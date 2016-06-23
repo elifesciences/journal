@@ -1,0 +1,11 @@
+imports:
+  - resource: parameters.yml
+  - resource: services.yml
+
+framework:
+    assets: ~
+    router:
+        resource: '%kernel.root_dir%/config/routing.yml'
+    secret: '%secret%'
+    trusted_hosts: '%trusted_hosts%'
+    trusted_proxies: '%trusted_proxies%'

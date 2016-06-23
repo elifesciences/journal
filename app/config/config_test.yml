@@ -1,0 +1,12 @@
+imports:
+  - resource: config_dev.yml
+
+framework:
+    profiler:
+        collect: false
+    session:
+        storage_id: session.storage.mock_file
+    test: ~
+
+web_profiler:
+    toolbar: false
