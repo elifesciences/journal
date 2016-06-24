@@ -6,5 +6,18 @@ framework:
     router:
         resource: '%kernel.root_dir%/config/routing_dev.yml'
 
+monolog:
+    handlers:
+        console:
+            channels:
+              - !event
+            type: console
+        main:
+            channels:
+              - !event
+            level: debug
+            path: '%kernel.logs_dir%/%kernel.environment%.log'
+            type: stream
+
 web_profiler:
     toolbar: true

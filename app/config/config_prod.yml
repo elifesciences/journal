@@ -1,2 +1,15 @@
 imports:
   - resource: config.yml
+
+monolog:
+    handlers:
+        console:
+            type: console
+        main:
+            action_level: error
+            handler: nested
+            type: fingers_crossed
+        nested:
+            type: stream
+            path: '%kernel.logs_dir%/%kernel.environment%.log'
+            level: debug

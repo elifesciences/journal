@@ -10,6 +10,7 @@
     "require": {
         "php": "^7.0",
         "sensio/distribution-bundle": "^5.0",
+        "symfony/monolog-bundle": "^2.11",
         "symfony/symfony": "^3.1"
     },
     "scripts": {

@@ -5,6 +5,7 @@ namespace eLife\Journal;
 use Sensio\Bundle\DistributionBundle\SensioDistributionBundle;
 use Symfony\Bundle\DebugBundle\DebugBundle;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
+use Symfony\Bundle\MonologBundle\MonologBundle;
 use Symfony\Bundle\TwigBundle\TwigBundle;
 use Symfony\Bundle\WebProfilerBundle\WebProfilerBundle;
 use Symfony\Component\Config\Loader\LoaderInterface;
@@ -16,6 +17,7 @@ class AppKernel extends Kernel
     {
         $bundles = [
             new FrameworkBundle(),
+            new MonologBundle(),
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {
