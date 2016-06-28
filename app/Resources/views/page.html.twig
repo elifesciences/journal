@@ -1,0 +1,59 @@
+<!doctype html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
+
+    {% set title = block('title') %}
+
+    <title>{% if title %}{{ title }} | {% endif %}eLife</title>
+
+    <link href="{{ resource_url('/elife/patterns/assets/css/all.css') }}" rel="stylesheet">
+
+    <!--[if lt IE 9]>
+    <script src="https://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <script>document.createElement("picture");</script>
+    <![endif]-->
+
+    <script>
+        WebFontConfig = {
+            custom: {
+                families: ["Avenir Next Webfont", "PT Serif Webfont"],
+                urls: ["{{ resource_url('/elife/patterns/assets/fonts/fonts.css') }}"]
+            }
+        };
+
+        (function (d) {
+            var wf = d.createElement("script");
+            var s = d.scripts[0];
+            wf.src = "https://ajax.googleapis.com/ajax/libs/webfont/1.6.16/webfont.js";
+            s.parentNode.insertBefore(wf, s);
+        })(document);
+    </script>
+
+</head>
+
+<body class="body">
+
+<div class="global-wrapper">
+
+    <div class="global-inner">
+
+        <main role="main">
+
+            {% block body %}{% endblock %}
+
+        </main>
+
+    </div>
+
+</div>
+
+<script src="{{ resource_url('/elife/patterns/assets/js/main.js') }}"></script>
+
+</body>
+
+</html>

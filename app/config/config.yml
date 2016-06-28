@@ -2,10 +2,22 @@ imports:
   - resource: parameters.yml
   - resource: services.yml
 
+bobthecow_mustache:
+    loader_id: elife.patterns.mustache.loader.puli
+    partials_loader_id: elife.patterns.mustache.loader.filesystem
+
 framework:
     assets: ~
     router:
         resource: '%kernel.root_dir%/config/routing.yml'
     secret: '%secret%'
+    templating:
+        engines:
+          - mustache
+          - twig
     trusted_hosts: '%trusted_hosts%'
     trusted_proxies: '%trusted_proxies%'
+
+twig:
+    debug: '%kernel.debug%'
+    strict_variables: '%kernel.debug%'

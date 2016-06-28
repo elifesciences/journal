@@ -1,4 +1,6 @@
+/.puli/
 /app/config/parameters.yml
+/phpunit.xml
 /var/*
 !/var/cache
 /var/cache/*
@@ -10,4 +12,5 @@
 /var/sessions/*
 !var/sessions/.gitkeep
 /vendor/
+/web/assets/
 /web/bundles/

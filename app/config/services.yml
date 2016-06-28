@@ -1,0 +1,29 @@
+services:
+
+    elife.journal.templating.promise_aware:
+        class: eLife\Journal\Templating\PromiseAwareEngine
+        decorates: templating
+        arguments:
+          - '@elife.journal.templating.promise_aware.inner'
+
+    elife.journal.twig.extension.pattern:
+        class: eLife\Journal\Twig\PatternExtension
+        arguments:
+          - '@elife.patterns.pattern_renderer'
+        tags:
+          - name: twig.extension
+
+    elife.patterns.pattern_renderer:
+        class: eLife\Patterns\PatternRenderer\MustachePatternRenderer
+        arguments:
+          - '@mustache'
+
+    elife.patterns.mustache.loader.puli:
+        class: eLife\Patterns\Mustache\PuliLoader
+        arguments:
+          - '@puli.repository'
+
+    elife.patterns.mustache.loader.filesystem:
+        class: eLife\Patterns\Mustache\PatternLabLoader
+        arguments:
+          - '@=service("puli.repository").get("/elife/patterns/templates").getFilesystemPath()'

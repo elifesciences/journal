@@ -2,6 +2,8 @@
 
 namespace eLife\Journal;
 
+use Bobthecow\Bundle\MustacheBundle\BobthecowMustacheBundle;
+use Puli\SymfonyBundle\PuliBundle;
 use Sensio\Bundle\DistributionBundle\SensioDistributionBundle;
 use Symfony\Bundle\DebugBundle\DebugBundle;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
@@ -16,14 +18,17 @@ class AppKernel extends Kernel
     public function registerBundles() : array
     {
         $bundles = [
+            new AppBundle(),
+            new BobthecowMustacheBundle(),
             new FrameworkBundle(),
             new MonologBundle(),
+            new PuliBundle(),
+            new TwigBundle(),
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {
             $bundles[] = new DebugBundle();
             $bundles[] = new SensioDistributionBundle();
-            $bundles[] = new TwigBundle();
             $bundles[] = new WebProfilerBundle();
         }
 
