@@ -11,9 +11,9 @@ Dependencies
 Installation
 -------------
 
-1. `composer install`
-2. `puli publish --install`
-3. Create `app/config/parameters.yml` from `app/config/parameters.yml.dist`
+1. Create `app/config/parameters.yml` from `app/config/parameters.yml.dist`
+2. `composer install`
+3. `puli publish --install`
 
 Running the tests
 -----------------
