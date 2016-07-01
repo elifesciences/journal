@@ -6,6 +6,13 @@ services:
         arguments:
           - '@elife.journal.templating.promise_aware.inner'
 
+    elife.journal.twig.extension.info_bar:
+        class: eLife\Journal\Twig\InfoBarExtension
+        arguments:
+          - '@elife.patterns.pattern_renderer'
+        tags:
+          - name: twig.extension
+
     elife.journal.twig.extension.pattern:
         class: eLife\Journal\Twig\PatternExtension
         arguments:
