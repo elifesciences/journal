@@ -28,7 +28,7 @@ final class FooterFactory
             new Footer(
                 parse_url($this->puliUrlGenerator->generateUrl('/elife/patterns/assets'), PHP_URL_PATH),
                 new MainMenu([
-                    new MainMenuLink('eLife', 'mainMenuElife', [
+                    new MainMenuLink('eLife', [
                         new Link('How to publish',
                             'http://submit.elifesciences.org/html/elife_author_instructions.html'),
                         new Link('About', $this->urlGenerator->generate('about')),
@@ -37,7 +37,7 @@ final class FooterFactory
                         new Link('Contact', $this->urlGenerator->generate('contact')),
                         new Link('Terms and policy', $this->urlGenerator->generate('terms')),
                     ]),
-                    new MainMenuLink('Resources', 'mainMenuResources', [
+                    new MainMenuLink('Resources', [
                         new Link('Inside eLife', $this->urlGenerator->generate('inside-elife')),
                         new Link('Monthly archive',
                             $this->urlGenerator->generate('archive-year', ['year' => (date('Y') - 1)])),
