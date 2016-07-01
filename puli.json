@@ -32,6 +32,41 @@
             "install-path": "vendor/beberlei/assert",
             "installer": "composer"
         },
+        "behat/behat": {
+            "install-path": "vendor/behat/behat",
+            "installer": "composer",
+            "env": "dev"
+        },
+        "behat/gherkin": {
+            "install-path": "vendor/behat/gherkin",
+            "installer": "composer",
+            "env": "dev"
+        },
+        "behat/mink": {
+            "install-path": "vendor/behat/mink",
+            "installer": "composer",
+            "env": "dev"
+        },
+        "behat/mink-browserkit-driver": {
+            "install-path": "vendor/behat/mink-browserkit-driver",
+            "installer": "composer",
+            "env": "dev"
+        },
+        "behat/mink-extension": {
+            "install-path": "vendor/behat/mink-extension",
+            "installer": "composer",
+            "env": "dev"
+        },
+        "behat/symfony2-extension": {
+            "install-path": "vendor/behat/symfony2-extension",
+            "installer": "composer",
+            "env": "dev"
+        },
+        "behat/transliterator": {
+            "install-path": "vendor/behat/transliterator",
+            "installer": "composer",
+            "env": "dev"
+        },
         "bobthecow/mustache-bundle": {
             "install-path": "vendor/bobthecow/mustache-bundle/Bobthecow/Bundle/MustacheBundle",
             "installer": "composer"

@@ -1,0 +1,15 @@
+default:
+    extensions:
+        Behat\MinkExtension:
+            sessions:
+                default:
+                    symfony2: ~
+        Behat\Symfony2Extension:
+            kernel:
+                class: eLife\Journal\AppKernel
+    suites:
+        labs:
+            filters:
+                tags: '@labs'
+            contexts:
+              - LabsContext

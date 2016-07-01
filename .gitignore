@@ -1,5 +1,6 @@
 /.puli/
 /app/config/parameters.yml
+/behat.yml
 /phpunit.xml
 /var/*
 !/var/cache
