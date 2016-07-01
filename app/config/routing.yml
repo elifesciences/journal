@@ -1,0 +1,4 @@
+home:
+    path: /
+    defaults:
+         _controller: AppBundle:Home:home
