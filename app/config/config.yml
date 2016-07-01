@@ -15,8 +15,6 @@ framework:
         engines:
           - mustache
           - twig
-    trusted_hosts: '%trusted_hosts%'
-    trusted_proxies: '%trusted_proxies%'
 
 twig:
     debug: '%kernel.debug%'
