@@ -6,6 +6,12 @@ bobthecow_mustache:
     loader_id: elife.patterns.mustache.loader.puli
     partials_loader_id: elife.patterns.mustache.loader.filesystem
 
+csa_guzzle:
+    clients:
+        elife_api:
+            config:
+                base_uri: '%api_url%'
+
 framework:
     assets: ~
     router:

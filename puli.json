@@ -36,6 +36,14 @@
             "install-path": "vendor/bobthecow/mustache-bundle/Bobthecow/Bundle/MustacheBundle",
             "installer": "composer"
         },
+        "crell/api-problem": {
+            "install-path": "vendor/crell/api-problem",
+            "installer": "composer"
+        },
+        "csa/guzzle-bundle": {
+            "install-path": "vendor/csa/guzzle-bundle",
+            "installer": "composer"
+        },
         "cweagans/composer-patches": {
             "install-path": "vendor/cweagans/composer-patches",
             "installer": "composer"
@@ -69,12 +77,24 @@
             "install-path": "vendor/doctrine/lexer",
             "installer": "composer"
         },
+        "elife/api-sdk": {
+            "install-path": "vendor/elife/api-sdk",
+            "installer": "composer"
+        },
         "elife/patterns": {
             "install-path": "vendor/elife/patterns",
             "installer": "composer"
         },
+        "guzzlehttp/guzzle": {
+            "install-path": "vendor/guzzlehttp/guzzle",
+            "installer": "composer"
+        },
         "guzzlehttp/promises": {
             "install-path": "vendor/guzzlehttp/promises",
+            "installer": "composer"
+        },
+        "guzzlehttp/psr7": {
+            "install-path": "vendor/guzzlehttp/psr7",
             "installer": "composer"
         },
         "justinrainbow/json-schema": {
@@ -93,6 +113,10 @@
             "install-path": "vendor/myclabs/deep-copy",
             "installer": "composer",
             "env": "dev"
+        },
+        "namshi/cuzzle": {
+            "install-path": "vendor/namshi/cuzzle",
+            "installer": "composer"
         },
         "paragonie/random_compat": {
             "install-path": "vendor/paragonie/random_compat",
@@ -155,6 +179,10 @@
         },
         "psr/cache": {
             "install-path": "vendor/psr/cache",
+            "installer": "composer"
+        },
+        "psr/http-message": {
+            "install-path": "vendor/psr/http-message",
             "installer": "composer"
         },
         "psr/log": {

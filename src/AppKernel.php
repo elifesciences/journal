@@ -3,6 +3,7 @@
 namespace eLife\Journal;
 
 use Bobthecow\Bundle\MustacheBundle\BobthecowMustacheBundle;
+use Csa\Bundle\GuzzleBundle\CsaGuzzleBundle;
 use Puli\SymfonyBundle\PuliBundle;
 use Sensio\Bundle\DistributionBundle\SensioDistributionBundle;
 use Symfony\Bundle\DebugBundle\DebugBundle;
@@ -20,6 +21,7 @@ class AppKernel extends Kernel
         $bundles = [
             new AppBundle(),
             new BobthecowMustacheBundle(),
+            new CsaGuzzleBundle(),
             new FrameworkBundle(),
             new MonologBundle(),
             new PuliBundle(),

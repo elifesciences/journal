@@ -1,5 +1,10 @@
 imports:
   - resource: config_dev.yml
+  - resource: services_test.yml
+
+parameters:
+    api_url: http://api.elifesciences.org/
+    api_mock: '%kernel.cache_dir%/guzzle/fixtures'
 
 framework:
     profiler:

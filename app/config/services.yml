@@ -1,5 +1,27 @@
 services:
 
+    elife.api_sdk.client:
+        class: eLife\ApiSdk\HttpClient\Guzzle6HttpClient
+        arguments:
+          - '@csa_guzzle.client.elife_api'
+
+    elife.api_sdk.client.warning_checking:
+        class: eLife\ApiSdk\HttpClient\WarningCheckingHttpClient
+        decorates: elife.api_sdk.client
+        arguments:
+          - '@elife.api_sdk.client.warning_checking.inner'
+          - '@logger'
+
+    elife.api_sdk.labs:
+        class: eLife\ApiSdk\ApiClient\LabsClient
+        arguments:
+          - '@elife.api_sdk.client'
+
+    elife.api_sdk.subjects:
+        class: eLife\ApiSdk\ApiClient\SubjectsClient
+        arguments:
+          - '@elife.api_sdk.client'
+
     elife.journal.templating.promise_aware:
         class: eLife\Journal\Templating\PromiseAwareEngine
         decorates: templating
@@ -23,6 +45,7 @@ services:
     elife.journal.view_model.factory.footer:
         class: eLife\Journal\ViewModel\FooterFactory
         arguments:
+          - '@elife.api_sdk.subjects'
           - '@router'
           - '@puli.url_generator'
 
