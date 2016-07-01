@@ -5,6 +5,7 @@ use Symfony\Component\Debug\Debug;
 use Symfony\Component\HttpFoundation\Request;
 
 require_once __DIR__.'/../app/autoload.php';
+umask(0002);
 
 Debug::enable();
 
