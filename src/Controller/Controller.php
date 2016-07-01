@@ -30,6 +30,7 @@ abstract class Controller implements ContainerAwareInterface
     final protected function defaultPageArguments() : array
     {
         return [
+            'footer' => $this->get('elife.journal.view_model.factory.footer')->createFooter(),
         ];
     }
 }

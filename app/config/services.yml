@@ -20,6 +20,12 @@ services:
         tags:
           - name: twig.extension
 
+    elife.journal.view_model.factory.footer:
+        class: eLife\Journal\ViewModel\FooterFactory
+        arguments:
+          - '@router'
+          - '@puli.url_generator'
+
     elife.patterns.pattern_renderer:
         class: eLife\Patterns\PatternRenderer\MustachePatternRenderer
         arguments:

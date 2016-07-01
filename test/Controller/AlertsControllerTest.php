@@ -2,23 +2,23 @@
 
 namespace test\eLife\Journal\Controller;
 
-final class HomeControllerTest extends PageTestCase
+final class AlertsControllerTest extends PageTestCase
 {
     /**
      * @test
      */
-    public function it_displays_the_homepage()
+    public function it_displays_the_alerts_page()
     {
         $client = static::createClient();
 
-        $crawler = $client->request('GET', '/');
+        $crawler = $client->request('GET', '/alerts');
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
-        $this->assertSame('eLife', $crawler->filter('h1')->text());
+        $this->assertSame('Alerts', $crawler->filter('h1')->text());
     }
 
     protected function getUrl() : string
     {
-        return '/';
+        return '/alerts';
     }
 }

@@ -2,3 +2,55 @@ home:
     path: /
     defaults:
          _controller: AppBundle:Home:home
+
+about:
+    path: /about
+    defaults:
+         _controller: AppBundle:About:about
+
+alerts:
+    path: /alerts
+    defaults:
+         _controller: AppBundle:Alerts:alerts
+
+archive-year:
+    path: /archive/{year}
+    defaults:
+         _controller: AppBundle:Archive:year
+    requirements:
+        number: '[2-9][0-9]{3}'
+
+contact:
+    path: /contact
+    defaults:
+         _controller: AppBundle:Contact:contact
+
+press-packs:
+    path: /for-the-press
+    defaults:
+         _controller: AppBundle:PressPacks:list
+
+inside-elife:
+    path: /inside-elife
+    defaults:
+         _controller: AppBundle:InsideElife:list
+
+labs:
+    path: /labs
+    defaults:
+         _controller: AppBundle:Labs:list
+
+resources:
+    path: /resources
+    defaults:
+         _controller: AppBundle:Resources:resources
+
+terms:
+    path: /terms
+    defaults:
+         _controller: AppBundle:Terms:terms
+
+who-we-work-with:
+    path: who-we-work-with
+    defaults:
+         _controller: AppBundle:WhoWeWorkWith:whoWeWorkWith
