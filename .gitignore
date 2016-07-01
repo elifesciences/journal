@@ -12,5 +12,5 @@
 /var/sessions/*
 !var/sessions/.gitkeep
 /vendor/
-/web/assets/
+/web/assets
 /web/bundles/
