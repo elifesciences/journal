@@ -20,10 +20,20 @@ archive-year:
     requirements:
         number: '[2-9][0-9]{3}'
 
+careers:
+    path: /careers
+    defaults:
+         _controller: AppBundle:Careers:list
+
 contact:
     path: /contact
     defaults:
          _controller: AppBundle:Contact:contact
+
+magazine:
+    path: /magazine
+    defaults:
+         _controller: AppBundle:Magazine:list
 
 press-packs:
     path: /for-the-press

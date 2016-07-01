@@ -14,7 +14,7 @@ final class TermsControllerTest extends PageTestCase
         $crawler = $client->request('GET', '/terms');
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
-        $this->assertSame('Terms and policy', $crawler->filter('h1')->text());
+        $this->assertSame('Terms and policy', $crawler->filter('main h1')->text());
     }
 
     protected function getUrl() : string

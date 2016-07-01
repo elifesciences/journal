@@ -14,7 +14,7 @@ final class AlertsControllerTest extends PageTestCase
         $crawler = $client->request('GET', '/alerts');
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
-        $this->assertSame('Alerts', $crawler->filter('h1')->text());
+        $this->assertSame('Alerts', $crawler->filter('main h1')->text());
     }
 
     protected function getUrl() : string

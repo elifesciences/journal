@@ -14,7 +14,7 @@ final class ArchiveControllerTest extends PageTestCase
         $crawler = $client->request('GET', '/archive/'.(date('Y') - 1));
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
-        $this->assertSame((date('Y') - 1).' archive', $crawler->filter('h1')->text());
+        $this->assertSame((date('Y') - 1).' archive', $crawler->filter('main h1')->text());
     }
 
     /**

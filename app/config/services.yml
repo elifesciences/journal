@@ -26,6 +26,12 @@ services:
           - '@router'
           - '@puli.url_generator'
 
+    elife.journal.view_model.factory.site_header:
+        class: eLife\Journal\ViewModel\SiteHeaderFactory
+        arguments:
+          - '@router'
+          - '@puli.url_generator'
+
     elife.patterns.pattern_renderer:
         class: eLife\Patterns\PatternRenderer\MustachePatternRenderer
         arguments:

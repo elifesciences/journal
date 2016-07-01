@@ -14,7 +14,7 @@ final class LabsControllerTest extends PageTestCase
         $crawler = $client->request('GET', '/labs');
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
-        $this->assertSame('Labs', $crawler->filter('h1')->text());
+        $this->assertSame('Labs', $crawler->filter('main h1')->text());
     }
 
     protected function getUrl() : string

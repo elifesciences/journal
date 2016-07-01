@@ -42,6 +42,10 @@
 
     <div class="global-inner">
 
+        {% if header %}
+            {{ render_pattern(header) }}
+        {% endif %}
+
         {% block info_bar %}{% endblock %}
 
         <main role="main">

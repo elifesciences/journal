@@ -2,23 +2,23 @@
 
 namespace test\eLife\Journal\Controller;
 
-final class ContactControllerTest extends PageTestCase
+final class CareersControllerTest extends PageTestCase
 {
     /**
      * @test
      */
-    public function it_displays_the_contact_page()
+    public function it_displays_the_careers_page()
     {
         $client = static::createClient();
 
-        $crawler = $client->request('GET', '/contact');
+        $crawler = $client->request('GET', '/careers');
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
-        $this->assertSame('Contact', $crawler->filter('main h1')->text());
+        $this->assertSame('Careers', $crawler->filter('main h1')->text());
     }
 
     protected function getUrl() : string
     {
-        return '/contact';
+        return '/careers';
     }
 }

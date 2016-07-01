@@ -14,7 +14,7 @@ final class WhoWeWorkWithControllerTest extends PageTestCase
         $crawler = $client->request('GET', '/who-we-work-with');
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
-        $this->assertSame('Who we work with', $crawler->filter('h1')->text());
+        $this->assertSame('Who we work with', $crawler->filter('main h1')->text());
     }
 
     protected function getUrl() : string
