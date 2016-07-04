@@ -1,4 +1,4 @@
 #!/bin/bash
 set -e
 
-vendor/bin/phpunit
+vendor/bin/phpunit --log-junit build/phpunit.xml

@@ -15,3 +15,4 @@
 /vendor/
 /web/assets
 /web/bundles/
+/build/*
