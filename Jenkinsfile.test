@@ -5,9 +5,9 @@ elifePipeline {
 
     stage 'Project tests'
     def testArtifact = "${env.BUILD_TAG}.junit.xml"
-    builderDeployRevision 'journal--master', commit
-    builderProjectTests 'journal--master', '/srv/journal'
-    builderTestArtifact testArtifact, 'journal--master', '/srv/journal/build/phpunit.xml'
+    builderDeployRevision 'journal--develop--ci', commit
+    builderProjectTests 'journal--develop--ci', '/srv/journal'
+    builderTestArtifact testArtifact, 'journal--develop--ci', '/srv/journal/build/phpunit.xml'
     elifeVerifyJunitXml testArtifact
 
     stage 'Approval'
