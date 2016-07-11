@@ -6,7 +6,7 @@ use eLife\Patterns\ViewModel\Button;
 use eLife\Patterns\ViewModel\Image;
 use eLife\Patterns\ViewModel\Link;
 use eLife\Patterns\ViewModel\NavLinkedItem;
-use eLife\Patterns\ViewModel\PictureSvgWithFallback;
+use eLife\Patterns\ViewModel\Picture;
 use eLife\Patterns\ViewModel\SiteHeader;
 use eLife\Patterns\ViewModel\SiteHeaderNavBar;
 use GuzzleHttp\Promise\FulfilledPromise;
@@ -29,9 +29,9 @@ final class SiteHeaderFactory
     {
         $primaryLinks = SiteHeaderNavBar::primary([
             NavLinkedItem::asIcon(new Link('Menu', '#mainMenu'),
-                new PictureSvgWithFallback(
+                new Picture(
                     [
-                        ['svg' => $this->puliUrlGenerator->generateUrl('/elife/patterns/assets/img/patterns/molecules/nav-primary-menu-ic.svg')],
+                        ['srcset' => $this->puliUrlGenerator->generateUrl('/elife/patterns/assets/img/patterns/molecules/nav-primary-menu-ic.svg')],
                     ],
                     new Image(
                         $this->puliUrlGenerator->generateUrl('/elife/patterns/assets/img/patterns/molecules/nav-primary-menu-ic_1x.png'),
