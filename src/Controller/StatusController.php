@@ -4,9 +4,9 @@ namespace eLife\Journal\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
 
-class StatusController
+final class StatusController
 {
-    public function indexAction()
+    public function indexAction() : Response
     {
         return new Response("");
     }
