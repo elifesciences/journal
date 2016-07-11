@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "3909c4fd42c07d28de1d4e05a278a70d",
-    "content-hash": "755ceb5366818b23567e23146452dc4d",
+    "hash": "06cf62db27f54a13f5c711dc0de0d09e",
+    "content-hash": "64ade079c76662c55d5942ee3ba83600",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -1230,6 +1230,54 @@
                 "random"
             ],
             "time": "2016-04-03 06:00:07"
+        },
+        {
+            "name": "phive/twig-extensions-deferred",
+            "version": "v0.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/rybakit/twig-extensions-deferred.git",
+                "reference": "e699a1fc855c1566f3cca7f87d6dd30817c1c252"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/rybakit/twig-extensions-deferred/zipball/e699a1fc855c1566f3cca7f87d6dd30817c1c252",
+                "reference": "e699a1fc855c1566f3cca7f87d6dd30817c1c252",
+                "shasum": ""
+            },
+            "require": {
+                "twig/twig": "~1.18"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Phive\\Twig\\Extensions\\Deferred\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Eugene Leonovich",
+                    "email": "gen.work@gmail.com"
+                }
+            ],
+            "description": "An extension for Twig that allows to defer block rendering",
+            "homepage": "https://github.com/rybakit/twig-extensions-deferred",
+            "keywords": [
+                "defer",
+                "extension",
+                "lazy",
+                "twig"
+            ],
+            "time": "2015-04-05 06:39:32"
         },
         {
             "name": "psr/cache",

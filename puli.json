@@ -157,6 +157,10 @@
             "install-path": "vendor/paragonie/random_compat",
             "installer": "composer"
         },
+        "phive/twig-extensions-deferred": {
+            "install-path": "vendor/phive/twig-extensions-deferred",
+            "installer": "composer"
+        },
         "phpdocumentor/reflection-common": {
             "install-path": "vendor/phpdocumentor/reflection-common",
             "installer": "composer",

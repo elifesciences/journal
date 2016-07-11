@@ -13,6 +13,16 @@
 
     <link href="{{ resource_url('/elife/patterns/assets/css/all.css') }}" rel="stylesheet">
 
+    {% block stylesheets deferred %}
+    {% if inline_stylesheets|length %}
+        <style>
+            {% for stylesheet in inline_stylesheets %}
+            {{ stylesheet }}
+            {% endfor %}
+        </style>
+    {% endif %}
+    {% endblock %}
+
     <!--[if lt IE 9]>
     <script src="https://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <script>document.createElement("picture");</script>
@@ -63,6 +73,16 @@
 </div>
 
 <script src="{{ resource_url('/elife/patterns/assets/js/main.js') }}"></script>
+
+{% block javascripts deferred %}
+{% if inline_javascripts|length %}
+    <script>
+        {% for javascript in inline_javascripts %}
+        {{ stylesheet }}
+        {% endfor %}
+    </script>
+{% endif %}
+{% endblock %}
 
 </body>
 

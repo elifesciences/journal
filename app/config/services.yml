@@ -28,6 +28,13 @@ services:
         arguments:
           - '@elife.journal.templating.promise_aware.inner'
 
+    elife.journal.twig.extension.assets:
+        class: eLife\Journal\Twig\AssetsExtension
+        arguments:
+          - '@elife.patterns.pattern_renderer.asset_recording'
+        tags:
+          - name: twig.extension
+
     elife.journal.twig.extension.info_bar:
         class: eLife\Journal\Twig\InfoBarExtension
         arguments:
@@ -66,6 +73,12 @@ services:
         arguments:
           - '@mustache'
 
+    elife.patterns.pattern_renderer.asset_recording:
+        class: eLife\Patterns\PatternRenderer\AssetRecordingPatternRenderer
+        decorates: elife.patterns.pattern_renderer
+        arguments:
+          - '@elife.patterns.pattern_renderer.asset_recording.inner'
+
     elife.patterns.mustache.loader.puli:
         class: eLife\Patterns\Mustache\PuliLoader
         arguments:
@@ -75,3 +88,8 @@ services:
         class: eLife\Patterns\Mustache\PatternLabLoader
         arguments:
           - '@=service("puli.repository").get("/elife/patterns/templates").getFilesystemPath()'
+
+    phive.twig.deferred:
+        class: Phive\Twig\Extensions\Deferred\DeferredExtension
+        tags:
+          - name: twig.extension
