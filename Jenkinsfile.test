@@ -4,7 +4,7 @@ elifePipeline {
     def commit = elifeGitRevision()
 
     stage 'Project tests'
-    // def testArtifact = "${env.BUILD_TAG}.junit.xml"
+    def testArtifact = "${env.BUILD_TAG}.junit.xml"
     builderDeployRevision 'journal--ci', commit
     builderProjectTests 'journal--ci', '/srv/journal'
     builderTestArtifact testArtifact, 'journal--ci', '/srv/journal/build/phpunit.xml'
