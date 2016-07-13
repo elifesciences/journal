@@ -132,6 +132,11 @@
             "install-path": "vendor/guzzlehttp/psr7",
             "installer": "composer"
         },
+        "jarnaiz/behat-junit-formatter": {
+            "install-path": "vendor/jarnaiz/behat-junit-formatter",
+            "installer": "composer",
+            "env": "dev"
+        },
         "justinrainbow/json-schema": {
             "install-path": "vendor/justinrainbow/json-schema",
             "installer": "composer"
