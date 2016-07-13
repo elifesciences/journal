@@ -4,11 +4,14 @@ elifePipeline {
     def commit = elifeGitRevision()
 
     stage 'Project tests'
-    def testArtifact = "${env.BUILD_TAG}.junit.xml"
     builderDeployRevision 'journal--ci', commit
     builderProjectTests 'journal--ci', '/srv/journal'
-    builderTestArtifact testArtifact, 'journal--ci', '/srv/journal/build/phpunit.xml'
-    elifeVerifyJunitXml testArtifact
+    def phpunitTestArtifact = "${env.BUILD_TAG}.phpunit.xml"
+    builderTestArtifact phpunitTestArtifact, 'journal--ci', '/srv/journal/build/phpunit.xml'
+    def behatTestArtifact = "${env.BUILD_TAG}.behat.xml"
+    builderTestArtifact behatTestArtifact, 'journal--ci', '/srv/journal/build/behat.xml'
+    elifeVerifyJunitXml phpunitTestArtifact
+    elifeVerifyJunitXml behatTestArtifact
 
     stage 'Deploy on end2end'
     builderDeployRevision 'journal--end2end', commit
