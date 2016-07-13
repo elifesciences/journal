@@ -11,10 +11,11 @@ final class RouteNotFoundTest extends WebTestCase
      */
     public function it_returns_a_404_when_a_route_is_not_found()
     {
-        $client = static::createClient();
+        $client = static::createClient(['debug' => false]);
 
-        $client->request('GET', '/foo');
+        $crawler = $client->request('GET', '/foo');
 
         $this->assertSame(404, $client->getResponse()->getStatusCode());
+        $this->assertContains('404 Not Found', $crawler->filter('h1')->text());
     }
 }
