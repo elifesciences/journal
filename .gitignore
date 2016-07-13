@@ -1,9 +1,9 @@
 /.puli/
 /app/config/parameters.yml
 /behat.yml
-/build/*
+/build/
 /phpunit.xml
-/var/*
+/var/
 /vendor/
 /web/assets
 /web/bundles/
