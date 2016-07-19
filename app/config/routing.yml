@@ -76,3 +76,8 @@ who-we-work-with:
     path: who-we-work-with
     defaults:
          _controller: AppBundle:WhoWeWorkWith:whoWeWorkWith
+
+status:
+    path: /status
+    defaults:
+         _controller: AppBundle:Status:index
