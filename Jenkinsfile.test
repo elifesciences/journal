@@ -15,9 +15,11 @@ elifePipeline {
         elifeVerifyJunitXml behatTestArtifact
     }
 
-    stage 'Deploy on end2end'
-    builderDeployRevision 'journal--end2end', commit
+    if (env.BRANCH_NAME != 'develop') {
+        stage 'Deploy on end2end'
+        builderDeployRevision 'journal--end2end', commit
 
-    stage 'Approval'
-    elifeGitMoveToBranch commit, 'approved'
+        stage 'Approval'
+        elifeGitMoveToBranch commit, 'approved'
+    }
 }
