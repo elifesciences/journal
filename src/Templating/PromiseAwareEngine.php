@@ -2,8 +2,8 @@
 
 namespace eLife\Journal\Templating;
 
-use function GuzzleHttp\Promise\all;
 use Symfony\Component\Templating\EngineInterface;
+use function GuzzleHttp\Promise\all;
 
 final class PromiseAwareEngine implements EngineInterface
 {
