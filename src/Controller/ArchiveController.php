@@ -2,11 +2,33 @@
 
 namespace eLife\Journal\Controller;
 
+use eLife\Patterns\ViewModel\Button;
+use eLife\Patterns\ViewModel\ContentHeaderNonArticle;
+use eLife\Patterns\ViewModel\FormLabel;
+use eLife\Patterns\ViewModel\Select;
+use eLife\Patterns\ViewModel\SelectNav;
+use eLife\Patterns\ViewModel\SelectOption;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 final class ArchiveController extends Controller
 {
+    public function indexAction(Request $request) : Response
+    {
+        $year = (int) $request->query->get('year');
+
+        if ($year < 2012 || $year >= date('Y')) {
+            throw new NotFoundHttpException();
+        }
+
+        return new RedirectResponse(
+            $this->get('router')->generate('archive-year', ['year' => $year]),
+            Response::HTTP_MOVED_PERMANENTLY
+        );
+    }
+
     public function yearAction(int $year) : Response
     {
         if ($year < 2012) {
@@ -16,6 +38,21 @@ final class ArchiveController extends Controller
         }
 
         $arguments = $this->defaultPageArguments();
+
+        $years = [];
+        for ($year = 2012; $year < date('Y'); ++$year) {
+            $years[] = new SelectOption($year, $year);
+        }
+
+        $arguments['contentHeader'] = ContentHeaderNonArticle::archive(
+            'Monthly archive',
+            false,
+            new SelectNav(
+                $this->get('router')->generate('archive'),
+                new Select('year', $years, new FormLabel('Archive year', 'year')),
+                Button::form('Go', Button::TYPE_SUBMIT)
+            )
+        );
 
         $arguments['year'] = $year;
 

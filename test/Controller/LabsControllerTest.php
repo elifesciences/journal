@@ -33,7 +33,7 @@ final class LabsControllerTest extends PageTestCase
         $crawler = $client->request('GET', '/labs');
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
-        $this->assertSame('Labs', $crawler->filter('main h1')->text());
+        $this->assertSame('eLife Labs', $crawler->filter('.content-header__title')->text());
         $this->assertContains('No experiments available.', $crawler->filter('main')->text());
     }
 

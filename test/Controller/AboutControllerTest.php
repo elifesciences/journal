@@ -14,7 +14,7 @@ final class AboutControllerTest extends PageTestCase
         $crawler = $client->request('GET', '/about');
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
-        $this->assertSame('About', $crawler->filter('main h1')->text());
+        $this->assertSame('About eLife', $crawler->filter('.content-header__title')->text());
     }
 
     protected function getUrl() : string

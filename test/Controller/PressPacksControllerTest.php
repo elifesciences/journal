@@ -14,7 +14,7 @@ final class PressPacksControllerTest extends PageTestCase
         $crawler = $client->request('GET', '/for-the-press');
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
-        $this->assertSame('For the press', $crawler->filter('main h1')->text());
+        $this->assertSame('For the press', $crawler->filter('.content-header__title')->text());
     }
 
     protected function getUrl() : string

@@ -4,6 +4,7 @@ namespace eLife\Journal\Controller;
 
 use eLife\ApiSdk\Exception\ResponseException;
 use eLife\ApiSdk\Result;
+use eLife\Patterns\ViewModel\ContentHeaderNonArticle;
 use eLife\Patterns\ViewModel\LeadPara;
 use eLife\Patterns\ViewModel\LeadParas;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,6 +22,11 @@ final class SubjectsController extends Controller
                 if ($e instanceof ResponseException && 404 === $e->getResponse()->getStatusCode()) {
                     throw new NotFoundHttpException('Subject not found', $e);
                 }
+            });
+
+        $arguments['contentHeader'] = $arguments['subject']
+            ->then(function (Result $subject) {
+                return ContentHeaderNonArticle::subject($subject['name']);
             });
 
         $arguments['lead_paras'] = $arguments['subject']
