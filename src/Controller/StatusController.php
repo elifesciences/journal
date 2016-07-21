@@ -8,6 +8,6 @@ final class StatusController
 {
     public function indexAction() : Response
     {
-        return new Response("");
+        return new Response('');
     }
 }
