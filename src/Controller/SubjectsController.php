@@ -2,7 +2,7 @@
 
 namespace eLife\Journal\Controller;
 
-use eLife\ApiSdk\Exception\ResponseException;
+use eLife\ApiSdk\Exception\BadResponse;
 use eLife\ApiSdk\Result;
 use eLife\Patterns\ViewModel\ContentHeaderNonArticle;
 use eLife\Patterns\ViewModel\LeadPara;
@@ -19,7 +19,7 @@ final class SubjectsController extends Controller
 
         $arguments['subject'] = $this->get('elife.api_sdk.subjects')->getSubject(1, $id)
             ->otherwise(function (Throwable $e) {
-                if ($e instanceof ResponseException && 404 === $e->getResponse()->getStatusCode()) {
+                if ($e instanceof BadResponse && 404 === $e->getResponse()->getStatusCode()) {
                     throw new NotFoundHttpException('Subject not found', $e);
                 }
             });

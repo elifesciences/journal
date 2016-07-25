@@ -3,7 +3,7 @@
 namespace eLife\Journal\Controller;
 
 use DateTimeImmutable;
-use eLife\ApiSdk\Exception\ResponseException;
+use eLife\ApiSdk\Exception\BadResponse;
 use eLife\ApiSdk\Result;
 use eLife\Patterns\ViewModel\ContentHeaderNonArticle;
 use eLife\Patterns\ViewModel\Date;
@@ -52,7 +52,7 @@ developed further to become features on the eLife platform.'),
 
         $arguments['experiment'] = $this->get('elife.api_sdk.labs')->getExperiment(1, $number)
             ->otherwise(function (Throwable $e) {
-                if ($e instanceof ResponseException && 404 === $e->getResponse()->getStatusCode()) {
+                if ($e instanceof BadResponse && 404 === $e->getResponse()->getStatusCode()) {
                     throw new NotFoundHttpException('Experiment not found', $e);
                 }
             });
