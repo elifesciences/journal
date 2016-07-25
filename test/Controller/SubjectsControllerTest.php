@@ -55,7 +55,7 @@ final class SubjectsControllerTest extends PageTestCase
         $crawler = $client->request('GET', '/subjects/subject');
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
-        $this->assertSame('Subject', $crawler->filter('main h1')->text());
+        $this->assertSame('Subject', $crawler->filter('.content-header__title')->text());
         $this->assertSame('Subject impact statement.', trim($crawler->filter('main .lead-paras')->text()));
     }
 

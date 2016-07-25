@@ -2,10 +2,14 @@
 
 namespace eLife\Journal\Controller;
 
+use DateTimeImmutable;
 use eLife\ApiSdk\Exception\ResponseException;
 use eLife\ApiSdk\Result;
+use eLife\Patterns\ViewModel\ContentHeaderNonArticle;
+use eLife\Patterns\ViewModel\Date;
 use eLife\Patterns\ViewModel\LeadPara;
 use eLife\Patterns\ViewModel\LeadParas;
+use eLife\Patterns\ViewModel\Meta;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
@@ -18,6 +22,8 @@ final class LabsController extends Controller
         $perPage = 6;
 
         $arguments = $this->defaultPageArguments();
+
+        $arguments['contentHeader'] = ContentHeaderNonArticle::basic('eLife Labs');
 
         $arguments['leadParas'] = new LeadParas([
             new LeadPara('eLife Labs showcases experiments in new functionality and technologies. Some experiments may be
@@ -49,6 +55,14 @@ developed further to become features on the eLife platform.'),
                 if ($e instanceof ResponseException && 404 === $e->getResponse()->getStatusCode()) {
                     throw new NotFoundHttpException('Experiment not found', $e);
                 }
+            });
+
+        $arguments['contentHeader'] = $arguments['experiment']
+            ->then(function (Result $experiment) {
+                return ContentHeaderNonArticle::basic($experiment['title'], false, null, null,
+                    Meta::withText('Experiment: '.str_pad($experiment['number'], 3, '0', STR_PAD_LEFT),
+                        new Date(DateTimeImmutable::createFromFormat(DATE_ATOM, $experiment['published'])))
+                );
             });
 
         return new Response($this->get('templating')->render('::labs-experiment.html.twig', $arguments));

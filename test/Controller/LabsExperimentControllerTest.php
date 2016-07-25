@@ -52,7 +52,7 @@ final class LabsExperimentControllerTest extends PageTestCase
         $crawler = $client->request('GET', '/labs/experiment1');
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
-        $this->assertSame('Experiment title', $crawler->filter('main h1')->text());
+        $this->assertSame('Experiment title', $crawler->filter('.content-header__title')->text());
     }
 
     /**

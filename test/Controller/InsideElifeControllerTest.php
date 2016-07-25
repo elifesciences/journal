@@ -14,7 +14,7 @@ final class InsideElifeControllerTest extends PageTestCase
         $crawler = $client->request('GET', '/inside-elife');
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
-        $this->assertSame('Inside eLife', $crawler->filter('main h1')->text());
+        $this->assertSame('Inside eLife', $crawler->filter('.content-header__title')->text());
     }
 
     protected function getUrl() : string

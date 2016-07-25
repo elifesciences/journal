@@ -13,6 +13,11 @@ alerts:
     defaults:
          _controller: AppBundle:Alerts:alerts
 
+archive:
+    path: /archive
+    defaults:
+         _controller: AppBundle:Archive:index
+
 archive-year:
     path: /archive/{year}
     defaults:

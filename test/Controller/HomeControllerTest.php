@@ -14,7 +14,7 @@ final class HomeControllerTest extends PageTestCase
         $crawler = $client->request('GET', '/');
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
-        $this->assertSame('eLife', $crawler->filter('main h1')->text());
+        $this->assertSame('eLife', $crawler->filter('.content-header__title')->text());
     }
 
     protected function getUrl() : string

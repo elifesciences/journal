@@ -14,7 +14,7 @@ final class MagazineControllerTest extends PageTestCase
         $crawler = $client->request('GET', '/magazine');
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
-        $this->assertSame('Magazine', $crawler->filter('main h1')->text());
+        $this->assertSame('Magazine', $crawler->filter('.content-header__title')->text());
     }
 
     protected function getUrl() : string

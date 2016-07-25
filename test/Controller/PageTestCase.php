@@ -17,10 +17,9 @@ abstract class PageTestCase extends WebTestCase
 
         $crawler = $client->request('GET', $this->getUrl());
 
-        $header = $crawler->filter('header');
+        $header = $crawler->filter('header.site-header');
 
         $this->assertCount(1, $header);
-        $this->assertContains('site-header', $header->attr('class'));
     }
 
     /**
@@ -32,10 +31,9 @@ abstract class PageTestCase extends WebTestCase
 
         $crawler = $client->request('GET', $this->getUrl());
 
-        $footer = $crawler->filter('footer');
+        $footer = $crawler->filter('footer.site-footer');
 
         $this->assertCount(1, $footer);
-        $this->assertContains('site-footer', $footer->attr('class'));
     }
 
     final protected static function createClient(array $options = [], array $server = [])
