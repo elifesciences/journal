@@ -114,25 +114,31 @@
         },
         {
             "name": "crell/api-problem",
-            "version": "1.7",
+            "version": "2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Crell/ApiProblem.git",
-                "reference": "5e871a0f6804417c2cc516d67a73607bc3f12d5f"
+                "reference": "1e8dc70f9bf4363571087dc9d95f09bc8ba7d314"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Crell/ApiProblem/zipball/5e871a0f6804417c2cc516d67a73607bc3f12d5f",
-                "reference": "5e871a0f6804417c2cc516d67a73607bc3f12d5f",
+                "url": "https://api.github.com/repos/Crell/ApiProblem/zipball/1e8dc70f9bf4363571087dc9d95f09bc8ba7d314",
+                "reference": "1e8dc70f9bf4363571087dc9d95f09bc8ba7d314",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.3"
+                "php": "^5.5 || ^7.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "3.7.*"
+                "codeclimate/php-test-reporter": "dev-master",
+                "phpunit/phpunit": "4.*"
             },
             "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.0.x-dev"
+                }
+            },
             "autoload": {
                 "psr-4": {
                     "Crell\\ApiProblem\\": "src/"
@@ -158,7 +164,7 @@
                 "rest",
                 "xml"
             ],
-            "time": "2014-10-07 17:43:34"
+            "time": "2016-07-24 18:53:45"
         },
         {
             "name": "csa/guzzle-bundle",
@@ -669,17 +675,17 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-sdk-php.git",
-                "reference": "037c218671d5a2c09955274d17b73a28e6966edb"
+                "reference": "c3de37fa0ed248e8e2a7a5c54ee106390db7aa59"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/037c218671d5a2c09955274d17b73a28e6966edb",
-                "reference": "037c218671d5a2c09955274d17b73a28e6966edb",
+                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/c3de37fa0ed248e8e2a7a5c54ee106390db7aa59",
+                "reference": "c3de37fa0ed248e8e2a7a5c54ee106390db7aa59",
                 "shasum": ""
             },
             "require": {
                 "beberlei/assert": "^2.0",
-                "crell/api-problem": "^1.0",
+                "crell/api-problem": "^2.0",
                 "guzzlehttp/promises": "^1.0",
                 "guzzlehttp/psr7": "^1.0",
                 "php": "^7.0",
@@ -714,7 +720,7 @@
                 "GPL-3.0+"
             ],
             "description": "eLife Sciences API SDK",
-            "time": "2016-07-19 08:48:50"
+            "time": "2016-07-25 12:18:17"
         },
         {
             "name": "elife/patterns",
