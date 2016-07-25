@@ -2,7 +2,9 @@
 
 namespace eLife\Journal\Controller;
 
+use eLife\ApiSdk\ApiClient\SubjectsClient;
 use eLife\ApiSdk\Exception\BadResponse;
+use eLife\ApiSdk\MediaType;
 use eLife\ApiSdk\Result;
 use eLife\Patterns\ViewModel\ContentHeaderNonArticle;
 use eLife\Patterns\ViewModel\LeadPara;
@@ -17,7 +19,8 @@ final class SubjectsController extends Controller
     {
         $arguments = $this->defaultPageArguments();
 
-        $arguments['subject'] = $this->get('elife.api_sdk.subjects')->getSubject(1, $id)
+        $arguments['subject'] = $this->get('elife.api_sdk.subjects')
+            ->getSubject(['Accept' => new MediaType(SubjectsClient::TYPE_SUBJECT, 1)], $id)
             ->otherwise(function (Throwable $e) {
                 if ($e instanceof BadResponse && 404 === $e->getResponse()->getStatusCode()) {
                     throw new NotFoundHttpException('Subject not found', $e);
