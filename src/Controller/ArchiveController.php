@@ -40,8 +40,8 @@ final class ArchiveController extends Controller
         $arguments = $this->defaultPageArguments();
 
         $years = [];
-        for ($year = 2012; $year < date('Y'); ++$year) {
-            $years[] = new SelectOption($year, $year);
+        for ($yearOption = 2012; $yearOption < date('Y'); ++$yearOption) {
+            $years[] = new SelectOption($yearOption, $yearOption, $yearOption === $year);
         }
 
         $arguments['contentHeader'] = ContentHeaderNonArticle::archive(

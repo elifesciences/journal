@@ -15,6 +15,7 @@ final class ArchiveControllerTest extends PageTestCase
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertSame('Monthly archive', $crawler->filter('.content-header__title')->text());
+        $this->assertEquals(date('Y') - 1, $crawler->filter('.content-header__cta option[selected]')->text());
     }
 
     /**
@@ -34,9 +35,10 @@ final class ArchiveControllerTest extends PageTestCase
         $this->assertSame('/archive', $client->getRequest()->getPathInfo());
         $this->assertSame('year=2012', $client->getRequest()->getQueryString());
 
-        $client->followRedirect();
+        $crawler = $client->followRedirect();
 
         $this->assertSame('/archive/2012', $client->getRequest()->getPathInfo());
+        $this->assertEquals(2012, $crawler->filter('.content-header__cta option[selected]')->text());
     }
 
     /**
