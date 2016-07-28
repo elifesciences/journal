@@ -28,7 +28,7 @@ class AppKernel extends Kernel
             new TwigBundle(),
         ];
 
-        if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {
+        if (in_array($this->getEnvironment(), ['dev', 'test', 'ci'], true)) {
             $bundles[] = new DebugBundle();
             $bundles[] = new SensioDistributionBundle();
             $bundles[] = new WebProfilerBundle();

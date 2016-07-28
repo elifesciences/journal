@@ -19,6 +19,9 @@ elifePipeline {
         stage 'Deploy on end2end'
         builderDeployRevision 'journal--end2end', commit
 
+        stage 'Deploy on demo'
+        builderDeployRevision 'journal--demo', commit
+
         stage 'Approval'
         elifeGitMoveToBranch commit, 'approved'
     }
