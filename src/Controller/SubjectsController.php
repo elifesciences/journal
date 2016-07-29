@@ -6,6 +6,7 @@ use eLife\ApiSdk\ApiClient\SubjectsClient;
 use eLife\ApiSdk\Exception\BadResponse;
 use eLife\ApiSdk\MediaType;
 use eLife\ApiSdk\Result;
+use eLife\Patterns\ViewModel\BackgroundImage;
 use eLife\Patterns\ViewModel\ContentHeaderNonArticle;
 use eLife\Patterns\ViewModel\LeadPara;
 use eLife\Patterns\ViewModel\LeadParas;
@@ -29,7 +30,12 @@ final class SubjectsController extends Controller
 
         $arguments['contentHeader'] = $arguments['subject']
             ->then(function (Result $subject) {
-                return ContentHeaderNonArticle::subject($subject['name']);
+                return ContentHeaderNonArticle::subject($subject['name'], false, null,
+                    new BackgroundImage(
+                        $subject['image']['sizes']['2:1'][900],
+                        $subject['image']['sizes']['2:1'][1800]
+                    )
+                );
             });
 
         $arguments['lead_paras'] = $arguments['subject']
