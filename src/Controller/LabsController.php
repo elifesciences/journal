@@ -7,6 +7,7 @@ use eLife\ApiSdk\ApiClient\LabsClient;
 use eLife\ApiSdk\Exception\BadResponse;
 use eLife\ApiSdk\MediaType;
 use eLife\ApiSdk\Result;
+use eLife\Patterns\ViewModel\BackgroundImage;
 use eLife\Patterns\ViewModel\ContentHeaderNonArticle;
 use eLife\Patterns\ViewModel\Date;
 use eLife\Patterns\ViewModel\LeadPara;
@@ -65,7 +66,11 @@ developed further to become features on the eLife platform.'),
             ->then(function (Result $experiment) {
                 return ContentHeaderNonArticle::basic($experiment['title'], false, null, null,
                     Meta::withText('Experiment: '.str_pad($experiment['number'], 3, '0', STR_PAD_LEFT),
-                        new Date(DateTimeImmutable::createFromFormat(DATE_ATOM, $experiment['published'])))
+                        new Date(DateTimeImmutable::createFromFormat(DATE_ATOM, $experiment['published']))),
+                    new BackgroundImage(
+                        $experiment['image']['sizes']['2:1'][900],
+                        $experiment['image']['sizes']['2:1'][1800]
+                    )
                 );
             });
 
