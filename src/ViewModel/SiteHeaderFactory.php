@@ -28,7 +28,8 @@ final class SiteHeaderFactory
     public function createSiteHeader() : PromiseInterface
     {
         $primaryLinks = SiteHeaderNavBar::primary([
-            NavLinkedItem::asIcon(new Link('Menu', '#mainMenu'),
+            NavLinkedItem::asIcon(
+                new Link('Menu', '#mainMenu'),
                 new Picture(
                     [
                         ['srcset' => $this->puliUrlGenerator->generateUrl('/elife/patterns/assets/img/patterns/molecules/nav-primary-menu-ic.svg')],
@@ -39,10 +40,12 @@ final class SiteHeaderFactory
                             48 => $this->puliUrlGenerator->generateUrl('/elife/patterns/assets/img/patterns/molecules/nav-primary-menu-ic_2x.png'),
                             24 => $this->puliUrlGenerator->generateUrl('/elife/patterns/assets/img/patterns/molecules/nav-primary-menu-ic_1x.png'),
                         ],
-                        'Menu icon',
-                        ['nav-primary__menu_icon']
+                        'Menu icon'
                     )
-                )
+                ),
+                true,
+                false,
+                'menu'
             ),
             NavLinkedItem::asLink(new Link('Home', $this->urlGenerator->generate('home'))),
             NavLinkedItem::asLink(new Link('Magazine', $this->urlGenerator->generate('magazine'))),
