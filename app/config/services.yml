@@ -17,6 +17,11 @@ services:
         arguments:
           - '@elife.api_sdk.client'
 
+    elife.api_sdk.podcast:
+        class: eLife\ApiSdk\ApiClient\PodcastClient
+        arguments:
+          - '@elife.api_sdk.client'
+
     elife.api_sdk.subjects:
         class: eLife\ApiSdk\ApiClient\SubjectsClient
         arguments:

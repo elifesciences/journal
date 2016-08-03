@@ -8,4 +8,8 @@
 
     {{ render_pattern(contentHeader) }}
 
+    {% if audio_player %}
+        {{ render_pattern(audio_player) }}
+    {% endif %}
+
 {% endblock %}

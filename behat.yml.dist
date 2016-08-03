@@ -16,3 +16,8 @@ default:
                 tags: '@labs'
             contexts:
               - LabsContext
+        magazine:
+            filters:
+                tags: '@magazine'
+            contexts:
+              - MagazineContext
