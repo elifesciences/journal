@@ -62,11 +62,10 @@ services:
           - '@router'
           - '@puli.url_generator'
 
-    elife.journal.view_model.factory.teaser_non_article_content:
-        class: eLife\Journal\ViewModel\TeaserNonArticleContentFactory
+    elife.journal.view_model.factory.teaser_grid:
+        class: eLife\Journal\ViewModel\TeaserGridFactory
         arguments:
           - '@router'
-          - '@puli.url_generator'
 
     elife.patterns.pattern_renderer:
         class: eLife\Patterns\PatternRenderer\MustachePatternRenderer

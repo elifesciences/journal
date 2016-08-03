@@ -40,7 +40,7 @@ developed further to become features on the eLife platform.'),
                 $teasers = [];
 
                 foreach ($result['items'] as $experiment) {
-                    $teasers[] = $this->get('elife.journal.view_model.factory.teaser_non_article_content')
+                    $teasers[] = $this->get('elife.journal.view_model.factory.teaser_grid')
                         ->forExperiment($experiment);
                 }
 
