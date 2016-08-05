@@ -50,7 +50,7 @@ final class ArchiveController extends Controller
             new SelectNav(
                 $this->get('router')->generate('archive'),
                 new Select('year', $years, new FormLabel('Archive year', 'year', true)),
-                Button::form('Go', Button::TYPE_SUBMIT)
+                Button::form('Go', Button::TYPE_SUBMIT, Button::SIZE_EXTRA_SMALL)
             )
         );
 
