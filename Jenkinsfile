@@ -18,9 +18,11 @@ elifePipeline {
     elifeMainlineOnly {
         stage 'Deploy on end2end'
         builderDeployRevision 'journal--end2end', commit
+        builderSmokeTests 'journal--end2end', '/srv/journal'
 
         stage 'Deploy on demo'
         builderDeployRevision 'journal--demo', commit
+        builderSmokeTests 'journal--demo', '/srv/journal'
 
         stage 'Approval'
         elifeGitMoveToBranch commit, 'approved'
@@ -28,5 +30,7 @@ elifePipeline {
         // this should be done by another pipeline prod-journal when we decide to go into prod
         stage 'Not production yet'
         elifeGitMoveToBranch commit, 'master'
+        //builderDeployRevision 'journal--prod', commit
+        //builderSmokeTests 'journal--prod', '/srv/journal'
     }
 }
