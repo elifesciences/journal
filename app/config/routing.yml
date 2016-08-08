@@ -30,6 +30,11 @@ careers:
     defaults:
          _controller: AppBundle:Careers:list
 
+collections:
+    path: /collections
+    defaults:
+         _controller: AppBundle:Collections:list
+
 contact:
     path: /contact
     defaults:
@@ -61,6 +66,11 @@ labs-experiment:
          _controller: AppBundle:Labs:experiment
     requirements:
         number: '[1-9][0-9]*'
+
+podcast:
+    path: /podcast
+    defaults:
+         _controller: AppBundle:Podcast:list
 
 resources:
     path: /resources
