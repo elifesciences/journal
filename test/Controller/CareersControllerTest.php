@@ -14,7 +14,7 @@ final class CareersControllerTest extends PageTestCase
         $crawler = $client->request('GET', '/careers');
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
-        $this->assertSame('Early careers', $crawler->filter('.content-header__title')->text());
+        $this->assertSame('Careers', $crawler->filter('.content-header__title')->text());
     }
 
     protected function getUrl() : string
