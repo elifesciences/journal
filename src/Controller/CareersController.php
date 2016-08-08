@@ -11,7 +11,7 @@ final class CareersController extends Controller
     {
         $arguments = $this->defaultPageArguments();
 
-        $arguments['contentHeader'] = ContentHeaderNonArticle::basic('Early careers');
+        $arguments['contentHeader'] = ContentHeaderNonArticle::basic('Careers');
 
         return new Response($this->get('templating')->render('::careers.html.twig', $arguments));
     }
