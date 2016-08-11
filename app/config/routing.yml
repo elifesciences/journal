@@ -17,6 +17,7 @@ archive:
     path: /archive
     defaults:
          _controller: AppBundle:Archive:index
+    condition: 'request.query.get("year") > 0'
 
 archive-year:
     path: /archive/{year}

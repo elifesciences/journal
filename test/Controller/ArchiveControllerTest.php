@@ -80,7 +80,7 @@ final class ArchiveControllerTest extends PageTestCase
     {
         $client = static::createClient();
 
-        $client->request('GET', '/archive/');
+        $client->request('GET', '/archive');
 
         $this->assertSame(404, $client->getResponse()->getStatusCode());
     }
