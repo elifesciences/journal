@@ -331,6 +331,11 @@
             "install-path": "vendor/symfony/monolog-bundle",
             "installer": "composer"
         },
+        "symfony/phpunit-bridge": {
+            "install-path": "vendor/symfony/phpunit-bridge",
+            "installer": "composer",
+            "env": "dev"
+        },
         "symfony/polyfill-intl-icu": {
             "install-path": "vendor/symfony/polyfill-intl-icu",
             "installer": "composer"
