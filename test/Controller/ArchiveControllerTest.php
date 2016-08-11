@@ -2,8 +2,18 @@
 
 namespace test\eLife\Journal\Controller;
 
+use Symfony\Bridge\PhpUnit\ClockMock;
+
+/**
+ * @group time-sensitive
+ */
 final class ArchiveControllerTest extends PageTestCase
 {
+    public function setUp()
+    {
+        ClockMock::withClockMock(strtotime('2016-01-01 00:00:00'));
+    }
+
     /**
      * @test
      */
@@ -11,11 +21,11 @@ final class ArchiveControllerTest extends PageTestCase
     {
         $client = static::createClient();
 
-        $crawler = $client->request('GET', '/archive/'.(date('Y') - 1));
+        $crawler = $client->request('GET', '/archive/2015');
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertSame('Monthly archive', $crawler->filter('.content-header__title')->text());
-        $this->assertEquals(date('Y') - 1, $crawler->filter('.content-header__cta option[selected]')->text());
+        $this->assertEquals(2015, $crawler->filter('.content-header__cta option[selected]')->text());
     }
 
     /**
@@ -25,7 +35,7 @@ final class ArchiveControllerTest extends PageTestCase
     {
         $client = static::createClient();
 
-        $crawler = $client->request('GET', '/archive/'.(date('Y') - 1));
+        $crawler = $client->request('GET', '/archive/2015');
 
         $selectNav = $crawler->selectButton('Go')->form();
         $selectNav['year']->setValue(2012);
@@ -58,8 +68,8 @@ final class ArchiveControllerTest extends PageTestCase
     {
         return [
             'before eLife' => [2011],
-            'current year' => [(int) date('Y')],
-            'next year' => [date('Y') + 1],
+            'current year' => [2016],
+            'next year' => [2017],
         ];
     }
 
@@ -90,6 +100,6 @@ final class ArchiveControllerTest extends PageTestCase
 
     protected function getUrl() : string
     {
-        return '/archive/'.(date('Y') - 1);
+        return '/archive/2015';
     }
 }
