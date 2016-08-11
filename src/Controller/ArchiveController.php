@@ -19,7 +19,7 @@ final class ArchiveController extends Controller
     {
         $year = (int) $request->query->get('year');
 
-        if ($year < 2012 || $year >= date('Y')) {
+        if ($year < 2012 || $year >= date('Y', time())) {
             throw new NotFoundHttpException();
         }
 
@@ -33,14 +33,14 @@ final class ArchiveController extends Controller
     {
         if ($year < 2012) {
             throw new NotFoundHttpException('eLife did not publish in '.$year);
-        } elseif ($year >= date('Y')) {
+        } elseif ($year >= date('Y', time())) {
             throw new NotFoundHttpException('Year not yet in archive');
         }
 
         $arguments = $this->defaultPageArguments();
 
         $years = [];
-        for ($yearOption = 2012; $yearOption < date('Y'); ++$yearOption) {
+        for ($yearOption = 2012; $yearOption < date('Y', time()); ++$yearOption) {
             $years[] = new SelectOption($yearOption, $yearOption, $yearOption === $year);
         }
 
