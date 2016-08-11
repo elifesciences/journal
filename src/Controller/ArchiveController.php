@@ -17,11 +17,9 @@ final class ArchiveController extends Controller
 {
     public function indexAction(Request $request) : Response
     {
-        $year = (int) $request->query->get('year');
+        $year = $request->query->get('year');
 
-        if ($year < 2012 || $year >= date('Y', time())) {
-            throw new NotFoundHttpException();
-        }
+        $this->validateArchiveYear($year);
 
         return new RedirectResponse(
             $this->get('router')->generate('archive-year', ['year' => $year]),
@@ -31,11 +29,7 @@ final class ArchiveController extends Controller
 
     public function yearAction(int $year) : Response
     {
-        if ($year < 2012) {
-            throw new NotFoundHttpException('eLife did not publish in '.$year);
-        } elseif ($year >= date('Y', time())) {
-            throw new NotFoundHttpException('Year not yet in archive');
-        }
+        $this->validateArchiveYear($year);
 
         $arguments = $this->defaultPageArguments();
 
@@ -57,5 +51,14 @@ final class ArchiveController extends Controller
         $arguments['year'] = $year;
 
         return new Response($this->get('templating')->render('::archive-year.html.twig', $arguments));
+    }
+
+    private function validateArchiveYear(int $year)
+    {
+        if ($year < 2012) {
+            throw new NotFoundHttpException('eLife did not publish in '.$year);
+        } elseif ($year >= date('Y', time())) {
+            throw new NotFoundHttpException('Year not yet in archive');
+        }
     }
 }
