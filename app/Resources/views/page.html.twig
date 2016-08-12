@@ -11,16 +11,10 @@
 
     <title>{% if title %}{{ title }} | {% endif %}eLife</title>
 
-    <link href="{{ resource_url('/elife/patterns/assets/css/all.css') }}" rel="stylesheet">
-
     {% block stylesheets deferred %}
-    {% if inline_stylesheets|length %}
-        <style>
-            {% for stylesheet in inline_stylesheets %}
-            {{ stylesheet }}
-            {% endfor %}
-        </style>
-    {% endif %}
+    {% for stylesheet in stylesheets %}
+        <link href="{{ resource_url(stylesheet) }}" rel="stylesheet">
+    {% endfor %}
     {% endblock %}
 
     <!--[if lt IE 9]>
@@ -72,16 +66,10 @@
 
 </div>
 
-<script src="{{ resource_url('/elife/patterns/assets/js/main.js') }}"></script>
-
 {% block javascripts deferred %}
-{% if inline_javascripts|length %}
-    <script>
-        {% for javascript in inline_javascripts %}
-        {{ stylesheet }}
-        {% endfor %}
-    </script>
-{% endif %}
+{% for javascript in javascripts %}
+    <script src="{{ resource_url(javascript) }}"></script>
+{% endfor %}
 {% endblock %}
 
 </body>
