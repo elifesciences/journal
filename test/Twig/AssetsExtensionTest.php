@@ -29,15 +29,15 @@ final class AssetsExtensionTest extends PHPUnit_Framework_TestCase
     public function it_adds_globals()
     {
         $hasAssets = $this->prophesize(HasAssets::class);
-        $hasAssets->getInlineStyleSheets()->willReturn($inlineStyleSheets = new ArrayObject(['inline_stylesheet']));
-        $hasAssets->getInlineJavaScripts()->willReturn($inlineJavaScripts = new ArrayObject(['inline_javascript']));
+        $hasAssets->getStyleSheets()->willReturn($styleSheets = new ArrayObject(['/path/to/some/css']));
+        $hasAssets->getJavaScripts()->willReturn($javaScripts = new ArrayObject(['path/to/some/js']));
 
         $twig = new Twig_Environment(new Twig_Loader_Array([]));
         $twig->addExtension(new AssetsExtension($hasAssets->reveal()));
 
         $globals = $twig->getGlobals();
 
-        $this->assertEquals($globals['inline_stylesheets'], $inlineStyleSheets);
-        $this->assertEquals($globals['inline_javascripts'], $inlineJavaScripts);
+        $this->assertEquals($globals['stylesheets'], ['/elife/patterns/assets/css/all.css']);
+        $this->assertEquals($globals['javascripts'], ['/elife/patterns/assets/js/main.js']);
     }
 }
