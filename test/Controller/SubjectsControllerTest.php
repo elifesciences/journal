@@ -52,11 +52,32 @@ final class SubjectsControllerTest extends PageTestCase
             )
         );
 
+        static::mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/search?for=&page=1&per-page=6&sort=date&order=desc&subject[]=subject',
+                [
+                    'Accept' => 'application/vnd.elife.search+json; version=1',
+                ]
+            ),
+            new Response(
+                200,
+                [
+                    'Content-Type' => 'application/vnd.elife.search+json; version=1',
+                ],
+                json_encode([
+                    'total' => 0,
+                    'items' => [],
+                ])
+            )
+        );
+
         $crawler = $client->request('GET', '/subjects/subject');
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertSame('Subject', $crawler->filter('.content-header__title')->text());
         $this->assertSame('Subject impact statement.', trim($crawler->filter('main .lead-paras')->text()));
+        $this->assertContains('No articles available.', $crawler->filter('main')->text());
     }
 
     /**
@@ -126,6 +147,26 @@ final class SubjectsControllerTest extends PageTestCase
                             ],
                         ],
                     ],
+                ])
+            )
+        );
+
+        static::mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/search?for=&page=1&per-page=6&sort=date&order=desc&subject[]=subject',
+                [
+                    'Accept' => 'application/vnd.elife.search+json; version=1',
+                ]
+            ),
+            new Response(
+                200,
+                [
+                    'Content-Type' => 'application/vnd.elife.search+json; version=1',
+                ],
+                json_encode([
+                    'total' => 0,
+                    'items' => [],
                 ])
             )
         );

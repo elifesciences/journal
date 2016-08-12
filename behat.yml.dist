@@ -21,3 +21,8 @@ default:
                 tags: '@magazine'
             contexts:
               - MagazineContext
+        subject:
+            filters:
+                tags: '@subject'
+            contexts:
+              - SubjectContext
