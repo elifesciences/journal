@@ -14,6 +14,22 @@
             {{ render_pattern(lead_paras) }}
         {% endif %}
 
+        <div class="u-pad-top">
+
+            {% if latestArticles %}
+
+                {{ render_pattern(latestArticles) }}
+
+            {% else %}
+
+                {{ render_pattern(latestArticlesHeading) }}
+
+                <p>No articles available.</p>
+
+            {% endif %}
+
+        </div>
+
     </div>
 
 {% endblock %}

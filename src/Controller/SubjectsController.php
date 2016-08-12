@@ -2,6 +2,7 @@
 
 namespace eLife\Journal\Controller;
 
+use eLife\ApiSdk\ApiClient\SearchClient;
 use eLife\ApiSdk\ApiClient\SubjectsClient;
 use eLife\ApiSdk\Exception\BadResponse;
 use eLife\ApiSdk\MediaType;
@@ -10,6 +11,7 @@ use eLife\Patterns\ViewModel\BackgroundImage;
 use eLife\Patterns\ViewModel\ContentHeaderNonArticle;
 use eLife\Patterns\ViewModel\LeadPara;
 use eLife\Patterns\ViewModel\LeadParas;
+use eLife\Patterns\ViewModel\ListHeading;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
@@ -18,6 +20,9 @@ final class SubjectsController extends Controller
 {
     public function subjectAction(string $id) : Response
     {
+        $page = 1;
+        $perPage = 6;
+
         $arguments = $this->defaultPageArguments();
 
         $arguments['subject'] = $this->get('elife.api_sdk.subjects')
@@ -44,6 +49,20 @@ final class SubjectsController extends Controller
             })
             ->otherwise(function () {
                 return null;
+            });
+
+        $arguments['latestArticlesHeading'] = new ListHeading('Latest articles');
+        $arguments['latestArticles'] = $this->get('elife.api_sdk.search')
+            ->query(['Accept' => new MediaType(SearchClient::TYPE_SEARCH, 1)], '', $page, $perPage, 'date',
+                true, [$id])
+            ->then(function (Result $result) use ($arguments) {
+                if (empty($result['items'])) {
+                    return null;
+                }
+
+                return $this->get('elife.journal.view_model.factory.listing_teaser')
+                    ->forResult($result, $arguments['latestArticlesHeading']['heading'])
+                    ;
             });
 
         return new Response($this->get('templating')->render('::subject.html.twig', $arguments));
