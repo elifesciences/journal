@@ -4,9 +4,7 @@ namespace eLife\Journal\ViewModel;
 
 use DateTimeImmutable;
 use eLife\ApiSdk\ApiClient\SubjectsClient;
-use eLife\ApiSdk\MediaType;
 use eLife\ApiSdk\Result;
-use eLife\Patterns\ViewModel\ContextLabel;
 use eLife\Patterns\ViewModel\Date;
 use eLife\Patterns\ViewModel\Link;
 use eLife\Patterns\ViewModel\ListingTeasers;
@@ -17,13 +15,14 @@ use eLife\Patterns\ViewModel\TeaserFooter;
 use eLife\Patterns\ViewModel\TeaserImage;
 use GuzzleHttp\Promise\FulfilledPromise;
 use GuzzleHttp\Promise\PromiseInterface;
-use GuzzleHttp\Psr7\Uri;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use UnexpectedValueException;
 use function GuzzleHttp\Promise\all;
 
 final class SecondaryListingTeaserFactory
 {
+    use CreatesTeasers;
+
     private $urlGenerator;
     private $subjects;
 
@@ -296,24 +295,5 @@ final class SecondaryListingTeaserFactory
                 )
             )
         ));
-    }
-
-    private function createContextLabel(array $item) : PromiseInterface
-    {
-        if (empty($item['subjects'])) {
-            return new FulfilledPromise(null);
-        }
-
-        return all(array_map(function (string $id) {
-            return $this->subjects->getSubject(['Accept' => new MediaType(SubjectsClient::TYPE_SUBJECT, 1)], $id);
-        }, $item['subjects']))
-            ->then(function (array $subjects) {
-                return new ContextLabel(...array_map(function (Result $subject) {
-                    return new Link(
-                        $subject['name'],
-                        $this->urlGenerator->generate('subject', ['id' => $subject['id']])
-                    );
-                }, $subjects));
-            });
     }
 }
