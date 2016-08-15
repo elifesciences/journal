@@ -49,13 +49,13 @@ final class TeaserGridFactory
     {
         return Teaser::withGrid(
             $episode['title'],
-            null,
+            $this->urlGenerator->generate('podcast-episode', ['number' => $episode['number']]),
             $episode['impactStatement'] ?? null,
             'Episode '.$episode['number'],
             TeaserImage::prominent(
                 $episode['image']['sizes']['16:9'][250],
                 $episode['image']['alt'],
-                null,
+                $this->urlGenerator->generate('podcast-episode', ['number' => $episode['number']]),
                 [
                     500 => $episode['image']['sizes']['16:9'][500],
                     250 => $episode['image']['sizes']['16:9'][250],

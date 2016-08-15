@@ -2,11 +2,26 @@
 
 namespace eLife\Journal\Controller;
 
+use DateTimeImmutable;
 use eLife\ApiSdk\ApiClient\PodcastClient;
+use eLife\ApiSdk\Exception\BadResponse;
 use eLife\ApiSdk\MediaType;
 use eLife\ApiSdk\Result;
+use eLife\Patterns\ViewModel\AudioPlayer;
+use eLife\Patterns\ViewModel\AudioSource;
+use eLife\Patterns\ViewModel\BackgroundImage;
 use eLife\Patterns\ViewModel\ContentHeaderNonArticle;
+use eLife\Patterns\ViewModel\Date;
+use eLife\Patterns\ViewModel\Image;
+use eLife\Patterns\ViewModel\LeadPara;
+use eLife\Patterns\ViewModel\LeadParas;
+use eLife\Patterns\ViewModel\Link;
+use eLife\Patterns\ViewModel\Meta;
+use eLife\Patterns\ViewModel\Picture;
+use eLife\Patterns\ViewModel\PodcastDownload;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Throwable;
 
 final class PodcastController extends Controller
 {
@@ -33,5 +48,79 @@ final class PodcastController extends Controller
             });
 
         return new Response($this->get('templating')->render('::podcast.html.twig', $arguments));
+    }
+
+    public function episodeAction(int $number) : Response
+    {
+        $arguments = $this->defaultPageArguments();
+
+        $arguments['episode'] = $this->get('elife.api_sdk.podcast')
+            ->getEpisode(['Accept' => new MediaType(PodcastClient::TYPE_PODCAST_EPISODE, 1)], $number)
+            ->otherwise(function (Throwable $e) {
+                if ($e instanceof BadResponse && 404 === $e->getResponse()->getStatusCode()) {
+                    throw new NotFoundHttpException('Episode not found', $e);
+                }
+            });
+
+        $arguments['contentHeader'] = $arguments['episode']
+            ->then(function (Result $episode) {
+                return ContentHeaderNonArticle::podcast($episode['title'], false, 'Episode '.$episode['number'], null,
+                    Meta::withLink(new Link('Podcast', $this->get('router')->generate('podcast')),
+                        new Date(DateTimeImmutable::createFromFormat(DATE_ATOM, $episode['published']))),
+                    new BackgroundImage(
+                        $episode['image']['sizes']['2:1'][900],
+                        $episode['image']['sizes']['2:1'][1800]
+                    ),
+                    new PodcastDownload(
+                        $episode['mp3'],
+                        new Picture(
+                            [
+                                [
+                                    'srcset' => $this->get('puli.url_generator')
+                                        ->generateUrl('/elife/patterns/assets/img/icons/download-full-reverse.svg'),
+                                    'media' => '(min-width: 35em)',
+                                    'type' => 'image/svg+xml',
+                                ],
+                                [
+                                    'srcset' => $this->get('puli.url_generator')
+                                        ->generateUrl('/elife/patterns/assets/img/icons/download-full-reverse-1x.png'),
+                                    'media' => '(min-width: 35em)',
+                                ],
+                                [
+                                    'srcset' => $this->get('puli.url_generator')
+                                        ->generateUrl('/elife/patterns/assets/img/icons/download-reverse.svg'),
+                                    'type' => 'image/svg+xml',
+                                ],
+                            ],
+                            new Image(
+                                $this->get('puli.url_generator')
+                                    ->generateUrl('/elife/patterns/assets/img/icons/download-full-reverse-1x.png'),
+                                [
+                                    88 => $this->get('puli.url_generator')
+                                        ->generateUrl('/elife/patterns/assets/img/icons/download-full-reverse-2x.png'),
+                                    44 => $this->get('puli.url_generator')
+                                        ->generateUrl('/elife/patterns/assets/img/icons/download-full-reverse-1x.png'),
+                                ],
+                                'Download icon'
+                            )
+                        )
+                    )
+                );
+            });
+
+        $arguments['audioPlayer'] = $arguments['episode']
+            ->then(function (Result $episode) {
+                return new AudioPlayer($episode['title'], [new AudioSource($episode['mp3'], AudioSource::TYPE_MP3)]);
+            });
+
+        $arguments['leadParas'] = $arguments['episode']
+            ->then(function (Result $episode) {
+                return new LeadParas([new LeadPara($episode['impactStatement'])]);
+            })
+            ->otherwise(function () {
+                return null;
+            });
+
+        return new Response($this->get('templating')->render('::podcast-episode.html.twig', $arguments));
     }
 }
