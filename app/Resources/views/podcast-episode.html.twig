@@ -1,0 +1,21 @@
+{% extends '::page.html.twig' %}
+
+{% block title %}{{ episode.title }} | Podcast{% endblock %}
+
+{% block body %}
+
+    {{ info_bar('This page is incomplete.') }}
+
+    {{ render_pattern(contentHeader) }}
+
+    {{ render_pattern(audioPlayer) }}
+
+    <div class="wrapper u-pad-top">
+
+        {% if leadParas %}
+            {{ render_pattern(leadParas) }}
+        {% endif %}
+
+    </div>
+
+{% endblock %}
