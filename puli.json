@@ -112,9 +112,19 @@
             "install-path": "vendor/doctrine/lexer",
             "installer": "composer"
         },
+        "elife/api": {
+            "install-path": "vendor/elife/api",
+            "installer": "composer",
+            "env": "dev"
+        },
         "elife/api-sdk": {
             "install-path": "vendor/elife/api-sdk",
             "installer": "composer"
+        },
+        "elife/api-validator": {
+            "install-path": "vendor/elife/api-validator",
+            "installer": "composer",
+            "env": "dev"
         },
         "elife/patterns": {
             "install-path": "vendor/elife/patterns",
