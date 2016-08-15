@@ -21,6 +21,11 @@ default:
                 tags: '@magazine'
             contexts:
               - MagazineContext
+        podcast:
+            filters:
+                tags: '@podcast'
+            contexts:
+              - PodcastContext
         subject:
             filters:
                 tags: '@subject'

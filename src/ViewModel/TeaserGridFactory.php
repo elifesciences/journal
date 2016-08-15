@@ -4,6 +4,7 @@ namespace eLife\Journal\ViewModel;
 
 use DateTimeImmutable;
 use eLife\Patterns\ViewModel\Date;
+use eLife\Patterns\ViewModel\Link;
 use eLife\Patterns\ViewModel\Meta;
 use eLife\Patterns\ViewModel\Teaser;
 use eLife\Patterns\ViewModel\TeaserFooter;
@@ -40,6 +41,32 @@ final class TeaserGridFactory
                     'Experiment: '.str_pad($experiment['number'], 3, '0', STR_PAD_LEFT),
                     new Date(DateTimeImmutable::createFromFormat(DATE_ATOM, $experiment['published']))
                 )
+            )
+        );
+    }
+
+    public function forPodcastEpisode(array $episode) : Teaser
+    {
+        return Teaser::withGrid(
+            $episode['title'],
+            null,
+            $episode['impactStatement'] ?? null,
+            'Episode '.$episode['number'],
+            TeaserImage::prominent(
+                $episode['image']['sizes']['16:9'][250],
+                $episode['image']['alt'],
+                null,
+                [
+                    500 => $episode['image']['sizes']['16:9'][500],
+                    250 => $episode['image']['sizes']['16:9'][250],
+                ]
+            ),
+            TeaserFooter::forNonArticle(
+                Meta::withLink(
+                    new Link('Podcast', $this->urlGenerator->generate('podcast')),
+                    new Date(DateTimeImmutable::createFromFormat(DATE_ATOM, $episode['published']))
+                ),
+                $episode['mp3']
             )
         );
     }
