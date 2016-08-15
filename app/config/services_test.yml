@@ -1,9 +1,33 @@
 services:
 
+    elife.api_validator.validator:
+        class: eLife\ApiValidator\MessageValidator\JsonMessageValidator
+        public: false
+        arguments:
+          - '@elife.api_validator.schema_finder'
+          - '@elife.api_validator.validator.json_decoder'
+
+    elife.api_validator.validator.json_decoder:
+        class: Webmozart\Json\JsonDecoder
+        public: false
+
+    elife.api_validator.schema_finder:
+        class: eLife\ApiValidator\SchemaFinder\PuliSchemaFinder
+        public: false
+        arguments:
+          - '@puli.repository'
+
     elife.guzzle.middleware.mock.storage:
         class: Csa\Bundle\GuzzleBundle\Cache\MockStorageAdapter
         arguments:
           - '%api_mock%'
+
+    elife.guzzle.middleware.mock.storage.validating:
+        class: test\eLife\Journal\ValidatingStorageAdapter
+        decorates: elife.guzzle.middleware.mock.storage
+        arguments:
+          - '@elife.guzzle.middleware.mock.storage.validating.inner'
+          - '@elife.api_validator.validator'
 
     elife.guzzle.middleware.mock:
         class: Csa\Bundle\GuzzleBundle\GuzzleHttp\Middleware\MockMiddleware

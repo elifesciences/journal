@@ -80,11 +80,11 @@ final class SubjectsControllerTest extends PageTestCase
                                 1800 => 'https://placehold.it/1800x900',
                             ],
                             '16:9' => [
-                                250 => 'https:\/\/placehold.it\/250x141',
-                                500 => 'https:\/\/placehold.it\/500x281',
+                                250 => 'https://placehold.it/250x141',
+                                500 => 'https://placehold.it/500x281',
                             ],
                             '1:1' => [
-                                70 => 'https://placehold.it\/70x70',
+                                70 => 'https://placehold.it/70x70',
                                 140 => 'https://placehold.it/140x140',
                             ],
                         ],
@@ -109,6 +109,32 @@ final class SubjectsControllerTest extends PageTestCase
                 json_encode([
                     'total' => 0,
                     'items' => [],
+                    'subjects' => [
+                        [
+                            'id' => 'subject',
+                            'name' => 'Subject',
+                            'results' => 0,
+                        ],
+                    ],
+                    'types' => [
+                        'correction' => 0,
+                        'editorial' => 0,
+                        'feature' => 0,
+                        'insight' => 0,
+                        'research-advance' => 0,
+                        'research-article' => 0,
+                        'research-exchange' => 0,
+                        'retraction' => 0,
+                        'registered-report' => 0,
+                        'replication-study' => 0,
+                        'short-report' => 0,
+                        'tools-resources' => 0,
+                        'blog-article' => 0,
+                        'collection' => 0,
+                        'event' => 0,
+                        'labs-experiment' => 0,
+                        'podcast-episode' => 0,
+                    ],
                 ])
             )
         );

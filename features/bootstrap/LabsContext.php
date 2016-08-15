@@ -27,25 +27,33 @@ final class LabsContext extends Context
                     'alt' => '',
                     'sizes' => [
                         '2:1' => [
-                            '900' => 'https://placehold.it/900x450',
-                            '1800' => 'https://placehold.it/1800x900',
+                            900 => 'https://placehold.it/900x450',
+                            1800 => 'https://placehold.it/1800x900',
                         ],
                         '16:9' => [
-                            '250' => 'https://placehold.it/250x141',
-                            '500' => 'https://placehold.it/500x281',
+                            250 => 'https://placehold.it/250x141',
+                            500 => 'https://placehold.it/500x281',
                         ],
                         '1:1' => [
-                            '70' => 'https://placehold.it/70x70',
-                            '140' => 'https://placehold.it/140x140',
+                            70 => 'https://placehold.it/70x70',
+                            140 => 'https://placehold.it/140x140',
                         ],
                     ],
                 ],
                 'impactStatement' => 'Experiment '.$i.' impact statement',
+                'content' => [
+                    [
+                        'type' => 'paragraph',
+                        'text' => 'Experiment '.$i.' text.',
+                    ],
+                ],
             ];
         }
 
         foreach (array_chunk($experiments, 6) as $i => $experimentsChunk) {
             $page = $i + 1;
+
+            unset($experimentsChunk['content']);
 
             $this->mockApiResponse(
                 new Request(

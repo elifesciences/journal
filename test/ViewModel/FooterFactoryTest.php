@@ -55,11 +55,11 @@ final class FooterFactoryTest extends KernelTestCase
                                             1800 => 'https://placehold.it/1800x900',
                                         ],
                                         '16:9' => [
-                                            250 => 'https:\/\/placehold.it\/250x141',
-                                            500 => 'https:\/\/placehold.it\/500x281',
+                                            250 => 'https://placehold.it/250x141',
+                                            500 => 'https://placehold.it/500x281',
                                         ],
                                         '1:1' => [
-                                            70 => 'https://placehold.it\/70x70',
+                                            70 => 'https://placehold.it/70x70',
                                             140 => 'https://placehold.it/140x140',
                                         ],
                                     ],
