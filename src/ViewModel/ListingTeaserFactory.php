@@ -4,9 +4,7 @@ namespace eLife\Journal\ViewModel;
 
 use DateTimeImmutable;
 use eLife\ApiSdk\ApiClient\SubjectsClient;
-use eLife\ApiSdk\MediaType;
 use eLife\ApiSdk\Result;
-use eLife\Patterns\ViewModel\ContextLabel;
 use eLife\Patterns\ViewModel\Date;
 use eLife\Patterns\ViewModel\Link;
 use eLife\Patterns\ViewModel\ListingTeasers;
@@ -24,6 +22,8 @@ use function GuzzleHttp\Promise\all;
 
 final class ListingTeaserFactory
 {
+    use CreatesTeasers;
+
     private $urlGenerator;
     private $puliUrlGenerator;
     private $subjects;
@@ -120,20 +120,23 @@ final class ListingTeaserFactory
 
     private function teaserForBlogArticle(array $article) : PromiseInterface
     {
-        return new FulfilledPromise(Teaser::main(
-            $article['title'],
-            null,
-            $article['impactStatement'] ?? null,
-            null,
-            $this->createContextLabel($article),
-            null,
-            TeaserFooter::forNonArticle(
-                Meta::withLink(
-                    new Link('Inside eLife', $this->urlGenerator->generate('inside-elife')),
-                    new Date(DateTimeImmutable::createFromFormat(DATE_ATOM, $article['published']))
-                )
-            )
-        ));
+        return $this->createContextLabel($article)
+            ->then(function ($contextLabel) use ($article) {
+                return new FulfilledPromise(Teaser::main(
+                    $article['title'],
+                    null,
+                    $article['impactStatement'] ?? null,
+                    null,
+                    $contextLabel,
+                    null,
+                    TeaserFooter::forNonArticle(
+                        Meta::withLink(
+                            new Link('Inside eLife', $this->urlGenerator->generate('inside-elife')),
+                            new Date(DateTimeImmutable::createFromFormat(DATE_ATOM, $article['published']))
+                        )
+                    )
+                ));
+            });
     }
 
     private function teaserForCollection(array $collection) : PromiseInterface
@@ -220,24 +223,5 @@ final class ListingTeaserFactory
                 );
             })
             ;
-    }
-
-    private function createContextLabel(array $item) : PromiseInterface
-    {
-        if (empty($item['subjects'])) {
-            return new FulfilledPromise(null);
-        }
-
-        return all(array_map(function (string $id) {
-            return $this->subjects->getSubject(['Accept' => new MediaType(SubjectsClient::TYPE_SUBJECT, 1)], $id);
-        }, $item['subjects']))
-            ->then(function (array $subjects) {
-                return new ContextLabel(...array_map(function (Result $subject) {
-                    return new Link(
-                        $subject['name'],
-                        $this->urlGenerator->generate('subject', ['id' => $subject['id']])
-                    );
-                }, $subjects));
-            });
     }
 }
