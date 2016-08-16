@@ -8,4 +8,20 @@
 
     {{ render_pattern(contentHeader) }}
 
+    <div class="wrapper u-pad-top">
+
+        {% if latest %}
+
+            {{ render_pattern(latest) }}
+
+        {% else %}
+
+            {{ render_pattern(latestHeading) }}
+
+            <p>No articles available.</p>
+
+        {% endif %}
+
+    </div>
+
 {% endblock %}

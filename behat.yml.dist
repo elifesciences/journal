@@ -11,6 +11,11 @@ default:
             filename: behat.xml
             outputDir: %paths.base%/build
     suites:
+        blog:
+            filters:
+                tags: '@blog'
+            contexts:
+              - BlogContext
         collection:
             filters:
                 tags: '@collection'
