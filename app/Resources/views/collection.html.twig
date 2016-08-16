@@ -1,0 +1,25 @@
+{% extends '::page.html.twig' %}
+
+{% block title %}{{ collection.title }} | Collections{% endblock %}
+
+{% block body %}
+
+    {{ info_bar('This page is incomplete.') }}
+
+    {{ render_pattern(contentHeader) }}
+
+    <div class="wrapper">
+
+        {% if lead_paras %}
+            {{ render_pattern(lead_paras) }}
+        {% endif %}
+
+        <div class="u-pad-top">
+
+            {{ render_pattern(collectionList) }}
+
+        </div>
+
+    </div>
+
+{% endblock %}
