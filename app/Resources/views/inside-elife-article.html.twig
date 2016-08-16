@@ -1,0 +1,19 @@
+{% extends '::page.html.twig' %}
+
+{% block title %}{{ article.title }} | Inside eLife{% endblock %}
+
+{% block body %}
+
+    {{ info_bar('This page is incomplete.') }}
+
+    {{ render_pattern(contentHeader) }}
+
+    <div class="wrapper">
+
+        {% if leadParas %}
+            {{ render_pattern(leadParas) }}
+        {% endif %}
+
+    </div>
+
+{% endblock %}

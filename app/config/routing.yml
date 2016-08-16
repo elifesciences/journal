@@ -61,6 +61,11 @@ inside-elife:
     defaults:
          _controller: AppBundle:InsideElife:list
 
+inside-elife-article:
+    path: /inside-elife/{id}
+    defaults:
+         _controller: AppBundle:InsideElife:article
+
 labs:
     path: /labs
     defaults:

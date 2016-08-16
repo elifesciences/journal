@@ -2,12 +2,21 @@
 
 namespace eLife\Journal\Controller;
 
+use DateTimeImmutable;
 use eLife\ApiSdk\ApiClient\BlogClient;
+use eLife\ApiSdk\Exception\BadResponse;
 use eLife\ApiSdk\MediaType;
 use eLife\ApiSdk\Result;
 use eLife\Patterns\ViewModel\ContentHeaderNonArticle;
+use eLife\Patterns\ViewModel\Date;
+use eLife\Patterns\ViewModel\LeadPara;
+use eLife\Patterns\ViewModel\LeadParas;
+use eLife\Patterns\ViewModel\Link;
 use eLife\Patterns\ViewModel\ListHeading;
+use eLife\Patterns\ViewModel\Meta;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Throwable;
 
 final class InsideElifeController extends Controller
 {
@@ -40,5 +49,40 @@ final class InsideElifeController extends Controller
         ;
 
         return new Response($this->get('templating')->render('::inside-elife.html.twig', $arguments));
+    }
+
+    public function articleAction(string $id) : Response
+    {
+        $arguments = $this->defaultPageArguments();
+
+        $arguments['article'] = $this->get('elife.api_sdk.blog')
+            ->getArticle(['Accept' => new MediaType(BlogClient::TYPE_BLOG_ARTICLE, 1)], $id)
+            ->otherwise(function (Throwable $e) {
+                if ($e instanceof BadResponse && 404 === $e->getResponse()->getStatusCode()) {
+                    throw new NotFoundHttpException('Article not found', $e);
+                }
+
+                throw $e;
+            });
+
+        $arguments['contentHeader'] = $arguments['article']
+            ->then(function (Result $article) {
+                return ContentHeaderNonArticle::basic($article['title'], false, null, null,
+                    Meta::withLink(
+                        new Link('Inside eLife', $this->get('router')->generate('inside-elife')),
+                        new Date(DateTimeImmutable::createFromFormat(DATE_ATOM, $article['published']))
+                    )
+                );
+            });
+
+        $arguments['leadParas'] = $arguments['article']
+            ->then(function (Result $episode) {
+                return new LeadParas([new LeadPara($episode['impactStatement'])]);
+            })
+            ->otherwise(function () {
+                return null;
+            });
+
+        return new Response($this->get('templating')->render('::inside-elife-article.html.twig', $arguments));
     }
 }
