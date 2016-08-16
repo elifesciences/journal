@@ -2,12 +2,22 @@
 
 namespace eLife\Journal\Controller;
 
+use DateTimeImmutable;
 use eLife\ApiSdk\ApiClient\CollectionsClient;
+use eLife\ApiSdk\Exception\BadResponse;
 use eLife\ApiSdk\MediaType;
 use eLife\ApiSdk\Result;
+use eLife\Patterns\ViewModel\BackgroundImage;
 use eLife\Patterns\ViewModel\ContentHeaderNonArticle;
+use eLife\Patterns\ViewModel\Date;
+use eLife\Patterns\ViewModel\LeadPara;
+use eLife\Patterns\ViewModel\LeadParas;
+use eLife\Patterns\ViewModel\Link;
 use eLife\Patterns\ViewModel\ListHeading;
+use eLife\Patterns\ViewModel\Meta;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Throwable;
 
 final class CollectionsController extends Controller
 {
@@ -39,5 +49,51 @@ final class CollectionsController extends Controller
             });
 
         return new Response($this->get('templating')->render('::collections.html.twig', $arguments));
+    }
+
+    public function collectionAction(string $id) : Response
+    {
+        $arguments = $this->defaultPageArguments();
+
+        $arguments['collection'] = $this->get('elife.api_sdk.collections')
+            ->getCollection(['Accept' => new MediaType(CollectionsClient::TYPE_COLLECTION, 1)], $id)
+            ->otherwise(function (Throwable $e) {
+                if ($e instanceof BadResponse && 404 === $e->getResponse()->getStatusCode()) {
+                    throw new NotFoundHttpException('Collection not found', $e);
+                }
+            });
+
+        $arguments['contentHeader'] = $arguments['collection']
+            ->then(function (Result $collection) {
+                return ContentHeaderNonArticle::curatedContentListing($collection['title'], false,
+                    $collection['subTitle'] ?? null,
+                    null,
+                    Meta::withLink(
+                        new Link('Collection', $this->get('router')->generate('collections')),
+                        new Date(DateTimeImmutable::createFromFormat(DATE_ATOM, $collection['updated']))
+                    ),
+                    null,
+                    new BackgroundImage(
+                        $collection['image']['sizes']['2:1'][900],
+                        $collection['image']['sizes']['2:1'][1800]
+                    )
+                );
+            });
+
+        $arguments['lead_paras'] = $arguments['collection']
+            ->then(function (Result $collection) {
+                return new LeadParas([new LeadPara($collection['impactStatement'])]);
+            })
+            ->otherwise(function () {
+                return null;
+            });
+
+        $arguments['collectionList'] = $arguments['collection']
+            ->then(function (Result $collection) {
+                return $this->get('elife.journal.view_model.factory.listing_teaser')
+                    ->forItems($collection['content'], 'Collection');
+            });
+
+        return new Response($this->get('templating')->render('::collection.html.twig', $arguments));
     }
 }

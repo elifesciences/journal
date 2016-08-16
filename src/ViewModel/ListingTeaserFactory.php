@@ -148,16 +148,22 @@ final class ListingTeaserFactory
     {
         return $this->createContextLabel($collection)
             ->then(function ($contextLabel) use ($collection) {
+                $curatedBy = 'Curated by '.$collection['selectedCurator']['name']['preferred'];
+                if (false === empty($collection['selectedCurator']['etAl'])) {
+                    $curatedBy .= ' et al';
+                }
+                $curatedBy .= '.';
+
                 return Teaser::main(
                     $collection['title'],
-                    null,
+                    $this->urlGenerator->generate('collection', ['id' => $collection['id']]),
                     $collection['impactStatement'] ?? null,
-                    'Curated by '.$collection['selectedCurator']['name']['preferred'],
+                    $curatedBy,
                     $contextLabel,
                     TeaserImage::big(
                         $collection['image']['sizes']['16:9'][250],
                         $collection['image']['alt'],
-                        null,
+                        $this->urlGenerator->generate('collection', ['id' => $collection['id']]),
                         [
                             500 => $collection['image']['sizes']['16:9'][500],
                             250 => $collection['image']['sizes']['16:9'][250],

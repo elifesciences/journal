@@ -187,15 +187,21 @@ final class SecondaryListingTeaserFactory
     {
         return $this->createContextLabel($collection)
             ->then(function ($contextLabel) use ($collection) {
+                $curatedBy = 'Curated by '.$collection['selectedCurator']['name']['preferred'];
+                if (false === empty($collection['selectedCurator']['etAl'])) {
+                    $curatedBy .= ' et al';
+                }
+                $curatedBy .= '.';
+
                 return Teaser::secondary(
                     $collection['title'],
-                    null,
-                    null,
+                    $this->urlGenerator->generate('collection', ['id' => $collection['id']]),
+                    $curatedBy,
                     $contextLabel,
                     TeaserImage::small(
                         $collection['image']['sizes']['1:1'][70],
                         $collection['image']['alt'],
-                        null,
+                        $this->urlGenerator->generate('collection', ['id' => $collection['id']]),
                         [
                             140 => $collection['image']['sizes']['1:1'][140],
                             70 => $collection['image']['sizes']['1:1'][70],
