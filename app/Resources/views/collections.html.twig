@@ -8,4 +8,28 @@
 
     {{ render_pattern(contentHeader) }}
 
+    <div class="wrapper u-pad-top">
+
+        <div class="grid">
+
+            <div class="grid__item large--eight-twelfths push--large--two-twelfths">
+
+                {% if latestCollections %}
+
+                    {{ render_pattern(latestCollections) }}
+
+                {% else %}
+
+                    {{ render_pattern(latestCollectionsHeading) }}
+
+                    <p>No collections available.</p>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+    </div>
+
 {% endblock %}

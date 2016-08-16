@@ -40,8 +40,13 @@ final class ListingTeaserFactory
 
     public function forResult(Result $result, string $heading = null) : PromiseInterface
     {
+        return $this->forItems($result['items'], $heading);
+    }
+
+    public function forItems(array $items, string $heading = null) : PromiseInterface
+    {
         $teasers = [];
-        foreach ($result['items'] as $item) {
+        foreach ($items as $item) {
             $teasers[] = $this->createTeaser($item);
         }
 
@@ -147,7 +152,7 @@ final class ListingTeaserFactory
                     $collection['title'],
                     null,
                     $collection['impactStatement'] ?? null,
-                    null,
+                    'Curated by '.$collection['selectedCurator']['name']['preferred'],
                     $contextLabel,
                     TeaserImage::big(
                         $collection['image']['sizes']['16:9'][250],
