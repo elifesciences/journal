@@ -169,7 +169,7 @@ final class SecondaryListingTeaserFactory
             ->then(function ($contextLabel) use ($article) {
                 return Teaser::secondary(
                     $article['title'],
-                    null,
+                    $this->urlGenerator->generate('inside-elife-article', ['id' => $article['id']]),
                     null,
                     $contextLabel,
                     null,

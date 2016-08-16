@@ -129,7 +129,7 @@ final class ListingTeaserFactory
             ->then(function ($contextLabel) use ($article) {
                 return new FulfilledPromise(Teaser::main(
                     $article['title'],
-                    null,
+                    $this->urlGenerator->generate('inside-elife-article', ['id' => $article['id']]),
                     $article['impactStatement'] ?? null,
                     null,
                     $contextLabel,
