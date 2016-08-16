@@ -212,14 +212,14 @@ final class ListingTeaserFactory
             ->then(function ($contextLabel) use ($episode) {
                 return Teaser::main(
                     $episode['title'],
-                    null,
+                    $this->urlGenerator->generate('podcast-episode', ['number' => $episode['number']]),
                     $episode['impactStatement'] ?? null,
-                    null,
+                    'Episode '.$episode['number'],
                     $contextLabel,
                     TeaserImage::big(
                         $episode['image']['sizes']['16:9'][250],
                         $episode['image']['alt'],
-                        null,
+                        $this->urlGenerator->generate('podcast-episode', ['number' => $episode['number']]),
                         [
                             500 => $episode['image']['sizes']['16:9'][500],
                             250 => $episode['image']['sizes']['16:9'][250],
@@ -229,7 +229,8 @@ final class ListingTeaserFactory
                         Meta::withText(
                             'Podcast',
                             new Date(DateTimeImmutable::createFromFormat(DATE_ATOM, $episode['published']))
-                        )
+                        ),
+                        $episode['mp3']
                     )
                 );
             })
