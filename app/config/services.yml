@@ -22,6 +22,11 @@ services:
         arguments:
           - '@elife.api_sdk.client'
 
+    elife.api_sdk.events:
+        class: eLife\ApiSdk\ApiClient\EventsClient
+        arguments:
+          - '@elife.api_sdk.client'
+
     elife.api_sdk.labs:
         class: eLife\ApiSdk\ApiClient\LabsClient
         arguments:

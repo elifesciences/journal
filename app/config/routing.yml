@@ -46,6 +46,11 @@ contact:
     defaults:
          _controller: AppBundle:Contact:contact
 
+events:
+    path: /events
+    defaults:
+         _controller: AppBundle:Events:list
+
 magazine:
     path: /magazine
     defaults:

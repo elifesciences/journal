@@ -76,6 +76,8 @@ final class ListingTeaserFactory
                 return $this->teaserForBlogArticle($item);
             case 'collection':
                 return $this->teaserForCollection($item);
+            case 'event':
+                return $this->teaserForEvent($item);
             case 'labs-experiment':
                 return $this->teaserForLabsExperiment($item);
             case 'podcast-episode':
@@ -178,6 +180,18 @@ final class ListingTeaserFactory
                 );
             })
             ;
+    }
+
+    private function teaserForEvent(array $event) : PromiseInterface
+    {
+        return new FulfilledPromise(
+            Teaser::event(
+                $event['title'],
+                null,
+                null,
+                new Date(DateTimeImmutable::createFromFormat(DATE_ATOM, $event['starts']), true)
+            )
+        );
     }
 
     private function teaserForLabsExperiment(array $experiment) : PromiseInterface
