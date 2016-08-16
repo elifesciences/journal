@@ -5,6 +5,7 @@ namespace eLife\Journal\ViewModel;
 use DateTimeImmutable;
 use eLife\ApiSdk\ApiClient\SubjectsClient;
 use eLife\ApiSdk\Result;
+use eLife\Patterns\ViewModel\ContextLabel;
 use eLife\Patterns\ViewModel\Date;
 use eLife\Patterns\ViewModel\Link;
 use eLife\Patterns\ViewModel\ListingTeasers;
@@ -280,26 +281,30 @@ final class SecondaryListingTeaserFactory
 
     private function teaserForPodcastEpisode(array $episode) : PromiseInterface
     {
-        return new FulfilledPromise(Teaser::secondary(
-            $episode['title'],
-            null,
-            null,
-            null,
-            TeaserImage::small(
-                $episode['image']['sizes']['1:1'][70],
-                $episode['image']['alt'],
-                null,
-                [
-                    140 => $episode['image']['sizes']['1:1'][140],
-                    70 => $episode['image']['sizes']['1:1'][70],
-                ]
-            ),
-            TeaserFooter::forNonArticle(
-                Meta::withText(
-                    'Podcast',
-                    new Date(DateTimeImmutable::createFromFormat(DATE_ATOM, $episode['published']))
-                )
-            )
-        ));
+        return $this->createContextLabel($episode)
+            ->then(function (ContextLabel $contextLabel = null) use ($episode) {
+                return Teaser::secondary(
+                    $episode['title'],
+                    $this->urlGenerator->generate('podcast-episode', ['number' => $episode['number']]),
+                    'Episode '.$episode['number'],
+                    $contextLabel,
+                    TeaserImage::small(
+                        $episode['image']['sizes']['1:1'][70],
+                        $episode['image']['alt'],
+                        $this->urlGenerator->generate('podcast-episode', ['number' => $episode['number']]),
+                        [
+                            140 => $episode['image']['sizes']['1:1'][140],
+                            70 => $episode['image']['sizes']['1:1'][70],
+                        ]
+                    ),
+                    TeaserFooter::forNonArticle(
+                        Meta::withText(
+                            'Podcast',
+                            new Date(DateTimeImmutable::createFromFormat(DATE_ATOM, $episode['published']))
+                        ),
+                        $episode['mp3']
+                    )
+                );
+            });
     }
 }
