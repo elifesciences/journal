@@ -20,7 +20,7 @@
             <li><a href="{{ path('collections') }}">Collections</a></li>
         </ul>
 
-        {% if events %}
+        {% if events or elifeDigests %}
 
         <div class="grid">
 
@@ -42,13 +42,19 @@
 
                     {% endif %}
 
-                    {% if events %}
+                    {% if events or elifeDigests %}
 
                 </div>
 
                 <div class="grid__item large--four-twelfths listing-column-secondary">
 
-                    {{ render_pattern(events) }}
+                    {% if events %}
+                        {{ render_pattern(events) }}
+                    {% endif %}
+
+                    {% if elifeDigests %}
+                        {{ render_pattern(elifeDigests) }}
+                    {% endif %}
 
                 </div>
 

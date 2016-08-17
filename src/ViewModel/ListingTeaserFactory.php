@@ -190,12 +190,8 @@ final class ListingTeaserFactory
 
     private function teaserForMediumArticle(array $article) : PromiseInterface
     {
-        return new FulfilledPromise(Teaser::main(
-            $article['title'],
-            $article['uri'],
-            $article['impactStatement'] ?? null,
-            null,
-            TeaserImage::big(
+        if (false === empty($article['image'])) {
+            $image = TeaserImage::big(
                 $article['image']['sizes']['16:9'][250],
                 $article['image']['alt'],
                 $this->urlGenerator->generate('podcast-episode', ['number' => $article['number']]),
@@ -203,7 +199,17 @@ final class ListingTeaserFactory
                     500 => $article['image']['sizes']['16:9'][500],
                     250 => $article['image']['sizes']['16:9'][250],
                 ]
-            ),
+            );
+        } else {
+            $image = null;
+        }
+
+        return new FulfilledPromise(Teaser::main(
+            $article['title'],
+            $article['uri'],
+            $article['impactStatement'] ?? null,
+            null,
+            $image,
             TeaserFooter::forNonArticle(
                 Meta::withLink(
                     new Link('Medium', 'https://medium.com/@elife'),
