@@ -3,10 +3,13 @@
 namespace eLife\Journal\Controller;
 
 use eLife\ApiSdk\ApiClient\EventsClient;
+use eLife\ApiSdk\Exception\BadResponse;
 use eLife\ApiSdk\MediaType;
 use eLife\ApiSdk\Result;
 use eLife\Patterns\ViewModel\ContentHeaderNonArticle;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Throwable;
 
 final class EventsController extends Controller
 {
@@ -37,5 +40,25 @@ final class EventsController extends Controller
             });
 
         return new Response($this->get('templating')->render('::events.html.twig', $arguments));
+    }
+
+    public function eventAction(string $id) : Response
+    {
+        $arguments = $this->defaultPageArguments();
+
+        $arguments['event'] = $this->get('elife.api_sdk.events')
+            ->getEvent(['Accept' => new MediaType(EventsClient::TYPE_EVENT, 1)], $id)
+            ->otherwise(function (Throwable $e) {
+                if ($e instanceof BadResponse && 404 === $e->getResponse()->getStatusCode()) {
+                    throw new NotFoundHttpException('Event not found', $e);
+                }
+            });
+
+        $arguments['contentHeader'] = $arguments['event']
+            ->then(function (Result $event) {
+                return ContentHeaderNonArticle::basic($event['title']);
+            });
+
+        return new Response($this->get('templating')->render('::event.html.twig', $arguments));
     }
 }

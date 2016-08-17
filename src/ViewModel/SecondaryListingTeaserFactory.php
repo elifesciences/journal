@@ -189,7 +189,7 @@ final class SecondaryListingTeaserFactory
     {
         return new FulfilledPromise(Teaser::event(
             $event['title'],
-            null,
+            $this->urlGenerator->generate('event', ['id' => $event['id']]),
             null,
             new Date(DateTimeImmutable::createFromFormat(DATE_ATOM, $event['starts']), true),
             true
