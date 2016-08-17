@@ -54,12 +54,10 @@ final class HomepageContext extends Context
                         'total' => $number,
                         'items' => $articleChunk,
                         'subjects' => [
-                            'subjects' => [
-                                [
-                                    'id' => 'subject',
-                                    'name' => 'Some subject',
-                                    'results' => 0,
-                                ],
+                            [
+                                'id' => 'subject',
+                                'name' => 'Some subject',
+                                'results' => 0,
                             ],
                         ],
                         'types' => [
@@ -141,12 +139,10 @@ final class HomepageContext extends Context
                         'total' => $number,
                         'items' => $articleChunk,
                         'subjects' => [
-                            'subjects' => [
-                                [
-                                    'id' => 'subject',
-                                    'name' => 'Some subject',
-                                    'results' => 0,
-                                ],
+                            [
+                                'id' => 'subject',
+                                'name' => 'Some subject',
+                                'results' => 0,
                             ],
                         ],
                         'types' => [
