@@ -26,6 +26,11 @@ default:
                 tags: '@event'
             contexts:
               - EventContext
+        homepage:
+            filters:
+                tags: '@homepage'
+            contexts:
+              - HomepageContext
         labs:
             filters:
                 tags: '@labs'
