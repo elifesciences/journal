@@ -12,15 +12,41 @@
 
     <div class="wrapper u-pad-top">
 
-        {% if latestResearch %}
+        {% if magazine %}
 
-            {{ render_pattern(latestResearch) }}
+        <div class="grid">
 
-        {% else %}
+            <div class="listing-column-container">
 
-            {{ render_pattern(latestResearchHeading) }}
+                <div class="grid__item large--eight-twelfths listing-column-main">
 
-            <p>No articles available.</p>
+                    {% endif %}
+
+                    {% if latestResearch %}
+
+                        {{ render_pattern(latestResearch) }}
+
+                    {% else %}
+
+                        {{ render_pattern(latestResearchHeading) }}
+
+                        <p>No articles available.</p>
+
+                    {% endif %}
+
+                    {% if magazine %}
+
+                </div>
+
+                <div class="grid__item large--four-twelfths listing-column-secondary">
+
+                    {{ render_pattern(magazine) }}
+
+                </div>
+
+            </div>
+
+        </div>
 
         {% endif %}
 
