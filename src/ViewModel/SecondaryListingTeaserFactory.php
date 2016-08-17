@@ -37,29 +37,13 @@ final class SecondaryListingTeaserFactory
         string $heading = null,
         SeeMoreLink $seeMoreLink = null
     ) : PromiseInterface {
-        $teasers = [];
-        foreach ($result['items'] as $item) {
-            $teasers[] = $this->createTeaser($item);
-        }
-
-        return all($teasers)
-            ->then(function (array $teasers) use ($heading, $seeMoreLink) {
-                if ($seeMoreLink) {
-                    return ListingTeasers::withSeeMore($teasers, $seeMoreLink, $heading);
-                }
-
-                return ListingTeasers::basic($teasers, $heading);
-            });
+        return $this->forItems($result['items'], $heading, $seeMoreLink);
     }
 
-    public function forEvents(
-        Result $result,
-        string $heading = null,
-        SeeMoreLink $seeMoreLink = null
-    ) : PromiseInterface {
+    public function forItems(array $items, string $heading = null, SeeMoreLink $seeMoreLink = null) : PromiseInterface
+    {
         $teasers = [];
-        foreach ($result['items'] as $item) {
-            $item['type'] = 'event';
+        foreach ($items as $item) {
             $teasers[] = $this->createTeaser($item);
         }
 
