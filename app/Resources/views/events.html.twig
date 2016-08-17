@@ -1,0 +1,33 @@
+{% extends '::page.html.twig' %}
+
+{% block title %}Events{% endblock %}
+
+{% block body %}
+
+    {{ info_bar('This page is incomplete.') }}
+
+    {{ render_pattern(contentHeader) }}
+
+    <div class="wrapper u-pad-top">
+
+        <div class="grid">
+
+            <div class="grid__item large--eight-twelfths push--large--two-twelfths">
+
+                {% if upcomingEvents %}
+
+                    {{ render_pattern(upcomingEvents) }}
+
+                {% else %}
+
+                    <p>There are currently no pending events. Please call back soon.</p>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+    </div>
+
+{% endblock %}

@@ -21,6 +21,11 @@ default:
                 tags: '@collection'
             contexts:
               - CollectionContext
+        event:
+            filters:
+                tags: '@event'
+            contexts:
+              - EventContext
         labs:
             filters:
                 tags: '@labs'
