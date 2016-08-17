@@ -393,7 +393,6 @@ final class MagazineContext extends Context
      */
     public function iShouldSeeTheLatestDigestsInTheList(int $number)
     {
-        echo $this->getSession()->getPage()->getHtml();
         $this->assertSession()->elementsCount('css', '.list-heading:contains("eLife digests") + ol > li', $number + 1);
 
         for ($i = $number; $i > 0; --$i) {
