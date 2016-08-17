@@ -6,6 +6,7 @@ use GuzzleHttp\Psr7\Response;
 final class HomepageContext extends Context
 {
     private $numberOfArticles;
+    private $numberOfMagazineArticles;
 
     /**
      * @Given /^(\d+) articles have been published$/
@@ -52,7 +53,15 @@ final class HomepageContext extends Context
                     json_encode([
                         'total' => $number,
                         'items' => $articleChunk,
-                        'subjects' => [],
+                        'subjects' => [
+                            'subjects' => [
+                                [
+                                    'id' => 'subject',
+                                    'name' => 'Some subject',
+                                    'results' => 0,
+                                ],
+                            ],
+                        ],
                         'types' => [
                             'correction' => 0,
                             'editorial' => 0,
@@ -71,6 +80,93 @@ final class HomepageContext extends Context
                             'event' => 0,
                             'labs-experiment' => 0,
                             'podcast-episode' => 0,
+                        ],
+                    ])
+                )
+            );
+        }
+    }
+
+    /**
+     * @Given /^the Magazine has (\d+) items$/
+     */
+    public function theMagazineHasItems(int $number)
+    {
+        $this->numberOfMagazineArticles = $number;
+
+        $articles = [];
+
+        $today = (new DateTimeImmutable('-1 day'))->setTime(0, 0, 0);
+
+        for ($i = $number; $i > 0; --$i) {
+            $articles[] = [
+                'type' => 'podcast-episode',
+                'number' => $i,
+                'title' => 'Podcast episode '.$i.' title',
+                'published' => $today->format(DATE_RFC3339),
+                'image' => [
+                    'alt' => '',
+                    'sizes' => [
+                        '2:1' => [
+                            '900' => 'https://placehold.it/900x450',
+                            '1800' => 'https://placehold.it/1800x900',
+                        ],
+                        '16:9' => [
+                            '250' => 'https://placehold.it/250x141',
+                            '500' => 'https://placehold.it/500x281',
+                        ],
+                        '1:1' => [
+                            '70' => 'https://placehold.it/70x70',
+                            '140' => 'https://placehold.it/140x140',
+                        ],
+                    ],
+                ],
+                'mp3' => 'https://www.example.com/episode'.$i.'.mp3',
+            ];
+        }
+
+        foreach (array_chunk($articles, 7) as $i => $articleChunk) {
+            $page = $i + 1;
+
+            $this->mockApiResponse(
+                new Request(
+                    'GET',
+                    "http://api.elifesciences.org/search?for=&page=$page&per-page=7&sort=date&order=desc&type[]=editorial&type[]=insight&type[]=feature&type[]=collection&type[]=interview&type[]=podcast-episode",
+                    ['Accept' => 'application/vnd.elife.search+json; version=1']
+                ),
+                new Response(
+                    200,
+                    ['Content-Type' => 'application/vnd.elife.search+json; version=1'],
+                    json_encode([
+                        'total' => $number,
+                        'items' => $articleChunk,
+                        'subjects' => [
+                            'subjects' => [
+                                [
+                                    'id' => 'subject',
+                                    'name' => 'Some subject',
+                                    'results' => 0,
+                                ],
+                            ],
+                        ],
+                        'types' => [
+                            'correction' => 0,
+                            'editorial' => 0,
+                            'feature' => 0,
+                            'insight' => 0,
+                            'research-advance' => 0,
+                            'research-article' => 0,
+                            'research-exchange' => 0,
+                            'retraction' => 0,
+                            'registered-report' => 0,
+                            'replication-study' => 0,
+                            'short-report' => 0,
+                            'tools-resources' => 0,
+                            'blog-article' => 0,
+                            'collection' => 0,
+                            'event' => 0,
+                            'labs-experiment' => 0,
+                            'podcast-episode' => $this->numberOfMagazineArticles,
                         ],
                     ])
                 )
@@ -103,5 +199,30 @@ final class HomepageContext extends Context
                 'Article '.$expectedNumber.' title'
             );
         }
+    }
+
+    /**
+     * @Then /^I should see the latest (\d+) Magazine items in the 'Magazine' list$/
+     */
+    public function iShouldSeeTheLatestMagazineItemsInTheMagazineList(int $number)
+    {
+        $this->assertSession()->elementsCount('css', '.list-heading:contains("Magazine") + ol > li', $number + 1);
+
+        for ($i = $number; $i > 0; --$i) {
+            $nthChild = ($number - $i + 1);
+            $expectedNumber = ($this->numberOfMagazineArticles - $nthChild + 1);
+
+            $this->assertSession()->elementContains(
+                'css',
+                '.list-heading:contains("Magazine") + ol > li:nth-child('.$nthChild.')',
+                'Podcast episode '.$expectedNumber.' title'
+            );
+        }
+
+        $this->assertSession()->elementContains(
+            'css',
+            '.list-heading:contains("Magazine") + ol > li:nth-child('.($number + 1).')',
+            'See more Magazine articles'
+        );
     }
 }
