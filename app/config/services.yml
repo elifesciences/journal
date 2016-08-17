@@ -32,6 +32,11 @@ services:
         arguments:
           - '@elife.api_sdk.client'
 
+    elife.api_sdk.medium:
+        class: eLife\ApiSdk\ApiClient\MediumClient
+        arguments:
+          - '@elife.api_sdk.client'
+
     elife.api_sdk.podcast:
         class: eLife\ApiSdk\ApiClient\PodcastClient
         arguments:

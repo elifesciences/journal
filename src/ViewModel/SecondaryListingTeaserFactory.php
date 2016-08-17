@@ -57,27 +57,6 @@ final class SecondaryListingTeaserFactory
             });
     }
 
-    public function forMediumArticles(
-        Result $result,
-        string $heading = null,
-        SeeMoreLink $seeMoreLink = null
-    ) : PromiseInterface {
-        $teasers = [];
-        foreach ($result['items'] as $item) {
-            $item['type'] = 'medium-article';
-            $teasers[] = $this->createTeaser($item);
-        }
-
-        return all($teasers)
-            ->then(function (array $teasers) use ($heading, $seeMoreLink) {
-                if ($seeMoreLink) {
-                    return ListingTeasers::withSeeMore($teasers, $seeMoreLink, $heading);
-                }
-
-                return ListingTeasers::basic($teasers, $heading);
-            });
-    }
-
     private function teaserForArticle(array $article) : PromiseInterface
     {
         if (false === empty($article['image'])) {
@@ -207,12 +186,8 @@ final class SecondaryListingTeaserFactory
 
     private function teaserForMediumArticle(array $article) : PromiseInterface
     {
-        return new FulfilledPromise(Teaser::secondary(
-            $article['title'],
-            $article['uri'],
-            null,
-            null,
-            TeaserImage::small(
+        if (false === empty($article['image'])) {
+            $image = TeaserImage::small(
                 $article['image']['sizes']['1:1'][70],
                 $article['image']['alt'],
                 null,
@@ -220,7 +195,17 @@ final class SecondaryListingTeaserFactory
                     140 => $article['image']['sizes']['1:1'][140],
                     70 => $article['image']['sizes']['1:1'][70],
                 ]
-            ),
+            );
+        } else {
+            $image = null;
+        }
+
+        return new FulfilledPromise(Teaser::secondary(
+            $article['title'],
+            $article['uri'],
+            null,
+            null,
+            $image,
             TeaserFooter::forNonArticle(
                 Meta::withDate(
                     new Date(DateTimeImmutable::createFromFormat(DATE_ATOM, $article['published']))

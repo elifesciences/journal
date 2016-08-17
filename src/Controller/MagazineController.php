@@ -3,6 +3,7 @@
 namespace eLife\Journal\Controller;
 
 use eLife\ApiSdk\ApiClient\EventsClient;
+use eLife\ApiSdk\ApiClient\MediumClient;
 use eLife\ApiSdk\ApiClient\PodcastClient;
 use eLife\ApiSdk\ApiClient\SearchClient;
 use eLife\ApiSdk\MediaType;
@@ -83,6 +84,30 @@ final class MagazineController extends Controller
 
                 return $this->get('elife.journal.view_model.factory.listing_teaser_secondary')
                     ->forItems($items, 'Events', $seeMoreLink);
+            })
+            ->otherwise(function () {
+                return null;
+            });
+
+        $arguments['elifeDigests'] = $this->get('elife.api_sdk.medium')
+            ->listArticles(['Accept' => new MediaType(MediumClient::TYPE_MEDIUM_ARTICLE_LIST, 1)])
+            ->then(function (Result $result) {
+                if (empty($result['items'])) {
+                    return null;
+                }
+
+                $items = array_map(function (array $item) {
+                    $item['type'] = 'medium-article';
+
+                    return $item;
+                }, array_slice($result['items'], 0, 3));
+
+                return $this->get('elife.journal.view_model.factory.listing_teaser_secondary')
+                    ->forItems(
+                        $items,
+                        'eLife digests',
+                        new SeeMoreLink(new Link('See more eLife digests on Medium', 'https://medium.com/@elife'))
+                    );
             })
             ->otherwise(function () {
                 return null;
