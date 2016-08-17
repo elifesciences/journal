@@ -10,4 +10,20 @@
 
     {{ render_pattern(contentHeader) }}
 
+    <div class="wrapper u-pad-top">
+
+        {% if latestResearch %}
+
+            {{ render_pattern(latestResearch) }}
+
+        {% else %}
+
+            {{ render_pattern(latestResearchHeading) }}
+
+            <p>No articles available.</p>
+
+        {% endif %}
+
+    </div>
+
 {% endblock %}
