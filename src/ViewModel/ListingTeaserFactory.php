@@ -17,7 +17,6 @@ use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Psr7\Uri;
 use Puli\UrlGenerator\Api\UrlGenerator as PuliUrlGenerator;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use UnexpectedValueException;
 use function GuzzleHttp\Promise\all;
 
 final class ListingTeaserFactory
@@ -54,37 +53,6 @@ final class ListingTeaserFactory
             ->then(function (array $teasers) use ($heading) {
                 return ListingTeasers::basic($teasers, $heading);
             });
-    }
-
-    private function createTeaser(array $item): PromiseInterface
-    {
-        switch ($type = $item['type'] ?? 'unknown') {
-            case 'correction':
-            case 'editorial':
-            case 'feature':
-            case 'insight':
-            case 'research-advance':
-            case 'research-article':
-            case 'research-exchange':
-            case 'retraction':
-            case 'registered-report':
-            case 'replication-study':
-            case 'short-report':
-            case 'tools-resources':
-                return $this->teaserForArticle($item);
-            case 'blog-article':
-                return $this->teaserForBlogArticle($item);
-            case 'collection':
-                return $this->teaserForCollection($item);
-            case 'event':
-                return $this->teaserForEvent($item);
-            case 'labs-experiment':
-                return $this->teaserForLabsExperiment($item);
-            case 'podcast-episode':
-                return $this->teaserForPodcastEpisode($item);
-        }
-
-        throw new UnexpectedValueException('Unknown type '.$type);
     }
 
     private function teaserForArticle(array $article) : PromiseInterface
@@ -215,6 +183,31 @@ final class ListingTeaserFactory
                 Meta::withText(
                     'Experiment: '.str_pad($experiment['number'], 3, '0', STR_PAD_LEFT),
                     new Date(DateTimeImmutable::createFromFormat(DATE_ATOM, $experiment['published']))
+                )
+            )
+        ));
+    }
+
+    private function teaserForMediumArticle(array $article) : PromiseInterface
+    {
+        return new FulfilledPromise(Teaser::main(
+            $article['title'],
+            $article['uri'],
+            $article['impactStatement'] ?? null,
+            null,
+            TeaserImage::big(
+                $article['image']['sizes']['16:9'][250],
+                $article['image']['alt'],
+                $this->urlGenerator->generate('podcast-episode', ['number' => $article['number']]),
+                [
+                    500 => $article['image']['sizes']['16:9'][500],
+                    250 => $article['image']['sizes']['16:9'][250],
+                ]
+            ),
+            TeaserFooter::forNonArticle(
+                Meta::withLink(
+                    new Link('Medium', 'https://medium.com/@elife'),
+                    new Date(DateTimeImmutable::createFromFormat(DATE_ATOM, $article['published']))
                 )
             )
         ));
