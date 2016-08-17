@@ -1,0 +1,23 @@
+{% extends '::page.html.twig' %}
+
+{% block title %}{{ event.title }} | Events{% endblock %}
+
+{% block meta %}
+
+    {% if date(event.ends) < date() %}
+        <meta name="robots" content="noindex">
+    {% endif %}
+
+{% endblock %}
+
+{% block body %}
+
+    {{ info_bar('This page is incomplete.') }}
+
+    {% if date(event.ends) < date() %}
+        {{ info_bar('This event has finished.', constant('eLife\\Patterns\\ViewModel\\InfoBar::TYPE_ATTENTION')) }}
+    {% endif %}
+
+    {{ render_pattern(contentHeader) }}
+
+{% endblock %}
