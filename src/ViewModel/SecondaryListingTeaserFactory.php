@@ -17,7 +17,6 @@ use eLife\Patterns\ViewModel\TeaserImage;
 use GuzzleHttp\Promise\FulfilledPromise;
 use GuzzleHttp\Promise\PromiseInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use UnexpectedValueException;
 use function GuzzleHttp\Promise\all;
 
 final class SecondaryListingTeaserFactory
@@ -93,39 +92,6 @@ final class SecondaryListingTeaserFactory
 
                 return ListingTeasers::basic($teasers, $heading);
             });
-    }
-
-    private function createTeaser(array $item): PromiseInterface
-    {
-        switch ($type = $item['type'] ?? 'unknown') {
-            case 'correction':
-            case 'editorial':
-            case 'feature':
-            case 'insight':
-            case 'research-advance':
-            case 'research-article':
-            case 'research-exchange':
-            case 'retraction':
-            case 'registered-report':
-            case 'replication-study':
-            case 'short-report':
-            case 'tools-resources':
-                return $this->teaserForArticle($item);
-            case 'blog-article':
-                return $this->teaserForBlogArticle($item);
-            case 'collection':
-                return $this->teaserForCollection($item);
-            case 'event':
-                return $this->teaserForEvent($item);
-            case 'labs-experiment':
-                return $this->teaserForLabsExperiment($item);
-            case 'medium-article':
-                return $this->teaserForMediumArticle($item);
-            case 'podcast-episode':
-                return $this->teaserForPodcastEpisode($item);
-        }
-
-        throw new UnexpectedValueException('Unknown type '.$type);
     }
 
     private function teaserForArticle(array $article) : PromiseInterface
