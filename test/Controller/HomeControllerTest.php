@@ -35,7 +35,13 @@ final class HomeControllerTest extends PageTestCase
                 json_encode([
                     'total' => 0,
                     'items' => [],
-                    'subjects' => [],
+                    'subjects' => [
+                        [
+                            'id' => 'subject',
+                            'name' => 'Some subject',
+                            'results' => 0,
+                        ],
+                    ],
                     'types' => [
                         'correction' => 0,
                         'editorial' => 0,
