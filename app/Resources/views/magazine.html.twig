@@ -20,15 +20,41 @@
             <li><a href="{{ path('collections') }}">Collections</a></li>
         </ul>
 
-        {% if latest %}
+        {% if events %}
 
-            {{ render_pattern(latest) }}
+        <div class="grid">
 
-        {% else %}
+            <div class="listing-column-container">
 
-            {{ render_pattern(latestHeading) }}
+                <div class="grid__item large--eight-twelfths listing-column-main">
 
-            <p>No articles available.</p>
+                    {% endif %}
+
+                    {% if latest %}
+
+                        {{ render_pattern(latest) }}
+
+                    {% else %}
+
+                        {{ render_pattern(latestHeading) }}
+
+                        <p>No articles available.</p>
+
+                    {% endif %}
+
+                    {% if events %}
+
+                </div>
+
+                <div class="grid__item large--four-twelfths listing-column-secondary">
+
+                    {{ render_pattern(events) }}
+
+                </div>
+
+            </div>
+
+        </div>
 
         {% endif %}
 

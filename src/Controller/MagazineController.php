@@ -2,6 +2,7 @@
 
 namespace eLife\Journal\Controller;
 
+use eLife\ApiSdk\ApiClient\EventsClient;
 use eLife\ApiSdk\ApiClient\PodcastClient;
 use eLife\ApiSdk\ApiClient\SearchClient;
 use eLife\ApiSdk\MediaType;
@@ -9,7 +10,9 @@ use eLife\ApiSdk\Result;
 use eLife\Patterns\ViewModel\AudioPlayer;
 use eLife\Patterns\ViewModel\AudioSource;
 use eLife\Patterns\ViewModel\ContentHeaderNonArticle;
+use eLife\Patterns\ViewModel\Link;
 use eLife\Patterns\ViewModel\ListHeading;
+use eLife\Patterns\ViewModel\SeeMoreLink;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
@@ -55,6 +58,34 @@ final class MagazineController extends Controller
 
                 return $this->get('elife.journal.view_model.factory.listing_teaser')
                     ->forResult($result, $arguments['latestHeading']['heading']);
+            });
+
+        $arguments['events'] = $this->get('elife.api_sdk.events')
+            ->listEvents(['Accept' => new MediaType(EventsClient::TYPE_EVENT_LIST, 1)], 1, 3, 'open', false)
+            ->then(function (Result $result) {
+                if (empty($result['items'])) {
+                    return null;
+                }
+
+                $items = array_map(function (array $item) {
+                    $item['type'] = 'event';
+
+                    return $item;
+                }, $result['items']);
+
+                if ($result['total'] > 3) {
+                    $seeMoreLink = new SeeMoreLink(
+                        new Link('See more events', $this->get('router')->generate('events'))
+                    );
+                } else {
+                    $seeMoreLink = null;
+                }
+
+                return $this->get('elife.journal.view_model.factory.listing_teaser_secondary')
+                    ->forItems($items, 'Events', $seeMoreLink);
+            })
+            ->otherwise(function () {
+                return null;
             });
 
         return new Response($this->get('templating')->render('::magazine.html.twig', $arguments));

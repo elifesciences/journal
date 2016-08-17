@@ -7,6 +7,7 @@ final class MagazineContext extends Context
 {
     private $numberOfArticles;
     private $numberOfPodcastEpisodes;
+    private $numberOfEvents;
 
     /**
      * @Given /^(\d+) Magazine articles have been published$/
@@ -178,6 +179,81 @@ final class MagazineContext extends Context
     }
 
     /**
+     * @Given /^there are no upcoming events$/
+     */
+    public function thereAreNoUpcomingEvents()
+    {
+        $this->thereAreUpcomingEvents(0);
+    }
+
+    /**
+     * @Given /^there are (\d+) upcoming events$/
+     */
+    public function thereAreUpcomingEvents(int $number)
+    {
+        $this->numberOfEvents = $number;
+
+        $events = [];
+
+        $starts = (new DateTimeImmutable())->setTime(0, 0, 0);
+        $ends = $starts->modify('+1 day');
+
+        for ($i = $number; $i > 0; --$i) {
+            $events[] = [
+                'id' => "$i",
+                'title' => 'Event '.$i.' title',
+                'starts' => $starts->format(DATE_RFC3339),
+                'ends' => $ends->format(DATE_RFC3339),
+                'content' => [
+                    [
+                        'type' => 'paragraph',
+                        'text' => 'Event '.$i.' text.',
+                    ],
+                ],
+            ];
+        }
+
+        foreach (array_chunk($events, 3) as $i => $eventsChunk) {
+            $page = $i + 1;
+
+            $this->mockApiResponse(
+                new Request(
+                    'GET',
+                    "http://api.elifesciences.org/events?page=$page&per-page=3&type=open&order=asc",
+                    ['Accept' => 'application/vnd.elife.event-list+json; version=1']
+                ),
+                new Response(
+                    200,
+                    ['Content-Type' => 'application/vnd.elife.event-list+json; version=1'],
+                    json_encode([
+                        'total' => $number,
+                        'items' => array_map(function (array $item) {
+                            unset($item['content']);
+
+                            return $item;
+                        }, $eventsChunk),
+                    ])
+                )
+            );
+
+            foreach ($eventsChunk as $event) {
+                $this->mockApiResponse(
+                    new Request(
+                        'GET',
+                        'http://api.elifesciences.org/events/'.$event['id'],
+                        ['Accept' => 'application/vnd.elife.event+json; version=1']
+                    ),
+                    new Response(
+                        200,
+                        ['Content-Type' => 'application/vnd.elife.event+json; version=1'],
+                        json_encode($event)
+                    )
+                );
+            }
+        }
+    }
+
+    /**
      * @When /^I go to the Magazine page$/
      */
     public function iGoToTheMagazinePage()
@@ -218,5 +294,61 @@ final class MagazineContext extends Context
             ->elementAttributeContains('css', '.audio-player__player source', 'src',
                 'https://example.com/episode'.$this->numberOfPodcastEpisodes.'.mp3')
         ;
+    }
+
+    /**
+     * @Then /^I should not see the 'Upcoming events' list$/
+     */
+    public function iShouldNotSeeTheUpcomingEventsList()
+    {
+        $this->assertSession()->elementNotExists('css', '.list-heading:contains("Events")');
+    }
+
+    /**
+     * @Then /^I should see (\d+) upcoming events in the 'Events' list$/
+     */
+    public function iShouldSeeUpcomingEventsInTheEventsList(int $number)
+    {
+        if ($this->numberOfEvents > 3) {
+            $this->assertSession()->elementsCount('css', '.list-heading:contains("Events") + ol > li', $number + 1);
+        } else {
+            $this->assertSession()->elementsCount('css', '.list-heading:contains("Events") + ol > li', $number);
+        }
+
+        for ($i = $number; $i > 0; --$i) {
+            $nthChild = ($number - $i + 1);
+            $expectedNumber = ($this->numberOfEvents - $nthChild + 1);
+
+            $this->assertSession()->elementContains(
+                'css',
+                '.list-heading:contains("Events") + ol > li:nth-child('.$nthChild.')',
+                'Event '.$expectedNumber.' title'
+            );
+        }
+    }
+
+    /**
+     * @Given /^I should not see a 'See more events' link$/
+     */
+    public function iShouldNotSeeASeeMoreEventsLink()
+    {
+        $this->assertSession()->elementNotExists('css', '.list-heading:contains("Events") + ol > li:nth-child(4)');
+        $this->assertSession()->elementTextNotContains(
+            'css',
+            '.list-heading:contains("Events") + ol',
+            'See more events'
+        );
+    }
+
+    /**
+     * @Given /^I should see a 'See more events' link$/
+     */
+    public function iShouldSeeASeeMoreEventsLink()
+    {
+        $this->assertSession()->elementContains(
+            'css',
+            '.list-heading:contains("Events") + ol > li:nth-child(4)',
+            'See more events'
+        );
     }
 }
