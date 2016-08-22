@@ -56,6 +56,11 @@ events:
     defaults:
          _controller: AppBundle:Events:list
 
+interview:
+    path: /interviews/{id}
+    defaults:
+         _controller: AppBundle:Interviews:interview
+
 magazine:
     path: /magazine
     defaults:

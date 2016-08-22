@@ -36,6 +36,8 @@ trait CreatesTeasers
                 return $this->teaserForCollection($item);
             case 'event':
                 return $this->teaserForEvent($item);
+            case 'interview':
+                return $this->teaserForInterview($item);
             case 'labs-experiment':
                 return $this->teaserForLabsExperiment($item);
             case 'medium-article':
