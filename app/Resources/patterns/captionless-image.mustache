@@ -1,0 +1,10 @@
+{{#picture}}
+    {{> atoms-picture }}
+{{/picture}}
+
+{{^picture}}
+    <img src="{{defaultPath}}"
+         alt="{{altText}}"{{#srcset}}
+         srcset="{{srcset}}"{{/srcset}}
+        {{#classes}} class="{{classes}}"{{/classes}} />
+{{/picture}}

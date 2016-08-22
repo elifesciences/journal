@@ -19,6 +19,7 @@ final class EventControllerTest extends PageTestCase
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertSame('Event title', $crawler->filter('.content-header__title')->text());
+        $this->assertContains('Event text.', $crawler->filter('.wrapper')->text());
     }
 
     /**

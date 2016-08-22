@@ -1,6 +1,9 @@
 {
     "version": "1.0",
     "name": "elife/journal",
+    "path-mappings": {
+        "/elife/journal/patterns": "app/Resources/patterns/"
+    },
     "bindings": {
         "dc209342-25f4-4270-b4d3-6832bf78fc2a": {
             "_class": "Puli\\Discovery\\Binding\\ResourceBinding",

@@ -7,6 +7,8 @@ use eLife\ApiSdk\Exception\BadResponse;
 use eLife\ApiSdk\MediaType;
 use eLife\ApiSdk\Result;
 use eLife\Patterns\ViewModel\ContentHeaderNonArticle;
+use eLife\Patterns\ViewModel\LeadPara;
+use eLife\Patterns\ViewModel\LeadParas;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
@@ -57,6 +59,19 @@ final class EventsController extends Controller
         $arguments['contentHeader'] = $arguments['event']
             ->then(function (Result $event) {
                 return ContentHeaderNonArticle::basic($event['title']);
+            });
+
+        $arguments['leadParas'] = $arguments['event']
+            ->then(function (Result $event) {
+                return new LeadParas([new LeadPara($event['impactStatement'])]);
+            })
+            ->otherwise(function () {
+                return null;
+            });
+
+        $arguments['blocks'] = $arguments['event']
+            ->then(function (Result $event) {
+                return $this->get('elife.website.view_model.block_converter')->handleBlocks(...$event['content']);
             });
 
         return new Response($this->get('templating')->render('::event.html.twig', $arguments));

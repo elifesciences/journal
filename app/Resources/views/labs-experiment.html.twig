@@ -8,4 +8,24 @@
 
     {{ render_pattern(contentHeader) }}
 
+    <div class="wrapper">
+
+        {% if leadParas %}
+            {{ render_pattern(leadParas) }}
+        {% endif %}
+
+        <div class="grid">
+
+            <div class="grid__item medium--six-twelfths push--large--three-twelfths u-pad-top">
+
+                {% for block in blocks %}
+                    {{ render_pattern(block) }}
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+    </div>
+
 {% endblock %}
