@@ -43,7 +43,7 @@ final class ArchiveControllerTest extends PageTestCase
         $client->submit($selectNav);
 
         $this->assertSame('/archive', $client->getRequest()->getPathInfo());
-        $this->assertSame('year=2012', $client->getRequest()->getQueryString());
+        $this->assertSame('submit=&year=2012', $client->getRequest()->getQueryString());
 
         $crawler = $client->followRedirect();
 
