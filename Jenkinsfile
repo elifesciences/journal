@@ -6,13 +6,7 @@ elifePipeline {
     stage 'Project tests'
     lock('journal--ci') {
         builderDeployRevision 'journal--ci', commit
-        builderProjectTests 'journal--ci', '/srv/journal'
-        def phpunitTestArtifact = "${env.BUILD_TAG}.phpunit.xml"
-        builderTestArtifact phpunitTestArtifact, 'journal--ci', '/srv/journal/build/phpunit.xml'
-        def behatTestArtifact = "${env.BUILD_TAG}.behat.xml"
-        builderTestArtifact behatTestArtifact, 'journal--ci', '/srv/journal/build/behat.xml'
-        elifeVerifyJunitXml phpunitTestArtifact
-        elifeVerifyJunitXml behatTestArtifact
+        builderProjectTests 'journal--ci', '/srv/journal', ['/srv/journal/build/phpunit.xml', '/srv/journal/build/behat.xml']
     }
 
     elifeMainlineOnly {

@@ -6,13 +6,13 @@ use Bobthecow\Bundle\MustacheBundle\BobthecowMustacheBundle;
 use Csa\Bundle\GuzzleBundle\CsaGuzzleBundle;
 use Puli\SymfonyBundle\PuliBundle;
 use Sensio\Bundle\DistributionBundle\SensioDistributionBundle;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\DebugBundle\DebugBundle;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Bundle\MonologBundle\MonologBundle;
 use Symfony\Bundle\TwigBundle\TwigBundle;
 use Symfony\Bundle\WebProfilerBundle\WebProfilerBundle;
 use Symfony\Component\Config\Loader\LoaderInterface;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Kernel;
 
 class AppKernel extends Kernel
