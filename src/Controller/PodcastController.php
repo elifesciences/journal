@@ -11,14 +11,17 @@ use eLife\Patterns\ViewModel\AudioPlayer;
 use eLife\Patterns\ViewModel\AudioSource;
 use eLife\Patterns\ViewModel\BackgroundImage;
 use eLife\Patterns\ViewModel\ContentHeaderNonArticle;
+use eLife\Patterns\ViewModel\ContextLabel;
 use eLife\Patterns\ViewModel\Date;
 use eLife\Patterns\ViewModel\Image;
 use eLife\Patterns\ViewModel\LeadPara;
 use eLife\Patterns\ViewModel\LeadParas;
 use eLife\Patterns\ViewModel\Link;
+use eLife\Patterns\ViewModel\ListingTeasers;
 use eLife\Patterns\ViewModel\Meta;
 use eLife\Patterns\ViewModel\Picture;
 use eLife\Patterns\ViewModel\PodcastDownload;
+use eLife\Patterns\ViewModel\Teaser;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
@@ -119,6 +122,36 @@ final class PodcastController extends Controller
             })
             ->otherwise(function () {
                 return null;
+            });
+
+        $arguments['chapters'] = $arguments['episode']
+            ->then(function (Result $episode) {
+                return ListingTeasers::basic(
+                    array_map(function (array $chapter) {
+                        $minutes = floor($chapter['time'] / 60);
+                        $seconds = str_pad($chapter['time'] % 60, 2, '0', STR_PAD_LEFT);
+
+                        return Teaser::chapterListingItem(
+                            $chapter['title'],
+                            null,
+                            $chapter['impactStatement'] ?? null,
+                            new ContextLabel(new Link(sprintf('%s:%s', $minutes, $seconds)))
+                        );
+                    }, $episode['chapters']),
+                    'Chapters'
+                );
+            });
+
+        $arguments['related'] = $arguments['episode']
+            ->then(function (Result $episode) {
+                $articles = [];
+
+                foreach ($episode['chapters'] as $chapter) {
+                    $articles[] = $chapter['content'][0];
+                }
+
+                return $this->get('elife.journal.view_model.factory.listing_teaser_secondary')
+                    ->forItems($articles, 'Related');
             });
 
         return new Response($this->get('templating')->render('::podcast-episode.html.twig', $arguments));

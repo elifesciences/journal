@@ -124,6 +124,26 @@ final class MagazineContext extends Context
                     ],
                 ],
                 'mp3' => 'https://example.com/episode'.$number.'.mp3',
+                'chapters' => [
+                    [
+                        'number' => 1,
+                        'title' => 'Chapter 1',
+                        'time' => 0,
+                        'content' => [
+                            [
+                                'type' => 'research-article',
+                                'status' => 'vor',
+                                'id' => '12345',
+                                'version' => 1,
+                                'doi' => '10.7554/eLife.12345',
+                                'title' => 'Article 12345',
+                                'published' => '2010-01-01T00:00:00+00:00',
+                                'volume' => 5,
+                                'elocationId' => 'e12345',
+                            ],
+                        ],
+                    ],
+                ],
             ];
         }
 
@@ -141,7 +161,11 @@ final class MagazineContext extends Context
                     ['Content-Type' => 'application/vnd.elife.podcast-episode-list+json; version=1'],
                     json_encode([
                         'total' => $number,
-                        'items' => $episodesChunk,
+                        'items' => array_map(function (array $episode) {
+                            unset($episode['chapters']);
+
+                            return $episode;
+                        }, $episodesChunk),
                     ])
                 )
             );
@@ -173,7 +197,11 @@ final class MagazineContext extends Context
                 ['Content-Type' => 'application/vnd.elife.podcast-episode-list+json; version=1'],
                 json_encode([
                     'total' => $number,
-                    'items' => [$episodes[0]],
+                    'items' => array_map(function (array $episode) {
+                        unset($episode['chapters']);
+
+                        return $episode;
+                    }, [$episodes[0]]),
                 ])
             )
         );
