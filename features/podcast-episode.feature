@@ -15,8 +15,7 @@ Feature: Podcast episode
     And I click on the second chapter's title
     Then the audio player should start playing the second chapter
 
-  @wip
   Scenario: Related list shows first article for each chapter
     Given there is a podcast episode with two chapters
     When I go the podcast episode page
-    Then I should see the two articles covered by the chapters
+    Then I should see the two articles covered by the chapters in the 'Related' list
