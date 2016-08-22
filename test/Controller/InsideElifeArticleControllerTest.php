@@ -18,6 +18,7 @@ final class InsideElifeArticleControllerTest extends PageTestCase
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertSame('Blog article title', $crawler->filter('.content-header__title')->text());
+        $this->assertContains('Blog article text.', $crawler->filter('.wrapper')->text());
     }
 
     /**

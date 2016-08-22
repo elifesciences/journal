@@ -47,6 +47,11 @@ final class InterviewsController extends Controller
                 return null;
             });
 
+        $arguments['blocks'] = $arguments['interview']
+            ->then(function (Result $interview) {
+                return $this->get('elife.website.view_model.block_converter')->handleBlocks(...$interview['content']);
+            });
+
         return new Response($this->get('templating')->render('::interview.html.twig', $arguments));
     }
 }

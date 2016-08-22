@@ -74,6 +74,19 @@ developed further to become features on the eLife platform.'),
                 );
             });
 
+        $arguments['leadParas'] = $arguments['experiment']
+            ->then(function (Result $experiment) {
+                return new LeadParas([new LeadPara($experiment['impactStatement'])]);
+            })
+            ->otherwise(function () {
+                return null;
+            });
+
+        $arguments['blocks'] = $arguments['experiment']
+            ->then(function (Result $experiment) {
+                return $this->get('elife.website.view_model.block_converter')->handleBlocks(...$experiment['content']);
+            });
+
         return new Response($this->get('templating')->render('::labs-experiment.html.twig', $arguments));
     }
 }

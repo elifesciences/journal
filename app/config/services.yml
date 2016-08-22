@@ -84,6 +84,11 @@ services:
         tags:
           - name: twig.extension
 
+    elife.website.view_model.block_converter:
+        class: eLife\Journal\ViewModel\BlockConverter
+        arguments:
+          - '@elife.patterns.pattern_renderer'
+
     elife.journal.view_model.factory.footer:
         class: eLife\Journal\ViewModel\FooterFactory
         arguments:

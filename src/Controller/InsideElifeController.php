@@ -83,6 +83,11 @@ final class InsideElifeController extends Controller
                 return null;
             });
 
+        $arguments['blocks'] = $arguments['article']
+            ->then(function (Result $article) {
+                return $this->get('elife.website.view_model.block_converter')->handleBlocks(...$article['content']);
+            });
+
         return new Response($this->get('templating')->render('::inside-elife-article.html.twig', $arguments));
     }
 }
