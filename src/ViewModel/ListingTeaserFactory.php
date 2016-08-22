@@ -162,6 +162,26 @@ final class ListingTeaserFactory
         );
     }
 
+    private function teaserForInterview(array $interview) : PromiseInterface
+    {
+        return new FulfilledPromise(
+            Teaser::main(
+                $interview['title'],
+                $this->urlGenerator->generate('interview', ['id' => $interview['id']]),
+                $interview['impactStatement'] ?? null,
+                'An interview with '.$interview['interviewee']['name']['preferred'],
+                null,
+                null,
+                TeaserFooter::forNonArticle(
+                    Meta::withText(
+                        'Interview',
+                        new Date(DateTimeImmutable::createFromFormat(DATE_ATOM, $interview['published']))
+                    )
+                )
+            )
+        );
+    }
+
     private function teaserForLabsExperiment(array $experiment) : PromiseInterface
     {
         return new FulfilledPromise(Teaser::main(

@@ -159,6 +159,23 @@ final class SecondaryListingTeaserFactory
         ));
     }
 
+    private function teaserForInterview(array $interview) : PromiseInterface
+    {
+        return new FulfilledPromise(Teaser::secondary(
+            $interview['title'],
+            $this->urlGenerator->generate('interview', ['id' => $interview['id']]),
+            'An interview with '.$interview['interviewee']['name']['preferred'],
+            null,
+            null,
+            TeaserFooter::forNonArticle(
+                Meta::withText(
+                    'Interview',
+                    new Date(DateTimeImmutable::createFromFormat(DATE_ATOM, $interview['published']))
+                )
+            )
+        ));
+    }
+
     private function teaserForLabsExperiment(array $experiment) : PromiseInterface
     {
         return new FulfilledPromise(Teaser::secondary(
