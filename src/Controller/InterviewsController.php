@@ -3,10 +3,10 @@
 namespace eLife\Journal\Controller;
 
 use DateTimeImmutable;
-use eLife\ApiSdk\ApiClient\InterviewsClient;
-use eLife\ApiSdk\Exception\BadResponse;
-use eLife\ApiSdk\MediaType;
-use eLife\ApiSdk\Result;
+use eLife\ApiClient\ApiClient\InterviewsClient;
+use eLife\ApiClient\Exception\BadResponse;
+use eLife\ApiClient\MediaType;
+use eLife\ApiClient\Result;
 use eLife\Patterns\ViewModel\ContentHeaderNonArticle;
 use eLife\Patterns\ViewModel\Date;
 use eLife\Patterns\ViewModel\LeadPara;
@@ -22,7 +22,7 @@ final class InterviewsController extends Controller
     {
         $arguments = $this->defaultPageArguments();
 
-        $arguments['interview'] = $this->get('elife.api_sdk.interviews')
+        $arguments['interview'] = $this->get('elife.api_client.interviews')
             ->getInterview(['Accept' => new MediaType(InterviewsClient::TYPE_INTERVIEW, 1)], $id)
             ->otherwise(function (Throwable $e) {
                 if ($e instanceof BadResponse && 404 === $e->getResponse()->getStatusCode()) {

@@ -120,8 +120,8 @@
             "installer": "composer",
             "env": "dev"
         },
-        "elife/api-sdk": {
-            "install-path": "vendor/elife/api-sdk",
+        "elife/api-client": {
+            "install-path": "vendor/elife/api-client",
             "installer": "composer"
         },
         "elife/api-validator": {

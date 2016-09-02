@@ -2,9 +2,9 @@
 
 namespace eLife\Journal\Controller;
 
-use eLife\ApiSdk\ApiClient\SearchClient;
-use eLife\ApiSdk\MediaType;
-use eLife\ApiSdk\Result;
+use eLife\ApiClient\ApiClient\SearchClient;
+use eLife\ApiClient\MediaType;
+use eLife\ApiClient\Result;
 use eLife\Patterns\ViewModel\ContentHeaderNonArticle;
 use eLife\Patterns\ViewModel\Link;
 use eLife\Patterns\ViewModel\ListHeading;
@@ -23,7 +23,7 @@ final class HomeController extends Controller
         $arguments['contentHeader'] = ContentHeaderNonArticle::basic('eLife');
 
         $arguments['latestResearchHeading'] = new ListHeading('Latest research');
-        $arguments['latestResearch'] = $this->get('elife.api_sdk.search')
+        $arguments['latestResearch'] = $this->get('elife.api_client.search')
             ->query(['Accept' => new MediaType(SearchClient::TYPE_SEARCH, 1)], '', $page, $perPage, 'date', true, [],
                 [
                     'research-advance',
@@ -43,7 +43,7 @@ final class HomeController extends Controller
             })
         ;
 
-        $arguments['magazine'] = $this->get('elife.api_sdk.search')
+        $arguments['magazine'] = $this->get('elife.api_client.search')
             ->query(['Accept' => new MediaType(SearchClient::TYPE_SEARCH, 1)], '', 1, 7, 'date', true, [],
                 ['editorial', 'insight', 'feature', 'collection', 'interview', 'podcast-episode'])
             ->then(function (Result $result) use ($arguments) {

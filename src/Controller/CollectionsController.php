@@ -3,10 +3,10 @@
 namespace eLife\Journal\Controller;
 
 use DateTimeImmutable;
-use eLife\ApiSdk\ApiClient\CollectionsClient;
-use eLife\ApiSdk\Exception\BadResponse;
-use eLife\ApiSdk\MediaType;
-use eLife\ApiSdk\Result;
+use eLife\ApiClient\ApiClient\CollectionsClient;
+use eLife\ApiClient\Exception\BadResponse;
+use eLife\ApiClient\MediaType;
+use eLife\ApiClient\Result;
 use eLife\Patterns\ViewModel\BackgroundImage;
 use eLife\Patterns\ViewModel\ContentHeaderNonArticle;
 use eLife\Patterns\ViewModel\Date;
@@ -31,7 +31,7 @@ final class CollectionsController extends Controller
         $arguments['contentHeader'] = ContentHeaderNonArticle::basic('eLife collections');
 
         $arguments['latestCollectionsHeading'] = new ListHeading('Latest collections');
-        $arguments['latestCollections'] = $this->get('elife.api_sdk.collections')
+        $arguments['latestCollections'] = $this->get('elife.api_client.collections')
             ->listCollections(['Accept' => new MediaType(CollectionsClient::TYPE_COLLECTION_LIST, 1)], $page, $perPage)
             ->then(function (Result $result) use ($arguments) {
                 if (empty($result['items'])) {
@@ -55,7 +55,7 @@ final class CollectionsController extends Controller
     {
         $arguments = $this->defaultPageArguments();
 
-        $arguments['collection'] = $this->get('elife.api_sdk.collections')
+        $arguments['collection'] = $this->get('elife.api_client.collections')
             ->getCollection(['Accept' => new MediaType(CollectionsClient::TYPE_COLLECTION, 1)], $id)
             ->otherwise(function (Throwable $e) {
                 if ($e instanceof BadResponse && 404 === $e->getResponse()->getStatusCode()) {

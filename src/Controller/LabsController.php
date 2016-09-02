@@ -3,10 +3,10 @@
 namespace eLife\Journal\Controller;
 
 use DateTimeImmutable;
-use eLife\ApiSdk\ApiClient\LabsClient;
-use eLife\ApiSdk\Exception\BadResponse;
-use eLife\ApiSdk\MediaType;
-use eLife\ApiSdk\Result;
+use eLife\ApiClient\ApiClient\LabsClient;
+use eLife\ApiClient\Exception\BadResponse;
+use eLife\ApiClient\MediaType;
+use eLife\ApiClient\Result;
 use eLife\Patterns\ViewModel\BackgroundImage;
 use eLife\Patterns\ViewModel\ContentHeaderNonArticle;
 use eLife\Patterns\ViewModel\Date;
@@ -34,7 +34,7 @@ developed further to become features on the eLife platform.'),
             new LeadPara('Feedback welcome!'),
         ]);
 
-        $arguments['experiments'] = $this->get('elife.api_sdk.labs')
+        $arguments['experiments'] = $this->get('elife.api_client.labs')
             ->listExperiments(['Accept' => new MediaType(LabsClient::TYPE_EXPERIMENT_LIST, 1)], $page, $perPage)
             ->then(function (Result $result) {
                 $teasers = [];
@@ -54,7 +54,7 @@ developed further to become features on the eLife platform.'),
     {
         $arguments = $this->defaultPageArguments();
 
-        $arguments['experiment'] = $this->get('elife.api_sdk.labs')
+        $arguments['experiment'] = $this->get('elife.api_client.labs')
             ->getExperiment(['Accept' => new MediaType(LabsClient::TYPE_EXPERIMENT, 1)], $number)
             ->otherwise(function (Throwable $e) {
                 if ($e instanceof BadResponse && 404 === $e->getResponse()->getStatusCode()) {
