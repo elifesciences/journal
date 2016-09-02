@@ -54,7 +54,19 @@ final class SubjectsController extends Controller
         $arguments['latestArticlesHeading'] = new ListHeading('Latest articles');
         $arguments['latestArticles'] = $this->get('elife.api_client.search')
             ->query(['Accept' => new MediaType(SearchClient::TYPE_SEARCH, 1)], '', $page, $perPage, 'date',
-                true, [$id])
+                true, [$id],
+                [
+                    'research-article',
+                    'research-advance',
+                    'research-exchange',
+                    'short-report',
+                    'tools-resources',
+                    'replication-study',
+                    'editorial',
+                    'insight',
+                    'feature',
+                    'collection',
+                ])
             ->then(function (Result $result) use ($arguments) {
                 if (empty($result['items'])) {
                     return null;

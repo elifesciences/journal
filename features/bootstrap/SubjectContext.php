@@ -60,29 +60,54 @@ final class SubjectContext extends Context
 
         for ($i = $number; $i > 0; --$i) {
             $articles[] = [
-                'type' => 'podcast-episode',
-                'number' => $i,
-                'title' => 'Podcast episode '.$i,
-                'published' => $today->format(DATE_RFC3339),
+                'type' => 'collection',
+                'id' => "$i",
+                'title' => 'Collection '.$i.' title',
+                'updated' => $today->format(DATE_RFC3339),
                 'image' => [
                     'alt' => '',
                     'sizes' => [
                         '2:1' => [
-                            '900' => 'https://placehold.it/900x450',
-                            '1800' => 'https://placehold.it/1800x900',
+                            900 => 'https://placehold.it/900x450',
+                            1800 => 'https://placehold.it/1800x900',
                         ],
                         '16:9' => [
-                            '250' => 'https://placehold.it/250x141',
-                            '500' => 'https://placehold.it/500x281',
+                            250 => 'https://placehold.it/250x141',
+                            500 => 'https://placehold.it/500x281',
                         ],
                         '1:1' => [
-                            '70' => 'https://placehold.it/70x70',
-                            '140' => 'https://placehold.it/140x140',
+                            70 => 'https://placehold.it/70x70',
+                            140 => 'https://placehold.it/140x140',
                         ],
                     ],
                 ],
-                'mp3' => 'https://www.example.com/episode'.$i.'.mp3',
                 'subjects' => [$subjectId],
+                'selectedCurator' => [
+                    'id' => "$i",
+                    'type' => 'senior-editor',
+                    'name' => [
+                        'preferred' => 'Person '.$i,
+                        'index' => $i.', Person',
+                    ],
+                ],
+                'curators' => [
+                    [
+                        'id' => "$i",
+                        'type' => 'senior-editor',
+                        'name' => [
+                            'preferred' => 'Person '.$i,
+                            'index' => $i.', Person',
+                        ],
+                    ],
+                ],
+                'content' => [
+                    [
+                        'type' => 'blog-article',
+                        'id' => "$i",
+                        'title' => 'Blog article '.$i.' title',
+                        'published' => $today->format(DATE_RFC3339),
+                    ],
+                ],
             ];
         }
 
@@ -92,7 +117,7 @@ final class SubjectContext extends Context
             $this->mockApiResponse(
                 new Request(
                     'GET',
-                    "http://api.elifesciences.org/search?for=&page=$page&per-page=6&sort=date&order=desc&subject[]=$subjectId",
+                    "http://api.elifesciences.org/search?for=&page=$page&per-page=6&sort=date&order=desc&subject[]=$subjectId&type[]=research-article&type[]=research-advance&type[]=research-exchange&type[]=short-report&type[]=tools-resources&type[]=replication-study&type[]=editorial&type[]=insight&type[]=feature&type[]=collection",
                     ['Accept' => 'application/vnd.elife.search+json; version=1']
                 ),
                 new Response(
@@ -100,7 +125,12 @@ final class SubjectContext extends Context
                     ['Content-Type' => 'application/vnd.elife.search+json; version=1'],
                     json_encode([
                         'total' => $number,
-                        'items' => $articleChunk,
+                        'items' => array_map(function (array $collection) {
+                            unset($collection['curators']);
+                            unset($collection['content']);
+
+                            return $collection;
+                        }, $articleChunk),
                         'subjects' => [
                             [
                                 'id' => $subjectId,
@@ -122,11 +152,11 @@ final class SubjectContext extends Context
                             'short-report' => 0,
                             'tools-resources' => 0,
                             'blog-article' => 0,
-                            'collection' => 0,
+                            'collection' => $this->numberOfArticles,
                             'event' => 0,
                             'interview' => 0,
                             'labs-experiment' => 0,
-                            'podcast-episode' => $this->numberOfArticles,
+                            'podcast-episode' => 0,
                         ],
                     ])
                 )
@@ -156,7 +186,7 @@ final class SubjectContext extends Context
             $this->assertSession()->elementContains(
                 'css',
                 '.list-heading:contains("Latest articles") + ol > li:nth-child('.$nthChild.')',
-                'Podcast episode '.$expectedNumber
+                'Collection '.$expectedNumber.' title'
             )
             ;
             $this->assertSession()->elementContains(

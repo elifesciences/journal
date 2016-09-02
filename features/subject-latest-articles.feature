@@ -2,7 +2,17 @@
 Feature: Subject page latest articles
 
   Rules:
-  - All content items with the MSA are shown
+  - The following types of content with the MSA are included:
+    - Research article
+    - Research advance
+    - Research exchange
+    - Short report
+    - Tools and resources
+    - Replication study
+    - Editorial
+    - Insight
+    - Feature
+    - Collection
   - Items are loaded in batches of 6
   - Items are shown most recent first
 
