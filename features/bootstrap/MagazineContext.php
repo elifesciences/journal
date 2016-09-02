@@ -316,7 +316,7 @@ final class MagazineContext extends Context
                     ['Content-Type' => 'application/vnd.elife.medium-article-list+json; version=1'],
                     json_encode([
                         'total' => $number,
-                        'items' => $articlesChunk
+                        'items' => $articlesChunk,
                     ])
                 )
             );
