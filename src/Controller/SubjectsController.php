@@ -2,11 +2,11 @@
 
 namespace eLife\Journal\Controller;
 
-use eLife\ApiSdk\ApiClient\SearchClient;
-use eLife\ApiSdk\ApiClient\SubjectsClient;
-use eLife\ApiSdk\Exception\BadResponse;
-use eLife\ApiSdk\MediaType;
-use eLife\ApiSdk\Result;
+use eLife\ApiClient\ApiClient\SearchClient;
+use eLife\ApiClient\ApiClient\SubjectsClient;
+use eLife\ApiClient\Exception\BadResponse;
+use eLife\ApiClient\MediaType;
+use eLife\ApiClient\Result;
 use eLife\Patterns\ViewModel\BackgroundImage;
 use eLife\Patterns\ViewModel\ContentHeaderNonArticle;
 use eLife\Patterns\ViewModel\LeadPara;
@@ -25,7 +25,7 @@ final class SubjectsController extends Controller
 
         $arguments = $this->defaultPageArguments();
 
-        $arguments['subject'] = $this->get('elife.api_sdk.subjects')
+        $arguments['subject'] = $this->get('elife.api_client.subjects')
             ->getSubject(['Accept' => new MediaType(SubjectsClient::TYPE_SUBJECT, 1)], $id)
             ->otherwise(function (Throwable $e) {
                 if ($e instanceof BadResponse && 404 === $e->getResponse()->getStatusCode()) {
@@ -52,7 +52,7 @@ final class SubjectsController extends Controller
             });
 
         $arguments['latestArticlesHeading'] = new ListHeading('Latest articles');
-        $arguments['latestArticles'] = $this->get('elife.api_sdk.search')
+        $arguments['latestArticles'] = $this->get('elife.api_client.search')
             ->query(['Accept' => new MediaType(SearchClient::TYPE_SEARCH, 1)], '', $page, $perPage, 'date',
                 true, [$id])
             ->then(function (Result $result) use ($arguments) {

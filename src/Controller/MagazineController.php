@@ -2,12 +2,12 @@
 
 namespace eLife\Journal\Controller;
 
-use eLife\ApiSdk\ApiClient\EventsClient;
-use eLife\ApiSdk\ApiClient\MediumClient;
-use eLife\ApiSdk\ApiClient\PodcastClient;
-use eLife\ApiSdk\ApiClient\SearchClient;
-use eLife\ApiSdk\MediaType;
-use eLife\ApiSdk\Result;
+use eLife\ApiClient\ApiClient\EventsClient;
+use eLife\ApiClient\ApiClient\MediumClient;
+use eLife\ApiClient\ApiClient\PodcastClient;
+use eLife\ApiClient\ApiClient\SearchClient;
+use eLife\ApiClient\MediaType;
+use eLife\ApiClient\Result;
 use eLife\Patterns\ViewModel\AudioPlayer;
 use eLife\Patterns\ViewModel\AudioSource;
 use eLife\Patterns\ViewModel\ContentHeaderNonArticle;
@@ -29,7 +29,7 @@ final class MagazineController extends Controller
         $arguments['contentHeader'] = ContentHeaderNonArticle::basic('Magazine', false,
             'Highlighting the latest research and giving a voice to life and biomedical scientists.');
 
-        $arguments['audio_player'] = $this->get('elife.api_sdk.podcast')
+        $arguments['audio_player'] = $this->get('elife.api_client.podcast')
             ->listEpisodes(['Accept' => new MediaType(PodcastClient::TYPE_PODCAST_EPISODE_LIST, 1)], 1, 1)
             ->then(function (Result $result) {
                 if (empty($result['items'])) {
@@ -49,7 +49,7 @@ final class MagazineController extends Controller
         ;
 
         $arguments['latestHeading'] = new ListHeading('Latest');
-        $arguments['latest'] = $this->get('elife.api_sdk.search')
+        $arguments['latest'] = $this->get('elife.api_client.search')
             ->query(['Accept' => new MediaType(SearchClient::TYPE_SEARCH, 1)], '', $page, $perPage, 'date', true, [],
                 ['editorial', 'insight', 'feature', 'collection', 'interview', 'podcast-episode'])
             ->then(function (Result $result) use ($arguments) {
@@ -61,7 +61,7 @@ final class MagazineController extends Controller
                     ->forResult($result, $arguments['latestHeading']['heading']);
             });
 
-        $arguments['events'] = $this->get('elife.api_sdk.events')
+        $arguments['events'] = $this->get('elife.api_client.events')
             ->listEvents(['Accept' => new MediaType(EventsClient::TYPE_EVENT_LIST, 1)], 1, 3, 'open', false)
             ->then(function (Result $result) {
                 if (empty($result['items'])) {
@@ -89,7 +89,7 @@ final class MagazineController extends Controller
                 return null;
             });
 
-        $arguments['elifeDigests'] = $this->get('elife.api_sdk.medium')
+        $arguments['elifeDigests'] = $this->get('elife.api_client.medium')
             ->listArticles(['Accept' => new MediaType(MediumClient::TYPE_MEDIUM_ARTICLE_LIST, 1)])
             ->then(function (Result $result) {
                 if (empty($result['items'])) {

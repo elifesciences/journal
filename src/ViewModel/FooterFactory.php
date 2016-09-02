@@ -2,9 +2,9 @@
 
 namespace eLife\Journal\ViewModel;
 
-use eLife\ApiSdk\ApiClient\SubjectsClient;
-use eLife\ApiSdk\MediaType;
-use eLife\ApiSdk\Result;
+use eLife\ApiClient\ApiClient\SubjectsClient;
+use eLife\ApiClient\MediaType;
+use eLife\ApiClient\Result;
 use eLife\Patterns\ViewModel\Footer;
 use eLife\Patterns\ViewModel\Link;
 use eLife\Patterns\ViewModel\MainMenu;

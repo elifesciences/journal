@@ -3,10 +3,10 @@
 namespace eLife\Journal\Controller;
 
 use DateTimeImmutable;
-use eLife\ApiSdk\ApiClient\PodcastClient;
-use eLife\ApiSdk\Exception\BadResponse;
-use eLife\ApiSdk\MediaType;
-use eLife\ApiSdk\Result;
+use eLife\ApiClient\ApiClient\PodcastClient;
+use eLife\ApiClient\Exception\BadResponse;
+use eLife\ApiClient\MediaType;
+use eLife\ApiClient\Result;
 use eLife\Patterns\ViewModel\AudioPlayer;
 use eLife\Patterns\ViewModel\AudioSource;
 use eLife\Patterns\ViewModel\BackgroundImage;
@@ -37,7 +37,7 @@ final class PodcastController extends Controller
 
         $arguments['contentHeader'] = ContentHeaderNonArticle::basic('eLife podcast');
 
-        $arguments['episodes'] = $this->get('elife.api_sdk.podcast')
+        $arguments['episodes'] = $this->get('elife.api_client.podcast')
             ->listEpisodes(['Accept' => new MediaType(PodcastClient::TYPE_PODCAST_EPISODE_LIST, 1)], $page, $perPage)
             ->then(function (Result $result) {
                 $teasers = [];
@@ -57,7 +57,7 @@ final class PodcastController extends Controller
     {
         $arguments = $this->defaultPageArguments();
 
-        $arguments['episode'] = $this->get('elife.api_sdk.podcast')
+        $arguments['episode'] = $this->get('elife.api_client.podcast')
             ->getEpisode(['Accept' => new MediaType(PodcastClient::TYPE_PODCAST_EPISODE, 1)], $number)
             ->otherwise(function (Throwable $e) {
                 if ($e instanceof BadResponse && 404 === $e->getResponse()->getStatusCode()) {

@@ -2,10 +2,10 @@
 
 namespace eLife\Journal\Controller;
 
-use eLife\ApiSdk\ApiClient\EventsClient;
-use eLife\ApiSdk\Exception\BadResponse;
-use eLife\ApiSdk\MediaType;
-use eLife\ApiSdk\Result;
+use eLife\ApiClient\ApiClient\EventsClient;
+use eLife\ApiClient\Exception\BadResponse;
+use eLife\ApiClient\MediaType;
+use eLife\ApiClient\Result;
 use eLife\Patterns\ViewModel\ContentHeaderNonArticle;
 use eLife\Patterns\ViewModel\LeadPara;
 use eLife\Patterns\ViewModel\LeadParas;
@@ -24,7 +24,7 @@ final class EventsController extends Controller
 
         $arguments['contentHeader'] = ContentHeaderNonArticle::basic('eLife events');
 
-        $arguments['upcomingEvents'] = $this->get('elife.api_sdk.events')
+        $arguments['upcomingEvents'] = $this->get('elife.api_client.events')
             ->listEvents(['Accept' => new MediaType(EventsClient::TYPE_EVENT_LIST, 1)], $page, $perPage, 'open', false)
             ->then(function (Result $result) use ($arguments) {
                 if (empty($result['items'])) {
@@ -48,7 +48,7 @@ final class EventsController extends Controller
     {
         $arguments = $this->defaultPageArguments();
 
-        $arguments['event'] = $this->get('elife.api_sdk.events')
+        $arguments['event'] = $this->get('elife.api_client.events')
             ->getEvent(['Accept' => new MediaType(EventsClient::TYPE_EVENT, 1)], $id)
             ->otherwise(function (Throwable $e) {
                 if ($e instanceof BadResponse && 404 === $e->getResponse()->getStatusCode()) {

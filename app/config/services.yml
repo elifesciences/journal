@@ -1,61 +1,61 @@
 services:
 
-    elife.api_sdk.client:
-        class: eLife\ApiSdk\HttpClient\Guzzle6HttpClient
+    elife.api_client.client:
+        class: eLife\ApiClient\HttpClient\Guzzle6HttpClient
         arguments:
           - '@csa_guzzle.client.elife_api'
 
-    elife.api_sdk.client.warning_checking:
-        class: eLife\ApiSdk\HttpClient\WarningCheckingHttpClient
-        decorates: elife.api_sdk.client
+    elife.api_client.client.warning_checking:
+        class: eLife\ApiClient\HttpClient\WarningCheckingHttpClient
+        decorates: elife.api_client.client
         arguments:
-          - '@elife.api_sdk.client.warning_checking.inner'
+          - '@elife.api_client.client.warning_checking.inner'
           - '@logger'
 
-    elife.api_sdk.blog:
-        class: eLife\ApiSdk\ApiClient\BlogClient
+    elife.api_client.blog:
+        class: eLife\ApiClient\ApiClient\BlogClient
         arguments:
-          - '@elife.api_sdk.client'
+          - '@elife.api_client.client'
 
-    elife.api_sdk.collections:
-        class: eLife\ApiSdk\ApiClient\CollectionsClient
+    elife.api_client.collections:
+        class: eLife\ApiClient\ApiClient\CollectionsClient
         arguments:
-          - '@elife.api_sdk.client'
+          - '@elife.api_client.client'
 
-    elife.api_sdk.events:
-        class: eLife\ApiSdk\ApiClient\EventsClient
+    elife.api_client.events:
+        class: eLife\ApiClient\ApiClient\EventsClient
         arguments:
-          - '@elife.api_sdk.client'
+          - '@elife.api_client.client'
 
-    elife.api_sdk.interviews:
-        class: eLife\ApiSdk\ApiClient\InterviewsClient
+    elife.api_client.interviews:
+        class: eLife\ApiClient\ApiClient\InterviewsClient
         arguments:
-          - '@elife.api_sdk.client'
+          - '@elife.api_client.client'
 
-    elife.api_sdk.labs:
-        class: eLife\ApiSdk\ApiClient\LabsClient
+    elife.api_client.labs:
+        class: eLife\ApiClient\ApiClient\LabsClient
         arguments:
-          - '@elife.api_sdk.client'
+          - '@elife.api_client.client'
 
-    elife.api_sdk.medium:
-        class: eLife\ApiSdk\ApiClient\MediumClient
+    elife.api_client.medium:
+        class: eLife\ApiClient\ApiClient\MediumClient
         arguments:
-          - '@elife.api_sdk.client'
+          - '@elife.api_client.client'
 
-    elife.api_sdk.podcast:
-        class: eLife\ApiSdk\ApiClient\PodcastClient
+    elife.api_client.podcast:
+        class: eLife\ApiClient\ApiClient\PodcastClient
         arguments:
-          - '@elife.api_sdk.client'
+          - '@elife.api_client.client'
 
-    elife.api_sdk.search:
-        class: eLife\ApiSdk\ApiClient\SearchClient
+    elife.api_client.search:
+        class: eLife\ApiClient\ApiClient\SearchClient
         arguments:
-          - '@elife.api_sdk.client'
+          - '@elife.api_client.client'
 
-    elife.api_sdk.subjects:
-        class: eLife\ApiSdk\ApiClient\SubjectsClient
+    elife.api_client.subjects:
+        class: eLife\ApiClient\ApiClient\SubjectsClient
         arguments:
-          - '@elife.api_sdk.client'
+          - '@elife.api_client.client'
 
     elife.journal.templating.promise_aware:
         class: eLife\Journal\Templating\PromiseAwareEngine
@@ -92,7 +92,7 @@ services:
     elife.journal.view_model.factory.footer:
         class: eLife\Journal\ViewModel\FooterFactory
         arguments:
-          - '@elife.api_sdk.subjects'
+          - '@elife.api_client.subjects'
           - '@router'
           - '@puli.url_generator'
 
@@ -101,13 +101,13 @@ services:
         arguments:
           - '@router'
           - '@puli.url_generator'
-          - '@elife.api_sdk.subjects'
+          - '@elife.api_client.subjects'
 
     elife.journal.view_model.factory.listing_teaser_secondary:
         class: eLife\Journal\ViewModel\SecondaryListingTeaserFactory
         arguments:
           - '@router'
-          - '@elife.api_sdk.subjects'
+          - '@elife.api_client.subjects'
 
     elife.journal.view_model.factory.site_header:
         class: eLife\Journal\ViewModel\SiteHeaderFactory

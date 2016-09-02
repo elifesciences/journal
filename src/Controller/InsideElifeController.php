@@ -3,10 +3,10 @@
 namespace eLife\Journal\Controller;
 
 use DateTimeImmutable;
-use eLife\ApiSdk\ApiClient\BlogClient;
-use eLife\ApiSdk\Exception\BadResponse;
-use eLife\ApiSdk\MediaType;
-use eLife\ApiSdk\Result;
+use eLife\ApiClient\ApiClient\BlogClient;
+use eLife\ApiClient\Exception\BadResponse;
+use eLife\ApiClient\MediaType;
+use eLife\ApiClient\Result;
 use eLife\Patterns\ViewModel\ContentHeaderNonArticle;
 use eLife\Patterns\ViewModel\Date;
 use eLife\Patterns\ViewModel\LeadPara;
@@ -30,7 +30,7 @@ final class InsideElifeController extends Controller
         $arguments['contentHeader'] = ContentHeaderNonArticle::basic('Inside eLife');
 
         $arguments['latestHeading'] = new ListHeading('Latest');
-        $arguments['latest'] = $this->get('elife.api_sdk.blog')
+        $arguments['latest'] = $this->get('elife.api_client.blog')
             ->listArticles(['Accept' => new MediaType(BlogClient::TYPE_BLOG_ARTICLE_LIST, 1)], $page, $perPage)
             ->then(function (Result $result) use ($arguments) {
                 if (empty($result['items'])) {
@@ -55,7 +55,7 @@ final class InsideElifeController extends Controller
     {
         $arguments = $this->defaultPageArguments();
 
-        $arguments['article'] = $this->get('elife.api_sdk.blog')
+        $arguments['article'] = $this->get('elife.api_client.blog')
             ->getArticle(['Accept' => new MediaType(BlogClient::TYPE_BLOG_ARTICLE, 1)], $id)
             ->otherwise(function (Throwable $e) {
                 if ($e instanceof BadResponse && 404 === $e->getResponse()->getStatusCode()) {

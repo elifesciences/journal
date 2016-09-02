@@ -3,8 +3,8 @@
 namespace eLife\Journal\ViewModel;
 
 use DateTimeImmutable;
-use eLife\ApiSdk\ApiClient\SubjectsClient;
-use eLife\ApiSdk\Result;
+use eLife\ApiClient\ApiClient\SubjectsClient;
+use eLife\ApiClient\Result;
 use eLife\Patterns\ViewModel\Date;
 use eLife\Patterns\ViewModel\Link;
 use eLife\Patterns\ViewModel\ListingTeasers;
