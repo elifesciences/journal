@@ -90,7 +90,7 @@ final class MagazineController extends Controller
             });
 
         $arguments['elifeDigests'] = $this->get('elife.api_client.medium')
-            ->listArticles(['Accept' => new MediaType(MediumClient::TYPE_MEDIUM_ARTICLE_LIST, 1)])
+            ->listArticles(['Accept' => new MediaType(MediumClient::TYPE_MEDIUM_ARTICLE_LIST, 1)], 1, 3)
             ->then(function (Result $result) {
                 if (empty($result['items'])) {
                     return null;
