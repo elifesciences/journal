@@ -302,20 +302,25 @@ final class MagazineContext extends Context
             ];
         }
 
-        $this->mockApiResponse(
-            new Request(
-                'GET',
-                'http://api.elifesciences.org/medium-articles',
-                ['Accept' => 'application/vnd.elife.medium-article-list+json; version=1']
-            ),
-            new Response(
-                200,
-                ['Content-Type' => 'application/vnd.elife.medium-article-list+json; version=1'],
-                json_encode([
-                    'items' => $articles,
-                ])
-            )
-        );
+        foreach (array_chunk($articles, 3) as $i => $articlesChunk) {
+            $page = $i + 1;
+
+            $this->mockApiResponse(
+                new Request(
+                    'GET',
+                    "http://api.elifesciences.org/medium-articles?page=$page&per-page=3&order=desc",
+                    ['Accept' => 'application/vnd.elife.medium-article-list+json; version=1']
+                ),
+                new Response(
+                    200,
+                    ['Content-Type' => 'application/vnd.elife.medium-article-list+json; version=1'],
+                    json_encode([
+                        'total' => $number,
+                        'items' => $articlesChunk
+                    ])
+                )
+            );
+        }
     }
 
     /**
