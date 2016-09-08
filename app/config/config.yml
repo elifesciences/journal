@@ -3,6 +3,8 @@ imports:
   - resource: services.yml
 
 bobthecow_mustache:
+    globals:
+        assetsPath: '@elife.patterns.mustache.helpers.assets_path'
     loader_id: elife.patterns.mustache.loader.puli
     partials_loader_id: elife.patterns.mustache.loader.filesystem
 

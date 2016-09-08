@@ -10,23 +10,19 @@ use eLife\Patterns\ViewModel\Link;
 use eLife\Patterns\ViewModel\MainMenu;
 use eLife\Patterns\ViewModel\MainMenuLink;
 use GuzzleHttp\Promise\PromiseInterface;
-use Puli\UrlGenerator\Api\UrlGenerator as PuliUrlGenerator;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 final class FooterFactory
 {
     private $subjectsClient;
     private $urlGenerator;
-    private $puliUrlGenerator;
 
     public function __construct(
         SubjectsClient $subjectsClient,
-        UrlGeneratorInterface $urlGenerator,
-        PuliUrlGenerator $puliUrlGenerator
+        UrlGeneratorInterface $urlGenerator
     ) {
         $this->subjectsClient = $subjectsClient;
         $this->urlGenerator = $urlGenerator;
-        $this->puliUrlGenerator = $puliUrlGenerator;
     }
 
     public function createFooter() : PromiseInterface
@@ -43,7 +39,6 @@ final class FooterFactory
                 }
 
                 return new Footer(
-                    parse_url($this->puliUrlGenerator->generateUrl('/elife/patterns/assets'), PHP_URL_PATH),
                     new MainMenu([
                         new MainMenuLink('Subjects', $subjects),
                         new MainMenuLink('eLife', [
