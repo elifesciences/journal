@@ -4,6 +4,7 @@ namespace eLife\Journal;
 
 use Bobthecow\Bundle\MustacheBundle\BobthecowMustacheBundle;
 use Csa\Bundle\GuzzleBundle\CsaGuzzleBundle;
+use eLife\Journal\Expression\ParseUrlFunctionProvider;
 use Puli\SymfonyBundle\PuliBundle;
 use Sensio\Bundle\DistributionBundle\SensioDistributionBundle;
 use Symfony\Bundle\DebugBundle\DebugBundle;
@@ -12,6 +13,7 @@ use Symfony\Bundle\MonologBundle\MonologBundle;
 use Symfony\Bundle\TwigBundle\TwigBundle;
 use Symfony\Bundle\WebProfilerBundle\WebProfilerBundle;
 use Symfony\Component\Config\Loader\LoaderInterface;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Kernel;
 
@@ -68,5 +70,14 @@ class AppKernel extends Kernel
         $response = $this->handle($request);
         $response->send();
         $this->terminate($request, $response);
+    }
+
+    protected function buildContainer() : ContainerBuilder
+    {
+        $builder = parent::buildContainer();
+
+        $builder->addExpressionLanguageProvider(new ParseUrlFunctionProvider());
+
+        return $builder;
     }
 }

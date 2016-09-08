@@ -94,13 +94,11 @@ services:
         arguments:
           - '@elife.api_client.subjects'
           - '@router'
-          - '@puli.url_generator'
 
     elife.journal.view_model.factory.listing_teaser:
         class: eLife\Journal\ViewModel\ListingTeaserFactory
         arguments:
           - '@router'
-          - '@puli.url_generator'
           - '@elife.api_client.subjects'
 
     elife.journal.view_model.factory.listing_teaser_secondary:
@@ -130,6 +128,12 @@ services:
         decorates: elife.patterns.pattern_renderer
         arguments:
           - '@elife.patterns.pattern_renderer.asset_recording.inner'
+
+    elife.patterns.mustache.helpers.assets_path:
+        class: eLife\Journal\Mustache\DynamicValueHelper
+        public: false
+        arguments:
+          - '@=parse_url(service("puli.url_generator").generateUrl("/elife/patterns/assets"), constant("PHP_URL_PATH"))'
 
     elife.patterns.mustache.loader.puli:
         class: eLife\Patterns\Mustache\PuliLoader

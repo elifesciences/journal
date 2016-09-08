@@ -14,8 +14,6 @@ use eLife\Patterns\ViewModel\TeaserFooter;
 use eLife\Patterns\ViewModel\TeaserImage;
 use GuzzleHttp\Promise\FulfilledPromise;
 use GuzzleHttp\Promise\PromiseInterface;
-use GuzzleHttp\Psr7\Uri;
-use Puli\UrlGenerator\Api\UrlGenerator as PuliUrlGenerator;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use function GuzzleHttp\Promise\all;
 
@@ -24,16 +22,13 @@ final class ListingTeaserFactory
     use CreatesTeasers;
 
     private $urlGenerator;
-    private $puliUrlGenerator;
     private $subjects;
 
     public function __construct(
         UrlGeneratorInterface $urlGenerator,
-        PuliUrlGenerator $puliUrlGenerator,
         SubjectsClient $subjects
     ) {
         $this->urlGenerator = $urlGenerator;
-        $this->puliUrlGenerator = $puliUrlGenerator;
         $this->subjects = $subjects;
     }
 
@@ -85,8 +80,7 @@ final class ListingTeaserFactory
                             ucfirst(str_replace('-', ' ', $article['type'])),
                             new Date(DateTimeImmutable::createFromFormat(DATE_ATOM, $article['published']))
                         ),
-                        'vor' === $article['status'],
-                        (new Uri($this->puliUrlGenerator->generateUrl('/elife/patterns/assets')))->withQuery('')
+                        'vor' === $article['status']
                     )
                 );
             })
