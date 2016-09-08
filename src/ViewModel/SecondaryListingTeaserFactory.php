@@ -253,8 +253,7 @@ final class SecondaryListingTeaserFactory
                         Meta::withText(
                             'Podcast',
                             new Date(DateTimeImmutable::createFromFormat(DATE_ATOM, $episode['published']))
-                        ),
-                        $episode['mp3']
+                        )
                     )
                 );
             });
