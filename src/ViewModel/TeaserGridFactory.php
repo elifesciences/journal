@@ -65,8 +65,7 @@ final class TeaserGridFactory
                 Meta::withLink(
                     new Link('Podcast', $this->urlGenerator->generate('podcast')),
                     new Date(DateTimeImmutable::createFromFormat(DATE_ATOM, $episode['published']))
-                ),
-                $episode['mp3']
+                )
             )
         );
     }
