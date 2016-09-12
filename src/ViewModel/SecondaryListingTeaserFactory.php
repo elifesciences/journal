@@ -63,7 +63,6 @@ final class SecondaryListingTeaserFactory
             $image = TeaserImage::small(
                 $article['image']['sizes']['1:1'][70],
                 $article['image']['alt'],
-                null,
                 [
                     140 => $article['image']['sizes']['1:1'][140],
                     70 => $article['image']['sizes']['1:1'][70],
@@ -131,7 +130,6 @@ final class SecondaryListingTeaserFactory
                     TeaserImage::small(
                         $collection['image']['sizes']['1:1'][70],
                         $collection['image']['alt'],
-                        $this->urlGenerator->generate('collection', ['id' => $collection['id']]),
                         [
                             140 => $collection['image']['sizes']['1:1'][140],
                             70 => $collection['image']['sizes']['1:1'][70],
@@ -186,7 +184,6 @@ final class SecondaryListingTeaserFactory
             TeaserImage::small(
                 $experiment['image']['sizes']['1:1'][70],
                 $experiment['image']['alt'],
-                null,
                 [
                     140 => $experiment['image']['sizes']['1:1'][140],
                     70 => $experiment['image']['sizes']['1:1'][70],
@@ -207,7 +204,6 @@ final class SecondaryListingTeaserFactory
             $image = TeaserImage::small(
                 $article['image']['sizes']['1:1'][70],
                 $article['image']['alt'],
-                null,
                 [
                     140 => $article['image']['sizes']['1:1'][140],
                     70 => $article['image']['sizes']['1:1'][70],
@@ -243,7 +239,6 @@ final class SecondaryListingTeaserFactory
                     TeaserImage::small(
                         $episode['image']['sizes']['1:1'][70],
                         $episode['image']['alt'],
-                        $this->urlGenerator->generate('podcast-episode', ['number' => $episode['number']]),
                         [
                             140 => $episode['image']['sizes']['1:1'][140],
                             70 => $episode['image']['sizes']['1:1'][70],
