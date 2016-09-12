@@ -12,6 +12,11 @@ services:
           - '@elife.api_client.client.warning_checking.inner'
           - '@logger'
 
+    elife.api_client.articles:
+        class: eLife\ApiClient\ApiClient\ArticlesClient
+        arguments:
+          - '@elife.api_client.client'
+
     elife.api_client.blog:
         class: eLife\ApiClient\ApiClient\BlogClient
         arguments:

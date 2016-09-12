@@ -99,6 +99,7 @@ final class PodcastEpisodeControllerTest extends PageTestCase
                                     'published' => '2010-01-01T00:00:00+00:00',
                                     'volume' => 5,
                                     'elocationId' => 'e12345',
+                                    'authorLine' => 'Foo Bar',
                                 ],
                             ],
                         ],

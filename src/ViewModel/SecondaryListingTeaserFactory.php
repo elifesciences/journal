@@ -76,8 +76,8 @@ final class SecondaryListingTeaserFactory
             ->then(function ($contextLabel) use ($article, $image) {
                 return Teaser::secondary(
                     $article['title'],
-                    null,
-                    null,
+                    $this->urlGenerator->generate('article', ['volume' => $article['volume'], 'id' => $article['id']]),
+                    $article['authorLine'],
                     $contextLabel,
                     $image,
                     TeaserFooter::forNonArticle(
@@ -120,7 +120,6 @@ final class SecondaryListingTeaserFactory
                 if (false === empty($collection['selectedCurator']['etAl'])) {
                     $curatedBy .= ' et al';
                 }
-                $curatedBy .= '.';
 
                 return Teaser::secondary(
                     $collection['title'],

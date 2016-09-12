@@ -69,9 +69,9 @@ final class ListingTeaserFactory
             ->then(function ($contextLabel) use ($article, $image) {
                 return Teaser::main(
                     $article['title'],
-                    null,
+                    $this->urlGenerator->generate('article', ['volume' => $article['volume'], 'id' => $article['id']]),
                     $article['impactStatement'] ?? null,
-                    null,
+                    $article['authorLine'],
                     $contextLabel,
                     $image,
                     TeaserFooter::forArticle(

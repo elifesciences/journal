@@ -20,6 +20,7 @@ final class HomepageContext extends Context
         $today = (new DateTimeImmutable())->setTime(0, 0, 0);
 
         for ($i = $number; $i > 0; --$i) {
+            $i = str_pad($i, 5, '0', STR_PAD_LEFT);
             $articles[] = [
                 'status' => 'poa',
                 'id' => "$i",
@@ -35,6 +36,7 @@ final class HomepageContext extends Context
                     'holder' => 'Author et al',
                     'statement' => 'Creative Commons Attribution License.',
                 ],
+                'authorLine' => 'Foo Bar',
             ];
         }
 
@@ -194,7 +196,7 @@ final class HomepageContext extends Context
             $this->assertSession()->elementContains(
                 'css',
                 '.list-heading:contains("Latest research") + ol > li:nth-child('.$nthChild.')',
-                'Article '.$expectedNumber.' title'
+                'Article '.str_pad($expectedNumber, 5, '0', STR_PAD_LEFT).' title'
             );
         }
     }

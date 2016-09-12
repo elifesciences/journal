@@ -26,6 +26,14 @@ archive-year:
     requirements:
         number: '[2-9][0-9]{3}'
 
+article:
+    path: /content/{volume}/e{id}
+    defaults:
+         _controller: AppBundle:Articles:latestVersion
+    requirements:
+        volume: '[1-9][0-9]*'
+        id: '[0-9]{5}'
+
 careers:
     path: /careers
     defaults:
