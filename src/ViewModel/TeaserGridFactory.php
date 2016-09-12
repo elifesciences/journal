@@ -30,7 +30,6 @@ final class TeaserGridFactory
             TeaserImage::prominent(
                 $experiment['image']['sizes']['16:9'][250],
                 $experiment['image']['alt'],
-                $this->urlGenerator->generate('labs-experiment', ['number' => $experiment['number']]),
                 [
                     500 => $experiment['image']['sizes']['16:9'][500],
                     250 => $experiment['image']['sizes']['16:9'][250],
@@ -55,7 +54,6 @@ final class TeaserGridFactory
             TeaserImage::prominent(
                 $episode['image']['sizes']['16:9'][250],
                 $episode['image']['alt'],
-                $this->urlGenerator->generate('podcast-episode', ['number' => $episode['number']]),
                 [
                     500 => $episode['image']['sizes']['16:9'][500],
                     250 => $episode['image']['sizes']['16:9'][250],

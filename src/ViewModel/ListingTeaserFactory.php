@@ -56,7 +56,6 @@ final class ListingTeaserFactory
             $image = TeaserImage::big(
                 $article['image']['sizes']['16:9'][250],
                 $article['image']['alt'],
-                null,
                 [
                     500 => $article['image']['sizes']['16:9'][500],
                     250 => $article['image']['sizes']['16:9'][250],
@@ -127,7 +126,6 @@ final class ListingTeaserFactory
                     TeaserImage::big(
                         $collection['image']['sizes']['16:9'][250],
                         $collection['image']['alt'],
-                        $this->urlGenerator->generate('collection', ['id' => $collection['id']]),
                         [
                             500 => $collection['image']['sizes']['16:9'][500],
                             250 => $collection['image']['sizes']['16:9'][250],
@@ -187,7 +185,6 @@ final class ListingTeaserFactory
             TeaserImage::big(
                 $experiment['image']['sizes']['16:9'][250],
                 $experiment['image']['alt'],
-                $this->urlGenerator->generate('labs-experiment', ['number' => $experiment['number']]),
                 [
                     500 => $experiment['image']['sizes']['16:9'][500],
                     250 => $experiment['image']['sizes']['16:9'][250],
@@ -208,7 +205,6 @@ final class ListingTeaserFactory
             $image = TeaserImage::big(
                 $article['image']['sizes']['16:9'][250],
                 $article['image']['alt'],
-                $this->urlGenerator->generate('podcast-episode', ['number' => $article['number']]),
                 [
                     500 => $article['image']['sizes']['16:9'][500],
                     250 => $article['image']['sizes']['16:9'][250],
@@ -246,7 +242,6 @@ final class ListingTeaserFactory
                     TeaserImage::big(
                         $episode['image']['sizes']['16:9'][250],
                         $episode['image']['alt'],
-                        $this->urlGenerator->generate('podcast-episode', ['number' => $episode['number']]),
                         [
                             500 => $episode['image']['sizes']['16:9'][500],
                             250 => $episode['image']['sizes']['16:9'][250],
@@ -256,8 +251,7 @@ final class ListingTeaserFactory
                         Meta::withText(
                             'Podcast',
                             new Date(DateTimeImmutable::createFromFormat(DATE_ATOM, $episode['published']))
-                        ),
-                        $episode['mp3']
+                        )
                     )
                 );
             })
