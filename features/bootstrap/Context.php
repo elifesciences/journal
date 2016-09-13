@@ -89,9 +89,9 @@ abstract class Context extends RawMinkContext implements KernelAwareContext
     {
         for ($i = 0; $i < $wait; ++$i) {
             try {
-                if ($lambda()) {
-                    return true;
-                }
+                $lambda();
+
+                return;
             } catch (Exception $e) {
                 // Do nothing.
             }

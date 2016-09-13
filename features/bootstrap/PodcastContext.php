@@ -216,8 +216,6 @@ final class PodcastContext extends Context
                 ->find('css',
                     '.list-heading:contains("Chapters") + .listing-list > .listing-list__item:nth-child(2) .teaser__header_text_link')
                 ->click();
-
-            return true;
         });
     }
 
@@ -258,13 +256,10 @@ final class PodcastContext extends Context
     /**
      * @Then /^the second chapter's number and title appear as part of the player title$/
      */
-    public function theSecondChapterSNumberAndTitleAppearAsPartOfThePlayerTitle()
+    public function theSecondChaptersNumberAndTitleAppearAsPartOfThePlayerTitle()
     {
-        echo $this->getSession()->getPage()->getHtml();
         $this->spin(function () {
             $this->assertSession()->elementTextContains('css', '.audio-player__title', 'Episode 100: 2. Chapter 2');
-
-            return true;
         });
     }
 
@@ -284,8 +279,6 @@ final class PodcastContext extends Context
             if (true === 'document.querySelector(".audio-player__player").paused') {
                 throw new ExpectationException('Player is paused', $this->getSession()->getDriver());
             }
-
-            return true;
         });
     }
 
@@ -300,8 +293,6 @@ final class PodcastContext extends Context
                     '.list-heading:contains("Chapters") + .listing-list > .listing-list__item:nth-child(2) > .media-chapter-listing-item',
                     'class',
                     'current-chapter');
-
-            return true;
         });
     }
 }
