@@ -141,6 +141,7 @@ final class MagazineContext extends Context
                                 'published' => '2010-01-01T00:00:00+00:00',
                                 'volume' => 5,
                                 'elocationId' => 'e54321',
+                                'authorLine' => 'Foo Bar',
                             ],
                         ],
                     ],

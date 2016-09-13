@@ -1,0 +1,11 @@
+{% extends '::page.html.twig' %}
+
+{% block title %}{{ article.title|striptags }} | {% endblock %}
+
+{% block body %}
+
+    {{ info_bar('This page is incomplete.') }}
+
+    {{ render_pattern(contentHeader) }}
+
+{% endblock %}
