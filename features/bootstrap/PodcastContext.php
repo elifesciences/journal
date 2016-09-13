@@ -210,12 +210,15 @@ final class PodcastContext extends Context
      */
     public function iClickOnTheSecondChaptersTitle()
     {
-        sleep(1);
-        $this->getSession()
-            ->getPage()
-            ->find('css',
-                '.list-heading:contains("Chapters") + .listing-list > .listing-list__item:nth-child(2) .teaser__header_text_link')
-            ->click();
+        $this->spin(function () {
+            $this->getSession()
+                ->getPage()
+                ->find('css',
+                    '.list-heading:contains("Chapters") + .listing-list > .listing-list__item:nth-child(2) .teaser__header_text_link')
+                ->click();
+
+            return true;
+        });
     }
 
     /**
@@ -233,8 +236,7 @@ final class PodcastContext extends Context
                 'css',
                 '.list-heading:contains("Latest episodes") + ul > li:nth-child('.$nthChild.')',
                 'Episode '.$expectedNumber.' title'
-            )
-            ;
+            );
         }
     }
 
@@ -258,7 +260,11 @@ final class PodcastContext extends Context
      */
     public function theSecondChapterSNumberAndTitleAppearAsPartOfThePlayerTitle()
     {
-        $this->assertSession()->elementTextContains('css', '.audio-player__title', 'Episode 100: 2. Chapter 2');
+        $this->spin(function () {
+            $this->assertSession()->elementTextContains('css', '.audio-player__title', 'Episode 100: 2. Chapter 2');
+
+            return true;
+        });
     }
 
     /**
@@ -266,16 +272,20 @@ final class PodcastContext extends Context
      */
     public function theAudioPlayerShouldStartPlayingTheSecondChapter()
     {
-        $chapter = $this->getSession()
-            ->evaluateScript('document.querySelector(".current-chapter").dataset.chapterNumber');
+        $this->spin(function () {
+            $chapter = $this->getSession()
+                ->evaluateScript('document.querySelector(".current-chapter").dataset.chapterNumber');
 
-        if (2 != $chapter) {
-            throw new ExpectationException('Player is on chapter '.$chapter, $this->getSession()->getDriver());
-        }
+            if (2 != $chapter) {
+                throw new ExpectationException('Player is on chapter '.$chapter, $this->getSession()->getDriver());
+            }
 
-        if (true === 'document.querySelector(".audio-player__player").paused') {
-            throw new ExpectationException('Player is paused', $this->getSession()->getDriver());
-        }
+            if (true === 'document.querySelector(".audio-player__player").paused') {
+                throw new ExpectationException('Player is paused', $this->getSession()->getDriver());
+            }
+
+            return true;
+        });
     }
 
     /**
@@ -283,10 +293,14 @@ final class PodcastContext extends Context
      */
     public function thereIsAnIndicationNearTheSecondChaptersTitleThatThisIsTheCurrentChapter()
     {
-        $this->assertSession()
-            ->elementAttributeContains('css',
-                '.list-heading:contains("Chapters") + .listing-list > .listing-list__item:nth-child(2) > .media-chapter-listing-item',
-                'class',
-                'current-chapter');
+        $this->spin(function () {
+            $this->assertSession()
+                ->elementAttributeContains('css',
+                    '.list-heading:contains("Chapters") + .listing-list > .listing-list__item:nth-child(2) > .media-chapter-listing-item',
+                    'class',
+                    'current-chapter');
+
+            return true;
+        });
     }
 }
