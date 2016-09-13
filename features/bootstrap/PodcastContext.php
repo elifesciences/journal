@@ -210,6 +210,7 @@ final class PodcastContext extends Context
      */
     public function iClickOnTheSecondChaptersTitle()
     {
+        sleep(1);
         $this->getSession()
             ->getPage()
             ->find('css',
