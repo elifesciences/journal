@@ -11,21 +11,21 @@ Feature: Podcast episode
   - Current chapter is indicated in the listing
   - Related list shows the first article covered by each of the chapters
 
-  @wip
+  @javascript
   Scenario: Current chapter's number and title is part of player's title
     Given there is a podcast episode with two chapters
     When I go the podcast episode page
     And I click on the second chapter's title
     Then the second chapter's number and title appear as part of the player title
 
-  @wip
+  @javascript
   Scenario: Current chapter indicated in chapter list
     Given there is a podcast episode with two chapters
     When I go the podcast episode page
     And I click on the second chapter's title
     Then there is an indication near the second chapter's title that this is the current chapter
 
-  @wip
+  @javascript
   Scenario: Clicking a chapter title plays the chapter
     Given there is a podcast episode with two chapters
     When I go the podcast episode page

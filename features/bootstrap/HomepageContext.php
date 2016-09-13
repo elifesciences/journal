@@ -122,7 +122,7 @@ final class HomepageContext extends Context
                         ],
                     ],
                 ],
-                'mp3' => 'https://www.example.com/episode'.$i.'.mp3',
+                'mp3' => $this->locatePath('/audio-file'),
             ];
         }
 

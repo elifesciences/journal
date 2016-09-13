@@ -26,7 +26,15 @@
 
                 <div class="grid__item large--eight-twelfths listing-column-main">
 
-                    {{ render_pattern(chapters) }}
+                    <h3 class="list-heading">Chapters</h3>
+
+                    <ol class="listing-list">
+                        {% for chapter in chapters %}
+                            <li class="listing-list__item">
+                                {{ render_pattern(chapter) }}
+                            </li>
+                        {% endfor %}
+                    </ol>
 
                 </div>
 

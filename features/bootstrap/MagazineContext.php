@@ -44,7 +44,7 @@ final class MagazineContext extends Context
                         ],
                     ],
                 ],
-                'mp3' => 'https://www.example.com/episode'.$i.'.mp3',
+                'mp3' => $this->locatePath('/audio-file'),
             ];
         }
 
@@ -124,7 +124,7 @@ final class MagazineContext extends Context
                         ],
                     ],
                 ],
-                'mp3' => 'https://example.com/episode'.$number.'.mp3',
+                'mp3' => $this->locatePath('/audio-file'),
                 'chapters' => [
                     [
                         'number' => 1,
@@ -359,11 +359,11 @@ final class MagazineContext extends Context
         $this->assertSession()->elementExists('css', '.audio-player');
         $this->assertSession()
             ->elementContains('css', '.audio-player__header',
-                'Latest podcast: Episode '.$this->numberOfPodcastEpisodes.' title')
+                'Episode '.$this->numberOfPodcastEpisodes)
         ;
         $this->assertSession()
             ->elementAttributeContains('css', '.audio-player__player source', 'src',
-                'https://example.com/episode'.$this->numberOfPodcastEpisodes.'.mp3')
+                $this->locatePath('/audio-file'))
         ;
     }
 

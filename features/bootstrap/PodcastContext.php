@@ -1,5 +1,6 @@
 <?php
 
+use Behat\Mink\Exception\ExpectationException;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 
@@ -41,7 +42,7 @@ final class PodcastContext extends Context
                     ],
                 ],
                 'impactStatement' => 'Experiment '.$i.' impact statement',
-                'mp3' => 'https://www.example.com/episode'.$i.'.mp3',
+                'mp3' => $this->locatePath('/audio-file'),
                 'chapters' => [
                     [
                         'number' => 1,
@@ -142,12 +143,12 @@ final class PodcastContext extends Context
                         ],
                     ],
                     'impactStatement' => 'Experiment impact statement',
-                    'mp3' => 'https://www.example.com/episode.mp3',
+                    'mp3' => $this->locatePath('/audio-file'),
                     'chapters' => [
                         [
                             'number' => 1,
                             'title' => 'Chapter 1',
-                            'time' => 0,
+                            'time' => 3,
                             'content' => [
                                 [
                                     'type' => 'research-article',
@@ -166,7 +167,7 @@ final class PodcastContext extends Context
                         [
                             'number' => 2,
                             'title' => 'Chapter 2',
-                            'time' => 100,
+                            'time' => 7,
                             'content' => [
                                 [
                                     'type' => 'research-article',
@@ -205,6 +206,18 @@ final class PodcastContext extends Context
     }
 
     /**
+     * @When /^I click on the second chapter's title$/
+     */
+    public function iClickOnTheSecondChaptersTitle()
+    {
+        $this->getSession()
+            ->getPage()
+            ->find('css',
+                '.list-heading:contains("Chapters") + .listing-list > .listing-list__item:nth-child(2) .teaser__header_text_link')
+            ->click();
+    }
+
+    /**
      * @Then /^I should see the latest (\d+) podcast episodes in the 'Latest episodes' list$/
      */
     public function iShouldSeeTheLatestPodcastEpisodesInTheEpisodesList(int $number)
@@ -237,5 +250,42 @@ final class PodcastContext extends Context
         $this->assertSession()
             ->elementContains('css', '.list-heading:contains("Related") + ol > li:nth-child(2)', 'Article 12346')
         ;
+    }
+
+    /**
+     * @Then /^the second chapter's number and title appear as part of the player title$/
+     */
+    public function theSecondChapterSNumberAndTitleAppearAsPartOfThePlayerTitle()
+    {
+        $this->assertSession()->elementTextContains('css', '.audio-player__title', 'Episode 100: 2. Chapter 2');
+    }
+
+    /**
+     * @Then /^the audio player should start playing the second chapter$/
+     */
+    public function theAudioPlayerShouldStartPlayingTheSecondChapter()
+    {
+        $chapter = $this->getSession()
+            ->evaluateScript('document.querySelector(".current-chapter").dataset.chapterNumber');
+
+        if (2 != $chapter) {
+            throw new ExpectationException('Player is on chapter '.$chapter, $this->getSession()->getDriver());
+        }
+
+        if (true === 'document.querySelector(".audio-player__player").paused') {
+            throw new ExpectationException('Player is paused', $this->getSession()->getDriver());
+        }
+    }
+
+    /**
+     * @Then /^there is an indication near the second chapter's title that this is the current chapter$/
+     */
+    public function thereIsAnIndicationNearTheSecondChaptersTitleThatThisIsTheCurrentChapter()
+    {
+        $this->assertSession()
+            ->elementAttributeContains('css',
+                '.list-heading:contains("Chapters") + .listing-list > .listing-list__item:nth-child(2) > .media-chapter-listing-item',
+                'class',
+                'current-chapter');
     }
 }
