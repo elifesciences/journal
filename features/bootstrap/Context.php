@@ -87,7 +87,7 @@ abstract class Context extends RawMinkContext implements KernelAwareContext
 
     final protected function spin(callable $lambda, int $wait = 10)
     {
-        for ($i = 0; $i < $wait; $i++) {
+        for ($i = 0; $i < $wait; ++$i) {
             try {
                 if ($lambda()) {
                     return true;
@@ -102,8 +102,8 @@ abstract class Context extends RawMinkContext implements KernelAwareContext
         $backtrace = debug_backtrace();
 
         throw new Exception(
-            "Timeout thrown by ".$backtrace[1]['class']."::".$backtrace[1]['function']."()\n".
-            $backtrace[1]['file'].", line ".$backtrace[1]['line']
+            'Timeout thrown by '.$backtrace[1]['class'].'::'.$backtrace[1]['function']."()\n".
+            $backtrace[1]['file'].', line '.$backtrace[1]['line']
         );
     }
 }
