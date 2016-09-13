@@ -99,11 +99,6 @@ abstract class Context extends RawMinkContext implements KernelAwareContext
             sleep(1);
         }
 
-        $backtrace = debug_backtrace();
-
-        throw new Exception(
-            'Timeout thrown by '.$backtrace[1]['class'].'::'.$backtrace[1]['function']."()\n".
-            $backtrace[1]['file'].', line '.$backtrace[1]['line']
-        );
+        throw new Exception('Timeout');
     }
 }

@@ -260,6 +260,7 @@ final class PodcastContext extends Context
      */
     public function theSecondChapterSNumberAndTitleAppearAsPartOfThePlayerTitle()
     {
+        echo $this->getSession()->getPage()->getHtml();
         $this->spin(function () {
             $this->assertSession()->elementTextContains('css', '.audio-player__title', 'Episode 100: 2. Chapter 2');
 
