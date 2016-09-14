@@ -5,7 +5,13 @@ default:
                 default:
                     symfony2: ~
                 javascript:
-                    selenium2: ~
+                    selenium2: 
+                        capabilities:
+                            extra_capabilities:
+                                loggingPrefs:
+                                    driver: DEBUG
+                                    server: DEBUG
+                                    browser: DEBUG
             base_url: http://localhost/
         Behat\Symfony2Extension:
             kernel:
