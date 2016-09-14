@@ -9,6 +9,6 @@ final class AudioFileController
 {
     public function audioFileAction() : Response
     {
-        return new BinaryFileResponse(__DIR__.'/../../app/Resources/tests/blank.m4a');
+        return new BinaryFileResponse(__DIR__.'/../../app/Resources/tests/blank.mp3');
     }
 }
