@@ -7,6 +7,13 @@ services:
           - '@elife.api_validator.schema_finder'
           - '@elife.api_validator.validator.json_decoder'
 
+    elife.api_validator.validator.fake_https:
+        class: eLife\ApiValidator\MessageValidator\FakeHttpsMessageValidator
+        decorates: elife.api_validator.validator
+        arguments:
+          - '@elife.api_validator.validator.fake_https.inner'
+          - '@elife.api_validator.validator.json_decoder'
+
     elife.api_validator.validator.json_decoder:
         class: Webmozart\Json\JsonDecoder
         public: false
