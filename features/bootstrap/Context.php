@@ -100,6 +100,6 @@ abstract class Context extends RawMinkContext implements KernelAwareContext
             sleep(1);
         }
 
-        throw new Exception('Timeout: ' . $e->getMessage(), -1 , $e);
+        throw new Exception('Timeout: '.$e->getMessage(), -1, $e);
     }
 }

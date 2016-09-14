@@ -203,7 +203,7 @@ final class PodcastContext extends Context
     public function iGoThePodcastEpisodePage()
     {
         $this->visitPath('/podcast/episode100');
-        $this->spin(function() {
+        $this->spin(function () {
             $element = $this->getSession()
                 ->getPage()
                 ->find('css', '.audio-player__duration');
