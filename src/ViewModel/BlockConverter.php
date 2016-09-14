@@ -37,11 +37,11 @@ final class BlockConverter
             case 'image':
                 $image = new Image($block['uri'], [], $block['alt']);
 
-                if (empty($block['caption'])) {
+                if (empty($block['title'])) {
                     return new CaptionlessImage($image);
                 }
 
-                return CaptionedImage::withOnlyHeading($image, $block['caption']);
+                return CaptionedImage::withOnlyHeading($image, $block['title']);
             case 'paragraph':
                 return new Paragraph($block['text']);
             case 'question':
