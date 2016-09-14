@@ -87,6 +87,7 @@ abstract class Context extends RawMinkContext implements KernelAwareContext
 
     final protected function spin(callable $lambda, int $wait = 10)
     {
+        $e = null;
         for ($i = 0; $i < $wait; ++$i) {
             try {
                 $lambda();
@@ -99,6 +100,6 @@ abstract class Context extends RawMinkContext implements KernelAwareContext
             sleep(1);
         }
 
-        throw new Exception('Timeout');
+        throw new Exception('Timeout: ' . $e->getMessage(), -1 , $e);
     }
 }
