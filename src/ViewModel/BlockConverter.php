@@ -7,6 +7,7 @@ use eLife\Patterns\ViewModel;
 use eLife\Patterns\ViewModel\CaptionedImage;
 use eLife\Patterns\ViewModel\IFrame;
 use eLife\Patterns\ViewModel\Image;
+use eLife\Patterns\ViewModel\PullQuote;
 use Traversable;
 use UnexpectedValueException;
 
@@ -50,12 +51,18 @@ final class BlockConverter
                     $this->renderViewModels($this->handleLevelledBlocks($block['answer'], $level + 1)),
                     $level
                 );
+            case 'quote':
+                return new PullQuote($this->renderViewModels($this->handleBlocks(...$block['text'])),
+                    $block['cite'] ?? null, false);
             case 'section':
                 return new Section(
                     $block['title'],
                     $this->renderViewModels($this->handleLevelledBlocks($block['content'], $level + 1)),
                     $level
                 );
+            case 'table':
+                return new Table(implode('', $block['tables']),
+                    $this->renderViewModels($this->handleBlocks(...$block['footer'] ?? [])));
             case 'youtube':
                 return new IFrame('https://www.youtube.com/embed/'.$block['id'], $block['width'], $block['height']);
             default:

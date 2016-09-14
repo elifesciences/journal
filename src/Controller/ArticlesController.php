@@ -8,6 +8,8 @@ use eLife\ApiClient\ApiClient\SubjectsClient;
 use eLife\ApiClient\Exception\BadResponse;
 use eLife\ApiClient\MediaType;
 use eLife\ApiClient\Result;
+use eLife\Journal\ViewModel\Section;
+use eLife\Patterns\ViewModel;
 use eLife\Patterns\ViewModel\Author;
 use eLife\Patterns\ViewModel\AuthorList;
 use eLife\Patterns\ViewModel\BackgroundImage;
@@ -173,6 +175,44 @@ final class ArticlesController extends Controller
                 }
 
                 return [new InfoBar('Accepted manuscript, PDF only. Full online edition to follow.')];
+            });
+
+        $arguments['body'] = $arguments['article']
+            ->then(function (Result $article) {
+                $parts = [];
+
+                if (false === empty($article['abstract'])) {
+                    $parts[] = new Section(
+                        'Abstract',
+                        implode('', array_map(function (ViewModel $viewModel) {
+                            return $this->get('elife.patterns.pattern_renderer')->render($viewModel);
+                        }, iterator_to_array($this->get('elife.website.view_model.block_converter')
+                            ->handleBlocks(...$article['abstract']['content']))))
+                    );
+                }
+
+                if (false === empty($article['digest'])) {
+                    $parts[] = new Section(
+                        'eLife digest',
+                        implode(array_map(function (ViewModel $viewModel) {
+                            return $this->get('elife.patterns.pattern_renderer')->render($viewModel);
+                        }, iterator_to_array($this->get('elife.website.view_model.block_converter')
+                            ->handleBlocks(...$article['digest']['content']))))
+                    );
+                }
+
+                if (false === empty($article['body'])) {
+                    if (empty($parts) && 1 === count($article['body'])) {
+                        $parts = $this->get('elife.website.view_model.block_converter')
+                            ->handleBlocks(...$article['body'][0]['content']);
+                    } else {
+                        $parts = array_merge($parts,
+                            iterator_to_array($this->get('elife.website.view_model.block_converter')
+                                ->handleBlocks(...$article['body'])));
+                    }
+                }
+
+                return $parts;
             });
 
         return new Response($this->get('templating')->render('::article.html.twig', $arguments));
