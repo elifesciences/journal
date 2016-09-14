@@ -6,6 +6,10 @@
 
     {{ info_bar('This page is incomplete.') }}
 
+    {% for infoBar in infoBars %}
+        {{ render_pattern(infoBar) }}
+    {% endfor %}
+
 {% endblock %}
 
 {% block body %}

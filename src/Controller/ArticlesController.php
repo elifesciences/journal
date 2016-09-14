@@ -13,6 +13,7 @@ use eLife\Patterns\ViewModel\AuthorList;
 use eLife\Patterns\ViewModel\BackgroundImage;
 use eLife\Patterns\ViewModel\ContentHeaderArticle;
 use eLife\Patterns\ViewModel\Date;
+use eLife\Patterns\ViewModel\InfoBar;
 use eLife\Patterns\ViewModel\Institution;
 use eLife\Patterns\ViewModel\InstitutionList;
 use eLife\Patterns\ViewModel\Link;
@@ -163,6 +164,15 @@ final class ArticlesController extends Controller
                         $article['image']['sizes']['2:1'][1800]
                     ) : null
                 );
+            });
+
+        $arguments['infoBars'] = $arguments['article']
+            ->then(function (Result $article) {
+                if ('vor' === $article['status']) {
+                    return [];
+                }
+
+                return [new InfoBar('Accepted manuscript, PDF only. Full online edition to follow.')];
             });
 
         return new Response($this->get('templating')->render('::article.html.twig', $arguments));
