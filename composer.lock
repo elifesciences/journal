@@ -3302,12 +3302,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-validator-php.git",
-                "reference": "99b246203d6f010d10439ad65b93b18ab6ccc0d4"
+                "reference": "18ba36fa07b830596c78b740d6e9d6ef90e65bd3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-validator-php/zipball/99b246203d6f010d10439ad65b93b18ab6ccc0d4",
-                "reference": "99b246203d6f010d10439ad65b93b18ab6ccc0d4",
+                "url": "https://api.github.com/repos/elifesciences/api-validator-php/zipball/18ba36fa07b830596c78b740d6e9d6ef90e65bd3",
+                "reference": "18ba36fa07b830596c78b740d6e9d6ef90e65bd3",
                 "shasum": ""
             },
             "require": {
@@ -3341,7 +3341,7 @@
                 "MIT"
             ],
             "description": "eLife Sciences API validator",
-            "time": "2016-08-15 11:58:26"
+            "time": "2016-09-13 08:27:27"
         },
         {
             "name": "jarnaiz/behat-junit-formatter",
