@@ -10,9 +10,13 @@
 
 {% endblock %}
 
-{% block body %}
+{% block info_bar %}
 
     {{ info_bar('This page is incomplete.') }}
+
+{% endblock %}
+
+{% block body %}
 
     {% if date(event.ends) < date() %}
         {{ info_bar('This event has finished.', constant('eLife\\Patterns\\ViewModel\\InfoBar::TYPE_ATTENTION')) }}
