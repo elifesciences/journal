@@ -7,6 +7,9 @@ use eLife\Patterns\ReadOnlyArrayAccess;
 use eLife\Patterns\SimplifyAssets;
 use eLife\Patterns\ViewModel;
 
+/**
+ * @SuppressWarnings(ForbiddenAbleSuffix)
+ */
 final class Table implements ViewModel
 {
     use ArrayFromProperties;
