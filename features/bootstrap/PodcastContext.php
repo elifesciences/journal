@@ -284,7 +284,9 @@ final class PodcastContext extends Context
                 throw new ExpectationException('Player is on chapter '.$chapter, $this->getSession()->getDriver());
             }
 
-            if (true === 'document.querySelector(".audio-player__player").paused') {
+            if (true === $this->getSession()
+                    ->evaluateScript('document.querySelector(".audio-player__player").paused')
+            ) {
                 throw new ExpectationException('Player is paused', $this->getSession()->getDriver());
             }
         });
