@@ -1,5 +1,6 @@
 <?php
 
+use Behat\Mink\Exception\UnsupportedDriverActionException;
 use Behat\MinkExtension\Context\RawMinkContext;
 use Behat\Symfony2Extension\Context\KernelAwareContext;
 use GuzzleHttp\Psr7\Request;
@@ -101,5 +102,14 @@ abstract class Context extends RawMinkContext implements KernelAwareContext
         }
 
         throw new Exception('Timeout: '.$e->getMessage(), -1, $e);
+    }
+
+    final protected function isJavaScript()
+    {
+        try {
+            return $this->getSession()->evaluateScript('true');
+        } catch (UnsupportedDriverActionException $e) {
+            return false;
+        }
     }
 }

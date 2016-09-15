@@ -203,14 +203,16 @@ final class PodcastContext extends Context
     public function iGoThePodcastEpisodePage()
     {
         $this->visitPath('/podcast/episode100');
-        $this->spin(function () {
-            $element = $this->getSession()
-                ->getPage()
-                ->find('css', '.audio-player__duration');
-            if ($element->getText() == '0:00') {
-                throw new Exception("Time is still 0:00, metadata didn't load");
-            }
-        });
+
+        if ($this->isJavaScript()) {
+            $this->spin(function () {
+                if (!$this->getSession()
+                    ->evaluateScript('document.querySelector(".audio-player__player").readyState >= 2')
+                ) {
+                    throw new ExpectationException('Podcast is not loaded', $this->getSession()->getDriver());
+                }
+            });
+        }
     }
 
     /**
