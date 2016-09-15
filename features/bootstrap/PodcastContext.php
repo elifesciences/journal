@@ -219,12 +219,16 @@ final class PodcastContext extends Context
     public function iClickOnTheSecondChaptersTitle()
     {
         $this->spin(function () {
-            $this->getSession()
-                ->getPage()
-                ->find('css',
-                    '.list-heading:contains("Chapters") + .listing-list > .listing-list__item:nth-child(2) .teaser__header_text_link')
-                ->click();
+            $this->assertSession()
+                ->elementExists('css',
+                    '.list-heading:contains("Chapters") + .listing-list > .listing-list__item:nth-child(2) .teaser__header_text_link');
         });
+
+        $this->getSession()
+            ->getPage()
+            ->find('css',
+                '.list-heading:contains("Chapters") + .listing-list > .listing-list__item:nth-child(2) .teaser__header_text_link')
+            ->click();
     }
 
     /**
