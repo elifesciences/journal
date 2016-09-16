@@ -60,6 +60,11 @@
             "installer": "composer",
             "env": "dev"
         },
+        "behat/mink-selenium2-driver": {
+            "install-path": "vendor/behat/mink-selenium2-driver",
+            "installer": "composer",
+            "env": "dev"
+        },
         "behat/symfony2-extension": {
             "install-path": "vendor/behat/symfony2-extension",
             "installer": "composer",
@@ -144,6 +149,11 @@
         "guzzlehttp/psr7": {
             "install-path": "vendor/guzzlehttp/psr7",
             "installer": "composer"
+        },
+        "instaclick/php-webdriver": {
+            "install-path": "vendor/instaclick/php-webdriver",
+            "installer": "composer",
+            "env": "dev"
         },
         "jarnaiz/behat-junit-formatter": {
             "install-path": "vendor/jarnaiz/behat-junit-formatter",

@@ -13,6 +13,7 @@ use eLife\Patterns\ViewModel\AudioSource;
 use eLife\Patterns\ViewModel\ContentHeaderNonArticle;
 use eLife\Patterns\ViewModel\Link;
 use eLife\Patterns\ViewModel\ListHeading;
+use eLife\Patterns\ViewModel\MediaChapterListingItem;
 use eLife\Patterns\ViewModel\SeeMoreLink;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
@@ -36,11 +37,18 @@ final class MagazineController extends Controller
                     return null;
                 }
 
-                $item = $result['items'][0];
-
+                return $this->get('elife.api_client.podcast')
+                    ->getEpisode(['Accept' => new MediaType(PodcastClient::TYPE_PODCAST_EPISODE, 1)],
+                        $result['items'][0]['number']);
+            })
+            ->then(function (Result $episode) {
                 return new AudioPlayer(
-                    'Latest podcast: '.$item['title'],
-                    [new AudioSource($item['mp3'], AudioSource::TYPE_MP3)]
+                    $episode['number'],
+                    'Episode '.$episode['number'],
+                    [new AudioSource($episode['mp3'], AudioSource::TYPE_MP3)],
+                    array_map(function (array $chapter) {
+                        return new MediaChapterListingItem($chapter['title'], $chapter['time'], $chapter['number']);
+                    }, $episode['chapters'])
                 );
             })
             ->otherwise(function (Throwable $e) {

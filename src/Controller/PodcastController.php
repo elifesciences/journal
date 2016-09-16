@@ -11,17 +11,15 @@ use eLife\Patterns\ViewModel\AudioPlayer;
 use eLife\Patterns\ViewModel\AudioSource;
 use eLife\Patterns\ViewModel\BackgroundImage;
 use eLife\Patterns\ViewModel\ContentHeaderNonArticle;
-use eLife\Patterns\ViewModel\ContextLabel;
 use eLife\Patterns\ViewModel\Date;
 use eLife\Patterns\ViewModel\Image;
 use eLife\Patterns\ViewModel\LeadPara;
 use eLife\Patterns\ViewModel\LeadParas;
 use eLife\Patterns\ViewModel\Link;
-use eLife\Patterns\ViewModel\ListingTeasers;
+use eLife\Patterns\ViewModel\MediaChapterListingItem;
 use eLife\Patterns\ViewModel\Meta;
 use eLife\Patterns\ViewModel\Picture;
 use eLife\Patterns\ViewModel\PodcastDownload;
-use eLife\Patterns\ViewModel\Teaser;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
@@ -111,9 +109,25 @@ final class PodcastController extends Controller
                 );
             });
 
-        $arguments['audioPlayer'] = $arguments['episode']
+        $chapterListing = $arguments['episode']
             ->then(function (Result $episode) {
-                return new AudioPlayer($episode['title'], [new AudioSource($episode['mp3'], AudioSource::TYPE_MP3)]);
+                return [
+                    'episode' => $episode,
+                    'chapterListing' => array_map(function (array $chapter) {
+                        return new MediaChapterListingItem($chapter['title'], $chapter['time'], $chapter['number'],
+                            $chapter['impactStatement'] ?? null);
+                    }, $episode['chapters']),
+                ];
+            });
+
+        $arguments['audioPlayer'] = $chapterListing
+            ->then(function (array $results) {
+                return new AudioPlayer(
+                    $results['episode']['number'],
+                    'Episode '.$results['episode']['number'],
+                    [new AudioSource($results['episode']['mp3'], AudioSource::TYPE_MP3)],
+                    $results['chapterListing']
+                );
             });
 
         $arguments['leadParas'] = $arguments['episode']
@@ -124,22 +138,9 @@ final class PodcastController extends Controller
                 return null;
             });
 
-        $arguments['chapters'] = $arguments['episode']
-            ->then(function (Result $episode) {
-                return ListingTeasers::basic(
-                    array_map(function (array $chapter) {
-                        $minutes = floor($chapter['time'] / 60);
-                        $seconds = str_pad($chapter['time'] % 60, 2, '0', STR_PAD_LEFT);
-
-                        return Teaser::chapterListingItem(
-                            $chapter['title'],
-                            null,
-                            $chapter['impactStatement'] ?? null,
-                            new ContextLabel(new Link(sprintf('%s:%s', $minutes, $seconds)))
-                        );
-                    }, $episode['chapters']),
-                    'Chapters'
-                );
+        $arguments['chapters'] = $chapterListing
+            ->then(function (array $results) {
+                return $results['chapterListing'];
             });
 
         $arguments['related'] = $arguments['episode']

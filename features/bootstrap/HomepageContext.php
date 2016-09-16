@@ -106,7 +106,6 @@ final class HomepageContext extends Context
                 'title' => 'Podcast episode '.$i.' title',
                 'published' => $today->format(DATE_RFC3339),
                 'image' => [
-                    'alt' => '',
                     'sizes' => [
                         '2:1' => [
                             '900' => 'https://placehold.it/900x450',
@@ -121,8 +120,9 @@ final class HomepageContext extends Context
                             '140' => 'https://placehold.it/140x140',
                         ],
                     ],
+                    'alt' => '',
                 ],
-                'mp3' => 'https://www.example.com/episode'.$i.'.mp3',
+                'mp3' => $this->locatePath('/audio-file'),
             ];
         }
 

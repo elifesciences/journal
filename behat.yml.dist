@@ -4,6 +4,9 @@ default:
             sessions:
                 default:
                     symfony2: ~
+                javascript:
+                    selenium2: ~
+            base_url: http://localhost/
         Behat\Symfony2Extension:
             kernel:
                 class: eLife\Journal\AppKernel

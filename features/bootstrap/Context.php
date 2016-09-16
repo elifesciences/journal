@@ -1,5 +1,6 @@
 <?php
 
+use Behat\Mink\Exception\UnsupportedDriverActionException;
 use Behat\MinkExtension\Context\RawMinkContext;
 use Behat\Symfony2Extension\Context\KernelAwareContext;
 use GuzzleHttp\Psr7\Request;
@@ -83,5 +84,32 @@ abstract class Context extends RawMinkContext implements KernelAwareContext
                 ])
             )
         );
+    }
+
+    final protected function spin(callable $lambda, int $wait = 10)
+    {
+        $e = null;
+        for ($i = 0; $i < $wait; ++$i) {
+            try {
+                $lambda();
+
+                return;
+            } catch (Exception $e) {
+                // Do nothing.
+            }
+
+            sleep(1);
+        }
+
+        throw new Exception('Timeout: '.$e->getMessage(), -1, $e);
+    }
+
+    final protected function isJavaScript()
+    {
+        try {
+            return $this->getSession()->evaluateScript('true');
+        } catch (UnsupportedDriverActionException $e) {
+            return false;
+        }
     }
 }
