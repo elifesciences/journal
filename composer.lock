@@ -3279,54 +3279,6 @@
             "time": "2015-09-28 16:26:35"
         },
         {
-            "name": "bex/behat-extension-driver-locator",
-            "version": "1.0.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/tkotosz/behat-extension-driver-locator.git",
-                "reference": "af9fb11f5f3cc220ee2c08071ee9d50f11048b86"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/tkotosz/behat-extension-driver-locator/zipball/af9fb11f5f3cc220ee2c08071ee9d50f11048b86",
-                "reference": "af9fb11f5f3cc220ee2c08071ee9d50f11048b86",
-                "shasum": ""
-            },
-            "require": {
-                "behat/behat": "^3.0.0",
-                "php": ">=5.4"
-            },
-            "require-dev": {
-                "phpspec/phpspec": "2.4.0-alpha2"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Tibor Kotosz",
-                    "email": "kotosy@gmail.com",
-                    "homepage": "https://github.com/tkotosz",
-                    "role": "Developer"
-                }
-            ],
-            "description": "Driver locator tool for behat extensions",
-            "homepage": "https://github.com/tkotosz/behat-extension-driver-locator",
-            "keywords": [
-                "BDD",
-                "Behat",
-                "TDD"
-            ],
-            "time": "2015-12-17 13:26:09"
-        },
-        {
             "name": "doctrine/instantiator",
             "version": "1.0.5",
             "source": {

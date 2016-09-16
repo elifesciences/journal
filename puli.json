@@ -75,11 +75,6 @@
             "installer": "composer",
             "env": "dev"
         },
-        "bex/behat-extension-driver-locator": {
-            "install-path": "vendor/bex/behat-extension-driver-locator",
-            "installer": "composer",
-            "env": "dev"
-        },
         "bobthecow/mustache-bundle": {
             "install-path": "vendor/bobthecow/mustache-bundle/Bobthecow/Bundle/MustacheBundle",
             "installer": "composer"
