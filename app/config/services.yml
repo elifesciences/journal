@@ -10,7 +10,7 @@ services:
         decorates: elife.api_client.client
         arguments:
           - '@elife.api_client.client.warning_checking.inner'
-          - '@logger'
+          - '@monolog.logger.api'
 
     elife.api_client.articles:
         class: eLife\ApiClient\ApiClient\ArticlesClient

@@ -24,6 +24,10 @@ framework:
           - mustache
           - twig
 
+monolog:
+    channels:
+      - api
+
 twig:
     debug: '%kernel.debug%'
     strict_variables: '%kernel.debug%'
