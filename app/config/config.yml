@@ -13,6 +13,8 @@ csa_guzzle:
         elife_api:
             config:
                 base_uri: '%api_url%'
+                headers:
+                    authorization: '%secret%'
 
 framework:
     assets: ~
