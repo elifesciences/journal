@@ -15,12 +15,14 @@ final class Section implements ViewModel
 
     private $header;
     private $h;
+    private $id;
     private $content;
 
-    public function __construct(string $header, string $content, int $level = 1)
+    public function __construct(string $header, string $content, string $id = null, int $level = 1)
     {
         $this->header = $header;
         $this->h = $level + 1;
+        $this->id = $id;
         $this->content = $content;
     }
 
