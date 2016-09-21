@@ -21,6 +21,7 @@ use eLife\Patterns\ViewModel\InstitutionList;
 use eLife\Patterns\ViewModel\Link;
 use eLife\Patterns\ViewModel\Meta;
 use eLife\Patterns\ViewModel\SubjectList;
+use eLife\Patterns\ViewModel\ViewSelector;
 use GuzzleHttp\Promise\FulfilledPromise;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -229,6 +230,23 @@ final class ArticlesController extends Controller
                 }
 
                 return $parts;
+            });
+
+        $arguments['viewSelector'] = all(['article' => $arguments['article'], 'body' => $arguments['body']])
+            ->then(function (array $sections) {
+                $article = $sections['article'];
+                $body = $sections['body'];
+
+                if (count($body) < 2 || false === $body[0] instanceof ArticleSection) {
+                    return null;
+                }
+
+                return new ViewSelector(
+                    $this->get('router')->generate('article', ['id' => $article['id'], 'volume' => $article['volume']]),
+                    array_map(function (ArticleSection $section) {
+                        return new Link($section['title'], '#'.$section['id']);
+                    }, $body)
+                );
             });
 
         return new Response($this->get('templating')->render('::article.html.twig', $arguments));

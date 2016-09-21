@@ -20,7 +20,17 @@
 
         <div class="grid">
 
-            <div class="grid__item large--six-twelfths push--large--two-twelfths u-pad-top-lg">
+            {% if viewSelector %}
+
+                <div class="grid__item large--two-twelfths u-pad-top-lg">
+
+                    {{ render_pattern(viewSelector) }}
+
+                </div>
+
+            {% endif %}
+
+            <div class="grid__item large--six-twelfths {% if not viewSelector %}push--large--two-twelfths{% endif %} u-pad-top-lg">
 
                 {% if body %}
 

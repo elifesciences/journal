@@ -360,6 +360,11 @@ final class ArticleControllerTest extends PageTestCase
             $crawler->filter('main > .wrapper > div > div > section:nth-of-type(3) > header > h2')->text());
         $this->assertSame('Body text',
             $crawler->filter('main > .wrapper > div > div > section:nth-of-type(3) > div > p')->text());
+
+        $this->assertSame(
+            ['Abstract', 'eLife digest', 'Body title'],
+            array_map('trim', $crawler->filter('.view-selector__jump_link_item')->extract('_text'))
+        );
     }
 
     /**
@@ -429,6 +434,7 @@ final class ArticleControllerTest extends PageTestCase
 
         $this->assertNotContains('Body title', $crawler->text());
         $this->assertSame('Body text', $crawler->filter('main > .wrapper > div > div > p')->text());
+        $this->assertEmpty($crawler->filter('.view-selector'));
     }
 
     protected function getUrl() : string
