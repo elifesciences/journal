@@ -25,7 +25,7 @@ final class BlockConverter
         return $this->handleLevelledBlocks($blocks);
     }
 
-    private function handleLevelledBlocks(array $blocks, int $level = 1) : Traversable
+    public function handleLevelledBlocks(array $blocks, int $level = 1) : Traversable
     {
         foreach ($blocks as $block) {
             yield $this->handleBlock($block, $level);
@@ -58,6 +58,7 @@ final class BlockConverter
                 return new Section(
                     $block['title'],
                     $this->renderViewModels($this->handleLevelledBlocks($block['content'], $level + 1)),
+                    $block['id'] ?? null,
                     $level
                 );
             case 'table':

@@ -174,6 +174,7 @@ final class ArticleControllerTest extends PageTestCase
                     'body' => [
                         [
                             'type' => 'section',
+                            'id' => 's-1',
                             'title' => 'Introduction',
                             'content' => [
                                 [
@@ -331,6 +332,7 @@ final class ArticleControllerTest extends PageTestCase
                     'body' => [
                         [
                             'type' => 'section',
+                            'id' => 's-1',
                             'title' => 'Body title',
                             'content' => [
                                 [
@@ -347,17 +349,17 @@ final class ArticleControllerTest extends PageTestCase
         $crawler = $client->request('GET', '/content/1/e00001');
 
         $this->assertSame('Abstract',
-            $crawler->filter('main > .wrapper > div > div > section:nth-of-type(1) > h2')->text());
+            $crawler->filter('main > .wrapper > div > div > section:nth-of-type(1) > header > h2')->text());
         $this->assertSame('Abstract text',
-            $crawler->filter('main > .wrapper > div > div > section:nth-of-type(1) > p')->text());
+            $crawler->filter('main > .wrapper > div > div > section:nth-of-type(1) > div > p')->text());
         $this->assertSame('eLife digest',
-            $crawler->filter('main > .wrapper > div > div > section:nth-of-type(2) > h2')->text());
+            $crawler->filter('main > .wrapper > div > div > section:nth-of-type(2) > header > h2')->text());
         $this->assertSame('Digest text',
-            $crawler->filter('main > .wrapper > div > div > section:nth-of-type(2) > p')->text());
+            $crawler->filter('main > .wrapper > div > div > section:nth-of-type(2) > div > p')->text());
         $this->assertSame('Body title',
-            $crawler->filter('main > .wrapper > div > div > section:nth-of-type(3) > h2')->text());
+            $crawler->filter('main > .wrapper > div > div > section:nth-of-type(3) > header > h2')->text());
         $this->assertSame('Body text',
-            $crawler->filter('main > .wrapper > div > div > section:nth-of-type(3) > p')->text());
+            $crawler->filter('main > .wrapper > div > div > section:nth-of-type(3) > div > p')->text());
     }
 
     /**
@@ -409,6 +411,7 @@ final class ArticleControllerTest extends PageTestCase
                     'body' => [
                         [
                             'type' => 'section',
+                            'id' => 's-1',
                             'title' => 'Body title',
                             'content' => [
                                 [
@@ -472,6 +475,7 @@ final class ArticleControllerTest extends PageTestCase
                     'body' => [
                         [
                             'type' => 'section',
+                            'id' => 's-1',
                             'title' => 'Introduction',
                             'content' => [
                                 [

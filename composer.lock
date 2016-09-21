@@ -728,12 +728,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:elifesciences/patterns-php.git",
-                "reference": "03512fe6fed1cc8ed12ffe8c27b254e2051c73aa"
+                "reference": "01546a70a1b008f6c9b291bb54319e65f1019709"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/03512fe6fed1cc8ed12ffe8c27b254e2051c73aa",
-                "reference": "03512fe6fed1cc8ed12ffe8c27b254e2051c73aa",
+                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/01546a70a1b008f6c9b291bb54319e65f1019709",
+                "reference": "01546a70a1b008f6c9b291bb54319e65f1019709",
                 "shasum": ""
             },
             "require": {
@@ -776,7 +776,7 @@
                 "source": "https://github.com/elifesciences/patterns-php/tree/master",
                 "issues": "https://github.com/elifesciences/patterns-php/issues"
             },
-            "time": "2016-09-13 08:12:49"
+            "time": "2016-09-21 09:51:53"
         },
         {
             "name": "guzzlehttp/guzzle",
@@ -3338,12 +3338,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-raml.git",
-                "reference": "7ced2dc82d961ad6122c40a4d6546c2bc07327a0"
+                "reference": "31bd8eed6d8aa10cfa4f4c4586f7a5db6ad35d32"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-raml/zipball/7ced2dc82d961ad6122c40a4d6546c2bc07327a0",
-                "reference": "7ced2dc82d961ad6122c40a4d6546c2bc07327a0",
+                "url": "https://api.github.com/repos/elifesciences/api-raml/zipball/31bd8eed6d8aa10cfa4f4c4586f7a5db6ad35d32",
+                "reference": "31bd8eed6d8aa10cfa4f4c4586f7a5db6ad35d32",
                 "shasum": ""
             },
             "require": {
@@ -3355,7 +3355,7 @@
                 "GPL-3.0+"
             ],
             "description": "eLife Sciences API specification",
-            "time": "2016-09-12 07:07:51"
+            "time": "2016-09-21 09:55:06"
         },
         {
             "name": "elife/api-validator",

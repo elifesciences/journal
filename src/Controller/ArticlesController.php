@@ -8,8 +8,8 @@ use eLife\ApiClient\ApiClient\SubjectsClient;
 use eLife\ApiClient\Exception\BadResponse;
 use eLife\ApiClient\MediaType;
 use eLife\ApiClient\Result;
-use eLife\Journal\ViewModel\Section;
 use eLife\Patterns\ViewModel;
+use eLife\Patterns\ViewModel\ArticleSection;
 use eLife\Patterns\ViewModel\Author;
 use eLife\Patterns\ViewModel\AuthorList;
 use eLife\Patterns\ViewModel\BackgroundImage;
@@ -181,24 +181,34 @@ final class ArticlesController extends Controller
             ->then(function (Result $article) {
                 $parts = [];
 
+                $first = true;
+
                 if (false === empty($article['abstract'])) {
-                    $parts[] = new Section(
+                    $parts[] = new ArticleSection(
+                        'abstract',
                         'Abstract',
-                        implode('', array_map(function (ViewModel $viewModel) {
+                        array_map(function (ViewModel $viewModel) {
                             return $this->get('elife.patterns.pattern_renderer')->render($viewModel);
                         }, iterator_to_array($this->get('elife.website.view_model.block_converter')
-                            ->handleBlocks(...$article['abstract']['content']))))
+                            ->handleLevelledBlocks($article['abstract']['content'], 2))),
+                        $first
                     );
+
+                    $first = false;
                 }
 
                 if (false === empty($article['digest'])) {
-                    $parts[] = new Section(
+                    $parts[] = new ArticleSection(
+                        'digest',
                         'eLife digest',
-                        implode(array_map(function (ViewModel $viewModel) {
+                        array_map(function (ViewModel $viewModel) {
                             return $this->get('elife.patterns.pattern_renderer')->render($viewModel);
                         }, iterator_to_array($this->get('elife.website.view_model.block_converter')
-                            ->handleBlocks(...$article['digest']['content']))))
+                            ->handleLevelledBlocks($article['digest']['content'], 2))),
+                        $first
                     );
+
+                    $first = false;
                 }
 
                 if (false === empty($article['body'])) {
@@ -206,9 +216,15 @@ final class ArticlesController extends Controller
                         $parts = $this->get('elife.website.view_model.block_converter')
                             ->handleBlocks(...$article['body'][0]['content']);
                     } else {
-                        $parts = array_merge($parts,
-                            iterator_to_array($this->get('elife.website.view_model.block_converter')
-                                ->handleBlocks(...$article['body'])));
+                        foreach ($article['body'] as $part) {
+                            $parts[] = new ArticleSection($part['id'], $part['title'],
+                                array_map(function (ViewModel $viewModel) {
+                                    return $this->get('elife.patterns.pattern_renderer')->render($viewModel);
+                                }, iterator_to_array($this->get('elife.website.view_model.block_converter')
+                                    ->handleLevelledBlocks($part['content'], 2))), $first);
+
+                            $first = false;
+                        }
                     }
                 }
 
