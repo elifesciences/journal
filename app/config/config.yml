@@ -14,7 +14,7 @@ csa_guzzle:
             config:
                 base_uri: '%api_url%'
                 headers:
-                    authorization: '%secret%'
+                    Authorization: '%secret%'
 
 framework:
     assets: ~
