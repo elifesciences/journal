@@ -123,6 +123,11 @@ subject:
     defaults:
          _controller: AppBundle:Subjects:subject
 
+subjects:
+    path: /subjects
+    defaults:
+         _controller: AppBundle:Subjects:list
+
 terms:
     path: /terms
     defaults:
