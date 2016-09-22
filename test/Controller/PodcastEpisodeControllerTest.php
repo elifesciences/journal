@@ -82,7 +82,12 @@ final class PodcastEpisodeControllerTest extends PageTestCase
                         ],
                     ],
                     'impactStatement' => 'Experiment impact statement',
-                    'mp3' => 'https://www.example.com/episode1.mp3',
+                    'sources' => [
+                        [
+                            'mediaType' => 'audio/mpeg',
+                            'uri' => 'https://www.example.com/episode1.mp3',
+                        ],
+                    ],
                     'chapters' => [
                         [
                             'number' => 1,

@@ -122,7 +122,12 @@ final class HomepageContext extends Context
                     ],
                     'alt' => '',
                 ],
-                'mp3' => $this->locatePath('/audio-file'),
+                'sources' => [
+                    [
+                        'mediaType' => 'audio/mpeg',
+                        'uri' => $this->locatePath('/audio-file'),
+                    ],
+                ],
             ];
         }
 
