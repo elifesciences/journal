@@ -13,8 +13,8 @@ elifePipeline {
         stage 'Deploy on end2end'
         elifeEnd2EndTest {
             builderDeployRevision 'journal--end2end', commit
+            builderSmokeTests 'journal--end2end', '/srv/journal'
         }, 'two'
-        builderSmokeTests 'journal--end2end', '/srv/journal'
 
         stage 'Deploy on demo'
         builderDeployRevision 'journal--demo', commit
