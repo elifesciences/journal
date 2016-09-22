@@ -11,7 +11,9 @@ elifePipeline {
 
     elifeMainlineOnly {
         stage 'Deploy on end2end'
-        builderDeployRevision 'journal--end2end', commit
+        elifeEnd2EndTest {
+            builderDeployRevision 'journal--end2end', commit
+        }, 'two'
         builderSmokeTests 'journal--end2end', '/srv/journal'
 
         stage 'Deploy on demo'
