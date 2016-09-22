@@ -1,5 +1,6 @@
 parameters:
     api_url: https://api.elifesciences.org/
+    api_key: public
     secret: ThisTokenIsNotSoSecretChangeIt
     trusted_hosts:
       - .*\.?elifesciences.org$
