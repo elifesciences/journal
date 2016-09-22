@@ -44,7 +44,12 @@ final class MagazineContext extends Context
                         ],
                     ],
                 ],
-                'mp3' => $this->locatePath('/audio-file'),
+                'sources' => [
+                    [
+                        'mediaType' => 'audio/mpeg',
+                        'uri' => $this->locatePath('/audio-file'),
+                    ],
+                ],
             ];
         }
 
@@ -124,7 +129,12 @@ final class MagazineContext extends Context
                         ],
                     ],
                 ],
-                'mp3' => $this->locatePath('/audio-file'),
+                'sources' => [
+                    [
+                        'mediaType' => 'audio/mpeg',
+                        'uri' => $this->locatePath('/audio-file'),
+                    ],
+                ],
                 'chapters' => [
                     [
                         'number' => 1,

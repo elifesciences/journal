@@ -42,7 +42,12 @@ final class PodcastContext extends Context
                     ],
                 ],
                 'impactStatement' => 'Experiment '.$i.' impact statement',
-                'mp3' => $this->locatePath('/audio-file'),
+                'sources' => [
+                    [
+                        'mediaType' => 'audio/mpeg',
+                        'uri' => $this->locatePath('/audio-file'),
+                    ],
+                ],
                 'chapters' => [
                     [
                         'number' => 1,
@@ -143,7 +148,12 @@ final class PodcastContext extends Context
                         ],
                     ],
                     'impactStatement' => 'Experiment impact statement',
-                    'mp3' => $this->locatePath('/audio-file'),
+                    'sources' => [
+                        [
+                            'mediaType' => 'audio/mpeg',
+                            'uri' => $this->locatePath('/audio-file'),
+                        ],
+                    ],
                     'chapters' => [
                         [
                             'number' => 1,

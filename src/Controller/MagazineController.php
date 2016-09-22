@@ -45,7 +45,9 @@ final class MagazineController extends Controller
                 return new AudioPlayer(
                     $episode['number'],
                     'Episode '.$episode['number'],
-                    [new AudioSource($episode['mp3'], AudioSource::TYPE_MP3)],
+                    array_map(function (array $source) {
+                        return new AudioSource($source['uri'], $source['mediaType']);
+                    }, $episode['sources']),
                     array_map(function (array $chapter) {
                         return new MediaChapterListingItem($chapter['title'], $chapter['time'], $chapter['number']);
                     }, $episode['chapters'])

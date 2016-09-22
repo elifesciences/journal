@@ -73,7 +73,7 @@ final class PodcastController extends Controller
                         $episode['image']['sizes']['2:1'][1800]
                     ),
                     new PodcastDownload(
-                        $episode['mp3'],
+                        $episode['sources'][0]['uri'],
                         new Picture(
                             [
                                 [
@@ -125,7 +125,9 @@ final class PodcastController extends Controller
                 return new AudioPlayer(
                     $results['episode']['number'],
                     'Episode '.$results['episode']['number'],
-                    [new AudioSource($results['episode']['mp3'], AudioSource::TYPE_MP3)],
+                    array_map(function (array $source) {
+                        return new AudioSource($source['uri'], $source['mediaType']);
+                    }, $results['episode']['sources']),
                     $results['chapterListing']
                 );
             });
