@@ -97,7 +97,6 @@ services:
     elife.journal.view_model.factory.footer:
         class: eLife\Journal\ViewModel\FooterFactory
         arguments:
-          - '@elife.api_client.subjects'
           - '@router'
 
     elife.journal.view_model.factory.listing_teaser:

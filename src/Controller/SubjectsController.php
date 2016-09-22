@@ -18,6 +18,15 @@ use Throwable;
 
 final class SubjectsController extends Controller
 {
+    public function listAction() : Response
+    {
+        $arguments = $this->defaultPageArguments();
+
+        $arguments['contentHeader'] = ContentHeaderNonArticle::basic('Browse our research categories');
+
+        return new Response($this->get('templating')->render('::subjects.html.twig', $arguments));
+    }
+
     public function subjectAction(string $id) : Response
     {
         $page = 1;
