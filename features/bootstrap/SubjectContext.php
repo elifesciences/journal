@@ -5,7 +5,63 @@ use GuzzleHttp\Psr7\Response;
 
 final class SubjectContext extends Context
 {
+    private $numberOfSubjects;
     private $numberOfArticles;
+
+    /**
+     * @Given /^there are (\d+) subjects$/
+     */
+    public function thereAreSubjects(int $number)
+    {
+        $this->numberOfSubjects = $number;
+
+        $subjects = [];
+
+        for ($i = $number; $i > 0; --$i) {
+            $subjects[] = [
+                'id' => 'subject'.$i,
+                'name' => 'Subject '.$i.' name',
+                'impactStatement' => 'Subject '.$i.' impact statement.',
+                'image' => [
+                    'alt' => '',
+                    'sizes' => [
+                        '2:1' => [
+                            900 => 'https://placehold.it/900x450',
+                            1800 => 'https://placehold.it/1800x900',
+                        ],
+                        '16:9' => [
+                            250 => 'https://placehold.it/250x141',
+                            500 => 'https://placehold.it/500x281',
+                        ],
+                        '1:1' => [
+                            70 => 'https://placehold.it/70x70',
+                            140 => 'https://placehold.it/140x140',
+                        ],
+                    ],
+                ],
+            ];
+        }
+
+        foreach (array_chunk($subjects, 100) as $i => $subjectsChunk) {
+            $page = $i + 1;
+
+            $this->mockApiResponse(
+                new Request(
+                    'GET',
+                    "http://api.elifesciences.org/subjects?page=$page&per-page=100&order=asc",
+                    ['Accept' => 'application/vnd.elife.subject-list+json; version=1']
+                ),
+                new Response(
+                    200,
+                    ['Content-Type' => 'application/vnd.elife.subject-list+json; version=1'],
+                    json_encode([
+                        'total' => $number,
+                        'items' => $subjectsChunk,
+                    ])
+                )
+            );
+        }
+    }
 
     /**
      * @Given /^there are (\d+) articles with the MSA \'([^\']*)\'$/
@@ -165,11 +221,38 @@ final class SubjectContext extends Context
     }
 
     /**
+     * @When /^I go the Subjects page$/
+     */
+    public function iGoTheSubjectsPage()
+    {
+        $this->visitPath('/subjects');
+    }
+
+    /**
      * @When /^I go the MSA \'([^\']*)\' page$/
      */
     public function iGoTheMSAPage(string $subject)
     {
         $this->visitPath('/subjects/'.$this->createSubjectId($subject));
+    }
+
+    /**
+     * @Then /^I should see the (\d+) subjects\.$/
+     */
+    public function iShouldSeeTheSubjects(int $number)
+    {
+        $this->assertSession()->elementsCount('css', 'ol.grid-listing > li', $number);
+
+        for ($i = $number; $i > 0; --$i) {
+            $nthChild = ($number - $i + 1);
+            $expectedNumber = ($this->numberOfSubjects - $nthChild + 1);
+
+            $this->assertSession()->elementContains(
+                'css',
+                'ol.grid-listing > li:nth-child('.$nthChild.')',
+                'Subject '.$expectedNumber.' name'
+            );
+        }
     }
 
     /**

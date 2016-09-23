@@ -8,9 +8,12 @@ use eLife\ApiClient\Exception\BadResponse;
 use eLife\ApiClient\MediaType;
 use eLife\ApiClient\Result;
 use eLife\Patterns\ViewModel\BackgroundImage;
+use eLife\Patterns\ViewModel\BlockLink;
 use eLife\Patterns\ViewModel\ContentHeaderNonArticle;
+use eLife\Patterns\ViewModel\GridListing;
 use eLife\Patterns\ViewModel\LeadPara;
 use eLife\Patterns\ViewModel\LeadParas;
+use eLife\Patterns\ViewModel\Link;
 use eLife\Patterns\ViewModel\ListHeading;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -23,6 +26,28 @@ final class SubjectsController extends Controller
         $arguments = $this->defaultPageArguments();
 
         $arguments['contentHeader'] = ContentHeaderNonArticle::basic('Browse our research categories');
+
+        $arguments['subjects'] = $this->get('elife.api_client.subjects')
+            ->listSubjects(['Accept' => new MediaType(SubjectsClient::TYPE_SUBJECT_LIST, 1)], 1, 100, false)
+            ->then(function (Result $result) {
+                if (empty($result['items'])) {
+                    return null;
+                }
+
+                return GridListing::forBlockLinks(array_map(function (array $subject) {
+                    return new BlockLink(
+                        new Link(
+                            $subject['name'],
+                            $this->get('router')->generate('subject', ['id' => $subject['id']])
+                        ),
+                        new BackgroundImage(
+                            $subject['image']['sizes']['16:9'][250],
+                            $subject['image']['sizes']['16:9'][500],
+                            600
+                        )
+                    );
+                }, $result['items']));
+            });
 
         return new Response($this->get('templating')->render('::subjects.html.twig', $arguments));
     }
