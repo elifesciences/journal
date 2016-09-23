@@ -10,6 +10,7 @@ use eLife\ApiClient\Result;
 use eLife\Patterns\ViewModel\BackgroundImage;
 use eLife\Patterns\ViewModel\ContentHeaderNonArticle;
 use eLife\Patterns\ViewModel\Date;
+use eLife\Patterns\ViewModel\GridListing;
 use eLife\Patterns\ViewModel\LeadPara;
 use eLife\Patterns\ViewModel\LeadParas;
 use eLife\Patterns\ViewModel\Meta;
@@ -37,14 +38,14 @@ developed further to become features on the eLife platform.'),
         $arguments['experiments'] = $this->get('elife.api_client.labs')
             ->listExperiments(['Accept' => new MediaType(LabsClient::TYPE_EXPERIMENT_LIST, 1)], $page, $perPage)
             ->then(function (Result $result) {
-                $teasers = [];
-
-                foreach ($result['items'] as $experiment) {
-                    $teasers[] = $this->get('elife.journal.view_model.factory.teaser_grid')
-                        ->forExperiment($experiment);
+                if (empty($result['items'])) {
+                    return null;
                 }
 
-                return $teasers;
+                return GridListing::forTeasers(array_map(function (array $experiment) {
+                    return $this->get('elife.journal.view_model.factory.teaser_grid')
+                        ->forExperiment($experiment);
+                }, $result['items']), 'Experiments');
             });
 
         return new Response($this->get('templating')->render('::labs.html.twig', $arguments));

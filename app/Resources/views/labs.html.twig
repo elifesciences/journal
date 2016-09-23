@@ -16,31 +16,15 @@
 
         {{ render_pattern(leadParas) }}
 
-        <div class="listing-column-container">
+        {% if experiments %}
 
-            <div class="listing-column-secondary">
+            {{ render_pattern(experiments) }}
 
-                <h3 class="list-heading">Experiments</h3>
+        {% else %}
 
-                {% if experiments|length %}
+            <p class="u-pad-top-lg">No experiments available.</p>
 
-                    <ul class="grid">
-
-                        {% for experiment in experiments %}
-                            <li class="grid__item medium--four-twelfths">{{ render_pattern(experiment) }}</li>
-                        {% endfor %}
-
-                    </ul>
-
-                {% else %}
-
-                    <p>No experiments available.</p>
-
-                {% endif %}
-
-            </div>
-
-        </div>
+        {% endif %}
 
     </div>
 

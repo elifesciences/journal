@@ -728,12 +728,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:elifesciences/patterns-php.git",
-                "reference": "74874e2424aa21af0b7f52a0cff75100d897adcf"
+                "reference": "3d656e89dd07dcf7b9d71e2450da80855c121f61"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/74874e2424aa21af0b7f52a0cff75100d897adcf",
-                "reference": "74874e2424aa21af0b7f52a0cff75100d897adcf",
+                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/3d656e89dd07dcf7b9d71e2450da80855c121f61",
+                "reference": "3d656e89dd07dcf7b9d71e2450da80855c121f61",
                 "shasum": ""
             },
             "require": {
@@ -776,7 +776,7 @@
                 "source": "https://github.com/elifesciences/patterns-php/tree/master",
                 "issues": "https://github.com/elifesciences/patterns-php/issues"
             },
-            "time": "2016-09-22 14:42:38"
+            "time": "2016-09-23 07:41:38"
         },
         {
             "name": "guzzlehttp/guzzle",
