@@ -12,23 +12,15 @@
 
     {{ render_pattern(contentHeader) }}
 
-    <div class="wrapper u-pad-top">
+    <div class="wrapper">
 
-        <h3 class="list-heading">Latest episodes</h3>
+        {% if episodes %}
 
-        {% if episodes|length %}
-
-            <ul class="grid">
-
-                {% for episode in episodes %}
-                    <li class="grid__item medium--four-twelfths">{{ render_pattern(episode) }}</li>
-                {% endfor %}
-
-            </ul>
+            {{ render_pattern(episodes) }}
 
         {% else %}
 
-            <p>No episodes available.</p>
+            <p class="u-pad-top-lg">No episodes available.</p>
 
         {% endif %}
 

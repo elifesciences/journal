@@ -248,7 +248,8 @@ final class PodcastContext extends Context
      */
     public function iShouldSeeTheLatestPodcastEpisodesInTheEpisodesList(int $number)
     {
-        $this->assertSession()->elementsCount('css', '.list-heading:contains("Latest episodes") + ul > li', $number);
+        $this->assertSession()
+            ->elementsCount('css', '.grid-listing-heading:contains("Latest episodes") + ol > li', $number);
 
         for ($i = $number; $i > 0; --$i) {
             $nthChild = ($number - $i + 1);
@@ -256,7 +257,7 @@ final class PodcastContext extends Context
 
             $this->assertSession()->elementContains(
                 'css',
-                '.list-heading:contains("Latest episodes") + ul > li:nth-child('.$nthChild.')',
+                '.grid-listing-heading:contains("Latest episodes") + ol > li:nth-child('.$nthChild.')',
                 'Episode '.$expectedNumber.' title'
             );
         }

@@ -12,6 +12,7 @@ use eLife\Patterns\ViewModel\AudioSource;
 use eLife\Patterns\ViewModel\BackgroundImage;
 use eLife\Patterns\ViewModel\ContentHeaderNonArticle;
 use eLife\Patterns\ViewModel\Date;
+use eLife\Patterns\ViewModel\GridListing;
 use eLife\Patterns\ViewModel\Image;
 use eLife\Patterns\ViewModel\LeadPara;
 use eLife\Patterns\ViewModel\LeadParas;
@@ -38,14 +39,14 @@ final class PodcastController extends Controller
         $arguments['episodes'] = $this->get('elife.api_client.podcast')
             ->listEpisodes(['Accept' => new MediaType(PodcastClient::TYPE_PODCAST_EPISODE_LIST, 1)], $page, $perPage)
             ->then(function (Result $result) {
-                $teasers = [];
-
-                foreach ($result['items'] as $episode) {
-                    $teasers[] = $this->get('elife.journal.view_model.factory.teaser_grid')
-                        ->forPodcastEpisode($episode);
+                if (empty($result['items'])) {
+                    return null;
                 }
 
-                return $teasers;
+                return GridListing::forTeasers(array_map(function (array $episode) {
+                    return $this->get('elife.journal.view_model.factory.teaser_grid')
+                        ->forPodcastEpisode($episode);
+                }, $result['items']), 'Latest episodes');
             });
 
         return new Response($this->get('templating')->render('::podcast.html.twig', $arguments));
