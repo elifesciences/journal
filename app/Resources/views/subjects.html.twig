@@ -12,4 +12,18 @@
 
     {{ render_pattern(contentHeader) }}
 
+    <div class="wrapper u-pad-top-lg">
+
+        {% if subjects %}
+
+            {{ render_pattern(subjects) }}
+
+        {% else %}
+
+            <p>No subjects available.</p>
+
+        {% endif %}
+
+    </div>
+
 {% endblock %}
