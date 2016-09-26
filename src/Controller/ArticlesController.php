@@ -79,21 +79,8 @@ final class ArticlesController extends Controller
                         $this->get('router')->generate('subject', ['id' => $subject['id']]));
                 }, $results['subjects']);
 
-                $onBehalfOf = null;
-
-                $authors = array_merge(...array_map(function (array $author) use (&$onBehalfOf) {
+                $authors = array_merge(...array_map(function (array $author) {
                     $authors = [];
-
-                    $authorOnBehalfOf = null;
-                    if (!empty($author['onBehalfOf'])) {
-                        $authorOnBehalfOf = end($author['onBehalfOf']['name']);
-                    }
-
-                    if (null !== $onBehalfOf && $onBehalfOf !== $authorOnBehalfOf) {
-                        $authors[] = Author::asText('on behalf of '.$onBehalfOf);
-                    }
-
-                    $onBehalfOf = $authorOnBehalfOf;
 
                     switch ($type = $author['type'] ?? 'unknown') {
                         case 'person':
@@ -102,16 +89,15 @@ final class ArticlesController extends Controller
                         case 'group':
                             $authors[] = Author::asText($author['name']);
                             break;
+                        case 'on-behalf-of':
+                            $authors[] = Author::asText($author['onBehalfOf']);
+                            break;
                         default:
                             throw new \RuntimeException('Unknown type '.$type);
                     }
 
                     return $authors;
                 }, $results['article']['authors']));
-
-                if (null !== $onBehalfOf) {
-                    $authors[] = Author::asText('on behalf of '.$onBehalfOf);
-                }
 
                 $institutions = array_map(function (string $name) {
                     return new Institution($name);
