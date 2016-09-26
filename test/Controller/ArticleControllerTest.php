@@ -122,18 +122,12 @@ final class ArticleControllerTest extends PageTestCase
                                     ],
                                 ],
                             ],
-                            'onBehalfOf' => [
-                                'name' => ['Sub-Organisation One', 'Organisation One'],
-                            ],
                         ],
                         [
                             'type' => 'person',
                             'name' => [
                                 'preferred' => 'Author Two',
                                 'index' => 'Author Two',
-                            ],
-                            'onBehalfOf' => [
-                                'name' => ['Sub-Organisation One', 'Organisation One'],
                             ],
                         ],
                         [
@@ -166,9 +160,10 @@ final class ArticleControllerTest extends PageTestCase
                                     'name' => ['Institution Three'],
                                 ],
                             ],
-                            'onBehalfOf' => [
-                                'name' => ['Organisation Two'],
-                            ],
+                        ],
+                        [
+                            'type' => 'on-behalf-of',
+                            'onBehalfOf' => 'on behalf of Institution Four',
                         ],
                     ],
                     'body' => [
@@ -192,15 +187,13 @@ final class ArticleControllerTest extends PageTestCase
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertSame('Article title', $crawler->filter('.content-header__title')->text());
-        $this->assertCount(6, $crawler->filter('.content-header__author_list_item'));
+        $this->assertCount(5, $crawler->filter('.content-header__author_list_item'));
         $this->assertSame('Author One', trim($crawler->filter('.content-header__author_list_item')->eq(0)->text()));
         $this->assertSame('Author Two', trim($crawler->filter('.content-header__author_list_item')->eq(1)->text()));
-        $this->assertSame('on behalf of Organisation One',
-            trim($crawler->filter('.content-header__author_list_item')->eq(2)->text()));
-        $this->assertSame('Author Three', trim($crawler->filter('.content-header__author_list_item')->eq(3)->text()));
-        $this->assertSame('Author Four', trim($crawler->filter('.content-header__author_list_item')->eq(4)->text()));
-        $this->assertSame('on behalf of Organisation Two',
-            trim($crawler->filter('.content-header__author_list_item')->eq(5)->text()));
+        $this->assertSame('Author Three', trim($crawler->filter('.content-header__author_list_item')->eq(2)->text()));
+        $this->assertSame('Author Four', trim($crawler->filter('.content-header__author_list_item')->eq(3)->text()));
+        $this->assertSame('on behalf of Institution Four',
+            trim($crawler->filter('.content-header__author_list_item')->eq(4)->text()));
         $this->assertCount(3, $crawler->filter('.content-header__institution_list_item'));
         $this->assertSame('Institution One, Country One',
             trim($crawler->filter('.content-header__institution_list_item')->eq(0)->text()));
