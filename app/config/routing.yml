@@ -34,11 +34,6 @@ article:
         volume: '[1-9][0-9]*'
         id: '[0-9]{5}'
 
-careers:
-    path: /careers
-    defaults:
-         _controller: AppBundle:Careers:list
-
 collection:
     path: /collections/{id}
     defaults:
@@ -48,6 +43,11 @@ collections:
     path: /collections
     defaults:
          _controller: AppBundle:Collections:list
+
+community:
+    path: /community
+    defaults:
+         _controller: AppBundle:Community:list
 
 contact:
     path: /contact

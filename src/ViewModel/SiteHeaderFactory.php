@@ -52,9 +52,9 @@ final class SiteHeaderFactory
         ]);
 
         $secondaryLinks = SiteHeaderNavBar::secondary([
-            NavLinkedItem::asLink(new Link('Careers', $this->urlGenerator->generate('careers'))),
             NavLinkedItem::asLink(new Link('About', $this->urlGenerator->generate('about'))),
             NavLinkedItem::asLink(new Link('Labs', $this->urlGenerator->generate('labs'))),
+            NavLinkedItem::asLink(new Link('Community', $this->urlGenerator->generate('community'))),
             NavLinkedItem::asButton(
                 Button::link('Submit my research', 'http://submit.elifesciences.org/', Button::SIZE_EXTRA_SMALL)
             ),
