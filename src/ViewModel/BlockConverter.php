@@ -4,6 +4,7 @@ namespace eLife\Journal\ViewModel;
 
 use eLife\Patterns\PatternRenderer;
 use eLife\Patterns\ViewModel;
+use eLife\Patterns\ViewModel\ArticleSection;
 use eLife\Patterns\ViewModel\CaptionedImage;
 use eLife\Patterns\ViewModel\IFrame;
 use eLife\Patterns\ViewModel\Image;
@@ -27,12 +28,16 @@ final class BlockConverter
 
     public function handleLevelledBlocks(array $blocks, int $level = 1) : Traversable
     {
+        $isFirst = true;
+
         foreach ($blocks as $block) {
-            yield $this->handleBlock($block, $level);
+            yield $this->handleBlock($block, $level, $isFirst);
+
+            $isFirst = false;
         }
     }
 
-    private function handleBlock(array $block, int $level) : ViewModel
+    private function handleBlock(array $block, int $level, bool $isFirst = false) : ViewModel
     {
         switch ($type = $block['type'] ?? 'no type') {
             case 'image':
@@ -46,20 +51,23 @@ final class BlockConverter
             case 'paragraph':
                 return new Paragraph($block['text']);
             case 'question':
-                return new Section(
+                return ArticleSection::basic(
                     $block['question'],
+                    $level + 1,
                     $this->renderViewModels($this->handleLevelledBlocks($block['answer'], $level + 1)),
-                    $level
+                    null,
+                    $isFirst
                 );
             case 'quote':
                 return new PullQuote($this->renderViewModels($this->handleBlocks(...$block['text'])),
                     $block['cite'] ?? null, false);
             case 'section':
-                return new Section(
+                return ArticleSection::basic(
                     $block['title'],
+                    $level + 1,
                     $this->renderViewModels($this->handleLevelledBlocks($block['content'], $level + 1)),
                     $block['id'] ?? null,
-                    $level
+                    $isFirst
                 );
             case 'table':
                 return new Table(implode('', $block['tables']),
