@@ -36,10 +36,10 @@ final class ArticleContext extends Context
                     'elocationId' => 'e00001',
                     'copyright' => [
                         'license' => 'CC-BY-4.0',
-                        'holder' => 'Bar',
+                        'holder' => 'Author One',
                         'statement' => 'Copyright statement.',
                     ],
-                    'authorLine' => 'Author One et al',
+                    'authorLine' => 'Author One',
                     'authors' => [
                         [
                             'type' => 'person',
@@ -47,70 +47,6 @@ final class ArticleContext extends Context
                                 'preferred' => 'Author One',
                                 'index' => 'Author One',
                             ],
-                            'affiliations' => [
-                                [
-                                    'name' => ['Department One', 'Institution One'],
-                                    'address' => [
-                                        'formatted' => ['Locality One', 'Country One'],
-                                        'components' => [
-                                            'locality' => ['Locality One'],
-                                            'country' => 'Country One',
-                                        ],
-                                    ],
-                                ],
-                                [
-                                    'name' => ['Department Two', 'Institution Two'],
-                                    'address' => [
-                                        'formatted' => ['Locality Two', 'Country Two'],
-                                        'components' => [
-                                            'locality' => ['Locality Two'],
-                                            'country' => 'Country Two',
-                                        ],
-                                    ],
-                                ],
-                            ],
-                        ],
-                        [
-                            'type' => 'person',
-                            'name' => [
-                                'preferred' => 'Author Two',
-                                'index' => 'Author Two',
-                            ],
-                        ],
-                        [
-                            'type' => 'person',
-                            'name' => [
-                                'preferred' => 'Author Three',
-                                'index' => 'Author Three',
-                            ],
-                            'affiliations' => [
-                                [
-                                    'name' => ['Department One', 'Institution One'],
-                                    'address' => [
-                                        'formatted' => ['Locality One', 'Country One'],
-                                        'components' => [
-                                            'locality' => ['Locality One'],
-                                            'country' => 'Country One',
-                                        ],
-                                    ],
-                                ],
-                            ],
-                        ],
-                        [
-                            'type' => 'person',
-                            'name' => [
-                                'preferred' => 'Author Four',
-                                'index' => 'Author Four',
-                            ],
-                            'affiliations' => [
-                                [
-                                    'name' => ['Institution Three'],
-                                ],
-                            ],
-                        ],
-                        [
-                            'type' => 'on-behalf-of',
-                            'onBehalfOf' => 'on behalf of Institution Four',
                         ],
                     ],
                     'abstract' => [
