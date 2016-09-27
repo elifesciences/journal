@@ -171,13 +171,15 @@ final class ArticlesController extends Controller
                 $first = true;
 
                 if (false === empty($article['abstract'])) {
-                    $parts[] = new ArticleSection(
+                    $parts[] = ArticleSection::collapsible(
                         'abstract',
                         'Abstract',
-                        array_map(function (ViewModel $viewModel) {
+                        2,
+                        implode('', array_map(function (ViewModel $viewModel) {
                             return $this->get('elife.patterns.pattern_renderer')->render($viewModel);
                         }, iterator_to_array($this->get('elife.website.view_model.block_converter')
-                            ->handleLevelledBlocks($article['abstract']['content'], 2))),
+                            ->handleLevelledBlocks($article['abstract']['content'], 2)))),
+                        false,
                         $first
                     );
 
@@ -185,13 +187,15 @@ final class ArticlesController extends Controller
                 }
 
                 if (false === empty($article['digest'])) {
-                    $parts[] = new ArticleSection(
+                    $parts[] = ArticleSection::collapsible(
                         'digest',
                         'eLife digest',
-                        array_map(function (ViewModel $viewModel) {
+                        2,
+                        implode('', array_map(function (ViewModel $viewModel) {
                             return $this->get('elife.patterns.pattern_renderer')->render($viewModel);
                         }, iterator_to_array($this->get('elife.website.view_model.block_converter')
-                            ->handleLevelledBlocks($article['digest']['content'], 2))),
+                            ->handleLevelledBlocks($article['digest']['content'], 2)))),
+                        false,
                         $first
                     );
 
@@ -203,12 +207,12 @@ final class ArticlesController extends Controller
                         $parts = $this->get('elife.website.view_model.block_converter')
                             ->handleBlocks(...$article['body'][0]['content']);
                     } else {
-                        foreach ($article['body'] as $part) {
-                            $parts[] = new ArticleSection($part['id'], $part['title'],
-                                array_map(function (ViewModel $viewModel) {
+                        foreach ($article['body'] as $i => $part) {
+                            $parts[] = ArticleSection::collapsible($part['id'], $part['title'], 2,
+                                implode('', array_map(function (ViewModel $viewModel) {
                                     return $this->get('elife.patterns.pattern_renderer')->render($viewModel);
                                 }, iterator_to_array($this->get('elife.website.view_model.block_converter')
-                                    ->handleLevelledBlocks($part['content'], 2))), $first);
+                                    ->handleLevelledBlocks($part['content'], 2)))), $i > 0, $first);
 
                             $first = false;
                         }
