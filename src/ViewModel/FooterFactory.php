@@ -27,7 +27,7 @@ final class FooterFactory
                     'https://submit.elifesciences.org/html/elife_reviewer_instructions.html'),
                 new Link('About', $this->urlGenerator->generate('about')),
                 new Link('Inside eLife', $this->urlGenerator->generate('inside-elife')),
-                new Link('Careers', $this->urlGenerator->generate('careers')),
+                new Link('Community', $this->urlGenerator->generate('community')),
                 new Link('Labs', $this->urlGenerator->generate('labs')),
             ]),
             [
