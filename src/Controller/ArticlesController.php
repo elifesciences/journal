@@ -14,6 +14,7 @@ use eLife\Patterns\ViewModel\Author;
 use eLife\Patterns\ViewModel\AuthorList;
 use eLife\Patterns\ViewModel\BackgroundImage;
 use eLife\Patterns\ViewModel\ContentHeaderArticle;
+use eLife\Patterns\ViewModel\ContextualData;
 use eLife\Patterns\ViewModel\Date;
 use eLife\Patterns\ViewModel\Doi;
 use eLife\Patterns\ViewModel\InfoBar;
@@ -163,6 +164,14 @@ final class ArticlesController extends Controller
                 }
 
                 return [new InfoBar('Accepted manuscript, PDF only. Full online edition to follow.')];
+            });
+
+        $arguments['contextualData'] = $arguments['article']
+            ->then(function (Result $article) {
+                return ContextualData::withCitation(
+                    sprintf('eLife %s;%s:%s', 2011 + $article['volume'], $article['volume'], $article['elocationId']),
+                    new Doi($article['doi'])
+                );
             });
 
         $arguments['body'] = $arguments['article']
