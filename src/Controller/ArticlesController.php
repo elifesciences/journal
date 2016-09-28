@@ -15,6 +15,7 @@ use eLife\Patterns\ViewModel\AuthorList;
 use eLife\Patterns\ViewModel\BackgroundImage;
 use eLife\Patterns\ViewModel\ContentHeaderArticle;
 use eLife\Patterns\ViewModel\Date;
+use eLife\Patterns\ViewModel\Doi;
 use eLife\Patterns\ViewModel\InfoBar;
 use eLife\Patterns\ViewModel\Institution;
 use eLife\Patterns\ViewModel\InstitutionList;
@@ -180,7 +181,8 @@ final class ArticlesController extends Controller
                         }, iterator_to_array($this->get('elife.website.view_model.block_converter')
                             ->handleLevelledBlocks($article['abstract']['content'], 2)))),
                         false,
-                        $first
+                        $first,
+                        empty($article['abstract']['doi']) ? null : new Doi($article['abstract']['doi'])
                     );
 
                     $first = false;
@@ -196,7 +198,8 @@ final class ArticlesController extends Controller
                         }, iterator_to_array($this->get('elife.website.view_model.block_converter')
                             ->handleLevelledBlocks($article['digest']['content'], 2)))),
                         false,
-                        $first
+                        $first,
+                        new Doi($article['digest']['doi'])
                     );
 
                     $first = false;

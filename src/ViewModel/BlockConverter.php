@@ -56,6 +56,7 @@ final class BlockConverter
                     $level + 1,
                     $this->renderViewModels($this->handleLevelledBlocks($block['answer'], $level + 1)),
                     null,
+                    null,
                     $isFirst
                 );
             case 'quote':
@@ -67,6 +68,7 @@ final class BlockConverter
                     $level + 1,
                     $this->renderViewModels($this->handleLevelledBlocks($block['content'], $level + 1)),
                     $block['id'] ?? null,
+                    null,
                     $isFirst
                 );
             case 'table':
