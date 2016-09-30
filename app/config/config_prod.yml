@@ -11,9 +11,19 @@ monolog:
             type: console
         main:
             action_level: error
-            handler: nested
+            handler: composite
             type: fingers_crossed
-        nested:
+        composite:
+            type: group
+            members:
+                - text
+                - json
+        text:
             type: stream
-            path: '%kernel.logs_dir%/%kernel.environment%.log'
+            path: '%kernel.logs_dir%/%kernel.environment%.txt.log'
             level: debug
+        json:
+            type: stream
+            path: '%kernel.logs_dir%/%kernel.environment%.json.log'
+            level: debug
+            formatter: monolog.formatter.json
