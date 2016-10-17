@@ -228,6 +228,25 @@ final class ArticlesController extends Controller
 
                             $first = false;
                         }
+
+                        $copyright = '<p>'.$article['copyright']['statement'].'</p>';
+
+                        if (false === empty($article['copyright']['holder'])) {
+                            $copyright = sprintf('<p>© %s, %s</p>', 2011 + $article['volume'],
+                                    $article['copyright']['holder']).$copyright;
+                        }
+
+                        $parts[] = ArticleSection::collapsible(
+                            'info',
+                            'Article and author information',
+                            2,
+                            implode('', array_map(function (ViewModel $viewModel) {
+                                return $this->get('elife.patterns.pattern_renderer')->render($viewModel);
+                            }, [
+                                ArticleSection::basic('Copyright', 3, $copyright),
+                            ])),
+                            true
+                        );
                     }
                 }
 

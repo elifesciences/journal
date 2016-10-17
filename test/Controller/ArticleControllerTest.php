@@ -358,8 +358,17 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertSame('Body text',
             $crawler->filter('main > .wrapper > div > div > section:nth-of-type(3) > div > p')->text());
 
+        $articleInfo = $crawler->filter('main > .wrapper > div > div > section:nth-of-type(4)');
+        $this->assertSame('Article and author information',
+            $articleInfo->filter('header > h2')->text());
+
+        $copyright = $articleInfo->filter('div > section:nth-of-type(1)');
+        $this->assertSame('Copyright', $copyright->filter('header > h3')->text());
+        $this->assertContains('© 2012, Bar', $copyright->filter('div')->text());
+        $this->assertContains('Copyright statement.', $copyright->filter('div')->text());
+
         $this->assertSame(
-            ['Abstract', 'eLife digest', 'Body title'],
+            ['Abstract', 'eLife digest', 'Body title', 'Article and author information'],
             array_map('trim', $crawler->filter('.view-selector__jump_link_item')->extract('_text'))
         );
     }
