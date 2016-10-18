@@ -27,3 +27,6 @@ monolog:
             path: '%kernel.logs_dir%/%kernel.environment%.json.log'
             level: debug
             formatter: monolog.formatter.json
+        newrelic:
+            type: newrelic
+            level: error
