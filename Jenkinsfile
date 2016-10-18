@@ -10,7 +10,7 @@ elifePipeline {
     }
 
     elifeMainlineOnly {
-        stage 'Deploy on end2end'
+        stage 'End2end tests'
         elifeEnd2EndTest({
             builderDeployRevision 'journal--end2end', commit
             builderSmokeTests 'journal--end2end', '/srv/journal'
