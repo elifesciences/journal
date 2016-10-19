@@ -3,9 +3,7 @@
 namespace eLife\Journal\ViewModel;
 
 use DateTimeImmutable;
-use eLife\ApiClient\ApiClient\SubjectsClient;
 use eLife\ApiClient\Result;
-use eLife\Patterns\ViewModel\ContextLabel;
 use eLife\Patterns\ViewModel\Date;
 use eLife\Patterns\ViewModel\Link;
 use eLife\Patterns\ViewModel\ListingTeasers;
@@ -14,50 +12,42 @@ use eLife\Patterns\ViewModel\SeeMoreLink;
 use eLife\Patterns\ViewModel\Teaser;
 use eLife\Patterns\ViewModel\TeaserFooter;
 use eLife\Patterns\ViewModel\TeaserImage;
-use GuzzleHttp\Promise\FulfilledPromise;
-use GuzzleHttp\Promise\PromiseInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use function GuzzleHttp\Promise\all;
 
 final class SecondaryListingTeaserFactory
 {
     use CreatesTeasers;
 
     private $urlGenerator;
-    private $subjects;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator, SubjectsClient $subjects)
+    public function __construct(UrlGeneratorInterface $urlGenerator)
     {
         $this->urlGenerator = $urlGenerator;
-        $this->subjects = $subjects;
     }
 
     public function forResult(
         Result $result,
         string $heading = null,
         SeeMoreLink $seeMoreLink = null
-    ) : PromiseInterface {
+    ) : ListingTeasers {
         return $this->forItems($result['items'], $heading, $seeMoreLink);
     }
 
-    public function forItems(array $items, string $heading = null, SeeMoreLink $seeMoreLink = null) : PromiseInterface
+    public function forItems(array $items, string $heading = null, SeeMoreLink $seeMoreLink = null) : ListingTeasers
     {
         $teasers = [];
         foreach ($items as $item) {
             $teasers[] = $this->createTeaser($item);
         }
 
-        return all($teasers)
-            ->then(function (array $teasers) use ($heading, $seeMoreLink) {
-                if ($seeMoreLink) {
-                    return ListingTeasers::withSeeMore($teasers, $seeMoreLink, $heading);
-                }
+        if ($seeMoreLink) {
+            return ListingTeasers::withSeeMore($teasers, $seeMoreLink, $heading);
+        }
 
-                return ListingTeasers::basic($teasers, $heading);
-            });
+        return ListingTeasers::basic($teasers, $heading);
     }
 
-    private function teaserForArticle(array $article) : PromiseInterface
+    private function teaserForArticle(array $article) : Teaser
     {
         if (false === empty($article['image'])) {
             $image = TeaserImage::small(
@@ -72,99 +62,87 @@ final class SecondaryListingTeaserFactory
             $image = null;
         }
 
-        return $this->createContextLabel($article)
-            ->then(function ($contextLabel) use ($article, $image) {
-                if (empty($article['titlePrefix'])) {
-                    $title = $article['title'];
-                } else {
-                    $title = sprintf('%s: %s', $article['titlePrefix'], $article['title']);
-                }
+        if (empty($article['titlePrefix'])) {
+            $title = $article['title'];
+        } else {
+            $title = sprintf('%s: %s', $article['titlePrefix'], $article['title']);
+        }
 
-                return Teaser::secondary(
-                    $title,
-                    $this->urlGenerator->generate('article', ['volume' => $article['volume'], 'id' => $article['id']]),
-                    $article['authorLine'],
-                    $contextLabel,
-                    $image,
-                    TeaserFooter::forNonArticle(
-                        Meta::withText(
-                            ucfirst(str_replace('-', ' ', $article['type'])),
-                            new Date(DateTimeImmutable::createFromFormat(DATE_ATOM, $article['statusDate']))
-                        )
-                    )
-                );
-            })
-            ;
+        return Teaser::secondary(
+            $title,
+            $this->urlGenerator->generate('article', ['volume' => $article['volume'], 'id' => $article['id']]),
+            $article['authorLine'],
+            $this->createContextLabel($article),
+            $image,
+            TeaserFooter::forNonArticle(
+                Meta::withText(
+                    ucfirst(str_replace('-', ' ', $article['type'])),
+                    new Date(DateTimeImmutable::createFromFormat(DATE_ATOM, $article['statusDate']))
+                )
+            )
+        );
     }
 
-    private function teaserForBlogArticle(array $article) : PromiseInterface
+    private function teaserForBlogArticle(array $article) : Teaser
     {
-        return $this->createContextLabel($article)
-            ->then(function ($contextLabel) use ($article) {
-                return Teaser::secondary(
-                    $article['title'],
-                    $this->urlGenerator->generate('inside-elife-article', ['id' => $article['id']]),
-                    null,
-                    $contextLabel,
-                    null,
-                    TeaserFooter::forNonArticle(
-                        Meta::withLink(
-                            new Link('Inside eLife', $this->urlGenerator->generate('inside-elife')),
-                            new Date(DateTimeImmutable::createFromFormat(DATE_ATOM, $article['published']))
-                        )
-                    )
-                );
-            })
-            ;
+        return Teaser::secondary(
+            $article['title'],
+            $this->urlGenerator->generate('inside-elife-article', ['id' => $article['id']]),
+            null,
+            $this->createContextLabel($article),
+            null,
+            TeaserFooter::forNonArticle(
+                Meta::withLink(
+                    new Link('Inside eLife', $this->urlGenerator->generate('inside-elife')),
+                    new Date(DateTimeImmutable::createFromFormat(DATE_ATOM, $article['published']))
+                )
+            )
+        );
     }
 
-    private function teaserForCollection(array $collection) : PromiseInterface
+    private function teaserForCollection(array $collection) : Teaser
     {
-        return $this->createContextLabel($collection)
-            ->then(function ($contextLabel) use ($collection) {
-                $curatedBy = 'Curated by '.$collection['selectedCurator']['name']['preferred'];
-                if (false === empty($collection['selectedCurator']['etAl'])) {
-                    $curatedBy .= ' et al';
-                }
+        $curatedBy = 'Curated by '.$collection['selectedCurator']['name']['preferred'];
+        if (false === empty($collection['selectedCurator']['etAl'])) {
+            $curatedBy .= ' et al';
+        }
 
-                return Teaser::secondary(
-                    $collection['title'],
-                    $this->urlGenerator->generate('collection', ['id' => $collection['id']]),
-                    $curatedBy,
-                    $contextLabel,
-                    TeaserImage::small(
-                        $collection['image']['sizes']['1:1'][70],
-                        $collection['image']['alt'],
-                        [
-                            140 => $collection['image']['sizes']['1:1'][140],
-                            70 => $collection['image']['sizes']['1:1'][70],
-                        ]
-                    ),
-                    TeaserFooter::forNonArticle(
-                        Meta::withLink(
-                            new Link('Collection', $this->urlGenerator->generate('collections')),
-                            new Date(DateTimeImmutable::createFromFormat(DATE_ATOM, $collection['updated']))
-                        )
-                    )
-                );
-            })
-            ;
+        return Teaser::secondary(
+            $collection['title'],
+            $this->urlGenerator->generate('collection', ['id' => $collection['id']]),
+            $curatedBy,
+            $this->createContextLabel($collection),
+            TeaserImage::small(
+                $collection['image']['sizes']['1:1'][70],
+                $collection['image']['alt'],
+                [
+                    140 => $collection['image']['sizes']['1:1'][140],
+                    70 => $collection['image']['sizes']['1:1'][70],
+                ]
+            ),
+            TeaserFooter::forNonArticle(
+                Meta::withLink(
+                    new Link('Collection', $this->urlGenerator->generate('collections')),
+                    new Date(DateTimeImmutable::createFromFormat(DATE_ATOM, $collection['updated']))
+                )
+            )
+        );
     }
 
-    private function teaserForEvent(array $event) : PromiseInterface
+    private function teaserForEvent(array $event) : Teaser
     {
-        return new FulfilledPromise(Teaser::event(
+        return Teaser::event(
             $event['title'],
             $this->urlGenerator->generate('event', ['id' => $event['id']]),
             null,
             new Date(DateTimeImmutable::createFromFormat(DATE_ATOM, $event['starts']), true),
             true
-        ));
+        );
     }
 
-    private function teaserForInterview(array $interview) : PromiseInterface
+    private function teaserForInterview(array $interview) : Teaser
     {
-        return new FulfilledPromise(Teaser::secondary(
+        return Teaser::secondary(
             $interview['title'],
             $this->urlGenerator->generate('interview', ['id' => $interview['id']]),
             'An interview with '.$interview['interviewee']['name']['preferred'],
@@ -176,12 +154,12 @@ final class SecondaryListingTeaserFactory
                     new Date(DateTimeImmutable::createFromFormat(DATE_ATOM, $interview['published']))
                 )
             )
-        ));
+        );
     }
 
-    private function teaserForLabsExperiment(array $experiment) : PromiseInterface
+    private function teaserForLabsExperiment(array $experiment) : Teaser
     {
-        return new FulfilledPromise(Teaser::secondary(
+        return Teaser::secondary(
             $experiment['title'],
             $this->urlGenerator->generate('labs-experiment', ['number' => $experiment['number']]),
             null,
@@ -200,10 +178,10 @@ final class SecondaryListingTeaserFactory
                     new Date(DateTimeImmutable::createFromFormat(DATE_ATOM, $experiment['published']))
                 )
             )
-        ));
+        );
     }
 
-    private function teaserForMediumArticle(array $article) : PromiseInterface
+    private function teaserForMediumArticle(array $article) : Teaser
     {
         if (false === empty($article['image'])) {
             $image = TeaserImage::small(
@@ -218,7 +196,7 @@ final class SecondaryListingTeaserFactory
             $image = null;
         }
 
-        return new FulfilledPromise(Teaser::secondary(
+        return Teaser::secondary(
             $article['title'],
             $article['uri'],
             null,
@@ -229,33 +207,30 @@ final class SecondaryListingTeaserFactory
                     new Date(DateTimeImmutable::createFromFormat(DATE_ATOM, $article['published']))
                 )
             )
-        ));
+        );
     }
 
-    private function teaserForPodcastEpisode(array $episode) : PromiseInterface
+    private function teaserForPodcastEpisode(array $episode) : Teaser
     {
-        return $this->createContextLabel($episode)
-            ->then(function (ContextLabel $contextLabel = null) use ($episode) {
-                return Teaser::secondary(
-                    $episode['title'],
-                    $this->urlGenerator->generate('podcast-episode', ['number' => $episode['number']]),
-                    'Episode '.$episode['number'],
-                    $contextLabel,
-                    TeaserImage::small(
-                        $episode['image']['sizes']['1:1'][70],
-                        $episode['image']['alt'],
-                        [
-                            140 => $episode['image']['sizes']['1:1'][140],
-                            70 => $episode['image']['sizes']['1:1'][70],
-                        ]
-                    ),
-                    TeaserFooter::forNonArticle(
-                        Meta::withText(
-                            'Podcast',
-                            new Date(DateTimeImmutable::createFromFormat(DATE_ATOM, $episode['published']))
-                        )
-                    )
-                );
-            });
+        return Teaser::secondary(
+            $episode['title'],
+            $this->urlGenerator->generate('podcast-episode', ['number' => $episode['number']]),
+            'Episode '.$episode['number'],
+            $this->createContextLabel($episode),
+            TeaserImage::small(
+                $episode['image']['sizes']['1:1'][70],
+                $episode['image']['alt'],
+                [
+                    140 => $episode['image']['sizes']['1:1'][140],
+                    70 => $episode['image']['sizes']['1:1'][70],
+                ]
+            ),
+            TeaserFooter::forNonArticle(
+                Meta::withText(
+                    'Podcast',
+                    new Date(DateTimeImmutable::createFromFormat(DATE_ATOM, $episode['published']))
+                )
+            )
+        );
     }
 }

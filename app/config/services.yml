@@ -103,13 +103,11 @@ services:
         class: eLife\Journal\ViewModel\ListingTeaserFactory
         arguments:
           - '@router'
-          - '@elife.api_client.subjects'
 
     elife.journal.view_model.factory.listing_teaser_secondary:
         class: eLife\Journal\ViewModel\SecondaryListingTeaserFactory
         arguments:
           - '@router'
-          - '@elife.api_client.subjects'
 
     elife.journal.view_model.factory.site_header:
         class: eLife\Journal\ViewModel\SiteHeaderFactory
