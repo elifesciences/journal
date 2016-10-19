@@ -102,6 +102,7 @@ final class PodcastEpisodeControllerTest extends PageTestCase
                                     'doi' => '10.7554/eLife.12345',
                                     'title' => 'Article 12345',
                                     'published' => '2010-01-01T00:00:00+00:00',
+                                    'statusDate' => '2010-01-01T00:00:00+00:00',
                                     'volume' => 5,
                                     'elocationId' => 'e12345',
                                     'authorLine' => 'Foo Bar',

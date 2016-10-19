@@ -3338,12 +3338,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-raml.git",
-                "reference": "459c6438d70becc21e2259df58194af10d54ac90"
+                "reference": "ca67fed2e2c0106155c603584b7ac1e07d43ccd2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-raml/zipball/459c6438d70becc21e2259df58194af10d54ac90",
-                "reference": "459c6438d70becc21e2259df58194af10d54ac90",
+                "url": "https://api.github.com/repos/elifesciences/api-raml/zipball/ca67fed2e2c0106155c603584b7ac1e07d43ccd2",
+                "reference": "ca67fed2e2c0106155c603584b7ac1e07d43ccd2",
                 "shasum": ""
             },
             "require": {

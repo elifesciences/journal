@@ -83,7 +83,7 @@ final class ListingTeaserFactory
                     TeaserFooter::forArticle(
                         Meta::withText(
                             ucfirst(str_replace('-', ' ', $article['type'])),
-                            new Date(DateTimeImmutable::createFromFormat(DATE_ATOM, $article['published']))
+                            new Date(DateTimeImmutable::createFromFormat(DATE_ATOM, $article['statusDate']))
                         ),
                         'vor' === $article['status']
                     )
