@@ -72,6 +72,11 @@ final class ArticlesController extends Controller
                 return all($return);
             });
 
+        $arguments['articleTitle'] = $arguments['article']
+            ->then(function (Result $article) {
+                return $this->getArticleTitle($article);
+            });
+
         $arguments['contentHeader'] = all(['article' => $arguments['article'], 'subjects' => $subjects])
             ->then(function (array $results) {
                 $article = $results['article'];
@@ -127,7 +132,7 @@ final class ArticlesController extends Controller
                     case 'short-report':
                     case 'tools-resources':
                         return ContentHeaderArticle::research(
-                            $article['title'],
+                            $this->getArticleTitle($article),
                             $authors,
                             Meta::withText(
                                 ucfirst(str_replace('-', ' ', $article['type'])),
@@ -139,7 +144,7 @@ final class ArticlesController extends Controller
                 }
 
                 return ContentHeaderArticle::magazine(
-                    $article['title'],
+                    $this->getArticleTitle($article),
                     $article['impactStatement'],
                     $authors,
                     null,
@@ -252,5 +257,14 @@ final class ArticlesController extends Controller
             });
 
         return new Response($this->get('templating')->render('::article.html.twig', $arguments));
+    }
+
+    private function getArticleTitle(Result $article)
+    {
+        if (empty($article['titlePrefix'])) {
+            return $article['title'];
+        }
+
+        return sprintf('%s: %s', $article['titlePrefix'], $article['title']);
     }
 }
