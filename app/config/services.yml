@@ -151,3 +151,8 @@ services:
         class: Phive\Twig\Extensions\Deferred\DeferredExtension
         tags:
           - name: twig.extension
+
+    monolog.processor.http_message:
+        class: eLife\ApiClient\Log\HttpMessageProcessor
+        tags:
+            - { name: monolog.processor, method: __invoke }
