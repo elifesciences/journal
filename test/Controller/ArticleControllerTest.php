@@ -290,6 +290,7 @@ final class ArticleControllerTest extends PageTestCase
                     'type' => 'research-advance',
                     'doi' => '10.7554/eLife.00001',
                     'title' => 'Article title',
+                    'titlePrefix' => 'Title prefix',
                     'published' => '2010-01-01T00:00:00+00:00',
                     'volume' => 1,
                     'elocationId' => 'e00001',
@@ -344,6 +345,8 @@ final class ArticleControllerTest extends PageTestCase
         );
 
         $crawler = $client->request('GET', '/content/1/e00001');
+
+        $this->assertSame('Title prefix: Article title', $crawler->filter('.content-header__title')->text());
 
         $this->assertSame('Abstract',
             $crawler->filter('main > .wrapper > div > div > section:nth-of-type(1) > header > h2')->text());

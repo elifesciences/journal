@@ -67,8 +67,14 @@ final class ListingTeaserFactory
 
         return $this->createContextLabel($article)
             ->then(function ($contextLabel) use ($article, $image) {
+                if (empty($article['titlePrefix'])) {
+                    $title = $article['title'];
+                } else {
+                    $title = sprintf('%s: %s', $article['titlePrefix'], $article['title']);
+                }
+
                 return Teaser::main(
-                    $article['title'],
+                    $title,
                     $this->urlGenerator->generate('article', ['volume' => $article['volume'], 'id' => $article['id']]),
                     $article['impactStatement'] ?? null,
                     $article['authorLine'],
