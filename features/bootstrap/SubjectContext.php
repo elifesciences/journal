@@ -137,7 +137,12 @@ final class SubjectContext extends Context
                         ],
                     ],
                 ],
-                'subjects' => [$subjectId],
+                'subjects' => [
+                    [
+                        'id' => $subjectId,
+                        'name' => $subject,
+                    ],
+                ],
                 'selectedCurator' => [
                     'id' => "$i",
                     'type' => 'senior-editor',

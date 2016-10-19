@@ -4,7 +4,6 @@ namespace eLife\Journal\Controller;
 
 use DateTimeImmutable;
 use eLife\ApiClient\ApiClient\ArticlesClient;
-use eLife\ApiClient\ApiClient\SubjectsClient;
 use eLife\ApiClient\Exception\BadResponse;
 use eLife\ApiClient\MediaType;
 use eLife\ApiClient\Result;
@@ -24,7 +23,6 @@ use eLife\Patterns\ViewModel\Link;
 use eLife\Patterns\ViewModel\Meta;
 use eLife\Patterns\ViewModel\SubjectList;
 use eLife\Patterns\ViewModel\ViewSelector;
-use GuzzleHttp\Promise\FulfilledPromise;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
@@ -56,35 +54,17 @@ final class ArticlesController extends Controller
                 return $result;
             });
 
-        $subjects = $arguments['article']
-            ->then(function (Result $result) {
-                if (empty($result['subjects'])) {
-                    return new FulfilledPromise([]);
-                }
-
-                $return = [];
-                foreach ($result['subjects'] as $id) {
-                    $return[] = $this->get('elife.api_client.subjects')
-                        ->getSubject(['Accept' => new MediaType(SubjectsClient::TYPE_SUBJECT, 1)],
-                            $id);
-                }
-
-                return all($return);
-            });
-
         $arguments['articleTitle'] = $arguments['article']
             ->then(function (Result $article) {
                 return $this->getArticleTitle($article);
             });
 
-        $arguments['contentHeader'] = all(['article' => $arguments['article'], 'subjects' => $subjects])
-            ->then(function (array $results) {
-                $article = $results['article'];
-
-                $subjects = array_map(function (Result $subject) {
+        $arguments['contentHeader'] = $arguments['article']
+            ->then(function (Result $article) {
+                $subjects = array_map(function (array $subject) {
                     return new Link($subject['name'],
                         $this->get('router')->generate('subject', ['id' => $subject['id']]));
-                }, $results['subjects']);
+                }, $article['subjects'] ?? []);
 
                 $authors = array_merge(...array_map(function (array $author) {
                     $authors = [];
@@ -104,7 +84,7 @@ final class ArticlesController extends Controller
                     }
 
                     return $authors;
-                }, $results['article']['authors']));
+                }, $article['authors']));
 
                 $institutions = array_map(function (string $name) {
                     return new Institution($name);
@@ -119,7 +99,7 @@ final class ArticlesController extends Controller
                     }
 
                     return $institutions;
-                }, $results['article']['authors'])))));
+                }, $article['authors'])))));
 
                 $authors = AuthorList::asList($authors);
                 $institutions = !empty($institutions) ? new InstitutionList($institutions) : null;

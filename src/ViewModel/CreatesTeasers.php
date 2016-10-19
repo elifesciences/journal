@@ -2,19 +2,14 @@
 
 namespace eLife\Journal\ViewModel;
 
-use eLife\ApiClient\ApiClient\SubjectsClient;
-use eLife\ApiClient\MediaType;
-use eLife\ApiClient\Result;
 use eLife\Patterns\ViewModel\ContextLabel;
 use eLife\Patterns\ViewModel\Link;
-use GuzzleHttp\Promise\FulfilledPromise;
-use GuzzleHttp\Promise\PromiseInterface;
+use eLife\Patterns\ViewModel\Teaser;
 use UnexpectedValueException;
-use function GuzzleHttp\Promise\all;
 
 trait CreatesTeasers
 {
-    final private function createTeaser(array $item): PromiseInterface
+    final private function createTeaser(array $item): Teaser
     {
         switch ($type = $item['type'] ?? 'unknown') {
             case 'correction':
@@ -49,22 +44,20 @@ trait CreatesTeasers
         throw new UnexpectedValueException('Unknown type '.$type);
     }
 
-    final private function createContextLabel(array $item) : PromiseInterface
+    /**
+     * @return ContextLabel|null
+     */
+    final private function createContextLabel(array $item)
     {
         if (empty($item['subjects'])) {
-            return new FulfilledPromise(null);
+            return null;
         }
 
-        return all(array_map(function (string $id) {
-            return $this->subjects->getSubject(['Accept' => new MediaType(SubjectsClient::TYPE_SUBJECT, 1)], $id);
-        }, $item['subjects']))
-            ->then(function (array $subjects) {
-                return new ContextLabel(...array_map(function (Result $subject) {
-                    return new Link(
-                        $subject['name'],
-                        $this->urlGenerator->generate('subject', ['id' => $subject['id']])
-                    );
-                }, $subjects));
-            });
+        return new ContextLabel(...array_map(function (array $subject) {
+            return new Link(
+                $subject['name'],
+                $this->urlGenerator->generate('subject', ['id' => $subject['id']])
+            );
+        }, $item['subjects'] ?? []));
     }
 }
