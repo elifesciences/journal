@@ -29,6 +29,7 @@ final class HomepageContext extends Context
                 'doi' => '10.7554/eLife.'.$i,
                 'title' => 'Article '.$i.' title',
                 'published' => $today->format(DATE_RFC3339),
+                'statusDate' => $today->format(DATE_RFC3339),
                 'volume' => 5,
                 'elocationId' => 'e'.$i,
                 'copyright' => [

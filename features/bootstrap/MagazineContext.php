@@ -149,6 +149,7 @@ final class MagazineContext extends Context
                                 'doi' => '10.7554/eLife.54321',
                                 'title' => 'Article 54321',
                                 'published' => '2010-01-01T00:00:00+00:00',
+                                'statusDate' => '2010-01-01T00:00:00+00:00',
                                 'volume' => 5,
                                 'elocationId' => 'e54321',
                                 'authorLine' => 'Foo Bar',
