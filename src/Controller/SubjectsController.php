@@ -41,8 +41,8 @@ final class SubjectsController extends Controller
                             $this->get('router')->generate('subject', ['id' => $subject['id']])
                         ),
                         new BackgroundImage(
-                            $subject['image']['sizes']['16:9'][250],
-                            $subject['image']['sizes']['16:9'][500],
+                            $subject['image']['thumbnail']['sizes']['16:9'][250],
+                            $subject['image']['thumbnail']['sizes']['16:9'][500],
                             600
                         )
                     );
@@ -71,8 +71,8 @@ final class SubjectsController extends Controller
             ->then(function (Result $subject) {
                 return ContentHeaderNonArticle::subject($subject['name'], false, null,
                     new BackgroundImage(
-                        $subject['image']['sizes']['2:1'][900],
-                        $subject['image']['sizes']['2:1'][1800]
+                        $subject['image']['banner']['sizes']['2:1'][900],
+                        $subject['image']['banner']['sizes']['2:1'][1800]
                     )
                 );
             });

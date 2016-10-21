@@ -69,8 +69,8 @@ developed further to become features on the eLife platform.'),
                     Meta::withText('Experiment: '.str_pad($experiment['number'], 3, '0', STR_PAD_LEFT),
                         new Date(DateTimeImmutable::createFromFormat(DATE_ATOM, $experiment['published']))),
                     new BackgroundImage(
-                        $experiment['image']['sizes']['2:1'][900],
-                        $experiment['image']['sizes']['2:1'][1800]
+                        $experiment['image']['banner']['sizes']['2:1'][900],
+                        $experiment['image']['banner']['sizes']['2:1'][1800]
                     )
                 );
             });

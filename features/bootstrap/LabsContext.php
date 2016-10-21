@@ -24,19 +24,26 @@ final class LabsContext extends Context
                 'title' => 'Experiment '.$i.' title',
                 'published' => $today->format(DATE_RFC3339),
                 'image' => [
-                    'alt' => '',
-                    'sizes' => [
-                        '2:1' => [
-                            900 => 'https://placehold.it/900x450',
-                            1800 => 'https://placehold.it/1800x900',
+                    'banner' => [
+                        'alt' => '',
+                        'sizes' => [
+                            '2:1' => [
+                                900 => 'https://placehold.it/900x450',
+                                1800 => 'https://placehold.it/1800x900',
+                            ],
                         ],
-                        '16:9' => [
-                            250 => 'https://placehold.it/250x141',
-                            500 => 'https://placehold.it/500x281',
-                        ],
-                        '1:1' => [
-                            70 => 'https://placehold.it/70x70',
-                            140 => 'https://placehold.it/140x140',
+                    ],
+                    'thumbnail' => [
+                        'alt' => '',
+                        'sizes' => [
+                            '16:9' => [
+                                250 => 'https://placehold.it/250x141',
+                                500 => 'https://placehold.it/500x281',
+                            ],
+                            '1:1' => [
+                                70 => 'https://placehold.it/70x70',
+                                140 => 'https://placehold.it/140x140',
+                            ],
                         ],
                     ],
                 ],
@@ -53,8 +60,6 @@ final class LabsContext extends Context
         foreach (array_chunk($experiments, 6) as $i => $experimentsChunk) {
             $page = $i + 1;
 
-            unset($experimentsChunk['content']);
-
             $this->mockApiResponse(
                 new Request(
                     'GET',
@@ -66,7 +71,12 @@ final class LabsContext extends Context
                     ['Content-Type' => 'application/vnd.elife.labs-experiment-list+json; version=1'],
                     json_encode([
                         'total' => $number,
-                        'items' => $experimentsChunk,
+                        'items' => array_map(function (array $experiment) {
+                            unset($experiment['image']['banner']);
+                            unset($experiment['content']);
+
+                            return $experiment;
+                        }, $experimentsChunk),
                     ])
                 )
             );

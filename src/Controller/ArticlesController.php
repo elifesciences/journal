@@ -135,9 +135,9 @@ final class ArticlesController extends Controller
                     ),
                     $institutions,
                     false,
-                    $article['image'] ? new BackgroundImage(
-                        $article['image']['sizes']['2:1'][900],
-                        $article['image']['sizes']['2:1'][1800]
+                    !empty($article['image']['banner']) ? new BackgroundImage(
+                        $article['image']['banner']['sizes']['2:1'][900],
+                        $article['image']['banner']['sizes']['2:1'][1800]
                     ) : null
                 );
             });

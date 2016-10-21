@@ -51,11 +51,11 @@ final class SecondaryListingTeaserFactory
     {
         if (false === empty($article['image'])) {
             $image = TeaserImage::small(
-                $article['image']['sizes']['1:1'][70],
-                $article['image']['alt'],
+                $article['image']['thumbnail']['sizes']['1:1'][70],
+                $article['image']['thumbnail']['alt'],
                 [
-                    140 => $article['image']['sizes']['1:1'][140],
-                    70 => $article['image']['sizes']['1:1'][70],
+                    140 => $article['image']['thumbnail']['sizes']['1:1'][140],
+                    70 => $article['image']['thumbnail']['sizes']['1:1'][70],
                 ]
             );
         } else {
@@ -113,11 +113,11 @@ final class SecondaryListingTeaserFactory
             $curatedBy,
             $this->createContextLabel($collection),
             TeaserImage::small(
-                $collection['image']['sizes']['1:1'][70],
-                $collection['image']['alt'],
+                $collection['image']['thumbnail']['sizes']['1:1'][70],
+                $collection['image']['thumbnail']['alt'],
                 [
-                    140 => $collection['image']['sizes']['1:1'][140],
-                    70 => $collection['image']['sizes']['1:1'][70],
+                    140 => $collection['image']['thumbnail']['sizes']['1:1'][140],
+                    70 => $collection['image']['thumbnail']['sizes']['1:1'][70],
                 ]
             ),
             TeaserFooter::forNonArticle(
@@ -165,11 +165,11 @@ final class SecondaryListingTeaserFactory
             null,
             null,
             TeaserImage::small(
-                $experiment['image']['sizes']['1:1'][70],
-                $experiment['image']['alt'],
+                $experiment['image']['thumbnail']['sizes']['1:1'][70],
+                $experiment['image']['thumbnail']['alt'],
                 [
-                    140 => $experiment['image']['sizes']['1:1'][140],
-                    70 => $experiment['image']['sizes']['1:1'][70],
+                    140 => $experiment['image']['thumbnail']['sizes']['1:1'][140],
+                    70 => $experiment['image']['thumbnail']['sizes']['1:1'][70],
                 ]
             ),
             TeaserFooter::forNonArticle(
@@ -185,11 +185,11 @@ final class SecondaryListingTeaserFactory
     {
         if (false === empty($article['image'])) {
             $image = TeaserImage::small(
-                $article['image']['sizes']['1:1'][70],
-                $article['image']['alt'],
+                $article['image']['thumbnail']['sizes']['1:1'][70],
+                $article['image']['thumbnail']['alt'],
                 [
-                    140 => $article['image']['sizes']['1:1'][140],
-                    70 => $article['image']['sizes']['1:1'][70],
+                    140 => $article['image']['thumbnail']['sizes']['1:1'][140],
+                    70 => $article['image']['thumbnail']['sizes']['1:1'][70],
                 ]
             );
         } else {
@@ -218,11 +218,11 @@ final class SecondaryListingTeaserFactory
             'Episode '.$episode['number'],
             $this->createContextLabel($episode),
             TeaserImage::small(
-                $episode['image']['sizes']['1:1'][70],
-                $episode['image']['alt'],
+                $episode['image']['thumbnail']['sizes']['1:1'][70],
+                $episode['image']['thumbnail']['alt'],
                 [
-                    140 => $episode['image']['sizes']['1:1'][140],
-                    70 => $episode['image']['sizes']['1:1'][70],
+                    140 => $episode['image']['thumbnail']['sizes']['1:1'][140],
+                    70 => $episode['image']['thumbnail']['sizes']['1:1'][70],
                 ]
             ),
             TeaserFooter::forNonArticle(

@@ -70,8 +70,8 @@ final class PodcastController extends Controller
                     Meta::withLink(new Link('Podcast', $this->get('router')->generate('podcast')),
                         new Date(DateTimeImmutable::createFromFormat(DATE_ATOM, $episode['published']))),
                     new BackgroundImage(
-                        $episode['image']['sizes']['2:1'][900],
-                        $episode['image']['sizes']['2:1'][1800]
+                        $episode['image']['banner']['sizes']['2:1'][900],
+                        $episode['image']['banner']['sizes']['2:1'][1800]
                     ),
                     new PodcastDownload(
                         $episode['sources'][0]['uri'],
