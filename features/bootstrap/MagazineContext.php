@@ -180,8 +180,8 @@ final class MagazineContext extends Context
                     json_encode([
                         'total' => $number,
                         'items' => array_map(function (array $episode) {
-                            unset($episode['image']['banner']);
                             unset($episode['chapters']);
+                            unset($episode['image']['banner']);
 
                             return $episode;
                         }, $episodesChunk),
