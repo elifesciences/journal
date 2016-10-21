@@ -25,19 +25,26 @@ final class PodcastContext extends Context
                 'title' => 'Episode '.$i.' title',
                 'published' => $today->format(DATE_RFC3339),
                 'image' => [
-                    'alt' => '',
-                    'sizes' => [
-                        '2:1' => [
-                            900 => 'https://placehold.it/900x450',
-                            1800 => 'https://placehold.it/1800x900',
+                    'banner' => [
+                        'alt' => '',
+                        'sizes' => [
+                            '2:1' => [
+                                900 => 'https://placehold.it/900x450',
+                                1800 => 'https://placehold.it/1800x900',
+                            ],
                         ],
-                        '16:9' => [
-                            250 => 'https://placehold.it/250x141',
-                            500 => 'https://placehold.it/500x281',
-                        ],
-                        '1:1' => [
-                            70 => 'https://placehold.it/70x70',
-                            140 => 'https://placehold.it/140x140',
+                    ],
+                    'thumbnail' => [
+                        'alt' => '',
+                        'sizes' => [
+                            '16:9' => [
+                                250 => 'https://placehold.it/250x141',
+                                500 => 'https://placehold.it/500x281',
+                            ],
+                            '1:1' => [
+                                70 => 'https://placehold.it/70x70',
+                                140 => 'https://placehold.it/140x140',
+                            ],
                         ],
                     ],
                 ],
@@ -88,6 +95,7 @@ final class PodcastContext extends Context
                     json_encode([
                         'total' => $number,
                         'items' => array_map(function (array $episode) {
+                            unset($episode['image']['banner']);
                             unset($episode['chapters']);
 
                             return $episode;
@@ -100,7 +108,7 @@ final class PodcastContext extends Context
                 $this->mockApiResponse(
                     new Request(
                         'GET',
-                        'http://api.elifesciences.org/podcast-episdoes/'.$episode['number'],
+                        'http://api.elifesciences.org/podcast-episodes/'.$episode['number'],
                         ['Accept' => 'application/vnd.elife.podcast-episode+json; version=1']
                     ),
                     new Response(
@@ -132,19 +140,26 @@ final class PodcastContext extends Context
                     'title' => 'Episode title',
                     'published' => date(DATE_RFC3339),
                     'image' => [
-                        'alt' => '',
-                        'sizes' => [
-                            '2:1' => [
-                                900 => 'https://placehold.it/900x450',
-                                1800 => 'https://placehold.it/1800x900',
+                        'banner' => [
+                            'alt' => '',
+                            'sizes' => [
+                                '2:1' => [
+                                    900 => 'https://placehold.it/900x450',
+                                    1800 => 'https://placehold.it/1800x900',
+                                ],
                             ],
-                            '16:9' => [
-                                250 => 'https://placehold.it/250x141',
-                                500 => 'https://placehold.it/500x281',
-                            ],
-                            '1:1' => [
-                                70 => 'https://placehold.it/70x70',
-                                140 => 'https://placehold.it/140x140',
+                        ],
+                        'thumbnail' => [
+                            'alt' => '',
+                            'sizes' => [
+                                '16:9' => [
+                                    250 => 'https://placehold.it/250x141',
+                                    500 => 'https://placehold.it/500x281',
+                                ],
+                                '1:1' => [
+                                    70 => 'https://placehold.it/70x70',
+                                    140 => 'https://placehold.it/140x140',
+                                ],
                             ],
                         ],
                     ],

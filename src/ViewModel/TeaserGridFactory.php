@@ -28,11 +28,11 @@ final class TeaserGridFactory
             $experiment['impactStatement'] ?? null,
             null,
             TeaserImage::prominent(
-                $experiment['image']['sizes']['16:9'][250],
-                $experiment['image']['alt'],
+                $experiment['image']['thumbnail']['sizes']['16:9'][250],
+                $experiment['image']['thumbnail']['alt'],
                 [
-                    500 => $experiment['image']['sizes']['16:9'][500],
-                    250 => $experiment['image']['sizes']['16:9'][250],
+                    500 => $experiment['image']['thumbnail']['sizes']['16:9'][500],
+                    250 => $experiment['image']['thumbnail']['sizes']['16:9'][250],
                 ]
             ),
             TeaserFooter::forNonArticle(
@@ -52,11 +52,11 @@ final class TeaserGridFactory
             $episode['impactStatement'] ?? null,
             'Episode '.$episode['number'],
             TeaserImage::prominent(
-                $episode['image']['sizes']['16:9'][250],
-                $episode['image']['alt'],
+                $episode['image']['thumbnail']['sizes']['16:9'][250],
+                $episode['image']['thumbnail']['alt'],
                 [
-                    500 => $episode['image']['sizes']['16:9'][500],
-                    250 => $episode['image']['sizes']['16:9'][250],
+                    500 => $episode['image']['thumbnail']['sizes']['16:9'][500],
+                    250 => $episode['image']['thumbnail']['sizes']['16:9'][250],
                 ]
             ),
             TeaserFooter::forNonArticle(

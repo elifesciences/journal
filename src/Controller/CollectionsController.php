@@ -74,8 +74,8 @@ final class CollectionsController extends Controller
                     ),
                     null,
                     new BackgroundImage(
-                        $collection['image']['sizes']['2:1'][900],
-                        $collection['image']['sizes']['2:1'][1800]
+                        $collection['image']['banner']['sizes']['2:1'][900],
+                        $collection['image']['banner']['sizes']['2:1'][1800]
                     )
                 );
             });

@@ -23,19 +23,26 @@ final class SubjectContext extends Context
                 'name' => 'Subject '.$i.' name',
                 'impactStatement' => 'Subject '.$i.' impact statement.',
                 'image' => [
-                    'alt' => '',
-                    'sizes' => [
-                        '2:1' => [
-                            900 => 'https://placehold.it/900x450',
-                            1800 => 'https://placehold.it/1800x900',
+                    'banner' => [
+                        'alt' => '',
+                        'sizes' => [
+                            '2:1' => [
+                                900 => 'https://placehold.it/900x450',
+                                1800 => 'https://placehold.it/1800x900',
+                            ],
                         ],
-                        '16:9' => [
-                            250 => 'https://placehold.it/250x141',
-                            500 => 'https://placehold.it/500x281',
-                        ],
-                        '1:1' => [
-                            70 => 'https://placehold.it/70x70',
-                            140 => 'https://placehold.it/140x140',
+                    ],
+                    'thumbnail' => [
+                        'alt' => '',
+                        'sizes' => [
+                            '16:9' => [
+                                250 => 'https://placehold.it/250x141',
+                                500 => 'https://placehold.it/500x281',
+                            ],
+                            '1:1' => [
+                                70 => 'https://placehold.it/70x70',
+                                140 => 'https://placehold.it/140x140',
+                            ],
                         ],
                     ],
                 ],
@@ -94,19 +101,26 @@ final class SubjectContext extends Context
                     'name' => $subject,
                     'impactStatement' => $subject.' impact statement.',
                     'image' => [
-                        'alt' => '',
-                        'sizes' => [
-                            '2:1' => [
-                                900 => 'https://placehold.it/900x450',
-                                1800 => 'https://placehold.it/1800x900',
+                        'banner' => [
+                            'alt' => '',
+                            'sizes' => [
+                                '2:1' => [
+                                    900 => 'https://placehold.it/900x450',
+                                    1800 => 'https://placehold.it/1800x900',
+                                ],
                             ],
-                            '16:9' => [
-                                250 => 'https://placehold.it/250x141',
-                                500 => 'https://placehold.it/500x281',
-                            ],
-                            '1:1' => [
-                                70 => 'https://placehold.it/70x70',
-                                140 => 'https://placehold.it/140x140',
+                        ],
+                        'thumbnail' => [
+                            'alt' => '',
+                            'sizes' => [
+                                '16:9' => [
+                                    250 => 'https://placehold.it/250x141',
+                                    500 => 'https://placehold.it/500x281',
+                                ],
+                                '1:1' => [
+                                    70 => 'https://placehold.it/70x70',
+                                    140 => 'https://placehold.it/140x140',
+                                ],
                             ],
                         ],
                     ],
@@ -121,19 +135,26 @@ final class SubjectContext extends Context
                 'title' => 'Collection '.$i.' title',
                 'updated' => $today->format(DATE_RFC3339),
                 'image' => [
-                    'alt' => '',
-                    'sizes' => [
-                        '2:1' => [
-                            900 => 'https://placehold.it/900x450',
-                            1800 => 'https://placehold.it/1800x900',
+                    'banner' => [
+                        'alt' => '',
+                        'sizes' => [
+                            '2:1' => [
+                                900 => 'https://placehold.it/900x450',
+                                1800 => 'https://placehold.it/1800x900',
+                            ],
                         ],
-                        '16:9' => [
-                            250 => 'https://placehold.it/250x141',
-                            500 => 'https://placehold.it/500x281',
-                        ],
-                        '1:1' => [
-                            70 => 'https://placehold.it/70x70',
-                            140 => 'https://placehold.it/140x140',
+                    ],
+                    'thumbnail' => [
+                        'alt' => '',
+                        'sizes' => [
+                            '16:9' => [
+                                250 => 'https://placehold.it/250x141',
+                                500 => 'https://placehold.it/500x281',
+                            ],
+                            '1:1' => [
+                                70 => 'https://placehold.it/70x70',
+                                140 => 'https://placehold.it/140x140',
+                            ],
                         ],
                     ],
                 ],
@@ -187,6 +208,7 @@ final class SubjectContext extends Context
                     json_encode([
                         'total' => $number,
                         'items' => array_map(function (array $collection) {
+                            unset($collection['image']['banner']);
                             unset($collection['curators']);
                             unset($collection['content']);
 

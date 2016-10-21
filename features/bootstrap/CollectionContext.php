@@ -24,19 +24,26 @@ final class CollectionContext extends Context
                 'title' => 'Collection '.$i.' title',
                 'updated' => $today->format(DATE_RFC3339),
                 'image' => [
-                    'alt' => '',
-                    'sizes' => [
-                        '2:1' => [
-                            900 => 'https://placehold.it/900x450',
-                            1800 => 'https://placehold.it/1800x900',
+                    'banner' => [
+                        'alt' => '',
+                        'sizes' => [
+                            '2:1' => [
+                                900 => 'https://placehold.it/900x450',
+                                1800 => 'https://placehold.it/1800x900',
+                            ],
                         ],
-                        '16:9' => [
-                            250 => 'https://placehold.it/250x141',
-                            500 => 'https://placehold.it/500x281',
-                        ],
-                        '1:1' => [
-                            70 => 'https://placehold.it/70x70',
-                            140 => 'https://placehold.it/140x140',
+                    ],
+                    'thumbnail' => [
+                        'alt' => '',
+                        'sizes' => [
+                            '16:9' => [
+                                250 => 'https://placehold.it/250x141',
+                                500 => 'https://placehold.it/500x281',
+                            ],
+                            '1:1' => [
+                                70 => 'https://placehold.it/70x70',
+                                140 => 'https://placehold.it/140x140',
+                            ],
                         ],
                     ],
                 ],
@@ -72,9 +79,6 @@ final class CollectionContext extends Context
         foreach (array_chunk($collections, 6) as $i => $collectionsChunk) {
             $page = $i + 1;
 
-            unset($collectionsChunk['curators']);
-            unset($collectionsChunk['content']);
-
             $this->mockApiResponse(
                 new Request(
                     'GET',
@@ -86,7 +90,13 @@ final class CollectionContext extends Context
                     ['Content-Type' => 'application/vnd.elife.collection-list+json; version=1'],
                     json_encode([
                         'total' => $number,
-                        'items' => $collectionsChunk,
+                        'items' => array_map(function (array $collection) {
+                            unset($collection['image']['banner']);
+                            unset($collection['curators']);
+                            unset($collection['content']);
+
+                            return $collection;
+                        }, $collectionsChunk),
                     ])
                 )
             );
