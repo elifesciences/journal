@@ -7,7 +7,7 @@ use eLife\Patterns\ReadOnlyArrayAccess;
 use eLife\Patterns\SimplifyAssets;
 use eLife\Patterns\ViewModel;
 use eLife\Patterns\ViewModel\Image;
-use eLife\Patterns\ViewModel\IsImage;
+use eLife\Patterns\ViewModel\IsCaptioned;
 use eLife\Patterns\ViewModel\Picture;
 use InvalidArgumentException;
 use Traversable;
@@ -23,7 +23,7 @@ final class CaptionlessImage implements ViewModel
     private $defaultPath;
     private $srcset;
 
-    public function __construct(IsImage $image)
+    public function __construct(IsCaptioned $image)
     {
         if ($image instanceof Image) {
             $this->altText = $image['altText'];

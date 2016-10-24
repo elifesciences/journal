@@ -8,7 +8,6 @@ use eLife\ApiClient\Exception\BadResponse;
 use eLife\ApiClient\MediaType;
 use eLife\ApiClient\Result;
 use eLife\Patterns\ViewModel\AudioPlayer;
-use eLife\Patterns\ViewModel\AudioSource;
 use eLife\Patterns\ViewModel\BackgroundImage;
 use eLife\Patterns\ViewModel\ContentHeaderNonArticle;
 use eLife\Patterns\ViewModel\Date;
@@ -18,6 +17,8 @@ use eLife\Patterns\ViewModel\LeadPara;
 use eLife\Patterns\ViewModel\LeadParas;
 use eLife\Patterns\ViewModel\Link;
 use eLife\Patterns\ViewModel\MediaChapterListingItem;
+use eLife\Patterns\ViewModel\MediaSource;
+use eLife\Patterns\ViewModel\MediaType as MediaSourceType;
 use eLife\Patterns\ViewModel\Meta;
 use eLife\Patterns\ViewModel\Picture;
 use eLife\Patterns\ViewModel\PodcastDownload;
@@ -127,7 +128,7 @@ final class PodcastController extends Controller
                     $results['episode']['number'],
                     'Episode '.$results['episode']['number'],
                     array_map(function (array $source) {
-                        return new AudioSource($source['uri'], $source['mediaType']);
+                        return new MediaSource($source['uri'], new MediaSourceType($source['mediaType']));
                     }, $results['episode']['sources']),
                     $results['chapterListing']
                 );
