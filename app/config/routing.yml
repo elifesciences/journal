@@ -32,7 +32,6 @@ article:
          _controller: AppBundle:Articles:latestVersion
     requirements:
         volume: '[1-9][0-9]*'
-        id: '[0-9]{5}'
 
 collection:
     path: /collections/{id}
