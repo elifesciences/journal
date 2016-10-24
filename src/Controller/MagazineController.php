@@ -9,11 +9,12 @@ use eLife\ApiClient\ApiClient\SearchClient;
 use eLife\ApiClient\MediaType;
 use eLife\ApiClient\Result;
 use eLife\Patterns\ViewModel\AudioPlayer;
-use eLife\Patterns\ViewModel\AudioSource;
 use eLife\Patterns\ViewModel\ContentHeaderNonArticle;
 use eLife\Patterns\ViewModel\Link;
 use eLife\Patterns\ViewModel\ListHeading;
 use eLife\Patterns\ViewModel\MediaChapterListingItem;
+use eLife\Patterns\ViewModel\MediaSource;
+use eLife\Patterns\ViewModel\MediaType as MediaSourceType;
 use eLife\Patterns\ViewModel\SeeMoreLink;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
@@ -46,7 +47,7 @@ final class MagazineController extends Controller
                     $episode['number'],
                     'Episode '.$episode['number'],
                     array_map(function (array $source) {
-                        return new AudioSource($source['uri'], $source['mediaType']);
+                        return new MediaSource($source['uri'], new MediaSourceType($source['mediaType']));
                     }, $episode['sources']),
                     array_map(function (array $chapter) {
                         return new MediaChapterListingItem($chapter['title'], $chapter['time'], $chapter['number']);
