@@ -45,6 +45,7 @@ final class ArticlesController extends Controller
                 if ($e instanceof BadResponse && 404 === $e->getResponse()->getStatusCode()) {
                     throw new NotFoundHttpException('Article not found', $e);
                 }
+                throw $e;
             })
             ->then(function (Result $result) use ($volume) {
                 if ($volume !== $result['volume']) {
