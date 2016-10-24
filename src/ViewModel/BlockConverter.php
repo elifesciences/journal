@@ -5,12 +5,15 @@ namespace eLife\Journal\ViewModel;
 use eLife\Patterns\PatternRenderer;
 use eLife\Patterns\ViewModel;
 use eLife\Patterns\ViewModel\ArticleSection;
-use eLife\Patterns\ViewModel\CaptionedFigure;
+use eLife\Patterns\ViewModel\Doi;
 use eLife\Patterns\ViewModel\IFrame;
 use eLife\Patterns\ViewModel\Image;
 use eLife\Patterns\ViewModel\MediaSource;
 use eLife\Patterns\ViewModel\MediaType;
+use eLife\Patterns\ViewModel\IsCaptioned;
+use eLife\Patterns\ViewModel\Link;
 use eLife\Patterns\ViewModel\PullQuote;
+use eLife\Patterns\ViewModel\Table as TableViewModel;
 use eLife\Patterns\ViewModel\Video;
 use Traversable;
 use UnexpectedValueException;
@@ -50,7 +53,7 @@ final class BlockConverter
                     return new CaptionlessImage($image);
                 }
 
-                return CaptionedFigure::withOnlyHeading($image, $block['title']);
+                return $this->createCaptionedAsset($image, $block);
             case 'paragraph':
                 return new Paragraph($block['text']);
             case 'question':
@@ -75,17 +78,58 @@ final class BlockConverter
                     $isFirst
                 );
             case 'table':
-                return new Table(implode('', $block['tables']),
-                    $this->renderViewModels($this->handleBlocks(...$block['footer'] ?? [])));
-            case 'video':
-                return new Video($block['image'], array_map(function (array $source) {
-                    return new MediaSource($source['uri'], new MediaType($source['mediaType']));
-                }, $block['sources']));
+                if (empty($block['title'])) {
+                    return new Table(implode('', $block['tables']),
+                        $this->renderViewModels($this->handleBlocks(...$block['footer'] ?? [])));
+                }
+
+                $table = new TableViewModel(...$block['tables']);
+
+                return $this->createCaptionedAsset($table, $block);
             case 'youtube':
                 return new IFrame('https://www.youtube.com/embed/'.$block['id'], $block['width'], $block['height']);
+            case 'video':
+                $video = new Video($block['image'], array_map(function (array $source) {
+                    return new MediaSource($source['uri'], new MediaType($source['mediaType']));
+                }, $block['sources']));
+
+                if (empty($block['title'])) {
+                    return $video;
+                }
+
+                return $this->createCaptionedAsset($video, $block);
             default:
                 throw new UnexpectedValueException('Unknown block type'.$type);
         }
+    }
+
+    private function createCaptionedAsset(IsCaptioned $asset, array $block) : ViewModel
+    {
+        $doi = !empty($block['doi']) ? new Doi($block['doi']) : null;
+        if (!empty($block['uri'])) {
+            $download = !empty($block['doi']) ? new Link('Download', $block['uri']) : null;
+        } else {
+            $download = null;
+        }
+
+        if (empty($block['caption'])) {
+            $asset = CaptionedAsset::withOnlyHeading($asset, $block['title'], $doi, $download);
+        } else {
+            $asset = CaptionedAsset::withParagraphs($asset, $block['title'],
+                array_map(function (array $block) {
+                    if ('mathml' === $block['type']) {
+                        return $block['mathml'];
+                    }
+
+                    return $block['text'];
+                }, $block['caption']), $doi, $download);
+        }
+
+        if (empty($block['label'])) {
+            return $asset;
+        }
+
+        return AssetViewerInline::primary($block['id'], $block['label'], $asset);
     }
 
     private function renderViewModels(Traversable $viewModels) : string
