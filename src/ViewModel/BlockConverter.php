@@ -5,7 +5,7 @@ namespace eLife\Journal\ViewModel;
 use eLife\Patterns\PatternRenderer;
 use eLife\Patterns\ViewModel;
 use eLife\Patterns\ViewModel\ArticleSection;
-use eLife\Patterns\ViewModel\CaptionedImage;
+use eLife\Patterns\ViewModel\CaptionedFigure;
 use eLife\Patterns\ViewModel\IFrame;
 use eLife\Patterns\ViewModel\Image;
 use eLife\Patterns\ViewModel\PullQuote;
@@ -47,7 +47,7 @@ final class BlockConverter
                     return new CaptionlessImage($image);
                 }
 
-                return CaptionedImage::withOnlyHeading($image, $block['title']);
+                return CaptionedFigure::withOnlyHeading($image, $block['title']);
             case 'paragraph':
                 return new Paragraph($block['text']);
             case 'question':
