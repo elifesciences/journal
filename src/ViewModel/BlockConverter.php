@@ -8,7 +8,10 @@ use eLife\Patterns\ViewModel\ArticleSection;
 use eLife\Patterns\ViewModel\CaptionedFigure;
 use eLife\Patterns\ViewModel\IFrame;
 use eLife\Patterns\ViewModel\Image;
+use eLife\Patterns\ViewModel\MediaSource;
+use eLife\Patterns\ViewModel\MediaType;
 use eLife\Patterns\ViewModel\PullQuote;
+use eLife\Patterns\ViewModel\Video;
 use Traversable;
 use UnexpectedValueException;
 
@@ -74,6 +77,10 @@ final class BlockConverter
             case 'table':
                 return new Table(implode('', $block['tables']),
                     $this->renderViewModels($this->handleBlocks(...$block['footer'] ?? [])));
+            case 'video':
+                return new Video($block['image'], array_map(function (array $source) {
+                    return new MediaSource($source['uri'], new MediaType($source['mediaType']));
+                }, $block['sources']));
             case 'youtube':
                 return new IFrame('https://www.youtube.com/embed/'.$block['id'], $block['width'], $block['height']);
             default:
