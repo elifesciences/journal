@@ -343,6 +343,12 @@ final class ArticleControllerTest extends PageTestCase
                             ],
                         ],
                     ],
+                    'acknowledgements' => [
+                        [
+                            'type' => 'paragraph',
+                            'text' => 'Acknowledgements text',
+                        ],
+                    ],
                 ])
             )
         );
@@ -368,7 +374,11 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertSame('Article and author information',
             $articleInfo->filter('header > h2')->text());
 
-        $copyright = $articleInfo->filter('div > section:nth-of-type(1)');
+        $acknowledgements = $articleInfo->filter('div > section:nth-of-type(1)');
+        $this->assertSame('Acknowledgements', $acknowledgements->filter('header > h3')->text());
+        $this->assertSame('Acknowledgements text', trim($acknowledgements->filter('div')->text()));
+
+        $copyright = $articleInfo->filter('div > section:nth-of-type(2)');
         $this->assertSame('Copyright', $copyright->filter('header > h3')->text());
         $this->assertContains('© 2012, Bar', $copyright->filter('div')->text());
         $this->assertContains('Copyright statement.', $copyright->filter('div')->text());

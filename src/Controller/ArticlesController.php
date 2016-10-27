@@ -215,6 +215,16 @@ final class ArticlesController extends Controller
                             $first = false;
                         }
 
+                        $infoSections = [];
+
+                        if (!empty($article['acknowledgements'])) {
+                            $infoSections[] = ArticleSection::basic('Acknowledgements', 3,
+                                implode('', array_map(function (ViewModel $viewModel) {
+                                    return $this->get('elife.patterns.pattern_renderer')->render($viewModel);
+                                }, iterator_to_array($this->get('elife.website.view_model.block_converter')
+                                    ->handleLevelledBlocks($article['acknowledgements'], 3)))));
+                        }
+
                         $copyright = '<p>'.$article['copyright']['statement'].'</p>';
 
                         if (false === empty($article['copyright']['holder'])) {
@@ -222,15 +232,15 @@ final class ArticlesController extends Controller
                                     $article['copyright']['holder']).$copyright;
                         }
 
+                        $infoSections[] = ArticleSection::basic('Copyright', 3, $copyright);
+
                         $parts[] = ArticleSection::collapsible(
                             'info',
                             'Article and author information',
                             2,
                             implode('', array_map(function (ViewModel $viewModel) {
                                 return $this->get('elife.patterns.pattern_renderer')->render($viewModel);
-                            }, [
-                                ArticleSection::basic('Copyright', 3, $copyright),
-                            ])),
+                            }, $infoSections)),
                             true
                         );
                     }
