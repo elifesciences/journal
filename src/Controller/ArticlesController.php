@@ -215,6 +215,24 @@ final class ArticlesController extends Controller
                             $first = false;
                         }
 
+                        if (!empty($article['decisionLetter']['content'])) {
+                            $parts[] = ArticleSection::collapsible('decision-letter', 'Decision letter', 2,
+                                implode('', array_map(function (ViewModel $viewModel) {
+                                    return $this->get('elife.patterns.pattern_renderer')->render($viewModel);
+                                }, iterator_to_array($this->get('elife.website.view_model.block_converter')
+                                    ->handleLevelledBlocks($article['decisionLetter']['content'], 2)))), true, false,
+                                new Doi($article['decisionLetter']['doi']));
+                        }
+
+                        if (!empty($article['authorResponse'])) {
+                            $parts[] = ArticleSection::collapsible('author-response', 'Author response', 2,
+                                implode('', array_map(function (ViewModel $viewModel) {
+                                    return $this->get('elife.patterns.pattern_renderer')->render($viewModel);
+                                }, iterator_to_array($this->get('elife.website.view_model.block_converter')
+                                    ->handleLevelledBlocks($article['authorResponse']['content'], 2)))), true, false,
+                                new Doi($article['authorResponse']['doi']));
+                        }
+
                         $infoSections = [];
 
                         if (!empty($article['acknowledgements'])) {

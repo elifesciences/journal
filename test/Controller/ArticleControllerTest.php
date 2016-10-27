@@ -349,6 +349,30 @@ final class ArticleControllerTest extends PageTestCase
                             'text' => 'Acknowledgements text',
                         ],
                     ],
+                    'decisionLetter' => [
+                        'doi' => '10.7554/eLife.09560.003',
+                        'description' => [
+                            [
+                                'type' => 'paragraph',
+                                'text' => 'Decision letter description',
+                            ],
+                        ],
+                        'content' => [
+                            [
+                                'type' => 'paragraph',
+                                'text' => 'Decision letter text',
+                            ],
+                        ],
+                    ],
+                    'authorResponse' => [
+                        'doi' => '10.7554/eLife.09560.003',
+                        'content' => [
+                            [
+                                'type' => 'paragraph',
+                                'text' => 'Author response text',
+                            ],
+                        ],
+                    ],
                 ])
             )
         );
@@ -369,8 +393,16 @@ final class ArticleControllerTest extends PageTestCase
             $crawler->filter('main > .wrapper > div > div > section:nth-of-type(3) > header > h2')->text());
         $this->assertSame('Body text',
             $crawler->filter('main > .wrapper > div > div > section:nth-of-type(3) > div > p')->text());
+        $this->assertSame('Decision letter',
+            $crawler->filter('main > .wrapper > div > div > section:nth-of-type(4) > header > h2')->text());
+        $this->assertSame('Decision letter text',
+            $crawler->filter('main > .wrapper > div > div > section:nth-of-type(4) > div > p')->text());
+        $this->assertSame('Author response',
+            $crawler->filter('main > .wrapper > div > div > section:nth-of-type(5) > header > h2')->text());
+        $this->assertSame('Author response text',
+            $crawler->filter('main > .wrapper > div > div > section:nth-of-type(5) > div > p')->text());
 
-        $articleInfo = $crawler->filter('main > .wrapper > div > div > section:nth-of-type(4)');
+        $articleInfo = $crawler->filter('main > .wrapper > div > div > section:nth-of-type(6)');
         $this->assertSame('Article and author information',
             $articleInfo->filter('header > h2')->text());
 
@@ -384,7 +416,14 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertContains('Copyright statement.', $copyright->filter('div')->text());
 
         $this->assertSame(
-            ['Abstract', 'eLife digest', 'Body title', 'Article and author information'],
+            [
+                'Abstract',
+                'eLife digest',
+                'Body title',
+                'Decision letter',
+                'Author response',
+                'Article and author information',
+            ],
             array_map('trim', $crawler->filter('.view-selector__jump_link_item')->extract('_text'))
         );
     }
