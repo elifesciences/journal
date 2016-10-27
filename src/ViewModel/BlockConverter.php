@@ -12,6 +12,7 @@ use eLife\Patterns\ViewModel\IFrame;
 use eLife\Patterns\ViewModel\Image;
 use eLife\Patterns\ViewModel\IsCaptioned;
 use eLife\Patterns\ViewModel\Link;
+use eLife\Patterns\ViewModel\Listing;
 use eLife\Patterns\ViewModel\MediaSource;
 use eLife\Patterns\ViewModel\MediaType;
 use eLife\Patterns\ViewModel\PullQuote;
@@ -56,6 +57,27 @@ final class BlockConverter
                 }
 
                 return $this->createCaptionedAsset($image, $block);
+            case 'list':
+                $items = array_map(function ($item) use ($level) {
+                    if (is_string($item)) {
+                        return $item;
+                    }
+
+                    return $this->renderViewModels($this->handleLevelledBlocks($item, $level + 1));
+                }, $block['items']);
+
+                switch ($prefix = $block['prefix'] ?? 'no prefix') {
+                    case 'alpha-lower':
+                    case 'alpha-upper':
+                    case 'number':
+                    case 'roman-lower':
+                    case 'roman-upper':
+                        return Listing::ordered($items, $prefix);
+                    case 'bullet':
+                        return Listing::unordered($items, $prefix);
+                }
+
+                return Listing::unordered($items);
             case 'paragraph':
                 return new Paragraph($block['text']);
             case 'question':
