@@ -172,7 +172,7 @@ final class ArticlesController extends Controller
 
                         $infoSections = [];
 
-                        if (!$article->getAcknowledgements()->isEmpty()) {
+                        if ($article->getAcknowledgements()->notEmpty()) {
                             $infoSections[] = ArticleSection::basic(
                                 'Acknowledgements',
                                 3,
