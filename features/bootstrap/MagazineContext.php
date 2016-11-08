@@ -23,31 +23,16 @@ final class MagazineContext extends Context
 
         for ($i = $number; $i > 0; --$i) {
             $articles[] = [
-                'type' => 'podcast-episode',
-                'number' => $i,
-                'title' => 'Podcast episode '.$i.' title',
+                'type' => 'interview',
+                'id' => 'interview'.$i,
+                'interviewee' => [
+                    'name' => [
+                        'preferred' => 'Interviewee '.$i,
+                        'index' => 'Interviewee '.$i,
+                    ],
+                ],
+                'title' => 'Interview '.$i.' title',
                 'published' => $today->format(DATE_RFC3339),
-                'image' => [
-                    'thumbnail' => [
-                        'alt' => '',
-                        'sizes' => [
-                            '16:9' => [
-                                '250' => 'https://placehold.it/250x141',
-                                '500' => 'https://placehold.it/500x281',
-                            ],
-                            '1:1' => [
-                                '70' => 'https://placehold.it/70x70',
-                                '140' => 'https://placehold.it/140x140',
-                            ],
-                        ],
-                    ],
-                ],
-                'sources' => [
-                    [
-                        'mediaType' => 'audio/mpeg',
-                        'uri' => $this->locatePath('/audio-file'),
-                    ],
-                ],
             ];
         }
 
@@ -83,9 +68,9 @@ final class MagazineContext extends Context
                             'blog-article' => 0,
                             'collection' => 0,
                             'event' => 0,
-                            'interview' => 0,
+                            'interview' => $this->numberOfArticles,
                             'labs-experiment' => 0,
-                            'podcast-episode' => $this->numberOfArticles,
+                            'podcast-episode' => 0,
                         ],
                     ])
                 )
@@ -364,7 +349,7 @@ final class MagazineContext extends Context
             $this->assertSession()->elementContains(
                 'css',
                 '.list-heading:contains("Latest") + ol > li:nth-child('.$nthChild.')',
-                'Podcast episode '.$expectedNumber.' title'
+                'Interview '.$expectedNumber.' title'
             );
         }
     }
