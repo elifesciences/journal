@@ -8,12 +8,12 @@ use eLife\Patterns\ViewModel\Date;
 use eLife\Patterns\ViewModel\Meta;
 use eLife\Patterns\ViewModel\Teaser;
 use eLife\Patterns\ViewModel\TeaserFooter;
-use eLife\Patterns\ViewModel\TeaserImage;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 final class PodcastEpisodeTeaserConverter implements ViewModelConverter
 {
     use CreatesContextLabel;
+    use CreatesTeaserImage;
 
     private $urlGenerator;
 
@@ -33,14 +33,7 @@ final class PodcastEpisodeTeaserConverter implements ViewModelConverter
             $object->getImpactStatement(),
             'Episode '.$object->getNumber(),
             $this->createContextLabel($object),
-            TeaserImage::big(
-                $object->getThumbnail()->getSize('16:9')->getImage(250),
-                $object->getThumbnail()->getAltText(),
-                [
-                    500 => $object->getThumbnail()->getSize('16:9')->getImage(500),
-                    250 => $object->getThumbnail()->getSize('16:9')->getImage(250),
-                ]
-            ),
+            $this->bigTeaserImage($object->getThumbnail()),
             TeaserFooter::forNonArticle(
                 Meta::withText(
                     'Podcast',

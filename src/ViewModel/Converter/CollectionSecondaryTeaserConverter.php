@@ -9,12 +9,12 @@ use eLife\Patterns\ViewModel\Link;
 use eLife\Patterns\ViewModel\Meta;
 use eLife\Patterns\ViewModel\Teaser;
 use eLife\Patterns\ViewModel\TeaserFooter;
-use eLife\Patterns\ViewModel\TeaserImage;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 final class CollectionSecondaryTeaserConverter implements ViewModelConverter
 {
     use CreatesContextLabel;
+    use CreatesTeaserImage;
 
     private $urlGenerator;
 
@@ -39,14 +39,7 @@ final class CollectionSecondaryTeaserConverter implements ViewModelConverter
             $this->urlGenerator->generate('collection', ['id' => $object->getId()]),
             $curatedBy,
             $this->createContextLabel($object),
-            TeaserImage::small(
-                $object->getThumbnail()->getSize('1:1')->getImage(70),
-                $object->getThumbnail()->getAltText(),
-                [
-                    140 => $object->getThumbnail()->getSize('1:1')->getImage(140),
-                    70 => $object->getThumbnail()->getSize('1:1')->getImage(70),
-                ]
-            ),
+            $this->smallTeaserImage($object->getThumbnail()),
             TeaserFooter::forNonArticle(
                 Meta::withLink(
                     new Link('Collection', $this->urlGenerator->generate('collections')),

@@ -8,6 +8,8 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 final class LabsExperimentSecondaryTeaserConverter implements ViewModelConverter
 {
+    use CreatesTeaserImage;
+
     private $urlGenerator;
 
     public function __construct(UrlGeneratorInterface $urlGenerator)
@@ -25,14 +27,7 @@ final class LabsExperimentSecondaryTeaserConverter implements ViewModelConverter
             $this->urlGenerator->generate('labs-experiment', ['number' => $object->getNumber()]),
             null,
             null,
-            ViewModel\TeaserImage::small(
-                $object->getThumbnail()->getSize('1:1')->getImage(70),
-                $object->getThumbnail()->getAltText(),
-                [
-                    140 => $object->getThumbnail()->getSize('1:1')->getImage(140),
-                    70 => $object->getThumbnail()->getSize('1:1')->getImage(70),
-                ]
-            ),
+            $this->smallTeaserImage($object->getThumbnail()),
             ViewModel\TeaserFooter::forNonArticle(
                 ViewModel\Meta::withText(
                     'Experiment: '.str_pad($object->getNumber(), 3, '0', STR_PAD_LEFT),

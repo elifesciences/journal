@@ -10,6 +10,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 final class ArticleTeaserConverter implements ViewModelConverter
 {
     use CreatesContextLabel;
+    use CreatesTeaserImage;
 
     private $urlGenerator;
 
@@ -24,14 +25,7 @@ final class ArticleTeaserConverter implements ViewModelConverter
     public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
         if ($object instanceof ArticleVoR && $object->getThumbnail()) {
-            $image = ViewModel\TeaserImage::small(
-                $object->getThumbnail()->getSize('1:1')->getImage(70),
-                $object->getThumbnail()->getAltText(),
-                [
-                    140 => $object->getThumbnail()->getSize('1:1')->getImage(140),
-                    70 => $object->getThumbnail()->getSize('1:1')->getImage(70),
-                ]
-            );
+            $image = $this->smallTeaserImage($object->getThumbnail());
         } else {
             $image = null;
         }

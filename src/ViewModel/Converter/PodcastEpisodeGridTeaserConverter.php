@@ -8,6 +8,8 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 final class PodcastEpisodeGridTeaserConverter implements ViewModelConverter
 {
+    use CreatesTeaserImage;
+
     private $urlGenerator;
 
     public function __construct(UrlGeneratorInterface $urlGenerator)
@@ -25,14 +27,7 @@ final class PodcastEpisodeGridTeaserConverter implements ViewModelConverter
             $this->urlGenerator->generate('podcast-episode', ['number' => $object->getNumber()]),
             $object->getImpactStatement(),
             'Episode '.$object->getNumber(),
-            ViewModel\TeaserImage::prominent(
-                $object->getThumbnail()->getSize('16:9')->getImage(250),
-                $object->getThumbnail()->getAltText(),
-                [
-                    500 => $object->getThumbnail()->getSize('16:9')->getImage(500),
-                    250 => $object->getThumbnail()->getSize('16:9')->getImage(250),
-                ]
-            ),
+            $this->prominentTeaserImage($object->getThumbnail()),
             ViewModel\TeaserFooter::forNonArticle(
                 ViewModel\Meta::withLink(
                     new ViewModel\Link('Podcast', $this->urlGenerator->generate('podcast')),

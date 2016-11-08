@@ -8,24 +8,18 @@ use eLife\Patterns\ViewModel\Date;
 use eLife\Patterns\ViewModel\Meta;
 use eLife\Patterns\ViewModel\Teaser;
 use eLife\Patterns\ViewModel\TeaserFooter;
-use eLife\Patterns\ViewModel\TeaserImage;
 
 final class MediumArticleSecondaryTeaserConverter implements ViewModelConverter
 {
+    use CreatesTeaserImage;
+
     /**
      * @param MediumArticle $object
      */
     public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
         if ($object->getImage()) {
-            $image = TeaserImage::small(
-                $object->getImage()->getSize('1:1')->getImage(70),
-                $object->getImage()->getAltText(),
-                [
-                    140 => $object->getImage()->getSize('1:1')->getImage(140),
-                    70 => $object->getImage()->getSize('1:1')->getImage(70),
-                ]
-            );
+            $image = $this->smallTeaserImage($object->getImage());
         } else {
             $image = null;
         }
