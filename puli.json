@@ -129,6 +129,10 @@
             "install-path": "vendor/elife/api-client",
             "installer": "composer"
         },
+        "elife/api-sdk": {
+            "install-path": "vendor/elife/api-sdk",
+            "installer": "composer"
+        },
         "elife/api-validator": {
             "install-path": "vendor/elife/api-validator",
             "installer": "composer",

@@ -1,8 +1,8 @@
 <?php
 
-namespace test\eLife\Journal\ViewModel;
+namespace test\eLife\Journal\ViewModel\Factory;
 
-use eLife\Journal\ViewModel\FooterFactory;
+use eLife\Journal\ViewModel\Factory\FooterFactory;
 use eLife\Patterns\ViewModel\Footer;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
