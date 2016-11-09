@@ -29,12 +29,9 @@ class ModelConverterTestCase extends PHPUnit_Framework_TestCase
      * @test
      * @dataProvider samples
      */
-    public function it_converts_a_model(string $sample)
+    public function it_converts_a_model(string $path)
     {
-        $path = "vendor/elife/api/src/samples/{$this->model}/v1/{$sample}.json";
-        if (!file_exists($path)) {
-            $this->markTestSkipped();
-        }
+        $this->assertTrue(file_exists($path), "$path does not exists");
         $file = file_get_contents($path);
 
         $model = json_decode($file, true);
@@ -50,10 +47,19 @@ class ModelConverterTestCase extends PHPUnit_Framework_TestCase
 
     public function samples()
     {
-        return [
-            ['complete'],
-            ['minimum'],
-        ];
+        $samples = [];
+        foreach ($this->models as $model) {
+            $samples = array_merge(
+                $samples,
+                array_map(
+                    function ($path) {
+                        return [$path];
+                    },
+                    $glob = glob("vendor/elife/api/src/samples/{$model}/v1/*.json")
+                )
+            );
+        }
+        return $samples;
     }
 
     /**

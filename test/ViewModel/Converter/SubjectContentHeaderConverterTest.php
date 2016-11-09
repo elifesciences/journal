@@ -8,7 +8,7 @@ use eLife\Patterns\ViewModel\ContentHeaderNonArticle;
 
 final class SubjectContentHeaderConverterTest extends ModelConverterTestCase
 {
-    protected $model = 'subject';
+    protected $models = ['subject'];
     protected $class = Subject::class;
     protected $viewModelClass = ContentHeaderNonArticle::class;
 
