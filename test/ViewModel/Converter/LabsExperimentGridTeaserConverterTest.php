@@ -20,7 +20,6 @@ final class GridTeaserConverterTest extends ModelConverterTestCase
      */
     public function setUpConverter()
     {
-        $this->urlGenerator = $this->createMock(UrlGeneratorInterface::class);
-        $this->converter = new LabsExperimentGridTeaserConverter($this->urlGenerator);
+        $this->converter = new LabsExperimentGridTeaserConverter($this->stubUrlGenerator());
     }
 }

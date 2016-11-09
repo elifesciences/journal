@@ -19,7 +19,6 @@ final class CollectionContentHeaderConverterTest extends ModelConverterTestCase
      */
     public function setUpConverter()
     {
-        $this->urlGenerator = $this->createMock(UrlGeneratorInterface::class);
-        $this->converter = new CollectionContentHeaderConverter($this->urlGenerator);
+        $this->converter = new CollectionContentHeaderConverter($this->stubUrlGenerator());
     }
 }

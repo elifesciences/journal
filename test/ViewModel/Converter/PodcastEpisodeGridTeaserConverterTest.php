@@ -22,7 +22,6 @@ final class PodcastEpisodeGridTeaserConverterTest extends ModelConverterTestCase
      */
     public function setUpConverter()
     {
-        $this->urlGenerator = $this->createMock(UrlGeneratorInterface::class);
-        $this->converter = new PodcastEpisodeGridTeaserConverter($this->urlGenerator);
+        $this->converter = new PodcastEpisodeGridTeaserConverter($this->stubUrlGenerator());
     }
 }

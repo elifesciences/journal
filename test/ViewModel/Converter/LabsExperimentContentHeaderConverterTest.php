@@ -19,7 +19,6 @@ final class LabsExperimentContentHeaderConverterTest extends ModelConverterTestC
      */
     public function setUpConverter()
     {
-        $this->urlGenerator = $this->createMock(UrlGeneratorInterface::class);
-        $this->converter = new LabsExperimentContentHeaderConverter($this->urlGenerator);
+        $this->converter = new LabsExperimentContentHeaderConverter();
     }
 }

@@ -22,12 +22,10 @@ final class PodcastEpisodeContentHeaderConverterTest extends ModelConverterTestC
      */
     public function setUpConverter()
     {
-        // TODO: extract into ModelConverterTestCase
-        $this->urlGenerator = $this->createMock(UrlGeneratorInterface::class);
         $this->puliUrlGenerator = $this->createMock(PuliUrlGenerator::class);
         $this->puliUrlGenerator->expects($this->any())
             ->method('generateUrl')
             ->will($this->returnValue('http://...'));
-        $this->converter = new PodcastEpisodeContentHeaderConverter($this->urlGenerator, $this->puliUrlGenerator);
+        $this->converter = new PodcastEpisodeContentHeaderConverter($this->stubUrlGenerator(), $this->puliUrlGenerator);
     }
 }

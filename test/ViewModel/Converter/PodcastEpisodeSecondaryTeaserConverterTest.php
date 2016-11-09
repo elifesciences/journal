@@ -22,7 +22,6 @@ final class PodcastEpisodeSecondaryTeaserConverterTest extends ModelConverterTes
      */
     public function setUpConverter()
     {
-        $this->urlGenerator = $this->createMock(UrlGeneratorInterface::class);
-        $this->converter = new PodcastEpisodeSecondaryTeaserConverter($this->urlGenerator);
+        $this->converter = new PodcastEpisodeSecondaryTeaserConverter($this->stubUrlGenerator());
     }
 }

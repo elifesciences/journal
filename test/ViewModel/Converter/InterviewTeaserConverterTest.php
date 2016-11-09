@@ -19,7 +19,6 @@ final class InterviewTeaserConverterTest extends ModelConverterTestCase
      */
     public function setUpConverter()
     {
-        $this->urlGenerator = $this->createMock(UrlGeneratorInterface::class);
-        $this->converter = new InterviewTeaserConverter($this->urlGenerator);
+        $this->converter = new InterviewTeaserConverter($this->stubUrlGenerator());
     }
 }

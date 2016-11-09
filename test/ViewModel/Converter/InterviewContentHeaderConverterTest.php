@@ -19,7 +19,6 @@ final class InterviewContentHeaderConverterTest extends ModelConverterTestCase
      */
     public function setUpConverter()
     {
-        $this->urlGenerator = $this->createMock(UrlGeneratorInterface::class);
-        $this->converter = new InterviewContentHeaderConverter($this->urlGenerator);
+        $this->converter = new InterviewContentHeaderConverter();
     }
 }

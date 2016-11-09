@@ -5,7 +5,6 @@ namespace test\eLife\Journal\ViewModel\Converter;
 use eLife\ApiSdk\Model\MediumArticle;
 use eLife\Journal\ViewModel\Converter\MediumArticleSecondaryTeaserConverter;
 use eLife\Patterns\ViewModel\Teaser;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 final class MediumArticleSecondaryTeaserConverterTest extends ModelConverterTestCase
 {
@@ -21,8 +20,7 @@ final class MediumArticleSecondaryTeaserConverterTest extends ModelConverterTest
      */
     public function setUpConverter()
     {
-        $this->urlGenerator = $this->createMock(UrlGeneratorInterface::class);
-        $this->converter = new MediumArticleSecondaryTeaserConverter($this->urlGenerator);
+        $this->converter = new MediumArticleSecondaryTeaserConverter();
     }
 
     protected function dataHook(array $model) : array

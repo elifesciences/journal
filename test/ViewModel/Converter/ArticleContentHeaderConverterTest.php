@@ -19,7 +19,6 @@ final class ArticleContentHeaderConverterTest extends ModelConverterTestCase
      */
     public function setUpConverter()
     {
-        $this->urlGenerator = $this->createMock(UrlGeneratorInterface::class);
-        $this->converter = new ArticleContentHeaderConverter($this->urlGenerator);
+        $this->converter = new ArticleContentHeaderConverter($this->stubUrlGenerator());
     }
 }

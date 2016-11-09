@@ -19,7 +19,6 @@ final class BlogArticleTeaserConverterTest extends ModelConverterTestCase
      */
     public function setUpConverter()
     {
-        $this->urlGenerator = $this->createMock(UrlGeneratorInterface::class);
-        $this->converter = new BlogArticleTeaserConverter($this->urlGenerator);
+        $this->converter = new BlogArticleTeaserConverter($this->stubUrlGenerator());
     }
 }

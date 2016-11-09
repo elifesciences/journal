@@ -19,7 +19,6 @@ final class EventContentHeaderConverterTest extends ModelConverterTestCase
      */
     public function setUpConverter()
     {
-        $this->urlGenerator = $this->createMock(UrlGeneratorInterface::class);
-        $this->converter = new EventContentHeaderConverter($this->urlGenerator);
+        $this->converter = new EventContentHeaderConverter();
     }
 }

@@ -7,6 +7,7 @@ use eLife\ApiSdk\Model\Block;
 use eLife\ApiSdk\Model\Model;
 use eLife\Journal\ViewModel\Paragraph;
 use eLife\Patterns\ViewModel\ContentHeaderNonArticle;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class ModelConverterTestCase extends PHPUnit_Framework_TestCase
 {
@@ -99,5 +100,10 @@ class ModelConverterTestCase extends PHPUnit_Framework_TestCase
     protected function modelHook(Model $model)
     {
         return $model;
+    }
+
+    protected function stubUrlGenerator() : UrlGeneratorInterface
+    {
+        return $this->createMock(UrlGeneratorInterface::class);
     }
 }
