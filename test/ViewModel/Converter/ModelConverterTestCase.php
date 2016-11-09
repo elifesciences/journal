@@ -14,6 +14,7 @@ class ModelConverterTestCase extends PHPUnit_Framework_TestCase
     protected $class;
     protected $viewModelClass;
     protected $converter;
+    protected $context = [];
     
     /**
      * @before
@@ -38,7 +39,10 @@ class ModelConverterTestCase extends PHPUnit_Framework_TestCase
 
         $model = $this->serializer->denormalize($model, $this->class);
 
-        $this->assertTrue($this->converter->supports($model, $this->viewModelClass), "Converter does not support turning " . get_class($model) . " into " . $this->viewModelClass);
+        $this->assertTrue(
+            $this->converter->supports($model, $this->viewModelClass, $this->context),
+            "Converter does not support turning " . get_class($model) . " into " . $this->viewModelClass
+        );
         $viewModel = $this->converter->convert($model);
         $this->assertTrue($viewModel instanceof $this->viewModelClass);
 
