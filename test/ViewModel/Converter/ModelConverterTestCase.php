@@ -41,12 +41,11 @@ class ModelConverterTestCase extends PHPUnit_Framework_TestCase
 
         $model = $this->serializer->denormalize($model, $this->class);
 
-        $this->assertTrue($this->converter->supports($model, $this->viewModelClass));
+        $this->assertTrue($this->converter->supports($model, $this->viewModelClass), "Converter does not support turning " . get_class($model) . " into " . $this->viewModelClass);
         $viewModel = $this->converter->convert($model);
         $this->assertTrue($viewModel instanceof $this->viewModelClass);
 
         $viewModel->toArray();
-        var_dump($viewModel->toArray());
     }
 
     public function samples()
