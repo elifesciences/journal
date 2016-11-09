@@ -201,7 +201,7 @@ final class ArticlesController extends Controller
                 $body = $sections['body'];
                 $hasFigures = $sections['hasFigures'];
 
-                if ((count($body) < 2 || false === $body[0] instanceof ArticleSection) && !$hasFigures) {
+                if ((count($body) < 2 || false === $body[0] instanceof ArticleSection) || !$hasFigures) {
                     return null;
                 }
 
