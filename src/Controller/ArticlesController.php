@@ -201,15 +201,19 @@ final class ArticlesController extends Controller
                 $body = $sections['body'];
                 $hasFigures = $sections['hasFigures'];
 
-                if ((count($body) < 2 || false === $body[0] instanceof ArticleSection) || !$hasFigures) {
+                if ((count($body) < 2 || false === $body[0] instanceof ArticleSection) && !$hasFigures) {
                     return null;
                 }
 
                 return new ViewSelector(
                     $this->get('router')->generate('article', ['id' => $article->getId(), 'volume' => $article->getVolume()]),
-                    array_map(function (ArticleSection $section) {
-                        return new Link($section['title'], '#'.$section['id']);
-                    }, $body),
+                    array_filter(array_map(function (ViewModel $viewModel) {
+                        if ($viewModel instanceof ArticleSection) {
+                            return new Link($viewModel['title'], '#'.$viewModel['id']);
+                        }
+
+                        return null;
+                    }, $body)),
                     $hasFigures ? $this->get('router')->generate('article-figures', ['id' => $article->getId(), 'volume' => $article->getVolume()]) : null
                 );
             });
