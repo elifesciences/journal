@@ -16,6 +16,7 @@ class ModelConverterTestCase extends PHPUnit_Framework_TestCase
     protected $converter;
     protected $context = [];
     protected $samples = '*';
+    private $serializer;
     
     /**
      * @before
