@@ -9,7 +9,6 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 final class ArticleContentHeaderConverterTest extends ModelConverterTestCase
 {
-    # multiple models
     protected $models = ['article-poa', /*'article-vor'*/];
     protected $class = ArticleVersion::class;
     protected $viewModelClass = ContentHeaderArticle::class;
