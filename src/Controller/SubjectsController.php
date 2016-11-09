@@ -4,7 +4,6 @@ namespace eLife\Journal\Controller;
 
 use eLife\ApiClient\ApiClient\SearchClient;
 use eLife\ApiClient\ApiClient\SubjectsClient;
-use eLife\ApiClient\Exception\BadResponse;
 use eLife\ApiClient\MediaType;
 use eLife\ApiClient\Result;
 use eLife\Patterns\ViewModel\BackgroundImage;
@@ -16,8 +15,6 @@ use eLife\Patterns\ViewModel\LeadParas;
 use eLife\Patterns\ViewModel\Link;
 use eLife\Patterns\ViewModel\ListHeading;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Throwable;
 
 final class SubjectsController extends Controller
 {
@@ -60,12 +57,7 @@ final class SubjectsController extends Controller
         $arguments = $this->defaultPageArguments();
 
         $arguments['subject'] = $this->get('elife.api_client.subjects')
-            ->getSubject(['Accept' => new MediaType(SubjectsClient::TYPE_SUBJECT, 1)], $id)
-            ->otherwise(function (Throwable $e) {
-                if ($e instanceof BadResponse && 404 === $e->getResponse()->getStatusCode()) {
-                    throw new NotFoundHttpException('Subject not found', $e);
-                }
-            });
+            ->getSubject(['Accept' => new MediaType(SubjectsClient::TYPE_SUBJECT, 1)], $id);
 
         $arguments['contentHeader'] = $arguments['subject']
             ->then(function (Result $subject) {

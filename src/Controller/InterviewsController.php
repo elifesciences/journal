@@ -4,7 +4,6 @@ namespace eLife\Journal\Controller;
 
 use DateTimeImmutable;
 use eLife\ApiClient\ApiClient\InterviewsClient;
-use eLife\ApiClient\Exception\BadResponse;
 use eLife\ApiClient\MediaType;
 use eLife\ApiClient\Result;
 use eLife\Patterns\ViewModel\ContentHeaderNonArticle;
@@ -13,8 +12,6 @@ use eLife\Patterns\ViewModel\LeadPara;
 use eLife\Patterns\ViewModel\LeadParas;
 use eLife\Patterns\ViewModel\Meta;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Throwable;
 
 final class InterviewsController extends Controller
 {
@@ -23,12 +20,7 @@ final class InterviewsController extends Controller
         $arguments = $this->defaultPageArguments();
 
         $arguments['interview'] = $this->get('elife.api_client.interviews')
-            ->getInterview(['Accept' => new MediaType(InterviewsClient::TYPE_INTERVIEW, 1)], $id)
-            ->otherwise(function (Throwable $e) {
-                if ($e instanceof BadResponse && 404 === $e->getResponse()->getStatusCode()) {
-                    throw new NotFoundHttpException('Interview not found', $e);
-                }
-            });
+            ->getInterview(['Accept' => new MediaType(InterviewsClient::TYPE_INTERVIEW, 1)], $id);
 
         $arguments['contentHeader'] = $arguments['interview']
             ->then(function (Result $interview) {

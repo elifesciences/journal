@@ -4,7 +4,6 @@ namespace eLife\Journal\Controller;
 
 use DateTimeImmutable;
 use eLife\ApiClient\ApiClient\PodcastClient;
-use eLife\ApiClient\Exception\BadResponse;
 use eLife\ApiClient\MediaType;
 use eLife\ApiClient\Result;
 use eLife\Patterns\ViewModel\AudioPlayer;
@@ -23,8 +22,6 @@ use eLife\Patterns\ViewModel\Meta;
 use eLife\Patterns\ViewModel\Picture;
 use eLife\Patterns\ViewModel\PodcastDownload;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Throwable;
 
 final class PodcastController extends Controller
 {
@@ -58,12 +55,7 @@ final class PodcastController extends Controller
         $arguments = $this->defaultPageArguments();
 
         $arguments['episode'] = $this->get('elife.api_client.podcast')
-            ->getEpisode(['Accept' => new MediaType(PodcastClient::TYPE_PODCAST_EPISODE, 1)], $number)
-            ->otherwise(function (Throwable $e) {
-                if ($e instanceof BadResponse && 404 === $e->getResponse()->getStatusCode()) {
-                    throw new NotFoundHttpException('Episode not found', $e);
-                }
-            });
+            ->getEpisode(['Accept' => new MediaType(PodcastClient::TYPE_PODCAST_EPISODE, 1)], $number);
 
         $arguments['contentHeader'] = $arguments['episode']
             ->then(function (Result $episode) {

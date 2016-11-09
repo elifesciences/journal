@@ -4,7 +4,6 @@ namespace eLife\Journal\Controller;
 
 use DateTimeImmutable;
 use eLife\ApiClient\ApiClient\ArticlesClient;
-use eLife\ApiClient\Exception\BadResponse;
 use eLife\ApiClient\MediaType;
 use eLife\ApiClient\Result;
 use eLife\Patterns\ViewModel;
@@ -25,7 +24,6 @@ use eLife\Patterns\ViewModel\SubjectList;
 use eLife\Patterns\ViewModel\ViewSelector;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Throwable;
 use function GuzzleHttp\Promise\all;
 
 final class ArticlesController extends Controller
@@ -41,12 +39,6 @@ final class ArticlesController extends Controller
                     new MediaType(ArticlesClient::TYPE_ARTICLE_VOR, 1),
                 ],
             ], $id)
-            ->otherwise(function (Throwable $e) {
-                if ($e instanceof BadResponse && 404 === $e->getResponse()->getStatusCode()) {
-                    throw new NotFoundHttpException('Article not found', $e);
-                }
-                throw $e;
-            })
             ->then(function (Result $result) use ($volume) {
                 if ($volume !== $result['volume']) {
                     throw new NotFoundHttpException('Incorrect volume');

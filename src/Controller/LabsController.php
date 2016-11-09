@@ -4,7 +4,6 @@ namespace eLife\Journal\Controller;
 
 use DateTimeImmutable;
 use eLife\ApiClient\ApiClient\LabsClient;
-use eLife\ApiClient\Exception\BadResponse;
 use eLife\ApiClient\MediaType;
 use eLife\ApiClient\Result;
 use eLife\Patterns\ViewModel\BackgroundImage;
@@ -15,8 +14,6 @@ use eLife\Patterns\ViewModel\LeadPara;
 use eLife\Patterns\ViewModel\LeadParas;
 use eLife\Patterns\ViewModel\Meta;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Throwable;
 
 final class LabsController extends Controller
 {
@@ -56,12 +53,7 @@ developed further to become features on the eLife platform.'),
         $arguments = $this->defaultPageArguments();
 
         $arguments['experiment'] = $this->get('elife.api_client.labs')
-            ->getExperiment(['Accept' => new MediaType(LabsClient::TYPE_EXPERIMENT, 1)], $number)
-            ->otherwise(function (Throwable $e) {
-                if ($e instanceof BadResponse && 404 === $e->getResponse()->getStatusCode()) {
-                    throw new NotFoundHttpException('Experiment not found', $e);
-                }
-            });
+            ->getExperiment(['Accept' => new MediaType(LabsClient::TYPE_EXPERIMENT, 1)], $number);
 
         $arguments['contentHeader'] = $arguments['experiment']
             ->then(function (Result $experiment) {

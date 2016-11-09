@@ -4,7 +4,6 @@ namespace eLife\Journal\Controller;
 
 use DateTimeImmutable;
 use eLife\ApiClient\ApiClient\CollectionsClient;
-use eLife\ApiClient\Exception\BadResponse;
 use eLife\ApiClient\MediaType;
 use eLife\ApiClient\Result;
 use eLife\Patterns\ViewModel\BackgroundImage;
@@ -16,8 +15,6 @@ use eLife\Patterns\ViewModel\Link;
 use eLife\Patterns\ViewModel\ListHeading;
 use eLife\Patterns\ViewModel\Meta;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Throwable;
 
 final class CollectionsController extends Controller
 {
@@ -56,12 +53,7 @@ final class CollectionsController extends Controller
         $arguments = $this->defaultPageArguments();
 
         $arguments['collection'] = $this->get('elife.api_client.collections')
-            ->getCollection(['Accept' => new MediaType(CollectionsClient::TYPE_COLLECTION, 1)], $id)
-            ->otherwise(function (Throwable $e) {
-                if ($e instanceof BadResponse && 404 === $e->getResponse()->getStatusCode()) {
-                    throw new NotFoundHttpException('Collection not found', $e);
-                }
-            });
+            ->getCollection(['Accept' => new MediaType(CollectionsClient::TYPE_COLLECTION, 1)], $id);
 
         $arguments['contentHeader'] = $arguments['collection']
             ->then(function (Result $collection) {

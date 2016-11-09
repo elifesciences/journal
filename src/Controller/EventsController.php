@@ -3,15 +3,12 @@
 namespace eLife\Journal\Controller;
 
 use eLife\ApiClient\ApiClient\EventsClient;
-use eLife\ApiClient\Exception\BadResponse;
 use eLife\ApiClient\MediaType;
 use eLife\ApiClient\Result;
 use eLife\Patterns\ViewModel\ContentHeaderNonArticle;
 use eLife\Patterns\ViewModel\LeadPara;
 use eLife\Patterns\ViewModel\LeadParas;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Throwable;
 
 final class EventsController extends Controller
 {
@@ -49,12 +46,7 @@ final class EventsController extends Controller
         $arguments = $this->defaultPageArguments();
 
         $arguments['event'] = $this->get('elife.api_client.events')
-            ->getEvent(['Accept' => new MediaType(EventsClient::TYPE_EVENT, 1)], $id)
-            ->otherwise(function (Throwable $e) {
-                if ($e instanceof BadResponse && 404 === $e->getResponse()->getStatusCode()) {
-                    throw new NotFoundHttpException('Event not found', $e);
-                }
-            });
+            ->getEvent(['Accept' => new MediaType(EventsClient::TYPE_EVENT, 1)], $id);
 
         $arguments['contentHeader'] = $arguments['event']
             ->then(function (Result $event) {
