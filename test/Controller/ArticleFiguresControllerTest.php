@@ -94,7 +94,7 @@ final class ArticleFiguresControllerTest extends PageTestCase
                     'version' => 1,
                     'type' => 'research-article',
                     'doi' => '10.7554/eLife.00001',
-                    'title' => 'Article title',
+                    'title' => 'Article 1 title',
                     'published' => '2010-01-01T00:00:00+00:00',
                     'statusDate' => '2010-01-01T00:00:00+00:00',
                     'volume' => 1,
@@ -166,7 +166,7 @@ final class ArticleFiguresControllerTest extends PageTestCase
                     'copyright' => [
                         'license' => 'CC-BY-4.0',
                         'holder' => 'Bar',
-                        'statement' => 'Copyright statement.',
+                        'statement' => 'Copyright statement',
                     ],
                     'authorLine' => 'Foo Bar',
                     'authors' => [
