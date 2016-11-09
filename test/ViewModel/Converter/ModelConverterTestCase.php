@@ -4,6 +4,7 @@ namespace test\eLife\Journal\ViewModel\Converter;
 
 use PHPUnit_Framework_TestCase;
 use eLife\ApiSdk\Model\Block;
+use eLife\ApiSdk\Model\Model;
 use eLife\Journal\ViewModel\Paragraph;
 use eLife\Patterns\ViewModel\ContentHeaderNonArticle;
 
@@ -38,9 +39,10 @@ class ModelConverterTestCase extends PHPUnit_Framework_TestCase
         $file = file_get_contents($path);
 
         $model = json_decode($file, true);
-        $model = $this->modelHook($model);
+        $model = $this->dataHook($model);
 
         $model = $this->serializer->denormalize($model, $this->class);
+        $model = $this->modelHook($model);
 
         $this->assertTrue(
             $this->converter->supports($model, $this->viewModelClass, $this->context),
@@ -86,7 +88,15 @@ class ModelConverterTestCase extends PHPUnit_Framework_TestCase
         $this->assertFalse($this->converter->supports($block));
     }
 
-    protected function modelHook(array $model) : array
+    protected function dataHook(array $model) : array
+    {
+        return $model;
+    }
+
+    /**
+     * @return object
+     */
+    protected function modelHook(Model $model)
     {
         return $model;
     }

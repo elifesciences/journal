@@ -25,7 +25,7 @@ final class MediumArticleSecondaryTeaserConverterTest extends ModelConverterTest
         $this->converter = new MediumArticleSecondaryTeaserConverter($this->urlGenerator);
     }
 
-    protected function modelHook(array $model) : array
+    protected function dataHook(array $model) : array
     {
         return $model['items'][0];
     }
