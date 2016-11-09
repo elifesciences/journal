@@ -42,7 +42,7 @@ final class ArticleTeaserConverter implements ViewModelConverter
                     ucfirst(str_replace('-', ' ', $object->getType())),
                     new ViewModel\Date($object->getStatusDate())
                 ),
-                true
+                $object instanceof ArticleVoR
             )
         );
     }
