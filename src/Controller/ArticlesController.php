@@ -221,6 +221,15 @@ final class ArticlesController extends Controller
     {
         $arguments = $this->articlePageArguments($volume, $id);
 
+        $arguments['article'] = $arguments['article']
+            ->then(function (ArticleVersion $article) {
+                if (false === $article instanceof ArticleVoR) {
+                    throw new NotFoundHttpException('Article is not a VoR');
+                }
+
+                return $article;
+            });
+
         $arguments['body'] = $arguments['article']
             ->then(function (ArticleVoR $article) {
                 $figures = $this->findFigures($article);
