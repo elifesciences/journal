@@ -2,25 +2,16 @@
 
 namespace eLife\Journal\Controller;
 
-use DateTimeImmutable;
-use eLife\ApiClient\ApiClient\ArticlesClient;
-use eLife\ApiClient\MediaType;
-use eLife\ApiClient\Result;
+use eLife\ApiSdk\Model\ArticleVersion;
+use eLife\ApiSdk\Model\ArticleVoR;
+use eLife\ApiSdk\Model\Block;
 use eLife\Patterns\ViewModel;
 use eLife\Patterns\ViewModel\ArticleSection;
-use eLife\Patterns\ViewModel\Author;
-use eLife\Patterns\ViewModel\AuthorList;
-use eLife\Patterns\ViewModel\BackgroundImage;
 use eLife\Patterns\ViewModel\ContentHeaderArticle;
 use eLife\Patterns\ViewModel\ContextualData;
-use eLife\Patterns\ViewModel\Date;
 use eLife\Patterns\ViewModel\Doi;
 use eLife\Patterns\ViewModel\InfoBar;
-use eLife\Patterns\ViewModel\Institution;
-use eLife\Patterns\ViewModel\InstitutionList;
 use eLife\Patterns\ViewModel\Link;
-use eLife\Patterns\ViewModel\Meta;
-use eLife\Patterns\ViewModel\SubjectList;
 use eLife\Patterns\ViewModel\ViewSelector;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -32,112 +23,29 @@ final class ArticlesController extends Controller
     {
         $arguments = $this->defaultPageArguments();
 
-        $arguments['article'] = $this->get('elife.api_client.articles')
-            ->getArticleLatestVersion([
-                'Accept' => [
-                    new MediaType(ArticlesClient::TYPE_ARTICLE_POA, 1),
-                    new MediaType(ArticlesClient::TYPE_ARTICLE_VOR, 1),
-                ],
-            ], $id)
-            ->then(function (Result $result) use ($volume) {
-                if ($volume !== $result['volume']) {
+        $arguments['article'] = $this->get('elife.api_sdk.articles')
+            ->get($id)
+            ->then(function (ArticleVersion $article) use ($volume) {
+                if ($volume !== $article->getVolume()) {
                     throw new NotFoundHttpException('Incorrect volume');
                 }
 
-                return $result;
+                return $article;
             });
 
         $arguments['articleTitle'] = $arguments['article']
-            ->then(function (Result $article) {
-                return $this->getArticleTitle($article);
+            ->then(function (ArticleVersion $article) {
+                return $article->getFullTitle();
             });
 
         $arguments['contentHeader'] = $arguments['article']
-            ->then(function (Result $article) {
-                $subjects = array_map(function (array $subject) {
-                    return new Link($subject['name'],
-                        $this->get('router')->generate('subject', ['id' => $subject['id']]));
-                }, $article['subjects'] ?? []);
-
-                $authors = array_merge(...array_map(function (array $author) {
-                    $authors = [];
-
-                    switch ($type = $author['type'] ?? 'unknown') {
-                        case 'person':
-                            $authors[] = Author::asText($author['name']['preferred']);
-                            break;
-                        case 'group':
-                            $authors[] = Author::asText($author['name']);
-                            break;
-                        case 'on-behalf-of':
-                            $authors[] = Author::asText($author['onBehalfOf']);
-                            break;
-                        default:
-                            throw new \RuntimeException('Unknown type '.$type);
-                    }
-
-                    return $authors;
-                }, $article['authors']));
-
-                $institutions = array_map(function (string $name) {
-                    return new Institution($name);
-                }, array_values(array_unique(array_merge(...array_map(function (array $author) {
-                    $institutions = [];
-                    foreach ($author['affiliations'] ?? [] as $affiliation) {
-                        $name = end($affiliation['name']);
-                        if (!empty($affiliation['address']['components']['country'])) {
-                            $name .= ', '.$affiliation['address']['components']['country'];
-                        }
-                        $institutions[] = $name;
-                    }
-
-                    return $institutions;
-                }, $article['authors'])))));
-
-                $authors = AuthorList::asList($authors);
-                $institutions = !empty($institutions) ? new InstitutionList($institutions) : null;
-
-                switch ($article['type']) {
-                    case 'research-advance':
-                    case 'research-article':
-                    case 'research-exchange':
-                    case 'replication-study':
-                    case 'short-report':
-                    case 'tools-resources':
-                        return ContentHeaderArticle::research(
-                            $this->getArticleTitle($article),
-                            $authors,
-                            Meta::withText(
-                                ucfirst(str_replace('-', ' ', $article['type'])),
-                                new Date(DateTimeImmutable::createFromFormat(DATE_ATOM, $article['published']))
-                            ),
-                            new SubjectList(...$subjects),
-                            $institutions
-                        );
-                }
-
-                return ContentHeaderArticle::magazine(
-                    $this->getArticleTitle($article),
-                    $article['impactStatement'],
-                    $authors,
-                    null,
-                    new SubjectList(...$subjects),
-                    Meta::withText(
-                        ucfirst(str_replace('-', ' ', $article['type'])),
-                        new Date(DateTimeImmutable::createFromFormat(DATE_ATOM, $article['published']))
-                    ),
-                    $institutions,
-                    false,
-                    !empty($article['image']['banner']) ? new BackgroundImage(
-                        $article['image']['banner']['sizes']['2:1'][900],
-                        $article['image']['banner']['sizes']['2:1'][1800]
-                    ) : null
-                );
+            ->then(function (ArticleVersion $article) {
+                return $this->get('elife.journal.view_model.converter')->convert($article, ContentHeaderArticle::class);
             });
 
         $arguments['infoBars'] = $arguments['article']
-            ->then(function (Result $article) {
-                if ('vor' === $article['status']) {
+            ->then(function (ArticleVersion $article) {
+                if ($article instanceof ArticleVoR) {
                     return [];
                 }
 
@@ -145,101 +53,143 @@ final class ArticlesController extends Controller
             });
 
         $arguments['contextualData'] = $arguments['article']
-            ->then(function (Result $article) {
+            ->then(function (ArticleVersion $article) {
                 return ContextualData::withCitation(
-                    sprintf('eLife %s;%s:%s', 2011 + $article['volume'], $article['volume'], $article['elocationId']),
-                    new Doi($article['doi'])
+                    sprintf('eLife %s;%s:%s', 2011 + $article->getVolume(), $article->getVolume(), $article->getElocationId()),
+                    new Doi($article->getDoi())
                 );
             });
 
         $arguments['body'] = $arguments['article']
-            ->then(function (Result $article) {
+            ->then(function (ArticleVersion $article) {
                 $parts = [];
 
                 $first = true;
 
-                if (false === empty($article['abstract'])) {
+                if ($article->getAbstract()) {
                     $parts[] = ArticleSection::collapsible(
                         'abstract',
                         'Abstract',
                         2,
-                        implode('', array_map(function (ViewModel $viewModel) {
-                            return $this->get('elife.patterns.pattern_renderer')->render($viewModel);
-                        }, iterator_to_array($this->get('elife.website.view_model.block_converter')
-                            ->handleLevelledBlocks($article['abstract']['content'], 2)))),
+                        $article->getAbstract()->getContent()
+                            ->map(function (Block $block) {
+                                return $this->get('elife.journal.view_model.converter')->convert($block, null, ['level' => 2]);
+                            })
+                            ->reduce(function (string $carry, ViewModel $viewModel) {
+                                return $carry.$this->get('elife.patterns.pattern_renderer')->render($viewModel);
+                            }, ''),
                         false,
                         $first,
-                        empty($article['abstract']['doi']) ? null : new Doi($article['abstract']['doi'])
+                        $article->getAbstract()->getDoi() ? new Doi($article->getAbstract()->getDoi()) : null
                     );
 
                     $first = false;
                 }
 
-                if (false === empty($article['digest'])) {
+                if ($article instanceof ArticleVoR && $article->getDigest()) {
                     $parts[] = ArticleSection::collapsible(
                         'digest',
                         'eLife digest',
                         2,
-                        implode('', array_map(function (ViewModel $viewModel) {
-                            return $this->get('elife.patterns.pattern_renderer')->render($viewModel);
-                        }, iterator_to_array($this->get('elife.website.view_model.block_converter')
-                            ->handleLevelledBlocks($article['digest']['content'], 2)))),
+                        $article->getDigest()->getContent()
+                            ->map(function (Block $block) {
+                                return $this->get('elife.journal.view_model.converter')->convert($block, null, ['level' => 2]);
+                            })
+                            ->reduce(function (string $carry, ViewModel $viewModel) {
+                                return $carry.$this->get('elife.patterns.pattern_renderer')->render($viewModel);
+                            }, ''),
                         false,
                         $first,
-                        new Doi($article['digest']['doi'])
+                        new Doi($article->getAbstract()->getDoi())
                     );
 
                     $first = false;
                 }
 
-                if (false === empty($article['body'])) {
-                    if (empty($parts) && 1 === count($article['body'])) {
-                        $parts = $this->get('elife.website.view_model.block_converter')
-                            ->handleBlocks(...$article['body'][0]['content']);
+                if ($article instanceof ArticleVoR) {
+                    if (empty($parts) && 1 === count($article->getContent())) {
+                        $parts = array_map(function (Block $block) {
+                            return $this->get('elife.journal.view_model.converter')->convert($block, null, ['level' => 2]);
+                        }, $article->getContent()[0]->getContent());
                     } else {
-                        foreach ($article['body'] as $i => $part) {
-                            $parts[] = ArticleSection::collapsible($part['id'], $part['title'], 2,
-                                implode('', array_map(function (ViewModel $viewModel) {
-                                    return $this->get('elife.patterns.pattern_renderer')->render($viewModel);
-                                }, iterator_to_array($this->get('elife.website.view_model.block_converter')
-                                    ->handleLevelledBlocks($part['content'], 2)))), $i > 0, $first);
+                        $isInitiallyClosed = false;
+
+                        $parts = array_merge($parts, $article->getContent()->map(function (Block\Section $section) use (&$first, &$isInitiallyClosed) {
+                            $section = ArticleSection::collapsible(
+                                $section->getId(),
+                                $section->getTitle(),
+                                2,
+                                array_reduce(array_map(function (Block $block) {
+                                    return $this->get('elife.journal.view_model.converter')->convert($block, null, ['level' => 2]);
+                                }, $section->getContent()), function (string $carry, ViewModel $viewModel) {
+                                    return $carry.$this->get('elife.patterns.pattern_renderer')->render($viewModel);
+                                }, ''),
+                                $isInitiallyClosed,
+                                $first
+                            );
 
                             $first = false;
+                            $isInitiallyClosed = true;
+
+                            return $section;
+                        })->toArray());
+
+                        if ($article->getDecisionLetter()) {
+                            $parts[] = ArticleSection::collapsible(
+                                'decision-letter',
+                                'Decision letter',
+                                2,
+                                $article->getDecisionLetter()->getContent()
+                                    ->map(function (Block $block) {
+                                        return $this->get('elife.journal.view_model.converter')->convert($block, null, ['level' => 2]);
+                                    })
+                                    ->reduce(function (string $carry, ViewModel $viewModel) {
+                                        return $carry.$this->get('elife.patterns.pattern_renderer')->render($viewModel);
+                                    }, ''),
+                                true,
+                                false,
+                                new Doi($article->getDecisionLetter()->getDoi())
+                            );
                         }
 
-                        if (!empty($article['decisionLetter']['content'])) {
-                            $parts[] = ArticleSection::collapsible('decision-letter', 'Decision letter', 2,
-                                implode('', array_map(function (ViewModel $viewModel) {
-                                    return $this->get('elife.patterns.pattern_renderer')->render($viewModel);
-                                }, iterator_to_array($this->get('elife.website.view_model.block_converter')
-                                    ->handleLevelledBlocks($article['decisionLetter']['content'], 2)))), true, false,
-                                new Doi($article['decisionLetter']['doi']));
-                        }
-
-                        if (!empty($article['authorResponse'])) {
-                            $parts[] = ArticleSection::collapsible('author-response', 'Author response', 2,
-                                implode('', array_map(function (ViewModel $viewModel) {
-                                    return $this->get('elife.patterns.pattern_renderer')->render($viewModel);
-                                }, iterator_to_array($this->get('elife.website.view_model.block_converter')
-                                    ->handleLevelledBlocks($article['authorResponse']['content'], 2)))), true, false,
-                                new Doi($article['authorResponse']['doi']));
+                        if ($article->getAuthorResponse()) {
+                            $parts[] = ArticleSection::collapsible(
+                                'author-response',
+                                'Author response',
+                                2,
+                                $article->getAuthorResponse()->getContent()
+                                    ->map(function (Block $block) {
+                                        return $this->get('elife.journal.view_model.converter')->convert($block, null, ['level' => 2]);
+                                    })
+                                    ->reduce(function (string $carry, ViewModel $viewModel) {
+                                        return $carry.$this->get('elife.patterns.pattern_renderer')->render($viewModel);
+                                    }, ''),
+                                true,
+                                false,
+                                new Doi($article->getAuthorResponse()->getDoi())
+                            );
                         }
 
                         $infoSections = [];
 
-                        if (!empty($article['acknowledgements'])) {
-                            $infoSections[] = ArticleSection::basic('Acknowledgements', 3,
-                                implode('', array_map(function (ViewModel $viewModel) {
-                                    return $this->get('elife.patterns.pattern_renderer')->render($viewModel);
-                                }, iterator_to_array($this->get('elife.website.view_model.block_converter')
-                                    ->handleLevelledBlocks($article['acknowledgements'], 3)))));
+                        if ($article->getAcknowledgements()->notEmpty()) {
+                            $infoSections[] = ArticleSection::basic(
+                                'Acknowledgements',
+                                3,
+                                $article->getAcknowledgements()
+                                    ->map(function (Block $block) {
+                                        return $this->get('elife.journal.view_model.converter')->convert($block, null, ['level' => 3]);
+                                    })
+                                    ->reduce(function (string $carry, ViewModel $viewModel) {
+                                        return $carry.$this->get('elife.patterns.pattern_renderer')->render($viewModel);
+                                    }, '')
+                            );
                         }
 
-                        $copyright = '<p>'.$article['copyright']['statement'].'</p>';
+                        $copyright = '<p>'.$article->getCopyright()->getStatement().'</p>';
 
-                        if (false === empty($article['copyright']['holder'])) {
-                            $copyright = sprintf('<p>© %s, %s</p>', 2011 + $article['volume'],
-                                    $article['copyright']['holder']).$copyright;
+                        if ($article->getCopyright()->getHolder()) {
+                            $copyright = sprintf('<p>© %s, %s.</p>', 2011 + $article->getVolume(), $article->getCopyright()->getHolder()).$copyright;
                         }
 
                         $infoSections[] = ArticleSection::basic('Copyright', 3, $copyright);
@@ -261,6 +211,7 @@ final class ArticlesController extends Controller
 
         $arguments['viewSelector'] = all(['article' => $arguments['article'], 'body' => $arguments['body']])
             ->then(function (array $sections) {
+                /** @var ArticleVersion $article */
                 $article = $sections['article'];
                 $body = $sections['body'];
 
@@ -269,7 +220,7 @@ final class ArticlesController extends Controller
                 }
 
                 return new ViewSelector(
-                    $this->get('router')->generate('article', ['id' => $article['id'], 'volume' => $article['volume']]),
+                    $this->get('router')->generate('article', ['id' => $article->getId(), 'volume' => $article->getVolume()]),
                     array_map(function (ArticleSection $section) {
                         return new Link($section['title'], '#'.$section['id']);
                     }, $body)
@@ -277,14 +228,5 @@ final class ArticlesController extends Controller
             });
 
         return new Response($this->get('templating')->render('::article.html.twig', $arguments));
-    }
-
-    private function getArticleTitle(Result $article)
-    {
-        if (empty($article['titlePrefix'])) {
-            return $article['title'];
-        }
-
-        return sprintf('%s: %s', $article['titlePrefix'], $article['title']);
     }
 }

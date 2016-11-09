@@ -2,25 +2,18 @@
 
 namespace eLife\Journal\Controller;
 
-use DateTimeImmutable;
-use eLife\ApiClient\ApiClient\PodcastClient;
-use eLife\ApiClient\MediaType;
-use eLife\ApiClient\Result;
+use eLife\ApiSdk\Collection\Sequence;
+use eLife\ApiSdk\Model\Model;
+use eLife\ApiSdk\Model\PodcastEpisode;
+use eLife\ApiSdk\Model\PodcastEpisodeChapter;
 use eLife\Patterns\ViewModel\AudioPlayer;
-use eLife\Patterns\ViewModel\BackgroundImage;
 use eLife\Patterns\ViewModel\ContentHeaderNonArticle;
-use eLife\Patterns\ViewModel\Date;
 use eLife\Patterns\ViewModel\GridListing;
-use eLife\Patterns\ViewModel\Image;
 use eLife\Patterns\ViewModel\LeadPara;
 use eLife\Patterns\ViewModel\LeadParas;
-use eLife\Patterns\ViewModel\Link;
+use eLife\Patterns\ViewModel\ListingTeasers;
 use eLife\Patterns\ViewModel\MediaChapterListingItem;
-use eLife\Patterns\ViewModel\MediaSource;
-use eLife\Patterns\ViewModel\MediaType as MediaSourceType;
-use eLife\Patterns\ViewModel\Meta;
-use eLife\Patterns\ViewModel\Picture;
-use eLife\Patterns\ViewModel\PodcastDownload;
+use eLife\Patterns\ViewModel\Teaser;
 use Symfony\Component\HttpFoundation\Response;
 
 final class PodcastController extends Controller
@@ -34,17 +27,16 @@ final class PodcastController extends Controller
 
         $arguments['contentHeader'] = ContentHeaderNonArticle::basic('eLife podcast');
 
-        $arguments['episodes'] = $this->get('elife.api_client.podcast')
-            ->listEpisodes(['Accept' => new MediaType(PodcastClient::TYPE_PODCAST_EPISODE_LIST, 1)], $page, $perPage)
-            ->then(function (Result $result) {
-                if (empty($result['items'])) {
+        $arguments['episodes'] = $this->get('elife.api_sdk.podcast_episodes')
+            ->slice(($page * $perPage) - $perPage, $perPage)
+            ->then(function (Sequence $episodes) {
+                if ($episodes->isEmpty()) {
                     return null;
                 }
 
-                return GridListing::forTeasers(array_map(function (array $episode) {
-                    return $this->get('elife.journal.view_model.factory.teaser_grid')
-                        ->forPodcastEpisode($episode);
-                }, $result['items']), 'Latest episodes');
+                return GridListing::forTeasers($episodes->map(function (PodcastEpisode $episode) {
+                    return $this->get('elife.journal.view_model.converter')->convert($episode, Teaser::class, ['variant' => 'grid']);
+                })->toArray(), 'Latest episodes');
             });
 
         return new Response($this->get('templating')->render('::podcast.html.twig', $arguments));
@@ -54,101 +46,47 @@ final class PodcastController extends Controller
     {
         $arguments = $this->defaultPageArguments();
 
-        $arguments['episode'] = $this->get('elife.api_client.podcast')
-            ->getEpisode(['Accept' => new MediaType(PodcastClient::TYPE_PODCAST_EPISODE, 1)], $number);
+        $arguments['episode'] = $this->get('elife.api_sdk.podcast_episodes')->get($number);
 
         $arguments['contentHeader'] = $arguments['episode']
-            ->then(function (Result $episode) {
-                return ContentHeaderNonArticle::podcast($episode['title'], false, 'Episode '.$episode['number'], null,
-                    Meta::withLink(new Link('Podcast', $this->get('router')->generate('podcast')),
-                        new Date(DateTimeImmutable::createFromFormat(DATE_ATOM, $episode['published']))),
-                    new BackgroundImage(
-                        $episode['image']['banner']['sizes']['2:1'][900],
-                        $episode['image']['banner']['sizes']['2:1'][1800]
-                    ),
-                    new PodcastDownload(
-                        $episode['sources'][0]['uri'],
-                        new Picture(
-                            [
-                                [
-                                    'srcset' => $this->get('puli.url_generator')
-                                        ->generateUrl('/elife/patterns/assets/img/icons/download-full-reverse.svg'),
-                                    'media' => '(min-width: 35em)',
-                                    'type' => 'image/svg+xml',
-                                ],
-                                [
-                                    'srcset' => $this->get('puli.url_generator')
-                                        ->generateUrl('/elife/patterns/assets/img/icons/download-full-reverse-1x.png'),
-                                    'media' => '(min-width: 35em)',
-                                ],
-                                [
-                                    'srcset' => $this->get('puli.url_generator')
-                                        ->generateUrl('/elife/patterns/assets/img/icons/download-reverse.svg'),
-                                    'type' => 'image/svg+xml',
-                                ],
-                            ],
-                            new Image(
-                                $this->get('puli.url_generator')
-                                    ->generateUrl('/elife/patterns/assets/img/icons/download-full-reverse-1x.png'),
-                                [
-                                    88 => $this->get('puli.url_generator')
-                                        ->generateUrl('/elife/patterns/assets/img/icons/download-full-reverse-2x.png'),
-                                    44 => $this->get('puli.url_generator')
-                                        ->generateUrl('/elife/patterns/assets/img/icons/download-full-reverse-1x.png'),
-                                ],
-                                'Download icon'
-                            )
-                        )
-                    )
-                );
+            ->then(function (PodcastEpisode $episode) {
+                return $this->get('elife.journal.view_model.converter')->convert($episode, ContentHeaderNonArticle::class);
             });
 
-        $chapterListing = $arguments['episode']
-            ->then(function (Result $episode) {
-                return [
-                    'episode' => $episode,
-                    'chapterListing' => array_map(function (array $chapter) {
-                        return new MediaChapterListingItem($chapter['title'], $chapter['time'], $chapter['number'],
-                            $chapter['impactStatement'] ?? null);
-                    }, $episode['chapters']),
-                ];
-            });
-
-        $arguments['audioPlayer'] = $chapterListing
-            ->then(function (array $results) {
-                return new AudioPlayer(
-                    $results['episode']['number'],
-                    'Episode '.$results['episode']['number'],
-                    array_map(function (array $source) {
-                        return new MediaSource($source['uri'], new MediaSourceType($source['mediaType']));
-                    }, $results['episode']['sources']),
-                    $results['chapterListing']
-                );
+        $arguments['audioPlayer'] = $arguments['episode']
+            ->then(function (PodcastEpisode $episode) {
+                return $this->get('elife.journal.view_model.converter')->convert($episode, AudioPlayer::class);
             });
 
         $arguments['leadParas'] = $arguments['episode']
-            ->then(function (Result $episode) {
-                return new LeadParas([new LeadPara($episode['impactStatement'])]);
+            ->then(function (PodcastEpisode $episode) {
+                return new LeadParas([new LeadPara($episode->getImpactStatement())]);
             })
             ->otherwise(function () {
                 return null;
             });
 
-        $arguments['chapters'] = $chapterListing
-            ->then(function (array $results) {
-                return $results['chapterListing'];
+        $arguments['chapters'] = $arguments['episode']
+            ->then(function (PodcastEpisode $episode) {
+                return $episode->getChapters()->map(function (PodcastEpisodeChapter $chapter) {
+                    return $this->get('elife.journal.view_model.converter')->convert($chapter, MediaChapterListingItem::class);
+                });
             });
 
         $arguments['related'] = $arguments['episode']
-            ->then(function (Result $episode) {
+            ->then(function (PodcastEpisode $episode) {
                 $articles = [];
 
-                foreach ($episode['chapters'] as $chapter) {
-                    $articles[] = $chapter['content'][0];
+                foreach ($episode->getChapters() as $chapter) {
+                    $articles = array_merge($articles, $chapter->getContent()->slice(0, 1)->toArray());
                 }
 
-                return $this->get('elife.journal.view_model.factory.listing_teaser_secondary')
-                    ->forItems($articles, 'Related');
+                return ListingTeasers::basic(
+                    array_map(function (Model $model) {
+                        return $this->get('elife.journal.view_model.converter')->convert($model, Teaser::class, ['variant' => 'secondary']);
+                    }, $articles),
+                    'Related'
+                );
             });
 
         return new Response($this->get('templating')->render('::podcast-episode.html.twig', $arguments));

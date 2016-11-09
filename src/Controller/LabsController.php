@@ -2,17 +2,14 @@
 
 namespace eLife\Journal\Controller;
 
-use DateTimeImmutable;
-use eLife\ApiClient\ApiClient\LabsClient;
-use eLife\ApiClient\MediaType;
-use eLife\ApiClient\Result;
-use eLife\Patterns\ViewModel\BackgroundImage;
+use eLife\ApiSdk\Collection\Sequence;
+use eLife\ApiSdk\Model\Block;
+use eLife\ApiSdk\Model\LabsExperiment;
 use eLife\Patterns\ViewModel\ContentHeaderNonArticle;
-use eLife\Patterns\ViewModel\Date;
 use eLife\Patterns\ViewModel\GridListing;
 use eLife\Patterns\ViewModel\LeadPara;
 use eLife\Patterns\ViewModel\LeadParas;
-use eLife\Patterns\ViewModel\Meta;
+use eLife\Patterns\ViewModel\Teaser;
 use Symfony\Component\HttpFoundation\Response;
 
 final class LabsController extends Controller
@@ -32,17 +29,16 @@ developed further to become features on the eLife platform.'),
             new LeadPara('Feedback welcome!'),
         ]);
 
-        $arguments['experiments'] = $this->get('elife.api_client.labs')
-            ->listExperiments(['Accept' => new MediaType(LabsClient::TYPE_EXPERIMENT_LIST, 1)], $page, $perPage)
-            ->then(function (Result $result) {
-                if (empty($result['items'])) {
+        $arguments['experiments'] = $this->get('elife.api_sdk.labs_experiments')
+            ->slice(($page * $perPage) - $perPage, $perPage)
+            ->then(function (Sequence $experiments) {
+                if ($experiments->isEmpty()) {
                     return null;
                 }
 
-                return GridListing::forTeasers(array_map(function (array $experiment) {
-                    return $this->get('elife.journal.view_model.factory.teaser_grid')
-                        ->forExperiment($experiment);
-                }, $result['items']), 'Experiments');
+                return GridListing::forTeasers($experiments->map(function (LabsExperiment $experiment) {
+                    return $this->get('elife.journal.view_model.converter')->convert($experiment, Teaser::class, ['variant' => 'grid']);
+                })->toArray(), 'Experiments');
             });
 
         return new Response($this->get('templating')->render('::labs.html.twig', $arguments));
@@ -52,32 +48,26 @@ developed further to become features on the eLife platform.'),
     {
         $arguments = $this->defaultPageArguments();
 
-        $arguments['experiment'] = $this->get('elife.api_client.labs')
-            ->getExperiment(['Accept' => new MediaType(LabsClient::TYPE_EXPERIMENT, 1)], $number);
+        $arguments['experiment'] = $this->get('elife.api_sdk.labs_experiments')->get($number);
 
         $arguments['contentHeader'] = $arguments['experiment']
-            ->then(function (Result $experiment) {
-                return ContentHeaderNonArticle::basic($experiment['title'], false, null, null,
-                    Meta::withText('Experiment: '.str_pad($experiment['number'], 3, '0', STR_PAD_LEFT),
-                        new Date(DateTimeImmutable::createFromFormat(DATE_ATOM, $experiment['published']))),
-                    new BackgroundImage(
-                        $experiment['image']['banner']['sizes']['2:1'][900],
-                        $experiment['image']['banner']['sizes']['2:1'][1800]
-                    )
-                );
+            ->then(function (LabsExperiment $experiment) {
+                return $this->get('elife.journal.view_model.converter')->convert($experiment, ContentHeaderNonArticle::class);
             });
 
         $arguments['leadParas'] = $arguments['experiment']
-            ->then(function (Result $experiment) {
-                return new LeadParas([new LeadPara($experiment['impactStatement'])]);
+            ->then(function (LabsExperiment $experiment) {
+                return new LeadParas([new LeadPara($experiment->getImpactStatement())]);
             })
             ->otherwise(function () {
                 return null;
             });
 
         $arguments['blocks'] = $arguments['experiment']
-            ->then(function (Result $experiment) {
-                return $this->get('elife.website.view_model.block_converter')->handleBlocks(...$experiment['content']);
+            ->then(function (LabsExperiment $experiment) {
+                return $experiment->getContent()->map(function (Block $block) {
+                    return $this->get('elife.journal.view_model.converter')->convert($block);
+                });
             });
 
         return new Response($this->get('templating')->render('::labs-experiment.html.twig', $arguments));

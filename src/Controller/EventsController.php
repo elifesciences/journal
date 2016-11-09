@@ -2,12 +2,14 @@
 
 namespace eLife\Journal\Controller;
 
-use eLife\ApiClient\ApiClient\EventsClient;
-use eLife\ApiClient\MediaType;
-use eLife\ApiClient\Result;
+use eLife\ApiSdk\Collection\Sequence;
+use eLife\ApiSdk\Model\Block;
+use eLife\ApiSdk\Model\Event;
 use eLife\Patterns\ViewModel\ContentHeaderNonArticle;
 use eLife\Patterns\ViewModel\LeadPara;
 use eLife\Patterns\ViewModel\LeadParas;
+use eLife\Patterns\ViewModel\ListingTeasers;
+use eLife\Patterns\ViewModel\Teaser;
 use Symfony\Component\HttpFoundation\Response;
 
 final class EventsController extends Controller
@@ -21,21 +23,21 @@ final class EventsController extends Controller
 
         $arguments['contentHeader'] = ContentHeaderNonArticle::basic('eLife events');
 
-        $arguments['upcomingEvents'] = $this->get('elife.api_client.events')
-            ->listEvents(['Accept' => new MediaType(EventsClient::TYPE_EVENT_LIST, 1)], $page, $perPage, 'open', false)
-            ->then(function (Result $result) use ($arguments) {
-                if (empty($result['items'])) {
+        $arguments['upcomingEvents'] = $this->get('elife.api_sdk.events')
+            ->forType('open')
+            ->reverse()
+            ->slice(($page * $perPage) - $perPage, $perPage)
+            ->then(function (Sequence $result) use ($arguments) {
+                if ($result->isEmpty()) {
                     return null;
                 }
 
-                $items = array_map(function (array $item) {
-                    $item['type'] = 'event';
-
-                    return $item;
-                }, $result['items']);
-
-                return $this->get('elife.journal.view_model.factory.listing_teaser')
-                    ->forItems($items, 'Upcoming events');
+                return ListingTeasers::basic(
+                    $result->map(function (Event $event) {
+                        return $this->get('elife.journal.view_model.converter')->convert($event, Teaser::class);
+                    })->toArray(),
+                    'Upcoming events'
+                );
             });
 
         return new Response($this->get('templating')->render('::events.html.twig', $arguments));
@@ -45,25 +47,26 @@ final class EventsController extends Controller
     {
         $arguments = $this->defaultPageArguments();
 
-        $arguments['event'] = $this->get('elife.api_client.events')
-            ->getEvent(['Accept' => new MediaType(EventsClient::TYPE_EVENT, 1)], $id);
+        $arguments['event'] = $this->get('elife.api_sdk.events')->get($id);
 
         $arguments['contentHeader'] = $arguments['event']
-            ->then(function (Result $event) {
-                return ContentHeaderNonArticle::basic($event['title']);
+            ->then(function (Event $event) {
+                return $this->get('elife.journal.view_model.converter')->convert($event, ContentHeaderNonArticle::class);
             });
 
         $arguments['leadParas'] = $arguments['event']
-            ->then(function (Result $event) {
-                return new LeadParas([new LeadPara($event['impactStatement'])]);
+            ->then(function (Event $event) {
+                return new LeadParas([new LeadPara($event->getImpactStatement())]);
             })
             ->otherwise(function () {
                 return null;
             });
 
         $arguments['blocks'] = $arguments['event']
-            ->then(function (Result $event) {
-                return $this->get('elife.website.view_model.block_converter')->handleBlocks(...$event['content']);
+            ->then(function (Event $event) {
+                return $event->getContent()->map(function (Block $block) {
+                    return $this->get('elife.journal.view_model.converter')->convert($block);
+                });
             });
 
         return new Response($this->get('templating')->render('::event.html.twig', $arguments));

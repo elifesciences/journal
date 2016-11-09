@@ -1,10 +1,9 @@
 <?php
 
-namespace test\eLife\Journal\ViewModel;
+namespace test\eLife\Journal\ViewModel\Factory;
 
-use eLife\Journal\ViewModel\SiteHeaderFactory;
+use eLife\Journal\ViewModel\Factory\SiteHeaderFactory;
 use eLife\Patterns\ViewModel\SiteHeader;
-use GuzzleHttp\Promise\PromiseInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 final class SiteHeaderFactoryTest extends KernelTestCase
@@ -27,19 +26,8 @@ final class SiteHeaderFactoryTest extends KernelTestCase
     /**
      * @test
      */
-    public function it_returns_a_promise()
-    {
-        $this->assertInstanceOf(PromiseInterface::class, $this->siteHeaderFactory->createSiteHeader());
-    }
-
-    /**
-     * @test
-     * @depends it_returns_a_promise
-     */
     public function it_returns_a_site_header()
     {
-        $footer = $this->siteHeaderFactory->createSiteHeader()->wait();
-
-        $this->assertInstanceOf(SiteHeader::class, $footer);
+        $this->assertInstanceOf(SiteHeader::class, $this->siteHeaderFactory->createSiteHeader());
     }
 }

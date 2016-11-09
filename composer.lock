@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "b2cf3c9538896605c0bf9aee9856830d",
-    "content-hash": "8da70bd414f313896ad2b6e885bb8cd6",
+    "hash": "36272a1ba97b115244c833385e7ec476",
+    "content-hash": "443a17e5cc24dee193a10bb7347a5116",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -722,6 +722,54 @@
             ],
             "description": "eLife Sciences API client",
             "time": "2016-10-18 12:49:31"
+        },
+        {
+            "name": "elife/api-sdk",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/elifesciences/api-sdk-php.git",
+                "reference": "e7793057b4230db55b8286144e6effa4b963b533"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/e7793057b4230db55b8286144e6effa4b963b533",
+                "reference": "e7793057b4230db55b8286144e6effa4b963b533",
+                "shasum": ""
+            },
+            "require": {
+                "elife/api-client": "^1.0@dev",
+                "guzzlehttp/promises": "^1.0",
+                "php": "^7.0",
+                "symfony/serializer": "^3.1"
+            },
+            "require-dev": {
+                "elife/api": "dev-master",
+                "elife/api-validator": "^1.0@dev",
+                "guzzlehttp/guzzle": "^6.0",
+                "phpunit/phpunit": "^5.2",
+                "psr/http-message": "^1.0",
+                "puli/composer-plugin": "^1.0-beta9",
+                "puli/repository": "^1.0-beta9",
+                "webmozart/json": "^1.3@dev"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "eLife\\ApiSdk\\": "./src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "eLife Sciences API SDK",
+            "time": "2016-11-08 14:34:22"
         },
         {
             "name": "elife/patterns",
@@ -4706,6 +4754,7 @@
     "minimum-stability": "beta",
     "stability-flags": {
         "elife/api-client": 20,
+        "elife/api-sdk": 20,
         "elife/patterns": 20,
         "justinrainbow/json-schema": 20,
         "puli/repository": 10,

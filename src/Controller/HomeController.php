@@ -2,13 +2,14 @@
 
 namespace eLife\Journal\Controller;
 
-use eLife\ApiClient\ApiClient\SearchClient;
-use eLife\ApiClient\MediaType;
-use eLife\ApiClient\Result;
+use eLife\ApiSdk\Collection\Sequence;
+use eLife\ApiSdk\Model\Model;
 use eLife\Patterns\ViewModel\ContentHeaderNonArticle;
 use eLife\Patterns\ViewModel\Link;
 use eLife\Patterns\ViewModel\ListHeading;
+use eLife\Patterns\ViewModel\ListingTeasers;
 use eLife\Patterns\ViewModel\SeeMoreLink;
+use eLife\Patterns\ViewModel\Teaser;
 use Symfony\Component\HttpFoundation\Response;
 
 final class HomeController extends Controller
@@ -23,47 +24,40 @@ final class HomeController extends Controller
         $arguments['contentHeader'] = ContentHeaderNonArticle::basic('eLife');
 
         $arguments['latestResearchHeading'] = new ListHeading('Latest research');
-        $arguments['latestResearch'] = $this->get('elife.api_client.search')
-            ->query(['Accept' => new MediaType(SearchClient::TYPE_SEARCH, 1)], '', $page, $perPage, 'date', true, [],
-                [
-                    'research-advance',
-                    'research-article',
-                    'research-exchange',
-                    'short-report',
-                    'tools-resources',
-                    'replication-study',
-                ])
-            ->then(function (Result $result) use ($arguments) {
-                if (empty($result['items'])) {
+        $arguments['latestResearch'] = $this->get('elife.api_sdk.search')
+            ->forType('research-advance', 'research-article', 'research-exchange', 'short-report', 'tools-resources', 'replication-study')
+            ->sortBy('date')
+            ->slice(($page * $perPage) - $perPage, $perPage)
+            ->then(function (Sequence $result) use ($arguments) {
+                if ($result->isEmpty()) {
                     return null;
                 }
 
-                return $this->get('elife.journal.view_model.factory.listing_teaser')
-                    ->forResult($result, $arguments['latestResearchHeading']['heading']);
-            })
-        ;
+                return ListingTeasers::basic(
+                    $result->map(function (Model $model) {
+                        return $this->get('elife.journal.view_model.converter')->convert($model, Teaser::class);
+                    })->toArray(),
+                    $arguments['latestResearchHeading']['heading']
+                );
+            });
 
-        $arguments['magazine'] = $this->get('elife.api_client.search')
-            ->query(['Accept' => new MediaType(SearchClient::TYPE_SEARCH, 1)], '', 1, 7, 'date', true, [],
-                ['editorial', 'insight', 'feature', 'collection', 'interview', 'podcast-episode'])
-            ->then(function (Result $result) use ($arguments) {
-                if (empty($result['items'])) {
+        $arguments['magazine'] = $this->get('elife.api_sdk.search')
+            ->forType('editorial', 'insight', 'feature', 'collection', 'interview', 'podcast-episode')
+            ->sortBy('date')
+            ->slice(1, 7)
+            ->then(function (Sequence $result) use ($arguments) {
+                if ($result->isEmpty()) {
                     return null;
                 }
 
-                return $this->get('elife.journal.view_model.factory.listing_teaser_secondary')
-                    ->forResult(
-                        $result,
-                        'Magazine',
-                        new SeeMoreLink(
-                            new Link(
-                                'See more Magazine articles',
-                                $this->get('router')->generate('magazine')
-                            )
-                        )
-                    );
-            })
-            ->otherwise(function () {
+                return ListingTeasers::withSeeMore(
+                    $result->map(function (Model $model) {
+                        return $this->get('elife.journal.view_model.converter')->convert($model, Teaser::class, ['variant' => 'secondary']);
+                    })->toArray(),
+                    new SeeMoreLink(new Link('See more Magazine articles', $this->get('router')->generate('magazine'))),
+                    'Magazine'
+                );
+            })->otherwise(function () {
                 return null;
             });
 
