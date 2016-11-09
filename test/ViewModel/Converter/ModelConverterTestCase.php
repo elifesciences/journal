@@ -7,12 +7,12 @@ use eLife\ApiSdk\Model\Block;
 use eLife\ApiSdk\Model\Model;
 use eLife\Journal\ViewModel\Paragraph;
 use eLife\Patterns\ViewModel\ContentHeaderNonArticle;
+use eLife\Journal\ViewModel\Converter\ViewModelConverter;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class ModelConverterTestCase extends PHPUnit_Framework_TestCase
 {
-    // TODO: check these have sane values before starting the test
-    protected $model;
+    protected $models;
     protected $class;
     protected $viewModelClass;
     protected $converter;
@@ -36,6 +36,7 @@ class ModelConverterTestCase extends PHPUnit_Framework_TestCase
      */
     public function it_converts_a_model(string $path)
     {
+        $this->assertInstanceOf(ViewModelConverter::class, $this->converter);
         $this->assertTrue(file_exists($path), "$path does not exists");
         $file = file_get_contents($path);
 
@@ -57,6 +58,12 @@ class ModelConverterTestCase extends PHPUnit_Framework_TestCase
 
     public function samples()
     {
+        $this->assertInternalType('array', $this->models);
+        $this->assertInternalType('string', $this->class);
+        $this->assertInternalType('string', $this->viewModelClass);
+        $this->assertInternalType('array', $this->context);
+        $this->assertInternalType('string', $this->samples);
+
         $samples = [];
         foreach ($this->models as $model) {
             $samples = array_merge(
