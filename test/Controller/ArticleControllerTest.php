@@ -343,6 +343,26 @@ final class ArticleControllerTest extends PageTestCase
                             ],
                         ],
                     ],
+                    'appendices' => [
+                        [
+                            'id' => 'app1',
+                            'doi' => '10.7554/eLife.09560.005',
+                            'title' => 'Appendix 1',
+                            'content' => [
+                                [
+                                    'type' => 'section',
+                                    'id' => 'app1-1',
+                                    'title' => 'Appendix title',
+                                    'content' => [
+                                        [
+                                            'type' => 'paragraph',
+                                            'text' => 'Appendix text',
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
                     'acknowledgements' => [
                         [
                             'type' => 'paragraph',
@@ -393,16 +413,20 @@ final class ArticleControllerTest extends PageTestCase
             $crawler->filter('main > .wrapper > div > div > section:nth-of-type(3) > header > h2')->text());
         $this->assertSame('Body text',
             $crawler->filter('main > .wrapper > div > div > section:nth-of-type(3) > div > p')->text());
+        $appendix = $crawler->filter('main > .wrapper > div > div > section:nth-of-type(4)');
+        $this->assertSame('Appendix 1', $appendix->filter('header > h2')->text());
+        $this->assertSame('Appendix title', $appendix->filter('div > section > header > h3')->text());
+        $this->assertSame('Appendix text', $appendix->filter('div > p')->text());
         $this->assertSame('Decision letter',
-            $crawler->filter('main > .wrapper > div > div > section:nth-of-type(4) > header > h2')->text());
-        $this->assertSame('Decision letter text',
-            $crawler->filter('main > .wrapper > div > div > section:nth-of-type(4) > div > p')->text());
-        $this->assertSame('Author response',
             $crawler->filter('main > .wrapper > div > div > section:nth-of-type(5) > header > h2')->text());
-        $this->assertSame('Author response text',
+        $this->assertSame('Decision letter text',
             $crawler->filter('main > .wrapper > div > div > section:nth-of-type(5) > div > p')->text());
+        $this->assertSame('Author response',
+            $crawler->filter('main > .wrapper > div > div > section:nth-of-type(6) > header > h2')->text());
+        $this->assertSame('Author response text',
+            $crawler->filter('main > .wrapper > div > div > section:nth-of-type(6) > div > p')->text());
 
-        $articleInfo = $crawler->filter('main > .wrapper > div > div > section:nth-of-type(6)');
+        $articleInfo = $crawler->filter('main > .wrapper > div > div > section:nth-of-type(7)');
         $this->assertSame('Article and author information',
             $articleInfo->filter('header > h2')->text());
 
@@ -420,6 +444,7 @@ final class ArticleControllerTest extends PageTestCase
                 'Abstract',
                 'eLife digest',
                 'Body title',
+                'Appendix 1',
                 'Decision letter',
                 'Author response',
                 'Article and author information',
