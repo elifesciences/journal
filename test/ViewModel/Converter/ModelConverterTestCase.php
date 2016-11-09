@@ -15,6 +15,7 @@ class ModelConverterTestCase extends PHPUnit_Framework_TestCase
     protected $viewModelClass;
     protected $converter;
     protected $context = [];
+    protected $samples = '*';
     
     /**
      * @before
@@ -36,6 +37,7 @@ class ModelConverterTestCase extends PHPUnit_Framework_TestCase
         $file = file_get_contents($path);
 
         $model = json_decode($file, true);
+        $model = $this->modelHook($model);
 
         $model = $this->serializer->denormalize($model, $this->class);
 
@@ -59,7 +61,7 @@ class ModelConverterTestCase extends PHPUnit_Framework_TestCase
                     function ($path) {
                         return [$path];
                     },
-                    $glob = glob("vendor/elife/api/src/samples/{$model}/v1/*.json")
+                    $glob = glob("vendor/elife/api/src/samples/{$model}/v1/{$this->samples}.json")
                 )
             );
         }
@@ -81,5 +83,10 @@ class ModelConverterTestCase extends PHPUnit_Framework_TestCase
         $block = $this->serializer->denormalize($block, Block::class);
 
         $this->assertFalse($this->converter->supports($block));
+    }
+
+    protected function modelHook(array $model) : array
+    {
+        return $model;
     }
 }
