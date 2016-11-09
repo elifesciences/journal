@@ -33,6 +33,13 @@ article:
     requirements:
         volume: '[1-9][0-9]*'
 
+article-figures:
+    path: /content/{volume}/e{id}/figures
+    defaults:
+         _controller: AppBundle:Articles:latestVersionFigures
+    requirements:
+        volume: '[1-9][0-9]*'
+
 collection:
     path: /collections/{id}
     defaults:
