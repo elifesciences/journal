@@ -2,6 +2,7 @@
 
 namespace eLife\Journal\Controller;
 
+use eLife\ApiSdk\Model\Appendix;
 use eLife\ApiSdk\Model\ArticleVersion;
 use eLife\ApiSdk\Model\ArticleVoR;
 use eLife\ApiSdk\Model\Block;
@@ -132,6 +133,18 @@ final class ArticlesController extends Controller
                             $isInitiallyClosed = true;
 
                             return $section;
+                        })->toArray());
+
+                        $parts = array_merge($parts, $article->getAppendices()->map(function (Appendix $appendix) {
+                            return ArticleSection::collapsible($appendix->getId(), $appendix->getTitle(), 2,
+                                $appendix->getContent()
+                                    ->map(function (Block $block) {
+                                        return $this->get('elife.journal.view_model.converter')->convert($block, null, ['level' => 2]);
+                                    })
+                                    ->reduce(function (string $carry, ViewModel $viewModel) {
+                                        return $carry.$this->get('elife.patterns.pattern_renderer')->render($viewModel);
+                                    }, ''),
+                                true, false, new Doi($appendix->getDoi()));
                         })->toArray());
 
                         if ($article->getDecisionLetter()) {
