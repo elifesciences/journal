@@ -134,6 +134,12 @@ services:
         tags:
           - name: view_model.converter
 
+    elife.journal.view_model.converter.block.image_captioned:
+        class: eLife\Journal\ViewModel\Converter\Block\CaptionedImageConverter
+        public: false
+        tags:
+          - name: view_model.converter
+
     elife.journal.view_model.converter.block.listing:
         class: eLife\Journal\ViewModel\Converter\Block\ListingConverter
         public: false
@@ -185,8 +191,20 @@ services:
         tags:
           - name: view_model.converter
 
+    elife.journal.view_model.converter.block.table_captioned:
+        class: eLife\Journal\ViewModel\Converter\Block\CaptionedTableConverter
+        public: false
+        tags:
+          - name: view_model.converter
+
     elife.journal.view_model.converter.block.video:
         class: eLife\Journal\ViewModel\Converter\Block\VideoConverter
+        public: false
+        tags:
+          - name: view_model.converter
+
+    elife.journal.view_model.converter.block.video_captioned:
+        class: eLife\Journal\ViewModel\Converter\Block\CaptionedVideoConverter
         public: false
         tags:
           - name: view_model.converter

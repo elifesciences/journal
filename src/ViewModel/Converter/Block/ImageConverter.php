@@ -19,6 +19,6 @@ final class ImageConverter implements ViewModelConverter
 
     public function supports($object, string $viewModel = null, array $context = []) : bool
     {
-        return $object instanceof Block\Image;
+        return $object instanceof Block\Image && !$object->getImage()->getTitle();
     }
 }

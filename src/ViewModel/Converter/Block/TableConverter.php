@@ -24,20 +24,16 @@ final class TableConverter implements ViewModelConverter
      */
     public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
-        if (empty($object->getTitle())) {
-            return new Table(
-                implode('', $object->getTables()),
-                implode('', array_map(function (Block $block) use ($context) {
-                    return $this->patternRenderer->render($this->viewModelConverter->convert($block, null, $context));
-                }, $object->getFooter()))
-            );
-        }
-
-        return new ViewModel\Table(...$object->getTables());
+        return new Table(
+            implode('', $object->getTables()),
+            implode('', array_map(function (Block $block) use ($context) {
+                return $this->patternRenderer->render($this->viewModelConverter->convert($block, null, $context));
+            }, $object->getFooter()))
+        );
     }
 
     public function supports($object, string $viewModel = null, array $context = []) : bool
     {
-        return $object instanceof Block\Table;
+        return $object instanceof Block\Table && !$object->getTitle();
     }
 }
