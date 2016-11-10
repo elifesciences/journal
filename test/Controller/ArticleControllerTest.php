@@ -343,6 +343,79 @@ final class ArticleControllerTest extends PageTestCase
                             ],
                         ],
                     ],
+                    'appendices' => [
+                        [
+                            'id' => 'app1',
+                            'doi' => '10.7554/eLife.09560.005',
+                            'title' => 'Appendix 1',
+                            'content' => [
+                                [
+                                    'type' => 'section',
+                                    'id' => 'app1-1',
+                                    'title' => 'Appendix title',
+                                    'content' => [
+                                        [
+                                            'type' => 'paragraph',
+                                            'text' => 'Appendix text',
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                    'references' => [
+                        [
+                            'type' => 'journal',
+                            'id' => 'bib1',
+                            'date' => '2013',
+                            'authors' => [
+                                [
+                                    'type' => 'person',
+                                    'name' => [
+                                        'preferred' => 'Person One',
+                                        'index' => 'One, Person',
+                                    ],
+                                ],
+                            ],
+                            'articleTitle' => 'Journal article',
+                            'journal' => [
+                                'name' => [
+                                    'A journal',
+                                ],
+                            ],
+                            'pages' => 'In press',
+                        ],
+                    ],
+                    'acknowledgements' => [
+                        [
+                            'type' => 'paragraph',
+                            'text' => 'Acknowledgements text',
+                        ],
+                    ],
+                    'decisionLetter' => [
+                        'doi' => '10.7554/eLife.09560.003',
+                        'description' => [
+                            [
+                                'type' => 'paragraph',
+                                'text' => 'Decision letter description',
+                            ],
+                        ],
+                        'content' => [
+                            [
+                                'type' => 'paragraph',
+                                'text' => 'Decision letter text',
+                            ],
+                        ],
+                    ],
+                    'authorResponse' => [
+                        'doi' => '10.7554/eLife.09560.003',
+                        'content' => [
+                            [
+                                'type' => 'paragraph',
+                                'text' => 'Author response text',
+                            ],
+                        ],
+                    ],
                 ])
             )
         );
@@ -363,18 +436,50 @@ final class ArticleControllerTest extends PageTestCase
             $crawler->filter('main > .wrapper > div > div > section:nth-of-type(3) > header > h2')->text());
         $this->assertSame('Body text',
             $crawler->filter('main > .wrapper > div > div > section:nth-of-type(3) > div > p')->text());
+        $appendix = $crawler->filter('main > .wrapper > div > div > section:nth-of-type(4)');
+        $this->assertSame('Appendix 1', $appendix->filter('header > h2')->text());
+        $this->assertSame('Appendix title', $appendix->filter('div > section > header > h3')->text());
+        $this->assertSame('Appendix text', $appendix->filter('div > p')->text());
+        $references = $crawler->filter('main > .wrapper > div > div > section:nth-of-type(5)');
+        $this->assertSame('References',
+            $references->filter('header > h2')->text());
+        $this->assertSame('1',
+            $references->filter('div > ol > li:nth-of-type(1) .reference-list__ordinal_number')->text());
+        $this->assertSame('Journal article',
+            $references->filter('div > ol > li:nth-of-type(1) .reference__title')->text());
+        $this->assertSame('Decision letter',
+            $crawler->filter('main > .wrapper > div > div > section:nth-of-type(6) > header > h2')->text());
+        $this->assertSame('Decision letter text',
+            $crawler->filter('main > .wrapper > div > div > section:nth-of-type(6) > div > p')->text());
+        $this->assertSame('Author response',
+            $crawler->filter('main > .wrapper > div > div > section:nth-of-type(7) > header > h2')->text());
+        $this->assertSame('Author response text',
+            $crawler->filter('main > .wrapper > div > div > section:nth-of-type(7) > div > p')->text());
 
-        $articleInfo = $crawler->filter('main > .wrapper > div > div > section:nth-of-type(4)');
+        $articleInfo = $crawler->filter('main > .wrapper > div > div > section:nth-of-type(8)');
         $this->assertSame('Article and author information',
             $articleInfo->filter('header > h2')->text());
 
-        $copyright = $articleInfo->filter('div > section:nth-of-type(1)');
+        $acknowledgements = $articleInfo->filter('div > section:nth-of-type(1)');
+        $this->assertSame('Acknowledgements', $acknowledgements->filter('header > h3')->text());
+        $this->assertSame('Acknowledgements text', trim($acknowledgements->filter('div')->text()));
+
+        $copyright = $articleInfo->filter('div > section:nth-of-type(2)');
         $this->assertSame('Copyright', $copyright->filter('header > h3')->text());
         $this->assertContains('© 2012, Bar', $copyright->filter('div')->text());
         $this->assertContains('Copyright statement.', $copyright->filter('div')->text());
 
         $this->assertSame(
-            ['Abstract', 'eLife digest', 'Body title', 'Article and author information'],
+            [
+                'Abstract',
+                'eLife digest',
+                'Body title',
+                'Appendix 1',
+                'References',
+                'Decision letter',
+                'Author response',
+                'Article and author information',
+            ],
             array_map('trim', $crawler->filter('.view-selector__jump_link_item')->extract('_text'))
         );
     }

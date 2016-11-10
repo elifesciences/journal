@@ -2,21 +2,16 @@
 
 namespace eLife\Journal\Controller;
 
-use DateTimeImmutable;
-use eLife\ApiClient\ApiClient\BlogClient;
-use eLife\ApiClient\Exception\BadResponse;
-use eLife\ApiClient\MediaType;
-use eLife\ApiClient\Result;
+use eLife\ApiSdk\Collection\Sequence;
+use eLife\ApiSdk\Model\Block;
+use eLife\ApiSdk\Model\BlogArticle;
 use eLife\Patterns\ViewModel\ContentHeaderNonArticle;
-use eLife\Patterns\ViewModel\Date;
 use eLife\Patterns\ViewModel\LeadPara;
 use eLife\Patterns\ViewModel\LeadParas;
-use eLife\Patterns\ViewModel\Link;
 use eLife\Patterns\ViewModel\ListHeading;
-use eLife\Patterns\ViewModel\Meta;
+use eLife\Patterns\ViewModel\ListingTeasers;
+use eLife\Patterns\ViewModel\Teaser;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Throwable;
 
 final class InsideElifeController extends Controller
 {
@@ -30,23 +25,20 @@ final class InsideElifeController extends Controller
         $arguments['contentHeader'] = ContentHeaderNonArticle::basic('Inside eLife');
 
         $arguments['latestHeading'] = new ListHeading('Latest');
-        $arguments['latest'] = $this->get('elife.api_client.blog')
-            ->listArticles(['Accept' => new MediaType(BlogClient::TYPE_BLOG_ARTICLE_LIST, 1)], $page, $perPage)
-            ->then(function (Result $result) use ($arguments) {
-                if (empty($result['items'])) {
+        $arguments['latest'] = $this->get('elife.api_sdk.blog_articles')
+            ->slice(($page * $perPage) - $perPage, $perPage)
+            ->then(function (Sequence $result) use ($arguments) {
+                if ($result->isEmpty()) {
                     return null;
                 }
 
-                $items = array_map(function (array $item) {
-                    $item['type'] = 'blog-article';
-
-                    return $item;
-                }, $result['items']);
-
-                return $this->get('elife.journal.view_model.factory.listing_teaser')
-                    ->forItems($items, $arguments['latestHeading']['heading']);
-            })
-        ;
+                return ListingTeasers::basic(
+                    $result->map(function (BlogArticle $article) {
+                        return $this->get('elife.journal.view_model.converter')->convert($article, Teaser::class);
+                    })->toArray(),
+                    $arguments['latestHeading']['heading']
+                );
+            });
 
         return new Response($this->get('templating')->render('::inside-elife.html.twig', $arguments));
     }
@@ -55,37 +47,26 @@ final class InsideElifeController extends Controller
     {
         $arguments = $this->defaultPageArguments();
 
-        $arguments['article'] = $this->get('elife.api_client.blog')
-            ->getArticle(['Accept' => new MediaType(BlogClient::TYPE_BLOG_ARTICLE, 1)], $id)
-            ->otherwise(function (Throwable $e) {
-                if ($e instanceof BadResponse && 404 === $e->getResponse()->getStatusCode()) {
-                    throw new NotFoundHttpException('Article not found', $e);
-                }
-
-                throw $e;
-            });
+        $arguments['article'] = $this->get('elife.api_sdk.blog_articles')->get($id);
 
         $arguments['contentHeader'] = $arguments['article']
-            ->then(function (Result $article) {
-                return ContentHeaderNonArticle::basic($article['title'], false, null, null,
-                    Meta::withLink(
-                        new Link('Inside eLife', $this->get('router')->generate('inside-elife')),
-                        new Date(DateTimeImmutable::createFromFormat(DATE_ATOM, $article['published']))
-                    )
-                );
+            ->then(function (BlogArticle $article) {
+                return $this->get('elife.journal.view_model.converter')->convert($article, ContentHeaderNonArticle::class);
             });
 
         $arguments['leadParas'] = $arguments['article']
-            ->then(function (Result $episode) {
-                return new LeadParas([new LeadPara($episode['impactStatement'])]);
+            ->then(function (BlogArticle $article) {
+                return new LeadParas([new LeadPara($article->getImpactStatement())]);
             })
             ->otherwise(function () {
                 return null;
             });
 
         $arguments['blocks'] = $arguments['article']
-            ->then(function (Result $article) {
-                return $this->get('elife.website.view_model.block_converter')->handleBlocks(...$article['content']);
+            ->then(function (BlogArticle $article) {
+                return $article->getContent()->map(function (Block $block) {
+                    return $this->get('elife.journal.view_model.converter')->convert($block);
+                });
             });
 
         return new Response($this->get('templating')->render('::inside-elife-article.html.twig', $arguments));

@@ -2,11 +2,9 @@
 
 namespace eLife\Journal\Controller;
 
-use eLife\ApiClient\ApiClient\SearchClient;
-use eLife\ApiClient\ApiClient\SubjectsClient;
-use eLife\ApiClient\Exception\BadResponse;
-use eLife\ApiClient\MediaType;
-use eLife\ApiClient\Result;
+use eLife\ApiSdk\Collection\Sequence;
+use eLife\ApiSdk\Model\Model;
+use eLife\ApiSdk\Model\Subject;
 use eLife\Patterns\ViewModel\BackgroundImage;
 use eLife\Patterns\ViewModel\BlockLink;
 use eLife\Patterns\ViewModel\ContentHeaderNonArticle;
@@ -15,9 +13,9 @@ use eLife\Patterns\ViewModel\LeadPara;
 use eLife\Patterns\ViewModel\LeadParas;
 use eLife\Patterns\ViewModel\Link;
 use eLife\Patterns\ViewModel\ListHeading;
+use eLife\Patterns\ViewModel\ListingTeasers;
+use eLife\Patterns\ViewModel\Teaser;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Throwable;
 
 final class SubjectsController extends Controller
 {
@@ -27,26 +25,28 @@ final class SubjectsController extends Controller
 
         $arguments['contentHeader'] = ContentHeaderNonArticle::basic('Browse our research categories');
 
-        $arguments['subjects'] = $this->get('elife.api_client.subjects')
-            ->listSubjects(['Accept' => new MediaType(SubjectsClient::TYPE_SUBJECT_LIST, 1)], 1, 100, false)
-            ->then(function (Result $result) {
-                if (empty($result['items'])) {
+        $arguments['subjects'] = $this->get('elife.api_sdk.subjects')
+            ->reverse()
+            ->slice(1, 100)
+            ->map(function (Subject $subject) {
+                return new BlockLink(
+                    new Link(
+                        $subject->getName(),
+                        $this->get('router')->generate('subject', ['id' => $subject->getId()])
+                    ),
+                    new BackgroundImage(
+                        $subject->getThumbnail()->getSize('16:9')->getImage(250),
+                        $subject->getThumbnail()->getSize('16:9')->getImage(500),
+                        600
+                    )
+                );
+            })
+            ->then(function (Sequence $subjects) {
+                if ($subjects->isEmpty()) {
                     return null;
                 }
 
-                return GridListing::forBlockLinks(array_map(function (array $subject) {
-                    return new BlockLink(
-                        new Link(
-                            $subject['name'],
-                            $this->get('router')->generate('subject', ['id' => $subject['id']])
-                        ),
-                        new BackgroundImage(
-                            $subject['image']['thumbnail']['sizes']['16:9'][250],
-                            $subject['image']['thumbnail']['sizes']['16:9'][500],
-                            600
-                        )
-                    );
-                }, $result['items']));
+                return GridListing::forBlockLinks($subjects->toArray());
             });
 
         return new Response($this->get('templating')->render('::subjects.html.twig', $arguments));
@@ -59,56 +59,38 @@ final class SubjectsController extends Controller
 
         $arguments = $this->defaultPageArguments();
 
-        $arguments['subject'] = $this->get('elife.api_client.subjects')
-            ->getSubject(['Accept' => new MediaType(SubjectsClient::TYPE_SUBJECT, 1)], $id)
-            ->otherwise(function (Throwable $e) {
-                if ($e instanceof BadResponse && 404 === $e->getResponse()->getStatusCode()) {
-                    throw new NotFoundHttpException('Subject not found', $e);
-                }
-            });
+        $arguments['subject'] = $this->get('elife.api_sdk.subjects')->get($id);
 
         $arguments['contentHeader'] = $arguments['subject']
-            ->then(function (Result $subject) {
-                return ContentHeaderNonArticle::subject($subject['name'], false, null,
-                    new BackgroundImage(
-                        $subject['image']['banner']['sizes']['2:1'][900],
-                        $subject['image']['banner']['sizes']['2:1'][1800]
-                    )
-                );
+            ->then(function (Subject $subject) {
+                return $this->get('elife.journal.view_model.converter')->convert($subject, ContentHeaderNonArticle::class);
             });
 
         $arguments['lead_paras'] = $arguments['subject']
-            ->then(function (Result $result) {
-                return new LeadParas([new LeadPara($result['impactStatement'])]);
+            ->then(function (Subject $subject) {
+                return new LeadParas([new LeadPara($subject->getImpactStatement())]);
             })
             ->otherwise(function () {
                 return null;
             });
 
         $arguments['latestArticlesHeading'] = new ListHeading('Latest articles');
-        $arguments['latestArticles'] = $this->get('elife.api_client.search')
-            ->query(['Accept' => new MediaType(SearchClient::TYPE_SEARCH, 1)], '', $page, $perPage, 'date',
-                true, [$id],
-                [
-                    'research-article',
-                    'research-advance',
-                    'research-exchange',
-                    'short-report',
-                    'tools-resources',
-                    'replication-study',
-                    'editorial',
-                    'insight',
-                    'feature',
-                    'collection',
-                ])
-            ->then(function (Result $result) use ($arguments) {
-                if (empty($result['items'])) {
+        $arguments['latestArticles'] = $this->get('elife.api_sdk.search')
+            ->forSubject($id)
+            ->forType('research-article', 'research-advance', 'research-exchange', 'short-report', 'tools-resources', 'replication-study', 'editorial', 'insight', 'feature', 'collection')
+            ->sortBy('date')
+            ->slice(($page * $perPage) - $perPage, $perPage)
+            ->then(function (Sequence $result) use ($arguments) {
+                if ($result->isEmpty()) {
                     return null;
                 }
 
-                return $this->get('elife.journal.view_model.factory.listing_teaser')
-                    ->forResult($result, $arguments['latestArticlesHeading']['heading'])
-                    ;
+                return ListingTeasers::basic(
+                    $result->map(function (Model $model) {
+                        return $this->get('elife.journal.view_model.converter')->convert($model, Teaser::class);
+                    })->toArray(),
+                    $arguments['latestArticlesHeading']['heading']
+                );
             });
 
         return new Response($this->get('templating')->render('::subject.html.twig', $arguments));

@@ -18,6 +18,7 @@
         "csa/guzzle-bundle": "^2.1",
         "cweagans/composer-patches": "^1.5",
         "elife/api-client": "^1.0@dev",
+        "elife/api-sdk": "^1.0@dev",
         "elife/patterns": "dev-master",
         "guzzlehttp/promises": "^1.2",
         "justinrainbow/json-schema": "^2.0@dev",

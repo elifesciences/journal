@@ -1,6 +1,6 @@
 <?php
 
-namespace eLife\Journal\ViewModel;
+namespace eLife\Journal\ViewModel\Factory;
 
 use eLife\Patterns\ViewModel\Footer;
 use eLife\Patterns\ViewModel\Link;

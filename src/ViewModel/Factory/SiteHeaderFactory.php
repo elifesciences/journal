@@ -1,6 +1,6 @@
 <?php
 
-namespace eLife\Journal\ViewModel;
+namespace eLife\Journal\ViewModel\Factory;
 
 use eLife\Patterns\ViewModel\Button;
 use eLife\Patterns\ViewModel\Image;
@@ -9,8 +9,6 @@ use eLife\Patterns\ViewModel\NavLinkedItem;
 use eLife\Patterns\ViewModel\Picture;
 use eLife\Patterns\ViewModel\SiteHeader;
 use eLife\Patterns\ViewModel\SiteHeaderNavBar;
-use GuzzleHttp\Promise\FulfilledPromise;
-use GuzzleHttp\Promise\PromiseInterface;
 use Puli\UrlGenerator\Api\UrlGenerator as PuliUrlGenerator;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -25,7 +23,7 @@ final class SiteHeaderFactory
         $this->puliUrlGenerator = $puliUrlGenerator;
     }
 
-    public function createSiteHeader() : PromiseInterface
+    public function createSiteHeader() : SiteHeader
     {
         $primaryLinks = SiteHeaderNavBar::primary([
             NavLinkedItem::asIcon(
@@ -60,8 +58,6 @@ final class SiteHeaderFactory
             ),
         ]);
 
-        return new FulfilledPromise(
-            new SiteHeader($this->urlGenerator->generate('home'), $primaryLinks, $secondaryLinks)
-        );
+        return new SiteHeader($this->urlGenerator->generate('home'), $primaryLinks, $secondaryLinks);
     }
 }
