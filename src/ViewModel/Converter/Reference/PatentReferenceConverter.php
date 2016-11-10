@@ -20,7 +20,7 @@ final class PatentReferenceConverter implements ViewModelConverter
             $title .= ' ('.$object->getNumber().')';
         }
 
-        $origin = [$object->getDate()->format()];
+        $origin = [$object->getDate()->format().$object->getDiscriminator()];
         if ($object->getAssignees()) {
             $origin[] = $this->createAuthorsString($object->getAssignees(), $object->assigneesEtAl());
         }

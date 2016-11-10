@@ -29,7 +29,7 @@ final class PeriodicalReferenceConverter implements ViewModelConverter
         }
 
         $origin = [
-            $object->getDate()->format(),
+            $object->getDate()->format().$object->getDiscriminator(),
             $periodical,
         ];
 

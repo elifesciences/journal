@@ -29,7 +29,7 @@ final class JournalReferenceConverter implements ViewModelConverter
         }
 
         $origin = [
-            $object->getDate()->format(),
+            $object->getDate()->format().$object->getDiscriminator(),
             $journal,
         ];
         if ($object->getPmid()) {
