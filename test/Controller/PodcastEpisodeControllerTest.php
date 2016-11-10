@@ -23,19 +23,6 @@ final class PodcastEpisodeControllerTest extends PageTestCase
     /**
      * @test
      */
-    public function it_displays_a_podcast_episode_page_with_empty_chapter_content()
-    {
-        $client = static::createClient();
-
-        $crawler = $client->request('GET', $this->getUrlWithEmptyChapterContent());
-
-        $this->assertSame(200, $client->getResponse()->getStatusCode());
-        $this->assertSame('Episode title', $crawler->filter('.content-header__title')->text());
-    }
-
-    /**
-     * @test
-     */
     public function it_displays_a_404_if_the_episode_is_not_found()
     {
         $client = static::createClient();
@@ -63,81 +50,6 @@ final class PodcastEpisodeControllerTest extends PageTestCase
     }
 
     protected function getUrl() : string
-    {
-        $this->mockApiResponse(
-            new Request(
-                'GET',
-                'http://api.elifesciences.org/podcast-episodes/1',
-                ['Accept' => 'application/vnd.elife.podcast-episode+json; version=1']
-            ),
-            new Response(
-                200,
-                ['Content-Type' => 'application/vnd.elife.podcast-episode+json; version=1'],
-                json_encode([
-                    'number' => 1,
-                    'title' => 'Episode title',
-                    'published' => '2010-01-01T00:00:00+00:00',
-                    'image' => [
-                        'banner' => [
-                            'alt' => '',
-                            'sizes' => [
-                                '2:1' => [
-                                    900 => 'https://placehold.it/900x450',
-                                    1800 => 'https://placehold.it/1800x900',
-                                ],
-                            ],
-                        ],
-                        'thumbnail' => [
-                            'alt' => '',
-                            'sizes' => [
-                                '16:9' => [
-                                    250 => 'https://placehold.it/250x141',
-                                    500 => 'https://placehold.it/500x281',
-                                ],
-                                '1:1' => [
-                                    70 => 'https://placehold.it/70x70',
-                                    140 => 'https://placehold.it/140x140',
-                                ],
-                            ],
-                        ],
-                    ],
-                    'impactStatement' => 'Experiment impact statement',
-                    'sources' => [
-                        [
-                            'mediaType' => 'audio/mpeg',
-                            'uri' => 'https://www.example.com/episode1.mp3',
-                        ],
-                    ],
-                    'chapters' => [
-                        [
-                            'number' => 1,
-                            'title' => 'Chapter 1',
-                            'time' => 0,
-                            'content' => [
-                                [
-                                    'type' => 'research-article',
-                                    'status' => 'vor',
-                                    'id' => '12345',
-                                    'version' => 1,
-                                    'doi' => '10.7554/eLife.12345',
-                                    'title' => 'Article 12345',
-                                    'published' => '2010-01-01T00:00:00+00:00',
-                                    'statusDate' => '2010-01-01T00:00:00+00:00',
-                                    'volume' => 5,
-                                    'elocationId' => 'e12345',
-                                    'authorLine' => 'Foo Bar',
-                                ],
-                            ],
-                        ],
-                    ],
-                ])
-            )
-        );
-
-        return '/podcast/episode1';
-    }
-
-    protected function getUrlWithEmptyChapterContent() : string
     {
         $this->mockApiResponse(
             new Request(
