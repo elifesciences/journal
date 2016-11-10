@@ -3,43 +3,37 @@
 namespace eLife\Journal\ViewModel\Converter\Block;
 
 use eLife\ApiSdk\Model\Block;
+use eLife\Journal\ViewModel\AssetViewerInlineSet;
 use eLife\Journal\ViewModel\Converter\ViewModelConverter;
 use eLife\Patterns\ViewModel;
-use eLife\Patterns\ViewModel\AssetViewerInline;
-use eLife\Patterns\ViewModel\CaptionedAsset;
 
 final class CaptionedImageConverter implements ViewModelConverter
 {
+    private $viewModelConverter;
+
+    public function __construct(ViewModelConverter $viewModelConverter)
+    {
+        $this->viewModelConverter = $viewModelConverter;
+    }
+
     /**
      * @param Block\Image $object
      */
     public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
-        $image = $object->getImage();
+        $figure = $this->viewModelConverter->convert($object->getImage());
 
-        $asset = new ViewModel\Image($image->getUri(), [], $image->getAltText());
-
-        $doi = $image->getDoi() ? new ViewModel\Doi($image->getDoi()) : null;
-        $download = new ViewModel\Link('Download', $image->getUri());
-
-        if (empty($image->getCaption())) {
-            $asset = CaptionedAsset::withOnlyHeading($asset, $image->getTitle(), $doi, $download);
-        } else {
-            $asset = CaptionedAsset::withParagraphs($asset, $image->getTitle(),
-                array_map(function (Block $block) {
-                    if ($block instanceof Block\MathML) {
-                        return $block->getMathML();
-                    }
-
-                    return $block->getText();
-                }, $image->getCaption()), $doi, $download);
+        if (empty($context['supplements'])) {
+            return $figure;
         }
 
-        if (empty($image->getLabel())) {
-            return $asset;
+        $assets = [$figure];
+
+        foreach ($object->getSupplements() as $i => $supplement) {
+            $assets[] = $this->viewModelConverter->convert($supplement, null, ['parentId' => $object->getImage()->getId(), 'ordinal' => $i + 1]);
         }
 
-        return AssetViewerInline::primary($image->getId(), $image->getLabel(), $asset);
+        return new AssetViewerInlineSet(...$assets);
     }
 
     public function supports($object, string $viewModel = null, array $context = []) : bool
