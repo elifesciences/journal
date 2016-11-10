@@ -390,6 +390,90 @@ services:
         tags:
           - name: view_model.converter
 
+    elife.journal.view_model.converter.reference.book:
+        class: eLife\Journal\ViewModel\Converter\Reference\BookReferenceConverter
+        public: false
+        tags:
+          - name: view_model.converter
+
+    elife.journal.view_model.converter.reference.book_chapter:
+        class: eLife\Journal\ViewModel\Converter\Reference\BookChapterReferenceConverter
+        public: false
+        tags:
+          - name: view_model.converter
+
+    elife.journal.view_model.converter.reference.clinical_trial:
+        class: eLife\Journal\ViewModel\Converter\Reference\ClinicalTrialReferenceConverter
+        public: false
+        tags:
+          - name: view_model.converter
+
+    elife.journal.view_model.converter.reference.conference_proceeding:
+        class: eLife\Journal\ViewModel\Converter\Reference\ConferenceProceedingReferenceConverter
+        public: false
+        tags:
+          - name: view_model.converter
+
+    elife.journal.view_model.converter.reference.data:
+        class: eLife\Journal\ViewModel\Converter\Reference\DataReferenceConverter
+        public: false
+        tags:
+          - name: view_model.converter
+
+    elife.journal.view_model.converter.reference.journal:
+        class: eLife\Journal\ViewModel\Converter\Reference\JournalReferenceConverter
+        public: false
+        tags:
+          - name: view_model.converter
+
+    elife.journal.view_model.converter.reference.patent:
+        class: eLife\Journal\ViewModel\Converter\Reference\PatentReferenceConverter
+        public: false
+        tags:
+          - name: view_model.converter
+
+    elife.journal.view_model.converter.reference.periodical:
+        class: eLife\Journal\ViewModel\Converter\Reference\PeriodicalReferenceConverter
+        public: false
+        tags:
+          - name: view_model.converter
+
+    elife.journal.view_model.converter.reference.preprint:
+        class: eLife\Journal\ViewModel\Converter\Reference\PreprintReferenceConverter
+        public: false
+        tags:
+          - name: view_model.converter
+
+    elife.journal.view_model.converter.reference.report:
+        class: eLife\Journal\ViewModel\Converter\Reference\ReportReferenceConverter
+        public: false
+        tags:
+          - name: view_model.converter
+
+    elife.journal.view_model.converter.reference.software:
+        class: eLife\Journal\ViewModel\Converter\Reference\SoftwareReferenceConverter
+        public: false
+        tags:
+          - name: view_model.converter
+
+    elife.journal.view_model.converter.reference.thesis:
+        class: eLife\Journal\ViewModel\Converter\Reference\ThesisReferenceConverter
+        public: false
+        tags:
+          - name: view_model.converter
+
+    elife.journal.view_model.converter.reference.unknown:
+        class: eLife\Journal\ViewModel\Converter\Reference\UnknownReferenceConverter
+        public: false
+        tags:
+          - name: view_model.converter
+
+    elife.journal.view_model.converter.reference.web:
+        class: eLife\Journal\ViewModel\Converter\Reference\WebReferenceConverter
+        public: false
+        tags:
+          - name: view_model.converter
+
     elife.journal.view_model.converter.subject.header:
         class: eLife\Journal\ViewModel\Converter\SubjectContentHeaderConverter
         public: false
