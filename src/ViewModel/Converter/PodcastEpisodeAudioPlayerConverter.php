@@ -7,7 +7,7 @@ use eLife\ApiSdk\Model\PodcastEpisodeChapter;
 use eLife\ApiSdk\Model\PodcastEpisodeSource;
 use eLife\Patterns\ViewModel;
 
-final class PodcastEpisodeAudioPlayer implements ViewModelConverter
+final class PodcastEpisodeAudioPlayerConverter implements ViewModelConverter
 {
     private $viewModelConverter;
 
