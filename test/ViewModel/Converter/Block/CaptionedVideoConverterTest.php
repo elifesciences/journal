@@ -35,6 +35,46 @@ final class CaptionedVideoConverterTest extends BlockConverterTestCase
                     'image' => 'https://example.com/video1-thumbnail',
                 ],
             ],
+            [
+                [
+                    'title' => 'Video\'s caption',
+                    'sources' => [
+                        [
+                            'mediaType' => 'video/ogg',
+                            'uri' => 'https://example.com/video1',
+                        ]
+                    ],
+                    'width' => 800,
+                    'height' => 600,
+                    'image' => 'https://example.com/video1-thumbnail',
+                    'caption' => [
+                        [
+                            'type' => 'paragraph',
+                            'text' => 'A video\'s caption',
+                        ],
+                    ]
+                ],
+            ],
+            [
+                [
+                    'title' => 'Video\'s caption',
+                    'sources' => [
+                        [
+                            'mediaType' => 'video/ogg',
+                            'uri' => 'https://example.com/video1',
+                        ]
+                    ],
+                    'width' => 800,
+                    'height' => 600,
+                    'image' => 'https://example.com/video1-thumbnail',
+                    'caption' => [
+                        [
+                            'type' => 'mathml',
+                            'mathml' => '<math>A video\'s caption</math>',
+                        ],
+                    ]
+                ],
+            ],
         ];
     }
 }

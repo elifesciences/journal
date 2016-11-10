@@ -29,6 +29,33 @@ final class CaptionedTableConverterTest extends BlockConverterTestCase
                     ],
                 ],
             ],
+            [
+                [
+                    'title' => 'Table\'s caption',
+                    'tables' => [
+                    ],
+                    'caption' => [
+                        [
+                            'type' => 'paragraph',
+                            'text' => 'A table\'s caption',
+                        ],
+                    ]
+                ],
+
+            ],
+            [
+                [
+                    'title' => 'Table\'s caption',
+                    'tables' => [
+                    ],
+                    'caption' => [
+                        [
+                            'type' => 'mathml',
+                            'mathml' => '<math>A table\'s caption</math>',
+                        ],
+                    ]
+                ],
+            ],
         ];
     }
 }

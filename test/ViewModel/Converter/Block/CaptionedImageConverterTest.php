@@ -26,7 +26,33 @@ final class CaptionedImageConverterTest extends BlockConverterTestCase
                 [
                     'alt' => 'Image 1',
                     'uri' => 'https://example.com/image1',
-                    'title' => 'An image\'s caption',
+                    'title' => 'An image\'s title',
+                ],
+            ],
+            [
+                [
+                    'alt' => 'Image 1',
+                    'uri' => 'https://example.com/image1',
+                    'title' => 'An image\'s title',
+                    'caption' => [
+                        [
+                            'type' => 'paragraph',
+                            'text' => 'An image\'s caption',
+                        ],
+                    ]
+                ],
+            ],
+            [
+                [
+                    'alt' => 'Image 1',
+                    'uri' => 'https://example.com/image1',
+                    'title' => 'An image\'s title',
+                    'caption' => [
+                        [
+                            'type' => 'mathml',
+                            'mathml' => '<math>An image\'s caption</math>',
+                        ],
+                    ]
                 ],
             ],
         ];
