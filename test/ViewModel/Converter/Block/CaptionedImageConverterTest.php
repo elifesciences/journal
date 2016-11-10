@@ -3,11 +3,12 @@
 namespace test\eLife\Journal\ViewModel\Converter\Block;
 
 use eLife\Journal\ViewModel\Converter\Block\CaptionedImageConverter;
+use eLife\ApiSdk\Model\Block\Image;
 use eLife\Patterns\ViewModel\CaptionedAsset;
 
 final class CaptionedImageConverterTest extends BlockConverterTestCase
 {
-    protected $class = 'eLife\ApiSdk\Model\Block\Image';
+    protected $class = Image::class;
     protected $viewModelClass = CaptionedAsset::class;
 
     /**
