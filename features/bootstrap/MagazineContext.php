@@ -130,21 +130,6 @@ final class MagazineContext extends Context
                         'number' => 1,
                         'title' => 'Chapter 1',
                         'time' => 0,
-                        'content' => [
-                            [
-                                'type' => 'research-article',
-                                'status' => 'vor',
-                                'id' => '54321',
-                                'version' => 1,
-                                'doi' => '10.7554/eLife.54321',
-                                'title' => 'Article 54321',
-                                'published' => '2010-01-01T00:00:00+00:00',
-                                'statusDate' => '2010-01-01T00:00:00+00:00',
-                                'volume' => 5,
-                                'elocationId' => 'e54321',
-                                'authorLine' => 'Foo Bar',
-                            ],
-                        ],
                     ],
                 ],
             ];

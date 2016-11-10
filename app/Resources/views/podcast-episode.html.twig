@@ -40,7 +40,9 @@
 
                 <div class="grid__item large--four-twelfths listing-column-secondary">
 
-                    {{ render_pattern(related) }}
+                    {% if related %}
+                        {{ render_pattern(related) }}
+                    {% endif %}
 
                     <p class="u-pad-top-lg">The eLife Podcast is produced for eLife by The Naked Scientists.</p>
 

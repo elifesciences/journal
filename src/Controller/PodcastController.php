@@ -81,6 +81,10 @@ final class PodcastController extends Controller
                     $articles = array_merge($articles, $chapter->getContent()->slice(0, 1)->toArray());
                 }
 
+                if (empty($articles)) {
+                    return null;
+                }
+
                 return ListingTeasers::basic(
                     array_map(function (Model $model) {
                         return $this->get('elife.journal.view_model.converter')->convert($model, Teaser::class, ['variant' => 'secondary']);
