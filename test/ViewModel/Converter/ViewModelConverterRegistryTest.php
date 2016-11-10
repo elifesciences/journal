@@ -3,10 +3,10 @@
 namespace test\eLife\Journal\ViewModel\Converter;
 
 use DateTimeImmutable;
+use eLife\Journal\ViewModel\Converter\ViewModelConverter;
+use eLife\Journal\ViewModel\Converter\ViewModelConverterRegistry;
 use PHPUnit_Framework_TestCase;
 use stdClass;
-use eLife\Journal\ViewModel\Converter\ViewModelConverterRegistry;
-use eLife\Journal\ViewModel\Converter\ViewModelConverter;
 
 final class ViewModelConverterRegistryTest extends PHPUnit_Framework_TestCase
 {
@@ -31,9 +31,10 @@ final class ViewModelConverterRegistryTest extends PHPUnit_Framework_TestCase
         $stub
             ->expects($this->any())
             ->method('supports')
-            ->will($this->returnCallback(function($object, $specifiedViewModelClass) use ($objectClass, $viewModelClass) {
+            ->will($this->returnCallback(function ($object, $specifiedViewModelClass) use ($objectClass, $viewModelClass) {
                 return $object instanceof $objectClass && $viewModelClass == $specifiedViewModelClass;
             }));
+
         return $stub;
     }
 
@@ -41,18 +42,18 @@ final class ViewModelConverterRegistryTest extends PHPUnit_Framework_TestCase
     {
         $this->assertTrue(
             $registry->supports($object, $viewModelClass),
-            "Registry should support " . get_class($object) . " turning into $viewModelClass, but it doesn't"
+            'Registry should support '.get_class($object)." turning into $viewModelClass, but it doesn't"
         );
     }
 
     /**
-     * Probably grammatically incorrect, but that's the naming convention for negative assertions in PHPUnit
+     * Probably grammatically incorrect, but that's the naming convention for negative assertions in PHPUnit.
      */
     private function assertNotSupports(ViewModelConverterRegistry $registry, $object, string $viewModelClass)
     {
         $this->assertFalse(
             $registry->supports($object, $viewModelClass),
-            "Registry should not support " . get_class($object) . " turning into $viewModelClass, but it does"
+            'Registry should not support '.get_class($object)." turning into $viewModelClass, but it does"
         );
     }
 }

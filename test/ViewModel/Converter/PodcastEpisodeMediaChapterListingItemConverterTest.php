@@ -6,11 +6,10 @@ use eLife\ApiSdk\Model\Model;
 use eLife\ApiSdk\Model\PodcastEpisode;
 use eLife\Journal\ViewModel\Converter\PodcastEpisodeMediaChapterListingItemConverter;
 use eLife\Patterns\ViewModel\MediaChapterListingItem;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 final class PodcastEpisodeMediaChapterListingItemConverterTest extends ModelConverterTestCase
 {
-    # multiple models
+    // multiple models
     protected $models = ['podcast-episode'];
     protected $class = PodcastEpisode::class;
     protected $viewModelClass = MediaChapterListingItem::class;

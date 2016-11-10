@@ -5,11 +5,10 @@ namespace test\eLife\Journal\ViewModel\Converter;
 use eLife\ApiSdk\Model\BlogArticle;
 use eLife\Journal\ViewModel\Converter\BlogArticleSecondaryTeaserConverter;
 use eLife\Patterns\ViewModel\Teaser;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 final class BlogArticleSecondaryTeaserConverterTest extends ModelConverterTestCase
 {
-    # multiple models
+    // multiple models
     protected $models = ['blog-article'];
     protected $class = BlogArticle::class;
     protected $viewModelClass = Teaser::class;

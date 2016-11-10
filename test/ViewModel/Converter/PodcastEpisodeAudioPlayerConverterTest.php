@@ -4,15 +4,13 @@ namespace test\eLife\Journal\ViewModel\Converter;
 
 use eLife\ApiSdk\Model\PodcastEpisode;
 use eLife\Journal\ViewModel\Converter\PodcastEpisodeAudioPlayerConverter;
+use eLife\Journal\ViewModel\Converter\ViewModelConverter;
 use eLife\Patterns\ViewModel\AudioPlayer;
 use eLife\Patterns\ViewModel\MediaChapterListingItem;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Puli\UrlGenerator\Api\UrlGenerator as PuliUrlGenerator;
-use eLife\Journal\ViewModel\Converter\ViewModelConverter;
 
 final class PodcastEpisodeAudioPlayerConverterTest extends ModelConverterTestCase
 {
-    # multiple models
+    // multiple models
     protected $models = ['podcast-episode'];
     protected $class = PodcastEpisode::class;
     protected $viewModelClass = AudioPlayer::class;
@@ -34,6 +32,6 @@ final class PodcastEpisodeAudioPlayerConverterTest extends ModelConverterTestCas
 
     private function aMediaChapterListingItem()
     {
-        return new MediaChapterListingItem("1", 0, 1);
+        return new MediaChapterListingItem('1', 0, 1);
     }
 }

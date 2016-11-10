@@ -2,12 +2,10 @@
 
 namespace test\eLife\Journal\ViewModel\Converter;
 
-use PHPUnit_Framework_TestCase;
 use eLife\ApiSdk\Model\Block;
 use eLife\ApiSdk\Model\Model;
-use eLife\Journal\ViewModel\Paragraph;
-use eLife\Patterns\ViewModel\ContentHeaderNonArticle;
 use eLife\Journal\ViewModel\Converter\ViewModelConverter;
+use PHPUnit_Framework_TestCase;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class ModelConverterTestCase extends PHPUnit_Framework_TestCase
@@ -19,7 +17,7 @@ class ModelConverterTestCase extends PHPUnit_Framework_TestCase
     protected $context = [];
     protected $samples = '*';
     private $serializer;
-    
+
     /**
      * @before
      */
@@ -48,7 +46,7 @@ class ModelConverterTestCase extends PHPUnit_Framework_TestCase
 
         $this->assertTrue(
             $this->converter->supports($model, $this->viewModelClass, $this->context),
-            "Converter does not support turning " . get_class($model) . " into " . $this->viewModelClass
+            'Converter does not support turning '.get_class($model).' into '.$this->viewModelClass
         );
         $viewModel = $this->converter->convert($model);
         $this->assertTrue($viewModel instanceof $this->viewModelClass);
@@ -76,6 +74,7 @@ class ModelConverterTestCase extends PHPUnit_Framework_TestCase
                 )
             );
         }
+
         return $samples;
     }
 
