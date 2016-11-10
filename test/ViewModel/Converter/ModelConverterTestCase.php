@@ -2,13 +2,14 @@
 
 namespace test\eLife\Journal\ViewModel\Converter;
 
+use eLife\ApiSdk\ApiSdk;
 use eLife\ApiSdk\Model\Block;
 use eLife\ApiSdk\Model\Model;
 use eLife\Journal\ViewModel\Converter\ViewModelConverter;
 use PHPUnit_Framework_TestCase;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-class ModelConverterTestCase extends PHPUnit_Framework_TestCase
+abstract class ModelConverterTestCase extends PHPUnit_Framework_TestCase
 {
     protected $models;
     protected $class;
@@ -24,7 +25,7 @@ class ModelConverterTestCase extends PHPUnit_Framework_TestCase
     public function setUpSerializer()
     {
         $httpClient = $this->createMock('eLife\ApiClient\HttpClient');
-        $apiSdk = new \eLife\ApiSdk\ApiSdk($httpClient);
+        $apiSdk = new ApiSdk($httpClient);
         $this->serializer = $apiSdk->getSerializer();
     }
 
