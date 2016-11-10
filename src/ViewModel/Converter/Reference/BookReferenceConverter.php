@@ -25,7 +25,7 @@ final class BookReferenceConverter implements ViewModelConverter
         }
 
         $origin = [
-            $object->getDate()->format(),
+            $object->getDate()->format().$object->getDiscriminator(),
             $this->publisherToString($object->getPublisher()),
         ];
         if ($object->getPmid()) {

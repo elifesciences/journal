@@ -17,7 +17,7 @@ final class ReportReferenceConverter implements ViewModelConverter
     public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
         $origin = [
-            $object->getDate()->format(),
+            $object->getDate()->format().$object->getDiscriminator(),
             $this->publisherToString($object->getPublisher()),
         ];
         if ($object->getPmid()) {

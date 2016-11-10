@@ -15,7 +15,7 @@ final class WebReferenceConverter implements ViewModelConverter
      */
     public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
-        $origin = [$object->getDate()->format()];
+        $origin = [$object->getDate()->format().$object->getDiscriminator()];
         if ($object->getWebsite()) {
             $origin[] = $object->getWebsite();
         }

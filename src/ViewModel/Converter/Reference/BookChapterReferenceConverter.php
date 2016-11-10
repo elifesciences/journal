@@ -25,7 +25,7 @@ final class BookChapterReferenceConverter implements ViewModelConverter
         }
 
         $origin = [
-            $object->getDate()->format(),
+            $object->getDate()->format().$object->getDiscriminator(),
             'In: '.$this->createAuthorsString($object->getEditors(), $object->editorsEtAl()).', editors',
             '<i>'.$bookTitle.'</i>',
             $this->publisherToString($object->getPublisher()),

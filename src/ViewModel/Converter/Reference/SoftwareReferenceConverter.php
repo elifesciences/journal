@@ -21,7 +21,7 @@ final class SoftwareReferenceConverter implements ViewModelConverter
         }
 
         $origin = [
-            $object->getDate()->format(),
+            $object->getDate()->format().$object->getDiscriminator(),
             $object->getPublisher()->toString(),
         ];
 

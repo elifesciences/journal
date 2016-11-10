@@ -15,7 +15,7 @@ final class UnknownReferenceConverter implements ViewModelConverter
      */
     public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
-        $origin = [$object->getDate()->format()];
+        $origin = [$object->getDate()->format().$object->getDiscriminator()];
         if ($object->getDetails()) {
             $origin[] = $object->getDetails();
         }

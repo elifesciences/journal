@@ -16,7 +16,7 @@ final class DataReferenceConverter implements ViewModelConverter
     public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
         $origin = [
-            $object->getDate()->format(),
+            $object->getDate()->format().$object->getDiscriminator(),
             $object->getSource(),
         ];
         if ($object->getAssigningAuthority()) {
