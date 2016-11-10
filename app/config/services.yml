@@ -344,7 +344,7 @@ services:
           - name: view_model.converter
 
     elife.journal.view_model.converter.podcast_episode.audio_player:
-        class: eLife\Journal\ViewModel\Converter\PodcastEpisodeAudioPlayer
+        class: eLife\Journal\ViewModel\Converter\PodcastEpisodeAudioPlayerConverter
         public: false
         arguments:
           - '@elife.journal.view_model.converter'
