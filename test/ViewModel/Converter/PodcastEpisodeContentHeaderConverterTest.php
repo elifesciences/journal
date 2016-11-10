@@ -9,12 +9,10 @@ use Puli\UrlGenerator\Api\UrlGenerator as PuliUrlGenerator;
 
 final class PodcastEpisodeContentHeaderConverterTest extends ModelConverterTestCase
 {
-    // multiple models
     protected $models = ['podcast-episode'];
     protected $class = PodcastEpisode::class;
     protected $viewModelClass = ContentHeaderNonArticle::class;
-    protected $samples = 'complete';
-    //protected $samples = '*'; or delete it
+    protected $samples = '*';
 
     /**
      * @before

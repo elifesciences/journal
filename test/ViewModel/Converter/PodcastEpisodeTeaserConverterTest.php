@@ -8,12 +8,10 @@ use eLife\Patterns\ViewModel\Teaser;
 
 final class PodcastEpisodeTeaserConverterTest extends ModelConverterTestCase
 {
-    // multiple models
     protected $models = ['podcast-episode'];
     protected $class = PodcastEpisode::class;
     protected $viewModelClass = Teaser::class;
-    protected $samples = 'complete';
-    //protected $samples = '*'; or delete it
+    protected $samples = '*';
 
     /**
      * @before

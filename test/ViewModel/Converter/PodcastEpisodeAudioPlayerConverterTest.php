@@ -10,11 +10,10 @@ use eLife\Patterns\ViewModel\MediaChapterListingItem;
 
 final class PodcastEpisodeAudioPlayerConverterTest extends ModelConverterTestCase
 {
-    // multiple models
     protected $models = ['podcast-episode'];
     protected $class = PodcastEpisode::class;
     protected $viewModelClass = AudioPlayer::class;
-    protected $samples = '*'; or delete it
+    protected $samples = '*';
 
     /**
      * @before

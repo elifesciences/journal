@@ -8,13 +8,11 @@ use eLife\Patterns\ViewModel\Teaser;
 
 final class PodcastEpisodeGridTeaserConverterTest extends ModelConverterTestCase
 {
-    // multiple models
     protected $models = ['podcast-episode'];
     protected $class = PodcastEpisode::class;
     protected $viewModelClass = Teaser::class;
     protected $context = ['variant' => 'grid'];
-    protected $samples = 'complete';
-    //protected $samples = '*'; or delete it
+    protected $samples = '*';
 
     /**
      * @before
