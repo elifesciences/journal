@@ -65,7 +65,7 @@ final class ArticlesController extends Controller
                             }, ''),
                         false,
                         $first,
-                        new Doi($article->getAbstract()->getDoi())
+                        new Doi($article->getDigest()->getDoi())
                     );
 
                     $first = false;
