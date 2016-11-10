@@ -363,6 +363,29 @@ final class ArticleControllerTest extends PageTestCase
                             ],
                         ],
                     ],
+                    'references' => [
+                        [
+                            'type' => 'journal',
+                            'id' => 'bib1',
+                            'date' => '2013',
+                            'authors' => [
+                                [
+                                    'type' => 'person',
+                                    'name' => [
+                                        'preferred' => 'Person One',
+                                        'index' => 'One, Person',
+                                    ],
+                                ],
+                            ],
+                            'articleTitle' => 'Journal article',
+                            'journal' => [
+                                'name' => [
+                                    'A journal',
+                                ],
+                            ],
+                            'pages' => 'In press',
+                        ],
+                    ],
                     'acknowledgements' => [
                         [
                             'type' => 'paragraph',
@@ -417,16 +440,23 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertSame('Appendix 1', $appendix->filter('header > h2')->text());
         $this->assertSame('Appendix title', $appendix->filter('div > section > header > h3')->text());
         $this->assertSame('Appendix text', $appendix->filter('div > p')->text());
+        $references = $crawler->filter('main > .wrapper > div > div > section:nth-of-type(5)');
+        $this->assertSame('References',
+            $references->filter('header > h2')->text());
+        $this->assertSame('1',
+            $references->filter('div > ol > li:nth-of-type(1) .reference-list__ordinal_number')->text());
+        $this->assertSame('Journal article',
+            $references->filter('div > ol > li:nth-of-type(1) .reference__title')->text());
         $this->assertSame('Decision letter',
-            $crawler->filter('main > .wrapper > div > div > section:nth-of-type(5) > header > h2')->text());
-        $this->assertSame('Decision letter text',
-            $crawler->filter('main > .wrapper > div > div > section:nth-of-type(5) > div > p')->text());
-        $this->assertSame('Author response',
             $crawler->filter('main > .wrapper > div > div > section:nth-of-type(6) > header > h2')->text());
-        $this->assertSame('Author response text',
+        $this->assertSame('Decision letter text',
             $crawler->filter('main > .wrapper > div > div > section:nth-of-type(6) > div > p')->text());
+        $this->assertSame('Author response',
+            $crawler->filter('main > .wrapper > div > div > section:nth-of-type(7) > header > h2')->text());
+        $this->assertSame('Author response text',
+            $crawler->filter('main > .wrapper > div > div > section:nth-of-type(7) > div > p')->text());
 
-        $articleInfo = $crawler->filter('main > .wrapper > div > div > section:nth-of-type(7)');
+        $articleInfo = $crawler->filter('main > .wrapper > div > div > section:nth-of-type(8)');
         $this->assertSame('Article and author information',
             $articleInfo->filter('header > h2')->text());
 
@@ -445,6 +475,7 @@ final class ArticleControllerTest extends PageTestCase
                 'eLife digest',
                 'Body title',
                 'Appendix 1',
+                'References',
                 'Decision letter',
                 'Author response',
                 'Article and author information',

@@ -1,0 +1,43 @@
+<?php
+
+namespace eLife\Journal\ViewModel\Converter\Reference;
+
+use eLife\ApiSdk\Model\Reference\PeriodicalReference;
+use eLife\Journal\ViewModel\Converter\ViewModelConverter;
+use eLife\Patterns\ViewModel;
+
+final class PeriodicalReferenceConverter implements ViewModelConverter
+{
+    use HasAuthors;
+
+    /**
+     * @param PeriodicalReference $object
+     */
+    public function convert($object, string $viewModel = null, array $context = []) : ViewModel
+    {
+        $periodical = '<i>'.implode(', ', $object->getPeriodical()->getName()).'</i>';
+        $periodicalExtra = $object->getPages()->toString();
+        if ($object->getVolume()) {
+            $periodicalExtra = '<b>'.$object->getVolume().'</b>:'.$periodicalExtra;
+        }
+        $periodical .= ' '.$periodicalExtra;
+
+        $origin = [
+            $object->getDate()->format(),
+            $periodical,
+        ];
+
+        return new ViewModel\Reference(
+            $object->getArticleTitle(),
+            implode('. ', $origin).'.',
+            $object->getUri(),
+            null,
+            $this->createAuthors($object->getAuthors(), $object->authorsEtAl())
+        );
+    }
+
+    public function supports($object, string $viewModel = null, array $context = []) : bool
+    {
+        return $object instanceof PeriodicalReference;
+    }
+}

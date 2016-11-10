@@ -6,6 +6,7 @@ use eLife\ApiSdk\Model\Appendix;
 use eLife\ApiSdk\Model\ArticleVersion;
 use eLife\ApiSdk\Model\ArticleVoR;
 use eLife\ApiSdk\Model\Block;
+use eLife\ApiSdk\Model\Reference;
 use eLife\Patterns\ViewModel;
 use eLife\Patterns\ViewModel\ArticleSection;
 use eLife\Patterns\ViewModel\ContentHeaderArticle;
@@ -109,6 +110,25 @@ final class ArticlesController extends Controller
                                     }, ''),
                                 true, false, new Doi($appendix->getDoi()));
                         })->toArray());
+
+                        if ($article->getReferences()->notEmpty()) {
+                            $parts[] = ArticleSection::collapsible(
+                                'references',
+                                'References',
+                                2,
+                                $this->get('elife.patterns.pattern_renderer')->render(new ViewModel\ReferenceList(
+                                    ...$article->getReferences()
+                                    ->map(function (Reference $reference, int $index) {
+                                        return new ViewModel\ReferenceListItem(
+                                            $reference->getId(),
+                                            $index + 1,
+                                            $this->get('elife.journal.view_model.converter')->convert($reference)
+                                        );
+                                    })->toArray()
+                                )),
+                                true
+                            );
+                        }
 
                         if ($article->getDecisionLetter()) {
                             $parts[] = ArticleSection::collapsible(
