@@ -428,10 +428,14 @@ final class ArticleControllerTest extends PageTestCase
             $crawler->filter('main > .wrapper > div > div > section:nth-of-type(1) > header > h2')->text());
         $this->assertSame('Abstract text',
             $crawler->filter('main > .wrapper > div > div > section:nth-of-type(1) > div > p')->text());
+        $this->assertSame('https://doi.org/10.7554/eLife.09560.001',
+            $crawler->filter('main > .wrapper > div > div > section:nth-of-type(1) > div > .doi')->text());
         $this->assertSame('eLife digest',
             $crawler->filter('main > .wrapper > div > div > section:nth-of-type(2) > header > h2')->text());
         $this->assertSame('Digest text',
             $crawler->filter('main > .wrapper > div > div > section:nth-of-type(2) > div > p')->text());
+        $this->assertSame('https://doi.org/10.7554/eLife.09560.002',
+            $crawler->filter('main > .wrapper > div > div > section:nth-of-type(2) > div > .doi')->text());
         $this->assertSame('Body title',
             $crawler->filter('main > .wrapper > div > div > section:nth-of-type(3) > header > h2')->text());
         $this->assertSame('Body text',
