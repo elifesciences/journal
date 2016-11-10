@@ -46,6 +46,21 @@ final class ListingConverterTest extends BlockConverterTestCase
                     ],
                 ],
             ],
+
+            [
+                [
+                    'prefix' => 'bullet',
+                    'items' => [
+                        'First element',
+                        [
+                            [
+                                'type' => 'paragraph',
+                                'text' => 'Second element',
+                            ]
+                        ],
+                    ],
+                ],
+            ],
         ];
     }
 }
