@@ -3,8 +3,8 @@
 namespace test\eLife\Journal\ViewModel\Converter\Block;
 
 use eLife\ApiSdk\Model\Block\Table;
-use eLife\Journal\ViewModel\Converter\Block\TableConverter;
 use eLife\Journal\ViewModel;
+use eLife\Journal\ViewModel\Converter\Block\TableConverter;
 use eLife\Journal\ViewModel\Converter\ViewModelConverter;
 use eLife\Patterns\PatternRenderer;
 

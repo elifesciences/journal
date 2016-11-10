@@ -2,8 +2,8 @@
 
 namespace test\eLife\Journal\ViewModel\Converter\Block;
 
-use eLife\Journal\ViewModel\Converter\Block\CaptionedImageConverter;
 use eLife\ApiSdk\Model\Block\Image;
+use eLife\Journal\ViewModel\Converter\Block\CaptionedImageConverter;
 use eLife\Patterns\ViewModel\CaptionedAsset;
 
 final class CaptionedImageConverterTest extends BlockConverterTestCase
@@ -39,7 +39,7 @@ final class CaptionedImageConverterTest extends BlockConverterTestCase
                             'type' => 'paragraph',
                             'text' => 'An image\'s caption',
                         ],
-                    ]
+                    ],
                 ],
             ],
             [
@@ -52,7 +52,7 @@ final class CaptionedImageConverterTest extends BlockConverterTestCase
                             'type' => 'mathml',
                             'mathml' => '<math>An image\'s caption</math>',
                         ],
-                    ]
+                    ],
                 ],
             ],
         ];

@@ -2,11 +2,11 @@
 
 namespace test\eLife\Journal\ViewModel\Converter\Block;
 
-use eLife\Journal\ViewModel\Converter\Block\QuoteConverter;
 use eLife\ApiSdk\Model\Block\Quote;
-use eLife\Patterns\ViewModel\PullQuote;
+use eLife\Journal\ViewModel\Converter\Block\QuoteConverter;
 use eLife\Journal\ViewModel\Converter\ViewModelConverter;
 use eLife\Patterns\PatternRenderer;
+use eLife\Patterns\ViewModel\PullQuote;
 
 final class QuoteConverterTest extends BlockConverterTestCase
 {
@@ -37,7 +37,7 @@ final class QuoteConverterTest extends BlockConverterTestCase
                         [
                             'type' => 'paragraph',
                             'text' => 'Lorem ipsum...',
-                        ]
+                        ],
                     ],
                 ],
             ],

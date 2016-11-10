@@ -27,7 +27,7 @@ final class VideoConverterTest extends BlockConverterTestCase
                         [
                             'mediaType' => 'video/ogg',
                             'uri' => 'https://example.com/video1',
-                        ]
+                        ],
                     ],
                     'width' => 800,
                     'height' => 600,

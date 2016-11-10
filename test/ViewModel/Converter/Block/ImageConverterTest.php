@@ -2,9 +2,9 @@
 
 namespace test\eLife\Journal\ViewModel\Converter\Block;
 
-use eLife\Journal\ViewModel\Converter\Block\ImageConverter;
 use eLife\ApiSdk\Model\Block\Image;
 use eLife\Journal\ViewModel\CaptionlessImage;
+use eLife\Journal\ViewModel\Converter\Block\ImageConverter;
 
 final class ImageConverterTest extends BlockConverterTestCase
 {

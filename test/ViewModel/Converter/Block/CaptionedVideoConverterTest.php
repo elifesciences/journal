@@ -28,7 +28,7 @@ final class CaptionedVideoConverterTest extends BlockConverterTestCase
                         [
                             'mediaType' => 'video/ogg',
                             'uri' => 'https://example.com/video1',
-                        ]
+                        ],
                     ],
                     'width' => 800,
                     'height' => 600,
@@ -42,7 +42,7 @@ final class CaptionedVideoConverterTest extends BlockConverterTestCase
                         [
                             'mediaType' => 'video/ogg',
                             'uri' => 'https://example.com/video1',
-                        ]
+                        ],
                     ],
                     'width' => 800,
                     'height' => 600,
@@ -52,7 +52,7 @@ final class CaptionedVideoConverterTest extends BlockConverterTestCase
                             'type' => 'paragraph',
                             'text' => 'A video\'s caption',
                         ],
-                    ]
+                    ],
                 ],
             ],
             [
@@ -62,7 +62,7 @@ final class CaptionedVideoConverterTest extends BlockConverterTestCase
                         [
                             'mediaType' => 'video/ogg',
                             'uri' => 'https://example.com/video1',
-                        ]
+                        ],
                     ],
                     'width' => 800,
                     'height' => 600,
@@ -72,7 +72,7 @@ final class CaptionedVideoConverterTest extends BlockConverterTestCase
                             'type' => 'mathml',
                             'mathml' => '<math>A video\'s caption</math>',
                         ],
-                    ]
+                    ],
                 ],
             ],
         ];

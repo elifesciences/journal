@@ -2,11 +2,11 @@
 
 namespace test\eLife\Journal\ViewModel\Converter\Block;
 
-use eLife\Journal\ViewModel\Converter\Block\SectionConverter;
 use eLife\ApiSdk\Model\Block\Section;
-use eLife\Patterns\ViewModel\ArticleSection;
+use eLife\Journal\ViewModel\Converter\Block\SectionConverter;
 use eLife\Journal\ViewModel\Converter\ViewModelConverter;
 use eLife\Patterns\PatternRenderer;
+use eLife\Patterns\ViewModel\ArticleSection;
 
 final class SectionConverterTest extends BlockConverterTestCase
 {
@@ -38,7 +38,7 @@ final class SectionConverterTest extends BlockConverterTestCase
                         [
                             'type' => 'paragraph',
                             'text' => 'Lorem ipsum...',
-                        ]
+                        ],
                     ],
                 ],
             ],

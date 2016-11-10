@@ -39,7 +39,7 @@ final class CaptionedTableConverterTest extends BlockConverterTestCase
                             'type' => 'paragraph',
                             'text' => 'A table\'s caption',
                         ],
-                    ]
+                    ],
                 ],
 
             ],
@@ -53,7 +53,7 @@ final class CaptionedTableConverterTest extends BlockConverterTestCase
                             'type' => 'mathml',
                             'mathml' => '<math>A table\'s caption</math>',
                         ],
-                    ]
+                    ],
                 ],
             ],
         ];

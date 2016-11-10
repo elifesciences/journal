@@ -2,11 +2,11 @@
 
 namespace test\eLife\Journal\ViewModel\Converter\Block;
 
-use eLife\Journal\ViewModel\Converter\Block\ListingConverter;
 use eLife\ApiSdk\Model\Block\Listing;
-use eLife\Patterns\ViewModel;
+use eLife\Journal\ViewModel\Converter\Block\ListingConverter;
 use eLife\Journal\ViewModel\Converter\ViewModelConverter;
 use eLife\Patterns\PatternRenderer;
+use eLife\Patterns\ViewModel;
 
 final class ListingConverterTest extends BlockConverterTestCase
 {
@@ -56,7 +56,7 @@ final class ListingConverterTest extends BlockConverterTestCase
                             [
                                 'type' => 'paragraph',
                                 'text' => 'Second element',
-                            ]
+                            ],
                         ],
                     ],
                 ],

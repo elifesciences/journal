@@ -2,11 +2,11 @@
 
 namespace test\eLife\Journal\ViewModel\Converter\Block;
 
-use eLife\Journal\ViewModel\Converter\Block\QuestionConverter;
 use eLife\ApiSdk\Model\Block\Question;
-use eLife\Patterns\ViewModel\ArticleSection;
+use eLife\Journal\ViewModel\Converter\Block\QuestionConverter;
 use eLife\Journal\ViewModel\Converter\ViewModelConverter;
 use eLife\Patterns\PatternRenderer;
+use eLife\Patterns\ViewModel\ArticleSection;
 
 final class QuestionConverterTest extends BlockConverterTestCase
 {
@@ -38,7 +38,7 @@ final class QuestionConverterTest extends BlockConverterTestCase
                         [
                             'type' => 'paragraph',
                             'text' => '42',
-                        ]
+                        ],
                     ],
                 ],
             ],
