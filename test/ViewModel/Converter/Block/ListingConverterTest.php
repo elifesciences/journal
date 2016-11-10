@@ -36,6 +36,16 @@ final class ListingConverterTest extends BlockConverterTestCase
                     ],
                 ],
             ],
+
+            [
+                [
+                    'prefix' => 'number',
+                    'items' => [
+                        'First element',
+                        'Second element',
+                    ],
+                ],
+            ],
         ];
     }
 }
