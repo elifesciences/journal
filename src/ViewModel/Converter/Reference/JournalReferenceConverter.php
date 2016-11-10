@@ -3,6 +3,7 @@
 namespace eLife\Journal\ViewModel\Converter\Reference;
 
 use eLife\ApiSdk\Model\Reference\JournalReference;
+use eLife\ApiSdk\Model\Reference\ReferencePageRange;
 use eLife\Journal\ViewModel\Converter\ViewModelConverter;
 use eLife\Patterns\ViewModel;
 
@@ -16,11 +17,16 @@ final class JournalReferenceConverter implements ViewModelConverter
     public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
         $journal = '<i>'.implode(', ', $object->getJournal()->getName()).'</i>';
-        $journalExtra = $object->getPages()->toString();
         if ($object->getVolume()) {
-            $journalExtra = '<b>'.$object->getVolume().'</b>:'.$journalExtra;
+            $journal .= ' <b>'.$object->getVolume().'</b>:';
+            if ($object->getPages() instanceof ReferencePageRange) {
+                $journal .= $object->getPages()->getRange();
+            } else {
+                $journal .= $object->getPages()->toString();
+            }
+        } elseif ($object->getPages()) {
+            $journal .= ' '.$object->getPages()->toString();
         }
-        $journal .= ' '.$journalExtra;
 
         $origin = [
             $object->getDate()->format(),
