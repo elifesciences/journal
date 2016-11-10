@@ -137,6 +137,13 @@ services:
     elife.journal.view_model.converter.block.image_captioned:
         class: eLife\Journal\ViewModel\Converter\Block\CaptionedImageConverter
         public: false
+        arguments:
+          - '@elife.journal.view_model.converter'
+        tags:
+          - name: view_model.converter
+
+    elife.journal.view_model.converter.block.image_file_captioned:
+        class: eLife\Journal\ViewModel\Converter\Block\CaptionedImageFileConverter
         tags:
           - name: view_model.converter
 

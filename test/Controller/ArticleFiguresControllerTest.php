@@ -26,11 +26,12 @@ final class ArticleFiguresControllerTest extends PageTestCase
         $this->assertContains('doi: 10.7554/eLife.00001', $crawler->filter('.contextual-data__cite_wrapper')->text());
 
         $figures = $crawler->filter('.large--six-twelfths > div');
-        $this->assertCount(4, $figures);
+        $this->assertCount(5, $figures);
         $this->assertSame('Image 1 label', trim($figures->eq(0)->filter('.asset-viewer-inline__header_text')->text()));
         $this->assertSame('Video 1 label', trim($figures->eq(1)->filter('.asset-viewer-inline__header_text')->text()));
         $this->assertSame('Image 2 label', trim($figures->eq(2)->filter('.asset-viewer-inline__header_text')->text()));
-        $this->assertSame('Table 1 label', trim($figures->eq(3)->filter('.asset-viewer-inline__header_text')->text()));
+        $this->assertSame('Image 2 supplement 1 label', trim($figures->eq(3)->filter('.asset-viewer-inline__header_text')->text()));
+        $this->assertSame('Table 1 label', trim($figures->eq(4)->filter('.asset-viewer-inline__header_text')->text()));
     }
 
     /**
@@ -223,6 +224,15 @@ final class ArticleFiguresControllerTest extends PageTestCase
                                             'title' => 'Image 2 title',
                                             'alt' => '',
                                             'uri' => 'https://placehold.it/900x450',
+                                            'supplements' => [
+                                                [
+                                                    'id' => 'image2s1',
+                                                    'label' => 'Image 2 supplement 1 label',
+                                                    'title' => 'Image 2 supplement 1 title',
+                                                    'alt' => '',
+                                                    'uri' => 'https://placehold.it/900x450',
+                                                ],
+                                            ],
                                         ],
                                     ],
                                 ],
