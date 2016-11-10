@@ -50,7 +50,7 @@ abstract class BlockConverterTestCase extends PHPUnit_Framework_TestCase
             'Converter does not support turning '.get_class($block).' into '.$this->viewModelClass
         );
         $viewModel = $this->converter->convert($block);
-        $this->assertTrue($viewModel instanceof $this->viewModelClass);
+        $this->assertTrue($viewModel instanceof $this->viewModelClass, "Failed asserting ".var_export($viewModel, true)." is an instance of $this->viewModelClass");
 
         $viewModel->toArray();
     }
@@ -75,7 +75,7 @@ abstract class BlockConverterTestCase extends PHPUnit_Framework_TestCase
     {
         $block = $this->serializer->denormalize($this->unsupportedModelData(), Block::class);
 
-        $this->assertFalse($this->converter->supports($block));
+        $this->assertFalse($this->converter->supports($block), "Should not support ".var_export($block, true));
     }
 
     protected function unsupportedModelData()
