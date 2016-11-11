@@ -28,14 +28,6 @@ abstract class BlockConverterTestCase extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @before
-     */
-    public function setUpConverter()
-    {
-        $this->converter = new CaptionedImageConverter();
-    }
-
-    /**
      * @test
      * @dataProvider blocks
      */
@@ -55,18 +47,7 @@ abstract class BlockConverterTestCase extends PHPUnit_Framework_TestCase
         $viewModel->toArray();
     }
 
-    public function blocks()
-    {
-        return [
-            [
-                [
-                    'alt' => 'Image 1',
-                    'uri' => 'https://example.com/image1',
-                    'title' => 'An image\'s caption',
-                ],
-            ],
-        ];
-    }
+    public abstract function blocks();
 
     /**
      * @test
