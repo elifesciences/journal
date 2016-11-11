@@ -65,15 +65,11 @@ abstract class ModelConverterTestCase extends PHPUnit_Framework_TestCase
 
         $samples = [];
         foreach ($this->models as $model) {
-            $samples = array_merge(
-                $samples,
-                array_map(
-                    function ($path) {
-                        return [$path];
-                    },
-                    $glob = glob("vendor/elife/api/src/samples/{$model}/v1/{$this->samples}.json")
-                )
-            );
+            $glob = glob("vendor/elife/api/src/samples/{$model}/v1/{$this->samples}.json");
+            foreach ($glob as $path) {
+                $name = $model.'/v1/'.basename($path); 
+                $samples[$name] = ['path' => $path];
+            }
         }
 
         return $samples;
