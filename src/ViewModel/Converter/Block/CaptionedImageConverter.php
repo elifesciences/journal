@@ -21,16 +21,16 @@ final class CaptionedImageConverter implements ViewModelConverter
      */
     public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
-        $figure = $this->viewModelConverter->convert($object->getImage());
+        $figure = $this->viewModelConverter->convert($object->getImage(), null, $context);
 
-        if (empty($context['supplements'])) {
+        if (empty($context['complete'])) {
             return $figure;
         }
 
         $assets = [$figure];
 
         foreach ($object->getSupplements() as $i => $supplement) {
-            $assets[] = $this->viewModelConverter->convert($supplement, null, ['parentId' => $object->getImage()->getId(), 'ordinal' => $i + 1]);
+            $assets[] = $this->viewModelConverter->convert($supplement, null, ['complete' => true, 'parentId' => $object->getImage()->getId(), 'ordinal' => $i + 1]);
         }
 
         return new AssetViewerInlineSet(...$assets);

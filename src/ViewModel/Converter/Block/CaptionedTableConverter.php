@@ -6,10 +6,12 @@ use eLife\ApiSdk\Model\Block;
 use eLife\Journal\ViewModel\Converter\ViewModelConverter;
 use eLife\Patterns\ViewModel;
 use eLife\Patterns\ViewModel\AssetViewerInline;
-use eLife\Patterns\ViewModel\CaptionedAsset;
 
 final class CaptionedTableConverter implements ViewModelConverter
 {
+    use CreatesAdditionalAssetData;
+    use CreatesCaptionedAsset;
+
     /**
      * @param Block\Table $object
      */
@@ -17,26 +19,21 @@ final class CaptionedTableConverter implements ViewModelConverter
     {
         $asset = new ViewModel\Table(...$object->getTables());
 
-        $doi = $object->getDoi() ? new ViewModel\Doi($object->getDoi()) : null;
-
-        if (empty($object->getCaption())) {
-            $asset = CaptionedAsset::withOnlyHeading($asset, $object->getTitle(), $doi);
-        } else {
-            $asset = CaptionedAsset::withParagraphs($asset, $object->getTitle(),
-                array_map(function (Block $block) {
-                    if ($block instanceof Block\MathML) {
-                        return $block->getMathML();
-                    }
-
-                    return $block->getText();
-                }, $object->getCaption()), $doi);
-        }
+        $asset = $this->createCaptionedAsset($asset, $object->getTitle(), $object->getCaption(), $object->getDoi());
 
         if (empty($object->getLabel())) {
             return $asset;
         }
 
-        return AssetViewerInline::primary($object->getId(), $object->getLabel(), $asset);
+        if (!empty($context['complete'])) {
+            $additionalAssets = array_map(function (Block\File $sourceData) {
+                return $this->createAdditionalAssetData($sourceData);
+            }, $object->getSourceData());
+        } else {
+            $additionalAssets = [];
+        }
+
+        return AssetViewerInline::primary($object->getId(), $object->getLabel(), $asset, $additionalAssets);
     }
 
     public function supports($object, string $viewModel = null, array $context = []) : bool
