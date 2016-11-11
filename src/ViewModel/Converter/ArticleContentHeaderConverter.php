@@ -6,9 +6,6 @@ use eLife\ApiSdk\Model\ArticleVersion;
 use eLife\ApiSdk\Model\ArticleVoR;
 use eLife\ApiSdk\Model\Author;
 use eLife\ApiSdk\Model\AuthorEntry;
-use eLife\ApiSdk\Model\GroupAuthor;
-use eLife\ApiSdk\Model\OnBehalfOfAuthor;
-use eLife\ApiSdk\Model\PersonAuthor;
 use eLife\ApiSdk\Model\Subject;
 use eLife\Patterns\ViewModel;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -32,22 +29,7 @@ final class ArticleContentHeaderConverter implements ViewModelConverter
         });
 
         $authors = $object->getAuthors()->map(function (AuthorEntry $author) {
-            switch (get_class($author)) {
-                case PersonAuthor::class:
-                    /* @var PersonAuthor $author */
-                    return ViewModel\Author::asText($author->getPreferredName());
-                    break;
-                case GroupAuthor::class:
-                    /* @var GroupAuthor $author */
-                    return ViewModel\Author::asText($author->getName());
-                    break;
-                case OnBehalfOfAuthor::class:
-                    /* @var OnBehalfOfAuthor $author */
-                    return ViewModel\Author::asText($author->getOnBehalfOf());
-                    break;
-            }
-
-            throw new \RuntimeException('Unknown type '.get_class($author));
+            return ViewModel\Author::asText($author->toString());
         })->toArray();
 
         $institutions = array_map(function (string $institution) {
