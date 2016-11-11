@@ -729,12 +729,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-sdk-php.git",
-                "reference": "6242818f0ce9b22ddca28db75895eabc7df94e9d"
+                "reference": "8c89b314afcea13d1be33c5a97d99627edb7174c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/6242818f0ce9b22ddca28db75895eabc7df94e9d",
-                "reference": "6242818f0ce9b22ddca28db75895eabc7df94e9d",
+                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/8c89b314afcea13d1be33c5a97d99627edb7174c",
+                "reference": "8c89b314afcea13d1be33c5a97d99627edb7174c",
                 "shasum": ""
             },
             "require": {
@@ -769,7 +769,7 @@
                 "MIT"
             ],
             "description": "eLife Sciences API SDK",
-            "time": "2016-11-10 13:41:26"
+            "time": "2016-11-11 09:13:35"
         },
         {
             "name": "elife/patterns",
@@ -777,12 +777,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:elifesciences/patterns-php.git",
-                "reference": "acb4fe3440d27f812e211c896a73b9bbde54e59f"
+                "reference": "a6c253862bf2d2f0ab571d630cc78a3a94fbbaf5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/acb4fe3440d27f812e211c896a73b9bbde54e59f",
-                "reference": "acb4fe3440d27f812e211c896a73b9bbde54e59f",
+                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/a6c253862bf2d2f0ab571d630cc78a3a94fbbaf5",
+                "reference": "a6c253862bf2d2f0ab571d630cc78a3a94fbbaf5",
                 "shasum": ""
             },
             "require": {
@@ -825,7 +825,7 @@
                 "source": "https://github.com/elifesciences/patterns-php/tree/master",
                 "issues": "https://github.com/elifesciences/patterns-php/issues"
             },
-            "time": "2016-11-09 12:48:44"
+            "time": "2016-11-11 09:02:45"
         },
         {
             "name": "guzzlehttp/guzzle",

@@ -266,7 +266,7 @@ final class ArticlesController extends Controller
             })
             ->then(function (array $figures) {
                 return array_map(function (Block $block) {
-                    return $this->get('elife.journal.view_model.converter')->convert($block, null, ['supplements' => true]);
+                    return $this->get('elife.journal.view_model.converter')->convert($block, null, ['complete' => true]);
                 }, $figures);
             });
 
