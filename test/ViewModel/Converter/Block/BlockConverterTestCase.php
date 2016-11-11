@@ -4,7 +4,6 @@ namespace test\eLife\Journal\ViewModel\Converter\Block;
 
 use eLife\ApiSdk\ApiSdk;
 use eLife\ApiSdk\Model\Block;
-use eLife\Journal\ViewModel\Converter\Block\CaptionedImageConverter;
 use eLife\Journal\ViewModel\Converter\ViewModelConverter;
 use PHPUnit_Framework_TestCase;
 
@@ -47,7 +46,7 @@ abstract class BlockConverterTestCase extends PHPUnit_Framework_TestCase
         $viewModel->toArray();
     }
 
-    public abstract function blocks();
+    abstract public function blocks();
 
     /**
      * @test
