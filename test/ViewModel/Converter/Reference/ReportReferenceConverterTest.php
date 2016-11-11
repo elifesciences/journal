@@ -22,7 +22,7 @@ final class ReportReferenceConverterTest extends ReferenceConverterTestCase
     public function references()
     {
         return [
-            [
+            'minimum' => [
                 [
                     'id' => '',
                     'date' => '2016-01-01',
@@ -31,6 +31,19 @@ final class ReportReferenceConverterTest extends ReferenceConverterTestCase
                     'publisher' => [
                         'name' => [''],
                     ],
+                ],
+            ],
+            'complete' => [
+                [
+                    'id' => '',
+                    'date' => '2016-01-01',
+                    'authors' => [],
+                    'title' => '...',
+                    'publisher' => [
+                        'name' => [''],
+                    ],
+                    'pmid' => 42,
+                    'isbn' => '978-3-16-148410-0',
                 ],
             ],
         ];

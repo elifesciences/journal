@@ -22,7 +22,7 @@ final class PatentReferenceConverterTest extends ReferenceConverterTestCase
     public function references()
     {
         return [
-            [
+            'minimum' => [
                 [
                     'id' => '',
                     'date' => '2016-01-01',
@@ -30,6 +30,18 @@ final class PatentReferenceConverterTest extends ReferenceConverterTestCase
                     'title' => 'Light bulb',
                     'patentType' => '',
                     'country' => 'US',
+                ],
+            ],
+            'complete' => [
+                [
+                    'id' => '',
+                    'date' => '2016-01-01',
+                    'inventors' => [],
+                    'title' => 'Light bulb',
+                    'patentType' => '',
+                    'country' => 'US',
+                    'assignees' => [],
+                    'number' => '1234',
                 ],
             ],
         ];

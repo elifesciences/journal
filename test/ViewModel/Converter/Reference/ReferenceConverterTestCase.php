@@ -55,7 +55,7 @@ abstract class ReferenceConverterTestCase extends PHPUnit_Framework_TestCase
         $viewModel->toArray();
     }
 
-    public abstract function references();
+    abstract public function references();
 
     /**
      * @test

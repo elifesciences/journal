@@ -22,13 +22,26 @@ final class DataReferenceConverterTest extends ReferenceConverterTestCase
     public function references()
     {
         return [
-            [
+            'minimum' => [
                 [
                     'id' => '',
                     'date' => '2016-01-01',
                     'authors' => [],
                     'title' => 'MNIST data set',
                     'source' => '',
+                ],
+            ],
+            'complete' => [
+                [
+                    'id' => '',
+                    'date' => '2016-01-01',
+                    'authors' => [],
+                    'title' => 'MNIST data set',
+                    'source' => '',
+                    'dataId' => '123456',
+                    'assigningAuthority' => [
+                        'name' => [''],
+                    ],
                 ],
             ],
         ];

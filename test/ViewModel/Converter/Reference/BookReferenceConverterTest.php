@@ -22,16 +22,45 @@ final class BookReferenceConverterTest extends ReferenceConverterTestCase
     public function references()
     {
         return [
-            [
+            'minimum' => [
                 [
                     'id' => '',
                     'date' => '2016-01-01',
-                    'authors' => [],
+                    'authors' => [
+                    ],
                     'editors' => [],
                     'bookTitle' => 'Encyclopedia Galactica',
                     'publisher' => [
                         'name' => ['Cambridge University Press'],
+                        'address' => [
+                            'formatted' => ['24 Hills Road'],
+                        ],
                     ],
+                ],
+            ],
+
+            'complete' => [
+                [
+                    'id' => '',
+                    'date' => '2016-01-01',
+                    'authors' => [
+                        [
+                            'type' => 'on-behalf-of',
+                            'onBehalfOf' => 'Someone else',
+                        ],
+                    ],
+                    'editors' => [],
+                    'bookTitle' => 'Encyclopedia Galactica',
+                    'publisher' => [
+                        'name' => ['Cambridge University Press'],
+                        'address' => [
+                            'formatted' => ['24 Hills Road'],
+                        ],
+                    ],
+                    'volume' => '1',
+                    'edition' => '2',
+                    'pmid' => 42,
+                    'isbn' => '978-3-16-148410-0',
                 ],
             ],
         ];

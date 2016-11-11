@@ -22,14 +22,26 @@ final class WebReferenceConverterTest extends ReferenceConverterTestCase
     public function references()
     {
         return [
-            [
+            'minimum' => [
                 [
                     'id' => '',
                     'date' => '2016-01-01',
                     'authors' => [
                     ],
                     'title' => 'Example.com',
-                    'uri' => 'https://example.com'
+                    'uri' => 'https://example.com',
+                ],
+            ],
+            'complete' => [
+                [
+                    'id' => '',
+                    'date' => '2016-01-01',
+                    'authors' => [
+                    ],
+                    'title' => 'Example.com',
+                    'uri' => 'https://example.com',
+                    'website' => 'Example dot com',
+                    'accessed' => '2016',
                 ],
             ],
         ];

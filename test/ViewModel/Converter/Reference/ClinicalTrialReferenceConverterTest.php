@@ -30,7 +30,7 @@ final class ClinicalTrialReferenceConverterTest extends ReferenceConverterTestCa
                     'authorsType' => 'authors',
                     'title' => 'Efficacy of citrus fruits in curing scurvy',
                     'uri' => 'https://en.wikipedia.org/wiki/James_Lind',
-                ]
+                ],
             ],
         ];
     }

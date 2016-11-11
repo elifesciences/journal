@@ -22,7 +22,7 @@ final class JournalReferenceConverterTest extends ReferenceConverterTestCase
     public function references()
     {
         return [
-            [
+            'minimum' => [
                 [
                     'id' => '',
                     'date' => '2016-01-01',
@@ -32,6 +32,28 @@ final class JournalReferenceConverterTest extends ReferenceConverterTestCase
                         'name' => ['eLife'],
                     ],
                     'pages' => '100',
+                ],
+            ],
+            'complete' => [
+                [
+                    'id' => '',
+                    'date' => '2016-01-01',
+                    'authors' => [
+                        [
+                            'type' => 'person',
+                            'name' => [
+                                'preferred' => 'Qianglin Fang',
+                                'index' => 'Fang, Qianglin',
+                            ],
+                        ],
+                    ],
+                    'articleTitle' => 'MNIST data set',
+                    'journal' => [
+                        'name' => ['eLife'],
+                    ],
+                    'pages' => '100',
+                    'volume' => '5',
+                    'pmid' => 42,
                 ],
             ],
         ];

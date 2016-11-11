@@ -22,7 +22,7 @@ final class PeriodicalReferenceConverterTest extends ReferenceConverterTestCase
     public function references()
     {
         return [
-            [
+            'minimum' => [
                 [
                     'id' => '',
                     'date' => '2016-01-01',
@@ -31,7 +31,19 @@ final class PeriodicalReferenceConverterTest extends ReferenceConverterTestCase
                     'periodical' => [
                         'name' => ['The Onion'],
                     ],
-                    // TODO: good example for pages
+                    'pages' => '100',
+                ],
+            ],
+            'complete' => [
+                [
+                    'id' => '',
+                    'date' => '2016-01-01',
+                    'authors' => [],
+                    'articleTitle' => '...',
+                    'periodical' => [
+                        'name' => ['The Onion'],
+                    ],
+                    'volume' => 4,
                     'pages' => '100',
                 ],
             ],
