@@ -8,7 +8,7 @@ use eLife\Patterns\ViewModel\ContentHeaderArticle;
 
 final class ArticleContentHeaderConverterTest extends ModelConverterTestCase
 {
-    protected $models = ['article-poa'/*'article-vor'*/];
+    protected $models = ['article-poa', 'article-vor'];
     protected $class = ArticleVersion::class;
     protected $viewModelClass = ContentHeaderArticle::class;
 

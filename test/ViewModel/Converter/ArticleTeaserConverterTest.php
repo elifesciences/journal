@@ -8,8 +8,7 @@ use eLife\Patterns\ViewModel\Teaser;
 
 final class ArticleTeaserConverterTest extends ModelConverterTestCase
 {
-    // multiple models
-    protected $models = ['article-poa'/*'article-vor'*/];
+    protected $models = ['article-poa', 'article-vor'];
     protected $class = ArticleVersion::class;
     protected $viewModelClass = Teaser::class;
 
