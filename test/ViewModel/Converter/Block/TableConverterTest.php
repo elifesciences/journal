@@ -33,6 +33,13 @@ final class TableConverterTest extends BlockConverterTestCase
                     ],
                 ],
             ],
+            'one table' => [
+                [
+                    'tables' => [
+                        '<table>...</table>',
+                    ],
+                ],
+            ],
         ];
     }
 }
