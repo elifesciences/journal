@@ -61,9 +61,9 @@ final class PersonAuthorDetailsConverter implements ViewModelConverter
     private function prettyList(array $items) : string
     {
         $last = array_slice($items, -1);
-        $first = join(', ', array_slice($items, 0, -1));
+        $first = implode(', ', array_slice($items, 0, -1));
         $both = array_filter(array_merge([$first], $last), 'strlen');
 
-        return join(' and ', $both);
+        return implode(' and ', $both);
     }
 }
