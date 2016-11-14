@@ -19,7 +19,7 @@ final class ThesisReferenceConverterTest extends ReferenceConverterTestCase
         $this->converter = new ThesisReferenceConverter();
     }
 
-    public function references()
+    public function references() : array
     {
         return [
             [

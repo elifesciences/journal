@@ -19,7 +19,7 @@ final class WebReferenceConverterTest extends ReferenceConverterTestCase
         $this->converter = new WebReferenceConverter();
     }
 
-    public function references()
+    public function references() : array
     {
         return [
             'minimum' => [

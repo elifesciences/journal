@@ -19,7 +19,7 @@ final class PreprintReferenceConverterTest extends ReferenceConverterTestCase
         $this->converter = new PreprintReferenceConverter();
     }
 
-    public function references()
+    public function references() : array
     {
         return [
             [

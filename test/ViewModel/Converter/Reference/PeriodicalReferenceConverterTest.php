@@ -19,7 +19,7 @@ final class PeriodicalReferenceConverterTest extends ReferenceConverterTestCase
         $this->converter = new PeriodicalReferenceConverter();
     }
 
-    public function references()
+    public function references() : array
     {
         return [
             'minimum' => [

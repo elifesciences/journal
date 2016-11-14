@@ -19,7 +19,7 @@ final class ClinicalTrialReferenceConverterTest extends ReferenceConverterTestCa
         $this->converter = new ClinicalTrialReferenceConverter();
     }
 
-    public function references()
+    public function references() : array
     {
         return [
             [

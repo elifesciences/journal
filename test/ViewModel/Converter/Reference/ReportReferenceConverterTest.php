@@ -19,7 +19,7 @@ final class ReportReferenceConverterTest extends ReferenceConverterTestCase
         $this->converter = new ReportReferenceConverter();
     }
 
-    public function references()
+    public function references() : array
     {
         return [
             'minimum' => [

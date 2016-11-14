@@ -19,7 +19,7 @@ final class UnknownReferenceConverterTest extends ReferenceConverterTestCase
         $this->converter = new UnknownReferenceConverter();
     }
 
-    public function references()
+    public function references() : array
     {
         return [
             [

@@ -19,7 +19,7 @@ final class PatentReferenceConverterTest extends ReferenceConverterTestCase
         $this->converter = new PatentReferenceConverter();
     }
 
-    public function references()
+    public function references() : array
     {
         return [
             'minimum' => [

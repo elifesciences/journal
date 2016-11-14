@@ -19,7 +19,7 @@ final class ConferenceProceedingReferenceConverterTest extends ReferenceConverte
         $this->converter = new ConferenceProceedingReferenceConverter();
     }
 
-    public function references()
+    public function references() : array
     {
         return [
             [

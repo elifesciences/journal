@@ -19,7 +19,7 @@ final class BookReferenceConverterTest extends ReferenceConverterTestCase
         $this->converter = new BookReferenceConverter();
     }
 
-    public function references()
+    public function references() : array
     {
         return [
             'minimum' => [

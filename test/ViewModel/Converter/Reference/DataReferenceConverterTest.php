@@ -19,7 +19,7 @@ final class DataReferenceConverterTest extends ReferenceConverterTestCase
         $this->converter = new DataReferenceConverter();
     }
 
-    public function references()
+    public function references() : array
     {
         return [
             'minimum' => [

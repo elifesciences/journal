@@ -19,7 +19,7 @@ final class SoftwareReferenceConverterTest extends ReferenceConverterTestCase
         $this->converter = new SoftwareReferenceConverter();
     }
 
-    public function references()
+    public function references() : array
     {
         return [
             [

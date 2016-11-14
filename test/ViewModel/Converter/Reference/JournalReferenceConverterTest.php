@@ -19,7 +19,7 @@ final class JournalReferenceConverterTest extends ReferenceConverterTestCase
         $this->converter = new JournalReferenceConverter();
     }
 
-    public function references()
+    public function references() : array
     {
         return [
             'minimum' => [
