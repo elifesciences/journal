@@ -268,7 +268,7 @@ final class ArticlesController extends Controller
                 return $article;
             });
 
-        $arguments['body'] = $arguments['article']
+        $allFigures = $arguments['article']
             ->then(function (ArticleVoR $article) {
                 $figures = $this->findFigures($article);
 
@@ -277,18 +277,97 @@ final class ArticlesController extends Controller
                 }
 
                 return $figures;
+            });
+
+        $figures = $allFigures
+            ->then(function (array $allFigures) {
+                return array_filter($allFigures, function (Block $block) {
+                    return $block instanceof Block\Image;
+                });
             })
             ->then(function (array $figures) {
-                return array_map(function (Block $block) {
-                    return $this->get('elife.journal.view_model.converter')->convert($block, null, ['complete' => true]);
+                return array_map(function (Block\Image $image) {
+                    return $this->get('elife.journal.view_model.converter')->convert($image, null, ['complete' => true]);
+                }, $figures);
+            })
+            ->then(function (array $figures) {
+                return array_map(function (ViewModel $image) {
+                    return $this->get('elife.patterns.pattern_renderer')->render($image);
                 }, $figures);
             });
 
-        $arguments['viewSelector'] = $arguments['article']
-            ->then(function (ArticleVoR $article) {
+        $videos = $allFigures
+            ->then(function (array $allFigures) {
+                return array_filter($allFigures, function (Block $block) {
+                    return $block instanceof Block\Video;
+                });
+            })
+            ->then(function (array $videos) {
+                return array_map(function (Block\Video $video) {
+                    return $this->get('elife.journal.view_model.converter')->convert($video, null, ['complete' => true]);
+                }, $videos);
+            })
+            ->then(function (array $videos) {
+                return array_map(function (ViewModel $video) {
+                    return $this->get('elife.patterns.pattern_renderer')->render($video);
+                }, $videos);
+            });
+
+        $tables = $allFigures
+            ->then(function (array $allFigures) {
+                return array_filter($allFigures, function (Block $block) {
+                    return $block instanceof Block\Table;
+                });
+            })
+            ->then(function (array $tables) {
+                return array_map(function (Block\Table $table) {
+                    return $this->get('elife.journal.view_model.converter')->convert($table, null, ['complete' => true]);
+                }, $tables);
+            })
+            ->then(function (array $tables) {
+                return array_map(function (ViewModel $table) {
+                    return $this->get('elife.patterns.pattern_renderer')->render($table);
+                }, $tables);
+            });
+
+        $arguments['body'] = all(['figures' => $figures, 'videos' => $videos, 'tables' => $tables])
+            ->then(function (array $all) {
+                $parts = [];
+
+                $first = true;
+
+                if (!empty($all['figures'])) {
+                    $parts[] = ArticleSection::collapsible('figures', 'Figures', 2, implode($all['figures']), false, $first);
+                    $first = false;
+                }
+
+                if (!empty($all['videos'])) {
+                    $parts[] = ArticleSection::collapsible('videos', 'Videos', 2, implode($all['videos']), false, $first);
+                    $first = false;
+                }
+
+                if (!empty($all['tables'])) {
+                    $parts[] = ArticleSection::collapsible('tables', 'Tables', 2, implode($all['tables']), false, $first);
+                }
+
+                return $parts;
+            });
+
+        $arguments['viewSelector'] = all(['article' => $arguments['article'], 'body' => $arguments['body']])
+            ->then(function (array $sections) {
+                /** @var ArticleVoR $article */
+                $article = $sections['article'];
+                $body = $sections['body'];
+
                 return new ViewSelector(
                     $this->get('router')->generate('article', ['id' => $article->getId(), 'volume' => $article->getVolume()]),
-                    [],
+                    array_filter(array_map(function (ViewModel $viewModel) {
+                        if ($viewModel instanceof ArticleSection) {
+                            return new Link($viewModel['title'], '#'.$viewModel['id']);
+                        }
+
+                        return null;
+                    }, count($body) > 1 ? $body : [])),
                     $this->get('router')
                         ->generate('article-figures', ['id' => $article->getId(), 'volume' => $article->getVolume()])
                 );
