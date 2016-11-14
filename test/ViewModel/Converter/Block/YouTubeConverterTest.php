@@ -32,7 +32,7 @@ final class YouTubeConverterTest extends BlockConverterTestCase
         ];
     }
 
-    protected function unsupportedModelData()
+    protected function unsupportedBlockData()
     {
         return [
             'type' => 'image',

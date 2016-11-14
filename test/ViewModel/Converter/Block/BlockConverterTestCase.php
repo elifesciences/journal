@@ -40,14 +40,14 @@ abstract class BlockConverterTestCase extends PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    final public function it_does_not_convert_unsupported_models()
+    final public function it_does_not_convert_unsupported_blocks()
     {
-        $block = $this->serializer->denormalize($this->unsupportedModelData(), Block::class);
+        $block = $this->serializer->denormalize($this->unsupportedBlockData(), Block::class);
 
         $this->assertFalse($this->converter->supports($block), 'Should not support '.var_export($block, true));
     }
 
-    protected function unsupportedModelData()
+    protected function unsupportedBlockData()
     {
         return [
             'type' => 'youtube',
