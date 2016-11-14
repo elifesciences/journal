@@ -392,6 +392,12 @@ final class ArticleControllerTest extends PageTestCase
                             'text' => 'Acknowledgements text',
                         ],
                     ],
+                    'ethics' => [
+                        [
+                            'type' => 'paragraph',
+                            'text' => 'Ethics text',
+                        ],
+                    ],
                     'decisionLetter' => [
                         'doi' => '10.7554/eLife.09560.003',
                         'description' => [
@@ -468,7 +474,11 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertSame('Acknowledgements', $acknowledgements->filter('header > h3')->text());
         $this->assertSame('Acknowledgements text', trim($acknowledgements->filter('div')->text()));
 
-        $copyright = $articleInfo->filter('div > section:nth-of-type(2)');
+        $ethics = $articleInfo->filter('div > section:nth-of-type(2)');
+        $this->assertSame('Ethics', $ethics->filter('header > h3')->text());
+        $this->assertSame('Ethics text', trim($ethics->filter('div')->text()));
+
+        $copyright = $articleInfo->filter('div > section:nth-of-type(3)');
         $this->assertSame('Copyright', $copyright->filter('header > h3')->text());
         $this->assertContains('© 2012, Bar', $copyright->filter('div')->text());
         $this->assertContains('Copyright statement.', $copyright->filter('div')->text());

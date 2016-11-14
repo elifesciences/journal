@@ -182,6 +182,20 @@ final class ArticlesController extends Controller
                             );
                         }
 
+                        if ($article->getEthics()->notEmpty()) {
+                            $infoSections[] = ArticleSection::basic(
+                                'Ethics',
+                                3,
+                                $article->getEthics()
+                                    ->map(function (Block $block) {
+                                        return $this->get('elife.journal.view_model.converter')->convert($block, null, ['level' => 3]);
+                                    })
+                                    ->reduce(function (string $carry, ViewModel $viewModel) {
+                                        return $carry.$this->get('elife.patterns.pattern_renderer')->render($viewModel);
+                                    }, '')
+                            );
+                        }
+
                         $copyright = '<p>'.$article->getCopyright()->getStatement().'</p>';
 
                         if ($article->getCopyright()->getHolder()) {
