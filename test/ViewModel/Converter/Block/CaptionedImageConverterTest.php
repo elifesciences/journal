@@ -29,14 +29,14 @@ final class CaptionedImageConverterTest extends BlockConverterTestCase
     public function blocks()
     {
         return [
-            [
+            'minimum' => [
                 [
                     'alt' => 'Image 1',
                     'uri' => 'https://example.com/image1',
                     'title' => 'An image\'s title',
                 ],
             ],
-            [
+            'with paragraph caption' => [
                 [
                     'alt' => 'Image 1',
                     'uri' => 'https://example.com/image1',
@@ -49,7 +49,7 @@ final class CaptionedImageConverterTest extends BlockConverterTestCase
                     ],
                 ],
             ],
-            [
+            'with MathML caption' => [
                 [
                     'alt' => 'Image 1',
                     'uri' => 'https://example.com/image1',

@@ -27,7 +27,7 @@ final class TableConverterTest extends BlockConverterTestCase
     public function blocks()
     {
         return [
-            [
+            'empty' => [
                 [
                     'tables' => [
                     ],

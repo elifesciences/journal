@@ -31,7 +31,7 @@ final class QuoteConverterTest extends BlockConverterTestCase
     public function blocks()
     {
         return [
-            [
+            'minimum' => [
                 [
                     'text' => [
                         [

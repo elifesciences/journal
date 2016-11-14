@@ -21,7 +21,7 @@ final class CaptionedVideoConverterTest extends BlockConverterTestCase
     public function blocks()
     {
         return [
-            [
+            'minimum' => [
                 [
                     'title' => 'Video\'s caption',
                     'sources' => [
@@ -35,7 +35,7 @@ final class CaptionedVideoConverterTest extends BlockConverterTestCase
                     'image' => 'https://example.com/video1-thumbnail',
                 ],
             ],
-            [
+            'with paragraph caption' => [
                 [
                     'title' => 'Video\'s caption',
                     'sources' => [
@@ -55,7 +55,7 @@ final class CaptionedVideoConverterTest extends BlockConverterTestCase
                     ],
                 ],
             ],
-            [
+            'with MathML caption' => [
                 [
                     'title' => 'Video\'s caption',
                     'sources' => [

@@ -22,14 +22,14 @@ final class CaptionedTableConverterTest extends BlockConverterTestCase
     public function blocks()
     {
         return [
-            [
+            'minimum' => [
                 [
                     'title' => 'Table\'s caption',
                     'tables' => [
                     ],
                 ],
             ],
-            [
+            'with paragraph caption' => [
                 [
                     'title' => 'Table\'s caption',
                     'tables' => [
@@ -43,7 +43,7 @@ final class CaptionedTableConverterTest extends BlockConverterTestCase
                 ],
 
             ],
-            [
+            'with MathML caption' => [
                 [
                     'title' => 'Table\'s caption',
                     'tables' => [

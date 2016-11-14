@@ -22,7 +22,7 @@ final class ParagraphConverterTest extends BlockConverterTestCase
     public function blocks()
     {
         return [
-            [
+            'minimum' => [
                 [
                     'text' => 'Lorem ipsum...',
                 ],

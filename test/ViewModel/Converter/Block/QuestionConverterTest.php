@@ -31,7 +31,7 @@ final class QuestionConverterTest extends BlockConverterTestCase
     public function blocks()
     {
         return [
-            [
+            'minimum' => [
                 [
                     'question' => 'What is the answer?',
                     'answer' => [

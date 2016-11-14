@@ -22,7 +22,7 @@ final class ImageConverterTest extends BlockConverterTestCase
     public function blocks()
     {
         return [
-            [
+            'minimum' => [
                 [
                     'alt' => 'Image 1',
                     'uri' => 'https://example.com/image1',

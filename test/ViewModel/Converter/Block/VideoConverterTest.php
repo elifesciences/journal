@@ -21,7 +21,7 @@ final class VideoConverterTest extends BlockConverterTestCase
     public function blocks()
     {
         return [
-            [
+            'minimum' => [
                 [
                     'sources' => [
                         [

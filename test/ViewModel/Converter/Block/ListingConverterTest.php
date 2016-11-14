@@ -27,7 +27,7 @@ final class ListingConverterTest extends BlockConverterTestCase
     public function blocks()
     {
         return [
-            [
+            'unordered' => [
                 [
                     'prefix' => 'bullet',
                     'items' => [
@@ -36,8 +36,7 @@ final class ListingConverterTest extends BlockConverterTestCase
                     ],
                 ],
             ],
-
-            [
+            'ordered' => [
                 [
                     'prefix' => 'number',
                     'items' => [
@@ -46,8 +45,7 @@ final class ListingConverterTest extends BlockConverterTestCase
                     ],
                 ],
             ],
-
-            [
+            'with paragraph' => [
                 [
                     'prefix' => 'bullet',
                     'items' => [

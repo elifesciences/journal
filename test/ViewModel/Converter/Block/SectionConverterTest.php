@@ -31,7 +31,7 @@ final class SectionConverterTest extends BlockConverterTestCase
     public function blocks()
     {
         return [
-            [
+            'minimum' => [
                 [
                     'title' => 'Results',
                     'content' => [
