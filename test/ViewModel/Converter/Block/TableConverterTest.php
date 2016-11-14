@@ -24,7 +24,7 @@ final class TableConverterTest extends BlockConverterTestCase
         );
     }
 
-    public function blocks()
+    public function blocks() : array
     {
         return [
             'empty' => [

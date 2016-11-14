@@ -35,7 +35,7 @@ abstract class BlockConverterTestCase extends PHPUnit_Framework_TestCase
         $viewModel->toArray();
     }
 
-    abstract public function blocks();
+    abstract public function blocks() : array;
 
     /**
      * @test

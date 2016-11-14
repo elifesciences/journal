@@ -19,7 +19,7 @@ final class ParagraphConverterTest extends BlockConverterTestCase
         $this->converter = new ParagraphConverter();
     }
 
-    public function blocks()
+    public function blocks() : array
     {
         return [
             'minimum' => [

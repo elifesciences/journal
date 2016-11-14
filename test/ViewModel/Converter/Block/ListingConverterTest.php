@@ -24,7 +24,7 @@ final class ListingConverterTest extends BlockConverterTestCase
         );
     }
 
-    public function blocks()
+    public function blocks() : array
     {
         return [
             'unordered' => [

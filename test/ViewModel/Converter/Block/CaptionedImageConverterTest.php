@@ -26,7 +26,7 @@ final class CaptionedImageConverterTest extends BlockConverterTestCase
             ->will($this->returnValue(new AssetViewerInlineSet()));
     }
 
-    public function blocks()
+    public function blocks() : array
     {
         return [
             'minimum' => [

@@ -18,7 +18,7 @@ final class VideoConverterTest extends BlockConverterTestCase
         $this->converter = new VideoConverter();
     }
 
-    public function blocks()
+    public function blocks() : array
     {
         return [
             'minimum' => [

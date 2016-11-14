@@ -19,7 +19,7 @@ final class CaptionedTableConverterTest extends BlockConverterTestCase
         $this->converter = new CaptionedTableConverter();
     }
 
-    public function blocks()
+    public function blocks() : array
     {
         return [
             'minimum' => [

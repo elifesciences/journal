@@ -28,7 +28,7 @@ final class QuoteConverterTest extends BlockConverterTestCase
             ->will($this->returnValue('...'));
     }
 
-    public function blocks()
+    public function blocks() : array
     {
         return [
             'minimum' => [

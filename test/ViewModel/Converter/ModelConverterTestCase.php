@@ -94,7 +94,7 @@ abstract class ModelConverterTestCase extends PHPUnit_Framework_TestCase
         return $model;
     }
 
-    protected function stubUrlGenerator() : UrlGeneratorInterface
+    final protected function stubUrlGenerator() : UrlGeneratorInterface
     {
         return $this->createMock(UrlGeneratorInterface::class);
     }

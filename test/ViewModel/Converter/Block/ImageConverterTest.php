@@ -19,7 +19,7 @@ final class ImageConverterTest extends BlockConverterTestCase
         $this->converter = new ImageConverter();
     }
 
-    public function blocks()
+    public function blocks() : array
     {
         return [
             'minimum' => [

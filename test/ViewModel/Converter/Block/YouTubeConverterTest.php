@@ -18,7 +18,7 @@ final class YouTubeConverterTest extends BlockConverterTestCase
         $this->converter = new YouTubeConverter();
     }
 
-    public function blocks()
+    public function blocks() : array
     {
         return [
             'minimum' => [

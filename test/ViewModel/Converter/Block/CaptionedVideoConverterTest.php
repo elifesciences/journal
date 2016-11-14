@@ -18,7 +18,7 @@ final class CaptionedVideoConverterTest extends BlockConverterTestCase
         $this->converter = new CaptionedVideoConverter();
     }
 
-    public function blocks()
+    public function blocks() : array
     {
         return [
             'minimum' => [
