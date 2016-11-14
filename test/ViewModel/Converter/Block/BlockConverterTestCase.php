@@ -30,7 +30,7 @@ abstract class BlockConverterTestCase extends PHPUnit_Framework_TestCase
      * @test
      * @dataProvider blocks
      */
-    public function it_converts_a_block($data)
+    final public function it_converts_a_block($data)
     {
         $this->assertInstanceOf(ViewModelConverter::class, $this->converter);
 
@@ -51,7 +51,7 @@ abstract class BlockConverterTestCase extends PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function it_does_not_convert_unsupported_models()
+    final public function it_does_not_convert_unsupported_models()
     {
         $block = $this->serializer->denormalize($this->unsupportedModelData(), Block::class);
 

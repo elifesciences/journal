@@ -33,7 +33,7 @@ abstract class ModelConverterTestCase extends PHPUnit_Framework_TestCase
      * @test
      * @dataProvider samples
      */
-    public function it_converts_a_model(string $path)
+    final public function it_converts_a_model(string $path)
     {
         $this->assertInstanceOf(ViewModelConverter::class, $this->converter);
         $this->assertTrue(file_exists($path), "$path does not exists");
@@ -55,7 +55,7 @@ abstract class ModelConverterTestCase extends PHPUnit_Framework_TestCase
         $viewModel->toArray();
     }
 
-    public function samples()
+    final public function samples()
     {
         $this->assertInternalType('array', $this->models);
         $this->assertInternalType('string', $this->class);
@@ -78,7 +78,7 @@ abstract class ModelConverterTestCase extends PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function it_does_not_convert_unsupported_models()
+    final public function it_does_not_convert_unsupported_models()
     {
         $block = [
             'type' => 'youtube',
