@@ -2,7 +2,6 @@
 
 namespace test\eLife\Journal\ViewModel\Converter;
 
-use eLife\ApiSdk\ApiSdk;
 use eLife\ApiSdk\Model\Block;
 use eLife\ApiSdk\Model\Model;
 use eLife\Journal\ViewModel\Converter\ViewModelConverter;
@@ -17,17 +16,7 @@ abstract class ModelConverterTestCase extends PHPUnit_Framework_TestCase
     protected $converter;
     protected $context = [];
     protected $samples = '*';
-    private $serializer;
-
-    /**
-     * @before
-     */
-    public function setUpSerializer()
-    {
-        $httpClient = $this->createMock('eLife\ApiClient\HttpClient');
-        $apiSdk = new ApiSdk($httpClient);
-        $this->serializer = $apiSdk->getSerializer();
-    }
+    use SerializerAwareTestCase;
 
     /**
      * @test
