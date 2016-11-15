@@ -8,6 +8,7 @@ use eLife\ApiSdk\Model\ArticleVoR;
 use eLife\ApiSdk\Model\Author;
 use eLife\ApiSdk\Model\AuthorEntry;
 use eLife\ApiSdk\Model\Block;
+use eLife\ApiSdk\Model\File;
 use eLife\ApiSdk\Model\PersonAuthor;
 use eLife\ApiSdk\Model\Reference;
 use eLife\Patterns\ViewModel;
@@ -349,7 +350,28 @@ final class ArticlesController extends Controller
                 }, $tables);
             });
 
-        $arguments['body'] = all(['figures' => $figures, 'videos' => $videos, 'tables' => $tables])
+        $additionalFiles = $arguments['article']
+            ->then(function (ArticleVoR $article) {
+                return $article->getAdditionalFiles()
+                    ->map(function (File $file) {
+                        return $this->get('elife.journal.view_model.converter')->convert($file);
+                    })
+                    ->toArray();
+            })
+            ->then(function (array $files) {
+                if (empty($files)) {
+                    return null;
+                }
+
+                return $this->get('elife.patterns.pattern_renderer')->render(new ViewModel\AdditionalAssets(null, $files));
+            });
+
+        $arguments['body'] = all([
+            'figures' => $figures,
+            'videos' => $videos,
+            'tables' => $tables,
+            'additionalFiles' => $additionalFiles,
+        ])
             ->then(function (array $all) {
                 $parts = [];
 
@@ -367,6 +389,10 @@ final class ArticlesController extends Controller
 
                 if (!empty($all['tables'])) {
                     $parts[] = ArticleSection::collapsible('tables', 'Tables', 2, implode($all['tables']), false, $first);
+                }
+
+                if (!empty($all['additionalFiles'])) {
+                    $parts[] = ArticleSection::collapsible('files', 'Additional files', 2, $all['additionalFiles']);
                 }
 
                 return $parts;

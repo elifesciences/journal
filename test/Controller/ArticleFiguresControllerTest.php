@@ -26,7 +26,7 @@ final class ArticleFiguresControllerTest extends PageTestCase
         $this->assertContains('doi: 10.7554/eLife.00001', $crawler->filter('.contextual-data__cite_wrapper')->text());
 
         $figureTypes = $crawler->filter('main > .wrapper > div > div > section');
-        $this->assertCount(3, $figureTypes);
+        $this->assertCount(4, $figureTypes);
 
         $figures = $figureTypes->eq(0)->filter('.asset-viewer-inline');
         $this->assertSame('Image 1 label', trim($figures->eq(0)->filter('.asset-viewer-inline__header_text')->text()));
@@ -41,11 +41,15 @@ final class ArticleFiguresControllerTest extends PageTestCase
         $tables = $figureTypes->eq(2)->filter('.asset-viewer-inline');
         $this->assertSame('Table 1 label', trim($tables->eq(0)->filter('.asset-viewer-inline__header_text')->text()));
 
+        $additionalFiles = $figureTypes->eq(3)->filter('.additional-asset__heading_text');
+        $this->assertSame('Additional file 1 label', trim($additionalFiles->eq(0)->text()));
+
         $this->assertSame(
             [
                 'Figures',
                 'Videos',
                 'Tables',
+                'Additional files',
             ],
             array_map('trim', $crawler->filter('.view-selector__jump_link_item')->extract('_text'))
         );
@@ -284,6 +288,16 @@ final class ArticleFiguresControllerTest extends PageTestCase
                                     ],
                                 ],
                             ],
+                        ],
+                    ],
+                    'additionalFiles' => [
+                        [
+                            'id' => 'file1',
+                            'label' => 'Additional file 1 label',
+                            'title' => 'Additional file 1 title',
+                            'mediaType' => 'image/jpeg',
+                            'uri' => 'https://placehold.it/900x450',
+                            'filename' => 'image.jpg',
                         ],
                     ],
                 ])
