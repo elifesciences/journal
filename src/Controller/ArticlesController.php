@@ -231,7 +231,7 @@ final class ArticlesController extends Controller
                             implode('', array_map(function (ViewModel $viewModel) {
                                 return $this->get('elife.patterns.pattern_renderer')->render($viewModel);
                             }, $infoSections)),
-                            false // TODO
+                            true
                         );
                     }
                 }
