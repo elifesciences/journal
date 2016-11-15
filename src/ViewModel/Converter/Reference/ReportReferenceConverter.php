@@ -16,10 +16,7 @@ final class ReportReferenceConverter implements ViewModelConverter
      */
     public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
-        $origin = [
-            $object->getDate()->format().$object->getDiscriminator(),
-            $this->publisherToString($object->getPublisher()),
-        ];
+        $origin = [$this->publisherToString($object->getPublisher())];
         if ($object->getPmid()) {
             $origin[] = 'PMID '.$object->getPmid();
         }
@@ -27,13 +24,13 @@ final class ReportReferenceConverter implements ViewModelConverter
             $origin[] = 'ISBN '.$object->getIsbn();
         }
 
-        return new ViewModel\Reference(
-            $object->getTitle(),
-            implode('. ', $origin).'.',
-            $object->getUri(),
-            $object->getDoi() ? $object->getUri() : null,
-            $this->createAuthors($object->getAuthors(), $object->authorsEtAl())
-        );
+        $authors = [$this->createAuthors($object->getAuthors(), $object->authorsEtAl(), [$object->getDate()->format().$object->getDiscriminator()])];
+
+        if ($object->getDoi()) {
+            return ViewModel\Reference::withDoi($object->getTitle(), new ViewModel\Doi($object->getDoi()), $origin, $authors);
+        }
+
+        return ViewModel\Reference::withOutDoi(new ViewModel\Link($object->getTitle(), $object->getUri()), $origin, $authors);
     }
 
     public function supports($object, string $viewModel = null, array $context = []) : bool

@@ -15,18 +15,13 @@ final class ThesisReferenceConverter implements ViewModelConverter
      */
     public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
-        $origin = [
-            $object->getDate()->format().$object->getDiscriminator(),
-            $object->getPublisher()->toString(),
-        ];
+        $authors = [new ViewModel\ReferenceAuthorList([ViewModel\Author::asText($object->getAuthor()->getPreferredName())], '('.$object->getDate()->format().$object->getDiscriminator().')')];
 
-        return new ViewModel\Reference(
-            $object->getTitle(),
-            implode('. ', $origin).'.',
-            $object->getUri(),
-            $object->getDoi() ? $object->getUri() : null,
-            [ViewModel\Author::asText($object->getAuthor()->getPreferredName())]
-        );
+        if ($object->getDoi()) {
+            return ViewModel\Reference::withDoi($object->getTitle(), new ViewModel\Doi($object->getDoi()), [$object->getPublisher()->toString()], $authors);
+        }
+
+        return ViewModel\Reference::withOutDoi(new ViewModel\Link($object->getTitle(), $object->getUri()), [$object->getPublisher()->toString()], $authors);
     }
 
     public function supports($object, string $viewModel = null, array $context = []) : bool

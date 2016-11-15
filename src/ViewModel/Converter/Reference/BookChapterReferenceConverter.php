@@ -25,7 +25,6 @@ final class BookChapterReferenceConverter implements ViewModelConverter
         }
 
         $origin = [
-            $object->getDate()->format().$object->getDiscriminator(),
             'In: '.$this->createAuthorsString($object->getEditors(), $object->editorsEtAl()).', editors',
             '<i>'.$bookTitle.'</i>',
             $this->publisherToString($object->getPublisher()),
@@ -38,15 +37,13 @@ final class BookChapterReferenceConverter implements ViewModelConverter
         }
         $origin[] = $object->getPages()->toString();
 
-        $doiUri = ($object->getDoi() ? 'https://doi.org/'.$object->getDoi() : null);
+        $authors = [$this->createAuthors($object->getAuthors(), $object->authorsEtAl(), [$object->getDate()->format().$object->getDiscriminator()])];
 
-        return new ViewModel\Reference(
-            $object->getChapterTitle(),
-            implode('. ', $origin).'.',
-            $doiUri,
-            $doiUri,
-            $this->createAuthors($object->getAuthors(), $object->authorsEtAl())
-        );
+        if ($object->getDoi()) {
+            return ViewModel\Reference::withDoi($object->getChapterTitle(), new ViewModel\Doi($object->getDoi()), $origin, $authors);
+        }
+
+        return ViewModel\Reference::withOutDoi(new ViewModel\Link($object->getChapterTitle()), $origin, $authors);
     }
 
     public function supports($object, string $viewModel = null, array $context = []) : bool
