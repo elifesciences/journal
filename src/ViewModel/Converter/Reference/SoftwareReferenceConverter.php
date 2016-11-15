@@ -20,18 +20,9 @@ final class SoftwareReferenceConverter implements ViewModelConverter
             $title .= ', version '.$object->getVersion();
         }
 
-        $origin = [
-            $object->getDate()->format().$object->getDiscriminator(),
-            $object->getPublisher()->toString(),
-        ];
+        $authors = [$this->createAuthors($object->getAuthors(), $object->authorsEtAl(), [$object->getDate()->format().$object->getDiscriminator()])];
 
-        return new ViewModel\Reference(
-            $title,
-            implode('. ', $origin).'.',
-            $object->getUri(),
-            null,
-            $this->createAuthors($object->getAuthors(), $object->authorsEtAl())
-        );
+        return ViewModel\Reference::withOutDoi(new ViewModel\Link($title, $object->getUri()), [$object->getPublisher()->toString()], $authors);
     }
 
     public function supports($object, string $viewModel = null, array $context = []) : bool

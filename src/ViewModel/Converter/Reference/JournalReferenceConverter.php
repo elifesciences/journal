@@ -28,23 +28,18 @@ final class JournalReferenceConverter implements ViewModelConverter
             $journal .= ' '.$object->getPages()->toString();
         }
 
-        $origin = [
-            $object->getDate()->format().$object->getDiscriminator(),
-            $journal,
-        ];
+        $origin = [$journal];
         if ($object->getPmid()) {
             $origin[] = 'PMID '.$object->getPmid();
         }
 
-        $doiUrl = $object->getDoi() ? 'https://doi.org/'.$object->getDoi() : null;
+        $authors = [$this->createAuthors($object->getAuthors(), $object->authorsEtAl(), [$object->getDate()->format().$object->getDiscriminator()])];
 
-        return new ViewModel\Reference(
-            $object->getArticleTitle(),
-            implode('. ', $origin).'.',
-            $doiUrl,
-            $doiUrl,
-            $this->createAuthors($object->getAuthors(), $object->authorsEtAl())
-        );
+        if ($object->getDoi()) {
+            return ViewModel\Reference::withDoi($object->getArticleTitle(), new ViewModel\Doi($object->getDoi()), $origin, $authors);
+        }
+
+        return ViewModel\Reference::withOutDoi(new ViewModel\Link($object->getArticleTitle()), $origin, $authors);
     }
 
     public function supports($object, string $viewModel = null, array $context = []) : bool

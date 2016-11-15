@@ -8,17 +8,21 @@ use eLife\Patterns\ViewModel;
 
 trait HasAuthors
 {
-    private function createAuthors(array $authors, bool $etAl = false) : array
+    private function createAuthors(array $authors, bool $etAl, array $suffixes) : ViewModel\ReferenceAuthorList
     {
         $authors = array_map(function (Model\AuthorEntry $author) {
             return ViewModel\Author::asText($author->toString());
         }, $authors);
 
+        $suffix = trim(array_reduce(array_filter($suffixes), function (string $carry, string $suffix) {
+            return $carry.' ('.$suffix.')';
+        }, ''));
+
         if ($etAl) {
-            $authors[] = ViewModel\Author::asText('et al');
+            $suffix = 'et al '.$suffix;
         }
 
-        return $authors;
+        return new ViewModel\ReferenceAuthorList($authors, $suffix);
     }
 
     private function createAuthorsString(array $authors, bool $etAl = false) : string

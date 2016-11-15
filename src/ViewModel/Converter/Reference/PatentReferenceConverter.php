@@ -20,20 +20,16 @@ final class PatentReferenceConverter implements ViewModelConverter
             $title .= ' ('.$object->getNumber().')';
         }
 
-        $origin = [$object->getDate()->format().$object->getDiscriminator()];
+        $origin = [];
         if ($object->getAssignees()) {
             $origin[] = $this->createAuthorsString($object->getAssignees(), $object->assigneesEtAl());
         }
         $origin[] = $object->getPatentType();
         $origin[] = $object->getCountry();
 
-        return new ViewModel\Reference(
-            $title,
-            implode('. ', $origin).'.',
-            $object->getUri(),
-            null,
-            $this->createAuthors($object->getInventors(), $object->inventorsEtAl())
-        );
+        $authors = [$this->createAuthors($object->getInventors(), $object->inventorsEtAl(), [$object->getDate()->format().$object->getDiscriminator()])];
+
+        return ViewModel\Reference::withOutDoi(new ViewModel\Link($title, $object->getUri()), $origin, $authors);
     }
 
     public function supports($object, string $viewModel = null, array $context = []) : bool

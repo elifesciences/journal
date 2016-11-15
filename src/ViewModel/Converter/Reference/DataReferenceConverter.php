@@ -15,10 +15,7 @@ final class DataReferenceConverter implements ViewModelConverter
      */
     public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
-        $origin = [
-            $object->getDate()->format().$object->getDiscriminator(),
-            $object->getSource(),
-        ];
+        $origin = [$object->getSource()];
         if ($object->getAssigningAuthority()) {
             $origin[] = $object->getAssigningAuthority()->toString();
         }
@@ -26,13 +23,25 @@ final class DataReferenceConverter implements ViewModelConverter
             $origin[] = 'ID '.$object->getDataId();
         }
 
-        return new ViewModel\Reference(
-            $object->getTitle(),
-            implode('. ', $origin).'.',
-            $object->getUri(),
-            $object->getDoi() ? $object->getUri() : null,
-            $this->createAuthors($object->getAuthors(), $object->authorsEtAl())
-        );
+        $authors = [];
+        $year = true;
+        if ($object->getCurators()) {
+            $authors[] = $this->createAuthors($object->getCurators(), $object->curatorsEtAl(), ['curators', $object->getDate()->format().$object->getDiscriminator()]);
+            $year = false;
+        }
+        if ($object->getCompilers()) {
+            array_unshift($authors, $this->createAuthors($object->getCompilers(), $object->compilersEtAl(), ['compilers', $year ? $object->getDate()->format().$object->getDiscriminator() : '']));
+            $year = false;
+        }
+        if ($object->getAuthors()) {
+            array_unshift($authors, $this->createAuthors($object->getAuthors(), $object->authorsEtAl(), ['authors', $year ? $object->getDate()->format().$object->getDiscriminator() : '']));
+        }
+
+        if ($object->getDoi()) {
+            return ViewModel\Reference::withDoi($object->getTitle(), new ViewModel\Doi($object->getDoi()), $origin, $authors);
+        }
+
+        return ViewModel\Reference::withOutDoi(new ViewModel\Link($object->getTitle(), $object->getUri()), $origin, $authors);
     }
 
     public function supports($object, string $viewModel = null, array $context = []) : bool

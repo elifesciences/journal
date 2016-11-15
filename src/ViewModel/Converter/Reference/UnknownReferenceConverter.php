@@ -15,18 +15,9 @@ final class UnknownReferenceConverter implements ViewModelConverter
      */
     public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
-        $origin = [$object->getDate()->format().$object->getDiscriminator()];
-        if ($object->getDetails()) {
-            $origin[] = $object->getDetails();
-        }
+        $authors = [$this->createAuthors($object->getAuthors(), $object->authorsEtAl(), [$object->getDate()->format().$object->getDiscriminator()])];
 
-        return new ViewModel\Reference(
-            $object->getTitle(),
-            implode('. ', $origin).'.',
-            $object->getUri(),
-            null,
-            $this->createAuthors($object->getAuthors(), $object->authorsEtAl())
-        );
+        return ViewModel\Reference::withOutDoi(new ViewModel\Link($object->getTitle(), $object->getUri()), $object->getDetails() ? [$object->getDetails()] : [], $authors);
     }
 
     public function supports($object, string $viewModel = null, array $context = []) : bool

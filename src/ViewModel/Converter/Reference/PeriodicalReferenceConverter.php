@@ -28,18 +28,9 @@ final class PeriodicalReferenceConverter implements ViewModelConverter
             $periodical .= ' '.$object->getPages()->toString();
         }
 
-        $origin = [
-            $object->getDate()->format().$object->getDiscriminator(),
-            $periodical,
-        ];
+        $authors = [$this->createAuthors($object->getAuthors(), $object->authorsEtAl(), [$object->getDate()->format().$object->getDiscriminator()])];
 
-        return new ViewModel\Reference(
-            $object->getArticleTitle(),
-            implode('. ', $origin).'.',
-            $object->getUri(),
-            null,
-            $this->createAuthors($object->getAuthors(), $object->authorsEtAl())
-        );
+        return ViewModel\Reference::withOutDoi(new ViewModel\Link($object->getArticleTitle(), $object->getUri()), [$periodical], $authors);
     }
 
     public function supports($object, string $viewModel = null, array $context = []) : bool

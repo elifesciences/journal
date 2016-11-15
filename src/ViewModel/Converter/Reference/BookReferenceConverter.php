@@ -24,10 +24,7 @@ final class BookReferenceConverter implements ViewModelConverter
             $title .= ' ('.$object->getEdition().')';
         }
 
-        $origin = [
-            $object->getDate()->format().$object->getDiscriminator(),
-            $this->publisherToString($object->getPublisher()),
-        ];
+        $origin = [$this->publisherToString($object->getPublisher())];
         if ($object->getPmid()) {
             $origin[] = 'PMID '.$object->getPmid();
         }
@@ -35,15 +32,13 @@ final class BookReferenceConverter implements ViewModelConverter
             $origin[] = 'ISBN '.$object->getIsbn();
         }
 
-        $doiUri = ($object->getDoi() ? 'https://doi.org/'.$object->getDoi() : null);
+        $authors = [$this->createAuthors($object->getAuthors(), $object->authorsEtAl(), [$object->getDate()->format().$object->getDiscriminator()])];
 
-        return new ViewModel\Reference(
-            $title,
-            implode('. ', $origin).'.',
-            $doiUri,
-            $doiUri,
-            $this->createAuthors($object->getAuthors(), $object->authorsEtAl())
-        );
+        if ($object->getDoi()) {
+            return ViewModel\Reference::withDoi($title, new ViewModel\Doi($object->getDoi()), $origin, $authors);
+        }
+
+        return ViewModel\Reference::withOutDoi(new ViewModel\Link($title), $origin, $authors);
     }
 
     public function supports($object, string $viewModel = null, array $context = []) : bool

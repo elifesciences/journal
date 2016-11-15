@@ -15,21 +15,18 @@ final class ConferenceProceedingReferenceConverter implements ViewModelConverter
      */
     public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
-        $origin = [
-            $object->getDate()->format().$object->getDiscriminator(),
-            $object->getConference()->toString(),
-        ];
+        $origin = [$object->getConference()->toString()];
         if ($object->getPages()) {
             $origin[] = $object->getPages()->toString();
         }
 
-        return new ViewModel\Reference(
-            $object->getArticleTitle(),
-            implode('. ', $origin).'.',
-            $object->getUri(),
-            $object->getDoi() ? $object->getUri() : null,
-            $this->createAuthors($object->getAuthors(), $object->authorsEtAl())
-        );
+        $authors = [$this->createAuthors($object->getAuthors(), $object->authorsEtAl(), [$object->getDate()->format().$object->getDiscriminator()])];
+
+        if ($object->getDoi()) {
+            return ViewModel\Reference::withDoi($object->getArticleTitle(), new ViewModel\Doi($object->getDoi()), $origin, $authors);
+        }
+
+        return ViewModel\Reference::withOutDoi(new ViewModel\Link($object->getArticleTitle(), $object->getUri()), $origin, $authors);
     }
 
     public function supports($object, string $viewModel = null, array $context = []) : bool

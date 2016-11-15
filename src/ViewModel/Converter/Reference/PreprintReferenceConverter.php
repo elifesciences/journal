@@ -15,18 +15,13 @@ final class PreprintReferenceConverter implements ViewModelConverter
      */
     public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
-        $origin = [
-            $object->getDate()->format().$object->getDiscriminator(),
-            $object->getSource(),
-        ];
+        $authors = [$this->createAuthors($object->getAuthors(), $object->authorsEtAl(), [$object->getDate()->format().$object->getDiscriminator()])];
 
-        return new ViewModel\Reference(
-            $object->getArticleTitle(),
-            implode('. ', $origin).'.',
-            $object->getUri(),
-            $object->getDoi() ? $object->getUri() : null,
-            $this->createAuthors($object->getAuthors(), $object->authorsEtAl())
-        );
+        if ($object->getDoi()) {
+            return ViewModel\Reference::withDoi($object->getArticleTitle(), new ViewModel\Doi($object->getDoi()), [$object->getSource()], $authors);
+        }
+
+        return ViewModel\Reference::withOutDoi(new ViewModel\Link($object->getArticleTitle(), $object->getUri()), [$object->getSource()], $authors);
     }
 
     public function supports($object, string $viewModel = null, array $context = []) : bool
