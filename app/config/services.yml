@@ -134,12 +134,6 @@ services:
         tags:
           - name: view_model.converter
 
-    elife.journal.view_model.converter.block.file_additional_asset:
-        class: eLife\Journal\ViewModel\Converter\Block\FileAdditionalAssetConverter
-        public: false
-        tags:
-          - name: view_model.converter
-
     elife.journal.view_model.converter.block.image:
         class: eLife\Journal\ViewModel\Converter\Block\ImageConverter
         public: false
@@ -307,6 +301,12 @@ services:
         public: false
         arguments:
           - '@router'
+        tags:
+          - name: view_model.converter
+
+    elife.journal.view_model.converter.file_additional_asset:
+        class: eLife\Journal\ViewModel\Converter\FileAdditionalAssetConverter
+        public: false
         tags:
           - name: view_model.converter
 

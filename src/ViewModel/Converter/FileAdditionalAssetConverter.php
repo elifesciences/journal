@@ -1,15 +1,15 @@
 <?php
 
-namespace eLife\Journal\ViewModel\Converter\Block;
+namespace eLife\Journal\ViewModel\Converter;
 
 use eLife\ApiSdk\Model\Block;
-use eLife\Journal\ViewModel\Converter\ViewModelConverter;
+use eLife\ApiSdk\Model\File;
 use eLife\Patterns\ViewModel;
 
 final class FileAdditionalAssetConverter implements ViewModelConverter
 {
     /**
-     * @param Block\File $object
+     * @param File $object
      */
     public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
@@ -44,6 +44,6 @@ final class FileAdditionalAssetConverter implements ViewModelConverter
 
     public function supports($object, string $viewModel = null, array $context = []) : bool
     {
-        return $object instanceof Block\File;
+        return $object instanceof File;
     }
 }
