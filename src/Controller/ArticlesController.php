@@ -5,7 +5,10 @@ namespace eLife\Journal\Controller;
 use eLife\ApiSdk\Model\Appendix;
 use eLife\ApiSdk\Model\ArticleVersion;
 use eLife\ApiSdk\Model\ArticleVoR;
+use eLife\ApiSdk\Model\Author;
+use eLife\ApiSdk\Model\AuthorEntry;
 use eLife\ApiSdk\Model\Block;
+use eLife\ApiSdk\Model\PersonAuthor;
 use eLife\ApiSdk\Model\Reference;
 use eLife\Patterns\ViewModel;
 use eLife\Patterns\ViewModel\ArticleSection;
@@ -168,6 +171,22 @@ final class ArticlesController extends Controller
 
                         $infoSections = [];
 
+                        $realAuthors = $article->getAuthors()->filter(function (AuthorEntry $author) {
+                            return $author instanceof Author;
+                        });
+
+                        $personAuthors = $realAuthors->filter(function (Author $author) {
+                            return $author instanceof PersonAuthor;
+                        });
+
+                        if ($personAuthors->notEmpty()) {
+                            $infoSections[] = new ViewModel\AuthorsDetails(
+                                ...$personAuthors->map(function (PersonAuthor $author) use ($article) {
+                                    return $this->get('elife.journal.view_model.converter')->convert($author, null, ['article' => $article]);
+                                })->toArray()
+                            );
+                        }
+
                         if ($article->getAcknowledgements()->notEmpty()) {
                             $infoSections[] = ArticleSection::basic(
                                 'Acknowledgements',
@@ -211,7 +230,7 @@ final class ArticlesController extends Controller
                             implode('', array_map(function (ViewModel $viewModel) {
                                 return $this->get('elife.patterns.pattern_renderer')->render($viewModel);
                             }, $infoSections)),
-                            true
+                            false // TODO
                         );
                     }
                 }
