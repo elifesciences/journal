@@ -134,6 +134,12 @@ services:
         tags:
           - name: view_model.converter
 
+    elife.journal.view_model.converter.block.file_additional_asset:
+        class: eLife\Journal\ViewModel\Converter\Block\FileAdditionalAssetConverter
+        public: false
+        tags:
+          - name: view_model.converter
+
     elife.journal.view_model.converter.block.image:
         class: eLife\Journal\ViewModel\Converter\Block\ImageConverter
         public: false
@@ -150,6 +156,8 @@ services:
 
     elife.journal.view_model.converter.block.image_file_captioned:
         class: eLife\Journal\ViewModel\Converter\Block\CaptionedImageFileConverter
+        arguments:
+          - '@elife.journal.view_model.converter'
         tags:
           - name: view_model.converter
 
@@ -207,6 +215,8 @@ services:
     elife.journal.view_model.converter.block.table_captioned:
         class: eLife\Journal\ViewModel\Converter\Block\CaptionedTableConverter
         public: false
+        arguments:
+          - '@elife.journal.view_model.converter'
         tags:
           - name: view_model.converter
 
@@ -219,6 +229,8 @@ services:
     elife.journal.view_model.converter.block.video_captioned:
         class: eLife\Journal\ViewModel\Converter\Block\CaptionedVideoConverter
         public: false
+        arguments:
+          - '@elife.journal.view_model.converter'
         tags:
           - name: view_model.converter
 
