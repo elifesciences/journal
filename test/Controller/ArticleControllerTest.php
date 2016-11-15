@@ -311,6 +311,10 @@ final class ArticleControllerTest extends PageTestCase
                                 'index' => 'Bar, Foo',
                             ],
                         ],
+                        [
+                            'type' => 'group',
+                            'name' => 'Baz',
+                        ],
                     ],
                     'abstract' => [
                         'doi' => '10.7554/eLife.09560.001',
@@ -469,6 +473,10 @@ final class ArticleControllerTest extends PageTestCase
         $articleInfo = $crawler->filter('main > .wrapper > div > div > section:nth-of-type(8)');
         $this->assertSame('Article and author information',
             $articleInfo->filter('header > h2')->text());
+
+        $authorDetails = $articleInfo->filter('div > ol:nth-of-type(1) > li');
+        $this->assertCount(1, $authorDetails);
+        $this->assertSame('Foo Bar', $authorDetails->eq(0)->filter('.author-details__name')->text());
 
         $acknowledgements = $articleInfo->filter('div > section:nth-of-type(1)');
         $this->assertSame('Acknowledgements', $acknowledgements->filter('header > h3')->text());

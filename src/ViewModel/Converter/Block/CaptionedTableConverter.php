@@ -3,14 +3,21 @@
 namespace eLife\Journal\ViewModel\Converter\Block;
 
 use eLife\ApiSdk\Model\Block;
+use eLife\ApiSdk\Model\File;
 use eLife\Journal\ViewModel\Converter\ViewModelConverter;
 use eLife\Patterns\ViewModel;
 use eLife\Patterns\ViewModel\AssetViewerInline;
 
 final class CaptionedTableConverter implements ViewModelConverter
 {
-    use CreatesAdditionalAssetData;
     use CreatesCaptionedAsset;
+
+    private $viewModelConverter;
+
+    public function __construct(ViewModelConverter $viewModelConverter)
+    {
+        $this->viewModelConverter = $viewModelConverter;
+    }
 
     /**
      * @param Block\Table $object
@@ -26,8 +33,8 @@ final class CaptionedTableConverter implements ViewModelConverter
         }
 
         if (!empty($context['complete'])) {
-            $additionalAssets = array_map(function (Block\File $sourceData) {
-                return $this->createAdditionalAssetData($sourceData);
+            $additionalAssets = array_map(function (File $sourceData) {
+                return $this->viewModelConverter->convert($sourceData);
             }, $object->getSourceData());
         } else {
             $additionalAssets = [];

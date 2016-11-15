@@ -25,15 +25,34 @@ final class ArticleFiguresControllerTest extends PageTestCase
             $crawler->filter('.contextual-data__cite_wrapper')->text());
         $this->assertContains('doi: 10.7554/eLife.00001', $crawler->filter('.contextual-data__cite_wrapper')->text());
 
-        $figures = $crawler->filter('.large--six-twelfths > div');
-        $this->assertCount(5, $figures);
+        $figureTypes = $crawler->filter('main > .wrapper > div > div > section');
+        $this->assertCount(4, $figureTypes);
+
+        $figures = $figureTypes->eq(0)->filter('.asset-viewer-inline');
         $this->assertSame('Image 1 label', trim($figures->eq(0)->filter('.asset-viewer-inline__header_text')->text()));
-        $this->assertSame('Video 1 label', trim($figures->eq(1)->filter('.asset-viewer-inline__header_text')->text()));
-        $this->assertSame('Image 2 label', trim($figures->eq(2)->filter('.asset-viewer-inline__header_text')->text()));
-        $this->assertSame('Image 2 source data 1 label', trim($figures->eq(2)->filter('.additional-assets__heading_text')->text()));
-        $this->assertSame('Image 2 supplement 1 label', trim($figures->eq(3)->filter('.asset-viewer-inline__header_text')->text()));
-        $this->assertSame('Image 2 supplement 1 source data 1 label', trim($figures->eq(3)->filter('.additional-assets__heading_text')->text()));
-        $this->assertSame('Table 1 label', trim($figures->eq(4)->filter('.asset-viewer-inline__header_text')->text()));
+        $this->assertSame('Image 2 label', trim($figures->eq(1)->filter('.asset-viewer-inline__header_text')->text()));
+        $this->assertSame('Image 2 source data 1 label', trim($figures->eq(1)->filter('.additional-asset__heading_text')->text()));
+        $this->assertSame('Image 2 supplement 1 label', trim($figures->eq(2)->filter('.asset-viewer-inline__header_text')->text()));
+        $this->assertSame('Image 2 supplement 1 source data 1 label', trim($figures->eq(2)->filter('.additional-asset__heading_text')->text()));
+
+        $videos = $figureTypes->eq(1)->filter('.asset-viewer-inline');
+        $this->assertSame('Video 1 label', trim($videos->eq(0)->filter('.asset-viewer-inline__header_text')->text()));
+
+        $tables = $figureTypes->eq(2)->filter('.asset-viewer-inline');
+        $this->assertSame('Table 1 label', trim($tables->eq(0)->filter('.asset-viewer-inline__header_text')->text()));
+
+        $additionalFiles = $figureTypes->eq(3)->filter('.additional-asset__heading_text');
+        $this->assertSame('Additional file 1 label', trim($additionalFiles->eq(0)->text()));
+
+        $this->assertSame(
+            [
+                'Figures',
+                'Videos',
+                'Tables',
+                'Additional files',
+            ],
+            array_map('trim', $crawler->filter('.view-selector__jump_link_item')->extract('_text'))
+        );
     }
 
     /**
@@ -269,6 +288,16 @@ final class ArticleFiguresControllerTest extends PageTestCase
                                     ],
                                 ],
                             ],
+                        ],
+                    ],
+                    'additionalFiles' => [
+                        [
+                            'id' => 'file1',
+                            'label' => 'Additional file 1 label',
+                            'title' => 'Additional file 1 title',
+                            'mediaType' => 'image/jpeg',
+                            'uri' => 'https://placehold.it/900x450',
+                            'filename' => 'image.jpg',
                         ],
                     ],
                 ])

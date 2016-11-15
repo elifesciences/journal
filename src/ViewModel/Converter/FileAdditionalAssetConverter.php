@@ -1,13 +1,17 @@
 <?php
 
-namespace eLife\Journal\ViewModel\Converter\Block;
+namespace eLife\Journal\ViewModel\Converter;
 
 use eLife\ApiSdk\Model\Block;
+use eLife\ApiSdk\Model\File;
 use eLife\Patterns\ViewModel;
 
-trait CreatesAdditionalAssetData
+final class FileAdditionalAssetConverter implements ViewModelConverter
 {
-    final private function createAdditionalAssetData(Block\File $object) : ViewModel\AdditionalAssetData
+    /**
+     * @param File $object
+     */
+    public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
         $download = ViewModel\DownloadLink::fromLink(
             new ViewModel\Link('Download '.$object->getFilename(), $object->getUri()),
@@ -15,7 +19,7 @@ trait CreatesAdditionalAssetData
         );
 
         if (!$object->getDoi()) {
-            return ViewModel\AdditionalAssetData::withoutDoi(
+            return ViewModel\AdditionalAsset::withoutDoi(
                 $object->getId(),
                 $object->getLabel(),
                 $download,
@@ -26,7 +30,7 @@ trait CreatesAdditionalAssetData
             );
         }
 
-        return ViewModel\AdditionalAssetData::withDoi(
+        return ViewModel\AdditionalAsset::withDoi(
             $object->getId(),
             $object->getLabel(),
             $download,
@@ -36,5 +40,10 @@ trait CreatesAdditionalAssetData
                 return $block->getText();
             }, $object->getCaption()))
         );
+    }
+
+    public function supports($object, string $viewModel = null, array $context = []) : bool
+    {
+        return $object instanceof File;
     }
 }
