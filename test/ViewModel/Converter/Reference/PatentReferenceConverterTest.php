@@ -26,7 +26,7 @@ final class PatentReferenceConverterTest extends ReferenceConverterTestCase
                 [
                     'id' => '',
                     'date' => '2016-01-01',
-                    'inventors' => [],
+                    'inventors' => $this->minimumAuthorsData(),
                     'title' => 'Light bulb',
                     'patentType' => '',
                     'country' => 'US',
@@ -36,7 +36,7 @@ final class PatentReferenceConverterTest extends ReferenceConverterTestCase
                 [
                     'id' => '',
                     'date' => '2016-01-01',
-                    'inventors' => [],
+                    'inventors' => $this->minimumAuthorsData(),
                     'title' => 'Light bulb',
                     'patentType' => '',
                     'country' => 'US',

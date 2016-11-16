@@ -26,7 +26,7 @@ final class SoftwareReferenceConverterTest extends ReferenceConverterTestCase
                 [
                     'id' => '',
                     'date' => '2016-01-01',
-                    'authors' => [],
+                    'authors' => $this->minimumAuthorsData(),
                     'title' => '...',
                     'publisher' => [
                         'name' => [''],

@@ -26,7 +26,7 @@ final class PeriodicalReferenceConverterTest extends ReferenceConverterTestCase
                 [
                     'id' => '',
                     'date' => '2016-01-01',
-                    'authors' => [],
+                    'authors' => $this->minimumAuthorsData(),
                     'articleTitle' => '...',
                     'periodical' => [
                         'name' => ['The Onion'],
@@ -38,7 +38,7 @@ final class PeriodicalReferenceConverterTest extends ReferenceConverterTestCase
                 [
                     'id' => '',
                     'date' => '2016-01-01',
-                    'authors' => [],
+                    'authors' => $this->minimumAuthorsData(),
                     'articleTitle' => '...',
                     'periodical' => [
                         'name' => ['The Onion'],

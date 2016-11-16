@@ -26,8 +26,7 @@ final class WebReferenceConverterTest extends ReferenceConverterTestCase
                 [
                     'id' => '',
                     'date' => '2016-01-01',
-                    'authors' => [
-                    ],
+                    'authors' => $this->minimumAuthorsData(),
                     'title' => 'Example.com',
                     'uri' => 'https://example.com',
                 ],
@@ -36,8 +35,7 @@ final class WebReferenceConverterTest extends ReferenceConverterTestCase
                 [
                     'id' => '',
                     'date' => '2016-01-01',
-                    'authors' => [
-                    ],
+                    'authors' => $this->minimumAuthorsData(),
                     'title' => 'Example.com',
                     'uri' => 'https://example.com',
                     'website' => 'Example dot com',

@@ -26,7 +26,7 @@ final class BookChapterReferenceConverterTest extends ReferenceConverterTestCase
                 [
                     'id' => '',
                     'date' => '2016-01-01',
-                    'authors' => [],
+                    'authors' => $this->minimumAuthorsData(),
                     'editors' => [],
                     'bookTitle' => 'Encyclopedia Galactica',
                     'chapterTitle' => 'Chapter 1',

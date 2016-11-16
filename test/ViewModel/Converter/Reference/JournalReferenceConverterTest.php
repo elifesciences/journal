@@ -26,7 +26,7 @@ final class JournalReferenceConverterTest extends ReferenceConverterTestCase
                 [
                     'id' => '',
                     'date' => '2016-01-01',
-                    'authors' => [],
+                    'authors' => $this->minimumAuthorsData(),
                     'articleTitle' => 'MNIST data set',
                     'journal' => [
                         'name' => ['eLife'],

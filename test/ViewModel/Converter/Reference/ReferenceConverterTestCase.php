@@ -79,4 +79,17 @@ abstract class ReferenceConverterTestCase extends PHPUnit_Framework_TestCase
             'uri' => 'https://en.wikipedia.org/wiki/James_Lind',
         ];
     }
+
+    protected function minimumAuthorsData()
+    {
+        return [
+            [
+                'type' => 'person',
+                'name' => [
+                    'preferred' => 'Isaac Newton',
+                    'index' => 'Newton, Isaac',
+                ],
+            ],
+        ];
+    }
 }

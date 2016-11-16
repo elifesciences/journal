@@ -26,7 +26,7 @@ final class ConferenceProceedingReferenceConverterTest extends ReferenceConverte
                 [
                     'id' => '',
                     'date' => '2016-01-01',
-                    'authors' => [],
+                    'authors' => $this->minimumAuthorsData(),
                     'articleTitle' => 'Dependency Injection',
                     'conference' => [
                         'name' => ['phpDay'],

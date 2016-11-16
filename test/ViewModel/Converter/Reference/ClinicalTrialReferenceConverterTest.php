@@ -26,7 +26,7 @@ final class ClinicalTrialReferenceConverterTest extends ReferenceConverterTestCa
                 [
                     'id' => '',
                     'date' => '1747-01-01',
-                    'authors' => [],
+                    'authors' => $this->minimumAuthorsData(),
                     'authorsType' => 'authors',
                     'title' => 'Efficacy of citrus fruits in curing scurvy',
                     'uri' => 'https://en.wikipedia.org/wiki/James_Lind',
