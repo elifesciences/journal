@@ -7,6 +7,7 @@ use eLife\ApiSdk\Model\Model;
 use eLife\Journal\ViewModel\Converter\ViewModelConverter;
 use PHPUnit_Framework_TestCase;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use test\eLife\Journal\PuliAwareTestCase;
 
 abstract class ModelConverterTestCase extends PHPUnit_Framework_TestCase
 {
@@ -16,6 +17,7 @@ abstract class ModelConverterTestCase extends PHPUnit_Framework_TestCase
     protected $converter;
     protected $context = [];
     protected $selectSamples = false;
+    use PuliAwareTestCase;
     use SerializerAwareTestCase;
 
     /**
@@ -44,6 +46,9 @@ abstract class ModelConverterTestCase extends PHPUnit_Framework_TestCase
 
     final public function samples()
     {
+        // @beforeClass not called on data providers
+        $this->setUpPuli();
+
         $this->assertInternalType('array', $this->models);
         $this->assertInternalType('string', $this->class);
         $this->assertInternalType('string', $this->viewModelClass);
@@ -51,7 +56,7 @@ abstract class ModelConverterTestCase extends PHPUnit_Framework_TestCase
 
         $samples = [];
         foreach ($this->models as $model) {
-            $folder = $this->puliRepository()->find("/elife/api/samples/{$model}/v1/*");
+            $folder = self::$puli->find("/elife/api/samples/{$model}/v1/*");
 
             foreach ($folder as $sample) {
                 if ($this->selectSamples) {
@@ -65,13 +70,6 @@ abstract class ModelConverterTestCase extends PHPUnit_Framework_TestCase
         }
 
         return $samples;
-    }
-
-    private function puliRepository()
-    {
-        $factoryClass = PULI_FACTORY_CLASS;
-
-        return (new $factoryClass())->createRepository();
     }
 
     /**
