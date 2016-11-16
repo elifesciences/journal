@@ -52,7 +52,7 @@ abstract class ModelConverterTestCase extends PHPUnit_Framework_TestCase
         $samples = [];
         foreach ($this->models as $model) {
             $folder = $this->puliRepository()->get("/elife/api/samples/{$model}/v1");
-            
+
             foreach ($folder->listChildren() as $sampleName => $sample) {
                 if ($this->selectSamples) {
                     if (!in_array($sampleName, $this->selectSamples)) {
@@ -70,6 +70,7 @@ abstract class ModelConverterTestCase extends PHPUnit_Framework_TestCase
     private function puliRepository()
     {
         $factoryClass = PULI_FACTORY_CLASS;
+
         return (new $factoryClass())->createRepository();
     }
 
