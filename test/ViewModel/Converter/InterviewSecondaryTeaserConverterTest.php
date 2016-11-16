@@ -8,7 +8,6 @@ use eLife\Patterns\ViewModel\Teaser;
 
 final class InterviewSecondaryTeaserConverterTest extends ModelConverterTestCase
 {
-    // multiple models
     protected $models = ['interview'];
     protected $class = Interview::class;
     protected $viewModelClass = Teaser::class;

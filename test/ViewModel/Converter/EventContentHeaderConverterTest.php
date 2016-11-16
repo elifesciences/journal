@@ -8,7 +8,6 @@ use eLife\Patterns\ViewModel\ContentHeaderNonArticle;
 
 final class EventContentHeaderConverterTest extends ModelConverterTestCase
 {
-    // multiple models
     protected $models = ['event'];
     protected $class = Event::class;
     protected $viewModelClass = ContentHeaderNonArticle::class;

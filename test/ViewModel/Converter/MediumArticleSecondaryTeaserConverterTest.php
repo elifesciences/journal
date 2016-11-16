@@ -8,7 +8,6 @@ use eLife\Patterns\ViewModel\Teaser;
 
 final class MediumArticleSecondaryTeaserConverterTest extends ModelConverterTestCase
 {
-    // multiple models
     protected $models = ['medium-article-list'];
     protected $class = MediumArticle::class;
     protected $viewModelClass = Teaser::class;
