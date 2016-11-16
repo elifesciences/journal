@@ -12,7 +12,6 @@ final class PodcastEpisodeSecondaryTeaserConverterTest extends ModelConverterTes
     protected $class = PodcastEpisode::class;
     protected $viewModelClass = Teaser::class;
     protected $context = ['variant' => 'secondary'];
-    protected $samples = '*';
 
     /**
      * @before

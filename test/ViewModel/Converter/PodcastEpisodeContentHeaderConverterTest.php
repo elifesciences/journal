@@ -12,7 +12,6 @@ final class PodcastEpisodeContentHeaderConverterTest extends ModelConverterTestC
     protected $models = ['podcast-episode'];
     protected $class = PodcastEpisode::class;
     protected $viewModelClass = ContentHeaderNonArticle::class;
-    protected $samples = '*';
 
     /**
      * @before

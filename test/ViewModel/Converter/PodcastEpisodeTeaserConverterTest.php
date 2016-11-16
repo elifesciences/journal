@@ -11,7 +11,6 @@ final class PodcastEpisodeTeaserConverterTest extends ModelConverterTestCase
     protected $models = ['podcast-episode'];
     protected $class = PodcastEpisode::class;
     protected $viewModelClass = Teaser::class;
-    protected $samples = '*';
 
     /**
      * @before

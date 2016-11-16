@@ -12,7 +12,6 @@ final class PodcastEpisodeGridTeaserConverterTest extends ModelConverterTestCase
     protected $class = PodcastEpisode::class;
     protected $viewModelClass = Teaser::class;
     protected $context = ['variant' => 'grid'];
-    protected $samples = '*';
 
     /**
      * @before

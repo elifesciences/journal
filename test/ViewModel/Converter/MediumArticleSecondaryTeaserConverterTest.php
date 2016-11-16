@@ -12,7 +12,7 @@ final class MediumArticleSecondaryTeaserConverterTest extends ModelConverterTest
     protected $class = MediumArticle::class;
     protected $viewModelClass = Teaser::class;
     protected $context = ['variant' => 'secondary'];
-    protected $samples = 'first-page';
+    protected $selectSamples = ['first-page.json'];
 
     /**
      * @before

@@ -15,20 +15,18 @@ abstract class ModelConverterTestCase extends PHPUnit_Framework_TestCase
     protected $viewModelClass;
     protected $converter;
     protected $context = [];
-    protected $samples = '*';
+    protected $selectSamples = false;
     use SerializerAwareTestCase;
 
     /**
      * @test
      * @dataProvider samples
      */
-    final public function it_converts_a_model(string $path)
+    final public function it_converts_a_model(string $body)
     {
         $this->assertInstanceOf(ViewModelConverter::class, $this->converter);
-        $this->assertTrue(file_exists($path), "$path does not exists");
-        $file = file_get_contents($path);
 
-        $model = json_decode($file, true);
+        $model = json_decode($body, true);
         $model = $this->dataHook($model);
 
         $model = $this->serializer->denormalize($model, $this->class);
@@ -50,18 +48,29 @@ abstract class ModelConverterTestCase extends PHPUnit_Framework_TestCase
         $this->assertInternalType('string', $this->class);
         $this->assertInternalType('string', $this->viewModelClass);
         $this->assertInternalType('array', $this->context);
-        $this->assertInternalType('string', $this->samples);
 
         $samples = [];
         foreach ($this->models as $model) {
-            $glob = glob("vendor/elife/api/src/samples/{$model}/v1/{$this->samples}.json");
-            foreach ($glob as $path) {
-                $name = $model.'/v1/'.basename($path);
-                $samples[$name] = ['path' => $path];
+            $folder = $this->puliRepository()->get("/elife/api/samples/{$model}/v1");
+            
+            foreach ($folder->listChildren() as $sampleName => $sample) {
+                if ($this->selectSamples) {
+                    if (!in_array($sampleName, $this->selectSamples)) {
+                        continue;
+                    }
+                }
+                $name = $model.'/v1/'.$sampleName;
+                $samples[$name] = ['body' => $sample->getBody()];
             }
         }
 
         return $samples;
+    }
+
+    private function puliRepository()
+    {
+        $factoryClass = PULI_FACTORY_CLASS;
+        return (new $factoryClass())->createRepository();
     }
 
     /**

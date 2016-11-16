@@ -13,7 +13,6 @@ final class PodcastEpisodeAudioPlayerConverterTest extends ModelConverterTestCas
     protected $models = ['podcast-episode'];
     protected $class = PodcastEpisode::class;
     protected $viewModelClass = AudioPlayer::class;
-    protected $samples = '*';
 
     /**
      * @before

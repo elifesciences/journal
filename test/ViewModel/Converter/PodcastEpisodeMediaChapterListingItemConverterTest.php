@@ -12,7 +12,6 @@ final class PodcastEpisodeMediaChapterListingItemConverterTest extends ModelConv
     protected $models = ['podcast-episode'];
     protected $class = PodcastEpisode::class;
     protected $viewModelClass = MediaChapterListingItem::class;
-    protected $samples = '*';
 
     /**
      * @before
