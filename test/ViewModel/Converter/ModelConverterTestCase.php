@@ -51,15 +51,15 @@ abstract class ModelConverterTestCase extends PHPUnit_Framework_TestCase
 
         $samples = [];
         foreach ($this->models as $model) {
-            $folder = $this->puliRepository()->get("/elife/api/samples/{$model}/v1");
+            $folder = $this->puliRepository()->find("/elife/api/samples/{$model}/v1/*");
 
-            foreach ($folder->listChildren() as $sampleName => $sample) {
+            foreach ($folder as $sample) {
                 if ($this->selectSamples) {
-                    if (!in_array($sampleName, $this->selectSamples)) {
+                    if (!in_array($sample->getName(), $this->selectSamples)) {
                         continue;
                     }
                 }
-                $name = $model.'/v1/'.$sampleName;
+                $name = $model.'/v1/'.$sample->getName();
                 $samples[$name] = ['body' => $sample->getBody()];
             }
         }
