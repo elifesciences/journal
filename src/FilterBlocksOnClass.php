@@ -5,12 +5,12 @@ namespace eLife\Journal;
 class FilterBlocksOnClass
 {
     private $class;
-    
+
     public static function for($class)
     {
         return new self($class);
     }
-    
+
     private function __construct($class)
     {
         $this->class = $class;
@@ -21,6 +21,5 @@ class FilterBlocksOnClass
         return array_filter($objects, function (Block $block) {
             return $block instanceof $this->class;
         });
-    }    
-        
+    }
 }
