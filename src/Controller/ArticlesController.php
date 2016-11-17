@@ -25,11 +25,11 @@ use function GuzzleHttp\Promise\all;
 
 final class ArticlesController extends Controller
 {
-    private function toLevel2($articleSection) : string
+    private function toLevel($level, $content) : string
     {
-        return $articleSection->getContent()
-            ->map(function (Block $block) {
-                return $this->get('elife.journal.view_model.converter')->convert($block, null, ['level' => 2]);
+        return $content
+            ->map(function (Block $block) use ($level) {
+                return $this->get('elife.journal.view_model.converter')->convert($block, null, ['level' => $level]);
             })
             ->reduce(function (string $carry, ViewModel $viewModel) {
                 return $carry.$this->get('elife.patterns.pattern_renderer')->render($viewModel);
@@ -62,7 +62,7 @@ final class ArticlesController extends Controller
                         'abstract',
                         'Abstract',
                         2,
-                        $this->toLevel2($article->getAbstract()),
+                        $this->toLevel(2, $article->getAbstract()->getContent()),
                         false,
                         $first,
                         $article->getAbstract()->getDoi() ? new Doi($article->getAbstract()->getDoi()) : null
@@ -76,7 +76,7 @@ final class ArticlesController extends Controller
                         'digest',
                         'eLife digest',
                         2,
-                        $this->toLevel2($article->getDigest()),
+                        $this->toLevel(2, $article->getDigest()->getContent()),
                         false,
                         $first,
                         new Doi($article->getDigest()->getDoi())
@@ -115,7 +115,7 @@ final class ArticlesController extends Controller
 
                         $parts = array_merge($parts, $article->getAppendices()->map(function (Appendix $appendix) {
                             return ArticleSection::collapsible($appendix->getId(), $appendix->getTitle(), 2,
-                                $this->toLevel2($appendix),
+                                $this->toLevel(2, $appendix->getContent()),
                                 true, false, new Doi($appendix->getDoi()));
                         })->toArray());
 
@@ -143,7 +143,7 @@ final class ArticlesController extends Controller
                                 'decision-letter',
                                 'Decision letter',
                                 2,
-                                $this->toLevel2($article->getDecisionLetter()),
+                                $this->toLevel(2, $article->getDecisionLetter()->getContent()),
                                 true,
                                 false,
                                 new Doi($article->getDecisionLetter()->getDoi())
@@ -155,7 +155,7 @@ final class ArticlesController extends Controller
                                 'author-response',
                                 'Author response',
                                 2,
-                                $this->toLevel2($article->getAuthorResponse()),
+                                $this->toLevel(2, $article->getAuthorResponse()->getContent()),
                                 true,
                                 false,
                                 new Doi($article->getAuthorResponse()->getDoi())
@@ -184,13 +184,7 @@ final class ArticlesController extends Controller
                             $infoSections[] = ArticleSection::basic(
                                 'Acknowledgements',
                                 3,
-                                $article->getAcknowledgements()
-                                    ->map(function (Block $block) {
-                                        return $this->get('elife.journal.view_model.converter')->convert($block, null, ['level' => 3]);
-                                    })
-                                    ->reduce(function (string $carry, ViewModel $viewModel) {
-                                        return $carry.$this->get('elife.patterns.pattern_renderer')->render($viewModel);
-                                    }, '')
+                                $this->toLevel(3, $article->getAcknowledgements())
                             );
                         }
 
@@ -198,13 +192,7 @@ final class ArticlesController extends Controller
                             $infoSections[] = ArticleSection::basic(
                                 'Ethics',
                                 3,
-                                $article->getEthics()
-                                    ->map(function (Block $block) {
-                                        return $this->get('elife.journal.view_model.converter')->convert($block, null, ['level' => 3]);
-                                    })
-                                    ->reduce(function (string $carry, ViewModel $viewModel) {
-                                        return $carry.$this->get('elife.patterns.pattern_renderer')->render($viewModel);
-                                    }, '')
+                                $this->toLevel(3, $article->getEthics())
                             );
                         }
 
