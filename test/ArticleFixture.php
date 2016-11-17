@@ -54,6 +54,26 @@ final class ArticleFixture
 
     private function samples()
     {
+        $affiliationOne = [
+            'name' => ['Department One', 'Institution One'],
+            'address' => [
+                'formatted' => ['Locality One', 'Country One'],
+                'components' => [
+                    'locality' => ['Locality One'],
+                    'country' => 'Country One',
+                ],
+            ],
+        ];
+        $affiliationTwo = [
+            'name' => ['Department Two', 'Institution Two'],
+            'address' => [
+                'formatted' => ['Locality Two', 'Country Two'],
+                'components' => [
+                    'locality' => ['Locality Two'],
+                    'country' => 'Country Two',
+                ],
+            ],
+        ];
         return [
             'many-authors-and-affiliations' => [
                 'status' => 'vor',
@@ -80,26 +100,8 @@ final class ArticleFixture
                             'index' => 'Author One',
                         ],
                         'affiliations' => [
-                            [
-                                'name' => ['Department One', 'Institution One'],
-                                'address' => [
-                                    'formatted' => ['Locality One', 'Country One'],
-                                    'components' => [
-                                        'locality' => ['Locality One'],
-                                        'country' => 'Country One',
-                                    ],
-                                ],
-                            ],
-                            [
-                                'name' => ['Department Two', 'Institution Two'],
-                                'address' => [
-                                    'formatted' => ['Locality Two', 'Country Two'],
-                                    'components' => [
-                                        'locality' => ['Locality Two'],
-                                        'country' => 'Country Two',
-                                    ],
-                                ],
-                            ],
+                            $affiliationOne,
+                            $affiliationTwo,
                         ],
                     ],
                     [
@@ -116,16 +118,7 @@ final class ArticleFixture
                             'index' => 'Author Three',
                         ],
                         'affiliations' => [
-                            [
-                                'name' => ['Department One', 'Institution One'],
-                                'address' => [
-                                    'formatted' => ['Locality One', 'Country One'],
-                                    'components' => [
-                                        'locality' => ['Locality One'],
-                                        'country' => 'Country One',
-                                    ],
-                                ],
-                            ],
+                            $affiliationOne,
                         ],
                     ],
                     [

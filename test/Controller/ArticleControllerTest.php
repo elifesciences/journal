@@ -5,6 +5,7 @@ namespace test\eLife\Journal\Controller;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use test\eLife\Journal\ArticleFixture;
+use test\eLife\Journal\Page\ArticlePage;
 
 final class ArticleControllerTest extends PageTestCase
 {
@@ -26,12 +27,13 @@ final class ArticleControllerTest extends PageTestCase
         $crawler = $client->request('GET', $this->getUrl());
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
-        $this->assertSame('Article title', $crawler->filter('.content-header__title')->text());
+
+        $page = new ArticlePage($crawler);
+        $this->assertSame('Article title', $page->headerTitle());
         $this->assertSame('Foo Bar', trim($crawler->filter('.content-header__author_list')->text()));
         $this->assertEmpty($crawler->filter('.content-header__institution_list'));
 
-        $this->assertContains('Cite as: eLife 2012;1:e00001',
-            $crawler->filter('.contextual-data__cite_wrapper')->text());
+        $this->assertContains('Cite as: eLife 2012;1:e00001', $page->citation());
         $this->assertContains('doi: 10.7554/eLife.00001', $crawler->filter('.contextual-data__cite_wrapper')->text());
     }
 
@@ -65,23 +67,20 @@ final class ArticleControllerTest extends PageTestCase
         );
 
         $crawler = $client->request('GET', '/content/1/e00001');
+        $page = new ArticlePage($crawler);
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertSame('Article title', $crawler->filter('.content-header__title')->text());
-        $this->assertCount(5, $crawler->filter('.content-header__author_list_item'));
-        $this->assertSame('Author One', trim($crawler->filter('.content-header__author_list_item')->eq(0)->text()));
-        $this->assertSame('Author Two', trim($crawler->filter('.content-header__author_list_item')->eq(1)->text()));
-        $this->assertSame('Author Three', trim($crawler->filter('.content-header__author_list_item')->eq(2)->text()));
-        $this->assertSame('Author Four', trim($crawler->filter('.content-header__author_list_item')->eq(3)->text()));
-        $this->assertSame('on behalf of Institution Four',
-            trim($crawler->filter('.content-header__author_list_item')->eq(4)->text()));
-        $this->assertCount(3, $crawler->filter('.content-header__institution_list_item'));
-        $this->assertSame('Institution One, Country One',
-            trim($crawler->filter('.content-header__institution_list_item')->eq(0)->text()));
-        $this->assertSame('Institution Two, Country Two',
-            trim($crawler->filter('.content-header__institution_list_item')->eq(1)->text()));
-        $this->assertSame('Institution Three',
-            trim($crawler->filter('.content-header__institution_list_item')->eq(2)->text()));
+        $this->assertSame(5, $page->headerAuthorCount());
+        $this->assertSame('Author One', $page->headerAuthor(0));
+        $this->assertSame('Author Two', $page->headerAuthor(1));
+        $this->assertSame('Author Three', $page->headerAuthor(2));
+        $this->assertSame('Author Four', $page->headerAuthor(3));
+        $this->assertSame('on behalf of Institution Four', $page->headerAuthor(4));
+        $this->assertSame(3, $page->headerInstitutionCount());
+        $this->assertSame('Institution One, Country One', $page->headerInstitution(0));
+        $this->assertSame('Institution Two, Country Two', $page->headerInstitution(1));
+        $this->assertSame('Institution Three', $page->headerInstitution(2));
     }
 
     /**
