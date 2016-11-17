@@ -47,6 +47,24 @@ final class ArticlesController extends Controller
             }, '');
     }
 
+    private function toComplete()
+    {
+        return function (array $blocks) {
+            return array_map(function ($block) {
+                return $this->get('elife.journal.view_model.converter')->convert($block, null, ['complete' => true]);
+            }, $blocks);
+        };
+    }
+
+    private function render()
+    {
+        return function (array $figures) {
+            return array_map(function (ViewModel $viewModel) {
+                return $this->get('elife.patterns.pattern_renderer')->render($ViewModel);
+            }, $figures);
+        };
+    }
+
     private function linksToSections($body) : array
     {
     return                array_filter(array_map(function (ViewModel $viewModel) {
@@ -280,42 +298,18 @@ final class ArticlesController extends Controller
 
         $figures = $allFigures
             ->then(FilterBlocksForClass::for(Block\Image::class))
-            ->then(function (array $figures) {
-                return array_map(function (Block\Image $image) {
-                    return $this->get('elife.journal.view_model.converter')->convert($image, null, ['complete' => true]);
-                }, $figures);
-            })
-            ->then(function (array $figures) {
-                return array_map(function (ViewModel $image) {
-                    return $this->get('elife.patterns.pattern_renderer')->render($image);
-                }, $figures);
-            });
+            ->then($this->toComplete())
+            ->then($this->render());
 
         $videos = $allFigures
             ->then(FilterBlocksForClass::for(Block\Video::class))
-            ->then(function (array $videos) {
-                return array_map(function (Block\Video $video) {
-                    return $this->get('elife.journal.view_model.converter')->convert($video, null, ['complete' => true]);
-                }, $videos);
-            })
-            ->then(function (array $videos) {
-                return array_map(function (ViewModel $video) {
-                    return $this->get('elife.patterns.pattern_renderer')->render($video);
-                }, $videos);
-            });
+            ->then($this->toComplete())
+            ->then($this->render());
 
         $tables = $allFigures
             ->then(FilterBlocksForClass::for(Block\Table::class))
-            ->then(function (array $tables) {
-                return array_map(function (Block\Table $table) {
-                    return $this->get('elife.journal.view_model.converter')->convert($table, null, ['complete' => true]);
-                }, $tables);
-            })
-            ->then(function (array $tables) {
-                return array_map(function (ViewModel $table) {
-                    return $this->get('elife.patterns.pattern_renderer')->render($table);
-                }, $tables);
-            });
+            ->then($this->toComplete())
+            ->then($this->render());
 
         $generateDataSets = $arguments['article']
             ->then(function (ArticleVoR $article) {
