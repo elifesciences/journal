@@ -11,6 +11,7 @@ use eLife\ApiSdk\Model\Block;
 use eLife\ApiSdk\Model\File;
 use eLife\ApiSdk\Model\PersonAuthor;
 use eLife\ApiSdk\Model\Reference;
+use eLife\Journal\FilterBlocksForClass;
 use eLife\Patterns\ViewModel;
 use eLife\Patterns\ViewModel\ArticleSection;
 use eLife\Patterns\ViewModel\ContentHeaderArticle;
@@ -277,11 +278,7 @@ final class ArticlesController extends Controller
             });
 
         $figures = $allFigures
-            ->then(function (array $allFigures) {
-                return array_filter($allFigures, function (Block $block) {
-                    return $block instanceof Block\Image;
-                });
-            })
+            ->then(FilterBlocksForClass::for(Block\Image::class))
             ->then(function (array $figures) {
                 return array_map(function (Block\Image $image) {
                     return $this->get('elife.journal.view_model.converter')->convert($image, null, ['complete' => true]);
@@ -294,11 +291,7 @@ final class ArticlesController extends Controller
             });
 
         $videos = $allFigures
-            ->then(function (array $allFigures) {
-                return array_filter($allFigures, function (Block $block) {
-                    return $block instanceof Block\Video;
-                });
-            })
+            ->then(FilterBlocksForClass::for(Block\Video::class))
             ->then(function (array $videos) {
                 return array_map(function (Block\Video $video) {
                     return $this->get('elife.journal.view_model.converter')->convert($video, null, ['complete' => true]);
@@ -311,11 +304,7 @@ final class ArticlesController extends Controller
             });
 
         $tables = $allFigures
-            ->then(function (array $allFigures) {
-                return array_filter($allFigures, function (Block $block) {
-                    return $block instanceof Block\Table;
-                });
-            })
+            ->then(FilterBlocksForClass::for(Block\Table::class))
             ->then(function (array $tables) {
                 return array_map(function (Block\Table $table) {
                     return $this->get('elife.journal.view_model.converter')->convert($table, null, ['complete' => true]);
