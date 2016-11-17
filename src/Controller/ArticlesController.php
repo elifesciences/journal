@@ -36,6 +36,17 @@ final class ArticlesController extends Controller
             }, '');
     }
 
+    private function linksToSections($body) : array
+    {
+    return                array_filter(array_map(function (ViewModel $viewModel) {
+                        if ($viewModel instanceof ArticleSection) {
+                            return new Link($viewModel['title'], '#'.$viewModel['id']);
+                        }
+
+                        return null;
+                    }, count($body) > 1 ? $body : []));
+    }
+
     public function latestVersionAction(int $volume, string $id) : Response
     {
         $arguments = $this->articlePageArguments($volume, $id);
@@ -242,13 +253,7 @@ final class ArticlesController extends Controller
 
                 return new ViewSelector(
                     $this->get('router')->generate('article', ['id' => $article->getId(), 'volume' => $article->getVolume()]),
-                    array_filter(array_map(function (ViewModel $viewModel) {
-                        if ($viewModel instanceof ArticleSection) {
-                            return new Link($viewModel['title'], '#'.$viewModel['id']);
-                        }
-
-                        return null;
-                    }, $body)),
+                    $this->linksToSections($body),
                     $hasFigures ? $this->get('router')->generate('article-figures', ['id' => $article->getId(), 'volume' => $article->getVolume()]) : null
                 );
             });
@@ -387,6 +392,8 @@ final class ArticlesController extends Controller
 
                 return new ViewSelector(
                     $this->get('router')->generate('article', ['id' => $article->getId(), 'volume' => $article->getVolume()]),
+                    $this->linksToSections($body),
+                    /*
                     array_filter(array_map(function (ViewModel $viewModel) {
                         if ($viewModel instanceof ArticleSection) {
                             return new Link($viewModel['title'], '#'.$viewModel['id']);
@@ -394,6 +401,7 @@ final class ArticlesController extends Controller
 
                         return null;
                     }, count($body) > 1 ? $body : [])),
+                     */
                     $this->get('router')
                         ->generate('article-figures', ['id' => $article->getId(), 'volume' => $article->getVolume()])
                 );
