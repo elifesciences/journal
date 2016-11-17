@@ -26,6 +26,17 @@ use function GuzzleHttp\Promise\all;
 
 final class ArticlesController extends Controller
 {
+    private function toLevel2($articleSection) : string
+    {
+        return $articleSection->getContent()
+            ->map(function (Block $block) {
+                return $this->get('elife.journal.view_model.converter')->convert($block, null, ['level' => 2]);
+            })
+            ->reduce(function (string $carry, ViewModel $viewModel) {
+                return $carry.$this->get('elife.patterns.pattern_renderer')->render($viewModel);
+            }, '');
+    }
+
     public function latestVersionAction(int $volume, string $id) : Response
     {
         $arguments = $this->articlePageArguments($volume, $id);
@@ -41,13 +52,7 @@ final class ArticlesController extends Controller
                         'abstract',
                         'Abstract',
                         2,
-                        $article->getAbstract()->getContent()
-                            ->map(function (Block $block) {
-                                return $this->get('elife.journal.view_model.converter')->convert($block, null, ['level' => 2]);
-                            })
-                            ->reduce(function (string $carry, ViewModel $viewModel) {
-                                return $carry.$this->get('elife.patterns.pattern_renderer')->render($viewModel);
-                            }, ''),
+                        $this->toLevel2($article->getAbstract()),
                         false,
                         $first,
                         $article->getAbstract()->getDoi() ? new Doi($article->getAbstract()->getDoi()) : null
@@ -61,13 +66,7 @@ final class ArticlesController extends Controller
                         'digest',
                         'eLife digest',
                         2,
-                        $article->getDigest()->getContent()
-                            ->map(function (Block $block) {
-                                return $this->get('elife.journal.view_model.converter')->convert($block, null, ['level' => 2]);
-                            })
-                            ->reduce(function (string $carry, ViewModel $viewModel) {
-                                return $carry.$this->get('elife.patterns.pattern_renderer')->render($viewModel);
-                            }, ''),
+                        $this->toLevel2($article->getDigest()),
                         false,
                         $first,
                         new Doi($article->getDigest()->getDoi())
@@ -106,14 +105,8 @@ final class ArticlesController extends Controller
 
                         $parts = array_merge($parts, $article->getAppendices()->map(function (Appendix $appendix) {
                             return ArticleSection::collapsible($appendix->getId(), $appendix->getTitle(), 2,
-                                $appendix->getContent()
-                                    ->map(function (Block $block) {
-                                        return $this->get('elife.journal.view_model.converter')->convert($block, null, ['level' => 2]);
-                                    })
-                                    ->reduce(function (string $carry, ViewModel $viewModel) {
-                                        return $carry.$this->get('elife.patterns.pattern_renderer')->render($viewModel);
-                                    }, ''),
-                                true, false, $appendix->getDoi() ? new Doi($appendix->getDoi()) : null);
+                                $this->toLevel2($appendix),
+                                true, false, new Doi($appendix->getDoi()));
                         })->toArray());
 
                         if ($article->getReferences()->notEmpty()) {
@@ -140,13 +133,7 @@ final class ArticlesController extends Controller
                                 'decision-letter',
                                 'Decision letter',
                                 2,
-                                $article->getDecisionLetter()->getContent()
-                                    ->map(function (Block $block) {
-                                        return $this->get('elife.journal.view_model.converter')->convert($block, null, ['level' => 2]);
-                                    })
-                                    ->reduce(function (string $carry, ViewModel $viewModel) {
-                                        return $carry.$this->get('elife.patterns.pattern_renderer')->render($viewModel);
-                                    }, ''),
+                                $this->toLevel2($article->getDecisionLetter()),
                                 true,
                                 false,
                                 new Doi($article->getDecisionLetter()->getDoi())
@@ -158,13 +145,7 @@ final class ArticlesController extends Controller
                                 'author-response',
                                 'Author response',
                                 2,
-                                $article->getAuthorResponse()->getContent()
-                                    ->map(function (Block $block) {
-                                        return $this->get('elife.journal.view_model.converter')->convert($block, null, ['level' => 2]);
-                                    })
-                                    ->reduce(function (string $carry, ViewModel $viewModel) {
-                                        return $carry.$this->get('elife.patterns.pattern_renderer')->render($viewModel);
-                                    }, ''),
+                                $this->toLevel2($article->getAuthorResponse()),
                                 true,
                                 false,
                                 new Doi($article->getAuthorResponse()->getDoi())
