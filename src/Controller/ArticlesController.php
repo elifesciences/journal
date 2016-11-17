@@ -25,6 +25,15 @@ use function GuzzleHttp\Promise\all;
 
 final class ArticlesController extends Controller
 {
+    private function closedCollapsibleArticleSection($id, $title, $object) : ArticleSection
+    {
+        return ArticleSection::collapsible(
+             $id, $title, 2,
+                $this->toLevel(2, $object->getContent()),
+                true, false,
+                new Doi($object->getDoi()));
+    }
+
     private function toLevel($level, $content) : string
     {
         return $content
@@ -114,9 +123,11 @@ final class ArticlesController extends Controller
                         })->toArray());
 
                         $parts = array_merge($parts, $article->getAppendices()->map(function (Appendix $appendix) {
-                            return ArticleSection::collapsible($appendix->getId(), $appendix->getTitle(), 2,
-                                $this->toLevel(2, $appendix->getContent()),
-                                true, false, new Doi($appendix->getDoi()));
+                            return $this->closedCollapsibleArticleSection(
+                                $appendix->getId(),
+                                $appendix->getTitle(),
+                                $appendix
+                            );
                         })->toArray());
 
                         if ($article->getReferences()->notEmpty()) {
@@ -139,26 +150,18 @@ final class ArticlesController extends Controller
                         }
 
                         if ($article->getDecisionLetter()) {
-                            $parts[] = ArticleSection::collapsible(
+                            $parts[] = $this->closedCollapsibleArticleSection(
                                 'decision-letter',
                                 'Decision letter',
-                                2,
-                                $this->toLevel(2, $article->getDecisionLetter()->getContent()),
-                                true,
-                                false,
-                                new Doi($article->getDecisionLetter()->getDoi())
+                                $article->getDecisionLetter()
                             );
                         }
 
                         if ($article->getAuthorResponse()) {
-                            $parts[] = ArticleSection::collapsible(
+                            $parts[] = $this->closedCollapsibleArticleSection(
                                 'author-response',
                                 'Author response',
-                                2,
-                                $this->toLevel(2, $article->getAuthorResponse()->getContent()),
-                                true,
-                                false,
-                                new Doi($article->getAuthorResponse()->getDoi())
+                                $article->getAuthorResponse()
                             );
                         }
 
