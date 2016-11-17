@@ -66,13 +66,13 @@ final class ArticlesController extends Controller
 
     private function linksToSections($body) : array
     {
-    return                array_filter(array_map(function (ViewModel $viewModel) {
-                        if ($viewModel instanceof ArticleSection) {
-                            return new Link($viewModel['title'], '#'.$viewModel['id']);
-                        }
+        return                array_filter(array_map(function (ViewModel $viewModel) {
+            if ($viewModel instanceof ArticleSection) {
+                return new Link($viewModel['title'], '#'.$viewModel['id']);
+            }
 
-                        return null;
-                    }, count($body) > 1 ? $body : []));
+            return null;
+        }, count($body) > 1 ? $body : []));
     }
 
     public function latestVersionAction(int $volume, string $id) : Response

@@ -74,6 +74,7 @@ final class ArticleFixture
                 ],
             ],
         ];
+
         return [
             'many-authors-and-affiliations' => [
                 'status' => 'vor',

@@ -7,7 +7,7 @@ use Symfony\Component\DomCrawler\Crawler;
 class Page
 {
     protected $crawler;
-    
+
     public function __construct(Crawler $crawler)
     {
         $this->crawler = $crawler;
