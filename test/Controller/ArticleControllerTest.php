@@ -42,10 +42,7 @@ final class ArticleControllerTest extends PageTestCase
     {
         $client = static::createClient();
 
-        static::mockApiResponse(
-            $this->fixture->articleRequest('00001'),
-            $this->fixture->articleNotFoundResponse()
-        );
+        $this->fixture->mockArticleNotFound('00001');
 
         $client->request('GET', '/content/1/e00001');
 
@@ -59,10 +56,7 @@ final class ArticleControllerTest extends PageTestCase
     {
         $client = static::createClient();
 
-        $this->mockApiResponse(
-            $this->fixture->articleRequest('00001'),
-            $this->fixture->articleVorResponse('many-authors-and-affiliations')
-        );
+        $this->fixture->mockArticleVor('many-authors-and-affiliations', '00001');
 
         $crawler = $client->request('GET', '/content/1/e00001');
 
@@ -91,10 +85,7 @@ final class ArticleControllerTest extends PageTestCase
     {
         $client = static::createClient();
 
-        $this->mockApiResponse(
-            $this->fixture->articleRequest('00001'),
-            $this->fixture->articlePoaResponse('a-poa')
-        );
+        $this->fixture->mockArticlePoa('a-poa', '00001');
 
         $crawler = $client->request('GET', '/content/1/e00001');
         $this->assertContains('Accepted manuscript, PDF only. Full online edition to follow.',
@@ -108,10 +99,7 @@ final class ArticleControllerTest extends PageTestCase
     {
         $client = static::createClient();
 
-        $this->mockApiResponse(
-            $this->fixture->articleRequest('00001'),
-            $this->fixture->articleVorResponse('content')
-        );
+        $this->fixture->mockArticleVor('content', '00001');
 
         $crawler = $client->request('GET', '/content/1/e00001');
 
@@ -196,10 +184,7 @@ final class ArticleControllerTest extends PageTestCase
     {
         $client = static::createClient();
 
-        $this->mockApiResponse(
-            $this->fixture->articleRequest('00001'),
-            $this->fixture->articleVorResponse('content-without-sections')
-        );
+        $this->fixture->mockArticleVor('content-without-sections', '00001');
 
         $crawler = $client->request('GET', '/content/1/e00001');
 
@@ -210,10 +195,7 @@ final class ArticleControllerTest extends PageTestCase
 
     protected function getUrl() : string
     {
-        $this->mockApiResponse(
-            $this->fixture->articleRequest('00001'),
-            $this->fixture->articleVorResponse('a-vor')
-        );
+        $this->fixture->mockArticleVor('a-vor', '00001');
 
         return '/content/1/e00001';
     }

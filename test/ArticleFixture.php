@@ -4,9 +4,34 @@ namespace test\eLife\Journal;
 
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use test\eLife\Journal\WebTestCase;
 
 final class ArticleFixture
 {
+    public function mockArticlePoa($sampleName, $articleId = '00001')
+    {
+        WebTestCase::mockApiResponse(
+            $this->articleRequest($articleId),
+            $this->articlePoaResponse($sampleName)
+        );
+    }
+
+    public function mockArticleVor($sampleName, $articleId = '00001')
+    {
+        WebTestCase::mockApiResponse(
+            $this->articleRequest($articleId),
+            $this->articleVorResponse($sampleName)
+        );
+    }
+
+    public function mockArticleNotFound($articleId = '00001')
+    {
+        WebTestCase::mockApiResponse(
+            $this->articleRequest($articleId),
+            $this->articleNotFoundResponse()
+        );
+    }
+
     public function articleRequest($articleId)
     {
         return new Request(

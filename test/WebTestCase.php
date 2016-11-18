@@ -18,7 +18,7 @@ abstract class WebTestCase extends BaseWebTestCase
         (new Filesystem())->remove(static::$kernel->getContainer()->getParameter('api_mock'));
     }
 
-    final protected static function mockApiResponse(RequestInterface $request, ResponseInterface $response)
+    final public static function mockApiResponse(RequestInterface $request, ResponseInterface $response)
     {
         static::$kernel->getContainer()
             ->get('elife.guzzle.middleware.mock.storage')
