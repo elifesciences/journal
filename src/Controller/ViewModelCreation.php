@@ -6,8 +6,8 @@ use eLife\ApiSdk\Model\Block;
 use eLife\Patterns\ViewModel;
 
 /**
- * Generic manipulation of ViewModel objects, and of Model objects turning them 
- * into ViewModel ones
+ * Generic manipulation of ViewModel objects, and of Model objects turning them
+ * into ViewModel ones.
  */
 trait ViewModelCreation
 {

@@ -21,5 +21,4 @@ final class LinksToSections
             count($body) > 1 ? $body : []
         ));
     }
-
 }
