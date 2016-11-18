@@ -11,6 +11,7 @@ use eLife\ApiSdk\Model\Block;
 use eLife\ApiSdk\Model\File;
 use eLife\ApiSdk\Model\PersonAuthor;
 use eLife\ApiSdk\Model\Reference;
+use eLife\Journal\FilterBlocksForClass;
 use eLife\Patterns\ViewModel;
 use eLife\Patterns\ViewModel\ArticleSection;
 use eLife\Patterns\ViewModel\ContentHeaderArticle;
@@ -25,6 +26,55 @@ use function GuzzleHttp\Promise\all;
 
 final class ArticlesController extends Controller
 {
+    private function closedCollapsibleArticleSection($id, $title, $object) : ArticleSection
+    {
+        return ArticleSection::collapsible(
+             $id, $title, 2,
+                $this->toLevel(2, $object->getContent()),
+                true, false,
+                new Doi($object->getDoi()));
+    }
+
+    private function toLevel($level, $content) : string
+    {
+        return $content
+            ->map(function (Block $block) use ($level) {
+                return $this->get('elife.journal.view_model.converter')->convert($block, null, ['level' => $level]);
+            })
+            ->reduce(function (string $carry, ViewModel $viewModel) {
+                return $carry.$this->get('elife.patterns.pattern_renderer')->render($viewModel);
+            }, '');
+    }
+
+    private function toComplete()
+    {
+        return function (array $blocks) {
+            return array_map(function ($block) {
+                return $this->get('elife.journal.view_model.converter')->convert($block, null, ['complete' => true]);
+            }, $blocks);
+        };
+    }
+
+    private function render()
+    {
+        return function (array $figures) {
+            return array_map(function (ViewModel $viewModel) {
+                return $this->get('elife.patterns.pattern_renderer')->render($ViewModel);
+            }, $figures);
+        };
+    }
+
+    private function linksToSections($body) : array
+    {
+        return                array_filter(array_map(function (ViewModel $viewModel) {
+            if ($viewModel instanceof ArticleSection) {
+                return new Link($viewModel['title'], '#'.$viewModel['id']);
+            }
+
+            return null;
+        }, count($body) > 1 ? $body : []));
+    }
+
     public function latestVersionAction(int $volume, string $id) : Response
     {
         $arguments = $this->articlePageArguments($volume, $id);
@@ -40,13 +90,7 @@ final class ArticlesController extends Controller
                         'abstract',
                         'Abstract',
                         2,
-                        $article->getAbstract()->getContent()
-                            ->map(function (Block $block) {
-                                return $this->get('elife.journal.view_model.converter')->convert($block, null, ['level' => 2]);
-                            })
-                            ->reduce(function (string $carry, ViewModel $viewModel) {
-                                return $carry.$this->get('elife.patterns.pattern_renderer')->render($viewModel);
-                            }, ''),
+                        $this->toLevel(2, $article->getAbstract()->getContent()),
                         false,
                         $first,
                         $article->getAbstract()->getDoi() ? new Doi($article->getAbstract()->getDoi()) : null
@@ -60,13 +104,7 @@ final class ArticlesController extends Controller
                         'digest',
                         'eLife digest',
                         2,
-                        $article->getDigest()->getContent()
-                            ->map(function (Block $block) {
-                                return $this->get('elife.journal.view_model.converter')->convert($block, null, ['level' => 2]);
-                            })
-                            ->reduce(function (string $carry, ViewModel $viewModel) {
-                                return $carry.$this->get('elife.patterns.pattern_renderer')->render($viewModel);
-                            }, ''),
+                        $this->toLevel(2, $article->getDigest()->getContent()),
                         false,
                         $first,
                         new Doi($article->getDigest()->getDoi())
@@ -104,15 +142,11 @@ final class ArticlesController extends Controller
                         })->toArray());
 
                         $parts = array_merge($parts, $article->getAppendices()->map(function (Appendix $appendix) {
-                            return ArticleSection::collapsible($appendix->getId(), $appendix->getTitle(), 2,
-                                $appendix->getContent()
-                                    ->map(function (Block $block) {
-                                        return $this->get('elife.journal.view_model.converter')->convert($block, null, ['level' => 2]);
-                                    })
-                                    ->reduce(function (string $carry, ViewModel $viewModel) {
-                                        return $carry.$this->get('elife.patterns.pattern_renderer')->render($viewModel);
-                                    }, ''),
-                                true, false, new Doi($appendix->getDoi()));
+                            return $this->closedCollapsibleArticleSection(
+                                $appendix->getId(),
+                                $appendix->getTitle(),
+                                $appendix
+                            );
                         })->toArray());
 
                         if ($article->getReferences()->notEmpty()) {
@@ -135,38 +169,18 @@ final class ArticlesController extends Controller
                         }
 
                         if ($article->getDecisionLetter()) {
-                            $parts[] = ArticleSection::collapsible(
+                            $parts[] = $this->closedCollapsibleArticleSection(
                                 'decision-letter',
                                 'Decision letter',
-                                2,
-                                $article->getDecisionLetter()->getContent()
-                                    ->map(function (Block $block) {
-                                        return $this->get('elife.journal.view_model.converter')->convert($block, null, ['level' => 2]);
-                                    })
-                                    ->reduce(function (string $carry, ViewModel $viewModel) {
-                                        return $carry.$this->get('elife.patterns.pattern_renderer')->render($viewModel);
-                                    }, ''),
-                                true,
-                                false,
-                                new Doi($article->getDecisionLetter()->getDoi())
+                                $article->getDecisionLetter()
                             );
                         }
 
                         if ($article->getAuthorResponse()) {
-                            $parts[] = ArticleSection::collapsible(
+                            $parts[] = $this->closedCollapsibleArticleSection(
                                 'author-response',
                                 'Author response',
-                                2,
-                                $article->getAuthorResponse()->getContent()
-                                    ->map(function (Block $block) {
-                                        return $this->get('elife.journal.view_model.converter')->convert($block, null, ['level' => 2]);
-                                    })
-                                    ->reduce(function (string $carry, ViewModel $viewModel) {
-                                        return $carry.$this->get('elife.patterns.pattern_renderer')->render($viewModel);
-                                    }, ''),
-                                true,
-                                false,
-                                new Doi($article->getAuthorResponse()->getDoi())
+                                $article->getAuthorResponse()
                             );
                         }
 
@@ -192,13 +206,7 @@ final class ArticlesController extends Controller
                             $infoSections[] = ArticleSection::basic(
                                 'Acknowledgements',
                                 3,
-                                $article->getAcknowledgements()
-                                    ->map(function (Block $block) {
-                                        return $this->get('elife.journal.view_model.converter')->convert($block, null, ['level' => 3]);
-                                    })
-                                    ->reduce(function (string $carry, ViewModel $viewModel) {
-                                        return $carry.$this->get('elife.patterns.pattern_renderer')->render($viewModel);
-                                    }, '')
+                                $this->toLevel(3, $article->getAcknowledgements())
                             );
                         }
 
@@ -206,13 +214,7 @@ final class ArticlesController extends Controller
                             $infoSections[] = ArticleSection::basic(
                                 'Ethics',
                                 3,
-                                $article->getEthics()
-                                    ->map(function (Block $block) {
-                                        return $this->get('elife.journal.view_model.converter')->convert($block, null, ['level' => 3]);
-                                    })
-                                    ->reduce(function (string $carry, ViewModel $viewModel) {
-                                        return $carry.$this->get('elife.patterns.pattern_renderer')->render($viewModel);
-                                    }, '')
+                                $this->toLevel(3, $article->getEthics())
                             );
                         }
 
@@ -261,13 +263,7 @@ final class ArticlesController extends Controller
 
                 return new ViewSelector(
                     $this->get('router')->generate('article', ['id' => $article->getId(), 'volume' => $article->getVolume()]),
-                    array_filter(array_map(function (ViewModel $viewModel) {
-                        if ($viewModel instanceof ArticleSection) {
-                            return new Link($viewModel['title'], '#'.$viewModel['id']);
-                        }
-
-                        return null;
-                    }, $body)),
+                    $this->linksToSections($body),
                     $hasFigures ? $this->get('router')->generate('article-figures', ['id' => $article->getId(), 'volume' => $article->getVolume()]) : null
                 );
             });
@@ -300,55 +296,19 @@ final class ArticlesController extends Controller
             });
 
         $figures = $allFigures
-            ->then(function (array $allFigures) {
-                return array_filter($allFigures, function (Block $block) {
-                    return $block instanceof Block\Image;
-                });
-            })
-            ->then(function (array $figures) {
-                return array_map(function (Block\Image $image) {
-                    return $this->get('elife.journal.view_model.converter')->convert($image, null, ['complete' => true]);
-                }, $figures);
-            })
-            ->then(function (array $figures) {
-                return array_map(function (ViewModel $image) {
-                    return $this->get('elife.patterns.pattern_renderer')->render($image);
-                }, $figures);
-            });
+            ->then(FilterBlocksForClass::for(Block\Image::class))
+            ->then($this->toComplete())
+            ->then($this->render());
 
         $videos = $allFigures
-            ->then(function (array $allFigures) {
-                return array_filter($allFigures, function (Block $block) {
-                    return $block instanceof Block\Video;
-                });
-            })
-            ->then(function (array $videos) {
-                return array_map(function (Block\Video $video) {
-                    return $this->get('elife.journal.view_model.converter')->convert($video, null, ['complete' => true]);
-                }, $videos);
-            })
-            ->then(function (array $videos) {
-                return array_map(function (ViewModel $video) {
-                    return $this->get('elife.patterns.pattern_renderer')->render($video);
-                }, $videos);
-            });
+            ->then(FilterBlocksForClass::for(Block\Video::class))
+            ->then($this->toComplete())
+            ->then($this->render());
 
         $tables = $allFigures
-            ->then(function (array $allFigures) {
-                return array_filter($allFigures, function (Block $block) {
-                    return $block instanceof Block\Table;
-                });
-            })
-            ->then(function (array $tables) {
-                return array_map(function (Block\Table $table) {
-                    return $this->get('elife.journal.view_model.converter')->convert($table, null, ['complete' => true]);
-                }, $tables);
-            })
-            ->then(function (array $tables) {
-                return array_map(function (ViewModel $table) {
-                    return $this->get('elife.patterns.pattern_renderer')->render($table);
-                }, $tables);
-            });
+            ->then(FilterBlocksForClass::for(Block\Table::class))
+            ->then($this->toComplete())
+            ->then($this->render());
 
         $additionalFiles = $arguments['article']
             ->then(function (ArticleVoR $article) {
@@ -406,6 +366,8 @@ final class ArticlesController extends Controller
 
                 return new ViewSelector(
                     $this->get('router')->generate('article', ['id' => $article->getId(), 'volume' => $article->getVolume()]),
+                    $this->linksToSections($body),
+                    /*
                     array_filter(array_map(function (ViewModel $viewModel) {
                         if ($viewModel instanceof ArticleSection) {
                             return new Link($viewModel['title'], '#'.$viewModel['id']);
@@ -413,6 +375,7 @@ final class ArticlesController extends Controller
 
                         return null;
                     }, count($body) > 1 ? $body : [])),
+                     */
                     $this->get('router')
                         ->generate('article-figures', ['id' => $article->getId(), 'volume' => $article->getVolume()])
                 );
