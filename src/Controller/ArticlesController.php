@@ -113,7 +113,7 @@ final class ArticlesController extends Controller
                                     ->reduce(function (string $carry, ViewModel $viewModel) {
                                         return $carry.$this->get('elife.patterns.pattern_renderer')->render($viewModel);
                                     }, ''),
-                                true, false, new Doi($appendix->getDoi()));
+                                true, false, $appendix->getDoi() ? new Doi($appendix->getDoi()) : null);
                         })->toArray());
 
                         if ($article->getReferences()->notEmpty()) {
@@ -184,8 +184,8 @@ final class ArticlesController extends Controller
                         if ($personAuthors->notEmpty()) {
                             $infoSections[] = new ViewModel\AuthorsDetails(
                                 ...$personAuthors->map(function (PersonAuthor $author) use ($article) {
-                                    return $this->get('elife.journal.view_model.converter')->convert($author, null, ['article' => $article]);
-                                })->toArray()
+                                return $this->get('elife.journal.view_model.converter')->convert($author, null, ['article' => $article]);
+                            })->toArray()
                             );
                         }
 
