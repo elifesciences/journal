@@ -152,6 +152,7 @@ services:
         class: eLife\Journal\ViewModel\Converter\Block\CaptionedImageFileConverter
         arguments:
           - '@elife.journal.view_model.converter'
+          - '@elife.patterns.pattern_renderer'
         tags:
           - name: view_model.converter
 
@@ -211,6 +212,7 @@ services:
         public: false
         arguments:
           - '@elife.journal.view_model.converter'
+          - '@elife.patterns.pattern_renderer'
         tags:
           - name: view_model.converter
 
@@ -225,6 +227,7 @@ services:
         public: false
         arguments:
           - '@elife.journal.view_model.converter'
+          - '@elife.patterns.pattern_renderer'
         tags:
           - name: view_model.converter
 
@@ -307,6 +310,9 @@ services:
     elife.journal.view_model.converter.file_additional_asset:
         class: eLife\Journal\ViewModel\Converter\FileAdditionalAssetConverter
         public: false
+        arguments:
+          - '@elife.journal.view_model.converter'
+          - '@elife.patterns.pattern_renderer'
         tags:
           - name: view_model.converter
 

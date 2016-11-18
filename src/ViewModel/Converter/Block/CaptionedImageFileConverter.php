@@ -5,6 +5,7 @@ namespace eLife\Journal\ViewModel\Converter\Block;
 use eLife\ApiSdk\Model\Block;
 use eLife\ApiSdk\Model\File;
 use eLife\Journal\ViewModel\Converter\ViewModelConverter;
+use eLife\Patterns\PatternRenderer;
 use eLife\Patterns\ViewModel;
 use eLife\Patterns\ViewModel\AssetViewerInline;
 
@@ -13,10 +14,12 @@ final class CaptionedImageFileConverter implements ViewModelConverter
     use CreatesCaptionedAsset;
 
     private $viewModelConverter;
+    private $patternRenderer;
 
-    public function __construct(ViewModelConverter $viewModelConverter)
+    public function __construct(ViewModelConverter $viewModelConverter, PatternRenderer $patternRenderer)
     {
         $this->viewModelConverter = $viewModelConverter;
+        $this->patternRenderer = $patternRenderer;
     }
 
     /**
@@ -26,7 +29,11 @@ final class CaptionedImageFileConverter implements ViewModelConverter
     {
         $asset = new ViewModel\Image($object->getUri(), [], $object->getAltText());
 
-        $asset = $this->createCaptionedAsset($asset, $object->getTitle(), $object->getCaption(), $object->getDoi(), $object->getUri());
+        $caption = array_map(function (Block $block) {
+            return $this->viewModelConverter->convert($block);
+        }, $object->getCaption());
+
+        $asset = $this->createCaptionedAsset($asset, $object->getTitle(), $caption, $object->getDoi(), $object->getUri());
 
         if (empty($object->getLabel())) {
             return $asset;
@@ -50,5 +57,10 @@ final class CaptionedImageFileConverter implements ViewModelConverter
     public function supports($object, string $viewModel = null, array $context = []) : bool
     {
         return $object instanceof Block\ImageFile && $object->getTitle();
+    }
+
+    protected function getPatternRenderer() : PatternRenderer
+    {
+        return $this->patternRenderer;
     }
 }

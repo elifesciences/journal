@@ -31,9 +31,9 @@ final class ArticleFiguresControllerTest extends PageTestCase
         $figures = $figureTypes->eq(0)->filter('.asset-viewer-inline');
         $this->assertSame('Image 1 label', trim($figures->eq(0)->filter('.asset-viewer-inline__header_text')->text()));
         $this->assertSame('Image 2 label', trim($figures->eq(1)->filter('.asset-viewer-inline__header_text')->text()));
-        $this->assertSame('Image 2 source data 1 label', trim($figures->eq(1)->filter('.additional-asset__heading_text')->text()));
+        $this->assertSame('Image 2 source data 1 label', trim($figures->eq(1)->filter('.additional-assets__list .caption-text__heading')->text()));
         $this->assertSame('Image 2 supplement 1 label', trim($figures->eq(2)->filter('.asset-viewer-inline__header_text')->text()));
-        $this->assertSame('Image 2 supplement 1 source data 1 label', trim($figures->eq(2)->filter('.additional-asset__heading_text')->text()));
+        $this->assertSame('Image 2 supplement 1 source data 1 label', trim($figures->eq(2)->filter('.additional-assets__list .caption-text__heading')->text()));
 
         $videos = $figureTypes->eq(1)->filter('.asset-viewer-inline');
         $this->assertSame('Video 1 label', trim($videos->eq(0)->filter('.asset-viewer-inline__header_text')->text()));
@@ -41,7 +41,7 @@ final class ArticleFiguresControllerTest extends PageTestCase
         $tables = $figureTypes->eq(2)->filter('.asset-viewer-inline');
         $this->assertSame('Table 1 label', trim($tables->eq(0)->filter('.asset-viewer-inline__header_text')->text()));
 
-        $additionalFiles = $figureTypes->eq(3)->filter('.additional-asset__heading_text');
+        $additionalFiles = $figureTypes->eq(3)->filter('.caption-text__heading');
         $this->assertSame('Additional file 1 label', trim($additionalFiles->eq(0)->text()));
 
         $this->assertSame(

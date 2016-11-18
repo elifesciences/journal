@@ -4,6 +4,7 @@ namespace test\eLife\Journal\ViewModel\Converter\Block;
 
 use eLife\Journal\ViewModel\Converter\Block\CaptionedVideoConverter;
 use eLife\Journal\ViewModel\Converter\ViewModelConverter;
+use eLife\Patterns\PatternRenderer;
 use eLife\Patterns\ViewModel\CaptionedAsset;
 
 final class CaptionedVideoConverterTest extends BlockConverterTestCase
@@ -16,7 +17,10 @@ final class CaptionedVideoConverterTest extends BlockConverterTestCase
      */
     public function setUpConverter()
     {
-        $this->converter = new CaptionedVideoConverter($this->createMock(ViewModelConverter::class));
+        $this->converter = new CaptionedVideoConverter(
+            $this->createMock(ViewModelConverter::class),
+            $this->createMock(PatternRenderer::class)
+        );
     }
 
     public function blocks() : array

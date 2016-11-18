@@ -6,6 +6,7 @@ use eLife\ApiSdk\Model\Block\Image;
 use eLife\Journal\ViewModel\AssetViewerInlineSet;
 use eLife\Journal\ViewModel\Converter\Block\CaptionedImageConverter;
 use eLife\Journal\ViewModel\Converter\ViewModelConverter;
+use eLife\Patterns\PatternRenderer;
 
 final class CaptionedImageConverterTest extends BlockConverterTestCase
 {
@@ -18,7 +19,8 @@ final class CaptionedImageConverterTest extends BlockConverterTestCase
     public function setUpConverter()
     {
         $this->converter = new CaptionedImageConverter(
-            $viewModelConverter = $this->createMock(ViewModelConverter::class)
+            $viewModelConverter = $this->createMock(ViewModelConverter::class),
+            $this->createMock(PatternRenderer::class)
         );
         $viewModelConverter
             ->expects($this->any())

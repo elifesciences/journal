@@ -5,6 +5,7 @@ namespace eLife\Journal\ViewModel\Converter\Block;
 use eLife\ApiSdk\Model\Block;
 use eLife\ApiSdk\Model\File;
 use eLife\Journal\ViewModel\Converter\ViewModelConverter;
+use eLife\Patterns\PatternRenderer;
 use eLife\Patterns\ViewModel;
 use eLife\Patterns\ViewModel\AssetViewerInline;
 
@@ -13,10 +14,12 @@ final class CaptionedVideoConverter implements ViewModelConverter
     use CreatesCaptionedAsset;
 
     private $viewModelConverter;
+    private $patternRenderer;
 
-    public function __construct(ViewModelConverter $viewModelConverter)
+    public function __construct(ViewModelConverter $viewModelConverter, PatternRenderer $patternRenderer)
     {
         $this->viewModelConverter = $viewModelConverter;
+        $this->patternRenderer = $patternRenderer;
     }
 
     /**
@@ -31,7 +34,11 @@ final class CaptionedVideoConverter implements ViewModelConverter
             }, $object->getSources())
         );
 
-        $asset = $this->createCaptionedAsset($asset, $object->getTitle(), $object->getCaption(), $object->getDoi(), $object->getSources()[0]->getUri());
+        $caption = array_map(function (Block $block) {
+            return $this->viewModelConverter->convert($block);
+        }, $object->getCaption());
+
+        $asset = $this->createCaptionedAsset($asset, $object->getTitle(), $caption, $object->getDoi(), $object->getSources()[0]->getUri());
 
         if (empty($object->getLabel())) {
             return $asset;
@@ -51,5 +58,10 @@ final class CaptionedVideoConverter implements ViewModelConverter
     public function supports($object, string $viewModel = null, array $context = []) : bool
     {
         return $object instanceof Block\Video && $object->getTitle();
+    }
+
+    protected function getPatternRenderer() : PatternRenderer
+    {
+        return $this->patternRenderer;
     }
 }

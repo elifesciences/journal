@@ -2,13 +2,21 @@
 
 namespace eLife\Journal\ViewModel\Converter\Block;
 
-use eLife\ApiSdk\Model\Block;
+use eLife\Journal\ViewModel\Converter\HasPatternRenderer;
 use eLife\Patterns\ViewModel;
 
 trait CreatesCaptionedAsset
 {
+    use HasPatternRenderer;
+
     final private function createCaptionedAsset(ViewModel\IsCaptioned $asset, string $heading, array $captions, string $doi = null, string $download = null) : ViewModel\CaptionedAsset
     {
+        $captionText = new ViewModel\CaptionText(
+            $heading,
+            null,
+            $this->render(...$captions)
+        );
+
         if ($doi) {
             $doi = new ViewModel\Doi($doi);
         }
@@ -16,17 +24,6 @@ trait CreatesCaptionedAsset
             $download = new ViewModel\Link('Download', $download);
         }
 
-        if (empty($captions)) {
-            return ViewModel\CaptionedAsset::withOnlyHeading($asset, $heading, $doi, $download);
-        }
-
-        return ViewModel\CaptionedAsset::withParagraphs($asset, $heading,
-            array_map(function (Block $block) {
-                if ($block instanceof Block\MathML) {
-                    return $block->getMathML();
-                }
-
-                return $block->getText();
-            }, $captions), $doi, $download);
+        return new ViewModel\CaptionedAsset($asset, $captionText, $doi, $download);
     }
 }
