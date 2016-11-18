@@ -184,8 +184,8 @@ final class ArticlesController extends Controller
                         if ($personAuthors->notEmpty()) {
                             $infoSections[] = new ViewModel\AuthorsDetails(
                                 ...$personAuthors->map(function (PersonAuthor $author) use ($article) {
-                                return $this->get('elife.journal.view_model.converter')->convert($author, null, ['article' => $article]);
-                            })->toArray()
+                                    return $this->get('elife.journal.view_model.converter')->convert($author, null, ['article' => $article]);
+                                })->toArray()
                             );
                         }
 
