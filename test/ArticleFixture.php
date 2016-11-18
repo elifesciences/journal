@@ -4,7 +4,6 @@ namespace test\eLife\Journal;
 
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
-use test\eLife\Journal\WebTestCase;
 
 final class ArticleFixture
 {
@@ -99,23 +98,65 @@ final class ArticleFixture
                 ],
             ],
         ];
-        return [
-            'many-authors-and-affiliations' => [
-                'status' => 'vor',
-                'id' => '00001',
-                'version' => 1,
-                'type' => 'research-article',
-                'doi' => '10.7554/eLife.00001',
-                'title' => 'Article title',
-                'published' => '2010-01-01T00:00:00+00:00',
-                'statusDate' => '2010-01-01T00:00:00+00:00',
-                'volume' => 1,
-                'elocationId' => 'e00001',
-                'copyright' => [
-                    'license' => 'CC-BY-4.0',
-                    'holder' => 'Bar',
-                    'statement' => 'Copyright statement.',
+        $copyright = [
+            'license' => 'CC-BY-4.0',
+            'holder' => 'Bar',
+            'statement' => 'Copyright statement.',
+        ];
+        $authorFooBar = [
+            'type' => 'person',
+            'name' => [
+                'preferred' => 'Foo Bar',
+                'index' => 'Bar, Foo',
+            ],
+        ];
+        $body = [
+            [
+                'type' => 'section',
+                'id' => 's-1',
+                'title' => 'Body title',
+                'content' => [
+                    [
+                        'type' => 'paragraph',
+                        'text' => 'Body text',
+                    ],
                 ],
+            ],
+        ];
+        $homoNalediBody = [
+            [
+                'type' => 'section',
+                'id' => 's-1',
+                'title' => 'Introduction',
+                'content' => [
+                    [
+                        'type' => 'paragraph',
+                        'text' => 'Fossil hominins were first recognized in the Dinaledi Chamber in the Rising Star cave system in October 2013. During a relatively short excavation, our team recovered an extensive collection of 1550 hominin specimens, representing nearly every element of the skeleton multiple times (Figure 1), including many complete elements and morphologically informative fragments, some in articulation, as well as smaller fragments many of which could be refit into more complete elements. The collection is a morphologically homogeneous sample that can be attributed to no previously-known hominin species. Here we describe this new species, <i>Homo naledi</i>. We have not defined <i>H. naledi</i> narrowly based on a single jaw or skull because the entire body of material has informed our understanding of its biology.',
+                    ],
+                ],
+            ],
+        ];
+        $defaults = function (array $mergeIn) use ($copyright) : array {
+            return array_merge(
+                [
+                    'id' => '00001',
+                    'version' => 1,
+                    'type' => 'research-article',
+                    'doi' => '10.7554/eLife.00001',
+                    'title' => 'Article title',
+                    'published' => '2010-01-01T00:00:00+00:00',
+                    'statusDate' => '2010-01-01T00:00:00+00:00',
+                    'volume' => 1,
+                    'elocationId' => 'e00001',
+                    'copyright' => $copyright,
+                ],
+                $mergeIn
+            );
+        };
+
+        return [
+            'many-authors-and-affiliations' => $defaults([
+                'status' => 'vor',
                 'authorLine' => 'Author One et al',
                 'authors' => [
                     [
@@ -163,36 +204,10 @@ final class ArticleFixture
                         'onBehalfOf' => 'on behalf of Institution Four',
                     ],
                 ],
-                'body' => [
-                    [
-                        'type' => 'section',
-                        'id' => 's-1',
-                        'title' => 'Introduction',
-                        'content' => [
-                            [
-                                'type' => 'paragraph',
-                                'text' => 'Fossil hominins were first recognized in the Dinaledi Chamber in the Rising Star cave system in October 2013. During a relatively short excavation, our team recovered an extensive collection of 1550 hominin specimens, representing nearly every element of the skeleton multiple times (Figure 1), including many complete elements and morphologically informative fragments, some in articulation, as well as smaller fragments many of which could be refit into more complete elements. The collection is a morphologically homogeneous sample that can be attributed to no previously-known hominin species. Here we describe this new species, <i>Homo naledi</i>. We have not defined <i>H. naledi</i> narrowly based on a single jaw or skull because the entire body of material has informed our understanding of its biology.',
-                            ],
-                        ],
-                    ],
-                ],
-            ],
-            'a-poa' => [
+                'body' => $homoNalediBody,
+            ]),
+            'a-poa' => $defaults([
                 'status' => 'poa',
-                'id' => '00001',
-                'version' => 1,
-                'type' => 'research-article',
-                'doi' => '10.7554/eLife.00001',
-                'title' => 'Article title',
-                'published' => '2010-01-01T00:00:00+00:00',
-                'statusDate' => '2010-01-01T00:00:00+00:00',
-                'volume' => 1,
-                'elocationId' => 'e00001',
-                'copyright' => [
-                    'license' => 'CC-BY-4.0',
-                    'holder' => 'Author One',
-                    'statement' => 'Copyright statement.',
-                ],
                 'authorLine' => 'Author One et al',
                 'authors' => [
                     [
@@ -203,33 +218,13 @@ final class ArticleFixture
                         ],
                     ],
                 ],
-            ],
-            'content' => [
+            ]),
+            'content' => $defaults([
                 'status' => 'vor',
-                'id' => '00001',
-                'version' => 1,
-                'type' => 'research-advance',
-                'doi' => '10.7554/eLife.00001',
-                'title' => 'Article title',
                 'titlePrefix' => 'Title prefix',
-                'published' => '2010-01-01T00:00:00+00:00',
-                'statusDate' => '2010-01-01T00:00:00+00:00',
-                'volume' => 1,
-                'elocationId' => 'e00001',
-                'copyright' => [
-                    'license' => 'CC-BY-4.0',
-                    'holder' => 'Bar',
-                    'statement' => 'Copyright statement.',
-                ],
                 'authorLine' => 'Foo Bar',
                 'authors' => [
-                    [
-                        'type' => 'person',
-                        'name' => [
-                            'preferred' => 'Foo Bar',
-                            'index' => 'Bar, Foo',
-                        ],
-                    ],
+                    $authorFooBar,
                     [
                         'type' => 'group',
                         'name' => 'Baz',
@@ -253,19 +248,7 @@ final class ArticleFixture
                         ],
                     ],
                 ],
-                'body' => [
-                    [
-                        'type' => 'section',
-                        'id' => 's-1',
-                        'title' => 'Body title',
-                        'content' => [
-                            [
-                                'type' => 'paragraph',
-                                'text' => 'Body text',
-                            ],
-                        ],
-                    ],
-                ],
+                'body' => $body,
                 'appendices' => [
                     [
                         'id' => 'app1',
@@ -345,87 +328,23 @@ final class ArticleFixture
                         ],
                     ],
                 ],
-            ],
-            'content-without-sections' => [
+            ]),
+            'content-without-sections' => $defaults([
                 'status' => 'vor',
-                'id' => '00001',
-                'version' => 1,
-                'type' => 'research-exchange',
-                'doi' => '10.7554/eLife.00001',
-                'title' => 'Article title',
-                'published' => '2010-01-01T00:00:00+00:00',
-                'statusDate' => '2010-01-01T00:00:00+00:00',
-                'volume' => 1,
-                'elocationId' => 'e00001',
-                'copyright' => [
-                    'license' => 'CC-BY-4.0',
-                    'holder' => 'Bar',
-                    'statement' => 'Copyright statement.',
-                ],
                 'authorLine' => 'Foo Bar',
                 'authors' => [
-                    [
-                        'type' => 'person',
-                        'name' => [
-                            'preferred' => 'Foo Bar',
-                            'index' => 'Bar, Foo',
-                        ],
-                    ],
+                    $authorFooBar,
                 ],
-                'body' => [
-                    [
-                        'type' => 'section',
-                        'id' => 's-1',
-                        'title' => 'Body title',
-                        'content' => [
-                            [
-                                'type' => 'paragraph',
-                                'text' => 'Body text',
-                            ],
-                        ],
-                    ],
-                ],
-            ],
-            'a-vor' => [
+                'body' => $body,
+            ]),
+            'a-vor' => $defaults([
                 'status' => 'vor',
-                'id' => '00001',
-                'version' => 1,
-                'type' => 'research-article',
-                'doi' => '10.7554/eLife.00001',
-                'title' => 'Article title',
-                'published' => '2010-01-01T00:00:00+00:00',
-                'statusDate' => '2010-01-01T00:00:00+00:00',
-                'volume' => 1,
-                'elocationId' => 'e00001',
-                'copyright' => [
-                    'license' => 'CC-BY-4.0',
-                    'holder' => 'Bar',
-                    'statement' => 'Copyright statement.',
-                ],
                 'authorLine' => 'Foo Bar',
                 'authors' => [
-                    [
-                        'type' => 'person',
-                        'name' => [
-                            'preferred' => 'Foo Bar',
-                            'index' => 'Bar, Foo',
-                        ],
-                    ],
+                    $authorFooBar,
                 ],
-                'body' => [
-                    [
-                        'type' => 'section',
-                        'id' => 's-1',
-                        'title' => 'Introduction',
-                        'content' => [
-                            [
-                                'type' => 'paragraph',
-                                'text' => 'Fossil hominins were first recognized in the Dinaledi Chamber in the Rising Star cave system in October 2013. During a relatively short excavation, our team recovered an extensive collection of 1550 hominin specimens, representing nearly every element of the skeleton multiple times (Figure 1), including many complete elements and morphologically informative fragments, some in articulation, as well as smaller fragments many of which could be refit into more complete elements. The collection is a morphologically homogeneous sample that can be attributed to no previously-known hominin species. Here we describe this new species, <i>Homo naledi</i>. We have not defined <i>H. naledi</i> narrowly based on a single jaw or skull because the entire body of material has informed our understanding of its biology.',
-                            ],
-                        ],
-                    ],
-                ],
-            ],
+                'body' => $homoNalediBody,
+            ]),
         ];
     }
 }
