@@ -27,19 +27,6 @@ final class ArticlesController extends Controller
 {
     use ViewModelCreation;
 
-    private function closedCollapsibleArticleSection($id, $title, $object) : ArticleSection
-    {
-        return ArticleSection::collapsible(
-            $id,
-            $title,
-            2,
-            $this->toLevel(2, $object->getContent()),
-            true,
-            false,
-            new Doi($object->getDoi())
-        );
-    }
-
     public function latestVersionAction(int $volume, string $id) : Response
     {
         $arguments = $this->articlePageArguments($volume, $id);
@@ -492,5 +479,21 @@ final class ArticlesController extends Controller
         }
 
         return $figures;
+    }
+
+    /**
+     * Extract once stable, there are more possible abstractions on ArticleSection hiding here.
+     */
+    private function closedCollapsibleArticleSection($id, $title, $object) : ArticleSection
+    {
+        return ArticleSection::collapsible(
+            $id,
+            $title,
+            2,
+            $this->toLevel(2, $object->getContent()),
+            true,
+            false,
+            new Doi($object->getDoi())
+        );
     }
 }
