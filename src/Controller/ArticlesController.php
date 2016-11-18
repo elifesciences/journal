@@ -27,53 +27,33 @@ use function GuzzleHttp\Promise\all;
 
 final class ArticlesController extends Controller
 {
+    use ViewModelCreation;
+
     private function closedCollapsibleArticleSection($id, $title, $object) : ArticleSection
     {
         return ArticleSection::collapsible(
-             $id, $title, 2,
-                $this->toLevel(2, $object->getContent()),
-                true, false,
-                new Doi($object->getDoi()));
-    }
-
-    private function toLevel($level, $content) : string
-    {
-        return $content
-            ->map(function (Block $block) use ($level) {
-                return $this->get('elife.journal.view_model.converter')->convert($block, null, ['level' => $level]);
-            })
-            ->reduce(function (string $carry, ViewModel $viewModel) {
-                return $carry.$this->get('elife.patterns.pattern_renderer')->render($viewModel);
-            }, '');
-    }
-
-    private function toComplete()
-    {
-        return function (array $blocks) {
-            return array_map(function ($block) {
-                return $this->get('elife.journal.view_model.converter')->convert($block, null, ['complete' => true]);
-            }, $blocks);
-        };
-    }
-
-    private function render()
-    {
-        return function (array $figures) {
-            return array_map(function (ViewModel $viewModel) {
-                return $this->get('elife.patterns.pattern_renderer')->render($ViewModel);
-            }, $figures);
-        };
+            $id,
+            $title,
+            2,
+            $this->toLevel(2, $object->getContent()),
+            true,
+            false,
+            new Doi($object->getDoi())
+        );
     }
 
     private function linksToSections($body) : array
     {
-        return                array_filter(array_map(function (ViewModel $viewModel) {
-            if ($viewModel instanceof ArticleSection) {
-                return new Link($viewModel['title'], '#'.$viewModel['id']);
-            }
+        return array_filter(array_map(
+            function (ViewModel $viewModel) {
+                if ($viewModel instanceof ArticleSection) {
+                    return new Link($viewModel['title'], '#'.$viewModel['id']);
+                }
 
-            return null;
-        }, count($body) > 1 ? $body : []));
+                return null;
+            },
+            count($body) > 1 ? $body : []
+        ));
     }
 
     public function latestVersionAction(int $volume, string $id) : Response
