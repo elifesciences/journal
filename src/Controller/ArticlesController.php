@@ -12,7 +12,7 @@ use eLife\ApiSdk\Model\DataSet;
 use eLife\ApiSdk\Model\File;
 use eLife\ApiSdk\Model\PersonAuthor;
 use eLife\ApiSdk\Model\Reference;
-use eLife\Journal\FilterBlocksForClass;
+use eLife\Journal\Controller\FilterBlocks;
 use eLife\Patterns\ViewModel;
 use eLife\Patterns\ViewModel\ArticleSection;
 use eLife\Patterns\ViewModel\ContentHeaderArticle;
@@ -263,17 +263,17 @@ final class ArticlesController extends Controller
             });
 
         $figures = $allFigures
-            ->then(FilterBlocksForClass::for(Block\Image::class))
+            ->then(FilterBlocks::byClass(Block\Image::class))
             ->then($this->toComplete())
             ->then($this->render());
 
         $videos = $allFigures
-            ->then(FilterBlocksForClass::for(Block\Video::class))
+            ->then(FilterBlocks::byClass(Block\Video::class))
             ->then($this->toComplete())
             ->then($this->render());
 
         $tables = $allFigures
-            ->then(FilterBlocksForClass::for(Block\Table::class))
+            ->then(FilterBlocks::byClass(Block\Table::class))
             ->then($this->toComplete())
             ->then($this->render());
 

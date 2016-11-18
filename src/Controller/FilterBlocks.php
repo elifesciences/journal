@@ -2,11 +2,11 @@
 
 namespace eLife\Journal;
 
-class FilterBlocksOnClass
+class FilterBlocks
 {
     private $class;
 
-    public static function for($class)
+    public static function byClass($class)
     {
         return new self($class);
     }
