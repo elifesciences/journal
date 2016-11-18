@@ -26,7 +26,7 @@ final class ArticleFiguresControllerTest extends PageTestCase
         $this->assertContains('doi: 10.7554/eLife.00001', $crawler->filter('.contextual-data__cite_wrapper')->text());
 
         $figureTypes = $crawler->filter('main > .wrapper > div > div > section');
-        $this->assertCount(4, $figureTypes);
+        $this->assertCount(5, $figureTypes);
 
         $figures = $figureTypes->eq(0)->filter('.asset-viewer-inline');
         $this->assertSame('Image 1 label', trim($figures->eq(0)->filter('.asset-viewer-inline__header_text')->text()));
@@ -41,7 +41,13 @@ final class ArticleFiguresControllerTest extends PageTestCase
         $tables = $figureTypes->eq(2)->filter('.asset-viewer-inline');
         $this->assertSame('Table 1 label', trim($tables->eq(0)->filter('.asset-viewer-inline__header_text')->text()));
 
-        $additionalFiles = $figureTypes->eq(3)->filter('.caption-text__heading');
+        $dataSets = $figureTypes->eq(3)->filter('.article-section__body')->children();
+        $this->assertSame('The following data sets were generated', trim($dataSets->eq(0)->text()));
+        $this->assertSame('Data set 1', trim($dataSets->eq(1)->filter('.reference__title')->text()));
+        $this->assertSame('The following previously published data sets were used', trim($dataSets->eq(2)->text()));
+        $this->assertSame('Data set 2', trim($dataSets->eq(3)->filter('.reference__title')->text()));
+
+        $additionalFiles = $figureTypes->eq(4)->filter('.caption-text__heading');
         $this->assertSame('Additional file 1 label', trim($additionalFiles->eq(0)->text()));
 
         $this->assertSame(
@@ -49,6 +55,7 @@ final class ArticleFiguresControllerTest extends PageTestCase
                 'Figures',
                 'Videos',
                 'Tables',
+                'Data sets',
                 'Additional files',
             ],
             array_map('trim', $crawler->filter('.view-selector__jump_link_item')->extract('_text'))
@@ -287,6 +294,48 @@ final class ArticleFiguresControllerTest extends PageTestCase
                                         '<table><tbody><tr><td>Table</td></tr></tbody></table>',
                                     ],
                                 ],
+                            ],
+                        ],
+                    ],
+                    'dataSets' => [
+                        'generated' => [
+                            [
+                                'id' => 'dataro1',
+                                'authors' => [
+                                    [
+                                        'type' => 'person',
+                                        'name' => [
+                                            'preferred' => 'Foo Bar',
+                                            'index' => 'Bar, Foo',
+                                        ],
+                                    ],
+                                    [
+                                        'type' => 'group',
+                                        'name' => 'Baz',
+                                    ],
+                                ],
+                                'date' => '2013',
+                                'title' => 'Data set 1',
+                                'dataId' => 'DataSet1',
+                                'uri' => 'http://www.example.com/',
+                                'details' => 'Data set details.',
+                            ],
+                        ],
+                        'used' => [
+                            [
+                                'id' => 'dataro2',
+                                'authors' => [
+                                    [
+                                        'type' => 'person',
+                                        'name' => [
+                                            'preferred' => 'Foo Bar',
+                                            'index' => 'Bar, Foo',
+                                        ],
+                                    ],
+                                ],
+                                'date' => '2014',
+                                'title' => 'Data set 2',
+                                'uri' => 'http://www.example.com/',
                             ],
                         ],
                     ],

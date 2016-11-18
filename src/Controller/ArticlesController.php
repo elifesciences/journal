@@ -8,6 +8,7 @@ use eLife\ApiSdk\Model\ArticleVoR;
 use eLife\ApiSdk\Model\Author;
 use eLife\ApiSdk\Model\AuthorEntry;
 use eLife\ApiSdk\Model\Block;
+use eLife\ApiSdk\Model\DataSet;
 use eLife\ApiSdk\Model\File;
 use eLife\ApiSdk\Model\PersonAuthor;
 use eLife\ApiSdk\Model\Reference;
@@ -350,6 +351,67 @@ final class ArticlesController extends Controller
                 }, $tables);
             });
 
+        $generateDataSets = $arguments['article']
+            ->then(function (ArticleVoR $article) {
+                return $article->getGeneratedDataSets()
+                    ->map(function (DataSet $dataSet, int $id) {
+                        $reference = $this->get('elife.journal.view_model.converter')->convert($dataSet);
+
+                        return new ViewModel\ReferenceListItem($dataSet->getId(), $id + 1, $reference);
+                    })
+                    ->toArray();
+            })
+            ->then(function (array $generatedDataSets) {
+                if (empty($generatedDataSets)) {
+                    return null;
+                }
+
+                return $this->get('elife.patterns.pattern_renderer')->render(new ViewModel\ReferenceList(...$generatedDataSets));
+            })
+            ->then(function (string $generatedDataSets = null) {
+                if (empty($generatedDataSets)) {
+                    return null;
+                }
+
+                return $this->get('elife.patterns.pattern_renderer')->render(new ViewModel\MessageBar('The following data sets were generated')).$generatedDataSets;
+            });
+
+        $usedDataSets = $arguments['article']
+            ->then(function (ArticleVoR $article) {
+                return $article->getUsedDataSets()
+                    ->map(function (DataSet $dataSet, int $id) {
+                        $reference = $this->get('elife.journal.view_model.converter')->convert($dataSet);
+
+                        return new ViewModel\ReferenceListItem($dataSet->getId(), $id + 1, $reference);
+                    })
+                    ->toArray();
+            })
+            ->then(function (array $usedDataSets) {
+                if (empty($usedDataSets)) {
+                    return null;
+                }
+
+                return $this->get('elife.patterns.pattern_renderer')->render(new ViewModel\ReferenceList(...$usedDataSets));
+            })
+            ->then(function (string $usedDataSets = null) {
+                if (empty($usedDataSets)) {
+                    return null;
+                }
+
+                return $this->get('elife.patterns.pattern_renderer')->render(new ViewModel\MessageBar('The following previously published data sets were used')).$usedDataSets;
+            });
+
+        $dataSets = all(['generated' => $generateDataSets, 'used' => $usedDataSets])
+            ->then(function (array $dataSets) {
+                $dataSets = array_filter($dataSets);
+
+                if (empty($dataSets)) {
+                    return null;
+                }
+
+                return $dataSets['generated'].$dataSets['used'];
+            });
+
         $additionalFiles = $arguments['article']
             ->then(function (ArticleVoR $article) {
                 return $article->getAdditionalFiles()
@@ -370,6 +432,7 @@ final class ArticlesController extends Controller
             'figures' => $figures,
             'videos' => $videos,
             'tables' => $tables,
+            'dataSets' => $dataSets,
             'additionalFiles' => $additionalFiles,
         ])
             ->then(function (array $all) {
@@ -389,6 +452,10 @@ final class ArticlesController extends Controller
 
                 if (!empty($all['tables'])) {
                     $parts[] = ArticleSection::collapsible('tables', 'Tables', 2, implode($all['tables']), false, $first);
+                }
+
+                if (!empty($all['dataSets'])) {
+                    $parts[] = ArticleSection::collapsible('data-sets', 'Data sets', 2, $all['dataSets']);
                 }
 
                 if (!empty($all['additionalFiles'])) {
