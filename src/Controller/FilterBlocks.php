@@ -2,7 +2,7 @@
 
 namespace eLife\Journal;
 
-class FilterBlocks
+final class FilterBlocks
 {
     private $class;
 

@@ -6,7 +6,7 @@ use eLife\Patterns\ViewModel;
 use eLife\Patterns\ViewModel\ArticleSection;
 use eLife\Patterns\ViewModel\Link;
 
-class LinksToSections
+final class LinksToSections
 {
     public static function of($body) : array
     {

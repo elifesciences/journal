@@ -39,5 +39,4 @@ trait ViewModelCreation
             }, $figures);
         };
     }
-
 }
