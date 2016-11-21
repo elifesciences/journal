@@ -63,6 +63,13 @@ services:
         tags:
           - name: kernel.event_subscriber
 
+    elife.journal.listener.fragment_link_rewrite:
+        class: eLife\Journal\EventListener\FragmentLinkRewriteSubscriber
+        arguments:
+          - '@router'
+        tags:
+          - name: kernel.event_subscriber
+
     elife.journal.templating.promise_aware:
         class: eLife\Journal\Templating\PromiseAwareEngine
         decorates: templating
