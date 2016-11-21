@@ -12,6 +12,7 @@ use eLife\ApiSdk\Model\DataSet;
 use eLife\ApiSdk\Model\File;
 use eLife\ApiSdk\Model\PersonAuthor;
 use eLife\ApiSdk\Model\Reference;
+use eLife\ApiSdk\Model\Reviewer;
 use eLife\Patterns\ViewModel;
 use eLife\Patterns\ViewModel\ArticleSection;
 use eLife\Patterns\ViewModel\ContentHeaderArticle;
@@ -19,6 +20,7 @@ use eLife\Patterns\ViewModel\ContextualData;
 use eLife\Patterns\ViewModel\Doi;
 use eLife\Patterns\ViewModel\InfoBar;
 use eLife\Patterns\ViewModel\Link;
+use eLife\Patterns\ViewModel\Listing;
 use eLife\Patterns\ViewModel\ViewSelector;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -136,10 +138,13 @@ final class ArticlesController extends Controller
                         }
 
                         if ($article->getDecisionLetter()) {
+                            $header = $this->get('elife.journal.view_model.converter')->convert($article, ViewModel\DecisionLetterHeader::class);
+
                             $parts[] = ArticleSection::collapsible(
                                 'decision-letter',
                                 'Decision letter',
                                 2,
+                                $this->get('elife.patterns.pattern_renderer')->render($header).
                                 $article->getDecisionLetter()->getContent()
                                     ->map(function (Block $block) {
                                         return $this->get('elife.journal.view_model.converter')->convert($block, null, ['level' => 2]);
@@ -214,6 +219,28 @@ final class ArticlesController extends Controller
                                     ->reduce(function (string $carry, ViewModel $viewModel) {
                                         return $carry.$this->get('elife.patterns.pattern_renderer')->render($viewModel);
                                     }, '')
+                            );
+                        }
+
+                        if ($article->getReviewers()->notEmpty()) {
+                            $infoSections[] = ArticleSection::basic(
+                                'Reviewers',
+                                3,
+                                $this->get('elife.patterns.pattern_renderer')->render(
+                                    Listing::ordered(
+                                        $article->getReviewers()
+                                            ->map(function (Reviewer $reviewer) {
+                                                $parts = [$reviewer->getPreferredName(), $reviewer->getRole()];
+
+                                                foreach ($reviewer->getAffiliations() as $affiliation) {
+                                                    $parts[] = $affiliation->toString();
+                                                }
+
+                                                return implode(', ', $parts);
+                                            })
+                                            ->toArray()
+                                    )
+                                )
                             );
                         }
 
