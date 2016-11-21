@@ -316,6 +316,33 @@ final class ArticleControllerTest extends PageTestCase
                             'name' => 'Baz',
                         ],
                     ],
+                    'reviewers' => [
+                        [
+                            'name' => [
+                                'preferred' => 'Reviewer 1',
+                                'index' => 'Reviewer 1',
+                            ],
+                            'role' => 'role',
+                            'affiliations' => [
+                                [
+                                    'name' => ['Institution'],
+                                    'address' => [
+                                        'formatted' => ['Country'],
+                                        'components' => [
+                                            'country' => 'Country',
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                        [
+                            'name' => [
+                                'preferred' => 'Reviewer 2',
+                                'index' => 'Reviewer 2',
+                            ],
+                            'role' => 'role',
+                        ],
+                    ],
                     'abstract' => [
                         'doi' => '10.7554/eLife.09560.001',
                         'content' => [
@@ -463,6 +490,13 @@ final class ArticleControllerTest extends PageTestCase
             $references->filter('div > ol > li:nth-of-type(1) .reference__title')->text());
         $this->assertSame('Decision letter',
             $crawler->filter('main > .wrapper > div > div > section:nth-of-type(6) > header > h2')->text());
+        $this->assertCount(2, $crawler->filter('main > .wrapper > div > div > section:nth-of-type(6) > div .profile-snippet__name'));
+        $this->assertSame('Reviewer 1',
+            $crawler->filter('main > .wrapper > div > div > section:nth-of-type(6) > div .profile-snippet__name')->eq(0)->text());
+        $this->assertSame('Reviewer 2',
+            $crawler->filter('main > .wrapper > div > div > section:nth-of-type(6) > div .profile-snippet__name')->eq(1)->text());
+        $this->assertSame('Decision letter description',
+            $crawler->filter('main > .wrapper > div > div > section:nth-of-type(6) > div .decision-letter-header__main_text > p')->text());
         $this->assertSame('Decision letter text',
             $crawler->filter('main > .wrapper > div > div > section:nth-of-type(6) > div > p')->text());
         $this->assertSame('Author response',
@@ -474,7 +508,7 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertSame('Article and author information',
             $articleInfo->filter('header > h2')->text());
 
-        $authorDetails = $articleInfo->filter('div > ol:nth-of-type(1) > li');
+        $authorDetails = $articleInfo->filter('div > ol:nth-of-type(1) > li.authors-details__author');
         $this->assertCount(1, $authorDetails);
         $this->assertSame('Foo Bar', $authorDetails->eq(0)->filter('.author-details__name')->text());
 
@@ -486,7 +520,15 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertSame('Ethics', $ethics->filter('header > h3')->text());
         $this->assertSame('Ethics text', trim($ethics->filter('div')->text()));
 
-        $copyright = $articleInfo->filter('div > section:nth-of-type(3)');
+        $reviewers = $articleInfo->filter('div > section:nth-of-type(3)');
+        $this->assertSame('Reviewers', $reviewers->filter('header > h3')->text());
+
+        $reviewerDetails = $reviewers->filter('li');
+        $this->assertCount(2, $reviewerDetails);
+        $this->assertSame('Reviewer 1, role, Institution, Country', $reviewerDetails->eq(0)->text());
+        $this->assertSame('Reviewer 2, role', $reviewerDetails->eq(1)->text());
+
+        $copyright = $articleInfo->filter('div > section:nth-of-type(4)');
         $this->assertSame('Copyright', $copyright->filter('header > h3')->text());
         $this->assertContains('© 2012, Bar', $copyright->filter('div')->text());
         $this->assertContains('Copyright statement.', $copyright->filter('div')->text());

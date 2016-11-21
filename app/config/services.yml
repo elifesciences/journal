@@ -104,6 +104,15 @@ services:
     elife.journal.view_model.converter:
         class: eLife\Journal\ViewModel\Converter\ViewModelConverterRegistry
 
+    elife.journal.view_model.converter.article.decision_letter_header:
+        class: eLife\Journal\ViewModel\Converter\ArticleDecisionLetterHeaderConverter
+        public: false
+        arguments:
+          - '@elife.journal.view_model.converter'
+          - '@elife.patterns.pattern_renderer'
+        tags:
+          - name: view_model.converter
+
     elife.journal.view_model.converter.article.header:
         class: eLife\Journal\ViewModel\Converter\ArticleContentHeaderConverter
         public: false
@@ -522,6 +531,14 @@ services:
     elife.journal.view_model.converter.reference.web:
         class: eLife\Journal\ViewModel\Converter\Reference\WebReferenceConverter
         public: false
+        tags:
+          - name: view_model.converter
+
+    elife.journal.view_model.converter.reviewer.profile_snippet:
+        class: eLife\Journal\ViewModel\Converter\ReviewerProfileSnippetConverter
+        public: false
+        arguments:
+          - '@elife.journal.view_model.converter'
         tags:
           - name: view_model.converter
 
