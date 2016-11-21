@@ -35,7 +35,7 @@ trait ViewModelCreation
     {
         return function (array $figures) {
             return array_map(function (ViewModel $viewModel) {
-                return $this->get('elife.patterns.pattern_renderer')->render($ViewModel);
+                return $this->get('elife.patterns.pattern_renderer')->render($viewModel);
             }, $figures);
         };
     }

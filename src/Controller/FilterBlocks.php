@@ -1,6 +1,8 @@
 <?php
 
-namespace eLife\Journal;
+namespace eLife\Journal\Controller;
+
+use eLife\ApiSdk\Model\Block;
 
 final class FilterBlocks
 {
