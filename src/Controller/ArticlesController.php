@@ -237,6 +237,8 @@ final class ArticlesController extends Controller
                     }
                 }
 
+                $parts[] = $this->get('elife.journal.view_model.converter')->convert($article, ViewModel\ArticleMeta::class);
+
                 return $parts;
             });
 
