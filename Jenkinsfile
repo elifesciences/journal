@@ -22,11 +22,5 @@ elifePipeline {
 
         stage 'Approval'
         elifeGitMoveToBranch commit, 'approved'
-
-        // this should be done by another pipeline prod-journal when we decide to go into prod
-        stage 'Not production yet'
-        elifeGitMoveToBranch commit, 'master'
-        //builderDeployRevision 'journal--prod', commit
-        //builderSmokeTests 'journal--prod', '/srv/journal'
     }
 }
