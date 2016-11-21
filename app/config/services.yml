@@ -112,6 +112,12 @@ services:
         tags:
           - name: view_model.converter
 
+    elife.journal.view_model.converter.article.meta:
+        class: eLife\Journal\ViewModel\Converter\ArticleMetaConverter
+        public: false
+        tags:
+          - name: view_model.converter
+
     elife.journal.view_model.converter.article.teaser:
         class: eLife\Journal\ViewModel\Converter\ArticleTeaserConverter
         public: false
