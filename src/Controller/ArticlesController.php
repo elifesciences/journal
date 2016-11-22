@@ -10,9 +10,11 @@ use eLife\ApiSdk\Model\AuthorEntry;
 use eLife\ApiSdk\Model\Block;
 use eLife\ApiSdk\Model\DataSet;
 use eLife\ApiSdk\Model\File;
+use eLife\ApiSdk\Model\FundingAward;
 use eLife\ApiSdk\Model\PersonAuthor;
 use eLife\ApiSdk\Model\Reference;
 use eLife\ApiSdk\Model\Reviewer;
+use eLife\Journal\ViewModel\Paragraph;
 use eLife\Patterns\ViewModel;
 use eLife\Patterns\ViewModel\ArticleSection;
 use eLife\Patterns\ViewModel\ContentHeaderArticle;
@@ -191,6 +193,42 @@ final class ArticlesController extends Controller
                                 ...$personAuthors->map(function (PersonAuthor $author) use ($article) {
                                     return $this->get('elife.journal.view_model.converter')->convert($author, null, ['article' => $article]);
                                 })->toArray()
+                            );
+                        }
+
+                        if ($article->getFunding()) {
+                            $funding = $article->getFunding()->getAwards()
+                                ->map(function (FundingAward $award) {
+                                    $title = $award->getSource()->getPlace()->toString();
+
+                                    if ($award->getAwardId()) {
+                                        $title .= ' ('.$award->getAwardId().')';
+                                    }
+
+                                    $body = Listing::unordered(
+                                        $award->getRecipients()
+                                            ->map(function (Author $author) {
+                                                return $author->toString();
+                                            })
+                                            ->toArray(),
+                                        'bullet'
+                                    );
+
+                                    return ArticleSection::basic(
+                                        $title,
+                                        4,
+                                        $this->get('elife.patterns.pattern_renderer')->render($body)
+                                    );
+                                })->toArray();
+
+                            $funding[] = new Paragraph($article->getFunding()->getStatement());
+
+                            $infoSections[] = ArticleSection::basic(
+                                'Funding',
+                                3,
+                                implode('', array_map(function (ViewModel $viewModel) {
+                                    return $this->get('elife.patterns.pattern_renderer')->render($viewModel);
+                                }, $funding))
                             );
                         }
 

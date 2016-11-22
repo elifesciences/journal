@@ -429,6 +429,43 @@ final class ArticleControllerTest extends PageTestCase
                             'text' => 'Ethics text',
                         ],
                     ],
+                    'funding' => [
+                        'awards' => [
+                            [
+                                'id' => 'award1',
+                                'source' => [
+                                    'name' => [
+                                        'Funding source',
+                                    ],
+                                ],
+                                'awardId' => 'Award ID',
+                                'recipients' => [
+                                    [
+                                        'type' => 'person',
+                                        'name' => [
+                                            'preferred' => 'Foo Bar',
+                                            'index' => 'Bar, Foo',
+                                        ],
+                                    ],
+                                ],
+                            ],
+                            [
+                                'id' => 'award2',
+                                'source' => [
+                                    'name' => [
+                                        'Other funding source',
+                                    ],
+                                ],
+                                'recipients' => [
+                                    [
+                                        'type' => 'group',
+                                        'name' => 'Baz',
+                                    ],
+                                ],
+                            ],
+                        ],
+                        'statement' => 'Funding statement',
+                    ],
                     'decisionLetter' => [
                         'doi' => '10.7554/eLife.09560.003',
                         'description' => [
@@ -512,15 +549,25 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertCount(1, $authorDetails);
         $this->assertSame('Foo Bar', $authorDetails->eq(0)->filter('.author-details__name')->text());
 
-        $acknowledgements = $articleInfo->filter('div > section:nth-of-type(1)');
+        $articleInfo = $crawler->filter('main > .wrapper > div > div > section:nth-of-type(8) > div > section');
+
+        $funding = $articleInfo->eq(0);
+        $this->assertSame('Funding', $funding->filter('header > h3')->text());
+        $this->assertSame('Funding source (Award ID)', $funding->filter('.article-section__body .article-section__header_text')->eq(0)->text());
+        $this->assertSame('Foo Bar', trim($funding->filter('.article-section__body .article-section__body')->eq(0)->text()));
+        $this->assertSame('Other funding source', $funding->filter('.article-section__body .article-section__header_text')->eq(1)->text());
+        $this->assertSame('Baz', trim($funding->filter('.article-section__body .article-section__body')->eq(1)->text()));
+        $this->assertSame('Funding statement', $funding->filter('p')->text());
+
+        $acknowledgements = $articleInfo->eq(1);
         $this->assertSame('Acknowledgements', $acknowledgements->filter('header > h3')->text());
         $this->assertSame('Acknowledgements text', trim($acknowledgements->filter('div')->text()));
 
-        $ethics = $articleInfo->filter('div > section:nth-of-type(2)');
+        $ethics = $articleInfo->eq(2);
         $this->assertSame('Ethics', $ethics->filter('header > h3')->text());
         $this->assertSame('Ethics text', trim($ethics->filter('div')->text()));
 
-        $reviewers = $articleInfo->filter('div > section:nth-of-type(3)');
+        $reviewers = $articleInfo->eq(3);
         $this->assertSame('Reviewers', $reviewers->filter('header > h3')->text());
 
         $reviewerDetails = $reviewers->filter('li');
@@ -528,7 +575,7 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertSame('Reviewer 1, role, Institution, Country', $reviewerDetails->eq(0)->text());
         $this->assertSame('Reviewer 2, role', $reviewerDetails->eq(1)->text());
 
-        $copyright = $articleInfo->filter('div > section:nth-of-type(4)');
+        $copyright = $articleInfo->eq(4);
         $this->assertSame('Copyright', $copyright->filter('header > h3')->text());
         $this->assertContains('© 2012, Bar', $copyright->filter('div')->text());
         $this->assertContains('Copyright statement.', $copyright->filter('div')->text());
