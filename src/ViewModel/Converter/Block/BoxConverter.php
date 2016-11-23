@@ -32,7 +32,7 @@ final class BoxConverter implements ViewModelConverter
             return $this->viewModelConverter->convert($block);
         }, $object->getContent());
 
-        return new ViewModel\Box($object->getId(), $object->getLabel(), $object->getTitle(), $context['level'], $object->getDoi() ? new ViewModel\Doi($object->getDoi()) : null, $this->render(...$content));
+        return new ViewModel\Box($object->getId(), $object->getLabel(), $object->getTitle(), $context['level'], $object->getDoi() ? new ViewModel\Doi($object->getDoi()) : null, $this->patternRenderer->render(...$content));
     }
 
     public function supports($object, string $viewModel = null, array $context = []) : bool

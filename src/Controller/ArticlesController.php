@@ -2,6 +2,7 @@
 
 namespace eLife\Journal\Controller;
 
+use eLife\ApiSdk\Collection\Sequence;
 use eLife\ApiSdk\Model\Appendix;
 use eLife\ApiSdk\Model\ArticleVersion;
 use eLife\ApiSdk\Model\ArticleVoR;
@@ -45,13 +46,12 @@ final class ArticlesController extends Controller
                         'abstract',
                         'Abstract',
                         2,
-                        $article->getAbstract()->getContent()
+                        $this->get('elife.patterns.pattern_renderer')->render(
+                            ...$article->getAbstract()->getContent()
                             ->map(function (Block $block) {
                                 return $this->get('elife.journal.view_model.converter')->convert($block, null, ['level' => 2]);
                             })
-                            ->reduce(function (string $carry, ViewModel $viewModel) {
-                                return $carry.$this->get('elife.patterns.pattern_renderer')->render($viewModel);
-                            }, ''),
+                        ),
                         false,
                         $first,
                         $article->getAbstract()->getDoi() ? new Doi($article->getAbstract()->getDoi()) : null
@@ -65,13 +65,12 @@ final class ArticlesController extends Controller
                         'digest',
                         'eLife digest',
                         2,
-                        $article->getDigest()->getContent()
+                        $this->get('elife.patterns.pattern_renderer')->render(
+                            ...$article->getDigest()->getContent()
                             ->map(function (Block $block) {
                                 return $this->get('elife.journal.view_model.converter')->convert($block, null, ['level' => 2]);
                             })
-                            ->reduce(function (string $carry, ViewModel $viewModel) {
-                                return $carry.$this->get('elife.patterns.pattern_renderer')->render($viewModel);
-                            }, ''),
+                        ),
                         false,
                         $first,
                         new Doi($article->getDigest()->getDoi())
@@ -93,11 +92,11 @@ final class ArticlesController extends Controller
                                 $section->getId(),
                                 $section->getTitle(),
                                 2,
-                                array_reduce(array_map(function (Block $block) {
-                                    return $this->get('elife.journal.view_model.converter')->convert($block, null, ['level' => 2]);
-                                }, $section->getContent()), function (string $carry, ViewModel $viewModel) {
-                                    return $carry.$this->get('elife.patterns.pattern_renderer')->render($viewModel);
-                                }, ''),
+                                $this->get('elife.patterns.pattern_renderer')->render(
+                                    ...array_map(function (Block $block) {
+                                        return $this->get('elife.journal.view_model.converter')->convert($block, null, ['level' => 2]);
+                                    }, $section->getContent())
+                                ),
                                 $isInitiallyClosed,
                                 $first
                             );
@@ -110,13 +109,12 @@ final class ArticlesController extends Controller
 
                         $parts = array_merge($parts, $article->getAppendices()->map(function (Appendix $appendix) {
                             return ArticleSection::collapsible($appendix->getId(), $appendix->getTitle(), 2,
-                                $appendix->getContent()
+                                $this->get('elife.patterns.pattern_renderer')->render(
+                                    ...$appendix->getContent()
                                     ->map(function (Block $block) {
                                         return $this->get('elife.journal.view_model.converter')->convert($block, null, ['level' => 2]);
                                     })
-                                    ->reduce(function (string $carry, ViewModel $viewModel) {
-                                        return $carry.$this->get('elife.patterns.pattern_renderer')->render($viewModel);
-                                    }, ''),
+                                ),
                                 true, false, $appendix->getDoi() ? new Doi($appendix->getDoi()) : null);
                         })->toArray());
 
@@ -133,7 +131,7 @@ final class ArticlesController extends Controller
                                             $index + 1,
                                             $this->get('elife.journal.view_model.converter')->convert($reference)
                                         );
-                                    })->toArray()
+                                    })
                                 )),
                                 true
                             );
@@ -147,13 +145,12 @@ final class ArticlesController extends Controller
                                 'Decision letter',
                                 2,
                                 $this->get('elife.patterns.pattern_renderer')->render($header).
-                                $article->getDecisionLetter()->getContent()
+                                $this->get('elife.patterns.pattern_renderer')->render(
+                                    ...$article->getDecisionLetter()->getContent()
                                     ->map(function (Block $block) {
                                         return $this->get('elife.journal.view_model.converter')->convert($block, null, ['level' => 2]);
                                     })
-                                    ->reduce(function (string $carry, ViewModel $viewModel) {
-                                        return $carry.$this->get('elife.patterns.pattern_renderer')->render($viewModel);
-                                    }, ''),
+                                ),
                                 true,
                                 false,
                                 new Doi($article->getDecisionLetter()->getDoi())
@@ -165,13 +162,12 @@ final class ArticlesController extends Controller
                                 'author-response',
                                 'Author response',
                                 2,
-                                $article->getAuthorResponse()->getContent()
+                                $this->get('elife.patterns.pattern_renderer')->render(
+                                    ...$article->getAuthorResponse()->getContent()
                                     ->map(function (Block $block) {
                                         return $this->get('elife.journal.view_model.converter')->convert($block, null, ['level' => 2]);
                                     })
-                                    ->reduce(function (string $carry, ViewModel $viewModel) {
-                                        return $carry.$this->get('elife.patterns.pattern_renderer')->render($viewModel);
-                                    }, ''),
+                                ),
                                 true,
                                 false,
                                 new Doi($article->getAuthorResponse()->getDoi())
@@ -192,7 +188,7 @@ final class ArticlesController extends Controller
                             $infoSections[] = new ViewModel\AuthorsDetails(
                                 ...$personAuthors->map(function (PersonAuthor $author) use ($article) {
                                     return $this->get('elife.journal.view_model.converter')->convert($author, null, ['article' => $article]);
-                                })->toArray()
+                                })
                             );
                         }
 
@@ -226,9 +222,7 @@ final class ArticlesController extends Controller
                             $infoSections[] = ArticleSection::basic(
                                 'Funding',
                                 3,
-                                implode('', array_map(function (ViewModel $viewModel) {
-                                    return $this->get('elife.patterns.pattern_renderer')->render($viewModel);
-                                }, $funding))
+                                $this->get('elife.patterns.pattern_renderer')->render(...$funding)
                             );
                         }
 
@@ -236,13 +230,12 @@ final class ArticlesController extends Controller
                             $infoSections[] = ArticleSection::basic(
                                 'Acknowledgements',
                                 3,
-                                $article->getAcknowledgements()
+                                $this->get('elife.patterns.pattern_renderer')->render(
+                                    ...$article->getAcknowledgements()
                                     ->map(function (Block $block) {
                                         return $this->get('elife.journal.view_model.converter')->convert($block, null, ['level' => 3]);
                                     })
-                                    ->reduce(function (string $carry, ViewModel $viewModel) {
-                                        return $carry.$this->get('elife.patterns.pattern_renderer')->render($viewModel);
-                                    }, '')
+                                )
                             );
                         }
 
@@ -250,13 +243,12 @@ final class ArticlesController extends Controller
                             $infoSections[] = ArticleSection::basic(
                                 'Ethics',
                                 3,
-                                $article->getEthics()
+                                $this->get('elife.patterns.pattern_renderer')->render(
+                                    ...$article->getEthics()
                                     ->map(function (Block $block) {
                                         return $this->get('elife.journal.view_model.converter')->convert($block, null, ['level' => 3]);
                                     })
-                                    ->reduce(function (string $carry, ViewModel $viewModel) {
-                                        return $carry.$this->get('elife.patterns.pattern_renderer')->render($viewModel);
-                                    }, '')
+                                )
                             );
                         }
 
@@ -294,9 +286,7 @@ final class ArticlesController extends Controller
                             'info',
                             'Article and author information',
                             2,
-                            implode('', array_map(function (ViewModel $viewModel) {
-                                return $this->get('elife.patterns.pattern_renderer')->render($viewModel);
-                            }, $infoSections)),
+                            $this->get('elife.patterns.pattern_renderer')->render(...$infoSections),
                             true
                         );
                     }
@@ -377,11 +367,6 @@ final class ArticlesController extends Controller
                 return array_map(function (Block\Image $image) {
                     return $this->get('elife.journal.view_model.converter')->convert($image, null, ['complete' => true]);
                 }, $figures);
-            })
-            ->then(function (array $figures) {
-                return array_map(function (ViewModel $image) {
-                    return $this->get('elife.patterns.pattern_renderer')->render($image);
-                }, $figures);
             });
 
         $videos = $allFigures
@@ -393,11 +378,6 @@ final class ArticlesController extends Controller
             ->then(function (array $videos) {
                 return array_map(function (Block\Video $video) {
                     return $this->get('elife.journal.view_model.converter')->convert($video, null, ['complete' => true]);
-                }, $videos);
-            })
-            ->then(function (array $videos) {
-                return array_map(function (ViewModel $video) {
-                    return $this->get('elife.patterns.pattern_renderer')->render($video);
                 }, $videos);
             });
 
@@ -411,11 +391,6 @@ final class ArticlesController extends Controller
                 return array_map(function (Block\Table $table) {
                     return $this->get('elife.journal.view_model.converter')->convert($table, null, ['complete' => true]);
                 }, $tables);
-            })
-            ->then(function (array $tables) {
-                return array_map(function (ViewModel $table) {
-                    return $this->get('elife.patterns.pattern_renderer')->render($table);
-                }, $tables);
             });
 
         $generateDataSets = $arguments['article']
@@ -425,22 +400,17 @@ final class ArticlesController extends Controller
                         $reference = $this->get('elife.journal.view_model.converter')->convert($dataSet);
 
                         return new ViewModel\ReferenceListItem($dataSet->getId(), $id + 1, $reference);
-                    })
-                    ->toArray();
+                    });
             })
-            ->then(function (array $generatedDataSets) {
-                if (empty($generatedDataSets)) {
-                    return null;
+            ->then(function (Sequence $generatedDataSets) {
+                if ($generatedDataSets->isEmpty()) {
+                    return [];
                 }
 
-                return $this->get('elife.patterns.pattern_renderer')->render(new ViewModel\ReferenceList(...$generatedDataSets));
-            })
-            ->then(function (string $generatedDataSets = null) {
-                if (empty($generatedDataSets)) {
-                    return null;
-                }
-
-                return $this->get('elife.patterns.pattern_renderer')->render(new ViewModel\MessageBar('The following data sets were generated')).$generatedDataSets;
+                return [
+                    new ViewModel\MessageBar('The following data sets were generated'),
+                    new ViewModel\ReferenceList(...$generatedDataSets),
+                ];
             });
 
         $usedDataSets = $arguments['article']
@@ -450,33 +420,22 @@ final class ArticlesController extends Controller
                         $reference = $this->get('elife.journal.view_model.converter')->convert($dataSet);
 
                         return new ViewModel\ReferenceListItem($dataSet->getId(), $id + 1, $reference);
-                    })
-                    ->toArray();
+                    });
             })
-            ->then(function (array $usedDataSets) {
-                if (empty($usedDataSets)) {
-                    return null;
+            ->then(function (Sequence $usedDataSets) {
+                if ($usedDataSets->isEmpty()) {
+                    return [];
                 }
 
-                return $this->get('elife.patterns.pattern_renderer')->render(new ViewModel\ReferenceList(...$usedDataSets));
-            })
-            ->then(function (string $usedDataSets = null) {
-                if (empty($usedDataSets)) {
-                    return null;
-                }
-
-                return $this->get('elife.patterns.pattern_renderer')->render(new ViewModel\MessageBar('The following previously published data sets were used')).$usedDataSets;
+                return [
+                    new ViewModel\MessageBar('The following previously published data sets were used'),
+                    new ViewModel\ReferenceList(...$usedDataSets),
+                ];
             });
 
         $dataSets = all(['generated' => $generateDataSets, 'used' => $usedDataSets])
             ->then(function (array $dataSets) {
-                $dataSets = array_filter($dataSets);
-
-                if (empty($dataSets)) {
-                    return null;
-                }
-
-                return $dataSets['generated'].$dataSets['used'];
+                return array_filter(array_merge($dataSets['generated'], $dataSets['used']));
             });
 
         $additionalFiles = $arguments['article']
@@ -492,7 +451,7 @@ final class ArticlesController extends Controller
                     return null;
                 }
 
-                return $this->get('elife.patterns.pattern_renderer')->render(new ViewModel\AdditionalAssets(null, $files));
+                return new ViewModel\AdditionalAssets(null, $files);
             });
 
         $arguments['body'] = all([
@@ -508,25 +467,25 @@ final class ArticlesController extends Controller
                 $first = true;
 
                 if (!empty($all['figures'])) {
-                    $parts[] = ArticleSection::collapsible('figures', 'Figures', 2, implode($all['figures']), false, $first);
+                    $parts[] = ArticleSection::collapsible('figures', 'Figures', 2, $this->get('elife.patterns.pattern_renderer')->render(...$all['figures']), false, $first);
                     $first = false;
                 }
 
                 if (!empty($all['videos'])) {
-                    $parts[] = ArticleSection::collapsible('videos', 'Videos', 2, implode($all['videos']), false, $first);
+                    $parts[] = ArticleSection::collapsible('videos', 'Videos', 2, $this->get('elife.patterns.pattern_renderer')->render(...$all['videos']), false, $first);
                     $first = false;
                 }
 
                 if (!empty($all['tables'])) {
-                    $parts[] = ArticleSection::collapsible('tables', 'Tables', 2, implode($all['tables']), false, $first);
+                    $parts[] = ArticleSection::collapsible('tables', 'Tables', 2, $this->get('elife.patterns.pattern_renderer')->render(...$all['tables']), false, $first);
                 }
 
                 if (!empty($all['dataSets'])) {
-                    $parts[] = ArticleSection::collapsible('data-sets', 'Data sets', 2, $all['dataSets']);
+                    $parts[] = ArticleSection::collapsible('data-sets', 'Data sets', 2, $this->get('elife.patterns.pattern_renderer')->render(...$all['dataSets']));
                 }
 
                 if (!empty($all['additionalFiles'])) {
-                    $parts[] = ArticleSection::collapsible('files', 'Additional files', 2, $all['additionalFiles']);
+                    $parts[] = ArticleSection::collapsible('files', 'Additional files', 2, $this->get('elife.patterns.pattern_renderer')->render($all['additionalFiles']));
                 }
 
                 return $parts;

@@ -777,12 +777,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:elifesciences/patterns-php.git",
-                "reference": "c68ee8371d59cc5a5653380615402c25ba57fff1"
+                "reference": "8ccfcec1a6bbaab6d974775788cd38e94aeea891"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/c68ee8371d59cc5a5653380615402c25ba57fff1",
-                "reference": "c68ee8371d59cc5a5653380615402c25ba57fff1",
+                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/8ccfcec1a6bbaab6d974775788cd38e94aeea891",
+                "reference": "8ccfcec1a6bbaab6d974775788cd38e94aeea891",
                 "shasum": ""
             },
             "require": {
@@ -796,7 +796,7 @@
                 "cpliakas/git-wrapper": "^1.0",
                 "justinrainbow/json-schema": "^1.6",
                 "php-jsonpointer/php-jsonpointer": "^1.0",
-                "phpspec/prophecy": "^1.5",
+                "phpspec/prophecy": "^1.6",
                 "phpunit/phpunit": "^5.2",
                 "symfony/filesystem": "^3.0",
                 "symfony/finder": "^3.0",
@@ -825,7 +825,7 @@
                 "source": "https://github.com/elifesciences/patterns-php/tree/master",
                 "issues": "https://github.com/elifesciences/patterns-php/issues"
             },
-            "time": "2016-11-21 15:27:28"
+            "time": "2016-11-23 15:05:16"
         },
         {
             "name": "guzzlehttp/guzzle",
