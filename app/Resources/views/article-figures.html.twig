@@ -1,3 +1,17 @@
 {% extends '::article.html.twig' %}
 
 {% block title %}Figures in {{ parent() }}{% endblock %}
+
+{% block article_body %}
+
+    {% fragment_link_rewrite path('article', {volume: article.volume, id: article.id}) %}
+
+    {% for part in body %}
+
+        {{ render_pattern(part) }}
+
+    {% endfor %}
+
+    {% end_fragment_link_rewrite %}
+
+{% endblock %}
