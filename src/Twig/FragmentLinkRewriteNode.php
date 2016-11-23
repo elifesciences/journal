@@ -4,6 +4,7 @@ namespace eLife\Journal\Twig;
 
 use Twig_Compiler;
 use Twig_Node;
+use Twig_Node_Expression;
 
 final class FragmentLinkRewriteNode extends Twig_Node
 {
@@ -16,27 +17,22 @@ final class FragmentLinkRewriteNode extends Twig_Node
     {
         $compiler->addDebugInfo($this);
 
-        if (!($this->getNode('link') instanceof \Twig_Node_Expression)) {
+        if (false === $this->getNode('link') instanceof Twig_Node_Expression) {
             $compiler
                 ->write('ob_start();')
-                ->raw(PHP_EOL);
-
-            $compiler
-                ->subcompile($this->getNode('link'));
-
-            $compiler
-                ->write('$_fragmentLinkRewriteUri = ob_get_clean();')
-                ->raw(PHP_EOL);
+                ->raw(PHP_EOL)
+                ->subcompile($this->getNode('link'))
+                ->write('$_fragmentLinkRewriteUri = ob_get_clean()');
         } else {
             $compiler
                 ->write('$_fragmentLinkRewriteUri = ')
-                ->subcompile($this->getNode('link'))
-                ->raw(';')
-                ->raw(PHP_EOL);
+                ->subcompile($this->getNode('link'));
         }
 
         $compiler
-            ->write("ob_start();\n")
+            ->raw(';'.PHP_EOL)
+            ->write('ob_start();')
+            ->raw(PHP_EOL)
             ->subcompile($this->getNode('body'))
             ->write('echo $this->env->getExtension("fragment_link_rewriter")->rewrite(ob_get_clean(), $_fragmentLinkRewriteUri);');
     }
