@@ -38,15 +38,31 @@
 
             <div class="grid__item large--six-twelfths {% if not viewSelector %}push--large--two-twelfths{% endif %} u-pad-top-lg">
 
-                {% if body %}
+                {% block article_body %}
 
-                    {% for part in body %}
+                    {% if hasFigures %}
 
-                        {{ render_pattern(part) }}
+                        {% fragment_link_rewrite path('article-figures', {volume: article.volume, id: article.id}) %}
 
-                    {% endfor %}
+                        {% for part in body %}
 
-                {% endif %}
+                            {{ render_pattern(part) }}
+
+                        {% endfor %}
+
+                        {% end_fragment_link_rewrite %}
+
+                    {% else %}
+
+                        {% for part in body %}
+
+                            {{ render_pattern(part) }}
+
+                        {% endfor %}
+
+                    {% endif %}
+
+                {% endblock %}
 
             </div>
         </div>

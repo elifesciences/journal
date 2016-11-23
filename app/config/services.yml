@@ -58,15 +58,12 @@ services:
         class: eLife\ApiSdk\Client\Subjects
         factory: ['@elife.api_sdk', subjects]
 
+    elife.journal.helper.fragment_link_rewriter:
+        class: eLife\Journal\Helper\FragmentLinkRewriter
+        public: false
+
     elife.journal.listener.api_bad_response:
         class: eLife\Journal\EventListener\ApiBadResponseSubscriber
-        tags:
-          - name: kernel.event_subscriber
-
-    elife.journal.listener.fragment_link_rewrite:
-        class: eLife\Journal\EventListener\FragmentLinkRewriteSubscriber
-        arguments:
-          - '@router'
         tags:
           - name: kernel.event_subscriber
 
@@ -80,6 +77,13 @@ services:
         class: eLife\Journal\Twig\AssetsExtension
         arguments:
           - '@elife.patterns.pattern_renderer.asset_recording'
+        tags:
+          - name: twig.extension
+
+    elife.journal.twig.extension.fragment_link_rewriter:
+        class: eLife\Journal\Twig\FragmentLinkRewriterExtension
+        arguments:
+          - '@elife.journal.helper.fragment_link_rewriter'
         tags:
           - name: twig.extension
 
