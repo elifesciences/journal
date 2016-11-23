@@ -404,7 +404,7 @@ final class ArticlesController extends Controller
             })
             ->then(function (Sequence $generatedDataSets) {
                 if ($generatedDataSets->isEmpty()) {
-                    return null;
+                    return [];
                 }
 
                 return [
@@ -424,7 +424,7 @@ final class ArticlesController extends Controller
             })
             ->then(function (Sequence $usedDataSets) {
                 if ($usedDataSets->isEmpty()) {
-                    return null;
+                    return [];
                 }
 
                 return [
