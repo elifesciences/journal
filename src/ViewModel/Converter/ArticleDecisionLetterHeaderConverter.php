@@ -23,11 +23,10 @@ final class ArticleDecisionLetterHeaderConverter implements ViewModelConverter
     public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
         return new ViewModel\DecisionLetterHeader(
-            $object->getDecisionLetterDescription()
+            $this->patternRenderer->render(
+                ...$object->getDecisionLetterDescription()
                 ->map([$this->viewModelConverter, 'convert'])
-                ->reduce(function (string $carry, ViewModel $viewModel) {
-                    return $carry.$this->patternRenderer->render($viewModel);
-                }, ''),
+            ),
             $object->getReviewers()
                 ->map([$this->viewModelConverter, 'convert'])
                 ->toArray()

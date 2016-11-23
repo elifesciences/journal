@@ -14,7 +14,7 @@ trait CreatesCaptionedAsset
         $captionText = new ViewModel\CaptionText(
             $heading,
             null,
-            $this->render(...$captions)
+            $this->getPatternRenderer()->render(...$captions)
         );
 
         if ($doi) {

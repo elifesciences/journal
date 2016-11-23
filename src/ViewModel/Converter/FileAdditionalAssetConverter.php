@@ -32,7 +32,7 @@ final class FileAdditionalAssetConverter implements ViewModelConverter
         $captionText = new ViewModel\CaptionText(
             $object->getLabel(),
             $object->getTitle(),
-            $this->render(...$caption)
+            $this->patternRenderer->render(...$caption)
         );
 
         $download = ViewModel\DownloadLink::fromLink(
