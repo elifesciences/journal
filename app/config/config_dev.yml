@@ -16,12 +16,14 @@ monolog:
             channels:
               - !event
             type: console
+            formatter: monolog.formatter.line
         main:
             channels:
               - !event
             level: debug
             path: '%kernel.logs_dir%/%kernel.environment%.log'
             type: stream
+            formatter: monolog.formatter.line
 
 web_profiler:
     toolbar: true

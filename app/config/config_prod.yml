@@ -22,6 +22,7 @@ monolog:
             type: stream
             path: '%kernel.logs_dir%/%kernel.environment%.txt.log'
             level: debug
+            formatter: monolog.formatter.line
         json:
             type: stream
             path: '%kernel.logs_dir%/%kernel.environment%.json.log'
