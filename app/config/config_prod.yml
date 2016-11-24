@@ -13,11 +13,14 @@ monolog:
             action_level: error
             handler: composite
             type: fingers_crossed
+            excluded_404s:
+                - ^/
         composite:
             type: group
             members:
                 - text
                 - json
+                - newrelic
         text:
             type: stream
             path: '%kernel.logs_dir%/%kernel.environment%.txt.log'
