@@ -40,7 +40,7 @@ final class ArticleTeaserConverter implements ViewModelConverter
             ViewModel\TeaserFooter::forArticle(
                 ViewModel\Meta::withText(
                     ucfirst(str_replace('-', ' ', $object->getType())),
-                    new ViewModel\Date($object->getStatusDate())
+                    $object->getStatusDate() ? new ViewModel\Date($object->getStatusDate()) : null
                 ),
                 $object instanceof ArticleVoR
             )
