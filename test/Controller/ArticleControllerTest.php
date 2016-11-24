@@ -129,6 +129,7 @@ final class ArticleControllerTest extends PageTestCase
                                     ],
                                 ],
                             ],
+                            'equalContributionGroups' => [1],
                         ],
                         [
                             'type' => 'person',
@@ -136,6 +137,7 @@ final class ArticleControllerTest extends PageTestCase
                                 'preferred' => 'Author Two',
                                 'index' => 'Author Two',
                             ],
+                            'equalContributionGroups' => [1],
                         ],
                         [
                             'type' => 'person',
@@ -171,6 +173,15 @@ final class ArticleControllerTest extends PageTestCase
                         [
                             'type' => 'on-behalf-of',
                             'onBehalfOf' => 'on behalf of Institution Four',
+                        ],
+                    ],
+                    'abstract' => [
+                        'doi' => '10.7554/eLife.09560.001',
+                        'content' => [
+                            [
+                                'type' => 'paragraph',
+                                'text' => 'Abstract text',
+                            ],
                         ],
                     ],
                     'body' => [
