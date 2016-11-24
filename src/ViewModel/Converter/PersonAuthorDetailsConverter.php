@@ -2,8 +2,8 @@
 
 namespace eLife\Journal\ViewModel\Converter;
 
+use eLife\ApiSdk\Collection\Sequence;
 use eLife\ApiSdk\Model\Address;
-use eLife\ApiSdk\Model\ArticleVersion;
 use eLife\ApiSdk\Model\Author;
 use eLife\ApiSdk\Model\PersonAuthor;
 use eLife\ApiSdk\Model\Place;
@@ -26,7 +26,7 @@ final class PersonAuthorDetailsConverter implements ViewModelConverter
                 return $address->getFormatted();
             }, $object->getPostalAddresses()),
             $object->getContribution(),
-            ($context['article'] ?? false) ? $this->findEqualContributions($object, $context['article']) : null,
+            ($context['authors'] ?? false) ? $this->findEqualContributions($object, $context['authors']) : null,
             $object->getEmailAddresses(),
             $object->getPhoneNumbers(),
             $object->getCompetingInterests() ?? 'No competing interests declared.',
@@ -39,9 +39,9 @@ final class PersonAuthorDetailsConverter implements ViewModelConverter
         return $object instanceof PersonAuthor;
     }
 
-    private function findEqualContributions(PersonAuthor $author, ArticleVersion $article)
+    private function findEqualContributions(PersonAuthor $author, Sequence $authors)
     {
-        $authors = $article->getAuthors()->filter(function (Author $otherAuthor) use ($author) {
+        $authors = $authors->filter(function (Author $otherAuthor) use ($author) {
             if ($otherAuthor == $author || false === $otherAuthor instanceof Author) {
                 return false;
             }
@@ -49,16 +49,16 @@ final class PersonAuthorDetailsConverter implements ViewModelConverter
             return (bool) count(array_intersect($author->getEqualContributionGroups(), $otherAuthor->getEqualContributionGroups()));
         })->map(function (Author $authorEntry) {
             return $authorEntry->toString();
-        })->toArray();
+        });
 
-        if (empty($authors)) {
+        if ($authors->isEmpty()) {
             return null;
         }
 
-        return $this->prettyList($authors);
+        return $this->prettyList(...$authors);
     }
 
-    private function prettyList(array $items) : string
+    private function prettyList(string ...$items) : string
     {
         $last = array_slice($items, -1);
         $first = implode(', ', array_slice($items, 0, -1));
