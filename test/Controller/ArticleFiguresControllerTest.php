@@ -339,7 +339,6 @@ final class ArticleFiguresControllerTest extends PageTestCase
                                 ],
                                 'date' => '2014',
                                 'title' => 'Data set 2',
-                                'uri' => 'http://www.example.com/',
                             ],
                         ],
                     ],
