@@ -64,7 +64,7 @@ final class ArticleContentHeaderConverter implements ViewModelConverter
                     $authors,
                     ViewModel\Meta::withText(
                         ucfirst(str_replace('-', ' ', $object->getType())),
-                        new ViewModel\Date($object->getPublishedDate())
+                        $object->getPublishedDate() ? new ViewModel\Date($object->getPublishedDate()) : null
                     ),
                     new ViewModel\SubjectList(...$subjects),
                     $institutions

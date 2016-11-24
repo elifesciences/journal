@@ -23,12 +23,14 @@ final class HomepageContext extends Context
             $i = str_pad($i, 5, '0', STR_PAD_LEFT);
             $articles[] = [
                 'status' => 'poa',
+                'stage' => 'published',
                 'id' => "$i",
                 'version' => 1,
                 'type' => 'research-article',
                 'doi' => '10.7554/eLife.'.$i,
                 'title' => 'Article '.$i.' title',
                 'published' => $today->format(DATE_RFC3339),
+                'versionDate' => $today->format(DATE_RFC3339),
                 'statusDate' => $today->format(DATE_RFC3339),
                 'volume' => 5,
                 'elocationId' => 'e'.$i,
