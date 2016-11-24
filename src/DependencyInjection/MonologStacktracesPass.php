@@ -5,7 +5,7 @@ namespace eLife\Journal\DependencyInjection;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-final class MonologConverterPass implements CompilerPassInterface
+final class MonologStacktracesPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container)
     {
@@ -15,7 +15,7 @@ final class MonologConverterPass implements CompilerPassInterface
         ];
 
         foreach ($definitions as $definition) {
-            $definition->addMethodCall('includeStacktraces', [$includeStacktraces = true]);
+            $definition->addMethodCall('includeStacktraces');
         }
     }
 }
