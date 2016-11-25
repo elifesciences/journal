@@ -199,6 +199,12 @@ services:
           - '@elife.journal.view_model.converter'
           - '@elife.patterns.pattern_renderer'
 
+    elife.journal.view_model.converter.block.math:
+        class: eLife\Journal\ViewModel\Converter\Block\MathConverter
+        public: false
+        tags:
+          - name: view_model.converter
+
     elife.journal.view_model.converter.block.paragraph:
         class: eLife\Journal\ViewModel\Converter\Block\ParagraphConverter
         public: false
