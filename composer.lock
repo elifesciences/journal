@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "0de1c9d39b93e689eb111116197832ef",
-    "content-hash": "7eea61a48d70659e3f0de034737ff4f0",
+    "hash": "d4b462e97fbcd3ec900fb7fc1302bde2",
+    "content-hash": "0ae089b705a0be685e5d414c315c8a79",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -725,16 +725,16 @@
         },
         {
             "name": "elife/api-sdk",
-            "version": "dev-master",
+            "version": "dev-date-format",
             "source": {
                 "type": "git",
-                "url": "https://github.com/elifesciences/api-sdk-php.git",
-                "reference": "942b0e1c07c08e9d0b17cc3fadee392cb1549961"
+                "url": "https://github.com/thewilkybarkid/api-sdk-php.git",
+                "reference": "e2314ea4e58eab7dea2f21cb7e8ff90dee0feb73"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/942b0e1c07c08e9d0b17cc3fadee392cb1549961",
-                "reference": "942b0e1c07c08e9d0b17cc3fadee392cb1549961",
+                "url": "https://api.github.com/repos/thewilkybarkid/api-sdk-php/zipball/e2314ea4e58eab7dea2f21cb7e8ff90dee0feb73",
+                "reference": "e2314ea4e58eab7dea2f21cb7e8ff90dee0feb73",
                 "shasum": ""
             },
             "require": {
@@ -764,12 +764,20 @@
                     "eLife\\ApiSdk\\": "./src"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
+            "autoload-dev": {
+                "psr-4": {
+                    "Csa\\Bundle\\GuzzleBundle\\": "./vendor-extra/Csa/GuzzleBundle",
+                    "test\\eLife\\ApiSdk\\": "./test"
+                }
+            },
             "license": [
                 "MIT"
             ],
             "description": "eLife Sciences API SDK",
-            "time": "2016-11-24 14:24:06"
+            "support": {
+                "source": "https://github.com/thewilkybarkid/api-sdk-php/tree/date-format"
+            },
+            "time": "2016-11-26 14:50:36"
         },
         {
             "name": "elife/patterns",
@@ -3387,12 +3395,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-raml.git",
-                "reference": "31adb1af107d4b9eaeafc8165680c5ad6d34e5bb"
+                "reference": "c7af7f94b5675561026b43e03266c9ef15784b8d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-raml/zipball/31adb1af107d4b9eaeafc8165680c5ad6d34e5bb",
-                "reference": "31adb1af107d4b9eaeafc8165680c5ad6d34e5bb",
+                "url": "https://api.github.com/repos/elifesciences/api-raml/zipball/c7af7f94b5675561026b43e03266c9ef15784b8d",
+                "reference": "c7af7f94b5675561026b43e03266c9ef15784b8d",
                 "shasum": ""
             },
             "require": {
@@ -3404,7 +3412,7 @@
                 "GPL-3.0+"
             ],
             "description": "eLife Sciences API specification",
-            "time": "2016-11-24 13:30:24"
+            "time": "2016-11-25 18:17:04"
         },
         {
             "name": "elife/api-validator",

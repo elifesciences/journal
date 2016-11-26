@@ -66,7 +66,7 @@ final class InsideElifeArticleControllerTest extends PageTestCase
                 json_encode([
                     'id' => '1',
                     'title' => 'Blog article title',
-                    'published' => '2010-01-01T00:00:00+00:00',
+                    'published' => '2010-01-01T00:00:00Z',
                     'impactStatement' => 'Blog article impact statement',
                     'content' => [
                         [

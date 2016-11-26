@@ -23,8 +23,8 @@ final class EventContext extends Context
             $events[] = [
                 'id' => "$i",
                 'title' => 'Event '.$i.' title',
-                'starts' => $starts->format(DATE_RFC3339),
-                'ends' => $ends->format(DATE_RFC3339),
+                'starts' => $starts->format('Y-m-d\TH:i:s\Z'),
+                'ends' => $ends->format('Y-m-d\TH:i:s\Z'),
                 'content' => [
                     [
                         'type' => 'paragraph',

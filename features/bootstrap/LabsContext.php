@@ -22,7 +22,7 @@ final class LabsContext extends Context
             $experiments[] = [
                 'number' => $i,
                 'title' => 'Experiment '.$i.' title',
-                'published' => $today->format(DATE_RFC3339),
+                'published' => $today->format('Y-m-d\TH:i:s\Z'),
                 'image' => [
                     'banner' => [
                         'alt' => '',

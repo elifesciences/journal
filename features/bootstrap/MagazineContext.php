@@ -32,7 +32,7 @@ final class MagazineContext extends Context
                     ],
                 ],
                 'title' => 'Interview '.$i.' title',
-                'published' => $today->format(DATE_RFC3339),
+                'published' => $today->format('Y-m-d\TH:i:s\Z'),
             ];
         }
 
@@ -94,7 +94,7 @@ final class MagazineContext extends Context
                 'number' => $i,
                 'title' => 'Episode '.$i.' title',
                 'impactStatement' => 'Episode '.$i.' impact statement',
-                'published' => $today->format(DATE_RFC3339),
+                'published' => $today->format('Y-m-d\TH:i:s\Z'),
                 'image' => [
                     'banner' => [
                         'alt' => '',
@@ -221,8 +221,8 @@ final class MagazineContext extends Context
             $events[] = [
                 'id' => "$i",
                 'title' => 'Event '.$i.' title',
-                'starts' => $starts->format(DATE_RFC3339),
-                'ends' => $ends->format(DATE_RFC3339),
+                'starts' => $starts->format('Y-m-d\TH:i:s\Z'),
+                'ends' => $ends->format('Y-m-d\TH:i:s\Z'),
                 'content' => [
                     [
                         'type' => 'paragraph',
@@ -287,7 +287,7 @@ final class MagazineContext extends Context
             $articles[] = [
                 'uri' => 'https://medium.com/@elife/'.$i,
                 'title' => 'Medium article '.$i.' title',
-                'published' => $today->format(DATE_RFC3339),
+                'published' => $today->format('Y-m-d\TH:i:s\Z'),
             ];
         }
 

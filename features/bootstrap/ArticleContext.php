@@ -32,9 +32,9 @@ final class ArticleContext extends Context
                     'type' => 'research-article',
                     'doi' => '10.7554/eLife.00001',
                     'title' => 'Article title',
-                    'published' => '2010-01-01T00:00:00+00:00',
-                    'versionDate' => '2010-01-01T00:00:00+00:00',
-                    'statusDate' => '2010-01-01T00:00:00+00:00',
+                    'published' => '2010-01-01T00:00:00Z',
+                    'versionDate' => '2010-01-01T00:00:00Z',
+                    'statusDate' => '2010-01-01T00:00:00Z',
                     'volume' => 1,
                     'elocationId' => 'e00001',
                     'copyright' => [

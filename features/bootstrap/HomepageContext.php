@@ -29,9 +29,9 @@ final class HomepageContext extends Context
                 'type' => 'research-article',
                 'doi' => '10.7554/eLife.'.$i,
                 'title' => 'Article '.$i.' title',
-                'published' => $today->format(DATE_RFC3339),
-                'versionDate' => $today->format(DATE_RFC3339),
-                'statusDate' => $today->format(DATE_RFC3339),
+                'published' => $today->format('Y-m-d\TH:i:s\Z'),
+                'versionDate' => $today->format('Y-m-d\TH:i:s\Z'),
+                'statusDate' => $today->format('Y-m-d\TH:i:s\Z'),
                 'volume' => 5,
                 'elocationId' => 'e'.$i,
                 'copyright' => [
@@ -107,7 +107,7 @@ final class HomepageContext extends Context
                 'type' => 'podcast-episode',
                 'number' => $i,
                 'title' => 'Podcast episode '.$i.' title',
-                'published' => $today->format(DATE_RFC3339),
+                'published' => $today->format('Y-m-d\TH:i:s\Z'),
                 'image' => [
                     'thumbnail' => [
                         'alt' => '',

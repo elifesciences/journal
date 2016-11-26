@@ -41,8 +41,8 @@ final class EventControllerTest extends PageTestCase
                 json_encode([
                     'id' => '1',
                     'title' => 'Event title',
-                    'starts' => (new DateTimeImmutable('-2 days'))->format(DATE_RFC3339),
-                    'ends' => (new DateTimeImmutable('-1 day'))->format(DATE_RFC3339),
+                    'starts' => (new DateTimeImmutable('-2 days'))->format('Y-m-d\TH:i:s\Z'),
+                    'ends' => (new DateTimeImmutable('-1 day'))->format('Y-m-d\TH:i:s\Z'),
                     'content' => [
                         [
                             'type' => 'paragraph',
@@ -105,8 +105,8 @@ final class EventControllerTest extends PageTestCase
                 json_encode([
                     'id' => '1',
                     'title' => 'Event title',
-                    'starts' => (new DateTimeImmutable('+1 day'))->format(DATE_RFC3339),
-                    'ends' => (new DateTimeImmutable('+2 days'))->format(DATE_RFC3339),
+                    'starts' => (new DateTimeImmutable('+1 day'))->format('Y-m-d\TH:i:s\Z'),
+                    'ends' => (new DateTimeImmutable('+2 days'))->format('Y-m-d\TH:i:s\Z'),
                     'content' => [
                         [
                             'type' => 'paragraph',

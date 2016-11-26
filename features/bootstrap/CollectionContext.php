@@ -22,7 +22,7 @@ final class CollectionContext extends Context
             $collections[] = [
                 'id' => "$i",
                 'title' => 'Collection '.$i.' title',
-                'updated' => $today->format(DATE_RFC3339),
+                'updated' => $today->format('Y-m-d\TH:i:s\Z'),
                 'image' => [
                     'banner' => [
                         'alt' => '',
@@ -70,7 +70,7 @@ final class CollectionContext extends Context
                         'type' => 'blog-article',
                         'id' => "$i",
                         'title' => 'Blog article '.$i.' title',
-                        'published' => $today->format(DATE_RFC3339),
+                        'published' => $today->format('Y-m-d\TH:i:s\Z'),
                     ],
                 ],
             ];

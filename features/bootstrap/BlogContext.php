@@ -22,7 +22,7 @@ final class BlogContext extends Context
             $articles[] = [
                 'id' => "$i",
                 'title' => 'Blog article '.$i.' title',
-                'published' => $today->format(DATE_RFC3339),
+                'published' => $today->format('Y-m-d\TH:i:s\Z'),
                 'impactStatement' => 'Blog article '.$i.' impact statement',
                 'content' => [
                     [

@@ -65,7 +65,7 @@ final class CollectionControllerTest extends PageTestCase
                 json_encode([
                     'id' => '1',
                     'title' => 'Collection title',
-                    'updated' => '2010-01-01T00:00:00+00:00',
+                    'updated' => '2010-01-01T00:00:00Z',
                     'image' => [
                         'banner' => [
                             'alt' => '',
@@ -113,7 +113,7 @@ final class CollectionControllerTest extends PageTestCase
                             'type' => 'blog-article',
                             'id' => '1',
                             'title' => 'Blog article title',
-                            'published' => '2010-01-01T00:00:00+00:00',
+                            'published' => '2010-01-01T00:00:00Z',
                         ],
                     ],
                 ])

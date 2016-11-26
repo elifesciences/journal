@@ -66,7 +66,7 @@ final class LabsExperimentControllerTest extends PageTestCase
                 json_encode([
                     'number' => 1,
                     'title' => 'Experiment title',
-                    'published' => '2010-01-01T00:00:00+00:00',
+                    'published' => '2010-01-01T00:00:00Z',
                     'image' => [
                         'banner' => [
                             'alt' => '',
