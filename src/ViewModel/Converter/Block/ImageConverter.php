@@ -14,7 +14,7 @@ final class ImageConverter implements ViewModelConverter
      */
     public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
-        return new CaptionlessImage(new ViewModel\Image($object->getImage()->getUri(), [], $object->getImage()->getAltText()));
+        return new CaptionlessImage(new ViewModel\Image(str_replace('.tif', '.jpg', $object->getImage()->getUri()), [], $object->getImage()->getAltText()));
     }
 
     public function supports($object, string $viewModel = null, array $context = []) : bool
