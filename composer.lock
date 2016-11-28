@@ -729,12 +729,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/thewilkybarkid/api-sdk-php.git",
-                "reference": "ce9e09875a44ed743c83f119f7efda1fc4fbd136"
+                "reference": "463d94c707d38dc8797f496c67f3e70b29cbf81a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thewilkybarkid/api-sdk-php/zipball/ce9e09875a44ed743c83f119f7efda1fc4fbd136",
-                "reference": "ce9e09875a44ed743c83f119f7efda1fc4fbd136",
+                "url": "https://api.github.com/repos/thewilkybarkid/api-sdk-php/zipball/463d94c707d38dc8797f496c67f3e70b29cbf81a",
+                "reference": "463d94c707d38dc8797f496c67f3e70b29cbf81a",
                 "shasum": ""
             },
             "require": {
@@ -777,7 +777,7 @@
             "support": {
                 "source": "https://github.com/thewilkybarkid/api-sdk-php/tree/date-format"
             },
-            "time": "2016-11-27 10:31:47"
+            "time": "2016-11-28 09:09:52"
         },
         {
             "name": "elife/patterns",

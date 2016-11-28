@@ -1,5 +1,6 @@
 <?php
 
+use eLife\ApiSdk\ApiSdk;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 
@@ -29,9 +30,9 @@ final class HomepageContext extends Context
                 'type' => 'research-article',
                 'doi' => '10.7554/eLife.'.$i,
                 'title' => 'Article '.$i.' title',
-                'published' => $today->format('Y-m-d\TH:i:s\Z'),
-                'versionDate' => $today->format('Y-m-d\TH:i:s\Z'),
-                'statusDate' => $today->format('Y-m-d\TH:i:s\Z'),
+                'published' => $today->format(ApiSdk::DATE_FORMAT),
+                'versionDate' => $today->format(ApiSdk::DATE_FORMAT),
+                'statusDate' => $today->format(ApiSdk::DATE_FORMAT),
                 'volume' => 5,
                 'elocationId' => 'e'.$i,
                 'copyright' => [
@@ -107,7 +108,7 @@ final class HomepageContext extends Context
                 'type' => 'podcast-episode',
                 'number' => $i,
                 'title' => 'Podcast episode '.$i.' title',
-                'published' => $today->format('Y-m-d\TH:i:s\Z'),
+                'published' => $today->format(ApiSdk::DATE_FORMAT),
                 'image' => [
                     'thumbnail' => [
                         'alt' => '',

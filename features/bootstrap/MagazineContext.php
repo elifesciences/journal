@@ -1,5 +1,6 @@
 <?php
 
+use eLife\ApiSdk\ApiSdk;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 
@@ -32,7 +33,7 @@ final class MagazineContext extends Context
                     ],
                 ],
                 'title' => 'Interview '.$i.' title',
-                'published' => $today->format('Y-m-d\TH:i:s\Z'),
+                'published' => $today->format(ApiSdk::DATE_FORMAT),
             ];
         }
 
@@ -94,7 +95,7 @@ final class MagazineContext extends Context
                 'number' => $i,
                 'title' => 'Episode '.$i.' title',
                 'impactStatement' => 'Episode '.$i.' impact statement',
-                'published' => $today->format('Y-m-d\TH:i:s\Z'),
+                'published' => $today->format(ApiSdk::DATE_FORMAT),
                 'image' => [
                     'banner' => [
                         'alt' => '',
@@ -221,8 +222,8 @@ final class MagazineContext extends Context
             $events[] = [
                 'id' => "$i",
                 'title' => 'Event '.$i.' title',
-                'starts' => $starts->format('Y-m-d\TH:i:s\Z'),
-                'ends' => $ends->format('Y-m-d\TH:i:s\Z'),
+                'starts' => $starts->format(ApiSdk::DATE_FORMAT),
+                'ends' => $ends->format(ApiSdk::DATE_FORMAT),
                 'content' => [
                     [
                         'type' => 'paragraph',
@@ -287,7 +288,7 @@ final class MagazineContext extends Context
             $articles[] = [
                 'uri' => 'https://medium.com/@elife/'.$i,
                 'title' => 'Medium article '.$i.' title',
-                'published' => $today->format('Y-m-d\TH:i:s\Z'),
+                'published' => $today->format(ApiSdk::DATE_FORMAT),
             ];
         }
 

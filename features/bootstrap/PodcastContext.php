@@ -1,6 +1,7 @@
 <?php
 
 use Behat\Mink\Exception\ExpectationException;
+use eLife\ApiSdk\ApiSdk;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 
@@ -23,7 +24,7 @@ final class PodcastContext extends Context
             $episodes[] = [
                 'number' => $i,
                 'title' => 'Episode '.$i.' title',
-                'published' => $today->format('Y-m-d\TH:i:s\Z'),
+                'published' => $today->format(ApiSdk::DATE_FORMAT),
                 'image' => [
                     'banner' => [
                         'alt' => '',
@@ -123,7 +124,7 @@ final class PodcastContext extends Context
                 json_encode([
                     'number' => 100,
                     'title' => 'Episode title',
-                    'published' => date('Y-m-d\TH:i:s\Z'),
+                    'published' => date(ApiSdk::DATE_FORMAT),
                     'image' => [
                         'banner' => [
                             'alt' => '',

@@ -3,6 +3,7 @@
 namespace test\eLife\Journal\Controller;
 
 use DateTimeImmutable;
+use eLife\ApiSdk\ApiSdk;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 
@@ -41,8 +42,8 @@ final class EventControllerTest extends PageTestCase
                 json_encode([
                     'id' => '1',
                     'title' => 'Event title',
-                    'starts' => (new DateTimeImmutable('-2 days'))->format('Y-m-d\TH:i:s\Z'),
-                    'ends' => (new DateTimeImmutable('-1 day'))->format('Y-m-d\TH:i:s\Z'),
+                    'starts' => (new DateTimeImmutable('-2 days'))->format(ApiSdk::DATE_FORMAT),
+                    'ends' => (new DateTimeImmutable('-1 day'))->format(ApiSdk::DATE_FORMAT),
                     'content' => [
                         [
                             'type' => 'paragraph',
@@ -105,8 +106,8 @@ final class EventControllerTest extends PageTestCase
                 json_encode([
                     'id' => '1',
                     'title' => 'Event title',
-                    'starts' => (new DateTimeImmutable('+1 day'))->format('Y-m-d\TH:i:s\Z'),
-                    'ends' => (new DateTimeImmutable('+2 days'))->format('Y-m-d\TH:i:s\Z'),
+                    'starts' => (new DateTimeImmutable('+1 day'))->format(ApiSdk::DATE_FORMAT),
+                    'ends' => (new DateTimeImmutable('+2 days'))->format(ApiSdk::DATE_FORMAT),
                     'content' => [
                         [
                             'type' => 'paragraph',

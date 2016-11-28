@@ -1,5 +1,6 @@
 <?php
 
+use eLife\ApiSdk\ApiSdk;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 
@@ -23,8 +24,8 @@ final class EventContext extends Context
             $events[] = [
                 'id' => "$i",
                 'title' => 'Event '.$i.' title',
-                'starts' => $starts->format('Y-m-d\TH:i:s\Z'),
-                'ends' => $ends->format('Y-m-d\TH:i:s\Z'),
+                'starts' => $starts->format(ApiSdk::DATE_FORMAT),
+                'ends' => $ends->format(ApiSdk::DATE_FORMAT),
                 'content' => [
                     [
                         'type' => 'paragraph',
