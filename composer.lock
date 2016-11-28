@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "d4b462e97fbcd3ec900fb7fc1302bde2",
-    "content-hash": "0ae089b705a0be685e5d414c315c8a79",
+    "hash": "0de1c9d39b93e689eb111116197832ef",
+    "content-hash": "7eea61a48d70659e3f0de034737ff4f0",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -725,16 +725,16 @@
         },
         {
             "name": "elife/api-sdk",
-            "version": "dev-date-format",
+            "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/thewilkybarkid/api-sdk-php.git",
-                "reference": "463d94c707d38dc8797f496c67f3e70b29cbf81a"
+                "url": "https://github.com/elifesciences/api-sdk-php.git",
+                "reference": "c52abc6091df4402cdc1027c6153cb3a86e88fe2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thewilkybarkid/api-sdk-php/zipball/463d94c707d38dc8797f496c67f3e70b29cbf81a",
-                "reference": "463d94c707d38dc8797f496c67f3e70b29cbf81a",
+                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/c52abc6091df4402cdc1027c6153cb3a86e88fe2",
+                "reference": "c52abc6091df4402cdc1027c6153cb3a86e88fe2",
                 "shasum": ""
             },
             "require": {
@@ -764,20 +764,12 @@
                     "eLife\\ApiSdk\\": "./src"
                 }
             },
-            "autoload-dev": {
-                "psr-4": {
-                    "Csa\\Bundle\\GuzzleBundle\\": "./vendor-extra/Csa/GuzzleBundle",
-                    "test\\eLife\\ApiSdk\\": "./test"
-                }
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
             "description": "eLife Sciences API SDK",
-            "support": {
-                "source": "https://github.com/thewilkybarkid/api-sdk-php/tree/date-format"
-            },
-            "time": "2016-11-28 09:09:52"
+            "time": "2016-11-28 11:36:59"
         },
         {
             "name": "elife/patterns",
