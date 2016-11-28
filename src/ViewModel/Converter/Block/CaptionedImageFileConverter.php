@@ -27,7 +27,7 @@ final class CaptionedImageFileConverter implements ViewModelConverter
      */
     public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
-        $asset = new ViewModel\Image($object->getUri(), [], $object->getAltText());
+        $asset = new ViewModel\Image(str_replace('.tif', '.jpg', $object->getUri()), [], $object->getAltText());
 
         $caption = array_map(function (Block $block) {
             return $this->viewModelConverter->convert($block);
