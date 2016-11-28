@@ -124,6 +124,14 @@ services:
         tags:
           - name: view_model.converter
 
+    elife.journal.view_model.converter.article.download_links_list:
+        class: eLife\Journal\ViewModel\Converter\ArticleDownloadLinksListConverter
+        public: false
+        arguments:
+          - '@router'
+        tags:
+          - name: view_model.converter
+
     elife.journal.view_model.converter.article.header:
         class: eLife\Journal\ViewModel\Converter\ArticleContentHeaderConverter
         public: false
@@ -433,7 +441,6 @@ services:
         public: false
         arguments:
           - '@router'
-          - '@puli.url_generator'
         tags:
           - name: view_model.converter
 

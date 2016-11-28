@@ -4,18 +4,15 @@ namespace eLife\Journal\ViewModel\Converter;
 
 use eLife\ApiSdk\Model\PodcastEpisode;
 use eLife\Patterns\ViewModel;
-use Puli\UrlGenerator\Api\UrlGenerator as PuliUrlGenerator;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 final class PodcastEpisodeContentHeaderConverter implements ViewModelConverter
 {
     private $urlGenerator;
-    private $puliUrlGenerator;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator, PuliUrlGenerator $puliUrlGenerator)
+    public function __construct(UrlGeneratorInterface $urlGenerator)
     {
         $this->urlGenerator = $urlGenerator;
-        $this->puliUrlGenerator = $puliUrlGenerator;
     }
 
     /**
@@ -30,34 +27,7 @@ final class PodcastEpisodeContentHeaderConverter implements ViewModelConverter
                 $object->getBanner()->getSize('2:1')->getImage(900),
                 $object->getBanner()->getSize('2:1')->getImage(1800)
             ),
-            new ViewModel\PodcastDownload(
-                $object->getSources()[0]->getUri(),
-                new ViewModel\Picture(
-                    [
-                        [
-                            'srcset' => $this->puliUrlGenerator->generateUrl('/elife/patterns/assets/img/icons/download-full-reverse.svg'),
-                            'media' => '(min-width: 35em)',
-                            'type' => 'image/svg+xml',
-                        ],
-                        [
-                            'srcset' => $this->puliUrlGenerator->generateUrl('/elife/patterns/assets/img/icons/download-full-reverse-1x.png'),
-                            'media' => '(min-width: 35em)',
-                        ],
-                        [
-                            'srcset' => $this->puliUrlGenerator->generateUrl('/elife/patterns/assets/img/icons/download-reverse.svg'),
-                            'type' => 'image/svg+xml',
-                        ],
-                    ],
-                    new ViewModel\Image(
-                        $this->puliUrlGenerator->generateUrl('/elife/patterns/assets/img/icons/download-full-reverse-1x.png'),
-                        [
-                            88 => $this->puliUrlGenerator->generateUrl('/elife/patterns/assets/img/icons/download-full-reverse-2x.png'),
-                            44 => $this->puliUrlGenerator->generateUrl('/elife/patterns/assets/img/icons/download-full-reverse-1x.png'),
-                        ],
-                        'Download icon'
-                    )
-                )
-            )
+            $object->getSources()[0]->getUri()
         );
     }
 

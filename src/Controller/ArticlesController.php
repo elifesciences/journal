@@ -292,8 +292,6 @@ final class ArticlesController extends Controller
                     }
                 }
 
-                $parts[] = $this->get('elife.journal.view_model.converter')->convert($article, ViewModel\ArticleMeta::class);
-
                 return $parts;
             });
 
@@ -313,7 +311,7 @@ final class ArticlesController extends Controller
                 $body = $sections['body'];
                 $hasFigures = $sections['hasFigures'];
 
-                if ((count($body) < 3 || false === $body[0] instanceof ArticleSection) && !$hasFigures) {
+                if ((count($body) < 2 || false === $body[0] instanceof ArticleSection) && !$hasFigures) {
                     return null;
                 }
 
@@ -328,6 +326,24 @@ final class ArticlesController extends Controller
                     }, $body)),
                     $hasFigures ? $this->get('router')->generate('article-figures', ['id' => $article->getId(), 'volume' => $article->getVolume()]) : null
                 );
+            });
+
+        $arguments['body'] = all(['article' => $arguments['article'], 'body' => $arguments['body']])
+            ->then(function (array $parts) {
+                $article = $parts['article'];
+                $body = $parts['body'];
+
+                $downloadLinks = $this->get('elife.journal.view_model.converter')->convert($article, ViewModel\ArticleDownloadLinksList::class);
+
+                $body[] = ArticleSection::basic(
+                    'Download links',
+                    2,
+                    $this->get('elife.patterns.pattern_renderer')->render($downloadLinks)
+                );
+
+                $body[] = $this->get('elife.journal.view_model.converter')->convert($article, ViewModel\ArticleMeta::class);
+
+                return $body;
             });
 
         return new Response($this->get('templating')->render('::article.html.twig', $arguments));
