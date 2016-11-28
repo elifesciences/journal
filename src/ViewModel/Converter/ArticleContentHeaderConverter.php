@@ -67,7 +67,8 @@ final class ArticleContentHeaderConverter implements ViewModelConverter
                         $object->getPublishedDate() ? new ViewModel\Date($object->getPublishedDate()) : null
                     ),
                     new ViewModel\SubjectList(...$subjects),
-                    $institutions
+                    $institutions,
+                    '#downloads'
                 );
         }
 
@@ -84,7 +85,7 @@ final class ArticleContentHeaderConverter implements ViewModelConverter
             $object->getFullTitle(),
             $object instanceof ArticleVoR ? $object->getImpactStatement() : null,
             $authors,
-            null,
+            '#downloads',
             new ViewModel\SubjectList(...$subjects),
             ViewModel\Meta::withText(
                 ucfirst(str_replace('-', ' ', $object->getType())),

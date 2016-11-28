@@ -597,7 +597,9 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertContains('© 2012, Bar', $copyright->filter('div')->text());
         $this->assertContains('Copyright statement.', $copyright->filter('div')->text());
 
-        $this->assertSame('Categories and tags', $crawler->filter('main > .wrapper > div > div > section:nth-of-type(9) .article-meta__group_title')->text());
+        $this->assertSame('Download links', $crawler->filter('main > .wrapper > div > div > section:nth-of-type(9) .article-section__header_text')->text());
+
+        $this->assertSame('Categories and tags', $crawler->filter('main > .wrapper > div > div > section:nth-of-type(10) .article-meta__group_title')->text());
 
         $this->assertSame(
             [
