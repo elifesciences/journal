@@ -1,5 +1,6 @@
 <?php
 
+use eLife\ApiSdk\ApiSdk;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 
@@ -22,7 +23,7 @@ final class BlogContext extends Context
             $articles[] = [
                 'id' => "$i",
                 'title' => 'Blog article '.$i.' title',
-                'published' => $today->format(DATE_RFC3339),
+                'published' => $today->format(ApiSdk::DATE_FORMAT),
                 'impactStatement' => 'Blog article '.$i.' impact statement',
                 'content' => [
                     [

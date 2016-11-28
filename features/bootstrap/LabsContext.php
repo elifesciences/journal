@@ -1,5 +1,6 @@
 <?php
 
+use eLife\ApiSdk\ApiSdk;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 
@@ -22,7 +23,7 @@ final class LabsContext extends Context
             $experiments[] = [
                 'number' => $i,
                 'title' => 'Experiment '.$i.' title',
-                'published' => $today->format(DATE_RFC3339),
+                'published' => $today->format(ApiSdk::DATE_FORMAT),
                 'image' => [
                     'banner' => [
                         'alt' => '',

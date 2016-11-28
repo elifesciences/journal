@@ -1,5 +1,6 @@
 <?php
 
+use eLife\ApiSdk\ApiSdk;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 
@@ -22,7 +23,7 @@ final class CollectionContext extends Context
             $collections[] = [
                 'id' => "$i",
                 'title' => 'Collection '.$i.' title',
-                'updated' => $today->format(DATE_RFC3339),
+                'updated' => $today->format(ApiSdk::DATE_FORMAT),
                 'image' => [
                     'banner' => [
                         'alt' => '',
@@ -70,7 +71,7 @@ final class CollectionContext extends Context
                         'type' => 'blog-article',
                         'id' => "$i",
                         'title' => 'Blog article '.$i.' title',
-                        'published' => $today->format(DATE_RFC3339),
+                        'published' => $today->format(ApiSdk::DATE_FORMAT),
                     ],
                 ],
             ];

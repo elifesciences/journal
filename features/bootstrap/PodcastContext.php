@@ -1,6 +1,7 @@
 <?php
 
 use Behat\Mink\Exception\ExpectationException;
+use eLife\ApiSdk\ApiSdk;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 
@@ -23,7 +24,7 @@ final class PodcastContext extends Context
             $episodes[] = [
                 'number' => $i,
                 'title' => 'Episode '.$i.' title',
-                'published' => $today->format(DATE_RFC3339),
+                'published' => $today->format(ApiSdk::DATE_FORMAT),
                 'image' => [
                     'banner' => [
                         'alt' => '',
@@ -123,7 +124,7 @@ final class PodcastContext extends Context
                 json_encode([
                     'number' => 100,
                     'title' => 'Episode title',
-                    'published' => date(DATE_RFC3339),
+                    'published' => date(ApiSdk::DATE_FORMAT),
                     'image' => [
                         'banner' => [
                             'alt' => '',
@@ -169,9 +170,9 @@ final class PodcastContext extends Context
                                     'version' => 1,
                                     'doi' => '10.7554/eLife.12345',
                                     'title' => 'Article 12345',
-                                    'published' => '2010-01-01T00:00:00+00:00',
-                                    'versionDate' => '2010-01-01T00:00:00+00:00',
-                                    'statusDate' => '2010-01-01T00:00:00+00:00',
+                                    'published' => '2010-01-01T00:00:00Z',
+                                    'versionDate' => '2010-01-01T00:00:00Z',
+                                    'statusDate' => '2010-01-01T00:00:00Z',
                                     'volume' => 5,
                                     'elocationId' => 'e12345',
                                     'authorLine' => 'Foo Bar',
@@ -191,9 +192,9 @@ final class PodcastContext extends Context
                                     'version' => 1,
                                     'doi' => '10.7554/eLife.12346',
                                     'title' => 'Article 12346',
-                                    'published' => '2010-01-01T00:00:00+00:00',
-                                    'versionDate' => '2010-01-01T00:00:00+00:00',
-                                    'statusDate' => '2010-01-01T00:00:00+00:00',
+                                    'published' => '2010-01-01T00:00:00Z',
+                                    'versionDate' => '2010-01-01T00:00:00Z',
+                                    'statusDate' => '2010-01-01T00:00:00Z',
                                     'volume' => 5,
                                     'elocationId' => 'e12346',
                                     'authorLine' => 'Foo Bar',

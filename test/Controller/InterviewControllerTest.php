@@ -78,7 +78,7 @@ final class InterviewControllerTest extends PageTestCase
                         ],
                     ],
                     'title' => 'Interview title',
-                    'published' => '2010-01-01T00:00:00+00:00',
+                    'published' => '2010-01-01T00:00:00Z',
                     'impactStatement' => 'Interview impact statement',
                     'content' => [
                         [
