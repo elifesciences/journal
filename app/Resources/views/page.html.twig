@@ -20,14 +20,14 @@
     {% block meta %}{% endblock %}
 
     <!--[if lt IE 9]>
-    <script src="https://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <script>document.createElement("picture");</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js" integrity="sha256-3Jy/GbSLrg0o9y5Z5n1uw0qxZECH7C6OQpVBgNFYa0g=" crossorigin="anonymous"></script>
+    <script>document.createElement('picture');</script>
     <![endif]-->
 
     <script>
         WebFontConfig = {
             custom: {
-                families: ["Avenir Next Webfont", "PT Serif Webfont"],
+                families: ["Avenir Next Webfont"],
                 urls: ["{{ resource_url('/elife/patterns/assets/fonts/fonts.css') }}"]
             }
         };
