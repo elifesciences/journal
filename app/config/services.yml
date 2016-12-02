@@ -395,6 +395,12 @@ services:
         tags:
           - name: view_model.converter
 
+    elife.journal.view_model.converter.impact_statement.lead_paras:
+        class: eLife\Journal\ViewModel\Converter\ImpactStatementLeadParasConverter
+        public: false
+        tags:
+          - name: view_model.converter
+
     elife.journal.view_model.converter.interview.header:
         class: eLife\Journal\ViewModel\Converter\InterviewContentHeaderConverter
         public: false
@@ -580,6 +586,14 @@ services:
     elife.journal.view_model.converter.reference.web:
         class: eLife\Journal\ViewModel\Converter\Reference\WebReferenceConverter
         public: false
+        tags:
+          - name: view_model.converter
+
+    elife.journal.view_model.converter.reference_list:
+        class: eLife\Journal\ViewModel\Converter\ReferenceListConverter
+        public: false
+        arguments:
+          - '@elife.journal.view_model.converter'
         tags:
           - name: view_model.converter
 

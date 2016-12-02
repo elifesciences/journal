@@ -39,7 +39,7 @@ final class CollectionSecondaryTeaserConverter implements ViewModelConverter
             $this->urlGenerator->generate('collection', ['id' => $object->getId()]),
             $curatedBy,
             $this->createContextLabel($object),
-            $this->smallTeaserImage($object->getThumbnail()),
+            $this->smallTeaserImage($object),
             TeaserFooter::forNonArticle(
                 Meta::withLink(
                     new Link('Collection', $this->urlGenerator->generate('collections')),

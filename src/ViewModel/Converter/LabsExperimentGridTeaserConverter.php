@@ -27,7 +27,7 @@ final class LabsExperimentGridTeaserConverter implements ViewModelConverter
             $this->urlGenerator->generate('labs-experiment', ['number' => $object->getNumber()]),
             $object->getImpactStatement(),
             null,
-            $this->prominentTeaserImage($object->getThumbnail()),
+            $this->prominentTeaserImage($object),
             ViewModel\TeaserFooter::forNonArticle(
                 ViewModel\Meta::withText(
                     'Experiment: '.str_pad($object->getNumber(), 3, '0', STR_PAD_LEFT),

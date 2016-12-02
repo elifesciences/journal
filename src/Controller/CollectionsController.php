@@ -5,12 +5,11 @@ namespace eLife\Journal\Controller;
 use eLife\ApiSdk\Collection\ArraySequence;
 use eLife\ApiSdk\Collection\Sequence;
 use eLife\ApiSdk\Model\Collection;
-use eLife\ApiSdk\Model\Model;
+use eLife\Journal\Helper\Callback;
 use eLife\Journal\Helper\Paginator;
 use eLife\Journal\Pagerfanta\SequenceAdapter;
 use eLife\Patterns\ViewModel\ContentHeaderNonArticle;
 use eLife\Patterns\ViewModel\ContentHeaderSimple;
-use eLife\Patterns\ViewModel\LeadPara;
 use eLife\Patterns\ViewModel\LeadParas;
 use eLife\Patterns\ViewModel\Link;
 use eLife\Patterns\ViewModel\ListHeading;
@@ -77,9 +76,7 @@ final class CollectionsController extends Controller
                     return null;
                 }
 
-                $teasers = $latestCollections->map(function (Collection $collection) {
-                    return $this->get('elife.journal.view_model.converter')->convert($collection, Teaser::class);
-                })->toArray();
+                $teasers = $latestCollections->map($this->willConvertTo(Teaser::class))->toArray();
 
                 if ($paginator->getNextPage()) {
                     return ListingTeasers::withPagination(
@@ -111,9 +108,7 @@ final class CollectionsController extends Controller
                 $paginator = $parts['paginator'];
 
                 return ListingTeasers::withPagination(
-                    $latestCollections->map(function (Model $model) {
-                        return $this->get('elife.journal.view_model.converter')->convert($model, Teaser::class);
-                    })->toArray(),
+                    $latestCollections->map($this->willConvertTo(Teaser::class))->toArray(),
                     new Pager(
                         $paginator->getPreviousPage() ? new Link('Newer', $paginator->getPreviousPagePath()) : null,
                         $paginator->getNextPage() ? new Link('Older', $paginator->getNextPagePath()) : null
@@ -131,24 +126,15 @@ final class CollectionsController extends Controller
         $arguments['collection'] = $this->get('elife.api_sdk.collections')->get($id);
 
         $arguments['contentHeader'] = $arguments['collection']
-            ->then(function (Collection $collection) {
-                return $this->get('elife.journal.view_model.converter')->convert($collection, ContentHeaderNonArticle::class);
-            });
+            ->then($this->willConvertTo(ContentHeaderNonArticle::class));
 
         $arguments['lead_paras'] = $arguments['collection']
-            ->then(function (Collection $collection) {
-                return new LeadParas([new LeadPara($collection->getImpactStatement())]);
-            })
-            ->otherwise(function () {
-                return null;
-            });
+            ->then(Callback::methodEmptyOr('getImpactStatement', $this->willConvertTo(LeadParas::class)));
 
         $arguments['collectionList'] = $arguments['collection']
             ->then(function (Collection $collection) {
                 return ListingTeasers::basic(
-                    $collection->getContent()->map(function (Model $model) {
-                        return $this->get('elife.journal.view_model.converter')->convert($model, Teaser::class);
-                    })->toArray(),
+                    $collection->getContent()->map($this->willConvertTo(Teaser::class))->toArray(),
                     'Collection'
                 );
             });

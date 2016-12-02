@@ -19,7 +19,7 @@ final class MediumArticleSecondaryTeaserConverter implements ViewModelConverter
     public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
         if ($object->getThumbnail()) {
-            $image = $this->smallTeaserImage($object->getThumbnail());
+            $image = $this->smallTeaserImage($object);
         } else {
             $image = null;
         }

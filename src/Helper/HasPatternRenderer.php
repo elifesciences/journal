@@ -1,6 +1,6 @@
 <?php
 
-namespace eLife\Journal\ViewModel\Converter;
+namespace eLife\Journal\Helper;
 
 use eLife\Patterns\PatternRenderer;
 

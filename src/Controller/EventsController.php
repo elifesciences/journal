@@ -4,13 +4,12 @@ namespace eLife\Journal\Controller;
 
 use eLife\ApiSdk\Collection\ArraySequence;
 use eLife\ApiSdk\Collection\Sequence;
-use eLife\ApiSdk\Model\Block;
 use eLife\ApiSdk\Model\Event;
+use eLife\Journal\Helper\Callback;
 use eLife\Journal\Helper\Paginator;
 use eLife\Journal\Pagerfanta\SequenceAdapter;
 use eLife\Patterns\ViewModel\ContentHeaderNonArticle;
 use eLife\Patterns\ViewModel\ContentHeaderSimple;
-use eLife\Patterns\ViewModel\LeadPara;
 use eLife\Patterns\ViewModel\LeadParas;
 use eLife\Patterns\ViewModel\Link;
 use eLife\Patterns\ViewModel\ListingTeasers;
@@ -77,9 +76,7 @@ final class EventsController extends Controller
                     return null;
                 }
 
-                $teasers = $upcomingEvents->map(function (Event $event) {
-                    return $this->get('elife.journal.view_model.converter')->convert($event, Teaser::class);
-                })->toArray();
+                $teasers = $upcomingEvents->map($this->willConvertTo(Teaser::class))->toArray();
 
                 if ($paginator->getNextPage()) {
                     return ListingTeasers::withPagination(
@@ -111,9 +108,7 @@ final class EventsController extends Controller
                 $paginator = $parts['paginator'];
 
                 return ListingTeasers::withPagination(
-                    $upcomingEvents->map(function (Event $event) {
-                        return $this->get('elife.journal.view_model.converter')->convert($event, Teaser::class);
-                    })->toArray(),
+                    $upcomingEvents->map($this->willConvertTo(Teaser::class))->toArray(),
                     new Pager(
                         $paginator->getPreviousPage() ? new Link('More recent events', $paginator->getPreviousPagePath()) : null,
                         $paginator->getNextPage() ? new Link('Less recent events', $paginator->getNextPagePath()) : null
@@ -131,24 +126,13 @@ final class EventsController extends Controller
         $arguments['event'] = $this->get('elife.api_sdk.events')->get($id);
 
         $arguments['contentHeader'] = $arguments['event']
-            ->then(function (Event $event) {
-                return $this->get('elife.journal.view_model.converter')->convert($event, ContentHeaderNonArticle::class);
-            });
+            ->then($this->willConvertTo(ContentHeaderNonArticle::class));
 
         $arguments['leadParas'] = $arguments['event']
-            ->then(function (Event $event) {
-                return new LeadParas([new LeadPara($event->getImpactStatement())]);
-            })
-            ->otherwise(function () {
-                return null;
-            });
+            ->then(Callback::methodEmptyOr('getImpactStatement', $this->willConvertTo(LeadParas::class)));
 
         $arguments['blocks'] = $arguments['event']
-            ->then(function (Event $event) {
-                return $event->getContent()->map(function (Block $block) {
-                    return $this->get('elife.journal.view_model.converter')->convert($block);
-                });
-            });
+            ->then($this->willConvertContent());
 
         return new Response($this->get('templating')->render('::event.html.twig', $arguments));
     }

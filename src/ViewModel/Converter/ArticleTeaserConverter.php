@@ -25,7 +25,7 @@ final class ArticleTeaserConverter implements ViewModelConverter
     public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
         if ($object instanceof ArticleVoR && $object->getThumbnail()) {
-            $image = $this->smallTeaserImage($object->getThumbnail());
+            $image = $this->smallTeaserImage($object);
         } else {
             $image = null;
         }

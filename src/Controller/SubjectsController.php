@@ -4,8 +4,8 @@ namespace eLife\Journal\Controller;
 
 use eLife\ApiSdk\Collection\ArraySequence;
 use eLife\ApiSdk\Collection\Sequence;
-use eLife\ApiSdk\Model\Model;
 use eLife\ApiSdk\Model\Subject;
+use eLife\Journal\Helper\Callback;
 use eLife\Journal\Helper\Paginator;
 use eLife\Journal\Pagerfanta\SequenceAdapter;
 use eLife\Patterns\ViewModel\BackgroundImage;
@@ -13,7 +13,6 @@ use eLife\Patterns\ViewModel\BlockLink;
 use eLife\Patterns\ViewModel\ContentHeaderNonArticle;
 use eLife\Patterns\ViewModel\ContentHeaderSimple;
 use eLife\Patterns\ViewModel\GridListing;
-use eLife\Patterns\ViewModel\LeadPara;
 use eLife\Patterns\ViewModel\LeadParas;
 use eLife\Patterns\ViewModel\Link;
 use eLife\Patterns\ViewModel\ListHeading;
@@ -51,13 +50,9 @@ final class SubjectsController extends Controller
                     )
                 );
             })
-            ->then(function (Sequence $subjects) {
-                if ($subjects->isEmpty()) {
-                    return null;
-                }
-
+            ->then(Callback::emptyOr(function (Sequence $subjects) {
                 return GridListing::forBlockLinks($subjects->toArray());
-            });
+            }));
 
         return new Response($this->get('templating')->render('::subjects.html.twig', $arguments));
     }
@@ -107,17 +102,10 @@ final class SubjectsController extends Controller
     private function createFirstPage(array $arguments) : Response
     {
         $arguments['contentHeader'] = $arguments['subject']
-            ->then(function (Subject $subject) {
-                return $this->get('elife.journal.view_model.converter')->convert($subject, ContentHeaderNonArticle::class);
-            });
+            ->then($this->willConvertTo(ContentHeaderNonArticle::class));
 
         $arguments['lead_paras'] = $arguments['subject']
-            ->then(function (Subject $subject) {
-                return new LeadParas([new LeadPara($subject->getImpactStatement())]);
-            })
-            ->otherwise(function () {
-                return null;
-            });
+            ->then(Callback::methodEmptyOr('getImpactStatement', $this->willConvertTo(LeadParas::class)));
 
         $arguments['latestArticlesHeading'] = new ListHeading($latestArticlesHeading = 'Latest articles');
         $arguments['latestArticles'] = all(['latestArticles' => $arguments['latestArticles'], 'paginator' => $arguments['paginator']])
@@ -129,9 +117,7 @@ final class SubjectsController extends Controller
                     return null;
                 }
 
-                $teasers = $latestArticles->map(function (Model $model) {
-                    return $this->get('elife.journal.view_model.converter')->convert($model, Teaser::class);
-                })->toArray();
+                $teasers = $latestArticles->map($this->willConvertTo(Teaser::class))->toArray();
 
                 if ($paginator->getNextPage()) {
                     return ListingTeasers::withPagination(
@@ -166,9 +152,7 @@ final class SubjectsController extends Controller
                 $paginator = $parts['paginator'];
 
                 return ListingTeasers::withPagination(
-                    $latestArticles->map(function (Model $model) {
-                        return $this->get('elife.journal.view_model.converter')->convert($model, Teaser::class);
-                    })->toArray(),
+                    $latestArticles->map($this->willConvertTo(Teaser::class))->toArray(),
                     new Pager(
                         $paginator->getPreviousPage() ? new Link('Newer articles', $paginator->getPreviousPagePath()) : null,
                         $paginator->getNextPage() ? new Link('Older articles', $paginator->getNextPagePath()) : null

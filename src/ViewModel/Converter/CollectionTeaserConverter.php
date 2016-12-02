@@ -40,7 +40,7 @@ final class CollectionTeaserConverter implements ViewModelConverter
             $object->getImpactStatement(),
             $curatedBy,
             $this->createContextLabel($object),
-            $this->bigTeaserImage($object->getThumbnail()),
+            $this->bigTeaserImage($object),
             TeaserFooter::forNonArticle(
                 Meta::withLink(
                     new Link('Collection', $this->urlGenerator->generate('collections')),

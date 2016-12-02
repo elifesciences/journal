@@ -3,14 +3,20 @@
 namespace eLife\Journal\ViewModel\Converter\Block;
 
 use eLife\ApiSdk\Model\Block;
-use eLife\Journal\ViewModel\Converter\HasPatternRenderer;
+use eLife\Journal\Helper\CanConvertContent;
+use eLife\Journal\Helper\HasViewModelConverter;
+use eLife\Journal\ViewModel\Converter\CreatesDoi;
 use eLife\Journal\ViewModel\Converter\ViewModelConverter;
 use eLife\Patterns\PatternRenderer;
 use eLife\Patterns\ViewModel;
 
 final class BoxConverter implements ViewModelConverter
 {
-    use HasPatternRenderer;
+    use CanConvertContent {
+        convertTo as doConvert;
+    }
+    use CreatesDoi;
+    use HasViewModelConverter;
 
     private $viewModelConverter;
     private $patternRenderer;
@@ -24,24 +30,27 @@ final class BoxConverter implements ViewModelConverter
     /**
      * @param Block\Box $object
      */
-    public function convert($object, string $viewModel = null, array $context = []) : ViewModel
+    public function convert($object, string $viewModel = null, array $context = []): ViewModel
     {
-        $context['level'] = ($context['level'] ?? 1) + 1;
+        $level = $context['level'] ?? 1;
 
-        $content = $object->getContent()->map(function (Block $block) {
-            return $this->viewModelConverter->convert($block);
-        });
-
-        return new ViewModel\Box($object->getId(), $object->getLabel(), $object->getTitle(), $context['level'], $object->getDoi() ? new ViewModel\Doi($object->getDoi()) : null, $this->patternRenderer->render(...$content));
+        return new ViewModel\Box(
+            $object->getId(),
+            $object->getLabel(),
+            $object->getTitle(),
+            $level,
+            $this->createDoi($object),
+            $this->patternRenderer->render(...$this->convertContent($object, $level + 1))
+        );
     }
 
-    public function supports($object, string $viewModel = null, array $context = []) : bool
+    public function supports($object, string $viewModel = null, array $context = []): bool
     {
         return $object instanceof Block\Box;
     }
 
-    protected function getPatternRenderer() : PatternRenderer
+    protected function getViewModelConverter(): ViewModelConverter
     {
-        return $this->patternRenderer;
+        return $this->viewModelConverter;
     }
 }

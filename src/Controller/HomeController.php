@@ -4,9 +4,8 @@ namespace eLife\Journal\Controller;
 
 use eLife\ApiSdk\Collection\ArraySequence;
 use eLife\ApiSdk\Collection\Sequence;
-use eLife\ApiSdk\Model\Cover;
-use eLife\ApiSdk\Model\Model;
 use eLife\ApiSdk\Model\Subject;
+use eLife\Journal\Helper\Callback;
 use eLife\Journal\Helper\Paginator;
 use eLife\Journal\Pagerfanta\SequenceAdapter;
 use eLife\Patterns\ViewModel\AllSubjectsList;
@@ -72,9 +71,7 @@ final class HomeController extends Controller
     {
         $arguments['carousel'] = $this->get('elife.api_sdk.covers')
             ->getCurrent()
-            ->map(function (Cover $cover) {
-                return $this->get('elife.journal.view_model.converter')->convert($cover);
-            })
+            ->map($this->willConvertTo())
             ->then(function (Sequence $covers) {
                 return new Carousel(...$covers);
             })
@@ -107,9 +104,7 @@ final class HomeController extends Controller
                     return null;
                 }
 
-                $teasers = $latestResearch->map(function (Model $model) {
-                    return $this->get('elife.journal.view_model.converter')->convert($model, Teaser::class);
-                })->toArray();
+                $teasers = $latestResearch->map($this->willConvertTo(Teaser::class))->toArray();
 
                 if ($paginator->getNextPage()) {
                     return ListingTeasers::withPagination(
@@ -126,19 +121,13 @@ final class HomeController extends Controller
             ->forType('editorial', 'insight', 'feature', 'collection', 'interview', 'podcast-episode')
             ->sortBy('date')
             ->slice(1, 7)
-            ->then(function (Sequence $result) {
-                if ($result->isEmpty()) {
-                    return null;
-                }
-
+            ->then(Callback::emptyOr(function (Sequence $result) {
                 return ListingTeasers::withSeeMore(
-                    $result->map(function (Model $model) {
-                        return $this->get('elife.journal.view_model.converter')->convert($model, Teaser::class, ['variant' => 'secondary']);
-                    })->toArray(),
+                    $result->map($this->willConvertTo(Teaser::class, ['variant' => 'secondary']))->toArray(),
                     new SeeMoreLink(new Link('See more Magazine articles', $this->get('router')->generate('magazine'))),
                     'Magazine'
                 );
-            })->otherwise(function () {
+            }))->otherwise(function () {
                 return null;
             });
 
@@ -161,9 +150,7 @@ final class HomeController extends Controller
                 $paginator = $parts['paginator'];
 
                 return ListingTeasers::withPagination(
-                    $latestResearch->map(function (Model $model) {
-                        return $this->get('elife.journal.view_model.converter')->convert($model, Teaser::class);
-                    })->toArray(),
+                    $latestResearch->map($this->willConvertTo(Teaser::class))->toArray(),
                     new Pager(
                         $paginator->getPreviousPage() ? new Link('Newer articles', $paginator->getPreviousPagePath()) : null,
                         $paginator->getNextPage() ? new Link('Older articles', $paginator->getNextPagePath()) : null

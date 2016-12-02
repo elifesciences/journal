@@ -34,11 +34,7 @@ final class CaptionedVideoConverter implements ViewModelConverter
             }, $object->getSources())
         );
 
-        $caption = $object->getCaption()->map(function (Block $block) {
-            return $this->viewModelConverter->convert($block);
-        });
-
-        $asset = $this->createCaptionedAsset($asset, $object->getTitle(), $caption, $object->getDoi(), $object->getSources()[0]->getUri());
+        $asset = $this->createCaptionedAsset($asset, $object, $object->getSources()[0]->getUri());
 
         if (empty($object->getLabel())) {
             return $asset;
@@ -63,5 +59,10 @@ final class CaptionedVideoConverter implements ViewModelConverter
     protected function getPatternRenderer() : PatternRenderer
     {
         return $this->patternRenderer;
+    }
+
+    protected function getViewModelConverter() : ViewModelConverter
+    {
+        return $this->viewModelConverter;
     }
 }
