@@ -275,8 +275,28 @@ final class ArticleControllerTest extends PageTestCase
         );
 
         $crawler = $client->request('GET', '/content/1/e00001');
+
+        $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertContains('Accepted manuscript, PDF only. Full online edition to follow.',
             array_map('trim', $crawler->filter('.info-bar')->extract(['_text'])));
+        $articleInfo = $crawler->filter('main > .wrapper > div > div > section:nth-of-type(1)');
+        $this->assertSame('Article and author information',
+            $articleInfo->filter('header > h2')->text());
+
+        $authorDetails = $articleInfo->filter('div > ol:nth-of-type(1) > li.authors-details__author');
+        $this->assertCount(1, $authorDetails);
+        $this->assertSame('Author One', $authorDetails->eq(0)->filter('.author-details__name')->text());
+
+        $articleInfo = $crawler->filter('main > .wrapper > div > div > section:nth-of-type(1) > div > section');
+
+        $copyright = $articleInfo->eq(0);
+        $this->assertSame('Copyright', $copyright->filter('header > h3')->text());
+        $this->assertContains('© 2012, Author One', $copyright->filter('div')->text());
+        $this->assertContains('Copyright statement.', $copyright->filter('div')->text());
+
+        $this->assertSame('Download links', $crawler->filter('main > .wrapper > div > div > section:nth-of-type(2) .article-section__header_text')->text());
+
+        $this->assertSame('Categories and tags', $crawler->filter('main > .wrapper > div > div > section:nth-of-type(3) .article-meta__group_title')->text());
     }
 
     /**
@@ -614,79 +634,6 @@ final class ArticleControllerTest extends PageTestCase
             ],
             array_map('trim', $crawler->filter('.view-selector__jump_link_item')->extract('_text'))
         );
-    }
-
-    /**
-     * @test
-     */
-    public function it_displays_content_without_sections_if_there_are_not_any()
-    {
-        $client = static::createClient();
-
-        $this->mockApiResponse(
-            new Request(
-                'GET',
-                'http://api.elifesciences.org/articles/00001',
-                [
-                    'Accept' => [
-                        'application/vnd.elife.article-poa+json; version=1',
-                        'application/vnd.elife.article-vor+json; version=1',
-                    ],
-                ]
-            ),
-            new Response(
-                200,
-                ['Content-Type' => 'application/vnd.elife.article-vor+json; version=1'],
-                json_encode([
-                    'status' => 'vor',
-                    'stage' => 'published',
-                    'id' => '00001',
-                    'version' => 1,
-                    'type' => 'research-exchange',
-                    'doi' => '10.7554/eLife.00001',
-                    'title' => 'Article title',
-                    'published' => '2010-01-01T00:00:00Z',
-                    'versionDate' => '2010-01-01T00:00:00Z',
-                    'statusDate' => '2010-01-01T00:00:00Z',
-                    'volume' => 1,
-                    'elocationId' => 'e00001',
-                    'copyright' => [
-                        'license' => 'CC-BY-4.0',
-                        'holder' => 'Bar',
-                        'statement' => 'Copyright statement.',
-                    ],
-                    'authorLine' => 'Foo Bar',
-                    'authors' => [
-                        [
-                            'type' => 'person',
-                            'name' => [
-                                'preferred' => 'Foo Bar',
-                                'index' => 'Bar, Foo',
-                            ],
-                        ],
-                    ],
-                    'body' => [
-                        [
-                            'type' => 'section',
-                            'id' => 's-1',
-                            'title' => 'Body title',
-                            'content' => [
-                                [
-                                    'type' => 'paragraph',
-                                    'text' => 'Body text',
-                                ],
-                            ],
-                        ],
-                    ],
-                ])
-            )
-        );
-
-        $crawler = $client->request('GET', '/content/1/e00001');
-
-        $this->assertNotContains('Body title', $crawler->text());
-        $this->assertSame('Body text', $crawler->filter('main > .wrapper > div > div > p')->text());
-        $this->assertEmpty($crawler->filter('.view-selector'));
     }
 
     protected function getUrl() : string

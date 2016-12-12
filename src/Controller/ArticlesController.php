@@ -79,218 +79,214 @@ final class ArticlesController extends Controller
                     $first = false;
                 }
 
+                $isInitiallyClosed = false;
+
                 if ($article instanceof ArticleVoR) {
-                    if (empty($parts) && 1 === count($article->getContent())) {
-                        $parts = array_map(function (Block $block) {
-                            return $this->get('elife.journal.view_model.converter')->convert($block, null, ['level' => 2]);
-                        }, $article->getContent()[0]->getContent());
-                    } else {
-                        $isInitiallyClosed = false;
-
-                        $parts = array_merge($parts, $article->getContent()->map(function (Block\Section $section) use (&$first, &$isInitiallyClosed) {
-                            $section = ArticleSection::collapsible(
-                                $section->getId(),
-                                $section->getTitle(),
-                                2,
-                                $this->get('elife.patterns.pattern_renderer')->render(
-                                    ...array_map(function (Block $block) {
-                                        return $this->get('elife.journal.view_model.converter')->convert($block, null, ['level' => 2]);
-                                    }, $section->getContent())
-                                ),
-                                $isInitiallyClosed,
-                                $first
-                            );
-
-                            $first = false;
-                            $isInitiallyClosed = true;
-
-                            return $section;
-                        })->toArray());
-
-                        $parts = array_merge($parts, $article->getAppendices()->map(function (Appendix $appendix) {
-                            return ArticleSection::collapsible($appendix->getId(), $appendix->getTitle(), 2,
-                                $this->get('elife.patterns.pattern_renderer')->render(
-                                    ...$appendix->getContent()
-                                    ->map(function (Block $block) {
-                                        return $this->get('elife.journal.view_model.converter')->convert($block, null, ['level' => 2]);
-                                    })
-                                ),
-                                true, false, $appendix->getDoi() ? new Doi($appendix->getDoi()) : null);
-                        })->toArray());
-
-                        if ($article->getReferences()->notEmpty()) {
-                            $parts[] = ArticleSection::collapsible(
-                                'references',
-                                'References',
-                                2,
-                                $this->get('elife.patterns.pattern_renderer')->render(new ViewModel\ReferenceList(
-                                    ...$article->getReferences()
-                                    ->map(function (Reference $reference, int $index) {
-                                        return new ViewModel\ReferenceListItem(
-                                            $reference->getId(),
-                                            $index + 1,
-                                            $this->get('elife.journal.view_model.converter')->convert($reference)
-                                        );
-                                    })
-                                )),
-                                true
-                            );
-                        }
-
-                        if ($article->getDecisionLetter()) {
-                            $header = $this->get('elife.journal.view_model.converter')->convert($article, ViewModel\DecisionLetterHeader::class);
-
-                            $parts[] = ArticleSection::collapsible(
-                                'decision-letter',
-                                'Decision letter',
-                                2,
-                                $this->get('elife.patterns.pattern_renderer')->render($header).
-                                $this->get('elife.patterns.pattern_renderer')->render(
-                                    ...$article->getDecisionLetter()->getContent()
-                                    ->map(function (Block $block) {
-                                        return $this->get('elife.journal.view_model.converter')->convert($block, null, ['level' => 2]);
-                                    })
-                                ),
-                                true,
-                                false,
-                                new Doi($article->getDecisionLetter()->getDoi())
-                            );
-                        }
-
-                        if ($article->getAuthorResponse()) {
-                            $parts[] = ArticleSection::collapsible(
-                                'author-response',
-                                'Author response',
-                                2,
-                                $this->get('elife.patterns.pattern_renderer')->render(
-                                    ...$article->getAuthorResponse()->getContent()
-                                    ->map(function (Block $block) {
-                                        return $this->get('elife.journal.view_model.converter')->convert($block, null, ['level' => 2]);
-                                    })
-                                ),
-                                true,
-                                false,
-                                new Doi($article->getAuthorResponse()->getDoi())
-                            );
-                        }
-
-                        $infoSections = [];
-
-                        $realAuthors = $article->getAuthors()->filter(function (AuthorEntry $author) {
-                            return $author instanceof Author;
-                        });
-
-                        $personAuthors = $realAuthors->filter(function (Author $author) {
-                            return $author instanceof PersonAuthor;
-                        });
-
-                        if ($personAuthors->notEmpty()) {
-                            $infoSections[] = new ViewModel\AuthorsDetails(
-                                ...$personAuthors->map(function (PersonAuthor $author) use ($realAuthors) {
-                                    return $this->get('elife.journal.view_model.converter')->convert($author, null, ['authors' => $realAuthors]);
-                                })
-                            );
-                        }
-
-                        if ($article->getFunding()) {
-                            $funding = $article->getFunding()->getAwards()
-                                ->map(function (FundingAward $award) {
-                                    $title = $award->getSource()->getPlace()->toString();
-
-                                    if ($award->getAwardId()) {
-                                        $title .= ' ('.$award->getAwardId().')';
-                                    }
-
-                                    $body = Listing::unordered(
-                                        $award->getRecipients()
-                                            ->map(function (Author $author) {
-                                                return $author->toString();
-                                            })
-                                            ->toArray(),
-                                        'bullet'
-                                    );
-
-                                    return ArticleSection::basic(
-                                        $title,
-                                        4,
-                                        $this->get('elife.patterns.pattern_renderer')->render($body)
-                                    );
-                                })->toArray();
-
-                            $funding[] = new Paragraph($article->getFunding()->getStatement());
-
-                            $infoSections[] = ArticleSection::basic(
-                                'Funding',
-                                3,
-                                $this->get('elife.patterns.pattern_renderer')->render(...$funding)
-                            );
-                        }
-
-                        if ($article->getAcknowledgements()->notEmpty()) {
-                            $infoSections[] = ArticleSection::basic(
-                                'Acknowledgements',
-                                3,
-                                $this->get('elife.patterns.pattern_renderer')->render(
-                                    ...$article->getAcknowledgements()
-                                    ->map(function (Block $block) {
-                                        return $this->get('elife.journal.view_model.converter')->convert($block, null, ['level' => 3]);
-                                    })
-                                )
-                            );
-                        }
-
-                        if ($article->getEthics()->notEmpty()) {
-                            $infoSections[] = ArticleSection::basic(
-                                'Ethics',
-                                3,
-                                $this->get('elife.patterns.pattern_renderer')->render(
-                                    ...$article->getEthics()
-                                    ->map(function (Block $block) {
-                                        return $this->get('elife.journal.view_model.converter')->convert($block, null, ['level' => 3]);
-                                    })
-                                )
-                            );
-                        }
-
-                        if ($article->getReviewers()->notEmpty()) {
-                            $infoSections[] = ArticleSection::basic(
-                                'Reviewers',
-                                3,
-                                $this->get('elife.patterns.pattern_renderer')->render(
-                                    Listing::ordered(
-                                        $article->getReviewers()
-                                            ->map(function (Reviewer $reviewer) {
-                                                $parts = [$reviewer->getPreferredName(), $reviewer->getRole()];
-
-                                                foreach ($reviewer->getAffiliations() as $affiliation) {
-                                                    $parts[] = $affiliation->toString();
-                                                }
-
-                                                return implode(', ', $parts);
-                                            })
-                                            ->toArray()
-                                    )
-                                )
-                            );
-                        }
-
-                        $copyright = '<p>'.$article->getCopyright()->getStatement().'</p>';
-
-                        if ($article->getCopyright()->getHolder()) {
-                            $copyright = sprintf('<p>© %s, %s.</p>', 2011 + $article->getVolume(), $article->getCopyright()->getHolder()).$copyright;
-                        }
-
-                        $infoSections[] = ArticleSection::basic('Copyright', 3, $copyright);
-
-                        $parts[] = ArticleSection::collapsible(
-                            'info',
-                            'Article and author information',
+                    $parts = array_merge($parts, $article->getContent()->map(function (Block\Section $section) use (&$first, &$isInitiallyClosed) {
+                        $section = ArticleSection::collapsible(
+                            $section->getId(),
+                            $section->getTitle(),
                             2,
-                            $this->get('elife.patterns.pattern_renderer')->render(...$infoSections),
-                            true
+                            $this->get('elife.patterns.pattern_renderer')->render(
+                                ...array_map(function (Block $block) {
+                                    return $this->get('elife.journal.view_model.converter')->convert($block, null, ['level' => 2]);
+                                }, $section->getContent())
+                            ),
+                            $isInitiallyClosed,
+                            $first
                         );
-                    }
+
+                        $first = false;
+                        $isInitiallyClosed = true;
+
+                        return $section;
+                    })->toArray());
                 }
+
+                if ($article instanceof ArticleVoR) {
+                    $parts = array_merge($parts, $article->getAppendices()->map(function (Appendix $appendix) {
+                        return ArticleSection::collapsible($appendix->getId(), $appendix->getTitle(), 2,
+                            $this->get('elife.patterns.pattern_renderer')->render(
+                                ...$appendix->getContent()
+                                ->map(function (Block $block) {
+                                    return $this->get('elife.journal.view_model.converter')->convert($block, null, ['level' => 2]);
+                                })
+                            ),
+                            true, false, $appendix->getDoi() ? new Doi($appendix->getDoi()) : null);
+                    })->toArray());
+                }
+
+                if ($article instanceof ArticleVoR && $article->getReferences()->notEmpty()) {
+                    $parts[] = ArticleSection::collapsible(
+                        'references',
+                        'References',
+                        2,
+                        $this->get('elife.patterns.pattern_renderer')->render(new ViewModel\ReferenceList(
+                            ...$article->getReferences()
+                            ->map(function (Reference $reference, int $index) {
+                                return new ViewModel\ReferenceListItem(
+                                    $reference->getId(),
+                                    $index + 1,
+                                    $this->get('elife.journal.view_model.converter')->convert($reference)
+                                );
+                            })
+                        )),
+                        true
+                    );
+                }
+
+                if ($article instanceof ArticleVoR && $article->getDecisionLetter()) {
+                    $header = $this->get('elife.journal.view_model.converter')->convert($article, ViewModel\DecisionLetterHeader::class);
+
+                    $parts[] = ArticleSection::collapsible(
+                        'decision-letter',
+                        'Decision letter',
+                        2,
+                        $this->get('elife.patterns.pattern_renderer')->render($header).
+                        $this->get('elife.patterns.pattern_renderer')->render(
+                            ...$article->getDecisionLetter()->getContent()
+                            ->map(function (Block $block) {
+                                return $this->get('elife.journal.view_model.converter')->convert($block, null, ['level' => 2]);
+                            })
+                        ),
+                        true,
+                        false,
+                        new Doi($article->getDecisionLetter()->getDoi())
+                    );
+                }
+
+                if ($article instanceof ArticleVoR && $article->getAuthorResponse()) {
+                    $parts[] = ArticleSection::collapsible(
+                        'author-response',
+                        'Author response',
+                        2,
+                        $this->get('elife.patterns.pattern_renderer')->render(
+                            ...$article->getAuthorResponse()->getContent()
+                            ->map(function (Block $block) {
+                                return $this->get('elife.journal.view_model.converter')->convert($block, null, ['level' => 2]);
+                            })
+                        ),
+                        true,
+                        false,
+                        new Doi($article->getAuthorResponse()->getDoi())
+                    );
+                }
+
+                $infoSections = [];
+
+                $realAuthors = $article->getAuthors()->filter(function (AuthorEntry $author) {
+                    return $author instanceof Author;
+                });
+
+                $personAuthors = $realAuthors->filter(function (Author $author) {
+                    return $author instanceof PersonAuthor;
+                });
+
+                if ($personAuthors->notEmpty()) {
+                    $infoSections[] = new ViewModel\AuthorsDetails(
+                        ...$personAuthors->map(function (PersonAuthor $author) use ($realAuthors) {
+                            return $this->get('elife.journal.view_model.converter')->convert($author, null, ['authors' => $realAuthors]);
+                        })
+                    );
+                }
+
+                if ($article instanceof ArticleVoR && $article->getFunding()) {
+                    $funding = $article->getFunding()->getAwards()
+                        ->map(function (FundingAward $award) {
+                            $title = $award->getSource()->getPlace()->toString();
+
+                            if ($award->getAwardId()) {
+                                $title .= ' ('.$award->getAwardId().')';
+                            }
+
+                            $body = Listing::unordered(
+                                $award->getRecipients()
+                                    ->map(function (Author $author) {
+                                        return $author->toString();
+                                    })
+                                    ->toArray(),
+                                'bullet'
+                            );
+
+                            return ArticleSection::basic(
+                                $title,
+                                4,
+                                $this->get('elife.patterns.pattern_renderer')->render($body)
+                            );
+                        })->toArray();
+
+                    $funding[] = new Paragraph($article->getFunding()->getStatement());
+
+                    $infoSections[] = ArticleSection::basic(
+                        'Funding',
+                        3,
+                        $this->get('elife.patterns.pattern_renderer')->render(...$funding)
+                    );
+                }
+
+                if ($article instanceof ArticleVoR && $article->getAcknowledgements()->notEmpty()) {
+                    $infoSections[] = ArticleSection::basic(
+                        'Acknowledgements',
+                        3,
+                        $this->get('elife.patterns.pattern_renderer')->render(
+                            ...$article->getAcknowledgements()
+                            ->map(function (Block $block) {
+                                return $this->get('elife.journal.view_model.converter')->convert($block, null, ['level' => 3]);
+                            })
+                        )
+                    );
+                }
+
+                if ($article instanceof ArticleVoR && $article->getEthics()->notEmpty()) {
+                    $infoSections[] = ArticleSection::basic(
+                        'Ethics',
+                        3,
+                        $this->get('elife.patterns.pattern_renderer')->render(
+                            ...$article->getEthics()
+                            ->map(function (Block $block) {
+                                return $this->get('elife.journal.view_model.converter')->convert($block, null, ['level' => 3]);
+                            })
+                        )
+                    );
+                }
+
+                if ($article instanceof ArticleVoR && $article->getReviewers()->notEmpty()) {
+                    $infoSections[] = ArticleSection::basic(
+                        'Reviewers',
+                        3,
+                        $this->get('elife.patterns.pattern_renderer')->render(
+                            Listing::ordered(
+                                $article->getReviewers()
+                                    ->map(function (Reviewer $reviewer) {
+                                        $parts = [$reviewer->getPreferredName(), $reviewer->getRole()];
+
+                                        foreach ($reviewer->getAffiliations() as $affiliation) {
+                                            $parts[] = $affiliation->toString();
+                                        }
+
+                                        return implode(', ', $parts);
+                                    })
+                                    ->toArray()
+                            )
+                        )
+                    );
+                }
+
+                $copyright = '<p>'.$article->getCopyright()->getStatement().'</p>';
+
+                if ($article->getCopyright()->getHolder()) {
+                    $copyright = sprintf('<p>© %s, %s.</p>', 2011 + $article->getVolume(), $article->getCopyright()->getHolder()).$copyright;
+                }
+
+                $infoSections[] = ArticleSection::basic('Copyright', 3, $copyright);
+
+                $parts[] = ArticleSection::collapsible(
+                    'info',
+                    'Article and author information',
+                    2,
+                    $this->get('elife.patterns.pattern_renderer')->render(...$infoSections),
+                    true
+                );
 
                 return $parts;
             });
