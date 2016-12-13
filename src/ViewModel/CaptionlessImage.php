@@ -2,8 +2,8 @@
 
 namespace eLife\Journal\ViewModel;
 
+use eLife\Patterns\ArrayAccessFromProperties;
 use eLife\Patterns\ArrayFromProperties;
-use eLife\Patterns\ReadOnlyArrayAccess;
 use eLife\Patterns\SimplifyAssets;
 use eLife\Patterns\ViewModel;
 use eLife\Patterns\ViewModel\Image;
@@ -14,8 +14,8 @@ use Traversable;
 
 final class CaptionlessImage implements ViewModel
 {
+    use ArrayAccessFromProperties;
     use ArrayFromProperties;
-    use ReadOnlyArrayAccess;
     use SimplifyAssets;
 
     private $picture;

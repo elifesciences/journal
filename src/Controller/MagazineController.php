@@ -2,29 +2,98 @@
 
 namespace eLife\Journal\Controller;
 
+use eLife\ApiSdk\Collection\ArraySequence;
 use eLife\ApiSdk\Collection\Sequence;
 use eLife\ApiSdk\Model\Model;
+use eLife\Journal\Helper\Paginator;
+use eLife\Journal\Pagerfanta\SequenceAdapter;
 use eLife\Patterns\ViewModel\AudioPlayer;
 use eLife\Patterns\ViewModel\ContentHeaderNonArticle;
+use eLife\Patterns\ViewModel\ContentHeaderSimple;
 use eLife\Patterns\ViewModel\Link;
 use eLife\Patterns\ViewModel\ListHeading;
 use eLife\Patterns\ViewModel\ListingTeasers;
+use eLife\Patterns\ViewModel\LoadMore;
+use eLife\Patterns\ViewModel\Pager;
 use eLife\Patterns\ViewModel\SeeMoreLink;
 use eLife\Patterns\ViewModel\Teaser;
+use Pagerfanta\Pagerfanta;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
+use function GuzzleHttp\Promise\all;
+use function GuzzleHttp\Promise\promise_for;
 
 final class MagazineController extends Controller
 {
-    public function listAction() : Response
+    public function listAction(Request $request) : Response
     {
-        $page = 1;
+        $page = (int) $request->query->get('page', 1);
         $perPage = 6;
 
         $arguments = $this->defaultPageArguments();
 
+        $latestResearch = promise_for($this->get('elife.api_sdk.search')
+            ->forType('editorial', 'insight', 'feature', 'collection', 'interview', 'podcast-episode')
+            ->sortBy('date'))
+            ->then(function (Sequence $sequence) use ($page, $perPage) {
+                $pagerfanta = new Pagerfanta(new SequenceAdapter($sequence));
+                $pagerfanta->setMaxPerPage($perPage)->setCurrentPage($page);
+
+                return $pagerfanta;
+            });
+
+        $arguments['paginator'] = $latestResearch
+            ->then(function (Pagerfanta $pagerfanta) use ($request) {
+                return new Paginator($pagerfanta, function (int $page = null) use ($request) {
+                    $routeParams = $request->attributes->get('_route_params');
+                    $routeParams['page'] = $page;
+
+                    return $this->get('router')->generate('magazine', $routeParams);
+                });
+            });
+
+        $arguments['latest'] = $latestResearch
+            ->then(function (Pagerfanta $pagerfanta) {
+                return new ArraySequence(iterator_to_array($pagerfanta));
+            });
+
+        if (1 === $page) {
+            return $this->createFirstPage($arguments);
+        }
+
+        return $this->createSubsequentPage($arguments);
+    }
+
+    private function createFirstPage(array $arguments) : Response
+    {
         $arguments['contentHeader'] = ContentHeaderNonArticle::basic('Magazine', false,
             'Highlighting the latest research and giving a voice to life and biomedical scientists.');
+
+        $arguments['latestHeading'] = new ListHeading($latestHeading = 'Latest');
+        $arguments['latest'] = all(['latest' => $arguments['latest'], 'paginator' => $arguments['paginator']])
+            ->then(function (array $parts) use ($latestHeading) {
+                $latest = $parts['latest'];
+                $paginator = $parts['paginator'];
+
+                if ($latest->isEmpty()) {
+                    return null;
+                }
+
+                $teasers = $latest->map(function (Model $model) {
+                    return $this->get('elife.journal.view_model.converter')->convert($model, Teaser::class);
+                })->toArray();
+
+                if ($paginator->getNextPage()) {
+                    return ListingTeasers::withPagination(
+                        $teasers,
+                        $paginator->getNextPage() ? new LoadMore(new Link('Load more', $paginator->getNextPagePath())) : null,
+                        $latestHeading
+                    );
+                }
+
+                return ListingTeasers::basic($teasers, $latestHeading);
+            });
 
         $arguments['audio_player'] = $this->get('elife.api_sdk.podcast_episodes')
             ->slice(0, 1)
@@ -37,24 +106,6 @@ final class MagazineController extends Controller
             })
             ->otherwise(function (Throwable $e) {
                 return null;
-            });
-
-        $arguments['latestHeading'] = new ListHeading('Latest');
-        $arguments['latest'] = $this->get('elife.api_sdk.search')
-            ->forType('editorial', 'insight', 'feature', 'collection', 'interview', 'podcast-episode')
-            ->sortBy('date')
-            ->slice(($page * $perPage) - $perPage, $perPage)
-            ->then(function (Sequence $result) use ($arguments) {
-                if ($result->isEmpty()) {
-                    return null;
-                }
-
-                return ListingTeasers::basic(
-                    $result->map(function (Model $model) {
-                        return $this->get('elife.journal.view_model.converter')->convert($model, Teaser::class);
-                    })->toArray(),
-                    $arguments['latestHeading']['heading']
-                );
             });
 
         $events = $this->get('elife.api_sdk.events')
@@ -106,5 +157,34 @@ final class MagazineController extends Controller
             });
 
         return new Response($this->get('templating')->render('::magazine.html.twig', $arguments));
+    }
+
+    private function createSubsequentPage(array $arguments) : Response
+    {
+        $arguments['contentHeader'] = $arguments['paginator']
+            ->then(function (Paginator $paginator) {
+                return new ContentHeaderSimple(
+                    'Browse our latest Magazine content',
+                    sprintf('Page %s of %s', number_format($paginator->getCurrentPage()), number_format(count($paginator)))
+                );
+            });
+
+        $arguments['latest'] = all(['latest' => $arguments['latest'], 'paginator' => $arguments['paginator']])
+            ->then(function (array $parts) {
+                $latest = $parts['latest'];
+                $paginator = $parts['paginator'];
+
+                return ListingTeasers::withPagination(
+                    $latest->map(function (Model $model) {
+                        return $this->get('elife.journal.view_model.converter')->convert($model, Teaser::class);
+                    })->toArray(),
+                    new Pager(
+                        $paginator->getPreviousPage() ? new Link('Newer', $paginator->getPreviousPagePath()) : null,
+                        $paginator->getNextPage() ? new Link('Older', $paginator->getNextPagePath()) : null
+                    )
+                );
+            });
+
+        return new Response($this->get('templating')->render('::magazine-alt.html.twig', $arguments));
     }
 }

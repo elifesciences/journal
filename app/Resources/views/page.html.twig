@@ -20,7 +20,8 @@
     {% block meta %}{% endblock %}
 
     <!--[if lt IE 9]>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js" integrity="sha256-3Jy/GbSLrg0o9y5Z5n1uw0qxZECH7C6OQpVBgNFYa0g=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"
+            integrity="sha256-3Jy/GbSLrg0o9y5Z5n1uw0qxZECH7C6OQpVBgNFYa0g=" crossorigin="anonymous"></script>
     <script>document.createElement('picture');</script>
     <![endif]-->
 
@@ -39,6 +40,22 @@
             s.parentNode.insertBefore(wf, s);
         })(document);
     </script>
+
+    {% if paginator is defined %}
+
+        {% if 1 == paginator.currentPage %}
+            <link rel="canonical" href="{{ paginator.currentPagePath }}">
+        {% endif %}
+
+        {% if paginator.previousPage %}
+            <link rel="prev" href="{{ paginator.previousPagePath }}">
+        {% endif %}
+
+        {% if paginator.nextPage %}
+            <link rel="next" href="{{ paginator.nextPagePath }}">
+        {% endif %}
+
+    {% endif %}
 
 </head>
 
