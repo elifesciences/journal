@@ -31,48 +31,6 @@ final class SubjectControllerTest extends PageTestCase
     {
         $client = static::createClient();
 
-        $this->mockApiResponse(
-            new Request(
-                'GET',
-                'http://api.elifesciences.org/subjects/subject',
-                ['Accept' => 'application/vnd.elife.subject+json; version=1']
-            ),
-            new Response(
-                200,
-                ['Content-Type' => 'application/vnd.elife.subject+json; version=1'],
-                json_encode([
-                    'id' => 'subject',
-                    'name' => 'Subject',
-                    'impactStatement' => 'Subject impact statement.',
-                    'image' => [
-                        'banner' => [
-                            'alt' => '',
-                            'sizes' => [
-                                '2:1' => [
-                                    900 => 'https://placehold.it/900x450',
-                                    1800 => 'https://placehold.it/1800x900',
-                                ],
-                            ],
-
-                        ],
-                        'thumbnail' => [
-                            'alt' => '',
-                            'sizes' => [
-                                '16:9' => [
-                                    250 => 'https://placehold.it/250x141',
-                                    500 => 'https://placehold.it/500x281',
-                                ],
-                                '1:1' => [
-                                    70 => 'https://placehold.it/70x70',
-                                    140 => 'https://placehold.it/140x140',
-                                ],
-                            ],
-                        ],
-                    ],
-                ])
-            )
-        );
-
         if ($callable) {
             $callable();
         }
@@ -95,7 +53,49 @@ final class SubjectControllerTest extends PageTestCase
                     $this->mockApiResponse(
                         new Request(
                             'GET',
-                            'http://api.elifesciences.org/search?for=&page=1&per-page=1&sort=date&order=desc&subject[]=ecology&type[]=research-article&type[]=research-advance&type[]=research-exchange&type[]=short-report&type[]=tools-resources&type[]=replication-study&type[]=editorial&type[]=insight&type[]=feature&type[]=collection',
+                            'http://api.elifesciences.org/subjects/subject',
+                            ['Accept' => 'application/vnd.elife.subject+json; version=1']
+                        ),
+                        new Response(
+                            200,
+                            ['Content-Type' => 'application/vnd.elife.subject+json; version=1'],
+                            json_encode([
+                                'id' => 'subject',
+                                'name' => 'Subject',
+                                'impactStatement' => 'Subject impact statement.',
+                                'image' => [
+                                    'banner' => [
+                                        'alt' => '',
+                                        'sizes' => [
+                                            '2:1' => [
+                                                900 => 'https://placehold.it/900x450',
+                                                1800 => 'https://placehold.it/1800x900',
+                                            ],
+                                        ],
+
+                                    ],
+                                    'thumbnail' => [
+                                        'alt' => '',
+                                        'sizes' => [
+                                            '16:9' => [
+                                                250 => 'https://placehold.it/250x141',
+                                                500 => 'https://placehold.it/500x281',
+                                            ],
+                                            '1:1' => [
+                                                70 => 'https://placehold.it/70x70',
+                                                140 => 'https://placehold.it/140x140',
+                                            ],
+                                        ],
+                                    ],
+                                ],
+                            ])
+                        )
+                    );
+
+                    $this->mockApiResponse(
+                        new Request(
+                            'GET',
+                            'http://api.elifesciences.org/search?for=&page=1&per-page=1&sort=date&order=desc&subject[]=subject&type[]=research-article&type[]=research-advance&type[]=research-exchange&type[]=short-report&type[]=tools-resources&type[]=replication-study&type[]=editorial&type[]=insight&type[]=feature&type[]=collection',
                             ['Accept' => 'application/vnd.elife.search+json; version=1']
                         ),
                         new Response(
