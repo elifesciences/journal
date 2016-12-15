@@ -5,16 +5,21 @@ namespace eLife\Journal\Controller;
 use eLife\ApiSdk\Collection\ArraySequence;
 use eLife\ApiSdk\Collection\Sequence;
 use eLife\ApiSdk\Model\Model;
+use eLife\ApiSdk\Model\Subject;
 use eLife\Journal\Helper\Paginator;
 use eLife\Journal\Pagerfanta\SequenceAdapter;
 use eLife\Patterns\ViewModel\ContentHeaderNonArticle;
 use eLife\Patterns\ViewModel\ContentHeaderSimple;
+use eLife\Patterns\ViewModel\LeadPara;
+use eLife\Patterns\ViewModel\LeadParas;
 use eLife\Patterns\ViewModel\Link;
 use eLife\Patterns\ViewModel\ListHeading;
 use eLife\Patterns\ViewModel\ListingTeasers;
 use eLife\Patterns\ViewModel\LoadMore;
 use eLife\Patterns\ViewModel\Pager;
 use eLife\Patterns\ViewModel\SeeMoreLink;
+use eLife\Patterns\ViewModel\SiteLinks;
+use eLife\Patterns\ViewModel\SiteLinksList;
 use eLife\Patterns\ViewModel\Teaser;
 use Pagerfanta\Pagerfanta;
 use Symfony\Component\HttpFoundation\Request;
@@ -66,6 +71,26 @@ final class HomeController extends Controller
     private function createFirstPage(array $arguments) : Response
     {
         $arguments['contentHeader'] = ContentHeaderNonArticle::basic('eLife');
+
+        $arguments['leadParas'] = new LeadParas([new LeadPara('eLife is an open-access journal that publishes research in the life and biomedical sciences')]);
+
+        $arguments['subjects'] = $this->get('elife.api_sdk.subjects')
+            ->reverse()
+            ->slice(1, 100)
+            ->map(function (Subject $subject) {
+                return new Link($subject->getName(), $this->get('router')->generate('subject', ['id' => $subject->getId()]));
+            })
+            ->then(function (Sequence $links) {
+                return array_chunk($links->toArray(), ceil(count($links) / 3));
+            })
+            ->then(function (array $columns) {
+                return new SiteLinksList(array_map(function (array $items) {
+                    return new SiteLinks($items);
+                }, $columns));
+            })
+            ->otherwise(function () {
+                return null;
+            });
 
         $arguments['latestResearchHeading'] = new ListHeading($latestResearchHeading = 'Latest research');
         $arguments['latestResearch'] = all(['latestResearch' => $arguments['latestResearch'], 'paginator' => $arguments['paginator']])

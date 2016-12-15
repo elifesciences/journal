@@ -10,6 +10,22 @@
 
     {{ render_pattern(contentHeader) }}
 
+    <div class="wrapper">
+
+        {{ render_pattern(leadParas) }}
+
+    </div>
+
+    {% if subjects %}
+
+        <div class="wrapper u-pad-top">
+
+            {{ render_pattern(subjects) }}
+
+        </div>
+
+    {% endif %}
+
     <div class="wrapper u-pad-top">
 
         {% if magazine %}
