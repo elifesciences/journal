@@ -16,6 +16,7 @@ use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Kernel;
+use WhiteOctober\PagerfantaBundle\WhiteOctoberPagerfantaBundle;
 
 class AppKernel extends Kernel
 {
@@ -29,6 +30,7 @@ class AppKernel extends Kernel
             new MonologBundle(),
             new PuliBundle(),
             new TwigBundle(),
+            new WhiteOctoberPagerfantaBundle(),
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test', 'ci'], true)) {

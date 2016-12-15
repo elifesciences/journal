@@ -1,0 +1,23 @@
+{% extends '::page.html.twig' %}
+
+{% block title %}{{ subject.name }}{% endblock %}
+
+{% block body %}
+
+    <div class="wrapper u-pad-top">
+
+        {{ render_pattern(contentHeader) }}
+
+        <div class="grid">
+
+            <div class="grid__item large--eight-twelfths push--large--two-twelfths">
+
+                {{ render_pattern(latestArticles) }}
+
+            </div>
+
+        </div>
+
+    </div>
+
+{% endblock %}

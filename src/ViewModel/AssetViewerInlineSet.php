@@ -2,18 +2,18 @@
 
 namespace eLife\Journal\ViewModel;
 
+use eLife\Patterns\ArrayAccessFromProperties;
 use eLife\Patterns\ArrayFromProperties;
 use eLife\Patterns\ComposedAssets;
-use eLife\Patterns\ReadOnlyArrayAccess;
 use eLife\Patterns\ViewModel;
 use eLife\Patterns\ViewModel\AssetViewerInline;
 use Traversable;
 
 final class AssetViewerInlineSet implements ViewModel
 {
+    use ArrayAccessFromProperties;
     use ArrayFromProperties;
     use ComposedAssets;
-    use ReadOnlyArrayAccess;
 
     private $viewers;
 

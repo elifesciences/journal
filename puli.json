@@ -185,6 +185,10 @@
             "install-path": "vendor/namshi/cuzzle",
             "installer": "composer"
         },
+        "pagerfanta/pagerfanta": {
+            "install-path": "vendor/pagerfanta/pagerfanta",
+            "installer": "composer"
+        },
         "paragonie/random_compat": {
             "install-path": "vendor/paragonie/random_compat",
             "installer": "composer"
@@ -409,6 +413,10 @@
         },
         "webmozart/path-util": {
             "install-path": "vendor/webmozart/path-util",
+            "installer": "composer"
+        },
+        "white-october/pagerfanta-bundle": {
+            "install-path": "vendor/white-october/pagerfanta-bundle",
             "installer": "composer"
         }
     }

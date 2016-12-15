@@ -1,0 +1,15 @@
+{% extends '::page.html.twig' %}
+
+{% block title %}Labs{% endblock %}
+
+{% block body %}
+
+    <div class="wrapper u-pad-top">
+
+        {{ render_pattern(contentHeader) }}
+
+        {{ render_pattern(experiments) }}
+
+    </div>
+
+{% endblock %}
