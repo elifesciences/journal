@@ -4,11 +4,12 @@ namespace eLife\Journal\Controller;
 
 use eLife\ApiSdk\Collection\ArraySequence;
 use eLife\ApiSdk\Collection\Sequence;
+use eLife\ApiSdk\Model\Cover;
 use eLife\ApiSdk\Model\Model;
 use eLife\ApiSdk\Model\Subject;
 use eLife\Journal\Helper\Paginator;
 use eLife\Journal\Pagerfanta\SequenceAdapter;
-use eLife\Patterns\ViewModel\ContentHeaderNonArticle;
+use eLife\Patterns\ViewModel\Carousel;
 use eLife\Patterns\ViewModel\ContentHeaderSimple;
 use eLife\Patterns\ViewModel\LeadPara;
 use eLife\Patterns\ViewModel\LeadParas;
@@ -70,7 +71,17 @@ final class HomeController extends Controller
 
     private function createFirstPage(array $arguments) : Response
     {
-        $arguments['contentHeader'] = ContentHeaderNonArticle::basic('eLife');
+        $arguments['carousel'] = $this->get('elife.api_sdk.covers')
+            ->getCurrent()
+            ->map(function (Cover $cover) {
+                return $this->get('elife.journal.view_model.converter')->convert($cover);
+            })
+            ->then(function (Sequence $covers) {
+                return new Carousel(...$covers);
+            })
+            ->otherwise(function () {
+                return null;
+            });
 
         $arguments['leadParas'] = new LeadParas([new LeadPara('eLife is an open-access journal that publishes research in the life and biomedical sciences')]);
 
