@@ -18,7 +18,6 @@ final class HomeControllerTest extends PageTestCase
         $crawler = $client->request('GET', $this->getUrl());
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
-        $this->assertSame('eLife', $crawler->filter('.content-header__title')->text());
         $this->assertContains('No articles available.', $crawler->filter('main')->text());
     }
 

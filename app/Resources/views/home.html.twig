@@ -1,14 +1,12 @@
 {% extends '::page.html.twig' %}
 
-{% block info_bar %}
-
-    {{ info_bar('This page is incomplete.') }}
-
-{% endblock %}
-
 {% block body %}
 
-    {{ render_pattern(contentHeader) }}
+    {% if carousel %}
+
+        {{ render_pattern(carousel) }}
+
+    {% endif %}
 
     <div class="wrapper">
 

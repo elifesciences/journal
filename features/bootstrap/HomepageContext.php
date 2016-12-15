@@ -182,6 +182,168 @@ final class HomepageContext extends Context
     }
 
     /**
+     * @Given /^there is a collection called \'([^\']*)\'$/
+     */
+    public function thereIsACollectionCalled(string $name)
+    {
+        // Do nothin.
+    }
+
+    /**
+     * @Given /^there is a cover linking to the \'([^\']*)\' collection$/
+     */
+    public function thereIsACoverLinkingToTheCollection(string $collectionName)
+    {
+        $id = $this->createId($collectionName);
+
+        $today = (new DateTimeImmutable())->setTime(0, 0, 0);
+
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/covers/current',
+                ['Accept' => 'application/vnd.elife.cover-list+json; version=1']
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.cover-list+json; version=1'],
+                json_encode([
+                    'total' => 1,
+                    'items' => [
+                        [
+                            'title' => $collectionName,
+                            'image' => [
+                                'alt' => '',
+                                'sizes' => [
+                                    '2:1' => [
+                                        900 => 'https://placehold.it/900x450?item',
+                                        1800 => 'https://placehold.it/1800x900?item',
+                                    ],
+                                ],
+                            ],
+                            'item' => [
+                                'type' => 'collection',
+                                'id' => $id,
+                                'title' => $collectionName,
+                                'updated' => $today->format(ApiSdk::DATE_FORMAT),
+                                'image' => [
+                                    'banner' => [
+                                        'alt' => '',
+                                        'sizes' => [
+                                            '2:1' => [
+                                                900 => 'https://placehold.it/900x450?item',
+                                                1800 => 'https://placehold.it/1800x900?item',
+                                            ],
+                                        ],
+                                    ],
+                                    'thumbnail' => [
+                                        'alt' => '',
+                                        'sizes' => [
+                                            '16:9' => [
+                                                250 => 'https://placehold.it/250x141?item',
+                                                500 => 'https://placehold.it/500x281?item',
+                                            ],
+                                            '1:1' => [
+                                                70 => 'https://placehold.it/70x70?item',
+                                                140 => 'https://placehold.it/140x140?item',
+                                            ],
+                                        ],
+                                    ],
+                                ],
+                                'selectedCurator' => [
+                                    'id' => '1',
+                                    'type' => 'senior-editor',
+                                    'name' => [
+                                        'preferred' => 'Person 1',
+                                        'index' => '1, Person',
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ])
+            )
+        );
+    }
+
+    /**
+     * @Given /^there is a cover linking to the \'([^\']*)\' collection with a custom title and image$/
+     */
+    public function thereIsACoverLinkingToTheCollectionWithACustomTitleAndImage(string $collectionName)
+    {
+        $id = $this->createId($collectionName);
+
+        $today = (new DateTimeImmutable())->setTime(0, 0, 0);
+
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/covers/current',
+                ['Accept' => 'application/vnd.elife.cover-list+json; version=1']
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.cover-list+json; version=1'],
+                json_encode([
+                    'total' => 1,
+                    'items' => [
+                        [
+                            'title' => 'Cover',
+                            'image' => [
+                                'alt' => '',
+                                'sizes' => [
+                                    '2:1' => [
+                                        900 => 'https://placehold.it/900x450?cover',
+                                        1800 => 'https://placehold.it/1800x900?cover',
+                                    ],
+                                ],
+                            ],
+                            'item' => [
+                                'type' => 'collection',
+                                'id' => $id,
+                                'updated' => $today->format(ApiSdk::DATE_FORMAT),
+                                'title' => $collectionName,
+                                'selectedCurator' => [
+                                    'id' => '1',
+                                    'type' => 'senior-editor',
+                                    'name' => [
+                                        'preferred' => 'Person 1',
+                                        'index' => '1, Person',
+                                    ],
+                                ],
+                                'image' => [
+                                    'banner' => [
+                                        'alt' => '',
+                                        'sizes' => [
+                                            '2:1' => [
+                                                900 => 'https://placehold.it/900x450?item',
+                                                1800 => 'https://placehold.it/1800x900?item',
+                                            ],
+                                        ],
+                                    ],
+                                    'thumbnail' => [
+                                        'alt' => '',
+                                        'sizes' => [
+                                            '16:9' => [
+                                                250 => 'https://placehold.it/250x141?item',
+                                                500 => 'https://placehold.it/500x281?item',
+                                            ],
+                                            '1:1' => [
+                                                70 => 'https://placehold.it/70x70?item',
+                                                140 => 'https://placehold.it/140x140?item',
+                                            ],
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ])
+            )
+        );
+    }
+
+    /**
      * @When /^I go to the homepage$/
      */
     public function iGoToTheHomepage()
@@ -231,5 +393,38 @@ final class HomepageContext extends Context
             '.list-heading:contains("Magazine") + ol > li:nth-child('.($number + 1).')',
             'See more Magazine articles'
         );
+    }
+
+    /**
+     * @Then /^I should see the \'([^\']*)\' cover in the carousel$/
+     */
+    public function iShouldSeeTheCoverInTheCarousel(string $name)
+    {
+        $this->assertSession()->elementAttributeContains('css', '.carousel-item__title_link', 'href', $this->createId($name));
+    }
+
+    /**
+     * @Then /^I should see the title and image from the \'([^\']*)\' collection used in the \'([^\']*)\' cover$/
+     */
+    public function iShouldSeeTheTitleAndImageFromTheCollectionUsedInTheCover(string $collectionName, string $coverName)
+    {
+        $this->assertSession()->elementTextContains('css', '.carousel-item__title', $coverName);
+        $this->assertSession()->elementAttributeContains('css', '.carousel-item', 'data-low-res-image-source', 'https://placehold.it/900x450?item');
+        $this->assertSession()->elementAttributeContains('css', '.carousel-item', 'data-high-res-image-source', 'https://placehold.it/1800x900?item');
+    }
+
+    /**
+     * @Then /^I should see the custom title and image used in the \'([^\']*)\' cover$/
+     */
+    public function iShouldSeeTheCustomTitleAndImageUsedInTheCover($arg1)
+    {
+        $this->assertSession()->elementTextContains('css', '.carousel-item__title', 'Cover');
+        $this->assertSession()->elementAttributeContains('css', '.carousel-item', 'data-low-res-image-source', 'https://placehold.it/900x450?cover');
+        $this->assertSession()->elementAttributeContains('css', '.carousel-item', 'data-high-res-image-source', 'https://placehold.it/1800x900?cover');
+    }
+
+    private function createId(string $name) : string
+    {
+        return md5($name);
     }
 }
