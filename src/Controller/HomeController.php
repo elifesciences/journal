@@ -4,11 +4,16 @@ namespace eLife\Journal\Controller;
 
 use eLife\ApiSdk\Collection\Sequence;
 use eLife\ApiSdk\Model\Model;
+use eLife\ApiSdk\Model\Subject;
 use eLife\Patterns\ViewModel\ContentHeaderNonArticle;
+use eLife\Patterns\ViewModel\LeadPara;
+use eLife\Patterns\ViewModel\LeadParas;
 use eLife\Patterns\ViewModel\Link;
 use eLife\Patterns\ViewModel\ListHeading;
 use eLife\Patterns\ViewModel\ListingTeasers;
 use eLife\Patterns\ViewModel\SeeMoreLink;
+use eLife\Patterns\ViewModel\SiteLinks;
+use eLife\Patterns\ViewModel\SiteLinksList;
 use eLife\Patterns\ViewModel\Teaser;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -22,6 +27,26 @@ final class HomeController extends Controller
         $arguments = $this->defaultPageArguments();
 
         $arguments['contentHeader'] = ContentHeaderNonArticle::basic('eLife');
+
+        $arguments['leadParas'] = new LeadParas([new LeadPara('eLife is an open-access journal that publishes research in the life and biomedical sciences')]);
+
+        $arguments['subjects'] = $this->get('elife.api_sdk.subjects')
+            ->reverse()
+            ->slice(1, 100)
+            ->map(function (Subject $subject) {
+                return new Link($subject->getName(), $this->get('router')->generate('subject', ['id' => $subject->getId()]));
+            })
+            ->then(function (Sequence $links) {
+                return array_chunk($links->toArray(), ceil(count($links) / 3));
+            })
+            ->then(function (array $columns) {
+                return new SiteLinksList(array_map(function (array $items) {
+                    return new SiteLinks($items);
+                }, $columns));
+            })
+            ->otherwise(function () {
+                return null;
+            });
 
         $arguments['latestResearchHeading'] = new ListHeading('Latest research');
         $arguments['latestResearch'] = $this->get('elife.api_sdk.search')
