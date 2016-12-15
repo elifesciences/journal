@@ -1,6 +1,5 @@
 <?php
 
-use eLife\ApiSdk\ApiSdk;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 
@@ -15,48 +14,9 @@ final class LabsContext extends Context
     {
         $this->numberOfExperiments = $number;
 
-        $experiments = [];
-
-        $today = (new DateTimeImmutable())->setTime(0, 0, 0);
-
-        for ($i = $number; $i > 0; --$i) {
-            $experiments[] = [
-                'number' => $i,
-                'title' => 'Experiment '.$i.' title',
-                'published' => $today->format(ApiSdk::DATE_FORMAT),
-                'image' => [
-                    'banner' => [
-                        'alt' => '',
-                        'sizes' => [
-                            '2:1' => [
-                                900 => 'https://placehold.it/900x450',
-                                1800 => 'https://placehold.it/1800x900',
-                            ],
-                        ],
-                    ],
-                    'thumbnail' => [
-                        'alt' => '',
-                        'sizes' => [
-                            '16:9' => [
-                                250 => 'https://placehold.it/250x141',
-                                500 => 'https://placehold.it/500x281',
-                            ],
-                            '1:1' => [
-                                70 => 'https://placehold.it/70x70',
-                                140 => 'https://placehold.it/140x140',
-                            ],
-                        ],
-                    ],
-                ],
-                'impactStatement' => 'Experiment '.$i.' impact statement',
-                'content' => [
-                    [
-                        'type' => 'paragraph',
-                        'text' => 'Experiment '.$i.' text.',
-                    ],
-                ],
-            ];
-        }
+        $experiments = array_map(function (int $number) {
+            return $this->faker->labsExperimentV1($number);
+        }, range($number, 1));
 
         foreach (array_chunk($experiments, 6) as $i => $experimentsChunk) {
             $page = $i + 1;
@@ -130,7 +90,7 @@ final class LabsContext extends Context
             $this->assertSession()->elementContains(
                 'css',
                 '.grid-listing-heading:contains("Experiments") + ol > li:nth-child('.$nthChild.')',
-                'Experiment '.$expectedNumber.' title'
+                'Experiment: '.str_pad($expectedNumber, 3, 0, STR_PAD_LEFT)
             );
         }
     }

@@ -3,6 +3,7 @@
 use Behat\Mink\Exception\UnsupportedDriverActionException;
 use Behat\MinkExtension\Context\RawMinkContext;
 use Behat\Symfony2Extension\Context\KernelAwareContext;
+use eLife\ApiFaker\Factory;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Symfony\Component\Filesystem\Filesystem;
@@ -14,6 +15,18 @@ abstract class Context extends RawMinkContext implements KernelAwareContext
      * @var KernelInterface
      */
     protected $kernel;
+
+    /**
+     * @var Generator
+     */
+    protected $faker;
+
+    public function __construct()
+    {
+        $this->faker = Factory::create();
+
+        $this->faker->seed('g123he1j1h12');
+    }
 
     final public function setKernel(KernelInterface $kernel)
     {
