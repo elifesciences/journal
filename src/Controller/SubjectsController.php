@@ -33,7 +33,7 @@ final class SubjectsController extends Controller
     {
         $arguments = $this->defaultPageArguments();
 
-        $arguments['contentHeader'] = ContentHeaderNonArticle::basic('Browse our research categories');
+        $arguments['contentHeader'] = new ContentHeaderSimple('Browse our research categories');
 
         $arguments['subjects'] = $this->get('elife.api_sdk.subjects')
             ->reverse()
