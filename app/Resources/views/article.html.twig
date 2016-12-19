@@ -1,6 +1,353 @@
 {% extends '::page.html.twig' %}
 
-{% block title %}{{ articleTitle|striptags }}{% endblock %}
+{% block title %}{{ article.fullTitle|striptags }}{% endblock %}
+
+{% block meta %}
+
+    {% if article.impactStatement is defined and article.impactStatement %}
+        <meta name="description" content="{{ article.impactStatement|striptags }}">
+    {% endif %}
+
+    {% block dublin_core %}
+
+        <meta name="DC.Format" content="text/html">
+        <meta name="DC.Language" content="en">
+        <meta name="DC.Title" content="{{ article.fullTitle|striptags }}">
+        <meta name="DC.Identifier" content="{{ article.doi }}">
+        {% if article.publishedDate %}
+            <meta name="DC.Date" content="{{ article.publishedDate|date('Y-m-d') }}">
+        {% endif %}
+        <meta name="DC.Publisher" content="eLife Sciences Publications Limited">
+
+        <meta name="DC.Rights" content="
+            {%- if article.copyright.holder -%}© {{ article.publishedDate|date('Y') }} {{ article.copyright.holder }}. {% endif -%}
+            {{- article.copyright.statement|striptags -}}
+        ">
+
+        {% if article.digest is defined and article.digest and article.digest.content|length %}
+            <meta name="DC.Description" content="
+                {%- for paragraph in article.digest.content -%}
+                    {{ paragraph.text|striptags }}
+                    {%- if not loop.last %} {% endif %}
+                {%- endfor -%}
+            ">
+        {% endif %}
+
+        {% for author in article.authors %}
+            {% if author.affiliations is defined %}
+                <meta name="DC.Contributor" content="{{ author.toString }}">
+                {% if author.people is defined %}
+                    {% for person in author.people %}
+                        <meta name="DC.Contributor" content="{{ person.preferredName }}">
+                    {% endfor %}
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+
+    {% endblock %}
+
+    {% block google_scholar %}
+
+        <meta name="citation_journal_title" content="eLife">
+        <meta name="citation_publisher" content="eLife Sciences Publications Limited">
+        <meta name="citation_journal_abbrev" content="eLife Sciences">
+        <meta name="citation_issn" content="2050-084X">
+        <meta name="citation_fulltext_world_readable" content="">
+        <meta name="citation_language" content="en">
+
+        <meta name="citation_title" content="{{ article.fullTitle|striptags }}">
+        <meta name="citation_id"
+              content="eLife {{ article.publishedDate|date('Y') }};{{ article.volume }}:{{ article.eLocationId }}">
+        <meta name="citation_firstpage" content="{{ article.eLocationId }}">
+        <meta name="citation_public_url" content="{{ url('article', {volume: article.volume, id: article.id}) }}">
+        <meta name="citation_pdf_url" content="{{ article.pdf }}">
+        <meta name="citation_doi" content="{{ article.doi }}">
+        <meta name="citation_volume" content="{{ article.volume }}">
+        {% if article.issue %}
+            <meta name="citation_issue" content="{{ article.issue }}">
+        {% endif %}
+        {% if article.publishedDate %}
+            <meta name="citation_publication_date" content="{{ article.publishedDate|date('Y/m/d') }}">
+        {% endif %}
+
+        {% if article.funding is defined and article.funding %}
+            {% for award in article.funding.awards %}
+                <meta name="citation_funding_source" content="citation_funder={{ award.source.place.toString }};
+                    {%- if award.source.funderId -%}
+                        citation_funder_id={{ award.source.funderId }};
+                    {%- endif -%}
+                    {%- if award.awardId -%}
+                        citation_grant_number={{ award.awardId }};
+                    {%- endif -%}
+                    {%- for recipient in award.recipients -%}
+                        citation_grant_recipient={{ recipient.toString }}{% if not loop.last %};{% endif -%}
+                    {%- endfor -%}
+                ">
+            {% endfor %}
+        {% endif %}
+
+        {% if article.keywords is defined and article.keywords|length %}
+            <meta name="citation_keywords" content="
+                {%- for keyword in article.keywords -%}
+                    {{- keyword|striptags -}}
+                    {%- if not loop.last %}; {% endif -%}
+                {%- endfor -%}
+            ">
+        {% endif %}
+
+        {% if article.subjects|length %}
+            <meta name="citation_section" content="
+                {%- for subject in article.subjects -%}
+                    {{- subject.name|striptags -}}
+                    {%- if not loop.last %}; {% endif -%}
+                {%- endfor -%}
+            ">
+        {% endif %}
+
+        {% for author in article.authors %}
+            {% if author.affiliations is defined %}
+                <meta name="citation_author" content="{{ author.toString }}">
+                {% for institution in author.affiliations %}
+                    <meta name="citation_author_institution" content="{{ institution.toString }}">
+                {% endfor %}
+                {% for emailAddress in author.emailAddresses %}
+                    <meta name="citation_author_email" content="{{ emailAddress }}">
+                {% endfor %}
+                {% if author.preferredName is defined %}
+                    {% if author.orcid %}
+                        <meta name="citation_author_orcid" content="https://orcid.org/{{ author.orcid }}">
+                    {% endif %}
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+
+        {% if article.references is defined -%}
+
+            {%- for reference in article.references %}
+
+                {%- set type = reference_type(reference) -%}
+
+                {%- if type == 'book' -%}
+
+                    <meta name="citation_reference"
+                          content="
+                            citation_title={{ reference.bookTitle }};
+                            {% for author in reference.authors %}
+                                citation_author={{ author.toString }};
+                            {% endfor %}
+                            citation_publisher={{ reference.publisher.name|join(', ') }};
+                            citation_publication_date={{ reference.date.toString }};
+                            {% if reference.isbn %}
+                                citation_isbn={{ reference.isbn }};
+                            {% endif %}
+                        ">
+
+                {%- elseif type == 'book-chapter' -%}
+
+                    <meta name="citation_reference"
+                          content="
+                            citation_title={{ reference.chapterTitle }};
+                            {% for author in reference.authors %}
+                                citation_author={{ author.toString }};
+                            {% endfor %}
+                            citation_inbook_title={{ reference.bookTitle }};
+                            citation_publisher={{ reference.publisher.name|join(', ') }};
+                            citation_publication_date={{ reference.date.toString }};
+                            {% if reference.isbn %}
+                                citation_isbn={{ reference.isbn }};
+                            {% endif %}
+                            {% if reference.pages.first is defined %}
+                                citation_firstpage={{ reference.pages.first }};
+                                citation_lastpage={{ reference.pages.last }};
+                                citation_pages={{ reference.pages.range }};
+                            {% else %}
+                                citation_firstpage={{ reference.pages.toString }};
+                            {% endif %}
+                        ">
+
+                {%- elseif type == 'clinical-trial' -%}
+
+                    <meta name="citation_reference"
+                          content="
+                            citation_title={{ reference.title }};
+                            {% for author in reference.authors %}
+                                citation_author={{ author.toString }};
+                            {% endfor %}
+                            citation_publication_date={{ reference.date.toString }};
+                        ">
+
+                {%- elseif type == 'conference-proceeding' -%}
+
+                    <meta name="citation_reference"
+                          content="
+                            citation_title={{ reference.articleTitle }};
+                            {% for author in reference.authors %}
+                                citation_author={{ author.toString }};
+                            {% endfor %}
+                            citation_conference_title={{ reference.conference.name|join(', ') }};
+                            citation_publication_date={{ reference.date.toString }};
+                            {% if reference.pages.first is defined %}
+                                citation_firstpage={{ reference.pages.first }};
+                                citation_lastpage={{ reference.pages.last }};
+                                citation_pages={{ reference.pages.range }};
+                            {% elseif reference.pages %}
+                                citation_firstpage={{ reference.pages.toString }};
+                            {% endif %}
+                        ">
+
+                {%- elseif type == 'data' -%}
+
+                    <meta name="citation_reference"
+                          content="
+                            citation_title={{ reference.title }};
+                            {% for author in reference.authors %}
+                                citation_author={{ author.toString }};
+                            {% endfor %}
+                            {% for compiler in reference.compilers %}
+                                citation_author={{ compiler.toString }};
+                            {% endfor %}
+                            {% for curator in reference.curators %}
+                                citation_author={{ curator.toString }};
+                            {% endfor %}
+                            citation_publisher={{ reference.source }};
+                            citation_publication_date={{ reference.date.toString }};
+                        ">
+
+                {%- elseif type == 'journal' -%}
+
+                    <meta name="citation_reference"
+                          content="
+                            citation_journal_title={{ reference.journal.name|join(', ') }};
+                            citation_title={{ reference.articleTitle }};
+                            citation_publication_date={{ reference.date.toString }};
+                            {% if reference.doi %}
+                                citation_doi={{ reference.doi }};
+                            {% endif %}
+                            {% if reference.pmid %}
+                                citation_pmid={{ reference.pmid }};
+                            {% endif %}
+                            {% for author in reference.authors %}
+                                citation_author={{ author.toString }};
+                            {% endfor %}
+                            {% if reference.volume %}
+                                citation_volume={{ reference.volume }};
+                            {% endif %}
+                            {% if reference.pages.first is defined %}
+                                citation_firstpage={{ reference.pages.first }};
+                                citation_lastpage={{ reference.pages.last }};
+                                citation_pages={{ reference.pages.range }};
+                            {% else %}
+                                citation_firstpage={{ reference.pages.toString }};
+                            {% endif %}
+                        ">
+
+                {%- elseif type == 'patent' -%}
+
+                    <meta name="citation_reference"
+                          content="
+                            citation_title={{ reference.title }};
+                            citation_publication_date={{ reference.date.toString }};
+                            {% for inventor in reference.inventors %}
+                                citation_author={{ inventor.toString }};
+                            {% endfor %}
+                            citation_patent_country={{ reference.country }};
+                            {% if reference.number %}
+                                citation_patent_number={{ reference.number }};
+                            {% endif %}
+                        ">
+
+                {%- elseif type == 'periodical' -%}
+
+                    <meta name="citation_reference"
+                          content="
+                            citation_title={{ reference.articleTitle }};
+                            {% for author in reference.authors %}
+                                citation_author={{ author.toString }};
+                            {% endfor %}
+                            citation_publisher={{ reference.periodical.name|join(', ') }};
+                            citation_publication_date={{ reference.date.toString }};
+                        ">
+
+                {%- elseif type == 'preprint' -%}
+
+                    <meta name="citation_reference"
+                          content="
+                            citation_title={{ reference.articleTitle }};
+                            {% for author in reference.authors %}
+                                citation_author={{ author.toString }};
+                            {% endfor %}
+                            citation_publication_date={{ reference.date.toString }};
+                            citation_technical_report_institution={{ reference.source }};
+                        ">
+
+                {%- elseif type == 'report' -%}
+
+                    <meta name="citation_reference"
+                          content="
+                            citation_title={{ reference.title }};
+                            {% for author in reference.authors %}
+                                citation_author={{ author.toString }};
+                            {% endfor %}
+                            citation_publication_date={{ reference.date.toString }};
+                            citation_technical_report_institution={{ reference.publisher.name|join(', ') }};
+                        ">
+
+                {%- elseif type == 'software' -%}
+
+                    <meta name="citation_reference"
+                          content="
+                            citation_title={{ reference.title }};
+                            {% for author in reference.authors %}
+                                citation_author={{ author.toString }};
+                            {% endfor %}
+                            citation_publisher={{ reference.publisher.name|join(', ') }};
+                            citation_publication_date={{ reference.date.toString }};
+                        ">
+
+                {%- elseif type == 'thesis' -%}
+
+                    <meta name="citation_reference"
+                          content="
+                            citation_title={{ reference.title }};
+                            citation_author={{ reference.author.preferredName }};
+                            citation_dissertation_institution={{ reference.publisher.name|join(', ') }};
+                            citation_publication_date={{ reference.date.toString }};
+                        ">
+
+                {%- elseif type == 'unknown' -%}
+
+                    <meta name="citation_reference"
+                          content="
+                            citation_title={{ reference.title }};
+                            {% for author in reference.authors %}
+                                citation_author={{ author.toString }};
+                            {% endfor %}
+                            citation_publication_date={{ reference.date.toString }};
+                        ">
+
+                {%- elseif type == 'web' -%}
+
+                    <meta name="citation_reference"
+                          content="
+                            citation_title={{ reference.title }};
+                            citation_publication_date={{ reference.date.toString }};
+                            {% for author in reference.authors %}
+                                citation_author={{ author.toString }};
+                            {% endfor %}
+                            {% if reference.website %}
+                                citation_publisher={{ reference.website }};
+                            {% endif %}
+                        ">
+
+                {%- endif %}
+
+            {% endfor -%}
+
+        {%- endif %}
+
+    {% endblock %}
+
+{% endblock %}
 
 {% block info_bar %}
 
