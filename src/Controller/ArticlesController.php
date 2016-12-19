@@ -540,11 +540,6 @@ final class ArticlesController extends Controller
                 return $article;
             });
 
-        $arguments['articleTitle'] = $arguments['article']
-            ->then(function (ArticleVersion $article) {
-                return $article->getFullTitle();
-            });
-
         $arguments['contentHeader'] = $arguments['article']
             ->then(function (ArticleVersion $article) {
                 return $this->get('elife.journal.view_model.converter')->convert($article, ContentHeaderArticle::class);

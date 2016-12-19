@@ -105,6 +105,11 @@ services:
         tags:
           - name: twig.extension
 
+    elife.journal.twig.extension.reference_type:
+        class: eLife\Journal\Twig\ReferenceTypeExtension
+        tags:
+          - name: twig.extension
+
     elife.journal.view_model.factory.footer:
         class: eLife\Journal\ViewModel\Factory\FooterFactory
         arguments:
