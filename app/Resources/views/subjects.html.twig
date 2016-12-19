@@ -2,17 +2,11 @@
 
 {% block title %}Research categories{% endblock %}
 
-{% block info_bar %}
-
-    {{ info_bar('This page is incomplete.') }}
-
-{% endblock %}
-
 {% block body %}
 
-    {{ render_pattern(contentHeader) }}
+    <div class="wrapper u-pad-top">
 
-    <div class="wrapper blg-pad-top-medium">
+        {{ render_pattern(contentHeader) }}
 
         {% if subjects %}
 
