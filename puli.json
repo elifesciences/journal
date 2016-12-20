@@ -2,9 +2,19 @@
     "version": "1.0",
     "name": "elife/journal",
     "path-mappings": {
+        "/elife/journal/images": "app/Resources/images/generated/",
         "/elife/journal/patterns": "app/Resources/patterns/"
     },
     "bindings": {
+        "2ec76e63-4153-4253-956e-799cac6ac8ce": {
+            "_class": "Puli\\Discovery\\Binding\\ResourceBinding",
+            "query": "/elife/journal/images{,/**/*}",
+            "type": "puli/public-resource",
+            "parameters": {
+                "path": "/images",
+                "server": "localhost"
+            }
+        },
         "dc209342-25f4-4270-b4d3-6832bf78fc2a": {
             "_class": "Puli\\Discovery\\Binding\\ResourceBinding",
             "query": "/elife/patterns/assets{,/**/*}",
