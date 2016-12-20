@@ -58,13 +58,13 @@ final class LabsContext extends Context
             ];
         }
 
-        foreach (array_chunk($experiments, 6) as $i => $experimentsChunk) {
+        foreach (array_chunk($experiments, 8) as $i => $experimentsChunk) {
             $page = $i + 1;
 
             $this->mockApiResponse(
                 new Request(
                     'GET',
-                    "http://api.elifesciences.org/labs-experiments?page=$page&per-page=6&order=desc",
+                    "http://api.elifesciences.org/labs-experiments?page=$page&per-page=8&order=desc",
                     ['Accept' => 'application/vnd.elife.labs-experiment-list+json; version=1']
                 ),
                 new Response(
