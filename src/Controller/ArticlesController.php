@@ -88,9 +88,9 @@ final class ArticlesController extends Controller
                             $section->getTitle(),
                             2,
                             $this->get('elife.patterns.pattern_renderer')->render(
-                                ...array_map(function (Block $block) {
+                                ...$section->getContent()->map(function (Block $block) {
                                     return $this->get('elife.journal.view_model.converter')->convert($block, null, ['level' => 2]);
-                                }, $section->getContent())
+                                })
                             ),
                             $isInitiallyClosed,
                             $first
