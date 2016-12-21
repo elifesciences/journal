@@ -190,7 +190,7 @@ final class ArticlesController extends Controller
                     );
                 }
 
-                if ($article instanceof ArticleVoR && $article->getFunding()) {
+                if ($article->getFunding()) {
                     $funding = $article->getFunding()->getAwards()
                         ->map(function (FundingAward $award) {
                             $title = $award->getSource()->getPlace()->toString();
@@ -293,7 +293,14 @@ final class ArticlesController extends Controller
 
         $arguments['hasFigures'] = $arguments['article']
             ->then(function (ArticleVersion $article) {
-                return count($this->findFigures($article)) > 0;
+                return
+                    $article->getGeneratedDataSets()->notEmpty()
+                    ||
+                    $article->getUsedDataSets()->notEmpty()
+                    ||
+                    $article->getAdditionalFiles()->notEmpty()
+                    ||
+                    count($this->findFigures($article)) > 0;
             });
 
         $arguments['viewSelector'] = all([
@@ -349,24 +356,9 @@ final class ArticlesController extends Controller
     {
         $arguments = $this->articlePageArguments($volume, $id);
 
-        $arguments['article'] = $arguments['article']
-            ->then(function (ArticleVersion $article) {
-                if (false === $article instanceof ArticleVoR) {
-                    throw new NotFoundHttpException('Article is not a VoR');
-                }
-
-                return $article;
-            });
-
         $allFigures = $arguments['article']
-            ->then(function (ArticleVoR $article) {
-                $figures = $this->findFigures($article);
-
-                if (empty($figures)) {
-                    throw new NotFoundHttpException('Article version does not contain any figures');
-                }
-
-                return $figures;
+            ->then(function (ArticleVersion $article) {
+                return $this->findFigures($article);
             });
 
         $figures = $allFigures
@@ -406,7 +398,7 @@ final class ArticlesController extends Controller
             });
 
         $generateDataSets = $arguments['article']
-            ->then(function (ArticleVoR $article) {
+            ->then(function (ArticleVersion $article) {
                 return $article->getGeneratedDataSets()
                     ->map(function (DataSet $dataSet, int $id) {
                         $reference = $this->get('elife.journal.view_model.converter')->convert($dataSet);
@@ -426,7 +418,7 @@ final class ArticlesController extends Controller
             });
 
         $usedDataSets = $arguments['article']
-            ->then(function (ArticleVoR $article) {
+            ->then(function (ArticleVersion $article) {
                 return $article->getUsedDataSets()
                     ->map(function (DataSet $dataSet, int $id) {
                         $reference = $this->get('elife.journal.view_model.converter')->convert($dataSet);
@@ -451,7 +443,7 @@ final class ArticlesController extends Controller
             });
 
         $additionalFiles = $arguments['article']
-            ->then(function (ArticleVoR $article) {
+            ->then(function (ArticleVersion $article) {
                 return $article->getAdditionalFiles()
                     ->map(function (File $file) {
                         return $this->get('elife.journal.view_model.converter')->convert($file);
@@ -490,14 +482,20 @@ final class ArticlesController extends Controller
 
                 if (!empty($all['tables'])) {
                     $parts[] = ArticleSection::collapsible('tables', 'Tables', 2, $this->get('elife.patterns.pattern_renderer')->render(...$all['tables']), false, $first);
+                    $first = false;
                 }
 
                 if (!empty($all['dataSets'])) {
-                    $parts[] = ArticleSection::collapsible('data-sets', 'Data sets', 2, $this->get('elife.patterns.pattern_renderer')->render(...$all['dataSets']));
+                    $parts[] = ArticleSection::collapsible('data-sets', 'Data sets', 2, $this->get('elife.patterns.pattern_renderer')->render(...$all['dataSets']), false, $first);
+                    $first = false;
                 }
 
                 if (!empty($all['additionalFiles'])) {
-                    $parts[] = ArticleSection::collapsible('files', 'Additional files', 2, $this->get('elife.patterns.pattern_renderer')->render($all['additionalFiles']));
+                    $parts[] = ArticleSection::collapsible('files', 'Additional files', 2, $this->get('elife.patterns.pattern_renderer')->render($all['additionalFiles']), false, $first);
+                }
+
+                if (empty($parts)) {
+                    throw new NotFoundHttpException('Article version does not contain any figures');
                 }
 
                 return $parts;
@@ -505,7 +503,7 @@ final class ArticlesController extends Controller
 
         $arguments['viewSelector'] = all(['article' => $arguments['article'], 'body' => $arguments['body']])
             ->then(function (array $sections) {
-                /** @var ArticleVoR $article */
+                /** @var ArticleVersion $article */
                 $article = $sections['article'];
                 $body = $sections['body'];
 

@@ -10,7 +10,7 @@ final class ArticleFiguresControllerTest extends PageTestCase
     /**
      * @test
      */
-    public function it_displays_an_article_figures_page()
+    public function it_displays_an_article_figures_page_for_a_vor()
     {
         $client = static::createClient();
 
@@ -60,6 +60,89 @@ final class ArticleFiguresControllerTest extends PageTestCase
             ],
             array_map('trim', $crawler->filter('.view-selector__jump_link_item')->extract('_text'))
         );
+    }
+
+    /**
+     * @test
+     */
+    public function it_displays_an_article_figures_page_for_a_poa()
+    {
+        $client = static::createClient();
+
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/articles/00001',
+                [
+                    'Accept' => [
+                        'application/vnd.elife.article-poa+json; version=1',
+                        'application/vnd.elife.article-vor+json; version=1',
+                    ],
+                ]
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.article-poa+json; version=1'],
+                json_encode([
+                    'status' => 'poa',
+                    'stage' => 'published',
+                    'id' => '00001',
+                    'version' => 1,
+                    'type' => 'research-article',
+                    'doi' => '10.7554/eLife.00001',
+                    'title' => 'Article title',
+                    'published' => '2010-01-01T00:00:00Z',
+                    'versionDate' => '2010-01-01T00:00:00Z',
+                    'statusDate' => '2010-01-01T00:00:00Z',
+                    'volume' => 1,
+                    'elocationId' => 'e00001',
+                    'copyright' => [
+                        'license' => 'CC-BY-4.0',
+                        'holder' => 'Foo Bar',
+                        'statement' => 'Copyright statement.',
+                    ],
+                    'authorLine' => 'Foo Bar',
+                    'authors' => [
+                        [
+                            'type' => 'person',
+                            'name' => [
+                                'preferred' => 'Foo Bar',
+                                'index' => 'Foo Bar',
+                            ],
+                        ],
+                    ],
+                    'additionalFiles' => [
+                        [
+                            'id' => 'file1',
+                            'label' => 'Additional file 1 label',
+                            'title' => 'Additional file 1 title',
+                            'mediaType' => 'image/jpeg',
+                            'uri' => 'https://placehold.it/900x450',
+                            'filename' => 'image.jpg',
+                        ],
+                    ],
+                ])
+            )
+        );
+
+        $crawler = $client->request('GET', '/content/1/e00001/figures');
+
+        $this->assertSame(200, $client->getResponse()->getStatusCode());
+        $this->assertSame('Article title', $crawler->filter('.content-header__title')->text());
+        $this->assertSame('Foo Bar', trim($crawler->filter('.content-header__author_list')->text()));
+        $this->assertEmpty($crawler->filter('.content-header__institution_list'));
+
+        $this->assertContains('Cite as: eLife 2012;1:e00001',
+            $crawler->filter('.contextual-data__cite_wrapper')->text());
+        $this->assertContains('doi: 10.7554/eLife.00001', $crawler->filter('.contextual-data__cite_wrapper')->text());
+
+        $figureTypes = $crawler->filter('main > .wrapper > div > div > section');
+        $this->assertCount(1, $figureTypes);
+
+        $additionalFiles = $figureTypes->eq(0)->filter('.caption-text__heading');
+        $this->assertSame('Additional file 1 label', trim($additionalFiles->eq(0)->text()));
+
+        $this->assertEmpty($crawler->filter('.view-selector__jump_link_item'));
     }
 
     /**
