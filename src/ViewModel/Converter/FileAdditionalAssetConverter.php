@@ -25,13 +25,13 @@ final class FileAdditionalAssetConverter implements ViewModelConverter
      */
     public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
-        $caption = array_map(function (Block $block) {
+        $caption = $object->getCaption()->map(function (Block $block) {
             return $this->viewModelConverter->convert($block);
-        }, $object->getCaption());
+        });
 
         $captionText = new ViewModel\CaptionText(
-            $object->getLabel(),
-            $object->getTitle(),
+            $object->getLabel() ?? $object->getTitle(),
+            $object->getLabel() ? $object->getTitle() : null,
             $this->patternRenderer->render(...$caption)
         );
 

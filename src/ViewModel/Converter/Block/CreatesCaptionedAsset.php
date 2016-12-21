@@ -2,6 +2,7 @@
 
 namespace eLife\Journal\ViewModel\Converter\Block;
 
+use eLife\ApiSdk\Collection\Sequence;
 use eLife\Journal\ViewModel\Converter\HasPatternRenderer;
 use eLife\Patterns\ViewModel;
 
@@ -9,7 +10,7 @@ trait CreatesCaptionedAsset
 {
     use HasPatternRenderer;
 
-    final private function createCaptionedAsset(ViewModel\IsCaptioned $asset, string $heading, array $captions, string $doi = null, string $download = null) : ViewModel\CaptionedAsset
+    final private function createCaptionedAsset(ViewModel\IsCaptioned $asset, string $heading, Sequence $captions, string $doi = null, string $download = null) : ViewModel\CaptionedAsset
     {
         $captionText = new ViewModel\CaptionText(
             $heading,

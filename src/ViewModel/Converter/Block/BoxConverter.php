@@ -28,9 +28,9 @@ final class BoxConverter implements ViewModelConverter
     {
         $context['level'] = ($context['level'] ?? 1) + 1;
 
-        $content = array_map(function (Block $block) {
+        $content = $object->getContent()->map(function (Block $block) {
             return $this->viewModelConverter->convert($block);
-        }, $object->getContent());
+        });
 
         return new ViewModel\Box($object->getId(), $object->getLabel(), $object->getTitle(), $context['level'], $object->getDoi() ? new ViewModel\Doi($object->getDoi()) : null, $this->patternRenderer->render(...$content));
     }

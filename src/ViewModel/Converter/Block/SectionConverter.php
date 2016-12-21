@@ -28,9 +28,9 @@ final class SectionConverter implements ViewModelConverter
         return ViewModel\ArticleSection::basic(
             $object->getTitle(),
             $context['level'],
-            implode('', array_map(function (Block $block) use ($context) {
+            implode('', $object->getContent()->map(function (Block $block) use ($context) {
                 return $this->patternRenderer->render($this->viewModelConverter->convert($block, null, $context));
-            }, $object->getContent())),
+            })->toArray()),
             $object->getId(),
             null,
             $context['isFirst'] ?? false
