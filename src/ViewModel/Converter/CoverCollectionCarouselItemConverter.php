@@ -36,8 +36,8 @@ final class CoverCollectionCarouselItemConverter implements ViewModelConverter
                 new ViewModel\Date($collection->getPublishedDate())
             ),
             new ViewModel\BackgroundImage(
-                $object->getImage()->getSize('2:1')->getImage(900),
-                $object->getImage()->getSize('2:1')->getImage(1800)
+                $object->getBanner()->getSize('2:1')->getImage(900),
+                $object->getBanner()->getSize('2:1')->getImage(1800)
             )
         );
     }

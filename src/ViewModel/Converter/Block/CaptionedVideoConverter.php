@@ -34,9 +34,9 @@ final class CaptionedVideoConverter implements ViewModelConverter
             }, $object->getSources())
         );
 
-        $caption = array_map(function (Block $block) {
+        $caption = $object->getCaption()->map(function (Block $block) {
             return $this->viewModelConverter->convert($block);
-        }, $object->getCaption());
+        });
 
         $asset = $this->createCaptionedAsset($asset, $object->getTitle(), $caption, $object->getDoi(), $object->getSources()[0]->getUri());
 
