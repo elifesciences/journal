@@ -15,23 +15,7 @@ final class LabsControllerTest extends PageTestCase
     {
         $client = static::createClient();
 
-        $this->mockApiResponse(
-            new Request(
-                'GET',
-                'http://api.elifesciences.org/labs-experiments?page=1&per-page=6&order=desc',
-                ['Accept' => 'application/vnd.elife.labs-experiment-list+json; version=1']
-            ),
-            new Response(
-                200,
-                ['Content-Type' => 'application/vnd.elife.labs-experiment-list+json; version=1'],
-                json_encode([
-                    'total' => 0,
-                    'items' => [],
-                ])
-            )
-        );
-
-        $crawler = $client->request('GET', '/labs');
+        $crawler = $client->request('GET', $this->getUrl());
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertSame('eLife Labs', $crawler->filter('.content-header__title')->text());
@@ -87,7 +71,7 @@ final class LabsControllerTest extends PageTestCase
         $this->mockApiResponse(
             new Request(
                 'GET',
-                'http://api.elifesciences.org/labs-experiments?page=1&per-page=6&order=desc',
+                'http://api.elifesciences.org/labs-experiments?page=1&per-page=8&order=desc',
                 ['Accept' => 'application/vnd.elife.labs-experiment-list+json; version=1']
             ),
             new Response(
