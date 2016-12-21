@@ -16,8 +16,8 @@ Installation
 
 1. Create `app/config/parameters.yml` from `app/config/parameters.yml.dist`
 2. `npm install`
-3. `composer install`
-4. `node_modules/.bin/gulp`
+3. `node_modules/.bin/gulp`
+4. `composer install`
 5. `puli publish --install`
 
 Running the tests
