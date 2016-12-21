@@ -8,6 +8,7 @@ use eLife\ApiSdk\Model\Block;
 use eLife\ApiSdk\Model\LabsExperiment;
 use eLife\Journal\Helper\Paginator;
 use eLife\Journal\Pagerfanta\SequenceAdapter;
+use eLife\Patterns\ViewModel\BackgroundImage;
 use eLife\Patterns\ViewModel\ContentHeaderNonArticle;
 use eLife\Patterns\ViewModel\ContentHeaderSimple;
 use eLife\Patterns\ViewModel\GridListing;
@@ -64,7 +65,11 @@ final class LabsController extends Controller
 
     private function createFirstPage(array $arguments) : Response
     {
-        $arguments['contentHeader'] = ContentHeaderNonArticle::basic('eLife Labs');
+        $arguments['contentHeader'] = ContentHeaderNonArticle::basic('eLife Labs', true, null, null, null,
+            new BackgroundImage(
+                $this->get('puli.url_generator')->generateUrl('/elife/journal/images/banners/labs-lo-res.jpg'),
+                $this->get('puli.url_generator')->generateUrl('/elife/journal/images/banners/labs-hi-res.jpg')
+            ));
 
         $arguments['leadParas'] = new LeadParas([
             new LeadPara('eLife Labs showcases experiments in new functionality and technologies. Some experiments may be

@@ -144,7 +144,12 @@ who-we-work-with:
     defaults:
          _controller: AppBundle:WhoWeWorkWith:whoWeWorkWith
 
+ping:
+    path: /ping
+    defaults:
+         _controller: AppBundle:Status:ping
+
 status:
     path: /status
     defaults:
-         _controller: AppBundle:Status:index
+         _controller: AppBundle:Status:status

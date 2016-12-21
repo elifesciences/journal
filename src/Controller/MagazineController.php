@@ -8,6 +8,7 @@ use eLife\ApiSdk\Model\Model;
 use eLife\Journal\Helper\Paginator;
 use eLife\Journal\Pagerfanta\SequenceAdapter;
 use eLife\Patterns\ViewModel\AudioPlayer;
+use eLife\Patterns\ViewModel\BackgroundImage;
 use eLife\Patterns\ViewModel\ContentHeaderNonArticle;
 use eLife\Patterns\ViewModel\ContentHeaderSimple;
 use eLife\Patterns\ViewModel\Link;
@@ -67,8 +68,12 @@ final class MagazineController extends Controller
 
     private function createFirstPage(array $arguments) : Response
     {
-        $arguments['contentHeader'] = ContentHeaderNonArticle::basic('Magazine', false,
-            'Highlighting the latest research and giving a voice to life and biomedical scientists.');
+        $arguments['contentHeader'] = ContentHeaderNonArticle::basic('Magazine', true,
+            'Highlighting the latest research and giving a voice to life and biomedical scientists.',
+            null, null, new BackgroundImage(
+                $this->get('puli.url_generator')->generateUrl('/elife/journal/images/banners/magazine-lo-res.jpg'),
+                $this->get('puli.url_generator')->generateUrl('/elife/journal/images/banners/magazine-hi-res.jpg')
+            ));
 
         $arguments['latestHeading'] = new ListHeading($latestHeading = 'Latest');
         $arguments['latest'] = all(['latest' => $arguments['latest'], 'paginator' => $arguments['paginator']])
