@@ -9,6 +9,7 @@ use eLife\ApiSdk\Model\Model;
 use eLife\ApiSdk\Model\Subject;
 use eLife\Journal\Helper\Paginator;
 use eLife\Journal\Pagerfanta\SequenceAdapter;
+use eLife\Patterns\ViewModel\AllSubjectsList;
 use eLife\Patterns\ViewModel\Carousel;
 use eLife\Patterns\ViewModel\ContentHeaderSimple;
 use eLife\Patterns\ViewModel\LeadPara;
@@ -19,8 +20,6 @@ use eLife\Patterns\ViewModel\ListingTeasers;
 use eLife\Patterns\ViewModel\LoadMore;
 use eLife\Patterns\ViewModel\Pager;
 use eLife\Patterns\ViewModel\SeeMoreLink;
-use eLife\Patterns\ViewModel\SiteLinks;
-use eLife\Patterns\ViewModel\SiteLinksList;
 use eLife\Patterns\ViewModel\Teaser;
 use Pagerfanta\Pagerfanta;
 use Symfony\Component\HttpFoundation\Request;
@@ -92,12 +91,7 @@ final class HomeController extends Controller
                 return new Link($subject->getName(), $this->get('router')->generate('subject', ['id' => $subject->getId()]));
             })
             ->then(function (Sequence $links) {
-                return array_chunk($links->toArray(), ceil(count($links) / 3));
-            })
-            ->then(function (array $columns) {
-                return new SiteLinksList(array_map(function (array $items) {
-                    return new SiteLinks($items);
-                }, $columns));
+                return new AllSubjectsList(...$links);
             })
             ->otherwise(function () {
                 return null;
