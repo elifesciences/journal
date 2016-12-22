@@ -441,7 +441,7 @@ final class ArticlesController extends Controller
                 /** @var ArticleHistory $history */
                 $history = $parts['history'];
 
-                if ($article->getVersion() < $history->getVersions()->last()->getVersion()) {
+                if ($article->getVersion() < $history->getVersions()[count($history->getVersions()) - 1]->getVersion()) {
                     return [new InfoBar('Read the <a href="'.$this->generateTextPath($history).'">most recent version of this article</a>.')];
                 }
 
@@ -542,7 +542,7 @@ final class ArticlesController extends Controller
 
     private function generateTextPath(ArticleHistory $history, int $forVersion = null) : string
     {
-        $currentVersion = $history->getVersions()->last();
+        $currentVersion = $history->getVersions()[count($history->getVersions()) - 1];
 
         if (null === $forVersion) {
             $forVersion = $currentVersion->getVersion();
@@ -557,7 +557,7 @@ final class ArticlesController extends Controller
 
     private function generateFiguresPath(ArticleHistory $history, int $forVersion = null) : string
     {
-        $currentVersion = $history->getVersions()->last();
+        $currentVersion = $history->getVersions()[count($history->getVersions()) - 1];
 
         if (null === $forVersion) {
             $forVersion = $currentVersion->getVersion();
