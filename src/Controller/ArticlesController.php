@@ -7,6 +7,8 @@ use eLife\ApiSdk\Collection\EmptySequence;
 use eLife\ApiSdk\Collection\PromiseSequence;
 use eLife\ApiSdk\Collection\Sequence;
 use eLife\ApiSdk\Model\Appendix;
+use eLife\ApiSdk\Model\ArticleHistory;
+use eLife\ApiSdk\Model\ArticlePoA;
 use eLife\ApiSdk\Model\ArticleVersion;
 use eLife\ApiSdk\Model\ArticleVoR;
 use eLife\ApiSdk\Model\Author;
@@ -38,8 +40,15 @@ final class ArticlesController extends Controller
     {
         $arguments = $this->articlePageArguments($volume, $id);
 
-        $arguments['body'] = $arguments['article']
-            ->then(function (ArticleVersion $article) {
+        $history = $this->get('elife.api_sdk.articles')->getHistory($id);
+
+        $arguments['body'] = all(['article' => $arguments['article'], 'history' => $history])
+            ->then(function (array $parts) {
+                /** @var ArticleVersion $article */
+                $article = $parts['article'];
+                /** @var ArticleHistory $history */
+                $history = $parts['history'];
+
                 $parts = [];
 
                 $first = true;
@@ -208,6 +217,36 @@ final class ArticlesController extends Controller
                         )
                     );
                 }
+
+                $publicationHistory = [];
+
+                if ($history->getReceived()) {
+                    $publicationHistory[] = 'Received: '.$history->getReceived()->format();
+                }
+
+                if ($history->getAccepted()) {
+                    $publicationHistory[] = 'Accepted: '.$history->getAccepted()->format();
+                }
+
+                $publicationHistory = array_merge($publicationHistory, $history->getVersions()
+                    ->filter(Callback::isInstanceOf(ArticlePoA::class))
+                    ->map(function (ArticlePoA $articleVersion, int $number) {
+                        return sprintf('Accepted Manuscript %s: %s (version %s)', 0 === $number ? 'published' : 'updated', $articleVersion->getVersionDate() ? $articleVersion->getVersionDate()->format('F j, Y') : '', $articleVersion->getVersion());
+                    })->toArray());
+
+                $publicationHistory = array_merge($publicationHistory, $history->getVersions()
+                    ->filter(Callback::isInstanceOf(ArticleVoR::class))
+                    ->map(function (ArticleVoR $articleVersion, int $number) {
+                        return sprintf('Version of Record %s: %s (version %s)', 0 === $number ? 'published' : 'updated', $articleVersion->getVersionDate() ? $articleVersion->getVersionDate()->format('F j, Y') : '', $articleVersion->getVersion());
+                    })->toArray());
+
+                $infoSections[] = ArticleSection::basic(
+                    'Publication history',
+                    3,
+                    $this->render(
+                        Listing::ordered($publicationHistory, 'bullet')
+                    )
+                );
 
                 $copyright = '<p>'.$article->getCopyright()->getStatement().'</p>';
 
