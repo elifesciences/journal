@@ -36,13 +36,11 @@ use function GuzzleHttp\Promise\promise_for;
 
 final class ArticlesController extends Controller
 {
-    public function latestVersionAction(int $volume, string $id) : Response
+    public function textAction(int $volume, string $id, int $version = null) : Response
     {
-        $arguments = $this->articlePageArguments($volume, $id);
+        $arguments = $this->articlePageArguments($volume, $id, $version);
 
-        $history = $this->get('elife.api_sdk.articles')->getHistory($id);
-
-        $arguments['body'] = all(['article' => $arguments['article'], 'history' => $history])
+        $arguments['body'] = all(['article' => $arguments['article'], 'history' => $arguments['history']])
             ->then(function (array $parts) {
                 /** @var ArticleVersion $article */
                 $article = $parts['article'];
@@ -230,14 +228,14 @@ final class ArticlesController extends Controller
 
                 $publicationHistory = array_merge($publicationHistory, $history->getVersions()
                     ->filter(Callback::isInstanceOf(ArticlePoA::class))
-                    ->map(function (ArticlePoA $articleVersion, int $number) {
-                        return sprintf('Accepted Manuscript %s: %s (version %s)', 0 === $number ? 'published' : 'updated', $articleVersion->getVersionDate() ? $articleVersion->getVersionDate()->format('F j, Y') : '', $articleVersion->getVersion());
+                    ->map(function (ArticlePoA $articleVersion, int $number) use ($history) {
+                        return sprintf('Accepted Manuscript %s: <a href="%s">%s (version %s)</a>', 0 === $number ? 'published' : 'updated', $this->generateTextPath($history, $articleVersion->getVersion()), $articleVersion->getVersionDate() ? $articleVersion->getVersionDate()->format('F j, Y') : '', $articleVersion->getVersion());
                     })->toArray());
 
                 $publicationHistory = array_merge($publicationHistory, $history->getVersions()
                     ->filter(Callback::isInstanceOf(ArticleVoR::class))
-                    ->map(function (ArticleVoR $articleVersion, int $number) {
-                        return sprintf('Version of Record %s: %s (version %s)', 0 === $number ? 'published' : 'updated', $articleVersion->getVersionDate() ? $articleVersion->getVersionDate()->format('F j, Y') : '', $articleVersion->getVersion());
+                    ->map(function (ArticleVoR $articleVersion, int $number) use ($history) {
+                        return sprintf('Version of Record %s: <a href="%s">%s (version %s)</a>', 0 === $number ? 'published' : 'updated', $this->generateTextPath($history, $articleVersion->getVersion()), $articleVersion->getVersionDate() ? $articleVersion->getVersionDate()->format('F j, Y') : '', $articleVersion->getVersion());
                     })->toArray());
 
                 $infoSections[] = ArticleSection::basic(
@@ -284,7 +282,7 @@ final class ArticlesController extends Controller
                     $hasFigures;
             });
 
-        $arguments['viewSelector'] = $this->createViewSelector($arguments['article'], $arguments['hasFigures'], $arguments['body']);
+        $arguments['viewSelector'] = $this->createViewSelector($arguments['article'], $arguments['hasFigures'], $arguments['history'], $arguments['body']);
 
         $arguments['body'] = all(['article' => $arguments['article'], 'body' => $arguments['body']])
             ->then(function (array $parts) {
@@ -303,9 +301,9 @@ final class ArticlesController extends Controller
         return new Response($this->get('templating')->render('::article.html.twig', $arguments));
     }
 
-    public function latestVersionFiguresAction(int $volume, string $id) : Response
+    public function figuresAction(int $volume, string $id, int $version = null) : Response
     {
-        $arguments = $this->articlePageArguments($volume, $id);
+        $arguments = $this->articlePageArguments($volume, $id, $version);
 
         $allFigures = $this->findFigures($arguments['article']);
 
@@ -402,17 +400,17 @@ final class ArticlesController extends Controller
             })
             ->then(Callback::mustNotBeEmpty(new NotFoundHttpException('Article version does not contain any figures')));
 
-        $arguments['viewSelector'] = $this->createViewSelector($arguments['article'], promise_for(true), $arguments['body']);
+        $arguments['viewSelector'] = $this->createViewSelector($arguments['article'], promise_for(true), $arguments['history'], $arguments['body']);
 
         return new Response($this->get('templating')->render('::article-figures.html.twig', $arguments));
     }
 
-    private function articlePageArguments(int $volume, string $id) : array
+    private function articlePageArguments(int $volume, string $id, int $version = null) : array
     {
         $arguments = $this->defaultPageArguments();
 
         $arguments['article'] = $this->get('elife.api_sdk.articles')
-            ->get($id)
+            ->get($id, $version)
             ->then(function (ArticleVersion $article) use ($volume) {
                 if ($volume !== $article->getVolume()) {
                     throw new NotFoundHttpException('Incorrect volume');
@@ -421,11 +419,32 @@ final class ArticlesController extends Controller
                 return $article;
             });
 
+        $arguments['history'] = $this->get('elife.api_sdk.articles')->getHistory($id);
+
+        $arguments['textPath'] = $arguments['history']
+            ->then(function (ArticleHistory $history) use ($version) {
+                return $this->generateTextPath($history, $version);
+            });
+
+        $arguments['figuresPath'] = $arguments['history']
+            ->then(function (ArticleHistory $history) use ($version) {
+                return $this->generateFiguresPath($history, $version);
+            });
+
         $arguments['contentHeader'] = $arguments['article']
             ->then($this->willConvertTo(ContentHeaderArticle::class));
 
-        $arguments['infoBars'] = $arguments['article']
-            ->then(function (ArticleVersion $article) {
+        $arguments['infoBars'] = all(['article' => $arguments['article'], 'history' => $arguments['history']])
+            ->then(function (array $parts) {
+                /** @var ArticleVersion $article */
+                $article = $parts['article'];
+                /** @var ArticleHistory $history */
+                $history = $parts['history'];
+
+                if ($article->getVersion() < $history->getVersions()[count($history->getVersions()) - 1]->getVersion()) {
+                    return [new InfoBar('Read the <a href="'.$this->generateTextPath($history).'">most recent version of this article</a>.')];
+                }
+
                 if ($article instanceof ArticleVoR) {
                     return [];
                 }
@@ -444,12 +463,13 @@ final class ArticlesController extends Controller
         return $arguments;
     }
 
-    private function createViewSelector(PromiseInterface $article, PromiseInterface $hasFigures, PromiseInterface $sections) : PromiseInterface
+    private function createViewSelector(PromiseInterface $article, PromiseInterface $hasFigures, PromiseInterface $history, PromiseInterface $sections) : PromiseInterface
     {
-        return all(['article' => $article, 'hasFigures' => $hasFigures, 'sections' => $sections])
+        return all(['article' => $article, 'hasFigures' => $hasFigures, 'history' => $history, 'sections' => $sections])
             ->then(function (array $sections) {
                 $article = $sections['article'];
                 $hasFigures = $sections['hasFigures'];
+                $history = $sections['history'];
                 $sections = $sections['sections'];
 
                 if ((count($sections) < 2 || false === $sections[0] instanceof ArticleSection)) {
@@ -461,7 +481,7 @@ final class ArticlesController extends Controller
                 }
 
                 return new ViewSelector(
-                    $this->get('router')->generate('article', ['id' => $article->getId(), 'volume' => $article->getVolume()]),
+                    $this->generateTextPath($history, $article->getVersion()),
                     array_filter(array_map(function (ViewModel $viewModel) {
                         if ($viewModel instanceof ArticleSection) {
                             return new Link($viewModel['title'], '#'.$viewModel['id']);
@@ -469,7 +489,7 @@ final class ArticlesController extends Controller
 
                         return null;
                     }, $sections)),
-                    $hasFigures ? $this->get('router')->generate('article-figures', ['id' => $article->getId(), 'volume' => $article->getVolume()]) : null
+                    $hasFigures ? $this->generateFiguresPath($history, $article->getVersion()) : null
                 );
             });
     }
@@ -518,5 +538,35 @@ final class ArticlesController extends Controller
 
             return new ArraySequence($figures);
         }));
+    }
+
+    private function generateTextPath(ArticleHistory $history, int $forVersion = null) : string
+    {
+        $currentVersion = $history->getVersions()[count($history->getVersions()) - 1];
+
+        if (null === $forVersion) {
+            $forVersion = $currentVersion->getVersion();
+        }
+
+        if ($forVersion === $currentVersion->getVersion()) {
+            return $this->get('router')->generate('article', ['id' => $currentVersion->getId(), 'volume' => $currentVersion->getVolume()]);
+        }
+
+        return $this->get('router')->generate('article-version', ['id' => $currentVersion->getId(), 'volume' => $currentVersion->getVolume(), 'version' => $forVersion]);
+    }
+
+    private function generateFiguresPath(ArticleHistory $history, int $forVersion = null) : string
+    {
+        $currentVersion = $history->getVersions()[count($history->getVersions()) - 1];
+
+        if (null === $forVersion) {
+            $forVersion = $currentVersion->getVersion();
+        }
+
+        if ($forVersion === $currentVersion->getVersion()) {
+            return $this->get('router')->generate('article-figures', ['id' => $currentVersion->getId(), 'volume' => $currentVersion->getVolume()]);
+        }
+
+        return $this->get('router')->generate('article-version-figures', ['id' => $currentVersion->getId(), 'volume' => $currentVersion->getVolume(), 'version' => $forVersion]);
     }
 }

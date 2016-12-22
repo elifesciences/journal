@@ -2,9 +2,15 @@
 
 {% block title %}Figures in {{ parent() }}{% endblock %}
 
+{% block meta %}
+
+    <link rel="canonical" href="{{ path('article-figures', {volume: article.volume, id: article.id}) }}">
+
+{% endblock %}
+
 {% block article_body %}
 
-    {% fragment_link_rewrite path('article', {volume: article.volume, id: article.id}) %}
+    {% fragment_link_rewrite textPath %}
 
     {% for part in body %}
 
