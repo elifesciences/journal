@@ -172,25 +172,4 @@ final class CallbackTest extends PHPUnit_Framework_TestCase
         yield '0' => [0];
         yield 'null' => [null];
     }
-
-    /**
-     * @test
-     * @dataProvider splitProvider
-     */
-    public function it_creates_split(int $groups, $input, array $expected)
-    {
-        $callback = Callback::split($groups);
-
-        $this->assertSame($expected, $callback($input));
-    }
-
-    public function splitProvider() : Traversable
-    {
-        yield '1-item array into 2' => [2, ['foo'], [['foo']]];
-        yield '1-item sequence into 2' => [2, new ArraySequence(['foo']), [['foo']]];
-        yield '2-item array into 2' => [2, ['foo', 'bar'], [['foo'], ['bar']]];
-        yield '2-item sequence into 2' => [2, new ArraySequence(['foo', 'bar']), [['foo'], ['bar']]];
-        yield '3-item array into 2' => [2, ['foo', 'bar', 'baz'], [['foo', 'bar'], ['baz']]];
-        yield '3-item sequence into 2' => [2, new ArraySequence(['foo', 'bar', 'baz']), [['foo', 'bar'], ['baz']]];
-    }
 }

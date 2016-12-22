@@ -84,17 +84,6 @@ final class Callback
         });
     }
 
-    public static function split(int $groups) : Callback
-    {
-        return new self(function ($object) use ($groups) {
-            if ($object instanceof Traversable) {
-                $object = iterator_to_array($object);
-            }
-
-            return array_chunk($object, ceil(count($object) / $groups));
-        });
-    }
-
     public function __invoke()
     {
         return call_user_func($this->callback, ...func_get_args());
