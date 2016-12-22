@@ -201,6 +201,46 @@ final class ArticleControllerTest extends PageTestCase
             )
         );
 
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/articles/00001/versions',
+                [
+                    'Accept' => [
+                        'application/vnd.elife.article-history+json; version=1',
+                    ],
+                ]
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.article-history+json; version=1'],
+                json_encode([
+                    'versions' => [
+                        [
+                            'status' => 'vor',
+                            'stage' => 'published',
+                            'id' => '00001',
+                            'version' => 1,
+                            'type' => 'research-article',
+                            'doi' => '10.7554/eLife.00001',
+                            'title' => 'Article title',
+                            'published' => '2010-01-01T00:00:00Z',
+                            'versionDate' => '2010-01-01T00:00:00Z',
+                            'statusDate' => '2010-01-01T00:00:00Z',
+                            'volume' => 1,
+                            'elocationId' => 'e00001',
+                            'copyright' => [
+                                'license' => 'CC-BY-4.0',
+                                'holder' => 'Bar',
+                                'statement' => 'Copyright statement.',
+                            ],
+                            'authorLine' => 'Author One et al',
+                        ],
+                    ],
+                ])
+            )
+        );
+
         $crawler = $client->request('GET', '/content/1/e00001');
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
@@ -274,6 +314,46 @@ final class ArticleControllerTest extends PageTestCase
             )
         );
 
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/articles/00001/versions',
+                [
+                    'Accept' => [
+                        'application/vnd.elife.article-history+json; version=1',
+                    ],
+                ]
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.article-history+json; version=1'],
+                json_encode([
+                    'versions' => [
+                        [
+                            'status' => 'poa',
+                            'stage' => 'published',
+                            'id' => '00001',
+                            'version' => 1,
+                            'type' => 'research-article',
+                            'doi' => '10.7554/eLife.00001',
+                            'title' => 'Article title',
+                            'published' => '2010-01-01T00:00:00Z',
+                            'versionDate' => '2010-01-01T00:00:00Z',
+                            'statusDate' => '2010-01-01T00:00:00Z',
+                            'volume' => 1,
+                            'elocationId' => 'e00001',
+                            'copyright' => [
+                                'license' => 'CC-BY-4.0',
+                                'holder' => 'Author One',
+                                'statement' => 'Copyright statement.',
+                            ],
+                            'authorLine' => 'Author One et al',
+                        ],
+                    ],
+                ])
+            )
+        );
+
         $crawler = $client->request('GET', '/content/1/e00001');
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
@@ -289,7 +369,12 @@ final class ArticleControllerTest extends PageTestCase
 
         $articleInfo = $crawler->filter('main > .wrapper > div > div > section:nth-of-type(1) > div > section');
 
-        $copyright = $articleInfo->eq(0);
+        $publicationHistory = $articleInfo->eq(0);
+        $this->assertSame('Publication history', $publicationHistory->filter('header > h3')->text());
+        $this->assertCount(1, $publicationHistory->filter('ol')->children());
+        $this->assertSame('Accepted Manuscript published: January 1, 2010 (version 1)', $publicationHistory->filter('ol')->children()->eq(0)->text());
+
+        $copyright = $articleInfo->eq(1);
         $this->assertSame('Copyright', $copyright->filter('header > h3')->text());
         $this->assertContains('© 2012, Author One', $copyright->filter('div')->text());
         $this->assertContains('Copyright statement.', $copyright->filter('div')->text());
@@ -324,14 +409,14 @@ final class ArticleControllerTest extends PageTestCase
                     'status' => 'vor',
                     'stage' => 'published',
                     'id' => '00001',
-                    'version' => 1,
+                    'version' => 4,
                     'type' => 'research-advance',
                     'doi' => '10.7554/eLife.00001',
                     'title' => 'Article title',
                     'titlePrefix' => 'Title prefix',
-                    'published' => '2010-01-01T00:00:00Z',
+                    'published' => '2007-01-01T00:00:00Z',
                     'versionDate' => '2010-01-01T00:00:00Z',
-                    'statusDate' => '2010-01-01T00:00:00Z',
+                    'statusDate' => '2009-01-01T00:00:00Z',
                     'volume' => 1,
                     'elocationId' => 'e00001',
                     'copyright' => [
@@ -531,6 +616,112 @@ final class ArticleControllerTest extends PageTestCase
             )
         );
 
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/articles/00001/versions',
+                [
+                    'Accept' => [
+                        'application/vnd.elife.article-history+json; version=1',
+                    ],
+                ]
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.article-history+json; version=1'],
+                json_encode([
+                    'received' => '2006-12-30',
+                    'accepted' => '2006-12-31',
+                    'versions' => [
+                        [
+                            'status' => 'poa',
+                            'stage' => 'published',
+                            'id' => '00001',
+                            'version' => 1,
+                            'type' => 'research-advance',
+                            'doi' => '10.7554/eLife.00001',
+                            'title' => 'Article title',
+                            'titlePrefix' => 'Title prefix',
+                            'published' => '2007-01-01T00:00:00Z',
+                            'versionDate' => '2007-01-01T00:00:00Z',
+                            'statusDate' => '2007-01-01T00:00:00Z',
+                            'volume' => 1,
+                            'elocationId' => 'e00001',
+                            'copyright' => [
+                                'license' => 'CC-BY-4.0',
+                                'holder' => 'Bar',
+                                'statement' => 'Copyright statement.',
+                            ],
+                            'authorLine' => 'Foo Bar',
+                        ],
+                        [
+                            'status' => 'poa',
+                            'stage' => 'published',
+                            'id' => '00001',
+                            'version' => 2,
+                            'type' => 'research-advance',
+                            'doi' => '10.7554/eLife.00001',
+                            'title' => 'Article title',
+                            'titlePrefix' => 'Title prefix',
+                            'published' => '2007-01-01T00:00:00Z',
+                            'versionDate' => '2008-01-01T00:00:00Z',
+                            'statusDate' => '2007-01-01T00:00:00Z',
+                            'volume' => 1,
+                            'elocationId' => 'e00001',
+                            'copyright' => [
+                                'license' => 'CC-BY-4.0',
+                                'holder' => 'Bar',
+                                'statement' => 'Copyright statement.',
+                            ],
+                            'authorLine' => 'Foo Bar',
+                        ],
+                        [
+                            'status' => 'vor',
+                            'stage' => 'published',
+                            'id' => '00001',
+                            'version' => 3,
+                            'type' => 'research-advance',
+                            'doi' => '10.7554/eLife.00001',
+                            'title' => 'Article title',
+                            'titlePrefix' => 'Title prefix',
+                            'published' => '2007-01-01T00:00:00Z',
+                            'versionDate' => '2009-01-01T00:00:00Z',
+                            'statusDate' => '2009-01-01T00:00:00Z',
+                            'volume' => 1,
+                            'elocationId' => 'e00001',
+                            'copyright' => [
+                                'license' => 'CC-BY-4.0',
+                                'holder' => 'Bar',
+                                'statement' => 'Copyright statement.',
+                            ],
+                            'authorLine' => 'Foo Bar',
+                        ],
+                        [
+                            'status' => 'vor',
+                            'stage' => 'published',
+                            'id' => '00001',
+                            'version' => 4,
+                            'type' => 'research-advance',
+                            'doi' => '10.7554/eLife.00001',
+                            'title' => 'Article title',
+                            'titlePrefix' => 'Title prefix',
+                            'published' => '2008-01-01T00:00:00Z',
+                            'versionDate' => '2010-01-01T00:00:00Z',
+                            'statusDate' => '2009-01-01T00:00:00Z',
+                            'volume' => 1,
+                            'elocationId' => 'e00001',
+                            'copyright' => [
+                                'license' => 'CC-BY-4.0',
+                                'holder' => 'Bar',
+                                'statement' => 'Copyright statement.',
+                            ],
+                            'authorLine' => 'Foo Bar',
+                        ],
+                    ],
+                ])
+            )
+        );
+
         $crawler = $client->request('GET', '/content/1/e00001');
 
         $this->assertSame('Title prefix: Article title', $crawler->filter('meta[name="citation_title"]')->attr('content'));
@@ -617,7 +808,17 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertSame('Reviewer 1, role, Institution, Country', $reviewerDetails->eq(0)->text());
         $this->assertSame('Reviewer 2, role', $reviewerDetails->eq(1)->text());
 
-        $copyright = $articleInfo->eq(4);
+        $publicationHistory = $articleInfo->eq(4);
+        $this->assertSame('Publication history', $publicationHistory->filter('header > h3')->text());
+        $this->assertCount(6, $publicationHistory->filter('ol')->children());
+        $this->assertSame('Received: December 30, 2006', $publicationHistory->filter('ol')->children()->eq(0)->text());
+        $this->assertSame('Accepted: December 31, 2006', $publicationHistory->filter('ol')->children()->eq(1)->text());
+        $this->assertSame('Accepted Manuscript published: January 1, 2007 (version 1)', $publicationHistory->filter('ol')->children()->eq(2)->text());
+        $this->assertSame('Accepted Manuscript updated: January 1, 2008 (version 2)', $publicationHistory->filter('ol')->children()->eq(3)->text());
+        $this->assertSame('Version of Record published: January 1, 2009 (version 3)', $publicationHistory->filter('ol')->children()->eq(4)->text());
+        $this->assertSame('Version of Record updated: January 1, 2010 (version 4)', $publicationHistory->filter('ol')->children()->eq(5)->text());
+
+        $copyright = $articleInfo->eq(5);
         $this->assertSame('Copyright', $copyright->filter('header > h3')->text());
         $this->assertContains('© 2012, Bar', $copyright->filter('div')->text());
         $this->assertContains('Copyright statement.', $copyright->filter('div')->text());
@@ -696,6 +897,46 @@ final class ArticleControllerTest extends PageTestCase
                                     'text' => 'Fossil hominins were first recognized in the Dinaledi Chamber in the Rising Star cave system in October 2013. During a relatively short excavation, our team recovered an extensive collection of 1550 hominin specimens, representing nearly every element of the skeleton multiple times (Figure 1), including many complete elements and morphologically informative fragments, some in articulation, as well as smaller fragments many of which could be refit into more complete elements. The collection is a morphologically homogeneous sample that can be attributed to no previously-known hominin species. Here we describe this new species, <i>Homo naledi</i>. We have not defined <i>H. naledi</i> narrowly based on a single jaw or skull because the entire body of material has informed our understanding of its biology.',
                                 ],
                             ],
+                        ],
+                    ],
+                ])
+            )
+        );
+
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/articles/00001/versions',
+                [
+                    'Accept' => [
+                        'application/vnd.elife.article-history+json; version=1',
+                    ],
+                ]
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.article-history+json; version=1'],
+                json_encode([
+                    'versions' => [
+                        [
+                            'status' => 'vor',
+                            'stage' => 'published',
+                            'id' => '00001',
+                            'version' => 1,
+                            'type' => 'research-article',
+                            'doi' => '10.7554/eLife.00001',
+                            'title' => 'Article title',
+                            'published' => '2010-01-01T00:00:00Z',
+                            'versionDate' => '2010-01-01T00:00:00Z',
+                            'statusDate' => '2010-01-01T00:00:00Z',
+                            'volume' => 1,
+                            'elocationId' => 'e00001',
+                            'copyright' => [
+                                'license' => 'CC-BY-4.0',
+                                'holder' => 'Bar',
+                                'statement' => 'Copyright statement.',
+                            ],
+                            'authorLine' => 'Foo Bar',
                         ],
                     ],
                 ])
