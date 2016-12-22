@@ -4,6 +4,8 @@
 
 {% block meta %}
 
+    <link rel="canonical" href="{{ path('article', {volume: article.volume, id: article.id}) }}">
+
     {% if article.impactStatement is defined and article.impactStatement %}
         <meta name="description" content="{{ article.impactStatement|striptags }}">
     {% endif %}
@@ -389,7 +391,7 @@
 
                     {% if hasFigures %}
 
-                        {% fragment_link_rewrite path('article-figures', {volume: article.volume, id: article.id}) %}
+                        {% fragment_link_rewrite figuresPath %}
 
                         {% for part in body %}
 

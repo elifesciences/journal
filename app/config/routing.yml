@@ -26,17 +26,33 @@ archive-year:
     requirements:
         number: '[2-9][0-9]{3}'
 
+article-version:
+    path: /content/{volume}/e{id}v{version}
+    defaults:
+         _controller: AppBundle:Articles:text
+    requirements:
+        volume: '[1-9][0-9]*'
+        version: '[1-9][0-9]*'
+
 article:
     path: /content/{volume}/e{id}
     defaults:
-         _controller: AppBundle:Articles:latestVersion
+         _controller: AppBundle:Articles:text
     requirements:
         volume: '[1-9][0-9]*'
+
+article-version-figures:
+    path: /content/{volume}/e{id}v{version}/figures
+    defaults:
+         _controller: AppBundle:Articles:figures
+    requirements:
+        volume: '[1-9][0-9]*'
+        version: '[1-9][0-9]*'
 
 article-figures:
     path: /content/{volume}/e{id}/figures
     defaults:
-         _controller: AppBundle:Articles:latestVersionFigures
+         _controller: AppBundle:Articles:figures
     requirements:
         volume: '[1-9][0-9]*'
 
