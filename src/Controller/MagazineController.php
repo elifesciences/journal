@@ -4,7 +4,7 @@ namespace eLife\Journal\Controller;
 
 use eLife\ApiSdk\Collection\ArraySequence;
 use eLife\ApiSdk\Collection\Sequence;
-use eLife\ApiSdk\Model\Model;
+use eLife\Journal\Helper\Callback;
 use eLife\Journal\Helper\Paginator;
 use eLife\Journal\Pagerfanta\SequenceAdapter;
 use eLife\Patterns\ViewModel\AudioPlayer;
@@ -85,9 +85,7 @@ final class MagazineController extends Controller
                     return null;
                 }
 
-                $teasers = $latest->map(function (Model $model) {
-                    return $this->get('elife.journal.view_model.converter')->convert($model, Teaser::class);
-                })->toArray();
+                $teasers = $latest->map($this->willConvertTo(Teaser::class))->toArray();
 
                 if ($paginator->getNextPage()) {
                     return ListingTeasers::withPagination(
@@ -102,13 +100,8 @@ final class MagazineController extends Controller
 
         $arguments['audio_player'] = $this->get('elife.api_sdk.podcast_episodes')
             ->slice(0, 1)
-            ->then(function (Sequence $result) {
-                if ($result->isEmpty()) {
-                    return null;
-                }
-
-                return $this->get('elife.journal.view_model.converter')->convert($result[0], AudioPlayer::class);
-            })
+            ->then(Callback::method('offsetGet', 0))
+            ->then(Callback::emptyOr($this->willConvertTo(AudioPlayer::class)))
             ->otherwise(function (Throwable $e) {
                 return null;
             });
@@ -119,14 +112,8 @@ final class MagazineController extends Controller
 
         $arguments['events'] = $events
             ->slice(0, 3)
-            ->then(function (Sequence $result) use ($events) {
-                if ($result->isEmpty()) {
-                    return null;
-                }
-
-                $items = $result->map(function (Model $model) {
-                    return $this->get('elife.journal.view_model.converter')->convert($model, Teaser::class, ['variant' => 'secondary']);
-                })->toArray();
+            ->then(Callback::emptyOr(function (Sequence $result) use ($events) {
+                $items = $result->map($this->willConvertTo(Teaser::class, ['variant' => 'secondary']))->toArray();
                 $heading = 'Events';
 
                 if (count($events) > 3) {
@@ -138,26 +125,21 @@ final class MagazineController extends Controller
                 }
 
                 return ListingTeasers::basic($items, $heading);
-            })
+            }))
             ->otherwise(function () {
                 return null;
             });
 
         $arguments['elifeDigests'] = $this->get('elife.api_sdk.medium_articles')
             ->slice(0, 3)
-            ->then(function (Sequence $result) {
-                if ($result->isEmpty()) {
-                    return null;
-                }
-
+            ->then(Callback::emptyOr(function (Sequence $result) {
                 return ListingTeasers::withSeeMore(
-                    $result->map(function (Model $model) {
-                        return $this->get('elife.journal.view_model.converter')->convert($model, Teaser::class, ['variant' => 'secondary']);
-                    })->toArray(),
+                    $result->map($this->willConvertTo(Teaser::class, ['variant' => 'secondary']))->toArray(),
                     new SeeMoreLink(new Link('See more eLife digests on Medium', 'https://medium.com/@elife')),
                     'eLife digests'
                 );
-            })->otherwise(function () {
+            }))
+            ->otherwise(function () {
                 return null;
             });
 
@@ -180,9 +162,7 @@ final class MagazineController extends Controller
                 $paginator = $parts['paginator'];
 
                 return ListingTeasers::withPagination(
-                    $latest->map(function (Model $model) {
-                        return $this->get('elife.journal.view_model.converter')->convert($model, Teaser::class);
-                    })->toArray(),
+                    $latest->map($this->willConvertTo(Teaser::class))->toArray(),
                     new Pager(
                         $paginator->getPreviousPage() ? new Link('Newer', $paginator->getPreviousPagePath()) : null,
                         $paginator->getNextPage() ? new Link('Older', $paginator->getNextPagePath()) : null

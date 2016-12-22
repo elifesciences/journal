@@ -29,7 +29,7 @@ final class LabsExperimentTeaserConverter implements ViewModelConverter
             $object->getImpactStatement(),
             null,
             null,
-            $this->bigTeaserImage($object->getThumbnail()),
+            $this->bigTeaserImage($object),
             ViewModel\TeaserFooter::forNonArticle(
                 ViewModel\Meta::withText(
                     'Experiment: '.str_pad($object->getNumber(), 3, '0', STR_PAD_LEFT),

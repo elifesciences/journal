@@ -4,16 +4,14 @@ namespace eLife\Journal\Controller;
 
 use eLife\ApiSdk\Collection\ArraySequence;
 use eLife\ApiSdk\Collection\Sequence;
-use eLife\ApiSdk\Model\Model;
 use eLife\ApiSdk\Model\PodcastEpisode;
-use eLife\ApiSdk\Model\PodcastEpisodeChapter;
+use eLife\Journal\Helper\Callback;
 use eLife\Journal\Helper\Paginator;
 use eLife\Journal\Pagerfanta\SequenceAdapter;
 use eLife\Patterns\ViewModel\AudioPlayer;
 use eLife\Patterns\ViewModel\ContentHeaderNonArticle;
 use eLife\Patterns\ViewModel\ContentHeaderSimple;
 use eLife\Patterns\ViewModel\GridListing;
-use eLife\Patterns\ViewModel\LeadPara;
 use eLife\Patterns\ViewModel\LeadParas;
 use eLife\Patterns\ViewModel\Link;
 use eLife\Patterns\ViewModel\ListingTeasers;
@@ -79,9 +77,7 @@ final class PodcastController extends Controller
                     return null;
                 }
 
-                $teasers = $episodes->map(function (PodcastEpisode $episode) {
-                    return $this->get('elife.journal.view_model.converter')->convert($episode, Teaser::class, ['variant' => 'grid']);
-                })->toArray();
+                $teasers = $episodes->map($this->willConvertTo(Teaser::class, ['variant' => 'grid']))->toArray();
 
                 if ($paginator->getNextPage()) {
                     return GridListing::forTeasers(
@@ -113,9 +109,7 @@ final class PodcastController extends Controller
                 $paginator = $parts['paginator'];
 
                 return GridListing::forTeasers(
-                    $episodes->map(function (PodcastEpisode $episode) {
-                        return $this->get('elife.journal.view_model.converter')->convert($episode, Teaser::class, ['variant' => 'grid']);
-                    })->toArray(),
+                    $episodes->map($this->willConvertTo(Teaser::class, ['variant' => 'grid']))->toArray(),
                     null,
                     new Pager(
                         $paginator->getPreviousPage() ? new Link('Newer', $paginator->getPreviousPagePath()) : null,
@@ -134,49 +128,32 @@ final class PodcastController extends Controller
         $arguments['episode'] = $this->get('elife.api_sdk.podcast_episodes')->get($number);
 
         $arguments['contentHeader'] = $arguments['episode']
-            ->then(function (PodcastEpisode $episode) {
-                return $this->get('elife.journal.view_model.converter')->convert($episode, ContentHeaderNonArticle::class);
-            });
+            ->then($this->willConvertTo(ContentHeaderNonArticle::class));
 
         $arguments['audioPlayer'] = $arguments['episode']
-            ->then(function (PodcastEpisode $episode) {
-                return $this->get('elife.journal.view_model.converter')->convert($episode, AudioPlayer::class);
-            });
+            ->then($this->willConvertTo(AudioPlayer::class));
 
         $arguments['leadParas'] = $arguments['episode']
-            ->then(function (PodcastEpisode $episode) {
-                return new LeadParas([new LeadPara($episode->getImpactStatement())]);
-            })
-            ->otherwise(function () {
-                return null;
-            });
+            ->then(Callback::methodEmptyOr('getImpactStatement', $this->willConvertTo(LeadParas::class)));
 
         $arguments['chapters'] = $arguments['episode']
             ->then(function (PodcastEpisode $episode) {
-                return $episode->getChapters()->map(function (PodcastEpisodeChapter $chapter) {
-                    return $this->get('elife.journal.view_model.converter')->convert($chapter, MediaChapterListingItem::class);
-                });
+                return $episode->getChapters()->map($this->willConvertTo(MediaChapterListingItem::class));
             });
 
         $arguments['related'] = $arguments['episode']
             ->then(function (PodcastEpisode $episode) {
-                $articles = [];
-
-                foreach ($episode->getChapters() as $chapter) {
-                    $articles = array_merge($articles, $chapter->getContent()->slice(0, 1)->toArray());
-                }
-
-                if (empty($articles)) {
-                    return null;
-                }
-
+                return $episode->getChapters()
+                    ->map(Callback::method('getContent'))
+                    ->map(Callback::emptyOr(Callback::method('offsetGet', 0)))
+                    ->filter();
+            })
+            ->then(Callback::emptyOr(function (Sequence $articles) {
                 return ListingTeasers::basic(
-                    array_map(function (Model $model) {
-                        return $this->get('elife.journal.view_model.converter')->convert($model, Teaser::class, ['variant' => 'secondary']);
-                    }, $articles),
+                    $articles->map($this->willConvertTo(Teaser::class, ['variant' => 'secondary']))->toArray(),
                     'Related'
                 );
-            });
+            }));
 
         return new Response($this->get('templating')->render('::podcast-episode.html.twig', $arguments));
     }

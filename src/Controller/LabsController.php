@@ -4,8 +4,7 @@ namespace eLife\Journal\Controller;
 
 use eLife\ApiSdk\Collection\ArraySequence;
 use eLife\ApiSdk\Collection\Sequence;
-use eLife\ApiSdk\Model\Block;
-use eLife\ApiSdk\Model\LabsExperiment;
+use eLife\Journal\Helper\Callback;
 use eLife\Journal\Helper\Paginator;
 use eLife\Journal\Pagerfanta\SequenceAdapter;
 use eLife\Patterns\ViewModel\BackgroundImage;
@@ -86,9 +85,7 @@ developed further to become features on the eLife platform.'),
                     return null;
                 }
 
-                $teasers = $experiments->map(function (LabsExperiment $experiment) {
-                    return $this->get('elife.journal.view_model.converter')->convert($experiment, Teaser::class, ['variant' => 'grid']);
-                })->toArray();
+                $teasers = $experiments->map($this->willConvertTo(Teaser::class, ['variant' => 'grid']))->toArray();
 
                 if ($paginator->getNextPage()) {
                     return GridListing::forTeasers(
@@ -120,9 +117,7 @@ developed further to become features on the eLife platform.'),
                 $paginator = $parts['paginator'];
 
                 return GridListing::forTeasers(
-                    $experiments->map(function (LabsExperiment $experiment) {
-                        return $this->get('elife.journal.view_model.converter')->convert($experiment, Teaser::class, ['variant' => 'grid']);
-                    })->toArray(),
+                    $experiments->map($this->willConvertTo(Teaser::class, ['variant' => 'grid']))->toArray(),
                     null,
                     new Pager(
                         $paginator->getPreviousPage() ? new Link('Newer', $paginator->getPreviousPagePath()) : null,
@@ -141,24 +136,13 @@ developed further to become features on the eLife platform.'),
         $arguments['experiment'] = $this->get('elife.api_sdk.labs_experiments')->get($number);
 
         $arguments['contentHeader'] = $arguments['experiment']
-            ->then(function (LabsExperiment $experiment) {
-                return $this->get('elife.journal.view_model.converter')->convert($experiment, ContentHeaderNonArticle::class);
-            });
+            ->then($this->willConvertTo(ContentHeaderNonArticle::class));
 
         $arguments['leadParas'] = $arguments['experiment']
-            ->then(function (LabsExperiment $experiment) {
-                return new LeadParas([new LeadPara($experiment->getImpactStatement())]);
-            })
-            ->otherwise(function () {
-                return null;
-            });
+            ->then(Callback::methodEmptyOr('getImpactStatement', $this->willConvertTo(LeadParas::class)));
 
         $arguments['blocks'] = $arguments['experiment']
-            ->then(function (LabsExperiment $experiment) {
-                return $experiment->getContent()->map(function (Block $block) {
-                    return $this->get('elife.journal.view_model.converter')->convert($block);
-                });
-            });
+            ->then($this->willConvertContent());
 
         return new Response($this->get('templating')->render('::labs-experiment.html.twig', $arguments));
     }

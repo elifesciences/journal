@@ -4,13 +4,11 @@ namespace eLife\Journal\Controller;
 
 use eLife\ApiSdk\Collection\ArraySequence;
 use eLife\ApiSdk\Collection\Sequence;
-use eLife\ApiSdk\Model\Block;
-use eLife\ApiSdk\Model\BlogArticle;
+use eLife\Journal\Helper\Callback;
 use eLife\Journal\Helper\Paginator;
 use eLife\Journal\Pagerfanta\SequenceAdapter;
 use eLife\Patterns\ViewModel\ContentHeaderNonArticle;
 use eLife\Patterns\ViewModel\ContentHeaderSimple;
-use eLife\Patterns\ViewModel\LeadPara;
 use eLife\Patterns\ViewModel\LeadParas;
 use eLife\Patterns\ViewModel\Link;
 use eLife\Patterns\ViewModel\ListHeading;
@@ -77,9 +75,7 @@ final class InsideElifeController extends Controller
                     return null;
                 }
 
-                $teasers = $latest->map(function (BlogArticle $model) {
-                    return $this->get('elife.journal.view_model.converter')->convert($model, Teaser::class);
-                })->toArray();
+                $teasers = $latest->map($this->willConvertTo(Teaser::class))->toArray();
 
                 if ($paginator->getNextPage()) {
                     return ListingTeasers::withPagination(
@@ -111,9 +107,7 @@ final class InsideElifeController extends Controller
                 $paginator = $parts['paginator'];
 
                 return ListingTeasers::withPagination(
-                    $latest->map(function (BlogArticle $model) {
-                        return $this->get('elife.journal.view_model.converter')->convert($model, Teaser::class);
-                    })->toArray(),
+                    $latest->map($this->willConvertTo(Teaser::class))->toArray(),
                     new Pager(
                         $paginator->getPreviousPage() ? new Link('Newer articles', $paginator->getPreviousPagePath()) : null,
                         $paginator->getNextPage() ? new Link('Older articles', $paginator->getNextPagePath()) : null
@@ -131,24 +125,13 @@ final class InsideElifeController extends Controller
         $arguments['article'] = $this->get('elife.api_sdk.blog_articles')->get($id);
 
         $arguments['contentHeader'] = $arguments['article']
-            ->then(function (BlogArticle $article) {
-                return $this->get('elife.journal.view_model.converter')->convert($article, ContentHeaderNonArticle::class);
-            });
+            ->then($this->willConvertTo(ContentHeaderNonArticle::class));
 
         $arguments['leadParas'] = $arguments['article']
-            ->then(function (BlogArticle $article) {
-                return new LeadParas([new LeadPara($article->getImpactStatement())]);
-            })
-            ->otherwise(function () {
-                return null;
-            });
+            ->then(Callback::methodEmptyOr('getImpactStatement', $this->willConvertTo(LeadParas::class)));
 
         $arguments['blocks'] = $arguments['article']
-            ->then(function (BlogArticle $article) {
-                return $article->getContent()->map(function (Block $block) {
-                    return $this->get('elife.journal.view_model.converter')->convert($block);
-                });
-            });
+            ->then($this->willConvertContent());
 
         return new Response($this->get('templating')->render('::inside-elife-article.html.twig', $arguments));
     }

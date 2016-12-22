@@ -33,7 +33,7 @@ final class PodcastEpisodeTeaserConverter implements ViewModelConverter
             $object->getImpactStatement(),
             'Episode '.$object->getNumber(),
             $this->createContextLabel($object),
-            $this->bigTeaserImage($object->getThumbnail()),
+            $this->bigTeaserImage($object),
             TeaserFooter::forNonArticle(
                 Meta::withText(
                     'Podcast',

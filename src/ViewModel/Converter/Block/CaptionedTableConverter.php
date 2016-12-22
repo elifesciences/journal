@@ -29,11 +29,7 @@ final class CaptionedTableConverter implements ViewModelConverter
     {
         $asset = new ViewModel\Table(...$object->getTables());
 
-        $caption = $object->getCaption()->map(function (Block $block) {
-            return $this->viewModelConverter->convert($block);
-        });
-
-        $asset = $this->createCaptionedAsset($asset, $object->getTitle(), $caption, $object->getDoi());
+        $asset = $this->createCaptionedAsset($asset, $object);
 
         if (empty($object->getLabel())) {
             return $asset;
@@ -58,5 +54,10 @@ final class CaptionedTableConverter implements ViewModelConverter
     protected function getPatternRenderer() : PatternRenderer
     {
         return $this->patternRenderer;
+    }
+
+    protected function getViewModelConverter() : ViewModelConverter
+    {
+        return $this->viewModelConverter;
     }
 }

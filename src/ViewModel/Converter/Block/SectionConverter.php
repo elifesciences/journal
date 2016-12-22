@@ -3,12 +3,15 @@
 namespace eLife\Journal\ViewModel\Converter\Block;
 
 use eLife\ApiSdk\Model\Block;
+use eLife\Journal\Helper\CanConvertContent;
 use eLife\Journal\ViewModel\Converter\ViewModelConverter;
 use eLife\Patterns\PatternRenderer;
 use eLife\Patterns\ViewModel;
 
 final class SectionConverter implements ViewModelConverter
 {
+    use CanConvertContent;
+
     private $viewModelConverter;
     private $patternRenderer;
 
@@ -23,14 +26,12 @@ final class SectionConverter implements ViewModelConverter
      */
     public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
-        $context['level'] = ($context['level'] ?? 1) + 1;
+        $level = ($context['level'] ?? 1) + 1;
 
         return ViewModel\ArticleSection::basic(
             $object->getTitle(),
-            $context['level'],
-            implode('', $object->getContent()->map(function (Block $block) use ($context) {
-                return $this->patternRenderer->render($this->viewModelConverter->convert($block, null, $context));
-            })->toArray()),
+            $level,
+            $this->patternRenderer->render(...$this->convertContent($object, $level)),
             $object->getId(),
             null,
             $context['isFirst'] ?? false
@@ -40,5 +41,10 @@ final class SectionConverter implements ViewModelConverter
     public function supports($object, string $viewModel = null, array $context = []) : bool
     {
         return $object instanceof Block\Section;
+    }
+
+    protected function getViewModelConverter(): ViewModelConverter
+    {
+        return $this->viewModelConverter;
     }
 }

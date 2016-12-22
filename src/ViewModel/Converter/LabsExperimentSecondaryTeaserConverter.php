@@ -27,7 +27,7 @@ final class LabsExperimentSecondaryTeaserConverter implements ViewModelConverter
             $this->urlGenerator->generate('labs-experiment', ['number' => $object->getNumber()]),
             null,
             null,
-            $this->smallTeaserImage($object->getThumbnail()),
+            $this->smallTeaserImage($object),
             ViewModel\TeaserFooter::forNonArticle(
                 ViewModel\Meta::withText(
                     'Experiment: '.str_pad($object->getNumber(), 3, '0', STR_PAD_LEFT),

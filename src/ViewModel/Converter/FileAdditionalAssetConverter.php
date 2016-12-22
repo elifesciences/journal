@@ -4,6 +4,7 @@ namespace eLife\Journal\ViewModel\Converter;
 
 use eLife\ApiSdk\Model\Block;
 use eLife\ApiSdk\Model\File;
+use eLife\Journal\Helper\HasPatternRenderer;
 use eLife\Patterns\PatternRenderer;
 use eLife\Patterns\ViewModel;
 
