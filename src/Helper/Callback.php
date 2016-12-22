@@ -5,7 +5,6 @@ namespace eLife\Journal\Helper;
 use Countable;
 use Exception;
 use InvalidArgumentException;
-use Traversable;
 
 final class Callback
 {
