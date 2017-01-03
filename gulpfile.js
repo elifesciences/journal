@@ -9,11 +9,11 @@ const responsive = require('gulp-responsive');
 gulp.task('default', ['images']);
 
 gulp.task('images:clean', () => {
-    del(['./app/Resources/images/generated/**/*']);
+    return del(['./app/Resources/images/generated/**/*']);
 });
 
 gulp.task('images', ['images:clean'], () => {
-    gulp.src('./app/Resources/images/source/**/*.jpg')
+    return gulp.src('./app/Resources/images/source/**/*.jpg')
         .pipe(responsive({
             'banners/**/*': [
                 {
