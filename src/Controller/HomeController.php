@@ -9,6 +9,7 @@ use eLife\Journal\Helper\Callback;
 use eLife\Journal\Helper\Paginator;
 use eLife\Journal\Pagerfanta\SequenceAdapter;
 use eLife\Patterns\ViewModel\AllSubjectsList;
+use eLife\Patterns\ViewModel\AllSubjectsListLink;
 use eLife\Patterns\ViewModel\Carousel;
 use eLife\Patterns\ViewModel\ContentHeaderSimple;
 use eLife\Patterns\ViewModel\LeadPara;
@@ -79,7 +80,9 @@ final class HomeController extends Controller
                 return null;
             });
 
-        $arguments['leadParas'] = new LeadParas([new LeadPara('eLife is an open-access journal that publishes research in the life and biomedical sciences')]);
+        $arguments['leadParas'] = new LeadParas([new LeadPara('eLife is an open-access journal that publishes research in the life and biomedical sciences', 'strapline')]);
+
+        $arguments['subjectsLink'] = new AllSubjectsListLink('subjects');
 
         $arguments['subjects'] = $this->get('elife.api_sdk.subjects')
             ->reverse()
@@ -88,7 +91,7 @@ final class HomeController extends Controller
                 return new Link($subject->getName(), $this->get('router')->generate('subject', ['id' => $subject->getId()]));
             })
             ->then(function (Sequence $links) {
-                return new AllSubjectsList(...$links);
+                return new AllSubjectsList('subjects', $links->toArray(), 'strapline');
             })
             ->otherwise(function () {
                 return null;
