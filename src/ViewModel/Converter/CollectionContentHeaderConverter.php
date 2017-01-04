@@ -29,7 +29,7 @@ final class CollectionContentHeaderConverter implements ViewModelConverter
             null,
             Meta::withLink(
                 new Link('Collection', $this->urlGenerator->generate('collections')),
-                new Date($object->getPublishedDate())
+                Date::simple($object->getPublishedDate())
             ),
             null,
             new ViewModel\BackgroundImage(

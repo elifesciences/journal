@@ -17,7 +17,7 @@ final class InterviewContentHeaderConverter implements ViewModelConverter
             false,
             $object->getSubTitle(),
             null,
-            ViewModel\Meta::withText('Interview', new ViewModel\Date($object->getPublishedDate()))
+            ViewModel\Meta::withText('Interview', ViewModel\Date::simple($object->getPublishedDate()))
         );
     }
 

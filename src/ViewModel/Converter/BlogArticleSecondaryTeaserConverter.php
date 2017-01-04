@@ -31,7 +31,7 @@ final class BlogArticleSecondaryTeaserConverter implements ViewModelConverter
             ViewModel\TeaserFooter::forNonArticle(
                 ViewModel\Meta::withLink(
                     new ViewModel\Link('Inside eLife', $this->urlGenerator->generate('inside-elife')),
-                    new ViewModel\Date($object->getPublishedDate())
+                    ViewModel\Date::simple($object->getPublishedDate())
                 )
             )
         );

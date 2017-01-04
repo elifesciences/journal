@@ -44,7 +44,7 @@ final class CollectionTeaserConverter implements ViewModelConverter
             TeaserFooter::forNonArticle(
                 Meta::withLink(
                     new Link('Collection', $this->urlGenerator->generate('collections')),
-                    new Date($object->getPublishedDate())
+                    Date::simple($object->getPublishedDate())
                 )
             )
         );

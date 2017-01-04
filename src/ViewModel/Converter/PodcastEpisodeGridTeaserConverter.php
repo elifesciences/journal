@@ -31,7 +31,7 @@ final class PodcastEpisodeGridTeaserConverter implements ViewModelConverter
             ViewModel\TeaserFooter::forNonArticle(
                 ViewModel\Meta::withLink(
                     new ViewModel\Link('Podcast', $this->urlGenerator->generate('podcast')),
-                    new ViewModel\Date($object->getPublishedDate())
+                    ViewModel\Date::simple($object->getPublishedDate())
                 )
             )
         );

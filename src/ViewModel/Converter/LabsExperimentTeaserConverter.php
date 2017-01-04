@@ -33,7 +33,7 @@ final class LabsExperimentTeaserConverter implements ViewModelConverter
             ViewModel\TeaserFooter::forNonArticle(
                 ViewModel\Meta::withText(
                     'Experiment: '.str_pad($object->getNumber(), 3, '0', STR_PAD_LEFT),
-                    new ViewModel\Date($object->getPublishedDate())
+                    ViewModel\Date::simple($object->getPublishedDate())
                 )
             )
         );

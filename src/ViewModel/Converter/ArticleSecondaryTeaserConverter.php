@@ -43,7 +43,7 @@ final class ArticleSecondaryTeaserConverter implements ViewModelConverter
             TeaserFooter::forNonArticle(
                 Meta::withText(
                     ucfirst(str_replace('-', ' ', $object->getType())),
-                    $object->getStatusDate() ? new Date($object->getStatusDate()) : null
+                    $object->getStatusDate() ? Date::simple($object->getStatusDate(), $object->getStatusDate() != $object->getPublishedDate()) : null
                 )
             )
         );

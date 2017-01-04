@@ -30,7 +30,7 @@ final class MediumArticleSecondaryTeaserConverter implements ViewModelConverter
             null,
             null,
             $image,
-            TeaserFooter::forNonArticle(Meta::withDate(new Date($object->getPublishedDate())))
+            TeaserFooter::forNonArticle(Meta::withDate(Date::simple($object->getPublishedDate())))
         );
     }
 
