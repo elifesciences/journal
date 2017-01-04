@@ -23,6 +23,111 @@ final class HomeControllerTest extends PageTestCase
 
     /**
      * @test
+     */
+    public function it_displays_the_correct_dates_in_the_latest_research_list()
+    {
+        $client = static::createClient();
+
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/search?for=&page=1&per-page=6&sort=date&order=desc&type[]=research-advance&type[]=research-article&type[]=research-exchange&type[]=short-report&type[]=tools-resources&type[]=replication-study',
+                ['Accept' => 'application/vnd.elife.search+json; version=1']
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.search+json; version=1'],
+                json_encode([
+                    'total' => 2,
+                    'items' => [
+                        [
+                            'status' => 'vor',
+                            'stage' => 'published',
+                            'id' => '2',
+                            'version' => 2,
+                            'type' => 'research-article',
+                            'doi' => '10.7554/eLife.2',
+                            'title' => 'Article 2 title',
+                            'published' => '2012-01-01T00:00:00Z',
+                            'versionDate' => '2013-01-01T00:00:00Z',
+                            'statusDate' => '2013-01-01T00:00:00Z',
+                            'volume' => 1,
+                            'elocationId' => 'e2',
+                            'copyright' => [
+                                'license' => 'CC-BY-4.0',
+                                'holder' => 'Author et al',
+                                'statement' => 'Creative Commons Attribution License.',
+                            ],
+                            'authorLine' => 'Foo Bar',
+                        ],
+                        [
+                            'status' => 'poa',
+                            'stage' => 'published',
+                            'id' => '1',
+                            'version' => 1,
+                            'type' => 'research-article',
+                            'doi' => '10.7554/eLife.1',
+                            'title' => 'Article 1 title',
+                            'published' => '2012-01-01T00:00:00Z',
+                            'versionDate' => '2012-01-01T00:00:00Z',
+                            'statusDate' => '2012-01-01T00:00:00Z',
+                            'volume' => 1,
+                            'elocationId' => 'e1',
+                            'copyright' => [
+                                'license' => 'CC-BY-4.0',
+                                'holder' => 'Author et al',
+                                'statement' => 'Creative Commons Attribution License.',
+                            ],
+                            'authorLine' => 'Foo Bar',
+                        ],
+                    ],
+                    'subjects' => [
+                        [
+                            'id' => 'subject',
+                            'name' => 'Some subject',
+                            'results' => 0,
+                        ],
+                    ],
+                    'types' => [
+                        'correction' => 0,
+                        'editorial' => 0,
+                        'feature' => 0,
+                        'insight' => 0,
+                        'research-advance' => 0,
+                        'research-article' => 0,
+                        'research-exchange' => 0,
+                        'retraction' => 0,
+                        'registered-report' => 0,
+                        'replication-study' => 0,
+                        'short-report' => 0,
+                        'tools-resources' => 0,
+                        'blog-article' => 0,
+                        'collection' => 0,
+                        'event' => 0,
+                        'interview' => 0,
+                        'labs-experiment' => 0,
+                        'podcast-episode' => 0,
+                    ],
+                ])
+            )
+        );
+
+        $crawler = $client->request('GET', '/');
+
+        $this->assertSame(200, $client->getResponse()->getStatusCode());
+
+        $teasers = $crawler->filter('.list-heading:contains("Latest research") + ol > li');
+        $this->assertCount(2, $teasers);
+
+        $this->assertSame('Article 2 title', trim($teasers->eq(0)->filter('.teaser__header_text')->text()));
+        $this->assertSame('Research article Updated Jan 1, 2013', trim(preg_replace('/\s+/S', ' ', $teasers->eq(0)->filter('.teaser__footer .meta')->text())));
+
+        $this->assertSame('Article 1 title', trim($teasers->eq(1)->filter('.teaser__header_text')->text()));
+        $this->assertSame('Research article Jan 1, 2012', trim(preg_replace('/\s+/S', ' ', $teasers->eq(1)->filter('.teaser__footer .meta')->text())));
+    }
+
+    /**
+     * @test
      * @dataProvider invalidPageProvider
      */
     public function it_displays_a_404_when_not_on_a_valid_page($page, callable $callable = null)

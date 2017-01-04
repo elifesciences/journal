@@ -22,7 +22,7 @@ final class PodcastEpisodeContentHeaderConverter implements ViewModelConverter
     {
         return ViewModel\ContentHeaderNonArticle::podcast($object->getTitle(), false, 'Episode '.$object->getNumber(), null,
             ViewModel\Meta::withLink(new ViewModel\Link('Podcast', $this->urlGenerator->generate('podcast')),
-                new ViewModel\Date($object->getPublishedDate())),
+                ViewModel\Date::simple($object->getPublishedDate())),
             new ViewModel\BackgroundImage(
                 $object->getBanner()->getSize('2:1')->getImage(900),
                 $object->getBanner()->getSize('2:1')->getImage(1800)

@@ -36,7 +36,7 @@ final class PodcastEpisodeSecondaryTeaserConverter implements ViewModelConverter
             TeaserFooter::forNonArticle(
                 Meta::withText(
                     'Podcast',
-                    new Date($object->getPublishedDate())
+                    Date::simple($object->getPublishedDate())
                 )
             )
         );

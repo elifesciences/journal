@@ -36,7 +36,7 @@ final class CoverArticleCarouselItemConverter implements ViewModelConverter
             'Read article',
             ViewModel\Meta::withText(
                 ucfirst(str_replace('-', ' ', $article->getType())),
-                $article->getPublishedDate() ? new ViewModel\Date($article->getPublishedDate()) : null
+                $article->getStatusDate() ? ViewModel\Date::simple($article->getStatusDate(), $article->getStatusDate() != $article->getPublishedDate()) : null
             ),
             new ViewModel\BackgroundImage(
                 $object->getBanner()->getSize('2:1')->getImage(900),

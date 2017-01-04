@@ -33,7 +33,7 @@ final class InterviewSecondaryTeaserConverter implements ViewModelConverter
             TeaserFooter::forNonArticle(
                 Meta::withText(
                     'Interview',
-                    new Date($object->getPublishedDate())
+                    Date::simple($object->getPublishedDate())
                 )
             )
         );

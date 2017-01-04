@@ -33,7 +33,7 @@ final class CoverCollectionCarouselItemConverter implements ViewModelConverter
             'Read collection',
             ViewModel\Meta::withLink(
                 new ViewModel\Link('Collection', $this->urlGenerator->generate('collections')),
-                new ViewModel\Date($collection->getPublishedDate())
+                ViewModel\Date::simple($collection->getPublishedDate())
             ),
             new ViewModel\BackgroundImage(
                 $object->getBanner()->getSize('2:1')->getImage(900),

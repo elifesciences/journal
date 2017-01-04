@@ -27,7 +27,7 @@ final class BlogArticleContentHeaderConverter implements ViewModelConverter
         return ContentHeaderNonArticle::basic($object->getTitle(), false, null, null,
             Meta::withLink(
                 new Link('Inside eLife', $this->urlGenerator->generate('inside-elife')),
-                new Date($object->getPublishedDate())
+                Date::simple($object->getPublishedDate())
             )
         );
     }
