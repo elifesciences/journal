@@ -18,7 +18,7 @@
 
         <div class="wrapper u-pad-top">
 
-            {{ render_pattern(subjects) }}
+            {{ render_pattern(subjectsLink) }}
 
         </div>
 
@@ -65,5 +65,15 @@
         {% endif %}
 
     </div>
+
+    {% if subjects %}
+
+        <div class="wrapper">
+
+            {{ render_pattern(subjects) }}
+
+        </div>
+
+    {% endif %}
 
 {% endblock %}
