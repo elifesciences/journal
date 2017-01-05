@@ -18,6 +18,6 @@ final class PodcastEpisodeGridTeaserConverterTest extends ModelConverterTestCase
      */
     public function setUpConverter()
     {
-        $this->converter = new PodcastEpisodeGridTeaserConverter($this->stubUrlGenerator());
+        $this->converter = new PodcastEpisodeGridTeaserConverter($this->stubUrlGenerator(), $this->stubTranslator());
     }
 }

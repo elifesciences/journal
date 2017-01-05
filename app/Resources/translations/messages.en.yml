@@ -1,0 +1,20 @@
+type:
+    correction: Correction
+    editorial: Editorial
+    feature: Feature article
+    insight: Insight
+    research-advance: Research advance
+    research-article: Research article
+    research-exchange: Research exchange
+    retraction: Retraction
+    registered-report: Registered report
+    replication-study: Replication study
+    short-report: Short report
+    tools-resources: Tools and resources
+    blog-article: Inside eLife
+    collection: Collection
+    event: Event
+    interview: Interview
+    labs-experiment: 'Experiment: %number%'
+    medium-article: Medium article
+    podcast-episode: Podcast

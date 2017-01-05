@@ -6,6 +6,7 @@ use eLife\ApiSdk\Model\ArticleVersion;
 use eLife\ApiSdk\Model\ArticleVoR;
 use eLife\Patterns\ViewModel;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Translation\TranslatorInterface;
 
 final class ArticleTeaserConverter implements ViewModelConverter
 {
@@ -13,10 +14,12 @@ final class ArticleTeaserConverter implements ViewModelConverter
     use CreatesTeaserImage;
 
     private $urlGenerator;
+    private $translator;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator)
+    public function __construct(UrlGeneratorInterface $urlGenerator, TranslatorInterface $translator)
     {
         $this->urlGenerator = $urlGenerator;
+        $this->translator = $translator;
     }
 
     /**
@@ -39,7 +42,7 @@ final class ArticleTeaserConverter implements ViewModelConverter
             $image,
             ViewModel\TeaserFooter::forArticle(
                 ViewModel\Meta::withText(
-                    ucfirst(str_replace('-', ' ', $object->getType())),
+                    $this->translator->trans('type.'.$object->getType()),
                     $object->getStatusDate() ? ViewModel\Date::simple($object->getStatusDate(), $object->getStatusDate() != $object->getPublishedDate()) : null
                 ),
                 $object instanceof ArticleVoR

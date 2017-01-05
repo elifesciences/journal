@@ -17,6 +17,6 @@ final class LabsExperimentTeaserConverterTest extends ModelConverterTestCase
      */
     public function setUpConverter()
     {
-        $this->converter = new LabsExperimentTeaserConverter($this->stubUrlGenerator());
+        $this->converter = new LabsExperimentTeaserConverter($this->stubUrlGenerator(), $this->stubTranslator());
     }
 }

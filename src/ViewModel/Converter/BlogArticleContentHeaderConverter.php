@@ -9,14 +9,17 @@ use eLife\Patterns\ViewModel\Date;
 use eLife\Patterns\ViewModel\Link;
 use eLife\Patterns\ViewModel\Meta;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Translation\TranslatorInterface;
 
 final class BlogArticleContentHeaderConverter implements ViewModelConverter
 {
     private $urlGenerator;
+    private $translator;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator)
+    public function __construct(UrlGeneratorInterface $urlGenerator, TranslatorInterface $translator)
     {
         $this->urlGenerator = $urlGenerator;
+        $this->translator = $translator;
     }
 
     /**
@@ -26,7 +29,10 @@ final class BlogArticleContentHeaderConverter implements ViewModelConverter
     {
         return ContentHeaderNonArticle::basic($object->getTitle(), false, null, null,
             Meta::withLink(
-                new Link('Inside eLife', $this->urlGenerator->generate('inside-elife')),
+                new Link(
+                    $this->translator->trans('type.blog-article'),
+                    $this->urlGenerator->generate('inside-elife')
+                ),
                 Date::simple($object->getPublishedDate())
             )
         );

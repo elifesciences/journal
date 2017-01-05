@@ -6,15 +6,23 @@ use eLife\ApiSdk\Model\ArticleVersion;
 use eLife\ApiSdk\Model\ArticleVoR;
 use eLife\ApiSdk\Model\Subject;
 use eLife\Patterns\ViewModel;
+use Symfony\Component\Translation\TranslatorInterface;
 
 final class ArticleMetaConverter implements ViewModelConverter
 {
+    private $translator;
+
+    public function __construct(TranslatorInterface $translator)
+    {
+        $this->translator = $translator;
+    }
+
     /**
      * @param ArticleVersion $object
      */
     public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
-        $tags = [new ViewModel\Link(ucfirst(str_replace('-', ' ', $object->getType())))];
+        $tags = [new ViewModel\Link($this->translator->trans('type.'.$object->getType()))];
 
         $tags = array_merge($tags, $object->getSubjects()->map(function (Subject $subject) {
             return new ViewModel\Link($subject->getName());

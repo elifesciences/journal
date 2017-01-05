@@ -18,6 +18,6 @@ final class BlogArticleSecondaryTeaserConverterTest extends ModelConverterTestCa
      */
     public function setUpConverter()
     {
-        $this->converter = new BlogArticleSecondaryTeaserConverter($this->stubUrlGenerator());
+        $this->converter = new BlogArticleSecondaryTeaserConverter($this->stubUrlGenerator(), $this->stubTranslator());
     }
 }

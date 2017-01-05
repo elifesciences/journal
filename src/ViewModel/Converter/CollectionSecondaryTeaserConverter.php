@@ -10,6 +10,7 @@ use eLife\Patterns\ViewModel\Meta;
 use eLife\Patterns\ViewModel\Teaser;
 use eLife\Patterns\ViewModel\TeaserFooter;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Translation\TranslatorInterface;
 
 final class CollectionSecondaryTeaserConverter implements ViewModelConverter
 {
@@ -17,10 +18,12 @@ final class CollectionSecondaryTeaserConverter implements ViewModelConverter
     use CreatesTeaserImage;
 
     private $urlGenerator;
+    private $translator;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator)
+    public function __construct(UrlGeneratorInterface $urlGenerator, TranslatorInterface $translator)
     {
         $this->urlGenerator = $urlGenerator;
+        $this->translator = $translator;
     }
 
     /**
@@ -42,7 +45,10 @@ final class CollectionSecondaryTeaserConverter implements ViewModelConverter
             $this->smallTeaserImage($object),
             TeaserFooter::forNonArticle(
                 Meta::withLink(
-                    new Link('Collection', $this->urlGenerator->generate('collections')),
+                    new Link(
+                        $this->translator->trans('type.collection'),
+                        $this->urlGenerator->generate('collections')
+                    ),
                     Date::simple($object->getPublishedDate())
                 )
             )

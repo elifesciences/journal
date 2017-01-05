@@ -146,12 +146,15 @@ services:
         public: false
         arguments:
           - '@router'
+          - '@translator'
         tags:
           - name: view_model.converter
 
     elife.journal.view_model.converter.article.meta:
         class: eLife\Journal\ViewModel\Converter\ArticleMetaConverter
         public: false
+        arguments:
+          - '@translator'
         tags:
           - name: view_model.converter
 
@@ -160,6 +163,7 @@ services:
         public: false
         arguments:
           - '@router'
+          - '@translator'
         tags:
           - name: view_model.converter
 
@@ -168,6 +172,7 @@ services:
         public: false
         arguments:
           - '@router'
+          - '@translator'
         tags:
           - name: view_model.converter
 
@@ -299,6 +304,7 @@ services:
         public: false
         arguments:
           - '@router'
+          - '@translator'
         tags:
           - name: view_model.converter
 
@@ -307,6 +313,7 @@ services:
         public: false
         arguments:
           - '@router'
+          - '@translator'
         tags:
           - name: view_model.converter
 
@@ -315,6 +322,7 @@ services:
         public: false
         arguments:
           - '@router'
+          - '@translator'
         tags:
           - name: view_model.converter
 
@@ -323,6 +331,7 @@ services:
         public: false
         arguments:
           - '@router'
+          - '@translator'
         tags:
           - name: view_model.converter
 
@@ -331,6 +340,7 @@ services:
         public: false
         arguments:
           - '@router'
+          - '@translator'
         tags:
           - name: view_model.converter
 
@@ -339,6 +349,7 @@ services:
         public: false
         arguments:
           - '@router'
+          - '@translator'
         tags:
           - name: view_model.converter
 
@@ -347,6 +358,7 @@ services:
         public: false
         arguments:
           - '@router'
+          - '@translator'
         tags:
           - name: view_model.converter
 
@@ -355,6 +367,7 @@ services:
         public: false
         arguments:
           - '@router'
+          - '@translator'
         tags:
           - name: view_model.converter
 
@@ -404,6 +417,8 @@ services:
     elife.journal.view_model.converter.interview.header:
         class: eLife\Journal\ViewModel\Converter\InterviewContentHeaderConverter
         public: false
+        arguments:
+          - '@translator'
         tags:
           - name: view_model.converter
 
@@ -412,6 +427,7 @@ services:
         public: false
         arguments:
           - '@router'
+          - '@translator'
         tags:
           - name: view_model.converter
 
@@ -420,12 +436,15 @@ services:
         public: false
         arguments:
           - '@router'
+          - '@translator'
         tags:
           - name: view_model.converter
 
     elife.journal.view_model.converter.labs_experiment.header:
         class: eLife\Journal\ViewModel\Converter\LabsExperimentContentHeaderConverter
         public: false
+        arguments:
+          - '@translator'
         tags:
           - name: view_model.converter
 
@@ -434,6 +453,7 @@ services:
         public: false
         arguments:
           - '@router'
+          - '@translator'
         tags:
           - name: view_model.converter
 
@@ -442,6 +462,7 @@ services:
         public: false
         arguments:
           - '@router'
+          - '@translator'
         tags:
           - name: view_model.converter
 
@@ -450,6 +471,7 @@ services:
         public: false
         arguments:
           - '@router'
+          - '@translator'
         tags:
           - name: view_model.converter
 
@@ -472,6 +494,7 @@ services:
         public: false
         arguments:
           - '@router'
+          - '@translator'
         tags:
           - name: view_model.converter
 
@@ -486,6 +509,7 @@ services:
         public: false
         arguments:
           - '@router'
+          - '@translator'
         tags:
           - name: view_model.converter
 
@@ -494,6 +518,7 @@ services:
         public: false
         arguments:
           - '@router'
+          - '@translator'
         tags:
           - name: view_model.converter
 
@@ -502,6 +527,7 @@ services:
         public: false
         arguments:
           - '@router'
+          - '@translator'
         tags:
           - name: view_model.converter
 

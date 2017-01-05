@@ -9,14 +9,17 @@ use eLife\ApiSdk\Model\AuthorEntry;
 use eLife\ApiSdk\Model\Subject;
 use eLife\Patterns\ViewModel;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Translation\TranslatorInterface;
 
 final class ArticleContentHeaderConverter implements ViewModelConverter
 {
     private $urlGenerator;
+    private $translator;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator)
+    public function __construct(UrlGeneratorInterface $urlGenerator, TranslatorInterface $translator)
     {
         $this->urlGenerator = $urlGenerator;
+        $this->translator = $translator;
     }
 
     /**
@@ -63,7 +66,7 @@ final class ArticleContentHeaderConverter implements ViewModelConverter
                     $object->getFullTitle(),
                     $authors,
                     ViewModel\Meta::withText(
-                        ucfirst(str_replace('-', ' ', $object->getType())),
+                        $this->translator->trans('type.'.$object->getType()),
                         $object->getPublishedDate() ? ViewModel\Date::simple($object->getPublishedDate()) : null
                     ),
                     new ViewModel\SubjectList(...$subjects),
@@ -88,7 +91,7 @@ final class ArticleContentHeaderConverter implements ViewModelConverter
             '#downloads',
             new ViewModel\SubjectList(...$subjects),
             ViewModel\Meta::withText(
-                ucfirst(str_replace('-', ' ', $object->getType())),
+                $this->translator->trans('type.'.$object->getType()),
                 ViewModel\Date::simple($object->getPublishedDate())
             ),
             $institutions,

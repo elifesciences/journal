@@ -7,14 +7,17 @@ use eLife\ApiSdk\Model\Cover;
 use eLife\ApiSdk\Model\Subject;
 use eLife\Patterns\ViewModel;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Translation\TranslatorInterface;
 
 final class CoverCollectionCarouselItemConverter implements ViewModelConverter
 {
     private $urlGenerator;
+    private $translator;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator)
+    public function __construct(UrlGeneratorInterface $urlGenerator, TranslatorInterface $translator)
     {
         $this->urlGenerator = $urlGenerator;
+        $this->translator = $translator;
     }
 
     /**
@@ -32,7 +35,10 @@ final class CoverCollectionCarouselItemConverter implements ViewModelConverter
             new ViewModel\Link($object->getTitle(), $this->urlGenerator->generate('collection', ['id' => $collection->getId()])),
             'Read collection',
             ViewModel\Meta::withLink(
-                new ViewModel\Link('Collection', $this->urlGenerator->generate('collections')),
+                new ViewModel\Link(
+                    $this->translator->trans('type.collection'),
+                    $this->urlGenerator->generate('collections')
+                ),
                 ViewModel\Date::simple($collection->getPublishedDate())
             ),
             new ViewModel\BackgroundImage(

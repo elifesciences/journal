@@ -25,6 +25,8 @@ framework:
         engines:
           - mustache
           - twig
+    translator:
+        fallbacks: [en]
 
 monolog:
     channels:

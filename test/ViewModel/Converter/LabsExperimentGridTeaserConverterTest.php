@@ -18,6 +18,6 @@ final class LabsExperimentGridTeaserConverterTest extends ModelConverterTestCase
      */
     public function setUpConverter()
     {
-        $this->converter = new LabsExperimentGridTeaserConverter($this->stubUrlGenerator());
+        $this->converter = new LabsExperimentGridTeaserConverter($this->stubUrlGenerator(), $this->stubTranslator());
     }
 }

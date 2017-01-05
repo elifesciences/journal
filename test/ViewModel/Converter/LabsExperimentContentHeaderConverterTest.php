@@ -17,6 +17,6 @@ final class LabsExperimentContentHeaderConverterTest extends ModelConverterTestC
      */
     public function setUpConverter()
     {
-        $this->converter = new LabsExperimentContentHeaderConverter();
+        $this->converter = new LabsExperimentContentHeaderConverter($this->stubTranslator());
     }
 }

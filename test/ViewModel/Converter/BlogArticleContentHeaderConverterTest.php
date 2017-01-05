@@ -17,6 +17,6 @@ final class BlogArticleContentHeaderConverterTest extends ModelConverterTestCase
      */
     public function setUpConverter()
     {
-        $this->converter = new BlogArticleContentHeaderConverter($this->stubUrlGenerator());
+        $this->converter = new BlogArticleContentHeaderConverter($this->stubUrlGenerator(), $this->stubTranslator());
     }
 }

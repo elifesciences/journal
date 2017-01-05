@@ -5,16 +5,19 @@ namespace eLife\Journal\ViewModel\Converter;
 use eLife\ApiSdk\Model\BlogArticle;
 use eLife\Patterns\ViewModel;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Translation\TranslatorInterface;
 
 final class BlogArticleSecondaryTeaserConverter implements ViewModelConverter
 {
     use CreatesContextLabel;
 
     private $urlGenerator;
+    private $translator;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator)
+    public function __construct(UrlGeneratorInterface $urlGenerator, TranslatorInterface $translator)
     {
         $this->urlGenerator = $urlGenerator;
+        $this->translator = $translator;
     }
 
     /**
@@ -30,7 +33,10 @@ final class BlogArticleSecondaryTeaserConverter implements ViewModelConverter
             null,
             ViewModel\TeaserFooter::forNonArticle(
                 ViewModel\Meta::withLink(
-                    new ViewModel\Link('Inside eLife', $this->urlGenerator->generate('inside-elife')),
+                    new ViewModel\Link(
+                        $this->translator->trans('type.blog-article'),
+                        $this->urlGenerator->generate('inside-elife')
+                    ),
                     ViewModel\Date::simple($object->getPublishedDate())
                 )
             )
