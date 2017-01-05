@@ -4,6 +4,7 @@ namespace eLife\Journal\ViewModel\Converter;
 
 use eLife\ApiSdk\Model\ArticleVersion;
 use eLife\ApiSdk\Model\ArticleVoR;
+use eLife\Journal\Helper\ArticleType;
 use eLife\Patterns\ViewModel;
 use eLife\Patterns\ViewModel\Date;
 use eLife\Patterns\ViewModel\Meta;
@@ -42,7 +43,7 @@ final class ArticleSecondaryTeaserConverter implements ViewModelConverter
             $image,
             TeaserFooter::forNonArticle(
                 Meta::withText(
-                    ucfirst(str_replace('-', ' ', $object->getType())),
+                    ArticleType::singular($object->getType()),
                     $object->getStatusDate() ? Date::simple($object->getStatusDate(), $object->getStatusDate() != $object->getPublishedDate()) : null
                 )
             )

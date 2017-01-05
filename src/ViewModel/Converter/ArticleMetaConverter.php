@@ -5,6 +5,7 @@ namespace eLife\Journal\ViewModel\Converter;
 use eLife\ApiSdk\Model\ArticleVersion;
 use eLife\ApiSdk\Model\ArticleVoR;
 use eLife\ApiSdk\Model\Subject;
+use eLife\Journal\Helper\ArticleType;
 use eLife\Patterns\ViewModel;
 
 final class ArticleMetaConverter implements ViewModelConverter
@@ -14,7 +15,7 @@ final class ArticleMetaConverter implements ViewModelConverter
      */
     public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
-        $tags = [new ViewModel\Link(ucfirst(str_replace('-', ' ', $object->getType())))];
+        $tags = [new ViewModel\Link(ArticleType::singular($object->getType()))];
 
         $tags = array_merge($tags, $object->getSubjects()->map(function (Subject $subject) {
             return new ViewModel\Link($subject->getName());

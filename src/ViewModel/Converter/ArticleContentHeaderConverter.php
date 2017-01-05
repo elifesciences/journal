@@ -7,6 +7,7 @@ use eLife\ApiSdk\Model\ArticleVoR;
 use eLife\ApiSdk\Model\Author;
 use eLife\ApiSdk\Model\AuthorEntry;
 use eLife\ApiSdk\Model\Subject;
+use eLife\Journal\Helper\ArticleType;
 use eLife\Patterns\ViewModel;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -63,7 +64,7 @@ final class ArticleContentHeaderConverter implements ViewModelConverter
                     $object->getFullTitle(),
                     $authors,
                     ViewModel\Meta::withText(
-                        ucfirst(str_replace('-', ' ', $object->getType())),
+                        ArticleType::singular($object->getType()),
                         $object->getPublishedDate() ? ViewModel\Date::simple($object->getPublishedDate()) : null
                     ),
                     new ViewModel\SubjectList(...$subjects),
@@ -88,7 +89,7 @@ final class ArticleContentHeaderConverter implements ViewModelConverter
             '#downloads',
             new ViewModel\SubjectList(...$subjects),
             ViewModel\Meta::withText(
-                ucfirst(str_replace('-', ' ', $object->getType())),
+                ArticleType::singular($object->getType()),
                 ViewModel\Date::simple($object->getPublishedDate())
             ),
             $institutions,
