@@ -53,6 +53,14 @@ final class ArticleContentHeaderConverter implements ViewModelConverter
         $authors = ViewModel\AuthorList::asList($authors);
         $institutions = !empty($institutions) ? new ViewModel\InstitutionList($institutions) : null;
 
+        $meta = ViewModel\Meta::withLink(
+            new ViewModel\Link(
+                ArticleType::singular($object->getType()),
+                $this->urlGenerator->generate('article-type', ['type' => $object->getType()])
+            ),
+            $object->getPublishedDate() ? ViewModel\Date::simple($object->getPublishedDate()) : null
+        );
+
         switch ($object->getType()) {
             case 'research-advance':
             case 'research-article':
@@ -63,10 +71,7 @@ final class ArticleContentHeaderConverter implements ViewModelConverter
                 return ViewModel\ContentHeaderArticle::research(
                     $object->getFullTitle(),
                     $authors,
-                    ViewModel\Meta::withText(
-                        ArticleType::singular($object->getType()),
-                        $object->getPublishedDate() ? ViewModel\Date::simple($object->getPublishedDate()) : null
-                    ),
+                    $meta,
                     new ViewModel\SubjectList(...$subjects),
                     $institutions,
                     '#downloads'
@@ -88,10 +93,7 @@ final class ArticleContentHeaderConverter implements ViewModelConverter
             $authors,
             '#downloads',
             new ViewModel\SubjectList(...$subjects),
-            ViewModel\Meta::withText(
-                ArticleType::singular($object->getType()),
-                ViewModel\Date::simple($object->getPublishedDate())
-            ),
+            $meta,
             $institutions,
             false,
             $image
