@@ -42,8 +42,11 @@ final class ArticleSecondaryTeaserConverter implements ViewModelConverter
             $this->createContextLabel($object),
             $image,
             TeaserFooter::forNonArticle(
-                Meta::withText(
-                    ArticleType::singular($object->getType()),
+                Meta::withLink(
+                    new ViewModel\Link(
+                        ArticleType::singular($object->getType()),
+                        $this->urlGenerator->generate('article-type', ['type' => $object->getType()])
+                    ),
                     $object->getStatusDate() ? Date::simple($object->getStatusDate(), $object->getStatusDate() != $object->getPublishedDate()) : null
                 )
             )
