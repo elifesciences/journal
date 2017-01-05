@@ -4,6 +4,7 @@ namespace eLife\Journal\ViewModel\Converter;
 
 use eLife\ApiSdk\Model\ArticleVersion;
 use eLife\ApiSdk\Model\ArticleVoR;
+use eLife\Journal\Helper\ArticleType;
 use eLife\Patterns\ViewModel;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -39,7 +40,7 @@ final class ArticleTeaserConverter implements ViewModelConverter
             $image,
             ViewModel\TeaserFooter::forArticle(
                 ViewModel\Meta::withText(
-                    ucfirst(str_replace('-', ' ', $object->getType())),
+                    ArticleType::singular($object->getType()),
                     $object->getStatusDate() ? ViewModel\Date::simple($object->getStatusDate(), $object->getStatusDate() != $object->getPublishedDate()) : null
                 ),
                 $object instanceof ArticleVoR
