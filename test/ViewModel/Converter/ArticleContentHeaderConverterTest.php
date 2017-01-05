@@ -17,6 +17,6 @@ final class ArticleContentHeaderConverterTest extends ModelConverterTestCase
      */
     public function setUpConverter()
     {
-        $this->converter = new ArticleContentHeaderConverter($this->stubUrlGenerator(), $this->stubTranslator());
+        $this->converter = new ArticleContentHeaderConverter($this->stubUrlGenerator());
     }
 }

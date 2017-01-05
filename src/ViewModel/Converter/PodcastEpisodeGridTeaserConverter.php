@@ -5,19 +5,16 @@ namespace eLife\Journal\ViewModel\Converter;
 use eLife\ApiSdk\Model\PodcastEpisode;
 use eLife\Patterns\ViewModel;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Translation\TranslatorInterface;
 
 final class PodcastEpisodeGridTeaserConverter implements ViewModelConverter
 {
     use CreatesTeaserImage;
 
     private $urlGenerator;
-    private $translator;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator, TranslatorInterface $translator)
+    public function __construct(UrlGeneratorInterface $urlGenerator)
     {
         $this->urlGenerator = $urlGenerator;
-        $this->translator = $translator;
     }
 
     /**
@@ -33,10 +30,7 @@ final class PodcastEpisodeGridTeaserConverter implements ViewModelConverter
             $this->prominentTeaserImage($object),
             ViewModel\TeaserFooter::forNonArticle(
                 ViewModel\Meta::withLink(
-                    new ViewModel\Link(
-                        $this->translator->trans('type.podcast-episode'),
-                        $this->urlGenerator->generate('podcast')
-                    ),
+                    new ViewModel\Link('Podcast', $this->urlGenerator->generate('podcast')),
                     ViewModel\Date::simple($object->getPublishedDate())
                 )
             )

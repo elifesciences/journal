@@ -9,7 +9,6 @@ use eLife\Patterns\ViewModel\Meta;
 use eLife\Patterns\ViewModel\Teaser;
 use eLife\Patterns\ViewModel\TeaserFooter;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Translation\TranslatorInterface;
 
 final class PodcastEpisodeSecondaryTeaserConverter implements ViewModelConverter
 {
@@ -17,12 +16,10 @@ final class PodcastEpisodeSecondaryTeaserConverter implements ViewModelConverter
     use CreatesTeaserImage;
 
     private $urlGenerator;
-    private $translator;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator, TranslatorInterface $translator)
+    public function __construct(UrlGeneratorInterface $urlGenerator)
     {
         $this->urlGenerator = $urlGenerator;
-        $this->translator = $translator;
     }
 
     /**
@@ -37,11 +34,8 @@ final class PodcastEpisodeSecondaryTeaserConverter implements ViewModelConverter
             $this->createContextLabel($object),
             $this->smallTeaserImage($object),
             TeaserFooter::forNonArticle(
-                Meta::withLink(
-                    new ViewModel\Link(
-                        $this->translator->trans('type.podcast-episode'),
-                        $this->urlGenerator->generate('podcast')
-                    ),
+                Meta::withText(
+                    'Podcast',
                     Date::simple($object->getPublishedDate())
                 )
             )

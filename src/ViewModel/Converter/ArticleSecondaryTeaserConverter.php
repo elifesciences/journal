@@ -10,7 +10,6 @@ use eLife\Patterns\ViewModel\Meta;
 use eLife\Patterns\ViewModel\Teaser;
 use eLife\Patterns\ViewModel\TeaserFooter;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Translation\TranslatorInterface;
 
 final class ArticleSecondaryTeaserConverter implements ViewModelConverter
 {
@@ -18,12 +17,10 @@ final class ArticleSecondaryTeaserConverter implements ViewModelConverter
     use CreatesTeaserImage;
 
     private $urlGenerator;
-    private $translator;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator, TranslatorInterface $translator)
+    public function __construct(UrlGeneratorInterface $urlGenerator)
     {
         $this->urlGenerator = $urlGenerator;
-        $this->translator = $translator;
     }
 
     /**
@@ -45,7 +42,7 @@ final class ArticleSecondaryTeaserConverter implements ViewModelConverter
             $image,
             TeaserFooter::forNonArticle(
                 Meta::withText(
-                    $this->translator->trans('type.'.$object->getType()),
+                    ucfirst(str_replace('-', ' ', $object->getType())),
                     $object->getStatusDate() ? Date::simple($object->getStatusDate(), $object->getStatusDate() != $object->getPublishedDate()) : null
                 )
             )

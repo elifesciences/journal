@@ -9,17 +9,14 @@ use eLife\Patterns\ViewModel\Meta;
 use eLife\Patterns\ViewModel\Teaser;
 use eLife\Patterns\ViewModel\TeaserFooter;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Translation\TranslatorInterface;
 
 final class InterviewTeaserConverter implements ViewModelConverter
 {
     private $urlGenerator;
-    private $translator;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator, TranslatorInterface $translator)
+    public function __construct(UrlGeneratorInterface $urlGenerator)
     {
         $this->urlGenerator = $urlGenerator;
-        $this->translator = $translator;
     }
 
     /**
@@ -36,7 +33,7 @@ final class InterviewTeaserConverter implements ViewModelConverter
             null,
             TeaserFooter::forNonArticle(
                 Meta::withText(
-                    $this->translator->trans('type.interview'),
+                    'Interview',
                     Date::simple($object->getPublishedDate())
                 )
             )

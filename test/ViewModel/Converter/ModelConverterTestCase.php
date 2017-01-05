@@ -7,7 +7,6 @@ use eLife\ApiSdk\Model\Model;
 use eLife\Journal\ViewModel\Converter\ViewModelConverter;
 use PHPUnit_Framework_TestCase;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Translation\TranslatorInterface;
 use test\eLife\Journal\PuliAwareTestCase;
 
 abstract class ModelConverterTestCase extends PHPUnit_Framework_TestCase
@@ -106,14 +105,5 @@ abstract class ModelConverterTestCase extends PHPUnit_Framework_TestCase
     final protected function stubUrlGenerator() : UrlGeneratorInterface
     {
         return $this->createMock(UrlGeneratorInterface::class);
-    }
-
-    final protected function stubTranslator() : TranslatorInterface
-    {
-        $translator = $this->createMock(TranslatorInterface::class);
-
-        $translator->method('trans')->will($this->returnArgument(0));
-
-        return $translator;
     }
 }

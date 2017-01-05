@@ -17,6 +17,6 @@ final class PodcastEpisodeTeaserConverterTest extends ModelConverterTestCase
      */
     public function setUpConverter()
     {
-        $this->converter = new PodcastEpisodeTeaserConverter($this->stubUrlGenerator(), $this->stubTranslator());
+        $this->converter = new PodcastEpisodeTeaserConverter($this->stubUrlGenerator());
     }
 }

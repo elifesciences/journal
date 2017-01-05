@@ -17,6 +17,6 @@ final class CollectionContentHeaderConverterTest extends ModelConverterTestCase
      */
     public function setUpConverter()
     {
-        $this->converter = new CollectionContentHeaderConverter($this->stubUrlGenerator(), $this->stubTranslator());
+        $this->converter = new CollectionContentHeaderConverter($this->stubUrlGenerator());
     }
 }
