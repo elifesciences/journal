@@ -15,10 +15,11 @@ final class StatusTest extends WebTestCase
     {
         $client = static::createClient();
 
-        $crawler = $client->request('GET', '/ping');
+        $client->request('GET', '/ping');
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
-        $this->assertContains('pong', $crawler->text());
+        $this->assertSame('text/plain; charset=UTF-8', $client->getResponse()->headers->get('Content-Type'));
+        $this->assertSame('pong', $client->getResponse()->getContent());
         $this->assertFalse($client->getResponse()->isCacheable());
         $this->assertSame('none', $client->getResponse()->headers->get('X-Robots-Tag'));
     }
