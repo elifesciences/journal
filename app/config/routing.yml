@@ -56,6 +56,11 @@ article-figures:
     requirements:
         volume: '[1-9][0-9]*'
 
+article-type:
+    path: /articles/{type}
+    defaults:
+         _controller: AppBundle:ArticleTypes:list
+
 collection:
     path: /collections/{id}
     defaults:

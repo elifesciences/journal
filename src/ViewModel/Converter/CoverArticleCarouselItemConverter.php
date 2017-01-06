@@ -35,8 +35,11 @@ final class CoverArticleCarouselItemConverter implements ViewModelConverter
                 $this->urlGenerator->generate('article', ['volume' => $article->getVolume(), 'id' => $article->getId()])
             ),
             'Read article',
-            ViewModel\Meta::withText(
-                ArticleType::singular($article->getType()),
+            ViewModel\Meta::withLink(
+                new ViewModel\Link(
+                    ArticleType::singular($article->getType()),
+                    $this->urlGenerator->generate('article-type', ['type' => $article->getType()])
+                ),
                 $article->getStatusDate() ? ViewModel\Date::simple($article->getStatusDate(), $article->getStatusDate() != $article->getPublishedDate()) : null
             ),
             new ViewModel\BackgroundImage(

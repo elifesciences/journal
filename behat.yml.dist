@@ -19,6 +19,11 @@ default:
                 tags: '@article'
             contexts:
               - ArticleContext
+        article-type:
+            filters:
+                tags: '@article-type'
+            contexts:
+              - ArticleTypeContext
         blog:
             filters:
                 tags: '@blog'

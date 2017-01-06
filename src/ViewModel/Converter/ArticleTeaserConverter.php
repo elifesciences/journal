@@ -39,8 +39,11 @@ final class ArticleTeaserConverter implements ViewModelConverter
             $this->createContextLabel($object),
             $image,
             ViewModel\TeaserFooter::forArticle(
-                ViewModel\Meta::withText(
-                    ArticleType::singular($object->getType()),
+                ViewModel\Meta::withLink(
+                    new ViewModel\Link(
+                        ArticleType::singular($object->getType()),
+                        $this->urlGenerator->generate('article-type', ['type' => $object->getType()])
+                    ),
                     $object->getStatusDate() ? ViewModel\Date::simple($object->getStatusDate(), $object->getStatusDate() != $object->getPublishedDate()) : null
                 ),
                 $object instanceof ArticleVoR
