@@ -77,8 +77,8 @@ final class MagazineController extends Controller
         $arguments['latestHeading'] = new ListHeading($latestHeading = 'Latest');
         $arguments['latest'] = all(['latest' => $arguments['latest'], 'paginator' => $arguments['paginator']])
             ->then(function (array $parts) use ($latestHeading) {
-                $latest = $parts['latest'];
                 $paginator = $parts['paginator'];
+                $latest = $parts['latest'];
 
                 if ($latest->isEmpty()) {
                     return null;
