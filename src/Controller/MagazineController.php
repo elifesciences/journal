@@ -14,7 +14,6 @@ use eLife\Patterns\ViewModel\ContentHeaderSimple;
 use eLife\Patterns\ViewModel\Link;
 use eLife\Patterns\ViewModel\ListHeading;
 use eLife\Patterns\ViewModel\ListingTeasers;
-use eLife\Patterns\ViewModel\LoadMore;
 use eLife\Patterns\ViewModel\Pager;
 use eLife\Patterns\ViewModel\SeeMoreLink;
 use eLife\Patterns\ViewModel\Teaser;
@@ -90,7 +89,7 @@ final class MagazineController extends Controller
                 if ($paginator->getNextPage()) {
                     return ListingTeasers::withPagination(
                         $teasers,
-                        $paginator->getNextPage() ? new LoadMore(new Link('Load more', $paginator->getNextPagePath())) : null,
+                        $paginator->getNextPage() ? Pager::firstPage(new Link('Load more', $paginator->getNextPagePath())) : null,
                         $latestHeading
                     );
                 }
@@ -163,7 +162,7 @@ final class MagazineController extends Controller
 
                 return ListingTeasers::withPagination(
                     $latest->map($this->willConvertTo(Teaser::class))->toArray(),
-                    new Pager(
+                    Pager::subsequentPage(
                         $paginator->getPreviousPage() ? new Link('Newer', $paginator->getPreviousPagePath()) : null,
                         $paginator->getNextPage() ? new Link('Older', $paginator->getNextPagePath()) : null
                     )

@@ -14,7 +14,6 @@ use eLife\Patterns\ViewModel\GridListing;
 use eLife\Patterns\ViewModel\LeadPara;
 use eLife\Patterns\ViewModel\LeadParas;
 use eLife\Patterns\ViewModel\Link;
-use eLife\Patterns\ViewModel\LoadMore;
 use eLife\Patterns\ViewModel\Pager;
 use eLife\Patterns\ViewModel\Teaser;
 use Pagerfanta\Pagerfanta;
@@ -91,7 +90,7 @@ developed further to become features on the eLife platform.'),
                     return GridListing::forTeasers(
                         $teasers,
                         'Experiments',
-                        $paginator->getNextPage() ? new LoadMore(new Link('Load more experiments', $paginator->getNextPagePath())) : null
+                        $paginator->getNextPage() ? Pager::firstPage(new Link('Load more experiments', $paginator->getNextPagePath())) : null
                     );
                 }
 
@@ -119,7 +118,7 @@ developed further to become features on the eLife platform.'),
                 return GridListing::forTeasers(
                     $experiments->map($this->willConvertTo(Teaser::class, ['variant' => 'grid']))->toArray(),
                     null,
-                    new Pager(
+                    Pager::subsequentPage(
                         $paginator->getPreviousPage() ? new Link('Newer', $paginator->getPreviousPagePath()) : null,
                         $paginator->getNextPage() ? new Link('Older', $paginator->getNextPagePath()) : null
                     )
