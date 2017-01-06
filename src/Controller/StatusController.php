@@ -9,7 +9,7 @@ final class StatusController extends Controller
 {
     public function pingAction() : Response
     {
-        return $this->createResponse('<html><head><title>pong</title></head><body>pong</body></html>');
+        return $this->createResponse('pong', Response::HTTP_OK, ['Content-Type' => 'text/plain']);
     }
 
     public function statusAction() : Response
@@ -23,9 +23,9 @@ final class StatusController extends Controller
         return $this->createResponse('<html><head><title>Status</title></head><body>Everything is ok.</body></html>');
     }
 
-    private function createResponse(string $body = '', int $statusCode = 200)
+    private function createResponse(string $body = '', int $statusCode = Response::HTTP_OK, array $headers = [])
     {
-        $response = new Response($body, $statusCode);
+        $response = new Response($body, $statusCode, $headers);
 
         $response->headers->set('X-Robots-Tag', 'none');
         $response->setPrivate();
