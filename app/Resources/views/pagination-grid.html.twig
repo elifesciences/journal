@@ -1,17 +1,7 @@
-{% extends '::page.html.twig' %}
+{% extends '::pagination.html.twig' %}
 
-{% if title is defined %}
-    {% block title %}{{ title }}{% endblock %}
-{% endif %}
+{% block listing %}
 
-{% block body %}
-
-    <div class="wrapper u-pad-top">
-
-        {{ render_pattern(contentHeader) }}
-
-        {{ render_pattern(listing) }}
-
-    </div>
+    {{ render_pattern(listing) }}
 
 {% endblock %}

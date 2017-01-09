@@ -1,8 +1,6 @@
 {% extends '::page.html.twig' %}
 
-{% if title is defined %}
-    {% block title %}{{ title }}{% endblock %}
-{% endif %}
+{% block title %}{{ title }}, page {{ paginator.currentPage }}{% endblock %}
 
 {% block body %}
 
@@ -10,15 +8,19 @@
 
         {{ render_pattern(contentHeader) }}
 
-        <div class="grid">
+        {% block listing %}
 
-            <div class="grid__item large--eight-twelfths push--large--two-twelfths">
+            <div class="grid">
 
-                {{ render_pattern(listing) }}
+                <div class="grid__item large--eight-twelfths push--large--two-twelfths">
+
+                    {{ render_pattern(listing) }}
+
+                </div>
 
             </div>
 
-        </div>
+        {% endblock %}
 
     </div>
 

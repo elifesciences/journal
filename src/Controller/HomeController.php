@@ -117,6 +117,8 @@ final class HomeController extends Controller
                 );
             });
 
+        $arguments['title'] = 'Latest research';
+
         return new Response($this->get('templating')->render('::pagination.html.twig', $arguments));
     }
 }
