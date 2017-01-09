@@ -15,7 +15,6 @@ use eLife\Patterns\ViewModel\GridListing;
 use eLife\Patterns\ViewModel\LeadParas;
 use eLife\Patterns\ViewModel\Link;
 use eLife\Patterns\ViewModel\ListingTeasers;
-use eLife\Patterns\ViewModel\LoadMore;
 use eLife\Patterns\ViewModel\MediaChapterListingItem;
 use eLife\Patterns\ViewModel\Pager;
 use eLife\Patterns\ViewModel\Teaser;
@@ -83,7 +82,7 @@ final class PodcastController extends Controller
                     return GridListing::forTeasers(
                         $teasers,
                         'Latest episodes',
-                        $paginator->getNextPage() ? new LoadMore(new Link('Load more episodes', $paginator->getNextPagePath())) : null
+                        $paginator->getNextPage() ? Pager::firstPage(new Link('Load more episodes', $paginator->getNextPagePath())) : null
                     );
                 }
 
@@ -111,7 +110,7 @@ final class PodcastController extends Controller
                 return GridListing::forTeasers(
                     $episodes->map($this->willConvertTo(Teaser::class, ['variant' => 'grid']))->toArray(),
                     null,
-                    new Pager(
+                    Pager::subsequentPage(
                         $paginator->getPreviousPage() ? new Link('Newer', $paginator->getPreviousPagePath()) : null,
                         $paginator->getNextPage() ? new Link('Older', $paginator->getNextPagePath()) : null
                     )

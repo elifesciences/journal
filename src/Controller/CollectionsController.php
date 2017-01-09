@@ -14,7 +14,6 @@ use eLife\Patterns\ViewModel\LeadParas;
 use eLife\Patterns\ViewModel\Link;
 use eLife\Patterns\ViewModel\ListHeading;
 use eLife\Patterns\ViewModel\ListingTeasers;
-use eLife\Patterns\ViewModel\LoadMore;
 use eLife\Patterns\ViewModel\Pager;
 use eLife\Patterns\ViewModel\Teaser;
 use Pagerfanta\Pagerfanta;
@@ -81,7 +80,7 @@ final class CollectionsController extends Controller
                 if ($paginator->getNextPage()) {
                     return ListingTeasers::withPagination(
                         $teasers,
-                        $paginator->getNextPage() ? new LoadMore(new Link('Load more', $paginator->getNextPagePath())) : null,
+                        $paginator->getNextPage() ? Pager::firstPage(new Link('Load more', $paginator->getNextPagePath())) : null,
                         $latestCollectionsHeading
                     );
                 }
@@ -109,7 +108,7 @@ final class CollectionsController extends Controller
 
                 return ListingTeasers::withPagination(
                     $latestCollections->map($this->willConvertTo(Teaser::class))->toArray(),
-                    new Pager(
+                    Pager::subsequentPage(
                         $paginator->getPreviousPage() ? new Link('Newer', $paginator->getPreviousPagePath()) : null,
                         $paginator->getNextPage() ? new Link('Older', $paginator->getNextPagePath()) : null
                     )
