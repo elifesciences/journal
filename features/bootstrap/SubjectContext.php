@@ -326,7 +326,7 @@ final class SubjectContext extends Context
      */
     public function iShouldSeeTheSubjects(int $number)
     {
-        $this->assertSession()->elementsCount('css', 'ol.grid-listing > li', $number);
+        $this->assertSession()->elementsCount('css', '.grid-listing > .grid-listing-item', $number);
 
         for ($i = $number; $i > 0; --$i) {
             $nthChild = ($number - $i + 1);
@@ -334,7 +334,7 @@ final class SubjectContext extends Context
 
             $this->assertSession()->elementContains(
                 'css',
-                'ol.grid-listing > li:nth-child('.$nthChild.')',
+                '.grid-listing > .grid-listing-item:nth-child('.$nthChild.')',
                 'Subject '.$expectedNumber.' name'
             );
         }

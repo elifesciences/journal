@@ -442,7 +442,7 @@ final class MagazineContext extends Context
         $this->assertSession()->elementNotExists('css', '.list-heading:contains("Events") + .listing-list > .listing-list__item:nth-child(4)');
         $this->assertSession()->elementTextNotContains(
             'css',
-            '.list-heading:contains("Events") + ol',
+            '.list-heading:contains("Events") + .listing-list',
             'See more events'
         );
     }
