@@ -1,6 +1,6 @@
 {% extends '::page.html.twig' %}
 
-{% block title %}{{ type }}{% endblock %}
+{% block title %}{{ title }}{% endblock %}
 
 {% block body %}
 
@@ -12,17 +12,7 @@
 
             <div class="grid__item large--eight-twelfths push--large--two-twelfths">
 
-                {% if latest %}
-
-                    {{ render_pattern(latest) }}
-
-                {% else %}
-
-                    {{ render_pattern(latestHeading) }}
-
-                    <p>No articles available.</p>
-
-                {% endif %}
+                {{ render_pattern(listing) }}
 
             </div>
 

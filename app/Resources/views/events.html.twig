@@ -1,6 +1,6 @@
 {% extends '::page.html.twig' %}
 
-{% block title %}Events{% endblock %}
+{% block title %}{{ title }}{% endblock %}
 
 {% block info_bar %}
 
@@ -18,15 +18,7 @@
 
             <div class="grid__item large--eight-twelfths push--large--two-twelfths">
 
-                {% if upcomingEvents %}
-
-                    {{ render_pattern(upcomingEvents) }}
-
-                {% else %}
-
-                    <p>There are currently no pending events. Please call back soon.</p>
-
-                {% endif %}
+                {{ render_pattern(listing) }}
 
             </div>
 

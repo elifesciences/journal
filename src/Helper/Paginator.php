@@ -99,4 +99,9 @@ final class Paginator implements Countable
     {
         return call_user_func($this->uriGenerator, $this->pagerfanta->getNbPages());
     }
+
+    public function getItems() : array
+    {
+        return iterator_to_array($this->pagerfanta);
+    }
 }

@@ -2,7 +2,6 @@
 
 namespace eLife\Journal\Controller;
 
-use eLife\ApiSdk\Collection\ArraySequence;
 use eLife\ApiSdk\Collection\Sequence;
 use eLife\Journal\Helper\Callback;
 use eLife\Journal\Helper\Paginator;
@@ -13,13 +12,10 @@ use eLife\Patterns\ViewModel\ContentHeaderSimple;
 use eLife\Patterns\ViewModel\GridListing;
 use eLife\Patterns\ViewModel\LeadPara;
 use eLife\Patterns\ViewModel\LeadParas;
-use eLife\Patterns\ViewModel\Link;
-use eLife\Patterns\ViewModel\Pager;
 use eLife\Patterns\ViewModel\Teaser;
 use Pagerfanta\Pagerfanta;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use function GuzzleHttp\Promise\all;
 use function GuzzleHttp\Promise\promise_for;
 
 final class LabsController extends Controller
@@ -33,11 +29,13 @@ final class LabsController extends Controller
 
         $experiments = promise_for($this->get('elife.api_sdk.labs_experiments'))
             ->then(function (Sequence $sequence) use ($page, $perPage) {
-                $pagerfanta = new Pagerfanta(new SequenceAdapter($sequence));
+                $pagerfanta = new Pagerfanta(new SequenceAdapter($sequence, $this->willConvertTo(Teaser::class, ['variant' => 'grid'])));
                 $pagerfanta->setMaxPerPage($perPage)->setCurrentPage($page);
 
                 return $pagerfanta;
             });
+
+        $arguments['title'] = 'Labs';
 
         $arguments['paginator'] = $experiments
             ->then(function (Pagerfanta $pagerfanta) use ($request) {
@@ -49,10 +47,8 @@ final class LabsController extends Controller
                 });
             });
 
-        $arguments['experiments'] = $experiments
-            ->then(function (Pagerfanta $pagerfanta) {
-                return new ArraySequence(iterator_to_array($pagerfanta));
-            });
+        $arguments['listing'] = $arguments['paginator']
+            ->then($this->willConvertTo(GridListing::class, ['heading' => 'Experiments', 'type' => 'experiments']));
 
         if (1 === $page) {
             return $this->createFirstPage($arguments);
@@ -75,28 +71,6 @@ developed further to become features on the eLife platform.'),
             new LeadPara('Feedback welcome!'),
         ]);
 
-        $arguments['experiments'] = all(['experiments' => $arguments['experiments'], 'paginator' => $arguments['paginator']])
-            ->then(function (array $parts) {
-                $experiments = $parts['experiments'];
-                $paginator = $parts['paginator'];
-
-                if ($experiments->isEmpty()) {
-                    return null;
-                }
-
-                $teasers = $experiments->map($this->willConvertTo(Teaser::class, ['variant' => 'grid']))->toArray();
-
-                if ($paginator->getNextPage()) {
-                    return GridListing::forTeasers(
-                        $teasers,
-                        'Experiments',
-                        $paginator->getNextPage() ? Pager::firstPage(new Link('Load more experiments', $paginator->getNextPagePath())) : null
-                    );
-                }
-
-                return GridListing::forTeasers($teasers, 'Experiments');
-            });
-
         return new Response($this->get('templating')->render('::labs.html.twig', $arguments));
     }
 
@@ -110,22 +84,7 @@ developed further to become features on the eLife platform.'),
                 );
             });
 
-        $arguments['experiments'] = all(['experiments' => $arguments['experiments'], 'paginator' => $arguments['paginator']])
-            ->then(function (array $parts) {
-                $experiments = $parts['experiments'];
-                $paginator = $parts['paginator'];
-
-                return GridListing::forTeasers(
-                    $experiments->map($this->willConvertTo(Teaser::class, ['variant' => 'grid']))->toArray(),
-                    null,
-                    Pager::subsequentPage(
-                        $paginator->getPreviousPage() ? new Link('Newer', $paginator->getPreviousPagePath()) : null,
-                        $paginator->getNextPage() ? new Link('Older', $paginator->getNextPagePath()) : null
-                    )
-                );
-            });
-
-        return new Response($this->get('templating')->render('::labs-alt.html.twig', $arguments));
+        return new Response($this->get('templating')->render('::pagination-grid.html.twig', $arguments));
     }
 
     public function experimentAction(int $number) : Response

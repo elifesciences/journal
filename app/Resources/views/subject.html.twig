@@ -1,6 +1,6 @@
 {% extends '::page.html.twig' %}
 
-{% block title %}{{ subject.name }}{% endblock %}
+{% block title %}{{ title }}{% endblock %}
 
 {% block info_bar %}
 
@@ -20,17 +20,7 @@
 
         <div class="u-pad-top">
 
-            {% if latestArticles %}
-
-                {{ render_pattern(latestArticles) }}
-
-            {% else %}
-
-                {{ render_pattern(latestArticlesHeading) }}
-
-                <p>No articles available.</p>
-
-            {% endif %}
+            {{ render_pattern(listing) }}
 
         </div>
 

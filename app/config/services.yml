@@ -459,6 +459,18 @@ services:
         tags:
           - name: view_model.converter
 
+    elife.journal.view_model.converter.paginator.grid_listing:
+        class: eLife\Journal\ViewModel\Converter\PaginatorGridListingConverter
+        public: false
+        tags:
+          - name: view_model.converter
+
+    elife.journal.view_model.converter.paginator.listing_teasers:
+        class: eLife\Journal\ViewModel\Converter\PaginatorListingTeasersConverter
+        public: false
+        tags:
+          - name: view_model.converter
+
     elife.journal.view_model.converter.podcast_episode.audio_player:
         class: eLife\Journal\ViewModel\Converter\PodcastEpisodeAudioPlayerConverter
         public: false

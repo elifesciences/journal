@@ -1,6 +1,6 @@
 {% extends '::page.html.twig' %}
 
-{% block title %}Collections{% endblock %}
+{% block title %}{{ title }}{% endblock %}
 
 {% block info_bar %}
 
@@ -18,17 +18,7 @@
 
             <div class="grid__item large--eight-twelfths push--large--two-twelfths">
 
-                {% if latestCollections %}
-
-                    {{ render_pattern(latestCollections) }}
-
-                {% else %}
-
-                    {{ render_pattern(latestCollectionsHeading) }}
-
-                    <p>No collections available.</p>
-
-                {% endif %}
+                {{ render_pattern(listing) }}
 
             </div>
 

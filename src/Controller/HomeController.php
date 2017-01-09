@@ -2,7 +2,6 @@
 
 namespace eLife\Journal\Controller;
 
-use eLife\ApiSdk\Collection\ArraySequence;
 use eLife\ApiSdk\Collection\Sequence;
 use eLife\ApiSdk\Model\Subject;
 use eLife\Journal\Helper\Callback;
@@ -15,15 +14,12 @@ use eLife\Patterns\ViewModel\ContentHeaderSimple;
 use eLife\Patterns\ViewModel\LeadPara;
 use eLife\Patterns\ViewModel\LeadParas;
 use eLife\Patterns\ViewModel\Link;
-use eLife\Patterns\ViewModel\ListHeading;
 use eLife\Patterns\ViewModel\ListingTeasers;
-use eLife\Patterns\ViewModel\Pager;
 use eLife\Patterns\ViewModel\SeeMoreLink;
 use eLife\Patterns\ViewModel\Teaser;
 use Pagerfanta\Pagerfanta;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use function GuzzleHttp\Promise\all;
 use function GuzzleHttp\Promise\promise_for;
 
 final class HomeController extends Controller
@@ -39,7 +35,7 @@ final class HomeController extends Controller
             ->forType('research-advance', 'research-article', 'research-exchange', 'short-report', 'tools-resources', 'replication-study')
             ->sortBy('date'))
             ->then(function (Sequence $sequence) use ($page, $perPage) {
-                $pagerfanta = new Pagerfanta(new SequenceAdapter($sequence));
+                $pagerfanta = new Pagerfanta(new SequenceAdapter($sequence, $this->willConvertTo(Teaser::class)));
                 $pagerfanta->setMaxPerPage($perPage)->setCurrentPage($page);
 
                 return $pagerfanta;
@@ -55,10 +51,8 @@ final class HomeController extends Controller
                 });
             });
 
-        $arguments['latestResearch'] = $latestResearch
-            ->then(function (Pagerfanta $pagerfanta) {
-                return new ArraySequence(iterator_to_array($pagerfanta));
-            });
+        $arguments['listing'] = $arguments['paginator']
+            ->then($this->willConvertTo(ListingTeasers::class, ['heading' => 'Latest research', 'type' => 'articles']));
 
         if (1 === $page) {
             return $this->createFirstPage($arguments);
@@ -96,29 +90,6 @@ final class HomeController extends Controller
                 return null;
             });
 
-        $arguments['latestResearchHeading'] = new ListHeading($latestResearchHeading = 'Latest research');
-        $arguments['latestResearch'] = all(['latestResearch' => $arguments['latestResearch'], 'paginator' => $arguments['paginator']])
-            ->then(function (array $parts) use ($latestResearchHeading) {
-                $latestResearch = $parts['latestResearch'];
-                $paginator = $parts['paginator'];
-
-                if ($latestResearch->isEmpty()) {
-                    return null;
-                }
-
-                $teasers = $latestResearch->map($this->willConvertTo(Teaser::class))->toArray();
-
-                if ($paginator->getNextPage()) {
-                    return ListingTeasers::withPagination(
-                        $teasers,
-                        $paginator->getNextPage() ? Pager::firstPage(new Link('More articles', $paginator->getNextPagePath())) : null,
-                        $latestResearchHeading
-                    );
-                }
-
-                return ListingTeasers::basic($teasers, $latestResearchHeading);
-            });
-
         $arguments['magazine'] = $this->get('elife.api_sdk.search')
             ->forType('editorial', 'insight', 'feature', 'collection', 'interview', 'podcast-episode')
             ->sortBy('date')
@@ -146,20 +117,8 @@ final class HomeController extends Controller
                 );
             });
 
-        $arguments['latestResearch'] = all(['latestResearch' => $arguments['latestResearch'], 'paginator' => $arguments['paginator']])
-            ->then(function (array $parts) {
-                $latestResearch = $parts['latestResearch'];
-                $paginator = $parts['paginator'];
+        $arguments['title'] = 'Latest research';
 
-                return ListingTeasers::withPagination(
-                    $latestResearch->map($this->willConvertTo(Teaser::class))->toArray(),
-                    Pager::subsequentPage(
-                        $paginator->getPreviousPage() ? new Link('Newer articles', $paginator->getPreviousPagePath()) : null,
-                        $paginator->getNextPage() ? new Link('Older articles', $paginator->getNextPagePath()) : null
-                    )
-                );
-            });
-
-        return new Response($this->get('templating')->render('::home-alt.html.twig', $arguments));
+        return new Response($this->get('templating')->render('::pagination.html.twig', $arguments));
     }
 }

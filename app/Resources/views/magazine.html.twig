@@ -1,6 +1,6 @@
 {% extends '::page.html.twig' %}
 
-{% block title %}Magazine{% endblock %}
+{% block title %}{{ title }}{% endblock %}
 
 {% block info_bar %}
 
@@ -37,17 +37,7 @@
 
                     {% endif %}
 
-                    {% if latest %}
-
-                        {{ render_pattern(latest) }}
-
-                    {% else %}
-
-                        {{ render_pattern(latestHeading) }}
-
-                        <p>No articles available.</p>
-
-                    {% endif %}
+                    {{ render_pattern(listing) }}
 
                     {% if events or elifeDigests %}
 
