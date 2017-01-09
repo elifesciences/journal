@@ -81,9 +81,9 @@ final class BlogContext extends Context
     }
 
     /**
-     * @When /^I load more articles$/
+     * @When /^I load more blog articles$/
      */
-    public function iLoadMoreArticles()
+    public function iLoadMoreBlogArticles()
     {
         $this->getSession()->getPage()->clickLink('More articles');
     }
