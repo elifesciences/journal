@@ -1,6 +1,8 @@
 {% extends '::page.html.twig' %}
 
-{% block title %}{{ type }}{% endblock %}
+{% if title is defined %}
+    {% block title %}{{ title }}{% endblock %}
+{% endif %}
 
 {% block body %}
 
@@ -12,7 +14,7 @@
 
             <div class="grid__item large--eight-twelfths push--large--two-twelfths">
 
-                {{ render_pattern(latest) }}
+                {{ render_pattern(listing) }}
 
             </div>
 

@@ -1,6 +1,6 @@
 {% extends '::page.html.twig' %}
 
-{% block title %}Labs{% endblock %}
+{% block title %}{{ title }}{% endblock %}
 
 {% block body %}
 
@@ -10,15 +10,7 @@
 
         {{ render_pattern(leadParas) }}
 
-        {% if experiments %}
-
-            {{ render_pattern(experiments) }}
-
-        {% else %}
-
-            <p class="blg-pad-top-medium">No experiments available.</p>
-
-        {% endif %}
+        {{ render_pattern(listing) }}
 
     </div>
 

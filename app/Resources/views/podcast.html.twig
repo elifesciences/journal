@@ -1,6 +1,6 @@
 {% extends '::page.html.twig' %}
 
-{% block title %}Podcast{% endblock %}
+{% block title %}{{ title }}{% endblock %}
 
 {% block info_bar %}
 
@@ -14,15 +14,7 @@
 
     <div class="wrapper">
 
-        {% if episodes %}
-
-            {{ render_pattern(episodes) }}
-
-        {% else %}
-
-            <p class="blg-pad-top-medium">No episodes available.</p>
-
-        {% endif %}
+        {{ render_pattern(listing) }}
 
     </div>
 

@@ -2,7 +2,6 @@
 
 namespace eLife\Journal\Controller;
 
-use eLife\ApiSdk\Collection\ArraySequence;
 use eLife\ApiSdk\Collection\Sequence;
 use eLife\Journal\Helper\Callback;
 use eLife\Journal\Helper\Paginator;
@@ -10,15 +9,11 @@ use eLife\Journal\Pagerfanta\SequenceAdapter;
 use eLife\Patterns\ViewModel\ContentHeaderNonArticle;
 use eLife\Patterns\ViewModel\ContentHeaderSimple;
 use eLife\Patterns\ViewModel\LeadParas;
-use eLife\Patterns\ViewModel\Link;
-use eLife\Patterns\ViewModel\ListHeading;
 use eLife\Patterns\ViewModel\ListingTeasers;
-use eLife\Patterns\ViewModel\Pager;
 use eLife\Patterns\ViewModel\Teaser;
 use Pagerfanta\Pagerfanta;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use function GuzzleHttp\Promise\all;
 use function GuzzleHttp\Promise\promise_for;
 
 final class InsideElifeController extends Controller
@@ -32,11 +27,13 @@ final class InsideElifeController extends Controller
 
         $latest = promise_for($this->get('elife.api_sdk.blog_articles'))
             ->then(function (Sequence $sequence) use ($page, $perPage) {
-                $pagerfanta = new Pagerfanta(new SequenceAdapter($sequence));
+                $pagerfanta = new Pagerfanta(new SequenceAdapter($sequence, $this->willConvertTo(Teaser::class)));
                 $pagerfanta->setMaxPerPage($perPage)->setCurrentPage($page);
 
                 return $pagerfanta;
             });
+
+        $arguments['title'] = 'Inside eLife';
 
         $arguments['paginator'] = $latest
             ->then(function (Pagerfanta $pagerfanta) use ($request) {
@@ -48,10 +45,8 @@ final class InsideElifeController extends Controller
                 });
             });
 
-        $arguments['latest'] = $latest
-            ->then(function (Pagerfanta $pagerfanta) {
-                return new ArraySequence(iterator_to_array($pagerfanta));
-            });
+        $arguments['listing'] = $arguments['paginator']
+            ->then($this->willConvertTo(ListingTeasers::class, ['heading' => 'Latest', 'type' => 'articles']));
 
         if (1 === $page) {
             return $this->createFirstPage($arguments);
@@ -63,29 +58,6 @@ final class InsideElifeController extends Controller
     private function createFirstPage(array $arguments) : Response
     {
         $arguments['contentHeader'] = ContentHeaderNonArticle::basic('Inside eLife');
-
-        $arguments['latestHeading'] = new ListHeading($latestHeading = 'Latest');
-        $arguments['latest'] = all(['latest' => $arguments['latest'], 'paginator' => $arguments['paginator']])
-            ->then(function (array $parts) use ($latestHeading) {
-                $latest = $parts['latest'];
-                $paginator = $parts['paginator'];
-
-                if ($latest->isEmpty()) {
-                    return null;
-                }
-
-                $teasers = $latest->map($this->willConvertTo(Teaser::class))->toArray();
-
-                if ($paginator->getNextPage()) {
-                    return ListingTeasers::withPagination(
-                        $teasers,
-                        $paginator->getNextPage() ? Pager::firstPage(new Link('Load more articles', $paginator->getNextPagePath())) : null,
-                        $latestHeading
-                    );
-                }
-
-                return ListingTeasers::basic($teasers, $latestHeading);
-            });
 
         return new Response($this->get('templating')->render('::inside-elife.html.twig', $arguments));
     }
@@ -100,21 +72,7 @@ final class InsideElifeController extends Controller
                 );
             });
 
-        $arguments['latest'] = all(['latest' => $arguments['latest'], 'paginator' => $arguments['paginator']])
-            ->then(function (array $parts) {
-                $latest = $parts['latest'];
-                $paginator = $parts['paginator'];
-
-                return ListingTeasers::withPagination(
-                    $latest->map($this->willConvertTo(Teaser::class))->toArray(),
-                    Pager::subsequentPage(
-                        $paginator->getPreviousPage() ? new Link('Newer articles', $paginator->getPreviousPagePath()) : null,
-                        $paginator->getNextPage() ? new Link('Older articles', $paginator->getNextPagePath()) : null
-                    )
-                );
-            });
-
-        return new Response($this->get('templating')->render('::inside-elife-alt.html.twig', $arguments));
+        return new Response($this->get('templating')->render('::pagination.html.twig', $arguments));
     }
 
     public function articleAction(string $id) : Response

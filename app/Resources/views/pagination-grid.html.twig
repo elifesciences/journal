@@ -1,6 +1,8 @@
 {% extends '::page.html.twig' %}
 
-{% block title %}Labs{% endblock %}
+{% if title is defined %}
+    {% block title %}{{ title }}{% endblock %}
+{% endif %}
 
 {% block body %}
 
@@ -8,7 +10,7 @@
 
         {{ render_pattern(contentHeader) }}
 
-        {{ render_pattern(experiments) }}
+        {{ render_pattern(listing) }}
 
     </div>
 

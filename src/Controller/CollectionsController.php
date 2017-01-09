@@ -2,7 +2,6 @@
 
 namespace eLife\Journal\Controller;
 
-use eLife\ApiSdk\Collection\ArraySequence;
 use eLife\ApiSdk\Collection\Sequence;
 use eLife\ApiSdk\Model\Collection;
 use eLife\Journal\Helper\Callback;
@@ -11,15 +10,11 @@ use eLife\Journal\Pagerfanta\SequenceAdapter;
 use eLife\Patterns\ViewModel\ContentHeaderNonArticle;
 use eLife\Patterns\ViewModel\ContentHeaderSimple;
 use eLife\Patterns\ViewModel\LeadParas;
-use eLife\Patterns\ViewModel\Link;
-use eLife\Patterns\ViewModel\ListHeading;
 use eLife\Patterns\ViewModel\ListingTeasers;
-use eLife\Patterns\ViewModel\Pager;
 use eLife\Patterns\ViewModel\Teaser;
 use Pagerfanta\Pagerfanta;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use function GuzzleHttp\Promise\all;
 use function GuzzleHttp\Promise\promise_for;
 
 final class CollectionsController extends Controller
@@ -33,11 +28,13 @@ final class CollectionsController extends Controller
 
         $latestResearch = promise_for($this->get('elife.api_sdk.collections'))
             ->then(function (Sequence $sequence) use ($page, $perPage) {
-                $pagerfanta = new Pagerfanta(new SequenceAdapter($sequence));
+                $pagerfanta = new Pagerfanta(new SequenceAdapter($sequence, $this->willConvertTo(Teaser::class)));
                 $pagerfanta->setMaxPerPage($perPage)->setCurrentPage($page);
 
                 return $pagerfanta;
             });
+
+        $arguments['title'] = 'Collections';
 
         $arguments['paginator'] = $latestResearch
             ->then(function (Pagerfanta $pagerfanta) use ($request) {
@@ -49,10 +46,8 @@ final class CollectionsController extends Controller
                 });
             });
 
-        $arguments['latestCollections'] = $latestResearch
-            ->then(function (Pagerfanta $pagerfanta) {
-                return new ArraySequence(iterator_to_array($pagerfanta));
-            });
+        $arguments['listing'] = $arguments['paginator']
+            ->then($this->willConvertTo(ListingTeasers::class, ['type' => 'collections']));
 
         if (1 === $page) {
             return $this->createFirstPage($arguments);
@@ -64,29 +59,6 @@ final class CollectionsController extends Controller
     private function createFirstPage(array $arguments) : Response
     {
         $arguments['contentHeader'] = ContentHeaderNonArticle::basic('eLife collections');
-
-        $arguments['latestCollectionsHeading'] = new ListHeading($latestCollectionsHeading = 'Latest collections');
-        $arguments['latestCollections'] = all(['latestCollections' => $arguments['latestCollections'], 'paginator' => $arguments['paginator']])
-            ->then(function (array $parts) use ($latestCollectionsHeading) {
-                $latestCollections = $parts['latestCollections'];
-                $paginator = $parts['paginator'];
-
-                if ($latestCollections->isEmpty()) {
-                    return null;
-                }
-
-                $teasers = $latestCollections->map($this->willConvertTo(Teaser::class))->toArray();
-
-                if ($paginator->getNextPage()) {
-                    return ListingTeasers::withPagination(
-                        $teasers,
-                        $paginator->getNextPage() ? Pager::firstPage(new Link('Load more', $paginator->getNextPagePath())) : null,
-                        $latestCollectionsHeading
-                    );
-                }
-
-                return ListingTeasers::basic($teasers, $latestCollectionsHeading);
-            });
 
         return new Response($this->get('templating')->render('::collections.html.twig', $arguments));
     }
@@ -101,21 +73,7 @@ final class CollectionsController extends Controller
                 );
             });
 
-        $arguments['latestCollections'] = all(['latestCollections' => $arguments['latestCollections'], 'paginator' => $arguments['paginator']])
-            ->then(function (array $parts) {
-                $latestCollections = $parts['latestCollections'];
-                $paginator = $parts['paginator'];
-
-                return ListingTeasers::withPagination(
-                    $latestCollections->map($this->willConvertTo(Teaser::class))->toArray(),
-                    Pager::subsequentPage(
-                        $paginator->getPreviousPage() ? new Link('Newer', $paginator->getPreviousPagePath()) : null,
-                        $paginator->getNextPage() ? new Link('Older', $paginator->getNextPagePath()) : null
-                    )
-                );
-            });
-
-        return new Response($this->get('templating')->render('::collections-alt.html.twig', $arguments));
+        return new Response($this->get('templating')->render('::pagination.html.twig', $arguments));
     }
 
     public function collectionAction(string $id) : Response

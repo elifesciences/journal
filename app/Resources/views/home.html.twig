@@ -36,17 +36,7 @@
 
                     {% endif %}
 
-                    {% if latestResearch %}
-
-                        {{ render_pattern(latestResearch) }}
-
-                    {% else %}
-
-                        {{ render_pattern(latestResearchHeading) }}
-
-                        <p>No articles available.</p>
-
-                    {% endif %}
+                    {{ render_pattern(listing) }}
 
                     {% if magazine %}
 

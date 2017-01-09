@@ -2,7 +2,6 @@
 
 namespace eLife\Journal\Controller;
 
-use eLife\ApiSdk\Collection\ArraySequence;
 use eLife\ApiSdk\Collection\Sequence;
 use eLife\ApiSdk\Model\PodcastEpisode;
 use eLife\Journal\Helper\Callback;
@@ -13,15 +12,12 @@ use eLife\Patterns\ViewModel\ContentHeaderNonArticle;
 use eLife\Patterns\ViewModel\ContentHeaderSimple;
 use eLife\Patterns\ViewModel\GridListing;
 use eLife\Patterns\ViewModel\LeadParas;
-use eLife\Patterns\ViewModel\Link;
 use eLife\Patterns\ViewModel\ListingTeasers;
 use eLife\Patterns\ViewModel\MediaChapterListingItem;
-use eLife\Patterns\ViewModel\Pager;
 use eLife\Patterns\ViewModel\Teaser;
 use Pagerfanta\Pagerfanta;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use function GuzzleHttp\Promise\all;
 use function GuzzleHttp\Promise\promise_for;
 
 final class PodcastController extends Controller
@@ -35,11 +31,13 @@ final class PodcastController extends Controller
 
         $episodes = promise_for($this->get('elife.api_sdk.podcast_episodes'))
             ->then(function (Sequence $sequence) use ($page, $perPage) {
-                $pagerfanta = new Pagerfanta(new SequenceAdapter($sequence));
+                $pagerfanta = new Pagerfanta(new SequenceAdapter($sequence, $this->willConvertTo(Teaser::class, ['variant' => 'grid'])));
                 $pagerfanta->setMaxPerPage($perPage)->setCurrentPage($page);
 
                 return $pagerfanta;
             });
+
+        $arguments['title'] = 'Podcast';
 
         $arguments['paginator'] = $episodes
             ->then(function (Pagerfanta $pagerfanta) use ($request) {
@@ -51,10 +49,8 @@ final class PodcastController extends Controller
                 });
             });
 
-        $arguments['episodes'] = $episodes
-            ->then(function (Pagerfanta $pagerfanta) {
-                return new ArraySequence(iterator_to_array($pagerfanta));
-            });
+        $arguments['listing'] = $arguments['paginator']
+            ->then($this->willConvertTo(GridListing::class, ['type' => 'episodes']));
 
         if (1 === $page) {
             return $this->createFirstPage($arguments);
@@ -66,28 +62,6 @@ final class PodcastController extends Controller
     private function createFirstPage(array $arguments) : Response
     {
         $arguments['contentHeader'] = ContentHeaderNonArticle::basic('eLife podcast');
-
-        $arguments['episodes'] = all(['episodes' => $arguments['episodes'], 'paginator' => $arguments['paginator']])
-            ->then(function (array $parts) {
-                $episodes = $parts['episodes'];
-                $paginator = $parts['paginator'];
-
-                if ($episodes->isEmpty()) {
-                    return null;
-                }
-
-                $teasers = $episodes->map($this->willConvertTo(Teaser::class, ['variant' => 'grid']))->toArray();
-
-                if ($paginator->getNextPage()) {
-                    return GridListing::forTeasers(
-                        $teasers,
-                        'Latest episodes',
-                        $paginator->getNextPage() ? Pager::firstPage(new Link('Load more episodes', $paginator->getNextPagePath())) : null
-                    );
-                }
-
-                return GridListing::forTeasers($teasers, 'Experiments');
-            });
 
         return new Response($this->get('templating')->render('::podcast.html.twig', $arguments));
     }
@@ -102,22 +76,7 @@ final class PodcastController extends Controller
                 );
             });
 
-        $arguments['episodes'] = all(['episodes' => $arguments['episodes'], 'paginator' => $arguments['paginator']])
-            ->then(function (array $parts) {
-                $episodes = $parts['episodes'];
-                $paginator = $parts['paginator'];
-
-                return GridListing::forTeasers(
-                    $episodes->map($this->willConvertTo(Teaser::class, ['variant' => 'grid']))->toArray(),
-                    null,
-                    Pager::subsequentPage(
-                        $paginator->getPreviousPage() ? new Link('Newer', $paginator->getPreviousPagePath()) : null,
-                        $paginator->getNextPage() ? new Link('Older', $paginator->getNextPagePath()) : null
-                    )
-                );
-            });
-
-        return new Response($this->get('templating')->render('::podcast-alt.html.twig', $arguments));
+        return new Response($this->get('templating')->render('::pagination-grid.html.twig', $arguments));
     }
 
     public function episodeAction(int $number) : Response
