@@ -43,6 +43,49 @@ final class ArticleTypeContext extends Context
             ];
         }
 
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/search?for=&page=1&per-page=1&sort=date&order=desc&type[]=research-article',
+                ['Accept' => 'application/vnd.elife.search+json; version=1']
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.search+json; version=1'],
+                json_encode([
+                    'total' => $number,
+                    'items' => [$articles[0]],
+                    'subjects' => [
+                        [
+                            'id' => 'subject',
+                            'name' => 'Some subject',
+                            'results' => 0,
+                        ],
+                    ],
+                    'types' => [
+                        'correction' => 0,
+                        'editorial' => 0,
+                        'feature' => 0,
+                        'insight' => 0,
+                        'research-advance' => 0,
+                        'research-article' => $this->numberOfArticles,
+                        'research-exchange' => 0,
+                        'retraction' => 0,
+                        'registered-report' => 0,
+                        'replication-study' => 0,
+                        'short-report' => 0,
+                        'tools-resources' => 0,
+                        'blog-article' => 0,
+                        'collection' => 0,
+                        'event' => 0,
+                        'interview' => 0,
+                        'labs-experiment' => 0,
+                        'podcast-episode' => 0,
+                    ],
+                ])
+            )
+        );
+
         foreach (array_chunk($articles, 6) as $i => $articleChunk) {
             $page = $i + 1;
 
@@ -100,21 +143,31 @@ final class ArticleTypeContext extends Context
     }
 
     /**
+     * @When /^I load more articles$/
+     */
+    public function iLoadMoreArticles()
+    {
+        $this->getSession()->getPage()->clickLink('More articles');
+    }
+
+    /**
      * @Then /^I should see the latest (\d+) research articles in the 'Latest articles' list$/
      */
     public function iShouldSeeTheLatestArticlesInTheLatestArticlesList(int $number)
     {
-        $this->assertSession()->elementsCount('css', '.list-heading:contains("Latest articles") + ol > li', $number);
+        $this->spin(function () use ($number) {
+            $this->assertSession()->elementsCount('css', '.list-heading:contains("Latest articles") + .listing-list > .listing-list__item', $number);
 
-        for ($i = $number; $i > 0; --$i) {
-            $nthChild = ($number - $i + 1);
-            $expectedNumber = ($this->numberOfArticles - $nthChild + 1);
+            for ($i = $number; $i > 0; --$i) {
+                $nthChild = ($number - $i + 1);
+                $expectedNumber = ($this->numberOfArticles - $nthChild + 1);
 
-            $this->assertSession()->elementContains(
-                'css',
-                '.list-heading:contains("Latest articles") + ol > li:nth-child('.$nthChild.')',
-                'Article '.str_pad($expectedNumber, 5, '0', STR_PAD_LEFT).' title'
-            );
-        }
+                $this->assertSession()->elementContains(
+                    'css',
+                    '.list-heading:contains("Latest articles") + .listing-list > .listing-list__item:nth-child('.$nthChild.')',
+                    'Article '.str_pad($expectedNumber, 5, '0', STR_PAD_LEFT).' title'
+                );
+            }
+        });
     }
 }

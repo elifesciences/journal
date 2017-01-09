@@ -12,7 +12,7 @@ Feature: Podcast page latest podcasts
     When I go to the podcast page
     Then I should see the latest 6 podcast episodes in the 'Latest episodes' list
 
-  @wip
+  @javascript
   Scenario: Loading more content adds previous 6 to the list
     When I go to the podcast page
     And I load more episodes

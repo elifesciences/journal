@@ -23,7 +23,7 @@ Feature: Subject page latest articles
     When I go the MSA 'Cell biology' page
     Then I should see the latest 6 items with the MSA 'Cell biology' in the 'Latest articles' list
 
-  @wip
+  @javascript
   Scenario: Loading more content adds previous 6 to the list
     When I go the MSA 'Cell biology' page
     And I load more articles

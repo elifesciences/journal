@@ -58,6 +58,27 @@ final class LabsContext extends Context
             ];
         }
 
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/labs-experiments?page=1&per-page=1&order=desc',
+                ['Accept' => 'application/vnd.elife.labs-experiment-list+json; version=1']
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.labs-experiment-list+json; version=1'],
+                json_encode([
+                    'total' => $number,
+                    'items' => array_map(function (array $experiment) {
+                        unset($experiment['image']['banner']);
+                        unset($experiment['content']);
+
+                        return $experiment;
+                    }, [$experiments[0]]),
+                ])
+            )
+        );
+
         foreach (array_chunk($experiments, 8) as $i => $experimentsChunk) {
             $page = $i + 1;
 
@@ -116,22 +137,32 @@ final class LabsContext extends Context
     }
 
     /**
+     * @When /^I load more experiments$/
+     */
+    public function iLoadMoreExperiments()
+    {
+        $this->getSession()->getPage()->clickLink('More experiments');
+    }
+
+    /**
      * @Then /^I should see the latest (\d+) Labs experiments in the 'Experiments' list$/
      */
     public function iShouldSeeTheLatestLabsExperimentsInTheExperimentsList(int $number)
     {
-        $this->assertSession()
-            ->elementsCount('css', '.grid-listing-heading:contains("Experiments") + ol > li', $number);
+        $this->spin(function () use ($number) {
+            $this->assertSession()
+                ->elementsCount('css', '.grid-listing-heading:contains("Experiments") + .grid-listing > .grid-listing-item', $number);
 
-        for ($i = $number; $i > 0; --$i) {
-            $nthChild = ($number - $i + 1);
-            $expectedNumber = ($this->numberOfExperiments - $nthChild + 1);
+            for ($i = $number; $i > 0; --$i) {
+                $nthChild = ($number - $i + 1);
+                $expectedNumber = ($this->numberOfExperiments - $nthChild + 1);
 
-            $this->assertSession()->elementContains(
-                'css',
-                '.grid-listing-heading:contains("Experiments") + ol > li:nth-child('.$nthChild.')',
-                'Experiment '.$expectedNumber.' title'
-            );
-        }
+                $this->assertSession()->elementContains(
+                    'css',
+                    '.grid-listing-heading:contains("Experiments") + .grid-listing > .grid-listing-item:nth-child('.$nthChild.')',
+                    'Experiment '.$expectedNumber.' title'
+                );
+            }
+        });
     }
 }

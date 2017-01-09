@@ -77,6 +77,28 @@ final class CollectionContext extends Context
             ];
         }
 
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/collections?page=1&per-page=1&order=desc',
+                ['Accept' => 'application/vnd.elife.collection-list+json; version=1']
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.collection-list+json; version=1'],
+                json_encode([
+                    'total' => $number,
+                    'items' => array_map(function (array $collection) {
+                        unset($collection['image']['banner']);
+                        unset($collection['curators']);
+                        unset($collection['content']);
+
+                        return $collection;
+                    }, [$collections[0]]),
+                ])
+            )
+        );
+
         foreach (array_chunk($collections, 6) as $i => $collectionsChunk) {
             $page = $i + 1;
 
@@ -128,21 +150,31 @@ final class CollectionContext extends Context
     }
 
     /**
+     * @When /^I load more collections/
+     */
+    public function iLoadMoreCollections()
+    {
+        $this->getSession()->getPage()->clickLink('More collections');
+    }
+
+    /**
      * @Then /^I should see the (\d+) most-recently-updated collections in the 'Latest collections' list$/
      */
     public function iShouldSeeTheMostRecentlyUpdatedCollectionsInTheLatestCollectionsList(int $number)
     {
-        $this->assertSession()->elementsCount('css', '.list-heading:contains("Latest collections") + ol > li', $number);
+        $this->spin(function () use ($number) {
+            $this->assertSession()->elementsCount('css', '.list-heading:contains("Latest collections") + .listing-list > .listing-list__item', $number);
 
-        for ($i = $number; $i > 0; --$i) {
-            $nthChild = ($number - $i + 1);
-            $expectedNumber = ($this->numberOfCollections - $nthChild + 1);
+            for ($i = $number; $i > 0; --$i) {
+                $nthChild = ($number - $i + 1);
+                $expectedNumber = ($this->numberOfCollections - $nthChild + 1);
 
-            $this->assertSession()->elementContains(
-                'css',
-                '.list-heading:contains("Latest collections") + ol > li:nth-child('.$nthChild.')',
-                'Collection '.$expectedNumber.' title'
-            );
-        }
+                $this->assertSession()->elementContains(
+                    'css',
+                    '.list-heading:contains("Latest collections") + .listing-list > .listing-list__item:nth-child('.$nthChild.')',
+                    'Collection '.$expectedNumber.' title'
+                );
+            }
+        });
     }
 }

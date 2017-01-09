@@ -19,7 +19,7 @@ Feature: Magazine 'Latest' list
     When I go to the Magazine page
     Then I should see the latest 6 Magazine articles in the 'Latest' list
 
-  @wip
+  @javascript
   Scenario: Loading more articles adds previous 6 to the list
     Given 20 Magazine articles have been published
     When I go to the Magazine page

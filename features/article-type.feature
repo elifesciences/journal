@@ -12,7 +12,7 @@ Feature: Article type page
     When I go to the research articles page
     Then I should see the latest 6 research articles in the 'Latest articles' list
 
-  @wip
+  @javascript
   Scenario: Loading more articles adds previous 6 to the list
     Given 20 research articles have been published
     When I go to the research articles page

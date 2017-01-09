@@ -19,7 +19,7 @@ Feature: Homepage 'Latest research' list
     When I go to the homepage
     Then I should see the latest 6 articles in the 'Latest research' list
 
-  @wip
+  @javascript
   Scenario: Loading more articles adds previous 6 to the list
     Given 20 articles have been published
     When I go to the homepage
