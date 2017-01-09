@@ -100,6 +100,14 @@ final class ArticleTypeContext extends Context
     }
 
     /**
+     * @When /^I load more articles$/
+     */
+    public function iLoadMoreArticles()
+    {
+        $this->getSession()->getPage()->clickLink('More articles');
+    }
+
+    /**
      * @Then /^I should see the latest (\d+) research articles in the 'Latest articles' list$/
      */
     public function iShouldSeeTheLatestArticlesInTheLatestArticlesList(int $number)

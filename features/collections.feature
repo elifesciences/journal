@@ -12,7 +12,7 @@ Feature: Collections page latest collections
     When I go the collections page
     Then I should see the 6 most-recently-updated collections in the 'Latest collections' list
 
-  @wip
+  @javascript
   Scenario: Loading more content adds previous 6 to the list
     When I go the collections page
     And I load more collections

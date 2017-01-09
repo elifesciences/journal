@@ -352,6 +352,14 @@ final class HomepageContext extends Context
     }
 
     /**
+     * @When /^I load more articles$/
+     */
+    public function iLoadMoreArticles()
+    {
+        $this->getSession()->getPage()->clickLink('More articles');
+    }
+
+    /**
      * @Then /^I should see the latest (\d+) articles in the 'Latest research' list$/
      */
     public function iShouldSeeTheLatestArticlesInTheLatestResearchList(int $number)

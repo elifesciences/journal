@@ -322,6 +322,14 @@ final class MagazineContext extends Context
     }
 
     /**
+     * @When /^I load more articles$/
+     */
+    public function iLoadMoreArticles()
+    {
+        $this->getSession()->getPage()->clickLink('More articles');
+    }
+
+    /**
      * @Then /^I should see the latest (\d+) Magazine articles in the 'Latest' list$/
      */
     public function iShouldSeeTheLatestMagazineArticlesInTheLatestList(int $number)

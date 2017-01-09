@@ -81,6 +81,14 @@ final class BlogContext extends Context
     }
 
     /**
+     * @When /^I load more articles$/
+     */
+    public function iLoadMoreArticles()
+    {
+        $this->getSession()->getPage()->clickLink('More articles');
+    }
+
+    /**
      * @Then /^I should see the latest (\d+) blog articles in the 'Latest' list$/
      */
     public function iShouldSeeTheLatestBlogArticlesInTheLatestList(int $number)

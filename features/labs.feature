@@ -12,7 +12,7 @@ Feature: Labs page
     When I go the Labs page
     Then I should see the latest 8 Labs experiments in the 'Experiments' list
 
-  @wip
+  @javascript
   Scenario: Loading more experiments adds previous 8 to the list
     When I go the Labs page
     And I load more experiments

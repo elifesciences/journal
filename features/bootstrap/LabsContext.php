@@ -116,6 +116,14 @@ final class LabsContext extends Context
     }
 
     /**
+     * @When /^I load more experiments$/
+     */
+    public function iLoadMoreExperiments()
+    {
+        $this->getSession()->getPage()->clickLink('More experiments');
+    }
+
+    /**
      * @Then /^I should see the latest (\d+) Labs experiments in the 'Experiments' list$/
      */
     public function iShouldSeeTheLatestLabsExperimentsInTheExperimentsList(int $number)

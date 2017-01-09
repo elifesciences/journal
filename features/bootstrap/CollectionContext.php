@@ -128,6 +128,14 @@ final class CollectionContext extends Context
     }
 
     /**
+     * @When /^I load more collections/
+     */
+    public function iLoadMoreCollections()
+    {
+        $this->getSession()->getPage()->clickLink('More collections');
+    }
+
+    /**
      * @Then /^I should see the (\d+) most-recently-updated collections in the 'Latest collections' list$/
      */
     public function iShouldSeeTheMostRecentlyUpdatedCollectionsInTheLatestCollectionsList(int $number)

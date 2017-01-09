@@ -13,7 +13,7 @@ Feature: Events
     When I go to the events page
     Then I should see the 6 earliest upcoming events in the 'Upcoming events' list
 
-  @wip
+  @javascript
   Scenario: Loading more events adds previous 6 to the list
     When I go to the events page
     And I load more events

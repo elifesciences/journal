@@ -12,7 +12,7 @@ Feature: Inside eLife page
     When I go the Inside eLife page
     Then I should see the latest 6 blog articles in the 'Latest' list
 
-  @wip
+  @javascript
   Scenario: Loading more blog articles adds previous 6 to the list
     When I go the Inside eLife page
     And I load more blog articles

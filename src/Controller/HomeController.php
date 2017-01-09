@@ -58,7 +58,7 @@ final class HomeController extends Controller
             return $this->createFirstPage($arguments);
         }
 
-        return $this->createSubsequentPage($arguments);
+        return $this->createSubsequentPage($request, $arguments);
     }
 
     private function createFirstPage(array $arguments) : Response
@@ -107,18 +107,26 @@ final class HomeController extends Controller
         return new Response($this->get('templating')->render('::home.html.twig', $arguments));
     }
 
-    private function createSubsequentPage(array $arguments) : Response
+    private function createSubsequentPage(Request $request, array $arguments) : Response
     {
-        $arguments['contentHeader'] = $arguments['paginator']
-            ->then(function (Paginator $paginator) {
-                return new ContentHeaderSimple(
-                    'Browse our latest research',
-                    sprintf('Page %s of %s', number_format($paginator->getCurrentPage()), number_format(count($paginator)))
-                );
-            });
+        if ($request->isXmlHttpRequest()) {
+            $response = new Response($this->render($arguments['listing']->wait()));
+        } else {
+            $arguments['contentHeader'] = $arguments['paginator']
+                ->then(function (Paginator $paginator) {
+                    return new ContentHeaderSimple(
+                        'Browse our latest research',
+                        sprintf('Page %s of %s', number_format($paginator->getCurrentPage()), number_format(count($paginator)))
+                    );
+                });
 
-        $arguments['title'] = 'Latest research';
+            $arguments['title'] = 'Latest research';
 
-        return new Response($this->get('templating')->render('::pagination.html.twig', $arguments));
+            return new Response($this->get('templating')->render('::pagination.html.twig', $arguments));
+        }
+
+        $response->headers->set('Vary', 'X-Requested-With', false);
+
+        return $response;
     }
 }

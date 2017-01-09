@@ -84,6 +84,14 @@ final class EventContext extends Context
     }
 
     /**
+     * @When /^I load more events$/
+     */
+    public function iLoadMoreEvents()
+    {
+        $this->getSession()->getPage()->clickLink('More events');
+    }
+
+    /**
      * @Then /^I should see the (\d+) earliest upcoming events in the 'Upcoming events' list$/
      */
     public function iShouldSeeTheEarliestUpcomingEventsInTheUpcomingEventsList(int $number)

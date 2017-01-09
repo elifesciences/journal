@@ -265,6 +265,14 @@ final class SubjectContext extends Context
     }
 
     /**
+     * @When /^I load more articles$/
+     */
+    public function iLoadMoreArticles()
+    {
+        $this->getSession()->getPage()->clickLink('More articles');
+    }
+
+    /**
      * @Then /^I should see the (\d+) subjects\.$/
      */
     public function iShouldSeeTheSubjects(int $number)
