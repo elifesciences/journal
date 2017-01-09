@@ -37,6 +37,43 @@ final class MagazineContext extends Context
             ];
         }
 
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/search?for=&page=1&per-page=1&sort=date&order=desc&type[]=editorial&type[]=insight&type[]=feature&type[]=collection&type[]=interview&type[]=podcast-episode',
+                ['Accept' => 'application/vnd.elife.search+json; version=1']
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.search+json; version=1'],
+                json_encode([
+                    'total' => $number,
+                    'items' => [$articles[0]],
+                    'subjects' => [],
+                    'types' => [
+                        'correction' => 0,
+                        'editorial' => 0,
+                        'feature' => 0,
+                        'insight' => 0,
+                        'research-advance' => 0,
+                        'research-article' => 0,
+                        'research-exchange' => 0,
+                        'retraction' => 0,
+                        'registered-report' => 0,
+                        'replication-study' => 0,
+                        'short-report' => 0,
+                        'tools-resources' => 0,
+                        'blog-article' => 0,
+                        'collection' => 0,
+                        'event' => 0,
+                        'interview' => $this->numberOfArticles,
+                        'labs-experiment' => 0,
+                        'podcast-episode' => 0,
+                    ],
+                ])
+            )
+        );
+
         foreach (array_chunk($articles, 6) as $i => $articleChunk) {
             $page = $i + 1;
 
@@ -334,18 +371,20 @@ final class MagazineContext extends Context
      */
     public function iShouldSeeTheLatestMagazineArticlesInTheLatestList(int $number)
     {
-        $this->assertSession()->elementsCount('css', '.list-heading:contains("Latest") + ol > li', $number);
+        $this->spin(function () use ($number) {
+            $this->assertSession()->elementsCount('css', '.list-heading:contains("Latest") + .listing-list > .listing-list__item', $number);
 
-        for ($i = $number; $i > 0; --$i) {
-            $nthChild = ($number - $i + 1);
-            $expectedNumber = ($this->numberOfArticles - $nthChild + 1);
+            for ($i = $number; $i > 0; --$i) {
+                $nthChild = ($number - $i + 1);
+                $expectedNumber = ($this->numberOfArticles - $nthChild + 1);
 
-            $this->assertSession()->elementContains(
-                'css',
-                '.list-heading:contains("Latest") + ol > li:nth-child('.$nthChild.')',
-                'Interview '.$expectedNumber.' title'
-            );
-        }
+                $this->assertSession()->elementContains(
+                    'css',
+                    '.list-heading:contains("Latest") + .listing-list > .listing-list__item:nth-child('.$nthChild.')',
+                    'Interview '.$expectedNumber.' title'
+                );
+            }
+        });
     }
 
     /**
@@ -378,9 +417,9 @@ final class MagazineContext extends Context
     public function iShouldSeeUpcomingEventsInTheEventsList(int $number)
     {
         if ($this->numberOfEvents > 3) {
-            $this->assertSession()->elementsCount('css', '.list-heading:contains("Events") + ol > li', $number + 1);
+            $this->assertSession()->elementsCount('css', '.list-heading:contains("Events") + .listing-list > .listing-list__item', $number + 1);
         } else {
-            $this->assertSession()->elementsCount('css', '.list-heading:contains("Events") + ol > li', $number);
+            $this->assertSession()->elementsCount('css', '.list-heading:contains("Events") + .listing-list > .listing-list__item', $number);
         }
 
         for ($i = $number; $i > 0; --$i) {
@@ -389,7 +428,7 @@ final class MagazineContext extends Context
 
             $this->assertSession()->elementContains(
                 'css',
-                '.list-heading:contains("Events") + ol > li:nth-child('.$nthChild.')',
+                '.list-heading:contains("Events") + .listing-list > .listing-list__item:nth-child('.$nthChild.')',
                 'Event '.$expectedNumber.' title'
             );
         }
@@ -400,7 +439,7 @@ final class MagazineContext extends Context
      */
     public function iShouldNotSeeASeeMoreEventsLink()
     {
-        $this->assertSession()->elementNotExists('css', '.list-heading:contains("Events") + ol > li:nth-child(4)');
+        $this->assertSession()->elementNotExists('css', '.list-heading:contains("Events") + .listing-list > .listing-list__item:nth-child(4)');
         $this->assertSession()->elementTextNotContains(
             'css',
             '.list-heading:contains("Events") + ol',
@@ -415,7 +454,7 @@ final class MagazineContext extends Context
     {
         $this->assertSession()->elementContains(
             'css',
-            '.list-heading:contains("Events") + ol > li:nth-child(4)',
+            '.list-heading:contains("Events") + .listing-list > .listing-list__item:nth-child(4)',
             'See more events'
         );
     }
@@ -425,7 +464,7 @@ final class MagazineContext extends Context
      */
     public function iShouldSeeTheLatestDigestsInTheList(int $number)
     {
-        $this->assertSession()->elementsCount('css', '.list-heading:contains("eLife digests") + ol > li', $number + 1);
+        $this->assertSession()->elementsCount('css', '.list-heading:contains("eLife digests") + .listing-list > .listing-list__item', $number + 1);
 
         for ($i = $number; $i > 0; --$i) {
             $nthChild = ($number - $i + 1);
@@ -433,14 +472,14 @@ final class MagazineContext extends Context
 
             $this->assertSession()->elementContains(
                 'css',
-                '.list-heading:contains("eLife digests") + ol > li:nth-child('.$nthChild.')',
+                '.list-heading:contains("eLife digests") + .listing-list > .listing-list__item:nth-child('.$nthChild.')',
                 'Medium article '.$expectedNumber.' title'
             );
         }
 
         $this->assertSession()->elementContains(
             'css',
-            '.list-heading:contains("eLife digests") + ol > li:nth-child('.($number + 1).')',
+            '.list-heading:contains("eLife digests") + .listing-list > .listing-list__item:nth-child('.($number + 1).')',
             'See more eLife digests on Medium'
         );
     }

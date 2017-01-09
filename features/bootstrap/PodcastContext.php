@@ -66,6 +66,27 @@ final class PodcastContext extends Context
             ];
         }
 
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/podcast-episodes?page=1&per-page=1&order=desc',
+                ['Accept' => 'application/vnd.elife.podcast-episode-list+json; version=1']
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.podcast-episode-list+json; version=1'],
+                json_encode([
+                    'total' => $number,
+                    'items' => array_map(function (array $episode) {
+                        unset($episode['image']['banner']);
+                        unset($episode['chapters']);
+
+                        return $episode;
+                    }, [$episodes[0]]),
+                ])
+            )
+        );
+
         foreach (array_chunk($episodes, 6) as $i => $episodesChunk) {
             $page = $i + 1;
 
@@ -264,19 +285,21 @@ final class PodcastContext extends Context
      */
     public function iShouldSeeTheLatestPodcastEpisodesInTheEpisodesList(int $number)
     {
-        $this->assertSession()
-            ->elementsCount('css', '.grid-listing-heading:contains("Latest episodes") + ol > li', $number);
+        $this->spin(function () use ($number) {
+            $this->assertSession()
+                ->elementsCount('css', '.grid-listing-heading:contains("Latest episodes") + .grid-listing > .grid-listing-item', $number);
 
-        for ($i = $number; $i > 0; --$i) {
-            $nthChild = ($number - $i + 1);
-            $expectedNumber = ($this->numberOfEpisodes - $nthChild + 1);
+            for ($i = $number; $i > 0; --$i) {
+                $nthChild = ($number - $i + 1);
+                $expectedNumber = ($this->numberOfEpisodes - $nthChild + 1);
 
-            $this->assertSession()->elementContains(
-                'css',
-                '.grid-listing-heading:contains("Latest episodes") + ol > li:nth-child('.$nthChild.')',
-                'Episode '.$expectedNumber.' title'
-            );
-        }
+                $this->assertSession()->elementContains(
+                    'css',
+                    '.grid-listing-heading:contains("Latest episodes") + .grid-listing > .grid-listing-item:nth-child('.$nthChild.')',
+                    'Episode '.$expectedNumber.' title'
+                );
+            }
+        });
     }
 
     /**
@@ -284,14 +307,12 @@ final class PodcastContext extends Context
      */
     public function iShouldSeeTheTwoArticlesCoveredByTheChaptersInTheRelatedList()
     {
-        $this->assertSession()->elementsCount('css', '.list-heading:contains("Related") + ol > li', 2);
+        $this->assertSession()->elementsCount('css', '.list-heading:contains("Related") + .listing-list > .listing-list__item', 2);
 
         $this->assertSession()
-            ->elementContains('css', '.list-heading:contains("Related") + ol > li:nth-child(1)', 'Article 12345')
-        ;
+            ->elementContains('css', '.list-heading:contains("Related") + .listing-list > .listing-list__item:nth-child(1)', 'Article 12345');
         $this->assertSession()
-            ->elementContains('css', '.list-heading:contains("Related") + ol > li:nth-child(2)', 'Article 12346')
-        ;
+            ->elementContains('css', '.list-heading:contains("Related") + .listing-list > .listing-list__item:nth-child(2)', 'Article 12346');
     }
 
     /**

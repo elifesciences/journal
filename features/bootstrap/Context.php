@@ -37,6 +37,12 @@ abstract class Context extends RawMinkContext implements KernelAwareContext
 
     final protected function spin(callable $lambda, int $wait = 10)
     {
+        if (!$this->isJavaScript()) {
+            $lambda();
+
+            return;
+        }
+
         $e = null;
         for ($i = 0; $i < $wait; ++$i) {
             try {

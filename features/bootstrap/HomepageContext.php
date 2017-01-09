@@ -407,18 +407,20 @@ final class HomepageContext extends Context
      */
     public function iShouldSeeTheLatestArticlesInTheLatestResearchList(int $number)
     {
-        $this->assertSession()->elementsCount('css', '.list-heading:contains("Latest research") + ol > li', $number);
+        $this->spin(function () use ($number) {
+            $this->assertSession()->elementsCount('css', '.list-heading:contains("Latest research") + .listing-list > .listing-list__item', $number);
 
-        for ($i = $number; $i > 0; --$i) {
-            $nthChild = ($number - $i + 1);
-            $expectedNumber = ($this->numberOfArticles - $nthChild + 1);
+            for ($i = $number; $i > 0; --$i) {
+                $nthChild = ($number - $i + 1);
+                $expectedNumber = ($this->numberOfArticles - $nthChild + 1);
 
-            $this->assertSession()->elementContains(
-                'css',
-                '.list-heading:contains("Latest research") + ol > li:nth-child('.$nthChild.')',
-                'Article '.str_pad($expectedNumber, 5, '0', STR_PAD_LEFT).' title'
-            );
-        }
+                $this->assertSession()->elementContains(
+                    'css',
+                    '.list-heading:contains("Latest research") + .listing-list > .listing-list__item:nth-child('.$nthChild.')',
+                    'Article '.str_pad($expectedNumber, 5, '0', STR_PAD_LEFT).' title'
+                );
+            }
+        });
     }
 
     /**
@@ -426,7 +428,7 @@ final class HomepageContext extends Context
      */
     public function iShouldSeeTheLatestMagazineItemsInTheMagazineList(int $number)
     {
-        $this->assertSession()->elementsCount('css', '.list-heading:contains("Magazine") + ol > li', $number + 1);
+        $this->assertSession()->elementsCount('css', '.list-heading:contains("Magazine") + .listing-list > .listing-list__item', $number + 1);
 
         for ($i = $number; $i > 0; --$i) {
             $nthChild = ($number - $i + 1);
@@ -434,14 +436,14 @@ final class HomepageContext extends Context
 
             $this->assertSession()->elementContains(
                 'css',
-                '.list-heading:contains("Magazine") + ol > li:nth-child('.$nthChild.')',
+                '.list-heading:contains("Magazine") + .listing-list > .listing-list__item:nth-child('.$nthChild.')',
                 'Podcast episode '.$expectedNumber.' title'
             );
         }
 
         $this->assertSession()->elementContains(
             'css',
-            '.list-heading:contains("Magazine") + ol > li:nth-child('.($number + 1).')',
+            '.list-heading:contains("Magazine") + .listing-list > .listing-list__item:nth-child('.($number + 1).')',
             'See more Magazine articles'
         );
     }

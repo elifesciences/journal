@@ -34,6 +34,22 @@ final class BlogContext extends Context
             ];
         }
 
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/blog-articles?page=1&per-page=1&order=desc',
+                ['Accept' => 'application/vnd.elife.blog-article-list+json; version=1']
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.blog-article-list+json; version=1'],
+                json_encode([
+                    'total' => $number,
+                    'items' => [$articles[0]],
+                ])
+            )
+        );
+
         foreach (array_chunk($articles, 6) as $i => $articlesChunk) {
             $page = $i + 1;
 
@@ -93,17 +109,19 @@ final class BlogContext extends Context
      */
     public function iShouldSeeTheLatestBlogArticlesInTheLatestList(int $number)
     {
-        $this->assertSession()->elementsCount('css', '.list-heading:contains("Latest") + ol > li', $number);
+        $this->spin(function () use ($number) {
+            $this->assertSession()->elementsCount('css', '.list-heading:contains("Latest") + .listing-list > .listing-list__item', $number);
 
-        for ($i = $number; $i > 0; --$i) {
-            $nthChild = ($number - $i + 1);
-            $expectedNumber = ($this->numberOfArticles - $nthChild + 1);
+            for ($i = $number; $i > 0; --$i) {
+                $nthChild = ($number - $i + 1);
+                $expectedNumber = ($this->numberOfArticles - $nthChild + 1);
 
-            $this->assertSession()->elementContains(
-                'css',
-                '.list-heading:contains("Latest") + ol > li:nth-child('.$nthChild.')',
-                'Blog article '.$expectedNumber.' title'
-            );
-        }
+                $this->assertSession()->elementContains(
+                    'css',
+                    '.list-heading:contains("Latest") + .listing-list > .listing-list__item:nth-child('.$nthChild.')',
+                    'Blog article '.$expectedNumber.' title'
+                );
+            }
+        });
     }
 }
