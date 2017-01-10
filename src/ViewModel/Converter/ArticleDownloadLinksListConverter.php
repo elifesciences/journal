@@ -29,6 +29,13 @@ final class ArticleDownloadLinksListConverter implements ViewModelConverter
 
         $articleUri = $this->urlGenerator->generate('article', ['volume' => $object->getVolume(), 'id' => $object->getId()], UrlGeneratorInterface::ABSOLUTE_URL);
 
+        if ($object->getPublishedDate()) {
+            $groups[mixed_visibility_text('', 'Download citations', '(links to download the citations from this article in formats compatible with various reference manager tools)')] = [
+                new ViewModel\Link('BibTeX', $this->urlGenerator->generate('article-bibtex', ['volume' => $object->getVolume(), 'id' => $object->getId()])),
+                new ViewModel\Link('RIS', $this->urlGenerator->generate('article-ris', ['volume' => $object->getVolume(), 'id' => $object->getId()])),
+            ];
+        }
+
         $groups[mixed_visibility_text('', 'Open citations', '(links to open the citations from this article in various online reference manager services)')] = [
             new ViewModel\Link('Mendeley', 'https://www.mendeley.com/import?doi='.$object->getDoi()),
             new ViewModel\Link('ReadCube', 'https://www.readcube.com/articles/'.$object->getDoi()),

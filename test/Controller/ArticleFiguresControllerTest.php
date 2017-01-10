@@ -21,7 +21,7 @@ final class ArticleFiguresControllerTest extends PageTestCase
         $this->assertSame('Foo Bar', trim($crawler->filter('.content-header__author_list')->text()));
         $this->assertEmpty($crawler->filter('.content-header__institution_list'));
 
-        $this->assertContains('Cite as: eLife 2012;1:e00001',
+        $this->assertContains('Cite as: eLife 2010;1:e00001',
             $crawler->filter('.contextual-data__cite_wrapper')->text());
         $this->assertContains('doi: 10.7554/eLife.00001', $crawler->filter('.contextual-data__cite_wrapper')->text());
 
@@ -192,7 +192,7 @@ final class ArticleFiguresControllerTest extends PageTestCase
         $this->assertSame('Foo Bar', trim($crawler->filter('.content-header__author_list')->text()));
         $this->assertEmpty($crawler->filter('.content-header__institution_list'));
 
-        $this->assertContains('Cite as: eLife 2012;1:e00001',
+        $this->assertContains('Cite as: eLife 2010;1:e00001',
             $crawler->filter('.contextual-data__cite_wrapper')->text());
         $this->assertContains('doi: 10.7554/eLife.00001', $crawler->filter('.contextual-data__cite_wrapper')->text());
 

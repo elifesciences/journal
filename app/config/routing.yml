@@ -34,6 +34,20 @@ article-version:
         volume: '[1-9][0-9]*'
         version: '[1-9][0-9]*'
 
+article-bibtex:
+    path: /content/{volume}/e{id}.bib
+    defaults:
+         _controller: AppBundle:Articles:bibTex
+    requirements:
+        volume: '[1-9][0-9]*'
+
+article-ris:
+    path: /content/{volume}/e{id}.ris
+    defaults:
+         _controller: AppBundle:Articles:ris
+    requirements:
+        volume: '[1-9][0-9]*'
+
 article:
     path: /content/{volume}/e{id}
     defaults:

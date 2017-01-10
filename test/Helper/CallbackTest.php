@@ -64,6 +64,58 @@ final class CallbackTest extends PHPUnit_Framework_TestCase
 
     /**
      * @test
+     * @dataProvider notEmptyProvider
+     */
+    public function it_creates_method_must_not_be_empty_with_not_empty($item)
+    {
+        $object = new class($item) {
+            private $item;
+
+            public function __construct($item)
+            {
+                $this->item = $item;
+            }
+
+            public function get()
+            {
+                return $this->item;
+            }
+        };
+
+        $callback = Callback::methodMustNotBeEmpty('get');
+
+        $this->assertSame($object, $callback($object));
+    }
+
+    /**
+     * @test
+     * @dataProvider emptyProvider
+     */
+    public function it_creates_method_must_not_be_empty_with_empty($item)
+    {
+        $object = new class($item) {
+            private $item;
+
+            public function __construct($item)
+            {
+                $this->item = $item;
+            }
+
+            public function get()
+            {
+                return $this->item;
+            }
+        };
+
+        $callback = Callback::methodMustNotBeEmpty('get');
+
+        $this->expectException(InvalidArgumentException::class);
+
+        $callback($object);
+    }
+
+    /**
+     * @test
      */
     public function it_creates_method()
     {

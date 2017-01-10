@@ -405,7 +405,27 @@ final class ArticlesController extends Controller
         return new Response($this->get('templating')->render('::article-figures.html.twig', $arguments));
     }
 
-    private function articlePageArguments(int $volume, string $id, int $version = null) : array
+    public function bibTexAction(int $volume, string $id) : Response
+    {
+        $arguments = $this->defaultArticleArguments($volume, $id);
+
+        $arguments['article'] = $arguments['article']
+            ->then(Callback::methodMustNotBeEmpty('getPublishedDate', new NotFoundHttpException('Article version not published')));
+
+        return new Response($this->get('templating')->render('::article.bib.twig', $arguments), Response::HTTP_OK, ['Content-Type' => 'application/x-bibtex']);
+    }
+
+    public function risAction(int $volume, string $id) : Response
+    {
+        $arguments = $this->defaultArticleArguments($volume, $id);
+
+        $arguments['article'] = $arguments['article']
+            ->then(Callback::methodMustNotBeEmpty('getPublishedDate', new NotFoundHttpException('Article version not published')));
+
+        return new Response(preg_replace('~\R~u', "\r\n", $this->get('templating')->render('::article.ris.twig', $arguments)), Response::HTTP_OK, ['Content-Type' => 'application/x-research-info-systems']);
+    }
+
+    private function defaultArticleArguments(int $volume, string $id, int $version = null) : array
     {
         $arguments = $this->defaultPageArguments();
 
@@ -418,6 +438,13 @@ final class ArticlesController extends Controller
 
                 return $article;
             });
+
+        return $arguments;
+    }
+
+    private function articlePageArguments(int $volume, string $id, int $version = null) : array
+    {
+        $arguments = $this->defaultArticleArguments($volume, $id, $version);
 
         $arguments['history'] = $this->get('elife.api_sdk.articles')->getHistory($id);
 
@@ -454,10 +481,7 @@ final class ArticlesController extends Controller
 
         $arguments['contextualData'] = $arguments['article']
             ->then(function (ArticleVersion $article) {
-                return ContextualData::withCitation(
-                    sprintf('eLife %s;%s:%s', 2011 + $article->getVolume(), $article->getVolume(), $article->getElocationId()),
-                    new Doi($article->getDoi())
-                );
+                return ContextualData::withCitation($article->getCiteAs(), new Doi($article->getDoi()));
             });
 
         return $arguments;
