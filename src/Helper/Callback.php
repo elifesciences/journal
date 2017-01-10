@@ -52,6 +52,23 @@ final class Callback
         });
     }
 
+    public static function methodMustNotBeEmpty(string $method, Exception $exception = null) : Callback
+    {
+        if (null === $exception) {
+            $exception = new InvalidArgumentException('Is empty');
+        }
+
+        return new self(function ($object) use ($method, $exception) {
+            $test = call_user_func([$object, $method]);
+
+            if (empty($test) || ((is_array($test) || $test instanceof Countable) && 0 === count($test))) {
+                throw $exception;
+            }
+
+            return $object;
+        });
+    }
+
     public static function method(string $method, ...$values) : Callback
     {
         return new self(function ($object) use ($method, $values) {

@@ -1,0 +1,39 @@
+{% autoescape false %}
+TY  - JOUR
+TI  - {{ article.title|html2ris }}
+{% for author in article.authors %}
+{% if author.indexName is defined %}
+AU  - {{ author.indexName }}
+{% elseif author.name is defined %}
+AU  - {{ author.name }}
+{% endif %}
+{% endfor %}
+{% if article.reviewers|length %}
+{% for reviewer in article.reviewers %}
+A2  - {{ reviewer.indexName }}
+{% endfor %}
+{% endif %}
+VL  - {{ article.volume }}
+{% if article.issue %}
+IS  - {{ article.issue }}
+{% endif %}
+PY  - {{ article.publishedDate|date('Y') }}
+DA  - {{ article.publishedDate|date('Y/m/d') }}
+SP  - {{ article.eLocationId }}
+C1  - {{ article.citeAs }}
+DO  - {{ article.doi }}
+UR  - https://doi.org/{{ article.doi }}
+{% if article.abstract %}
+AB  - {% for paragraph in article.abstract.content %}{{ paragraph.text|html2ris }}{% if not loop.last %} {% endif %}{% endfor %}
+
+{% endif %}
+{% if article.keywords is defined and article.keywords|length %}
+{% for keyword in article.keywords %}
+KW  - {{ keyword|html2ris }}
+{% endfor %}
+{% endif %}
+JF  - eLife
+SN  - 2050-084X
+PB  - eLife Sciences Publications, Ltd
+ER  - {# end of file marker #}
+{% endautoescape %}

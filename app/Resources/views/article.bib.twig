@@ -1,0 +1,30 @@
+{% autoescape false %}
+@article {{ '{' }}{{ article.doi }}{{ '}' }},
+article_type = {{ '{' }}journal{{ '}' }},
+title = {{ '{' }}{{ article.fullTitle|html2tex }}{{ '}' }},
+author = {{ '{' }}{% for author in article.authors %}{% if author.indexName is defined %}{% if not loop.first %} and {% endif %}{{ author.indexName }}{% elseif author.name is defined %}{% if not loop.first %} and {% endif %}{{ author.name }}{% endif %}{% endfor %}{{ '}' }},
+{% if article.reviewers|length %}
+editor = {{ '{' }}{% for reviewer in article.reviewers %}{{ reviewer.indexName }}{% if not loop.last %} and {% endif %}{% endfor %}{{ '}' }},
+{% endif %}
+volume = {{ article.volume }},
+{% if article.issue %}
+number = {{ article.issue }},
+{% endif %}
+year = {{ article.publishedDate|date('Y') }},
+month = {{ '{' }}{{ article.publishedDate|date('M')|lower }}{{ '}' }},
+pub_date = {{ '{' }}{{ article.publishedDate|date('Y-m-d') }}{{ '}' }},
+pages = {{ '{' }}{{ article.eLocationId }}{{ '}' }},
+citation = {{ '{' }}{{ article.citeAs }}{{ '}' }},
+doi = {{ '{' }}{{ article.doi }}{{ '}' }},
+url = {{ '{' }}https://doi.org/{{ article.doi }}{{ '}' }},
+{% if article.abstract %}
+abstract = {{ '{' }}{% for paragraph in article.abstract.content %}{{ paragraph.text|html2tex }}{% if not loop.last %} {% endif %}{% endfor %}{{ '}' }},
+{% endif %}
+{% if article.keywords is defined and article.keywords|length %}
+keywords = {{ '{' }}{% for keyword in article.keywords %}{{ keyword|html2tex }}{% if not loop.last %}, {% endif %}{% endfor %}{{ '}' }},
+{% endif %}
+journal = {{ '{' }}eLife{{ '}' }},
+issn = {{ '{' }}2050-084X{{ '}' }},
+publisher = {{ '{' }}eLife Sciences Publications, Ltd{{ '}' }},
+{{ '}' }}
+{% endautoescape %}
