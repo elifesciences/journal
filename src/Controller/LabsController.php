@@ -8,7 +8,6 @@ use eLife\Journal\Helper\Paginator;
 use eLife\Journal\Pagerfanta\SequenceAdapter;
 use eLife\Patterns\ViewModel\BackgroundImage;
 use eLife\Patterns\ViewModel\ContentHeaderNonArticle;
-use eLife\Patterns\ViewModel\ContentHeaderSimple;
 use eLife\Patterns\ViewModel\GridListing;
 use eLife\Patterns\ViewModel\LeadPara;
 use eLife\Patterns\ViewModel\LeadParas;
@@ -39,12 +38,16 @@ final class LabsController extends Controller
 
         $arguments['paginator'] = $experiments
             ->then(function (Pagerfanta $pagerfanta) use ($request) {
-                return new Paginator($pagerfanta, function (int $page = null) use ($request) {
-                    $routeParams = $request->attributes->get('_route_params');
-                    $routeParams['page'] = $page;
+                return new Paginator(
+                    'Browse our experiments',
+                    $pagerfanta,
+                    function (int $page = null) use ($request) {
+                        $routeParams = $request->attributes->get('_route_params');
+                        $routeParams['page'] = $page;
 
-                    return $this->get('router')->generate('labs', $routeParams);
-                });
+                        return $this->get('router')->generate('labs', $routeParams);
+                    }
+                );
             });
 
         $arguments['listing'] = $arguments['paginator']
@@ -54,7 +57,7 @@ final class LabsController extends Controller
             return $this->createFirstPage($arguments);
         }
 
-        return $this->createSubsequentPage($arguments);
+        return $this->createSubsequentPage($request, $arguments);
     }
 
     private function createFirstPage(array $arguments) : Response
@@ -72,19 +75,6 @@ developed further to become features on the eLife platform.'),
         ]);
 
         return new Response($this->get('templating')->render('::labs.html.twig', $arguments));
-    }
-
-    private function createSubsequentPage(array $arguments) : Response
-    {
-        $arguments['contentHeader'] = $arguments['paginator']
-            ->then(function (Paginator $paginator) {
-                return new ContentHeaderSimple(
-                    'Browse our experiments',
-                    sprintf('Page %s of %s', number_format($paginator->getCurrentPage()), number_format(count($paginator)))
-                );
-            });
-
-        return new Response($this->get('templating')->render('::pagination-grid.html.twig', $arguments));
     }
 
     public function experimentAction(int $number) : Response

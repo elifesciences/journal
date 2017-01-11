@@ -9,7 +9,6 @@ use eLife\Journal\Helper\Paginator;
 use eLife\Journal\Pagerfanta\SequenceAdapter;
 use eLife\Patterns\ViewModel\AudioPlayer;
 use eLife\Patterns\ViewModel\ContentHeaderNonArticle;
-use eLife\Patterns\ViewModel\ContentHeaderSimple;
 use eLife\Patterns\ViewModel\GridListing;
 use eLife\Patterns\ViewModel\LeadParas;
 use eLife\Patterns\ViewModel\ListingTeasers;
@@ -41,12 +40,16 @@ final class PodcastController extends Controller
 
         $arguments['paginator'] = $episodes
             ->then(function (Pagerfanta $pagerfanta) use ($request) {
-                return new Paginator($pagerfanta, function (int $page = null) use ($request) {
-                    $routeParams = $request->attributes->get('_route_params');
-                    $routeParams['page'] = $page;
+                return new Paginator(
+                    'Browse the podcast',
+                    $pagerfanta,
+                    function (int $page = null) use ($request) {
+                        $routeParams = $request->attributes->get('_route_params');
+                        $routeParams['page'] = $page;
 
-                    return $this->get('router')->generate('podcast', $routeParams);
-                });
+                        return $this->get('router')->generate('podcast', $routeParams);
+                    }
+                );
             });
 
         $arguments['listing'] = $arguments['paginator']
@@ -56,7 +59,7 @@ final class PodcastController extends Controller
             return $this->createFirstPage($arguments);
         }
 
-        return $this->createSubsequentPage($arguments);
+        return $this->createSubsequentPage($request, $arguments);
     }
 
     private function createFirstPage(array $arguments) : Response
@@ -64,19 +67,6 @@ final class PodcastController extends Controller
         $arguments['contentHeader'] = ContentHeaderNonArticle::basic('eLife podcast');
 
         return new Response($this->get('templating')->render('::podcast.html.twig', $arguments));
-    }
-
-    private function createSubsequentPage(array $arguments) : Response
-    {
-        $arguments['contentHeader'] = $arguments['paginator']
-            ->then(function (Paginator $paginator) {
-                return new ContentHeaderSimple(
-                    'Browse the podcast',
-                    sprintf('Page %s of %s', number_format($paginator->getCurrentPage()), number_format(count($paginator)))
-                );
-            });
-
-        return new Response($this->get('templating')->render('::pagination-grid.html.twig', $arguments));
     }
 
     public function episodeAction(int $number) : Response

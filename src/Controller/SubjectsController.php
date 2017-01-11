@@ -76,14 +76,21 @@ final class SubjectsController extends Controller
         $arguments['title'] = $arguments['subject']
             ->then(Callback::method('getName'));
 
-        $arguments['paginator'] = $latestArticles
-            ->then(function (Pagerfanta $pagerfanta) use ($request) {
-                return new Paginator($pagerfanta, function (int $page = null) use ($request) {
-                    $routeParams = $request->attributes->get('_route_params');
-                    $routeParams['page'] = $page;
+        $arguments['paginator'] = all(['subject' => $arguments['subject'], 'latestArticles' => $latestArticles])
+            ->then(function (array $parts) use ($request) {
+                $subject = $parts['subject'];
+                $latestArticles = $parts['latestArticles'];
 
-                    return $this->get('router')->generate('subject', $routeParams);
-                });
+                return new Paginator(
+                    sprintf('Browse our latest %s articles', $subject->getName()),
+                    $latestArticles,
+                    function (int $page = null) use ($request) {
+                        $routeParams = $request->attributes->get('_route_params');
+                        $routeParams['page'] = $page;
+
+                        return $this->get('router')->generate('subject', $routeParams);
+                    }
+                );
             });
 
         $arguments['listing'] = $arguments['paginator']
@@ -93,7 +100,7 @@ final class SubjectsController extends Controller
             return $this->createFirstPage($arguments);
         }
 
-        return $this->createSubsequentPage($arguments);
+        return $this->createSubsequentPage($request, $arguments);
     }
 
     private function createFirstPage(array $arguments) : Response
@@ -105,21 +112,5 @@ final class SubjectsController extends Controller
             ->then(Callback::methodEmptyOr('getImpactStatement', $this->willConvertTo(LeadParas::class)));
 
         return new Response($this->get('templating')->render('::subject.html.twig', $arguments));
-    }
-
-    private function createSubsequentPage(array $arguments) : Response
-    {
-        $arguments['contentHeader'] = all(['subject' => $arguments['subject'], 'paginator' => $arguments['paginator']])
-            ->then(function (array $parts) {
-                $subject = $parts['subject'];
-                $paginator = $parts['paginator'];
-
-                return new ContentHeaderSimple(
-                    sprintf('Browse our latest %s articles', $subject->getName()),
-                    sprintf('Page %s of %s', number_format($paginator->getCurrentPage()), number_format(count($paginator)))
-                );
-            });
-
-        return new Response($this->get('templating')->render('::pagination.html.twig', $arguments));
     }
 }
