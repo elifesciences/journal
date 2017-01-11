@@ -7,11 +7,13 @@ use Pagerfanta\Pagerfanta;
 
 final class Paginator implements Countable
 {
+    private $title;
     private $pagerfanta;
     private $uriGenerator;
 
-    public function __construct(Pagerfanta $pagerfanta, callable $uriGenerator)
+    public function __construct(string $title, Pagerfanta $pagerfanta, callable $uriGenerator)
     {
+        $this->title = $title;
         $this->pagerfanta = $pagerfanta;
         $this->uriGenerator = $uriGenerator;
     }
@@ -19,6 +21,11 @@ final class Paginator implements Countable
     public function count() : int
     {
         return $this->pagerfanta->getNbPages();
+    }
+
+    public function getTitle() : string
+    {
+        return $this->title;
     }
 
     public function getCurrentPage() : int

@@ -7,7 +7,6 @@ use eLife\Journal\Helper\ArticleType;
 use eLife\Journal\Helper\Paginator;
 use eLife\Journal\Pagerfanta\SequenceAdapter;
 use eLife\Patterns\ViewModel\ContentHeaderNonArticle;
-use eLife\Patterns\ViewModel\ContentHeaderSimple;
 use eLife\Patterns\ViewModel\ListingTeasers;
 use eLife\Patterns\ViewModel\Teaser;
 use InvalidArgumentException;
@@ -43,13 +42,17 @@ final class ArticleTypesController extends Controller
             });
 
         $arguments['paginator'] = $latest
-            ->then(function (Pagerfanta $pagerfanta) use ($request) {
-                return new Paginator($pagerfanta, function (int $page = null) use ($request) {
-                    $routeParams = $request->attributes->get('_route_params');
-                    $routeParams['page'] = $page;
+            ->then(function (Pagerfanta $pagerfanta) use ($request, $type) {
+                return new Paginator(
+                    'Browse our '.lcfirst(ArticleType::plural($type)),
+                    $pagerfanta,
+                    function (int $page = null) use ($request) {
+                        $routeParams = $request->attributes->get('_route_params');
+                        $routeParams['page'] = $page;
 
-                    return $this->get('router')->generate('article-type', $routeParams);
-                });
+                        return $this->get('router')->generate('article-type', $routeParams);
+                    }
+                );
             });
 
         $arguments['listing'] = $arguments['paginator']
@@ -59,7 +62,7 @@ final class ArticleTypesController extends Controller
             return $this->createFirstPage($arguments);
         }
 
-        return $this->createSubsequentPage($arguments);
+        return $this->createSubsequentPage($request, $arguments);
     }
 
     private function createFirstPage(array $arguments) : Response
@@ -67,18 +70,5 @@ final class ArticleTypesController extends Controller
         $arguments['contentHeader'] = ContentHeaderNonArticle::basic($arguments['title']);
 
         return new Response($this->get('templating')->render('::article-type.html.twig', $arguments));
-    }
-
-    private function createSubsequentPage(array $arguments) : Response
-    {
-        $arguments['contentHeader'] = $arguments['paginator']
-            ->then(function (Paginator $paginator) use ($arguments) {
-                return new ContentHeaderSimple(
-                    'Browse our '.lcfirst($arguments['title']),
-                    sprintf('Page %s of %s', number_format($paginator->getCurrentPage()), number_format(count($paginator)))
-                );
-            });
-
-        return new Response($this->get('templating')->render('::pagination.html.twig', $arguments));
     }
 }

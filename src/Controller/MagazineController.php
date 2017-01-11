@@ -9,7 +9,6 @@ use eLife\Journal\Pagerfanta\SequenceAdapter;
 use eLife\Patterns\ViewModel\AudioPlayer;
 use eLife\Patterns\ViewModel\BackgroundImage;
 use eLife\Patterns\ViewModel\ContentHeaderNonArticle;
-use eLife\Patterns\ViewModel\ContentHeaderSimple;
 use eLife\Patterns\ViewModel\Link;
 use eLife\Patterns\ViewModel\ListingTeasers;
 use eLife\Patterns\ViewModel\SeeMoreLink;
@@ -43,12 +42,16 @@ final class MagazineController extends Controller
 
         $arguments['paginator'] = $latestResearch
             ->then(function (Pagerfanta $pagerfanta) use ($request) {
-                return new Paginator($pagerfanta, function (int $page = null) use ($request) {
-                    $routeParams = $request->attributes->get('_route_params');
-                    $routeParams['page'] = $page;
+                return new Paginator(
+                    'Browse our latest Magazine content',
+                    $pagerfanta,
+                    function (int $page = null) use ($request) {
+                        $routeParams = $request->attributes->get('_route_params');
+                        $routeParams['page'] = $page;
 
-                    return $this->get('router')->generate('magazine', $routeParams);
-                });
+                        return $this->get('router')->generate('magazine', $routeParams);
+                    }
+                );
             });
 
         $arguments['listing'] = $arguments['paginator']
@@ -58,7 +61,7 @@ final class MagazineController extends Controller
             return $this->createFirstPage($arguments);
         }
 
-        return $this->createSubsequentPage($arguments);
+        return $this->createSubsequentPage($request, $arguments);
     }
 
     private function createFirstPage(array $arguments) : Response
@@ -116,18 +119,5 @@ final class MagazineController extends Controller
             });
 
         return new Response($this->get('templating')->render('::magazine.html.twig', $arguments));
-    }
-
-    private function createSubsequentPage(array $arguments) : Response
-    {
-        $arguments['contentHeader'] = $arguments['paginator']
-            ->then(function (Paginator $paginator) {
-                return new ContentHeaderSimple(
-                    'Browse our latest Magazine content',
-                    sprintf('Page %s of %s', number_format($paginator->getCurrentPage()), number_format(count($paginator)))
-                );
-            });
-
-        return new Response($this->get('templating')->render('::pagination.html.twig', $arguments));
     }
 }

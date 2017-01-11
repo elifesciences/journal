@@ -10,7 +10,6 @@ use eLife\Journal\Pagerfanta\SequenceAdapter;
 use eLife\Patterns\ViewModel\AllSubjectsList;
 use eLife\Patterns\ViewModel\AllSubjectsListLink;
 use eLife\Patterns\ViewModel\Carousel;
-use eLife\Patterns\ViewModel\ContentHeaderSimple;
 use eLife\Patterns\ViewModel\LeadPara;
 use eLife\Patterns\ViewModel\LeadParas;
 use eLife\Patterns\ViewModel\Link;
@@ -41,14 +40,20 @@ final class HomeController extends Controller
                 return $pagerfanta;
             });
 
+        $arguments['title'] = 'Latest research';
+
         $arguments['paginator'] = $latestResearch
             ->then(function (Pagerfanta $pagerfanta) use ($request) {
-                return new Paginator($pagerfanta, function (int $page = null) use ($request) {
-                    $routeParams = $request->attributes->get('_route_params');
-                    $routeParams['page'] = $page;
+                return new Paginator(
+                    'Browse our latest research',
+                    $pagerfanta,
+                    function (int $page = null) use ($request) {
+                        $routeParams = $request->attributes->get('_route_params');
+                        $routeParams['page'] = $page;
 
-                    return $this->get('router')->generate('home', $routeParams);
-                });
+                        return $this->get('router')->generate('home', $routeParams);
+                    }
+                );
             });
 
         $arguments['listing'] = $arguments['paginator']
@@ -105,28 +110,5 @@ final class HomeController extends Controller
             });
 
         return new Response($this->get('templating')->render('::home.html.twig', $arguments));
-    }
-
-    private function createSubsequentPage(Request $request, array $arguments) : Response
-    {
-        if ($request->isXmlHttpRequest()) {
-            $response = new Response($this->render($arguments['listing']->wait()));
-        } else {
-            $arguments['contentHeader'] = $arguments['paginator']
-                ->then(function (Paginator $paginator) {
-                    return new ContentHeaderSimple(
-                        'Browse our latest research',
-                        sprintf('Page %s of %s', number_format($paginator->getCurrentPage()), number_format(count($paginator)))
-                    );
-                });
-
-            $arguments['title'] = 'Latest research';
-
-            return new Response($this->get('templating')->render('::pagination.html.twig', $arguments));
-        }
-
-        $response->headers->set('Vary', 'X-Requested-With', false);
-
-        return $response;
     }
 }
