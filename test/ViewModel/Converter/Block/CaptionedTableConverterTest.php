@@ -20,8 +20,13 @@ final class CaptionedTableConverterTest extends BlockConverterTestCase
     {
         $this->converter = new CaptionedTableConverter(
             $this->createMock(ViewModelConverter::class),
-            $this->createMock(PatternRenderer::class)
+            $patternRenderer = $this->createMock(PatternRenderer::class)
         );
+
+        $patternRenderer
+            ->expects($this->any())
+            ->method('render')
+            ->will($this->returnValue('...'));
     }
 
     public function blocks() : array
@@ -31,6 +36,7 @@ final class CaptionedTableConverterTest extends BlockConverterTestCase
                 [
                     'title' => 'Table\'s caption',
                     'tables' => [
+                        '<table>...</table>',
                     ],
                 ],
             ],
@@ -38,6 +44,7 @@ final class CaptionedTableConverterTest extends BlockConverterTestCase
                 [
                     'title' => 'Table\'s caption',
                     'tables' => [
+                        '<table>...</table>',
                     ],
                     'caption' => [
                         [
@@ -46,17 +53,45 @@ final class CaptionedTableConverterTest extends BlockConverterTestCase
                         ],
                     ],
                 ],
-
             ],
             'with MathML caption' => [
                 [
                     'title' => 'Table\'s caption',
                     'tables' => [
+                        '<table>...</table>',
                     ],
                     'caption' => [
                         [
                             'type' => 'mathml',
                             'mathml' => '<math>A table\'s caption</math>',
+                        ],
+                    ],
+                ],
+            ],
+            'with footnotes' => [
+                [
+                    'title' => 'Table\'s caption',
+                    'tables' => [
+                        '<table>...</table>',
+                    ],
+                    'footnotes' => [
+                        [
+                            'id' => 'id',
+                            'label' => 'label',
+                            'text' => [
+                                [
+                                    'type' => 'paragraph',
+                                    'text' => 'footnote 1',
+                                ],
+                            ],
+                        ],
+                        [
+                            'text' => [
+                                [
+                                    'type' => 'paragraph',
+                                    'text' => 'footnote 2',
+                                ],
+                            ],
                         ],
                     ],
                 ],
