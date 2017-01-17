@@ -256,7 +256,7 @@ final class ArticlesController extends Controller
 
                 $parts[] = ArticleSection::collapsible(
                     'info',
-                    'Article and author information',
+                    'Article'.($article->getAuthors()->notEmpty() ? ' and author' : '').' information',
                     2,
                     $this->render(...$infoSections),
                     true
