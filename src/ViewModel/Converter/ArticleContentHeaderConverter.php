@@ -50,7 +50,7 @@ final class ArticleContentHeaderConverter implements ViewModelConverter
             return $institutions;
         }, []))));
 
-        $authors = ViewModel\AuthorList::asList($authors);
+        $authors = !empty($authors) ? ViewModel\AuthorList::asList($authors) : null;
         $institutions = !empty($institutions) ? new ViewModel\InstitutionList($institutions) : null;
 
         $meta = ViewModel\Meta::withLink(
@@ -70,9 +70,9 @@ final class ArticleContentHeaderConverter implements ViewModelConverter
             case 'tools-resources':
                 return ViewModel\ContentHeaderArticle::research(
                     $object->getFullTitle(),
-                    $authors,
                     $meta,
                     new ViewModel\SubjectList(...$subjects),
+                    $authors,
                     $institutions,
                     '#downloads'
                 );
