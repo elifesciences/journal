@@ -4,6 +4,8 @@ namespace eLife\Journal\ViewModel\Converter\Block;
 
 use eLife\ApiSdk\Model\Block;
 use eLife\ApiSdk\Model\File;
+use eLife\ApiSdk\Model\Footnote;
+use eLife\Journal\Helper\CanConvert;
 use eLife\Journal\ViewModel\Converter\ViewModelConverter;
 use eLife\Patterns\PatternRenderer;
 use eLife\Patterns\ViewModel;
@@ -11,6 +13,7 @@ use eLife\Patterns\ViewModel\AssetViewerInline;
 
 final class CaptionedTableConverter implements ViewModelConverter
 {
+    use CanConvert;
     use CreatesCaptionedAsset;
 
     private $viewModelConverter;
@@ -27,7 +30,16 @@ final class CaptionedTableConverter implements ViewModelConverter
      */
     public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
-        $asset = new ViewModel\Table(...$object->getTables());
+        $asset = new ViewModel\Table(
+            $object->getTables(),
+            array_map(function (Footnote $footnote) {
+                return new ViewModel\TableFootnote(
+                    $this->getPatternRenderer()->render(...$footnote->getText()->map($this->willConvertTo())),
+                    $footnote->getId(),
+                    $footnote->getLabel()
+                );
+            }, $object->getFootnotes())
+        );
 
         $asset = $this->createCaptionedAsset($asset, $object);
 
