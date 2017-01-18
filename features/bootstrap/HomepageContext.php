@@ -462,8 +462,8 @@ final class HomepageContext extends Context
     public function iShouldSeeTheTitleAndImageFromTheCollectionUsedInTheCover(string $collectionName, string $coverName)
     {
         $this->assertSession()->elementTextContains('css', '.carousel-item__title', $coverName);
-        $this->assertSession()->elementAttributeContains('css', '.carousel-item', 'data-low-res-image-source', 'https://placehold.it/900x450?item');
-        $this->assertSession()->elementAttributeContains('css', '.carousel-item', 'data-high-res-image-source', 'https://placehold.it/1800x900?item');
+        $this->assertSession()->elementAttributeContains('css', '.carousel-item__inner', 'data-low-res-image-source', 'https://placehold.it/900x450?item');
+        $this->assertSession()->elementAttributeContains('css', '.carousel-item__inner', 'data-high-res-image-source', 'https://placehold.it/1800x900?item');
     }
 
     /**
@@ -472,8 +472,8 @@ final class HomepageContext extends Context
     public function iShouldSeeTheCustomTitleAndImageUsedInTheCover($arg1)
     {
         $this->assertSession()->elementTextContains('css', '.carousel-item__title', 'Cover');
-        $this->assertSession()->elementAttributeContains('css', '.carousel-item', 'data-low-res-image-source', 'https://placehold.it/900x450?cover');
-        $this->assertSession()->elementAttributeContains('css', '.carousel-item', 'data-high-res-image-source', 'https://placehold.it/1800x900?cover');
+        $this->assertSession()->elementAttributeContains('css', '.carousel-item__inner', 'data-low-res-image-source', 'https://placehold.it/900x450?cover');
+        $this->assertSession()->elementAttributeContains('css', '.carousel-item__inner', 'data-high-res-image-source', 'https://placehold.it/1800x900?cover');
     }
 
     private function createId(string $name) : string
