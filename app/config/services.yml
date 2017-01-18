@@ -12,6 +12,13 @@ services:
           - '@elife.api_client.client.warning_checking.inner'
           - '@monolog.logger.api'
 
+    elife.api_client.client.user_agent_prepending:
+        class: eLife\ApiClient\HttpClient\UserAgentPrependingHttpClient
+        decorates: elife.api_client.client
+        arguments:
+          - '@elife.api_client.client.warning_checking.inner'
+          - '@="eLifeJournal/"~version()'
+
     elife.api_sdk:
         class: eLife\ApiSdk\ApiSdk
         public: false

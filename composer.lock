@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "2d357304e83fba540eb2c56164a671bf",
-    "content-hash": "cb347d640fc1bc5a888f2084ba8fab45",
+    "hash": "90b8ac098353274c1564b4aa00ca26e7",
+    "content-hash": "dca85de40f9707d6fc21199869288fc0",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -675,12 +675,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-client-php.git",
-                "reference": "c5595f2f914de1c101223cec73f60837cc272bd8"
+                "reference": "5f234e2f4cdf0c5616cf081f8b791f6c5ae8fc59"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-client-php/zipball/c5595f2f914de1c101223cec73f60837cc272bd8",
-                "reference": "c5595f2f914de1c101223cec73f60837cc272bd8",
+                "url": "https://api.github.com/repos/elifesciences/api-client-php/zipball/5f234e2f4cdf0c5616cf081f8b791f6c5ae8fc59",
+                "reference": "5f234e2f4cdf0c5616cf081f8b791f6c5ae8fc59",
                 "shasum": ""
             },
             "require": {
@@ -688,10 +688,12 @@
                 "crell/api-problem": "^2.0",
                 "guzzlehttp/promises": "^1.0",
                 "guzzlehttp/psr7": "^1.0",
+                "ocramius/package-versions": "^1.0",
                 "php": "^7.0",
                 "psr/http-message": "^1.0"
             },
             "require-dev": {
+                "giorgiosironi/eris": "^0.8",
                 "guzzlehttp/guzzle": "^6.0",
                 "mtdowling/jmespath.php": "^2.0",
                 "phpspec/phpspec": "^2.4",
@@ -721,7 +723,7 @@
                 "GPL-3.0+"
             ],
             "description": "eLife Sciences API client",
-            "time": "2016-12-15 12:54:40"
+            "time": "2017-01-18 08:59:44"
         },
         {
             "name": "elife/api-sdk",
@@ -729,17 +731,18 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-sdk-php.git",
-                "reference": "65628753924d61c98d10efff34578f7b4600e6fd"
+                "reference": "9ed4ba5883d9a571d6e833da9ec11f1054eb0cd8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/65628753924d61c98d10efff34578f7b4600e6fd",
-                "reference": "65628753924d61c98d10efff34578f7b4600e6fd",
+                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/9ed4ba5883d9a571d6e833da9ec11f1054eb0cd8",
+                "reference": "9ed4ba5883d9a571d6e833da9ec11f1054eb0cd8",
                 "shasum": ""
             },
             "require": {
                 "elife/api-client": "^1.0@dev",
                 "guzzlehttp/promises": "^1.0",
+                "ocramius/package-versions": "^1.1",
                 "php": "^7.0",
                 "symfony/serializer": "^3.1"
             },
@@ -769,7 +772,7 @@
                 "MIT"
             ],
             "description": "eLife Sciences API SDK",
-            "time": "2017-01-17 12:00:06"
+            "time": "2017-01-18 11:07:34"
         },
         {
             "name": "elife/patterns",
@@ -1237,6 +1240,54 @@
             ],
             "description": "Get the cURL shell command from a Guzzle request",
             "time": "2016-07-03 18:18:53"
+        },
+        {
+            "name": "ocramius/package-versions",
+            "version": "1.1.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Ocramius/PackageVersions.git",
+                "reference": "51e867c70f0799790b3e82276875414ce13daaca"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Ocramius/PackageVersions/zipball/51e867c70f0799790b3e82276875414ce13daaca",
+                "reference": "51e867c70f0799790b3e82276875414ce13daaca",
+                "shasum": ""
+            },
+            "require": {
+                "composer-plugin-api": "^1.0",
+                "php": "~7.0"
+            },
+            "require-dev": {
+                "composer/composer": "^1.3",
+                "ext-zip": "*",
+                "phpunit/phpunit": "^5.4.7"
+            },
+            "type": "composer-plugin",
+            "extra": {
+                "class": "PackageVersions\\Installer",
+                "branch-alias": {
+                    "dev-master": "2.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "PackageVersions\\": "src/PackageVersions"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Marco Pivetta",
+                    "email": "ocramius@gmail.com"
+                }
+            ],
+            "description": "Composer plugin that provides efficient querying for installed package versions (no runtime IO)",
+            "time": "2016-12-30 09:49:15"
         },
         {
             "name": "pagerfanta/pagerfanta",
