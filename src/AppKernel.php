@@ -5,7 +5,6 @@ namespace eLife\Journal;
 use Bobthecow\Bundle\MustacheBundle\BobthecowMustacheBundle;
 use Csa\Bundle\GuzzleBundle\CsaGuzzleBundle;
 use eLife\Journal\Expression\ParseUrlFunctionProvider;
-use eLife\Journal\Expression\VersionFunctionProvider;
 use PackageVersions\Versions;
 use Puli\SymfonyBundle\PuliBundle;
 use Sensio\Bundle\DistributionBundle\SensioDistributionBundle;
