@@ -195,6 +195,10 @@
             "install-path": "vendor/namshi/cuzzle",
             "installer": "composer"
         },
+        "ocramius/package-versions": {
+            "install-path": "vendor/ocramius/package-versions",
+            "installer": "composer"
+        },
         "pagerfanta/pagerfanta": {
             "install-path": "vendor/pagerfanta/pagerfanta",
             "installer": "composer"
