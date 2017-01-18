@@ -5,6 +5,8 @@ namespace eLife\Journal;
 use Bobthecow\Bundle\MustacheBundle\BobthecowMustacheBundle;
 use Csa\Bundle\GuzzleBundle\CsaGuzzleBundle;
 use eLife\Journal\Expression\ParseUrlFunctionProvider;
+use eLife\Journal\Expression\VersionFunctionProvider;
+use PackageVersions\Versions;
 use Puli\SymfonyBundle\PuliBundle;
 use Sensio\Bundle\DistributionBundle\SensioDistributionBundle;
 use Symfony\Bundle\DebugBundle\DebugBundle;
@@ -20,6 +22,25 @@ use WhiteOctober\PagerfantaBundle\WhiteOctoberPagerfantaBundle;
 
 class AppKernel extends Kernel
 {
+    private $version;
+
+    public function __construct(string $environment, bool $debug)
+    {
+        parent::__construct($environment, $debug);
+
+        $originalVersion = Versions::getVersion('elife/journal');
+        list($version, $reference) = explode('@', $originalVersion);
+        if (false !== strpos($version, 'dev')) {
+            if (40 === strlen($reference)) {
+                $version = implode('@', [$version, substr($reference, 0, 7)]);
+            } else {
+                $version = $originalVersion;
+            }
+        }
+
+        $this->version = $version;
+    }
+
     public function registerBundles() : array
     {
         $bundles = [
@@ -45,6 +66,11 @@ class AppKernel extends Kernel
     public function getName() : string
     {
         return 'journal';
+    }
+
+    public function getVersion() : string
+    {
+        return $this->version;
     }
 
     public function getRootDir() : string
@@ -79,6 +105,7 @@ class AppKernel extends Kernel
         $builder = parent::buildContainer();
 
         $builder->addExpressionLanguageProvider(new ParseUrlFunctionProvider());
+        $builder->addExpressionLanguageProvider(new VersionFunctionProvider());
 
         return $builder;
     }
