@@ -67,9 +67,11 @@ final class InsideElifeController extends Controller
 
     public function articleAction(string $id) : Response
     {
-        $arguments = $this->defaultPageArguments();
+        $article = $this->get('elife.api_sdk.blog_articles')->get($id);
 
-        $arguments['article'] = $this->get('elife.api_sdk.blog_articles')->get($id);
+        $arguments = $this->defaultPageArguments($article);
+
+        $arguments['article'] = $article;
 
         $arguments['contentHeader'] = $arguments['article']
             ->then($this->willConvertTo(ContentHeaderNonArticle::class));

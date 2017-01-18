@@ -68,9 +68,11 @@ final class CollectionsController extends Controller
 
     public function collectionAction(string $id) : Response
     {
-        $arguments = $this->defaultPageArguments();
+        $collection = $this->get('elife.api_sdk.collections')->get($id);
 
-        $arguments['collection'] = $this->get('elife.api_sdk.collections')->get($id);
+        $arguments = $this->defaultPageArguments($collection);
+
+        $arguments['collection'] = $collection;
 
         $arguments['contentHeader'] = $arguments['collection']
             ->then($this->willConvertTo(ContentHeaderNonArticle::class));

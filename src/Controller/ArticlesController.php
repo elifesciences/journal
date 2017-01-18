@@ -427,9 +427,7 @@ final class ArticlesController extends Controller
 
     private function defaultArticleArguments(int $volume, string $id, int $version = null) : array
     {
-        $arguments = $this->defaultPageArguments();
-
-        $arguments['article'] = $this->get('elife.api_sdk.articles')
+        $article = $this->get('elife.api_sdk.articles')
             ->get($id, $version)
             ->then(function (ArticleVersion $article) use ($volume) {
                 if ($volume !== $article->getVolume()) {
@@ -438,6 +436,10 @@ final class ArticlesController extends Controller
 
                 return $article;
             });
+
+        $arguments = $this->defaultPageArguments($article);
+
+        $arguments['article'] = $article;
 
         return $arguments;
     }

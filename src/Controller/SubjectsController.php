@@ -58,9 +58,11 @@ final class SubjectsController extends Controller
         $page = (int) $request->query->get('page', 1);
         $perPage = 6;
 
-        $arguments = $this->defaultPageArguments();
+        $subject = $this->get('elife.api_sdk.subjects')->get($id);
 
-        $arguments['subject'] = $this->get('elife.api_sdk.subjects')->get($id);
+        $arguments = $this->defaultPageArguments($subject);
+
+        $arguments['subject'] = $subject;
 
         $latestArticles = promise_for($this->get('elife.api_sdk.search')
             ->forSubject($id)
