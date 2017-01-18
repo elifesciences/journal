@@ -159,6 +159,11 @@ resources:
     defaults:
          _controller: AppBundle:Resources:resources
 
+search:
+    path: /search
+    defaults:
+         _controller: AppBundle:Search:query
+
 subject:
     path: /subjects/{id}
     defaults:
