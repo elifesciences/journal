@@ -105,7 +105,6 @@ class AppKernel extends Kernel
         $builder = parent::buildContainer();
 
         $builder->addExpressionLanguageProvider(new ParseUrlFunctionProvider());
-        $builder->addExpressionLanguageProvider(new VersionFunctionProvider());
 
         return $builder;
     }

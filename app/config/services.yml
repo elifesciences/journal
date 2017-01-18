@@ -17,7 +17,7 @@ services:
         decorates: elife.api_client.client
         arguments:
           - '@elife.api_client.client.warning_checking.inner'
-          - '@="eLifeJournal/"~version()'
+          - '@="eLifeJournal/"~service("kernel").getVersion()'
 
     elife.api_sdk:
         class: eLife\ApiSdk\ApiSdk
