@@ -59,6 +59,11 @@ default:
                 tags: '@podcast'
             contexts:
               - PodcastContext
+        search:
+            filters:
+                tags: '@search'
+            contexts:
+              - SearchContext
         subject:
             filters:
                 tags: '@subject'

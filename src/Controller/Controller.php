@@ -2,15 +2,18 @@
 
 namespace eLife\Journal\Controller;
 
+use eLife\ApiSdk\Model\Model;
 use eLife\Journal\Helper\CanConvertContent;
 use eLife\Journal\Helper\Paginator;
 use eLife\Journal\ViewModel\Converter\ViewModelConverter;
 use eLife\Patterns\ViewModel;
 use eLife\Patterns\ViewModel\ContentHeaderSimple;
+use GuzzleHttp\Promise\PromiseInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use function GuzzleHttp\Promise\promise_for;
 
 abstract class Controller implements ContainerAwareInterface
 {
@@ -69,10 +72,12 @@ abstract class Controller implements ContainerAwareInterface
         return $response;
     }
 
-    final protected function defaultPageArguments(): array
+    final protected function defaultPageArguments(PromiseInterface $model = null): array
     {
         return [
-            'header' => $this->get('elife.journal.view_model.factory.site_header')->createSiteHeader(),
+            'header' => promise_for($model)->then(function (Model $model = null) : ViewModel\SiteHeader {
+                return $this->get('elife.journal.view_model.factory.site_header')->createSiteHeader($model);
+            }),
             'footer' => $this->get('elife.journal.view_model.factory.footer')->createFooter(),
         ];
     }

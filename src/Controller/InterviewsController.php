@@ -12,9 +12,11 @@ final class InterviewsController extends Controller
 {
     public function interviewAction(string $id) : Response
     {
-        $arguments = $this->defaultPageArguments();
+        $interview = $this->get('elife.api_sdk.interviews')->get($id);
 
-        $arguments['interview'] = $this->get('elife.api_sdk.interviews')->get($id);
+        $arguments = $this->defaultPageArguments($interview);
+
+        $arguments['interview'] = $interview;
 
         $arguments['contentHeader'] = $arguments['interview']
             ->then($this->willConvertTo(ContentHeaderNonArticle::class));

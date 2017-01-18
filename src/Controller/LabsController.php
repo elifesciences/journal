@@ -79,9 +79,11 @@ developed further to become features on the eLife platform.'),
 
     public function experimentAction(int $number) : Response
     {
-        $arguments = $this->defaultPageArguments();
+        $experiment = $this->get('elife.api_sdk.labs_experiments')->get($number);
 
-        $arguments['experiment'] = $this->get('elife.api_sdk.labs_experiments')->get($number);
+        $arguments = $this->defaultPageArguments($experiment);
+
+        $arguments['experiment'] = $experiment;
 
         $arguments['contentHeader'] = $arguments['experiment']
             ->then($this->willConvertTo(ContentHeaderNonArticle::class));

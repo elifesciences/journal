@@ -2,6 +2,9 @@
 
 namespace eLife\Journal\ViewModel\Factory;
 
+use eLife\ApiSdk\Model\HasSubjects;
+use eLife\ApiSdk\Model\Model;
+use eLife\ApiSdk\Model\Subject;
 use eLife\Patterns\ViewModel\Button;
 use eLife\Patterns\ViewModel\CompactForm;
 use eLife\Patterns\ViewModel\Form;
@@ -13,6 +16,7 @@ use eLife\Patterns\ViewModel\Picture;
 use eLife\Patterns\ViewModel\SearchBox;
 use eLife\Patterns\ViewModel\SiteHeader;
 use eLife\Patterns\ViewModel\SiteHeaderNavBar;
+use eLife\Patterns\ViewModel\SubjectFilter;
 use Puli\UrlGenerator\Api\UrlGenerator as PuliUrlGenerator;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -27,7 +31,7 @@ final class SiteHeaderFactory
         $this->puliUrlGenerator = $puliUrlGenerator;
     }
 
-    public function createSiteHeader() : SiteHeader
+    public function createSiteHeader(Model $model = null) : SiteHeader
     {
         $primaryLinks = SiteHeaderNavBar::primary([
             NavLinkedItem::asIcon(
@@ -80,12 +84,21 @@ final class SiteHeaderFactory
             ),
         ]);
 
+        if ($model instanceof HasSubjects) {
+            $subject = $model->getSubjects()[0];
+        } elseif ($model instanceof Subject) {
+            $subject = $model;
+        } else {
+            $subject = null;
+        }
+
         $searchBox = new SearchBox(
             new CompactForm(
                 new Form($this->urlGenerator->generate('search'), 'search', 'GET'),
                 new Input('Search by keyword or author', 'search', 'for', null, 'Search by keyword or author'),
                 'Search'
-            )
+            ),
+            $subject ? new SubjectFilter('subjects[]', $subject->getId(), $subject->getName()) : null
         );
 
         return new SiteHeader($this->urlGenerator->generate('home'), $primaryLinks, $secondaryLinks, $searchBox);
