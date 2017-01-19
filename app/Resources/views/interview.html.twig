@@ -2,12 +2,6 @@
 
 {% block title %}{{ interview.title }} | Interviews{% endblock %}
 
-{% block info_bar %}
-
-    {{ info_bar('This page is incomplete.') }}
-
-{% endblock %}
-
 {% block body %}
 
     {{ render_pattern(contentHeader) }}
@@ -25,6 +19,10 @@
                 {% for block in blocks %}
                     {{ render_pattern(block) }}
                 {% endfor %}
+
+                {% if cv %}
+                    {{ render_pattern(cv) }}
+                {% endif %}
 
             </div>
 
