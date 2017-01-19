@@ -169,6 +169,8 @@ services:
     elife.journal.view_model.converter.article.meta:
         class: eLife\Journal\ViewModel\Converter\ArticleMetaConverter
         public: false
+        arguments:
+          - '@router'
         tags:
           - name: view_model.converter
 

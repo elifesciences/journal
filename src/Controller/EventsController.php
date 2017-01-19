@@ -70,9 +70,11 @@ final class EventsController extends Controller
 
     public function eventAction(string $id) : Response
     {
-        $arguments = $this->defaultPageArguments();
+        $event = $this->get('elife.api_sdk.events')->get($id);
 
-        $arguments['event'] = $this->get('elife.api_sdk.events')->get($id);
+        $arguments = $this->defaultPageArguments($event);
+
+        $arguments['event'] = $event;
 
         $arguments['contentHeader'] = $arguments['event']
             ->then($this->willConvertTo(ContentHeaderNonArticle::class));

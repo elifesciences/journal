@@ -52,6 +52,27 @@ final class InterviewControllerTest extends PageTestCase
         $this->assertSame(404, $client->getResponse()->getStatusCode());
     }
 
+    /**
+     * @test
+     */
+    public function it_displays_content()
+    {
+        $client = static::createClient();
+
+        $crawler = $client->request('GET', $this->getUrl());
+
+        $this->assertSame(200, $client->getResponse()->getStatusCode());
+
+        $this->assertSame('Question?',
+            $crawler->filter('main > .wrapper > div > div > section:nth-of-type(1) > header > h3')->text());
+        $this->assertSame('Answer.',
+            $crawler->filter('main > .wrapper > div > div > section:nth-of-type(1) > div > p')->text());
+        $this->assertSame('Interviewee CV',
+            $crawler->filter('main > .wrapper > div > div > section:nth-of-type(2) > header > h2')->text());
+        $this->assertSame('2013 – Present: Somewhere',
+            $crawler->filter('main > .wrapper > div > div > section:nth-of-type(2) > div > ol > li')->text());
+    }
+
     protected function getUrl() : string
     {
         $this->mockApiResponse(

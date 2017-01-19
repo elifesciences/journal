@@ -17,6 +17,6 @@ final class ArticleMetaConverterTest extends ModelConverterTestCase
      */
     public function setUpConverter()
     {
-        $this->converter = new ArticleMetaConverter();
+        $this->converter = new ArticleMetaConverter($this->stubUrlGenerator());
     }
 }
