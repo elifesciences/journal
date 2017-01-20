@@ -11,7 +11,7 @@ elifePipeline {
         lock('journal--ci') {
             builderDeployRevision 'journal--ci', commit
             builderCmd "journal--ci", "cd /srv/journal && composer1.0 update elife/patterns --no-interaction"
-            sh "rsync -avz ci--journal.elife.internal:/srv/journal/ --exclude=.git -o StrictHostKeyChecking=no ."
+            sh "rsync -avz --exclude=.git -e 'ssh -o StrictHostKeyChecking=no' elife@ci--journal.elife.internal:/srv/journal/ ."
             sh "git add composer.lock"
         }
     }
