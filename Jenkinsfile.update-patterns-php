@@ -21,8 +21,9 @@ elifePipeline {
     stage 'Commit', {
         differences = elifeGitDifferences()
         elifeOnlyIf differences, {
-            shortDescription = elifeGitSubrepositorySummary 'vendor/elife/patterns'
-            elifeGitCommit "Updated elife/patterns to ${shortDescription}"
+            def subrepositorySummary = elifeGitSubrepositorySummary 'vendor/elife/patterns'
+            def shortDescription = "Updated elife/patterns to ${subrepositorySummary}"
+            elifeGitCommit shortDescription
         }
     }
 
