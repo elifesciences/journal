@@ -29,7 +29,7 @@ elifePipeline {
 
     stage 'Push and pull request', {
         elifeOnlyIf differences, {
-            elifeGithubPullRequest branch, shortDescription, "I have run ${env.BUILD_URL} which resulted in this pull request.", 'origin/develop'
+            elifeGithubPullRequest branch, shortDescription, "I have run ${env.BUILD_URL} which resulted in this pull request.", 'develop'
         }
     }
 }
