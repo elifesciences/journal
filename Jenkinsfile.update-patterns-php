@@ -22,7 +22,7 @@ elifePipeline {
         differences = elifeGitDifferences()
         elifeOnlyIf differences, {
             def subrepositorySummary = elifeGitSubrepositorySummary 'vendor/elife/patterns'
-            def shortDescription = "Updated elife/patterns to ${subrepositorySummary}"
+            shortDescription = "Updated elife/patterns to ${subrepositorySummary}"
             elifeGitCommit shortDescription
         }
     }
