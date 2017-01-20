@@ -1,14 +1,18 @@
-elifeLibrary {
+elifePipeline {
     def branch
     stage 'Checkout and branch', {
         checkout scm
         branch = elifeGitGenerateBranch 'update_patterns_php_'
+        def commit = elifeGitRevision()
     }
 
     stage 'Update', {
-        sh "composer1.0 install --no-interaction"
-        sh "composer1.0 update elife/patterns --no-interaction"
-        sh "git add composer.lock"
+        lock('journal--ci') {
+            builderDeployRevision 'journal--ci', commit
+            builderCmd "journal--ci", "cd /srv/journal && composer1.0 update elife/patterns --no-interaction"
+            sh "rsync -avz ci--journal.elife.internal:/srv/journal/ --exclude=.git ."
+            sh "git add composer.lock"
+        }
     }
 
     def differences
