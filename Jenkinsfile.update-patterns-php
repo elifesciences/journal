@@ -1,9 +1,10 @@
 elifePipeline {
+    def commit
     def branch
     stage 'Checkout and branch', {
         checkout scm
+        commit = elifeGitRevision()
         branch = elifeGitGenerateBranch 'update_patterns_php_'
-        def commit = elifeGitRevision()
     }
 
     stage 'Update', {
