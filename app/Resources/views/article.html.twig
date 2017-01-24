@@ -365,11 +365,15 @@
 
     {{ render_pattern(contentHeader) }}
 
-    <div class="wrapper">
+    {% if contextualData %}
 
-        {{ render_pattern(contextualData) }}
+        <div class="wrapper">
 
-    </div>
+            {{ render_pattern(contextualData) }}
+
+        </div>
+
+    {% endif %}
 
     <div class="wrapper">
 

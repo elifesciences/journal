@@ -482,9 +482,9 @@ final class ArticlesController extends Controller
             });
 
         $arguments['contextualData'] = $arguments['article']
-            ->then(function (ArticleVersion $article) {
+            ->then(Callback::methodEmptyOr('getCiteAs', function (ArticleVersion $article) {
                 return ContextualData::withCitation($article->getCiteAs(), new Doi($article->getDoi()));
-            });
+            }));
 
         return $arguments;
     }
