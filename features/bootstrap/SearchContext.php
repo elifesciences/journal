@@ -47,7 +47,7 @@ final class SearchContext extends Context
         $this->mockApiResponse(
             new Request(
                 'GET',
-                'http://api.elifesciences.org/search?for=&page=1&per-page=1&sort=date&order=desc',
+                'http://api.elifesciences.org/search?for=&page=1&per-page=1&sort=relevance&order=desc',
                 ['Accept' => 'application/vnd.elife.search+json; version=1']
             ),
             new Response(
@@ -90,7 +90,7 @@ final class SearchContext extends Context
         $this->mockApiResponse(
             new Request(
                 'GET',
-                'http://api.elifesciences.org/search?for=&page=1&per-page=6&sort=date&order=desc',
+                'http://api.elifesciences.org/search?for=&page=1&per-page=6&sort=relevance&order=desc',
                 ['Accept' => 'application/vnd.elife.search+json; version=1']
             ),
             new Response(
@@ -133,7 +133,7 @@ final class SearchContext extends Context
         $this->mockApiResponse(
             new Request(
                 'GET',
-                "http://api.elifesciences.org/search?for=$keyword&page=1&per-page=1&sort=date&order=desc",
+                "http://api.elifesciences.org/search?for=$keyword&page=1&per-page=1&sort=relevance&order=desc",
                 ['Accept' => 'application/vnd.elife.search+json; version=1']
             ),
             new Response(
@@ -179,7 +179,7 @@ final class SearchContext extends Context
             $this->mockApiResponse(
                 new Request(
                     'GET',
-                    "http://api.elifesciences.org/search?for=$keyword&page=$page&per-page=6&sort=date&order=desc",
+                    "http://api.elifesciences.org/search?for=$keyword&page=$page&per-page=6&sort=relevance&order=desc",
                     ['Accept' => 'application/vnd.elife.search+json; version=1']
                 ),
                 new Response(

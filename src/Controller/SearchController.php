@@ -8,8 +8,11 @@ use eLife\ApiSdk\Collection\Sequence;
 use eLife\Journal\Helper\Callback;
 use eLife\Journal\Helper\Paginator;
 use eLife\Journal\Pagerfanta\SequenceAdapter;
+use eLife\Patterns\ViewModel\Link;
 use eLife\Patterns\ViewModel\ListingTeasers;
 use eLife\Patterns\ViewModel\MessageBar;
+use eLife\Patterns\ViewModel\SortControl;
+use eLife\Patterns\ViewModel\SortControlOption;
 use eLife\Patterns\ViewModel\Teaser;
 use Pagerfanta\Pagerfanta;
 use Symfony\Component\HttpFoundation\Request;
@@ -26,13 +29,19 @@ final class SearchController extends Controller
 
         $for = trim($request->query->get('for'));
         $subjects = $request->query->get('subjects', []);
+        $sort = $request->query->get('sort', 'relevance');
+        $order = $request->query->get('order', SortControlOption::DESC);
 
         $arguments = $this->defaultPageArguments();
 
         $search = $this->get('elife.api_sdk.search')
             ->forQuery($for)
             ->forSubject(...$subjects)
-            ->sortBy('date');
+            ->sortBy($sort);
+
+        if (SortControlOption::ASC === $order) {
+            $search = $search->reverse();
+        }
 
         $search = promise_for($search)
             ->then(function (Sequence $sequence) use ($page, $perPage) {
@@ -62,14 +71,16 @@ final class SearchController extends Controller
             ->then(Callback::methodEmptyOr('getTotal', $this->willConvertTo(ListingTeasers::class, ['heading' => ''])));
 
         if (1 === $page) {
-            return $this->createFirstPage($arguments);
+            return $this->createFirstPage($request, $arguments);
         }
 
         return $this->createSubsequentPage($request, $arguments);
     }
 
-    private function createFirstPage(array $arguments) : Response
+    private function createFirstPage(Request $request, array $arguments) : Response
     {
+        $order = $request->query->get('order', SortControlOption::DESC);
+
         $arguments['messageBar'] = $arguments['paginator']
             ->then(function (Paginator $paginator) {
                 if (1 === $paginator->getTotal()) {
@@ -78,6 +89,25 @@ final class SearchController extends Controller
 
                 return new MessageBar(number_format($paginator->getTotal()).' results found');
             });
+
+        $relevanceQuery = clone $request->query;
+        $relevanceQuery->set('sort', 'relevance');
+        $relevanceQuery->set('order', SortControlOption::ASC === $order ? SortControlOption::DESC : SortControlOption::ASC);
+
+        $dateQuery = clone $request->query;
+        $dateQuery->set('sort', 'date');
+        $dateQuery->set('order', SortControlOption::ASC === $order ? SortControlOption::DESC : SortControlOption::ASC);
+
+        $arguments['sortControl'] = new SortControl([
+            new SortControlOption(
+                new Link('Relevance', $this->get('router')->generate('search', $relevanceQuery->all())),
+                SortControlOption::ASC === $order ? SortControlOption::ASC : SortControlOption::DESC
+            ),
+            new SortControlOption(
+                new Link('Date', $this->get('router')->generate('search', $dateQuery->all())),
+                SortControlOption::ASC === $order ? SortControlOption::ASC : SortControlOption::DESC
+            ),
+        ]);
 
         return new Response($this->get('templating')->render('::search.html.twig', $arguments));
     }
