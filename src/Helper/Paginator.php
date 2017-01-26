@@ -28,6 +28,11 @@ final class Paginator implements Countable
         return $this->title;
     }
 
+    public function getTotal() : int
+    {
+        return $this->pagerfanta->getNbResults();
+    }
+
     public function getCurrentPage() : int
     {
         return $this->pagerfanta->getCurrentPage();
