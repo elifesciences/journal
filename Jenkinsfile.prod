@@ -3,9 +3,14 @@ elifePipeline {
     checkout scm
     def commit = elifeGitRevision()
 
-    stage 'Deploy'
-    elifeDeploySlackNotification 'journal', 'prod'
+    stage 'Deploy to preview'
+    elifeDeploySlackNotification 'journal', 'preview'
     elifeGitMoveToBranch commit, 'master'
+    builderDeployRevision 'journal--preview', commit
+    builderSmokeTests 'journal--preview', '/srv/journal'
+
+    stage 'Deploy to prod'
+    elifeDeploySlackNotification 'journal', 'prod'
     builderDeployRevision 'journal--prod', commit
     builderSmokeTests 'journal--prod', '/srv/journal'
 }
