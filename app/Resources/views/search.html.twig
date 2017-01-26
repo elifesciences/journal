@@ -16,6 +16,14 @@
 
 {% block body %}
 
-    {{ render_pattern(contentHeader) }}
+    <div class="wrapper u-pad-top-lg">
+
+        {{ render_pattern(messageBar) }}
+
+        {% if listing %}
+            {{ render_pattern(listing) }}
+        {% endif %}
+
+    </div>
 
 {% endblock %}
