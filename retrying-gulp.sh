@@ -10,7 +10,7 @@ for attempt in $(seq 1 "$maximum"); do
         continue
     else
         echo "Gulp succeeded"
-        break
+        exit 0
     fi
 done
 echo "Giving up after $attempt consecutive failures"
