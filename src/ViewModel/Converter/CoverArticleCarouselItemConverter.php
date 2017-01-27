@@ -5,7 +5,7 @@ namespace eLife\Journal\ViewModel\Converter;
 use eLife\ApiSdk\Model\ArticleVersion;
 use eLife\ApiSdk\Model\Cover;
 use eLife\ApiSdk\Model\Subject;
-use eLife\Journal\Helper\ArticleType;
+use eLife\Journal\Helper\ModelName;
 use eLife\Patterns\ViewModel;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -37,7 +37,7 @@ final class CoverArticleCarouselItemConverter implements ViewModelConverter
             'Read article',
             ViewModel\Meta::withLink(
                 new ViewModel\Link(
-                    ArticleType::singular($article->getType()),
+                    ModelName::singular($article->getType()),
                     $this->urlGenerator->generate('article-type', ['type' => $article->getType()])
                 ),
                 $article->getStatusDate() ? ViewModel\Date::simple($article->getStatusDate(), $article->getStatusDate() != $article->getPublishedDate()) : null
