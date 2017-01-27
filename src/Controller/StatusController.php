@@ -25,7 +25,17 @@ final class StatusController extends Controller
 HTML;
 
         try {
+            $this->get('elife.api_sdk.articles')[0];
+            $this->get('elife.api_sdk.blog_articles')[0];
+            $this->get('elife.api_sdk.collections')[0];
+            $this->get('elife.api_sdk.covers')[0];
+            $this->get('elife.api_sdk.events')[0];
+            $this->get('elife.api_sdk.interviews')[0];
+            $this->get('elife.api_sdk.labs_experiments')[0];
+            $this->get('elife.api_sdk.medium_articles')[0];
+            $this->get('elife.api_sdk.podcast_episodes')[0];
             $this->get('elife.api_sdk.search')[0];
+            $this->get('elife.api_sdk.subjects')[0];
         } catch (Throwable $e) {
             return $this->createResponse('<html><head><title>Status</title></head><body>Everything is not ok.'.$jsErrorSetup.' </body></html>', 500);
         }
