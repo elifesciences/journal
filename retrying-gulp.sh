@@ -14,3 +14,4 @@ for attempt in $(seq 1 "$maximum"); do
     fi
 done
 echo "Giving up after $attempt consecutive failures"
+exit $attempt
