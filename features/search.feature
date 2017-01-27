@@ -8,7 +8,7 @@ Feature: Search page
   - If the ordering can't separate two or more search results, fallback ordering is publication date (most recent first) then title (A first).
 
   Background:
-    Given there are 20 articles about 'Cells'
+    Given there are 20 research articles about 'Cells'
     And I am on the search page
 
   Scenario: List shows 4 most relevant results

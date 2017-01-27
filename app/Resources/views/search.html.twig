@@ -18,13 +18,9 @@
 
     <div class="wrapper u-pad-top-lg">
 
-        {% if filterPanel %}
-
         <div class="grid">
 
             <div class="grid__item large--eight-twelfths">
-
-                {% endif %}
 
                 {{ render_pattern(sortControl) }}
 
@@ -33,8 +29,6 @@
                 {% if listing %}
                     {{ render_pattern(listing) }}
                 {% endif %}
-
-                {% if filterPanel %}
 
             </div>
 
@@ -53,8 +47,6 @@
             </div>
 
         </div>
-
-        {% endif %}
 
     </div>
 
