@@ -139,6 +139,10 @@ final class SearchController extends Controller
                         $subjectFilters[] = new Filter(in_array($subject->getId(), $arguments['query']['subjects']), $subject->getName(), $results, 'subjects[]', $subject->getId());
                     }
 
+                    usort($subjectFilters, function (Filter $a, Filter $b) {
+                        return $a['label'] <=> $b['label'];
+                    });
+
                     $filterGroups[] = new FilterGroup('Subject', $subjectFilters);
                 }
 
