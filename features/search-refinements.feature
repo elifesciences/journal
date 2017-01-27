@@ -11,12 +11,12 @@ Feature: Search page refinements
     And there are 4 articles about 'Cells' with the MSA 'Immunology'
     And I am on the search page
 
-  Scenario:
+  Scenario: Filter by MSA
     Given I searched for 'Cells'
     When I filter by the MSA 'Biochemistry'
     Then I should see the 4 most relevant results about 'Cells' with the MSA 'Biochemistry'
 
-  Scenario:
+  Scenario: Filter by two MSAs
     Given I searched for 'Cells'
     And I filtered by the MSA 'Biochemistry'
     When I filter by the MSA 'Immunology'
