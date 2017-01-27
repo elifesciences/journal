@@ -9,7 +9,7 @@
     </php>
 
     <testsuites>
-        <testsuite name="eLife Journal test suite">
+        <testsuite name="eLife Journal">
             <directory>test</directory>
         </testsuite>
     </testsuites>
