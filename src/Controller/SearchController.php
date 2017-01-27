@@ -7,6 +7,7 @@ use eLife\ApiSdk\Client\Search;
 use eLife\ApiSdk\Collection\Sequence;
 use eLife\ApiSdk\Model\Subject;
 use eLife\Journal\Helper\Callback;
+use eLife\Journal\Helper\ModelName;
 use eLife\Journal\Helper\Paginator;
 use eLife\Journal\Pagerfanta\SequenceAdapter;
 use eLife\Patterns\ViewModel\Button;
@@ -39,6 +40,7 @@ final class SearchController extends Controller
         $arguments['query'] = [
             'for' => trim($request->query->get('for')),
             'subjects' => $request->query->get('subjects', []),
+            'types' => $request->query->get('types', []),
             'sort' => $request->query->get('sort', 'relevance'),
             'order' => $request->query->get('order', SortControlOption::DESC),
         ];
@@ -46,6 +48,7 @@ final class SearchController extends Controller
         $search = $this->get('elife.api_sdk.search')
             ->forQuery($arguments['query']['for'])
             ->forSubject(...$arguments['query']['subjects'])
+            ->forType(...$arguments['query']['types'])
             ->sortBy($arguments['query']['sort']);
 
         if (SortControlOption::ASC === $arguments['query']['order']) {
@@ -130,16 +133,29 @@ final class SearchController extends Controller
             ->then(function (Search $search) use ($arguments) {
                 $filterGroups = [];
 
-                if (!count($search->subjects())) {
-                    return null;
+                if (count($search->subjects())) {
+                    $subjectFilters = [];
+                    foreach ($search->subjects() as $subject => $results) {
+                        $subjectFilters[] = new Filter(in_array($subject->getId(), $arguments['query']['subjects']), $subject->getName(), $results, 'subjects[]', $subject->getId());
+                    }
+
+                    $filterGroups[] = new FilterGroup('Subject', $subjectFilters);
                 }
 
-                $subjectFilters = [];
-                foreach ($search->subjects() as $subject => $results) {
-                    $subjectFilters[] = new Filter(in_array($subject->getId(), $arguments['query']['subjects']), $subject->getName(), $results, 'subjects[]', $subject->getId());
+                $typeFilters = [];
+
+                foreach ($search->types() as $type => $results) {
+                    $typeFilters[] = new Filter(in_array($type, $arguments['query']['types']), ModelName::plural($type), $results, 'types[]', $type);
                 }
 
-                $filterGroups[] = new FilterGroup('Subject', $subjectFilters);
+                usort($typeFilters, function (Filter $a, Filter $b) {
+                    return $a['label'] <=> $b['label'];
+                });
+
+                $filterGroups[] = new FilterGroup(
+                    'Type',
+                    $typeFilters
+                );
 
                 return new FilterPanel(
                     'Refine your results by:',

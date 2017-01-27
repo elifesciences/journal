@@ -2,34 +2,34 @@
 
 namespace test\eLife\Journal\Helper;
 
-use eLife\Journal\Helper\ArticleType;
+use eLife\Journal\Helper\ModelName;
 use InvalidArgumentException;
 use PHPUnit_Framework_TestCase;
 use Traversable;
 
-final class ArticleTypeTest extends PHPUnit_Framework_TestCase
+final class ModelNameTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @test
-     * @dataProvider validArticleTypeProvider
+     * @dataProvider validModelProvider
      */
     public function it_providers_a_singular(string $id)
     {
-        ArticleType::singular($id);
+        ModelName::singular($id);
     }
 
     /**
      * @test
-     * @dataProvider validArticleTypeProvider
+     * @dataProvider validModelProvider
      */
     public function it_providers_a_plural(string $id)
     {
-        ArticleType::plural($id);
+        ModelName::plural($id);
     }
 
-    public function validArticleTypeProvider() : Traversable
+    public function validModelProvider() : Traversable
     {
-        $types = ['correction', 'editorial', 'feature', 'insight', 'research-advance', 'research-article', 'research-exchange', 'retraction', 'registered-report', 'replication-study', 'short-report', 'tools-resources'];
+        $types = ['correction', 'editorial', 'feature', 'insight', 'research-advance', 'research-article', 'research-exchange', 'retraction', 'registered-report', 'replication-study', 'short-report', 'tools-resources', 'blog-article', 'collection', 'event', 'labs-experiment', 'interview', 'podcast-episode'];
 
         foreach ($types as $type) {
             yield $type => [$type];
@@ -43,7 +43,7 @@ final class ArticleTypeTest extends PHPUnit_Framework_TestCase
     {
         $this->expectException(InvalidArgumentException::class);
 
-        ArticleType::singular('foo');
+        ModelName::singular('foo');
     }
 
     /**
@@ -53,6 +53,6 @@ final class ArticleTypeTest extends PHPUnit_Framework_TestCase
     {
         $this->expectException(InvalidArgumentException::class);
 
-        ArticleType::plural('foo');
+        ModelName::plural('foo');
     }
 }

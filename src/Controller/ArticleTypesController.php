@@ -3,7 +3,7 @@
 namespace eLife\Journal\Controller;
 
 use eLife\ApiSdk\Collection\Sequence;
-use eLife\Journal\Helper\ArticleType;
+use eLife\Journal\Helper\ModelName;
 use eLife\Journal\Helper\Paginator;
 use eLife\Journal\Pagerfanta\SequenceAdapter;
 use eLife\Patterns\ViewModel\ContentHeaderNonArticle;
@@ -26,7 +26,7 @@ final class ArticleTypesController extends Controller
         $arguments = $this->defaultPageArguments();
 
         try {
-            $arguments['title'] = ArticleType::plural($type);
+            $arguments['title'] = ModelName::plural($type);
         } catch (InvalidArgumentException $e) {
             throw new NotFoundHttpException('Unknown type '.$type, $e);
         }
@@ -44,7 +44,7 @@ final class ArticleTypesController extends Controller
         $arguments['paginator'] = $latest
             ->then(function (Pagerfanta $pagerfanta) use ($request, $type) {
                 return new Paginator(
-                    'Browse our '.lcfirst(ArticleType::plural($type)),
+                    'Browse our '.lcfirst(ModelName::plural($type)),
                     $pagerfanta,
                     function (int $page = null) use ($request) {
                         $routeParams = $request->attributes->get('_route_params');
