@@ -4,6 +4,7 @@ namespace eLife\Journal\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
+use function GuzzleHttp\Promise\all;
 
 final class StatusController extends Controller
 {
@@ -24,8 +25,22 @@ final class StatusController extends Controller
 </script>
 HTML;
 
+        $requests = [
+            $this->get('elife.api_sdk.articles')->slice(0, 1),
+            $this->get('elife.api_sdk.blog_articles')->slice(0, 1),
+            $this->get('elife.api_sdk.collections')->slice(0, 1),
+            $this->get('elife.api_sdk.covers')->slice(0, 1),
+            $this->get('elife.api_sdk.events')->slice(0, 1),
+            $this->get('elife.api_sdk.interviews')->slice(0, 1),
+            $this->get('elife.api_sdk.labs_experiments')->slice(0, 1),
+            $this->get('elife.api_sdk.medium_articles')->slice(0, 1),
+            $this->get('elife.api_sdk.podcast_episodes')->slice(0, 1),
+            $this->get('elife.api_sdk.search')->slice(0, 1),
+            $this->get('elife.api_sdk.subjects')->slice(0, 1),
+        ];
+
         try {
-            $this->get('elife.api_sdk.search')[0];
+            all($requests)->wait();
         } catch (Throwable $e) {
             return $this->createResponse('<html><head><title>Status</title></head><body>Everything is not ok.'.$jsErrorSetup.' </body></html>', 500);
         }
