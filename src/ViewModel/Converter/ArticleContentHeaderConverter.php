@@ -7,7 +7,7 @@ use eLife\ApiSdk\Model\ArticleVoR;
 use eLife\ApiSdk\Model\Author;
 use eLife\ApiSdk\Model\AuthorEntry;
 use eLife\ApiSdk\Model\Subject;
-use eLife\Journal\Helper\ArticleType;
+use eLife\Journal\Helper\ModelName;
 use eLife\Patterns\ViewModel;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -55,7 +55,7 @@ final class ArticleContentHeaderConverter implements ViewModelConverter
 
         $meta = ViewModel\Meta::withLink(
             new ViewModel\Link(
-                ArticleType::singular($object->getType()),
+                ModelName::singular($object->getType()),
                 $this->urlGenerator->generate('article-type', ['type' => $object->getType()])
             ),
             $object->getPublishedDate() ? ViewModel\Date::simple($object->getPublishedDate()) : null

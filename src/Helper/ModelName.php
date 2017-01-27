@@ -4,7 +4,7 @@ namespace eLife\Journal\Helper;
 
 use Assert\Assertion;
 
-final class ArticleType
+final class ModelName
 {
     private static $types = [
         'correction' => [
@@ -54,6 +54,30 @@ final class ArticleType
         'tools-resources' => [
             'singular' => 'Tools and resources',
             'plural' => 'Tools and resources',
+        ],
+        'blog-article' => [
+            'singular' => 'Inside eLife',
+            'plural' => 'Inside eLife',
+        ],
+        'collection' => [
+            'singular' => 'Collection',
+            'plural' => 'Collections',
+        ],
+        'event' => [
+            'singular' => 'Event',
+            'plural' => 'Events',
+        ],
+        'labs-experiment' => [
+            'singular' => 'Experiment',
+            'plural' => 'Experiments',
+        ],
+        'interview' => [
+            'singular' => 'Interview',
+            'plural' => 'Interviews',
+        ],
+        'podcast-episode' => [
+            'singular' => 'Podcast',
+            'plural' => 'Podcasts',
         ],
     ];
 

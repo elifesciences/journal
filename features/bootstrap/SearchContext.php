@@ -14,8 +14,8 @@ final class SearchContext extends Context
     private $articles = [];
 
     /**
-     * @Given /^there are (\d+) articles about \'([^\']*)\'$/
-     * @Given /^there are (\d+) articles about \'([^\']*)\' with the MSA \'([^\']*)\'$/
+     * @Given /^there are (\d+) research articles about \'([^\']*)\'$/
+     * @Given /^there are (\d+) research articles about \'([^\']*)\' with the MSA \'([^\']*)\'$/
      */
     public function thereAreArticlesAbout(int $number, string $keyword, string $subject = null)
     {
@@ -76,74 +76,55 @@ final class SearchContext extends Context
 
         foreach (['', $keyword] as $thisKeyword) {
             foreach ($subjectGroups as $subjects) {
-                $uri = $baseUri.implode('', array_map(function (string $subject) {
-                    return '&subject[]='.$this->createSubjectId($subject);
-                }, $subjects));
+                foreach (['', 'research-article'] as $contentType) {
+                    $uri = $baseUri.implode('', array_map(function (string $subject) {
+                        return '&subject[]='.$this->createSubjectId($subject);
+                    }, $subjects));
 
-                $articlesWithKeywordAndSubjects = $this->filterArticlesWithASubject($subjects, $articlesWithKeyword);
+                    $articlesWithKeywordAndSubjects = $this->filterArticlesWithASubject($subjects, $articlesWithKeyword);
 
-                $typeFilters = [
-                    'correction' => 0,
-                    'editorial' => 0,
-                    'feature' => 0,
-                    'insight' => 0,
-                    'research-advance' => 0,
-                    'research-article' => 0,
-                    'research-exchange' => 0,
-                    'retraction' => 0,
-                    'registered-report' => 0,
-                    'replication-study' => 0,
-                    'short-report' => 0,
-                    'tools-resources' => 0,
-                    'blog-article' => 0,
-                    'collection' => 0,
-                    'event' => 0,
-                    'interview' => 0,
-                    'labs-experiment' => 0,
-                    'podcast-episode' => 0,
-                ];
-
-                foreach (array_keys($typeFilters) as $type) {
-                    $typeFilters[$type] = count($this->filterArticlesByType($type, $articlesWithKeyword));
-                }
-
-                $subjectFilters = array_map(function (string $subject) use ($articlesWithKeyword) {
-                    return [
-                        'id' => $this->createSubjectId($subject),
-                        'name' => $subject,
-                        'results' => count($this->filterArticlesWithSubject($subject, $articlesWithKeyword)),
+                    $typeFilters = [
+                        'correction' => 0,
+                        'editorial' => 0,
+                        'feature' => 0,
+                        'insight' => 0,
+                        'research-advance' => 0,
+                        'research-article' => 0,
+                        'research-exchange' => 0,
+                        'retraction' => 0,
+                        'registered-report' => 0,
+                        'replication-study' => 0,
+                        'short-report' => 0,
+                        'tools-resources' => 0,
+                        'blog-article' => 0,
+                        'collection' => 0,
+                        'event' => 0,
+                        'interview' => 0,
+                        'labs-experiment' => 0,
+                        'podcast-episode' => 0,
                     ];
-                }, $this->query['subjects']);
 
-                $this->mockApiResponse(
-                    new Request(
-                        'GET',
-                        sprintf($uri, $thisKeyword, 1, 1),
-                        ['Accept' => 'application/vnd.elife.search+json; version=1']
-                    ),
-                    new Response(
-                        200,
-                        ['Content-Type' => 'application/vnd.elife.search+json; version=1'],
-                        json_encode([
-                            'total' => count($articlesWithKeywordAndSubjects),
-                            'items' => count($articlesWithKeywordAndSubjects) ? [$articlesWithKeywordAndSubjects[0]] : [],
-                            'subjects' => $subjectFilters,
-                            'types' => $typeFilters,
-                        ])
-                    )
-                );
+                    foreach (array_keys($typeFilters) as $type) {
+                        $typeFilters[$type] = count($this->filterArticlesByType($type, $articlesWithKeyword));
+                    }
 
-                $articleChunks = array_chunk($articlesWithKeywordAndSubjects, 6);
+                    if ($contentType) {
+                        $uri .= '&type[]='.$contentType;
+                        $articlesWithKeywordAndSubjects = $this->filterArticlesByType($contentType, $articlesWithKeywordAndSubjects);
+                    }
 
-                if (empty($articleChunks)) {
-                    $articleChunks[] = [];
-                }
+                    $subjectFilters = array_map(function (string $subject) use ($articlesWithKeyword) {
+                        return [
+                            'id' => $this->createSubjectId($subject),
+                            'name' => $subject,
+                            'results' => count($this->filterArticlesWithSubject($subject, $articlesWithKeyword)),
+                        ];
+                    }, $this->query['subjects']);
 
-                foreach ($articleChunks as $i => $articleChunk) {
                     $this->mockApiResponse(
                         new Request(
                             'GET',
-                            sprintf($uri, $thisKeyword, $i + 1, 6),
+                            sprintf($uri, $thisKeyword, 1, 1),
                             ['Accept' => 'application/vnd.elife.search+json; version=1']
                         ),
                         new Response(
@@ -151,12 +132,38 @@ final class SearchContext extends Context
                             ['Content-Type' => 'application/vnd.elife.search+json; version=1'],
                             json_encode([
                                 'total' => count($articlesWithKeywordAndSubjects),
-                                'items' => $articleChunk,
+                                'items' => count($articlesWithKeywordAndSubjects) ? [$articlesWithKeywordAndSubjects[0]] : [],
                                 'subjects' => $subjectFilters,
                                 'types' => $typeFilters,
                             ])
                         )
                     );
+
+                    $articleChunks = array_chunk($articlesWithKeywordAndSubjects, 6);
+
+                    if (empty($articleChunks)) {
+                        $articleChunks[] = [];
+                    }
+
+                    foreach ($articleChunks as $i => $articleChunk) {
+                        $this->mockApiResponse(
+                            new Request(
+                                'GET',
+                                sprintf($uri, $thisKeyword, $i + 1, 6),
+                                ['Accept' => 'application/vnd.elife.search+json; version=1']
+                            ),
+                            new Response(
+                                200,
+                                ['Content-Type' => 'application/vnd.elife.search+json; version=1'],
+                                json_encode([
+                                    'total' => count($articlesWithKeywordAndSubjects),
+                                    'items' => $articleChunk,
+                                    'subjects' => $subjectFilters,
+                                    'types' => $typeFilters,
+                                ])
+                            )
+                        );
+                    }
                 }
             }
         }
@@ -293,6 +300,16 @@ final class SearchContext extends Context
     }
 
     /**
+     * @When /^I filter by the content type \'([^\']*)\'$/
+     */
+    public function iFilterByTheContentType(string $contentType)
+    {
+        $this->getSession()->getPage()->checkField($contentType);
+
+        $this->getSession()->getPage()->pressButton('Refine results');
+    }
+
+    /**
      * @When /^I load more results$/
      */
     public function iLoadMoreResults()
@@ -359,9 +376,60 @@ final class SearchContext extends Context
         });
     }
 
+    /**
+     * @Then /^I should see the (\d+) most relevant results about \'([^\']*)\' with the content type \'([^\']*)\'$/
+     */
+    public function iShouldSeeTheMostRelevantResultsAboutWithTheContentType(int $number, string $keyword, string $contentType)
+    {
+        $articles = $this->filterArticlesByType($this->createContentTypeId($contentType), $this->filterArticlesContainingKeyword($keyword, $this->articles));
+
+        $this->spin(function () use ($number, $articles) {
+            $this->assertSession()->elementsCount('css', '.message-bar:contains("'.count($articles).' results found") + .list-heading + .listing-list > .listing-list__item', $number);
+
+            for ($i = $number; $i > 0; --$i) {
+                $nthChild = ($number - $i + 1);
+                $expectedNumber = (count($articles) - $nthChild + 1);
+
+                $this->assertSession()->elementContains(
+                    'css',
+                    '.message-bar:contains("'.count($articles).' results found") + .list-heading + .listing-list > .listing-list__item:nth-child('.$nthChild.')',
+                    'Article '.str_pad($expectedNumber, 5, '0', STR_PAD_LEFT).' title'
+                );
+            }
+        });
+    }
+
+    /**
+     * @Then /^I should see the (\d+) most relevant results about \'([^\']*)\' with the MSA \'([^\']*)\' and the content type \'([^\']*)\'$/
+     */
+    public function iShouldSeeTheMostRelevantResultsAboutWithTheMSAAndTheContentType(int $number, string $keyword, string $subject, string $contentType)
+    {
+        $articles = $this->filterArticlesByType($this->createContentTypeId($contentType), $this->filterArticlesWithSubject($subject, $this->filterArticlesContainingKeyword($keyword, $this->articles)));
+
+        $this->spin(function () use ($number, $articles) {
+            $this->assertSession()->elementsCount('css', '.message-bar:contains("'.count($articles).' results found") + .list-heading + .listing-list > .listing-list__item', $number);
+
+            for ($i = $number; $i > 0; --$i) {
+                $nthChild = ($number - $i + 1);
+                $expectedNumber = (count($articles) - $nthChild + 1);
+
+                $this->assertSession()->elementContains(
+                    'css',
+                    '.message-bar:contains("'.count($articles).' results found") + .list-heading + .listing-list > .listing-list__item:nth-child('.$nthChild.')',
+                    'Article '.str_pad($expectedNumber, 5, '0', STR_PAD_LEFT).' title'
+                );
+            }
+        });
+    }
+
     private function createSubjectId(string $subjectName) : string
     {
         return md5($subjectName);
+    }
+
+    private function createContentTypeId(string $contentTypeName) : string
+    {
+        return str_replace(' ', '-', (str_replace(' and ', ' ', strtolower($contentTypeName))));
     }
 
     private function filterArticlesByType(string $type, array $articles) : array
