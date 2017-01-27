@@ -18,13 +18,35 @@
 
     <div class="wrapper u-pad-top-lg">
 
-        {{ render_pattern(sortControl) }}
+        <div class="grid">
 
-        {{ render_pattern(messageBar) }}
+            <div class="grid__item large--eight-twelfths">
 
-        {% if listing %}
-            {{ render_pattern(listing) }}
-        {% endif %}
+                {{ render_pattern(sortControl) }}
+
+                {{ render_pattern(messageBar) }}
+
+                {% if listing %}
+                    {{ render_pattern(listing) }}
+                {% endif %}
+
+            </div>
+
+            <div class="grid__item large--four-twelfths">
+
+                <form method="get" action="{{ path('search') }}">
+
+                    <input type="hidden" name="for" value="{{ query.for }}">
+                    <input type="hidden" name="sort" value="{{ query.sort }}">
+                    <input type="hidden" name="order" value="{{ query.order }}">
+
+                    {{ render_pattern(filterPanel) }}
+
+                </form>
+
+            </div>
+
+        </div>
 
     </div>
 

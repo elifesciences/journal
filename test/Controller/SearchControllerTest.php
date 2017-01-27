@@ -222,7 +222,7 @@ final class SearchControllerTest extends PageTestCase
 
         $crawler = $client->click($crawler->selectLink('Date')->link());
 
-        $this->assertSame('/search?sort=date&order=ascending', $client->getRequest()->getRequestUri());
+        $this->assertSame('/search?for=&sort=date&order=ascending', $client->getRequest()->getRequestUri());
         $this->assertSame(200, $client->getResponse()->getStatusCode());
 
         $this->mockApiResponse(
@@ -313,7 +313,7 @@ final class SearchControllerTest extends PageTestCase
 
         $client->click($crawler->selectLink('Date')->link());
 
-        $this->assertSame('/search?sort=date&order=descending', $client->getRequest()->getRequestUri());
+        $this->assertSame('/search?for=&sort=date&order=descending', $client->getRequest()->getRequestUri());
         $this->assertSame(200, $client->getResponse()->getStatusCode());
     }
 
