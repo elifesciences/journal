@@ -3,7 +3,7 @@ set -e
 
 maximum=${1:-3}
 
-for attempt in $(seq 1 $maximum); do
+for attempt in $(seq 1 "$maximum"); do
     echo "Attempt: $attempt"
     if ! node_modules/.bin/gulp; then
         echo "Gulp failure, retrying"
