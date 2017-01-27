@@ -34,6 +34,150 @@ final class StatusTest extends WebTestCase
         $this->mockApiResponse(
             new Request(
                 'GET',
+                'http://api.elifesciences.org/articles?page=1&per-page=1&order=desc',
+                ['Accept' => 'application/vnd.elife.article-list+json; version=1']
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.article-list+json; version=1'],
+                json_encode([
+                    'total' => 0,
+                    'items' => [],
+                ])
+            )
+        );
+
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/blog-articles?page=1&per-page=1&order=desc',
+                ['Accept' => 'application/vnd.elife.blog-article-list+json; version=1']
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.blog-article-list+json; version=1'],
+                json_encode([
+                    'total' => 0,
+                    'items' => [],
+                ])
+            )
+        );
+
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/collections?page=1&per-page=1&order=desc',
+                ['Accept' => 'application/vnd.elife.collection-list+json; version=1']
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.collection-list+json; version=1'],
+                json_encode([
+                    'total' => 0,
+                    'items' => [],
+                ])
+            )
+        );
+
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/covers?page=1&per-page=1&order=desc',
+                ['Accept' => 'application/vnd.elife.cover-list+json; version=1']
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.cover-list+json; version=1'],
+                json_encode([
+                    'total' => 0,
+                    'items' => [],
+                ])
+            )
+        );
+
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/events?page=1&per-page=1&type=all&order=desc',
+                ['Accept' => 'application/vnd.elife.event-list+json; version=1']
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.event-list+json; version=1'],
+                json_encode([
+                    'total' => 0,
+                    'items' => [],
+                ])
+            )
+        );
+
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/interviews?page=1&per-page=1&order=desc',
+                ['Accept' => 'application/vnd.elife.interview-list+json; version=1']
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.interview-list+json; version=1'],
+                json_encode([
+                    'total' => 0,
+                    'items' => [],
+                ])
+            )
+        );
+
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/labs-experiments?page=1&per-page=1&order=desc',
+                ['Accept' => 'application/vnd.elife.labs-experiment-list+json; version=1']
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.labs-experiment-list+json; version=1'],
+                json_encode([
+                    'total' => 0,
+                    'items' => [],
+                ])
+            )
+        );
+
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/medium-articles?page=1&per-page=1&order=desc',
+                ['Accept' => 'application/vnd.elife.medium-article-list+json; version=1']
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.medium-article-list+json; version=1'],
+                json_encode([
+                    'total' => 0,
+                    'items' => [],
+                ])
+            )
+        );
+
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/podcast-episodes?page=1&per-page=1&order=desc',
+                ['Accept' => 'application/vnd.elife.podcast-episode-list+json; version=1']
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.podcast-episode-list+json; version=1'],
+                json_encode([
+                    'total' => 0,
+                    'items' => [],
+                ])
+            )
+        );
+
+        $this->mockApiResponse(
+            new Request(
+                'GET',
                 'http://api.elifesciences.org/search?for=&page=1&per-page=1&sort=relevance&order=desc',
                 ['Accept' => 'application/vnd.elife.search+json; version=1']
             ),
@@ -43,13 +187,7 @@ final class StatusTest extends WebTestCase
                 json_encode([
                     'total' => 0,
                     'items' => [],
-                    'subjects' => [
-                        [
-                            'id' => 'subject',
-                            'name' => 'Some subject',
-                            'results' => 0,
-                        ],
-                    ],
+                    'subjects' => [],
                     'types' => [
                         'correction' => 0,
                         'editorial' => 0,
@@ -70,6 +208,22 @@ final class StatusTest extends WebTestCase
                         'labs-experiment' => 0,
                         'podcast-episode' => 0,
                     ],
+                ])
+            )
+        );
+
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/subjects?page=1&per-page=1&order=desc',
+                ['Accept' => 'application/vnd.elife.subject-list+json; version=1']
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.subject-list+json; version=1'],
+                json_encode([
+                    'total' => 0,
+                    'items' => [],
                 ])
             )
         );
