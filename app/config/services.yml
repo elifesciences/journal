@@ -57,6 +57,10 @@ services:
         class: eLife\ApiSdk\Client\MediumArticles
         factory: ['@elife.api_sdk', mediumArticles]
 
+    elife.api_sdk.metrics:
+        class: eLife\ApiSdk\Client\Metrics
+        factory: ['@elife.api_sdk', metrics]
+
     elife.api_sdk.podcast_episodes:
         class: eLife\ApiSdk\Client\PodcastEpisodes
         factory: ['@elife.api_sdk', podcastEpisodes]

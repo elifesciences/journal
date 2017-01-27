@@ -489,6 +489,72 @@ final class ArticleControllerTest extends PageTestCase
     /**
      * @test
      */
+    public function it_displays_metrics()
+    {
+        $client = static::createClient();
+
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/metrics/article/00001/citations',
+                ['Accept' => 'application/vnd.elife.metric-citations+json; version=1']
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.metric-citations+json; version=1'],
+                json_encode([
+                    [
+                        'service' => 'Service One',
+                        'uri' => 'http://www.example.com/',
+                        'citations' => 123,
+                    ],
+                    [
+                        'service' => 'Service Two',
+                        'uri' => 'http://www.example.com/',
+                        'citations' => 1234,
+                    ],
+                ])
+            )
+        );
+
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/metrics/article/00001/page-views?by=month&page=1&per-page=20&order=desc',
+                ['Accept' => 'application/vnd.elife.metric-time-period+json; version=1']
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.metric-time-period+json; version=1'],
+                json_encode([
+                    'totalPeriods' => 2,
+                    'totalValue' => 5678,
+                    'periods' => [
+                        [
+                            'period' => '2016-01-01',
+                            'value' => 2839,
+                        ],
+                        [
+                            'period' => '2016-01-02',
+                            'value' => 2839,
+                        ],
+                    ],
+                ])
+            )
+        );
+
+        $crawler = $client->request('GET', $this->getUrl());
+
+        $this->assertSame(200, $client->getResponse()->getStatusCode());
+        $this->assertSame('Article title', $crawler->filter('.content-header__title')->text());
+
+        $this->assertContains('1,234', $crawler->filter('.contextual-data__list_title:contains("Cited") + .contextual-data__list_desc')->text());
+        $this->assertContains('5,678', $crawler->filter('.contextual-data__list_title:contains("Views") + .contextual-data__list_desc')->text());
+    }
+
+    /**
+     * @test
+     */
     public function it_displays_a_poa()
     {
         $client = static::createClient();

@@ -13,6 +13,7 @@ use eLife\ApiSdk\Model\ArticleVersion;
 use eLife\ApiSdk\Model\ArticleVoR;
 use eLife\ApiSdk\Model\Author;
 use eLife\ApiSdk\Model\Block;
+use eLife\ApiSdk\Model\CitationsMetric;
 use eLife\ApiSdk\Model\DataSet;
 use eLife\ApiSdk\Model\FundingAward;
 use eLife\ApiSdk\Model\PersonAuthor;
@@ -481,10 +482,46 @@ final class ArticlesController extends Controller
                 return [new InfoBar('Accepted manuscript, PDF only. Full online edition to follow.')];
             });
 
-        $arguments['contextualData'] = $arguments['article']
-            ->then(Callback::methodEmptyOr('getCiteAs', function (ArticleVersion $article) {
-                return ContextualData::withCitation($article->getCiteAs(), new Doi($article->getDoi()));
-            }));
+        $arguments['citations'] = $this->get('elife.api_sdk.metrics')
+            ->citations('article', $id)
+            ->otherwise(function () {
+                return null;
+            });
+
+        $arguments['pageViews'] = $this->get('elife.api_sdk.metrics')
+            ->totalPageViews('article', $id)
+            ->otherwise(function () {
+                return null;
+            });
+
+        $arguments['contextualData'] = all(['article' => $arguments['article'], 'citations' => $arguments['citations'], 'pageViews' => $arguments['pageViews']])
+            ->then(function (array $parts) {
+                /** @var ArticleVersion $article */
+                $article = $parts['article'];
+                /** @var CitationsMetric|null $citations */
+                $citations = $parts['citations'];
+                /** @var int|null $pageViews */
+                $pageViews = $parts['pageViews'];
+
+                $metrics = [];
+
+                if (null !== $citations) {
+                    $metrics[] = new ViewModel\ContextualDataMetric('Cited', number_format($citations->getHighest()->getCitations()));
+                }
+                if (null !== $pageViews) {
+                    $metrics[] = new ViewModel\ContextualDataMetric('Views', number_format($pageViews));
+                }
+
+                if (!$article->getCiteAs()) {
+                    if (!empty($metrics)) {
+                        return ContextualData::withMetrics($metrics);
+                    }
+
+                    return null;
+                }
+
+                return ContextualData::withCitation($article->getCiteAs(), new Doi($article->getDoi()), $metrics);
+            });
 
         return $arguments;
     }
