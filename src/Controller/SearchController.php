@@ -5,15 +5,22 @@ namespace eLife\Journal\Controller;
 use eLife\ApiClient\Result;
 use eLife\ApiSdk\Client\Search;
 use eLife\ApiSdk\Collection\Sequence;
+use eLife\ApiSdk\Model\Subject;
 use eLife\Journal\Helper\Callback;
 use eLife\Journal\Helper\Paginator;
 use eLife\Journal\Pagerfanta\SequenceAdapter;
+use eLife\Patterns\ViewModel\Button;
+use eLife\Patterns\ViewModel\Filter;
+use eLife\Patterns\ViewModel\FilterGroup;
+use eLife\Patterns\ViewModel\FilterPanel;
+use eLife\Patterns\ViewModel\Form;
 use eLife\Patterns\ViewModel\Link;
 use eLife\Patterns\ViewModel\ListingTeasers;
 use eLife\Patterns\ViewModel\MessageBar;
 use eLife\Patterns\ViewModel\SortControl;
 use eLife\Patterns\ViewModel\SortControlOption;
 use eLife\Patterns\ViewModel\Teaser;
+use GuzzleHttp\Promise\PromiseInterface;
 use Pagerfanta\Pagerfanta;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,23 +34,27 @@ final class SearchController extends Controller
         $page = (int) $request->query->get('page', 1);
         $perPage = 6;
 
-        $for = trim($request->query->get('for'));
-        $subjects = $request->query->get('subjects', []);
-        $sort = $request->query->get('sort', 'relevance');
-        $order = $request->query->get('order', SortControlOption::DESC);
-
         $arguments = $this->defaultPageArguments();
 
-        $search = $this->get('elife.api_sdk.search')
-            ->forQuery($for)
-            ->forSubject(...$subjects)
-            ->sortBy($sort);
+        $arguments['query'] = [
+            'for' => trim($request->query->get('for')),
+            'subjects' => $request->query->get('subjects', []),
+            'sort' => $request->query->get('sort', 'relevance'),
+            'order' => $request->query->get('order', SortControlOption::DESC),
+        ];
 
-        if (SortControlOption::ASC === $order) {
+        $search = $this->get('elife.api_sdk.search')
+            ->forQuery($arguments['query']['for'])
+            ->forSubject(...$arguments['query']['subjects'])
+            ->sortBy($arguments['query']['sort']);
+
+        if (SortControlOption::ASC === $arguments['query']['order']) {
             $search = $search->reverse();
         }
 
-        $search = promise_for($search)
+        $search = promise_for($search);
+
+        $pagerfanta = $search
             ->then(function (Sequence $sequence) use ($page, $perPage) {
                 $pagerfanta = new Pagerfanta(new SequenceAdapter($sequence, $this->willConvertTo(Teaser::class)));
                 $pagerfanta->setMaxPerPage($perPage)->setCurrentPage($page);
@@ -53,7 +64,7 @@ final class SearchController extends Controller
 
         $arguments['title'] = 'Search';
 
-        $arguments['paginator'] = $search
+        $arguments['paginator'] = $pagerfanta
             ->then(function (Pagerfanta $pagerfanta) use ($request) {
                 return new Paginator(
                     'Browse the search results',
@@ -71,16 +82,14 @@ final class SearchController extends Controller
             ->then(Callback::methodEmptyOr('getTotal', $this->willConvertTo(ListingTeasers::class, ['heading' => ''])));
 
         if (1 === $page) {
-            return $this->createFirstPage($request, $arguments);
+            return $this->createFirstPage($search, $arguments);
         }
 
         return $this->createSubsequentPage($request, $arguments);
     }
 
-    private function createFirstPage(Request $request, array $arguments) : Response
+    private function createFirstPage(PromiseInterface $search, array $arguments) : Response
     {
-        $order = $request->query->get('order', SortControlOption::DESC);
-
         $arguments['messageBar'] = $arguments['paginator']
             ->then(function (Paginator $paginator) {
                 if (1 === $paginator->getTotal()) {
@@ -90,24 +99,54 @@ final class SearchController extends Controller
                 return new MessageBar(number_format($paginator->getTotal()).' results found');
             });
 
-        $relevanceQuery = clone $request->query;
-        $relevanceQuery->set('sort', 'relevance');
-        $relevanceQuery->set('order', SortControlOption::ASC === $order ? SortControlOption::DESC : SortControlOption::ASC);
+        $relevanceQuery = array_merge(
+            $arguments['query'],
+            [
+                'sort' => 'relevance',
+                'order' => SortControlOption::ASC === $arguments['query']['order'] ? SortControlOption::DESC : SortControlOption::ASC,
+            ]
+        );
 
-        $dateQuery = clone $request->query;
-        $dateQuery->set('sort', 'date');
-        $dateQuery->set('order', SortControlOption::ASC === $order ? SortControlOption::DESC : SortControlOption::ASC);
+        $dateQuery = array_merge(
+            $arguments['query'],
+            [
+                'sort' => 'date',
+                'order' => SortControlOption::ASC === $arguments['query']['order'] ? SortControlOption::DESC : SortControlOption::ASC,
+            ]
+        );
 
         $arguments['sortControl'] = new SortControl([
             new SortControlOption(
-                new Link('Relevance', $this->get('router')->generate('search', $relevanceQuery->all())),
-                SortControlOption::ASC === $order ? SortControlOption::ASC : SortControlOption::DESC
+                new Link('Relevance', $this->get('router')->generate('search', $relevanceQuery)),
+                SortControlOption::ASC === $arguments['query']['order'] ? SortControlOption::ASC : SortControlOption::DESC
             ),
             new SortControlOption(
-                new Link('Date', $this->get('router')->generate('search', $dateQuery->all())),
-                SortControlOption::ASC === $order ? SortControlOption::ASC : SortControlOption::DESC
+                new Link('Date', $this->get('router')->generate('search', $dateQuery)),
+                SortControlOption::ASC === $arguments['query']['order'] ? SortControlOption::ASC : SortControlOption::DESC
             ),
         ]);
+
+        $arguments['filterPanel'] = $search
+            ->then(function (Search $search) use ($arguments) {
+                $filterGroups = [];
+
+                if (!count($search->subjects())) {
+                    return null;
+                }
+
+                $subjectFilters = [];
+                foreach ($search->subjects() as $subject => $results) {
+                    $subjectFilters[] = new Filter(in_array($subject->getId(), $arguments['query']['subjects']), $subject->getName(), $results, 'subjects[]', $subject->getId());
+                }
+
+                $filterGroups[] = new FilterGroup('Subject', $subjectFilters);
+
+                return new FilterPanel(
+                    'Refine your results by:',
+                    $filterGroups,
+                    Button::form('Refine results', Button::TYPE_SUBMIT, null, Button::SIZE_SMALL)
+                );
+            });
 
         return new Response($this->get('templating')->render('::search.html.twig', $arguments));
     }
