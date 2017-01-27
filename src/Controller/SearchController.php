@@ -130,6 +130,10 @@ final class SearchController extends Controller
             ->then(function (Search $search) use ($arguments) {
                 $filterGroups = [];
 
+                if (!count($search->subjects())) {
+                    return null;
+                }
+
                 $subjectFilters = [];
                 foreach ($search->subjects() as $subject => $results) {
                     $subjectFilters[] = new Filter(in_array($subject->getId(), $arguments['query']['subjects']), $subject->getName(), $results, 'subjects[]', $subject->getId());
