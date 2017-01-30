@@ -87,13 +87,13 @@ final class PodcastContext extends Context
             )
         );
 
-        foreach (array_chunk($episodes, 6) as $i => $episodesChunk) {
+        foreach (array_chunk($episodes, 8) as $i => $episodesChunk) {
             $page = $i + 1;
 
             $this->mockApiResponse(
                 new Request(
                     'GET',
-                    "http://api.elifesciences.org/podcast-episodes?page=$page&per-page=6&order=desc",
+                    "http://api.elifesciences.org/podcast-episodes?page=$page&per-page=8&order=desc",
                     ['Accept' => 'application/vnd.elife.podcast-episode-list+json; version=1']
                 ),
                 new Response(

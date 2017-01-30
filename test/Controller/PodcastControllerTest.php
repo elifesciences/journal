@@ -71,7 +71,7 @@ final class PodcastControllerTest extends PageTestCase
         $this->mockApiResponse(
             new Request(
                 'GET',
-                'http://api.elifesciences.org/podcast-episodes?page=1&per-page=6&order=desc',
+                'http://api.elifesciences.org/podcast-episodes?page=1&per-page=8&order=desc',
                 ['Accept' => 'application/vnd.elife.podcast-episode-list+json; version=1']
             ),
             new Response(
