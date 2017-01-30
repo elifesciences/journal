@@ -2,6 +2,7 @@
 set -e
 
 rm -f build/*.xml
+bin/console cache:clear --env=test --no-warmup
 bin/console security:check
 proofreader app/ bin/ src/ web/
 proofreader --no-phpcpd features/ test/
