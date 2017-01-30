@@ -16,6 +16,6 @@ final class RouteNotFoundTest extends WebTestCase
         $crawler = $client->request('GET', '/foo');
 
         $this->assertSame(404, $client->getResponse()->getStatusCode());
-        $this->assertContains('404 Not Found', $crawler->filter('h1')->text());
+        $this->assertContains('The page you were looking for is not found.', $crawler->text());
     }
 }
