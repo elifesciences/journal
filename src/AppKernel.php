@@ -11,6 +11,7 @@ use Sensio\Bundle\DistributionBundle\SensioDistributionBundle;
 use Symfony\Bundle\DebugBundle\DebugBundle;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Bundle\MonologBundle\MonologBundle;
+use Symfony\Bundle\SwiftmailerBundle\SwiftmailerBundle;
 use Symfony\Bundle\TwigBundle\TwigBundle;
 use Symfony\Bundle\WebProfilerBundle\WebProfilerBundle;
 use Symfony\Component\Config\Loader\LoaderInterface;
@@ -49,6 +50,7 @@ class AppKernel extends Kernel
             new FrameworkBundle(),
             new MonologBundle(),
             new PuliBundle(),
+            new SwiftmailerBundle(),
             new TwigBundle(),
             new WhiteOctoberPagerfantaBundle(),
         ];

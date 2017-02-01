@@ -18,9 +18,14 @@ csa_guzzle:
 
 framework:
     assets: ~
+    csrf_protection: ~
+    form: ~
     router:
         resource: '%kernel.root_dir%/config/routing.yml'
     secret: '%secret%'
+    session:
+        name: journal
+        save_path: '%kernel.root_dir%/../var/sessions/%kernel.environment%'
     templating:
         engines:
           - mustache
@@ -29,6 +34,8 @@ framework:
 monolog:
     channels:
       - api
+
+swiftmailer: '%swiftmailer%'
 
 twig:
     debug: '%kernel.debug%'

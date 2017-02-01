@@ -9,6 +9,7 @@ parameters:
 framework:
     profiler:
         collect: false
+        enabled: true
     router:
         resource: '%kernel.root_dir%/config/routing_test.yml'
     session:

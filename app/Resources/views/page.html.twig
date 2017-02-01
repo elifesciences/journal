@@ -89,6 +89,12 @@
             {{ render_pattern(header) }}
         {% endif %}
 
+        {% for type, messages in app.session.flashbag.all %}
+            {% for message in messages %}
+                {{ info_bar(message, type) }}
+            {% endfor %}
+        {% endfor %}
+
         {% block info_bar %}{% endblock %}
 
         <main role="main" class="blg-margin-bottom-large">
