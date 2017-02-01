@@ -3,6 +3,7 @@
 namespace eLife\Journal\ViewModel\Converter;
 
 use eLife\ApiSdk\Model\ArticleVersion;
+use eLife\ApiSdk\Model\ArticleVoR;
 use eLife\Patterns\ViewModel;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use function eLife\Patterns\mixed_visibility_text;
@@ -24,7 +25,13 @@ final class ArticleDownloadLinksListConverter implements ViewModelConverter
         $groups = [];
 
         if ($object->getPdf()) {
-            $groups[mixed_visibility_text('', 'Downloads', '(link to download the article as PDF)')] = [new ViewModel\Link('Article', $object->getPdf())];
+            $items = [new ViewModel\Link('Article PDF', $object->getPdf())];
+
+            if ($object instanceof ArticleVor && $object->getFiguresPdf()) {
+                $items[] = new ViewModel\Link('Figures PDF', $object->getFiguresPdf());
+            }
+
+            $groups[mixed_visibility_text('', 'Downloads', '(link to download the article as PDF)')] = $items;
         }
 
         $articleUri = $this->urlGenerator->generate('article', ['volume' => $object->getVolume(), 'id' => $object->getId()], UrlGeneratorInterface::ABSOLUTE_URL);
