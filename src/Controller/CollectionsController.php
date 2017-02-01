@@ -68,7 +68,9 @@ final class CollectionsController extends Controller
 
     public function collectionAction(string $id) : Response
     {
-        $collection = $this->get('elife.api_sdk.collections')->get($id);
+        $collection = $this->get('elife.api_sdk.collections')
+            ->get($id)
+            ->otherwise($this->mightNotExist());
 
         $arguments = $this->defaultPageArguments($collection);
 

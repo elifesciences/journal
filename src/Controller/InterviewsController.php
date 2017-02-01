@@ -15,7 +15,9 @@ final class InterviewsController extends Controller
 {
     public function interviewAction(string $id) : Response
     {
-        $interview = $this->get('elife.api_sdk.interviews')->get($id);
+        $interview = $this->get('elife.api_sdk.interviews')
+            ->get($id)
+            ->otherwise($this->mightNotExist());
 
         $arguments = $this->defaultPageArguments($interview);
 

@@ -79,7 +79,9 @@ developed further to become features on the eLife platform.'),
 
     public function experimentAction(int $number) : Response
     {
-        $experiment = $this->get('elife.api_sdk.labs_experiments')->get($number);
+        $experiment = $this->get('elife.api_sdk.labs_experiments')
+            ->get($number)
+            ->otherwise($this->mightNotExist());
 
         $arguments = $this->defaultPageArguments($experiment);
 

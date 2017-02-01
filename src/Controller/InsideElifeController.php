@@ -67,7 +67,9 @@ final class InsideElifeController extends Controller
 
     public function articleAction(string $id) : Response
     {
-        $article = $this->get('elife.api_sdk.blog_articles')->get($id);
+        $article = $this->get('elife.api_sdk.blog_articles')
+            ->get($id)
+            ->otherwise($this->mightNotExist());
 
         $arguments = $this->defaultPageArguments($article);
 

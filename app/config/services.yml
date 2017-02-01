@@ -77,11 +77,6 @@ services:
         class: eLife\Journal\Helper\FragmentLinkRewriter
         public: false
 
-    elife.journal.listener.api_bad_response:
-        class: eLife\Journal\EventListener\ApiBadResponseSubscriber
-        tags:
-          - name: kernel.event_subscriber
-
     elife.journal.templating.promise_aware:
         class: eLife\Journal\Templating\PromiseAwareEngine
         decorates: templating
