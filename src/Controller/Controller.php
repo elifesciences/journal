@@ -60,7 +60,6 @@ abstract class Controller implements ContainerAwareInterface
                     case Response::HTTP_GONE:
                     case Response::HTTP_NOT_FOUND:
                         throw new HttpException($e->getResponse()->getStatusCode(), $e->getMessage(), $e);
-                        break;
                 }
             }
 
