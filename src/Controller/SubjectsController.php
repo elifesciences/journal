@@ -58,7 +58,9 @@ final class SubjectsController extends Controller
         $page = (int) $request->query->get('page', 1);
         $perPage = 6;
 
-        $subject = $this->get('elife.api_sdk.subjects')->get($id);
+        $subject = $this->get('elife.api_sdk.subjects')
+            ->get($id)
+            ->otherwise($this->mightNotExist());
 
         $arguments = $this->defaultPageArguments($subject);
 

@@ -71,7 +71,9 @@ final class PodcastController extends Controller
 
     public function episodeAction(int $number) : Response
     {
-        $episode = $this->get('elife.api_sdk.podcast_episodes')->get($number);
+        $episode = $this->get('elife.api_sdk.podcast_episodes')
+            ->get($number)
+            ->otherwise($this->mightNotExist());
 
         $arguments = $this->defaultPageArguments($episode);
 

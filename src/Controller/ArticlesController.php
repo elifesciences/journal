@@ -430,6 +430,7 @@ final class ArticlesController extends Controller
     {
         $article = $this->get('elife.api_sdk.articles')
             ->get($id, $version)
+            ->otherwise($this->mightNotExist())
             ->then(function (ArticleVersion $article) use ($volume) {
                 if ($volume !== $article->getVolume()) {
                     throw new NotFoundHttpException('Incorrect volume');
@@ -449,7 +450,9 @@ final class ArticlesController extends Controller
     {
         $arguments = $this->defaultArticleArguments($volume, $id, $version);
 
-        $arguments['history'] = $this->get('elife.api_sdk.articles')->getHistory($id);
+        $arguments['history'] = $this->get('elife.api_sdk.articles')
+            ->getHistory($id)
+            ->otherwise($this->mightNotExist());
 
         $arguments['textPath'] = $arguments['history']
             ->then(function (ArticleHistory $history) use ($version) {
@@ -484,10 +487,12 @@ final class ArticlesController extends Controller
 
         $arguments['citations'] = $this->get('elife.api_sdk.metrics')
             ->citations('article', $id)
+            ->otherwise($this->mightNotExist())
             ->otherwise($this->softFailure('Failed to load citations count'));
 
         $arguments['pageViews'] = $this->get('elife.api_sdk.metrics')
             ->totalPageViews('article', $id)
+            ->otherwise($this->mightNotExist())
             ->otherwise($this->softFailure('Failed to load page views count'));
 
         $arguments['contextualData'] = all(['article' => $arguments['article'], 'citations' => $arguments['citations'], 'pageViews' => $arguments['pageViews']])

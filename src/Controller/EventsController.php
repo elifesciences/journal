@@ -70,7 +70,9 @@ final class EventsController extends Controller
 
     public function eventAction(string $id) : Response
     {
-        $event = $this->get('elife.api_sdk.events')->get($id);
+        $event = $this->get('elife.api_sdk.events')
+            ->get($id)
+            ->otherwise($this->mightNotExist());
 
         $arguments = $this->defaultPageArguments($event);
 

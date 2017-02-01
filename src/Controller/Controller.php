@@ -14,6 +14,7 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Throwable;
 use function GuzzleHttp\Promise\promise_for;
 
@@ -51,14 +52,27 @@ abstract class Controller implements ContainerAwareInterface
         return $this->get('elife.patterns.pattern_renderer')->render(...$viewModels);
     }
 
+    final protected function mightNotExist() : callable
+    {
+        return function (Throwable $e) {
+            if ($e instanceof BadResponse) {
+                switch ($e->getResponse()->getStatusCode()) {
+                    case Response::HTTP_GONE:
+                    case Response::HTTP_NOT_FOUND:
+                        throw new HttpException($e->getResponse()->getStatusCode(), $e->getMessage(), $e);
+                }
+            }
+
+            throw $e;
+        };
+    }
+
     final protected function softFailure(string $message = null) : callable
     {
         return function (Throwable $e) use ($message) {
-            if ($e instanceof BadResponse && in_array($e->getResponse()->getStatusCode(), [Response::HTTP_NOT_FOUND, Response::HTTP_GONE])) {
-                return null;
+            if (false === $e instanceof HttpException) {
+                $this->get('logger')->error($message ?? $e->getMessage(), ['exception' => $e]);
             }
-
-            $this->get('logger')->error($message ?? $e->getMessage(), ['exception' => $e]);
 
             return null;
         };
@@ -66,6 +80,9 @@ abstract class Controller implements ContainerAwareInterface
 
     final protected function createSubsequentPage(Request $request, array $arguments) : Response
     {
+        $arguments['listing'] = $arguments['listing']
+            ->otherwise($this->mightNotExist());
+
         if ($request->isXmlHttpRequest()) {
             $response = new Response($this->render($arguments['listing']->wait()));
         } else {
