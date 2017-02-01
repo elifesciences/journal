@@ -18,7 +18,7 @@ final class PodcastEpisodeMediaChapterListingItemConverterTest extends ModelConv
      */
     public function setUpConverter()
     {
-        $this->converter = new PodcastEpisodeMediaChapterListingItemConverter();
+        $this->converter = new PodcastEpisodeMediaChapterListingItemConverter($this->stubUrlGenerator());
     }
 
     protected function modelHook(Model $model)

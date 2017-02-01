@@ -513,6 +513,8 @@ services:
     elife.journal.view_model.converter.podcast_episode.media_chapter_listing_item:
         class: eLife\Journal\ViewModel\Converter\PodcastEpisodeMediaChapterListingItemConverter
         public: false
+        arguments:
+          - '@router'
         tags:
           - name: view_model.converter
 
