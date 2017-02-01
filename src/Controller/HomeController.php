@@ -74,9 +74,7 @@ final class HomeController extends Controller
             ->then(function (Sequence $covers) {
                 return new Carousel(...$covers);
             })
-            ->otherwise(function () {
-                return null;
-            });
+            ->otherwise($this->softFailure('Failed to load covers'));
 
         $arguments['leadParas'] = new LeadParas([new LeadPara('eLife is an open-access journal that publishes research in the life and biomedical sciences', 'strapline')]);
 
@@ -91,9 +89,7 @@ final class HomeController extends Controller
             ->then(function (Sequence $links) {
                 return new AllSubjectsList('subjects', $links->toArray(), 'strapline');
             })
-            ->otherwise(function () {
-                return null;
-            });
+            ->otherwise($this->softFailure('Failed to load subjects list'));
 
         $arguments['magazine'] = $this->get('elife.api_sdk.search')
             ->forType('editorial', 'insight', 'feature', 'collection', 'interview', 'podcast-episode')
@@ -105,9 +101,8 @@ final class HomeController extends Controller
                     new SeeMoreLink(new Link('See more Magazine articles', $this->get('router')->generate('magazine'))),
                     'Magazine'
                 );
-            }))->otherwise(function () {
-                return null;
-            });
+            }))
+            ->otherwise($this->softFailure('Failed to load Magazine list'));
 
         return new Response($this->get('templating')->render('::home.html.twig', $arguments));
     }

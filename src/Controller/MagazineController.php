@@ -16,7 +16,6 @@ use eLife\Patterns\ViewModel\Teaser;
 use Pagerfanta\Pagerfanta;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Throwable;
 use function GuzzleHttp\Promise\promise_for;
 
 final class MagazineController extends Controller
@@ -77,9 +76,7 @@ final class MagazineController extends Controller
             ->slice(0, 1)
             ->then(Callback::method('offsetGet', 0))
             ->then(Callback::emptyOr($this->willConvertTo(AudioPlayer::class)))
-            ->otherwise(function (Throwable $e) {
-                return null;
-            });
+            ->otherwise($this->softFailure('Failed to load podcast episode audio player'));
 
         $events = $this->get('elife.api_sdk.events')
             ->forType('open')
@@ -101,9 +98,7 @@ final class MagazineController extends Controller
 
                 return ListingTeasers::basic($items, $heading);
             }))
-            ->otherwise(function () {
-                return null;
-            });
+            ->otherwise($this->softFailure('Failed to load events'));
 
         $arguments['elifeDigests'] = $this->get('elife.api_sdk.medium_articles')
             ->slice(0, 3)
@@ -114,9 +109,7 @@ final class MagazineController extends Controller
                     'eLife digests'
                 );
             }))
-            ->otherwise(function () {
-                return null;
-            });
+            ->otherwise($this->softFailure('Failed to load Medium articles'));
 
         return new Response($this->get('templating')->render('::magazine.html.twig', $arguments));
     }

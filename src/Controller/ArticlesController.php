@@ -484,15 +484,11 @@ final class ArticlesController extends Controller
 
         $arguments['citations'] = $this->get('elife.api_sdk.metrics')
             ->citations('article', $id)
-            ->otherwise(function () {
-                return null;
-            });
+            ->otherwise($this->softFailure('Failed to load citations count'));
 
         $arguments['pageViews'] = $this->get('elife.api_sdk.metrics')
             ->totalPageViews('article', $id)
-            ->otherwise(function () {
-                return null;
-            });
+            ->otherwise($this->softFailure('Failed to load page views count'));
 
         $arguments['contextualData'] = all(['article' => $arguments['article'], 'citations' => $arguments['citations'], 'pageViews' => $arguments['pageViews']])
             ->then(function (array $parts) {

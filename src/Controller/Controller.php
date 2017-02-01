@@ -2,6 +2,7 @@
 
 namespace eLife\Journal\Controller;
 
+use eLife\ApiClient\Exception\BadResponse;
 use eLife\ApiSdk\Model\Model;
 use eLife\Journal\Helper\CanConvertContent;
 use eLife\Journal\Helper\Paginator;
@@ -13,6 +14,7 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Throwable;
 use function GuzzleHttp\Promise\promise_for;
 
 abstract class Controller implements ContainerAwareInterface
@@ -47,6 +49,19 @@ abstract class Controller implements ContainerAwareInterface
     final protected function render(ViewModel ...$viewModels): string
     {
         return $this->get('elife.patterns.pattern_renderer')->render(...$viewModels);
+    }
+
+    final protected function softFailure(string $message = null) : callable
+    {
+        return function (Throwable $e) use ($message) {
+            if ($e instanceof BadResponse && in_array($e->getResponse()->getStatusCode(), [Response::HTTP_NOT_FOUND, Response::HTTP_GONE])) {
+                return null;
+            }
+
+            $this->get('logger')->error($message ?? $e->getMessage(), ['exception' => $e]);
+
+            return null;
+        };
     }
 
     final protected function createSubsequentPage(Request $request, array $arguments) : Response

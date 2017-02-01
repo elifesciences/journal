@@ -31,9 +31,7 @@ final class ExceptionController extends Controller
 
         foreach ($arguments as $key => $value) {
             $arguments[$key] = promise_for($value)
-                ->otherwise(function () {
-                    return null;
-                });
+                ->otherwise($this->softFailure('Failed to create '.$key));
         }
 
         $arguments['error'] = $this->createError($request, $exception->getStatusCode());
