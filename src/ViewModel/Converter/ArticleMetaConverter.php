@@ -41,7 +41,7 @@ final class ArticleMetaConverter implements ViewModelConverter
             $tags = array_merge($tags, $object->getKeywords()->map(function (string $keyword) {
                 return new ViewModel\Link(
                     $keyword,
-                    $this->urlGenerator->generate('search', ['for' => $keyword])
+                    $this->urlGenerator->generate('search', ['for' => strip_tags($keyword)])
                 );
             })->toArray());
         }
@@ -57,7 +57,7 @@ final class ArticleMetaConverter implements ViewModelConverter
             $groups[$title] = array_map(function (string $keyword) {
                 return new ViewModel\Link(
                     $keyword,
-                    $this->urlGenerator->generate('search', ['for' => $keyword])
+                    $this->urlGenerator->generate('search', ['for' => strip_tags($keyword)])
                 );
             }, $object->getResearchOrganisms());
         }
