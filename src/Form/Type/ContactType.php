@@ -20,7 +20,7 @@ final class ContactType extends AbstractType
             ->add('name', TextType::class,
                 [
                     'required' => true,
-                    'constraints' => [new NotBlank(['message' => 'Please provide your name'])],
+                    'constraints' => [new NotBlank(['message' => 'Please provide your name.'])],
                     'attr' => [
                         'autofocus' => true,
                     ],
