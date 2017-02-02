@@ -2,13 +2,11 @@ parameters:
     api_url: https://api.elifesciences.org/
     api_key: public
     secret: ThisTokenIsNotSoSecretChangeIt
-    swiftmailer:
-        transport: smtp
-        host: 127.0.0.1
-        username: ~
-        password: ~
-        spool:
-            type: memory
+    mailer_transport: smtp
+    mailer_host: 127.0.0.1
+    mailer_port: ~
+    mailer_username: ~
+    mailer_password: ~
     trusted_hosts:
       - .*\.?elifesciences.org$
     trusted_proxies:
