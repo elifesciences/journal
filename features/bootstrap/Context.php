@@ -5,6 +5,7 @@ use Behat\MinkExtension\Context\RawMinkContext;
 use Behat\Symfony2Extension\Context\KernelAwareContext;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use Symfony\Bundle\SwiftmailerBundle\DataCollector\MessageDataCollector;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpKernel\KernelInterface;
 
@@ -14,6 +15,11 @@ abstract class Context extends RawMinkContext implements KernelAwareContext
      * @var KernelInterface
      */
     protected $kernel;
+
+    /**
+     * @var Swift_Message[]
+     */
+    protected $emails;
 
     final public function setKernel(KernelInterface $kernel)
     {
@@ -33,6 +39,55 @@ abstract class Context extends RawMinkContext implements KernelAwareContext
     final public function clearMockedApiResponses()
     {
         (new Filesystem())->remove($this->kernel->getContainer()->getParameter('api_mock'));
+    }
+
+    /**
+     * @BeforeScenario
+     */
+    final public function resetEmails()
+    {
+        $this->emails = [];
+    }
+
+    final protected function readyToRecordEmails()
+    {
+        $this->getSession()->getDriver()->getClient()->followRedirects(false);
+
+        $this->getSession()
+            ->getDriver()
+            ->getClient()
+            ->enableProfiler();
+    }
+
+    final protected function recordEmails()
+    {
+        /** @var MessageDataCollector $collector */
+        $collector = $this->getSession()
+            ->getDriver()
+            ->getClient()
+            ->getProfile()
+            ->getCollector('swiftmailer');
+
+        if (0 === $collector->getMessageCount()) {
+            return;
+        }
+
+        $this->emails = array_merge($this->emails, $collector->getMessages());
+
+        $this->getSession()->getDriver()->getClient()->followRedirect();
+    }
+
+    final protected function assertEmailSent(array $from, array $to, string $subject, string $body)
+    {
+        foreach ($this->emails as $key => $email) {
+            if ($from === $email->getFrom() && $to === $email->getTo() && $subject === $email->getSubject() && $body === $email->getBody()) {
+                unset($this->emails[$key]);
+
+                return;
+            }
+        }
+
+        throw new RuntimeException('Could not find email in stack ('.count($this->emails).' recorded)');
     }
 
     final protected function spin(callable $lambda, int $wait = 10)

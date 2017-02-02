@@ -1,18 +1,39 @@
 {% extends '::page.html.twig' %}
 
-{% block title %}Contact{% endblock %}
-
-{% block info_bar %}
-
-    {{ info_bar('This page is incomplete.') }}
-
-{% endblock %}
+{% block title %}{{ title }}{% endblock %}
 
 {% block body %}
 
     <div class="wrapper">
 
-        <h1>Contact</h1>
+        <h1>{{ title }}</h1>
+
+        <div class="grid">
+
+            <div class="grid__item medium--eight-twelfths">
+
+                {{ render_pattern(form) }}
+
+            </div>
+
+            <div class="grid__item medium--four-twelfths">
+
+                <dl>
+                    <dt>Email</dt>
+                    <dd><a href="mailto:staff@elifesciences.org">staff@elifesciences.org</a></dd>
+                    <dt>Telephone</dt>
+                    <dd><a href="tel:+441223855340">+44&nbsp;1223&nbsp;855340</a></dd>
+                    <dt>Address</dt>
+                    <dd>
+                        eLife Sciences Publications, Ltd<br>
+                        1st Floor, 24 Hills Road<br>
+                        Cambridge CB2 1JP<br>
+                        UK
+                    </dd>
+                </dl>
+            </div>
+
+        </div>
 
     </div>
 

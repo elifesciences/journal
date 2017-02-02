@@ -25,5 +25,8 @@ monolog:
             type: stream
             formatter: monolog.formatter.line
 
+swiftmailer:
+    disable_delivery: true
+
 web_profiler:
     toolbar: true

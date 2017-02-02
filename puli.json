@@ -372,6 +372,10 @@
             "install-path": "vendor/sensiolabs/security-checker",
             "installer": "composer"
         },
+        "swiftmailer/swiftmailer": {
+            "install-path": "vendor/swiftmailer/swiftmailer",
+            "installer": "composer"
+        },
         "symfony/monolog-bundle": {
             "install-path": "vendor/symfony/monolog-bundle",
             "installer": "composer"
@@ -399,6 +403,10 @@
         },
         "symfony/polyfill-util": {
             "install-path": "vendor/symfony/polyfill-util",
+            "installer": "composer"
+        },
+        "symfony/swiftmailer-bundle": {
+            "install-path": "vendor/symfony/swiftmailer-bundle",
             "installer": "composer"
         },
         "symfony/symfony": {

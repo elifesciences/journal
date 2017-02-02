@@ -413,6 +413,14 @@ services:
         tags:
           - name: view_model.converter
 
+    elife.journal.view_model.converter.form_view:
+        class: eLife\Journal\ViewModel\Converter\FormViewConverter
+        public: false
+        arguments:
+          - '@elife.patterns.pattern_renderer'
+        tags:
+          - name: view_model.converter
+
     elife.journal.view_model.converter.impact_statement.lead_paras:
         class: eLife\Journal\ViewModel\Converter\ImpactStatementLeadParasConverter
         public: false
