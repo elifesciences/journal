@@ -45,7 +45,9 @@ final class ContactController extends Controller
                 ->setSubject('Question to eLife')
                 ->setFrom('do_not_reply@elifesciences.org')
                 ->setTo($form->get('email')->getData(), $form->get('name')->getData())
-                ->setBody('Thanks for your question. We will respond as soon as we can.');
+                ->setBody('Thanks for your question. We will respond as soon as we can.
+
+eLife Sciences Publications, Ltd is a limited liability non-profit non-stock corporation incorporated in the State of Delaware, USA, with company number 5030732, and is registered in the UK with company number FC030576 and branch number BR015634 at the address First Floor, 24 Hills Road, Cambridge CB2 1JP.');
 
             $message2 = Swift_Message::newInstance()
                 ->setSubject('Question submitted')
