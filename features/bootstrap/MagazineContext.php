@@ -117,6 +117,69 @@ final class MagazineContext extends Context
     }
 
     /**
+     * @Given /^(\d+) Community articles have been published$/
+     */
+    public function communityArticlesHaveBeenPublished(int $number)
+    {
+        $this->numberOfArticles = $number;
+
+        $articles = [];
+
+        $today = (new DateTimeImmutable())->setTime(0, 0, 0);
+
+        for ($i = $number; $i > 0; --$i) {
+            $articles[] = [
+                'type' => 'interview',
+                'id' => 'interview'.$i,
+                'interviewee' => [
+                    'name' => [
+                        'preferred' => 'Interviewee '.$i,
+                        'index' => 'Interviewee '.$i,
+                    ],
+                ],
+                'title' => 'Interview '.$i.' title',
+                'published' => $today->format(ApiSdk::DATE_FORMAT),
+            ];
+        }
+
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/community?for=&page=1&per-page=1&sort=date&order=desc',
+                ['Accept' => 'application/vnd.elife.community-list+json; version=1']
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.community-list+json; version=1'],
+                json_encode([
+                    'total' => $number,
+                    'items' => [$articles[0]],
+                ])
+            )
+        );
+
+        foreach (array_chunk($articles, 6) as $i => $articleChunk) {
+            $page = $i + 1;
+
+            $this->mockApiResponse(
+                new Request(
+                    'GET',
+                    "http://api.elifesciences.org/community?for=&page=$page&per-page=6&sort=date&order=desc",
+                    ['Accept' => 'application/vnd.elife.communit-list+json; version=1']
+                ),
+                new Response(
+                    200,
+                    ['Content-Type' => 'application/vnd.elife.community-list+json; version=1'],
+                    json_encode([
+                        'total' => $number,
+                        'items' => $articleChunk,
+                    ])
+                )
+            );
+        }
+    }
+
+    /**
      * @Given /^there are (\d+) podcast episodes$/
      */
     public function thereArePodcastEpisodes(int $number)
@@ -359,6 +422,14 @@ final class MagazineContext extends Context
     }
 
     /**
+     * @When /^I go to the Community page$/
+     */
+    public function iGoToTheCommunityPage()
+    {
+        $this->visitPath('/magazine');
+    }
+
+    /**
      * @When /^I load more articles$/
      */
     public function iLoadMoreArticles()
@@ -367,9 +438,9 @@ final class MagazineContext extends Context
     }
 
     /**
-     * @Then /^I should see the latest (\d+) Magazine articles in the 'Latest' list$/
+     * @Then /^I should see the latest (\d+) (.*) articles in the 'Latest' list$/
      */
-    public function iShouldSeeTheLatestMagazineArticlesInTheLatestList(int $number)
+    public function iShouldSeeTheLatestSectionArticlesInTheLatestList(int $number, $section)
     {
         $this->spin(function () use ($number) {
             $this->assertSession()->elementsCount('css', '.list-heading:contains("Latest") + .listing-list > .listing-list__item', $number);
