@@ -487,6 +487,9 @@ final class ArticlesController extends Controller
 
         $arguments['citations'] = $this->get('elife.api_sdk.metrics')
             ->citations('article', $id)
+            ->then(function (CitationsMetric $citations) {
+                return $citations->getHighest()->getCitations();
+            })
             ->otherwise($this->mightNotExist())
             ->otherwise($this->softFailure('Failed to load citations count'));
 
@@ -499,7 +502,7 @@ final class ArticlesController extends Controller
             ->then(function (array $parts) {
                 /** @var ArticleVersion $article */
                 $article = $parts['article'];
-                /** @var CitationsMetric|null $citations */
+                /** @var int|null $citations */
                 $citations = $parts['citations'];
                 /** @var int|null $pageViews */
                 $pageViews = $parts['pageViews'];
@@ -507,7 +510,7 @@ final class ArticlesController extends Controller
                 $metrics = [];
 
                 if (null !== $citations) {
-                    $metrics[] = new ViewModel\ContextualDataMetric('Cited', number_format($citations->getHighest()->getCitations()));
+                    $metrics[] = new ViewModel\ContextualDataMetric('Cited', number_format($citations));
                 }
                 if (null !== $pageViews) {
                     $metrics[] = new ViewModel\ContextualDataMetric('Views', number_format($pageViews));
