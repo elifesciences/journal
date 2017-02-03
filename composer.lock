@@ -675,12 +675,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-client-php.git",
-                "reference": "2a6000c396b376cee98507252dba3f425dd41901"
+                "reference": "9d02eb491f2daffef2f1c62e074b834351d8d06a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-client-php/zipball/2a6000c396b376cee98507252dba3f425dd41901",
-                "reference": "2a6000c396b376cee98507252dba3f425dd41901",
+                "url": "https://api.github.com/repos/elifesciences/api-client-php/zipball/9d02eb491f2daffef2f1c62e074b834351d8d06a",
+                "reference": "9d02eb491f2daffef2f1c62e074b834351d8d06a",
                 "shasum": ""
             },
             "require": {
@@ -723,7 +723,7 @@
                 "MIT"
             ],
             "description": "eLife Sciences API client",
-            "time": "2017-01-27 15:17:09"
+            "time": "2017-02-03 13:43:14"
         },
         {
             "name": "elife/api-sdk",
@@ -731,12 +731,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-sdk-php.git",
-                "reference": "3654d1a2ee933b6d0943369ac77613c05f0d203e"
+                "reference": "7dc68b3c603e44060728944429d678a574c331f5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/3654d1a2ee933b6d0943369ac77613c05f0d203e",
-                "reference": "3654d1a2ee933b6d0943369ac77613c05f0d203e",
+                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/7dc68b3c603e44060728944429d678a574c331f5",
+                "reference": "7dc68b3c603e44060728944429d678a574c331f5",
                 "shasum": ""
             },
             "require": {
@@ -772,7 +772,7 @@
                 "MIT"
             ],
             "description": "eLife Sciences API SDK",
-            "time": "2017-02-01 09:48:54"
+            "time": "2017-02-03 15:15:22"
         },
         {
             "name": "elife/patterns",
@@ -780,12 +780,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:elifesciences/patterns-php.git",
-                "reference": "00fda54ae4ebef4365a1e9ebf66ed0bee046c488"
+                "reference": "041c40c0822a6f9ae06d2d36bdbb1b620042796f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/00fda54ae4ebef4365a1e9ebf66ed0bee046c488",
-                "reference": "00fda54ae4ebef4365a1e9ebf66ed0bee046c488",
+                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/041c40c0822a6f9ae06d2d36bdbb1b620042796f",
+                "reference": "041c40c0822a6f9ae06d2d36bdbb1b620042796f",
                 "shasum": ""
             },
             "require": {
@@ -824,7 +824,11 @@
                 "MIT"
             ],
             "description": "eLife patterns",
-            "time": "2017-02-03 09:57:58"
+            "support": {
+                "source": "https://github.com/elifesciences/patterns-php/tree/master",
+                "issues": "https://github.com/elifesciences/patterns-php/issues"
+            },
+            "time": "2017-02-03 11:06:30"
         },
         {
             "name": "guzzlehttp/guzzle",
@@ -3666,12 +3670,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-raml.git",
-                "reference": "1107fc18cb1dab406b669c59048844f365db9877"
+                "reference": "f8906a9a6c7f094f02d74f86a73db979e7e45695"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-raml/zipball/1107fc18cb1dab406b669c59048844f365db9877",
-                "reference": "1107fc18cb1dab406b669c59048844f365db9877",
+                "url": "https://api.github.com/repos/elifesciences/api-raml/zipball/f8906a9a6c7f094f02d74f86a73db979e7e45695",
+                "reference": "f8906a9a6c7f094f02d74f86a73db979e7e45695",
                 "shasum": ""
             },
             "require": {
@@ -3683,7 +3687,7 @@
                 "MIT"
             ],
             "description": "eLife Sciences API specification",
-            "time": "2017-02-01 09:33:55"
+            "time": "2017-02-03 11:54:49"
         },
         {
             "name": "elife/api-validator",

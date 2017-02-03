@@ -1,0 +1,15 @@
+{% extends '::page.html.twig' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block info_bar %}
+
+    {{ info_bar('This page is incomplete.') }}
+
+{% endblock %}
+
+{% block body %}
+
+    {{ render_pattern(contentHeader) }}
+
+{% endblock %}
