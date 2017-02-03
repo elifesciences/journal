@@ -7,7 +7,7 @@ parameters:
     mailer_port: ~
     mailer_username: ~
     mailer_password: ~
-    mailer_encryption: false
+    mailer_encryption: ~
     trusted_hosts:
       - .*\.?elifesciences.org$
     trusted_proxies:
