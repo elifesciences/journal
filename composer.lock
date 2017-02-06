@@ -168,16 +168,16 @@
         },
         {
             "name": "csa/guzzle-bundle",
-            "version": "v2.1.0",
+            "version": "v2.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/csarrazi/CsaGuzzleBundle.git",
-                "reference": "ff3da1ed7bf84385d2c6512e0f9777b5e3fbec54"
+                "reference": "9796e5c28e02d5c2f0aa1376e8390b1d29159d28"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/csarrazi/CsaGuzzleBundle/zipball/ff3da1ed7bf84385d2c6512e0f9777b5e3fbec54",
-                "reference": "ff3da1ed7bf84385d2c6512e0f9777b5e3fbec54",
+                "url": "https://api.github.com/repos/csarrazi/CsaGuzzleBundle/zipball/9796e5c28e02d5c2f0aa1376e8390b1d29159d28",
+                "reference": "9796e5c28e02d5c2f0aa1376e8390b1d29159d28",
                 "shasum": ""
             },
             "require": {
@@ -206,7 +206,7 @@
             "type": "symfony-bundle",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.1.x-dev"
+                    "dev-master": "2.2.x-dev"
                 }
             },
             "autoload": {
@@ -216,7 +216,7 @@
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
-                "MIT"
+                "Apache-2.0"
             ],
             "authors": [
                 {
@@ -225,7 +225,7 @@
                 }
             ],
             "description": "A bundle integrating GuzzleHttp >= 4.0",
-            "time": "2016-05-17 17:03:12"
+            "time": "2016-08-25 12:09:22"
         },
         {
             "name": "cweagans/composer-patches",
