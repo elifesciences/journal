@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "f257b0a4c616b9e828c625c659c526d2",
-    "content-hash": "47ed99730dd7651734ca71fd70c28c41",
+    "hash": "611bc6d6495d038f9e3e282bd99f3376",
+    "content-hash": "f09d789959112512f93c862737234038",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -168,40 +168,38 @@
         },
         {
             "name": "csa/guzzle-bundle",
-            "version": "v2.1.2",
+            "version": "v2.2.0-alpha1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/csarrazi/CsaGuzzleBundle.git",
-                "reference": "9796e5c28e02d5c2f0aa1376e8390b1d29159d28"
+                "reference": "001cc25706450286d90480444ab05ed31b7e8645"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/csarrazi/CsaGuzzleBundle/zipball/9796e5c28e02d5c2f0aa1376e8390b1d29159d28",
-                "reference": "9796e5c28e02d5c2f0aa1376e8390b1d29159d28",
+                "url": "https://api.github.com/repos/csarrazi/CsaGuzzleBundle/zipball/001cc25706450286d90480444ab05ed31b7e8645",
+                "reference": "001cc25706450286d90480444ab05ed31b7e8645",
                 "shasum": ""
             },
             "require": {
                 "guzzlehttp/guzzle": "^6.1",
-                "namshi/cuzzle": "^2.0",
                 "php": ">=5.5.0",
-                "symfony/dependency-injection": "^2.6|^3.0",
-                "symfony/expression-language": "^2.6|^3.0",
-                "symfony/filesystem": "^2.3|^3.0",
-                "symfony/framework-bundle": "^2.6|^3.0",
+                "symfony/dependency-injection": "^2.7|^3.0",
+                "symfony/filesystem": "^2.7|^3.0",
+                "symfony/framework-bundle": "^2.7|^3.0",
                 "twig/twig": "^1.12|^2.0"
-            },
-            "conflict": {
-                "guzzlehttp/command": "*",
-                "guzzlehttp/guzzle-services": "*"
             },
             "require-dev": {
                 "doctrine/cache": "^1.1",
+                "namshi/cuzzle": "^2.0",
                 "phpunit/phpunit": "^4.8",
+                "psr/cache": "^1.0",
                 "symfony/phpunit-bridge": "^2.7|^3.0",
                 "symfony/web-profiler-bundle": "^2.3|^3.0"
             },
             "suggest": {
-                "doctrine/cache": "Allows caching of responses"
+                "doctrine/cache": "Allows caching of responses",
+                "namshi/cuzzle": "Output command to repeat request in command line",
+                "psr/cache": "Allows caching of responses"
             },
             "type": "symfony-bundle",
             "extra": {
@@ -225,7 +223,7 @@
                 }
             ],
             "description": "A bundle integrating GuzzleHttp >= 4.0",
-            "time": "2016-08-25 12:09:22"
+            "time": "2016-10-28 06:34:28"
         },
         {
             "name": "cweagans/composer-patches",
@@ -1190,56 +1188,6 @@
                 "templating"
             ],
             "time": "2016-02-27 19:22:46"
-        },
-        {
-            "name": "namshi/cuzzle",
-            "version": "2.0.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/namshi/cuzzle.git",
-                "reference": "d700a16b493546712c6275d61ed33cc1e377eb08"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/namshi/cuzzle/zipball/d700a16b493546712c6275d61ed33cc1e377eb08",
-                "reference": "d700a16b493546712c6275d61ed33cc1e377eb08",
-                "shasum": ""
-            },
-            "require": {
-                "guzzlehttp/guzzle": "^6.0",
-                "php": ">=5.5.0",
-                "psr/log": "^1.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^4.2.2"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.0.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Namshi\\Cuzzle\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Nikita Nefedov",
-                    "email": "inefedor@gmail.com"
-                },
-                {
-                    "name": "cirpo",
-                    "email": "alessandro.cinelli@gmail.com"
-                }
-            ],
-            "description": "Get the cURL shell command from a Guzzle request",
-            "time": "2016-07-03 18:18:53"
         },
         {
             "name": "ocramius/package-versions",
@@ -3876,6 +3824,56 @@
             "time": "2015-11-20 12:04:31"
         },
         {
+            "name": "namshi/cuzzle",
+            "version": "2.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/namshi/cuzzle.git",
+                "reference": "d700a16b493546712c6275d61ed33cc1e377eb08"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/namshi/cuzzle/zipball/d700a16b493546712c6275d61ed33cc1e377eb08",
+                "reference": "d700a16b493546712c6275d61ed33cc1e377eb08",
+                "shasum": ""
+            },
+            "require": {
+                "guzzlehttp/guzzle": "^6.0",
+                "php": ">=5.5.0",
+                "psr/log": "^1.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.2.2"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Namshi\\Cuzzle\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nikita Nefedov",
+                    "email": "inefedor@gmail.com"
+                },
+                {
+                    "name": "cirpo",
+                    "email": "alessandro.cinelli@gmail.com"
+                }
+            ],
+            "description": "Get the cURL shell command from a Guzzle request",
+            "time": "2016-07-03 18:18:53"
+        },
+        {
             "name": "phpdocumentor/reflection-common",
             "version": "1.0",
             "source": {
@@ -5036,6 +5034,7 @@
     "aliases": [],
     "minimum-stability": "beta",
     "stability-flags": {
+        "csa/guzzle-bundle": 15,
         "elife/api-client": 20,
         "elife/api-sdk": 20,
         "elife/patterns": 20,
