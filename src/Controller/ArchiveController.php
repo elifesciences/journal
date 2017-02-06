@@ -56,7 +56,7 @@ final class ArchiveController extends Controller
         }
 
         $months = [];
-        foreach (range(2012 === $year ? 10 : 1, $this->getMaxMonth($year)) as $month) {
+        foreach (range($this->getMinMonth($year), $this->getMaxMonth($year)) as $month) {
             $starts = DateTimeImmutable::createFromFormat('j n Y H:i:s', "1 $month $year 00:00:00", new DateTimeZone('Z'));
             $ends = $starts->setDate((int) $starts->format('Y'), (int) $starts->format('n'), (int) $starts->format('t'))->setTime(23, 59, 59);
 
@@ -164,6 +164,11 @@ final class ArchiveController extends Controller
         $currentMonth = (int) date('n', time());
 
         return 1 === $currentMonth ? $currentYear - 1 : $currentYear;
+    }
+
+    private function getMinMonth(int $year) : int
+    {
+        return 2012 === $year ? 10 : 1;
     }
 
     private function getMaxMonth(int $year) : int
