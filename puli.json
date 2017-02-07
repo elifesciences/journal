@@ -193,8 +193,7 @@
         },
         "namshi/cuzzle": {
             "install-path": "vendor/namshi/cuzzle",
-            "installer": "composer",
-            "env": "dev"
+            "installer": "composer"
         },
         "ocramius/package-versions": {
             "install-path": "vendor/ocramius/package-versions",
