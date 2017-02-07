@@ -27,6 +27,12 @@ final class CollectionsController extends Controller
 
         $arguments = $this->defaultPageArguments();
 
+        $latestResearch = $this->pagerfantaPromise(
+            $this->get('elife.api_sdk.collections'),
+            $page,
+            $perPage
+        );
+        /*
         $latestResearch = promise_for($this->get('elife.api_sdk.collections'))
             ->then(function (Sequence $sequence) use ($page, $perPage) {
                 $pagerfanta = new Pagerfanta(new SequenceAdapter($sequence, $this->willConvertTo(Teaser::class)));
@@ -34,6 +40,7 @@ final class CollectionsController extends Controller
 
                 return $pagerfanta;
             });
+         */
 
         $arguments['title'] = 'Collections';
 

@@ -2,13 +2,30 @@
 
 namespace eLife\Journal\Controller;
 
+use eLife\ApiSdk\Collection\Sequence;
 use eLife\Journal\Helper\Paginator;
+use eLife\Journal\Pagerfanta\SequenceAdapter;
+use eLife\Patterns\ViewModel\Teaser;
 use GuzzleHttp\Promise\PromiseInterface;
 use Pagerfanta\Pagerfanta;
 use Symfony\Component\HttpFoundation\Request;
+use function GuzzleHttp\Promise\promise_for;
 
 trait HasPages
 {
+    abstract protected function willConvertTo(string $viewModel = null, array $context = []): callable;
+
+    public function pagerfantaPromise($sdkClient, $page, $perPage): PromiseInterface
+    {
+        return promise_for($sdkClient)
+            ->then(function (Sequence $sequence) use ($page, $perPage) {
+                $pagerfanta = new Pagerfanta(new SequenceAdapter($sequence, $this->willConvertTo(Teaser::class)));
+                $pagerfanta->setMaxPerPage($perPage)->setCurrentPage($page);
+
+                return $pagerfanta;
+            });
+    }
+
     public function paginator(PromiseInterface $pagerfantaPromise, Request $request, string $title, string $route)
     {
         return $pagerfantaPromise
@@ -24,6 +41,5 @@ trait HasPages
                     }
                 );
             });
-
     }
 }
