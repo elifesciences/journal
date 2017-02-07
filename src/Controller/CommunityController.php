@@ -53,8 +53,6 @@ final class CommunityController extends Controller
 
     private function createFirstPage(array $arguments) : Response
     {
-        $arguments['contentHeader'] = ContentHeaderNonArticle::basic('eLife community');
-
         return new Response($this->get('templating')->render('::community.html.twig', $arguments));
     }
 }
