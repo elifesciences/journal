@@ -1,15 +1,15 @@
 {% extends '::page.html.twig' %}
 
-{% block title %}{{ year }} archive{% endblock %}
-
-{% block info_bar %}
-
-    {{ info_bar('This page is incomplete.') }}
-
-{% endblock %}
+{% block title %}{{ title }}{% endblock %}
 
 {% block body %}
 
     {{ render_pattern(contentHeader) }}
+
+    <div class="wrapper">
+
+        {{ render_pattern(months) }}
+
+    </div>
 
 {% endblock %}

@@ -82,7 +82,7 @@ final class StatusTest extends WebTestCase
         $this->mockApiResponse(
             new Request(
                 'GET',
-                'http://api.elifesciences.org/covers?page=1&per-page=1&order=desc',
+                'http://api.elifesciences.org/covers?page=1&per-page=1&sort=date&order=desc',
                 ['Accept' => 'application/vnd.elife.cover-list+json; version=1']
             ),
             new Response(
