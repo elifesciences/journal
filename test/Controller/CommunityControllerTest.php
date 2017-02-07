@@ -18,11 +18,37 @@ final class CommunityControllerTest extends PageTestCase
         $crawler = $client->request('GET', $this->getUrl());
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
-        $this->assertSame('Community', $crawler->filter('.content-header__title')->text());
-        // possibly: $this->assertContains('No community content available.', $crawler->filter('main')->text());
+        $this->assertSame('eLife community', $crawler->filter('.content-header__title')->text());
+        $this->assertContains('No community content available.', $crawler->filter('main')->text());
     }
 
-    // TODO: it_displays_a_404_when_not_on_a_valid_page()
+    /**
+     * @test
+     */
+    public function it_displays_a_404_when_not_on_a_valid_page()
+    {
+        $client = static::createClient();
+
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/community?page=1&per-page=1&order=desc',
+                ['Accept' => 'application/vnd.elife.community-list+json; version=1']
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.community-list+json; version=1'],
+                json_encode([
+                    'total' => 0,
+                    'items' => [],
+                ])
+            )
+        );
+
+        $client->request('GET', '/community?page=2');
+
+        $this->assertSame(404, $client->getResponse()->getStatusCode());
+    }
 
     protected function getUrl() : string
     {
