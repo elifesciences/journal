@@ -1,4 +1,4 @@
-@magazine
+@community
 Feature: Community 'Latest' list
 
   Rules:
