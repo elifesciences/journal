@@ -18,6 +18,8 @@ use function GuzzleHttp\Promise\promise_for;
 
 final class CollectionsController extends Controller
 {
+    use HasPages;
+
     public function listAction(Request $request) : Response
     {
         $page = (int) $request->query->get('page', 1);
@@ -35,19 +37,12 @@ final class CollectionsController extends Controller
 
         $arguments['title'] = 'Collections';
 
-        $arguments['paginator'] = $latestResearch
-            ->then(function (Pagerfanta $pagerfanta) use ($request) {
-                return new Paginator(
-                    'Browse our collections',
-                    $pagerfanta,
-                    function (int $page = null) use ($request) {
-                        $routeParams = $request->attributes->get('_route_params');
-                        $routeParams['page'] = $page;
-
-                        return $this->get('router')->generate('collections', $routeParams);
-                    }
-                );
-            });
+        $arguments['paginator'] = $this->paginator(
+            $latestResearch,
+            $request,
+            'Browse our collections',
+            'collections'
+        );
 
         $arguments['listing'] = $arguments['paginator']
             ->then($this->willConvertTo(ListingTeasers::class, ['type' => 'collections']));

@@ -19,6 +19,8 @@ use function GuzzleHttp\Promise\promise_for;
 
 final class CommunityController extends Controller
 {
+    use HasPages;
+
     public function listAction(Request $request) : Response
     {
         $page = (int) $request->query->get('page', 1);
@@ -42,19 +44,12 @@ final class CommunityController extends Controller
 
         $arguments['title'] = 'Community';
 
-        $arguments['paginator'] = $latestCommunity
-            ->then(function (Pagerfanta $pagerfanta) use ($request) {
-                return new Paginator(
-                    'Browse our community listings',
-                    $pagerfanta,
-                    function (int $page = null) use ($request) {
-                        $routeParams = $request->attributes->get('_route_params');
-                        $routeParams['page'] = $page;
-
-                        return $this->get('router')->generate('community', $routeParams);
-                    }
-                );
-            });
+        $arguments['paginator'] = $this->paginator(
+            $latestCommunity,
+            $request,
+            'Browse our community listings',
+            'community'
+        );
 
         $arguments['listing'] = $arguments['paginator']
             ->then($this->willConvertTo(ListingTeasers::class, ['type' => 'community content']));
