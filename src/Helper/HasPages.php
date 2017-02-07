@@ -3,7 +3,6 @@
 namespace eLife\Journal\Helper;
 
 use eLife\ApiSdk\Collection\Sequence;
-use eLife\Journal\Helper\Paginator;
 use eLife\Journal\Pagerfanta\SequenceAdapter;
 use eLife\Patterns\ViewModel\Teaser;
 use GuzzleHttp\Promise\PromiseInterface;

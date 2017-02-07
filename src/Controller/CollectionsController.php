@@ -2,20 +2,16 @@
 
 namespace eLife\Journal\Controller;
 
-use eLife\ApiSdk\Collection\Sequence;
 use eLife\ApiSdk\Model\Collection;
 use eLife\Journal\Helper\Callback;
 use eLife\Journal\Helper\HasPages;
 use eLife\Journal\Helper\Paginator;
-use eLife\Journal\Pagerfanta\SequenceAdapter;
 use eLife\Patterns\ViewModel\ContentHeaderNonArticle;
 use eLife\Patterns\ViewModel\LeadParas;
 use eLife\Patterns\ViewModel\ListingTeasers;
 use eLife\Patterns\ViewModel\Teaser;
-use Pagerfanta\Pagerfanta;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use function GuzzleHttp\Promise\promise_for;
 
 final class CollectionsController extends Controller
 {
