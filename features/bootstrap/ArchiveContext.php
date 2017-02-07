@@ -11,10 +11,19 @@ final class ArchiveContext extends Context
 {
     /** @var DateTimeImmutable */
     private $today;
+    private $emptyResearchArticles;
 
     public function __construct()
     {
         ClockMock::register(ArchiveController::class);
+    }
+
+    /**
+     * @BeforeScenario
+     */
+    public function resetEmptyResearchArticles()
+    {
+        $this->emptyResearchArticles = true;
     }
 
     /**
@@ -99,11 +108,473 @@ final class ArchiveContext extends Context
     }
 
     /**
+     * @Given /^(\d+) research articles were published during ([A-Za-z]+) (\d+)$/
+     */
+    public function researchArticlesWerePublishedDuringMarch(int $number, string $month, int $year)
+    {
+        $this->emptyResearchArticles = false;
+
+        $date = DateTimeImmutable::createFromFormat('j F Y H:i:s', "1 $month $year 00:00:00", new DateTimeZone('Z'));
+
+        $articles = [];
+        for ($i = $number; $i > 0; --$i) {
+            $i = str_pad($i, 5, '0', STR_PAD_LEFT);
+            $articles[] = [
+                'status' => 'poa',
+                'stage' => 'published',
+                'id' => "$i",
+                'version' => 1,
+                'type' => 'research-article',
+                'doi' => '10.7554/eLife.'.$i,
+                'title' => 'Article '.$i.' title',
+                'published' => $date->format(ApiSdk::DATE_FORMAT),
+                'versionDate' => $date->format(ApiSdk::DATE_FORMAT),
+                'statusDate' => $date->format(ApiSdk::DATE_FORMAT),
+                'volume' => 5,
+                'elocationId' => 'e'.$i,
+                'copyright' => [
+                    'license' => 'CC-BY-4.0',
+                    'holder' => 'Author et al',
+                    'statement' => 'Creative Commons Attribution License.',
+                ],
+                'authorLine' => 'Foo Bar',
+            ];
+        }
+
+        $endDate = DateTimeImmutable::createFromFormat('j F Y H:i:s', $date->format('t')." $month $year 23:59:59", new DateTimeZone('Z'))->format('Y-m-d');
+        $startDate = $date->format('Y-m-d');
+
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                "http://api.elifesciences.org/search?for=&page=1&per-page=1&sort=date&order=desc&type[]=research-advance&type[]=research-article&type[]=research-exchange&type[]=short-report&type[]=tools-resources&type[]=replication-study&start-date=$startDate&end-date=$endDate",
+                ['Accept' => 'application/vnd.elife.search+json; version=1']
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.search+json; version=1'],
+                json_encode([
+                    'total' => $number,
+                    'items' => [$articles[0]],
+                    'subjects' => [
+                        [
+                            'id' => 'subject',
+                            'name' => 'Some subject',
+                            'results' => 0,
+                        ],
+                    ],
+                    'types' => [
+                        'correction' => 0,
+                        'editorial' => 0,
+                        'feature' => 0,
+                        'insight' => 0,
+                        'research-advance' => 0,
+                        'research-article' => $number,
+                        'research-exchange' => 0,
+                        'retraction' => 0,
+                        'registered-report' => 0,
+                        'replication-study' => 0,
+                        'short-report' => 0,
+                        'tools-resources' => 0,
+                        'blog-article' => 0,
+                        'collection' => 0,
+                        'event' => 0,
+                        'interview' => 0,
+                        'labs-experiment' => 0,
+                        'podcast-episode' => 0,
+                    ],
+                ])
+            )
+        );
+
+        foreach (array_chunk($articles, 100) as $i => $articleChunk) {
+            $page = $i + 1;
+
+            $this->mockApiResponse(
+                new Request(
+                    'GET',
+                    "http://api.elifesciences.org/search?for=&page=$page&per-page=100&sort=date&order=desc&type[]=research-advance&type[]=research-article&type[]=research-exchange&type[]=short-report&type[]=tools-resources&type[]=replication-study&start-date=$startDate&end-date=$endDate",
+                    ['Accept' => 'application/vnd.elife.search+json; version=1']
+                ),
+                new Response(
+                    200,
+                    ['Content-Type' => 'application/vnd.elife.search+json; version=1'],
+                    json_encode([
+                        'total' => $number,
+                        'items' => $articleChunk,
+                        'subjects' => [
+                            [
+                                'id' => 'subject',
+                                'name' => 'Some subject',
+                                'results' => 0,
+                            ],
+                        ],
+                        'types' => [
+                            'correction' => 0,
+                            'editorial' => 0,
+                            'feature' => 0,
+                            'insight' => 0,
+                            'research-advance' => 0,
+                            'research-article' => $number,
+                            'research-exchange' => 0,
+                            'retraction' => 0,
+                            'registered-report' => 0,
+                            'replication-study' => 0,
+                            'short-report' => 0,
+                            'tools-resources' => 0,
+                            'blog-article' => 0,
+                            'collection' => 0,
+                            'event' => 0,
+                            'interview' => 0,
+                            'labs-experiment' => 0,
+                            'podcast-episode' => 0,
+                        ],
+                    ])
+                )
+            );
+        }
+    }
+
+    /**
+     * @Given /^(\d+) Magazine articles were published during ([A-Za-z]+) (\d+)$/
+     */
+    public function magazineArticlesWerePublishedDuringMarch(int $number, string $month, int $year)
+    {
+        $date = DateTimeImmutable::createFromFormat('j F Y H:i:s', "1 $month $year 00:00:00", new DateTimeZone('Z'));
+
+        $articles = [];
+        for ($i = $number; $i > 0; --$i) {
+            $i = str_pad($i, 5, '0', STR_PAD_LEFT);
+            $articles[] = [
+                'type' => 'interview',
+                'id' => 'interview'.$i,
+                'interviewee' => [
+                    'name' => [
+                        'preferred' => 'Interviewee '.$i,
+                        'index' => 'Interviewee '.$i,
+                    ],
+                ],
+                'title' => 'Interview '.$i.' title',
+                'published' => $date->format(ApiSdk::DATE_FORMAT),
+            ];
+        }
+
+        $endDate = DateTimeImmutable::createFromFormat('j F Y H:i:s', $date->format('t')." $month $year 23:59:59", new DateTimeZone('Z'))->format('Y-m-d');
+        $startDate = $date->format('Y-m-d');
+
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                "http://api.elifesciences.org/search?for=&page=1&per-page=1&sort=date&order=desc&type[]=editorial&type[]=insight&type[]=feature&type[]=collection&type[]=interview&type[]=podcast-episode&start-date=$startDate&end-date=$endDate",
+                ['Accept' => 'application/vnd.elife.search+json; version=1']
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.search+json; version=1'],
+                json_encode([
+                    'total' => $number,
+                    'items' => [$articles[0]],
+                    'subjects' => [],
+                    'types' => [
+                        'correction' => 0,
+                        'editorial' => 0,
+                        'feature' => 0,
+                        'insight' => 0,
+                        'research-advance' => 0,
+                        'research-article' => 0,
+                        'research-exchange' => 0,
+                        'retraction' => 0,
+                        'registered-report' => 0,
+                        'replication-study' => 0,
+                        'short-report' => 0,
+                        'tools-resources' => 0,
+                        'blog-article' => 0,
+                        'collection' => 0,
+                        'event' => 0,
+                        'interview' => $number,
+                        'labs-experiment' => 0,
+                        'podcast-episode' => 0,
+                    ],
+                ])
+            )
+        );
+
+        foreach (array_chunk($articles, 100) as $i => $articleChunk) {
+            $page = $i + 1;
+
+            $this->mockApiResponse(
+                new Request(
+                    'GET',
+                    "http://api.elifesciences.org/search?for=&page=$page&per-page=100&sort=date&order=desc&type[]=editorial&type[]=insight&type[]=feature&type[]=collection&type[]=interview&type[]=podcast-episode&start-date=$startDate&end-date=$endDate",
+                    ['Accept' => 'application/vnd.elife.search+json; version=1']
+                ),
+                new Response(
+                    200,
+                    ['Content-Type' => 'application/vnd.elife.search+json; version=1'],
+                    json_encode([
+                        'total' => $number,
+                        'items' => $articleChunk,
+                        'subjects' => [],
+                        'types' => [
+                            'correction' => 0,
+                            'editorial' => 0,
+                            'feature' => 0,
+                            'insight' => 0,
+                            'research-advance' => 0,
+                            'research-article' => 0,
+                            'research-exchange' => 0,
+                            'retraction' => 0,
+                            'registered-report' => 0,
+                            'replication-study' => 0,
+                            'short-report' => 0,
+                            'tools-resources' => 0,
+                            'blog-article' => 0,
+                            'collection' => 0,
+                            'event' => 0,
+                            'interview' => $number,
+                            'labs-experiment' => 0,
+                            'podcast-episode' => 0,
+                        ],
+                    ])
+                )
+            );
+        }
+    }
+
+    /**
+     * @Given /^there are Magazine articles:$/
+     */
+    public function thereAreMagazineArticles(TableNode $table)
+    {
+        //$date = DateTimeImmutable::createFromFormat('j F Y H:i:s', "1 $month $year 00:00:00", new DateTimeZone('Z'));
+
+        $articles = array_map(function (array $data) {
+            $date = DateTimeImmutable::createFromFormat('j F Y H:i:s', $data['Published'].' 00:00:00', new DateTimeZone('Z'));
+            $id = $this->createId($data['Article']);
+
+            switch ($type = $data['Type']) {
+                case 'Insight':
+                    return [
+                        'status' => 'poa',
+                        'stage' => 'published',
+                        'id' => $id,
+                        'version' => 1,
+                        'type' => 'research-article',
+                        'doi' => "10.7554/eLife.$id",
+                        'title' => $data['Article'],
+                        'published' => $date->format(ApiSdk::DATE_FORMAT),
+                        'versionDate' => $date->format(ApiSdk::DATE_FORMAT),
+                        'statusDate' => $date->format(ApiSdk::DATE_FORMAT),
+                        'volume' => 5,
+                        'elocationId' => "e$id",
+                        'copyright' => [
+                            'license' => 'CC-BY-4.0',
+                            'holder' => 'Author et al',
+                            'statement' => 'Creative Commons Attribution License.',
+                        ],
+                        'authorLine' => 'Foo Bar',
+                    ];
+                case 'Podcast episode':
+                    static $podcastNumber = 0;
+
+                    ++$podcastNumber;
+
+                    return [
+                        'type' => 'podcast-episode',
+                        'number' => $podcastNumber,
+                        'title' => $data['Article'],
+                        'published' => $date->format(ApiSdk::DATE_FORMAT),
+                        'image' => [
+                            'thumbnail' => [
+                                'alt' => '',
+                                'sizes' => [
+                                    '16:9' => [
+                                        '250' => 'https://placehold.it/250x141',
+                                        '500' => 'https://placehold.it/500x281',
+                                    ],
+                                    '1:1' => [
+                                        '70' => 'https://placehold.it/70x70',
+                                        '140' => 'https://placehold.it/140x140',
+                                    ],
+                                ],
+                            ],
+                        ],
+                        'sources' => [
+                            [
+                                'mediaType' => 'audio/mpeg',
+                                'uri' => $this->locatePath('/audio-file'),
+                            ],
+                        ],
+                    ];
+            }
+
+            throw new UnexpectedValueException('Unknown type'.$type);
+        }, $table->getColumnsHash());
+
+        usort($articles, function (array $a, array $b) {
+            return $b['published'] <=> $a['published'];
+        });
+
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/search?for=&page=1&per-page=1&sort=date&order=desc&type[]=editorial&type[]=insight&type[]=feature&type[]=collection&type[]=interview&type[]=podcast-episode&start-date=2016-03-01&end-date=2016-03-31',
+                ['Accept' => 'application/vnd.elife.search+json; version=1']
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.search+json; version=1'],
+                json_encode([
+                    'total' => count($articles),
+                    'items' => [$articles[0]],
+                    'subjects' => [],
+                    'types' => [
+                        'correction' => 0,
+                        'editorial' => 0,
+                        'feature' => 0,
+                        'insight' => array_reduce($articles, function (int $carry, array $article) {
+                            if ('insight' === $article['type']) {
+                                ++$carry;
+                            }
+
+                            return $carry;
+                        }, 0),
+                        'research-advance' => 0,
+                        'research-article' => 0,
+                        'research-exchange' => 0,
+                        'retraction' => 0,
+                        'registered-report' => 0,
+                        'replication-study' => 0,
+                        'short-report' => 0,
+                        'tools-resources' => 0,
+                        'blog-article' => 0,
+                        'collection' => 0,
+                        'event' => 0,
+                        'interview' => 0,
+                        'labs-experiment' => 0,
+                        'podcast-episode' => array_reduce($articles, function (int $carry, array $article) {
+                            if ('podcast-episode' === $article['type']) {
+                                ++$carry;
+                            }
+
+                            return $carry;
+                        }, 0),
+                    ],
+                ])
+            )
+        );
+
+        foreach (array_chunk($articles, 100) as $i => $articleChunk) {
+            $page = $i + 1;
+
+            $this->mockApiResponse(
+                new Request(
+                    'GET',
+                    "http://api.elifesciences.org/search?for=&page=$page&per-page=100&sort=date&order=desc&type[]=editorial&type[]=insight&type[]=feature&type[]=collection&type[]=interview&type[]=podcast-episode&start-date=2016-03-01&end-date=2016-03-31",
+                    ['Accept' => 'application/vnd.elife.search+json; version=1']
+                ),
+                new Response(
+                    200,
+                    ['Content-Type' => 'application/vnd.elife.search+json; version=1'],
+                    json_encode([
+                        'total' => count($articles),
+                        'items' => $articleChunk,
+                        'subjects' => [],
+                        'types' => [
+                            'correction' => 0,
+                            'editorial' => 0,
+                            'feature' => 0,
+                            'insight' => array_reduce($articles, function (int $carry, array $article) {
+                                if ('insight' === $article['type']) {
+                                    ++$carry;
+                                }
+
+                                return $carry;
+                            }, 0),
+                            'research-advance' => 0,
+                            'research-article' => 0,
+                            'research-exchange' => 0,
+                            'retraction' => 0,
+                            'registered-report' => 0,
+                            'replication-study' => 0,
+                            'short-report' => 0,
+                            'tools-resources' => 0,
+                            'blog-article' => 0,
+                            'collection' => 0,
+                            'event' => 0,
+                            'interview' => 0,
+                            'labs-experiment' => 0,
+                            'podcast-episode' => array_reduce($articles, function (int $carry, array $article) {
+                                if ('podcast-episode' === $article['type']) {
+                                    ++$carry;
+                                }
+
+                                return $carry;
+                            }, 0),
+                        ],
+                    ])
+                )
+            );
+        }
+    }
+
+    /**
      * @When /^I go to the monthly archive for (\d+)$/
      */
     public function iGoToTheMonthlyArchiveFor(int $year)
     {
         $this->visitPath('/archive/'.$year);
+    }
+
+    /**
+     * @When /^I go to the archive for ([A-Za-z]+) (\d+)$/
+     */
+    public function iGoToTheArchiveForMarch(string $month, int $year)
+    {
+        if ($this->emptyResearchArticles) {
+            $date = DateTimeImmutable::createFromFormat('j F Y H:i:s', "1 $month $year 00:00:00", new DateTimeZone('Z'));
+            $endDate = DateTimeImmutable::createFromFormat('j F Y H:i:s', $date->format('t')." $month $year 23:59:59", new DateTimeZone('Z'))->format('Y-m-d');
+            $startDate = $date->format('Y-m-d');
+
+            $this->mockApiResponse(
+                new Request(
+                    'GET',
+                    "http://api.elifesciences.org/search?for=&page=1&per-page=1&sort=date&order=desc&type[]=research-advance&type[]=research-article&type[]=research-exchange&type[]=short-report&type[]=tools-resources&type[]=replication-study&start-date=$startDate&end-date=$endDate",
+                    ['Accept' => 'application/vnd.elife.search+json; version=1']
+                ),
+                new Response(
+                    200,
+                    ['Content-Type' => 'application/vnd.elife.search+json; version=1'],
+                    json_encode([
+                        'total' => 0,
+                        'items' => [],
+                        'subjects' => [],
+                        'types' => [
+                            'correction' => 0,
+                            'editorial' => 0,
+                            'feature' => 0,
+                            'insight' => 0,
+                            'research-advance' => 0,
+                            'research-article' => 0,
+                            'research-exchange' => 0,
+                            'retraction' => 0,
+                            'registered-report' => 0,
+                            'replication-study' => 0,
+                            'short-report' => 0,
+                            'tools-resources' => 0,
+                            'blog-article' => 0,
+                            'collection' => 0,
+                            'event' => 0,
+                            'interview' => 0,
+                            'labs-experiment' => 0,
+                            'podcast-episode' => 0,
+                        ],
+                    ])
+                )
+            );
+        }
+
+        $this->visitPath('/archive/'.$year.'/'.strtolower($month));
     }
 
     /**
@@ -136,6 +607,19 @@ final class ArchiveContext extends Context
     }
 
     /**
+     * @Then /^I should see the image from the cover for "([^"]*)" in the header$/
+     */
+    public function iShouldSeeTheImageFromTheCoverForInTheHeader(string $article)
+    {
+        $this->assertSession()->elementAttributeContains(
+            'css',
+            '.content-header',
+            'data-high-res-image-source',
+            'https://placehold.it/1800x900?'.$this->createId($article)
+        );
+    }
+
+    /**
      * @Then /^I should see the following cover articles for ([A-Za-z]+) (\d+):$/
      */
     public function iShouldSeeTheFollowingCoverArticlesForMarch2016(string $month, int $year, TableNode $table)
@@ -147,6 +631,56 @@ final class ArchiveContext extends Context
                 $cover
             );
         }
+    }
+
+    /**
+     * @Then /^I should see the (\d+) research articles published during ([A-Za-z]+) (\d+) in the 'Research articles' list$/
+     */
+    public function iShouldSeeTheResearchArticlesPublishedDuringMarchInTheList(int $number)
+    {
+        $this->assertSession()->elementsCount('css', '.list-heading:contains("Research articles") + .listing-list > .listing-list__item', $number);
+
+        for ($i = $number; $i > 0; --$i) {
+            $nthChild = ($number - $i + 1);
+            $expectedNumber = ($number - $nthChild + 1);
+
+            $this->assertSession()->elementContains(
+                'css',
+                '.list-heading:contains("Research articles") + .listing-list > .listing-list__item:nth-child('.$nthChild.')',
+                'Article '.str_pad($expectedNumber, 5, '0', STR_PAD_LEFT).' title'
+            );
+        }
+    }
+
+    /**
+     * @Then /^I should see the (\d+) Magazine items published during ([A-Za-z]+) (\d+) in the 'Magazine' list$/
+     */
+    public function iShouldSeeTheMagazineItemsPublishedDuringMarchInTheList(int $number)
+    {
+        $this->assertSession()->elementsCount('css', '.list-heading:contains("Magazine") + .listing-list > .listing-list__item', $number);
+
+        for ($i = $number; $i > 0; --$i) {
+            $nthChild = ($number - $i + 1);
+            $expectedNumber = ($number - $nthChild + 1);
+
+            $this->assertSession()->elementContains(
+                'css',
+                '.list-heading:contains("Magazine") + .listing-list > .listing-list__item:nth-child('.$nthChild.')',
+                'Interview '.str_pad($expectedNumber, 5, '0', STR_PAD_LEFT).' title'
+            );
+        }
+    }
+
+    /**
+     * @Then /^I should see the "([^"]*)" at the top of the 'Magazine' list$/
+     */
+    public function iShouldSeeTheAtTheTopOfTheList(string $article)
+    {
+        $this->assertSession()->elementContains(
+            'css',
+            '.list-heading:contains("Magazine") + .listing-list > .listing-list__item:nth-child(1)',
+            $article
+        );
     }
 
     private function createId(string $name) : string
