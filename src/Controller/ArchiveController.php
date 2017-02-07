@@ -11,7 +11,10 @@ use eLife\ApiSdk\Model\Collection;
 use eLife\ApiSdk\Model\Cover;
 use eLife\ApiSdk\Model\Interview;
 use eLife\ApiSdk\Model\LabsExperiment;
+use eLife\ApiSdk\Model\Model;
 use eLife\ApiSdk\Model\PodcastEpisode;
+use eLife\Journal\Helper\Callback;
+use eLife\Journal\ViewModel\EmptyListing;
 use eLife\Patterns\ViewModel\ArchiveNavLink;
 use eLife\Patterns\ViewModel\BackgroundImage;
 use eLife\Patterns\ViewModel\BlockLink;
@@ -20,9 +23,11 @@ use eLife\Patterns\ViewModel\ContentHeaderNonArticle;
 use eLife\Patterns\ViewModel\FormLabel;
 use eLife\Patterns\ViewModel\GridListing;
 use eLife\Patterns\ViewModel\Link;
+use eLife\Patterns\ViewModel\ListingTeasers;
 use eLife\Patterns\ViewModel\Select;
 use eLife\Patterns\ViewModel\SelectNav;
 use eLife\Patterns\ViewModel\SelectOption;
+use eLife\Patterns\ViewModel\Teaser;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -128,21 +133,74 @@ final class ArchiveController extends Controller
 
     public function monthAction(int $year, string $month) : Response
     {
-        $date = DateTimeImmutable::createFromFormat('j F Y', "1 $month $year", new DateTimeZone('Z'));
+        $starts = DateTimeImmutable::createFromFormat('j F Y H:i:s', "1 $month $year 00:00:00", new DateTimeZone('Z'));
 
-        if (!$date) {
+        if (!$starts) {
             throw new NotFoundHttpException('Unknown month '.$month);
         }
 
-        $this->validateArchiveYear($year, $date->format('n'));
+        $this->validateArchiveYear($year, $starts->format('n'));
 
-        $date = $date->setTime(0, 0, 0);
+        $ends = $starts->setDate((int) $starts->format('Y'), (int) $starts->format('n'), (int) $starts->format('t'))->setTime(23, 59, 59);
+
+        $covers = $this->get('elife.api_sdk.covers')
+            ->sortBy('page-views')
+            ->startDate($starts)
+            ->endDate($ends)
+            ->slice(0, 4)
+            ->otherwise($this->softFailure('Failed to load cover articles for '.$starts->format('F Y')));
 
         $arguments = $this->defaultPageArguments();
 
-        $arguments['title'] = $date->format('F Y');
+        $arguments['title'] = $starts->format('F Y');
 
-        $arguments['contentHeader'] = ContentHeaderNonArticle::basic($arguments['title']);
+        $arguments['contentHeader'] = $covers
+            ->then(function (Sequence $covers = null) use ($arguments) {
+                if (!$covers || $covers->isEmpty()) {
+                    $background = null;
+                } else {
+                    $background = new BackgroundImage(
+                        $covers[0]->getBanner()->getSize('2:1')->getImage(900),
+                        $covers[0]->getBanner()->getSize('2:1')->getImage(1800)
+                    );
+                }
+
+                return ContentHeaderNonArticle::basic($arguments['title'], $background instanceof BackgroundImage, null, null, null, $background);
+            });
+
+        $arguments['listing'] = $research = $this->get('elife.api_sdk.search')
+            ->forType('research-advance', 'research-article', 'research-exchange', 'short-report', 'tools-resources', 'replication-study')
+            ->sortBy('date')
+            ->startDate($starts)
+            ->endDate($ends)
+            ->map($this->willConvertTo(Teaser::class))
+            ->then(function (Sequence $result) {
+                if ($result->isEmpty()) {
+                    return new EmptyListing('Research articles', 'No articles available.');
+                }
+
+                return ListingTeasers::basic($result->toArray(), 'Research articles');
+            });
+
+        $arguments['magazine'] = $this->get('elife.api_sdk.search')
+            ->forType('editorial', 'insight', 'feature', 'collection', 'interview', 'podcast-episode')
+            ->sortBy('date')
+            ->startDate($starts)
+            ->endDate($ends)
+            ->sort(function (Model $a, Model $b) {
+                if ($a instanceof PodcastEpisode) {
+                    return -1;
+                } elseif ($b instanceof PodcastEpisode) {
+                    return 1;
+                }
+
+                return 0;
+            })
+            ->map($this->willConvertTo(Teaser::class, ['variant' => 'secondary']))
+            ->then(Callback::emptyOr(function (Sequence $result) {
+                return ListingTeasers::basic($result->toArray(), 'Magazine');
+            }))
+            ->otherwise($this->softFailure('Failed to load Magazine list'));
 
         return new Response($this->get('templating')->render('::archive-month.html.twig', $arguments));
     }
@@ -153,8 +211,10 @@ final class ArchiveController extends Controller
             throw new NotFoundHttpException('eLife did not publish in '.$year);
         } elseif ($year > $this->getMaxYear()) {
             throw new NotFoundHttpException('Year not yet in archive');
-        } elseif ($month > $this->getMaxMonth($year)) {
+        } elseif ($month && ($month > $this->getMaxMonth($year))) {
             throw new NotFoundHttpException('Month not yet in archive');
+        } elseif ($month && ($month < $this->getMinMonth($year))) {
+            throw new NotFoundHttpException('eLife did not publish in '.DateTimeImmutable::createFromFormat('j n Y H:i:s', "1 $month $year 00:00:00", new DateTimeZone('Z'))->format('F Y'));
         }
     }
 

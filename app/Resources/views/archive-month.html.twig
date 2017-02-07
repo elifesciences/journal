@@ -12,4 +12,36 @@
 
     {{ render_pattern(contentHeader) }}
 
+    <div class="wrapper u-pad-top">
+
+        {% if magazine %}
+
+        <div class="grid">
+
+            <div class="listing-column-container">
+
+                <div class="grid__item large--eight-twelfths listing-column-main">
+
+                    {% endif %}
+
+                    {{ render_pattern(listing) }}
+
+                    {% if magazine %}
+
+                </div>
+
+                <div class="grid__item large--four-twelfths listing-column-secondary">
+
+                    {{ render_pattern(magazine) }}
+
+                </div>
+
+            </div>
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
 {% endblock %}
