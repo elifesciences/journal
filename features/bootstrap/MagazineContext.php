@@ -438,12 +438,19 @@ final class MagazineContext extends Context
     }
 
     /**
+     * @When /^I load more community content$/
+     */
+    public function iLoadMoreCommunityContent()
+    {
+        $this->getSession()->getPage()->clickLink('More community content');
+    }
+
+    /**
      * @Then /^I should see the latest (\d+) (.*) articles in the 'Latest' list$/
      */
     public function iShouldSeeTheLatestSectionArticlesInTheLatestList(int $number, $section)
     {
         $this->spin(function () use ($number) {
-            var_dump($this->getSession()->getPage()->getContent());
             $this->assertSession()->elementsCount('css', '.list-heading:contains("Latest")', 1);
             $this->assertSession()->elementsCount('css', '.list-heading:contains("Latest") + .listing-list > .listing-list__item', $number);
 

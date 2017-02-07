@@ -15,5 +15,5 @@ Feature: Community 'Latest' list
   Scenario: Loading more articles adds previous 6 to the list
     Given 20 Community articles have been published
     When I go to the Community page
-    And I load more articles
+    And I load more community content
     Then I should see the latest 12 Community articles in the 'Latest' list

@@ -57,14 +57,13 @@ final class CommunityController extends Controller
             });
 
         $arguments['listing'] = $arguments['paginator']
-            ->then($this->willConvertTo(ListingTeasers::class, ['type' => 'community']));
+            ->then($this->willConvertTo(ListingTeasers::class, ['type' => 'community content']));
 
         if (1 === $page) {
             return $this->createFirstPage($arguments);
         }
 
-        return new Response();
-        //return $this->createSubsequentPage($request, $arguments);
+        return $this->createSubsequentPage($request, $arguments);
     }
 
     private function createFirstPage(array $arguments) : Response
