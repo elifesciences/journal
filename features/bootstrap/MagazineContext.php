@@ -145,7 +145,7 @@ final class MagazineContext extends Context
         $this->mockApiResponse(
             new Request(
                 'GET',
-                'http://api.elifesciences.org/community?for=&page=1&per-page=1&sort=date&order=desc',
+                'http://api.elifesciences.org/community?page=1&per-page=1&order=desc',
                 ['Accept' => 'application/vnd.elife.community-list+json; version=1']
             ),
             new Response(
@@ -164,8 +164,8 @@ final class MagazineContext extends Context
             $this->mockApiResponse(
                 new Request(
                     'GET',
-                    "http://api.elifesciences.org/community?for=&page=$page&per-page=6&sort=date&order=desc",
-                    ['Accept' => 'application/vnd.elife.communit-list+json; version=1']
+                    "http://api.elifesciences.org/community?page=$page&per-page=6&order=desc",
+                    ['Accept' => 'application/vnd.elife.community-list+json; version=1']
                 ),
                 new Response(
                     200,
@@ -426,7 +426,7 @@ final class MagazineContext extends Context
      */
     public function iGoToTheCommunityPage()
     {
-        $this->visitPath('/magazine');
+        $this->visitPath('/community');
     }
 
     /**
@@ -443,6 +443,8 @@ final class MagazineContext extends Context
     public function iShouldSeeTheLatestSectionArticlesInTheLatestList(int $number, $section)
     {
         $this->spin(function () use ($number) {
+            var_dump($this->getSession()->getPage()->getContent());
+            $this->assertSession()->elementsCount('css', '.list-heading:contains("Latest")', 1);
             $this->assertSession()->elementsCount('css', '.list-heading:contains("Latest") + .listing-list > .listing-list__item', $number);
 
             for ($i = $number; $i > 0; --$i) {

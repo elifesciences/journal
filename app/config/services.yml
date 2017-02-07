@@ -37,6 +37,10 @@ services:
         class: eLife\ApiSdk\Client\Collections
         factory: ['@elife.api_sdk', collections]
 
+    elife.api_sdk.community:
+        class: eLife\ApiSdk\Client\Community
+        factory: ['@elife.api_sdk', community]
+
     elife.api_sdk.covers:
         class: eLife\ApiSdk\Client\Covers
         factory: ['@elife.api_sdk', covers]
