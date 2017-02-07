@@ -1,6 +1,6 @@
 <?php
 
-namespace eLife\Journal\Controller;
+namespace eLife\Journal\Helper;
 
 use eLife\ApiSdk\Collection\Sequence;
 use eLife\Journal\Helper\Paginator;
@@ -13,8 +13,6 @@ use function GuzzleHttp\Promise\promise_for;
 
 trait HasPages
 {
-    abstract protected function willConvertTo(string $viewModel = null, array $context = []): callable;
-
     public function pagerfantaPromise($sdkClient, $page, $perPage): PromiseInterface
     {
         return promise_for($sdkClient)

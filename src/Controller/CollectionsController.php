@@ -5,6 +5,7 @@ namespace eLife\Journal\Controller;
 use eLife\ApiSdk\Collection\Sequence;
 use eLife\ApiSdk\Model\Collection;
 use eLife\Journal\Helper\Callback;
+use eLife\Journal\Helper\HasPages;
 use eLife\Journal\Helper\Paginator;
 use eLife\Journal\Pagerfanta\SequenceAdapter;
 use eLife\Patterns\ViewModel\ContentHeaderNonArticle;
@@ -32,15 +33,6 @@ final class CollectionsController extends Controller
             $page,
             $perPage
         );
-        /*
-        $latestResearch = promise_for($this->get('elife.api_sdk.collections'))
-            ->then(function (Sequence $sequence) use ($page, $perPage) {
-                $pagerfanta = new Pagerfanta(new SequenceAdapter($sequence, $this->willConvertTo(Teaser::class)));
-                $pagerfanta->setMaxPerPage($perPage)->setCurrentPage($page);
-
-                return $pagerfanta;
-            });
-         */
 
         $arguments['title'] = 'Collections';
 
