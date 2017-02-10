@@ -37,12 +37,12 @@ final class CommunityController extends Controller
         $arguments['paginator'] = $this->paginator(
             $latestCommunity,
             $request,
-            'Browse our community listings',
+            'Browse our community articles',
             'community'
         );
 
         $arguments['listing'] = $arguments['paginator']
-            ->then($this->willConvertTo(ListingTeasers::class, ['type' => 'community content']));
+            ->then($this->willConvertTo(ListingTeasers::class, ['emptyText' => 'No community articles available.']));
 
         if (1 === $page) {
             return $this->createFirstPage($arguments);

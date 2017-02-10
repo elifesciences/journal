@@ -84,7 +84,7 @@ final class CommunityContext extends Context
      */
     public function iLoadMoreCommunityContent()
     {
-        $this->getSession()->getPage()->clickLink('More community content');
+        $this->getSession()->getPage()->clickLink('Load more');
     }
 
     /**

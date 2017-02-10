@@ -18,7 +18,7 @@ final class CommunityControllerTest extends PageTestCase
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertSame('Community', $crawler->filter('.content-header__title')->text());
-        $this->assertContains('No community content available.', $crawler->filter('main')->text());
+        $this->assertContains('No community articles available.', $crawler->filter('main')->text());
     }
 
     /**
