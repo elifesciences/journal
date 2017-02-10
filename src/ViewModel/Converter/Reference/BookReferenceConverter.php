@@ -38,11 +38,7 @@ final class BookReferenceConverter implements ViewModelConverter
         $authorsSuffix = [$object->getDate()->format().$object->getDiscriminator()];
 
         if ('editors' === $object->getAuthorsType()) {
-            if (count($object->getAuthors()) > 1) {
-                array_unshift($authorsSuffix, 'editors');
-            } else {
-                array_unshift($authorsSuffix, 'editor');
-            }
+            array_unshift($authorsSuffix, count($object->getAuthors()) > 1 ? 'editors' : 'editor');
         }
 
         $authors = [$this->createAuthors($object->getAuthors(), $object->authorsEtAl(), $authorsSuffix)];
