@@ -20,12 +20,6 @@ final class CommunityController extends Controller
         $perPage = 6;
         $arguments = $this->defaultPageArguments();
 
-        $arguments['contentHeader'] = ContentHeaderNonArticle::basic('Community', true, null, null, null,
-            new BackgroundImage(
-                $this->get('puli.url_generator')->generateUrl('/elife/journal/images/banners/community-lo-res.jpg'),
-                $this->get('puli.url_generator')->generateUrl('/elife/journal/images/banners/community-hi-res.jpg')
-            ));
-
         $latestCommunity = $this->pagerfantaPromise(
             $this->get('elife.api_sdk.community'),
             $page,
@@ -53,6 +47,12 @@ final class CommunityController extends Controller
 
     private function createFirstPage(array $arguments) : Response
     {
+        $arguments['contentHeader'] = ContentHeaderNonArticle::basic('Community', true, null, null, null,
+            new BackgroundImage(
+                $this->get('puli.url_generator')->generateUrl('/elife/journal/images/banners/community-lo-res.jpg'),
+                $this->get('puli.url_generator')->generateUrl('/elife/journal/images/banners/community-hi-res.jpg')
+            ));
+
         return new Response($this->get('templating')->render('::community.html.twig', $arguments));
     }
 }
