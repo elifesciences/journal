@@ -24,7 +24,7 @@ framework:
         resource: '%kernel.root_dir%/config/routing.yml'
     secret: '%secret%'
     session:
-        name: journal
+        name: '%session_name%'
         save_path: '0;660;%kernel.root_dir%/../var/sessions/%kernel.environment%'
     templating:
         engines:
