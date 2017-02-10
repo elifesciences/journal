@@ -30,7 +30,7 @@ trait HasPages
                 return new Paginator(
                     $title,
                     $pagerfanta,
-                    function (int $page = null) use ($request, $request, $route) {
+                    function (int $page = null) use ($request, $route) {
                         $routeParams = $request->attributes->get('_route_params');
                         $routeParams['page'] = $page;
 
