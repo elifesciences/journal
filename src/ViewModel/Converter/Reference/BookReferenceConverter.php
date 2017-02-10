@@ -35,7 +35,13 @@ final class BookReferenceConverter implements ViewModelConverter
             $abstracts[] = new ViewModel\Link('PubMed', 'https://www.ncbi.nlm.nih.gov/pubmed/'.$object->getPmid());
         }
 
-        $authors = [$this->createAuthors($object->getAuthors(), $object->authorsEtAl(), [$object->getDate()->format().$object->getDiscriminator()])];
+        $authorsSuffix = [$object->getDate()->format().$object->getDiscriminator()];
+
+        if ('editors' === $object->getAuthorsType()) {
+            array_unshift($authorsSuffix, count($object->getAuthors()) > 1 ? 'editors' : 'editor');
+        }
+
+        $authors = [$this->createAuthors($object->getAuthors(), $object->authorsEtAl(), $authorsSuffix)];
 
         if ($object->getDoi()) {
             return ViewModel\Reference::withDoi($title, new ViewModel\Doi($object->getDoi()), $origin, $authors, $abstracts);

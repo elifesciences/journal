@@ -25,7 +25,7 @@ framework:
     secret: '%secret%'
     session:
         name: '%session_name%'
-        save_path: '%kernel.root_dir%/../var/sessions/%kernel.environment%'
+        save_path: '0;660;%kernel.root_dir%/../var/sessions/%kernel.environment%'
     templating:
         engines:
           - mustache
