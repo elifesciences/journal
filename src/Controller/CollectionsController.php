@@ -2,22 +2,21 @@
 
 namespace eLife\Journal\Controller;
 
-use eLife\ApiSdk\Collection\Sequence;
 use eLife\ApiSdk\Model\Collection;
 use eLife\Journal\Helper\Callback;
+use eLife\Journal\Helper\HasPages;
 use eLife\Journal\Helper\Paginator;
-use eLife\Journal\Pagerfanta\SequenceAdapter;
 use eLife\Patterns\ViewModel\ContentHeaderNonArticle;
 use eLife\Patterns\ViewModel\LeadParas;
 use eLife\Patterns\ViewModel\ListingTeasers;
 use eLife\Patterns\ViewModel\Teaser;
-use Pagerfanta\Pagerfanta;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use function GuzzleHttp\Promise\promise_for;
 
 final class CollectionsController extends Controller
 {
+    use HasPages;
+
     public function listAction(Request $request) : Response
     {
         $page = (int) $request->query->get('page', 1);
@@ -25,29 +24,20 @@ final class CollectionsController extends Controller
 
         $arguments = $this->defaultPageArguments();
 
-        $latestResearch = promise_for($this->get('elife.api_sdk.collections'))
-            ->then(function (Sequence $sequence) use ($page, $perPage) {
-                $pagerfanta = new Pagerfanta(new SequenceAdapter($sequence, $this->willConvertTo(Teaser::class)));
-                $pagerfanta->setMaxPerPage($perPage)->setCurrentPage($page);
-
-                return $pagerfanta;
-            });
+        $latestResearch = $this->pagerfantaPromise(
+            $this->get('elife.api_sdk.collections'),
+            $page,
+            $perPage
+        );
 
         $arguments['title'] = 'Collections';
 
-        $arguments['paginator'] = $latestResearch
-            ->then(function (Pagerfanta $pagerfanta) use ($request) {
-                return new Paginator(
-                    'Browse our collections',
-                    $pagerfanta,
-                    function (int $page = null) use ($request) {
-                        $routeParams = $request->attributes->get('_route_params');
-                        $routeParams['page'] = $page;
-
-                        return $this->get('router')->generate('collections', $routeParams);
-                    }
-                );
-            });
+        $arguments['paginator'] = $this->paginator(
+            $latestResearch,
+            $request,
+            'Browse our collections',
+            'collections'
+        );
 
         $arguments['listing'] = $arguments['paginator']
             ->then($this->willConvertTo(ListingTeasers::class, ['type' => 'collections']));

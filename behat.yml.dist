@@ -39,6 +39,11 @@ default:
                 tags: '@collection'
             contexts:
               - CollectionContext
+        community:
+            filters:
+                tags: '@community'
+            contexts:
+              - CommunityContext
         contact:
             filters:
                 tags: '@contact'

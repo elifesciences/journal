@@ -15,7 +15,7 @@
     "require": {
         "php": "^7.0",
         "bobthecow/mustache-bundle": "^1.2",
-        "csa/guzzle-bundle": "^2.1",
+        "csa/guzzle-bundle": "2.1.0",
         "cweagans/composer-patches": "^1.5",
         "elife/api-client": "^1.0@dev",
         "elife/api-sdk": "^1.0@dev",
