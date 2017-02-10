@@ -369,10 +369,9 @@ final class MagazineContext extends Context
     /**
      * @Then /^I should see the latest (\d+) Magazine articles in the 'Latest' list$/
      */
-    public function iShouldSeeTheLatestSectionArticlesInTheLatestList(int $number)
+    public function iShouldSeeTheLatestMagazineArticlesInTheLatestList(int $number)
     {
         $this->spin(function () use ($number) {
-            $this->assertSession()->elementsCount('css', '.list-heading:contains("Latest")', 1);
             $this->assertSession()->elementsCount('css', '.list-heading:contains("Latest") + .listing-list > .listing-list__item', $number);
 
             for ($i = $number; $i > 0; --$i) {
