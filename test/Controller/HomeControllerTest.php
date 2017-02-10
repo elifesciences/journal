@@ -19,6 +19,7 @@ final class HomeControllerTest extends PageTestCase
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertContains('No articles available.', $crawler->filter('main')->text());
+        $this->assertEmpty($client->getResponse()->headers->getCookies());
     }
 
     /**
