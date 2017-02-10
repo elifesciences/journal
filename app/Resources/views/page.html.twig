@@ -89,11 +89,13 @@
             {{ render_pattern(header) }}
         {% endif %}
 
-        {% for type, messages in app.session.flashbag.all %}
-            {% for message in messages %}
-                {{ info_bar(message, type) }}
+        {% if app.request.hasPreviousSession %}
+            {% for type, messages in app.session.flashbag.all %}
+                {% for message in messages %}
+                    {{ info_bar(message, type) }}
+                {% endfor %}
             {% endfor %}
-        {% endfor %}
+        {% endif %}
 
         {% block info_bar %}{% endblock %}
 
