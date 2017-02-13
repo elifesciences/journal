@@ -5,9 +5,9 @@ namespace eLife\Journal\Controller;
 use eLife\ApiClient\Result;
 use eLife\ApiSdk\Client\Search;
 use eLife\ApiSdk\Collection\Sequence;
+use eLife\ApiSdk\Model\SearchTypes;
 use eLife\ApiSdk\Model\Subject;
 use eLife\Journal\Helper\Callback;
-use eLife\Journal\Helper\ModelName;
 use eLife\Journal\Helper\Paginator;
 use eLife\Journal\Pagerfanta\SequenceAdapter;
 use eLife\Patterns\ViewModel\Button;
@@ -30,6 +30,29 @@ use function GuzzleHttp\Promise\promise_for;
 
 final class SearchController extends Controller
 {
+    private static $magazineTypes = [
+        'blog-article',
+        'collection',
+        'editorial',
+        'feature',
+        'insight',
+        'interview',
+        'labs-experiment',
+        'podcast-episode',
+    ];
+
+    private static $researchTypes = [
+        'correction',
+        'registered-report',
+        'replication-study',
+        'research-advance',
+        'research-article',
+        'research-exchange',
+        'retraction',
+        'short-report',
+        'tools-resources',
+    ];
+
     public function queryAction(Request $request) : Response
     {
         $page = (int) $request->query->get('page', 1);
@@ -45,10 +68,18 @@ final class SearchController extends Controller
             'order' => $request->query->get('order', SortControlOption::DESC),
         ];
 
+        $apiTypes = [];
+        if (in_array('magazine', $arguments['query']['types'])) {
+            $apiTypes = array_merge($apiTypes, self::$magazineTypes);
+        }
+        if (in_array('research', $arguments['query']['types'])) {
+            $apiTypes = array_merge($apiTypes, self::$researchTypes);
+        }
+
         $search = $this->get('elife.api_sdk.search')
             ->forQuery($arguments['query']['for'])
             ->forSubject(...$arguments['query']['subjects'])
-            ->forType(...$arguments['query']['types'])
+            ->forType(...$apiTypes)
             ->sortBy($arguments['query']['sort']);
 
         if (SortControlOption::ASC === $arguments['query']['order']) {
@@ -146,19 +177,14 @@ final class SearchController extends Controller
                     $filterGroups[] = new FilterGroup('Subject', $subjectFilters);
                 }
 
-                $typeFilters = [];
-
-                foreach ($search->types() as $type => $results) {
-                    $typeFilters[] = new Filter(in_array($type, $arguments['query']['types']), ModelName::plural($type), $results, 'types[]', $type);
-                }
-
-                usort($typeFilters, function (Filter $a, Filter $b) {
-                    return $a['label'] <=> $b['label'];
-                });
+                $allTypes = $search->types();
 
                 $filterGroups[] = new FilterGroup(
                     'Type',
-                    $typeFilters
+                    [
+                        new Filter(in_array('magazine', $arguments['query']['types']), 'Magazine', $this->countForTypes(self::$magazineTypes, $allTypes), 'types[]', 'magazine'),
+                        new Filter(in_array('research', $arguments['query']['types']), 'Research', $this->countForTypes(self::$researchTypes, $allTypes), 'types[]', 'research'),
+                    ]
                 );
 
                 return new FilterPanel(
@@ -169,5 +195,12 @@ final class SearchController extends Controller
             });
 
         return new Response($this->get('templating')->render('::search.html.twig', $arguments));
+    }
+
+    private function countForTypes(array $types, SearchTypes $allTypes) : int
+    {
+        return array_sum(array_filter(iterator_to_array($allTypes), function (int $count, string $key) use ($types) {
+            return in_array($key, $types);
+        }, ARRAY_FILTER_USE_BOTH));
     }
 }
