@@ -7,6 +7,29 @@ use GuzzleHttp\Psr7\Response;
 
 final class SearchContext extends Context
 {
+    private static $magazineTypes = [
+        'blog-article',
+        'collection',
+        'editorial',
+        'feature',
+        'insight',
+        'interview',
+        'labs-experiment',
+        'podcast-episode',
+    ];
+
+    private static $researchTypes = [
+        'correction',
+        'registered-report',
+        'replication-study',
+        'research-advance',
+        'research-article',
+        'research-exchange',
+        'retraction',
+        'short-report',
+        'tools-resources',
+    ];
+
     private $query = [
         'for' => '',
         'subjects' => [],
@@ -14,14 +37,14 @@ final class SearchContext extends Context
     private $articles = [];
 
     /**
-     * @Given /^there are (\d+) research articles about \'([^\']*)\'$/
-     * @Given /^there are (\d+) research articles about \'([^\']*)\' with the MSA \'([^\']*)\'$/
+     * @Given /^there are (\d+) (research articles|insights) about \'([^\']*)\'$/
+     * @Given /^there are (\d+) (research articles|insights) about \'([^\']*)\' with the MSA \'([^\']*)\'$/
      */
-    public function thereAreArticlesAbout(int $number, string $keyword, string $subject = null)
+    public function thereAreArticlesAbout(int $number, string $type, string $keyword, string $subject = null)
     {
         $today = (new DateTimeImmutable())->setTime(0, 0, 0);
 
-        if ($subject && !in_array($subject, $this->query)) {
+        if ($subject && !in_array($subject, $this->query['subjects'])) {
             $this->query['subjects'][] = $subject;
         }
 
@@ -34,7 +57,7 @@ final class SearchContext extends Context
                 'stage' => 'published',
                 'id' => "$i",
                 'version' => 1,
-                'type' => 'research-article',
+                'type' => 'research articles' === $type ? 'research-article' : 'insight',
                 'doi' => '10.7554/eLife.'.$i,
                 'title' => "Article $i title: $keyword",
                 'published' => $today->format(ApiSdk::DATE_FORMAT),
@@ -76,10 +99,10 @@ final class SearchContext extends Context
 
         foreach (['', $keyword] as $thisKeyword) {
             foreach ($subjectGroups as $subjects) {
-                foreach (['', 'research-article'] as $contentType) {
+                foreach ([[], self::$magazineTypes, self::$researchTypes, array_merge(self::$researchTypes, self::$magazineTypes)] as $contentTypes) {
                     $uri = $baseUri.implode('', array_map(function (string $subject) {
-                        return '&subject[]='.$this->createSubjectId($subject);
-                    }, $subjects));
+                            return '&subject[]='.$this->createSubjectId($subject);
+                        }, $subjects));
 
                     $articlesWithKeywordAndSubjects = $this->filterArticlesWithASubject($subjects, $articlesWithKeyword);
 
@@ -107,9 +130,11 @@ final class SearchContext extends Context
                         $typeFilters[$type] = count($this->filterArticlesByType($type, $articlesWithKeyword));
                     }
 
-                    if ($contentType) {
-                        $uri .= '&type[]='.$contentType;
-                        $articlesWithKeywordAndSubjects = $this->filterArticlesByType($contentType, $articlesWithKeywordAndSubjects);
+                    if (!empty($contentTypes)) {
+                        $uri .= array_reduce($contentTypes, function (string $carry, string $contentType) {
+                            return "$carry&type[]=$contentType";
+                        }, '');
+                        $articlesWithKeywordAndSubjects = $this->filterArticlesByTypes($contentTypes, $articlesWithKeywordAndSubjects);
                     }
 
                     $subjectFilters = array_map(function (string $subject) use ($articlesWithKeyword) {
@@ -336,14 +361,11 @@ final class SearchContext extends Context
         $this->spin(function () use ($number, $articles) {
             $this->assertSession()->elementsCount('css', '.message-bar:contains("'.count($articles).' results found") + .list-heading + .listing-list > .listing-list__item', $number);
 
-            for ($i = $number; $i > 0; --$i) {
-                $nthChild = ($number - $i + 1);
-                $expectedNumber = (count($articles) - $nthChild + 1);
-
+            for ($i = 0; $i < $number; ++$i) {
                 $this->assertSession()->elementContains(
                     'css',
-                    '.message-bar:contains("'.count($articles).' results found") + .list-heading + .listing-list > .listing-list__item:nth-child('.$nthChild.')',
-                    'Article '.str_pad($expectedNumber, 5, '0', STR_PAD_LEFT).' title'
+                    '.message-bar:contains("'.count($articles).' results found") + .list-heading + .listing-list > .listing-list__item:nth-child('.($i + 1).')',
+                    $articles[$i]['title']
                 );
             }
         });
@@ -362,14 +384,11 @@ final class SearchContext extends Context
         $this->spin(function () use ($number, $articles) {
             $this->assertSession()->elementsCount('css', '.message-bar:contains("'.count($articles).' results found") + .list-heading + .listing-list > .listing-list__item', $number);
 
-            for ($i = $number; $i > 0; --$i) {
-                $nthChild = ($number - $i + 1);
-                $expectedNumber = (count($articles) - $nthChild + 1);
-
+            for ($i = 0; $i < $number; ++$i) {
                 $this->assertSession()->elementContains(
                     'css',
-                    '.message-bar:contains("'.count($articles).' results found") + .list-heading + .listing-list > .listing-list__item:nth-child('.$nthChild.')',
-                    'Article '.str_pad($expectedNumber, 5, '0', STR_PAD_LEFT).' title'
+                    '.message-bar:contains("'.count($articles).' results found") + .list-heading + .listing-list > .listing-list__item:nth-child('.($i + 1).')',
+                    $articles[$i]['title']
                 );
             }
         });
@@ -385,14 +404,11 @@ final class SearchContext extends Context
         $this->spin(function () use ($number, $articles) {
             $this->assertSession()->elementsCount('css', '.message-bar:contains("'.count($articles).' results found") + .list-heading + .listing-list > .listing-list__item', $number);
 
-            for ($i = $number; $i > 0; --$i) {
-                $nthChild = ($number - $i + 1);
-                $expectedNumber = (count($articles) - $nthChild + 1);
-
+            for ($i = 0; $i < $number; ++$i) {
                 $this->assertSession()->elementContains(
                     'css',
-                    '.message-bar:contains("'.count($articles).' results found") + .list-heading + .listing-list > .listing-list__item:nth-child('.$nthChild.')',
-                    'Article '.str_pad($expectedNumber, 5, '0', STR_PAD_LEFT).' title'
+                    '.message-bar:contains("'.count($articles).' results found") + .list-heading + .listing-list > .listing-list__item:nth-child('.($i + 1).')',
+                    $articles[$i]['title']
                 );
             }
         });
@@ -408,14 +424,11 @@ final class SearchContext extends Context
         $this->spin(function () use ($number, $articles) {
             $this->assertSession()->elementsCount('css', '.message-bar:contains("'.count($articles).' results found") + .list-heading + .listing-list > .listing-list__item', $number);
 
-            for ($i = $number; $i > 0; --$i) {
-                $nthChild = ($number - $i + 1);
-                $expectedNumber = (count($articles) - $nthChild + 1);
-
+            for ($i = 0; $i < $number; ++$i) {
                 $this->assertSession()->elementContains(
                     'css',
-                    '.message-bar:contains("'.count($articles).' results found") + .list-heading + .listing-list > .listing-list__item:nth-child('.$nthChild.')',
-                    'Article '.str_pad($expectedNumber, 5, '0', STR_PAD_LEFT).' title'
+                    '.message-bar:contains("'.count($articles).' results found") + .list-heading + .listing-list > .listing-list__item:nth-child('.($i + 1).')',
+                    $articles[$i]['title']
                 );
             }
         });
@@ -433,8 +446,13 @@ final class SearchContext extends Context
 
     private function filterArticlesByType(string $type, array $articles) : array
     {
-        return array_values(array_filter($articles, function (array $article) use ($type) {
-            return $article['type'] === $type;
+        return $this->filterArticlesByTypes([$type], $articles);
+    }
+
+    private function filterArticlesByTypes(array $types, array $articles) : array
+    {
+        return array_values(array_filter($articles, function (array $article) use ($types) {
+            return in_array($article['type'], $types);
         }));
     }
 
