@@ -1,35 +1,15 @@
-elifePipeline {
-    def commit
-    def branch
-    stage 'Checkout and branch', {
-        checkout scm
-        commit = elifeGitRevision()
-        branch = elifeGitGenerateBranch 'update_patterns_php_'
-    }
-
-    stage 'Update', {
+elifeUpdatePipeline(
+    { commit ->
         lock('journal--ci') {
             builderDeployRevision 'journal--ci', commit
-            builderCmd "journal--ci", "cd /srv/journal && composer1.0 update elife/patterns --no-interaction"
-            sh "rsync -avz --exclude=/.git -e 'ssh -o StrictHostKeyChecking=no' elife@ci--journal.elife.internal:/srv/journal/ ."
+            builderCmd "journal--ci", "composer1.0 update elife/patterns --no-interaction", "/srv/journal"
+            builderSync "ci--journal.elife.internal", "/srv/journal/"
             sh "git add composer.lock"
         }
-    }
-
-    def differences
-    def shortDescription
-    stage 'Commit', {
-        differences = elifeGitDifferences()
-        elifeOnlyIf differences, {
-            def subrepositorySummary = elifeGitSubrepositorySummary 'vendor/elife/patterns'
-            shortDescription = "Updated elife/patterns to ${subrepositorySummary}"
-            elifeGitCommit shortDescription
-        }
-    }
-
-    stage 'Push and pull request', {
-        elifeOnlyIf differences, {
-            elifeGithubPullRequest branch, shortDescription, "I have run ${env.BUILD_URL} which resulted in this pull request.", 'develop'
-        }
-    }
-}
+    },
+    {
+        def subrepositorySummary = elifeGitSubrepositorySummary 'vendor/elife/patterns'
+        return "Updated elife/patterns to ${subrepositorySummary}"
+    },
+    'update_patterns_php_'
+)
