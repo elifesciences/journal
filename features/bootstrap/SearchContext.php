@@ -98,7 +98,6 @@ final class SearchContext extends Context
                         'tools-resources' => 0,
                         'blog-article' => 0,
                         'collection' => 0,
-                        'event' => 0,
                         'interview' => 0,
                         'labs-experiment' => 0,
                         'podcast-episode' => 0,
