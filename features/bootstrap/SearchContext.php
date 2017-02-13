@@ -101,8 +101,8 @@ final class SearchContext extends Context
             foreach ($subjectGroups as $subjects) {
                 foreach ([[], self::$magazineTypes, self::$researchTypes, array_merge(self::$researchTypes, self::$magazineTypes)] as $contentTypes) {
                     $uri = $baseUri.implode('', array_map(function (string $subject) {
-                            return '&subject[]='.$this->createSubjectId($subject);
-                        }, $subjects));
+                        return '&subject[]='.$this->createSubjectId($subject);
+                    }, $subjects));
 
                     $articlesWithKeywordAndSubjects = $this->filterArticlesWithASubject($subjects, $articlesWithKeyword);
 
