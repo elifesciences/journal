@@ -83,7 +83,6 @@ services:
 
     elife.journal.listener.early_response:
         class: eLife\Journal\EventListener\EarlyResponseSubscriber
-        public: false
         tags:
           - name: kernel.event_subscriber
 
