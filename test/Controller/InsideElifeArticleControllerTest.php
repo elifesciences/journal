@@ -4,6 +4,7 @@ namespace test\eLife\Journal\Controller;
 
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use Traversable;
 
 final class InsideElifeArticleControllerTest extends PageTestCase
 {
@@ -19,6 +20,26 @@ final class InsideElifeArticleControllerTest extends PageTestCase
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertSame('Blog article title', $crawler->filter('.content-header__title')->text());
         $this->assertContains('Blog article text.', $crawler->filter('.wrapper')->text());
+    }
+
+    /**
+     * @test
+     * @dataProvider incorrectSlugProvider
+     */
+    public function it_redirects_if_the_slug_is_not_correct(string $url)
+    {
+        $client = static::createClient();
+
+        $expectedUrl = $this->getUrl();
+
+        $client->request('GET', $url);
+
+        $this->assertTrue($client->getResponse()->isRedirect($expectedUrl));
+    }
+
+    public function incorrectSlugProvider() : Traversable
+    {
+        return $this->stringProvider('/inside-elife/1', '/inside-elife/1/foo');
     }
 
     /**
@@ -78,6 +99,6 @@ final class InsideElifeArticleControllerTest extends PageTestCase
             )
         );
 
-        return '/inside-elife/1';
+        return '/inside-elife/1/blog-article-title';
     }
 }

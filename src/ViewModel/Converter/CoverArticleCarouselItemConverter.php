@@ -32,7 +32,7 @@ final class CoverArticleCarouselItemConverter implements ViewModelConverter
             })->toArray(),
             new ViewModel\Link(
                 $object->getTitle(),
-                $this->urlGenerator->generate('article', ['volume' => $article->getVolume(), 'id' => $article->getId()])
+                $this->urlGenerator->generate('article', ['id' => $article->getId()])
             ),
             'Read article',
             ViewModel\Meta::withLink(

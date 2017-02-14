@@ -65,11 +65,12 @@ final class InsideElifeController extends Controller
         return new Response($this->get('templating')->render('::inside-elife.html.twig', $arguments));
     }
 
-    public function articleAction(string $id) : Response
+    public function articleAction(Request $request, string $id) : Response
     {
         $article = $this->get('elife.api_sdk.blog_articles')
             ->get($id)
-            ->otherwise($this->mightNotExist());
+            ->otherwise($this->mightNotExist())
+            ->then($this->checkSlug($request, Callback::method('getTitle')));
 
         $arguments = $this->defaultPageArguments($article);
 

@@ -9,15 +9,19 @@ use eLife\Patterns\ViewModel\ArticleSection;
 use eLife\Patterns\ViewModel\ContentHeaderNonArticle;
 use eLife\Patterns\ViewModel\LeadParas;
 use eLife\Patterns\ViewModel\Listing;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 final class InterviewsController extends Controller
 {
-    public function interviewAction(string $id) : Response
+    public function interviewAction(Request $request, string $id) : Response
     {
         $interview = $this->get('elife.api_sdk.interviews')
             ->get($id)
-            ->otherwise($this->mightNotExist());
+            ->otherwise($this->mightNotExist())
+            ->then($this->checkSlug($request, function (Interview $interview) {
+                return $interview->getInterviewee()->getPerson()->getPreferredName();
+            }));
 
         $arguments = $this->defaultPageArguments($interview);
 

@@ -109,7 +109,7 @@ final class ArchiveController extends Controller
                             $item = $cover->getItem();
 
                             if ($item instanceof ArticleVersion) {
-                                return new Link($cover->getTitle(), $this->get('router')->generate('article', ['volume' => $item->getVolume(), 'id' => $item->getId()]));
+                                return new Link($cover->getTitle(), $this->get('router')->generate('article', ['id' => $item->getId()]));
                             } elseif ($item instanceof BlogArticle) {
                                 return new Link($cover->getTitle(), $this->get('router')->generate('inside-elife-article', ['id' => $item->getId()]));
                             } elseif ($item instanceof Collection) {

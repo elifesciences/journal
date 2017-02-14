@@ -2,6 +2,7 @@
 
 namespace eLife\Journal\ViewModel\Converter;
 
+use Cocur\Slugify\SlugifyInterface;
 use eLife\ApiSdk\Model\Collection;
 use eLife\ApiSdk\Model\Cover;
 use eLife\ApiSdk\Model\Subject;
@@ -11,10 +12,12 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 final class CoverCollectionCarouselItemConverter implements ViewModelConverter
 {
     private $urlGenerator;
+    private $slugify;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator)
+    public function __construct(UrlGeneratorInterface $urlGenerator, SlugifyInterface $slugify)
     {
         $this->urlGenerator = $urlGenerator;
+        $this->slugify = $slugify;
     }
 
     /**
@@ -29,7 +32,7 @@ final class CoverCollectionCarouselItemConverter implements ViewModelConverter
             $collection->getSubjects()->map(function (Subject $subject) {
                 return new ViewModel\Link($subject->getName(), $this->urlGenerator->generate('subject', ['id' => $subject->getId()]));
             })->toArray(),
-            new ViewModel\Link($object->getTitle(), $this->urlGenerator->generate('collection', ['id' => $collection->getId()])),
+            new ViewModel\Link($object->getTitle(), $this->urlGenerator->generate('collection', ['id' => $collection->getId(), 'slug' => $this->slugify->slugify($collection->getTitle())])),
             'Read collection',
             ViewModel\Meta::withLink(
                 new ViewModel\Link('Collection', $this->urlGenerator->generate('collections')),

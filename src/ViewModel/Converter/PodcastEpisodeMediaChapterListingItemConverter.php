@@ -34,7 +34,7 @@ final class PodcastEpisodeMediaChapterListingItemConverter implements ViewModelC
                         $return .= ' by '.$model->getAuthorLine();
                     }
 
-                    return '<a href="'.$this->urlGenerator->generate('article', ['volume' => $model->getVolume(), 'id' => $model->getId()]).'">'.$return.'</a>';
+                    return '<a href="'.$this->urlGenerator->generate('article', ['id' => $model->getId()]).'">'.$return.'</a>';
                 } elseif ($model instanceof Collection) {
                     $return = ModelName::singular('collection').' curated by '.$model->getSelectedCurator();
 

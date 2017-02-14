@@ -18,6 +18,6 @@ final class CollectionSecondaryTeaserConverterTest extends ModelConverterTestCas
      */
     public function setUpConverter()
     {
-        $this->converter = new CollectionSecondaryTeaserConverter($this->stubUrlGenerator());
+        $this->converter = new CollectionSecondaryTeaserConverter($this->stubUrlGenerator(), $this->stubSlugify());
     }
 }

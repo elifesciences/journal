@@ -4,6 +4,7 @@ namespace test\eLife\Journal\Controller;
 
 use GuzzleHttp\Psr7\Request;
 use test\eLife\Journal\WebTestCase;
+use Traversable;
 
 abstract class PageTestCase extends WebTestCase
 {
@@ -43,6 +44,13 @@ abstract class PageTestCase extends WebTestCase
         $client->setServerParameters($server);
 
         return $client;
+    }
+
+    final protected function stringProvider(string ...$strings) : Traversable
+    {
+        foreach ($strings as $string) {
+            yield $string => [$string];
+        }
     }
 
     abstract protected function getUrl() : string;

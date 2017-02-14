@@ -2,6 +2,7 @@
 
 namespace test\eLife\Journal\ViewModel\Converter;
 
+use Cocur\Slugify\SlugifyInterface;
 use eLife\ApiSdk\Model\Block;
 use eLife\ApiSdk\Model\Model;
 use eLife\Journal\ViewModel\Converter\ViewModelConverter;
@@ -105,5 +106,10 @@ abstract class ModelConverterTestCase extends PHPUnit_Framework_TestCase
     final protected function stubUrlGenerator() : UrlGeneratorInterface
     {
         return $this->createMock(UrlGeneratorInterface::class);
+    }
+
+    final protected function stubSlugify() : SlugifyInterface
+    {
+        return $this->createMock(SlugifyInterface::class);
     }
 }

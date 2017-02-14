@@ -6,6 +6,7 @@ use DateTimeImmutable;
 use eLife\ApiSdk\ApiSdk;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use Traversable;
 
 final class EventControllerTest extends PageTestCase
 {
@@ -54,11 +55,31 @@ final class EventControllerTest extends PageTestCase
             )
         );
 
-        $crawler = $client->request('GET', '/events/1');
+        $crawler = $client->request('GET', '/events/1/event-title');
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertSame('This event has finished.', trim($crawler->filter('.info-bar--attention')->text()));
         $this->assertSame('noindex', $crawler->filter('head > meta[name="robots"]')->attr('content'));
+    }
+
+    /**
+     * @test
+     * @dataProvider incorrectSlugProvider
+     */
+    public function it_redirects_if_the_slug_is_not_correct(string $url)
+    {
+        $client = static::createClient();
+
+        $expectedUrl = $this->getUrl();
+
+        $client->request('GET', $url);
+
+        $this->assertTrue($client->getResponse()->isRedirect($expectedUrl));
+    }
+
+    public function incorrectSlugProvider() : Traversable
+    {
+        return $this->stringProvider('/events/1', '/events/1/foo');
     }
 
     /**
@@ -118,6 +139,6 @@ final class EventControllerTest extends PageTestCase
             )
         );
 
-        return '/events/1';
+        return '/events/1/event-title';
     }
 }

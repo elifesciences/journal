@@ -2,6 +2,7 @@
 
 namespace eLife\Journal\ViewModel\Converter;
 
+use Cocur\Slugify\SlugifyInterface;
 use eLife\ApiSdk\Model\BlogArticle;
 use eLife\Patterns\ViewModel;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -11,10 +12,12 @@ final class BlogArticleSecondaryTeaserConverter implements ViewModelConverter
     use CreatesContextLabel;
 
     private $urlGenerator;
+    private $slugify;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator)
+    public function __construct(UrlGeneratorInterface $urlGenerator, SlugifyInterface $slugify)
     {
         $this->urlGenerator = $urlGenerator;
+        $this->slugify = $slugify;
     }
 
     /**
@@ -24,7 +27,7 @@ final class BlogArticleSecondaryTeaserConverter implements ViewModelConverter
     {
         return ViewModel\Teaser::secondary(
             $object->getTitle(),
-            $this->urlGenerator->generate('inside-elife-article', ['id' => $object->getId()]),
+            $this->urlGenerator->generate('inside-elife-article', ['id' => $object->getId(), 'slug' => $this->slugify->slugify($object->getTitle())]),
             null,
             $this->createContextLabel($object),
             null,

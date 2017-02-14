@@ -18,6 +18,6 @@ final class EventSecondaryTeaserConverterTest extends ModelConverterTestCase
      */
     public function setUpConverter()
     {
-        $this->converter = new EventSecondaryTeaserConverter($this->stubUrlGenerator());
+        $this->converter = new EventSecondaryTeaserConverter($this->stubUrlGenerator(), $this->stubSlugify());
     }
 }
