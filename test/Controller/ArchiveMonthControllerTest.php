@@ -34,7 +34,7 @@ final class ArchiveMonthControllerTest extends PageTestCase
      * @test
      * @dataProvider invalidYearProvider
      */
-    public function it_returns_a_404_for_an_invalid_year_and_month(int $year, string $month)
+    public function it_returns_a_404_for_an_invalid_year_and_month($year, string $month)
     {
         $client = static::createClient();
 
@@ -49,6 +49,7 @@ final class ArchiveMonthControllerTest extends PageTestCase
             'before eLife' => [2012, 'september'],
             'current month' => [2016, 'january'],
             'next month' => [2016, 'february'],
+            'not a year' => ['foo', 'january'],
             'not a month' => [2016, 'smarch'],
         ];
     }
