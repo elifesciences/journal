@@ -55,7 +55,7 @@ final class ArchiveControllerTest extends PageTestCase
      * @test
      * @dataProvider invalidYearProvider
      */
-    public function it_returns_a_404_for_an_invalid_year(int $year)
+    public function it_returns_a_404_for_an_invalid_year($year)
     {
         $client = static::createClient();
 
@@ -70,6 +70,7 @@ final class ArchiveControllerTest extends PageTestCase
             'before eLife' => [2011],
             'current year' => [2016],
             'next year' => [2017],
+            'not a year' => ['foo'],
         ];
     }
 
@@ -89,7 +90,7 @@ final class ArchiveControllerTest extends PageTestCase
      * @test
      * @dataProvider invalidYearProvider
      */
-    public function it_returns_a_404_for_the_index_page_with_an_invalid_year(int $year)
+    public function it_returns_a_404_for_the_index_page_with_an_invalid_year($year)
     {
         $client = static::createClient();
 

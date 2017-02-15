@@ -24,14 +24,14 @@ archive-year:
     defaults:
          _controller: AppBundle:Archive:year
     requirements:
-        number: '[2-9][0-9]{3}'
+        year: '[2-9][0-9]{3}'
 
 archive-month:
     path: /archive/{year}/{month}
     defaults:
          _controller: AppBundle:Archive:month
     requirements:
-        number: '[2-9][0-9]{3}'
+        year: '[2-9][0-9]{3}'
 
 article-version:
     path: /content/{volume}/e{id}v{version}
