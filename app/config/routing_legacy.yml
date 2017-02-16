@@ -1,0 +1,47 @@
+# Temporary home for legacy redirects
+
+legacy-article-version:
+    path: /content/{volume}/e{id}v{version}
+    defaults:
+        _controller: FrameworkBundle:Redirect:redirect
+        route: article-version
+        permanent: true
+        ignoreAttributes:
+          - volume
+    requirements:
+        volume: '[1-9][0-9]*'
+        version: '[1-9][0-9]*'
+
+legacy-article:
+    path: /content/{volume}/e{id}
+    defaults:
+        _controller: FrameworkBundle:Redirect:redirect
+        route: article
+        permanent: true
+        ignoreAttributes:
+          - volume
+    requirements:
+        volume: '[1-9][0-9]*'
+
+legacy-article-version-figures:
+    path: /content/{volume}/e{id}v{version}/figures
+    defaults:
+        _controller: FrameworkBundle:Redirect:redirect
+        route: article-version-figures
+        permanent: true
+        ignoreAttributes:
+          - volume
+    requirements:
+        volume: '[1-9][0-9]*'
+        version: '[1-9][0-9]*'
+
+legacy-article-figures:
+    path: /content/{volume}/e{id}/figures
+    defaults:
+        _controller: FrameworkBundle:Redirect:redirect
+        route: article-figures
+        permanent: true
+        ignoreAttributes:
+          - volume
+    requirements:
+        volume: '[1-9][0-9]*'

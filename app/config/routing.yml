@@ -1,3 +1,6 @@
+_legacy:
+    resource: routing_legacy.yml
+
 home:
     path: /
     defaults:
