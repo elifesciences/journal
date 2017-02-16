@@ -69,6 +69,7 @@ final class ArchiveController extends Controller
                 ->sortBy('page-views')
                 ->startDate($starts)
                 ->endDate($ends)
+                ->useDate('published')
                 ->slice(0, 4)
                 ->otherwise($this->softFailure('Failed to load cover articles for '.$starts->format('F Y')));
         }
@@ -147,6 +148,7 @@ final class ArchiveController extends Controller
             ->sortBy('page-views')
             ->startDate($starts)
             ->endDate($ends)
+            ->useDate('published')
             ->slice(0, 4)
             ->otherwise($this->softFailure('Failed to load cover articles for '.$starts->format('F Y')));
 
@@ -173,7 +175,8 @@ final class ArchiveController extends Controller
             ->sortBy('date')
             ->startDate($starts)
             ->endDate($ends)
-            ->map($this->willConvertTo(Teaser::class))
+            ->useDate('published')
+            ->map($this->willConvertTo(Teaser::class, ['date' => 'published']))
             ->then(function (Sequence $result) {
                 if ($result->isEmpty()) {
                     return new EmptyListing('Research articles', 'No articles available.');
@@ -187,6 +190,7 @@ final class ArchiveController extends Controller
             ->sortBy('date')
             ->startDate($starts)
             ->endDate($ends)
+            ->useDate('published')
             ->sort(function (Model $a, Model $b) {
                 if ($a instanceof PodcastEpisode) {
                     return -1;
@@ -196,7 +200,7 @@ final class ArchiveController extends Controller
 
                 return 0;
             })
-            ->map($this->willConvertTo(Teaser::class, ['variant' => 'secondary']))
+            ->map($this->willConvertTo(Teaser::class, ['variant' => 'secondary', 'date' => 'published']))
             ->then(Callback::emptyOr(function (Sequence $result) {
                 return ListingTeasers::basic($result->toArray(), 'Magazine');
             }))

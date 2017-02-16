@@ -34,6 +34,12 @@ final class CollectionTeaserConverter implements ViewModelConverter
         }
         $curatedBy .= '.';
 
+        if ('published' === ($context['date'] ?? 'default')) {
+            $date = Date::simple($object->getPublishedDate());
+        } else {
+            $date = Date::simple($object->getUpdatedDate() ?? $object->getPublishedDate(), !empty($object->getUpdatedDate()));
+        }
+
         return Teaser::main(
             $object->getTitle(),
             $this->urlGenerator->generate('collection', ['id' => $object->getId()]),
@@ -42,10 +48,7 @@ final class CollectionTeaserConverter implements ViewModelConverter
             $this->createContextLabel($object),
             $this->bigTeaserImage($object),
             TeaserFooter::forNonArticle(
-                Meta::withLink(
-                    new Link('Collection', $this->urlGenerator->generate('collections')),
-                    Date::simple($object->getUpdatedDate() ?? $object->getPublishedDate(), !empty($object->getUpdatedDate()))
-                )
+                Meta::withLink(new Link('Collection', $this->urlGenerator->generate('collections')), $date)
             )
         );
     }

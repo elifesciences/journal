@@ -87,7 +87,7 @@ final class SearchContext extends Context
 
         $articlesWithKeyword = $this->filterArticlesContainingKeyword($keyword, $this->articles);
 
-        $baseUri = 'http://api.elifesciences.org/search?for=%s&page=%s&per-page=%s&sort=relevance&order=desc';
+        $baseUri = 'http://api.elifesciences.org/search?for=%s&page=%s&per-page=%s&sort=relevance&order=desc&use-date=default';
 
         $subjectGroups = [[], $this->query['subjects']];
 

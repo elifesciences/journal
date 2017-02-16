@@ -82,7 +82,7 @@ final class StatusTest extends WebTestCase
         $this->mockApiResponse(
             new Request(
                 'GET',
-                'http://api.elifesciences.org/covers?page=1&per-page=1&sort=date&order=desc',
+                'http://api.elifesciences.org/covers?page=1&per-page=1&sort=date&order=desc&use-date=default',
                 ['Accept' => 'application/vnd.elife.cover-list+json; version=1']
             ),
             new Response(
@@ -178,7 +178,7 @@ final class StatusTest extends WebTestCase
         $this->mockApiResponse(
             new Request(
                 'GET',
-                'http://api.elifesciences.org/search?for=&page=1&per-page=1&sort=relevance&order=desc',
+                'http://api.elifesciences.org/search?for=&page=1&per-page=1&sort=relevance&order=desc&use-date=default',
                 ['Accept' => 'application/vnd.elife.search+json; version=1']
             ),
             new Response(

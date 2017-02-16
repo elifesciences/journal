@@ -25,16 +25,19 @@ final class CoverCollectionCarouselItemConverter implements ViewModelConverter
         /** @var Collection $collection */
         $collection = $object->getItem();
 
+        if ('published' === ($context['date'] ?? 'default')) {
+            $date = ViewModel\Date::simple($collection->getPublishedDate());
+        } else {
+            $date = ViewModel\Date::simple($collection->getUpdatedDate() ?? $collection->getPublishedDate(), !empty($collection->getUpdatedDate()));
+        }
+
         return new ViewModel\CarouselItem(
             $collection->getSubjects()->map(function (Subject $subject) {
                 return new ViewModel\Link($subject->getName(), $this->urlGenerator->generate('subject', ['id' => $subject->getId()]));
             })->toArray(),
             new ViewModel\Link($object->getTitle(), $this->urlGenerator->generate('collection', ['id' => $collection->getId()])),
             'Read collection',
-            ViewModel\Meta::withLink(
-                new ViewModel\Link('Collection', $this->urlGenerator->generate('collections')),
-                ViewModel\Date::simple($collection->getPublishedDate())
-            ),
+            ViewModel\Meta::withLink(new ViewModel\Link('Collection', $this->urlGenerator->generate('collections')), $date),
             new ViewModel\BackgroundImage(
                 $object->getBanner()->getSize('2:1')->getImage(900),
                 $object->getBanner()->getSize('2:1')->getImage(1800)

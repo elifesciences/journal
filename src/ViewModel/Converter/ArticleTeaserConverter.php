@@ -31,6 +31,12 @@ final class ArticleTeaserConverter implements ViewModelConverter
             $image = null;
         }
 
+        if ('published' === ($context['date'] ?? 'default')) {
+            $date = $object->getPublishedDate() ? ViewModel\Date::simple($object->getPublishedDate()) : null;
+        } else {
+            $date = $object->getStatusDate() ? ViewModel\Date::simple($object->getStatusDate(), $object->getStatusDate() != $object->getPublishedDate()) : null;
+        }
+
         return ViewModel\Teaser::main(
             $object->getFullTitle(),
             $this->urlGenerator->generate('article', ['volume' => $object->getVolume(), 'id' => $object->getId()]),
@@ -44,7 +50,7 @@ final class ArticleTeaserConverter implements ViewModelConverter
                         ModelName::singular($object->getType()),
                         $this->urlGenerator->generate('article-type', ['type' => $object->getType()])
                     ),
-                    $object->getStatusDate() ? ViewModel\Date::simple($object->getStatusDate(), $object->getStatusDate() != $object->getPublishedDate()) : null
+                    $date
                 ),
                 $object instanceof ArticleVoR
             )
