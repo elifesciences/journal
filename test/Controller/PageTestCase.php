@@ -4,7 +4,6 @@ namespace test\eLife\Journal\Controller;
 
 use GuzzleHttp\Psr7\Request;
 use test\eLife\Journal\WebTestCase;
-use Traversable;
 
 abstract class PageTestCase extends WebTestCase
 {
