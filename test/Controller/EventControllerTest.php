@@ -43,6 +43,7 @@ final class EventControllerTest extends PageTestCase
                 json_encode([
                     'id' => '1',
                     'title' => 'Event title',
+                    'published' => '2010-01-01T00:00:00Z',
                     'starts' => (new DateTimeImmutable('-2 days'))->format(ApiSdk::DATE_FORMAT),
                     'ends' => (new DateTimeImmutable('-1 day'))->format(ApiSdk::DATE_FORMAT),
                     'content' => [
@@ -127,6 +128,7 @@ final class EventControllerTest extends PageTestCase
                 json_encode([
                     'id' => '1',
                     'title' => 'Event title',
+                    'published' => '2010-01-01T00:00:00Z',
                     'starts' => (new DateTimeImmutable('+1 day'))->format(ApiSdk::DATE_FORMAT),
                     'ends' => (new DateTimeImmutable('+2 days'))->format(ApiSdk::DATE_FORMAT),
                     'content' => [

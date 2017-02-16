@@ -23,7 +23,7 @@ final class CollectionContext extends Context
             $collections[] = [
                 'id' => "$i",
                 'title' => 'Collection '.$i.' title',
-                'updated' => $today->format(ApiSdk::DATE_FORMAT),
+                'published' => $today->format(ApiSdk::DATE_FORMAT),
                 'image' => [
                     'banner' => [
                         'alt' => '',

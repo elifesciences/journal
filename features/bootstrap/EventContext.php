@@ -24,6 +24,7 @@ final class EventContext extends Context
             $events[] = [
                 'id' => "$i",
                 'title' => 'Event '.$i.' title',
+                'published' => '2010-01-01T00:00:00Z',
                 'starts' => $starts->format(ApiSdk::DATE_FORMAT),
                 'ends' => $ends->format(ApiSdk::DATE_FORMAT),
                 'content' => [
