@@ -5,10 +5,13 @@ namespace test\eLife\Journal\Helper;
 use eLife\Journal\Helper\ModelName;
 use InvalidArgumentException;
 use PHPUnit_Framework_TestCase;
+use test\eLife\Journal\Providers;
 use Traversable;
 
 final class ModelNameTest extends PHPUnit_Framework_TestCase
 {
+    use Providers;
+
     /**
      * @test
      * @dataProvider validModelProvider
@@ -29,11 +32,7 @@ final class ModelNameTest extends PHPUnit_Framework_TestCase
 
     public function validModelProvider() : Traversable
     {
-        $types = ['correction', 'editorial', 'feature', 'insight', 'research-advance', 'research-article', 'research-exchange', 'retraction', 'registered-report', 'replication-study', 'short-report', 'tools-resources', 'blog-article', 'collection', 'event', 'labs-experiment', 'interview', 'podcast-episode'];
-
-        foreach ($types as $type) {
-            yield $type => [$type];
-        }
+        return $this->stringProvider('correction', 'editorial', 'feature', 'insight', 'research-advance', 'research-article', 'research-exchange', 'retraction', 'registered-report', 'replication-study', 'short-report', 'tools-resources', 'blog-article', 'collection', 'event', 'labs-experiment', 'interview', 'podcast-episode');
     }
 
     /**

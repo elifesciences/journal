@@ -2,6 +2,7 @@
 
 namespace eLife\Journal\ViewModel\Converter;
 
+use Cocur\Slugify\SlugifyInterface;
 use eLife\ApiSdk\Model\Interview;
 use eLife\Patterns\ViewModel;
 use eLife\Patterns\ViewModel\Date;
@@ -13,10 +14,12 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 final class InterviewSecondaryTeaserConverter implements ViewModelConverter
 {
     private $urlGenerator;
+    private $slugify;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator)
+    public function __construct(UrlGeneratorInterface $urlGenerator, SlugifyInterface $slugify)
     {
         $this->urlGenerator = $urlGenerator;
+        $this->slugify = $slugify;
     }
 
     /**
@@ -26,7 +29,7 @@ final class InterviewSecondaryTeaserConverter implements ViewModelConverter
     {
         return Teaser::secondary(
             $object->getTitle(),
-            $this->urlGenerator->generate('interview', ['id' => $object->getId()]),
+            $this->urlGenerator->generate('interview', ['id' => $object->getId(), 'slug' => $this->slugify->slugify($object->getInterviewee()->getPerson()->getPreferredName())]),
             $object->getSubTitle(),
             null,
             null,

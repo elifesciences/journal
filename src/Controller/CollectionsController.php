@@ -56,11 +56,12 @@ final class CollectionsController extends Controller
         return new Response($this->get('templating')->render('::collections.html.twig', $arguments));
     }
 
-    public function collectionAction(string $id) : Response
+    public function collectionAction(Request $request, string $id) : Response
     {
         $collection = $this->get('elife.api_sdk.collections')
             ->get($id)
-            ->otherwise($this->mightNotExist());
+            ->otherwise($this->mightNotExist())
+            ->then($this->checkSlug($request, Callback::method('getTitle')));
 
         $arguments = $this->defaultPageArguments($collection);
 

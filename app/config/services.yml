@@ -81,6 +81,11 @@ services:
         class: eLife\Journal\Helper\FragmentLinkRewriter
         public: false
 
+    elife.journal.listener.early_response:
+        class: eLife\Journal\EventListener\EarlyResponseSubscriber
+        tags:
+          - name: kernel.event_subscriber
+
     elife.journal.templating.promise_aware:
         class: eLife\Journal\Templating\PromiseAwareEngine
         decorates: templating
@@ -329,6 +334,7 @@ services:
         public: false
         arguments:
           - '@router'
+          - '@slugify'
         tags:
           - name: view_model.converter
 
@@ -337,6 +343,7 @@ services:
         public: false
         arguments:
           - '@router'
+          - '@slugify'
         tags:
           - name: view_model.converter
 
@@ -353,6 +360,7 @@ services:
         public: false
         arguments:
           - '@router'
+          - '@slugify'
         tags:
           - name: view_model.converter
 
@@ -361,6 +369,7 @@ services:
         public: false
         arguments:
           - '@router'
+          - '@slugify'
         tags:
           - name: view_model.converter
 
@@ -377,6 +386,7 @@ services:
         public: false
         arguments:
           - '@router'
+          - '@slugify'
         tags:
           - name: view_model.converter
 
@@ -397,6 +407,7 @@ services:
         public: false
         arguments:
           - '@router'
+          - '@slugify'
         tags:
           - name: view_model.converter
 
@@ -405,6 +416,7 @@ services:
         public: false
         arguments:
           - '@router'
+          - '@slugify'
         tags:
           - name: view_model.converter
 
@@ -442,6 +454,7 @@ services:
         public: false
         arguments:
           - '@router'
+          - '@slugify'
         tags:
           - name: view_model.converter
 
@@ -450,6 +463,7 @@ services:
         public: false
         arguments:
           - '@router'
+          - '@slugify'
         tags:
           - name: view_model.converter
 

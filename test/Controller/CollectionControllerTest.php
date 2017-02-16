@@ -4,9 +4,13 @@ namespace test\eLife\Journal\Controller;
 
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use test\eLife\Journal\Providers;
+use Traversable;
 
 final class CollectionControllerTest extends PageTestCase
 {
+    use Providers;
+
     /**
      * @test
      */
@@ -18,6 +22,26 @@ final class CollectionControllerTest extends PageTestCase
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertSame('Collection title', $crawler->filter('.content-header__title')->text());
+    }
+
+    /**
+     * @test
+     * @dataProvider incorrectSlugProvider
+     */
+    public function it_redirects_if_the_slug_is_not_correct(string $url)
+    {
+        $client = static::createClient();
+
+        $expectedUrl = $this->getUrl();
+
+        $client->request('GET', $url);
+
+        $this->assertTrue($client->getResponse()->isRedirect($expectedUrl));
+    }
+
+    public function incorrectSlugProvider() : Traversable
+    {
+        return $this->stringProvider('/collections/1', '/collections/1/foo');
     }
 
     /**
@@ -120,6 +144,6 @@ final class CollectionControllerTest extends PageTestCase
             )
         );
 
-        return '/collections/1';
+        return '/collections/1/collection-title';
     }
 }

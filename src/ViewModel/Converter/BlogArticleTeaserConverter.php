@@ -2,6 +2,7 @@
 
 namespace eLife\Journal\ViewModel\Converter;
 
+use Cocur\Slugify\SlugifyInterface;
 use eLife\ApiSdk\Model\BlogArticle;
 use eLife\Patterns\ViewModel;
 use eLife\Patterns\ViewModel\Date;
@@ -16,10 +17,12 @@ final class BlogArticleTeaserConverter implements ViewModelConverter
     use CreatesContextLabel;
 
     private $urlGenerator;
+    private $slugify;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator)
+    public function __construct(UrlGeneratorInterface $urlGenerator, SlugifyInterface $slugify)
     {
         $this->urlGenerator = $urlGenerator;
+        $this->slugify = $slugify;
     }
 
     /**
@@ -29,7 +32,7 @@ final class BlogArticleTeaserConverter implements ViewModelConverter
     {
         return Teaser::main(
             $object->getTitle(),
-            $this->urlGenerator->generate('inside-elife-article', ['id' => $object->getId()]),
+            $this->urlGenerator->generate('inside-elife-article', ['id' => $object->getId(), 'slug' => $this->slugify->slugify($object->getTitle())]),
             $object->getImpactStatement(),
             null,
             $this->createContextLabel($object),

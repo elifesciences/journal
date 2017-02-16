@@ -37,9 +37,9 @@ use function GuzzleHttp\Promise\promise_for;
 
 final class ArticlesController extends Controller
 {
-    public function textAction(int $volume, string $id, int $version = null) : Response
+    public function textAction(string $id, int $version = null) : Response
     {
-        $arguments = $this->articlePageArguments($volume, $id, $version);
+        $arguments = $this->articlePageArguments($id, $version);
 
         $arguments['body'] = all(['article' => $arguments['article'], 'history' => $arguments['history']])
             ->then(function (array $parts) {
@@ -302,9 +302,9 @@ final class ArticlesController extends Controller
         return new Response($this->get('templating')->render('::article.html.twig', $arguments));
     }
 
-    public function figuresAction(int $volume, string $id, int $version = null) : Response
+    public function figuresAction(string $id, int $version = null) : Response
     {
-        $arguments = $this->articlePageArguments($volume, $id, $version);
+        $arguments = $this->articlePageArguments($id, $version);
 
         $allFigures = $this->findFigures($arguments['article']);
 
@@ -406,9 +406,9 @@ final class ArticlesController extends Controller
         return new Response($this->get('templating')->render('::article-figures.html.twig', $arguments));
     }
 
-    public function bibTexAction(int $volume, string $id) : Response
+    public function bibTexAction(string $id) : Response
     {
-        $arguments = $this->defaultArticleArguments($volume, $id);
+        $arguments = $this->defaultArticleArguments($id);
 
         $arguments['article'] = $arguments['article']
             ->then(Callback::methodMustNotBeEmpty('getPublishedDate', new NotFoundHttpException('Article version not published')));
@@ -416,9 +416,9 @@ final class ArticlesController extends Controller
         return new Response($this->get('templating')->render('::article.bib.twig', $arguments), Response::HTTP_OK, ['Content-Type' => 'application/x-bibtex']);
     }
 
-    public function risAction(int $volume, string $id) : Response
+    public function risAction(string $id) : Response
     {
-        $arguments = $this->defaultArticleArguments($volume, $id);
+        $arguments = $this->defaultArticleArguments($id);
 
         $arguments['article'] = $arguments['article']
             ->then(Callback::methodMustNotBeEmpty('getPublishedDate', new NotFoundHttpException('Article version not published')));
@@ -426,18 +426,11 @@ final class ArticlesController extends Controller
         return new Response(preg_replace('~\R~u', "\r\n", $this->get('templating')->render('::article.ris.twig', $arguments)), Response::HTTP_OK, ['Content-Type' => 'application/x-research-info-systems']);
     }
 
-    private function defaultArticleArguments(int $volume, string $id, int $version = null) : array
+    private function defaultArticleArguments(string $id, int $version = null) : array
     {
         $article = $this->get('elife.api_sdk.articles')
             ->get($id, $version)
-            ->otherwise($this->mightNotExist())
-            ->then(function (ArticleVersion $article) use ($volume) {
-                if ($volume !== $article->getVolume()) {
-                    throw new NotFoundHttpException('Incorrect volume');
-                }
-
-                return $article;
-            });
+            ->otherwise($this->mightNotExist());
 
         $arguments = $this->defaultPageArguments($article);
 
@@ -446,9 +439,9 @@ final class ArticlesController extends Controller
         return $arguments;
     }
 
-    private function articlePageArguments(int $volume, string $id, int $version = null) : array
+    private function articlePageArguments(string $id, int $version = null) : array
     {
-        $arguments = $this->defaultArticleArguments($volume, $id, $version);
+        $arguments = $this->defaultArticleArguments($id, $version);
 
         $arguments['history'] = $this->get('elife.api_sdk.articles')
             ->getHistory($id)
@@ -616,10 +609,10 @@ final class ArticlesController extends Controller
         }
 
         if ($forVersion === $currentVersion->getVersion()) {
-            return $this->get('router')->generate('article', ['id' => $currentVersion->getId(), 'volume' => $currentVersion->getVolume()]);
+            return $this->get('router')->generate('article', ['id' => $currentVersion->getId()]);
         }
 
-        return $this->get('router')->generate('article-version', ['id' => $currentVersion->getId(), 'volume' => $currentVersion->getVolume(), 'version' => $forVersion]);
+        return $this->get('router')->generate('article-version', ['id' => $currentVersion->getId(), 'version' => $forVersion]);
     }
 
     private function generateFiguresPath(ArticleHistory $history, int $forVersion = null) : string
@@ -631,9 +624,9 @@ final class ArticlesController extends Controller
         }
 
         if ($forVersion === $currentVersion->getVersion()) {
-            return $this->get('router')->generate('article-figures', ['id' => $currentVersion->getId(), 'volume' => $currentVersion->getVolume()]);
+            return $this->get('router')->generate('article-figures', ['id' => $currentVersion->getId()]);
         }
 
-        return $this->get('router')->generate('article-version-figures', ['id' => $currentVersion->getId(), 'volume' => $currentVersion->getVolume(), 'version' => $forVersion]);
+        return $this->get('router')->generate('article-version-figures', ['id' => $currentVersion->getId(), 'version' => $forVersion]);
     }
 }
