@@ -1,3 +1,6 @@
+_legacy:
+    resource: routing_legacy.yml
+
 home:
     path: /
     defaults:
@@ -34,7 +37,7 @@ archive-month:
         year: '[2-9][0-9]{3}'
 
 article-version:
-    path: /content/{volume}/e{id}v{version}
+    path: /articles/{id}v{version}
     defaults:
          _controller: AppBundle:Articles:text
     requirements:
@@ -42,38 +45,16 @@ article-version:
         version: '[1-9][0-9]*'
 
 article-bibtex:
-    path: /content/{volume}/e{id}.bib
+    path: /articles/{id}.bib
     defaults:
          _controller: AppBundle:Articles:bibTex
     requirements:
         volume: '[1-9][0-9]*'
 
 article-ris:
-    path: /content/{volume}/e{id}.ris
+    path: /articles/{id}.ris
     defaults:
          _controller: AppBundle:Articles:ris
-    requirements:
-        volume: '[1-9][0-9]*'
-
-article:
-    path: /content/{volume}/e{id}
-    defaults:
-         _controller: AppBundle:Articles:text
-    requirements:
-        volume: '[1-9][0-9]*'
-
-article-version-figures:
-    path: /content/{volume}/e{id}v{version}/figures
-    defaults:
-         _controller: AppBundle:Articles:figures
-    requirements:
-        volume: '[1-9][0-9]*'
-        version: '[1-9][0-9]*'
-
-article-figures:
-    path: /content/{volume}/e{id}/figures
-    defaults:
-         _controller: AppBundle:Articles:figures
     requirements:
         volume: '[1-9][0-9]*'
 
@@ -81,11 +62,36 @@ article-type:
     path: /articles/{type}
     defaults:
          _controller: AppBundle:ArticleTypes:list
+    requirements:
+        type: '(correction|editorial|feature|insight|research-advance|research-article|research-exchange|retraction|registered-report|replication-study|short-report|tools-resources)'
+
+article:
+    path: /articles/{id}
+    defaults:
+         _controller: AppBundle:Articles:text
+    requirements:
+        volume: '[1-9][0-9]*'
+
+article-version-figures:
+    path: /articles/{id}v{version}/figures
+    defaults:
+         _controller: AppBundle:Articles:figures
+    requirements:
+        volume: '[1-9][0-9]*'
+        version: '[1-9][0-9]*'
+
+article-figures:
+    path: /articles/{id}/figures
+    defaults:
+         _controller: AppBundle:Articles:figures
+    requirements:
+        volume: '[1-9][0-9]*'
 
 collection:
-    path: /collections/{id}
+    path: /collections/{id}/{slug}
     defaults:
          _controller: AppBundle:Collections:collection
+         slug: ''
 
 collections:
     path: /collections
@@ -103,9 +109,10 @@ contact:
          _controller: AppBundle:Contact:contact
 
 event:
-    path: /events/{id}
+    path: /events/{id}/{slug}
     defaults:
          _controller: AppBundle:Events:event
+         slug: ''
 
 events:
     path: /events
@@ -113,9 +120,10 @@ events:
          _controller: AppBundle:Events:list
 
 interview:
-    path: /interviews/{id}
+    path: /interviews/{id}/{slug}
     defaults:
          _controller: AppBundle:Interviews:interview
+         slug: ''
 
 magazine:
     path: /magazine
@@ -133,9 +141,10 @@ inside-elife:
          _controller: AppBundle:InsideElife:list
 
 inside-elife-article:
-    path: /inside-elife/{id}
+    path: /inside-elife/{id}/{slug}
     defaults:
          _controller: AppBundle:InsideElife:article
+         slug: ''
 
 labs:
     path: /labs

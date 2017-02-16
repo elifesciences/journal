@@ -24,18 +24,6 @@ final class ArticleTypeControllerTest extends PageTestCase
 
     /**
      * @test
-     */
-    public function it_displays_a_404_when_not_on_a_valid_article_type()
-    {
-        $client = static::createClient();
-
-        $client->request('GET', '/articles/foo');
-
-        $this->assertSame(404, $client->getResponse()->getStatusCode());
-    }
-
-    /**
-     * @test
      * @dataProvider invalidPageProvider
      */
     public function it_displays_a_404_when_not_on_a_valid_page($page, callable $callable = null)

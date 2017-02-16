@@ -68,11 +68,12 @@ final class EventsController extends Controller
         return new Response($this->get('templating')->render('::events.html.twig', $arguments));
     }
 
-    public function eventAction(string $id) : Response
+    public function eventAction(Request $request, string $id) : Response
     {
         $event = $this->get('elife.api_sdk.events')
             ->get($id)
-            ->otherwise($this->mightNotExist());
+            ->otherwise($this->mightNotExist())
+            ->then($this->checkSlug($request, Callback::method('getTitle')));
 
         $arguments = $this->defaultPageArguments($event);
 

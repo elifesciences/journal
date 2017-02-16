@@ -3,6 +3,7 @@
 namespace eLife\Journal;
 
 use Bobthecow\Bundle\MustacheBundle\BobthecowMustacheBundle;
+use Cocur\Slugify\Bridge\Symfony\CocurSlugifyBundle;
 use Csa\Bundle\GuzzleBundle\CsaGuzzleBundle;
 use eLife\Journal\Expression\ParseUrlFunctionProvider;
 use PackageVersions\Versions;
@@ -46,6 +47,7 @@ class AppKernel extends Kernel
         $bundles = [
             new AppBundle(),
             new BobthecowMustacheBundle(),
+            new CocurSlugifyBundle(),
             new CsaGuzzleBundle(),
             new FrameworkBundle(),
             new MonologBundle(),

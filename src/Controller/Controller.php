@@ -4,6 +4,7 @@ namespace eLife\Journal\Controller;
 
 use eLife\ApiClient\Exception\BadResponse;
 use eLife\ApiSdk\Model\Model;
+use eLife\Journal\Exception\EarlyResponse;
 use eLife\Journal\Helper\CanConvertContent;
 use eLife\Journal\Helper\Paginator;
 use eLife\Journal\ViewModel\Converter\ViewModelConverter;
@@ -12,6 +13,7 @@ use eLife\Patterns\ViewModel\ContentHeaderSimple;
 use GuzzleHttp\Promise\PromiseInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -50,6 +52,24 @@ abstract class Controller implements ContainerAwareInterface
     final protected function render(ViewModel ...$viewModels): string
     {
         return $this->get('elife.patterns.pattern_renderer')->render(...$viewModels);
+    }
+
+    final protected function checkSlug(Request $request, callable $toSlugify) : callable
+    {
+        return function ($object) use ($request, $toSlugify) {
+            $slug = $request->attributes->get('_route_params')['slug'];
+            $correctSlug = $this->get('slugify')->slugify($toSlugify($object));
+
+            if ($slug !== $correctSlug) {
+                $route = $request->attributes->get('_route');
+                $routeParams = $request->attributes->get('_route_params');
+                $routeParams['slug'] = $correctSlug;
+
+                throw new EarlyResponse(new RedirectResponse($this->get('router')->generate($route, $routeParams), Response::HTTP_MOVED_PERMANENTLY));
+            }
+
+            return $object;
+        };
     }
 
     final protected function mightNotExist() : callable

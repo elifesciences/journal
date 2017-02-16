@@ -35,7 +35,7 @@ final class ArticleBibTexControllerTest extends WebTestCase
             )
         );
 
-        $client->request('GET', '/content/1/e00001.bib');
+        $client->request('GET', '/articles/00001.bib');
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertSame('application/x-bibtex', $client->getResponse()->headers->get('Content-Type'));
@@ -280,7 +280,7 @@ EOT
             )
         );
 
-        $client->request('GET', '/content/1/e00001.bib');
+        $client->request('GET', '/articles/00001.bib');
 
         $this->assertSame(404, $client->getResponse()->getStatusCode());
     }
@@ -334,7 +334,7 @@ EOT
             )
         );
 
-        $client->request('GET', '/content/1/e00001.bib');
+        $client->request('GET', '/articles/00001.bib');
 
         $this->assertSame(404, $client->getResponse()->getStatusCode());
     }

@@ -89,6 +89,10 @@
             "install-path": "vendor/bobthecow/mustache-bundle/Bobthecow/Bundle/MustacheBundle",
             "installer": "composer"
         },
+        "cocur/slugify": {
+            "install-path": "vendor/cocur/slugify",
+            "installer": "composer"
+        },
         "crell/api-problem": {
             "install-path": "vendor/crell/api-problem",
             "installer": "composer"

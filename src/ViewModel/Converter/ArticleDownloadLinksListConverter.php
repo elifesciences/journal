@@ -34,12 +34,12 @@ final class ArticleDownloadLinksListConverter implements ViewModelConverter
             $groups[mixed_visibility_text('', 'Downloads', '(link to download the article as PDF)')] = $items;
         }
 
-        $articleUri = $this->urlGenerator->generate('article', ['volume' => $object->getVolume(), 'id' => $object->getId()], UrlGeneratorInterface::ABSOLUTE_URL);
+        $articleUri = $this->urlGenerator->generate('article', ['id' => $object->getId()], UrlGeneratorInterface::ABSOLUTE_URL);
 
         if ($object->getPublishedDate()) {
             $groups[mixed_visibility_text('', 'Download citations', '(links to download the citations from this article in formats compatible with various reference manager tools)')] = [
-                new ViewModel\Link('BibTeX', $this->urlGenerator->generate('article-bibtex', ['volume' => $object->getVolume(), 'id' => $object->getId()])),
-                new ViewModel\Link('RIS', $this->urlGenerator->generate('article-ris', ['volume' => $object->getVolume(), 'id' => $object->getId()])),
+                new ViewModel\Link('BibTeX', $this->urlGenerator->generate('article-bibtex', ['id' => $object->getId()])),
+                new ViewModel\Link('RIS', $this->urlGenerator->generate('article-ris', ['id' => $object->getId()])),
             ];
         }
 

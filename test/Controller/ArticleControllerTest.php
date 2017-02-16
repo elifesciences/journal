@@ -115,7 +115,7 @@ final class ArticleControllerTest extends PageTestCase
             )
         );
 
-        $crawler = $client->request('GET', '/content/1/e00001');
+        $crawler = $client->request('GET', '/articles/00001');
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertSame('Article title', $crawler->filter('.content-header__title')->text());
@@ -174,7 +174,7 @@ final class ArticleControllerTest extends PageTestCase
             )
         );
 
-        $client->request('GET', '/content/1/e00001');
+        $client->request('GET', '/articles/00001');
 
         $this->assertSame(404, $client->getResponse()->getStatusCode());
     }
@@ -360,7 +360,7 @@ final class ArticleControllerTest extends PageTestCase
             )
         );
 
-        $crawler = $client->request('GET', '/content/1/e00001');
+        $crawler = $client->request('GET', '/articles/00001');
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertSame('Article title', $crawler->filter('.content-header__title')->text());
@@ -475,7 +475,7 @@ final class ArticleControllerTest extends PageTestCase
             )
         );
 
-        $crawler = $client->request('GET', '/content/1/e00001');
+        $crawler = $client->request('GET', '/articles/00001');
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertSame('Article title', $crawler->filter('.content-header__title')->text());
@@ -645,7 +645,7 @@ final class ArticleControllerTest extends PageTestCase
             )
         );
 
-        $crawler = $client->request('GET', '/content/1/e00001');
+        $crawler = $client->request('GET', '/articles/00001');
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertContains('Accepted manuscript, PDF only. Full online edition to follow.',
@@ -788,7 +788,7 @@ final class ArticleControllerTest extends PageTestCase
             )
         );
 
-        $crawler = $client->request('GET', '/content/1/e00001v1');
+        $crawler = $client->request('GET', '/articles/00001v1');
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertContains('Read the most recent version of this article.', array_map('trim', $crawler->filter('.info-bar')->extract(['_text'])));
@@ -1132,7 +1132,7 @@ final class ArticleControllerTest extends PageTestCase
             )
         );
 
-        $crawler = $client->request('GET', '/content/1/e00001');
+        $crawler = $client->request('GET', '/articles/00001');
 
         $this->assertSame('Title prefix: Article title', $crawler->filter('meta[name="citation_title"]')->attr('content'));
         $this->assertSame('10.7554/eLife.00001', $crawler->filter('meta[name="citation_doi"]')->attr('content'));
@@ -1343,6 +1343,6 @@ final class ArticleControllerTest extends PageTestCase
             )
         );
 
-        return '/content/1/e00001';
+        return '/articles/00001';
     }
 }

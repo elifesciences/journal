@@ -185,7 +185,7 @@ final class ArticleFiguresControllerTest extends PageTestCase
             )
         );
 
-        $crawler = $client->request('GET', '/content/1/e00001v1/figures');
+        $crawler = $client->request('GET', '/articles/00001v1/figures');
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertSame('Article title', $crawler->filter('.content-header__title')->text());
@@ -255,7 +255,7 @@ final class ArticleFiguresControllerTest extends PageTestCase
             )
         );
 
-        $client->request('GET', '/content/1/e00001/figures');
+        $client->request('GET', '/articles/00001/figures');
 
         $this->assertSame(404, $client->getResponse()->getStatusCode());
     }
@@ -366,7 +366,7 @@ final class ArticleFiguresControllerTest extends PageTestCase
             )
         );
 
-        $client->request('GET', '/content/1/e00001/figures');
+        $client->request('GET', '/articles/00001/figures');
 
         $this->assertSame(404, $client->getResponse()->getStatusCode());
     }
@@ -600,6 +600,6 @@ final class ArticleFiguresControllerTest extends PageTestCase
             )
         );
 
-        return '/content/1/e00001/figures';
+        return '/articles/00001/figures';
     }
 }

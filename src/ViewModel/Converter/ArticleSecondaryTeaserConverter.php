@@ -37,7 +37,7 @@ final class ArticleSecondaryTeaserConverter implements ViewModelConverter
 
         return Teaser::secondary(
             $object->getFullTitle(),
-            $this->urlGenerator->generate('article', ['volume' => $object->getVolume(), 'id' => $object->getId()]),
+            $this->urlGenerator->generate('article', ['id' => $object->getId()]),
             $object->getAuthorLine(),
             $this->createContextLabel($object),
             $image,

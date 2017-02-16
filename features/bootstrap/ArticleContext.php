@@ -144,7 +144,7 @@ final class ArticleContext extends Context
      */
     public function iGoTheResearchArticlePage()
     {
-        $this->visitPath('/content/1/e00001');
+        $this->visitPath('/articles/00001');
     }
 
     /**

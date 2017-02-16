@@ -4,9 +4,13 @@ namespace test\eLife\Journal\Controller;
 
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use test\eLife\Journal\Providers;
+use Traversable;
 
 final class InterviewControllerTest extends PageTestCase
 {
+    use Providers;
+
     /**
      * @test
      */
@@ -19,6 +23,26 @@ final class InterviewControllerTest extends PageTestCase
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertSame('Interview title', $crawler->filter('.content-header__title')->text());
         $this->assertSame('An interview with Interviewee', $crawler->filter('.content-header__strapline')->text());
+    }
+
+    /**
+     * @test
+     * @dataProvider incorrectSlugProvider
+     */
+    public function it_redirects_if_the_slug_is_not_correct(string $url)
+    {
+        $client = static::createClient();
+
+        $expectedUrl = $this->getUrl();
+
+        $client->request('GET', $url);
+
+        $this->assertTrue($client->getResponse()->isRedirect($expectedUrl));
+    }
+
+    public function incorrectSlugProvider() : Traversable
+    {
+        return $this->stringProvider('/interviews/1', '/interviews/1/foo');
     }
 
     /**
@@ -117,6 +141,6 @@ final class InterviewControllerTest extends PageTestCase
             )
         );
 
-        return '/interviews/1';
+        return '/interviews/1/interviewee';
     }
 }
