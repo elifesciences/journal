@@ -4,7 +4,6 @@ namespace eLife\Journal\ViewModel\Converter;
 
 use eLife\ApiSdk\Model\BlogArticle;
 use eLife\Patterns\ViewModel;
-use eLife\Patterns\ViewModel\Date;
 use eLife\Patterns\ViewModel\Link;
 use eLife\Patterns\ViewModel\Meta;
 use eLife\Patterns\ViewModel\Teaser;
