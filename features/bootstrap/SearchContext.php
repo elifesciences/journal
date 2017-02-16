@@ -87,7 +87,7 @@ final class SearchContext extends Context
 
         $articlesWithKeyword = $this->filterArticlesContainingKeyword($keyword, $this->articles);
 
-        $baseUri = 'http://api.elifesciences.org/search?for=%s&page=%s&per-page=%s&sort=relevance&order=desc&use-date=default';
+        $baseUri = 'http://api.elifesciences.org/search?for=%s&page=%s&per-page=%s&sort=relevance&order=desc';
 
         $subjectGroups = [[], $this->query['subjects']];
 
@@ -144,6 +144,8 @@ final class SearchContext extends Context
                             'results' => count($this->filterArticlesWithSubject($subject, $articlesWithKeyword)),
                         ];
                     }, $this->query['subjects']);
+
+                    $uri .= '&use-date=default';
 
                     $this->mockApiResponse(
                         new Request(
