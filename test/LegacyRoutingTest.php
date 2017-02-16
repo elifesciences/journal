@@ -7,6 +7,8 @@ use Traversable;
 
 final class LegacyRoutingTest extends WebTestCase
 {
+    use Providers;
+
     /**
      * @test
      * @dataProvider redirectsProvider
@@ -23,15 +25,11 @@ final class LegacyRoutingTest extends WebTestCase
 
     public function redirectsProvider() : Traversable
     {
-        $redirects = [
+        return $this->arrayProvider([
             '/content/1/e00001' => '/articles/00001',
             '/content/1/e00001v1' => '/articles/00001v1',
             '/content/1/e00001/figures' => '/articles/00001/figures',
             '/content/1/e00001v1/figures' => '/articles/00001v1/figures',
-        ];
-
-        foreach ($redirects as $path => $expected) {
-            yield $path => [$path, $expected];
-        }
+        ]);
     }
 }

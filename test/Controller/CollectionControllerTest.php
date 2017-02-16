@@ -4,10 +4,13 @@ namespace test\eLife\Journal\Controller;
 
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use test\eLife\Journal\Providers;
 use Traversable;
 
 final class CollectionControllerTest extends PageTestCase
 {
+    use Providers;
+
     /**
      * @test
      */

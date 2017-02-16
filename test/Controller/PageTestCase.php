@@ -46,12 +46,5 @@ abstract class PageTestCase extends WebTestCase
         return $client;
     }
 
-    final protected function stringProvider(string ...$strings) : Traversable
-    {
-        foreach ($strings as $string) {
-            yield $string => [$string];
-        }
-    }
-
     abstract protected function getUrl() : string;
 }

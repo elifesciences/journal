@@ -4,10 +4,13 @@ namespace test\eLife\Journal\Helper;
 
 use eLife\Journal\Helper\Humanizer;
 use PHPUnit_Framework_TestCase;
+use test\eLife\Journal\Providers;
 use Traversable;
 
 final class HumanizerTest extends PHPUnit_Framework_TestCase
 {
+    use Providers;
+
     /**
      * @test
      * @dataProvider stringProvider
@@ -19,14 +22,10 @@ final class HumanizerTest extends PHPUnit_Framework_TestCase
 
     public function stringProvider() : Traversable
     {
-        $inputs = [
+        return $this->arrayProvider([
             'foo' => 'Foo',
             'foo_bar' => 'Foo bar',
             'foo-bar' => 'Foo bar',
-        ];
-
-        foreach ($inputs as $input => $expected) {
-            yield $input => [$input, $expected];
-        }
+        ]);
     }
 }

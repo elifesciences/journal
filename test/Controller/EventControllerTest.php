@@ -6,10 +6,13 @@ use DateTimeImmutable;
 use eLife\ApiSdk\ApiSdk;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use test\eLife\Journal\Providers;
 use Traversable;
 
 final class EventControllerTest extends PageTestCase
 {
+    use Providers;
+
     /**
      * @test
      */
