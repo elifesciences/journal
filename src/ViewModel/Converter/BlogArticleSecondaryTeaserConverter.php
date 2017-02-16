@@ -9,6 +9,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 final class BlogArticleSecondaryTeaserConverter implements ViewModelConverter
 {
     use CreatesContextLabel;
+    use CreatesDate;
 
     private $urlGenerator;
 
@@ -31,7 +32,7 @@ final class BlogArticleSecondaryTeaserConverter implements ViewModelConverter
             ViewModel\TeaserFooter::forNonArticle(
                 ViewModel\Meta::withLink(
                     new ViewModel\Link('Inside eLife', $this->urlGenerator->generate('inside-elife')),
-                    ViewModel\Date::simple($object->getPublishedDate())
+                    $this->simpleDate($object, $context)
                 )
             )
         );

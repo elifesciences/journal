@@ -11,6 +11,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 final class ArticleTeaserConverter implements ViewModelConverter
 {
     use CreatesContextLabel;
+    use CreatesDate;
     use CreatesTeaserImage;
 
     private $urlGenerator;
@@ -31,12 +32,6 @@ final class ArticleTeaserConverter implements ViewModelConverter
             $image = null;
         }
 
-        if ('published' === ($context['date'] ?? 'default')) {
-            $date = $object->getPublishedDate() ? ViewModel\Date::simple($object->getPublishedDate()) : null;
-        } else {
-            $date = $object->getStatusDate() ? ViewModel\Date::simple($object->getStatusDate(), $object->getStatusDate() != $object->getPublishedDate()) : null;
-        }
-
         return ViewModel\Teaser::main(
             $object->getFullTitle(),
             $this->urlGenerator->generate('article', ['volume' => $object->getVolume(), 'id' => $object->getId()]),
@@ -50,7 +45,7 @@ final class ArticleTeaserConverter implements ViewModelConverter
                         ModelName::singular($object->getType()),
                         $this->urlGenerator->generate('article-type', ['type' => $object->getType()])
                     ),
-                    $date
+                    $this->simpleDate($object, $context)
                 ),
                 $object instanceof ArticleVoR
             )

@@ -10,6 +10,8 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 final class CoverCollectionCarouselItemConverter implements ViewModelConverter
 {
+    use CreatesDate;
+
     private $urlGenerator;
 
     public function __construct(UrlGeneratorInterface $urlGenerator)
@@ -25,19 +27,13 @@ final class CoverCollectionCarouselItemConverter implements ViewModelConverter
         /** @var Collection $collection */
         $collection = $object->getItem();
 
-        if ('published' === ($context['date'] ?? 'default')) {
-            $date = ViewModel\Date::simple($collection->getPublishedDate());
-        } else {
-            $date = ViewModel\Date::simple($collection->getUpdatedDate() ?? $collection->getPublishedDate(), !empty($collection->getUpdatedDate()));
-        }
-
         return new ViewModel\CarouselItem(
             $collection->getSubjects()->map(function (Subject $subject) {
                 return new ViewModel\Link($subject->getName(), $this->urlGenerator->generate('subject', ['id' => $subject->getId()]));
             })->toArray(),
             new ViewModel\Link($object->getTitle(), $this->urlGenerator->generate('collection', ['id' => $collection->getId()])),
             'Read collection',
-            ViewModel\Meta::withLink(new ViewModel\Link('Collection', $this->urlGenerator->generate('collections')), $date),
+            ViewModel\Meta::withLink(new ViewModel\Link('Collection', $this->urlGenerator->generate('collections')), $this->simpleDate($collection, $context)),
             new ViewModel\BackgroundImage(
                 $object->getBanner()->getSize('2:1')->getImage(900),
                 $object->getBanner()->getSize('2:1')->getImage(1800)

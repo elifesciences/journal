@@ -12,6 +12,8 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 final class InterviewTeaserConverter implements ViewModelConverter
 {
+    use CreatesDate;
+
     private $urlGenerator;
 
     public function __construct(UrlGeneratorInterface $urlGenerator)
@@ -32,10 +34,7 @@ final class InterviewTeaserConverter implements ViewModelConverter
             null,
             null,
             TeaserFooter::forNonArticle(
-                Meta::withText(
-                    'Interview',
-                    Date::simple($object->getPublishedDate())
-                )
+                Meta::withText('Interview', $this->simpleDate($object, $context))
             )
         );
     }

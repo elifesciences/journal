@@ -14,6 +14,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 final class CollectionSecondaryTeaserConverter implements ViewModelConverter
 {
     use CreatesContextLabel;
+    use CreatesDate;
     use CreatesTeaserImage;
 
     private $urlGenerator;
@@ -34,12 +35,6 @@ final class CollectionSecondaryTeaserConverter implements ViewModelConverter
         }
         $curatedBy .= '.';
 
-        if ('published' === ($context['date'] ?? 'default')) {
-            $date = Date::simple($object->getPublishedDate());
-        } else {
-            $date = Date::simple($object->getUpdatedDate() ?? $object->getPublishedDate(), !empty($object->getUpdatedDate()));
-        }
-
         return Teaser::secondary(
             $object->getTitle(),
             $this->urlGenerator->generate('collection', ['id' => $object->getId()]),
@@ -47,7 +42,7 @@ final class CollectionSecondaryTeaserConverter implements ViewModelConverter
             $this->createContextLabel($object),
             $this->smallTeaserImage($object),
             TeaserFooter::forNonArticle(
-                Meta::withLink(new Link('Collection', $this->urlGenerator->generate('collections')), $date)
+                Meta::withLink(new Link('Collection', $this->urlGenerator->generate('collections')), $this->simpleDate($object, $context))
             )
         );
     }

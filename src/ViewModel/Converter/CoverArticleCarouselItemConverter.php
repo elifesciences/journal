@@ -11,6 +11,8 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 final class CoverArticleCarouselItemConverter implements ViewModelConverter
 {
+    use CreatesDate;
+
     private $urlGenerator;
 
     public function __construct(UrlGeneratorInterface $urlGenerator)
@@ -26,12 +28,6 @@ final class CoverArticleCarouselItemConverter implements ViewModelConverter
         /** @var ArticleVersion $article */
         $article = $object->getItem();
 
-        if ('published' === ($context['date'] ?? 'default')) {
-            $date = $article->getPublishedDate() ? ViewModel\Date::simple($article->getPublishedDate()) : null;
-        } else {
-            $date = $article->getStatusDate() ? ViewModel\Date::simple($article->getStatusDate(), $article->getStatusDate() != $article->getPublishedDate()) : null;
-        }
-
         return new ViewModel\CarouselItem(
             $article->getSubjects()->map(function (Subject $subject) {
                 return new ViewModel\Link($subject->getName(), $this->urlGenerator->generate('subject', ['id' => $subject->getId()]));
@@ -46,7 +42,7 @@ final class CoverArticleCarouselItemConverter implements ViewModelConverter
                     ModelName::singular($article->getType()),
                     $this->urlGenerator->generate('article-type', ['type' => $article->getType()])
                 ),
-                $date
+                $this->simpleDate($article, $context)
             ),
             new ViewModel\BackgroundImage(
                 $object->getBanner()->getSize('2:1')->getImage(900),

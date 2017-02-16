@@ -12,6 +12,8 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 final class CollectionContentHeaderConverter implements ViewModelConverter
 {
+    use CreatesDate;
+
     private $urlGenerator;
 
     public function __construct(UrlGeneratorInterface $urlGenerator)
@@ -29,7 +31,7 @@ final class CollectionContentHeaderConverter implements ViewModelConverter
             null,
             Meta::withLink(
                 new Link('Collection', $this->urlGenerator->generate('collections')),
-                Date::simple($object->getUpdatedDate() ?? $object->getPublishedDate(), !empty($object->getUpdatedDate()))
+                $this->simpleDate($object, $context)
             ),
             null,
             new ViewModel\BackgroundImage(

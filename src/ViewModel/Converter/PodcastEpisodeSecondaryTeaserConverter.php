@@ -13,6 +13,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 final class PodcastEpisodeSecondaryTeaserConverter implements ViewModelConverter
 {
     use CreatesContextLabel;
+    use CreatesDate;
     use CreatesTeaserImage;
 
     private $urlGenerator;
@@ -34,10 +35,7 @@ final class PodcastEpisodeSecondaryTeaserConverter implements ViewModelConverter
             $this->createContextLabel($object),
             $this->smallTeaserImage($object),
             TeaserFooter::forNonArticle(
-                Meta::withText(
-                    'Podcast',
-                    Date::simple($object->getPublishedDate())
-                )
+                Meta::withText('Podcast', $this->simpleDate($object, $context))
             )
         );
     }
