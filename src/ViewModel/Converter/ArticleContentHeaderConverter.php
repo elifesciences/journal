@@ -13,6 +13,8 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 final class ArticleContentHeaderConverter implements ViewModelConverter
 {
+    use CreatesDate;
+
     private $urlGenerator;
 
     public function __construct(UrlGeneratorInterface $urlGenerator)
@@ -58,7 +60,7 @@ final class ArticleContentHeaderConverter implements ViewModelConverter
                 ModelName::singular($object->getType()),
                 $this->urlGenerator->generate('article-type', ['type' => $object->getType()])
             ),
-            $object->getPublishedDate() ? ViewModel\Date::simple($object->getPublishedDate()) : null
+            $this->simpleDate($object, $context)
         );
 
         switch ($object->getType()) {

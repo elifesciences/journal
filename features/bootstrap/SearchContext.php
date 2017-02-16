@@ -145,6 +145,8 @@ final class SearchContext extends Context
                         ];
                     }, $this->query['subjects']);
 
+                    $uri .= '&use-date=default';
+
                     $this->mockApiResponse(
                         new Request(
                             'GET',

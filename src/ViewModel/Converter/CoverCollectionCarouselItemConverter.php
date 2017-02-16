@@ -11,6 +11,8 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 final class CoverCollectionCarouselItemConverter implements ViewModelConverter
 {
+    use CreatesDate;
+
     private $urlGenerator;
     private $slugify;
 
@@ -34,10 +36,7 @@ final class CoverCollectionCarouselItemConverter implements ViewModelConverter
             })->toArray(),
             new ViewModel\Link($object->getTitle(), $this->urlGenerator->generate('collection', ['id' => $collection->getId(), 'slug' => $this->slugify->slugify($collection->getTitle())])),
             'Read collection',
-            ViewModel\Meta::withLink(
-                new ViewModel\Link('Collection', $this->urlGenerator->generate('collections')),
-                ViewModel\Date::simple($collection->getPublishedDate())
-            ),
+            ViewModel\Meta::withLink(new ViewModel\Link('Collection', $this->urlGenerator->generate('collections')), $this->simpleDate($collection, $context)),
             new ViewModel\BackgroundImage(
                 $object->getBanner()->getSize('2:1')->getImage(900),
                 $object->getBanner()->getSize('2:1')->getImage(1800)

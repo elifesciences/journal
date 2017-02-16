@@ -5,7 +5,6 @@ namespace eLife\Journal\ViewModel\Converter;
 use Cocur\Slugify\SlugifyInterface;
 use eLife\ApiSdk\Model\Interview;
 use eLife\Patterns\ViewModel;
-use eLife\Patterns\ViewModel\Date;
 use eLife\Patterns\ViewModel\Meta;
 use eLife\Patterns\ViewModel\Teaser;
 use eLife\Patterns\ViewModel\TeaserFooter;
@@ -13,6 +12,8 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 final class InterviewTeaserConverter implements ViewModelConverter
 {
+    use CreatesDate;
+
     private $urlGenerator;
     private $slugify;
 
@@ -35,10 +36,7 @@ final class InterviewTeaserConverter implements ViewModelConverter
             null,
             null,
             TeaserFooter::forNonArticle(
-                Meta::withText(
-                    'Interview',
-                    Date::simple($object->getPublishedDate())
-                )
+                Meta::withText('Interview', $this->simpleDate($object, $context))
             )
         );
     }

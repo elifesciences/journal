@@ -6,7 +6,6 @@ use eLife\ApiSdk\Model\ArticleVersion;
 use eLife\ApiSdk\Model\ArticleVoR;
 use eLife\Journal\Helper\ModelName;
 use eLife\Patterns\ViewModel;
-use eLife\Patterns\ViewModel\Date;
 use eLife\Patterns\ViewModel\Meta;
 use eLife\Patterns\ViewModel\Teaser;
 use eLife\Patterns\ViewModel\TeaserFooter;
@@ -15,6 +14,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 final class ArticleSecondaryTeaserConverter implements ViewModelConverter
 {
     use CreatesContextLabel;
+    use CreatesDate;
     use CreatesTeaserImage;
 
     private $urlGenerator;
@@ -47,7 +47,7 @@ final class ArticleSecondaryTeaserConverter implements ViewModelConverter
                         ModelName::singular($object->getType()),
                         $this->urlGenerator->generate('article-type', ['type' => $object->getType()])
                     ),
-                    $object->getStatusDate() ? Date::simple($object->getStatusDate(), $object->getStatusDate() != $object->getPublishedDate()) : null
+                    $this->simpleDate($object, $context)
                 )
             )
         );

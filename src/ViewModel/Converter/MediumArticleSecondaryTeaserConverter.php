@@ -4,13 +4,13 @@ namespace eLife\Journal\ViewModel\Converter;
 
 use eLife\ApiSdk\Model\MediumArticle;
 use eLife\Patterns\ViewModel;
-use eLife\Patterns\ViewModel\Date;
 use eLife\Patterns\ViewModel\Meta;
 use eLife\Patterns\ViewModel\Teaser;
 use eLife\Patterns\ViewModel\TeaserFooter;
 
 final class MediumArticleSecondaryTeaserConverter implements ViewModelConverter
 {
+    use CreatesDate;
     use CreatesTeaserImage;
 
     /**
@@ -30,7 +30,7 @@ final class MediumArticleSecondaryTeaserConverter implements ViewModelConverter
             null,
             null,
             $image,
-            TeaserFooter::forNonArticle(Meta::withDate(Date::simple($object->getPublishedDate())))
+            TeaserFooter::forNonArticle(Meta::withDate($this->simpleDate($object, $context)))
         );
     }
 

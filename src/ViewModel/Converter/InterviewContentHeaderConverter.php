@@ -7,6 +7,8 @@ use eLife\Patterns\ViewModel;
 
 final class InterviewContentHeaderConverter implements ViewModelConverter
 {
+    use CreatesDate;
+
     /**
      * @param Interview $object
      */
@@ -17,7 +19,7 @@ final class InterviewContentHeaderConverter implements ViewModelConverter
             false,
             $object->getSubTitle(),
             null,
-            ViewModel\Meta::withText('Interview', ViewModel\Date::simple($object->getPublishedDate()))
+            ViewModel\Meta::withText('Interview', $this->simpleDate($object, $context))
         );
     }
 

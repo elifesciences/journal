@@ -5,13 +5,14 @@ namespace eLife\Journal\ViewModel\Converter;
 use eLife\ApiSdk\Model\Collection;
 use eLife\Patterns\ViewModel;
 use eLife\Patterns\ViewModel\ContentHeaderNonArticle;
-use eLife\Patterns\ViewModel\Date;
 use eLife\Patterns\ViewModel\Link;
 use eLife\Patterns\ViewModel\Meta;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 final class CollectionContentHeaderConverter implements ViewModelConverter
 {
+    use CreatesDate;
+
     private $urlGenerator;
 
     public function __construct(UrlGeneratorInterface $urlGenerator)
@@ -29,7 +30,7 @@ final class CollectionContentHeaderConverter implements ViewModelConverter
             null,
             Meta::withLink(
                 new Link('Collection', $this->urlGenerator->generate('collections')),
-                Date::simple($object->getUpdatedDate() ?? $object->getPublishedDate(), !empty($object->getUpdatedDate()))
+                $this->simpleDate($object, $context)
             ),
             null,
             new ViewModel\BackgroundImage(

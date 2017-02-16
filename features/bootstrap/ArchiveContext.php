@@ -85,7 +85,7 @@ final class ArchiveContext extends Context
             $this->mockApiResponse(
                 new Request(
                     'GET',
-                    "http://api.elifesciences.org/covers?page=1&per-page=4&sort=page-views&order=desc&start-date=$startDate&end-date=$endDate",
+                    "http://api.elifesciences.org/covers?page=1&per-page=4&sort=page-views&order=desc&use-date=published&start-date=$startDate&end-date=$endDate",
                     ['Accept' => 'application/vnd.elife.cover-list+json; version=1']
                 ),
                 new Response(
@@ -147,7 +147,7 @@ final class ArchiveContext extends Context
         $this->mockApiResponse(
             new Request(
                 'GET',
-                "http://api.elifesciences.org/search?for=&page=1&per-page=1&sort=date&order=desc&type[]=research-advance&type[]=research-article&type[]=research-exchange&type[]=short-report&type[]=tools-resources&type[]=replication-study&start-date=$startDate&end-date=$endDate",
+                "http://api.elifesciences.org/search?for=&page=1&per-page=1&sort=date&order=desc&type[]=research-advance&type[]=research-article&type[]=research-exchange&type[]=short-report&type[]=tools-resources&type[]=replication-study&use-date=published&start-date=$startDate&end-date=$endDate",
                 ['Accept' => 'application/vnd.elife.search+json; version=1']
             ),
             new Response(
@@ -192,7 +192,7 @@ final class ArchiveContext extends Context
             $this->mockApiResponse(
                 new Request(
                     'GET',
-                    "http://api.elifesciences.org/search?for=&page=$page&per-page=100&sort=date&order=desc&type[]=research-advance&type[]=research-article&type[]=research-exchange&type[]=short-report&type[]=tools-resources&type[]=replication-study&start-date=$startDate&end-date=$endDate",
+                    "http://api.elifesciences.org/search?for=&page=$page&per-page=100&sort=date&order=desc&type[]=research-advance&type[]=research-article&type[]=research-exchange&type[]=short-report&type[]=tools-resources&type[]=replication-study&use-date=published&start-date=$startDate&end-date=$endDate",
                     ['Accept' => 'application/vnd.elife.search+json; version=1']
                 ),
                 new Response(
@@ -263,7 +263,7 @@ final class ArchiveContext extends Context
         $this->mockApiResponse(
             new Request(
                 'GET',
-                "http://api.elifesciences.org/search?for=&page=1&per-page=1&sort=date&order=desc&type[]=editorial&type[]=insight&type[]=feature&type[]=collection&type[]=interview&type[]=podcast-episode&start-date=$startDate&end-date=$endDate",
+                "http://api.elifesciences.org/search?for=&page=1&per-page=1&sort=date&order=desc&type[]=editorial&type[]=insight&type[]=feature&type[]=collection&type[]=interview&type[]=podcast-episode&use-date=published&start-date=$startDate&end-date=$endDate",
                 ['Accept' => 'application/vnd.elife.search+json; version=1']
             ),
             new Response(
@@ -302,7 +302,7 @@ final class ArchiveContext extends Context
             $this->mockApiResponse(
                 new Request(
                     'GET',
-                    "http://api.elifesciences.org/search?for=&page=$page&per-page=100&sort=date&order=desc&type[]=editorial&type[]=insight&type[]=feature&type[]=collection&type[]=interview&type[]=podcast-episode&start-date=$startDate&end-date=$endDate",
+                    "http://api.elifesciences.org/search?for=&page=$page&per-page=100&sort=date&order=desc&type[]=editorial&type[]=insight&type[]=feature&type[]=collection&type[]=interview&type[]=podcast-episode&use-date=published&start-date=$startDate&end-date=$endDate",
                     ['Accept' => 'application/vnd.elife.search+json; version=1']
                 ),
                 new Response(
@@ -414,7 +414,7 @@ final class ArchiveContext extends Context
         $this->mockApiResponse(
             new Request(
                 'GET',
-                'http://api.elifesciences.org/search?for=&page=1&per-page=1&sort=date&order=desc&type[]=editorial&type[]=insight&type[]=feature&type[]=collection&type[]=interview&type[]=podcast-episode&start-date=2016-03-01&end-date=2016-03-31',
+                'http://api.elifesciences.org/search?for=&page=1&per-page=1&sort=date&order=desc&type[]=editorial&type[]=insight&type[]=feature&type[]=collection&type[]=interview&type[]=podcast-episode&use-date=published&start-date=2016-03-01&end-date=2016-03-31',
                 ['Accept' => 'application/vnd.elife.search+json; version=1']
             ),
             new Response(
@@ -465,7 +465,7 @@ final class ArchiveContext extends Context
             $this->mockApiResponse(
                 new Request(
                     'GET',
-                    "http://api.elifesciences.org/search?for=&page=$page&per-page=100&sort=date&order=desc&type[]=editorial&type[]=insight&type[]=feature&type[]=collection&type[]=interview&type[]=podcast-episode&start-date=2016-03-01&end-date=2016-03-31",
+                    "http://api.elifesciences.org/search?for=&page=$page&per-page=100&sort=date&order=desc&type[]=editorial&type[]=insight&type[]=feature&type[]=collection&type[]=interview&type[]=podcast-episode&use-date=published&start-date=2016-03-01&end-date=2016-03-31",
                     ['Accept' => 'application/vnd.elife.search+json; version=1']
                 ),
                 new Response(
@@ -533,7 +533,7 @@ final class ArchiveContext extends Context
             $this->mockApiResponse(
                 new Request(
                     'GET',
-                    "http://api.elifesciences.org/search?for=&page=1&per-page=1&sort=date&order=desc&type[]=research-advance&type[]=research-article&type[]=research-exchange&type[]=short-report&type[]=tools-resources&type[]=replication-study&start-date=$startDate&end-date=$endDate",
+                    "http://api.elifesciences.org/search?for=&page=1&per-page=1&sort=date&order=desc&type[]=research-advance&type[]=research-article&type[]=research-exchange&type[]=short-report&type[]=tools-resources&type[]=replication-study&use-date=published&start-date=$startDate&end-date=$endDate",
                     ['Accept' => 'application/vnd.elife.search+json; version=1']
                 ),
                 new Response(

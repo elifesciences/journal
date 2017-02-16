@@ -5,7 +5,6 @@ namespace eLife\Journal\ViewModel\Converter;
 use Cocur\Slugify\SlugifyInterface;
 use eLife\ApiSdk\Model\BlogArticle;
 use eLife\Patterns\ViewModel;
-use eLife\Patterns\ViewModel\Date;
 use eLife\Patterns\ViewModel\Link;
 use eLife\Patterns\ViewModel\Meta;
 use eLife\Patterns\ViewModel\Teaser;
@@ -15,6 +14,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 final class BlogArticleTeaserConverter implements ViewModelConverter
 {
     use CreatesContextLabel;
+    use CreatesDate;
 
     private $urlGenerator;
     private $slugify;
@@ -40,7 +40,7 @@ final class BlogArticleTeaserConverter implements ViewModelConverter
             TeaserFooter::forNonArticle(
                 Meta::withLink(
                     new Link('Inside eLife', $this->urlGenerator->generate('inside-elife')),
-                    Date::simple($object->getPublishedDate())
+                    $this->simpleDate($object, $context)
                 )
             )
         );

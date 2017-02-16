@@ -9,6 +9,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 final class LabsExperimentTeaserConverter implements ViewModelConverter
 {
+    use CreatesDate;
     use CreatesTeaserImage;
 
     private $urlGenerator;
@@ -33,7 +34,7 @@ final class LabsExperimentTeaserConverter implements ViewModelConverter
             ViewModel\TeaserFooter::forNonArticle(
                 ViewModel\Meta::withText(
                     'Experiment: '.str_pad($object->getNumber(), 3, '0', STR_PAD_LEFT),
-                    ViewModel\Date::simple($object->getPublishedDate())
+                    $this->simpleDate($object, $context)
                 )
             )
         );
