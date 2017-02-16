@@ -265,7 +265,7 @@ final class HomepageContext extends Context
                                 'type' => 'collection',
                                 'id' => $id,
                                 'title' => $collectionName,
-                                'updated' => $today->format(ApiSdk::DATE_FORMAT),
+                                'published' => $today->format(ApiSdk::DATE_FORMAT),
                                 'image' => [
                                     'banner' => [
                                         'alt' => '',
@@ -341,7 +341,7 @@ final class HomepageContext extends Context
                             'item' => [
                                 'type' => 'collection',
                                 'id' => $id,
-                                'updated' => $today->format(ApiSdk::DATE_FORMAT),
+                                'published' => $today->format(ApiSdk::DATE_FORMAT),
                                 'title' => $collectionName,
                                 'selectedCurator' => [
                                     'id' => '1',
