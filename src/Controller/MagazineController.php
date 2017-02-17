@@ -11,6 +11,8 @@ use eLife\Patterns\ViewModel\BackgroundImage;
 use eLife\Patterns\ViewModel\ContentHeaderNonArticle;
 use eLife\Patterns\ViewModel\Link;
 use eLife\Patterns\ViewModel\ListingTeasers;
+use eLife\Patterns\ViewModel\SectionListing;
+use eLife\Patterns\ViewModel\SectionListingLink;
 use eLife\Patterns\ViewModel\SeeMoreLink;
 use eLife\Patterns\ViewModel\Teaser;
 use Pagerfanta\Pagerfanta;
@@ -81,6 +83,17 @@ final class MagazineController extends Controller
         $events = $this->get('elife.api_sdk.events')
             ->forType('open')
             ->reverse();
+
+        $arguments['menuLink'] = new SectionListingLink('All sections', 'sections');
+
+        $arguments['menu'] = new SectionListing('sections', [
+            new Link('Editorials', $this->get('router')->generate('article-type', ['type' => 'editorial'])),
+            new Link('Insights', $this->get('router')->generate('article-type', ['type' => 'insight'])),
+            new Link('Feature articles', $this->get('router')->generate('article-type', ['type' => 'feature'])),
+            new Link('Podcast', $this->get('router')->generate('podcast')),
+            new Link('Collections', $this->get('router')->generate('collections')),
+            new Link('Community', $this->get('router')->generate('community')),
+        ], true);
 
         $arguments['events'] = $events
             ->slice(0, 3)

@@ -14,6 +14,8 @@ use eLife\Patterns\ViewModel\LeadPara;
 use eLife\Patterns\ViewModel\LeadParas;
 use eLife\Patterns\ViewModel\Link;
 use eLife\Patterns\ViewModel\ListingTeasers;
+use eLife\Patterns\ViewModel\SectionListing;
+use eLife\Patterns\ViewModel\SectionListingLink;
 use eLife\Patterns\ViewModel\SeeMoreLink;
 use eLife\Patterns\ViewModel\Teaser;
 use Pagerfanta\Pagerfanta;
@@ -78,7 +80,7 @@ final class HomeController extends Controller
 
         $arguments['leadParas'] = new LeadParas([new LeadPara('eLife is an open-access journal that publishes research in the life and biomedical sciences', 'strapline')]);
 
-        $arguments['subjectsLink'] = new AllSubjectsListLink('subjects');
+        $arguments['subjectsLink'] = new SectionListingLink('All research categories', 'subjects');
 
         $arguments['subjects'] = $this->get('elife.api_sdk.subjects')
             ->reverse()
@@ -87,7 +89,7 @@ final class HomeController extends Controller
                 return new Link($subject->getName(), $this->get('router')->generate('subject', ['id' => $subject->getId()]));
             })
             ->then(function (Sequence $links) {
-                return new AllSubjectsList('subjects', $links->toArray(), 'strapline');
+                return new SectionListing('subjects', $links->toArray(), false, 'strapline');
             })
             ->otherwise($this->softFailure('Failed to load subjects list'));
 

@@ -18,14 +18,11 @@
 
     <div class="wrapper u-pad-top">
 
-        <ul>
-            <li><a href="{{ path('article-type', {type: 'editorial'}) }}">Editorials</a></li>
-            <li><a href="{{ path('article-type', {type: 'insight'}) }}">Insights</a></li>
-            <li><a href="{{ path('article-type', {type: 'feature'}) }}">Feature articles</a></li>
-            <li><a href="{{ path('podcast') }}">Podcast</a></li>
-            <li><a href="{{ path('collections') }}">Collections</a></li>
-            <li><a href="{{ path('community') }}">Community</a></li>
-        </ul>
+        {{ render_pattern(menuLink) }}
+
+    </div>
+
+    <div class="wrapper u-pad-top">
 
         {% if events or elifeDigests %}
 
@@ -60,6 +57,12 @@
         </div>
 
         {% endif %}
+
+    </div>
+
+    <div class="wrapper">
+
+        {{ render_pattern(menu) }}
 
     </div>
 
