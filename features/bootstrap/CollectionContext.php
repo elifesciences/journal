@@ -154,7 +154,7 @@ final class CollectionContext extends Context
      */
     public function iLoadMoreCollections()
     {
-        $this->getSession()->getPage()->clickLink('More collections');
+        $this->getSession()->getPage()->clickLink('Load more');
     }
 
     /**
@@ -163,7 +163,7 @@ final class CollectionContext extends Context
     public function iShouldSeeTheMostRecentlyUpdatedCollectionsInTheLatestCollectionsList(int $number)
     {
         $this->spin(function () use ($number) {
-            $this->assertSession()->elementsCount('css', '.list-heading:contains("Latest collections") + .listing-list > .listing-list__item', $number);
+            $this->assertSession()->elementsCount('css', '.list-heading:contains("Latest") + .listing-list > .listing-list__item', $number);
 
             for ($i = $number; $i > 0; --$i) {
                 $nthChild = ($number - $i + 1);
@@ -171,7 +171,7 @@ final class CollectionContext extends Context
 
                 $this->assertSession()->elementContains(
                     'css',
-                    '.list-heading:contains("Latest collections") + .listing-list > .listing-list__item:nth-child('.$nthChild.')',
+                    '.list-heading:contains("Latest") + .listing-list > .listing-list__item:nth-child('.$nthChild.')',
                     'Collection '.$expectedNumber.' title'
                 );
             }
