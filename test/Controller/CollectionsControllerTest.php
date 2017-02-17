@@ -18,7 +18,7 @@ final class CollectionsControllerTest extends PageTestCase
         $crawler = $client->request('GET', $this->getUrl());
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
-        $this->assertSame('eLife collections', $crawler->filter('.content-header__title')->text());
+        $this->assertSame('Collections', $crawler->filter('.content-header__title')->text());
         $this->assertContains('No collections available.', $crawler->filter('main')->text());
     }
 

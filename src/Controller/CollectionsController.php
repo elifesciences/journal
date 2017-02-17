@@ -40,7 +40,7 @@ final class CollectionsController extends Controller
         );
 
         $arguments['listing'] = $arguments['paginator']
-            ->then($this->willConvertTo(ListingTeasers::class, ['type' => 'collections']));
+            ->then($this->willConvertTo(ListingTeasers::class, ['emptyText' => 'No collections available.']));
 
         if (1 === $page) {
             return $this->createFirstPage($arguments);
@@ -51,7 +51,7 @@ final class CollectionsController extends Controller
 
     private function createFirstPage(array $arguments) : Response
     {
-        $arguments['contentHeader'] = ContentHeaderNonArticle::basic('eLife collections');
+        $arguments['contentHeader'] = ContentHeaderNonArticle::basic($arguments['title']);
 
         return new Response($this->get('templating')->render('::collections.html.twig', $arguments));
     }
