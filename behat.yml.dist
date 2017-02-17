@@ -74,6 +74,11 @@ default:
                 tags: '@podcast'
             contexts:
               - PodcastContext
+        press-packs:
+            filters:
+                tags: '@press-packs'
+            contexts:
+              - PressPackageContext
         search:
             filters:
                 tags: '@search'
