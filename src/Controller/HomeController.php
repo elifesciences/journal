@@ -7,8 +7,6 @@ use eLife\ApiSdk\Model\Subject;
 use eLife\Journal\Helper\Callback;
 use eLife\Journal\Helper\Paginator;
 use eLife\Journal\Pagerfanta\SequenceAdapter;
-use eLife\Patterns\ViewModel\AllSubjectsList;
-use eLife\Patterns\ViewModel\AllSubjectsListLink;
 use eLife\Patterns\ViewModel\Carousel;
 use eLife\Patterns\ViewModel\LeadPara;
 use eLife\Patterns\ViewModel\LeadParas;
