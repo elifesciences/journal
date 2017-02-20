@@ -497,6 +497,22 @@ services:
         tags:
           - name: view_model.converter
 
+    elife.journal.view_model.converter.highlight.podcast_episode.teaser.secondary:
+        class: eLife\Journal\ViewModel\Converter\HighlightPodcastEpisodeSecondaryTeaserConverter
+        public: false
+        arguments:
+          - '@router'
+        tags:
+          - name: view_model.converter
+
+    elife.journal.view_model.converter.highlight.podcast_episode_chapter.teaser.secondary:
+        class: eLife\Journal\ViewModel\Converter\HighlightPodcastEpisodeChapterSecondaryTeaserConverter
+        public: false
+        arguments:
+          - '@router'
+        tags:
+          - name: view_model.converter
+
     elife.journal.view_model.converter.impact_statement.lead_paras:
         class: eLife\Journal\ViewModel\Converter\ImpactStatementLeadParasConverter
         public: false

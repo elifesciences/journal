@@ -2,11 +2,15 @@
 
 namespace eLife\Journal\Controller;
 
+use eLife\ApiSdk\Collection\PromiseSequence;
+use eLife\ApiSdk\Collection\Sequence;
+use eLife\Journal\Helper\Callback;
 use eLife\Journal\Helper\HasPages;
 use eLife\Journal\Helper\Paginator;
 use eLife\Patterns\ViewModel\BackgroundImage;
 use eLife\Patterns\ViewModel\ContentHeaderNonArticle;
 use eLife\Patterns\ViewModel\ListingTeasers;
+use eLife\Patterns\ViewModel\Teaser;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -52,6 +56,13 @@ final class CommunityController extends Controller
                 $this->get('puli.url_generator')->generateUrl('/elife/journal/images/banners/community-lo-res.jpg'),
                 $this->get('puli.url_generator')->generateUrl('/elife/journal/images/banners/community-hi-res.jpg')
             ));
+
+        $arguments['highlights'] = (new PromiseSequence($this->get('elife.api_sdk.highlights')
+            ->get('community')))
+            ->then(Callback::emptyOr(function (Sequence $result) {
+                return ListingTeasers::basic($result->map($this->willConvertTo(Teaser::class, ['variant' => 'secondary']))->toArray(), 'Highlights');
+            }))
+            ->otherwise($this->softFailure('Failed to load community highlights'));
 
         return new Response($this->get('templating')->render('::community.html.twig', $arguments));
     }
