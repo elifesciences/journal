@@ -130,6 +130,12 @@ magazine:
     defaults:
          _controller: AppBundle:Magazine:list
 
+press-pack:
+    path: /for-the-press/{id}/{slug}
+    defaults:
+         _controller: AppBundle:PressPacks:pressPack
+         slug: ''
+
 press-packs:
     path: /for-the-press
     defaults:

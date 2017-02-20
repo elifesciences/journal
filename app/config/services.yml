@@ -69,6 +69,10 @@ services:
         class: eLife\ApiSdk\Client\PodcastEpisodes
         factory: ['@elife.api_sdk', podcastEpisodes]
 
+    elife.api_sdk.press_packages:
+        class: eLife\ApiSdk\Client\PressPackages
+        factory: ['@elife.api_sdk', pressPackages]
+
     elife.api_sdk.search:
         class: eLife\ApiSdk\Client\Search
         factory: ['@elife.api_sdk', search]
@@ -560,6 +564,23 @@ services:
         public: false
         arguments:
           - '@router'
+        tags:
+          - name: view_model.converter
+
+    elife.journal.view_model.converter.press_package.header:
+        class: eLife\Journal\ViewModel\Converter\PressPackageContentHeaderConverter
+        public: false
+        arguments:
+          - '@router'
+        tags:
+          - name: view_model.converter
+
+    elife.journal.view_model.converter.press_package.teaser:
+        class: eLife\Journal\ViewModel\Converter\PressPackageTeaserConverter
+        public: false
+        arguments:
+          - '@router'
+          - '@slugify'
         tags:
           - name: view_model.converter
 
