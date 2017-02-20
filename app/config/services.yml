@@ -49,6 +49,10 @@ services:
         class: eLife\ApiSdk\Client\Events
         factory: ['@elife.api_sdk', events]
 
+    elife.api_sdk.highlights:
+        class: eLife\ApiSdk\Client\Highlights
+        factory: ['@elife.api_sdk', highlights]
+
     elife.api_sdk.interviews:
         class: eLife\ApiSdk\Client\Interviews
         factory: ['@elife.api_sdk', interviews]
@@ -438,6 +442,58 @@ services:
         public: false
         arguments:
           - '@elife.patterns.pattern_renderer'
+        tags:
+          - name: view_model.converter
+
+    elife.journal.view_model.converter.highlight.article.teaser.secondary:
+        class: eLife\Journal\ViewModel\Converter\HighlightArticleSecondaryTeaserConverter
+        public: false
+        arguments:
+          - '@router'
+        tags:
+          - name: view_model.converter
+
+    elife.journal.view_model.converter.highlight.blog_article.teaser.secondary:
+        class: eLife\Journal\ViewModel\Converter\HighlightBlogArticleSecondaryTeaserConverter
+        public: false
+        arguments:
+          - '@router'
+          - '@slugify'
+        tags:
+          - name: view_model.converter
+
+    elife.journal.view_model.converter.highlight.collection.teaser.secondary:
+        class: eLife\Journal\ViewModel\Converter\HighlightCollectionSecondaryTeaserConverter
+        public: false
+        arguments:
+          - '@router'
+          - '@slugify'
+        tags:
+          - name: view_model.converter
+
+    elife.journal.view_model.converter.highlight.event.teaser.secondary:
+        class: eLife\Journal\ViewModel\Converter\HighlightEventSecondaryTeaserConverter
+        public: false
+        arguments:
+          - '@router'
+          - '@slugify'
+        tags:
+          - name: view_model.converter
+
+    elife.journal.view_model.converter.highlight.labs_experiment.teaser.secondary:
+        class: eLife\Journal\ViewModel\Converter\HighlightLabsExperimentSecondaryTeaserConverter
+        public: false
+        arguments:
+          - '@router'
+        tags:
+          - name: view_model.converter
+
+    elife.journal.view_model.converter.highlight.interview.teaser.secondary:
+        class: eLife\Journal\ViewModel\Converter\HighlightInterviewSecondaryTeaserConverter
+        public: false
+        arguments:
+          - '@router'
+          - '@slugify'
         tags:
           - name: view_model.converter
 
