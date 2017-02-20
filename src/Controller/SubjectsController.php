@@ -2,7 +2,11 @@
 
 namespace eLife\Journal\Controller;
 
+use eLife\ApiSdk\Collection\PromiseSequence;
 use eLife\ApiSdk\Collection\Sequence;
+use eLife\ApiSdk\Model\Highlight;
+use eLife\ApiSdk\Model\PodcastEpisode;
+use eLife\ApiSdk\Model\PodcastEpisodeChapterModel;
 use eLife\ApiSdk\Model\Subject;
 use eLife\Journal\Helper\Callback;
 use eLife\Journal\Helper\Paginator;
@@ -64,6 +68,7 @@ final class SubjectsController extends Controller
 
         $arguments = $this->defaultPageArguments($subject);
 
+        $arguments['id'] = $id;
         $arguments['subject'] = $subject;
 
         $latestArticles = promise_for($this->get('elife.api_sdk.search')
@@ -114,6 +119,35 @@ final class SubjectsController extends Controller
 
         $arguments['lead_paras'] = $arguments['subject']
             ->then(Callback::methodEmptyOr('getImpactStatement', $this->willConvertTo(LeadParas::class)));
+
+        $podcastEpisode = $this->get('elife.api_sdk.search')
+            ->forType('podcast-episode')
+            ->forSubject($arguments['id'])
+            ->sortBy('date')
+            ->slice(0, 1)
+            ->otherwise($this->softFailure('Failed to load podcast episodes for '.$arguments['id']));
+
+        $highlights = (new PromiseSequence($this->get('elife.api_sdk.highlights')
+            ->get($arguments['id'])))
+            ->filter(function (Highlight $highlight) {
+                return false === $highlight->getItem() instanceof PodcastEpisode && false === $highlight->getItem() instanceof PodcastEpisodeChapterModel;
+            })
+            ->slice(0, 3)
+            ->otherwise($this->softFailure('Failed to load highlights for '.$arguments['id']));
+
+        $arguments['highlights'] = all(compact('podcastEpisode', 'highlights'))
+            ->then(function (array $parts) {
+                return array_map(
+                    $this->willConvertTo(Teaser::class, ['variant' => 'secondary']),
+                    array_merge(
+                        $parts['podcastEpisode'] instanceof Sequence ? $parts['podcastEpisode']->toArray() : [],
+                        $parts['highlights'] instanceof Sequence ? $parts['highlights']->toArray() : []
+                    )
+                );
+            })
+            ->then(Callback::emptyOr(function (array $result) {
+                return ListingTeasers::basic($result, 'Highlights');
+            }));
 
         return new Response($this->get('templating')->render('::subject.html.twig', $arguments));
     }

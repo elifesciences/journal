@@ -6,8 +6,19 @@ use GuzzleHttp\Psr7\Response;
 
 final class SubjectContext extends Context
 {
+    private $emptyArticles;
     private $numberOfSubjects;
     private $numberOfArticles;
+    private $numberOfHighlightedArticles;
+    private $numberOfPodcastEpisodes;
+
+    /**
+     * @BeforeScenario
+     */
+    public function resetEmptyArticles()
+    {
+        $this->emptyArticles = true;
+    }
 
     /**
      * @Given /^there are (\d+) subjects$/
@@ -71,23 +82,14 @@ final class SubjectContext extends Context
         }
     }
 
-    /**
-     * @Given /^there are (\d+) articles with the MSA \'([^\']*)\'$/
-     */
-    public function thereAreArticlesWithTheMSA(int $number, string $subject)
+    private function mockSubject(string $subject)
     {
-        $this->numberOfArticles = $number;
-
-        $articles = [];
-
-        $today = (new DateTimeImmutable())->setTime(0, 0, 0);
-
         $subjectId = $this->createSubjectId($subject);
 
         static::mockApiResponse(
             new Request(
                 'GET',
-                'http://api.elifesciences.org/subjects/'.$subjectId,
+                "http://api.elifesciences.org/subjects/$subjectId",
                 [
                     'Accept' => 'application/vnd.elife.subject+json; version=1',
                 ]
@@ -100,7 +102,7 @@ final class SubjectContext extends Context
                 json_encode([
                     'id' => $subjectId,
                     'name' => $subject,
-                    'impactStatement' => $subject.' impact statement.',
+                    'impactStatement' => "$subject impact statement.",
                     'image' => [
                         'banner' => [
                             'alt' => '',
@@ -128,6 +130,23 @@ final class SubjectContext extends Context
                 ])
             )
         );
+    }
+
+    /**
+     * @Given /^there are (\d+) articles with the MSA \'([^\']*)\'$/
+     */
+    public function thereAreArticlesWithTheMSA(int $number, string $subject)
+    {
+        $this->emptyArticles = false;
+        $this->numberOfArticles = $number;
+
+        $articles = [];
+
+        $today = (new DateTimeImmutable())->setTime(0, 0, 0);
+
+        $subjectId = $this->createSubjectId($subject);
+
+        $this->mockSubject($subject);
 
         for ($i = $number; $i > 0; --$i) {
             $articles[] = [
@@ -296,6 +315,180 @@ final class SubjectContext extends Context
     }
 
     /**
+     * @Given /^there are (\d+) podcast episodes with the MSA \'([^\']*)\'$/
+     */
+    public function thereArePodcastEpisodesWithTheMSA(int $number, string $subject)
+    {
+        $this->numberOfPodcastEpisodes = $number;
+
+        $episodes = [];
+
+        $today = (new DateTimeImmutable())->setTime(0, 0, 0);
+
+        $subjectId = $this->createSubjectId($subject);
+
+        $this->mockSubject($subject);
+
+        for ($i = $number; $i > 0; --$i) {
+            $episodes[] = [
+                'type' => 'podcast-episode',
+                'number' => $i,
+                'title' => "Episode $i title",
+                'impactStatement' => "Episode $i impact statement",
+                'published' => $today->format(ApiSdk::DATE_FORMAT),
+                'image' => [
+                    'banner' => [
+                        'alt' => '',
+                        'sizes' => [
+                            '2:1' => [
+                                '900' => 'https://placehold.it/900x450',
+                                '1800' => 'https://placehold.it/1800x900',
+                            ],
+                        ],
+                    ],
+                    'thumbnail' => [
+                        'alt' => '',
+                        'sizes' => [
+                            '16:9' => [
+                                '250' => 'https://placehold.it/250x141',
+                                '500' => 'https://placehold.it/500x281',
+                            ],
+                            '1:1' => [
+                                '70' => 'https://placehold.it/70x70',
+                                '140' => 'https://placehold.it/140x140',
+                            ],
+                        ],
+                    ],
+                ],
+                'sources' => [
+                    [
+                        'mediaType' => 'audio/mpeg',
+                        'uri' => $this->locatePath('/audio-file'),
+                    ],
+                ],
+                'subjects' => [
+                    [
+                        'id' => $subjectId,
+                        'name' => $subject,
+                    ],
+                ],
+            ];
+        }
+
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                "http://api.elifesciences.org/search?for=&page=1&per-page=1&sort=date&order=desc&subject[]=$subjectId&type[]=podcast-episode&use-date=default",
+                ['Accept' => 'application/vnd.elife.search+json; version=1']
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.search+json; version=1'],
+                json_encode([
+                    'total' => $number,
+                    'items' => [$episodes[0]],
+                    'subjects' => [
+                        [
+                            'id' => $subjectId,
+                            'name' => $subject,
+                            'results' => count($episodes),
+                        ],
+                    ],
+                    'types' => [
+                        'correction' => 0,
+                        'editorial' => 0,
+                        'feature' => 0,
+                        'insight' => 0,
+                        'research-advance' => 0,
+                        'research-article' => 0,
+                        'research-exchange' => 0,
+                        'retraction' => 0,
+                        'registered-report' => 0,
+                        'replication-study' => 0,
+                        'short-report' => 0,
+                        'tools-resources' => 0,
+                        'blog-article' => 0,
+                        'collection' => 0,
+                        'interview' => 0,
+                        'labs-experiment' => 0,
+                        'podcast-episode' => $this->numberOfPodcastEpisodes,
+                    ],
+                ])
+            )
+        );
+    }
+
+    /**
+     * @Given /^there are (\d+) highlighted articles with the MSA \'([^\']*)\'$/
+     */
+    public function thereAreHighlightedArticlesWithTheMSA(int $number, string $subject)
+    {
+        $this->numberOfHighlightedArticles = $number;
+
+        $articles = [];
+
+        $today = (new DateTimeImmutable())->setTime(0, 0, 0);
+
+        $subjectId = $this->createSubjectId($subject);
+
+        $this->mockSubject($subject);
+
+        for ($i = $number; $i > 0; --$i) {
+            $articles[] = [
+                'title' => "Collection $i highlight title",
+                'item' => [
+                    'type' => 'collection',
+                    'id' => "$i",
+                    'title' => 'Collection '.$i.' title',
+                    'published' => $today->format(ApiSdk::DATE_FORMAT),
+                    'image' => [
+                        'thumbnail' => [
+                            'alt' => '',
+                            'sizes' => [
+                                '16:9' => [
+                                    250 => 'https://placehold.it/250x141',
+                                    500 => 'https://placehold.it/500x281',
+                                ],
+                                '1:1' => [
+                                    70 => 'https://placehold.it/70x70',
+                                    140 => 'https://placehold.it/140x140',
+                                ],
+                            ],
+                        ],
+                    ],
+                    'subjects' => [
+                        [
+                            'id' => $subjectId,
+                            'name' => $subject,
+                        ],
+                    ],
+                    'selectedCurator' => [
+                        'id' => "$i",
+                        'type' => 'senior-editor',
+                        'name' => [
+                            'preferred' => 'Person '.$i,
+                            'index' => $i.', Person',
+                        ],
+                    ],
+                ],
+            ];
+        }
+
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                "http://api.elifesciences.org/highlights/$subjectId",
+                ['Accept' => 'application/vnd.elife.highlights+json; version=1']
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.highlights+json; version=1'],
+                json_encode($articles)
+            )
+        );
+    }
+
+    /**
      * @When /^I go the Subjects page$/
      */
     public function iGoTheSubjectsPage()
@@ -308,7 +501,53 @@ final class SubjectContext extends Context
      */
     public function iGoTheMSAPage(string $subject)
     {
-        $this->visitPath('/subjects/'.$this->createSubjectId($subject));
+        $subjectId = $this->createSubjectId($subject);
+
+        if ($this->emptyArticles) {
+            $this->mockApiResponse(
+                new Request(
+                    'GET',
+                    "http://api.elifesciences.org/search?for=&page=1&per-page=6&sort=date&order=desc&subject[]=$subjectId&type[]=research-article&type[]=research-advance&type[]=research-exchange&type[]=short-report&type[]=tools-resources&type[]=replication-study&type[]=editorial&type[]=insight&type[]=feature&type[]=collection&use-date=default",
+                    ['Accept' => 'application/vnd.elife.search+json; version=1']
+                ),
+                new Response(
+                    200,
+                    ['Content-Type' => 'application/vnd.elife.search+json; version=1'],
+                    json_encode([
+                        'total' => 0,
+                        'items' => [],
+                        'subjects' => [
+                            [
+                                'id' => $subjectId,
+                                'name' => $subject,
+                                'results' => 0,
+                            ],
+                        ],
+                        'types' => [
+                            'correction' => 0,
+                            'editorial' => 0,
+                            'feature' => 0,
+                            'insight' => 0,
+                            'research-advance' => 0,
+                            'research-article' => 0,
+                            'research-exchange' => 0,
+                            'retraction' => 0,
+                            'registered-report' => 0,
+                            'replication-study' => 0,
+                            'short-report' => 0,
+                            'tools-resources' => 0,
+                            'blog-article' => 0,
+                            'collection' => 0,
+                            'interview' => 0,
+                            'labs-experiment' => 0,
+                            'podcast-episode' => 0,
+                        ],
+                    ])
+                )
+            );
+        }
+
+        $this->visitPath("/subjects/$subjectId");
     }
 
     /**
@@ -367,5 +606,48 @@ final class SubjectContext extends Context
     private function createSubjectId(string $subjectName) : string
     {
         return md5($subjectName);
+    }
+
+    /**
+     * @Then /^I should see the latest podcast episode with the MSA \'([^\']*)\' in the 'Highlights' list$/
+     */
+    public function iShouldSeeTheLatestPodcastEpisodeWithTheMSAInTheList(string $subject)
+    {
+        $expectedNumber = $this->numberOfPodcastEpisodes;
+
+        $this->assertSession()->elementContains(
+            'css',
+            '.list-heading:contains("Highlights") + .listing-list > .listing-list__item:nth-child(1)',
+            "Episode $expectedNumber title"
+        );
+        $this->assertSession()->elementContains(
+            'css',
+            '.list-heading:contains("Highlights") + .listing-list > .listing-list__item:nth-child(1)',
+            $subject
+        );
+    }
+
+    /**
+     * @Given /^I should see the latest (\d+) highlighted articles with the MSA \'([^\']*)\' in the 'Highlights' list$/
+     */
+    public function iShouldSeeTheLatestHighlightedArticlesWithTheMSAInTheList(int $number, string $subject)
+    {
+        $this->assertSession()->elementsCount('css', '.list-heading:contains("Highlights") + .listing-list > .listing-list__item', $number + 1);
+
+        for ($i = $number; $i > 0; --$i) {
+            $nthChild = ($number - $i + 2);
+            $expectedNumber = ($this->numberOfHighlightedArticles - $nthChild + 2);
+
+            $this->assertSession()->elementContains(
+                'css',
+                '.list-heading:contains("Highlights") + .listing-list > .listing-list__item:nth-child('.$nthChild.')',
+                "Collection $expectedNumber highlight title"
+            );
+            $this->assertSession()->elementContains(
+                'css',
+                '.list-heading:contains("Highlights") + .listing-list > .listing-list__item:nth-child('.$nthChild.')',
+                $subject
+            );
+        }
     }
 }
