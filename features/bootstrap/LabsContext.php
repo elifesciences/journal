@@ -125,6 +125,8 @@ final class LabsContext extends Context
      */
     public function iAmOnALabsExperimentPage()
     {
+        $this->thereAreLabsExperiments(1);
+
         $this->visitPath('/labs/experiment1');
     }
 
@@ -142,6 +144,24 @@ final class LabsContext extends Context
     public function iLoadMoreExperiments()
     {
         $this->getSession()->getPage()->clickLink('More experiments');
+    }
+
+    /**
+     * @When /^I complete the feedback form$/
+     */
+    public function iCompleteTheFeedbackForm()
+    {
+        $this->readyToRecordEmails();
+
+        $page = $this->getSession()->getPage();
+
+        $page->fillField('labs_experiment_feedback[name]', 'Foo Bar');
+        $page->fillField('labs_experiment_feedback[email]', 'foo@example.com');
+        $page->fillField('labs_experiment_feedback[comment]', "Lorem ipsum dolor sit amet, consectetur adipiscing elit.\n\nVivamus rhoncus turpis quam, sit amet finibus elit pharetra eget.");
+
+        $page->pressButton('Submit');
+
+        $this->recordEmails();
     }
 
     /**
@@ -164,5 +184,48 @@ final class LabsContext extends Context
                 );
             }
         });
+    }
+
+    /**
+     * @Then /^I should see a 'thank you' message$/
+     */
+    public function iShouldSeeAThankYouMessage()
+    {
+        $this->assertSession()
+            ->elementContains('css', '.info-bar--success', 'Thanks Foo Bar, we have received your comment.');
+    }
+
+    /**
+     * @Given /^I should be sent a 'thank you' email$/
+     */
+    public function iShouldBeSentAThankYouEmail()
+    {
+        $this->assertEmailSent(['do_not_reply@elifesciences.org' => null], ['foo@example.com' => 'Foo Bar'],
+            'Comment on eLife Labs', 'Thanks for your comment. We will respond as soon as we can.
+
+eLife Sciences Publications, Ltd is a limited liability non-profit non-stock corporation incorporated in the State of Delaware, USA, with company number 5030732, and is registered in the UK with company number FC030576 and branch number BR015634 at the address First Floor, 24 Hills Road, Cambridge CB2 1JP.');
+    }
+
+    /**
+     * @Then /^the completed form should be sent to labs@elifesciences\.org$/
+     */
+    public function theCompletedFormShouldBeSentToLabsElifesciencesOrg()
+    {
+        $this->assertEmailSent(['do_not_reply@elifesciences.org' => null], ['labs@elifesciences.org' => null],
+            'Comment submitted', 'A comment has been submitted on '.$this->locatePath('/labs/experiment1').'
+
+Name
+----
+Foo Bar
+
+Email
+-----
+foo@example.com
+
+Comment
+-------
+Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+
+Vivamus rhoncus turpis quam, sit amet finibus elit pharetra eget.');
     }
 }

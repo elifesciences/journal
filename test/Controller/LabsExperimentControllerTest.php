@@ -24,6 +24,43 @@ final class LabsExperimentControllerTest extends PageTestCase
     /**
      * @test
      */
+    public function it_requires_all_the_fields_to_be_completed()
+    {
+        $client = static::createClient();
+
+        $crawler = $client->request('GET', $this->getUrl());
+
+        $crawler = $client->submit($crawler->selectButton('Submit')->form());
+
+        $this->assertCount(3, $crawler->filter('.info-bar'));
+        $this->assertSame('Please provide your name.', trim($crawler->filter('.info-bar')->eq(0)->text()));
+        $this->assertSame('Please provide your email address.', trim($crawler->filter('.info-bar')->eq(1)->text()));
+        $this->assertSame('Please let us know your comment.', trim($crawler->filter('.info-bar')->eq(2)->text()));
+    }
+
+    /**
+     * @test
+     */
+    public function it_requires_a_valid_email()
+    {
+        $client = static::createClient();
+
+        $crawler = $client->request('GET', $this->getUrl());
+
+        $form = $crawler->selectButton('Submit')->form();
+        $form['labs_experiment_feedback[name]'] = 'My name';
+        $form['labs_experiment_feedback[email]'] = 'foo';
+        $form['labs_experiment_feedback[comment]'] = 'My question';
+
+        $crawler = $client->submit($form);
+
+        $this->assertCount(1, $crawler->filter('.info-bar'));
+        $this->assertSame('Please provide a valid email address.', trim($crawler->filter('.info-bar')->text()));
+    }
+
+    /**
+     * @test
+     */
     public function it_displays_a_404_if_the_experiment_is_not_found()
     {
         $client = static::createClient();
