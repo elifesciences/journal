@@ -54,6 +54,13 @@ abstract class Controller implements ContainerAwareInterface
         return $this->get('elife.patterns.pattern_renderer')->render(...$viewModels);
     }
 
+    final protected function willRender() : callable
+    {
+        return function (ViewModel $viewModel) {
+            return $this->render($viewModel);
+        };
+    }
+
     final protected function checkSlug(Request $request, callable $toSlugify) : callable
     {
         return function ($object) use ($request, $toSlugify) {
