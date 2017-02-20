@@ -2,12 +2,6 @@
 
 {% block title %}{{ title }}{% endblock %}
 
-{% block info_bar %}
-
-    {{ info_bar('This page is incomplete.') }}
-
-{% endblock %}
-
 {% block body %}
 
     {{ render_pattern(contentHeader) }}
@@ -16,11 +10,21 @@
 
         <div class="grid">
 
-            <div class="grid__item large--eight-twelfths push--large--two-twelfths">
+            <div class="grid__item large--eight-twelfths {% if not highlights %}push--large--two-twelfths{% endif %}">
 
                 {{ render_pattern(listing) }}
 
             </div>
+
+            {% if highlights %}
+
+                <div class="grid__item large--four-twelfths">
+
+                    {{ render_pattern(highlights) }}
+
+                </div>
+
+            {% endif %}
 
         </div>
 
