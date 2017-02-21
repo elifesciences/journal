@@ -2,14 +2,34 @@
 
 {% block title %}{{ package.title }} | For the press{% endblock %}
 
-{% block info_bar %}
-
-    {{ info_bar('This page is incomplete.') }}
-
-{% endblock %}
-
 {% block body %}
 
     {{ render_pattern(contentHeader) }}
+
+    <div class="wrapper">
+
+        {% if leadParas %}
+            {{ render_pattern(leadParas) }}
+        {% endif %}
+
+        <div class="grid">
+
+            <div class="grid__item medium--nine-twelfths large--seven-twelfths push--large--two-twelfths u-pad-top-lg">
+
+                {% for block in blocks %}
+                    {{ render_pattern(block) }}
+                {% endfor %}
+
+            </div>
+
+            <div class="grid__item medium--three-twelfths push--large--two-twelfths u-pad-top-lg">
+
+                {{ render_pattern(relatedContent) }}
+
+            </div>
+
+        </div>
+
+    </div>
 
 {% endblock %}

@@ -573,6 +573,12 @@ services:
         tags:
           - name: view_model.converter
 
+    elife.journal.view_model.converter.media_contact.paragraph:
+        class: eLife\Journal\ViewModel\Converter\MediaContactParagraphConverter
+        public: false
+        tags:
+          - name: view_model.converter
+
     elife.journal.view_model.converter.medium_article.teaser.secondary:
         class: eLife\Journal\ViewModel\Converter\MediumArticleSecondaryTeaserConverter
         public: false
