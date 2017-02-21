@@ -17,8 +17,9 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
-use Throwable;
+use function GuzzleHttp\Promise\exception_for;
 use function GuzzleHttp\Promise\promise_for;
+use function GuzzleHttp\Promise\rejection_for;
 
 abstract class Controller implements ContainerAwareInterface
 {
@@ -81,22 +82,24 @@ abstract class Controller implements ContainerAwareInterface
 
     final protected function mightNotExist() : callable
     {
-        return function (Throwable $e) {
-            if ($e instanceof BadResponse) {
-                switch ($e->getResponse()->getStatusCode()) {
+        return function ($reason) {
+            if ($reason instanceof BadResponse) {
+                switch ($reason->getResponse()->getStatusCode()) {
                     case Response::HTTP_GONE:
                     case Response::HTTP_NOT_FOUND:
-                        throw new HttpException($e->getResponse()->getStatusCode(), $e->getMessage(), $e);
+                        throw new HttpException($reason->getResponse()->getStatusCode(), $reason->getMessage(), $reason);
                 }
             }
 
-            throw $e;
+            return rejection_for($reason);
         };
     }
 
     final protected function softFailure(string $message = null) : callable
     {
-        return function (Throwable $e) use ($message) {
+        return function ($reason) use ($message) {
+            $e = exception_for($reason);
+
             if (false === $e instanceof HttpException) {
                 $this->get('logger')->error($message ?? $e->getMessage(), ['exception' => $e]);
             }

@@ -2,15 +2,15 @@
 
 namespace eLife\Journal\Exception;
 
-use Exception;
 use Symfony\Component\HttpFoundation\Response;
+use Throwable;
 use UnexpectedValueException;
 
 class EarlyResponse extends UnexpectedValueException
 {
     private $response;
 
-    public function __construct(Response $response, Exception $previous = null)
+    public function __construct(Response $response, Throwable $previous = null)
     {
         parent::__construct('Early response', 0, $previous);
 
