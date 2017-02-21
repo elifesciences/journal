@@ -49,7 +49,7 @@ final class InsideElifeController extends Controller
             });
 
         $arguments['listing'] = $arguments['paginator']
-            ->then($this->willConvertTo(ListingTeasers::class, ['heading' => 'Latest', 'type' => 'articles']));
+            ->then($this->willConvertTo(ListingTeasers::class, ['heading' => 'Latest', 'emptyText' => 'No articles available.']));
 
         if (1 === $page) {
             return $this->createFirstPage($arguments);
@@ -60,7 +60,7 @@ final class InsideElifeController extends Controller
 
     private function createFirstPage(array $arguments) : Response
     {
-        $arguments['contentHeader'] = ContentHeaderNonArticle::basic('Inside eLife');
+        $arguments['contentHeader'] = ContentHeaderNonArticle::basic($arguments['title']);
 
         return new Response($this->get('templating')->render('::inside-elife.html.twig', $arguments));
     }
