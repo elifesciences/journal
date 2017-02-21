@@ -793,12 +793,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-sdk-php.git",
-                "reference": "f609eed74264b986cbf40bfcae0d97e6a847e35c"
+                "reference": "30afba7668b4f421fd09a603b6e7e72aa0dcef07"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/f609eed74264b986cbf40bfcae0d97e6a847e35c",
-                "reference": "f609eed74264b986cbf40bfcae0d97e6a847e35c",
+                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/30afba7668b4f421fd09a603b6e7e72aa0dcef07",
+                "reference": "30afba7668b4f421fd09a603b6e7e72aa0dcef07",
                 "shasum": ""
             },
             "require": {
@@ -834,7 +834,7 @@
                 "MIT"
             ],
             "description": "eLife Sciences API SDK",
-            "time": "2017-02-20 18:13:05"
+            "time": "2017-02-21 13:04:31"
         },
         {
             "name": "elife/patterns",
