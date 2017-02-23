@@ -3,18 +3,23 @@
 namespace eLife\Journal\ViewModel\Converter;
 
 use eLife\ApiSdk\Model\PodcastEpisode;
+use eLife\Journal\Helper\CreatesDownloadUri;
 use eLife\Patterns\ViewModel;
+use Symfony\Component\HttpKernel\UriSigner;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 final class PodcastEpisodeContentHeaderConverter implements ViewModelConverter
 {
     use CreatesDate;
+    use CreatesDownloadUri;
 
     private $urlGenerator;
+    private $uriSigner;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator)
+    public function __construct(UrlGeneratorInterface $urlGenerator, UriSigner $uriSigner)
     {
         $this->urlGenerator = $urlGenerator;
+        $this->uriSigner = $uriSigner;
     }
 
     /**
@@ -28,12 +33,22 @@ final class PodcastEpisodeContentHeaderConverter implements ViewModelConverter
                 $object->getBanner()->getSize('2:1')->getImage(900),
                 $object->getBanner()->getSize('2:1')->getImage(1800)
             ),
-            $object->getSources()[0]->getUri()
+            $this->createDownloadUri($object->getSources()[0]->getUri())
         );
     }
 
     public function supports($object, string $viewModel = null, array $context = []) : bool
     {
         return $object instanceof PodcastEpisode && ViewModel\ContentHeaderNonArticle::class === $viewModel;
+    }
+
+    protected function getUrlGenerator() : UrlGeneratorInterface
+    {
+        return $this->urlGenerator;
+    }
+
+    protected function getUriSigner() : UriSigner
+    {
+        return $this->uriSigner;
     }
 }

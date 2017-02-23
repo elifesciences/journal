@@ -108,6 +108,12 @@ contact:
     defaults:
          _controller: AppBundle:Contact:contact
 
+download:
+    path: /download/{uri}/{name}
+    defaults:
+         _controller: AppBundle:Download:file
+         name: ''
+
 event:
     path: /events/{id}/{slug}
     defaults:

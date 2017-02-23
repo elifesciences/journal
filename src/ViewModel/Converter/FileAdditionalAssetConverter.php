@@ -4,21 +4,29 @@ namespace eLife\Journal\ViewModel\Converter;
 
 use eLife\ApiSdk\Model\Block;
 use eLife\ApiSdk\Model\File;
+use eLife\Journal\Helper\CreatesDownloadUri;
 use eLife\Journal\Helper\HasPatternRenderer;
 use eLife\Patterns\PatternRenderer;
 use eLife\Patterns\ViewModel;
+use Symfony\Component\HttpKernel\UriSigner;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 final class FileAdditionalAssetConverter implements ViewModelConverter
 {
+    use CreatesDownloadUri;
     use HasPatternRenderer;
 
     private $viewModelConverter;
     private $patternRenderer;
+    private $urlGenerator;
+    private $uriSigner;
 
-    public function __construct(ViewModelConverter $viewModelConverter, PatternRenderer $patternRenderer)
+    public function __construct(ViewModelConverter $viewModelConverter, PatternRenderer $patternRenderer, UrlGeneratorInterface $urlGenerator, UriSigner $uriSigner)
     {
         $this->viewModelConverter = $viewModelConverter;
         $this->patternRenderer = $patternRenderer;
+        $this->urlGenerator = $urlGenerator;
+        $this->uriSigner = $uriSigner;
     }
 
     /**
@@ -37,7 +45,7 @@ final class FileAdditionalAssetConverter implements ViewModelConverter
         );
 
         $download = ViewModel\DownloadLink::fromLink(
-            new ViewModel\Link('Download '.$object->getFilename(), $object->getUri()),
+            new ViewModel\Link('Download '.$object->getFilename(), $this->createDownloadUri($object->getUri(), $object->getFilename())),
             $object->getFilename()
         );
 
@@ -56,5 +64,15 @@ final class FileAdditionalAssetConverter implements ViewModelConverter
     protected function getPatternRenderer() : PatternRenderer
     {
         return $this->patternRenderer;
+    }
+
+    protected function getUrlGenerator() : UrlGeneratorInterface
+    {
+        return $this->urlGenerator;
+    }
+
+    protected function getUriSigner() : UriSigner
+    {
+        return $this->uriSigner;
     }
 }

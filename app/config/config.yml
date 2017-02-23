@@ -15,6 +15,9 @@ csa_guzzle:
                 base_uri: '%api_url%'
                 headers:
                     Authorization: '%api_key%'
+        file_download:
+            config:
+                http_errors: false
 
 framework:
     assets: ~

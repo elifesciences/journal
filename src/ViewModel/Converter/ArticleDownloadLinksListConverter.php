@@ -4,17 +4,23 @@ namespace eLife\Journal\ViewModel\Converter;
 
 use eLife\ApiSdk\Model\ArticleVersion;
 use eLife\ApiSdk\Model\ArticleVoR;
+use eLife\Journal\Helper\CreatesDownloadUri;
 use eLife\Patterns\ViewModel;
+use Symfony\Component\HttpKernel\UriSigner;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use function eLife\Patterns\mixed_visibility_text;
 
 final class ArticleDownloadLinksListConverter implements ViewModelConverter
 {
-    private $urlGenerator;
+    use CreatesDownloadUri;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator)
+    private $urlGenerator;
+    private $uriSigner;
+
+    public function __construct(UrlGeneratorInterface $urlGenerator, UriSigner $uriSigner)
     {
         $this->urlGenerator = $urlGenerator;
+        $this->uriSigner = $uriSigner;
     }
 
     /**
@@ -25,10 +31,10 @@ final class ArticleDownloadLinksListConverter implements ViewModelConverter
         $groups = [];
 
         if ($object->getPdf()) {
-            $items = [new ViewModel\Link('Article PDF', $object->getPdf())];
+            $items = [new ViewModel\Link('Article PDF', $this->createDownloadUri($object->getPdf()))];
 
             if ($object instanceof ArticleVor && $object->getFiguresPdf()) {
-                $items[] = new ViewModel\Link('Figures PDF', $object->getFiguresPdf());
+                $items[] = new ViewModel\Link('Figures PDF', $this->createDownloadUri($object->getFiguresPdf()));
             }
 
             $groups[mixed_visibility_text('', 'Downloads', '(link to download the article as PDF)')] = $items;
@@ -56,5 +62,15 @@ final class ArticleDownloadLinksListConverter implements ViewModelConverter
     public function supports($object, string $viewModel = null, array $context = []) : bool
     {
         return $object instanceof ArticleVersion && ViewModel\ArticleDownloadLinksList::class === $viewModel;
+    }
+
+    protected function getUrlGenerator() : UrlGeneratorInterface
+    {
+        return $this->urlGenerator;
+    }
+
+    protected function getUriSigner() : UriSigner
+    {
+        return $this->uriSigner;
     }
 }

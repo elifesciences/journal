@@ -4,22 +4,30 @@ namespace eLife\Journal\ViewModel\Converter\Block;
 
 use eLife\ApiSdk\Model\Block;
 use eLife\ApiSdk\Model\File;
+use eLife\Journal\Helper\CreatesDownloadUri;
 use eLife\Journal\ViewModel\Converter\ViewModelConverter;
 use eLife\Patterns\PatternRenderer;
 use eLife\Patterns\ViewModel;
 use eLife\Patterns\ViewModel\AssetViewerInline;
+use Symfony\Component\HttpKernel\UriSigner;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 final class CaptionedVideoConverter implements ViewModelConverter
 {
     use CreatesCaptionedAsset;
+    use CreatesDownloadUri;
 
     private $viewModelConverter;
     private $patternRenderer;
+    private $urlGenerator;
+    private $uriSigner;
 
-    public function __construct(ViewModelConverter $viewModelConverter, PatternRenderer $patternRenderer)
+    public function __construct(ViewModelConverter $viewModelConverter, PatternRenderer $patternRenderer, UrlGeneratorInterface $urlGenerator, UriSigner $uriSigner)
     {
         $this->viewModelConverter = $viewModelConverter;
         $this->patternRenderer = $patternRenderer;
+        $this->urlGenerator = $urlGenerator;
+        $this->uriSigner = $uriSigner;
     }
 
     /**
@@ -34,7 +42,7 @@ final class CaptionedVideoConverter implements ViewModelConverter
             }, $object->getSources())
         );
 
-        $asset = $this->createCaptionedAsset($asset, $object, $object->getSources()[0]->getUri());
+        $asset = $this->createCaptionedAsset($asset, $object, $this->createDownloadUri($object->getSources()[0]->getUri()));
 
         if (empty($object->getLabel())) {
             return $asset;
@@ -64,5 +72,15 @@ final class CaptionedVideoConverter implements ViewModelConverter
     protected function getViewModelConverter() : ViewModelConverter
     {
         return $this->viewModelConverter;
+    }
+
+    protected function getUrlGenerator() : UrlGeneratorInterface
+    {
+        return $this->urlGenerator;
+    }
+
+    protected function getUriSigner() : UriSigner
+    {
+        return $this->uriSigner;
     }
 }
