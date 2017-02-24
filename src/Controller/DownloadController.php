@@ -33,7 +33,6 @@ final class DownloadController extends Controller
                         if (ob_get_length()) {
                             ob_end_clean();
                         }
-                        $stream->rewind();
                         while (!$stream->eof()) {
                             echo $stream->read(1024);
                             flush();

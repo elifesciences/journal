@@ -18,6 +18,7 @@ csa_guzzle:
         file_download:
             config:
                 http_errors: false
+                stream: true
 
 framework:
     assets: ~
