@@ -40,13 +40,13 @@ final class DownloadController extends Controller
                         $stream->close();
                     },
                     $fileResponse->getStatusCode(),
-                    [
+                    array_filter([
                         'Cache-Control' => $fileResponse->getHeaderLine('Cache-Control'),
                         'Content-Length' => $fileResponse->getHeaderLine('Content-Length'),
                         'Content-Type' => $fileResponse->getHeaderLine('Content-Type'),
                         'ETag' => $fileResponse->getHeaderLine('ETag'),
                         'Last-Modified' => $fileResponse->getHeaderLine('Last-Modified'),
-                    ]
+                    ])
                 );
 
                 if (!empty($name)) {
