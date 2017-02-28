@@ -24,7 +24,7 @@ final class DownloadControllerTest extends WebTestCase
         $this->mockApiResponse(
             new Request(
                 'GET',
-                'http://www.example.com/test.txt',
+                'http://www.example.com/test.mp3',
                 [
                     'Accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
                     'Referer' => 'http://www.example.com/',
@@ -36,13 +36,13 @@ final class DownloadControllerTest extends WebTestCase
             ),
             new Response(
                 200,
-                ['Content-Type' => 'text/plain'],
-                'test'
+                ['Content-Type' => 'audio/mp3'],
+                fopen($mp3 = __DIR__.'/../../app/Resources/tests/blank.mp3', 'r')
             )
         );
 
         ob_start();
-        $client->request('GET', $this->createDownloadUri('http://www.example.com/test.txt'), [], [], ['HTTP_REFERER' => 'http://www.example.com/']);
+        $client->request('GET', $this->createDownloadUri('http://www.example.com/test.mp3'), [], [], ['HTTP_REFERER' => 'http://www.example.com/']);
         $content = ob_get_clean();
 
         $response = $client->getResponse();
@@ -51,10 +51,10 @@ final class DownloadControllerTest extends WebTestCase
         $this->assertSame(200, $response->getStatusCode());
         $this->assertSame([
             'cache-control' => ['no-cache'],
-            'content-type' => ['text/plain; charset=UTF-8'],
+            'content-type' => ['audio/mp3'],
             'content-disposition' => ['attachment'],
         ], $response->headers->all());
-        $this->assertSame('test', $content);
+        $this->assertSame(file_get_contents($mp3), $content);
     }
 
     /**
