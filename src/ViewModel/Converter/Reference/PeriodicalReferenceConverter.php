@@ -16,7 +16,7 @@ final class PeriodicalReferenceConverter implements ViewModelConverter
      */
     public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
-        $periodical = '<i>'.implode(', ', $object->getPeriodical()->getName()).'</i>';
+        $periodical = '<i>'.$object->getPeriodical().'</i>';
         if ($object->getVolume()) {
             $periodical .= ' <b>'.$object->getVolume().'</b>:';
             if ($object->getPages() instanceof ReferencePageRange) {
