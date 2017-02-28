@@ -23,7 +23,15 @@ final class DownloadControllerTest extends WebTestCase
         $this->mockApiResponse(
             new Request(
                 'GET',
-                'http://www.example.com/test.txt'
+                'http://www.example.com/test.txt',
+                [
+                    'Accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+                    'Referer' => 'http://www.example.com/',
+                    'X-Forwarded-For' => '127.0.0.1',
+                    'X-Forwarded-Host' => 'localhost',
+                    'X-Forwarded-Port' => '80',
+                    'X-Forwarded-Proto' => 'http',
+                ]
             ),
             new Response(
                 200,
@@ -33,7 +41,7 @@ final class DownloadControllerTest extends WebTestCase
         );
 
         ob_start();
-        $client->request('GET', $this->createDownloadUri('http://www.example.com/test.txt'));
+        $client->request('GET', $this->createDownloadUri('http://www.example.com/test.txt'), [], [], ['HTTP_REFERER' => 'http://www.example.com/']);
         $content = ob_get_clean();
 
         $response = $client->getResponse();
@@ -58,7 +66,14 @@ final class DownloadControllerTest extends WebTestCase
         $this->mockApiResponse(
             new Request(
                 'GET',
-                'http://www.example.com/test.txt'
+                'http://www.example.com/test.txt',
+                [
+                    'Accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+                    'X-Forwarded-For' => '127.0.0.1',
+                    'X-Forwarded-Host' => 'localhost',
+                    'X-Forwarded-Port' => '80',
+                    'X-Forwarded-Proto' => 'http',
+                ]
             ),
             new Response(
                 200,
@@ -93,7 +108,14 @@ final class DownloadControllerTest extends WebTestCase
         $this->mockApiResponse(
             new Request(
                 'GET',
-                'http://www.example.com/test.txt'
+                'http://www.example.com/test.txt',
+                [
+                    'Accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+                    'X-Forwarded-For' => '127.0.0.1',
+                    'X-Forwarded-Host' => 'localhost',
+                    'X-Forwarded-Port' => '80',
+                    'X-Forwarded-Proto' => 'http',
+                ]
             ),
             new Response(
                 200,
@@ -101,8 +123,11 @@ final class DownloadControllerTest extends WebTestCase
                     'Cache-Control' => 'public, max-age=100',
                     'Content-Length' => 4,
                     'Content-Type' => 'text/plain',
+                    'Date' => 'Wed, 21 Oct 2015 07:28:00 GMT',
                     'ETag' => '1234567890',
+                    'Expires' => 'Wed, 21 Oct 2015 07:28:00 GMT',
                     'Last-Modified' => 'Wed, 21 Oct 2015 07:28:00 GMT',
+                    'Vary' => 'Accept',
                 ],
                 'test'
             )
@@ -120,8 +145,11 @@ final class DownloadControllerTest extends WebTestCase
             'cache-control' => ['max-age=100, public'],
             'content-length' => ['4'],
             'content-type' => ['text/plain; charset=UTF-8'],
+            'date' => ['Wed, 21 Oct 2015 07:28:00 GMT'],
             'etag' => ['1234567890'],
+            'expires' => ['Wed, 21 Oct 2015 07:28:00 GMT'],
             'last-modified' => ['Wed, 21 Oct 2015 07:28:00 GMT'],
+            'vary' => ['Accept'],
             'content-disposition' => ['attachment'],
         ], $response->headers->all());
         $this->assertSame('test', $content);
@@ -138,7 +166,14 @@ final class DownloadControllerTest extends WebTestCase
         $this->mockApiResponse(
             new Request(
                 'GET',
-                'http://www.example.com/test.txt'
+                'http://www.example.com/test.txt',
+                [
+                    'Accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+                    'X-Forwarded-For' => '127.0.0.1',
+                    'X-Forwarded-Host' => 'localhost',
+                    'X-Forwarded-Port' => '80',
+                    'X-Forwarded-Proto' => 'http',
+                ]
             ),
             new Response($fileStatusCode)
         );

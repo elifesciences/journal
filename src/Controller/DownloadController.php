@@ -23,7 +23,19 @@ final class DownloadController extends Controller
         }
 
         /** @var ResponseInterface $fileResponse */
-        $fileResponse = $this->get('csa_guzzle.client.file_download')->request('GET', $link->getUri());
+        $fileResponse = $this->get('csa_guzzle.client.file_download')->request('GET', $link->getUri(), [
+            'headers' => array_filter([
+                'Accept' => $request->headers->get('Accept'),
+                'Cache-Control' => $request->headers->get('Cache-Control'),
+                'If-Modified-Since' => $request->headers->get('If-Modified-Since'),
+                'If-None-Match' => $request->headers->get('If-None-Match'),
+                'Referer' => $request->headers->get('Referer'),
+                'X-Forwarded-For' => $request->getClientIp(),
+                'X-Forwarded-Host' => $request->getHost(),
+                'X-Forwarded-Port' => $request->getPort(),
+                'X-Forwarded-Proto' => $request->getScheme(),
+            ]),
+        ]);
 
         $stream = $fileResponse->getBody();
 
@@ -45,8 +57,11 @@ final class DownloadController extends Controller
                         'Cache-Control' => $fileResponse->getHeaderLine('Cache-Control'),
                         'Content-Length' => $fileResponse->getHeaderLine('Content-Length'),
                         'Content-Type' => $fileResponse->getHeaderLine('Content-Type'),
+                        'Date' => $fileResponse->getHeaderLine('Date'),
                         'ETag' => $fileResponse->getHeaderLine('ETag'),
+                        'Expires' => $fileResponse->getHeaderLine('Expires'),
                         'Last-Modified' => $fileResponse->getHeaderLine('Last-Modified'),
+                        'Vary' => $fileResponse->getHeaderLine('Vary'),
                     ])
                 );
 
