@@ -22,6 +22,9 @@ final class DownloadController extends Controller
             throw new NotFoundHttpException('Not a valid signed URI', $e);
         }
 
+        $xForwardedFor = array_filter(array_map('trim', explode(',', $request->isFromTrustedProxy() ? $request->headers->get('X-Forwarded-For') : '')));
+        $xForwardedFor[] = $request->server->get('REMOTE_ADDR');
+
         /** @var ResponseInterface $fileResponse */
         $fileResponse = $this->get('csa_guzzle.client.file_download')->request('GET', $link->getUri(), [
             'headers' => array_filter([
@@ -30,7 +33,7 @@ final class DownloadController extends Controller
                 'If-Modified-Since' => $request->headers->get('If-Modified-Since'),
                 'If-None-Match' => $request->headers->get('If-None-Match'),
                 'Referer' => $request->headers->get('Referer'),
-                'X-Forwarded-For' => $request->getClientIp(),
+                'X-Forwarded-For' => implode(', ', $xForwardedFor),
                 'X-Forwarded-Host' => $request->getHost(),
                 'X-Forwarded-Port' => $request->getPort(),
                 'X-Forwarded-Proto' => $request->getScheme(),

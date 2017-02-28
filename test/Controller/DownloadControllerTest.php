@@ -4,6 +4,7 @@ namespace test\eLife\Journal\Controller;
 
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use Symfony\Component\HttpFoundation\Request as HttpFoundationRequest;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use test\eLife\Journal\Providers;
 use test\eLife\Journal\WebTestCase;
@@ -42,6 +43,92 @@ final class DownloadControllerTest extends WebTestCase
 
         ob_start();
         $client->request('GET', $this->createDownloadUri('http://www.example.com/test.txt'), [], [], ['HTTP_REFERER' => 'http://www.example.com/']);
+        $content = ob_get_clean();
+
+        $response = $client->getResponse();
+
+        $this->assertInstanceOf(StreamedResponse::class, $response);
+        $this->assertSame(200, $response->getStatusCode());
+        $this->assertSame([
+            'cache-control' => ['no-cache'],
+            'content-type' => ['text/plain; charset=UTF-8'],
+            'content-disposition' => ['attachment'],
+        ], $response->headers->all());
+        $this->assertSame('test', $content);
+    }
+
+    /**
+     * @test
+     */
+    public function it_sets_x_forwarded_for_when_not_through_a_trusted_proxy()
+    {
+        $client = static::createClient();
+
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://www.example.com/test.txt',
+                [
+                    'Accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+                    'X-Forwarded-For' => '127.0.0.1',
+                    'X-Forwarded-Host' => 'localhost',
+                    'X-Forwarded-Port' => '80',
+                    'X-Forwarded-Proto' => 'http',
+                ]
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'text/plain'],
+                'test'
+            )
+        );
+
+        ob_start();
+        $client->request('GET', $this->createDownloadUri('http://www.example.com/test.txt'), [], [], ['HTTP_X_FORWARDED_FOR' => '54.230.78.56, 34.197.12.171']);
+        $content = ob_get_clean();
+
+        $response = $client->getResponse();
+
+        $this->assertInstanceOf(StreamedResponse::class, $response);
+        $this->assertSame(200, $response->getStatusCode());
+        $this->assertSame([
+            'cache-control' => ['no-cache'],
+            'content-type' => ['text/plain; charset=UTF-8'],
+            'content-disposition' => ['attachment'],
+        ], $response->headers->all());
+        $this->assertSame('test', $content);
+    }
+
+    /**
+     * @test
+     */
+    public function it_adds_x_forwarded_for_when_through_a_trusted_proxy()
+    {
+        HttpFoundationRequest::setTrustedProxies(['127.0.0.1']);
+
+        $client = static::createClient();
+
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://www.example.com/test.txt',
+                [
+                    'Accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+                    'X-Forwarded-For' => '54.230.78.56, 34.197.12.171, 127.0.0.1',
+                    'X-Forwarded-Host' => 'localhost',
+                    'X-Forwarded-Port' => '80',
+                    'X-Forwarded-Proto' => 'http',
+                ]
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'text/plain'],
+                'test'
+            )
+        );
+
+        ob_start();
+        $client->request('GET', $this->createDownloadUri('http://www.example.com/test.txt'), [], [], ['HTTP_X_FORWARDED_FOR' => '54.230.78.56, 34.197.12.171']);
         $content = ob_get_clean();
 
         $response = $client->getResponse();
