@@ -13,10 +13,13 @@ csa_guzzle:
         elife_api:
             config:
                 base_uri: '%api_url%'
+                connect_timeout: 0.25
                 headers:
                     Authorization: '%api_key%'
+                timeout: 1
         file_download:
             config:
+                connect_timeout: 0.25
                 http_errors: false
                 stream: true
 
