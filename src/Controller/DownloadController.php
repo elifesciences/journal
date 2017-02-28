@@ -52,31 +52,34 @@ final class DownloadController extends Controller
                         }
                         $stream->close();
                     },
-                    $fileResponse->getStatusCode(),
-                    array_filter([
-                        'Cache-Control' => $fileResponse->getHeaderLine('Cache-Control'),
-                        'Content-Length' => $fileResponse->getHeaderLine('Content-Length'),
-                        'Content-Type' => $fileResponse->getHeaderLine('Content-Type'),
-                        'Date' => $fileResponse->getHeaderLine('Date'),
-                        'ETag' => $fileResponse->getHeaderLine('ETag'),
-                        'Expires' => $fileResponse->getHeaderLine('Expires'),
-                        'Last-Modified' => $fileResponse->getHeaderLine('Last-Modified'),
-                        'Vary' => $fileResponse->getHeaderLine('Vary'),
-                    ])
+                    $fileResponse->getStatusCode()
                 );
-
-                if ($link->getFilename()) {
-                    $response->headers->set('Content-Disposition', $response->headers->makeDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $link->getFilename()));
-                } else {
-                    $response->headers->set('Content-Disposition', ResponseHeaderBag::DISPOSITION_ATTACHMENT);
-                }
-
+                break;
+            case Response::HTTP_NOT_MODIFIED:
+                $response = new Response('', $fileResponse->getStatusCode());
                 break;
             case Response::HTTP_NOT_FOUND:
             case Response::HTTP_GONE:
                 throw new HttpException($fileResponse->getStatusCode(), $fileResponse->getReasonPhrase());
             default:
                 throw new RuntimeException("Failed: {$fileResponse->getStatusCode()}, {$fileResponse->getReasonPhrase()}");
+        }
+
+        $response->headers->add(array_filter([
+            'Cache-Control' => $fileResponse->getHeaderLine('Cache-Control'),
+            'Content-Length' => $fileResponse->getHeaderLine('Content-Length'),
+            'Content-Type' => $fileResponse->getHeaderLine('Content-Type'),
+            'Date' => $fileResponse->getHeaderLine('Date'),
+            'ETag' => $fileResponse->getHeaderLine('ETag'),
+            'Expires' => $fileResponse->getHeaderLine('Expires'),
+            'Last-Modified' => $fileResponse->getHeaderLine('Last-Modified'),
+            'Vary' => $fileResponse->getHeaderLine('Vary'),
+        ]));
+
+        if ($link->getFilename()) {
+            $response->headers->set('Content-Disposition', $response->headers->makeDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $link->getFilename()));
+        } else {
+            $response->headers->set('Content-Disposition', ResponseHeaderBag::DISPOSITION_ATTACHMENT);
         }
 
         return $response;

@@ -49,8 +49,8 @@ final class DownloadControllerTest extends WebTestCase
         $this->assertInstanceOf(StreamedResponse::class, $response);
         $this->assertSame(200, $response->getStatusCode());
         $this->assertSame([
-            'content-type' => ['text/plain; charset=UTF-8'],
             'cache-control' => ['no-cache'],
+            'content-type' => ['text/plain; charset=UTF-8'],
             'content-disposition' => ['attachment'],
         ], $response->headers->all());
         $this->assertSame('test', $content);
@@ -91,8 +91,8 @@ final class DownloadControllerTest extends WebTestCase
         $this->assertInstanceOf(StreamedResponse::class, $response);
         $this->assertSame(200, $response->getStatusCode());
         $this->assertSame([
-            'content-type' => ['text/plain; charset=UTF-8'],
             'cache-control' => ['no-cache'],
+            'content-type' => ['text/plain; charset=UTF-8'],
             'content-disposition' => ['attachment; filename="foo.txt"'],
         ], $response->headers->all());
         $this->assertSame('test', $content);
@@ -157,9 +157,59 @@ final class DownloadControllerTest extends WebTestCase
 
     /**
      * @test
+     */
+    public function it_respects_caching()
+    {
+        $client = static::createClient();
+
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://www.example.com/test.txt',
+                [
+                    'Accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+                    'Cache-Control' => 'public',
+                    'If-Modified-Since' => 'Wed, 21 Oct 2015 07:28:00 GMT',
+                    'If-None-Match' => '1234567890',
+                    'X-Forwarded-For' => '127.0.0.1',
+                    'X-Forwarded-Host' => 'localhost',
+                    'X-Forwarded-Port' => '80',
+                    'X-Forwarded-Proto' => 'http',
+                ]
+            ),
+            new Response(
+                304,
+                [
+                    'Cache-Control' => 'public, max-age=300',
+                    'Date' => 'Wed, 21 Oct 2015 07:28:00 GMT',
+                    'ETag' => '1234567890',
+                    'Expires' => 'Wed, 21 Oct 2015 07:29:00 GMT',
+                    'Vary' => 'Accept',
+                ]
+            )
+        );
+
+        $client->request('GET', $this->createDownloadUri('http://www.example.com/test.txt'), [], [], ['HTTP_CACHE_CONTROL' => 'public', 'HTTP_IF_MODIFIED_SINCE' => 'Wed, 21 Oct 2015 07:28:00 GMT', 'HTTP_IF_NONE_MATCH' => '1234567890']);
+
+        $response = $client->getResponse();
+
+        $this->assertSame(304, $response->getStatusCode());
+        $this->assertSame([
+            'cache-control' => ['max-age=300, public'],
+            'date' => ['Wed, 21 Oct 2015 07:28:00 GMT'],
+            'etag' => ['1234567890'],
+            'expires' => ['Wed, 21 Oct 2015 07:29:00 GMT'],
+            'vary' => ['Accept'],
+            'content-disposition' => ['attachment'],
+        ], $response->headers->all());
+        $this->assertEmpty($response->getContent());
+    }
+
+    /**
+     * @test
      * @dataProvider statusCodeProvider
      */
-    public function it_returns_other_status_Codes(int $fileStatusCode, int $expected)
+    public function it_returns_other_status_codes(int $fileStatusCode, int $expected)
     {
         $client = static::createClient();
 
