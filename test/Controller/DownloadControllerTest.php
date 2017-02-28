@@ -41,9 +41,9 @@ final class DownloadControllerTest extends WebTestCase
             )
         );
 
-        ob_start();
-        $client->request('GET', $this->createDownloadUri('http://www.example.com/test.mp3'), [], [], ['HTTP_REFERER' => 'http://www.example.com/']);
-        $content = ob_get_clean();
+        $content = $this->captureContent(function () use ($client) {
+            $client->request('GET', $this->createDownloadUri('http://www.example.com/test.mp3'), [], [], ['HTTP_REFERER' => 'http://www.example.com/']);
+        });
 
         $response = $client->getResponse();
 
@@ -83,9 +83,9 @@ final class DownloadControllerTest extends WebTestCase
             )
         );
 
-        ob_start();
-        $client->request('GET', $this->createDownloadUri('http://www.example.com/test.txt'), [], [], ['HTTP_X_FORWARDED_FOR' => '54.230.78.56, 34.197.12.171']);
-        $content = ob_get_clean();
+        $content = $this->captureContent(function () use ($client) {
+            $client->request('GET', $this->createDownloadUri('http://www.example.com/test.txt'), [], [], ['HTTP_X_FORWARDED_FOR' => '54.230.78.56, 34.197.12.171']);
+        });
 
         $response = $client->getResponse();
 
@@ -127,9 +127,9 @@ final class DownloadControllerTest extends WebTestCase
             )
         );
 
-        ob_start();
-        $client->request('GET', $this->createDownloadUri('http://www.example.com/test.txt'), [], [], ['HTTP_X_FORWARDED_FOR' => '54.230.78.56, 34.197.12.171']);
-        $content = ob_get_clean();
+        $content = $this->captureContent(function () use ($client) {
+            $client->request('GET', $this->createDownloadUri('http://www.example.com/test.txt'), [], [], ['HTTP_X_FORWARDED_FOR' => '54.230.78.56, 34.197.12.171']);
+        });
 
         $response = $client->getResponse();
 
@@ -187,9 +187,9 @@ final class DownloadControllerTest extends WebTestCase
             )
         );
 
-        ob_start();
-        $client->request('GET', $this->createDownloadUri('http://www.example.com/test.txt'));
-        $content = ob_get_clean();
+        $content = $this->captureContent(function () use ($client) {
+            $client->request('GET', $this->createDownloadUri('http://www.example.com/test.txt'));
+        });
 
         $response = $client->getResponse();
 
@@ -229,9 +229,9 @@ final class DownloadControllerTest extends WebTestCase
             )
         );
 
-        ob_start();
-        $client->request('GET', $this->createDownloadUri('http://www.example.com/test.txt', 'foo.txt'));
-        $content = ob_get_clean();
+        $content = $this->captureContent(function () use ($client) {
+            $client->request('GET', $this->createDownloadUri('http://www.example.com/test.txt', 'foo.txt'));
+        });
 
         $response = $client->getResponse();
 
@@ -280,9 +280,9 @@ final class DownloadControllerTest extends WebTestCase
             )
         );
 
-        ob_start();
-        $client->request('GET', $this->createDownloadUri('http://www.example.com/test.txt'));
-        $content = ob_get_clean();
+        $content = $this->captureContent(function () use ($client) {
+            $client->request('GET', $this->createDownloadUri('http://www.example.com/test.txt'));
+        });
 
         $response = $client->getResponse();
 
@@ -396,5 +396,14 @@ final class DownloadControllerTest extends WebTestCase
         }
 
         return self::$kernel->getContainer()->get('uri_signer')->sign($uri);
+    }
+
+    private function captureContent(callable $callback) : string
+    {
+        ob_start();
+
+        $callback();
+
+        return ob_get_clean();
     }
 }
