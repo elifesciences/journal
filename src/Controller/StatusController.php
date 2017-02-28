@@ -32,6 +32,7 @@ final class StatusController extends Controller
         try {
             all($requests)->wait();
         } catch (Throwable $e) {
+            $this->get('logger')->error('/status failed', ['exception' => $e]);
             return $this->createResponse('<html><head><title>Status</title></head><body>Everything is not ok.</body></html>', 500);
         }
 
