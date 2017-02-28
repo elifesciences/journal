@@ -3,6 +3,7 @@
 namespace test\eLife\Journal\ViewModel\Converter;
 
 use eLife\ApiSdk\Model\PodcastEpisode;
+use eLife\Journal\Helper\DownloadLinkUriGenerator;
 use eLife\Journal\ViewModel\Converter\PodcastEpisodeContentHeaderConverter;
 use eLife\Patterns\ViewModel\ContentHeaderNonArticle;
 use Symfony\Component\HttpKernel\UriSigner;
@@ -18,6 +19,6 @@ final class PodcastEpisodeContentHeaderConverterTest extends ModelConverterTestC
      */
     public function setUpConverter()
     {
-        $this->converter = new PodcastEpisodeContentHeaderConverter($this->stubUrlGenerator(), new UriSigner('secret'));
+        $this->converter = new PodcastEpisodeContentHeaderConverter($this->stubUrlGenerator(), new DownloadLinkUriGenerator($this->stubUrlGenerator(), new UriSigner('secret')));
     }
 }

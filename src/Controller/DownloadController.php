@@ -10,19 +10,20 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use UnexpectedValueException;
 
 final class DownloadController extends Controller
 {
-    public function fileAction(Request $request, string $uri, string $name = '') : Response
+    public function fileAction(Request $request) : Response
     {
-        if (!$this->get('uri_signer')->check($request->getUri())) {
-            throw new NotFoundHttpException('Not a valid signed URI');
+        try {
+            $link = $this->get('elife.journal.helper.download_link_uri_generator')->check($request->getUri());
+        } catch (UnexpectedValueException $e) {
+            throw new NotFoundHttpException('Not a valid signed URI', $e);
         }
 
-        $uri = base64_decode($uri);
-
         /** @var ResponseInterface $fileResponse */
-        $fileResponse = $this->get('csa_guzzle.client.file_download')->request('GET', $uri);
+        $fileResponse = $this->get('csa_guzzle.client.file_download')->request('GET', $link->getUri());
 
         $stream = $fileResponse->getBody();
 
@@ -49,8 +50,8 @@ final class DownloadController extends Controller
                     ])
                 );
 
-                if (!empty($name)) {
-                    $response->headers->set('Content-Disposition', $response->headers->makeDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $name));
+                if ($link->getFilename()) {
+                    $response->headers->set('Content-Disposition', $response->headers->makeDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $link->getFilename()));
                 } else {
                     $response->headers->set('Content-Disposition', ResponseHeaderBag::DISPOSITION_ATTACHMENT);
                 }

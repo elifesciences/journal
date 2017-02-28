@@ -4,30 +4,26 @@ namespace eLife\Journal\ViewModel\Converter\Block;
 
 use eLife\ApiSdk\Model\Block;
 use eLife\ApiSdk\Model\File;
-use eLife\Journal\Helper\CreatesDownloadUri;
+use eLife\Journal\Helper\DownloadLink;
+use eLife\Journal\Helper\DownloadLinkUriGenerator;
 use eLife\Journal\ViewModel\Converter\ViewModelConverter;
 use eLife\Patterns\PatternRenderer;
 use eLife\Patterns\ViewModel;
 use eLife\Patterns\ViewModel\AssetViewerInline;
-use Symfony\Component\HttpKernel\UriSigner;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 final class CaptionedImageFileConverter implements ViewModelConverter
 {
     use CreatesCaptionedAsset;
-    use CreatesDownloadUri;
 
     private $viewModelConverter;
     private $patternRenderer;
-    private $urlGenerator;
-    private $uriSigner;
+    private $downloadLinkUriGenerator;
 
-    public function __construct(ViewModelConverter $viewModelConverter, PatternRenderer $patternRenderer, UrlGeneratorInterface $urlGenerator, UriSigner $uriSigner)
+    public function __construct(ViewModelConverter $viewModelConverter, PatternRenderer $patternRenderer, DownloadLinkUriGenerator $downloadLinkUriGenerator)
     {
         $this->viewModelConverter = $viewModelConverter;
         $this->patternRenderer = $patternRenderer;
-        $this->urlGenerator = $urlGenerator;
-        $this->uriSigner = $uriSigner;
+        $this->downloadLinkUriGenerator = $downloadLinkUriGenerator;
     }
 
     /**
@@ -37,7 +33,7 @@ final class CaptionedImageFileConverter implements ViewModelConverter
     {
         $asset = new ViewModel\Image(str_replace('.tif', '.jpg', $object->getUri()), [], $object->getAltText());
 
-        $asset = $this->createCaptionedAsset($asset, $object, $this->createDownloadUri($object->getUri()));
+        $asset = $this->createCaptionedAsset($asset, $object, $this->downloadLinkUriGenerator->generate(new DownloadLink($object->getUri())));
 
         if (empty($object->getLabel())) {
             return $asset;
@@ -71,15 +67,5 @@ final class CaptionedImageFileConverter implements ViewModelConverter
     protected function getViewModelConverter() : ViewModelConverter
     {
         return $this->viewModelConverter;
-    }
-
-    protected function getUrlGenerator() : UrlGeneratorInterface
-    {
-        return $this->urlGenerator;
-    }
-
-    protected function getUriSigner() : UriSigner
-    {
-        return $this->uriSigner;
     }
 }

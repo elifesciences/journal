@@ -4,23 +4,21 @@ namespace eLife\Journal\ViewModel\Converter;
 
 use eLife\ApiSdk\Model\ArticleVersion;
 use eLife\ApiSdk\Model\ArticleVoR;
-use eLife\Journal\Helper\CreatesDownloadUri;
+use eLife\Journal\Helper\DownloadLink;
+use eLife\Journal\Helper\DownloadLinkUriGenerator;
 use eLife\Patterns\ViewModel;
-use Symfony\Component\HttpKernel\UriSigner;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use function eLife\Patterns\mixed_visibility_text;
 
 final class ArticleDownloadLinksListConverter implements ViewModelConverter
 {
-    use CreatesDownloadUri;
-
     private $urlGenerator;
-    private $uriSigner;
+    private $downloadLinkUriGenerator;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator, UriSigner $uriSigner)
+    public function __construct(UrlGeneratorInterface $urlGenerator, DownloadLinkUriGenerator $downloadLinkUriGenerator)
     {
         $this->urlGenerator = $urlGenerator;
-        $this->uriSigner = $uriSigner;
+        $this->downloadLinkUriGenerator = $downloadLinkUriGenerator;
     }
 
     /**
@@ -31,10 +29,10 @@ final class ArticleDownloadLinksListConverter implements ViewModelConverter
         $groups = [];
 
         if ($object->getPdf()) {
-            $items = [new ViewModel\Link('Article PDF', $this->createDownloadUri($object->getPdf()))];
+            $items = [new ViewModel\Link('Article PDF', $this->downloadLinkUriGenerator->generate(new DownloadLink($object->getPdf())))];
 
             if ($object instanceof ArticleVor && $object->getFiguresPdf()) {
-                $items[] = new ViewModel\Link('Figures PDF', $this->createDownloadUri($object->getFiguresPdf()));
+                $items[] = new ViewModel\Link('Figures PDF', $this->downloadLinkUriGenerator->generate(new DownloadLink($object->getFiguresPdf())));
             }
 
             $groups[mixed_visibility_text('', 'Downloads', '(link to download the article as PDF)')] = $items;
@@ -62,15 +60,5 @@ final class ArticleDownloadLinksListConverter implements ViewModelConverter
     public function supports($object, string $viewModel = null, array $context = []) : bool
     {
         return $object instanceof ArticleVersion && ViewModel\ArticleDownloadLinksList::class === $viewModel;
-    }
-
-    protected function getUrlGenerator() : UrlGeneratorInterface
-    {
-        return $this->urlGenerator;
-    }
-
-    protected function getUriSigner() : UriSigner
-    {
-        return $this->uriSigner;
     }
 }
