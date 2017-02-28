@@ -941,11 +941,7 @@ final class ArticleControllerTest extends PageTestCase
                                 ],
                             ],
                             'articleTitle' => 'Journal article',
-                            'journal' => [
-                                'name' => [
-                                    'A journal',
-                                ],
-                            ],
+                            'journal' => 'A journal',
                             'pages' => 'In press',
                         ],
                     ],
