@@ -59,6 +59,66 @@ final class DownloadControllerTest extends WebTestCase
     /**
      * @test
      */
+    public function it_follows_redirects()
+    {
+        $client = static::createClient();
+
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://www.example.com/test.txt',
+                [
+                    'Accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+                    'X-Forwarded-For' => '127.0.0.1',
+                    'X-Forwarded-Host' => 'localhost',
+                    'X-Forwarded-Port' => '80',
+                    'X-Forwarded-Proto' => 'http',
+                ]
+            ),
+            new Response(
+                301,
+                ['Location' => 'http://www.example.com/foo.txt']
+            )
+        );
+
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://www.example.com/foo.txt',
+                [
+                    'Accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+                    'X-Forwarded-For' => '127.0.0.1',
+                    'X-Forwarded-Host' => 'localhost',
+                    'X-Forwarded-Port' => '80',
+                    'X-Forwarded-Proto' => 'http',
+                ]
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'text/plain'],
+                'test'
+            )
+        );
+
+        ob_start();
+        $client->request('GET', $this->createDownloadUri('http://www.example.com/test.txt'));
+        $content = ob_get_clean();
+
+        $response = $client->getResponse();
+
+        $this->assertInstanceOf(StreamedResponse::class, $response);
+        $this->assertSame(200, $response->getStatusCode());
+        $this->assertSame([
+            'cache-control' => ['no-cache'],
+            'content-type' => ['text/plain; charset=UTF-8'],
+            'content-disposition' => ['attachment'],
+        ], $response->headers->all());
+        $this->assertSame('test', $content);
+    }
+
+    /**
+     * @test
+     */
     public function it_downloads_a_file_with_a_name()
     {
         $client = static::createClient();
