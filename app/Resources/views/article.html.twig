@@ -219,7 +219,7 @@
 
                     <meta name="citation_reference"
                           content="
-                            citation_journal_title={{ reference.journal.name|join(', ') }};
+                            citation_journal_title={{ reference.journal }};
                             citation_title={{ reference.articleTitle }};
                             citation_publication_date={{ reference.date.toString }};
                             {% if reference.doi %}
@@ -266,7 +266,7 @@
                             {% for author in reference.authors %}
                                 citation_author={{ author.toString }};
                             {% endfor %}
-                            citation_publisher={{ reference.periodical.name|join(', ') }};
+                            citation_publisher={{ reference.periodical }};
                             citation_publication_date={{ reference.date.toString }};
                         ">
 

@@ -28,9 +28,7 @@ final class JournalReferenceConverterTest extends ReferenceConverterTestCase
                     'date' => '2016-01-01',
                     'authors' => $this->minimumAuthorsData(),
                     'articleTitle' => 'MNIST data set',
-                    'journal' => [
-                        'name' => ['eLife'],
-                    ],
+                    'journal' => 'eLife',
                     'pages' => '100',
                 ],
             ],
@@ -48,9 +46,7 @@ final class JournalReferenceConverterTest extends ReferenceConverterTestCase
                         ],
                     ],
                     'articleTitle' => 'MNIST data set',
-                    'journal' => [
-                        'name' => ['eLife'],
-                    ],
+                    'journal' => 'eLife',
                     'pages' => '100',
                     'volume' => '5',
                     'pmid' => 42,
