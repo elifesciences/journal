@@ -56,6 +56,7 @@ final class StatusController extends Controller
         }
         $items = array_map(function($response) {
             if ($response instanceof Throwable) {
+                $this->get('logger')->critical('/status failed', ['exception' => $response]);
                 return $response->getMessage();
             }
             return $response->getStatusCode();
