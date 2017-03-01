@@ -5,9 +5,6 @@ namespace eLife\Journal\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 use function GuzzleHttp\Promise\all;
-use function GuzzleHttp\Promise\each;
-use function GuzzleHttp\Promise\exception_for;
-
 
 final class StatusController extends Controller
 {
@@ -34,16 +31,16 @@ final class StatusController extends Controller
 
         $responsePromises = array_map(function ($request) {
             return $request
-                ->then(function($response) {
+                ->then(function ($response) {
                     return $response->status();
                 })
-                ->otherwise(function($reason) {
+                ->otherwise(function ($reason) {
                     return $reason;
                 });
         }, $requests);
 
         $responses = all($responsePromises)->wait();
-        $problems = array_filter($responses, function($response) {
+        $problems = array_filter($responses, function ($response) {
             return $response instanceof Throwable;
         });
 
@@ -54,11 +51,13 @@ final class StatusController extends Controller
             $status = 200;
             $text = 'Everything is ok';
         }
-        $items = array_map(function($response) {
+        $items = array_map(function ($response) {
             if ($response instanceof Throwable) {
                 $this->get('logger')->critical('/status failed', ['exception' => $response]);
+
                 return $response->getMessage();
             }
+
             return $response->getStatusCode();
         }, $responses);
         $list = '<ul>'.PHP_EOL;
@@ -66,6 +65,7 @@ final class StatusController extends Controller
             $list .= '<li>'.$api.': '.$item.'</li>'.PHP_EOL;
         }
         $list .= '</ul>'.PHP_EOL;
+
         return $this->createResponse(
             '<html>'.PHP_EOL
             .'<head>'.PHP_EOL
@@ -74,7 +74,7 @@ final class StatusController extends Controller
             .'<body>'.PHP_EOL
             .$text.$list.PHP_EOL
             .'</body>'.PHP_EOL
-            .'</html>', 
+            .'</html>',
             $status
         );
     }
