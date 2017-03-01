@@ -6,6 +6,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 use function GuzzleHttp\Promise\all;
 use function GuzzleHttp\Promise\each;
+use function GuzzleHttp\Promise\exception_for;
 
 
 final class StatusController extends Controller
@@ -18,41 +19,63 @@ final class StatusController extends Controller
     public function statusAction() : Response
     {
         $requests = [
-            $this->get('elife.api_sdk.articles')->slice(0, 1),
-            $this->get('elife.api_sdk.blog_articles')->slice(0, 1),
-            $this->get('elife.api_sdk.collections')->slice(0, 1),
-            $this->get('elife.api_sdk.covers')->slice(0, 1),
-            $this->get('elife.api_sdk.events')->slice(0, 1),
-            $this->get('elife.api_sdk.interviews')->slice(0, 1),
-            $this->get('elife.api_sdk.labs_experiments')->slice(0, 1),
-            $this->get('elife.api_sdk.medium_articles')->slice(0, 1),
-            $this->get('elife.api_sdk.podcast_episodes')->slice(0, 1),
-            $this->get('elife.api_sdk.search')->slice(0, 1),
-            $this->get('elife.api_sdk.subjects')->slice(0, 1),
+            'articles' => $this->get('elife.api_sdk.articles')->slice(0, 1),
+            'blog-articles' => $this->get('elife.api_sdk.blog_articles')->slice(0, 1),
+            'collections' => $this->get('elife.api_sdk.collections')->slice(0, 1),
+            'covers' => $this->get('elife.api_sdk.covers')->slice(0, 1),
+            'events' => $this->get('elife.api_sdk.events')->slice(0, 1),
+            'interviews' => $this->get('elife.api_sdk.interviews')->slice(0, 1),
+            'labs-experiments' => $this->get('elife.api_sdk.labs_experiments')->slice(0, 1),
+            'medium-articles' => $this->get('elife.api_sdk.medium_articles')->slice(0, 1),
+            'podcast-episodes' => $this->get('elife.api_sdk.podcast_episodes')->slice(0, 1),
+            'search' => $this->get('elife.api_sdk.search')->slice(0, 1),
+            'subjects' => $this->get('elife.api_sdk.subjects')->slice(0, 1),
         ];
 
-        $requests = each(
-            $requests, 
-            function() {
-                return true;
-            },
-            function ($reason) {
-                $e = exception_for($reason);
+        $responsePromises = array_map(function ($request) {
+            return $request
+                ->then(function($response) {
+                    return $response->status();
+                })
+                ->otherwise(function($reason) {
+                    return $reason;
+                });
+        }, $requests);
 
-                $this->get('logger')->critical('/status failed', ['exception' => $e]);
+        $responses = all($responsePromises)->wait();
+        $problems = array_filter($responses, function($response) {
+            return $response instanceof Throwable;
+        });
 
-                return false;
-            }
-        );
-
-        try {
-             $value = $requests->wait();
-             var_dump($value);
-        } catch (Throwable $e) {
-            return $this->createResponse('<html><head><title>Status</title></head><body>Everything is not ok.</body></html>', 500);
+        if ($problems) {
+            $status = 500;
+            $text = 'Everything is not ok';
+        } else {
+            $status = 200;
+            $text = 'Everything is ok';
         }
-
-        return $this->createResponse('<html><head><title>Status</title></head><body>Everything is ok.</body></html>');
+        $items = array_map(function($response) {
+            if ($response instanceof Throwable) {
+                return $response->getMessage();
+            }
+            return $response->getStatusCode();
+        }, $responses);
+        $list = '<ul>'.PHP_EOL;
+        foreach ($items as $api => $item) {
+            $list .= '<li>'.$api.': '.$item.'</li>'.PHP_EOL;
+        }
+        $list .= '</ul>'.PHP_EOL;
+        return $this->createResponse(
+            '<html>'.PHP_EOL
+            .'<head>'.PHP_EOL
+            .'<title>Status</title>'.PHP_EOL
+            .'</head>'.PHP_EOL
+            .'<body>'.PHP_EOL
+            .$text.$list.PHP_EOL
+            .'</body>'.PHP_EOL
+            .'</html>', 
+            $status
+        );
     }
 
     private function createResponse(string $body = '', int $statusCode = Response::HTTP_OK, array $headers = [])
