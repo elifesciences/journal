@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "4ae6146d9224b2d9cc3ddd227e27f527",
+    "hash": "1bbedfe6175f28f2741db645ddf1d4dc",
     "content-hash": "84f6e8b5f2da545ba0caa59a55348b67",
     "packages": [
         {
@@ -793,12 +793,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-sdk-php.git",
-                "reference": "1d6372958c4922415a8fef232d4c661816c75d96"
+                "reference": "5569f0e903cd5d1f8e0118adc37e15c898fc7771"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/1d6372958c4922415a8fef232d4c661816c75d96",
-                "reference": "1d6372958c4922415a8fef232d4c661816c75d96",
+                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/5569f0e903cd5d1f8e0118adc37e15c898fc7771",
+                "reference": "5569f0e903cd5d1f8e0118adc37e15c898fc7771",
                 "shasum": ""
             },
             "require": {
@@ -834,7 +834,7 @@
                 "MIT"
             ],
             "description": "eLife Sciences API SDK",
-            "time": "2017-02-27 13:55:53"
+            "time": "2017-03-01 14:12:49"
         },
         {
             "name": "elife/patterns",

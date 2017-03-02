@@ -27,7 +27,6 @@ final class BookReferenceConverterTest extends ReferenceConverterTestCase
                     'id' => '',
                     'date' => '2016-01-01',
                     'authors' => $this->minimumAuthorsData(),
-                    'editors' => [],
                     'bookTitle' => 'Encyclopedia Galactica',
                     'publisher' => [
                         'name' => ['Cambridge University Press'],
@@ -48,7 +47,17 @@ final class BookReferenceConverterTest extends ReferenceConverterTestCase
                             'onBehalfOf' => 'Someone else',
                         ],
                     ],
-                    'editors' => [],
+                    'authorsEtAl' => true,
+                    'editors' => [
+                        [
+                            'type' => 'person',
+                            'name' => [
+                                'preferred' => 'Isaac Newton',
+                                'index' => 'Newton, Isaac',
+                            ],
+                        ],
+                    ],
+                    'editorsEtAl' => true,
                     'bookTitle' => 'Encyclopedia Galactica',
                     'publisher' => [
                         'name' => ['Cambridge University Press'],

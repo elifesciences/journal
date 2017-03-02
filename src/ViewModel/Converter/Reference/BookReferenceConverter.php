@@ -25,10 +25,7 @@ final class BookReferenceConverter implements ViewModelConverter
             $title .= ' ('.$object->getEdition().')';
         }
 
-        $origin = [$this->publisherToString($object->getPublisher())];
-        if ($object->getIsbn()) {
-            $origin[] = 'ISBN '.$object->getIsbn();
-        }
+        $origin = [];
 
         $abstracts = [];
         if ($object->getPmid()) {
@@ -37,11 +34,19 @@ final class BookReferenceConverter implements ViewModelConverter
 
         $authorsSuffix = [$object->getDate()->format().$object->getDiscriminator()];
 
-        if ('editors' === $object->getAuthorsType()) {
-            array_unshift($authorsSuffix, count($object->getAuthors()) > 1 ? 'editors' : 'editor');
+        if (empty($object->getAuthors())) {
+            $authors = [$this->createAuthors($object->getEditors(), $object->editorsEtAl(), array_merge(['editors'], $authorsSuffix))];
+        } else {
+            $authors = [$this->createAuthors($object->getAuthors(), $object->authorsEtAl(), $authorsSuffix)];
+            if (!empty($object->getEditors())) {
+                $origin[] = $this->createAuthorsString($object->getEditors(), $object->editorsEtAl()).', editors';
+            }
         }
 
-        $authors = [$this->createAuthors($object->getAuthors(), $object->authorsEtAl(), $authorsSuffix)];
+        $origin[] = $this->publisherToString($object->getPublisher());
+        if ($object->getIsbn()) {
+            $origin[] = 'ISBN '.$object->getIsbn();
+        }
 
         if ($object->getDoi()) {
             return ViewModel\Reference::withDoi($title, new ViewModel\Doi($object->getDoi()), $origin, $authors, $abstracts);

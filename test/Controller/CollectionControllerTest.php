@@ -22,6 +22,7 @@ final class CollectionControllerTest extends PageTestCase
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertSame('Collection title', $crawler->filter('.content-header__title')->text());
+        $this->assertSame('Collection Jan 1, 2010', trim(preg_replace('!\s+!', ' ', $crawler->filter('.content-header .meta')->text())));
     }
 
     /**
@@ -90,6 +91,7 @@ final class CollectionControllerTest extends PageTestCase
                     'id' => '1',
                     'title' => 'Collection title',
                     'published' => '2010-01-01T00:00:00Z',
+                    'updated' => '2011-01-01T00:00:00Z',
                     'image' => [
                         'banner' => [
                             'alt' => '',
