@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -ex
 
-bin/console
+bin/console --version --env=$ENVIRONMENT_NAME
 [ $(curl --write-out %{http_code} --silent --output /dev/null $(hostname)/favicon.ico) == 200 ]
 [ $(curl --write-out %{http_code} --silent --output /dev/null $(hostname)/assets/css/all.css) == 200 ]
 [ $(curl --write-out %{http_code} --silent --output /dev/null $(hostname)/images/banners/magazine-hi-res.jpg) == 200 ]
