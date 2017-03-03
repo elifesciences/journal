@@ -3,6 +3,8 @@
 namespace eLife\Journal\ViewModel\Converter;
 
 use eLife\ApiSdk\Model\PodcastEpisode;
+use eLife\Journal\Helper\DownloadLink;
+use eLife\Journal\Helper\DownloadLinkUriGenerator;
 use eLife\Patterns\ViewModel;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -11,10 +13,12 @@ final class PodcastEpisodeContentHeaderConverter implements ViewModelConverter
     use CreatesDate;
 
     private $urlGenerator;
+    private $downloadLinkUriGenerator;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator)
+    public function __construct(UrlGeneratorInterface $urlGenerator, DownloadLinkUriGenerator $downloadLinkUriGenerator)
     {
         $this->urlGenerator = $urlGenerator;
+        $this->downloadLinkUriGenerator = $downloadLinkUriGenerator;
     }
 
     /**
@@ -28,7 +32,7 @@ final class PodcastEpisodeContentHeaderConverter implements ViewModelConverter
                 $object->getBanner()->getSize('2:1')->getImage(900),
                 $object->getBanner()->getSize('2:1')->getImage(1800)
             ),
-            $object->getSources()[0]->getUri()
+            $this->downloadLinkUriGenerator->generate(new DownloadLink($object->getSources()[0]->getUri()))
         );
     }
 

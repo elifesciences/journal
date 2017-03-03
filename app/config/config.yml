@@ -17,6 +17,11 @@ csa_guzzle:
                 headers:
                     Authorization: '%api_key%'
                 timeout: 1
+        file_download:
+            config:
+                connect_timeout: 0.25
+                http_errors: false
+                stream: true
 
 framework:
     assets: ~

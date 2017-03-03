@@ -4,6 +4,8 @@ namespace eLife\Journal\ViewModel\Converter;
 
 use eLife\ApiSdk\Model\ArticleVersion;
 use eLife\ApiSdk\Model\ArticleVoR;
+use eLife\Journal\Helper\DownloadLink;
+use eLife\Journal\Helper\DownloadLinkUriGenerator;
 use eLife\Patterns\ViewModel;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use function eLife\Patterns\mixed_visibility_text;
@@ -11,10 +13,12 @@ use function eLife\Patterns\mixed_visibility_text;
 final class ArticleDownloadLinksListConverter implements ViewModelConverter
 {
     private $urlGenerator;
+    private $downloadLinkUriGenerator;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator)
+    public function __construct(UrlGeneratorInterface $urlGenerator, DownloadLinkUriGenerator $downloadLinkUriGenerator)
     {
         $this->urlGenerator = $urlGenerator;
+        $this->downloadLinkUriGenerator = $downloadLinkUriGenerator;
     }
 
     /**
@@ -25,10 +29,10 @@ final class ArticleDownloadLinksListConverter implements ViewModelConverter
         $groups = [];
 
         if ($object->getPdf()) {
-            $items = [new ViewModel\Link('Article PDF', $object->getPdf())];
+            $items = [new ViewModel\Link('Article PDF', $this->downloadLinkUriGenerator->generate(new DownloadLink($object->getPdf())))];
 
             if ($object instanceof ArticleVor && $object->getFiguresPdf()) {
-                $items[] = new ViewModel\Link('Figures PDF', $object->getFiguresPdf());
+                $items[] = new ViewModel\Link('Figures PDF', $this->downloadLinkUriGenerator->generate(new DownloadLink($object->getFiguresPdf())));
             }
 
             $groups[mixed_visibility_text('', 'Downloads', '(link to download the article as PDF)')] = $items;

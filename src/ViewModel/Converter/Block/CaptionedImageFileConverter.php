@@ -4,6 +4,8 @@ namespace eLife\Journal\ViewModel\Converter\Block;
 
 use eLife\ApiSdk\Model\Block;
 use eLife\ApiSdk\Model\File;
+use eLife\Journal\Helper\DownloadLink;
+use eLife\Journal\Helper\DownloadLinkUriGenerator;
 use eLife\Journal\ViewModel\Converter\ViewModelConverter;
 use eLife\Patterns\PatternRenderer;
 use eLife\Patterns\ViewModel;
@@ -15,11 +17,13 @@ final class CaptionedImageFileConverter implements ViewModelConverter
 
     private $viewModelConverter;
     private $patternRenderer;
+    private $downloadLinkUriGenerator;
 
-    public function __construct(ViewModelConverter $viewModelConverter, PatternRenderer $patternRenderer)
+    public function __construct(ViewModelConverter $viewModelConverter, PatternRenderer $patternRenderer, DownloadLinkUriGenerator $downloadLinkUriGenerator)
     {
         $this->viewModelConverter = $viewModelConverter;
         $this->patternRenderer = $patternRenderer;
+        $this->downloadLinkUriGenerator = $downloadLinkUriGenerator;
     }
 
     /**
@@ -29,7 +33,7 @@ final class CaptionedImageFileConverter implements ViewModelConverter
     {
         $asset = new ViewModel\Image(str_replace('.tif', '.jpg', $object->getUri()), [], $object->getAltText());
 
-        $asset = $this->createCaptionedAsset($asset, $object, $object->getUri());
+        $asset = $this->createCaptionedAsset($asset, $object, $this->downloadLinkUriGenerator->generate(new DownloadLink($object->getUri())));
 
         if (empty($object->getLabel())) {
             return $asset;

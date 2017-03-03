@@ -2,10 +2,13 @@
 
 namespace test\eLife\Journal\ViewModel\Converter\Block;
 
+use eLife\Journal\Helper\DownloadLinkUriGenerator;
 use eLife\Journal\ViewModel\Converter\Block\CaptionedVideoConverter;
 use eLife\Journal\ViewModel\Converter\ViewModelConverter;
 use eLife\Patterns\PatternRenderer;
 use eLife\Patterns\ViewModel\CaptionedAsset;
+use Symfony\Component\HttpKernel\UriSigner;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 final class CaptionedVideoConverterTest extends BlockConverterTestCase
 {
@@ -19,7 +22,8 @@ final class CaptionedVideoConverterTest extends BlockConverterTestCase
     {
         $this->converter = new CaptionedVideoConverter(
             $this->createMock(ViewModelConverter::class),
-            $this->createMock(PatternRenderer::class)
+            $this->createMock(PatternRenderer::class),
+            new DownloadLinkUriGenerator($this->createMock(UrlGeneratorInterface::class), new UriSigner('secret'))
         );
     }
 

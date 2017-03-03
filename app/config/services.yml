@@ -89,6 +89,12 @@ services:
         class: eLife\Journal\Helper\FragmentLinkRewriter
         public: false
 
+    elife.journal.helper.download_link_uri_generator:
+        class: eLife\Journal\Helper\DownloadLinkUriGenerator
+        arguments:
+          - '@router'
+          - '@uri_signer'
+
     elife.journal.listener.early_response:
         class: eLife\Journal\EventListener\EarlyResponseSubscriber
         tags:
@@ -171,6 +177,7 @@ services:
         public: false
         arguments:
           - '@router'
+          - '@elife.journal.helper.download_link_uri_generator'
         tags:
           - name: view_model.converter
 
@@ -239,6 +246,7 @@ services:
         arguments:
           - '@elife.journal.view_model.converter'
           - '@elife.patterns.pattern_renderer'
+          - '@elife.journal.helper.download_link_uri_generator'
         tags:
           - name: view_model.converter
 
@@ -320,6 +328,7 @@ services:
         arguments:
           - '@elife.journal.view_model.converter'
           - '@elife.patterns.pattern_renderer'
+          - '@elife.journal.helper.download_link_uri_generator'
         tags:
           - name: view_model.converter
 
@@ -434,6 +443,7 @@ services:
         arguments:
           - '@elife.journal.view_model.converter'
           - '@elife.patterns.pattern_renderer'
+          - '@elife.journal.helper.download_link_uri_generator'
         tags:
           - name: view_model.converter
 
@@ -610,6 +620,7 @@ services:
         public: false
         arguments:
           - '@router'
+          - '@elife.journal.helper.download_link_uri_generator'
         tags:
           - name: view_model.converter
 

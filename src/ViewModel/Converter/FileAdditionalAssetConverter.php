@@ -4,6 +4,8 @@ namespace eLife\Journal\ViewModel\Converter;
 
 use eLife\ApiSdk\Model\Block;
 use eLife\ApiSdk\Model\File;
+use eLife\Journal\Helper\DownloadLink;
+use eLife\Journal\Helper\DownloadLinkUriGenerator;
 use eLife\Journal\Helper\HasPatternRenderer;
 use eLife\Patterns\PatternRenderer;
 use eLife\Patterns\ViewModel;
@@ -14,11 +16,13 @@ final class FileAdditionalAssetConverter implements ViewModelConverter
 
     private $viewModelConverter;
     private $patternRenderer;
+    private $downloadLinkUriGenerator;
 
-    public function __construct(ViewModelConverter $viewModelConverter, PatternRenderer $patternRenderer)
+    public function __construct(ViewModelConverter $viewModelConverter, PatternRenderer $patternRenderer, DownloadLinkUriGenerator $downloadLinkUriGenerator)
     {
         $this->viewModelConverter = $viewModelConverter;
         $this->patternRenderer = $patternRenderer;
+        $this->downloadLinkUriGenerator = $downloadLinkUriGenerator;
     }
 
     /**
@@ -37,7 +41,7 @@ final class FileAdditionalAssetConverter implements ViewModelConverter
         );
 
         $download = ViewModel\DownloadLink::fromLink(
-            new ViewModel\Link('Download '.$object->getFilename(), $object->getUri()),
+            new ViewModel\Link('Download '.$object->getFilename(), $this->downloadLinkUriGenerator->generate(new DownloadLink($object->getUri(), $object->getFilename()))),
             $object->getFilename()
         );
 
