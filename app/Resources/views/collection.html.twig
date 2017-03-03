@@ -2,6 +2,10 @@
 
 {% block title %}{{ title }} | Collections{% endblock %}
 
+{% block description %}
+    {{ collection.impactStatement }}
+{% endblock %}
+
 {% block info_bar %}
 
     {{ info_bar('This page is incomplete.') }}

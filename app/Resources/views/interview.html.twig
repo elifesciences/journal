@@ -2,6 +2,10 @@
 
 {% block title %}{{ title }} | Interviews{% endblock %}
 
+{% block description %}
+    {{ interview.impactStatement }}
+{% endblock %}
+
 {% block body %}
 
     {{ render_pattern(contentHeader) }}

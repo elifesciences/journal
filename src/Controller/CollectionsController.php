@@ -66,7 +66,7 @@ final class CollectionsController extends Controller
         $arguments = $this->defaultPageArguments($collection);
 
         $arguments['title'] = $collection
-            ->then(Callback::method('getTitle'));
+            ->then(Callback::method('getFullTitle'));
 
         $arguments['collection'] = $collection;
 

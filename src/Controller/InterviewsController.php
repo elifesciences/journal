@@ -26,7 +26,7 @@ final class InterviewsController extends Controller
         $arguments = $this->defaultPageArguments($interview);
 
         $arguments['title'] = $interview
-            ->then(Callback::method('getTitle'));
+            ->then(Callback::method('getFullTitle'));
 
         $arguments['interview'] = $interview;
 

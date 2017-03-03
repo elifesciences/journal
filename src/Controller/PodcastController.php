@@ -78,7 +78,7 @@ final class PodcastController extends Controller
         $arguments = $this->defaultPageArguments($episode);
 
         $arguments['title'] = $episode
-            ->then(Callback::method('getTitle'));
+            ->then(Callback::method('getFullTitle'));
 
         $arguments['episode'] = $episode;
 
