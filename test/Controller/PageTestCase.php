@@ -45,7 +45,6 @@ abstract class PageTestCase extends WebTestCase
         $crawler = $client->request('GET', $this->getUrl());
 
         $this->assertSame('eLife', $crawler->filter('meta[property="og:site_name"]')->attr('content'));
-        $this->assertSame('en', $crawler->filter('meta[property="og:locale"]')->attr('content'));
         $this->assertSame('@eLife', $crawler->filter('meta[name="twitter:site"]')->attr('content'));
     }
 
