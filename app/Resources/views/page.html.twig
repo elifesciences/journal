@@ -1,15 +1,13 @@
 <!doctype html>
 
-<html lang="en">
+<html lang="en" prefix="og: http://ogp.me/ns#">
 
 <head>
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
 
-    {% set title = block('title') %}
-
-    <title>{% if title %}{{ title }} | {% endif %}eLife</title>
+    <title>{% block title %}{{ title|striptags }}{% endblock %} | eLife</title>
 
     {# We don't use gulp-favicon's generated file as it includes things we don't want, such as apple-mobile-web-app-capable #}
     <link rel="apple-touch-icon" sizes="57x57" href="{{ asset('favicons/apple-touch-icon-57x57.png') }}">
@@ -37,7 +35,70 @@
 
     <meta name="format-detection" content="telephone=no">
 
-    {% block meta %}{% endblock %}
+    {% block meta %}
+
+        {% if block('canonical') %}
+            {% set canonical = block('canonical')|trim %}
+        {% elseif paginator is defined %}
+            {% set canonical = paginator.currentPagePath %}
+        {% else %}
+            {% set canonical = path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) %}
+        {% endif %}
+
+        <meta property="og:site_name" content="eLife">
+        <meta property="og:url" content="{{ app.request.uriForPath(canonical) }}">
+        <meta property="og:title" content="{{ title|striptags }}">
+        <meta name="twitter:site" content="@eLife">
+
+        {% if block('description') and block('description')|trim != '' %}
+            {% set description = block('description') %}
+        {% elseif contentHeader is defined and contentHeader.strapline is defined %}
+            {% set description = contentHeader.strapline %}
+        {% elseif leadParas is defined and leadParas %}
+            {% set description = render_pattern(leadParas) %}
+        {% endif %}
+        {% if description is defined %}
+            <meta property="og:description" content="{{ description|striptags|single_line|trim }}">
+            <meta name="description" content="{{ description|striptags|single_line|trim }}">
+        {% endif %}
+
+        {% if contentHeader is defined and contentHeader.backgroundImage is defined %}
+            <meta name="twitter:card" content="summary_large_image">
+            {% if '/' == contentHeader.backgroundImage.highResImageSource|first %}
+                <meta property="og:image"
+                      content="{{ app.request.uriForPath(contentHeader.backgroundImage.highResImageSource) }}">
+            {% else %}
+                <meta property="og:image" content="{{ contentHeader.backgroundImage.highResImageSource }}">
+            {% endif %}
+            <meta property="og:image:width" content="1800">
+            <meta property="og:image:height" content="900">
+        {% else %}
+            <meta name="twitter:card" content="summary">
+        {% endif %}
+        {% if contentHeader is defined and contentHeader.meta is defined %}
+            <meta property="og:type" content="article">
+            {% if contentHeader.subjects is defined %}
+                {% for subject in contentHeader.subjects.list %}
+                    <meta property="og:article:section" content="{{ subject.name }}">
+                {% endfor %}
+            {% endif %}
+        {% endif %}
+
+        <link rel="canonical" href="{{ canonical }}">
+
+        {% if paginator is defined %}
+
+            {% if paginator.previousPage %}
+                <link rel="prev" href="{{ paginator.previousPagePath }}">
+            {% endif %}
+
+            {% if paginator.nextPage %}
+                <link rel="next" href="{{ paginator.nextPagePath }}">
+            {% endif %}
+
+        {% endif %}
+
+    {% endblock %}
 
     <!--[if lt IE 9]>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"
@@ -60,22 +121,6 @@
             s.parentNode.insertBefore(wf, s);
         })(document);
     </script>
-
-    {% if paginator is defined %}
-
-        {% if 1 == paginator.currentPage %}
-            <link rel="canonical" href="{{ paginator.currentPagePath }}">
-        {% endif %}
-
-        {% if paginator.previousPage %}
-            <link rel="prev" href="{{ paginator.previousPagePath }}">
-        {% endif %}
-
-        {% if paginator.nextPage %}
-            <link rel="next" href="{{ paginator.nextPagePath }}">
-        {% endif %}
-
-    {% endif %}
 
 </head>
 

@@ -27,6 +27,30 @@ final class CollectionControllerTest extends PageTestCase
 
     /**
      * @test
+     */
+    public function it_has_metadata()
+    {
+        $client = static::createClient();
+
+        $crawler = $client->request('GET', $this->getUrl().'?foo');
+
+        $this->assertSame(200, $client->getResponse()->getStatusCode());
+
+        $this->assertSame('Collection title: Collection sub-title | Collections | eLife', $crawler->filter('title')->text());
+        $this->assertSame('/collections/1/collection-title', $crawler->filter('link[rel="canonical"]')->attr('href'));
+        $this->assertSame('http://localhost/collections/1/collection-title', $crawler->filter('meta[property="og:url"]')->attr('content'));
+        $this->assertSame('Collection title: Collection sub-title', $crawler->filter('meta[property="og:title"]')->attr('content'));
+        $this->assertSame('Collection impact statement', $crawler->filter('meta[property="og:description"]')->attr('content'));
+        $this->assertSame('Collection impact statement', $crawler->filter('meta[name="description"]')->attr('content'));
+        $this->assertSame('article', $crawler->filter('meta[property="og:type"]')->attr('content'));
+        $this->assertSame('summary_large_image', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
+        $this->assertSame('https://placehold.it/1800x900', $crawler->filter('meta[property="og:image"]')->attr('content'));
+        $this->assertSame('1800', $crawler->filter('meta[property="og:image:width"]')->attr('content'));
+        $this->assertSame('900', $crawler->filter('meta[property="og:image:height"]')->attr('content'));
+    }
+
+    /**
+     * @test
      * @dataProvider incorrectSlugProvider
      */
     public function it_redirects_if_the_slug_is_not_correct(string $url)
@@ -90,6 +114,7 @@ final class CollectionControllerTest extends PageTestCase
                 json_encode([
                     'id' => '1',
                     'title' => 'Collection title',
+                    'subTitle' => 'Collection sub-title',
                     'published' => '2010-01-01T00:00:00Z',
                     'updated' => '2011-01-01T00:00:00Z',
                     'image' => [
@@ -116,6 +141,7 @@ final class CollectionControllerTest extends PageTestCase
                             ],
                         ],
                     ],
+                    'impactStatement' => 'Collection impact statement',
                     'selectedCurator' => [
                         'id' => 'person',
                         'type' => 'senior-editor',

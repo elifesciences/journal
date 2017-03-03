@@ -24,6 +24,33 @@ final class PodcastEpisodeControllerTest extends PageTestCase
     /**
      * @test
      */
+    public function it_has_metadata()
+    {
+        $client = static::createClient();
+
+        $crawler = $client->request('GET', $this->getUrl().'?foo');
+
+        $this->assertSame(200, $client->getResponse()->getStatusCode());
+
+        $this->assertSame('Episode 1: Episode title | Podcast | eLife', $crawler->filter('title')->text());
+        $this->assertSame('/podcast/episode1', $crawler->filter('link[rel="canonical"]')->attr('href'));
+        $this->assertSame('http://localhost/podcast/episode1', $crawler->filter('meta[property="og:url"]')->attr('content'));
+        $this->assertSame('Episode 1: Episode title', $crawler->filter('meta[property="og:title"]')->attr('content'));
+        $this->assertSame('Episode impact statement', $crawler->filter('meta[property="og:description"]')->attr('content'));
+        $this->assertSame('Episode impact statement', $crawler->filter('meta[name="description"]')->attr('content'));
+        $this->assertSame('article', $crawler->filter('meta[property="og:type"]')->attr('content'));
+        $this->assertSame('summary_large_image', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
+        $this->assertSame('https://placehold.it/1800x900', $crawler->filter('meta[property="og:image"]')->attr('content'));
+        $this->assertSame('1800', $crawler->filter('meta[property="og:image:width"]')->attr('content'));
+        $this->assertSame('900', $crawler->filter('meta[property="og:image:height"]')->attr('content'));
+        $this->assertSame('https://www.example.com/episode1.mp3', $crawler->filter('meta[property="og:audio:url"]')->attr('content'));
+        $this->assertSame('audio/mpeg', $crawler->filter('meta[property="og:audio:type"]')->attr('content'));
+    }
+
+    /**
+     * /**
+     * @test
+     */
     public function it_displays_a_404_if_the_episode_is_not_found()
     {
         $client = static::createClient();
@@ -63,7 +90,7 @@ final class PodcastEpisodeControllerTest extends PageTestCase
                 ['Content-Type' => 'application/vnd.elife.podcast-episode+json; version=1'],
                 json_encode([
                     'number' => 1,
-                    'title' => 'Episode title',
+                    'title' => 'Episode <i>title</i>',
                     'published' => '2010-01-01T00:00:00Z',
                     'image' => [
                         'banner' => [
@@ -89,7 +116,7 @@ final class PodcastEpisodeControllerTest extends PageTestCase
                             ],
                         ],
                     ],
-                    'impactStatement' => 'Experiment impact statement',
+                    'impactStatement' => 'Episode impact <a href="#">statement</a>',
                     'sources' => [
                         [
                             'mediaType' => 'audio/mpeg',

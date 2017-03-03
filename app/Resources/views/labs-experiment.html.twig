@@ -1,6 +1,6 @@
 {% extends '::page.html.twig' %}
 
-{% block title %}{{ experiment.title }} | Labs{% endblock %}
+{% block title %}{{ title|striptags }} | Labs{% endblock %}
 
 {% block body %}
 

@@ -77,6 +77,9 @@ final class EventsController extends Controller
 
         $arguments = $this->defaultPageArguments($event);
 
+        $arguments['title'] = $event
+            ->then(Callback::method('getTitle'));
+
         $arguments['event'] = $event;
 
         $arguments['contentHeader'] = $arguments['event']

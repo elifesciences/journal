@@ -11,7 +11,9 @@ final class AlertsController extends Controller
     {
         $arguments = $this->defaultPageArguments();
 
-        $arguments['contentHeader'] = ContentHeaderNonArticle::basic('Alerts');
+        $arguments['title'] = 'Alerts';
+
+        $arguments['contentHeader'] = ContentHeaderNonArticle::basic($arguments['title']);
 
         return new Response($this->get('templating')->render('::alerts.html.twig', $arguments));
     }

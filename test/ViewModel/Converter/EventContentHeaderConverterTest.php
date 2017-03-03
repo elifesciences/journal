@@ -17,6 +17,6 @@ final class EventContentHeaderConverterTest extends ModelConverterTestCase
      */
     public function setUpConverter()
     {
-        $this->converter = new EventContentHeaderConverter();
+        $this->converter = new EventContentHeaderConverter($this->stubUrlGenerator());
     }
 }

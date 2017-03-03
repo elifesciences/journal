@@ -1,6 +1,10 @@
 {% extends '::page.html.twig' %}
 
-{% block title %}{{ interview.title }} | Interviews{% endblock %}
+{% block title %}{{ title|striptags }} | Interviews{% endblock %}
+
+{% block description %}
+    {{ interview.impactStatement|raw }}
+{% endblock %}
 
 {% block body %}
 

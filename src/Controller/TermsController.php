@@ -11,7 +11,9 @@ final class TermsController extends Controller
     {
         $arguments = $this->defaultPageArguments();
 
-        $arguments['contentHeader'] = ContentHeaderNonArticle::basic('Terms and policy');
+        $arguments['title'] = 'Terms and policy';
+
+        $arguments['contentHeader'] = ContentHeaderNonArticle::basic($arguments['title']);
 
         return new Response($this->get('templating')->render('::terms.html.twig', $arguments));
     }

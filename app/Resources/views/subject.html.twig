@@ -1,15 +1,13 @@
 {% extends '::page.html.twig' %}
 
-{% block title %}{{ title }}{% endblock %}
-
 {% block body %}
 
     {{ render_pattern(contentHeader) }}
 
     <div class="wrapper">
 
-        {% if lead_paras %}
-            {{ render_pattern(lead_paras) }}
+        {% if leadParas %}
+            {{ render_pattern(leadParas) }}
         {% endif %}
 
         <div class="grid">

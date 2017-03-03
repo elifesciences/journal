@@ -53,6 +53,24 @@ final class ArchiveControllerTest extends PageTestCase
 
     /**
      * @test
+     */
+    public function it_has_metadata()
+    {
+        $client = static::createClient();
+
+        $crawler = $client->request('GET', $this->getUrl().'?foo');
+
+        $this->assertSame(200, $client->getResponse()->getStatusCode());
+
+        $this->assertSame('2015 | eLife', $crawler->filter('title')->text());
+        $this->assertSame('/archive/2015', $crawler->filter('link[rel="canonical"]')->attr('href'));
+        $this->assertSame('http://localhost/archive/2015', $crawler->filter('meta[property="og:url"]')->attr('content'));
+        $this->assertSame('2015', $crawler->filter('meta[property="og:title"]')->attr('content'));
+        $this->assertSame('summary', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
+    }
+
+    /**
+     * @test
      * @dataProvider invalidYearProvider
      */
     public function it_returns_a_404_for_an_invalid_year($year)

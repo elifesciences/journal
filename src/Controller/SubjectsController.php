@@ -32,6 +32,8 @@ final class SubjectsController extends Controller
     {
         $arguments = $this->defaultPageArguments();
 
+        $arguments['title'] = 'Research categories';
+
         $arguments['contentHeader'] = new ContentHeaderSimple('Browse our research categories');
 
         $arguments['subjects'] = $this->get('elife.api_sdk.subjects')
@@ -117,7 +119,7 @@ final class SubjectsController extends Controller
         $arguments['contentHeader'] = $arguments['subject']
             ->then($this->willConvertTo(ContentHeaderNonArticle::class));
 
-        $arguments['lead_paras'] = $arguments['subject']
+        $arguments['leadParas'] = $arguments['subject']
             ->then(Callback::methodEmptyOr('getImpactStatement', $this->willConvertTo(LeadParas::class)));
 
         $podcastEpisode = $this->get('elife.api_sdk.search')

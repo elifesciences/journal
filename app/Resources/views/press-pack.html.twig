@@ -1,6 +1,6 @@
 {% extends '::page.html.twig' %}
 
-{% block title %}{{ package.title }} | For the press{% endblock %}
+{% block title %}{{ title|striptags }} | For the press{% endblock %}
 
 {% block body %}
 

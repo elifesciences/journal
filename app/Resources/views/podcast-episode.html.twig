@@ -1,6 +1,21 @@
 {% extends '::page.html.twig' %}
 
-{% block title %}{{ episode.title }} | Podcast{% endblock %}
+{% block title %}{{ title|striptags }} | Podcast{% endblock %}
+
+{% block meta %}
+
+    {{ parent() }}
+
+    {% for source in episode.sources %}
+        <meta property="og:audio:url" content="{{ source.uri }}">
+        <meta property="og:audio:type" content="{{ source.mediaType }}">
+    {% endfor %}
+
+{% endblock %}
+
+{% block description %}
+    {{ episode.impactStatement|raw }}
+{% endblock %}
 
 {% block body %}
 

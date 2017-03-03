@@ -66,6 +66,9 @@ final class PressPacksController extends Controller
 
         $arguments = $this->defaultPageArguments($package);
 
+        $arguments['title'] = $package
+            ->then(Callback::method('getTitle'));
+
         $arguments['package'] = $package;
 
         $arguments['contentHeader'] = $arguments['package']

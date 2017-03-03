@@ -128,6 +128,25 @@ final class PressPackControllerTest extends PageTestCase
 
     /**
      * @test
+     */
+    public function it_has_metadata()
+    {
+        $client = static::createClient();
+
+        $crawler = $client->request('GET', $this->getUrl().'?foo');
+
+        $this->assertSame(200, $client->getResponse()->getStatusCode());
+
+        $this->assertSame('Press package title | For the press | eLife', $crawler->filter('title')->text());
+        $this->assertSame('/for-the-press/1/press-package-title', $crawler->filter('link[rel="canonical"]')->attr('href'));
+        $this->assertSame('http://localhost/for-the-press/1/press-package-title', $crawler->filter('meta[property="og:url"]')->attr('content'));
+        $this->assertSame('Press package title', $crawler->filter('meta[property="og:title"]')->attr('content'));
+        $this->assertSame('article', $crawler->filter('meta[property="og:type"]')->attr('content'));
+        $this->assertSame('summary', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
+    }
+
+    /**
+     * @test
      * @dataProvider incorrectSlugProvider
      */
     public function it_redirects_if_the_slug_is_not_correct(string $url)

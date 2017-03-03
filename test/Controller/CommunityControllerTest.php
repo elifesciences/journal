@@ -159,6 +159,27 @@ final class CommunityControllerTest extends PageTestCase
 
     /**
      * @test
+     */
+    public function it_has_metadata()
+    {
+        $client = static::createClient();
+
+        $crawler = $client->request('GET', $this->getUrl().'?foo');
+
+        $this->assertSame(200, $client->getResponse()->getStatusCode());
+
+        $this->assertSame('Community | eLife', $crawler->filter('title')->text());
+        $this->assertSame('/community', $crawler->filter('link[rel="canonical"]')->attr('href'));
+        $this->assertSame('http://localhost/community', $crawler->filter('meta[property="og:url"]')->attr('content'));
+        $this->assertSame('Community', $crawler->filter('meta[property="og:title"]')->attr('content'));
+        $this->assertSame('summary_large_image', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
+        $this->assertSame('http://localhost/images/banners/community-hi-res.jpg?v1', $crawler->filter('meta[property="og:image"]')->attr('content'));
+        $this->assertSame('1800', $crawler->filter('meta[property="og:image:width"]')->attr('content'));
+        $this->assertSame('900', $crawler->filter('meta[property="og:image:height"]')->attr('content'));
+    }
+
+    /**
+     * @test
      * @dataProvider invalidPageProvider
      */
     public function it_displays_a_404_when_not_on_a_valid_page($page, callable $callable = null)

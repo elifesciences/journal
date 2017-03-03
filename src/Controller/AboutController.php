@@ -11,6 +11,8 @@ final class AboutController extends Controller
     {
         $arguments = $this->defaultPageArguments();
 
+        $arguments['title'] = 'About';
+
         $arguments['contentHeader'] = ContentHeaderNonArticle::basic('About eLife', false,
             'Pain-free publishing for your best science.');
 

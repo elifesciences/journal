@@ -1,6 +1,10 @@
 {% extends '::page.html.twig' %}
 
-{% block title %}{{ collection.title }} | Collections{% endblock %}
+{% block title %}{{ title|striptags }} | Collections{% endblock %}
+
+{% block description %}
+    {{ collection.impactStatement|raw }}
+{% endblock %}
 
 {% block info_bar %}
 
@@ -14,8 +18,8 @@
 
     <div class="wrapper">
 
-        {% if lead_paras %}
-            {{ render_pattern(lead_paras) }}
+        {% if leadParas %}
+            {{ render_pattern(leadParas) }}
         {% endif %}
 
         <div class="u-pad-top">
