@@ -4,13 +4,15 @@
     {{ path('article', {id: article.id}) }}
 {% endblock %}
 
+    {% block description %}
+        {% if article.impactStatement is defined %}
+            {{ article.impactStatement|raw }}
+        {% endif %}
+    {% endblock %}
+
 {% block meta %}
 
     {{ parent() }}
-
-    {% if article.impactStatement is defined and article.impactStatement %}
-        <meta name="description" content="{{ article.impactStatement|striptags }}">
-    {% endif %}
 
     {% block dublin_core %}
 
@@ -391,7 +393,8 @@
 
             {% endif %}
 
-            <div class="grid__item large--six-twelfths {% if not viewSelector %}push--large--two-twelfths{% endif %} blg-pad-top-medium" data-behaviour="FragmentHandler">
+            <div class="grid__item large--six-twelfths {% if not viewSelector %}push--large--two-twelfths{% endif %} blg-pad-top-medium"
+                 data-behaviour="FragmentHandler">
 
                 {% block article_body %}
 

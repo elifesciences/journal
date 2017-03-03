@@ -50,11 +50,18 @@
         <meta property="og:title" content="{{ title }}">
         <meta name="twitter:site" content="@eLife">
 
-        {% if contentHeader is defined and contentHeader.strapline is defined %}
-            <meta property="og:description" content="{{ contentHeader.strapline|striptags }}">
+        {% if block('description') and block('description')|trim != '' %}
+            {% set description = block('description') %}
+        {% elseif contentHeader is defined and contentHeader.strapline is defined %}
+            {% set description = contentHeader.strapline %}
         {% elseif leadParas is defined and leadParas %}
-            <meta property="og:description" content="{{ render_pattern(leadParas)|striptags|single_line|trim }}">
+            {% set description = render_pattern(leadParas) %}
         {% endif %}
+        {% if description is defined %}
+            <meta property="og:description" content="{{ description|striptags|single_line|trim }}">
+            <meta name="description" content="{{ description|striptags|single_line|trim }}">
+        {% endif %}
+
         {% if contentHeader is defined and contentHeader.backgroundImage is defined %}
             <meta name="twitter:card" content="summary_large_image">
             {% if '/' == contentHeader.backgroundImage.highResImageSource|first %}

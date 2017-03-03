@@ -38,6 +38,7 @@ final class LabsExperimentControllerTest extends PageTestCase
         $this->assertSame('http://localhost/labs/experiment1', $crawler->filter('meta[property="og:url"]')->attr('content'));
         $this->assertSame('Experiment title', $crawler->filter('meta[property="og:title"]')->attr('content'));
         $this->assertSame('Experiment impact statement', $crawler->filter('meta[property="og:description"]')->attr('content'));
+        $this->assertSame('Experiment impact statement', $crawler->filter('meta[name="description"]')->attr('content'));
         $this->assertSame('article', $crawler->filter('meta[property="og:type"]')->attr('content'));
         $this->assertSame('summary_large_image', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
         $this->assertSame('https://placehold.it/1800x900', $crawler->filter('meta[property="og:image"]')->attr('content'));

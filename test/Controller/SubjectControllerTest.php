@@ -39,6 +39,7 @@ final class SubjectControllerTest extends PageTestCase
         $this->assertSame('http://localhost/subjects/subject', $crawler->filter('meta[property="og:url"]')->attr('content'));
         $this->assertSame('Subject', $crawler->filter('meta[property="og:title"]')->attr('content'));
         $this->assertSame('Subject impact statement.', $crawler->filter('meta[property="og:description"]')->attr('content'));
+        $this->assertSame('Subject impact statement.', $crawler->filter('meta[name="description"]')->attr('content'));
         $this->assertSame('summary_large_image', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
         $this->assertSame('https://placehold.it/1800x900', $crawler->filter('meta[property="og:image"]')->attr('content'));
         $this->assertSame('1800', $crawler->filter('meta[property="og:image:width"]')->attr('content'));

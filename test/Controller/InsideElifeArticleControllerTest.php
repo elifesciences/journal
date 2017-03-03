@@ -42,6 +42,7 @@ final class InsideElifeArticleControllerTest extends PageTestCase
         $this->assertSame('http://localhost/inside-elife/1/blog-article-title', $crawler->filter('meta[property="og:url"]')->attr('content'));
         $this->assertSame('Blog article title', $crawler->filter('meta[property="og:title"]')->attr('content'));
         $this->assertSame('Blog article impact statement', $crawler->filter('meta[property="og:description"]')->attr('content'));
+        $this->assertSame('Blog article impact statement', $crawler->filter('meta[property="description"]')->attr('content'));
         $this->assertSame('article', $crawler->filter('meta[property="og:type"]')->attr('content'));
         $this->assertSame('summary', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
     }

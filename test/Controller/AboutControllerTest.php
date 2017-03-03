@@ -33,6 +33,7 @@ final class AboutControllerTest extends PageTestCase
         $this->assertSame('http://localhost/about', $crawler->filter('meta[property="og:url"]')->attr('content'));
         $this->assertSame('About', $crawler->filter('meta[property="og:title"]')->attr('content'));
         $this->assertSame('Pain-free publishing for your best science.', $crawler->filter('meta[property="og:description"]')->attr('content'));
+        $this->assertSame('Pain-free publishing for your best science.', $crawler->filter('meta[name="description"]')->attr('content'));
         $this->assertSame('summary', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
     }
 

@@ -42,6 +42,7 @@ final class InterviewControllerTest extends PageTestCase
         $this->assertSame('http://localhost/interviews/1/interviewee', $crawler->filter('meta[property="og:url"]')->attr('content'));
         $this->assertSame('Interview title', $crawler->filter('meta[property="og:title"]')->attr('content'));
         $this->assertSame('An interview with Interviewee', $crawler->filter('meta[property="og:description"]')->attr('content'));
+        $this->assertSame('An interview with Interviewee', $crawler->filter('meta[name="description"]')->attr('content'));
         $this->assertSame('article', $crawler->filter('meta[property="og:type"]')->attr('content'));
         $this->assertSame('summary', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
     }
