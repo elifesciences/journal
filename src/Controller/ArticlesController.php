@@ -509,7 +509,7 @@ sources: '.implode(', ', array_map(function (CitationsMetricSource $source) {
                 $history = $parts['history'];
 
                 if ($article->getVersion() < $history->getVersions()[count($history->getVersions()) - 1]->getVersion()) {
-                    return [new InfoBar('Read the <a href="'.$this->generateTextPath($history).'">most recent version of this article</a>.')];
+                    return [new InfoBar('Read the <a href="'.$this->generateTextPath($history).'">most recent version of this article</a>.', InfoBar::TYPE_MULTIPLE_VERSIONS)];
                 }
 
                 if ($article instanceof ArticleVoR) {
