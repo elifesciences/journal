@@ -65,12 +65,15 @@ final class CollectionsController extends Controller
 
         $arguments = $this->defaultPageArguments($collection);
 
+        $arguments['title'] = $collection
+            ->then(Callback::method('getTitle'));
+
         $arguments['collection'] = $collection;
 
         $arguments['contentHeader'] = $arguments['collection']
             ->then($this->willConvertTo(ContentHeaderNonArticle::class));
 
-        $arguments['lead_paras'] = $arguments['collection']
+        $arguments['leadParas'] = $arguments['collection']
             ->then(Callback::methodEmptyOr('getImpactStatement', $this->willConvertTo(LeadParas::class)));
 
         $arguments['collectionList'] = $arguments['collection']

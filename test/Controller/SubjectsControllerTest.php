@@ -21,6 +21,24 @@ final class SubjectsControllerTest extends PageTestCase
         $this->assertContains('No subjects available.', $crawler->filter('main')->text());
     }
 
+    /**
+     * @test
+     */
+    public function it_has_metadata()
+    {
+        $client = static::createClient();
+
+        $crawler = $client->request('GET', $this->getUrl().'?foo');
+
+        $this->assertSame(200, $client->getResponse()->getStatusCode());
+
+        $this->assertSame('Research categories | eLife', $crawler->filter('title')->text());
+        $this->assertSame('/subjects', $crawler->filter('link[rel="canonical"]')->attr('href'));
+        $this->assertSame('http://localhost/subjects', $crawler->filter('meta[property="og:url"]')->attr('content'));
+        $this->assertSame('Research categories', $crawler->filter('meta[property="og:title"]')->attr('content'));
+        $this->assertSame('summary', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
+    }
+
     protected function getUrl() : string
     {
         $this->mockApiResponse(

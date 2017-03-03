@@ -17,6 +17,24 @@ final class WhoWeWorkWithControllerTest extends PageTestCase
         $this->assertSame('Who we work with', $crawler->filter('.content-header__title')->text());
     }
 
+    /**
+     * @test
+     */
+    public function it_has_metadata()
+    {
+        $client = static::createClient();
+
+        $crawler = $client->request('GET', $this->getUrl().'?foo');
+
+        $this->assertSame(200, $client->getResponse()->getStatusCode());
+
+        $this->assertSame('Who we work with | eLife', $crawler->filter('title')->text());
+        $this->assertSame('/who-we-work-with', $crawler->filter('link[rel="canonical"]')->attr('href'));
+        $this->assertSame('http://localhost/who-we-work-with', $crawler->filter('meta[property="og:url"]')->attr('content'));
+        $this->assertSame('Who we work with', $crawler->filter('meta[property="og:title"]')->attr('content'));
+        $this->assertSame('summary', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
+    }
+
     protected function getUrl() : string
     {
         return '/who-we-work-with';

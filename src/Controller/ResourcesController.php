@@ -11,7 +11,9 @@ final class ResourcesController extends Controller
     {
         $arguments = $this->defaultPageArguments();
 
-        $arguments['contentHeader'] = ContentHeaderNonArticle::basic('Resources');
+        $arguments['title'] = 'Resources';
+
+        $arguments['contentHeader'] = ContentHeaderNonArticle::basic($arguments['title']);
 
         return new Response($this->get('templating')->render('::resources.html.twig', $arguments));
     }

@@ -347,6 +347,11 @@ sources: '.implode(', ', array_map(function (CitationsMetricSource $source) {
     {
         $arguments = $this->articlePageArguments($id, $version);
 
+        $arguments['title'] = $arguments['title']
+            ->then(function (string $title) {
+                return 'Figures in '.$title;
+            });
+
         $allFigures = $this->findFigures($arguments['article']);
 
         $figures = $allFigures
@@ -474,6 +479,9 @@ sources: '.implode(', ', array_map(function (CitationsMetricSource $source) {
             ->otherwise($this->mightNotExist());
 
         $arguments = $this->defaultPageArguments($article);
+
+        $arguments['title'] = $article
+            ->then(Callback::method('getFullTitle'));
 
         $arguments['article'] = $article;
 

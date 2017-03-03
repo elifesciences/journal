@@ -144,6 +144,11 @@ services:
         tags:
           - name: twig.extension
 
+    elife.journal.twig.extension.single_line:
+        class: eLife\Journal\Twig\SingleLineExtension
+        tags:
+          - name: twig.extension
+
     elife.journal.twig.extension.tex:
         class: eLife\Journal\Twig\TexExtension
         tags:
@@ -416,6 +421,8 @@ services:
     elife.journal.view_model.converter.event.header:
         class: eLife\Journal\ViewModel\Converter\EventContentHeaderConverter
         public: false
+        arguments:
+          - '@router'
         tags:
           - name: view_model.converter
 

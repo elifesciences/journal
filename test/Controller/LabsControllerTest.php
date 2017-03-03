@@ -24,6 +24,28 @@ final class LabsControllerTest extends PageTestCase
 
     /**
      * @test
+     */
+    public function it_has_metadata()
+    {
+        $client = static::createClient();
+
+        $crawler = $client->request('GET', $this->getUrl().'?foo');
+
+        $this->assertSame(200, $client->getResponse()->getStatusCode());
+
+        $this->assertSame('Labs | eLife', $crawler->filter('title')->text());
+        $this->assertSame('/labs', $crawler->filter('link[rel="canonical"]')->attr('href'));
+        $this->assertSame('http://localhost/labs', $crawler->filter('meta[property="og:url"]')->attr('content'));
+        $this->assertSame('Labs', $crawler->filter('meta[property="og:title"]')->attr('content'));
+        $this->assertSame('eLife Labs showcases experiments in new functionality and technologies. Some experiments may be developed further to become features on the eLife platform. Feedback welcome!', $crawler->filter('meta[property="og:description"]')->attr('content'));
+        $this->assertSame('summary_large_image', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
+        $this->assertSame('http://localhost/images/banners/labs-hi-res.jpg?v1', $crawler->filter('meta[property="og:image"]')->attr('content'));
+        $this->assertSame('1800', $crawler->filter('meta[property="og:image:width"]')->attr('content'));
+        $this->assertSame('900', $crawler->filter('meta[property="og:image:height"]')->attr('content'));
+    }
+
+    /**
+     * @test
      * @dataProvider invalidPageProvider
      */
     public function it_displays_a_404_when_not_on_a_valid_page($page, callable $callable = null)

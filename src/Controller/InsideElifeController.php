@@ -74,6 +74,9 @@ final class InsideElifeController extends Controller
 
         $arguments = $this->defaultPageArguments($article);
 
+        $arguments['title'] = $article
+            ->then(Callback::method('getTitle'));
+
         $arguments['article'] = $article;
 
         $arguments['contentHeader'] = $arguments['article']

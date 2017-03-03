@@ -1,11 +1,7 @@
 {% extends '::article.html.twig' %}
 
-{% block title %}Figures in {{ parent() }}{% endblock %}
-
-{% block meta %}
-
-    <link rel="canonical" href="{{ path('article-figures', {volume: article.volume, id: article.id}) }}">
-
+{% block canonical %}
+    {{ path('article-figures', {id: article.id}) }}
 {% endblock %}
 
 {% block article_body %}

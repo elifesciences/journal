@@ -1,10 +1,12 @@
 {% extends '::page.html.twig' %}
 
-{% block title %}{{ article.fullTitle|striptags }}{% endblock %}
+{% block canonical %}
+    {{ path('article', {id: article.id}) }}
+{% endblock %}
 
 {% block meta %}
 
-    <link rel="canonical" href="{{ path('article', {volume: article.volume, id: article.id}) }}">
+    {{ parent() }}
 
     {% if article.impactStatement is defined and article.impactStatement %}
         <meta name="description" content="{{ article.impactStatement|striptags }}">

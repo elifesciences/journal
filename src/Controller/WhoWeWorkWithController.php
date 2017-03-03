@@ -11,7 +11,9 @@ final class WhoWeWorkWithController extends Controller
     {
         $arguments = $this->defaultPageArguments();
 
-        $arguments['contentHeader'] = ContentHeaderNonArticle::basic('Who we work with');
+        $arguments['title'] = 'Who we work with';
+
+        $arguments['contentHeader'] = ContentHeaderNonArticle::basic($arguments['title']);
 
         return new Response($this->get('templating')->render('::who-we-work-with.html.twig', $arguments));
     }

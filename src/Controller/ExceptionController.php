@@ -34,6 +34,8 @@ final class ExceptionController extends Controller
                 ->otherwise($this->softFailure('Failed to create '.$key));
         }
 
+        $arguments['title'] = 'Error';
+
         $arguments['error'] = $this->createError($request, $exception->getStatusCode());
 
         return new Response($this->get('templating')->render('::exception.html.twig', $arguments));

@@ -65,127 +65,30 @@ final class ArticleFiguresControllerTest extends PageTestCase
     /**
      * @test
      */
+    public function it_has_metadata()
+    {
+        $client = static::createClient();
+
+        $crawler = $client->request('GET', $this->getUrl().'?foo');
+
+        $this->assertSame(200, $client->getResponse()->getStatusCode());
+
+        $this->assertSame('Figures in Article title | eLife', $crawler->filter('title')->text());
+        $this->assertSame('/articles/00001/figures', $crawler->filter('link[rel="canonical"]')->attr('href'));
+        $this->assertSame('http://localhost/articles/00001/figures', $crawler->filter('meta[property="og:url"]')->attr('content'));
+        $this->assertSame('Figures in Article title', $crawler->filter('meta[property="og:title"]')->attr('content'));
+        $this->assertSame('article', $crawler->filter('meta[property="og:type"]')->attr('content'));
+        $this->assertSame('summary', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
+    }
+
+    /**
+     * @test
+     */
     public function it_displays_an_article_figures_page_for_a_poa()
     {
         $client = static::createClient();
 
-        $this->mockApiResponse(
-            new Request(
-                'GET',
-                'http://api.elifesciences.org/articles/00001/versions/1',
-                [
-                    'Accept' => [
-                        'application/vnd.elife.article-poa+json; version=1',
-                        'application/vnd.elife.article-vor+json; version=1',
-                    ],
-                ]
-            ),
-            new Response(
-                200,
-                ['Content-Type' => 'application/vnd.elife.article-poa+json; version=1'],
-                json_encode([
-                    'status' => 'poa',
-                    'stage' => 'published',
-                    'id' => '00001',
-                    'version' => 1,
-                    'type' => 'research-article',
-                    'doi' => '10.7554/eLife.00001',
-                    'title' => 'Article title',
-                    'published' => '2010-01-01T00:00:00Z',
-                    'versionDate' => '2010-01-01T00:00:00Z',
-                    'statusDate' => '2010-01-01T00:00:00Z',
-                    'volume' => 1,
-                    'elocationId' => 'e00001',
-                    'copyright' => [
-                        'license' => 'CC-BY-4.0',
-                        'holder' => 'Foo Bar',
-                        'statement' => 'Copyright statement.',
-                    ],
-                    'authorLine' => 'Foo Bar',
-                    'authors' => [
-                        [
-                            'type' => 'person',
-                            'name' => [
-                                'preferred' => 'Foo Bar',
-                                'index' => 'Foo Bar',
-                            ],
-                        ],
-                    ],
-                    'additionalFiles' => [
-                        [
-                            'id' => 'file1',
-                            'label' => 'Additional file 1 label',
-                            'title' => 'Additional file 1 title',
-                            'mediaType' => 'image/jpeg',
-                            'uri' => 'https://placehold.it/900x450',
-                            'filename' => 'image.jpg',
-                        ],
-                    ],
-                ])
-            )
-        );
-
-        $this->mockApiResponse(
-            new Request(
-                'GET',
-                'http://api.elifesciences.org/articles/00001/versions',
-                [
-                    'Accept' => [
-                        'application/vnd.elife.article-history+json; version=1',
-                    ],
-                ]
-            ),
-            new Response(
-                200,
-                ['Content-Type' => 'application/vnd.elife.article-history+json; version=1'],
-                json_encode([
-                    'versions' => [
-                        [
-                            'status' => 'poa',
-                            'stage' => 'published',
-                            'id' => '00001',
-                            'version' => 1,
-                            'type' => 'research-article',
-                            'doi' => '10.7554/eLife.00001',
-                            'title' => 'Article title',
-                            'published' => '2010-01-01T00:00:00Z',
-                            'versionDate' => '2010-01-01T00:00:00Z',
-                            'statusDate' => '2010-01-01T00:00:00Z',
-                            'volume' => 1,
-                            'elocationId' => 'e00001',
-                            'copyright' => [
-                                'license' => 'CC-BY-4.0',
-                                'holder' => 'Foo Bar',
-                                'statement' => 'Copyright statement.',
-                            ],
-                            'authorLine' => 'Foo Bar',
-                        ],
-                        [
-                            'status' => 'vor',
-                            'stage' => 'published',
-                            'id' => '00001',
-                            'version' => 2,
-                            'type' => 'research-article',
-                            'doi' => '10.7554/eLife.00001',
-                            'title' => 'Article title',
-                            'published' => '2010-01-01T00:00:00Z',
-                            'versionDate' => '2011-01-01T00:00:00Z',
-                            'statusDate' => '2011-01-01T00:00:00Z',
-                            'volume' => 1,
-                            'elocationId' => 'e00001',
-                            'copyright' => [
-                                'license' => 'CC-BY-4.0',
-                                'holder' => 'Foo Bar',
-                                'statement' => 'Copyright statement.',
-                            ],
-                            'authorLine' => 'Foo Bar',
-                        ],
-                    ],
-                ])
-            )
-        );
-
-        $crawler = $client->request('GET', '/articles/00001v1/figures');
+        $crawler = $client->request('GET', $this->getPreviousVersionUrl());
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertSame('Article title', $crawler->filter('.content-header__title')->text());
@@ -203,6 +106,25 @@ final class ArticleFiguresControllerTest extends PageTestCase
         $this->assertSame('Additional file 1 label', trim($additionalFiles->eq(0)->text()));
 
         $this->assertEmpty($crawler->filter('.view-selector__jump_link_item'));
+    }
+
+    /**
+     * @test
+     */
+    public function it_has_metadata_for_previous_versions()
+    {
+        $client = static::createClient();
+
+        $crawler = $client->request('GET', $this->getPreviousVersionUrl().'?foo');
+
+        $this->assertSame(200, $client->getResponse()->getStatusCode());
+
+        $this->assertSame('Figures in Article title | eLife', $crawler->filter('title')->text());
+        $this->assertSame('/articles/00001v1/figures', $crawler->filter('link[rel="canonical"]')->attr('href'));
+        $this->assertSame('http://localhost/articles/00001v1/figures', $crawler->filter('meta[property="og:url"]')->attr('content'));
+        $this->assertSame('Figures in Article title', $crawler->filter('meta[property="og:title"]')->attr('content'));
+        $this->assertSame('article', $crawler->filter('meta[property="og:type"]')->attr('content'));
+        $this->assertSame('summary', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
     }
 
     /**
@@ -601,5 +523,126 @@ final class ArticleFiguresControllerTest extends PageTestCase
         );
 
         return '/articles/00001/figures';
+    }
+
+    private function getPreviousVersionUrl()
+    {
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/articles/00001/versions/1',
+                [
+                    'Accept' => [
+                        'application/vnd.elife.article-poa+json; version=1',
+                        'application/vnd.elife.article-vor+json; version=1',
+                    ],
+                ]
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.article-poa+json; version=1'],
+                json_encode([
+                    'status' => 'poa',
+                    'stage' => 'published',
+                    'id' => '00001',
+                    'version' => 1,
+                    'type' => 'research-article',
+                    'doi' => '10.7554/eLife.00001',
+                    'title' => 'Article title',
+                    'published' => '2010-01-01T00:00:00Z',
+                    'versionDate' => '2010-01-01T00:00:00Z',
+                    'statusDate' => '2010-01-01T00:00:00Z',
+                    'volume' => 1,
+                    'elocationId' => 'e00001',
+                    'copyright' => [
+                        'license' => 'CC-BY-4.0',
+                        'holder' => 'Foo Bar',
+                        'statement' => 'Copyright statement.',
+                    ],
+                    'authorLine' => 'Foo Bar',
+                    'authors' => [
+                        [
+                            'type' => 'person',
+                            'name' => [
+                                'preferred' => 'Foo Bar',
+                                'index' => 'Foo Bar',
+                            ],
+                        ],
+                    ],
+                    'additionalFiles' => [
+                        [
+                            'id' => 'file1',
+                            'label' => 'Additional file 1 label',
+                            'title' => 'Additional file 1 title',
+                            'mediaType' => 'image/jpeg',
+                            'uri' => 'https://placehold.it/900x450',
+                            'filename' => 'image.jpg',
+                        ],
+                    ],
+                ])
+            )
+        );
+
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/articles/00001/versions',
+                [
+                    'Accept' => [
+                        'application/vnd.elife.article-history+json; version=1',
+                    ],
+                ]
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.article-history+json; version=1'],
+                json_encode([
+                    'versions' => [
+                        [
+                            'status' => 'poa',
+                            'stage' => 'published',
+                            'id' => '00001',
+                            'version' => 1,
+                            'type' => 'research-article',
+                            'doi' => '10.7554/eLife.00001',
+                            'title' => 'Article title',
+                            'published' => '2010-01-01T00:00:00Z',
+                            'versionDate' => '2010-01-01T00:00:00Z',
+                            'statusDate' => '2010-01-01T00:00:00Z',
+                            'volume' => 1,
+                            'elocationId' => 'e00001',
+                            'copyright' => [
+                                'license' => 'CC-BY-4.0',
+                                'holder' => 'Foo Bar',
+                                'statement' => 'Copyright statement.',
+                            ],
+                            'authorLine' => 'Foo Bar',
+                        ],
+                        [
+                            'status' => 'vor',
+                            'stage' => 'published',
+                            'id' => '00001',
+                            'version' => 2,
+                            'type' => 'research-article',
+                            'doi' => '10.7554/eLife.00001',
+                            'title' => 'Article title',
+                            'published' => '2010-01-01T00:00:00Z',
+                            'versionDate' => '2011-01-01T00:00:00Z',
+                            'statusDate' => '2011-01-01T00:00:00Z',
+                            'volume' => 1,
+                            'elocationId' => 'e00001',
+                            'copyright' => [
+                                'license' => 'CC-BY-4.0',
+                                'holder' => 'Foo Bar',
+                                'statement' => 'Copyright statement.',
+                            ],
+                            'authorLine' => 'Foo Bar',
+                        ],
+                    ],
+                ])
+            )
+        );
+
+        return '/articles/00001v1/figures';
     }
 }

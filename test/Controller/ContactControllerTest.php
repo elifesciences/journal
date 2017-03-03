@@ -20,6 +20,24 @@ final class ContactControllerTest extends PageTestCase
     /**
      * @test
      */
+    public function it_has_metadata()
+    {
+        $client = static::createClient();
+
+        $crawler = $client->request('GET', $this->getUrl().'?foo');
+
+        $this->assertSame(200, $client->getResponse()->getStatusCode());
+
+        $this->assertSame('Contact | eLife', $crawler->filter('title')->text());
+        $this->assertSame('/contact', $crawler->filter('link[rel="canonical"]')->attr('href'));
+        $this->assertSame('http://localhost/contact', $crawler->filter('meta[property="og:url"]')->attr('content'));
+        $this->assertSame('Contact', $crawler->filter('meta[property="og:title"]')->attr('content'));
+        $this->assertSame('summary', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
+    }
+
+    /**
+     * @test
+     */
     public function it_requires_all_the_fields_to_be_completed()
     {
         $client = static::createClient();

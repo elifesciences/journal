@@ -1,8 +1,10 @@
 {% extends '::page.html.twig' %}
 
-{% block title %}{{ event.title }} | Events{% endblock %}
+{% block title %}{{ title }} | Events{% endblock %}
 
 {% block meta %}
+
+    {{ parent() }}
 
     {% if date(event.ends) < date() %}
         <meta name="robots" content="noindex">

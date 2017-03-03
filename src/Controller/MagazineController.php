@@ -59,19 +59,19 @@ final class MagazineController extends Controller
             ->then($this->willConvertTo(ListingTeasers::class, ['type' => 'articles']));
 
         if (1 === $page) {
-            return $this->createFirstPage($arguments);
+            return $this->createFirstPage($request, $arguments);
         }
 
         return $this->createSubsequentPage($request, $arguments);
     }
 
-    private function createFirstPage(array $arguments) : Response
+    private function createFirstPage(Request $request, array $arguments) : Response
     {
         $arguments['contentHeader'] = ContentHeaderNonArticle::basic('Magazine', true,
             'Highlighting the latest research and giving a voice to life and biomedical scientists.',
             null, null, new BackgroundImage(
-                $this->get('puli.url_generator')->generateUrl('/elife/journal/images/banners/magazine-lo-res.jpg'),
-                $this->get('puli.url_generator')->generateUrl('/elife/journal/images/banners/magazine-hi-res.jpg')
+                $request->getSchemeAndHttpHost().$this->get('puli.url_generator')->generateUrl('/elife/journal/images/banners/magazine-lo-res.jpg'),
+                $request->getSchemeAndHttpHost().$this->get('puli.url_generator')->generateUrl('/elife/journal/images/banners/magazine-hi-res.jpg')
             ));
 
         $arguments['audio_player'] = $this->get('elife.api_sdk.podcast_episodes')

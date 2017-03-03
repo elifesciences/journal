@@ -60,7 +60,7 @@ final class SearchController extends Controller
 
         $arguments = $this->defaultPageArguments();
 
-        $arguments['query'] = [
+        $arguments['query'] = $query = [
             'for' => trim($request->query->get('for')),
             'subjects' => $request->query->get('subjects', []),
             'types' => $request->query->get('types', []),
@@ -99,12 +99,12 @@ final class SearchController extends Controller
         $arguments['title'] = 'Search';
 
         $arguments['paginator'] = $pagerfanta
-            ->then(function (Pagerfanta $pagerfanta) use ($request) {
+            ->then(function (Pagerfanta $pagerfanta) use ($request, $query) {
                 return new Paginator(
                     'Browse the search results',
                     $pagerfanta,
-                    function (int $page = null) use ($request) {
-                        $routeParams = $request->query->all();
+                    function (int $page = null) use ($request, $query) {
+                        $routeParams = $query + $request->attributes->get('_route_params');
                         $routeParams['page'] = $page;
 
                         return $this->get('router')->generate('search', $routeParams);

@@ -35,6 +35,20 @@ abstract class PageTestCase extends WebTestCase
         $this->assertCount(1, $footer);
     }
 
+    /**
+     * @test
+     */
+    final public function it_has_global_metadata()
+    {
+        $client = static::createClient();
+
+        $crawler = $client->request('GET', $this->getUrl());
+
+        $this->assertSame('eLife', $crawler->filter('meta[property="og:site_name"]')->attr('content'));
+        $this->assertSame('en', $crawler->filter('meta[property="og:locale"]')->attr('content'));
+        $this->assertSame('@eLife', $crawler->filter('meta[name="twitter:site"]')->attr('content'));
+    }
+
     final protected static function createClient(array $options = [], array $server = [])
     {
         static::bootKernel($options);

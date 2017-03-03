@@ -30,6 +30,25 @@ final class EventControllerTest extends PageTestCase
     /**
      * @test
      */
+    public function it_has_metadata()
+    {
+        $client = static::createClient();
+
+        $crawler = $client->request('GET', $this->getUrl().'?foo');
+
+        $this->assertSame(200, $client->getResponse()->getStatusCode());
+
+        $this->assertSame('Event title | Events | eLife', $crawler->filter('title')->text());
+        $this->assertSame('/events/1/event-title', $crawler->filter('link[rel="canonical"]')->attr('href'));
+        $this->assertSame('http://localhost/events/1/event-title', $crawler->filter('meta[property="og:url"]')->attr('content'));
+        $this->assertSame('Event title', $crawler->filter('meta[property="og:title"]')->attr('content'));
+        $this->assertSame('article', $crawler->filter('meta[property="og:type"]')->attr('content'));
+        $this->assertSame('summary', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
+    }
+
+    /**
+     * @test
+     */
     public function it_displays_a_message_if_the_event_has_finished()
     {
         $client = static::createClient();

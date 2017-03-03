@@ -24,6 +24,24 @@ final class PressPacksControllerTest extends PageTestCase
 
     /**
      * @test
+     */
+    public function it_has_metadata()
+    {
+        $client = static::createClient();
+
+        $crawler = $client->request('GET', $this->getUrl().'?foo');
+
+        $this->assertSame(200, $client->getResponse()->getStatusCode());
+
+        $this->assertSame('For the press | eLife', $crawler->filter('title')->text());
+        $this->assertSame('/for-the-press', $crawler->filter('link[rel="canonical"]')->attr('href'));
+        $this->assertSame('http://localhost/for-the-press', $crawler->filter('meta[property="og:url"]')->attr('content'));
+        $this->assertSame('For the press', $crawler->filter('meta[property="og:title"]')->attr('content'));
+        $this->assertSame('summary', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
+    }
+
+    /**
+     * @test
      * @dataProvider invalidPageProvider
      */
     public function it_displays_a_404_when_not_on_a_valid_page($page, callable $callable = null)

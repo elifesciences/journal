@@ -95,6 +95,9 @@ developed further to become features on the eLife platform.'),
 
         $arguments = $this->defaultPageArguments($experiment);
 
+        $arguments['title'] = $experiment
+            ->then(Callback::method('getTitle'));
+
         $arguments['experiment'] = $experiment;
 
         $arguments['feedbackForm'] = $experiment
