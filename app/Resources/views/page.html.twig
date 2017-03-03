@@ -7,7 +7,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
 
-    <title>{% block title %}{{ title }}{% endblock %} | eLife</title>
+    <title>{% block title %}{{ title|striptags }}{% endblock %} | eLife</title>
 
     {# We don't use gulp-favicon's generated file as it includes things we don't want, such as apple-mobile-web-app-capable #}
     <link rel="apple-touch-icon" sizes="57x57" href="{{ asset('favicons/apple-touch-icon-57x57.png') }}">
@@ -47,7 +47,7 @@
 
         <meta property="og:site_name" content="eLife">
         <meta property="og:url" content="{{ app.request.uriForPath(canonical) }}">
-        <meta property="og:title" content="{{ title }}">
+        <meta property="og:title" content="{{ title|striptags }}">
         <meta name="twitter:site" content="@eLife">
 
         {% if block('description') and block('description')|trim != '' %}

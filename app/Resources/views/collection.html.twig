@@ -1,9 +1,9 @@
 {% extends '::page.html.twig' %}
 
-{% block title %}{{ title }} | Collections{% endblock %}
+{% block title %}{{ title|striptags }} | Collections{% endblock %}
 
 {% block description %}
-    {{ collection.impactStatement }}
+    {{ collection.impactStatement|raw }}
 {% endblock %}
 
 {% block info_bar %}

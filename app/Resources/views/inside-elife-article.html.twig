@@ -1,6 +1,6 @@
 {% extends '::page.html.twig' %}
 
-{% block title %}{{ title }} | Inside eLife{% endblock %}
+{% block title %}{{ title|striptags }} | Inside eLife{% endblock %}
 
 {% block body %}
 

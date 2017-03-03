@@ -1,6 +1,6 @@
 {% extends '::page.html.twig' %}
 
-{% block title %}{{ title }} | Podcast{% endblock %}
+{% block title %}{{ title|striptags }} | Podcast{% endblock %}
 
 {% block meta %}
 
@@ -14,7 +14,7 @@
 {% endblock %}
 
 {% block description %}
-    {{ episode.impactStatement }}
+    {{ episode.impactStatement|raw }}
 {% endblock %}
 
 {% block body %}

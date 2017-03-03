@@ -90,7 +90,7 @@ final class PodcastEpisodeControllerTest extends PageTestCase
                 ['Content-Type' => 'application/vnd.elife.podcast-episode+json; version=1'],
                 json_encode([
                     'number' => 1,
-                    'title' => 'Episode title',
+                    'title' => 'Episode <i>title</i>',
                     'published' => '2010-01-01T00:00:00Z',
                     'image' => [
                         'banner' => [
@@ -116,7 +116,7 @@ final class PodcastEpisodeControllerTest extends PageTestCase
                             ],
                         ],
                     ],
-                    'impactStatement' => 'Episode impact statement',
+                    'impactStatement' => 'Episode impact <a href="#">statement</a>',
                     'sources' => [
                         [
                             'mediaType' => 'audio/mpeg',

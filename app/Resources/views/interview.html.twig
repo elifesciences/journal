@@ -1,9 +1,9 @@
 {% extends '::page.html.twig' %}
 
-{% block title %}{{ title }} | Interviews{% endblock %}
+{% block title %}{{ title|striptags }} | Interviews{% endblock %}
 
 {% block description %}
-    {{ interview.impactStatement }}
+    {{ interview.impactStatement|raw }}
 {% endblock %}
 
 {% block body %}

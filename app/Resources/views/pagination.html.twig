@@ -1,6 +1,6 @@
 {% extends '::page.html.twig' %}
 
-{% block title %}{{ title }}, page {{ paginator.currentPage }}{% endblock %}
+{% block title %}{{ title|striptags }}, page {{ paginator.currentPage }}{% endblock %}
 
 {% block body %}
 

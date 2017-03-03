@@ -1,6 +1,6 @@
 {% extends '::page.html.twig' %}
 
-{% block title %}{{ title }} | Events{% endblock %}
+{% block title %}{{ title|striptags }} | Events{% endblock %}
 
 {% block meta %}
 
