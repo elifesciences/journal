@@ -2,11 +2,9 @@
 
 namespace eLife\Journal\Controller;
 
-use eLife\ApiClient\Result;
 use eLife\ApiSdk\Client\Search;
 use eLife\ApiSdk\Collection\Sequence;
 use eLife\ApiSdk\Model\SearchTypes;
-use eLife\ApiSdk\Model\Subject;
 use eLife\Journal\Helper\Callback;
 use eLife\Journal\Helper\Paginator;
 use eLife\Journal\Pagerfanta\SequenceAdapter;
@@ -14,7 +12,6 @@ use eLife\Patterns\ViewModel\Button;
 use eLife\Patterns\ViewModel\Filter;
 use eLife\Patterns\ViewModel\FilterGroup;
 use eLife\Patterns\ViewModel\FilterPanel;
-use eLife\Patterns\ViewModel\Form;
 use eLife\Patterns\ViewModel\Link;
 use eLife\Patterns\ViewModel\ListingTeasers;
 use eLife\Patterns\ViewModel\MessageBar;
@@ -25,7 +22,6 @@ use GuzzleHttp\Promise\PromiseInterface;
 use Pagerfanta\Pagerfanta;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use function GuzzleHttp\Promise\all;
 use function GuzzleHttp\Promise\promise_for;
 
 final class SearchController extends Controller
