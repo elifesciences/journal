@@ -43,7 +43,7 @@ final class PodcastEpisodeControllerTest extends PageTestCase
         $this->assertSame('https://placehold.it/1800x900', $crawler->filter('meta[property="og:image"]')->attr('content'));
         $this->assertSame('1800', $crawler->filter('meta[property="og:image:width"]')->attr('content'));
         $this->assertSame('900', $crawler->filter('meta[property="og:image:height"]')->attr('content'));
-        $this->assertSame('https://www.example.com/episode1.mp3', $crawler->filter('meta[property="og:audio"]')->attr('content'));
+        $this->assertSame('https://www.example.com/episode1.mp3', $crawler->filter('meta[property="og:audio:url"]')->attr('content'));
         $this->assertSame('audio/mpeg', $crawler->filter('meta[property="og:audio:type"]')->attr('content'));
     }
 
