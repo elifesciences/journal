@@ -60,7 +60,7 @@ final class ArticleContentHeaderConverter implements ViewModelConverter
                 ModelName::singular($object->getType()),
                 $this->urlGenerator->generate('article-type', ['type' => $object->getType()])
             ),
-            $this->simpleDate($object, $context)
+            $this->simpleDate($object, ['date' => 'published'] + $context)
         );
 
         switch ($object->getType()) {

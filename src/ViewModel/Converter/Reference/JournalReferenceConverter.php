@@ -17,7 +17,7 @@ final class JournalReferenceConverter implements ViewModelConverter
      */
     public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
-        $journal = '<i>'.implode(', ', $object->getJournal()->getName()).'</i>';
+        $journal = '<i>'.$object->getJournal().'</i>';
         if ($object->getVolume()) {
             $journal .= ' <b>'.$object->getVolume().'</b>:';
             if ($object->getPages() instanceof ReferencePageRange) {
@@ -46,7 +46,7 @@ final class JournalReferenceConverter implements ViewModelConverter
             'title' => strip_tags($object->getArticleTitle()),
             'author' => array_map(Callback::method('toString'), $object->getAuthors()),
             'publication_year' => $object->getDate()->getYear(),
-            'journal' => implode(',', $object->getJournal()->getName()),
+            'journal' => $object->getJournal(),
             'volume' => $object->getVolume(),
             'pages' => $object->getPages()->toString(),
             'pmid' => $object->getPmid(),

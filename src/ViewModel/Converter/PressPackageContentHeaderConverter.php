@@ -28,7 +28,7 @@ final class PressPackageContentHeaderConverter implements ViewModelConverter
         return ContentHeaderNonArticle::basic($object->getTitle(), false, null, null,
             Meta::withLink(
                 new Link('Press pack', $this->urlGenerator->generate('press-packs')),
-                $this->simpleDate($object, $context)
+                $this->simpleDate($object, ['date' => 'published'] + $context)
             )
         );
     }
