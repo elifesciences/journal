@@ -3,9 +3,8 @@
 
 
 bin/console --version --env=$ENVIRONMENT_NAME
-[ $(curl --write-out %{http_code} --silent --output /dev/null $(hostname)/favicon.ico) == 200 ]
-smoke_url_ok $(hostname)/favicon.ico
 
+smoke_url_ok $(hostname)/favicon.ico
 smoke_url_ok $(hostname)/assets/css/all.css
 smoke_url_ok $(hostname)/images/banners/magazine-hi-res.jpg
 smoke_url_ok $(hostname)/ping
