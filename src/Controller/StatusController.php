@@ -2,12 +2,14 @@
 
 namespace eLife\Journal\Controller;
 
+use eLife\ApiClient\Exception\BadResponse;
 use eLife\ApiSdk\Model\ArticleVersion;
 use eLife\Journal\Helper\Callback;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 use function GuzzleHttp\Promise\each;
 use function GuzzleHttp\Promise\exception_for;
+use function GuzzleHttp\Promise\rejection_for;
 
 final class StatusController extends Controller
 {
@@ -27,13 +29,29 @@ final class StatusController extends Controller
             'interviews' => $this->get('elife.api_sdk.interviews')->slice(0, 1),
             'labs-experiments' => $this->get('elife.api_sdk.labs_experiments')->slice(0, 1),
             'medium-articles' => $this->get('elife.api_sdk.medium_articles')->slice(0, 1),
-            'metrics' => $article->then(Callback::method('offsetGet', 0))->then(Callback::emptyOr(function (ArticleVersion $article) {
-                return $this->get('elife.api_sdk.metrics')->totalPageViews('article', $article->getId());
-            })),
+            'metrics' => $article->then(Callback::method('offsetGet', 0))
+                ->then(Callback::emptyOr(function (ArticleVersion $article) {
+                    return $this->get('elife.api_sdk.metrics')->totalPageViews('article', $article->getId());
+                }))
+                ->otherwise(function ($reason) {
+                    if ($reason instanceof BadResponse && in_array($reason->getResponse()->getStatusCode(), [404, 410])) {
+                        return null;
+                    }
+
+                    return rejection_for($reason);
+                }),
             'podcast-episodes' => $this->get('elife.api_sdk.podcast_episodes')->slice(0, 1),
-            'recommendations' => $article->then(Callback::method('offsetGet', 0))->then(Callback::emptyOr(function (ArticleVersion $article) {
-                return $this->get('elife.api_sdk.recommendations')->list('article', $article->getId())->slice(0, 1);
-            })),
+            'recommendations' => $article->then(Callback::method('offsetGet', 0))
+                ->then(Callback::emptyOr(function (ArticleVersion $article) {
+                    return $this->get('elife.api_sdk.recommendations')->list('article', $article->getId())->slice(0, 1);
+                }))
+                ->otherwise(function ($reason) {
+                    if ($reason instanceof BadResponse && in_array($reason->getResponse()->getStatusCode(), [404, 410])) {
+                        return null;
+                    }
+
+                    return rejection_for($reason);
+                }),
             'search' => $this->get('elife.api_sdk.search')->slice(0, 1),
             'subjects' => $this->get('elife.api_sdk.subjects')->slice(0, 1),
         ];
