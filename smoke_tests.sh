@@ -1,14 +1,21 @@
 #!/usr/bin/env bash
-set -ex
+. /opt/smoke.sh/smoke.sh
+
 
 bin/console --version --env=$ENVIRONMENT_NAME
 [ $(curl --write-out %{http_code} --silent --output /dev/null $(hostname)/favicon.ico) == 200 ]
-[ $(curl --write-out %{http_code} --silent --output /dev/null $(hostname)/assets/css/all.css) == 200 ]
-[ $(curl --write-out %{http_code} --silent --output /dev/null $(hostname)/images/banners/magazine-hi-res.jpg) == 200 ]
-[ $(curl --write-out %{http_code} --silent --output /dev/null $(hostname)/ping) == 200 ]
+smoke_url_ok $(hostname)/favicon.ico
 
-if [ "$ENVIRONMENT_NAME" != "ci" ]
+smoke_url_ok $(hostname)/assets/css/all.css
+smoke_url_ok $(hostname)/images/banners/magazine-hi-res.jpg
+smoke_url_ok $(hostname)/ping
+    smoke_assert_body "pong"
+
+if [ "$ENVIRONMENT_NAME" != "ci" ] && [ "$ENVIRONMENT_NAME" != "dev" ]
   then
-    [ $(curl --write-out %{http_code} --silent --output /dev/null $(hostname)/status) == 200 ]
-    [ $(curl --write-out %{http_code} --silent --output /dev/null $(hostname)) == 200 ]
+    curl -v $(hostname)/status
+    smoke_url_ok $(hostname)/status
+    smoke_url_ok $(hostname)/
 fi
+
+smoke_report
