@@ -6,14 +6,18 @@
 
 {% block article_body %}
 
-    {% fragment_link_rewrite textPath %}
+    <div class="grid__item large--eight-twelfths blg-pad-top-medium" data-behaviour="FragmentHandler">
 
-    {% for part in body %}
+        {% fragment_link_rewrite textPath %}
 
-        {{ render_pattern(part) }}
+        {% for part in body %}
 
-    {% endfor %}
+            {{ render_pattern(part) }}
 
-    {% end_fragment_link_rewrite %}
+        {% endfor %}
+
+        {% end_fragment_link_rewrite %}
+
+    </div>
 
 {% endblock %}
