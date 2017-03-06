@@ -46,7 +46,6 @@ final class StatusController extends Controller
 
         array_map(function ($problem) {
             $this->get('logger')->critical('/status failed', ['exception' => $problem]);
-
         }, $problems);
 
         if ($problems) {
@@ -54,7 +53,6 @@ final class StatusController extends Controller
         } else {
             return $this->createResponse('<html><head><title>Status</title></head><body>Everything is ok.</body></html>');
         }
-
     }
 
     private function createResponse(string $body = '', int $statusCode = Response::HTTP_OK, array $headers = [])
