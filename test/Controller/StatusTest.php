@@ -41,8 +41,37 @@ final class StatusTest extends WebTestCase
                 200,
                 ['Content-Type' => 'application/vnd.elife.article-list+json; version=1'],
                 json_encode([
-                    'total' => 0,
-                    'items' => [],
+                    'total' => 1,
+                    'items' => [
+                        [
+                            'status' => 'poa',
+                            'id' => '00001',
+                            'version' => 1,
+                            'type' => 'research-article',
+                            'doi' => '10.7554/eLife.00001',
+                            'title' => 'Title',
+                            'stage' => 'published',
+                            'published' => '2016-01-02T00:00:00Z',
+                            'statusDate' => '2016-01-02T00:00:00Z',
+                            'versionDate' => '2016-01-02T00:00:00Z',
+                            'volume' => 1,
+                            'elocationId' => 'e00001',
+                            'copyright' => [
+                                'license' => 'CC0-1.0',
+                                'statement' => 'Statement.',
+                            ],
+                            'authorLine' => 'Foo Bar et al',
+                            'authors' => [
+                                [
+                                    'type' => 'person',
+                                    'name' => [
+                                        'preferred' => 'Foo Bar',
+                                        'index' => 'Bar, Foo',
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
                 ])
             )
         );
@@ -162,12 +191,45 @@ final class StatusTest extends WebTestCase
         $this->mockApiResponse(
             new Request(
                 'GET',
+                'http://api.elifesciences.org/metrics/article/00001/page-views?by=month&page=1&per-page=20&order=desc',
+                ['Accept' => 'application/vnd.elife.metric-time-period+json; version=1']
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.metric-time-period+json; version=1'],
+                json_encode([
+                    'totalValue' => 0,
+                    'totalPeriods' => 0,
+                    'periods' => [],
+                ])
+            )
+        );
+
+        $this->mockApiResponse(
+            new Request(
+                'GET',
                 'http://api.elifesciences.org/podcast-episodes?page=1&per-page=1&order=desc',
                 ['Accept' => 'application/vnd.elife.podcast-episode-list+json; version=1']
             ),
             new Response(
                 200,
                 ['Content-Type' => 'application/vnd.elife.podcast-episode-list+json; version=1'],
+                json_encode([
+                    'total' => 0,
+                    'items' => [],
+                ])
+            )
+        );
+
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/recommendations/article/00001?page=1&per-page=1&order=desc',
+                ['Accept' => 'application/vnd.elife.recommendations+json; version=1']
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.recommendations+json; version=1'],
                 json_encode([
                     'total' => 0,
                     'items' => [],

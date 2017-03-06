@@ -6,8 +6,11 @@ use DateTimeImmutable;
 use eLife\ApiSdk\Collection\ArraySequence;
 use eLife\ApiSdk\Collection\EmptySequence;
 use eLife\Journal\Helper\Callback;
+use eLife\Journal\Helper\Paginator;
 use InvalidArgumentException;
 use LogicException;
+use Pagerfanta\Adapter\NullAdapter;
+use Pagerfanta\Pagerfanta;
 use PHPUnit_Framework_TestCase;
 use Traversable;
 
@@ -221,6 +224,9 @@ final class CallbackTest extends PHPUnit_Framework_TestCase
         yield 'empty sequence' => [new EmptySequence()];
         yield 'empty array' => [[]];
         yield 'empty string' => [''];
+        yield 'empty paginator' => [new Paginator('title', new Pagerfanta(new NullAdapter()), function () {
+            return 'foo';
+        })];
         yield '0' => [0];
         yield 'null' => [null];
     }
