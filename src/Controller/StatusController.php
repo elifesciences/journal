@@ -31,8 +31,8 @@ final class StatusController extends Controller
 
         $responsePromises = array_map(function ($request) {
             return $request
-                ->then(function ($response) {
-                    return $response->status();
+                ->then(function ($items) {
+                    return $items;
                 })
                 ->otherwise(function ($reason) {
                     return $reason;
