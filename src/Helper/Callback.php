@@ -44,7 +44,7 @@ final class Callback
         }
 
         return new self(function ($object) use ($exception) {
-            if (empty($object) || ((is_array($object) || $object instanceof Countable) && 0 === count($object))) {
+            if (empty($object) || ((is_array($object) || $object instanceof Countable) && 0 === count($object)) || ($object instanceof Paginator && 0 === $object->getTotal())) {
                 throw $exception;
             }
 
@@ -61,7 +61,7 @@ final class Callback
         return new self(function ($object) use ($method, $exception) {
             $test = call_user_func([$object, $method]);
 
-            if (empty($test) || ((is_array($test) || $test instanceof Countable) && 0 === count($test))) {
+            if (empty($test) || ((is_array($test) || $test instanceof Countable) && 0 === count($test)) || ($test instanceof Paginator && 0 === $test->getTotal())) {
                 throw $exception;
             }
 
@@ -76,10 +76,17 @@ final class Callback
         });
     }
 
+    public static function pick(string $key) : Callback
+    {
+        return new self(function (array $object) use ($key) {
+            return $object[$key];
+        });
+    }
+
     public static function emptyOr(callable $callback) : Callback
     {
         return new self(function ($object) use ($callback) {
-            if (empty($object) || ((is_array($object) || $object instanceof Countable) && 0 === count($object))) {
+            if (empty($object) || ((is_array($object) || $object instanceof Countable) && 0 === count($object)) || ($object instanceof Paginator && 0 === $object->getTotal())) {
                 return null;
             }
 
@@ -92,7 +99,7 @@ final class Callback
         return new self(function ($object) use ($method, $callback) {
             $test = call_user_func([$object, $method]);
 
-            if (empty($test) || ((is_array($test) || $test instanceof Countable) && 0 === count($test))) {
+            if (empty($test) || ((is_array($test) || $test instanceof Countable) && 0 === count($test)) || ($test instanceof Paginator && 0 === $test->getTotal())) {
                 return null;
             }
 

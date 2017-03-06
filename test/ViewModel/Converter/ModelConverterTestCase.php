@@ -39,7 +39,7 @@ abstract class ModelConverterTestCase extends PHPUnit_Framework_TestCase
             $this->converter->supports($model, $this->viewModelClass, $this->context),
             'Converter does not support turning '.get_class($model).' into '.$this->viewModelClass
         );
-        $viewModel = $this->converter->convert($model);
+        $viewModel = $this->converter->convert($model, $this->viewModelClass, $this->context);
         $this->assertTrue($viewModel instanceof $this->viewModelClass);
 
         $viewModel->toArray();

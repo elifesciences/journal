@@ -95,16 +95,16 @@ abstract class Controller implements ContainerAwareInterface
         };
     }
 
-    final protected function softFailure(string $message = null) : callable
+    final protected function softFailure(string $message = null, $default = null) : callable
     {
-        return function ($reason) use ($message) {
+        return function ($reason) use ($message, $default) {
             $e = exception_for($reason);
 
             if (false === $e instanceof HttpException) {
                 $this->get('logger')->error($message ?? $e->getMessage(), ['exception' => $e]);
             }
 
-            return null;
+            return $default;
         };
     }
 

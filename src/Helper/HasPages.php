@@ -12,11 +12,11 @@ use function GuzzleHttp\Promise\promise_for;
 
 trait HasPages
 {
-    final private function pagerfantaPromise(Sequence $sdkClient, int $page, int $perPage): PromiseInterface
+    final private function pagerfantaPromise(Sequence $sdkClient, int $page, int $perPage, string $convertTo = Teaser::class) : PromiseInterface
     {
         return promise_for($sdkClient)
-            ->then(function (Sequence $sequence) use ($page, $perPage) {
-                $pagerfanta = new Pagerfanta(new SequenceAdapter($sequence, $this->willConvertTo(Teaser::class)));
+            ->then(function (Sequence $sequence) use ($page, $perPage, $convertTo) {
+                $pagerfanta = new Pagerfanta(new SequenceAdapter($sequence, $this->willConvertTo($convertTo)));
                 $pagerfanta->setMaxPerPage($perPage)->setCurrentPage($page);
 
                 return $pagerfanta;

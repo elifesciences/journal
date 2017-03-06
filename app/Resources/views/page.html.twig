@@ -39,7 +39,7 @@
 
         {% if block('canonical') %}
             {% set canonical = block('canonical')|trim %}
-        {% elseif paginator is defined %}
+        {% elseif paginator is defined and paginator %}
             {% set canonical = paginator.currentPagePath %}
         {% else %}
             {% set canonical = path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) %}
@@ -86,13 +86,13 @@
 
         <link rel="canonical" href="{{ canonical }}">
 
-        {% if paginator is defined %}
+        {% if paginator is defined and paginator %}
 
-            {% if paginator.previousPage %}
+            {% if paginator.previousPage and paginator %}
                 <link rel="prev" href="{{ paginator.previousPagePath }}">
             {% endif %}
 
-            {% if paginator.nextPage %}
+            {% if paginator.nextPage and paginator %}
                 <link rel="next" href="{{ paginator.nextPagePath }}">
             {% endif %}
 
