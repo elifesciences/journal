@@ -2,6 +2,8 @@
 
 namespace eLife\Journal\Controller;
 
+use eLife\ApiSdk\Model\ArticleVersion;
+use eLife\Journal\Helper\Callback;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 use function GuzzleHttp\Promise\all;
@@ -16,7 +18,7 @@ final class StatusController extends Controller
     public function statusAction() : Response
     {
         $requests = [
-            'articles' => $this->get('elife.api_sdk.articles')->slice(0, 1),
+            'articles' => $article = $this->get('elife.api_sdk.articles')->slice(0, 1),
             'blog-articles' => $this->get('elife.api_sdk.blog_articles')->slice(0, 1),
             'collections' => $this->get('elife.api_sdk.collections')->slice(0, 1),
             'covers' => $this->get('elife.api_sdk.covers')->slice(0, 1),
@@ -24,7 +26,13 @@ final class StatusController extends Controller
             'interviews' => $this->get('elife.api_sdk.interviews')->slice(0, 1),
             'labs-experiments' => $this->get('elife.api_sdk.labs_experiments')->slice(0, 1),
             'medium-articles' => $this->get('elife.api_sdk.medium_articles')->slice(0, 1),
+            'metrics' => $article->then(Callback::method('offsetGet', 0))->then(Callback::emptyOr(function (ArticleVersion $article) {
+                return $this->get('elife.api_sdk.metrics')->totalPageViews('article', $article->getId());
+            })),
             'podcast-episodes' => $this->get('elife.api_sdk.podcast_episodes')->slice(0, 1),
+            'recommendations' => $article->then(Callback::method('offsetGet', 0))->then(Callback::emptyOr(function (ArticleVersion $article) {
+                return $this->get('elife.api_sdk.recommendations')->list('article', $article->getId())->slice(0, 1);
+            })),
             'search' => $this->get('elife.api_sdk.search')->slice(0, 1),
             'subjects' => $this->get('elife.api_sdk.subjects')->slice(0, 1),
         ];

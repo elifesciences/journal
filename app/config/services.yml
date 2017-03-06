@@ -77,6 +77,10 @@ services:
         class: eLife\ApiSdk\Client\PressPackages
         factory: ['@elife.api_sdk', pressPackages]
 
+    elife.api_sdk.recommendations:
+        class: eLife\ApiSdk\Client\Recommendations
+        factory: ['@elife.api_sdk', recommendations]
+
     elife.api_sdk.search:
         class: eLife\ApiSdk\Client\Search
         factory: ['@elife.api_sdk', search]
@@ -202,8 +206,26 @@ services:
         tags:
           - name: view_model.converter
 
+    elife.journal.view_model.converter.article.read_more_item:
+        class: eLife\Journal\ViewModel\Converter\ArticleReadMoreItemConverter
+        public: false
+        arguments:
+          - '@elife.journal.view_model.converter'
+          - '@elife.patterns.pattern_renderer'
+          - '@router'
+        tags:
+          - name: view_model.converter
+
     elife.journal.view_model.converter.article.teaser:
         class: eLife\Journal\ViewModel\Converter\ArticleTeaserConverter
+        public: false
+        arguments:
+          - '@router'
+        tags:
+          - name: view_model.converter
+
+    elife.journal.view_model.converter.article.teaser.related_item:
+        class: eLife\Journal\ViewModel\Converter\ArticleRelatedItemTeaserConverter
         public: false
         arguments:
           - '@router'
@@ -377,6 +399,16 @@ services:
         tags:
           - name: view_model.converter
 
+    elife.journal.view_model.converter.collection.read_more_item:
+        class: eLife\Journal\ViewModel\Converter\CollectionReadMoreItemConverter
+        public: false
+        arguments:
+          - '@elife.patterns.pattern_renderer'
+          - '@router'
+          - '@slugify'
+        tags:
+          - name: view_model.converter
+
     elife.journal.view_model.converter.collection.teaser:
         class: eLife\Journal\ViewModel\Converter\CollectionTeaserConverter
         public: false
@@ -441,6 +473,12 @@ services:
         arguments:
           - '@router'
           - '@slugify'
+        tags:
+          - name: view_model.converter
+
+    elife.journal.view_model.converter.external_article.teaser.related_item:
+        class: eLife\Journal\ViewModel\Converter\ExternalArticleRelatedItemTeaserConverter
+        public: false
         tags:
           - name: view_model.converter
 
@@ -608,6 +646,12 @@ services:
         tags:
           - name: view_model.converter
 
+    elife.journal.view_model.converter.paginator.listing_read_more:
+        class: eLife\Journal\ViewModel\Converter\PaginatorListingReadMoreConverter
+        public: false
+        tags:
+          - name: view_model.converter
+
     elife.journal.view_model.converter.paginator.listing_teasers:
         class: eLife\Journal\ViewModel\Converter\PaginatorListingTeasersConverter
         public: false
@@ -659,6 +703,15 @@ services:
         class: eLife\Journal\ViewModel\Converter\PodcastEpisodeSecondaryTeaserConverter
         public: false
         arguments:
+          - '@router'
+        tags:
+          - name: view_model.converter
+
+    elife.journal.view_model.converter.podcast_episode_chapter.read_more_item:
+        class: eLife\Journal\ViewModel\Converter\PodcastEpisodeChapterReadMoreItemConverter
+        public: false
+        arguments:
+          - '@elife.patterns.pattern_renderer'
           - '@router'
         tags:
           - name: view_model.converter

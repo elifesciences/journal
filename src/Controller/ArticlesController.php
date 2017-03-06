@@ -7,6 +7,7 @@ use eLife\ApiSdk\Collection\EmptySequence;
 use eLife\ApiSdk\Collection\PromiseSequence;
 use eLife\ApiSdk\Collection\Sequence;
 use eLife\ApiSdk\Model\Appendix;
+use eLife\ApiSdk\Model\Article;
 use eLife\ApiSdk\Model\ArticleHistory;
 use eLife\ApiSdk\Model\ArticlePoA;
 use eLife\ApiSdk\Model\ArticleVersion;
@@ -17,9 +18,11 @@ use eLife\ApiSdk\Model\CitationsMetric;
 use eLife\ApiSdk\Model\CitationsMetricSource;
 use eLife\ApiSdk\Model\DataSet;
 use eLife\ApiSdk\Model\FundingAward;
+use eLife\ApiSdk\Model\Model;
 use eLife\ApiSdk\Model\PersonAuthor;
 use eLife\ApiSdk\Model\Reviewer;
 use eLife\Journal\Helper\Callback;
+use eLife\Journal\Helper\HasPages;
 use eLife\Journal\ViewModel\Paragraph;
 use eLife\Patterns\ViewModel;
 use eLife\Patterns\ViewModel\ArticleSection;
@@ -29,8 +32,10 @@ use eLife\Patterns\ViewModel\Doi;
 use eLife\Patterns\ViewModel\InfoBar;
 use eLife\Patterns\ViewModel\Link;
 use eLife\Patterns\ViewModel\Listing;
+use eLife\Patterns\ViewModel\ReadMoreItem;
 use eLife\Patterns\ViewModel\ViewSelector;
 use GuzzleHttp\Promise\PromiseInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use function GuzzleHttp\Promise\all;
@@ -38,9 +43,114 @@ use function GuzzleHttp\Promise\promise_for;
 
 final class ArticlesController extends Controller
 {
-    public function textAction(string $id, int $version = null) : Response
+    use HasPages;
+
+    public function textAction(Request $request, string $id, int $version = null) : Response
     {
+        $page = (int) $request->query->get('page', 1);
+        $perPage = 3;
+
         $arguments = $this->articlePageArguments($id, $version);
+
+        /** @var Sequence $recommendations */
+        $recommendations = new PromiseSequence($arguments['article']
+            ->then(function (ArticleVersion $article) {
+                if (in_array($article->getType(), ['correction', 'retraction'])) {
+                    return new EmptySequence();
+                }
+
+                return $this->get('elife.api_sdk.recommendations')->list('article', $article->getId())->slice(0)
+                    ->otherwise($this->mightNotExist())
+                    ->otherwise($this->softFailure('Failed to load recommendations', new EmptySequence()));
+            }));
+
+        $arguments['furtherReading'] = $recommendations
+            ->filter(function (Model $model) use ($arguments) {
+                // Remove corrections and retractions for this article.
+                if ($model instanceof ArticleVersion && in_array($model->getType(), ['correction', 'retraction'])) {
+                    foreach ($arguments['relatedArticles'] as $relatedArticle) {
+                        if ($relatedArticle->getId() === $model->getId()) {
+                            return false;
+                        }
+                    }
+                }
+
+                return true;
+            })
+            ->then(function (Sequence $furtherReading) use ($arguments) {
+                if (count($furtherReading) > 0) {
+                    foreach ($arguments['relatedArticles'] as $relatedArticle) {
+                        if ($relatedArticle instanceof Article) {
+                            if ($furtherReading[0]->getId() === $relatedArticle->getId()) {
+                                $relatedItem = $furtherReading[0];
+                                $furtherReading = $furtherReading->slice(1);
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                return [
+                    'relatedItem' => $relatedItem ?? null,
+                    'furtherReading' => $furtherReading,
+                ];
+            });
+
+        $arguments['relatedItem'] = $arguments['furtherReading']->then(Callback::pick('relatedItem'));
+        $furtherReading = new PromiseSequence($arguments['furtherReading']->then(Callback::pick('furtherReading')));
+
+        $furtherReading = $this->pagerfantaPromise(
+            $furtherReading,
+            $page,
+            $perPage,
+            ReadMoreItem::class
+        );
+
+        $arguments['paginator'] = $this->paginator(
+            $furtherReading,
+            $request,
+            'Read more articles',
+            'article'
+        );
+
+        $arguments['paginator'] = all(['paginator' => $arguments['paginator'], 'article' => $arguments['article']])
+            ->then(function (array $parts) {
+                if (in_array($parts['article']->getType(), ['correction', 'retraction'])) {
+                    return null;
+                }
+
+                return $parts['paginator'];
+            });
+
+        $arguments['listing'] = $arguments['paginator']
+            ->then(Callback::emptyOr($this->willConvertTo(ViewModel\ListingReadMore::class)));
+
+        if (1 === $page) {
+            return $this->createFirstPage($id, $arguments);
+        }
+
+        unset($arguments['firstFurtherReading']);
+
+        $arguments['title'] = 'Browse further reading';
+
+        return $this->createSubsequentPage($request, $arguments);
+    }
+
+    private function createFirstPage(string $id, array $arguments) : Response
+    {
+        $arguments['relatedItem'] = all(['relatedItem' => $arguments['relatedItem'], 'article' => $arguments['article']])
+            ->then(function (array $parts) {
+                /** @var Article|null $relatedItem */
+                $relatedItem = $parts['relatedItem'];
+                /** @var Article $article */
+                $article = $parts['article'];
+
+                if (empty($relatedItem)) {
+                    return null;
+                }
+
+                return $this->convertTo($relatedItem, ViewModel\Teaser::class, ['variant' => 'relatedItem', 'from' => $article->getType()]);
+            });
 
         $arguments['downloads'] = $this->get('elife.api_sdk.metrics')
             ->totalDownloads('article', $id)
@@ -496,6 +606,11 @@ sources: '.implode(', ', array_map(function (CitationsMetricSource $source) {
             ->getHistory($id)
             ->otherwise($this->mightNotExist());
 
+        /* @var Sequence $related */
+        $arguments['relatedArticles'] = new PromiseSequence($this->get('elife.api_sdk.articles')->getRelatedArticles($id)->slice(0)
+            ->otherwise($this->mightNotExist())
+            ->otherwise($this->softFailure('Failed to load related articles', new EmptySequence())));
+
         $arguments['textPath'] = $arguments['history']
             ->then(function (ArticleHistory $history) use ($version) {
                 return $this->generateTextPath($history, $version);
@@ -509,22 +624,46 @@ sources: '.implode(', ', array_map(function (CitationsMetricSource $source) {
         $arguments['contentHeader'] = $arguments['article']
             ->then($this->willConvertTo(ContentHeaderArticle::class));
 
-        $arguments['infoBars'] = all(['article' => $arguments['article'], 'history' => $arguments['history']])
+        $arguments['infoBars'] = all(['article' => $arguments['article'], 'history' => $arguments['history'], 'relatedArticles' => $arguments['relatedArticles']])
             ->then(function (array $parts) {
                 /** @var ArticleVersion $article */
                 $article = $parts['article'];
                 /** @var ArticleHistory $history */
                 $history = $parts['history'];
+                /** @var Sequence|Article[] $relatedArticles */
+                $relatedArticles = $parts['relatedArticles'];
+
+                $infoBars = [];
 
                 if ($article->getVersion() < $history->getVersions()[count($history->getVersions()) - 1]->getVersion()) {
-                    return [new InfoBar('Read the <a href="'.$this->generateTextPath($history).'">most recent version of this article</a>.', InfoBar::TYPE_MULTIPLE_VERSIONS)];
+                    $infoBars[] = new InfoBar('Read the <a href="'.$this->generateTextPath($history).'">most recent version of this article</a>.', InfoBar::TYPE_MULTIPLE_VERSIONS);
                 }
 
-                if ($article instanceof ArticleVoR) {
-                    return [];
+                if ($article instanceof ArticlePoA) {
+                    $infoBars[] = new InfoBar('Accepted manuscript, PDF only. Full online edition to follow.');
                 }
 
-                return [new InfoBar('Accepted manuscript, PDF only. Full online edition to follow.')];
+                switch ($type = $article->getType()) {
+                    case 'correction':
+                        $infoBars[] = new InfoBar('This is a correction notice. Read the <a href="'.$this->get('router')->generate('article', ['id' => $relatedArticles[0]->getId()]).'">corrected article</a>.', InfoBar::TYPE_CORRECTION);
+                        break;
+                    case 'retraction':
+                        $infoBars[] = new InfoBar('This is a retraction notice. Read the <a href="'.$this->get('router')->generate('article', ['id' => $relatedArticles[0]->getId()]).'">retraction notice</a>.', InfoBar::TYPE_ATTENTION);
+                        break;
+                }
+
+                foreach ($relatedArticles as $relatedArticle) {
+                    switch ($relatedArticle->getType()) {
+                        case 'correction':
+                            $infoBars[] = new InfoBar('This article has been corrected. Read the <a href="'.$this->get('router')->generate('article', ['id' => $relatedArticle->getId()]).'">correction notice</a>.', InfoBar::TYPE_CORRECTION);
+                            break;
+                        case 'retraction':
+                            $infoBars[] = new InfoBar('This article has been retracted. Read the <a href="'.$this->get('router')->generate('article', ['id' => $relatedArticle->getId()]).'">retraction notice</a>.', InfoBar::TYPE_ATTENTION);
+                            break;
+                    }
+                }
+
+                return $infoBars;
             });
 
         $arguments['citations'] = $this->get('elife.api_sdk.metrics')
