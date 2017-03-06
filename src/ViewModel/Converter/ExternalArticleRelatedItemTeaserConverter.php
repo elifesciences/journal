@@ -20,7 +20,7 @@ final class ExternalArticleRelatedItemTeaserConverter implements ViewModelConver
             $object->getTitle(),
             $object->getUri(),
             $object->getAuthorLine(),
-            new ViewModel\ContextLabel(new ViewModel\Link(ModelRelationship::get($context['from']))),
+            new ViewModel\ContextLabel(new ViewModel\Link(ModelRelationship::get($context['from'], $object->getType()))),
             null,
             TeaserFooter::forNonArticle(Meta::withText($object->getJournal()))
         );

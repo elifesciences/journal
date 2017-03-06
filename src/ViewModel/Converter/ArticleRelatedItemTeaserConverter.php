@@ -39,7 +39,7 @@ final class ArticleRelatedItemTeaserConverter implements ViewModelConverter
             $object->getFullTitle(),
             $this->urlGenerator->generate('article', ['id' => $object->getId()]),
             $object->getAuthorLine(),
-            new ViewModel\ContextLabel(new ViewModel\Link(ModelRelationship::get($context['from']))),
+            new ViewModel\ContextLabel(new ViewModel\Link(ModelRelationship::get($context['from'], $object->getType()))),
             $image,
             TeaserFooter::forNonArticle(
                 Meta::withLink(
