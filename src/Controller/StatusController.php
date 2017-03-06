@@ -19,7 +19,7 @@ final class StatusController extends Controller
     public function statusAction() : Response
     {
         $requests = [
-            'articles' => $article = $this->get('elife.api_sdk.articles')->slice(0, 1),
+            'articles' => $article = $this->get('elife.api_sdk.articles')->reverse()->slice(0, 1),
             'blog-articles' => $this->get('elife.api_sdk.blog_articles')->slice(0, 1),
             'collections' => $this->get('elife.api_sdk.collections')->slice(0, 1),
             'covers' => $this->get('elife.api_sdk.covers')->slice(0, 1),
