@@ -44,39 +44,17 @@ final class StatusController extends Controller
             return $response instanceof Throwable;
         });
 
+        array_map(function ($problem) {
+            $this->get('logger')->critical('/status failed', ['exception' => $problem]);
+
+        }, $problems);
+
         if ($problems) {
-            $status = 500;
-            $text = 'Everything is not ok';
+            return $this->createResponse('<html><head><title>Status</title></head><body>Everything is not ok.</body></html>', 500);
         } else {
-            $status = 200;
-            $text = 'Everything is ok';
+            return $this->createResponse('<html><head><title>Status</title></head><body>Everything is ok.</body></html>');
         }
-        $items = array_map(function ($response) {
-            if ($response instanceof Throwable) {
-                $this->get('logger')->critical('/status failed', ['exception' => $response]);
 
-                return $response->getMessage();
-            }
-
-            return $response->getStatusCode();
-        }, $responses);
-        $list = '<ul>'.PHP_EOL;
-        foreach ($items as $api => $item) {
-            $list .= '<li>'.$api.': '.$item.'</li>'.PHP_EOL;
-        }
-        $list .= '</ul>'.PHP_EOL;
-
-        return $this->createResponse(
-            '<html>'.PHP_EOL
-            .'<head>'.PHP_EOL
-            .'<title>Status</title>'.PHP_EOL
-            .'</head>'.PHP_EOL
-            .'<body>'.PHP_EOL
-            .$text.$list.PHP_EOL
-            .'</body>'.PHP_EOL
-            .'</html>',
-            $status
-        );
     }
 
     private function createResponse(string $body = '', int $statusCode = Response::HTTP_OK, array $headers = [])

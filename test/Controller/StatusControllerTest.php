@@ -16,8 +16,6 @@ final class StatusControllerTest extends WebTestCase
         $crawler = $client->request('GET', $this->getUrl());
 
         $this->assertSame(500, $client->getResponse()->getStatusCode());
-        $this->assertGreaterThanOrEqual(11, $crawler->filter('li')->count());
-        $this->assertRegexp('/articles: The promise was rejected with reason: .*/', $crawler->filter('li:nth-child(1)')->text());
     }
 
     protected function getUrl() : string
