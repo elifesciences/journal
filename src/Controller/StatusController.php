@@ -6,7 +6,8 @@ use eLife\ApiSdk\Model\ArticleVersion;
 use eLife\Journal\Helper\Callback;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
-use function GuzzleHttp\Promise\all;
+use function GuzzleHttp\Promise\each;
+use function GuzzleHttp\Promise\exception_for;
 
 final class StatusController extends Controller
 {
@@ -37,30 +38,21 @@ final class StatusController extends Controller
             'subjects' => $this->get('elife.api_sdk.subjects')->slice(0, 1),
         ];
 
-        $responsePromises = array_map(function ($request) {
-            return $request
-                ->then(function ($items) {
-                    return $items;
-                })
-                ->otherwise(function ($reason) {
-                    return $reason;
-                });
-        }, $requests);
+        $requests = each($requests, null, function ($reason) {
+            $e = exception_for($reason);
 
-        $responses = all($responsePromises)->wait();
-        $problems = array_filter($responses, function ($response) {
-            return $response instanceof Throwable;
+            $this->get('logger')->critical('/status failed', ['exception' => $e]);
+
+            throw $e;
         });
 
-        array_map(function ($problem) {
-            $this->get('logger')->critical('/status failed', ['exception' => $problem]);
-        }, $problems);
-
-        if ($problems) {
+        try {
+            $requests->wait();
+        } catch (Throwable $e) {
             return $this->createResponse('<html><head><title>Status</title></head><body>Everything is not ok.</body></html>', 500);
-        } else {
-            return $this->createResponse('<html><head><title>Status</title></head><body>Everything is ok.</body></html>');
         }
+
+        return $this->createResponse('<html><head><title>Status</title></head><body>Everything is ok.</body></html>');
     }
 
     private function createResponse(string $body = '', int $statusCode = Response::HTTP_OK, array $headers = [])
