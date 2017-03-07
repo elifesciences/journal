@@ -40,6 +40,11 @@ abstract class Controller implements ContainerAwareInterface
         return $this->container->get($id);
     }
 
+    final protected function getParameter(string $id)
+    {
+        return $this->container->getParameter($id);
+    }
+
     final protected function has(string $id): bool
     {
         return $this->container->has($id);

@@ -40,6 +40,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use function GuzzleHttp\Promise\all;
 use function GuzzleHttp\Promise\promise_for;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 final class ArticlesController extends Controller
 {
@@ -414,6 +415,14 @@ sources: '.implode(', ', array_map(function (CitationsMetricSource $source) {
                     );
                 }
 
+                $parts[] = ArticleSection::collapsible(
+                    'comments',
+                    'Comments',
+                    2,
+                    '<div id="disqus_thread">'.$this->render(ViewModel\Button::link('View the discussion thread', 'https://'.$this->getParameter('disqus_domain').'.disqus.com/?url='.urlencode($this->get('router')->generate('article', ['id' => $article->getId()], UrlGeneratorInterface::ABSOLUTE_URL)))).'</div>',
+                    true
+                );
+
                 return $parts;
             });
 
@@ -696,12 +705,10 @@ sources: '.implode(', ', array_map(function (CitationsMetricSource $source) {
                     $metrics[] = new ViewModel\ContextualDataMetric('Views', number_format($pageViews));
                 }
 
-                if (!$article->getCiteAs()) {
-                    if (!empty($metrics)) {
-                        return ContextualData::withMetrics($metrics);
-                    }
+                $metrics[] = new ViewModel\ContextualDataMetric('Comments', 0, 'disqus-comment-count');
 
-                    return null;
+                if (!$article->getCiteAs()) {
+                    return ContextualData::withMetrics($metrics);
                 }
 
                 return ContextualData::withCitation($article->getCiteAs(), new Doi($article->getDoi()), $metrics);

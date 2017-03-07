@@ -457,3 +457,27 @@
     {% endif %}
 
 {% endblock %}
+
+{% block javascripts %}
+
+    {{ parent() }}
+
+    <script id="dsq-count-scr" src="https://{{ disqus_domain }}.disqus.com/count.js" async></script>
+    <script>
+        var disqus_config = function () {
+            this.page.url = '{{ url('article', {id: article.id}) }}';
+            this.page.title = '{{ article.fullTitle|striptags }}';
+            this.page.identifier = 'article:{{ article.id }}';
+        };
+        var disqus_count = document.getElementById('disqus-comment-count');
+        disqus_count.classList.add('disqus-comment-count');
+        disqus_count.setAttribute('data-disqus-identifier', 'article:{{ article.id }}');
+        (function () {
+            var d = document, s = d.createElement('script');
+            s.src = 'https://{{ disqus_domain }}.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+    </script>
+
+{% endblock %}

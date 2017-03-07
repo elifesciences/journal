@@ -723,9 +723,11 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertContains('© 2012, Author One', $copyright->filter('div')->text());
         $this->assertContains('Copyright statement.', $copyright->filter('div')->text());
 
-        $this->assertSame('Download links', $crawler->filter('main > .wrapper > div > div > section:nth-of-type(2) .article-section__header_text')->text());
+        $this->assertSame('Comments', $crawler->filter('main > .wrapper > div > div > section:nth-of-type(2) .article-section__header_text')->text());
 
-        $this->assertSame('Categories and tags', $crawler->filter('main > .wrapper > div > div > section:nth-of-type(3) .article-meta__group_title')->text());
+        $this->assertSame('Download links', $crawler->filter('main > .wrapper > div > div > section:nth-of-type(3) .article-section__header_text')->text());
+
+        $this->assertSame('Categories and tags', $crawler->filter('main > .wrapper > div > div > section:nth-of-type(4) .article-meta__group_title')->text());
     }
 
     /**
@@ -1195,9 +1197,11 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertContains('© 2012, Bar', $copyright->filter('div')->text());
         $this->assertContains('Copyright statement.', $copyright->filter('div')->text());
 
-        $this->assertSame('Download links', $crawler->filter('main > .wrapper > div > div > section:nth-of-type(9) .article-section__header_text')->text());
+        $this->assertSame('Comments', $crawler->filter('main > .wrapper > div > div > section:nth-of-type(9) .article-section__header_text')->text());
 
-        $this->assertSame('Categories and tags', $crawler->filter('main > .wrapper > div > div > section:nth-of-type(10) .article-meta__group_title')->text());
+        $this->assertSame('Download links', $crawler->filter('main > .wrapper > div > div > section:nth-of-type(10) .article-section__header_text')->text());
+
+        $this->assertSame('Categories and tags', $crawler->filter('main > .wrapper > div > div > section:nth-of-type(11) .article-meta__group_title')->text());
 
         $this->assertSame(
             [
@@ -1209,6 +1213,7 @@ final class ArticleControllerTest extends PageTestCase
                 'Decision letter',
                 'Author response',
                 'Article and author information',
+                'Comments',
             ],
             array_map('trim', $crawler->filter('.view-selector__jump_link_item')->extract('_text'))
         );
