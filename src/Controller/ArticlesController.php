@@ -38,9 +38,9 @@ use GuzzleHttp\Promise\PromiseInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use function GuzzleHttp\Promise\all;
 use function GuzzleHttp\Promise\promise_for;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 final class ArticlesController extends Controller
 {
