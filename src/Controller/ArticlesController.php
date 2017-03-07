@@ -643,23 +643,25 @@ sources: '.implode(', ', array_map(function (CitationsMetricSource $source) {
                     $infoBars[] = new InfoBar('Accepted manuscript, PDF only. Full online edition to follow.');
                 }
 
-                switch ($type = $article->getType()) {
-                    case 'correction':
-                        $infoBars[] = new InfoBar('This is a correction notice. Read the <a href="'.$this->get('router')->generate('article', ['id' => $relatedArticles[0]->getId()]).'">corrected article</a>.', InfoBar::TYPE_CORRECTION);
-                        break;
-                    case 'retraction':
-                        $infoBars[] = new InfoBar('This is a retraction notice. Read the <a href="'.$this->get('router')->generate('article', ['id' => $relatedArticles[0]->getId()]).'">retraction notice</a>.', InfoBar::TYPE_ATTENTION);
-                        break;
-                }
-
-                foreach ($relatedArticles as $relatedArticle) {
-                    switch ($relatedArticle->getType()) {
+                if (count($relatedArticles) > 0) {
+                    switch ($type = $article->getType()) {
                         case 'correction':
-                            $infoBars[] = new InfoBar('This article has been corrected. Read the <a href="'.$this->get('router')->generate('article', ['id' => $relatedArticle->getId()]).'">correction notice</a>.', InfoBar::TYPE_CORRECTION);
+                            $infoBars[] = new InfoBar('This is a correction notice. Read the <a href="'.$this->get('router')->generate('article', ['id' => $relatedArticles[0]->getId()]).'">corrected article</a>.', InfoBar::TYPE_CORRECTION);
                             break;
                         case 'retraction':
-                            $infoBars[] = new InfoBar('This article has been retracted. Read the <a href="'.$this->get('router')->generate('article', ['id' => $relatedArticle->getId()]).'">retraction notice</a>.', InfoBar::TYPE_ATTENTION);
+                            $infoBars[] = new InfoBar('This is a retraction notice. Read the <a href="'.$this->get('router')->generate('article', ['id' => $relatedArticles[0]->getId()]).'">retraction notice</a>.', InfoBar::TYPE_ATTENTION);
                             break;
+                    }
+
+                    foreach ($relatedArticles as $relatedArticle) {
+                        switch ($relatedArticle->getType()) {
+                            case 'correction':
+                                $infoBars[] = new InfoBar('This article has been corrected. Read the <a href="'.$this->get('router')->generate('article', ['id' => $relatedArticle->getId()]).'">correction notice</a>.', InfoBar::TYPE_CORRECTION);
+                                break;
+                            case 'retraction':
+                                $infoBars[] = new InfoBar('This article has been retracted. Read the <a href="'.$this->get('router')->generate('article', ['id' => $relatedArticle->getId()]).'">retraction notice</a>.', InfoBar::TYPE_ATTENTION);
+                                break;
+                        }
                     }
                 }
 
