@@ -307,8 +307,6 @@ final class SearchContext extends Context
      */
     public function iSearchFor(string $keyword)
     {
-        $this->iClickSearch();
-
         $this->getSession()->getPage()->fillField('for', $keyword);
 
         $this->getSession()->getPage()->pressButton('Search');
