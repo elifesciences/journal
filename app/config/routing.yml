@@ -11,10 +11,41 @@ about:
     defaults:
          _controller: AppBundle:About:about
 
+about-early-career:
+    path: /about/early-career
+    defaults:
+         _controller: AppBundle:About:earlyCareer
+
+about-innovation:
+    path: /about/innovation
+    defaults:
+         _controller: AppBundle:About:innovation
+
+about-openness:
+    path: /about/openness
+    defaults:
+         _controller: AppBundle:About:openness
+
+about-peer-review:
+    path: /about/peer-review
+    defaults:
+         _controller: AppBundle:About:peerReview
+
+about-people:
+    path: /about/people/{type}
+    defaults:
+         _controller: AppBundle:About:people
+         type: ''
+
 alerts:
     path: /alerts
     defaults:
          _controller: AppBundle:Alerts:alerts
+
+annual-reports:
+    path: /annual-reports
+    defaults:
+         _controller: AppBundle:AnnualReports:list
 
 archive:
     path: /archive
