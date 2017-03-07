@@ -1,0 +1,27 @@
+{% extends '::page.html.twig' %}
+
+{% block title %}{{ title }} | About{% endblock %}
+
+{% block info_bar %}
+
+    {{ info_bar('This page is incomplete.') }}
+
+{% endblock %}
+
+{% block body %}
+
+    {{ render_pattern(contentHeader) }}
+
+    <div class="wrapper u-pad-top">
+
+        {{ render_pattern(menuLink) }}
+
+    </div>
+
+    <div class="wrapper">
+
+        {{ render_pattern(menu) }}
+
+    </div>
+
+{% endblock %}
