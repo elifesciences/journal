@@ -55,4 +55,6 @@ swiftmailer:
 twig:
     debug: '%kernel.debug%'
     exception_controller: AppBundle:Exception:show
+    globals:
+        disqus_domain: '%disqus_domain%'
     strict_variables: '%kernel.debug%'

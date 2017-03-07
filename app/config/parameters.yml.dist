@@ -9,6 +9,7 @@ parameters:
     mailer_username: ~
     mailer_password: ~
     mailer_encryption: ~
+    disqus_domain: elifesciences
     trusted_hosts:
       - .*\.?elifesciences.org$
     trusted_proxies:
