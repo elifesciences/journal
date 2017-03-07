@@ -8,13 +8,9 @@
 
 {% endblock %}
 
-{% block info_bar %}
-
-    {{ info_bar('This page is incomplete.') }}
-
-{% endblock %}
-
 {% block body %}
+
+    {{ render_pattern(searchBox) }}
 
     <div class="wrapper u-pad-top-lg">
 

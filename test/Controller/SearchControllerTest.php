@@ -23,13 +23,15 @@ final class SearchControllerTest extends PageTestCase
     /**
      * @test
      */
-    public function it_has_a_search_box_in_the_header()
+    public function it_has_a_search_box_in_the_page()
     {
         $client = static::createClient();
 
         $crawler = $client->request('GET', $this->getUrl());
 
-        $form = $crawler->selectButton('Search')->form();
+        $this->assertCount(0, $crawler->filter('.site-header .search-box'));
+
+        $form = $crawler->filter('main')->selectButton('Search')->form();
 
         $form['for'] = 'keyword';
 

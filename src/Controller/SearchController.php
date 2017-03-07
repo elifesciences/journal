@@ -9,12 +9,16 @@ use eLife\Journal\Helper\Callback;
 use eLife\Journal\Helper\Paginator;
 use eLife\Journal\Pagerfanta\SequenceAdapter;
 use eLife\Patterns\ViewModel\Button;
+use eLife\Patterns\ViewModel\CompactForm;
 use eLife\Patterns\ViewModel\Filter;
 use eLife\Patterns\ViewModel\FilterGroup;
 use eLife\Patterns\ViewModel\FilterPanel;
+use eLife\Patterns\ViewModel\Form;
+use eLife\Patterns\ViewModel\Input;
 use eLife\Patterns\ViewModel\Link;
 use eLife\Patterns\ViewModel\ListingTeasers;
 use eLife\Patterns\ViewModel\MessageBar;
+use eLife\Patterns\ViewModel\SearchBox;
 use eLife\Patterns\ViewModel\SortControl;
 use eLife\Patterns\ViewModel\SortControlOption;
 use eLife\Patterns\ViewModel\Teaser;
@@ -93,6 +97,14 @@ final class SearchController extends Controller
             });
 
         $arguments['title'] = 'Search';
+
+        $arguments['searchBox'] = new SearchBox(
+            new CompactForm(
+                new Form($this->get('router')->generate('search'), 'search', 'GET'),
+                new Input('Search by keyword or author', 'search', 'for', $arguments['query']['for'], 'Search by keyword or author'),
+                'Search'
+            )
+        );
 
         $arguments['paginator'] = $pagerfanta
             ->then(function (Pagerfanta $pagerfanta) use ($request, $query) {
