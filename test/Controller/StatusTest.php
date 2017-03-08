@@ -292,7 +292,21 @@ final class StatusTest extends WebTestCase
         $crawler = $client->request('GET', '/status');
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
-        $this->assertContains('Everything is ok', $crawler->text());
+        $checks = $crawler->filter('li');
+        $this->assertCount(13, $checks);
+        $this->assertSame('✔ Articles', trim($checks->eq(0)->text()));
+        $this->assertSame('✔ Collections', trim($checks->eq(1)->text()));
+        $this->assertSame('✔ Covers', trim($checks->eq(2)->text()));
+        $this->assertSame('✔ Events', trim($checks->eq(3)->text()));
+        $this->assertSame('✔ Inside eLife', trim($checks->eq(4)->text()));
+        $this->assertSame('✔ Interviews', trim($checks->eq(5)->text()));
+        $this->assertSame('✔ Labs', trim($checks->eq(6)->text()));
+        $this->assertSame('✔ Medium', trim($checks->eq(7)->text()));
+        $this->assertSame('✔ Metrics', trim($checks->eq(8)->text()));
+        $this->assertSame('✔ Podcast', trim($checks->eq(9)->text()));
+        $this->assertSame('✔ Recommendations', trim($checks->eq(10)->text()));
+        $this->assertSame('✔ Search', trim($checks->eq(11)->text()));
+        $this->assertSame('✔ Subjects', trim($checks->eq(12)->text()));
         $this->assertFalse($client->getResponse()->isCacheable());
         $this->assertSame('none', $client->getResponse()->headers->get('X-Robots-Tag'));
     }
@@ -307,7 +321,34 @@ final class StatusTest extends WebTestCase
         $crawler = $client->request('GET', '/status');
 
         $this->assertSame(500, $client->getResponse()->getStatusCode());
-        $this->assertContains('Everything is not ok', $crawler->text());
+        $checks = $crawler->filter('li');
+        $this->assertCount(13, $checks);
+        $this->assertSame('✘ Articles', trim($checks->eq(0)->filter('.check__name')->text()));
+        $this->assertNotEmpty($checks->eq(0)->filter('.check__message'));
+        $this->assertSame('✘ Collections', trim($checks->eq(1)->filter('.check__name')->text()));
+        $this->assertNotEmpty($checks->eq(1)->filter('.check__message'));
+        $this->assertSame('✘ Covers', trim($checks->eq(2)->filter('.check__name')->text()));
+        $this->assertNotEmpty($checks->eq(2)->filter('.check__message'));
+        $this->assertSame('✘ Events', trim($checks->eq(3)->filter('.check__name')->text()));
+        $this->assertNotEmpty($checks->eq(3)->filter('.check__message'));
+        $this->assertSame('✘ Inside eLife', trim($checks->eq(4)->filter('.check__name')->text()));
+        $this->assertNotEmpty($checks->eq(4)->filter('.check__message'));
+        $this->assertSame('✘ Interviews', trim($checks->eq(5)->filter('.check__name')->text()));
+        $this->assertNotEmpty($checks->eq(5)->filter('.check__message'));
+        $this->assertSame('✘ Labs', trim($checks->eq(6)->filter('.check__name')->text()));
+        $this->assertNotEmpty($checks->eq(6)->filter('.check__message'));
+        $this->assertSame('✘ Medium', trim($checks->eq(7)->filter('.check__name')->text()));
+        $this->assertNotEmpty($checks->eq(7)->filter('.check__message'));
+        $this->assertSame('Metrics', trim($checks->eq(8)->filter('.check__name')->text()));
+        $this->assertSame('Unknown', trim($checks->eq(8)->filter('.check__message')->text()));
+        $this->assertSame('✘ Podcast', trim($checks->eq(9)->filter('.check__name')->text()));
+        $this->assertNotEmpty($checks->eq(9)->filter('.check__message'));
+        $this->assertSame('Recommendations', trim($checks->eq(10)->filter('.check__name')->text()));
+        $this->assertSame('Unknown', trim($checks->eq(10)->filter('.check__message')->text()));
+        $this->assertSame('✘ Search', trim($checks->eq(11)->filter('.check__name')->text()));
+        $this->assertNotEmpty($checks->eq(11)->filter('.check__message'));
+        $this->assertSame('✘ Subjects', trim($checks->eq(12)->filter('.check__name')->text()));
+        $this->assertNotEmpty($checks->eq(12)->filter('.check__message'));
         $this->assertFalse($client->getResponse()->isCacheable());
         $this->assertSame('none', $client->getResponse()->headers->get('X-Robots-Tag'));
     }
