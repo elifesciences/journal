@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "1bbedfe6175f28f2741db645ddf1d4dc",
+    "hash": "4ae6146d9224b2d9cc3ddd227e27f527",
     "content-hash": "84f6e8b5f2da545ba0caa59a55348b67",
     "packages": [
         {
@@ -842,12 +842,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:elifesciences/patterns-php.git",
-                "reference": "bf7bdd0a39c9a350764d548b398bad7db9efe67e"
+                "reference": "4403b4914f240186c09ce7c89508889e8d44261f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/bf7bdd0a39c9a350764d548b398bad7db9efe67e",
-                "reference": "bf7bdd0a39c9a350764d548b398bad7db9efe67e",
+                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/4403b4914f240186c09ce7c89508889e8d44261f",
+                "reference": "4403b4914f240186c09ce7c89508889e8d44261f",
                 "shasum": ""
             },
             "require": {
@@ -886,7 +886,7 @@
                 "MIT"
             ],
             "description": "eLife patterns",
-            "time": "2017-03-02 12:04:43"
+            "time": "2017-03-08 08:49:41"
         },
         {
             "name": "guzzlehttp/guzzle",
