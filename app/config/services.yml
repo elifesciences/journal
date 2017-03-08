@@ -255,6 +255,12 @@ services:
         tags:
           - name: view_model.converter
 
+    elife.journal.view_model.converter.block.button:
+        class: eLife\Journal\ViewModel\Converter\Block\ButtonConverter
+        public: false
+        tags:
+          - name: view_model.converter
+
     elife.journal.view_model.converter.block.image:
         class: eLife\Journal\ViewModel\Converter\Block\ImageConverter
         public: false
