@@ -1,0 +1,126 @@
+<html>
+
+<head>
+
+    <title>eLife Journal Status</title>
+
+    <style>
+
+        body {
+            font-family: "Courier 10 Pitch", Courier, monospace;
+            font-size: 12px;
+            font-weight: normal;
+            margin: 2em;
+            text-align: center;
+        }
+
+        h1, pre {
+            font-family: inherit;
+            font-size: inherit;
+            font-weight: inherit;
+            margin: 0;
+        }
+
+        .wrapper {
+            display: block;
+            margin: 0 0 2em;
+        }
+
+        .wrapper > * {
+            display: inline-block;
+            margin-left: auto;
+            margin-right: auto;
+            text-align: left;
+        }
+
+        ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        li {
+            text-align: center;
+            margin-bottom: 1em;
+        }
+
+        .check--{{ constant('eLife\\Journal\\Controller\\StatusController::STATUS_OK') }} {
+            color: green;
+        }
+
+        .check--{{ constant('eLife\\Journal\\Controller\\StatusController::STATUS_FAILING') }} {
+            color: red;
+        }
+
+        .check--{{ constant('eLife\\Journal\\Controller\\StatusController::STATUS_UNKNOWN') }} {
+            color: gray;
+        }
+
+        .check__message {
+            display: block;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="wrapper">
+
+<pre>
+             ???????????
+         ??:...7777.ZZ....??
+       ?=.:.III7II.ZZZZZZZI..?
+     ?:..$$.III7II.ZZZZZ.?7$$.,?
+    ?.8~$$$.77777=ZZZ..$$$$$$$..?
+   I 88.$$$.IIIII:$..$$$$$$$$.OO I7
+  ?.88$$$$$.III7I7.$$$$$$$$7.OOOO.I
+ ? 888.$$$$7.II7..$$$$$$$$$.OOOOOO.?
+?.+888.$$$$$.II..$$$$$$$$$.ZOOOOOO..?
+? 8888.$$$$$$ .,$$$$$$$$$7.OOOOOOO..?
+? D888.7$$$$$$.$$$$$$$$,...OOOOOO,~.?
+,:.888Z.$$$$$$$.7$$$$..ZZZ OOOOOO.ZO.$
+,::.888 ?$$$$$$$ 7$=  $ZZZ.OOOOO.$ZO.$
+?.O .888 $$$$$$$7 ..I. ZZZ,.OOOO.OZ.?
+? OO +888 $$$$$$$..III.ZZZZ.OOO7.ZZ.?
+?.ZOO D888.$$$$$$$.III,.ZZZ.OOOO.ZO ?
+ ?.OOZ 888. 7$$$$$..III.ZZZ$.OOO.Z.?
+  ?.OO.888.$.7$$$$$.III.ZZZZ:OOO..+$
+  NI.O8888.$7.$$$$$.III.ZZZ:OOOO.??
+    ?.8888.$$$.$$$$.III.ZZZ.OOO ?
+     ?..88.$$$.$$$$.7II.ZZZOO..?
+       ?...$$$=$$$$.7I7$ZZ...?
+         ?? ..+$$$$.II... ??
+             ???????????
+</pre>
+
+</div>
+
+<div class="wrapper">
+
+    <h1>eLife Journal Status</h1>
+
+</div>
+
+<div class="wrapper">
+
+    <ul>
+        {% for check in checks %}
+            <li class="check check--{{ check.status }}">
+                <span class="check__name">
+                    {%- if check.status == constant('eLife\\Journal\\Controller\\StatusController::STATUS_OK') -%}
+                        ✔
+                    {%- elseif check.status == constant('eLife\\Journal\\Controller\\StatusController::STATUS_FAILING') -%}
+                        ✘
+                    {%- endif %} {{ check.name }}</span>
+                {%- if check.message %}<span class="check__message">{{ check.message }}</span>{% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+
+</div>
+
+</body>
+
+</html>
