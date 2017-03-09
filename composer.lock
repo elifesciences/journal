@@ -842,12 +842,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:elifesciences/patterns-php.git",
-                "reference": "acbac8b2646065307dff4c86a063ce0e9ec1d0f4"
+                "reference": "66229a71cc4db1ab81660acc14017ceb8b10d272"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/acbac8b2646065307dff4c86a063ce0e9ec1d0f4",
-                "reference": "acbac8b2646065307dff4c86a063ce0e9ec1d0f4",
+                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/66229a71cc4db1ab81660acc14017ceb8b10d272",
+                "reference": "66229a71cc4db1ab81660acc14017ceb8b10d272",
                 "shasum": ""
             },
             "require": {
@@ -886,7 +886,7 @@
                 "MIT"
             ],
             "description": "eLife patterns",
-            "time": "2017-03-08 15:21:00"
+            "time": "2017-03-09 09:51:41"
         },
         {
             "name": "guzzlehttp/guzzle",
