@@ -261,6 +261,12 @@ services:
         tags:
           - name: view_model.converter
 
+    elife.journal.view_model.converter.block.code:
+        class: eLife\Journal\ViewModel\Converter\Block\CodeConverter
+        public: false
+        tags:
+          - name: view_model.converter
+
     elife.journal.view_model.converter.block.image:
         class: eLife\Journal\ViewModel\Converter\Block\ImageConverter
         public: false
