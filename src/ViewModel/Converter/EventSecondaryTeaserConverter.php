@@ -27,7 +27,7 @@ final class EventSecondaryTeaserConverter implements ViewModelConverter
     {
         return Teaser::event(
             $object->getTitle(),
-            $this->urlGenerator->generate('event', ['id' => $object->getId(), 'slug' => $this->slugify->slugify($object->getTitle())]),
+            $object->getUri() ?? $this->urlGenerator->generate('event', ['id' => $object->getId(), 'slug' => $this->slugify->slugify($object->getTitle())]),
             null,
             Date::expanded($object->getStarts()),
             true
