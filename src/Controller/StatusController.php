@@ -25,6 +25,7 @@ final class StatusController extends Controller
     public function statusAction() : Response
     {
         $requests = [
+            'Annual reports' => $this->get('elife.api_sdk.annual_reports')->slice(0, 1),
             'Articles' => $article = $this->get('elife.api_sdk.articles')->reverse()->slice(0, 1),
             'Inside eLife' => $this->get('elife.api_sdk.blog_articles')->slice(0, 1),
             'Collections' => $this->get('elife.api_sdk.collections')->slice(0, 1),

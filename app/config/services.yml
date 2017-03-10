@@ -25,6 +25,10 @@ services:
         arguments:
           - '@elife.api_client.client'
 
+    elife.api_sdk.annual_reports:
+        class: eLife\ApiSdk\Client\AnnualReports
+        factory: ['@elife.api_sdk', annualReports]
+
     elife.api_sdk.articles:
         class: eLife\ApiSdk\Client\Articles
         factory: ['@elife.api_sdk', articles]
@@ -172,6 +176,12 @@ services:
 
     elife.journal.view_model.converter:
         class: eLife\Journal\ViewModel\Converter\ViewModelConverterRegistry
+
+    elife.journal.view_model.converter.annual_report.teaser:
+        class: eLife\Journal\ViewModel\Converter\AnnualReportTeaserConverter
+        public: false
+        tags:
+          - name: view_model.converter
 
     elife.journal.view_model.converter.article.decision_letter_header:
         class: eLife\Journal\ViewModel\Converter\ArticleDecisionLetterHeaderConverter
