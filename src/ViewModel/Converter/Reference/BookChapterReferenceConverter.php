@@ -17,7 +17,7 @@ final class BookChapterReferenceConverter implements ViewModelConverter
      */
     public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
-        $bookTitle = $object->getChapterTitle();
+        $bookTitle = $object->getBookTitle();
         if ($object->getVolume()) {
             $bookTitle .= ', '.$object->getVolume();
         }
