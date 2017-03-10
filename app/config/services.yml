@@ -490,15 +490,6 @@ services:
         tags:
           - name: view_model.converter
 
-    elife.journal.view_model.converter.event.teaser.secondary:
-        class: eLife\Journal\ViewModel\Converter\EventSecondaryTeaserConverter
-        public: false
-        arguments:
-          - '@router'
-          - '@slugify'
-        tags:
-          - name: view_model.converter
-
     elife.journal.view_model.converter.external_article.teaser.related_item:
         class: eLife\Journal\ViewModel\Converter\ExternalArticleRelatedItemTeaserConverter
         public: false

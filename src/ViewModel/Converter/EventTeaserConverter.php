@@ -27,14 +27,15 @@ final class EventTeaserConverter implements ViewModelConverter
     {
         return Teaser::event(
             $object->getTitle(),
-            $this->urlGenerator->generate('event', ['id' => $object->getId(), 'slug' => $this->slugify->slugify($object->getTitle())]),
+            $object->getUri() ?? $this->urlGenerator->generate('event', ['id' => $object->getId(), 'slug' => $this->slugify->slugify($object->getTitle())]),
             null,
-            Date::expanded($object->getStarts())
+            Date::expanded($object->getStarts()),
+            'secondary' === ($context['variant'] ?? null)
         );
     }
 
     public function supports($object, string $viewModel = null, array $context = []) : bool
     {
-        return $object instanceof Event && ViewModel\Teaser::class === $viewModel && empty($context['variant']);
+        return $object instanceof Event && ViewModel\Teaser::class === $viewModel;
     }
 }

@@ -87,6 +87,38 @@ final class EventControllerTest extends PageTestCase
 
     /**
      * @test
+     */
+    public function it_redirects_if_the_event_has_a_uri()
+    {
+        $client = static::createClient();
+
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/events/1',
+                ['Accept' => 'application/vnd.elife.event+json; version=1']
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.event+json; version=1'],
+                json_encode([
+                    'id' => '1',
+                    'title' => 'Event title',
+                    'published' => '2010-01-01T00:00:00Z',
+                    'starts' => (new DateTimeImmutable('+1 day'))->format(ApiSdk::DATE_FORMAT),
+                    'ends' => (new DateTimeImmutable('+2 days'))->format(ApiSdk::DATE_FORMAT),
+                    'uri' => 'http://www.example.com/',
+                ])
+            )
+        );
+
+        $client->request('GET', '/events/1');
+
+        $this->assertTrue($client->getResponse()->isRedirect('http://www.example.com/'));
+    }
+
+    /**
+     * @test
      * @dataProvider incorrectSlugProvider
      */
     public function it_redirects_if_the_slug_is_not_correct(string $url)
