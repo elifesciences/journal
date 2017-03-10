@@ -14,6 +14,11 @@ default:
             filename: behat.xml
             outputDir: %paths.base%/build
     suites:
+        annual-report:
+            filters:
+                tags: '@annual-report'
+            contexts:
+              - AnnualReportContext
         archive:
             filters:
                 tags: '@archive'
