@@ -3,7 +3,6 @@ imports:
 
 framework:
     trusted_hosts: '%trusted_hosts%'
-    trusted_proxies: '%trusted_proxies%'
 
 monolog:
     handlers:
