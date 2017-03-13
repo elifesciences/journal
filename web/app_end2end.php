@@ -10,5 +10,6 @@ $kernel = new AppKernel('end2end', false);
 $kernel->loadClassCache();
 
 Request::enableHttpMethodParameterOverride();
+Request::setTrustedProxies([$_SERVER['REMOTE_ADDR']]); // ELB
 
 $kernel->run(Request::createFromGlobals());

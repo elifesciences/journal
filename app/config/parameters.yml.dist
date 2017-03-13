@@ -12,5 +12,3 @@ parameters:
     disqus_domain: elifesciences
     trusted_hosts:
       - .*\.?elifesciences.org$
-    trusted_proxies:
-      - 192.0.0.1
