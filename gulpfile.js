@@ -5,6 +5,8 @@ const favicons = require('gulp-favicons');
 const gulp = require('gulp');
 const imageMin = require('gulp-imagemin');
 const imageMinMozjpeg = require('imagemin-mozjpeg');
+const imageMinOptipng = require('imagemin-optipng');
+const merge = require('merge-stream');
 const responsive = require('gulp-responsive');
 
 gulp.task('default', ['favicons', 'images']);
@@ -42,29 +44,67 @@ gulp.task('images:clean', () => {
 });
 
 gulp.task('images', ['images:clean'], () => {
-    return gulp.src('./app/Resources/images/source/**/*.jpg')
-        .pipe(responsive({
-            'banners/**/*': [
-                {
-                    width: 1900,
-                    height: 800,
-                    rename: {
-                        suffix: '-hi-res',
+    return merge(
+        gulp.src('./app/Resources/images/source/*/*.{jpg,png,svg}')
+            .pipe(responsive({
+                'banners/**/*': [
+                    {
+                        width: 1900,
+                        height: 800,
+                        rename: {
+                            suffix: '-hi-res',
+                        }
+                    }, {
+                        width: 950,
+                        height: 400,
+                        rename: {
+                            suffix: '-lo-res',
+                        }
                     }
-                }, {
-                    width: 950,
-                    height: 400,
-                    rename: {
-                        suffix: '-lo-res',
+                ],
+                'logos/**/*': [
+                    {
+                        width: 500,
+                        rename: {
+                            suffix: '-hi-res',
+                            extname: '.webp',
+                        },
+                        withoutEnlargement: false
+                    },
+                    {
+                        width: 250,
+                        rename: {
+                            suffix: '-lo-res',
+                            extname: '.webp',
+                        },
+                        withoutEnlargement: false
+                    },
+                    {
+                        width: 500,
+                        rename: {
+                            suffix: '-hi-res',
+                            extname: '.png',
+                        },
+                        withoutEnlargement: false
+                    },
+                    {
+                        width: 250,
+                        rename: {
+                            suffix: '-lo-res',
+                            extname: '.png',
+                        },
+                        withoutEnlargement: false
                     }
-                }
-            ]
-        }))
-        .pipe(imageMin([
-            imageMinMozjpeg({
-                quality: 75,
-                progressive: true,
-            }),
-        ]))
+                ]
+            }))
+            .pipe(imageMin([
+                imageMinMozjpeg({
+                    quality: 75,
+                    progressive: true,
+                }),
+                imageMinOptipng({})
+            ])),
+        gulp.src('./app/Resources/images/source/*/*.svg')
+    )
         .pipe(gulp.dest('./app/Resources/images/generated'));
 });
