@@ -35,7 +35,9 @@ final class CaptionedVideoConverter implements ViewModelConverter
             $object->getImage(),
             array_map(function (Block\VideoSource $source) {
                 return new ViewModel\MediaSource($source->getUri(), new ViewModel\MediaType($source->getMediaType()));
-            }, $object->getSources())
+            }, $object->getSources()),
+            $object->isAutoplay(),
+            $object->isLoop()
         );
 
         $asset = $this->createCaptionedAsset($asset, $object, $this->downloadLinkUriGenerator->generate(new DownloadLink($object->getSources()[0]->getUri())));
