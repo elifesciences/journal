@@ -56,6 +56,8 @@ final class CaptionedVideoConverterTest extends BlockConverterTestCase
                     'width' => 800,
                     'height' => 600,
                     'image' => 'https://example.com/video1-thumbnail',
+                    'autoplay' => true,
+                    'loop' => true,
                     'caption' => [
                         [
                             'type' => 'paragraph',
