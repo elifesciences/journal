@@ -443,7 +443,7 @@ sources: '.implode(', ', array_map(function (CitationsMetricSource $source) {
                     $hasFigures;
             });
 
-        $arguments['viewSelector'] = $this->createViewSelector($arguments['article'], $arguments['hasFigures'], $arguments['history'], $arguments['body']);
+        $arguments['viewSelector'] = $this->createViewSelector($arguments['article'], $arguments['hasFigures'], false, $arguments['history'], $arguments['body']);
 
         $arguments['body'] = all(['article' => $arguments['article'], 'body' => $arguments['body']])
             ->then(function (array $parts) {
@@ -566,7 +566,7 @@ sources: '.implode(', ', array_map(function (CitationsMetricSource $source) {
             })
             ->then(Callback::mustNotBeEmpty(new NotFoundHttpException('Article version does not contain any figures')));
 
-        $arguments['viewSelector'] = $this->createViewSelector($arguments['article'], promise_for(true), $arguments['history'], $arguments['body']);
+        $arguments['viewSelector'] = $this->createViewSelector($arguments['article'], promise_for(true), true, $arguments['history'], $arguments['body']);
 
         return new Response($this->get('templating')->render('::article-figures.html.twig', $arguments));
     }
@@ -717,10 +717,10 @@ sources: '.implode(', ', array_map(function (CitationsMetricSource $source) {
         return $arguments;
     }
 
-    private function createViewSelector(PromiseInterface $article, PromiseInterface $hasFigures, PromiseInterface $history, PromiseInterface $sections) : PromiseInterface
+    private function createViewSelector(PromiseInterface $article, PromiseInterface $hasFigures, bool $isFiguresPage, PromiseInterface $history, PromiseInterface $sections) : PromiseInterface
     {
         return all(['article' => $article, 'hasFigures' => $hasFigures, 'history' => $history, 'sections' => $sections])
-            ->then(function (array $sections) {
+            ->then(function (array $sections) use ($isFiguresPage) {
                 $article = $sections['article'];
                 $hasFigures = $sections['hasFigures'];
                 $history = $sections['history'];
@@ -743,7 +743,8 @@ sources: '.implode(', ', array_map(function (CitationsMetricSource $source) {
 
                         return null;
                     }, $sections)),
-                    $hasFigures ? $this->generateFiguresPath($history, $article->getVersion()) : null
+                    $hasFigures ? $this->generateFiguresPath($history, $article->getVersion()) : null,
+                    $isFiguresPage
                 );
             });
     }
