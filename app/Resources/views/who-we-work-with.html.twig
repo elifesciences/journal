@@ -1,13 +1,15 @@
 {% extends '::page.html.twig' %}
 
-{% block info_bar %}
-
-    {{ info_bar('This page is incomplete.') }}
-
-{% endblock %}
-
 {% block body %}
 
     {{ render_pattern(contentHeader) }}
+
+    <div class="wrapper">
+
+        {% for listing in listings %}
+            {{ render_pattern(listing) }}
+        {% endfor %}
+
+    </div>
 
 {% endblock %}

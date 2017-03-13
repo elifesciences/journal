@@ -6,6 +6,7 @@
     "gulp-favicons": "^2.2",
     "gulp-imagemin": "^3.1",
     "gulp-responsive": "^2.7",
-    "imagemin-mozjpeg": "^6.0"
+    "imagemin-mozjpeg": "^6.0",
+    "merge-stream": "^1.0.1"
   }
 }
