@@ -34,6 +34,21 @@ final class VideoConverterTest extends BlockConverterTestCase
                     'image' => 'https://example.com/video1-thumbnail',
                 ],
             ],
+            'complete' => [
+                [
+                    'sources' => [
+                        [
+                            'mediaType' => 'video/ogg',
+                            'uri' => 'https://example.com/video1',
+                        ],
+                    ],
+                    'width' => 800,
+                    'height' => 600,
+                    'autoplay' => true,
+                    'loop' => true,
+                    'image' => 'https://example.com/video1-thumbnail',
+                ],
+            ],
         ];
     }
 }
