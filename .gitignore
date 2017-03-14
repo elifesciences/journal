@@ -1,13 +1,10 @@
-/.puli/
 /app/config/parameters.yml
-/app/Resources/images/generated/
 /behat.yml
 /build/
 /node_modules/
 /phpunit.xml
 /var/
 /vendor/
-/web/assets
 /web/bundles/
 /web/favicons/
-/web/images
+/web/images/

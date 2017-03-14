@@ -29,7 +29,7 @@
 
     {% block stylesheets deferred %}
     {% for stylesheet in stylesheets %}
-        <link href="{{ resource_url(stylesheet) }}" rel="stylesheet">
+        <link href="{{ asset(stylesheet) }}" rel="stylesheet">
     {% endfor %}
     {% endblock %}
 
@@ -105,7 +105,7 @@
         WebFontConfig = {
             custom: {
                 families: ["Avenir Next Webfont"],
-                urls: ["{{ resource_url('/elife/patterns/assets/fonts/fonts.css') }}"]
+                urls: ["{{ asset('assets/fonts/fonts.css') }}"]
             }
         };
 
@@ -155,7 +155,7 @@
 
 {% block javascripts deferred %}
 {% for javascript in javascripts %}
-    <script src="{{ resource_url(javascript) }}"></script>
+    <script src="{{ asset(javascript) }}"></script>
 {% endfor %}
 {% endblock %}
 

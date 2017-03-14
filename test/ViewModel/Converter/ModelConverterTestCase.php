@@ -8,9 +8,8 @@ use eLife\ApiSdk\Model\Model;
 use eLife\Journal\ViewModel\Converter\ViewModelConverter;
 use PHPUnit_Framework_TestCase;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use test\eLife\Journal\PuliAwareTestCase;
 
-abstract class ModelConverterTestCase extends PHPUnit_Framework_TestCase
+abstract class ModelConverterTestCase /* extends PHPUnit_Framework_TestCase*/
 {
     protected $models;
     protected $class;
@@ -18,7 +17,7 @@ abstract class ModelConverterTestCase extends PHPUnit_Framework_TestCase
     protected $converter;
     protected $context = [];
     protected $selectSamples = false;
-    use PuliAwareTestCase;
+
     use SerializerAwareTestCase;
 
     /**

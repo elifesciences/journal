@@ -5,9 +5,8 @@ namespace eLife\Journal;
 use Bobthecow\Bundle\MustacheBundle\BobthecowMustacheBundle;
 use Cocur\Slugify\Bridge\Symfony\CocurSlugifyBundle;
 use Csa\Bundle\GuzzleBundle\CsaGuzzleBundle;
-use eLife\Journal\Expression\ParseUrlFunctionProvider;
+use eLife\Journal\Expression\ComposerLocateFunctionProvider;
 use PackageVersions\Versions;
-use Puli\SymfonyBundle\PuliBundle;
 use Sensio\Bundle\DistributionBundle\SensioDistributionBundle;
 use Symfony\Bundle\DebugBundle\DebugBundle;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
@@ -51,7 +50,6 @@ class AppKernel extends Kernel
             new CsaGuzzleBundle(),
             new FrameworkBundle(),
             new MonologBundle(),
-            new PuliBundle(),
             new SwiftmailerBundle(),
             new TwigBundle(),
             new WhiteOctoberPagerfantaBundle(),
@@ -107,7 +105,7 @@ class AppKernel extends Kernel
     {
         $builder = parent::buildContainer();
 
-        $builder->addExpressionLanguageProvider(new ParseUrlFunctionProvider());
+        $builder->addExpressionLanguageProvider(new ComposerLocateFunctionProvider());
 
         return $builder;
     }

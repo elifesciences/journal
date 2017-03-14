@@ -74,8 +74,8 @@ final class LabsController extends Controller
     {
         $arguments['contentHeader'] = ContentHeaderNonArticle::basic('eLife Labs', true, null, null, null,
             new BackgroundImage(
-                $this->get('puli.url_generator')->generateUrl('/elife/journal/images/banners/labs-lo-res.jpg'),
-                $this->get('puli.url_generator')->generateUrl('/elife/journal/images/banners/labs-hi-res.jpg')
+                $this->get('assets.packages')->getUrl('images/banners/labs-lo-res.jpg'),
+                $this->get('assets.packages')->getUrl('images/banners/labs-hi-res.jpg')
             ));
 
         $arguments['leadParas'] = new LeadParas([

@@ -16,7 +16,7 @@ gulp.task('favicons:clean', () => {
 });
 
 gulp.task('favicons', ['favicons:clean'], () => {
-    return gulp.src('./app/Resources/images/source/favicon.svg')
+    return gulp.src('./app/Resources/images/favicon.svg')
         .pipe(favicons({
             appName: 'eLife',
             appDescription: 'eLife is an open-access journal that publishes research in the life and biomedical sciences',
@@ -40,12 +40,12 @@ gulp.task('favicons', ['favicons:clean'], () => {
 });
 
 gulp.task('images:clean', () => {
-    return del(['./app/Resources/images/generated/**/*']);
+    return del(['./web/images/**/*']);
 });
 
 gulp.task('images', ['images:clean'], () => {
     return merge(
-        gulp.src('./app/Resources/images/source/*/*.{jpg,png,svg}')
+        gulp.src('./app/Resources/images/*/*.{jpg,png,svg}')
             .pipe(responsive({
                 'banners/**/*': [
                     {
@@ -104,7 +104,7 @@ gulp.task('images', ['images:clean'], () => {
                 }),
                 imageMinOptipng({})
             ])),
-        gulp.src('./app/Resources/images/source/*/*.svg')
+        gulp.src('./app/Resources/images/*/*.svg')
     )
-        .pipe(gulp.dest('./app/Resources/images/generated'));
+        .pipe(gulp.dest('./web/images'));
 });

@@ -32,6 +32,6 @@ final class Form implements ViewModel
 
     public function getTemplateName() : string
     {
-        return '/elife/journal/patterns/form.mustache';
+        return 'form.mustache';
     }
 }

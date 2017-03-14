@@ -17,20 +17,20 @@ use eLife\Patterns\ViewModel\SearchBox;
 use eLife\Patterns\ViewModel\SiteHeader;
 use eLife\Patterns\ViewModel\SiteHeaderNavBar;
 use eLife\Patterns\ViewModel\SubjectFilter;
-use Puli\UrlGenerator\Api\UrlGenerator as PuliUrlGenerator;
+use Symfony\Component\Asset\Packages;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 final class SiteHeaderFactory
 {
     private $urlGenerator;
-    private $puliUrlGenerator;
+    private $packages;
     private $requestStack;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator, PuliUrlGenerator $puliUrlGenerator, RequestStack $requestStack)
+    public function __construct(UrlGeneratorInterface $urlGenerator, Packages $packages, RequestStack $requestStack)
     {
         $this->urlGenerator = $urlGenerator;
-        $this->puliUrlGenerator = $puliUrlGenerator;
+        $this->packages = $packages;
         $this->requestStack = $requestStack;
     }
 
@@ -40,13 +40,13 @@ final class SiteHeaderFactory
             $searchItem = NavLinkedItem::asIcon(new Link('Search', $this->urlGenerator->generate('search')),
                 new Picture(
                     [
-                        ['srcset' => $this->puliUrlGenerator->generateUrl('/elife/patterns/assets/img/patterns/molecules/nav-primary-search-ic.svg')],
+                        ['srcset' => $this->packages->getUrl('assets/img/patterns/molecules/nav-primary-search-ic.svg')],
                     ],
                     new Image(
-                        $this->puliUrlGenerator->generateUrl('/elife/patterns/assets/img/patterns/molecules/nav-primary-search-ic_1x.png'),
+                        $this->packages->getUrl('assets/img/patterns/molecules/nav-primary-search-ic_1x.png'),
                         [
-                            48 => $this->puliUrlGenerator->generateUrl('/elife/patterns/assets/img/patterns/molecules/nav-primary-search-ic_2x.png'),
-                            24 => $this->puliUrlGenerator->generateUrl('/elife/patterns/assets/img/patterns/molecules/nav-primary-search-ic_1x.png'),
+                            48 => $this->packages->getUrl('assets/img/patterns/molecules/nav-primary-search-ic_2x.png'),
+                            24 => $this->packages->getUrl('assets/img/patterns/molecules/nav-primary-search-ic_1x.png'),
                         ],
                         'Search icon'
                     )
@@ -59,13 +59,13 @@ final class SiteHeaderFactory
             $searchItem = NavLinkedItem::asIcon(new Link('Search'),
                 new Picture(
                     [
-                        ['srcset' => $this->puliUrlGenerator->generateUrl('/elife/patterns/assets/img/patterns/molecules/nav-primary-search-disabled-ic.svg')],
+                        ['srcset' => $this->packages->getUrl('assets/img/patterns/molecules/nav-primary-search-disabled-ic.svg')],
                     ],
                     new Image(
-                        $this->puliUrlGenerator->generateUrl('/elife/patterns/assets/img/patterns/molecules/nav-primary-search-disabled-ic_1x.png'),
+                        $this->packages->getUrl('assets/img/patterns/molecules/nav-primary-search-disabled-ic_1x.png'),
                         [
-                            48 => $this->puliUrlGenerator->generateUrl('/elife/patterns/assets/img/patterns/molecules/nav-primary-search-disabled-ic_2x.png'),
-                            24 => $this->puliUrlGenerator->generateUrl('/elife/patterns/assets/img/patterns/molecules/nav-primary-search-disabled-ic_1x.png'),
+                            48 => $this->packages->getUrl('assets/img/patterns/molecules/nav-primary-search-disabled-ic_2x.png'),
+                            24 => $this->packages->getUrl('assets/img/patterns/molecules/nav-primary-search-disabled-ic_1x.png'),
                         ],
                         'Search icon'
                     )
@@ -81,13 +81,13 @@ final class SiteHeaderFactory
                 new Link('Menu', '#mainMenu'),
                 new Picture(
                     [
-                        ['srcset' => $this->puliUrlGenerator->generateUrl('/elife/patterns/assets/img/patterns/molecules/nav-primary-menu-ic.svg')],
+                        ['srcset' => $this->packages->getUrl('assets/img/patterns/molecules/nav-primary-menu-ic.svg')],
                     ],
                     new Image(
-                        $this->puliUrlGenerator->generateUrl('/elife/patterns/assets/img/patterns/molecules/nav-primary-menu-ic_1x.png'),
+                        $this->packages->getUrl('assets/img/patterns/molecules/nav-primary-menu-ic_1x.png'),
                         [
-                            48 => $this->puliUrlGenerator->generateUrl('/elife/patterns/assets/img/patterns/molecules/nav-primary-menu-ic_2x.png'),
-                            24 => $this->puliUrlGenerator->generateUrl('/elife/patterns/assets/img/patterns/molecules/nav-primary-menu-ic_1x.png'),
+                            48 => $this->packages->getUrl('assets/img/patterns/molecules/nav-primary-menu-ic_2x.png'),
+                            24 => $this->packages->getUrl('assets/img/patterns/molecules/nav-primary-menu-ic_1x.png'),
                         ],
                         'Menu icon'
                     )

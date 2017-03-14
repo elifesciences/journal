@@ -5,8 +5,8 @@ imports:
 bobthecow_mustache:
     globals:
         assetsPath: '@elife.patterns.mustache.helpers.assets_path'
-    loader_id: elife.patterns.mustache.loader.puli
-    partials_loader_id: elife.patterns.mustache.loader.filesystem
+    loader_id: elife.journal.mustache.loader
+    partials_loader_id: elife.patterns.mustache.loader.pattern_lab
 
 csa_guzzle:
     clients:
@@ -24,7 +24,8 @@ csa_guzzle:
                 stream: true
 
 framework:
-    assets: ~
+    assets:
+        version: 'v1'
     csrf_protection: ~
     form: ~
     router:

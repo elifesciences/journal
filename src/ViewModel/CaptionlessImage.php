@@ -38,7 +38,7 @@ final class CaptionlessImage implements ViewModel
 
     public function getTemplateName() : string
     {
-        return '/elife/journal/patterns/captionless-image.mustache';
+        return 'captionless-image.mustache';
     }
 
     protected function getComposedViewModels() : Traversable

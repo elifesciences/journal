@@ -108,6 +108,20 @@ services:
         tags:
           - name: kernel.event_subscriber
 
+    elife.journal.mustache.loader:
+        class: Mustache_Loader_CascadingLoader
+        public: false
+        arguments:
+          -
+            - '@elife.patterns.mustache.loader.filesystem'
+            - '@elife.journal.mustache.loader.local'
+
+    elife.journal.mustache.loader.local:
+        class: Mustache_Loader_FilesystemLoader
+        public: false
+        arguments:
+          - '@=service("kernel").getRootDir()~"/Resources/patterns"'
+
     elife.journal.templating.promise_aware:
         class: eLife\Journal\Templating\PromiseAwareEngine
         decorates: templating
@@ -171,7 +185,7 @@ services:
         class: eLife\Journal\ViewModel\Factory\SiteHeaderFactory
         arguments:
           - '@router'
-          - '@puli.url_generator'
+          - '@assets.packages'
           - '@request_stack'
 
     elife.journal.view_model.converter:
@@ -868,17 +882,19 @@ services:
         class: eLife\Journal\Mustache\DynamicValueHelper
         public: false
         arguments:
-          - '@=parse_url(service("puli.url_generator").generateUrl("/elife/patterns/assets"), constant("PHP_URL_PATH"))'
-
-    elife.patterns.mustache.loader.puli:
-        class: eLife\Patterns\Mustache\PuliLoader
-        arguments:
-          - '@puli.repository'
+          - '@=service("assets.packages").getPackage().getBasePath()~"assets"'
 
     elife.patterns.mustache.loader.filesystem:
-        class: eLife\Patterns\Mustache\PatternLabLoader
+        class: Mustache_Loader_FilesystemLoader
+        public: false
         arguments:
-          - '@=service("puli.repository").get("/elife/patterns/templates").getFilesystemPath()'
+          - '@=composer_locate("elife/patterns")'
+
+    elife.patterns.mustache.loader.pattern_lab:
+        class: eLife\Patterns\Mustache\PatternLabLoader
+        public: false
+        arguments:
+          - '@=composer_locate("elife/patterns")~"/resources/templates"'
 
     phive.twig.deferred:
         class: Phive\Twig\Extensions\Deferred\DeferredExtension

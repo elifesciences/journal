@@ -50,7 +50,7 @@ final class DownloadControllerTest extends WebTestCase
         $this->assertInstanceOf(StreamedResponse::class, $response);
         $this->assertSame(200, $response->getStatusCode());
         $this->assertSame([
-            'cache-control' => ['no-cache'],
+            'cache-control' => ['no-cache, private'],
             'content-type' => ['audio/mp3'],
             'content-disposition' => ['attachment'],
         ], $response->headers->all());
@@ -92,7 +92,7 @@ final class DownloadControllerTest extends WebTestCase
         $this->assertInstanceOf(StreamedResponse::class, $response);
         $this->assertSame(200, $response->getStatusCode());
         $this->assertSame([
-            'cache-control' => ['no-cache'],
+            'cache-control' => ['no-cache, private'],
             'content-type' => ['text/plain; charset=UTF-8'],
             'content-disposition' => ['attachment'],
         ], $response->headers->all());
@@ -136,7 +136,7 @@ final class DownloadControllerTest extends WebTestCase
         $this->assertInstanceOf(StreamedResponse::class, $response);
         $this->assertSame(200, $response->getStatusCode());
         $this->assertSame([
-            'cache-control' => ['no-cache'],
+            'cache-control' => ['no-cache, private'],
             'content-type' => ['text/plain; charset=UTF-8'],
             'content-disposition' => ['attachment'],
         ], $response->headers->all());
@@ -196,7 +196,7 @@ final class DownloadControllerTest extends WebTestCase
         $this->assertInstanceOf(StreamedResponse::class, $response);
         $this->assertSame(200, $response->getStatusCode());
         $this->assertSame([
-            'cache-control' => ['no-cache'],
+            'cache-control' => ['no-cache, private'],
             'content-type' => ['text/plain; charset=UTF-8'],
             'content-disposition' => ['attachment'],
         ], $response->headers->all());
@@ -238,7 +238,7 @@ final class DownloadControllerTest extends WebTestCase
         $this->assertInstanceOf(StreamedResponse::class, $response);
         $this->assertSame(200, $response->getStatusCode());
         $this->assertSame([
-            'cache-control' => ['no-cache'],
+            'cache-control' => ['no-cache, private'],
             'content-type' => ['text/plain; charset=UTF-8'],
             'content-disposition' => ['attachment; filename="foo.txt"'],
         ], $response->headers->all());
