@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "cb8c620529087b30f7eb6380d4f386a8",
+    "content-hash": "7e5ebf6246d392dd1d606ea2b465ed08",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -1058,6 +1058,44 @@
                 "uri"
             ],
             "time": "2016-06-24T23:00:38+00:00"
+        },
+        {
+            "name": "mindplay/composer-locator",
+            "version": "2.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mindplay-dk/composer-locator.git",
+                "reference": "24c960f014904c35ce89b77fc4118903c34b3fe6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mindplay-dk/composer-locator/zipball/24c960f014904c35ce89b77fc4118903c34b3fe6",
+                "reference": "24c960f014904c35ce89b77fc4118903c34b3fe6",
+                "shasum": ""
+            },
+            "require": {
+                "composer-plugin-api": "^1",
+                "php": ">= 5.4"
+            },
+            "require-dev": {
+                "composer/composer": "^1"
+            },
+            "type": "composer-plugin",
+            "extra": {
+                "class": "mindplay\\composer_locator\\Plugin"
+            },
+            "autoload": {
+                "classmap": [
+                    "src/ComposerLocator.php",
+                    "src/Plugin.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Locates Composer package root folders by package name",
+            "time": "2016-06-07T14:40:59+00:00"
         },
         {
             "name": "monolog/monolog",
@@ -3087,44 +3125,6 @@
                 "schema"
             ],
             "time": "2017-02-22T03:28:16+00:00"
-        },
-        {
-            "name": "mindplay/composer-locator",
-            "version": "2.1.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/mindplay-dk/composer-locator.git",
-                "reference": "24c960f014904c35ce89b77fc4118903c34b3fe6"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/mindplay-dk/composer-locator/zipball/24c960f014904c35ce89b77fc4118903c34b3fe6",
-                "reference": "24c960f014904c35ce89b77fc4118903c34b3fe6",
-                "shasum": ""
-            },
-            "require": {
-                "composer-plugin-api": "^1",
-                "php": ">= 5.4"
-            },
-            "require-dev": {
-                "composer/composer": "^1"
-            },
-            "type": "composer-plugin",
-            "extra": {
-                "class": "mindplay\\composer_locator\\Plugin"
-            },
-            "autoload": {
-                "classmap": [
-                    "src/ComposerLocator.php",
-                    "src/Plugin.php"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "description": "Locates Composer package root folders by package name",
-            "time": "2016-06-07T14:40:59+00:00"
         },
         {
             "name": "myclabs/deep-copy",
