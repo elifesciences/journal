@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "9b42e7ed11b0933bb98d06a220500892",
+    "content-hash": "cb8c620529087b30f7eb6380d4f386a8",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -788,16 +788,16 @@
         },
         {
             "name": "elife/api-sdk",
-            "version": "dev-puli",
+            "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/thewilkybarkid/api-sdk-php.git",
-                "reference": "7ab4ac5725df20e20fdd35e46ea81fc08ea74492"
+                "url": "https://github.com/elifesciences/api-sdk-php.git",
+                "reference": "6d4c10a68a6c7060a20117cabcc27c9454a0fadf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thewilkybarkid/api-sdk-php/zipball/7ab4ac5725df20e20fdd35e46ea81fc08ea74492",
-                "reference": "7ab4ac5725df20e20fdd35e46ea81fc08ea74492",
+                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/6d4c10a68a6c7060a20117cabcc27c9454a0fadf",
+                "reference": "6d4c10a68a6c7060a20117cabcc27c9454a0fadf",
                 "shasum": ""
             },
             "require": {
@@ -808,8 +808,8 @@
                 "symfony/serializer": "^2.8.2 || ^3.0.2"
             },
             "require-dev": {
-                "elife/api": "dev-puli",
-                "elife/api-validator": "dev-puli",
+                "elife/api": "dev-master",
+                "elife/api-validator": "^1.0@dev",
                 "guzzlehttp/guzzle": "^6.0",
                 "justinrainbow/json-schema": "^3.0 || ^4.0 || ^5.0",
                 "mindplay/composer-locator": "^2.1.1",
@@ -827,33 +827,25 @@
                     "eLife\\ApiSdk\\": "./src"
                 }
             },
-            "autoload-dev": {
-                "psr-4": {
-                    "Csa\\Bundle\\GuzzleBundle\\": "./vendor-extra/Csa/GuzzleBundle",
-                    "test\\eLife\\ApiSdk\\": "./test"
-                }
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
             "description": "eLife Sciences API SDK",
-            "support": {
-                "source": "https://github.com/thewilkybarkid/api-sdk-php/tree/puli"
-            },
-            "time": "2017-03-14 09:54:59"
+            "time": "2017-03-15 12:58:27"
         },
         {
             "name": "elife/patterns",
-            "version": "dev-puli",
+            "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "git@github.com:thewilkybarkid/patterns-php.git",
-                "reference": "f3ca3bba50548e7aaea35362519bb995fef5e453"
+                "url": "git@github.com:elifesciences/patterns-php.git",
+                "reference": "d1cca30611f1804c5a0e2aa453d9f4cb15e91466"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thewilkybarkid/patterns-php/zipball/f3ca3bba50548e7aaea35362519bb995fef5e453",
-                "reference": "f3ca3bba50548e7aaea35362519bb995fef5e453",
+                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/d1cca30611f1804c5a0e2aa453d9f4cb15e91466",
+                "reference": "d1cca30611f1804c5a0e2aa453d9f4cb15e91466",
                 "shasum": ""
             },
             "require": {
@@ -891,9 +883,10 @@
             ],
             "description": "eLife patterns",
             "support": {
-                "source": "https://github.com/thewilkybarkid/patterns-php/tree/puli"
+                "source": "https://github.com/elifesciences/patterns-php/tree/master",
+                "issues": "https://github.com/elifesciences/patterns-php/issues"
             },
-            "time": "2017-03-14 09:14:40"
+            "time": "2017-03-15 13:08:50"
         },
         {
             "name": "guzzlehttp/guzzle",
@@ -2865,43 +2858,41 @@
         },
         {
             "name": "elife/api",
-            "version": "dev-puli",
+            "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/thewilkybarkid/api-raml.git",
-                "reference": "aa6bad67d937b73ed7bf572cade487c187891bea"
+                "url": "https://github.com/elifesciences/api-raml.git",
+                "reference": "58a328e447ad09fba076da95899e91b5dca9bb8e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thewilkybarkid/api-raml/zipball/aa6bad67d937b73ed7bf572cade487c187891bea",
-                "reference": "aa6bad67d937b73ed7bf572cade487c187891bea",
+                "url": "https://api.github.com/repos/elifesciences/api-raml/zipball/58a328e447ad09fba076da95899e91b5dca9bb8e",
+                "reference": "58a328e447ad09fba076da95899e91b5dca9bb8e",
                 "shasum": ""
             },
             "conflict": {
                 "justinrainbow/json-schema": "<3.0.0"
             },
             "type": "library",
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
             "description": "eLife Sciences API specification",
-            "support": {
-                "source": "https://github.com/thewilkybarkid/api-raml/tree/puli"
-            },
-            "time": "2017-03-14 09:12:06"
+            "time": "2017-03-15 12:50:40"
         },
         {
             "name": "elife/api-validator",
-            "version": "dev-puli",
+            "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/thewilkybarkid/api-validator-php.git",
-                "reference": "eadb231355ad16a552c40e7d0c272a88108e5173"
+                "url": "https://github.com/elifesciences/api-validator-php.git",
+                "reference": "4307a752a29e8e98a305358d991d755c26f07063"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thewilkybarkid/api-validator-php/zipball/eadb231355ad16a552c40e7d0c272a88108e5173",
-                "reference": "eadb231355ad16a552c40e7d0c272a88108e5173",
+                "url": "https://api.github.com/repos/elifesciences/api-validator-php/zipball/4307a752a29e8e98a305358d991d755c26f07063",
+                "reference": "4307a752a29e8e98a305358d991d755c26f07063",
                 "shasum": ""
             },
             "require": {
@@ -2927,19 +2918,12 @@
                     "eLife\\ApiValidator\\": "src/"
                 }
             },
-            "autoload-dev": {
-                "psr-4": {
-                    "test\\eLife\\ApiValidator\\": "test/src/"
-                }
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
             "description": "eLife Sciences API validator",
-            "support": {
-                "source": "https://github.com/thewilkybarkid/api-validator-php/tree/puli"
-            },
-            "time": "2017-03-14 08:55:10"
+            "time": "2017-03-15 12:52:36"
         },
         {
             "name": "instaclick/php-webdriver",
