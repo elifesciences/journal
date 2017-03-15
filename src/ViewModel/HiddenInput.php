@@ -30,6 +30,6 @@ final class HiddenInput implements ViewModel
 
     public function getTemplateName() : string
     {
-        return '/elife/journal/patterns/hidden-input.mustache';
+        return 'hidden-input.mustache';
     }
 }

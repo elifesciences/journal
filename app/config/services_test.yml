@@ -5,24 +5,23 @@ services:
         public: false
         arguments:
           - '@elife.api_validator.schema_finder'
-          - '@elife.api_validator.validator.json_decoder'
+          - '@elife.api_validator.schema_validator'
 
     elife.api_validator.validator.fake_https:
         class: eLife\ApiValidator\MessageValidator\FakeHttpsMessageValidator
         decorates: elife.api_validator.validator
         arguments:
           - '@elife.api_validator.validator.fake_https.inner'
-          - '@elife.api_validator.validator.json_decoder'
 
-    elife.api_validator.validator.json_decoder:
-        class: Webmozart\Json\JsonDecoder
+    elife.api_validator.schema_validator:
+        class: JsonSchema\Validator
         public: false
 
     elife.api_validator.schema_finder:
-        class: eLife\ApiValidator\SchemaFinder\PuliSchemaFinder
+        class: eLife\ApiValidator\SchemaFinder\PathBasedSchemaFinder
         public: false
         arguments:
-          - '@puli.repository'
+          - '@=composer_locate("elife/api")~"/dist/model"'
 
     elife.guzzle.middleware.mock.storage:
         class: Csa\Bundle\GuzzleBundle\Cache\MockStorageAdapter

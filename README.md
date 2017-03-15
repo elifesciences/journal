@@ -7,7 +7,6 @@ Dependencies
 ------------
 
 * [Composer](https://getcomposer.org/)
-* [Puli CLI](http://puli.io)
 * [npm](https://www.npmjs.com/)
 * PHP 7
 
@@ -18,7 +17,6 @@ Installation
 2. `npm install`
 3. `node_modules/.bin/gulp`
 4. `composer install`
-5. `puli publish --install`
 
 Running the tests
 -----------------

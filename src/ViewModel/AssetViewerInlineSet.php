@@ -24,7 +24,7 @@ final class AssetViewerInlineSet implements ViewModel
 
     public function getTemplateName() : string
     {
-        return '/elife/journal/patterns/asset-viewer-inline-set.mustache';
+        return 'asset-viewer-inline-set.mustache';
     }
 
     protected function getComposedViewModels() : Traversable

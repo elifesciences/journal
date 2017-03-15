@@ -3,12 +3,13 @@
 namespace test\eLife\Journal\ViewModel\Converter;
 
 use Cocur\Slugify\SlugifyInterface;
+use ComposerLocator;
 use eLife\ApiSdk\Model\Block;
 use eLife\ApiSdk\Model\Model;
 use eLife\Journal\ViewModel\Converter\ViewModelConverter;
 use PHPUnit_Framework_TestCase;
+use Symfony\Component\Finder\Finder;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use test\eLife\Journal\PuliAwareTestCase;
 
 abstract class ModelConverterTestCase extends PHPUnit_Framework_TestCase
 {
@@ -18,7 +19,7 @@ abstract class ModelConverterTestCase extends PHPUnit_Framework_TestCase
     protected $converter;
     protected $context = [];
     protected $selectSamples = false;
-    use PuliAwareTestCase;
+
     use SerializerAwareTestCase;
 
     /**
@@ -47,26 +48,24 @@ abstract class ModelConverterTestCase extends PHPUnit_Framework_TestCase
 
     final public function samples()
     {
-        // @beforeClass not called on data providers
-        $this->setUpPuli();
-
         $this->assertInternalType('array', $this->models);
         $this->assertInternalType('string', $this->class);
         $this->assertInternalType('string', $this->viewModelClass);
         $this->assertInternalType('array', $this->context);
 
         $samples = [];
+
         foreach ($this->models as $model) {
-            $folder = self::$puli->find("/elife/api/samples/{$model}/v1/*");
+            $folder = Finder::create()->files()->in(ComposerLocator::getPath('elife/api')."/dist/samples/{$model}/v1");
 
             foreach ($folder as $sample) {
                 if ($this->selectSamples) {
-                    if (!in_array($sample->getName(), $this->selectSamples)) {
+                    if (!in_array($sample->getBasename(), $this->selectSamples)) {
                         continue;
                     }
                 }
-                $name = $model.'/v1/'.$sample->getName();
-                $samples[$name] = ['body' => $sample->getBody()];
+                $name = $model.'/v1/'.$sample->getBasename();
+                $samples[$name] = ['body' => $sample->getContents()];
             }
         }
 

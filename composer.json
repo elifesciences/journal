@@ -22,21 +22,15 @@
         "elife/api-sdk": "^1.0@dev",
         "elife/patterns": "dev-master",
         "guzzlehttp/promises": "^1.2",
-        "justinrainbow/json-schema": "^2.0@dev",
         "ocramius/package-versions": "^1.1",
         "pagerfanta/pagerfanta": "^1.0",
         "phive/twig-extensions-deferred": "^0.3",
-        "puli/repository": "^1.0-beta10",
-        "puli/symfony-bundle": "^1.0-beta10",
-        "puli/twig-extension": "^1.0-beta8",
-        "puli/url-generator": "^1.0-beta4",
         "sensio/distribution-bundle": "^5.0",
         "swiftmailer/swiftmailer": "^5.4",
         "symfony/monolog-bundle": "^3.0",
         "symfony/swiftmailer-bundle": "^2.4",
         "symfony/symfony": "^3.1",
         "twig/twig": "^1.24",
-        "webmozart/json": "^1.3@dev",
         "white-october/pagerfanta-bundle": "^1.0"
     },
     "require-dev": {
@@ -50,12 +44,13 @@
         "elife/api-validator": "^1.0@dev",
         "guzzlehttp/psr7": "^1.3",
         "jarnaiz/behat-junit-formatter": "^1.3",
+        "justinrainbow/json-schema": "^5.1",
+        "mindplay/composer-locator": "^2.1",
         "namshi/cuzzle": "^2.0",
         "phpspec/prophecy": "^1.6",
         "phpunit/phpunit": "^5.4",
         "symfony/phpunit-bridge": "^3.1"
     },
-    "minimum-stability": "beta",
     "scripts": {
         "post-install-cmd": [
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",

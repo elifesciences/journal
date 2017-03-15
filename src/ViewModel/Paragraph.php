@@ -22,6 +22,6 @@ final class Paragraph implements ViewModel
 
     public function getTemplateName() : string
     {
-        return '/elife/journal/patterns/paragraph.mustache';
+        return 'paragraph.mustache';
     }
 }

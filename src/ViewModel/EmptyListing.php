@@ -24,6 +24,6 @@ final class EmptyListing implements ViewModel
 
     public function getTemplateName() : string
     {
-        return '/elife/journal/patterns/empty-listing.mustache';
+        return 'empty-listing.mustache';
     }
 }

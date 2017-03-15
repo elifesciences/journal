@@ -27,6 +27,6 @@ final class DefinitionList implements ViewModel
 
     public function getTemplateName() : string
     {
-        return '/elife/journal/patterns/definition-list.mustache';
+        return 'definition-list.mustache';
     }
 }

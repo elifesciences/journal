@@ -37,7 +37,7 @@ final class AssetsExtensionTest extends PHPUnit_Framework_TestCase
 
         $globals = $twig->getGlobals();
 
-        $this->assertEquals($globals['stylesheets'], ['/elife/patterns/assets/css/all.css']);
-        $this->assertEquals($globals['javascripts'], ['/elife/patterns/assets/js/main.js']);
+        $this->assertEquals($globals['stylesheets'], ['assets/css/all.css']);
+        $this->assertEquals($globals['javascripts'], ['assets/js/main.js']);
     }
 }
