@@ -70,8 +70,8 @@ final class MagazineController extends Controller
         $arguments['contentHeader'] = ContentHeaderNonArticle::basic('Magazine', true,
             'Highlighting the latest research and giving a voice to life and biomedical scientists.',
             null, null, new BackgroundImage(
-                $request->getSchemeAndHttpHost().$this->get('puli.url_generator')->generateUrl('/elife/journal/images/banners/magazine-lo-res.jpg'),
-                $request->getSchemeAndHttpHost().$this->get('puli.url_generator')->generateUrl('/elife/journal/images/banners/magazine-hi-res.jpg')
+                $this->get('puli.url_generator')->generateUrl('/elife/journal/images/banners/magazine-lo-res.jpg'),
+                $this->get('puli.url_generator')->generateUrl('/elife/journal/images/banners/magazine-hi-res.jpg')
             ));
 
         $arguments['audio_player'] = $this->get('elife.api_sdk.podcast_episodes')
