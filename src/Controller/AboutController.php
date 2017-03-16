@@ -115,7 +115,7 @@ final class AboutController extends Controller
             ArticleSection::basic('Related links', 2,
                 $this->render(Listing::unordered([
                     '<a href="'.$this->get('router')->generate('alerts').'">Sign up for Technology & Innovation News from eLife</a>',
-                ],
+                ], 'bullet'))),
         ];
 
         return new Response($this->get('templating')->render('::about.html.twig', $arguments));
