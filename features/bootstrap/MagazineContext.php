@@ -234,6 +234,195 @@ final class MagazineContext extends Context
     }
 
     /**
+     * @Given /^there is a collection called \'([^\']*)\'$/
+     */
+    public function thereIsACollectionCalled(string $name)
+    {
+        // Do nothing.
+    }
+
+    /**
+     * @Given /^there is a Magazine highlight linking to the \'([^\']*)\' collection$/
+     */
+    public function thereIsAMagazineHighlightLinkingToTheCollection(string $collectionName)
+    {
+        $id = $this->createId($collectionName);
+
+        $today = (new DateTimeImmutable())->setTime(0, 0, 0);
+
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/highlights/magazine',
+                ['Accept' => 'application/vnd.elife.highlights+json; version=1']
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.highlights+json; version=1'],
+                json_encode(array_fill(0, 3, [
+                    'title' => $collectionName,
+                    'image' => [
+                        'alt' => '',
+                        'sizes' => [
+                            '16:9' => [
+                                250 => 'https://placehold.it/250x141?item',
+                                500 => 'https://placehold.it/500x281?item',
+                            ],
+                            '1:1' => [
+                                70 => 'https://placehold.it/70x70?item',
+                                140 => 'https://placehold.it/140x140?item',
+                            ],
+                        ],
+                    ],
+                    'item' => [
+                        'type' => 'collection',
+                        'id' => $id,
+                        'title' => $collectionName,
+                        'published' => $today->format(ApiSdk::DATE_FORMAT),
+                        'image' => [
+                            'thumbnail' => [
+                                'alt' => '',
+                                'sizes' => [
+                                    '16:9' => [
+                                        250 => 'https://placehold.it/250x141?item',
+                                        500 => 'https://placehold.it/500x281?item',
+                                    ],
+                                    '1:1' => [
+                                        70 => 'https://placehold.it/70x70?item',
+                                        140 => 'https://placehold.it/140x140?item',
+                                    ],
+                                ],
+                            ],
+                        ],
+                        'selectedCurator' => [
+                            'id' => '1',
+                            'type' => 'senior-editor',
+                            'name' => [
+                                'preferred' => 'Person 1',
+                                'index' => '1, Person',
+                            ],
+                        ],
+                    ],
+                ]))
+            )
+        );
+    }
+
+    /**
+     * @Given /^there is a Magazine highlight linking to the \'([^\']*)\' collection with a custom title and image$/
+     */
+    public function thereIsAMagazineHighlightLinkingToTheCollectionWithACustomTitleAndImage(string $collectionName)
+    {
+        $id = $this->createId($collectionName);
+
+        $today = (new DateTimeImmutable())->setTime(0, 0, 0);
+
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/highlights/magazine',
+                ['Accept' => 'application/vnd.elife.highlights+json; version=1']
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.highlights+json; version=1'],
+                json_encode([
+                        [
+                            'title' => 'Highlight',
+                            'image' => [
+                                'alt' => '',
+                                'sizes' => [
+                                    '16:9' => [
+                                        250 => 'https://placehold.it/250x141?highlight',
+                                        500 => 'https://placehold.it/500x281?highlight',
+                                    ],
+                                    '1:1' => [
+                                        70 => 'https://placehold.it/70x70?highlight',
+                                        140 => 'https://placehold.it/140x140?highlight',
+                                    ],
+                                ],
+                            ],
+                            'item' => [
+                                'type' => 'collection',
+                                'id' => $id,
+                                'title' => $collectionName,
+                                'published' => $today->format(ApiSdk::DATE_FORMAT),
+                                'image' => [
+                                    'thumbnail' => [
+                                        'alt' => '',
+                                        'sizes' => [
+                                            '16:9' => [
+                                                250 => 'https://placehold.it/250x141?item',
+                                                500 => 'https://placehold.it/500x281?item',
+                                            ],
+                                            '1:1' => [
+                                                70 => 'https://placehold.it/70x70?item',
+                                                140 => 'https://placehold.it/140x140?item',
+                                            ],
+                                        ],
+                                    ],
+                                ],
+                                'selectedCurator' => [
+                                    'id' => '1',
+                                    'type' => 'senior-editor',
+                                    'name' => [
+                                        'preferred' => 'Person 1',
+                                        'index' => '1, Person',
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ] + array_fill(1, 2, [
+                        'title' => $collectionName,
+                        'image' => [
+                            'alt' => '',
+                            'sizes' => [
+                                '16:9' => [
+                                    250 => 'https://placehold.it/250x141?item',
+                                    500 => 'https://placehold.it/500x281?item',
+                                ],
+                                '1:1' => [
+                                    70 => 'https://placehold.it/70x70?item',
+                                    140 => 'https://placehold.it/140x140?item',
+                                ],
+                            ],
+                        ],
+                        'item' => [
+                            'type' => 'collection',
+                            'id' => $id,
+                            'title' => $collectionName,
+                            'published' => $today->format(ApiSdk::DATE_FORMAT),
+                            'image' => [
+                                'thumbnail' => [
+                                    'alt' => '',
+                                    'sizes' => [
+                                        '16:9' => [
+                                            250 => 'https://placehold.it/250x141?item',
+                                            500 => 'https://placehold.it/500x281?item',
+                                        ],
+                                        '1:1' => [
+                                            70 => 'https://placehold.it/70x70?item',
+                                            140 => 'https://placehold.it/140x140?item',
+                                        ],
+                                    ],
+                                ],
+                            ],
+                            'selectedCurator' => [
+                                'id' => '1',
+                                'type' => 'senior-editor',
+                                'name' => [
+                                    'preferred' => 'Person 1',
+                                    'index' => '1, Person',
+                                ],
+                            ],
+                        ],
+                    ])
+                )
+            )
+        );
+    }
+
+    /**
      * @Given /^there are no upcoming events$/
      */
     public function thereAreNoUpcomingEvents()
@@ -401,6 +590,32 @@ final class MagazineContext extends Context
     }
 
     /**
+     * @Then /^I should see the \'([^\']*)\' Magazine highlight in the 'Highlights' list$/
+     */
+    public function iShouldSeeTheMagazineHighlightInTheList(string $name)
+    {
+        $this->assertSession()->elementAttributeContains('css', '.highlights__list .teaser__header_text_link', 'href', $this->createId($name));
+    }
+
+    /**
+     * @Then /^I should see the title and image from the \'([^\']*)\' collection used in the Magazine highlight$/
+     */
+    public function iShouldSeeTheTitleAndImageFromTheCollectionUsedInTheMagazineHighlight(string $collectionName)
+    {
+        $this->assertSession()->elementTextContains('css', '.highlights__list .teaser__header', $collectionName);
+        $this->assertSession()->elementAttributeContains('css', '.highlights__list .teaser__img', 'src', 'https://placehold.it/70x70?item');
+    }
+
+    /**
+     * @Then /^I should see the custom title and image used in the \'([^\']*)\' Magazine highlight$/
+     */
+    public function iShouldSeeTheCustomTitleAndImageUsedInTheMagazineHighlight(string $collectionName)
+    {
+        $this->assertSession()->elementTextContains('css', '.highlights__list .teaser__header', 'Highlight');
+        $this->assertSession()->elementAttributeContains('css', '.highlights__list .teaser__img', 'src', 'https://placehold.it/70x70?highlight');
+    }
+
+    /**
      * @Then /^I should not see the 'Upcoming events' list$/
      */
     public function iShouldNotSeeTheUpcomingEventsList()
@@ -479,5 +694,10 @@ final class MagazineContext extends Context
             '.list-heading:contains("eLife digests") + .listing-list > .listing-list__item:nth-child('.($number + 1).')',
             'See more eLife digests on Medium'
         );
+    }
+
+    private function createId(string $name) : string
+    {
+        return md5($name);
     }
 }
