@@ -32,8 +32,8 @@ final class AboutOpennessControllerTest extends PageTestCase
         $this->assertSame('/about/openness', $crawler->filter('link[rel="canonical"]')->attr('href'));
         $this->assertSame('http://localhost/about/openness', $crawler->filter('meta[property="og:url"]')->attr('content'));
         $this->assertSame('Openness', $crawler->filter('meta[property="og:title"]')->attr('content'));
-        $this->assertSame('We believe that open access to research findings and associated data has the potential to revolutionise the scientific enterprise.', $crawler->filter('meta[property="og:description"]')->attr('content'));
-        $this->assertSame('We believe that open access to research findings and associated data has the potential to revolutionise the scientific enterprise.', $crawler->filter('meta[name="description"]')->attr('content'));
+        $this->assertSame('We believe that open access to research findings and associated data has the potential to revolutionise the scientific enterprise', $crawler->filter('meta[property="og:description"]')->attr('content'));
+        $this->assertSame('We believe that open access to research findings and associated data has the potential to revolutionise the scientific enterprise', $crawler->filter('meta[name="description"]')->attr('content'));
         $this->assertSame('summary', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
     }
 
