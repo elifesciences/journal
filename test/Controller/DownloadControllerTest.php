@@ -42,7 +42,7 @@ final class DownloadControllerTest extends WebTestCase
         );
 
         $content = $this->captureContent(function () use ($client) {
-            $client->request('GET', $this->createDownloadUri('http://www.example.com/test.mp3'), [], [], ['HTTP_REFERER' => 'http://www.example.com/']);
+            $client->request('GET', $this->createDownloadUri('http://www.example.com/test.mp3', 'test.mp3'), [], [], ['HTTP_REFERER' => 'http://www.example.com/']);
         });
 
         $response = $client->getResponse();
@@ -52,7 +52,7 @@ final class DownloadControllerTest extends WebTestCase
         $this->assertSame([
             'cache-control' => ['no-cache'],
             'content-type' => ['audio/mp3'],
-            'content-disposition' => ['attachment'],
+            'content-disposition' => ['attachment; filename="test.mp3"'],
         ], $response->headers->all());
         $this->assertSame(file_get_contents($mp3), $content);
     }
@@ -84,7 +84,7 @@ final class DownloadControllerTest extends WebTestCase
         );
 
         $content = $this->captureContent(function () use ($client) {
-            $client->request('GET', $this->createDownloadUri('http://www.example.com/test.txt'), [], [], ['HTTP_X_FORWARDED_FOR' => '54.230.78.56, 34.197.12.171']);
+            $client->request('GET', $this->createDownloadUri('http://www.example.com/test.txt', 'test.txt'), [], [], ['HTTP_X_FORWARDED_FOR' => '54.230.78.56, 34.197.12.171']);
         });
 
         $response = $client->getResponse();
@@ -94,7 +94,7 @@ final class DownloadControllerTest extends WebTestCase
         $this->assertSame([
             'cache-control' => ['no-cache'],
             'content-type' => ['text/plain; charset=UTF-8'],
-            'content-disposition' => ['attachment'],
+            'content-disposition' => ['attachment; filename="test.txt"'],
         ], $response->headers->all());
         $this->assertSame('test', $content);
     }
@@ -128,7 +128,7 @@ final class DownloadControllerTest extends WebTestCase
         );
 
         $content = $this->captureContent(function () use ($client) {
-            $client->request('GET', $this->createDownloadUri('http://www.example.com/test.txt'), [], [], ['HTTP_X_FORWARDED_FOR' => '54.230.78.56, 34.197.12.171']);
+            $client->request('GET', $this->createDownloadUri('http://www.example.com/test.txt', 'test.txt'), [], [], ['HTTP_X_FORWARDED_FOR' => '54.230.78.56, 34.197.12.171']);
         });
 
         $response = $client->getResponse();
@@ -138,7 +138,7 @@ final class DownloadControllerTest extends WebTestCase
         $this->assertSame([
             'cache-control' => ['no-cache'],
             'content-type' => ['text/plain; charset=UTF-8'],
-            'content-disposition' => ['attachment'],
+            'content-disposition' => ['attachment; filename="test.txt"'],
         ], $response->headers->all());
         $this->assertSame('test', $content);
     }
@@ -188,7 +188,7 @@ final class DownloadControllerTest extends WebTestCase
         );
 
         $content = $this->captureContent(function () use ($client) {
-            $client->request('GET', $this->createDownloadUri('http://www.example.com/test.txt'));
+            $client->request('GET', $this->createDownloadUri('http://www.example.com/test.txt', 'test.txt'));
         });
 
         $response = $client->getResponse();
@@ -198,49 +198,7 @@ final class DownloadControllerTest extends WebTestCase
         $this->assertSame([
             'cache-control' => ['no-cache'],
             'content-type' => ['text/plain; charset=UTF-8'],
-            'content-disposition' => ['attachment'],
-        ], $response->headers->all());
-        $this->assertSame('test', $content);
-    }
-
-    /**
-     * @test
-     */
-    public function it_downloads_a_file_with_a_name()
-    {
-        $client = static::createClient();
-
-        $this->mockApiResponse(
-            new Request(
-                'GET',
-                'http://www.example.com/test.txt',
-                [
-                    'Accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-                    'X-Forwarded-For' => '127.0.0.1',
-                    'X-Forwarded-Host' => 'localhost',
-                    'X-Forwarded-Port' => '80',
-                    'X-Forwarded-Proto' => 'http',
-                ]
-            ),
-            new Response(
-                200,
-                ['Content-Type' => 'text/plain'],
-                'test'
-            )
-        );
-
-        $content = $this->captureContent(function () use ($client) {
-            $client->request('GET', $this->createDownloadUri('http://www.example.com/test.txt', 'foo.txt'));
-        });
-
-        $response = $client->getResponse();
-
-        $this->assertInstanceOf(StreamedResponse::class, $response);
-        $this->assertSame(200, $response->getStatusCode());
-        $this->assertSame([
-            'cache-control' => ['no-cache'],
-            'content-type' => ['text/plain; charset=UTF-8'],
-            'content-disposition' => ['attachment; filename="foo.txt"'],
+            'content-disposition' => ['attachment; filename="test.txt"'],
         ], $response->headers->all());
         $this->assertSame('test', $content);
     }
@@ -281,7 +239,7 @@ final class DownloadControllerTest extends WebTestCase
         );
 
         $content = $this->captureContent(function () use ($client) {
-            $client->request('GET', $this->createDownloadUri('http://www.example.com/test.txt'));
+            $client->request('GET', $this->createDownloadUri('http://www.example.com/test.txt', 'test.txt'));
         });
 
         $response = $client->getResponse();
@@ -297,7 +255,7 @@ final class DownloadControllerTest extends WebTestCase
             'expires' => ['Wed, 21 Oct 2015 07:28:00 GMT'],
             'last-modified' => ['Wed, 21 Oct 2015 07:28:00 GMT'],
             'vary' => ['Accept'],
-            'content-disposition' => ['attachment'],
+            'content-disposition' => ['attachment; filename="test.txt"'],
         ], $response->headers->all());
         $this->assertSame('test', $content);
     }
@@ -336,7 +294,7 @@ final class DownloadControllerTest extends WebTestCase
             )
         );
 
-        $client->request('GET', $this->createDownloadUri('http://www.example.com/test.txt'), [], [], ['HTTP_CACHE_CONTROL' => 'public', 'HTTP_IF_MODIFIED_SINCE' => 'Wed, 21 Oct 2015 07:28:00 GMT', 'HTTP_IF_NONE_MATCH' => '1234567890']);
+        $client->request('GET', $this->createDownloadUri('http://www.example.com/test.txt', 'test.txt'), [], [], ['HTTP_CACHE_CONTROL' => 'public', 'HTTP_IF_MODIFIED_SINCE' => 'Wed, 21 Oct 2015 07:28:00 GMT', 'HTTP_IF_NONE_MATCH' => '1234567890']);
 
         $response = $client->getResponse();
 
@@ -347,7 +305,7 @@ final class DownloadControllerTest extends WebTestCase
             'etag' => ['1234567890'],
             'expires' => ['Wed, 21 Oct 2015 07:29:00 GMT'],
             'vary' => ['Accept'],
-            'content-disposition' => ['attachment'],
+            'content-disposition' => ['attachment; filename="test.txt"'],
         ], $response->headers->all());
         $this->assertEmpty($response->getContent());
     }
@@ -375,7 +333,7 @@ final class DownloadControllerTest extends WebTestCase
             new Response($fileStatusCode)
         );
 
-        $client->request('GET', $this->createDownloadUri('http://www.example.com/test.txt'));
+        $client->request('GET', $this->createDownloadUri('http://www.example.com/test.txt', 'test.txt'));
 
         $response = $client->getResponse();
 
@@ -387,13 +345,9 @@ final class DownloadControllerTest extends WebTestCase
         return $this->arrayProvider([404 => 404, 410 => 410, 500 => 500, 503 => 500]);
     }
 
-    private function createDownloadUri(string $fileUri, string $name = '') : string
+    private function createDownloadUri(string $fileUri, string $name) : string
     {
-        $uri = 'http://localhost/download/'.base64_encode($fileUri);
-
-        if ($name) {
-            $uri .= "/$name";
-        }
+        $uri = 'http://localhost/download/'.base64_encode($fileUri)."/$name";
 
         return self::$kernel->getContainer()->get('uri_signer')->sign($uri);
     }
