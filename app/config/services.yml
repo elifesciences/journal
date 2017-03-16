@@ -108,8 +108,8 @@ services:
         tags:
           - name: kernel.event_subscriber
 
-    elife.journal.listener.network_problem:
-        class: eLife\Journal\EventListener\NetworkProblemSubscriber
+    elife.journal.listener.api_timeout:
+        class: eLife\Journal\EventListener\ApiTimeoutSubscriber
         tags:
           - name: kernel.event_subscriber
 
