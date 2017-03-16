@@ -8,6 +8,5 @@ require_once __DIR__.'/../app/autoload.php';
 Debug::enable();
 
 $kernel = new AppKernel('ci', true);
-$kernel->loadClassCache();
 
 $kernel->run(Request::createFromGlobals());
