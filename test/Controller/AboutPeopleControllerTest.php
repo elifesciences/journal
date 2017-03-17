@@ -14,7 +14,7 @@ final class AboutPeopleControllerTest extends PageTestCase
         $crawler = $client->request('GET', $this->getUrl());
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
-        $this->assertSame('Editors and people', $crawler->filter('.content-header__title')->text());
+        $this->assertSame('People', $crawler->filter('.content-header__title')->text());
     }
 
     /**
@@ -28,10 +28,10 @@ final class AboutPeopleControllerTest extends PageTestCase
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
 
-        $this->assertSame('Editors and people | About | eLife', $crawler->filter('title')->text());
+        $this->assertSame('People | About | eLife', $crawler->filter('title')->text());
         $this->assertSame('/about/people', $crawler->filter('link[rel="canonical"]')->attr('href'));
         $this->assertSame('http://localhost/about/people', $crawler->filter('meta[property="og:url"]')->attr('content'));
-        $this->assertSame('Editors and people', $crawler->filter('meta[property="og:title"]')->attr('content'));
+        $this->assertSame('People', $crawler->filter('meta[property="og:title"]')->attr('content'));
         $this->assertSame('summary', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
     }
 
