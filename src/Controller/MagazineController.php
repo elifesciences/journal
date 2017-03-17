@@ -82,6 +82,7 @@ final class MagazineController extends Controller
 
         $arguments['highlights'] = $this->get('elife.api_sdk.highlights')
             ->get('magazine')
+            ->slice(0, 6)
             ->map($this->willConvertTo(Teaser::class, ['variant' => 'secondary']))
             ->then(function (Sequence $highlights) {
                 return ListingTeasers::forHighlights($highlights->toArray(), 'Highlights', 'highlights');
