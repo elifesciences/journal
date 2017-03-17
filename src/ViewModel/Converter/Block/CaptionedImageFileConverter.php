@@ -33,7 +33,7 @@ final class CaptionedImageFileConverter implements ViewModelConverter
     {
         $asset = new ViewModel\Image(str_replace('.tif', '.jpg', $object->getUri()), [], $object->getAltText());
 
-        $asset = $this->createCaptionedAsset($asset, $object, $this->downloadLinkUriGenerator->generate(new DownloadLink($object->getUri())));
+        $asset = $this->createCaptionedAsset($asset, $object, $this->downloadLinkUriGenerator->generate(DownloadLink::fromUri($object->getUri())));
 
         if (empty($object->getLabel())) {
             return $asset;

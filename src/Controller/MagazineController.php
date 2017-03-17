@@ -80,6 +80,15 @@ final class MagazineController extends Controller
             ->then(Callback::emptyOr($this->willConvertTo(AudioPlayer::class)))
             ->otherwise($this->softFailure('Failed to load podcast episode audio player'));
 
+        $arguments['highlights'] = $this->get('elife.api_sdk.highlights')
+            ->get('magazine')
+            ->slice(0, 6)
+            ->map($this->willConvertTo(Teaser::class, ['variant' => 'secondary']))
+            ->then(function (Sequence $highlights) {
+                return ListingTeasers::forHighlights($highlights->toArray(), 'Highlights', 'highlights');
+            })
+            ->otherwise($this->softFailure('Failed to load highlights for magazine'));
+
         $events = $this->get('elife.api_sdk.events')
             ->forType('open')
             ->reverse();
