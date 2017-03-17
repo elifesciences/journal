@@ -34,7 +34,8 @@ final class AboutController extends Controller
                     '<a href="'.$this->get('router')->generate('annual-reports').'">Annual reports</a>',
                     '<a href="'.$this->get('router')->generate('press-packs').'">For the press</a>',
                     '<a href="'.$this->get('router')->generate('resources').'">Resources to download</a>',
-                ], 'bullet'))),
+                ], 'bullet'))
+            ),
         ];
 
         return new Response($this->get('templating')->render('::about.html.twig', $arguments));
@@ -64,7 +65,8 @@ final class AboutController extends Controller
                     '<a href="https://doi.org/10.7554/eLife.11326">What makes an eLife paper in epidemiology and global health?</a>',
                     '<a href="https://submit.elifesciences.org/html/elife_author_instructions.html">Author Guide and Policies</a>',
                     '<a href="'.$this->get('router')->generate('alerts').'">Sign up for alerts and news</a>',
-                ], 'bullet'))),
+                ], 'bullet'))
+            ),
         ];
 
         return new Response($this->get('templating')->render('::about.html.twig', $arguments));
@@ -93,7 +95,8 @@ final class AboutController extends Controller
                     '<a href="https://creativecommons.org/licenses/by/4.0/">Our copyright license: Creative Commons Attribution (CC-BY)</a>',
                     '<a href="https://medium.com/@elife">eLife on medium.com</a>',
                     '<a href="http://www.budapestopenaccessinitiative.org/">The Budapest Open Access Initiative (BOAI)</a>',
-                ], 'bullet'))),
+                ], 'bullet'))
+            ),
         ];
 
         return new Response($this->get('templating')->render('::about.html.twig', $arguments));
@@ -115,7 +118,8 @@ final class AboutController extends Controller
             ArticleSection::basic('Related links', 2,
                 $this->render(Listing::unordered([
                     '<a href="'.$this->get('router')->generate('alerts').'">Sign up for Technology & Innovation News from eLife</a>',
-                ], 'bullet'))),
+                ], 'bullet'))
+            ),
         ];
 
         return new Response($this->get('templating')->render('::about.html.twig', $arguments));
