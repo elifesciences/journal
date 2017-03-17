@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "763bd6db2122ec916fa4cfe0b5e4becd",
+    "content-hash": "b6e80fc3606db7680e7f771d7ed2b64c",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -1068,6 +1068,66 @@
                 "url"
             ],
             "time": "2017-03-20T17:10:46+00:00"
+        },
+        {
+            "name": "irozgar/gulp-rev-versions-bundle",
+            "version": "v1.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/irozgar/gulp-rev-versions-bundle.git",
+                "reference": "fed3a9a8c891127a5f0e21a3491a4839c1395559"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/irozgar/gulp-rev-versions-bundle/zipball/fed3a9a8c891127a5f0e21a3491a4839c1395559",
+                "reference": "fed3a9a8c891127a5f0e21a3491a4839c1395559",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.6",
+                "symfony/asset": "^2.7|^3.0",
+                "symfony/config": "^2.7|^3.0",
+                "symfony/dependency-injection": "^2.7|^3.0",
+                "symfony/http-kernel": "^2.7|^3.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.8|^5.5",
+                "symfony/browser-kit": "^2.7|^3.0",
+                "symfony/framework-bundle": "^2.7|^3.0",
+                "symfony/twig-bundle": "^2.7|^3.0",
+                "symfony/yaml": "^2.7|^3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Irozgar\\GulpRevVersionsBundle\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Isaac Rozas",
+                    "email": "irozgar@gmail.com"
+                }
+            ],
+            "description": "A bundle that allows symfony to get the version of assets versioned with gulp-rev",
+            "keywords": [
+                "JS",
+                "asset",
+                "assets",
+                "bundle",
+                "css",
+                "gulp-rev",
+                "javascript",
+                "rev-manifest",
+                "symfony",
+                "twig",
+                "version"
+            ],
+            "time": "2017-02-21T00:17:19+00:00"
         },
         {
             "name": "mindplay/composer-locator",

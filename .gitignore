@@ -1,10 +1,12 @@
 /app/config/parameters.yml
+/app/Resources/assets/images/
+/app/Resources/assets/rev-manifest.json
 /behat.yml
 /build/
 /node_modules/
 /phpunit.xml
 /var/
 /vendor/
+/web/assets/
 /web/bundles/
-/web/favicons/
-/web/images/
+/web/favicon.ico
