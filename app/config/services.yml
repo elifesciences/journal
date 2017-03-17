@@ -108,6 +108,11 @@ services:
         tags:
           - name: kernel.event_subscriber
 
+    elife.journal.listener.api_timeout:
+        class: eLife\Journal\EventListener\ApiTimeoutSubscriber
+        tags:
+          - name: kernel.event_subscriber
+
     elife.journal.mustache.loader:
         class: Mustache_Loader_CascadingLoader
         public: false
