@@ -1,6 +1,4 @@
 /app/config/parameters.yml
-/app/Resources/assets/images/
-/app/Resources/assets/rev-manifest.json
 /behat.yml
 /build/
 /node_modules/
