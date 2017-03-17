@@ -17,7 +17,7 @@ final class ApiTimeoutSubscriberTest extends PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function it_turns_network_problems_into_a_504_exception()
+    public function it_turns_api_timeouts_into_a_504_exception()
     {
         $subscriber = new ApiTimeoutSubscriber();
 
