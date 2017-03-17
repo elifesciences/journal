@@ -27,6 +27,10 @@ csa_guzzle:
 framework:
     assets:
         version_strategy: irozgar_gulp_rev_versions.asset.gulp_rev_version_strategy
+    cache:
+        pools:
+            cache.guzzle:
+                adapter: cache.app
     csrf_protection: ~
     form: ~
     router:
