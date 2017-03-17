@@ -32,13 +32,9 @@ final class DownloadLinkUriGenerator
 
         $path = explode('/', parse_url($uri, PHP_URL_PATH));
 
+        $name = array_pop($path);
         $uri = array_pop($path);
 
-        if ('download' !== $second = array_pop($path)) {
-            $name = $uri;
-            $uri = $second;
-        }
-
-        return new DownloadLink(base64_decode($uri), $name ?? null);
+        return new DownloadLink(base64_decode($uri), $name);
     }
 }
