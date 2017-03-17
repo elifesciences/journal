@@ -40,7 +40,7 @@ final class CaptionedVideoConverter implements ViewModelConverter
             $object->isLoop()
         );
 
-        $asset = $this->createCaptionedAsset($asset, $object, $this->downloadLinkUriGenerator->generate(new DownloadLink($object->getSources()[0]->getUri())));
+        $asset = $this->createCaptionedAsset($asset, $object, $this->downloadLinkUriGenerator->generate(DownloadLink::fromUri($object->getSources()[0]->getUri())));
 
         if (empty($object->getLabel())) {
             return $asset;

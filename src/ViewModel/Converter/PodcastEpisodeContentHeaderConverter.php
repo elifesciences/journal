@@ -32,7 +32,7 @@ final class PodcastEpisodeContentHeaderConverter implements ViewModelConverter
                 $object->getBanner()->getSize('2:1')->getImage(900),
                 $object->getBanner()->getSize('2:1')->getImage(1800)
             ),
-            $this->downloadLinkUriGenerator->generate(new DownloadLink($object->getSources()[0]->getUri()))
+            $this->downloadLinkUriGenerator->generate(DownloadLink::fromUri($object->getSources()[0]->getUri()))
         );
     }
 
