@@ -1,11 +1,5 @@
 {% extends '::page.html.twig' %}
 
-{% block info_bar %}
-
-    {{ info_bar('This page is incomplete.') }}
-
-{% endblock %}
-
 {% block body %}
 
     {{ render_pattern(contentHeader) }}
@@ -19,6 +13,16 @@
         {{ render_pattern(menuLink) }}
 
     </div>
+
+    {% if highlights %}
+
+        <div class="wrapper u-pad-top">
+
+            {{ render_pattern(highlights) }}
+
+        </div>
+
+    {% endif %}
 
     <div class="wrapper u-pad-top">
 
