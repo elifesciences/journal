@@ -79,11 +79,7 @@ final class DownloadController extends Controller
             'Vary' => $fileResponse->getHeaderLine('Vary'),
         ]));
 
-        if ($link->getFilename()) {
-            $response->headers->set('Content-Disposition', $response->headers->makeDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $link->getFilename()));
-        } else {
-            $response->headers->set('Content-Disposition', ResponseHeaderBag::DISPOSITION_ATTACHMENT);
-        }
+        $response->headers->set('Content-Disposition', $response->headers->makeDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $link->getFilename()));
 
         return $response;
     }

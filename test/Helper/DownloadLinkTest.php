@@ -12,7 +12,7 @@ final class DownloadLinkTest extends PHPUnit_Framework_TestCase
      */
     public function it_has_a_uri()
     {
-        $link = new DownloadLink('http://www.example.com/test.txt');
+        $link = new DownloadLink('http://www.example.com/test.txt', 'test.txt');
 
         $this->assertSame('http://www.example.com/test.txt', $link->getUri());
     }
@@ -20,12 +20,21 @@ final class DownloadLinkTest extends PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function it_may_have_a_filename()
+    public function it_has_a_filename()
     {
-        $with = new DownloadLink('http://www.example.com/test.txt', 'foo.bar');
-        $withOut = new DownloadLink('http://www.example.com/test.txt');
+        $link = new DownloadLink('http://www.example.com/test.txt', 'foo.bar');
 
-        $this->assertSame('foo.bar', $with->getFilename());
-        $this->assertNull($withOut->getFilename());
+        $this->assertSame('foo.bar', $link->getFilename());
+    }
+
+    /**
+     * @test
+     */
+    public function it_can_be_created_from_a_uri()
+    {
+        $link = DownloadLink::fromUri('http://www.example.com/test.txt');
+
+        $this->assertSame('http://www.example.com/test.txt', $link->getUri());
+        $this->assertSame('test.txt', $link->getFilename());
     }
 }
