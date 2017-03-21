@@ -103,6 +103,11 @@ services:
           - '@router'
           - '@uri_signer'
 
+    elife.journal.listener.cache_control:
+        class: eLife\Journal\EventListener\CacheControlSubscriber
+        tags:
+          - name: kernel.event_subscriber
+
     elife.journal.listener.early_response:
         class: eLife\Journal\EventListener\EarlyResponseSubscriber
         tags:
