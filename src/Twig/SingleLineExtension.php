@@ -3,14 +3,14 @@
 namespace eLife\Journal\Twig;
 
 use Twig_Extension;
-use Twig_SimpleFilter;
+use Twig_Filter;
 
 final class SingleLineExtension extends Twig_Extension
 {
     public function getFilters()
     {
         return [
-            new Twig_SimpleFilter('single_line', [$this, 'singleLine']),
+            new Twig_Filter('single_line', [$this, 'singleLine']),
         ];
     }
 

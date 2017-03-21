@@ -25,9 +25,4 @@ final class FragmentLinkRewriterExtension extends Twig_Extension
     {
         return $this->rewriter->rewrite($html, $alternateFragmentPage);
     }
-
-    public function getName() : string
-    {
-        return 'fragment_link_rewriter';
-    }
 }

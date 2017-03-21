@@ -3,14 +3,14 @@
 namespace eLife\Journal\Twig;
 
 use Twig_Extension;
-use Twig_SimpleFilter;
+use Twig_Filter;
 
 final class TexExtension extends Twig_Extension
 {
     public function getFilters()
     {
         return [
-            new Twig_SimpleFilter('html2tex', [$this, 'html2tex']),
+            new Twig_Filter('html2tex', [$this, 'html2tex']),
         ];
     }
 
