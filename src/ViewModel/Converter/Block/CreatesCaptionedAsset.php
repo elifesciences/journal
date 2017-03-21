@@ -7,6 +7,7 @@ use eLife\ApiSdk\Model\Block;
 use eLife\Journal\Helper\HasPatternRenderer;
 use eLife\Journal\Helper\HasViewModelConverter;
 use eLife\Journal\ViewModel\Converter\CreatesDoi;
+use eLife\Journal\ViewModel\Paragraph;
 use eLife\Patterns\ViewModel;
 
 trait CreatesCaptionedAsset
@@ -20,6 +21,12 @@ trait CreatesCaptionedAsset
         $caption = $asset->getCaption()->map(function (Block $block) {
             return $this->getViewModelConverter()->convert($block);
         });
+
+        if ($asset instanceof Block\ImageFile) {
+            $caption = array_merge($caption->toArray(), array_map(function (string $attribution) {
+                return new Paragraph($attribution);
+            }, $asset->getAttribution()));
+        }
 
         $captionText = new ViewModel\CaptionText(
             $asset->getTitle(),
