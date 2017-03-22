@@ -4,6 +4,7 @@ imports:
 
 bobthecow_mustache:
     globals:
+        assetRewrite: '.'
         assetsPath: '@elife.patterns.mustache.helpers.assets_path'
     loader_id: elife.journal.mustache.loader
     partials_loader_id: elife.patterns.mustache.loader.pattern_lab

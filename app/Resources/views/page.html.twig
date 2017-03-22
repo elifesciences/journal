@@ -37,7 +37,7 @@
 
     {% block meta %}
 
-        {% if block('canonical') %}
+        {% if block('canonical') is defined %}
             {% set canonical = block('canonical')|trim %}
         {% elseif paginator is defined and paginator %}
             {% set canonical = paginator.currentPagePath %}
@@ -50,7 +50,7 @@
         <meta property="og:title" content="{{ title|striptags }}">
         <meta name="twitter:site" content="@eLife">
 
-        {% if block('description') and block('description')|trim != '' %}
+        {% if block('description') is defined and block('description')|trim != '' %}
             {% set description = block('description') %}
         {% elseif contentHeader is defined and contentHeader.strapline is defined %}
             {% set description = contentHeader.strapline %}

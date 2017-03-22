@@ -34,6 +34,6 @@ final class FragmentLinkRewriteNode extends Twig_Node
             ->write('ob_start();')
             ->raw(PHP_EOL)
             ->subcompile($this->getNode('body'))
-            ->write('echo $this->env->getExtension("fragment_link_rewriter")->rewrite(ob_get_clean(), $_fragmentLinkRewriteUri);');
+            ->write('echo $this->env->getExtension("'.FragmentLinkRewriterExtension::class.'")->rewrite(ob_get_clean(), $_fragmentLinkRewriteUri);');
     }
 }
