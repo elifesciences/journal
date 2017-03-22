@@ -8,14 +8,15 @@ const imageMinMozjpeg = require('imagemin-mozjpeg');
 const imageMinOptipng = require('imagemin-optipng');
 const merge = require('merge-stream');
 const responsive = require('gulp-responsive');
+const rev = require('gulp-rev-all');
 
-gulp.task('default', ['favicons', 'images']);
+gulp.task('default', ['assets']);
 
 gulp.task('favicons:clean', () => {
-    return del(['./web/favicons/**/*']);
+    return del(['./build/assets/favicons/**/*']);
 });
 
-gulp.task('favicons', ['favicons:clean'], () => {
+gulp.task('favicons:build', ['favicons:clean'], () => {
     return gulp.src('./app/Resources/images/favicon.svg')
         .pipe(favicons({
             appName: 'eLife',
@@ -23,8 +24,8 @@ gulp.task('favicons', ['favicons:clean'], () => {
             background: '#ffffff',
             dir: 'ltr',
             lang: 'en',
-            path: '/favicons/',
-            url: '/favicons/',
+            path: '/assets/favicons/',
+            url: '/assets/favicons/',
             display: 'browser',
             start_url: '/',
             icons: {
@@ -35,12 +36,17 @@ gulp.task('favicons', ['favicons:clean'], () => {
                 yandex: false,
             },
         }))
-        .pipe(gulp.dest('./web/favicons'))
+        .pipe(gulp.dest('./build/assets/favicons'))
         .pipe(imageMin());
 });
 
+gulp.task('favicons', ['favicons:build'], () => {
+    return gulp.src('./build/assets/favicons/favicon.ico')
+        .pipe(gulp.dest('./web'));
+});
+
 gulp.task('images:clean', () => {
-    return del(['./web/images/**/*']);
+    return del(['./build/assets/images/**/*']);
 });
 
 gulp.task('images', ['images:clean'], () => {
@@ -106,5 +112,29 @@ gulp.task('images', ['images:clean'], () => {
             ])),
         gulp.src('./app/Resources/images/*/*.svg')
     )
-        .pipe(gulp.dest('./web/images'));
+        .pipe(gulp.dest('./build/assets/images'));
+});
+
+gulp.task('patterns:clean', () => {
+    return del(['./build/assets/patterns/**/*']);
+});
+
+gulp.task('patterns', () => {
+    return gulp.src('./vendor/elife/patterns/resources/assets/**/*')
+        .pipe(gulp.dest('./build/assets/patterns'));
+});
+
+gulp.task('assets:clean', () => {
+    return del(['./web/assets/**/*']);
+});
+
+gulp.task('assets', ['assets:clean', 'favicons', 'images', 'patterns'], () => {
+    return gulp.src('./build/assets/**/*.*', {base: "./build", follow: true})
+        .pipe(rev.revision({
+            includeFilesInManifest: ['.css', '.jpg', '.js', '.json', '.ico', '.png', '.svg', '.webp', '.woff', '.woff2'],
+            replaceInExtensions: ['.css', '.js', '.json']
+        }))
+        .pipe(gulp.dest('./web'))
+        .pipe(rev.manifestFile())
+        .pipe(gulp.dest('./build'));
 });

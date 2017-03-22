@@ -238,18 +238,18 @@ final class WhoWeWorkWithController extends Controller
         return array_map(function (array $item) : ImageLink {
             $sources = [];
             if ($item['svg']) {
-                $sources[] = ['srcset' => $this->get('assets.packages')->getUrl("images/logos/{$item['filename']}.svg"), 'type' => 'image/svg+xml'];
+                $sources[] = ['srcset' => $this->get('assets.packages')->getUrl("assets/images/logos/{$item['filename']}.svg"), 'type' => 'image/svg+xml'];
             }
-            $sources[] = ['srcset' => sprintf('%s 200w, %s 400w', $this->get('assets.packages')->getUrl("images/logos/{$item['filename']}-lo-res.webp"), $this->get('assets.packages')->getUrl("images/logos/{$item['filename']}-hi-res.webp")), 'type' => 'image/webp'];
+            $sources[] = ['srcset' => sprintf('%s 200w, %s 400w', $this->get('assets.packages')->getUrl("assets/images/logos/{$item['filename']}-lo-res.webp"), $this->get('assets.packages')->getUrl("assets/images/logos/{$item['filename']}-hi-res.webp")), 'type' => 'image/webp'];
 
             return new ImageLink(
                 $item['uri'],
                 new Picture(
                     $sources,
                     new Image(
-                        $this->get('assets.packages')->getUrl("images/logos/{$item['filename']}-lo-res.png"),
+                        $this->get('assets.packages')->getUrl("assets/images/logos/{$item['filename']}-lo-res.png"),
                         [
-                            400 => $this->get('assets.packages')->getUrl("images/logos/{$item['filename']}-hi-res.png"),
+                            400 => $this->get('assets.packages')->getUrl("assets/images/logos/{$item['filename']}-hi-res.png"),
                         ],
                         $item['name']
                     )

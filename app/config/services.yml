@@ -889,11 +889,11 @@ services:
         arguments:
           - '@elife.patterns.pattern_renderer.asset_recording.inner'
 
-    elife.patterns.mustache.helpers.assets_path:
-        class: eLife\Journal\Mustache\DynamicValueHelper
+    elife.patterns.mustache.helpers.asset_rewrite:
+        class: eLife\Journal\Mustache\PackagesHelper
         public: false
         arguments:
-          - '@=service("assets.packages").getPackage().getBasePath()~"assets"'
+          - '@assets.packages'
 
     elife.patterns.mustache.loader.filesystem:
         class: Mustache_Loader_FilesystemLoader

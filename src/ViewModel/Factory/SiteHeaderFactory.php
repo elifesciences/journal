@@ -40,13 +40,13 @@ final class SiteHeaderFactory
             $searchItem = NavLinkedItem::asIcon(new Link('Search', $this->urlGenerator->generate('search')),
                 new Picture(
                     [
-                        ['srcset' => $this->packages->getUrl('assets/img/patterns/molecules/nav-primary-search-ic.svg')],
+                        ['srcset' => $this->packages->getUrl('assets/patterns/img/patterns/molecules/nav-primary-search-ic.svg')],
                     ],
                     new Image(
-                        $this->packages->getUrl('assets/img/patterns/molecules/nav-primary-search-ic_1x.png'),
+                        $this->packages->getUrl('assets/patterns/img/patterns/molecules/nav-primary-search-ic_1x.png'),
                         [
-                            48 => $this->packages->getUrl('assets/img/patterns/molecules/nav-primary-search-ic_2x.png'),
-                            24 => $this->packages->getUrl('assets/img/patterns/molecules/nav-primary-search-ic_1x.png'),
+                            48 => $this->packages->getUrl('assets/patterns/img/patterns/molecules/nav-primary-search-ic_2x.png'),
+                            24 => $this->packages->getUrl('assets/patterns/img/patterns/molecules/nav-primary-search-ic_1x.png'),
                         ],
                         'Search icon'
                     )
@@ -59,13 +59,13 @@ final class SiteHeaderFactory
             $searchItem = NavLinkedItem::asIcon(new Link('Search'),
                 new Picture(
                     [
-                        ['srcset' => $this->packages->getUrl('assets/img/patterns/molecules/nav-primary-search-disabled-ic.svg')],
+                        ['srcset' => $this->packages->getUrl('assets/patterns/img/patterns/molecules/nav-primary-search-disabled-ic.svg')],
                     ],
                     new Image(
-                        $this->packages->getUrl('assets/img/patterns/molecules/nav-primary-search-disabled-ic_1x.png'),
+                        $this->packages->getUrl('assets/patterns/img/patterns/molecules/nav-primary-search-disabled-ic_1x.png'),
                         [
-                            48 => $this->packages->getUrl('assets/img/patterns/molecules/nav-primary-search-disabled-ic_2x.png'),
-                            24 => $this->packages->getUrl('assets/img/patterns/molecules/nav-primary-search-disabled-ic_1x.png'),
+                            48 => $this->packages->getUrl('assets/patterns/img/patterns/molecules/nav-primary-search-disabled-ic_2x.png'),
+                            24 => $this->packages->getUrl('assets/patterns/img/patterns/molecules/nav-primary-search-disabled-ic_1x.png'),
                         ],
                         'Search icon'
                     )
@@ -81,13 +81,13 @@ final class SiteHeaderFactory
                 new Link('Menu', '#mainMenu'),
                 new Picture(
                     [
-                        ['srcset' => $this->packages->getUrl('assets/img/patterns/molecules/nav-primary-menu-ic.svg')],
+                        ['srcset' => $this->packages->getUrl('assets/patterns/img/patterns/molecules/nav-primary-menu-ic.svg')],
                     ],
                     new Image(
-                        $this->packages->getUrl('assets/img/patterns/molecules/nav-primary-menu-ic_1x.png'),
+                        $this->packages->getUrl('assets/patterns/img/patterns/molecules/nav-primary-menu-ic_1x.png'),
                         [
-                            48 => $this->packages->getUrl('assets/img/patterns/molecules/nav-primary-menu-ic_2x.png'),
-                            24 => $this->packages->getUrl('assets/img/patterns/molecules/nav-primary-menu-ic_1x.png'),
+                            48 => $this->packages->getUrl('assets/patterns/img/patterns/molecules/nav-primary-menu-ic_2x.png'),
+                            24 => $this->packages->getUrl('assets/patterns/img/patterns/molecules/nav-primary-menu-ic_1x.png'),
                         ],
                         'Menu icon'
                     )
