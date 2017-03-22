@@ -1,12 +1,13 @@
 {
-  "private": true,
-  "dependencies": {
-    "del": "^2.2",
-    "gulp": "^3.9",
-    "gulp-favicons": "^2.2",
-    "gulp-imagemin": "^3.1",
-    "gulp-responsive": "^2.7",
-    "imagemin-mozjpeg": "^6.0",
-    "merge-stream": "^1.0.1"
-  }
+    "private": true,
+    "dependencies": {
+        "del": "^2.2",
+        "gulp": "^3.9",
+        "gulp-favicons": "^2.2",
+        "gulp-imagemin": "^3.1",
+        "gulp-responsive": "^2.7",
+        "gulp-rev-all": "^0.9",
+        "imagemin-mozjpeg": "^6.0",
+        "merge-stream": "^1.0.1"
+    }
 }

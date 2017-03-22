@@ -173,7 +173,7 @@ final class CommunityControllerTest extends PageTestCase
         $this->assertSame('http://localhost/community', $crawler->filter('meta[property="og:url"]')->attr('content'));
         $this->assertSame('Community', $crawler->filter('meta[property="og:title"]')->attr('content'));
         $this->assertSame('summary_large_image', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
-        $this->assertSame('http://localhost/images/banners/community-hi-res.jpg?v1', $crawler->filter('meta[property="og:image"]')->attr('content'));
+        $this->assertSame('http://localhost/'.ltrim(self::$kernel->getContainer()->get('assets.packages')->getUrl('assets/images/banners/community-hi-res.jpg'), '/'), $crawler->filter('meta[property="og:image"]')->attr('content'));
         $this->assertSame('1800', $crawler->filter('meta[property="og:image:width"]')->attr('content'));
         $this->assertSame('900', $crawler->filter('meta[property="og:image:height"]')->attr('content'));
     }
