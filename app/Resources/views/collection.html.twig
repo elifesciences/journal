@@ -6,12 +6,6 @@
     {{ collection.impactStatement|raw }}
 {% endblock %}
 
-{% block info_bar %}
-
-    {{ info_bar('This page is incomplete.') }}
-
-{% endblock %}
-
 {% block body %}
 
     {{ render_pattern(contentHeader) }}
@@ -22,9 +16,29 @@
             {{ render_pattern(leadParas) }}
         {% endif %}
 
-        <div class="u-pad-top">
+        <div class="grid">
 
-            {{ render_pattern(collectionList) }}
+            <div class="grid__item medium--eight-twelfths">
+
+                {{ render_pattern(collectionList) }}
+
+            </div>
+
+            <div class="grid__item medium--four-twelfths">
+
+                {% if multimedia %}
+                    {{ render_pattern(multimedia) }}
+                {% endif %}
+
+                {% if related %}
+                    {{ render_pattern(related) }}
+                {% endif %}
+
+                <div class="u-pad-top">
+                    {{ render_pattern(contributors) }}
+                </div>
+
+            </div>
 
         </div>
 
