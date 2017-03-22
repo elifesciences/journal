@@ -68,6 +68,8 @@ final class DownloadController extends Controller
                 throw new RuntimeException("Failed: {$fileResponse->getStatusCode()}, {$fileResponse->getReasonPhrase()}");
         }
 
+        $response->headers->remove('Cache-Control');
+
         $response->headers->add(array_filter([
             'Cache-Control' => $fileResponse->getHeaderLine('Cache-Control'),
             'Content-Length' => $fileResponse->getHeaderLine('Content-Length'),

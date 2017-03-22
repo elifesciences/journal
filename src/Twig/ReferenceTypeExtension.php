@@ -5,7 +5,7 @@ namespace eLife\Journal\Twig;
 use eLife\ApiSdk\Model\Reference;
 use OutOfBoundsException;
 use Twig_Extension;
-use Twig_SimpleFunction;
+use Twig_Function;
 
 final class ReferenceTypeExtension extends Twig_Extension
 {
@@ -29,7 +29,7 @@ final class ReferenceTypeExtension extends Twig_Extension
     public function getFunctions()
     {
         return [
-            new Twig_SimpleFunction(
+            new Twig_Function(
                 'reference_type',
                 [$this, 'getReferenceType']
             ),
@@ -43,10 +43,5 @@ final class ReferenceTypeExtension extends Twig_Extension
         }
 
         return self::$references[get_class($reference)];
-    }
-
-    public function getName()
-    {
-        return 'reference_type';
     }
 }

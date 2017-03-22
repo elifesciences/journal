@@ -5,7 +5,7 @@ namespace eLife\Journal\Twig;
 use eLife\Patterns\PatternRenderer;
 use eLife\Patterns\ViewModel;
 use Twig_Extension;
-use Twig_SimpleFunction;
+use Twig_Function;
 
 final class PatternExtension extends Twig_Extension
 {
@@ -19,7 +19,7 @@ final class PatternExtension extends Twig_Extension
     public function getFunctions()
     {
         return [
-            new Twig_SimpleFunction(
+            new Twig_Function(
                 'render_pattern',
                 [$this, 'renderPattern'],
                 ['is_safe' => ['html']]
@@ -30,10 +30,5 @@ final class PatternExtension extends Twig_Extension
     public function renderPattern(ViewModel $viewModel) : string
     {
         return $this->renderer->render($viewModel);
-    }
-
-    public function getName()
-    {
-        return 'pattern';
     }
 }
