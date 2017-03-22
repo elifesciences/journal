@@ -32,8 +32,8 @@ final class AboutInnovationControllerTest extends PageTestCase
         $this->assertSame('/about/innovation', $crawler->filter('link[rel="canonical"]')->attr('href'));
         $this->assertSame('http://localhost/about/innovation', $crawler->filter('meta[property="og:url"]')->attr('content'));
         $this->assertSame('Innovation', $crawler->filter('meta[property="og:title"]')->attr('content'));
-        $this->assertSame('eLife invests in open-source technology to deliver effective solutions to accelerate research communication and discovery.', $crawler->filter('meta[property="og:description"]')->attr('content'));
-        $this->assertSame('eLife invests in open-source technology to deliver effective solutions to accelerate research communication and discovery.', $crawler->filter('meta[name="description"]')->attr('content'));
+        $this->assertSame('eLife invests in open-source technology to deliver effective solutions to accelerate research communication and discovery', $crawler->filter('meta[property="og:description"]')->attr('content'));
+        $this->assertSame('eLife invests in open-source technology to deliver effective solutions to accelerate research communication and discovery', $crawler->filter('meta[name="description"]')->attr('content'));
         $this->assertSame('summary', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
     }
 

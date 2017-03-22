@@ -22,9 +22,4 @@ final class AssetsExtension extends Twig_Extension implements Twig_Extension_Glo
             'javascripts' => ['assets/js/main.js'],
         ];
     }
-
-    public function getName()
-    {
-        return 'assets';
-    }
 }

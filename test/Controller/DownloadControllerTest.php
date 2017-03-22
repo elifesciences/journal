@@ -50,7 +50,6 @@ final class DownloadControllerTest extends WebTestCase
         $this->assertInstanceOf(StreamedResponse::class, $response);
         $this->assertSame(200, $response->getStatusCode());
         $this->assertSame([
-            'cache-control' => ['no-cache'],
             'content-type' => ['audio/mp3'],
             'content-disposition' => ['attachment; filename="test.mp3"'],
         ], $response->headers->all());
@@ -92,7 +91,6 @@ final class DownloadControllerTest extends WebTestCase
         $this->assertInstanceOf(StreamedResponse::class, $response);
         $this->assertSame(200, $response->getStatusCode());
         $this->assertSame([
-            'cache-control' => ['no-cache'],
             'content-type' => ['text/plain; charset=UTF-8'],
             'content-disposition' => ['attachment; filename="test.txt"'],
         ], $response->headers->all());
@@ -136,7 +134,6 @@ final class DownloadControllerTest extends WebTestCase
         $this->assertInstanceOf(StreamedResponse::class, $response);
         $this->assertSame(200, $response->getStatusCode());
         $this->assertSame([
-            'cache-control' => ['no-cache'],
             'content-type' => ['text/plain; charset=UTF-8'],
             'content-disposition' => ['attachment; filename="test.txt"'],
         ], $response->headers->all());
@@ -196,7 +193,6 @@ final class DownloadControllerTest extends WebTestCase
         $this->assertInstanceOf(StreamedResponse::class, $response);
         $this->assertSame(200, $response->getStatusCode());
         $this->assertSame([
-            'cache-control' => ['no-cache'],
             'content-type' => ['text/plain; charset=UTF-8'],
             'content-disposition' => ['attachment; filename="test.txt"'],
         ], $response->headers->all());
