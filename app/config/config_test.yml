@@ -7,6 +7,10 @@ parameters:
     api_mock: '%kernel.cache_dir%/guzzle/fixtures'
 
 framework:
+    cache:
+        pools:
+            cache.guzzle:
+                public: true
     profiler:
         collect: false
         enabled: true
