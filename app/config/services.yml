@@ -691,6 +691,12 @@ services:
         tags:
           - name: view_model.converter
 
+    elife.journal.view_model.converter.person.profile_snippet:
+        class: eLife\Journal\ViewModel\Converter\PersonProfileSnippetConverter
+        public: false
+        tags:
+          - name: view_model.converter
+
     elife.journal.view_model.converter.podcast_episode.audio_player:
         class: eLife\Journal\ViewModel\Converter\PodcastEpisodeAudioPlayerConverter
         public: false
