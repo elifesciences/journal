@@ -12,7 +12,7 @@ final class FragmentLinkRewriter
             return $html;
         }
 
-        return preg_replace_callback('/href=["\']#([^\s]+)["\']/', function (array $match) use ($alternateFragmentPage, $matches) {
+        return preg_replace_callback('/href=["\']#([^\s]+?)["\']/', function (array $match) use ($alternateFragmentPage, $matches) {
             if (in_array($match[1], $matches[1])) {
                 return $match[0];
             }
