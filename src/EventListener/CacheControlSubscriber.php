@@ -21,11 +21,11 @@ final class CacheControlSubscriber implements EventSubscriberInterface
         $request = $event->getRequest();
         $response = $event->getResponse();
 
-        if (!$request->isMethodSafe() || $response instanceof StreamedResponse || Response::HTTP_NOT_MODIFIED === $response->getStatusCode()) {
+        if (!$request->isMethodCacheable() || $response instanceof StreamedResponse || Response::HTTP_NOT_MODIFIED === $response->getStatusCode()) {
             return;
         }
 
-        if ('no-cache' === $response->headers->get('Cache-Control')) {
+        if ('no-cache, private' === $response->headers->get('Cache-Control')) {
             // Default Symfony value, so treat as untouched.
 
             $response->headers->set('Cache-Control', 'public, max-age=300, stale-while-revalidate=300, stale-if-error=86400');

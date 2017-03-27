@@ -49,7 +49,7 @@ final class CacheControlSubscriberTest extends PHPUnit_Framework_TestCase
 
         $subscriber->onKernelResponse(new FilterResponseEvent($this->createMock(HttpKernelInterface::class), Request::create('foo', Request::METHOD_POST), HttpKernelInterface::MASTER_REQUEST, $response = new Response('foo')));
 
-        $this->assertSame('no-cache', $response->headers->get('Cache-Control'));
+        $this->assertSame('no-cache, private', $response->headers->get('Cache-Control'));
         $this->assertEmpty($response->getVary());
         $this->assertFalse($response->headers->has('Etag'));
     }
@@ -63,7 +63,7 @@ final class CacheControlSubscriberTest extends PHPUnit_Framework_TestCase
 
         $subscriber->onKernelResponse(new FilterResponseEvent($this->createMock(HttpKernelInterface::class), new Request(), HttpKernelInterface::MASTER_REQUEST, $response = new StreamedResponse()));
 
-        $this->assertSame('no-cache', $response->headers->get('Cache-Control'));
+        $this->assertSame('no-cache, private', $response->headers->get('Cache-Control'));
         $this->assertEmpty($response->getVary());
         $this->assertFalse($response->headers->has('Etag'));
     }
@@ -77,7 +77,7 @@ final class CacheControlSubscriberTest extends PHPUnit_Framework_TestCase
 
         $subscriber->onKernelResponse(new FilterResponseEvent($this->createMock(HttpKernelInterface::class), new Request(), HttpKernelInterface::MASTER_REQUEST, $response = new Response('', Response::HTTP_NOT_MODIFIED)));
 
-        $this->assertSame('no-cache', $response->headers->get('Cache-Control'));
+        $this->assertSame('no-cache, private', $response->headers->get('Cache-Control'));
         $this->assertEmpty($response->getVary());
         $this->assertFalse($response->headers->has('Etag'));
     }
