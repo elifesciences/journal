@@ -3,10 +3,9 @@
 namespace eLife\Journal\ViewModel\Converter;
 
 use eLife\ApiSdk\Collection\Sequence;
-use eLife\ApiSdk\Model\Address;
 use eLife\ApiSdk\Model\Author;
 use eLife\ApiSdk\Model\PersonAuthor;
-use eLife\ApiSdk\Model\Place;
+use eLife\Journal\Helper\Callback;
 use eLife\Patterns\ViewModel;
 
 final class PersonAuthorDetailsConverter implements ViewModelConverter
@@ -19,12 +18,8 @@ final class PersonAuthorDetailsConverter implements ViewModelConverter
         return new ViewModel\AuthorDetails(
             'author-'.hash('crc32', $object->toString()),
             $object->toString(),
-            array_map(function (Place $affiliation) {
-                return $affiliation->toString();
-            }, $object->getAffiliations()),
-            array_map(function (Address $address) {
-                return $address->getFormatted();
-            }, $object->getPostalAddresses()),
+            array_map(Callback::method('toString'), $object->getAffiliations()),
+            array_map(Callback::method('toString'), $object->getPostalAddresses()),
             $object->getContribution(),
             ($context['authors'] ?? false) ? $this->findEqualContributions($object, $context['authors']) : null,
             $object->getEmailAddresses(),
