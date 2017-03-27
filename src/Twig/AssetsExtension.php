@@ -18,13 +18,8 @@ final class AssetsExtension extends Twig_Extension implements Twig_Extension_Glo
     public function getGlobals()
     {
         return [
-            'stylesheets' => ['assets/css/all.css'],
-            'javascripts' => ['assets/js/main.js'],
+            'stylesheets' => ['assets/patterns/css/all.css'],
+            'javascripts' => ['assets/patterns/js/main.js'],
         ];
-    }
-
-    public function getName()
-    {
-        return 'assets';
     }
 }

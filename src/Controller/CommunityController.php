@@ -53,8 +53,8 @@ final class CommunityController extends Controller
     {
         $arguments['contentHeader'] = ContentHeaderNonArticle::basic('Community', true, null, null, null,
             new BackgroundImage(
-                $this->get('assets.packages')->getUrl('images/banners/community-lo-res.jpg'),
-                $this->get('assets.packages')->getUrl('images/banners/community-hi-res.jpg')
+                $this->get('assets.packages')->getUrl('assets/images/banners/community-lo-res.jpg'),
+                $this->get('assets.packages')->getUrl('assets/images/banners/community-hi-res.jpg')
             ));
 
         $arguments['highlights'] = (new PromiseSequence($this->get('elife.api_sdk.highlights')

@@ -4,7 +4,8 @@ imports:
 
 bobthecow_mustache:
     globals:
-        assetsPath: '@elife.patterns.mustache.helpers.assets_path'
+        assetRewrite: '@elife.patterns.mustache.helpers.asset_rewrite'
+        assetsPath: 'assets/patterns'
     loader_id: elife.journal.mustache.loader
     partials_loader_id: elife.patterns.mustache.loader.pattern_lab
 
@@ -25,7 +26,11 @@ csa_guzzle:
 
 framework:
     assets:
-        version: 'v1'
+        version_strategy: irozgar_gulp_rev_versions.asset.gulp_rev_version_strategy
+    cache:
+        pools:
+            cache.guzzle:
+                adapter: cache.app
     csrf_protection: ~
     form: ~
     router:
@@ -38,6 +43,9 @@ framework:
         engines:
           - mustache
           - twig
+
+irozgar_gulp_rev_versions:
+    manifest_path: '../build/rev-manifest.json'
 
 monolog:
     channels:

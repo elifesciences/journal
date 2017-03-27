@@ -25,6 +25,25 @@ final class CollectionContentHeaderConverter implements ViewModelConverter
      */
     public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
+        $curatorName = $object->getSelectedCurator()->getDetails()->getPreferredName();
+        if ($object->selectedCuratorEtAl()) {
+            $curatorName .= ' et al';
+        }
+        if ($object->getSelectedCurator()->getThumbnail()) {
+            $curatorImage = new ViewModel\Picture(
+                [],
+                new ViewModel\Image(
+                    $object->getSelectedCurator()->getThumbnail()->getSize('1:1')->getImage(70),
+                    [
+                        140 => $object->getSelectedCurator()->getThumbnail()->getSize('1:1')->getImage(140),
+                        70 => $object->getSelectedCurator()->getThumbnail()->getSize('1:1')->getImage(70),
+                    ]
+                )
+            );
+        } else {
+            $curatorImage = null;
+        }
+
         return ContentHeaderNonArticle::curatedContentListing($object->getTitle(), false,
             $object->getSubTitle(),
             null,
@@ -32,7 +51,7 @@ final class CollectionContentHeaderConverter implements ViewModelConverter
                 new Link('Collection', $this->urlGenerator->generate('collections')),
                 $this->simpleDate($object, ['date' => 'published'] + $context)
             ),
-            null,
+            new ViewModel\Profile(new Link($curatorName), $curatorImage),
             new ViewModel\BackgroundImage(
                 $object->getBanner()->getSize('2:1')->getImage(900),
                 $object->getBanner()->getSize('2:1')->getImage(1800)

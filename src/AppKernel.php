@@ -6,6 +6,7 @@ use Bobthecow\Bundle\MustacheBundle\BobthecowMustacheBundle;
 use Cocur\Slugify\Bridge\Symfony\CocurSlugifyBundle;
 use Csa\Bundle\GuzzleBundle\CsaGuzzleBundle;
 use eLife\Journal\Expression\ComposerLocateFunctionProvider;
+use Irozgar\GulpRevVersionsBundle\IrozgarGulpRevVersionsBundle;
 use PackageVersions\Versions;
 use Sensio\Bundle\DistributionBundle\SensioDistributionBundle;
 use Symfony\Bundle\DebugBundle\DebugBundle;
@@ -49,6 +50,7 @@ class AppKernel extends Kernel
             new CocurSlugifyBundle(),
             new CsaGuzzleBundle(),
             new FrameworkBundle(),
+            new IrozgarGulpRevVersionsBundle(),
             new MonologBundle(),
             new SwiftmailerBundle(),
             new TwigBundle(),

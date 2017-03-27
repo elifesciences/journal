@@ -2,13 +2,16 @@
 
 namespace eLife\Journal\Controller;
 
+use eLife\ApiSdk\Collection\Sequence;
 use eLife\ApiSdk\Model\Collection;
 use eLife\Journal\Helper\Callback;
 use eLife\Journal\Helper\HasPages;
 use eLife\Journal\Helper\Paginator;
 use eLife\Patterns\ViewModel\ContentHeaderNonArticle;
 use eLife\Patterns\ViewModel\LeadParas;
+use eLife\Patterns\ViewModel\ListingProfileSnippets;
 use eLife\Patterns\ViewModel\ListingTeasers;
+use eLife\Patterns\ViewModel\ProfileSnippet;
 use eLife\Patterns\ViewModel\Teaser;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -81,6 +84,33 @@ final class CollectionsController extends Controller
                 return ListingTeasers::basic(
                     $collection->getContent()->map($this->willConvertTo(Teaser::class))->toArray(),
                     'Collection'
+                );
+            });
+
+        $arguments['multimedia'] = $arguments['collection']
+            ->then(Callback::method('getPodcastEpisodes'))
+            ->then(Callback::emptyOr(function (Sequence $podcastEpisodes) {
+                return ListingTeasers::basic(
+                    $podcastEpisodes->map($this->willConvertTo(Teaser::class, ['variant' => 'secondary']))->toArray(),
+                    'Multimedia'
+                );
+            }));
+
+        $arguments['related'] = $arguments['collection']
+            ->then(Callback::method('getRelatedContent'))
+            ->then(Callback::emptyOr(function (Sequence $relatedContent) {
+                return ListingTeasers::basic(
+                    $relatedContent->map($this->willConvertTo(Teaser::class, ['variant' => 'secondary']))->toArray(),
+                    'Related'
+                );
+            }));
+
+        $arguments['contributors'] = $arguments['collection']
+            ->then(Callback::method('getCurators'))
+            ->then(function (Sequence $curators) {
+                return ListingProfileSnippets::basic(
+                    $curators->map($this->willConvertTo(ProfileSnippet::class))->toArray(),
+                    'Contributors'
                 );
             });
 

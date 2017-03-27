@@ -23,6 +23,307 @@ final class CollectionControllerTest extends PageTestCase
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertSame('Collection title', $crawler->filter('.content-header__title')->text());
         $this->assertSame('Collection Jan 1, 2010', trim(preg_replace('!\s+!', ' ', $crawler->filter('.content-header .meta')->text())));
+
+        $content = $crawler->filter('.list-heading:contains("Collection") + .listing-list > .listing-list__item');
+        $this->assertCount(1, $content);
+        $this->assertContains('Blog article title', $content->eq(0)->text());
+    }
+
+    /**
+     * @test
+     */
+    public function it_displays_multimedia()
+    {
+        $client = static::createClient();
+
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/collections/1',
+                ['Accept' => 'application/vnd.elife.collection+json; version=1']
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.collection+json; version=1'],
+                json_encode([
+                    'id' => '1',
+                    'title' => 'Collection title',
+                    'subTitle' => 'Collection sub-title',
+                    'published' => '2010-01-01T00:00:00Z',
+                    'updated' => '2011-01-01T00:00:00Z',
+                    'image' => [
+                        'banner' => [
+                            'alt' => '',
+                            'sizes' => [
+                                '2:1' => [
+                                    900 => 'https://placehold.it/900x450',
+                                    1800 => 'https://placehold.it/1800x900',
+                                ],
+                            ],
+                        ],
+                        'thumbnail' => [
+                            'alt' => '',
+                            'sizes' => [
+                                '16:9' => [
+                                    250 => 'https://placehold.it/250x141',
+                                    500 => 'https://placehold.it/500x281',
+                                ],
+                                '1:1' => [
+                                    70 => 'https://placehold.it/70x70',
+                                    140 => 'https://placehold.it/140x140',
+                                ],
+                            ],
+                        ],
+                    ],
+                    'impactStatement' => 'Collection impact statement',
+                    'selectedCurator' => [
+                        'id' => 'person',
+                        'type' => 'senior-editor',
+                        'name' => [
+                            'preferred' => 'Person',
+                            'index' => 'Person',
+                        ],
+                    ],
+                    'curators' => [
+                        [
+                            'id' => 'person',
+                            'type' => 'senior-editor',
+                            'name' => [
+                                'preferred' => 'Person',
+                                'index' => 'Person',
+                            ],
+                        ],
+                    ],
+                    'content' => [
+                        [
+                            'type' => 'blog-article',
+                            'id' => '1',
+                            'title' => 'Blog article title',
+                            'published' => '2010-01-01T00:00:00Z',
+                        ],
+                    ],
+                    'podcastEpisodes' => [
+                        [
+                            'number' => 1,
+                            'title' => 'Podcast episode title',
+                            'published' => '2010-01-01T00:00:00Z',
+                            'image' => [
+                                'thumbnail' => [
+                                    'alt' => '',
+                                    'sizes' => [
+                                        '16:9' => [
+                                            250 => 'https://placehold.it/250x141',
+                                            500 => 'https://placehold.it/500x281',
+                                        ],
+                                        '1:1' => [
+                                            70 => 'https://placehold.it/70x70',
+                                            140 => 'https://placehold.it/140x140',
+                                        ],
+                                    ],
+                                ],
+                            ],
+                            'sources' => [
+                                [
+                                    'mediaType' => 'audio/mpeg',
+                                    'uri' => 'https://www.example.com/episode1.mp3',
+                                ],
+                            ],
+                        ],
+                    ],
+                ])
+            )
+        );
+
+        $crawler = $client->request('GET', '/collections/1/collection-title');
+
+        $this->assertSame(200, $client->getResponse()->getStatusCode());
+        $multimedia = $crawler->filter('.list-heading:contains("Multimedia") + .listing-list > .listing-list__item');
+        $this->assertCount(1, $multimedia);
+        $this->assertContains('Podcast episode title', $multimedia->eq(0)->text());
+    }
+
+    /**
+     * @test
+     */
+    public function it_displays_related_content()
+    {
+        $client = static::createClient();
+
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/collections/1',
+                ['Accept' => 'application/vnd.elife.collection+json; version=1']
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.collection+json; version=1'],
+                json_encode([
+                    'id' => '1',
+                    'title' => 'Collection title',
+                    'subTitle' => 'Collection sub-title',
+                    'published' => '2010-01-01T00:00:00Z',
+                    'updated' => '2011-01-01T00:00:00Z',
+                    'image' => [
+                        'banner' => [
+                            'alt' => '',
+                            'sizes' => [
+                                '2:1' => [
+                                    900 => 'https://placehold.it/900x450',
+                                    1800 => 'https://placehold.it/1800x900',
+                                ],
+                            ],
+                        ],
+                        'thumbnail' => [
+                            'alt' => '',
+                            'sizes' => [
+                                '16:9' => [
+                                    250 => 'https://placehold.it/250x141',
+                                    500 => 'https://placehold.it/500x281',
+                                ],
+                                '1:1' => [
+                                    70 => 'https://placehold.it/70x70',
+                                    140 => 'https://placehold.it/140x140',
+                                ],
+                            ],
+                        ],
+                    ],
+                    'impactStatement' => 'Collection impact statement',
+                    'selectedCurator' => [
+                        'id' => 'person',
+                        'type' => 'senior-editor',
+                        'name' => [
+                            'preferred' => 'Person',
+                            'index' => 'Person',
+                        ],
+                    ],
+                    'curators' => [
+                        [
+                            'id' => 'person',
+                            'type' => 'senior-editor',
+                            'name' => [
+                                'preferred' => 'Person',
+                                'index' => 'Person',
+                            ],
+                        ],
+                    ],
+                    'content' => [
+                        [
+                            'type' => 'blog-article',
+                            'id' => '1',
+                            'title' => 'Blog article 1 title',
+                            'published' => '2010-01-01T00:00:00Z',
+                        ],
+                    ],
+                    'relatedContent' => [
+                        [
+                            'type' => 'blog-article',
+                            'id' => '2',
+                            'title' => 'Blog article 2 title',
+                            'published' => '2010-01-01T00:00:00Z',
+                        ],
+                    ],
+                ])
+            )
+        );
+
+        $crawler = $client->request('GET', '/collections/1/collection-title');
+
+        $this->assertSame(200, $client->getResponse()->getStatusCode());
+        $related = $crawler->filter('.list-heading:contains("Related") + .listing-list > .listing-list__item');
+        $this->assertCount(1, $related);
+        $this->assertContains('Blog article 2 title', $related->eq(0)->text());
+    }
+
+    /**
+     * @test
+     */
+    public function it_displays_contributors()
+    {
+        $client = static::createClient();
+
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/collections/1',
+                ['Accept' => 'application/vnd.elife.collection+json; version=1']
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.collection+json; version=1'],
+                json_encode([
+                    'id' => '1',
+                    'title' => 'Collection title',
+                    'subTitle' => 'Collection sub-title',
+                    'published' => '2010-01-01T00:00:00Z',
+                    'updated' => '2011-01-01T00:00:00Z',
+                    'image' => [
+                        'banner' => [
+                            'alt' => '',
+                            'sizes' => [
+                                '2:1' => [
+                                    900 => 'https://placehold.it/900x450',
+                                    1800 => 'https://placehold.it/1800x900',
+                                ],
+                            ],
+                        ],
+                        'thumbnail' => [
+                            'alt' => '',
+                            'sizes' => [
+                                '16:9' => [
+                                    250 => 'https://placehold.it/250x141',
+                                    500 => 'https://placehold.it/500x281',
+                                ],
+                                '1:1' => [
+                                    70 => 'https://placehold.it/70x70',
+                                    140 => 'https://placehold.it/140x140',
+                                ],
+                            ],
+                        ],
+                    ],
+                    'impactStatement' => 'Collection impact statement',
+                    'selectedCurator' => [
+                        'id' => 'person',
+                        'type' => 'senior-editor',
+                        'name' => [
+                            'preferred' => 'Person One',
+                            'index' => 'Person One',
+                        ],
+                    ],
+                    'curators' => [
+                        [
+                            'id' => 'person',
+                            'type' => 'reviewing-editor',
+                            'name' => [
+                                'preferred' => 'Person Two',
+                                'index' => 'Person Two',
+                            ],
+                        ],
+                        [
+                            'id' => 'person',
+                            'type' => 'senior-editor',
+                            'name' => [
+                                'preferred' => 'Person One',
+                                'index' => 'Person One',
+                            ],
+                        ],
+                    ],
+                    'content' => [
+                        [
+                            'type' => 'blog-article',
+                            'id' => '1',
+                            'title' => 'Blog article title',
+                            'published' => '2010-01-01T00:00:00Z',
+                        ],
+                    ],
+                ])
+            )
+        );
+
+        $crawler = $client->request('GET', '/collections/1/collection-title');
+
+        $this->assertSame(200, $client->getResponse()->getStatusCode());
+        $this->assertCount(2, $crawler->filter('.list-heading:contains("Contributors") + .listing-list > .listing-list__item'));
     }
 
     /**

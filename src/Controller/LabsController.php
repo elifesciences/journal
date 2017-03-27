@@ -74,8 +74,8 @@ final class LabsController extends Controller
     {
         $arguments['contentHeader'] = ContentHeaderNonArticle::basic('eLife Labs', true, null, null, null,
             new BackgroundImage(
-                $this->get('assets.packages')->getUrl('images/banners/labs-lo-res.jpg'),
-                $this->get('assets.packages')->getUrl('images/banners/labs-hi-res.jpg')
+                $this->get('assets.packages')->getUrl('assets/images/banners/labs-lo-res.jpg'),
+                $this->get('assets.packages')->getUrl('assets/images/banners/labs-hi-res.jpg')
             ));
 
         $arguments['leadParas'] = new LeadParas([
@@ -110,39 +110,41 @@ developed further to become features on the eLife platform.'),
 
                 $form->handleRequest($request);
 
-                if ($form->isValid()) {
-                    $this->get('session')
-                        ->getFlashBag()
-                        ->add(InfoBar::TYPE_SUCCESS,
-                            'Thanks '.$form->get('name')->getData().', we have received your comment.');
+                if ($form->isSubmitted()) {
+                    if ($form->isValid()) {
+                        $this->get('session')
+                            ->getFlashBag()
+                            ->add(InfoBar::TYPE_SUCCESS,
+                                'Thanks '.$form->get('name')->getData().', we have received your comment.');
 
-                    $response = implode("\n\n", array_map(function (FormInterface $child) {
-                        $label = ($child->getConfig()->getOption('label') ?? Humanizer::humanize($child->getName()));
+                        $response = implode("\n\n", array_map(function (FormInterface $child) {
+                            $label = ($child->getConfig()->getOption('label') ?? Humanizer::humanize($child->getName()));
 
-                        return $label."\n".str_repeat('-', strlen($label))."\n".$child->getData();
-                    }, array_filter(iterator_to_array($form), function (FormInterface $child) {
-                        return !in_array($child->getConfig()->getType()->getBlockPrefix(), ['submit']);
-                    })));
+                            return $label."\n".str_repeat('-', strlen($label))."\n".$child->getData();
+                        }, array_filter(iterator_to_array($form), function (FormInterface $child) {
+                            return !in_array($child->getConfig()->getType()->getBlockPrefix(), ['submit']);
+                        })));
 
-                    $message1 = Swift_Message::newInstance()
-                        ->setSubject('Comment on eLife Labs')
-                        ->setFrom('do_not_reply@elifesciences.org')
-                        ->setTo($form->get('email')->getData(), $form->get('name')->getData())
-                        ->setBody('Thanks for your comment. We will respond as soon as we can.
+                        $message1 = Swift_Message::newInstance()
+                            ->setSubject('Comment on eLife Labs')
+                            ->setFrom('do_not_reply@elifesciences.org')
+                            ->setTo($form->get('email')->getData(), $form->get('name')->getData())
+                            ->setBody('Thanks for your comment. We will respond as soon as we can.
 
 eLife Sciences Publications, Ltd is a limited liability non-profit non-stock corporation incorporated in the State of Delaware, USA, with company number 5030732, and is registered in the UK with company number FC030576 and branch number BR015634 at the address First Floor, 24 Hills Road, Cambridge CB2 1JP.');
 
-                    $message2 = Swift_Message::newInstance()
-                        ->setSubject('Comment submitted')
-                        ->setFrom('do_not_reply@elifesciences.org')
-                        ->setTo('labs@elifesciences.org')
-                        ->setBody("A comment has been submitted on $uri\n\n$response");
+                        $message2 = Swift_Message::newInstance()
+                            ->setSubject('Comment submitted')
+                            ->setFrom('do_not_reply@elifesciences.org')
+                            ->setTo('labs@elifesciences.org')
+                            ->setBody("A comment has been submitted on $uri\n\n$response");
 
-                    $this->get('mailer')->send($message1);
-                    $this->get('mailer')->send($message2);
+                        $this->get('mailer')->send($message1);
+                        $this->get('mailer')->send($message2);
 
-                    throw new EarlyResponse(new RedirectResponse($uri));
-                } elseif ($form->isSubmitted()) {
+                        throw new EarlyResponse(new RedirectResponse($uri));
+                    }
+
                     foreach ($form->getErrors(true) as $error) {
                         $this->get('session')
                             ->getFlashBag()

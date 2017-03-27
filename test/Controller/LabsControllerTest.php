@@ -40,7 +40,7 @@ final class LabsControllerTest extends PageTestCase
         $this->assertSame('eLife Labs showcases experiments in new functionality and technologies. Some experiments may be developed further to become features on the eLife platform. Feedback welcome!', $crawler->filter('meta[property="og:description"]')->attr('content'));
         $this->assertSame('eLife Labs showcases experiments in new functionality and technologies. Some experiments may be developed further to become features on the eLife platform. Feedback welcome!', $crawler->filter('meta[name="description"]')->attr('content'));
         $this->assertSame('summary_large_image', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
-        $this->assertSame('http://localhost/images/banners/labs-hi-res.jpg?v1', $crawler->filter('meta[property="og:image"]')->attr('content'));
+        $this->assertSame('http://localhost/'.ltrim(self::$kernel->getContainer()->get('assets.packages')->getUrl('assets/images/banners/labs-hi-res.jpg'), '/'), $crawler->filter('meta[property="og:image"]')->attr('content'));
         $this->assertSame('1800', $crawler->filter('meta[property="og:image:width"]')->attr('content'));
         $this->assertSame('900', $crawler->filter('meta[property="og:image:height"]')->attr('content'));
     }

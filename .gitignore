@@ -5,6 +5,6 @@
 /phpunit.xml
 /var/
 /vendor/
+/web/assets/
 /web/bundles/
-/web/favicons/
-/web/images/
+/web/favicon.ico
