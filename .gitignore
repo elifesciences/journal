@@ -1,9 +1,11 @@
 /app/config/parameters.yml
 /behat.yml
-/build/
+/build/*
+!/build/.gitkeep
 /node_modules/
 /phpunit.xml
-/var/
+/var/*
+!/var/.gitkeep
 /vendor/
 /web/assets/
 /web/bundles/
