@@ -1177,7 +1177,7 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertSame('Ethics text', trim($ethics->filter('div')->text()));
 
         $reviewers = $articleInfo->eq(3);
-        $this->assertSame('Reviewers', $reviewers->filter('header > h3')->text());
+        $this->assertSame('Reviewing Editor', $reviewers->filter('header > h3')->text());
 
         $reviewerDetails = $reviewers->filter('li');
         $this->assertCount(2, $reviewerDetails);

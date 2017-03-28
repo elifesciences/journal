@@ -320,7 +320,7 @@ final class ArticlesController extends Controller
 
                 if ($article instanceof ArticleVoR && $article->getReviewers()->notEmpty()) {
                     $infoSections[] = ArticleSection::basic(
-                        'Reviewers',
+                        'Reviewing Editor',
                         3,
                         $this->render(
                             Listing::ordered(
