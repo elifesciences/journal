@@ -93,6 +93,38 @@ services:
         class: eLife\ApiSdk\Client\Subjects
         factory: ['@elife.api_sdk', subjects]
 
+    elife.journal.guzzle.cache:
+        class: Kevinrob\GuzzleCache\CacheMiddleware
+        public: false
+        arguments:
+          - '@elife.journal.guzzle.cache.strategy'
+        tags:
+          - name: csa_guzzle.middleware
+            alias: cache
+            priority: -1500
+
+    elife.journal.guzzle.cache.storage:
+        class: Kevinrob\GuzzleCache\Storage\Psr6CacheStorage
+        public: false
+        arguments:
+          - '@cache.guzzle'
+
+    elife.journal.guzzle.cache.strategy:
+        class: Kevinrob\GuzzleCache\Strategy\PrivateCacheStrategy
+        public: false
+        arguments:
+          - '@elife.journal.guzzle.cache.storage'
+
+    elife.journal.guzzle.stale_logging:
+        class: eLife\Journal\Guzzle\StaleLoggingMiddleware
+        public: false
+        arguments:
+          - '@monolog.logger.api'
+        tags:
+          - name: csa_guzzle.middleware
+            alias: state_logging
+            priority: -1499
+
     elife.journal.helper.fragment_link_rewriter:
         class: eLife\Journal\Helper\FragmentLinkRewriter
         public: false
@@ -102,6 +134,11 @@ services:
         arguments:
           - '@router'
           - '@uri_signer'
+
+    elife.journal.listener.cache_control:
+        class: eLife\Journal\EventListener\CacheControlSubscriber
+        tags:
+          - name: kernel.event_subscriber
 
     elife.journal.listener.early_response:
         class: eLife\Journal\EventListener\EarlyResponseSubscriber

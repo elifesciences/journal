@@ -320,7 +320,7 @@ final class ArticlesController extends Controller
 
                 if ($article instanceof ArticleVoR && $article->getReviewers()->notEmpty()) {
                     $infoSections[] = ArticleSection::basic(
-                        'Reviewers',
+                        'Reviewing Editor',
                         3,
                         $this->render(
                             Listing::ordered(
@@ -391,10 +391,12 @@ final class ArticlesController extends Controller
 
                 if ($pageViews) {
                     $statistics[] = ViewModel\Statistic::fromNumber('Page views', $pageViews);
+                    $statisticsExtra[] = new ViewModel\BarChart($article->getId(), 'article', 'page-views', rtrim($this->getParameter('api_url'), '/'), 'page-views', 'month');
                 }
 
                 if ($downloads) {
                     $statistics[] = ViewModel\Statistic::fromNumber('Downloads', $downloads);
+                    $statisticsExtra[] = new ViewModel\BarChart($article->getId(), 'article', 'downloads', rtrim($this->getParameter('api_url'), '/'), 'downloads', 'month');
                 }
 
                 if ($citations) {

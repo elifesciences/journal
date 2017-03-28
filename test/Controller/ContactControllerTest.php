@@ -38,6 +38,19 @@ final class ContactControllerTest extends PageTestCase
     /**
      * @test
      */
+    public function it_has_cache_headers()
+    {
+        $client = static::createClient();
+
+        $client->request('GET', $this->getUrl());
+
+        $this->assertSame('must-revalidate, no-cache, no-store, private', $client->getResponse()->headers->get('Cache-Control'));
+        $this->assertEmpty($client->getResponse()->getVary());
+    }
+
+    /**
+     * @test
+     */
     public function it_requires_all_the_fields_to_be_completed()
     {
         $client = static::createClient();
