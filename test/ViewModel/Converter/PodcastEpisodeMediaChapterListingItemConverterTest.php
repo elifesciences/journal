@@ -6,12 +6,12 @@ use eLife\ApiSdk\Model\Model;
 use eLife\ApiSdk\Model\PodcastEpisode;
 use eLife\Journal\ViewModel\Converter\PodcastEpisodeMediaChapterListingItemConverter;
 use eLife\Patterns\ViewModel\MediaChapterListingItem;
+use Traversable;
 
 final class PodcastEpisodeMediaChapterListingItemConverterTest extends ModelConverterTestCase
 {
     protected $models = ['podcast-episode'];
-    protected $class = PodcastEpisode::class;
-    protected $viewModelClass = MediaChapterListingItem::class;
+    protected $viewModelClasses = [MediaChapterListingItem::class];
 
     /**
      * @before
@@ -21,8 +21,11 @@ final class PodcastEpisodeMediaChapterListingItemConverterTest extends ModelConv
         $this->converter = new PodcastEpisodeMediaChapterListingItemConverter($this->stubUrlGenerator());
     }
 
-    protected function modelHook(Model $model)
+    /**
+     * @param PodcastEpisode $model
+     */
+    protected function modelHook(Model $model) : Traversable
     {
-        return $model->getChapters()[0];
+        yield from $model->getChapters();
     }
 }

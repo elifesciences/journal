@@ -9,8 +9,7 @@ use eLife\Patterns\ViewModel\Teaser;
 final class EventTeaserConverterTest extends ModelConverterTestCase
 {
     protected $models = ['event'];
-    protected $class = Event::class;
-    protected $viewModelClass = Teaser::class;
+    protected $viewModelClasses = [Teaser::class];
 
     /**
      * @before

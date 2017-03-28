@@ -2,16 +2,16 @@
 
 namespace test\eLife\Journal\ViewModel\Converter\Block;
 
-use eLife\ApiSdk\Model\Block\Table;
+use eLife\ApiSdk\Model\Block;
 use eLife\Journal\ViewModel\Converter\Block\CaptionedTableConverter;
 use eLife\Journal\ViewModel\Converter\ViewModelConverter;
 use eLife\Patterns\PatternRenderer;
-use eLife\Patterns\ViewModel\CaptionedAsset;
+use eLife\Patterns\ViewModel;
 
 final class CaptionedTableConverterTest extends BlockConverterTestCase
 {
-    protected $class = Table::class;
-    protected $viewModelClass = CaptionedAsset::class;
+    protected $blockClass = Block\Table::class;
+    protected $viewModelClasses = [ViewModel\AssetViewerInline::class, ViewModel\CaptionedAsset::class];
 
     /**
      * @before
@@ -29,73 +29,11 @@ final class CaptionedTableConverterTest extends BlockConverterTestCase
             ->will($this->returnValue('...'));
     }
 
-    public function blocks() : array
+    /**
+     * @param Block\Table $block
+     */
+    protected function includeBlock(Block $block) : bool
     {
-        return [
-            'minimum' => [
-                [
-                    'title' => 'Table\'s caption',
-                    'tables' => [
-                        '<table>...</table>',
-                    ],
-                ],
-            ],
-            'with paragraph caption' => [
-                [
-                    'title' => 'Table\'s caption',
-                    'tables' => [
-                        '<table>...</table>',
-                    ],
-                    'caption' => [
-                        [
-                            'type' => 'paragraph',
-                            'text' => 'A table\'s caption',
-                        ],
-                    ],
-                ],
-            ],
-            'with MathML caption' => [
-                [
-                    'title' => 'Table\'s caption',
-                    'tables' => [
-                        '<table>...</table>',
-                    ],
-                    'caption' => [
-                        [
-                            'type' => 'mathml',
-                            'mathml' => '<math>A table\'s caption</math>',
-                        ],
-                    ],
-                ],
-            ],
-            'with footnotes' => [
-                [
-                    'title' => 'Table\'s caption',
-                    'tables' => [
-                        '<table>...</table>',
-                    ],
-                    'footnotes' => [
-                        [
-                            'id' => 'id',
-                            'label' => 'label',
-                            'text' => [
-                                [
-                                    'type' => 'paragraph',
-                                    'text' => 'footnote 1',
-                                ],
-                            ],
-                        ],
-                        [
-                            'text' => [
-                                [
-                                    'type' => 'paragraph',
-                                    'text' => 'footnote 2',
-                                ],
-                            ],
-                        ],
-                    ],
-                ],
-            ],
-        ];
+        return !empty($block->getTitle());
     }
 }

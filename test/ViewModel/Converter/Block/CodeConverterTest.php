@@ -2,14 +2,14 @@
 
 namespace test\eLife\Journal\ViewModel\Converter\Block;
 
-use eLife\ApiSdk\Model\Block\Code;
+use eLife\ApiSdk\Model\Block;
 use eLife\Journal\ViewModel\Converter\Block\CodeConverter;
 use eLife\Patterns\ViewModel;
 
 final class CodeConverterTest extends BlockConverterTestCase
 {
-    protected $class = Code::class;
-    protected $viewModelClass = ViewModel\Code::class;
+    protected $blockClass = Block\Code::class;
+    protected $viewModelClasses = [ViewModel\Code::class];
 
     /**
      * @before
@@ -17,22 +17,5 @@ final class CodeConverterTest extends BlockConverterTestCase
     public function setUpConverter()
     {
         $this->converter = new CodeConverter();
-    }
-
-    public function blocks() : array
-    {
-        return [
-            'minimum' => [
-                [
-                    'code' => '<p>foo</p>',
-                ],
-            ],
-            'complete' => [
-                [
-                    'code' => "<p>foo</p>\n<p>bar</p>",
-                    'language' => 'html',
-                ],
-            ],
-        ];
     }
 }

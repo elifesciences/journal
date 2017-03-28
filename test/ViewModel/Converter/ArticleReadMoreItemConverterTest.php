@@ -2,7 +2,6 @@
 
 namespace test\eLife\Journal\ViewModel\Converter;
 
-use eLife\ApiSdk\Model\ArticleVersion;
 use eLife\Journal\ViewModel\Converter\ArticleReadMoreItemConverter;
 use eLife\Journal\ViewModel\Converter\ViewModelConverter;
 use eLife\Journal\ViewModel\Paragraph;
@@ -13,8 +12,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 final class ArticleReadMoreItemConverterTest extends ModelConverterTestCase
 {
     protected $models = ['article-poa', 'article-vor'];
-    protected $class = ArticleVersion::class;
-    protected $viewModelClass = ReadMoreItem::class;
+    protected $viewModelClasses = [ReadMoreItem::class];
 
     /**
      * @before
