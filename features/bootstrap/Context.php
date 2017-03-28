@@ -49,6 +49,14 @@ abstract class Context extends RawMinkContext implements KernelAwareContext
         $this->emails = [];
     }
 
+    /**
+     * @AfterScenario
+     */
+    final public function stopSession()
+    {
+        $this->getSession()->stop();
+    }
+
     final protected function readyToRecordEmails()
     {
         $this->getSession()->getDriver()->getClient()->followRedirects(false);
