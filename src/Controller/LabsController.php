@@ -61,7 +61,7 @@ final class LabsController extends Controller
             });
 
         $arguments['listing'] = $arguments['paginator']
-            ->then($this->willConvertTo(GridListing::class, ['heading' => 'Experiments', 'type' => 'experiments']));
+            ->then($this->willConvertTo(GridListing::class, ['heading' => 'Latest', 'type' => 'experiments']));
 
         if (1 === $page) {
             return $this->createFirstPage($arguments);
@@ -79,9 +79,8 @@ final class LabsController extends Controller
             ));
 
         $arguments['leadParas'] = new LeadParas([
-            new LeadPara('eLife Labs showcases experiments in new functionality and technologies. Some experiments may be
-developed further to become features on the eLife platform.'),
-            new LeadPara('Feedback welcome!'),
+            new LeadPara('In eLife Labs, explore open-source solutions developed at the intersection of research and technology.
+Learn more about our focus on <a href="'.$this->get('router')->generate('about-innovation').'">innovation at eLife</a>.'),
         ]);
 
         return new Response($this->get('templating')->render('::labs.html.twig', $arguments));
