@@ -9,6 +9,8 @@ use eLife\Journal\Helper\HasPages;
 use eLife\Journal\Helper\Paginator;
 use eLife\Patterns\ViewModel\BackgroundImage;
 use eLife\Patterns\ViewModel\ContentHeaderNonArticle;
+use eLife\Patterns\ViewModel\LeadPara;
+use eLife\Patterns\ViewModel\LeadParas;
 use eLife\Patterns\ViewModel\ListingTeasers;
 use eLife\Patterns\ViewModel\Teaser;
 use Symfony\Component\HttpFoundation\Request;
@@ -56,6 +58,11 @@ final class CommunityController extends Controller
                 $this->get('assets.packages')->getUrl('assets/images/banners/community-lo-res.jpg'),
                 $this->get('assets.packages')->getUrl('assets/images/banners/community-hi-res.jpg')
             ));
+
+        $arguments['leadParas'] = new LeadParas([
+            new LeadPara('The eLife community is working to help address some of the pressures on early-career scientists in a number of ways.'),
+            new LeadPara('Learn more about <a href="'.$this->get('router')->generate('about-early-career').'">our work</a> and advisory group, <a href="https://crm.elifesciences.org/crm/civicrm/profile/create?reset=1&gid=26">sign up for our bi-monthly news</a>, and explore recent activities below.'),
+        ]);
 
         $arguments['highlights'] = (new PromiseSequence($this->get('elife.api_sdk.highlights')
             ->get('community')))
