@@ -172,6 +172,8 @@ final class CommunityControllerTest extends PageTestCase
         $this->assertSame('/community', $crawler->filter('link[rel="canonical"]')->attr('href'));
         $this->assertSame('http://localhost/community', $crawler->filter('meta[property="og:url"]')->attr('content'));
         $this->assertSame('Community', $crawler->filter('meta[property="og:title"]')->attr('content'));
+        $this->assertSame('The eLife community is working to help address some of the pressures on early-career scientists in a number of ways. Learn more about our work and advisory group, sign up for our bi-monthly news, and explore recent activities below.', $crawler->filter('meta[property="og:description"]')->attr('content'));
+        $this->assertSame('The eLife community is working to help address some of the pressures on early-career scientists in a number of ways. Learn more about our work and advisory group, sign up for our bi-monthly news, and explore recent activities below.', $crawler->filter('meta[name="description"]')->attr('content'));
         $this->assertSame('summary_large_image', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
         $this->assertSame('http://localhost/'.ltrim(self::$kernel->getContainer()->get('assets.packages')->getUrl('assets/images/banners/community-hi-res.jpg'), '/'), $crawler->filter('meta[property="og:image"]')->attr('content'));
         $this->assertSame('1800', $crawler->filter('meta[property="og:image:width"]')->attr('content'));

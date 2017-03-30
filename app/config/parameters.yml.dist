@@ -1,5 +1,6 @@
 parameters:
     api_url: https://api.elifesciences.org/
+    api_url_public: '%api_url%'
     api_key: public
     secret: ThisTokenIsNotSoSecretChangeIt
     session_name: journal
