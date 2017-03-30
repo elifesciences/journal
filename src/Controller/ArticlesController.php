@@ -19,7 +19,6 @@ use eLife\ApiSdk\Model\CitationsMetricSource;
 use eLife\ApiSdk\Model\DataSet;
 use eLife\ApiSdk\Model\FundingAward;
 use eLife\ApiSdk\Model\Model;
-use eLife\ApiSdk\Model\PersonAuthor;
 use eLife\ApiSdk\Model\Reviewer;
 use eLife\Journal\Helper\Callback;
 use eLife\Journal\Helper\HasPages;
@@ -270,11 +269,9 @@ final class ArticlesController extends Controller
 
                 $realAuthors = $article->getAuthors()->filter(Callback::isInstanceOf(Author::class));
 
-                $personAuthors = $realAuthors->filter(Callback::isInstanceOf(PersonAuthor::class));
-
-                if ($personAuthors->notEmpty()) {
+                if ($realAuthors->notEmpty()) {
                     $infoSections[] = new ViewModel\AuthorsDetails(
-                        ...$personAuthors->map($this->willConvertTo(null, ['authors' => $realAuthors]))
+                        ...$realAuthors->map($this->willConvertTo(null, ['authors' => $realAuthors]))
                     );
                 }
 
