@@ -58,7 +58,7 @@ final class SearchController extends Controller
         $page = (int) $request->query->get('page', 1);
         $perPage = 6;
 
-        $arguments = $this->defaultPageArguments();
+        $arguments = $this->defaultPageArguments($request);
 
         $arguments['query'] = $query = [
             'for' => trim($request->query->get('for')),

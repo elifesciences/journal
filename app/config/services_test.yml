@@ -27,7 +27,7 @@ services:
         class: Csa\Bundle\GuzzleBundle\Cache\MockStorageAdapter
         arguments:
           - '%api_mock%'
-          - ['Authorization', 'Host', 'User-Agent', 'X-Guzzle-Cache']
+          - ['Authorization', 'Content-Length', 'Host', 'host', 'Referer', 'referer', 'User-Agent', 'user-agent', 'X-Guzzle-Cache']
 
     elife.guzzle.middleware.mock.storage.validating:
         class: test\eLife\Journal\ValidatingStorageAdapter

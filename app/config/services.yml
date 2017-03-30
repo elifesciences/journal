@@ -93,6 +93,11 @@ services:
         class: eLife\ApiSdk\Client\Subjects
         factory: ['@elife.api_sdk', subjects]
 
+    elife.journal.goutte:
+        class: Goutte\Client
+        calls:
+          - ['setClient', ['@csa_guzzle.client.elife_crm']]
+
     elife.journal.guzzle.cache:
         class: Kevinrob\GuzzleCache\CacheMiddleware
         public: false

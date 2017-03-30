@@ -8,6 +8,17 @@ final class HomepageContext extends Context
 {
     private $numberOfArticles;
     private $numberOfMagazineArticles;
+    private $alreadySubscribed;
+
+    /**
+     * @BeforeScenario
+     */
+    public function reset()
+    {
+        $this->numberOfArticles = null;
+        $this->numberOfMagazineArticles = null;
+        $this->alreadySubscribed = false;
+    }
 
     /**
      * @Given /^(\d+) articles have been published$/
@@ -384,10 +395,57 @@ final class HomepageContext extends Context
     }
 
     /**
+     * @Given /^I am already subscribed$/
+     */
+    public function iAmAlreadySubscribed()
+    {
+        $this->alreadySubscribed = true;
+    }
+
+    /**
+     * @Given /^I am on the homepage$/
      * @When /^I go to the homepage$/
      */
     public function iGoToTheHomepage()
     {
+        if (null === $this->numberOfArticles) {
+            $this->mockApiResponse(
+                new Request(
+                    'GET',
+                    'http://api.elifesciences.org/search?for=&page=1&per-page=6&sort=date&order=desc&type[]=research-advance&type[]=research-article&type[]=research-exchange&type[]=short-report&type[]=tools-resources&type[]=replication-study&use-date=default',
+                    ['Accept' => 'application/vnd.elife.search+json; version=1']
+                ),
+                new Response(
+                    200,
+                    ['Content-Type' => 'application/vnd.elife.search+json; version=1'],
+                    json_encode([
+                        'total' => 0,
+                        'items' => [],
+                        'subjects' => [],
+                        'types' => [
+                            'correction' => 0,
+                            'editorial' => 0,
+                            'feature' => 0,
+                            'insight' => 0,
+                            'research-advance' => 0,
+                            'research-article' => 0,
+                            'research-exchange' => 0,
+                            'retraction' => 0,
+                            'registered-report' => 0,
+                            'replication-study' => 0,
+                            'short-report' => 0,
+                            'tools-resources' => 0,
+                            'blog-article' => 0,
+                            'collection' => 0,
+                            'interview' => 0,
+                            'labs-experiment' => 0,
+                            'podcast-episode' => 0,
+                        ],
+                    ])
+                )
+            );
+        }
+
         $this->visitPath('/');
     }
 
@@ -397,6 +455,110 @@ final class HomepageContext extends Context
     public function iLoadMoreArticles()
     {
         $this->getSession()->getPage()->clickLink('More articles');
+    }
+
+    /**
+     * @When /^I fill in the sign\-up form$/
+     */
+    public function iFillInTheSignUpForm()
+    {
+        $form = $this->assertSession()->elementExists('css', '#email_cta');
+        $form->fillField('Email', 'foo@example.com');
+
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://crm.elifesciences.org/crm/civicrm/profile/create?reset=1&gid=18'
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'text/html'],
+                '<html>
+<body>
+<form action="/crm/civicrm/profile/create" method="post">
+<input type="text" name="email-3">
+<input type="submit" value="Save">
+</form>
+</body>
+</html>'
+            )
+        );
+
+        if ($this->alreadySubscribed) {
+            $this->mockApiResponse(
+                new Request(
+                    'POST',
+                    'http://crm.elifesciences.org/crm/civicrm/profile/create',
+                    ['Content-Type' => 'application/x-www-form-urlencoded'],
+                    'email-3=foo%40example.com'
+                ),
+                new Response(
+                    200,
+                    ['Content-Type' => 'text/html'],
+                    '<html>
+<body>
+<span class="msg-text">Your information has been saved</span>
+</body>
+</html>'
+                )
+            );
+        } else {
+            $this->mockApiResponse(
+                new Request(
+                    'POST',
+                    'http://crm.elifesciences.org/crm/civicrm/profile/create',
+                    ['Content-Type' => 'application/x-www-form-urlencoded'],
+                    'email-3=foo%40example.com'
+                ),
+                new Response(
+                    200,
+                    ['Content-Type' => 'text/html'],
+                    '<html>
+<body>
+<span class="messages">Your subscription request has been submitted</span>
+</body>
+</html>'
+                )
+            );
+        }
+
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/search?for=&page=1&per-page=6&sort=date&order=desc&type[]=research-advance&type[]=research-article&type[]=research-exchange&type[]=short-report&type[]=tools-resources&type[]=replication-study&use-date=default',
+                ['Accept' => 'application/vnd.elife.search+json; version=1']
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.search+json; version=1'],
+                json_encode([
+                    'total' => 0,
+                    'items' => [],
+                    'subjects' => [],
+                    'types' => [
+                        'correction' => 0,
+                        'editorial' => 0,
+                        'feature' => 0,
+                        'insight' => 0,
+                        'research-advance' => 0,
+                        'research-article' => 0,
+                        'research-exchange' => 0,
+                        'retraction' => 0,
+                        'registered-report' => 0,
+                        'replication-study' => 0,
+                        'short-report' => 0,
+                        'tools-resources' => 0,
+                        'blog-article' => 0,
+                        'collection' => 0,
+                        'interview' => 0,
+                        'labs-experiment' => 0,
+                        'podcast-episode' => 0,
+                    ],
+                ])
+            )
+        );
+
+        $form->submit();
     }
 
     /**
@@ -471,6 +633,24 @@ final class HomepageContext extends Context
         $this->assertSession()->elementTextContains('css', '.carousel-item__title', 'Cover');
         $this->assertSession()->elementAttributeContains('css', '.carousel-item__inner', 'data-low-res-image-source', 'https://placehold.it/900x450?cover');
         $this->assertSession()->elementAttributeContains('css', '.carousel-item__inner', 'data-high-res-image-source', 'https://placehold.it/1800x900?cover');
+    }
+
+    /**
+     * @Then /^I should be prompted to check my email$/
+     */
+    public function iShouldBePromptedToCheckMyEmail()
+    {
+        $this->assertSession()
+            ->elementContains('css', '.info-bar--success', 'Almost finished! Click the link in the email we just sent you to confirm your subscription.');
+    }
+
+    /**
+     * @Then /^I should be reminded that I am already subscribed$/
+     */
+    public function iShouldBeRemindedThatIAmAlreadySubscribed()
+    {
+        $this->assertSession()
+            ->elementContains('css', '.info-bar--success', 'You are already subscribed!');
     }
 
     private function createId(string $name) : string

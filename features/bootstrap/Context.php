@@ -47,6 +47,7 @@ abstract class Context extends RawMinkContext implements KernelAwareContext
     final public function resetEmails()
     {
         $this->emails = [];
+        $this->getSession()->getDriver()->getClient()->followRedirects(true);
     }
 
     /**

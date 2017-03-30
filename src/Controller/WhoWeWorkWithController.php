@@ -7,13 +7,14 @@ use eLife\Patterns\ViewModel\GridListing;
 use eLife\Patterns\ViewModel\Image;
 use eLife\Patterns\ViewModel\ImageLink;
 use eLife\Patterns\ViewModel\Picture;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 final class WhoWeWorkWithController extends Controller
 {
-    public function whoWeWorkWithAction() : Response
+    public function whoWeWorkWithAction(Request $request) : Response
     {
-        $arguments = $this->defaultPageArguments();
+        $arguments = $this->defaultPageArguments($request);
 
         $arguments['title'] = 'Who we work with';
 

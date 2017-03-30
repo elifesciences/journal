@@ -27,7 +27,7 @@ final class ExceptionController extends Controller
             ob_end_clean();
         }
 
-        $arguments = $this->defaultPageArguments();
+        $arguments = $this->defaultPageArguments($request);
 
         foreach ($arguments as $key => $value) {
             $arguments[$key] = promise_for($value)
