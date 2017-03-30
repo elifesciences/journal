@@ -391,12 +391,12 @@ final class ArticlesController extends Controller
 
                 if ($pageViews) {
                     $statistics[] = ViewModel\Statistic::fromNumber('Page views', $pageViews);
-                    $statisticsExtra[] = new ViewModel\BarChart($article->getId(), 'article', 'page-views', rtrim($this->getParameter('api_url'), '/'), 'page-views', 'month');
+                    $statisticsExtra[] = new ViewModel\BarChart($article->getId(), 'article', 'page-views', rtrim($this->getParameter('api_url_public'), '/'), 'page-views', 'month');
                 }
 
                 if ($downloads) {
                     $statistics[] = ViewModel\Statistic::fromNumber('Downloads', $downloads);
-                    $statisticsExtra[] = new ViewModel\BarChart($article->getId(), 'article', 'downloads', rtrim($this->getParameter('api_url'), '/'), 'downloads', 'month');
+                    $statisticsExtra[] = new ViewModel\BarChart($article->getId(), 'article', 'downloads', rtrim($this->getParameter('api_url_public'), '/'), 'downloads', 'month');
                 }
 
                 if ($citations) {
