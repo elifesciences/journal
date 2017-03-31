@@ -17,7 +17,7 @@ final class InterviewContentHeaderConverter implements ViewModelConverter
         return ViewModel\ContentHeaderNonArticle::basic(
             $object->getTitle(),
             false,
-            $object->getSubTitle(),
+            null,
             null,
             ViewModel\Meta::withText('Interview', $this->simpleDate($object, ['date' => 'published'] + $context))
         );

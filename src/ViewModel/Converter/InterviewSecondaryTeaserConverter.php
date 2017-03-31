@@ -31,7 +31,7 @@ final class InterviewSecondaryTeaserConverter implements ViewModelConverter
         return Teaser::secondary(
             $object->getTitle(),
             $this->urlGenerator->generate('interview', ['id' => $object->getId(), 'slug' => $this->slugify->slugify($object->getInterviewee()->getPerson()->getPreferredName())]),
-            $object->getSubTitle(),
+            null,
             null,
             null,
             TeaserFooter::forNonArticle(
