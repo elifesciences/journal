@@ -4,6 +4,7 @@ parameters:
     api_key: public
     secret: ThisTokenIsNotSoSecretChangeIt
     session_name: journal
+    redis_cache: redis://localhost
     mailer_transport: smtp
     mailer_host: 127.0.0.1
     mailer_port: ~

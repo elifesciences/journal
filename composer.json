@@ -14,6 +14,7 @@
     },
     "require": {
         "php": "^7.0",
+        "ext-redis": "*",
         "bobthecow/mustache-bundle": "^1.2",
         "cocur/slugify": "^2.4",
         "csa/guzzle-bundle": "^2.2",
