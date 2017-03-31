@@ -23,7 +23,6 @@ final class InterviewControllerTest extends PageTestCase
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertSame('Interview title', $crawler->filter('.content-header__title')->text());
         $this->assertSame('Interview Jan 1, 2010', trim(preg_replace('!\s+!', ' ', $crawler->filter('.content-header .meta')->text())));
-        $this->assertSame('An interview with Interviewee', $crawler->filter('.content-header__strapline')->text());
     }
 
     /**
@@ -37,10 +36,10 @@ final class InterviewControllerTest extends PageTestCase
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
 
-        $this->assertSame('Interview title: An interview with Interviewee | Interviews | eLife', $crawler->filter('title')->text());
+        $this->assertSame('Interview title | Interviews | eLife', $crawler->filter('title')->text());
         $this->assertSame('/interviews/1/interviewee', $crawler->filter('link[rel="canonical"]')->attr('href'));
         $this->assertSame('http://localhost/interviews/1/interviewee', $crawler->filter('meta[property="og:url"]')->attr('content'));
-        $this->assertSame('Interview title: An interview with Interviewee', $crawler->filter('meta[property="og:title"]')->attr('content'));
+        $this->assertSame('Interview title', $crawler->filter('meta[property="og:title"]')->attr('content'));
         $this->assertSame('Interview impact statement', $crawler->filter('meta[property="og:description"]')->attr('content'));
         $this->assertSame('Interview impact statement', $crawler->filter('meta[name="description"]')->attr('content'));
         $this->assertSame('article', $crawler->filter('meta[property="og:type"]')->attr('content'));
