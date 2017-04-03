@@ -34,7 +34,7 @@ final class LabsController extends Controller
         $page = (int) $request->query->get('page', 1);
         $perPage = 8;
 
-        $arguments = $this->defaultPageArguments();
+        $arguments = $this->defaultPageArguments($request);
 
         $experiments = promise_for($this->get('elife.api_sdk.labs_experiments'))
             ->then(function (Sequence $sequence) use ($page, $perPage) {
@@ -92,7 +92,7 @@ Learn more about our focus on <a href="'.$this->get('router')->generate('about-i
             ->get($number)
             ->otherwise($this->mightNotExist());
 
-        $arguments = $this->defaultPageArguments($experiment);
+        $arguments = $this->defaultPageArguments($request, $experiment);
 
         $arguments['title'] = $experiment
             ->then(Callback::method('getTitle'));

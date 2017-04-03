@@ -166,7 +166,7 @@ final class AboutController extends Controller
 
     private function aboutPageArguments(Request $request) : array
     {
-        $arguments = $this->defaultPageArguments();
+        $arguments = $this->defaultPageArguments($request);
 
         $arguments['menuLink'] = new SectionListingLink('All sections', 'sections');
 

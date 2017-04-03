@@ -11,6 +11,7 @@ parameters:
     mailer_username: ~
     mailer_password: ~
     mailer_encryption: ~
+    crm_url: https://crm.elifesciences.org/crm/civicrm/
     disqus_domain: elifesciences
     trusted_hosts:
       - .*\.?elifesciences.org$
