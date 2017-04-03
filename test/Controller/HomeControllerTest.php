@@ -120,10 +120,10 @@ final class HomeControllerTest extends PageTestCase
         $this->assertCount(2, $teasers);
 
         $this->assertSame('Article 2 title', trim($teasers->eq(0)->filter('.teaser__header_text')->text()));
-        $this->assertSame('Research article Updated Jan 1, 2013', trim(preg_replace('/\s+/S', ' ', $teasers->eq(0)->filter('.teaser__footer .meta')->text())));
+        $this->assertSame('Research Article Updated Jan 1, 2013', trim(preg_replace('/\s+/S', ' ', $teasers->eq(0)->filter('.teaser__footer .meta')->text())));
 
         $this->assertSame('Article 1 title', trim($teasers->eq(1)->filter('.teaser__header_text')->text()));
-        $this->assertSame('Research article Jan 1, 2012', trim(preg_replace('/\s+/S', ' ', $teasers->eq(1)->filter('.teaser__footer .meta')->text())));
+        $this->assertSame('Research Article Jan 1, 2012', trim(preg_replace('/\s+/S', ' ', $teasers->eq(1)->filter('.teaser__footer .meta')->text())));
     }
 
     /**

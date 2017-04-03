@@ -5,6 +5,7 @@ namespace eLife\Journal\Controller;
 use eLife\ApiSdk\Collection\Sequence;
 use eLife\Journal\Helper\Callback;
 use eLife\Journal\Helper\Paginator;
+use eLife\Journal\Helper\ModelName;
 use eLife\Journal\Pagerfanta\SequenceAdapter;
 use eLife\Patterns\ViewModel\AudioPlayer;
 use eLife\Patterns\ViewModel\BackgroundImage;
@@ -96,11 +97,11 @@ final class MagazineController extends Controller
         $arguments['menuLink'] = new SectionListingLink('All sections', 'sections');
 
         $arguments['menu'] = new SectionListing('sections', [
-            new Link('Editorials', $this->get('router')->generate('article-type', ['type' => 'editorial'])),
-            new Link('Insights', $this->get('router')->generate('article-type', ['type' => 'insight'])),
-            new Link('Feature articles', $this->get('router')->generate('article-type', ['type' => 'feature'])),
-            new Link('Podcast', $this->get('router')->generate('podcast')),
-            new Link('Collections', $this->get('router')->generate('collections')),
+            new Link(ModelName::plural('editorial'), $this->get('router')->generate('article-type', ['type' => 'editorial'])),
+            new Link(ModelName::plural('insight'), $this->get('router')->generate('article-type', ['type' => 'insight'])),
+            new Link(ModelName::plural('feature'), $this->get('router')->generate('article-type', ['type' => 'feature'])),
+            new Link(ModelName::plural('podcast-episode'), $this->get('router')->generate('podcast')),
+            new Link(ModelName::plural('collection'), $this->get('router')->generate('collections')),
             new Link('Community', $this->get('router')->generate('community')),
         ], true);
 
