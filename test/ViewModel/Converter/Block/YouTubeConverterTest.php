@@ -2,13 +2,14 @@
 
 namespace test\eLife\Journal\ViewModel\Converter\Block;
 
+use eLife\ApiSdk\Model\Block;
 use eLife\Journal\ViewModel\Converter\Block\YouTubeConverter;
-use eLife\Patterns\ViewModel\IFrame;
+use eLife\Patterns\ViewModel;
 
 final class YouTubeConverterTest extends BlockConverterTestCase
 {
-    protected $class = 'eLife\ApiSdk\Model\Block\YouTube';
-    protected $viewModelClass = IFrame::class;
+    protected $blockClass = Block\YouTube::class;
+    protected $viewModelClasses = [ViewModel\IFrame::class];
 
     /**
      * @before
@@ -18,25 +19,11 @@ final class YouTubeConverterTest extends BlockConverterTestCase
         $this->converter = new YouTubeConverter();
     }
 
-    public function blocks() : array
+    protected function unsupportedModelData() : array
     {
         return [
-            'minimum' => [
-                [
-                    'id' => 'dQw4w9WgXcQ',
-                    'width' => 800,
-                    'height' => 600,
-                ],
-            ],
-        ];
-    }
-
-    protected function unsupportedBlockData()
-    {
-        return [
-            'type' => 'image',
-            'alt' => 'Image 1',
-            'uri' => 'https://example.com/image1',
+            'type' => 'paragraph',
+            'text' => 'foo',
         ];
     }
 }

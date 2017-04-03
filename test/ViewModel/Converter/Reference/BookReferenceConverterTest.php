@@ -4,12 +4,10 @@ namespace test\eLife\Journal\ViewModel\Converter\Reference;
 
 use eLife\ApiSdk\Model\Reference\BookReference;
 use eLife\Journal\ViewModel\Converter\Reference\BookReferenceConverter;
-use eLife\Patterns\ViewModel\Reference;
 
 final class BookReferenceConverterTest extends ReferenceConverterTestCase
 {
-    protected $class = BookReference::class;
-    protected $viewModelClass = Reference::class;
+    protected $referenceClass = BookReference::class;
 
     /**
      * @before
@@ -17,60 +15,5 @@ final class BookReferenceConverterTest extends ReferenceConverterTestCase
     public function setUpConverter()
     {
         $this->converter = new BookReferenceConverter();
-    }
-
-    public function references() : array
-    {
-        return [
-            'minimum' => [
-                [
-                    'id' => '',
-                    'date' => '2016-01-01',
-                    'authors' => $this->minimumAuthorsData(),
-                    'bookTitle' => 'Encyclopedia Galactica',
-                    'publisher' => [
-                        'name' => ['Cambridge University Press'],
-                        'address' => [
-                            'formatted' => ['24 Hills Road'],
-                        ],
-                    ],
-                ],
-            ],
-
-            'complete' => [
-                [
-                    'id' => '',
-                    'date' => '2016-01-01',
-                    'authors' => [
-                        [
-                            'type' => 'on-behalf-of',
-                            'onBehalfOf' => 'Someone else',
-                        ],
-                    ],
-                    'authorsEtAl' => true,
-                    'editors' => [
-                        [
-                            'type' => 'person',
-                            'name' => [
-                                'preferred' => 'Isaac Newton',
-                                'index' => 'Newton, Isaac',
-                            ],
-                        ],
-                    ],
-                    'editorsEtAl' => true,
-                    'bookTitle' => 'Encyclopedia Galactica',
-                    'publisher' => [
-                        'name' => ['Cambridge University Press'],
-                        'address' => [
-                            'formatted' => ['24 Hills Road'],
-                        ],
-                    ],
-                    'volume' => '1',
-                    'edition' => '2',
-                    'pmid' => 42,
-                    'isbn' => '978-3-16-148410-0',
-                ],
-            ],
-        ];
     }
 }

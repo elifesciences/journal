@@ -5,18 +5,22 @@ namespace eLife\Journal\Controller;
 use eLife\ApiClient\Exception\BadResponse;
 use eLife\ApiSdk\Model\Model;
 use eLife\Journal\Exception\EarlyResponse;
+use eLife\Journal\Form\Type\EmailCtaType;
 use eLife\Journal\Helper\CanConvertContent;
 use eLife\Journal\Helper\Paginator;
 use eLife\Journal\ViewModel\Converter\ViewModelConverter;
 use eLife\Patterns\ViewModel;
 use eLife\Patterns\ViewModel\ContentHeaderSimple;
+use eLife\Patterns\ViewModel\InfoBar;
 use GuzzleHttp\Promise\PromiseInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use UnexpectedValueException;
 use function GuzzleHttp\Promise\exception_for;
 use function GuzzleHttp\Promise\promise_for;
 use function GuzzleHttp\Promise\rejection_for;
@@ -45,17 +49,17 @@ abstract class Controller implements ContainerAwareInterface
         return $this->container->getParameter($id);
     }
 
-    final protected function has(string $id): bool
+    final protected function has(string $id) : bool
     {
         return $this->container->has($id);
     }
 
-    final protected function getViewModelConverter(): ViewModelConverter
+    final protected function getViewModelConverter() : ViewModelConverter
     {
         return $this->get('elife.journal.view_model.converter');
     }
 
-    final protected function render(ViewModel ...$viewModels): string
+    final protected function render(ViewModel ...$viewModels) : string
     {
         return $this->get('elife.patterns.pattern_renderer')->render(...$viewModels);
     }
@@ -139,12 +143,50 @@ abstract class Controller implements ContainerAwareInterface
         return $response;
     }
 
-    final protected function defaultPageArguments(PromiseInterface $model = null): array
+    final protected function defaultPageArguments(Request $request, PromiseInterface $model = null) : array
     {
+        /** @var FormInterface $form */
+        $form = $this->get('form.factory')
+            ->create(EmailCtaType::class, null, ['action' => $request->getUri()]);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted()) {
+            if ($form->isValid()) {
+                $goutte = $this->get('elife.journal.goutte');
+
+                $crawler = $goutte->request('GET', $this->getParameter('crm_url').'profile/create?reset=1&gid=18');
+                $button = $crawler->selectButton('Save');
+
+                $crawler = $goutte->submit($button->form(), ['email-3' => $form->get('email')->getData()]);
+
+                if ($crawler->filter('.messages:contains("Your subscription request has been submitted")')->count()) {
+                    $this->get('session')
+                        ->getFlashBag()
+                        ->add(ViewModel\InfoBar::TYPE_SUCCESS, 'Almost finished! Click the link in the email we just sent you to confirm your subscription.');
+                } elseif ($crawler->filter('.msg-text:contains("Your information has been saved")')->count()) {
+                    $this->get('session')
+                        ->getFlashBag()
+                        ->add(ViewModel\InfoBar::TYPE_SUCCESS, 'You are already subscribed!');
+                } else {
+                    throw new UnexpectedValueException('Couldn\'t read CRM response');
+                }
+
+                throw new EarlyResponse(new RedirectResponse($request->getUri()));
+            }
+
+            foreach ($form->getErrors(true) as $error) {
+                $this->get('session')
+                    ->getFlashBag()
+                    ->add(InfoBar::TYPE_ATTENTION, $error->getMessage());
+            }
+        }
+
         return [
             'header' => promise_for($model)->then(function (Model $model = null) : ViewModel\SiteHeader {
                 return $this->get('elife.journal.view_model.factory.site_header')->createSiteHeader($model);
             }),
+            'emailCta' => $this->get('elife.journal.view_model.converter')->convert($form->createView()),
             'footer' => $this->get('elife.journal.view_model.factory.footer')->createFooter(),
         ];
     }

@@ -22,7 +22,7 @@ final class InsideElifeController extends Controller
         $page = (int) $request->query->get('page', 1);
         $perPage = 6;
 
-        $arguments = $this->defaultPageArguments();
+        $arguments = $this->defaultPageArguments($request);
 
         $latest = promise_for($this->get('elife.api_sdk.blog_articles'))
             ->then(function (Sequence $sequence) use ($page, $perPage) {
@@ -72,7 +72,7 @@ final class InsideElifeController extends Controller
             ->otherwise($this->mightNotExist())
             ->then($this->checkSlug($request, Callback::method('getTitle')));
 
-        $arguments = $this->defaultPageArguments($article);
+        $arguments = $this->defaultPageArguments($request, $article);
 
         $arguments['title'] = $article
             ->then(Callback::method('getTitle'));

@@ -25,7 +25,7 @@ final class CollectionsController extends Controller
         $page = (int) $request->query->get('page', 1);
         $perPage = 6;
 
-        $arguments = $this->defaultPageArguments();
+        $arguments = $this->defaultPageArguments($request);
 
         $latestResearch = $this->pagerfantaPromise(
             $this->get('elife.api_sdk.collections'),
@@ -66,7 +66,7 @@ final class CollectionsController extends Controller
             ->otherwise($this->mightNotExist())
             ->then($this->checkSlug($request, Callback::method('getTitle')));
 
-        $arguments = $this->defaultPageArguments($collection);
+        $arguments = $this->defaultPageArguments($request, $collection);
 
         $arguments['title'] = $collection
             ->then(Callback::method('getFullTitle'));

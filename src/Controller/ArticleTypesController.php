@@ -23,7 +23,7 @@ final class ArticleTypesController extends Controller
         $page = (int) $request->query->get('page', 1);
         $perPage = 6;
 
-        $arguments = $this->defaultPageArguments();
+        $arguments = $this->defaultPageArguments($request);
 
         try {
             $arguments['title'] = ModelName::plural($type);

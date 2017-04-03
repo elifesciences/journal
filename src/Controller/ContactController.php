@@ -17,7 +17,7 @@ final class ContactController extends Controller
 {
     public function contactAction(Request $request) : Response
     {
-        $arguments = $this->defaultPageArguments();
+        $arguments = $this->defaultPageArguments($request);
 
         $arguments['title'] = 'Contact';
 

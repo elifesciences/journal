@@ -50,7 +50,7 @@ final class ArticlesController extends Controller
         $page = (int) $request->query->get('page', 1);
         $perPage = 3;
 
-        $arguments = $this->articlePageArguments($id, $version);
+        $arguments = $this->articlePageArguments($request, $id, $version);
 
         /** @var Sequence $recommendations */
         $recommendations = new PromiseSequence($arguments['article']
@@ -461,9 +461,9 @@ sources: '.implode(', ', array_map(function (CitationsMetricSource $source) {
         return new Response($this->get('templating')->render('::article.html.twig', $arguments));
     }
 
-    public function figuresAction(string $id, int $version = null) : Response
+    public function figuresAction(Request $request, string $id, int $version = null) : Response
     {
-        $arguments = $this->articlePageArguments($id, $version);
+        $arguments = $this->articlePageArguments($request, $id, $version);
 
         $arguments['title'] = $arguments['title']
             ->then(function (string $title) {
@@ -570,9 +570,9 @@ sources: '.implode(', ', array_map(function (CitationsMetricSource $source) {
         return new Response($this->get('templating')->render('::article-figures.html.twig', $arguments));
     }
 
-    public function bibTexAction(string $id) : Response
+    public function bibTexAction(Request $request, string $id) : Response
     {
-        $arguments = $this->defaultArticleArguments($id);
+        $arguments = $this->defaultArticleArguments($request, $id);
 
         $arguments['article'] = $arguments['article']
             ->then(Callback::methodMustNotBeEmpty('getPublishedDate', new NotFoundHttpException('Article version not published')));
@@ -580,9 +580,9 @@ sources: '.implode(', ', array_map(function (CitationsMetricSource $source) {
         return new Response($this->get('templating')->render('::article.bib.twig', $arguments), Response::HTTP_OK, ['Content-Type' => 'application/x-bibtex']);
     }
 
-    public function risAction(string $id) : Response
+    public function risAction(Request $request, string $id) : Response
     {
-        $arguments = $this->defaultArticleArguments($id);
+        $arguments = $this->defaultArticleArguments($request, $id);
 
         $arguments['article'] = $arguments['article']
             ->then(Callback::methodMustNotBeEmpty('getPublishedDate', new NotFoundHttpException('Article version not published')));
@@ -590,13 +590,13 @@ sources: '.implode(', ', array_map(function (CitationsMetricSource $source) {
         return new Response(preg_replace('~\R~u', "\r\n", $this->get('templating')->render('::article.ris.twig', $arguments)), Response::HTTP_OK, ['Content-Type' => 'application/x-research-info-systems']);
     }
 
-    private function defaultArticleArguments(string $id, int $version = null) : array
+    private function defaultArticleArguments(Request $request, string $id, int $version = null) : array
     {
         $article = $this->get('elife.api_sdk.articles')
             ->get($id, $version)
             ->otherwise($this->mightNotExist());
 
-        $arguments = $this->defaultPageArguments($article);
+        $arguments = $this->defaultPageArguments($request, $article);
 
         $arguments['title'] = $article
             ->then(Callback::method('getFullTitle'));
@@ -606,9 +606,9 @@ sources: '.implode(', ', array_map(function (CitationsMetricSource $source) {
         return $arguments;
     }
 
-    private function articlePageArguments(string $id, int $version = null) : array
+    private function articlePageArguments(Request $request, string $id, int $version = null) : array
     {
-        $arguments = $this->defaultArticleArguments($id, $version);
+        $arguments = $this->defaultArticleArguments($request, $id, $version);
 
         $arguments['history'] = $this->get('elife.api_sdk.articles')
             ->getHistory($id)
