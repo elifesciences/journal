@@ -21,7 +21,10 @@ abstract class ModelConverterTestCase extends PHPUnit_Framework_TestCase
         'article-vor' => Model\ArticleVoR::class,
         'blog-article' => Model\BlogArticle::class,
         'collection' => Model\Collection::class,
+        'cover' => Model\Cover::class,
         'event' => Model\Event::class,
+        'external-article' => Model\ExternalArticle::class,
+        'highlight' => Model\Highlight::class,
         'interview' => Model\Interview::class,
         'labs-experiment' => Model\LabsExperiment::class,
         'medium-article' => Model\MediumArticle::class,
@@ -71,11 +74,24 @@ abstract class ModelConverterTestCase extends PHPUnit_Framework_TestCase
 
         foreach ($this->models as $originalModel) {
             switch ($originalModel) {
+                case 'cover':
+                    $model = 'cover-list';
+                    $list = true;
+                    break;
+                case 'highlight':
+                    $model = 'highlights';
+                    $list = true;
+                    break;
                 case 'medium-article':
                     $model = 'medium-article-list';
                     $list = true;
                     break;
                 case 'podcast-episode-chapter':
+                    $model = 'recommendations';
+                    $type = true;
+                    $list = true;
+                    break;
+                case 'external-article':
                     $model = 'recommendations';
                     $type = true;
                     $list = true;
@@ -91,7 +107,12 @@ abstract class ModelConverterTestCase extends PHPUnit_Framework_TestCase
                 $name = $model.'/v1/'.$sample->getBasename();
                 $contents = json_decode($sample->getContents(), true);
                 if ($list) {
-                    foreach ($contents['items'] as $i => $item) {
+                    if (isset($contents['items'])) {
+                        $items = $contents['items'];
+                    } else {
+                        $items = $contents;
+                    }
+                    foreach ($items as $i => $item) {
                         if ($type ?? false) {
                             if ($originalModel !== $item['type']) {
                                 continue;
