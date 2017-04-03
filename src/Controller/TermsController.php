@@ -3,13 +3,14 @@
 namespace eLife\Journal\Controller;
 
 use eLife\Patterns\ViewModel\ContentHeaderNonArticle;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 final class TermsController extends Controller
 {
-    public function termsAction() : Response
+    public function termsAction(Request $request) : Response
     {
-        $arguments = $this->defaultPageArguments();
+        $arguments = $this->defaultPageArguments($request);
 
         $arguments['title'] = 'Terms and policy';
 

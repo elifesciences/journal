@@ -2,7 +2,7 @@
 
 namespace test\eLife\Journal\Controller;
 
-use GuzzleHttp\Psr7\Request;
+use Symfony\Component\HttpFoundation\Response;
 use test\eLife\Journal\WebTestCase;
 
 abstract class PageTestCase extends WebTestCase
@@ -19,6 +19,18 @@ abstract class PageTestCase extends WebTestCase
         $header = $crawler->filter('header.site-header');
 
         $this->assertCount(1, $header);
+    }
+
+    /**
+     * @test
+     */
+    final public function it_has_the_sign_up_form()
+    {
+        $client = static::createClient();
+
+        $crawler = $client->request('GET', $this->getUrl());
+
+        $this->assertCount(1, $crawler->filter('.email-cta'));
     }
 
     /**
@@ -46,6 +58,23 @@ abstract class PageTestCase extends WebTestCase
 
         $this->assertSame('eLife', $crawler->filter('meta[property="og:site_name"]')->attr('content'));
         $this->assertSame('@eLife', $crawler->filter('meta[name="twitter:site"]')->attr('content'));
+    }
+
+    /**
+     * @test
+     */
+    public function it_has_cache_headers()
+    {
+        $client = static::createClient();
+
+        $client->request('GET', $this->getUrl());
+
+        $this->assertSame('max-age=300, public, stale-if-error=86400, stale-while-revalidate=300', $client->getResponse()->headers->get('Cache-Control'));
+        $this->assertSame(['Cookie'], $client->getResponse()->getVary());
+
+        $client->request('GET', $this->getUrl(), [], [], ['HTTP_IF_NONE_MATCH' => $client->getResponse()->headers->get('Etag')]);
+
+        $this->assertSame(Response::HTTP_NOT_MODIFIED, $client->getResponse()->getStatusCode());
     }
 
     final protected static function createClient(array $options = [], array $server = [])

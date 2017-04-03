@@ -1,14 +1,17 @@
 parameters:
     api_url: https://api.elifesciences.org/
+    api_url_public: '%api_url%'
     api_key: public
     secret: ThisTokenIsNotSoSecretChangeIt
     session_name: journal
+    redis_cache: redis://localhost
     mailer_transport: smtp
     mailer_host: 127.0.0.1
     mailer_port: ~
     mailer_username: ~
     mailer_password: ~
     mailer_encryption: ~
+    crm_url: https://crm.elifesciences.org/crm/civicrm/
     disqus_domain: elifesciences
     trusted_hosts:
       - .*\.?elifesciences.org$

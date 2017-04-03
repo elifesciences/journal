@@ -23,7 +23,7 @@ final class PressPacksController extends Controller
         $page = (int) $request->query->get('page', 1);
         $perPage = 6;
 
-        $arguments = $this->defaultPageArguments();
+        $arguments = $this->defaultPageArguments($request);
 
         $latest = $this->pagerfantaPromise(
             $this->get('elife.api_sdk.press_packages'),
@@ -64,7 +64,7 @@ final class PressPacksController extends Controller
             ->otherwise($this->mightNotExist())
             ->then($this->checkSlug($request, Callback::method('getTitle')));
 
-        $arguments = $this->defaultPageArguments($package);
+        $arguments = $this->defaultPageArguments($request, $package);
 
         $arguments['title'] = $package
             ->then(Callback::method('getTitle'));

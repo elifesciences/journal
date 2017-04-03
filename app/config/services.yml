@@ -93,6 +93,11 @@ services:
         class: eLife\ApiSdk\Client\Subjects
         factory: ['@elife.api_sdk', subjects]
 
+    elife.journal.goutte:
+        class: Goutte\Client
+        calls:
+          - ['setClient', ['@csa_guzzle.client.elife_crm']]
+
     elife.journal.guzzle.cache:
         class: Kevinrob\GuzzleCache\CacheMiddleware
         public: false
@@ -134,6 +139,11 @@ services:
         arguments:
           - '@router'
           - '@uri_signer'
+
+    elife.journal.listener.cache_control:
+        class: eLife\Journal\EventListener\CacheControlSubscriber
+        tags:
+          - name: kernel.event_subscriber
 
     elife.journal.listener.early_response:
         class: eLife\Journal\EventListener\EarlyResponseSubscriber
@@ -299,6 +309,12 @@ services:
         public: false
         arguments:
           - '@router'
+        tags:
+          - name: view_model.converter
+
+    elife.journal.view_model.converter.author_group.details:
+        class: eLife\Journal\ViewModel\Converter\GroupAuthorDetailsConverter
+        public: false
         tags:
           - name: view_model.converter
 

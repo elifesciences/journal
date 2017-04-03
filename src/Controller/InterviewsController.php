@@ -23,10 +23,10 @@ final class InterviewsController extends Controller
                 return $interview->getInterviewee()->getPerson()->getPreferredName();
             }));
 
-        $arguments = $this->defaultPageArguments($interview);
+        $arguments = $this->defaultPageArguments($request, $interview);
 
         $arguments['title'] = $interview
-            ->then(Callback::method('getFullTitle'));
+            ->then(Callback::method('getTitle'));
 
         $arguments['interview'] = $interview;
 

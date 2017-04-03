@@ -19,7 +19,6 @@ use eLife\ApiSdk\Model\CitationsMetricSource;
 use eLife\ApiSdk\Model\DataSet;
 use eLife\ApiSdk\Model\FundingAward;
 use eLife\ApiSdk\Model\Model;
-use eLife\ApiSdk\Model\PersonAuthor;
 use eLife\ApiSdk\Model\Reviewer;
 use eLife\Journal\Helper\Callback;
 use eLife\Journal\Helper\HasPages;
@@ -51,7 +50,7 @@ final class ArticlesController extends Controller
         $page = (int) $request->query->get('page', 1);
         $perPage = 3;
 
-        $arguments = $this->articlePageArguments($id, $version);
+        $arguments = $this->articlePageArguments($request, $id, $version);
 
         /** @var Sequence $recommendations */
         $recommendations = new PromiseSequence($arguments['article']
@@ -270,11 +269,9 @@ final class ArticlesController extends Controller
 
                 $realAuthors = $article->getAuthors()->filter(Callback::isInstanceOf(Author::class));
 
-                $personAuthors = $realAuthors->filter(Callback::isInstanceOf(PersonAuthor::class));
-
-                if ($personAuthors->notEmpty()) {
+                if ($realAuthors->notEmpty()) {
                     $infoSections[] = new ViewModel\AuthorsDetails(
-                        ...$personAuthors->map($this->willConvertTo(null, ['authors' => $realAuthors]))
+                        ...$realAuthors->map($this->willConvertTo(null, ['authors' => $realAuthors]))
                     );
                 }
 
@@ -391,12 +388,12 @@ final class ArticlesController extends Controller
 
                 if ($pageViews) {
                     $statistics[] = ViewModel\Statistic::fromNumber('Page views', $pageViews);
-                    $statisticsExtra[] = new ViewModel\BarChart($article->getId(), 'article', 'page-views', rtrim($this->getParameter('api_url'), '/'), 'page-views', 'month');
+                    $statisticsExtra[] = new ViewModel\BarChart($article->getId(), 'article', 'page-views', rtrim($this->getParameter('api_url_public'), '/'), 'page-views', 'month');
                 }
 
                 if ($downloads) {
                     $statistics[] = ViewModel\Statistic::fromNumber('Downloads', $downloads);
-                    $statisticsExtra[] = new ViewModel\BarChart($article->getId(), 'article', 'downloads', rtrim($this->getParameter('api_url'), '/'), 'downloads', 'month');
+                    $statisticsExtra[] = new ViewModel\BarChart($article->getId(), 'article', 'downloads', rtrim($this->getParameter('api_url_public'), '/'), 'downloads', 'month');
                 }
 
                 if ($citations) {
@@ -464,9 +461,9 @@ sources: '.implode(', ', array_map(function (CitationsMetricSource $source) {
         return new Response($this->get('templating')->render('::article.html.twig', $arguments));
     }
 
-    public function figuresAction(string $id, int $version = null) : Response
+    public function figuresAction(Request $request, string $id, int $version = null) : Response
     {
-        $arguments = $this->articlePageArguments($id, $version);
+        $arguments = $this->articlePageArguments($request, $id, $version);
 
         $arguments['title'] = $arguments['title']
             ->then(function (string $title) {
@@ -573,9 +570,9 @@ sources: '.implode(', ', array_map(function (CitationsMetricSource $source) {
         return new Response($this->get('templating')->render('::article-figures.html.twig', $arguments));
     }
 
-    public function bibTexAction(string $id) : Response
+    public function bibTexAction(Request $request, string $id) : Response
     {
-        $arguments = $this->defaultArticleArguments($id);
+        $arguments = $this->defaultArticleArguments($request, $id);
 
         $arguments['article'] = $arguments['article']
             ->then(Callback::methodMustNotBeEmpty('getPublishedDate', new NotFoundHttpException('Article version not published')));
@@ -583,9 +580,9 @@ sources: '.implode(', ', array_map(function (CitationsMetricSource $source) {
         return new Response($this->get('templating')->render('::article.bib.twig', $arguments), Response::HTTP_OK, ['Content-Type' => 'application/x-bibtex']);
     }
 
-    public function risAction(string $id) : Response
+    public function risAction(Request $request, string $id) : Response
     {
-        $arguments = $this->defaultArticleArguments($id);
+        $arguments = $this->defaultArticleArguments($request, $id);
 
         $arguments['article'] = $arguments['article']
             ->then(Callback::methodMustNotBeEmpty('getPublishedDate', new NotFoundHttpException('Article version not published')));
@@ -593,13 +590,13 @@ sources: '.implode(', ', array_map(function (CitationsMetricSource $source) {
         return new Response(preg_replace('~\R~u', "\r\n", $this->get('templating')->render('::article.ris.twig', $arguments)), Response::HTTP_OK, ['Content-Type' => 'application/x-research-info-systems']);
     }
 
-    private function defaultArticleArguments(string $id, int $version = null) : array
+    private function defaultArticleArguments(Request $request, string $id, int $version = null) : array
     {
         $article = $this->get('elife.api_sdk.articles')
             ->get($id, $version)
             ->otherwise($this->mightNotExist());
 
-        $arguments = $this->defaultPageArguments($article);
+        $arguments = $this->defaultPageArguments($request, $article);
 
         $arguments['title'] = $article
             ->then(Callback::method('getFullTitle'));
@@ -609,9 +606,9 @@ sources: '.implode(', ', array_map(function (CitationsMetricSource $source) {
         return $arguments;
     }
 
-    private function articlePageArguments(string $id, int $version = null) : array
+    private function articlePageArguments(Request $request, string $id, int $version = null) : array
     {
-        $arguments = $this->defaultArticleArguments($id, $version);
+        $arguments = $this->defaultArticleArguments($request, $id, $version);
 
         $arguments['history'] = $this->get('elife.api_sdk.articles')
             ->getHistory($id)

@@ -3,13 +3,14 @@
 namespace eLife\Journal\Controller;
 
 use eLife\Patterns\ViewModel\ContentHeaderNonArticle;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 final class ResourcesController extends Controller
 {
-    public function resourcesAction() : Response
+    public function resourcesAction(Request $request) : Response
     {
-        $arguments = $this->defaultPageArguments();
+        $arguments = $this->defaultPageArguments($request);
 
         $arguments['title'] = 'Resources';
 

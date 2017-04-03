@@ -32,7 +32,7 @@ final class InterviewTeaserConverter implements ViewModelConverter
             $object->getTitle(),
             $this->urlGenerator->generate('interview', ['id' => $object->getId(), 'slug' => $this->slugify->slugify($object->getInterviewee()->getPerson()->getPreferredName())]),
             $object->getImpactStatement(),
-            $object->getSubTitle(),
+            null,
             null,
             null,
             TeaserFooter::forNonArticle(

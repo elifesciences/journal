@@ -4,7 +4,9 @@ imports:
 
 parameters:
     api_url: http://api.elifesciences.org/
+    api_url_public: http://api.elifesciences.org/
     api_mock: '%kernel.cache_dir%/guzzle/fixtures'
+    crm_url: http://crm.elifesciences.org/crm/civicrm/
 
 framework:
     cache:

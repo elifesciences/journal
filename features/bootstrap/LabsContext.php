@@ -165,13 +165,13 @@ final class LabsContext extends Context
     }
 
     /**
-     * @Then /^I should see the latest (\d+) Labs experiments in the 'Experiments' list$/
+     * @Then /^I should see the latest (\d+) Labs experiments in the 'Latest' list$/
      */
-    public function iShouldSeeTheLatestLabsExperimentsInTheExperimentsList(int $number)
+    public function iShouldSeeTheLatestLabsExperimentsInTheLatestList(int $number)
     {
         $this->spin(function () use ($number) {
             $this->assertSession()
-                ->elementsCount('css', '.grid-listing-heading:contains("Experiments") + .grid-listing > .grid-listing-item', $number);
+                ->elementsCount('css', '.grid-listing-heading:contains("Latest") + .grid-listing > .grid-listing-item', $number);
 
             for ($i = $number; $i > 0; --$i) {
                 $nthChild = ($number - $i + 1);
@@ -179,7 +179,7 @@ final class LabsContext extends Context
 
                 $this->assertSession()->elementContains(
                     'css',
-                    '.grid-listing-heading:contains("Experiments") + .grid-listing > .grid-listing-item:nth-child('.$nthChild.')',
+                    '.grid-listing-heading:contains("Latest") + .grid-listing > .grid-listing-item:nth-child('.$nthChild.')',
                     'Experiment '.$expectedNumber.' title'
                 );
             }
