@@ -11,8 +11,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 final class CollectionReadMoreItemConverterTest extends ModelConverterTestCase
 {
     protected $models = ['collection'];
-    protected $class = Collection::class;
-    protected $viewModelClass = ReadMoreItem::class;
+    protected $viewModelClasses = [ReadMoreItem::class];
 
     /**
      * @before

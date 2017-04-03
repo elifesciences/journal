@@ -2,15 +2,13 @@
 
 namespace test\eLife\Journal\ViewModel\Converter;
 
-use eLife\ApiSdk\Model\ArticleVersion;
 use eLife\Journal\ViewModel\Converter\ArticleContentHeaderConverter;
 use eLife\Patterns\ViewModel\ContentHeaderArticle;
 
 final class ArticleContentHeaderConverterTest extends ModelConverterTestCase
 {
     protected $models = ['article-poa', 'article-vor'];
-    protected $class = ArticleVersion::class;
-    protected $viewModelClass = ContentHeaderArticle::class;
+    protected $viewModelClasses = [ContentHeaderArticle::class];
 
     /**
      * @before

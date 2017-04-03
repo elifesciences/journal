@@ -2,13 +2,14 @@
 
 namespace test\eLife\Journal\ViewModel\Converter\Block;
 
+use eLife\ApiSdk\Model\Block;
 use eLife\Journal\ViewModel\Converter\Block\VideoConverter;
-use eLife\Patterns\ViewModel\Video;
+use eLife\Patterns\ViewModel;
 
 final class VideoConverterTest extends BlockConverterTestCase
 {
-    protected $class = 'eLife\ApiSdk\Model\Block\Video';
-    protected $viewModelClass = Video::class;
+    protected $blockClass = Block\Video::class;
+    protected $viewModelClasses = [ViewModel\Video::class];
 
     /**
      * @before
@@ -18,37 +19,11 @@ final class VideoConverterTest extends BlockConverterTestCase
         $this->converter = new VideoConverter();
     }
 
-    public function blocks() : array
+    /**
+     * @param Block\Video $block
+     */
+    protected function includeBlock(Block $block) : bool
     {
-        return [
-            'minimum' => [
-                [
-                    'sources' => [
-                        [
-                            'mediaType' => 'video/ogg',
-                            'uri' => 'https://example.com/video1',
-                        ],
-                    ],
-                    'width' => 800,
-                    'height' => 600,
-                    'image' => 'https://example.com/video1-thumbnail',
-                ],
-            ],
-            'complete' => [
-                [
-                    'sources' => [
-                        [
-                            'mediaType' => 'video/ogg',
-                            'uri' => 'https://example.com/video1',
-                        ],
-                    ],
-                    'width' => 800,
-                    'height' => 600,
-                    'autoplay' => true,
-                    'loop' => true,
-                    'image' => 'https://example.com/video1-thumbnail',
-                ],
-            ],
-        ];
+        return !$block->getTitle();
     }
 }

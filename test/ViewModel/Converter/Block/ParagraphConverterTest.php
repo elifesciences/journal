@@ -2,14 +2,14 @@
 
 namespace test\eLife\Journal\ViewModel\Converter\Block;
 
-use eLife\ApiSdk\Model\Block\Paragraph;
+use eLife\ApiSdk\Model\Block;
 use eLife\Journal\ViewModel;
 use eLife\Journal\ViewModel\Converter\Block\ParagraphConverter;
 
 final class ParagraphConverterTest extends BlockConverterTestCase
 {
-    protected $class = Paragraph::class;
-    protected $viewModelClass = ViewModel\Paragraph::class;
+    protected $blockClass = Block\Paragraph::class;
+    protected $viewModelClasses = [ViewModel\Paragraph::class];
 
     /**
      * @before
@@ -17,16 +17,5 @@ final class ParagraphConverterTest extends BlockConverterTestCase
     public function setUpConverter()
     {
         $this->converter = new ParagraphConverter();
-    }
-
-    public function blocks() : array
-    {
-        return [
-            'minimum' => [
-                [
-                    'text' => 'Lorem ipsum...',
-                ],
-            ],
-        ];
     }
 }

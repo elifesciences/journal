@@ -2,16 +2,16 @@
 
 namespace test\eLife\Journal\ViewModel\Converter\Block;
 
-use eLife\ApiSdk\Model\Block\Quote;
+use eLife\ApiSdk\Model\Block;
 use eLife\Journal\ViewModel\Converter\Block\QuoteConverter;
 use eLife\Journal\ViewModel\Converter\ViewModelConverter;
 use eLife\Patterns\PatternRenderer;
-use eLife\Patterns\ViewModel\PullQuote;
+use eLife\Patterns\ViewModel;
 
 final class QuoteConverterTest extends BlockConverterTestCase
 {
-    protected $class = Quote::class;
-    protected $viewModelClass = PullQuote::class;
+    protected $blockClass = Block\Quote::class;
+    protected $viewModelClasses = [ViewModel\PullQuote::class];
 
     /**
      * @before
@@ -26,21 +26,5 @@ final class QuoteConverterTest extends BlockConverterTestCase
             ->expects($this->any())
             ->method('render')
             ->will($this->returnValue('...'));
-    }
-
-    public function blocks() : array
-    {
-        return [
-            'minimum' => [
-                [
-                    'text' => [
-                        [
-                            'type' => 'paragraph',
-                            'text' => 'Lorem ipsum...',
-                        ],
-                    ],
-                ],
-            ],
-        ];
     }
 }

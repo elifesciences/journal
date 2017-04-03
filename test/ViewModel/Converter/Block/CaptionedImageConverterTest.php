@@ -2,16 +2,17 @@
 
 namespace test\eLife\Journal\ViewModel\Converter\Block;
 
-use eLife\ApiSdk\Model\Block\Image;
+use eLife\ApiSdk\Model\Block;
 use eLife\Journal\ViewModel\AssetViewerInlineSet;
 use eLife\Journal\ViewModel\Converter\Block\CaptionedImageConverter;
 use eLife\Journal\ViewModel\Converter\ViewModelConverter;
 use eLife\Patterns\PatternRenderer;
+use eLife\Patterns\ViewModel;
 
 final class CaptionedImageConverterTest extends BlockConverterTestCase
 {
-    protected $class = Image::class;
-    protected $viewModelClass = AssetViewerInlineSet::class;
+    protected $blockClass = Block\Image::class;
+    protected $viewModelClasses = [AssetViewerInlineSet::class, ViewModel\CaptionedAsset::class];
 
     /**
      * @before
@@ -28,42 +29,11 @@ final class CaptionedImageConverterTest extends BlockConverterTestCase
             ->will($this->returnValue(new AssetViewerInlineSet()));
     }
 
-    public function blocks() : array
+    /**
+     * @param Block\Image $block
+     */
+    protected function includeBlock(Block $block) : bool
     {
-        return [
-            'minimum' => [
-                [
-                    'alt' => 'Image 1',
-                    'uri' => 'https://example.com/image1',
-                    'title' => 'An image\'s title',
-                ],
-            ],
-            'with paragraph caption' => [
-                [
-                    'alt' => 'Image 1',
-                    'uri' => 'https://example.com/image1',
-                    'title' => 'An image\'s title',
-                    'caption' => [
-                        [
-                            'type' => 'paragraph',
-                            'text' => 'An image\'s caption',
-                        ],
-                    ],
-                ],
-            ],
-            'with MathML caption' => [
-                [
-                    'alt' => 'Image 1',
-                    'uri' => 'https://example.com/image1',
-                    'title' => 'An image\'s title',
-                    'caption' => [
-                        [
-                            'type' => 'mathml',
-                            'mathml' => '<math>An image\'s caption</math>',
-                        ],
-                    ],
-                ],
-            ],
-        ];
+        return !empty($block->getImage()->getTitle());
     }
 }

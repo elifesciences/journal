@@ -2,18 +2,19 @@
 
 namespace test\eLife\Journal\ViewModel\Converter\Block;
 
+use eLife\ApiSdk\Model\Block;
 use eLife\Journal\Helper\DownloadLinkUriGenerator;
 use eLife\Journal\ViewModel\Converter\Block\CaptionedVideoConverter;
 use eLife\Journal\ViewModel\Converter\ViewModelConverter;
 use eLife\Patterns\PatternRenderer;
-use eLife\Patterns\ViewModel\CaptionedAsset;
+use eLife\Patterns\ViewModel;
 use Symfony\Component\HttpKernel\UriSigner;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 final class CaptionedVideoConverterTest extends BlockConverterTestCase
 {
-    protected $class = 'eLife\ApiSdk\Model\Block\Video';
-    protected $viewModelClass = CaptionedAsset::class;
+    protected $blockClass = Block\Video::class;
+    protected $viewModelClasses = [ViewModel\AssetViewerInline::class, ViewModel\CaptionedAsset::class];
 
     /**
      * @before
@@ -27,65 +28,11 @@ final class CaptionedVideoConverterTest extends BlockConverterTestCase
         );
     }
 
-    public function blocks() : array
+    /**
+     * @param Block\Video $block
+     */
+    protected function includeBlock(Block $block) : bool
     {
-        return [
-            'minimum' => [
-                [
-                    'title' => 'Video\'s caption',
-                    'sources' => [
-                        [
-                            'mediaType' => 'video/ogg',
-                            'uri' => 'https://example.com/video1',
-                        ],
-                    ],
-                    'width' => 800,
-                    'height' => 600,
-                    'image' => 'https://example.com/video1-thumbnail',
-                ],
-            ],
-            'with paragraph caption' => [
-                [
-                    'title' => 'Video\'s caption',
-                    'sources' => [
-                        [
-                            'mediaType' => 'video/ogg',
-                            'uri' => 'https://example.com/video1',
-                        ],
-                    ],
-                    'width' => 800,
-                    'height' => 600,
-                    'image' => 'https://example.com/video1-thumbnail',
-                    'autoplay' => true,
-                    'loop' => true,
-                    'caption' => [
-                        [
-                            'type' => 'paragraph',
-                            'text' => 'A video\'s caption',
-                        ],
-                    ],
-                ],
-            ],
-            'with MathML caption' => [
-                [
-                    'title' => 'Video\'s caption',
-                    'sources' => [
-                        [
-                            'mediaType' => 'video/ogg',
-                            'uri' => 'https://example.com/video1',
-                        ],
-                    ],
-                    'width' => 800,
-                    'height' => 600,
-                    'image' => 'https://example.com/video1-thumbnail',
-                    'caption' => [
-                        [
-                            'type' => 'mathml',
-                            'mathml' => '<math>A video\'s caption</math>',
-                        ],
-                    ],
-                ],
-            ],
-        ];
+        return !empty($block->getTitle());
     }
 }

@@ -9,8 +9,7 @@ use eLife\Patterns\ViewModel\Teaser;
 final class CollectionSecondaryTeaserConverterTest extends ModelConverterTestCase
 {
     protected $models = ['collection'];
-    protected $class = Collection::class;
-    protected $viewModelClass = Teaser::class;
+    protected $viewModelClasses = [Teaser::class];
     protected $context = ['variant' => 'secondary'];
 
     /**
