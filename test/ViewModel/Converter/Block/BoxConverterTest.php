@@ -10,8 +10,8 @@ use eLife\Patterns\ViewModel;
 
 final class BoxConverterTest extends BlockConverterTestCase
 {
-    protected $class = Block\Box::class;
-    protected $viewModelClass = ViewModel\Box::class;
+    protected $blockClass = Block\Box::class;
+    protected $viewModelClasses = [ViewModel\Box::class];
 
     /**
      * @before
@@ -27,38 +27,5 @@ final class BoxConverterTest extends BlockConverterTestCase
             ->expects($this->any())
             ->method('render')
             ->will($this->returnValue('...'));
-    }
-
-    public function blocks() : array
-    {
-        return [
-            'minimum' => [
-                [
-                    'type' => 'box',
-                    'title' => 'Box title',
-                    'content' => [
-                        [
-                            'type' => 'paragraph',
-                            'text' => 'Box content.',
-                        ],
-                    ],
-                ],
-            ],
-            'complete' => [
-                [
-                    'type' => 'box',
-                    'doi' => '10.7554/eLife.09560.005',
-                    'id' => 'boxId',
-                    'label' => 'Box label',
-                    'title' => 'Box title',
-                    'content' => [
-                        [
-                            'type' => 'paragraph',
-                            'text' => 'Box content.',
-                        ],
-                    ],
-                ],
-            ],
-        ];
     }
 }

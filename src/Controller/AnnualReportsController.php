@@ -18,7 +18,7 @@ final class AnnualReportsController extends Controller
         $page = (int) $request->query->get('page', 1);
         $perPage = 6;
 
-        $arguments = $this->defaultPageArguments();
+        $arguments = $this->defaultPageArguments($request);
 
         $annualReports = $this->pagerfantaPromise(
             $this->get('elife.api_sdk.annual_reports'),

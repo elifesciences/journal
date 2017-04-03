@@ -2,58 +2,90 @@
 
 namespace test\eLife\Journal\ViewModel\Converter\Block;
 
+use eLife\ApiSdk\Collection\Sequence;
+use eLife\ApiSdk\Model\ArticleVersion;
+use eLife\ApiSdk\Model\ArticleVoR;
+use eLife\ApiSdk\Model\Asset;
 use eLife\ApiSdk\Model\Block;
-use eLife\Journal\ViewModel\Converter\ViewModelConverter;
-use PHPUnit_Framework_TestCase;
-use test\eLife\Journal\ViewModel\Converter\SerializerAwareTestCase;
+use eLife\ApiSdk\Model\HasContent;
+use eLife\ApiSdk\Model\Model;
+use eLife\ApiSdk\Model\Person;
+use eLife\ApiSdk\Model\PressPackage;
+use test\eLife\Journal\ViewModel\Converter\ModelConverterTestCase;
+use Traversable;
 
-abstract class BlockConverterTestCase extends PHPUnit_Framework_TestCase
+abstract class BlockConverterTestCase extends ModelConverterTestCase
 {
-    protected $converter;
-    protected $class;
-    protected $viewModelClass;
-    protected $context = [];
-    use SerializerAwareTestCase;
+    protected $models = ['article-vor', 'blog-article', 'event', 'interview', 'labs-experiment', 'person', 'press-package'];
 
-    /**
-     * @test
-     * @dataProvider blocks
-     */
-    final public function it_converts_a_block($data)
+    final protected function modelHook(Model $model) : Traversable
     {
-        $this->assertInstanceOf(ViewModelConverter::class, $this->converter);
-
-        $block = $this->serializer->denormalize($data, $this->class);
-
-        $this->assertTrue(
-            $this->converter->supports($block, $this->viewModelClass, $this->context),
-            'Converter does not support turning '.get_class($block).' into '.$this->viewModelClass
-        );
-        $viewModel = $this->converter->convert($block);
-        $this->assertTrue($viewModel instanceof $this->viewModelClass, 'Failed asserting '.var_export($viewModel, true)." is an instance of $this->viewModelClass");
-
-        $viewModel->toArray();
+        yield from array_filter(iterator_to_array($this->findBlocks($model)), [$this, 'includeBlock']);
     }
 
-    abstract public function blocks() : array;
-
-    /**
-     * @test
-     */
-    final public function it_does_not_convert_unsupported_blocks()
+    protected function includeBlock(Block $block) : bool
     {
-        $block = $this->serializer->denormalize($this->unsupportedBlockData(), Block::class);
-
-        $this->assertFalse($this->converter->supports($block), 'Should not support '.var_export($block, true));
+        return true;
     }
 
-    protected function unsupportedBlockData()
+    private function findBlocks(Model $model) : Traversable
     {
-        return [
-            'type' => 'youtube',
-            'id' => '-9JVFCL0fvk',
-            'width' => 960,
-            'height' => 720,
-        ];
+        if ($model instanceof HasContent) {
+            yield from $this->hasContentHook($model);
+        }
+
+        if ($model instanceof ArticleVersion) {
+            if ($model->getAbstract()) {
+                yield from $this->hasContentHook($model->getAbstract());
+            }
+        }
+
+        if ($model instanceof ArticleVoR) {
+            if ($model->getDigest()) {
+                yield from $this->hasContentHook($model->getDigest());
+            }
+            foreach ($model->getAppendices() as $appendix) {
+                yield from $this->hasContentHook($appendix);
+            }
+            yield from $this->sequenceHook($model->getAcknowledgements());
+            yield from $this->sequenceHook($model->getEthics());
+            if ($model->getDecisionLetter()) {
+                yield from $this->hasContentHook($model->getDecisionLetter());
+            }
+            if ($model->getAuthorResponse()) {
+                yield from $this->hasContentHook($model->getAuthorResponse());
+            }
+        }
+
+        if ($model instanceof Person) {
+            yield from $this->sequenceHook($model->getProfile());
+        }
+
+        if ($model instanceof PressPackage) {
+            yield from $this->sequenceHook($model->getAbout());
+        }
+    }
+
+    private function hasContentHook(HasContent $hasContent) : Traversable
+    {
+        return $this->sequenceHook($hasContent->getContent());
+    }
+
+    private function sequenceHook(Sequence $blocks) : Traversable
+    {
+        foreach ($blocks as $block) {
+            if ($block instanceof $this->blockClass) {
+                yield $block;
+                continue;
+            }
+
+            if ($block instanceof HasContent) {
+                yield from $this->hasContentHook($block);
+            }
+
+            if ($block instanceof Asset) {
+                yield from $this->sequenceHook($block->getCaption());
+            }
+        }
     }
 }

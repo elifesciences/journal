@@ -24,7 +24,7 @@ final class CommunityController extends Controller
     {
         $page = (int) $request->query->get('page', 1);
         $perPage = 6;
-        $arguments = $this->defaultPageArguments();
+        $arguments = $this->defaultPageArguments($request);
 
         $latestCommunity = $this->pagerfantaPromise(
             $this->get('elife.api_sdk.community'),

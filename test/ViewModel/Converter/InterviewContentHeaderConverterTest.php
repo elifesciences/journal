@@ -9,8 +9,7 @@ use eLife\Patterns\ViewModel\ContentHeaderNonArticle;
 final class InterviewContentHeaderConverterTest extends ModelConverterTestCase
 {
     protected $models = ['interview'];
-    protected $class = Interview::class;
-    protected $viewModelClass = ContentHeaderNonArticle::class;
+    protected $viewModelClasses = [ContentHeaderNonArticle::class];
 
     /**
      * @before

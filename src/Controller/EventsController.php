@@ -25,7 +25,7 @@ final class EventsController extends Controller
         $page = (int) $request->query->get('page', 1);
         $perPage = 6;
 
-        $arguments = $this->defaultPageArguments();
+        $arguments = $this->defaultPageArguments($request);
 
         $upcomingEvents = promise_for($this->get('elife.api_sdk.events')
             ->forType('open')
@@ -84,7 +84,7 @@ final class EventsController extends Controller
             })
             ->then($this->checkSlug($request, Callback::method('getTitle')));
 
-        $arguments = $this->defaultPageArguments($event);
+        $arguments = $this->defaultPageArguments($request, $event);
 
         $arguments['title'] = $event
             ->then(Callback::method('getTitle'));

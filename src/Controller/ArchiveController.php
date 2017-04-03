@@ -49,11 +49,11 @@ final class ArchiveController extends Controller
         );
     }
 
-    public function yearAction(int $year) : Response
+    public function yearAction(Request $request, int $year) : Response
     {
         $this->validateArchiveYear($year);
 
-        $arguments = $this->defaultPageArguments();
+        $arguments = $this->defaultPageArguments($request);
 
         $years = [];
         for ($yearOption = 2012; $yearOption <= $this->getMaxYear(); ++$yearOption) {
@@ -132,7 +132,7 @@ final class ArchiveController extends Controller
         return new Response($this->get('templating')->render('::archive-year.html.twig', $arguments));
     }
 
-    public function monthAction(int $year, string $month) : Response
+    public function monthAction(Request $request, int $year, string $month) : Response
     {
         $starts = DateTimeImmutable::createFromFormat('j F Y H:i:s', "1 $month $year 00:00:00", new DateTimeZone('Z'));
 
@@ -152,7 +152,7 @@ final class ArchiveController extends Controller
             ->slice(0, 4)
             ->otherwise($this->softFailure('Failed to load cover articles for '.$starts->format('F Y')));
 
-        $arguments = $this->defaultPageArguments();
+        $arguments = $this->defaultPageArguments($request);
 
         $arguments['title'] = $starts->format('F Y');
 

@@ -2,16 +2,16 @@
 
 namespace test\eLife\Journal\ViewModel\Converter\Block;
 
-use eLife\ApiSdk\Model\Block\Question;
+use eLife\ApiSdk\Model\Block;
 use eLife\Journal\ViewModel\Converter\Block\QuestionConverter;
 use eLife\Journal\ViewModel\Converter\ViewModelConverter;
 use eLife\Patterns\PatternRenderer;
-use eLife\Patterns\ViewModel\ArticleSection;
+use eLife\Patterns\ViewModel;
 
 final class QuestionConverterTest extends BlockConverterTestCase
 {
-    protected $class = Question::class;
-    protected $viewModelClass = ArticleSection::class;
+    protected $blockClass = Block\Question::class;
+    protected $viewModelClasses = [ViewModel\ArticleSection::class];
 
     /**
      * @before
@@ -26,22 +26,5 @@ final class QuestionConverterTest extends BlockConverterTestCase
             ->expects($this->any())
             ->method('render')
             ->will($this->returnValue('...'));
-    }
-
-    public function blocks() : array
-    {
-        return [
-            'minimum' => [
-                [
-                    'question' => 'What is the answer?',
-                    'answer' => [
-                        [
-                            'type' => 'paragraph',
-                            'text' => '42',
-                        ],
-                    ],
-                ],
-            ],
-        ];
     }
 }

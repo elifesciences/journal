@@ -28,9 +28,9 @@ use function GuzzleHttp\Promise\promise_for;
 
 final class SubjectsController extends Controller
 {
-    public function listAction() : Response
+    public function listAction(Request $request) : Response
     {
-        $arguments = $this->defaultPageArguments();
+        $arguments = $this->defaultPageArguments($request);
 
         $arguments['title'] = 'Research categories';
 
@@ -68,7 +68,7 @@ final class SubjectsController extends Controller
             ->get($id)
             ->otherwise($this->mightNotExist());
 
-        $arguments = $this->defaultPageArguments($subject);
+        $arguments = $this->defaultPageArguments($request, $subject);
 
         $arguments['id'] = $id;
         $arguments['subject'] = $subject;

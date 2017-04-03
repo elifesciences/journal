@@ -26,7 +26,7 @@ final class PodcastController extends Controller
         $page = (int) $request->query->get('page', 1);
         $perPage = 8;
 
-        $arguments = $this->defaultPageArguments();
+        $arguments = $this->defaultPageArguments($request);
 
         $episodes = promise_for($this->get('elife.api_sdk.podcast_episodes'))
             ->then(function (Sequence $sequence) use ($page, $perPage) {
@@ -69,13 +69,13 @@ final class PodcastController extends Controller
         return new Response($this->get('templating')->render('::podcast.html.twig', $arguments));
     }
 
-    public function episodeAction(int $number) : Response
+    public function episodeAction(Request $request, int $number) : Response
     {
         $episode = $this->get('elife.api_sdk.podcast_episodes')
             ->get($number)
             ->otherwise($this->mightNotExist());
 
-        $arguments = $this->defaultPageArguments($episode);
+        $arguments = $this->defaultPageArguments($request, $episode);
 
         $arguments['title'] = $episode
             ->then(Callback::method('getFullTitle'));

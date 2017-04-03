@@ -1,5 +1,6 @@
 <?php
 
+use Behat\Mink\Driver\BrowserKitDriver;
 use Behat\Mink\Exception\UnsupportedDriverActionException;
 use Behat\MinkExtension\Context\RawMinkContext;
 use Behat\Symfony2Extension\Context\KernelAwareContext;
@@ -47,6 +48,9 @@ abstract class Context extends RawMinkContext implements KernelAwareContext
     final public function resetEmails()
     {
         $this->emails = [];
+        if ($this->getSession()->getDriver() instanceof BrowserKitDriver) {
+            $this->getSession()->getDriver()->getClient()->followRedirects(true);
+        }
     }
 
     /**

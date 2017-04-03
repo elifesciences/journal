@@ -30,21 +30,34 @@ final class FormViewConverter implements ViewModelConverter
             switch ($prefix) {
                 case 'email':
                     return ViewModel\TextField::emailInput(new ViewModel\FormLabel($this->getLabel($object), $object->vars['id']),
-                        $object->vars['id'], $object->vars['full_name'], $object->vars['placeholder'] ?? null,
+                        $object->vars['id'], $object->vars['full_name'], $object->vars['attr']['placeholder'] ?? null,
                         $object->vars['required'],
                         $object->vars['disabled'], $object->vars['attr']['autofocus'] ?? false, $object->vars['value'],
                         $this->getState($object));
                 case 'form':
-                    $contents = '';
+                    $form = new ViewModel\Form($object->vars['action'], $object->vars['full_name'], $object->vars['method']);
 
-                    foreach ($object->children as $child) {
-                        $contents .= $this->patternRenderer->render($this->convert($child));
+                    $children = array_map([$this, 'convert'], $object->children);
+
+                    if ('email_cta' === $object->vars['full_name']) {
+                        return new ViewModel\EmailCta(
+                            'Be the first to read new articles from eLife',
+                            'Sign up for alerts',
+                            new ViewModel\CompactForm(
+                                $form,
+                                new ViewModel\Input(
+                                    $children['email']['label']['labelText'],
+                                    $children['email']['inputType'],
+                                    $children['email']['name'],
+                                    $children['email']['value'],
+                                    $children['email']['placeholder']
+                                ),
+                                $children['submit']['text']
+                            )
+                        );
                     }
 
-                    return new Form(
-                        new ViewModel\Form($object->vars['action'], $object->vars['full_name'], $object->vars['method']),
-                        $contents
-                    );
+                    return new Form($form, $this->patternRenderer->render(...array_values($children)));
                 case 'hidden':
                     return new HiddenInput($object->vars['full_name'], $object->vars['id'], $object->vars['value']);
                 case 'submit':
@@ -53,7 +66,7 @@ final class FormViewConverter implements ViewModelConverter
                     );
                 case 'text':
                     return ViewModel\TextField::textInput(new ViewModel\FormLabel($this->getLabel($object), $object->vars['id']),
-                        $object->vars['id'], $object->vars['full_name'], $object->vars['placeholder'] ?? null,
+                        $object->vars['id'], $object->vars['full_name'], $object->vars['attr']['placeholder'] ?? null,
                         $object->vars['required'], $object->vars['disabled'], $object->vars['attr']['autofocus'] ?? false, $object->vars['value'],
                         $this->getState($object));
                 case 'textarea':
@@ -61,7 +74,7 @@ final class FormViewConverter implements ViewModelConverter
                         $object->vars['id'],
                         $object->vars['full_name'],
                         $object->vars['value'],
-                        $object->vars['placeholder'] ?? null,
+                        $object->vars['attr']['placeholder'] ?? null,
                         $object->vars['required'],
                         $object->vars['disabled'],
                         $object->vars['attr']['autofocus'] ?? false,

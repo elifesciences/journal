@@ -3,7 +3,7 @@ elifeUpdatePipeline(
         lock('journal--ci') {
             builderDeployRevision 'journal--ci', commit
             builderCmd "journal--ci", "composer update elife/patterns --no-interaction", "/srv/journal"
-            builderSync "ci--journal.elife.internal", "/srv/journal/"
+            builderSync "ci--journal.elifesciences.org", "/srv/journal/"
             sh "git add composer.lock"
         }
     },

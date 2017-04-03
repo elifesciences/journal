@@ -2,7 +2,7 @@
 
 namespace test\eLife\Journal\ViewModel\Converter\Block;
 
-use eLife\ApiSdk\Model\Block\Table;
+use eLife\ApiSdk\Model\Block;
 use eLife\Journal\ViewModel\Converter\Block\TableConverter;
 use eLife\Journal\ViewModel\Converter\ViewModelConverter;
 use eLife\Patterns\PatternRenderer;
@@ -10,8 +10,8 @@ use eLife\Patterns\ViewModel;
 
 final class TableConverterTest extends BlockConverterTestCase
 {
-    protected $class = Table::class;
-    protected $viewModelClass = ViewModel\Table::class;
+    protected $blockClass = Block\Table::class;
+    protected $viewModelClasses = [ViewModel\Table::class];
 
     /**
      * @before
@@ -29,43 +29,11 @@ final class TableConverterTest extends BlockConverterTestCase
             ->will($this->returnValue('...'));
     }
 
-    public function blocks() : array
+    /**
+     * @param Block\Table $block
+     */
+    protected function includeBlock(Block $block) : bool
     {
-        return [
-            'minimum' => [
-                [
-                    'tables' => [
-                        '<table>...</table>',
-                    ],
-                ],
-            ],
-            'complete' => [
-                [
-                    'tables' => [
-                        '<table>...</table>',
-                    ],
-                    'footnotes' => [
-                        [
-                            'id' => 'id',
-                            'label' => 'label',
-                            'text' => [
-                                [
-                                    'type' => 'paragraph',
-                                    'text' => 'footnote 1',
-                                ],
-                            ],
-                        ],
-                        [
-                            'text' => [
-                                [
-                                    'type' => 'paragraph',
-                                    'text' => 'footnote 2',
-                                ],
-                            ],
-                        ],
-                    ],
-                ],
-            ],
-        ];
+        return !$block->getTitle();
     }
 }
