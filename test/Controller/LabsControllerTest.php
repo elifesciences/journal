@@ -37,8 +37,8 @@ final class LabsControllerTest extends PageTestCase
         $this->assertSame('/labs', $crawler->filter('link[rel="canonical"]')->attr('href'));
         $this->assertSame('http://localhost/labs', $crawler->filter('meta[property="og:url"]')->attr('content'));
         $this->assertSame('Labs', $crawler->filter('meta[property="og:title"]')->attr('content'));
-        $this->assertSame('In eLife Labs, explore open-source solutions developed at the intersection of research and technology. Learn more about our focus on innovation at eLife.', $crawler->filter('meta[property="og:description"]')->attr('content'));
-        $this->assertSame('In eLife Labs, explore open-source solutions developed at the intersection of research and technology. Learn more about our focus on innovation at eLife.', $crawler->filter('meta[name="description"]')->attr('content'));
+        $this->assertSame('In eLife Labs, explore open-source solutions developed at the intersection of research and technology. Learn more about our focus on innovation at eLife, and follow us on Twitter.', $crawler->filter('meta[property="og:description"]')->attr('content'));
+        $this->assertSame('In eLife Labs, explore open-source solutions developed at the intersection of research and technology. Learn more about our focus on innovation at eLife, and follow us on Twitter.', $crawler->filter('meta[name="description"]')->attr('content'));
         $this->assertSame('summary_large_image', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
         $this->assertSame('http://localhost/'.ltrim(self::$kernel->getContainer()->get('assets.packages')->getUrl('assets/images/banners/labs-hi-res.jpg'), '/'), $crawler->filter('meta[property="og:image"]')->attr('content'));
         $this->assertSame('1800', $crawler->filter('meta[property="og:image:width"]')->attr('content'));
