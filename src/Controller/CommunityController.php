@@ -60,8 +60,9 @@ final class CommunityController extends Controller
             ));
 
         $arguments['leadParas'] = new LeadParas([
-            new LeadPara('The eLife community is working to help address some of the pressures on early-career scientists in a number of ways.'),
-            new LeadPara('Learn more about <a href="'.$this->get('router')->generate('about-early-career').'">our work</a> and advisory group, <a href="https://crm.elifesciences.org/crm/civicrm/profile/create?reset=1&gid=26">sign up for our bi-monthly news</a>, and explore recent activities below.'),
+            new LeadPara('The eLife community is working to help address some of the pressures on early-career scientists in a number of ways.
+Learn more about <a href="'.$this->get('router')->generate('about-early-career').'">our work</a> and advisory group, <a href="https://crm.elifesciences.org/crm/civicrm/profile/create?reset=1&gid=26">sign up for our bi-monthly news</a>,
+follow us on <a href="https://www.twitter.com/elifecommunity">Twitter</a>, and explore recent activities below.'),
         ]);
 
         $arguments['highlights'] = (new PromiseSequence($this->get('elife.api_sdk.highlights')
