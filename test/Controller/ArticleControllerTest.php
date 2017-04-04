@@ -19,7 +19,7 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertSame('Article title', $crawler->filter('.content-header__title')->text());
         $this->assertEmpty($crawler->filter('.content-header__institution_list'));
-        $this->assertSame('Research article Jan 1, 2010', trim(preg_replace('!\s+!', ' ', $crawler->filter('.content-header .meta')->text())));
+        $this->assertSame('Research Article Jan 1, 2010', trim(preg_replace('!\s+!', ' ', $crawler->filter('.content-header .meta')->text())));
 
         $this->assertContains('Cite as: eLife 2010;1:e00001',
             $crawler->filter('.contextual-data__cite_wrapper')->text());
