@@ -32,13 +32,16 @@ final class MagazineControllerTest extends PageTestCase
         $crawler = $client->request('GET', $this->getUrl());
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
-        $this->assertSame('Magazine', $crawler->filter('.content-header__title')->text());
-        $this->assertContains('Editorials', $crawler->filter('#sections')->text());
-        $this->assertContains('Insights', $crawler->filter('#sections')->text());
-        $this->assertContains('Feature Articles', $crawler->filter('#sections')->text());
-        $this->assertContains('Podcast', $crawler->filter('#sections')->text());
-        $this->assertContains('Collections', $crawler->filter('#sections')->text());
-        $this->assertContains('Community', $crawler->filter('#sections')->text());
+
+        $sections = $crawler->filter('.section-listing__list_item');
+
+        $this->assertCount(6, $sections);
+        $this->assertSame('Editorials', trim($sections->eq(0)->text()));
+        $this->assertSame('Insights', trim($sections->eq(1)->text()));
+        $this->assertSame('Feature Articles', trim($sections->eq(2)->text()));
+        $this->assertSame('Podcasts', trim($sections->eq(3)->text()));
+        $this->assertSame('Collections', trim($sections->eq(4)->text()));
+        $this->assertSame('Community', trim($sections->eq(5)->text()));
     }
 
     /**
