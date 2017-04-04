@@ -4,8 +4,8 @@ namespace eLife\Journal\Controller;
 
 use eLife\ApiSdk\Collection\Sequence;
 use eLife\Journal\Helper\Callback;
-use eLife\Journal\Helper\Paginator;
 use eLife\Journal\Helper\ModelName;
+use eLife\Journal\Helper\Paginator;
 use eLife\Journal\Pagerfanta\SequenceAdapter;
 use eLife\Patterns\ViewModel\AudioPlayer;
 use eLife\Patterns\ViewModel\BackgroundImage;

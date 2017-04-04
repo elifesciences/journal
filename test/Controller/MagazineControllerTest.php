@@ -39,8 +39,6 @@ final class MagazineControllerTest extends PageTestCase
         $this->assertContains('Podcast', $crawler->filter('#sections')->text());
         $this->assertContains('Collections', $crawler->filter('#sections')->text());
         $this->assertContains('Community', $crawler->filter('#sections')->text());
-
-
     }
 
     /**
