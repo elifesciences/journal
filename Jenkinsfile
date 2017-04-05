@@ -14,10 +14,13 @@ elifePipeline {
 
     elifeMainlineOnly {
         stage 'End2end tests', {
-            elifeEnd2EndTest {
-                builderDeployRevision 'journal--end2end', commit
-                builderSmokeTests 'journal--end2end', '/srv/journal'
-            }
+            elifeSpectrum(
+                deploy: [
+                    stackname: 'journal--end2end',
+                    revision: commit,
+                    folder: '/srv/journal'
+                ]
+            )
         }
 
         stage 'Deploy on demo', {
