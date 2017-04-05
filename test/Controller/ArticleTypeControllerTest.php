@@ -18,7 +18,7 @@ final class ArticleTypeControllerTest extends PageTestCase
         $crawler = $client->request('GET', $this->getUrl());
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
-        $this->assertSame('Research articles', $crawler->filter('.content-header__title')->text());
+        $this->assertSame('Research Articles', $crawler->filter('.content-header__title')->text());
         $this->assertContains('No articles available.', $crawler->filter('main')->text());
     }
 
@@ -33,10 +33,10 @@ final class ArticleTypeControllerTest extends PageTestCase
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
 
-        $this->assertSame('Research articles | eLife', $crawler->filter('title')->text());
+        $this->assertSame('Research Articles | eLife', $crawler->filter('title')->text());
         $this->assertSame('/articles/research-article', $crawler->filter('link[rel="canonical"]')->attr('href'));
         $this->assertSame('http://localhost/articles/research-article', $crawler->filter('meta[property="og:url"]')->attr('content'));
-        $this->assertSame('Research articles', $crawler->filter('meta[property="og:title"]')->attr('content'));
+        $this->assertSame('Research Articles', $crawler->filter('meta[property="og:title"]')->attr('content'));
         $this->assertSame('summary', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
     }
 

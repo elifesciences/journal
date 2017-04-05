@@ -16,44 +16,44 @@ final class ModelName
             'plural' => 'Editorials',
         ],
         'feature' => [
-            'singular' => 'Feature article',
-            'plural' => 'Feature articles',
+            'singular' => 'Feature Article',
+            'plural' => 'Feature Articles',
         ],
         'insight' => [
             'singular' => 'Insight',
             'plural' => 'Insights',
         ],
         'research-advance' => [
-            'singular' => 'Research advance',
-            'plural' => 'Research advances',
+            'singular' => 'Research Advance',
+            'plural' => 'Research Advances',
         ],
         'research-article' => [
-            'singular' => 'Research article',
-            'plural' => 'Research articles',
+            'singular' => 'Research Article',
+            'plural' => 'Research Articles',
         ],
         'research-exchange' => [
-            'singular' => 'Research exchange',
-            'plural' => 'Research exchanges',
+            'singular' => 'Research Exchange',
+            'plural' => 'Research Exchanges',
         ],
         'retraction' => [
             'singular' => 'Retraction',
             'plural' => 'Retractions',
         ],
         'registered-report' => [
-            'singular' => 'Registered report',
-            'plural' => 'Registered reports',
+            'singular' => 'Registered Report',
+            'plural' => 'Registered Reports',
         ],
         'replication-study' => [
-            'singular' => 'Replication study',
-            'plural' => 'Replication studies',
+            'singular' => 'Replication Study',
+            'plural' => 'Replication Studies',
         ],
         'short-report' => [
-            'singular' => 'Short report',
-            'plural' => 'Short reports',
+            'singular' => 'Short Report',
+            'plural' => 'Short Reports',
         ],
         'tools-resources' => [
-            'singular' => 'Tools and resources',
-            'plural' => 'Tools and resources',
+            'singular' => 'Tools and Resources',
+            'plural' => 'Tools and Resources',
         ],
         'blog-article' => [
             'singular' => 'Inside eLife',

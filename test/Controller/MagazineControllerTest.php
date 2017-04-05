@@ -25,6 +25,28 @@ final class MagazineControllerTest extends PageTestCase
     /**
      * @test
      */
+    public function it_displays_the_magazine_navigation()
+    {
+        $client = static::createClient();
+
+        $crawler = $client->request('GET', $this->getUrl());
+
+        $this->assertSame(200, $client->getResponse()->getStatusCode());
+
+        $sections = $crawler->filter('.section-listing__list_item');
+
+        $this->assertCount(6, $sections);
+        $this->assertSame('Editorials', trim($sections->eq(0)->text()));
+        $this->assertSame('Insights', trim($sections->eq(1)->text()));
+        $this->assertSame('Feature Articles', trim($sections->eq(2)->text()));
+        $this->assertSame('Podcasts', trim($sections->eq(3)->text()));
+        $this->assertSame('Collections', trim($sections->eq(4)->text()));
+        $this->assertSame('Community', trim($sections->eq(5)->text()));
+    }
+
+    /**
+     * @test
+     */
     public function it_has_metadata()
     {
         $client = static::createClient();
