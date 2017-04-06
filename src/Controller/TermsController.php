@@ -54,7 +54,7 @@ final class TermsController extends Controller
                     $this->render(
                         new Paragraph('Unless otherwise indicated, the articles and journal content published by
                           eLife on the eLife Sites are licensed under a <a
-                            href="http://creativecommons.org/licenses/by/4.0/">Creative Commons
+                            href="https://creativecommons.org/licenses/by/4.0/">Creative Commons
                             Attribution license</a> (also known as a CC-BY license). This means that you
                           are free to use, reproduce and distribute the articles and related content
                           (unless otherwise noted), for commercial and noncommercial purposes, subject
@@ -311,7 +311,7 @@ final class TermsController extends Controller
                 ).
                 $this->render(ArticleSection::basic('Cookies', 3,
                         $this->render(
-                            new Paragraph('A cookie is a string of information that a Website stores on a visitor&rsquo;s computer, and that the visitor&rsquo;s browser provides to the Website each time the visitor returns. eLife uses cookies to help eLife identify and track visitors, their usage of eLife Website, and their Website access preferences. eLife visitors who do not wish to have cookies placed on their computers should set their browsers to refuse cookies before using eLife&rsquo;s Websites, with the drawback that certain features of eLife&rsquo;s Websites may not function properly without the aid of cookies. You can modify your browser settings to notify you each time a cookie is sent to it and you can decide whether or not to accept. Alternatively, you can set your browser to refuse all cookies. Cookies that have already been set can be deleted at any time using your browser settings. The independent website at <a href="http://www.aboutcookies.org/">www.aboutcookies.org</a> contains comprehensive information on how to modify your browser settings.')
+                            new Paragraph('A cookie is a string of information that a Website stores on a visitor&rsquo;s computer, and that the visitor&rsquo;s browser provides to the Website each time the visitor returns. eLife uses cookies to help eLife identify and track visitors, their usage of eLife Website, and their Website access preferences. eLife visitors who do not wish to have cookies placed on their computers should set their browsers to refuse cookies before using eLife&rsquo;s Websites, with the drawback that certain features of eLife&rsquo;s Websites may not function properly without the aid of cookies. You can modify your browser settings to notify you each time a cookie is sent to it and you can decide whether or not to accept. Alternatively, you can set your browser to refuse all cookies. Cookies that have already been set can be deleted at any time using your browser settings. The independent website at <a href="https://www.aboutcookies.org/">www.aboutcookies.org</a> contains comprehensive information on how to modify your browser settings.')
                         )
                     )
                 ).
@@ -335,7 +335,7 @@ final class TermsController extends Controller
                 ).
                 $this->render(ArticleSection::basic('Privacy policy attribution and reuse', 3,
                         $this->render(
-                            new Paragraph('This policy is based on the one developed by <a href="http://automattic.com/privacy/" target="_blank">Automattic.com</a> and made available under a <a href="http://creativecommons.org/licenses/by-sa/3.0/" target="_blank">CC-SA license</a>.')
+                            new Paragraph('This policy is based on the one developed by <a href="https://automattic.com/privacy/">Automattic.com</a> and made available under a <a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-SA license</a>.')
                         )
                     )
                 )
