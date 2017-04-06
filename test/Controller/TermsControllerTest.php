@@ -15,6 +15,14 @@ final class TermsControllerTest extends PageTestCase
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertSame('Terms and policy', $crawler->filter('.content-header__title')->text());
+
+        $majorSections = $crawler->filter('h2.article-section__header_text');
+
+        $this->assertCount(2, $majorSections);
+
+        $this->assertSame('Terms and Conditions of Use', trim($majorSections->eq(0)->text()));
+        $this->assertSame('Privacy Policy', trim($majorSections->eq(1)->text()));
+
     }
 
     /**
