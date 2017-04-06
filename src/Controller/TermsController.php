@@ -26,7 +26,7 @@ final class TermsController extends Controller
                         new Paragraph('eLife Sciences Publications, Ltd. ("eLife") is a 501(c)(3) nonprofit
                           initiative for the very best in science and science communication. In
                           furtherance of our mission, eLife operates websites, including the websites at
-                          elife.elifesciences.org, submit.elifesciences.org, www.elifesciences.org and
+                          elifesciences.org, submit.elifesciences.org, payments.elifesciences.org and
                           other eLife websites (the "eLife Sites"). We offer use of the eLife journal
                           content free of charge to the public through the eLife Sites. Access to and
                           use of the eLife Sites is provided by eLife subject to the following Terms and
