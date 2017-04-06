@@ -79,8 +79,8 @@ final class LabsController extends Controller
             ));
 
         $arguments['leadParas'] = new LeadParas([
-            new LeadPara('In eLife Labs, explore open-source solutions developed at the intersection of research and technology.
-Learn more about our focus on <a href="'.$this->get('router')->generate('about-innovation').'">innovation at eLife</a>.'),
+            new LeadPara('Exploring open-source solutions at the intersection of research and technology.
+Learn more about <a href="'.$this->get('router')->generate('about-innovation').'">innovation at eLife</a>, or follow us on <a href="https://twitter.com/eLifeInnovation">Twitter</a>.'),
         ]);
 
         return new Response($this->get('templating')->render('::labs.html.twig', $arguments));
