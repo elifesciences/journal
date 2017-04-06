@@ -313,7 +313,7 @@ final class ArticlesController extends Controller
                     );
                 }
 
-                if ($article instanceof ArticleVoR && $article->getReviewers()->notEmpty()) {
+                if ($article->getReviewers()->notEmpty()) {
                     $infoSections[] = ArticleSection::basic(
                         'Reviewing Editor',
                         3,
