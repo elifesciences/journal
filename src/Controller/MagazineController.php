@@ -85,9 +85,9 @@ final class MagazineController extends Controller
             ->get('magazine')
             ->slice(0, 6)
             ->map($this->willConvertTo(Teaser::class, ['variant' => 'secondary']))
-            ->then(function (Sequence $highlights) {
+            ->then(Callback::emptyOr(function (Sequence $highlights) {
                 return ListingTeasers::forHighlights($highlights->toArray(), 'Highlights', 'highlights');
-            })
+            }))
             ->otherwise($this->softFailure('Failed to load highlights for magazine'));
 
         $events = $this->get('elife.api_sdk.events')

@@ -159,7 +159,8 @@ final class AboutController extends Controller
 
         $arguments['title'] = 'People';
 
-        $arguments['contentHeader'] = ContentHeaderNonArticle::basic($arguments['title']);
+        $arguments['contentHeader'] = ContentHeaderNonArticle::basic($arguments['title'], false,
+            'The working scientists who serve as eLife editors, our early-career advisors, governing board, and our executive staff all work in concert to realise eLife’s mission to accelerate discovery');
 
         return new Response($this->get('templating')->render('::about-people.html.twig', $arguments));
     }
