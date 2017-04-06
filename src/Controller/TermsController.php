@@ -70,8 +70,8 @@ final class TermsController extends Controller
                       website. As a condition to your use of the eLife Sites, you agree not to:')
                 ).
                 $this->render(
-                      Listing::unordered([
-                          'upload, post, e-mail, transmit, or otherwise make available any
+                    Listing::unordered([
+                        'upload, post, e-mail, transmit, or otherwise make available any
                             information, materials, or other content that is illegal, harmful,
                             threatening, abusive, harassing, defamatory, obscene, pornographic, or
                             offensive; or that infringes another&apos;s rights, including any intellectual
@@ -87,7 +87,7 @@ final class TermsController extends Controller
                         'use the eLife Sites for any illegal or unauthorized purpose. You must not,
                           in the use of the eLife Sites, violate any US laws or laws in your
                           jurisdiction (including but not limited to copyright laws).',
-                      ], 'bullet')
+                    ], 'bullet')
                 )
             ),
             ArticleSection::basic('Suspension of Use / Violation of these Terms and Conditions', 3,
@@ -167,8 +167,8 @@ final class TermsController extends Controller
                           trademark rights, or breach of any other intellectual property rights of
                           whatsoever nature, or rights similar thereto anywhere in the world,
                           belonging to any other person, or any allegation of any of the foregoing.',
-                        ], 'bullet')
-                    )
+                    ], 'bullet')
+                )
             ),
             ArticleSection::basic('Interactive Features', 3,
                 $this->render(
