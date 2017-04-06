@@ -25,6 +25,7 @@ trait AuthorDetailsConverter
                     }, $author->getPhoneNumbers())
                 ),
                 'Competing interests' => $author->getCompetingInterests() ?? 'No competing interests declared.',
+                'Additional information' => $author->getAdditionalInformation(),
             ]
         );
     }
