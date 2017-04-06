@@ -68,7 +68,7 @@ final class TermsController extends Controller
                       distress or inconvenience to any person and the transmission of obscene or
                       offensive content or disruption of normal flow of dialogue within this
                       website. As a condition to your use of the eLife Sites, you agree not to:')
-                ) .
+                ).
                 $this->render(
                       Listing::unordered([
                           'upload, post, e-mail, transmit, or otherwise make available any
@@ -155,7 +155,7 @@ final class TermsController extends Controller
                       APIs, and content on the eLife Sites, and for the results of any action you
                       may take based on the material contained herein, and from any consequences of
                       the following:')
-                ) .
+                ).
                 $this->render(
                     Listing::unordered([
                         'your failure to comply with any of these Terms and Conditions;',
@@ -303,7 +303,7 @@ final class TermsController extends Controller
             ArticleSection::basic('Privacy policy changes', 3,
                 $this->render(
                     new Paragraph('Although most changes are likely to be minor, eLife may change its Privacy Policy from time to time, and at eLife&rsquo;s sole discretion. eLife encourages visitors to frequently check this page for any changes to its Privacy Policy. Your continued use of this site after any change in this Privacy Policy will constitute your acceptance of such change. <em>First published March 30, 2012.</em> Change log:')
-                ) .
+                ).
                 $this->render(
                     Listing::unordered([
                         'Added para&#39;s 2-3 on cookies (5 Dec, 12)',

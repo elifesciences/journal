@@ -22,7 +22,6 @@ final class TermsControllerTest extends PageTestCase
 
         $this->assertSame('Terms and Conditions of Use', trim($majorSections->eq(0)->text()));
         $this->assertSame('Privacy Policy', trim($majorSections->eq(1)->text()));
-
     }
 
     /**
