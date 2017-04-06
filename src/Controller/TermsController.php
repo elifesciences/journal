@@ -204,7 +204,7 @@ final class TermsController extends Controller
                 ).
                 $this->render(ArticleSection::basic('Links to Other Websites and Resources', 3,
                         $this->render(
-                            new Paragraph('Ihe eLife Sites may provide links to other websites or resources. Because
+                            new Paragraph('The eLife Sites may provide links to other websites or resources. Because
                               eLife has no control over such sites and resources, you acknowledge and agree
                               that eLife is not responsible for the availability of such external sites or
                               resources, and does not endorse and is not responsible or liable for any
@@ -323,7 +323,7 @@ final class TermsController extends Controller
                 ).
                 $this->render(ArticleSection::basic('Privacy policy changes', 3,
                         $this->render(
-                            new Paragraph('Although most changes are likely to be minor, eLife may change its Privacy Policy from time to time, and at eLife&rsquo;s sole discretion. eLife encourages visitors to frequently check this page for any changes to its Privacy Policy. Your continued use of this site after any change in this Privacy Policy will constitute your acceptance of such change. <em>First published March 30, 2012.</em> Change log:')
+                            new Paragraph('Although most changes are likely to be minor, eLife may change its Privacy Policy from time to time, and at eLife&rsquo;s sole discretion. eLife encourages visitors to frequently check this page for any changes to its Privacy Policy. Your continued use of this site after any change in this Privacy Policy will constitute your acceptance of such change. <i>First published March 30, 2012.</i> Change log:')
                         ).
                         $this->render(
                             Listing::unordered([
