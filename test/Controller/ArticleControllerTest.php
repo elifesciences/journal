@@ -656,6 +656,33 @@ final class ArticleControllerTest extends PageTestCase
                             ],
                         ],
                     ],
+                    'reviewers' => [
+                        [
+                            'name' => [
+                                'preferred' => 'Reviewer 1',
+                                'index' => 'Reviewer 1',
+                            ],
+                            'role' => 'role',
+                            'affiliations' => [
+                                [
+                                    'name' => ['Institution'],
+                                    'address' => [
+                                        'formatted' => ['Country'],
+                                        'components' => [
+                                            'country' => 'Country',
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                        [
+                            'name' => [
+                                'preferred' => 'Reviewer 2',
+                                'index' => 'Reviewer 2',
+                            ],
+                            'role' => 'role',
+                        ],
+                    ],
                 ])
             )
         );
@@ -715,12 +742,15 @@ final class ArticleControllerTest extends PageTestCase
 
         $articleInfo = $crawler->filter('main > .wrapper > div > div > section:nth-of-type(1) > div > section');
 
-        $publicationHistory = $articleInfo->eq(0);
+        $reviewers = $articleInfo->eq(0);
+        $this->assertSame('Reviewing Editor', $reviewers->filter('header > h3')->text());
+
+        $publicationHistory = $articleInfo->eq(1);
         $this->assertSame('Publication history', $publicationHistory->filter('header > h3')->text());
         $this->assertCount(1, $publicationHistory->filter('ol')->children());
         $this->assertSame('Accepted Manuscript published: January 1, 2010 (version 1)', $publicationHistory->filter('ol')->children()->eq(0)->text());
 
-        $copyright = $articleInfo->eq(1);
+        $copyright = $articleInfo->eq(2);
         $this->assertSame('Copyright', $copyright->filter('header > h3')->text());
         $this->assertContains('© 2012, Author One', $copyright->filter('div')->text());
         $this->assertContains('Copyright statement.', $copyright->filter('div')->text());
