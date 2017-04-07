@@ -32,6 +32,8 @@ final class AlertsControllerTest extends PageTestCase
         $this->assertSame('/alerts', $crawler->filter('link[rel="canonical"]')->attr('href'));
         $this->assertSame('http://localhost/alerts', $crawler->filter('meta[property="og:url"]')->attr('content'));
         $this->assertSame('Alerts', $crawler->filter('meta[property="og:title"]')->attr('content'));
+        $this->assertSame('Stay in touch with eLife efforts to support the community and open science as well as new research. Choose your feeds and preferred ways to connect below.', $crawler->filter('meta[property="og:description"]')->attr('content'));
+        $this->assertSame('Stay in touch with eLife efforts to support the community and open science as well as new research. Choose your feeds and preferred ways to connect below.', $crawler->filter('meta[name="description"]')->attr('content'));
         $this->assertSame('summary', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
     }
 
