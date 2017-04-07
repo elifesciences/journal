@@ -18,6 +18,12 @@ final class FooterFactory
 
     public function createFooter() : Footer
     {
+        $now = time();
+        $year = gmdate('Y', $now);
+        if (1 == gmdate('n', $now)) {
+            --$year;
+        }
+
         return new Footer(
             new MainMenu([
                 new Link('Research categories', $this->urlGenerator->generate('subjects')),
@@ -38,7 +44,7 @@ final class FooterFactory
                 new Link('Terms and policy', $this->urlGenerator->generate('terms')),
                 new Link('Inside eLife', $this->urlGenerator->generate('inside-elife')),
                 new Link('Monthly archive',
-                    $this->urlGenerator->generate('archive-year', ['year' => (date('Y', time()) - 1)])),
+                    $this->urlGenerator->generate('archive-year', ['year' => $year])),
                 new Link('Labs', $this->urlGenerator->generate('labs')),
                 new Link('For the press', $this->urlGenerator->generate('press-packs')),
                 new Link('Resources', $this->urlGenerator->generate('resources')),
