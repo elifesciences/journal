@@ -224,8 +224,8 @@ final class ArchiveController extends Controller
 
     private function getMaxYear() : int
     {
-        $currentYear = (int) date('Y', time());
-        $currentMonth = (int) date('n', time());
+        $currentYear = (int) gmdate('Y', time());
+        $currentMonth = (int) gmdate('n', time());
 
         return 1 === $currentMonth ? $currentYear - 1 : $currentYear;
     }
@@ -237,8 +237,8 @@ final class ArchiveController extends Controller
 
     private function getMaxMonth(int $year) : int
     {
-        $currentYear = (int) date('Y', time());
-        $currentMonth = (int) date('n', time());
+        $currentYear = (int) gmdate('Y', time());
+        $currentMonth = (int) gmdate('n', time());
 
         return $currentYear === $year ? $currentMonth - 1 : 12;
     }
