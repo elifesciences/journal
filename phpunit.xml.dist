@@ -27,8 +27,14 @@
             <arguments>
                 <array>
                     <element key="time-sensitive">
-                        <string>eLife\Journal\Controller</string>
-                        <string>eLife\Journal\ViewModel</string>
+                        <array>
+                            <element>
+                                <string>eLife\Journal\Controller</string>
+                            </element>
+                            <element>
+                                <string>eLife\Journal\ViewModel\Factory</string>
+                            </element>
+                        </array>
                     </element>
                 </array>
             </arguments>

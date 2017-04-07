@@ -36,10 +36,10 @@ final class FooterFactoryTest extends KernelTestCase
     /**
      * @test
      * @dataProvider yearProvider
+     * @group        time-sensitive
      */
     public function it_includes_a_link_to_the_latest_year_in_the_archive(string $today, string $expected)
     {
-        ClockMock::register(FooterFactory::class);
         ClockMock::withClockMock(strtotime($today));
 
         $footer = $this->footerFactory->createFooter();
