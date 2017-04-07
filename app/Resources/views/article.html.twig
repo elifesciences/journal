@@ -21,12 +21,12 @@
         <meta name="DC.Title" content="{{ article.fullTitle|striptags }}">
         <meta name="DC.Identifier" content="{{ article.doi }}">
         {% if article.publishedDate %}
-            <meta name="DC.Date" content="{{ article.publishedDate|date('Y-m-d') }}">
+            <meta name="DC.Date" content="{{ article.publishedDate|date('Y-m-d', 'UTC') }}">
         {% endif %}
         <meta name="DC.Publisher" content="eLife Sciences Publications Limited">
 
         <meta name="DC.Rights" content="
-            {%- if article.copyright.holder -%}© {{ article.publishedDate|date('Y') }} {{ article.copyright.holder }}. {% endif -%}
+            {%- if article.copyright.holder -%}© {{ article.publishedDate|date('Y', 'UTC') }} {{ article.copyright.holder }}. {% endif -%}
             {{- article.copyright.statement|striptags -}}
         ">
 
@@ -63,7 +63,7 @@
 
         <meta name="citation_title" content="{{ article.fullTitle|striptags }}">
         <meta name="citation_id"
-              content="eLife {{ article.publishedDate|date('Y') }};{{ article.volume }}:{{ article.eLocationId }}">
+              content="eLife {{ article.publishedDate|date('Y', 'UTC') }};{{ article.volume }}:{{ article.eLocationId }}">
         <meta name="citation_firstpage" content="{{ article.eLocationId }}">
         <meta name="citation_public_url" content="{{ url('article', {volume: article.volume, id: article.id}) }}">
         <meta name="citation_pdf_url" content="{{ article.pdf }}">
@@ -73,7 +73,7 @@
             <meta name="citation_issue" content="{{ article.issue }}">
         {% endif %}
         {% if article.publishedDate %}
-            <meta name="citation_publication_date" content="{{ article.publishedDate|date('Y/m/d') }}">
+            <meta name="citation_publication_date" content="{{ article.publishedDate|date('Y/m/d', 'UTC') }}">
         {% endif %}
 
         {% if article.funding is defined and article.funding %}

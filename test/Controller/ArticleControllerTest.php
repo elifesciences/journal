@@ -1132,6 +1132,8 @@ final class ArticleControllerTest extends PageTestCase
 
         $this->assertSame('Title prefix: Article title', $crawler->filter('meta[name="citation_title"]')->attr('content'));
         $this->assertSame('10.7554/eLife.00001', $crawler->filter('meta[name="citation_doi"]')->attr('content'));
+        $this->assertSame('eLife 2007;1:e00001', $crawler->filter('meta[name="citation_id"]')->attr('content'));
+        $this->assertSame('2007/01/01', $crawler->filter('meta[name="citation_publication_date"]')->attr('content'));
         $this->assertCount(2, $crawler->filter('meta[name="citation_author"]'));
         $this->assertCount(1, $crawler->filter('meta[name="citation_reference"]'));
 
