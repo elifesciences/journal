@@ -10,9 +10,9 @@ volume = {{ article.volume }},
 {% if article.issue %}
 number = {{ article.issue }},
 {% endif %}
-year = {{ article.publishedDate|date('Y') }},
-month = {{ '{' }}{{ article.publishedDate|date('M')|lower }}{{ '}' }},
-pub_date = {{ '{' }}{{ article.publishedDate|date('Y-m-d') }}{{ '}' }},
+year = {{ article.publishedDate|date('Y', 'UTC') }},
+month = {{ '{' }}{{ article.publishedDate|date('M', 'UTC')|lower }}{{ '}' }},
+pub_date = {{ '{' }}{{ article.publishedDate|date('Y-m-d', 'UTC') }}{{ '}' }},
 pages = {{ '{' }}{{ article.eLocationId }}{{ '}' }},
 citation = {{ '{' }}{{ article.citeAs }}{{ '}' }},
 doi = {{ '{' }}{{ article.doi }}{{ '}' }},

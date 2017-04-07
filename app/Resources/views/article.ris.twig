@@ -17,8 +17,8 @@ VL  - {{ article.volume }}
 {% if article.issue %}
 IS  - {{ article.issue }}
 {% endif %}
-PY  - {{ article.publishedDate|date('Y') }}
-DA  - {{ article.publishedDate|date('Y/m/d') }}
+PY  - {{ article.publishedDate|date('Y', 'UTC') }}
+DA  - {{ article.publishedDate|date('Y/m/d', 'UTC') }}
 SP  - {{ article.eLocationId }}
 C1  - {{ article.citeAs }}
 DO  - {{ article.doi }}

@@ -13,7 +13,7 @@ final class ArchiveMonthControllerTest extends PageTestCase
 {
     public function setUp()
     {
-        ClockMock::withClockMock(strtotime('2016-01-01 00:00:00'));
+        ClockMock::withClockMock(strtotime('2016-01-01T00:00:00Z'));
     }
 
     /**
