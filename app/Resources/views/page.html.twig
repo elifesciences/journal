@@ -96,8 +96,7 @@
     {% endblock %}
 
     <!--[if lt IE 9]>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"
-            integrity="sha256-3Jy/GbSLrg0o9y5Z5n1uw0qxZECH7C6OQpVBgNFYa0g=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
     <script>document.createElement('picture');</script>
     <![endif]-->
 
@@ -113,6 +112,8 @@
             var wf = d.createElement("script");
             var s = d.scripts[0];
             wf.src = "https://ajax.googleapis.com/ajax/libs/webfont/1.6.16/webfont.js";
+            wf.integrity = 'sha384-0bIyOfFEbXDmR9pWVT6PKyzSRIx8gTXuOsrfXQA51wfXn3LRXt+ih6riwq9Zv2yn';
+            wf.crossOrigin = 'anonymous';
             s.parentNode.insertBefore(wf, s);
         })(document);
     </script>

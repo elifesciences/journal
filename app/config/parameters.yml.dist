@@ -15,3 +15,5 @@ parameters:
     disqus_domain: elifesciences
     trusted_hosts:
       - .*\.?elifesciences.org$
+    status_checks:
+        Articles: articles
