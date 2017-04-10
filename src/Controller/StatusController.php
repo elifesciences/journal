@@ -15,7 +15,6 @@ final class StatusController extends Controller
 {
     const STATUS_OK = 'ok';
     const STATUS_FAILING = 'failing';
-    const STATUS_UNKNOWN = 'unknown';
 
     public function pingAction() : Response
     {
@@ -24,46 +23,9 @@ final class StatusController extends Controller
 
     public function statusAction() : Response
     {
-        $requests = [
-            'Annual reports' => $this->get('elife.api_sdk.annual_reports')->slice(0, 1),
-            'Articles' => $article = $this->get('elife.api_sdk.articles')->reverse()->slice(0, 1),
-            'Inside eLife' => $this->get('elife.api_sdk.blog_articles')->slice(0, 1),
-            'Collections' => $this->get('elife.api_sdk.collections')->slice(0, 1),
-            'Covers' => $this->get('elife.api_sdk.covers')->slice(0, 1),
-            'Events' => $this->get('elife.api_sdk.events')->slice(0, 1),
-            'Interviews' => $this->get('elife.api_sdk.interviews')->slice(0, 1),
-            'Labs' => $this->get('elife.api_sdk.labs_experiments')->slice(0, 1),
-            'Medium' => $this->get('elife.api_sdk.medium_articles')->slice(0, 1),
-            'Metrics' => $article->then(Callback::method('offsetGet', 0))
-                ->then(Callback::emptyOr(function (ArticleVersion $article) {
-                    return $this->get('elife.api_sdk.metrics')->totalPageViews('article', $article->getId());
-                }), function () {
-                    return null;
-                })
-                ->otherwise(function ($reason) {
-                    if ($reason instanceof BadResponse && in_array($reason->getResponse()->getStatusCode(), [404, 410])) {
-                        return null;
-                    }
-
-                    return rejection_for($reason);
-                }),
-            'Podcast' => $this->get('elife.api_sdk.podcast_episodes')->slice(0, 1),
-            'Recommendations' => $article->then(Callback::method('offsetGet', 0))
-                ->then(Callback::emptyOr(function (ArticleVersion $article) {
-                    return $this->get('elife.api_sdk.recommendations')->list('article', $article->getId())->slice(0, 1);
-                }), function () {
-                    return null;
-                })
-                ->otherwise(function ($reason) {
-                    if ($reason instanceof BadResponse && in_array($reason->getResponse()->getStatusCode(), [404, 410])) {
-                        return null;
-                    }
-
-                    return rejection_for($reason);
-                }),
-            'Search' => $this->get('elife.api_sdk.search')->slice(0, 1),
-            'Subjects' => $this->get('elife.api_sdk.subjects')->slice(0, 1),
-        ];
+        $requests = array_map(function (string $uri) {
+            return $this->get('csa_guzzle.client.elife_api')->requestAsync('GET', $uri, ['headers' => ['Cache-Control' => 'no-cache, no-store']]);
+        }, $this->getParameter('status_checks'));
 
         try {
             all($requests)->wait();
@@ -76,17 +38,7 @@ final class StatusController extends Controller
 
         foreach ($requests as $name => $request) {
             $requests[$name] = $request
-                ->then(function ($check) use ($name) {
-                    if (null === $check) {
-                        $this->get('logger')->warning("$name status check not possible");
-
-                        return [
-                            'name' => $name,
-                            'status' => self::STATUS_UNKNOWN,
-                            'message' => 'Unknown',
-                        ];
-                    }
-
+                ->then(function () use ($name) {
                     return [
                         'name' => $name,
                         'status' => self::STATUS_OK,
