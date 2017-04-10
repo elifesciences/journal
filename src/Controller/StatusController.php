@@ -2,14 +2,10 @@
 
 namespace eLife\Journal\Controller;
 
-use eLife\ApiClient\Exception\BadResponse;
-use eLife\ApiSdk\Model\ArticleVersion;
-use eLife\Journal\Helper\Callback;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 use function GuzzleHttp\Promise\all;
 use function GuzzleHttp\Promise\exception_for;
-use function GuzzleHttp\Promise\rejection_for;
 
 final class StatusController extends Controller
 {
