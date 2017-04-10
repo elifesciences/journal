@@ -7,6 +7,9 @@ parameters:
     api_url_public: http://api.elifesciences.org/
     api_mock: '%kernel.cache_dir%/guzzle/fixtures'
     crm_url: http://crm.elifesciences.org/crm/civicrm/
+    status_checks:
+        Check 1: foo
+        Check 2: bar
 
 framework:
     cache:
