@@ -9,6 +9,7 @@ use eLife\ApiSdk\Model\PodcastEpisode;
 use eLife\ApiSdk\Model\PodcastEpisodeChapterModel;
 use eLife\ApiSdk\Model\Subject;
 use eLife\Journal\Helper\Callback;
+use eLife\Journal\Helper\CreatesIiifUri;
 use eLife\Journal\Helper\Paginator;
 use eLife\Journal\Pagerfanta\SequenceAdapter;
 use eLife\Patterns\ViewModel\BackgroundImage;
@@ -28,6 +29,8 @@ use function GuzzleHttp\Promise\promise_for;
 
 final class SubjectsController extends Controller
 {
+    use CreatesIiifUri;
+
     public function listAction(Request $request) : Response
     {
         $arguments = $this->defaultPageArguments($request);
@@ -46,8 +49,8 @@ final class SubjectsController extends Controller
                         $this->get('router')->generate('subject', ['id' => $subject->getId()])
                     ),
                     new BackgroundImage(
-                        $subject->getThumbnail()->getSize('16:9')->getImage(250),
-                        $subject->getThumbnail()->getSize('16:9')->getImage(500),
+                        $this->iiifUri($subject->getThumbnail(), 500, 281),
+                        $this->iiifUri($subject->getThumbnail(), 250, 141),
                         600
                     )
                 );
