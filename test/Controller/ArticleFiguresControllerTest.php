@@ -348,13 +348,35 @@ final class ArticleFiguresControllerTest extends PageTestCase
                                     'id' => 'image1',
                                     'label' => 'Image 1 label',
                                     'title' => 'Image 1 title',
-                                    'alt' => '',
-                                    'uri' => 'https://placehold.it/900x450',
+                                    'image' => [
+                                        'uri' => 'https://www.example.com/iiif/image',
+                                        'alt' => '',
+                                        'source' => [
+                                            'mediaType' => 'image/jpeg',
+                                            'uri' => 'https://www.example.com/image.jpg',
+                                            'filename' => 'image.jpg',
+                                        ],
+                                        'size' => [
+                                            'width' => 800,
+                                            'height' => 600,
+                                        ],
+                                    ],
                                 ],
                                 [
                                     'type' => 'image',
-                                    'alt' => '',
-                                    'uri' => 'https://placehold.it/900x450',
+                                    'image' => [
+                                        'uri' => 'https://www.example.com/iiif/image',
+                                        'alt' => '',
+                                        'source' => [
+                                            'mediaType' => 'image/jpeg',
+                                            'uri' => 'https://www.example.com/image.jpg',
+                                            'filename' => 'image.jpg',
+                                        ],
+                                        'size' => [
+                                            'width' => 800,
+                                            'height' => 600,
+                                        ],
+                                    ],
                                 ],
                                 [
                                     'type' => 'section',
@@ -371,7 +393,19 @@ final class ArticleFiguresControllerTest extends PageTestCase
                                                     'uri' => 'https://placehold.it/900x450',
                                                 ],
                                             ],
-                                            'image' => 'https://placehold.it/900x450',
+                                            'placeholder' => [
+                                                'uri' => 'https://www.example.com/iiif/image',
+                                                'alt' => '',
+                                                'source' => [
+                                                    'mediaType' => 'image/jpeg',
+                                                    'uri' => 'https://www.example.com/image.jpg',
+                                                    'filename' => 'image.jpg',
+                                                ],
+                                                'size' => [
+                                                    'width' => 800,
+                                                    'height' => 600,
+                                                ],
+                                            ],
                                             'width' => 900,
                                             'height' => 450,
                                         ],
@@ -380,8 +414,19 @@ final class ArticleFiguresControllerTest extends PageTestCase
                                             'id' => 'image2',
                                             'label' => 'Image 2 label',
                                             'title' => 'Image 2 title',
-                                            'alt' => '',
-                                            'uri' => 'https://placehold.it/900x450',
+                                            'image' => [
+                                                'uri' => 'https://www.example.com/iiif/image',
+                                                'alt' => '',
+                                                'source' => [
+                                                    'mediaType' => 'image/jpeg',
+                                                    'uri' => 'https://www.example.com/image.jpg',
+                                                    'filename' => 'image.jpg',
+                                                ],
+                                                'size' => [
+                                                    'width' => 800,
+                                                    'height' => 600,
+                                                ],
+                                            ],
                                             'sourceData' => [
                                                 [
                                                     'id' => 'image2-sd1',
@@ -397,8 +442,19 @@ final class ArticleFiguresControllerTest extends PageTestCase
                                                     'id' => 'image2s1',
                                                     'label' => 'Image 2 supplement 1 label',
                                                     'title' => 'Image 2 supplement 1 title',
-                                                    'alt' => '',
-                                                    'uri' => 'https://placehold.it/900x450',
+                                                    'image' => [
+                                                        'uri' => 'https://www.example.com/iiif/image',
+                                                        'alt' => '',
+                                                        'source' => [
+                                                            'mediaType' => 'image/jpeg',
+                                                            'uri' => 'https://www.example.com/image.jpg',
+                                                            'filename' => 'image.jpg',
+                                                        ],
+                                                        'size' => [
+                                                            'width' => 800,
+                                                            'height' => 600,
+                                                        ],
+                                                    ],
                                                     'sourceData' => [
                                                         [
                                                             'id' => 'image2s1-sd1',

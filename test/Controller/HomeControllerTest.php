@@ -293,25 +293,29 @@ final class HomeControllerTest extends PageTestCase
                             'impactStatement' => 'Subject impact statement.',
                             'image' => [
                                 'banner' => [
+                                    'uri' => 'https://www.example.com/iiif/image',
                                     'alt' => '',
-                                    'sizes' => [
-                                        '2:1' => [
-                                            900 => 'https://placehold.it/900x450',
-                                            1800 => 'https://placehold.it/1800x900',
-                                        ],
+                                    'source' => [
+                                        'mediaType' => 'image/jpeg',
+                                        'uri' => 'https://www.example.com/image.jpg',
+                                        'filename' => 'image.jpg',
+                                    ],
+                                    'size' => [
+                                        'width' => 800,
+                                        'height' => 600,
                                     ],
                                 ],
                                 'thumbnail' => [
+                                    'uri' => 'https://www.example.com/iiif/image',
                                     'alt' => '',
-                                    'sizes' => [
-                                        '16:9' => [
-                                            250 => 'https://placehold.it/250x141',
-                                            500 => 'https://placehold.it/500x281',
-                                        ],
-                                        '1:1' => [
-                                            70 => 'https://placehold.it/70x70',
-                                            140 => 'https://placehold.it/140x140',
-                                        ],
+                                    'source' => [
+                                        'mediaType' => 'image/jpeg',
+                                        'uri' => 'https://www.example.com/image.jpg',
+                                        'filename' => 'image.jpg',
+                                    ],
+                                    'size' => [
+                                        'width' => 800,
+                                        'height' => 600,
                                     ],
                                 ],
                             ],

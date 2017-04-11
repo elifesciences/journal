@@ -36,25 +36,29 @@ final class SubjectContext extends Context
                 'impactStatement' => 'Subject '.$i.' impact statement.',
                 'image' => [
                     'banner' => [
+                        'uri' => "https://www.example.com/iiif/banner$i",
                         'alt' => '',
-                        'sizes' => [
-                            '2:1' => [
-                                900 => 'https://placehold.it/900x450',
-                                1800 => 'https://placehold.it/1800x900',
-                            ],
+                        'source' => [
+                            'mediaType' => 'image/jpeg',
+                            'uri' => "https://www.example.com/banner$i.jpg",
+                            'filename' => "banner$i.jpg",
+                        ],
+                        'size' => [
+                            'width' => 800,
+                            'height' => 600,
                         ],
                     ],
                     'thumbnail' => [
+                        'uri' => "https://www.example.com/iiif/thumbnail$i",
                         'alt' => '',
-                        'sizes' => [
-                            '16:9' => [
-                                250 => 'https://placehold.it/250x141',
-                                500 => 'https://placehold.it/500x281',
-                            ],
-                            '1:1' => [
-                                70 => 'https://placehold.it/70x70',
-                                140 => 'https://placehold.it/140x140',
-                            ],
+                        'source' => [
+                            'mediaType' => 'image/jpeg',
+                            'uri' => "https://www.example.com/thumbnail$i.jpg",
+                            'filename' => "thumbnail$i.jpg",
+                        ],
+                        'size' => [
+                            'width' => 800,
+                            'height' => 600,
                         ],
                     ],
                 ],
@@ -105,25 +109,29 @@ final class SubjectContext extends Context
                     'impactStatement' => "$subject impact statement.",
                     'image' => [
                         'banner' => [
+                            'uri' => 'https://www.example.com/iiif/banner',
                             'alt' => '',
-                            'sizes' => [
-                                '2:1' => [
-                                    900 => 'https://placehold.it/900x450',
-                                    1800 => 'https://placehold.it/1800x900',
-                                ],
+                            'source' => [
+                                'mediaType' => 'image/jpeg',
+                                'uri' => 'https://www.example.com/banner.jpg',
+                                'filename' => 'banner.jpg',
+                            ],
+                            'size' => [
+                                'width' => 800,
+                                'height' => 600,
                             ],
                         ],
                         'thumbnail' => [
+                            'uri' => 'https://www.example.com/iiif/thumbnail',
                             'alt' => '',
-                            'sizes' => [
-                                '16:9' => [
-                                    250 => 'https://placehold.it/250x141',
-                                    500 => 'https://placehold.it/500x281',
-                                ],
-                                '1:1' => [
-                                    70 => 'https://placehold.it/70x70',
-                                    140 => 'https://placehold.it/140x140',
-                                ],
+                            'source' => [
+                                'mediaType' => 'image/jpeg',
+                                'uri' => 'https://www.example.com/thumbnail.jpg',
+                                'filename' => 'thumbnail.jpg',
+                            ],
+                            'size' => [
+                                'width' => 800,
+                                'height' => 600,
                             ],
                         ],
                     ],
@@ -156,25 +164,29 @@ final class SubjectContext extends Context
                 'published' => $today->format(ApiSdk::DATE_FORMAT),
                 'image' => [
                     'banner' => [
+                        'uri' => 'https://www.example.com/iiif/image',
                         'alt' => '',
-                        'sizes' => [
-                            '2:1' => [
-                                900 => 'https://placehold.it/900x450',
-                                1800 => 'https://placehold.it/1800x900',
-                            ],
+                        'source' => [
+                            'mediaType' => 'image/jpeg',
+                            'uri' => 'https://www.example.com/image.jpg',
+                            'filename' => 'image.jpg',
+                        ],
+                        'size' => [
+                            'width' => 800,
+                            'height' => 600,
                         ],
                     ],
                     'thumbnail' => [
+                        'uri' => 'https://www.example.com/iiif/image',
                         'alt' => '',
-                        'sizes' => [
-                            '16:9' => [
-                                250 => 'https://placehold.it/250x141',
-                                500 => 'https://placehold.it/500x281',
-                            ],
-                            '1:1' => [
-                                70 => 'https://placehold.it/70x70',
-                                140 => 'https://placehold.it/140x140',
-                            ],
+                        'source' => [
+                            'mediaType' => 'image/jpeg',
+                            'uri' => 'https://www.example.com/image.jpg',
+                            'filename' => 'image.jpg',
+                        ],
+                        'size' => [
+                            'width' => 800,
+                            'height' => 600,
                         ],
                     ],
                 ],
@@ -338,25 +350,29 @@ final class SubjectContext extends Context
                 'published' => $today->format(ApiSdk::DATE_FORMAT),
                 'image' => [
                     'banner' => [
+                        'uri' => 'https://www.example.com/iiif/image',
                         'alt' => '',
-                        'sizes' => [
-                            '2:1' => [
-                                '900' => 'https://placehold.it/900x450',
-                                '1800' => 'https://placehold.it/1800x900',
-                            ],
+                        'source' => [
+                            'mediaType' => 'image/jpeg',
+                            'uri' => 'https://www.example.com/image.jpg',
+                            'filename' => 'image.jpg',
+                        ],
+                        'size' => [
+                            'width' => 800,
+                            'height' => 600,
                         ],
                     ],
                     'thumbnail' => [
+                        'uri' => 'https://www.example.com/iiif/image',
                         'alt' => '',
-                        'sizes' => [
-                            '16:9' => [
-                                '250' => 'https://placehold.it/250x141',
-                                '500' => 'https://placehold.it/500x281',
-                            ],
-                            '1:1' => [
-                                '70' => 'https://placehold.it/70x70',
-                                '140' => 'https://placehold.it/140x140',
-                            ],
+                        'source' => [
+                            'mediaType' => 'image/jpeg',
+                            'uri' => 'https://www.example.com/image.jpg',
+                            'filename' => 'image.jpg',
+                        ],
+                        'size' => [
+                            'width' => 800,
+                            'height' => 600,
                         ],
                     ],
                 ],
@@ -443,16 +459,16 @@ final class SubjectContext extends Context
                     'published' => $today->format(ApiSdk::DATE_FORMAT),
                     'image' => [
                         'thumbnail' => [
+                            'uri' => 'https://www.example.com/iiif/image',
                             'alt' => '',
-                            'sizes' => [
-                                '16:9' => [
-                                    250 => 'https://placehold.it/250x141',
-                                    500 => 'https://placehold.it/500x281',
-                                ],
-                                '1:1' => [
-                                    70 => 'https://placehold.it/70x70',
-                                    140 => 'https://placehold.it/140x140',
-                                ],
+                            'source' => [
+                                'mediaType' => 'image/jpeg',
+                                'uri' => 'https://www.example.com/image.jpg',
+                                'filename' => 'image.jpg',
+                            ],
+                            'size' => [
+                                'width' => 800,
+                                'height' => 600,
                             ],
                         ],
                     ],
