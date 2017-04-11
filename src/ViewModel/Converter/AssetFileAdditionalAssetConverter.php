@@ -2,15 +2,15 @@
 
 namespace eLife\Journal\ViewModel\Converter;
 
+use eLife\ApiSdk\Model\AssetFile;
 use eLife\ApiSdk\Model\Block;
-use eLife\ApiSdk\Model\File;
 use eLife\Journal\Helper\DownloadLink;
 use eLife\Journal\Helper\DownloadLinkUriGenerator;
 use eLife\Journal\Helper\HasPatternRenderer;
 use eLife\Patterns\PatternRenderer;
 use eLife\Patterns\ViewModel;
 
-final class FileAdditionalAssetConverter implements ViewModelConverter
+final class AssetFileAdditionalAssetConverter implements ViewModelConverter
 {
     use HasPatternRenderer;
 
@@ -26,7 +26,7 @@ final class FileAdditionalAssetConverter implements ViewModelConverter
     }
 
     /**
-     * @param File $object
+     * @param AssetFile $object
      */
     public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
@@ -41,12 +41,12 @@ final class FileAdditionalAssetConverter implements ViewModelConverter
         );
 
         $download = ViewModel\DownloadLink::fromLink(
-            new ViewModel\Link('Download '.$object->getFilename(), $this->downloadLinkUriGenerator->generate(new DownloadLink($object->getUri(), $object->getFilename()))),
-            $object->getFilename()
+            new ViewModel\Link('Download '.$object->getFile()->getFilename(), $this->downloadLinkUriGenerator->generate(new DownloadLink($object->getFile()->getUri(), $object->getFile()->getFilename()))),
+            $object->getFile()->getFilename()
         );
 
         if (!$object->getDoi()) {
-            return ViewModel\AdditionalAsset::withoutDoi($object->getId(), $captionText, $download, $object->getUri());
+            return ViewModel\AdditionalAsset::withoutDoi($object->getId(), $captionText, $download, $object->getFile()->getUri());
         }
 
         return ViewModel\AdditionalAsset::withDoi($object->getId(), $captionText, $download, new ViewModel\Doi($object->getDoi()));
@@ -54,7 +54,7 @@ final class FileAdditionalAssetConverter implements ViewModelConverter
 
     public function supports($object, string $viewModel = null, array $context = []) : bool
     {
-        return $object instanceof File;
+        return $object instanceof AssetFile;
     }
 
     protected function getPatternRenderer() : PatternRenderer

@@ -3,11 +3,14 @@
 namespace eLife\Journal\ViewModel\Converter;
 
 use eLife\ApiSdk\Model\Person;
+use eLife\Journal\Helper\CreatesIiifUri;
 use eLife\Journal\Helper\PersonType;
 use eLife\Patterns\ViewModel;
 
 final class PersonProfileSnippetConverter implements ViewModelConverter
 {
+    use CreatesIiifUri;
+
     /**
      * @param Person $object
      */
@@ -15,10 +18,9 @@ final class PersonProfileSnippetConverter implements ViewModelConverter
     {
         if ($object->getThumbnail()) {
             $image = new ViewModel\Image(
-                $object->getThumbnail()->getSize('1:1')->getImage(70),
+                $this->iiifUri($object->getThumbnail(), 70, 70),
                 [
-                    140 => $object->getThumbnail()->getSize('1:1')->getImage(140),
-                    70 => $object->getThumbnail()->getSize('1:1')->getImage(70),
+                    140 => $this->iiifUri($object->getThumbnail(), 140, 140),
                 ],
                 $object->getThumbnail()->getAltText()
             );
