@@ -37,6 +37,11 @@ final class AlertsController extends Controller
                     '<a href="https://medium.com/feed/@eLIfe">Subscribe</a> to the RSS feed for eLife Digests on Medium.com',
                 ], 'bullet')
             )),
+            ArticleSection::basic('Community-building', 2, $this->render(
+                Listing::unordered([
+                    '<a href="https://crm.elifesciences.org/crm/civicrm/profile/create?reset=1&gid=26">Sign up to our bi-monthly community newsletter</a> for details on upcoming webinars, travel grant deadlines, interviews, and other efforts to connect and support especially early-career researchers in life sciences and biomedicine',
+                ], 'bullet')
+            )),
         ];
 
         return new Response($this->get('templating')->render('::alerts.html.twig', $arguments));
