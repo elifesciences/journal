@@ -32,6 +32,11 @@ final class AlertsController extends Controller
                     'See the highlights of recently published research and more on <a href="https://www.twitter.com/elife">Twitter</a> or <a href="https://www.facebook.com/elifesciences">Facebook</a>',
                 ], 'bullet')
             )),
+            ArticleSection::basic('Science in plain language', 2, $this->render(
+                Listing::unordered([
+                    '<a href="https://medium.com/feed/@eLIfe">Subscribe</a> to the RSS feed for eLife Digests on Medium.com',
+                ], 'bullet')
+            )),
         ];
 
         return new Response($this->get('templating')->render('::alerts.html.twig', $arguments));
