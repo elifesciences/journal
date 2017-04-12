@@ -25,7 +25,7 @@ trait CreatesIiifUri
         }
 
         if (empty($extension)) {
-            $mediaType = explode($image->getSource()->getMediaType(), ';', 2);
+            $mediaType = explode(';', $image->getSource()->getMediaType(), 2);
             switch ($mediaType[0]) {
                 case 'image/png':
                     $extension = 'png';

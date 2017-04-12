@@ -352,9 +352,9 @@ final class HomepageContext extends Context
                                 'uri' => 'https://www.example.com/iiif/image',
                                 'alt' => '',
                                 'source' => [
-                                    'mediaType' => 'image/jpeg',
-                                    'uri' => 'https://www.example.com/image.jpg',
-                                    'filename' => 'image.jpg',
+                                    'mediaType' => 'image/png',
+                                    'uri' => 'https://www.example.com/image.png',
+                                    'filename' => 'image.png',
                                 ],
                                 'size' => [
                                     'width' => 800,
@@ -647,8 +647,8 @@ final class HomepageContext extends Context
     public function iShouldSeeTheCustomTitleAndImageUsedInTheCover($arg1)
     {
         $this->assertSession()->elementTextContains('css', '.carousel-item__title', 'Cover');
-        $this->assertSession()->elementAttributeContains('css', '.carousel-item__inner', 'data-low-res-image-source', 'https://www.example.com/iiif/image/0,100,800,400/900,450/0/default.jpg');
-        $this->assertSession()->elementAttributeContains('css', '.carousel-item__inner', 'data-high-res-image-source', 'https://www.example.com/iiif/image/0,100,800,400/1800,900/0/default.jpg');
+        $this->assertSession()->elementAttributeContains('css', '.carousel-item__inner', 'data-low-res-image-source', 'https://www.example.com/iiif/image/0,100,800,400/900,450/0/default.png');
+        $this->assertSession()->elementAttributeContains('css', '.carousel-item__inner', 'data-high-res-image-source', 'https://www.example.com/iiif/image/0,100,800,400/1800,900/0/default.png');
     }
 
     /**
