@@ -17,10 +17,12 @@ trait CreatesIiifUri
                 $size = "$width,$height";
             } elseif ($width !== $image->getWidth()) {
                 $size = "$width,";
+            } elseif ($height !== $image->getHeight()) {
+                $size = ",$height";
             }
-        } elseif ($width) {
+        } elseif ($width && $width !== $image->getWidth()) {
             $size = "$width,";
-        } elseif ($height) {
+        } elseif ($height && $height !== $image->getHeight()) {
             $size = ",$height";
         }
 
