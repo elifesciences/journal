@@ -4,6 +4,7 @@ namespace eLife\Journal\ViewModel\Converter\Block;
 
 use eLife\ApiSdk\Model\Block;
 use eLife\ApiSdk\Model\File;
+use eLife\Journal\Helper\CreatesIiifUri;
 use eLife\Journal\Helper\DownloadLink;
 use eLife\Journal\Helper\DownloadLinkUriGenerator;
 use eLife\Journal\ViewModel\Converter\ViewModelConverter;
@@ -14,6 +15,7 @@ use eLife\Patterns\ViewModel\AssetViewerInline;
 final class CaptionedVideoConverter implements ViewModelConverter
 {
     use CreatesCaptionedAsset;
+    use CreatesIiifUri;
 
     private $viewModelConverter;
     private $patternRenderer;
@@ -35,7 +37,7 @@ final class CaptionedVideoConverter implements ViewModelConverter
             array_map(function (Block\VideoSource $source) {
                 return new ViewModel\MediaSource($source->getUri(), new ViewModel\MediaType($source->getMediaType()));
             }, $object->getSources()),
-            $object->getImage(),
+            $object->getPlaceholder() ? $this->iiifUri($object->getPlaceholder(), $object->getWidth(), $object->getHeight()) : null,
             $object->isAutoplay(),
             $object->isLoop()
         );
