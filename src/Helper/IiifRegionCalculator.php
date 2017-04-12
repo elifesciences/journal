@@ -12,41 +12,26 @@ final class IiifRegionCalculator
 
     public static function calculateForImage(Image $image, int $requestedW, int $requestedH) : string
     {
-        return self::calculate($image->getWidth(), $image->getHeight(), $image->getFocalPointY(), $image->getFocalPointY(), $requestedW, $requestedH);
+        return self::calculate($image->getWidth(), $image->getHeight(), $image->getFocalPointX(), $image->getFocalPointY(), $requestedW, $requestedH);
     }
 
     public static function calculate(int $sourceW, int $sourceH, int $focalX, int $focalY, int $requestedW, int $requestedH) : string
     {
-        $focalX = (int) ($sourceW * ($focalX / 100));
-        $focalY = (int) ($sourceH * ($focalY / 100));
+        $ratioWidth = $sourceW / $requestedW;
+        $ratioHeight = $sourceH / $requestedH;
 
-        $sourceRatio = $sourceW / $sourceH;
-        $requestedRatio = $requestedW / $requestedH;
-
-        if ($requestedRatio > 1) {
-            $w = $sourceW;
-            $h = (int) (($sourceW / $requestedW) * $requestedH);
-        } else {
-            $w = (int) (($sourceH / $requestedH) * $requestedW);
-            $h = $sourceH;
-        }
-
-        $foundRatio = $w / $h;
-
-        $x = $focalX - (int) ($w / 2);
-        $y = $focalY - (int) ($h / 2);
-
-        if ($x < 0) {
-            $x = 0;
-        } elseif (($x + $w) > $sourceW) {
-            $x = $sourceW - $w;
-        }
-
-        if ($y < 0) {
+        if ($ratioHeight < $ratioWidth) {
+            list($x, $x2) = self::calculateCrop($sourceW, $requestedW, $focalX, $ratioHeight);
             $y = 0;
-        } elseif (($y + $h) > $sourceH) {
-            $y = $sourceH - $h;
+            $y2 = $sourceH;
+        } else {
+            list($y, $y2) = self::calculateCrop($sourceH, $requestedH, $focalY, $ratioWidth);
+            $x = 0;
+            $x2 = $sourceW;
         }
+
+        $w = $x2 - $x;
+        $h = $y2 - $y;
 
         $result = "$x,$y,$w,$h";
 
@@ -55,5 +40,24 @@ final class IiifRegionCalculator
         }
 
         return $result;
+    }
+
+    private static function calculateCrop(int $sourceSize, int $requestedSize, int $focalPercentage, float $ratio)
+    {
+        $cropSize = ceil($ratio * $requestedSize);
+        $focalPoint = (int) ($sourceSize * ($focalPercentage / 100));
+        $cropStart = $focalPoint - $cropSize / 2;
+        $cropEnd = $cropStart + $cropSize;
+        if ($cropStart < 0) {
+            $cropEnd -= $cropStart;
+            $cropStart = 0;
+        } else {
+            if ($cropEnd > $sourceSize) {
+                $cropStart -= ($cropEnd - $sourceSize);
+                $cropEnd = $sourceSize;
+            }
+        }
+
+        return [ceil($cropStart), ceil($cropEnd)];
     }
 }
