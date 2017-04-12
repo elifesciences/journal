@@ -217,6 +217,12 @@ resources:
     defaults:
          _controller: AppBundle:Resources:resources
 
+rss-ahead:
+    path: /rss/ahead.xml
+
+rss-recent:
+    path: /rss/recent.xml
+
 search:
     path: /search
     defaults:
