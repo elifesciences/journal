@@ -3,8 +3,8 @@
 namespace eLife\Journal\Controller;
 
 use eLife\Journal\ViewModel\Paragraph;
-use eLife\Patterns\ViewModel\ContentHeaderNonArticle;
 use eLife\Patterns\ViewModel\ArticleSection;
+use eLife\Patterns\ViewModel\ContentHeaderNonArticle;
 use eLife\Patterns\ViewModel\LeadPara;
 use eLife\Patterns\ViewModel\LeadParas;
 use eLife\Patterns\ViewModel\Listing;
@@ -48,7 +48,7 @@ final class AlertsController extends Controller
                     'For the latest in eLife Labs, innovation, and new tools, <a href="https://crm.elifesciences.org/crm/node/8">sign up for our technology and innovation newsletter</a>',
                 ], 'bullet')
             )),
-            new Paragraph('eLife is also on <a href="http://www.linkedin.com/company/elife-sciences-publications-ltd">LinkedIn</a> and <a href="https://plus.google.com/102129675554093758550/posts">Google Plus</a>.')
+            new Paragraph('eLife is also on <a href="http://www.linkedin.com/company/elife-sciences-publications-ltd">LinkedIn</a> and <a href="https://plus.google.com/102129675554093758550/posts">Google Plus</a>.'),
         ];
 
         return new Response($this->get('templating')->render('::alerts.html.twig', $arguments));
