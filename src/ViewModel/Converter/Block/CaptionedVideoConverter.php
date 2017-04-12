@@ -32,10 +32,10 @@ final class CaptionedVideoConverter implements ViewModelConverter
     public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
         $asset = new ViewModel\Video(
-            $object->getImage(),
             array_map(function (Block\VideoSource $source) {
                 return new ViewModel\MediaSource($source->getUri(), new ViewModel\MediaType($source->getMediaType()));
             }, $object->getSources()),
+            $object->getImage(),
             $object->isAutoplay(),
             $object->isLoop()
         );
