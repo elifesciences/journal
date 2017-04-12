@@ -48,14 +48,13 @@ final class IiifRegionCalculator
         $focalPoint = (int) ($sourceSize * ($focalPercentage / 100));
         $cropStart = $focalPoint - $cropSize / 2;
         $cropEnd = $cropStart + $cropSize;
+
         if ($cropStart < 0) {
             $cropEnd -= $cropStart;
             $cropStart = 0;
-        } else {
-            if ($cropEnd > $sourceSize) {
-                $cropStart -= ($cropEnd - $sourceSize);
-                $cropEnd = $sourceSize;
-            }
+        } elseif ($cropEnd > $sourceSize) {
+            $cropStart -= ($cropEnd - $sourceSize);
+            $cropEnd = $sourceSize;
         }
 
         return [ceil($cropStart), ceil($cropEnd)];
