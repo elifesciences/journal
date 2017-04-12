@@ -20,7 +20,7 @@ trait CreatesIiifUri
             }
         } elseif ($width) {
             $size = "$width,";
-        } else {
+        } elseif ($height) {
             $size = ",$height";
         }
 
