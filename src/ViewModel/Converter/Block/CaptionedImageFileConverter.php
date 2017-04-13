@@ -2,8 +2,9 @@
 
 namespace eLife\Journal\ViewModel\Converter\Block;
 
+use eLife\ApiSdk\Model\AssetFile;
 use eLife\ApiSdk\Model\Block;
-use eLife\ApiSdk\Model\File;
+use eLife\Journal\Helper\CreatesIiifUri;
 use eLife\Journal\Helper\DownloadLink;
 use eLife\Journal\Helper\DownloadLinkUriGenerator;
 use eLife\Journal\ViewModel\Converter\ViewModelConverter;
@@ -14,6 +15,7 @@ use eLife\Patterns\ViewModel\AssetViewerInline;
 final class CaptionedImageFileConverter implements ViewModelConverter
 {
     use CreatesCaptionedAsset;
+    use CreatesIiifUri;
 
     private $viewModelConverter;
     private $patternRenderer;
@@ -31,16 +33,30 @@ final class CaptionedImageFileConverter implements ViewModelConverter
      */
     public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
-        $asset = new ViewModel\Image(str_replace('.tif', '.jpg', $object->getUri()), [], $object->getAltText());
+        $srcset = [];
+        $baseWidth = 538;
+        if ($object->getImage()->getWidth() > $baseWidth) {
+            $width = $baseWidth * 2;
+            if ($width > $object->getImage()->getWidth()) {
+                $width = $object->getImage()->getWidth();
+            }
+            $srcset[$width] = $this->iiifUri($object->getImage(), $width);
+        }
 
-        $asset = $this->createCaptionedAsset($asset, $object, $this->downloadLinkUriGenerator->generate(DownloadLink::fromUri($object->getUri())));
+        $asset = new ViewModel\Image(
+            $this->iiifUri($object->getImage(), $baseWidth),
+            $srcset,
+            $object->getImage()->getAltText()
+        );
+
+        $asset = $this->createCaptionedAsset($asset, $object, $this->downloadLinkUriGenerator->generate(new DownloadLink($object->getImage()->getSource()->getUri(), $object->getImage()->getSource()->getFilename())));
 
         if (empty($object->getLabel())) {
             return $asset;
         }
 
         if (!empty($context['complete'])) {
-            $additionalAssets = array_map(function (File $sourceData) {
+            $additionalAssets = array_map(function (AssetFile $sourceData) {
                 return $this->viewModelConverter->convert($sourceData);
             }, $object->getSourceData());
         } else {

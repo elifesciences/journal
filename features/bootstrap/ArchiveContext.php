@@ -44,20 +44,26 @@ final class ArchiveContext extends Context
         $covers = array_map(function (array $coverData) {
             $date = DateTimeImmutable::createFromFormat('j F Y H:i:s', $coverData['Published'].' 00:00:00', new DateTimeZone('Z'));
 
+            $id = $this->createId($coverData['Article']);
+
             return [
                 'title' => $coverData['Cover text'],
                 'image' => [
+                    'uri' => "https://www.example.com/iiif/image$id",
                     'alt' => '',
-                    'sizes' => [
-                        '2:1' => [
-                            '900' => 'https://placehold.it/900x450?'.$this->createId($coverData['Article']),
-                            '1800' => 'https://placehold.it/1800x900?'.$this->createId($coverData['Article']),
-                        ],
+                    'source' => [
+                        'mediaType' => 'image/jpeg',
+                        'uri' => "https://www.example.com/image$id.jpg",
+                        'filename' => "image$id.jpg",
+                    ],
+                    'size' => [
+                        'width' => 800,
+                        'height' => 600,
                     ],
                 ],
                 'item' => [
                     'type' => 'blog-article',
-                    'id' => $this->createId($coverData['Article']),
+                    'id' => $id,
                     'title' => $coverData['Article'],
                     'published' => $date->format(ApiSdk::DATE_FORMAT),
                 ],
@@ -382,16 +388,16 @@ final class ArchiveContext extends Context
                         'published' => $date->format(ApiSdk::DATE_FORMAT),
                         'image' => [
                             'thumbnail' => [
+                                'uri' => "https://www.example.com/iiif/image$podcastNumber",
                                 'alt' => '',
-                                'sizes' => [
-                                    '16:9' => [
-                                        '250' => 'https://placehold.it/250x141',
-                                        '500' => 'https://placehold.it/500x281',
-                                    ],
-                                    '1:1' => [
-                                        '70' => 'https://placehold.it/70x70',
-                                        '140' => 'https://placehold.it/140x140',
-                                    ],
+                                'source' => [
+                                    'mediaType' => 'image/jpeg',
+                                    'uri' => "https://www.example.com/image$podcastNumber.jpg",
+                                    'filename' => "image$podcastNumber.jpg",
+                                ],
+                                'size' => [
+                                    'width' => 800,
+                                    'height' => 600,
                                 ],
                             ],
                         ],
@@ -595,7 +601,7 @@ final class ArchiveContext extends Context
             'css',
             '.grid-listing-heading:contains("Monthly archive") + .grid-listing > .grid-listing-item:contains("'.$month.' '.$year.'") .block-link',
             'data-high-res-image-source',
-            'https://placehold.it/1800x900?'.$this->createId($article)
+            'https://www.example.com/iiif/image'.$this->createId($article).'/0,32,800,536/526,352/0/default.jpg'
         );
     }
 
@@ -608,7 +614,7 @@ final class ArchiveContext extends Context
             'css',
             '.content-header',
             'data-high-res-image-source',
-            'https://placehold.it/1800x900?'.$this->createId($article)
+            'https://www.example.com/iiif/image'.$this->createId($article).'/0,100,800,400/1800,900/0/default.jpg'
         );
     }
 

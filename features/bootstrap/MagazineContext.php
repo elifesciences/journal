@@ -133,25 +133,29 @@ final class MagazineContext extends Context
                 'published' => $today->format(ApiSdk::DATE_FORMAT),
                 'image' => [
                     'banner' => [
+                        'uri' => "https://www.example.com/iiif/banner$i",
                         'alt' => '',
-                        'sizes' => [
-                            '2:1' => [
-                                '900' => 'https://placehold.it/900x450',
-                                '1800' => 'https://placehold.it/1800x900',
-                            ],
+                        'source' => [
+                            'mediaType' => 'image/jpeg',
+                            'uri' => "https://www.example.com/banner$i.jpg",
+                            'filename' => "banner$i.jpg",
+                        ],
+                        'size' => [
+                            'width' => 800,
+                            'height' => 600,
                         ],
                     ],
                     'thumbnail' => [
+                        'uri' => "https://www.example.com/iiif/thumbnail$i",
                         'alt' => '',
-                        'sizes' => [
-                            '16:9' => [
-                                '250' => 'https://placehold.it/250x141',
-                                '500' => 'https://placehold.it/500x281',
-                            ],
-                            '1:1' => [
-                                '70' => 'https://placehold.it/70x70',
-                                '140' => 'https://placehold.it/140x140',
-                            ],
+                        'source' => [
+                            'mediaType' => 'image/jpeg',
+                            'uri' => "https://www.example.com/thumbnail$i.jpg",
+                            'filename' => "thumbnail$i.jpg",
+                        ],
+                        'size' => [
+                            'width' => 800,
+                            'height' => 600,
                         ],
                     ],
                 ],
@@ -262,16 +266,16 @@ final class MagazineContext extends Context
                 json_encode(array_fill(0, 3, [
                     'title' => $collectionName,
                     'image' => [
+                        'uri' => 'https://www.example.com/iiif/item-image',
                         'alt' => '',
-                        'sizes' => [
-                            '16:9' => [
-                                250 => 'https://placehold.it/250x141?item',
-                                500 => 'https://placehold.it/500x281?item',
-                            ],
-                            '1:1' => [
-                                70 => 'https://placehold.it/70x70?item',
-                                140 => 'https://placehold.it/140x140?item',
-                            ],
+                        'source' => [
+                            'mediaType' => 'image/jpeg',
+                            'uri' => 'https://www.example.com/item-image.jpg',
+                            'filename' => 'item-image.jpg',
+                        ],
+                        'size' => [
+                            'width' => 800,
+                            'height' => 600,
                         ],
                     ],
                     'item' => [
@@ -281,16 +285,16 @@ final class MagazineContext extends Context
                         'published' => $today->format(ApiSdk::DATE_FORMAT),
                         'image' => [
                             'thumbnail' => [
+                                'uri' => 'https://www.example.com/iiif/item-image',
                                 'alt' => '',
-                                'sizes' => [
-                                    '16:9' => [
-                                        250 => 'https://placehold.it/250x141?item',
-                                        500 => 'https://placehold.it/500x281?item',
-                                    ],
-                                    '1:1' => [
-                                        70 => 'https://placehold.it/70x70?item',
-                                        140 => 'https://placehold.it/140x140?item',
-                                    ],
+                                'source' => [
+                                    'mediaType' => 'image/jpeg',
+                                    'uri' => 'https://www.example.com/item-image.jpg',
+                                    'filename' => 'item-image.jpg',
+                                ],
+                                'size' => [
+                                    'width' => 800,
+                                    'height' => 600,
                                 ],
                             ],
                         ],
@@ -330,16 +334,16 @@ final class MagazineContext extends Context
                         [
                             'title' => 'Highlight',
                             'image' => [
+                                'uri' => 'https://www.example.com/iiif/highlight-image',
                                 'alt' => '',
-                                'sizes' => [
-                                    '16:9' => [
-                                        250 => 'https://placehold.it/250x141?highlight',
-                                        500 => 'https://placehold.it/500x281?highlight',
-                                    ],
-                                    '1:1' => [
-                                        70 => 'https://placehold.it/70x70?highlight',
-                                        140 => 'https://placehold.it/140x140?highlight',
-                                    ],
+                                'source' => [
+                                    'mediaType' => 'image/jpeg',
+                                    'uri' => 'https://www.example.com/highlight-image.jpg',
+                                    'filename' => 'highlight-image.jpg',
+                                ],
+                                'size' => [
+                                    'width' => 800,
+                                    'height' => 600,
                                 ],
                             ],
                             'item' => [
@@ -349,16 +353,16 @@ final class MagazineContext extends Context
                                 'published' => $today->format(ApiSdk::DATE_FORMAT),
                                 'image' => [
                                     'thumbnail' => [
+                                        'uri' => 'https://www.example.com/iiif/item-image',
                                         'alt' => '',
-                                        'sizes' => [
-                                            '16:9' => [
-                                                250 => 'https://placehold.it/250x141?item',
-                                                500 => 'https://placehold.it/500x281?item',
-                                            ],
-                                            '1:1' => [
-                                                70 => 'https://placehold.it/70x70?item',
-                                                140 => 'https://placehold.it/140x140?item',
-                                            ],
+                                        'source' => [
+                                            'mediaType' => 'image/jpeg',
+                                            'uri' => 'https://www.example.com/item-image.jpg',
+                                            'filename' => 'item-image.jpg',
+                                        ],
+                                        'size' => [
+                                            'width' => 800,
+                                            'height' => 600,
                                         ],
                                     ],
                                 ],
@@ -375,16 +379,16 @@ final class MagazineContext extends Context
                     ] + array_fill(1, 2, [
                         'title' => $collectionName,
                         'image' => [
+                            'uri' => 'https://www.example.com/iiif/item-image',
                             'alt' => '',
-                            'sizes' => [
-                                '16:9' => [
-                                    250 => 'https://placehold.it/250x141?item',
-                                    500 => 'https://placehold.it/500x281?item',
-                                ],
-                                '1:1' => [
-                                    70 => 'https://placehold.it/70x70?item',
-                                    140 => 'https://placehold.it/140x140?item',
-                                ],
+                            'source' => [
+                                'mediaType' => 'image/jpeg',
+                                'uri' => 'https://www.example.com/item-image.jpg',
+                                'filename' => 'item-image.jpg',
+                            ],
+                            'size' => [
+                                'width' => 800,
+                                'height' => 600,
                             ],
                         ],
                         'item' => [
@@ -394,16 +398,16 @@ final class MagazineContext extends Context
                             'published' => $today->format(ApiSdk::DATE_FORMAT),
                             'image' => [
                                 'thumbnail' => [
+                                    'uri' => 'https://www.example.com/iiif/item-image',
                                     'alt' => '',
-                                    'sizes' => [
-                                        '16:9' => [
-                                            250 => 'https://placehold.it/250x141?item',
-                                            500 => 'https://placehold.it/500x281?item',
-                                        ],
-                                        '1:1' => [
-                                            70 => 'https://placehold.it/70x70?item',
-                                            140 => 'https://placehold.it/140x140?item',
-                                        ],
+                                    'source' => [
+                                        'mediaType' => 'image/jpeg',
+                                        'uri' => 'https://www.example.com/item-image.jpg',
+                                        'filename' => 'item-image.jpg',
+                                    ],
+                                    'size' => [
+                                        'width' => 800,
+                                        'height' => 600,
                                     ],
                                 ],
                             ],
@@ -603,7 +607,7 @@ final class MagazineContext extends Context
     public function iShouldSeeTheTitleAndImageFromTheCollectionUsedInTheMagazineHighlight(string $collectionName)
     {
         $this->assertSession()->elementTextContains('css', '.highlights__list .teaser__header', $collectionName);
-        $this->assertSession()->elementAttributeContains('css', '.highlights__list .teaser__img', 'src', 'https://placehold.it/70x70?item');
+        $this->assertSession()->elementAttributeContains('css', '.highlights__list .teaser__img', 'src', 'https://www.example.com/iiif/item-image/100,0,600,600/70,70/0/default.jpg');
     }
 
     /**
@@ -612,7 +616,7 @@ final class MagazineContext extends Context
     public function iShouldSeeTheCustomTitleAndImageUsedInTheMagazineHighlight(string $collectionName)
     {
         $this->assertSession()->elementTextContains('css', '.highlights__list .teaser__header', 'Highlight');
-        $this->assertSession()->elementAttributeContains('css', '.highlights__list .teaser__img', 'src', 'https://placehold.it/70x70?highlight');
+        $this->assertSession()->elementAttributeContains('css', '.highlights__list .teaser__img', 'src', 'https://www.example.com/iiif/highlight-image/100,0,600,600/70,70/0/default.jpg');
     }
 
     /**

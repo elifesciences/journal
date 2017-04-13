@@ -3,11 +3,14 @@
 namespace eLife\Journal\ViewModel\Converter\Block;
 
 use eLife\ApiSdk\Model\Block;
+use eLife\Journal\Helper\CreatesIiifUri;
 use eLife\Journal\ViewModel\Converter\ViewModelConverter;
 use eLife\Patterns\ViewModel;
 
 final class VideoConverter implements ViewModelConverter
 {
+    use CreatesIiifUri;
+
     /**
      * @param Block\Video $object
      */
@@ -17,7 +20,7 @@ final class VideoConverter implements ViewModelConverter
             array_map(function (Block\VideoSource $source) {
                 return new ViewModel\MediaSource($source->getUri(), new ViewModel\MediaType($source->getMediaType()));
             }, $object->getSources()),
-            $object->getImage(),
+            $object->getPlaceholder() ? $this->iiifUri($object->getPlaceholder(), $object->getWidth(), $object->getHeight()) : null,
             $object->isAutoplay(),
             $object->isLoop()
         );

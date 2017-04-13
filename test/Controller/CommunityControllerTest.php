@@ -73,16 +73,16 @@ final class CommunityControllerTest extends PageTestCase
                             'published' => '2000-01-01T00:00:00Z',
                             'image' => [
                                 'thumbnail' => [
+                                    'uri' => 'https://www.example.com/iiif/image',
                                     'alt' => '',
-                                    'sizes' => [
-                                        '16:9' => [
-                                            '250' => 'https://placehold.it/250x141',
-                                            '500' => 'https://placehold.it/500x281',
-                                        ],
-                                        '1:1' => [
-                                            '70' => 'https://placehold.it/70x70',
-                                            '140' => 'https://placehold.it/140x140',
-                                        ],
+                                    'source' => [
+                                        'mediaType' => 'image/jpeg',
+                                        'uri' => 'https://www.example.com/image.jpg',
+                                        'filename' => 'image.jpg',
+                                    ],
+                                    'size' => [
+                                        'width' => 800,
+                                        'height' => 600,
                                     ],
                                 ],
                             ],
@@ -110,16 +110,16 @@ final class CommunityControllerTest extends PageTestCase
                                 'published' => '2000-01-01T00:00:00Z',
                                 'image' => [
                                     'thumbnail' => [
+                                        'uri' => 'https://www.example.com/iiif/image',
                                         'alt' => '',
-                                        'sizes' => [
-                                            '16:9' => [
-                                                '250' => 'https://placehold.it/250x141',
-                                                '500' => 'https://placehold.it/500x281',
-                                            ],
-                                            '1:1' => [
-                                                '70' => 'https://placehold.it/70x70',
-                                                '140' => 'https://placehold.it/140x140',
-                                            ],
+                                        'source' => [
+                                            'mediaType' => 'image/jpeg',
+                                            'uri' => 'https://www.example.com/image.jpg',
+                                            'filename' => 'image.jpg',
+                                        ],
+                                        'size' => [
+                                            'width' => 800,
+                                            'height' => 600,
                                         ],
                                     ],
                                 ],

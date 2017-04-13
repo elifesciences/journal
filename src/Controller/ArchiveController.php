@@ -14,6 +14,7 @@ use eLife\ApiSdk\Model\LabsExperiment;
 use eLife\ApiSdk\Model\Model;
 use eLife\ApiSdk\Model\PodcastEpisode;
 use eLife\Journal\Helper\Callback;
+use eLife\Journal\Helper\CreatesIiifUri;
 use eLife\Journal\ViewModel\EmptyListing;
 use eLife\Patterns\ViewModel\ArchiveNavLink;
 use eLife\Patterns\ViewModel\BackgroundImage;
@@ -37,6 +38,8 @@ use function GuzzleHttp\Promise\all;
 
 final class ArchiveController extends Controller
 {
+    use CreatesIiifUri;
+
     public function indexAction(Request $request) : Response
     {
         $year = $request->query->get('year');
@@ -101,8 +104,8 @@ final class ArchiveController extends Controller
                         new BlockLink(
                             $link,
                             new BackgroundImage(
-                                $covers[0]->getBanner()->getSize('2:1')->getImage(900),
-                                $covers[0]->getBanner()->getSize('2:1')->getImage(1800)
+                                $this->iiifUri($covers[0]->getBanner(), 263, 176),
+                                $this->iiifUri($covers[0]->getBanner(), 526, 352)
                             )
                         ),
                         'Cover articles',
@@ -162,8 +165,8 @@ final class ArchiveController extends Controller
                     $background = null;
                 } else {
                     $background = new BackgroundImage(
-                        $covers[0]->getBanner()->getSize('2:1')->getImage(900),
-                        $covers[0]->getBanner()->getSize('2:1')->getImage(1800)
+                        $this->iiifUri($covers[0]->getBanner(), 900, 450),
+                        $this->iiifUri($covers[0]->getBanner(), 1800, 900)
                     );
                 }
 

@@ -41,7 +41,7 @@ final class SubjectControllerTest extends PageTestCase
         $this->assertSame('Subject impact statement.', $crawler->filter('meta[property="og:description"]')->attr('content'));
         $this->assertSame('Subject impact statement.', $crawler->filter('meta[name="description"]')->attr('content'));
         $this->assertSame('summary_large_image', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
-        $this->assertSame('https://placehold.it/1800x900', $crawler->filter('meta[property="og:image"]')->attr('content'));
+        $this->assertSame('https://www.example.com/iiif/image/0,100,800,400/1800,900/0/default.jpg', $crawler->filter('meta[property="og:image"]')->attr('content'));
         $this->assertSame('1800', $crawler->filter('meta[property="og:image:width"]')->attr('content'));
         $this->assertSame('900', $crawler->filter('meta[property="og:image:height"]')->attr('content'));
     }
@@ -97,16 +97,16 @@ final class SubjectControllerTest extends PageTestCase
                             'published' => '2000-01-01T00:00:00Z',
                             'image' => [
                                 'thumbnail' => [
+                                    'uri' => 'https://www.example.com/iiif/image',
                                     'alt' => '',
-                                    'sizes' => [
-                                        '16:9' => [
-                                            '250' => 'https://placehold.it/250x141',
-                                            '500' => 'https://placehold.it/500x281',
-                                        ],
-                                        '1:1' => [
-                                            '70' => 'https://placehold.it/70x70',
-                                            '140' => 'https://placehold.it/140x140',
-                                        ],
+                                    'source' => [
+                                        'mediaType' => 'image/jpeg',
+                                        'uri' => 'https://www.example.com/image.jpg',
+                                        'filename' => 'image.jpg',
+                                    ],
+                                    'size' => [
+                                        'width' => 800,
+                                        'height' => 600,
                                     ],
                                 ],
                             ],
@@ -134,16 +134,16 @@ final class SubjectControllerTest extends PageTestCase
                                 'published' => '2000-01-01T00:00:00Z',
                                 'image' => [
                                     'thumbnail' => [
+                                        'uri' => 'https://www.example.com/iiif/image',
                                         'alt' => '',
-                                        'sizes' => [
-                                            '16:9' => [
-                                                '250' => 'https://placehold.it/250x141',
-                                                '500' => 'https://placehold.it/500x281',
-                                            ],
-                                            '1:1' => [
-                                                '70' => 'https://placehold.it/70x70',
-                                                '140' => 'https://placehold.it/140x140',
-                                            ],
+                                        'source' => [
+                                            'mediaType' => 'image/jpeg',
+                                            'uri' => 'https://www.example.com/image.jpg',
+                                            'filename' => 'image.jpg',
+                                        ],
+                                        'size' => [
+                                            'width' => 800,
+                                            'height' => 600,
                                         ],
                                     ],
                                 ],
@@ -221,26 +221,29 @@ final class SubjectControllerTest extends PageTestCase
                                 'impactStatement' => 'Subject impact statement.',
                                 'image' => [
                                     'banner' => [
+                                        'uri' => 'https://www.example.com/iiif/image',
                                         'alt' => '',
-                                        'sizes' => [
-                                            '2:1' => [
-                                                900 => 'https://placehold.it/900x450',
-                                                1800 => 'https://placehold.it/1800x900',
-                                            ],
+                                        'source' => [
+                                            'mediaType' => 'image/jpeg',
+                                            'uri' => 'https://www.example.com/image.jpg',
+                                            'filename' => 'image.jpg',
                                         ],
-
+                                        'size' => [
+                                            'width' => 800,
+                                            'height' => 600,
+                                        ],
                                     ],
                                     'thumbnail' => [
+                                        'uri' => 'https://www.example.com/iiif/image',
                                         'alt' => '',
-                                        'sizes' => [
-                                            '16:9' => [
-                                                250 => 'https://placehold.it/250x141',
-                                                500 => 'https://placehold.it/500x281',
-                                            ],
-                                            '1:1' => [
-                                                70 => 'https://placehold.it/70x70',
-                                                140 => 'https://placehold.it/140x140',
-                                            ],
+                                        'source' => [
+                                            'mediaType' => 'image/jpeg',
+                                            'uri' => 'https://www.example.com/image.jpg',
+                                            'filename' => 'image.jpg',
+                                        ],
+                                        'size' => [
+                                            'width' => 800,
+                                            'height' => 600,
                                         ],
                                     ],
                                 ],
@@ -317,26 +320,29 @@ final class SubjectControllerTest extends PageTestCase
                     'impactStatement' => 'Subject impact statement.',
                     'image' => [
                         'banner' => [
+                            'uri' => 'https://www.example.com/iiif/image',
                             'alt' => '',
-                            'sizes' => [
-                                '2:1' => [
-                                    900 => 'https://placehold.it/900x450',
-                                    1800 => 'https://placehold.it/1800x900',
-                                ],
+                            'source' => [
+                                'mediaType' => 'image/jpeg',
+                                'uri' => 'https://www.example.com/image.jpg',
+                                'filename' => 'image.jpg',
                             ],
-
+                            'size' => [
+                                'width' => 800,
+                                'height' => 600,
+                            ],
                         ],
                         'thumbnail' => [
+                            'uri' => 'https://www.example.com/iiif/image',
                             'alt' => '',
-                            'sizes' => [
-                                '16:9' => [
-                                    250 => 'https://placehold.it/250x141',
-                                    500 => 'https://placehold.it/500x281',
-                                ],
-                                '1:1' => [
-                                    70 => 'https://placehold.it/70x70',
-                                    140 => 'https://placehold.it/140x140',
-                                ],
+                            'source' => [
+                                'mediaType' => 'image/jpeg',
+                                'uri' => 'https://www.example.com/image.jpg',
+                                'filename' => 'image.jpg',
+                            ],
+                            'size' => [
+                                'width' => 800,
+                                'height' => 600,
                             ],
                         ],
                     ],

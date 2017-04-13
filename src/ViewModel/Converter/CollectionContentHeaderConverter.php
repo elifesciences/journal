@@ -3,6 +3,7 @@
 namespace eLife\Journal\ViewModel\Converter;
 
 use eLife\ApiSdk\Model\Collection;
+use eLife\Journal\Helper\CreatesIiifUri;
 use eLife\Patterns\ViewModel;
 use eLife\Patterns\ViewModel\ContentHeaderNonArticle;
 use eLife\Patterns\ViewModel\Link;
@@ -12,6 +13,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 final class CollectionContentHeaderConverter implements ViewModelConverter
 {
     use CreatesDate;
+    use CreatesIiifUri;
 
     private $urlGenerator;
 
@@ -33,10 +35,9 @@ final class CollectionContentHeaderConverter implements ViewModelConverter
             $curatorImage = new ViewModel\Picture(
                 [],
                 new ViewModel\Image(
-                    $object->getSelectedCurator()->getThumbnail()->getSize('1:1')->getImage(70),
+                    $this->iiifUri($object->getSelectedCurator()->getThumbnail(), 70, 70),
                     [
-                        140 => $object->getSelectedCurator()->getThumbnail()->getSize('1:1')->getImage(140),
-                        70 => $object->getSelectedCurator()->getThumbnail()->getSize('1:1')->getImage(70),
+                        140 => $this->iiifUri($object->getSelectedCurator()->getThumbnail(), 140, 140),
                     ]
                 )
             );
@@ -53,8 +54,8 @@ final class CollectionContentHeaderConverter implements ViewModelConverter
             ),
             new ViewModel\Profile(new Link($curatorName), $curatorImage),
             new ViewModel\BackgroundImage(
-                $object->getBanner()->getSize('2:1')->getImage(900),
-                $object->getBanner()->getSize('2:1')->getImage(1800)
+                $this->iiifUri($object->getBanner(), 900, 450),
+                $this->iiifUri($object->getBanner(), 1800, 900)
             )
         );
     }
