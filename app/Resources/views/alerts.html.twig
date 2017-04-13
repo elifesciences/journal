@@ -10,4 +10,24 @@
 
     {{ render_pattern(contentHeader) }}
 
+    <div class="wrapper">
+
+        {{ render_pattern(leadParas) }}
+
+        <div class="grid">
+
+            <div class="grid__item medium--eight-twelfths push--large--two-twelfths">
+
+                {% for part in body %}
+
+                    {{ render_pattern(part) }}
+
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+    </div>
+
 {% endblock %}
