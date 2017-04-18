@@ -2,8 +2,8 @@
 
 namespace eLife\Journal\ViewModel\Converter\Block;
 
+use eLife\ApiSdk\Model\AssetFile;
 use eLife\ApiSdk\Model\Block;
-use eLife\ApiSdk\Model\File;
 use eLife\Journal\Helper\CreatesIiifUri;
 use eLife\Journal\Helper\DownloadLink;
 use eLife\Journal\Helper\DownloadLinkUriGenerator;
@@ -49,7 +49,7 @@ final class CaptionedVideoConverter implements ViewModelConverter
         }
 
         if (!empty($context['complete'])) {
-            $additionalAssets = array_map(function (File $sourceData) {
+            $additionalAssets = array_map(function (AssetFile $sourceData) {
                 return $this->viewModelConverter->convert($sourceData);
             }, $object->getSourceData());
         } else {
