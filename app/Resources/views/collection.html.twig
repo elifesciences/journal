@@ -10,32 +10,38 @@
 
     {{ render_pattern(contentHeader) }}
 
-    <div class="wrapper">
+    {% if leadParas %}
 
-        {% if leadParas %}
+        <div class="wrapper">
             {{ render_pattern(leadParas) }}
-        {% endif %}
+        </div>
+
+    {% endif %}
+
+    <div class="wrapper u-pad-top-lg">
 
         <div class="grid">
 
-            <div class="grid__item medium--eight-twelfths">
+            <div class="listing-column-container">
 
-                {{ render_pattern(collectionList) }}
+                <div class="grid__item medium--eight-twelfths listing-column-main">
 
-            </div>
+                    {{ render_pattern(collectionList) }}
 
-            <div class="grid__item medium--four-twelfths">
+                </div>
 
-                {% if multimedia %}
-                    {{ render_pattern(multimedia) }}
-                {% endif %}
+                <div class="grid__item medium--four-twelfths listing-column-secondary">
 
-                {% if related %}
-                    {{ render_pattern(related) }}
-                {% endif %}
+                    {% if multimedia %}
+                        {{ render_pattern(multimedia) }}
+                    {% endif %}
 
-                <div class="u-pad-top">
+                    {% if related %}
+                        {{ render_pattern(related) }}
+                    {% endif %}
+
                     {{ render_pattern(contributors) }}
+
                 </div>
 
             </div>

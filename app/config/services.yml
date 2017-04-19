@@ -103,10 +103,21 @@ services:
         public: false
         arguments:
           - '@elife.journal.guzzle.cache.strategy'
+        calls:
+          - ['setClient', ['@elife.journal.guzzle.cache.client']]
         tags:
           - name: csa_guzzle.middleware
             alias: cache
             priority: -1500
+
+    elife.journal.guzzle.cache.client:
+        class: GuzzleHttp\Client
+        public: false
+        arguments:
+          - connect_timeout: 1
+            timeout: 2
+        tags:
+          - name: csa_guzzle.client
 
     elife.journal.guzzle.cache.storage:
         class: Kevinrob\GuzzleCache\Storage\Psr6CacheStorage

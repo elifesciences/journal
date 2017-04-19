@@ -12,35 +12,31 @@
 
     {% endif %}
 
-    <div class="wrapper u-pad-top">
-
-        {% if magazine %}
+    <div class="wrapper u-pad-top-lg">
 
         <div class="grid">
 
             <div class="listing-column-container">
 
-                <div class="grid__item large--eight-twelfths listing-column-main">
-
-                    {% endif %}
+                <div class="grid__item large--eight-twelfths listing-column-main {% if not magazine %}push--large--two-twelfths{% endif %}">
 
                     {{ render_pattern(listing) }}
 
-                    {% if magazine %}
-
                 </div>
 
-                <div class="grid__item large--four-twelfths listing-column-secondary">
+                {% if magazine %}
 
-                    {{ render_pattern(magazine) }}
+                    <div class="grid__item large--four-twelfths listing-column-secondary">
 
-                </div>
+                        {{ render_pattern(magazine) }}
+
+                    </div>
+
+                {% endif %}
 
             </div>
 
         </div>
-
-        {% endif %}
 
     </div>
 

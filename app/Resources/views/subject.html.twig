@@ -4,29 +4,37 @@
 
     {{ render_pattern(contentHeader) }}
 
-    <div class="wrapper">
+    {% if leadParas %}
 
-        {% if leadParas %}
+        <div class="wrapper">
             {{ render_pattern(leadParas) }}
-        {% endif %}
+        </div>
+
+    {% endif %}
+
+    <div class="wrapper u-pad-top-lg">
 
         <div class="grid">
 
-            <div class="grid__item large--eight-twelfths {% if not highlights %}push--large--two-twelfths{% endif %} u-pad-top">
+            <div class="listing-column-container">
 
-                {{ render_pattern(listing) }}
+                <div class="grid__item large--eight-twelfths listing-column-main {% if not highlights %}push--large--two-twelfths{% endif %}">
 
-            </div>
-
-            {% if highlights %}
-
-                <div class="grid__item large--four-twelfths u-pad-top">
-
-                    {{ render_pattern(highlights) }}
+                    {{ render_pattern(listing) }}
 
                 </div>
 
-            {% endif %}
+                {% if highlights %}
+
+                    <div class="grid__item large--four-twelfths listing-column-secondary">
+
+                        {{ render_pattern(highlights) }}
+
+                    </div>
+
+                {% endif %}
+
+            </div>
 
         </div>
 
