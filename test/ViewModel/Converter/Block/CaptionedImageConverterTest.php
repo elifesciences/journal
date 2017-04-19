@@ -8,11 +8,15 @@ use eLife\Journal\ViewModel\Converter\Block\CaptionedImageConverter;
 use eLife\Journal\ViewModel\Converter\ViewModelConverter;
 use eLife\Patterns\PatternRenderer;
 use eLife\Patterns\ViewModel;
+use eLife\Patterns\ViewModel\AssetViewerInline;
+use eLife\Patterns\ViewModel\CaptionText;
+use eLife\Patterns\ViewModel\Image;
 
 final class CaptionedImageConverterTest extends BlockConverterTestCase
 {
     protected $blockClass = Block\Image::class;
     protected $viewModelClasses = [AssetViewerInlineSet::class, ViewModel\CaptionedAsset::class];
+    protected $context = ['complete' => true];
 
     /**
      * @before
@@ -26,7 +30,14 @@ final class CaptionedImageConverterTest extends BlockConverterTestCase
         $viewModelConverter
             ->expects($this->any())
             ->method('convert')
-            ->will($this->returnValue(new AssetViewerInlineSet()));
+            ->will($this->returnValue(AssetViewerInline::primary(
+                'some-id',
+                'Some label',
+                new ViewModel\CaptionedAsset(
+                    new Image('/image.jpg'),
+                    new CaptionText('Some caption')
+                )
+            )));
     }
 
     /**
