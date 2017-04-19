@@ -24,41 +24,37 @@
 
     {% endif %}
 
-    <div class="wrapper u-pad-top">
-
-        {% if events or elifeDigests %}
+    <div class="wrapper u-pad-top-lg">
 
         <div class="grid">
 
             <div class="listing-column-container">
 
-                <div class="grid__item large--eight-twelfths listing-column-main">
-
-                    {% endif %}
+                <div class="grid__item large--eight-twelfths listing-column-main {% if not events and not elifeDigests %}push--large--two-twelfths{% endif %}">
 
                     {{ render_pattern(listing) }}
 
-                    {% if events or elifeDigests %}
-
                 </div>
 
-                <div class="grid__item large--four-twelfths listing-column-secondary">
+                {% if events or elifeDigests %}
 
-                    {% if events %}
-                        {{ render_pattern(events) }}
-                    {% endif %}
+                    <div class="grid__item large--four-twelfths listing-column-secondary">
 
-                    {% if elifeDigests %}
-                        {{ render_pattern(elifeDigests) }}
-                    {% endif %}
+                        {% if events %}
+                            {{ render_pattern(events) }}
+                        {% endif %}
 
-                </div>
+                        {% if elifeDigests %}
+                            {{ render_pattern(elifeDigests) }}
+                        {% endif %}
+
+                    </div>
+
+                {% endif %}
 
             </div>
 
         </div>
-
-        {% endif %}
 
     </div>
 

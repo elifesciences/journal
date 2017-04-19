@@ -23,11 +23,15 @@
 
     {{ render_pattern(audioPlayer) }}
 
-    <div class="wrapper u-pad-top">
+    {% if leadParas %}
 
-        {% if leadParas %}
+        <div class="wrapper">
             {{ render_pattern(leadParas) }}
-        {% endif %}
+        </div>
+
+    {% endif %}
+
+    <div class="wrapper u-pad-top-lg">
 
         <div class="grid">
 
