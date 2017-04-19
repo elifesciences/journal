@@ -10,13 +10,17 @@
 
     {{ render_pattern(contentHeader) }}
 
-    <div class="wrapper u-pad-top">
+    <div class="wrapper u-pad-top-lg">
 
         <div class="grid">
 
-            <div class="grid__item large--eight-twelfths push--large--two-twelfths">
+            <div class="listing-column-container">
 
-                {{ render_pattern(listing) }}
+                <div class="grid__item large--eight-twelfths listing-column-main push--large--two-twelfths">
+
+                    {{ render_pattern(listing) }}
+
+                </div>
 
             </div>
 

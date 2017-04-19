@@ -6,15 +6,19 @@
 
     {{ render_pattern(contentHeader) }}
 
-    <div class="wrapper">
+    {% if leadParas %}
 
-        {% if leadParas %}
+        <div class="wrapper">
             {{ render_pattern(leadParas) }}
-        {% endif %}
+        </div>
+
+    {% endif %}
+
+    <div class="wrapper u-pad-top-lg">
 
         <div class="grid">
 
-            <div class="grid__item medium--nine-twelfths large--seven-twelfths push--large--two-twelfths u-pad-top-lg">
+            <div class="grid__item medium--nine-twelfths large--seven-twelfths push--large--two-twelfths">
 
                 {% for block in blocks %}
                     {{ render_pattern(block) }}
@@ -22,7 +26,7 @@
 
             </div>
 
-            <div class="grid__item medium--three-twelfths push--large--two-twelfths u-pad-top-lg">
+            <div class="grid__item medium--three-twelfths push--large--two-twelfths">
 
                 {{ render_pattern(relatedContent) }}
 
