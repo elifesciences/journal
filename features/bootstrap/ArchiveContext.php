@@ -633,6 +633,22 @@ final class ArchiveContext extends Context
     }
 
     /**
+     * @Then /^I should see the following cover articles for ([A-Za-z]+) (\d+) in the "Cover articles" list:$/
+     */
+    public function iShouldSeeTheFollowingCoverArticlesForMarchInTheList(string $month, int $year, TableNode $table)
+    {
+        $this->assertSession()->elementsCount('css', '.highlights__list .listing-list__item', count($table->getLines()));
+
+        foreach ($table->getColumn(0) as $i => $cover) {
+            $this->assertSession()->elementContains(
+                'css',
+                '.highlights__list .listing-list__item:nth-child('.($i + 1).')',
+                $cover
+            );
+        }
+    }
+
+    /**
      * @Then /^I should see the (\d+) research articles published during ([A-Za-z]+) (\d+) in the 'Research articles' list$/
      */
     public function iShouldSeeTheResearchArticlesPublishedDuringMarchInTheList(int $number)

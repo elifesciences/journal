@@ -1,14 +1,16 @@
 {% extends '::page.html.twig' %}
 
-{% block info_bar %}
-
-    {{ info_bar('This page is incomplete.') }}
-
-{% endblock %}
-
 {% block body %}
 
     {{ render_pattern(contentHeader) }}
+
+    {% if covers %}
+
+        <div class="wrapper u-pad-top-lg">
+            {{ render_pattern(covers) }}
+        </div>
+
+    {% endif %}
 
     <div class="wrapper u-pad-top">
 

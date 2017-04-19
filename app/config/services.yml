@@ -535,8 +535,43 @@ services:
         tags:
           - name: view_model.converter
 
+    elife.journal.view_model.converter.cover.article.teaser.secondary:
+        class: eLife\Journal\ViewModel\Converter\CoverArticleSecondaryTeaserConverter
+        public: false
+        arguments:
+          - '@router'
+        tags:
+          - name: view_model.converter
+
+    elife.journal.view_model.converter.cover.blog_article.carousel_item:
+        class: eLife\Journal\ViewModel\Converter\CoverBlogArticleCarouselItemConverter
+        public: false
+        arguments:
+          - '@router'
+          - '@slugify'
+        tags:
+          - name: view_model.converter
+
+    elife.journal.view_model.converter.cover.blog_article.teaser.secondary:
+        class: eLife\Journal\ViewModel\Converter\CoverBlogArticleSecondaryTeaserConverter
+        public: false
+        arguments:
+          - '@router'
+          - '@slugify'
+        tags:
+          - name: view_model.converter
+
     elife.journal.view_model.converter.cover.collection.carousel_item:
         class: eLife\Journal\ViewModel\Converter\CoverCollectionCarouselItemConverter
+        public: false
+        arguments:
+          - '@router'
+          - '@slugify'
+        tags:
+          - name: view_model.converter
+
+    elife.journal.view_model.converter.cover.collection.teaser.secondary:
+        class: eLife\Journal\ViewModel\Converter\CoverCollectionSecondaryTeaserConverter
         public: false
         arguments:
           - '@router'

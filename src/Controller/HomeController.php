@@ -8,6 +8,7 @@ use eLife\Journal\Helper\Callback;
 use eLife\Journal\Helper\Paginator;
 use eLife\Journal\Pagerfanta\SequenceAdapter;
 use eLife\Patterns\ViewModel\Carousel;
+use eLife\Patterns\ViewModel\CarouselItem;
 use eLife\Patterns\ViewModel\LeadPara;
 use eLife\Patterns\ViewModel\LeadParas;
 use eLife\Patterns\ViewModel\Link;
@@ -70,7 +71,7 @@ final class HomeController extends Controller
     {
         $arguments['carousel'] = $this->get('elife.api_sdk.covers')
             ->getCurrent()
-            ->map($this->willConvertTo())
+            ->map($this->willConvertTo(CarouselItem::class))
             ->then(Callback::emptyOr(function (Sequence $covers) {
                 return new Carousel(...$covers);
             }))
