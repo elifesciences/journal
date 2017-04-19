@@ -55,6 +55,6 @@ final class CoverArticleCarouselItemConverter implements ViewModelConverter
 
     public function supports($object, string $viewModel = null, array $context = []) : bool
     {
-        return $object instanceof Cover && $object->getItem() instanceof ArticleVersion;
+        return $object instanceof Cover && ViewModel\CarouselItem::class === $viewModel && $object->getItem() instanceof ArticleVersion;
     }
 }

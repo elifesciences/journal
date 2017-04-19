@@ -4,6 +4,7 @@ namespace eLife\Journal\Controller;
 
 use DateTimeImmutable;
 use DateTimeZone;
+use eLife\ApiSdk\Collection\PromiseSequence;
 use eLife\ApiSdk\Collection\Sequence;
 use eLife\ApiSdk\Model\ArticleVersion;
 use eLife\ApiSdk\Model\BlogArticle;
@@ -147,13 +148,13 @@ final class ArchiveController extends Controller
 
         $ends = $starts->setDate((int) $starts->format('Y'), (int) $starts->format('n'), (int) $starts->format('t'))->setTime(23, 59, 59);
 
-        $covers = $this->get('elife.api_sdk.covers')
+        $covers = new PromiseSequence($this->get('elife.api_sdk.covers')
             ->sortBy('page-views')
             ->startDate($starts)
             ->endDate($ends)
             ->useDate('published')
             ->slice(0, 4)
-            ->otherwise($this->softFailure('Failed to load cover articles for '.$starts->format('F Y')));
+            ->otherwise($this->softFailure('Failed to load cover articles for '.$starts->format('F Y'))));
 
         $arguments = $this->defaultPageArguments($request);
 
@@ -172,6 +173,13 @@ final class ArchiveController extends Controller
 
                 return ContentHeaderNonArticle::basic($arguments['title'], $background instanceof BackgroundImage, null, null, null, $background);
             });
+
+        $arguments['covers'] = $covers
+            ->map($this->willConvertTo(Teaser::class, ['variant' => 'secondary']))
+            ->then(Callback::emptyOr(function (Sequence $covers) {
+                return ListingTeasers::forHighlights($covers->toArray(), 'Cover articles', 'covers');
+            }))
+            ->otherwise($this->softFailure('Failed to load cover articles for '.$starts->format('F Y')));
 
         $arguments['listing'] = $research = $this->get('elife.api_sdk.search')
             ->forType('research-advance', 'research-article', 'research-exchange', 'short-report', 'tools-resources', 'replication-study')
