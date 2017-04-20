@@ -1,5 +1,2 @@
 imports:
   - resource: config_continuumtest.yml
-
-swiftmailer:
-    disable_delivery: true
