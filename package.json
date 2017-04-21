@@ -8,6 +8,9 @@
         "gulp-responsive": "^2.7",
         "gulp-rev-all": "^0.9",
         "imagemin-mozjpeg": "^6.0",
+        "imagemin-svgo": "^5.2.1",
+        "imagemin-webp": "^4.0",
+        "imagemin-zopfli": "^5.1",
         "merge-stream": "^1.0.1"
     }
 }
