@@ -17,10 +17,22 @@ final class ImageConverter implements ViewModelConverter
      */
     public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
+        $image = $object->getImage()->getImage();
+
+        $srcset = [];
+        $baseWidth = 538;
+        if ($image->getWidth() > $baseWidth) {
+            $width = $baseWidth * 2;
+            if ($width > $image->getWidth()) {
+                $width = $image->getWidth();
+            }
+            $srcset[$width] = $this->iiifUri($image, $width);
+        }
+
         return new CaptionlessImage(
             new ViewModel\Image(
-                $this->iiifUri($object->getImage()->getImage(), 538),
-                [1076 => $this->iiifUri($object->getImage()->getImage(), 1076)],
+                $this->iiifUri($image, $image >= $baseWidth ? $baseWidth : null),
+                $srcset,
                 $object->getImage()->getImage()->getAltText()
             )
         );
