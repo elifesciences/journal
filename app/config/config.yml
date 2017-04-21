@@ -23,11 +23,15 @@ csa_guzzle:
                 base_uri: '%crm_url%'
                 connect_timeout: 1
                 timeout: 3
+            middleware:
+              - !cache
         file_download:
             config:
                 connect_timeout: 0.5
                 http_errors: false
                 stream: true
+            middleware:
+              - !cache
 
 framework:
     assets:
