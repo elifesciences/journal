@@ -18,9 +18,10 @@ final class ResourcesControllerTest extends PageTestCase
 
         $majorSections = $crawler->filter('h2.article-section__header_text');
 
-        $this->assertCount(1, $majorSections);
+        $this->assertCount(2, $majorSections);
 
         $this->assertSame('Videos', trim($majorSections->eq(0)->text()));
+        $this->assertSame('Posters', trim($majorSections->eq(1)->text()));
     }
 
     /**

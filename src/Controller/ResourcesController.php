@@ -7,8 +7,10 @@ use eLife\Patterns\ViewModel\ArticleSection;
 use eLife\Patterns\ViewModel\Code;
 use eLife\Patterns\ViewModel\ContentHeaderNonArticle;
 use eLife\Patterns\ViewModel\IFrame;
+use eLife\Patterns\ViewModel\Image;
 use eLife\Patterns\ViewModel\LeadPara;
 use eLife\Patterns\ViewModel\LeadParas;
+use eLife\Patterns\ViewModel\Picture;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -42,8 +44,36 @@ This is true for journal articles and related content. See our <a href="'.$this-
                 new Code('<iframe width="560" height="315" src="https://www.youtube.com/embed/quCG17jZW-w" frameborder="0" allowfullscreen></iframe>'),
                 new Paragraph('All of our videos are available on <a href="https://www.youtube.com/channel/UCNEHLtAc_JPI84xW8V4XWyw">YouTube</a>.')
             )),
+            ArticleSection::basic('Posters', 2, $this->render(
+                $this->toStyleGuideImage('$1000 Travel Grants now available', 'travel-grants-thumbnail.png'),
+                new Paragraph('$1,000 Travel grants (2017)'),
+                new Paragraph('<a href="https://cdn.elifesciences.org/downloads/a4-elife-travel-grants.pdf">A4 download</a> |
+<a href="https://cdn.elifesciences.org/downloads/letter-elife-travel-grants.pdf">US letter download</a> '),
+                $this->toStyleGuideImage('#ECRWednesday Webinars - cultivate your career', 'ecr-wednesdays-thumbnail.png'),
+                new Paragraph('#ECRWednesday Webinars - cultivate your career'),
+                new Paragraph('<a href="https://cdn.elifesciences.org/downloads/a4-elife-ecr-wednesdays.pdf ">A4 download</a> |
+<a href="https://cdn.elifesciences.org/downloads/letter-elife-ecr-wednesdays.pdf">US letter download</a> ')
+            )),
         ];
 
         return new Response($this->get('templating')->render('::resources.html.twig', $arguments));
+    }
+
+    private function toStyleGuideImage($name, $filename) : Picture
+    {
+        $styleGuideDirectoryUri = 'https://cdn.elifesciences.org/style-guide-images/';
+        $sourceUri = $styleGuideDirectoryUri.$filename;
+        $sources = [];
+        $sources[] = ['srcset' => sprintf('%s 200w', $sourceUri), 'type' => 'image/png'];
+
+        return new Picture(
+                $sources,
+                new Image(
+                    $sourceUri,
+                    [],
+                    $name,
+                    []
+                )
+            );
     }
 }
