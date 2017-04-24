@@ -3,10 +3,13 @@
 namespace eLife\Journal\ViewModel\Converter;
 
 use eLife\ApiSdk\Model\Subject;
+use eLife\Journal\Helper\CreatesIiifUri;
 use eLife\Patterns\ViewModel;
 
 final class SubjectContentHeaderConverter implements ViewModelConverter
 {
+    use CreatesIiifUri;
+
     /**
      * @param Subject $object
      */
@@ -14,8 +17,8 @@ final class SubjectContentHeaderConverter implements ViewModelConverter
     {
         return ViewModel\ContentHeaderNonArticle::subject($object->getName(), false, null,
             new ViewModel\BackgroundImage(
-                $object->getBanner()->getSizes()[0]->getImage(900),
-                $object->getBanner()->getSizes()[0]->getImage(1800)
+                $this->iiifUri($object->getBanner(), 900, 450),
+                $this->iiifUri($object->getBanner(), 1800, 900)
             )
         );
     }

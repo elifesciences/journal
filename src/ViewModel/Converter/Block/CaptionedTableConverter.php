@@ -2,8 +2,8 @@
 
 namespace eLife\Journal\ViewModel\Converter\Block;
 
+use eLife\ApiSdk\Model\AssetFile;
 use eLife\ApiSdk\Model\Block;
-use eLife\ApiSdk\Model\File;
 use eLife\ApiSdk\Model\Footnote;
 use eLife\Journal\Helper\CanConvert;
 use eLife\Journal\ViewModel\Converter\ViewModelConverter;
@@ -48,7 +48,7 @@ final class CaptionedTableConverter implements ViewModelConverter
         }
 
         if (!empty($context['complete'])) {
-            $additionalAssets = array_map(function (File $sourceData) {
+            $additionalAssets = array_map(function (AssetFile $sourceData) {
                 return $this->viewModelConverter->convert($sourceData);
             }, $object->getSourceData());
         } else {

@@ -3,6 +3,7 @@ Feature: Archive month
 
   Rules:
   - The heading image is the same as the image used for the month on the monthly archive page
+  - The cover articles are the same as appear for the month on the monthly archive page
   - 'Research articles' list contains items from the homepage 'Latest research' list published during the month
   - 'Magazine' list contains Magazine items published during the month
   - Podcast episodes always appear at the top of the 'Magazine' list
@@ -20,6 +21,11 @@ Feature: Archive month
       | Article 5 | Article 5       | 50         | 29 March 2016 |
     When I go to the archive for March 2016
     Then I should see the image from the cover for "Article 4" in the header
+    And I should see the following cover articles for March 2016 in the "Cover articles" list:
+      | Another Article |
+      | Some Article    |
+      | Article 3       |
+      | Article 1       |
 
   Scenario: 'Research articles' list shows research articles published during the month
     Given 4 research articles were published during March 2016

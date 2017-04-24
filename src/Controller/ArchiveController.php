@@ -4,6 +4,7 @@ namespace eLife\Journal\Controller;
 
 use DateTimeImmutable;
 use DateTimeZone;
+use eLife\ApiSdk\Collection\PromiseSequence;
 use eLife\ApiSdk\Collection\Sequence;
 use eLife\ApiSdk\Model\ArticleVersion;
 use eLife\ApiSdk\Model\BlogArticle;
@@ -14,6 +15,7 @@ use eLife\ApiSdk\Model\LabsExperiment;
 use eLife\ApiSdk\Model\Model;
 use eLife\ApiSdk\Model\PodcastEpisode;
 use eLife\Journal\Helper\Callback;
+use eLife\Journal\Helper\CreatesIiifUri;
 use eLife\Journal\ViewModel\EmptyListing;
 use eLife\Patterns\ViewModel\ArchiveNavLink;
 use eLife\Patterns\ViewModel\BackgroundImage;
@@ -37,6 +39,8 @@ use function GuzzleHttp\Promise\all;
 
 final class ArchiveController extends Controller
 {
+    use CreatesIiifUri;
+
     public function indexAction(Request $request) : Response
     {
         $year = $request->query->get('year');
@@ -101,8 +105,8 @@ final class ArchiveController extends Controller
                         new BlockLink(
                             $link,
                             new BackgroundImage(
-                                $covers[0]->getBanner()->getSize('2:1')->getImage(900),
-                                $covers[0]->getBanner()->getSize('2:1')->getImage(1800)
+                                $this->iiifUri($covers[0]->getBanner(), 263, 176),
+                                $this->iiifUri($covers[0]->getBanner(), 526, 352)
                             )
                         ),
                         'Cover articles',
@@ -144,13 +148,13 @@ final class ArchiveController extends Controller
 
         $ends = $starts->setDate((int) $starts->format('Y'), (int) $starts->format('n'), (int) $starts->format('t'))->setTime(23, 59, 59);
 
-        $covers = $this->get('elife.api_sdk.covers')
+        $covers = new PromiseSequence($this->get('elife.api_sdk.covers')
             ->sortBy('page-views')
             ->startDate($starts)
             ->endDate($ends)
             ->useDate('published')
             ->slice(0, 4)
-            ->otherwise($this->softFailure('Failed to load cover articles for '.$starts->format('F Y')));
+            ->otherwise($this->softFailure('Failed to load cover articles for '.$starts->format('F Y'))));
 
         $arguments = $this->defaultPageArguments($request);
 
@@ -162,13 +166,20 @@ final class ArchiveController extends Controller
                     $background = null;
                 } else {
                     $background = new BackgroundImage(
-                        $covers[0]->getBanner()->getSize('2:1')->getImage(900),
-                        $covers[0]->getBanner()->getSize('2:1')->getImage(1800)
+                        $this->iiifUri($covers[0]->getBanner(), 900, 450),
+                        $this->iiifUri($covers[0]->getBanner(), 1800, 900)
                     );
                 }
 
                 return ContentHeaderNonArticle::basic($arguments['title'], $background instanceof BackgroundImage, null, null, null, $background);
             });
+
+        $arguments['covers'] = $covers
+            ->map($this->willConvertTo(Teaser::class, ['variant' => 'secondary']))
+            ->then(Callback::emptyOr(function (Sequence $covers) {
+                return ListingTeasers::forHighlights($covers->toArray(), 'Cover articles', 'covers');
+            }))
+            ->otherwise($this->softFailure('Failed to load cover articles for '.$starts->format('F Y')));
 
         $arguments['listing'] = $research = $this->get('elife.api_sdk.search')
             ->forType('research-advance', 'research-article', 'research-exchange', 'short-report', 'tools-resources', 'replication-study')

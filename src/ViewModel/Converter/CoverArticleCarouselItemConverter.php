@@ -5,6 +5,7 @@ namespace eLife\Journal\ViewModel\Converter;
 use eLife\ApiSdk\Model\ArticleVersion;
 use eLife\ApiSdk\Model\Cover;
 use eLife\ApiSdk\Model\Subject;
+use eLife\Journal\Helper\CreatesIiifUri;
 use eLife\Journal\Helper\ModelName;
 use eLife\Patterns\ViewModel;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -12,6 +13,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 final class CoverArticleCarouselItemConverter implements ViewModelConverter
 {
     use CreatesDate;
+    use CreatesIiifUri;
 
     private $urlGenerator;
 
@@ -45,14 +47,14 @@ final class CoverArticleCarouselItemConverter implements ViewModelConverter
                 $this->simpleDate($article, $context)
             ),
             new ViewModel\BackgroundImage(
-                $object->getBanner()->getSize('2:1')->getImage(900),
-                $object->getBanner()->getSize('2:1')->getImage(1800)
+                $this->iiifUri($object->getBanner(), 900, 450),
+                $this->iiifUri($object->getBanner(), 1800, 900)
             )
         );
     }
 
     public function supports($object, string $viewModel = null, array $context = []) : bool
     {
-        return $object instanceof Cover && $object->getItem() instanceof ArticleVersion;
+        return $object instanceof Cover && ViewModel\CarouselItem::class === $viewModel && $object->getItem() instanceof ArticleVersion;
     }
 }

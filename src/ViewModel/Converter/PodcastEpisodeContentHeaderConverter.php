@@ -3,6 +3,7 @@
 namespace eLife\Journal\ViewModel\Converter;
 
 use eLife\ApiSdk\Model\PodcastEpisode;
+use eLife\Journal\Helper\CreatesIiifUri;
 use eLife\Journal\Helper\DownloadLink;
 use eLife\Journal\Helper\DownloadLinkUriGenerator;
 use eLife\Patterns\ViewModel;
@@ -11,6 +12,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 final class PodcastEpisodeContentHeaderConverter implements ViewModelConverter
 {
     use CreatesDate;
+    use CreatesIiifUri;
 
     private $urlGenerator;
     private $downloadLinkUriGenerator;
@@ -29,8 +31,8 @@ final class PodcastEpisodeContentHeaderConverter implements ViewModelConverter
         return ViewModel\ContentHeaderNonArticle::podcast($object->getTitle(), false, 'Episode '.$object->getNumber(), null,
             ViewModel\Meta::withLink(new ViewModel\Link('Podcast', $this->urlGenerator->generate('podcast')), $this->simpleDate($object, ['date' => 'published'] + $context)),
             new ViewModel\BackgroundImage(
-                $object->getBanner()->getSize('2:1')->getImage(900),
-                $object->getBanner()->getSize('2:1')->getImage(1800)
+                $this->iiifUri($object->getBanner(), 900, 450),
+                $this->iiifUri($object->getBanner(), 1800, 900)
             ),
             $this->downloadLinkUriGenerator->generate(DownloadLink::fromUri($object->getSources()[0]->getUri()))
         );

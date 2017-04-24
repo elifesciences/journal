@@ -163,16 +163,16 @@ final class HomepageContext extends Context
                 'published' => $today->format(ApiSdk::DATE_FORMAT),
                 'image' => [
                     'thumbnail' => [
+                        'uri' => 'https://www.example.com/iiif/image',
                         'alt' => '',
-                        'sizes' => [
-                            '16:9' => [
-                                '250' => 'https://placehold.it/250x141',
-                                '500' => 'https://placehold.it/500x281',
-                            ],
-                            '1:1' => [
-                                '70' => 'https://placehold.it/70x70',
-                                '140' => 'https://placehold.it/140x140',
-                            ],
+                        'source' => [
+                            'mediaType' => 'image/jpeg',
+                            'uri' => 'https://www.example.com/image.jpg',
+                            'filename' => 'image.jpg',
+                        ],
+                        'size' => [
+                            'width' => 800,
+                            'height' => 600,
                         ],
                     ],
                 ],
@@ -264,12 +264,16 @@ final class HomepageContext extends Context
                         [
                             'title' => $collectionName,
                             'image' => [
+                                'uri' => 'https://www.example.com/iiif/image',
                                 'alt' => '',
-                                'sizes' => [
-                                    '2:1' => [
-                                        900 => 'https://placehold.it/900x450?item',
-                                        1800 => 'https://placehold.it/1800x900?item',
-                                    ],
+                                'source' => [
+                                    'mediaType' => 'image/jpeg',
+                                    'uri' => 'https://www.example.com/image.jpg',
+                                    'filename' => 'image.jpg',
+                                ],
+                                'size' => [
+                                    'width' => 800,
+                                    'height' => 600,
                                 ],
                             ],
                             'item' => [
@@ -279,25 +283,29 @@ final class HomepageContext extends Context
                                 'published' => $today->format(ApiSdk::DATE_FORMAT),
                                 'image' => [
                                     'banner' => [
+                                        'uri' => 'https://www.example.com/iiif/banner',
                                         'alt' => '',
-                                        'sizes' => [
-                                            '2:1' => [
-                                                900 => 'https://placehold.it/900x450?item',
-                                                1800 => 'https://placehold.it/1800x900?item',
-                                            ],
+                                        'source' => [
+                                            'mediaType' => 'image/jpeg',
+                                            'uri' => 'https://www.example.com/banner.jpg',
+                                            'filename' => 'banner.jpg',
+                                        ],
+                                        'size' => [
+                                            'width' => 800,
+                                            'height' => 600,
                                         ],
                                     ],
                                     'thumbnail' => [
+                                        'uri' => 'https://www.example.com/iiif/thumbnail',
                                         'alt' => '',
-                                        'sizes' => [
-                                            '16:9' => [
-                                                250 => 'https://placehold.it/250x141?item',
-                                                500 => 'https://placehold.it/500x281?item',
-                                            ],
-                                            '1:1' => [
-                                                70 => 'https://placehold.it/70x70?item',
-                                                140 => 'https://placehold.it/140x140?item',
-                                            ],
+                                        'source' => [
+                                            'mediaType' => 'image/jpeg',
+                                            'uri' => 'https://www.example.com/thumbnail.jpg',
+                                            'filename' => 'thumbnail.jpg',
+                                        ],
+                                        'size' => [
+                                            'width' => 800,
+                                            'height' => 600,
                                         ],
                                     ],
                                 ],
@@ -341,12 +349,16 @@ final class HomepageContext extends Context
                         [
                             'title' => 'Cover',
                             'image' => [
+                                'uri' => 'https://www.example.com/iiif/image',
                                 'alt' => '',
-                                'sizes' => [
-                                    '2:1' => [
-                                        900 => 'https://placehold.it/900x450?cover',
-                                        1800 => 'https://placehold.it/1800x900?cover',
-                                    ],
+                                'source' => [
+                                    'mediaType' => 'image/png',
+                                    'uri' => 'https://www.example.com/image.png',
+                                    'filename' => 'image.png',
+                                ],
+                                'size' => [
+                                    'width' => 800,
+                                    'height' => 600,
                                 ],
                             ],
                             'item' => [
@@ -364,25 +376,29 @@ final class HomepageContext extends Context
                                 ],
                                 'image' => [
                                     'banner' => [
+                                        'uri' => 'https://www.example.com/iiif/banner',
                                         'alt' => '',
-                                        'sizes' => [
-                                            '2:1' => [
-                                                900 => 'https://placehold.it/900x450?item',
-                                                1800 => 'https://placehold.it/1800x900?item',
-                                            ],
+                                        'source' => [
+                                            'mediaType' => 'image/jpeg',
+                                            'uri' => 'https://www.example.com/banner.jpg',
+                                            'filename' => 'banner.jpg',
+                                        ],
+                                        'size' => [
+                                            'width' => 800,
+                                            'height' => 600,
                                         ],
                                     ],
                                     'thumbnail' => [
+                                        'uri' => 'https://www.example.com/iiif/thumbnail',
                                         'alt' => '',
-                                        'sizes' => [
-                                            '16:9' => [
-                                                250 => 'https://placehold.it/250x141?item',
-                                                500 => 'https://placehold.it/500x281?item',
-                                            ],
-                                            '1:1' => [
-                                                70 => 'https://placehold.it/70x70?item',
-                                                140 => 'https://placehold.it/140x140?item',
-                                            ],
+                                        'source' => [
+                                            'mediaType' => 'image/jpeg',
+                                            'uri' => 'https://www.example.com/thumbnail.jpg',
+                                            'filename' => 'thumbnail.jpg',
+                                        ],
+                                        'size' => [
+                                            'width' => 800,
+                                            'height' => 600,
                                         ],
                                     ],
                                 ],
@@ -621,8 +637,8 @@ final class HomepageContext extends Context
     public function iShouldSeeTheTitleAndImageFromTheCollectionUsedInTheCover(string $collectionName, string $coverName)
     {
         $this->assertSession()->elementTextContains('css', '.carousel-item__title', $coverName);
-        $this->assertSession()->elementAttributeContains('css', '.carousel-item__inner', 'data-low-res-image-source', 'https://placehold.it/900x450?item');
-        $this->assertSession()->elementAttributeContains('css', '.carousel-item__inner', 'data-high-res-image-source', 'https://placehold.it/1800x900?item');
+        $this->assertSession()->elementAttributeContains('css', '.carousel-item__inner', 'data-low-res-image-source', 'https://www.example.com/iiif/image/0,100,800,400/900,450/0/default.jpg');
+        $this->assertSession()->elementAttributeContains('css', '.carousel-item__inner', 'data-high-res-image-source', 'https://www.example.com/iiif/image/0,100,800,400/1800,900/0/default.jpg');
     }
 
     /**
@@ -631,8 +647,8 @@ final class HomepageContext extends Context
     public function iShouldSeeTheCustomTitleAndImageUsedInTheCover($arg1)
     {
         $this->assertSession()->elementTextContains('css', '.carousel-item__title', 'Cover');
-        $this->assertSession()->elementAttributeContains('css', '.carousel-item__inner', 'data-low-res-image-source', 'https://placehold.it/900x450?cover');
-        $this->assertSession()->elementAttributeContains('css', '.carousel-item__inner', 'data-high-res-image-source', 'https://placehold.it/1800x900?cover');
+        $this->assertSession()->elementAttributeContains('css', '.carousel-item__inner', 'data-low-res-image-source', 'https://www.example.com/iiif/image/0,100,800,400/900,450/0/default.png');
+        $this->assertSession()->elementAttributeContains('css', '.carousel-item__inner', 'data-high-res-image-source', 'https://www.example.com/iiif/image/0,100,800,400/1800,900/0/default.png');
     }
 
     /**

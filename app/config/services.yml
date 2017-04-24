@@ -103,10 +103,21 @@ services:
         public: false
         arguments:
           - '@elife.journal.guzzle.cache.strategy'
+        calls:
+          - ['setClient', ['@elife.journal.guzzle.cache.client']]
         tags:
           - name: csa_guzzle.middleware
             alias: cache
             priority: -1500
+
+    elife.journal.guzzle.cache.client:
+        class: GuzzleHttp\Client
+        public: false
+        arguments:
+          - connect_timeout: 1
+            timeout: 2
+        tags:
+          - name: csa_guzzle.client
 
     elife.journal.guzzle.cache.storage:
         class: Kevinrob\GuzzleCache\Storage\Psr6CacheStorage
@@ -309,6 +320,16 @@ services:
         public: false
         arguments:
           - '@router'
+        tags:
+          - name: view_model.converter
+
+    elife.journal.view_model.converter.asset_file_additional_asset:
+        class: eLife\Journal\ViewModel\Converter\AssetFileAdditionalAssetConverter
+        public: false
+        arguments:
+          - '@elife.journal.view_model.converter'
+          - '@elife.patterns.pattern_renderer'
+          - '@elife.journal.helper.download_link_uri_generator'
         tags:
           - name: view_model.converter
 
@@ -525,8 +546,43 @@ services:
         tags:
           - name: view_model.converter
 
+    elife.journal.view_model.converter.cover.article.teaser.secondary:
+        class: eLife\Journal\ViewModel\Converter\CoverArticleSecondaryTeaserConverter
+        public: false
+        arguments:
+          - '@router'
+        tags:
+          - name: view_model.converter
+
+    elife.journal.view_model.converter.cover.blog_article.carousel_item:
+        class: eLife\Journal\ViewModel\Converter\CoverBlogArticleCarouselItemConverter
+        public: false
+        arguments:
+          - '@router'
+          - '@slugify'
+        tags:
+          - name: view_model.converter
+
+    elife.journal.view_model.converter.cover.blog_article.teaser.secondary:
+        class: eLife\Journal\ViewModel\Converter\CoverBlogArticleSecondaryTeaserConverter
+        public: false
+        arguments:
+          - '@router'
+          - '@slugify'
+        tags:
+          - name: view_model.converter
+
     elife.journal.view_model.converter.cover.collection.carousel_item:
         class: eLife\Journal\ViewModel\Converter\CoverCollectionCarouselItemConverter
+        public: false
+        arguments:
+          - '@router'
+          - '@slugify'
+        tags:
+          - name: view_model.converter
+
+    elife.journal.view_model.converter.cover.collection.teaser.secondary:
+        class: eLife\Journal\ViewModel\Converter\CoverCollectionSecondaryTeaserConverter
         public: false
         arguments:
           - '@router'
@@ -560,16 +616,6 @@ services:
     elife.journal.view_model.converter.external_article.teaser.related_item:
         class: eLife\Journal\ViewModel\Converter\ExternalArticleRelatedItemTeaserConverter
         public: false
-        tags:
-          - name: view_model.converter
-
-    elife.journal.view_model.converter.file_additional_asset:
-        class: eLife\Journal\ViewModel\Converter\FileAdditionalAssetConverter
-        public: false
-        arguments:
-          - '@elife.journal.view_model.converter'
-          - '@elife.patterns.pattern_renderer'
-          - '@elife.journal.helper.download_link_uri_generator'
         tags:
           - name: view_model.converter
 

@@ -3,14 +3,14 @@
 namespace eLife\Journal\ViewModel\Converter;
 
 use Cocur\Slugify\SlugifyInterface;
-use eLife\ApiSdk\Model\Collection;
+use eLife\ApiSdk\Model\BlogArticle;
 use eLife\ApiSdk\Model\Cover;
 use eLife\ApiSdk\Model\Subject;
 use eLife\Journal\Helper\CreatesIiifUri;
 use eLife\Patterns\ViewModel;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-final class CoverCollectionCarouselItemConverter implements ViewModelConverter
+final class CoverBlogArticleCarouselItemConverter implements ViewModelConverter
 {
     use CreatesDate;
     use CreatesIiifUri;
@@ -29,16 +29,19 @@ final class CoverCollectionCarouselItemConverter implements ViewModelConverter
      */
     public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
-        /** @var Collection $collection */
-        $collection = $object->getItem();
+        /** @var BlogArticle $article */
+        $article = $object->getItem();
 
         return new ViewModel\CarouselItem(
-            $collection->getSubjects()->map(function (Subject $subject) {
+            $article->getSubjects()->map(function (Subject $subject) {
                 return new ViewModel\Link($subject->getName(), $this->urlGenerator->generate('subject', ['id' => $subject->getId()]));
             })->toArray(),
-            new ViewModel\Link($object->getTitle(), $this->urlGenerator->generate('collection', ['id' => $collection->getId(), 'slug' => $this->slugify->slugify($collection->getTitle())])),
-            'Read collection',
-            ViewModel\Meta::withLink(new ViewModel\Link('Collection', $this->urlGenerator->generate('collections')), $this->simpleDate($collection, $context)),
+            new ViewModel\Link($object->getTitle(), $this->urlGenerator->generate('inside-elife-article', ['id' => $article->getId(), 'slug' => $this->slugify->slugify($article->getTitle())])),
+            'Read article',
+            ViewModel\Meta::withLink(
+                new ViewModel\Link('Inside eLife', $this->urlGenerator->generate('inside-elife')),
+                $this->simpleDate($article, $context)
+            ),
             new ViewModel\BackgroundImage(
                 $this->iiifUri($object->getBanner(), 900, 450),
                 $this->iiifUri($object->getBanner(), 1800, 900)
@@ -48,6 +51,6 @@ final class CoverCollectionCarouselItemConverter implements ViewModelConverter
 
     public function supports($object, string $viewModel = null, array $context = []) : bool
     {
-        return $object instanceof Cover && ViewModel\CarouselItem::class === $viewModel && $object->getItem() instanceof Collection;
+        return $object instanceof Cover && ViewModel\CarouselItem::class === $viewModel && $object->getItem() instanceof BlogArticle;
     }
 }
