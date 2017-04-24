@@ -14,6 +14,20 @@
 
         {{ render_pattern(leadParas) }}
 
+        <div class="grid">
+
+            <div class="grid__item medium--six-twelfths push--large--three-twelfths">
+
+                {% for part in body %}
+
+                    {{ render_pattern(part) }}
+
+                {% endfor %}
+
+            </div>
+
+        </div>
+
     </div>
 
 {% endblock %}

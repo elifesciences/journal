@@ -15,6 +15,12 @@ final class ResourcesControllerTest extends PageTestCase
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertSame('Resources', $crawler->filter('.content-header__title')->text());
+
+        $majorSections = $crawler->filter('h2.article-section__header_text');
+
+        $this->assertCount(1, $majorSections);
+
+        $this->assertSame('Videos', trim($majorSections->eq(0)->text()));
     }
 
     /**
