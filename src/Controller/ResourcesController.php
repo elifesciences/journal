@@ -54,6 +54,44 @@ This is true for journal articles and related content. See our <a href="'.$this-
                 new Paragraph('<a href="https://cdn.elifesciences.org/downloads/a4-elife-ecr-wednesdays.pdf ">A4 download</a> |
 <a href="https://cdn.elifesciences.org/downloads/letter-elife-ecr-wednesdays.pdf">US letter download</a> ')
             )),
+            ArticleSection::basic('The eLife Logo', 2, $this->render(
+                new Paragraph('The eLife logo may not be used to promote any organizations other than eLife, or to sell or promote any good or service without the express approval of eLife. If you have any questions, please <a href="'.$this->get('router')->generate('contact').'">contact us</a>.'),
+                ArticleSection::basic('Acceptable Configurations', 3, $this->render(
+                    new Paragraph('There are two possible configurations of the eLife logo. The logo may not be used in any other configuration.'),
+                    $this->toStyleGuideImage('Acceptable Configurations', 'accept-config.jpg'),
+                    new Paragraph('If colors are not being used, the logo may be presented at 100% black, or 60% black. On a dark background, the logo may <strong>only</strong> appear in reverse white.')
+                )),
+                ArticleSection::basic('Acceptable Color Use', 3, $this->render(
+                    $this->toStyleGuideImage('Acceptable Color Use', 'accept-color.jpg')
+                )),
+                ArticleSection::basic('Downloadable logos', 3, $this->render(
+                    new Paragraph('Please be sure you are downloading the correct logo for your purpose (i.e. for print, download CMYK, for web, download RGB).'),
+                    ArticleSection::basic('Full-Color Horiztonal (Preferred)', 4, $this->render(
+                        $this->toStyleGuideImage('Full-Color Horiztonal', 'elife-full-color-horizontal-sm.jpg'),
+                        new Paragraph('Print - CMYK: <a href="https://cdn.elifesciences.org/style-guide-images/elife-full-color-horizontal.eps">.eps</a> Web - RGB: <a href="https://cdn.elifesciences.org/style-guide-images/elife-full-color-horizontal.jpg">.jpg</a> (72dpi) <a href="https://cdn.elifesciences.org/style-guide-images/elife-full-color-horizontal.png">.png</a> (72dpi with transparent background)')
+                    )),
+                    ArticleSection::basic('Full-Color Vertical', 4, $this->render(
+                        $this->toStyleGuideImage('Full-Color Vertical', 'elife-full-color-vertical-sm.jpg'),
+                        new Paragraph('Print - CMYK: <a href="https://cdn.elifesciences.org/style-guide-images/elife-full-color-vertical.eps">.eps</a> Web - RGB: <a href="https://cdn.elifesciences.org/style-guide-images/elife-full-color-vertical.jpg">.jpg</a> (72dpi) <a href="https://cdn.elifesciences.org/style-guide-images/elife-full-color-vertical.png">.png</a> (72dpi with transparent background)')
+                    )),
+                    ArticleSection::basic('Greyscale Horizontal', 4, $this->render(
+                        $this->toStyleGuideImage('Greyscale Horizontal', 'elife-greyscale-horizontal-sm.jpg'),
+                        new Paragraph('Print - CMYK: <a href="https://cdn.elifesciences.org/style-guide-images/elife-greyscale-horizontal.eps">.eps</a> Web - RGB: <a href="https://cdn.elifesciences.org/style-guide-images/elife-greyscale-horizontal.jpg">.jpg</a> (72dpi) <a href="https://cdn.elifesciences.org/style-guide-images/elife-greyscale-horizontal.png">.png</a> (72dpi with transparent background)')
+                    )),
+                    ArticleSection::basic('Greyscale Horizontal (Reversed)', 4, $this->render(
+                        $this->toStyleGuideImage('Greyscale Horizontal Reversed', 'elife-greyscale-horizontal-reversed-sm.jpg'),
+                        new Paragraph('Print - CMYK: <a href="https://cdn.elifesciences.org/style-guide-images/elife-greyscale-horizontal-reversed.eps">.eps</a> Web - RGB <a href="https://cdn.elifesciences.org/style-guide-images/elife-greyscale-horizontal-reversed.png">.png</a> (72dpi with transparent background)')
+                    )),
+                    ArticleSection::basic('Greyscale Vertical', 4, $this->render(
+                        $this->toStyleGuideImage('Greyscale Vertical', 'elife-greyscale-vertical-sm.jpg'),
+                        new Paragraph('Print - CMYK: <a href="https://cdn.elifesciences.org/style-guide-images/elife-greyscale-vertical.eps">.eps</a> Web - RGB: <a href="https://cdn.elifesciences.org/style-guide-images/elife-greyscale-vertical.jpg">.jpg</a> (72dpi) <a href="https://cdn.elifesciences.org/style-guide-images/elife-greyscale-vertical.png">.png</a> (72dpi with transparent background)')
+                    )),
+                    ArticleSection::basic('Greyscale Vertical (Reversed)', 4, $this->render(
+                        $this->toStyleGuideImage('Greyscale Vertical Reversed', 'elife-greyscale-vertical-reversed-sm.jpg'),
+                        new Paragraph('Print - CMYK: <a href="https://cdn.elifesciences.org/style-guide-images/elife-greyscale-vertical-reversed.eps">.eps</a> Web - RGB <a href="https://cdn.elifesciences.org/style-guide-images/elife-greyscale-vertical-reversed.png">.png</a> (72dpi with transparent background)')
+                    ))
+                ))
+            )),
         ];
 
         return new Response($this->get('templating')->render('::resources.html.twig', $arguments));
