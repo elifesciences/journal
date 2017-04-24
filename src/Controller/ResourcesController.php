@@ -39,7 +39,8 @@ This is true for journal articles and related content. See our <a href="'.$this-
                 new Code('<iframe width="560" height="315" src="https://www.youtube.com/embed/videoseries?list=PLOAy5WJPezEi1bxU3Jxa82GBZwK9Xj982" frameborder="0" allowfullscreen></iframe>'),
                 new Paragraph('eLife: Changing the review process'),
                 new IFrame('https://www.youtube.com/embed/quCG17jZW-w', 560, 315),
-                new Code('<iframe width="560" height="315" src="https://www.youtube.com/embed/quCG17jZW-w" frameborder="0" allowfullscreen></iframe>')
+                new Code('<iframe width="560" height="315" src="https://www.youtube.com/embed/quCG17jZW-w" frameborder="0" allowfullscreen></iframe>'),
+                new Paragraph('All of our videos are available on <a href="https://www.youtube.com/channel/UCNEHLtAc_JPI84xW8V4XWyw">YouTube</a>.')
             )),
         ];
 
