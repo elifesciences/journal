@@ -69,7 +69,7 @@ final class MagazineController extends Controller
     private function createFirstPage(Request $request, array $arguments) : Response
     {
         $arguments['contentHeader'] = ContentHeaderNonArticle::basic('Magazine', true,
-            'Highlighting the latest research and giving a voice to life and biomedical scientists.',
+            'Highlighting the latest research and giving a voice to scientists',
             null, null, new BackgroundImage(
                 $this->get('assets.packages')->getUrl('assets/images/banners/magazine-lo-res.jpg'),
                 $this->get('assets.packages')->getUrl('assets/images/banners/magazine-hi-res.jpg')
