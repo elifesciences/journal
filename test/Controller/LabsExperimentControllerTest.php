@@ -41,7 +41,7 @@ final class LabsExperimentControllerTest extends PageTestCase
         $this->assertSame('Experiment impact statement', $crawler->filter('meta[name="description"]')->attr('content'));
         $this->assertSame('article', $crawler->filter('meta[property="og:type"]')->attr('content'));
         $this->assertSame('summary_large_image', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
-        $this->assertSame('https://www.example.com/iiif/image/0,100,800,400/1800,900/0/default.jpg', $crawler->filter('meta[property="og:image"]')->attr('content'));
+        $this->assertSame('https://www.example.com/iiif/banner/0,350,1800,900/1800,900/0/default.jpg', $crawler->filter('meta[property="og:image"]')->attr('content'));
         $this->assertSame('1800', $crawler->filter('meta[property="og:image:width"]')->attr('content'));
         $this->assertSame('900', $crawler->filter('meta[property="og:image:height"]')->attr('content'));
     }
@@ -144,16 +144,16 @@ final class LabsExperimentControllerTest extends PageTestCase
                     'published' => '2010-01-01T00:00:00Z',
                     'image' => [
                         'banner' => [
-                            'uri' => 'https://www.example.com/iiif/image',
+                            'uri' => 'https://www.example.com/iiif/banner',
                             'alt' => '',
                             'source' => [
                                 'mediaType' => 'image/jpeg',
-                                'uri' => 'https://www.example.com/image.jpg',
+                                'uri' => 'https://www.example.com/banner.jpg',
                                 'filename' => 'image.jpg',
                             ],
                             'size' => [
-                                'width' => 800,
-                                'height' => 600,
+                                'width' => 1800,
+                                'height' => 1600,
                             ],
                         ],
                         'thumbnail' => [

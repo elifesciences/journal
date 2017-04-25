@@ -44,8 +44,8 @@ final class SubjectContext extends Context
                             'filename' => "banner$i.jpg",
                         ],
                         'size' => [
-                            'width' => 800,
-                            'height' => 600,
+                            'width' => 1800,
+                            'height' => 1600,
                         ],
                     ],
                     'thumbnail' => [
@@ -117,8 +117,8 @@ final class SubjectContext extends Context
                                 'filename' => 'banner.jpg',
                             ],
                             'size' => [
-                                'width' => 800,
-                                'height' => 600,
+                                'width' => 1800,
+                                'height' => 1600,
                             ],
                         ],
                         'thumbnail' => [
@@ -164,16 +164,16 @@ final class SubjectContext extends Context
                 'published' => $today->format(ApiSdk::DATE_FORMAT),
                 'image' => [
                     'banner' => [
-                        'uri' => 'https://www.example.com/iiif/image',
+                        'uri' => 'https://www.example.com/iiif/banner',
                         'alt' => '',
                         'source' => [
                             'mediaType' => 'image/jpeg',
-                            'uri' => 'https://www.example.com/image.jpg',
-                            'filename' => 'image.jpg',
+                            'uri' => 'https://www.example.com/banner.jpg',
+                            'filename' => 'banner.jpg',
                         ],
                         'size' => [
-                            'width' => 800,
-                            'height' => 600,
+                            'width' => 1800,
+                            'height' => 1600,
                         ],
                     ],
                     'thumbnail' => [
@@ -350,16 +350,16 @@ final class SubjectContext extends Context
                 'published' => $today->format(ApiSdk::DATE_FORMAT),
                 'image' => [
                     'banner' => [
-                        'uri' => 'https://www.example.com/iiif/image',
+                        'uri' => 'https://www.example.com/iiif/banner',
                         'alt' => '',
                         'source' => [
                             'mediaType' => 'image/jpeg',
-                            'uri' => 'https://www.example.com/image.jpg',
-                            'filename' => 'image.jpg',
+                            'uri' => 'https://www.example.com/banner.jpg',
+                            'filename' => 'banner.jpg',
                         ],
                         'size' => [
-                            'width' => 800,
-                            'height' => 600,
+                            'width' => 1800,
+                            'height' => 1600,
                         ],
                     ],
                     'thumbnail' => [

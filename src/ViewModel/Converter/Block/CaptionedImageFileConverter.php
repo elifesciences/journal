@@ -44,7 +44,7 @@ final class CaptionedImageFileConverter implements ViewModelConverter
         }
 
         $asset = new ViewModel\Image(
-            $this->iiifUri($object->getImage(), $baseWidth),
+            $this->iiifUri($object->getImage(), $object->getImage()->getWidth() >= $baseWidth ? $baseWidth : null),
             $srcset,
             $object->getImage()->getAltText()
         );
