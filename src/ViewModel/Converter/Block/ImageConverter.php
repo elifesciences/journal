@@ -31,7 +31,7 @@ final class ImageConverter implements ViewModelConverter
 
         return new CaptionlessImage(
             new ViewModel\Image(
-                $this->iiifUri($image, $image >= $baseWidth ? $baseWidth : null),
+                $this->iiifUri($image, $image->getWidth() >= $baseWidth ? $baseWidth : null),
                 $srcset,
                 $object->getImage()->getImage()->getAltText()
             )

@@ -39,8 +39,17 @@ abstract class ModelConverterTestCase extends PHPUnit_Framework_TestCase
     protected $viewModelClasses;
     protected $converter;
     protected $context = [];
+    private static $modelsNumber = 0;
 
     use SerializerAwareTestCase;
+
+    /**
+     * @beforeClass
+     */
+    public static function initializeModelNumber()
+    {
+        self::$modelsNumber = 0;
+    }
 
     /**
      * @test
@@ -53,6 +62,7 @@ abstract class ModelConverterTestCase extends PHPUnit_Framework_TestCase
         $model = $this->serializer->denormalize($model, $class);
 
         foreach ($this->modelHook($model) as $model) {
+            ++self::$modelsNumber;
             foreach ($this->viewModelClasses as $viewModelClass) {
                 $this->assertTrue(
                     $this->converter->supports($model, $viewModelClass, $this->context),
@@ -63,6 +73,16 @@ abstract class ModelConverterTestCase extends PHPUnit_Framework_TestCase
 
                 $viewModel->toArray();
             }
+        }
+    }
+
+    /**
+     * @afterClass
+     */
+    public static function checkAtLeastOneModelHasBeenConverted()
+    {
+        if (self::$modelsNumber == 0) {
+            echo 'No models have been run through it_converts_a_model ('.get_called_class().')',PHP_EOL;
         }
     }
 
