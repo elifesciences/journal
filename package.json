@@ -7,6 +7,7 @@
         "gulp-imagemin": "^3.1",
         "gulp-responsive": "^2.7",
         "gulp-rev-all": "^0.9",
+        "gulp-svg2png": "^2.0.2",
         "imagemin-mozjpeg": "^6.0",
         "merge-stream": "^1.0.1"
     }
