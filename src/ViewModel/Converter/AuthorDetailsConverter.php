@@ -24,7 +24,7 @@ trait AuthorDetailsConverter
                         return "<a href=\"tel:$phoneNumber\">$phoneNumber</a>";
                     }, $author->getPhoneNumbers())
                 ),
-                'Competing interests' => $author->getCompetingInterests() ?? 'No competing interests declared.',
+                'Competing interests' => $author->getCompetingInterests(),
                 'Additional information' => $author->getAdditionalInformation(),
             ]
         );
