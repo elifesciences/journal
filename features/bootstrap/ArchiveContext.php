@@ -57,8 +57,8 @@ final class ArchiveContext extends Context
                         'filename' => "image$id.jpg",
                     ],
                     'size' => [
-                        'width' => 800,
-                        'height' => 600,
+                        'width' => 1800,
+                        'height' => 1600,
                     ],
                 ],
                 'item' => [
@@ -601,7 +601,7 @@ final class ArchiveContext extends Context
             'css',
             '.grid-listing-heading:contains("Monthly archive") + .grid-listing > .grid-listing-item:contains("'.$month.' '.$year.'") .block-link',
             'data-high-res-image-source',
-            'https://www.example.com/iiif/image'.$this->createId($article).'/0,32,800,536/526,352/0/default.jpg'
+            'https://www.example.com/iiif/image'.$this->createId($article).'/0,198,1800,1205/526,352/0/default.jpg'
         );
     }
 
@@ -614,7 +614,7 @@ final class ArchiveContext extends Context
             'css',
             '.content-header',
             'data-high-res-image-source',
-            'https://www.example.com/iiif/image'.$this->createId($article).'/0,100,800,400/1800,900/0/default.jpg'
+            'https://www.example.com/iiif/image'.$this->createId($article).'/0,350,1800,900/1800,900/0/default.jpg'
         );
     }
 

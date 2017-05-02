@@ -44,29 +44,47 @@ abstract class ModelConverterTestCase extends PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @dataProvider samples
      */
-    final public function it_converts_a_model(array $model, string $class)
+    final public function it_is_a_view_model_converter()
     {
         $this->assertInstanceOf(ViewModelConverter::class, $this->converter);
+    }
 
-        $model = $this->serializer->denormalize($model, $class);
+    /**
+     * @test
+     * @dataProvider samples
+     */
+    final public function it_converts_a_model($model, string $viewModelClass)
+    {
+        $this->assertTrue(
+            $this->converter->supports($model, $viewModelClass, $this->context),
+            'Converter does not support turning '.get_class($model).' into '.$viewModelClass
+        );
+        $viewModel = $this->converter->convert($model, $viewModelClass, $this->context);
+        $this->assertContains(get_class($viewModel), $this->viewModelClasses);
 
-        foreach ($this->modelHook($model) as $model) {
-            foreach ($this->viewModelClasses as $viewModelClass) {
-                $this->assertTrue(
-                    $this->converter->supports($model, $viewModelClass, $this->context),
-                    'Converter does not support turning '.get_class($model).' into '.$viewModelClass
-                );
-                $viewModel = $this->converter->convert($model, $viewModelClass, $this->context);
-                $this->assertContains(get_class($viewModel), $this->viewModelClasses);
+        $viewModel->toArray();
+    }
 
-                $viewModel->toArray();
+    final public function samples() : Traversable
+    {
+        $this->setUpSerializer();
+
+        foreach ($this->findSamples() as $sample) {
+            $model = $sample[0];
+            $class = $sample[1];
+
+            $model = $this->serializer->denormalize($model, $class);
+
+            foreach ($this->modelHook($model) as $model) {
+                foreach ($this->viewModelClasses as $viewModelClass) {
+                    yield [$model, $viewModelClass];
+                }
             }
         }
     }
 
-    final public function samples() : Traversable
+    final private function findSamples() : Traversable
     {
         $this->assertInternalType('array', $this->models);
         $this->assertInternalType('array', $this->viewModelClasses);

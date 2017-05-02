@@ -16,7 +16,7 @@ smoke_url_ok $(hostname)/ping
 
 if [ "$ENVIRONMENT_NAME" != "ci" ] && [ "$ENVIRONMENT_NAME" != "dev" ]
   then
-    curl -v $(hostname)/status
+    curl -v $(hostname)/status | grep check__name
     smoke_url_ok $(hostname)/status
     smoke_url_ok $(hostname)/
 fi

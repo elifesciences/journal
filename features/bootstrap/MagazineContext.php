@@ -141,8 +141,8 @@ final class MagazineContext extends Context
                             'filename' => "banner$i.jpg",
                         ],
                         'size' => [
-                            'width' => 800,
-                            'height' => 600,
+                            'width' => 1800,
+                            'height' => 1600,
                         ],
                     ],
                     'thumbnail' => [

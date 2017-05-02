@@ -14,6 +14,8 @@ final class StatusController extends Controller
 
     public function pingAction() : Response
     {
+        $this->get('cache.app')->getItem('ping')->get();
+
         return $this->createResponse('pong', Response::HTTP_OK, ['Content-Type' => 'text/plain']);
     }
 

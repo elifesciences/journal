@@ -272,8 +272,8 @@ final class HomepageContext extends Context
                                     'filename' => 'image.jpg',
                                 ],
                                 'size' => [
-                                    'width' => 800,
-                                    'height' => 600,
+                                    'width' => 1800,
+                                    'height' => 1600,
                                 ],
                             ],
                             'item' => [
@@ -291,8 +291,8 @@ final class HomepageContext extends Context
                                             'filename' => 'banner.jpg',
                                         ],
                                         'size' => [
-                                            'width' => 800,
-                                            'height' => 600,
+                                            'width' => 1800,
+                                            'height' => 1600,
                                         ],
                                     ],
                                     'thumbnail' => [
@@ -304,8 +304,8 @@ final class HomepageContext extends Context
                                             'filename' => 'thumbnail.jpg',
                                         ],
                                         'size' => [
-                                            'width' => 800,
-                                            'height' => 600,
+                                            'width' => 1800,
+                                            'height' => 1600,
                                         ],
                                     ],
                                 ],
@@ -357,8 +357,8 @@ final class HomepageContext extends Context
                                     'filename' => 'image.png',
                                 ],
                                 'size' => [
-                                    'width' => 800,
-                                    'height' => 600,
+                                    'width' => 1800,
+                                    'height' => 1600,
                                 ],
                             ],
                             'item' => [
@@ -384,8 +384,8 @@ final class HomepageContext extends Context
                                             'filename' => 'banner.jpg',
                                         ],
                                         'size' => [
-                                            'width' => 800,
-                                            'height' => 600,
+                                            'width' => 1800,
+                                            'height' => 1600,
                                         ],
                                     ],
                                     'thumbnail' => [
@@ -637,8 +637,8 @@ final class HomepageContext extends Context
     public function iShouldSeeTheTitleAndImageFromTheCollectionUsedInTheCover(string $collectionName, string $coverName)
     {
         $this->assertSession()->elementTextContains('css', '.carousel-item__title', $coverName);
-        $this->assertSession()->elementAttributeContains('css', '.carousel-item__inner', 'data-low-res-image-source', 'https://www.example.com/iiif/image/0,100,800,400/900,450/0/default.jpg');
-        $this->assertSession()->elementAttributeContains('css', '.carousel-item__inner', 'data-high-res-image-source', 'https://www.example.com/iiif/image/0,100,800,400/1800,900/0/default.jpg');
+        $this->assertSession()->elementAttributeContains('css', '.carousel-item__inner', 'data-low-res-image-source', 'https://www.example.com/iiif/image/0,350,1800,900/900,450/0/default.jpg');
+        $this->assertSession()->elementAttributeContains('css', '.carousel-item__inner', 'data-high-res-image-source', 'https://www.example.com/iiif/image/0,350,1800,900/1800,900/0/default.jpg');
     }
 
     /**
@@ -647,8 +647,8 @@ final class HomepageContext extends Context
     public function iShouldSeeTheCustomTitleAndImageUsedInTheCover($arg1)
     {
         $this->assertSession()->elementTextContains('css', '.carousel-item__title', 'Cover');
-        $this->assertSession()->elementAttributeContains('css', '.carousel-item__inner', 'data-low-res-image-source', 'https://www.example.com/iiif/image/0,100,800,400/900,450/0/default.png');
-        $this->assertSession()->elementAttributeContains('css', '.carousel-item__inner', 'data-high-res-image-source', 'https://www.example.com/iiif/image/0,100,800,400/1800,900/0/default.png');
+        $this->assertSession()->elementAttributeContains('css', '.carousel-item__inner', 'data-low-res-image-source', 'https://www.example.com/iiif/image/0,350,1800,900/900,450/0/default.png');
+        $this->assertSession()->elementAttributeContains('css', '.carousel-item__inner', 'data-high-res-image-source', 'https://www.example.com/iiif/image/0,350,1800,900/1800,900/0/default.png');
     }
 
     /**
