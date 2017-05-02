@@ -55,8 +55,8 @@ final class CommunityController extends Controller
     {
         $arguments['contentHeader'] = ContentHeaderNonArticle::basic('Community', true, null, null, null,
             new BackgroundImage(
-                $this->get('assets.packages')->getUrl('assets/images/banners/community-lo-res.jpg'),
-                $this->get('assets.packages')->getUrl('assets/images/banners/community-hi-res.jpg')
+                $this->get('assets.packages')->getUrl('assets/images/banners/community-950x400.jpg'),
+                $this->get('assets.packages')->getUrl('assets/images/banners/community-1900x800.jpg')
             ));
 
         $arguments['leadParas'] = new LeadParas([

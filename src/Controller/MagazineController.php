@@ -71,8 +71,8 @@ final class MagazineController extends Controller
         $arguments['contentHeader'] = ContentHeaderNonArticle::basic('Magazine', true,
             'Highlighting the latest research and giving a voice to scientists',
             null, null, new BackgroundImage(
-                $this->get('assets.packages')->getUrl('assets/images/banners/magazine-lo-res.jpg'),
-                $this->get('assets.packages')->getUrl('assets/images/banners/magazine-hi-res.jpg')
+                $this->get('assets.packages')->getUrl('assets/images/banners/magazine-950x400.jpg'),
+                $this->get('assets.packages')->getUrl('assets/images/banners/magazine-1900x800.jpg')
             ));
 
         $arguments['audio_player'] = $this->get('elife.api_sdk.podcast_episodes')

@@ -74,8 +74,8 @@ final class LabsController extends Controller
     {
         $arguments['contentHeader'] = ContentHeaderNonArticle::basic('eLife Labs', true, null, null, null,
             new BackgroundImage(
-                $this->get('assets.packages')->getUrl('assets/images/banners/labs-lo-res.jpg'),
-                $this->get('assets.packages')->getUrl('assets/images/banners/labs-hi-res.jpg')
+                $this->get('assets.packages')->getUrl('assets/images/banners/labs-950x400.jpg'),
+                $this->get('assets.packages')->getUrl('assets/images/banners/labs-1900x800.jpg')
             ));
 
         $arguments['leadParas'] = new LeadParas([
