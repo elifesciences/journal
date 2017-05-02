@@ -49,8 +49,8 @@ final class SubjectsController extends Controller
                         $this->get('router')->generate('subject', ['id' => $subject->getId()])
                     ),
                     new BackgroundImage(
-                        $this->iiifUri($subject->getThumbnail(), 500, 281),
-                        $this->iiifUri($subject->getThumbnail(), 250, 141),
+                        $this->iiifUri($subject->getThumbnail(), 263, 152),
+                        $this->iiifUri($subject->getThumbnail(), 526, 304),
                         600
                     )
                 );
