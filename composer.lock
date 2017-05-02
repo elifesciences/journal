@@ -843,12 +843,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:elifesciences/patterns-php.git",
-                "reference": "6eafa5b447e1a9dc3cc436842cdfc3d956b5ea5e"
+                "reference": "b31d3a4beb201808b3788404971c48b907fae77e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/6eafa5b447e1a9dc3cc436842cdfc3d956b5ea5e",
-                "reference": "6eafa5b447e1a9dc3cc436842cdfc3d956b5ea5e",
+                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/b31d3a4beb201808b3788404971c48b907fae77e",
+                "reference": "b31d3a4beb201808b3788404971c48b907fae77e",
                 "shasum": ""
             },
             "require": {
@@ -885,7 +885,7 @@
                 "MIT"
             ],
             "description": "eLife patterns",
-            "time": "2017-04-18 06:25:50"
+            "time": "2017-05-02 11:00:53"
         },
         {
             "name": "fabpot/goutte",
@@ -3162,7 +3162,7 @@
                 "MIT"
             ],
             "description": "eLife Sciences API specification",
-            "time": "2017-04-19T08:33:48+00:00"
+            "time": "2017-04-19 08:33:48"
         },
         {
             "name": "elife/api-validator",
