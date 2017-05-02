@@ -2,7 +2,7 @@
 
 namespace eLife\Journal\Controller;
 
-use eLife\Patterns\ViewModel\ContentHeaderNonArticle;
+use eLife\Patterns\ViewModel\ContentHeader;
 use eLife\Patterns\ViewModel\GridListing;
 use eLife\Patterns\ViewModel\Image;
 use eLife\Patterns\ViewModel\ImageLink;
@@ -18,7 +18,7 @@ final class WhoWeWorkWithController extends Controller
 
         $arguments['title'] = 'Who we work with';
 
-        $arguments['contentHeader'] = ContentHeaderNonArticle::basic($arguments['title']);
+        $arguments['contentHeader'] = new ContentHeader($arguments['title']);
 
         $memberships = [
             [
@@ -241,16 +241,16 @@ final class WhoWeWorkWithController extends Controller
             if ($item['svg']) {
                 $sources[] = ['srcset' => $this->get('assets.packages')->getUrl("assets/images/logos/{$item['filename']}.svg"), 'type' => 'image/svg+xml'];
             }
-            $sources[] = ['srcset' => sprintf('%s 200w, %s 400w', $this->get('assets.packages')->getUrl("assets/images/logos/{$item['filename']}-lo-res.webp"), $this->get('assets.packages')->getUrl("assets/images/logos/{$item['filename']}-hi-res.webp")), 'type' => 'image/webp'];
+            $sources[] = ['srcset' => sprintf('%s 250w, %s 500w', $this->get('assets.packages')->getUrl("assets/images/logos/{$item['filename']}-250.webp"), $this->get('assets.packages')->getUrl("assets/images/logos/{$item['filename']}-500.webp")), 'type' => 'image/webp'];
 
             return new ImageLink(
                 $item['uri'],
                 new Picture(
                     $sources,
                     new Image(
-                        $this->get('assets.packages')->getUrl("assets/images/logos/{$item['filename']}-lo-res.png"),
+                        $this->get('assets.packages')->getUrl("assets/images/logos/{$item['filename']}-250.png"),
                         [
-                            400 => $this->get('assets.packages')->getUrl("assets/images/logos/{$item['filename']}-hi-res.png"),
+                            500 => $this->get('assets.packages')->getUrl("assets/images/logos/{$item['filename']}-500.png"),
                         ],
                         $item['name']
                     )

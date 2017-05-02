@@ -612,9 +612,9 @@ final class ArchiveContext extends Context
     {
         $this->assertSession()->elementAttributeContains(
             'css',
-            '.content-header',
-            'data-high-res-image-source',
-            'https://www.example.com/iiif/image'.$this->createId($article).'/0,350,1800,900/1800,900/0/default.jpg'
+            '.content-header .content-header__image',
+            'src',
+            'https://www.example.com/iiif/image'.$this->createId($article).'/0,529,1800,543/1114,336/0/default.jpg'
         );
     }
 

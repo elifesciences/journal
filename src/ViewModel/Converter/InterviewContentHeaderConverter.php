@@ -14,9 +14,17 @@ final class InterviewContentHeaderConverter implements ViewModelConverter
      */
     public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
-        return ViewModel\ContentHeaderNonArticle::basic(
+        return new ViewModel\ContentHeader(
             $object->getTitle(),
+            null,
+            $object->getImpactStatement(),
             false,
+            [],
+            null,
+            null,
+            [],
+            [],
+            null,
             null,
             null,
             ViewModel\Meta::withText('Interview', $this->simpleDate($object, ['date' => 'published'] + $context))
@@ -25,6 +33,6 @@ final class InterviewContentHeaderConverter implements ViewModelConverter
 
     public function supports($object, string $viewModel = null, array $context = []) : bool
     {
-        return $object instanceof Interview && ViewModel\ContentHeaderNonArticle::class === $viewModel;
+        return $object instanceof Interview && ViewModel\ContentHeader::class === $viewModel;
     }
 }

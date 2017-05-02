@@ -4,6 +4,7 @@ namespace eLife\Journal\Controller;
 
 use eLife\Journal\Form\Type\ContactType;
 use eLife\Journal\Helper\Humanizer;
+use eLife\Patterns\ViewModel\ContentHeader;
 use eLife\Patterns\ViewModel\InfoBar;
 use Swift_Message;
 use Symfony\Component\Form\Form;
@@ -20,6 +21,8 @@ final class ContactController extends Controller
         $arguments = $this->defaultPageArguments($request);
 
         $arguments['title'] = 'Contact';
+
+        $arguments['contentHeader'] = new ContentHeader($arguments['title']);
 
         /** @var Form $form */
         $form = $this->get('form.factory')

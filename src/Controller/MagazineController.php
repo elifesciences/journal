@@ -8,8 +8,7 @@ use eLife\Journal\Helper\ModelName;
 use eLife\Journal\Helper\Paginator;
 use eLife\Journal\Pagerfanta\SequenceAdapter;
 use eLife\Patterns\ViewModel\AudioPlayer;
-use eLife\Patterns\ViewModel\BackgroundImage;
-use eLife\Patterns\ViewModel\ContentHeaderNonArticle;
+use eLife\Patterns\ViewModel\ContentHeader;
 use eLife\Patterns\ViewModel\Link;
 use eLife\Patterns\ViewModel\ListingTeasers;
 use eLife\Patterns\ViewModel\SectionListing;
@@ -68,12 +67,11 @@ final class MagazineController extends Controller
 
     private function createFirstPage(Request $request, array $arguments) : Response
     {
-        $arguments['contentHeader'] = ContentHeaderNonArticle::basic('Magazine', true,
-            'Highlighting the latest research and giving a voice to scientists',
-            null, null, new BackgroundImage(
-                $this->get('assets.packages')->getUrl('assets/images/banners/magazine-lo-res.jpg'),
-                $this->get('assets.packages')->getUrl('assets/images/banners/magazine-hi-res.jpg')
-            ));
+        $arguments['contentHeader'] = new ContentHeader(
+            'Magazine',
+            $this->get('elife.journal.view_model.factory.content_header_image')->forLocalFile('magazine'),
+            'Highlighting the latest research and giving a voice to scientists'
+        );
 
         $arguments['audio_player'] = $this->get('elife.api_sdk.podcast_episodes')
             ->slice(0, 1)

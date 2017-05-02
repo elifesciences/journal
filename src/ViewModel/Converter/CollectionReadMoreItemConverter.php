@@ -41,11 +41,10 @@ final class CollectionReadMoreItemConverter implements ViewModelConverter
             new ViewModel\ContentHeaderReadMore(
                 $object->getTitle(),
                 $this->urlGenerator->generate('collection', ['id' => $object->getId(), 'slug' => $this->slugify->slugify($object->getTitle())]),
-                null,
-                $curatedBy,
-                new ViewModel\SubjectList(...$object->getSubjects()->map(function (Subject $subject) {
+                $object->getSubjects()->map(function (Subject $subject) {
                     return new ViewModel\Link($subject->getName());
-                })),
+                })->toArray(),
+                $curatedBy,
                 ViewModel\Meta::withLink(
                     new ViewModel\Link(ModelName::singular('collection'), $this->urlGenerator->generate('collections')),
                     $this->simpleDate($object, $context)

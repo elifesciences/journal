@@ -19,7 +19,6 @@ final class SubjectControllerTest extends PageTestCase
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertSame('Subject', $crawler->filter('.content-header__title')->text());
-        $this->assertSame('Subject impact statement.', trim($crawler->filter('main .lead-paras')->text()));
         $this->assertContains('No articles available.', $crawler->filter('main')->text());
     }
 
@@ -41,9 +40,9 @@ final class SubjectControllerTest extends PageTestCase
         $this->assertSame('Subject impact statement.', $crawler->filter('meta[property="og:description"]')->attr('content'));
         $this->assertSame('Subject impact statement.', $crawler->filter('meta[name="description"]')->attr('content'));
         $this->assertSame('summary_large_image', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
-        $this->assertSame('https://www.example.com/iiif/banner/0,350,1800,900/1800,900/0/default.jpg', $crawler->filter('meta[property="og:image"]')->attr('content'));
-        $this->assertSame('1800', $crawler->filter('meta[property="og:image:width"]')->attr('content'));
-        $this->assertSame('900', $crawler->filter('meta[property="og:image:height"]')->attr('content'));
+        $this->assertSame('https://www.example.com/iiif/banner/0,529,1800,543/1114,336/0/default.jpg', $crawler->filter('meta[property="og:image"]')->attr('content'));
+        $this->assertSame('1114', $crawler->filter('meta[property="og:image:width"]')->attr('content'));
+        $this->assertSame('336', $crawler->filter('meta[property="og:image:height"]')->attr('content'));
     }
 
     /**

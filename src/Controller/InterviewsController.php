@@ -6,8 +6,7 @@ use eLife\ApiSdk\Model\Interview;
 use eLife\ApiSdk\Model\IntervieweeCvLine;
 use eLife\Journal\Helper\Callback;
 use eLife\Patterns\ViewModel\ArticleSection;
-use eLife\Patterns\ViewModel\ContentHeaderNonArticle;
-use eLife\Patterns\ViewModel\LeadParas;
+use eLife\Patterns\ViewModel\ContentHeader;
 use eLife\Patterns\ViewModel\Listing;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -31,10 +30,7 @@ final class InterviewsController extends Controller
         $arguments['interview'] = $interview;
 
         $arguments['contentHeader'] = $arguments['interview']
-            ->then($this->willConvertTo(ContentHeaderNonArticle::class));
-
-        $arguments['leadParas'] = $arguments['interview']
-            ->then(Callback::methodEmptyOr('getImpactStatement', $this->willConvertTo(LeadParas::class)));
+            ->then($this->willConvertTo(ContentHeader::class));
 
         $arguments['blocks'] = $arguments['interview']
             ->then($this->willConvertContent());

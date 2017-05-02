@@ -4,7 +4,7 @@ namespace eLife\Journal\Controller;
 
 use eLife\Journal\Helper\HasPages;
 use eLife\Journal\Helper\Paginator;
-use eLife\Patterns\ViewModel\ContentHeaderNonArticle;
+use eLife\Patterns\ViewModel\ContentHeader;
 use eLife\Patterns\ViewModel\ListingTeasers;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -47,7 +47,7 @@ final class AnnualReportsController extends Controller
 
     private function createFirstPage(array $arguments) : Response
     {
-        $arguments['contentHeader'] = ContentHeaderNonArticle::basic($arguments['title']);
+        $arguments['contentHeader'] = new ContentHeader($arguments['title']);
 
         return new Response($this->get('templating')->render('::annual-reports.html.twig', $arguments));
     }
