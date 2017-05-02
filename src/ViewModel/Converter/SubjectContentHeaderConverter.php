@@ -3,28 +3,32 @@
 namespace eLife\Journal\ViewModel\Converter;
 
 use eLife\ApiSdk\Model\Subject;
-use eLife\Journal\Helper\CreatesIiifUri;
+use eLife\Journal\ViewModel\Factory\ContentHeaderImageFactory;
 use eLife\Patterns\ViewModel;
 
 final class SubjectContentHeaderConverter implements ViewModelConverter
 {
-    use CreatesIiifUri;
+    private $contentHeaderImageFactory;
+
+    public function __construct(ContentHeaderImageFactory $contentHeaderImageFactory)
+    {
+        $this->contentHeaderImageFactory = $contentHeaderImageFactory;
+    }
 
     /**
      * @param Subject $object
      */
     public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
-        return ViewModel\ContentHeaderNonArticle::subject($object->getName(), false, null,
-            new ViewModel\BackgroundImage(
-                $this->iiifUri($object->getBanner(), 900, 450),
-                $this->iiifUri($object->getBanner(), 1800, 900)
-            )
+        return new ViewModel\ContentHeader(
+            $object->getName(),
+            $this->contentHeaderImageFactory->forImage($object->getBanner()),
+            $object->getImpactStatement()
         );
     }
 
     public function supports($object, string $viewModel = null, array $context = []) : bool
     {
-        return $object instanceof Subject && ViewModel\ContentHeaderNonArticle::class === $viewModel;
+        return $object instanceof Subject && ViewModel\ContentHeader::class === $viewModel;
     }
 }

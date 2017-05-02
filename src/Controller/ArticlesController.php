@@ -25,7 +25,7 @@ use eLife\Journal\Helper\HasPages;
 use eLife\Journal\ViewModel\Paragraph;
 use eLife\Patterns\ViewModel;
 use eLife\Patterns\ViewModel\ArticleSection;
-use eLife\Patterns\ViewModel\ContentHeaderArticle;
+use eLife\Patterns\ViewModel\ContentHeader;
 use eLife\Patterns\ViewModel\ContextualData;
 use eLife\Patterns\ViewModel\Doi;
 use eLife\Patterns\ViewModel\InfoBar;
@@ -628,7 +628,7 @@ sources: '.implode(', ', array_map(function (CitationsMetricSource $source) {
             });
 
         $arguments['contentHeader'] = $arguments['article']
-            ->then($this->willConvertTo(ContentHeaderArticle::class));
+            ->then($this->willConvertTo(ContentHeader::class));
 
         $arguments['infoBars'] = all(['article' => $arguments['article'], 'history' => $arguments['history'], 'relatedArticles' => $arguments['relatedArticles']])
             ->then(function (array $parts) {

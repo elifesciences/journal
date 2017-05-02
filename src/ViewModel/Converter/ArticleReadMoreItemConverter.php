@@ -35,11 +35,10 @@ final class ArticleReadMoreItemConverter implements ViewModelConverter
             new ViewModel\ContentHeaderReadMore(
                 $object->getFullTitle(),
                 $this->urlGenerator->generate('article', ['id' => $object->getId()]),
-                null,
-                $object->getAuthorLine(),
-                new ViewModel\SubjectList(...$object->getSubjects()->map(function (Subject $subject) {
+                $object->getSubjects()->map(function (Subject $subject) {
                     return new ViewModel\Link($subject->getName());
-                })),
+                })->toArray(),
+                $object->getAuthorLine(),
                 ViewModel\Meta::withLink(
                     new ViewModel\Link(
                         ModelName::singular($object->getType()),

@@ -4,9 +4,7 @@ namespace eLife\Journal\Controller;
 
 use eLife\Journal\ViewModel\Paragraph;
 use eLife\Patterns\ViewModel\ArticleSection;
-use eLife\Patterns\ViewModel\ContentHeaderNonArticle;
-use eLife\Patterns\ViewModel\LeadPara;
-use eLife\Patterns\ViewModel\LeadParas;
+use eLife\Patterns\ViewModel\ContentHeader;
 use eLife\Patterns\ViewModel\Listing;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,11 +17,8 @@ final class AlertsController extends Controller
 
         $arguments['title'] = 'Alerts';
 
-        $arguments['contentHeader'] = ContentHeaderNonArticle::basic($arguments['title']);
-
-        $arguments['leadParas'] = new LeadParas([
-            new LeadPara('Stay in touch with eLife efforts to support the community and open science as well as new research. Choose your feeds and preferred ways to connect below.'),
-        ]);
+        $arguments['contentHeader'] = new ContentHeader($arguments['title'], null,
+            'Stay in touch with eLife efforts to support the community and open science as well as new research. Choose your feeds and preferred ways to connect below.');
 
         $arguments['body'] = [
             ArticleSection::basic('New Research', 2, $this->render(

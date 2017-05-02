@@ -10,7 +10,7 @@ bin/console --version --env=$ENVIRONMENT_NAME
 smoke_url_ok $(hostname)/favicon.ico
 smoke_url_ok $(hostname)/$(from_manifest assets/favicons/manifest.json)
 smoke_url_ok $(hostname)/$(from_manifest assets/patterns/css/all.css)
-smoke_url_ok $(hostname)/$(from_manifest assets/images/banners/magazine-1900x800.jpg)
+smoke_url_ok $(hostname)/$(from_manifest assets/images/banners/magazine-1114x336.jpg)
 smoke_url_ok $(hostname)/ping
     smoke_assert_body "pong"
 

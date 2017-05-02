@@ -6,7 +6,7 @@ use eLife\ApiSdk\Collection\Sequence;
 use eLife\Journal\Helper\ModelName;
 use eLife\Journal\Helper\Paginator;
 use eLife\Journal\Pagerfanta\SequenceAdapter;
-use eLife\Patterns\ViewModel\ContentHeaderNonArticle;
+use eLife\Patterns\ViewModel\ContentHeader;
 use eLife\Patterns\ViewModel\ListingTeasers;
 use eLife\Patterns\ViewModel\Teaser;
 use InvalidArgumentException;
@@ -67,7 +67,7 @@ final class ArticleTypesController extends Controller
 
     private function createFirstPage(array $arguments) : Response
     {
-        $arguments['contentHeader'] = ContentHeaderNonArticle::basic($arguments['title']);
+        $arguments['contentHeader'] = new ContentHeader($arguments['title']);
 
         return new Response($this->get('templating')->render('::article-type.html.twig', $arguments));
     }

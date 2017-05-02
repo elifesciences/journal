@@ -21,7 +21,7 @@ use eLife\Patterns\ViewModel\ArchiveNavLink;
 use eLife\Patterns\ViewModel\BackgroundImage;
 use eLife\Patterns\ViewModel\BlockLink;
 use eLife\Patterns\ViewModel\Button;
-use eLife\Patterns\ViewModel\ContentHeaderNonArticle;
+use eLife\Patterns\ViewModel\ContentHeader;
 use eLife\Patterns\ViewModel\FormLabel;
 use eLife\Patterns\ViewModel\GridListing;
 use eLife\Patterns\ViewModel\Link;
@@ -80,9 +80,18 @@ final class ArchiveController extends Controller
 
         $arguments['title'] = $year;
 
-        $arguments['contentHeader'] = ContentHeaderNonArticle::archive(
+        $arguments['contentHeader'] = new ContentHeader(
             'Monthly archive',
+            null,
+            null,
             false,
+            [],
+            null,
+            null,
+            [],
+            [],
+            null,
+            null,
             new SelectNav(
                 $this->get('router')->generate('archive'),
                 new Select('year', $years, new FormLabel('Archive year', 'year', true)),
@@ -165,13 +174,10 @@ final class ArchiveController extends Controller
                 if (!$covers || $covers->isEmpty()) {
                     $background = null;
                 } else {
-                    $background = new BackgroundImage(
-                        $this->iiifUri($covers[0]->getBanner(), 900, 450),
-                        $this->iiifUri($covers[0]->getBanner(), 1800, 900)
-                    );
+                    $background = $this->get('elife.journal.view_model.factory.content_header_image')->forImage($covers[0]->getBanner());
                 }
 
-                return ContentHeaderNonArticle::basic($arguments['title'], $background instanceof BackgroundImage, null, null, null, $background);
+                return new ContentHeader($arguments['title'], $background);
             });
 
         $arguments['covers'] = $covers

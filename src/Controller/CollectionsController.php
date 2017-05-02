@@ -7,8 +7,7 @@ use eLife\ApiSdk\Model\Collection;
 use eLife\Journal\Helper\Callback;
 use eLife\Journal\Helper\HasPages;
 use eLife\Journal\Helper\Paginator;
-use eLife\Patterns\ViewModel\ContentHeaderNonArticle;
-use eLife\Patterns\ViewModel\LeadParas;
+use eLife\Patterns\ViewModel\ContentHeader;
 use eLife\Patterns\ViewModel\ListingProfileSnippets;
 use eLife\Patterns\ViewModel\ListingTeasers;
 use eLife\Patterns\ViewModel\ProfileSnippet;
@@ -54,7 +53,7 @@ final class CollectionsController extends Controller
 
     private function createFirstPage(array $arguments) : Response
     {
-        $arguments['contentHeader'] = ContentHeaderNonArticle::basic($arguments['title']);
+        $arguments['contentHeader'] = new ContentHeader($arguments['title']);
 
         return new Response($this->get('templating')->render('::collections.html.twig', $arguments));
     }
@@ -74,10 +73,7 @@ final class CollectionsController extends Controller
         $arguments['collection'] = $collection;
 
         $arguments['contentHeader'] = $arguments['collection']
-            ->then($this->willConvertTo(ContentHeaderNonArticle::class));
-
-        $arguments['leadParas'] = $arguments['collection']
-            ->then(Callback::methodEmptyOr('getImpactStatement', $this->willConvertTo(LeadParas::class)));
+            ->then($this->willConvertTo(ContentHeader::class));
 
         $arguments['collectionList'] = $arguments['collection']
             ->then(function (Collection $collection) {

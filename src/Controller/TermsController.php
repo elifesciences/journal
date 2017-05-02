@@ -4,7 +4,7 @@ namespace eLife\Journal\Controller;
 
 use eLife\Journal\ViewModel\Paragraph;
 use eLife\Patterns\ViewModel\ArticleSection;
-use eLife\Patterns\ViewModel\ContentHeaderNonArticle;
+use eLife\Patterns\ViewModel\ContentHeader;
 use eLife\Patterns\ViewModel\Listing;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,7 +17,7 @@ final class TermsController extends Controller
 
         $arguments['title'] = 'Terms and policy';
 
-        $arguments['contentHeader'] = ContentHeaderNonArticle::basic($arguments['title']);
+        $arguments['contentHeader'] = new ContentHeader($arguments['title']);
 
         $arguments['body'] = [
             ArticleSection::basic('Terms and Conditions of Use', 2, $this->render(
