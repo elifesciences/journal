@@ -2,7 +2,7 @@
 
 namespace eLife\Journal\Controller;
 
-use eLife\Patterns\ViewModel\ContentHeaderNonArticle;
+use eLife\Patterns\ViewModel\ContentHeader;
 use eLife\Patterns\ViewModel\GridListing;
 use eLife\Patterns\ViewModel\Image;
 use eLife\Patterns\ViewModel\ImageLink;
@@ -18,7 +18,7 @@ final class WhoWeWorkWithController extends Controller
 
         $arguments['title'] = 'Who we work with';
 
-        $arguments['contentHeader'] = ContentHeaderNonArticle::basic($arguments['title']);
+        $arguments['contentHeader'] = new ContentHeader($arguments['title']);
 
         $memberships = [
             [

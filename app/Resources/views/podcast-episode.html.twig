@@ -13,23 +13,11 @@
 
 {% endblock %}
 
-{% block description %}
-    {{ episode.impactStatement|raw }}
-{% endblock %}
-
 {% block body %}
 
     {{ render_pattern(contentHeader) }}
 
     {{ render_pattern(audioPlayer) }}
-
-    {% if leadParas %}
-
-        <div class="wrapper">
-            {{ render_pattern(leadParas) }}
-        </div>
-
-    {% endif %}
 
     <div class="wrapper u-pad-top-lg">
 

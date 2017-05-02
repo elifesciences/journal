@@ -4,7 +4,6 @@ namespace eLife\Journal\ViewModel\Converter;
 
 use eLife\ApiSdk\Model\Event;
 use eLife\Patterns\ViewModel;
-use eLife\Patterns\ViewModel\ContentHeaderNonArticle;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 final class EventContentHeaderConverter implements ViewModelConverter
@@ -21,9 +20,17 @@ final class EventContentHeaderConverter implements ViewModelConverter
      */
     public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
-        return ContentHeaderNonArticle::basic(
+        return new ViewModel\ContentHeader(
             $object->getTitle(),
+            null,
+            $object->getImpactStatement(),
             false,
+            [],
+            null,
+            null,
+            [],
+            [],
+            null,
             null,
             null,
             ViewModel\Meta::withLink(new ViewModel\Link('Event', $this->urlGenerator->generate('events')), ViewModel\Date::simple($object->getStarts()))
@@ -32,6 +39,6 @@ final class EventContentHeaderConverter implements ViewModelConverter
 
     public function supports($object, string $viewModel = null, array $context = []) : bool
     {
-        return $object instanceof Event && ViewModel\ContentHeaderNonArticle::class === $viewModel;
+        return $object instanceof Event && ViewModel\ContentHeader::class === $viewModel;
     }
 }

@@ -14,10 +14,9 @@ use eLife\Journal\Helper\Paginator;
 use eLife\Journal\Pagerfanta\SequenceAdapter;
 use eLife\Patterns\ViewModel\BackgroundImage;
 use eLife\Patterns\ViewModel\BlockLink;
-use eLife\Patterns\ViewModel\ContentHeaderNonArticle;
+use eLife\Patterns\ViewModel\ContentHeader;
 use eLife\Patterns\ViewModel\ContentHeaderSimple;
 use eLife\Patterns\ViewModel\GridListing;
-use eLife\Patterns\ViewModel\LeadParas;
 use eLife\Patterns\ViewModel\Link;
 use eLife\Patterns\ViewModel\ListingTeasers;
 use eLife\Patterns\ViewModel\Teaser;
@@ -120,10 +119,7 @@ final class SubjectsController extends Controller
     private function createFirstPage(array $arguments) : Response
     {
         $arguments['contentHeader'] = $arguments['subject']
-            ->then($this->willConvertTo(ContentHeaderNonArticle::class));
-
-        $arguments['leadParas'] = $arguments['subject']
-            ->then(Callback::methodEmptyOr('getImpactStatement', $this->willConvertTo(LeadParas::class)));
+            ->then($this->willConvertTo(ContentHeader::class));
 
         $podcastEpisode = $this->get('elife.api_sdk.search')
             ->forType('podcast-episode')

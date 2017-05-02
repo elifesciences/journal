@@ -3,12 +3,12 @@
 namespace test\eLife\Journal\ViewModel\Converter;
 
 use eLife\Journal\ViewModel\Converter\BlogArticleContentHeaderConverter;
-use eLife\Patterns\ViewModel\ContentHeaderNonArticle;
+use eLife\Patterns\ViewModel\ContentHeader;
 
 final class BlogArticleContentHeaderConverterTest extends ModelConverterTestCase
 {
     protected $models = ['blog-article'];
-    protected $viewModelClasses = [ContentHeaderNonArticle::class];
+    protected $viewModelClasses = [ContentHeader::class];
 
     /**
      * @before

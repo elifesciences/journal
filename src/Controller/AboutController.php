@@ -5,7 +5,7 @@ namespace eLife\Journal\Controller;
 use eLife\Journal\ViewModel\DefinitionList;
 use eLife\Journal\ViewModel\Paragraph;
 use eLife\Patterns\ViewModel\ArticleSection;
-use eLife\Patterns\ViewModel\ContentHeaderNonArticle;
+use eLife\Patterns\ViewModel\ContentHeader;
 use eLife\Patterns\ViewModel\IFrame;
 use eLife\Patterns\ViewModel\Link;
 use eLife\Patterns\ViewModel\Listing;
@@ -22,7 +22,7 @@ final class AboutController extends Controller
 
         $arguments['title'] = 'About';
 
-        $arguments['contentHeader'] = ContentHeaderNonArticle::basic('About eLife', false,
+        $arguments['contentHeader'] = new ContentHeader('About eLife', null,
             'We want to improve all aspects of research communication in support of excellence in science');
 
         $arguments['body'] = [
@@ -48,7 +48,7 @@ final class AboutController extends Controller
 
         $arguments['title'] = 'Peer review';
 
-        $arguments['contentHeader'] = ContentHeaderNonArticle::basic($arguments['title'], false,
+        $arguments['contentHeader'] = new ContentHeader($arguments['title'], null,
             '"Our goal at eLife is to publish papers that our reviewers and editors find authoritative, rigorous, insightful, enlightening or just beautiful"*');
 
         $arguments['body'] = [
@@ -80,7 +80,7 @@ final class AboutController extends Controller
 
         $arguments['title'] = 'Openness';
 
-        $arguments['contentHeader'] = ContentHeaderNonArticle::basic($arguments['title'], false,
+        $arguments['contentHeader'] = new ContentHeader($arguments['title'], null,
             'We believe that open access to research findings and associated data has the potential to revolutionise the scientific enterprise');
 
         $arguments['body'] = [
@@ -110,7 +110,7 @@ final class AboutController extends Controller
 
         $arguments['title'] = 'Innovation';
 
-        $arguments['contentHeader'] = ContentHeaderNonArticle::basic($arguments['title'], false,
+        $arguments['contentHeader'] = new ContentHeader($arguments['title'], null,
             'eLife invests in open-source technology to deliver effective solutions to accelerate research communication and discovery');
 
         $arguments['body'] = [
@@ -133,7 +133,7 @@ final class AboutController extends Controller
 
         $arguments['title'] = 'Early-career scientists';
 
-        $arguments['contentHeader'] = ContentHeaderNonArticle::basic($arguments['title'], false,
+        $arguments['contentHeader'] = new ContentHeader($arguments['title'], null,
             'The community behind eLife wants to help address some of the pressures on early-career scientists');
 
         $arguments['body'] = [
@@ -159,7 +159,7 @@ final class AboutController extends Controller
 
         $arguments['title'] = 'People';
 
-        $arguments['contentHeader'] = ContentHeaderNonArticle::basic($arguments['title'], false,
+        $arguments['contentHeader'] = new ContentHeader($arguments['title'], null,
             'The working scientists who serve as eLife editors, our early-career advisors, governing board, and our executive staff all work in concert to realise eLife’s mission to accelerate discovery');
 
         return new Response($this->get('templating')->render('::about-people.html.twig', $arguments));

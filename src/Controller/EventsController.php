@@ -8,8 +8,7 @@ use eLife\Journal\Exception\EarlyResponse;
 use eLife\Journal\Helper\Callback;
 use eLife\Journal\Helper\Paginator;
 use eLife\Journal\Pagerfanta\SequenceAdapter;
-use eLife\Patterns\ViewModel\ContentHeaderNonArticle;
-use eLife\Patterns\ViewModel\LeadParas;
+use eLife\Patterns\ViewModel\ContentHeader;
 use eLife\Patterns\ViewModel\ListingTeasers;
 use eLife\Patterns\ViewModel\Teaser;
 use Pagerfanta\Pagerfanta;
@@ -65,7 +64,7 @@ final class EventsController extends Controller
 
     private function createFirstPage(array $arguments) : Response
     {
-        $arguments['contentHeader'] = ContentHeaderNonArticle::basic('eLife events');
+        $arguments['contentHeader'] = new ContentHeader('eLife events');
 
         return new Response($this->get('templating')->render('::events.html.twig', $arguments));
     }
@@ -92,10 +91,7 @@ final class EventsController extends Controller
         $arguments['event'] = $event;
 
         $arguments['contentHeader'] = $arguments['event']
-            ->then($this->willConvertTo(ContentHeaderNonArticle::class));
-
-        $arguments['leadParas'] = $arguments['event']
-            ->then(Callback::methodEmptyOr('getImpactStatement', $this->willConvertTo(LeadParas::class)));
+            ->then($this->willConvertTo(ContentHeader::class));
 
         $arguments['blocks'] = $arguments['event']
             ->then($this->willConvertContent());

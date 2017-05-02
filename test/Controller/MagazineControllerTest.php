@@ -62,9 +62,9 @@ final class MagazineControllerTest extends PageTestCase
         $this->assertSame('Highlighting the latest research and giving a voice to scientists', $crawler->filter('meta[property="og:description"]')->attr('content'));
         $this->assertSame('Highlighting the latest research and giving a voice to scientists', $crawler->filter('meta[name="description"]')->attr('content'));
         $this->assertSame('summary_large_image', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
-        $this->assertSame('http://localhost/'.ltrim(self::$kernel->getContainer()->get('assets.packages')->getUrl('assets/images/banners/magazine-1900x800.jpg'), '/'), $crawler->filter('meta[property="og:image"]')->attr('content'));
-        $this->assertSame('1800', $crawler->filter('meta[property="og:image:width"]')->attr('content'));
-        $this->assertSame('900', $crawler->filter('meta[property="og:image:height"]')->attr('content'));
+        $this->assertSame('http://localhost/'.ltrim(self::$kernel->getContainer()->get('assets.packages')->getUrl('assets/images/banners/magazine-1114x336.jpg'), '/'), $crawler->filter('meta[property="og:image"]')->attr('content'));
+        $this->assertSame('1114', $crawler->filter('meta[property="og:image:width"]')->attr('content'));
+        $this->assertSame('336', $crawler->filter('meta[property="og:image:height"]')->attr('content'));
     }
 
     /**

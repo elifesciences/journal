@@ -11,12 +11,9 @@ use eLife\Journal\Helper\Humanizer;
 use eLife\Journal\Helper\Paginator;
 use eLife\Journal\Pagerfanta\SequenceAdapter;
 use eLife\Patterns\ViewModel\ArticleSection;
-use eLife\Patterns\ViewModel\BackgroundImage;
-use eLife\Patterns\ViewModel\ContentHeaderNonArticle;
+use eLife\Patterns\ViewModel\ContentHeader;
 use eLife\Patterns\ViewModel\GridListing;
 use eLife\Patterns\ViewModel\InfoBar;
-use eLife\Patterns\ViewModel\LeadPara;
-use eLife\Patterns\ViewModel\LeadParas;
 use eLife\Patterns\ViewModel\Teaser;
 use Pagerfanta\Pagerfanta;
 use Swift_Message;
@@ -72,16 +69,12 @@ final class LabsController extends Controller
 
     private function createFirstPage(array $arguments) : Response
     {
-        $arguments['contentHeader'] = ContentHeaderNonArticle::basic('eLife Labs', true, null, null, null,
-            new BackgroundImage(
-                $this->get('assets.packages')->getUrl('assets/images/banners/labs-950x400.jpg'),
-                $this->get('assets.packages')->getUrl('assets/images/banners/labs-1900x800.jpg')
-            ));
-
-        $arguments['leadParas'] = new LeadParas([
-            new LeadPara('Exploring open-source solutions at the intersection of research and technology.
-Learn more about <a href="'.$this->get('router')->generate('about-innovation').'">innovation at eLife</a>, or follow us on <a href="https://twitter.com/eLifeInnovation">Twitter</a>.'),
-        ]);
+        $arguments['contentHeader'] = new ContentHeader(
+            'eLife Labs',
+            $this->get('elife.journal.view_model.factory.content_header_image')->forLocalFile('labs'),
+            'Exploring open-source solutions at the intersection of research and technology.
+Learn more about <a href="'.$this->get('router')->generate('about-innovation').'">innovation at eLife</a>, or follow us on <a href="https://twitter.com/eLifeInnovation">Twitter</a>.'
+        );
 
         return new Response($this->get('templating')->render('::labs.html.twig', $arguments));
     }
@@ -155,10 +148,7 @@ eLife Sciences Publications, Ltd is a limited liability non-profit non-stock cor
             });
 
         $arguments['contentHeader'] = $arguments['experiment']
-            ->then($this->willConvertTo(ContentHeaderNonArticle::class));
-
-        $arguments['leadParas'] = $arguments['experiment']
-            ->then(Callback::methodEmptyOr('getImpactStatement', $this->willConvertTo(LeadParas::class)));
+            ->then($this->willConvertTo(ContentHeader::class));
 
         $arguments['blocks'] = $arguments['experiment']
             ->then($this->willConvertContent());

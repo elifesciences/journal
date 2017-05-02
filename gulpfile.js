@@ -21,7 +21,7 @@ gulp.task('favicons:clean', () => {
 
 gulp.task('favicons:build', ['favicons:clean'], () => {
     return gulp.src('./app/Resources/images/favicon.svg')
-        .pipe(svg2png({width:512,height:512}))
+        .pipe(svg2png({width: 512, height: 512}))
         .pipe(favicons({
             appName: 'eLife',
             appDescription: 'eLife is an open-access journal that publishes research in the life and biomedical sciences',
@@ -58,7 +58,7 @@ gulp.task('images:clean', () => {
 });
 
 gulp.task('images:banners', ['images:clean'], () => {
-    const sizes = {1900: 800, 950: 400};
+    const sizes = {2228: 672, 1114: 336, 2046: 576, 1023: 288, 1534: 528, 767: 264, 900: 528, 450: 264};
 
     return gulp.src('./app/Resources/images/banners/*.jpg')
         .pipe(responsive({
