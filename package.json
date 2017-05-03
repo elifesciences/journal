@@ -9,9 +9,9 @@
         "gulp-rev-all": "^0.9",
         "gulp-svg2png": "^2.0.2",
         "imagemin-mozjpeg": "^6.0",
+        "imagemin-optipng": "^5.2",
         "imagemin-svgo": "^5.2.1",
         "imagemin-webp": "^4.0",
-        "imagemin-zopfli": "^5.1",
         "merge-stream": "^1.0.1"
     }
 }

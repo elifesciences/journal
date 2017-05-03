@@ -5,9 +5,9 @@ const favicons = require('gulp-favicons');
 const gulp = require('gulp');
 const imageMin = require('gulp-imagemin');
 const imageMinMozjpeg = require('imagemin-mozjpeg');
+const imageMinOptipng = require('imagemin-optipng');
 const imageMinSvgo = require('imagemin-svgo');
 const imageMinWebp = require('imagemin-webp');
-const imageMinZopfli = require('imagemin-zopfli');
 const merge = require('merge-stream');
 const responsive = require('gulp-responsive');
 const rev = require('gulp-rev-all');
@@ -41,8 +41,8 @@ gulp.task('favicons:build', ['favicons:clean'], () => {
             },
         }))
         .pipe(imageMin([
-            imageMinZopfli({
-                more: true,
+            imageMinOptipng({
+                optimizationLevel: 4,
             }),
         ]))
         .pipe(gulp.dest('./build/assets/favicons'));
@@ -115,12 +115,12 @@ gulp.task('images', ['images:banners', 'images:logos', 'images:svgs'], () => {
                 quality: 75,
                 progressive: true,
             }),
+            imageMinOptipng({
+                optimizationLevel: 4,
+            }),
             imageMinSvgo({}),
             imageMinWebp({
                 quality: 65,
-            }),
-            imageMinZopfli({
-                more: true,
             }),
         ]))
         .pipe(gulp.dest('./build/assets/images'));
