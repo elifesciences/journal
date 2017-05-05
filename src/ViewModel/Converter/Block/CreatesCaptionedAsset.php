@@ -16,7 +16,7 @@ trait CreatesCaptionedAsset
     use HasPatternRenderer;
     use HasViewModelConverter;
 
-    final private function createCaptionedAsset(ViewModel\IsCaptioned $viewModel, Asset $asset, string $download = null) : ViewModel\CaptionedAsset
+    final private function createCaptionedAsset(ViewModel\IsCaptioned $viewModel, Asset $asset) : ViewModel\CaptionedAsset
     {
         $caption = $asset->getCaption()->map(function (Block $block) {
             return $this->getViewModelConverter()->convert($block);
@@ -34,10 +34,6 @@ trait CreatesCaptionedAsset
             $this->getPatternRenderer()->render(...$caption)
         );
 
-        if ($download) {
-            $download = new ViewModel\Link('Download', $download);
-        }
-
-        return new ViewModel\CaptionedAsset($viewModel, $captionText, $this->createDoi($asset), $download);
+        return new ViewModel\CaptionedAsset($viewModel, $captionText, $this->createDoi($asset));
     }
 }
