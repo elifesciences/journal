@@ -155,8 +155,35 @@ final class ArticlesController extends Controller
             ->otherwise($this->mightNotExist())
             ->otherwise($this->softFailure('Failed to load downloads count'));
 
-        $arguments['body'] = all(['article' => $arguments['article'], 'history' => $arguments['history'], 'citations' => $arguments['citations'], 'downloads' => $arguments['downloads'], 'pageViews' => $arguments['pageViews']])
+        $figures = $this->findFigures($arguments['article'])->then(Callback::method('notEmpty'));
+
+        $arguments['hasFigures'] = all(['article' => $arguments['article'], 'hasFigures' => $figures])
             ->then(function (array $parts) {
+                $article = $parts['article'];
+                $hasFigures = $parts['hasFigures'];
+
+                return
+                    $article->getGeneratedDataSets()->notEmpty()
+                    ||
+                    $article->getUsedDataSets()->notEmpty()
+                    ||
+                    $article->getAdditionalFiles()->notEmpty()
+                    ||
+                    $hasFigures;
+            });
+
+        $context = all(['article' => $arguments['article'], 'history' => $arguments['history'], 'hasFigures' => $arguments['hasFigures']])
+            ->then(function (array $parts) {
+                $context = [];
+                if ($parts['hasFigures']) {
+                    $context['figuresUri'] = $this->generateFiguresPath($parts['history'], $parts['article']->getVersion());
+                }
+
+                return $context;
+            });
+
+        $arguments['body'] = all(['article' => $arguments['article'], 'history' => $arguments['history'], 'citations' => $arguments['citations'], 'downloads' => $arguments['downloads'], 'pageViews' => $arguments['pageViews'], 'context' => $context])
+            ->then(function (array $parts) use ($context) {
                 /** @var ArticleVersion $article */
                 $article = $parts['article'];
                 /** @var ArticleHistory $history */
@@ -167,6 +194,8 @@ final class ArticlesController extends Controller
                 $downloads = $parts['downloads'];
                 /** @var int|null $pageViews */
                 $pageViews = $parts['pageViews'];
+                /** @var array $context */
+                $context = $parts['context'];
 
                 $parts = [];
 
@@ -177,7 +206,7 @@ final class ArticlesController extends Controller
                         'abstract',
                         'Abstract',
                         2,
-                        $this->render(...$this->convertContent($article->getAbstract())),
+                        $this->render(...$this->convertContent($article->getAbstract(), 2, $context)),
                         false,
                         $first,
                         $article->getAbstract()->getDoi() ? new Doi($article->getAbstract()->getDoi()) : null
@@ -191,7 +220,7 @@ final class ArticlesController extends Controller
                         'digest',
                         'eLife digest',
                         2,
-                        $this->render(...$this->convertContent($article->getDigest())),
+                        $this->render(...$this->convertContent($article->getDigest(), 2, $context)),
                         false,
                         $first,
                         new Doi($article->getDigest()->getDoi())
@@ -203,12 +232,12 @@ final class ArticlesController extends Controller
                 $isInitiallyClosed = false;
 
                 if ($article instanceof ArticleVoR) {
-                    $parts = array_merge($parts, $article->getContent()->map(function (Block\Section $section) use (&$first, &$isInitiallyClosed) {
+                    $parts = array_merge($parts, $article->getContent()->map(function (Block\Section $section) use (&$first, &$isInitiallyClosed, $context) {
                         $section = ArticleSection::collapsible(
                             $section->getId(),
                             $section->getTitle(),
                             2,
-                            $this->render(...$this->convertContent($section)),
+                            $this->render(...$this->convertContent($section, 2, $context)),
                             $isInitiallyClosed,
                             $first
                         );
@@ -221,9 +250,9 @@ final class ArticlesController extends Controller
                 }
 
                 if ($article instanceof ArticleVoR) {
-                    $parts = array_merge($parts, $article->getAppendices()->map(function (Appendix $appendix) {
+                    $parts = array_merge($parts, $article->getAppendices()->map(function (Appendix $appendix) use ($context) {
                         return ArticleSection::collapsible($appendix->getId(), $appendix->getTitle(), 2,
-                            $this->render(...$this->convertContent($appendix)),
+                            $this->render(...$this->convertContent($appendix, 2, $context)),
                             true, false, $appendix->getDoi() ? new Doi($appendix->getDoi()) : null);
                     })->toArray());
                 }
@@ -244,7 +273,7 @@ final class ArticlesController extends Controller
                         'Decision letter',
                         2,
                         $this->render($this->convertTo($article, ViewModel\DecisionLetterHeader::class)).
-                        $this->render(...$this->convertContent($article->getDecisionLetter())),
+                        $this->render(...$this->convertContent($article->getDecisionLetter(), 2, $context)),
                         true,
                         false,
                         new Doi($article->getDecisionLetter()->getDoi())
@@ -256,7 +285,7 @@ final class ArticlesController extends Controller
                         'author-response',
                         'Author response',
                         2,
-                        $this->render(...$this->convertContent($article->getAuthorResponse())),
+                        $this->render(...$this->convertContent($article->getAuthorResponse(), 2, $context)),
                         true,
                         false,
                         new Doi($article->getAuthorResponse()->getDoi())
@@ -421,23 +450,6 @@ sources: '.implode(', ', array_map(function (CitationsMetricSource $source) {
                 );
 
                 return $parts;
-            });
-
-        $figures = $this->findFigures($arguments['article'])->then(Callback::method('notEmpty'));
-
-        $arguments['hasFigures'] = all(['article' => $arguments['article'], 'hasFigures' => $figures])
-            ->then(function (array $parts) {
-                $article = $parts['article'];
-                $hasFigures = $parts['hasFigures'];
-
-                return
-                    $article->getGeneratedDataSets()->notEmpty()
-                    ||
-                    $article->getUsedDataSets()->notEmpty()
-                    ||
-                    $article->getAdditionalFiles()->notEmpty()
-                    ||
-                    $hasFigures;
             });
 
         $arguments['viewSelector'] = $this->createViewSelector($arguments['article'], $arguments['hasFigures'], false, $arguments['history'], $arguments['body']);

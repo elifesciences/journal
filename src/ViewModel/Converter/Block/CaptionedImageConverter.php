@@ -21,7 +21,7 @@ final class CaptionedImageConverter implements ViewModelConverter
      */
     public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
-        $figure = $this->viewModelConverter->convert($object->getImage(), null, $context);
+        $figure = $this->viewModelConverter->convert($object->getImage(), null, $context + ['supplementsCount' => count($object->getSupplements())]);
 
         if (empty($context['complete'])) {
             return $figure;

@@ -31,7 +31,7 @@ final class SectionConverter implements ViewModelConverter
         return ViewModel\ArticleSection::basic(
             $object->getTitle(),
             $level,
-            $this->patternRenderer->render(...$this->convertContent($object, $level)),
+            $this->patternRenderer->render(...$this->convertContent($object, $level, $context)),
             $object->getId(),
             null,
             $context['isFirst'] ?? false
@@ -43,7 +43,7 @@ final class SectionConverter implements ViewModelConverter
         return $object instanceof Block\Section;
     }
 
-    protected function getViewModelConverter(): ViewModelConverter
+    protected function getViewModelConverter() : ViewModelConverter
     {
         return $this->viewModelConverter;
     }

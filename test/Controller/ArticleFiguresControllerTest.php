@@ -30,7 +30,7 @@ final class ArticleFiguresControllerTest extends PageTestCase
 
         $figures = $figureTypes->eq(0)->filter('.asset-viewer-inline');
         $this->assertSame('Image 1 label', trim($figures->eq(0)->filter('.asset-viewer-inline__header_text')->text()));
-        $this->assertSame('Image 2 label', trim($figures->eq(1)->filter('.asset-viewer-inline__header_text')->text()));
+        $this->assertSame('Image 2 label with 1 supplement', trim($figures->eq(1)->filter('.asset-viewer-inline__header_text')->text()));
         $this->assertSame('Image 2 source data 1 label', trim($figures->eq(1)->filter('.additional-assets__list .caption-text__heading')->text()));
         $this->assertSame('Image 2 supplement 1 label', trim($figures->eq(2)->filter('.asset-viewer-inline__header_text')->text()));
         $this->assertSame('Image 2 supplement 1 source data 1 label', trim($figures->eq(2)->filter('.additional-assets__list .caption-text__heading')->text()));
