@@ -81,4 +81,29 @@ final class StaleLoggingMiddlewareTest extends PHPUnit_Framework_TestCase
 
         $promise->wait();
     }
+
+    /**
+     * @test
+     */
+    public function it_does_not_log_if_the_response_does_not_define_a_max_age()
+    {
+        $request = new Request('GET', 'http://www.example.com/');
+        $options = [];
+        $response = new Response(200, ['Age' => '10']);
+
+        $logger = $this->createMock(LoggerInterface::class);
+
+        $middleware = new StaleLoggingMiddleware($logger);
+        $handler = function () use ($response) {
+            return promise_for($response);
+        };
+
+        $promise = call_user_func($middleware($handler), $request, $options);
+
+        $logger->expects($this->once())
+            ->method('debug')
+            ->with($this->identicalTo('Using stale response for GET http://www.example.com/'));
+
+        $promise->wait();
+    }
 }

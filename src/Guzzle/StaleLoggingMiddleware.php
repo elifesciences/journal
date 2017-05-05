@@ -29,6 +29,11 @@ final class StaleLoggingMiddleware
                 $cacheControl = new KeyValueHttpHeader($response->getHeader('Cache-Control'));
 
                 $age = (int) $response->getHeaderLine('Age');
+                if ($cacheControl->get('max-age') === '') {
+                    $this->logger->debug("Using stale response for {$request->getMethod()} {$request->getUri()}", ['extra' => ['request' => $this->dumpHttpMessage($request), 'response' => $this->dumpHttpMessage($response)]]);
+
+                    return $response;
+                }
                 $maxAge = (int) $cacheControl->get('max-age');
                 $maxStaleAge = $maxAge + ((int) $cacheControl->get('stale-while-revalidate'));
 
