@@ -11,6 +11,7 @@ use eLife\Journal\ViewModel\Converter\ViewModelConverter;
 use eLife\Patterns\PatternRenderer;
 use eLife\Patterns\ViewModel;
 use eLife\Patterns\ViewModel\AssetViewerInline;
+use eLife\Patterns\ViewModel\Link;
 
 final class CaptionedImageFileConverter implements ViewModelConverter
 {
@@ -49,7 +50,7 @@ final class CaptionedImageFileConverter implements ViewModelConverter
             $object->getImage()->getAltText()
         );
 
-        $asset = $this->createCaptionedAsset($asset, $object, $this->downloadLinkUriGenerator->generate(new DownloadLink($object->getImage()->getSource()->getUri(), $object->getImage()->getSource()->getFilename())));
+        $asset = $this->createCaptionedAsset($asset, $object);
 
         if (empty($object->getLabel())) {
             return $asset;
@@ -63,8 +64,11 @@ final class CaptionedImageFileConverter implements ViewModelConverter
             $additionalAssets = [];
         }
 
+        $download = new Link('Download', $this->downloadLinkUriGenerator->generate(new DownloadLink($object->getImage()->getSource()->getUri(), $object->getImage()->getSource()->getFilename())));
+        $open = $this->iiifUri($object->getImage());
+
         if (!empty($context['parentId']) && !empty($context['ordinal'])) {
-            return AssetViewerInline::supplement($object->getId(), $context['ordinal'], $context['parentId'], $object->getLabel(), $asset, $additionalAssets);
+            return AssetViewerInline::supplement($object->getId(), $context['ordinal'], $context['parentId'], $object->getLabel(), $asset, $additionalAssets, $download, $open);
         }
 
         if (!empty($context['complete']) && !empty($context['figuresUri'])) {
@@ -73,7 +77,7 @@ final class CaptionedImageFileConverter implements ViewModelConverter
             $seeAllLink = null;
         }
 
-        return AssetViewerInline::primary($object->getId(), $object->getLabel(), $asset, $additionalAssets, $context['supplementsCount'] ?? 0, $seeAllLink);
+        return AssetViewerInline::primary($object->getId(), $object->getLabel(), $asset, $additionalAssets, $download, $open, $context['supplementsCount'] ?? 0, $seeAllLink);
     }
 
     public function supports($object, string $viewModel = null, array $context = []) : bool
