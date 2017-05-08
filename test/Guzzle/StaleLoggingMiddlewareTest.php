@@ -12,6 +12,11 @@ use function GuzzleHttp\Promise\promise_for;
 
 final class StaleLoggingMiddlewareTest extends PHPUnit_Framework_TestCase
 {
+    /** @var LoggerInterface */
+    private $logger;
+    /** @var StaleLoggingMiddleware */
+    private $middleware;
+
     public function setUp()
     {
         $this->logger = $this->createMock(LoggerInterface::class);
