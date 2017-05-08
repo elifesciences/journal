@@ -30,7 +30,7 @@ final class StaleLoggingMiddlewareTest extends PHPUnit_Framework_TestCase
     {
         $request = new Request('GET', 'http://www.example.com/');
         $options = [];
-        $response = new Response(200, [CacheMiddleware::HEADER_CACHE_INFO => CacheMiddleware::HEADER_CACHE_STALE]);
+        $response = new Response(200, ['Age' => '10', CacheMiddleware::HEADER_CACHE_INFO => CacheMiddleware::HEADER_CACHE_STALE]);
 
         $handler = function () use ($response) {
             return promise_for($response);
@@ -80,6 +80,28 @@ final class StaleLoggingMiddlewareTest extends PHPUnit_Framework_TestCase
         };
 
         $promise = call_user_func($this->middleware->__invoke($handler), $request, $options);
+        $promise->wait();
+    }
+
+    /**
+     * @test
+     */
+    public function it_logs_if_the_response_is_stale_but_inside_the_stale_while_revalidate_time()
+    {
+        $request = new Request('GET', 'http://www.example.com/');
+        $options = [];
+        $response = new Response(200, ['Age' => '10', 'Cache-Control' => 'max-age=5, stale-while-revalidate=5', CacheMiddleware::HEADER_CACHE_INFO => CacheMiddleware::HEADER_CACHE_STALE]);
+
+        $handler = function () use ($response) {
+            return promise_for($response);
+        };
+
+        $promise = call_user_func($this->middleware->__invoke($handler), $request, $options);
+
+        $this->logger->expects($this->once())
+            ->method('info')
+            ->with($this->identicalTo('Using stale response for GET http://www.example.com/'));
+
         $promise->wait();
     }
 }

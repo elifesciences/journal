@@ -4,6 +4,7 @@ namespace eLife\Journal\Guzzle;
 
 use GuzzleHttp\Promise\PromiseInterface;
 use Kevinrob\GuzzleCache\CacheMiddleware;
+use Kevinrob\GuzzleCache\KeyValueHttpHeader;
 use Psr\Http\Message\MessageInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -26,16 +27,20 @@ final class StaleLoggingMiddleware
             $promise = $handler($request, $options);
 
             return $promise->then(function (ResponseInterface $response) use ($request) {
-                if (CacheMiddleware::HEADER_CACHE_STALE === $response->getHeaderLine(CacheMiddleware::HEADER_CACHE_INFO)) {
-                    $this->logger->error(
-                        "Using stale response for {$request->getMethod()} {$request->getUri()}",
-                        [
-                            'extra' => [
-                                'request' => $this->dumpHttpMessage($request),
-                                'response' => $this->dumpHttpMessage($response),
-                            ],
-                        ]
-                    );
+                if (CacheMiddleware::HEADER_CACHE_STALE !== $response->getHeaderLine(CacheMiddleware::HEADER_CACHE_INFO)) {
+                    return $response;
+                }
+
+                $cacheControl = new KeyValueHttpHeader($response->getHeader('Cache-Control'));
+
+                $age = (int) $response->getHeaderLine('Age');
+                $maxAge = (int) $cacheControl->get('max-age');
+                $maxStaleAge = $maxAge + ((int) $cacheControl->get('stale-while-revalidate'));
+
+                if ($age > $maxStaleAge) {
+                    $this->logger->error("Using stale response for {$request->getMethod()} {$request->getUri()}", ['extra' => ['request' => $this->dumpHttpMessage($request), 'response' => $this->dumpHttpMessage($response)]]);
+                } elseif ($age > $maxAge) {
+                    $this->logger->info("Using stale response for {$request->getMethod()} {$request->getUri()}", ['extra' => ['request' => $this->dumpHttpMessage($request), 'response' => $this->dumpHttpMessage($response)]]);
                 }
 
                 return $response;
