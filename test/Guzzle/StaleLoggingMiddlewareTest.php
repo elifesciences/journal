@@ -82,8 +82,4 @@ final class StaleLoggingMiddlewareTest extends PHPUnit_Framework_TestCase
         $promise = call_user_func($this->middleware->__invoke($handler), $request, $options);
         $promise->wait();
     }
-
-    private function noResponseIsLogged()
-    {
-    }
 }
