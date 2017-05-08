@@ -18,7 +18,11 @@
 
                 <div class="grid__item medium--eight-twelfths listing-column-main">
 
-                    {{ render_pattern(collectionList) }}
+                    {% for part in body %}
+
+                        {{ render_pattern(part) }}
+
+                    {% endfor %}
 
                 </div>
 
