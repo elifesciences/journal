@@ -71,7 +71,7 @@ final class CaptionedImageFileConverter implements ViewModelConverter
             return AssetViewerInline::supplement($object->getId(), $context['ordinal'], $context['parentId'], $object->getLabel(), $asset, $additionalAssets, $download, $open);
         }
 
-        if (!empty($context['complete']) && !empty($context['figuresUri'])) {
+        if (empty($context['complete']) && !empty($context['figuresUri'])) {
             $seeAllLink = $context['figuresUri'].'#'.$object->getId();
         } else {
             $seeAllLink = null;
