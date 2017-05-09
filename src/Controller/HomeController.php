@@ -12,6 +12,7 @@ use eLife\Patterns\ViewModel\CarouselItem;
 use eLife\Patterns\ViewModel\LeadPara;
 use eLife\Patterns\ViewModel\LeadParas;
 use eLife\Patterns\ViewModel\Link;
+use eLife\Patterns\ViewModel\ListHeading;
 use eLife\Patterns\ViewModel\ListingTeasers;
 use eLife\Patterns\ViewModel\SectionListing;
 use eLife\Patterns\ViewModel\SectionListingLink;
@@ -88,7 +89,7 @@ final class HomeController extends Controller
                 return new Link($subject->getName(), $this->get('router')->generate('subject', ['id' => $subject->getId()]));
             })
             ->then(function (Sequence $links) {
-                return new SectionListing('subjects', $links->toArray(), false, 'strapline');
+                return new SectionListing('subjects', $links->toArray(), new ListHeading('Research categories'), false, 'strapline');
             })
             ->otherwise($this->softFailure('Failed to load subjects list'));
 
