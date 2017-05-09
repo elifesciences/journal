@@ -8,6 +8,7 @@ use eLife\Patterns\ViewModel\ArticleSection;
 use eLife\Patterns\ViewModel\ContentHeader;
 use eLife\Patterns\ViewModel\IFrame;
 use eLife\Patterns\ViewModel\Link;
+use eLife\Patterns\ViewModel\ListHeading;
 use eLife\Patterns\ViewModel\Listing;
 use eLife\Patterns\ViewModel\SectionListing;
 use eLife\Patterns\ViewModel\SectionListingLink;
@@ -186,7 +187,7 @@ final class AboutController extends Controller
             return new Link($text, $path, $path === $currentPath);
         }, array_keys($menuItems), array_values($menuItems));
 
-        $arguments['menu'] = new SectionListing('sections', $menuItems, true);
+        $arguments['menu'] = new SectionListing('sections', $menuItems, new ListHeading('About sections'), true);
 
         return $arguments;
     }
