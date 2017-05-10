@@ -126,7 +126,9 @@
     <div class="global-inner">
 
         {% if header %}
-            {{ render_pattern(header) }}
+            <div class="wrapper wrapper--site-header">
+                {{ render_pattern(header) }}
+            </div>
         {% endif %}
 
         {% if app.request.hasPreviousSession %}
@@ -139,7 +141,7 @@
 
         {% block info_bar %}{% endblock %}
 
-        <main role="main" class="blg-margin-bottom-large">
+        <main role="main" class="main blg-margin-bottom-large">
 
             {% block body %}{% endblock %}
 
