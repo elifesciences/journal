@@ -753,7 +753,8 @@ sources: '.implode(', ', array_map(function (CitationsMetricSource $source) {
                         return null;
                     }, $sections)),
                     $hasFigures ? $this->generateFiguresPath($history, $article->getVersion()) : null,
-                    $isFiguresPage
+                    $isFiguresPage,
+                    rtrim($this->getParameter('side_by_side_view_url'), '/').'/'.$article->getId()
                 );
             });
     }

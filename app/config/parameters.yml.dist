@@ -2,6 +2,7 @@ parameters:
     api_url: https://api.elifesciences.org/
     api_url_public: '%api_url%'
     api_key: public
+    side_by_side_view_url: https://lens.elifesciences.org/
     secret: ThisTokenIsNotSoSecretChangeIt
     session_name: journal
     redis_cache: redis://localhost
