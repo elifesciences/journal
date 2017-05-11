@@ -754,7 +754,9 @@ sources: '.implode(', ', array_map(function (CitationsMetricSource $source) {
                     }, $sections)),
                     $hasFigures ? $this->generateFiguresPath($history, $article->getVersion()) : null,
                     $isFiguresPage,
-                    rtrim($this->getParameter('side_by_side_view_url'), '/').'/'.$article->getId()
+                    $article instanceof ArticleVoR
+                        ? rtrim($this->getParameter('side_by_side_view_url'), '/').'/'.$article->getId()
+                        : null
                 );
             });
     }
