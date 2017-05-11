@@ -732,6 +732,8 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertContains('Accepted manuscript, PDF only. Full online edition to follow.',
             array_map('trim', $crawler->filter('.info-bar')->extract(['_text'])));
+
+        $this->assertNull($crawler->filter('.view-selector')->attr('data-side-by-side-link'));
         $articleInfo = $crawler->filter('main > .wrapper > div > div > section:nth-of-type(1)');
         $this->assertSame('Article and author information',
             $articleInfo->filter('header > h2')->text());
@@ -1281,6 +1283,8 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertSame('Download links', $crawler->filter('main > .wrapper > div > div > section:nth-of-type(10) .article-section__header_text')->text());
 
         $this->assertSame('Categories and tags', $crawler->filter('main > .wrapper > div > div > section:nth-of-type(11) .article-meta__group_title')->text());
+
+        $this->assertRegexp('|^https://.*/00001$|', $crawler->filter('.view-selector')->attr('data-side-by-side-link'));
 
         $this->assertSame(
             [
