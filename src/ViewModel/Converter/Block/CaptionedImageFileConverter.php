@@ -65,7 +65,11 @@ final class CaptionedImageFileConverter implements ViewModelConverter
         }
 
         $download = new Link('Download', $this->downloadLinkUriGenerator->generate(new DownloadLink($object->getImage()->getSource()->getUri(), $object->getImage()->getSource()->getFilename())));
-        $open = $this->iiifUri($object->getImage());
+        $open = new ViewModel\OpenLink(
+            $this->iiifUri($object->getImage()),
+            $object->getImage()->getWidth(),
+            $object->getImage()->getHeight()
+        );
 
         if (!empty($context['parentId']) && !empty($context['ordinal'])) {
             return AssetViewerInline::supplement($object->getId(), $context['ordinal'], $context['parentId'], $object->getLabel(), $asset, $additionalAssets, $download, $open);
