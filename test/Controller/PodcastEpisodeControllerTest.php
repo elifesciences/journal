@@ -18,7 +18,7 @@ final class PodcastEpisodeControllerTest extends PageTestCase
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertSame('Episode title', $crawler->filter('.content-header__title')->text());
-        $this->assertSame('Podcast Jan 1, 2010', trim(preg_replace('!\s+!', ' ', $crawler->filter('.content-header .meta')->text())));
+        $this->assertSame('Podcast', trim(preg_replace('!\s+!', ' ', $crawler->filter('.content-header .meta')->text())));
     }
 
     /**
@@ -32,10 +32,10 @@ final class PodcastEpisodeControllerTest extends PageTestCase
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
 
-        $this->assertSame('Episode 1: Episode title | Podcast | eLife', $crawler->filter('title')->text());
+        $this->assertSame('Episode title | Podcast | eLife', $crawler->filter('title')->text());
         $this->assertSame('/podcast/episode1', $crawler->filter('link[rel="canonical"]')->attr('href'));
         $this->assertSame('http://localhost/podcast/episode1', $crawler->filter('meta[property="og:url"]')->attr('content'));
-        $this->assertSame('Episode 1: Episode title', $crawler->filter('meta[property="og:title"]')->attr('content'));
+        $this->assertSame('Episode title', $crawler->filter('meta[property="og:title"]')->attr('content'));
         $this->assertSame('Episode impact statement', $crawler->filter('meta[property="og:description"]')->attr('content'));
         $this->assertSame('Episode impact statement', $crawler->filter('meta[name="description"]')->attr('content'));
         $this->assertSame('article', $crawler->filter('meta[property="og:type"]')->attr('content'));

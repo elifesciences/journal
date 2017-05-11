@@ -8,7 +8,6 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 final class PodcastEpisodeGridTeaserConverter implements ViewModelConverter
 {
-    use CreatesDate;
     use CreatesTeaserImage;
 
     private $urlGenerator;
@@ -27,12 +26,11 @@ final class PodcastEpisodeGridTeaserConverter implements ViewModelConverter
             $object->getTitle(),
             $this->urlGenerator->generate('podcast-episode', ['number' => $object->getNumber()]),
             $object->getImpactStatement(),
-            'Episode '.$object->getNumber(),
+            null,
             $this->prominentTeaserImage($object),
             ViewModel\TeaserFooter::forNonArticle(
                 ViewModel\Meta::withLink(
-                    new ViewModel\Link('Podcast', $this->urlGenerator->generate('podcast')),
-                    $this->simpleDate($object, $context)
+                    new ViewModel\Link('Podcast', $this->urlGenerator->generate('podcast'))
                 )
             )
         );

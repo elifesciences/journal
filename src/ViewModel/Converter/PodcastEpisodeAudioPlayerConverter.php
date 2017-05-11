@@ -23,7 +23,7 @@ final class PodcastEpisodeAudioPlayerConverter implements ViewModelConverter
     {
         return new ViewModel\AudioPlayer(
             $object->getNumber(),
-            'Episode '.$object->getNumber(),
+            $object->getTitle(),
             array_map(function (PodcastEpisodeSource $source) {
                 return new ViewModel\MediaSource($source->getUri(), new ViewModel\MediaType($source->getMediaType()));
             }, $object->getSources()),
