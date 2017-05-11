@@ -12,8 +12,6 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 final class PodcastEpisodeChapterReadMoreItemConverter implements ViewModelConverter
 {
-    use CreatesDate;
-
     private $patternRenderer;
     private $urlGenerator;
 
@@ -43,8 +41,7 @@ final class PodcastEpisodeChapterReadMoreItemConverter implements ViewModelConve
                     new ViewModel\Link(
                         ModelName::singular('podcast-episode'),
                         $this->urlGenerator->generate('podcast')
-                    ),
-                    $this->simpleDate($episode, $context)
+                    )
                 )
             ),
             $chapter->getImpactStatement() ? $this->patternRenderer->render(new Paragraph($chapter->getImpactStatement())) : null
