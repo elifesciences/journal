@@ -14,6 +14,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 final class ArticleContentHeaderConverter implements ViewModelConverter
 {
     use CreatesDate;
+    use CreatesId;
     use CreatesIiifUri;
 
     private $urlGenerator;
@@ -32,7 +33,16 @@ final class ArticleContentHeaderConverter implements ViewModelConverter
             return new ViewModel\Link($subject->getName(), $this->urlGenerator->generate('subject', ['id' => $subject->getId()]));
         })->toArray();
 
-        $authors = $object->getAuthors()->map(function (AuthorEntry $author) {
+        $authors = $object->getAuthors()->map(function (AuthorEntry $author) use ($object) {
+            if ($author instanceof Author) {
+                return ViewModel\Author::asLink(
+                    new ViewModel\Link(
+                        $author->toString(),
+                        $this->urlGenerator->generate('article', ['id' => $object->getId(), '_fragment' => $this->createId($author)])
+                    )
+                );
+            }
+
             return ViewModel\Author::asText($author->toString());
         })->toArray();
 
@@ -71,7 +81,7 @@ final class ArticleContentHeaderConverter implements ViewModelConverter
             $object->getAuthorLine(),
             $authors,
             $institutions,
-            '#downloads',
+            $this->urlGenerator->generate('article', ['id' => $object->getId(), '_fragment' => 'downloads']),
             null,
             null,
             $meta

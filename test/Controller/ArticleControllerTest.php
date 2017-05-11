@@ -903,6 +903,45 @@ final class ArticleControllerTest extends PageTestCase
                                     'type' => 'paragraph',
                                     'text' => 'Body text',
                                 ],
+                                [
+                                    'type' => 'image',
+                                    'id' => 'image1',
+                                    'label' => 'Image 1 label',
+                                    'title' => 'Image 1 title',
+                                    'image' => [
+                                        'uri' => 'https://www.example.com/iiif/image',
+                                        'alt' => '',
+                                        'source' => [
+                                            'mediaType' => 'image/jpeg',
+                                            'uri' => 'https://www.example.com/image.jpg',
+                                            'filename' => 'image.jpg',
+                                        ],
+                                        'size' => [
+                                            'width' => 800,
+                                            'height' => 600,
+                                        ],
+                                    ],
+                                    'supplements' => [
+                                        [
+                                            'id' => 'image1s1',
+                                            'label' => 'Image 1 supplement 1 label',
+                                            'title' => 'Image 1 supplement 1 title',
+                                            'image' => [
+                                                'uri' => 'https://www.example.com/iiif/image',
+                                                'alt' => '',
+                                                'source' => [
+                                                    'mediaType' => 'image/jpeg',
+                                                    'uri' => 'https://www.example.com/image.jpg',
+                                                    'filename' => 'image.jpg',
+                                                ],
+                                                'size' => [
+                                                    'width' => 800,
+                                                    'height' => 600,
+                                                ],
+                                            ],
+                                        ],
+                                    ],
+                                ],
                             ],
                         ],
                     ],
@@ -1153,8 +1192,13 @@ final class ArticleControllerTest extends PageTestCase
             $crawler->filter('main > .wrapper > div > div > section:nth-of-type(2) > div > .doi')->text());
         $this->assertSame('Body title',
             $crawler->filter('main > .wrapper > div > div > section:nth-of-type(3) > header > h2')->text());
-        $this->assertSame('Body text',
-            $crawler->filter('main > .wrapper > div > div > section:nth-of-type(3) > div > p')->text());
+
+        $body = $crawler->filter('main > .wrapper > div > div > section:nth-of-type(3) > div')->children();
+        $this->assertCount(2, $body);
+
+        $this->assertSame('Body text', $body->eq(0)->text());
+        $this->assertSame('Image 1 label with 1 supplement see all', trim($body->eq(1)->filter('.asset-viewer-inline__header_text')->text()));
+
         $appendix = $crawler->filter('main > .wrapper > div > div > section:nth-of-type(4)');
         $this->assertSame('Appendix 1', $appendix->filter('header > h2')->text());
         $this->assertSame('Appendix title', $appendix->filter('div > section > header > h3')->text());

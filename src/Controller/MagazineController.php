@@ -10,6 +10,7 @@ use eLife\Journal\Pagerfanta\SequenceAdapter;
 use eLife\Patterns\ViewModel\AudioPlayer;
 use eLife\Patterns\ViewModel\ContentHeader;
 use eLife\Patterns\ViewModel\Link;
+use eLife\Patterns\ViewModel\ListHeading;
 use eLife\Patterns\ViewModel\ListingTeasers;
 use eLife\Patterns\ViewModel\SectionListing;
 use eLife\Patterns\ViewModel\SectionListingLink;
@@ -101,7 +102,7 @@ final class MagazineController extends Controller
             new Link(ModelName::plural('podcast-episode'), $this->get('router')->generate('podcast')),
             new Link(ModelName::plural('collection'), $this->get('router')->generate('collections')),
             new Link('Community', $this->get('router')->generate('community')),
-        ], true);
+        ], new ListHeading('Magazine sections'), true);
 
         $arguments['events'] = $events
             ->slice(0, 3)

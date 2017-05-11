@@ -10,6 +10,7 @@ use eLife\Patterns\ViewModel\AuthorDetails;
 final class PersonAuthorDetailsConverter implements ViewModelConverter
 {
     use AuthorDetailsConverter;
+    use CreatesId;
 
     /**
      * @param PersonAuthor $object
@@ -17,7 +18,7 @@ final class PersonAuthorDetailsConverter implements ViewModelConverter
     public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
         return AuthorDetails::forPerson(
-            'author-'.hash('crc32', $object->toString()),
+            $this->createId($object),
             $object->toString(),
             $this->findDetails($object, $context['authors'] ?? new EmptySequence()),
             $object->getOrcid()

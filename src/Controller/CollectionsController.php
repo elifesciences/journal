@@ -75,9 +75,13 @@ final class CollectionsController extends Controller
         $arguments['contentHeader'] = $arguments['collection']
             ->then($this->willConvertTo(ContentHeader::class));
 
-        $arguments['collectionList'] = $arguments['collection']
+        $arguments['body'] = $arguments['collection']
             ->then(function (Collection $collection) {
-                return ListingTeasers::basic(
+                if ($collection->getSummary()->notEmpty()) {
+                    yield from $collection->getSummary()->map($this->willConvertTo());
+                }
+
+                yield ListingTeasers::basic(
                     $collection->getContent()->map($this->willConvertTo(Teaser::class))->toArray(),
                     'Collection'
                 );
