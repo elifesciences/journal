@@ -1,0 +1,27 @@
+grid__item
+one-whole
+
+{# $bkpt-site--wide#}
+{% if relatedItem is defined and relatedItem %}
+    large--eight-twelfths
+    push--large--one-twelfth
+{% else %}
+    large--ten-twelfths
+    push--large--one-twelfth
+{% endif %}
+
+{# $bkpt-site-x--wide #}
+{% if relatedItem is defined and relatedItem %}
+    x-large--seven-twelfths
+    {% if not viewSelector is defined %}
+        push--x-large--two-twelfths
+    {% endif %}
+{% else %}
+    x-large--eight-twelfths
+    {% if viewSelector is defined %}
+        push--x-large--zero
+    {% else %}
+        push--x-large--two-twelfths
+    {% endif %}
+{% endif %}
+
