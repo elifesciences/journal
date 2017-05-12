@@ -14,7 +14,7 @@
 
         <div class="grid">
 
-            <div class="grid__item medium--six-twelfths push--large--three-twelfths u-pad-top">
+            <div class="{% include 'grid-item-classes.html.twig' with {'column': 'content-main'} %}  u-pad-top">
 
                 {% for block in blocks %}
                     {{ render_pattern(block) }}
