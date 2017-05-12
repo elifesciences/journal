@@ -14,7 +14,7 @@
 
         <div class="grid">
 
-            <div class="{% include 'grid-item-classes.html.twig' %}">
+            <div class="{% include 'grid-item-classes.html.twig' with {'column': 'content-main'} %}">
 
                 {% for part in body %}
 

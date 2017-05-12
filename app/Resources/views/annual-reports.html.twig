@@ -10,7 +10,7 @@
 
             <div class="listing-column-container">
 
-                <div class="{% include 'grid-item-classes.html.twig' %}">
+                <div class="{% include 'grid-item-classes.html.twig' with {'column': 'content-main'} %}">
 
                     {{ render_pattern(listing) }}
 

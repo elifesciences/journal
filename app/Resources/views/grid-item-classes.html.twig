@@ -1,27 +1,29 @@
 grid__item
 one-whole
 
-{# $bkpt-site--wide#}
-{% if relatedItem is defined and relatedItem %}
-    large--eight-twelfths
-    push--large--one-twelfth
-{% else %}
-    large--ten-twelfths
-    push--large--one-twelfth
-{% endif %}
+{% if column is defined and column == 'content-main' %}
 
-{# $bkpt-site-x--wide #}
-{% if relatedItem is defined and relatedItem %}
-    x-large--seven-twelfths
-    {% if not viewSelector is defined %}
-        push--x-large--two-twelfths
-    {% endif %}
-{% else %}
-    x-large--eight-twelfths
-    {% if viewSelector is defined %}
-        push--x-large--zero
+    {# $bkpt-site--wide#}
+    {% if (relatedItem is defined and relatedItem) or (relatedContent is defined and relatedContent) %}
+        large--eight-twelfths
     {% else %}
-        push--x-large--two-twelfths
+        large--ten-twelfths
+        push--large--one-twelfth
     {% endif %}
-{% endif %}
 
+    {# $bkpt-site-x--wide #}
+    {% if (relatedItem is defined and relatedItem) or (relatedContent is defined and relatedContent) %}
+        x-large--seven-twelfths
+        {% if not viewSelector is defined %}
+            push--x-large--two-twelfths
+        {% endif %}
+    {% else %}
+        x-large--eight-twelfths
+        {% if viewSelector is defined %}
+            push--x-large--zero
+        {% else %}
+            push--x-large--two-twelfths
+        {% endif %}
+    {% endif %}
+
+{% endif %}
