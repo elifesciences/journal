@@ -18,6 +18,7 @@ use eLife\ApiSdk\Model\CitationsMetric;
 use eLife\ApiSdk\Model\CitationsMetricSource;
 use eLife\ApiSdk\Model\DataSet;
 use eLife\ApiSdk\Model\FundingAward;
+use eLife\ApiSdk\Model\HasContent;
 use eLife\ApiSdk\Model\Model;
 use eLife\ApiSdk\Model\Reviewer;
 use eLife\Journal\Helper\Callback;
@@ -483,15 +484,21 @@ sources: '.implode(', ', array_map(function (CitationsMetricSource $source) {
         $allFigures = $this->findFigures($arguments['article']);
 
         $figures = $allFigures
-            ->filter(Callback::isInstanceOf(Block\Image::class))
+            ->filter(function (Block\Figure $figure) {
+                return $figure->getAssets()[0]->getAsset() instanceof Block\Image;
+            })
             ->map($this->willConvertTo(null, ['complete' => true]));
 
         $videos = $allFigures
-            ->filter(Callback::isInstanceOf(Block\Video::class))
+            ->filter(function (Block\Figure $figure) {
+                return $figure->getAssets()[0]->getAsset() instanceof Block\Video;
+            })
             ->map($this->willConvertTo(null, ['complete' => true]));
 
         $tables = $allFigures
-            ->filter(Callback::isInstanceOf(Block\Table::class))
+            ->filter(function (Block\Figure $figure) {
+                return $figure->getAssets()[0]->getAsset() instanceof Block\Table;
+            })
             ->map($this->willConvertTo(null, ['complete' => true]));
 
         $generateDataSets = $arguments['article']
@@ -768,42 +775,23 @@ sources: '.implode(', ', array_map(function (CitationsMetricSource $source) {
                 return new EmptySequence();
             }
 
-            /* @var ArticleVoR $article */
-            $blocks = $article->getContent()->reverse()->toArray();
-            $figures = [];
-            while (!empty($blocks)) {
-                $block = array_shift($blocks);
-                switch (get_class($block)) {
-                    case Block\Image::class:
-                        if ($block->getImage()->getLabel()) {
-                            array_unshift($figures, $block);
-                        }
-                        break;
-                    case Block\Table::class:
-                    case Block\Video::class:
-                        if ($block->getLabel()) {
-                            array_unshift($figures, $block);
-                        }
-                        break;
-                    case Block\Box::class:
-                    case Block\Section::class:
-                        foreach ($block->getContent() as $element) {
-                            array_unshift($blocks, $element);
-                        }
-                        break;
-                    case Block\Listing::class:
-                        foreach ($block->getItems() as $listItem) {
-                            if (is_array($listItem)) {
-                                foreach ($listItem as $listItemElement) {
-                                    array_unshift($blocks, $listItemElement);
-                                }
-                            }
-                        }
-                        break;
-                }
-            }
+            $map = function ($item) use (&$map) {
+                if ($item instanceof HasContent) {
+                    return $item->getContent()->map($map)->prepend($item);
+                } elseif ($item instanceof Block\Listing) {
+                    $items = new ArraySequence($item->getItems());
 
-            return new ArraySequence($figures);
+                    return $items->prepend($item);
+                }
+
+                return $item;
+            };
+
+            /* @var ArticleVoR $article */
+            return $article->getContent()->map($map)->flatten()
+                ->filter(function (Block $block) {
+                    return $block instanceof Block\Figure;
+                });
         }));
     }
 

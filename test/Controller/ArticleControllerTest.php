@@ -906,25 +906,29 @@ final class ArticleControllerTest extends PageTestCase
                                     'text' => 'Body text',
                                 ],
                                 [
-                                    'type' => 'image',
-                                    'id' => 'image1',
-                                    'label' => 'Image 1 label',
-                                    'title' => 'Image 1 title',
-                                    'image' => [
-                                        'uri' => 'https://www.example.com/iiif/image',
-                                        'alt' => '',
-                                        'source' => [
-                                            'mediaType' => 'image/jpeg',
-                                            'uri' => 'https://www.example.com/image.jpg',
-                                            'filename' => 'image.jpg',
-                                        ],
-                                        'size' => [
-                                            'width' => 800,
-                                            'height' => 600,
-                                        ],
-                                    ],
-                                    'supplements' => [
+                                    'type' => 'figure',
+                                    'assets' => [
                                         [
+                                            'type' => 'image',
+                                            'id' => 'image1',
+                                            'label' => 'Image 1 label',
+                                            'title' => 'Image 1 title',
+                                            'image' => [
+                                                'uri' => 'https://www.example.com/iiif/image',
+                                                'alt' => '',
+                                                'source' => [
+                                                    'mediaType' => 'image/jpeg',
+                                                    'uri' => 'https://www.example.com/image.jpg',
+                                                    'filename' => 'image.jpg',
+                                                ],
+                                                'size' => [
+                                                    'width' => 800,
+                                                    'height' => 600,
+                                                ],
+                                            ],
+                                        ],
+                                        [
+                                            'type' => 'image',
                                             'id' => 'image1s1',
                                             'label' => 'Image 1 supplement 1 label',
                                             'title' => 'Image 1 supplement 1 title',
