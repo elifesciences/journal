@@ -10,7 +10,7 @@
 
         <div class="grid">
 
-            <div class="grid__item medium--nine-twelfths large--seven-twelfths push--large--two-twelfths">
+            <div class="{% include 'grid-item-classes.html.twig' with {'column': 'content-main'} %}">
 
                 {% for block in blocks %}
                     {{ render_pattern(block) }}
@@ -18,7 +18,7 @@
 
             </div>
 
-            <div class="grid__item medium--three-twelfths push--large--two-twelfths">
+            <div class="{% include 'grid-item-classes.html.twig' with {'column': 'content-secondary'} %}">
 
                 {{ render_pattern(relatedContent) }}
 

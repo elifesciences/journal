@@ -26,4 +26,15 @@ one-whole
         {% endif %}
     {% endif %}
 
+{% elseif column is defined and column == 'content-secondary' %}
+
+    {# $bkpt-site--wide#}
+    large--four-twelfths
+
+    {# $bkpt-site-x--wide #}
+    x-large--three-twelfths
+    {% if not viewSelector is defined %}
+        push--x-large--two-twelfths
+    {% endif %}
+
 {% endif %}
