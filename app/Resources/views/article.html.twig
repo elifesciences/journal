@@ -385,7 +385,7 @@
 
             {% if viewSelector %}
 
-                <div class="grid__item large--two-twelfths blg-pad-top-medium">
+                <div class="grid__item one-whole x-large--two-twelfths blg-pad-top-medium">
 
                     {{ render_pattern(viewSelector) }}
 
@@ -395,7 +395,7 @@
 
             {% block article_body %}
 
-                <div class="grid__item large--six-twelfths {% if not viewSelector %}push--large--two-twelfths{% endif %} blg-pad-top-medium"
+                <div class="{% include 'grid-item-classes.html.twig' with {'column': 'content-main'} %} blg-pad-top-medium"
                      data-behaviour="FragmentHandler">
 
                     {% if hasFigures %}
@@ -424,7 +424,7 @@
 
                 {% if relatedItem is defined and relatedItem %}
 
-                    <div class="grid__item large--four-twelfths {% if not viewSelector %}push--large--two-twelfths{% endif %} blg-pad-top-medium">
+                    <div class="{% include 'grid-item-classes.html.twig' with {'column': 'content-secondary'} %} blg-pad-top-medium">
 
                         {{ render_pattern(relatedItem) }}
 
