@@ -45,7 +45,7 @@ final class VideoConverter implements ViewModelConverter
 
     public function supports($object, string $viewModel = null, array $context = []) : bool
     {
-        return $object instanceof Block\Video && !$object->getTitle();
+        return $object instanceof Block\Video;
     }
 
     protected function getViewModelConverter() : ViewModelConverter
