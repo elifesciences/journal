@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "65fc8ed3fa903570b9f3d65aa1f115a0",
+    "content-hash": "82b5f14eaf39aa8dcd3c14ed4262c6a2",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -3153,12 +3153,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-raml.git",
-                "reference": "7bf6cf2e7ea9f7bc3140bf7985f7151d2ed15259"
+                "reference": "f7f5a2f6ef6bc5e407610f688536ae1f5d668a7a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-raml/zipball/7bf6cf2e7ea9f7bc3140bf7985f7151d2ed15259",
-                "reference": "7bf6cf2e7ea9f7bc3140bf7985f7151d2ed15259",
+                "url": "https://api.github.com/repos/elifesciences/api-raml/zipball/f7f5a2f6ef6bc5e407610f688536ae1f5d668a7a",
+                "reference": "f7f5a2f6ef6bc5e407610f688536ae1f5d668a7a",
                 "shasum": ""
             },
             "conflict": {
@@ -3170,7 +3170,7 @@
                 "MIT"
             ],
             "description": "eLife Sciences API specification",
-            "time": "2017-05-08 12:11:01"
+            "time": "2017-05-12T10:54:57+00:00"
         },
         {
             "name": "elife/api-validator",
@@ -4757,8 +4757,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": "^7.0",
-        "ext-redis": "*"
+        "php": "^7.0"
     },
     "platform-dev": []
 }
