@@ -9,6 +9,7 @@ Dependencies
 * [Composer](https://getcomposer.org/)
 * [npm](https://www.npmjs.com/)
 * PHP 7
+* [PhpRedis](https://github.com/phpredis/phpredis) (in production)
 
 Installation
 -------------
