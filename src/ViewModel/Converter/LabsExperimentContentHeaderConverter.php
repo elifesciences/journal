@@ -10,13 +10,6 @@ final class LabsExperimentContentHeaderConverter implements ViewModelConverter
 {
     use CreatesDate;
 
-    private $contentHeaderImageFactory;
-
-    public function __construct(ContentHeaderImageFactory $contentHeaderImageFactory)
-    {
-        $this->contentHeaderImageFactory = $contentHeaderImageFactory;
-    }
-
     /**
      * @param LabsExperiment $object
      */
