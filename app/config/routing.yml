@@ -161,6 +161,11 @@ interview:
          _controller: AppBundle:Interviews:interview
          slug: ''
 
+interviews:
+    path: /interviews
+    defaults:
+         _controller: AppBundle:Interviews:list
+
 magazine:
     path: /magazine
     defaults:

@@ -64,6 +64,11 @@ default:
                 tags: '@homepage'
             contexts:
               - HomepageContext
+        interview:
+            filters:
+                tags: '@interview'
+            contexts:
+              - InterviewContext
         labs:
             filters:
                 tags: '@labs'
