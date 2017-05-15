@@ -3,7 +3,6 @@
 namespace eLife\Journal\ViewModel\Converter;
 
 use eLife\ApiSdk\Model\LabsExperiment;
-use eLife\Journal\ViewModel\Factory\ContentHeaderImageFactory;
 use eLife\Patterns\ViewModel;
 
 final class LabsExperimentContentHeaderConverter implements ViewModelConverter
