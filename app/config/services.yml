@@ -341,12 +341,18 @@ services:
     elife.journal.view_model.converter.author_group.details:
         class: eLife\Journal\ViewModel\Converter\GroupAuthorDetailsConverter
         public: false
+        arguments:
+          - '@elife.journal.view_model.converter'
+          - '@elife.patterns.pattern_renderer'
         tags:
           - name: view_model.converter
 
     elife.journal.view_model.converter.author_person.details:
         class: eLife\Journal\ViewModel\Converter\PersonAuthorDetailsConverter
         public: false
+        arguments:
+          - '@elife.journal.view_model.converter'
+          - '@elife.patterns.pattern_renderer'
         tags:
           - name: view_model.converter
 

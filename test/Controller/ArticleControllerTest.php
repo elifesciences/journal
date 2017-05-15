@@ -844,6 +844,7 @@ final class ArticleControllerTest extends PageTestCase
                                 'preferred' => 'Foo Bar',
                                 'index' => 'Bar, Foo',
                             ],
+                            'role' => 'Role',
                         ],
                         [
                             'type' => 'group',
@@ -1234,7 +1235,7 @@ final class ArticleControllerTest extends PageTestCase
 
         $authorDetails = $articleInfo->filter('div > ol:nth-of-type(1) > li.authors-details__author');
         $this->assertCount(2, $authorDetails);
-        $this->assertSame('Foo Bar', $authorDetails->eq(0)->filter('.author-details__name')->text());
+        $this->assertSame('Foo Bar, Role', $authorDetails->eq(0)->filter('.author-details__name')->text());
         $this->assertSame('Baz', $authorDetails->eq(1)->filter('.author-details__name')->text());
 
         $articleInfo = $crawler->filter('main > .wrapper > div > div > section:nth-of-type(8) > div > section');
