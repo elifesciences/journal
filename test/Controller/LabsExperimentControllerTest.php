@@ -40,10 +40,7 @@ final class LabsExperimentControllerTest extends PageTestCase
         $this->assertSame('Experiment impact statement', $crawler->filter('meta[property="og:description"]')->attr('content'));
         $this->assertSame('Experiment impact statement', $crawler->filter('meta[name="description"]')->attr('content'));
         $this->assertSame('article', $crawler->filter('meta[property="og:type"]')->attr('content'));
-        $this->assertSame('summary_large_image', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
-        $this->assertSame('https://www.example.com/iiif/banner/0,529,1800,543/1114,336/0/default.jpg', $crawler->filter('meta[property="og:image"]')->attr('content'));
-        $this->assertSame('1114', $crawler->filter('meta[property="og:image:width"]')->attr('content'));
-        $this->assertSame('336', $crawler->filter('meta[property="og:image:height"]')->attr('content'));
+        $this->assertSame('summary', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
     }
 
     /**
@@ -143,19 +140,6 @@ final class LabsExperimentControllerTest extends PageTestCase
                     'title' => 'Experiment title',
                     'published' => '2010-01-01T00:00:00Z',
                     'image' => [
-                        'banner' => [
-                            'uri' => 'https://www.example.com/iiif/banner',
-                            'alt' => '',
-                            'source' => [
-                                'mediaType' => 'image/jpeg',
-                                'uri' => 'https://www.example.com/banner.jpg',
-                                'filename' => 'image.jpg',
-                            ],
-                            'size' => [
-                                'width' => 1800,
-                                'height' => 1600,
-                            ],
-                        ],
                         'thumbnail' => [
                             'uri' => 'https://www.example.com/iiif/image',
                             'alt' => '',

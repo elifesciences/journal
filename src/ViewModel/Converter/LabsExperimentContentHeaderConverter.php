@@ -24,7 +24,7 @@ final class LabsExperimentContentHeaderConverter implements ViewModelConverter
     {
         return new ViewModel\ContentHeader(
             $object->getTitle(),
-            $this->contentHeaderImageFactory->forImage($object->getBanner()), $object->getImpactStatement(), false, [], null, null, [], [], null, null, null,
+            null, $object->getImpactStatement(), false, [], null, null, [], [], null, null, null,
             ViewModel\Meta::withText(
                 'Experiment: '.str_pad($object->getNumber(), 3, '0', STR_PAD_LEFT),
                 $this->simpleDate($object, $context)
