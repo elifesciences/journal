@@ -710,6 +710,8 @@ services:
     elife.journal.view_model.converter.interview.header:
         class: eLife\Journal\ViewModel\Converter\InterviewContentHeaderConverter
         public: false
+        arguments:
+          - '@router'
         tags:
           - name: view_model.converter
 
