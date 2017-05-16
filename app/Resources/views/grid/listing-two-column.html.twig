@@ -16,6 +16,14 @@
         {% set related = block('related') %}
     {% endif %}
 
+    {% if block('events') is defined and block('events')|trim != '' %}
+        {% set events = block('events') %}
+    {% endif %}
+
+    {% if block('elifeDigests') is defined and block('elifeDigests')|trim != '' %}
+        {% set elifeDigests = block('elifeDigests') %}
+    {% endif %}
+
     <div class="grid">
 
         <div class="listing-column-container">
@@ -40,6 +48,14 @@
 
                 {% if related is defined %}
                     {{ related|raw }}
+                {% endif %}
+
+                {% if events is defined %}
+                    {{  events|raw }}
+                {% endif %}
+
+                {% if elifeDigests is defined %}
+                    {{ elifeDigests|raw }}
                 {% endif %}
 
             </div>
