@@ -1,0 +1,31 @@
+<div class="wrapper u-pad-top-lg">
+
+    {% set listing = block('listing') %}
+
+    {% if highlights %}
+        {% set highlights = block('highlights') %}
+    {% endif %}
+
+    <div class="grid">
+
+        <div class="listing-column-container">
+
+            <div class="grid__item one-whole x-large--eight-twelfths listing-column-main">
+
+                {{  listing|raw }}
+
+            </div>
+
+            <div class="grid__item one-whole x-large--four-twelfths listing-column-secondary">
+
+                {% if highlights %}
+                    {{  highlights|raw }}
+                {% endif %}
+
+            </div>
+
+            </div>
+
+    </div>
+
+</div>
