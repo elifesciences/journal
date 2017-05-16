@@ -19,7 +19,7 @@ final class LabsExperimentControllerTest extends PageTestCase
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertSame('Experiment title', $crawler->filter('.content-header__title')->text());
         $this->assertSame('Experiment: 001 Jan 1, 2010', trim(preg_replace('!\s+!', ' ', $crawler->filter('.content-header .meta')->text())));
-        $this->assertContains('Experiment text.', $crawler->filter('main > .wrapper')->text());
+        $this->assertContains('Experiment text.', $crawler->filter('main > div.wrapper')->text());
     }
 
     /**
