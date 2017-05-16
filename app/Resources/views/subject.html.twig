@@ -4,32 +4,21 @@
 
     {{ render_pattern(contentHeader) }}
 
-    <div class="wrapper u-pad-top-lg">
+    {% embed 'grid/listing-two-column.html.twig' %}
 
-        <div class="grid">
+        {% block listing %}
 
-            <div class="listing-column-container">
+            {{ render_pattern(listing) }}
 
-                <div class="grid__item large--eight-twelfths listing-column-main {% if not highlights %}push--large--two-twelfths{% endif %}">
+        {% endblock %}
 
-                    {{ render_pattern(listing) }}
+        {% if highlights %}
+            {% block highlights %}
+                {{ render_pattern(highlights) }}
+            {% endblock %}
+        {% endif %}
 
-                </div>
 
-                {% if highlights %}
-
-                    <div class="grid__item large--four-twelfths listing-column-secondary">
-
-                        {{ render_pattern(highlights) }}
-
-                    </div>
-
-                {% endif %}
-
-            </div>
-
-        </div>
-
-    </div>
+    {% endembed %}
 
 {% endblock %}
