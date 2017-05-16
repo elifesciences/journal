@@ -3,7 +3,7 @@ set -e
 
 if [ "$#" != 1 ]; then
     echo "Usage: ./switch-patterns-php.sh PATTERNS_PHP_BRANCH"
-    echo "Example: ./switch-patterns-php.sh update_pattern_library/side_by_side_view"
+    echo "Example: ./switch-patterns-php.sh update_pattern_library/PR-621"
     exit 1
 fi
 
