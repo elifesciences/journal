@@ -31,10 +31,6 @@ final class ModelName
             'singular' => 'Research Article',
             'plural' => 'Research Articles',
         ],
-        'research-exchange' => [
-            'singular' => 'Research Exchange',
-            'plural' => 'Research Exchanges',
-        ],
         'retraction' => [
             'singular' => 'Retraction',
             'plural' => 'Retractions',
@@ -46,6 +42,10 @@ final class ModelName
         'replication-study' => [
             'singular' => 'Replication Study',
             'plural' => 'Replication Studies',
+        ],
+        'scientific-correspondence' => [
+            'singular' => 'Scientific Correspondence',
+            'plural' => 'Scientific Correspondences',
         ],
         'short-report' => [
             'singular' => 'Short Report',
