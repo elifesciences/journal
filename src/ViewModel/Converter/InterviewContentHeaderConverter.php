@@ -4,10 +4,18 @@ namespace eLife\Journal\ViewModel\Converter;
 
 use eLife\ApiSdk\Model\Interview;
 use eLife\Patterns\ViewModel;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 final class InterviewContentHeaderConverter implements ViewModelConverter
 {
     use CreatesDate;
+
+    private $urlGenerator;
+
+    public function __construct(UrlGeneratorInterface $urlGenerator)
+    {
+        $this->urlGenerator = $urlGenerator;
+    }
 
     /**
      * @param Interview $object
@@ -27,7 +35,10 @@ final class InterviewContentHeaderConverter implements ViewModelConverter
             null,
             null,
             null,
-            ViewModel\Meta::withText('Interview', $this->simpleDate($object, ['date' => 'published'] + $context))
+            ViewModel\Meta::withLink(
+                new ViewModel\Link('Interview', $this->urlGenerator->generate('interviews')),
+                $this->simpleDate($object, ['date' => 'published'] + $context)
+            )
         );
     }
 
