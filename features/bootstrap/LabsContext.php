@@ -25,19 +25,6 @@ final class LabsContext extends Context
                 'title' => 'Experiment '.$i.' title',
                 'published' => $today->format(ApiSdk::DATE_FORMAT),
                 'image' => [
-                    'banner' => [
-                        'uri' => "https://www.example.com/iiif/banner$i",
-                        'alt' => '',
-                        'source' => [
-                            'mediaType' => 'image/jpeg',
-                            'uri' => "https://www.example.com/banner$i.jpg",
-                            'filename' => "banner$i.jpg",
-                        ],
-                        'size' => [
-                            'width' => 1800,
-                            'height' => 1600,
-                        ],
-                    ],
                     'thumbnail' => [
                         'uri' => "https://www.example.com/iiif/thumbnail$i",
                         'alt' => '',
@@ -74,7 +61,6 @@ final class LabsContext extends Context
                 json_encode([
                     'total' => $number,
                     'items' => array_map(function (array $experiment) {
-                        unset($experiment['image']['banner']);
                         unset($experiment['content']);
 
                         return $experiment;
@@ -98,7 +84,6 @@ final class LabsContext extends Context
                     json_encode([
                         'total' => $number,
                         'items' => array_map(function (array $experiment) {
-                            unset($experiment['image']['banner']);
                             unset($experiment['content']);
 
                             return $experiment;
