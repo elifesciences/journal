@@ -25,7 +25,7 @@ final class ArticleFiguresControllerTest extends PageTestCase
             $crawler->filter('.contextual-data__cite_wrapper')->text());
         $this->assertContains('doi: 10.7554/eLife.00001', $crawler->filter('.contextual-data__cite_wrapper')->text());
 
-        $figureTypes = $crawler->filter('main > .wrapper > div > div > section');
+        $figureTypes = $crawler->filter('main > div.wrapper > div > div > section');
         $this->assertCount(5, $figureTypes);
 
         $figures = $figureTypes->eq(0)->filter('.asset-viewer-inline');
@@ -99,7 +99,7 @@ final class ArticleFiguresControllerTest extends PageTestCase
             $crawler->filter('.contextual-data__cite_wrapper')->text());
         $this->assertContains('doi: 10.7554/eLife.00001', $crawler->filter('.contextual-data__cite_wrapper')->text());
 
-        $figureTypes = $crawler->filter('main > .wrapper > div > div > section');
+        $figureTypes = $crawler->filter('main > div.wrapper > div > div > section');
         $this->assertCount(1, $figureTypes);
 
         $additionalFiles = $figureTypes->eq(0)->filter('.caption-text__heading');
