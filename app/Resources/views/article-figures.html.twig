@@ -6,18 +6,32 @@
 
 {% block article_body %}
 
-    <div class="grid__item large--ten-twelfths push--large--one-twelfth x-large--eight-twelfths push--x-large--zero blg-pad-top-medium" data-behaviour="FragmentHandler">
+    {% embed 'grid/content.html.twig' with {'behaviour': 'FragmentHandler'} %}
 
-        {% fragment_link_rewrite textPath %}
+        {% block navigation %}
 
-        {% for part in body %}
+            {% if viewSelector %}
 
-            {{ render_pattern(part) }}
+                {{ render_pattern(viewSelector) }}
 
-        {% endfor %}
+            {% endif %}
 
-        {% end_fragment_link_rewrite %}
+        {% endblock %}
 
-    </div>
+        {% block main %}
+
+            {% fragment_link_rewrite textPath %}
+
+            {% for part in body %}
+
+                {{ render_pattern(part) }}
+
+            {% endfor %}
+
+            {% end_fragment_link_rewrite %}
+
+        {% endblock %}
+
+    {% endembed %}
 
 {% endblock %}

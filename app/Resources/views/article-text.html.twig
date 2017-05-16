@@ -1,0 +1,84 @@
+{% extends '::article.html.twig' %}
+
+{% block article_body %}
+
+    {% embed 'grid/content.html.twig' with {'behaviour': 'FragmentHandler'} %}
+
+        {% block navigation %}
+
+            {% if viewSelector %}
+
+                {{ render_pattern(viewSelector) }}
+
+            {% endif %}
+
+        {% endblock %}
+
+        {% block main %}
+
+            {% if hasFigures %}
+
+                {% fragment_link_rewrite figuresPath %}
+
+                {% for part in body %}
+
+                    {{ render_pattern(part) }}
+
+                {% endfor %}
+
+                {% end_fragment_link_rewrite %}
+
+            {% else %}
+
+                {% for part in body %}
+
+                    {{ render_pattern(part) }}
+
+                {% endfor %}
+
+            {% endif %}
+
+        {% endblock %}
+
+        {% block secondary %}
+
+            {% if relatedItem %}
+
+                {{ render_pattern(relatedItem) }}
+
+            {% endif %}
+
+        {% endblock %}
+
+    {% endembed %}
+
+    {% if listing %}
+
+        {% embed 'grid/content.html.twig' %}
+
+            {% block main %}
+
+                {{ render_pattern(listing) }}
+
+            {% endblock %}
+
+        {% endembed %}
+
+    {% endif %}
+
+{% endblock %}
+
+{% block javascripts %}
+
+    {{ parent() }}
+
+    <script>
+        (function () {
+            var d = document, s = d.createElement('script');
+            s.src = 'https://{{ disqus_domain }}.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+    </script>
+
+{% endblock %}

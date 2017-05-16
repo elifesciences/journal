@@ -6,26 +6,22 @@
 
     {{ render_pattern(contentHeader) }}
 
-    <div class="wrapper u-pad-top-lg">
+    {% embed 'grid/content.html.twig' %}
 
-        <div class="grid">
+        {% block main %}
 
-            <div class="{% include 'grid-item-classes.html.twig' with {'column': 'content-main'} %} u-pad-top">
+            {% for block in blocks %}
+                {{ render_pattern(block) }}
+            {% endfor %}
 
-                {% for block in blocks %}
-                    {{ render_pattern(block) }}
-                {% endfor %}
+        {% endblock %}
 
-            </div>
+        {% block secondary %}
 
-            <div class="{% include 'grid-item-classes.html.twig' with {'column': 'content-secondary'} %}">
+            {{ render_pattern(relatedContent) }}
 
-                {{ render_pattern(relatedContent) }}
+        {% endblock %}
 
-            </div>
-
-        </div>
-
-    </div>
+    {% endembed %}
 
 {% endblock %}

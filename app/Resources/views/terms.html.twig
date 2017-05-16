@@ -4,21 +4,18 @@
 
     {{ render_pattern(contentHeader) }}
 
-    <div class="wrapper u-pad-top-lg">
+    {% embed 'grid/content.html.twig' %}
 
-        <div class="grid">
+        {% block main %}
 
-            <div class="{% include 'grid-item-classes.html.twig' with {'column': 'content-main'} %} u-pad-top">
+            {% for part in body %}
 
-                {% for part in body %}
+                {{ render_pattern(part) }}
 
-                    {{ render_pattern(part) }}
+            {% endfor %}
 
-                {% endfor %}
+        {% endblock %}
 
-            </div>
+    {% endembed %}
 
-        </div>
-
-    </div>
 {% endblock %}

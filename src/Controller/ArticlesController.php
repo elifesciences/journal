@@ -468,7 +468,7 @@ sources: '.implode(', ', array_map(function (CitationsMetricSource $source) {
                 return $body;
             });
 
-        return new Response($this->get('templating')->render('::article.html.twig', $arguments));
+        return new Response($this->get('templating')->render('::article-text.html.twig', $arguments));
     }
 
     public function figuresAction(Request $request, string $id, int $version = null) : Response
