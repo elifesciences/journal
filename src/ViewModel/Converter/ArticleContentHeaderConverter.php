@@ -39,7 +39,8 @@ final class ArticleContentHeaderConverter implements ViewModelConverter
                     new ViewModel\Link(
                         $author->toString(),
                         $this->urlGenerator->generate('article', ['id' => $object->getId(), '_fragment' => $this->createId($author)])
-                    )
+                    ),
+                    !empty($author->getEmailAddresses()) || !empty($author->getPhoneNumbers())
                 );
             }
 
