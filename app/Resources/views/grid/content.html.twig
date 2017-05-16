@@ -1,0 +1,66 @@
+<div class="wrapper">
+
+    <div class="grid">
+
+        {% if block('navigation') is defined and block('navigation')|trim != '' %}
+            {% set navigation = block('navigation') %}
+        {% endif %}
+
+        {% set main = block('main') %}
+
+        {% if block('secondary') is defined and block('secondary')|trim != '' %}
+            {% set secondary = block('secondary') %}
+        {% endif %}
+
+        {% if navigation is defined %}
+
+            <div class="grid__item one-whole x-large--two-twelfths blg-margin-top-medium">
+
+                {{ navigation|raw }}
+
+            </div>
+
+        {% endif %}
+
+        <div class="grid__item one-whole
+
+            {% if secondary is defined %}
+                large--eight-twelfths x-large--seven-twelfths
+                {% if navigation is not defined %}push--x-large--two-twelfths{% endif %}
+            {% else %}
+                large--ten-twelfths push--large--one-twelfth x-large--eight-twelfths
+                {% if navigation is defined %}push--x-large--zero{% else %}push--x-large--two-twelfths{% endif %}
+            {% endif %}
+
+            blg-margin-top-medium"
+
+            {% if behaviour is defined %}
+
+                data-behaviour="{{ behaviour }}"
+
+            {% endif %}
+
+        >
+
+            {{ main|raw }}
+
+        </div>
+
+        {% if secondary is defined %}
+
+            <div class="grid__item one-whole
+
+                large--four-twelfths x-large--three-twelfths
+                {% if navigation is not defined %}push--x-large--two-twelfths{% endif %}
+
+                blg-margin-top-medium">
+
+                {{ secondary|raw }}
+
+            </div>
+
+        {% endif %}
+
+    </div>
+
+</div>
