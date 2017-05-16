@@ -10,6 +10,7 @@ fi
 branch="$1"
 
 composer install
+rm -f composer-switch-patterns-php.lock
 cat composer.json | jq '.require["elife/patterns"] = "dev-'$branch'"' > composer-switch-patterns-php.json
 COMPOSER=composer-switch-patterns-php.json composer update elife/patterns --no-interaction
 ./retrying-gulp.sh
