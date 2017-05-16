@@ -886,6 +886,7 @@
             ],
             "description": "eLife patterns",
             "time": "2017-05-16 09:29:15"
+        },
         {
             "name": "fabpot/goutte",
             "version": "v3.2.1",
