@@ -1,9 +1,19 @@
 <div class="wrapper u-pad-top-lg">
 
-    {% set listing = block('listing') %}
+    {% if block('listing') is defined and block('listing')|trim != '' %}
+        {% set listing = block('listing') %}
+    {% endif %}
 
-    {% if highlights %}
+    {% if block('chapters') is defined %}
+        {% set chapters = block('chapters') %}
+    {% endif %}
+
+    {% if block('highlights') is defined and block('highlights')|trim != '' %}
         {% set highlights = block('highlights') %}
+    {% endif %}
+
+    {% if block('related') is defined and block('related')|trim != '' %}
+        {% set related = block('related') %}
     {% endif %}
 
     <div class="grid">
@@ -12,19 +22,29 @@
 
             <div class="grid__item one-whole x-large--eight-twelfths listing-column-main">
 
-                {{  listing|raw }}
+                {% if listing is defined %}
+                    {{  listing|raw }}
+                {% endif %}
+
+                {% if chapters is defined %}
+                        {{ chapters|raw }}
+                {% endif %}
 
             </div>
 
             <div class="grid__item one-whole x-large--four-twelfths listing-column-secondary">
 
-                {% if highlights %}
+                {% if highlights is defined %}
                     {{  highlights|raw }}
+                {% endif %}
+
+                {% if related is defined %}
+                    {{ related|raw }}
                 {% endif %}
 
             </div>
 
-            </div>
+        </div>
 
     </div>
 
