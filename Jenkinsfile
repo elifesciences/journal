@@ -18,7 +18,8 @@ elifePipeline {
                 deploy: [
                     stackname: 'journal--end2end',
                     revision: commit,
-                    folder: '/srv/journal'
+                    folder: '/srv/journal',
+                    concurrency: 'blue-green'
                 ]
             )
         }
