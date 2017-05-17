@@ -21,27 +21,32 @@
 
     {% embed 'grid/listing-two-column.html.twig' %}
 
-        {% block chapters %}
-            <h3 class="list-heading">Chapters</h3>
-            <ol class="listing-list">
-            {% for chapter in chapters %}
-                <li class="listing-list__item">
-                    {{ render_pattern(chapter) }}
-                </li>
-            {% endfor %}
-            </ol>
+        {%  block main %}
+
+            {% if chapters %}
+
+                <h3 class="list-heading">Chapters</h3>
+                <ol class="listing-list">
+                    {% for chapter in chapters %}
+                        <li class="listing-list__item">
+                            {{ render_pattern(chapter) }}
+                        </li>
+                    {% endfor %}
+                </ol>
+
+            {% endif %}
 
         {% endblock %}
 
-        {% if related %}
+        {% block secondary %}
 
-            {% block related %}
+            {% if related %}
 
                 {{ render_pattern(related) }}
 
-            {% endblock %}
+            {% endif %}
 
-        {% endif %}
+        {% endblock %}
 
     {% endembed %}
 
