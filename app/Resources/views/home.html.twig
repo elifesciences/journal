@@ -24,33 +24,29 @@
 
     {% endif %}
 
-    <div class="wrapper u-pad-top-lg">
+    {% embed 'grid/listing-two-column.html.twig' %}
 
-        <div class="grid">
+        {% block main %}
 
-            <div class="listing-column-container">
+            {% if listing %}
 
-                <div class="grid__item large--eight-twelfths listing-column-main {% if not magazine %}push--large--two-twelfths{% endif %}">
+                {{ render_pattern(listing) }}
 
-                    {{ render_pattern(listing) }}
+            {% endif %}
 
-                </div>
+        {% endblock %}
 
-                {% if magazine %}
+        {% block secondary %}
 
-                    <div class="grid__item large--four-twelfths listing-column-secondary">
+            {% if magazine %}
 
-                        {{ render_pattern(magazine) }}
+                {{ render_pattern(magazine) }}
 
-                    </div>
+            {% endif %}
 
-                {% endif %}
+        {% endblock %}
 
-            </div>
-
-        </div>
-
-    </div>
+    {% endembed %}
 
     {% if subjects %}
 
