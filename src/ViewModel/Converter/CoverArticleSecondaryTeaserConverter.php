@@ -37,11 +37,11 @@ final class CoverArticleSecondaryTeaserConverter implements ViewModelConverter
             $article->getAuthorLine(),
             $this->createContextLabel($article),
             ViewModel\TeaserImage::small(
-                $this->iiifUri($object->getBanner(), 70, 70),
+                $this->iiifUri($object->getBanner(), 72, 72),
                 $object->getBanner()->getAltText(),
                 [
-                    140 => $this->iiifUri($object->getBanner(), 140, 140),
-                    70 => $this->iiifUri($object->getBanner(), 70, 70),
+                    144 => $this->iiifUri($object->getBanner(), 144, 144),
+                    72 => $this->iiifUri($object->getBanner(), 72, 72),
                 ]
             ),
             ViewModel\TeaserFooter::forNonArticle(

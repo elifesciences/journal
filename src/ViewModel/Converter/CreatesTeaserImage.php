@@ -13,11 +13,11 @@ trait CreatesTeaserImage
     final private function prominentTeaserImage(HasThumbnail $object) : ViewModel\TeaserImage
     {
         return ViewModel\TeaserImage::prominent(
-            $this->iiifUri($object->getThumbnail(), 250, 141),
+            $this->iiifUri($object->getThumbnail(), 263, 148),
             $object->getThumbnail()->getAltText(),
             [
-                500 => $this->iiifUri($object->getThumbnail(), 500, 281),
-                250 => $this->iiifUri($object->getThumbnail(), 250, 141),
+                526 => $this->iiifUri($object->getThumbnail(), 526, 296),
+                263 => $this->iiifUri($object->getThumbnail(), 263, 148),
             ]
         );
     }
@@ -25,11 +25,11 @@ trait CreatesTeaserImage
     final private function bigTeaserImage(HasThumbnail $object) : ViewModel\TeaserImage
     {
         return ViewModel\TeaserImage::big(
-            $this->iiifUri($object->getThumbnail(), 250, 141),
+            $this->iiifUri($object->getThumbnail(), 257, 144),
             $object->getThumbnail()->getAltText(),
             [
-                500 => $this->iiifUri($object->getThumbnail(), 500, 281),
-                250 => $this->iiifUri($object->getThumbnail(), 250, 141),
+                514 => $this->iiifUri($object->getThumbnail(), 514, 288),
+                257 => $this->iiifUri($object->getThumbnail(), 257, 144),
             ]
         );
     }
@@ -37,11 +37,11 @@ trait CreatesTeaserImage
     final private function smallTeaserImage(HasThumbnail $object) : ViewModel\TeaserImage
     {
         return ViewModel\TeaserImage::small(
-            $this->iiifUri($object->getThumbnail(), 70, 70),
+            $this->iiifUri($object->getThumbnail(), 72, 72),
             $object->getThumbnail()->getAltText(),
             [
-                140 => $this->iiifUri($object->getThumbnail(), 140, 140),
-                70 => $this->iiifUri($object->getThumbnail(), 70, 70),
+                144 => $this->iiifUri($object->getThumbnail(), 144, 144),
+                72 => $this->iiifUri($object->getThumbnail(), 72, 72),
             ]
         );
     }

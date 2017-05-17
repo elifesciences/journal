@@ -36,9 +36,9 @@ final class CollectionContentHeaderConverter implements ViewModelConverter
             $curatorImage = new ViewModel\Picture(
                 [],
                 new ViewModel\Image(
-                    $this->iiifUri($object->getSelectedCurator()->getThumbnail(), 70, 70),
+                    $this->iiifUri($object->getSelectedCurator()->getThumbnail(), 40, 40),
                     [
-                        140 => $this->iiifUri($object->getSelectedCurator()->getThumbnail(), 140, 140),
+                        80 => $this->iiifUri($object->getSelectedCurator()->getThumbnail(), 80, 80),
                     ]
                 )
             );
