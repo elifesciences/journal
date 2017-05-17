@@ -24,39 +24,42 @@
 
     {% endif %}
 
-    <div class="wrapper u-pad-top-lg">
+    {% embed 'grid/listing-two-column.html.twig' %}
 
-        <div class="grid">
+        {% block listing %}
 
-            <div class="listing-column-container">
+            {% if listing %}
 
-                <div class="grid__item large--eight-twelfths listing-column-main {% if not events and not elifeDigests %}push--large--two-twelfths{% endif %}">
+                {{ render_pattern(listing) }}
 
-                    {{ render_pattern(listing) }}
+            {% endif %}
 
-                </div>
+        {% endblock %}
 
-                {% if events or elifeDigests %}
 
-                    <div class="grid__item large--four-twelfths listing-column-secondary">
 
-                        {% if events %}
-                            {{ render_pattern(events) }}
-                        {% endif %}
+        {% block events %}
 
-                        {% if elifeDigests %}
-                            {{ render_pattern(elifeDigests) }}
-                        {% endif %}
+            {% if events %}
 
-                    </div>
+                {{ render_pattern(events) }}
 
-                {% endif %}
+            {% endif %}
 
-            </div>
+        {% endblock %}
 
-        </div>
 
-    </div>
+        {% block elifeDigests %}
+
+            {% if elifeDigests %}
+
+                {{ render_pattern(elifeDigests) }}
+
+            {% endif %}
+
+        {% endblock %}
+
+    {% endembed %}
 
     <div class="wrapper">
 
