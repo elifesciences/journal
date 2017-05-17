@@ -2,35 +2,31 @@
 
     <div class="grid">
 
-        {% if block('main') is defined and block('main')|trim != '' %}
-            {% set main = block('main') %}
-        {% endif %}
+        {% set main = block('main')|trim %}
 
-        {% if block('secondary') is defined and block('secondary')|trim != '' %}
-            {% set secondary = block('secondary') %}
+        {% if block('secondary') is defined %}
+            {% set secondary = block('secondary')|trim %}
+        {% else %}
+            {% set secondary = '' %}
         {% endif %}
 
         <div class="listing-column-container">
 
             <div class="grid__item one-whole x-large--eight-twelfths listing-column-main">
 
-                {% if main is defined %}
-
-                    {{ main|raw }}
-
-                {% endif %}
+                {{ main|raw }}
 
             </div>
 
-            <div class="grid__item one-whole x-large--four-twelfths listing-column-secondary">
+            {% if secondary != '' %}
 
-                {% if secondary is defined %}
+                <div class="grid__item one-whole x-large--four-twelfths listing-column-secondary">
 
                     {{ secondary|raw }}
 
-                {% endif %}
+                </div>
 
-            </div>
+            {% endif %}
 
         </div>
 
