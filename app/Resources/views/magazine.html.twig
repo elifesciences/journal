@@ -26,7 +26,7 @@
 
     {% embed 'grid/listing-two-column.html.twig' %}
 
-        {% block listing %}
+        {% block main %}
 
             {% if listing %}
 
@@ -38,18 +38,13 @@
 
 
 
-        {% block events %}
+        {% block secondary %}
 
             {% if events %}
 
                 {{ render_pattern(events) }}
 
             {% endif %}
-
-        {% endblock %}
-
-
-        {% block elifeDigests %}
 
             {% if elifeDigests %}
 
