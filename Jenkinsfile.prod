@@ -11,6 +11,6 @@ elifePipeline {
 
     stage 'Deploy to prod'
     elifeDeploySlackNotification 'journal', 'prod'
-    builderDeployRevision 'journal--prod', commit
+    builderDeployRevision 'journal--prod', commit, 'blue-green'
     builderSmokeTests 'journal--prod', '/srv/journal'
 }
