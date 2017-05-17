@@ -599,9 +599,9 @@ final class ArchiveContext extends Context
     {
         $this->assertSession()->elementAttributeContains(
             'css',
-            '.grid-listing-heading:contains("Monthly archive") + .grid-listing > .grid-listing-item:contains("'.$month.' '.$year.'") .block-link',
-            'data-high-res-image-source',
-            'https://www.example.com/iiif/image'.$this->createId($article).'/0,198,1800,1205/526,352/0/default.jpg'
+            '.grid-listing-heading:contains("Monthly archive") + .grid-listing > .grid-listing-item:contains("'.$month.' '.$year.'") .block-link__image',
+            'src',
+            'https://www.example.com/iiif/image'.$this->createId($article).'/0,198,1800,1205/263,176/0/default.jpg'
         );
     }
 
