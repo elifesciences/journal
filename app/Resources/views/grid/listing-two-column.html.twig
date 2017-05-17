@@ -1,61 +1,33 @@
 <div class="wrapper u-pad-top-lg">
 
-    {% if block('listing') is defined and block('listing')|trim != '' %}
-        {% set listing = block('listing') %}
-    {% endif %}
-
-    {% if block('chapters') is defined %}
-        {% set chapters = block('chapters') %}
-    {% endif %}
-
-    {% if block('highlights') is defined and block('highlights')|trim != '' %}
-        {% set highlights = block('highlights') %}
-    {% endif %}
-
-    {% if block('related') is defined and block('related')|trim != '' %}
-        {% set related = block('related') %}
-    {% endif %}
-
-    {% if block('events') is defined and block('events')|trim != '' %}
-        {% set events = block('events') %}
-    {% endif %}
-
-    {% if block('elifeDigests') is defined and block('elifeDigests')|trim != '' %}
-        {% set elifeDigests = block('elifeDigests') %}
-    {% endif %}
-
     <div class="grid">
+
+        {% if block('main') is defined and block('main')|trim != '' %}
+            {% set main = block('main') %}
+        {% endif %}
+
+        {% if block('secondary') is defined and block('secondary')|trim != '' %}
+            {% set secondary = block('secondary') %}
+        {% endif %}
 
         <div class="listing-column-container">
 
             <div class="grid__item one-whole x-large--eight-twelfths listing-column-main">
 
-                {% if listing is defined %}
-                    {{  listing|raw }}
-                {% endif %}
+                {% if main is defined %}
 
-                {% if chapters is defined %}
-                        {{ chapters|raw }}
+                    {{ main|raw }}
+
                 {% endif %}
 
             </div>
 
             <div class="grid__item one-whole x-large--four-twelfths listing-column-secondary">
 
-                {% if highlights is defined %}
-                    {{  highlights|raw }}
-                {% endif %}
+                {% if secondary is defined %}
 
-                {% if related is defined %}
-                    {{ related|raw }}
-                {% endif %}
+                    {{ secondary|raw }}
 
-                {% if events is defined %}
-                    {{  events|raw }}
-                {% endif %}
-
-                {% if elifeDigests is defined %}
-                    {{ elifeDigests|raw }}
                 {% endif %}
 
             </div>

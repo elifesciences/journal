@@ -886,6 +886,11 @@
             ],
             "description": "eLife patterns",
             "time": "2017-05-18 06:56:08"
+            "support": {
+                "source": "https://github.com/elifesciences/patterns-php/tree/master",
+                "issues": "https://github.com/elifesciences/patterns-php/issues"
+            },
+            "time": "2017-05-17 09:22:43"
         },
         {
             "name": "fabpot/goutte",

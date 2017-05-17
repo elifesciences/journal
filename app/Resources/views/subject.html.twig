@@ -6,18 +6,25 @@
 
     {% embed 'grid/listing-two-column.html.twig' %}
 
-        {% block listing %}
+        {% block main %}
 
-            {{ render_pattern(listing) }}
+            {% if listing %}
+
+                {{ render_pattern(listing) }}
+
+            {% endif %}
 
         {% endblock %}
 
-        {% if highlights %}
-            {% block highlights %}
-                {{ render_pattern(highlights) }}
-            {% endblock %}
-        {% endif %}
+        {% block secondary %}
 
+            {% if highlights %}
+
+                {{ render_pattern(highlights) }}
+
+            {% endif %}
+
+        {% endblock %}
 
     {% endembed %}
 
