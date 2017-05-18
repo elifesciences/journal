@@ -2,13 +2,8 @@
 
     <div class="grid">
 
-        {% set main = block('main')|trim %}
-
-        {% if block('secondary') is defined %}
-            {% set secondary = block('secondary')|trim %}
-        {% else %}
-            {% set secondary = '' %}
-        {% endif %}
+        {% set main = block('main') %}
+        {% set secondary = (block('secondary') ?? '')|trim %}
 
         <div class="listing-column-container">
 
@@ -18,7 +13,7 @@
 
             </div>
 
-            {% if secondary != '' %}
+            {% if secondary|length %}
 
                 <div class="grid__item one-whole x-large--four-twelfths listing-column-secondary">
 

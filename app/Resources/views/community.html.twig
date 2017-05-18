@@ -4,16 +4,11 @@
 
     {{ render_pattern(contentHeader) }}
 
-
     {% embed 'grid/listing-two-column.html.twig' %}
 
         {% block main %}
 
-            {% if listing %}
-
-                {{ render_pattern(listing) }}
-
-            {% endif %}
+            {{ render_pattern(listing) }}
 
         {% endblock %}
 
