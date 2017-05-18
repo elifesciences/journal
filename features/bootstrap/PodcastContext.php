@@ -278,13 +278,13 @@ final class PodcastContext extends Context
         $this->spin(function () {
             $this->assertSession()
                 ->elementExists('css',
-                    '.list-heading:contains("Chapters") + .listing-list > .listing-list__item:nth-child(2) .teaser__header_text_link');
+                    '.list-heading:contains("Chapters") + .listing-list > .listing-list__item:nth-child(2) .media-chapter-listing-item__header_text_link');
         });
 
         $this->getSession()
             ->getPage()
             ->find('css',
-                '.list-heading:contains("Chapters") + .listing-list > .listing-list__item:nth-child(2) .teaser__header_text_link')
+                '.list-heading:contains("Chapters") + .listing-list > .listing-list__item:nth-child(2) .media-chapter-listing-item__header_text_link')
             ->click();
     }
 

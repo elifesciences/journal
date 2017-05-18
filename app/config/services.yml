@@ -825,6 +825,7 @@ services:
         public: false
         arguments:
           - '@router'
+          - '@slugify'
         tags:
           - name: view_model.converter
 
