@@ -1,4 +1,4 @@
-<div class="wrapper">
+<div class="wrapper blg-pad-top-medium">
 
     <div class="grid">
 
@@ -8,7 +8,7 @@
 
         {% if navigation|length %}
 
-            <div class="grid__item one-whole x-large--two-twelfths blg-margin-top-medium">
+            <div class="grid__item one-whole x-large--two-twelfths">
 
                 {{ navigation|raw }}
 
@@ -24,9 +24,7 @@
             {% else %}
                 large--ten-twelfths push--large--one-twelfth x-large--eight-twelfths
                 {% if navigation|length %}push--x-large--zero{% else %}push--x-large--two-twelfths{% endif %}
-            {% endif %}
-
-            blg-margin-top-medium">
+            {% endif %}">
 
             {{ main|raw }}
 
@@ -37,9 +35,7 @@
             <div class="grid__item one-whole
 
                 large--four-twelfths x-large--three-twelfths
-                {% if not navigation|length %}push--x-large--two-twelfths{% endif %}
-
-                blg-margin-top-medium">
+                {% if not navigation|length %}push--x-large--two-twelfths{% endif %}">
 
                 {{ secondary|raw }}
 
