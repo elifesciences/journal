@@ -10,22 +10,14 @@
 
     {{ render_pattern(contentHeader) }}
 
-    <div class="wrapper u-pad-top-lg">
+    {% embed 'grid/listing-one-column.html.twig' %}
 
-        <div class="grid">
+        {% block listing %}
 
-            <div class="listing-column-container">
+            {{ render_pattern(listing) }}
 
-                <div class="grid__item large--eight-twelfths listing-column-main push--large--two-twelfths">
+        {% endblock %}
 
-                    {{ render_pattern(listing) }}
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </div>
+    {% endembed %}
 
 {% endblock %}

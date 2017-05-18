@@ -1,0 +1,30 @@
+<div class="wrapper u-pad-top-lg">
+
+    <div class="grid">
+
+        {% set main = block('main') %}
+        {% set secondary = (block('secondary') ?? '')|trim %}
+
+        <div class="listing-column-container">
+
+            <div class="grid__item one-whole x-large--eight-twelfths listing-column-main">
+
+                {{ main|raw }}
+
+            </div>
+
+            {% if secondary|length %}
+
+                <div class="grid__item one-whole x-large--four-twelfths listing-column-secondary">
+
+                    {{ secondary|raw }}
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</div>
