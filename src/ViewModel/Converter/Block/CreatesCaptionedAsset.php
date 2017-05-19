@@ -25,7 +25,7 @@ trait CreatesCaptionedAsset
         }));
 
         $captionText = new ViewModel\CaptionText(
-            $asset->getTitle(),
+            $asset->getTitle() ?? 'Title',
             null,
             $this->getPatternRenderer()->render(...$caption)
         );
