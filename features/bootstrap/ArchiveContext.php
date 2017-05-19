@@ -153,7 +153,7 @@ final class ArchiveContext extends Context
         $this->mockApiResponse(
             new Request(
                 'GET',
-                "http://api.elifesciences.org/search?for=&page=1&per-page=1&sort=date&order=desc&type[]=research-advance&type[]=research-article&type[]=research-exchange&type[]=short-report&type[]=tools-resources&type[]=replication-study&use-date=published&start-date=$startDate&end-date=$endDate",
+                "http://api.elifesciences.org/search?for=&page=1&per-page=1&sort=date&order=desc&type[]=research-advance&type[]=research-article&type[]=scientific-correspondence&type[]=short-report&type[]=tools-resources&type[]=replication-study&use-date=published&start-date=$startDate&end-date=$endDate",
                 ['Accept' => 'application/vnd.elife.search+json; version=1']
             ),
             new Response(
@@ -176,10 +176,10 @@ final class ArchiveContext extends Context
                         'insight' => 0,
                         'research-advance' => 0,
                         'research-article' => $number,
-                        'research-exchange' => 0,
                         'retraction' => 0,
                         'registered-report' => 0,
                         'replication-study' => 0,
+                        'scientific-correspondence' => 0,
                         'short-report' => 0,
                         'tools-resources' => 0,
                         'blog-article' => 0,
@@ -198,7 +198,7 @@ final class ArchiveContext extends Context
             $this->mockApiResponse(
                 new Request(
                     'GET',
-                    "http://api.elifesciences.org/search?for=&page=$page&per-page=100&sort=date&order=desc&type[]=research-advance&type[]=research-article&type[]=research-exchange&type[]=short-report&type[]=tools-resources&type[]=replication-study&use-date=published&start-date=$startDate&end-date=$endDate",
+                    "http://api.elifesciences.org/search?for=&page=$page&per-page=100&sort=date&order=desc&type[]=research-advance&type[]=research-article&type[]=scientific-correspondence&type[]=short-report&type[]=tools-resources&type[]=replication-study&use-date=published&start-date=$startDate&end-date=$endDate",
                     ['Accept' => 'application/vnd.elife.search+json; version=1']
                 ),
                 new Response(
@@ -221,10 +221,10 @@ final class ArchiveContext extends Context
                             'insight' => 0,
                             'research-advance' => 0,
                             'research-article' => $number,
-                            'research-exchange' => 0,
                             'retraction' => 0,
                             'registered-report' => 0,
                             'replication-study' => 0,
+                            'scientific-correspondence' => 0,
                             'short-report' => 0,
                             'tools-resources' => 0,
                             'blog-article' => 0,
@@ -286,10 +286,10 @@ final class ArchiveContext extends Context
                         'insight' => 0,
                         'research-advance' => 0,
                         'research-article' => 0,
-                        'research-exchange' => 0,
                         'retraction' => 0,
                         'registered-report' => 0,
                         'replication-study' => 0,
+                        'scientific-correspondence' => 0,
                         'short-report' => 0,
                         'tools-resources' => 0,
                         'blog-article' => 0,
@@ -325,10 +325,10 @@ final class ArchiveContext extends Context
                             'insight' => 0,
                             'research-advance' => 0,
                             'research-article' => 0,
-                            'research-exchange' => 0,
                             'retraction' => 0,
                             'registered-report' => 0,
                             'replication-study' => 0,
+                            'scientific-correspondence' => 0,
                             'short-report' => 0,
                             'tools-resources' => 0,
                             'blog-article' => 0,
@@ -443,10 +443,10 @@ final class ArchiveContext extends Context
                         }, 0),
                         'research-advance' => 0,
                         'research-article' => 0,
-                        'research-exchange' => 0,
                         'retraction' => 0,
                         'registered-report' => 0,
                         'replication-study' => 0,
+                        'scientific-correspondence' => 0,
                         'short-report' => 0,
                         'tools-resources' => 0,
                         'blog-article' => 0,
@@ -494,10 +494,10 @@ final class ArchiveContext extends Context
                             }, 0),
                             'research-advance' => 0,
                             'research-article' => 0,
-                            'research-exchange' => 0,
                             'retraction' => 0,
                             'registered-report' => 0,
                             'replication-study' => 0,
+                            'scientific-correspondence' => 0,
                             'short-report' => 0,
                             'tools-resources' => 0,
                             'blog-article' => 0,
@@ -539,7 +539,7 @@ final class ArchiveContext extends Context
             $this->mockApiResponse(
                 new Request(
                     'GET',
-                    "http://api.elifesciences.org/search?for=&page=1&per-page=1&sort=date&order=desc&type[]=research-advance&type[]=research-article&type[]=research-exchange&type[]=short-report&type[]=tools-resources&type[]=replication-study&use-date=published&start-date=$startDate&end-date=$endDate",
+                    "http://api.elifesciences.org/search?for=&page=1&per-page=1&sort=date&order=desc&type[]=research-advance&type[]=research-article&type[]=scientific-correspondence&type[]=short-report&type[]=tools-resources&type[]=replication-study&use-date=published&start-date=$startDate&end-date=$endDate",
                     ['Accept' => 'application/vnd.elife.search+json; version=1']
                 ),
                 new Response(
@@ -556,10 +556,10 @@ final class ArchiveContext extends Context
                             'insight' => 0,
                             'research-advance' => 0,
                             'research-article' => 0,
-                            'research-exchange' => 0,
                             'retraction' => 0,
                             'registered-report' => 0,
                             'replication-study' => 0,
+                            'scientific-correspondence' => 0,
                             'short-report' => 0,
                             'tools-resources' => 0,
                             'blog-article' => 0,
@@ -599,9 +599,9 @@ final class ArchiveContext extends Context
     {
         $this->assertSession()->elementAttributeContains(
             'css',
-            '.grid-listing-heading:contains("Monthly archive") + .grid-listing > .grid-listing-item:contains("'.$month.' '.$year.'") .block-link',
-            'data-high-res-image-source',
-            'https://www.example.com/iiif/image'.$this->createId($article).'/0,198,1800,1205/526,352/0/default.jpg'
+            '.grid-listing-heading:contains("Monthly archive") + .grid-listing > .grid-listing-item:contains("'.$month.' '.$year.'") .block-link__image',
+            'src',
+            'https://www.example.com/iiif/image'.$this->createId($article).'/0,198,1800,1205/263,176/0/default.jpg'
         );
     }
 

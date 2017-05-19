@@ -33,7 +33,7 @@ final class HomeController extends Controller
         $arguments = $this->defaultPageArguments($request);
 
         $latestResearch = promise_for($this->get('elife.api_sdk.search')
-            ->forType('research-advance', 'research-article', 'research-exchange', 'short-report', 'tools-resources', 'replication-study')
+            ->forType('research-advance', 'research-article', 'scientific-correspondence', 'short-report', 'tools-resources', 'replication-study')
             ->sortBy('date'))
             ->then(function (Sequence $sequence) use ($page, $perPage) {
                 $pagerfanta = new Pagerfanta(new SequenceAdapter($sequence, $this->willConvertTo(Teaser::class)));
@@ -74,7 +74,7 @@ final class HomeController extends Controller
             ->getCurrent()
             ->map($this->willConvertTo(CarouselItem::class))
             ->then(Callback::emptyOr(function (Sequence $covers) {
-                return new Carousel(...$covers);
+                return new Carousel($covers->toArray(), 'Highlights', 'highlights');
             }))
             ->otherwise($this->softFailure('Failed to load covers'));
 

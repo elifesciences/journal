@@ -58,7 +58,7 @@ final class HomepageContext extends Context
         $this->mockApiResponse(
             new Request(
                 'GET',
-                'http://api.elifesciences.org/search?for=&page=1&per-page=1&sort=date&order=desc&type[]=research-advance&type[]=research-article&type[]=research-exchange&type[]=short-report&type[]=tools-resources&type[]=replication-study&use-date=default',
+                'http://api.elifesciences.org/search?for=&page=1&per-page=1&sort=date&order=desc&type[]=research-advance&type[]=research-article&type[]=scientific-correspondence&type[]=short-report&type[]=tools-resources&type[]=replication-study&use-date=default',
                 ['Accept' => 'application/vnd.elife.search+json; version=1']
             ),
             new Response(
@@ -81,10 +81,10 @@ final class HomepageContext extends Context
                         'insight' => 0,
                         'research-advance' => 0,
                         'research-article' => $this->numberOfArticles,
-                        'research-exchange' => 0,
                         'retraction' => 0,
                         'registered-report' => 0,
                         'replication-study' => 0,
+                        'scientific-correspondence' => 0,
                         'short-report' => 0,
                         'tools-resources' => 0,
                         'blog-article' => 0,
@@ -103,7 +103,7 @@ final class HomepageContext extends Context
             $this->mockApiResponse(
                 new Request(
                     'GET',
-                    "http://api.elifesciences.org/search?for=&page=$page&per-page=6&sort=date&order=desc&type[]=research-advance&type[]=research-article&type[]=research-exchange&type[]=short-report&type[]=tools-resources&type[]=replication-study&use-date=default",
+                    "http://api.elifesciences.org/search?for=&page=$page&per-page=6&sort=date&order=desc&type[]=research-advance&type[]=research-article&type[]=scientific-correspondence&type[]=short-report&type[]=tools-resources&type[]=replication-study&use-date=default",
                     ['Accept' => 'application/vnd.elife.search+json; version=1']
                 ),
                 new Response(
@@ -126,10 +126,10 @@ final class HomepageContext extends Context
                             'insight' => 0,
                             'research-advance' => 0,
                             'research-article' => $this->numberOfArticles,
-                            'research-exchange' => 0,
                             'retraction' => 0,
                             'registered-report' => 0,
                             'replication-study' => 0,
+                            'scientific-correspondence' => 0,
                             'short-report' => 0,
                             'tools-resources' => 0,
                             'blog-article' => 0,
@@ -214,10 +214,10 @@ final class HomepageContext extends Context
                             'insight' => 0,
                             'research-advance' => 0,
                             'research-article' => 0,
-                            'research-exchange' => 0,
                             'retraction' => 0,
                             'registered-report' => 0,
                             'replication-study' => 0,
+                            'scientific-correspondence' => 0,
                             'short-report' => 0,
                             'tools-resources' => 0,
                             'blog-article' => 0,
@@ -428,7 +428,7 @@ final class HomepageContext extends Context
             $this->mockApiResponse(
                 new Request(
                     'GET',
-                    'http://api.elifesciences.org/search?for=&page=1&per-page=6&sort=date&order=desc&type[]=research-advance&type[]=research-article&type[]=research-exchange&type[]=short-report&type[]=tools-resources&type[]=replication-study&use-date=default',
+                    'http://api.elifesciences.org/search?for=&page=1&per-page=6&sort=date&order=desc&type[]=research-advance&type[]=research-article&type[]=scientific-correspondence&type[]=short-report&type[]=tools-resources&type[]=replication-study&use-date=default',
                     ['Accept' => 'application/vnd.elife.search+json; version=1']
                 ),
                 new Response(
@@ -445,10 +445,10 @@ final class HomepageContext extends Context
                             'insight' => 0,
                             'research-advance' => 0,
                             'research-article' => 0,
-                            'research-exchange' => 0,
                             'retraction' => 0,
                             'registered-report' => 0,
                             'replication-study' => 0,
+                            'scientific-correspondence' => 0,
                             'short-report' => 0,
                             'tools-resources' => 0,
                             'blog-article' => 0,
@@ -541,7 +541,7 @@ final class HomepageContext extends Context
         $this->mockApiResponse(
             new Request(
                 'GET',
-                'http://api.elifesciences.org/search?for=&page=1&per-page=6&sort=date&order=desc&type[]=research-advance&type[]=research-article&type[]=research-exchange&type[]=short-report&type[]=tools-resources&type[]=replication-study&use-date=default',
+                'http://api.elifesciences.org/search?for=&page=1&per-page=6&sort=date&order=desc&type[]=research-advance&type[]=research-article&type[]=scientific-correspondence&type[]=short-report&type[]=tools-resources&type[]=replication-study&use-date=default',
                 ['Accept' => 'application/vnd.elife.search+json; version=1']
             ),
             new Response(
@@ -558,10 +558,10 @@ final class HomepageContext extends Context
                         'insight' => 0,
                         'research-advance' => 0,
                         'research-article' => 0,
-                        'research-exchange' => 0,
                         'retraction' => 0,
                         'registered-report' => 0,
                         'replication-study' => 0,
+                        'scientific-correspondence' => 0,
                         'short-report' => 0,
                         'tools-resources' => 0,
                         'blog-article' => 0,
@@ -636,9 +636,14 @@ final class HomepageContext extends Context
      */
     public function iShouldSeeTheTitleAndImageFromTheCollectionUsedInTheCover(string $collectionName, string $coverName)
     {
-        $this->assertSession()->elementTextContains('css', '.carousel-item__title', $coverName);
-        $this->assertSession()->elementAttributeContains('css', '.carousel-item__inner', 'data-low-res-image-source', 'https://www.example.com/iiif/image/0,350,1800,900/900,450/0/default.jpg');
-        $this->assertSession()->elementAttributeContains('css', '.carousel-item__inner', 'data-high-res-image-source', 'https://www.example.com/iiif/image/0,350,1800,900/1800,900/0/default.jpg');
+        $this->spin(function () {
+            $this->assertSession()->elementAttributeContains(
+                'css',
+                '.carousel-item__image',
+                'src',
+                'https://www.example.com/iiif/image/0,529,1800,543/1114,336/0/default.jpg'
+            );
+        });
     }
 
     /**
@@ -646,9 +651,14 @@ final class HomepageContext extends Context
      */
     public function iShouldSeeTheCustomTitleAndImageUsedInTheCover($arg1)
     {
-        $this->assertSession()->elementTextContains('css', '.carousel-item__title', 'Cover');
-        $this->assertSession()->elementAttributeContains('css', '.carousel-item__inner', 'data-low-res-image-source', 'https://www.example.com/iiif/image/0,350,1800,900/900,450/0/default.png');
-        $this->assertSession()->elementAttributeContains('css', '.carousel-item__inner', 'data-high-res-image-source', 'https://www.example.com/iiif/image/0,350,1800,900/1800,900/0/default.png');
+        $this->spin(function () {
+            $this->assertSession()->elementAttributeContains(
+                'css',
+                '.carousel-item__image',
+                'src',
+                'https://www.example.com/iiif/image/0,529,1800,543/1114,336/0/default.png'
+            );
+        });
     }
 
     /**

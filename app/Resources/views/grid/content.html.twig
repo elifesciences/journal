@@ -1,0 +1,52 @@
+<div class="wrapper">
+
+    <div class="grid">
+
+        {% set navigation = (block('navigation') ?? '')|trim %}
+        {% set main = block('main') %}
+        {% set secondary = (block('secondary') ?? '')|trim %}
+
+        {% if navigation|length %}
+
+            <div class="grid__item one-whole x-large--two-twelfths blg-margin-top-medium">
+
+                {{ navigation|raw }}
+
+            </div>
+
+        {% endif %}
+
+        <div class="grid__item one-whole
+
+            {% if secondary|length %}
+                large--eight-twelfths x-large--seven-twelfths
+                {% if not navigation|length %}push--x-large--two-twelfths{% endif %}
+            {% else %}
+                large--ten-twelfths push--large--one-twelfth x-large--eight-twelfths
+                {% if navigation|length %}push--x-large--zero{% else %}push--x-large--two-twelfths{% endif %}
+            {% endif %}
+
+            blg-margin-top-medium">
+
+            {{ main|raw }}
+
+        </div>
+
+        {% if secondary|length %}
+
+            <div class="grid__item one-whole
+
+                large--four-twelfths x-large--three-twelfths
+                {% if not navigation|length %}push--x-large--two-twelfths{% endif %}
+
+                blg-margin-top-medium">
+
+                {{ secondary|raw }}
+
+            </div>
+
+        {% endif %}
+
+    </div>
+
+</div>

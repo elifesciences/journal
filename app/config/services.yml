@@ -341,12 +341,18 @@ services:
     elife.journal.view_model.converter.author_group.details:
         class: eLife\Journal\ViewModel\Converter\GroupAuthorDetailsConverter
         public: false
+        arguments:
+          - '@elife.journal.view_model.converter'
+          - '@elife.patterns.pattern_renderer'
         tags:
           - name: view_model.converter
 
     elife.journal.view_model.converter.author_person.details:
         class: eLife\Journal\ViewModel\Converter\PersonAuthorDetailsConverter
         public: false
+        arguments:
+          - '@elife.journal.view_model.converter'
+          - '@elife.patterns.pattern_renderer'
         tags:
           - name: view_model.converter
 
@@ -556,6 +562,7 @@ services:
         public: false
         arguments:
           - '@router'
+          - '@elife.journal.view_model.factory.content_header_image'
         tags:
           - name: view_model.converter
 
@@ -573,6 +580,7 @@ services:
         arguments:
           - '@router'
           - '@slugify'
+          - '@elife.journal.view_model.factory.content_header_image'
         tags:
           - name: view_model.converter
 
@@ -591,6 +599,7 @@ services:
         arguments:
           - '@router'
           - '@slugify'
+          - '@elife.journal.view_model.factory.content_header_image'
         tags:
           - name: view_model.converter
 
@@ -711,6 +720,8 @@ services:
     elife.journal.view_model.converter.interview.header:
         class: eLife\Journal\ViewModel\Converter\InterviewContentHeaderConverter
         public: false
+        arguments:
+          - '@router'
         tags:
           - name: view_model.converter
 
@@ -735,8 +746,6 @@ services:
     elife.journal.view_model.converter.labs_experiment.header:
         class: eLife\Journal\ViewModel\Converter\LabsExperimentContentHeaderConverter
         public: false
-        arguments:
-          - '@elife.journal.view_model.factory.content_header_image'
         tags:
           - name: view_model.converter
 
@@ -823,6 +832,7 @@ services:
         public: false
         arguments:
           - '@router'
+          - '@slugify'
         tags:
           - name: view_model.converter
 

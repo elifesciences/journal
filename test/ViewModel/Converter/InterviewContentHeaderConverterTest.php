@@ -16,6 +16,6 @@ final class InterviewContentHeaderConverterTest extends ModelConverterTestCase
      */
     public function setUpConverter()
     {
-        $this->converter = new InterviewContentHeaderConverter();
+        $this->converter = new InterviewContentHeaderConverter($this->stubUrlGenerator());
     }
 }
