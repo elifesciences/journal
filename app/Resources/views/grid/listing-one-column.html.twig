@@ -1,16 +1,12 @@
-<div class="wrapper u-pad-top-lg">
+<div class="wrapper wrapper--listing">
 
     {% set listing = block('listing') %}
 
     <div class="grid">
 
-        <div class="listing-column-container">
+        <div class="grid__item one-whole x-large--eight-twelfths push--x-large--two-twelfths grid-column">
 
-            <div class="listing-column-main grid__item one-whole x-large--eight-twelfths push--x-large--two-twelfths">
-
-                {{ listing|raw }}
-
-            </div>
+            {{ listing|raw }}
 
         </div>
 
