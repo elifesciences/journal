@@ -25,20 +25,11 @@ trait CreatesCaptionedAsset
         }));
 
         $captionText = new ViewModel\CaptionText(
-            $asset->getTitle(),
+            $asset->getTitle() ?? 'Title',
             null,
             $this->getPatternRenderer()->render(...$caption)
         );
 
         return new ViewModel\CaptionedAsset($viewModel, $captionText, $doi);
-    }
-
-    final private function tryAndCreateCaptionedAsset(ViewModel\IsCaptioned $viewModel, Asset $asset, ViewModel\Doi $doi = null) : ViewModel
-    {
-        if (!$asset->getTitle() && $asset->getAttribution()->isEmpty() && $asset->getCaption()->isEmpty()) {
-            return $viewModel;
-        }
-
-        return $this->createCaptionedAsset($viewModel, $asset, $doi);
     }
 }
