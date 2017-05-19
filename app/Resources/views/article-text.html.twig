@@ -54,7 +54,7 @@
 
     {% if listing %}
 
-        {% embed 'grid/content.html.twig' %}
+        {% embed 'grid/content.html.twig' with { 'isSubsequent': true } %}
 
             {% block main %}
 
