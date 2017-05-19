@@ -376,26 +376,49 @@ services:
         tags:
           - name: view_model.converter
 
-    elife.journal.view_model.converter.block.image:
-        class: eLife\Journal\ViewModel\Converter\Block\ImageConverter
-        public: false
-        tags:
-          - name: view_model.converter
-
-    elife.journal.view_model.converter.block.image_captioned:
-        class: eLife\Journal\ViewModel\Converter\Block\CaptionedImageConverter
+    elife.journal.view_model.converter.block.figure:
+        class: eLife\Journal\ViewModel\Converter\Block\FigureConverter
         public: false
         arguments:
           - '@elife.journal.view_model.converter'
         tags:
           - name: view_model.converter
 
-    elife.journal.view_model.converter.block.image_file_captioned:
-        class: eLife\Journal\ViewModel\Converter\Block\CaptionedImageFileConverter
+    elife.journal.view_model.converter.block.figure.image:
+        class: eLife\Journal\ViewModel\Converter\Block\FigureAssetImageConverter
+        public: false
         arguments:
           - '@elife.journal.view_model.converter'
           - '@elife.patterns.pattern_renderer'
           - '@elife.journal.helper.download_link_uri_generator'
+        tags:
+          - name: view_model.converter
+
+    elife.journal.view_model.converter.block.figure.table:
+        class: eLife\Journal\ViewModel\Converter\Block\FigureAssetTableConverter
+        public: false
+        arguments:
+          - '@elife.journal.view_model.converter'
+          - '@elife.patterns.pattern_renderer'
+        tags:
+          - name: view_model.converter
+
+    elife.journal.view_model.converter.block.figure.video:
+        class: eLife\Journal\ViewModel\Converter\Block\FigureAssetVideoConverter
+        public: false
+        arguments:
+          - '@elife.journal.view_model.converter'
+          - '@elife.patterns.pattern_renderer'
+          - '@elife.journal.helper.download_link_uri_generator'
+        tags:
+          - name: view_model.converter
+
+    elife.journal.view_model.converter.block.image:
+        class: eLife\Journal\ViewModel\Converter\Block\ImageConverter
+        public: false
+        arguments:
+          - '@elife.journal.view_model.converter'
+          - '@elife.patterns.pattern_renderer'
         tags:
           - name: view_model.converter
 
@@ -456,28 +479,12 @@ services:
         tags:
           - name: view_model.converter
 
-    elife.journal.view_model.converter.block.table_captioned:
-        class: eLife\Journal\ViewModel\Converter\Block\CaptionedTableConverter
-        public: false
-        arguments:
-          - '@elife.journal.view_model.converter'
-          - '@elife.patterns.pattern_renderer'
-        tags:
-          - name: view_model.converter
-
     elife.journal.view_model.converter.block.video:
         class: eLife\Journal\ViewModel\Converter\Block\VideoConverter
         public: false
-        tags:
-          - name: view_model.converter
-
-    elife.journal.view_model.converter.block.video_captioned:
-        class: eLife\Journal\ViewModel\Converter\Block\CaptionedVideoConverter
-        public: false
         arguments:
           - '@elife.journal.view_model.converter'
           - '@elife.patterns.pattern_renderer'
-          - '@elife.journal.helper.download_link_uri_generator'
         tags:
           - name: view_model.converter
 

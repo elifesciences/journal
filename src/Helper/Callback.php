@@ -22,6 +22,13 @@ final class Callback
         });
     }
 
+    public static function methodIsInstanceOf(string $method, string $class) : Callback
+    {
+        return new self(function ($object) use ($method, $class) {
+            return call_user_func([$object, $method]) instanceof $class;
+        });
+    }
+
     public static function mustBeInstanceOf(string $class, Exception $exception = null) : Callback
     {
         if (null === $exception) {

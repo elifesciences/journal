@@ -182,7 +182,7 @@ final class SearchController extends Controller
                         return $a['label'] <=> $b['label'];
                     });
 
-                    $filterGroups[] = new FilterGroup('Subject', $subjectFilters);
+                    $filterGroups[] = new FilterGroup('Research categories', $subjectFilters);
                 }
 
                 $allTypes = $search->types();
