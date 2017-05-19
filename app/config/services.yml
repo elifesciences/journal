@@ -635,6 +635,12 @@ services:
         tags:
           - name: view_model.converter
 
+    elife.journal.view_model.converter.external_article.read_more_item:
+        class: eLife\Journal\ViewModel\Converter\ExternalArticleReadMoreItemConverter
+        public: false
+        tags:
+          - name: view_model.converter
+
     elife.journal.view_model.converter.external_article.teaser.related_item:
         class: eLife\Journal\ViewModel\Converter\ExternalArticleRelatedItemTeaserConverter
         public: false
