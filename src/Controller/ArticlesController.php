@@ -2,7 +2,6 @@
 
 namespace eLife\Journal\Controller;
 
-use eLife\ApiSdk\Collection\ArraySequence;
 use eLife\ApiSdk\Collection\EmptySequence;
 use eLife\ApiSdk\Collection\PromiseSequence;
 use eLife\ApiSdk\Collection\Sequence;
@@ -785,9 +784,7 @@ sources: '.implode(', ', array_map(function (CitationsMetricSource $source) {
                 if ($item instanceof HasContent) {
                     return $item->getContent()->map($map)->prepend($item);
                 } elseif ($item instanceof Block\Listing) {
-                    $items = new ArraySequence($item->getItems());
-
-                    return $items->prepend($item);
+                    return $item->getItems()->map($map)->prepend($item);
                 }
 
                 return $item;
@@ -795,8 +792,8 @@ sources: '.implode(', ', array_map(function (CitationsMetricSource $source) {
 
             /* @var ArticleVoR $article */
             return $article->getContent()->map($map)->flatten()
-                ->filter(function (Block $block) {
-                    return $block instanceof Block\Figure;
+                ->filter(function ($item) {
+                    return $item instanceof Block\Figure;
                 });
         }));
     }
