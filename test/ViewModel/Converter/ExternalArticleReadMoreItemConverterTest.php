@@ -3,11 +3,7 @@
 namespace test\eLife\Journal\ViewModel\Converter;
 
 use eLife\Journal\ViewModel\Converter\ExternalArticleReadMoreItemConverter;
-use eLife\Journal\ViewModel\Converter\ViewModelConverter;
-use eLife\Journal\ViewModel\Paragraph;
-use eLife\Patterns\PatternRenderer;
 use eLife\Patterns\ViewModel\ReadMoreItem;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 final class ExternalArticleReadMoreItemConverterTest extends ModelConverterTestCase
 {
