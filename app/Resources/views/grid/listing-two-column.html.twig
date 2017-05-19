@@ -5,7 +5,7 @@
         {% set main = block('main') %}
         {% set secondary = (block('secondary') ?? '')|trim %}
 
-        <div class="grid__item one-whole x-large--eight-twelfths listing-column-main">
+        <div class="grid__item one-whole x-large--eight-twelfths column-container">
 
             {{ main|raw }}
 
@@ -13,7 +13,7 @@
 
         {% if secondary|length %}
 
-            <div class="grid__item one-whole x-large--four-twelfths listing-column-secondary">
+            <div class="grid__item one-whole x-large--four-twelfths grid-secondary-column">
 
                 {{ secondary|raw }}
 
