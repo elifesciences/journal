@@ -2,7 +2,7 @@
 
 {% block article_body %}
 
-    {% embed 'grid/content.html.twig' %}
+    {% embed 'grid/content.html.twig' with { 'isFirst': true } %}
 
         {% block navigation %}
 
@@ -54,7 +54,7 @@
 
     {% if listing %}
 
-        {% embed 'grid/content.html.twig' %}
+        {% embed 'grid/content.html.twig'  with { 'isSubsequent': true } %}
 
             {% block main %}
 

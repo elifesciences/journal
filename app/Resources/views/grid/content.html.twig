@@ -1,4 +1,5 @@
-<div class="wrapper blg-pad-top--small-to-medium">
+{# Only the first content wrapper should use css .wrapper--content. #}
+<div class="wrapper{% if isSubsequent ?? false %}{% else %} wrapper--content{% endif %}">
 
     <div class="grid">
 
@@ -26,7 +27,8 @@
             {% else %}
                 large--ten-twelfths push--large--one-twelfth x-large--eight-twelfths
                 {% if navigation|length %}push--x-large--zero{% else %}push--x-large--two-twelfths{% endif %}
-            {% endif %}">
+            {% endif %}
+            column-container">
 
             {{ main|raw }}
 
@@ -37,7 +39,8 @@
             <div class="grid__item one-whole
 
                 large--four-twelfths x-large--three-twelfths
-                {% if not navigation|length %}push--x-large--two-twelfths{% endif %}">
+                {% if not navigation|length %}push--x-large--two-twelfths{% endif %}
+                column-container">
 
                 {{ secondary|raw }}
 
