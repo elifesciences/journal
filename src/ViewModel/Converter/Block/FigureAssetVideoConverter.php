@@ -2,19 +2,19 @@
 
 namespace eLife\Journal\ViewModel\Converter\Block;
 
-use eLife\ApiSdk\Model\AssetFile;
 use eLife\ApiSdk\Model\Block;
+use eLife\Journal\Helper\CanConvert;
 use eLife\Journal\Helper\CreatesIiifUri;
 use eLife\Journal\Helper\DownloadLink;
 use eLife\Journal\Helper\DownloadLinkUriGenerator;
 use eLife\Journal\ViewModel\Converter\ViewModelConverter;
 use eLife\Patterns\PatternRenderer;
 use eLife\Patterns\ViewModel;
-use eLife\Patterns\ViewModel\AssetViewerInline;
 
-final class CaptionedVideoConverter implements ViewModelConverter
+final class FigureAssetVideoConverter implements ViewModelConverter
 {
-    use CreatesCaptionedAsset;
+    use CanConvert;
+    use CreatesAssetViewerInline;
     use CreatesIiifUri;
 
     private $viewModelConverter;
@@ -29,39 +29,30 @@ final class CaptionedVideoConverter implements ViewModelConverter
     }
 
     /**
-     * @param Block\Video $object
+     * @param Block\FigureAsset $object
      */
     public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
-        $asset = new ViewModel\Video(
+        /** @var Block\Video $asset */
+        $asset = $object->getAsset();
+
+        $assetViewModel = new ViewModel\Video(
             array_map(function (Block\VideoSource $source) {
                 return new ViewModel\MediaSource($source->getUri(), new ViewModel\MediaType($source->getMediaType()));
-            }, $object->getSources()),
-            $object->getPlaceholder() ? $this->iiifUri($object->getPlaceholder(), $object->getWidth(), $object->getHeight()) : null,
-            $object->isAutoplay(),
-            $object->isLoop()
+            }, $asset->getSources()),
+            $asset->getPlaceholder() ? $this->iiifUri($asset->getPlaceholder(), $asset->getWidth(), $asset->getHeight()) : null,
+            $asset->isAutoplay(),
+            $asset->isLoop()
         );
 
-        $asset = $this->createCaptionedAsset($asset, $object, $this->downloadLinkUriGenerator->generate(DownloadLink::fromUri($object->getSources()[0]->getUri())));
+        $download = new ViewModel\Link('Download', $this->downloadLinkUriGenerator->generate(DownloadLink::fromUri($asset->getSources()[0]->getUri())));
 
-        if (empty($object->getLabel())) {
-            return $asset;
-        }
-
-        if (!empty($context['complete'])) {
-            $additionalAssets = array_map(function (AssetFile $sourceData) {
-                return $this->viewModelConverter->convert($sourceData);
-            }, $object->getSourceData());
-        } else {
-            $additionalAssets = [];
-        }
-
-        return AssetViewerInline::primary($object->getId(), $object->getLabel(), $asset, $additionalAssets);
+        return $this->createAssetViewerInline($object, $assetViewModel, $download, null, $context);
     }
 
     public function supports($object, string $viewModel = null, array $context = []) : bool
     {
-        return $object instanceof Block\Video && $object->getTitle();
+        return $object instanceof Block\FigureAsset && $object->getAsset() instanceof Block\Video;
     }
 
     protected function getPatternRenderer() : PatternRenderer

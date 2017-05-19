@@ -2,19 +2,17 @@
 
 namespace eLife\Journal\ViewModel\Converter\Block;
 
-use eLife\ApiSdk\Model\AssetFile;
 use eLife\ApiSdk\Model\Block;
 use eLife\ApiSdk\Model\Footnote;
 use eLife\Journal\Helper\CanConvert;
 use eLife\Journal\ViewModel\Converter\ViewModelConverter;
 use eLife\Patterns\PatternRenderer;
 use eLife\Patterns\ViewModel;
-use eLife\Patterns\ViewModel\AssetViewerInline;
 
-final class CaptionedTableConverter implements ViewModelConverter
+final class FigureAssetTableConverter implements ViewModelConverter
 {
     use CanConvert;
-    use CreatesCaptionedAsset;
+    use CreatesAssetViewerInline;
 
     private $viewModelConverter;
     private $patternRenderer;
@@ -26,41 +24,30 @@ final class CaptionedTableConverter implements ViewModelConverter
     }
 
     /**
-     * @param Block\Table $object
+     * @param Block\FigureAsset $object
      */
     public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
-        $asset = new ViewModel\Table(
-            $object->getTables(),
+        /** @var Block\Table $asset */
+        $asset = $object->getAsset();
+
+        $assetViewModel = new ViewModel\Table(
+            $asset->getTables(),
             array_map(function (Footnote $footnote) {
                 return new ViewModel\TableFootnote(
                     $this->getPatternRenderer()->render(...$footnote->getText()->map($this->willConvertTo())),
                     $footnote->getId(),
                     $footnote->getLabel()
                 );
-            }, $object->getFootnotes())
+            }, $asset->getFootnotes())
         );
 
-        $asset = $this->createCaptionedAsset($asset, $object);
-
-        if (empty($object->getLabel())) {
-            return $asset;
-        }
-
-        if (!empty($context['complete'])) {
-            $additionalAssets = array_map(function (AssetFile $sourceData) {
-                return $this->viewModelConverter->convert($sourceData);
-            }, $object->getSourceData());
-        } else {
-            $additionalAssets = [];
-        }
-
-        return AssetViewerInline::primary($object->getId(), $object->getLabel(), $asset, $additionalAssets);
+        return $this->createAssetViewerInline($object, $assetViewModel, null, null, $context);
     }
 
     public function supports($object, string $viewModel = null, array $context = []) : bool
     {
-        return $object instanceof Block\Table && $object->getTitle();
+        return $object instanceof Block\FigureAsset && $object->getAsset() instanceof Block\Table;
     }
 
     protected function getPatternRenderer() : PatternRenderer
