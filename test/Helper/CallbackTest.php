@@ -246,11 +246,9 @@ final class CallbackTest extends PHPUnit_Framework_TestCase
         yield 'empty sequence' => [new EmptySequence()];
         yield 'empty array' => [[]];
         yield 'empty string' => [''];
-        yield 'empty paginator' => [
-            new Paginator('title', new Pagerfanta(new NullAdapter()), function () {
-                return 'foo';
-            }),
-        ];
+        yield 'empty paginator' => [new Paginator('title', new Pagerfanta(new NullAdapter()), function () {
+            return 'foo';
+        })];
         yield '0' => [0];
         yield 'null' => [null];
     }
