@@ -439,11 +439,6 @@
       "from": "currently-unhandled@>=0.4.1 <0.5.0",
       "resolved": "https://registry.npmjs.org/currently-unhandled/-/currently-unhandled-0.4.1.tgz"
     },
-    "cwebp-bin": {
-      "version": "3.2.0",
-      "from": "cwebp-bin@>=3.1.0 <4.0.0",
-      "resolved": "https://registry.npmjs.org/cwebp-bin/-/cwebp-bin-3.2.0.tgz"
-    },
     "dashdash": {
       "version": "1.14.1",
       "from": "dashdash@>=1.12.0 <2.0.0",
@@ -1633,11 +1628,6 @@
       "from": "imagemin-svgo@latest",
       "resolved": "https://registry.npmjs.org/imagemin-svgo/-/imagemin-svgo-5.2.1.tgz"
     },
-    "imagemin-webp": {
-      "version": "4.0.0",
-      "from": "imagemin-webp@latest",
-      "resolved": "https://registry.npmjs.org/imagemin-webp/-/imagemin-webp-4.0.0.tgz"
-    },
     "indent-string": {
       "version": "2.1.0",
       "from": "indent-string@>=2.1.0 <3.0.0",
@@ -1702,11 +1692,6 @@
       "version": "1.0.0",
       "from": "is-bzip2@>=1.0.0 <2.0.0",
       "resolved": "https://registry.npmjs.org/is-bzip2/-/is-bzip2-1.0.0.tgz"
-    },
-    "is-cwebp-readable": {
-      "version": "1.0.3",
-      "from": "is-cwebp-readable@>=1.0.0 <2.0.0",
-      "resolved": "https://registry.npmjs.org/is-cwebp-readable/-/is-cwebp-readable-1.0.3.tgz"
     },
     "is-dotfile": {
       "version": "1.0.2",
