@@ -300,7 +300,10 @@ final class MagazineContext extends Context
                         ],
                         'selectedCurator' => [
                             'id' => '1',
-                            'type' => 'senior-editor',
+                            'type' => [
+                                'id' => 'senior-editor',
+                                'label' => 'Senior editor',
+                            ],
                             'name' => [
                                 'preferred' => 'Person 1',
                                 'index' => '1, Person',
@@ -368,7 +371,10 @@ final class MagazineContext extends Context
                                 ],
                                 'selectedCurator' => [
                                     'id' => '1',
-                                    'type' => 'senior-editor',
+                                    'type' => [
+                                        'id' => 'senior-editor',
+                                        'label' => 'Senior editor',
+                                    ],
                                     'name' => [
                                         'preferred' => 'Person 1',
                                         'index' => '1, Person',
@@ -413,7 +419,10 @@ final class MagazineContext extends Context
                             ],
                             'selectedCurator' => [
                                 'id' => '1',
-                                'type' => 'senior-editor',
+                                'type' => [
+                                    'id' => 'senior-editor',
+                                    'label' => 'Senior editor',
+                                ],
                                 'name' => [
                                     'preferred' => 'Person 1',
                                     'index' => '1, Person',

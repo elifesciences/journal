@@ -54,7 +54,10 @@ final class CollectionContext extends Context
                 ],
                 'selectedCurator' => [
                     'id' => "$i",
-                    'type' => 'senior-editor',
+                    'type' => [
+                        'id' => 'senior-editor',
+                        'label' => 'Senior editor',
+                    ],
                     'name' => [
                         'preferred' => 'Person '.$i,
                         'index' => $i.', Person',
@@ -63,7 +66,10 @@ final class CollectionContext extends Context
                 'curators' => [
                     [
                         'id' => "$i",
-                        'type' => 'senior-editor',
+                        'type' => [
+                            'id' => 'senior-editor',
+                            'label' => 'Senior editor',
+                        ],
                         'name' => [
                             'preferred' => 'Person '.$i,
                             'index' => $i.', Person',
