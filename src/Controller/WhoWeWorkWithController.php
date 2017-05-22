@@ -241,7 +241,6 @@ final class WhoWeWorkWithController extends Controller
             if ($item['svg']) {
                 $sources[] = ['srcset' => $this->get('assets.packages')->getUrl("assets/images/logos/{$item['filename']}.svg"), 'type' => 'image/svg+xml'];
             }
-            $sources[] = ['srcset' => sprintf('%s 250w, %s 500w', $this->get('assets.packages')->getUrl("assets/images/logos/{$item['filename']}-250.webp"), $this->get('assets.packages')->getUrl("assets/images/logos/{$item['filename']}-500.webp")), 'type' => 'image/webp'];
 
             return new ImageLink(
                 $item['uri'],

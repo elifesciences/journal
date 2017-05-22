@@ -4,7 +4,6 @@ namespace eLife\Journal\ViewModel\Converter;
 
 use eLife\ApiSdk\Model\Person;
 use eLife\Journal\Helper\CreatesIiifUri;
-use eLife\Journal\Helper\PersonType;
 use eLife\Patterns\ViewModel;
 
 final class PersonProfileSnippetConverter implements ViewModelConverter
@@ -30,7 +29,7 @@ final class PersonProfileSnippetConverter implements ViewModelConverter
 
         return new ViewModel\ProfileSnippet(
             $object->getDetails()->getPreferredName(),
-            PersonType::singular($object->getType()),
+            $object->getTypeLabel(),
             $image
         );
     }
