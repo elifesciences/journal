@@ -45,6 +45,28 @@ final class CallbackTest extends PHPUnit_Framework_TestCase
      * @test
      * @dataProvider notEmptyProvider
      */
+    public function it_creates_is_not_empty_with_not_empty($item)
+    {
+        $callback = Callback::isNotEmpty();
+
+        $this->assertTrue($callback($item));
+    }
+
+    /**
+     * @test
+     * @dataProvider emptyProvider
+     */
+    public function it_creates_is_not_empty_with_empty($item)
+    {
+        $callback = Callback::isNotEmpty();
+
+        $this->assertFalse($callback($item));
+    }
+
+    /**
+     * @test
+     * @dataProvider notEmptyProvider
+     */
     public function it_creates_must_not_be_empty_with_not_empty($item)
     {
         $callback = Callback::mustNotBeEmpty();
@@ -224,9 +246,11 @@ final class CallbackTest extends PHPUnit_Framework_TestCase
         yield 'empty sequence' => [new EmptySequence()];
         yield 'empty array' => [[]];
         yield 'empty string' => [''];
-        yield 'empty paginator' => [new Paginator('title', new Pagerfanta(new NullAdapter()), function () {
-            return 'foo';
-        })];
+        yield 'empty paginator' => [
+            new Paginator('title', new Pagerfanta(new NullAdapter()), function () {
+                return 'foo';
+            }),
+        ];
         yield '0' => [0];
         yield 'null' => [null];
     }
