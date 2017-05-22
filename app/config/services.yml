@@ -73,6 +73,10 @@ services:
         class: eLife\ApiSdk\Client\Metrics
         factory: ['@elife.api_sdk', metrics]
 
+    elife.api_sdk.people:
+        class: eLife\ApiSdk\Client\People
+        factory: ['@elife.api_sdk', people]
+
     elife.api_sdk.podcast_episodes:
         class: eLife\ApiSdk\Client\PodcastEpisodes
         factory: ['@elife.api_sdk', podcastEpisodes]
@@ -806,6 +810,15 @@ services:
     elife.journal.view_model.converter.paginator.listing_teasers:
         class: eLife\Journal\ViewModel\Converter\PaginatorListingTeasersConverter
         public: false
+        tags:
+          - name: view_model.converter
+
+    elife.journal.view_model.converter.person.about_profile:
+        class: eLife\Journal\ViewModel\Converter\PersonAboutProfileConverter
+        public: false
+        arguments:
+          - '@elife.journal.view_model.converter'
+          - '@elife.patterns.pattern_renderer'
         tags:
           - name: view_model.converter
 

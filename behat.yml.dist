@@ -79,6 +79,11 @@ default:
                 tags: '@magazine'
             contexts:
               - MagazineContext
+        people:
+            filters:
+                tags: '@people'
+            contexts:
+              - PeopleContext
         podcast:
             filters:
                 tags: '@podcast'

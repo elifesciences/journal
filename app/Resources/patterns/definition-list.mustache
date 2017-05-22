@@ -1,6 +1,8 @@
 <dl>
     {{#items}}
         <dt>{{{term}}}</dt>
-        <dd>{{{descriptor}}}</dd>
+        {{#descriptors}}
+            <dd>{{{.}}}</dd>
+        {{/descriptors}}
     {{/items}}
 </dl>
