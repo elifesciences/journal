@@ -10,44 +10,42 @@
 
 {% block body %}
 
-    {{ render_pattern(searchBox) }}
+    <div class="wrapper">
 
-    <div class="wrapper u-pad-top-lg">
-
-        <div class="grid">
-
-            <div class="listing-column-container">
-
-                <div class="grid__item large--eight-twelfths listing-column-main">
-
-                    {{ render_pattern(sortControl) }}
-
-                    {{ render_pattern(messageBar) }}
-
-                    {% if listing %}
-                        {{ render_pattern(listing) }}
-                    {% endif %}
-
-                </div>
-
-                <div class="grid__item large--four-twelfths listing-column-secondary">
-
-                    <form method="get" action="{{ path('search') }}">
-
-                        <input type="hidden" name="for" value="{{ query.for }}">
-                        <input type="hidden" name="sort" value="{{ query.sort }}">
-                        <input type="hidden" name="order" value="{{ query.order }}">
-
-                        {{ render_pattern(filterPanel) }}
-
-                    </form>
-
-                </div>
-
-            </div>
-
-        </div>
+        {{ render_pattern(searchBox) }}
 
     </div>
+
+    {% embed 'grid/listing-two-column.html.twig' %}
+
+        {% block main %}
+
+            {{ render_pattern(sortControl) }}
+
+            {{ render_pattern(messageBar) }}
+
+            {% if listing %}
+
+                {{ render_pattern(listing) }}
+
+            {% endif %}
+
+        {% endblock %}
+
+        {% block secondary %}
+
+            <form method="get" action="{{ path('search') }}">
+
+                <input type="hidden" name="for" value="{{ query.for }}">
+                <input type="hidden" name="sort" value="{{ query.sort }}">
+                <input type="hidden" name="order" value="{{ query.order }}">
+
+                {{ render_pattern(filterPanel) }}
+
+            </form>
+
+        {% endblock %}
+
+    {% endembed %}
 
 {% endblock %}

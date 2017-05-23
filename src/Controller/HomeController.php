@@ -74,7 +74,7 @@ final class HomeController extends Controller
             ->getCurrent()
             ->map($this->willConvertTo(CarouselItem::class))
             ->then(Callback::emptyOr(function (Sequence $covers) {
-                return new Carousel(...$covers);
+                return new Carousel($covers->toArray(), new ListHeading('Highlights', 'highlights'));
             }))
             ->otherwise($this->softFailure('Failed to load covers'));
 
@@ -101,7 +101,7 @@ final class HomeController extends Controller
                 return ListingTeasers::withSeeMore(
                     $result->map($this->willConvertTo(Teaser::class, ['variant' => 'secondary']))->toArray(),
                     new SeeMoreLink(new Link('See more Magazine articles', $this->get('router')->generate('magazine'))),
-                    'Magazine'
+                    new ListHeading('Magazine')
                 );
             }))
             ->otherwise($this->softFailure('Failed to load Magazine list'));

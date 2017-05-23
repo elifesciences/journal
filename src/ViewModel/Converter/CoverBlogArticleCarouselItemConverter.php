@@ -6,22 +6,23 @@ use Cocur\Slugify\SlugifyInterface;
 use eLife\ApiSdk\Model\BlogArticle;
 use eLife\ApiSdk\Model\Cover;
 use eLife\ApiSdk\Model\Subject;
-use eLife\Journal\Helper\CreatesIiifUri;
+use eLife\Journal\ViewModel\Factory\ContentHeaderImageFactory;
 use eLife\Patterns\ViewModel;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 final class CoverBlogArticleCarouselItemConverter implements ViewModelConverter
 {
     use CreatesDate;
-    use CreatesIiifUri;
 
     private $urlGenerator;
     private $slugify;
+    private $contentHeaderImageFactory;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator, SlugifyInterface $slugify)
+    public function __construct(UrlGeneratorInterface $urlGenerator, SlugifyInterface $slugify, ContentHeaderImageFactory $contentHeaderImageFactory)
     {
         $this->urlGenerator = $urlGenerator;
         $this->slugify = $slugify;
+        $this->contentHeaderImageFactory = $contentHeaderImageFactory;
     }
 
     /**
@@ -42,10 +43,7 @@ final class CoverBlogArticleCarouselItemConverter implements ViewModelConverter
                 new ViewModel\Link('Inside eLife', $this->urlGenerator->generate('inside-elife')),
                 $this->simpleDate($article, $context)
             ),
-            new ViewModel\BackgroundImage(
-                $this->iiifUri($object->getBanner(), 900, 450),
-                $this->iiifUri($object->getBanner(), 1800, 900)
-            )
+            $this->contentHeaderImageFactory->forImage($object->getBanner())
         );
     }
 

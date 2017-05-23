@@ -6,6 +6,7 @@ use eLife\Patterns\ViewModel\ContentHeader;
 use eLife\Patterns\ViewModel\GridListing;
 use eLife\Patterns\ViewModel\Image;
 use eLife\Patterns\ViewModel\ImageLink;
+use eLife\Patterns\ViewModel\ListHeading;
 use eLife\Patterns\ViewModel\Picture;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -225,10 +226,10 @@ final class WhoWeWorkWithController extends Controller
         ];
 
         $arguments['listings'] = [
-            GridListing::forImageLinks($this->toImageLinks($memberships), 'Memberships'),
-            GridListing::forImageLinks($this->toImageLinks($serviceProviders), 'Service providers'),
-            GridListing::forImageLinks($this->toImageLinks($content), 'Content availability and archiving'),
-            GridListing::forImageLinks($this->toImageLinks($committees), 'Committees and initiatives'),
+            GridListing::forImageLinks($this->toImageLinks($memberships), new ListHeading('Memberships')),
+            GridListing::forImageLinks($this->toImageLinks($serviceProviders), new ListHeading('Service providers')),
+            GridListing::forImageLinks($this->toImageLinks($content), new ListHeading('Content availability and archiving')),
+            GridListing::forImageLinks($this->toImageLinks($committees), new ListHeading('Committees and initiatives')),
         ];
 
         return new Response($this->get('templating')->render('::who-we-work-with.html.twig', $arguments));
@@ -241,7 +242,6 @@ final class WhoWeWorkWithController extends Controller
             if ($item['svg']) {
                 $sources[] = ['srcset' => $this->get('assets.packages')->getUrl("assets/images/logos/{$item['filename']}.svg"), 'type' => 'image/svg+xml'];
             }
-            $sources[] = ['srcset' => sprintf('%s 250w, %s 500w', $this->get('assets.packages')->getUrl("assets/images/logos/{$item['filename']}-250.webp"), $this->get('assets.packages')->getUrl("assets/images/logos/{$item['filename']}-500.webp")), 'type' => 'image/webp'];
 
             return new ImageLink(
                 $item['uri'],

@@ -359,12 +359,12 @@ final class SearchContext extends Context
         $articles = $this->filterArticlesContainingKeyword($keyword, $this->articles);
 
         $this->spin(function () use ($number, $articles) {
-            $this->assertSession()->elementsCount('css', '.message-bar:contains("'.count($articles).' results found") + .listing-column-container > .listing-list > .listing-list__item', $number);
+            $this->assertSession()->elementsCount('css', '.message-bar:contains("'.count($articles).' results found") + * > .listing-list > .listing-list__item', $number);
 
             for ($i = 0; $i < $number; ++$i) {
                 $this->assertSession()->elementContains(
                     'css',
-                    '.message-bar:contains("'.count($articles).' results found") + .listing-column-container > .listing-list > .listing-list__item:nth-child('.($i + 1).')',
+                    '.message-bar:contains("'.count($articles).' results found") + * > .listing-list > .listing-list__item:nth-child('.($i + 1).')',
                     $articles[$i]['title']
                 );
             }
@@ -382,12 +382,12 @@ final class SearchContext extends Context
         $articles = $this->filterArticlesWithASubject($subjects, $this->filterArticlesContainingKeyword($keyword, $this->articles));
 
         $this->spin(function () use ($number, $articles) {
-            $this->assertSession()->elementsCount('css', '.message-bar:contains("'.count($articles).' results found") + .listing-column-container > .list-heading + .listing-list > .listing-list__item', $number);
+            $this->assertSession()->elementsCount('css', '.message-bar:contains("'.count($articles).' results found") + * > .listing-list > .listing-list__item', $number);
 
             for ($i = 0; $i < $number; ++$i) {
                 $this->assertSession()->elementContains(
                     'css',
-                    '.message-bar:contains("'.count($articles).' results found") + .listing-column-container > .list-heading + .listing-list > .listing-list__item:nth-child('.($i + 1).')',
+                    '.message-bar:contains("'.count($articles).' results found") + * > .listing-list > .listing-list__item:nth-child('.($i + 1).')',
                     $articles[$i]['title']
                 );
             }
@@ -402,12 +402,12 @@ final class SearchContext extends Context
         $articles = $this->filterArticlesByType($this->createContentTypeId($contentType), $this->filterArticlesContainingKeyword($keyword, $this->articles));
 
         $this->spin(function () use ($number, $articles) {
-            $this->assertSession()->elementsCount('css', '.message-bar:contains("'.count($articles).' results found") + .listing-column-container > .listing-list > .listing-list__item', $number);
+            $this->assertSession()->elementsCount('css', '.message-bar:contains("'.count($articles).' results found") + * > .listing-list > .listing-list__item', $number);
 
             for ($i = 0; $i < $number; ++$i) {
                 $this->assertSession()->elementContains(
                     'css',
-                    '.message-bar:contains("'.count($articles).' results found") + .listing-column-container > .listing-list > .listing-list__item:nth-child('.($i + 1).')',
+                    '.message-bar:contains("'.count($articles).' results found") + * > .listing-list > .listing-list__item:nth-child('.($i + 1).')',
                     $articles[$i]['title']
                 );
             }
@@ -422,12 +422,12 @@ final class SearchContext extends Context
         $articles = $this->filterArticlesByType($this->createContentTypeId($contentType), $this->filterArticlesWithSubject($subject, $this->filterArticlesContainingKeyword($keyword, $this->articles)));
 
         $this->spin(function () use ($number, $articles) {
-            $this->assertSession()->elementsCount('css', '.message-bar:contains("'.count($articles).' results found") + .listing-column-container > .listing-list > .listing-list__item', $number);
+            $this->assertSession()->elementsCount('css', '.message-bar:contains("'.count($articles).' results found") + * > .listing-list > .listing-list__item', $number);
 
             for ($i = 0; $i < $number; ++$i) {
                 $this->assertSession()->elementContains(
                     'css',
-                    '.message-bar:contains("'.count($articles).' results found") + .listing-column-container > .listing-list > .listing-list__item:nth-child('.($i + 1).')',
+                    '.message-bar:contains("'.count($articles).' results found") + * > .listing-list > .listing-list__item:nth-child('.($i + 1).')',
                     $articles[$i]['title']
                 );
             }

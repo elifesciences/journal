@@ -4,21 +4,21 @@ namespace eLife\Journal\Controller;
 
 use eLife\ApiSdk\Collection\PromiseSequence;
 use eLife\ApiSdk\Collection\Sequence;
-use eLife\ApiSdk\Model\Highlight;
-use eLife\ApiSdk\Model\PodcastEpisode;
-use eLife\ApiSdk\Model\PodcastEpisodeChapterModel;
 use eLife\ApiSdk\Model\Subject;
 use eLife\Journal\Helper\Callback;
 use eLife\Journal\Helper\CreatesIiifUri;
 use eLife\Journal\Helper\Paginator;
 use eLife\Journal\Pagerfanta\SequenceAdapter;
-use eLife\Patterns\ViewModel\BackgroundImage;
+use eLife\Journal\ViewModel\EmptyListing;
 use eLife\Patterns\ViewModel\BlockLink;
 use eLife\Patterns\ViewModel\ContentHeader;
 use eLife\Patterns\ViewModel\ContentHeaderSimple;
 use eLife\Patterns\ViewModel\GridListing;
+use eLife\Patterns\ViewModel\Image;
 use eLife\Patterns\ViewModel\Link;
+use eLife\Patterns\ViewModel\ListHeading;
 use eLife\Patterns\ViewModel\ListingTeasers;
+use eLife\Patterns\ViewModel\Picture;
 use eLife\Patterns\ViewModel\Teaser;
 use Pagerfanta\Pagerfanta;
 use Symfony\Component\HttpFoundation\Request;
@@ -47,16 +47,24 @@ final class SubjectsController extends Controller
                         $subject->getName(),
                         $this->get('router')->generate('subject', ['id' => $subject->getId()])
                     ),
-                    new BackgroundImage(
-                        $this->iiifUri($subject->getThumbnail(), 500, 281),
-                        $this->iiifUri($subject->getThumbnail(), 250, 141),
-                        600
+                    new Picture(
+                        [
+                            [
+                                'srcset' => sprintf('%s 263w, %s 526w', $this->iiifUri($subject->getThumbnail(), 263, 148), $this->iiifUri($subject->getThumbnail(), 526, 296)),
+                                'media' => '(min-width: 600px)',
+                            ],
+                        ],
+                        new Image('data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==')
                     )
                 );
             })
-            ->then(Callback::emptyOr(function (Sequence $subjects) {
+            ->then(function (Sequence $subjects) {
+                if ($subjects->isEmpty()) {
+                    return new EmptyListing(null, 'No subjects available.');
+                }
+
                 return GridListing::forBlockLinks($subjects->toArray());
-            }));
+            });
 
         return new Response($this->get('templating')->render('::subjects.html.twig', $arguments));
     }
@@ -121,34 +129,14 @@ final class SubjectsController extends Controller
         $arguments['contentHeader'] = $arguments['subject']
             ->then($this->willConvertTo(ContentHeader::class));
 
-        $podcastEpisode = $this->get('elife.api_sdk.search')
-            ->forType('podcast-episode')
-            ->forSubject($arguments['id'])
-            ->sortBy('date')
-            ->slice(0, 1)
-            ->otherwise($this->softFailure('Failed to load podcast episodes for '.$arguments['id']));
-
-        $highlights = (new PromiseSequence($this->get('elife.api_sdk.highlights')
+        $arguments['highlights'] = (new PromiseSequence($this->get('elife.api_sdk.highlights')
             ->get($arguments['id'])))
-            ->filter(function (Highlight $highlight) {
-                return false === $highlight->getItem() instanceof PodcastEpisode && false === $highlight->getItem() instanceof PodcastEpisodeChapterModel;
-            })
             ->slice(0, 3)
+            ->map($this->willConvertTo(Teaser::class, ['variant' => 'secondary']))
+            ->then(Callback::emptyOr(function (Sequence $result) {
+                return ListingTeasers::basic($result->toArray(), new ListHeading('Highlights'));
+            }))
             ->otherwise($this->softFailure('Failed to load highlights for '.$arguments['id']));
-
-        $arguments['highlights'] = all(compact('podcastEpisode', 'highlights'))
-            ->then(function (array $parts) {
-                return array_map(
-                    $this->willConvertTo(Teaser::class, ['variant' => 'secondary']),
-                    array_merge(
-                        $parts['podcastEpisode'] instanceof Sequence ? $parts['podcastEpisode']->toArray() : [],
-                        $parts['highlights'] instanceof Sequence ? $parts['highlights']->toArray() : []
-                    )
-                );
-            })
-            ->then(Callback::emptyOr(function (array $result) {
-                return ListingTeasers::basic($result, 'Highlights');
-            }));
 
         return new Response($this->get('templating')->render('::subject.html.twig', $arguments));
     }

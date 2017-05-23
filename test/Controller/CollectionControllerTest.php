@@ -81,7 +81,10 @@ final class CollectionControllerTest extends PageTestCase
                     'impactStatement' => 'Collection impact statement',
                     'selectedCurator' => [
                         'id' => 'person',
-                        'type' => 'senior-editor',
+                        'type' => [
+                            'id' => 'senior-editor',
+                            'label' => 'Senior editor',
+                        ],
                         'name' => [
                             'preferred' => 'Person',
                             'index' => 'Person',
@@ -90,7 +93,10 @@ final class CollectionControllerTest extends PageTestCase
                     'curators' => [
                         [
                             'id' => 'person',
-                            'type' => 'senior-editor',
+                            'type' => [
+                                'id' => 'senior-editor',
+                                'label' => 'Senior editor',
+                            ],
                             'name' => [
                                 'preferred' => 'Person',
                                 'index' => 'Person',
@@ -197,7 +203,10 @@ final class CollectionControllerTest extends PageTestCase
                     'impactStatement' => 'Collection impact statement',
                     'selectedCurator' => [
                         'id' => 'person',
-                        'type' => 'senior-editor',
+                        'type' => [
+                            'id' => 'senior-editor',
+                            'label' => 'Senior editor',
+                        ],
                         'name' => [
                             'preferred' => 'Person',
                             'index' => 'Person',
@@ -206,7 +215,10 @@ final class CollectionControllerTest extends PageTestCase
                     'curators' => [
                         [
                             'id' => 'person',
-                            'type' => 'senior-editor',
+                            'type' => [
+                                'id' => 'senior-editor',
+                                'label' => 'Senior editor',
+                            ],
                             'name' => [
                                 'preferred' => 'Person',
                                 'index' => 'Person',
@@ -293,7 +305,10 @@ final class CollectionControllerTest extends PageTestCase
                     'impactStatement' => 'Collection impact statement',
                     'selectedCurator' => [
                         'id' => 'person',
-                        'type' => 'senior-editor',
+                        'type' => [
+                            'id' => 'senior-editor',
+                            'label' => 'Senior editor',
+                        ],
                         'name' => [
                             'preferred' => 'Person One',
                             'index' => 'Person One',
@@ -302,7 +317,10 @@ final class CollectionControllerTest extends PageTestCase
                     'curators' => [
                         [
                             'id' => 'person',
-                            'type' => 'reviewing-editor',
+                            'type' => [
+                                'id' => 'reviewing-editor',
+                                'label' => 'Reviewing editor',
+                            ],
                             'name' => [
                                 'preferred' => 'Person Two',
                                 'index' => 'Person Two',
@@ -310,7 +328,10 @@ final class CollectionControllerTest extends PageTestCase
                         ],
                         [
                             'id' => 'person',
-                            'type' => 'senior-editor',
+                            'type' => [
+                                'id' => 'senior-editor',
+                                'label' => 'Senior editor',
+                            ],
                             'name' => [
                                 'preferred' => 'Person One',
                                 'index' => 'Person One',
@@ -457,7 +478,10 @@ final class CollectionControllerTest extends PageTestCase
                     'impactStatement' => 'Collection impact statement',
                     'selectedCurator' => [
                         'id' => 'person',
-                        'type' => 'senior-editor',
+                        'type' => [
+                            'id' => 'senior-editor',
+                            'label' => 'Senior editor',
+                        ],
                         'name' => [
                             'preferred' => 'Person',
                             'index' => 'Person',
@@ -466,7 +490,10 @@ final class CollectionControllerTest extends PageTestCase
                     'curators' => [
                         [
                             'id' => 'person',
-                            'type' => 'senior-editor',
+                            'type' => [
+                                'id' => 'senior-editor',
+                                'label' => 'Senior editor',
+                            ],
                             'name' => [
                                 'preferred' => 'Person',
                                 'index' => 'Person',

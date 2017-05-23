@@ -1,20 +1,17 @@
-<div class="wrapper">
+{# Only the first content wrapper should use css .wrapper--content. #}
+<div class="wrapper{% if not isSubsequent ?? false %} wrapper--content{% endif %}">
 
     <div class="grid">
 
-        {% if block('navigation') is defined and block('navigation')|trim != '' %}
-            {% set navigation = block('navigation') %}
-        {% endif %}
-
+        {% set navigation = (block('navigation') ?? '')|trim %}
         {% set main = block('main') %}
+        {% set secondary = (block('secondary') ?? '')|trim %}
 
-        {% if block('secondary') is defined and block('secondary')|trim != '' %}
-            {% set secondary = block('secondary') %}
-        {% endif %}
+        {% if navigation|length %}
 
-        {% if navigation is defined %}
-
-            <div class="grid__item one-whole x-large--two-twelfths blg-margin-top-medium">
+            <div class="grid__item one-whole x-large--two-twelfths
+                        {# Needed to prevent collapse when contents are out of document flow #}
+                        blg-pad-bottom-smallish">
 
                 {{ navigation|raw }}
 
@@ -24,36 +21,25 @@
 
         <div class="grid__item one-whole
 
-            {% if secondary is defined %}
+            {% if secondary|length %}
                 large--eight-twelfths x-large--seven-twelfths
-                {% if navigation is not defined %}push--x-large--two-twelfths{% endif %}
+                {% if not navigation|length %}push--x-large--two-twelfths{% endif %}
             {% else %}
                 large--ten-twelfths push--large--one-twelfth x-large--eight-twelfths
-                {% if navigation is defined %}push--x-large--zero{% else %}push--x-large--two-twelfths{% endif %}
+                {% if navigation|length %}push--x-large--zero{% else %}push--x-large--two-twelfths{% endif %}
             {% endif %}
-
-            blg-margin-top-medium"
-
-            {% if behaviour is defined %}
-
-                data-behaviour="{{ behaviour }}"
-
-            {% endif %}
-
-        >
+            grid-column">
 
             {{ main|raw }}
 
         </div>
 
-        {% if secondary is defined %}
+        {% if secondary|length %}
 
             <div class="grid__item one-whole
 
                 large--four-twelfths x-large--three-twelfths
-                {% if navigation is not defined %}push--x-large--two-twelfths{% endif %}
-
-                blg-margin-top-medium">
+                {% if not navigation|length %}push--x-large--two-twelfths{% endif %} grid-secondary-column">
 
                 {{ secondary|raw }}
 

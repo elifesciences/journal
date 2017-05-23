@@ -11,7 +11,7 @@ use eLife\Patterns\ViewModel;
 final class TableConverterTest extends BlockConverterTestCase
 {
     protected $blockClass = Block\Table::class;
-    protected $viewModelClasses = [ViewModel\Table::class];
+    protected $viewModelClasses = [ViewModel\Table::class, ViewModel\CaptionedAsset::class];
 
     /**
      * @before
@@ -20,20 +20,7 @@ final class TableConverterTest extends BlockConverterTestCase
     {
         $this->converter = new TableConverter(
             $this->createMock(ViewModelConverter::class),
-            $patternRenderer = $this->createMock(PatternRenderer::class)
+            $this->createMock(PatternRenderer::class)
         );
-
-        $patternRenderer
-            ->expects($this->any())
-            ->method('render')
-            ->will($this->returnValue('...'));
-    }
-
-    /**
-     * @param Block\Table $block
-     */
-    protected function includeBlock(Block $block) : bool
-    {
-        return !$block->getTitle();
     }
 }

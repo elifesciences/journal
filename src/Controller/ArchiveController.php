@@ -18,14 +18,16 @@ use eLife\Journal\Helper\Callback;
 use eLife\Journal\Helper\CreatesIiifUri;
 use eLife\Journal\ViewModel\EmptyListing;
 use eLife\Patterns\ViewModel\ArchiveNavLink;
-use eLife\Patterns\ViewModel\BackgroundImage;
 use eLife\Patterns\ViewModel\BlockLink;
 use eLife\Patterns\ViewModel\Button;
 use eLife\Patterns\ViewModel\ContentHeader;
 use eLife\Patterns\ViewModel\FormLabel;
 use eLife\Patterns\ViewModel\GridListing;
+use eLife\Patterns\ViewModel\Image;
 use eLife\Patterns\ViewModel\Link;
+use eLife\Patterns\ViewModel\ListHeading;
 use eLife\Patterns\ViewModel\ListingTeasers;
+use eLife\Patterns\ViewModel\Picture;
 use eLife\Patterns\ViewModel\Select;
 use eLife\Patterns\ViewModel\SelectNav;
 use eLife\Patterns\ViewModel\SelectOption;
@@ -113,9 +115,15 @@ final class ArchiveController extends Controller
                     return ArchiveNavLink::withLinks(
                         new BlockLink(
                             $link,
-                            new BackgroundImage(
-                                $this->iiifUri($covers[0]->getBanner(), 263, 176),
-                                $this->iiifUri($covers[0]->getBanner(), 526, 352)
+                            new Picture(
+                                [],
+                                new Image(
+                                    $this->iiifUri($covers[0]->getBanner(), 263, 176),
+                                    [
+                                        526 => $this->iiifUri($covers[0]->getBanner(), 526, 352),
+                                        263 => $this->iiifUri($covers[0]->getBanner(), 263, 176),
+                                    ]
+                                )
                             )
                         ),
                         'Cover articles',
@@ -139,7 +147,7 @@ final class ArchiveController extends Controller
                             throw new UnexpectedValueException('Unexpected type '.get_class($item));
                         })->toArray()
                     );
-                }, array_values($months), array_keys($months)), 'Monthly archive');
+                }, array_values($months), array_keys($months)), new ListHeading('Monthly archive'));
             });
 
         return new Response($this->get('templating')->render('::archive-year.html.twig', $arguments));
@@ -183,7 +191,7 @@ final class ArchiveController extends Controller
         $arguments['covers'] = $covers
             ->map($this->willConvertTo(Teaser::class, ['variant' => 'secondary']))
             ->then(Callback::emptyOr(function (Sequence $covers) {
-                return ListingTeasers::forHighlights($covers->toArray(), 'Cover articles', 'covers');
+                return ListingTeasers::forHighlights($covers->toArray(), new ListHeading('Cover articles'), 'covers');
             }))
             ->otherwise($this->softFailure('Failed to load cover articles for '.$starts->format('F Y')));
 
@@ -196,10 +204,10 @@ final class ArchiveController extends Controller
             ->map($this->willConvertTo(Teaser::class, ['date' => 'published']))
             ->then(function (Sequence $result) {
                 if ($result->isEmpty()) {
-                    return new EmptyListing('Research articles', 'No articles available.');
+                    return new EmptyListing(new ListHeading('Research articles'), 'No articles available.');
                 }
 
-                return ListingTeasers::basic($result->toArray(), 'Research articles');
+                return ListingTeasers::basic($result->toArray(), new ListHeading('Research articles'));
             });
 
         $arguments['magazine'] = $this->get('elife.api_sdk.search')
@@ -219,7 +227,7 @@ final class ArchiveController extends Controller
             })
             ->map($this->willConvertTo(Teaser::class, ['variant' => 'secondary', 'date' => 'published']))
             ->then(Callback::emptyOr(function (Sequence $result) {
-                return ListingTeasers::basic($result->toArray(), 'Magazine');
+                return ListingTeasers::basic($result->toArray(), new ListHeading('Magazine'));
             }))
             ->otherwise($this->softFailure('Failed to load Magazine list'));
 

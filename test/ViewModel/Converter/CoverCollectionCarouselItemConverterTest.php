@@ -6,7 +6,9 @@ use eLife\ApiSdk\Model\Collection;
 use eLife\ApiSdk\Model\Cover;
 use eLife\ApiSdk\Model\Model;
 use eLife\Journal\ViewModel\Converter\CoverCollectionCarouselItemConverter;
+use eLife\Journal\ViewModel\Factory\ContentHeaderImageFactory;
 use eLife\Patterns\ViewModel\CarouselItem;
+use Symfony\Component\Asset\Packages;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Traversable;
 
@@ -26,7 +28,7 @@ final class CoverCollectionCarouselItemConverterTest extends ModelConverterTestC
             ->method('generate')
             ->will($this->returnValue('/'));
 
-        $this->converter = new CoverCollectionCarouselItemConverter($urlGenerator, $this->stubSlugify());
+        $this->converter = new CoverCollectionCarouselItemConverter($urlGenerator, $this->stubSlugify(), new ContentHeaderImageFactory(new Packages()));
     }
 
     /**
