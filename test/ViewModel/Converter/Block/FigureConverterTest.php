@@ -29,8 +29,7 @@ final class FigureConverterTest extends BlockConverterTestCase
                 'some-id',
                 'Some label',
                 new ViewModel\CaptionedAsset(
-                    new ViewModel\Image('/image.jpg'),
-                    new ViewModel\CaptionText('Some caption')
+                    new ViewModel\Image('/image.jpg')
                 )
             )));
     }

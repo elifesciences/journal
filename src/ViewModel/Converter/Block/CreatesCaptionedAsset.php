@@ -24,11 +24,19 @@ trait CreatesCaptionedAsset
             return new Paragraph($attribution);
         }));
 
-        $captionText = new ViewModel\CaptionText(
-            $asset->getTitle() ?? 'Title',
-            null,
-            $this->getPatternRenderer()->render(...$caption)
-        );
+        if ($caption->notEmpty()) {
+            $text = $this->getPatternRenderer()->render(...$caption);
+        } else {
+            $text = null;
+        }
+
+        if ($asset->getTitle()) {
+            $captionText = ViewModel\CaptionText::withHeading($asset->getTitle(), null, $text);
+        } elseif ($text) {
+            $captionText = ViewModel\CaptionText::withText($text);
+        } else {
+            $captionText = null;
+        }
 
         return new ViewModel\CaptionedAsset($viewModel, $captionText, $doi);
     }
