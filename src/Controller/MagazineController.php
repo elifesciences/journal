@@ -85,7 +85,7 @@ final class MagazineController extends Controller
             ->slice(0, 6)
             ->map($this->willConvertTo(Teaser::class, ['variant' => 'secondary']))
             ->then(Callback::emptyOr(function (Sequence $highlights) {
-                return ListingTeasers::forHighlights($highlights->toArray(), 'Highlights', 'highlights');
+                return ListingTeasers::forHighlights($highlights->toArray(), new ListHeading('Highlights'), 'highlights');
             }))
             ->otherwise($this->softFailure('Failed to load highlights for magazine'));
 
@@ -108,7 +108,7 @@ final class MagazineController extends Controller
             ->slice(0, 3)
             ->then(Callback::emptyOr(function (Sequence $result) use ($events) {
                 $items = $result->map($this->willConvertTo(Teaser::class, ['variant' => 'secondary']))->toArray();
-                $heading = 'Events';
+                $heading = new ListHeading('Events');
 
                 if (count($events) > 3) {
                     return ListingTeasers::withSeeMore(
@@ -128,7 +128,7 @@ final class MagazineController extends Controller
                 return ListingTeasers::withSeeMore(
                     $result->map($this->willConvertTo(Teaser::class, ['variant' => 'secondary']))->toArray(),
                     new SeeMoreLink(new Link('See more eLife digests on Medium', 'https://medium.com/@elife')),
-                    'eLife digests'
+                    new ListHeading('eLife digests')
                 );
             }))
             ->otherwise($this->softFailure('Failed to load Medium articles'));

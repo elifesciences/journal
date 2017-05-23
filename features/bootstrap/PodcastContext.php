@@ -295,7 +295,7 @@ final class PodcastContext extends Context
     {
         $this->spin(function () use ($number) {
             $this->assertSession()
-                ->elementsCount('css', '.grid-listing-heading:contains("Latest episodes") + .grid-listing > .grid-listing-item', $number);
+                ->elementsCount('css', '.list-heading:contains("Latest episodes") + .grid-listing > .grid-listing-item', $number);
 
             for ($i = $number; $i > 0; --$i) {
                 $nthChild = ($number - $i + 1);
@@ -303,7 +303,7 @@ final class PodcastContext extends Context
 
                 $this->assertSession()->elementContains(
                     'css',
-                    '.grid-listing-heading:contains("Latest episodes") + .grid-listing > .grid-listing-item:nth-child('.$nthChild.')',
+                    '.list-heading:contains("Latest episodes") + .grid-listing > .grid-listing-item:nth-child('.$nthChild.')',
                     'Episode '.$expectedNumber.' title'
                 );
             }

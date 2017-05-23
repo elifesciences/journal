@@ -843,12 +843,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:elifesciences/patterns-php.git",
-                "reference": "f139a7e23afe5ec3349eac7ecd81d9d013d7ea98"
+                "reference": "d133b7e144e32002f61370df37f98830e482256f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/f139a7e23afe5ec3349eac7ecd81d9d013d7ea98",
-                "reference": "f139a7e23afe5ec3349eac7ecd81d9d013d7ea98",
+                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/d133b7e144e32002f61370df37f98830e482256f",
+                "reference": "d133b7e144e32002f61370df37f98830e482256f",
                 "shasum": ""
             },
             "require": {
@@ -885,7 +885,11 @@
                 "MIT"
             ],
             "description": "eLife patterns",
-            "time": "2017-05-22 10:44:31"
+            "support": {
+                "source": "https://github.com/elifesciences/patterns-php/tree/master",
+                "issues": "https://github.com/elifesciences/patterns-php/issues"
+            },
+            "time": "2017-05-23 10:15:21"
         },
         {
             "name": "fabpot/goutte",

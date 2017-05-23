@@ -9,12 +9,14 @@ use eLife\Journal\Helper\Callback;
 use eLife\Journal\Helper\CreatesIiifUri;
 use eLife\Journal\Helper\Paginator;
 use eLife\Journal\Pagerfanta\SequenceAdapter;
+use eLife\Journal\ViewModel\EmptyListing;
 use eLife\Patterns\ViewModel\BlockLink;
 use eLife\Patterns\ViewModel\ContentHeader;
 use eLife\Patterns\ViewModel\ContentHeaderSimple;
 use eLife\Patterns\ViewModel\GridListing;
 use eLife\Patterns\ViewModel\Image;
 use eLife\Patterns\ViewModel\Link;
+use eLife\Patterns\ViewModel\ListHeading;
 use eLife\Patterns\ViewModel\ListingTeasers;
 use eLife\Patterns\ViewModel\Picture;
 use eLife\Patterns\ViewModel\Teaser;
@@ -56,9 +58,13 @@ final class SubjectsController extends Controller
                     )
                 );
             })
-            ->then(Callback::emptyOr(function (Sequence $subjects) {
+            ->then(function (Sequence $subjects) {
+                if ($subjects->isEmpty()) {
+                    return new EmptyListing(null, 'No subjects available.');
+                }
+
                 return GridListing::forBlockLinks($subjects->toArray());
-            }));
+            });
 
         return new Response($this->get('templating')->render('::subjects.html.twig', $arguments));
     }
@@ -128,7 +134,7 @@ final class SubjectsController extends Controller
             ->slice(0, 3)
             ->map($this->willConvertTo(Teaser::class, ['variant' => 'secondary']))
             ->then(Callback::emptyOr(function (Sequence $result) {
-                return ListingTeasers::basic($result->toArray(), 'Highlights');
+                return ListingTeasers::basic($result->toArray(), new ListHeading('Highlights'));
             }))
             ->otherwise($this->softFailure('Failed to load highlights for '.$arguments['id']));
 

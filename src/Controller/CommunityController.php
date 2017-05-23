@@ -8,6 +8,7 @@ use eLife\Journal\Helper\Callback;
 use eLife\Journal\Helper\HasPages;
 use eLife\Journal\Helper\Paginator;
 use eLife\Patterns\ViewModel\ContentHeader;
+use eLife\Patterns\ViewModel\ListHeading;
 use eLife\Patterns\ViewModel\ListingTeasers;
 use eLife\Patterns\ViewModel\Teaser;
 use Symfony\Component\HttpFoundation\Request;
@@ -61,7 +62,7 @@ follow us on <a href="https://www.twitter.com/elifecommunity">Twitter</a>, and e
         $arguments['highlights'] = (new PromiseSequence($this->get('elife.api_sdk.highlights')
             ->get('community')))
             ->then(Callback::emptyOr(function (Sequence $result) {
-                return ListingTeasers::basic($result->map($this->willConvertTo(Teaser::class, ['variant' => 'secondary']))->toArray(), 'Highlights');
+                return ListingTeasers::basic($result->map($this->willConvertTo(Teaser::class, ['variant' => 'secondary']))->toArray(), new ListHeading('Highlights'));
             }))
             ->otherwise($this->softFailure('Failed to load community highlights'));
 

@@ -13,6 +13,7 @@ use eLife\Patterns\ViewModel;
 use eLife\Patterns\ViewModel\ContentHeaderSimple;
 use eLife\Patterns\ViewModel\InfoBar;
 use GuzzleHttp\Promise\PromiseInterface;
+use GuzzleHttp\Promise\RejectedPromise;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Form\FormInterface;
@@ -107,6 +108,7 @@ abstract class Controller implements ContainerAwareInterface
     final protected function softFailure(string $message = null, $default = null) : callable
     {
         return function ($reason) use ($message, $default) {
+            //return new RejectedPromise($reason);
             $e = exception_for($reason);
 
             if (false === $e instanceof HttpException) {

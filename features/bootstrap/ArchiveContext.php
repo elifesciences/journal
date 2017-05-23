@@ -581,12 +581,12 @@ final class ArchiveContext extends Context
      */
     public function iShouldSeeArchivesFor(TableNode $table)
     {
-        $this->assertSession()->elementsCount('css', '.grid-listing-heading:contains("Monthly archive") + .grid-listing > .grid-listing-item', count($table->getColumn(0)));
+        $this->assertSession()->elementsCount('css', '.list-heading:contains("Monthly archive") + .grid-listing > .grid-listing-item', count($table->getColumn(0)));
 
         foreach ($table->getColumn(0) as $i => $month) {
             $this->assertSession()->elementContains(
                 'css',
-                '.grid-listing-heading:contains("Monthly archive") + .grid-listing > .grid-listing-item:nth-child('.($i + 1).')',
+                '.list-heading:contains("Monthly archive") + .grid-listing > .grid-listing-item:nth-child('.($i + 1).')',
                 $month
             );
         }
@@ -599,7 +599,7 @@ final class ArchiveContext extends Context
     {
         $this->assertSession()->elementAttributeContains(
             'css',
-            '.grid-listing-heading:contains("Monthly archive") + .grid-listing > .grid-listing-item:contains("'.$month.' '.$year.'") .block-link__image',
+            '.list-heading:contains("Monthly archive") + .grid-listing > .grid-listing-item:contains("'.$month.' '.$year.'") .block-link__image',
             'src',
             'https://www.example.com/iiif/image'.$this->createId($article).'/0,198,1800,1205/263,176/0/default.jpg'
         );
@@ -626,7 +626,7 @@ final class ArchiveContext extends Context
         foreach ($table->getColumn(0) as $i => $cover) {
             $this->assertSession()->elementContains(
                 'css',
-                '.grid-listing-heading:contains("Monthly archive") + .grid-listing > .grid-listing-item:contains("'.$month.' '.$year.'") .archive-nav-link__sub_links_list_item:nth-child('.($i + 2).')',
+                '.list-heading:contains("Monthly archive") + .grid-listing > .grid-listing-item:contains("'.$month.' '.$year.'") .archive-nav-link__sub_links_list_item:nth-child('.($i + 2).')',
                 $cover
             );
         }
