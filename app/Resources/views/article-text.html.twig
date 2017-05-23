@@ -16,27 +16,31 @@
 
         {% block main %}
 
-            {% if hasFigures %}
+            <div data-behaviour="DelegateBehaviour" data-delegate-behaviour="Popup" data-selector="a">
 
-                {% fragment_link_rewrite figuresPath %}
+                {% if hasFigures %}
 
-                {% for part in body %}
+                    {% fragment_link_rewrite figuresPath %}
 
-                    {{ render_pattern(part) }}
+                    {% for part in body %}
 
-                {% endfor %}
+                        {{ render_pattern(part) }}
 
-                {% end_fragment_link_rewrite %}
+                    {% endfor %}
 
-            {% else %}
+                    {% end_fragment_link_rewrite %}
 
-                {% for part in body %}
+                {% else %}
 
-                    {{ render_pattern(part) }}
+                    {% for part in body %}
 
-                {% endfor %}
+                        {{ render_pattern(part) }}
 
-            {% endif %}
+                    {% endfor %}
+
+                {% endif %}
+
+            </div>
 
         {% endblock %}
 
