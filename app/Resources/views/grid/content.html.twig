@@ -39,7 +39,12 @@
             <div class="grid__item one-whole
 
                 large--four-twelfths x-large--three-twelfths
-                {% if not navigation|length %}push--x-large--two-twelfths{% endif %} grid-secondary-column">
+                {% if not navigation|length %}push--x-large--two-twelfths{% endif %}
+                grid-secondary-column
+                {# article-secondary-column used in teaser pattern to apply one-off styles. This coupling is
+                   uncomfortable. May be possible to replace it by having the view model tell the teaser pattern it's in
+                   an article secondary column, and apply a corresponding css variant class directly to .teaser #}
+                article-secondary-column">
 
                 {{ secondary|raw }}
 
