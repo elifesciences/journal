@@ -36,7 +36,7 @@ trait CreatesCaptionedAsset
             $captionText = ViewModel\CaptionText::withText($text);
         } else {
             $captionText = null;
-        };
+        }
 
         return new ViewModel\CaptionedAsset($viewModel, $captionText, $doi);
     }
