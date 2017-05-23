@@ -5,6 +5,7 @@ namespace eLife\Journal\ViewModel\Converter;
 use eLife\Journal\Helper\Paginator;
 use eLife\Journal\ViewModel\EmptyListing;
 use eLife\Patterns\ViewModel;
+use eLife\Patterns\ViewModel\ListHeading;
 
 final class PaginatorListingReadMoreConverter implements ViewModelConverter
 {
@@ -15,7 +16,7 @@ final class PaginatorListingReadMoreConverter implements ViewModelConverter
     {
         $type = $context['type'] ?? null;
 
-        $heading = $context['heading'] ?? 'Further reading';
+        $heading = new ListHeading($context['heading'] ?? 'Further reading');
         $loadMoreText = $type ? 'More '.$type : 'Load more';
         $prevText = trim('Newer '.$type);
         $nextText = trim('Older '.$type);
