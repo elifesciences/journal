@@ -379,7 +379,11 @@
 
     {% endif %}
 
-    {% block article_body %}{% endblock %}
+    <div data-behaviour="DelegateBehaviour" data-delegate-behaviour="Popup" data-selector="a">
+
+        {% block article_body %}{% endblock %}
+
+    </div>
 
 {% endblock %}
 
