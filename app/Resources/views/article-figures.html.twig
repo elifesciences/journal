@@ -20,19 +20,15 @@
 
         {% block main %}
 
-            <div data-behaviour="DelegateBehaviour" data-delegate-behaviour="Popup" data-selector="a">
+            {% fragment_link_rewrite textPath %}
 
-                {% fragment_link_rewrite textPath %}
+            {% for part in body %}
 
-                {% for part in body %}
+                {{ render_pattern(part) }}
 
-                    {{ render_pattern(part) }}
+            {% endfor %}
 
-                {% endfor %}
-
-                {% end_fragment_link_rewrite %}
-
-            </div>
+            {% end_fragment_link_rewrite %}
 
         {% endblock %}
 
