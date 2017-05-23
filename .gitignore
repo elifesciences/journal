@@ -2,6 +2,7 @@
 /behat.yml
 /build/*
 !/build/.gitkeep
+/composer-switch-patterns-php.*
 /node_modules/
 /phpunit.xml
 /var/*
