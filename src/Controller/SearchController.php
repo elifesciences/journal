@@ -37,7 +37,7 @@ final class SearchController extends Controller
         'feature',
         'insight',
         'interview',
-        'labs-experiment',
+        'labs-post',
         'podcast-episode',
     ];
 

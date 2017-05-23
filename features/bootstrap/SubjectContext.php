@@ -271,7 +271,7 @@ final class SubjectContext extends Context
                         'blog-article' => 0,
                         'collection' => $this->numberOfArticles,
                         'interview' => 0,
-                        'labs-experiment' => 0,
+                        'labs-post' => 0,
                         'podcast-episode' => 0,
                     ],
                 ])
@@ -322,7 +322,7 @@ final class SubjectContext extends Context
                             'blog-article' => 0,
                             'collection' => $this->numberOfArticles,
                             'interview' => 0,
-                            'labs-experiment' => 0,
+                            'labs-post' => 0,
                             'podcast-episode' => 0,
                         ],
                     ])
@@ -455,7 +455,7 @@ final class SubjectContext extends Context
                             'blog-article' => 0,
                             'collection' => 0,
                             'interview' => 0,
-                            'labs-experiment' => 0,
+                            'labs-post' => 0,
                             'podcast-episode' => 0,
                         ],
                     ])

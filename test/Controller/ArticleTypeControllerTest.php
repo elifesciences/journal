@@ -125,7 +125,7 @@ final class ArticleTypeControllerTest extends PageTestCase
                         'blog-article' => 0,
                         'collection' => 0,
                         'interview' => 0,
-                        'labs-experiment' => 0,
+                        'labs-post' => 0,
                         'podcast-episode' => 0,
                     ],
                 ])

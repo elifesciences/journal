@@ -2,11 +2,11 @@
 
 namespace eLife\Journal\ViewModel\Converter;
 
-use eLife\ApiSdk\Model\LabsExperiment;
+use eLife\ApiSdk\Model\LabsPost;
 use eLife\Patterns\ViewModel;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-final class LabsExperimentSecondaryTeaserConverter implements ViewModelConverter
+final class LabsPostGridTeaserConverter implements ViewModelConverter
 {
     use CreatesDate;
     use CreatesTeaserImage;
@@ -19,19 +19,19 @@ final class LabsExperimentSecondaryTeaserConverter implements ViewModelConverter
     }
 
     /**
-     * @param LabsExperiment $object
+     * @param LabsPost $object
      */
     public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
-        return ViewModel\Teaser::secondary(
+        return ViewModel\Teaser::withGrid(
             $object->getTitle(),
-            $this->urlGenerator->generate('labs-experiment', ['number' => $object->getNumber()]),
+            $this->urlGenerator->generate('labs-post', ['id' => $object->getId()]),
+            $object->getImpactStatement(),
             null,
-            null,
-            $this->smallTeaserImage($object),
+            $this->prominentTeaserImage($object),
             ViewModel\TeaserFooter::forNonArticle(
                 ViewModel\Meta::withText(
-                    'Experiment: '.str_pad($object->getNumber(), 3, '0', STR_PAD_LEFT),
+                    'Post: '.str_pad($object->getId(), 3, '0', STR_PAD_LEFT),
                     $this->simpleDate($object, $context)
                 )
             )
@@ -40,6 +40,6 @@ final class LabsExperimentSecondaryTeaserConverter implements ViewModelConverter
 
     public function supports($object, string $viewModel = null, array $context = []) : bool
     {
-        return $object instanceof LabsExperiment && ViewModel\Teaser::class === $viewModel && 'secondary' === ($context['variant'] ?? null);
+        return $object instanceof LabsPost && ViewModel\Teaser::class === $viewModel && 'grid' === ($context['variant'] ?? null);
     }
 }

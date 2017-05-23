@@ -2,15 +2,15 @@
 
 namespace eLife\Journal\ViewModel\Converter;
 
-use eLife\ApiSdk\Model\LabsExperiment;
+use eLife\ApiSdk\Model\LabsPost;
 use eLife\Patterns\ViewModel;
 
-final class LabsExperimentContentHeaderConverter implements ViewModelConverter
+final class LabsPostContentHeaderConverter implements ViewModelConverter
 {
     use CreatesDate;
 
     /**
-     * @param LabsExperiment $object
+     * @param LabsPost $object
      */
     public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
@@ -18,7 +18,7 @@ final class LabsExperimentContentHeaderConverter implements ViewModelConverter
             $object->getTitle(),
             null, $object->getImpactStatement(), false, [], null, null, [], [], null, null, null,
             ViewModel\Meta::withText(
-                'Experiment: '.str_pad($object->getNumber(), 3, '0', STR_PAD_LEFT),
+                'Post: '.str_pad($object->getId(), 3, '0', STR_PAD_LEFT),
                 $this->simpleDate($object, $context)
             )
         );
@@ -26,6 +26,6 @@ final class LabsExperimentContentHeaderConverter implements ViewModelConverter
 
     public function supports($object, string $viewModel = null, array $context = []) : bool
     {
-        return $object instanceof LabsExperiment && ViewModel\ContentHeader::class === $viewModel;
+        return $object instanceof LabsPost && ViewModel\ContentHeader::class === $viewModel;
     }
 }
