@@ -1,20 +1,22 @@
 {% extends '::page.html.twig' %}
 
-{% block info_bar %}
-
-    {{ info_bar('This page is incomplete.') }}
-
-{% endblock %}
-
 {% block body %}
 
     {{ render_pattern(contentHeader) }}
 
-    {% embed 'grid/listing-one-column.html.twig' %}
+    {% embed 'grid/listing-two-column.html.twig' %}
 
-        {% block listing %}
+        {% block main %}
 
             {{ render_pattern(listing) }}
+
+        {% endblock %}
+
+        {% block secondary %}
+
+            {% for item in sidebar %}
+                {{ render_pattern(item) }}
+            {% endfor %}
 
         {% endblock %}
 
