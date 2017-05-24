@@ -91,21 +91,10 @@ This is true for journal articles and related content. See our <a href="'.$this-
         return new Response($this->get('templating')->render('::resources.html.twig', $arguments));
     }
 
-    private function toStyleGuideImage($name, $filename) : Picture
+    private function toStyleGuideImage(string $name, string $filename) : Picture
     {
-        $styleGuideDirectoryUri = 'https://cdn.elifesciences.org/style-guide-images/';
-        $sourceUri = $styleGuideDirectoryUri.$filename;
-        $sources = [];
-        $sources[] = ['srcset' => sprintf('%s 200w', $sourceUri), 'type' => 'image/png'];
+        $sourceUri = "https://cdn.elifesciences.org/style-guide-images/$filename";
 
-        return new Picture(
-                $sources,
-                new Image(
-                    $sourceUri,
-                    [],
-                    $name,
-                    []
-                )
-            );
+        return new Picture([], new Image($sourceUri, [], $name));
     }
 }
