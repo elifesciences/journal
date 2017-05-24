@@ -20,7 +20,7 @@ trait CreatesCaptionedAsset
             return $this->getViewModelConverter()->convert($block);
         });
 
-        $caption->append(...$asset->getAttribution()->map(function (string $attribution) {
+        $caption = $caption->append(...$asset->getAttribution()->map(function (string $attribution) {
             return new Paragraph($attribution);
         }));
 

@@ -460,12 +460,11 @@ sources: '.implode(', ', array_map(function (CitationsMetricSource $source) {
 
         $arguments['viewSelector'] = $this->createViewSelector($arguments['article'], $arguments['hasFigures'], false, $arguments['history'], $arguments['body']);
 
-        $arguments['body'] = all(['article' => $arguments['article'], 'body' => $arguments['body']])
+        $arguments['body'] = all(['article' => $arguments['article'], 'body' => $arguments['body'], 'downloadLinks' => $arguments['downloadLinks']])
             ->then(function (array $parts) {
                 $article = $parts['article'];
                 $body = $parts['body'];
-
-                $downloadLinks = $this->convertTo($article, ViewModel\ArticleDownloadLinksList::class);
+                $downloadLinks = $parts['downloadLinks'];
 
                 $body[] = ArticleSection::basic('Download links', 2, $this->render($downloadLinks));
 
@@ -588,6 +587,16 @@ sources: '.implode(', ', array_map(function (CitationsMetricSource $source) {
             ->then(Callback::mustNotBeEmpty(new NotFoundHttpException('Article version does not contain any figures')));
 
         $arguments['viewSelector'] = $this->createViewSelector($arguments['article'], promise_for(true), true, $arguments['history'], $arguments['body']);
+
+        $arguments['body'] = all(['body' => $arguments['body'], 'downloadLinks' => $arguments['downloadLinks']])
+            ->then(function (array $parts) {
+                $body = $parts['body'];
+                $downloadLinks = $parts['downloadLinks'];
+
+                $body[] = ArticleSection::basic('Download links', 2, $this->render($downloadLinks));
+
+                return $body;
+            });
 
         return new Response($this->get('templating')->render('::article-figures.html.twig', $arguments));
     }
@@ -734,6 +743,9 @@ sources: '.implode(', ', array_map(function (CitationsMetricSource $source) {
 
                 return ContextualData::withCitation($article->getCiteAs(), new Doi($article->getDoi()), $metrics);
             });
+
+        $arguments['downloadLinks'] = $arguments['article']
+            ->then($this->willConvertTo(ViewModel\ArticleDownloadLinksList::class));
 
         return $arguments;
     }
