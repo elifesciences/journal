@@ -1,13 +1,21 @@
 {% extends '::page.html.twig' %}
 
-{% block info_bar %}
-
-    {{ info_bar('This page is incomplete.') }}
-
-{% endblock %}
-
 {% block body %}
 
     {{ render_pattern(contentHeader) }}
+
+    {% embed 'grid/content.html.twig' %}
+
+        {% block main %}
+
+            {% for part in body %}
+
+                {{ render_pattern(part) }}
+
+            {% endfor %}
+
+        {% endblock %}
+
+    {% endembed %}
 
 {% endblock %}
