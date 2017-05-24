@@ -8,8 +8,6 @@ use eLife\Patterns\ViewModel\Code;
 use eLife\Patterns\ViewModel\ContentHeader;
 use eLife\Patterns\ViewModel\IFrame;
 use eLife\Patterns\ViewModel\Image;
-use eLife\Patterns\ViewModel\LeadPara;
-use eLife\Patterns\ViewModel\LeadParas;
 use eLife\Patterns\ViewModel\Picture;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,11 +20,7 @@ final class ResourcesController extends Controller
 
         $arguments['title'] = 'Resources';
 
-        $arguments['contentHeader'] = new ContentHeader($arguments['title']);
-
-        $arguments['leadParas'] = new LeadParas([
-            new LeadPara('A collection of posters, handouts, slide presentations, videos, and more, about all of the work behind the eLife initiative.'),
-        ]);
+        $arguments['contentHeader'] = new ContentHeader($arguments['title'], null, 'A collection of posters, handouts, slide presentations, videos, and more, about all of the work behind the eLife initiative.');
 
         $arguments['body'] = [
             new Paragraph('Everything we produce is made available under a <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution</a> (CC-BY) license,
