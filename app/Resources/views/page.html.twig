@@ -139,7 +139,9 @@
             {% endfor %}
         {% endif %}
 
-        {% block info_bar %}{% endblock %}
+        {% for infoBar in infoBars %}
+            {{ render_pattern(infoBar) }}
+        {% endfor %}
 
         <main role="main" class="main">
 
