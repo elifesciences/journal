@@ -26,8 +26,9 @@ final class ArticleFiguresControllerTest extends PageTestCase
         $this->assertContains('doi: 10.7554/eLife.00001', $crawler->filter('.contextual-data__cite_wrapper')->text());
 
         $figureTypes = $crawler->filter('.grid-column > section');
-        $this->assertCount(5, $figureTypes);
+        $this->assertCount(6, $figureTypes);
 
+        $this->assertSame('Figures', $figureTypes->eq(0)->filter('.article-section__header_text')->text());
         $figures = $figureTypes->eq(0)->filter('.asset-viewer-inline');
         $this->assertSame('Image 1 label', trim($figures->eq(0)->filter('.asset-viewer-inline__header_text')->text()));
         $this->assertSame('Image 2 label with 1 supplement', trim($figures->eq(1)->filter('.asset-viewer-inline__header_text')->text()));
@@ -35,20 +36,26 @@ final class ArticleFiguresControllerTest extends PageTestCase
         $this->assertSame('Image 2 supplement 1 label', trim($figures->eq(2)->filter('.asset-viewer-inline__header_text')->text()));
         $this->assertSame('Image 2 supplement 1 source data 1 label', trim($figures->eq(2)->filter('.additional-assets__list .caption-text__heading')->text()));
 
+        $this->assertSame('Videos', $figureTypes->eq(1)->filter('.article-section__header_text')->text());
         $videos = $figureTypes->eq(1)->filter('.asset-viewer-inline');
         $this->assertSame('Video 1 label', trim($videos->eq(0)->filter('.asset-viewer-inline__header_text')->text()));
 
+        $this->assertSame('Tables', $figureTypes->eq(2)->filter('.article-section__header_text')->text());
         $tables = $figureTypes->eq(2)->filter('.asset-viewer-inline');
         $this->assertSame('Table 1 label', trim($tables->eq(0)->filter('.asset-viewer-inline__header_text')->text()));
 
+        $this->assertSame('Data sets', $figureTypes->eq(3)->filter('.article-section__header_text')->text());
         $dataSets = $figureTypes->eq(3)->filter('.article-section__body')->children();
         $this->assertSame('The following data sets were generated', trim($dataSets->eq(0)->text()));
         $this->assertSame('Data set 1', trim($dataSets->eq(1)->filter('.reference__title')->text()));
         $this->assertSame('The following previously published data sets were used', trim($dataSets->eq(2)->text()));
         $this->assertSame('Data set 2', trim($dataSets->eq(3)->filter('.reference__title')->text()));
 
+        $this->assertSame('Additional files', $figureTypes->eq(4)->filter('.article-section__header_text')->text());
         $additionalFiles = $figureTypes->eq(4)->filter('.caption-text__heading');
         $this->assertSame('Additional file 1 label', trim($additionalFiles->eq(0)->text()));
+
+        $this->assertSame('Download links', $figureTypes->eq(5)->filter('.article-section__header_text')->text());
 
         $this->assertSame(
             [
@@ -100,10 +107,13 @@ final class ArticleFiguresControllerTest extends PageTestCase
         $this->assertContains('doi: 10.7554/eLife.00001', $crawler->filter('.contextual-data__cite_wrapper')->text());
 
         $figureTypes = $crawler->filter('.grid-column > section');
-        $this->assertCount(1, $figureTypes);
+        $this->assertCount(2, $figureTypes);
 
+        $this->assertSame('Additional files', $figureTypes->eq(0)->filter('.article-section__header_text')->text());
         $additionalFiles = $figureTypes->eq(0)->filter('.caption-text__heading');
         $this->assertSame('Additional file 1 label', trim($additionalFiles->eq(0)->text()));
+
+        $this->assertSame('Download links', $figureTypes->eq(1)->filter('.article-section__header_text')->text());
 
         $this->assertEmpty($crawler->filter('.view-selector__jump_link_item'));
     }
