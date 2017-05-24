@@ -552,6 +552,15 @@ services:
         tags:
           - name: view_model.converter
 
+    elife.journal.view_model.converter.collection.teaser.related_item:
+        class: eLife\Journal\ViewModel\Converter\CollectionRelatedItemTeaserConverter
+        public: false
+        arguments:
+          - '@router'
+          - '@slugify'
+        tags:
+          - name: view_model.converter
+
     elife.journal.view_model.converter.collection.teaser.secondary:
         class: eLife\Journal\ViewModel\Converter\CollectionSecondaryTeaserConverter
         public: false
@@ -884,6 +893,14 @@ services:
         public: false
         arguments:
           - '@elife.patterns.pattern_renderer'
+          - '@router'
+        tags:
+          - name: view_model.converter
+
+    elife.journal.view_model.converter.podcast_episode_chapter.teaser.related_item:
+        class: eLife\Journal\ViewModel\Converter\PodcastEpisodeChapterRelatedItemTeaserConverter
+        public: false
+        arguments:
           - '@router'
         tags:
           - name: view_model.converter

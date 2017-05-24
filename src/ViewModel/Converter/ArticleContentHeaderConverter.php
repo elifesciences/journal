@@ -82,7 +82,7 @@ final class ArticleContentHeaderConverter implements ViewModelConverter
             $object->getAuthorLine(),
             $authors,
             $institutions,
-            $this->urlGenerator->generate('article', ['id' => $object->getId(), '_fragment' => 'downloads']),
+            '#downloads',
             null,
             null,
             $meta
