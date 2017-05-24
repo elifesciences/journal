@@ -5,21 +5,22 @@ namespace eLife\Journal\ViewModel\Converter;
 use eLife\ApiSdk\Model\ArticleVersion;
 use eLife\ApiSdk\Model\Cover;
 use eLife\ApiSdk\Model\Subject;
-use eLife\Journal\Helper\CreatesIiifUri;
 use eLife\Journal\Helper\ModelName;
+use eLife\Journal\ViewModel\Factory\ContentHeaderImageFactory;
 use eLife\Patterns\ViewModel;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 final class CoverArticleCarouselItemConverter implements ViewModelConverter
 {
     use CreatesDate;
-    use CreatesIiifUri;
 
     private $urlGenerator;
+    private $contentHeaderImageFactory;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator)
+    public function __construct(UrlGeneratorInterface $urlGenerator, ContentHeaderImageFactory $contentHeaderImageFactory)
     {
         $this->urlGenerator = $urlGenerator;
+        $this->contentHeaderImageFactory = $contentHeaderImageFactory;
     }
 
     /**
@@ -46,10 +47,7 @@ final class CoverArticleCarouselItemConverter implements ViewModelConverter
                 ),
                 $this->simpleDate($article, $context)
             ),
-            new ViewModel\BackgroundImage(
-                $this->iiifUri($object->getBanner(), 900, 450),
-                $this->iiifUri($object->getBanner(), 1800, 900)
-            )
+            $this->contentHeaderImageFactory->forImage($object->getBanner())
         );
     }
 

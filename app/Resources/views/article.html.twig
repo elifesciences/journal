@@ -379,82 +379,11 @@
 
     {% endif %}
 
-    <div class="wrapper">
+    <div data-behaviour="DelegateBehaviour" data-delegate-behaviour="Popup" data-selector="a">
 
-        <div class="grid">
-
-            {% if viewSelector %}
-
-                <div class="grid__item large--two-twelfths blg-pad-top-medium">
-
-                    {{ render_pattern(viewSelector) }}
-
-                </div>
-
-            {% endif %}
-
-            {% block article_body %}
-
-                <div class="grid__item large--six-twelfths {% if not viewSelector %}push--large--two-twelfths{% endif %} blg-pad-top-medium"
-                     data-behaviour="FragmentHandler">
-
-                    {% if hasFigures %}
-
-                        {% fragment_link_rewrite figuresPath %}
-
-                        {% for part in body %}
-
-                            {{ render_pattern(part) }}
-
-                        {% endfor %}
-
-                        {% end_fragment_link_rewrite %}
-
-                    {% else %}
-
-                        {% for part in body %}
-
-                            {{ render_pattern(part) }}
-
-                        {% endfor %}
-
-                    {% endif %}
-
-                </div>
-
-                {% if relatedItem is defined and relatedItem %}
-
-                    <div class="grid__item large--four-twelfths {% if not viewSelector %}push--large--two-twelfths{% endif %} blg-pad-top-medium">
-
-                        {{ render_pattern(relatedItem) }}
-
-                    </div>
-
-                {% endif %}
-
-            {% endblock %}
-
-        </div>
+        {% block article_body %}{% endblock %}
 
     </div>
-
-    {% if listing is defined and listing %}
-
-        <div class="wrapper u-pad-top-lg">
-
-            <div class="grid">
-
-                <div class="grid__item large--eight-twelfths push--large--two-twelfths">
-
-                    {{ render_pattern(listing) }}
-
-                </div>
-
-            </div>
-
-        </div>
-
-    {% endif %}
 
 {% endblock %}
 
@@ -472,12 +401,6 @@
         var disqus_count = document.getElementById('disqus-comment-count');
         disqus_count.classList.add('disqus-comment-count');
         disqus_count.setAttribute('data-disqus-identifier', 'article:{{ article.id }}');
-        (function () {
-            var d = document, s = d.createElement('script');
-            s.src = 'https://{{ disqus_domain }}.disqus.com/embed.js';
-            s.setAttribute('data-timestamp', +new Date());
-            (d.head || d.body).appendChild(s);
-        })();
     </script>
 
 {% endblock %}

@@ -6,9 +6,11 @@ const gulp = require('gulp');
 const imageMin = require('gulp-imagemin');
 const imageMinMozjpeg = require('imagemin-mozjpeg');
 const imageMinOptipng = require('imagemin-optipng');
+const imageMinSvgo = require('imagemin-svgo');
 const merge = require('merge-stream');
 const responsive = require('gulp-responsive');
 const rev = require('gulp-rev-all');
+const svg2png = require('gulp-svg2png');
 
 gulp.task('default', ['assets']);
 
@@ -18,6 +20,7 @@ gulp.task('favicons:clean', () => {
 
 gulp.task('favicons:build', ['favicons:clean'], () => {
     return gulp.src('./app/Resources/images/favicon.svg')
+        .pipe(svg2png({width: 512, height: 512}))
         .pipe(favicons({
             appName: 'eLife',
             appDescription: 'eLife is an open-access journal that publishes research in the life and biomedical sciences',
@@ -36,8 +39,12 @@ gulp.task('favicons:build', ['favicons:clean'], () => {
                 yandex: false,
             },
         }))
-        .pipe(gulp.dest('./build/assets/favicons'))
-        .pipe(imageMin());
+        .pipe(imageMin([
+            imageMinOptipng({
+                optimizationLevel: 4,
+            }),
+        ]))
+        .pipe(gulp.dest('./build/assets/favicons'));
 });
 
 gulp.task('favicons', ['favicons:build'], () => {
@@ -49,69 +56,65 @@ gulp.task('images:clean', () => {
     return del(['./build/assets/images/**/*']);
 });
 
-gulp.task('images', ['images:clean'], () => {
-    return merge(
-        gulp.src('./app/Resources/images/*/*.{jpg,png,svg}')
-            .pipe(responsive({
-                'banners/**/*': [
-                    {
-                        width: 1900,
-                        height: 800,
-                        rename: {
-                            suffix: '-hi-res',
-                        }
-                    }, {
-                        width: 950,
-                        height: 400,
-                        rename: {
-                            suffix: '-lo-res',
-                        }
-                    }
-                ],
-                'logos/**/*': [
-                    {
-                        width: 500,
-                        rename: {
-                            suffix: '-hi-res',
-                            extname: '.webp',
-                        },
-                        withoutEnlargement: false
+gulp.task('images:banners', ['images:clean'], () => {
+    const sizes = {2228: 672, 1114: 336, 2046: 576, 1023: 288, 1534: 528, 767: 264, 900: 528, 450: 264};
+
+    return gulp.src('./app/Resources/images/banners/*.jpg')
+        .pipe(responsive({
+            '*': Object.keys(sizes).reduce((acc, width) => {
+                let height = sizes[width];
+
+                acc.push({
+                    width: width,
+                    height: height,
+                    rename: {
+                        suffix: `-${width}x${height}`,
                     },
-                    {
-                        width: 250,
-                        rename: {
-                            suffix: '-lo-res',
-                            extname: '.webp',
-                        },
-                        withoutEnlargement: false
+                    withoutEnlargement: false,
+                });
+
+                return acc;
+            }, []),
+        }))
+        .pipe(gulp.dest('./build/assets/images/banners'));
+});
+
+gulp.task('images:logos', ['images:clean'], () => {
+    return gulp.src('./app/Resources/images/logos/*.{png,svg}')
+        .pipe(responsive({
+            '*': [250, 500].reduce((acc, width) => {
+                acc.push({
+                    width: width,
+                    rename: {
+                        suffix: `-${width}`,
+                        extname: '.png',
                     },
-                    {
-                        width: 500,
-                        rename: {
-                            suffix: '-hi-res',
-                            extname: '.png',
-                        },
-                        withoutEnlargement: false
-                    },
-                    {
-                        width: 250,
-                        rename: {
-                            suffix: '-lo-res',
-                            extname: '.png',
-                        },
-                        withoutEnlargement: false
-                    }
-                ]
-            }))
-            .pipe(imageMin([
-                imageMinMozjpeg({
-                    quality: 75,
-                    progressive: true,
-                }),
-                imageMinOptipng({})
-            ])),
-        gulp.src('./app/Resources/images/*/*.svg')
-    )
+                    withoutEnlargement: false,
+                });
+
+                return acc;
+            }, []),
+        }))
+        .pipe(gulp.dest('./build/assets/images/logos'));
+});
+
+gulp.task('images:svgs', ['images:clean'], () => {
+    return gulp.src('./app/Resources/images/*/*.svg')
+        .pipe(gulp.dest('./build/assets/images'));
+});
+
+gulp.task('images', ['images:banners', 'images:logos', 'images:svgs'], () => {
+    return gulp.src('./build/assets/images/**/*')
+        .pipe(imageMin([
+            imageMinMozjpeg({
+                quality: 75,
+                progressive: true,
+            }),
+            imageMinOptipng({
+                optimizationLevel: 4,
+            }),
+            imageMinSvgo({}),
+        ]))
         .pipe(gulp.dest('./build/assets/images'));
 });
 
@@ -131,8 +134,8 @@ gulp.task('assets:clean', () => {
 gulp.task('assets', ['assets:clean', 'favicons', 'images', 'patterns'], () => {
     return gulp.src('./build/assets/**/*.*', {base: "./build", follow: true})
         .pipe(rev.revision({
-            includeFilesInManifest: ['.css', '.jpg', '.js', '.json', '.ico', '.png', '.svg', '.webp', '.woff', '.woff2'],
-            replaceInExtensions: ['.css', '.js', '.json']
+            includeFilesInManifest: ['.css', '.jpg', '.js', '.json', '.ico', '.png', '.svg', '.woff', '.woff2'],
+            replaceInExtensions: ['.css', '.js', '.json'],
         }))
         .pipe(gulp.dest('./web'))
         .pipe(rev.manifestFile())

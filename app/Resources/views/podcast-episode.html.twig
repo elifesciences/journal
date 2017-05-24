@@ -13,60 +13,37 @@
 
 {% endblock %}
 
-{% block description %}
-    {{ episode.impactStatement|raw }}
-{% endblock %}
-
 {% block body %}
 
     {{ render_pattern(contentHeader) }}
 
     {{ render_pattern(audioPlayer) }}
 
-    {% if leadParas %}
+    {% embed 'grid/listing-two-column.html.twig' %}
 
-        <div class="wrapper">
-            {{ render_pattern(leadParas) }}
-        </div>
+        {% block main %}
 
-    {% endif %}
+            <h3 class="list-heading">Chapters</h3>
+            <ol class="listing-list">
+                {% for chapter in chapters %}
+                    <li class="listing-list__item">
+                        {{ render_pattern(chapter) }}
+                    </li>
+                {% endfor %}
+            </ol>
 
-    <div class="wrapper u-pad-top-lg">
+        {% endblock %}
 
-        <div class="grid">
+        {% block secondary %}
 
-            <div class="listing-column-container">
+            {% if related %}
 
-                <div class="grid__item large--eight-twelfths listing-column-main">
+                {{ render_pattern(related) }}
 
-                    <h3 class="list-heading">Chapters</h3>
+            {% endif %}
 
-                    <ol class="listing-list">
-                        {% for chapter in chapters %}
-                            <li class="listing-list__item">
-                                {{ render_pattern(chapter) }}
-                            </li>
-                        {% endfor %}
-                    </ol>
+        {% endblock %}
 
-                </div>
-
-                <div class="grid__item large--four-twelfths listing-column-secondary">
-
-                    {% if related %}
-                        {{ render_pattern(related) }}
-                    {% endif %}
-
-                    <p class="blg-pad-top-medium">The eLife Podcast is produced for eLife by The Naked Scientists.</p>
-
-                    <p>Contact us at <a href="mailto:podcast@elifesciences.org">podcast@elifesciences.org</a>.</p>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </div>
+    {% endembed %}
 
 {% endblock %}

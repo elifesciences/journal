@@ -8,9 +8,9 @@ use eLife\Journal\Helper\ModelName;
 use eLife\Journal\Helper\Paginator;
 use eLife\Journal\Pagerfanta\SequenceAdapter;
 use eLife\Patterns\ViewModel\AudioPlayer;
-use eLife\Patterns\ViewModel\BackgroundImage;
-use eLife\Patterns\ViewModel\ContentHeaderNonArticle;
+use eLife\Patterns\ViewModel\ContentHeader;
 use eLife\Patterns\ViewModel\Link;
+use eLife\Patterns\ViewModel\ListHeading;
 use eLife\Patterns\ViewModel\ListingTeasers;
 use eLife\Patterns\ViewModel\SectionListing;
 use eLife\Patterns\ViewModel\SectionListingLink;
@@ -68,12 +68,11 @@ final class MagazineController extends Controller
 
     private function createFirstPage(Request $request, array $arguments) : Response
     {
-        $arguments['contentHeader'] = ContentHeaderNonArticle::basic('Magazine', true,
-            'Highlighting the latest research and giving a voice to life and biomedical scientists.',
-            null, null, new BackgroundImage(
-                $this->get('assets.packages')->getUrl('assets/images/banners/magazine-lo-res.jpg'),
-                $this->get('assets.packages')->getUrl('assets/images/banners/magazine-hi-res.jpg')
-            ));
+        $arguments['contentHeader'] = new ContentHeader(
+            'Magazine',
+            $this->get('elife.journal.view_model.factory.content_header_image')->forLocalFile('magazine'),
+            'Highlighting the latest research and giving a voice to scientists'
+        );
 
         $arguments['audio_player'] = $this->get('elife.api_sdk.podcast_episodes')
             ->slice(0, 1)
@@ -86,7 +85,7 @@ final class MagazineController extends Controller
             ->slice(0, 6)
             ->map($this->willConvertTo(Teaser::class, ['variant' => 'secondary']))
             ->then(Callback::emptyOr(function (Sequence $highlights) {
-                return ListingTeasers::forHighlights($highlights->toArray(), 'Highlights', 'highlights');
+                return ListingTeasers::forHighlights($highlights->toArray(), new ListHeading('Highlights'), 'highlights');
             }))
             ->otherwise($this->softFailure('Failed to load highlights for magazine'));
 
@@ -103,13 +102,13 @@ final class MagazineController extends Controller
             new Link(ModelName::plural('podcast-episode'), $this->get('router')->generate('podcast')),
             new Link(ModelName::plural('collection'), $this->get('router')->generate('collections')),
             new Link('Community', $this->get('router')->generate('community')),
-        ], true);
+        ], new ListHeading('Magazine sections'), true);
 
         $arguments['events'] = $events
             ->slice(0, 3)
             ->then(Callback::emptyOr(function (Sequence $result) use ($events) {
                 $items = $result->map($this->willConvertTo(Teaser::class, ['variant' => 'secondary']))->toArray();
-                $heading = 'Events';
+                $heading = new ListHeading('Events');
 
                 if (count($events) > 3) {
                     return ListingTeasers::withSeeMore(
@@ -129,7 +128,7 @@ final class MagazineController extends Controller
                 return ListingTeasers::withSeeMore(
                     $result->map($this->willConvertTo(Teaser::class, ['variant' => 'secondary']))->toArray(),
                     new SeeMoreLink(new Link('See more eLife digests on Medium', 'https://medium.com/@elife')),
-                    'eLife digests'
+                    new ListHeading('eLife digests')
                 );
             }))
             ->otherwise($this->softFailure('Failed to load Medium articles'));

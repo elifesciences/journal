@@ -6,30 +6,18 @@
 
     {{ render_pattern(contentHeader) }}
 
-    {% if leadParas %}
+    {% embed 'grid/content.html.twig' %}
 
-        <div class="wrapper">
-            {{ render_pattern(leadParas) }}
-        </div>
+        {% block main %}
 
-    {% endif %}
+            {% for block in blocks %}
+                {{ render_pattern(block) }}
+            {% endfor %}
 
-    <div class="wrapper u-pad-top-lg">
+            {{ render_pattern(feedbackForm) }}
 
-        <div class="grid">
+        {% endblock %}
 
-            <div class="grid__item medium--six-twelfths push--large--three-twelfths">
-
-                {% for block in blocks %}
-                    {{ render_pattern(block) }}
-                {% endfor %}
-
-                {{ render_pattern(feedbackForm) }}
-
-            </div>
-
-        </div>
-
-    </div>
+    {% endembed %}
 
 {% endblock %}

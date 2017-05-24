@@ -2,19 +2,15 @@
 
 {% block body %}
 
-    <div class="wrapper u-pad-top">
+    <div class="wrapper">
 
         {{ render_pattern(contentHeader) }}
 
-        {% if subjects %}
+    </div>
 
-            {{ render_pattern(subjects) }}
+    <div class="wrapper wrapper--listing">
 
-        {% else %}
-
-            <p>No subjects available.</p>
-
-        {% endif %}
+        {{ render_pattern(subjects) }}
 
     </div>
 

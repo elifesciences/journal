@@ -18,7 +18,7 @@ final class PodcastEpisodeControllerTest extends PageTestCase
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertSame('Episode title', $crawler->filter('.content-header__title')->text());
-        $this->assertSame('Podcast Jan 1, 2010', trim(preg_replace('!\s+!', ' ', $crawler->filter('.content-header .meta')->text())));
+        $this->assertSame('Podcast', trim(preg_replace('!\s+!', ' ', $crawler->filter('.content-header .meta')->text())));
     }
 
     /**
@@ -32,17 +32,17 @@ final class PodcastEpisodeControllerTest extends PageTestCase
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
 
-        $this->assertSame('Episode 1: Episode title | Podcast | eLife', $crawler->filter('title')->text());
+        $this->assertSame('Episode title | Podcast | eLife', $crawler->filter('title')->text());
         $this->assertSame('/podcast/episode1', $crawler->filter('link[rel="canonical"]')->attr('href'));
         $this->assertSame('http://localhost/podcast/episode1', $crawler->filter('meta[property="og:url"]')->attr('content'));
-        $this->assertSame('Episode 1: Episode title', $crawler->filter('meta[property="og:title"]')->attr('content'));
+        $this->assertSame('Episode title', $crawler->filter('meta[property="og:title"]')->attr('content'));
         $this->assertSame('Episode impact statement', $crawler->filter('meta[property="og:description"]')->attr('content'));
         $this->assertSame('Episode impact statement', $crawler->filter('meta[name="description"]')->attr('content'));
         $this->assertSame('article', $crawler->filter('meta[property="og:type"]')->attr('content'));
         $this->assertSame('summary_large_image', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
-        $this->assertSame('https://www.example.com/iiif/image/0,100,800,400/1800,900/0/default.jpg', $crawler->filter('meta[property="og:image"]')->attr('content'));
-        $this->assertSame('1800', $crawler->filter('meta[property="og:image:width"]')->attr('content'));
-        $this->assertSame('900', $crawler->filter('meta[property="og:image:height"]')->attr('content'));
+        $this->assertSame('https://www.example.com/iiif/banner/0,529,1800,543/1114,336/0/default.jpg', $crawler->filter('meta[property="og:image"]')->attr('content'));
+        $this->assertSame('1114', $crawler->filter('meta[property="og:image:width"]')->attr('content'));
+        $this->assertSame('336', $crawler->filter('meta[property="og:image:height"]')->attr('content'));
         $this->assertSame('https://www.example.com/episode1.mp3', $crawler->filter('meta[property="og:audio:url"]')->attr('content'));
         $this->assertSame('audio/mpeg', $crawler->filter('meta[property="og:audio:type"]')->attr('content'));
     }
@@ -94,16 +94,16 @@ final class PodcastEpisodeControllerTest extends PageTestCase
                     'published' => '2010-01-01T00:00:00Z',
                     'image' => [
                         'banner' => [
-                            'uri' => 'https://www.example.com/iiif/image',
+                            'uri' => 'https://www.example.com/iiif/banner',
                             'alt' => '',
                             'source' => [
                                 'mediaType' => 'image/jpeg',
-                                'uri' => 'https://www.example.com/image.jpg',
+                                'uri' => 'https://www.example.com/banner.jpg',
                                 'filename' => 'image.jpg',
                             ],
                             'size' => [
-                                'width' => 800,
-                                'height' => 600,
+                                'width' => 1800,
+                                'height' => 1600,
                             ],
                         ],
                         'thumbnail' => [

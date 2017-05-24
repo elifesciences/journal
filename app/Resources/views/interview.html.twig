@@ -10,32 +10,20 @@
 
     {{ render_pattern(contentHeader) }}
 
-    {% if leadParas %}
+    {% embed 'grid/content.html.twig' %}
 
-        <div class="wrapper">
-            {{ render_pattern(leadParas) }}
-        </div>
+        {% block main %}
 
-    {% endif %}
+            {% for block in blocks %}
+                {{ render_pattern(block) }}
+            {% endfor %}
 
-    <div class="wrapper u-pad-top-lg">
+            {% if cv %}
+                {{ render_pattern(cv) }}
+            {% endif %}
 
-        <div class="grid">
+        {% endblock %}
 
-            <div class="grid__item medium--six-twelfths push--large--three-twelfths u-pad-top">
-
-                {% for block in blocks %}
-                    {{ render_pattern(block) }}
-                {% endfor %}
-
-                {% if cv %}
-                    {{ render_pattern(cv) }}
-                {% endif %}
-
-            </div>
-
-        </div>
-
-    </div>
+    {% endembed %}
 
 {% endblock %}

@@ -10,24 +10,18 @@
 
     {{ render_pattern(contentHeader) }}
 
-    <div class="wrapper">
+    {% embed 'grid/content.html.twig' %}
 
-        {{ render_pattern(leadParas) }}
+        {% block main %}
 
-        <div class="grid">
+            {% for part in body %}
 
-            <div class="grid__item medium--eight-twelfths push--large--two-twelfths">
+                {{ render_pattern(part) }}
 
-                {% for part in body %}
+            {% endfor %}
 
-                    {{ render_pattern(part) }}
+        {% endblock %}
 
-                {% endfor %}
-
-            </div>
-
-        </div>
-
-    </div>
+    {% endembed %}
 
 {% endblock %}

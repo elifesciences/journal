@@ -35,8 +35,8 @@ final class PodcastContext extends Context
                             'filename' => "banner$i.jpg",
                         ],
                         'size' => [
-                            'width' => 800,
-                            'height' => 600,
+                            'width' => 1800,
+                            'height' => 1600,
                         ],
                     ],
                     'thumbnail' => [
@@ -160,8 +160,8 @@ final class PodcastContext extends Context
                                 'filename' => 'banner.jpg',
                             ],
                             'size' => [
-                                'width' => 800,
-                                'height' => 600,
+                                'width' => 1800,
+                                'height' => 1600,
                             ],
                         ],
                         'thumbnail' => [
@@ -278,13 +278,13 @@ final class PodcastContext extends Context
         $this->spin(function () {
             $this->assertSession()
                 ->elementExists('css',
-                    '.list-heading:contains("Chapters") + .listing-list > .listing-list__item:nth-child(2) .teaser__header_text_link');
+                    '.list-heading:contains("Chapters") + .listing-list > .listing-list__item:nth-child(2) .media-chapter-listing-item__header_text_link');
         });
 
         $this->getSession()
             ->getPage()
             ->find('css',
-                '.list-heading:contains("Chapters") + .listing-list > .listing-list__item:nth-child(2) .teaser__header_text_link')
+                '.list-heading:contains("Chapters") + .listing-list > .listing-list__item:nth-child(2) .media-chapter-listing-item__header_text_link')
             ->click();
     }
 
@@ -295,7 +295,7 @@ final class PodcastContext extends Context
     {
         $this->spin(function () use ($number) {
             $this->assertSession()
-                ->elementsCount('css', '.grid-listing-heading:contains("Latest episodes") + .grid-listing > .grid-listing-item', $number);
+                ->elementsCount('css', '.list-heading:contains("Latest episodes") + .grid-listing > .grid-listing-item', $number);
 
             for ($i = $number; $i > 0; --$i) {
                 $nthChild = ($number - $i + 1);
@@ -303,7 +303,7 @@ final class PodcastContext extends Context
 
                 $this->assertSession()->elementContains(
                     'css',
-                    '.grid-listing-heading:contains("Latest episodes") + .grid-listing > .grid-listing-item:nth-child('.$nthChild.')',
+                    '.list-heading:contains("Latest episodes") + .grid-listing > .grid-listing-item:nth-child('.$nthChild.')',
                     'Episode '.$expectedNumber.' title'
                 );
             }

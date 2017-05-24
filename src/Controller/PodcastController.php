@@ -8,9 +8,9 @@ use eLife\Journal\Helper\Callback;
 use eLife\Journal\Helper\Paginator;
 use eLife\Journal\Pagerfanta\SequenceAdapter;
 use eLife\Patterns\ViewModel\AudioPlayer;
-use eLife\Patterns\ViewModel\ContentHeaderNonArticle;
+use eLife\Patterns\ViewModel\ContentHeader;
 use eLife\Patterns\ViewModel\GridListing;
-use eLife\Patterns\ViewModel\LeadParas;
+use eLife\Patterns\ViewModel\ListHeading;
 use eLife\Patterns\ViewModel\ListingTeasers;
 use eLife\Patterns\ViewModel\MediaChapterListingItem;
 use eLife\Patterns\ViewModel\Teaser;
@@ -64,7 +64,7 @@ final class PodcastController extends Controller
 
     private function createFirstPage(array $arguments) : Response
     {
-        $arguments['contentHeader'] = ContentHeaderNonArticle::basic('eLife podcast');
+        $arguments['contentHeader'] = new ContentHeader('eLife podcast');
 
         return new Response($this->get('templating')->render('::podcast.html.twig', $arguments));
     }
@@ -78,18 +78,15 @@ final class PodcastController extends Controller
         $arguments = $this->defaultPageArguments($request, $episode);
 
         $arguments['title'] = $episode
-            ->then(Callback::method('getFullTitle'));
+            ->then(Callback::method('getTitle'));
 
         $arguments['episode'] = $episode;
 
         $arguments['contentHeader'] = $arguments['episode']
-            ->then($this->willConvertTo(ContentHeaderNonArticle::class));
+            ->then($this->willConvertTo(ContentHeader::class));
 
         $arguments['audioPlayer'] = $arguments['episode']
             ->then($this->willConvertTo(AudioPlayer::class));
-
-        $arguments['leadParas'] = $arguments['episode']
-            ->then(Callback::methodEmptyOr('getImpactStatement', $this->willConvertTo(LeadParas::class)));
 
         $arguments['chapters'] = $arguments['episode']
             ->then(function (PodcastEpisode $episode) {
@@ -106,7 +103,7 @@ final class PodcastController extends Controller
             ->then(Callback::emptyOr(function (Sequence $articles) {
                 return ListingTeasers::basic(
                     $articles->map($this->willConvertTo(Teaser::class, ['variant' => 'secondary']))->toArray(),
-                    'Related'
+                    new ListHeading('Related')
                 );
             }));
 

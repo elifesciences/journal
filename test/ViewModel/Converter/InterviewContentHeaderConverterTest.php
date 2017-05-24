@@ -4,18 +4,18 @@ namespace test\eLife\Journal\ViewModel\Converter;
 
 use eLife\ApiSdk\Model\Interview;
 use eLife\Journal\ViewModel\Converter\InterviewContentHeaderConverter;
-use eLife\Patterns\ViewModel\ContentHeaderNonArticle;
+use eLife\Patterns\ViewModel\ContentHeader;
 
 final class InterviewContentHeaderConverterTest extends ModelConverterTestCase
 {
     protected $models = ['interview'];
-    protected $viewModelClasses = [ContentHeaderNonArticle::class];
+    protected $viewModelClasses = [ContentHeader::class];
 
     /**
      * @before
      */
     public function setUpConverter()
     {
-        $this->converter = new InterviewContentHeaderConverter();
+        $this->converter = new InterviewContentHeaderConverter($this->stubUrlGenerator());
     }
 }

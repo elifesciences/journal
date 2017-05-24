@@ -2,15 +2,30 @@
 
 namespace eLife\Journal\Controller;
 
+use eLife\ApiSdk\Collection\EmptySequence;
+use eLife\ApiSdk\Collection\PromiseSequence;
+use eLife\ApiSdk\Collection\Sequence;
+use eLife\ApiSdk\Model\Person;
+use eLife\ApiSdk\Model\Subject;
+use eLife\Journal\Helper\Callback;
 use eLife\Journal\ViewModel\DefinitionList;
 use eLife\Journal\ViewModel\Paragraph;
+use eLife\Patterns\ViewModel\AboutProfile;
+use eLife\Patterns\ViewModel\AboutProfiles;
 use eLife\Patterns\ViewModel\ArticleSection;
-use eLife\Patterns\ViewModel\ContentHeaderNonArticle;
+use eLife\Patterns\ViewModel\Button;
+use eLife\Patterns\ViewModel\ContentHeader;
+use eLife\Patterns\ViewModel\FormLabel;
 use eLife\Patterns\ViewModel\IFrame;
 use eLife\Patterns\ViewModel\Link;
+use eLife\Patterns\ViewModel\ListHeading;
 use eLife\Patterns\ViewModel\Listing;
 use eLife\Patterns\ViewModel\SectionListing;
 use eLife\Patterns\ViewModel\SectionListingLink;
+use eLife\Patterns\ViewModel\Select;
+use eLife\Patterns\ViewModel\SelectNav;
+use eLife\Patterns\ViewModel\SelectOption;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -22,7 +37,7 @@ final class AboutController extends Controller
 
         $arguments['title'] = 'About';
 
-        $arguments['contentHeader'] = ContentHeaderNonArticle::basic('About eLife', false,
+        $arguments['contentHeader'] = new ContentHeader('About eLife', null,
             'We want to improve all aspects of research communication in support of excellence in science');
 
         $arguments['body'] = [
@@ -48,7 +63,7 @@ final class AboutController extends Controller
 
         $arguments['title'] = 'Peer review';
 
-        $arguments['contentHeader'] = ContentHeaderNonArticle::basic($arguments['title'], false,
+        $arguments['contentHeader'] = new ContentHeader($arguments['title'], null,
             '"Our goal at eLife is to publish papers that our reviewers and editors find authoritative, rigorous, insightful, enlightening or just beautiful"*');
 
         $arguments['body'] = [
@@ -80,7 +95,7 @@ final class AboutController extends Controller
 
         $arguments['title'] = 'Openness';
 
-        $arguments['contentHeader'] = ContentHeaderNonArticle::basic($arguments['title'], false,
+        $arguments['contentHeader'] = new ContentHeader($arguments['title'], null,
             'We believe that open access to research findings and associated data has the potential to revolutionise the scientific enterprise');
 
         $arguments['body'] = [
@@ -110,7 +125,7 @@ final class AboutController extends Controller
 
         $arguments['title'] = 'Innovation';
 
-        $arguments['contentHeader'] = ContentHeaderNonArticle::basic($arguments['title'], false,
+        $arguments['contentHeader'] = new ContentHeader($arguments['title'], null,
             'eLife invests in open-source technology to deliver effective solutions to accelerate research communication and discovery');
 
         $arguments['body'] = [
@@ -133,7 +148,7 @@ final class AboutController extends Controller
 
         $arguments['title'] = 'Early-career scientists';
 
-        $arguments['contentHeader'] = ContentHeaderNonArticle::basic($arguments['title'], false,
+        $arguments['contentHeader'] = new ContentHeader($arguments['title'], null,
             'The community behind eLife wants to help address some of the pressures on early-career scientists');
 
         $arguments['body'] = [
@@ -153,16 +168,93 @@ final class AboutController extends Controller
         return new Response($this->get('templating')->render('::about.html.twig', $arguments));
     }
 
-    public function peopleAction(Request $request) : Response
+    public function peopleAction(Request $request, string $type) : Response
     {
+        if ($request->query->has('type')) {
+            return new RedirectResponse(
+                $this->get('router')->generate('about-people', ['type' => $request->query->get('type')]),
+                Response::HTTP_MOVED_PERMANENTLY
+            );
+        }
+
         $arguments = $this->aboutPageArguments($request);
 
         $arguments['title'] = 'People';
 
-        $arguments['contentHeader'] = ContentHeaderNonArticle::basic($arguments['title'], false,
+        $arguments['contentHeader'] = new ContentHeader($arguments['title'], null,
             'The working scientists who serve as eLife editors, our early-career advisors, governing board, and our executive staff all work in concert to realise eLife’s mission to accelerate discovery');
+        $subjects = $this->get('elife.api_sdk.subjects')->reverse();
+
+        $allSubjects = $subjects->slice(0, 100)
+            ->otherwise($this->softFailure('Failed to load subjects for people', new EmptySequence()));
+
+        $types = (new PromiseSequence($allSubjects))
+            ->map(function (Subject $subject) use ($type) {
+                return new SelectOption($subject->getId(), $subject->getName(), $subject->getId() === $type);
+            });
+
+        $types = $types
+            ->prepend(new SelectOption('', 'Leadership team', '' === $type))
+            ->append(new SelectOption('directors', 'Board of directors', 'directors' === $type))
+            ->append(new SelectOption('staff', 'Executive staff', 'staff' === $type));
+
+        $arguments['contentHeader'] = (new PromiseSequence($types))
+            ->then(function (Sequence $types) use ($arguments) {
+                return new ContentHeader($arguments['title'], null, 'The working scientists who serve as eLife editors, our early-career advisors, governing board, and our executive staff all work in concert to realise eLife’s mission to accelerate discovery',
+                    false, [], null, null, [], [], null, null,
+                    new SelectNav(
+                        $this->get('router')->generate('about-people'),
+                        new Select('type', $types->toArray(), new FormLabel('Type', 'type', true)),
+                        Button::form('Go', Button::TYPE_SUBMIT, 'go', Button::SIZE_EXTRA_SMALL)
+                    )
+                );
+            });
+
+        $people = $this->get('elife.api_sdk.people')->reverse();
+
+        $arguments['lists'] = [];
+
+        switch ($type) {
+            case '':
+                $leadership = $people->forType('leadership');
+
+                $editorInChief = $leadership->filter(function (Person $person) {
+                    return 'Editor-in-Chief' === $person->getTypeLabel();
+                });
+                $deputyEditors = $leadership->filter(function (Person $person) {
+                    return 'Editor-in-Chief' !== $person->getTypeLabel();
+                });
+
+                $arguments['lists'][] = $this->createAboutProfiles($editorInChief, 'Editor-in-Chief');
+                $arguments['lists'][] = $this->createAboutProfiles($deputyEditors, 'Deputy editors');
+                $arguments['lists'][] = $this->createAboutProfiles($people->forType('senior-editor'), 'Senior editors');
+                break;
+            case 'directors':
+                $arguments['lists'][] = $this->createAboutProfiles($people->forType('director'), 'Board of directors');
+                break;
+            case 'staff':
+                $arguments['lists'][] = $this->createAboutProfiles($people->forType('executive'), 'Executive staff');
+                break;
+            default:
+                $arguments['subject'] = $subjects->get($type)->otherwise($this->mightNotExist());
+
+                $people = $people->forSubject($type);
+                $arguments['lists'][] = $this->createAboutProfiles($people->forType('senior-editor'), 'Senior editors');
+                $arguments['lists'][] = $this->createAboutProfiles($people->forType('reviewing-editor'), 'Reviewing editors', true);
+        }
+
+        $arguments['lists'] = array_filter($arguments['lists'], Callback::isNotEmpty());
 
         return new Response($this->get('templating')->render('::about-people.html.twig', $arguments));
+    }
+
+    private function createAboutProfiles(Sequence $people, string $heading, bool $compact = false)
+    {
+        if ($people->isEmpty()) {
+            return null;
+        }
+
+        return new AboutProfiles($people->map($this->willConvertTo(AboutProfile::class, compact('compact')))->toArray(), new ListHeading($heading), $compact);
     }
 
     private function aboutPageArguments(Request $request) : array
@@ -186,7 +278,7 @@ final class AboutController extends Controller
             return new Link($text, $path, $path === $currentPath);
         }, array_keys($menuItems), array_values($menuItems));
 
-        $arguments['menu'] = new SectionListing('sections', $menuItems, true);
+        $arguments['menu'] = new SectionListing('sections', $menuItems, new ListHeading('About sections'), true);
 
         return $arguments;
     }

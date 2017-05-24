@@ -47,8 +47,8 @@ final class SearchController extends Controller
         'replication-study',
         'research-advance',
         'research-article',
-        'research-exchange',
         'retraction',
+        'scientific-correspondence',
         'short-report',
         'tools-resources',
     ];
@@ -182,7 +182,7 @@ final class SearchController extends Controller
                         return $a['label'] <=> $b['label'];
                     });
 
-                    $filterGroups[] = new FilterGroup('Subject', $subjectFilters);
+                    $filterGroups[] = new FilterGroup('Research categories', $subjectFilters);
                 }
 
                 $allTypes = $search->types();

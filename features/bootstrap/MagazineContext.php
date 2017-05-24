@@ -57,10 +57,10 @@ final class MagazineContext extends Context
                         'insight' => 0,
                         'research-advance' => 0,
                         'research-article' => 0,
-                        'research-exchange' => 0,
                         'retraction' => 0,
                         'registered-report' => 0,
                         'replication-study' => 0,
+                        'scientific-correspondence' => 0,
                         'short-report' => 0,
                         'tools-resources' => 0,
                         'blog-article' => 0,
@@ -96,10 +96,10 @@ final class MagazineContext extends Context
                             'insight' => 0,
                             'research-advance' => 0,
                             'research-article' => 0,
-                            'research-exchange' => 0,
                             'retraction' => 0,
                             'registered-report' => 0,
                             'replication-study' => 0,
+                            'scientific-correspondence' => 0,
                             'short-report' => 0,
                             'tools-resources' => 0,
                             'blog-article' => 0,
@@ -141,8 +141,8 @@ final class MagazineContext extends Context
                             'filename' => "banner$i.jpg",
                         ],
                         'size' => [
-                            'width' => 800,
-                            'height' => 600,
+                            'width' => 1800,
+                            'height' => 1600,
                         ],
                     ],
                     'thumbnail' => [
@@ -300,7 +300,10 @@ final class MagazineContext extends Context
                         ],
                         'selectedCurator' => [
                             'id' => '1',
-                            'type' => 'senior-editor',
+                            'type' => [
+                                'id' => 'senior-editor',
+                                'label' => 'Senior editor',
+                            ],
                             'name' => [
                                 'preferred' => 'Person 1',
                                 'index' => '1, Person',
@@ -368,7 +371,10 @@ final class MagazineContext extends Context
                                 ],
                                 'selectedCurator' => [
                                     'id' => '1',
-                                    'type' => 'senior-editor',
+                                    'type' => [
+                                        'id' => 'senior-editor',
+                                        'label' => 'Senior editor',
+                                    ],
                                     'name' => [
                                         'preferred' => 'Person 1',
                                         'index' => '1, Person',
@@ -413,7 +419,10 @@ final class MagazineContext extends Context
                             ],
                             'selectedCurator' => [
                                 'id' => '1',
-                                'type' => 'senior-editor',
+                                'type' => [
+                                    'id' => 'senior-editor',
+                                    'label' => 'Senior editor',
+                                ],
                                 'name' => [
                                     'preferred' => 'Person 1',
                                     'index' => '1, Person',

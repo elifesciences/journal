@@ -59,12 +59,12 @@ final class MagazineControllerTest extends PageTestCase
         $this->assertSame('/magazine', $crawler->filter('link[rel="canonical"]')->attr('href'));
         $this->assertSame('http://localhost/magazine', $crawler->filter('meta[property="og:url"]')->attr('content'));
         $this->assertSame('Magazine', $crawler->filter('meta[property="og:title"]')->attr('content'));
-        $this->assertSame('Highlighting the latest research and giving a voice to life and biomedical scientists.', $crawler->filter('meta[property="og:description"]')->attr('content'));
-        $this->assertSame('Highlighting the latest research and giving a voice to life and biomedical scientists.', $crawler->filter('meta[name="description"]')->attr('content'));
+        $this->assertSame('Highlighting the latest research and giving a voice to scientists', $crawler->filter('meta[property="og:description"]')->attr('content'));
+        $this->assertSame('Highlighting the latest research and giving a voice to scientists', $crawler->filter('meta[name="description"]')->attr('content'));
         $this->assertSame('summary_large_image', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
-        $this->assertSame('http://localhost/'.ltrim(self::$kernel->getContainer()->get('assets.packages')->getUrl('assets/images/banners/magazine-hi-res.jpg'), '/'), $crawler->filter('meta[property="og:image"]')->attr('content'));
-        $this->assertSame('1800', $crawler->filter('meta[property="og:image:width"]')->attr('content'));
-        $this->assertSame('900', $crawler->filter('meta[property="og:image:height"]')->attr('content'));
+        $this->assertSame('http://localhost/'.ltrim(self::$kernel->getContainer()->get('assets.packages')->getUrl('assets/images/banners/magazine-1114x336.jpg'), '/'), $crawler->filter('meta[property="og:image"]')->attr('content'));
+        $this->assertSame('1114', $crawler->filter('meta[property="og:image:width"]')->attr('content'));
+        $this->assertSame('336', $crawler->filter('meta[property="og:image:height"]')->attr('content'));
     }
 
     /**
@@ -133,10 +133,10 @@ final class MagazineControllerTest extends PageTestCase
                         'insight' => 0,
                         'research-advance' => 0,
                         'research-article' => 0,
-                        'research-exchange' => 0,
                         'retraction' => 0,
                         'registered-report' => 0,
                         'replication-study' => 0,
+                        'scientific-correspondence' => 0,
                         'short-report' => 0,
                         'tools-resources' => 0,
                         'blog-article' => 0,

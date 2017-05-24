@@ -12,6 +12,7 @@ use eLife\Patterns\ViewModel;
 final class TableConverter implements ViewModelConverter
 {
     use CanConvert;
+    use CreatesCaptionedAsset;
 
     private $viewModelConverter;
     private $patternRenderer;
@@ -27,7 +28,7 @@ final class TableConverter implements ViewModelConverter
      */
     public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
-        return new ViewModel\Table(
+        $table = new ViewModel\Table(
             $object->getTables(),
             array_map(function (Footnote $footnote) {
                 return new ViewModel\TableFootnote(
@@ -37,15 +38,26 @@ final class TableConverter implements ViewModelConverter
                 );
             }, $object->getFootnotes())
         );
+
+        if (!$object->getTitle() && $object->getAttribution()->isEmpty() && $object->getCaption()->isEmpty()) {
+            return $table;
+        }
+
+        return $this->createCaptionedAsset($table, $object);
     }
 
     public function supports($object, string $viewModel = null, array $context = []) : bool
     {
-        return $object instanceof Block\Table && !$object->getTitle();
+        return $object instanceof Block\Table;
     }
 
     protected function getViewModelConverter() : ViewModelConverter
     {
         return $this->viewModelConverter;
+    }
+
+    protected function getPatternRenderer() : PatternRenderer
+    {
+        return $this->patternRenderer;
     }
 }

@@ -10,44 +10,36 @@
 
     {{ render_pattern(contentHeader) }}
 
-    {% if leadParas %}
+    {% embed 'grid/listing-two-column.html.twig' %}
 
-        <div class="wrapper">
-            {{ render_pattern(leadParas) }}
-        </div>
+        {% block main %}
 
-    {% endif %}
+            {% for part in body %}
 
-    <div class="wrapper u-pad-top-lg">
+                {{ render_pattern(part) }}
 
-        <div class="grid">
+            {% endfor %}
 
-            <div class="listing-column-container">
+        {% endblock %}
 
-                <div class="grid__item medium--eight-twelfths listing-column-main">
+        {% block secondary %}
 
-                    {{ render_pattern(collectionList) }}
+            {% if multimedia %}
 
-                </div>
+                {{ render_pattern(multimedia) }}
 
-                <div class="grid__item medium--four-twelfths listing-column-secondary">
+            {% endif %}
 
-                    {% if multimedia %}
-                        {{ render_pattern(multimedia) }}
-                    {% endif %}
+            {% if related %}
 
-                    {% if related %}
-                        {{ render_pattern(related) }}
-                    {% endif %}
+                {{ render_pattern(related) }}
 
-                    {{ render_pattern(contributors) }}
+            {% endif %}
 
-                </div>
+            {{ render_pattern(contributors) }}
 
-            </div>
+        {% endblock %}
 
-        </div>
-
-    </div>
+    {% endembed %}
 
 {% endblock %}

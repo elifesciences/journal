@@ -3,12 +3,12 @@
 namespace test\eLife\Journal\ViewModel\Converter;
 
 use eLife\Journal\ViewModel\Converter\LabsExperimentContentHeaderConverter;
-use eLife\Patterns\ViewModel\ContentHeaderNonArticle;
+use eLife\Patterns\ViewModel\ContentHeader;
 
 final class LabsExperimentContentHeaderConverterTest extends ModelConverterTestCase
 {
     protected $models = ['labs-experiment'];
-    protected $viewModelClasses = [ContentHeaderNonArticle::class];
+    protected $viewModelClasses = [ContentHeader::class];
 
     /**
      * @before

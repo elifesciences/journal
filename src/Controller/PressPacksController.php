@@ -6,8 +6,7 @@ use eLife\ApiSdk\Model\PressPackage;
 use eLife\Journal\Helper\Callback;
 use eLife\Journal\Helper\HasPages;
 use eLife\Patterns\ViewModel\ArticleSection;
-use eLife\Patterns\ViewModel\ContentHeaderNonArticle;
-use eLife\Patterns\ViewModel\LeadParas;
+use eLife\Patterns\ViewModel\ContentHeader;
 use eLife\Patterns\ViewModel\Listing;
 use eLife\Patterns\ViewModel\ListingTeasers;
 use eLife\Patterns\ViewModel\Teaser;
@@ -52,7 +51,7 @@ final class PressPacksController extends Controller
 
     private function createFirstPage(array $arguments) : Response
     {
-        $arguments['contentHeader'] = ContentHeaderNonArticle::basic($arguments['title']);
+        $arguments['contentHeader'] = new ContentHeader($arguments['title']);
 
         return new Response($this->get('templating')->render('::press-packs.html.twig', $arguments));
     }
@@ -72,10 +71,7 @@ final class PressPacksController extends Controller
         $arguments['package'] = $package;
 
         $arguments['contentHeader'] = $arguments['package']
-            ->then($this->willConvertTo(ContentHeaderNonArticle::class));
-
-        $arguments['leadParas'] = $arguments['package']
-            ->then(Callback::methodEmptyOr('getImpactStatement', $this->willConvertTo(LeadParas::class)));
+            ->then($this->willConvertTo(ContentHeader::class));
 
         $arguments['blocks'] = $arguments['package']
             ->then(function (PressPackage $package) {

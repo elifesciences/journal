@@ -8,7 +8,7 @@
         {{ render_pattern(audio_player) }}
     {% endif %}
 
-    <div class="wrapper u-pad-top">
+    <div class="wrapper">
 
         {{ render_pattern(menuLink) }}
 
@@ -16,7 +16,7 @@
 
     {% if highlights %}
 
-        <div class="wrapper u-pad-top">
+        <div class="wrapper">
 
             {{ render_pattern(highlights) }}
 
@@ -24,39 +24,32 @@
 
     {% endif %}
 
-    <div class="wrapper u-pad-top-lg">
+    {% embed 'grid/listing-two-column.html.twig' %}
 
-        <div class="grid">
+        {% block main %}
 
-            <div class="listing-column-container">
+            {{ render_pattern(listing) }}
 
-                <div class="grid__item large--eight-twelfths listing-column-main {% if not events and not elifeDigests %}push--large--two-twelfths{% endif %}">
+        {% endblock %}
 
-                    {{ render_pattern(listing) }}
 
-                </div>
+        {% block secondary %}
 
-                {% if events or elifeDigests %}
+            {% if events %}
 
-                    <div class="grid__item large--four-twelfths listing-column-secondary">
+                {{ render_pattern(events) }}
 
-                        {% if events %}
-                            {{ render_pattern(events) }}
-                        {% endif %}
+            {% endif %}
 
-                        {% if elifeDigests %}
-                            {{ render_pattern(elifeDigests) }}
-                        {% endif %}
+            {% if elifeDigests %}
 
-                    </div>
+                {{ render_pattern(elifeDigests) }}
 
-                {% endif %}
+            {% endif %}
 
-            </div>
+        {% endblock %}
 
-        </div>
-
-    </div>
+    {% endembed %}
 
     <div class="wrapper">
 

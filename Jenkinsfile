@@ -8,7 +8,7 @@ elifePipeline {
     stage 'Project tests', {
         lock('journal--ci') {
             builderDeployRevision 'journal--ci', commit
-            builderProjectTests 'journal--ci', '/srv/journal', ['/srv/journal/build/phpunit.xml', '/srv/journal/build/behat.xml']
+            builderProjectTests 'journal--ci', '/srv/journal', ['/srv/journal/build/phpunit.xml', '/srv/journal/build/behat.xml'], ['smoke', 'project']
         }
     }
 
@@ -18,7 +18,8 @@ elifePipeline {
                 deploy: [
                     stackname: 'journal--end2end',
                     revision: commit,
-                    folder: '/srv/journal'
+                    folder: '/srv/journal',
+                    concurrency: 'blue-green'
                 ]
             )
         }

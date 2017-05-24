@@ -6,12 +6,23 @@ use eLife\ApiSdk\Collection\EmptySequence;
 use eLife\ApiSdk\Model\GroupAuthor;
 use eLife\ApiSdk\Model\PersonAuthor;
 use eLife\Journal\Helper\Callback;
+use eLife\Patterns\PatternRenderer;
 use eLife\Patterns\ViewModel;
 use eLife\Patterns\ViewModel\AuthorDetails;
 
 final class GroupAuthorDetailsConverter implements ViewModelConverter
 {
     use AuthorDetailsConverter;
+    use CreatesId;
+
+    private $viewModelConverter;
+    private $patternRenderer;
+
+    public function __construct(ViewModelConverter $viewModelConverter, PatternRenderer $patternRenderer)
+    {
+        $this->viewModelConverter = $viewModelConverter;
+        $this->patternRenderer = $patternRenderer;
+    }
 
     /**
      * @param GroupAuthor $object
@@ -19,7 +30,7 @@ final class GroupAuthorDetailsConverter implements ViewModelConverter
     public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
         return AuthorDetails::forGroup(
-            'author-'.hash('crc32', $object->toString()),
+            $this->createId($object),
             $object->toString(),
             $this->findDetails($object, $context['authors'] ?? new EmptySequence()),
             array_filter(
@@ -42,5 +53,15 @@ final class GroupAuthorDetailsConverter implements ViewModelConverter
     public function supports($object, string $viewModel = null, array $context = []) : bool
     {
         return $object instanceof GroupAuthor;
+    }
+
+    protected function getPatternRenderer() : PatternRenderer
+    {
+        return $this->patternRenderer;
+    }
+
+    protected function getViewModelConverter() : ViewModelConverter
+    {
+        return $this->viewModelConverter;
     }
 }

@@ -19,7 +19,7 @@ final class LabsExperimentControllerTest extends PageTestCase
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertSame('Experiment title', $crawler->filter('.content-header__title')->text());
         $this->assertSame('Experiment: 001 Jan 1, 2010', trim(preg_replace('!\s+!', ' ', $crawler->filter('.content-header .meta')->text())));
-        $this->assertContains('Experiment text.', $crawler->filter('.wrapper')->eq(1)->text());
+        $this->assertContains('Experiment text.', $crawler->filter('main > div.wrapper')->text());
     }
 
     /**
@@ -40,10 +40,7 @@ final class LabsExperimentControllerTest extends PageTestCase
         $this->assertSame('Experiment impact statement', $crawler->filter('meta[property="og:description"]')->attr('content'));
         $this->assertSame('Experiment impact statement', $crawler->filter('meta[name="description"]')->attr('content'));
         $this->assertSame('article', $crawler->filter('meta[property="og:type"]')->attr('content'));
-        $this->assertSame('summary_large_image', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
-        $this->assertSame('https://www.example.com/iiif/image/0,100,800,400/1800,900/0/default.jpg', $crawler->filter('meta[property="og:image"]')->attr('content'));
-        $this->assertSame('1800', $crawler->filter('meta[property="og:image:width"]')->attr('content'));
-        $this->assertSame('900', $crawler->filter('meta[property="og:image:height"]')->attr('content'));
+        $this->assertSame('summary', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
     }
 
     /**
@@ -143,19 +140,6 @@ final class LabsExperimentControllerTest extends PageTestCase
                     'title' => 'Experiment title',
                     'published' => '2010-01-01T00:00:00Z',
                     'image' => [
-                        'banner' => [
-                            'uri' => 'https://www.example.com/iiif/image',
-                            'alt' => '',
-                            'source' => [
-                                'mediaType' => 'image/jpeg',
-                                'uri' => 'https://www.example.com/image.jpg',
-                                'filename' => 'image.jpg',
-                            ],
-                            'size' => [
-                                'width' => 800,
-                                'height' => 600,
-                            ],
-                        ],
                         'thumbnail' => [
                             'uri' => 'https://www.example.com/iiif/image',
                             'alt' => '',

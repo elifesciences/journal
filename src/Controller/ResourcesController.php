@@ -5,7 +5,7 @@ namespace eLife\Journal\Controller;
 use eLife\Journal\ViewModel\Paragraph;
 use eLife\Patterns\ViewModel\ArticleSection;
 use eLife\Patterns\ViewModel\Code;
-use eLife\Patterns\ViewModel\ContentHeaderNonArticle;
+use eLife\Patterns\ViewModel\ContentHeader;
 use eLife\Patterns\ViewModel\IFrame;
 use eLife\Patterns\ViewModel\Image;
 use eLife\Patterns\ViewModel\LeadPara;
@@ -22,7 +22,7 @@ final class ResourcesController extends Controller
 
         $arguments['title'] = 'Resources';
 
-        $arguments['contentHeader'] = ContentHeaderNonArticle::basic($arguments['title']);
+        $arguments['contentHeader'] = new ContentHeader($arguments['title']);
 
         $arguments['leadParas'] = new LeadParas([
             new LeadPara('A collection of posters, handouts, slide presentations, videos, and more, about all of the work behind the eLife initiative.'),

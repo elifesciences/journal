@@ -25,12 +25,12 @@ final class ArticleFiguresControllerTest extends PageTestCase
             $crawler->filter('.contextual-data__cite_wrapper')->text());
         $this->assertContains('doi: 10.7554/eLife.00001', $crawler->filter('.contextual-data__cite_wrapper')->text());
 
-        $figureTypes = $crawler->filter('main > .wrapper > div > div > section');
+        $figureTypes = $crawler->filter('.grid-column > section');
         $this->assertCount(5, $figureTypes);
 
         $figures = $figureTypes->eq(0)->filter('.asset-viewer-inline');
         $this->assertSame('Image 1 label', trim($figures->eq(0)->filter('.asset-viewer-inline__header_text')->text()));
-        $this->assertSame('Image 2 label', trim($figures->eq(1)->filter('.asset-viewer-inline__header_text')->text()));
+        $this->assertSame('Image 2 label with 1 supplement', trim($figures->eq(1)->filter('.asset-viewer-inline__header_text')->text()));
         $this->assertSame('Image 2 source data 1 label', trim($figures->eq(1)->filter('.additional-assets__list .caption-text__heading')->text()));
         $this->assertSame('Image 2 supplement 1 label', trim($figures->eq(2)->filter('.asset-viewer-inline__header_text')->text()));
         $this->assertSame('Image 2 supplement 1 source data 1 label', trim($figures->eq(2)->filter('.additional-assets__list .caption-text__heading')->text()));
@@ -99,7 +99,7 @@ final class ArticleFiguresControllerTest extends PageTestCase
             $crawler->filter('.contextual-data__cite_wrapper')->text());
         $this->assertContains('doi: 10.7554/eLife.00001', $crawler->filter('.contextual-data__cite_wrapper')->text());
 
-        $figureTypes = $crawler->filter('main > .wrapper > div > div > section');
+        $figureTypes = $crawler->filter('.grid-column > section');
         $this->assertCount(1, $figureTypes);
 
         $additionalFiles = $figureTypes->eq(0)->filter('.caption-text__heading');
@@ -344,21 +344,26 @@ final class ArticleFiguresControllerTest extends PageTestCase
                             'title' => 'Introduction',
                             'content' => [
                                 [
-                                    'type' => 'image',
-                                    'id' => 'image1',
-                                    'label' => 'Image 1 label',
-                                    'title' => 'Image 1 title',
-                                    'image' => [
-                                        'uri' => 'https://www.example.com/iiif/image',
-                                        'alt' => '',
-                                        'source' => [
-                                            'mediaType' => 'image/jpeg',
-                                            'uri' => 'https://www.example.com/image.jpg',
-                                            'filename' => 'image.jpg',
-                                        ],
-                                        'size' => [
-                                            'width' => 800,
-                                            'height' => 600,
+                                    'type' => 'figure',
+                                    'assets' => [
+                                        [
+                                            'type' => 'image',
+                                            'id' => 'image1',
+                                            'label' => 'Image 1 label',
+                                            'title' => 'Image 1 title',
+                                            'image' => [
+                                                'uri' => 'https://www.example.com/iiif/image',
+                                                'alt' => '',
+                                                'source' => [
+                                                    'mediaType' => 'image/jpeg',
+                                                    'uri' => 'https://www.example.com/image.jpg',
+                                                    'filename' => 'image.jpg',
+                                                ],
+                                                'size' => [
+                                                    'width' => 800,
+                                                    'height' => 600,
+                                                ],
+                                            ],
                                         ],
                                     ],
                                 ],
@@ -383,62 +388,71 @@ final class ArticleFiguresControllerTest extends PageTestCase
                                     'title' => 'Sub-section',
                                     'content' => [
                                         [
-                                            'type' => 'video',
-                                            'id' => 'video1',
-                                            'label' => 'Video 1 label',
-                                            'title' => 'Video 1 table',
-                                            'sources' => [
+                                            'type' => 'figure',
+                                            'assets' => [
                                                 [
-                                                    'mediaType' => 'video/mp4',
-                                                    'uri' => 'https://placehold.it/900x450',
+                                                    'type' => 'video',
+                                                    'id' => 'video1',
+                                                    'label' => 'Video 1 label',
+                                                    'title' => 'Video 1 table',
+                                                    'sources' => [
+                                                        [
+                                                            'mediaType' => 'video/mp4',
+                                                            'uri' => 'https://placehold.it/900x450',
+                                                        ],
+                                                    ],
+                                                    'placeholder' => [
+                                                        'uri' => 'https://www.example.com/iiif/image',
+                                                        'alt' => '',
+                                                        'source' => [
+                                                            'mediaType' => 'image/jpeg',
+                                                            'uri' => 'https://www.example.com/image.jpg',
+                                                            'filename' => 'image.jpg',
+                                                        ],
+                                                        'size' => [
+                                                            'width' => 800,
+                                                            'height' => 600,
+                                                        ],
+                                                    ],
+                                                    'width' => 900,
+                                                    'height' => 450,
                                                 ],
                                             ],
-                                            'placeholder' => [
-                                                'uri' => 'https://www.example.com/iiif/image',
-                                                'alt' => '',
-                                                'source' => [
-                                                    'mediaType' => 'image/jpeg',
-                                                    'uri' => 'https://www.example.com/image.jpg',
-                                                    'filename' => 'image.jpg',
-                                                ],
-                                                'size' => [
-                                                    'width' => 800,
-                                                    'height' => 600,
-                                                ],
-                                            ],
-                                            'width' => 900,
-                                            'height' => 450,
                                         ],
                                         [
-                                            'type' => 'image',
-                                            'id' => 'image2',
-                                            'label' => 'Image 2 label',
-                                            'title' => 'Image 2 title',
-                                            'image' => [
-                                                'uri' => 'https://www.example.com/iiif/image',
-                                                'alt' => '',
-                                                'source' => [
-                                                    'mediaType' => 'image/jpeg',
-                                                    'uri' => 'https://www.example.com/image.jpg',
-                                                    'filename' => 'image.jpg',
-                                                ],
-                                                'size' => [
-                                                    'width' => 800,
-                                                    'height' => 600,
-                                                ],
-                                            ],
-                                            'sourceData' => [
+                                            'type' => 'figure',
+                                            'assets' => [
                                                 [
-                                                    'id' => 'image2-sd1',
-                                                    'label' => 'Image 2 source data 1 label',
-                                                    'title' => 'Image 2 source data 1 title',
-                                                    'mediaType' => 'image/jpeg',
-                                                    'uri' => 'https://placehold.it/900x450',
-                                                    'filename' => 'image.jpg',
+                                                    'type' => 'image',
+                                                    'id' => 'image2',
+                                                    'label' => 'Image 2 label',
+                                                    'title' => 'Image 2 title',
+                                                    'image' => [
+                                                        'uri' => 'https://www.example.com/iiif/image',
+                                                        'alt' => '',
+                                                        'source' => [
+                                                            'mediaType' => 'image/jpeg',
+                                                            'uri' => 'https://www.example.com/image.jpg',
+                                                            'filename' => 'image.jpg',
+                                                        ],
+                                                        'size' => [
+                                                            'width' => 800,
+                                                            'height' => 600,
+                                                        ],
+                                                    ],
+                                                    'sourceData' => [
+                                                        [
+                                                            'id' => 'image2-sd1',
+                                                            'label' => 'Image 2 source data 1 label',
+                                                            'title' => 'Image 2 source data 1 title',
+                                                            'mediaType' => 'image/jpeg',
+                                                            'uri' => 'https://placehold.it/900x450',
+                                                            'filename' => 'image.jpg',
+                                                        ],
+                                                    ],
                                                 ],
-                                            ],
-                                            'supplements' => [
                                                 [
+                                                    'type' => 'image',
                                                     'id' => 'image2s1',
                                                     'label' => 'Image 2 supplement 1 label',
                                                     'title' => 'Image 2 supplement 1 title',
@@ -471,13 +485,18 @@ final class ArticleFiguresControllerTest extends PageTestCase
                                     ],
                                 ],
                                 [
-                                    'type' => 'table',
-                                    'doi' => '10.7554/eLife.09560.013',
-                                    'id' => 'table1',
-                                    'label' => 'Table 1 label',
-                                    'title' => 'Table 1 title',
-                                    'tables' => [
-                                        '<table><tbody><tr><td>Table</td></tr></tbody></table>',
+                                    'type' => 'figure',
+                                    'assets' => [
+                                        [
+                                            'type' => 'table',
+                                            'doi' => '10.7554/eLife.09560.013',
+                                            'id' => 'table1',
+                                            'label' => 'Table 1 label',
+                                            'title' => 'Table 1 title',
+                                            'tables' => [
+                                                '<table><tbody><tr><td>Table</td></tr></tbody></table>',
+                                            ],
+                                        ],
                                     ],
                                 ],
                             ],

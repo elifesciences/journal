@@ -4,15 +4,27 @@ namespace eLife\Journal\ViewModel\Converter;
 
 use eLife\ApiSdk\Collection\Sequence;
 use eLife\ApiSdk\Model\Author;
+use eLife\ApiSdk\Model\PersonAuthor;
 use eLife\Journal\Helper\Callback;
+use eLife\Journal\Helper\CanConvert;
+use eLife\Journal\Helper\HasPatternRenderer;
 
 trait AuthorDetailsConverter
 {
+    use CanConvert;
+    use HasPatternRenderer;
+
     private function findDetails(Author $author, Sequence $authors) : array
     {
+        if ($author instanceof PersonAuthor && $author->getBiography()->notEmpty()) {
+            $primary = $this->getPatternRenderer()->render(...$author->getBiography()->map($this->willConvertTo()));
+        } else {
+            $primary = array_map(Callback::method('toString'), $author->getAffiliations());
+        }
+
         return array_filter(
             [
-                '' => array_map(Callback::method('toString'), $author->getAffiliations()),
+                '' => $primary,
                 'Present address' => array_map(Callback::method('toString'), $author->getPostalAddresses()),
                 'Contribution' => $author->getContribution(),
                 'Contributed equally with' => $this->findEqualContributions($author, $authors),
@@ -24,7 +36,7 @@ trait AuthorDetailsConverter
                         return "<a href=\"tel:$phoneNumber\">$phoneNumber</a>";
                     }, $author->getPhoneNumbers())
                 ),
-                'Competing interests' => $author->getCompetingInterests() ?? 'No competing interests declared.',
+                'Competing interests' => $author->getCompetingInterests(),
                 'Additional information' => $author->getAdditionalInformation(),
             ]
         );

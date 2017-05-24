@@ -23,7 +23,7 @@ final class InsideElifeArticleControllerTest extends PageTestCase
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertSame('Blog article title', $crawler->filter('.content-header__title')->text());
         $this->assertSame('Inside eLife Jan 1, 2010', trim(preg_replace('!\s+!', ' ', $crawler->filter('.content-header .meta')->text())));
-        $this->assertContains('Blog article text.', $crawler->filter('.wrapper')->eq(1)->text());
+        $this->assertContains('Blog article text.', $crawler->filter('main > div.wrapper')->text());
     }
 
     /**

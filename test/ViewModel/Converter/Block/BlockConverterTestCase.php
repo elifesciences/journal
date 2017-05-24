@@ -20,12 +20,19 @@ abstract class BlockConverterTestCase extends ModelConverterTestCase
 
     final protected function modelHook(Model $model) : Traversable
     {
-        yield from array_filter(iterator_to_array($this->findBlocks($model)), [$this, 'includeBlock']);
+        foreach (array_filter(iterator_to_array($this->findBlocks($model)), [$this, 'includeBlock']) as $block) {
+            yield from $this->explodeBlock($block);
+        }
     }
 
     protected function includeBlock(Block $block) : bool
     {
         return true;
+    }
+
+    protected function explodeBlock(Block $block) : Traversable
+    {
+        yield $block;
     }
 
     private function findBlocks(Model $model) : Traversable

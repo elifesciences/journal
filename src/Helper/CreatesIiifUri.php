@@ -3,6 +3,7 @@
 namespace eLife\Journal\Helper;
 
 use eLife\ApiSdk\Model\Image;
+use InvalidArgumentException;
 
 trait CreatesIiifUri
 {
@@ -11,6 +12,11 @@ trait CreatesIiifUri
         $uri = $image->getUri();
         $region = 'full';
         $size = 'full';
+
+        if (($width && $width > ($image->getWidth() * 2)) || ($height && $height > ($image->getHeight() * 2))) {
+            throw new InvalidArgumentException("Unable to scale the image $uri that large (requested width: $width, requested height: $height; actual width: {$image->getWidth()}, actual height {$image->getHeight()})");
+        }
+
         if ($width && $height) {
             if (($width / $height) !== ($image->getWidth() / $image->getHeight())) {
                 $region = IiifRegionCalculator::calculateForImage($image, $width, $height);

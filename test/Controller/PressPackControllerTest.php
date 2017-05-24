@@ -23,10 +23,10 @@ final class PressPackControllerTest extends PageTestCase
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertSame('Press package title', $crawler->filter('.content-header__title')->text());
         $this->assertSame('Press pack Jan 1, 2010', trim(preg_replace('!\s+!', ' ', $crawler->filter('.content-header .meta')->text())));
-        $this->assertContains('Press package text.', $crawler->filter('.wrapper')->text());
+        $this->assertContains('Press package text.', $crawler->filter('main > div.wrapper')->text());
         $this->assertContains('Article title', $crawler->filter('.teaser__header_text')->text());
-        $this->assertNotContains('Media contacts', $crawler->filter('.wrapper')->text());
-        $this->assertNotContains('About', $crawler->filter('.wrapper')->text());
+        $this->assertNotContains('Media contacts', $crawler->filter('main > div.wrapper')->text());
+        $this->assertNotContains('About', $crawler->filter('main > div.wrapper')->text());
     }
 
     /**

@@ -3,7 +3,6 @@
 namespace eLife\Journal\ViewModel\Converter;
 
 use eLife\ApiSdk\Model\ArticleVersion;
-use eLife\ApiSdk\Model\ArticleVoR;
 use eLife\ApiSdk\Model\Author;
 use eLife\ApiSdk\Model\AuthorEntry;
 use eLife\ApiSdk\Model\Subject;
@@ -15,6 +14,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 final class ArticleContentHeaderConverter implements ViewModelConverter
 {
     use CreatesDate;
+    use CreatesId;
     use CreatesIiifUri;
 
     private $urlGenerator;
@@ -31,9 +31,19 @@ final class ArticleContentHeaderConverter implements ViewModelConverter
     {
         $subjects = $object->getSubjects()->map(function (Subject $subject) {
             return new ViewModel\Link($subject->getName(), $this->urlGenerator->generate('subject', ['id' => $subject->getId()]));
-        });
+        })->toArray();
 
-        $authors = $object->getAuthors()->map(function (AuthorEntry $author) {
+        $authors = $object->getAuthors()->map(function (AuthorEntry $author) use ($object) {
+            if ($author instanceof Author) {
+                return ViewModel\Author::asLink(
+                    new ViewModel\Link(
+                        $author->toString(),
+                        $this->urlGenerator->generate('article', ['id' => $object->getId(), '_fragment' => $this->createId($author)])
+                    ),
+                    !empty($author->getEmailAddresses()) || !empty($author->getPhoneNumbers())
+                );
+            }
+
             return ViewModel\Author::asText($author->toString());
         })->toArray();
 
@@ -54,9 +64,6 @@ final class ArticleContentHeaderConverter implements ViewModelConverter
             return $institutions;
         }, []))));
 
-        $authors = !empty($authors) ? ViewModel\AuthorList::asList($authors) : null;
-        $institutions = !empty($institutions) ? new ViewModel\InstitutionList($institutions) : null;
-
         $meta = ViewModel\Meta::withLink(
             new ViewModel\Link(
                 ModelName::singular($object->getType()),
@@ -65,47 +72,25 @@ final class ArticleContentHeaderConverter implements ViewModelConverter
             $this->simpleDate($object, ['date' => 'published'] + $context)
         );
 
-        switch ($object->getType()) {
-            case 'research-advance':
-            case 'research-article':
-            case 'research-exchange':
-            case 'replication-study':
-            case 'short-report':
-            case 'tools-resources':
-                return ViewModel\ContentHeaderArticle::research(
-                    $object->getFullTitle(),
-                    $meta,
-                    new ViewModel\SubjectList(...$subjects),
-                    $authors,
-                    $institutions,
-                    '#downloads'
-                );
-        }
-
-        if ($object instanceof ArticleVoR && $object->getBanner()) {
-            $image = new ViewModel\BackgroundImage(
-                $this->iiifUri($object->getBanner(), 900, 450),
-                $this->iiifUri($object->getBanner(), 1800, 900)
-            );
-        } else {
-            $image = null;
-        }
-
-        return ViewModel\ContentHeaderArticle::magazine(
+        return new ViewModel\ContentHeader(
             $object->getFullTitle(),
-            $object instanceof ArticleVoR ? $object->getImpactStatement() : null,
+            null,
+            null,
+            true,
+            $subjects,
+            null,
+            $object->getAuthorLine(),
             $authors,
-            '#downloads',
-            new ViewModel\SubjectList(...$subjects),
-            $meta,
             $institutions,
-            false,
-            $image
+            $this->urlGenerator->generate('article', ['id' => $object->getId(), '_fragment' => 'downloads']),
+            null,
+            null,
+            $meta
         );
     }
 
     public function supports($object, string $viewModel = null, array $context = []) : bool
     {
-        return $object instanceof ArticleVersion && ViewModel\ContentHeaderArticle::class === $viewModel;
+        return $object instanceof ArticleVersion && ViewModel\ContentHeader::class === $viewModel;
     }
 }

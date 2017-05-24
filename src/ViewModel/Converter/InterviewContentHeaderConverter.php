@@ -4,27 +4,46 @@ namespace eLife\Journal\ViewModel\Converter;
 
 use eLife\ApiSdk\Model\Interview;
 use eLife\Patterns\ViewModel;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 final class InterviewContentHeaderConverter implements ViewModelConverter
 {
     use CreatesDate;
+
+    private $urlGenerator;
+
+    public function __construct(UrlGeneratorInterface $urlGenerator)
+    {
+        $this->urlGenerator = $urlGenerator;
+    }
 
     /**
      * @param Interview $object
      */
     public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
-        return ViewModel\ContentHeaderNonArticle::basic(
+        return new ViewModel\ContentHeader(
             $object->getTitle(),
+            null,
+            $object->getImpactStatement(),
             false,
+            [],
             null,
             null,
-            ViewModel\Meta::withText('Interview', $this->simpleDate($object, ['date' => 'published'] + $context))
+            [],
+            [],
+            null,
+            null,
+            null,
+            ViewModel\Meta::withLink(
+                new ViewModel\Link('Interview', $this->urlGenerator->generate('interviews')),
+                $this->simpleDate($object, ['date' => 'published'] + $context)
+            )
         );
     }
 
     public function supports($object, string $viewModel = null, array $context = []) : bool
     {
-        return $object instanceof Interview && ViewModel\ContentHeaderNonArticle::class === $viewModel;
+        return $object instanceof Interview && ViewModel\ContentHeader::class === $viewModel;
     }
 }

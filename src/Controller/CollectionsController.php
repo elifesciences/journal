@@ -7,8 +7,8 @@ use eLife\ApiSdk\Model\Collection;
 use eLife\Journal\Helper\Callback;
 use eLife\Journal\Helper\HasPages;
 use eLife\Journal\Helper\Paginator;
-use eLife\Patterns\ViewModel\ContentHeaderNonArticle;
-use eLife\Patterns\ViewModel\LeadParas;
+use eLife\Patterns\ViewModel\ContentHeader;
+use eLife\Patterns\ViewModel\ListHeading;
 use eLife\Patterns\ViewModel\ListingProfileSnippets;
 use eLife\Patterns\ViewModel\ListingTeasers;
 use eLife\Patterns\ViewModel\ProfileSnippet;
@@ -54,7 +54,7 @@ final class CollectionsController extends Controller
 
     private function createFirstPage(array $arguments) : Response
     {
-        $arguments['contentHeader'] = ContentHeaderNonArticle::basic($arguments['title']);
+        $arguments['contentHeader'] = new ContentHeader($arguments['title']);
 
         return new Response($this->get('templating')->render('::collections.html.twig', $arguments));
     }
@@ -69,21 +69,22 @@ final class CollectionsController extends Controller
         $arguments = $this->defaultPageArguments($request, $collection);
 
         $arguments['title'] = $collection
-            ->then(Callback::method('getFullTitle'));
+            ->then(Callback::method('getTitle'));
 
         $arguments['collection'] = $collection;
 
         $arguments['contentHeader'] = $arguments['collection']
-            ->then($this->willConvertTo(ContentHeaderNonArticle::class));
+            ->then($this->willConvertTo(ContentHeader::class));
 
-        $arguments['leadParas'] = $arguments['collection']
-            ->then(Callback::methodEmptyOr('getImpactStatement', $this->willConvertTo(LeadParas::class)));
-
-        $arguments['collectionList'] = $arguments['collection']
+        $arguments['body'] = $arguments['collection']
             ->then(function (Collection $collection) {
-                return ListingTeasers::basic(
+                if ($collection->getSummary()->notEmpty()) {
+                    yield from $collection->getSummary()->map($this->willConvertTo());
+                }
+
+                yield ListingTeasers::basic(
                     $collection->getContent()->map($this->willConvertTo(Teaser::class))->toArray(),
-                    'Collection'
+                    new ListHeading('Collection')
                 );
             });
 
@@ -92,7 +93,7 @@ final class CollectionsController extends Controller
             ->then(Callback::emptyOr(function (Sequence $podcastEpisodes) {
                 return ListingTeasers::basic(
                     $podcastEpisodes->map($this->willConvertTo(Teaser::class, ['variant' => 'secondary']))->toArray(),
-                    'Multimedia'
+                    new ListHeading('Multimedia')
                 );
             }));
 
@@ -101,7 +102,7 @@ final class CollectionsController extends Controller
             ->then(Callback::emptyOr(function (Sequence $relatedContent) {
                 return ListingTeasers::basic(
                     $relatedContent->map($this->willConvertTo(Teaser::class, ['variant' => 'secondary']))->toArray(),
-                    'Related'
+                    new ListHeading('Related')
                 );
             }));
 
@@ -110,7 +111,7 @@ final class CollectionsController extends Controller
             ->then(function (Sequence $curators) {
                 return ListingProfileSnippets::basic(
                     $curators->map($this->willConvertTo(ProfileSnippet::class))->toArray(),
-                    'Contributors'
+                    new ListHeading('Contributors')
                 );
             });
 

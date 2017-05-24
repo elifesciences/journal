@@ -19,7 +19,6 @@ final class SubjectControllerTest extends PageTestCase
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertSame('Subject', $crawler->filter('.content-header__title')->text());
-        $this->assertSame('Subject impact statement.', trim($crawler->filter('main .lead-paras')->text()));
         $this->assertContains('No articles available.', $crawler->filter('main')->text());
     }
 
@@ -41,142 +40,9 @@ final class SubjectControllerTest extends PageTestCase
         $this->assertSame('Subject impact statement.', $crawler->filter('meta[property="og:description"]')->attr('content'));
         $this->assertSame('Subject impact statement.', $crawler->filter('meta[name="description"]')->attr('content'));
         $this->assertSame('summary_large_image', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
-        $this->assertSame('https://www.example.com/iiif/image/0,100,800,400/1800,900/0/default.jpg', $crawler->filter('meta[property="og:image"]')->attr('content'));
-        $this->assertSame('1800', $crawler->filter('meta[property="og:image:width"]')->attr('content'));
-        $this->assertSame('900', $crawler->filter('meta[property="og:image:height"]')->attr('content'));
-    }
-
-    /**
-     * @test
-     */
-    public function it_ignores_podcast_highlights()
-    {
-        $client = static::createClient();
-
-        $this->mockApiResponse(
-            new Request(
-                'GET',
-                'http://api.elifesciences.org/highlights/subject',
-                ['Accept' => 'application/vnd.elife.highlights+json; version=1']
-            ),
-            new Response(
-                200,
-                ['Content-Type' => 'application/vnd.elife.highlights+json; version=1'],
-                json_encode([
-                    [
-                        'title' => 'Article highlight',
-                        'item' => [
-                            'status' => 'vor',
-                            'stage' => 'preview',
-                            'id' => '00001',
-                            'version' => 1,
-                            'type' => 'research-article',
-                            'doi' => '10.7554/eLife.00001',
-                            'title' => 'Article',
-                            'volume' => 1,
-                            'elocationId' => 'e00001',
-                            'copyright' => [
-                                'license' => 'CC-BY-4.0',
-                                'holder' => 'Bar',
-                                'statement' => 'Copyright statement.',
-                            ],
-                            'subjects' => [
-                                [
-                                    'id' => 'subject',
-                                    'name' => 'Subject',
-                                ],
-                            ],
-                        ],
-                    ],
-                    [
-                        'title' => 'Podcast episode highlight',
-                        'item' => [
-                            'type' => 'podcast-episode',
-                            'number' => 1,
-                            'title' => 'Podcast episode',
-                            'published' => '2000-01-01T00:00:00Z',
-                            'image' => [
-                                'thumbnail' => [
-                                    'uri' => 'https://www.example.com/iiif/image',
-                                    'alt' => '',
-                                    'source' => [
-                                        'mediaType' => 'image/jpeg',
-                                        'uri' => 'https://www.example.com/image.jpg',
-                                        'filename' => 'image.jpg',
-                                    ],
-                                    'size' => [
-                                        'width' => 800,
-                                        'height' => 600,
-                                    ],
-                                ],
-                            ],
-                            'sources' => [
-                                [
-                                    'mediaType' => 'audio/mpeg',
-                                    'uri' => 'https://nakeddiscovery.com/scripts/mp3s/audio/eLife_Podcast_16.05.mp3',
-                                ],
-                            ],
-                            'subjects' => [
-                                [
-                                    'id' => 'subject',
-                                    'name' => 'Subject',
-                                ],
-                            ],
-                        ],
-                    ],
-                    [
-                        'title' => 'Podcast episode chapter highlight',
-                        'item' => [
-                            'type' => 'podcast-episode-chapter',
-                            'episode' => [
-                                'number' => 1,
-                                'title' => 'Podcast episode',
-                                'published' => '2000-01-01T00:00:00Z',
-                                'image' => [
-                                    'thumbnail' => [
-                                        'uri' => 'https://www.example.com/iiif/image',
-                                        'alt' => '',
-                                        'source' => [
-                                            'mediaType' => 'image/jpeg',
-                                            'uri' => 'https://www.example.com/image.jpg',
-                                            'filename' => 'image.jpg',
-                                        ],
-                                        'size' => [
-                                            'width' => 800,
-                                            'height' => 600,
-                                        ],
-                                    ],
-                                ],
-                                'sources' => [
-                                    [
-                                        'mediaType' => 'audio/mpeg',
-                                        'uri' => 'https://nakeddiscovery.com/scripts/mp3s/audio/eLife_Podcast_16.06.mp3',
-                                    ],
-                                ],
-                                'subjects' => [
-                                    [
-                                        'id' => 'subject',
-                                        'name' => 'Subject',
-                                    ],
-                                ],
-                            ],
-                            'chapter' => [
-                                'number' => 1,
-                                'title' => 'Chapter',
-                                'time' => 0,
-                            ],
-                        ],
-                    ],
-                ])
-            )
-        );
-
-        $crawler = $client->request('GET', $this->getUrl());
-
-        $this->assertSame(200, $client->getResponse()->getStatusCode());
-
-        $this->assertCount(1, $crawler->filter('.list-heading:contains("Highlights") + .listing-list > .listing-list__item'));
-        $this->assertContains('Article highlight', $crawler->filter('.list-heading:contains("Highlights") + .listing-list > .listing-list__item:nth-child(1)')->text());
+        $this->assertSame('https://www.example.com/iiif/banner/0,529,1800,543/1114,336/0/default.jpg', $crawler->filter('meta[property="og:image"]')->attr('content'));
+        $this->assertSame('1114', $crawler->filter('meta[property="og:image:width"]')->attr('content'));
+        $this->assertSame('336', $crawler->filter('meta[property="og:image:height"]')->attr('content'));
     }
 
     /**
@@ -254,7 +120,7 @@ final class SubjectControllerTest extends PageTestCase
                     $this->mockApiResponse(
                         new Request(
                             'GET',
-                            'http://api.elifesciences.org/search?for=&page=1&per-page=1&sort=date&order=desc&subject[]=subject&type[]=research-article&type[]=research-advance&type[]=research-exchange&type[]=short-report&type[]=tools-resources&type[]=replication-study&type[]=editorial&type[]=insight&type[]=feature&type[]=collection&use-date=default',
+                            'http://api.elifesciences.org/search?for=&page=1&per-page=1&sort=date&order=desc&subject[]=subject&type[]=research-article&type[]=research-advance&type[]=scientific-correspondence&type[]=short-report&type[]=tools-resources&type[]=replication-study&type[]=editorial&type[]=insight&type[]=feature&type[]=collection&use-date=default',
                             ['Accept' => 'application/vnd.elife.search+json; version=1']
                         ),
                         new Response(
@@ -320,16 +186,16 @@ final class SubjectControllerTest extends PageTestCase
                     'impactStatement' => 'Subject impact statement.',
                     'image' => [
                         'banner' => [
-                            'uri' => 'https://www.example.com/iiif/image',
+                            'uri' => 'https://www.example.com/iiif/banner',
                             'alt' => '',
                             'source' => [
                                 'mediaType' => 'image/jpeg',
-                                'uri' => 'https://www.example.com/image.jpg',
+                                'uri' => 'https://www.example.com/banner.jpg',
                                 'filename' => 'image.jpg',
                             ],
                             'size' => [
-                                'width' => 800,
-                                'height' => 600,
+                                'width' => 1800,
+                                'height' => 1600,
                             ],
                         ],
                         'thumbnail' => [
@@ -353,7 +219,7 @@ final class SubjectControllerTest extends PageTestCase
         static::mockApiResponse(
             new Request(
                 'GET',
-                'http://api.elifesciences.org/search?for=&page=1&per-page=6&sort=date&order=desc&subject[]=subject&type[]=research-article&type[]=research-advance&type[]=research-exchange&type[]=short-report&type[]=tools-resources&type[]=replication-study&type[]=editorial&type[]=insight&type[]=feature&type[]=collection&use-date=default',
+                'http://api.elifesciences.org/search?for=&page=1&per-page=6&sort=date&order=desc&subject[]=subject&type[]=research-article&type[]=research-advance&type[]=scientific-correspondence&type[]=short-report&type[]=tools-resources&type[]=replication-study&type[]=editorial&type[]=insight&type[]=feature&type[]=collection&use-date=default',
                 [
                     'Accept' => 'application/vnd.elife.search+json; version=1',
                 ]
@@ -380,10 +246,10 @@ final class SubjectControllerTest extends PageTestCase
                         'insight' => 0,
                         'research-advance' => 0,
                         'research-article' => 0,
-                        'research-exchange' => 0,
                         'retraction' => 0,
                         'registered-report' => 0,
                         'replication-study' => 0,
+                        'scientific-correspondence' => 0,
                         'short-report' => 0,
                         'tools-resources' => 0,
                         'blog-article' => 0,

@@ -25,19 +25,6 @@ final class LabsContext extends Context
                 'title' => 'Experiment '.$i.' title',
                 'published' => $today->format(ApiSdk::DATE_FORMAT),
                 'image' => [
-                    'banner' => [
-                        'uri' => "https://www.example.com/iiif/banner$i",
-                        'alt' => '',
-                        'source' => [
-                            'mediaType' => 'image/jpeg',
-                            'uri' => "https://www.example.com/banner$i.jpg",
-                            'filename' => "banner$i.jpg",
-                        ],
-                        'size' => [
-                            'width' => 800,
-                            'height' => 600,
-                        ],
-                    ],
                     'thumbnail' => [
                         'uri' => "https://www.example.com/iiif/thumbnail$i",
                         'alt' => '',
@@ -74,7 +61,6 @@ final class LabsContext extends Context
                 json_encode([
                     'total' => $number,
                     'items' => array_map(function (array $experiment) {
-                        unset($experiment['image']['banner']);
                         unset($experiment['content']);
 
                         return $experiment;
@@ -98,7 +84,6 @@ final class LabsContext extends Context
                     json_encode([
                         'total' => $number,
                         'items' => array_map(function (array $experiment) {
-                            unset($experiment['image']['banner']);
                             unset($experiment['content']);
 
                             return $experiment;
@@ -175,7 +160,7 @@ final class LabsContext extends Context
     {
         $this->spin(function () use ($number) {
             $this->assertSession()
-                ->elementsCount('css', '.grid-listing-heading:contains("Latest") + .grid-listing > .grid-listing-item', $number);
+                ->elementsCount('css', '.list-heading:contains("Latest") + .grid-listing > .grid-listing-item', $number);
 
             for ($i = $number; $i > 0; --$i) {
                 $nthChild = ($number - $i + 1);
@@ -183,7 +168,7 @@ final class LabsContext extends Context
 
                 $this->assertSession()->elementContains(
                     'css',
-                    '.grid-listing-heading:contains("Latest") + .grid-listing > .grid-listing-item:nth-child('.$nthChild.')',
+                    '.list-heading:contains("Latest") + .grid-listing > .grid-listing-item:nth-child('.$nthChild.')',
                     'Experiment '.$expectedNumber.' title'
                 );
             }
