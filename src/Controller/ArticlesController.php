@@ -76,26 +76,10 @@ final class ArticlesController extends Controller
                 }
 
                 return true;
-            })
-            ->then(function (Sequence $furtherReading) use ($arguments) {
-                if (count($furtherReading) > 0) {
-                    foreach ($arguments['relatedArticles'] as $relatedArticle) {
-                        if ($furtherReading[0] instanceof Article && $furtherReading[0]->getId() === $relatedArticle->getId()) {
-                            $relatedItem = $furtherReading[0];
-                            $furtherReading = $furtherReading->slice(1);
-                            break;
-                        }
-                    }
-                }
-
-                return [
-                    'relatedItem' => $relatedItem ?? null,
-                    'furtherReading' => $furtherReading,
-                ];
             });
 
-        $arguments['relatedItem'] = $arguments['furtherReading']->then(Callback::pick('relatedItem'));
-        $furtherReading = new PromiseSequence($arguments['furtherReading']->then(Callback::pick('furtherReading')));
+        $arguments['relatedItem'] = $arguments['furtherReading']->then(Callback::method('offsetGet', 0));
+        $furtherReading = new PromiseSequence($arguments['furtherReading']->then(Callback::method('slice', 1)));
 
         $furtherReading = $this->pagerfantaPromise(
             $furtherReading,
