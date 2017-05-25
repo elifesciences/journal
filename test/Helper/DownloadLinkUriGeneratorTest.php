@@ -16,6 +16,9 @@ final class DownloadLinkUriGeneratorTest extends KernelTestCase
     /** @var UriSigner */
     private $uriSigner;
 
+    /** @var string */
+    private $defaultBaseUrl;
+
     /**
      * @before
      */
@@ -23,8 +26,16 @@ final class DownloadLinkUriGeneratorTest extends KernelTestCase
     {
         static::bootKernel();
 
-        $this->downloadLinkUriGenerator = static::$kernel->getContainer()->get('elife.journal.helper.download_link_uri_generator');
-        $this->uriSigner = static::$kernel->getContainer()->get('uri_signer');
+        $container = static::$kernel->getContainer();
+        $this->downloadLinkUriGenerator = $container->get('elife.journal.helper.download_link_uri_generator');
+        $this->uriSigner = $container->get('uri_signer');
+        $this->defaultBaseUrl =
+            $container->getParameter('router.request_context.scheme')
+            .'://'
+            .$container->getParameter('router.request_context.host')
+            .($container->getParameter('router.request_context.base_url')
+                ? '/'.$container->getParameter('router.request_context.base_url')
+                : '');
     }
 
     /**
@@ -32,7 +43,10 @@ final class DownloadLinkUriGeneratorTest extends KernelTestCase
      */
     public function it_generates_a_uri()
     {
-        $this->assertSame($this->uriSigner->sign('http://localhost/download/aHR0cDovL3d3dy5leGFtcGxlLmNvbS90ZXN0LnR4dA==/foo.bar'), $this->downloadLinkUriGenerator->generate(new DownloadLink('http://www.example.com/test.txt', 'foo.bar')));
+        $this->assertSame(
+            $this->uriSigner->sign($this->defaultBaseUrl.'/download/aHR0cDovL3d3dy5leGFtcGxlLmNvbS90ZXN0LnR4dA==/foo.bar'),
+            $this->downloadLinkUriGenerator->generate(new DownloadLink('http://www.example.com/test.txt', 'foo.bar'))
+        );
     }
 
     /**
