@@ -390,18 +390,25 @@ final class SubjectContext extends Context
             ];
         }
 
-        $this->mockApiResponse(
-            new Request(
-                'GET',
-                "http://api.elifesciences.org/highlights/$subjectId",
-                ['Accept' => 'application/vnd.elife.highlights+json; version=1']
-            ),
-            new Response(
-                200,
-                ['Content-Type' => 'application/vnd.elife.highlights+json; version=1'],
-                json_encode($articles)
-            )
-        );
+        foreach (array_chunk($articles, 3) as $i => $articlesChunk) {
+            $page = $i + 1;
+
+            $this->mockApiResponse(
+                new Request(
+                    'GET',
+                    "http://api.elifesciences.org/highlights/$subjectId?page=$page&per-page=3&order=desc",
+                    ['Accept' => 'application/vnd.elife.highlight-list+json; version=1']
+                ),
+                new Response(
+                    200,
+                    ['Content-Type' => 'application/vnd.elife.highlight-list+json; version=1'],
+                    json_encode([
+                        'total' => $number,
+                        'items' => $articlesChunk,
+                    ])
+                )
+            );
+        }
     }
 
     /**

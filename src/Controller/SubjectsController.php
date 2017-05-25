@@ -130,8 +130,8 @@ final class SubjectsController extends Controller
             ->then($this->willConvertTo(ContentHeader::class));
 
         $arguments['highlights'] = (new PromiseSequence($this->get('elife.api_sdk.highlights')
-            ->get($arguments['id'])))
-            ->slice(0, 3)
+            ->get($arguments['id'])
+            ->slice(0, 3)))
             ->map($this->willConvertTo(Teaser::class, ['variant' => 'secondary']))
             ->then(Callback::emptyOr(function (Sequence $result) {
                 return ListingTeasers::basic($result->toArray(), new ListHeading('Highlights'));
