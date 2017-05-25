@@ -60,7 +60,8 @@ follow us on <a href="https://www.twitter.com/elifecommunity">Twitter</a>, and e
         );
 
         $arguments['highlights'] = (new PromiseSequence($this->get('elife.api_sdk.highlights')
-            ->get('community')))
+            ->get('community')
+            ->slice(0, 6)))
             ->then(Callback::emptyOr(function (Sequence $result) {
                 return ListingTeasers::basic($result->map($this->willConvertTo(Teaser::class, ['variant' => 'secondary']))->toArray(), new ListHeading('Highlights'));
             }))

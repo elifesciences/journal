@@ -97,7 +97,7 @@ abstract class ModelConverterTestCase extends PHPUnit_Framework_TestCase
                     $list = true;
                     break;
                 case 'highlight':
-                    $model = 'highlights';
+                    $model = 'highlight-list';
                     $list = true;
                     break;
                 case 'medium-article':
