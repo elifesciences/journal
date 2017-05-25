@@ -42,10 +42,16 @@ final class PersonAboutProfileConverter implements ViewModelConverter
             $extra = null;
         }
 
+        if ($object->getAffiliations()->notEmpty()) {
+            $role = implode('<br>', $object->getAffiliations()->map(Callback::method('toString'))->toArray());
+        } else {
+            $role = $object->getTypeLabel();
+        }
+
         if ($context['compact'] ?? false) {
             return new ViewModel\AboutProfile(
                 $object->getDetails()->getPreferredName(),
-                $object->getTypeLabel(),
+                $role,
                 null,
                 $extra
             );
@@ -88,7 +94,7 @@ final class PersonAboutProfileConverter implements ViewModelConverter
 
         return new ViewModel\AboutProfile(
             $object->getDetails()->getPreferredName(),
-            $object->getTypeLabel(),
+            $role,
             $image,
             $this->patternRenderer->render(...$profile)
         );
