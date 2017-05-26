@@ -16,8 +16,15 @@ smoke_url_ok $(hostname)/ping
 
 if [ "$ENVIRONMENT_NAME" != "ci" ] && [ "$ENVIRONMENT_NAME" != "dev" ]
   then
-    curl -v $(hostname)/status | grep check__name
-    smoke_url_ok $(hostname)/status
+    checks=$(curl -v $(hostname)/status | grep check__name)
+    echo $checks
+    good_checks=$(echo $checks | grep -o ✔ | wc -l)
+    if [ "$good_checks" -ne 6 ]; then
+        echo "Not all status checks are ok"
+        exit 2
+    else
+        echo "All checks are ok"
+    fi
     smoke_url_ok $(hostname)/
 fi
 
