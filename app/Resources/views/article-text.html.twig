@@ -78,6 +78,10 @@
             s.src = 'https://{{ disqus_domain }}.disqus.com/embed.js';
             s.setAttribute('data-timestamp', +new Date());
             (d.head || d.body).appendChild(s);
+
+            d.getElementById('comments').addEventListener('expandsection', function () {
+                window.dispatchEvent(new Event('resize'));
+            })
         })();
     </script>
 
