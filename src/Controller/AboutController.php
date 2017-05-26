@@ -234,7 +234,7 @@ final class AboutController extends Controller
                 $arguments['lists'][] = $this->createAboutProfiles($people->forType('director'), 'Board of directors');
                 break;
             case 'early-career':
-                $arguments['list'][] = $this->createAboutProfiles($people->forType('early-career'), 'Early-career advisory group');
+                $arguments['lists'][] = $this->createAboutProfiles($people->forType('early-career'), 'Early-career advisory group');
                 break;
             case 'staff':
                 $arguments['lists'][] = $this->createAboutProfiles($people->forType('executive'), 'Executive staff');
