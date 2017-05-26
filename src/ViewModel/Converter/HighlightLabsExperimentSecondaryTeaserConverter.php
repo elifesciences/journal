@@ -31,7 +31,7 @@ final class HighlightLabsExperimentSecondaryTeaserConverter implements ViewModel
         return ViewModel\Teaser::secondary(
             $object->getTitle(),
             $this->urlGenerator->generate('labs-experiment', ['number' => $experiment->getNumber()]),
-            $object->getAuthorLine(),
+            null,
             $this->createContextLabel($experiment),
             $object->getThumbnail() ? $this->smallTeaserImage($object) : null,
             ViewModel\TeaserFooter::forNonArticle(
