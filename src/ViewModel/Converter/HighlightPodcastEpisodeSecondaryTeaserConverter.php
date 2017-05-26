@@ -30,7 +30,7 @@ final class HighlightPodcastEpisodeSecondaryTeaserConverter implements ViewModel
         return ViewModel\Teaser::secondary(
             $object->getTitle(),
             $this->urlGenerator->generate('podcast-episode', ['number' => $episode->getNumber()]),
-            $object->getAuthorLine(),
+            null,
             $this->createContextLabel($episode),
             $object->getThumbnail() ? $this->smallTeaserImage($object) : null,
             ViewModel\TeaserFooter::forNonArticle(

@@ -34,7 +34,7 @@ final class HighlightEventSecondaryTeaserConverter implements ViewModelConverter
         return ViewModel\Teaser::event(
             $object->getTitle(),
             $this->urlGenerator->generate('event', ['id' => $event->getId(), 'slug' => $this->slugify->slugify($event->getTitle())]),
-            $object->getAuthorLine(),
+            null,
             ViewModel\Date::expanded($event->getStarts()),
             true,
             $object->getThumbnail() ? $this->smallTeaserImage($object) : null
