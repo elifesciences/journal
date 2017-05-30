@@ -6,23 +6,23 @@ use GuzzleHttp\Psr7\Response;
 
 final class LabsContext extends Context
 {
-    private $numberOfExperiments;
+    private $numberOfPosts;
 
     /**
-     * @Given /^there are (\d+) Labs experiments$/
+     * @Given /^there are (\d+) Labs posts$/
      */
-    public function thereAreLabsExperiments(int $number)
+    public function thereAreLabsPosts(int $number)
     {
-        $this->numberOfExperiments = $number;
+        $this->numberOfPosts = $number;
 
-        $experiments = [];
+        $posts = [];
 
         $today = (new DateTimeImmutable())->setTime(0, 0, 0);
 
         for ($i = $number; $i > 0; --$i) {
-            $experiments[] = [
-                'number' => $i,
-                'title' => 'Experiment '.$i.' title',
+            $posts[] = [
+                'id' => (string) $i,
+                'title' => 'Post '.$i.' title',
                 'published' => $today->format(ApiSdk::DATE_FORMAT),
                 'image' => [
                     'thumbnail' => [
@@ -39,11 +39,11 @@ final class LabsContext extends Context
                         ],
                     ],
                 ],
-                'impactStatement' => 'Experiment '.$i.' impact statement',
+                'impactStatement' => 'Post '.$i.' impact statement',
                 'content' => [
                     [
                         'type' => 'paragraph',
-                        'text' => 'Experiment '.$i.' text.',
+                        'text' => 'Post '.$i.' text.',
                     ],
                 ],
             ];
@@ -52,57 +52,57 @@ final class LabsContext extends Context
         $this->mockApiResponse(
             new Request(
                 'GET',
-                'http://api.elifesciences.org/labs-experiments?page=1&per-page=1&order=desc',
-                ['Accept' => 'application/vnd.elife.labs-experiment-list+json; version=1']
+                'http://api.elifesciences.org/labs-posts?page=1&per-page=1&order=desc',
+                ['Accept' => 'application/vnd.elife.labs-post-list+json; version=1']
             ),
             new Response(
                 200,
-                ['Content-Type' => 'application/vnd.elife.labs-experiment-list+json; version=1'],
+                ['Content-Type' => 'application/vnd.elife.labs-post-list+json; version=1'],
                 json_encode([
                     'total' => $number,
-                    'items' => array_map(function (array $experiment) {
-                        unset($experiment['content']);
+                    'items' => array_map(function (array $post) {
+                        unset($post['content']);
 
-                        return $experiment;
-                    }, [$experiments[0]]),
+                        return $post;
+                    }, [$posts[0]]),
                 ])
             )
         );
 
-        foreach (array_chunk($experiments, 8) as $i => $experimentsChunk) {
+        foreach (array_chunk($posts, 8) as $i => $postsChunk) {
             $page = $i + 1;
 
             $this->mockApiResponse(
                 new Request(
                     'GET',
-                    "http://api.elifesciences.org/labs-experiments?page=$page&per-page=8&order=desc",
-                    ['Accept' => 'application/vnd.elife.labs-experiment-list+json; version=1']
+                    "http://api.elifesciences.org/labs-posts?page=$page&per-page=8&order=desc",
+                    ['Accept' => 'application/vnd.elife.labs-post-list+json; version=1']
                 ),
                 new Response(
                     200,
-                    ['Content-Type' => 'application/vnd.elife.labs-experiment-list+json; version=1'],
+                    ['Content-Type' => 'application/vnd.elife.labs-post-list+json; version=1'],
                     json_encode([
                         'total' => $number,
-                        'items' => array_map(function (array $experiment) {
-                            unset($experiment['content']);
+                        'items' => array_map(function (array $post) {
+                            unset($post['content']);
 
-                            return $experiment;
-                        }, $experimentsChunk),
+                            return $post;
+                        }, $postsChunk),
                     ])
                 )
             );
 
-            foreach ($experimentsChunk as $experiment) {
+            foreach ($postsChunk as $post) {
                 $this->mockApiResponse(
                     new Request(
                         'GET',
-                        'http://api.elifesciences.org/labs-experiments/'.$experiment['number'],
-                        ['Accept' => 'application/vnd.elife.labs-experiment+json; version=1']
+                        'http://api.elifesciences.org/labs-posts/'.$post['id'],
+                        ['Accept' => 'application/vnd.elife.labs-post+json; version=1']
                     ),
                     new Response(
                         200,
-                        ['Content-Type' => 'application/vnd.elife.labs-experiment+json; version=1'],
-                        json_encode($experiment)
+                        ['Content-Type' => 'application/vnd.elife.labs-post+json; version=1'],
+                        json_encode($post)
                     )
                 );
             }
@@ -110,13 +110,13 @@ final class LabsContext extends Context
     }
 
     /**
-     * @Given /^I am on a Labs experiment page$/
+     * @Given /^I am on a Labs post page$/
      */
-    public function iAmOnALabsExperimentPage()
+    public function iAmOnALabsPostPage()
     {
-        $this->thereAreLabsExperiments(1);
+        $this->thereAreLabsPosts(1);
 
-        $this->visitPath('/labs/experiment1');
+        $this->visitPath('/labs/1');
     }
 
     /**
@@ -128,11 +128,11 @@ final class LabsContext extends Context
     }
 
     /**
-     * @When /^I load more experiments$/
+     * @When /^I load more posts$/
      */
-    public function iLoadMoreExperiments()
+    public function iLoadMorePosts()
     {
-        $this->getSession()->getPage()->clickLink('More experiments');
+        $this->getSession()->getPage()->clickLink('More posts');
     }
 
     /**
@@ -144,9 +144,9 @@ final class LabsContext extends Context
 
         $page = $this->getSession()->getPage();
 
-        $page->fillField('labs_experiment_feedback[name]', 'Foo Bar');
-        $page->fillField('labs_experiment_feedback[email]', 'foo@example.com');
-        $page->fillField('labs_experiment_feedback[comment]', "Lorem ipsum dolor sit amet, consectetur adipiscing elit.\n\nVivamus rhoncus turpis quam, sit amet finibus elit pharetra eget.");
+        $page->fillField('labs_post_feedback[name]', 'Foo Bar');
+        $page->fillField('labs_post_feedback[email]', 'foo@example.com');
+        $page->fillField('labs_post_feedback[comment]', "Lorem ipsum dolor sit amet, consectetur adipiscing elit.\n\nVivamus rhoncus turpis quam, sit amet finibus elit pharetra eget.");
 
         $page->pressButton('Submit');
 
@@ -154,9 +154,9 @@ final class LabsContext extends Context
     }
 
     /**
-     * @Then /^I should see the latest (\d+) Labs experiments in the 'Latest' list$/
+     * @Then /^I should see the latest (\d+) Labs posts in the 'Latest' list$/
      */
-    public function iShouldSeeTheLatestLabsExperimentsInTheLatestList(int $number)
+    public function iShouldSeeTheLatestLabsPostsInTheLatestList(int $number)
     {
         $this->spin(function () use ($number) {
             $this->assertSession()
@@ -164,12 +164,12 @@ final class LabsContext extends Context
 
             for ($i = $number; $i > 0; --$i) {
                 $nthChild = ($number - $i + 1);
-                $expectedNumber = ($this->numberOfExperiments - $nthChild + 1);
+                $expectedNumber = ($this->numberOfPosts - $nthChild + 1);
 
                 $this->assertSession()->elementContains(
                     'css',
                     '.list-heading:contains("Latest") + .grid-listing > .grid-listing-item:nth-child('.$nthChild.')',
-                    'Experiment '.$expectedNumber.' title'
+                    'Post '.$expectedNumber.' title'
                 );
             }
         });
@@ -201,7 +201,7 @@ eLife Sciences Publications, Ltd is a limited liability non-profit non-stock cor
     public function theCompletedFormShouldBeSentToLabsElifesciencesOrg()
     {
         $this->assertEmailSent(['do_not_reply@elifesciences.org' => null], ['labs@elifesciences.org' => null],
-            'Comment submitted', 'A comment has been submitted on '.$this->locatePath('/labs/experiment1').'
+            'Comment submitted', 'A comment has been submitted on '.$this->locatePath('/labs/1').'
 
 Name
 ----
