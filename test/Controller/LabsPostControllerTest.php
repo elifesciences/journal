@@ -34,8 +34,8 @@ final class LabsPostControllerTest extends PageTestCase
         $this->assertSame(200, $client->getResponse()->getStatusCode());
 
         $this->assertSame('Post title | Labs | eLife', $crawler->filter('title')->text());
-        $this->assertSame('/labs/1', $crawler->filter('link[rel="canonical"]')->attr('href'));
-        $this->assertSame('http://localhost/labs/1', $crawler->filter('meta[property="og:url"]')->attr('content'));
+        $this->assertSame('/labs/1/post-title', $crawler->filter('link[rel="canonical"]')->attr('href'));
+        $this->assertSame('http://localhost/labs/1/post-title', $crawler->filter('meta[property="og:url"]')->attr('content'));
         $this->assertSame('Post title', $crawler->filter('meta[property="og:title"]')->attr('content'));
         $this->assertSame('Post impact statement', $crawler->filter('meta[property="og:description"]')->attr('content'));
         $this->assertSame('Post impact statement', $crawler->filter('meta[name="description"]')->attr('content'));
@@ -165,6 +165,6 @@ final class LabsPostControllerTest extends PageTestCase
             )
         );
 
-        return '/labs/1';
+        return '/labs/1/post-title';
     }
 }

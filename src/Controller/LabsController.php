@@ -83,7 +83,8 @@ Learn more about <a href="'.$this->get('router')->generate('about-innovation').'
     {
         $post = $this->get('elife.api_sdk.labs_posts')
             ->get($id)
-            ->otherwise($this->mightNotExist());
+            ->otherwise($this->mightNotExist())
+            ->then($this->checkSlug($request, Callback::method('getTitle')));
 
         $arguments = $this->defaultPageArguments($request, $post);
 
@@ -94,7 +95,7 @@ Learn more about <a href="'.$this->get('router')->generate('about-innovation').'
 
         $arguments['feedbackForm'] = $post
             ->then(function (LabsPost $post) use ($request) {
-                $uri = $this->get('router')->generate('labs-post', ['id' => $post->getId()], UrlGeneratorInterface::ABSOLUTE_URL);
+                $uri = $this->get('router')->generate('labs-post', ['id' => $post->getId(), 'slug' => $this->get('slugify')->slugify($post->getTitle())], UrlGeneratorInterface::ABSOLUTE_URL);
 
                 /** @var FormInterface $form */
                 $form = $this->get('form.factory')

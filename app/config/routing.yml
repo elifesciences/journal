@@ -199,9 +199,10 @@ labs:
          _controller: AppBundle:Labs:list
 
 labs-post:
-    path: /labs/{id}
+    path: /labs/{id}/{slug}
     defaults:
          _controller: AppBundle:Labs:post
+         slug: ''
 
 podcast:
     path: /podcast
