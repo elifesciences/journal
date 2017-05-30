@@ -37,6 +37,8 @@ final class ArticleTypeControllerTest extends PageTestCase
         $this->assertSame('/articles/research-article', $crawler->filter('link[rel="canonical"]')->attr('href'));
         $this->assertSame('http://localhost/articles/research-article', $crawler->filter('meta[property="og:url"]')->attr('content'));
         $this->assertSame('Research Articles', $crawler->filter('meta[property="og:title"]')->attr('content'));
+        $this->assertSame('Research Articles published by eLife are full-length studies that present important breakthroughs across the life sciences and biomedicine. There is no maximum length and no limits on the number of display items.', $crawler->filter('meta[property="og:description"]')->attr('content'));
+        $this->assertSame('Research Articles published by eLife are full-length studies that present important breakthroughs across the life sciences and biomedicine. There is no maximum length and no limits on the number of display items.', $crawler->filter('meta[name="description"]')->attr('content'));
         $this->assertSame('summary', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
     }
 
