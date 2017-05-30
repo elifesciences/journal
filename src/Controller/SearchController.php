@@ -141,11 +141,14 @@ final class SearchController extends Controller
                 return new MessageBar(number_format($paginator->getTotal()).' results found');
             });
 
+        $currentOrder = SortControlOption::ASC === $arguments['query']['order'] ? SortControlOption::ASC : SortControlOption::DESC;
+        $inverseOrder = SortControlOption::ASC === $arguments['query']['order'] ? SortControlOption::DESC : SortControlOption::ASC;
+
         $relevanceQuery = array_merge(
             $arguments['query'],
             [
                 'sort' => 'relevance',
-                'order' => SortControlOption::ASC === $arguments['query']['order'] ? SortControlOption::DESC : SortControlOption::ASC,
+                'order' => 'relevance' === $arguments['query']['sort'] ? $inverseOrder : SortControlOption::DESC,
             ]
         );
 
@@ -153,18 +156,18 @@ final class SearchController extends Controller
             $arguments['query'],
             [
                 'sort' => 'date',
-                'order' => SortControlOption::ASC === $arguments['query']['order'] ? SortControlOption::DESC : SortControlOption::ASC,
+                'order' => 'date' === $arguments['query']['sort'] ? $inverseOrder : SortControlOption::DESC,
             ]
         );
 
         $arguments['sortControl'] = new SortControl([
             new SortControlOption(
                 new Link('Relevance', $this->get('router')->generate('search', $relevanceQuery)),
-                SortControlOption::ASC === $arguments['query']['order'] ? SortControlOption::ASC : SortControlOption::DESC
+                'relevance' === $arguments['query']['sort'] ? $currentOrder : null
             ),
             new SortControlOption(
                 new Link('Date', $this->get('router')->generate('search', $dateQuery)),
-                SortControlOption::ASC === $arguments['query']['order'] ? SortControlOption::ASC : SortControlOption::DESC
+                'date' === $arguments['query']['sort'] ? $currentOrder : null
             ),
         ]);
 

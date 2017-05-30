@@ -31,7 +31,7 @@ final class HighlightLabsPostSecondaryTeaserConverter implements ViewModelConver
         return ViewModel\Teaser::secondary(
             $object->getTitle(),
             $this->urlGenerator->generate('labs-post', ['id' => $post->getId()]),
-            $object->getAuthorLine(),
+            null,
             $this->createContextLabel($post),
             $object->getThumbnail() ? $this->smallTeaserImage($object) : null,
             ViewModel\TeaserFooter::forNonArticle(

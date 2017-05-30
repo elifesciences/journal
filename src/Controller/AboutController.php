@@ -196,6 +196,7 @@ final class AboutController extends Controller
         $types = $types
             ->prepend(new SelectOption('', 'Leadership team', '' === $type))
             ->append(new SelectOption('directors', 'Board of directors', 'directors' === $type))
+            ->append(new SelectOption('early-career', 'Early-career advisory group', 'early-career' === $type))
             ->append(new SelectOption('staff', 'Executive staff', 'staff' === $type));
 
         $arguments['contentHeader'] = (new PromiseSequence($types))
@@ -231,6 +232,9 @@ final class AboutController extends Controller
                 break;
             case 'directors':
                 $arguments['lists'][] = $this->createAboutProfiles($people->forType('director'), 'Board of directors');
+                break;
+            case 'early-career':
+                $arguments['lists'][] = $this->createAboutProfiles($people->forType('early-career'), 'Early-career advisory group');
                 break;
             case 'staff':
                 $arguments['lists'][] = $this->createAboutProfiles($people->forType('executive'), 'Executive staff');

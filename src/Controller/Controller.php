@@ -188,6 +188,7 @@ abstract class Controller implements ContainerAwareInterface
             'header' => promise_for($model)->then(function (Model $model = null) : ViewModel\SiteHeader {
                 return $this->get('elife.journal.view_model.factory.site_header')->createSiteHeader($model);
             }),
+            'infoBars' => [],
             'emailCta' => $this->get('elife.journal.view_model.converter')->convert($form->createView()),
             'footer' => $this->get('elife.journal.view_model.factory.footer')->createFooter(),
         ];

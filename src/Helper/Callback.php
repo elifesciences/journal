@@ -94,13 +94,6 @@ final class Callback
         });
     }
 
-    public static function pick(string $key) : Callback
-    {
-        return new self(function (array $object) use ($key) {
-            return $object[$key];
-        });
-    }
-
     public static function emptyOr(callable $callback) : Callback
     {
         return new self(function ($object) use ($callback) {
