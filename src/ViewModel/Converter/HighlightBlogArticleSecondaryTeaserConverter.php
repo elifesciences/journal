@@ -35,7 +35,7 @@ final class HighlightBlogArticleSecondaryTeaserConverter implements ViewModelCon
         return ViewModel\Teaser::secondary(
             $object->getTitle(),
             $this->urlGenerator->generate('inside-elife-article', ['id' => $article->getId(), 'slug' => $this->slugify->slugify($object->getTitle())]),
-            $object->getAuthorLine(),
+            null,
             $this->createContextLabel($article),
             $object->getThumbnail() ? $this->smallTeaserImage($object) : null,
             ViewModel\TeaserFooter::forNonArticle(

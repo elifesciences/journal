@@ -35,7 +35,7 @@ final class HighlightInterviewSecondaryTeaserConverter implements ViewModelConve
         return ViewModel\Teaser::secondary(
             $object->getTitle(),
             $this->urlGenerator->generate('interview', ['id' => $interview->getId(), 'slug' => $this->slugify->slugify($interview->getInterviewee()->getPerson()->getPreferredName())]),
-            $object->getAuthorLine(),
+            null,
             $this->createContextLabel($interview),
             $object->getThumbnail() ? $this->smallTeaserImage($object) : null,
             ViewModel\TeaserFooter::forNonArticle(

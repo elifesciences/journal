@@ -4,22 +4,26 @@ namespace test\eLife\Journal\Controller;
 
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use test\eLife\Journal\Providers;
+use Traversable;
 
-final class LabsExperimentControllerTest extends PageTestCase
+final class LabsPostControllerTest extends PageTestCase
 {
+    use Providers;
+
     /**
      * @test
      */
-    public function it_displays_a_labs_experiment_page()
+    public function it_displays_a_labs_post_page()
     {
         $client = static::createClient();
 
         $crawler = $client->request('GET', $this->getUrl());
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
-        $this->assertSame('Experiment title', $crawler->filter('.content-header__title')->text());
-        $this->assertSame('Experiment: 001 Jan 1, 2010', trim(preg_replace('!\s+!', ' ', $crawler->filter('.content-header .meta')->text())));
-        $this->assertContains('Experiment text.', $crawler->filter('main > div.wrapper')->text());
+        $this->assertSame('Post title', $crawler->filter('.content-header__title')->text());
+        $this->assertSame('Labs Jan 1, 2010', trim(preg_replace('!\s+!', ' ', $crawler->filter('.content-header .meta')->text())));
+        $this->assertContains('Post text.', $crawler->filter('main > div.wrapper')->text());
     }
 
     /**
@@ -33,12 +37,12 @@ final class LabsExperimentControllerTest extends PageTestCase
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
 
-        $this->assertSame('Experiment title | Labs | eLife', $crawler->filter('title')->text());
-        $this->assertSame('/labs/experiment1', $crawler->filter('link[rel="canonical"]')->attr('href'));
-        $this->assertSame('http://localhost/labs/experiment1', $crawler->filter('meta[property="og:url"]')->attr('content'));
-        $this->assertSame('Experiment title', $crawler->filter('meta[property="og:title"]')->attr('content'));
-        $this->assertSame('Experiment impact statement', $crawler->filter('meta[property="og:description"]')->attr('content'));
-        $this->assertSame('Experiment impact statement', $crawler->filter('meta[name="description"]')->attr('content'));
+        $this->assertSame('Post title | Labs | eLife', $crawler->filter('title')->text());
+        $this->assertSame('/labs/1/post-title', $crawler->filter('link[rel="canonical"]')->attr('href'));
+        $this->assertSame('http://localhost/labs/1/post-title', $crawler->filter('meta[property="og:url"]')->attr('content'));
+        $this->assertSame('Post title', $crawler->filter('meta[property="og:title"]')->attr('content'));
+        $this->assertSame('Post impact statement', $crawler->filter('meta[property="og:description"]')->attr('content'));
+        $this->assertSame('Post impact statement', $crawler->filter('meta[name="description"]')->attr('content'));
         $this->assertSame('article', $crawler->filter('meta[property="og:type"]')->attr('content'));
         $this->assertSame('summary', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
     }
@@ -83,9 +87,9 @@ final class LabsExperimentControllerTest extends PageTestCase
         $crawler = $client->request('GET', $this->getUrl());
 
         $form = $crawler->selectButton('Submit')->form();
-        $form['labs_experiment_feedback[name]'] = 'My name';
-        $form['labs_experiment_feedback[email]'] = 'foo';
-        $form['labs_experiment_feedback[comment]'] = 'My question';
+        $form['labs_post_feedback[name]'] = 'My name';
+        $form['labs_post_feedback[email]'] = 'foo';
+        $form['labs_post_feedback[comment]'] = 'My question';
 
         $crawler = $client->submit($form);
 
@@ -95,17 +99,37 @@ final class LabsExperimentControllerTest extends PageTestCase
 
     /**
      * @test
+     * @dataProvider incorrectSlugProvider
      */
-    public function it_displays_a_404_if_the_experiment_is_not_found()
+    public function it_redirects_if_the_slug_is_not_correct(string $url)
+    {
+        $client = static::createClient();
+
+        $expectedUrl = $this->getUrl();
+
+        $client->request('GET', $url);
+
+        $this->assertTrue($client->getResponse()->isRedirect($expectedUrl));
+    }
+
+    public function incorrectSlugProvider() : Traversable
+    {
+        return $this->stringProvider('/labs/1', '/labs/1/foo');
+    }
+
+    /**
+     * @test
+     */
+    public function it_displays_a_404_if_the_post_is_not_found()
     {
         $client = static::createClient();
 
         static::mockApiResponse(
             new Request(
                 'GET',
-                'http://api.elifesciences.org/labs-experiments/1',
+                'http://api.elifesciences.org/labs-posts/1',
                 [
-                    'Accept' => 'application/vnd.elife.labs-experiment+json; version=1',
+                    'Accept' => 'application/vnd.elife.labs-post+json; version=1',
                 ]
             ),
             new Response(
@@ -119,7 +143,7 @@ final class LabsExperimentControllerTest extends PageTestCase
             )
         );
 
-        $client->request('GET', '/labs/experiment1');
+        $client->request('GET', '/labs/1');
 
         $this->assertSame(404, $client->getResponse()->getStatusCode());
     }
@@ -129,15 +153,15 @@ final class LabsExperimentControllerTest extends PageTestCase
         $this->mockApiResponse(
             new Request(
                 'GET',
-                'http://api.elifesciences.org/labs-experiments/1',
-                ['Accept' => 'application/vnd.elife.labs-experiment+json; version=1']
+                'http://api.elifesciences.org/labs-posts/1',
+                ['Accept' => 'application/vnd.elife.labs-post+json; version=1']
             ),
             new Response(
                 200,
-                ['Content-Type' => 'application/vnd.elife.labs-experiment+json; version=1'],
+                ['Content-Type' => 'application/vnd.elife.labs-post+json; version=1'],
                 json_encode([
-                    'number' => 1,
-                    'title' => 'Experiment title',
+                    'id' => '1',
+                    'title' => 'Post title',
                     'published' => '2010-01-01T00:00:00Z',
                     'image' => [
                         'thumbnail' => [
@@ -154,17 +178,17 @@ final class LabsExperimentControllerTest extends PageTestCase
                             ],
                         ],
                     ],
-                    'impactStatement' => 'Experiment impact statement',
+                    'impactStatement' => 'Post impact statement',
                     'content' => [
                         [
                             'type' => 'paragraph',
-                            'text' => 'Experiment text.',
+                            'text' => 'Post text.',
                         ],
                     ],
                 ])
             )
         );
 
-        return '/labs/experiment1';
+        return '/labs/1/post-title';
     }
 }

@@ -16,7 +16,7 @@ use Traversable;
 
 abstract class BlockConverterTestCase extends ModelConverterTestCase
 {
-    protected $models = ['article-vor', 'blog-article', 'event', 'interview', 'labs-experiment', 'person', 'press-package'];
+    protected $models = ['article-vor', 'blog-article', 'event', 'interview', 'labs-post', 'person', 'press-package'];
 
     final protected function modelHook(Model $model) : Traversable
     {

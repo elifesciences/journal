@@ -198,12 +198,11 @@ labs:
     defaults:
          _controller: AppBundle:Labs:list
 
-labs-experiment:
-    path: /labs/experiment{number}
+labs-post:
+    path: /labs/{id}/{slug}
     defaults:
-         _controller: AppBundle:Labs:experiment
-    requirements:
-        number: '[1-9][0-9]*'
+         _controller: AppBundle:Labs:post
+         slug: ''
 
 podcast:
     path: /podcast
