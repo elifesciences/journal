@@ -466,7 +466,7 @@ sources: '.implode(', ', array_map(function (CitationsMetricSource $source) {
 
         $arguments['title'] = $arguments['title']
             ->then(function (string $title) {
-                return 'Figures in '.$title;
+                return 'Figures and data in '.$title;
             });
 
         $allFigures = $this->findFigures($arguments['article']);
@@ -568,7 +568,7 @@ sources: '.implode(', ', array_map(function (CitationsMetricSource $source) {
 
                 return $parts;
             })
-            ->then(Callback::mustNotBeEmpty(new NotFoundHttpException('Article version does not contain any figures')));
+            ->then(Callback::mustNotBeEmpty(new NotFoundHttpException('Article version does not contain any figures or data')));
 
         $arguments['viewSelector'] = $this->createViewSelector($arguments['article'], promise_for(true), true, $arguments['history'], $arguments['body']);
 
