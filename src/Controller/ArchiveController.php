@@ -139,7 +139,7 @@ final class ArchiveController extends Controller
                             } elseif ($item instanceof Interview) {
                                 return new Link($cover->getTitle(), $this->get('router')->generate('interview', ['id' => $item->getId()]));
                             } elseif ($item instanceof LabsPost) {
-                                return new Link($cover->getTitle(), $this->get('router')->generate('labs-post', ['number' => $item->getNumber()]));
+                                return new Link($cover->getTitle(), $this->get('router')->generate('labs-post', ['id' => $item->getId()]));
                             } elseif ($item instanceof PodcastEpisode) {
                                 return new Link($cover->getTitle(), $this->get('router')->generate('podcast-episode', ['number' => $item->getNumber()]));
                             }

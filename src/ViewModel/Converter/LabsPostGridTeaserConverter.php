@@ -2,6 +2,7 @@
 
 namespace eLife\Journal\ViewModel\Converter;
 
+use Cocur\Slugify\SlugifyInterface;
 use eLife\ApiSdk\Model\LabsPost;
 use eLife\Patterns\ViewModel;
 use eLife\Patterns\ViewModel\Link;
@@ -13,10 +14,12 @@ final class LabsPostGridTeaserConverter implements ViewModelConverter
     use CreatesTeaserImage;
 
     private $urlGenerator;
+    private $slugify;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator)
+    public function __construct(UrlGeneratorInterface $urlGenerator, SlugifyInterface $slugify)
     {
         $this->urlGenerator = $urlGenerator;
+        $this->slugify = $slugify;
     }
 
     /**
@@ -26,7 +29,7 @@ final class LabsPostGridTeaserConverter implements ViewModelConverter
     {
         return ViewModel\Teaser::withGrid(
             $object->getTitle(),
-            $this->urlGenerator->generate('labs-post', ['id' => $object->getId()]),
+            $this->urlGenerator->generate('labs-post', ['id' => $object->getId(), 'slug' => $this->slugify->slugify($object->getTitle())]),
             $object->getImpactStatement(),
             null,
             $this->prominentTeaserImage($object),

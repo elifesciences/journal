@@ -4,9 +4,13 @@ namespace test\eLife\Journal\Controller;
 
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use test\eLife\Journal\Providers;
+use Traversable;
 
 final class LabsPostControllerTest extends PageTestCase
 {
+    use Providers;
+
     /**
      * @test
      */
@@ -34,8 +38,8 @@ final class LabsPostControllerTest extends PageTestCase
         $this->assertSame(200, $client->getResponse()->getStatusCode());
 
         $this->assertSame('Post title | Labs | eLife', $crawler->filter('title')->text());
-        $this->assertSame('/labs/1', $crawler->filter('link[rel="canonical"]')->attr('href'));
-        $this->assertSame('http://localhost/labs/1', $crawler->filter('meta[property="og:url"]')->attr('content'));
+        $this->assertSame('/labs/1/post-title', $crawler->filter('link[rel="canonical"]')->attr('href'));
+        $this->assertSame('http://localhost/labs/1/post-title', $crawler->filter('meta[property="og:url"]')->attr('content'));
         $this->assertSame('Post title', $crawler->filter('meta[property="og:title"]')->attr('content'));
         $this->assertSame('Post impact statement', $crawler->filter('meta[property="og:description"]')->attr('content'));
         $this->assertSame('Post impact statement', $crawler->filter('meta[name="description"]')->attr('content'));
@@ -91,6 +95,26 @@ final class LabsPostControllerTest extends PageTestCase
 
         $this->assertCount(1, $crawler->filter('.info-bar'));
         $this->assertSame('Please provide a valid email address.', trim($crawler->filter('.info-bar')->text()));
+    }
+
+    /**
+     * @test
+     * @dataProvider incorrectSlugProvider
+     */
+    public function it_redirects_if_the_slug_is_not_correct(string $url)
+    {
+        $client = static::createClient();
+
+        $expectedUrl = $this->getUrl();
+
+        $client->request('GET', $url);
+
+        $this->assertTrue($client->getResponse()->isRedirect($expectedUrl));
+    }
+
+    public function incorrectSlugProvider() : Traversable
+    {
+        return $this->stringProvider('/labs/1', '/labs/1/foo');
     }
 
     /**
@@ -165,6 +189,6 @@ final class LabsPostControllerTest extends PageTestCase
             )
         );
 
-        return '/labs/1';
+        return '/labs/1/post-title';
     }
 }
