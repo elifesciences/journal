@@ -14,6 +14,7 @@ parameters:
     mailer_encryption: ~
     crm_url: https://crm.elifesciences.org/crm/civicrm/
     disqus_domain: elifesciences
+    gtm_id: ~
     trusted_hosts:
       - .*\.?elifesciences.org$
     status_checks:
