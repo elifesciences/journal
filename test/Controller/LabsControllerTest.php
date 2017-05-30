@@ -19,7 +19,7 @@ final class LabsControllerTest extends PageTestCase
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertSame('eLife Labs', $crawler->filter('.content-header__title')->text());
-        $this->assertContains('No experiments available.', $crawler->filter('main')->text());
+        $this->assertContains('No posts available.', $crawler->filter('main')->text());
     }
 
     /**
@@ -75,8 +75,8 @@ final class LabsControllerTest extends PageTestCase
                     $this->mockApiResponse(
                         new Request(
                             'GET',
-                            'http://api.elifesciences.org/labs-experiments?page=1&per-page=1&order=desc',
-                            ['Accept' => 'application/vnd.elife.labs-experiment-list+json; version=1']
+                            'http://api.elifesciences.org/labs-posts?page=1&per-page=1&order=desc',
+                            ['Accept' => 'application/vnd.elife.labs-post-list+json; version=1']
                         ),
                         new Response(
                             404,
@@ -94,12 +94,12 @@ final class LabsControllerTest extends PageTestCase
         $this->mockApiResponse(
             new Request(
                 'GET',
-                'http://api.elifesciences.org/labs-experiments?page=1&per-page=8&order=desc',
-                ['Accept' => 'application/vnd.elife.labs-experiment-list+json; version=1']
+                'http://api.elifesciences.org/labs-posts?page=1&per-page=8&order=desc',
+                ['Accept' => 'application/vnd.elife.labs-post-list+json; version=1']
             ),
             new Response(
                 200,
-                ['Content-Type' => 'application/vnd.elife.labs-experiment-list+json; version=1'],
+                ['Content-Type' => 'application/vnd.elife.labs-post-list+json; version=1'],
                 json_encode([
                     'total' => 0,
                     'items' => [],

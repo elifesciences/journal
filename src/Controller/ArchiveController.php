@@ -11,7 +11,7 @@ use eLife\ApiSdk\Model\BlogArticle;
 use eLife\ApiSdk\Model\Collection;
 use eLife\ApiSdk\Model\Cover;
 use eLife\ApiSdk\Model\Interview;
-use eLife\ApiSdk\Model\LabsExperiment;
+use eLife\ApiSdk\Model\LabsPost;
 use eLife\ApiSdk\Model\Model;
 use eLife\ApiSdk\Model\PodcastEpisode;
 use eLife\Journal\Helper\Callback;
@@ -138,8 +138,8 @@ final class ArchiveController extends Controller
                                 return new Link($cover->getTitle(), $this->get('router')->generate('collection', ['id' => $item->getId()]));
                             } elseif ($item instanceof Interview) {
                                 return new Link($cover->getTitle(), $this->get('router')->generate('interview', ['id' => $item->getId()]));
-                            } elseif ($item instanceof LabsExperiment) {
-                                return new Link($cover->getTitle(), $this->get('router')->generate('labs-experiment', ['number' => $item->getNumber()]));
+                            } elseif ($item instanceof LabsPost) {
+                                return new Link($cover->getTitle(), $this->get('router')->generate('labs-post', ['number' => $item->getNumber()]));
                             } elseif ($item instanceof PodcastEpisode) {
                                 return new Link($cover->getTitle(), $this->get('router')->generate('podcast-episode', ['number' => $item->getNumber()]));
                             }

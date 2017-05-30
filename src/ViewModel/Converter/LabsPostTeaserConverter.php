@@ -2,11 +2,13 @@
 
 namespace eLife\Journal\ViewModel\Converter;
 
-use eLife\ApiSdk\Model\LabsExperiment;
+use eLife\ApiSdk\Model\LabsPost;
 use eLife\Patterns\ViewModel;
+use eLife\Patterns\ViewModel\Link;
+use eLife\Patterns\ViewModel\Teaser;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-final class LabsExperimentGridTeaserConverter implements ViewModelConverter
+final class LabsPostTeaserConverter implements ViewModelConverter
 {
     use CreatesDate;
     use CreatesTeaserImage;
@@ -19,20 +21,21 @@ final class LabsExperimentGridTeaserConverter implements ViewModelConverter
     }
 
     /**
-     * @param LabsExperiment $object
+     * @param LabsPost $object
      */
     public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
-        return ViewModel\Teaser::withGrid(
+        return Teaser::main(
             $object->getTitle(),
-            $this->urlGenerator->generate('labs-experiment', ['number' => $object->getNumber()]),
+            $this->urlGenerator->generate('labs-post', ['id' => $object->getId()]),
             $object->getImpactStatement(),
             null,
-            $this->prominentTeaserImage($object),
+            null,
+            $this->bigTeaserImage($object),
             ViewModel\TeaserFooter::forNonArticle(
-                ViewModel\Meta::withText(
-                    'Experiment: '.str_pad($object->getNumber(), 3, '0', STR_PAD_LEFT),
-                    $this->simpleDate($object, $context)
+                ViewModel\Meta::withLink(
+                    new Link('Labs', $this->urlGenerator->generate('labs')),
+                    $this->simpleDate($object, ['date' => 'published'] + $context)
                 )
             )
         );
@@ -40,6 +43,6 @@ final class LabsExperimentGridTeaserConverter implements ViewModelConverter
 
     public function supports($object, string $viewModel = null, array $context = []) : bool
     {
-        return $object instanceof LabsExperiment && ViewModel\Teaser::class === $viewModel && 'grid' === ($context['variant'] ?? null);
+        return $object instanceof LabsPost && ViewModel\Teaser::class === $viewModel && empty($context['variant']);
     }
 }
