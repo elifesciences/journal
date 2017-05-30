@@ -80,7 +80,11 @@
             (d.head || d.body).appendChild(s);
 
             d.getElementById('comments').addEventListener('expandsection', function () {
-                window.dispatchEvent(new Event('resize'));
+                try {
+                    window.dispatchEvent(new Event('resize'));
+                } catch (e) {
+                    {# Do nothing #}
+                }
             })
         })();
     </script>
