@@ -116,7 +116,7 @@ final class LabsContext extends Context
     {
         $this->thereAreLabsPosts(1);
 
-        $this->visitPath('/labs/post1');
+        $this->visitPath('/labs/1');
     }
 
     /**
@@ -201,7 +201,7 @@ eLife Sciences Publications, Ltd is a limited liability non-profit non-stock cor
     public function theCompletedFormShouldBeSentToLabsElifesciencesOrg()
     {
         $this->assertEmailSent(['do_not_reply@elifesciences.org' => null], ['labs@elifesciences.org' => null],
-            'Comment submitted', 'A comment has been submitted on '.$this->locatePath('/labs/post1').'
+            'Comment submitted', 'A comment has been submitted on '.$this->locatePath('/labs/1').'
 
 Name
 ----
