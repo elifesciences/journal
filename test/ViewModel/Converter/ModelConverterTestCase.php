@@ -7,13 +7,13 @@ use ComposerLocator;
 use eLife\ApiSdk\Collection;
 use eLife\ApiSdk\Model;
 use eLife\Journal\ViewModel\Converter\ViewModelConverter;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Traversable;
 use function GuzzleHttp\json_decode;
 
-abstract class ModelConverterTestCase extends PHPUnit_Framework_TestCase
+abstract class ModelConverterTestCase extends TestCase
 {
     private static $classes = [
         'annual-report' => Model\AnnualReport::class,

@@ -3,11 +3,11 @@
 namespace test\eLife\Journal\Helper;
 
 use eLife\Journal\Helper\Humanizer;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use test\eLife\Journal\Providers;
 use Traversable;
 
-final class HumanizerTest extends PHPUnit_Framework_TestCase
+final class HumanizerTest extends TestCase
 {
     use Providers;
 

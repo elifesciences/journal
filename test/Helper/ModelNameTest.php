@@ -4,11 +4,11 @@ namespace test\eLife\Journal\Helper;
 
 use eLife\Journal\Helper\ModelName;
 use InvalidArgumentException;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use test\eLife\Journal\Providers;
 use Traversable;
 
-final class ModelNameTest extends PHPUnit_Framework_TestCase
+final class ModelNameTest extends TestCase
 {
     use Providers;
 
@@ -18,7 +18,7 @@ final class ModelNameTest extends PHPUnit_Framework_TestCase
      */
     public function it_providers_a_singular(string $id)
     {
-        ModelName::singular($id);
+        $this->assertInternalType('string', ModelName::singular($id));
     }
 
     /**
@@ -27,7 +27,7 @@ final class ModelNameTest extends PHPUnit_Framework_TestCase
      */
     public function it_providers_a_plural(string $id)
     {
-        ModelName::plural($id);
+        $this->assertInternalType('string', ModelName::plural($id));
     }
 
     public function validModelProvider() : Traversable

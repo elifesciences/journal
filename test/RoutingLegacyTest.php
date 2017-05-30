@@ -5,7 +5,7 @@ namespace test\eLife\Journal;
 use Symfony\Component\HttpFoundation\Response;
 use Traversable;
 
-final class LegacyRoutingTest extends WebTestCase
+final class RoutingLegacyTest extends WebTestCase
 {
     use Providers;
 
