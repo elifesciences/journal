@@ -5,9 +5,11 @@ namespace eLife\Journal\Controller;
 use OutOfBoundsException;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 final class DoiController extends Controller
 {
@@ -57,15 +59,7 @@ final class DoiController extends Controller
     {
         preg_match('~10.7554/eLife\.([a-z0-9-]+)(\..+)?~', $doi, $matches);
 
-        $route = $this->get('router')->getRouteCollection()->get($routeName);
-
-        $request = $this->get('request_stack')->getCurrentRequest();
-        $path = [
-            'id' => $matches[1],
-            '_forwarded' => $request->attributes,
-            '_controller' => $route->getDefaults()['_controller'],
-        ];
-        $subRequest = $request->duplicate([], null, $path);
+        $subRequest = Request::create($this->get('router')->generate($routeName, ['id' => $matches[1]], UrlGeneratorInterface::ABSOLUTE_URL));
 
         /** @var Response $text */
         $text = $this->get('http_kernel')->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
