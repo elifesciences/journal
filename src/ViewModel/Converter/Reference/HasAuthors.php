@@ -11,7 +11,7 @@ trait HasAuthors
     private function createAuthors(array $authors, bool $etAl, array $suffixes) : ViewModel\ReferenceAuthorList
     {
         $authors = array_map(function (Model\AuthorEntry $author) {
-            return ViewModel\Author::asText($author->toString());
+            return ViewModel\Author::asLink(new ViewModel\Link($author->toString(), 'https://scholar.google.com/scholar?q=%22author:'.urlencode($author->toString()).'%22'));
         }, $authors);
 
         $suffix = trim(array_reduce(array_filter($suffixes), function (string $carry, string $suffix) {
