@@ -26,7 +26,7 @@ abstract class ModelConverterTestCase extends PHPUnit_Framework_TestCase
         'external-article' => Model\ExternalArticle::class,
         'highlight' => Model\Highlight::class,
         'interview' => Model\Interview::class,
-        'labs-experiment' => Model\LabsExperiment::class,
+        'labs-post' => Model\LabsPost::class,
         'medium-article' => Model\MediumArticle::class,
         'person' => Model\Person::class,
         'podcast-episode' => Model\PodcastEpisode::class,

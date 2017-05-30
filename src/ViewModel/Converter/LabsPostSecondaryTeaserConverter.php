@@ -2,12 +2,12 @@
 
 namespace eLife\Journal\ViewModel\Converter;
 
-use eLife\ApiSdk\Model\LabsExperiment;
+use eLife\ApiSdk\Model\LabsPost;
 use eLife\Patterns\ViewModel;
-use eLife\Patterns\ViewModel\Teaser;
+use eLife\Patterns\ViewModel\Link;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-final class LabsExperimentTeaserConverter implements ViewModelConverter
+final class LabsPostSecondaryTeaserConverter implements ViewModelConverter
 {
     use CreatesDate;
     use CreatesTeaserImage;
@@ -20,21 +20,20 @@ final class LabsExperimentTeaserConverter implements ViewModelConverter
     }
 
     /**
-     * @param LabsExperiment $object
+     * @param LabsPost $object
      */
     public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
-        return Teaser::main(
+        return ViewModel\Teaser::secondary(
             $object->getTitle(),
-            $this->urlGenerator->generate('labs-experiment', ['number' => $object->getNumber()]),
-            $object->getImpactStatement(),
+            $this->urlGenerator->generate('labs-post', ['id' => $object->getId()]),
             null,
             null,
-            $this->bigTeaserImage($object),
+            $this->smallTeaserImage($object),
             ViewModel\TeaserFooter::forNonArticle(
-                ViewModel\Meta::withText(
-                    'Experiment: '.str_pad($object->getNumber(), 3, '0', STR_PAD_LEFT),
-                    $this->simpleDate($object, $context)
+                ViewModel\Meta::withLink(
+                    new Link('Labs', $this->urlGenerator->generate('labs')),
+                    $this->simpleDate($object, ['date' => 'published'] + $context)
                 )
             )
         );
@@ -42,6 +41,6 @@ final class LabsExperimentTeaserConverter implements ViewModelConverter
 
     public function supports($object, string $viewModel = null, array $context = []) : bool
     {
-        return $object instanceof LabsExperiment && ViewModel\Teaser::class === $viewModel && empty($context['variant']);
+        return $object instanceof LabsPost && ViewModel\Teaser::class === $viewModel && 'secondary' === ($context['variant'] ?? null);
     }
 }
