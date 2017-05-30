@@ -185,7 +185,7 @@ final class ArchiveContext extends Context
                         'blog-article' => 0,
                         'collection' => 0,
                         'interview' => 0,
-                        'labs-experiment' => 0,
+                        'labs-post' => 0,
                         'podcast-episode' => 0,
                     ],
                 ])
@@ -230,7 +230,7 @@ final class ArchiveContext extends Context
                             'blog-article' => 0,
                             'collection' => 0,
                             'interview' => 0,
-                            'labs-experiment' => 0,
+                            'labs-post' => 0,
                             'podcast-episode' => 0,
                         ],
                     ])
@@ -295,7 +295,7 @@ final class ArchiveContext extends Context
                         'blog-article' => 0,
                         'collection' => 0,
                         'interview' => $number,
-                        'labs-experiment' => 0,
+                        'labs-post' => 0,
                         'podcast-episode' => 0,
                     ],
                 ])
@@ -334,7 +334,7 @@ final class ArchiveContext extends Context
                             'blog-article' => 0,
                             'collection' => 0,
                             'interview' => $number,
-                            'labs-experiment' => 0,
+                            'labs-post' => 0,
                             'podcast-episode' => 0,
                         ],
                     ])
@@ -452,7 +452,7 @@ final class ArchiveContext extends Context
                         'blog-article' => 0,
                         'collection' => 0,
                         'interview' => 0,
-                        'labs-experiment' => 0,
+                        'labs-post' => 0,
                         'podcast-episode' => array_reduce($articles, function (int $carry, array $article) {
                             if ('podcast-episode' === $article['type']) {
                                 ++$carry;
@@ -503,7 +503,7 @@ final class ArchiveContext extends Context
                             'blog-article' => 0,
                             'collection' => 0,
                             'interview' => 0,
-                            'labs-experiment' => 0,
+                            'labs-post' => 0,
                             'podcast-episode' => array_reduce($articles, function (int $carry, array $article) {
                                 if ('podcast-episode' === $article['type']) {
                                     ++$carry;
@@ -565,7 +565,7 @@ final class ArchiveContext extends Context
                             'blog-article' => 0,
                             'collection' => 0,
                             'interview' => 0,
-                            'labs-experiment' => 0,
+                            'labs-post' => 0,
                             'podcast-episode' => 0,
                         ],
                     ])

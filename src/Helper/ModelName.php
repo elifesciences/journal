@@ -67,9 +67,9 @@ final class ModelName
             'singular' => 'Event',
             'plural' => 'Events',
         ],
-        'labs-experiment' => [
-            'singular' => 'Experiment',
-            'plural' => 'Experiments',
+        'labs-post' => [
+            'singular' => 'Labs Post',
+            'plural' => 'Labs Posts',
         ],
         'interview' => [
             'singular' => 'Interview',

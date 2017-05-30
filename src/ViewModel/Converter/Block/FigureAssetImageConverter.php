@@ -35,29 +35,47 @@ final class FigureAssetImageConverter implements ViewModelConverter
     {
         /** @var Block\Image $asset */
         $asset = $object->getAsset();
+        $image = $asset->getImage();
 
         $srcset = [];
         $baseWidth = 538;
-        if ($asset->getImage()->getWidth() > $baseWidth) {
+        if ($image->getWidth() > $baseWidth) {
             $width = $baseWidth * 2;
-            if ($width > $asset->getImage()->getWidth()) {
-                $width = $asset->getImage()->getWidth();
+            if ($width > $image->getWidth()) {
+                $width = $image->getWidth();
             }
-            $srcset[$width] = $this->iiifUri($asset->getImage(), $width);
+            $srcset[$width] = $this->iiifUri($image, $width);
         }
 
         $assetViewModel = new ViewModel\Image(
-            $this->iiifUri($asset->getImage(), $asset->getImage()->getWidth() >= $baseWidth ? $baseWidth : null),
+            $this->iiifUri($image, $image->getWidth() >= $baseWidth ? $baseWidth : null),
             $srcset,
-            $asset->getImage()->getAltText()
+            $image->getAltText()
         );
 
-        $download = new ViewModel\Link('Download', $this->downloadLinkUriGenerator->generate(new DownloadLink($asset->getImage()->getSource()->getUri(), $asset->getImage()->getSource()->getFilename())));
+        $download = new ViewModel\Link('Download', $this->downloadLinkUriGenerator->generate(new DownloadLink($image->getSource()->getUri(), $image->getSource()->getFilename())));
+
+        if ($image->getWidth() <= 1500 && $image->getHeight() <= 1500) {
+            $openWidth = $image->getWidth();
+            $openWidthActual = $openWidth;
+            $openHeight = $image->getHeight();
+            $openHeightActual = $openHeight;
+        } elseif ($image->getWidth() >= $image->getHeight()) {
+            $openWidth = 1500;
+            $openWidthActual = $openWidth;
+            $openHeight = null;
+            $openHeightActual = (int) (1500 * ($image->getHeight() / $image->getWidth()));
+        } else {
+            $openWidth = null;
+            $openWidthActual = (int) (1500 * ($image->getWidth() / $image->getHeight()));
+            $openHeight = 1500;
+            $openHeightActual = $openHeight;
+        }
 
         $open = new ViewModel\OpenLink(
-            $this->iiifUri($asset->getImage()),
-            $asset->getImage()->getWidth(),
-            $asset->getImage()->getHeight()
+            $this->iiifUri($image, $openWidth, $openHeight),
+            $openWidthActual,
+            $openHeightActual
         );
 
         return $this->createAssetViewerInline($object, $assetViewModel, $download, $open, $context);
