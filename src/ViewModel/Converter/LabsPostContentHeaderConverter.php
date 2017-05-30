@@ -4,10 +4,19 @@ namespace eLife\Journal\ViewModel\Converter;
 
 use eLife\ApiSdk\Model\LabsPost;
 use eLife\Patterns\ViewModel;
+use eLife\Patterns\ViewModel\Link;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 final class LabsPostContentHeaderConverter implements ViewModelConverter
 {
     use CreatesDate;
+
+    private $urlGenerator;
+
+    public function __construct(UrlGeneratorInterface $urlGenerator)
+    {
+        $this->urlGenerator = $urlGenerator;
+    }
 
     /**
      * @param LabsPost $object
@@ -17,9 +26,9 @@ final class LabsPostContentHeaderConverter implements ViewModelConverter
         return new ViewModel\ContentHeader(
             $object->getTitle(),
             null, $object->getImpactStatement(), false, [], null, null, [], [], null, null, null,
-            ViewModel\Meta::withText(
-                'Post: '.str_pad($object->getId(), 3, '0', STR_PAD_LEFT),
-                $this->simpleDate($object, $context)
+            ViewModel\Meta::withLink(
+                new Link('Labs', $this->urlGenerator->generate('labs')),
+                $this->simpleDate($object, ['date' => 'published'] + $context)
             )
         );
     }

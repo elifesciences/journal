@@ -15,6 +15,6 @@ final class LabsPostContentHeaderConverterTest extends ModelConverterTestCase
      */
     public function setUpConverter()
     {
-        $this->converter = new LabsPostContentHeaderConverter();
+        $this->converter = new LabsPostContentHeaderConverter($this->stubUrlGenerator());
     }
 }

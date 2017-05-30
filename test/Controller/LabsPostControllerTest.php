@@ -18,7 +18,7 @@ final class LabsPostControllerTest extends PageTestCase
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertSame('Post title', $crawler->filter('.content-header__title')->text());
-        $this->assertSame('Post: 001 Jan 1, 2010', trim(preg_replace('!\s+!', ' ', $crawler->filter('.content-header .meta')->text())));
+        $this->assertSame('Labs Jan 1, 2010', trim(preg_replace('!\s+!', ' ', $crawler->filter('.content-header .meta')->text())));
         $this->assertContains('Post text.', $crawler->filter('main > div.wrapper')->text());
     }
 

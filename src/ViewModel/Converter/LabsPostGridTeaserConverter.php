@@ -4,6 +4,7 @@ namespace eLife\Journal\ViewModel\Converter;
 
 use eLife\ApiSdk\Model\LabsPost;
 use eLife\Patterns\ViewModel;
+use eLife\Patterns\ViewModel\Link;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 final class LabsPostGridTeaserConverter implements ViewModelConverter
@@ -30,9 +31,9 @@ final class LabsPostGridTeaserConverter implements ViewModelConverter
             null,
             $this->prominentTeaserImage($object),
             ViewModel\TeaserFooter::forNonArticle(
-                ViewModel\Meta::withText(
-                    'Post: '.str_pad($object->getId(), 3, '0', STR_PAD_LEFT),
-                    $this->simpleDate($object, $context)
+                ViewModel\Meta::withLink(
+                    new Link('Labs', $this->urlGenerator->generate('labs')),
+                    $this->simpleDate($object, ['date' => 'published'] + $context)
                 )
             )
         );

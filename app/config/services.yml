@@ -765,6 +765,8 @@ services:
     elife.journal.view_model.converter.labs_post.header:
         class: eLife\Journal\ViewModel\Converter\LabsPostContentHeaderConverter
         public: false
+        arguments:
+          - '@router'
         tags:
           - name: view_model.converter
 
