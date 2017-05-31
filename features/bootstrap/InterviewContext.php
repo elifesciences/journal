@@ -49,13 +49,13 @@ final class InterviewContext extends Context
             )
         );
 
-        foreach (array_chunk($interviews, 6) as $i => $interviewChunk) {
+        foreach (array_chunk($interviews, $chunk = 10) as $i => $interviewChunk) {
             $page = $i + 1;
 
             $this->mockApiResponse(
                 new Request(
                     'GET',
-                    "http://api.elifesciences.org/interviews?page=$page&per-page=6&order=desc",
+                    "http://api.elifesciences.org/interviews?page=$page&per-page=$chunk&order=desc",
                     ['Accept' => 'application/vnd.elife.interview-list+json; version=1']
                 ),
                 new Response(

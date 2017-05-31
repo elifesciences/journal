@@ -109,13 +109,13 @@ final class CollectionContext extends Context
             )
         );
 
-        foreach (array_chunk($collections, 6) as $i => $collectionsChunk) {
+        foreach (array_chunk($collections, $chunk = 10) as $i => $collectionsChunk) {
             $page = $i + 1;
 
             $this->mockApiResponse(
                 new Request(
                     'GET',
-                    "http://api.elifesciences.org/collections?page=$page&per-page=6&order=desc",
+                    "http://api.elifesciences.org/collections?page=$page&per-page=$chunk&order=desc",
                     ['Accept' => 'application/vnd.elife.collection-list+json; version=1']
                 ),
                 new Response(
