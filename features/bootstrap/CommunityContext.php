@@ -50,13 +50,13 @@ final class CommunityContext extends Context
             )
         );
 
-        foreach (array_chunk($articles, 6) as $i => $articleChunk) {
+        foreach (array_chunk($articles, $chunk = 10) as $i => $articleChunk) {
             $page = $i + 1;
 
             $this->mockApiResponse(
                 new Request(
                     'GET',
-                    "http://api.elifesciences.org/community?page=$page&per-page=6&order=desc",
+                    "http://api.elifesciences.org/community?page=$page&per-page=$chunk&order=desc",
                     ['Accept' => 'application/vnd.elife.community-list+json; version=1']
                 ),
                 new Response(

@@ -27,7 +27,7 @@ Feature: Search page refinements
     Given I searched for 'Cells'
     And I filtered by the MSA 'Biochemistry'
     When I filter by the MSA 'Immunology'
-    Then I should see the 6 most relevant results about 'Cells' with the MSA 'Biochemistry' or 'Immunology'
+    Then I should see the 8 most relevant results about 'Cells' with the MSA 'Biochemistry' or 'Immunology'
 
   Scenario: Filter by MSA and Research content
     Given I searched for 'Cells'

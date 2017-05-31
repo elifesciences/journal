@@ -89,7 +89,7 @@ final class InterviewsControllerTest extends PageTestCase
         $this->mockApiResponse(
             new Request(
                 'GET',
-                'http://api.elifesciences.org/interviews?page=1&per-page=6&order=desc',
+                'http://api.elifesciences.org/interviews?page=1&per-page=10&order=desc',
                 ['Accept' => 'application/vnd.elife.interview-list+json; version=1']
             ),
             new Response(

@@ -139,6 +139,20 @@ contact:
     defaults:
          _controller: AppBundle:Contact:contact
 
+doi:
+    path: /lookup/doi/{doi}
+    defaults:
+         _controller: AppBundle:Doi:doi
+    requirements:
+        doi: 10.7554/eLife\.([a-z0-9-]+)
+
+doi-sub:
+    path: /lookup/doi/{doi}
+    defaults:
+         _controller: AppBundle:Doi:subDoi
+    requirements:
+        doi: 10.7554/eLife\.([a-z0-9-.]+)
+
 download:
     path: /download/{uri}/{name}
     defaults:

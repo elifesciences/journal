@@ -92,7 +92,7 @@ final class EventsControllerTest extends PageTestCase
         $this->mockApiResponse(
             new Request(
                 'GET',
-                'http://api.elifesciences.org/events?page=1&per-page=6&type=open&order=asc',
+                'http://api.elifesciences.org/events?page=1&per-page=10&type=open&order=asc',
                 ['Accept' => 'application/vnd.elife.event-list+json; version=1']
             ),
             new Response(
