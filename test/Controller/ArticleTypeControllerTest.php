@@ -91,7 +91,7 @@ final class ArticleTypeControllerTest extends PageTestCase
         static::mockApiResponse(
             new Request(
                 'GET',
-                'http://api.elifesciences.org/search?for=&page=1&per-page=6&sort=date&order=desc&type[]=research-article&use-date=default',
+                'http://api.elifesciences.org/search?for=&page=1&per-page=10&sort=date&order=desc&type[]=research-article&use-date=default',
                 [
                     'Accept' => 'application/vnd.elife.search+json; version=1',
                 ]

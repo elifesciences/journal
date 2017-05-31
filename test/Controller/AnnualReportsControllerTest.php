@@ -89,7 +89,7 @@ final class AnnualReportsControllerTest extends PageTestCase
         $this->mockApiResponse(
             new Request(
                 'GET',
-                'http://api.elifesciences.org/annual-reports?page=1&per-page=6&order=desc',
+                'http://api.elifesciences.org/annual-reports?page=1&per-page=10&order=desc',
                 ['Accept' => 'application/vnd.elife.annual-report-list+json; version=1']
             ),
             new Response(

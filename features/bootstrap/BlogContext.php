@@ -50,7 +50,7 @@ final class BlogContext extends Context
             )
         );
 
-        foreach (array_chunk($articles, 6) as $i => $articlesChunk) {
+        foreach (array_chunk($articles, $chunk = 10) as $i => $articlesChunk) {
             $page = $i + 1;
 
             unset($articlesChunk['content']);
@@ -58,7 +58,7 @@ final class BlogContext extends Context
             $this->mockApiResponse(
                 new Request(
                     'GET',
-                    "http://api.elifesciences.org/blog-articles?page=$page&per-page=6&order=desc",
+                    "http://api.elifesciences.org/blog-articles?page=$page&per-page=$chunk&order=desc",
                     ['Accept' => 'application/vnd.elife.blog-article-list+json; version=1']
                 ),
                 new Response(
