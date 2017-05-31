@@ -73,4 +73,5 @@ twig:
     exception_controller: AppBundle:Exception:show
     globals:
         disqus_domain: '%disqus_domain%'
+        gtm_id: '%gtm_id%'
     strict_variables: '%kernel.debug%'
