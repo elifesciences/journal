@@ -69,22 +69,17 @@ article-version:
     defaults:
          _controller: AppBundle:Articles:text
     requirements:
-        volume: '[1-9][0-9]*'
         version: '[1-9][0-9]*'
 
 article-bibtex:
     path: /articles/{id}.bib
     defaults:
          _controller: AppBundle:Articles:bibTex
-    requirements:
-        volume: '[1-9][0-9]*'
 
 article-ris:
     path: /articles/{id}.ris
     defaults:
          _controller: AppBundle:Articles:ris
-    requirements:
-        volume: '[1-9][0-9]*'
 
 article-type:
     path: /articles/{type}
@@ -97,23 +92,18 @@ article:
     path: /articles/{id}
     defaults:
          _controller: AppBundle:Articles:text
-    requirements:
-        volume: '[1-9][0-9]*'
 
 article-version-figures:
     path: /articles/{id}v{version}/figures
     defaults:
          _controller: AppBundle:Articles:figures
     requirements:
-        volume: '[1-9][0-9]*'
         version: '[1-9][0-9]*'
 
 article-figures:
     path: /articles/{id}/figures
     defaults:
          _controller: AppBundle:Articles:figures
-    requirements:
-        volume: '[1-9][0-9]*'
 
 collection:
     path: /collections/{id}/{slug}
