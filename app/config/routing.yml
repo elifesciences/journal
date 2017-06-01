@@ -69,17 +69,22 @@ article-version:
     defaults:
          _controller: AppBundle:Articles:text
     requirements:
+        id: '[a-z0-9-]+'
         version: '[1-9][0-9]*'
 
 article-bibtex:
     path: /articles/{id}.bib
     defaults:
          _controller: AppBundle:Articles:bibTex
+    requirements:
+        id: '[a-z0-9-]+'
 
 article-ris:
     path: /articles/{id}.ris
     defaults:
          _controller: AppBundle:Articles:ris
+    requirements:
+        id: '[a-z0-9-]+'
 
 article-type:
     path: /articles/{type}
@@ -92,24 +97,31 @@ article:
     path: /articles/{id}
     defaults:
          _controller: AppBundle:Articles:text
+    requirements:
+        id: '[a-z0-9-]+'
 
 article-version-figures:
     path: /articles/{id}v{version}/figures
     defaults:
          _controller: AppBundle:Articles:figures
     requirements:
+        id: '[a-z0-9-]+'
         version: '[1-9][0-9]*'
 
 article-figures:
     path: /articles/{id}/figures
     defaults:
          _controller: AppBundle:Articles:figures
+    requirements:
+        id: '[a-z0-9-]+'
 
 collection:
     path: /collections/{id}/{slug}
     defaults:
          _controller: AppBundle:Collections:collection
          slug: ''
+    requirements:
+        id: '[a-z0-9-]+'
 
 collections:
     path: /collections
@@ -150,6 +162,8 @@ event:
     defaults:
          _controller: AppBundle:Events:event
          slug: ''
+    requirements:
+        id: '[a-z0-9-]+'
 
 events:
     path: /events
@@ -161,6 +175,8 @@ interview:
     defaults:
          _controller: AppBundle:Interviews:interview
          slug: ''
+    requirements:
+        id: '[a-z0-9-]+'
 
 interviews:
     path: /interviews
@@ -177,6 +193,8 @@ press-pack:
     defaults:
          _controller: AppBundle:PressPacks:pressPack
          slug: ''
+    requirements:
+        id: '[a-z0-9-]+'
 
 press-packs:
     path: /for-the-press
@@ -193,6 +211,8 @@ inside-elife-article:
     defaults:
          _controller: AppBundle:InsideElife:article
          slug: ''
+    requirements:
+        id: '[a-z0-9-]+'
 
 labs:
     path: /labs
@@ -204,6 +224,8 @@ labs-post:
     defaults:
          _controller: AppBundle:Labs:post
          slug: ''
+    requirements:
+        id: '[a-z0-9-]+'
 
 podcast:
     path: /podcast
@@ -237,6 +259,8 @@ subject:
     path: /subjects/{id}
     defaults:
          _controller: AppBundle:Subjects:subject
+    requirements:
+        id: '[a-z0-9-]+'
 
 subjects:
     path: /subjects
