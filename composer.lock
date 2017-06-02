@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "e4608934fecf37e6157fa83315d2697c",
+    "content-hash": "77473a3ff46e51c3ee8ebe0b92d8ccb2",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -842,7 +842,7 @@
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "git@github.com:elifesciences/patterns-php.git",
+                "url": "https://github.com/elifesciences/patterns-php.git",
                 "reference": "429b0a246e362e1d0b26c7683cd049bc87ab82cb"
             },
             "dist": {
