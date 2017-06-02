@@ -36,6 +36,3 @@ monolog:
         newrelic:
             type: newrelic
             level: error
-
-swiftmailer:
-    delivery_addresses: [tech-team@elifesciences.org]

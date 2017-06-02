@@ -29,10 +29,22 @@ final class ArticleDownloadLinksListConverter implements ViewModelConverter
         $groups = [];
 
         if ($object->getPdf()) {
-            $items = [new ViewModel\Link('Article PDF', $this->downloadLinkUriGenerator->generate(DownloadLink::fromUri($object->getPdf())))];
+            $items = [
+                new ViewModel\Link(
+                    'Article PDF',
+                    $this->downloadLinkUriGenerator->generate(DownloadLink::fromUri($object->getPdf())),
+                    false,
+                    ['article-identifier' => $object->getDoi(), 'download-type' => 'pdf-article']
+                ),
+            ];
 
             if ($object instanceof ArticleVor && $object->getFiguresPdf()) {
-                $items[] = new ViewModel\Link('Figures PDF', $this->downloadLinkUriGenerator->generate(DownloadLink::fromUri($object->getFiguresPdf())));
+                $items[] = new ViewModel\Link(
+                    'Figures PDF',
+                    $this->downloadLinkUriGenerator->generate(DownloadLink::fromUri($object->getFiguresPdf())),
+                    false,
+                    ['article-identifier' => $object->getDoi(), 'download-type' => 'pdf-figures']
+                );
             }
 
             $groups[mixed_visibility_text('', 'Downloads', '(link to download the article as PDF)')] = $items;

@@ -61,9 +61,9 @@ services:
         class: eLife\ApiSdk\Client\Interviews
         factory: ['@elife.api_sdk', interviews]
 
-    elife.api_sdk.labs_experiments:
-        class: eLife\ApiSdk\Client\LabsExperiments
-        factory: ['@elife.api_sdk', labsExperiments]
+    elife.api_sdk.labs_posts:
+        class: eLife\ApiSdk\Client\LabsPosts
+        factory: ['@elife.api_sdk', labsPosts]
 
     elife.api_sdk.medium_articles:
         class: eLife\ApiSdk\Client\MediumArticles
@@ -703,11 +703,12 @@ services:
         tags:
           - name: view_model.converter
 
-    elife.journal.view_model.converter.highlight.labs_experiment.teaser.secondary:
-        class: eLife\Journal\ViewModel\Converter\HighlightLabsExperimentSecondaryTeaserConverter
+    elife.journal.view_model.converter.highlight.labs_post.teaser.secondary:
+        class: eLife\Journal\ViewModel\Converter\HighlightLabsPostSecondaryTeaserConverter
         public: false
         arguments:
           - '@router'
+          - '@slugify'
         tags:
           - name: view_model.converter
 
@@ -762,33 +763,38 @@ services:
         tags:
           - name: view_model.converter
 
-    elife.journal.view_model.converter.labs_experiment.header:
-        class: eLife\Journal\ViewModel\Converter\LabsExperimentContentHeaderConverter
-        public: false
-        tags:
-          - name: view_model.converter
-
-    elife.journal.view_model.converter.labs_experiment.teaser:
-        class: eLife\Journal\ViewModel\Converter\LabsExperimentTeaserConverter
+    elife.journal.view_model.converter.labs_post.header:
+        class: eLife\Journal\ViewModel\Converter\LabsPostContentHeaderConverter
         public: false
         arguments:
           - '@router'
         tags:
           - name: view_model.converter
 
-    elife.journal.view_model.converter.labs_experiment.teaser.grid:
-        class: eLife\Journal\ViewModel\Converter\LabsExperimentGridTeaserConverter
+    elife.journal.view_model.converter.labs_post.teaser:
+        class: eLife\Journal\ViewModel\Converter\LabsPostTeaserConverter
         public: false
         arguments:
           - '@router'
+          - '@slugify'
         tags:
           - name: view_model.converter
 
-    elife.journal.view_model.converter.labs_experiment.teaser.secondary:
-        class: eLife\Journal\ViewModel\Converter\LabsExperimentSecondaryTeaserConverter
+    elife.journal.view_model.converter.labs_post.teaser.grid:
+        class: eLife\Journal\ViewModel\Converter\LabsPostGridTeaserConverter
         public: false
         arguments:
           - '@router'
+          - '@slugify'
+        tags:
+          - name: view_model.converter
+
+    elife.journal.view_model.converter.labs_post.teaser.secondary:
+        class: eLife\Journal\ViewModel\Converter\LabsPostSecondaryTeaserConverter
+        public: false
+        arguments:
+          - '@router'
+          - '@slugify'
         tags:
           - name: view_model.converter
 

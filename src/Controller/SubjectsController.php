@@ -72,7 +72,7 @@ final class SubjectsController extends Controller
     public function subjectAction(Request $request, string $id) : Response
     {
         $page = (int) $request->query->get('page', 1);
-        $perPage = 6;
+        $perPage = 10;
 
         $subject = $this->get('elife.api_sdk.subjects')
             ->get($id)

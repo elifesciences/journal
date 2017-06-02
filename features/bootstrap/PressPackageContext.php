@@ -43,13 +43,13 @@ final class PressPackageContext extends Context
             )
         );
 
-        foreach (array_chunk($packages, 6) as $i => $packageChunk) {
+        foreach (array_chunk($packages, $chunk = 10) as $i => $packageChunk) {
             $page = $i + 1;
 
             $this->mockApiResponse(
                 new Request(
                     'GET',
-                    "http://api.elifesciences.org/press-packages?page=$page&per-page=6&order=desc",
+                    "http://api.elifesciences.org/press-packages?page=$page&per-page=$chunk&order=desc",
                     ['Accept' => 'application/vnd.elife.press-package-list+json; version=1']
                 ),
                 new Response(

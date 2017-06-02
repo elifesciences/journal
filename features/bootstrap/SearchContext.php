@@ -14,7 +14,7 @@ final class SearchContext extends Context
         'feature',
         'insight',
         'interview',
-        'labs-experiment',
+        'labs-post',
         'podcast-episode',
     ];
 
@@ -122,7 +122,7 @@ final class SearchContext extends Context
                         'blog-article' => 0,
                         'collection' => 0,
                         'interview' => 0,
-                        'labs-experiment' => 0,
+                        'labs-post' => 0,
                         'podcast-episode' => 0,
                     ];
 
@@ -165,7 +165,7 @@ final class SearchContext extends Context
                         )
                     );
 
-                    $articleChunks = array_chunk($articlesWithKeywordAndSubjects, 6);
+                    $articleChunks = array_chunk($articlesWithKeywordAndSubjects, $chunk = 10);
 
                     if (empty($articleChunks)) {
                         $articleChunks[] = [];
@@ -175,7 +175,7 @@ final class SearchContext extends Context
                         $this->mockApiResponse(
                             new Request(
                                 'GET',
-                                sprintf($uri, $thisKeyword, $i + 1, 6),
+                                sprintf($uri, $thisKeyword, $i + 1, $chunk),
                                 ['Accept' => 'application/vnd.elife.search+json; version=1']
                             ),
                             new Response(

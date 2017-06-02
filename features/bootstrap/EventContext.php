@@ -56,13 +56,13 @@ final class EventContext extends Context
             )
         );
 
-        foreach (array_chunk($events, 6) as $i => $eventsChunk) {
+        foreach (array_chunk($events, $chunk = 10) as $i => $eventsChunk) {
             $page = $i + 1;
 
             $this->mockApiResponse(
                 new Request(
                     'GET',
-                    "http://api.elifesciences.org/events?page=$page&per-page=6&type=open&order=asc",
+                    "http://api.elifesciences.org/events?page=$page&per-page=$chunk&type=open&order=asc",
                     ['Accept' => 'application/vnd.elife.event-list+json; version=1']
                 ),
                 new Response(

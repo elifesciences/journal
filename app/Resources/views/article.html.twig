@@ -65,7 +65,7 @@
         <meta name="citation_id"
               content="eLife {{ article.publishedDate|date('Y', 'UTC') }};{{ article.volume }}:{{ article.eLocationId }}">
         <meta name="citation_firstpage" content="{{ article.eLocationId }}">
-        <meta name="citation_public_url" content="{{ url('article', {volume: article.volume, id: article.id}) }}">
+        <meta name="citation_public_url" content="{{ url('article', {id: article.id}) }}">
         <meta name="citation_pdf_url" content="{{ article.pdf }}">
         <meta name="citation_doi" content="{{ article.doi }}">
         <meta name="citation_volume" content="{{ article.volume }}">

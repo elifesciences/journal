@@ -2,39 +2,43 @@
 
 namespace eLife\Journal\ViewModel\Converter;
 
-use eLife\ApiSdk\Model\LabsExperiment;
+use Cocur\Slugify\SlugifyInterface;
+use eLife\ApiSdk\Model\LabsPost;
 use eLife\Patterns\ViewModel;
+use eLife\Patterns\ViewModel\Link;
 use eLife\Patterns\ViewModel\Teaser;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-final class LabsExperimentTeaserConverter implements ViewModelConverter
+final class LabsPostTeaserConverter implements ViewModelConverter
 {
     use CreatesDate;
     use CreatesTeaserImage;
 
     private $urlGenerator;
+    private $slugify;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator)
+    public function __construct(UrlGeneratorInterface $urlGenerator, SlugifyInterface $slugify)
     {
         $this->urlGenerator = $urlGenerator;
+        $this->slugify = $slugify;
     }
 
     /**
-     * @param LabsExperiment $object
+     * @param LabsPost $object
      */
     public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
         return Teaser::main(
             $object->getTitle(),
-            $this->urlGenerator->generate('labs-experiment', ['number' => $object->getNumber()]),
+            $this->urlGenerator->generate('labs-post', ['id' => $object->getId(), 'slug' => $this->slugify->slugify($object->getTitle())]),
             $object->getImpactStatement(),
             null,
             null,
             $this->bigTeaserImage($object),
             ViewModel\TeaserFooter::forNonArticle(
-                ViewModel\Meta::withText(
-                    'Experiment: '.str_pad($object->getNumber(), 3, '0', STR_PAD_LEFT),
-                    $this->simpleDate($object, $context)
+                ViewModel\Meta::withLink(
+                    new Link('Labs', $this->urlGenerator->generate('labs')),
+                    $this->simpleDate($object, ['date' => 'published'] + $context)
                 )
             )
         );
@@ -42,6 +46,6 @@ final class LabsExperimentTeaserConverter implements ViewModelConverter
 
     public function supports($object, string $viewModel = null, array $context = []) : bool
     {
-        return $object instanceof LabsExperiment && ViewModel\Teaser::class === $viewModel && empty($context['variant']);
+        return $object instanceof LabsPost && ViewModel\Teaser::class === $viewModel && empty($context['variant']);
     }
 }

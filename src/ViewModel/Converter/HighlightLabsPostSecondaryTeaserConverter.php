@@ -3,13 +3,12 @@
 namespace eLife\Journal\ViewModel\Converter;
 
 use Cocur\Slugify\SlugifyInterface;
-use eLife\ApiSdk\Model\Collection;
 use eLife\ApiSdk\Model\Highlight;
+use eLife\ApiSdk\Model\LabsPost;
 use eLife\Patterns\ViewModel;
-use eLife\Patterns\ViewModel\Meta;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-final class HighlightCollectionSecondaryTeaserConverter implements ViewModelConverter
+final class HighlightLabsPostSecondaryTeaserConverter implements ViewModelConverter
 {
     use CreatesContextLabel;
     use CreatesDate;
@@ -29,24 +28,19 @@ final class HighlightCollectionSecondaryTeaserConverter implements ViewModelConv
      */
     public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
-        /** @var Collection $collection */
-        $collection = $object->getItem();
-
-        $curatedBy = 'Curated by '.$collection->getSelectedCurator()->getDetails()->getPreferredName();
-        if ($collection->selectedCuratorEtAl()) {
-            $curatedBy .= ' et al';
-        }
+        /** @var LabsPost $post */
+        $post = $object->getItem();
 
         return ViewModel\Teaser::secondary(
             $object->getTitle(),
-            $this->urlGenerator->generate('collection', ['id' => $collection->getId(), 'slug' => $this->slugify->slugify($collection->getTitle())]),
-            $curatedBy,
-            $this->createContextLabel($collection),
+            $this->urlGenerator->generate('labs-post', ['id' => $post->getId(), 'slug' => $this->slugify->slugify($object->getTitle())]),
+            null,
+            $this->createContextLabel($post),
             $object->getThumbnail() ? $this->smallTeaserImage($object) : null,
             ViewModel\TeaserFooter::forNonArticle(
-                Meta::withLink(
-                    new ViewModel\Link('Collection', $this->urlGenerator->generate('collections')),
-                    $this->simpleDate($collection, $context)
+                ViewModel\Meta::withLink(
+                    new ViewModel\Link('Labs', $this->urlGenerator->generate('labs')),
+                    $this->simpleDate($post, $context)
                 )
             )
         );
@@ -54,6 +48,6 @@ final class HighlightCollectionSecondaryTeaserConverter implements ViewModelConv
 
     public function supports($object, string $viewModel = null, array $context = []) : bool
     {
-        return $object instanceof Highlight && ViewModel\Teaser::class === $viewModel && 'secondary' === ($context['variant'] ?? null) && $object->getItem() instanceof Collection;
+        return $object instanceof Highlight && ViewModel\Teaser::class === $viewModel && 'secondary' === ($context['variant'] ?? null) && $object->getItem() instanceof LabsPost;
     }
 }

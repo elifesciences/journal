@@ -3,13 +3,13 @@
 namespace test\eLife\Journal\ViewModel\Converter;
 
 use eLife\ApiSdk\Model\Highlight;
-use eLife\ApiSdk\Model\LabsExperiment;
+use eLife\ApiSdk\Model\LabsPost;
 use eLife\ApiSdk\Model\Model;
-use eLife\Journal\ViewModel\Converter\HighlightLabsExperimentSecondaryTeaserConverter;
+use eLife\Journal\ViewModel\Converter\HighlightLabsPostSecondaryTeaserConverter;
 use eLife\Patterns\ViewModel\Teaser;
 use Traversable;
 
-final class HighlightLabsExperimentSecondaryTeaserConverterTest extends ModelConverterTestCase
+final class HighlightLabsPostSecondaryTeaserConverterTest extends ModelConverterTestCase
 {
     protected $models = ['highlight'];
     protected $viewModelClasses = [Teaser::class];
@@ -20,7 +20,7 @@ final class HighlightLabsExperimentSecondaryTeaserConverterTest extends ModelCon
      */
     public function setUpConverter()
     {
-        $this->converter = new HighlightLabsExperimentSecondaryTeaserConverter($this->stubUrlGenerator(), $this->stubSlugify());
+        $this->converter = new HighlightLabsPostSecondaryTeaserConverter($this->stubUrlGenerator(), $this->stubSlugify());
     }
 
     /**
@@ -28,7 +28,7 @@ final class HighlightLabsExperimentSecondaryTeaserConverterTest extends ModelCon
      */
     protected function modelHook(Model $model) : Traversable
     {
-        if ($model->getItem() instanceof LabsExperiment) {
+        if ($model->getItem() instanceof LabsPost) {
             yield $model;
         }
     }

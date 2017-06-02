@@ -37,6 +37,8 @@ final class ArticleTypeControllerTest extends PageTestCase
         $this->assertSame('/articles/research-article', $crawler->filter('link[rel="canonical"]')->attr('href'));
         $this->assertSame('http://localhost/articles/research-article', $crawler->filter('meta[property="og:url"]')->attr('content'));
         $this->assertSame('Research Articles', $crawler->filter('meta[property="og:title"]')->attr('content'));
+        $this->assertSame('Research Articles published by eLife are full-length studies that present important breakthroughs across the life sciences and biomedicine. There is no maximum length and no limits on the number of display items.', $crawler->filter('meta[property="og:description"]')->attr('content'));
+        $this->assertSame('Research Articles published by eLife are full-length studies that present important breakthroughs across the life sciences and biomedicine. There is no maximum length and no limits on the number of display items.', $crawler->filter('meta[name="description"]')->attr('content'));
         $this->assertSame('summary', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
     }
 
@@ -89,7 +91,7 @@ final class ArticleTypeControllerTest extends PageTestCase
         static::mockApiResponse(
             new Request(
                 'GET',
-                'http://api.elifesciences.org/search?for=&page=1&per-page=6&sort=date&order=desc&type[]=research-article&use-date=default',
+                'http://api.elifesciences.org/search?for=&page=1&per-page=10&sort=date&order=desc&type[]=research-article&use-date=default',
                 [
                     'Accept' => 'application/vnd.elife.search+json; version=1',
                 ]
@@ -125,7 +127,7 @@ final class ArticleTypeControllerTest extends PageTestCase
                         'blog-article' => 0,
                         'collection' => 0,
                         'interview' => 0,
-                        'labs-experiment' => 0,
+                        'labs-post' => 0,
                         'podcast-episode' => 0,
                     ],
                 ])
