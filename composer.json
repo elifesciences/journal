@@ -78,11 +78,5 @@
                 "Remove superfluous argument": "https://github.com/bobthecow/BobthecowMustacheBundle/pull/9.patch"
             }
         }
-    },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "git@github.com:elifesciences/patterns-php.git"
-        }
-    ]
+    }
 }
