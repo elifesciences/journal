@@ -8,10 +8,14 @@
 
 {% block body %}
 
-    <div class="wrapper wrapper--content grid-column">
+    {% embed 'grid/content.html.twig' %}
 
-        {{ render_pattern(error) }}
+        {% block main %}
 
-    </div>
+            {{ render_pattern(error) }}
+
+        {% endblock %}
+
+    {% endembed %}
 
 {% endblock %}
