@@ -7,8 +7,8 @@ elifePipeline {
 
     stage 'Project tests', {
         lock('journal--ci') {
-            def new_relic_status = elifeNewRelicStatus(26895928)
-            echo "New Relic status for journal--ci: ${new_relic_status}"
+            def newRelicStatus = elifeNewRelicStatus(26895928)
+            echo "New Relic status for journal--ci: ${newRelicStatus}"
             builderDeployRevision 'journal--ci', commit
             builderProjectTests 'journal--ci', '/srv/journal', ['/srv/journal/build/phpunit.xml', '/srv/journal/build/behat.xml'], ['smoke', 'project']
         }
