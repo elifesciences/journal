@@ -77,7 +77,7 @@ final class MagazineController extends Controller
         $arguments['audio_player'] = $this->get('elife.api_sdk.podcast_episodes')
             ->slice(0, 1)
             ->then(Callback::method('offsetGet', 0))
-            ->then(Callback::emptyOr($this->willConvertTo(AudioPlayer::class)))
+            ->then(Callback::emptyOr($this->willConvertTo(AudioPlayer::class, ['link' => true])))
             ->otherwise($this->softFailure('Failed to load podcast episode audio player'));
 
         $arguments['highlights'] = $this->get('elife.api_sdk.highlights')

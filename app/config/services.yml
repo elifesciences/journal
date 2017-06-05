@@ -848,6 +848,7 @@ services:
         public: false
         arguments:
           - '@elife.journal.view_model.converter'
+          - '@router'
         tags:
           - name: view_model.converter
 
