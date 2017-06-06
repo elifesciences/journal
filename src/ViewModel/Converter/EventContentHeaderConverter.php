@@ -28,6 +28,7 @@ final class EventContentHeaderConverter implements ViewModelConverter
             [],
             null,
             null,
+            null,
             [],
             [],
             null,
