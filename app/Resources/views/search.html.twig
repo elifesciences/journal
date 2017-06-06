@@ -34,15 +34,19 @@
 
         {% block secondary %}
 
-            <form method="get" action="{{ path('search') }}">
+            <div class="grid-secondary-column__item">
 
-                <input type="hidden" name="for" value="{{ query.for }}">
-                <input type="hidden" name="sort" value="{{ query.sort }}">
-                <input type="hidden" name="order" value="{{ query.order }}">
+                <form method="get" action="{{ path('search') }}">
 
-                {{ render_pattern(filterPanel) }}
+                    <input type="hidden" name="for" value="{{ query.for }}">
+                    <input type="hidden" name="sort" value="{{ query.sort }}">
+                    <input type="hidden" name="order" value="{{ query.order }}">
 
-            </form>
+                    {{ render_pattern(filterPanel) }}
+
+                </form>
+
+            </div>
 
         {% endblock %}
 
