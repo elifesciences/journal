@@ -26,17 +26,29 @@
 
             {% if multimedia %}
 
-                {{ render_pattern(multimedia) }}
+                <div class="grid-secondary-column__item">
+
+                    {{ render_pattern(multimedia) }}
+
+                </div>
 
             {% endif %}
 
             {% if related %}
 
-                {{ render_pattern(related) }}
+                <div class="grid-secondary-column__item">
+
+                    {{ render_pattern(related) }}
+
+                </div>
 
             {% endif %}
 
-            {{ render_pattern(contributors) }}
+            <div class="grid-secondary-column__item">
+
+                {{ render_pattern(contributors) }}
+
+            </div>
 
         {% endblock %}
 
