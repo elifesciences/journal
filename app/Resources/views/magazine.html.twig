@@ -37,13 +37,21 @@
 
             {% if events %}
 
-                {{ render_pattern(events) }}
+                <div class="grid-secondary-column__item">
+
+                    {{ render_pattern(events) }}
+
+                </div>
 
             {% endif %}
 
             {% if elifeDigests %}
 
-                {{ render_pattern(elifeDigests) }}
+                <div class="grid-secondary-column__item">
+
+                    {{ render_pattern(elifeDigests) }}
+
+                </div>
 
             {% endif %}
 
