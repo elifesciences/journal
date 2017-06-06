@@ -3,6 +3,7 @@
 namespace eLife\Journal\ViewModel\Converter;
 
 use eLife\ApiSdk\Model\PressPackage;
+use eLife\Journal\Helper\LicenceUri;
 use eLife\Patterns\ViewModel;
 use eLife\Patterns\ViewModel\Link;
 use eLife\Patterns\ViewModel\Meta;
@@ -29,7 +30,7 @@ final class PressPackageContentHeaderConverter implements ViewModelConverter
             Meta::withLink(
                 new Link('Press pack', $this->urlGenerator->generate('press-packs')),
                 $this->simpleDate($object, ['date' => 'published'] + $context)
-            )
+            ), LicenceUri::default()
         );
     }
 
