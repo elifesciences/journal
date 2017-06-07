@@ -7,6 +7,7 @@ use eLife\ApiSdk\Model\Author;
 use eLife\ApiSdk\Model\AuthorEntry;
 use eLife\ApiSdk\Model\Subject;
 use eLife\Journal\Helper\CreatesIiifUri;
+use eLife\Journal\Helper\LicenceUri;
 use eLife\Journal\Helper\ModelName;
 use eLife\Patterns\ViewModel;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -80,12 +81,14 @@ final class ArticleContentHeaderConverter implements ViewModelConverter
             $subjects,
             null,
             $object->getAuthorLine(),
+            $this->urlGenerator->generate('article', ['id' => $object->getId(), '_fragment' => 'info']),
             $authors,
             $institutions,
             '#downloads',
             null,
             null,
-            $meta
+            $meta,
+            LicenceUri::forCode($object->getCopyright()->getLicense())
         );
     }
 

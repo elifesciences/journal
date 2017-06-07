@@ -4,17 +4,17 @@
 
     {{ render_pattern(contentHeader) }}
 
-    <div class="wrapper wrapper--content">
+    {% embed 'grid/listing-two-column.html.twig' %}
 
-        <div class="grid">
+        {% block main %}
 
-            <div class="grid__item medium--eight-twelfths grid-column">
+            {{ render_pattern(form) }}
 
-                {{ render_pattern(form) }}
+        {% endblock %}
 
-            </div>
+        {% block secondary %}
 
-            <div class="grid__item medium--four-twelfths grid-column">
+            <div class="grid-secondary-column__item">
 
                 <dl>
                     <dt>Email</dt>
@@ -29,10 +29,11 @@
                         UK
                     </dd>
                 </dl>
+
             </div>
 
-        </div>
+        {% endblock %}
 
-    </div>
+    {% endembed %}
 
 {% endblock %}

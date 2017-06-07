@@ -14,9 +14,13 @@
 
         {% block secondary %}
 
-            {% for item in sidebar %}
-                {{ render_pattern(item) }}
-            {% endfor %}
+            <div class="grid-secondary-column__item">
+
+                {% for item in sidebar %}
+                    {{ render_pattern(item) }}
+                {% endfor %}
+
+            </div>
 
         {% endblock %}
 
