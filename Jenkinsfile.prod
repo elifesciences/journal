@@ -13,8 +13,9 @@ elifePipeline {
     }
 
     stage 'Deploy to prod', {
-        def newRelicStatus = elifeNewRelicStatus(29775807)
-        echo "New Relic status for journal--prod: ${newRelicStatus}" 
+        if (!params.force) {
+            elifeNewRelicEnsureStatus(29775807, ["green"])
+        }
         elifeDeploySlackNotification 'journal', 'prod'
         builderDeployRevision 'journal--prod', commit, 'blue-green'
         builderSmokeTests 'journal--prod', '/srv/journal'
