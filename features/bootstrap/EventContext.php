@@ -39,7 +39,7 @@ final class EventContext extends Context
         $this->mockApiResponse(
             new Request(
                 'GET',
-                'http://api.elifesciences.org/events?page=1&per-page=1&type=open&order=asc',
+                'http://api.elifesciences.org/events?page=1&per-page=1&show=open&order=asc',
                 ['Accept' => 'application/vnd.elife.event-list+json; version=1']
             ),
             new Response(
@@ -62,7 +62,7 @@ final class EventContext extends Context
             $this->mockApiResponse(
                 new Request(
                     'GET',
-                    "http://api.elifesciences.org/events?page=$page&per-page=$chunk&type=open&order=asc",
+                    "http://api.elifesciences.org/events?page=$page&per-page=$chunk&show=open&order=asc",
                     ['Accept' => 'application/vnd.elife.event-list+json; version=1']
                 ),
                 new Response(
