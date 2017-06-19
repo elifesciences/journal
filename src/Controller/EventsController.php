@@ -27,7 +27,7 @@ final class EventsController extends Controller
         $arguments = $this->defaultPageArguments($request);
 
         $upcomingEvents = promise_for($this->get('elife.api_sdk.events')
-            ->forType('open')
+            ->show('open')
             ->reverse())
             ->then(function (Sequence $sequence) use ($page, $perPage) {
                 $pagerfanta = new Pagerfanta(new SequenceAdapter($sequence, $this->willConvertTo(Teaser::class)));

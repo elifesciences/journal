@@ -90,7 +90,7 @@ final class MagazineController extends Controller
             ->otherwise($this->softFailure('Failed to load highlights for magazine'));
 
         $events = $this->get('elife.api_sdk.events')
-            ->forType('open')
+            ->show('open')
             ->reverse();
 
         $arguments['menuLink'] = new SectionListingLink('All sections', 'sections');

@@ -482,7 +482,7 @@ final class MagazineContext extends Context
             $this->mockApiResponse(
                 new Request(
                     'GET',
-                    "http://api.elifesciences.org/events?page=$page&per-page=3&type=open&order=asc",
+                    "http://api.elifesciences.org/events?page=$page&per-page=3&show=open&order=asc",
                     ['Accept' => 'application/vnd.elife.event-list+json; version=1']
                 ),
                 new Response(
