@@ -1,16 +1,17 @@
 {
-    "private": true,
-    "dependencies": {
-        "del": "^2.2",
-        "gulp": "^3.9",
-        "gulp-favicons": "^2.2",
-        "gulp-imagemin": "^3.1",
-        "gulp-responsive": "^2.7",
-        "gulp-rev-all": "^0.9",
-        "gulp-svg2png": "^2.0.2",
-        "imagemin-mozjpeg": "^6.0",
-        "imagemin-optipng": "^5.2",
-        "imagemin-svgo": "^5.2.1",
-        "merge-stream": "^1.0.1"
-    }
+  "private": true,
+  "dependencies": {
+    "critical": "^0.8.4",
+    "del": "^2.2",
+    "gulp": "^3.9",
+    "gulp-favicons": "^2.2",
+    "gulp-imagemin": "^3.1",
+    "gulp-responsive": "^2.7",
+    "gulp-rev-all": "^0.9",
+    "gulp-svg2png": "^2.0.2",
+    "imagemin-mozjpeg": "^6.0",
+    "imagemin-optipng": "^5.2",
+    "imagemin-svgo": "^5.2.1",
+    "merge-stream": "^1.0.1"
+  }
 }
