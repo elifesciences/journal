@@ -152,7 +152,7 @@ final class AboutController extends Controller
             'The community behind eLife wants to help address some of the pressures on early-career scientists');
 
         $arguments['body'] = [
-            new Paragraph('The community behind eLife – including the research funders who support the journal, the editors and referees who run the peer-review process, and our Early-Career Advisory Group – are keenly aware of the pressures faced by junior investigators, and are working to create a more positive publishing experience that will, among other things, help early-career researchers receive the recognition they deserve.'),
+            new Paragraph('The community behind eLife – including the research funders who support the journal, the editors and referees who run the peer-review process, and our <a href="'.$this->get('router')->generate('about-people', ['type' => 'early-career']).'">Early-Career Advisory Group</a> – are keenly aware of the pressures faced by junior investigators, and are working to create a more positive publishing experience that will, among other things, help early-career researchers receive the recognition they deserve.'),
             new Paragraph('eLife supports and showcases early-career scientists and their work in a number of ways:'),
             new DefinitionList([
                 '<a href="'.$this->get('router')->generate('magazine').'">Magazine features</a>' => 'Early-career researchers and issues of concern to them are regularly featured in interviews, podcasts and articles in the Magazine section of eLife',
