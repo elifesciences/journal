@@ -29,7 +29,7 @@ final class FormViewConverter implements ViewModelConverter
         foreach (array_reverse($object->vars['block_prefixes']) as $prefix) {
             switch ($prefix) {
                 case 'email':
-                    return ViewModel\TextField::emailInput(new ViewModel\FormLabel($this->getLabel($object), $object->vars['id']),
+                    return ViewModel\TextField::emailInput(new ViewModel\FormLabel($this->getLabel($object)),
                         $object->vars['id'], $object->vars['full_name'], $object->vars['attr']['placeholder'] ?? null,
                         $object->vars['required'],
                         $object->vars['disabled'], $object->vars['attr']['autofocus'] ?? false, $object->vars['value'],
@@ -65,12 +65,12 @@ final class FormViewConverter implements ViewModelConverter
                         ViewModel\Button::STYLE_DEFAULT, $object->vars['id'], true, false
                     );
                 case 'text':
-                    return ViewModel\TextField::textInput(new ViewModel\FormLabel($this->getLabel($object), $object->vars['id']),
+                    return ViewModel\TextField::textInput(new ViewModel\FormLabel($this->getLabel($object)),
                         $object->vars['id'], $object->vars['full_name'], $object->vars['attr']['placeholder'] ?? null,
                         $object->vars['required'], $object->vars['disabled'], $object->vars['attr']['autofocus'] ?? false, $object->vars['value'],
                         $this->getState($object));
                 case 'textarea':
-                    return new ViewModel\TextArea(new ViewModel\FormLabel($this->getLabel($object), $object->vars['id']),
+                    return new ViewModel\TextArea(new ViewModel\FormLabel($this->getLabel($object)),
                         $object->vars['id'],
                         $object->vars['full_name'],
                         $object->vars['value'],
