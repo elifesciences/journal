@@ -8,6 +8,7 @@ use eLife\Journal\ViewModel\HiddenInput;
 use eLife\Patterns\PatternRenderer;
 use eLife\Patterns\ViewModel;
 use InvalidArgumentException;
+use Symfony\Component\Form\ChoiceList\View\ChoiceView;
 use Symfony\Component\Form\FormView;
 
 final class FormViewConverter implements ViewModelConverter
@@ -28,8 +29,20 @@ final class FormViewConverter implements ViewModelConverter
 
         foreach (array_reverse($object->vars['block_prefixes']) as $prefix) {
             switch ($prefix) {
+                case 'choice':
+                    $options = array_map(function (ChoiceView $choice) use ($object) {
+                        return new ViewModel\SelectOption($choice->value, $choice->label, $choice->value === $object->vars['value']);
+                    }, $object->vars['choices']);
+
+                    if (!empty($object->vars['placeholder'])) {
+                        array_unshift($options, new ViewModel\SelectOption('', $object->vars['placeholder']));
+                    }
+
+                    return new ViewModel\Select($object->vars['id'], $options, new ViewModel\FormLabel($this->getLabel($object)),
+                        $object->vars['full_name'], $object->vars['required'], $object->vars['disabled'], $this->getState($object));
+                    break;
                 case 'email':
-                    return ViewModel\TextField::emailInput(new ViewModel\FormLabel($this->getLabel($object), $object->vars['id']),
+                    return ViewModel\TextField::emailInput(new ViewModel\FormLabel($this->getLabel($object)),
                         $object->vars['id'], $object->vars['full_name'], $object->vars['attr']['placeholder'] ?? null,
                         $object->vars['required'],
                         $object->vars['disabled'], $object->vars['attr']['autofocus'] ?? false, $object->vars['value'],
@@ -65,12 +78,12 @@ final class FormViewConverter implements ViewModelConverter
                         ViewModel\Button::STYLE_DEFAULT, $object->vars['id'], true, false
                     );
                 case 'text':
-                    return ViewModel\TextField::textInput(new ViewModel\FormLabel($this->getLabel($object), $object->vars['id']),
+                    return ViewModel\TextField::textInput(new ViewModel\FormLabel($this->getLabel($object)),
                         $object->vars['id'], $object->vars['full_name'], $object->vars['attr']['placeholder'] ?? null,
                         $object->vars['required'], $object->vars['disabled'], $object->vars['attr']['autofocus'] ?? false, $object->vars['value'],
                         $this->getState($object));
                 case 'textarea':
-                    return new ViewModel\TextArea(new ViewModel\FormLabel($this->getLabel($object), $object->vars['id']),
+                    return new ViewModel\TextArea(new ViewModel\FormLabel($this->getLabel($object)),
                         $object->vars['id'],
                         $object->vars['full_name'],
                         $object->vars['value'],

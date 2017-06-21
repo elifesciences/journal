@@ -21,6 +21,7 @@ final class ContactContext extends Context
 
         $page->fillField('contact[name]', 'Foo Bar');
         $page->fillField('contact[email]', 'foo@example.com');
+        $page->fillField('contact[subject]', 'Author query');
         $page->fillField('contact[question]', "Lorem ipsum dolor sit amet, consectetur adipiscing elit.\n\nVivamus rhoncus turpis quam, sit amet finibus elit pharetra eget.");
 
         $page->pressButton('Submit');
@@ -54,7 +55,7 @@ eLife Sciences Publications, Ltd is a limited liability non-profit non-stock cor
     public function theCompletedFormShouldBeSentToStaffElifesciencesOrg()
     {
         $this->assertEmailSent(['do_not_reply@elifesciences.org' => null], ['staff@elifesciences.org' => null],
-            'Question submitted', 'A question has been submitted on '.$this->locatePath('/contact').'
+            'Question submitted: Author query', 'A question has been submitted on '.$this->locatePath('/contact').'
 
 Name
 ----
@@ -63,6 +64,10 @@ Foo Bar
 Email
 -----
 foo@example.com
+
+Subject
+-------
+Author query
 
 Question
 --------
