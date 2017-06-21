@@ -43,7 +43,7 @@ final class PodcastEpisodeMediaChapterListingItemConverter implements ViewModelC
                 $text = ' curated by '.$model->getSelectedCurator()->getDetails()->getPreferredName();
 
                 if ($model->selectedCuratorEtAl()) {
-                    $text .= ' et al';
+                    $text .= ' et al.';
                 }
 
                 return new ViewModel\ContentSource(new ViewModel\Link($name, $url), $text);

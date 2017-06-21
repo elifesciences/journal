@@ -34,7 +34,7 @@ final class HighlightCollectionSecondaryTeaserConverter implements ViewModelConv
 
         $curatedBy = 'Curated by '.$collection->getSelectedCurator()->getDetails()->getPreferredName();
         if ($collection->selectedCuratorEtAl()) {
-            $curatedBy .= ' et al';
+            $curatedBy .= ' et al.';
         }
 
         return ViewModel\Teaser::secondary(

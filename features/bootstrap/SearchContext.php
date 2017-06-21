@@ -67,7 +67,7 @@ final class SearchContext extends Context
                 'elocationId' => 'e'.$i,
                 'copyright' => [
                     'license' => 'CC-BY-4.0',
-                    'holder' => 'Author et al',
+                    'holder' => 'Author et al.',
                     'statement' => 'Creative Commons Attribution License.',
                 ],
                 'authorLine' => 'Foo Bar',
