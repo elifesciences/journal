@@ -3,6 +3,7 @@
 namespace eLife\Journal\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -33,6 +34,19 @@ final class ContactType extends AbstractType
                         new NotBlank(['message' => 'Please provide your email address.']),
                         new Email(['message' => 'Please provide a valid email address.']),
                     ],
+                ]
+            )
+            ->add('subject', ChoiceType::class,
+                [
+                    'required' => true,
+                    'constraints' => [new NotBlank(['message' => 'Please choose a subject.'])],
+                    'placeholder' => 'Choose a subject',
+                    'choices' => array_combine($choices = [
+                        'Author query',
+                        'Press query',
+                        'Site feedback',
+                        'Other',
+                    ], $choices),
                 ]
             )
             ->add('question', TextareaType::class,
