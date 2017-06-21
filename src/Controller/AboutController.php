@@ -205,7 +205,7 @@ final class AboutController extends Controller
                     false, [], null, [], [], null, null,
                     new SelectNav(
                         $this->get('router')->generate('about-people'),
-                        new Select('type', $types->toArray(), new FormLabel('Type', 'type', true)),
+                        new Select('type', $types->toArray(), new FormLabel('Type', true), 'type'),
                         Button::form('Go', Button::TYPE_SUBMIT, 'go', Button::SIZE_EXTRA_SMALL)
                     )
                 );
