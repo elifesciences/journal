@@ -30,8 +30,6 @@ final class InterviewContentHeaderConverter implements ViewModelConverter
             false,
             [],
             null,
-            null,
-            null,
             [],
             [],
             null,
