@@ -118,7 +118,7 @@ final class ArticlesController extends Controller
 
     private function createFirstPage(string $id, array $arguments) : Response
     {
-        $arguments['relatedItem'] = all(['relatedItem' => $arguments['relatedItem'], 'article' => $arguments['article'], 'listing' => $arguments['listing']])
+        $arguments['relatedItem'] = all(['relatedItem' => $arguments['relatedItem'], 'article' => $arguments['article'], 'listing' => $arguments['listing'], 'relatedArticles' => $arguments['relatedArticles']])
             ->then(function (array $parts) {
                 /** @var Article|null $relatedItem */
                 $relatedItem = $parts['relatedItem'];
@@ -126,12 +126,26 @@ final class ArticlesController extends Controller
                 $article = $parts['article'];
                 /** @var ViewModel\ListingReadMore|null $listing */
                 $listing = $parts['listing'];
+                /** @var Sequence|Article[] $relatedArticles */
+                $relatedArticles = $parts['relatedArticles'];
 
                 if (empty($relatedItem)) {
                     return null;
                 }
 
-                $item = $this->convertTo($relatedItem, ViewModel\Teaser::class, ['variant' => 'relatedItem', 'from' => $article->getType()]);
+                if ($relatedItem instanceof Article) {
+                    $unrelated = true;
+                    foreach ($relatedArticles as $relatedArticle) {
+                        if ($relatedArticle->getId() === $relatedItem->getId()) {
+                            $unrelated = false;
+                            break;
+                        }
+                    }
+                } else {
+                    $unrelated = false;
+                }
+
+                $item = $this->convertTo($relatedItem, ViewModel\Teaser::class, ['variant' => 'relatedItem', 'from' => $article->getType(), 'unrelated' => $unrelated]);
 
                 if ($listing) {
                     return ViewModel\ListingTeasers::withSeeMore([$item], new ViewModel\SeeMoreLink(new Link('Further reading', '#listing')));
