@@ -37,9 +37,11 @@ final class CoverCollectionSecondaryTeaserConverter implements ViewModelConverte
             $curatedBy .= ' et al.';
         }
 
+        $url = $this->urlGenerator->generate('collection', ['id' => $collection->getId(), 'slug' => $this->slugify->slugify($collection->getTitle())]);
+
         return ViewModel\Teaser::secondary(
             $object->getTitle(),
-            $this->urlGenerator->generate('collection', ['id' => $collection->getId(), 'slug' => $this->slugify->slugify($collection->getTitle())]),
+            $url,
             $curatedBy,
             $this->createContextLabel($collection),
             ViewModel\TeaserImage::small(
