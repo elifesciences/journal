@@ -1886,6 +1886,18 @@
         }
       }
     },
+    "gulp-wait": {
+      "version": "0.0.2",
+      "from": "gulp-wait@latest",
+      "resolved": "https://registry.npmjs.org/gulp-wait/-/gulp-wait-0.0.2.tgz",
+      "dependencies": {
+        "map-stream": {
+          "version": "0.0.4",
+          "from": "map-stream@0.0.4",
+          "resolved": "https://registry.npmjs.org/map-stream/-/map-stream-0.0.4.tgz"
+        }
+      }
+    },
     "gulplog": {
       "version": "1.0.0",
       "from": "gulplog@>=1.0.0 <2.0.0",
