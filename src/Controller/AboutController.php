@@ -202,7 +202,7 @@ final class AboutController extends Controller
         $arguments['contentHeader'] = (new PromiseSequence($types))
             ->then(function (Sequence $types) use ($arguments) {
                 return new ContentHeader($arguments['title'], null, 'The working scientists who serve as eLife editors, our early-career advisors, governing board, and our executive staff all work in concert to realise eLife’s mission to accelerate discovery',
-                    false, [], null, null, null, [], [], null, null,
+                    false, [], null, [], [], null, null,
                     new SelectNav(
                         $this->get('router')->generate('about-people'),
                         new Select('type', $types->toArray(), new FormLabel('Type', 'type', true)),
