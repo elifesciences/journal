@@ -20,7 +20,7 @@ trait CreatesContextLabel
         return new ContextLabel(...$item->getSubjects()->map(function (Subject $subject) {
             return new Link(
                 $subject->getName(),
-                $this->urlGenerator->generate('subject', ['id' => $subject->getId()])
+                $this->urlGenerator->generate('subject', [$subject])
             );
         }));
     }

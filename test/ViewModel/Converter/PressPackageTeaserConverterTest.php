@@ -15,6 +15,6 @@ final class PressPackageTeaserConverterTest extends ModelConverterTestCase
      */
     public function setUpConverter()
     {
-        $this->converter = new PressPackageTeaserConverter($this->stubUrlGenerator(), $this->stubSlugify());
+        $this->converter = new PressPackageTeaserConverter($this->stubUrlGenerator());
     }
 }

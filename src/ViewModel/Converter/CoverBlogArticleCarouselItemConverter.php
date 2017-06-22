@@ -2,7 +2,6 @@
 
 namespace eLife\Journal\ViewModel\Converter;
 
-use Cocur\Slugify\SlugifyInterface;
 use eLife\ApiSdk\Model\BlogArticle;
 use eLife\ApiSdk\Model\Cover;
 use eLife\ApiSdk\Model\Subject;
@@ -15,13 +14,11 @@ final class CoverBlogArticleCarouselItemConverter implements ViewModelConverter
     use CreatesDate;
 
     private $urlGenerator;
-    private $slugify;
     private $contentHeaderImageFactory;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator, SlugifyInterface $slugify, ContentHeaderImageFactory $contentHeaderImageFactory)
+    public function __construct(UrlGeneratorInterface $urlGenerator, ContentHeaderImageFactory $contentHeaderImageFactory)
     {
         $this->urlGenerator = $urlGenerator;
-        $this->slugify = $slugify;
         $this->contentHeaderImageFactory = $contentHeaderImageFactory;
     }
 
@@ -35,9 +32,9 @@ final class CoverBlogArticleCarouselItemConverter implements ViewModelConverter
 
         return new ViewModel\CarouselItem(
             $article->getSubjects()->map(function (Subject $subject) {
-                return new ViewModel\Link($subject->getName(), $this->urlGenerator->generate('subject', ['id' => $subject->getId()]));
+                return new ViewModel\Link($subject->getName(), $this->urlGenerator->generate('subject', [$subject]));
             })->toArray(),
-            new ViewModel\Link($object->getTitle(), $this->urlGenerator->generate('inside-elife-article', ['id' => $article->getId(), 'slug' => $this->slugify->slugify($article->getTitle())])),
+            new ViewModel\Link($object->getTitle(), $this->urlGenerator->generate('inside-elife-article', [$article])),
             'Read article',
             ViewModel\Meta::withLink(
                 new ViewModel\Link('Inside eLife', $this->urlGenerator->generate('inside-elife')),

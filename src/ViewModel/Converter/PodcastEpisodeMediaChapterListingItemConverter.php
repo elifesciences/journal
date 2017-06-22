@@ -2,7 +2,6 @@
 
 namespace eLife\Journal\ViewModel\Converter;
 
-use Cocur\Slugify\SlugifyInterface;
 use eLife\ApiSdk\Model\ArticleVersion;
 use eLife\ApiSdk\Model\Collection;
 use eLife\ApiSdk\Model\Model;
@@ -15,12 +14,10 @@ use UnexpectedValueException;
 final class PodcastEpisodeMediaChapterListingItemConverter implements ViewModelConverter
 {
     private $urlGenerator;
-    private $slugify;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator, SlugifyInterface $slugify)
+    public function __construct(UrlGeneratorInterface $urlGenerator)
     {
         $this->urlGenerator = $urlGenerator;
-        $this->slugify = $slugify;
     }
 
     /**
@@ -31,7 +28,7 @@ final class PodcastEpisodeMediaChapterListingItemConverter implements ViewModelC
         $contentSources = $object->getContent()->map(function (Model $model) {
             if ($model instanceof ArticleVersion) {
                 $name = ModelName::singular($model->getType());
-                $url = $this->urlGenerator->generate('article', ['id' => $model->getId()]);
+                $url = $this->urlGenerator->generate('article', [$model]);
                 if ($model->getAuthorLine()) {
                     $text = ' by '.$model->getAuthorLine();
                 }
@@ -39,7 +36,7 @@ final class PodcastEpisodeMediaChapterListingItemConverter implements ViewModelC
                 return new ViewModel\ContentSource(new ViewModel\Link($name, $url), $text ?? null);
             } elseif ($model instanceof Collection) {
                 $name = ModelName::singular('collection');
-                $url = $this->urlGenerator->generate('collection', ['id' => $model->getId(), 'slug' => $this->slugify->slugify($model->getTitle())]);
+                $url = $this->urlGenerator->generate('collection', [$model]);
                 $text = ' curated by '.$model->getSelectedCurator()->getDetails()->getPreferredName();
 
                 if ($model->selectedCuratorEtAl()) {

@@ -20,7 +20,7 @@ final class HighlightInterviewSecondaryTeaserConverterTest extends ModelConverte
      */
     public function setUpConverter()
     {
-        $this->converter = new HighlightInterviewSecondaryTeaserConverter($this->stubUrlGenerator(), $this->stubSlugify());
+        $this->converter = new HighlightInterviewSecondaryTeaserConverter($this->stubUrlGenerator());
     }
 
     /**

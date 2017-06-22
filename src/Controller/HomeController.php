@@ -86,7 +86,7 @@ final class HomeController extends Controller
             ->reverse()
             ->slice(1, 100)
             ->map(function (Subject $subject) {
-                return new Link($subject->getName(), $this->get('router')->generate('subject', ['id' => $subject->getId()]));
+                return new Link($subject->getName(), $this->get('router')->generate('subject', [$subject]));
             })
             ->then(function (Sequence $links) {
                 return new SectionListing('subjects', $links->toArray(), new ListHeading('Research categories'), false, 'strapline');

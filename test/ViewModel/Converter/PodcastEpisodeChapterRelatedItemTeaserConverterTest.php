@@ -16,6 +16,6 @@ final class PodcastEpisodeChapterRelatedItemTeaserConverterTest extends ModelCon
      */
     public function setUpConverter()
     {
-        $this->converter = new PodcastEpisodeChapterRelatedItemTeaserConverter($this->stubUrlGenerator(), $this->stubSlugify());
+        $this->converter = new PodcastEpisodeChapterRelatedItemTeaserConverter($this->stubUrlGenerator());
     }
 }

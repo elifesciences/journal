@@ -33,7 +33,7 @@ final class CoverArticleSecondaryTeaserConverter implements ViewModelConverter
 
         return ViewModel\Teaser::secondary(
             $object->getTitle(),
-            $this->urlGenerator->generate('article', ['id' => $article->getId()]),
+            $this->urlGenerator->generate('article', [$article]),
             $article->getAuthorLine(),
             $this->createContextLabel($article),
             ViewModel\TeaserImage::small(

@@ -17,12 +17,12 @@ final class DoiController extends Controller
     {
         preg_match('~^10.7554/eLife\.([a-z0-9-]+)$~', $doi, $matches);
 
-        $this->get('elife.api_sdk.articles')
+        $article = $this->get('elife.api_sdk.articles')
             ->get($matches[1])
             ->otherwise($this->mightNotExist())
             ->wait();
 
-        return $this->redirectTo($this->get('router')->generate('article', ['id' => $matches[1]]));
+        return $this->redirectTo($this->get('router')->generate('article', [$article]));
     }
 
     public function subDoiAction(string $doi) : Response
