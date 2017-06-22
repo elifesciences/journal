@@ -27,18 +27,18 @@ final class CoverBlogArticleCarouselItemConverter implements ViewModelConverter
      */
     public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
-        /** @var BlogArticle $article */
-        $article = $object->getItem();
+        /** @var BlogArticle $blogArticle */
+        $blogArticle = $object->getItem();
 
         return new ViewModel\CarouselItem(
-            $article->getSubjects()->map(function (Subject $subject) {
+            $blogArticle->getSubjects()->map(function (Subject $subject) {
                 return new ViewModel\Link($subject->getName(), $this->urlGenerator->generate('subject', [$subject]));
             })->toArray(),
-            new ViewModel\Link($object->getTitle(), $this->urlGenerator->generate('inside-elife-article', [$article])),
+            new ViewModel\Link($object->getTitle(), $this->urlGenerator->generate('inside-elife-article', [$blogArticle])),
             'Read article',
             ViewModel\Meta::withLink(
                 new ViewModel\Link('Inside eLife', $this->urlGenerator->generate('inside-elife')),
-                $this->simpleDate($article, $context)
+                $this->simpleDate($blogArticle, $context)
             ),
             $this->contentHeaderImageFactory->forImage($object->getBanner())
         );
