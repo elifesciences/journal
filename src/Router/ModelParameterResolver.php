@@ -4,6 +4,7 @@ namespace eLife\Journal\Router;
 
 use Cocur\Slugify\SlugifyInterface;
 use eLife\ApiSdk\Model;
+use InvalidArgumentException;
 
 final class ModelParameterResolver implements ParameterResolver
 {
@@ -16,13 +17,12 @@ final class ModelParameterResolver implements ParameterResolver
 
     public function resolve(string $route, array $parameters) : array
     {
-        if (!isset($parameters[0])) {
+        if (!isset($parameters[0]) || !is_object($parameters[0])) {
             return $parameters;
         }
 
         $model = $parameters[0];
         unset($parameters[0]);
-        $new = [];
 
         if ($model instanceof Model\ArticleVersion) {
             $new = ['id' => $model->getId()];
@@ -44,6 +44,8 @@ final class ModelParameterResolver implements ParameterResolver
             $new = ['id' => $model->getId(), 'slug' => $this->slugify->slugify($model->getTitle())];
         } elseif ($model instanceof Model\Subject) {
             $new = ['id' => $model->getId()];
+        } else {
+            throw new InvalidArgumentException('Unexpected '.get_class($model));
         }
 
         return $new + $parameters;
