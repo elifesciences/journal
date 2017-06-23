@@ -338,7 +338,7 @@ final class ArticlesController extends Controller
                     );
                 }
 
-                if ($article instanceof ArticleVoR && $article->getEthics()->notEmpty()) {
+                if ($article->getEthics()->notEmpty()) {
                     $infoSections[] = ArticleSection::basic(
                         'Ethics',
                         3,
