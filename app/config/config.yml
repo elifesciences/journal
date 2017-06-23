@@ -17,18 +17,18 @@ csa_guzzle:
         elife_api:
             config:
                 base_uri: '%api_url%'
-                connect_timeout: 0.5
+#                connect_timeout: 0.5
                 headers:
                     Authorization: '%api_key%'
-                timeout: 1
+#                timeout: 1
         elife_crm:
             config:
                 base_uri: '%crm_url%'
-                connect_timeout: 1
-                timeout: 3
+#                connect_timeout: 1
+#                timeout: 3
         file_download:
             config:
-                connect_timeout: 0.5
+#                connect_timeout: 0.5
                 http_errors: false
                 stream: true
 

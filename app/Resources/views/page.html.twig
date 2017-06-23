@@ -5,7 +5,16 @@
 <head>
 
     <meta charset="utf-8">
+
+    <style>
+        {% if critical is not defined %}
+        {% set critical = 'critical/critical-css-inline-default.css.twig' %}
+        {% endif %}
+        {% include critical ignore missing %}
+    </style>
+
     <meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
+
 
     <title>{% block title %}{{ title|striptags }}{% endblock %} | eLife</title>
 
@@ -26,12 +35,6 @@
     <link rel="manifest" href="{{ asset('assets/favicons/manifest.json') }}">
     <meta name="theme-color" content="#ffffff">
     <meta name="application-name" content="eLife">
-
-    {% block stylesheets deferred %}
-    {% for stylesheet in stylesheets %}
-        <link href="{{ asset(stylesheet) }}" rel="stylesheet">
-    {% endfor %}
-    {% endblock %}
 
     <meta name="format-detection" content="telephone=no">
 
@@ -186,6 +189,12 @@
 {% block javascripts deferred %}
 {% for javascript in javascripts %}
     <script async src="{{ asset(javascript) }}"></script>
+{% endfor %}
+{% endblock %}
+
+{% block stylesheets deferred %}
+{% for stylesheet in stylesheets %}
+    <link href="{{ asset(stylesheet) }}" rel="stylesheet">
 {% endfor %}
 {% endblock %}
 
