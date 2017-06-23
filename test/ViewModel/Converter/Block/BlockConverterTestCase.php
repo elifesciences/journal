@@ -45,6 +45,7 @@ abstract class BlockConverterTestCase extends ModelConverterTestCase
             if ($model->getAbstract()) {
                 yield from $this->hasContentHook($model->getAbstract());
             }
+            yield from $this->sequenceHook($model->getEthics());
         }
 
         if ($model instanceof ArticleVoR) {
@@ -55,7 +56,6 @@ abstract class BlockConverterTestCase extends ModelConverterTestCase
                 yield from $this->hasContentHook($appendix);
             }
             yield from $this->sequenceHook($model->getAcknowledgements());
-            yield from $this->sequenceHook($model->getEthics());
             if ($model->getDecisionLetter()) {
                 yield from $this->hasContentHook($model->getDecisionLetter());
             }
