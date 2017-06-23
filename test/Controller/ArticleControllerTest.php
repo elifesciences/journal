@@ -238,7 +238,7 @@ final class ArticleControllerTest extends PageTestCase
                         'holder' => 'Bar',
                         'statement' => 'Copyright statement.',
                     ],
-                    'authorLine' => 'Author One et al',
+                    'authorLine' => 'Author One et al.',
                     'authors' => [
                         [
                             'type' => 'person',
@@ -373,7 +373,7 @@ final class ArticleControllerTest extends PageTestCase
                                 'holder' => 'Bar',
                                 'statement' => 'Copyright statement.',
                             ],
-                            'authorLine' => 'Author One et al',
+                            'authorLine' => 'Author One et al.',
                         ],
                     ],
                 ])
@@ -646,7 +646,7 @@ final class ArticleControllerTest extends PageTestCase
                         'holder' => 'Author One',
                         'statement' => 'Copyright statement.',
                     ],
-                    'authorLine' => 'Author One et al',
+                    'authorLine' => 'Author One et al.',
                     'authors' => [
                         [
                             'type' => 'person',
@@ -720,7 +720,7 @@ final class ArticleControllerTest extends PageTestCase
                                 'holder' => 'Author One',
                                 'statement' => 'Copyright statement.',
                             ],
-                            'authorLine' => 'Author One et al',
+                            'authorLine' => 'Author One et al.',
                         ],
                     ],
                 ])
@@ -1346,7 +1346,7 @@ final class ArticleControllerTest extends PageTestCase
                         'holder' => 'Author One',
                         'statement' => 'Copyright statement.',
                     ],
-                    'authorLine' => 'Author One et al',
+                    'authorLine' => 'Author One et al.',
                     'authors' => [
                         [
                             'type' => 'person',
@@ -1393,7 +1393,7 @@ final class ArticleControllerTest extends PageTestCase
                                 'holder' => 'Author One',
                                 'statement' => 'Copyright statement.',
                             ],
-                            'authorLine' => 'Author One et al',
+                            'authorLine' => 'Author One et al.',
                         ],
                     ],
                 ])
@@ -1432,7 +1432,7 @@ final class ArticleControllerTest extends PageTestCase
                             'holder' => 'Author One',
                             'statement' => 'Copyright statement.',
                         ],
-                        'authorLine' => 'Author One et al',
+                        'authorLine' => 'Author One et al.',
                     ],
                     [
                         'status' => 'vor',
@@ -1452,7 +1452,7 @@ final class ArticleControllerTest extends PageTestCase
                             'holder' => 'Author One',
                             'statement' => 'Copyright statement.',
                         ],
-                        'authorLine' => 'Author One et al',
+                        'authorLine' => 'Author One et al.',
                     ],
                     [
                         'status' => 'vor',
@@ -1472,7 +1472,7 @@ final class ArticleControllerTest extends PageTestCase
                             'holder' => 'Author One',
                             'statement' => 'Copyright statement.',
                         ],
-                        'authorLine' => 'Author One et al',
+                        'authorLine' => 'Author One et al.',
                     ],
                     [
                         'status' => 'vor',
@@ -1492,7 +1492,7 @@ final class ArticleControllerTest extends PageTestCase
                             'holder' => 'Author One',
                             'statement' => 'Copyright statement.',
                         ],
-                        'authorLine' => 'Author One et al',
+                        'authorLine' => 'Author One et al.',
                     ],
                 ])
             )
@@ -1532,7 +1532,7 @@ final class ArticleControllerTest extends PageTestCase
                                 'holder' => 'Author One',
                                 'statement' => 'Copyright statement.',
                             ],
-                            'authorLine' => 'Author One et al',
+                            'authorLine' => 'Author One et al.',
                         ],
                     ],
                 ])
@@ -1573,7 +1573,7 @@ final class ArticleControllerTest extends PageTestCase
                                 'holder' => 'Author One',
                                 'statement' => 'Copyright statement.',
                             ],
-                            'authorLine' => 'Author One et al',
+                            'authorLine' => 'Author One et al.',
                         ],
                         [
                             'status' => 'vor',
@@ -1593,7 +1593,7 @@ final class ArticleControllerTest extends PageTestCase
                                 'holder' => 'Author One',
                                 'statement' => 'Copyright statement.',
                             ],
-                            'authorLine' => 'Author One et al',
+                            'authorLine' => 'Author One et al.',
                         ],
                         [
                             'status' => 'vor',
@@ -1613,7 +1613,7 @@ final class ArticleControllerTest extends PageTestCase
                                 'holder' => 'Author One',
                                 'statement' => 'Copyright statement.',
                             ],
-                            'authorLine' => 'Author One et al',
+                            'authorLine' => 'Author One et al.',
                         ],
                         [
                             'status' => 'vor',
@@ -1633,7 +1633,7 @@ final class ArticleControllerTest extends PageTestCase
                                 'holder' => 'Author One',
                                 'statement' => 'Copyright statement.',
                             ],
-                            'authorLine' => 'Author One et al',
+                            'authorLine' => 'Author One et al.',
                         ],
                         [
                             'status' => 'vor',
@@ -1653,7 +1653,7 @@ final class ArticleControllerTest extends PageTestCase
                                 'holder' => 'Author One',
                                 'statement' => 'Copyright statement.',
                             ],
-                            'authorLine' => 'Author One et al',
+                            'authorLine' => 'Author One et al.',
                         ],
                         [
                             'status' => 'vor',
@@ -1673,7 +1673,7 @@ final class ArticleControllerTest extends PageTestCase
                                 'holder' => 'Author One',
                                 'statement' => 'Copyright statement.',
                             ],
-                            'authorLine' => 'Author One et al',
+                            'authorLine' => 'Author One et al.',
                         ],
                         [
                             'status' => 'vor',
@@ -1693,7 +1693,7 @@ final class ArticleControllerTest extends PageTestCase
                                 'holder' => 'Author One',
                                 'statement' => 'Copyright statement.',
                             ],
-                            'authorLine' => 'Author One et al',
+                            'authorLine' => 'Author One et al.',
                         ],
                     ],
                 ])
@@ -1850,7 +1850,7 @@ final class ArticleControllerTest extends PageTestCase
                         'holder' => 'Author One',
                         'statement' => 'Copyright statement.',
                     ],
-                    'authorLine' => 'Author One et al',
+                    'authorLine' => 'Author One et al.',
                     'authors' => [
                         [
                             'type' => 'person',
@@ -1897,7 +1897,7 @@ final class ArticleControllerTest extends PageTestCase
                                 'holder' => 'Author One',
                                 'statement' => 'Copyright statement.',
                             ],
-                            'authorLine' => 'Author One et al',
+                            'authorLine' => 'Author One et al.',
                         ],
                         [
                             'status' => 'vor',
@@ -1917,7 +1917,7 @@ final class ArticleControllerTest extends PageTestCase
                                 'holder' => 'Author One',
                                 'statement' => 'Copyright statement.',
                             ],
-                            'authorLine' => 'Author One et al',
+                            'authorLine' => 'Author One et al.',
                         ],
                     ],
                 ])

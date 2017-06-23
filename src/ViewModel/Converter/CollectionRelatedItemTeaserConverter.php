@@ -26,9 +26,8 @@ final class CollectionRelatedItemTeaserConverter implements ViewModelConverter
     {
         $curatedBy = 'Curated by '.$object->getSelectedCurator()->getDetails()->getPreferredName();
         if ($object->selectedCuratorEtAl()) {
-            $curatedBy .= ' et al';
+            $curatedBy .= ' et al.';
         }
-        $curatedBy .= '.';
 
         return ViewModel\Teaser::relatedItem(
             $object->getTitle(),

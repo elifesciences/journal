@@ -31,9 +31,8 @@ final class CoverCollectionSecondaryTeaserConverter implements ViewModelConverte
 
         $curatedBy = 'Curated by '.$collection->getSelectedCurator()->getDetails()->getPreferredName();
         if ($collection->selectedCuratorEtAl()) {
-            $curatedBy .= ' et al';
+            $curatedBy .= ' et al.';
         }
-        $curatedBy .= '.';
 
         return ViewModel\Teaser::secondary(
             $object->getTitle(),

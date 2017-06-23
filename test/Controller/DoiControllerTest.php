@@ -281,7 +281,7 @@ final class DoiControllerTest extends WebTestCase
                                 'holder' => 'Bar',
                                 'statement' => 'Copyright statement.',
                             ],
-                            'authorLine' => 'Author One et al',
+                            'authorLine' => 'Author One et al.',
                         ],
                     ],
                 ])
