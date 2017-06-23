@@ -15,6 +15,6 @@ final class BlogArticleTeaserConverterTest extends ModelConverterTestCase
      */
     public function setUpConverter()
     {
-        $this->converter = new BlogArticleTeaserConverter($this->stubUrlGenerator(), $this->stubSlugify());
+        $this->converter = new BlogArticleTeaserConverter($this->stubUrlGenerator());
     }
 }

@@ -16,6 +16,6 @@ final class CollectionRelatedItemTeaserConverterTest extends ModelConverterTestC
      */
     public function setUpConverter()
     {
-        $this->converter = new CollectionRelatedItemTeaserConverter($this->stubUrlGenerator(), $this->stubSlugify());
+        $this->converter = new CollectionRelatedItemTeaserConverter($this->stubUrlGenerator());
     }
 }

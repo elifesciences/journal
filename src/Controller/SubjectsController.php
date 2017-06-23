@@ -45,7 +45,7 @@ final class SubjectsController extends Controller
                 return new BlockLink(
                     new Link(
                         $subject->getName(),
-                        $this->get('router')->generate('subject', ['id' => $subject->getId()])
+                        $this->get('router')->generate('subject', [$subject])
                     ),
                     new Picture(
                         [

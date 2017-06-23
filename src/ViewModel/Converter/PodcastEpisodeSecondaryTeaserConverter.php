@@ -28,7 +28,7 @@ final class PodcastEpisodeSecondaryTeaserConverter implements ViewModelConverter
     {
         return Teaser::secondary(
             $object->getTitle(),
-            $this->urlGenerator->generate('podcast-episode', ['number' => $object->getNumber()]),
+            $this->urlGenerator->generate('podcast-episode', [$object]),
             null,
             $this->createContextLabel($object),
             $this->smallTeaserImage($object),

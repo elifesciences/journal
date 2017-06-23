@@ -20,7 +20,7 @@ final class HighlightBlogArticleSecondaryTeaserConverterTest extends ModelConver
      */
     public function setUpConverter()
     {
-        $this->converter = new HighlightBlogArticleSecondaryTeaserConverter($this->stubUrlGenerator(), $this->stubSlugify());
+        $this->converter = new HighlightBlogArticleSecondaryTeaserConverter($this->stubUrlGenerator());
     }
 
     /**

@@ -31,7 +31,7 @@ final class ArticleContentHeaderConverter implements ViewModelConverter
     public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
         $subjects = $object->getSubjects()->map(function (Subject $subject) {
-            return new ViewModel\Link($subject->getName(), $this->urlGenerator->generate('subject', ['id' => $subject->getId()]));
+            return new ViewModel\Link($subject->getName(), $this->urlGenerator->generate('subject', [$subject]));
         })->toArray();
 
         $authors = $object->getAuthors()->map(function (AuthorEntry $author) use ($object) {
@@ -39,7 +39,7 @@ final class ArticleContentHeaderConverter implements ViewModelConverter
                 return ViewModel\Author::asLink(
                     new ViewModel\Link(
                         $author->toString(),
-                        $this->urlGenerator->generate('article', ['id' => $object->getId(), '_fragment' => $this->createId($author)])
+                        $this->urlGenerator->generate('article', [$object, '_fragment' => $this->createId($author)])
                     ),
                     !empty($author->getEmailAddresses()) || !empty($author->getPhoneNumbers())
                 );

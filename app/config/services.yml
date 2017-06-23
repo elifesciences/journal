@@ -184,6 +184,20 @@ services:
         arguments:
           - '@=service("kernel").getRootDir()~"/Resources/patterns"'
 
+    elife.journal.router.parameter_resolver.model:
+      class: eLife\Journal\Router\ModelParameterResolver
+      public: false
+      arguments:
+        - '@slugify'
+
+    elife.journal.router.parameter_resolving:
+      class: eLife\Journal\Router\ParameterResolvingRouter
+      public: false
+      decorates: router
+      arguments:
+        - '@elife.journal.router.parameter_resolving.inner'
+        - '@elife.journal.router.parameter_resolver.model'
+
     elife.journal.templating.promise_aware:
         class: eLife\Journal\Templating\PromiseAwareEngine
         decorates: templating
@@ -511,7 +525,6 @@ services:
         public: false
         arguments:
           - '@router'
-          - '@slugify'
         tags:
           - name: view_model.converter
 
@@ -520,7 +533,6 @@ services:
         public: false
         arguments:
           - '@router'
-          - '@slugify'
         tags:
           - name: view_model.converter
 
@@ -539,7 +551,6 @@ services:
         arguments:
           - '@elife.patterns.pattern_renderer'
           - '@router'
-          - '@slugify'
         tags:
           - name: view_model.converter
 
@@ -548,7 +559,6 @@ services:
         public: false
         arguments:
           - '@router'
-          - '@slugify'
         tags:
           - name: view_model.converter
 
@@ -557,7 +567,6 @@ services:
         public: false
         arguments:
           - '@router'
-          - '@slugify'
         tags:
           - name: view_model.converter
 
@@ -566,7 +575,6 @@ services:
         public: false
         arguments:
           - '@router'
-          - '@slugify'
         tags:
           - name: view_model.converter
 
@@ -592,7 +600,6 @@ services:
         public: false
         arguments:
           - '@router'
-          - '@slugify'
           - '@elife.journal.view_model.factory.content_header_image'
         tags:
           - name: view_model.converter
@@ -602,7 +609,6 @@ services:
         public: false
         arguments:
           - '@router'
-          - '@slugify'
         tags:
           - name: view_model.converter
 
@@ -611,7 +617,6 @@ services:
         public: false
         arguments:
           - '@router'
-          - '@slugify'
           - '@elife.journal.view_model.factory.content_header_image'
         tags:
           - name: view_model.converter
@@ -621,7 +626,6 @@ services:
         public: false
         arguments:
           - '@router'
-          - '@slugify'
         tags:
           - name: view_model.converter
 
@@ -644,7 +648,6 @@ services:
         public: false
         arguments:
           - '@router'
-          - '@slugify'
         tags:
           - name: view_model.converter
 
@@ -681,7 +684,6 @@ services:
         public: false
         arguments:
           - '@router'
-          - '@slugify'
         tags:
           - name: view_model.converter
 
@@ -690,7 +692,6 @@ services:
         public: false
         arguments:
           - '@router'
-          - '@slugify'
         tags:
           - name: view_model.converter
 
@@ -699,7 +700,6 @@ services:
         public: false
         arguments:
           - '@router'
-          - '@slugify'
         tags:
           - name: view_model.converter
 
@@ -708,7 +708,6 @@ services:
         public: false
         arguments:
           - '@router'
-          - '@slugify'
         tags:
           - name: view_model.converter
 
@@ -717,7 +716,6 @@ services:
         public: false
         arguments:
           - '@router'
-          - '@slugify'
         tags:
           - name: view_model.converter
 
@@ -750,7 +748,6 @@ services:
         public: false
         arguments:
           - '@router'
-          - '@slugify'
         tags:
           - name: view_model.converter
 
@@ -759,7 +756,6 @@ services:
         public: false
         arguments:
           - '@router'
-          - '@slugify'
         tags:
           - name: view_model.converter
 
@@ -776,7 +772,6 @@ services:
         public: false
         arguments:
           - '@router'
-          - '@slugify'
         tags:
           - name: view_model.converter
 
@@ -785,7 +780,6 @@ services:
         public: false
         arguments:
           - '@router'
-          - '@slugify'
         tags:
           - name: view_model.converter
 
@@ -794,7 +788,6 @@ services:
         public: false
         arguments:
           - '@router'
-          - '@slugify'
         tags:
           - name: view_model.converter
 
@@ -867,7 +860,6 @@ services:
         public: false
         arguments:
           - '@router'
-          - '@slugify'
         tags:
           - name: view_model.converter
 
@@ -925,7 +917,6 @@ services:
         public: false
         arguments:
           - '@router'
-          - '@slugify'
         tags:
           - name: view_model.converter
 

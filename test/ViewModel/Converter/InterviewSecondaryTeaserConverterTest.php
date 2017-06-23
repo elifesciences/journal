@@ -17,6 +17,6 @@ final class InterviewSecondaryTeaserConverterTest extends ModelConverterTestCase
      */
     public function setUpConverter()
     {
-        $this->converter = new InterviewSecondaryTeaserConverter($this->stubUrlGenerator(), $this->stubSlugify());
+        $this->converter = new InterviewSecondaryTeaserConverter($this->stubUrlGenerator());
     }
 }

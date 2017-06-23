@@ -448,7 +448,7 @@ final class ArticlesController extends Controller
                     'comments',
                     'Comments',
                     2,
-                    '<div id="disqus_thread">'.$this->render(ViewModel\Button::link('View the discussion thread', 'https://'.$this->getParameter('disqus_domain').'.disqus.com/?url='.urlencode($this->get('router')->generate('article', ['id' => $article->getId()], UrlGeneratorInterface::ABSOLUTE_URL)))).'</div>',
+                    '<div id="disqus_thread">'.$this->render(ViewModel\Button::link('View the discussion thread', 'https://'.$this->getParameter('disqus_domain').'.disqus.com/?url='.urlencode($this->get('router')->generate('article', [$article], UrlGeneratorInterface::ABSOLUTE_URL)))).'</div>',
                     true
                 );
 
@@ -682,20 +682,20 @@ final class ArticlesController extends Controller
                 if (count($relatedArticles) > 0) {
                     switch ($type = $article->getType()) {
                         case 'correction':
-                            $infoBars[] = new InfoBar('This is a correction notice. Read the <a href="'.$this->get('router')->generate('article', ['id' => $relatedArticles[0]->getId()]).'">corrected article</a>.', InfoBar::TYPE_CORRECTION);
+                            $infoBars[] = new InfoBar('This is a correction notice. Read the <a href="'.$this->get('router')->generate('article', [$relatedArticles[0]]).'">corrected article</a>.', InfoBar::TYPE_CORRECTION);
                             break;
                         case 'retraction':
-                            $infoBars[] = new InfoBar('This is a retraction notice. Read the <a href="'.$this->get('router')->generate('article', ['id' => $relatedArticles[0]->getId()]).'">retraction notice</a>.', InfoBar::TYPE_ATTENTION);
+                            $infoBars[] = new InfoBar('This is a retraction notice. Read the <a href="'.$this->get('router')->generate('article', [$relatedArticles[0]]).'">retraction notice</a>.', InfoBar::TYPE_ATTENTION);
                             break;
                     }
 
                     foreach ($relatedArticles as $relatedArticle) {
                         switch ($relatedArticle->getType()) {
                             case 'correction':
-                                $infoBars[] = new InfoBar('This article has been corrected. Read the <a href="'.$this->get('router')->generate('article', ['id' => $relatedArticle->getId()]).'">correction notice</a>.', InfoBar::TYPE_CORRECTION);
+                                $infoBars[] = new InfoBar('This article has been corrected. Read the <a href="'.$this->get('router')->generate('article', [$relatedArticle]).'">correction notice</a>.', InfoBar::TYPE_CORRECTION);
                                 break;
                             case 'retraction':
-                                $infoBars[] = new InfoBar('This article has been retracted. Read the <a href="'.$this->get('router')->generate('article', ['id' => $relatedArticle->getId()]).'">retraction notice</a>.', InfoBar::TYPE_ATTENTION);
+                                $infoBars[] = new InfoBar('This article has been retracted. Read the <a href="'.$this->get('router')->generate('article', [$relatedArticle]).'">retraction notice</a>.', InfoBar::TYPE_ATTENTION);
                                 break;
                         }
                     }
@@ -816,10 +816,10 @@ final class ArticlesController extends Controller
         }
 
         if ($forVersion === $currentVersion->getVersion()) {
-            return $this->get('router')->generate('article', ['id' => $currentVersion->getId()]);
+            return $this->get('router')->generate('article', [$currentVersion]);
         }
 
-        return $this->get('router')->generate('article-version', ['id' => $currentVersion->getId(), 'version' => $forVersion]);
+        return $this->get('router')->generate('article-version', [$currentVersion, 'version' => $forVersion]);
     }
 
     private function generateFiguresPath(ArticleHistory $history, int $forVersion = null) : string
@@ -831,9 +831,9 @@ final class ArticlesController extends Controller
         }
 
         if ($forVersion === $currentVersion->getVersion()) {
-            return $this->get('router')->generate('article-figures', ['id' => $currentVersion->getId()]);
+            return $this->get('router')->generate('article-figures', [$currentVersion]);
         }
 
-        return $this->get('router')->generate('article-version-figures', ['id' => $currentVersion->getId(), 'version' => $forVersion]);
+        return $this->get('router')->generate('article-version-figures', [$currentVersion, 'version' => $forVersion]);
     }
 }

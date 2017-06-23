@@ -33,7 +33,7 @@ final class ArticleMetaConverter implements ViewModelConverter
         $tags = array_merge($tags, $object->getSubjects()->map(function (Subject $subject) {
             return new ViewModel\Link(
                 $subject->getName(),
-                $this->urlGenerator->generate('subject', ['id' => $subject->getId()])
+                $this->urlGenerator->generate('subject', [$subject])
             );
         })->toArray());
 

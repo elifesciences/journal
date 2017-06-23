@@ -2,7 +2,6 @@
 
 namespace eLife\Journal\ViewModel\Converter;
 
-use Cocur\Slugify\SlugifyInterface;
 use eLife\ApiSdk\Model\Highlight;
 use eLife\ApiSdk\Model\LabsPost;
 use eLife\Patterns\ViewModel;
@@ -15,12 +14,10 @@ final class HighlightLabsPostSecondaryTeaserConverter implements ViewModelConver
     use CreatesTeaserImage;
 
     private $urlGenerator;
-    private $slugify;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator, SlugifyInterface $slugify)
+    public function __construct(UrlGeneratorInterface $urlGenerator)
     {
         $this->urlGenerator = $urlGenerator;
-        $this->slugify = $slugify;
     }
 
     /**
@@ -33,7 +30,7 @@ final class HighlightLabsPostSecondaryTeaserConverter implements ViewModelConver
 
         return ViewModel\Teaser::secondary(
             $object->getTitle(),
-            $this->urlGenerator->generate('labs-post', ['id' => $post->getId(), 'slug' => $this->slugify->slugify($object->getTitle())]),
+            $this->urlGenerator->generate('labs-post', [$post]),
             null,
             $this->createContextLabel($post),
             $object->getThumbnail() ? $this->smallTeaserImage($object) : null,

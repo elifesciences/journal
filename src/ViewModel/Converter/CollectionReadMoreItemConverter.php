@@ -2,7 +2,6 @@
 
 namespace eLife\Journal\ViewModel\Converter;
 
-use Cocur\Slugify\SlugifyInterface;
 use eLife\ApiSdk\Model\Collection;
 use eLife\ApiSdk\Model\Subject;
 use eLife\Journal\Helper\ModelName;
@@ -17,13 +16,11 @@ final class CollectionReadMoreItemConverter implements ViewModelConverter
 
     private $patternRenderer;
     private $urlGenerator;
-    private $slugify;
 
-    public function __construct(PatternRenderer $patternRenderer, UrlGeneratorInterface $urlGenerator, SlugifyInterface $slugify)
+    public function __construct(PatternRenderer $patternRenderer, UrlGeneratorInterface $urlGenerator)
     {
         $this->patternRenderer = $patternRenderer;
         $this->urlGenerator = $urlGenerator;
-        $this->slugify = $slugify;
     }
 
     /**
@@ -40,7 +37,7 @@ final class CollectionReadMoreItemConverter implements ViewModelConverter
         return new ViewModel\ReadMoreItem(
             new ViewModel\ContentHeaderReadMore(
                 $object->getTitle(),
-                $this->urlGenerator->generate('collection', ['id' => $object->getId(), 'slug' => $this->slugify->slugify($object->getTitle())]),
+                $this->urlGenerator->generate('collection', [$object]),
                 $object->getSubjects()->map(function (Subject $subject) {
                     return new ViewModel\Link($subject->getName());
                 })->toArray(),
