@@ -14,7 +14,7 @@ elifePipeline {
 
     stage 'Deploy to prod', {
         if (!params.force) {
-            elifeNewRelicEnsureStatus(29775807, ["green"])
+            elifeNewRelicEnsureApdex(29775807)
         }
         elifeDeploySlackNotification 'journal', 'prod'
         builderDeployRevision 'journal--prod', commit, 'blue-green'
