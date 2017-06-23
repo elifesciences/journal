@@ -130,17 +130,17 @@ final class ArchiveController extends Controller
                             $item = $cover->getItem();
 
                             if ($item instanceof ArticleVersion) {
-                                return new Link($cover->getTitle(), $this->get('router')->generate('article', ['id' => $item->getId()]));
+                                return new Link($cover->getTitle(), $this->get('router')->generate('article', [$item]));
                             } elseif ($item instanceof BlogArticle) {
-                                return new Link($cover->getTitle(), $this->get('router')->generate('inside-elife-article', ['id' => $item->getId()]));
+                                return new Link($cover->getTitle(), $this->get('router')->generate('inside-elife-article', [$item]));
                             } elseif ($item instanceof Collection) {
-                                return new Link($cover->getTitle(), $this->get('router')->generate('collection', ['id' => $item->getId()]));
+                                return new Link($cover->getTitle(), $this->get('router')->generate('collection', [$item]));
                             } elseif ($item instanceof Interview) {
-                                return new Link($cover->getTitle(), $this->get('router')->generate('interview', ['id' => $item->getId()]));
+                                return new Link($cover->getTitle(), $this->get('router')->generate('interview', [$item]));
                             } elseif ($item instanceof LabsPost) {
-                                return new Link($cover->getTitle(), $this->get('router')->generate('labs-post', ['id' => $item->getId()]));
+                                return new Link($cover->getTitle(), $this->get('router')->generate('labs-post', [$item]));
                             } elseif ($item instanceof PodcastEpisode) {
-                                return new Link($cover->getTitle(), $this->get('router')->generate('podcast-episode', ['number' => $item->getNumber()]));
+                                return new Link($cover->getTitle(), $this->get('router')->generate('podcast-episode', [$item]));
                             }
 
                             throw new UnexpectedValueException('Unexpected type '.get_class($item));

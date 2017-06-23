@@ -26,12 +26,11 @@ final class PodcastEpisodeChapterReadMoreItemConverter implements ViewModelConve
     public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
         $chapter = $object->getChapter();
-        $episode = $object->getEpisode();
 
         return new ViewModel\ReadMoreItem(
             new ViewModel\ContentHeaderReadMore(
                 $chapter->getLongTitle() ?? $chapter->getTitle(),
-                $this->urlGenerator->generate('podcast-episode', ['number' => $episode->getNumber()]).'#'.$chapter->getTime(),
+                $this->urlGenerator->generate('podcast-episode', [$object]),
                 [],
                 null,
                 ViewModel\Meta::withLink(

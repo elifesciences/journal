@@ -27,7 +27,7 @@ final class CoverBlogArticleSecondaryTeaserConverterTest extends ModelConverterT
             ->method('generate')
             ->will($this->returnValue('/'));
 
-        $this->converter = new CoverBlogArticleSecondaryTeaserConverter($urlGenerator, $this->stubSlugify());
+        $this->converter = new CoverBlogArticleSecondaryTeaserConverter($urlGenerator);
     }
 
     /**

@@ -2,7 +2,6 @@
 
 namespace eLife\Journal\ViewModel\Converter;
 
-use Cocur\Slugify\SlugifyInterface;
 use eLife\ApiSdk\Model\Collection;
 use eLife\ApiSdk\Model\Cover;
 use eLife\Journal\Helper\CreatesIiifUri;
@@ -16,12 +15,10 @@ final class CoverCollectionSecondaryTeaserConverter implements ViewModelConverte
     use CreatesIiifUri;
 
     private $urlGenerator;
-    private $slugify;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator, SlugifyInterface $slugify)
+    public function __construct(UrlGeneratorInterface $urlGenerator)
     {
         $this->urlGenerator = $urlGenerator;
-        $this->slugify = $slugify;
     }
 
     /**
@@ -37,11 +34,9 @@ final class CoverCollectionSecondaryTeaserConverter implements ViewModelConverte
             $curatedBy .= ' et al.';
         }
 
-        $url = $this->urlGenerator->generate('collection', ['id' => $collection->getId(), 'slug' => $this->slugify->slugify($collection->getTitle())]);
-
         return ViewModel\Teaser::secondary(
             $object->getTitle(),
-            $url,
+            $this->urlGenerator->generate('collection', [$collection]),
             $curatedBy,
             $this->createContextLabel($collection),
             ViewModel\TeaserImage::small(

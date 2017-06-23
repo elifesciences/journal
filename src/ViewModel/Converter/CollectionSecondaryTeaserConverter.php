@@ -2,7 +2,6 @@
 
 namespace eLife\Journal\ViewModel\Converter;
 
-use Cocur\Slugify\SlugifyInterface;
 use eLife\ApiSdk\Model\Collection;
 use eLife\Patterns\ViewModel;
 use eLife\Patterns\ViewModel\Link;
@@ -18,12 +17,10 @@ final class CollectionSecondaryTeaserConverter implements ViewModelConverter
     use CreatesTeaserImage;
 
     private $urlGenerator;
-    private $slugify;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator, SlugifyInterface $slugify)
+    public function __construct(UrlGeneratorInterface $urlGenerator)
     {
         $this->urlGenerator = $urlGenerator;
-        $this->slugify = $slugify;
     }
 
     /**
@@ -38,7 +35,7 @@ final class CollectionSecondaryTeaserConverter implements ViewModelConverter
 
         return Teaser::secondary(
             $object->getTitle(),
-            $this->urlGenerator->generate('collection', ['id' => $object->getId(), 'slug' => $this->slugify->slugify($object->getTitle())]),
+            $this->urlGenerator->generate('collection', [$object]),
             $curatedBy,
             $this->createContextLabel($object),
             $this->smallTeaserImage($object),

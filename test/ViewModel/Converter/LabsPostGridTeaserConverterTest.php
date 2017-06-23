@@ -16,6 +16,6 @@ final class LabsPostGridTeaserConverterTest extends ModelConverterTestCase
      */
     public function setUpConverter()
     {
-        $this->converter = new LabsPostGridTeaserConverter($this->stubUrlGenerator(), $this->stubSlugify());
+        $this->converter = new LabsPostGridTeaserConverter($this->stubUrlGenerator());
     }
 }

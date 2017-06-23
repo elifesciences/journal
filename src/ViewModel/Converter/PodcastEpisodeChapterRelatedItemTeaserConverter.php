@@ -24,11 +24,10 @@ final class PodcastEpisodeChapterRelatedItemTeaserConverter implements ViewModel
     public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
         $chapter = $object->getChapter();
-        $episode = $object->getEpisode();
 
         return ViewModel\Teaser::relatedItem(
             $chapter->getLongTitle() ?? $chapter->getTitle(),
-            $this->urlGenerator->generate('podcast-episode', ['number' => $episode->getNumber()]).'#'.$chapter->getTime(),
+            $this->urlGenerator->generate('podcast-episode', [$object]),
             null,
             new ViewModel\ContextLabel(new ViewModel\Link(ModelRelationship::get($context['from'], 'podcast-episode-chapter', $context['unrelated'] ?? true))),
             null,

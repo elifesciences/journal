@@ -20,7 +20,7 @@ final class HighlightPodcastEpisodeChapterSecondaryTeaserConverterTest extends M
      */
     public function setUpConverter()
     {
-        $this->converter = new HighlightPodcastEpisodeChapterSecondaryTeaserConverter($this->stubUrlGenerator(), $this->stubSlugify());
+        $this->converter = new HighlightPodcastEpisodeChapterSecondaryTeaserConverter($this->stubUrlGenerator());
     }
 
     /**
