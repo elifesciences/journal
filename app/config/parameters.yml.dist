@@ -6,7 +6,7 @@ parameters:
     secret: ThisTokenIsNotSoSecretChangeIt
     session_name: journal
     redis_cache: redis://localhost
-    redis_http_cache: redis://localhost
+    redis_http_cache: '%redis_cache%'
     mailer_transport: smtp
     mailer_host: 127.0.0.1
     mailer_port: ~
