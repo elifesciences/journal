@@ -1,0 +1,23 @@
+services:
+
+    elife.journal.cache.http:
+        class: Symfony\Component\Cache\Adapter\RedisAdapter
+        public: false
+        arguments:
+          - ~
+          - ~
+          - 0
+        tags:
+          - name: cache.pool
+            provider: 'elife.journal.cache.http.redis'
+          - name: monolog.logger
+            channel: cache
+        calls:
+          - ['setLogger', ['@logger']]
+
+    elife.journal.cache.http.redis:
+      class: 'Redis'
+      public: false
+      factory: 'Symfony\Component\Cache\Adapter\RedisAdapter::createConnection'
+      arguments:
+        - '%redis_http_cache%'

@@ -37,7 +37,7 @@ framework:
             cache.doi:
                 adapter: cache.app
             cache.guzzle:
-                adapter: cache.app
+                adapter: elife.journal.cache.http
     csrf_protection: ~
     form: ~
     router:
