@@ -56,7 +56,7 @@ final class HomeControllerTest extends PageTestCase
                             'elocationId' => 'e2',
                             'copyright' => [
                                 'license' => 'CC-BY-4.0',
-                                'holder' => 'Author et al',
+                                'holder' => 'Author et al.',
                                 'statement' => 'Creative Commons Attribution License.',
                             ],
                             'authorLine' => 'Foo Bar',
@@ -76,7 +76,7 @@ final class HomeControllerTest extends PageTestCase
                             'elocationId' => 'e1',
                             'copyright' => [
                                 'license' => 'CC-BY-4.0',
-                                'holder' => 'Author et al',
+                                'holder' => 'Author et al.',
                                 'statement' => 'Creative Commons Attribution License.',
                             ],
                             'authorLine' => 'Foo Bar',

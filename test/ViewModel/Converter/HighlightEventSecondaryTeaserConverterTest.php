@@ -20,7 +20,7 @@ final class HighlightEventSecondaryTeaserConverterTest extends ModelConverterTes
      */
     public function setUpConverter()
     {
-        $this->converter = new HighlightEventSecondaryTeaserConverter($this->stubUrlGenerator(), $this->stubSlugify());
+        $this->converter = new HighlightEventSecondaryTeaserConverter($this->stubUrlGenerator());
     }
 
     /**

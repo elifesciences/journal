@@ -95,7 +95,7 @@ Learn more about <a href="'.$this->get('router')->generate('about-innovation').'
 
         $arguments['feedbackForm'] = $post
             ->then(function (LabsPost $post) use ($request) {
-                $uri = $this->get('router')->generate('labs-post', ['id' => $post->getId(), 'slug' => $this->get('slugify')->slugify($post->getTitle())], UrlGeneratorInterface::ABSOLUTE_URL);
+                $uri = $this->get('router')->generate('labs-post', [$post], UrlGeneratorInterface::ABSOLUTE_URL);
 
                 /** @var FormInterface $form */
                 $form = $this->get('form.factory')

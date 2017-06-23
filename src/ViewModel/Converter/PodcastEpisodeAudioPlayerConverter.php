@@ -25,7 +25,7 @@ final class PodcastEpisodeAudioPlayerConverter implements ViewModelConverter
     public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
         if ($context['link'] ?? false) {
-            $link = $this->urlGenerator->generate('podcast-episode', ['number' => $object->getNumber()]);
+            $link = $this->urlGenerator->generate('podcast-episode', [$object]);
         }
 
         return new ViewModel\AudioPlayer(

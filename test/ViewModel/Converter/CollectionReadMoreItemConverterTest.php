@@ -30,6 +30,6 @@ final class CollectionReadMoreItemConverterTest extends ModelConverterTestCase
             ->method('generate')
             ->will($this->returnValue('/'));
 
-        $this->converter = new CollectionReadMoreItemConverter($patternRenderer, $urlGenerator, $this->stubSlugify());
+        $this->converter = new CollectionReadMoreItemConverter($patternRenderer, $urlGenerator);
     }
 }

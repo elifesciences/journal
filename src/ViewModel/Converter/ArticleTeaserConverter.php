@@ -34,7 +34,7 @@ final class ArticleTeaserConverter implements ViewModelConverter
 
         return ViewModel\Teaser::main(
             $object->getFullTitle(),
-            $this->urlGenerator->generate('article', ['id' => $object->getId()]),
+            $this->urlGenerator->generate('article', [$object]),
             $object instanceof ArticleVoR ? $object->getImpactStatement() : null,
             $object->getAuthorLine(),
             $this->createContextLabel($object),

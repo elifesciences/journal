@@ -28,7 +28,7 @@ final class CoverCollectionCarouselItemConverterTest extends ModelConverterTestC
             ->method('generate')
             ->will($this->returnValue('/'));
 
-        $this->converter = new CoverCollectionCarouselItemConverter($urlGenerator, $this->stubSlugify(), new ContentHeaderImageFactory(new Packages()));
+        $this->converter = new CoverCollectionCarouselItemConverter($urlGenerator, new ContentHeaderImageFactory(new Packages()));
     }
 
     /**

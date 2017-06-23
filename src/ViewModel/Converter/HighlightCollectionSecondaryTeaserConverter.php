@@ -2,7 +2,6 @@
 
 namespace eLife\Journal\ViewModel\Converter;
 
-use Cocur\Slugify\SlugifyInterface;
 use eLife\ApiSdk\Model\Collection;
 use eLife\ApiSdk\Model\Highlight;
 use eLife\Patterns\ViewModel;
@@ -16,12 +15,10 @@ final class HighlightCollectionSecondaryTeaserConverter implements ViewModelConv
     use CreatesTeaserImage;
 
     private $urlGenerator;
-    private $slugify;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator, SlugifyInterface $slugify)
+    public function __construct(UrlGeneratorInterface $urlGenerator)
     {
         $this->urlGenerator = $urlGenerator;
-        $this->slugify = $slugify;
     }
 
     /**
@@ -34,12 +31,12 @@ final class HighlightCollectionSecondaryTeaserConverter implements ViewModelConv
 
         $curatedBy = 'Curated by '.$collection->getSelectedCurator()->getDetails()->getPreferredName();
         if ($collection->selectedCuratorEtAl()) {
-            $curatedBy .= ' et al';
+            $curatedBy .= ' et al.';
         }
 
         return ViewModel\Teaser::secondary(
             $object->getTitle(),
-            $this->urlGenerator->generate('collection', ['id' => $collection->getId(), 'slug' => $this->slugify->slugify($collection->getTitle())]),
+            $this->urlGenerator->generate('collection', [$collection]),
             $curatedBy,
             $this->createContextLabel($collection),
             $object->getThumbnail() ? $this->smallTeaserImage($object) : null,

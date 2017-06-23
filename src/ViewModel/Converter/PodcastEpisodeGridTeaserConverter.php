@@ -24,7 +24,7 @@ final class PodcastEpisodeGridTeaserConverter implements ViewModelConverter
     {
         return ViewModel\Teaser::withGrid(
             $object->getTitle(),
-            $this->urlGenerator->generate('podcast-episode', ['number' => $object->getNumber()]),
+            $this->urlGenerator->generate('podcast-episode', [$object]),
             $object->getImpactStatement(),
             null,
             $this->prominentTeaserImage($object),

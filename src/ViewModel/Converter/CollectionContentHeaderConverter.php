@@ -30,7 +30,7 @@ final class CollectionContentHeaderConverter implements ViewModelConverter
     {
         $curatorName = $object->getSelectedCurator()->getDetails()->getPreferredName();
         if ($object->selectedCuratorEtAl()) {
-            $curatorName .= ' et al';
+            $curatorName .= ' et al.';
         }
         if ($object->getSelectedCurator()->getThumbnail()) {
             $curatorImage = new ViewModel\Picture(

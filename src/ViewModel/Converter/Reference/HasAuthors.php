@@ -19,7 +19,7 @@ trait HasAuthors
         }, ''));
 
         if ($etAl) {
-            $suffix = 'et al '.$suffix;
+            $suffix = 'et al. '.$suffix;
         }
 
         return new ViewModel\ReferenceAuthorList($authors, $suffix);
@@ -32,7 +32,7 @@ trait HasAuthors
         }, $authors));
 
         if ($etAl) {
-            $authors .= ' et al';
+            $authors .= ' et al.';
         }
 
         return $authors;
