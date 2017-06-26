@@ -20,9 +20,92 @@ const responsive = require('gulp-responsive');
 const rev = require('gulp-rev-all');
 const svg2png = require('gulp-svg2png');
 
-// const serverAddress = 'localhost:8089';
-// const serverAddress = 'http://localhost:8000';
-const serverAddress = 'elifesciences.org';
+const criticalConf = {
+  cssRuleInclusions: (function () {
+
+    const globalExplicitInclusions = [
+      /.*main-menu--js.*/,
+      // /.*--js.*/,
+      'p',
+      /\.content-header.*/,
+      /\.meta.*/,
+      '.wrapper.wrapper--content'
+    ];
+
+    const listingExplicitInclusions = [/\.teaser__img--.*$/];
+    const highlightsExplicitInclusion = [/.*\.highlights.*$/];
+
+    return {
+      article: globalExplicitInclusions.concat(
+        [
+          /\.content-header__item_toggle--.*$/,
+          '.view-selector__list-item--side-by-side'
+        ]
+      ),
+      archiveMonth: globalExplicitInclusions.concat(
+        highlightsExplicitInclusion,
+        /\.teaser.*$/
+      ),
+      home: globalExplicitInclusions.concat(
+        [
+          listingExplicitInclusions,
+          /^.*carousel.*$/,
+        ]
+      ),
+      landing: globalExplicitInclusions.concat(
+        [
+          listingExplicitInclusions,
+          /.content-header.wrapper.*/,
+          '.section-listing-link'
+        ]
+      ),
+      magazine: globalExplicitInclusions.concat(
+        [
+          /^\.audio-player.*$/,
+          highlightsExplicitInclusion,
+          listingExplicitInclusions
+        ]
+      ),
+      listing: globalExplicitInclusions.concat(listingExplicitInclusions),
+      gridListing: globalExplicitInclusions.concat(
+        [
+          /^.*\.grid-listing.*$/,
+          '.teaser__header_text',
+          '.teaser__header_text_link'
+        ]
+      ),
+      default: globalExplicitInclusions.concat(
+        [
+          '.article-section__header_text',
+          '.list--bullet a'
+        ]
+      )
+    };
+
+  }()),
+  dimensions: [
+    {
+      height: 400,
+      width: 729
+    },
+    {
+      height: 1000,
+      width: 899
+    },
+    {
+      height: 1000,
+      width: 1199
+    },
+    {
+      height: 1000,
+      width: 1201
+    }
+  ],
+  // TODO: Switch server back to localhost
+  serverAddress: 'https://elifesciences.org'
+};
+criticalConf.srcPrefix = criticalConf.serverAddress.indexOf('http') !== 0 ? 'https://' : '';
+
 
 gulp.task('default', ['assets']);
 
@@ -158,161 +241,85 @@ gulp.task('launch-ls',function(done) {
   child.spawn('ls', [ '-la'], { stdio: 'inherit' });
 });
 
-gulp.task('generateCriticalCss', /*['server:start'],*/ (cb) => {
+gulp.task('generateCriticalCss:article',  (cb) => {
+  critical.generate(
+    {
+      inline: false,
+      base: 'app/Resources/views/critical',
+      dest: `critical-css-inline-${page.name}.css.twig`,
+      src: `${criticalConf.srcPrefix}${criticalConf.serverAddress}${page.url}`,
+      include: page.explicitInclusions,
+      minify: true,
+      timeout: 90000,
+      dimensions: criticalConf.dimensions
+    }
+  );
+  cb();
+});
 
-  // child.spawn('bin/console', [ 'server:start', serverAddress], { stdio: 'inherit' });
+  gulp.task('generateCriticalCss', /*['server:start'],*/ (cb) => {
 
-  //setTimeout(() => {
-  const globalExplicitInclusions = [
-    /.*main-menu--js.*/,
-    // /.*--js.*/,
-    'p',
-    /\.content-header.*/,
-    /\.meta.*/,
-    '.wrapper.wrapper--content'
-  ];
-
-  const listingExplicitInclusions = [/\.teaser__img--.*$/];
-  const highlightsExplicitInclusion = [/.*\.highlights.*$/];
-
-  const explicitInclusions = {
-    article: globalExplicitInclusions.concat(
-      [
-        /\.content-header__item_toggle--.*$/,
-        '.view-selector__list-item--side-by-side'
-      ]
-    ),
-    archiveMonth: globalExplicitInclusions.concat(
-      highlightsExplicitInclusion,
-      /\.teaser.*$/
-    ),
-    home: globalExplicitInclusions.concat(
-      [
-        listingExplicitInclusions,
-        /^.*carousel.*$/,
-      ]
-    ),
-    landing: globalExplicitInclusions.concat(
-      [
-        listingExplicitInclusions,
-        /.content-header.wrapper.*/,
-        '.section-listing-link'
-      ]
-    ),
-    magazine: globalExplicitInclusions.concat(
-      [
-        /^\.audio-player.*$/,
-        highlightsExplicitInclusion,
-        listingExplicitInclusions
-      ]
-    ),
-    listing: globalExplicitInclusions.concat(listingExplicitInclusions),
-    gridListing: globalExplicitInclusions.concat(
-      [
-        /^.*\.grid-listing.*$/,
-        '.teaser__header_text',
-        '.teaser__header_text_link'
-      ]
-    ),
-    default: globalExplicitInclusions.concat(
-      [
-        '.article-section__header_text',
-        '.list--bullet a'
-      ]
-    )
-  };
 
   const pagesToAnalyse = [
     {
       name: 'article',
-      relativeUrl: '/articles/09560',
-      explicitInclusions: explicitInclusions.article
+      url: '/articles/09560',
+      explicitInclusions: criticalConf.cssRuleInclusions.article
     },
     {
       name: 'archive-month',
-      relativeUrl: '/archive/2017/january',
-      explicitInclusions: explicitInclusions.archiveMonth
+      url: '/archive/2017/january',
+      explicitInclusions: criticalConf.cssRuleInclusions.archiveMonth
     },
     {
       name: 'home',
-      relativeUrl: '/',
-      explicitInclusions: explicitInclusions.home
+      url: '/',
+      explicitInclusions: criticalConf.cssRuleInclusions.home
     },
     {
       name: 'landing',
-      relativeUrl: '/subjects/biochemistry',
-      explicitInclusions: explicitInclusions.landing
+      url: '/subjects/biochemistry',
+      explicitInclusions: criticalConf.cssRuleInclusions.landing
     },
     {
       name: 'magazine',
-      relativeUrl: '/magazine',
-      explicitInclusions: explicitInclusions.magazine
+      url: '/magazine',
+      explicitInclusions: criticalConf.cssRuleInclusions.magazine
     },
     {
       name: 'listing',
-      relativeUrl: '/?page=2',
-      explicitInclusions: explicitInclusions.listing
+      url: '/?page=2',
+      explicitInclusions: criticalConf.cssRuleInclusions.listing
     },
     {
       name: 'grid-listing',
-      relativeUrl: '/archive/2017',
-      explicitInclusions: explicitInclusions.gridListing
+      url: '/archive/2017',
+      explicitInclusions: criticalConf.cssRuleInclusions.gridListing
     },
     {
       name: 'default',
-      relativeUrl: '/about/people',
-      explicitInclusions: explicitInclusions.default
+      url: '/about/people',
+      explicitInclusions: criticalConf.cssRuleInclusions.default
     },
   ];
 
-  // exec(`bin/console server:start ${serverAddress} &`);
   pagesToAnalyse.forEach((page) => {
-    // generateCriticalCss(page.name, `http://${serverAddress}${page.relativeUrl}`);
-    const srcPrefix = serverAddress.indexOf('http') !== 0 ? 'https://' : '';
+    // const srcPrefix = criticalConf.serverAddress.indexOf('http') !== 0 ? 'https://' : '';
     // return gulp.src('**/**')
     //            .pipe(startLocalServer)
     //            .pipe(critical(
     critical.generate({
                         inline: false,
                         base: 'app/Resources/views/critical',
-                        // dest: `critical-css-inline-article.css.twig`,
                         dest: `critical-css-inline-${page.name}.css.twig`,
-                        // src: `http://${serverAddress}${page.relativeUrl}`,
-                        src: `${srcPrefix}${serverAddress}${page.relativeUrl}`,
-                        // src: `${srcPrefix}://${serverAddress}/articles/09560`,
-                        // src: `https://elifesciences.org${page.relativeUrl}`,
+                        src: `${criticalConf.srcPrefix}${criticalConf.serverAddress}${page.url}`,
                         include: page.explicitInclusions,
                         minify: true,
-                        timeout: 60000,
-                        dimensions: [
-                          {
-                            height: 400,
-                            width: 729
-                          },
-                          {
-                            height: 1000,
-                            width: 899
-                          },
-                          {
-                            height: 1000,
-                            width: 1199
-                          },
-                          {
-                            height: 1000,
-                            width: 1201
-                          }
-                        ]
+                        timeout: 90000,
+                        dimensions: criticalConf.dimensions
                       }
                       // ).then(stopLocalServer,stopLocalServer);
     );//).on('error', (err) => { console.log(`Hello!\n${err}`)});
-    // });
-
-    // exec(`bin/console server:stop ${serverAddress} &`);
-    // child.spawn('bin/console', [ 'server:stop', serverAddress], { stdio: 'inherit' });
-    // cb();
-
-
-    //}, 1000);
   });
 });
 
