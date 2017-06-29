@@ -1924,10 +1924,15 @@
       "resolved": "https://registry.npmjs.org/gulp-svg2png/-/gulp-svg2png-2.0.2.tgz"
     },
     "gulp-util": {
-      "version": "3.0.7",
-      "from": "gulp-util@>=3.0.0 <4.0.0",
-      "resolved": "https://registry.npmjs.org/gulp-util/-/gulp-util-3.0.7.tgz",
+      "version": "3.0.8",
+      "from": "gulp-util@latest",
+      "resolved": "https://registry.npmjs.org/gulp-util/-/gulp-util-3.0.8.tgz",
       "dependencies": {
+        "dateformat": {
+          "version": "2.0.0",
+          "from": "dateformat@>=2.0.0 <3.0.0",
+          "resolved": "https://registry.npmjs.org/dateformat/-/dateformat-2.0.0.tgz"
+        },
         "object-assign": {
           "version": "3.0.0",
           "from": "object-assign@>=3.0.0 <4.0.0",

@@ -11,6 +11,7 @@
     "gulp-responsive": "^2.7",
     "gulp-rev-all": "^0.9",
     "gulp-svg2png": "^2.0.2",
+    "gulp-util": "^3.0.8",
     "imagemin-mozjpeg": "^6.0",
     "imagemin-optipng": "^5.2",
     "imagemin-svgo": "^5.2.1",
