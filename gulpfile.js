@@ -11,13 +11,16 @@ const critical = require('critical');
 const del = require('del');
 const favicons = require('gulp-favicons');
 const gulp = require('gulp');
+const gutil = require('gulp-util');
 const imageMin = require('gulp-imagemin');
 const imageMinMozjpeg = require('imagemin-mozjpeg');
 const imageMinOptipng = require('imagemin-optipng');
 const imageMinSvgo = require('imagemin-svgo');
 const merge = require('merge-stream');
+const remoteSrc = require('gulp-remote-src');
 const responsive = require('gulp-responsive');
 const rev = require('gulp-rev-all');
+const runSequence =require('run-sequence');
 const svg2png = require('gulp-svg2png');
 
 const criticalConf = {
@@ -102,10 +105,12 @@ const criticalConf = {
     }
   ],
   // TODO: Switch server back to localhost
-  serverAddress: 'https://elifesciences.org'
+  serverAddress: 'elifesciences.org'
+  // serverAddress: '127.0.0.1:8089'
 };
-criticalConf.srcPrefix = criticalConf.serverAddress.indexOf('http') !== 0 ? 'https://' : '';
 
+criticalConf.srcPrefix = criticalConf.serverAddress.indexOf('127') !== 0 ? 'https://' : 'http://';
+criticalConf.baseUrl = `${criticalConf.srcPrefix}${criticalConf.serverAddress}/`;
 
 gulp.task('default', ['assets']);
 
@@ -241,24 +246,57 @@ gulp.task('launch-ls',function(done) {
   child.spawn('ls', [ '-la'], { stdio: 'inherit' });
 });
 
-gulp.task('generateCriticalCss:article',  (cb) => {
-  critical.generate(
-    {
-      inline: false,
-      base: 'app/Resources/views/critical',
-      dest: `critical-css-inline-${page.name}.css.twig`,
-      src: `${criticalConf.srcPrefix}${criticalConf.serverAddress}${page.url}`,
-      include: page.explicitInclusions,
-      minify: true,
-      timeout: 90000,
-      dimensions: criticalConf.dimensions
-    }
-  );
-  cb();
+gulp.task('generateCriticalCss:article',  () => {
+  const page = {
+      name: 'article',
+      url: 'articles/09560',
+      explicitInclusions: criticalConf.cssRuleInclusions.article
+    };
+
+  gutil.log(gutil.colors.blue(`${criticalConf.baseUrl}${page.url}`));
+  return remoteSrc([page.url], { base: criticalConf.baseUrl })
+    .pipe(critical.stream(
+      {
+        inline: false,
+        // base: 'app/Resources/views/critical/',
+        base: 'web',
+        dest: `../app/Resources/views/critical/critical-css-inline-${page.name}.css.twig`,
+        // destFolder: '../app/Resources/views/critical',
+        src: page.url,
+        include: page.explicitInclusions,
+        minify: true,
+        dimensions: criticalConf.dimensions
+      })).on('exit', function(err) { gutil.log(gutil.colors.red(err.message)); })
 });
 
-  gulp.task('generateCriticalCss', /*['server:start'],*/ (cb) => {
+gulp.task('generateCriticalCss:archiveMonth',  () => {
+  const page = {
+    name: 'archive-month',
+    url: '/archive/2017/january',
+    explicitInclusions: criticalConf.cssRuleInclusions.archiveMonth
+  };
 
+  gutil.log(gutil.colors.blue(`${criticalConf.baseUrl}${page.url}`));
+  return remoteSrc([page.url], { base: criticalConf.baseUrl })
+    .pipe(critical.stream(
+      {
+        inline: false,
+        // base: 'app/Resources/views/critical/',
+        base: 'web',
+        dest: `../app/Resources/views/critical/critical-css-inline-${page.name}.css.twig`,
+        // destFolder: '../app/Resources/views/critical',
+        src: page.url,
+        include: page.explicitInclusions,
+        minify: true,
+        dimensions: criticalConf.dimensions
+      })).on('exit', function(err) { gutil.log(gutil.colors.red(err.message)); })
+});
+
+gulp.task('test1', (callback) => {
+  runSequence('server:start', ['generateCriticalCss:article', 'generateCriticalCss:archiveMonth'], 'server:stop', callback);
+});
+
+  gulp.task('generateCriticalCss', [/*'server:start'*/], (cb) => {
 
   const pagesToAnalyse = [
     {
@@ -266,41 +304,41 @@ gulp.task('generateCriticalCss:article',  (cb) => {
       url: '/articles/09560',
       explicitInclusions: criticalConf.cssRuleInclusions.article
     },
-    {
-      name: 'archive-month',
-      url: '/archive/2017/january',
-      explicitInclusions: criticalConf.cssRuleInclusions.archiveMonth
-    },
-    {
-      name: 'home',
-      url: '/',
-      explicitInclusions: criticalConf.cssRuleInclusions.home
-    },
-    {
-      name: 'landing',
-      url: '/subjects/biochemistry',
-      explicitInclusions: criticalConf.cssRuleInclusions.landing
-    },
-    {
-      name: 'magazine',
-      url: '/magazine',
-      explicitInclusions: criticalConf.cssRuleInclusions.magazine
-    },
-    {
-      name: 'listing',
-      url: '/?page=2',
-      explicitInclusions: criticalConf.cssRuleInclusions.listing
-    },
-    {
-      name: 'grid-listing',
-      url: '/archive/2017',
-      explicitInclusions: criticalConf.cssRuleInclusions.gridListing
-    },
-    {
-      name: 'default',
-      url: '/about/people',
-      explicitInclusions: criticalConf.cssRuleInclusions.default
-    },
+    // {
+    //   name: 'archive-month',
+    //   url: '/archive/2017/january',
+    //   explicitInclusions: criticalConf.cssRuleInclusions.archiveMonth
+    // },
+    // {
+    //   name: 'home',
+    //   url: '/',
+    //   explicitInclusions: criticalConf.cssRuleInclusions.home
+    // },
+    // {
+    //   name: 'landing',
+    //   url: '/subjects/biochemistry',
+    //   explicitInclusions: criticalConf.cssRuleInclusions.landing
+    // },
+    // {
+    //   name: 'magazine',
+    //   url: '/magazine',
+    //   explicitInclusions: criticalConf.cssRuleInclusions.magazine
+    // },
+    // {
+    //   name: 'listing',
+    //   url: '/?page=2',
+    //   explicitInclusions: criticalConf.cssRuleInclusions.listing
+    // },
+    // {
+    //   name: 'grid-listing',
+    //   url: '/archive/2017',
+    //   explicitInclusions: criticalConf.cssRuleInclusions.gridListing
+    // },
+    // {
+    //   name: 'default',
+    //   url: '/about/people',
+    //   explicitInclusions: criticalConf.cssRuleInclusions.default
+    // },
   ];
 
   pagesToAnalyse.forEach((page) => {
@@ -323,112 +361,34 @@ gulp.task('generateCriticalCss:article',  (cb) => {
   });
 });
 
-gulp.task('critical', ['generateCriticalCss'], () => {
-  stopLocalServer();
-});
+gulp.task('server:start', (callback) => {
+  const command = spawn('bin/console', ['server:start', criticalConf.serverAddress]);
 
-gulp.task('server:start', (cb) => {
-  // exec(`bin/console server:start ${serverAddress} &`);
-  // child.spawn('bin/console', [ 'server:start', serverAddress], { stdio: 'inherit' });
-  // cb();
-  // startLocalServer();
-  // execFile('node', ['--version'], (error, stdout, stderr) => {
-  //   if (error) {
-  //     console.error('stderr', stderr);
-  //     throw error;
-  //   }
-  //   console.log('stdout', stdout);
-  // });
-
-  // execFile('bin/console', ['server:start', serverAddress], (error, stdout, stderr) => {
-  //   if (error) {
-  //     console.error('stderr', stderr);
-  //     throw error;
-  //   }
-  //   console.log('stdout', stdout);
-  // });
-
-  return gulp.src('app/Resources/views/**/*')
-             // .pipe(gulpExec(`bin/console server:start ${serverAddress} &`)).on('start', () => {
-             .pipe(gulpExec(`php bin/console server:start ${serverAddress}`)).on('start', () => {
-      // .pipe(gulpExec('ls -lah').on('start', () => {
-      console.log('\n');
-      console.log(`Built in PHP server started on ${serverAddress}`);
-      console.log('\n');
-      // }));
-    });
-
-  // return exec(`bin/console server:start ${serverAddress} & echo`, function (err, stdout, stderr) {
-  //   console.log(err);
-  //   console.log(stdout);
-  //   console.log(stderr);
-  //   // cb(err);
-  // });
-
-  // return exec(`bin/console server:start ${serverAddress} & echo`);
-});
-
-gulp.task('server:stop', () => {
-  // exec(`bin/console server:stop ${serverAddress} &`);
-  // child.spawn('bin/console', [ 'server:stop', serverAddress], { stdio: 'inherit' });
-  // stopLocalServer();
-  return gulp.src('app/Resources/views/**/*')
-             // .pipe(gulpExec(`bin/console server:start ${serverAddress} &`)).on('start', () => {
-             .pipe(gulpExec(`php -S ${serverAddress} &`)).on('end', () => {
-      // .pipe(gulpExec('ls -lah').on('start', () => {
-      console.log('\n');
-      console.log(`Built in PHP server started on ${serverAddress}`);
-      console.log('\n');
-    });
-
-});
-
-function startLocalServer() {
-  // child.spawn('bin/console', [ 'server:start', serverAddress], { stdio: 'inherit' });
-  exec(`bin/console server:start ${serverAddress} &`, function (err, stdout, stderr) {
-    console.log('server started?');
+  command.stdout.on('data', (data) => {
+    console.log(`stdout: ${data}`);
   });
-}
 
-function stopLocalServer() {
-  child.spawn('bin/console', [ 'server:stop', serverAddress], { stdio: 'inherit' });
-  // exec(`bin/console server:stop ${serverAddress} &`, function (err, stdout, stderr) {
-  //   console.log(stdout);
-  //   console.log(stderr);
-  // });
+  command.stderr.on('data', (data) => {
+    console.log(`stderr: ${data}`);
+  });
 
-}
+  command.on('exit', (code) => {
+    callback(code);
+  });
+});
 
-function generateCriticalCss(pageName, url) {
-  child.spawn('bin/console', [ 'server:start', serverAddress], { stdio: 'inherit' });
+gulp.task('server:stop', (callback) => {
+  const command = spawn('bin/console', ['server:stop', criticalConf.serverAddress]);
 
-  const name = pageName || 'default';
-  // critical.generate(
-  //   {
-  //     inline: false,
-  //     base: 'app/Resources/views/critical',
-  //     src: url,
-  //     dest: `critical-css-inline-${name}.css.twig`,
-  //     include: [/^.*-js$/],
-  //     minify: true,
-  //     dimensions: [
-  //       {
-  //         height: 400,
-  //         width: 729
-  //       },
-  //       {
-  //         height: 800,
-  //         width: 899
-  //       },
-  //       {
-  //         height: 1000,
-  //         width: 1199
-  //       },
-  //       {
-  //         height: 1000,
-  //         width: 1201
-  //       }
-  //     ]
-  //   }
-  // );
-}
+  command.stdout.on('data', (data) => {
+    console.log(`stdout: ${data}`);
+  });
+
+  command.stderr.on('data', (data) => {
+    console.log(`stderr: ${data}`);
+  });
+
+  command.on('exit', (code) => {
+    callback(code);
+  });
+});
