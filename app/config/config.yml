@@ -58,6 +58,29 @@ monolog:
     channels:
       - api
 
+nelmio_security:
+    clickjacking: # Deprecated by frame-ancestors
+        paths:
+            '^/.*': DENY
+    content_type:
+        nosniff: true
+    csp:
+        enforce:
+            frame-ancestors:
+              - none
+            report-uri: '%router.request_context.base_url%/nelmio/csp/report'
+    referrer_policy:
+        enabled: true
+        policies:
+          - no-referrer
+          - strict-origin-when-cross-origin
+    signed_cookie:
+        names:
+          - '%session_name%'
+    xss_protection:
+        enabled: true
+        mode_block: true
+
 swiftmailer:
     transport: '%mailer_transport%'
     host: '%mailer_host%'
