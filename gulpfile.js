@@ -32,7 +32,7 @@ const criticalConf = {
       'p',
       /\.content-header.*/,
       /\.meta.*/,
-      '.wrapper.wrapper--content'
+      '.wrapper.wrapper--content',
     ];
 
     const listingExplicitInclusions = [/\.teaser__img--.*$/];
@@ -105,11 +105,12 @@ const criticalConf = {
     }
   ],
   // TODO: Switch server back to localhost
-  serverAddress: 'elifesciences.org'
-  // serverAddress: '127.0.0.1:8089'
+  // serverAddress: 'elifesciences.org'
+  serverAddress: '127.0.0.1:8089'
 };
 
 criticalConf.srcPrefix = criticalConf.serverAddress.indexOf('127') !== 0 ? 'https://' : 'http://';
+// criticalConf.baseUrl = `${criticalConf.srcPrefix}${criticalConf.serverAddress}/`;
 criticalConf.baseUrl = `${criticalConf.srcPrefix}${criticalConf.serverAddress}/`;
 
 gulp.task('default', ['assets']);
@@ -246,57 +247,152 @@ gulp.task('launch-ls',function(done) {
   child.spawn('ls', [ '-la'], { stdio: 'inherit' });
 });
 
-gulp.task('generateCriticalCss:article',  () => {
+
+function generateCriticalCss(page, callback) {
+  gutil.log(gutil.colors.blue(`${criticalConf.baseUrl}${page.url}`));
+
+  // return critical.generate({
+  //                     inline: false,
+  //                     base: './app/Resources/views/critical',
+  //                     dest: `critical-css-inline-${page.name}.css.twig`,
+  //                     src: `${criticalConf.baseUrl}${page.url}`,
+  //                     include: page.explicitInclusions,
+  //                     minify: true,
+  //                     timeout: 90000,
+  //                     dimensions: criticalConf.dimensions
+  //                   })
+  //         .then(() => { callback(); })
+  //         .error((err) => {
+  //           gutil.log(gutil.colors.red(err));
+  //         });
+
+
+  return remoteSrc([page.url], { base: criticalConf.baseUrl })
+    .pipe(critical.stream(
+      {
+        inline: false,
+        // base: 'app/Resources/views/critical/',
+        base: 'web',
+        dest: `../app/Resources/views/critical/critical-css-inline-${page.name}.css.twig`,
+        // destFolder: '../app/Resources/views/critical',
+        src: page.url,
+        include: page.explicitInclusions,
+        minify: true,
+        dimensions: criticalConf.dimensions
+      })).on('exit', function(err) { gutil.log(gutil.colors.red(err.message)); })
+}
+
+gulp.task('generateCriticalCss:article',  (callback) => {
   const page = {
       name: 'article',
       url: 'articles/09560',
       explicitInclusions: criticalConf.cssRuleInclusions.article
     };
 
+  // return generateCriticalCss(page);
   gutil.log(gutil.colors.blue(`${criticalConf.baseUrl}${page.url}`));
-  return remoteSrc([page.url], { base: criticalConf.baseUrl })
-    .pipe(critical.stream(
-      {
-        inline: false,
-        // base: 'app/Resources/views/critical/',
-        base: 'web',
-        dest: `../app/Resources/views/critical/critical-css-inline-${page.name}.css.twig`,
-        // destFolder: '../app/Resources/views/critical',
-        src: page.url,
-        include: page.explicitInclusions,
-        minify: true,
-        dimensions: criticalConf.dimensions
-      })).on('exit', function(err) { gutil.log(gutil.colors.red(err.message)); })
+
+
+  critical.generate({
+                      inline: false,
+                      base: './app/Resources/views/critical',
+                      dest: `critical-css-inline-${page.name}.css.twig`,
+                      src: `${criticalConf.baseUrl}${page.url}`,
+                      include: page.explicitInclusions,
+                      minify: true,
+                      timeout: 90000,
+                      dimensions: criticalConf.dimensions
+                    })
+    .then(() => { callback(); })
+    .error((err) => {
+      gutil.log(gutil.colors.red(err));
+    });
+
+
+  // return remoteSrc([page.url], { base: criticalConf.baseUrl })
+  //   .pipe(critical.stream(
+  //     {
+  //       inline: false,
+  //       // base: 'app/Resources/views/critical/',
+  //       base: 'web',
+  //       dest: `../app/Resources/views/critical/critical-css-inline-${page.name}.css.twig`,
+  //       // dest: `critical-css-inline-${page.name}.css.twig`,
+  //       // destFolder: '../app/Resources/views/critical',
+  //       // src: page.url,
+  //       include: page.explicitInclusions,
+  //       minify: true,
+  //       timeout: 120000,
+  //       dimensions: criticalConf.dimensions
+  //     }))
+  //   .on('exit', function(err) { gutil.log(gutil.colors.red(err.message)); })
+  //   // .pipe(gulp.dest('app/Resources/views/critical'));
 });
 
 gulp.task('generateCriticalCss:archiveMonth',  () => {
   const page = {
     name: 'archive-month',
-    url: '/archive/2017/january',
+    url: 'archive/2017/january',
     explicitInclusions: criticalConf.cssRuleInclusions.archiveMonth
   };
 
-  gutil.log(gutil.colors.blue(`${criticalConf.baseUrl}${page.url}`));
-  return remoteSrc([page.url], { base: criticalConf.baseUrl })
-    .pipe(critical.stream(
-      {
-        inline: false,
-        // base: 'app/Resources/views/critical/',
-        base: 'web',
-        dest: `../app/Resources/views/critical/critical-css-inline-${page.name}.css.twig`,
-        // destFolder: '../app/Resources/views/critical',
-        src: page.url,
-        include: page.explicitInclusions,
-        minify: true,
-        dimensions: criticalConf.dimensions
-      })).on('exit', function(err) { gutil.log(gutil.colors.red(err.message)); })
+  return generateCriticalCss(page);
 });
 
-gulp.task('test1', (callback) => {
-  runSequence('server:start', ['generateCriticalCss:article', 'generateCriticalCss:archiveMonth'], 'server:stop', callback);
+gulp.task('generateCriticalCss:landing',  () => {
+  const page = {
+    name: 'landing',
+    url: 'subjects/biochemistry',
+    explicitInclusions: criticalConf.cssRuleInclusions.landing
+  };
+
+  return generateCriticalCss(page);
 });
 
-  gulp.task('generateCriticalCss', [/*'server:start'*/], (cb) => {
+gulp.task('generateCriticalCss:magazine',  () => {
+  const page = {
+    name: 'magazine',
+    url: '/magazine',
+    explicitInclusions: criticalConf.cssRuleInclusions.magazine
+  };
+
+  return generateCriticalCss(page);
+});
+
+gulp.task('generateCriticalCss:listing',  () => {
+  const page = {
+    name: 'listing',
+    url: '/?page=2',
+    explicitInclusions: criticalConf.cssRuleInclusions.listing
+  };
+
+  return generateCriticalCss(page);
+});
+
+gulp.task('generateCriticalCss:gridListing',  () => {
+  const page = {
+    name: 'grid-listing',
+    url: '/archive/2017',
+    explicitInclusions: criticalConf.cssRuleInclusions.gridListing
+  };
+
+  return generateCriticalCss(page);
+});
+
+gulp.task('generateCriticalCss:default',  () => {
+  const page = {
+    name: 'default',
+    url: '/about/people',
+    explicitInclusions: criticalConf.cssRuleInclusions.default
+  };
+
+  return generateCriticalCss(page);
+});
+
+gulp.task('generateCriticalCss', (callback) => {
+  runSequence('server:start', ['generateCriticalCss:article'/*, 'generateCriticalCss:archiveMonth', 'generateCriticalCss:landing', 'generateCriticalCss:magazine', 'generateCriticalCss:listing', 'generateCriticalCss:gridListing', 'generateCriticalCss:default'*/], 'server:stop', callback);
+});
+
+  gulp.task('generateCriticalCss:unchained', [/*'server:start'*/], (cb) => {
 
   const pagesToAnalyse = [
     {
