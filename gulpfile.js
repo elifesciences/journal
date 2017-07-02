@@ -1,17 +1,12 @@
 'use strict';
 
-const gulpExec = require('gulp-exec');
-const exec = require('child_process').exec;
-const execFile = require('child_process').execFile;
-const spawn = require('child_process').spawn;
-
-const child = require('child_process');
-// const critical = require('critical').stream;
 const critical = require('critical');
 const del = require('del');
 const favicons = require('gulp-favicons');
+const fs = require('fs');
 const gulp = require('gulp');
 const gutil = require('gulp-util');
+const http = require('http');
 const imageMin = require('gulp-imagemin');
 const imageMinMozjpeg = require('imagemin-mozjpeg');
 const imageMinOptipng = require('imagemin-optipng');
@@ -20,6 +15,7 @@ const merge = require('merge-stream');
 const responsive = require('gulp-responsive');
 const rev = require('gulp-rev-all');
 const runSequence =require('run-sequence');
+const spawn = require('child_process').spawn;
 const svg2png = require('gulp-svg2png');
 
 const criticalConf = {
@@ -27,7 +23,7 @@ const criticalConf = {
 
     const globalExplicitInclusions = [
       /.*main-menu--js.*/,
-      // /.*--js.*/,
+      /.*--js.*/,
       'p',
       /\.content-header.*/,
       /\.meta.*/,
@@ -103,14 +99,13 @@ const criticalConf = {
       width: 1201
     }
   ],
-  // TODO: Switch server back to localhost
-  // serverAddress: 'elifesciences.org'
-  serverAddress: '127.0.0.1:8089'
+  serverAddress: '127.0.0.1',
+  port: '8089',
+  base: './app/Resources/views/critical'
 };
 
 criticalConf.srcPrefix = criticalConf.serverAddress.indexOf('127') !== 0 ? 'https://' : 'http://';
-// criticalConf.baseUrl = `${criticalConf.srcPrefix}${criticalConf.serverAddress}/`;
-criticalConf.baseUrl = `${criticalConf.srcPrefix}${criticalConf.serverAddress}/`;
+criticalConf.baseUrl = `${criticalConf.srcPrefix}${criticalConf.serverAddress}:${criticalConf.port}`;
 
 gulp.task('default', ['assets']);
 
@@ -242,238 +237,145 @@ gulp.task('assets', ['assets:clean', 'favicons', 'images', 'patterns'], () => {
              .pipe(gulp.dest('./build'));
 });
 
-gulp.task('launch-ls',function(done) {
-  child.spawn('ls', [ '-la'], { stdio: 'inherit' });
+gulp.task('generateCriticalCss', ['server:start'], (callback) => {
+
+  fs.stat(criticalConf.base, function(err) {
+    if(err) {
+      fs.mkdirSync(criticalConf.base);
+    }
+  });
+
+  runSequence('generateCriticalCss:article', 'generateCriticalCss:archiveMonth', 'generateCriticalCss:gridListing', 'generateCriticalCss:home', 'generateCriticalCss:landing', 'generateCriticalCss:listing', 'generateCriticalCss:magazine', 'generateCriticalCss:default', (err) => {
+    if (err) {
+      gutil.log(gutil.colors.red(`generateCriticalCss task failed with ${err}`));
+      changeServerState('stop');
+      return process.exit(1);
+    } else {
+      return changeServerState('stop', callback);
+    }
+  });
+
 });
 
-
 function generateCriticalCss(page, callback) {
-  gutil.log(gutil.colors.blue(`${criticalConf.baseUrl}${page.url}`));
 
-  // return critical.generate({
-  //                     inline: false,
-  //                     base: './app/Resources/views/critical',
-  //                     dest: `critical-css-inline-${page.name}.css.twig`,
-  //                     src: `${criticalConf.baseUrl}${page.url}`,
-  //                     include: page.explicitInclusions,
-  //                     minify: true,
-  //                     timeout: 90000,
-  //                     dimensions: criticalConf.dimensions
-  //                   })
-  //         .then(() => { callback(); })
-  //         .error((err) => {
-  //           gutil.log(gutil.colors.red(err));
-  //         });
+  gutil.log(gutil.colors.blue(`Generating critical CSS for ${page.name} page based on ${criticalConf.baseUrl}${page.url}`));
 
-
-  return remoteSrc([page.url], { base: criticalConf.baseUrl })
-    .pipe(critical.stream(
-      {
-        inline: false,
-        // base: 'app/Resources/views/critical/',
-        base: 'web',
-        dest: `../app/Resources/views/critical/critical-css-inline-${page.name}.css.twig`,
-        // destFolder: '../app/Resources/views/critical',
-        src: page.url,
-        include: page.explicitInclusions,
-        minify: true,
-        dimensions: criticalConf.dimensions
-      })).on('exit', function(err) { gutil.log(gutil.colors.red(err.message)); })
+  return critical.generate(
+    {
+      inline: false,
+      base: criticalConf.base,
+      dest: `critical-css-inline-${page.name}.css.twig`,
+      src: `${criticalConf.baseUrl}${page.url}`,
+      include: page.explicitInclusions,
+      minify: true,
+      dimensions: criticalConf.dimensions,
+      timeout: 90000
+    }
+  )
+  .then(() => {
+      return callback();
+  }, (err) => {
+    gutil.log(gutil.colors.red(`Generating critical CSS failed with ${err}`));
+    changeServerState('stop');
+    return process.exit(1);
+  });
 }
 
 gulp.task('generateCriticalCss:article',  (callback) => {
   const page = {
       name: 'article',
-      url: 'articles/09560',
+      url: '/articles/09560',
       explicitInclusions: criticalConf.cssRuleInclusions.article
     };
 
-  // return generateCriticalCss(page);
-  gutil.log(gutil.colors.blue(`${criticalConf.baseUrl}${page.url}`));
+  generateCriticalCss(page, callback);
 
-
-  critical.generate({
-                      inline: false,
-                      base: './app/Resources/views/critical',
-                      dest: `critical-css-inline-${page.name}.css.twig`,
-                      src: `${criticalConf.baseUrl}${page.url}`,
-                      include: page.explicitInclusions,
-                      minify: true,
-                      timeout: 90000,
-                      dimensions: criticalConf.dimensions
-                    })
-    .then(() => { callback(); })
-    .error((err) => {
-      gutil.log(gutil.colors.red(err));
-    });
-
-
-  // return remoteSrc([page.url], { base: criticalConf.baseUrl })
-  //   .pipe(critical.stream(
-  //     {
-  //       inline: false,
-  //       // base: 'app/Resources/views/critical/',
-  //       base: 'web',
-  //       dest: `../app/Resources/views/critical/critical-css-inline-${page.name}.css.twig`,
-  //       // dest: `critical-css-inline-${page.name}.css.twig`,
-  //       // destFolder: '../app/Resources/views/critical',
-  //       // src: page.url,
-  //       include: page.explicitInclusions,
-  //       minify: true,
-  //       timeout: 120000,
-  //       dimensions: criticalConf.dimensions
-  //     }))
-  //   .on('exit', function(err) { gutil.log(gutil.colors.red(err.message)); })
-  //   // .pipe(gulp.dest('app/Resources/views/critical'));
 });
 
-gulp.task('generateCriticalCss:archiveMonth',  () => {
+gulp.task('generateCriticalCss:archiveMonth',  (callback) => {
   const page = {
     name: 'archive-month',
-    url: 'archive/2017/january',
+    url: '/archive/2017/january',
     explicitInclusions: criticalConf.cssRuleInclusions.archiveMonth
   };
 
-  return generateCriticalCss(page);
+  generateCriticalCss(page, callback);
+
 });
 
-gulp.task('generateCriticalCss:landing',  () => {
+gulp.task('generateCriticalCss:landing',  (callback) => {
   const page = {
     name: 'landing',
-    url: 'subjects/biochemistry',
+    url: '/subjects/biochemistry',
     explicitInclusions: criticalConf.cssRuleInclusions.landing
   };
 
-  return generateCriticalCss(page);
+  generateCriticalCss(page, callback);
 });
 
-gulp.task('generateCriticalCss:magazine',  () => {
+gulp.task('generateCriticalCss:home',  (callback) => {
+  const page = {
+    name: 'home',
+    url: '/',
+    explicitInclusions: criticalConf.cssRuleInclusions.landing
+  };
+
+  generateCriticalCss(page, callback);
+});
+
+gulp.task('generateCriticalCss:magazine',  (callback) => {
   const page = {
     name: 'magazine',
     url: '/magazine',
     explicitInclusions: criticalConf.cssRuleInclusions.magazine
   };
 
-  return generateCriticalCss(page);
+  generateCriticalCss(page, callback);
 });
 
-gulp.task('generateCriticalCss:listing',  () => {
+gulp.task('generateCriticalCss:listing',  (callback) => {
   const page = {
     name: 'listing',
     url: '/?page=2',
     explicitInclusions: criticalConf.cssRuleInclusions.listing
   };
 
-  return generateCriticalCss(page);
+  generateCriticalCss(page, callback);
 });
 
-gulp.task('generateCriticalCss:gridListing',  () => {
+gulp.task('generateCriticalCss:gridListing',  (callback) => {
   const page = {
     name: 'grid-listing',
     url: '/archive/2017',
     explicitInclusions: criticalConf.cssRuleInclusions.gridListing
   };
 
-  return generateCriticalCss(page);
+  generateCriticalCss(page, callback);
 });
 
-gulp.task('generateCriticalCss:default',  () => {
+gulp.task('generateCriticalCss:default',  (callback) => {
   const page = {
     name: 'default',
-    url: '/about/people',
+    url: '/about/peopleadfdsfs',
     explicitInclusions: criticalConf.cssRuleInclusions.default
   };
 
-  return generateCriticalCss(page);
-});
-
-gulp.task('generateCriticalCss', (callback) => {
-  runSequence('server:start', ['generateCriticalCss:article'/*, 'generateCriticalCss:archiveMonth', 'generateCriticalCss:landing', 'generateCriticalCss:magazine', 'generateCriticalCss:listing', 'generateCriticalCss:gridListing', 'generateCriticalCss:default'*/], 'server:stop', callback);
-});
-
-  gulp.task('generateCriticalCss:unchained', [/*'server:start'*/], (cb) => {
-
-  const pagesToAnalyse = [
-    {
-      name: 'article',
-      url: '/articles/09560',
-      explicitInclusions: criticalConf.cssRuleInclusions.article
-    },
-    // {
-    //   name: 'archive-month',
-    //   url: '/archive/2017/january',
-    //   explicitInclusions: criticalConf.cssRuleInclusions.archiveMonth
-    // },
-    // {
-    //   name: 'home',
-    //   url: '/',
-    //   explicitInclusions: criticalConf.cssRuleInclusions.home
-    // },
-    // {
-    //   name: 'landing',
-    //   url: '/subjects/biochemistry',
-    //   explicitInclusions: criticalConf.cssRuleInclusions.landing
-    // },
-    // {
-    //   name: 'magazine',
-    //   url: '/magazine',
-    //   explicitInclusions: criticalConf.cssRuleInclusions.magazine
-    // },
-    // {
-    //   name: 'listing',
-    //   url: '/?page=2',
-    //   explicitInclusions: criticalConf.cssRuleInclusions.listing
-    // },
-    // {
-    //   name: 'grid-listing',
-    //   url: '/archive/2017',
-    //   explicitInclusions: criticalConf.cssRuleInclusions.gridListing
-    // },
-    // {
-    //   name: 'default',
-    //   url: '/about/people',
-    //   explicitInclusions: criticalConf.cssRuleInclusions.default
-    // },
-  ];
-
-  pagesToAnalyse.forEach((page) => {
-    // const srcPrefix = criticalConf.serverAddress.indexOf('http') !== 0 ? 'https://' : '';
-    // return gulp.src('**/**')
-    //            .pipe(startLocalServer)
-    //            .pipe(critical(
-    critical.generate({
-                        inline: false,
-                        base: 'app/Resources/views/critical',
-                        dest: `critical-css-inline-${page.name}.css.twig`,
-                        src: `${criticalConf.srcPrefix}${criticalConf.serverAddress}${page.url}`,
-                        include: page.explicitInclusions,
-                        minify: true,
-                        timeout: 90000,
-                        dimensions: criticalConf.dimensions
-                      }
-                      // ).then(stopLocalServer,stopLocalServer);
-    );//).on('error', (err) => { console.log(`Hello!\n${err}`)});
-  });
+  generateCriticalCss(page, callback);
 });
 
 gulp.task('server:start', (callback) => {
-  const command = spawn('bin/console', ['server:start', criticalConf.serverAddress]);
-
-  command.stdout.on('data', (data) => {
-    console.log(`stdout: ${data}`);
-  });
-
-  command.stderr.on('data', (data) => {
-    console.log(`stderr: ${data}`);
-  });
-
-  command.on('exit', (code) => {
-    callback(code);
-  });
+  changeServerState('start', callback);
 });
 
 gulp.task('server:stop', (callback) => {
-  const command = spawn('bin/console', ['server:stop', criticalConf.serverAddress]);
+  changeServerState('stop', callback);
+});
+
+function changeServerState(serverAction, callback) {
+  const action = serverAction === 'start' ? 'start' : 'stop';
+
+  const command = spawn('bin/console', [`server:${action}`, `${criticalConf.serverAddress}:${criticalConf.port}`]);
 
   command.stdout.on('data', (data) => {
     console.log(`stdout: ${data}`);
@@ -484,6 +386,11 @@ gulp.task('server:stop', (callback) => {
   });
 
   command.on('exit', (code) => {
-    callback(code);
+    const extra = action === 'stop' ? 'ped' : 'ed';
+    gutil.log(gutil.colors.blue(`${action}${extra} server on ${criticalConf.serverAddress}:${criticalConf.port}`));
+    if (callback && typeof callback === 'function') {
+      return callback(code);
+    }
   });
-});
+
+}
