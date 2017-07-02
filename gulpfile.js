@@ -283,85 +283,75 @@ function generateCriticalCss(page, callback) {
 }
 
 gulp.task('generateCriticalCss:article',  (callback) => {
-  const page = {
+  generateCriticalCss(
+    {
       name: 'article',
       url: '/articles/09560',
       explicitInclusions: criticalConf.cssRuleInclusions.article
-    };
-
-  generateCriticalCss(page, callback);
-
+    }, callback);
 });
 
 gulp.task('generateCriticalCss:archiveMonth',  (callback) => {
-  const page = {
-    name: 'archive-month',
-    url: '/archive/2017/january',
-    explicitInclusions: criticalConf.cssRuleInclusions.archiveMonth
-  };
-
-  generateCriticalCss(page, callback);
-
+  generateCriticalCss(
+    {
+      name: 'archive-month',
+      url: '/archive/2017/january',
+      explicitInclusions: criticalConf.cssRuleInclusions.archiveMonth
+    }, callback);
 });
 
 gulp.task('generateCriticalCss:landing',  (callback) => {
-  const page = {
-    name: 'landing',
-    url: '/subjects/biochemistry',
-    explicitInclusions: criticalConf.cssRuleInclusions.landing
-  };
-
-  generateCriticalCss(page, callback);
+  generateCriticalCss(
+    {
+      name: 'landing',
+      url: '/subjects/biochemistry',
+      explicitInclusions: criticalConf.cssRuleInclusions.landing
+    }, callback);
 });
 
 gulp.task('generateCriticalCss:home',  (callback) => {
-  const page = {
-    name: 'home',
-    url: '/',
-    explicitInclusions: criticalConf.cssRuleInclusions.landing
-  };
-
-  generateCriticalCss(page, callback);
+  generateCriticalCss(
+    {
+      name: 'home',
+      url: '/',
+      explicitInclusions: criticalConf.cssRuleInclusions.landing
+    }, callback);
 });
 
 gulp.task('generateCriticalCss:magazine',  (callback) => {
-  const page = {
-    name: 'magazine',
-    url: '/magazine',
-    explicitInclusions: criticalConf.cssRuleInclusions.magazine
-  };
-
-  generateCriticalCss(page, callback);
+  generateCriticalCss(
+    {
+      name: 'magazine',
+      url: '/magazine',
+      explicitInclusions: criticalConf.cssRuleInclusions.magazine
+    }, callback);
 });
 
 gulp.task('generateCriticalCss:listing',  (callback) => {
-  const page = {
-    name: 'listing',
-    url: '/?page=2',
-    explicitInclusions: criticalConf.cssRuleInclusions.listing
-  };
-
-  generateCriticalCss(page, callback);
+  generateCriticalCss(
+    {
+      name: 'listing',
+      url: '/?page=2',
+      explicitInclusions: criticalConf.cssRuleInclusions.listing
+    }, callback);
 });
 
 gulp.task('generateCriticalCss:gridListing',  (callback) => {
-  const page = {
-    name: 'grid-listing',
-    url: '/archive/2017',
-    explicitInclusions: criticalConf.cssRuleInclusions.gridListing
-  };
-
-  generateCriticalCss(page, callback);
+  generateCriticalCss(
+    {
+      name: 'grid-listing',
+      url: '/archive/2017',
+      explicitInclusions: criticalConf.cssRuleInclusions.gridListing
+    }, callback);
 });
 
 gulp.task('generateCriticalCss:default',  (callback) => {
-  const page = {
-    name: 'default',
-    url: '/about/peopleadfdsfs',
-    explicitInclusions: criticalConf.cssRuleInclusions.default
-  };
-
-  generateCriticalCss(page, callback);
+  generateCriticalCss(
+    {
+      name: 'default',
+      url: '/about/people',
+      explicitInclusions: criticalConf.cssRuleInclusions.default
+    }, callback);
 });
 
 gulp.task('server:start', (callback) => {
