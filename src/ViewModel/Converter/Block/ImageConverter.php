@@ -4,7 +4,6 @@ namespace eLife\Journal\ViewModel\Converter\Block;
 
 use eLife\ApiSdk\Model\Block;
 use eLife\Journal\Helper\CreatesIiifUri;
-use eLife\Journal\ViewModel\CaptionlessImage;
 use eLife\Journal\ViewModel\Converter\ViewModelConverter;
 use eLife\Patterns\PatternRenderer;
 use eLife\Patterns\ViewModel;
@@ -45,10 +44,6 @@ final class ImageConverter implements ViewModelConverter
             $srcset,
             $image->getAltText()
         );
-
-        if (!$object->getTitle() && $object->getAttribution()->isEmpty() && $object->getCaption()->isEmpty()) {
-            return new CaptionlessImage($imageViewModel);
-        }
 
         return $this->createCaptionedAsset($imageViewModel, $object);
     }
