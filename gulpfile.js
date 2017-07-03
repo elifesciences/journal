@@ -6,7 +6,6 @@ const favicons = require('gulp-favicons');
 const fs = require('fs');
 const gulp = require('gulp');
 const gutil = require('gulp-util');
-const http = require('http');
 const imageMin = require('gulp-imagemin');
 const imageMinMozjpeg = require('imagemin-mozjpeg');
 const imageMinOptipng = require('imagemin-optipng');
@@ -17,95 +16,6 @@ const rev = require('gulp-rev-all');
 const runSequence =require('run-sequence');
 const spawn = require('child_process').spawn;
 const svg2png = require('gulp-svg2png');
-
-const criticalConf = {
-  cssRuleInclusions: (function () {
-
-    const globalExplicitInclusions = [
-      /.*main-menu--js.*/,
-      /.*--js.*/,
-      'p',
-      /\.content-header.*/,
-      /\.meta.*/,
-      '.wrapper.wrapper--content',
-    ];
-
-    const listingExplicitInclusions = [/\.teaser__img--.*$/];
-    const highlightsExplicitInclusion = [/.*\.highlights.*$/];
-
-    return {
-      article: globalExplicitInclusions.concat(
-        [
-          /\.content-header__item_toggle--.*$/,
-          '.view-selector__list-item--side-by-side'
-        ]
-      ),
-      archiveMonth: globalExplicitInclusions.concat(
-        highlightsExplicitInclusion,
-        /\.teaser.*$/
-      ),
-      home: globalExplicitInclusions.concat(
-        [
-          listingExplicitInclusions,
-          /^.*carousel.*$/,
-        ]
-      ),
-      landing: globalExplicitInclusions.concat(
-        [
-          listingExplicitInclusions,
-          /.content-header.wrapper.*/,
-          '.section-listing-link'
-        ]
-      ),
-      magazine: globalExplicitInclusions.concat(
-        [
-          /^\.audio-player.*$/,
-          highlightsExplicitInclusion,
-          listingExplicitInclusions
-        ]
-      ),
-      listing: globalExplicitInclusions.concat(listingExplicitInclusions),
-      gridListing: globalExplicitInclusions.concat(
-        [
-          /^.*\.grid-listing.*$/,
-          '.teaser__header_text',
-          '.teaser__header_text_link'
-        ]
-      ),
-      default: globalExplicitInclusions.concat(
-        [
-          '.article-section__header_text',
-          '.list--bullet a'
-        ]
-      )
-    };
-
-  }()),
-  dimensions: [
-    {
-      height: 400,
-      width: 729
-    },
-    {
-      height: 1000,
-      width: 899
-    },
-    {
-      height: 1000,
-      width: 1199
-    },
-    {
-      height: 1000,
-      width: 1201
-    }
-  ],
-  serverAddress: '127.0.0.1',
-  port: '8089',
-  base: './app/Resources/views/critical'
-};
-
-criticalConf.srcPrefix = criticalConf.serverAddress.indexOf('127') !== 0 ? 'https://' : 'http://';
-criticalConf.baseUrl = `${criticalConf.srcPrefix}${criticalConf.serverAddress}:${criticalConf.port}`;
 
 gulp.task('default', ['assets']);
 
@@ -237,6 +147,103 @@ gulp.task('assets', ['assets:clean', 'favicons', 'images', 'patterns'], () => {
              .pipe(gulp.dest('./build'));
 });
 
+
+const criticalConf = {
+  cssRuleInclusions: (function () {
+
+    const globalExplicitInclusions = [
+      /.*main-menu--js.*/,
+      'p',
+      /\.content-header.*/,
+      /\.meta.*/,
+      '.wrapper.wrapper--content',
+    ];
+
+    const listingExplicitInclusions = [/\.teaser__img--.*$/];
+    const highlightsExplicitInclusion = [/.*\.highlights.*$/];
+    const listingMenuExplicitInclusion = [
+      '.section-listing-wrapper .list-heading',
+      '.section-listing__list_item',
+      /.*\.section-listing.*/,
+      '.js .to-top-link',
+    ];
+
+    return {
+      article: globalExplicitInclusions.concat(
+        /\.content-header__item_toggle--.*$/,
+        '.view-selector__list-item--side-by-side'
+      ),
+
+      archiveMonth: globalExplicitInclusions.concat(
+        highlightsExplicitInclusion,
+        /\.teaser.*$/
+      ),
+
+      home: globalExplicitInclusions.concat(
+        listingExplicitInclusions,
+        listingMenuExplicitInclusion,
+        /.*\.carousel.*/,
+        '.carousel__control--toggler',
+        '.carousel__items',
+        /\.carousel__item.*/
+      ),
+
+      landing: globalExplicitInclusions.concat(
+        listingExplicitInclusions,
+        /.content-header.wrapper.*/,
+        '.section-listing-link'
+      ),
+
+      magazine: globalExplicitInclusions.concat(
+        listingExplicitInclusions,
+        listingMenuExplicitInclusion,
+        highlightsExplicitInclusion,
+        /^\.audio-player.*$/
+      ),
+
+      listing: globalExplicitInclusions.concat(listingExplicitInclusions),
+
+      gridListing: globalExplicitInclusions.concat(
+        /.*\.grid-listing.*/,
+        /.*\.block-link--grid-listing.*/,
+        '.teaser__header_text',
+        '.teaser__header_text_link'
+      ),
+
+      default: globalExplicitInclusions.concat(
+        '.article-section__header_text',
+        '.list--bullet a'
+      )
+    };
+
+  }()),
+  dimensions: [
+    {
+      height: 400,
+      width: 729
+    },
+    {
+      height: 1000,
+      width: 899
+    },
+    {
+      height: 1000,
+      width: 1199
+    },
+    {
+      height: 1000,
+      width: 1201
+    }
+  ],
+  serverAddress: '127.0.0.1',
+  port: '8089',
+  base: './app/Resources/views/critical'
+};
+
+criticalConf.srcPrefix = criticalConf.serverAddress.indexOf('127') !== 0 ? 'https://' : 'http://';
+criticalConf.baseUrl = `${criticalConf.srcPrefix}${criticalConf.serverAddress}:${criticalConf.port}`;
+
+
 gulp.task('generateCriticalCss', ['server:start'], (callback) => {
 
   fs.stat(criticalConf.base, function(err) {
@@ -314,7 +321,7 @@ gulp.task('generateCriticalCss:home',  (callback) => {
     {
       name: 'home',
       url: '/',
-      explicitInclusions: criticalConf.cssRuleInclusions.landing
+      explicitInclusions: criticalConf.cssRuleInclusions.home
     }, callback);
 });
 
