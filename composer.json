@@ -76,6 +76,9 @@
         "patches": {
             "bobthecow/mustache-bundle": {
                 "Remove superfluous argument": "https://github.com/bobthecow/BobthecowMustacheBundle/pull/9.patch"
+            },
+            "cocur/slugify": {
+                "Use Slugify's defaults rather than having default values in Symfony's configuration": "https://github.com/cocur/slugify/pull/176.patch"
             }
         }
     }
