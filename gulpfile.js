@@ -148,20 +148,19 @@ gulp.task('assets', ['assets:clean', 'favicons', 'images', 'patterns'], () => {
 });
 
 
-const criticalConf = {
-  cssRuleInclusions: (function () {
+const criticalCssConfig = (function() {
 
-    const globalExplicitInclusions = [
+  const explicitlyIncludedSelectors = (function () {
+    const global = [
       /.*main-menu--js.*/,
       'p',
       /\.content-header.*/,
       /\.meta.*/,
       '.wrapper.wrapper--content',
     ];
-
-    const listingExplicitInclusions = [/\.teaser__img--.*$/];
-    const highlightsExplicitInclusion = [/.*\.highlights.*$/];
-    const listingMenuExplicitInclusion = [
+    const listing = [/\.teaser__img--.*$/];
+    const highlights = [/.*\.highlights.*$/];
+    const listingMenu = [
       '.section-listing-wrapper .list-heading',
       '.section-listing__list_item',
       /.*\.section-listing.*/,
@@ -169,86 +168,94 @@ const criticalConf = {
     ];
 
     return {
-      article: globalExplicitInclusions.concat(
+      article: global.concat(
         /\.content-header__item_toggle--.*$/,
-        '.view-selector__list-item--side-by-side'
+        '.view-selector__list-item--side-by-side',
+        '.see-more-link'
       ),
 
-      archiveMonth: globalExplicitInclusions.concat(
-        highlightsExplicitInclusion,
+      archiveMonth: global.concat(
+        highlights,
         /\.teaser.*$/
       ),
 
-      home: globalExplicitInclusions.concat(
-        listingExplicitInclusions,
-        listingMenuExplicitInclusion,
+      home: global.concat(
+        listing,
+        listingMenu,
         /.*\.carousel.*/,
         '.carousel__control--toggler',
         '.carousel__items',
         /\.carousel__item.*/
       ),
 
-      landing: globalExplicitInclusions.concat(
-        listingExplicitInclusions,
+      landing: global.concat(
+        listing,
         /.content-header.wrapper.*/,
         '.section-listing-link'
       ),
 
-      magazine: globalExplicitInclusions.concat(
-        listingExplicitInclusions,
-        listingMenuExplicitInclusion,
-        highlightsExplicitInclusion,
+      magazine: global.concat(
+        listing,
+        listingMenu,
+        highlights,
         /^\.audio-player.*$/
       ),
 
-      listing: globalExplicitInclusions.concat(listingExplicitInclusions),
+      listing: global.concat(listing),
 
-      gridListing: globalExplicitInclusions.concat(
+      gridListing: global.concat(
         /.*\.grid-listing.*/,
         /.*\.block-link--grid-listing.*/,
         '.teaser__header_text',
         '.teaser__header_text_link'
       ),
 
-      default: globalExplicitInclusions.concat(
+      default: global.concat(
         '.article-section__header_text',
         '.list--bullet a'
       )
     };
+  }());
 
-  }()),
-  dimensions: [
-    {
-      height: 400,
-      width: 729
-    },
-    {
-      height: 1000,
-      width: 899
-    },
-    {
-      height: 1000,
-      width: 1199
-    },
-    {
-      height: 1000,
-      width: 1201
+  const serverAddress = '127.0.0.1';
+  const port = '8089';
+
+  return {
+    serverAddress: serverAddress,
+    port: port,
+    baseUrl: `http://${serverAddress}:${port}`,
+    baseFilePath: './app/Resources/views/critical',
+    dimensions: [
+      {
+        height: 400,
+        width: 729
+      },
+      {
+        height: 1000,
+        width: 899
+      },
+      {
+        height: 1000,
+        width: 1199
+      },
+      {
+        height: 1000,
+        width: 1201
+      }
+    ],
+    getInclusions: (pageName) => {
+      return explicitlyIncludedSelectors[pageName];
     }
-  ],
-  serverAddress: '127.0.0.1',
-  port: '8089',
-  base: './app/Resources/views/critical'
-};
+  };
 
-criticalConf.srcPrefix = criticalConf.serverAddress.indexOf('127') !== 0 ? 'https://' : 'http://';
-criticalConf.baseUrl = `${criticalConf.srcPrefix}${criticalConf.serverAddress}:${criticalConf.port}`;
+}());
 
 
 gulp.task('generateCriticalCss', ['server:start'], (callback) => {
 
-  fs.stat(criticalConf.base, function(err) {
+  fs.stat(criticalCssConfig.baseFilePath, function(err) {
     if(err) {
-      fs.mkdirSync(criticalConf.base);
+      fs.mkdirSync(criticalCssConfig.baseFilePath);
     }
   });
 
@@ -266,17 +273,17 @@ gulp.task('generateCriticalCss', ['server:start'], (callback) => {
 
 function generateCriticalCss(page, callback) {
 
-  gutil.log(gutil.colors.blue(`Generating critical CSS for ${page.name} page based on ${criticalConf.baseUrl}${page.url}`));
+  gutil.log(gutil.colors.blue(`Generating critical CSS for ${page.name} page based on ${criticalCssConfig.baseUrl}${page.url}`));
 
   return critical.generate(
     {
       inline: false,
-      base: criticalConf.base,
+      base: criticalCssConfig.baseFilePath,
       dest: `critical-css-inline-${page.name}.css.twig`,
-      src: `${criticalConf.baseUrl}${page.url}`,
-      include: page.explicitInclusions,
+      src: `${criticalCssConfig.baseUrl}${page.url}`,
+      include: criticalCssConfig.getInclusions(page.name),
       minify: true,
-      dimensions: criticalConf.dimensions,
+      dimensions: criticalCssConfig.dimensions,
       timeout: 90000
     }
   )
@@ -290,89 +297,45 @@ function generateCriticalCss(page, callback) {
 }
 
 gulp.task('generateCriticalCss:article',  (callback) => {
-  generateCriticalCss(
-    {
-      name: 'article',
-      url: '/articles/09560',
-      explicitInclusions: criticalConf.cssRuleInclusions.article
-    }, callback);
+  generateCriticalCss({ name: 'article',  url: '/articles/09560'}, callback);
 });
 
 gulp.task('generateCriticalCss:archiveMonth',  (callback) => {
-  generateCriticalCss(
-    {
-      name: 'archive-month',
-      url: '/archive/2017/january',
-      explicitInclusions: criticalConf.cssRuleInclusions.archiveMonth
-    }, callback);
+  generateCriticalCss({ name: 'archive-month', url: '/archive/2017/january' }, callback);
 });
 
 gulp.task('generateCriticalCss:landing',  (callback) => {
-  generateCriticalCss(
-    {
-      name: 'landing',
-      url: '/subjects/biochemistry',
-      explicitInclusions: criticalConf.cssRuleInclusions.landing
-    }, callback);
+  generateCriticalCss({ name: 'landing', url: '/subjects/biochemistry' }, callback);
 });
 
 gulp.task('generateCriticalCss:home',  (callback) => {
-  generateCriticalCss(
-    {
-      name: 'home',
-      url: '/',
-      explicitInclusions: criticalConf.cssRuleInclusions.home
-    }, callback);
+  generateCriticalCss({ name: 'home', url: '/' }, callback);
 });
 
 gulp.task('generateCriticalCss:magazine',  (callback) => {
-  generateCriticalCss(
-    {
-      name: 'magazine',
-      url: '/magazine',
-      explicitInclusions: criticalConf.cssRuleInclusions.magazine
-    }, callback);
+  generateCriticalCss({ name: 'magazine', url: '/magazine' }, callback);
 });
 
 gulp.task('generateCriticalCss:listing',  (callback) => {
-  generateCriticalCss(
-    {
-      name: 'listing',
-      url: '/?page=2',
-      explicitInclusions: criticalConf.cssRuleInclusions.listing
-    }, callback);
+  generateCriticalCss({ name: 'listing', url: '/?page=2' }, callback);
 });
 
 gulp.task('generateCriticalCss:gridListing',  (callback) => {
-  generateCriticalCss(
-    {
-      name: 'grid-listing',
-      url: '/archive/2017',
-      explicitInclusions: criticalConf.cssRuleInclusions.gridListing
-    }, callback);
+  generateCriticalCss({ name: 'grid-listing', url: '/archive/2017' }, callback);
 });
 
 gulp.task('generateCriticalCss:default',  (callback) => {
-  generateCriticalCss(
-    {
-      name: 'default',
-      url: '/about/people',
-      explicitInclusions: criticalConf.cssRuleInclusions.default
-    }, callback);
+  generateCriticalCss({ name: 'default', url: '/about/people' }, callback);
 });
 
 gulp.task('server:start', (callback) => {
   changeServerState('start', callback);
 });
 
-gulp.task('server:stop', (callback) => {
-  changeServerState('stop', callback);
-});
-
 function changeServerState(serverAction, callback) {
   const action = serverAction === 'start' ? 'start' : 'stop';
 
-  const command = spawn('bin/console', [`server:${action}`, `${criticalConf.serverAddress}:${criticalConf.port}`]);
+  const command = spawn('bin/console', [`server:${action}`, `${criticalCssConfig.serverAddress}:${criticalCssConfig.port}`]);
 
   command.stdout.on('data', (data) => {
     console.log(`stdout: ${data}`);
@@ -383,8 +346,9 @@ function changeServerState(serverAction, callback) {
   });
 
   command.on('exit', (code) => {
-    const extra = action === 'stop' ? 'ped' : 'ed';
-    gutil.log(gutil.colors.blue(`${action}${extra} server on ${criticalConf.serverAddress}:${criticalConf.port}`));
+    let suffix = 'ed';
+    suffix = action === 'stop' ? `p${suffix}` : suffix;
+    gutil.log(gutil.colors.blue(`${action}${suffix} server on ${criticalCssConfig.serverAddress}:${criticalCssConfig.port}`));
     if (callback && typeof callback === 'function') {
       return callback(code);
     }
