@@ -185,7 +185,7 @@
 
 {% block javascripts deferred %}
 {% for javascript in javascripts %}
-    <script src="{{ asset(javascript) }}"></script>
+    <script src="{{ asset(javascript) }}" async></script>
 {% endfor %}
 {% endblock %}
 
