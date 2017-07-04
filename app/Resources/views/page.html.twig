@@ -27,12 +27,6 @@
     <meta name="theme-color" content="#ffffff">
     <meta name="application-name" content="eLife">
 
-    {% block javascripts deferred %}
-    {% for javascript in javascripts %}
-        <script async src="{{ asset(javascript) }}"></script>
-    {% endfor %}
-    {% endblock %}
-
     {% block stylesheets deferred %}
     {% for stylesheet in stylesheets %}
         <link href="{{ asset(stylesheet) }}" rel="stylesheet">
@@ -188,6 +182,12 @@
     </div>
 
 </div>
+
+{% block javascripts deferred %}
+{% for javascript in javascripts %}
+    <script async src="{{ asset(javascript) }}"></script>
+{% endfor %}
+{% endblock %}
 
 </body>
 
