@@ -275,6 +275,9 @@ services:
     elife.journal.view_model.converter.annual_report.teaser:
         class: eLife\Journal\ViewModel\Converter\AnnualReportTeaserConverter
         public: false
+        arguments:
+          - '@elife.patterns.pattern_renderer'
+          - '@elife.journal.helper.download_link_uri_generator'
         tags:
           - name: view_model.converter
 
