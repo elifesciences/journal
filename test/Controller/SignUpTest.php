@@ -102,6 +102,24 @@ final class SignUpTest extends WebTestCase
         $this->assertEmpty($client->getResponse()->getVary());
     }
 
+    /**
+     * @test
+     */
+    public function it_has_a_honeypot()
+    {
+        $client = static::createClient();
+
+        $crawler = $client->request('GET', $this->getUrl());
+
+        $form = $crawler->selectButton('Sign up')->form();
+        $form['email_cta[email]'] = 'foo@example.com';
+        $form["email_cta[{$this->getParameter('honeypot_field')}]"] = 'bar@example.com';
+        $crawler = $client->submit($form);
+
+        $this->assertCount(1, $crawler->filter('.info-bar'));
+        $this->assertSame('Please try submitting the form again.', trim($crawler->filter('.info-bar')->text()));
+    }
+
     protected function getUrl() : string
     {
         $this->mockApiResponse(
