@@ -99,6 +99,27 @@ final class LabsPostControllerTest extends PageTestCase
 
     /**
      * @test
+     */
+    public function it_has_a_honeypot()
+    {
+        $client = static::createClient();
+        $honeypotField = $client->getKernel()->getContainer()->getParameter('honeypot_field');
+
+        $crawler = $client->request('GET', $this->getUrl());
+
+        $form = $crawler->selectButton('Submit')->form();
+        $form['labs_post_feedback[name]'] = 'My name';
+        $form['labs_post_feedback[email]'] = 'foo@example.com';
+        $form['labs_post_feedback[comment]'] = 'My question';
+        $form["labs_post_feedback[{$this->getParameter('honeypot_field')}]"] = 'bar@example.com';
+        $crawler = $client->submit($form);
+
+        $this->assertCount(1, $crawler->filter('.info-bar'));
+        $this->assertSame('Please try submitting the form again.', trim($crawler->filter('.info-bar')->text()));
+    }
+
+    /**
+     * @test
      * @dataProvider incorrectSlugProvider
      */
     public function it_redirects_if_the_slug_is_not_correct(string $url)

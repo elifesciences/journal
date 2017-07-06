@@ -7,6 +7,7 @@ use Cocur\Slugify\Bridge\Symfony\CocurSlugifyBundle;
 use Csa\Bundle\GuzzleBundle\CsaGuzzleBundle;
 use eLife\Journal\Expression\ComposerLocateFunctionProvider;
 use Irozgar\GulpRevVersionsBundle\IrozgarGulpRevVersionsBundle;
+use Isometriks\Bundle\SpamBundle\IsometriksSpamBundle;
 use Nelmio\SecurityBundle\NelmioSecurityBundle;
 use PackageVersions\Versions;
 use Sensio\Bundle\DistributionBundle\SensioDistributionBundle;
@@ -52,6 +53,7 @@ class AppKernel extends Kernel
             new CsaGuzzleBundle(),
             new FrameworkBundle(),
             new IrozgarGulpRevVersionsBundle(),
+            new IsometriksSpamBundle(),
             new MonologBundle(),
             new NelmioSecurityBundle(),
             new SwiftmailerBundle(),
