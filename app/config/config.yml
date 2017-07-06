@@ -36,9 +36,11 @@ framework:
         pools:
             cache.doi:
                 adapter: cache.app
+                default_lifetime: 31536000 # 1 year
                 public: true
             cache.guzzle:
                 adapter: cache.app
+                default_lifetime: 31536000 # 1 year
                 public: true
     csrf_protection: ~
     form: ~
