@@ -1,6 +1,5 @@
 imports:
   - resource: config.yml
-  - resource: services_prod.yml
 
 framework:
     cache:

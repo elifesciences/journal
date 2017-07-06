@@ -36,8 +36,10 @@ framework:
         pools:
             cache.doi:
                 adapter: cache.app
+                public: true
             cache.guzzle:
-                adapter: elife.journal.cache.http
+                adapter: cache.app
+                public: true
     csrf_protection: ~
     form: ~
     router:
