@@ -16,7 +16,7 @@ final class HttpCachePass implements CompilerPassInterface
 
         $tags = $definition->getTags();
 
-        $namespace = crc32(implode(',', array_map(Versions::class . '::getVersion', self::$packages)));
+        $namespace = crc32(implode(',', array_map(Versions::class.'::getVersion', self::$packages)));
 
         // Make updates to library invalidate the cache.
         $tags['cache.pool'][0]['namespace'] = "http-$namespace";
