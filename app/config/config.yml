@@ -40,6 +40,7 @@ framework:
                 public: true
             cache.guzzle:
                 adapter: cache.app
+                clearer: ~
                 default_lifetime: 31536000 # 1 year
                 public: true
     csrf_protection: ~
