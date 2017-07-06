@@ -111,6 +111,8 @@ class AppKernel extends Kernel
     {
         $builder = parent::buildContainer();
 
+        $builder->getParameterBag()->add($this->getEnvParameters()); // https://github.com/symfony/symfony/issues/7555
+
         $builder->addExpressionLanguageProvider(new ComposerLocateFunctionProvider());
 
         return $builder;
