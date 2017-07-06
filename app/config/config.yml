@@ -2,6 +2,9 @@ imports:
   - resource: parameters.yml
   - resource: services.yml
 
+parameters:
+    honeypot_field: email_address
+
 bobthecow_mustache:
     globals:
         assetRewrite: '@elife.patterns.mustache.helpers.asset_rewrite'
@@ -58,6 +61,12 @@ framework:
 
 irozgar_gulp_rev_versions:
     manifest_path: '../build/rev-manifest.json'
+
+isometriks_spam:
+    honeypot:
+        field: '%honeypot_field%'
+        global: true
+        message: Please try submitting the form again.
 
 monolog:
     channels:

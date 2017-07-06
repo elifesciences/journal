@@ -7,6 +7,7 @@ use Cocur\Slugify\Bridge\Symfony\CocurSlugifyBundle;
 use Csa\Bundle\GuzzleBundle\CsaGuzzleBundle;
 use eLife\Journal\Expression\ComposerLocateFunctionProvider;
 use Irozgar\GulpRevVersionsBundle\IrozgarGulpRevVersionsBundle;
+use Isometriks\Bundle\SpamBundle\IsometriksSpamBundle;
 use Nelmio\SecurityBundle\NelmioSecurityBundle;
 use PackageVersions\Versions;
 use Sensio\Bundle\DistributionBundle\SensioDistributionBundle;
@@ -51,6 +52,7 @@ class AppKernel extends Kernel
             new CsaGuzzleBundle(),
             new FrameworkBundle(),
             new IrozgarGulpRevVersionsBundle(),
+            new IsometriksSpamBundle(),
             new MonologBundle(),
             new NelmioSecurityBundle(),
             new SwiftmailerBundle(),
@@ -107,6 +109,8 @@ class AppKernel extends Kernel
     protected function buildContainer()
     {
         $builder = parent::buildContainer();
+
+        $builder->getParameterBag()->add($this->getEnvParameters()); // https://github.com/symfony/symfony/issues/7555
 
         $builder->addExpressionLanguageProvider(new ComposerLocateFunctionProvider());
 

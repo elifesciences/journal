@@ -87,6 +87,27 @@ final class ContactControllerTest extends PageTestCase
         $this->assertSame('Please provide a valid email address.', trim($crawler->filter('.info-bar')->text()));
     }
 
+    /**
+     * @test
+     */
+    public function it_has_a_honeypot()
+    {
+        $client = static::createClient();
+
+        $crawler = $client->request('GET', $this->getUrl());
+
+        $form = $crawler->selectButton('Submit')->form();
+        $form['contact[name]'] = 'My name';
+        $form['contact[email]'] = 'foo@example.com';
+        $form['contact[subject]'] = 'Author query';
+        $form['contact[question]'] = 'My question';
+        $form["contact[{$this->getParameter('honeypot_field')}]"] = 'bar@example.com';
+        $crawler = $client->submit($form);
+
+        $this->assertCount(1, $crawler->filter('.info-bar'));
+        $this->assertSame('Please try submitting the form again.', trim($crawler->filter('.info-bar')->text()));
+    }
+
     protected function getUrl() : string
     {
         return '/contact';

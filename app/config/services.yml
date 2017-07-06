@@ -668,6 +668,7 @@ services:
         public: false
         arguments:
           - '@elife.patterns.pattern_renderer'
+          - '%honeypot_field%'
         tags:
           - name: view_model.converter
 

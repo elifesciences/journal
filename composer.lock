@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "ba39e3991ec5e13eb388f154cb69d7b7",
+    "content-hash": "424f3fa45712df349af327f61f9bfc23",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -848,12 +848,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/patterns-php.git",
-                "reference": "021bfc99077efafc55f13e2b1ff49ab54a411536"
+                "reference": "1f8ec610d598fe93334c83247f47cacdd50586e3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/021bfc99077efafc55f13e2b1ff49ab54a411536",
-                "reference": "021bfc99077efafc55f13e2b1ff49ab54a411536",
+                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/1f8ec610d598fe93334c83247f47cacdd50586e3",
+                "reference": "1f8ec610d598fe93334c83247f47cacdd50586e3",
                 "shasum": ""
             },
             "require": {
@@ -886,7 +886,7 @@
                 "MIT"
             ],
             "description": "eLife patterns",
-            "time": "2017-07-04 16:05:40"
+            "time": "2017-07-05 15:24:31"
         },
         {
             "name": "fabpot/goutte",
@@ -1174,6 +1174,51 @@
                 "version"
             ],
             "time": "2017-02-21T00:17:19+00:00"
+        },
+        {
+            "name": "isometriks/spam-bundle",
+            "version": "v1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/isometriks/IsometriksSpamBundle.git",
+                "reference": "6750758208eacff872fb072843c39e0bda0a60f7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/isometriks/IsometriksSpamBundle/zipball/6750758208eacff872fb072843c39e0bda0a60f7",
+                "reference": "6750758208eacff872fb072843c39e0bda0a60f7",
+                "shasum": ""
+            },
+            "type": "library",
+            "extra": {
+                "patches_applied": {
+                    "Add field label": "https://github.com/isometriks/IsometriksSpamBundle/pull/9.patch"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Isometriks\\Bundle\\SpamBundle\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "authors": [
+                {
+                    "name": "Craig Blanchette",
+                    "email": "craig.blanchette@gmail.com",
+                    "homepage": "http://isometriks.com"
+                },
+                {
+                    "name": "Patrik Pacin",
+                    "email": "github@exploit.cz",
+                    "homepage": "https://exploit.cz"
+                }
+            ],
+            "description": "Provides spam protection for Symfony3 forms",
+            "keywords": [
+                "spam",
+                "symfony3"
+            ],
+            "time": "2016-09-23T18:48:09+00:00"
         },
         {
             "name": "kevinrob/guzzle-cache-middleware",
