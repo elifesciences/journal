@@ -100,9 +100,9 @@ final class PressPacksController extends Controller
             });
 
         $arguments['relatedContent'] = $arguments['package']
-            ->then(function (PressPackage $package) {
+            ->then(Callback::methodEmptyOr('getRelatedContent', function (PressPackage $package) {
                 return ListingTeasers::basic($package->getRelatedContent()->map($this->willConvertTo(Teaser::class, ['variant' => 'secondary']))->toArray());
-            });
+            }));
 
         return new Response($this->get('templating')->render('::press-pack.html.twig', $arguments));
     }

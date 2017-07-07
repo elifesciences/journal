@@ -117,8 +117,15 @@ abstract class ModelConverterTestCase extends PHPUnit_Framework_TestCase
                     $model = $originalModel;
                     $list = false;
             }
+            switch ($originalModel) {
+                case 'press-package':
+                    $version = 2;
+                    break;
+                default:
+                    $version = 1;
+            }
 
-            $samples = Finder::create()->files()->in(ComposerLocator::getPath('elife/api')."/dist/samples/{$model}/v1");
+            $samples = Finder::create()->files()->in(ComposerLocator::getPath('elife/api')."/dist/samples/{$model}/v{$version}");
 
             foreach ($samples as $sample) {
                 $name = $model.'/v1/'.$sample->getBasename();
