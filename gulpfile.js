@@ -303,14 +303,17 @@ gulp.task('generateCriticalCss:archiveMonth',  (callback) => {
 });
 
 gulp.task('generateCriticalCss:landing',  (callback) => {
+    // TODO: populate right hand column
     generateCriticalCss({ name: 'landing', url: '/subjects/biochemistry' }, callback);
 });
 
 gulp.task('generateCriticalCss:home',  (callback) => {
+    // TODO: carousel
     generateCriticalCss({ name: 'home', url: '/' }, callback);
 });
 
 gulp.task('generateCriticalCss:magazine',  (callback) => {
+    // TODO: add in highlights carousel
     generateCriticalCss({ name: 'magazine', url: '/magazine' }, callback);
 });
 
