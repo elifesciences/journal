@@ -36,11 +36,17 @@ framework:
     assets:
         version_strategy: irozgar_gulp_rev_versions.asset.gulp_rev_version_strategy
     cache:
+        default_redis_provider: '%redis_cache%'
         pools:
             cache.doi:
                 adapter: cache.app
+                default_lifetime: 31536000 # 1 year
+                public: true
             cache.guzzle:
-                adapter: elife.journal.cache.http
+                adapter: cache.app
+                clearer: ~
+                default_lifetime: 31536000 # 1 year
+                public: true
     csrf_protection: ~
     form: ~
     router:
