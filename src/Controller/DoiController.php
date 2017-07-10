@@ -29,7 +29,7 @@ final class DoiController extends Controller
     {
         $key = str_replace('/', '.', $doi);
 
-        $cachedRedirect = $this->get('cache.app')->getItem($key);
+        $cachedRedirect = $this->get('cache.doi')->getItem($key);
 
         if (!$cachedRedirect->isHit()) {
             foreach (['article', 'article-figures'] as $route) {
@@ -42,7 +42,7 @@ final class DoiController extends Controller
                 $cachedRedirect->set($redirect);
                 $cachedRedirect->expiresAfter(60 * 60);
 
-                $this->get('cache.app')->save($cachedRedirect);
+                $this->get('cache.doi')->save($cachedRedirect);
 
                 break;
             }
