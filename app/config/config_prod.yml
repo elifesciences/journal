@@ -49,6 +49,6 @@ nelmio_security:
     forced_ssl:
         whitelist:
           - ^/ # Hack to disable redirect.
-        #hsts_max_age: 31536000 # 1 year
-        hsts_max_age: 600 # 10 minutes
+        hsts_max_age: 31536000 # 1 year
         hsts_subdomains: true
+        hsts_preload: true
