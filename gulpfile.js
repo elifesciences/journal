@@ -152,7 +152,7 @@ const criticalCssConfig = (function() {
 
     const explicitlyIncludedSelectors = (function () {
         const global = [
-            /.*main-menu--js.*/,
+            /.*\.main-menu(--js)?.*/,
             'p',
             /\.content-header.*/,
             /\.meta.*/,
@@ -174,7 +174,7 @@ const criticalCssConfig = (function() {
                 '.see-more-link'
             ),
 
-            archiveMonth: global.concat(
+            "archive-month": global.concat(
                 highlights,
                 /\.teaser.*$/
             ),
@@ -203,7 +203,7 @@ const criticalCssConfig = (function() {
 
             listing: global.concat(listing),
 
-            gridListing: global.concat(
+            'grid-listing': global.concat(
                 /.*\.grid-listing.*/,
                 /.*\.block-link--grid-listing.*/,
                 '.teaser__header_text',
@@ -217,7 +217,7 @@ const criticalCssConfig = (function() {
         };
     }());
 
-    const serverAddress = '127.0.0.1';
+    const serverAddress = 'localhost';
     const port = '8089';
 
     return {
@@ -259,7 +259,7 @@ gulp.task('generateCriticalCss', ['server:start'], (callback) => {
         }
     });
 
-    runSequence('generateCriticalCss:article', 'generateCriticalCss:archiveMonth', 'generateCriticalCss:gridListing', 'generateCriticalCss:home', 'generateCriticalCss:landing', 'generateCriticalCss:listing', 'generateCriticalCss:magazine', 'generateCriticalCss:default', (err) => {
+    runSequence('generateCriticalCss:article', 'generateCriticalCss:archiveMonth', 'generateCriticalCss:gridListing', 'generateCriticalCss:home', 'generateCriticalCss:landing', 'generateCriticalCss:listing', 'generateCriticalCss:magazine', 'generateCriticalCss:people', (err) => {
         if (err) {
             gutil.log(gutil.colors.red(`generateCriticalCss task failed with ${err}`));
             changeServerState('stop');
@@ -295,11 +295,11 @@ function generateCriticalCss(page, callback) {
 }
 
 gulp.task('generateCriticalCss:article',  (callback) => {
-    generateCriticalCss({ name: 'article',  url: '/articles/09560'}, callback);
+    generateCriticalCss({ name: 'article',  url: '/articles/00569'}, callback);
 });
 
 gulp.task('generateCriticalCss:archiveMonth',  (callback) => {
-    generateCriticalCss({ name: 'archive-month', url: '/archive/2017/january' }, callback);
+    generateCriticalCss({ name: 'archive-month', url: '/archive/2016/march' }, callback);
 });
 
 gulp.task('generateCriticalCss:landing',  (callback) => {
@@ -319,11 +319,11 @@ gulp.task('generateCriticalCss:listing',  (callback) => {
 });
 
 gulp.task('generateCriticalCss:gridListing',  (callback) => {
-    generateCriticalCss({ name: 'grid-listing', url: '/archive/2017' }, callback);
+    generateCriticalCss({ name: 'grid-listing', url: '/archive/2016' }, callback);
 });
 
-gulp.task('generateCriticalCss:default',  (callback) => {
-    generateCriticalCss({ name: 'default', url: '/about/people' }, callback);
+gulp.task('generateCriticalCss:people',  (callback) => {
+    generateCriticalCss({ name: 'people', url: '/about/people' }, callback);
 });
 
 gulp.task('server:start', (callback) => {
