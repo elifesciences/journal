@@ -88,9 +88,6 @@ nelmio_security:
         policies:
           - no-referrer
           - strict-origin-when-cross-origin
-    signed_cookie:
-        names:
-          - '%session_name%'
     xss_protection:
         enabled: true
         mode_block: true
