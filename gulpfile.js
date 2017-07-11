@@ -155,7 +155,7 @@ gulp.task('critical-css:directory', (callback) => {
 });
 
 gulp.task('critical-css:generate', ['critical-css:clean', 'critical-css:directory'], (callback) => {
-    runSequence('critical-css:generate:article', 'critical-css:generate:archive-month', 'critical-css:generate:grid-listing', 'critical-css:generate:home', 'critical-css:generate:landing', 'critical-css:generate:magazine', 'critical-css:generate:people', callback);
+    runSequence('critical-css:generate:article', 'critical-css:generate:archive-month', 'critical-css:generate:grid-listing', 'critical-css:generate:home', 'critical-css:generate:landing', 'critical-css:generate:listing', 'critical-css:generate:magazine', 'critical-css:generate:people', callback);
 });
 
 gulp.task('critical-css:generate:article', (callback) => {
