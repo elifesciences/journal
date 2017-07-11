@@ -269,7 +269,7 @@ const criticalCssConfig = (function () {
                 '.teaser__header_text_link'
             ),
 
-            default: global.concat(
+            people: global.concat(
                 '.article-section__header_text',
                 '.list--bullet a'
             )
