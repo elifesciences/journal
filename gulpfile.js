@@ -155,13 +155,7 @@ gulp.task('critical-css:directory', (callback) => {
 });
 
 gulp.task('critical-css:generate', ['critical-css:clean', 'critical-css:directory'], (callback) => {
-    runSequence('critical-css:generate:article', 'critical-css:generate:archive-month', 'critical-css:generate:grid-listing', 'critical-css:generate:home', 'critical-css:generate:landing', 'critical-css:generate:magazine', 'critical-css:generate:people', (err) => {
-        if (err) {
-            gutil.log(gutil.colors.red(`generateCriticalCss task failed with ${err}`));
-            return process.exit(1);
-        }
-    });
-
+    runSequence('critical-css:generate:article', 'critical-css:generate:archive-month', 'critical-css:generate:grid-listing', 'critical-css:generate:home', 'critical-css:generate:landing', 'critical-css:generate:magazine', 'critical-css:generate:people', callback);
 });
 
 gulp.task('critical-css:generate:article', (callback) => {
@@ -212,13 +206,7 @@ function generateCriticalCss(page, callback) {
         minify: true,
         dimensions: criticalCssConfig.dimensions,
         timeout: 90000
-    })
-        .then(() => {
-            return callback();
-        }, (err) => {
-            gutil.log(gutil.colors.red(`Generating critical CSS failed with ${err}`));
-            return process.exit(1);
-        });
+    }, callback);
 }
 
 const criticalCssConfig = (function () {
