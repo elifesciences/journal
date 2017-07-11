@@ -155,7 +155,7 @@ gulp.task('critical-css:directory', (callback) => {
 });
 
 gulp.task('critical-css:generate', ['critical-css:clean', 'critical-css:directory'], (callback) => {
-    runSequence('critical-css:generate:article', 'critical-css:generate:archive-month', 'critical-css:generate:grid-listing', 'critical-css:generate:home', 'critical-css:generate:landing', 'critical-css:generate:listing', 'critical-css:generate:magazine', 'critical-css:generate:people', callback);
+    runSequence('critical-css:generate:article', 'critical-css:generate:archive-month', 'critical-css:generate:grid-listing', 'critical-css:generate:home', 'critical-css:generate:landing', 'critical-css:generate:listing', 'critical-css:generate:magazine', 'critical-css:generate:people', 'critical-css:generate:default', callback);
 });
 
 gulp.task('critical-css:generate:article', (callback) => {
@@ -189,6 +189,10 @@ gulp.task('critical-css:generate:grid-listing', (callback) => {
 
 gulp.task('critical-css:generate:people', (callback) => {
     generateCriticalCss({name: 'people', url: '/about/people'}, callback);
+});
+
+gulp.task('critical-css:generate:default', (callback) => {
+    generateCriticalCss({name: 'default', url: '/resources'}, callback);
 });
 
 function generateCriticalCss(page, callback) {
@@ -270,6 +274,11 @@ const criticalCssConfig = (function () {
             ),
 
             people: global.concat(
+                '.article-section__header_text',
+                '.list--bullet a'
+            ),
+
+            default: global.concat(
                 '.article-section__header_text',
                 '.list--bullet a'
             )
