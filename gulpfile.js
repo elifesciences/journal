@@ -13,8 +13,7 @@ const imageMinSvgo = require('imagemin-svgo');
 const merge = require('merge-stream');
 const responsive = require('gulp-responsive');
 const rev = require('gulp-rev-all');
-const runSequence =require('run-sequence');
-const spawn = require('child_process').spawn;
+const runSequence = require('run-sequence');
 const svg2png = require('gulp-svg2png');
 
 gulp.task('default', ['assets']);
@@ -147,8 +146,85 @@ gulp.task('assets', ['assets:clean', 'favicons', 'images', 'patterns'], () => {
         .pipe(gulp.dest('./build'));
 });
 
+gulp.task('critical-css:clean', () => {
+    return del([criticalCssConfig.baseFilePath + '/**/*']);
+});
 
-const criticalCssConfig = (function() {
+gulp.task('critical-css:generate', ['critical-css:clean'], (callback) => {
+
+    fs.stat(criticalCssConfig.baseFilePath, (err) => {
+        if (err) {
+            fs.mkdirSync(criticalCssConfig.baseFilePath);
+        }
+    });
+
+    runSequence('critical-css:generate:article', 'critical-css:generate:archive-month', 'critical-css:generate:grid-listing', 'critical-css:generate:home', 'critical-css:generate:landing', 'critical-css:generate:magazine', 'critical-css:generate:people', (err) => {
+        if (err) {
+            gutil.log(gutil.colors.red(`generateCriticalCss task failed with ${err}`));
+            return process.exit(1);
+        }
+    });
+
+});
+
+gulp.task('critical-css:generate:article', (callback) => {
+    generateCriticalCss({name: 'article', url: '/articles/00569'}, callback);
+});
+
+gulp.task('critical-css:generate:archive-month', (callback) => {
+    generateCriticalCss({name: 'archive-month', url: '/archive/2016/march'}, callback);
+});
+
+gulp.task('critical-css:generate:landing', (callback) => {
+    // TODO: populate right hand column
+    generateCriticalCss({name: 'landing', url: '/subjects/biochemistry'}, callback);
+});
+
+gulp.task('critical-css:generate:home', (callback) => {
+    // TODO: carousel
+    generateCriticalCss({name: 'home', url: '/'}, callback);
+});
+
+gulp.task('critical-css:generate:magazine', (callback) => {
+    // TODO: add in highlights carousel
+    generateCriticalCss({name: 'magazine', url: '/magazine'}, callback);
+});
+
+gulp.task('critical-css:generate:listing', (callback) => {
+    generateCriticalCss({name: 'listing', url: '/?page=2'}, callback);
+});
+
+gulp.task('critical-css:generate:grid-listing', (callback) => {
+    generateCriticalCss({name: 'grid-listing', url: '/archive/2016'}, callback);
+});
+
+gulp.task('critical-css:generate:people', (callback) => {
+    generateCriticalCss({name: 'people', url: '/about/people'}, callback);
+});
+
+function generateCriticalCss(page, callback) {
+
+    gutil.log(gutil.colors.blue(`Generating critical CSS for ${page.name} page based on ${criticalCssConfig.baseUrl}${page.url}`));
+
+    return critical.generate({
+        inline: false,
+        base: criticalCssConfig.baseFilePath,
+        dest: `critical-css-inline-${page.name}.css.twig`,
+        src: `${criticalCssConfig.baseUrl}${page.url}`,
+        include: criticalCssConfig.getInclusions(page.name),
+        minify: true,
+        dimensions: criticalCssConfig.dimensions,
+        timeout: 90000
+    })
+        .then(() => {
+            return callback();
+        }, (err) => {
+            gutil.log(gutil.colors.red(`Generating critical CSS failed with ${err}`));
+            return process.exit(1);
+        });
+}
+
+const criticalCssConfig = (function () {
 
     const explicitlyIncludedSelectors = (function () {
         const global = [
@@ -217,13 +293,8 @@ const criticalCssConfig = (function() {
         };
     }());
 
-    const serverAddress = 'localhost';
-    const port = '8089';
-
     return {
-        serverAddress: serverAddress,
-        port: port,
-        baseUrl: `http://${serverAddress}:${port}`,
+        baseUrl: 'http://localhost:8080',
         baseFilePath: './app/Resources/views/critical',
         dimensions: [
             {
@@ -249,110 +320,3 @@ const criticalCssConfig = (function() {
     };
 
 }());
-
-
-gulp.task('generateCriticalCss', ['server:start'], (callback) => {
-
-    fs.stat(criticalCssConfig.baseFilePath, function(err) {
-        if(err) {
-            fs.mkdirSync(criticalCssConfig.baseFilePath);
-        }
-    });
-
-    runSequence('generateCriticalCss:article', 'generateCriticalCss:archiveMonth', 'generateCriticalCss:gridListing', 'generateCriticalCss:home', 'generateCriticalCss:landing', 'generateCriticalCss:listing', 'generateCriticalCss:magazine', 'generateCriticalCss:people', (err) => {
-        if (err) {
-            gutil.log(gutil.colors.red(`generateCriticalCss task failed with ${err}`));
-            changeServerState('stop');
-            return process.exit(1);
-        } else {
-            return changeServerState('stop', callback);
-        }
-    });
-
-});
-
-function generateCriticalCss(page, callback) {
-
-    gutil.log(gutil.colors.blue(`Generating critical CSS for ${page.name} page based on ${criticalCssConfig.baseUrl}${page.url}`));
-
-    return critical.generate({
-        inline: false,
-        base: criticalCssConfig.baseFilePath,
-        dest: `critical-css-inline-${page.name}.css.twig`,
-        src: `${criticalCssConfig.baseUrl}${page.url}`,
-        include: criticalCssConfig.getInclusions(page.name),
-        minify: true,
-        dimensions: criticalCssConfig.dimensions,
-        timeout: 90000
-    })
-    .then(() => {
-        return callback();
-    }, (err) => {
-        gutil.log(gutil.colors.red(`Generating critical CSS failed with ${err}`));
-        changeServerState('stop');
-        return process.exit(1);
-    });
-}
-
-gulp.task('generateCriticalCss:article',  (callback) => {
-    generateCriticalCss({ name: 'article',  url: '/articles/00569'}, callback);
-});
-
-gulp.task('generateCriticalCss:archiveMonth',  (callback) => {
-    generateCriticalCss({ name: 'archive-month', url: '/archive/2016/march' }, callback);
-});
-
-gulp.task('generateCriticalCss:landing',  (callback) => {
-    // TODO: populate right hand column
-    generateCriticalCss({ name: 'landing', url: '/subjects/biochemistry' }, callback);
-});
-
-gulp.task('generateCriticalCss:home',  (callback) => {
-    // TODO: carousel
-    generateCriticalCss({ name: 'home', url: '/' }, callback);
-});
-
-gulp.task('generateCriticalCss:magazine',  (callback) => {
-    // TODO: add in highlights carousel
-    generateCriticalCss({ name: 'magazine', url: '/magazine' }, callback);
-});
-
-gulp.task('generateCriticalCss:listing',  (callback) => {
-    generateCriticalCss({ name: 'listing', url: '/?page=2' }, callback);
-});
-
-gulp.task('generateCriticalCss:gridListing',  (callback) => {
-    generateCriticalCss({ name: 'grid-listing', url: '/archive/2016' }, callback);
-});
-
-gulp.task('generateCriticalCss:people',  (callback) => {
-    generateCriticalCss({ name: 'people', url: '/about/people' }, callback);
-});
-
-gulp.task('server:start', (callback) => {
-    changeServerState('start', callback);
-});
-
-function changeServerState(serverAction, callback) {
-    const action = serverAction === 'start' ? 'start' : 'stop';
-
-    const command = spawn('bin/console', [`server:${action}`, `${criticalCssConfig.serverAddress}:${criticalCssConfig.port}`]);
-
-    command.stdout.on('data', (data) => {
-        console.log(`stdout: ${data}`);
-    });
-
-    command.stderr.on('data', (data) => {
-        console.log(`stderr: ${data}`);
-    });
-
-    command.on('exit', (code) => {
-        let suffix = 'ed';
-        suffix = action === 'stop' ? `p${suffix}` : suffix;
-        gutil.log(gutil.colors.blue(`${action}${suffix} server on ${criticalCssConfig.serverAddress}:${criticalCssConfig.port}`));
-        if (callback && typeof callback === 'function') {
-            return callback(code);
-        }
-    });
-
-}
