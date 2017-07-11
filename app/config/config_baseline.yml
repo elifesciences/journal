@@ -1,0 +1,35 @@
+imports:
+  - resource: config.yml
+  - resource: services_prod.yml
+
+framework:
+    cache:
+        app: cache.adapter.redis
+        default_redis_provider: '%redis_cache%'
+    trusted_hosts: '%trusted_hosts%'
+
+monolog:
+    handlers:
+        console:
+            type: console
+        main:
+            action_level: error
+            handler: composite
+            type: fingers_crossed
+            excluded_404s:
+                - ^/
+        composite:
+            type: group
+            members:
+                - text
+                - json
+        text:
+            type: stream
+            path: '%kernel.logs_dir%/%kernel.environment%.txt.log'
+            level: debug
+            formatter: monolog.formatter.line
+        json:
+            type: stream
+            path: '%kernel.logs_dir%/%kernel.environment%.json.log'
+            level: debug
+            formatter: monolog.formatter.json

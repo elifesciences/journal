@@ -7,7 +7,6 @@ const imageMin = require('gulp-imagemin');
 const imageMinMozjpeg = require('imagemin-mozjpeg');
 const imageMinOptipng = require('imagemin-optipng');
 const imageMinSvgo = require('imagemin-svgo');
-const imageMinWebp = require('imagemin-webp');
 const merge = require('merge-stream');
 const responsive = require('gulp-responsive');
 const rev = require('gulp-rev-all');
@@ -84,18 +83,14 @@ gulp.task('images:logos', ['images:clean'], () => {
     return gulp.src('./app/Resources/images/logos/*.{png,svg}')
         .pipe(responsive({
             '*': [250, 500].reduce((acc, width) => {
-                ['webp', 'png'].reduce((acc, format) => {
-                    acc.push({
-                        width: width,
-                        rename: {
-                            suffix: `-${width}`,
-                            extname: `.${format}`,
-                        },
-                        withoutEnlargement: false,
-                    });
-
-                    return acc;
-                }, acc);
+                acc.push({
+                    width: width,
+                    rename: {
+                        suffix: `-${width}`,
+                        extname: '.png',
+                    },
+                    withoutEnlargement: false,
+                });
 
                 return acc;
             }, []),
@@ -119,9 +114,6 @@ gulp.task('images', ['images:banners', 'images:logos', 'images:svgs'], () => {
                 optimizationLevel: 4,
             }),
             imageMinSvgo({}),
-            imageMinWebp({
-                quality: 65,
-            }),
         ]))
         .pipe(gulp.dest('./build/assets/images'));
 });
@@ -142,7 +134,7 @@ gulp.task('assets:clean', () => {
 gulp.task('assets', ['assets:clean', 'favicons', 'images', 'patterns'], () => {
     return gulp.src('./build/assets/**/*.*', {base: "./build", follow: true})
         .pipe(rev.revision({
-            includeFilesInManifest: ['.css', '.jpg', '.js', '.json', '.ico', '.png', '.svg', '.webp', '.woff', '.woff2'],
+            includeFilesInManifest: ['.css', '.jpg', '.js', '.json', '.ico', '.png', '.svg', '.woff', '.woff2'],
             replaceInExtensions: ['.css', '.js', '.json'],
         }))
         .pipe(gulp.dest('./web'))

@@ -32,8 +32,8 @@ final class HighlightArticleSecondaryTeaserConverter implements ViewModelConvert
 
         return ViewModel\Teaser::secondary(
             $object->getTitle(),
-            $this->urlGenerator->generate('article', ['id' => $article->getId()]),
-            $object->getAuthorLine(),
+            $this->urlGenerator->generate('article', [$article]),
+            $article->getAuthorLine(),
             $this->createContextLabel($article),
             $object->getThumbnail() ? $this->smallTeaserImage($object) : null,
             ViewModel\TeaserFooter::forNonArticle(

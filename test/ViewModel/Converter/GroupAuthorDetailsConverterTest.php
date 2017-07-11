@@ -7,6 +7,8 @@ use eLife\ApiSdk\Model\GroupAuthor;
 use eLife\ApiSdk\Model\Model;
 use eLife\Journal\Helper\Callback;
 use eLife\Journal\ViewModel\Converter\GroupAuthorDetailsConverter;
+use eLife\Journal\ViewModel\Converter\ViewModelConverter;
+use eLife\Patterns\PatternRenderer;
 use eLife\Patterns\ViewModel\AuthorDetails;
 use Traversable;
 
@@ -20,7 +22,7 @@ final class GroupAuthorDetailsConverterTest extends ModelConverterTestCase
      */
     public function setUpConverter()
     {
-        $this->converter = new GroupAuthorDetailsConverter();
+        $this->converter = new GroupAuthorDetailsConverter($this->createMock(ViewModelConverter::class), $this->createMock(PatternRenderer::class));
     }
 
     /**

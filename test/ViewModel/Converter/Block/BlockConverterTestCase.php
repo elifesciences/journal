@@ -16,16 +16,23 @@ use Traversable;
 
 abstract class BlockConverterTestCase extends ModelConverterTestCase
 {
-    protected $models = ['article-vor', 'blog-article', 'event', 'interview', 'labs-experiment', 'person', 'press-package'];
+    protected $models = ['article-vor', 'blog-article', 'event', 'interview', 'labs-post', 'person', 'press-package'];
 
     final protected function modelHook(Model $model) : Traversable
     {
-        yield from array_filter(iterator_to_array($this->findBlocks($model)), [$this, 'includeBlock']);
+        foreach (array_filter(iterator_to_array($this->findBlocks($model)), [$this, 'includeBlock']) as $block) {
+            yield from $this->explodeBlock($block);
+        }
     }
 
     protected function includeBlock(Block $block) : bool
     {
         return true;
+    }
+
+    protected function explodeBlock(Block $block) : Traversable
+    {
+        yield $block;
     }
 
     private function findBlocks(Model $model) : Traversable
@@ -38,6 +45,7 @@ abstract class BlockConverterTestCase extends ModelConverterTestCase
             if ($model->getAbstract()) {
                 yield from $this->hasContentHook($model->getAbstract());
             }
+            yield from $this->sequenceHook($model->getEthics());
         }
 
         if ($model instanceof ArticleVoR) {
@@ -48,7 +56,6 @@ abstract class BlockConverterTestCase extends ModelConverterTestCase
                 yield from $this->hasContentHook($appendix);
             }
             yield from $this->sequenceHook($model->getAcknowledgements());
-            yield from $this->sequenceHook($model->getEthics());
             if ($model->getDecisionLetter()) {
                 yield from $this->hasContentHook($model->getDecisionLetter());
             }

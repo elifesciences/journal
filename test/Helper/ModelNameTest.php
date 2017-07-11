@@ -32,7 +32,7 @@ final class ModelNameTest extends PHPUnit_Framework_TestCase
 
     public function validModelProvider() : Traversable
     {
-        return $this->stringProvider('correction', 'editorial', 'feature', 'insight', 'research-advance', 'research-article', 'research-exchange', 'retraction', 'registered-report', 'replication-study', 'short-report', 'tools-resources', 'blog-article', 'collection', 'event', 'labs-experiment', 'interview', 'podcast-episode');
+        return $this->stringProvider('correction', 'editorial', 'feature', 'insight', 'research-advance', 'research-article', 'retraction', 'registered-report', 'replication-study', 'scientific-correspondence', 'short-report', 'tools-resources', 'blog-article', 'collection', 'event', 'labs-post', 'interview', 'podcast-episode');
     }
 
     /**

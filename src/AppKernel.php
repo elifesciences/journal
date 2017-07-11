@@ -7,6 +7,8 @@ use Cocur\Slugify\Bridge\Symfony\CocurSlugifyBundle;
 use Csa\Bundle\GuzzleBundle\CsaGuzzleBundle;
 use eLife\Journal\Expression\ComposerLocateFunctionProvider;
 use Irozgar\GulpRevVersionsBundle\IrozgarGulpRevVersionsBundle;
+use Isometriks\Bundle\SpamBundle\IsometriksSpamBundle;
+use Nelmio\SecurityBundle\NelmioSecurityBundle;
 use PackageVersions\Versions;
 use Sensio\Bundle\DistributionBundle\SensioDistributionBundle;
 use Symfony\Bundle\DebugBundle\DebugBundle;
@@ -16,7 +18,6 @@ use Symfony\Bundle\SwiftmailerBundle\SwiftmailerBundle;
 use Symfony\Bundle\TwigBundle\TwigBundle;
 use Symfony\Bundle\WebProfilerBundle\WebProfilerBundle;
 use Symfony\Component\Config\Loader\LoaderInterface;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Kernel;
 use WhiteOctober\PagerfantaBundle\WhiteOctoberPagerfantaBundle;
@@ -42,7 +43,7 @@ class AppKernel extends Kernel
         $this->version = $version;
     }
 
-    public function registerBundles() : array
+    public function registerBundles()
     {
         $bundles = [
             new AppBundle(),
@@ -51,7 +52,9 @@ class AppKernel extends Kernel
             new CsaGuzzleBundle(),
             new FrameworkBundle(),
             new IrozgarGulpRevVersionsBundle(),
+            new IsometriksSpamBundle(),
             new MonologBundle(),
+            new NelmioSecurityBundle(),
             new SwiftmailerBundle(),
             new TwigBundle(),
             new WhiteOctoberPagerfantaBundle(),
@@ -66,27 +69,27 @@ class AppKernel extends Kernel
         return $bundles;
     }
 
-    public function getName() : string
+    public function getName()
     {
         return 'journal';
     }
 
-    public function getVersion() : string
+    public function getVersion()
     {
         return $this->version;
     }
 
-    public function getRootDir() : string
+    public function getRootDir()
     {
         return __DIR__.'/../app';
     }
 
-    public function getCacheDir() : string
+    public function getCacheDir()
     {
         return $this->getRootDir().'/../var/cache/'.$this->getEnvironment();
     }
 
-    public function getLogDir() : string
+    public function getLogDir()
     {
         return $this->getRootDir().'/../var/logs';
     }
@@ -103,9 +106,11 @@ class AppKernel extends Kernel
         $this->terminate($request, $response);
     }
 
-    protected function buildContainer() : ContainerBuilder
+    protected function buildContainer()
     {
         $builder = parent::buildContainer();
+
+        $builder->getParameterBag()->add($this->getEnvParameters()); // https://github.com/symfony/symfony/issues/7555
 
         $builder->addExpressionLanguageProvider(new ComposerLocateFunctionProvider());
 

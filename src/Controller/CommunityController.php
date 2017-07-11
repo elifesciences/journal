@@ -8,6 +8,7 @@ use eLife\Journal\Helper\Callback;
 use eLife\Journal\Helper\HasPages;
 use eLife\Journal\Helper\Paginator;
 use eLife\Patterns\ViewModel\ContentHeader;
+use eLife\Patterns\ViewModel\ListHeading;
 use eLife\Patterns\ViewModel\ListingTeasers;
 use eLife\Patterns\ViewModel\Teaser;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,7 +21,7 @@ final class CommunityController extends Controller
     public function listAction(Request $request) : Response
     {
         $page = (int) $request->query->get('page', 1);
-        $perPage = 6;
+        $perPage = 10;
         $arguments = $this->defaultPageArguments($request);
 
         $latestCommunity = $this->pagerfantaPromise(
@@ -54,14 +55,15 @@ final class CommunityController extends Controller
             'Community',
             $this->get('elife.journal.view_model.factory.content_header_image')->forLocalFile('community'),
             'The eLife community is working to help address some of the pressures on early-career scientists in a number of ways.
-Learn more about <a href="'.$this->get('router')->generate('about-early-career').'">our work</a> and advisory group, <a href="https://crm.elifesciences.org/crm/civicrm/profile/create?reset=1&gid=26">sign up for our bi-monthly news</a>,
+Learn more about <a href="'.$this->get('router')->generate('about-early-career').'">our work</a> and <a href="'.$this->get('router')->generate('about-people', ['type' => 'early-career']).'">advisory group</a>, <a href="https://crm.elifesciences.org/crm/civicrm/profile/create?reset=1&gid=26">sign up for our bi-monthly news</a>,
 follow us on <a href="https://www.twitter.com/elifecommunity">Twitter</a>, and explore recent activities below.'
         );
 
         $arguments['highlights'] = (new PromiseSequence($this->get('elife.api_sdk.highlights')
-            ->get('community')))
+            ->get('community')
+            ->slice(0, 6)))
             ->then(Callback::emptyOr(function (Sequence $result) {
-                return ListingTeasers::basic($result->map($this->willConvertTo(Teaser::class, ['variant' => 'secondary']))->toArray(), 'Highlights');
+                return ListingTeasers::basic($result->map($this->willConvertTo(Teaser::class, ['variant' => 'secondary']))->toArray(), new ListHeading('Highlights'));
             }))
             ->otherwise($this->softFailure('Failed to load community highlights'));
 

@@ -26,7 +26,7 @@ final class MagazineController extends Controller
     public function listAction(Request $request) : Response
     {
         $page = (int) $request->query->get('page', 1);
-        $perPage = 6;
+        $perPage = 10;
 
         $arguments = $this->defaultPageArguments($request);
 
@@ -77,7 +77,7 @@ final class MagazineController extends Controller
         $arguments['audio_player'] = $this->get('elife.api_sdk.podcast_episodes')
             ->slice(0, 1)
             ->then(Callback::method('offsetGet', 0))
-            ->then(Callback::emptyOr($this->willConvertTo(AudioPlayer::class)))
+            ->then(Callback::emptyOr($this->willConvertTo(AudioPlayer::class, ['link' => true])))
             ->otherwise($this->softFailure('Failed to load podcast episode audio player'));
 
         $arguments['highlights'] = $this->get('elife.api_sdk.highlights')
@@ -85,12 +85,12 @@ final class MagazineController extends Controller
             ->slice(0, 6)
             ->map($this->willConvertTo(Teaser::class, ['variant' => 'secondary']))
             ->then(Callback::emptyOr(function (Sequence $highlights) {
-                return ListingTeasers::forHighlights($highlights->toArray(), 'Highlights', 'highlights');
+                return ListingTeasers::forHighlights($highlights->toArray(), new ListHeading('Highlights'), 'highlights');
             }))
             ->otherwise($this->softFailure('Failed to load highlights for magazine'));
 
         $events = $this->get('elife.api_sdk.events')
-            ->forType('open')
+            ->show('open')
             ->reverse();
 
         $arguments['menuLink'] = new SectionListingLink('All sections', 'sections');
@@ -108,7 +108,7 @@ final class MagazineController extends Controller
             ->slice(0, 3)
             ->then(Callback::emptyOr(function (Sequence $result) use ($events) {
                 $items = $result->map($this->willConvertTo(Teaser::class, ['variant' => 'secondary']))->toArray();
-                $heading = 'Events';
+                $heading = new ListHeading('Events');
 
                 if (count($events) > 3) {
                     return ListingTeasers::withSeeMore(
@@ -128,7 +128,7 @@ final class MagazineController extends Controller
                 return ListingTeasers::withSeeMore(
                     $result->map($this->willConvertTo(Teaser::class, ['variant' => 'secondary']))->toArray(),
                     new SeeMoreLink(new Link('See more eLife digests on Medium', 'https://medium.com/@elife')),
-                    'eLife digests'
+                    new ListHeading('eLife digests')
                 );
             }))
             ->otherwise($this->softFailure('Failed to load Medium articles'));

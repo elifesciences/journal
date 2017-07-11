@@ -2,7 +2,6 @@
 
 namespace eLife\Journal\ViewModel\Converter;
 
-use Cocur\Slugify\SlugifyInterface;
 use eLife\ApiSdk\Model\Highlight;
 use eLife\ApiSdk\Model\Interview;
 use eLife\Patterns\ViewModel;
@@ -16,12 +15,10 @@ final class HighlightInterviewSecondaryTeaserConverter implements ViewModelConve
     use CreatesTeaserImage;
 
     private $urlGenerator;
-    private $slugify;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator, SlugifyInterface $slugify)
+    public function __construct(UrlGeneratorInterface $urlGenerator)
     {
         $this->urlGenerator = $urlGenerator;
-        $this->slugify = $slugify;
     }
 
     /**
@@ -34,8 +31,8 @@ final class HighlightInterviewSecondaryTeaserConverter implements ViewModelConve
 
         return ViewModel\Teaser::secondary(
             $object->getTitle(),
-            $this->urlGenerator->generate('interview', ['id' => $interview->getId(), 'slug' => $this->slugify->slugify($interview->getInterviewee()->getPerson()->getPreferredName())]),
-            $object->getAuthorLine(),
+            $this->urlGenerator->generate('interview', [$interview]),
+            null,
             $this->createContextLabel($interview),
             $object->getThumbnail() ? $this->smallTeaserImage($object) : null,
             ViewModel\TeaserFooter::forNonArticle(

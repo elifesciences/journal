@@ -2,6 +2,9 @@ imports:
   - resource: parameters.yml
   - resource: services.yml
 
+parameters:
+    honeypot_field: email_address
+
 bobthecow_mustache:
     globals:
         assetRewrite: '@elife.patterns.mustache.helpers.asset_rewrite'
@@ -33,9 +36,17 @@ framework:
     assets:
         version_strategy: irozgar_gulp_rev_versions.asset.gulp_rev_version_strategy
     cache:
+        default_redis_provider: '%redis_cache%'
         pools:
+            cache.doi:
+                adapter: cache.app
+                default_lifetime: 31536000 # 1 year
+                public: true
             cache.guzzle:
                 adapter: cache.app
+                clearer: ~
+                default_lifetime: 31536000 # 1 year
+                public: true
     csrf_protection: ~
     form: ~
     router:
@@ -52,9 +63,35 @@ framework:
 irozgar_gulp_rev_versions:
     manifest_path: '../build/rev-manifest.json'
 
+isometriks_spam:
+    honeypot:
+        field: '%honeypot_field%'
+        global: true
+        message: Please try submitting the form again.
+
 monolog:
     channels:
       - api
+
+nelmio_security:
+    clickjacking: # Deprecated by frame-ancestors
+        paths:
+            '^/.*': DENY
+    content_type:
+        nosniff: true
+    csp:
+        enforce:
+            frame-ancestors:
+              - none
+            report-uri: '%router.request_context.base_url%/nelmio/csp/report'
+    referrer_policy:
+        enabled: true
+        policies:
+          - no-referrer
+          - strict-origin-when-cross-origin
+    xss_protection:
+        enabled: true
+        mode_block: true
 
 swiftmailer:
     transport: '%mailer_transport%'
@@ -71,4 +108,5 @@ twig:
     exception_controller: AppBundle:Exception:show
     globals:
         disqus_domain: '%disqus_domain%'
+        gtm_id: '%gtm_id%'
     strict_variables: '%kernel.debug%'

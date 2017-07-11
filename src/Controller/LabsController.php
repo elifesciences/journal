@@ -3,9 +3,9 @@
 namespace eLife\Journal\Controller;
 
 use eLife\ApiSdk\Collection\Sequence;
-use eLife\ApiSdk\Model\LabsExperiment;
+use eLife\ApiSdk\Model\LabsPost;
 use eLife\Journal\Exception\EarlyResponse;
-use eLife\Journal\Form\Type\LabsExperimentFeedbackType;
+use eLife\Journal\Form\Type\LabsPostFeedbackType;
 use eLife\Journal\Helper\Callback;
 use eLife\Journal\Helper\Humanizer;
 use eLife\Journal\Helper\Paginator;
@@ -33,7 +33,7 @@ final class LabsController extends Controller
 
         $arguments = $this->defaultPageArguments($request);
 
-        $experiments = promise_for($this->get('elife.api_sdk.labs_experiments'))
+        $posts = promise_for($this->get('elife.api_sdk.labs_posts'))
             ->then(function (Sequence $sequence) use ($page, $perPage) {
                 $pagerfanta = new Pagerfanta(new SequenceAdapter($sequence, $this->willConvertTo(Teaser::class, ['variant' => 'grid'])));
                 $pagerfanta->setMaxPerPage($perPage)->setCurrentPage($page);
@@ -43,10 +43,10 @@ final class LabsController extends Controller
 
         $arguments['title'] = 'Labs';
 
-        $arguments['paginator'] = $experiments
+        $arguments['paginator'] = $posts
             ->then(function (Pagerfanta $pagerfanta) use ($request) {
                 return new Paginator(
-                    'Browse our experiments',
+                    'Browse our posts',
                     $pagerfanta,
                     function (int $page = null) use ($request) {
                         $routeParams = $request->attributes->get('_route_params');
@@ -58,7 +58,7 @@ final class LabsController extends Controller
             });
 
         $arguments['listing'] = $arguments['paginator']
-            ->then($this->willConvertTo(GridListing::class, ['heading' => 'Latest', 'type' => 'experiments']));
+            ->then($this->willConvertTo(GridListing::class, ['heading' => 'Latest', 'type' => 'posts']));
 
         if (1 === $page) {
             return $this->createFirstPage($arguments);
@@ -79,26 +79,27 @@ Learn more about <a href="'.$this->get('router')->generate('about-innovation').'
         return new Response($this->get('templating')->render('::labs.html.twig', $arguments));
     }
 
-    public function experimentAction(Request $request, int $number) : Response
+    public function postAction(Request $request, string $id) : Response
     {
-        $experiment = $this->get('elife.api_sdk.labs_experiments')
-            ->get($number)
-            ->otherwise($this->mightNotExist());
+        $post = $this->get('elife.api_sdk.labs_posts')
+            ->get($id)
+            ->otherwise($this->mightNotExist())
+            ->then($this->checkSlug($request, Callback::method('getTitle')));
 
-        $arguments = $this->defaultPageArguments($request, $experiment);
+        $arguments = $this->defaultPageArguments($request, $post);
 
-        $arguments['title'] = $experiment
+        $arguments['title'] = $post
             ->then(Callback::method('getTitle'));
 
-        $arguments['experiment'] = $experiment;
+        $arguments['post'] = $post;
 
-        $arguments['feedbackForm'] = $experiment
-            ->then(function (LabsExperiment $experiment) use ($request) {
-                $uri = $this->get('router')->generate('labs-experiment', ['number' => $experiment->getNumber()], UrlGeneratorInterface::ABSOLUTE_URL);
+        $arguments['feedbackForm'] = $post
+            ->then(function (LabsPost $post) use ($request) {
+                $uri = $this->get('router')->generate('labs-post', [$post], UrlGeneratorInterface::ABSOLUTE_URL);
 
                 /** @var FormInterface $form */
                 $form = $this->get('form.factory')
-                    ->create(LabsExperimentFeedbackType::class, null, ['action' => $uri]);
+                    ->create(LabsPostFeedbackType::class, null, ['action' => $uri]);
 
                 $form->handleRequest($request);
 
@@ -147,13 +148,13 @@ eLife Sciences Publications, Ltd is a limited liability non-profit non-stock cor
                 return ArticleSection::basic('Feedback', 2, $this->render($this->get('elife.journal.view_model.converter')->convert($form->createView())));
             });
 
-        $arguments['contentHeader'] = $arguments['experiment']
+        $arguments['contentHeader'] = $arguments['post']
             ->then($this->willConvertTo(ContentHeader::class));
 
-        $arguments['blocks'] = $arguments['experiment']
+        $arguments['blocks'] = $arguments['post']
             ->then($this->willConvertContent());
 
-        $response = new Response($this->get('templating')->render('::labs-experiment.html.twig', $arguments));
+        $response = new Response($this->get('templating')->render('::labs-post.html.twig', $arguments));
 
         $response->setPrivate();
         $response->headers->addCacheControlDirective('no-cache');

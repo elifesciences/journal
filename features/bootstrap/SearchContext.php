@@ -14,7 +14,7 @@ final class SearchContext extends Context
         'feature',
         'insight',
         'interview',
-        'labs-experiment',
+        'labs-post',
         'podcast-episode',
     ];
 
@@ -24,8 +24,8 @@ final class SearchContext extends Context
         'replication-study',
         'research-advance',
         'research-article',
-        'research-exchange',
         'retraction',
+        'scientific-correspondence',
         'short-report',
         'tools-resources',
     ];
@@ -67,7 +67,7 @@ final class SearchContext extends Context
                 'elocationId' => 'e'.$i,
                 'copyright' => [
                     'license' => 'CC-BY-4.0',
-                    'holder' => 'Author et al',
+                    'holder' => 'Author et al.',
                     'statement' => 'Creative Commons Attribution License.',
                 ],
                 'authorLine' => 'Foo Bar',
@@ -113,16 +113,16 @@ final class SearchContext extends Context
                         'insight' => 0,
                         'research-advance' => 0,
                         'research-article' => 0,
-                        'research-exchange' => 0,
                         'retraction' => 0,
                         'registered-report' => 0,
                         'replication-study' => 0,
+                        'scientific-correspondence' => 0,
                         'short-report' => 0,
                         'tools-resources' => 0,
                         'blog-article' => 0,
                         'collection' => 0,
                         'interview' => 0,
-                        'labs-experiment' => 0,
+                        'labs-post' => 0,
                         'podcast-episode' => 0,
                     ];
 
@@ -165,7 +165,7 @@ final class SearchContext extends Context
                         )
                     );
 
-                    $articleChunks = array_chunk($articlesWithKeywordAndSubjects, 6);
+                    $articleChunks = array_chunk($articlesWithKeywordAndSubjects, $chunk = 10);
 
                     if (empty($articleChunks)) {
                         $articleChunks[] = [];
@@ -175,7 +175,7 @@ final class SearchContext extends Context
                         $this->mockApiResponse(
                             new Request(
                                 'GET',
-                                sprintf($uri, $thisKeyword, $i + 1, 6),
+                                sprintf($uri, $thisKeyword, $i + 1, $chunk),
                                 ['Accept' => 'application/vnd.elife.search+json; version=1']
                             ),
                             new Response(
@@ -359,12 +359,12 @@ final class SearchContext extends Context
         $articles = $this->filterArticlesContainingKeyword($keyword, $this->articles);
 
         $this->spin(function () use ($number, $articles) {
-            $this->assertSession()->elementsCount('css', '.message-bar:contains("'.count($articles).' results found") + .listing-column-container > .listing-list > .listing-list__item', $number);
+            $this->assertSession()->elementsCount('css', '.message-bar:contains("'.count($articles).' results found") + * > .listing-list > .listing-list__item', $number);
 
             for ($i = 0; $i < $number; ++$i) {
                 $this->assertSession()->elementContains(
                     'css',
-                    '.message-bar:contains("'.count($articles).' results found") + .listing-column-container > .listing-list > .listing-list__item:nth-child('.($i + 1).')',
+                    '.message-bar:contains("'.count($articles).' results found") + * > .listing-list > .listing-list__item:nth-child('.($i + 1).')',
                     $articles[$i]['title']
                 );
             }
@@ -382,12 +382,12 @@ final class SearchContext extends Context
         $articles = $this->filterArticlesWithASubject($subjects, $this->filterArticlesContainingKeyword($keyword, $this->articles));
 
         $this->spin(function () use ($number, $articles) {
-            $this->assertSession()->elementsCount('css', '.message-bar:contains("'.count($articles).' results found") + .listing-column-container > .list-heading + .listing-list > .listing-list__item', $number);
+            $this->assertSession()->elementsCount('css', '.message-bar:contains("'.count($articles).' results found") + * > .listing-list > .listing-list__item', $number);
 
             for ($i = 0; $i < $number; ++$i) {
                 $this->assertSession()->elementContains(
                     'css',
-                    '.message-bar:contains("'.count($articles).' results found") + .listing-column-container > .list-heading + .listing-list > .listing-list__item:nth-child('.($i + 1).')',
+                    '.message-bar:contains("'.count($articles).' results found") + * > .listing-list > .listing-list__item:nth-child('.($i + 1).')',
                     $articles[$i]['title']
                 );
             }
@@ -402,12 +402,12 @@ final class SearchContext extends Context
         $articles = $this->filterArticlesByType($this->createContentTypeId($contentType), $this->filterArticlesContainingKeyword($keyword, $this->articles));
 
         $this->spin(function () use ($number, $articles) {
-            $this->assertSession()->elementsCount('css', '.message-bar:contains("'.count($articles).' results found") + .listing-column-container > .listing-list > .listing-list__item', $number);
+            $this->assertSession()->elementsCount('css', '.message-bar:contains("'.count($articles).' results found") + * > .listing-list > .listing-list__item', $number);
 
             for ($i = 0; $i < $number; ++$i) {
                 $this->assertSession()->elementContains(
                     'css',
-                    '.message-bar:contains("'.count($articles).' results found") + .listing-column-container > .listing-list > .listing-list__item:nth-child('.($i + 1).')',
+                    '.message-bar:contains("'.count($articles).' results found") + * > .listing-list > .listing-list__item:nth-child('.($i + 1).')',
                     $articles[$i]['title']
                 );
             }
@@ -422,12 +422,12 @@ final class SearchContext extends Context
         $articles = $this->filterArticlesByType($this->createContentTypeId($contentType), $this->filterArticlesWithSubject($subject, $this->filterArticlesContainingKeyword($keyword, $this->articles)));
 
         $this->spin(function () use ($number, $articles) {
-            $this->assertSession()->elementsCount('css', '.message-bar:contains("'.count($articles).' results found") + .listing-column-container > .listing-list > .listing-list__item', $number);
+            $this->assertSession()->elementsCount('css', '.message-bar:contains("'.count($articles).' results found") + * > .listing-list > .listing-list__item', $number);
 
             for ($i = 0; $i < $number; ++$i) {
                 $this->assertSession()->elementContains(
                     'css',
-                    '.message-bar:contains("'.count($articles).' results found") + .listing-column-container > .listing-list > .listing-list__item:nth-child('.($i + 1).')',
+                    '.message-bar:contains("'.count($articles).' results found") + * > .listing-list > .listing-list__item:nth-child('.($i + 1).')',
                     $articles[$i]['title']
                 );
             }

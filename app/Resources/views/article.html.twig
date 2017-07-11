@@ -65,7 +65,7 @@
         <meta name="citation_id"
               content="eLife {{ article.publishedDate|date('Y', 'UTC') }};{{ article.volume }}:{{ article.eLocationId }}">
         <meta name="citation_firstpage" content="{{ article.eLocationId }}">
-        <meta name="citation_public_url" content="{{ url('article', {volume: article.volume, id: article.id}) }}">
+        <meta name="citation_public_url" content="{{ url('article', {id: article.id}) }}">
         <meta name="citation_pdf_url" content="{{ article.pdf }}">
         <meta name="citation_doi" content="{{ article.doi }}">
         <meta name="citation_volume" content="{{ article.volume }}">
@@ -355,16 +355,6 @@
 
 {% endblock %}
 
-{% block info_bar %}
-
-    {{ info_bar('This page is incomplete.') }}
-
-    {% for infoBar in infoBars %}
-        {{ render_pattern(infoBar) }}
-    {% endfor %}
-
-{% endblock %}
-
 {% block body %}
 
     {{ render_pattern(contentHeader) }}
@@ -379,82 +369,11 @@
 
     {% endif %}
 
-    <div class="wrapper">
+    <div data-behaviour="DelegateBehaviour" data-delegate-behaviour="Popup" data-selector="a">
 
-        <div class="grid">
-
-            {% if viewSelector %}
-
-                <div class="grid__item large--two-twelfths blg-pad-top-medium">
-
-                    {{ render_pattern(viewSelector) }}
-
-                </div>
-
-            {% endif %}
-
-            {% block article_body %}
-
-                <div class="grid__item large--six-twelfths {% if not viewSelector %}push--large--two-twelfths{% endif %} blg-pad-top-medium"
-                     data-behaviour="FragmentHandler">
-
-                    {% if hasFigures %}
-
-                        {% fragment_link_rewrite figuresPath %}
-
-                        {% for part in body %}
-
-                            {{ render_pattern(part) }}
-
-                        {% endfor %}
-
-                        {% end_fragment_link_rewrite %}
-
-                    {% else %}
-
-                        {% for part in body %}
-
-                            {{ render_pattern(part) }}
-
-                        {% endfor %}
-
-                    {% endif %}
-
-                </div>
-
-                {% if relatedItem is defined and relatedItem %}
-
-                    <div class="grid__item large--four-twelfths {% if not viewSelector %}push--large--two-twelfths{% endif %} blg-pad-top-medium">
-
-                        {{ render_pattern(relatedItem) }}
-
-                    </div>
-
-                {% endif %}
-
-            {% endblock %}
-
-        </div>
+        {% block article_body %}{% endblock %}
 
     </div>
-
-    {% if listing is defined and listing %}
-
-        <div class="wrapper u-pad-top-lg">
-
-            <div class="grid">
-
-                <div class="grid__item large--eight-twelfths push--large--two-twelfths">
-
-                    {{ render_pattern(listing) }}
-
-                </div>
-
-            </div>
-
-        </div>
-
-    {% endif %}
 
 {% endblock %}
 
@@ -462,22 +381,27 @@
 
     {{ parent() }}
 
-    <script id="dsq-count-scr" src="https://{{ disqus_domain }}.disqus.com/count.js" async></script>
     <script>
-        var disqus_config = function () {
-            this.page.url = '{{ url('article', {id: article.id}) }}';
-            this.page.title = '{{ article.fullTitle|striptags }}';
-            this.page.identifier = 'article:{{ article.id }}';
-        };
-        var disqus_count = document.getElementById('disqus-comment-count');
-        disqus_count.classList.add('disqus-comment-count');
-        disqus_count.setAttribute('data-disqus-identifier', 'article:{{ article.id }}');
-        (function () {
-            var d = document, s = d.createElement('script');
-            s.src = 'https://{{ disqus_domain }}.disqus.com/embed.js';
-            s.setAttribute('data-timestamp', +new Date());
-            (d.head || d.body).appendChild(s);
-        })();
+        if (!!document.createElement('div').dataset) {
+            var disqus_config = function () {
+                this.page.url = '{{ url('article', {id: article.id}) }}';
+                this.page.title = '{{ article.fullTitle|striptags }}';
+                this.page.identifier = 'article:{{ article.id }}';
+            };
+
+            (function () {
+                var d = document, s = d.createElement('script'), c = document.getElementById('disqus-comment-count');
+                s.id = 'dsq-count-scr';
+                s.src = 'https://{{ disqus_domain }}.disqus.com/count.js';
+                s.async = true;
+                s.addEventListener('error', function () {
+                    {# Do nothing #}
+                });
+                c.classList.add('disqus-comment-count');
+                c.setAttribute('data-disqus-identifier', 'article:{{ article.id }}');
+                d.head.appendChild(s);
+            })();
+        }
     </script>
 
 {% endblock %}

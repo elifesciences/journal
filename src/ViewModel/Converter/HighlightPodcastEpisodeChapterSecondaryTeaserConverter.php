@@ -30,8 +30,8 @@ final class HighlightPodcastEpisodeChapterSecondaryTeaserConverter implements Vi
 
         return ViewModel\Teaser::secondary(
             $object->getTitle(),
-            $this->urlGenerator->generate('podcast-episode', ['number' => $model->getEpisode()->getNumber()]).'#'.$model->getChapter()->getTime(),
-            $object->getAuthorLine(),
+            $this->urlGenerator->generate('podcast-episode', [$model]),
+            null,
             $this->createContextLabel($model->getEpisode()),
             $object->getThumbnail() ? $this->smallTeaserImage($object) : null,
             ViewModel\TeaserFooter::forNonArticle(

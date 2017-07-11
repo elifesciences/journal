@@ -59,10 +59,11 @@ final class ContactControllerTest extends PageTestCase
 
         $crawler = $client->submit($crawler->selectButton('Submit')->form());
 
-        $this->assertCount(3, $crawler->filter('.info-bar'));
+        $this->assertCount(4, $crawler->filter('.info-bar'));
         $this->assertSame('Please provide your name.', trim($crawler->filter('.info-bar')->eq(0)->text()));
         $this->assertSame('Please provide your email address.', trim($crawler->filter('.info-bar')->eq(1)->text()));
-        $this->assertSame('Please let us know your question.', trim($crawler->filter('.info-bar')->eq(2)->text()));
+        $this->assertSame('Please choose a subject.', trim($crawler->filter('.info-bar')->eq(2)->text()));
+        $this->assertSame('Please let us know your question.', trim($crawler->filter('.info-bar')->eq(3)->text()));
     }
 
     /**
@@ -77,12 +78,34 @@ final class ContactControllerTest extends PageTestCase
         $form = $crawler->selectButton('Submit')->form();
         $form['contact[name]'] = 'My name';
         $form['contact[email]'] = 'foo';
+        $form['contact[subject]'] = 'Author query';
         $form['contact[question]'] = 'My question';
 
         $crawler = $client->submit($form);
 
         $this->assertCount(1, $crawler->filter('.info-bar'));
         $this->assertSame('Please provide a valid email address.', trim($crawler->filter('.info-bar')->text()));
+    }
+
+    /**
+     * @test
+     */
+    public function it_has_a_honeypot()
+    {
+        $client = static::createClient();
+
+        $crawler = $client->request('GET', $this->getUrl());
+
+        $form = $crawler->selectButton('Submit')->form();
+        $form['contact[name]'] = 'My name';
+        $form['contact[email]'] = 'foo@example.com';
+        $form['contact[subject]'] = 'Author query';
+        $form['contact[question]'] = 'My question';
+        $form["contact[{$this->getParameter('honeypot_field')}]"] = 'bar@example.com';
+        $crawler = $client->submit($form);
+
+        $this->assertCount(1, $crawler->filter('.info-bar'));
+        $this->assertSame('Please try submitting the form again.', trim($crawler->filter('.info-bar')->text()));
     }
 
     protected function getUrl() : string

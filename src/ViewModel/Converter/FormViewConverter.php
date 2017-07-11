@@ -5,18 +5,22 @@ namespace eLife\Journal\ViewModel\Converter;
 use eLife\Journal\Helper\Humanizer;
 use eLife\Journal\ViewModel\Form;
 use eLife\Journal\ViewModel\HiddenInput;
+use eLife\Journal\ViewModel\HoneypotField;
 use eLife\Patterns\PatternRenderer;
 use eLife\Patterns\ViewModel;
 use InvalidArgumentException;
+use Symfony\Component\Form\ChoiceList\View\ChoiceView;
 use Symfony\Component\Form\FormView;
 
 final class FormViewConverter implements ViewModelConverter
 {
     private $patternRenderer;
+    private $honeypotField;
 
-    public function __construct(PatternRenderer $patternRenderer)
+    public function __construct(PatternRenderer $patternRenderer, string $honeypotField = null)
     {
         $this->patternRenderer = $patternRenderer;
+        $this->honeypotField = $honeypotField;
     }
 
     /**
@@ -28,8 +32,20 @@ final class FormViewConverter implements ViewModelConverter
 
         foreach (array_reverse($object->vars['block_prefixes']) as $prefix) {
             switch ($prefix) {
+                case 'choice':
+                    $options = array_map(function (ChoiceView $choice) use ($object) {
+                        return new ViewModel\SelectOption($choice->value, $choice->label, $choice->value === $object->vars['value']);
+                    }, $object->vars['choices']);
+
+                    if (!empty($object->vars['placeholder'])) {
+                        array_unshift($options, new ViewModel\SelectOption('', $object->vars['placeholder']));
+                    }
+
+                    return new ViewModel\Select($object->vars['id'], $options, new ViewModel\FormLabel($this->getLabel($object)),
+                        $object->vars['full_name'], $object->vars['required'], $object->vars['disabled'], $this->getState($object));
+                    break;
                 case 'email':
-                    return ViewModel\TextField::emailInput(new ViewModel\FormLabel($this->getLabel($object), $object->vars['id']),
+                    return ViewModel\TextField::emailInput(new ViewModel\FormLabel($this->getLabel($object)),
                         $object->vars['id'], $object->vars['full_name'], $object->vars['attr']['placeholder'] ?? null,
                         $object->vars['required'],
                         $object->vars['disabled'], $object->vars['attr']['autofocus'] ?? false, $object->vars['value'],
@@ -52,7 +68,9 @@ final class FormViewConverter implements ViewModelConverter
                                     $children['email']['value'],
                                     $children['email']['placeholder']
                                 ),
-                                $children['submit']['text']
+                                $children['submit']['text'],
+                                [],
+                                $children[$this->honeypotField] ?? null
                             )
                         );
                     }
@@ -65,12 +83,18 @@ final class FormViewConverter implements ViewModelConverter
                         ViewModel\Button::STYLE_DEFAULT, $object->vars['id'], true, false
                     );
                 case 'text':
-                    return ViewModel\TextField::textInput(new ViewModel\FormLabel($this->getLabel($object), $object->vars['id']),
+                    $field = ViewModel\TextField::textInput(new ViewModel\FormLabel($this->getLabel($object)),
                         $object->vars['id'], $object->vars['full_name'], $object->vars['attr']['placeholder'] ?? null,
                         $object->vars['required'], $object->vars['disabled'], $object->vars['attr']['autofocus'] ?? false, $object->vars['value'],
                         $this->getState($object));
+
+                    if ($object->vars['name'] === $this->honeypotField) {
+                        return new ViewModel\Honeypot($field);
+                    }
+
+                    return $field;
                 case 'textarea':
-                    return new ViewModel\TextArea(new ViewModel\FormLabel($this->getLabel($object), $object->vars['id']),
+                    return new ViewModel\TextArea(new ViewModel\FormLabel($this->getLabel($object)),
                         $object->vars['id'],
                         $object->vars['full_name'],
                         $object->vars['value'],

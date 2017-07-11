@@ -3,7 +3,6 @@
 namespace eLife\Journal\ViewModel\Converter;
 
 use eLife\ApiSdk\Model\PodcastEpisodeChapterModel;
-use eLife\ApiSdk\Model\Subject;
 use eLife\Journal\Helper\ModelName;
 use eLife\Journal\ViewModel\Paragraph;
 use eLife\Patterns\PatternRenderer;
@@ -27,15 +26,12 @@ final class PodcastEpisodeChapterReadMoreItemConverter implements ViewModelConve
     public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
         $chapter = $object->getChapter();
-        $episode = $object->getEpisode();
 
         return new ViewModel\ReadMoreItem(
             new ViewModel\ContentHeaderReadMore(
-                sprintf('Episode %s: %s. %s', $episode->getNumber(), $chapter->getNumber(), $chapter->getTitle()),
-                $this->urlGenerator->generate('podcast-episode', ['number' => $episode->getNumber()]).'#'.$chapter->getTime(),
-                $episode->getSubjects()->map(function (Subject $subject) {
-                    return new ViewModel\Link($subject->getName());
-                })->toArray(),
+                $chapter->getLongTitle() ?? $chapter->getTitle(),
+                $this->urlGenerator->generate('podcast-episode', [$object]),
+                [],
                 null,
                 ViewModel\Meta::withLink(
                     new ViewModel\Link(

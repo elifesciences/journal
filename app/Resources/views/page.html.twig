@@ -107,6 +107,21 @@
             }
         };
 
+        {% if gtm_id %}
+        (function (w, d, s, l, i) {
+            w[l] = w[l] || [];
+            w[l].push({
+                'gtm.start': new Date().getTime(), event: 'gtm.js'
+            });
+            var f = d.getElementsByTagName(s)[0],
+                j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : '';
+            j.async = true;
+            j.src =
+                'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+            f.parentNode.insertBefore(j, f);
+        })(window, document, 'script', 'dataLayer', '{{ gtm_id }}');
+        {% endif %}
+
         (function (d) {
             var wf = d.createElement("script");
             var s = d.scripts[0];
@@ -121,7 +136,14 @@
 
 <body class="body">
 
-<div class="global-wrapper">
+{% if gtm_id %}
+    <noscript>
+        <iframe src="https://www.googletagmanager.com/ns.html?id={{ gtm_id }}" height="0" width="0"
+                style="display:none; visibility:hidden"></iframe>
+    </noscript>
+{% endif %}
+
+<div class="global-wrapper" data-behaviour="FragmentHandler Math">
 
     <div class="global-inner">
 
@@ -131,7 +153,7 @@
             </div>
         {% endif %}
 
-        {% if app.request.hasPreviousSession %}
+        {% if (app.session and app.session.started) or app.request.hasPreviousSession %}
             {% for type, messages in app.session.flashbag.all %}
                 {% for message in messages %}
                     {{ info_bar(message, type) }}
@@ -139,9 +161,11 @@
             {% endfor %}
         {% endif %}
 
-        {% block info_bar %}{% endblock %}
+        {% for infoBar in infoBars %}
+            {{ render_pattern(infoBar) }}
+        {% endfor %}
 
-        <main role="main" class="main blg-margin-bottom-large">
+        <main role="main" class="main">
 
             {% block body %}{% endblock %}
 
@@ -161,7 +185,7 @@
 
 {% block javascripts deferred %}
 {% for javascript in javascripts %}
-    <script src="{{ asset(javascript) }}"></script>
+    <script async src="{{ asset(javascript) }}"></script>
 {% endfor %}
 {% endblock %}
 

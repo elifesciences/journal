@@ -53,13 +53,13 @@ final class AnnualReportContext extends Context
             )
         );
 
-        foreach (array_chunk($annualReports, 6) as $year => $annualReportsChunk) {
+        foreach (array_chunk($annualReports, $chunk = 10) as $year => $annualReportsChunk) {
             $page = $year + 1;
 
             $this->mockApiResponse(
                 new Request(
                     'GET',
-                    "http://api.elifesciences.org/annual-reports?page=$page&per-page=6&order=desc",
+                    "http://api.elifesciences.org/annual-reports?page=$page&per-page=$chunk&order=desc",
                     ['Accept' => 'application/vnd.elife.annual-report-list+json; version=1']
                 ),
                 new Response(

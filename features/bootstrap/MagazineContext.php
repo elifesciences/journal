@@ -57,29 +57,29 @@ final class MagazineContext extends Context
                         'insight' => 0,
                         'research-advance' => 0,
                         'research-article' => 0,
-                        'research-exchange' => 0,
                         'retraction' => 0,
                         'registered-report' => 0,
                         'replication-study' => 0,
+                        'scientific-correspondence' => 0,
                         'short-report' => 0,
                         'tools-resources' => 0,
                         'blog-article' => 0,
                         'collection' => 0,
                         'interview' => $this->numberOfArticles,
-                        'labs-experiment' => 0,
+                        'labs-post' => 0,
                         'podcast-episode' => 0,
                     ],
                 ])
             )
         );
 
-        foreach (array_chunk($articles, 6) as $i => $articleChunk) {
+        foreach (array_chunk($articles, $chunk = 10) as $i => $articleChunk) {
             $page = $i + 1;
 
             $this->mockApiResponse(
                 new Request(
                     'GET',
-                    "http://api.elifesciences.org/search?for=&page=$page&per-page=6&sort=date&order=desc&type[]=editorial&type[]=insight&type[]=feature&type[]=collection&type[]=interview&type[]=podcast-episode&use-date=default",
+                    "http://api.elifesciences.org/search?for=&page=$page&per-page=$chunk&sort=date&order=desc&type[]=editorial&type[]=insight&type[]=feature&type[]=collection&type[]=interview&type[]=podcast-episode&use-date=default",
                     ['Accept' => 'application/vnd.elife.search+json; version=1']
                 ),
                 new Response(
@@ -96,16 +96,16 @@ final class MagazineContext extends Context
                             'insight' => 0,
                             'research-advance' => 0,
                             'research-article' => 0,
-                            'research-exchange' => 0,
                             'retraction' => 0,
                             'registered-report' => 0,
                             'replication-study' => 0,
+                            'scientific-correspondence' => 0,
                             'short-report' => 0,
                             'tools-resources' => 0,
                             'blog-article' => 0,
                             'collection' => 0,
                             'interview' => $this->numberOfArticles,
-                            'labs-experiment' => 0,
+                            'labs-post' => 0,
                             'podcast-episode' => 0,
                         ],
                     ])
@@ -175,13 +175,13 @@ final class MagazineContext extends Context
             ];
         }
 
-        foreach (array_chunk($episodes, 6) as $i => $episodesChunk) {
+        foreach (array_chunk($episodes, $chunk = 10) as $i => $episodesChunk) {
             $page = $i + 1;
 
             $this->mockApiResponse(
                 new Request(
                     'GET',
-                    "http://api.elifesciences.org/podcast-episodes?page=$page&per-page=6&order=desc",
+                    "http://api.elifesciences.org/podcast-episodes?page=$page&per-page=$chunk&order=desc",
                     ['Accept' => 'application/vnd.elife.podcast-episode-list+json; version=1']
                 ),
                 new Response(
@@ -257,126 +257,15 @@ final class MagazineContext extends Context
         $this->mockApiResponse(
             new Request(
                 'GET',
-                'http://api.elifesciences.org/highlights/magazine',
-                ['Accept' => 'application/vnd.elife.highlights+json; version=1']
+                'http://api.elifesciences.org/highlights/magazine?page=1&per-page=6&order=desc',
+                ['Accept' => 'application/vnd.elife.highlight-list+json; version=1']
             ),
             new Response(
                 200,
-                ['Content-Type' => 'application/vnd.elife.highlights+json; version=1'],
-                json_encode(array_fill(0, 3, [
-                    'title' => $collectionName,
-                    'image' => [
-                        'uri' => 'https://www.example.com/iiif/item-image',
-                        'alt' => '',
-                        'source' => [
-                            'mediaType' => 'image/jpeg',
-                            'uri' => 'https://www.example.com/item-image.jpg',
-                            'filename' => 'item-image.jpg',
-                        ],
-                        'size' => [
-                            'width' => 800,
-                            'height' => 600,
-                        ],
-                    ],
-                    'item' => [
-                        'type' => 'collection',
-                        'id' => $id,
-                        'title' => $collectionName,
-                        'published' => $today->format(ApiSdk::DATE_FORMAT),
-                        'image' => [
-                            'thumbnail' => [
-                                'uri' => 'https://www.example.com/iiif/item-image',
-                                'alt' => '',
-                                'source' => [
-                                    'mediaType' => 'image/jpeg',
-                                    'uri' => 'https://www.example.com/item-image.jpg',
-                                    'filename' => 'item-image.jpg',
-                                ],
-                                'size' => [
-                                    'width' => 800,
-                                    'height' => 600,
-                                ],
-                            ],
-                        ],
-                        'selectedCurator' => [
-                            'id' => '1',
-                            'type' => 'senior-editor',
-                            'name' => [
-                                'preferred' => 'Person 1',
-                                'index' => '1, Person',
-                            ],
-                        ],
-                    ],
-                ]))
-            )
-        );
-    }
-
-    /**
-     * @Given /^there is a Magazine highlight linking to the \'([^\']*)\' collection with a custom title and image$/
-     */
-    public function thereIsAMagazineHighlightLinkingToTheCollectionWithACustomTitleAndImage(string $collectionName)
-    {
-        $id = $this->createId($collectionName);
-
-        $today = (new DateTimeImmutable())->setTime(0, 0, 0);
-
-        $this->mockApiResponse(
-            new Request(
-                'GET',
-                'http://api.elifesciences.org/highlights/magazine',
-                ['Accept' => 'application/vnd.elife.highlights+json; version=1']
-            ),
-            new Response(
-                200,
-                ['Content-Type' => 'application/vnd.elife.highlights+json; version=1'],
+                ['Content-Type' => 'application/vnd.elife.highlight-list+json; version=1'],
                 json_encode([
-                        [
-                            'title' => 'Highlight',
-                            'image' => [
-                                'uri' => 'https://www.example.com/iiif/highlight-image',
-                                'alt' => '',
-                                'source' => [
-                                    'mediaType' => 'image/jpeg',
-                                    'uri' => 'https://www.example.com/highlight-image.jpg',
-                                    'filename' => 'highlight-image.jpg',
-                                ],
-                                'size' => [
-                                    'width' => 800,
-                                    'height' => 600,
-                                ],
-                            ],
-                            'item' => [
-                                'type' => 'collection',
-                                'id' => $id,
-                                'title' => $collectionName,
-                                'published' => $today->format(ApiSdk::DATE_FORMAT),
-                                'image' => [
-                                    'thumbnail' => [
-                                        'uri' => 'https://www.example.com/iiif/item-image',
-                                        'alt' => '',
-                                        'source' => [
-                                            'mediaType' => 'image/jpeg',
-                                            'uri' => 'https://www.example.com/item-image.jpg',
-                                            'filename' => 'item-image.jpg',
-                                        ],
-                                        'size' => [
-                                            'width' => 800,
-                                            'height' => 600,
-                                        ],
-                                    ],
-                                ],
-                                'selectedCurator' => [
-                                    'id' => '1',
-                                    'type' => 'senior-editor',
-                                    'name' => [
-                                        'preferred' => 'Person 1',
-                                        'index' => '1, Person',
-                                    ],
-                                ],
-                            ],
-                        ],
-                    ] + array_fill(1, 2, [
+                    'total' => 3,
+                    'items' => array_fill(0, 3, [
                         'title' => $collectionName,
                         'image' => [
                             'uri' => 'https://www.example.com/iiif/item-image',
@@ -413,15 +302,140 @@ final class MagazineContext extends Context
                             ],
                             'selectedCurator' => [
                                 'id' => '1',
-                                'type' => 'senior-editor',
+                                'type' => [
+                                    'id' => 'senior-editor',
+                                    'label' => 'Senior editor',
+                                ],
                                 'name' => [
                                     'preferred' => 'Person 1',
                                     'index' => '1, Person',
                                 ],
                             ],
                         ],
-                    ])
-                )
+                    ]),
+                ])
+            )
+        );
+    }
+
+    /**
+     * @Given /^there is a Magazine highlight linking to the \'([^\']*)\' collection with a custom title and image$/
+     */
+    public function thereIsAMagazineHighlightLinkingToTheCollectionWithACustomTitleAndImage(string $collectionName)
+    {
+        $id = $this->createId($collectionName);
+
+        $today = (new DateTimeImmutable())->setTime(0, 0, 0);
+
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/highlights/magazine?page=1&per-page=6&order=desc',
+                ['Accept' => 'application/vnd.elife.highlight-list+json; version=1']
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.highlight-list+json; version=1'],
+                json_encode([
+                    'total' => 3,
+                    'items' => [
+                            [
+                                'title' => 'Highlight',
+                                'image' => [
+                                    'uri' => 'https://www.example.com/iiif/highlight-image',
+                                    'alt' => '',
+                                    'source' => [
+                                        'mediaType' => 'image/jpeg',
+                                        'uri' => 'https://www.example.com/highlight-image.jpg',
+                                        'filename' => 'highlight-image.jpg',
+                                    ],
+                                    'size' => [
+                                        'width' => 800,
+                                        'height' => 600,
+                                    ],
+                                ],
+                                'item' => [
+                                    'type' => 'collection',
+                                    'id' => $id,
+                                    'title' => $collectionName,
+                                    'published' => $today->format(ApiSdk::DATE_FORMAT),
+                                    'image' => [
+                                        'thumbnail' => [
+                                            'uri' => 'https://www.example.com/iiif/item-image',
+                                            'alt' => '',
+                                            'source' => [
+                                                'mediaType' => 'image/jpeg',
+                                                'uri' => 'https://www.example.com/item-image.jpg',
+                                                'filename' => 'item-image.jpg',
+                                            ],
+                                            'size' => [
+                                                'width' => 800,
+                                                'height' => 600,
+                                            ],
+                                        ],
+                                    ],
+                                    'selectedCurator' => [
+                                        'id' => '1',
+                                        'type' => [
+                                            'id' => 'senior-editor',
+                                            'label' => 'Senior editor',
+                                        ],
+                                        'name' => [
+                                            'preferred' => 'Person 1',
+                                            'index' => '1, Person',
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ] + array_fill(1, 2, [
+                            'title' => $collectionName,
+                            'image' => [
+                                'uri' => 'https://www.example.com/iiif/item-image',
+                                'alt' => '',
+                                'source' => [
+                                    'mediaType' => 'image/jpeg',
+                                    'uri' => 'https://www.example.com/item-image.jpg',
+                                    'filename' => 'item-image.jpg',
+                                ],
+                                'size' => [
+                                    'width' => 800,
+                                    'height' => 600,
+                                ],
+                            ],
+                            'item' => [
+                                'type' => 'collection',
+                                'id' => $id,
+                                'title' => $collectionName,
+                                'published' => $today->format(ApiSdk::DATE_FORMAT),
+                                'image' => [
+                                    'thumbnail' => [
+                                        'uri' => 'https://www.example.com/iiif/item-image',
+                                        'alt' => '',
+                                        'source' => [
+                                            'mediaType' => 'image/jpeg',
+                                            'uri' => 'https://www.example.com/item-image.jpg',
+                                            'filename' => 'item-image.jpg',
+                                        ],
+                                        'size' => [
+                                            'width' => 800,
+                                            'height' => 600,
+                                        ],
+                                    ],
+                                ],
+                                'selectedCurator' => [
+                                    'id' => '1',
+                                    'type' => [
+                                        'id' => 'senior-editor',
+                                        'label' => 'Senior editor',
+                                    ],
+                                    'name' => [
+                                        'preferred' => 'Person 1',
+                                        'index' => '1, Person',
+                                    ],
+                                ],
+                            ],
+                        ]),
+                ])
             )
         );
     }
@@ -468,7 +482,7 @@ final class MagazineContext extends Context
             $this->mockApiResponse(
                 new Request(
                     'GET',
-                    "http://api.elifesciences.org/events?page=$page&per-page=3&type=open&order=asc",
+                    "http://api.elifesciences.org/events?page=$page&per-page=3&show=open&order=asc",
                     ['Accept' => 'application/vnd.elife.event-list+json; version=1']
                 ),
                 new Response(

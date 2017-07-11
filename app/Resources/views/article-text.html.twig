@@ -1,0 +1,103 @@
+{% extends '::article.html.twig' %}
+
+{% block article_body %}
+
+    {% embed 'grid/content.html.twig' %}
+
+        {% block navigation %}
+
+            {% if viewSelector %}
+
+                {{ render_pattern(viewSelector) }}
+
+            {% endif %}
+
+        {% endblock %}
+
+        {% block main %}
+
+            {% if hasFigures %}
+
+                {% fragment_link_rewrite figuresPath %}
+
+                {% for part in body %}
+
+                    {{ render_pattern(part) }}
+
+                {% endfor %}
+
+                {% end_fragment_link_rewrite %}
+
+            {% else %}
+
+                {% for part in body %}
+
+                    {{ render_pattern(part) }}
+
+                {% endfor %}
+
+            {% endif %}
+
+        {% endblock %}
+
+        {% block secondary %}
+
+            {% if relatedItem %}
+
+                <div class="grid-secondary-column__item">
+
+                    {{ render_pattern(relatedItem) }}
+
+                </div>
+
+            {% endif %}
+
+        {% endblock %}
+
+    {% endembed %}
+
+    {% if listing %}
+
+        {% embed 'grid/content.html.twig' with { 'isSubsequent': true } %}
+
+            {% block main %}
+
+                {{ render_pattern(listing) }}
+
+            {% endblock %}
+
+        {% endembed %}
+
+    {% endif %}
+
+{% endblock %}
+
+{% block javascripts %}
+
+    {{ parent() }}
+
+    <script>
+        (function () {
+            if (disqus_config) {
+                var d = document, s = d.createElement('script'), c = d.getElementById('comments');
+                s.src = 'https://{{ disqus_domain }}.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                s.async = true;
+                s.addEventListener('error', function () {
+                    {# Do nothing #}
+                });
+                s.addEventListener('load', function () {
+                    c.addEventListener('expandsection', function () {
+                        try {
+                            window.dispatchEvent(new Event('resize'));
+                        } catch (e) {
+                            {# Do nothing #}
+                        }
+                    })
+                });
+                d.head.appendChild(s);
+            }
+        })();
+    </script>
+
+{% endblock %}

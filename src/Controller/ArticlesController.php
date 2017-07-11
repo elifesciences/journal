@@ -2,7 +2,6 @@
 
 namespace eLife\Journal\Controller;
 
-use eLife\ApiSdk\Collection\ArraySequence;
 use eLife\ApiSdk\Collection\EmptySequence;
 use eLife\ApiSdk\Collection\PromiseSequence;
 use eLife\ApiSdk\Collection\Sequence;
@@ -18,6 +17,7 @@ use eLife\ApiSdk\Model\CitationsMetric;
 use eLife\ApiSdk\Model\CitationsMetricSource;
 use eLife\ApiSdk\Model\DataSet;
 use eLife\ApiSdk\Model\FundingAward;
+use eLife\ApiSdk\Model\HasContent;
 use eLife\ApiSdk\Model\Model;
 use eLife\ApiSdk\Model\Reviewer;
 use eLife\Journal\Helper\Callback;
@@ -76,26 +76,10 @@ final class ArticlesController extends Controller
                 }
 
                 return true;
-            })
-            ->then(function (Sequence $furtherReading) use ($arguments) {
-                if (count($furtherReading) > 0) {
-                    foreach ($arguments['relatedArticles'] as $relatedArticle) {
-                        if ($furtherReading[0] instanceof Article && $furtherReading[0]->getId() === $relatedArticle->getId()) {
-                            $relatedItem = $furtherReading[0];
-                            $furtherReading = $furtherReading->slice(1);
-                            break;
-                        }
-                    }
-                }
-
-                return [
-                    'relatedItem' => $relatedItem ?? null,
-                    'furtherReading' => $furtherReading,
-                ];
             });
 
-        $arguments['relatedItem'] = $arguments['furtherReading']->then(Callback::pick('relatedItem'));
-        $furtherReading = new PromiseSequence($arguments['furtherReading']->then(Callback::pick('furtherReading')));
+        $arguments['relatedItem'] = $arguments['furtherReading']->then(Callback::method('offsetGet', 0));
+        $furtherReading = new PromiseSequence($arguments['furtherReading']->then(Callback::method('slice', 1)));
 
         $furtherReading = $this->pagerfantaPromise(
             $furtherReading,
@@ -127,8 +111,6 @@ final class ArticlesController extends Controller
             return $this->createFirstPage($id, $arguments);
         }
 
-        unset($arguments['firstFurtherReading']);
-
         $arguments['title'] = 'Browse further reading';
 
         return $this->createSubsequentPage($request, $arguments);
@@ -136,18 +118,40 @@ final class ArticlesController extends Controller
 
     private function createFirstPage(string $id, array $arguments) : Response
     {
-        $arguments['relatedItem'] = all(['relatedItem' => $arguments['relatedItem'], 'article' => $arguments['article']])
+        $arguments['relatedItem'] = all(['relatedItem' => $arguments['relatedItem'], 'article' => $arguments['article'], 'listing' => $arguments['listing'], 'relatedArticles' => $arguments['relatedArticles']])
             ->then(function (array $parts) {
                 /** @var Article|null $relatedItem */
                 $relatedItem = $parts['relatedItem'];
                 /** @var Article $article */
                 $article = $parts['article'];
+                /** @var ViewModel\ListingReadMore|null $listing */
+                $listing = $parts['listing'];
+                /** @var Sequence|Article[] $relatedArticles */
+                $relatedArticles = $parts['relatedArticles'];
 
                 if (empty($relatedItem)) {
                     return null;
                 }
 
-                return $this->convertTo($relatedItem, ViewModel\Teaser::class, ['variant' => 'relatedItem', 'from' => $article->getType()]);
+                if ($relatedItem instanceof Article) {
+                    $unrelated = true;
+                    foreach ($relatedArticles as $relatedArticle) {
+                        if ($relatedArticle->getId() === $relatedItem->getId()) {
+                            $unrelated = false;
+                            break;
+                        }
+                    }
+                } else {
+                    $unrelated = false;
+                }
+
+                $item = $this->convertTo($relatedItem, ViewModel\Teaser::class, ['variant' => 'relatedItem', 'from' => $article->getType(), 'unrelated' => $unrelated]);
+
+                if ($listing) {
+                    return ViewModel\ListingTeasers::withSeeMore([$item], new ViewModel\SeeMoreLink(new Link('Further reading', '#listing')));
+                }
+
+                return $item;
             });
 
         $arguments['downloads'] = $this->get('elife.api_sdk.metrics')
@@ -334,7 +338,7 @@ final class ArticlesController extends Controller
                     );
                 }
 
-                if ($article instanceof ArticleVoR && $article->getEthics()->notEmpty()) {
+                if ($article->getEthics()->notEmpty()) {
                     $infoSections[] = ArticleSection::basic(
                         'Ethics',
                         3,
@@ -397,7 +401,7 @@ final class ArticlesController extends Controller
                 $copyright = '<p>'.$article->getCopyright()->getStatement().'</p>';
 
                 if ($article->getCopyright()->getHolder()) {
-                    $copyright = sprintf('<p>© %s, %s.</p>', 2011 + $article->getVolume(), $article->getCopyright()->getHolder()).$copyright;
+                    $copyright = sprintf('<p>© %s, %s</p>', 2011 + $article->getVolume(), $article->getCopyright()->getHolder()).$copyright;
                 }
 
                 $infoSections[] = ArticleSection::basic('Copyright', 3, $copyright);
@@ -425,8 +429,7 @@ final class ArticlesController extends Controller
 
                 if ($citations) {
                     $statistics[] = ViewModel\Statistic::fromNumber('Citations', $citations->getHighest()->getCitations());
-                    $statisticsExtra[] = new Paragraph('Article citation count generated by polling the highest count across the following the
-sources: '.implode(', ', array_map(function (CitationsMetricSource $source) {
+                    $statisticsExtra[] = new Paragraph('Article citation count generated by polling the highest count across the following sources: '.implode(', ', array_map(function (CitationsMetricSource $source) {
                         return sprintf('<a href="%s">%s</a>', $source->getUri(), $source->getService());
                     }, $citations->toArray())).'.');
                 }
@@ -445,7 +448,7 @@ sources: '.implode(', ', array_map(function (CitationsMetricSource $source) {
                     'comments',
                     'Comments',
                     2,
-                    '<div id="disqus_thread">'.$this->render(ViewModel\Button::link('View the discussion thread', 'https://'.$this->getParameter('disqus_domain').'.disqus.com/?url='.urlencode($this->get('router')->generate('article', ['id' => $article->getId()], UrlGeneratorInterface::ABSOLUTE_URL)))).'</div>',
+                    '<div id="disqus_thread">'.$this->render(ViewModel\Button::link('View the discussion thread', 'https://'.$this->getParameter('disqus_domain').'.disqus.com/?url='.urlencode($this->get('router')->generate('article', [$article], UrlGeneratorInterface::ABSOLUTE_URL)))).'</div>',
                     true
                 );
 
@@ -454,12 +457,11 @@ sources: '.implode(', ', array_map(function (CitationsMetricSource $source) {
 
         $arguments['viewSelector'] = $this->createViewSelector($arguments['article'], $arguments['hasFigures'], false, $arguments['history'], $arguments['body']);
 
-        $arguments['body'] = all(['article' => $arguments['article'], 'body' => $arguments['body']])
+        $arguments['body'] = all(['article' => $arguments['article'], 'body' => $arguments['body'], 'downloadLinks' => $arguments['downloadLinks']])
             ->then(function (array $parts) {
                 $article = $parts['article'];
                 $body = $parts['body'];
-
-                $downloadLinks = $this->convertTo($article, ViewModel\ArticleDownloadLinksList::class);
+                $downloadLinks = $parts['downloadLinks'];
 
                 $body[] = ArticleSection::basic('Download links', 2, $this->render($downloadLinks));
 
@@ -468,7 +470,7 @@ sources: '.implode(', ', array_map(function (CitationsMetricSource $source) {
                 return $body;
             });
 
-        return new Response($this->get('templating')->render('::article.html.twig', $arguments));
+        return new Response($this->get('templating')->render('::article-text.html.twig', $arguments));
     }
 
     public function figuresAction(Request $request, string $id, int $version = null) : Response
@@ -477,21 +479,27 @@ sources: '.implode(', ', array_map(function (CitationsMetricSource $source) {
 
         $arguments['title'] = $arguments['title']
             ->then(function (string $title) {
-                return 'Figures in '.$title;
+                return 'Figures and data in '.$title;
             });
 
         $allFigures = $this->findFigures($arguments['article']);
 
         $figures = $allFigures
-            ->filter(Callback::isInstanceOf(Block\Image::class))
+            ->filter(function (Block\Figure $figure) {
+                return $figure->getAssets()[0]->getAsset() instanceof Block\Image;
+            })
             ->map($this->willConvertTo(null, ['complete' => true]));
 
         $videos = $allFigures
-            ->filter(Callback::isInstanceOf(Block\Video::class))
+            ->filter(function (Block\Figure $figure) {
+                return $figure->getAssets()[0]->getAsset() instanceof Block\Video;
+            })
             ->map($this->willConvertTo(null, ['complete' => true]));
 
         $tables = $allFigures
-            ->filter(Callback::isInstanceOf(Block\Table::class))
+            ->filter(function (Block\Figure $figure) {
+                return $figure->getAssets()[0]->getAsset() instanceof Block\Table;
+            })
             ->map($this->willConvertTo(null, ['complete' => true]));
 
         $generateDataSets = $arguments['article']
@@ -573,9 +581,19 @@ sources: '.implode(', ', array_map(function (CitationsMetricSource $source) {
 
                 return $parts;
             })
-            ->then(Callback::mustNotBeEmpty(new NotFoundHttpException('Article version does not contain any figures')));
+            ->then(Callback::mustNotBeEmpty(new NotFoundHttpException('Article version does not contain any figures or data')));
 
         $arguments['viewSelector'] = $this->createViewSelector($arguments['article'], promise_for(true), true, $arguments['history'], $arguments['body']);
+
+        $arguments['body'] = all(['body' => $arguments['body'], 'downloadLinks' => $arguments['downloadLinks']])
+            ->then(function (array $parts) {
+                $body = $parts['body'];
+                $downloadLinks = $parts['downloadLinks'];
+
+                $body[] = ArticleSection::basic('Download links', 2, $this->render($downloadLinks));
+
+                return $body;
+            });
 
         return new Response($this->get('templating')->render('::article-figures.html.twig', $arguments));
     }
@@ -664,20 +682,20 @@ sources: '.implode(', ', array_map(function (CitationsMetricSource $source) {
                 if (count($relatedArticles) > 0) {
                     switch ($type = $article->getType()) {
                         case 'correction':
-                            $infoBars[] = new InfoBar('This is a correction notice. Read the <a href="'.$this->get('router')->generate('article', ['id' => $relatedArticles[0]->getId()]).'">corrected article</a>.', InfoBar::TYPE_CORRECTION);
+                            $infoBars[] = new InfoBar('This is a correction notice. Read the <a href="'.$this->get('router')->generate('article', [$relatedArticles[0]]).'">corrected article</a>.', InfoBar::TYPE_CORRECTION);
                             break;
                         case 'retraction':
-                            $infoBars[] = new InfoBar('This is a retraction notice. Read the <a href="'.$this->get('router')->generate('article', ['id' => $relatedArticles[0]->getId()]).'">retraction notice</a>.', InfoBar::TYPE_ATTENTION);
+                            $infoBars[] = new InfoBar('This is a retraction notice. Read the <a href="'.$this->get('router')->generate('article', [$relatedArticles[0]]).'">retraction notice</a>.', InfoBar::TYPE_ATTENTION);
                             break;
                     }
 
                     foreach ($relatedArticles as $relatedArticle) {
                         switch ($relatedArticle->getType()) {
                             case 'correction':
-                                $infoBars[] = new InfoBar('This article has been corrected. Read the <a href="'.$this->get('router')->generate('article', ['id' => $relatedArticle->getId()]).'">correction notice</a>.', InfoBar::TYPE_CORRECTION);
+                                $infoBars[] = new InfoBar('This article has been corrected. Read the <a href="'.$this->get('router')->generate('article', [$relatedArticle]).'">correction notice</a>.', InfoBar::TYPE_CORRECTION);
                                 break;
                             case 'retraction':
-                                $infoBars[] = new InfoBar('This article has been retracted. Read the <a href="'.$this->get('router')->generate('article', ['id' => $relatedArticle->getId()]).'">retraction notice</a>.', InfoBar::TYPE_ATTENTION);
+                                $infoBars[] = new InfoBar('This article has been retracted. Read the <a href="'.$this->get('router')->generate('article', [$relatedArticle]).'">retraction notice</a>.', InfoBar::TYPE_ATTENTION);
                                 break;
                         }
                     }
@@ -723,6 +741,9 @@ sources: '.implode(', ', array_map(function (CitationsMetricSource $source) {
                 return ContextualData::withCitation($article->getCiteAs(), new Doi($article->getDoi()), $metrics);
             });
 
+        $arguments['downloadLinks'] = $arguments['article']
+            ->then($this->willConvertTo(ViewModel\ArticleDownloadLinksList::class));
+
         return $arguments;
     }
 
@@ -754,7 +775,9 @@ sources: '.implode(', ', array_map(function (CitationsMetricSource $source) {
                     }, $sections)),
                     $hasFigures ? $this->generateFiguresPath($history, $article->getVersion()) : null,
                     $isFiguresPage,
-                    rtrim($this->getParameter('side_by_side_view_url'), '/').'/'.$article->getId()
+                    $article instanceof ArticleVoR
+                        ? rtrim($this->getParameter('side_by_side_view_url'), '/').'/'.$article->getId()
+                        : null
                 );
             });
     }
@@ -766,42 +789,21 @@ sources: '.implode(', ', array_map(function (CitationsMetricSource $source) {
                 return new EmptySequence();
             }
 
-            /* @var ArticleVoR $article */
-            $blocks = $article->getContent()->reverse()->toArray();
-            $figures = [];
-            while (!empty($blocks)) {
-                $block = array_shift($blocks);
-                switch (get_class($block)) {
-                    case Block\Image::class:
-                        if ($block->getImage()->getLabel()) {
-                            array_unshift($figures, $block);
-                        }
-                        break;
-                    case Block\Table::class:
-                    case Block\Video::class:
-                        if ($block->getLabel()) {
-                            array_unshift($figures, $block);
-                        }
-                        break;
-                    case Block\Box::class:
-                    case Block\Section::class:
-                        foreach ($block->getContent() as $element) {
-                            array_unshift($blocks, $element);
-                        }
-                        break;
-                    case Block\Listing::class:
-                        foreach ($block->getItems() as $listItem) {
-                            if (is_array($listItem)) {
-                                foreach ($listItem as $listItemElement) {
-                                    array_unshift($blocks, $listItemElement);
-                                }
-                            }
-                        }
-                        break;
+            $map = function ($item) use (&$map) {
+                if ($item instanceof HasContent) {
+                    return $item->getContent()->map($map)->prepend($item);
+                } elseif ($item instanceof Block\Listing) {
+                    return $item->getItems()->map($map)->prepend($item);
                 }
-            }
 
-            return new ArraySequence($figures);
+                return $item;
+            };
+
+            /* @var ArticleVoR $article */
+            return $article->getContent()->map($map)->flatten()
+                ->filter(function ($item) {
+                    return $item instanceof Block\Figure;
+                });
         }));
     }
 
@@ -814,10 +816,10 @@ sources: '.implode(', ', array_map(function (CitationsMetricSource $source) {
         }
 
         if ($forVersion === $currentVersion->getVersion()) {
-            return $this->get('router')->generate('article', ['id' => $currentVersion->getId()]);
+            return $this->get('router')->generate('article', [$currentVersion]);
         }
 
-        return $this->get('router')->generate('article-version', ['id' => $currentVersion->getId(), 'version' => $forVersion]);
+        return $this->get('router')->generate('article-version', [$currentVersion, 'version' => $forVersion]);
     }
 
     private function generateFiguresPath(ArticleHistory $history, int $forVersion = null) : string
@@ -829,9 +831,9 @@ sources: '.implode(', ', array_map(function (CitationsMetricSource $source) {
         }
 
         if ($forVersion === $currentVersion->getVersion()) {
-            return $this->get('router')->generate('article-figures', ['id' => $currentVersion->getId()]);
+            return $this->get('router')->generate('article-figures', [$currentVersion]);
         }
 
-        return $this->get('router')->generate('article-version-figures', ['id' => $currentVersion->getId(), 'version' => $forVersion]);
+        return $this->get('router')->generate('article-version-figures', [$currentVersion, 'version' => $forVersion]);
     }
 }

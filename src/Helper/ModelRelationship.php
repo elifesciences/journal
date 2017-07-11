@@ -10,6 +10,8 @@ final class ModelRelationship
     ];
 
     private static $toRelationship = [
+        'collection' => 'Part of',
+        'podcast-episode-chapter' => 'Discussed in',
         'research-advance' => 'Built upon by',
     ];
 
@@ -17,8 +19,12 @@ final class ModelRelationship
     {
     }
 
-    public static function get(string $from, string $to) : string
+    public static function get(string $from, string $to, bool $unrelated = false) : string
     {
+        if ($unrelated) {
+            return 'Of interest';
+        }
+
         return self::$fromRelationship[$from] ?? (self::$toRelationship[$to] ?? 'Related to');
     }
 }

@@ -10,6 +10,7 @@ use eLife\Journal\Pagerfanta\SequenceAdapter;
 use eLife\Patterns\ViewModel\AudioPlayer;
 use eLife\Patterns\ViewModel\ContentHeader;
 use eLife\Patterns\ViewModel\GridListing;
+use eLife\Patterns\ViewModel\ListHeading;
 use eLife\Patterns\ViewModel\ListingTeasers;
 use eLife\Patterns\ViewModel\MediaChapterListingItem;
 use eLife\Patterns\ViewModel\Teaser;
@@ -102,7 +103,7 @@ final class PodcastController extends Controller
             ->then(Callback::emptyOr(function (Sequence $articles) {
                 return ListingTeasers::basic(
                     $articles->map($this->willConvertTo(Teaser::class, ['variant' => 'secondary']))->toArray(),
-                    'Related'
+                    new ListHeading('Related')
                 );
             }));
 

@@ -63,7 +63,7 @@ final class ArticleBibTexControllerTest extends WebTestCase
                     'license' => 'CC0-1.0',
                     'statement' => 'Statement.',
                 ],
-                'authorLine' => 'Foo Bar et al',
+                'authorLine' => 'Foo Bar et al.',
                 'authors' => [
                     [
                         'type' => 'person',
@@ -114,10 +114,10 @@ EOT
                 'elocationId' => 'e00001',
                 'copyright' => [
                     'license' => 'CC-BY-4.0',
-                    'holder' => 'Author One et al',
+                    'holder' => 'Author One et al.',
                     'statement' => 'Statement.',
                 ],
-                'authorLine' => 'Author One et al',
+                'authorLine' => 'Author One et al.',
                 'authors' => [
                     [
                         'type' => 'person',
@@ -320,7 +320,7 @@ EOT
                         'license' => 'CC0-1.0',
                         'statement' => 'Statement.',
                     ],
-                    'authorLine' => 'Foo Bar et al',
+                    'authorLine' => 'Foo Bar et al.',
                     'authors' => [
                         [
                             'type' => 'person',

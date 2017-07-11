@@ -10,44 +10,46 @@
 
 {% block body %}
 
-    {{ render_pattern(searchBox) }}
+    <div class="wrapper">
 
-    <div class="wrapper u-pad-top-lg">
+        {{ render_pattern(searchBox) }}
 
-        <div class="grid">
+    </div>
 
-            <div class="listing-column-container">
+    {% embed 'grid/listing-two-column.html.twig' %}
 
-                <div class="grid__item large--eight-twelfths listing-column-main">
+        {% block main %}
 
-                    {{ render_pattern(sortControl) }}
+            {{ render_pattern(sortControl) }}
 
-                    {{ render_pattern(messageBar) }}
+            {{ render_pattern(messageBar) }}
 
-                    {% if listing %}
-                        {{ render_pattern(listing) }}
-                    {% endif %}
+            {% if listing %}
 
-                </div>
+                {{ render_pattern(listing) }}
 
-                <div class="grid__item large--four-twelfths listing-column-secondary">
+            {% endif %}
 
-                    <form method="get" action="{{ path('search') }}">
+        {% endblock %}
 
-                        <input type="hidden" name="for" value="{{ query.for }}">
-                        <input type="hidden" name="sort" value="{{ query.sort }}">
-                        <input type="hidden" name="order" value="{{ query.order }}">
+        {% block secondary %}
 
-                        {{ render_pattern(filterPanel) }}
+            <div class="grid-secondary-column__item">
 
-                    </form>
+                <form method="get" action="{{ path('search') }}">
 
-                </div>
+                    <input type="hidden" name="for" value="{{ query.for }}">
+                    <input type="hidden" name="sort" value="{{ query.sort }}">
+                    <input type="hidden" name="order" value="{{ query.order }}">
+
+                    {{ render_pattern(filterPanel) }}
+
+                </form>
 
             </div>
 
-        </div>
+        {% endblock %}
 
-    </div>
+    {% endembed %}
 
 {% endblock %}

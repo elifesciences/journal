@@ -22,12 +22,12 @@ final class EventsController extends Controller
     public function listAction(Request $request) : Response
     {
         $page = (int) $request->query->get('page', 1);
-        $perPage = 6;
+        $perPage = 10;
 
         $arguments = $this->defaultPageArguments($request);
 
         $upcomingEvents = promise_for($this->get('elife.api_sdk.events')
-            ->forType('open')
+            ->show('open')
             ->reverse())
             ->then(function (Sequence $sequence) use ($page, $perPage) {
                 $pagerfanta = new Pagerfanta(new SequenceAdapter($sequence, $this->willConvertTo(Teaser::class)));

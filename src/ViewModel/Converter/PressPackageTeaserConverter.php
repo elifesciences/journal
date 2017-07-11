@@ -2,7 +2,6 @@
 
 namespace eLife\Journal\ViewModel\Converter;
 
-use Cocur\Slugify\SlugifyInterface;
 use eLife\ApiSdk\Model\PressPackage;
 use eLife\Patterns\ViewModel;
 use eLife\Patterns\ViewModel\Link;
@@ -17,12 +16,10 @@ final class PressPackageTeaserConverter implements ViewModelConverter
     use CreatesDate;
 
     private $urlGenerator;
-    private $slugify;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator, SlugifyInterface $slugify)
+    public function __construct(UrlGeneratorInterface $urlGenerator)
     {
         $this->urlGenerator = $urlGenerator;
-        $this->slugify = $slugify;
     }
 
     /**
@@ -32,7 +29,7 @@ final class PressPackageTeaserConverter implements ViewModelConverter
     {
         return Teaser::main(
             $object->getTitle(),
-            $this->urlGenerator->generate('press-pack', ['id' => $object->getId(), 'slug' => $this->slugify->slugify($object->getTitle())]),
+            $this->urlGenerator->generate('press-pack', [$object]),
             $object->getImpactStatement(),
             null,
             $this->createContextLabel($object),

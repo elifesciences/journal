@@ -1,0 +1,26 @@
+<div class="wrapper wrapper--listing">
+
+    <div class="grid">
+
+        {% set main = block('main') %}
+        {% set secondary = (block('secondary') ?? '')|trim %}
+
+        <div class="grid__item one-whole x-large--eight-twelfths grid-column">
+
+            {{ main|raw }}
+
+        </div>
+
+        {% if secondary|length %}
+
+            <div class="grid__item one-whole x-large--four-twelfths grid-secondary-column">
+
+                {{ secondary|raw }}
+
+            </div>
+
+        {% endif %}
+
+    </div>
+
+</div>

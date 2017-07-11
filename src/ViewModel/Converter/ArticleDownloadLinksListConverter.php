@@ -29,21 +29,33 @@ final class ArticleDownloadLinksListConverter implements ViewModelConverter
         $groups = [];
 
         if ($object->getPdf()) {
-            $items = [new ViewModel\Link('Article PDF', $this->downloadLinkUriGenerator->generate(DownloadLink::fromUri($object->getPdf())))];
+            $items = [
+                new ViewModel\Link(
+                    'Article PDF',
+                    $this->downloadLinkUriGenerator->generate(DownloadLink::fromUri($object->getPdf())),
+                    false,
+                    ['article-identifier' => $object->getDoi(), 'download-type' => 'pdf-article']
+                ),
+            ];
 
             if ($object instanceof ArticleVor && $object->getFiguresPdf()) {
-                $items[] = new ViewModel\Link('Figures PDF', $this->downloadLinkUriGenerator->generate(DownloadLink::fromUri($object->getFiguresPdf())));
+                $items[] = new ViewModel\Link(
+                    'Figures PDF',
+                    $this->downloadLinkUriGenerator->generate(DownloadLink::fromUri($object->getFiguresPdf())),
+                    false,
+                    ['article-identifier' => $object->getDoi(), 'download-type' => 'pdf-figures']
+                );
             }
 
             $groups[mixed_visibility_text('', 'Downloads', '(link to download the article as PDF)')] = $items;
         }
 
-        $articleUri = $this->urlGenerator->generate('article', ['id' => $object->getId()], UrlGeneratorInterface::ABSOLUTE_URL);
+        $articleUri = $this->urlGenerator->generate('article', [$object], UrlGeneratorInterface::ABSOLUTE_URL);
 
         if ($object->getPublishedDate()) {
             $groups[mixed_visibility_text('', 'Download citations', '(links to download the citations from this article in formats compatible with various reference manager tools)')] = [
-                new ViewModel\Link('BibTeX', $this->urlGenerator->generate('article-bibtex', ['id' => $object->getId()])),
-                new ViewModel\Link('RIS', $this->urlGenerator->generate('article-ris', ['id' => $object->getId()])),
+                new ViewModel\Link('BibTeX', $this->urlGenerator->generate('article-bibtex', [$object])),
+                new ViewModel\Link('RIS', $this->urlGenerator->generate('article-ris', [$object])),
             ];
         }
 

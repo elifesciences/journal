@@ -28,4 +28,9 @@ trait AppKernelTestCase
             ->get('elife.guzzle.middleware.mock.storage')
             ->save($request, $response);
     }
+
+    final protected function getParameter(string $parameter)
+    {
+        return static::$kernel->getContainer()->getParameter($parameter);
+    }
 }

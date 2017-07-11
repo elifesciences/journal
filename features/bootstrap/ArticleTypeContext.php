@@ -36,7 +36,7 @@ final class ArticleTypeContext extends Context
                 'elocationId' => 'e'.$i,
                 'copyright' => [
                     'license' => 'CC-BY-4.0',
-                    'holder' => 'Author et al',
+                    'holder' => 'Author et al.',
                     'statement' => 'Creative Commons Attribution License.',
                 ],
                 'authorLine' => 'Foo Bar',
@@ -69,29 +69,29 @@ final class ArticleTypeContext extends Context
                         'insight' => 0,
                         'research-advance' => 0,
                         'research-article' => $this->numberOfArticles,
-                        'research-exchange' => 0,
                         'retraction' => 0,
                         'registered-report' => 0,
                         'replication-study' => 0,
+                        'scientific-correspondence' => 0,
                         'short-report' => 0,
                         'tools-resources' => 0,
                         'blog-article' => 0,
                         'collection' => 0,
                         'interview' => 0,
-                        'labs-experiment' => 0,
+                        'labs-post' => 0,
                         'podcast-episode' => 0,
                     ],
                 ])
             )
         );
 
-        foreach (array_chunk($articles, 6) as $i => $articleChunk) {
+        foreach (array_chunk($articles, $chunk = 10) as $i => $articleChunk) {
             $page = $i + 1;
 
             $this->mockApiResponse(
                 new Request(
                     'GET',
-                    "http://api.elifesciences.org/search?for=&page=$page&per-page=6&sort=date&order=desc&type[]=research-article&use-date=default",
+                    "http://api.elifesciences.org/search?for=&page=$page&per-page=$chunk&sort=date&order=desc&type[]=research-article&use-date=default",
                     ['Accept' => 'application/vnd.elife.search+json; version=1']
                 ),
                 new Response(
@@ -114,16 +114,16 @@ final class ArticleTypeContext extends Context
                             'insight' => 0,
                             'research-advance' => 0,
                             'research-article' => $this->numberOfArticles,
-                            'research-exchange' => 0,
                             'retraction' => 0,
                             'registered-report' => 0,
                             'replication-study' => 0,
+                            'scientific-correspondence' => 0,
                             'short-report' => 0,
                             'tools-resources' => 0,
                             'blog-article' => 0,
                             'collection' => 0,
                             'interview' => 0,
-                            'labs-experiment' => 0,
+                            'labs-post' => 0,
                             'podcast-episode' => 0,
                         ],
                     ])

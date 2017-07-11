@@ -30,7 +30,7 @@ final class CollectionContentHeaderConverter implements ViewModelConverter
     {
         $curatorName = $object->getSelectedCurator()->getDetails()->getPreferredName();
         if ($object->selectedCuratorEtAl()) {
-            $curatorName .= ' et al';
+            $curatorName .= ' et al.';
         }
         if ($object->getSelectedCurator()->getThumbnail()) {
             $curatorImage = new ViewModel\Picture(
@@ -48,7 +48,7 @@ final class CollectionContentHeaderConverter implements ViewModelConverter
 
         return new ViewModel\ContentHeader(
             $object->getTitle(),
-            $this->contentHeaderImageFactory->forImage($object->getBanner()), $object->getImpactStatement(), true, [], new ViewModel\Profile(new Link($curatorName), $curatorImage), null, [], [], null, null, null,
+            $this->contentHeaderImageFactory->forImage($object->getBanner()), $object->getImpactStatement(), true, [], new ViewModel\Profile(new Link($curatorName), $curatorImage), [], [], null, null, null,
             ViewModel\Meta::withLink(
                 new Link('Collection', $this->urlGenerator->generate('collections')),
                 $this->simpleDate($object, ['date' => 'published'] + $context)

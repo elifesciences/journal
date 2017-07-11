@@ -3,6 +3,7 @@
 namespace eLife\Journal\ViewModel\Converter;
 
 use eLife\ApiSdk\Model\Event;
+use eLife\Journal\Helper\LicenceUri;
 use eLife\Patterns\ViewModel;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -27,13 +28,13 @@ final class EventContentHeaderConverter implements ViewModelConverter
             false,
             [],
             null,
-            null,
             [],
             [],
             null,
             null,
             null,
-            ViewModel\Meta::withLink(new ViewModel\Link('Event', $this->urlGenerator->generate('events')), ViewModel\Date::simple($object->getStarts()))
+            ViewModel\Meta::withLink(new ViewModel\Link('Event', $this->urlGenerator->generate('events')), ViewModel\Date::simple($object->getStarts())),
+            LicenceUri::default()
         );
     }
 
