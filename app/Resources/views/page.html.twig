@@ -7,10 +7,10 @@
     <meta charset="utf-8">
 
     <style>
-        {% if critical is not defined %}
-        {% set critical = 'critical/critical-css-inline-default.css.twig' %}
+        {% if criticalCss is not defined %}
+        {% set criticalCss = 'default' %}
         {% endif %}
-        {% include critical ignore missing %}
+        {% include '@critical-css/' ~ criticalCss ~ '.css' ignore missing %}
     </style>
 
     <meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">

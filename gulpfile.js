@@ -209,7 +209,7 @@ function generateCriticalCss(page, callback) {
     return critical.generate({
         inline: false,
         base: criticalCssConfig.baseFilePath,
-        dest: `critical-css-inline-${page.name}.css.twig`,
+        dest: `${page.name}.css`,
         src: `${criticalCssConfig.baseUrl}${page.url}`,
         include: criticalCssConfig.getInclusions(page.name),
         minify: true,
@@ -295,7 +295,7 @@ const criticalCssConfig = (function () {
 
     return {
         baseUrl: 'http://localhost:8080',
-        baseFilePath: './app/Resources/views/critical',
+        baseFilePath: './build/critical-css',
         dimensions: [
             {
                 height: 400,
