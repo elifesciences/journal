@@ -172,12 +172,10 @@ gulp.task('critical-css:generate:landing', (callback) => {
 });
 
 gulp.task('critical-css:generate:home', (callback) => {
-    // TODO: carousel
     generateCriticalCss({name: 'home', url: '/'}, callback);
 });
 
 gulp.task('critical-css:generate:magazine', (callback) => {
-    // TODO: add in highlights carousel
     generateCriticalCss({name: 'magazine', url: '/magazine'}, callback);
 });
 
