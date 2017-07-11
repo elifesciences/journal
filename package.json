@@ -14,6 +14,7 @@
         "imagemin-optipng": "^5.2",
         "imagemin-svgo": "^5.2.1",
         "merge-stream": "^1.0.1",
+        "mkdirp": "^0.5.1",
         "run-sequence": "^1.2.2"
     }
 }

@@ -3,7 +3,6 @@
 const critical = require('critical');
 const del = require('del');
 const favicons = require('gulp-favicons');
-const fs = require('fs');
 const gulp = require('gulp');
 const gutil = require('gulp-util');
 const imageMin = require('gulp-imagemin');
@@ -11,12 +10,13 @@ const imageMinMozjpeg = require('imagemin-mozjpeg');
 const imageMinOptipng = require('imagemin-optipng');
 const imageMinSvgo = require('imagemin-svgo');
 const merge = require('merge-stream');
+const mkdirp = require('mkdirp');
 const responsive = require('gulp-responsive');
 const rev = require('gulp-rev-all');
 const runSequence = require('run-sequence');
 const svg2png = require('gulp-svg2png');
 
-gulp.task('default', ['assets']);
+gulp.task('default', ['assets', 'critical-css:directory']);
 
 gulp.task('favicons:clean', () => {
     return del(['./build/assets/favicons/**/*']);
@@ -150,14 +150,11 @@ gulp.task('critical-css:clean', () => {
     return del([criticalCssConfig.baseFilePath + '/**/*']);
 });
 
-gulp.task('critical-css:generate', ['critical-css:clean'], (callback) => {
+gulp.task('critical-css:directory', (callback) => {
+    mkdirp(criticalCssConfig.baseFilePath, callback);
+});
 
-    fs.stat(criticalCssConfig.baseFilePath, (err) => {
-        if (err) {
-            fs.mkdirSync(criticalCssConfig.baseFilePath);
-        }
-    });
-
+gulp.task('critical-css:generate', ['critical-css:clean', 'critical-css:directory'], (callback) => {
     runSequence('critical-css:generate:article', 'critical-css:generate:archive-month', 'critical-css:generate:grid-listing', 'critical-css:generate:home', 'critical-css:generate:landing', 'critical-css:generate:magazine', 'critical-css:generate:people', (err) => {
         if (err) {
             gutil.log(gutil.colors.red(`generateCriticalCss task failed with ${err}`));
