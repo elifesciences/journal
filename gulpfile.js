@@ -11,10 +11,12 @@ const imageMinOptipng = require('imagemin-optipng');
 const imageMinSvgo = require('imagemin-svgo');
 const merge = require('merge-stream');
 const mkdirp = require('mkdirp');
+const remoteSrc = require('gulp-remote-src');
 const responsive = require('gulp-responsive');
 const rev = require('gulp-rev-all');
-const runSequence = require('run-sequence');
 const svg2png = require('gulp-svg2png');
+const through2 = require('through2');
+const values = require('object.values');
 
 gulp.task('default', ['assets', 'critical-css:directory']);
 
@@ -154,62 +156,44 @@ gulp.task('critical-css:directory', (callback) => {
     mkdirp(criticalCssConfig.baseFilePath, callback);
 });
 
-gulp.task('critical-css:generate', ['critical-css:clean', 'critical-css:directory'], (callback) => {
-    runSequence('critical-css:generate:article', 'critical-css:generate:archive-month', 'critical-css:generate:grid-listing', 'critical-css:generate:home', 'critical-css:generate:landing', 'critical-css:generate:listing', 'critical-css:generate:magazine', 'critical-css:generate:people', 'critical-css:generate:default', callback);
+gulp.task('critical-css:generate', ['critical-css:clean', 'critical-css:directory'], () => {
+    const types = {
+        'default': '/resources',
+        'article': '/articles/00569',
+        'archive-month': '/archive/2016/march',
+        'landing': '/subjects/biochemistry',
+        'home': '/',
+        'magazine': '/magazine',
+        //'listing': '/?page=2',
+        'grid-listing': '/archive/2016',
+        'people': '/about/people'
+    };
+
+    return remoteSrc(values(types), {base: criticalCssConfig.baseUrl})
+        .on('error', gutil.log)
+        .pipe(through2.obj((file, enc, callback) => {
+            const name = Object.keys(types).find(key => types[key] === `/${file.relative}`);
+
+            critical.generate({
+                inline: false,
+                base: 'web',
+                src: file,
+                include: criticalCssConfig.getInclusions(name),
+                minify: true,
+                dimensions: criticalCssConfig.dimensions,
+                timeout: 90000
+            }, (err, data) => {
+                if (err) {
+                    return callback(err);
+                }
+                file.path = `${criticalCssConfig.baseFilePath}/${name}.css`;
+                file.contents = new Buffer(data);
+                callback(err, file);
+            });
+        }))
+        .on('error', gutil.log)
+        .pipe(gulp.dest(criticalCssConfig.baseFilePath));
 });
-
-gulp.task('critical-css:generate:article', (callback) => {
-    generateCriticalCss({name: 'article', url: '/articles/00569'}, callback);
-});
-
-gulp.task('critical-css:generate:archive-month', (callback) => {
-    generateCriticalCss({name: 'archive-month', url: '/archive/2016/march'}, callback);
-});
-
-gulp.task('critical-css:generate:landing', (callback) => {
-    // TODO: populate right hand column
-    generateCriticalCss({name: 'landing', url: '/subjects/biochemistry'}, callback);
-});
-
-gulp.task('critical-css:generate:home', (callback) => {
-    generateCriticalCss({name: 'home', url: '/'}, callback);
-});
-
-gulp.task('critical-css:generate:magazine', (callback) => {
-    generateCriticalCss({name: 'magazine', url: '/magazine'}, callback);
-});
-
-gulp.task('critical-css:generate:listing', (callback) => {
-    generateCriticalCss({name: 'listing', url: '/?page=2'}, callback);
-});
-
-gulp.task('critical-css:generate:grid-listing', (callback) => {
-    generateCriticalCss({name: 'grid-listing', url: '/archive/2016'}, callback);
-});
-
-gulp.task('critical-css:generate:people', (callback) => {
-    generateCriticalCss({name: 'people', url: '/about/people'}, callback);
-});
-
-gulp.task('critical-css:generate:default', (callback) => {
-    generateCriticalCss({name: 'default', url: '/resources'}, callback);
-});
-
-function generateCriticalCss(page, callback) {
-
-    gutil.log(gutil.colors.blue(`Generating critical CSS for ${page.name} page based on ${criticalCssConfig.baseUrl}${page.url}`));
-
-    return critical.generate({
-        inline: false,
-        base: criticalCssConfig.baseFilePath,
-        dest: `${page.name}.css`,
-        src: `${criticalCssConfig.baseUrl}${page.url}`,
-        include: criticalCssConfig.getInclusions(page.name),
-        minify: true,
-        dimensions: criticalCssConfig.dimensions,
-        timeout: 90000
-    }, callback);
-}
 
 const criticalCssConfig = (function () {
 

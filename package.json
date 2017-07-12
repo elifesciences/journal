@@ -6,6 +6,7 @@
         "gulp": "^3.9",
         "gulp-favicons": "^2.2",
         "gulp-imagemin": "^3.1",
+        "gulp-remote-src": "^0.4.2",
         "gulp-responsive": "^2.7",
         "gulp-rev-all": "^0.9",
         "gulp-svg2png": "^2.0.2",
@@ -15,6 +16,7 @@
         "imagemin-svgo": "^5.2.1",
         "merge-stream": "^1.0.1",
         "mkdirp": "^0.5.1",
-        "run-sequence": "^1.2.2"
+        "object.values": "^1.0.4",
+        "through2": "^2.0.3"
     }
 }
