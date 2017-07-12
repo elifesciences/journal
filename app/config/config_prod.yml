@@ -17,7 +17,7 @@ monolog:
             excluded_404s:
                 - ^/
         composite:
-            type: group
+            type: whatfailuregroup
             members:
                 - text
                 - json
