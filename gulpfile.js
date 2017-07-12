@@ -4,7 +4,6 @@ const critical = require('critical');
 const del = require('del');
 const favicons = require('gulp-favicons');
 const gulp = require('gulp');
-const gutil = require('gulp-util');
 const imageMin = require('gulp-imagemin');
 const imageMinMozjpeg = require('imagemin-mozjpeg');
 const imageMinOptipng = require('imagemin-optipng');
@@ -156,7 +155,7 @@ gulp.task('critical-css:directory', (callback) => {
     mkdirp(criticalCssConfig.baseFilePath, callback);
 });
 
-gulp.task('critical-css:generate', ['critical-css:clean', 'critical-css:directory'], () => {
+gulp.task('critical-css:generate', ['critical-css:clean', 'critical-css:directory'], (callback) => {
     const types = {
         'default': '/resources',
         'article': '/articles/00569',
@@ -170,7 +169,7 @@ gulp.task('critical-css:generate', ['critical-css:clean', 'critical-css:director
     };
 
     return remoteSrc(values(types), {base: criticalCssConfig.baseUrl})
-        .on('error', gutil.log)
+        .on('error', (err) => callback(err))
         .pipe(through2.obj((file, enc, callback) => {
             const name = Object.keys(types).find(key => types[key] === `/${file.relative}`);
 
@@ -191,7 +190,6 @@ gulp.task('critical-css:generate', ['critical-css:clean', 'critical-css:director
                 callback(err, file);
             });
         }))
-        .on('error', gutil.log)
         .pipe(gulp.dest(criticalCssConfig.baseFilePath));
 });
 
