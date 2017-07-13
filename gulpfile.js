@@ -157,7 +157,7 @@ gulp.task('critical-css:generate', ['critical-css:clean'], (callback) => {
         'landing': '/subjects/biochemistry',
         'home': '/',
         'magazine': '/magazine',
-        //'listing': '/?page=2',
+        'listing': '/?page=2',
         'grid-listing': '/archive/2016',
         'people': '/about/people'
     };
