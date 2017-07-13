@@ -15,8 +15,6 @@ const responsive = require('gulp-responsive');
 const request = require('request');
 const rev = require('gulp-rev-all');
 const svg2png = require('gulp-svg2png');
-const through2 = require('through2');
-const values = require('object.values');
 
 gulp.task('default', ['assets', 'critical-css:directory']);
 
