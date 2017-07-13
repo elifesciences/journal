@@ -8,7 +8,7 @@ const imageMin = require('gulp-imagemin');
 const imageMinMozjpeg = require('imagemin-mozjpeg');
 const imageMinOptipng = require('imagemin-optipng');
 const imageMinSvgo = require('imagemin-svgo');
-const mapLimit = require('async/mapLimit');
+const mapValuesLimit = require('async/mapValuesLimit');
 const merge = require('merge-stream');
 const mkdirp = require('mkdirp');
 const responsive = require('gulp-responsive');
@@ -169,8 +169,7 @@ gulp.task('critical-css:generate', ['critical-css:clean', 'critical-css:director
         'people': '/about/people'
     };
 
-    mapLimit(types, 2, (path, callback) => {
-        const name = Object.keys(types).find(key => types[key] === path);
+    mapValuesLimit(types, 1, (path, name, callback) => {
         const uri = criticalCssConfig.baseUrl + path;
 
         request(uri, (error, response, html) => {
