@@ -273,14 +273,6 @@ const criticalCssConfig = (function () {
         baseFilePath: './build/critical-css',
         dimensions: [
             {
-                height: 400,
-                width: 729
-            },
-            {
-                height: 1000,
-                width: 899
-            },
-            {
                 height: 1000,
                 width: 1199
             },
