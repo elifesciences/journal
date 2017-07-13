@@ -12,6 +12,7 @@ const mapLimit = require('async/mapLimit');
 const merge = require('merge-stream');
 const mkdirp = require('mkdirp');
 const responsive = require('gulp-responsive');
+const request = require('request');
 const rev = require('gulp-rev-all');
 const svg2png = require('gulp-svg2png');
 const through2 = require('through2');
@@ -170,17 +171,27 @@ gulp.task('critical-css:generate', ['critical-css:clean', 'critical-css:director
 
     mapLimit(types, 2, (path, callback) => {
         const name = Object.keys(types).find(key => types[key] === path);
+        const uri = criticalCssConfig.baseUrl + path;
 
-        critical.generate({
-            inline: false,
-            base: criticalCssConfig.baseFilePath,
-            dest: `${name}.css`,
-            src: `${criticalCssConfig.baseUrl}${path}`,
-            include: criticalCssConfig.getInclusions(name),
-            minify: true,
-            dimensions: criticalCssConfig.dimensions,
-            timeout: 90000
-        }, callback)
+        request(uri, (error, response, html) => {
+            if (error) {
+                return callback(error);
+            } else if (response.statusCode < 200 || response.statusCode >= 300) {
+                return callback(new Error(`Request ${uri} failed with status code ${response.statusCode}`));
+            }
+
+            critical.generate({
+                inline: false,
+                base: `${criticalCssConfig.baseFilePath}`,
+                dest: `${name}.css`,
+                html: html,
+                src: uri,
+                include: criticalCssConfig.getInclusions(name),
+                minify: true,
+                dimensions: criticalCssConfig.dimensions,
+                timeout: 90000
+            }, callback)
+        });
     }, callback);
 });
 
