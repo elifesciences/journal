@@ -10,13 +10,12 @@ const imageMinMozjpeg = require('imagemin-mozjpeg');
 const imageMinOptipng = require('imagemin-optipng');
 const imageMinSvgo = require('imagemin-svgo');
 const merge = require('merge-stream');
-const mkdirp = require('mkdirp');
 const responsive = require('gulp-responsive');
 const request = require('request');
 const rev = require('gulp-rev-all');
 const svg2png = require('gulp-svg2png');
 
-gulp.task('default', ['assets', 'critical-css:directory']);
+gulp.task('default', ['assets']);
 
 gulp.task('favicons:clean', () => {
     return del(['./build/assets/favicons/**/*']);
@@ -150,11 +149,7 @@ gulp.task('critical-css:clean', () => {
     return del([criticalCssConfig.baseFilePath + '/**/*']);
 });
 
-gulp.task('critical-css:directory', (callback) => {
-    mkdirp(criticalCssConfig.baseFilePath, callback);
-});
-
-gulp.task('critical-css:generate', ['critical-css:clean', 'critical-css:directory'], (callback) => {
+gulp.task('critical-css:generate', ['critical-css:clean'], (callback) => {
     const types = {
         'default': '/resources',
         'article': '/articles/00569',
