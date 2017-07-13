@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "fd7e8f5dc4f20ee8f104b5e0b549edb9",
+    "content-hash": "41b59f3e794d1eff3cad62fcb02add6f",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -855,16 +855,16 @@
         },
         {
             "name": "elife/api-sdk",
-            "version": "dev-master",
+            "version": "dev-attribution",
             "source": {
                 "type": "git",
-                "url": "https://github.com/elifesciences/api-sdk-php.git",
-                "reference": "28cea31150b48d0b8b1ed9851d6fc0a974df8a54"
+                "url": "https://github.com/thewilkybarkid/api-sdk-php.git",
+                "reference": "6f20d676451006347a2d9f126678804e4cd07616"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/28cea31150b48d0b8b1ed9851d6fc0a974df8a54",
-                "reference": "28cea31150b48d0b8b1ed9851d6fc0a974df8a54",
+                "url": "https://api.github.com/repos/thewilkybarkid/api-sdk-php/zipball/6f20d676451006347a2d9f126678804e4cd07616",
+                "reference": "6f20d676451006347a2d9f126678804e4cd07616",
                 "shasum": ""
             },
             "require": {
@@ -894,12 +894,20 @@
                     "eLife\\ApiSdk\\": "./src"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
+            "autoload-dev": {
+                "psr-4": {
+                    "Csa\\Bundle\\GuzzleBundle\\": "./vendor-extra/Csa/GuzzleBundle",
+                    "test\\eLife\\ApiSdk\\": "./test"
+                }
+            },
             "license": [
                 "MIT"
             ],
             "description": "eLife Sciences API SDK",
-            "time": "2017-06-23 09:22:31"
+            "support": {
+                "source": "https://github.com/thewilkybarkid/api-sdk-php/tree/attribution"
+            },
+            "time": "2017-07-05 09:56:16"
         },
         {
             "name": "elife/patterns",
