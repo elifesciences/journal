@@ -8,9 +8,9 @@ const imageMin = require('gulp-imagemin');
 const imageMinMozjpeg = require('imagemin-mozjpeg');
 const imageMinOptipng = require('imagemin-optipng');
 const imageMinSvgo = require('imagemin-svgo');
+const mapLimit = require('async/mapLimit');
 const merge = require('merge-stream');
 const mkdirp = require('mkdirp');
-const remoteSrc = require('gulp-remote-src');
 const responsive = require('gulp-responsive');
 const rev = require('gulp-rev-all');
 const svg2png = require('gulp-svg2png');
@@ -168,29 +168,20 @@ gulp.task('critical-css:generate', ['critical-css:clean', 'critical-css:director
         'people': '/about/people'
     };
 
-    return remoteSrc(values(types), {base: criticalCssConfig.baseUrl})
-        .on('error', (err) => callback(err))
-        .pipe(through2.obj((file, enc, callback) => {
-            const name = Object.keys(types).find(key => types[key] === `/${file.relative}`);
+    mapLimit(types, 2, (path, callback) => {
+        const name = Object.keys(types).find(key => types[key] === path);
 
-            critical.generate({
-                inline: false,
-                base: 'web',
-                src: file,
-                include: criticalCssConfig.getInclusions(name),
-                minify: true,
-                dimensions: criticalCssConfig.dimensions,
-                timeout: 90000
-            }, (err, data) => {
-                if (err) {
-                    return callback(err);
-                }
-                file.path = `${criticalCssConfig.baseFilePath}/${name}.css`;
-                file.contents = new Buffer(data);
-                callback(err, file);
-            });
-        }))
-        .pipe(gulp.dest(criticalCssConfig.baseFilePath));
+        critical.generate({
+            inline: false,
+            base: criticalCssConfig.baseFilePath,
+            dest: `${name}.css`,
+            src: `${criticalCssConfig.baseUrl}${path}`,
+            include: criticalCssConfig.getInclusions(name),
+            minify: true,
+            dimensions: criticalCssConfig.dimensions,
+            timeout: 90000
+        }, callback)
+    }, callback);
 });
 
 const criticalCssConfig = (function () {
