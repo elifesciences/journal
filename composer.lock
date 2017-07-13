@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "424f3fa45712df349af327f61f9bfc23",
+    "content-hash": "fd7e8f5dc4f20ee8f104b5e0b549edb9",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -1446,6 +1446,9 @@
             "extra": {
                 "branch-alias": {
                     "dev-master": "2.0.x-dev"
+                },
+                "patches_applied": {
+                    "Fix WhatFailureGroupHandler::handleBatch when the handler has processors": "https://github.com/Seldaek/monolog/pull/1022.patch"
                 }
             },
             "autoload": {

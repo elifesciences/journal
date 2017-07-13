@@ -97,20 +97,6 @@ services:
         class: eLife\ApiSdk\Client\Subjects
         factory: ['@elife.api_sdk', subjects]
 
-    elife.journal.cache.http:
-        class: Symfony\Component\Cache\Adapter\FilesystemAdapter
-        public: false
-        arguments:
-          - ''
-          - 0
-          - '%kernel.cache_dir%/http-cache'
-        tags:
-          - name: cache.pool
-          - name: monolog.logger
-            channel: cache
-        calls:
-          - ['setLogger', ['@logger']]
-
     elife.journal.goutte:
         class: Goutte\Client
         calls:

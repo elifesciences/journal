@@ -12,10 +12,6 @@ parameters:
         Check 2: bar
 
 framework:
-    cache:
-        pools:
-            cache.guzzle:
-                public: true
     profiler:
         collect: false
         enabled: true

@@ -5,8 +5,7 @@ parameters:
     side_by_side_view_url: https://lens.elifesciences.org/
     secret: ThisTokenIsNotSoSecretChangeIt
     session_name: journal
-    redis_cache: redis://localhost
-    redis_http_cache: '%redis_cache%'
+    redis_cache: ~
     mailer_transport: smtp
     mailer_host: 127.0.0.1
     mailer_port: ~
