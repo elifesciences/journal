@@ -209,7 +209,8 @@ const criticalCssConfig = (function () {
         return {
             article: global.concat(
                 /\.content-header__item_toggle--.*$/,
-                '.view-selector__list-item--side-by-side',
+                /\.contextual-data.*/,
+                /\.view-selector.*/,
                 '.see-more-link'
             ),
 
