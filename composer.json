@@ -75,6 +75,7 @@
         "symfony-var-dir": "var",
         "symfony-web-dir": "web",
         "symfony-assets-install": "relative",
+        "composer-exit-on-patch-failure": true,
         "patches": {
             "bobthecow/mustache-bundle": {
                 "Remove superfluous argument": "https://github.com/bobthecow/BobthecowMustacheBundle/pull/9.patch"
