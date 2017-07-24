@@ -109,4 +109,6 @@ twig:
     globals:
         disqus_domain: '%disqus_domain%'
         gtm_id: '%gtm_id%'
+    paths:
+        '%kernel.root_dir%/../build/critical-css': 'critical-css'
     strict_variables: '%kernel.debug%'

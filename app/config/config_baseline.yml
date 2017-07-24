@@ -1,11 +1,9 @@
 imports:
   - resource: config.yml
-  - resource: services_prod.yml
 
 framework:
-    cache:
-        app: cache.adapter.redis
-        default_redis_provider: '%redis_cache%'
+    session:
+        cookie_secure: true
     trusted_hosts: '%trusted_hosts%'
 
 monolog:
@@ -19,10 +17,11 @@ monolog:
             excluded_404s:
                 - ^/
         composite:
-            type: group
+            type: whatfailuregroup
             members:
                 - text
                 - json
+                - newrelic
         text:
             type: stream
             path: '%kernel.logs_dir%/%kernel.environment%.txt.log'
@@ -33,3 +32,19 @@ monolog:
             path: '%kernel.logs_dir%/%kernel.environment%.json.log'
             level: debug
             formatter: monolog.formatter.json
+        newrelic:
+            type: newrelic
+            level: error
+
+nelmio_security:
+    csp:
+        enforce:
+            default-src:
+              - 'https:'
+              - unsafe-inline
+    forced_ssl:
+        whitelist:
+          - ^/ # Hack to disable redirect.
+        hsts_max_age: 31536000 # 1 year
+        hsts_subdomains: true
+        hsts_preload: true

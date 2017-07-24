@@ -18,11 +18,15 @@
 
         {% block secondary %}
 
-            <div class="grid-secondary-column__item">
+            {% if relatedContent %}
 
-                {{ render_pattern(relatedContent) }}
+                <div class="grid-secondary-column__item">
 
-            </div>
+                    {{ render_pattern(relatedContent) }}
+
+                </div>
+
+            {% endif %}
 
         {% endblock %}
 
