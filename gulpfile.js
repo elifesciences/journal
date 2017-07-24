@@ -1,6 +1,8 @@
 'use strict';
 
+const critical = require('critical');
 const del = require('del');
+const eachOfLimit = require('async/eachOfLimit');
 const favicons = require('gulp-favicons');
 const gulp = require('gulp');
 const imageMin = require('gulp-imagemin');
@@ -9,6 +11,7 @@ const imageMinOptipng = require('imagemin-optipng');
 const imageMinSvgo = require('imagemin-svgo');
 const merge = require('merge-stream');
 const responsive = require('gulp-responsive');
+const request = require('request');
 const rev = require('gulp-rev-all');
 const svg2png = require('gulp-svg2png');
 
@@ -141,3 +144,160 @@ gulp.task('assets', ['assets:clean', 'favicons', 'images', 'patterns'], () => {
         .pipe(rev.manifestFile())
         .pipe(gulp.dest('./build'));
 });
+
+gulp.task('critical-css:clean', () => {
+    return del([criticalCssConfig.baseFilePath + '/**/*']);
+});
+
+gulp.task('critical-css:generate', ['critical-css:clean'], (callback) => {
+    const types = {
+        'default': '/resources',
+        'article': '/articles/00569',
+        'archive-month': '/archive/2016/march',
+        'landing': '/subjects/biochemistry',
+        'home': '/',
+        'magazine': '/magazine',
+        'listing': '/?page=2',
+        'grid-listing': '/archive/2016',
+        'people': '/about/people'
+    };
+
+    eachOfLimit(types, 1, (path, name, callback) => {
+        const uri = criticalCssConfig.baseUrl + path;
+
+        request(uri, (error, response, html) => {
+            if (error) {
+                return callback(error);
+            } else if (response.statusCode < 200 || response.statusCode >= 300) {
+                return callback(new Error(`Request ${uri} failed with status code ${response.statusCode}`));
+            }
+
+            critical.generate({
+                inline: false,
+                base: `${criticalCssConfig.baseFilePath}`,
+                dest: `${name}.css`,
+                html: html,
+                src: uri,
+                include: criticalCssConfig.getInclusions(name),
+                minify: true,
+                dimensions: criticalCssConfig.dimensions,
+                timeout: 90000
+            }, callback)
+        });
+    }, callback);
+});
+
+const criticalCssConfig = (function () {
+
+    const explicitlyIncludedSelectors = (function () {
+        const global = [
+            /.*\.main-menu(--js)?.*/,
+            'p',
+            /\.content-header.*/,
+            /\.meta.*/,
+            '.wrapper.wrapper--content',
+        ];
+        const listing = [/\.teaser__img--.*$/];
+        const highlights = [/.*\.highlights.*$/];
+        const listingMenu = [
+            '.section-listing-wrapper .list-heading',
+            '.section-listing__list_item',
+            /.*\.section-listing.*/,
+            '.js .to-top-link',
+        ];
+
+        return {
+            article: global.concat(
+                /\.content-header__item_toggle--.*$/,
+                /\.contextual-data.*/,
+                /\.view-selector.*/,
+                'h2',
+                '.article-section__header_text',
+                '.article-section--first .article-section__header:first-child h2',
+                '.doi a.doi__link',
+                '.doi--article-section a.doi__link',
+                '.doi--article-section',
+                '.grid',
+                '.grid:before',
+                '.grid:after',
+                '.grid-column',
+                '.grid__item',
+                '.grid-secondary-column__item',
+                '.large--eight-twelfths',
+                '.large--ten-twelfths',
+                '.x-large--two-twelfths',
+                '.x-large--seven-twelfths',
+                '.x-large--eight-twelfths',
+                '.push--large--one-twelfth',
+                '.push--x-large--two-twelfths',
+                '.push--x-large--zero',
+                '.see-more-link'
+            ),
+
+            "archive-month": global.concat(
+                highlights,
+                /\.teaser.*$/
+            ),
+
+            home: global.concat(
+                listing,
+                listingMenu,
+                /.*\.carousel.*/,
+                '.carousel__control--toggler',
+                '.carousel__items',
+                /\.carousel__item.*/
+            ),
+
+            landing: global.concat(
+                listing,
+                /.content-header.wrapper.*/,
+                '.section-listing-link'
+            ),
+
+            magazine: global.concat(
+                listing,
+                listingMenu,
+                highlights,
+                /^\.audio-player.*$/
+            ),
+
+            listing: global.concat(listing),
+
+            'grid-listing': global.concat(
+                /.*\.grid-listing.*/,
+                /.*\.block-link--grid-listing.*/,
+                '.teaser__header_text',
+                '.teaser__header_text_link'
+            ),
+
+            people: global.concat(
+                '.article-section__header_text',
+                '.list--bullet a'
+            ),
+
+            default: global.concat(
+                '.article-section__header_text',
+                '.list--bullet a'
+            )
+        };
+    }());
+
+    return {
+        baseUrl: 'http://localhost:8080',
+        baseFilePath: './build/critical-css',
+        dimensions: [
+            {
+                height: 1000,
+                width: 1199
+            },
+            {
+                height: 1000,
+                width: 1201
+            }
+        ],
+        getInclusions: (pageName) => {
+            return explicitlyIncludedSelectors[pageName];
+        }
+    };
+
+}());

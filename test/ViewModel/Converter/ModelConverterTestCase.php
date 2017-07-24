@@ -90,6 +90,9 @@ abstract class ModelConverterTestCase extends PHPUnit_Framework_TestCase
         $this->assertInternalType('array', $this->context);
 
         foreach ($this->models as $originalModel) {
+            $model = $originalModel;
+            $list = false;
+            $version = 1;
             switch ($originalModel) {
                 case 'cover':
                     $model = 'cover-list';
@@ -113,12 +116,12 @@ abstract class ModelConverterTestCase extends PHPUnit_Framework_TestCase
                     $type = true;
                     $list = true;
                     break;
-                default:
-                    $model = $originalModel;
-                    $list = false;
+                case 'press-package':
+                    $version = 2;
+                    break;
             }
 
-            $samples = Finder::create()->files()->in(ComposerLocator::getPath('elife/api')."/dist/samples/{$model}/v1");
+            $samples = Finder::create()->files()->in(ComposerLocator::getPath('elife/api')."/dist/samples/{$model}/v{$version}");
 
             foreach ($samples as $sample) {
                 $name = $model.'/v1/'.$sample->getBasename();
