@@ -28,4 +28,24 @@ final class HumanizerTest extends PHPUnit_Framework_TestCase
             'foo-bar' => 'Foo bar',
         ]);
     }
+
+    /**
+     * @test
+     * @dataProvider listProvider
+     */
+    public function it_prettifies_lists(string $expected, array $input)
+    {
+        $this->assertSame($expected, Humanizer::prettyList(...$input));
+    }
+
+    public function listProvider() : Traversable
+    {
+        return $this->arrayProvider([
+            '' => [],
+            'foo' => ['foo'],
+            'foo and bar' => ['foo', 'bar'],
+            'foo, bar and baz' => ['foo', 'bar', 'baz'],
+            'foo, bar, baz and qux' => ['foo', 'bar', 'baz', 'qux'],
+        ]);
+    }
 }
