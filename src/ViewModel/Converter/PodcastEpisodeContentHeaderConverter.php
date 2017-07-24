@@ -31,7 +31,7 @@ final class PodcastEpisodeContentHeaderConverter implements ViewModelConverter
     /**
      * @param PodcastEpisode $object
      */
-    public function convert($object, string $viewModel = null, array $context = []): ViewModel
+    public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
         return new ViewModel\ContentHeader(
             $object->getTitle(),
@@ -42,7 +42,7 @@ final class PodcastEpisodeContentHeaderConverter implements ViewModelConverter
         );
     }
 
-    public function supports($object, string $viewModel = null, array $context = []): bool
+    public function supports($object, string $viewModel = null, array $context = []) : bool
     {
         return $object instanceof PodcastEpisode && ViewModel\ContentHeader::class === $viewModel;
     }

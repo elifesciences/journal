@@ -66,7 +66,7 @@ final class MagazineController extends Controller
         return $this->createSubsequentPage($request, $arguments);
     }
 
-    private function createFirstPage(Request $request, array $arguments): Response
+    private function createFirstPage(Request $request, array $arguments) : Response
     {
         $arguments['contentHeader'] = $this->get('elife.api_sdk.podcast_episodes')
             ->slice(0, 1)

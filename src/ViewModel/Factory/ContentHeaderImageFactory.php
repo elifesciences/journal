@@ -19,7 +19,7 @@ final class ContentHeaderImageFactory
         $this->packages = $packages;
     }
 
-    public function forLocalFile(string $filename): ViewModel\ContentHeaderImage
+    public function forLocalFile(string $filename) : ViewModel\ContentHeaderImage
     {
         return new ViewModel\ContentHeaderImage(
             $this->pictureForLocalFile($filename),
@@ -27,28 +27,28 @@ final class ContentHeaderImageFactory
         );
     }
 
-    public function forImage(Image $image): ViewModel\ContentHeaderImage
+    public function forImage(Image $image) : ViewModel\ContentHeaderImage
     {
         return new ViewModel\ContentHeaderImage(
             $this->pictureForImage($image)
         );
     }
 
-    public function pictureForLocalFile(string $filename): ViewModel\Picture
+    public function pictureForLocalFile(string $filename) : ViewModel\Picture
     {
         return $this->create(function (int $width, int $height) use ($filename) {
             return $this->packages->getUrl("assets/images/banners/{$filename}-{$width}x{$height}.jpg");
         });
     }
 
-    public function pictureForImage(Image $image): ViewModel\Picture
+    public function pictureForImage(Image $image) : ViewModel\Picture
     {
         return $this->create(function (int $width, int $height) use ($image) {
             return $this->iiifUri($image, $width, $height);
         });
     }
 
-    private function create(callable $callback): ViewModel\Picture
+    private function create(callable $callback) : ViewModel\Picture
     {
         $sources = [];
 
@@ -73,7 +73,7 @@ final class ContentHeaderImageFactory
         );
     }
 
-    private function createSrcset(callable $callback, int $width, int $height): array
+    private function createSrcset(callable $callback, int $width, int $height) : array
     {
         return array_reduce(range(2, 1), function (array $carry, int $factor) use ($callback, $width, $height) {
             try {
@@ -86,7 +86,7 @@ final class ContentHeaderImageFactory
         }, []);
     }
 
-    private function srcsetToString(array $srcset): string
+    private function srcsetToString(array $srcset) : string
     {
         return implode(', ', array_map(function (int $width, string $uri) {
             return "{$uri} {$width}w";
