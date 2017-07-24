@@ -66,19 +66,31 @@ final class MagazineController extends Controller
         return $this->createSubsequentPage($request, $arguments);
     }
 
-    private function createFirstPage(Request $request, array $arguments) : Response
+    private function createFirstPage(Request $request, array $arguments): Response
     {
-        $arguments['contentHeader'] = new ContentHeader(
-            'Magazine',
-            $this->get('elife.journal.view_model.factory.content_header_image')->forLocalFile('magazine'),
-            'Highlighting the latest research and giving a voice to scientists'
-        );
-
-        $arguments['audio_player'] = $this->get('elife.api_sdk.podcast_episodes')
+        $arguments['contentHeader'] = $this->get('elife.api_sdk.podcast_episodes')
             ->slice(0, 1)
             ->then(Callback::method('offsetGet', 0))
             ->then(Callback::emptyOr($this->willConvertTo(AudioPlayer::class, ['link' => true])))
-            ->otherwise($this->softFailure('Failed to load podcast episode audio player'));
+            ->otherwise($this->softFailure('Failed to load podcast episode audio player'))
+            ->then(function (AudioPlayer $audioPlayer = null) {
+                return new ContentHeader(
+                    'Magazine',
+                    $this->get('elife.journal.view_model.factory.content_header_image')->forLocalFile('magazine'),
+                    'Highlighting the latest research and giving a voice to scientists',
+                    false,
+                    [],
+                    null,
+                    [],
+                    [],
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    $audioPlayer
+                );
+            });
 
         $arguments['highlights'] = $this->get('elife.api_sdk.highlights')
             ->get('magazine')

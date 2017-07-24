@@ -7,7 +7,6 @@ use eLife\ApiSdk\Model\PodcastEpisode;
 use eLife\Journal\Helper\Callback;
 use eLife\Journal\Helper\Paginator;
 use eLife\Journal\Pagerfanta\SequenceAdapter;
-use eLife\Patterns\ViewModel\AudioPlayer;
 use eLife\Patterns\ViewModel\ContentHeader;
 use eLife\Patterns\ViewModel\GridListing;
 use eLife\Patterns\ViewModel\ListHeading;
@@ -84,9 +83,6 @@ final class PodcastController extends Controller
 
         $arguments['contentHeader'] = $arguments['episode']
             ->then($this->willConvertTo(ContentHeader::class));
-
-        $arguments['audioPlayer'] = $arguments['episode']
-            ->then($this->willConvertTo(AudioPlayer::class));
 
         $arguments['chapters'] = $arguments['episode']
             ->then(function (PodcastEpisode $episode) {

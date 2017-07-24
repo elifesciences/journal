@@ -40,7 +40,7 @@ final class CoverBlogArticleCarouselItemConverter implements ViewModelConverter
                 new ViewModel\Link('Inside eLife', $this->urlGenerator->generate('inside-elife')),
                 $this->simpleDate($blogArticle, $context)
             ),
-            $this->contentHeaderImageFactory->forImage($object->getBanner())
+            $this->contentHeaderImageFactory->pictureForImage($object->getBanner())
         );
     }
 

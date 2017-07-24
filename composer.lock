@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "1c72567f85f5b6bc3846de69f9865349",
+    "content-hash": "51cfa4b10efc78dcd5739eb9b8bf450d",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -903,16 +903,16 @@
         },
         {
             "name": "elife/patterns",
-            "version": "dev-master",
+            "version": "dev-content-header-audio-player-credit",
             "source": {
                 "type": "git",
-                "url": "https://github.com/elifesciences/patterns-php.git",
-                "reference": "8905be4f6975a18552fb2b3b7a6dba7edabbb6a8"
+                "url": "https://github.com/thewilkybarkid/patterns-php.git",
+                "reference": "958a4b9408ab6ee41da71e99359defb162762767"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/8905be4f6975a18552fb2b3b7a6dba7edabbb6a8",
-                "reference": "8905be4f6975a18552fb2b3b7a6dba7edabbb6a8",
+                "url": "https://api.github.com/repos/thewilkybarkid/patterns-php/zipball/958a4b9408ab6ee41da71e99359defb162762767",
+                "reference": "958a4b9408ab6ee41da71e99359defb162762767",
                 "shasum": ""
             },
             "require": {
@@ -940,12 +940,19 @@
                     "eLife\\Patterns\\": "./src"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
+            "autoload-dev": {
+                "psr-4": {
+                    "tests\\eLife\\Patterns\\": "./tests/src"
+                }
+            },
             "license": [
                 "MIT"
             ],
             "description": "eLife patterns",
-            "time": "2017-07-19 11:25:53"
+            "support": {
+                "source": "https://github.com/thewilkybarkid/patterns-php/tree/content-header-audio-player-credit"
+            },
+            "time": "2017-07-24 09:16:24"
         },
         {
             "name": "fabpot/goutte",

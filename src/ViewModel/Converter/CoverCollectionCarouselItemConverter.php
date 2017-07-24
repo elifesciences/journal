@@ -37,7 +37,7 @@ final class CoverCollectionCarouselItemConverter implements ViewModelConverter
             new ViewModel\Link($object->getTitle(), $this->urlGenerator->generate('collection', [$collection])),
             'Read collection',
             ViewModel\Meta::withLink(new ViewModel\Link('Collection', $this->urlGenerator->generate('collections')), $this->simpleDate($collection, $context)),
-            $this->contentHeaderImageFactory->forImage($object->getBanner())
+            $this->contentHeaderImageFactory->pictureForImage($object->getBanner())
         );
     }
 

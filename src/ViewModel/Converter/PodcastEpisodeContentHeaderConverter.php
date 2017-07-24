@@ -11,15 +11,18 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 final class PodcastEpisodeContentHeaderConverter implements ViewModelConverter
 {
+    private $viewModelConverter;
     private $urlGenerator;
     private $downloadLinkUriGenerator;
     private $contentHeaderImageFactory;
 
     public function __construct(
+        ViewModelConverter $viewModelConverter,
         UrlGeneratorInterface $urlGenerator,
         DownloadLinkUriGenerator $downloadLinkUriGenerator,
         ContentHeaderImageFactory $contentHeaderImageFactory
     ) {
+        $this->viewModelConverter = $viewModelConverter;
         $this->urlGenerator = $urlGenerator;
         $this->downloadLinkUriGenerator = $downloadLinkUriGenerator;
         $this->contentHeaderImageFactory = $contentHeaderImageFactory;
@@ -28,17 +31,18 @@ final class PodcastEpisodeContentHeaderConverter implements ViewModelConverter
     /**
      * @param PodcastEpisode $object
      */
-    public function convert($object, string $viewModel = null, array $context = []) : ViewModel
+    public function convert($object, string $viewModel = null, array $context = []): ViewModel
     {
         return new ViewModel\ContentHeader(
             $object->getTitle(),
             $this->contentHeaderImageFactory->forImage($object->getBanner()), $object->getImpactStatement(), false, [], null, [], [],
             $this->downloadLinkUriGenerator->generate(DownloadLink::fromUri($object->getSources()[0]->getUri())), null, null,
-            ViewModel\Meta::withLink(new ViewModel\Link('Podcast', $this->urlGenerator->generate('podcast')))
+            ViewModel\Meta::withLink(new ViewModel\Link('Podcast', $this->urlGenerator->generate('podcast'))), null,
+            $this->viewModelConverter->convert($object, ViewModel\AudioPlayer::class)
         );
     }
 
-    public function supports($object, string $viewModel = null, array $context = []) : bool
+    public function supports($object, string $viewModel = null, array $context = []): bool
     {
         return $object instanceof PodcastEpisode && ViewModel\ContentHeader::class === $viewModel;
     }
