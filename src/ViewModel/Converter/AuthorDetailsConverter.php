@@ -8,6 +8,7 @@ use eLife\ApiSdk\Model\PersonAuthor;
 use eLife\Journal\Helper\Callback;
 use eLife\Journal\Helper\CanConvert;
 use eLife\Journal\Helper\HasPatternRenderer;
+use eLife\Journal\Helper\Humanizer;
 
 trait AuthorDetailsConverter
 {
@@ -61,15 +62,6 @@ trait AuthorDetailsConverter
             return null;
         }
 
-        return $this->prettyList(...$authors);
-    }
-
-    private function prettyList(string ...$items) : string
-    {
-        $last = array_slice($items, -1);
-        $first = implode(', ', array_slice($items, 0, -1));
-        $both = array_filter(array_merge([$first], $last), 'strlen');
-
-        return implode(' and ', $both);
+        return Humanizer::prettyList(...$authors);
     }
 }
