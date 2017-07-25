@@ -25,6 +25,8 @@ final class ArticleFiguresControllerTest extends PageTestCase
             $crawler->filter('.contextual-data__cite_wrapper')->text());
         $this->assertContains('doi: 10.7554/eLife.00001', $crawler->filter('.contextual-data__cite_wrapper')->text());
 
+        $this->assertSame('2 figures, 1 video, 1 table, 2 data sets and 1 additional file', trim($crawler->filter('.message-bar')->text()));
+
         $figureTypes = $crawler->filter('.grid-column > section');
         $this->assertCount(6, $figureTypes);
 
@@ -105,6 +107,8 @@ final class ArticleFiguresControllerTest extends PageTestCase
         $this->assertContains('Cite as: eLife 2010;1:e00001',
             $crawler->filter('.contextual-data__cite_wrapper')->text());
         $this->assertContains('doi: 10.7554/eLife.00001', $crawler->filter('.contextual-data__cite_wrapper')->text());
+
+        $this->assertSame('1 additional file', trim($crawler->filter('.message-bar')->text()));
 
         $figureTypes = $crawler->filter('.grid-column > section');
         $this->assertCount(2, $figureTypes);
