@@ -30,7 +30,8 @@ final class ContentHeaderImageFactory
     public function forImage(Image $image) : ViewModel\ContentHeaderImage
     {
         return new ViewModel\ContentHeaderImage(
-            $this->pictureForImage($image)
+            $this->pictureForImage($image),
+            $image->getAttribution()->notEmpty() ? implode(' ', $image->getAttribution()->toArray()) : null
         );
     }
 
