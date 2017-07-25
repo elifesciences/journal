@@ -22,6 +22,7 @@ use eLife\ApiSdk\Model\Model;
 use eLife\ApiSdk\Model\Reviewer;
 use eLife\Journal\Helper\Callback;
 use eLife\Journal\Helper\HasPages;
+use eLife\Journal\Helper\Humanizer;
 use eLife\Journal\ViewModel\Paragraph;
 use eLife\Patterns\ViewModel;
 use eLife\Patterns\ViewModel\ArticleSection;
@@ -508,13 +509,7 @@ final class ArticlesController extends Controller
                     ->map(function (DataSet $dataSet, int $id) {
                         return new ViewModel\ReferenceListItem($dataSet->getId(), $id + 1, $this->convertTo($dataSet));
                     });
-            })
-            ->then(Callback::emptyOr(function (Sequence $generatedDataSets) {
-                return [
-                    new ViewModel\MessageBar('The following data sets were generated'),
-                    new ViewModel\ReferenceList(...$generatedDataSets),
-                ];
-            }));
+            });
 
         $usedDataSets = $arguments['article']
             ->then(function (ArticleVersion $article) {
@@ -522,7 +517,55 @@ final class ArticlesController extends Controller
                     ->map(function (DataSet $dataSet, int $id) {
                         return new ViewModel\ReferenceListItem($dataSet->getId(), $id + 1, $this->convertTo($dataSet));
                     });
+            });
+
+        $additionalFiles = $arguments['article']
+            ->then(function (ArticleVersion $article) {
+                return $article->getAdditionalFiles()->map($this->willConvertTo());
+            });
+
+        $arguments['messageBar'] = all([
+            'figures' => $figures,
+            'videos' => $videos,
+            'tables' => $tables,
+            'generatedDataSets' => $generateDataSets,
+            'usedDataSets' => $usedDataSets,
+            'additionalFiles' => $additionalFiles,
+        ])
+            ->then(function (array $all) {
+                return array_filter([
+                    'figures' => $all['figures'],
+                    'videos' => $all['videos'],
+                    'tables' => $all['tables'],
+                    'data sets' => $all['generatedDataSets']->append(...$all['usedDataSets']),
+                    'additional files' => $all['additionalFiles'],
+                ], Callback::method('notEmpty'));
             })
+            ->then(Callback::mustNotBeEmpty(new NotFoundHttpException('Article version does not contain any figures or data')))
+            ->then(function (array $all) {
+                return new ViewModel\MessageBar(Humanizer::prettyList(...array_map(function (string $text, Sequence $items) {
+                    if (1 === count($items)) {
+                        $text = substr($text, 0, strlen($text) - 1);
+                    }
+
+                    return sprintf('<b>%s</b> %s', number_format(count($items)), $text);
+                }, array_keys($all), array_values($all))));
+            });
+
+        $additionalFiles = $additionalFiles
+            ->then(Callback::emptyOr(function (Sequence $files) {
+                return new ViewModel\AdditionalAssets(null, $files->toArray());
+            }));
+
+        $generateDataSets = $generateDataSets
+            ->then(Callback::emptyOr(function (Sequence $generatedDataSets) {
+                return [
+                    new ViewModel\MessageBar('The following data sets were generated'),
+                    new ViewModel\ReferenceList(...$generatedDataSets),
+                ];
+            }));
+
+        $usedDataSets = $usedDataSets
             ->then(Callback::emptyOr(function (Sequence $usedDataSets) {
                 return [
                     new ViewModel\MessageBar('The following previously published data sets were used'),
@@ -534,14 +577,6 @@ final class ArticlesController extends Controller
             ->then(function (array $dataSets) {
                 return array_filter(array_merge((array) $dataSets['generated'], (array) $dataSets['used']));
             });
-
-        $additionalFiles = $arguments['article']
-            ->then(function (ArticleVersion $article) {
-                return $article->getAdditionalFiles()->map($this->willConvertTo());
-            })
-            ->then(Callback::emptyOr(function (Sequence $files) {
-                return new ViewModel\AdditionalAssets(null, $files->toArray());
-            }));
 
         $arguments['body'] = all([
             'figures' => $figures,
@@ -580,8 +615,7 @@ final class ArticlesController extends Controller
                 }
 
                 return $parts;
-            })
-            ->then(Callback::mustNotBeEmpty(new NotFoundHttpException('Article version does not contain any figures or data')));
+            });
 
         $arguments['viewSelector'] = $this->createViewSelector($arguments['article'], promise_for(true), true, $arguments['history'], $arguments['body']);
 
