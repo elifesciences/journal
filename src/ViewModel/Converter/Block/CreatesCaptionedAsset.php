@@ -2,8 +2,9 @@
 
 namespace eLife\Journal\ViewModel\Converter\Block;
 
-use eLife\ApiSdk\Model\Asset;
 use eLife\ApiSdk\Model\Block;
+use eLife\ApiSdk\Model\HasAttribution;
+use eLife\ApiSdk\Model\HasCaption;
 use eLife\Journal\Helper\HasPatternRenderer;
 use eLife\Journal\Helper\HasViewModelConverter;
 use eLife\Journal\ViewModel\Paragraph;
@@ -14,15 +15,17 @@ trait CreatesCaptionedAsset
     use HasPatternRenderer;
     use HasViewModelConverter;
 
-    final private function createCaptionedAsset(ViewModel\IsCaptioned $viewModel, Asset $asset, ViewModel\Doi $doi = null) : ViewModel\CaptionedAsset
+    final private function createCaptionedAsset(ViewModel\IsCaptioned $viewModel, HasCaption $asset, ViewModel\Doi $doi = null): ViewModel\CaptionedAsset
     {
         $caption = $asset->getCaption()->map(function (Block $block) {
             return $this->getViewModelConverter()->convert($block);
         });
 
-        $caption = $caption->append(...$asset->getAttribution()->map(function (string $attribution) {
-            return new Paragraph($attribution);
-        }));
+        if ($asset instanceof HasAttribution && $asset->getAttribution()->notEmpty()) {
+            $caption = $caption->append(...$asset->getAttribution()->map(function (string $attribution) {
+                return new Paragraph($attribution);
+            }));
+        }
 
         if ($caption->notEmpty()) {
             $text = $this->getPatternRenderer()->render(...$caption);
