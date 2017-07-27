@@ -5,6 +5,7 @@ namespace eLife\Journal\ViewModel\Converter;
 use eLife\ApiSdk\Model\Highlight;
 use eLife\ApiSdk\Model\Interview;
 use eLife\Patterns\ViewModel;
+use eLife\Patterns\ViewModel\Link;
 use eLife\Patterns\ViewModel\Meta;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -36,7 +37,10 @@ final class HighlightInterviewSecondaryTeaserConverter implements ViewModelConve
             $this->createContextLabel($interview),
             $object->getThumbnail() ? $this->smallTeaserImage($object) : null,
             ViewModel\TeaserFooter::forNonArticle(
-                Meta::withText('Interview', $this->simpleDate($interview, $context))
+                Meta::withLink(
+                    new Link('Interview', $this->urlGenerator->generate('interviews')),
+                    $this->simpleDate($interview, $context)
+                )
             )
         );
     }

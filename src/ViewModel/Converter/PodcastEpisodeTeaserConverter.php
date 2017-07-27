@@ -4,6 +4,7 @@ namespace eLife\Journal\ViewModel\Converter;
 
 use eLife\ApiSdk\Model\PodcastEpisode;
 use eLife\Patterns\ViewModel;
+use eLife\Patterns\ViewModel\Link;
 use eLife\Patterns\ViewModel\Meta;
 use eLife\Patterns\ViewModel\Teaser;
 use eLife\Patterns\ViewModel\TeaserFooter;
@@ -34,7 +35,9 @@ final class PodcastEpisodeTeaserConverter implements ViewModelConverter
             $this->createContextLabel($object),
             $this->bigTeaserImage($object),
             TeaserFooter::forNonArticle(
-                Meta::withText('Podcast')
+                Meta::withLink(
+                    new Link('Podcast', $this->urlGenerator->generate('podcast'))
+                )
             )
         );
     }
