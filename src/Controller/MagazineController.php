@@ -25,7 +25,7 @@ final class MagazineController extends Controller
 {
     public function listAction(Request $request) : Response
     {
-        $page = (int) $request->query->get('page', 1);
+        $page = (int)$request->query->get('page', 1);
         $perPage = 10;
 
         $arguments = $this->defaultPageArguments($request);
@@ -76,7 +76,7 @@ final class MagazineController extends Controller
             ->then(function (AudioPlayer $audioPlayer = null) {
                 return new ContentHeader(
                     'Magazine',
-                    $this->get('elife.journal.view_model.factory.content_header_image')->forLocalFile('magazine'),
+                    $this->get('elife.journal.view_model.factory.content_header_image')->forLocalFile('magazine', true),
                     'Highlighting the latest research and giving a voice to scientists',
                     false,
                     [],

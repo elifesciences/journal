@@ -19,19 +19,21 @@ final class ContentHeaderImageFactory
         $this->packages = $packages;
     }
 
-    public function forLocalFile(string $filename) : ViewModel\ContentHeaderImage
+    public function forLocalFile(string $filename, bool $creditOverlay = false) : ViewModel\ContentHeaderImage
     {
         return new ViewModel\ContentHeaderImage(
             $this->pictureForLocalFile($filename),
-            'Illustration by <a href="http://www.davidebonazzi.com/">Davide Bonazzi</a>'
+            'Illustration by <a href="http://www.davidebonazzi.com/">Davide Bonazzi</a>',
+            $creditOverlay
         );
     }
 
-    public function forImage(Image $image) : ViewModel\ContentHeaderImage
+    public function forImage(Image $image, bool $creditOverlay = false) : ViewModel\ContentHeaderImage
     {
         return new ViewModel\ContentHeaderImage(
             $this->pictureForImage($image),
-            $image->getAttribution()->notEmpty() ? implode(' ', $image->getAttribution()->toArray()) : null
+            $image->getAttribution()->notEmpty() ? implode(' ', $image->getAttribution()->toArray()) : null,
+            $creditOverlay
         );
     }
 
