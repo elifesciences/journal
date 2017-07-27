@@ -47,7 +47,7 @@ final class CoverArticleCarouselItemConverter implements ViewModelConverter
                 ),
                 $this->simpleDate($article, $context)
             ),
-            $this->contentHeaderImageFactory->forImage($object->getBanner())
+            $this->contentHeaderImageFactory->pictureForImage($object->getBanner())
         );
     }
 

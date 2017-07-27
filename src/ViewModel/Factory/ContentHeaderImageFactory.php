@@ -19,14 +19,32 @@ final class ContentHeaderImageFactory
         $this->packages = $packages;
     }
 
-    public function forLocalFile(string $filename) : ViewModel\Picture
+    public function forLocalFile(string $filename, bool $creditOverlay = false) : ViewModel\ContentHeaderImage
+    {
+        return new ViewModel\ContentHeaderImage(
+            $this->pictureForLocalFile($filename),
+            'Illustration by <a href="http://www.davidebonazzi.com/">Davide Bonazzi</a>',
+            $creditOverlay
+        );
+    }
+
+    public function forImage(Image $image, bool $creditOverlay = false) : ViewModel\ContentHeaderImage
+    {
+        return new ViewModel\ContentHeaderImage(
+            $this->pictureForImage($image),
+            $image->getAttribution()->notEmpty() ? implode(' ', $image->getAttribution()->toArray()) : null,
+            $creditOverlay
+        );
+    }
+
+    public function pictureForLocalFile(string $filename) : ViewModel\Picture
     {
         return $this->create(function (int $width, int $height) use ($filename) {
             return $this->packages->getUrl("assets/images/banners/{$filename}-{$width}x{$height}.jpg");
         });
     }
 
-    public function forImage(Image $image) : ViewModel\Picture
+    public function pictureForImage(Image $image) : ViewModel\Picture
     {
         return $this->create(function (int $width, int $height) use ($image) {
             return $this->iiifUri($image, $width, $height);
