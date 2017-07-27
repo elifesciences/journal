@@ -25,7 +25,7 @@ final class MagazineController extends Controller
 {
     public function listAction(Request $request) : Response
     {
-        $page = (int)$request->query->get('page', 1);
+        $page = (int) $request->query->get('page', 1);
         $perPage = 10;
 
         $arguments = $this->defaultPageArguments($request);
