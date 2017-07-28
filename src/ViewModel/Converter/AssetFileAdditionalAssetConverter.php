@@ -40,6 +40,27 @@ final class AssetFileAdditionalAssetConverter implements ViewModelConverter
             $text = null;
         }
 
+        $downloadLinkUri = $this->downloadLinkUriGenerator->generate(new DownloadLink($object->getFile()->getUri(), $object->getFile()->getFilename()));
+
+        // without doi means PoA status
+        if (!$object->getDoi()) {
+            return ViewModel\AdditionalAsset::withoutDoi(
+                $object->getId(),
+                ViewModel\CaptionText::withStandFirst(
+                    'All additional files',
+                    'Any figure supplements, source code, source data, videos or supplementary files associated with this article are contained within this zip.'
+                ),
+                ViewModel\DownloadLink::fromLink(
+                    new ViewModel\Link(
+                        'Download zip',
+                        $downloadLinkUri
+                    ),
+                    $object->getFile()->getFilename()
+                ),
+                $object->getFile()->getUri()
+            );
+        }
+
         if ($object->getLabel()) {
             $captionText = ViewModel\CaptionText::withHeading($object->getLabel(), $object->getTitle(), $text);
         } else {
@@ -47,13 +68,9 @@ final class AssetFileAdditionalAssetConverter implements ViewModelConverter
         }
 
         $download = ViewModel\DownloadLink::fromLink(
-            new ViewModel\Link('Download '.$object->getFile()->getFilename(), $this->downloadLinkUriGenerator->generate(new DownloadLink($object->getFile()->getUri(), $object->getFile()->getFilename()))),
+            new ViewModel\Link('Download '.$object->getFile()->getFilename(), $downloadLinkUri),
             $object->getFile()->getFilename()
         );
-
-        if (!$object->getDoi()) {
-            return ViewModel\AdditionalAsset::withoutDoi($object->getId(), $captionText, $download, $object->getFile()->getUri());
-        }
 
         return ViewModel\AdditionalAsset::withDoi($object->getId(), $captionText, $download, new ViewModel\Doi($object->getDoi()));
     }
