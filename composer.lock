@@ -1988,16 +1988,16 @@
         },
         {
             "name": "sensiolabs/security-checker",
-            "version": "v4.1.0",
+            "version": "v4.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sensiolabs/security-checker.git",
-                "reference": "bcf5dca53ab12bf5c763e3111804c4db1d902ae9"
+                "reference": "cf61ce9d9706ba35e60a894fe6f3584c6d0e5c9f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sensiolabs/security-checker/zipball/bcf5dca53ab12bf5c763e3111804c4db1d902ae9",
-                "reference": "bcf5dca53ab12bf5c763e3111804c4db1d902ae9",
+                "url": "https://api.github.com/repos/sensiolabs/security-checker/zipball/cf61ce9d9706ba35e60a894fe6f3584c6d0e5c9f",
+                "reference": "cf61ce9d9706ba35e60a894fe6f3584c6d0e5c9f",
                 "shasum": ""
             },
             "require": {
@@ -2029,7 +2029,7 @@
                 }
             ],
             "description": "A security checker for your composer.lock",
-            "time": "2017-07-28T14:45:14+00:00"
+            "time": "2017-07-28T18:31:05+00:00"
         },
         {
             "name": "swiftmailer/swiftmailer",
