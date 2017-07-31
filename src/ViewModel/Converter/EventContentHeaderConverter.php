@@ -25,7 +25,7 @@ final class EventContentHeaderConverter implements ViewModelConverter
             $object->getTitle(),
             null,
             $object->getImpactStatement(),
-            false,
+            true,
             [],
             null,
             [],

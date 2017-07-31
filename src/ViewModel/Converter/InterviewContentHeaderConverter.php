@@ -27,7 +27,7 @@ final class InterviewContentHeaderConverter implements ViewModelConverter
             $object->getTitle(),
             null,
             $object->getImpactStatement(),
-            false,
+            true,
             [],
             null,
             [],
