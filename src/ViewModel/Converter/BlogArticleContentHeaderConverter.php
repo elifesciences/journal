@@ -25,7 +25,7 @@ final class BlogArticleContentHeaderConverter implements ViewModelConverter
     public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
         return new ViewModel\ContentHeader(
-            $object->getTitle(), null, $object->getImpactStatement(), false, [],
+            $object->getTitle(), null, $object->getImpactStatement(), true, [],
             null, [], [], null, null, null,
             ViewModel\Meta::withLink(
                 new Link('Inside eLife', $this->urlGenerator->generate('inside-elife')),
