@@ -3,6 +3,7 @@
 namespace eLife\Journal\ViewModel\Converter;
 
 use eLife\ApiSdk\Model\PressPackage;
+use eLife\ApiSdk\Model\Subject;
 use eLife\Journal\Helper\LicenceUri;
 use eLife\Patterns\ViewModel;
 use eLife\Patterns\ViewModel\Link;
@@ -25,7 +26,12 @@ final class PressPackageContentHeaderConverter implements ViewModelConverter
      */
     public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
-        return new ViewModel\ContentHeader($object->getTitle(), null, $object->getImpactStatement(), true, null, [], [], null, null, null,
+        $subjects = $object->getSubjects()->map(function (Subject $subject) {
+            return new ViewModel\Link($subject->getName(), $this->urlGenerator->generate('subject', [$subject]));
+        })->toArray();
+
+        return new ViewModel\ContentHeader($object->getTitle(), null, $object->getImpactStatement(), true,
+            $subjects, null, [], [], null, null, null,
             Meta::withLink(
                 new Link('Press pack', $this->urlGenerator->generate('press-packs')),
                 $this->simpleDate($object, ['date' => 'published'] + $context)
