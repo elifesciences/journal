@@ -4,16 +4,16 @@
 
 {% block body %}
 
-    <div class="wrapper">
+    {{ render_pattern(contentHeader) }}
 
-        {{ render_pattern(contentHeader) }}
+    {% embed 'grid/listing-one-column.html.twig' with {fullWidth: true} %}
 
-    </div>
+        {% block listing %}
 
-    <div class="wrapper wrapper--listing">
+            {{ render_pattern(subjects) }}
 
-        {{ render_pattern(subjects) }}
+        {% endblock %}
 
-    </div>
+    {% endembed %}
 
 {% endblock %}

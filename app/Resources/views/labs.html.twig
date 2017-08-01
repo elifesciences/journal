@@ -6,10 +6,14 @@
 
     {{ render_pattern(contentHeader) }}
 
-    <div class="wrapper wrapper--listing">
+    {% embed 'grid/listing-one-column.html.twig' with {fullWidth: true} %}
 
-        {{ render_pattern(listing) }}
+        {% block listing %}
 
-    </div>
+            {{ render_pattern(listing) }}
+
+        {% endblock %}
+
+    {% endembed %}
 
 {% endblock %}
