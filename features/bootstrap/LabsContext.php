@@ -132,7 +132,7 @@ final class LabsContext extends Context
      */
     public function iLoadMorePosts()
     {
-        $this->getSession()->getPage()->clickLink('More posts');
+        $this->getSession()->getPage()->clickLink('Load more');
     }
 
     /**

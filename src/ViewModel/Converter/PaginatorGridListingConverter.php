@@ -17,7 +17,6 @@ final class PaginatorGridListingConverter implements ViewModelConverter
         $type = $context['type'] ?? null;
 
         $heading = new ListHeading($context['heading'] ?? trim('Latest '.$type));
-        $loadMoreText = $type ? 'More '.$type : 'Load more';
         $prevText = trim('Newer '.$type);
         $nextText = trim('Older '.$type);
         $emptyText = trim('No '.($type ?? 'items').' available.');
@@ -40,7 +39,7 @@ final class PaginatorGridListingConverter implements ViewModelConverter
                 $object->getItems(),
                 $heading,
                 $object->getNextPage()
-                    ? ViewModel\Pager::firstPage(new ViewModel\Link($loadMoreText, $object->getNextPagePath()), 'listing')
+                    ? ViewModel\Pager::firstPage(new ViewModel\Link('Load more', $object->getNextPagePath()), 'listing')
                     : null,
                 'listing'
             );
