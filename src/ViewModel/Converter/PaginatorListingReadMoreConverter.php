@@ -17,7 +17,6 @@ final class PaginatorListingReadMoreConverter implements ViewModelConverter
         $type = $context['type'] ?? null;
 
         $heading = new ListHeading($context['heading'] ?? 'Further reading');
-        $loadMoreText = $type ? 'More '.$type : 'Load more';
         $prevText = trim('Newer '.$type);
         $nextText = trim('Older '.$type);
         $emptyText = $context['emptyText'] ?? (trim('No '.($type ?? 'items').' available.'));
@@ -38,7 +37,7 @@ final class PaginatorListingReadMoreConverter implements ViewModelConverter
             return ViewModel\ListingReadMore::withPagination(
                 $object->getItems(),
                 $object->getNextPage()
-                    ? ViewModel\Pager::firstPage(new ViewModel\Link($loadMoreText, $object->getNextPagePath()), 'listing')
+                    ? ViewModel\Pager::firstPage(new ViewModel\Link('Load more', $object->getNextPagePath()), 'listing')
                     : null,
                 $heading,
                 'listing'

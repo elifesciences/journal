@@ -249,7 +249,7 @@ final class PodcastContext extends Context
      */
     public function iLoadMoreEpisodes()
     {
-        $this->getSession()->getPage()->clickLink('More episodes');
+        $this->getSession()->getPage()->clickLink('Load more');
     }
 
     /**

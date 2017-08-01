@@ -476,7 +476,7 @@ final class HomepageContext extends Context
      */
     public function iLoadMoreArticles()
     {
-        $this->getSession()->getPage()->clickLink('More articles');
+        $this->getSession()->getPage()->clickLink('Load more');
     }
 
     /**
