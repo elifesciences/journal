@@ -21,7 +21,6 @@ final class PaginatorListingTeasersConverter implements ViewModelConverter
         } else {
             $heading = new ListHeading($context['heading'] ?? trim('Latest '.$type));
         }
-        $loadMoreText = $type ? 'More '.$type : 'Load more';
         $prevText = trim('Newer '.$type);
         $nextText = trim('Older '.$type);
         $emptyText = $context['emptyText'] ?? (trim('No '.($type ?? 'items').' available.'));
@@ -42,7 +41,7 @@ final class PaginatorListingTeasersConverter implements ViewModelConverter
             return ViewModel\ListingTeasers::withPagination(
                 $object->getItems(),
                 $object->getNextPage()
-                    ? ViewModel\Pager::firstPage(new ViewModel\Link($loadMoreText, $object->getNextPagePath()), 'listing')
+                    ? ViewModel\Pager::firstPage(new ViewModel\Link('Load more', $object->getNextPagePath()), 'listing')
                     : null,
                 $heading,
                 'listing'

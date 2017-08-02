@@ -102,7 +102,7 @@ final class AnnualReportContext extends Context
      */
     public function iLoadMoreAnnualReports()
     {
-        $this->getSession()->getPage()->clickLink('More annual reports');
+        $this->getSession()->getPage()->clickLink('Load more');
     }
 
     /**

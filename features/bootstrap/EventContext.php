@@ -109,7 +109,7 @@ final class EventContext extends Context
      */
     public function iLoadMoreEvents()
     {
-        $this->getSession()->getPage()->clickLink('More events');
+        $this->getSession()->getPage()->clickLink('Load more');
     }
 
     /**

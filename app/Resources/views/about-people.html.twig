@@ -14,13 +14,17 @@
 
     </div>
 
-    <div class="wrapper u-pad-top-lg">
+    {% embed 'grid/listing-one-column.html.twig' with {fullWidth: true} %}
 
-        {% for list in lists %}
-            {{ render_pattern(list) }}
-        {% endfor %}
+        {% block listing %}
 
-    </div>
+            {% for list in lists %}
+                {{ render_pattern(list) }}
+            {% endfor %}
+
+        {% endblock %}
+
+    {% endembed %}
 
     <div class="wrapper">
 
