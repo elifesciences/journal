@@ -59,15 +59,11 @@ final class PersonAboutProfileConverter implements ViewModelConverter
 
         if ($object->getThumbnail()) {
             $srcset = [];
-            if ($object->getThumbnail()->getWidth() >= 500) {
-                $srcset[500] = $this->iiifUri($object->getThumbnail(), 500, 282);
-            }
-
             $image = new ViewModel\Picture(
                 [],
                 new ViewModel\Image(
                     $this->iiifUri($object->getThumbnail(), 250, 141),
-                    $srcset,
+                    $object->getThumbnail()->getWidth() >= 500 ? $this->iiifUri($object->getThumbnail(), 500, 282) : null,
                     $object->getThumbnail()->getAltText()
                 )
             );

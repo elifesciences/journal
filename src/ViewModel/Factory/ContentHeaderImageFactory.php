@@ -60,19 +60,14 @@ final class ContentHeaderImageFactory
                 continue;
             }
 
-            $sources[] = [
-                'srcset' => $this->srcsetToString($srcset),
-                'media' => "(max-width: {$width}px)",
-            ];
+            $sources[] = new ViewModel\PictureSource($srcset['1x'], $srcset['2x'] ?? null, null, "(max-width: {$width}px)");
         }
 
         $srcset = $this->createSrcset($callback, 1114, 336);
-        $default = end($srcset);
-        reset($srcset);
 
         return new ViewModel\Picture(
             $sources,
-            new ViewModel\Image($default, count($srcset) > 1 ? $srcset : [])
+            new ViewModel\Image($srcset['1x'], $srcset['2x'] ?? null)
         );
     }
 
@@ -80,19 +75,12 @@ final class ContentHeaderImageFactory
     {
         return array_reduce(range(2, 1), function (array $carry, int $factor) use ($callback, $width, $height) {
             try {
-                $carry[$width * $factor] = $callback($width * $factor, $height * $factor);
+                $carry["${factor}x"] = $callback($width * $factor, $height * $factor);
             } catch (Exception $e) {
                 // Do nothing.
             }
 
             return $carry;
         }, []);
-    }
-
-    private function srcsetToString(array $srcset) : string
-    {
-        return implode(', ', array_map(function (int $width, string $uri) {
-            return "{$uri} {$width}w";
-        }, array_keys($srcset), array_values($srcset)));
     }
 }

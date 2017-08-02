@@ -19,6 +19,7 @@ use eLife\Patterns\ViewModel\Link;
 use eLife\Patterns\ViewModel\ListHeading;
 use eLife\Patterns\ViewModel\ListingTeasers;
 use eLife\Patterns\ViewModel\Picture;
+use eLife\Patterns\ViewModel\PictureSource;
 use eLife\Patterns\ViewModel\Teaser;
 use Pagerfanta\Pagerfanta;
 use Symfony\Component\HttpFoundation\Request;
@@ -49,10 +50,7 @@ final class SubjectsController extends Controller
                     ),
                     new Picture(
                         [
-                            [
-                                'srcset' => sprintf('%s 263w, %s 526w', $this->iiifUri($subject->getThumbnail(), 263, 148), $this->iiifUri($subject->getThumbnail(), 526, 296)),
-                                'media' => '(min-width: 600px)',
-                            ],
+                            new PictureSource($this->iiifUri($subject->getThumbnail(), $this->iiifUri($subject->getThumbnail())), null, null, '(min-width: 600px)'),
                         ],
                         new Image('data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==')
                     )
@@ -136,7 +134,7 @@ final class SubjectsController extends Controller
             ->then(Callback::emptyOr(function (Sequence $result) {
                 return ListingTeasers::basic($result->toArray(), new ListHeading('Highlights'));
             }))
-            ->otherwise($this->softFailure('Failed to load highlights for '.$arguments['id']));
+            ->otherwise($this->softFailure('Failed to load highlights for ' . $arguments['id']));
 
         return new Response($this->get('templating')->render('::subject.html.twig', $arguments));
     }

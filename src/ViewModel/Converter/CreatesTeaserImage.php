@@ -14,11 +14,8 @@ trait CreatesTeaserImage
     {
         return ViewModel\TeaserImage::prominent(
             $this->iiifUri($object->getThumbnail(), 250, 141),
-            $object->getThumbnail()->getAltText(),
-            [
-                500 => $this->iiifUri($object->getThumbnail(), 500, 281),
-                250 => $this->iiifUri($object->getThumbnail(), 250, 141),
-            ]
+            $this->iiifUri($object->getThumbnail(), 500, 281),
+            $object->getThumbnail()->getAltText()
         );
     }
 
@@ -26,11 +23,8 @@ trait CreatesTeaserImage
     {
         return ViewModel\TeaserImage::big(
             $this->iiifUri($object->getThumbnail(), 250, 141),
-            $object->getThumbnail()->getAltText(),
-            [
-                500 => $this->iiifUri($object->getThumbnail(), 500, 281),
-                250 => $this->iiifUri($object->getThumbnail(), 250, 141),
-            ]
+            $this->iiifUri($object->getThumbnail(), 500, 281),
+            $object->getThumbnail()->getAltText()
         );
     }
 
@@ -38,11 +32,8 @@ trait CreatesTeaserImage
     {
         return ViewModel\TeaserImage::small(
             $this->iiifUri($object->getThumbnail(), 70, 70),
-            $object->getThumbnail()->getAltText(),
-            [
-                140 => $this->iiifUri($object->getThumbnail(), 140, 140),
-                70 => $this->iiifUri($object->getThumbnail(), 70, 70),
-            ]
+            $this->iiifUri($object->getThumbnail(), 140, 140),
+            $object->getThumbnail()->getAltText()
         );
     }
 }

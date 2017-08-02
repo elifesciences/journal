@@ -77,7 +77,7 @@ final class ArchiveController extends Controller
                 ->endDate($ends)
                 ->useDate('published')
                 ->slice(0, 4)
-                ->otherwise($this->softFailure('Failed to load cover articles for '.$starts->format('F Y')));
+                ->otherwise($this->softFailure('Failed to load cover articles for ' . $starts->format('F Y')));
         }
 
         $arguments['title'] = $year;
@@ -118,10 +118,7 @@ final class ArchiveController extends Controller
                                 [],
                                 new Image(
                                     $this->iiifUri($covers[0]->getBanner(), 263, 176),
-                                    [
-                                        526 => $this->iiifUri($covers[0]->getBanner(), 526, 352),
-                                        263 => $this->iiifUri($covers[0]->getBanner(), 263, 176),
-                                    ]
+                                    $this->iiifUri($covers[0]->getBanner(), 526, 352)
                                 )
                             )
                         ),
@@ -143,7 +140,7 @@ final class ArchiveController extends Controller
                                 return new Link($cover->getTitle(), $this->get('router')->generate('podcast-episode', [$item]));
                             }
 
-                            throw new UnexpectedValueException('Unexpected type '.get_class($item));
+                            throw new UnexpectedValueException('Unexpected type ' . get_class($item));
                         })->toArray()
                     );
                 }, array_values($months), array_keys($months)), new ListHeading('Monthly archive'));
@@ -157,7 +154,7 @@ final class ArchiveController extends Controller
         $starts = DateTimeImmutable::createFromFormat('j F Y H:i:s', "1 $month $year 00:00:00", new DateTimeZone('Z'));
 
         if (!$starts) {
-            throw new NotFoundHttpException('Unknown month '.$month);
+            throw new NotFoundHttpException('Unknown month ' . $month);
         }
 
         $this->validateArchiveYear($year, $starts->format('n'));
@@ -170,7 +167,7 @@ final class ArchiveController extends Controller
             ->endDate($ends)
             ->useDate('published')
             ->slice(0, 4)
-            ->otherwise($this->softFailure('Failed to load cover articles for '.$starts->format('F Y'))));
+            ->otherwise($this->softFailure('Failed to load cover articles for ' . $starts->format('F Y'))));
 
         $arguments = $this->defaultPageArguments($request);
 
@@ -192,7 +189,7 @@ final class ArchiveController extends Controller
             ->then(Callback::emptyOr(function (Sequence $covers) {
                 return ListingTeasers::forHighlights($covers->toArray(), new ListHeading('Cover articles'), 'covers');
             }))
-            ->otherwise($this->softFailure('Failed to load cover articles for '.$starts->format('F Y')));
+            ->otherwise($this->softFailure('Failed to load cover articles for ' . $starts->format('F Y')));
 
         $arguments['listing'] = $research = $this->get('elife.api_sdk.search')
             ->forType('research-advance', 'research-article', 'scientific-correspondence', 'short-report', 'tools-resources', 'replication-study')
@@ -236,13 +233,13 @@ final class ArchiveController extends Controller
     private function validateArchiveYear(int $year, int $month = null)
     {
         if ($year < 2012) {
-            throw new NotFoundHttpException('eLife did not publish in '.$year);
+            throw new NotFoundHttpException('eLife did not publish in ' . $year);
         } elseif ($year > $this->getMaxYear()) {
             throw new NotFoundHttpException('Year not yet in archive');
         } elseif ($month && ($month > $this->getMaxMonth($year))) {
             throw new NotFoundHttpException('Month not yet in archive');
         } elseif ($month && ($month < $this->getMinMonth($year))) {
-            throw new NotFoundHttpException('eLife did not publish in '.DateTimeImmutable::createFromFormat('j n Y H:i:s', "1 $month $year 00:00:00", new DateTimeZone('Z'))->format('F Y'));
+            throw new NotFoundHttpException('eLife did not publish in ' . DateTimeImmutable::createFromFormat('j n Y H:i:s', "1 $month $year 00:00:00", new DateTimeZone('Z'))->format('F Y'));
         }
     }
 
