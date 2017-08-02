@@ -25,7 +25,7 @@ final class ResourcesController extends Controller
         $arguments['body'] = [
             new Paragraph('Everything we produce is made available under a <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution</a> (CC-BY) license,
 so you are free to use it without asking permission so long as the author (eLife, for the materials below) is given credit.
-This is true for journal articles and related content. See our <a href="'.$this->get('router')->generate('terms').'">Terms and Conditions</a> for detail.'),
+This is true for journal articles and related content. See our <a href="' . $this->get('router')->generate('terms') . '">Terms and Conditions</a> for detail.'),
             ArticleSection::basic('Videos', 2, $this->render(
                 new Paragraph('eLife peer review: The author&apos;s perspective'),
                 new IFrame('https://www.youtube.com/embed/3pjXfgeOCho', 560, 315),
@@ -49,7 +49,7 @@ This is true for journal articles and related content. See our <a href="'.$this-
 <a href="https://cdn.elifesciences.org/downloads/letter-elife-ecr-wednesdays.pdf">US letter download</a> ')
             )),
             ArticleSection::basic('The eLife Logo', 2, $this->render(
-                new Paragraph('The eLife logo may not be used to promote any organizations other than eLife, or to sell or promote any good or service without the express approval of eLife. If you have any questions, please <a href="'.$this->get('router')->generate('contact').'">contact us</a>.'),
+                new Paragraph('The eLife logo may not be used to promote any organizations other than eLife, or to sell or promote any good or service without the express approval of eLife. If you have any questions, please <a href="' . $this->get('router')->generate('contact') . '">contact us</a>.'),
                 ArticleSection::basic('Acceptable Configurations', 3, $this->render(
                     new Paragraph('There are two possible configurations of the eLife logo. The logo may not be used in any other configuration.'),
                     $this->toStyleGuideImage('Acceptable Configurations', 'accept-config.jpg'),
@@ -95,6 +95,6 @@ This is true for journal articles and related content. See our <a href="'.$this-
     {
         $sourceUri = "https://cdn.elifesciences.org/style-guide-images/$filename";
 
-        return new Picture([], new Image($sourceUri, [], $name));
+        return new Picture([], new Image($sourceUri, null, $name));
     }
 }

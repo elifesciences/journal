@@ -18,9 +18,7 @@ final class PersonProfileSnippetConverter implements ViewModelConverter
         if ($object->getThumbnail()) {
             $image = new ViewModel\Image(
                 $this->iiifUri($object->getThumbnail(), 70, 70),
-                [
-                    140 => $this->iiifUri($object->getThumbnail(), 140, 140),
-                ],
+                $this->iiifUri($object->getThumbnail(), 140, 140),
                 $object->getThumbnail()->getAltText()
             );
         } else {

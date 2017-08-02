@@ -29,19 +29,11 @@ final class ImageConverter implements ViewModelConverter
     {
         $image = $object->getImage();
 
-        $srcset = [];
         $baseWidth = 538;
-        if ($image->getWidth() > $baseWidth) {
-            $width = $baseWidth * 2;
-            if ($width > $image->getWidth()) {
-                $width = $image->getWidth();
-            }
-            $srcset[$width] = $this->iiifUri($image, $width);
-        }
 
         $imageViewModel = new ViewModel\Image(
             $this->iiifUri($image, $image->getWidth() >= $baseWidth ? $baseWidth : null),
-            $srcset,
+            $image->getWidth() >= ($baseWidth * 2) ? $this->iiifUri($image, $baseWidth * 2) : null,
             $image->getAltText()
         );
 

@@ -7,7 +7,9 @@ use eLife\Patterns\ViewModel\GridListing;
 use eLife\Patterns\ViewModel\Image;
 use eLife\Patterns\ViewModel\ImageLink;
 use eLife\Patterns\ViewModel\ListHeading;
+use eLife\Patterns\ViewModel\MediaType;
 use eLife\Patterns\ViewModel\Picture;
+use eLife\Patterns\ViewModel\PictureSource;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -240,7 +242,7 @@ final class WhoWeWorkWithController extends Controller
         return array_map(function (array $item) : ImageLink {
             $sources = [];
             if ($item['svg']) {
-                $sources[] = ['srcset' => $this->get('assets.packages')->getUrl("assets/images/logos/{$item['filename']}.svg"), 'type' => 'image/svg+xml'];
+                $sources[] = new PictureSource($this->get('assets.packages')->getUrl("assets/images/logos/{$item['filename']}.svg"), null, new MediaType('image/svg+xml'));
             }
 
             return new ImageLink(
@@ -248,10 +250,8 @@ final class WhoWeWorkWithController extends Controller
                 new Picture(
                     $sources,
                     new Image(
-                        $this->get('assets.packages')->getUrl("assets/images/logos/{$item['filename']}-180.png"),
-                        [
-                            360 => $this->get('assets.packages')->getUrl("assets/images/logos/{$item['filename']}-360.png"),
-                        ],
+                        $this->get('assets.packages')->getUrl("assets/images/logos/{$item['filename']}@1x.png"),
+                        $this->get('assets.packages')->getUrl("assets/images/logos/{$item['filename']}@2x.png"),
                         $item['name']
                     )
                 )

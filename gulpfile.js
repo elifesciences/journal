@@ -85,11 +85,16 @@ gulp.task('images:banners', ['images:clean'], () => {
 gulp.task('images:logos', ['images:clean'], () => {
     return gulp.src('./app/Resources/images/logos/*.{png,svg}')
         .pipe(responsive({
-            '*': [180, 360].reduce((acc, width) => {
+            '*': [1, 2].reduce((acc, size) => {
+                const width = 180 * size;
+                const height = 60 * size;
+
                 acc.push({
                     width: width,
+                    height: height,
+                    max: true,
                     rename: {
-                        suffix: `-${width}`,
+                        suffix: `@${size}x`,
                         extname: '.png',
                     },
                     withoutEnlargement: false,
