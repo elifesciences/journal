@@ -248,9 +248,9 @@ final class WhoWeWorkWithController extends Controller
                 new Picture(
                     $sources,
                     new Image(
-                        $this->get('assets.packages')->getUrl("assets/images/logos/{$item['filename']}-250.png"),
+                        $this->get('assets.packages')->getUrl("assets/images/logos/{$item['filename']}-180.png"),
                         [
-                            500 => $this->get('assets.packages')->getUrl("assets/images/logos/{$item['filename']}-500.png"),
+                            360 => $this->get('assets.packages')->getUrl("assets/images/logos/{$item['filename']}-360.png"),
                         ],
                         $item['name']
                     )
