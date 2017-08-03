@@ -47,7 +47,8 @@ final class ArticleTeaserConverter implements ViewModelConverter
                     ),
                     $this->simpleDate($object, $context)
                 ),
-                $object instanceof ArticleVoR
+                $object instanceof ArticleVoR || null === $object->getPdf(),
+                null !== $object->getPdf()
             )
         );
     }
