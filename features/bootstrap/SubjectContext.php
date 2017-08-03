@@ -633,7 +633,7 @@ final class SubjectContext extends Context
         sort($namesCheck);
 
         if ($names !== $namesCheck) {
-            throw new ElementHtmlException("List is not sorted correctly: ".print_r($namesCheck, true), $this->getSession()->getDriver(), $list);
+            throw new ElementHtmlException('List is not sorted correctly: '.print_r($namesCheck, true), $this->getSession()->getDriver(), $list);
         }
     }
 }
