@@ -1,7 +1,8 @@
 <?php
 
-use Behat\Mink\Exception\ElementTextException;
+use Behat\Mink\Exception\ElementHtmlException;
 use eLife\ApiSdk\ApiSdk;
+use eLife\Journal\Helper\Callback;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 
@@ -620,22 +621,19 @@ final class SubjectContext extends Context
      */
     public function iShouldSeeSeniorsEditorsForTheMSASortedBySurnameInTheList(int $number, string $subject)
     {
-        $this->assertSession()->elementsCount('css', '.list-heading:contains("Senior editors") + .listing-list > .listing-list__item', $number + 1);
+        $list = $this->assertSession()->elementExists('css', '.list-heading:contains("Senior editors") + .listing-list');
+        $this->assertSession()->elementsCount('css', '.list-heading:contains("Senior editors") + .listing-list > .listing-list__item .profile-snippet__name', $number);
 
-        $previousEditor = '';
-        for ($i = $number; $i > 0; --$i) {
-            $nthChild = ($number - $i + 1);
+        $names = array_map(Callback::method('getText'), $this->getSession()->getPage()->findAll(
+            'css',
+            '.list-heading:contains("Senior editors") + .listing-list > .listing-list__item .profile-snippet__name'
+        ));
 
-            $name = $this->assertSession()->elementExists(
-                'css',
-                '.list-heading:contains("Senior editors") + .listing-list > .listing-list__item:nth-child('.$nthChild.') .profile-snippet__name'
-            );
+        $namesCheck = $names;
+        sort($namesCheck);
 
-            if ($name->getText() < $previousEditor) {
-                throw new ElementTextException("{$name->getText()} should be before $previousEditor", $this->getSession()->getDriver(), $name);
-            }
-
-            $previousEditor = $name->getText();
+        if ($names !== $namesCheck) {
+            throw new ElementHtmlException("List is not sorted correctly: ".print_r($namesCheck, true), $this->getSession()->getDriver(), $list);
         }
     }
 }
