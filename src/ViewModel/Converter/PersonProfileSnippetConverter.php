@@ -27,9 +27,13 @@ final class PersonProfileSnippetConverter implements ViewModelConverter
             $image = null;
         }
 
+        if ('institution' === ($context['title'] ?? null) && ($object->getAffiliations()->notEmpty())) {
+            $title = $object->getAffiliations()[0]->toString();
+        }
+
         return new ViewModel\ProfileSnippet(
             $object->getDetails()->getPreferredName(),
-            $object->getTypeLabel(),
+            $title ?? $object->getTypeLabel(),
             $image
         );
     }

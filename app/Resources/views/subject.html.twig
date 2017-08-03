@@ -26,6 +26,16 @@
 
             {% endif %}
 
+            {% if seniorEditors %}
+
+                <div class="grid-secondary-column__item">
+
+                    {{ render_pattern(seniorEditors) }}
+
+                </div>
+
+            {% endif %}
+
         {% endblock %}
 
     {% endembed %}

@@ -1,6 +1,8 @@
 <?php
 
+use Behat\Mink\Exception\ElementHtmlException;
 use eLife\ApiSdk\ApiSdk;
+use eLife\Journal\Helper\Callback;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 
@@ -10,6 +12,7 @@ final class SubjectContext extends Context
     private $numberOfSubjects;
     private $numberOfArticles;
     private $numberOfHighlightedArticles;
+    private $numberOfSeniorEditors;
 
     /**
      * @BeforeScenario
@@ -412,6 +415,63 @@ final class SubjectContext extends Context
     }
 
     /**
+     * @Given /^there are (\d+) senior editors for the MSA \'([^\']*)\'$/
+     */
+    public function thereAreSeniorEditorsForTheMSA(int $number, string $subject)
+    {
+        $this->numberOfSeniorEditors = $number;
+
+        $seniorEditors = [];
+
+        $subjectId = $this->createSubjectId($subject);
+
+        $this->mockSubject($subject);
+
+        for ($i = $number; $i > 0; --$i) {
+            $seniorEditors[] = [
+                'id' => "$i",
+                'type' => [
+                    'id' => 'senior-editor',
+                    'label' => 'Senior editor',
+                ],
+                'name' => [
+                    'preferred' => "Person $i",
+                    'index' => "Person $i",
+                ],
+                'research' => [
+                    'expertises' => [
+                        [
+                            'id' => $subjectId,
+                            'name' => $subject,
+                        ],
+                    ],
+                    'focuses' => [],
+                ],
+            ];
+        }
+
+        foreach (array_chunk($seniorEditors, 100) as $i => $seniorEditorChunk) {
+            $page = $i + 1;
+
+            $this->mockApiResponse(
+                new Request(
+                    'GET',
+                    "http://api.elifesciences.org/people?page=$page&per-page=100&order=asc&subject[]=$subjectId&type=senior-editor",
+                    ['Accept' => 'application/vnd.elife.person-list+json; version=1']
+                ),
+                new Response(
+                    200,
+                    ['Content-Type' => 'application/vnd.elife.person-list+json; version=1'],
+                    json_encode([
+                        'total' => $number,
+                        'items' => $seniorEditorChunk,
+                    ])
+                )
+            );
+        }
+    }
+
+    /**
      * @When /^I go the Subjects page$/
      */
     public function iGoTheSubjectsPage()
@@ -552,6 +612,28 @@ final class SubjectContext extends Context
                 '.list-heading:contains("Highlights") + .listing-list > .listing-list__item:nth-child('.$nthChild.')',
                 $subject
             );
+        }
+    }
+
+    /**
+     * @Then /^I should see (\d+) seniors editors for the MSA \'([^\']*)\' sorted by surname in the 'Senior editors' list$/
+     * @Then /^I should see the (\d+) seniors editors for the MSA \'([^\']*)\' sorted by surname in the 'Senior editors' list$/
+     */
+    public function iShouldSeeSeniorsEditorsForTheMSASortedBySurnameInTheList(int $number, string $subject)
+    {
+        $list = $this->assertSession()->elementExists('css', '.list-heading:contains("Senior editors") + .listing-list');
+        $this->assertSession()->elementsCount('css', '.list-heading:contains("Senior editors") + .listing-list > .listing-list__item .profile-snippet__name', $number);
+
+        $names = array_map(Callback::method('getText'), $this->getSession()->getPage()->findAll(
+            'css',
+            '.list-heading:contains("Senior editors") + .listing-list > .listing-list__item .profile-snippet__name'
+        ));
+
+        $namesCheck = $names;
+        sort($namesCheck);
+
+        if ($names !== $namesCheck) {
+            throw new ElementHtmlException('List is not sorted correctly: '.print_r($namesCheck, true), $this->getSession()->getDriver(), $list);
         }
     }
 }
