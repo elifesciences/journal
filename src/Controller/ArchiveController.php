@@ -181,7 +181,7 @@ final class ArchiveController extends Controller
                 if (!$covers || $covers->isEmpty()) {
                     $background = null;
                 } else {
-                    $background = $this->get('elife.journal.view_model.factory.content_header_image')->forImage($covers[0]->getBanner());
+                    $background = $this->get('elife.journal.view_model.factory.content_header_image')->forImage($covers[0]->getBanner(), true);
                 }
 
                 return new ContentHeader($arguments['title'], $background);
