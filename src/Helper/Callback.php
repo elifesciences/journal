@@ -94,6 +94,13 @@ final class Callback
         });
     }
 
+    public static function call(callable $callable, ...$values) : Callback
+    {
+        return new self(function () use ($callable, $values) {
+            return call_user_func($callable, ...$values);
+        });
+    }
+
     public static function emptyOr(callable $callback) : Callback
     {
         return new self(function ($object) use ($callback) {

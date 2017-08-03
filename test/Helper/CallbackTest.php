@@ -155,6 +155,16 @@ final class CallbackTest extends PHPUnit_Framework_TestCase
 
     /**
      * @test
+     */
+    public function it_creates_call()
+    {
+        $callback = Callback::call('range', 2, 5);
+
+        $this->assertSame(range(2, 5), $callback('foo'));
+    }
+
+    /**
+     * @test
      * @dataProvider notEmptyProvider
      */
     public function it_creates_empty_or_with_not_empty($item)
