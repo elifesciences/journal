@@ -41,6 +41,8 @@ trait CreatesCaptionedAsset
             $captionText = null;
         }
 
-        return new ViewModel\CaptionedAsset($viewModel, $captionText, $doi);
+        $inline = $asset instanceof Block\Image && $asset->isInline();
+
+        return new ViewModel\CaptionedAsset($viewModel, $captionText, $doi, $inline);
     }
 }
