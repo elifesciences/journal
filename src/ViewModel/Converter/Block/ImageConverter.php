@@ -30,7 +30,7 @@ final class ImageConverter implements ViewModelConverter
         $image = $object->getImage();
 
         $srcset = [];
-        $baseWidth = 538;
+        $baseWidth = $object->isInline() ? 365 : 538;
         if ($image->getWidth() > $baseWidth) {
             $width = $baseWidth * 2;
             if ($width > $image->getWidth()) {

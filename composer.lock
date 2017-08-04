@@ -859,12 +859,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-sdk-php.git",
-                "reference": "1601dff5e4564ae151d23016c36ee5fdf6cea585"
+                "reference": "6b1b5dcb46bb52d79833e01295ac7065c8371c14"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/1601dff5e4564ae151d23016c36ee5fdf6cea585",
-                "reference": "1601dff5e4564ae151d23016c36ee5fdf6cea585",
+                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/6b1b5dcb46bb52d79833e01295ac7065c8371c14",
+                "reference": "6b1b5dcb46bb52d79833e01295ac7065c8371c14",
                 "shasum": ""
             },
             "require": {
@@ -899,7 +899,7 @@
                 "MIT"
             ],
             "description": "eLife Sciences API SDK",
-            "time": "2017-07-24 07:20:38"
+            "time": "2017-08-04 13:50:38"
         },
         {
             "name": "elife/patterns",
@@ -907,12 +907,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/patterns-php.git",
-                "reference": "ce7a5ff5512e9a8a6cbed65ee5a4ebf66456d65d"
+                "reference": "ca3cfa34f698e511f717f3db8b6791a9d7a7c1f4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/ce7a5ff5512e9a8a6cbed65ee5a4ebf66456d65d",
-                "reference": "ce7a5ff5512e9a8a6cbed65ee5a4ebf66456d65d",
+                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/ca3cfa34f698e511f717f3db8b6791a9d7a7c1f4",
+                "reference": "ca3cfa34f698e511f717f3db8b6791a9d7a7c1f4",
                 "shasum": ""
             },
             "require": {
@@ -945,7 +945,7 @@
                 "MIT"
             ],
             "description": "eLife patterns",
-            "time": "2017-08-03 15:01:32"
+            "time": "2017-08-04 13:54:21"
         },
         {
             "name": "fabpot/goutte",
@@ -3365,12 +3365,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-raml.git",
-                "reference": "36442c5e4319ea5da8d835329654c705e5280fc9"
+                "reference": "dc873493692879f26c90ae2b454c6c7acf0229da"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-raml/zipball/36442c5e4319ea5da8d835329654c705e5280fc9",
-                "reference": "36442c5e4319ea5da8d835329654c705e5280fc9",
+                "url": "https://api.github.com/repos/elifesciences/api-raml/zipball/dc873493692879f26c90ae2b454c6c7acf0229da",
+                "reference": "dc873493692879f26c90ae2b454c6c7acf0229da",
                 "shasum": ""
             },
             "conflict": {
@@ -3382,7 +3382,7 @@
                 "MIT"
             ],
             "description": "eLife Sciences API specification",
-            "time": "2017-07-17 11:42:17"
+            "time": "2017-08-04 13:42:09"
         },
         {
             "name": "elife/api-validator",
