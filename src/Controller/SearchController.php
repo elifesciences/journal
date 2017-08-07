@@ -138,7 +138,7 @@ final class SearchController extends Controller
                     return new MessageBar('1 result found');
                 }
 
-                return new MessageBar(number_format($paginator->getTotal()).' results found');
+                return new MessageBar('<b>'.number_format($paginator->getTotal()).'</b> results found');
             });
 
         $currentOrder = SortControlOption::ASC === $arguments['query']['order'] ? SortControlOption::ASC : SortControlOption::DESC;
@@ -175,6 +175,16 @@ final class SearchController extends Controller
             ->then(function (Search $search) use ($arguments) {
                 $filterGroups = [];
 
+                $allTypes = $search->types();
+
+                $filterGroups[] = new FilterGroup(
+                    'Type',
+                    [
+                        new Filter(in_array('magazine', $arguments['query']['types']), 'Magazine', $this->countForTypes(self::$magazineTypes, $allTypes), 'types[]', 'magazine'),
+                        new Filter(in_array('research', $arguments['query']['types']), 'Research', $this->countForTypes(self::$researchTypes, $allTypes), 'types[]', 'research'),
+                    ]
+                );
+
                 if (count($search->subjects())) {
                     $subjectFilters = [];
                     foreach ($search->subjects() as $subject => $results) {
@@ -188,20 +198,10 @@ final class SearchController extends Controller
                     $filterGroups[] = new FilterGroup('Research categories', $subjectFilters);
                 }
 
-                $allTypes = $search->types();
-
-                $filterGroups[] = new FilterGroup(
-                    'Type',
-                    [
-                        new Filter(in_array('magazine', $arguments['query']['types']), 'Magazine', $this->countForTypes(self::$magazineTypes, $allTypes), 'types[]', 'magazine'),
-                        new Filter(in_array('research', $arguments['query']['types']), 'Research', $this->countForTypes(self::$researchTypes, $allTypes), 'types[]', 'research'),
-                    ]
-                );
-
                 return new FilterPanel(
                     'Refine your results by:',
                     $filterGroups,
-                    Button::form('Refine results', Button::TYPE_SUBMIT, null, Button::SIZE_SMALL)
+                    Button::form('Refine results', Button::TYPE_SUBMIT)
                 );
             });
 
