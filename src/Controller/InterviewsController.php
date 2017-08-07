@@ -107,6 +107,15 @@ final class InterviewsController extends Controller
                 );
             });
 
+        $arguments['collections'] = $this->get('elife.api_sdk.collections')
+            ->containing("interview/{$id}")
+            ->slice(0, 10)
+            ->map($this->willConvertTo(Teaser::class, ['variant' => 'relatedItem', 'from' => 'interview', 'unrelated' => false]))
+            ->then(Callback::emptyOr(function (Sequence $collections) {
+                return ListingTeasers::basic($collections->toArray());
+            }))
+            ->otherwise($this->softFailure("Failed to load collections for interview '$id'"));
+
         return new Response($this->get('templating')->render('::interview.html.twig', $arguments));
     }
 }
