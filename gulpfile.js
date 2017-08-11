@@ -179,6 +179,7 @@ gulp.task('critical-css:generate', ['critical-css:clean'], (callback) => {
                 html: html,
                 src: uri,
                 include: criticalCssConfig.getInclusions(name),
+                pathPrefix: criticalCssConfig.assetPathPrefix,
                 minify: true,
                 dimensions: criticalCssConfig.dimensions,
                 timeout: 90000
@@ -285,6 +286,7 @@ const criticalCssConfig = (function () {
     return {
         baseUrl: 'http://localhost:8080',
         baseFilePath: './build/critical-css',
+        assetPathPrefix: '/assets/patterns/level-to-be-raised-from-by-actual-path-double-dot/',
         dimensions: [
             {
                 height: 1000,
