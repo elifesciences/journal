@@ -8,14 +8,6 @@
 
 {% block body %}
 
-    {% embed 'grid/content.html.twig' %}
-
-        {% block main %}
-
-            {{ render_pattern(error) }}
-
-        {% endblock %}
-
-    {% endembed %}
+    {{ render_pattern(error) }}
 
 {% endblock %}
