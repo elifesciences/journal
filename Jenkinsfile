@@ -29,6 +29,11 @@ elifePipeline {
             builderSmokeTests 'journal--demo', '/srv/journal'
         }
 
+        stage 'Deploy on continuumtest', {
+            builderDeployRevision 'journal--continuumtest', commit
+            builderSmokeTests 'journal--continuumtest', '/srv/journal'
+        }
+
         stage 'Approval', {
             elifeGitMoveToBranch commit, 'approved'
         }
