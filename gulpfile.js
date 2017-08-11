@@ -286,7 +286,7 @@ const criticalCssConfig = (function () {
     return {
         baseUrl: 'http://localhost:8080',
         baseFilePath: './build/critical-css',
-        assetPathPrefix: '/assets/patterns/',
+        assetPathPrefix: '/assets/patterns',
         dimensions: [
             {
                 height: 1000,
