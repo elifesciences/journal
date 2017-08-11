@@ -18,6 +18,7 @@ use eLife\ApiSdk\Model\CitationsMetricSource;
 use eLife\ApiSdk\Model\DataSet;
 use eLife\ApiSdk\Model\FundingAward;
 use eLife\ApiSdk\Model\HasContent;
+use eLife\ApiSdk\Model\Identifier;
 use eLife\ApiSdk\Model\Model;
 use eLife\ApiSdk\Model\Reviewer;
 use eLife\Journal\Helper\Callback;
@@ -60,7 +61,7 @@ final class ArticlesController extends Controller
                     return new EmptySequence();
                 }
 
-                return $this->get('elife.api_sdk.recommendations')->list('article', $article->getId())->slice(0)
+                return $this->get('elife.api_sdk.recommendations')->list($article->getIdentifier())->slice(0)
                     ->otherwise($this->mightNotExist())
                     ->otherwise($this->softFailure('Failed to load recommendations', new EmptySequence()));
             }));
@@ -156,7 +157,7 @@ final class ArticlesController extends Controller
             });
 
         $arguments['downloads'] = $this->get('elife.api_sdk.metrics')
-            ->totalDownloads('article', $id)
+            ->totalDownloads(Identifier::article($id))
             ->otherwise($this->mightNotExist())
             ->otherwise($this->softFailure('Failed to load downloads count'));
 
@@ -739,12 +740,12 @@ final class ArticlesController extends Controller
             });
 
         $arguments['citations'] = $this->get('elife.api_sdk.metrics')
-            ->citations('article', $id)
+            ->citations(Identifier::article($id))
             ->otherwise($this->mightNotExist())
             ->otherwise($this->softFailure('Failed to load citations count'));
 
         $arguments['pageViews'] = $this->get('elife.api_sdk.metrics')
-            ->totalPageViews('article', $id)
+            ->totalPageViews(Identifier::article($id))
             ->otherwise($this->mightNotExist())
             ->otherwise($this->softFailure('Failed to load page views count'));
 
