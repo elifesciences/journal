@@ -28,6 +28,68 @@ final class InterviewControllerTest extends PageTestCase
     /**
      * @test
      */
+    public function it_displays_collections()
+    {
+        $client = static::createClient();
+
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/collections?page=1&per-page=10&order=desc&containing[]=interview/1',
+                ['Accept' => 'application/vnd.elife.collection-list+json; version=1']
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.collection-list+json; version=1'],
+                json_encode([
+                    'total' => 1,
+                    'items' => [
+                        [
+                            'id' => '1',
+                            'title' => 'Collection title',
+                            'published' => '2010-01-01T00:00:00Z',
+                            'image' => [
+                                'thumbnail' => [
+                                    'uri' => 'https://www.example.com/iiif/image',
+                                    'alt' => '',
+                                    'source' => [
+                                        'mediaType' => 'image/jpeg',
+                                        'uri' => 'https://www.example.com/image.jpg',
+                                        'filename' => 'image.jpg',
+                                    ],
+                                    'size' => [
+                                        'width' => 800,
+                                        'height' => 600,
+                                    ],
+                                ],
+                            ],
+                            'selectedCurator' => [
+                                'id' => 'person',
+                                'type' => [
+                                    'id' => 'senior-editor',
+                                    'label' => 'Senior editor',
+                                ],
+                                'name' => [
+                                    'preferred' => 'Person One',
+                                    'index' => 'Person One',
+                                ],
+                            ],
+                        ],
+                    ],
+                ])
+            )
+        );
+
+        $crawler = $client->request('GET', $this->getUrl());
+
+        $this->assertSame(200, $client->getResponse()->getStatusCode());
+        $this->assertSame('Part of', $crawler->filter('.teaser--related .teaser__context_label')->text());
+        $this->assertSame('Collection title', trim(preg_replace('!\s+!', ' ', $crawler->filter('.teaser--related .teaser__header_text')->text())));
+    }
+
+    /**
+     * @test
+     */
     public function it_has_metadata()
     {
         $client = static::createClient();
