@@ -3,6 +3,7 @@
 namespace eLife\Journal\Controller;
 
 use eLife\ApiSdk\Collection\Sequence;
+use eLife\ApiSdk\Model\Identifier;
 use eLife\ApiSdk\Model\Interview;
 use eLife\ApiSdk\Model\IntervieweeCvLine;
 use eLife\Journal\Helper\Callback;
@@ -108,7 +109,7 @@ final class InterviewsController extends Controller
             });
 
         $arguments['collections'] = $this->get('elife.api_sdk.collections')
-            ->containing("interview/{$id}")
+            ->containing(Identifier::interview($id))
             ->slice(0, 10)
             ->map($this->willConvertTo(Teaser::class, ['variant' => 'relatedItem', 'from' => 'interview', 'unrelated' => false]))
             ->then(Callback::emptyOr(function (Sequence $collections) {
