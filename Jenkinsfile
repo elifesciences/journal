@@ -27,12 +27,16 @@ elifePipeline {
         stage 'Deploy on demo, continuumtest', {
             def deployments = [
                 demo: {
-                    builderDeployRevision 'journal--demo', commit
-                    builderSmokeTests 'journal--demo', '/srv/journal'
+                    lock('journal--demo') {
+                        builderDeployRevision 'journal--demo', commit
+                        builderSmokeTests 'journal--demo', '/srv/journal'
+                    }
                 },
                 continuumtest: {
-                    builderDeployRevision 'journal--continuumtest', commit
-                    builderSmokeTests 'journal--continuumtest', '/srv/journal'
+                    lock('journal--continuumtest') {
+                        builderDeployRevision 'journal--continuumtest', commit
+                        builderSmokeTests 'journal--continuumtest', '/srv/journal'
+                    }
                 }
             ]
             parallel deployments
