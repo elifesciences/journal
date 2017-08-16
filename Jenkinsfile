@@ -37,6 +37,12 @@ elifePipeline {
                         builderDeployRevision 'journal--continuumtest', commit
                         builderSmokeTests 'journal--continuumtest', '/srv/journal'
                     }
+                },
+                continuumtestpreview: {
+                    lock('journal--continuumtestpreview') {
+                        builderDeployRevision 'journal--continuumtestpreview', commit
+                        builderSmokeTests 'journal--continuumtestpreview', '/srv/journal'
+                    }
                 }
             ]
             parallel deployments
