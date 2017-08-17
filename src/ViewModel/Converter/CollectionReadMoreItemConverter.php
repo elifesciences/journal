@@ -46,7 +46,8 @@ final class CollectionReadMoreItemConverter implements ViewModelConverter
                     $this->simpleDate($object, $context)
                 )
             ),
-            $object->getImpactStatement() ? $this->patternRenderer->render(new Paragraph($object->getImpactStatement())) : null
+            $object->getImpactStatement() ? $this->patternRenderer->render(new Paragraph($object->getImpactStatement())) : null,
+            $context['isRelated'] ?? false
         );
     }
 

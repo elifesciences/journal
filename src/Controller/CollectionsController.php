@@ -30,7 +30,8 @@ final class CollectionsController extends Controller
         $latestResearch = $this->pagerfantaPromise(
             $this->get('elife.api_sdk.collections'),
             $page,
-            $perPage
+            $perPage,
+            $this->willConvertTo(Teaser::class)
         );
 
         $arguments['title'] = 'Collections';

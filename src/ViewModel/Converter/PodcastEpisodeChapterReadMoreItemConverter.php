@@ -40,7 +40,8 @@ final class PodcastEpisodeChapterReadMoreItemConverter implements ViewModelConve
                     )
                 )
             ),
-            $chapter->getImpactStatement() ? $this->patternRenderer->render(new Paragraph($chapter->getImpactStatement())) : null
+            $chapter->getImpactStatement() ? $this->patternRenderer->render(new Paragraph($chapter->getImpactStatement())) : null,
+            $context['isRelated'] ?? false
         );
     }
 

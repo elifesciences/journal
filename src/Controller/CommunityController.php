@@ -27,7 +27,8 @@ final class CommunityController extends Controller
         $latestCommunity = $this->pagerfantaPromise(
             $this->get('elife.api_sdk.community'),
             $page,
-            $perPage
+            $perPage,
+            $this->willConvertTo(Teaser::class)
         );
 
         $arguments['title'] = 'Community';

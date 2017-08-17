@@ -6,6 +6,7 @@ use eLife\Journal\Helper\HasPages;
 use eLife\Journal\Helper\Paginator;
 use eLife\Patterns\ViewModel\ContentHeader;
 use eLife\Patterns\ViewModel\ListingTeasers;
+use eLife\Patterns\ViewModel\Teaser;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -23,7 +24,8 @@ final class AnnualReportsController extends Controller
         $annualReports = $this->pagerfantaPromise(
             $this->get('elife.api_sdk.annual_reports'),
             $page,
-            $perPage
+            $perPage,
+            $this->willConvertTo(Teaser::class)
         );
 
         $arguments['title'] = 'Annual reports';

@@ -28,7 +28,8 @@ final class PressPacksController extends Controller
         $latest = $this->pagerfantaPromise(
             $this->get('elife.api_sdk.press_packages'),
             $page,
-            $perPage
+            $perPage,
+            $this->willConvertTo(Teaser::class)
         );
 
         $arguments['title'] = 'For the press';
