@@ -24,6 +24,20 @@
 
         {% endblock %}
 
+        {% block secondary %}
+
+            {% if collections %}
+
+                <div class="grid-secondary-column__item">
+
+                    {{ render_pattern(collections) }}
+
+                </div>
+
+            {% endif %}
+
+        {% endblock %}
+
     {% endembed %}
 
 {% endblock %}
