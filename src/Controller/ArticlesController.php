@@ -81,13 +81,20 @@ final class ArticlesController extends Controller
             });
 
         $arguments['relatedItem'] = $arguments['furtherReading']->then(Callback::method('offsetGet', 0));
-        $furtherReading = new PromiseSequence($arguments['furtherReading']->then(Callback::method('slice', 1)));
 
         $furtherReading = $this->pagerfantaPromise(
-            $furtherReading,
+            $arguments['furtherReading'],
             $page,
             $perPage,
-            ReadMoreItem::class
+            function (Model $model, int $i) {
+                $context = [];
+
+                if (0 === $i) {
+                    $context['isRelated'] = true;
+                }
+
+                return $this->convertTo($model, ReadMoreItem::class, $context);
+            }
         );
 
         $arguments['paginator'] = $this->paginator(

@@ -47,7 +47,8 @@ final class ArticleReadMoreItemConverter implements ViewModelConverter
                     $this->simpleDate($object, $context)
                 )
             ),
-            $object->getAbstract() ? $this->patternRenderer->render(...$this->convertContent($object->getAbstract())) : null
+            $object->getAbstract() ? $this->patternRenderer->render(...$this->convertContent($object->getAbstract())) : null,
+            $context['isRelated'] ?? false
         );
     }
 

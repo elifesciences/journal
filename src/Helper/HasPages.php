@@ -4,7 +4,6 @@ namespace eLife\Journal\Helper;
 
 use eLife\ApiSdk\Collection\Sequence;
 use eLife\Journal\Pagerfanta\SequenceAdapter;
-use eLife\Patterns\ViewModel\Teaser;
 use GuzzleHttp\Promise\PromiseInterface;
 use Pagerfanta\Pagerfanta;
 use Symfony\Component\HttpFoundation\Request;
@@ -12,11 +11,11 @@ use function GuzzleHttp\Promise\promise_for;
 
 trait HasPages
 {
-    final private function pagerfantaPromise(Sequence $sdkClient, int $page, int $perPage, string $convertTo = Teaser::class) : PromiseInterface
+    final private function pagerfantaPromise(Sequence $sdkClient, int $page, int $perPage, callable $map = null) : PromiseInterface
     {
         return promise_for($sdkClient)
-            ->then(function (Sequence $sequence) use ($page, $perPage, $convertTo) {
-                $pagerfanta = new Pagerfanta(new SequenceAdapter($sequence, $this->willConvertTo($convertTo)));
+            ->then(function (Sequence $sequence) use ($page, $perPage, $map) {
+                $pagerfanta = new Pagerfanta(new SequenceAdapter($sequence, $map));
                 $pagerfanta->setMaxPerPage($perPage)->setCurrentPage($page);
 
                 return $pagerfanta;

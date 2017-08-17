@@ -1709,15 +1709,16 @@ final class ArticleControllerTest extends PageTestCase
 
         $furtherReading = $crawler->filter('.listing-list-heading:contains("Further reading") + .listing-list > .listing-list__item');
         $this->assertCount(3, $furtherReading);
-        $this->assertContains('Insight 2 title', $furtherReading->eq(0)->text());
-        $this->assertContains('Another article title', $furtherReading->eq(1)->text());
-        $this->assertContains('Insight 3 title', $furtherReading->eq(2)->text());
+        $this->assertContains('Insight 1 title', $furtherReading->eq(0)->text());
+        $this->assertContains('Insight 2 title', $furtherReading->eq(1)->text());
+        $this->assertContains('Another article title', $furtherReading->eq(2)->text());
 
         $crawler = $client->click($crawler->selectLink('Load more')->link());
 
         $furtherReading = $crawler->filter('.listing-list__item');
-        $this->assertCount(1, $furtherReading);
-        $this->assertContains('Insight 4 title', $furtherReading->eq(0)->text());
+        $this->assertCount(2, $furtherReading);
+        $this->assertContains('Insight 3 title', $furtherReading->eq(0)->text());
+        $this->assertContains('Insight 4 title', $furtherReading->eq(1)->text());
     }
 
     protected function getUrl() : string
