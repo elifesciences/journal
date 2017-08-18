@@ -86,10 +86,10 @@ final class ArticlesController extends Controller
             $arguments['furtherReading'],
             $page,
             $perPage,
-            function (Model $model, int $i) {
+            function (Model $model, int $i) use ($page) {
                 $context = [];
 
-                if (0 === $i) {
+                if (0 === $i && 1 === $page) {
                     $context['isRelated'] = true;
                 }
 
