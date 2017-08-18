@@ -1709,6 +1709,7 @@ final class ArticleControllerTest extends PageTestCase
 
         $furtherReading = $crawler->filter('.listing-list-heading:contains("Further reading") + .listing-list > .listing-list__item');
         $this->assertCount(3, $furtherReading);
+        $this->assertCount(1, $crawler->filter('.listing-list__item--related'));
         $this->assertContains('Insight 1 title', $furtherReading->eq(0)->text());
         $this->assertContains('Insight 2 title', $furtherReading->eq(1)->text());
         $this->assertContains('Another article title', $furtherReading->eq(2)->text());
@@ -1717,6 +1718,7 @@ final class ArticleControllerTest extends PageTestCase
 
         $furtherReading = $crawler->filter('.listing-list__item');
         $this->assertCount(2, $furtherReading);
+        $this->assertCount(0, $crawler->filter('.listing-list__item--related'));
         $this->assertContains('Insight 3 title', $furtherReading->eq(0)->text());
         $this->assertContains('Insight 4 title', $furtherReading->eq(1)->text());
     }
