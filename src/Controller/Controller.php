@@ -145,44 +145,57 @@ abstract class Controller implements ContainerAwareInterface
         return $response;
     }
 
+    final protected function ifFormSubmitted(Request $request, FormInterface $form, callable $onValid)
+    {
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted()) {
+            if ($form->isValid()) {
+                $onValid();
+
+                throw new EarlyResponse(new RedirectResponse($request->getUri()));
+            }
+
+            if (count($form->getErrors()) > 0) {
+                foreach ($form->getErrors() as $error) {
+                    $this->get('session')
+                        ->getFlashBag()
+                        ->add(InfoBar::TYPE_ATTENTION, $error->getMessage());
+                }
+            } else {
+                $this->get('session')
+                    ->getFlashBag()
+                    ->add(InfoBar::TYPE_ATTENTION, 'There were problems submitting the form.');
+            }
+        }
+    }
+
     final protected function defaultPageArguments(Request $request, PromiseInterface $model = null) : array
     {
         /** @var FormInterface $form */
         $form = $this->get('form.factory')
             ->create(EmailCtaType::class, null, ['action' => $request->getUri()]);
 
-        $form->handleRequest($request);
+        $this->ifFormSubmitted($request, $form, function () use ($form) {
+            $goutte = $this->get('elife.journal.goutte');
 
-        if ($form->isSubmitted()) {
-            if ($form->isValid()) {
-                $goutte = $this->get('elife.journal.goutte');
+            $crawler = $goutte->request('GET', $this->getParameter('crm_url').'profile/create?reset=1&gid=18');
+            $button = $crawler->selectButton('Save');
 
-                $crawler = $goutte->request('GET', $this->getParameter('crm_url').'profile/create?reset=1&gid=18');
-                $button = $crawler->selectButton('Save');
+            $crawler = $goutte->submit($button->form(), ['email-3' => $form->get('email')->getData()]);
 
-                $crawler = $goutte->submit($button->form(), ['email-3' => $form->get('email')->getData()]);
-
-                if ($crawler->filter('.messages:contains("Your subscription request has been submitted")')->count()) {
-                    $this->get('session')
-                        ->getFlashBag()
-                        ->add(ViewModel\InfoBar::TYPE_SUCCESS, 'Almost finished! Click the link in the email we just sent you to confirm your subscription.');
-                } elseif ($crawler->filter('.msg-text:contains("Your information has been saved")')->count()) {
-                    $this->get('session')
-                        ->getFlashBag()
-                        ->add(ViewModel\InfoBar::TYPE_SUCCESS, 'You are already subscribed!');
-                } else {
-                    throw new UnexpectedValueException('Couldn\'t read CRM response');
-                }
-
-                throw new EarlyResponse(new RedirectResponse($request->getUri()));
-            }
-
-            foreach ($form->getErrors(true) as $error) {
+            if ($crawler->filter('.messages:contains("Your subscription request has been submitted")')->count()) {
                 $this->get('session')
                     ->getFlashBag()
-                    ->add(InfoBar::TYPE_ATTENTION, $error->getMessage());
+                    ->add(ViewModel\InfoBar::TYPE_SUCCESS, 'Almost finished! Click the link in the email we just sent you to confirm your subscription.');
+            } elseif ($crawler->filter('.msg-text:contains("Your information has been saved")')->count()) {
+                $this->get('session')
+                    ->getFlashBag()
+                    ->add(ViewModel\InfoBar::TYPE_SUCCESS, 'You are already subscribed!');
+            } else {
+                throw new UnexpectedValueException('Couldn\'t read CRM response');
             }
-        }
+        });
 
         return [
             'header' => promise_for($model)->then(function (Model $model = null) : ViewModel\SiteHeader {

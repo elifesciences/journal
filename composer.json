@@ -20,7 +20,7 @@
         "cweagans/composer-patches": "^1.6",
         "elife/api-client": "^1.0@dev",
         "elife/api-sdk": "^1.0@dev",
-        "elife/patterns": "dev-master",
+        "elife/patterns": "dev-form-validation",
         "fabpot/goutte": "^3.2",
         "guzzlehttp/promises": "^1.3",
         "irozgar/gulp-rev-versions-bundle": "^1.0",
