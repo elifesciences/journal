@@ -320,7 +320,9 @@ final class SearchContext extends Context
     {
         $this->getSession()->getPage()->checkField($subject);
 
-        $this->getSession()->getPage()->pressButton('Refine results');
+        if (!$this->isJavaScript()) {
+            $this->getSession()->getPage()->pressButton('Refine results');
+        }
     }
 
     /**
@@ -330,7 +332,9 @@ final class SearchContext extends Context
     {
         $this->getSession()->getPage()->checkField($contentType);
 
-        $this->getSession()->getPage()->pressButton('Refine results');
+        if (!$this->isJavaScript()) {
+            $this->getSession()->getPage()->pressButton('Refine results');
+        }
     }
 
     /**
