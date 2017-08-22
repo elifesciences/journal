@@ -71,10 +71,12 @@ final class LabsPostControllerTest extends PageTestCase
 
         $crawler = $client->submit($crawler->selectButton('Submit')->form());
 
-        $this->assertCount(3, $crawler->filter('.info-bar'));
-        $this->assertSame('Please provide your name.', trim($crawler->filter('.info-bar')->eq(0)->text()));
-        $this->assertSame('Please provide your email address.', trim($crawler->filter('.info-bar')->eq(1)->text()));
-        $this->assertSame('Please let us know your comment.', trim($crawler->filter('.info-bar')->eq(2)->text()));
+        $this->assertCount(1, $crawler->filter('.info-bar'));
+        $this->assertSame('There were problems submitting the form.', trim($crawler->filter('.info-bar')->text()));
+        $this->assertSame(
+            ['Please provide your name.', 'Please provide your email address.', 'Please let us know your comment.'],
+            array_map('trim', $crawler->filter('.form-item__message')->extract(['_text']))
+        );
     }
 
     /**
@@ -94,7 +96,11 @@ final class LabsPostControllerTest extends PageTestCase
         $crawler = $client->submit($form);
 
         $this->assertCount(1, $crawler->filter('.info-bar'));
-        $this->assertSame('Please provide a valid email address.', trim($crawler->filter('.info-bar')->text()));
+        $this->assertSame('There were problems submitting the form.', trim($crawler->filter('.info-bar')->text()));
+        $this->assertSame(
+            ['Please provide a valid email address.'],
+            array_map('trim', $crawler->filter('.form-item__message')->extract(['_text']))
+        );
     }
 
     /**

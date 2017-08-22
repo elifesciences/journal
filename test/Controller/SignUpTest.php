@@ -91,7 +91,8 @@ final class SignUpTest extends WebTestCase
         $crawler = $client->submit($crawler->selectButton('Sign up')->form());
 
         $this->assertCount(1, $crawler->filter('.info-bar'));
-        $this->assertSame('Please provide your email address.', trim($crawler->filter('.info-bar')->text()));
+        $this->assertSame('There were problems submitting the form.', trim($crawler->filter('.info-bar')->text()));
+        $this->assertSame('Please provide your email address.', $crawler->filter('.compact-form__message')->text());
 
         $this->assertSame('no-cache, private', $client->getResponse()->headers->get('Cache-Control'));
         $this->assertEmpty($client->getResponse()->getVary());
