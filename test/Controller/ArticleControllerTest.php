@@ -1501,47 +1501,6 @@ final class ArticleControllerTest extends PageTestCase
         $this->mockApiResponse(
             new Request(
                 'GET',
-                'http://api.elifesciences.org/recommendations/article/00001?page=1&per-page=1&order=desc',
-                [
-                    'Accept' => [
-                        'application/vnd.elife.recommendations+json; version=1',
-                    ],
-                ]
-            ),
-            new Response(
-                200,
-                ['Content-Type' => 'application/vnd.elife.recommendations+json; version=1'],
-                json_encode([
-                    'total' => 7,
-                    'items' => [
-                        [
-                            'status' => 'vor',
-                            'stage' => 'published',
-                            'id' => '00002',
-                            'version' => 1,
-                            'type' => 'correction',
-                            'doi' => '10.7554/eLife.00002',
-                            'title' => 'Correction title',
-                            'published' => '2010-01-01T00:00:00Z',
-                            'versionDate' => '2010-01-01T00:00:00Z',
-                            'statusDate' => '2010-01-01T00:00:00Z',
-                            'volume' => 1,
-                            'elocationId' => 'e00002',
-                            'copyright' => [
-                                'license' => 'CC-BY-4.0',
-                                'holder' => 'Author One',
-                                'statement' => 'Copyright statement.',
-                            ],
-                            'authorLine' => 'Author One et al.',
-                        ],
-                    ],
-                ])
-            )
-        );
-
-        $this->mockApiResponse(
-            new Request(
-                'GET',
                 'http://api.elifesciences.org/recommendations/article/00001?page=1&per-page=100&order=desc',
                 [
                     'Accept' => [

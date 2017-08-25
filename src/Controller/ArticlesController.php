@@ -61,7 +61,7 @@ final class ArticlesController extends Controller
                     return new EmptySequence();
                 }
 
-                return $this->get('elife.api_sdk.recommendations')->list($article->getIdentifier())->slice(0)
+                return $this->get('elife.api_sdk.recommendations')->list($article->getIdentifier())->slice(0, 100)
                     ->otherwise($this->mightNotExist())
                     ->otherwise($this->softFailure('Failed to load recommendations', new EmptySequence()));
             }));
