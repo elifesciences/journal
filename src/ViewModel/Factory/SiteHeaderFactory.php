@@ -20,18 +20,22 @@ use eLife\Patterns\ViewModel\SubjectFilter;
 use Symfony\Component\Asset\Packages;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Security\Core\Authorization\AuthorizationChecker;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 final class SiteHeaderFactory
 {
     private $urlGenerator;
     private $packages;
     private $requestStack;
+    private $authorizationChecker;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator, Packages $packages, RequestStack $requestStack)
+    public function __construct(UrlGeneratorInterface $urlGenerator, Packages $packages, RequestStack $requestStack, AuthorizationCheckerInterface $authorizationChecker)
     {
         $this->urlGenerator = $urlGenerator;
         $this->packages = $packages;
         $this->requestStack = $requestStack;
+        $this->authorizationChecker = $authorizationChecker;
     }
 
     public function createSiteHeader(Model $model = null) : SiteHeader
@@ -101,6 +105,12 @@ final class SiteHeaderFactory
             $searchItem,
         ]);
 
+        if (!$this->authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY')) {
+            $authentication = Button::link('Log in/Register', $this->urlGenerator->generate('log-in'), Button::SIZE_EXTRA_SMALL);
+        } else {
+            $authentication = Button::link('Log out', $this->urlGenerator->generate('log-out'), Button::SIZE_EXTRA_SMALL);
+        }
+
         $secondaryLinks = SiteHeaderNavBar::secondary([
             NavLinkedItem::asLink(new Link('About', $this->urlGenerator->generate('about'))),
             NavLinkedItem::asLink(new Link('Labs', $this->urlGenerator->generate('labs'))),
@@ -108,6 +118,7 @@ final class SiteHeaderFactory
             NavLinkedItem::asButton(
                 Button::link('Submit my research', 'http://submit.elifesciences.org/', Button::SIZE_EXTRA_SMALL)
             ),
+            NavLinkedItem::asButton($authentication),
         ]);
 
         if ($model instanceof HasSubjects) {

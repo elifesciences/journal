@@ -1,5 +1,6 @@
 imports:
   - resource: parameters.yml
+  - resource: security.yml
   - resource: services.yml
 
 parameters:
@@ -59,6 +60,18 @@ framework:
         engines:
           - mustache
           - twig
+
+hwi_oauth:
+    firewall_names:
+      - main
+    resource_owners:
+        google:
+            type: google
+            client_id: '%google_client_id%'
+            client_secret: '%google_client_secret%'
+            scope: email profile
+            options:
+                csrf: true
 
 irozgar_gulp_rev_versions:
     manifest_path: '../build/rev-manifest.json'
