@@ -105,7 +105,7 @@ final class SiteHeaderFactory
             $searchItem,
         ]);
 
-        if (!$this->authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY')) {
+        if (!$this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             $authentication = Button::link('Log in/Register', $this->urlGenerator->generate('log-in'), Button::SIZE_EXTRA_SMALL);
         } else {
             $authentication = Button::link('Log out', $this->urlGenerator->generate('log-out'), Button::SIZE_EXTRA_SMALL);
