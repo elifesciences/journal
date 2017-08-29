@@ -105,21 +105,22 @@ final class SiteHeaderFactory
             $searchItem,
         ]);
 
-        if (!$this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
-            $authentication = Button::link('Log in/Register', $this->urlGenerator->generate('log-in'), Button::SIZE_EXTRA_SMALL);
-        } else {
-            $authentication = Button::link('Log out', $this->urlGenerator->generate('log-out'), Button::SIZE_EXTRA_SMALL);
-        }
-
-        $secondaryLinks = SiteHeaderNavBar::secondary([
+        $secondaryLinks = [
             NavLinkedItem::asLink(new Link('About', $this->urlGenerator->generate('about'))),
             NavLinkedItem::asLink(new Link('Labs', $this->urlGenerator->generate('labs'))),
             NavLinkedItem::asLink(new Link('Community', $this->urlGenerator->generate('community'))),
             NavLinkedItem::asButton(
                 Button::link('Submit my research', 'http://submit.elifesciences.org/', Button::SIZE_EXTRA_SMALL)
             ),
-            NavLinkedItem::asButton($authentication),
-        ]);
+        ];
+
+        if ($this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+            $secondaryLinks[] = NavLinkedItem::asButton(Button::link('Log out', $this->urlGenerator->generate('log-out'), Button::SIZE_EXTRA_SMALL));
+        } elseif ($this->authorizationChecker->isGranted('CAN_AUTHENTICATE')) {
+            $secondaryLinks[] = NavLinkedItem::asButton(Button::link('Log in/Register', $this->urlGenerator->generate('log-in'), Button::SIZE_EXTRA_SMALL));
+        }
+
+        $secondaryLinks = SiteHeaderNavBar::secondary($secondaryLinks);
 
         if ($model instanceof HasSubjects) {
             $subject = $model->getSubjects()[0];
