@@ -70,8 +70,8 @@ hwi_oauth:
             class: eLife\Journal\Security\OAuth2\ElifeResourceOwner
             client_id: '%oauth2_client_id%'
             client_secret: '%oauth2_client_secret%'
-            access_token_url: '%api_url%/oauth2/token'
-            authorization_url: '%api_url_public%/oauth2/authorize'
+            access_token_url: '%api_url%oauth2/token'
+            authorization_url: '%api_url_public%oauth2/authorize'
             paths:
                 identifier: orcid
                 nickname: name
