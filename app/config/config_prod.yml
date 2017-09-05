@@ -40,6 +40,7 @@ nelmio_security:
     csp:
         enforce:
             default-src:
+              - 'data:'
               - 'https:'
               - unsafe-inline
     forced_ssl:
