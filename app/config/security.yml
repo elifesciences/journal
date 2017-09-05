@@ -17,7 +17,7 @@ security:
                 oauth_user_provider:
                     service: hwi_oauth.user.provider
                 resource_owners:
-                    google: /log-in/check
+                    elife: /log-in/check
     access_control:
         - path: ^/log-in
           roles: IS_AUTHENTICATED_ANONYMOUSLY

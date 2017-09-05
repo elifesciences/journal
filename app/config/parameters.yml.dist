@@ -19,5 +19,5 @@ parameters:
       - .*\.?elifesciences.org$
     status_checks:
         Articles: articles
-    google_client_id: SomeLongIdentifier.apps.googleusercontent.com
-    google_client_secret: ThisIsASecretProvidedByGoogle
+    oauth2_client_id: some-id
+    oauth2_client_secret: ThisIsASecret

@@ -17,7 +17,7 @@ final class AuthController extends Controller
         $request = $this->get('request_stack')->getCurrentRequest();
         $path['_forwarded'] = $request->attributes;
         $path['_controller'] = 'HWIOAuthBundle:Connect:redirectToService';
-        $path['service'] = 'google';
+        $path['service'] = 'elife';
         $subRequest = $request->duplicate([], null, $path);
 
         return $this->get('http_kernel')->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
