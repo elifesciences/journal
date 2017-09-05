@@ -7,6 +7,8 @@ parameters:
     api_url_public: http://api.elifesciences.org/
     api_mock: '%kernel.cache_dir%/guzzle/fixtures'
     crm_url: http://crm.elifesciences.org/crm/civicrm/
+    oauth2_client_id: journal_client_id
+    oauth2_client_secret: journal_client_secret
     status_checks:
         Check 1: foo
         Check 2: bar
