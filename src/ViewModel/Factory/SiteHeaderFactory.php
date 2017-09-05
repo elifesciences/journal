@@ -116,7 +116,7 @@ final class SiteHeaderFactory
 
         if ($this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             $secondaryLinks[] = NavLinkedItem::asButton(Button::link('Log out', $this->urlGenerator->generate('log-out'), Button::SIZE_EXTRA_SMALL));
-        } elseif ($this->authorizationChecker->isGranted('CAN_AUTHENTICATE')) {
+        } elseif ($this->authorizationChecker->isGranted('FEATURE_CAN_AUTHENTICATE')) {
             $secondaryLinks[] = NavLinkedItem::asButton(Button::link('Log in/Register', $this->urlGenerator->generate('log-in'), Button::SIZE_EXTRA_SMALL));
         }
 

@@ -206,12 +206,12 @@ services:
         - '@elife.journal.router.parameter_resolving.inner'
         - '@elife.journal.router.parameter_resolver.model'
 
-    elife.journal.security.voter.can_authenticate:
+    elife.journal.security.voter.feature.can_authenticate:
         class: eLife\Journal\Security\Voter\SessionAttributeVoter
         public: false
         arguments:
           - '@request_stack'
-          - CAN_AUTHENTICATE
+          - FEATURE_CAN_AUTHENTICATE
           - open-sesame
         tags:
           - name: security.voter

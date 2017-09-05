@@ -10,7 +10,7 @@ final class AuthController extends Controller
 {
     public function redirectAction() : Response
     {
-        if (!$this->get('security.authorization_checker')->isGranted('CAN_AUTHENTICATE')) {
+        if (!$this->get('security.authorization_checker')->isGranted('FEATURE_CAN_AUTHENTICATE')) {
             throw new NotFoundHttpException('Not found');
         }
 
