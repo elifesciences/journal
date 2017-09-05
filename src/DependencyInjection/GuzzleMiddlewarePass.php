@@ -9,7 +9,7 @@ final class GuzzleMiddlewarePass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container)
     {
-        foreach (['elife_crm', 'file_download'] as $id) {
+        foreach (['elife_crm', 'file_download', 'oauth'] as $id) {
             $handler = $container->getDefinition("csa_guzzle.client.$id")->getArgument(0)['handler'];
 
             $handler->setMethodCalls(array_filter($handler->getMethodCalls(), function (array $methodCall) {

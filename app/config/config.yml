@@ -32,6 +32,10 @@ csa_guzzle:
                 connect_timeout: 0.5
                 http_errors: false
                 stream: true
+        oauth:
+            config:
+                connect_timeout: 1
+                timeout: 3
 
 framework:
     assets:
