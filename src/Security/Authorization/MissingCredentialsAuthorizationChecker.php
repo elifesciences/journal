@@ -5,7 +5,7 @@ namespace eLife\Journal\Security\Authorization;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationCredentialsNotFoundException;
 
-final class NoAuthenticationCredentialsHandlingAuthorizationChecker implements AuthorizationCheckerInterface
+final class MissingCredentialsAuthorizationChecker implements AuthorizationCheckerInterface
 {
     private $authorizationChecker;
 

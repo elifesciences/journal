@@ -2,12 +2,12 @@
 
 namespace test\eLife\Journal\Security\Authorization;
 
-use eLife\Journal\Security\Authorization\NoAuthenticationCredentialsHandlingAuthorizationChecker;
+use eLife\Journal\Security\Authorization\MissingCredentialsAuthorizationChecker;
 use PHPUnit_Framework_TestCase;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationCredentialsNotFoundException;
 
-final class NoAuthenticationCredentialsHandlingAuthorizationCheckerTest extends PHPUnit_Framework_TestCase
+final class MissingCredentialsAuthorizationCheckerTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @test
@@ -15,7 +15,7 @@ final class NoAuthenticationCredentialsHandlingAuthorizationCheckerTest extends 
     public function it_grants_if_the_parent_grants()
     {
         $parent = $this->prophesize(AuthorizationCheckerInterface::class);
-        $checker = new NoAuthenticationCredentialsHandlingAuthorizationChecker($parent->reveal());
+        $checker = new MissingCredentialsAuthorizationChecker($parent->reveal());
 
         $parent->isGranted('attribute', 'object')->willReturn(true);
 
@@ -28,7 +28,7 @@ final class NoAuthenticationCredentialsHandlingAuthorizationCheckerTest extends 
     public function it_denies_if_the_parent_denies()
     {
         $parent = $this->prophesize(AuthorizationCheckerInterface::class);
-        $checker = new NoAuthenticationCredentialsHandlingAuthorizationChecker($parent->reveal());
+        $checker = new MissingCredentialsAuthorizationChecker($parent->reveal());
 
         $parent->isGranted('attribute', 'object')->willReturn(false);
 
@@ -41,7 +41,7 @@ final class NoAuthenticationCredentialsHandlingAuthorizationCheckerTest extends 
     public function it_denies_if_the_parent_does_not_have_credentials()
     {
         $parent = $this->prophesize(AuthorizationCheckerInterface::class);
-        $checker = new NoAuthenticationCredentialsHandlingAuthorizationChecker($parent->reveal());
+        $checker = new MissingCredentialsAuthorizationChecker($parent->reveal());
 
         $parent->isGranted('attribute', 'object')->willThrow(AuthenticationCredentialsNotFoundException::class);
 
