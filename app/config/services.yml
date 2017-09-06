@@ -206,6 +206,13 @@ services:
         - '@elife.journal.router.parameter_resolving.inner'
         - '@elife.journal.router.parameter_resolver.model'
 
+    elife.journal.security.authorization.no_authentication_credentials_handling:
+        class: eLife\Journal\Security\Authorization\NoAuthenticationCredentialsHandlingAuthorizationChecker
+        public: false
+        decorates: security.authorization_checker
+        arguments:
+          - '@elife.journal.security.authorization.no_authentication_credentials_handling.inner'
+
     elife.journal.security.voter.feature.can_authenticate:
         class: eLife\Journal\Security\Voter\SessionAttributeVoter
         public: false
