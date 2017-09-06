@@ -1,5 +1,6 @@
 imports:
   - resource: parameters.yml
+  - resource: security.yml
   - resource: services.yml
 
 parameters:
@@ -31,6 +32,10 @@ csa_guzzle:
                 connect_timeout: 0.5
                 http_errors: false
                 stream: true
+        oauth:
+            config:
+                connect_timeout: 1
+                timeout: 3
 
 framework:
     assets:
@@ -59,6 +64,24 @@ framework:
         engines:
           - mustache
           - twig
+
+hwi_oauth:
+    firewall_names:
+      - main
+    resource_owners:
+        elife:
+            type: oauth2
+            class: eLife\Journal\Security\OAuth2\ElifeResourceOwner
+            client_id: '%oauth2_client_id%'
+            client_secret: '%oauth2_client_secret%'
+            access_token_url: '%api_url%/oauth2/token'
+            authorization_url: '%api_url_public%/oauth2/authorize'
+            paths:
+                identifier: orcid
+                nickname: name
+                realname: name
+            options:
+                csrf: true
 
 irozgar_gulp_rev_versions:
     manifest_path: '../build/rev-manifest.json'

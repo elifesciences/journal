@@ -1,3 +1,14 @@
+log-in:
+    path: /log-in
+    defaults:
+        _controller: AppBundle:Auth:redirect
+
+log-in-check:
+    path: /log-in/check
+
+log-out:
+    path: /log-out
+
 home:
     path: /
     defaults:

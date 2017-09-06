@@ -6,6 +6,7 @@ use Bobthecow\Bundle\MustacheBundle\BobthecowMustacheBundle;
 use Cocur\Slugify\Bridge\Symfony\CocurSlugifyBundle;
 use Csa\Bundle\GuzzleBundle\CsaGuzzleBundle;
 use eLife\Journal\Expression\ComposerLocateFunctionProvider;
+use HWI\Bundle\OAuthBundle\HWIOAuthBundle;
 use Irozgar\GulpRevVersionsBundle\IrozgarGulpRevVersionsBundle;
 use Isometriks\Bundle\SpamBundle\IsometriksSpamBundle;
 use Nelmio\SecurityBundle\NelmioSecurityBundle;
@@ -14,6 +15,7 @@ use Sensio\Bundle\DistributionBundle\SensioDistributionBundle;
 use Symfony\Bundle\DebugBundle\DebugBundle;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Bundle\MonologBundle\MonologBundle;
+use Symfony\Bundle\SecurityBundle\SecurityBundle;
 use Symfony\Bundle\SwiftmailerBundle\SwiftmailerBundle;
 use Symfony\Bundle\TwigBundle\TwigBundle;
 use Symfony\Bundle\WebProfilerBundle\WebProfilerBundle;
@@ -51,10 +53,12 @@ class AppKernel extends Kernel
             new CocurSlugifyBundle(),
             new CsaGuzzleBundle(),
             new FrameworkBundle(),
+            new HWIOAuthBundle(),
             new IrozgarGulpRevVersionsBundle(),
             new IsometriksSpamBundle(),
             new MonologBundle(),
             new NelmioSecurityBundle(),
+            new SecurityBundle(),
             new SwiftmailerBundle(),
             new TwigBundle(),
             new WhiteOctoberPagerfantaBundle(),

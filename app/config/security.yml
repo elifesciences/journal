@@ -1,0 +1,23 @@
+security:
+    providers:
+        oauth:
+            id: hwi_oauth.user.provider
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt))/
+            security: false
+        main:
+            anonymous: ~
+            logout:
+                path: /log-out
+                target: /
+            oauth:
+                login_path: /log-in
+                failure_path: /
+                oauth_user_provider:
+                    service: hwi_oauth.user.provider
+                resource_owners:
+                    elife: /log-in/check
+    access_control:
+        - path: ^/log-in
+          roles: IS_AUTHENTICATED_ANONYMOUSLY
