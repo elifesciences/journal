@@ -41,7 +41,7 @@ framework:
     assets:
         version_strategy: irozgar_gulp_rev_versions.asset.gulp_rev_version_strategy
     cache:
-        default_redis_provider: '%redis_cache%'
+        default_redis_provider: '%redis%'
         pools:
             cache.doi:
                 adapter: cache.app
@@ -58,6 +58,7 @@ framework:
         resource: '%kernel.root_dir%/config/routing.yml'
     secret: '%secret%'
     session:
+        cookie_lifetime: 86400 # 1 day
         name: '%session_name%'
         save_path: '0;660;%kernel.root_dir%/../var/sessions/%kernel.environment%'
     templating:
