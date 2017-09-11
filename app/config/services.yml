@@ -423,6 +423,15 @@ services:
         tags:
           - name: view_model.converter
 
+    elife.journal.view_model.converter.block.excerpt:
+        class: eLife\Journal\ViewModel\Converter\Block\ExcerptConverter
+        public: false
+        arguments:
+          - '@elife.journal.view_model.converter'
+          - '@elife.patterns.pattern_renderer'
+        tags:
+          - name: view_model.converter
+
     elife.journal.view_model.converter.block.figure:
         class: eLife\Journal\ViewModel\Converter\Block\FigureConverter
         public: false
