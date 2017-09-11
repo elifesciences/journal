@@ -27,8 +27,7 @@ final class QuoteConverter implements ViewModelConverter
             implode('', array_map(function (Block $block) use ($context) {
                 return $this->patternRenderer->render($this->viewModelConverter->convert($block, null, $context));
             }, $object->getText())),
-            $object->getCite(),
-            false
+            $object->getCite()
         );
     }
 
