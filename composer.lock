@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "18535ed76f951049c5ba02109db29f65",
+    "content-hash": "f823d82cab4940e0239877e3cd3196d9",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -950,16 +950,16 @@
         },
         {
             "name": "elife/patterns",
-            "version": "dev-quotes",
+            "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/thewilkybarkid/patterns-php.git",
-                "reference": "778f26c226863e10fc6f076a86c351acec082c89"
+                "url": "https://github.com/elifesciences/patterns-php.git",
+                "reference": "b9a073816994ccacf554867f6ee0c29cef680b7c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thewilkybarkid/patterns-php/zipball/778f26c226863e10fc6f076a86c351acec082c89",
-                "reference": "778f26c226863e10fc6f076a86c351acec082c89",
+                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/b9a073816994ccacf554867f6ee0c29cef680b7c",
+                "reference": "b9a073816994ccacf554867f6ee0c29cef680b7c",
                 "shasum": ""
             },
             "require": {
@@ -987,19 +987,12 @@
                     "eLife\\Patterns\\": "./src"
                 }
             },
-            "autoload-dev": {
-                "psr-4": {
-                    "tests\\eLife\\Patterns\\": "./tests/src"
-                }
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
             "description": "eLife patterns",
-            "support": {
-                "source": "https://github.com/thewilkybarkid/patterns-php/tree/quotes"
-            },
-            "time": "2017-09-11T08:50:05+00:00"
+            "time": "2017-09-11T09:05:07+00:00"
         },
         {
             "name": "fabpot/goutte",
