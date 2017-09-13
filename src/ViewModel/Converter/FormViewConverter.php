@@ -128,7 +128,7 @@ final class FormViewConverter implements ViewModelConverter
             return null;
         }
 
-        return count($form->vars['errors']) ? ViewModel\TextField::STATE_ERROR : ViewModel\TextField::STATE_VALID;
+        return count($form->vars['errors']) ? ViewModel\TextField::STATE_INVALID : ViewModel\TextField::STATE_VALID;
     }
 
     /**
