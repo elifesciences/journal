@@ -137,11 +137,12 @@ final class FormViewConverter implements ViewModelConverter
      */
     private function getMessageGroup(FormView $form)
     {
-        if (0 === count($form->vars['errors']))  {
+        if (0 === count($form->vars['errors'])) {
             return null;
         }
 
         $errors = implode(' ', array_map(Callback::method('getMessage'), iterator_to_array($form->vars['errors'])));
+
         return new MessageGroup($errors);
     }
 
