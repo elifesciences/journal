@@ -9,6 +9,7 @@ use eLife\Journal\ViewModel\HiddenInput;
 use eLife\Journal\ViewModel\HoneypotField;
 use eLife\Patterns\PatternRenderer;
 use eLife\Patterns\ViewModel;
+use eLife\Patterns\ViewModel\MessageGroup;
 use InvalidArgumentException;
 use Symfony\Component\Form\ChoiceList\View\ChoiceView;
 use Symfony\Component\Form\FormView;
@@ -44,14 +45,14 @@ final class FormViewConverter implements ViewModelConverter
 
                     return new ViewModel\Select($object->vars['id'], $options, new ViewModel\FormLabel($this->getLabel($object)),
                         $object->vars['full_name'], $object->vars['required'], $object->vars['disabled'], $this->getState($object),
-                        $this->getMessage($object));
+                         $this->getMessageGroup($object));
                     break;
                 case 'email':
                     return ViewModel\TextField::emailInput(new ViewModel\FormLabel($this->getLabel($object)),
                         $object->vars['id'], $object->vars['full_name'], $object->vars['attr']['placeholder'] ?? null,
                         $object->vars['required'],
                         $object->vars['disabled'], $this->getAutofocus($object), $object->vars['value'],
-                        $this->getState($object), $this->getMessage($object));
+                        $this->getState($object), $this->getMessageGroup($object));
                 case 'form':
                     $form = new ViewModel\Form($object->vars['action'], $object->vars['full_name'], $object->vars['method']);
 
@@ -73,7 +74,7 @@ final class FormViewConverter implements ViewModelConverter
                                 ),
                                 $children['submit']['text'],
                                 $children['email']['state'],
-                                $children['email']['message'],
+                                $children['email']['messageGroup'],
                                 [],
                                 $children[$this->honeypotField] ?? null
                             )
@@ -91,7 +92,7 @@ final class FormViewConverter implements ViewModelConverter
                     $field = ViewModel\TextField::textInput(new ViewModel\FormLabel($this->getLabel($object)),
                         $object->vars['id'], $object->vars['full_name'], $object->vars['attr']['placeholder'] ?? null,
                         $object->vars['required'], $object->vars['disabled'], $this->getAutofocus($object), $object->vars['value'],
-                        $this->getState($object), $this->getMessage($object));
+                        $this->getState($object), $this->getMessageGroup($object));
 
                     if ($object->vars['name'] === $this->honeypotField) {
                         return new ViewModel\Honeypot($field);
@@ -111,7 +112,7 @@ final class FormViewConverter implements ViewModelConverter
                         10,
                         null,
                         $this->getState($object),
-                        $this->getMessage($object)
+                        $this->getMessageGroup($object)
                     );
             }
         }
@@ -132,15 +133,16 @@ final class FormViewConverter implements ViewModelConverter
     }
 
     /**
-     * @param string|null
+     * @param object|null
      */
-    private function getMessage(FormView $form)
+    private function getMessageGroup(FormView $form)
     {
-        if (0 === count($form->vars['errors'])) {
+        if (0 === count($form->vars['errors']))  {
             return null;
         }
 
-        return implode(' ', array_map(Callback::method('getMessage'), iterator_to_array($form->vars['errors'])));
+        $errors = implode(' ', array_map(Callback::method('getMessage'), iterator_to_array($form->vars['errors'])));
+        return new MessageGroup($errors);
     }
 
     private function getAutofocus(FormView $form) : bool
