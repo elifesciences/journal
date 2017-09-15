@@ -45,7 +45,7 @@ final class FormViewConverter implements ViewModelConverter
 
                     return new ViewModel\Select($object->vars['id'], $options, new ViewModel\FormLabel($this->getLabel($object)),
                         $object->vars['full_name'], $object->vars['required'], $object->vars['disabled'], $this->getState($object),
-                         $this->getMessageGroup($object));
+                        $this->getMessageGroup($object));
                     break;
                 case 'email':
                     return ViewModel\TextField::emailInput(new ViewModel\FormLabel($this->getLabel($object)),
