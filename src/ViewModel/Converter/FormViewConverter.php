@@ -133,7 +133,7 @@ final class FormViewConverter implements ViewModelConverter
     }
 
     /**
-     * @param object|null
+     * @param MessageGroup|null
      */
     private function getMessageGroup(FormView $form)
     {
