@@ -141,9 +141,9 @@ final class FormViewConverter implements ViewModelConverter
             return null;
         }
 
-        $errors = implode(' ', array_map(Callback::method('getMessage'), iterator_to_array($form->vars['errors'])));
+        $errors = array_map(Callback::method('getMessage'), iterator_to_array($form->vars['errors']));
 
-        return new MessageGroup($errors);
+        return MessageGroup::forErrorText(implode(' ', $errors));
     }
 
     private function getAutofocus(FormView $form) : bool
