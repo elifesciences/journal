@@ -13,6 +13,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 final class InterviewSecondaryTeaserConverter implements ViewModelConverter
 {
     use CreatesDate;
+    use CreatesTeaserImage;
 
     private $urlGenerator;
 
@@ -31,7 +32,7 @@ final class InterviewSecondaryTeaserConverter implements ViewModelConverter
             $this->urlGenerator->generate('interview', [$object]),
             null,
             null,
-            null,
+            $object->getThumbnail() ? $this->smallTeaserImage($object) : null,
             TeaserFooter::forNonArticle(
                 Meta::withLink(
                     new Link('Interview', $this->urlGenerator->generate('interviews')),
