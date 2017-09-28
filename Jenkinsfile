@@ -20,7 +20,8 @@ elifePipeline {
                     revision: commit,
                     folder: '/srv/journal',
                     concurrency: 'blue-green'
-                ]
+                ],
+                marker: 'journal'
             )
         }
 
