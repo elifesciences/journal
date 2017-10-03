@@ -18,3 +18,6 @@ vendor/bin/phpunit --log-junit build/phpunit.xml
 
 echo "Behat tests"
 vendor/bin/behat --strict --tags '~wip' --format junit --format progress
+
+echo "Tenon tests"
+./tenon_key_pages.sh
