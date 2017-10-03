@@ -9,13 +9,13 @@ fi
 
 log="$1"
 
-api_errors=$(cat "$log" | jq '.apiErrors | length')
+api_errors=$(jq '.apiErrors | length' < "$log")
 if [ "$api_errors" -ne 0 ]; then
     echo "apiErrors is not empty in $log"
     exit 2
 fi
 
-result_set=$(cat "$log" | jq '.resultSet | length')
+result_set=$(jq '.resultSet | length' < "$log")
 if [ "$result_set" -ne 0 ]; then
     echo "resultSet is not empty ($result_set issues) in $log"
     exit 3
