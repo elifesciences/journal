@@ -10,9 +10,9 @@ fi
 
 log="$1"
 
-response_code=$(jq -r '.response.code' < "$log")
-if [ "$response_code" -ne "success" ]; then
-    echo "response.code is not 'success' in $log"
+response_code=$(jq -r '.code' < "$log")
+if [ "$response_code" != "success" ]; then
+    echo ".code is not 'success' in $log"
     exit 2
 fi
 
