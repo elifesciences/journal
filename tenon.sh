@@ -19,7 +19,7 @@ host="${HOSTNAME:-$(hostname)}"
 port="${PORT:-8443}"
 path="$1"
 url="${scheme}://${host}:${port}${path}"
-curl -v \
+curl -s \
     -X POST \
     -H "Cache-Control: no-cache" \
     -d "url=$url&key=${TENON_API_KEY}" https://tenon.io/api/ | jq .
