@@ -2,6 +2,7 @@
 set -e
 
 if [ "$#" -ne 1 ]; then
+    echo "Checks a log from tenon.sh"
     echo "Usage: ./tenon_check.sh LOG_FILE"
     echo "Example: ./tenon_check.sh build/tenon/_.log"
     exit 1

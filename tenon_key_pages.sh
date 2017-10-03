@@ -1,4 +1,5 @@
 #!/bin/bash
+# executes tenon.sh on paths listed in tenon_key_pages.txt
 set -eo pipefail
 
 rm -rf build/tenon/*.log

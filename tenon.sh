@@ -2,6 +2,7 @@
 set -e
 
 if [ "$#" -ne 1 ]; then
+    echo "Executes Tenon checks over a page. Doesn't check the result."
     echo "Usage: ./tenon.sh PATH"
     echo "Example: ./tenon.sh /community"
     echo "You can override the URL to check with the SCHEME, HOST and PORT environment variables"
