@@ -115,7 +115,7 @@ final class SiteHeaderFactory
         ];
 
         if ($this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
-            $secondaryLinks[] = NavLinkedItem::asButton(Button::link('Log out', $this->urlGenerator->generate('log-out'), Button::SIZE_EXTRA_SMALL));
+            $secondaryLinks[] = NavLinkedItem::asButton(Button::link('Log out', $this->urlGenerator->generate('log-out'), Button::SIZE_EXTRA_SMALL, Button::STYLE_CONFIRM));
         } elseif ($this->authorizationChecker->isGranted('FEATURE_CAN_AUTHENTICATE')) {
             $secondaryLinks[] = NavLinkedItem::asButton(Button::link('Log in/Register', $this->urlGenerator->generate('log-in'), Button::SIZE_EXTRA_SMALL, Button::STYLE_CONFIRM));
         }
