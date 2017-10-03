@@ -10,16 +10,22 @@ fi
 
 log="$1"
 
-api_errors=$(jq '.apiErrors | length' < "$log")
-if [ "$api_errors" -ne 0 ]; then
-    echo "apiErrors is not empty in $log"
+response_code=$(jq -r '.response.code' < "$log")
+if [ "$response_code" -ne "success" ]; then
+    echo "response.code is not 'success' in $log"
     exit 2
 fi
 
-result_set=$(jq '.resultSet | length' < "$log")
+api_errors=$(jq -r '.apiErrors | length' < "$log")
+if [ "$api_errors" -ne 0 ]; then
+    echo "apiErrors is not empty in $log"
+    exit 3
+fi
+
+result_set=$(jq -r '.resultSet | length' < "$log")
 if [ "$result_set" -ne 0 ]; then
     echo "resultSet is not empty ($result_set issues) in $log"
-    exit 3
+    exit 4
 fi
 
 echo "$log is green"
