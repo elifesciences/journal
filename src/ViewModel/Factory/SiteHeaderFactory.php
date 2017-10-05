@@ -17,6 +17,7 @@ use eLife\Patterns\ViewModel\SearchBox;
 use eLife\Patterns\ViewModel\SiteHeader;
 use eLife\Patterns\ViewModel\SiteHeaderNavBar;
 use eLife\Patterns\ViewModel\SubjectFilter;
+use eLife\Patterns\ViewModel\ProfileLoginControl;
 use Symfony\Component\Asset\Packages;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -115,9 +116,9 @@ final class SiteHeaderFactory
         ];
 
         if ($this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
-            $secondaryLinks[] = NavLinkedItem::asButton(Button::link('Log out', $this->urlGenerator->generate('log-out'), Button::SIZE_EXTRA_SMALL, Button::STYLE_CONFIRM));
+            $secondaryLinks[] = NavLinkedItem::asProfileLoginControl(ProfileLoginControl::loggedIn('#profileHomeLink', 'My name', '#profileManageLink', $this->urlGenerator->generate('log-out')));
         } elseif ($this->authorizationChecker->isGranted('FEATURE_CAN_AUTHENTICATE')) {
-            $secondaryLinks[] = NavLinkedItem::asButton(Button::link('Log in/Register', $this->urlGenerator->generate('log-in'), Button::SIZE_EXTRA_SMALL, Button::STYLE_CONFIRM));
+            $secondaryLinks[] = NavLinkedItem::asProfileLoginControl(ProfileLoginControl::notLoggedIn($this->urlGenerator->generate('log-in')));
         }
 
         $secondaryLinks = SiteHeaderNavBar::secondary($secondaryLinks);
