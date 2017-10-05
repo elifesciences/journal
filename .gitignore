@@ -1,8 +1,10 @@
 /app/config/parameters.yml
 /behat.yml
 /build/*
+/build/tenon/*.log
 !/build/.gitkeep
 !/build/critical-css/.gitkeep
+!/build/tenon/.gitkeep
 /composer-switch-patterns-php.*
 /node_modules/
 /phpunit.xml
