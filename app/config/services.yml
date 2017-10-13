@@ -85,6 +85,10 @@ services:
         class: eLife\ApiSdk\Client\PressPackages
         factory: ['@elife.api_sdk', pressPackages]
 
+    elife.api_sdk.profiles:
+        class: eLife\ApiSdk\Client\Profiles
+        factory: ['@elife.api_sdk', profiles]
+
     elife.api_sdk.recommendations:
         class: eLife\ApiSdk\Client\Recommendations
         factory: ['@elife.api_sdk', recommendations]
@@ -957,6 +961,12 @@ services:
         public: false
         arguments:
           - '@router'
+        tags:
+          - name: view_model.converter
+
+    elife.journal.view_model.converter.profile.header:
+        class: eLife\Journal\ViewModel\Converter\ProfileContentHeaderConverter
+        public: false
         tags:
           - name: view_model.converter
 
