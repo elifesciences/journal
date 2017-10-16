@@ -26,7 +26,7 @@ final class AuthenticationErrorSubscriber implements EventSubscriberInterface
 
     public function onKernelRequest(GetResponseEvent $event)
     {
-        if (!$event->isMasterRequest()) {
+        if (!$event->isMasterRequest() || !$event->getRequest()->getSession()->isStarted()) {
             return;
         }
 
