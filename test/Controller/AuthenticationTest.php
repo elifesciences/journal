@@ -67,6 +67,121 @@ final class AuthenticationTest extends WebTestCase
     /**
      * @test
      */
+    public function it_shows_error_messages()
+    {
+        $client = static::createClient();
+
+        $client->followRedirects(false);
+
+        $this->readyHomePage();
+
+        $crawler = $client->request('GET', '/?open-sesame');
+
+        $client->click($crawler->filter('a:contains("Log in/Register")')->link());
+
+        $response = $client->getResponse();
+
+        $this->assertTrue($response->isRedirect());
+
+        $location = Uri::withoutQueryValue(new Uri($response->headers->get('Location')), 'state');
+        $this->assertSame('http://api.elifesciences.org/oauth2/authorize?response_type=code&client_id=journal_client_id&redirect_uri=http%3A%2F%2Flocalhost%2Flog-in%2Fcheck', $location->__toString());
+
+        $state = parse_query((new Uri($response->headers->get('Location')))->getQuery())['state'];
+
+        $client->followRedirects();
+
+        $this->mockApiResponse(
+            new Request(
+                'POST',
+                'http://api.elifesciences.org/oauth2/token',
+                ['Content-Type' => 'application/x-www-form-urlencoded'],
+                build_query(['code' => 'foo', 'grant_type' => 'authorization_code', 'client_id' => 'journal--local-id', 'client_secret' => 'journal--local-secret', 'redirect_uri' => 'http://localhost/log-in/check'])
+            ),
+            new Response(
+                400,
+                ['Content-Type' => 'application/json'],
+                json_encode([
+                    'error' => 'invalid_request',
+                ])
+            )
+        );
+
+        $crawler = $client->request('GET', "/log-in/check?code=foo&state=$state");
+
+        $this->assertNotContains('Log out', $crawler->text());
+        $this->assertContains('Log in/Register', $crawler->text());
+
+        $this->assertCount(1, $crawler->filter('.info-bar'));
+        $this->assertSame('Failed to log in, please try again.', trim($crawler->filter('.info-bar')->text()));
+        $this->assertSame('no-cache, private', $client->getResponse()->headers->get('Cache-Control'));
+        $this->assertEmpty($client->getResponse()->getVary());
+
+        $crawler = $client->reload();
+        $this->assertSame(200, $client->getResponse()->getStatusCode());
+        $this->assertCount(0, $crawler->filter('.info-bar'));
+    }
+
+    /**
+     * @test
+     */
+    public function it_shows_an_error_message_when_no_name_is_available()
+    {
+        $client = static::createClient();
+
+        $client->followRedirects(false);
+
+        $this->readyHomePage();
+
+        $crawler = $client->request('GET', '/?open-sesame');
+
+        $client->click($crawler->filter('a:contains("Log in/Register")')->link());
+
+        $response = $client->getResponse();
+
+        $this->assertTrue($response->isRedirect());
+
+        $location = Uri::withoutQueryValue(new Uri($response->headers->get('Location')), 'state');
+        $this->assertSame('http://api.elifesciences.org/oauth2/authorize?response_type=code&client_id=journal_client_id&redirect_uri=http%3A%2F%2Flocalhost%2Flog-in%2Fcheck', $location->__toString());
+
+        $state = parse_query((new Uri($response->headers->get('Location')))->getQuery())['state'];
+
+        $client->followRedirects();
+
+        $this->mockApiResponse(
+            new Request(
+                'POST',
+                'http://api.elifesciences.org/oauth2/token',
+                ['Content-Type' => 'application/x-www-form-urlencoded'],
+                build_query(['code' => 'foo', 'grant_type' => 'authorization_code', 'client_id' => 'journal--local-id', 'client_secret' => 'journal--local-secret', 'redirect_uri' => 'http://localhost/log-in/check'])
+            ),
+            new Response(
+                400,
+                ['Content-Type' => 'application/json'],
+                json_encode([
+                    'error' => 'invalid_request',
+                    'error_description' => 'No name visible',
+                ])
+            )
+        );
+
+        $crawler = $client->request('GET', "/log-in/check?code=foo&state=$state");
+
+        $this->assertNotContains('Log out', $crawler->text());
+        $this->assertContains('Log in/Register', $crawler->text());
+
+        $this->assertCount(1, $crawler->filter('.info-bar'));
+        $this->assertSame('Your name on ORCID must not be private.', trim($crawler->filter('.info-bar')->text()));
+        $this->assertSame('no-cache, private', $client->getResponse()->headers->get('Cache-Control'));
+        $this->assertEmpty($client->getResponse()->getVary());
+
+        $crawler = $client->reload();
+        $this->assertSame(200, $client->getResponse()->getStatusCode());
+        $this->assertCount(0, $crawler->filter('.info-bar'));
+    }
+
+    /**
+     * @test
+     */
     public function it_disables_the_feature_flag_when_you_log_out()
     {
         $client = static::createClient();
