@@ -18,11 +18,9 @@ use eLife\Patterns\ViewModel\SearchBox;
 use eLife\Patterns\ViewModel\SiteHeader;
 use eLife\Patterns\ViewModel\SiteHeaderNavBar;
 use eLife\Patterns\ViewModel\SubjectFilter;
-use eLife\Patterns\ViewModel\ProfileLoginControl;
 use Symfony\Component\Asset\Packages;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Security\Core\Authorization\AuthorizationChecker;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 final class SiteHeaderFactory
@@ -124,7 +122,7 @@ final class SiteHeaderFactory
                         [
                           [
                             'srcset' => $this->packages->getUrl('assets/patterns/img/icons/profile.svg'),
-                            'type' => 'image/svg+xml'
+                            'type' => 'image/svg+xml',
                           ],
                         ],
                         new Image(
@@ -139,7 +137,7 @@ final class SiteHeaderFactory
                 )
             );
         } elseif ($this->authorizationChecker->isGranted('FEATURE_CAN_AUTHENTICATE')) {
-            $secondaryLinks[] = NavLinkedItem::asLoginControl(LoginControl::notLoggedIn('Log in / register', 'log-in'));
+            $secondaryLinks[] = NavLinkedItem::asLoginControl(LoginControl::notLoggedIn('Log in/Register', $this->urlGenerator->generate('log-in')));
         }
 
         $secondaryLinks = SiteHeaderNavBar::secondary($secondaryLinks);
