@@ -75,6 +75,16 @@ gulp.task('images:banners', ['images:clean'], () => {
                     },
                     withoutEnlargement: false,
                 });
+                acc.push({
+                    width: width,
+                    height: height,
+                    quality: 65,
+                    rename: {
+                        suffix: `-${width}x${height}`,
+                        extname: '.webp',
+                    },
+                    withoutEnlargement: false,
+                });
 
                 return acc;
             }, []),
@@ -91,6 +101,14 @@ gulp.task('images:logos', ['images:clean'], () => {
                     rename: {
                         suffix: `-${width}`,
                         extname: '.png',
+                    },
+                    withoutEnlargement: false,
+                });
+                acc.push({
+                    width: width,
+                    rename: {
+                        suffix: `-${width}`,
+                        extname: '.webp',
                     },
                     withoutEnlargement: false,
                 });
@@ -137,7 +155,7 @@ gulp.task('assets:clean', () => {
 gulp.task('assets', ['assets:clean', 'favicons', 'images', 'patterns'], () => {
     return gulp.src('./build/assets/**/*.*', {base: "./build", follow: true})
         .pipe(rev.revision({
-            includeFilesInManifest: ['.css', '.jpg', '.js', '.json', '.ico', '.png', '.svg', '.woff', '.woff2'],
+            includeFilesInManifest: ['.css', '.jpg', '.js', '.json', '.ico', '.png', '.svg', '.webp', '.woff', '.woff2'],
             replaceInExtensions: ['.css', '.js', '.json'],
         }))
         .pipe(gulp.dest('./web'))

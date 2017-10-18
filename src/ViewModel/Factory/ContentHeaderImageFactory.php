@@ -39,15 +39,15 @@ final class ContentHeaderImageFactory
 
     public function pictureForLocalFile(string $filename) : ViewModel\Picture
     {
-        return $this->create(function (int $width, int $height) use ($filename) {
-            return $this->packages->getUrl("assets/images/banners/{$filename}-{$width}x{$height}.jpg");
+        return $this->create(function (int $width, int $height, string $extension) use ($filename) {
+            return $this->packages->getUrl("assets/images/banners/{$filename}-{$width}x{$height}.{$extension}");
         });
     }
 
     public function pictureForImage(Image $image) : ViewModel\Picture
     {
-        return $this->create(function (int $width, int $height) use ($image) {
-            return $this->iiifUri($image, $width, $height);
+        return $this->create(function (int $width, int $height, string $extension) use ($image) {
+            return $this->iiifUri($image, $width, $height, $extension);
         });
     }
 
@@ -55,32 +55,37 @@ final class ContentHeaderImageFactory
     {
         $sources = [];
 
-        foreach ([450 => 264, 767 => 264, 1023 => 288] as $width => $height) {
-            if (empty($srcset = $this->createSrcset($callback, $width, $height))) {
-                continue;
+        foreach (['image/webp' => 'webp', 'image/jpeg' => 'jpg'] as $contentType => $extension) {
+            foreach ([450 => 264, 767 => 264, 1023 => 288, 1114 => 336] as $width => $height) {
+                if (empty($srcset = $this->createSrcset($callback, $width, $height, $extension))) {
+                    continue;
+                }
+
+                $source = [
+                    'srcset' => $this->srcsetToString($srcset),
+                    'media' => "(max-width: {$width}px)",
+                    'type' => $contentType,
+                ];
+
+                if (1114 === $width) {
+                    unset($source['media']);
+                }
+
+                $sources[] = $source;
             }
-
-            $sources[] = [
-                'srcset' => $this->srcsetToString($srcset),
-                'media' => "(max-width: {$width}px)",
-            ];
         }
-
-        $srcset = $this->createSrcset($callback, 1114, 336);
-        $default = end($srcset);
-        reset($srcset);
 
         return new ViewModel\Picture(
             $sources,
-            new ViewModel\Image($default, count($srcset) > 1 ? $srcset : [])
+            new ViewModel\Image($callback(1114, 336, 'jpg'))
         );
     }
 
-    private function createSrcset(callable $callback, int $width, int $height) : array
+    private function createSrcset(callable $callback, int $width, int $height, $extension) : array
     {
-        return array_reduce(range(2, 1), function (array $carry, int $factor) use ($callback, $width, $height) {
+        return array_reduce(range(2, 1), function (array $carry, int $factor) use ($callback, $width, $height, $extension) {
             try {
-                $carry[$width * $factor] = $callback($width * $factor, $height * $factor);
+                $carry[$width * $factor] = $callback($width * $factor, $height * $factor, $extension);
             } catch (Exception $e) {
                 // Do nothing.
             }
