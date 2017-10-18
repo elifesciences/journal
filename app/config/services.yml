@@ -159,6 +159,13 @@ services:
           - '@router'
           - '@uri_signer'
 
+    elife.journal.listener.authentication_error:
+        class: eLife\Journal\EventListener\AuthenticationErrorSubscriber
+        arguments:
+          - '@security.authentication_utils'
+        tags:
+          - name: kernel.event_subscriber
+
     elife.journal.listener.cache_control:
         class: eLife\Journal\EventListener\CacheControlSubscriber
         tags:
