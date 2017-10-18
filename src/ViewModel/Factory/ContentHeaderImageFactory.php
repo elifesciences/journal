@@ -39,14 +39,16 @@ final class ContentHeaderImageFactory
 
     public function pictureForLocalFile(string $filename) : ViewModel\Picture
     {
-        return $this->create(function (int $width, int $height, string $extension) use ($filename) {
+        return $this->create(function (int $width, int $height, string $extension = null) use ($filename) {
+            $extension = $extension ?? 'jpg';
+
             return $this->packages->getUrl("assets/images/banners/{$filename}-{$width}x{$height}.{$extension}");
         });
     }
 
     public function pictureForImage(Image $image) : ViewModel\Picture
     {
-        return $this->create(function (int $width, int $height, string $extension) use ($image) {
+        return $this->create(function (int $width, int $height, string $extension = null) use ($image) {
             return $this->iiifUri($image, $width, $height, $extension);
         });
     }
@@ -55,17 +57,17 @@ final class ContentHeaderImageFactory
     {
         $sources = [];
 
-        foreach (['image/webp' => 'webp', 'image/jpeg' => 'jpg'] as $contentType => $extension) {
+        foreach (['image/webp' => 'webp', '' => null] as $contentType => $extension) {
             foreach ([450 => 264, 767 => 264, 1023 => 288, 1114 => 336] as $width => $height) {
                 if (empty($srcset = $this->createSrcset($callback, $width, $height, $extension))) {
                     continue;
                 }
 
-                $source = [
+                $source = array_filter([
                     'srcset' => $this->srcsetToString($srcset),
                     'media' => "(max-width: {$width}px)",
                     'type' => $contentType,
-                ];
+                ]);
 
                 if (1114 === $width) {
                     unset($source['media']);
@@ -77,11 +79,11 @@ final class ContentHeaderImageFactory
 
         return new ViewModel\Picture(
             $sources,
-            new ViewModel\Image($callback(1114, 336, 'jpg'))
+            new ViewModel\Image($callback(1114, 336))
         );
     }
 
-    private function createSrcset(callable $callback, int $width, int $height, $extension) : array
+    private function createSrcset(callable $callback, int $width, int $height, string $extension = null) : array
     {
         return array_reduce(range(2, 1), function (array $carry, int $factor) use ($callback, $width, $height, $extension) {
             try {
