@@ -59,12 +59,21 @@ final class PersonAboutProfileConverter implements ViewModelConverter
 
         if ($object->getThumbnail()) {
             $srcset = [];
+            $webp = [];
             if ($object->getThumbnail()->getWidth() >= 500) {
                 $srcset[500] = $this->iiifUri($object->getThumbnail(), 500, 282);
+                $webp[500] = $this->iiifUri($object->getThumbnail(), 500, 282, 'webp');
             }
 
+            $webp[250] = $this->iiifUri($object->getThumbnail(), 250, 141, 'webp');
+
             $image = new ViewModel\Picture(
-                [],
+                [[
+                    'srcset' => implode(', ', array_map(function (int $width, string $uri) {
+                        return "{$uri} {$width}w";
+                    }, array_keys($webp), array_values($webp))),
+                    'type' => 'image/webp',
+                ]],
                 new ViewModel\Image(
                     $this->iiifUri($object->getThumbnail(), 250, 141),
                     $srcset,

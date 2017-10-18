@@ -16,12 +16,20 @@ final class PersonProfileSnippetConverter implements ViewModelConverter
     public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
         if ($object->getThumbnail()) {
-            $image = new ViewModel\Image(
-                $this->iiifUri($object->getThumbnail(), 70, 70),
-                [
-                    140 => $this->iiifUri($object->getThumbnail(), 140, 140),
-                ],
-                $object->getThumbnail()->getAltText()
+            $image = new ViewModel\Picture(
+                [[
+                    'srcset' => implode(', ', array_map(function (int $width, string $uri) {
+                        return "{$uri} {$width}w";
+                    }, [140, 70], [$this->iiifUri($object->getThumbnail(), 140, 140, 'webp'), $this->iiifUri($object->getThumbnail(), 70, 70, 'webp')])),
+                    'type' => 'image/webp',
+                ]],
+                new ViewModel\Image(
+                    $this->iiifUri($object->getThumbnail(), 70, 70),
+                    [
+                        140 => $this->iiifUri($object->getThumbnail(), 140, 140),
+                    ],
+                    $object->getThumbnail()->getAltText()
+                )
             );
         } else {
             $image = null;

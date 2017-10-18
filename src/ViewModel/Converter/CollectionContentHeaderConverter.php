@@ -34,7 +34,12 @@ final class CollectionContentHeaderConverter implements ViewModelConverter
         }
         if ($object->getSelectedCurator()->getThumbnail()) {
             $curatorImage = new ViewModel\Picture(
-                [],
+                [[
+                    'srcset' => implode(', ', array_map(function (int $width, string $uri) {
+                        return "{$uri} {$width}w";
+                    }, [140, 70], [$this->iiifUri($object->getSelectedCurator()->getThumbnail(), 140, 140, 'webp'), $this->iiifUri($object->getSelectedCurator()->getThumbnail(), 70, 70, 'webp')])),
+                    'type' => 'image/webp',
+                ]],
                 new ViewModel\Image(
                     $this->iiifUri($object->getSelectedCurator()->getThumbnail(), 70, 70),
                     [

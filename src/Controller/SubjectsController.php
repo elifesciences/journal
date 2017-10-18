@@ -54,6 +54,11 @@ final class SubjectsController extends Controller
                     new Picture(
                         [
                             [
+                                'srcset' => sprintf('%s 263w, %s 526w', $this->iiifUri($subject->getThumbnail(), 263, 148, 'webp'), $this->iiifUri($subject->getThumbnail(), 526, 296, 'webp')),
+                                'media' => '(min-width: 600px)',
+                                'type' => 'image/webp',
+                            ],
+                            [
                                 'srcset' => sprintf('%s 263w, %s 526w', $this->iiifUri($subject->getThumbnail(), 263, 148), $this->iiifUri($subject->getThumbnail(), 526, 296)),
                                 'media' => '(min-width: 600px)',
                             ],

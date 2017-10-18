@@ -115,7 +115,12 @@ final class ArchiveController extends Controller
                         new BlockLink(
                             $link,
                             new Picture(
-                                [],
+                                [[
+                                    'srcset' => implode(', ', array_map(function (int $width, string $uri) {
+                                        return "{$uri} {$width}w";
+                                    }, [526, 263], [$this->iiifUri($covers[0]->getBanner(), 526, 352, 'webp'), $this->iiifUri($covers[0]->getBanner(), 263, 176, 'webp')])),
+                                    'type' => 'image/webp',
+                                ]],
                                 new Image(
                                     $this->iiifUri($covers[0]->getBanner(), 263, 176),
                                     [

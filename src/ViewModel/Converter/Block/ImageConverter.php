@@ -30,6 +30,7 @@ final class ImageConverter implements ViewModelConverter
         $image = $object->getImage();
 
         $srcset = [];
+        $webp = [];
         $baseWidth = $object->isInline() ? 365 : 538;
         if ($image->getWidth() > $baseWidth) {
             $width = $baseWidth * 2;
@@ -37,12 +38,25 @@ final class ImageConverter implements ViewModelConverter
                 $width = $image->getWidth();
             }
             $srcset[$width] = $this->iiifUri($image, $width);
+            $webp[$width] = $this->iiifUri($image, $width, null, 'webp');
         }
 
-        $imageViewModel = new ViewModel\Image(
-            $this->iiifUri($image, $image->getWidth() >= $baseWidth ? $baseWidth : null),
-            $srcset,
-            $image->getAltText()
+        $baseWidth = $image->getWidth() >= $baseWidth ? $baseWidth : null;
+
+        $webp[$baseWidth] = $this->iiifUri($image, $baseWidth, null, 'webp');
+
+        $imageViewModel = new ViewModel\Picture(
+            [[
+                'srcset' => implode(', ', array_map(function (int $width, string $uri) {
+                    return "{$uri} {$width}w";
+                }, array_keys($webp), array_values($webp))),
+                'type' => 'image/webp',
+            ]],
+            new ViewModel\Image(
+                $this->iiifUri($image, $baseWidth),
+                $srcset,
+                $image->getAltText()
+            )
         );
 
         return $this->createCaptionedAsset($imageViewModel, $object);
