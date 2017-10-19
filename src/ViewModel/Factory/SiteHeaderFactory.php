@@ -11,6 +11,7 @@ use eLife\Patterns\ViewModel\Form;
 use eLife\Patterns\ViewModel\Image;
 use eLife\Patterns\ViewModel\Input;
 use eLife\Patterns\ViewModel\Link;
+use eLife\Patterns\ViewModel\LoginControl;
 use eLife\Patterns\ViewModel\NavLinkedItem;
 use eLife\Patterns\ViewModel\Picture;
 use eLife\Patterns\ViewModel\SearchBox;
@@ -20,7 +21,6 @@ use eLife\Patterns\ViewModel\SubjectFilter;
 use Symfony\Component\Asset\Packages;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Security\Core\Authorization\AuthorizationChecker;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 final class SiteHeaderFactory
@@ -115,9 +115,29 @@ final class SiteHeaderFactory
         ];
 
         if ($this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
-            $secondaryLinks[] = NavLinkedItem::asButton(Button::link('Log out', $this->urlGenerator->generate('log-out'), Button::SIZE_EXTRA_SMALL));
+            $secondaryLinks[] = NavLinkedItem::asLoginControl(
+                LoginControl::loggedIn(
+                    $this->urlGenerator->generate('log-out'), 'Log out',
+                    new Picture(
+                        [
+                            [
+                                'srcset' => $this->packages->getUrl('assets/patterns/img/icons/profile.svg'),
+                                'type' => 'image/svg+xml',
+                            ],
+                        ],
+                        new Image(
+                            $this->packages->getUrl('assets/patterns/img/icons/profile.png'),
+                            [
+                                70 => $this->packages->getUrl('assets/patterns/img/icons/profile@2x.png'),
+                                35 => $this->packages->getUrl('assets/patterns/img/icons/profile.png'),
+                            ],
+                            'Profile icon'
+                        )
+                    )
+                )
+            );
         } elseif ($this->authorizationChecker->isGranted('FEATURE_CAN_AUTHENTICATE')) {
-            $secondaryLinks[] = NavLinkedItem::asButton(Button::link('Log in/Register', $this->urlGenerator->generate('log-in'), Button::SIZE_EXTRA_SMALL));
+            $secondaryLinks[] = NavLinkedItem::asLoginControl(LoginControl::notLoggedIn('Log in/Register', $this->urlGenerator->generate('log-in')));
         }
 
         $secondaryLinks = SiteHeaderNavBar::secondary($secondaryLinks);
