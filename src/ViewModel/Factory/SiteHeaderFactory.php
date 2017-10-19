@@ -120,19 +120,19 @@ final class SiteHeaderFactory
                     $this->urlGenerator->generate('log-out'), 'Log out',
                     new Picture(
                         [
-                          [
-                            'srcset' => $this->packages->getUrl('assets/patterns/img/icons/profile.svg'),
-                            'type' => 'image/svg+xml',
-                          ],
+                            [
+                                'srcset' => $this->packages->getUrl('assets/patterns/img/icons/profile.svg'),
+                                'type' => 'image/svg+xml',
+                            ],
                         ],
                         new Image(
-                          $this->packages->getUrl('assets/patterns/img/icons/profile.png'),
-                          [
-                            70 => $this->packages->getUrl('assets/patterns/img/icons/profile@2x.png'),
-                            35 => $this->packages->getUrl('assets/patterns/img/icons/profile.png'),
-                          ],
-                          'Profile icon'
-                      )
+                            $this->packages->getUrl('assets/patterns/img/icons/profile.png'),
+                            [
+                                70 => $this->packages->getUrl('assets/patterns/img/icons/profile@2x.png'),
+                                35 => $this->packages->getUrl('assets/patterns/img/icons/profile.png'),
+                            ],
+                            'Profile icon'
+                        )
                     )
                 )
             );
