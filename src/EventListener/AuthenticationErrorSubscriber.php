@@ -37,7 +37,7 @@ final class AuthenticationErrorSubscriber implements EventSubscriberInterface
         }
 
         if ('No name visible' === $error->getMessage()) {
-            $message = 'Your name on ORCID must not be private.';
+            $message = 'Please adjust your <a href="https://orcid.org/my-orcid">ORCID privacy settings</a> for eLife to display your name.';
         }
 
         $event->getRequest()
