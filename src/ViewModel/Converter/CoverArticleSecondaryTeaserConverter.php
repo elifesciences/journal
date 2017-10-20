@@ -4,7 +4,6 @@ namespace eLife\Journal\ViewModel\Converter;
 
 use eLife\ApiSdk\Model\ArticleVersion;
 use eLife\ApiSdk\Model\Cover;
-use eLife\Journal\Helper\CreatesIiifUri;
 use eLife\Journal\Helper\ModelName;
 use eLife\Patterns\ViewModel;
 use eLife\Patterns\ViewModel\Meta;
@@ -14,12 +13,13 @@ final class CoverArticleSecondaryTeaserConverter implements ViewModelConverter
 {
     use CreatesContextLabel;
     use CreatesDate;
-    use CreatesIiifUri;
 
+    private $viewModelConverter;
     private $urlGenerator;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator)
+    public function __construct(ViewModelConverter $viewModelConverter, UrlGeneratorInterface $urlGenerator)
     {
+        $this->viewModelConverter = $viewModelConverter;
         $this->urlGenerator = $urlGenerator;
     }
 
@@ -37,12 +37,7 @@ final class CoverArticleSecondaryTeaserConverter implements ViewModelConverter
             $article->getAuthorLine(),
             $this->createContextLabel($article),
             ViewModel\TeaserImage::small(
-                $this->iiifUri($object->getBanner(), 70, 70),
-                $object->getBanner()->getAltText(),
-                [
-                    140 => $this->iiifUri($object->getBanner(), 140, 140),
-                    70 => $this->iiifUri($object->getBanner(), 70, 70),
-                ]
+                $this->viewModelConverter->convert($object->getBanner(), null, ['width' => 70, 'height' => 70])
             ),
             ViewModel\TeaserFooter::forNonArticle(
                 Meta::withLink(

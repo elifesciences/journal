@@ -2,6 +2,8 @@
 
 namespace eLife\Journal\Controller;
 
+use eLife\Journal\Helper\MediaTypes;
+use eLife\Journal\ViewModel\Builder\PictureBuilder;
 use eLife\Patterns\ViewModel\ContentHeader;
 use eLife\Patterns\ViewModel\GridListing;
 use eLife\Patterns\ViewModel\Image;
@@ -238,6 +240,32 @@ final class WhoWeWorkWithController extends Controller
     private function toImageLinks(array $items) : array
     {
         return array_map(function (array $item) : ImageLink {
+            $builder = new PictureBuilder(function (string $format = null, int $width = null) use ($item) {
+                $width = $width ?? 180;
+                $extension = MediaTypes::toExtension($format ?? 'image/png');
+
+                $path = "assets/images/logos/{$item['filename']}";
+
+                if ('svg' !== $extension) {
+                    $path .= "-{$width}";
+                }
+
+                return $this->get('assets.packages')->getUrl("{$path}.{$extension}");
+            }, $item['name']);
+
+            if ($item['svg']) {
+                $builder = $builder->addType('image/svg+xml');
+            }
+
+            $builder = $builder
+                ->addType('image/png')
+                ->addSize(180, null);
+
+            return new ImageLink(
+                $item['uri'],
+                $builder->build()
+            );
+
             $sources = [];
             if ($item['svg']) {
                 $sources[] = ['srcset' => $this->get('assets.packages')->getUrl("assets/images/logos/{$item['filename']}.svg"), 'type' => 'image/svg+xml'];
