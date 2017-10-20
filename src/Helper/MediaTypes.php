@@ -2,6 +2,8 @@
 
 namespace eLife\Journal\Helper;
 
+use Assert\Assertion;
+
 final class MediaTypes
 {
     private static $types = [
@@ -12,6 +14,8 @@ final class MediaTypes
 
     public static function toExtension(string $mediaType) : string
     {
+        Assertion::keyExists(self::$types, $mediaType);
+
         return self::$types[$mediaType];
     }
 }

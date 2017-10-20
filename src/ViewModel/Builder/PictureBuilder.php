@@ -35,6 +35,9 @@ final class PictureBuilder
 
     public function addSize(int $width, int $height = null, string $media = null) : PictureBuilder
     {
+        Assertion::min($width, 1);
+        Assertion::nullOrMin($height, 1);
+
         $clone = clone $this;
 
         $clone->sizes[] = compact('width', 'height', 'media');
