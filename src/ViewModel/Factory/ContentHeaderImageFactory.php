@@ -49,21 +49,27 @@ final class ContentHeaderImageFactory
     {
         return $this->create(function (int $width, int $height, string $extension) use ($image) {
             return $this->iiifUri($image, $width, $height, $extension);
-        });
+        }, $image->getSource()->getMediaType());
     }
 
-    private function create(callable $callback) : ViewModel\Picture
+    private function create(callable $callback, string $source = 'image/jpeg') : ViewModel\Picture
     {
-        $builder = new PictureBuilder(function (string $format = null, int $width = null, int $height = null) use ($callback) {
+        if ('image/png' === $source) {
+            $fallbackFormat = 'image/png';
+        } else {
+            $fallbackFormat = 'image/jpeg';
+        }
+
+        $builder = new PictureBuilder(function (string $format = null, int $width = null, int $height = null) use ($callback, $fallbackFormat) {
             $width = $width ?? 1114;
             $height = $height ?? 336;
-            $extension = MediaTypes::toExtension($format ?? 'image/jpeg');
+            $extension = MediaTypes::toExtension($format ?? $fallbackFormat);
 
             return $callback($width, $height, $extension);
         });
 
         $builder = $builder
-            ->addType('image/jpeg')
+            ->addType($fallbackFormat)
             ->addSize(450, 264, '(max-width: 450px)')
             ->addSize(767, 264, '(max-width: 767px)')
             ->addSize(1023, 288, '(max-width: 1023px)')

@@ -26,13 +26,17 @@ final class SubjectBlockLinkConverter implements ViewModelConverter
     public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
         $builder = new PictureBuilder(function (string $format = null, int $width = null, int $height = null) use ($object) {
-            $extension = MediaTypes::toExtension($format ?? 'image/jpeg');
+            if ('image/png' === $object->getBanner()->getSource()->getMediaType()) {
+                $fallbackFormat = 'image/png';
+            } else {
+                $fallbackFormat = 'image/jpeg';
+            }
 
             if (null === $width && null === $height) {
                 return 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==';
             }
 
-            return $this->iiifUri($object->getThumbnail(), $width, $height, $extension);
+            return $this->iiifUri($object->getThumbnail(), $width, $height, MediaTypes::toExtension($format ?? $fallbackFormat));
         });
 
         $builder = $builder

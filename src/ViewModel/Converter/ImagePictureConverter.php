@@ -18,7 +18,13 @@ final class ImagePictureConverter implements ViewModelConverter
     public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
         $builder = new PictureBuilder(function (string $format = null, int $width = null, int $height = null) use ($object, $context) {
-            return $this->iiifUri($object, $width ?? $context['width'], $height ?? ($context['height'] ?? null), MediaTypes::toExtension($format ?? 'image/jpeg'));
+            if ('image/png' === $object->getSource()->getMediaType()) {
+                $fallbackFormat = 'image/png';
+            } else {
+                $fallbackFormat = 'image/jpeg';
+            }
+
+            return $this->iiifUri($object, $width ?? $context['width'], $height ?? ($context['height'] ?? null), MediaTypes::toExtension($format ?? $fallbackFormat));
         }, $object->getAltText());
 
         if ('image/png' === $object->getSource()->getMediaType()) {
