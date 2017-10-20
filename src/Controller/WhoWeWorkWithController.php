@@ -6,10 +6,8 @@ use eLife\Journal\Helper\MediaTypes;
 use eLife\Journal\ViewModel\Builder\PictureBuilder;
 use eLife\Patterns\ViewModel\ContentHeader;
 use eLife\Patterns\ViewModel\GridListing;
-use eLife\Patterns\ViewModel\Image;
 use eLife\Patterns\ViewModel\ImageLink;
 use eLife\Patterns\ViewModel\ListHeading;
-use eLife\Patterns\ViewModel\Picture;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -264,25 +262,6 @@ final class WhoWeWorkWithController extends Controller
             return new ImageLink(
                 $item['uri'],
                 $builder->build()
-            );
-
-            $sources = [];
-            if ($item['svg']) {
-                $sources[] = ['srcset' => $this->get('assets.packages')->getUrl("assets/images/logos/{$item['filename']}.svg"), 'type' => 'image/svg+xml'];
-            }
-
-            return new ImageLink(
-                $item['uri'],
-                new Picture(
-                    $sources,
-                    new Image(
-                        $this->get('assets.packages')->getUrl("assets/images/logos/{$item['filename']}-180.png"),
-                        [
-                            360 => $this->get('assets.packages')->getUrl("assets/images/logos/{$item['filename']}-360.png"),
-                        ],
-                        $item['name']
-                    )
-                )
             );
         }, $items);
     }
