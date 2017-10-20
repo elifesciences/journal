@@ -20,8 +20,6 @@ abstract class WebTestCase extends BaseWebTestCase
                 'access_token' => 'token',
                 'expires_in' => 3920,
                 'token_type' => 'Bearer',
-                'orcid' => '0000-0002-1825-0097',
-                'name' => 'Josiah Carberry',
             ],
             ['ROLE_USER', 'ROLE_OAUTH_USER']
         );
