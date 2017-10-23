@@ -29,7 +29,7 @@ final class ProfileContentHeaderProfileConverter implements ViewModelConverter
         $emailAddress = $object->getEmailAddresses()[0];
 
         if ($context['isUser'] ?? false) {
-            return new ViewModel\ContentHeaderProfile(
+            return ViewModel\ContentHeaderProfile::loggedIn(
                 $object->getDetails()->getPreferredName(),
                 new ViewModel\Link('Log out', $this->urlGenerator->generate('log-out')),
                 [
@@ -40,10 +40,8 @@ final class ProfileContentHeaderProfileConverter implements ViewModelConverter
             );
         }
 
-        return new ViewModel\ContentHeaderProfile(
+        return ViewModel\ContentHeaderProfile::notLoggedIn(
             $object->getDetails()->getPreferredName(),
-            null,
-            [],
             $affiliations,
             $emailAddress
         );
