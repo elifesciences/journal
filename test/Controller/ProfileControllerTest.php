@@ -31,7 +31,7 @@ final class ProfileControllerTest extends PageTestCase
         $crawler = $client->request('GET', $this->getUrl());
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
-        $this->assertSame('Preferred Name', $crawler->filter('.content-header-profile__displayName')->text());
+        $this->assertSame('Preferred Name', $crawler->filter('.content-header-profile__display_name')->text());
         $this->assertEmpty($crawler->filter('.content-header-profile__details'));
     }
 

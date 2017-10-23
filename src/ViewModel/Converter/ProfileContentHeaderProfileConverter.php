@@ -28,14 +28,24 @@ final class ProfileContentHeaderProfileConverter implements ViewModelConverter
 
         $emailAddress = $object->getEmailAddresses()[0];
 
+        if ($context['isUser'] ?? false) {
+            return new ViewModel\ContentHeaderProfile(
+                $object->getDetails()->getPreferredName(),
+                new ViewModel\Link('Log out', $this->urlGenerator->generate('log-out')),
+                [
+                    new ViewModel\Link('Manage profile', 'https://orcid.org/my-orcid'),
+                ],
+                $affiliations,
+                $emailAddress ?? ''
+            );
+        }
+
         return new ViewModel\ContentHeaderProfile(
             $object->getDetails()->getPreferredName(),
-            ['Log out' => $this->urlGenerator->generate('log-out')],
-            ['Manage profile' => 'https://orcid.org/my-orcid'],
-            array_filter([
-                'affiliations' => $affiliations,
-                'emailAddress' => $emailAddress,
-            ])
+            null,
+            [],
+            $affiliations,
+            $emailAddress ?? ''
         );
     }
 

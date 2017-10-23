@@ -198,8 +198,8 @@ abstract class Controller implements ContainerAwareInterface
         });
 
         if ($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
-            $token = $this->get('security.token_storage')->getToken();
-            $profile = $this->get('elife.api_sdk.profiles')->get($token->getUser()->getUsername());
+            $user = $this->get('security.token_storage')->getToken()->getUser();
+            $profile = $this->get('elife.api_sdk.profiles')->get($user->getUsername());
         }
 
         return [
@@ -210,6 +210,7 @@ abstract class Controller implements ContainerAwareInterface
             'infoBars' => [],
             'emailCta' => $this->get('elife.journal.view_model.converter')->convert($form->createView()),
             'footer' => $this->get('elife.journal.view_model.factory.footer')->createFooter(),
+            'user' => $user ?? null,
         ];
     }
 }

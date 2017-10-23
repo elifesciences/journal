@@ -30,7 +30,13 @@ final class ProfilesController extends Controller
         $arguments['profile'] = $profile;
 
         $arguments['contentHeader'] = $arguments['profile']
-            ->then($this->willConvertTo(ContentHeaderProfile::class));
+            ->then(function (Profile $profile) use ($arguments) {
+                if ($profile->getId() === $arguments['user']->getUsername()) {
+                    $isUser = true;
+                }
+
+                return $this->convertTo($profile, ContentHeaderProfile::class, ['isUser' => $isUser ?? false]);
+            });
 
         return new Response($this->get('templating')->render('::profile.html.twig', $arguments));
     }
