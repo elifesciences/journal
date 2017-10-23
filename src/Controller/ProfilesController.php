@@ -31,7 +31,7 @@ final class ProfilesController extends Controller
 
         $arguments['contentHeader'] = $arguments['profile']
             ->then(function (Profile $profile) use ($arguments) {
-                if ($profile->getId() === $arguments['user']->getUsername()) {
+                if ($arguments['user'] && $profile->getId() === $arguments['user']->getUsername()) {
                     $isUser = true;
                 }
 
