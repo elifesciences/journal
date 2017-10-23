@@ -168,7 +168,7 @@ final class AuthenticationTest extends WebTestCase
         $this->assertContains('Log in/Register', $crawler->text());
 
         $this->assertCount(1, $crawler->filter('.info-bar'));
-        $this->assertSame('Your name on ORCID must not be private.', trim($crawler->filter('.info-bar')->text()));
+        $this->assertSame('Please adjust your ORCID privacy settings for eLife to display your name.', trim($crawler->filter('.info-bar')->text()));
         $this->assertSame('no-cache, private', $client->getResponse()->headers->get('Cache-Control'));
         $this->assertEmpty($client->getResponse()->getVary());
 
