@@ -5,12 +5,9 @@ namespace test\eLife\Journal\Controller;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use Symfony\Component\BrowserKit\Client;
-use test\eLife\Journal\Providers;
 
 final class ProfileControllerTest extends PageTestCase
 {
-    use Providers;
-
     /**
      * @test
      */
