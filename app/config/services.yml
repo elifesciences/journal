@@ -294,11 +294,6 @@ services:
         arguments:
           - '@router'
 
-    elife.journal.view_model.factory.picture:
-        class: eLife\Journal\ViewModel\Factory\PictureFactory
-        arguments:
-          - '@assets.packages'
-
     elife.journal.view_model.factory.site_header:
         class: eLife\Journal\ViewModel\Factory\SiteHeaderFactory
         arguments:
