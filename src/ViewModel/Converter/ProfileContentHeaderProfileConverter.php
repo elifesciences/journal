@@ -36,7 +36,7 @@ final class ProfileContentHeaderProfileConverter implements ViewModelConverter
                     new ViewModel\Link('Manage profile', 'https://orcid.org/my-orcid'),
                 ],
                 $affiliations,
-                $emailAddress ?? ''
+                $emailAddress
             );
         }
 
@@ -45,7 +45,7 @@ final class ProfileContentHeaderProfileConverter implements ViewModelConverter
             null,
             [],
             $affiliations,
-            $emailAddress ?? ''
+            $emailAddress
         );
     }
 
