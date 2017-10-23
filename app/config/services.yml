@@ -972,8 +972,10 @@ services:
           - name: view_model.converter
 
     elife.journal.view_model.converter.profile.header:
-        class: eLife\Journal\ViewModel\Converter\ProfileContentHeaderConverter
+        class: eLife\Journal\ViewModel\Converter\ProfileContentHeaderProfileConverter
         public: false
+        arguments:
+          - '@router'
         tags:
           - name: view_model.converter
 

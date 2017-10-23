@@ -31,6 +31,7 @@ abstract class ModelConverterTestCase extends PHPUnit_Framework_TestCase
         'podcast-episode' => Model\PodcastEpisode::class,
         'podcast-episode-chapter' => Model\PodcastEpisodeChapterModel::class,
         'press-package' => Model\PressPackage::class,
+        'profile' => Model\Profile::class,
         'subject' => Model\Subject::class,
     ];
 

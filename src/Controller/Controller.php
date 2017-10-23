@@ -3,7 +3,6 @@
 namespace eLife\Journal\Controller;
 
 use eLife\ApiClient\Exception\BadResponse;
-use eLife\ApiSdk\Model\Model;
 use eLife\Journal\Exception\EarlyResponse;
 use eLife\Journal\Form\Type\EmailCtaType;
 use eLife\Journal\Helper\CanConvertContent;
@@ -22,6 +21,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use UnexpectedValueException;
+use function GuzzleHttp\Promise\all;
 use function GuzzleHttp\Promise\exception_for;
 use function GuzzleHttp\Promise\promise_for;
 use function GuzzleHttp\Promise\rejection_for;
@@ -197,10 +197,16 @@ abstract class Controller implements ContainerAwareInterface
             }
         });
 
+        if ($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+            $token = $this->get('security.token_storage')->getToken();
+            $profile = $this->get('elife.api_sdk.profiles')->get($token->getUser()->getUsername());
+        }
+
         return [
-            'header' => promise_for($model)->then(function (Model $model = null) : ViewModel\SiteHeader {
-                return $this->get('elife.journal.view_model.factory.site_header')->createSiteHeader($model);
-            }),
+            'header' => all(['model' => promise_for($model), 'profile' => promise_for($profile ?? null)])
+                ->then(function (array $parts) {
+                    return $this->get('elife.journal.view_model.factory.site_header')->createSiteHeader($parts['model'], $parts['profile']);
+                }),
             'infoBars' => [],
             'emailCta' => $this->get('elife.journal.view_model.converter')->convert($form->createView()),
             'footer' => $this->get('elife.journal.view_model.factory.footer')->createFooter(),

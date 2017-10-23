@@ -4,6 +4,7 @@ namespace eLife\Journal\ViewModel\Factory;
 
 use eLife\ApiSdk\Model\HasSubjects;
 use eLife\ApiSdk\Model\Model;
+use eLife\ApiSdk\Model\Profile;
 use eLife\ApiSdk\Model\Subject;
 use eLife\Patterns\ViewModel\Button;
 use eLife\Patterns\ViewModel\CompactForm;
@@ -38,7 +39,7 @@ final class SiteHeaderFactory
         $this->authorizationChecker = $authorizationChecker;
     }
 
-    public function createSiteHeader(Model $model = null) : SiteHeader
+    public function createSiteHeader(Model $model = null, Profile $profile = null) : SiteHeader
     {
         if ($this->requestStack->getCurrentRequest() && 'search' !== $this->requestStack->getCurrentRequest()->get('_route')) {
             $searchItem = NavLinkedItem::asIcon(new Link('Search', $this->urlGenerator->generate('search')),
@@ -114,10 +115,11 @@ final class SiteHeaderFactory
             ),
         ];
 
-        if ($this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+        if ($this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED') && $profile) {
             $secondaryLinks[] = NavLinkedItem::asLoginControl(
                 LoginControl::loggedIn(
-                    $this->urlGenerator->generate('log-out'), 'Log out',
+                    $this->urlGenerator->generate('profile', ['id' => $profile->getId()]),
+                    $profile->getDetails()->getPreferredName(),
                     new Picture(
                         [
                             [
@@ -133,7 +135,12 @@ final class SiteHeaderFactory
                             ],
                             'Profile icon'
                         )
-                    )
+                    ),
+                    'View my profile',
+                    [
+                        'Manage profile' => 'https://orcid.org/my-orcid',
+                        'Log out' => $this->urlGenerator->generate('log-out'),
+                    ]
                 )
             );
         } elseif ($this->authorizationChecker->isGranted('FEATURE_CAN_AUTHENTICATE')) {

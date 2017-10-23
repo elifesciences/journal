@@ -22,8 +22,7 @@ final class AuthenticationTest extends WebTestCase
 
         $crawler = $client->request('GET', '/');
 
-        $this->assertNotContains('Log in/Register', $crawler->text());
-        $this->assertNotContains('Log out', $crawler->text());
+        $this->assertEmpty($crawler->filter('.login-control'));
 
         $client->request('GET', '/log-in');
 
@@ -60,8 +59,7 @@ final class AuthenticationTest extends WebTestCase
 
         $crawler = $client->request('GET', "/log-in/check?code=foo&state=$state");
 
-        $this->assertContains('Log out', $crawler->text());
-        $this->assertNotContains('Log in/Register', $crawler->text());
+        $this->assertEmpty($crawler->filter('.login-control'));
     }
 
     /**
@@ -194,10 +192,10 @@ final class AuthenticationTest extends WebTestCase
 
         $crawler = $client->request('GET', '/');
 
+        $crawler = $client->click($crawler->filter('a:contains("Josiah Carberry")')->link());
         $crawler = $client->click($crawler->filter('a:contains("Log out")')->link());
 
-        $this->assertNotContains('Log out', $crawler->text());
-        $this->assertNotContains('Log in/Register', $crawler->text());
+        $this->assertEmpty($crawler->filter('.login-control'));
     }
 
     private function readyHomePage()
@@ -261,6 +259,7 @@ final class AuthenticationTest extends WebTestCase
                     'access_token' => 'token',
                     'expires_in' => 3920,
                     'token_type' => 'Bearer',
+                    'id' => 'jcarberry',
                     'orcid' => '0000-0002-1825-0097',
                     'name' => 'Josiah Carberry',
                 ])

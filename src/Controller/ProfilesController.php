@@ -3,7 +3,7 @@
 namespace eLife\Journal\Controller;
 
 use eLife\ApiSdk\Model\Profile;
-use eLife\Patterns\ViewModel\ContentHeader;
+use eLife\Patterns\ViewModel\ContentHeaderProfile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -30,7 +30,7 @@ final class ProfilesController extends Controller
         $arguments['profile'] = $profile;
 
         $arguments['contentHeader'] = $arguments['profile']
-            ->then($this->willConvertTo(ContentHeader::class));
+            ->then($this->willConvertTo(ContentHeaderProfile::class));
 
         return new Response($this->get('templating')->render('::profile.html.twig', $arguments));
     }
