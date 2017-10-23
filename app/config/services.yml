@@ -234,6 +234,16 @@ services:
         tags:
           - name: security.voter
 
+    elife.journal.security.voter.feature.view_profiles:
+        class: eLife\Journal\Security\Voter\SessionAttributeVoter
+        public: false
+        arguments:
+          - '@request_stack'
+          - FEATURE_CAN_VIEW_PROFILES
+          - open-sesame
+        tags:
+          - name: security.voter
+
     elife.journal.templating.promise_aware:
         class: eLife\Journal\Templating\PromiseAwareEngine
         decorates: templating
