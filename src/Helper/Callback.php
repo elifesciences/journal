@@ -87,6 +87,13 @@ final class Callback
         });
     }
 
+    public static function apply(string $function) : Callback
+    {
+        return new self(function ($object) use ($function) {
+            return $function($object);
+        });
+    }
+
     public static function method(string $method, ...$values) : Callback
     {
         return new self(function ($object) use ($method, $values) {

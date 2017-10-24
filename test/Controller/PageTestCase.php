@@ -2,6 +2,7 @@
 
 namespace test\eLife\Journal\Controller;
 
+use Symfony\Component\BrowserKit\Client;
 use Symfony\Component\HttpFoundation\Response;
 use test\eLife\Journal\WebTestCase;
 
@@ -84,8 +85,15 @@ abstract class PageTestCase extends WebTestCase
         $client = static::$kernel->getContainer()->get('test.client');
         $client->setServerParameters($server);
 
+        static::onCreateClient($client);
+
         return $client;
     }
 
     abstract protected function getUrl() : string;
+
+    protected static function onCreateClient(Client $client)
+    {
+        // Do nothing.
+    }
 }

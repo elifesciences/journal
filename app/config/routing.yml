@@ -250,6 +250,13 @@ podcast-episode:
     requirements:
         number: '[1-9][0-9]*'
 
+profile:
+    path: /profiles/{id}
+    defaults:
+         _controller: AppBundle:Profiles:profile
+    requirements:
+        id: '[a-z0-9-]+'
+
 resources:
     path: /resources
     defaults:
