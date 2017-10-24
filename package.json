@@ -2,7 +2,7 @@
     "private": true,
     "dependencies": {
         "async": "^2.5.0",
-        "critical": "^0.8.4",
+        "critical": "^0.9.1",
         "del": "^2.2",
         "gulp": "^3.9",
         "gulp-favicons": "^2.2",
