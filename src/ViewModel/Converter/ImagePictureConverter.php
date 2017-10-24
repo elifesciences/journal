@@ -27,6 +27,8 @@ final class ImagePictureConverter implements ViewModelConverter
             return $this->iiifUri($object, $width ?? $context['width'], $height ?? ($context['height'] ?? null), MediaTypes::toExtension($format ?? $fallbackFormat));
         }, $object->getAltText());
 
+        $builder = $builder->setOriginalSize($object->getWidth(), $object->getHeight());
+
         if ('image/png' === $object->getSource()->getMediaType()) {
             $builder = $builder->addType('image/png');
         } else {

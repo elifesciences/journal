@@ -49,10 +49,10 @@ final class ContentHeaderImageFactory
     {
         return $this->create(function (int $width, int $height, string $extension) use ($image) {
             return $this->iiifUri($image, $width, $height, $extension);
-        }, $image->getSource()->getMediaType());
+        }, $image->getSource()->getMediaType(), $image->getWidth(), $image->getHeight());
     }
 
-    private function create(callable $callback, string $source = 'image/jpeg') : ViewModel\Picture
+    private function create(callable $callback, string $source = 'image/jpeg', int $width = null, int $height = null) : ViewModel\Picture
     {
         if ('image/png' === $source) {
             $fallbackFormat = 'image/png';
@@ -67,6 +67,10 @@ final class ContentHeaderImageFactory
 
             return $callback($width, $height, $extension);
         });
+
+        if ($width && $height) {
+            $builder = $builder->setOriginalSize($width, $height);
+        }
 
         $builder = $builder
             ->addType($fallbackFormat)

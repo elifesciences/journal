@@ -17,11 +17,13 @@ final class CoverBlockLinkConverter implements ViewModelConverter
      */
     public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
-        $builder = new PictureBuilder(function (string $format = null, int $width = null, int $height = null) use ($object) {
+        $image = $object->getBanner();
+
+        $builder = new PictureBuilder(function (string $format = null, int $width = null, int $height = null) use ($image) {
             $width = $width ?? 263;
             $height = $height ?? 176;
 
-            if ('image/png' === $object->getBanner()->getSource()->getMediaType()) {
+            if ('image/png' === $image->getSource()->getMediaType()) {
                 $fallbackFormat = 'image/png';
             } else {
                 $fallbackFormat = 'image/jpeg';
@@ -29,8 +31,10 @@ final class CoverBlockLinkConverter implements ViewModelConverter
 
             $extension = MediaTypes::toExtension($format ?? $fallbackFormat);
 
-            return $this->iiifUri($object->getBanner(), $width, $height, $extension);
+            return $this->iiifUri($image, $width, $height, $extension);
         });
+
+        $builder = $builder->setOriginalSize($image->getWidth(), $image->getHeight());
 
         $builder = $builder
             ->addType('image/jpeg')
