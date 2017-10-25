@@ -823,6 +823,22 @@ services:
         tags:
           - name: view_model.converter
 
+    elife.journal.view_model.converter.job_advert.header:
+        class: eLife\Journal\ViewModel\Converter\JobAdvertContentHeaderConverter
+        public: false
+        arguments:
+          - '@router'
+        tags:
+          - name: view_model.converter
+
+    elife.journal.view_model.converter.job_advert.teaser:
+        class: eLife\Journal\ViewModel\Converter\JobAdvertTeaserConverter
+        public: false
+        arguments:
+          - '@router'
+        tags:
+          - name: view_model.converter
+
     elife.journal.view_model.converter.labs_post.header:
         class: eLife\Journal\ViewModel\Converter\LabsPostContentHeaderConverter
         public: false
