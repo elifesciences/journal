@@ -4,38 +4,26 @@ namespace eLife\Journal\ViewModel\Converter;
 
 use eLife\ApiSdk\Model\Image;
 use eLife\Journal\Helper\CreatesIiifUri;
-use eLife\Journal\Helper\MediaTypes;
-use eLife\Journal\ViewModel\Builder\PictureBuilder;
+use eLife\Journal\ViewModel\Factory\PictureBuilderFactory;
 use eLife\Patterns\ViewModel;
 
 final class ImagePictureConverter implements ViewModelConverter
 {
     use CreatesIiifUri;
 
+    private $pictureBuilderFactory;
+
+    public function __construct(PictureBuilderFactory $pictureBuilderFactory)
+    {
+        $this->pictureBuilderFactory = $pictureBuilderFactory;
+    }
+
     /**
      * @param Image $object
      */
     public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
-        $builder = new PictureBuilder(function (string $format = null, int $width = null, int $height = null) use ($object, $context) {
-            if ('image/png' === $object->getSource()->getMediaType()) {
-                $fallbackFormat = 'image/png';
-            } else {
-                $fallbackFormat = 'image/jpeg';
-            }
-
-            return $this->iiifUri($object, $width ?? $context['width'], $height ?? ($context['height'] ?? null), MediaTypes::toExtension($format ?? $fallbackFormat));
-        }, $object->getAltText());
-
-        $builder = $builder->setOriginalSize($object->getWidth(), $object->getHeight());
-
-        if ('image/png' === $object->getSource()->getMediaType()) {
-            $builder = $builder->addType('image/png');
-        } else {
-            $builder = $builder->addType('image/jpeg');
-        }
-
-        $builder = $builder->addSize($context['width'], $context['height'] ?? null);
+        $builder = $this->pictureBuilderFactory->forImage($object, $context['width'], $context['height'] ?? null);
 
         return $builder->build();
     }

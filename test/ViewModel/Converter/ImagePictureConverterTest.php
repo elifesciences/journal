@@ -8,6 +8,7 @@ use eLife\ApiSdk\Model\HasBanner;
 use eLife\ApiSdk\Model\HasThumbnail;
 use eLife\ApiSdk\Model\Model;
 use eLife\Journal\ViewModel\Converter\ImagePictureConverter;
+use eLife\Journal\ViewModel\Factory\PictureBuilderFactory;
 use eLife\Patterns\ViewModel;
 use Traversable;
 
@@ -22,7 +23,7 @@ final class ImagePictureConverterTest extends ModelConverterTestCase
      */
     public function setUpConverter()
     {
-        $this->converter = new ImagePictureConverter();
+        $this->converter = new ImagePictureConverter(new PictureBuilderFactory());
     }
 
     /**

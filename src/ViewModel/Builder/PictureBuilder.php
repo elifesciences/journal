@@ -64,7 +64,22 @@ final class PictureBuilder
     {
         $sources = [];
 
-        foreach ($this->sizes as $size) {
+        $sizes = $this->sizes;
+        $sizes = array_unique($sizes, SORT_REGULAR);
+
+        usort($sizes, function (array $a, array $b) {
+            if (null === $b['media']) {
+                return 1;
+            }
+
+            if (null === $a['media']) {
+                return -1;
+            }
+
+            return 1;
+        });
+
+        foreach (array_reverse($sizes) as $size) {
             foreach (array_keys(array_filter($this->types)) as $type) {
                 if ('image/svg+xml' === $type) {
                     $sources[] = array_filter([

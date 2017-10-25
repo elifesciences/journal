@@ -6,6 +6,7 @@ use eLife\ApiSdk\Model\Collection;
 use eLife\Journal\ViewModel\Converter\CollectionContentHeaderConverter;
 use eLife\Journal\ViewModel\Converter\ViewModelConverter;
 use eLife\Journal\ViewModel\Factory\ContentHeaderImageFactory;
+use eLife\Journal\ViewModel\Factory\PictureBuilderFactory;
 use eLife\Patterns\ViewModel;
 use Symfony\Component\Asset\Packages;
 
@@ -22,7 +23,7 @@ final class CollectionContentHeaderConverterTest extends ModelConverterTestCase
         $this->converter = new CollectionContentHeaderConverter(
             $viewModelConverter = $this->createMock(ViewModelConverter::class),
             $this->stubUrlGenerator(),
-            new ContentHeaderImageFactory(new Packages())
+            new ContentHeaderImageFactory(new PictureBuilderFactory(), new Packages())
         );
 
         $viewModelConverter

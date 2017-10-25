@@ -13,10 +13,12 @@ final class ContentHeaderImageFactory
 {
     use CreatesIiifUri;
 
+    private $pictureBuilderFactory;
     private $packages;
 
-    public function __construct(Packages $packages)
+    public function __construct(PictureBuilderFactory $pictureBuilderFactory, Packages $packages)
     {
+        $this->pictureBuilderFactory = $pictureBuilderFactory;
         $this->packages = $packages;
     }
 
@@ -40,45 +42,28 @@ final class ContentHeaderImageFactory
 
     public function pictureForLocalFile(string $filename) : ViewModel\Picture
     {
-        return $this->create(function (int $width, int $height, string $extension) use ($filename) {
-            return $this->packages->getUrl("assets/images/banners/{$filename}-{$width}x{$height}.{$extension}");
-        });
+        $builder = $this->pictureBuilderFactory
+            ->create(function (string $format, int $width, int $height = null) use ($filename) {
+                $extension = MediaTypes::toExtension($format);
+
+                return $this->packages->getUrl("assets/images/banners/{$filename}-{$width}x{$height}.{$extension}");
+            }, 'image/jpeg', 1114, 336);
+
+        return $this->addSizes($builder)->build();
     }
 
     public function pictureForImage(Image $image) : ViewModel\Picture
     {
-        return $this->create(function (int $width, int $height, string $extension) use ($image) {
-            return $this->iiifUri($image, $width, $height, $extension);
-        }, $image->getSource()->getMediaType(), $image->getWidth(), $image->getHeight());
+        $builder = $this->pictureBuilderFactory->forImage($image, 1114, 336);
+
+        return $this->addSizes($builder)->build();
     }
 
-    private function create(callable $callback, string $source = 'image/jpeg', int $width = null, int $height = null) : ViewModel\Picture
+    private function addSizes(PictureBuilder $builder) : PictureBuilder
     {
-        if ('image/png' === $source) {
-            $fallbackFormat = 'image/png';
-        } else {
-            $fallbackFormat = 'image/jpeg';
-        }
-
-        $builder = new PictureBuilder(function (string $format = null, int $width = null, int $height = null) use ($callback, $fallbackFormat) {
-            $width = $width ?? 1114;
-            $height = $height ?? 336;
-            $extension = MediaTypes::toExtension($format ?? $fallbackFormat);
-
-            return $callback($width, $height, $extension);
-        });
-
-        if ($width && $height) {
-            $builder = $builder->setOriginalSize($width, $height);
-        }
-
-        $builder = $builder
-            ->addType($fallbackFormat)
+        return $builder
             ->addSize(450, 264, '(max-width: 450px)')
             ->addSize(767, 264, '(max-width: 767px)')
-            ->addSize(1023, 288, '(max-width: 1023px)')
-            ->addSize(1114, 336);
-
-        return $builder->build();
+            ->addSize(1023, 288, '(max-width: 1023px)');
     }
 }

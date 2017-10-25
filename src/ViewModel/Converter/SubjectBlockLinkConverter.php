@@ -5,7 +5,7 @@ namespace eLife\Journal\ViewModel\Converter;
 use eLife\ApiSdk\Model\Subject;
 use eLife\Journal\Helper\CreatesIiifUri;
 use eLife\Journal\Helper\MediaTypes;
-use eLife\Journal\ViewModel\Builder\PictureBuilder;
+use eLife\Journal\ViewModel\Factory\PictureBuilderFactory;
 use eLife\Patterns\ViewModel;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -14,10 +14,12 @@ final class SubjectBlockLinkConverter implements ViewModelConverter
     use CreatesIiifUri;
 
     private $urlGenerator;
+    private $pictureBuilderFactory;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator)
+    public function __construct(UrlGeneratorInterface $urlGenerator, PictureBuilderFactory $pictureBuilderFactory)
     {
         $this->urlGenerator = $urlGenerator;
+        $this->pictureBuilderFactory = $pictureBuilderFactory;
     }
 
     /**
@@ -27,24 +29,25 @@ final class SubjectBlockLinkConverter implements ViewModelConverter
     {
         $image = $object->getThumbnail();
 
-        $builder = new PictureBuilder(function (string $format = null, int $width = null, int $height = null) use ($image) {
-            if ('image/png' === $image->getSource()->getMediaType()) {
-                $fallbackFormat = 'image/png';
-            } else {
-                $fallbackFormat = 'image/jpeg';
-            }
+        if ('image/png' === $image->getSource()->getMediaType()) {
+            $format = 'image/png';
+        } else {
+            $format = 'image/jpeg';
+        }
 
-            if (null === $width && null === $height) {
-                return 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==';
-            }
+        $builder = $this->pictureBuilderFactory
+            ->create(function (string $format, int $width = null, int $height = null) use ($image) {
+                $extension = MediaTypes::toExtension($format);
 
-            return $this->iiifUri($image, $width, $height, MediaTypes::toExtension($format ?? $fallbackFormat));
-        });
+                if (null === $width && null === $height) {
+                    return 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==';
+                }
 
-        $builder = $builder->setOriginalSize($image->getWidth(), $image->getHeight());
+                return $this->iiifUri($image, $width, $height, $extension);
+            }, $format, null, null, $image->getAltText());
 
         $builder = $builder
-            ->addType('image/jpeg')
+            ->setOriginalSize($image->getWidth(), $image->getHeight())
             ->addSize(263, 148, '(min-width: 600px)');
 
         return new ViewModel\BlockLink(
