@@ -107,7 +107,6 @@ final class JobAdvertContext extends Context
      */
     public function iShouldSeeTheJobAdvertsWithTheNearestClosingDatesInTheLatestList(int $number)
     {
-
         $this->spin(function () use ($number) {
             $this->assertSession()->elementsCount('css', '.list-heading:contains("Latest") + .listing-list > .listing-list__item', $number);
 

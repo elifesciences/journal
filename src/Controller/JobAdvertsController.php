@@ -4,7 +4,6 @@ namespace eLife\Journal\Controller;
 
 use eLife\ApiSdk\Collection\Sequence;
 use eLife\ApiSdk\Model\JobAdvert;
-use eLife\Journal\Exception\EarlyResponse;
 use eLife\Journal\Helper\Callback;
 use eLife\Journal\Helper\Paginator;
 use eLife\Journal\Pagerfanta\SequenceAdapter;
@@ -12,7 +11,6 @@ use eLife\Patterns\ViewModel\ContentHeader;
 use eLife\Patterns\ViewModel\ListingTeasers;
 use eLife\Patterns\ViewModel\Teaser;
 use Pagerfanta\Pagerfanta;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use function GuzzleHttp\Promise\promise_for;

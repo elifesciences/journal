@@ -2,7 +2,7 @@
 
 namespace eLife\Journal\ViewModel\Converter;
 
-use \eLife\ApiSdk\Model\JobAdvert;
+use eLife\ApiSdk\Model\JobAdvert;
 use eLife\Journal\Helper\LicenceUri;
 use eLife\Patterns\ViewModel;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
