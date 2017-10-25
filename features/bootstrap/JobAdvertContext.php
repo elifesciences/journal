@@ -37,7 +37,7 @@ final class JobAdvertContext extends Context
         $this->mockApiResponse(
             new Request(
                 'GET',
-                'http://api.elifesciences.org/job-adverts?page=1&per-page=1&show=open&order=asc',
+                'http://api.elifesciences.org/job-adverts?page=1&per-page=1&show=open&order=desc',
                 ['Accept' => 'application/vnd.elife.job-advert-list+json; version=1']
             ),
             new Response(
@@ -56,7 +56,7 @@ final class JobAdvertContext extends Context
             $this->mockApiResponse(
                 new Request(
                     'GET',
-                    "http://api.elifesciences.org/job-adverts?page=$page&per-page=$chunk&show=open&order=asc",
+                    "http://api.elifesciences.org/job-adverts?page=$page&per-page=$chunk&show=open&order=desc",
                     ['Accept' => 'application/vnd.elife.job-advert-list+json; version=1']
                 ),
                 new Response(
@@ -103,25 +103,24 @@ final class JobAdvertContext extends Context
     }
 
     /**
-     * @Then /^I should see the (\d+) job adverts with the nearest closing dates in the 'Open job adverts' list$/
+     * @Then /^I should see the (\d+) job adverts with the nearest closing dates in the 'Latest' list$/
      */
-    public function iShouldSeeTheJobAdvertsWithTheNearestClosingDatesInTheOpenJobAdvertsList(int $number)
+    public function iShouldSeeTheJobAdvertsWithTheNearestClosingDatesInTheLatestList(int $number)
     {
 
-      $this->assertSession()->elementsCount('css', '.dummy', 2);
-//        $this->spin(function () use ($number) {
-//            $this->assertSession()->elementsCount('css', '.list-heading:contains("Job adverts") + .listing-list > .listing-list__item', $number);
-//
-//            for ($i = $number; $i > 0; --$i) {
-//                $nthChild = ($number - $i + 1);
-//                $expectedNumber = ($this->numberOfJobAdverts - $nthChild + 1);
-//
-//                $this->assertSession()->elementContains(
-//                    'css',
-//                    '.list-heading:contains("Job adverts") + .listing-list > .listing-list__item:nth-child('.$nthChild.')',
-//                    'Job advert '.$expectedNumber.' title'
-//                );
-//            }
-//        });
+        $this->spin(function () use ($number) {
+            $this->assertSession()->elementsCount('css', '.list-heading:contains("Latest") + .listing-list > .listing-list__item', $number);
+
+            for ($i = $number; $i > 0; --$i) {
+                $nthChild = ($number - $i + 1);
+                $expectedNumber = ($this->numberOfJobAdverts - $nthChild + 1);
+
+                $this->assertSession()->elementContains(
+                    'css',
+                    '.list-heading:contains("Latest") + .listing-list > .listing-list__item:nth-child('.$nthChild.')',
+                    'Job advert '.$expectedNumber.' title'
+                );
+            }
+        });
     }
 }

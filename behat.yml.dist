@@ -69,6 +69,11 @@ default:
                 tags: '@interview'
             contexts:
               - InterviewContext
+        jobs:
+            filters:
+                tags: '@jobs'
+            contexts:
+              - JobAdvertContext
         labs:
             filters:
                 tags: '@labs'
