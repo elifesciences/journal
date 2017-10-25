@@ -26,9 +26,8 @@ final class JobAdvertsController extends Controller
 
         $arguments = $this->defaultPageArguments($request);
 
-        $upcomingEvents = promise_for($this->get('elife.api_sdk.job_adverts')
-            ->show('open')
-            ->reverse())
+        $latest = promise_for($this->get('elife.api_sdk.job_adverts')
+            ->show('open'))
             ->then(function (Sequence $sequence) use ($page, $perPage) {
                 $pagerfanta = new Pagerfanta(new SequenceAdapter($sequence, $this->willConvertTo(Teaser::class)));
                 $pagerfanta->setMaxPerPage($perPage)->setCurrentPage($page);
@@ -36,9 +35,9 @@ final class JobAdvertsController extends Controller
                 return $pagerfanta;
             });
 
-        $arguments['title'] = 'Job adverts';
+        $arguments['title'] = 'eLife Jobs';
 
-        $arguments['paginator'] = $upcomingEvents
+        $arguments['paginator'] = $latest
             ->then(function (Pagerfanta $pagerfanta) use ($request) {
                 return new Paginator(
                     'Browse our open job adverts',
@@ -53,7 +52,7 @@ final class JobAdvertsController extends Controller
             });
 
         $arguments['listing'] = $arguments['paginator']
-            ->then($this->willConvertTo(ListingTeasers::class, ['heading' => 'Open job adverts', 'type' => 'job-adverts', 'emptyText' => 'There are currently no open job adverts. Please call back soon.']));
+            ->then($this->willConvertTo(ListingTeasers::class, ['heading' => 'Latest', 'type' => 'job-adverts', 'emptyText' => 'No vacancies at present.']));
 
         if (1 === $page) {
             return $this->createFirstPage($arguments);
@@ -64,14 +63,18 @@ final class JobAdvertsController extends Controller
 
     private function createFirstPage(array $arguments) : Response
     {
-        $arguments['contentHeader'] = new ContentHeader('eLife job adverts');
+        $arguments['contentHeader'] = new ContentHeader(
+          $arguments['title'],
+          null,
+          'Impact statement wording not yet confirmed.'
+        );
 
         return new Response($this->get('templating')->render('::job-adverts.html.twig', $arguments));
     }
 
     public function jobAdvertAction(Request $request, string $id) : Response
     {
-        $jobAdvert = $this->get('elife.api_sdk.job-advert')
+        $jobAdvert = $this->get('elife.api_sdk.job_advert')
             ->get($id)
             ->otherwise($this->mightNotExist())
             ->then(function (JobAdvert $jobAdvert) {
@@ -84,12 +87,12 @@ final class JobAdvertsController extends Controller
         $arguments['title'] = $jobAdvert
             ->then(Callback::method('getTitle'));
 
-        $arguments['jobAdvert'] = $jobAdvert;
+        $arguments['job-advert'] = $jobAdvert;
 
-        $arguments['contentHeader'] = $arguments['jobAdvert']
+        $arguments['contentHeader'] = $arguments['job-advert']
             ->then($this->willConvertTo(ContentHeader::class));
 
-        $arguments['blocks'] = $arguments['jobAdvert']
+        $arguments['blocks'] = $arguments['job-advert']
             ->then($this->willConvertContent());
 
         return new Response($this->get('templating')->render('::job-advert.html.twig', $arguments));
