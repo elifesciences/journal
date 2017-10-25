@@ -43,7 +43,7 @@ final class PictureBuilder
 
         $clone = clone $this;
 
-        $clone->types[] = $type;
+        $clone->types[$type] = true;
 
         return $clone;
     }
@@ -65,7 +65,7 @@ final class PictureBuilder
         $sources = [];
 
         foreach ($this->sizes as $size) {
-            foreach (array_filter($this->types) as $type) {
+            foreach (array_keys(array_filter($this->types)) as $type) {
                 if ('image/svg+xml' === $type) {
                     $sources[] = array_filter([
                         'srcset' => call_user_func($this->uriGenerator, $type, $size['width'], $size['height']),

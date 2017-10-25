@@ -81,8 +81,8 @@ final class PictureBuilderTest extends PHPUnit_Framework_TestCase
 
         $builder = $builder
             ->setOriginalSize(150, 150)
-            ->addType('image/svg+xml')
             ->addType('image/png')
+            ->addType('image/svg+xml')
             ->addSize(200, 300, '(media)')
             ->addSize(100);
 
