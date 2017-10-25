@@ -30,21 +30,21 @@ final class SubjectBlockLinkConverter implements ViewModelConverter
         $image = $object->getThumbnail();
 
         if ('image/png' === $image->getSource()->getMediaType()) {
-            $format = 'image/png';
+            $type = 'image/png';
         } else {
-            $format = 'image/jpeg';
+            $type = 'image/jpeg';
         }
 
         $builder = $this->pictureBuilderFactory
-            ->create(function (string $format, int $width = null, int $height = null) use ($image) {
-                $extension = MediaTypes::toExtension($format);
+            ->create(function (string $type, int $width = null, int $height = null) use ($image) {
+                $extension = MediaTypes::toExtension($type);
 
                 if (null === $width && null === $height) {
                     return 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==';
                 }
 
                 return $this->iiifUri($image, $width, $height, $extension);
-            }, $format, null, null, $image->getAltText());
+            }, $type, null, null, $image->getAltText());
 
         $builder = $builder
             ->setOriginalSize($image->getWidth(), $image->getHeight())

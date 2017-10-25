@@ -43,8 +43,8 @@ final class ContentHeaderImageFactory
     public function pictureForLocalFile(string $filename) : ViewModel\Picture
     {
         $builder = $this->pictureBuilderFactory
-            ->create(function (string $format, int $width, int $height = null) use ($filename) {
-                $extension = MediaTypes::toExtension($format);
+            ->create(function (string $type, int $width, int $height = null) use ($filename) {
+                $extension = MediaTypes::toExtension($type);
 
                 return $this->packages->getUrl("assets/images/banners/{$filename}-{$width}x{$height}.{$extension}");
             }, 'image/jpeg', 1114, 336);

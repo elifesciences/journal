@@ -11,15 +11,15 @@ final class PictureBuilderFactory
 {
     use CreatesIiifUri;
 
-    public function create(callable $uriGenerator, string $type, int $defaultWidth = null, int $defaultHeight = null, string $altText = '') : PictureBuilder
+    public function create(callable $uriGenerator, string $defaultType, int $defaultWidth = null, int $defaultHeight = null, string $altText = '') : PictureBuilder
     {
-        $builder = new PictureBuilder(function (string $format = null, int $width = null, int $height = null) use ($uriGenerator, $type, $defaultWidth, $defaultHeight) {
-            return $uriGenerator($format ?? $type, $width ?? $defaultWidth, $height ?? $defaultHeight);
+        $builder = new PictureBuilder(function (string $type = null, int $width = null, int $height = null) use ($uriGenerator, $defaultType, $defaultWidth, $defaultHeight) {
+            return $uriGenerator($type ?? $defaultType, $width ?? $defaultWidth, $height ?? $defaultHeight);
         }, $altText);
 
-        $builder = $builder->addType($type);
+        $builder = $builder->addType($defaultType);
 
-        if ('image/svg+xml' === $type) {
+        if ('image/svg+xml' === $defaultType) {
             $builder = $builder->addType('image/png');
         }
 
@@ -33,18 +33,17 @@ final class PictureBuilderFactory
     public function forImage(Image $image, int $defaultWidth, int $defaultHeight = null) : PictureBuilder
     {
         if ('image/png' === $image->getSource()->getMediaType()) {
-            $format = 'image/png';
+            $type = 'image/png';
         } else {
-            $format = 'image/jpeg';
+            $type = 'image/jpeg';
         }
 
-        $builder = $this->create(function (string $format, int $width, int $height = null) use ($image) {
-            $extension = MediaTypes::toExtension($format);
+        $builder = $this->create(function (string $type, int $width, int $height = null) use ($image) {
+            $extension = MediaTypes::toExtension($type);
 
             return $this->iiifUri($image, $width, $height, $extension);
-        }, $format, $defaultWidth, $defaultHeight, $image->getAltText());
+        }, $type, $defaultWidth, $defaultHeight, $image->getAltText());
 
-        return $builder
-            ->setOriginalSize($image->getWidth(), $image->getHeight());
+        return $builder->setOriginalSize($image->getWidth(), $image->getHeight());
     }
 }
