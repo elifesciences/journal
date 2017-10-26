@@ -26,7 +26,7 @@ final class JobAdvertsController extends Controller
         $arguments = $this->defaultPageArguments($request);
 
         $latest = promise_for($this->get('elife.api_sdk.job_adverts')
-            ->show('open'))
+            /*->show('open')*/)
             ->then(function (Sequence $sequence) use ($page, $perPage) {
                 $pagerfanta = new Pagerfanta(new SequenceAdapter($sequence, $this->willConvertTo(Teaser::class)));
                 $pagerfanta->setMaxPerPage($perPage)->setCurrentPage($page);
@@ -92,8 +92,14 @@ final class JobAdvertsController extends Controller
 
         $arguments['blocks'] = $arguments['job-advert']
             ->then(function (JobAdvert $jobAdvert) {
-                return $this->convertContent($jobAdvert)
+
+              if ($jobAdvert->getClosingDate() > new \DateTimeImmutable('now')) {
+                  return $this->convertContent($jobAdvert)
                     ->prepend(new Paragraph("Closing date for application is  <b>{$jobAdvert->getClosingDate()->format('M d Y')}</b>"));
+                }
+
+                return [new Paragraph('This position is now closed to applications.')];
+
             });
 
         return new Response($this->get('templating')->render('::job-advert.html.twig', $arguments));
