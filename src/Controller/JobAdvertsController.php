@@ -7,6 +7,7 @@ use eLife\ApiSdk\Model\JobAdvert;
 use eLife\Journal\Helper\Callback;
 use eLife\Journal\Helper\Paginator;
 use eLife\Journal\Pagerfanta\SequenceAdapter;
+use eLife\Journal\ViewModel\Paragraph;
 use eLife\Patterns\ViewModel\ContentHeader;
 use eLife\Patterns\ViewModel\ListingTeasers;
 use eLife\Patterns\ViewModel\Teaser;
@@ -71,7 +72,7 @@ final class JobAdvertsController extends Controller
 
     public function jobAdvertAction(Request $request, string $id) : Response
     {
-        $jobAdvert = $this->get('elife.api_sdk.job_advert')
+        $jobAdvert = $this->get('elife.api_sdk.job_adverts')
             ->get($id)
             ->otherwise($this->mightNotExist())
             ->then(function (JobAdvert $jobAdvert) {
@@ -90,8 +91,11 @@ final class JobAdvertsController extends Controller
             ->then($this->willConvertTo(ContentHeader::class));
 
         $arguments['blocks'] = $arguments['job-advert']
-            ->then($this->willConvertContent());
+            ->then(function (JobAdvert $jobAdvert) {
+                return $this->convertContent($jobAdvert)
+                    ->prepend(new Paragraph("Closing date for application is  <b>{$jobAdvert->getClosingDate()->format('M d Y')}</b>"));
+            });
 
-        return new Response($this->get('templating')->render('::job-advert.html.twig', $arguments));
+      return new Response($this->get('templating')->render('::job-advert.html.twig', $arguments));
     }
 }
