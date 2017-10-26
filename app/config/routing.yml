@@ -197,7 +197,7 @@ interviews:
 job-advert:
     path: /job-adverts/{id}/{slug}
     defaults:
-         _controller: AppBundle:JobAdvert:jobAdvert
+         _controller: AppBundle:JobAdverts:jobAdvert
 
 job-adverts:
     path: /job-adverts
