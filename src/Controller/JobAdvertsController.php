@@ -96,6 +96,6 @@ final class JobAdvertsController extends Controller
                     ->prepend(new Paragraph("Closing date for application is  <b>{$jobAdvert->getClosingDate()->format('M d Y')}</b>"));
             });
 
-      return new Response($this->get('templating')->render('::job-advert.html.twig', $arguments));
+        return new Response($this->get('templating')->render('::job-advert.html.twig', $arguments));
     }
 }
