@@ -35,8 +35,7 @@ final class JobAdvertContentHeaderConverter implements ViewModelConverter
             null,
             null,
             null,
-            null,
-            LicenceUri::default()
+            null
         );
     }
 
