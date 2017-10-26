@@ -63,8 +63,7 @@ final class JobAdvertsController extends Controller
     {
         $arguments['contentHeader'] = new ContentHeader(
           $arguments['title'],
-          null,
-          'Impact statement wording not yet confirmed.'
+          null
         );
 
         return new Response($this->get('templating')->render('::job-adverts.html.twig', $arguments));

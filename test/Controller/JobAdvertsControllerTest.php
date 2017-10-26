@@ -19,7 +19,6 @@ final class JobAdvertsControllerTest extends PageTestCase
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertSame('eLife Jobs', $crawler->filter('.content-header__title')->text());
-        $this->assertSame('Still awaiting final text, this test should fail', $crawler->filter('.content-header__impact-statement')->text());
         $this->assertContains('No vacancies at present.', $crawler->filter('main')->text());
     }
 
