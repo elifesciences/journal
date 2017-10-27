@@ -4,7 +4,6 @@ Feature: Job adverts
   Rules:
   - List contains job adverts that have not passed their closing date
   - Job adverts are loaded in batches of 10
-  - Job adverts are shown in ascending closing date order
 
   Background:
     Given there are 30 open job adverts
