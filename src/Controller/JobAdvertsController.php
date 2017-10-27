@@ -96,11 +96,9 @@ final class JobAdvertsController extends Controller
 
               if ($jobAdvert->getClosingDate() > new DateTimeImmutable('now')) {
                   return $this->convertContent($jobAdvert)
-                    ->prepend(new Paragraph("Closing date for application is  <b>{$jobAdvert->getClosingDate()->format('M d Y')}</b>"));
+                    ->prepend(new Paragraph("Closing date for applications is  <b>{$jobAdvert->getClosingDate()->format('F j, Y')}</b>."));
                 }
-
                 return [new Paragraph('This position is now closed to applications.')];
-
             });
 
         return new Response($this->get('templating')->render('::job-advert.html.twig', $arguments));
