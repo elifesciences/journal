@@ -196,7 +196,6 @@ final class JobAdvertContext extends Context
    * @When /^I go to the closed job advert$/
    */
   public function iGoToTheClosedJobAdvert() {
-    // Is there a better way of generating this URL with the slug here?
     $this->visitPath('/job-adverts/1/closed-job-advert-title');
   }
 
