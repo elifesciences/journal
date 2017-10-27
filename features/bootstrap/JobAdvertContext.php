@@ -126,14 +126,14 @@ final class JobAdvertContext extends Context
     /**
      * @When /^I go to a page for a job advert that has a closing date in the past$/
      */
-    public function iGoToAPageForAJobAdvertThatHasAClosingDateInThePast() {
-
-      $expiredJobAdvert = [
-        'id' => "1",
+    public function iGoToAPageForAJobAdvertThatHasAClosingDateInThePast()
+    {
+        $expiredJobAdvert = [
+        'id' => '1',
         'title' => 'Expired job advert title',
         'impactStatement' => 'Expired job advert impact statement',
         'published' => '2010-01-01T00:00:00Z',
-        'closingDate' => ((new DateTimeImmutable())->setTime(0, 0, 0))->modify("-1 day"),
+        'closingDate' => ((new DateTimeImmutable())->setTime(0, 0, 0))->modify('-1 day'),
         'content' => [
           [
             'type' => 'paragraph',
@@ -142,7 +142,7 @@ final class JobAdvertContext extends Context
         ],
       ];
 
-      $this->mockApiResponse(
+        $this->mockApiResponse(
         new Request(
           'GET',
           'http://api.elifesciences.org/job-adverts/1',
@@ -154,17 +154,16 @@ final class JobAdvertContext extends Context
           json_encode($expiredJobAdvert)
         )
       );
-
-
     }
 
   /**
    * @Given /^there is a closed job advert$/
    */
-  public function thereIsAClosedJobAdvert() {
-    $historicalClosingDate = (new DateTimeImmutable())->setTime(0, 0, 0)->modify("-1 day");
-    $jobAdvert = [
-      'id' => "1",
+  public function thereIsAClosedJobAdvert()
+  {
+      $historicalClosingDate = (new DateTimeImmutable())->setTime(0, 0, 0)->modify('-1 day');
+      $jobAdvert = [
+      'id' => '1',
       'title' => 'Closed job advert title',
       'impactStatement' => 'Closed job advert impact statement',
       'published' => '2010-01-01T00:00:00Z',
@@ -177,7 +176,7 @@ final class JobAdvertContext extends Context
       ],
     ];
 
-    $this->mockApiResponse(
+      $this->mockApiResponse(
       new Request(
         'GET',
         'http://api.elifesciences.org/job-adverts/1',
@@ -189,28 +188,29 @@ final class JobAdvertContext extends Context
         json_encode($jobAdvert)
       )
     );
-
   }
 
   /**
    * @When /^I go to the closed job advert$/
    */
-  public function iGoToTheClosedJobAdvert() {
-    $this->visitPath('/job-adverts/1/closed-job-advert-title');
+  public function iGoToTheClosedJobAdvert()
+  {
+      $this->visitPath('/job-adverts/1/closed-job-advert-title');
   }
 
   /**
    * @Then /^I should see text "([^"]*)"$/
    */
-  public function iShouldSeeText(string $expectedText) {
-    $this->assertSession()->pageTextContains($expectedText);
+  public function iShouldSeeText(string $expectedText)
+  {
+      $this->assertSession()->pageTextContains($expectedText);
   }
 
   /**
    * @Given /^I should not see text "([^"]*)"$/
    */
-  public function iShouldNotSeeText(string $forbiddenText) {
-    $this->assertSession()->pageTextNotContains($forbiddenText);
+  public function iShouldNotSeeText(string $forbiddenText)
+  {
+      $this->assertSession()->pageTextNotContains($forbiddenText);
   }
-
 }
