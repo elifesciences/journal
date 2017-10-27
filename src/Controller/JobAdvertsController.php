@@ -2,6 +2,7 @@
 
 namespace eLife\Journal\Controller;
 
+use DateTimeImmutable;
 use eLife\ApiSdk\Collection\Sequence;
 use eLife\ApiSdk\Model\JobAdvert;
 use eLife\Journal\Helper\Callback;
@@ -93,7 +94,7 @@ final class JobAdvertsController extends Controller
         $arguments['blocks'] = $arguments['job-advert']
             ->then(function (JobAdvert $jobAdvert) {
 
-              if ($jobAdvert->getClosingDate() > new \DateTimeImmutable('now')) {
+              if ($jobAdvert->getClosingDate() > new DateTimeImmutable('now')) {
                   return $this->convertContent($jobAdvert)
                     ->prepend(new Paragraph("Closing date for application is  <b>{$jobAdvert->getClosingDate()->format('M d Y')}</b>"));
                 }
