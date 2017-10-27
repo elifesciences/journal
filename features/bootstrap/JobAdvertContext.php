@@ -91,7 +91,7 @@ final class JobAdvertContext extends Context
      */
     public function iGoTheJobAdvertsPage()
     {
-        $this->visitPath('/job-adverts');
+        $this->visitPath('/jobs');
     }
 
     /**
@@ -157,21 +157,21 @@ final class JobAdvertContext extends Context
     }
 
   /**
-   * @Given /^there is a closed job advert$/
+   * @Given /^there is a closed job$/
    */
-  public function thereIsAClosedJobAdvert()
+  public function thereIsAClosedJob()
   {
       $historicalClosingDate = (new DateTimeImmutable())->setTime(0, 0, 0)->modify('-1 day');
       $jobAdvert = [
       'id' => '1',
-      'title' => 'Closed job advert title',
-      'impactStatement' => 'Closed job advert impact statement',
+      'title' => 'Closed job title',
+      'impactStatement' => 'Closed job impact statement',
       'published' => '2010-01-01T00:00:00Z',
       'closingDate' => $historicalClosingDate->format(ApiSdk::DATE_FORMAT),
       'content' => [
         [
           'type' => 'paragraph',
-          'text' => 'Closed job advert content paragraph text.',
+          'text' => 'Closed job content paragraph text.',
         ],
       ],
     ];
@@ -191,11 +191,11 @@ final class JobAdvertContext extends Context
   }
 
   /**
-   * @When /^I go to the closed job advert$/
+   * @When /^I go to the closed job$/
    */
-  public function iGoToTheClosedJobAdvert()
+  public function iGoToTheClosedJob()
   {
-      $this->visitPath('/job-adverts/1/closed-job-advert-title');
+      $this->visitPath('/jobs/1/closed-job-title');
   }
 
   /**

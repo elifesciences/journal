@@ -34,8 +34,8 @@ final class JobAdvertsControllerTest extends PageTestCase
         $this->assertSame(200, $client->getResponse()->getStatusCode());
 
         $this->assertSame('eLife Jobs | eLife', $crawler->filter('title')->text());
-        $this->assertSame('/job-adverts', $crawler->filter('link[rel="canonical"]')->attr('href'));
-        $this->assertSame('http://localhost/job-adverts', $crawler->filter('meta[property="og:url"]')->attr('content'));
+        $this->assertSame('/jobs', $crawler->filter('link[rel="canonical"]')->attr('href'));
+        $this->assertSame('http://localhost/jobs', $crawler->filter('meta[property="og:url"]')->attr('content'));
         $this->assertSame('eLife Jobs', $crawler->filter('meta[property="og:title"]')->attr('content'));
         $this->assertSame('summary', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
     }
@@ -52,7 +52,7 @@ final class JobAdvertsControllerTest extends PageTestCase
             $callable();
         }
 
-        $client->request('GET', '/job-adverts?page='.$page);
+        $client->request('GET', '/jobs?page='.$page);
 
         $this->assertSame(404, $client->getResponse()->getStatusCode());
     }
@@ -102,6 +102,6 @@ final class JobAdvertsControllerTest extends PageTestCase
             )
         );
 
-        return '/job-adverts';
+        return '/jobs';
     }
 }
