@@ -26,7 +26,7 @@ final class JobAdvertsController extends Controller
         $arguments = $this->defaultPageArguments($request);
 
         $latest = promise_for($this->get('elife.api_sdk.job_adverts')
-            /*->show('open')*/)
+            ->show('open'))
             ->then(function (Sequence $sequence) use ($page, $perPage) {
                 $pagerfanta = new Pagerfanta(new SequenceAdapter($sequence, $this->willConvertTo(Teaser::class)));
                 $pagerfanta->setMaxPerPage($perPage)->setCurrentPage($page);
