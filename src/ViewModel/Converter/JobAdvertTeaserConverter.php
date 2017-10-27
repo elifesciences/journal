@@ -27,18 +27,18 @@ final class JobAdvertTeaserConverter implements ViewModelConverter
     public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
         return Teaser::main(
-          $object->getTitle(),
-          $this->urlGenerator->generate('job-advert', [$object]),
-          $object->getImpactStatement(),
-          null,
-          null,
-          null,
-          TeaserFooter::forNonArticle(
-            Meta::withLink(
-              new Link('eLife Jobs', $this->urlGenerator->generate('job-adverts')),
-              $this->simpleDate($object, $context)
+            $object->getTitle(),
+            $this->urlGenerator->generate('job-advert', [$object]),
+            $object->getImpactStatement(),
+            null,
+            null,
+            null,
+            TeaserFooter::forNonArticle(
+                Meta::withLink(
+                    new Link('eLife Jobs', $this->urlGenerator->generate('job-adverts')),
+                    $this->simpleDate($object, $context)
+                )
             )
-          )
         );
     }
 
