@@ -157,9 +157,9 @@ final class JobAdvertContext extends Context
     }
 
   /**
-   * @Given /^there is a closed job$/
+   * @Given /^an advert has closed$/
    */
-  public function thereIsAClosedJob()
+  public function anAdvertHasClosed()
   {
       $historicalClosingDate = (new DateTimeImmutable())->setTime(0, 0, 0)->modify('-1 day');
       $jobAdvert = [
@@ -191,9 +191,9 @@ final class JobAdvertContext extends Context
   }
 
   /**
-   * @When /^I go to the closed job$/
+   * @When /^I go to the closed advert$/
    */
-  public function iGoToTheClosedJob()
+  public function iGoToTheClosedadvert()
   {
       $this->visitPath('/jobs/1/closed-job-title');
   }
