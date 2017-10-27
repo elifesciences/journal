@@ -95,7 +95,7 @@ final class JobAdvertsController extends Controller
             ->then(function (JobAdvert $jobAdvert) {
                 if ($jobAdvert->getClosingDate() > new DateTimeImmutable('now')) {
                     return $this->convertContent($jobAdvert)
-                    ->prepend(new Paragraph("Closing date for applications is  <b>{$jobAdvert->getClosingDate()->format('F j, Y')}</b>."));
+                        ->prepend(new Paragraph("Closing date for applications is <b>{$jobAdvert->getClosingDate()->format('F j, Y')}</b>."));
                 }
 
                 return [new Paragraph('This position is now closed to applications.')];
