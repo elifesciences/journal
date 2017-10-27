@@ -198,6 +198,7 @@ job-advert:
     path: /job-adverts/{id}/{slug}
     defaults:
          _controller: AppBundle:JobAdverts:jobAdvert
+         slug: ''
 
 job-adverts:
     path: /job-adverts
