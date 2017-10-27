@@ -4,6 +4,7 @@ namespace eLife\Journal\ViewModel\Converter;
 
 use eLife\ApiSdk\Model\JobAdvert;
 use eLife\Patterns\ViewModel;
+use eLife\Patterns\ViewModel\Link;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 final class JobAdvertContentHeaderConverter implements ViewModelConverter
@@ -34,7 +35,10 @@ final class JobAdvertContentHeaderConverter implements ViewModelConverter
             null,
             null,
             null,
-            null
+          ViewModel\Meta::withLink(
+            new Link('eLife jobs', $this->urlGenerator->generate('job-adverts')),
+            $this->simpleDate($object, ['date' => 'published'] + $context)
+          )
         );
     }
 
