@@ -76,9 +76,6 @@ final class JobAdvertsController extends Controller
         $jobAdvert = $this->get('elife.api_sdk.job_adverts')
             ->get($id)
             ->otherwise($this->mightNotExist())
-            ->then(function (JobAdvert $jobAdvert) {
-                return $jobAdvert;
-            })
             ->then($this->checkSlug($request, Callback::method('getTitle')));
 
         $arguments = $this->defaultPageArguments($request, $jobAdvert);
