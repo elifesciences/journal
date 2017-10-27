@@ -194,6 +194,17 @@ interviews:
     defaults:
          _controller: AppBundle:Interviews:list
 
+job-advert:
+    path: /jobs/{id}/{slug}
+    defaults:
+         _controller: AppBundle:JobAdverts:jobAdvert
+         slug: ''
+
+job-adverts:
+    path: /jobs
+    defaults:
+         _controller: AppBundle:JobAdverts:list
+
 magazine:
     path: /magazine
     defaults:

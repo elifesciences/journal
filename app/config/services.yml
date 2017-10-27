@@ -61,6 +61,10 @@ services:
         class: eLife\ApiSdk\Client\Interviews
         factory: ['@elife.api_sdk', interviews]
 
+    elife.api_sdk.job_adverts:
+        class: eLife\ApiSdk\Client\JobAdverts
+        factory: ['@elife.api_sdk', jobAdverts]
+
     elife.api_sdk.labs_posts:
         class: eLife\ApiSdk\Client\LabsPosts
         factory: ['@elife.api_sdk', labsPosts]
@@ -813,6 +817,22 @@ services:
 
     elife.journal.view_model.converter.interview.teaser.secondary:
         class: eLife\Journal\ViewModel\Converter\InterviewSecondaryTeaserConverter
+        public: false
+        arguments:
+          - '@router'
+        tags:
+          - name: view_model.converter
+
+    elife.journal.view_model.converter.job_advert.header:
+        class: eLife\Journal\ViewModel\Converter\JobAdvertContentHeaderConverter
+        public: false
+        arguments:
+          - '@router'
+        tags:
+          - name: view_model.converter
+
+    elife.journal.view_model.converter.job_advert.teaser:
+        class: eLife\Journal\ViewModel\Converter\JobAdvertTeaserConverter
         public: false
         arguments:
           - '@router'
