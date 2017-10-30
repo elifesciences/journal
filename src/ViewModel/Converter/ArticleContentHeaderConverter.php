@@ -6,7 +6,6 @@ use eLife\ApiSdk\Model\ArticleVersion;
 use eLife\ApiSdk\Model\Author;
 use eLife\ApiSdk\Model\AuthorEntry;
 use eLife\ApiSdk\Model\Subject;
-use eLife\Journal\Helper\CreatesIiifUri;
 use eLife\Journal\Helper\LicenceUri;
 use eLife\Journal\Helper\ModelName;
 use eLife\Patterns\ViewModel;
@@ -16,7 +15,6 @@ final class ArticleContentHeaderConverter implements ViewModelConverter
 {
     use CreatesDate;
     use CreatesId;
-    use CreatesIiifUri;
 
     private $urlGenerator;
 

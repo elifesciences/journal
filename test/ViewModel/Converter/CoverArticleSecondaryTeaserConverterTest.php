@@ -6,14 +6,15 @@ use eLife\ApiSdk\Model\ArticleVersion;
 use eLife\ApiSdk\Model\Cover;
 use eLife\ApiSdk\Model\Model;
 use eLife\Journal\ViewModel\Converter\CoverArticleSecondaryTeaserConverter;
-use eLife\Patterns\ViewModel\Teaser;
+use eLife\Journal\ViewModel\Converter\ViewModelConverter;
+use eLife\Patterns\ViewModel;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Traversable;
 
 final class CoverArticleSecondaryTeaserConverterTest extends ModelConverterTestCase
 {
     protected $models = ['cover'];
-    protected $viewModelClasses = [Teaser::class];
+    protected $viewModelClasses = [ViewModel\Teaser::class];
     protected $context = ['variant' => 'secondary'];
 
     /**
@@ -27,7 +28,18 @@ final class CoverArticleSecondaryTeaserConverterTest extends ModelConverterTestC
             ->method('generate')
             ->will($this->returnValue('/'));
 
-        $this->converter = new CoverArticleSecondaryTeaserConverter($urlGenerator);
+        $this->converter = new CoverArticleSecondaryTeaserConverter(
+            $viewModelConverter = $this->createMock(ViewModelConverter::class),
+            $urlGenerator
+        );
+
+        $viewModelConverter
+            ->expects($this->any())
+            ->method('convert')
+            ->will($this->returnValue(new ViewModel\Picture(
+                [],
+                new ViewModel\Image('/image.jpg')
+            )));
     }
 
     /**
