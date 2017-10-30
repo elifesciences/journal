@@ -194,6 +194,17 @@ interviews:
     defaults:
          _controller: AppBundle:Interviews:list
 
+job-advert:
+    path: /jobs/{id}/{slug}
+    defaults:
+         _controller: AppBundle:JobAdverts:jobAdvert
+         slug: ''
+
+job-adverts:
+    path: /jobs
+    defaults:
+         _controller: AppBundle:JobAdverts:list
+
 magazine:
     path: /magazine
     defaults:
@@ -249,6 +260,13 @@ podcast-episode:
          _controller: AppBundle:Podcast:episode
     requirements:
         number: '[1-9][0-9]*'
+
+profile:
+    path: /profiles/{id}
+    defaults:
+         _controller: AppBundle:Profiles:profile
+    requirements:
+        id: '[a-z0-9-]+'
 
 resources:
     path: /resources

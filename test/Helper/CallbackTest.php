@@ -142,6 +142,16 @@ final class CallbackTest extends PHPUnit_Framework_TestCase
     /**
      * @test
      */
+    public function it_creates_apply()
+    {
+        $callback = Callback::apply('end');
+
+        $this->assertSame('bar', $callback(['foo', 'bar']));
+    }
+
+    /**
+     * @test
+     */
     public function it_creates_method()
     {
         $date = new DateTimeImmutable();

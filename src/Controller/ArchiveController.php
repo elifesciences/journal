@@ -23,11 +23,9 @@ use eLife\Patterns\ViewModel\Button;
 use eLife\Patterns\ViewModel\ContentHeader;
 use eLife\Patterns\ViewModel\FormLabel;
 use eLife\Patterns\ViewModel\GridListing;
-use eLife\Patterns\ViewModel\Image;
 use eLife\Patterns\ViewModel\Link;
 use eLife\Patterns\ViewModel\ListHeading;
 use eLife\Patterns\ViewModel\ListingTeasers;
-use eLife\Patterns\ViewModel\Picture;
 use eLife\Patterns\ViewModel\Select;
 use eLife\Patterns\ViewModel\SelectNav;
 use eLife\Patterns\ViewModel\SelectOption;
@@ -112,24 +110,7 @@ final class ArchiveController extends Controller
                     }
 
                     return ArchiveNavLink::withLinks(
-                        new BlockLink(
-                            $link,
-                            new Picture(
-                                [[
-                                    'srcset' => implode(', ', array_map(function (int $width, string $uri) {
-                                        return "{$uri} {$width}w";
-                                    }, [526, 263], [$this->iiifUri($covers[0]->getBanner(), 526, 352, 'webp'), $this->iiifUri($covers[0]->getBanner(), 263, 176, 'webp')])),
-                                    'type' => 'image/webp',
-                                ]],
-                                new Image(
-                                    $this->iiifUri($covers[0]->getBanner(), 263, 176),
-                                    [
-                                        526 => $this->iiifUri($covers[0]->getBanner(), 526, 352),
-                                        263 => $this->iiifUri($covers[0]->getBanner(), 263, 176),
-                                    ]
-                                )
-                            )
-                        ),
+                        $this->convertTo($covers[0], BlockLink::class, ['link' => $link]),
                         'Cover articles',
                         $covers->map(function (Cover $cover) {
                             $item = $cover->getItem();

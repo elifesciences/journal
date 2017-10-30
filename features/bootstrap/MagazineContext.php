@@ -621,7 +621,7 @@ final class MagazineContext extends Context
     public function iShouldSeeTheTitleAndImageFromTheCollectionUsedInTheMagazineHighlight(string $collectionName)
     {
         $this->assertSession()->elementTextContains('css', '.highlights__list .teaser__header', $collectionName);
-        $this->assertSession()->elementAttributeContains('css', '.highlights__list .teaser__img', 'src', 'https://www.example.com/iiif/item-image/100,0,600,600/70,70/0/default.jpg');
+        $this->assertSession()->elementAttributeContains('css', '.highlights__list img', 'src', 'https://www.example.com/iiif/item-image/100,0,600,600/70,70/0/default.jpg');
     }
 
     /**
@@ -630,7 +630,7 @@ final class MagazineContext extends Context
     public function iShouldSeeTheCustomTitleAndImageUsedInTheMagazineHighlight(string $collectionName)
     {
         $this->assertSession()->elementTextContains('css', '.highlights__list .teaser__header', 'Highlight');
-        $this->assertSession()->elementAttributeContains('css', '.highlights__list .teaser__img', 'src', 'https://www.example.com/iiif/highlight-image/100,0,600,600/70,70/0/default.jpg');
+        $this->assertSession()->elementAttributeContains('css', '.highlights__list img', 'src', 'https://www.example.com/iiif/highlight-image/100,0,600,600/70,70/0/default.jpg');
     }
 
     /**

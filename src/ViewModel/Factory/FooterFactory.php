@@ -38,6 +38,7 @@ final class FooterFactory
             ]),
             [
                 new Link('About', $this->urlGenerator->generate('about')),
+                new Link('Jobs', $this->urlGenerator->generate('job-adverts')),
                 new Link('Who we work with', $this->urlGenerator->generate('who-we-work-with')),
                 new Link('Alerts', $this->urlGenerator->generate('alerts')),
                 new Link('Contact', $this->urlGenerator->generate('contact')),

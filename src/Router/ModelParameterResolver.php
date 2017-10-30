@@ -34,6 +34,8 @@ final class ModelParameterResolver implements ParameterResolver
             $new = ['id' => $model->getId(), 'slug' => $this->slugify->slugify($model->getTitle())];
         } elseif ($model instanceof Model\Interview) {
             $new = ['id' => $model->getId(), 'slug' => $this->slugify->slugify($model->getInterviewee()->getPerson()->getPreferredName())];
+        } elseif ($model instanceof Model\JobAdvert) {
+            $new = ['id' => $model->getId(), 'slug' => $this->slugify->slugify($model->getTitle())];
         } elseif ($model instanceof Model\LabsPost) {
             $new = ['id' => $model->getId(), 'slug' => $this->slugify->slugify($model->getTitle())];
         } elseif ($model instanceof Model\PodcastEpisode) {

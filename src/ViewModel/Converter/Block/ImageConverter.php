@@ -3,7 +3,6 @@
 namespace eLife\Journal\ViewModel\Converter\Block;
 
 use eLife\ApiSdk\Model\Block;
-use eLife\Journal\Helper\CreatesIiifUri;
 use eLife\Journal\ViewModel\Converter\ViewModelConverter;
 use eLife\Patterns\PatternRenderer;
 use eLife\Patterns\ViewModel;
@@ -11,7 +10,6 @@ use eLife\Patterns\ViewModel;
 final class ImageConverter implements ViewModelConverter
 {
     use CreatesCaptionedAsset;
-    use CreatesIiifUri;
 
     private $viewModelConverter;
     private $patternRenderer;
@@ -29,35 +27,7 @@ final class ImageConverter implements ViewModelConverter
     {
         $image = $object->getImage();
 
-        $srcset = [];
-        $webp = [];
-        $baseWidth = $object->isInline() ? 365 : 538;
-        if ($image->getWidth() > $baseWidth) {
-            $width = $baseWidth * 2;
-            if ($width > $image->getWidth()) {
-                $width = $image->getWidth();
-            }
-            $srcset[$width] = $this->iiifUri($image, $width);
-            $webp[$width] = $this->iiifUri($image, $width, null, 'webp');
-        }
-
-        $baseWidth = $image->getWidth() >= $baseWidth ? $baseWidth : null;
-
-        $webp[$baseWidth] = $this->iiifUri($image, $baseWidth, null, 'webp');
-
-        $imageViewModel = new ViewModel\Picture(
-            [[
-                'srcset' => implode(', ', array_map(function (int $width, string $uri) {
-                    return "{$uri} {$width}w";
-                }, array_keys($webp), array_values($webp))),
-                'type' => 'image/webp',
-            ]],
-            new ViewModel\Image(
-                $this->iiifUri($image, $baseWidth),
-                $srcset,
-                $image->getAltText()
-            )
-        );
+        $imageViewModel = $this->viewModelConverter->convert($image, null, ['width' => $object->isInline() ? 365 : 538]);
 
         return $this->createCaptionedAsset($imageViewModel, $object);
     }

@@ -4,7 +4,6 @@ namespace eLife\Journal\ViewModel\Converter;
 
 use eLife\ApiSdk\Model\BlogArticle;
 use eLife\ApiSdk\Model\Cover;
-use eLife\Journal\Helper\CreatesIiifUri;
 use eLife\Patterns\ViewModel;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -12,12 +11,13 @@ final class CoverBlogArticleSecondaryTeaserConverter implements ViewModelConvert
 {
     use CreatesContextLabel;
     use CreatesDate;
-    use CreatesIiifUri;
 
+    private $viewModelConverter;
     private $urlGenerator;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator)
+    public function __construct(ViewModelConverter $viewModelConverter, UrlGeneratorInterface $urlGenerator)
     {
+        $this->viewModelConverter = $viewModelConverter;
         $this->urlGenerator = $urlGenerator;
     }
 
@@ -34,7 +34,9 @@ final class CoverBlogArticleSecondaryTeaserConverter implements ViewModelConvert
             $this->urlGenerator->generate('inside-elife-article', [$article]),
             null,
             $this->createContextLabel($article),
-            null,
+            ViewModel\TeaserImage::small(
+                $this->viewModelConverter->convert($object->getBanner(), null, ['width' => 70, 'height' => 70])
+            ),
             ViewModel\TeaserFooter::forNonArticle(
                 ViewModel\Meta::withLink(
                     new ViewModel\Link('Inside eLife', $this->urlGenerator->generate('inside-elife')),

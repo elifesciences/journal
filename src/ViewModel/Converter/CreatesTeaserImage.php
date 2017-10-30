@@ -3,76 +3,31 @@
 namespace eLife\Journal\ViewModel\Converter;
 
 use eLife\ApiSdk\Model\HasThumbnail;
-use eLife\Journal\Helper\CreatesIiifUri;
+use eLife\Journal\Helper\HasViewModelConverter;
 use eLife\Patterns\ViewModel;
 
 trait CreatesTeaserImage
 {
-    use CreatesIiifUri;
+    use HasViewModelConverter;
 
     final private function prominentTeaserImage(HasThumbnail $object) : ViewModel\TeaserImage
     {
         return ViewModel\TeaserImage::prominent(
-            new ViewModel\Picture(
-                [[
-                    'srcset' => implode(', ', array_map(function (int $width, string $uri) {
-                        return "{$uri} {$width}w";
-                    }, [140, 70], [$this->iiifUri($object->getThumbnail(), 500, 281, 'webp'), $this->iiifUri($object->getThumbnail(), 250, 141, 'webp')])),
-                    'type' => 'image/webp',
-                ]],
-                new ViewModel\Image(
-                    $this->iiifUri($object->getThumbnail(), 250, 141),
-                    [
-                        500 => $this->iiifUri($object->getThumbnail(), 500, 281),
-                        250 => $this->iiifUri($object->getThumbnail(), 250, 141),
-                    ],
-                    $object->getThumbnail()->getAltText()
-                )
-            )
+            $this->getViewModelConverter()->convert($object->getThumbnail(), null, ['width' => 250, 'height' => 141])
         );
     }
 
     final private function bigTeaserImage(HasThumbnail $object) : ViewModel\TeaserImage
     {
         return ViewModel\TeaserImage::big(
-            new ViewModel\Picture(
-                [[
-                    'srcset' => implode(', ', array_map(function (int $width, string $uri) {
-                        return "{$uri} {$width}w";
-                    }, [140, 70], [$this->iiifUri($object->getThumbnail(), 500, 281, 'webp'), $this->iiifUri($object->getThumbnail(), 250, 141, 'webp')])),
-                    'type' => 'image/webp',
-                ]],
-                new ViewModel\Image(
-                    $this->iiifUri($object->getThumbnail(), 250, 141),
-                    [
-                        500 => $this->iiifUri($object->getThumbnail(), 500, 281),
-                        250 => $this->iiifUri($object->getThumbnail(), 250, 141),
-                    ],
-                    $object->getThumbnail()->getAltText()
-                )
-            )
+            $this->getViewModelConverter()->convert($object->getThumbnail(), null, ['width' => 250, 'height' => 141])
         );
     }
 
     final private function smallTeaserImage(HasThumbnail $object) : ViewModel\TeaserImage
     {
         return ViewModel\TeaserImage::small(
-            new ViewModel\Picture(
-                [[
-                    'srcset' => implode(', ', array_map(function (int $width, string $uri) {
-                        return "{$uri} {$width}w";
-                    }, [140, 70], [$this->iiifUri($object->getThumbnail(), 140, 140, 'webp'), $this->iiifUri($object->getThumbnail(), 70, 70, 'webp')])),
-                    'type' => 'image/webp',
-                ]],
-                new ViewModel\Image(
-                    $this->iiifUri($object->getThumbnail(), 70, 70),
-                    [
-                        140 => $this->iiifUri($object->getThumbnail(), 140, 140),
-                        70 => $this->iiifUri($object->getThumbnail(), 70, 70),
-                    ],
-                    $object->getThumbnail()->getAltText()
-                )
-            )
+            $this->getViewModelConverter()->convert($object->getThumbnail(), null, ['width' => 70, 'height' => 70])
         );
     }
 }

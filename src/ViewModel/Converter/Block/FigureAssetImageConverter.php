@@ -37,35 +37,7 @@ final class FigureAssetImageConverter implements ViewModelConverter
         $asset = $object->getAsset();
         $image = $asset->getImage();
 
-        $srcset = [];
-        $webp = [];
-        $baseWidth = 538;
-        if ($image->getWidth() > $baseWidth) {
-            $width = $baseWidth * 2;
-            if ($width > $image->getWidth()) {
-                $width = $image->getWidth();
-            }
-            $srcset[$width] = $this->iiifUri($image, $width);
-            $webp[$width] = $this->iiifUri($image, $width, null, 'webp');
-        }
-
-        $baseWidth = $image->getWidth() >= $baseWidth ? $baseWidth : null;
-
-        $webp[$baseWidth] = $this->iiifUri($image, $baseWidth, null, 'webp');
-
-        $assetViewModel = new ViewModel\Picture(
-            [[
-                'srcset' => implode(', ', array_map(function (int $width, string $uri) {
-                    return "{$uri} {$width}w";
-                }, array_keys($webp), array_values($webp))),
-                'type' => 'image/webp',
-            ]],
-            new ViewModel\Image(
-                $this->iiifUri($image, $baseWidth),
-                $srcset,
-                $image->getAltText()
-            )
-        );
+        $assetViewModel = $this->viewModelConverter->convert($image, null, ['width' => 538]);
 
         $download = new ViewModel\Link('Download', $this->downloadLinkUriGenerator->generate(new DownloadLink($image->getSource()->getUri(), $image->getSource()->getFilename())));
 

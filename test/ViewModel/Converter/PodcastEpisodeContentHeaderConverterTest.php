@@ -6,6 +6,7 @@ use eLife\Journal\Helper\DownloadLinkUriGenerator;
 use eLife\Journal\ViewModel\Converter\PodcastEpisodeContentHeaderConverter;
 use eLife\Journal\ViewModel\Converter\ViewModelConverter;
 use eLife\Journal\ViewModel\Factory\ContentHeaderImageFactory;
+use eLife\Journal\ViewModel\Factory\PictureBuilderFactory;
 use eLife\Patterns\ViewModel\AudioPlayer;
 use eLife\Patterns\ViewModel\ContentHeader;
 use eLife\Patterns\ViewModel\Link;
@@ -30,7 +31,12 @@ final class PodcastEpisodeContentHeaderConverterTest extends ModelConverterTestC
             ->method('convert')
             ->will($this->returnValue($this->anAudioPlayer()));
 
-        $this->converter = new PodcastEpisodeContentHeaderConverter($viewModelConverter, $this->stubUrlGenerator(), new DownloadLinkUriGenerator($this->stubUrlGenerator(), new UriSigner('secret')), new ContentHeaderImageFactory(new Packages()));
+        $this->converter = new PodcastEpisodeContentHeaderConverter(
+            $viewModelConverter,
+            $this->stubUrlGenerator(),
+            new DownloadLinkUriGenerator($this->stubUrlGenerator(), new UriSigner('secret')),
+            new ContentHeaderImageFactory(new PictureBuilderFactory(), new Packages())
+        );
     }
 
     private function anAudioPlayer()

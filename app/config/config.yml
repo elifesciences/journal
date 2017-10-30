@@ -78,8 +78,8 @@ hwi_oauth:
             access_token_url: '%api_url%/oauth2/token'
             authorization_url: '%api_url_public%/oauth2/authorize'
             paths:
-                identifier: orcid
-                nickname: name
+                identifier: id
+                nickname: id
                 realname: name
             options:
                 csrf: true

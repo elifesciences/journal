@@ -3,7 +3,6 @@
 namespace eLife\Journal\ViewModel\Converter;
 
 use eLife\ApiSdk\Model\Collection;
-use eLife\Journal\Helper\CreatesIiifUri;
 use eLife\Journal\ViewModel\Factory\ContentHeaderImageFactory;
 use eLife\Patterns\ViewModel;
 use eLife\Patterns\ViewModel\Link;
@@ -12,13 +11,14 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 final class CollectionContentHeaderConverter implements ViewModelConverter
 {
     use CreatesDate;
-    use CreatesIiifUri;
 
+    private $viewModelConverter;
     private $urlGenerator;
     private $contentHeaderImageFactory;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator, ContentHeaderImageFactory $contentHeaderImageFactory)
+    public function __construct(ViewModelConverter $viewModelConverter, UrlGeneratorInterface $urlGenerator, ContentHeaderImageFactory $contentHeaderImageFactory)
     {
+        $this->viewModelConverter = $viewModelConverter;
         $this->urlGenerator = $urlGenerator;
         $this->contentHeaderImageFactory = $contentHeaderImageFactory;
     }
@@ -33,20 +33,7 @@ final class CollectionContentHeaderConverter implements ViewModelConverter
             $curatorName .= ' et al.';
         }
         if ($object->getSelectedCurator()->getThumbnail()) {
-            $curatorImage = new ViewModel\Picture(
-                [[
-                    'srcset' => implode(', ', array_map(function (int $width, string $uri) {
-                        return "{$uri} {$width}w";
-                    }, [140, 70], [$this->iiifUri($object->getSelectedCurator()->getThumbnail(), 140, 140, 'webp'), $this->iiifUri($object->getSelectedCurator()->getThumbnail(), 70, 70, 'webp')])),
-                    'type' => 'image/webp',
-                ]],
-                new ViewModel\Image(
-                    $this->iiifUri($object->getSelectedCurator()->getThumbnail(), 70, 70),
-                    [
-                        140 => $this->iiifUri($object->getSelectedCurator()->getThumbnail(), 140, 140),
-                    ]
-                )
-            );
+            $curatorImage = $this->viewModelConverter->convert($object->getSelectedCurator()->getThumbnail(), null, ['width' => 70, 'height' => 70]);
         } else {
             $curatorImage = null;
         }

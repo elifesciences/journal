@@ -61,6 +61,10 @@ services:
         class: eLife\ApiSdk\Client\Interviews
         factory: ['@elife.api_sdk', interviews]
 
+    elife.api_sdk.job_adverts:
+        class: eLife\ApiSdk\Client\JobAdverts
+        factory: ['@elife.api_sdk', jobAdverts]
+
     elife.api_sdk.labs_posts:
         class: eLife\ApiSdk\Client\LabsPosts
         factory: ['@elife.api_sdk', labsPosts]
@@ -84,6 +88,10 @@ services:
     elife.api_sdk.press_packages:
         class: eLife\ApiSdk\Client\PressPackages
         factory: ['@elife.api_sdk', pressPackages]
+
+    elife.api_sdk.profiles:
+        class: eLife\ApiSdk\Client\Profiles
+        factory: ['@elife.api_sdk', profiles]
 
     elife.api_sdk.recommendations:
         class: eLife\ApiSdk\Client\Recommendations
@@ -230,6 +238,16 @@ services:
         tags:
           - name: security.voter
 
+    elife.journal.security.voter.feature.view_profiles:
+        class: eLife\Journal\Security\Voter\SessionAttributeVoter
+        public: false
+        arguments:
+          - '@request_stack'
+          - FEATURE_CAN_VIEW_PROFILES
+          - open-sesame
+        tags:
+          - name: security.voter
+
     elife.journal.templating.promise_aware:
         class: eLife\Journal\Templating\PromiseAwareEngine
         decorates: templating
@@ -284,9 +302,13 @@ services:
         tags:
           - name: twig.extension
 
+    elife.journal.view_model.factory.picture_builder:
+        class: eLife\Journal\ViewModel\Factory\PictureBuilderFactory
+
     elife.journal.view_model.factory.content_header_image:
         class: eLife\Journal\ViewModel\Factory\ContentHeaderImageFactory
         arguments:
+          - '@elife.journal.view_model.factory.picture_builder'
           - '@assets.packages'
 
     elife.journal.view_model.factory.footer:
@@ -362,6 +384,7 @@ services:
         class: eLife\Journal\ViewModel\Converter\ArticleTeaserConverter
         public: false
         arguments:
+          - '@elife.journal.view_model.converter'
           - '@router'
         tags:
           - name: view_model.converter
@@ -370,6 +393,7 @@ services:
         class: eLife\Journal\ViewModel\Converter\ArticleRelatedItemTeaserConverter
         public: false
         arguments:
+          - '@elife.journal.view_model.converter'
           - '@router'
         tags:
           - name: view_model.converter
@@ -378,6 +402,7 @@ services:
         class: eLife\Journal\ViewModel\Converter\ArticleSecondaryTeaserConverter
         public: false
         arguments:
+          - '@elife.journal.view_model.converter'
           - '@router'
         tags:
           - name: view_model.converter
@@ -585,6 +610,7 @@ services:
         class: eLife\Journal\ViewModel\Converter\CollectionContentHeaderConverter
         public: false
         arguments:
+          - '@elife.journal.view_model.converter'
           - '@router'
           - '@elife.journal.view_model.factory.content_header_image'
         tags:
@@ -603,6 +629,7 @@ services:
         class: eLife\Journal\ViewModel\Converter\CollectionTeaserConverter
         public: false
         arguments:
+          - '@elife.journal.view_model.converter'
           - '@router'
         tags:
           - name: view_model.converter
@@ -611,6 +638,7 @@ services:
         class: eLife\Journal\ViewModel\Converter\CollectionRelatedItemTeaserConverter
         public: false
         arguments:
+          - '@elife.journal.view_model.converter'
           - '@router'
         tags:
           - name: view_model.converter
@@ -619,6 +647,7 @@ services:
         class: eLife\Journal\ViewModel\Converter\CollectionSecondaryTeaserConverter
         public: false
         arguments:
+          - '@elife.journal.view_model.converter'
           - '@router'
         tags:
           - name: view_model.converter
@@ -636,6 +665,7 @@ services:
         class: eLife\Journal\ViewModel\Converter\CoverArticleSecondaryTeaserConverter
         public: false
         arguments:
+          - '@elife.journal.view_model.converter'
           - '@router'
         tags:
           - name: view_model.converter
@@ -653,6 +683,7 @@ services:
         class: eLife\Journal\ViewModel\Converter\CoverBlogArticleSecondaryTeaserConverter
         public: false
         arguments:
+          - '@elife.journal.view_model.converter'
           - '@router'
         tags:
           - name: view_model.converter
@@ -670,7 +701,16 @@ services:
         class: eLife\Journal\ViewModel\Converter\CoverCollectionSecondaryTeaserConverter
         public: false
         arguments:
+          - '@elife.journal.view_model.converter'
           - '@router'
+        tags:
+          - name: view_model.converter
+
+    elife.journal.view_model.converter.cover.block_link:
+        class: eLife\Journal\ViewModel\Converter\CoverBlockLinkConverter
+        public: false
+        arguments:
+          - '@elife.journal.view_model.factory.picture_builder'
         tags:
           - name: view_model.converter
 
@@ -721,6 +761,7 @@ services:
         class: eLife\Journal\ViewModel\Converter\HighlightArticleSecondaryTeaserConverter
         public: false
         arguments:
+          - '@elife.journal.view_model.converter'
           - '@router'
         tags:
           - name: view_model.converter
@@ -729,6 +770,7 @@ services:
         class: eLife\Journal\ViewModel\Converter\HighlightBlogArticleSecondaryTeaserConverter
         public: false
         arguments:
+          - '@elife.journal.view_model.converter'
           - '@router'
         tags:
           - name: view_model.converter
@@ -737,6 +779,7 @@ services:
         class: eLife\Journal\ViewModel\Converter\HighlightCollectionSecondaryTeaserConverter
         public: false
         arguments:
+          - '@elife.journal.view_model.converter'
           - '@router'
         tags:
           - name: view_model.converter
@@ -745,6 +788,7 @@ services:
         class: eLife\Journal\ViewModel\Converter\HighlightEventSecondaryTeaserConverter
         public: false
         arguments:
+          - '@elife.journal.view_model.converter'
           - '@router'
         tags:
           - name: view_model.converter
@@ -753,6 +797,7 @@ services:
         class: eLife\Journal\ViewModel\Converter\HighlightLabsPostSecondaryTeaserConverter
         public: false
         arguments:
+          - '@elife.journal.view_model.converter'
           - '@router'
         tags:
           - name: view_model.converter
@@ -761,6 +806,7 @@ services:
         class: eLife\Journal\ViewModel\Converter\HighlightInterviewSecondaryTeaserConverter
         public: false
         arguments:
+          - '@elife.journal.view_model.converter'
           - '@router'
         tags:
           - name: view_model.converter
@@ -769,6 +815,7 @@ services:
         class: eLife\Journal\ViewModel\Converter\HighlightPodcastEpisodeSecondaryTeaserConverter
         public: false
         arguments:
+          - '@elife.journal.view_model.converter'
           - '@router'
         tags:
           - name: view_model.converter
@@ -777,7 +824,16 @@ services:
         class: eLife\Journal\ViewModel\Converter\HighlightPodcastEpisodeChapterSecondaryTeaserConverter
         public: false
         arguments:
+          - '@elife.journal.view_model.converter'
           - '@router'
+        tags:
+          - name: view_model.converter
+
+    elife.journal.view_model.converter.image:
+        class: eLife\Journal\ViewModel\Converter\ImagePictureConverter
+        public: false
+        arguments:
+          - '@elife.journal.view_model.factory.picture_builder'
         tags:
           - name: view_model.converter
 
@@ -793,12 +849,30 @@ services:
         class: eLife\Journal\ViewModel\Converter\InterviewTeaserConverter
         public: false
         arguments:
+          - '@elife.journal.view_model.converter'
           - '@router'
         tags:
           - name: view_model.converter
 
     elife.journal.view_model.converter.interview.teaser.secondary:
         class: eLife\Journal\ViewModel\Converter\InterviewSecondaryTeaserConverter
+        public: false
+        arguments:
+          - '@elife.journal.view_model.converter'
+          - '@router'
+        tags:
+          - name: view_model.converter
+
+    elife.journal.view_model.converter.job_advert.header:
+        class: eLife\Journal\ViewModel\Converter\JobAdvertContentHeaderConverter
+        public: false
+        arguments:
+          - '@router'
+        tags:
+          - name: view_model.converter
+
+    elife.journal.view_model.converter.job_advert.teaser:
+        class: eLife\Journal\ViewModel\Converter\JobAdvertTeaserConverter
         public: false
         arguments:
           - '@router'
@@ -817,6 +891,7 @@ services:
         class: eLife\Journal\ViewModel\Converter\LabsPostTeaserConverter
         public: false
         arguments:
+          - '@elife.journal.view_model.converter'
           - '@router'
         tags:
           - name: view_model.converter
@@ -825,6 +900,7 @@ services:
         class: eLife\Journal\ViewModel\Converter\LabsPostGridTeaserConverter
         public: false
         arguments:
+          - '@elife.journal.view_model.converter'
           - '@router'
         tags:
           - name: view_model.converter
@@ -833,6 +909,7 @@ services:
         class: eLife\Journal\ViewModel\Converter\LabsPostSecondaryTeaserConverter
         public: false
         arguments:
+          - '@elife.journal.view_model.converter'
           - '@router'
         tags:
           - name: view_model.converter
@@ -846,6 +923,8 @@ services:
     elife.journal.view_model.converter.medium_article.teaser.secondary:
         class: eLife\Journal\ViewModel\Converter\MediumArticleSecondaryTeaserConverter
         public: false
+        arguments:
+          - '@elife.journal.view_model.converter'
         tags:
           - name: view_model.converter
 
@@ -879,6 +958,8 @@ services:
     elife.journal.view_model.converter.person.profile_snippet:
         class: eLife\Journal\ViewModel\Converter\PersonProfileSnippetConverter
         public: false
+        arguments:
+          - '@elife.journal.view_model.converter'
         tags:
           - name: view_model.converter
 
@@ -914,6 +995,7 @@ services:
         class: eLife\Journal\ViewModel\Converter\PodcastEpisodeTeaserConverter
         public: false
         arguments:
+          - '@elife.journal.view_model.converter'
           - '@router'
         tags:
           - name: view_model.converter
@@ -922,6 +1004,7 @@ services:
         class: eLife\Journal\ViewModel\Converter\PodcastEpisodeGridTeaserConverter
         public: false
         arguments:
+          - '@elife.journal.view_model.converter'
           - '@router'
         tags:
           - name: view_model.converter
@@ -930,6 +1013,7 @@ services:
         class: eLife\Journal\ViewModel\Converter\PodcastEpisodeSecondaryTeaserConverter
         public: false
         arguments:
+          - '@elife.journal.view_model.converter'
           - '@router'
         tags:
           - name: view_model.converter
@@ -961,6 +1045,14 @@ services:
 
     elife.journal.view_model.converter.press_package.teaser:
         class: eLife\Journal\ViewModel\Converter\PressPackageTeaserConverter
+        public: false
+        arguments:
+          - '@router'
+        tags:
+          - name: view_model.converter
+
+    elife.journal.view_model.converter.profile.header:
+        class: eLife\Journal\ViewModel\Converter\ProfileContentHeaderProfileConverter
         public: false
         arguments:
           - '@router'
@@ -1064,6 +1156,15 @@ services:
         public: false
         arguments:
           - '@elife.journal.view_model.converter'
+        tags:
+          - name: view_model.converter
+
+    elife.journal.view_model.converter.subject.block_link:
+        class: eLife\Journal\ViewModel\Converter\SubjectBlockLinkConverter
+        public: false
+        arguments:
+          - '@router'
+          - '@elife.journal.view_model.factory.picture_builder'
         tags:
           - name: view_model.converter
 
