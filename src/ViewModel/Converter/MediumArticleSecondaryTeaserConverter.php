@@ -13,6 +13,13 @@ final class MediumArticleSecondaryTeaserConverter implements ViewModelConverter
     use CreatesDate;
     use CreatesTeaserImage;
 
+    private $viewModelConverter;
+
+    public function __construct(ViewModelConverter $viewModelConverter)
+    {
+        $this->viewModelConverter = $viewModelConverter;
+    }
+
     /**
      * @param MediumArticle $object
      */
@@ -37,5 +44,10 @@ final class MediumArticleSecondaryTeaserConverter implements ViewModelConverter
     public function supports($object, string $viewModel = null, array $context = []) : bool
     {
         return $object instanceof MediumArticle && ViewModel\Teaser::class === $viewModel && 'secondary' === ($context['variant'] ?? null);
+    }
+
+    protected function getViewModelConverter() : ViewModelConverter
+    {
+        return $this->viewModelConverter;
     }
 }

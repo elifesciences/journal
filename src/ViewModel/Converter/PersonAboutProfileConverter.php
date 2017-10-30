@@ -5,7 +5,6 @@ namespace eLife\Journal\ViewModel\Converter;
 use eLife\ApiSdk\Model\Person;
 use eLife\Journal\Helper\Callback;
 use eLife\Journal\Helper\CanConvert;
-use eLife\Journal\Helper\CreatesIiifUri;
 use eLife\Journal\ViewModel\DefinitionList;
 use eLife\Patterns\PatternRenderer;
 use eLife\Patterns\ViewModel;
@@ -13,7 +12,6 @@ use eLife\Patterns\ViewModel;
 final class PersonAboutProfileConverter implements ViewModelConverter
 {
     use CanConvert;
-    use CreatesIiifUri;
 
     private $viewModelConverter;
     private $patternRenderer;
@@ -58,19 +56,7 @@ final class PersonAboutProfileConverter implements ViewModelConverter
         }
 
         if ($object->getThumbnail()) {
-            $srcset = [];
-            if ($object->getThumbnail()->getWidth() >= 500) {
-                $srcset[500] = $this->iiifUri($object->getThumbnail(), 500, 282);
-            }
-
-            $image = new ViewModel\Picture(
-                [],
-                new ViewModel\Image(
-                    $this->iiifUri($object->getThumbnail(), 250, 141),
-                    $srcset,
-                    $object->getThumbnail()->getAltText()
-                )
-            );
+            $image = $this->viewModelConverter->convert($object->getThumbnail(), null, ['width' => 250, 'height' => 141]);
         } else {
             $image = null;
         }

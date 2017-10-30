@@ -15,10 +15,12 @@ final class PodcastEpisodeTeaserConverter implements ViewModelConverter
     use CreatesContextLabel;
     use CreatesTeaserImage;
 
+    private $viewModelConverter;
     private $urlGenerator;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator)
+    public function __construct(ViewModelConverter $viewModelConverter, UrlGeneratorInterface $urlGenerator)
     {
+        $this->viewModelConverter = $viewModelConverter;
         $this->urlGenerator = $urlGenerator;
     }
 
@@ -45,5 +47,10 @@ final class PodcastEpisodeTeaserConverter implements ViewModelConverter
     public function supports($object, string $viewModel = null, array $context = []) : bool
     {
         return $object instanceof PodcastEpisode && ViewModel\Teaser::class === $viewModel && empty($context['variant']);
+    }
+
+    protected function getViewModelConverter() : ViewModelConverter
+    {
+        return $this->viewModelConverter;
     }
 }

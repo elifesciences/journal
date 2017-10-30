@@ -19,8 +19,16 @@ final class ImageConverterTest extends BlockConverterTestCase
     public function setUpConverter()
     {
         $this->converter = new ImageConverter(
-            $this->createMock(ViewModelConverter::class),
+            $viewModelConverter = $this->createMock(ViewModelConverter::class),
             $this->createMock(PatternRenderer::class)
         );
+
+        $viewModelConverter
+            ->expects($this->any())
+            ->method('convert')
+            ->will($this->returnValue(new ViewModel\Picture(
+                [],
+                new ViewModel\Image('/image.jpg')
+            )));
     }
 }

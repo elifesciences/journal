@@ -5,7 +5,6 @@ namespace eLife\Journal\Controller;
 use eLife\ApiSdk\Collection\PromiseSequence;
 use eLife\ApiSdk\Collection\Sequence;
 use eLife\ApiSdk\Model\Person;
-use eLife\ApiSdk\Model\Subject;
 use eLife\Journal\Helper\Callback;
 use eLife\Journal\Helper\CreatesIiifUri;
 use eLife\Journal\Helper\Paginator;
@@ -15,12 +14,10 @@ use eLife\Patterns\ViewModel\BlockLink;
 use eLife\Patterns\ViewModel\ContentHeader;
 use eLife\Patterns\ViewModel\ContentHeaderSimple;
 use eLife\Patterns\ViewModel\GridListing;
-use eLife\Patterns\ViewModel\Image;
 use eLife\Patterns\ViewModel\Link;
 use eLife\Patterns\ViewModel\ListHeading;
 use eLife\Patterns\ViewModel\ListingProfileSnippets;
 use eLife\Patterns\ViewModel\ListingTeasers;
-use eLife\Patterns\ViewModel\Picture;
 use eLife\Patterns\ViewModel\ProfileSnippet;
 use eLife\Patterns\ViewModel\SeeMoreLink;
 use eLife\Patterns\ViewModel\Teaser;
@@ -45,23 +42,7 @@ final class SubjectsController extends Controller
         $arguments['subjects'] = $this->get('elife.api_sdk.subjects')
             ->reverse()
             ->slice(1, 100)
-            ->map(function (Subject $subject) {
-                return new BlockLink(
-                    new Link(
-                        $subject->getName(),
-                        $this->get('router')->generate('subject', [$subject])
-                    ),
-                    new Picture(
-                        [
-                            [
-                                'srcset' => sprintf('%s 263w, %s 526w', $this->iiifUri($subject->getThumbnail(), 263, 148), $this->iiifUri($subject->getThumbnail(), 526, 296)),
-                                'media' => '(min-width: 600px)',
-                            ],
-                        ],
-                        new Image('data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==')
-                    )
-                );
-            })
+            ->map($this->willConvertTo(BlockLink::class))
             ->then(function (Sequence $subjects) {
                 if ($subjects->isEmpty()) {
                     return new EmptyListing(null, 'No subjects available.');

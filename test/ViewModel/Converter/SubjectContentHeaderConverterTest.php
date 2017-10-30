@@ -5,6 +5,7 @@ namespace test\eLife\Journal\ViewModel\Converter;
 use eLife\ApiSdk\Model\Subject;
 use eLife\Journal\ViewModel\Converter\SubjectContentHeaderConverter;
 use eLife\Journal\ViewModel\Factory\ContentHeaderImageFactory;
+use eLife\Journal\ViewModel\Factory\PictureBuilderFactory;
 use eLife\Patterns\ViewModel\ContentHeader;
 use Symfony\Component\Asset\Packages;
 
@@ -18,6 +19,8 @@ final class SubjectContentHeaderConverterTest extends ModelConverterTestCase
      */
     public function setUpConverter()
     {
-        $this->converter = new SubjectContentHeaderConverter(new ContentHeaderImageFactory(new Packages()));
+        $this->converter = new SubjectContentHeaderConverter(
+            new ContentHeaderImageFactory(new PictureBuilderFactory(), new Packages())
+        );
     }
 }

@@ -17,10 +17,12 @@ final class ArticleSecondaryTeaserConverter implements ViewModelConverter
     use CreatesDate;
     use CreatesTeaserImage;
 
+    private $viewModelConverter;
     private $urlGenerator;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator)
+    public function __construct(ViewModelConverter $viewModelConverter, UrlGeneratorInterface $urlGenerator)
     {
+        $this->viewModelConverter = $viewModelConverter;
         $this->urlGenerator = $urlGenerator;
     }
 
@@ -56,5 +58,10 @@ final class ArticleSecondaryTeaserConverter implements ViewModelConverter
     public function supports($object, string $viewModel = null, array $context = []) : bool
     {
         return $object instanceof ArticleVersion && ViewModel\Teaser::class === $viewModel && 'secondary' === ($context['variant'] ?? null);
+    }
+
+    protected function getViewModelConverter() : ViewModelConverter
+    {
+        return $this->viewModelConverter;
     }
 }

@@ -24,10 +24,18 @@ final class FigureAssetImageConverterTest extends BlockConverterTestCase
     public function setUpConverter()
     {
         $this->converter = new FigureAssetImageConverter(
-            $this->createMock(ViewModelConverter::class),
+            $viewModelConverter = $this->createMock(ViewModelConverter::class),
             $this->createMock(PatternRenderer::class),
             new DownloadLinkUriGenerator($this->createMock(UrlGeneratorInterface::class), new UriSigner('secret'))
         );
+
+        $viewModelConverter
+            ->expects($this->any())
+            ->method('convert')
+            ->will($this->returnValue(new ViewModel\Picture(
+                [],
+                new ViewModel\Image('/image.jpg')
+            )));
     }
 
     protected function explodeBlock(Block $block) : Traversable
