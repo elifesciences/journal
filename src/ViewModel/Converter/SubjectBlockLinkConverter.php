@@ -40,6 +40,7 @@ final class SubjectBlockLinkConverter implements ViewModelConverter
                 $extension = MediaTypes::toExtension($type);
 
                 if (null === $width && null === $height) {
+                    # No picture is displayed at smaller sizes, this prevents an image from being downloaded at all.
                     return 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==';
                 }
 
