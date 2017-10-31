@@ -27,6 +27,7 @@ final class MediaTypesTest extends PHPUnit_Framework_TestCase
             'image/jpeg' => 'jpg',
             'image/png' => 'png',
             'image/svg+xml' => 'svg',
+            'image/webp' => 'webp',
         ]);
     }
 

@@ -39,6 +39,7 @@ final class PictureBuilderTest extends PHPUnit_Framework_TestCase
         $builder = $builder
             ->addType('image/svg+xml')
             ->addType('image/png')
+            ->addType('image/webp')
             ->addSize(200, 300, '(media)')
             ->addSize(100);
 
@@ -51,6 +52,11 @@ final class PictureBuilderTest extends PHPUnit_Framework_TestCase
                         'media' => '(media)',
                     ],
                     [
+                        'srcset' => 'path:image/webp:400:600 400w, path:image/webp:200:300 200w',
+                        'type' => 'image/webp',
+                        'media' => '(media)',
+                    ],
+                    [
                         'srcset' => 'path:image/png:400:600 400w, path:image/png:200:300 200w',
                         'type' => 'image/png',
                         'media' => '(media)',
@@ -58,6 +64,10 @@ final class PictureBuilderTest extends PHPUnit_Framework_TestCase
                     [
                         'srcset' => 'path:image/svg+xml:100:',
                         'type' => 'image/svg+xml',
+                    ],
+                    [
+                        'srcset' => 'path:image/webp:200:0 200w, path:image/webp:100:0 100w',
+                        'type' => 'image/webp',
                     ],
                     [
                         'srcset' => 'path:image/png:200:0 200w, path:image/png:100:0 100w',
