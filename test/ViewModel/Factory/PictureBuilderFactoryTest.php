@@ -61,7 +61,7 @@ final class PictureBuilderFactoryTest extends PHPUnit_Framework_TestCase
             new ViewModel\Picture(
                 [
                     [
-                        'srcset' => 'path:image/jpeg:200:200 200w, path:image/jpeg:100:100 100w',
+                        'srcset' => 'path:image/jpeg:200:200 2x, path:image/jpeg:100:100 1x',
                         'type' => 'image/jpeg',
                     ],
                 ],
@@ -92,7 +92,7 @@ final class PictureBuilderFactoryTest extends PHPUnit_Framework_TestCase
                         'type' => 'image/svg+xml',
                     ],
                     [
-                        'srcset' => 'path:image/png:200:0 200w, path:image/png:100:0 100w',
+                        'srcset' => 'path:image/png:200:0 2x, path:image/png:100:0 1x',
                         'type' => 'image/png',
                     ],
                 ],
@@ -129,7 +129,7 @@ final class PictureBuilderFactoryTest extends PHPUnit_Framework_TestCase
             new ViewModel\Picture(
                 [
                     [
-                        'srcset' => 'https://example.com/image/full/100,/0/default.jpg 100w, https://example.com/image/full/50,/0/default.jpg 50w',
+                        'srcset' => 'https://example.com/image/full/100,/0/default.jpg 2x, https://example.com/image/full/50,/0/default.jpg 1x',
                         'type' => 'image/jpeg',
                     ],
                 ],
@@ -166,7 +166,7 @@ final class PictureBuilderFactoryTest extends PHPUnit_Framework_TestCase
             new ViewModel\Picture(
                 [
                     [
-                        'srcset' => 'https://example.com/image/full/100,/0/default.png 100w, https://example.com/image/full/50,/0/default.png 50w',
+                        'srcset' => 'https://example.com/image/full/100,/0/default.png 2x, https://example.com/image/full/50,/0/default.png 1x',
                         'type' => 'image/png',
                     ],
                 ],
@@ -203,7 +203,7 @@ final class PictureBuilderFactoryTest extends PHPUnit_Framework_TestCase
             new ViewModel\Picture(
                 [
                     [
-                        'srcset' => 'https://example.com/image/full/100,/0/default.jpg 100w, https://example.com/image/full/50,/0/default.jpg 50w',
+                        'srcset' => 'https://example.com/image/full/100,/0/default.jpg 2x, https://example.com/image/full/50,/0/default.jpg 1x',
                         'type' => 'image/jpeg',
                     ],
                 ],
@@ -243,11 +243,11 @@ final class PictureBuilderFactoryTest extends PHPUnit_Framework_TestCase
             new ViewModel\Picture(
                 [
                     [
-                        'srcset' => 'https://example.com/image/full/100,/0/default.webp 100w, https://example.com/image/full/50,/0/default.webp 50w',
+                        'srcset' => 'https://example.com/image/full/100,/0/default.webp 2x, https://example.com/image/full/50,/0/default.webp 1x',
                         'type' => 'image/webp',
                     ],
                     [
-                        'srcset' => 'https://example.com/image/full/100,/0/default.jpg 100w, https://example.com/image/full/50,/0/default.jpg 50w',
+                        'srcset' => 'https://example.com/image/full/100,/0/default.jpg 2x, https://example.com/image/full/50,/0/default.jpg 1x',
                         'type' => 'image/jpeg',
                     ],
                 ],

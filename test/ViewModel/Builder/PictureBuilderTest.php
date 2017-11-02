@@ -52,12 +52,12 @@ final class PictureBuilderTest extends PHPUnit_Framework_TestCase
                         'media' => '(media)',
                     ],
                     [
-                        'srcset' => 'path:image/webp:400:600 400w, path:image/webp:200:300 200w',
+                        'srcset' => 'path:image/webp:400:600 2x, path:image/webp:200:300 1x',
                         'type' => 'image/webp',
                         'media' => '(media)',
                     ],
                     [
-                        'srcset' => 'path:image/png:400:600 400w, path:image/png:200:300 200w',
+                        'srcset' => 'path:image/png:400:600 2x, path:image/png:200:300 1x',
                         'type' => 'image/png',
                         'media' => '(media)',
                     ],
@@ -66,11 +66,11 @@ final class PictureBuilderTest extends PHPUnit_Framework_TestCase
                         'type' => 'image/svg+xml',
                     ],
                     [
-                        'srcset' => 'path:image/webp:200:0 200w, path:image/webp:100:0 100w',
+                        'srcset' => 'path:image/webp:200:0 2x, path:image/webp:100:0 1x',
                         'type' => 'image/webp',
                     ],
                     [
-                        'srcset' => 'path:image/png:200:0 200w, path:image/png:100:0 100w',
+                        'srcset' => 'path:image/png:200:0 2x, path:image/png:100:0 1x',
                         'type' => 'image/png',
                     ],
                 ],
@@ -109,7 +109,7 @@ final class PictureBuilderTest extends PHPUnit_Framework_TestCase
                         'type' => 'image/svg+xml',
                     ],
                     [
-                        'srcset' => 'path:image/png:150:0 150w, path:image/png:100:0 100w',
+                        'srcset' => 'path:image/png:150:0 1.5x, path:image/png:100:0 1x',
                         'type' => 'image/png',
                     ],
                 ],

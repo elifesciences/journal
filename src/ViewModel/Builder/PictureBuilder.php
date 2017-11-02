@@ -109,8 +109,9 @@ final class PictureBuilder
                     }
 
                     $uri = call_user_func($this->uriGenerator, $type, $width, $height);
+                    $scalingFactor = round($width / $size['width'], 1);
 
-                    return "{$uri} {$width}w";
+                    return "{$uri} {$scalingFactor}x";
                 }, [2, 1])));
 
                 if (empty($srcset)) {
