@@ -50,8 +50,8 @@ final class SiteHeaderFactory
                     new Image(
                         $this->packages->getUrl('assets/patterns/img/patterns/molecules/nav-primary-search-ic_1x.png'),
                         [
-                            48 => $this->packages->getUrl('assets/patterns/img/patterns/molecules/nav-primary-search-ic_2x.png'),
-                            24 => $this->packages->getUrl('assets/patterns/img/patterns/molecules/nav-primary-search-ic_1x.png'),
+                            2 => $this->packages->getUrl('assets/patterns/img/patterns/molecules/nav-primary-search-ic_2x.png'),
+                            1 => $this->packages->getUrl('assets/patterns/img/patterns/molecules/nav-primary-search-ic_1x.png'),
                         ],
                         'Search icon'
                     )
@@ -69,8 +69,8 @@ final class SiteHeaderFactory
                     new Image(
                         $this->packages->getUrl('assets/patterns/img/patterns/molecules/nav-primary-search-disabled-ic_1x.png'),
                         [
-                            48 => $this->packages->getUrl('assets/patterns/img/patterns/molecules/nav-primary-search-disabled-ic_2x.png'),
-                            24 => $this->packages->getUrl('assets/patterns/img/patterns/molecules/nav-primary-search-disabled-ic_1x.png'),
+                            2 => $this->packages->getUrl('assets/patterns/img/patterns/molecules/nav-primary-search-disabled-ic_2x.png'),
+                            1 => $this->packages->getUrl('assets/patterns/img/patterns/molecules/nav-primary-search-disabled-ic_1x.png'),
                         ],
                         'Search icon'
                     )
@@ -91,8 +91,8 @@ final class SiteHeaderFactory
                     new Image(
                         $this->packages->getUrl('assets/patterns/img/patterns/molecules/nav-primary-menu-ic_1x.png'),
                         [
-                            48 => $this->packages->getUrl('assets/patterns/img/patterns/molecules/nav-primary-menu-ic_2x.png'),
-                            24 => $this->packages->getUrl('assets/patterns/img/patterns/molecules/nav-primary-menu-ic_1x.png'),
+                            2 => $this->packages->getUrl('assets/patterns/img/patterns/molecules/nav-primary-menu-ic_2x.png'),
+                            1 => $this->packages->getUrl('assets/patterns/img/patterns/molecules/nav-primary-menu-ic_1x.png'),
                         ],
                         'Menu icon'
                     )
@@ -130,8 +130,8 @@ final class SiteHeaderFactory
                         new Image(
                             $this->packages->getUrl('assets/patterns/img/icons/profile.png'),
                             [
-                                70 => $this->packages->getUrl('assets/patterns/img/icons/profile@2x.png'),
-                                35 => $this->packages->getUrl('assets/patterns/img/icons/profile.png'),
+                                2 => $this->packages->getUrl('assets/patterns/img/icons/profile@2x.png'),
+                                1 => $this->packages->getUrl('assets/patterns/img/icons/profile.png'),
                             ],
                             'Profile icon'
                         )

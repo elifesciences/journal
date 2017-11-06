@@ -92,7 +92,7 @@ final class PictureBuilder
                     continue;
                 }
 
-                $srcset = implode(', ', array_filter(array_map(function (int $scale) use ($size, $type) {
+                $srcset = implode(', ', array_filter(array_map(function (float $scale) use ($size, $type) {
                     $width = $size['width'] * $scale;
                     $height = $size['height'] * $scale;
 
