@@ -6,7 +6,6 @@ use eLife\ApiSdk\Model\HasSubjects;
 use eLife\ApiSdk\Model\Model;
 use eLife\ApiSdk\Model\Profile;
 use eLife\ApiSdk\Model\Subject;
-use function eLife\Patterns\mixed_visibility_text;
 use eLife\Patterns\ViewModel\Button;
 use eLife\Patterns\ViewModel\CompactForm;
 use eLife\Patterns\ViewModel\Form;
@@ -24,6 +23,7 @@ use Symfony\Component\Asset\Packages;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+use function eLife\Patterns\mixed_visibility_text;
 
 final class SiteHeaderFactory
 {
