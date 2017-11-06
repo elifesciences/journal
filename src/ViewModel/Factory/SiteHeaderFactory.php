@@ -6,6 +6,7 @@ use eLife\ApiSdk\Model\HasSubjects;
 use eLife\ApiSdk\Model\Model;
 use eLife\ApiSdk\Model\Profile;
 use eLife\ApiSdk\Model\Subject;
+use function eLife\Patterns\mixed_visibility_text;
 use eLife\Patterns\ViewModel\Button;
 use eLife\Patterns\ViewModel\CompactForm;
 use eLife\Patterns\ViewModel\Form;
@@ -144,7 +145,8 @@ final class SiteHeaderFactory
                 )
             );
         } elseif ($this->authorizationChecker->isGranted('FEATURE_CAN_AUTHENTICATE')) {
-            $secondaryLinks[] = NavLinkedItem::asLoginControl(LoginControl::notLoggedIn('Log in/Register', $this->urlGenerator->generate('log-in')));
+            $secondaryLinks[] = NavLinkedItem::asLoginControl(LoginControl::notLoggedIn(
+              mixed_visibility_text('', 'Log in / Register', ' (via Orcid)'), $this->urlGenerator->generate('log-in')));
         }
 
         $secondaryLinks = SiteHeaderNavBar::secondary($secondaryLinks);
