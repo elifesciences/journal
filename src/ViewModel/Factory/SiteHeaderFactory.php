@@ -139,7 +139,7 @@ final class SiteHeaderFactory
                     ),
                     'View my profile',
                     [
-                        'Manage profile' => 'https://orcid.org/my-orcid',
+                        'Manage my ORCID' => 'https://orcid.org/my-orcid',
                         'Log out' => $this->urlGenerator->generate('log-out'),
                     ]
                 )
