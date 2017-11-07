@@ -23,6 +23,7 @@ use Symfony\Component\Asset\Packages;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+use function eLife\Patterns\mixed_visibility_text;
 
 final class SiteHeaderFactory
 {
@@ -138,13 +139,18 @@ final class SiteHeaderFactory
                     ),
                     'View my profile',
                     [
-                        'Manage profile' => 'https://orcid.org/my-orcid',
+                        'Manage my ORCID' => 'https://orcid.org/my-orcid',
                         'Log out' => $this->urlGenerator->generate('log-out'),
                     ]
                 )
             );
         } elseif ($this->authorizationChecker->isGranted('FEATURE_CAN_AUTHENTICATE')) {
-            $secondaryLinks[] = NavLinkedItem::asLoginControl(LoginControl::notLoggedIn('Log in/Register', $this->urlGenerator->generate('log-in')));
+            $secondaryLinks[] = NavLinkedItem::asLoginControl(
+                LoginControl::notLoggedIn(
+                    mixed_visibility_text('', 'Log in/Register', '(via ORCID)'),
+                    $this->urlGenerator->generate('log-in')
+                )
+            );
         }
 
         $secondaryLinks = SiteHeaderNavBar::secondary($secondaryLinks);
