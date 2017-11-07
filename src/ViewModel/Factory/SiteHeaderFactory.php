@@ -147,7 +147,7 @@ final class SiteHeaderFactory
         } elseif ($this->authorizationChecker->isGranted('FEATURE_CAN_AUTHENTICATE')) {
             $secondaryLinks[] = NavLinkedItem::asLoginControl(
                 LoginControl::notLoggedIn(
-                    mixed_visibility_text('', 'Log in/Register', '(via Orcid)'),
+                    mixed_visibility_text('', 'Log in/Register', '(via ORCID)'),
                     $this->urlGenerator->generate('log-in')
                 )
             );
