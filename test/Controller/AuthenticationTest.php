@@ -42,7 +42,7 @@ final class AuthenticationTest extends WebTestCase
 
         $crawler = $client->request('GET', '/?open-sesame');
 
-        $client->click($crawler->filter('a:contains("Log in / Register  (via Orcid)")')->link());
+        $client->click($crawler->filter('a:contains("Log in/Register (via Orcid)")')->link());
 
         $response = $client->getResponse();
 
@@ -75,7 +75,7 @@ final class AuthenticationTest extends WebTestCase
 
         $crawler = $client->request('GET', '/?open-sesame');
 
-        $client->click($crawler->filter('a:contains("Log in / Register  (via Orcid)")')->link());
+        $client->click($crawler->filter('a:contains("Log in/Register (via Orcid)")')->link());
 
         $response = $client->getResponse();
 
@@ -107,7 +107,7 @@ final class AuthenticationTest extends WebTestCase
         $crawler = $client->request('GET', "/log-in/check?code=foo&state=$state");
 
         $this->assertNotContains('Log out', $crawler->text());
-        $this->assertContains('Log in / Register  (via Orcid)', $crawler->text());
+        $this->assertContains('Log in/Register (via Orcid)', $crawler->text());
 
         $this->assertCount(1, $crawler->filter('.info-bar'));
         $this->assertSame('Failed to log in, please try again.', trim($crawler->filter('.info-bar')->text()));
@@ -132,7 +132,7 @@ final class AuthenticationTest extends WebTestCase
 
         $crawler = $client->request('GET', '/?open-sesame');
 
-        $client->click($crawler->filter('a:contains("Log in / Register  (via Orcid)")')->link());
+        $client->click($crawler->filter('a:contains("Log in/Register (via Orcid)")')->link());
 
         $response = $client->getResponse();
 
@@ -165,7 +165,7 @@ final class AuthenticationTest extends WebTestCase
         $crawler = $client->request('GET', "/log-in/check?code=foo&state=$state");
 
         $this->assertNotContains('Log out', $crawler->text());
-        $this->assertContains('Log in / Register  (via Orcid)', $crawler->text());
+        $this->assertContains('Log in/Register (via Orcid)', $crawler->text());
 
         $this->assertCount(1, $crawler->filter('.info-bar'));
         $this->assertSame('Please adjust your ORCID privacy settings for eLife to display your name.', trim($crawler->filter('.info-bar')->text()));
