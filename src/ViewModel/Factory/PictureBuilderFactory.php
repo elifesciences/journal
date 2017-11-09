@@ -50,7 +50,14 @@ final class PictureBuilderFactory
             $type = 'image/jpeg';
         }
 
-        $builder = $this->create(function (string $type, int $width, int $height = null) use ($image) {
+        if ($defaultWidth > $image->getWidth()) {
+            $defaultWidth = null;
+        }
+        if ($defaultHeight > $image->getHeight()) {
+            $defaultHeight = null;
+        }
+
+        $builder = $this->create(function (string $type, int $width = null, int $height = null) use ($image) {
             $extension = MediaTypes::toExtension($type);
 
             return $this->iiifUri($image, $width, $height, $extension);
