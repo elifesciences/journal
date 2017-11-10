@@ -122,7 +122,7 @@ final class PictureBuilderTest extends PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function it_might_not_produce_any_sources_due_to_the_original_size()
+    public function it_might_not_produce_any_size_based_sources_due_to_the_original_size()
     {
         $builder = new PictureBuilder(function () {
             return 'path:'.implode(':', func_get_args());
@@ -136,7 +136,12 @@ final class PictureBuilderTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             new ViewModel\Picture(
-                [],
+                [
+                    [
+                        'srcset' => 'path:image/png',
+                        'type' => 'image/png',
+                    ],
+                ],
                 new ViewModel\Image('path:', [], 'alt')
             ),
             $builder->build()

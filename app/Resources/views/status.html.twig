@@ -1,8 +1,8 @@
-<html>
+{% extends '::base.html.twig' %}
 
-<head>
+{% block title %}Status{% endblock %}
 
-    <title>eLife Journal Status</title>
+{% block head %}
 
     <style>
 
@@ -58,11 +58,11 @@
 
     </style>
 
-</head>
+{% endblock %}
 
-<body>
+{% block content %}
 
-<div class="wrapper">
+    <div class="wrapper">
 
 <pre>
              ???????????
@@ -91,32 +91,30 @@
              ???????????
 </pre>
 
-</div>
+    </div>
 
-<div class="wrapper">
+    <div class="wrapper">
 
-    <h1>eLife Journal Status</h1>
+        <h1>eLife Journal Status</h1>
 
-</div>
+    </div>
 
-<div class="wrapper">
+    <div class="wrapper">
 
-    <ul>
-        {% for check in checks %}
-            <li class="check check--{{ check.status }}">
+        <ul>
+            {% for check in checks %}
+                <li class="check check--{{ check.status }}">
                 <span class="check__name">
                     {%- if check.status == constant('eLife\\Journal\\Controller\\StatusController::STATUS_OK') -%}
                         ✔
                     {%- elseif check.status == constant('eLife\\Journal\\Controller\\StatusController::STATUS_FAILING') -%}
                         ✘
                     {%- endif %} {{ check.name }}</span>
-                {%- if check.message %}<span class="check__message">{{ check.message }}</span>{% endif %}
-            </li>
-        {% endfor %}
-    </ul>
+                    {%- if check.message %}<span class="check__message">{{ check.message }}</span>{% endif %}
+                </li>
+            {% endfor %}
+        </ul>
 
-</div>
+    </div>
 
-</body>
-
-</html>
+{% endblock %}

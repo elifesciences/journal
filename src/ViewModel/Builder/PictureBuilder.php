@@ -126,9 +126,26 @@ final class PictureBuilder
             }
         }
 
+        $defaultPath = call_user_func($this->uriGenerator);
+
+        if (empty($sources)) {
+            foreach (array_keys(array_filter($this->types)) as $type) {
+                $typePath = call_user_func($this->uriGenerator, $type);
+
+                if ($typePath === $defaultPath) {
+                    continue;
+                }
+
+                $sources[] = array_filter([
+                    'srcset' => $typePath,
+                    'type' => $type,
+                ]);
+            }
+        }
+
         return new ViewModel\Picture(
             $sources,
-            new ViewModel\Image(call_user_func($this->uriGenerator), [], $this->altText)
+            new ViewModel\Image($defaultPath, [], $this->altText)
         );
     }
 }
