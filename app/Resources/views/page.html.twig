@@ -1,10 +1,6 @@
-<!doctype html>
+{% extends '::base.html.twig' %}
 
-<html lang="en" prefix="og: http://ogp.me/ns#">
-
-<head>
-
-    <meta charset="utf-8">
+{% block head %}
 
     <style>
         {% if criticalCss is not defined %}
@@ -12,10 +8,6 @@
         {% endif %}
         {% include '@critical-css/' ~ criticalCss ~ '.css' ignore missing %}
     </style>
-
-    <meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
-
-    <title>{% block title %}{{ title|striptags }}{% endblock %} | eLife</title>
 
     {# We don't use gulp-favicon's generated file as it includes things we don't want, such as apple-mobile-web-app-capable #}
     <link rel="apple-touch-icon" sizes="57x57" href="{{ asset('assets/favicons/apple-touch-icon-57x57.png') }}">
@@ -34,8 +26,6 @@
     <link rel="manifest" href="{{ asset('assets/favicons/manifest.json') }}">
     <meta name="theme-color" content="#ffffff">
     <meta name="application-name" content="eLife">
-
-    <meta name="format-detection" content="telephone=no">
 
     {% block meta %}
 
@@ -134,69 +124,66 @@
         })(document);
     </script>
 
-</head>
+{% endblock %}
 
-<body class="body">
+{% block content %}
+    {% if gtm_id %}
+        <noscript>
+            <iframe src="https://www.googletagmanager.com/ns.html?id={{ gtm_id }}" height="0" width="0"
+                    style="display:none; visibility:hidden"></iframe>
+        </noscript>
+    {% endif %}
 
-{% if gtm_id %}
-    <noscript>
-        <iframe src="https://www.googletagmanager.com/ns.html?id={{ gtm_id }}" height="0" width="0"
-                style="display:none; visibility:hidden"></iframe>
-    </noscript>
-{% endif %}
+    <div class="global-wrapper" data-behaviour="FragmentHandler Math">
 
-<div class="global-wrapper" data-behaviour="FragmentHandler Math">
+        <div class="global-inner">
 
-    <div class="global-inner">
+            {% if header %}
+                <div class="wrapper wrapper--site-header">
+                    {{ render_pattern(header) }}
+                </div>
+            {% endif %}
 
-        {% if header %}
-            <div class="wrapper wrapper--site-header">
-                {{ render_pattern(header) }}
-            </div>
-        {% endif %}
-
-        {% if (app.session and app.session.started) or app.request.hasPreviousSession %}
-            {% for type, messages in app.session.flashbag.all %}
-                {% for message in messages %}
-                    {{ info_bar(message, type) }}
+            {% if (app.session and app.session.started) or app.request.hasPreviousSession %}
+                {% for type, messages in app.session.flashbag.all %}
+                    {% for message in messages %}
+                        {{ info_bar(message, type) }}
+                    {% endfor %}
                 {% endfor %}
+            {% endif %}
+
+            {% for infoBar in infoBars %}
+                {{ render_pattern(infoBar) }}
             {% endfor %}
-        {% endif %}
 
-        {% for infoBar in infoBars %}
-            {{ render_pattern(infoBar) }}
-        {% endfor %}
+            <main role="main" class="main">
 
-        <main role="main" class="main">
+                {% block body %}{% endblock %}
 
-            {% block body %}{% endblock %}
+            </main>
 
-        </main>
+            {% if emailCta %}
+                {{ render_pattern(emailCta) }}
+            {% endif %}
 
-        {% if emailCta %}
-            {{ render_pattern(emailCta) }}
-        {% endif %}
+            {% if footer %}
+                {{ render_pattern(footer) }}
+            {% endif %}
 
-        {% if footer %}
-            {{ render_pattern(footer) }}
-        {% endif %}
+        </div>
 
     </div>
 
-</div>
+    {% block javascripts deferred %}
+    {% for javascript in javascripts %}
+        <script async src="{{ asset(javascript) }}"></script>
+    {% endfor %}
+    {% endblock %}
 
-{% block javascripts deferred %}
-{% for javascript in javascripts %}
-    <script async src="{{ asset(javascript) }}"></script>
-{% endfor %}
+    {% block stylesheets deferred %}
+    {% for stylesheet in stylesheets %}
+        <link href="{{ asset(stylesheet) }}" rel="stylesheet">
+    {% endfor %}
+    {% endblock %}
+
 {% endblock %}
-
-{% block stylesheets deferred %}
-{% for stylesheet in stylesheets %}
-    <link href="{{ asset(stylesheet) }}" rel="stylesheet">
-{% endfor %}
-{% endblock %}
-
-</body>
-
-</html>
