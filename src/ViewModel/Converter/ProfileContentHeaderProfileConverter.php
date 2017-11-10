@@ -33,7 +33,7 @@ final class ProfileContentHeaderProfileConverter implements ViewModelConverter
                 $object->getDetails()->getPreferredName(),
                 new ViewModel\Link('Log out', $this->urlGenerator->generate('log-out')),
                 [
-                    new ViewModel\Link('Manage profile', 'https://orcid.org/my-orcid'),
+                    new ViewModel\Link('Manage my ORCID', 'https://orcid.org/my-orcid'),
                 ],
                 $affiliations,
                 $emailAddress
