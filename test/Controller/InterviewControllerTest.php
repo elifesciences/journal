@@ -140,7 +140,7 @@ final class InterviewControllerTest extends PageTestCase
                 'GET',
                 'http://api.elifesciences.org/interviews/1',
                 [
-                    'Accept' => 'application/vnd.elife.interview+json; version=1',
+                    'Accept' => 'application/vnd.elife.interview+json; version=2',
                 ]
             ),
             new Response(
@@ -186,11 +186,11 @@ final class InterviewControllerTest extends PageTestCase
             new Request(
                 'GET',
                 'http://api.elifesciences.org/interviews/1',
-                ['Accept' => 'application/vnd.elife.interview+json; version=1']
+                ['Accept' => 'application/vnd.elife.interview+json; version=2']
             ),
             new Response(
                 200,
-                ['Content-Type' => 'application/vnd.elife.interview+json; version=1'],
+                ['Content-Type' => 'application/vnd.elife.interview+json; version=2'],
                 json_encode([
                     'id' => '1',
                     'interviewee' => [

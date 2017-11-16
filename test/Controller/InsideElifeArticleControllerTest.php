@@ -79,7 +79,7 @@ final class InsideElifeArticleControllerTest extends PageTestCase
                 'GET',
                 'http://api.elifesciences.org/blog-articles/1',
                 [
-                    'Accept' => 'application/vnd.elife.blog-article+json; version=1',
+                    'Accept' => 'application/vnd.elife.blog-article+json; version=2',
                 ]
             ),
             new Response(
@@ -104,11 +104,11 @@ final class InsideElifeArticleControllerTest extends PageTestCase
             new Request(
                 'GET',
                 'http://api.elifesciences.org/blog-articles/1',
-                ['Accept' => 'application/vnd.elife.blog-article+json; version=1']
+                ['Accept' => 'application/vnd.elife.blog-article+json; version=2']
             ),
             new Response(
                 200,
-                ['Content-Type' => 'application/vnd.elife.blog-article+json; version=1'],
+                ['Content-Type' => 'application/vnd.elife.blog-article+json; version=2'],
                 json_encode([
                     'id' => '1',
                     'title' => 'Blog article title',

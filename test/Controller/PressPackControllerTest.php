@@ -40,11 +40,11 @@ final class PressPackControllerTest extends PageTestCase
             new Request(
                 'GET',
                 'http://api.elifesciences.org/press-packages/1',
-                ['Accept' => 'application/vnd.elife.press-package+json; version=2']
+                ['Accept' => 'application/vnd.elife.press-package+json; version=3']
             ),
             new Response(
                 200,
-                ['Content-Type' => 'application/vnd.elife.press-package+json; version=2'],
+                ['Content-Type' => 'application/vnd.elife.press-package+json; version=3'],
                 json_encode([
                     'id' => '1',
                     'title' => 'Press package title',
@@ -121,11 +121,11 @@ final class PressPackControllerTest extends PageTestCase
             new Request(
                 'GET',
                 'http://api.elifesciences.org/press-packages/1',
-                ['Accept' => 'application/vnd.elife.press-package+json; version=2']
+                ['Accept' => 'application/vnd.elife.press-package+json; version=3']
             ),
             new Response(
                 200,
-                ['Content-Type' => 'application/vnd.elife.press-package+json; version=2'],
+                ['Content-Type' => 'application/vnd.elife.press-package+json; version=3'],
                 json_encode([
                     'id' => '1',
                     'title' => 'Press package title',
@@ -213,7 +213,7 @@ final class PressPackControllerTest extends PageTestCase
                 'GET',
                 'http://api.elifesciences.org/press-packages/1',
                 [
-                    'Accept' => 'application/vnd.elife.press-package+json; version=2',
+                    'Accept' => 'application/vnd.elife.press-package+json; version=3',
                 ]
             ),
             new Response(
@@ -238,11 +238,11 @@ final class PressPackControllerTest extends PageTestCase
             new Request(
                 'GET',
                 'http://api.elifesciences.org/press-packages/1',
-                ['Accept' => 'application/vnd.elife.press-package+json; version=2']
+                ['Accept' => 'application/vnd.elife.press-package+json; version=3']
             ),
             new Response(
                 200,
-                ['Content-Type' => 'application/vnd.elife.press-package+json; version=2'],
+                ['Content-Type' => 'application/vnd.elife.press-package+json; version=3'],
                 json_encode([
                     'id' => '1',
                     'title' => 'Press package title',
