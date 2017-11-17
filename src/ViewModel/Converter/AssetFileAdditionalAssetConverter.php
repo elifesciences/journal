@@ -40,11 +40,7 @@ final class AssetFileAdditionalAssetConverter implements ViewModelConverter
             $text = null;
         }
 
-        if ($object->getLabel()) {
-            $captionText = ViewModel\CaptionText::withHeading($object->getLabel(), $object->getTitle(), $text);
-        } else {
-            $captionText = ViewModel\CaptionText::withStandFirst($object->getTitle(), $text);
-        }
+        $captionText = ViewModel\CaptionText::withHeading($object->getLabel(), $object->getTitle(), $text);
 
         $download = ViewModel\DownloadLink::fromLink(
             new ViewModel\Link('Download '.$object->getFile()->getFilename(), $this->downloadLinkUriGenerator->generate(new DownloadLink($object->getFile()->getUri(), $object->getFile()->getFilename()))),

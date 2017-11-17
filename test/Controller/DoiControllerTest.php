@@ -42,8 +42,8 @@ final class DoiControllerTest extends WebTestCase
                 'http://api.elifesciences.org/articles/00001',
                 [
                     'Accept' => [
-                        'application/vnd.elife.article-poa+json; version=1',
-                        'application/vnd.elife.article-vor+json; version=1',
+                        'application/vnd.elife.article-poa+json; version=2',
+                        'application/vnd.elife.article-vor+json; version=2',
                     ],
                 ]
             ),
@@ -105,8 +105,8 @@ final class DoiControllerTest extends WebTestCase
                 'http://api.elifesciences.org/articles/00001',
                 [
                     'Accept' => [
-                        'application/vnd.elife.article-poa+json; version=1',
-                        'application/vnd.elife.article-vor+json; version=1',
+                        'application/vnd.elife.article-poa+json; version=2',
+                        'application/vnd.elife.article-vor+json; version=2',
                     ],
                 ]
             ),
@@ -134,14 +134,14 @@ final class DoiControllerTest extends WebTestCase
                 'http://api.elifesciences.org/articles/00001',
                 [
                     'Accept' => [
-                        'application/vnd.elife.article-poa+json; version=1',
-                        'application/vnd.elife.article-vor+json; version=1',
+                        'application/vnd.elife.article-poa+json; version=2',
+                        'application/vnd.elife.article-vor+json; version=2',
                     ],
                 ]
             ),
             new Response(
                 200,
-                ['Content-Type' => 'application/vnd.elife.article-vor+json; version=1'],
+                ['Content-Type' => 'application/vnd.elife.article-vor+json; version=2'],
                 json_encode([
                     'status' => 'vor',
                     'stage' => 'preview',

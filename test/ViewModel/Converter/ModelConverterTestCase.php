@@ -118,8 +118,16 @@ abstract class ModelConverterTestCase extends PHPUnit_Framework_TestCase
                     $type = true;
                     $list = true;
                     break;
-                case 'press-package':
+                case 'article-poa':
+                case 'article-vor':
+                case 'blog-article':
+                case 'event':
+                case 'interview':
+                case 'labs-post':
                     $version = 2;
+                    break;
+                case 'press-package':
+                    $version = 3;
                     break;
             }
 
