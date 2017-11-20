@@ -9,6 +9,7 @@ parameters:
     crm_url: http://crm.elifesciences.org/crm/civicrm/
     oauth2_client_id: journal_client_id
     oauth2_client_secret: journal_client_secret
+    redis: ~
     status_checks:
         Check 1: foo
         Check 2: bar

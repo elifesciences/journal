@@ -143,6 +143,14 @@ services:
         arguments:
           - '@elife.journal.guzzle.cache.storage'
 
+    elife.journal.guzzle.remove_validation:
+        class: eLife\Journal\Guzzle\RemoveValidationMiddleware
+        public: false
+        tags:
+          - name: csa_guzzle.middleware
+            alias: remove_validation
+            priority: -1501
+
     elife.journal.guzzle.stale_logging:
         class: eLife\Journal\Guzzle\StaleLoggingMiddleware
         public: false
