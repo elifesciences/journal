@@ -2,7 +2,7 @@
 
 namespace test\eLife\Journal\Guzzle;
 
-use eLife\Journal\Guzzle\RemoveValidationMiddleware;
+use eLife\Journal\Guzzle\RemoveSearchQueryValidationMiddleware;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit_Framework_TestCase;
@@ -10,7 +10,7 @@ use Psr\Http\Message\RequestInterface;
 use Traversable;
 use function GuzzleHttp\Promise\promise_for;
 
-final class RemoveValidationMiddlewareTest extends PHPUnit_Framework_TestCase
+final class RemoveSearchQueryValidationMiddlewareTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @test
@@ -24,7 +24,7 @@ final class RemoveValidationMiddlewareTest extends PHPUnit_Framework_TestCase
             return promise_for($response);
         };
 
-        $response = (new RemoveValidationMiddleware())($handler)($request, [])->wait();
+        $response = (new RemoveSearchQueryValidationMiddleware())($handler)($request, [])->wait();
 
         $this->assertFalse($response->hasHeader('Etag'));
         $this->assertFalse($response->hasHeader('Last-Modified'));
@@ -48,7 +48,7 @@ final class RemoveValidationMiddlewareTest extends PHPUnit_Framework_TestCase
             return promise_for($response);
         };
 
-        $response = (new RemoveValidationMiddleware())($handler)($request, [])->wait();
+        $response = (new RemoveSearchQueryValidationMiddleware())($handler)($request, [])->wait();
 
         $this->assertSame('33a64df', $response->getHeaderLine('Etag'));
         $this->assertSame('Wed, 21 Oct 2015 07:28:00 GMT', $response->getHeaderLine('Last-Modified'));
