@@ -2,9 +2,9 @@
 
 namespace eLife\Journal\Guzzle;
 
-use function GuzzleHttp\Psr7\parse_query;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use function GuzzleHttp\Psr7\parse_query;
 
 final class RemoveValidationMiddleware
 {

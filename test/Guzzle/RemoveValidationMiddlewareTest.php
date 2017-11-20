@@ -3,13 +3,12 @@
 namespace test\eLife\Journal\Guzzle;
 
 use eLife\Journal\Guzzle\RemoveValidationMiddleware;
-use function GuzzleHttp\Promise\promise_for;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit_Framework_TestCase;
 use Psr\Http\Message\RequestInterface;
-use test\eLife\Journal\Providers;
 use Traversable;
+use function GuzzleHttp\Promise\promise_for;
 
 final class RemoveValidationMiddlewareTest extends PHPUnit_Framework_TestCase
 {
