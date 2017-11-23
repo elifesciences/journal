@@ -142,7 +142,7 @@ final class PictureBuilderFactoryTest extends PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function it_creates_a_builder_for_images_that_does_not_stretch()
+    public function it_creates_a_builder_for_images_that_does_not_stretch_when_there_is_no_height()
     {
         $factory = new PictureBuilderFactory();
 
@@ -165,6 +165,37 @@ final class PictureBuilderFactoryTest extends PHPUnit_Framework_TestCase
             new ViewModel\Picture(
                 [],
                 new ViewModel\Image('https://example.com/image/full/full/0/default.jpg', [], 'alt')
+            ),
+            $builder->build()
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function it_creates_a_builder_for_images_that_can_stretch_if_there_is_a_height()
+    {
+        $factory = new PictureBuilderFactory();
+
+        $image = $this->createImage([
+            'uri' => 'https://example.com/image',
+            'alt' => 'alt',
+            'size' => [
+                'width' => 200,
+                'height' => 100,
+            ],
+            'source' => [
+                'mediaType' => 'image/jpeg',
+                'uri' => 'https://example.com/image.jpg',
+                'filename' => 'Image.jpg',
+            ],
+        ]);
+        $builder = $factory->forImage($image, 400, 200);
+
+        $this->assertEquals(
+            new ViewModel\Picture(
+                [],
+                new ViewModel\Image('https://example.com/image/full/400,/0/default.jpg', [], 'alt')
             ),
             $builder->build()
         );

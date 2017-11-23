@@ -50,11 +50,8 @@ final class PictureBuilderFactory
             $type = 'image/jpeg';
         }
 
-        if ($defaultWidth > $image->getWidth()) {
+        if ($defaultWidth > $image->getWidth() && null === $defaultHeight) {
             $defaultWidth = null;
-        }
-        if ($defaultHeight > $image->getHeight()) {
-            $defaultHeight = null;
         }
 
         $builder = $this->create(function (string $type, int $width = null, int $height = null) use ($image) {
