@@ -453,13 +453,15 @@ final class ArticlesController extends Controller
                     );
                 }
 
-                $parts[] = ArticleSection::collapsible(
-                    'comments',
-                    'Comments',
-                    2,
-                    '<div id="disqus_thread">'.$this->render(ViewModel\Button::link('View the discussion thread', 'https://'.$this->getParameter('disqus_domain').'.disqus.com/?url='.urlencode($this->get('router')->generate('article', [$article], UrlGeneratorInterface::ABSOLUTE_URL)))).'</div>',
-                    true
-                );
+                if (!$this->get('security.authorization_checker')->isGranted('FEATURE_CAN_USE_HYPOTHESIS')) {
+                    $parts[] = ArticleSection::collapsible(
+                        'comments',
+                        'Comments',
+                        2,
+                        '<div id="disqus_thread">'.$this->render(ViewModel\Button::link('View the discussion thread', 'https://'.$this->getParameter('disqus_domain').'.disqus.com/?url='.urlencode($this->get('router')->generate('article', [$article], UrlGeneratorInterface::ABSOLUTE_URL)))).'</div>',
+                        true
+                    );
+                }
 
                 return $parts;
             });
@@ -774,7 +776,11 @@ final class ArticlesController extends Controller
                     $metrics[] = new ViewModel\ContextualDataMetric('Views', number_format($pageViews));
                 }
 
-                $metrics[] = new ViewModel\ContextualDataMetric('Comments', 0, 'disqus-comment-count');
+                if ($this->get('security.authorization_checker')->isGranted('FEATURE_CAN_USE_HYPOTHESIS')) {
+                    $metrics[] = new ViewModel\ContextualDataMetric('Comments', 0, 'comment-count');
+                } else {
+                    $metrics[] = new ViewModel\ContextualDataMetric('Comments', 0, 'disqus-comment-count');
+                }
 
                 if (!$article->getCiteAs()) {
                     return ContextualData::withMetrics($metrics);

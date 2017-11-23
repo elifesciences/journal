@@ -21,4 +21,8 @@ parameters:
         Articles: articles
     oauth2_client_id: some-id
     oauth2_client_secret: ThisIsASecret
+    hypothesis_api: some-authority
+    hypothesis_authority: some-authority
+    hypothesis_client_id: some-id
+    hypothesis_client_secret: ThisIsASecret
     feature_can_view_webp_countries: ['GB']

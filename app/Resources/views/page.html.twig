@@ -19,6 +19,7 @@
     <link rel="apple-touch-icon" sizes="144x144" href="{{ asset('assets/favicons/apple-touch-icon-144x144.png') }}">
     <link rel="apple-touch-icon" sizes="152x152" href="{{ asset('assets/favicons/apple-touch-icon-152x152.png') }}">
     <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('assets/favicons/apple-touch-icon-180x180.png') }}">
+    <link rel="icon" type="image/svg+xml" href="{{ asset('assets/favicons/favicon.svg') }}">
     <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('assets/favicons/favicon-32x32.png') }}">
     <link rel="icon" type="image/png" sizes="192x192" href="{{ asset('assets/favicons/android-chrome-192x192.png') }}">
     <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('assets/favicons/favicon-16x16.png') }}">
@@ -178,6 +179,59 @@
     {% for javascript in javascripts %}
         <script async src="{{ asset(javascript) }}"></script>
     {% endfor %}
+
+    {% if hypothesis ?? false and is_granted('FEATURE_CAN_USE_HYPOTHESIS') %}
+        <script>
+            if (!!document.createElement('div').dataset) {
+                window.hypothesisConfig = function () {
+                    return {
+                        branding: {
+                            accentColor: '#0288D1',
+                            appBackgroundColor: 'white',
+                            ctaBackgroundColor: '#0288D1',
+                            ctaTextColor: 'white',
+                            selectionFontFamily: 'Georgia, Times, serif',
+                            annotationFontFamily: 'Georgia, Times, serif'
+                        },
+                        services: [{
+                            apiUrl: 'https://hypothes.is/api/',
+                            authority: '{{ hypothesis_authority }}',
+                            grantToken: {% if app.user %}'{{ hypothesis_token(app.user) }}'{% else %}null{% endif %},
+                            icon: '{{ absolute_url(asset('assets/favicons/favicon.svg')) }}',
+                            onLoginRequest: function () {
+                                window.location.replace('{{ path('log-in') }}');
+                            },
+                            onLogoutRequest: function () {
+                                window.location.replace('{{ path('log-out') }}');
+                            },
+                            onSignupRequest: function () {
+                                window.location.replace('{{ path('log-in') }}');
+                            },
+                            onProfileRequest: function () {
+                                window.location.replace('{{ path('home') }}');
+                            }
+                        }],
+                        showHighlights: 'whenSidebarOpen'
+                    };
+                };
+
+                (function () {
+                    var d = document, s = d.createElement('script'), c = d.getElementById('hypothesis-comment-count');
+                    if (!!c) {
+                        c.dataset.hypothesisAnnotationCount = '';
+                        c.previousElementSibling.dataset.hypothesisTrigger = '';
+                    }
+                    s.src = 'https://hypothes.is/embed.js';
+                    s.async = true;
+                    s.addEventListener('error', function () {
+                        {# Do nothing #}
+                    });
+                    d.head.appendChild(s);
+                })();
+            }
+        </script>
+    {% endif %}
+
     {% endblock %}
 
     {% block stylesheets deferred %}
