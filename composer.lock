@@ -906,12 +906,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-sdk-php.git",
-                "reference": "18da533d8e1b93cddf7d99e4bb9e9a815510f8c0"
+                "reference": "690fd900374e2e5955216aaf81026c64d9f96032"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/18da533d8e1b93cddf7d99e4bb9e9a815510f8c0",
-                "reference": "18da533d8e1b93cddf7d99e4bb9e9a815510f8c0",
+                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/690fd900374e2e5955216aaf81026c64d9f96032",
+                "reference": "690fd900374e2e5955216aaf81026c64d9f96032",
                 "shasum": ""
             },
             "require": {
@@ -946,7 +946,7 @@
                 "MIT"
             ],
             "description": "eLife Sciences API SDK",
-            "time": "2017-11-16T14:30:20+00:00"
+            "time": "2017-11-27T09:58:57+00:00"
         },
         {
             "name": "elife/patterns",
@@ -954,12 +954,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/patterns-php.git",
-                "reference": "6a93838138ababac8330867bb25a90152cc42d47"
+                "reference": "477344c458f542247c5cd3fca485aa609e558dd1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/6a93838138ababac8330867bb25a90152cc42d47",
-                "reference": "6a93838138ababac8330867bb25a90152cc42d47",
+                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/477344c458f542247c5cd3fca485aa609e558dd1",
+                "reference": "477344c458f542247c5cd3fca485aa609e558dd1",
                 "shasum": ""
             },
             "require": {
@@ -992,7 +992,7 @@
                 "MIT"
             ],
             "description": "eLife patterns",
-            "time": "2017-11-20T10:59:52+00:00"
+            "time": "2017-11-24T08:03:34+00:00"
         },
         {
             "name": "fabpot/goutte",
