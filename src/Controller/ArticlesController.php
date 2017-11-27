@@ -777,7 +777,7 @@ final class ArticlesController extends Controller
                 }
 
                 if ($this->get('security.authorization_checker')->isGranted('FEATURE_CAN_USE_HYPOTHESIS')) {
-                    $metrics[] = new ViewModel\ContextualDataMetric('Comments', 0, 'comment-count');
+                    $metrics[] = new ViewModel\ContextualDataMetric('Annotations', 0, 'annotation-count');
                 } else {
                     $metrics[] = new ViewModel\ContextualDataMetric('Comments', 0, 'disqus-comment-count');
                 }

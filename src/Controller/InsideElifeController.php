@@ -90,7 +90,7 @@ final class InsideElifeController extends Controller
                     return null;
                 }
 
-                $metrics = [new ContextualDataMetric('Comments', 0, 'hypothesis-comment-count')];
+                $metrics = [new ContextualDataMetric('Annotations', 0, 'annotation-count')];
 
                 return ContextualData::withMetrics($metrics);
             });
