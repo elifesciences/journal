@@ -194,7 +194,7 @@
                             annotationFontFamily: 'Georgia, Times, serif'
                         },
                         services: [{
-                            apiUrl: 'https://hypothes.is/api/',
+                            apiUrl: '{{ hypothesis_api }}',
                             authority: '{{ hypothesis_authority }}',
                             grantToken: {% if app.user %}'{{ hypothesis_token(app.user) }}'{% else %}null{% endif %},
                             icon: '{{ absolute_url(asset('assets/favicons/favicon.svg')) }}',
