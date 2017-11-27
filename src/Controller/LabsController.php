@@ -3,10 +3,13 @@
 namespace eLife\Journal\Controller;
 
 use eLife\ApiSdk\Collection\Sequence;
+use eLife\ApiSdk\Model\LabsPost;
 use eLife\Journal\Helper\Callback;
 use eLife\Journal\Helper\Paginator;
 use eLife\Journal\Pagerfanta\SequenceAdapter;
 use eLife\Patterns\ViewModel\ContentHeader;
+use eLife\Patterns\ViewModel\ContextualData;
+use eLife\Patterns\ViewModel\ContextualDataMetric;
 use eLife\Patterns\ViewModel\GridListing;
 use eLife\Patterns\ViewModel\Teaser;
 use Pagerfanta\Pagerfanta;
@@ -85,6 +88,17 @@ Learn more about <a href="'.$this->get('router')->generate('about-innovation').'
 
         $arguments['contentHeader'] = $arguments['post']
             ->then($this->willConvertTo(ContentHeader::class));
+
+        $arguments['contextualData'] = $arguments['post']
+            ->then(function (LabsPost $post) {
+                if (!$this->get('security.authorization_checker')->isGranted('FEATURE_CAN_USE_HYPOTHESIS')) {
+                    return null;
+                }
+
+                $metrics = [new ContextualDataMetric('Annotations', 0, 'annotation-count')];
+
+                return ContextualData::withMetrics($metrics);
+            });
 
         $arguments['blocks'] = $arguments['post']
             ->then($this->willConvertContent());
