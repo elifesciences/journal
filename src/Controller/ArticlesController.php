@@ -453,7 +453,7 @@ final class ArticlesController extends Controller
                     );
                 }
 
-                if (!$this->get('security.authorization_checker')->isGranted('FEATURE_CAN_USE_HYPOTHESIS')) {
+                if (!$this->isGranted('FEATURE_CAN_USE_HYPOTHESIS')) {
                     $parts[] = ArticleSection::collapsible(
                         'comments',
                         'Comments',
@@ -776,7 +776,7 @@ final class ArticlesController extends Controller
                     $metrics[] = new ViewModel\ContextualDataMetric('Views', number_format($pageViews));
                 }
 
-                if ($this->get('security.authorization_checker')->isGranted('FEATURE_CAN_USE_HYPOTHESIS')) {
+                if ($this->isGranted('FEATURE_CAN_USE_HYPOTHESIS')) {
                     $metrics[] = new ViewModel\ContextualDataMetric('Annotations', 0, 'annotation-count');
                 } else {
                     $metrics[] = new ViewModel\ContextualDataMetric('Comments', 0, 'disqus-comment-count');

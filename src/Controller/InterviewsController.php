@@ -91,15 +91,11 @@ final class InterviewsController extends Controller
             ->then($this->willConvertTo(ContentHeader::class));
 
         $arguments['contextualData'] = $arguments['interview']
-            ->then(function (Interview $interview) {
-                if (!$this->get('security.authorization_checker')->isGranted('FEATURE_CAN_USE_HYPOTHESIS')) {
-                    return null;
-                }
-
+            ->then($this->ifGranted(['FEATURE_CAN_USE_HYPOTHESIS'], function (Interview $interview) {
                 $metrics = [new ContextualDataMetric('Annotations', 0, 'annotation-count')];
 
                 return ContextualData::withMetrics($metrics);
-            });
+            }));
 
         $arguments['blocks'] = $arguments['interview']
             ->then($this->willConvertContent());

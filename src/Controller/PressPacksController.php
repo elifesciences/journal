@@ -86,15 +86,11 @@ final class PressPacksController extends Controller
             ->then($this->willConvertTo(ContentHeader::class));
 
         $arguments['contextualData'] = $arguments['package']
-            ->then(function (PressPackage $package) {
-                if (!$this->get('security.authorization_checker')->isGranted('FEATURE_CAN_USE_HYPOTHESIS')) {
-                    return null;
-                }
-
+            ->then($this->ifGranted(['FEATURE_CAN_USE_HYPOTHESIS'], function (PressPackage $package) {
                 $metrics = [new ContextualDataMetric('Annotations', 0, 'annotation-count')];
 
                 return ContextualData::withMetrics($metrics);
-            });
+            }));
 
         $arguments['blocks'] = $arguments['package']
             ->then(function (PressPackage $package) {
