@@ -28,7 +28,6 @@ final class HypothesisTokenGenerator
             'sub' => "acct:{$user->getUsername()}@{$this->authority}",
             'nbf' => time(),
             'exp' => time() + self::TOKEN_TTL,
-            $this->clientId,
         ], $this->clientSecret);
     }
 }
