@@ -202,7 +202,7 @@
                         enableExperimentalNewNoteButton: true,
                         enableCleanOnboardingTheme: true,
                         theme: 'clean',
-                        usernameUrl: '{{ absolute_url('/profiles/') }}',
+                        usernameUrl: '{{ absolute_url(path('profile-no-id')) }}',
                         services: [{
                             apiUrl: '{{ hypothesis_api }}',
                             authority: '{{ hypothesis_authority }}',
