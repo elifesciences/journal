@@ -26,7 +26,7 @@ final class HypothesisTokenExtensionTest extends PHPUnit_Framework_TestCase
      * @test
      * @depends it_is_a_twig_extension
      */
-    public function it_generates_a_toke()
+    public function it_generates_a_token()
     {
         $tokenGenerator = new HypothesisTokenGenerator('authority', 'client_id', 'client_secret');
 
