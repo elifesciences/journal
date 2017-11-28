@@ -218,7 +218,7 @@
                                 window.location.replace('{{ path('log-in') }}');
                             },
                             onProfileRequest: function () {
-                                window.location.replace('{{ path('home') }}');
+                                window.location.replace('{{ path('profile', {id: app.user.username}) }}');
                             }
                         }],
                         showHighlights: 'whenSidebarOpen'
