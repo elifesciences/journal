@@ -1,24 +1,53 @@
 parameters:
+    # Base URL for the API (does not have to be publicly accessible).
     api_url: https://api.elifesciences.org
+
+    # Base URL for the API to use in JavaScript in the browser (needs to be publicly accessible).
     api_url_public: '%api_url%'
+
+    # API authorization key to use.
     api_key: public
+
+    # Lens base URL.
     side_by_side_view_url: https://lens.elifesciences.org/
+
+    # Unique to the application instance to add more entropy to security related operations.
     secret: ThisTokenIsNotSoSecretChangeIt
+
+    # Name of the session cookie.
     session_name: journal
+
+    # Connection string for Redis (uses the filesystem for caching/sessions if not set).
     redis: ~
+
+    # Swift Mailer configuration.
     mailer_transport: smtp
     mailer_host: 127.0.0.1
     mailer_port: ~
     mailer_username: ~
     mailer_password: ~
     mailer_encryption: ~
+
+    # CiviCRM base URL.
     crm_url: https://crm.elifesciences.org/crm/civicrm/
+
+    # Disqus domain.
     disqus_domain: elifesciences
+
+    # Google Tag Manager ID.
     gtm_id: ~
+
+    # Host headers to trusted (can be an empty array).
     trusted_hosts:
       - .*\.?elifesciences.org$
+
+    # Map (name: path) of API paths to use on the /status page.
     status_checks:
         Articles: articles
+
+    # OAuth2 configuration.
     oauth2_client_id: some-id
     oauth2_client_secret: ThisIsASecret
+
+    # ISO 3166-1 alpha-2 codes to serve WebP images to.
     feature_can_view_webp_countries: ['GB']
