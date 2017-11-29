@@ -38,6 +38,157 @@ final class ProfileControllerTest extends PageTestCase
     /**
      * @test
      */
+    public function it_displays_a_profile_page_with_public_information()
+    {
+        $client = static::createClient();
+
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/profiles/1',
+                ['Accept' => 'application/vnd.elife.profile+json; version=1']
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.profile+json; version=1'],
+                json_encode([
+                    'id' => '1',
+                    'name' => [
+                        'preferred' => 'Preferred Name',
+                        'index' => 'Index Name',
+                    ],
+                    'emailAddresses' => [
+                        [
+                            'value' => 'j.carberry@orcid.org',
+                            'access' => 'public',
+                        ],
+                        [
+                            'value' => 'j.carberry@restricted.example.com',
+                            'access' => 'restricted',
+                        ],
+                        [
+                            'value' => 'j.carberry2@orcid.org',
+                            'access' => 'public',
+                        ],
+                    ],
+                    'affiliations' => [
+                        [
+                            'value' => [
+                                'name' => [
+                                    'Department 1',
+                                    'University 1',
+                                ],
+                                'address' => [
+                                    'formatted' => [
+                                        'Middletown',
+                                        'CT',
+                                        'United States',
+                                    ],
+                                    'components' => [
+                                        'locality' => [
+                                            'Middletown',
+                                        ],
+                                        'area' => [
+                                            'CT',
+                                        ],
+                                        'country' => 'United States',
+                                    ],
+                                ],
+                            ],
+                            'access' => 'public',
+                        ],
+                        [
+                            'value' => [
+                                'name' => [
+                                    'Department 2',
+                                    'University 2',
+                                ],
+                                'address' => [
+                                    'formatted' => [
+                                        'Middletown',
+                                        'CT',
+                                        'United States',
+                                    ],
+                                    'components' => [
+                                        'locality' => [
+                                            'Middletown',
+                                        ],
+                                        'area' => [
+                                            'CT',
+                                        ],
+                                        'country' => 'United States',
+                                    ],
+                                ],
+                            ],
+                            'access' => 'restricted',
+                        ],
+                        [
+                            'value' => [
+                                'name' => [
+                                    'Department 3',
+                                    'University 3',
+                                ],
+                                'address' => [
+                                    'formatted' => [
+                                        'Middletown',
+                                        'CT',
+                                        'United States',
+                                    ],
+                                    'components' => [
+                                        'locality' => [
+                                            'Middletown',
+                                        ],
+                                        'area' => [
+                                            'CT',
+                                        ],
+                                        'country' => 'United States',
+                                    ],
+                                ],
+                            ],
+                            'access' => 'public',
+                        ],
+                        [
+                            'value' => [
+                                'name' => [
+                                    'Department 4',
+                                    'University 1',
+                                ],
+                                'address' => [
+                                    'formatted' => [
+                                        'Middletown',
+                                        'CT',
+                                        'United States',
+                                    ],
+                                    'components' => [
+                                        'locality' => [
+                                            'Middletown',
+                                        ],
+                                        'area' => [
+                                            'CT',
+                                        ],
+                                        'country' => 'United States',
+                                    ],
+                                ],
+                            ],
+                            'access' => 'public',
+                        ],
+                    ],
+                ])
+            )
+        );
+
+        $crawler = $client->request('GET', '/profiles/1');
+
+        $this->assertSame(200, $client->getResponse()->getStatusCode());
+        $this->assertSame('Preferred Name', $crawler->filter('.content-header-profile__display_name')->text());
+        $this->assertSame(['University 1', 'University 3'],
+            array_map('trim', $crawler->filter('.content-header-profile__affiliation')->extract(['_text'])));
+        $this->assertSame('j.carberry@orcid.org', $crawler->filter('.content-header-profile__email')->text());
+    }
+
+    /**
+     * @test
+     */
     public function it_has_metadata()
     {
         $client = static::createClient();
