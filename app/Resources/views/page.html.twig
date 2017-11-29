@@ -207,19 +207,22 @@
                             apiUrl: '{{ hypothesis_api }}',
                             authority: '{{ hypothesis_authority }}',
                             grantToken: {% if app.user %}'{{ hypothesis_token(app.user) }}'{% else %}null{% endif %},
-                            icon: '{{ absolute_url(asset('assets/favicons/favicon.svg')) }}',
+                            icon: '{{ absolute_url(asset('assets/favicons/favicon.svg')) }}'
+                            {%- if not app.user %},
                             onLoginRequest: function () {
                                 window.location.replace('{{ path('log-in') }}');
                             },
-                            onLogoutRequest: function () {
-                                window.location.replace('{{ path('log-out') }}');
-                            },
                             onSignupRequest: function () {
                                 window.location.replace('{{ path('log-in') }}');
+                            }
+                            {%- else %},
+                            onLogoutRequest: function () {
+                                window.location.replace('{{ path('log-out') }}');
                             },
                             onProfileRequest: function () {
                                 window.location.replace('{{ path('profile', {id: app.user.username}) }}');
                             }
+                            {%- endif %}
                         }],
                         showHighlights: 'whenSidebarOpen'
                     };
