@@ -80,11 +80,12 @@ final class ArticlesController extends Controller
                 return true;
             });
 
+        // When NUMBER of comments > 0, text must be:
+        // '<span aria-hidden="true">NUMBER</span><span class="visuallyhidden">Open annotations (there are currently NUMBER annotations on this page).</span>'
+        // When 0 comments, text must be:
+        // "<span aria-hidden=\"true\">&#8220;</span><span class=\"visuallyhidden\">Open annotations (there are currently 0 annotations on this page).</span>
         $arguments['hypothesisOpenerAffordance'] = ViewModel\Button::speechBubble(
-          '<span aria-hidden="true">12</span><span class="visuallyhidden">Open annotations (there are currently 12 annotations on this page).</span>', true, null, null, true);
-//        $arguments['hypothesisOpenerAffordance'] = ViewModel\Button::speechBubble(
-//          '<span aria-hidden="true">&#8220;</span><span class="visuallyhidden">Open annotations (there are currently 0 annotations on this page).</span>');
-
+          '<span aria-hidden="true">12</span><span class="visuallyhidden">Open annotations (there are currently 12 annotations on this page).</span>', true, null, null, true, 'HypothesisOpenerAffordance');
         $arguments['relatedItem'] = $arguments['furtherReading']->then(Callback::method('offsetGet', 0));
 
         $furtherReading = $this->pagerfantaPromise(
