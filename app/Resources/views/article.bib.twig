@@ -1,5 +1,5 @@
 {% autoescape false %}
-@article {{ '{' }}{{ article.doi }}{{ '}' }},
+@article {{ '{' }}{{ article.doi }},
 article_type = {{ '{' }}journal{{ '}' }},
 title = {{ '{' }}{{ article.fullTitle|html2tex }}{{ '}' }},
 author = {{ '{' }}{% for author in article.authors %}{% if author.indexName is defined %}{% if not loop.first %} and {% endif %}{{ author.indexName }}{% elseif author.name is defined %}{% if not loop.first %} and {% endif %}{{ author.name }}{% endif %}{% endfor %}{{ '}' }},
