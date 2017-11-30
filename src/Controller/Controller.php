@@ -207,7 +207,18 @@ abstract class Controller implements ContainerAwareInterface
 
         if ($this->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             $user = $this->get('security.token_storage')->getToken()->getUser();
-            $profile = $this->get('elife.api_sdk.profiles')->get($user->getUsername());
+            $profile = $this->get('elife.api_sdk.profiles')->get($user->getUsername())
+                ->otherwise(function ($reason) use ($user, $request) {
+                    $request->getSession()->invalidate();
+
+                    $response = new RedirectResponse($request->getUri());
+                    $response->headers->clearCookie($this->container->getParameter('session_name'));
+
+                    $e = exception_for($reason);
+                    $this->get('logger')->error("Logged user {$user->getUsername()} out due to {$e->getMessage()}", ['exception' => $e]);
+
+                    throw new EarlyResponse($response);
+                });
         }
 
         return [
