@@ -268,6 +268,9 @@ profile:
     requirements:
         id: '[a-z0-9-]+'
 
+profile-no-id: # Truncated version of 'profile' for Hypothesis config, no controller here.
+    path: /profiles/
+
 resources:
     path: /resources
     defaults:

@@ -5,6 +5,7 @@ namespace eLife\Journal\Controller;
 use eLife\ApiClient\Exception\BadResponse;
 use eLife\Journal\Exception\EarlyResponse;
 use eLife\Journal\Form\Type\EmailCtaType;
+use eLife\Journal\Helper\CanCheckAuthorization;
 use eLife\Journal\Helper\CanConvertContent;
 use eLife\Journal\Helper\Paginator;
 use eLife\Journal\ViewModel\Converter\ViewModelConverter;
@@ -20,6 +21,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use UnexpectedValueException;
 use function GuzzleHttp\Promise\all;
 use function GuzzleHttp\Promise\exception_for;
@@ -28,6 +30,7 @@ use function GuzzleHttp\Promise\rejection_for;
 
 abstract class Controller implements ContainerAwareInterface
 {
+    use CanCheckAuthorization;
     use CanConvertContent;
 
     /**
@@ -58,6 +61,11 @@ abstract class Controller implements ContainerAwareInterface
     final protected function getViewModelConverter() : ViewModelConverter
     {
         return $this->get('elife.journal.view_model.converter');
+    }
+
+    final protected function getAuthorizationChecker() : AuthorizationCheckerInterface
+    {
+        return $this->get('security.authorization_checker');
     }
 
     final protected function render(ViewModel ...$viewModels) : string
@@ -197,7 +205,7 @@ abstract class Controller implements ContainerAwareInterface
             }
         });
 
-        if ($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+        if ($this->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             $user = $this->get('security.token_storage')->getToken()->getUser();
             $profile = $this->get('elife.api_sdk.profiles')->get($user->getUsername());
         }

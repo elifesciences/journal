@@ -1,3 +1,5 @@
+{% set hypothesis = true %}
+
 {% extends '::article.html.twig' %}
 
 {% block article_body %}
@@ -76,28 +78,32 @@
 
     {{ parent() }}
 
-    <script>
-        (function () {
-            if (disqus_config) {
-                var d = document, s = d.createElement('script'), c = d.getElementById('comments');
-                s.src = 'https://{{ disqus_domain }}.disqus.com/embed.js';
-                s.setAttribute('data-timestamp', +new Date());
-                s.async = true;
-                s.addEventListener('error', function () {
-                    {# Do nothing #}
-                });
-                s.addEventListener('load', function () {
-                    c.addEventListener('expandsection', function () {
-                        try {
-                            window.dispatchEvent(new Event('resize'));
-                        } catch (e) {
-                            {# Do nothing #}
-                        }
-                    })
-                });
-                d.head.appendChild(s);
-            }
-        })();
-    </script>
+    {% if not is_granted('FEATURE_CAN_USE_HYPOTHESIS') %}
+
+        <script>
+            (function () {
+                if (disqus_config) {
+                    var d = document, s = d.createElement('script'), c = d.getElementById('comments');
+                    s.src = 'https://{{ disqus_domain }}.disqus.com/embed.js';
+                    s.setAttribute('data-timestamp', +new Date());
+                    s.async = true;
+                    s.addEventListener('error', function () {
+                        {# Do nothing #}
+                    });
+                    s.addEventListener('load', function () {
+                        c.addEventListener('expandsection', function () {
+                            try {
+                                window.dispatchEvent(new Event('resize'));
+                            } catch (e) {
+                                {# Do nothing #}
+                            }
+                        })
+                    });
+                    d.head.appendChild(s);
+                }
+            })();
+        </script>
+
+    {% endif %}
 
 {% endblock %}
