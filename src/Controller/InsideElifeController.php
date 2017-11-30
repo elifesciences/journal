@@ -6,6 +6,7 @@ use eLife\ApiSdk\Collection\Sequence;
 use eLife\Journal\Helper\Callback;
 use eLife\Journal\Helper\Paginator;
 use eLife\Journal\Pagerfanta\SequenceAdapter;
+use eLife\Patterns\ViewModel\Button;
 use eLife\Patterns\ViewModel\ContentHeader;
 use eLife\Patterns\ViewModel\ListingTeasers;
 use eLife\Patterns\ViewModel\Teaser;
@@ -83,6 +84,13 @@ final class InsideElifeController extends Controller
 
         $arguments['blocks'] = $arguments['article']
             ->then($this->willConvertContent());
+
+      // When NUMBER of comments > 0, text must be:
+      // '<span aria-hidden="true">NUMBER</span><span class="visuallyhidden">Open annotations (there are currently NUMBER annotations on this page).</span>'
+      // When 0 comments, text must be:
+      // "<span aria-hidden=\"true\">&#8220;</span><span class=\"visuallyhidden\">Open annotations (there are currently 0 annotations on this page).</span>
+      $arguments['hypothesisOpenerAffordance'] = Button::speechBubble(
+        '<span aria-hidden="true">12</span><span class="visuallyhidden">Open annotations (there are currently 12 annotations on this page).</span>', true, null, null, true, 'HypothesisOpenerAffordance');
 
         return new Response($this->get('templating')->render('::inside-elife-article.html.twig', $arguments));
     }
