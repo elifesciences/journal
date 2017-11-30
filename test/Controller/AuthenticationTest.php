@@ -180,6 +180,48 @@ final class AuthenticationTest extends WebTestCase
     /**
      * @test
      */
+    public function it_logs_you_out_if_your_profile_is_unavailable()
+    {
+        $client = static::createClient();
+
+        $client->followRedirects();
+
+        $this->logIn($client);
+
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/profiles/jcarberry',
+                ['Accept' => 'application/vnd.elife.profile+json; version=1']
+            ),
+            new Response(
+                404,
+                [
+                    'Content-Type' => 'application/problem+json',
+                ],
+                json_encode([
+                    'title' => 'Not found',
+                ])
+            )
+        );
+
+        $this->readyHomePage();
+
+        $client->followRedirects(false);
+
+        $client->request('GET', '/');
+
+        $this->assertTrue($client->getResponse()->isRedirect('http://localhost/'));
+
+        $crawler = $client->followRedirect();
+
+        $this->assertSame(200, $client->getResponse()->getStatusCode());
+        $this->assertEmpty($crawler->filter('.login-control'));
+    }
+
+    /**
+     * @test
+     */
     public function it_disables_the_feature_flag_when_you_log_out()
     {
         $client = static::createClient();
