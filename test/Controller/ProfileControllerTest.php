@@ -59,12 +59,12 @@ final class ProfileControllerTest extends PageTestCase
                     ],
                     'emailAddresses' => [
                         [
-                            'value' => 'j.carberry@orcid.org',
-                            'access' => 'public',
-                        ],
-                        [
                             'value' => 'j.carberry@restricted.example.com',
                             'access' => 'restricted',
+                        ],
+                        [
+                            'value' => 'j.carberry@orcid.org',
+                            'access' => 'public',
                         ],
                         [
                             'value' => 'j.carberry2@orcid.org',
