@@ -57,9 +57,29 @@ final class AuthenticationTest extends WebTestCase
 
         $this->readyToken();
 
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/profiles/jcarberry',
+                ['Accept' => 'application/vnd.elife.profile+json; version=1']
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.profile+json; version=1'],
+                json_encode([
+                    'id' => 'jcarberry',
+                    'name' => [
+                        'preferred' => 'Josiah Carberry',
+                        'index' => 'Carberry, Josiah',
+                    ],
+                    'orcid' => '0000-0002-1825-0097',
+                ])
+            )
+        );
+
         $crawler = $client->request('GET', "/log-in/check?code=foo&state=$state");
 
-        $this->assertEmpty($crawler->filter('.login-control'));
+        $this->assertContains('Josiah Carberry', $crawler->filter('.login-control')->text());
     }
 
     /**
