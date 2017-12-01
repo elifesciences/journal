@@ -43,6 +43,44 @@ final class CallbackTest extends PHPUnit_Framework_TestCase
 
     /**
      * @test
+     */
+    public function it_creates_method_is_value()
+    {
+        $object1 = new class($this) {
+            private $item;
+
+            public function __construct($item)
+            {
+                $this->item = $item;
+            }
+
+            public function get()
+            {
+                return $this->item;
+            }
+        };
+        $object2 = new class('foo') {
+            private $item;
+
+            public function __construct($item)
+            {
+                $this->item = $item;
+            }
+
+            public function get()
+            {
+                return $this->item;
+            }
+        };
+
+        $callback = Callback::methodIsValue('get', $this);
+
+        $this->assertTrue($callback($object1));
+        $this->assertFalse($callback($object2));
+    }
+
+    /**
+     * @test
      * @dataProvider notEmptyProvider
      */
     public function it_creates_is_not_empty_with_not_empty($item)
