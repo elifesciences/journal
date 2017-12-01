@@ -104,7 +104,7 @@ Learn more about <a href="'.$this->get('router')->generate('about-innovation').'
       // '<span aria-hidden="true">NUMBER</span><span class="visuallyhidden">Open annotations (there are currently NUMBER annotations on this page).</span>'
       // When 0 comments, text must be:
       // "<span aria-hidden=\"true\">&#8220;</span><span class=\"visuallyhidden\">Open annotations (there are currently 0 annotations on this page).</span>
-      $arguments['hypothesisOpenerAffordance'] = Button::speechBubble(
+      $arguments['hypothesisOpener'] = Button::speechBubble(
         '<span aria-hidden="true">12</span><span class="visuallyhidden">Open annotations (there are currently 12 annotations on this page).</span>', true, null, null, true, 'HypothesisOpenerAffordance');
 
         $response = new Response($this->get('templating')->render('::labs-post.html.twig', $arguments));
