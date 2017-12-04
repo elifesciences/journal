@@ -81,9 +81,9 @@ final class ArticlesController extends Controller
                 return true;
             });
 
-      $arguments['relatedItem'] = $arguments['furtherReading']->then(Callback::method('offsetGet', 0));
+        $arguments['relatedItem'] = $arguments['furtherReading']->then(Callback::method('offsetGet', 0));
 
-      $arguments['hypothesisOpener'] = new HypothesisOpener(12);
+        $arguments['hypothesisOpener'] = new HypothesisOpener(12);
 
         $furtherReading = $this->pagerfantaPromise(
             $arguments['furtherReading'],

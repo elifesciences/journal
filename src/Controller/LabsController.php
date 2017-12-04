@@ -7,7 +7,6 @@ use eLife\ApiSdk\Model\LabsPost;
 use eLife\Journal\Helper\Callback;
 use eLife\Journal\Helper\Paginator;
 use eLife\Journal\Pagerfanta\SequenceAdapter;
-use eLife\Patterns\ViewModel\Button;
 use eLife\Patterns\ViewModel\ContentHeader;
 use eLife\Patterns\ViewModel\ContextualData;
 use eLife\Patterns\ViewModel\ContextualDataMetric;
@@ -101,7 +100,7 @@ Learn more about <a href="'.$this->get('router')->generate('about-innovation').'
         $arguments['blocks'] = $arguments['post']
             ->then($this->willConvertContent());
 
-      $arguments['hypothesisOpener'] = new HypothesisOpener(12);
+        $arguments['hypothesisOpener'] = new HypothesisOpener(12);
 
         $response = new Response($this->get('templating')->render('::labs-post.html.twig', $arguments));
 

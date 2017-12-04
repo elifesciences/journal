@@ -110,7 +110,7 @@ final class PressPacksController extends Controller
                 return $parts;
             });
 
-      $arguments['hypothesisOpener'] = new HypothesisOpener(12);
+        $arguments['hypothesisOpener'] = new HypothesisOpener(12);
 
         $arguments['relatedContent'] = $arguments['package']
             ->then(Callback::methodEmptyOr('getRelatedContent', function (PressPackage $package) {

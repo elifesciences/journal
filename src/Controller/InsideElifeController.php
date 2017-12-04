@@ -7,10 +7,10 @@ use eLife\ApiSdk\Model\BlogArticle;
 use eLife\Journal\Helper\Callback;
 use eLife\Journal\Helper\Paginator;
 use eLife\Journal\Pagerfanta\SequenceAdapter;
-use eLife\Patterns\ViewModel\HypothesisOpener;
 use eLife\Patterns\ViewModel\ContentHeader;
 use eLife\Patterns\ViewModel\ContextualData;
 use eLife\Patterns\ViewModel\ContextualDataMetric;
+use eLife\Patterns\ViewModel\HypothesisOpener;
 use eLife\Patterns\ViewModel\ListingTeasers;
 use eLife\Patterns\ViewModel\Teaser;
 use Pagerfanta\Pagerfanta;
@@ -95,7 +95,7 @@ final class InsideElifeController extends Controller
         $arguments['blocks'] = $arguments['article']
             ->then($this->willConvertContent());
 
-      $arguments['hypothesisOpener'] = new HypothesisOpener(12);;
+        $arguments['hypothesisOpener'] = new HypothesisOpener(12);
 
         return new Response($this->get('templating')->render('::inside-elife-article.html.twig', $arguments));
     }

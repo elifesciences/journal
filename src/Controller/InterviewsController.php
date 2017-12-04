@@ -10,7 +10,6 @@ use eLife\Journal\Helper\Callback;
 use eLife\Journal\Helper\Paginator;
 use eLife\Journal\Pagerfanta\SequenceAdapter;
 use eLife\Patterns\ViewModel\ArticleSection;
-use eLife\Patterns\ViewModel\Button;
 use eLife\Patterns\ViewModel\ContentHeader;
 use eLife\Patterns\ViewModel\ContextualData;
 use eLife\Patterns\ViewModel\ContextualDataMetric;
@@ -119,7 +118,7 @@ final class InterviewsController extends Controller
                 );
             });
 
-      $arguments['hypothesisOpener'] = new HypothesisOpener(12);
+        $arguments['hypothesisOpener'] = new HypothesisOpener(12);
 
         $arguments['collections'] = $this->get('elife.api_sdk.collections')
             ->containing(Identifier::interview($id))
