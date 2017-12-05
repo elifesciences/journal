@@ -210,17 +210,17 @@
                             icon: '{{ absolute_url(asset('assets/favicons/favicon.svg')) }}'
                             {%- if not app.user %},
                             onLoginRequest: function () {
-                                window.location.replace('{{ path('log-in') }}');
+                                window.location.assign('{{ path('log-in') }}');
                             },
                             onSignupRequest: function () {
-                                window.location.replace('{{ path('log-in') }}');
+                                window.location.assign('{{ path('log-in') }}');
                             }
                             {%- else %},
                             onLogoutRequest: function () {
-                                window.location.replace('{{ path('log-out') }}');
+                                window.location.assign('{{ path('log-out') }}');
                             },
                             onProfileRequest: function () {
-                                window.location.replace('{{ path('profile', {id: app.user.username}) }}');
+                                window.location.assign('{{ path('profile', {id: app.user.username}) }}');
                             }
                             {%- endif %}
                         }],
