@@ -84,7 +84,7 @@ final class ArticlesController extends Controller
         $arguments['relatedItem'] = $arguments['furtherReading']->then(Callback::method('offsetGet', 0));
 
         if ($this->isGranted('FEATURE_CAN_USE_HYPOTHESIS')) {
-          $arguments['hypothesisOpener'] = new HypothesisOpener();
+            $arguments['hypothesisOpener'] = new HypothesisOpener();
         }
 
         $furtherReading = $this->pagerfantaPromise(

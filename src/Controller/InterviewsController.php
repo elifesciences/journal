@@ -119,7 +119,7 @@ final class InterviewsController extends Controller
             });
 
         if ($this->isGranted('FEATURE_CAN_USE_HYPOTHESIS')) {
-          $arguments['hypothesisOpener'] = new HypothesisOpener();
+            $arguments['hypothesisOpener'] = new HypothesisOpener();
         }
 
         $arguments['collections'] = $this->get('elife.api_sdk.collections')

@@ -96,7 +96,7 @@ final class InsideElifeController extends Controller
             ->then($this->willConvertContent());
 
         if ($this->isGranted('FEATURE_CAN_USE_HYPOTHESIS')) {
-          $arguments['hypothesisOpener'] = new HypothesisOpener();
+            $arguments['hypothesisOpener'] = new HypothesisOpener();
         }
 
         return new Response($this->get('templating')->render('::inside-elife-article.html.twig', $arguments));

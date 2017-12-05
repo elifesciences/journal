@@ -111,7 +111,7 @@ final class PressPacksController extends Controller
             });
 
         if ($this->isGranted('FEATURE_CAN_USE_HYPOTHESIS')) {
-          $arguments['hypothesisOpener'] = new HypothesisOpener();
+            $arguments['hypothesisOpener'] = new HypothesisOpener();
         }
 
         $arguments['relatedContent'] = $arguments['package']

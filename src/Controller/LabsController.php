@@ -101,7 +101,7 @@ Learn more about <a href="'.$this->get('router')->generate('about-innovation').'
             ->then($this->willConvertContent());
 
         if ($this->isGranted('FEATURE_CAN_USE_HYPOTHESIS')) {
-          $arguments['hypothesisOpener'] = new HypothesisOpener();
+            $arguments['hypothesisOpener'] = new HypothesisOpener();
         }
 
         $response = new Response($this->get('templating')->render('::labs-post.html.twig', $arguments));
