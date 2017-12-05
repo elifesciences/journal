@@ -110,12 +110,14 @@ final class PressPacksController extends Controller
                 return $parts;
             });
 
-        $arguments['hypothesisOpener'] = new HypothesisOpener(12);
+        if ($this->isGranted('FEATURE_CAN_USE_HYPOTHESIS')) {
+          $arguments['hypothesisOpener'] = new HypothesisOpener();
+        }
 
         $arguments['relatedContent'] = $arguments['package']
-            ->then(Callback::methodEmptyOr('getRelatedContent', function (PressPackage $package) {
-                return ListingTeasers::basic($package->getRelatedContent()->map($this->willConvertTo(Teaser::class, ['variant' => 'secondary']))->toArray());
-            }));
+              ->then(Callback::methodEmptyOr('getRelatedContent', function (PressPackage $package) {
+                  return ListingTeasers::basic($package->getRelatedContent()->map($this->willConvertTo(Teaser::class, ['variant' => 'secondary']))->toArray());
+              }));
 
         return new Response($this->get('templating')->render('::press-pack.html.twig', $arguments));
     }

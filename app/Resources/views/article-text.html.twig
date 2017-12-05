@@ -44,7 +44,11 @@
 
         {% block secondary %}
 
-            {{ render_pattern(hypothesisOpener) }}
+            {% if is_granted('FEATURE_CAN_USE_HYPOTHESIS') %}
+
+                {{ render_pattern(hypothesisOpener) }}
+
+            {% endif %}
 
             {% if relatedItem %}
 

@@ -118,7 +118,9 @@ final class InterviewsController extends Controller
                 );
             });
 
-        $arguments['hypothesisOpener'] = new HypothesisOpener(12);
+        if ($this->isGranted('FEATURE_CAN_USE_HYPOTHESIS')) {
+          $arguments['hypothesisOpener'] = new HypothesisOpener();
+        }
 
         $arguments['collections'] = $this->get('elife.api_sdk.collections')
             ->containing(Identifier::interview($id))
