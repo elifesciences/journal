@@ -10,6 +10,7 @@ use eLife\Patterns\ViewModel\ArticleSection;
 use eLife\Patterns\ViewModel\ContentHeader;
 use eLife\Patterns\ViewModel\ContextualData;
 use eLife\Patterns\ViewModel\ContextualDataMetric;
+use eLife\Patterns\ViewModel\HypothesisOpener;
 use eLife\Patterns\ViewModel\Listing;
 use eLife\Patterns\ViewModel\ListingTeasers;
 use eLife\Patterns\ViewModel\Teaser;
@@ -108,6 +109,10 @@ final class PressPacksController extends Controller
 
                 return $parts;
             });
+
+        if ($this->isGranted('FEATURE_CAN_USE_HYPOTHESIS')) {
+            $arguments['hypothesisOpener'] = new HypothesisOpener();
+        }
 
         $arguments['relatedContent'] = $arguments['package']
             ->then(Callback::methodEmptyOr('getRelatedContent', function (PressPackage $package) {

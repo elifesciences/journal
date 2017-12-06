@@ -11,6 +11,7 @@ use eLife\Patterns\ViewModel\ContentHeader;
 use eLife\Patterns\ViewModel\ContextualData;
 use eLife\Patterns\ViewModel\ContextualDataMetric;
 use eLife\Patterns\ViewModel\GridListing;
+use eLife\Patterns\ViewModel\HypothesisOpener;
 use eLife\Patterns\ViewModel\Teaser;
 use Pagerfanta\Pagerfanta;
 use Symfony\Component\HttpFoundation\Request;
@@ -98,6 +99,10 @@ Learn more about <a href="'.$this->get('router')->generate('about-innovation').'
 
         $arguments['blocks'] = $arguments['post']
             ->then($this->willConvertContent());
+
+        if ($this->isGranted('FEATURE_CAN_USE_HYPOTHESIS')) {
+            $arguments['hypothesisOpener'] = new HypothesisOpener();
+        }
 
         $response = new Response($this->get('templating')->render('::labs-post.html.twig', $arguments));
 

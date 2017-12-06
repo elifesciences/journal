@@ -26,6 +26,12 @@
                 {{ render_pattern(block) }}
             {% endfor %}
 
+            {% if hypothesisOpener is defined %}
+
+                {{ render_pattern(hypothesisOpener) }}
+
+            {% endif %}
+
         {% endblock %}
 
         {% block secondary %}
