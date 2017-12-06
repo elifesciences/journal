@@ -26,7 +26,7 @@
                 {{ render_pattern(block) }}
             {% endfor %}
 
-            {% if is_granted('FEATURE_CAN_USE_HYPOTHESIS') %}
+            {% if hypothesisOpener is defined %}
 
                 {{ render_pattern(hypothesisOpener) }}
 

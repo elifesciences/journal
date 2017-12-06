@@ -34,7 +34,7 @@
                 {{ render_pattern(cv) }}
             {% endif %}
 
-            {% if is_granted('FEATURE_CAN_USE_HYPOTHESIS') %}
+            {% if hypothesisOpener is defined %}
 
                 {{ render_pattern(hypothesisOpener) }}
 
