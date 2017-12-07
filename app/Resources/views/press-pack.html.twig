@@ -22,15 +22,13 @@
 
         {% block main %}
 
+            {% if hypothesisOpener is defined %}
+                {{ render_pattern(hypothesisOpener) }}
+            {% endif %}
+
             {% for block in blocks %}
                 {{ render_pattern(block) }}
             {% endfor %}
-
-            {% if hypothesisOpener is defined %}
-
-                {{ render_pattern(hypothesisOpener) }}
-
-            {% endif %}
 
         {% endblock %}
 
