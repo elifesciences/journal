@@ -11,6 +11,9 @@ use eLife\Journal\Helper\Paginator;
 use eLife\Journal\Pagerfanta\SequenceAdapter;
 use eLife\Patterns\ViewModel\ArticleSection;
 use eLife\Patterns\ViewModel\ContentHeader;
+use eLife\Patterns\ViewModel\ContextualData;
+use eLife\Patterns\ViewModel\ContextualDataMetric;
+use eLife\Patterns\ViewModel\HypothesisOpener;
 use eLife\Patterns\ViewModel\Listing;
 use eLife\Patterns\ViewModel\ListingTeasers;
 use eLife\Patterns\ViewModel\Teaser;
@@ -88,6 +91,13 @@ final class InterviewsController extends Controller
         $arguments['contentHeader'] = $arguments['interview']
             ->then($this->willConvertTo(ContentHeader::class));
 
+        $arguments['contextualData'] = $arguments['interview']
+            ->then($this->ifGranted(['FEATURE_CAN_USE_HYPOTHESIS'], function (Interview $interview) {
+                $metrics = [new ContextualDataMetric('Annotations', 0, 'annotation-count')];
+
+                return ContextualData::withMetrics($metrics);
+            }));
+
         $arguments['blocks'] = $arguments['interview']
             ->then($this->willConvertContent());
 
@@ -107,6 +117,10 @@ final class InterviewsController extends Controller
                     $this->render($cv)
                 );
             });
+
+        if ($this->isGranted('FEATURE_CAN_USE_HYPOTHESIS')) {
+            $arguments['hypothesisOpener'] = new HypothesisOpener();
+        }
 
         $arguments['collections'] = $this->get('elife.api_sdk.collections')
             ->containing(Identifier::interview($id))

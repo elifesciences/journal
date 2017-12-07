@@ -133,6 +133,8 @@ twig:
     globals:
         disqus_domain: '%disqus_domain%'
         gtm_id: '%gtm_id%'
+        hypothesis_api: '%hypothesis_api%'
+        hypothesis_authority: '%hypothesis_authority%'
     paths:
         '%kernel.root_dir%/../build/critical-css': 'critical-css'
     strict_variables: '%kernel.debug%'

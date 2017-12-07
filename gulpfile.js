@@ -50,7 +50,12 @@ gulp.task('favicons:build', ['favicons:clean'], () => {
         .pipe(gulp.dest('./build/assets/favicons'));
 });
 
-gulp.task('favicons', ['favicons:build'], () => {
+gulp.task('favicons:svg', ['favicons:clean'], () => {
+    return gulp.src('./app/Resources/images/favicon.svg')
+        .pipe(gulp.dest('./build/assets/favicons'));
+});
+
+gulp.task('favicons', ['favicons:build', 'favicons:svg'], () => {
     return gulp.src('./build/assets/favicons/favicon.ico')
         .pipe(gulp.dest('./web'));
 });

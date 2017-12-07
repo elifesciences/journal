@@ -30,6 +30,7 @@ use eLife\Patterns\ViewModel\ArticleSection;
 use eLife\Patterns\ViewModel\ContentHeader;
 use eLife\Patterns\ViewModel\ContextualData;
 use eLife\Patterns\ViewModel\Doi;
+use eLife\Patterns\ViewModel\HypothesisOpener;
 use eLife\Patterns\ViewModel\InfoBar;
 use eLife\Patterns\ViewModel\Link;
 use eLife\Patterns\ViewModel\Listing;
@@ -81,6 +82,10 @@ final class ArticlesController extends Controller
             });
 
         $arguments['relatedItem'] = $arguments['furtherReading']->then(Callback::method('offsetGet', 0));
+
+        if ($this->isGranted('FEATURE_CAN_USE_HYPOTHESIS')) {
+            $arguments['hypothesisOpener'] = new HypothesisOpener();
+        }
 
         $furtherReading = $this->pagerfantaPromise(
             $arguments['furtherReading'],
@@ -453,13 +458,15 @@ final class ArticlesController extends Controller
                     );
                 }
 
-                $parts[] = ArticleSection::collapsible(
-                    'comments',
-                    'Comments',
-                    2,
-                    '<div id="disqus_thread">'.$this->render(ViewModel\Button::link('View the discussion thread', 'https://'.$this->getParameter('disqus_domain').'.disqus.com/?url='.urlencode($this->get('router')->generate('article', [$article], UrlGeneratorInterface::ABSOLUTE_URL)))).'</div>',
-                    true
-                );
+                if (!$this->isGranted('FEATURE_CAN_USE_HYPOTHESIS')) {
+                    $parts[] = ArticleSection::collapsible(
+                        'comments',
+                        'Comments',
+                        2,
+                        '<div id="disqus_thread">'.$this->render(ViewModel\Button::link('View the discussion thread', 'https://'.$this->getParameter('disqus_domain').'.disqus.com/?url='.urlencode($this->get('router')->generate('article', [$article], UrlGeneratorInterface::ABSOLUTE_URL)))).'</div>',
+                        true
+                    );
+                }
 
                 return $parts;
             });
@@ -774,7 +781,11 @@ final class ArticlesController extends Controller
                     $metrics[] = new ViewModel\ContextualDataMetric('Views', number_format($pageViews));
                 }
 
-                $metrics[] = new ViewModel\ContextualDataMetric('Comments', 0, 'disqus-comment-count');
+                if ($this->isGranted('FEATURE_CAN_USE_HYPOTHESIS')) {
+                    $metrics[] = new ViewModel\ContextualDataMetric('Annotations', 0, 'annotation-count');
+                } else {
+                    $metrics[] = new ViewModel\ContextualDataMetric('Comments', 0, 'disqus-comment-count');
+                }
 
                 if (!$article->getCiteAs()) {
                     return ContextualData::withMetrics($metrics);
