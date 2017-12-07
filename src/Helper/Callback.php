@@ -29,6 +29,13 @@ final class Callback
         });
     }
 
+    public static function methodIsValue(string $method, $value) : Callback
+    {
+        return new self(function ($object) use ($method, $value) {
+            return call_user_func([$object, $method]) === $value;
+        });
+    }
+
     public static function isNotEmpty() : Callback
     {
         return new self(function ($test) {

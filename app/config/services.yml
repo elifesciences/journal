@@ -228,6 +228,14 @@ services:
         arguments:
           - '@elife.journal.security.authorization.checker.missing_credentials.inner'
 
+    elife.journal.security.hypothesis.token_generator:
+        class: eLife\Journal\Security\HypothesisTokenGenerator
+        public: false
+        arguments:
+          - '%hypothesis_authority%'
+          - '%hypothesis_client_id%'
+          - '%hypothesis_client_secret%'
+
     elife.journal.security.voter.feature.can_authenticate:
         class: eLife\Journal\Security\Voter\SessionAttributeVoter
         public: false
@@ -246,6 +254,16 @@ services:
           - FEATURE_CAN_VIEW_WEBP
           - CloudFront-Viewer-Country
           - '%feature_can_view_webp_countries%'
+        tags:
+          - name: security.voter
+
+    elife.journal.security.voter.feature.use_hypothesis:
+        class: eLife\Journal\Security\Voter\SessionAttributeVoter
+        public: false
+        arguments:
+          - '@request_stack'
+          - FEATURE_CAN_USE_HYPOTHESIS
+          - open-sesame
         tags:
           - name: security.voter
 
@@ -276,6 +294,13 @@ services:
         class: eLife\Journal\Twig\FragmentLinkRewriterExtension
         arguments:
           - '@elife.journal.helper.fragment_link_rewriter'
+        tags:
+          - name: twig.extension
+
+    elife.journal.twig.extension.hypothesis_token:
+        class: eLife\Journal\Twig\HypothesisTokenExtension
+        arguments:
+          - '@elife.journal.security.hypothesis.token_generator'
         tags:
           - name: twig.extension
 
