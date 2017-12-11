@@ -954,12 +954,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/patterns-php.git",
-                "reference": "4a2c6e000de4a3b131293d1b74642bd97621b584"
+                "reference": "35106757a1e4a4428f107f8255fae9db5096c9ca"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/4a2c6e000de4a3b131293d1b74642bd97621b584",
-                "reference": "4a2c6e000de4a3b131293d1b74642bd97621b584",
+                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/35106757a1e4a4428f107f8255fae9db5096c9ca",
+                "reference": "35106757a1e4a4428f107f8255fae9db5096c9ca",
                 "shasum": ""
             },
             "require": {
@@ -992,7 +992,7 @@
                 "MIT"
             ],
             "description": "eLife patterns",
-            "time": "2017-12-06T13:29:24+00:00"
+            "time": "2017-12-11T14:05:57+00:00"
         },
         {
             "name": "fabpot/goutte",
@@ -2002,12 +2002,12 @@
             "version": "v2.0.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/rybakit/twig-extensions-deferred.git",
+                "url": "https://github.com/rybakit/twig-deferred-extension.git",
                 "reference": "b71cb53ad05a1a11b9f88e4d46e844389887a16f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/rybakit/twig-extensions-deferred/zipball/b71cb53ad05a1a11b9f88e4d46e844389887a16f",
+                "url": "https://api.github.com/repos/rybakit/twig-deferred-extension/zipball/b71cb53ad05a1a11b9f88e4d46e844389887a16f",
                 "reference": "b71cb53ad05a1a11b9f88e4d46e844389887a16f",
                 "shasum": ""
             },
