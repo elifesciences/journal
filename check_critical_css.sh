@@ -5,14 +5,11 @@ folder="build/critical-css/"
 expected_list=$(jq -r '. | keys[] | "'$folder'\(.).css"' < critical-css.json | sort)
 actual_list=$(find "$folder" -name '*.css' | sort)
 
-if [ "$actual_list" != "$expected_list" ]; then
-    echo "Expected list of files in $folder:"
-    echo "$expected_list"
-    echo "Actual list of files in $folder:"
-    echo "$actual_list"
-    diff -u <(echo "$expected_list") <(echo "$actual_list")
-    exit 2
-fi
+echo "Expected list of files in $folder:"
+echo "$expected_list"
+echo "Actual list of files in $folder:"
+echo "$actual_list"
+diff -u <(echo "$expected_list") <(echo "$actual_list")
 
 echo "Files generated:"
 echo "$actual_list"
