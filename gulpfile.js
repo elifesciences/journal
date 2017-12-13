@@ -15,6 +15,9 @@ const request = require('request');
 const rev = require('gulp-rev-all');
 const svg2png = require('gulp-svg2png');
 
+const criticalCssPageTypes = require('./critical-css.json')
+
+
 gulp.task('default', ['assets']);
 
 gulp.task('favicons:clean', () => {
@@ -173,20 +176,8 @@ gulp.task('critical-css:clean', () => {
 });
 
 gulp.task('critical-css:generate', ['critical-css:clean'], (callback) => {
-    const types = {
-        'default': '/resources',
-        'about': '/about',
-        'article': '/articles/00569',
-        'archive-month': '/archive/2016/march',
-        'landing': '/subjects/biochemistry',
-        'home': '/',
-        'magazine': '/magazine',
-        'listing': '/?page=2',
-        'grid-listing': '/archive/2016',
-        'people': '/about/people'
-    };
 
-    eachOfLimit(types, 1, (path, name, callback) => {
+    eachOfLimit(criticalCssPageTypes, 1, (path, name, callback) => {
         const uri = criticalCssConfig.baseUrl + path;
 
         request(uri, (error, response, html) => {
