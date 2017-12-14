@@ -14,12 +14,12 @@ monolog:
     handlers:
         console:
             channels:
-              - !event
+              - '!event'
             type: console
             formatter: monolog.formatter.line
         main:
             channels:
-              - !event
+              - '!event'
             level: debug
             path: '%kernel.logs_dir%/%kernel.environment%.log'
             type: stream
