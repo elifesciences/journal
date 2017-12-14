@@ -39,7 +39,7 @@ csa_guzzle:
 
 framework:
     assets:
-        version_strategy: irozgar_gulp_rev_versions.asset.gulp_rev_version_strategy
+        json_manifest_path: '%kernel.project_dir%/build/rev-manifest.json'
     cache:
         default_redis_provider: '%redis%'
         pools:
@@ -55,12 +55,12 @@ framework:
     csrf_protection: ~
     form: ~
     router:
-        resource: '%kernel.root_dir%/config/routing.yml'
+        resource: '%kernel.project_dir%/app/config/routing.yml'
     secret: '%secret%'
     session:
         cookie_lifetime: 86400 # 1 day
         name: '%session_name%'
-        save_path: '0;660;%kernel.root_dir%/../var/sessions/%kernel.environment%'
+        save_path: '0;660;%kernel.project_dir%/var/sessions/%kernel.environment%'
     templating:
         engines:
           - mustache
@@ -83,9 +83,6 @@ hwi_oauth:
                 realname: name
             options:
                 csrf: true
-
-irozgar_gulp_rev_versions:
-    manifest_path: '../build/rev-manifest.json'
 
 isometriks_spam:
     honeypot:
@@ -136,5 +133,5 @@ twig:
         hypothesis_api: '%hypothesis_api%'
         hypothesis_authority: '%hypothesis_authority%'
     paths:
-        '%kernel.root_dir%/../build/critical-css': 'critical-css'
+        '%kernel.project_dir%/build/critical-css': 'critical-css'
     strict_variables: '%kernel.debug%'

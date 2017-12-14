@@ -205,7 +205,7 @@ services:
         class: Mustache_Loader_FilesystemLoader
         public: false
         arguments:
-          - '@=service("kernel").getRootDir()~"/Resources/patterns"'
+          - '@=service("kernel").getProjectDir()~"/app/Resources/patterns"'
 
     elife.journal.router.parameter_resolver.model:
       class: eLife\Journal\Router\ModelParameterResolver
