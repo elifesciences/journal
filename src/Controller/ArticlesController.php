@@ -83,10 +83,6 @@ final class ArticlesController extends Controller
 
         $arguments['relatedItem'] = $arguments['furtherReading']->then(Callback::method('offsetGet', 0));
 
-        if ($this->isGranted('FEATURE_CAN_USE_HYPOTHESIS')) {
-            $arguments['hypothesisOpener'] = new HypothesisOpener();
-        }
-
         $furtherReading = $this->pagerfantaPromise(
             $arguments['furtherReading'],
             $page,
@@ -233,7 +229,7 @@ final class ArticlesController extends Controller
                     $first = false;
                 }
 
-                if ($article instanceof ArticleVoR && $article->getDigest()) {
+              if ($article instanceof ArticleVoR && $article->getDigest()) {
                     $parts[] = ArticleSection::collapsible(
                         'digest',
                         'eLife digest',
@@ -249,7 +245,7 @@ final class ArticlesController extends Controller
 
                 $isInitiallyClosed = false;
 
-                if ($article instanceof ArticleVoR) {
+              if ($article instanceof ArticleVoR) {
                     $parts = array_merge($parts, $article->getContent()->map(function (Block\Section $section) use (&$first, &$isInitiallyClosed, $context) {
                         $section = ArticleSection::collapsible(
                             $section->getId(),
@@ -267,7 +263,11 @@ final class ArticlesController extends Controller
                     })->toArray());
                 }
 
-                if ($article instanceof ArticleVoR) {
+              if ($this->isGranted('FEATURE_CAN_USE_HYPOTHESIS')) {
+                $parts[] = new HypothesisOpener();
+              }
+
+              if ($article instanceof ArticleVoR) {
                     $parts = array_merge($parts, $article->getAppendices()->map(function (Appendix $appendix) use ($context) {
                         return ArticleSection::collapsible($appendix->getId(), $appendix->getTitle(), 2,
                             $this->render(...$this->convertContent($appendix, 2, $context)),

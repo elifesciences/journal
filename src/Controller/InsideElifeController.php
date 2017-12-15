@@ -3,6 +3,7 @@
 namespace eLife\Journal\Controller;
 
 use eLife\ApiSdk\Collection\ArraySequence;
+use eLife\ApiSdk\Collection\PromiseSequence;
 use eLife\ApiSdk\Collection\Sequence;
 use eLife\ApiSdk\Model\BlogArticle;
 use eLife\Journal\Helper\Callback;
@@ -94,10 +95,14 @@ final class InsideElifeController extends Controller
             }));
 
         $arguments['blocks'] = $arguments['article']
-          ->then($this->ifGranted(['FEATURE_CAN_USE_HYPOTHESIS'], function (BlogArticle $article) {
-            $article->getContent()->prepend(new HypothesisOpener());
-          }))
-          ->then($this->willConvertContent());
+            ->then($this->willConvertContent())
+            ->then(function (Sequence $blocks) {
+                if (!$this->isGranted('FEATURE_CAN_USE_HYPOTHESIS')) {
+                    return $blocks;
+                }
+
+                return $blocks->prepend(new HypothesisOpener());
+            });
 
         return new Response($this->get('templating')->render('::inside-elife-article.html.twig', $arguments));
     }

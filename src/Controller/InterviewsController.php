@@ -99,8 +99,14 @@ final class InterviewsController extends Controller
             }));
 
         $arguments['blocks'] = $arguments['interview']
-            ->then($this->willConvertContent());
+            ->then($this->willConvertContent())
+            ->then(function (Sequence $blocks) {
+                if (!$this->isGranted('FEATURE_CAN_USE_HYPOTHESIS')) {
+                    return $blocks;
+                }
 
+                return $blocks->append(new HypothesisOpener());
+            });
         $arguments['cv'] = $arguments['interview']
             ->then(function (Interview $interview) {
                 if ($interview->getInterviewee()->getCvLines()->isEmpty()) {
