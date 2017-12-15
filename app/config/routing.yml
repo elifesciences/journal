@@ -309,6 +309,13 @@ who-we-work-with:
     defaults:
          _controller: AppBundle:WhoWeWorkWith:whoWeWorkWith
 
+covers:
+    path: /download-your-cover/{id}
+    defaults:
+        _controller: AppBundle:Covers:covers
+    requirements:
+        id: '[a-z0-9-]+'
+
 ping:
     path: /ping
     defaults:
