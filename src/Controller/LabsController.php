@@ -97,14 +97,14 @@ Learn more about <a href="'.$this->get('router')->generate('about-innovation').'
                 return ContextualData::withMetrics($metrics);
             }));
 
-      $arguments['blocks'] = $arguments['post']
+        $arguments['blocks'] = $arguments['post']
         ->then($this->willConvertContent())
         ->then(function (Sequence $blocks) {
-          if (!$this->isGranted('FEATURE_CAN_USE_HYPOTHESIS')) {
-            return $blocks;
-          }
+            if (!$this->isGranted('FEATURE_CAN_USE_HYPOTHESIS')) {
+                return $blocks;
+            }
 
-          return $blocks->prepend(new HypothesisOpener());
+            return $blocks->prepend(new HypothesisOpener());
         });
 
         $response = new Response($this->get('templating')->render('::labs-post.html.twig', $arguments));

@@ -2,8 +2,6 @@
 
 namespace eLife\Journal\Controller;
 
-use eLife\ApiSdk\Collection\ArraySequence;
-use eLife\ApiSdk\Collection\PromiseSequence;
 use eLife\ApiSdk\Collection\Sequence;
 use eLife\ApiSdk\Model\BlogArticle;
 use eLife\Journal\Helper\Callback;
