@@ -1,0 +1,12 @@
+{
+    "default": "/resources",
+    "about": "/about",
+    "article": "/articles/00569",
+    "archive-month": "/archive/2016/march",
+    "landing": "/subjects/biochemistry",
+    "home": "/",
+    "magazine": "/magazine",
+    "listing": "/?page=2",
+    "grid-listing": "/archive/2016",
+    "people": "/about/people"
+}
