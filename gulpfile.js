@@ -15,6 +15,9 @@ const request = require('request');
 const rev = require('gulp-rev-all');
 const svg2png = require('gulp-svg2png');
 
+const criticalCssPageTypes = require('./critical-css.json')
+
+
 gulp.task('default', ['assets']);
 
 gulp.task('favicons:clean', () => {
@@ -173,19 +176,8 @@ gulp.task('critical-css:clean', () => {
 });
 
 gulp.task('critical-css:generate', ['critical-css:clean'], (callback) => {
-    const types = {
-        'default': '/resources',
-        'article': '/articles/00569',
-        'archive-month': '/archive/2016/march',
-        'landing': '/subjects/biochemistry',
-        'home': '/',
-        'magazine': '/magazine',
-        'listing': '/?page=2',
-        'grid-listing': '/archive/2016',
-        'people': '/about/people'
-    };
 
-    eachOfLimit(types, 1, (path, name, callback) => {
+    eachOfLimit(criticalCssPageTypes, 1, (path, name, callback) => {
         const uri = criticalCssConfig.baseUrl + path;
 
         request(uri, (error, response, html) => {
@@ -221,14 +213,22 @@ const criticalCssConfig = (function () {
             /\.meta.*/,
             '.wrapper.wrapper--content',
         ];
-        const listing = [/\.teaser__img--.*$/];
         const highlights = [/.*\.highlights.*$/];
+        const listing = [
+          /\.teaser__img--.*$/,
+          /.*\.teaser__formats-list.*/
+        ];
         const listingMenu = [
             '.section-listing-wrapper .list-heading',
             '.section-listing__list_item',
             /.*\.section-listing.*/,
             '.js .to-top-link',
         ];
+
+        const landing = listing.concat(
+          /.content-header.wrapper.*/,
+          '.section-listing-link'
+        );
 
         return {
             article: global.concat(
@@ -258,6 +258,12 @@ const criticalCssConfig = (function () {
                 '.see-more-link'
             ),
 
+            about: global.concat(
+              landing,
+               /.*\.section-listing.*$/,
+               /.*.to-top-link$/
+            ),
+
             "archive-month": global.concat(
                 highlights,
                 /\.teaser.*$/
@@ -272,11 +278,7 @@ const criticalCssConfig = (function () {
                 /\.carousel__item.*/
             ),
 
-            landing: global.concat(
-                listing,
-                /.content-header.wrapper.*/,
-                '.section-listing-link'
-            ),
+            landing: global.concat(landing),
 
             magazine: global.concat(
                 listing,
@@ -290,6 +292,7 @@ const criticalCssConfig = (function () {
             'grid-listing': global.concat(
                 /.*\.grid-listing.*/,
                 /.*\.block-link--grid-listing.*/,
+                'h4',
                 '.teaser__header_text',
                 '.teaser__header_text_link'
             ),
