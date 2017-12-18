@@ -127,12 +127,48 @@ gulp.task('images:logos', ['images:clean'], () => {
         .pipe(gulp.dest('./build/assets/images/logos'));
 });
 
+gulp.task('images:investors', ['images:clean'], () => {
+    const sizes = {185: 72, 370: 144};
+
+    return gulp.src('./app/Resources/images/investors/*.{png,svg}')
+        .pipe(responsive({
+            '*': Object.keys(sizes).reduce((acc, width) => {
+                let height = sizes[width];
+
+                acc.push({
+                    width: width,
+                    height: height,
+                    max: true,
+                    rename: {
+                        suffix: `-${width}`,
+                        extname: '.png',
+                    },
+                    withoutEnlargement: false,
+                });
+                acc.push({
+                    width: width,
+                    height: height,
+                    max: true,
+                    quality: 65,
+                    rename: {
+                        suffix: `-${width}`,
+                        extname: '.webp',
+                    },
+                    withoutEnlargement: false,
+                });
+
+                return acc;
+            }, []),
+        }))
+        .pipe(gulp.dest('./build/assets/images/investors'));
+});
+
 gulp.task('images:svgs', ['images:clean'], () => {
     return gulp.src('./app/Resources/images/*/*.svg')
         .pipe(gulp.dest('./build/assets/images'));
 });
 
-gulp.task('images', ['images:banners', 'images:logos', 'images:svgs'], () => {
+gulp.task('images', ['images:banners', 'images:logos', 'images:investors', 'images:svgs'], () => {
     return gulp.src('./build/assets/images/**/*')
         .pipe(imageMin([
             imageMinMozjpeg({
@@ -215,8 +251,8 @@ const criticalCssConfig = (function () {
         ];
         const highlights = [/.*\.highlights.*$/];
         const listing = [
-          /\.teaser__img--.*$/,
-          /.*\.teaser__formats-list.*/
+            /\.teaser__img--.*$/,
+            /.*\.teaser__formats-list.*/
         ];
         const listingMenu = [
             '.section-listing-wrapper .list-heading',
@@ -226,8 +262,8 @@ const criticalCssConfig = (function () {
         ];
 
         const landing = listing.concat(
-          /.content-header.wrapper.*/,
-          '.section-listing-link'
+            /.content-header.wrapper.*/,
+            '.section-listing-link'
         );
 
         return {
@@ -259,9 +295,9 @@ const criticalCssConfig = (function () {
             ),
 
             about: global.concat(
-              landing,
-               /.*\.section-listing.*$/,
-               /.*.to-top-link$/
+                landing,
+                /.*\.section-listing.*$/,
+                /.*.to-top-link$/
             ),
 
             "archive-month": global.concat(
