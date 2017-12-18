@@ -6,18 +6,10 @@ use eLife\ApiSdk\Model\Image;
 use eLife\Journal\Helper\CreatesIiifUri;
 use eLife\Journal\Helper\MediaTypes;
 use eLife\Journal\ViewModel\Builder\PictureBuilder;
-use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 final class PictureBuilderFactory
 {
     use CreatesIiifUri;
-
-    private $authorizationChecker;
-
-    public function __construct(AuthorizationCheckerInterface $authorizationChecker = null)
-    {
-        $this->authorizationChecker = $authorizationChecker;
-    }
 
     public function create(callable $uriGenerator, string $defaultType, int $defaultWidth = null, int $defaultHeight = null, string $altText = '') : PictureBuilder
     {
@@ -25,14 +17,13 @@ final class PictureBuilderFactory
             return $uriGenerator($type ?? $defaultType, $width ?? $defaultWidth, $height ?? $defaultHeight);
         }, $altText);
 
-        $builder = $builder->addType($defaultType);
+        $builder = $builder
+            ->addType($defaultType)
+            ->addType('image/webp')
+        ;
 
         if ('image/svg+xml' === $defaultType) {
             $builder = $builder->addType('image/png');
-        }
-
-        if ($this->authorizationChecker && $this->authorizationChecker->isGranted('FEATURE_CAN_VIEW_WEBP')) {
-            $builder = $builder->addType('image/webp');
         }
 
         if ($defaultWidth) {
