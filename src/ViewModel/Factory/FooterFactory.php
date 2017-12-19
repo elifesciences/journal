@@ -2,18 +2,26 @@
 
 namespace eLife\Journal\ViewModel\Factory;
 
+use eLife\Journal\Helper\MediaTypes;
 use eLife\Patterns\ViewModel\Footer;
+use eLife\Patterns\ViewModel\Image;
+use eLife\Patterns\ViewModel\InvestorLogos;
 use eLife\Patterns\ViewModel\Link;
 use eLife\Patterns\ViewModel\MainMenu;
+use Symfony\Component\Asset\Packages;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 final class FooterFactory
 {
     private $urlGenerator;
+    private $pictureBuilderFactory;
+    private $packages;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator)
+    public function __construct(UrlGeneratorInterface $urlGenerator, PictureBuilderFactory $pictureBuilderFactory, Packages $packages)
     {
         $this->urlGenerator = $urlGenerator;
+        $this->pictureBuilderFactory = $pictureBuilderFactory;
+        $this->packages = $packages;
     }
 
     public function createFooter() : Footer
@@ -23,6 +31,24 @@ final class FooterFactory
         if (1 == gmdate('n', $now)) {
             --$year;
         }
+
+        $investors = [
+            [
+                'name' => 'Howard Hughes Medical Institute',
+                'filename' => 'hhmi',
+                'type' => 'image/svg+xml',
+            ],
+            [
+                'name' => 'Wellcome Trust',
+                'filename' => 'wellcome',
+                'type' => 'image/svg+xml',
+            ],
+            [
+                'name' => 'Max-Planck-Gesellschaft',
+                'filename' => 'max',
+                'type' => 'image/svg+xml',
+            ],
+        ];
 
         return new Footer(
             new MainMenu([
@@ -49,7 +75,22 @@ final class FooterFactory
                 new Link('Labs', $this->urlGenerator->generate('labs')),
                 new Link('For the press', $this->urlGenerator->generate('press-packs')),
                 new Link('Resources', $this->urlGenerator->generate('resources')),
-            ]
+            ],
+            new InvestorLogos(...array_map(function (array $item) {
+                return $this->pictureBuilderFactory
+                    ->create(function (string $type, int $width) use ($item) {
+                        $extension = MediaTypes::toExtension($type);
+
+                        $path = "assets/images/investors/{$item['filename']}";
+
+                        if ('svg' !== $extension) {
+                            $path .= "-{$width}";
+                        }
+
+                        return $this->packages->getUrl("{$path}.{$extension}");
+                    }, $item['type'], 185, null, $item['name'])
+                    ->build();
+            }, $investors))
         );
     }
 }
