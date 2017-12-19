@@ -10,18 +10,21 @@ use eLife\Patterns\ViewModel\Link;
 use eLife\Patterns\ViewModel\MainMenu;
 use Symfony\Component\Asset\Packages;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 final class FooterFactory
 {
     private $urlGenerator;
     private $pictureBuilderFactory;
     private $packages;
+    private $authorizationChecker;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator, PictureBuilderFactory $pictureBuilderFactory, Packages $packages)
+    public function __construct(UrlGeneratorInterface $urlGenerator, PictureBuilderFactory $pictureBuilderFactory, Packages $packages, AuthorizationCheckerInterface $authorizationChecker)
     {
         $this->urlGenerator = $urlGenerator;
         $this->pictureBuilderFactory = $pictureBuilderFactory;
         $this->packages = $packages;
+        $this->authorizationChecker = $authorizationChecker;
     }
 
     public function createFooter() : Footer
@@ -49,6 +52,14 @@ final class FooterFactory
                 'type' => 'image/svg+xml',
             ],
         ];
+
+        if ($this->authorizationChecker->isGranted('FEATURE_WALLENBERG')) {
+            $investors[] = [
+                'name' => 'Knut and Alice Wallenberg Foundation',
+                'filename' => 'kaw',
+                'type' => 'image/png',
+            ];
+        }
 
         return new Footer(
             new MainMenu([
