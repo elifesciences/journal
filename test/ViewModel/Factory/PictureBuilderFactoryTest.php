@@ -108,7 +108,7 @@ final class PictureBuilderFactoryTest extends PHPUnit_Framework_TestCase
                         'type' => 'image/png',
                     ],
                 ],
-                new ViewModel\Image('path:image/svg+xml::')
+                new ViewModel\Image('path:image/png::')
             ),
             $builder->build()
         );
