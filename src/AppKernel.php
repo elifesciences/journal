@@ -6,6 +6,7 @@ use Bobthecow\Bundle\MustacheBundle\BobthecowMustacheBundle;
 use Cocur\Slugify\Bridge\Symfony\CocurSlugifyBundle;
 use Csa\Bundle\GuzzleBundle\CsaGuzzleBundle;
 use eLife\Journal\Expression\ComposerLocateFunctionProvider;
+use eLife\Journal\Expression\TimeFunctionProvider;
 use HWI\Bundle\OAuthBundle\HWIOAuthBundle;
 use Irozgar\GulpRevVersionsBundle\IrozgarGulpRevVersionsBundle;
 use Isometriks\Bundle\SpamBundle\IsometriksSpamBundle;
@@ -117,6 +118,7 @@ class AppKernel extends Kernel
         $builder->getParameterBag()->add($this->getEnvParameters()); // https://github.com/symfony/symfony/issues/7555
 
         $builder->addExpressionLanguageProvider(new ComposerLocateFunctionProvider());
+        $builder->addExpressionLanguageProvider(new TimeFunctionProvider());
 
         return $builder;
     }
