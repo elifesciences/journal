@@ -6,6 +6,7 @@ use Bobthecow\Bundle\MustacheBundle\BobthecowMustacheBundle;
 use Cocur\Slugify\Bridge\Symfony\CocurSlugifyBundle;
 use Csa\Bundle\GuzzleBundle\CsaGuzzleBundle;
 use eLife\Journal\Expression\ComposerLocateFunctionProvider;
+use eLife\Journal\Expression\TimeFunctionProvider;
 use HWI\Bundle\OAuthBundle\HWIOAuthBundle;
 use Isometriks\Bundle\SpamBundle\IsometriksSpamBundle;
 use Nelmio\SecurityBundle\NelmioSecurityBundle;
@@ -118,6 +119,7 @@ class AppKernel extends Kernel
         $builder = parent::buildContainer();
 
         $builder->addExpressionLanguageProvider(new ComposerLocateFunctionProvider());
+        $builder->addExpressionLanguageProvider(new TimeFunctionProvider());
 
         return $builder;
     }

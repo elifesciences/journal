@@ -36,6 +36,9 @@
                                 <string>eLife\Journal\Security</string>
                             </element>
                             <element>
+                                <string>eLife\Journal\Security\Voter</string>
+                            </element>
+                            <element>
                                 <string>eLife\Journal\ViewModel\Factory</string>
                             </element>
                         </array>
