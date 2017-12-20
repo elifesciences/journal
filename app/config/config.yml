@@ -41,7 +41,7 @@ framework:
     assets:
         version_strategy: irozgar_gulp_rev_versions.asset.gulp_rev_version_strategy
     cache:
-        default_redis_provider: '%redis%'
+        default_redis_provider: '%redis_cache%'
         pools:
             cache.doi:
                 adapter: cache.app
