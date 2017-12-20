@@ -20,6 +20,8 @@ trait AppKernelTestCase
 
         (new Filesystem())->remove(static::$kernel->getContainer()->getParameter('api_mock'));
         static::$kernel->getContainer()->get('cache.guzzle')->clear();
+
+        return static::$kernel;
     }
 
     final protected static function mockApiResponse(RequestInterface $request, ResponseInterface $response)
