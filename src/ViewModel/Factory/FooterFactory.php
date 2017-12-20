@@ -57,7 +57,7 @@ final class FooterFactory
             $investors[] = [
                 'name' => 'Knut and Alice Wallenberg Foundation',
                 'filename' => 'kaw',
-                'type' => 'image/png',
+                'type' => 'image/svg+xml',
             ];
         }
 
