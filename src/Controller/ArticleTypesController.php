@@ -44,7 +44,7 @@ final class ArticleTypesController extends Controller
         $arguments['paginator'] = $latest
             ->then(function (Pagerfanta $pagerfanta) use ($request, $type) {
                 return new Paginator(
-                    'Browse our '.lcfirst(ModelName::plural($type)),
+                    'Browse our '.ModelName::plural($type),
                     $pagerfanta,
                     function (int $page = null) use ($request) {
                         $routeParams = $request->attributes->get('_route_params');
