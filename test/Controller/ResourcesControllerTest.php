@@ -18,11 +18,19 @@ final class ResourcesControllerTest extends PageTestCase
 
         $majorSections = $crawler->filter('h2.article-section__header_text');
 
-        $this->assertCount(3, $majorSections);
+        $this->assertCount(6, $majorSections);
 
-        $this->assertSame('Videos', trim($majorSections->eq(0)->text()));
-        $this->assertSame('Posters', trim($majorSections->eq(1)->text()));
-        $this->assertSame('The eLife Logo', trim($majorSections->eq(2)->text()));
+        $this->assertSame(
+            [
+                'Posters',
+                'Presentations',
+                'Videos',
+                'Images',
+                'The eLife logo',
+                'Brand guide',
+            ],
+            array_map('trim', $majorSections->extract(['_text']))
+        );
     }
 
     /**
@@ -40,8 +48,8 @@ final class ResourcesControllerTest extends PageTestCase
         $this->assertSame('/resources', $crawler->filter('link[rel="canonical"]')->attr('href'));
         $this->assertSame('http://localhost/resources', $crawler->filter('meta[property="og:url"]')->attr('content'));
         $this->assertSame('Resources', $crawler->filter('meta[property="og:title"]')->attr('content'));
-        $this->assertSame('A collection of posters, handouts, slide presentations, videos, and more, about all of the work behind the eLife initiative.', $crawler->filter('meta[property="og:description"]')->attr('content'));
-        $this->assertSame('A collection of posters, handouts, slide presentations, videos, and more, about all of the work behind the eLife initiative.', $crawler->filter('meta[name="description"]')->attr('content'));
+        $this->assertSame('A collection of resources, from posters, videos, images, presentations and more, to the brand behind eLife.', $crawler->filter('meta[property="og:description"]')->attr('content'));
+        $this->assertSame('A collection of resources, from posters, videos, images, presentations and more, to the brand behind eLife.', $crawler->filter('meta[name="description"]')->attr('content'));
         $this->assertSame('summary', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
     }
 
