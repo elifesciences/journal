@@ -37,7 +37,7 @@ final class ResourcesController extends Controller
             ArticleSection::basic('Videos', 2, $this->render(
                 new Paragraph('We’ve used video as a medium to discuss topics such as the peer review process, challenges for early-career researchers and for our editors to share their insights. All are available to share and embed from our YouTube channel.'),
                 Listing::unordered([
-                    '<a href="https://www.youtube.com/channel/UCNEHLtAc_JPI84xW8V4XWyw">Visit Youtube channel</a>',
+                    '<a href="https://www.youtube.com/channel/UCNEHLtAc_JPI84xW8V4XWyw">Visit YouTube channel</a>',
                 ], 'bullet')
             )),
             ArticleSection::basic('Images', 2, $this->render(
