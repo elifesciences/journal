@@ -5,6 +5,7 @@ namespace test\eLife\Journal\ViewModel\Factory;
 use eLife\Journal\ViewModel\Factory\FooterFactory;
 use eLife\Patterns\ViewModel\Footer;
 use Symfony\Bridge\PhpUnit\ClockMock;
+use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
 use test\eLife\Journal\KernelTestCase;
 use Traversable;
 
@@ -23,6 +24,7 @@ final class FooterFactoryTest extends KernelTestCase
         static::bootKernel();
 
         $this->footerFactory = static::$kernel->getContainer()->get('elife.journal.view_model.factory.footer');
+        static::$kernel->getContainer()->get('security.token_storage')->setToken(new AnonymousToken('secret', 'anon.'));
     }
 
     /**
@@ -60,5 +62,33 @@ final class FooterFactoryTest extends KernelTestCase
     {
         yield 'in January 2017' => ['2017-01-01T00:00:00Z', '/archive/2016'];
         yield 'in February 2017' => ['2017-02-01T00:00:00Z', '/archive/2017'];
+    }
+
+    /**
+     * @test
+     * @group time-sensitive
+     */
+    public function it_does_not_display_wallenberg_information_early()
+    {
+        ClockMock::withClockMock(strtotime('2017-12-31T23:59:59Z'));
+
+        $footer = $this->footerFactory->createFooter();
+        $patternRenderer = static::$kernel->getContainer()->get('elife.patterns.pattern_renderer');
+
+        $this->assertNotContains('Wallenberg', $patternRenderer->render($footer));
+    }
+
+    /**
+     * @test
+     * @group time-sensitive
+     */
+    public function it_displays_wallenberg_information_from_2018()
+    {
+        ClockMock::withClockMock(strtotime('2018-01-01T00:00:00Z'));
+
+        $footer = $this->footerFactory->createFooter();
+        $patternRenderer = static::$kernel->getContainer()->get('elife.patterns.pattern_renderer');
+
+        $this->assertContains('Wallenberg', $patternRenderer->render($footer));
     }
 }

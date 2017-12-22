@@ -205,7 +205,7 @@ services:
         class: Mustache_Loader_FilesystemLoader
         public: false
         arguments:
-          - '@=service("kernel").getRootDir()~"/Resources/patterns"'
+          - '@=service("kernel").getProjectDir()~"/app/Resources/patterns"'
 
     elife.journal.router.parameter_resolver.model:
       class: eLife\Journal\Router\ModelParameterResolver
@@ -263,6 +263,15 @@ services:
           - '@request_stack'
           - FEATURE_CAN_VIEW_PROFILES
           - open-sesame
+        tags:
+          - name: security.voter
+
+    elife.journal.security.voter.feature.wallenberg:
+        class: eLife\Journal\Security\Voter\TimeVoter
+        public: false
+        arguments:
+          - FEATURE_WALLENBERG
+          - "@=strtotime('2018-01-01T00:00:00Z')"
         tags:
           - name: security.voter
 
@@ -342,6 +351,7 @@ services:
           - '@router'
           - '@elife.journal.view_model.factory.picture_builder'
           - '@assets.packages'
+          - '@security.authorization_checker'
 
     elife.journal.view_model.factory.site_header:
         class: eLife\Journal\ViewModel\Factory\SiteHeaderFactory

@@ -9,12 +9,6 @@ $kernel = new AppKernel('prod', false);
 
 Request::enableHttpMethodParameterOverride();
 
-// ELB
-Request::setTrustedProxies([$_SERVER['REMOTE_ADDR']]);
-Request::setTrustedHeaderName(Request::HEADER_FORWARDED, null);
-Request::setTrustedHeaderName(Request::HEADER_CLIENT_IP, 'X-Forwarded-For');
-Request::setTrustedHeaderName(Request::HEADER_CLIENT_HOST, null);
-Request::setTrustedHeaderName(Request::HEADER_CLIENT_PORT, 'X-Forwarded-Port');
-Request::setTrustedHeaderName(Request::HEADER_CLIENT_PROTO, 'X-Forwarded-Proto');
+Request::setTrustedProxies([$_SERVER['REMOTE_ADDR']], Request::HEADER_X_FORWARDED_AWS_ELB);
 
 $kernel->run(Request::createFromGlobals());
