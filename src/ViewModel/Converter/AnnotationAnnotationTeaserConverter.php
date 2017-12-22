@@ -28,19 +28,20 @@ final class AnnotationAnnotationTeaserConverter implements ViewModelConverter
         $date = ViewModel\Date::simple($object->getUpdatedDate() ?? $object->getCreatedDate());
         $isRestricted = 'public' !== $object->getAccess();
 
-        $content = $object->getContent()->map($this->willConvertTo());
+        $content = $this->patternRenderer->render(...$object->getContent()->map($this->willConvertTo()));
+        $content = preg_replace('/<a href=\"(.*?)\">(.*?)<\/a>/', "\\2", $content); // TODO sort out
 
         if ($object->getParents()->notEmpty()) {
             return ViewModel\AnnotationTeaser::reply(
                 $object->getDocument()->getTitle(),
                 $date,
                 $object->getDocument()->getUri(),
-                $this->patternRenderer->render(...$content),
+                $content,
                 $isRestricted
             );
         }
 
-        if ($object->getHighlight() && $content->isEmpty()) {
+        if ($object->getHighlight() && !$content) {
             return ViewModel\AnnotationTeaser::highlight(
                 $object->getDocument()->getTitle(),
                 $date,
@@ -50,12 +51,12 @@ final class AnnotationAnnotationTeaserConverter implements ViewModelConverter
             );
         }
 
-        if (!$object->getHighlight() && $content->notEmpty()) {
+        if (!$object->getHighlight() && $content) {
             return ViewModel\AnnotationTeaser::pageNote(
                 $object->getDocument()->getTitle(),
                 $date,
                 $object->getDocument()->getUri(),
-                $this->patternRenderer->render(...$content),
+                $content,
                 $isRestricted
             );
         }
@@ -65,7 +66,7 @@ final class AnnotationAnnotationTeaserConverter implements ViewModelConverter
             $date,
             $object->getDocument()->getUri(),
             $object->getHighlight(),
-            $this->patternRenderer->render(...$content),
+            $content,
             $isRestricted
         );
     }
