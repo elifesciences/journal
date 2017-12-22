@@ -6,4 +6,16 @@
 
     {{ render_pattern(contentHeader) }}
 
+    {% embed 'grid/listing-one-column.html.twig' %}
+
+        {% block listing %}
+
+            {% for item in listing %}
+                {{ render_pattern(item) }}
+            {% endfor %}
+
+        {% endblock %}
+
+    {% endembed %}
+
 {% endblock %}
