@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "d925c53cab2377a327b33e33f31986b2",
+    "content-hash": "f16b26d6b576b4ff00d0f502db7c2292",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -950,16 +950,16 @@
         },
         {
             "name": "elife/patterns",
-            "version": "dev-master",
+            "version": "dev-partials",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/patterns-php.git",
-                "reference": "fba00562ee93d2a4ec524ad441be3a3b46aed669"
+                "reference": "4420ba0a0cb4e3187a13b98c7792d341e3d7f90f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/fba00562ee93d2a4ec524ad441be3a3b46aed669",
-                "reference": "fba00562ee93d2a4ec524ad441be3a3b46aed669",
+                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/4420ba0a0cb4e3187a13b98c7792d341e3d7f90f",
+                "reference": "4420ba0a0cb4e3187a13b98c7792d341e3d7f90f",
                 "shasum": ""
             },
             "require": {
@@ -992,7 +992,7 @@
                 "MIT"
             ],
             "description": "eLife patterns",
-            "time": "2017-12-19T10:00:47+00:00"
+            "time": "2017-12-22T13:25:39+00:00"
         },
         {
             "name": "fabpot/goutte",
@@ -1721,16 +1721,16 @@
         },
         {
             "name": "mustache/mustache",
-            "version": "v2.11.1",
+            "version": "v2.12.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bobthecow/mustache.php.git",
-                "reference": "a3f6d55996dd28b58f3a909d474189a3c1aa693f"
+                "reference": "fe8fe72e9d580591854de404cc59a1b83ca4d19e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bobthecow/mustache.php/zipball/a3f6d55996dd28b58f3a909d474189a3c1aa693f",
-                "reference": "a3f6d55996dd28b58f3a909d474189a3c1aa693f",
+                "url": "https://api.github.com/repos/bobthecow/mustache.php/zipball/fe8fe72e9d580591854de404cc59a1b83ca4d19e",
+                "reference": "fe8fe72e9d580591854de404cc59a1b83ca4d19e",
                 "shasum": ""
             },
             "require": {
@@ -1763,7 +1763,7 @@
                 "mustache",
                 "templating"
             ],
-            "time": "2016-07-31T06:18:27+00:00"
+            "time": "2017-07-11T12:54:05+00:00"
         },
         {
             "name": "nelmio/security-bundle",

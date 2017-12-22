@@ -5,13 +5,14 @@ imports:
 
 parameters:
     honeypot_field: email_address
+    mustache_stat_props: [size, mtime]
 
 bobthecow_mustache:
     globals:
         assetRewrite: '@elife.patterns.mustache.helpers.asset_rewrite'
         assetsPath: 'assets/patterns'
     loader_id: elife.journal.mustache.loader
-    partials_loader_id: elife.patterns.mustache.loader.pattern_lab
+    partials_loader_id: elife.journal.mustache.loader
 
 csa_guzzle:
     clients:
