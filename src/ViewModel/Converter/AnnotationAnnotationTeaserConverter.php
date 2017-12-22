@@ -25,7 +25,7 @@ final class AnnotationAnnotationTeaserConverter implements ViewModelConverter
      */
     public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
-        $date = ViewModel\Date::simple($object->getUpdatedDate());
+        $date = ViewModel\Date::simple($object->getUpdatedDate() ?? $object->getCreatedDate());
         $isRestricted = 'public' !== $object->getAccess();
 
         $content = $object->getContent()->map($this->willConvertTo());
