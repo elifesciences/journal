@@ -11,20 +11,23 @@ final class PictureBuilderFactory
 {
     use CreatesIiifUri;
 
-    public function create(callable $uriGenerator, string $defaultType, int $defaultWidth = null, int $defaultHeight = null, string $altText = '') : PictureBuilder
+    public function create(callable $uriGenerator, string $originalType, int $defaultWidth = null, int $defaultHeight = null, string $altText = '') : PictureBuilder
     {
+        $defaultType = $originalType;
+
+        if ('image/svg+xml' === $defaultType) {
+            $defaultType = 'image/png';
+        }
+
         $builder = new PictureBuilder(function (string $type = null, int $width = null, int $height = null) use ($uriGenerator, $defaultType, $defaultWidth, $defaultHeight) {
             return $uriGenerator($type ?? $defaultType, $width ?? $defaultWidth, $height ?? $defaultHeight);
         }, $altText);
 
         $builder = $builder
+            ->addType($originalType)
             ->addType($defaultType)
             ->addType('image/webp')
         ;
-
-        if ('image/svg+xml' === $defaultType) {
-            $builder = $builder->addType('image/png');
-        }
 
         if ($defaultWidth) {
             $builder = $builder->addSize($defaultWidth, $defaultHeight);
