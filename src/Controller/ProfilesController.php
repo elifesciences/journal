@@ -9,6 +9,7 @@ use eLife\Journal\Pagerfanta\SequenceAdapter;
 use eLife\Journal\ViewModel\EmptyListing;
 use eLife\Patterns\ViewModel\AnnotationTeaser;
 use eLife\Patterns\ViewModel\ContentHeaderProfile;
+use eLife\Patterns\ViewModel\ListHeading;
 use Pagerfanta\Pagerfanta;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -75,7 +76,7 @@ final class ProfilesController extends Controller
                 // TODO replace with listing pattern
 
                 if (0 === count($paginator->getItems())) {
-                    return [new EmptyListing('Annotations', 'No annotations available.')];
+                    return [new EmptyListing(new ListHeading('Annotations'), 'No annotations available.')];
                 }
 
                 return $paginator->getItems();
