@@ -4,11 +4,11 @@ namespace test\eLife\Journal\Helper;
 
 use eLife\ApiSdk\Model\Image;
 use eLife\Journal\Helper\IiifRegionCalculator;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use test\eLife\Journal\ViewModel\Converter\SerializerAwareTestCase;
 use Traversable;
 
-final class IiifRegionCalculatorTest extends PHPUnit_Framework_TestCase
+final class IiifRegionCalculatorTest extends TestCase
 {
     use SerializerAwareTestCase;
 

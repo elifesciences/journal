@@ -2,14 +2,13 @@
 
 namespace test\eLife\Journal\Helper;
 
-use Assert\Assertion;
 use eLife\Journal\Helper\LicenceUri;
 use InvalidArgumentException;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use test\eLife\Journal\Providers;
 use Traversable;
 
-final class LicenceUriTest extends PHPUnit_Framework_TestCase
+final class LicenceUriTest extends TestCase
 {
     use Providers;
 
@@ -18,21 +17,28 @@ final class LicenceUriTest extends PHPUnit_Framework_TestCase
      */
     public function it_provides_a_default_uri()
     {
-        Assertion::url(LicenceUri::default());
+        $this->assertSame('https://creativecommons.org/licenses/by/4.0/', LicenceUri::default());
     }
 
     /**
      * @test
      * @dataProvider validModelProvider
      */
-    public function it_providers_a_uri_for_a_code(string $code)
+    public function it_providers_a_uri_for_a_code(string $code, string $uri)
     {
-        Assertion::url(LicenceUri::forCode($code));
+        $this->assertSame($uri, LicenceUri::forCode($code));
     }
 
     public function validModelProvider() : Traversable
     {
-        return $this->stringProvider('CC0-1.0', 'CC-BY-1.0', 'CC-BY-2.0', 'CC-BY-2.5', 'CC-BY-3.0', 'CC-BY-4.0');
+        return $this->arrayProvider([
+            'CC0-1.0' => 'https://creativecommons.org/publicdomain/zero/1.0/',
+            'CC-BY-1.0' => 'https://creativecommons.org/licenses/by/1.0/',
+            'CC-BY-2.0' => 'https://creativecommons.org/licenses/by/2.0/',
+            'CC-BY-2.5' => 'https://creativecommons.org/licenses/by/2.5/',
+            'CC-BY-3.0' => 'https://creativecommons.org/licenses/by/3.0/',
+            'CC-BY-4.0' => 'https://creativecommons.org/licenses/by/4.0/',
+        ]);
     }
 
     /**

@@ -4,11 +4,11 @@ namespace test\eLife\Journal\Helper;
 
 use eLife\Journal\Helper\MediaTypes;
 use InvalidArgumentException;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use test\eLife\Journal\Providers;
 use Traversable;
 
-final class MediaTypesTest extends PHPUnit_Framework_TestCase
+final class MediaTypesTest extends TestCase
 {
     use Providers;
 
