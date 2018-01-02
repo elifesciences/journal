@@ -29,7 +29,7 @@ final class AnnotationAnnotationTeaserConverter implements ViewModelConverter
         $isRestricted = 'public' !== $object->getAccess();
 
         $content = $this->patternRenderer->render(...$object->getContent()->map($this->willConvertTo()));
-        $content = preg_replace('/<a href=\"(.*?)\">(.*?)<\/a>/', "\\2", $content); // TODO sort out
+        $content = preg_replace('/<a href=\"(.*?)\">(.*?)<\/a>/', '\\2', $content); // TODO sort out
 
         if ($object->getParents()->notEmpty()) {
             return ViewModel\AnnotationTeaser::reply(
