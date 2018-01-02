@@ -3,7 +3,7 @@
 namespace test\eLife\Journal\Security\Voter;
 
 use eLife\Journal\Security\Voter\SessionAttributeVoter;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -12,7 +12,7 @@ use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
 use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 use Traversable;
 
-final class SessionAttributeVoterTest extends PHPUnit_Framework_TestCase
+final class SessionAttributeVoterTest extends TestCase
 {
     /**
      * @test

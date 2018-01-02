@@ -5,9 +5,9 @@ namespace test\eLife\Journal\ViewModel\Builder;
 use eLife\Journal\ViewModel\Builder\PictureBuilder;
 use eLife\Patterns\ViewModel;
 use InvalidArgumentException;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-final class PictureBuilderTest extends PHPUnit_Framework_TestCase
+final class PictureBuilderTest extends TestCase
 {
     /**
      * @test

@@ -11,17 +11,17 @@ use InvalidArgumentException;
 use LogicException;
 use Pagerfanta\Adapter\NullAdapter;
 use Pagerfanta\Pagerfanta;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Traversable;
 
-final class CallbackTest extends PHPUnit_Framework_TestCase
+final class CallbackTest extends TestCase
 {
     /**
      * @test
      */
     public function it_creates_is_instance_of()
     {
-        $callback = Callback::isInstanceOf(PHPUnit_Framework_TestCase::class);
+        $callback = Callback::isInstanceOf(TestCase::class);
 
         $this->assertTrue($callback($this));
         $this->assertFalse($callback('foo'));
@@ -32,7 +32,7 @@ final class CallbackTest extends PHPUnit_Framework_TestCase
      */
     public function it_creates_must_be_an_instance_of()
     {
-        $callback = Callback::mustBeInstanceOf(PHPUnit_Framework_TestCase::class);
+        $callback = Callback::mustBeInstanceOf(TestCase::class);
 
         $this->assertSame($this, $callback($this));
 

@@ -56,8 +56,8 @@
         "justinrainbow/json-schema": "^5.2",
         "namshi/cuzzle": "^2.0",
         "phpspec/prophecy": "^1.7",
-        "phpunit/phpunit": "^5.7",
-        "symfony/phpunit-bridge": "^3.4"
+        "phpunit/phpunit": "^6.5",
+        "symfony/phpunit-bridge": "^4.0"
     },
     "scripts": {
         "post-install-cmd": [
