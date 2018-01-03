@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "d5d335678b5eb1499c5b36e85ea5d98e",
+    "content-hash": "50974c6dbf39f6f4d2135b4c7b1fc35c",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -1008,16 +1008,16 @@
         },
         {
             "name": "elife/patterns",
-            "version": "dev-master",
+            "version": "dev-ELPP-3348-paragraph-pattern",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/patterns-php.git",
-                "reference": "fba00562ee93d2a4ec524ad441be3a3b46aed669"
+                "reference": "d4551a62e2c0597d55f49d1b578852caaa0af41f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/fba00562ee93d2a4ec524ad441be3a3b46aed669",
-                "reference": "fba00562ee93d2a4ec524ad441be3a3b46aed669",
+                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/d4551a62e2c0597d55f49d1b578852caaa0af41f",
+                "reference": "d4551a62e2c0597d55f49d1b578852caaa0af41f",
                 "shasum": ""
             },
             "require": {
@@ -1050,7 +1050,7 @@
                 "MIT"
             ],
             "description": "eLife patterns",
-            "time": "2017-12-19T10:00:47+00:00"
+            "time": "2018-01-03T14:15:52+00:00"
         },
         {
             "name": "fabpot/goutte",

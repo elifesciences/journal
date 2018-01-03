@@ -4,8 +4,8 @@ namespace test\eLife\Journal\ViewModel\Converter;
 
 use eLife\Journal\ViewModel\Converter\ArticleReadMoreItemConverter;
 use eLife\Journal\ViewModel\Converter\ViewModelConverter;
-use eLife\Journal\ViewModel\Paragraph;
 use eLife\Patterns\PatternRenderer;
+use eLife\Patterns\ViewModel\Paragraph;
 use eLife\Patterns\ViewModel\ReadMoreItem;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
