@@ -13,6 +13,7 @@ use Symfony\Component\Security\Guard\Token\PostAuthenticationGuardToken;
 abstract class WebTestCase extends BaseWebTestCase
 {
     use AppKernelTestCase;
+    use Assertions;
 
     final protected function logIn(Client $client)
     {

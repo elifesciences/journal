@@ -68,8 +68,6 @@ final class ElifeProvider extends AbstractProvider
 
         $parameters = array_filter($parameters);
 
-        ksort($parameters);
-
         return $parameters;
     }
 

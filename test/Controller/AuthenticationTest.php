@@ -49,7 +49,7 @@ final class AuthenticationTest extends WebTestCase
         $this->assertTrue($response->isRedirect());
 
         $location = Uri::withoutQueryValue(new Uri($response->headers->get('Location')), 'state');
-        $this->assertSame('http://api.elifesciences.org/oauth2/authorize?client_id=journal_client_id&redirect_uri=http%3A%2F%2Flocalhost%2Flog-in%2Fcheck&response_type=code', $location->__toString());
+        $this->assertSameUri('http://api.elifesciences.org/oauth2/authorize?response_type=code&client_id=journal_client_id&redirect_uri=http%3A%2F%2Flocalhost%2Flog-in%2Fcheck', $location);
 
         $state = parse_query((new Uri($response->headers->get('Location')))->getQuery())['state'];
 
@@ -102,7 +102,7 @@ final class AuthenticationTest extends WebTestCase
         $this->assertTrue($response->isRedirect());
 
         $location = Uri::withoutQueryValue(new Uri($response->headers->get('Location')), 'state');
-        $this->assertSame('http://api.elifesciences.org/oauth2/authorize?client_id=journal_client_id&redirect_uri=http%3A%2F%2Flocalhost%2Flog-in%2Fcheck&response_type=code', $location->__toString());
+        $this->assertSameUri('http://api.elifesciences.org/oauth2/authorize?response_type=code&client_id=journal_client_id&redirect_uri=http%3A%2F%2Flocalhost%2Flog-in%2Fcheck', $location);
 
         $state = parse_query((new Uri($response->headers->get('Location')))->getQuery())['state'];
 
@@ -112,8 +112,8 @@ final class AuthenticationTest extends WebTestCase
             new Request(
                 'POST',
                 'http://api.elifesciences.org/oauth2/token',
-                ['content-type' => 'application/x-www-form-urlencoded'],
-                build_query(['client_id' => 'journal_client_id', 'client_secret' => 'journal_client_secret', 'redirect_uri' => 'http://localhost/log-in/check', 'grant_type' => 'authorization_code', 'code' => 'foo'])
+                ['Content-Type' => 'application/x-www-form-urlencoded'],
+                build_query(['code' => 'foo', 'grant_type' => 'authorization_code', 'client_id' => 'journal--local-id', 'client_secret' => 'journal--local-secret', 'redirect_uri' => 'http://localhost/log-in/check'])
             ),
             new Response(
                 400,
@@ -159,7 +159,7 @@ final class AuthenticationTest extends WebTestCase
         $this->assertTrue($response->isRedirect());
 
         $location = Uri::withoutQueryValue(new Uri($response->headers->get('Location')), 'state');
-        $this->assertSame('http://api.elifesciences.org/oauth2/authorize?client_id=journal_client_id&redirect_uri=http%3A%2F%2Flocalhost%2Flog-in%2Fcheck&response_type=code', $location->__toString());
+        $this->assertSameUri('http://api.elifesciences.org/oauth2/authorize?response_type=code&client_id=journal_client_id&redirect_uri=http%3A%2F%2Flocalhost%2Flog-in%2Fcheck', $location->__toString());
 
         $state = parse_query((new Uri($response->headers->get('Location')))->getQuery())['state'];
 
@@ -169,8 +169,8 @@ final class AuthenticationTest extends WebTestCase
             new Request(
                 'POST',
                 'http://api.elifesciences.org/oauth2/token',
-                ['content-type' => 'application/x-www-form-urlencoded'],
-                build_query(['client_id' => 'journal_client_id', 'client_secret' => 'journal_client_secret', 'redirect_uri' => 'http://localhost/log-in/check', 'grant_type' => 'authorization_code', 'code' => 'foo'])
+                ['Content-Type' => 'application/x-www-form-urlencoded'],
+                build_query(['code' => 'foo', 'grant_type' => 'authorization_code', 'client_id' => 'journal--local-id', 'client_secret' => 'journal--local-secret', 'redirect_uri' => 'http://localhost/log-in/check'])
             ),
             new Response(
                 400,
@@ -311,8 +311,8 @@ final class AuthenticationTest extends WebTestCase
             new Request(
                 'POST',
                 'http://api.elifesciences.org/oauth2/token',
-                ['content-type' => 'application/x-www-form-urlencoded'],
-                build_query(['client_id' => 'journal--local-id', 'client_secret' => 'journal--local-secret', 'redirect_uri' => 'http://localhost/log-in/check', 'grant_type' => 'authorization_code', 'code' => 'foo'])
+                ['Content-Type' => 'application/x-www-form-urlencoded'],
+                build_query(['code' => 'foo', 'grant_type' => 'authorization_code', 'client_id' => 'journal--local-id', 'client_secret' => 'journal--local-secret', 'redirect_uri' => 'http://localhost/log-in/check'])
             ),
             new Response(
                 200,
