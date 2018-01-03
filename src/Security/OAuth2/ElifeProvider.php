@@ -51,10 +51,6 @@ final class ElifeProvider extends AbstractProvider
 
     protected function checkResponse(ResponseInterface $response, $data)
     {
-        if ('No name visible' === ($data['error_description'] ?? '')) {
-            throw new IdentityProviderException('No name visible', 0, (string) $response->getBody());
-        }
-
         if (isset($data['error'])) {
             throw new IdentityProviderException($data['error_description'] ?? $data['error'], 0, (string) $response->getBody());
         }
