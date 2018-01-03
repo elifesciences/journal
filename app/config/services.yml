@@ -236,6 +236,17 @@ services:
           - '%hypothesis_client_id%'
           - '%hypothesis_client_secret%'
 
+    elife.journal.security.authenticator.elife:
+        class: eLife\Journal\Security\Authenticator\ElifeAuthenticator
+        public: false
+        arguments:
+          - '@oauth2.registry'
+          - '@router'
+
+    elife.journal.security.user.oauth_provider:
+        class: eLife\Journal\Security\User\OAuthUserProvider
+        public: false
+
     elife.journal.security.voter.feature.can_authenticate:
         class: eLife\Journal\Security\Voter\SessionAttributeVoter
         public: false

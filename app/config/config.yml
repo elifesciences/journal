@@ -66,29 +66,23 @@ framework:
           - mustache
           - twig
 
-hwi_oauth:
-    firewall_names:
-      - main
-    resource_owners:
-        elife:
-            type: oauth2
-            class: eLife\Journal\Security\OAuth2\ElifeResourceOwner
-            client_id: '%oauth2_client_id%'
-            client_secret: '%oauth2_client_secret%'
-            access_token_url: '%api_url%/oauth2/token'
-            authorization_url: '%api_url_public%/oauth2/authorize'
-            paths:
-                identifier: id
-                nickname: id
-                realname: name
-            options:
-                csrf: true
-
 isometriks_spam:
     honeypot:
         field: '%honeypot_field%'
         global: true
         message: Please try submitting the form again.
+
+knpu_oauth2_client:
+    clients:
+        elife:
+            type: generic
+            provider_class: eLife\Journal\Security\OAuth2\ElifeProvider
+            client_id: '%oauth2_client_id%'
+            client_secret: '%oauth2_client_secret%'
+            redirect_route: log-in-check
+            provider_options:
+                api_url: '%api_url%'
+                api_url_public: '%api_url_public%'
 
 monolog:
     channels:

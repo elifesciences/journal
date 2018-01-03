@@ -2,13 +2,13 @@
 
 namespace test\eLife\Journal;
 
+use eLife\Journal\Security\User\OAuthUser;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
-use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
-use HWI\Bundle\OAuthBundle\Security\Core\User\OAuthUser;
 use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase as BaseWebTestCase;
 use Symfony\Component\BrowserKit\Cookie;
+use Symfony\Component\Security\Guard\Token\PostAuthenticationGuardToken;
 
 abstract class WebTestCase extends BaseWebTestCase
 {
@@ -20,18 +20,7 @@ abstract class WebTestCase extends BaseWebTestCase
 
         $session = $client->getContainer()->get('session');
 
-        $token = new OAuthToken(
-            [
-                'access_token' => 'token',
-                'expires_in' => 3920,
-                'token_type' => 'Bearer',
-                'id' => 'jcarberry',
-                'orcid' => '0000-0002-1825-0097',
-                'name' => 'Josiah Carberry',
-            ],
-            ['ROLE_USER', 'ROLE_OAUTH_USER']
-        );
-        $token->setUser(new OAuthUser('jcarberry'));
+        $token = new PostAuthenticationGuardToken(new OAuthUser('jcarberry', $roles = ['ROLE_USER', 'ROLE_OAUTH_USER']), 'main', $roles);
 
         $session->set('_security_main', serialize($token));
         $session->save();
