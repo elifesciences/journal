@@ -3,7 +3,6 @@
 namespace eLife\Journal\Security\OAuth2;
 
 use League\OAuth2\Client\Provider\ResourceOwnerInterface;
-use League\OAuth2\Client\Tool\ArrayAccessorTrait;
 
 final class ElifeResourceOwner implements ResourceOwnerInterface
 {
