@@ -153,10 +153,10 @@ final class TermsController extends Controller
                     ], 'bullet')
                 )),
                 ArticleSection::basic('Interactive Features', 3, $this->render(
-                    new Paragraph("In the course of using the eLife Sites, you may provide eLife with feedback,
+                    new Paragraph('In the course of using the eLife Sites, you may provide eLife with feedback,
                               including but not limited to suggestions, observations, errors, problems, and
                               defects regarding the eLife Sites (collectively &quot;Feedback&quot;) as well as
-                              ".strtolower($comments)." on journal content (\"{$comments}\"). You hereby grant eLife a
+                              '.strtolower($comments)." on journal content (\"{$comments}\"). You hereby grant eLife a
                               worldwide, irrevocable, perpetual, royalty-free, transferable, and sub-licensable,
                               non-exclusive right to use, copy, modify, distribute, display, perform, create
                               derivative works from and otherwise exploit all such Feedback and {$comments}.
