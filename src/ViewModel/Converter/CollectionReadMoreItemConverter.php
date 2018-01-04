@@ -5,9 +5,9 @@ namespace eLife\Journal\ViewModel\Converter;
 use eLife\ApiSdk\Model\Collection;
 use eLife\ApiSdk\Model\Subject;
 use eLife\Journal\Helper\ModelName;
-use eLife\Journal\ViewModel\Paragraph;
 use eLife\Patterns\PatternRenderer;
 use eLife\Patterns\ViewModel;
+use eLife\Patterns\ViewModel\Paragraph;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 final class CollectionReadMoreItemConverter implements ViewModelConverter

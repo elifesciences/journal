@@ -4,9 +4,9 @@ namespace eLife\Journal\ViewModel\Converter;
 
 use eLife\ApiSdk\Model\PodcastEpisodeChapterModel;
 use eLife\Journal\Helper\ModelName;
-use eLife\Journal\ViewModel\Paragraph;
 use eLife\Patterns\PatternRenderer;
 use eLife\Patterns\ViewModel;
+use eLife\Patterns\ViewModel\Paragraph;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 final class PodcastEpisodeChapterReadMoreItemConverter implements ViewModelConverter

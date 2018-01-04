@@ -5,9 +5,9 @@ namespace eLife\Journal\ViewModel\Converter;
 use eLife\ApiSdk\Model\AnnualReport;
 use eLife\Journal\Helper\DownloadLink;
 use eLife\Journal\Helper\DownloadLinkUriGenerator;
-use eLife\Journal\ViewModel\Paragraph;
 use eLife\Patterns\PatternRenderer;
 use eLife\Patterns\ViewModel;
+use eLife\Patterns\ViewModel\Paragraph;
 use eLife\Patterns\ViewModel\Teaser;
 
 final class AnnualReportTeaserConverter implements ViewModelConverter

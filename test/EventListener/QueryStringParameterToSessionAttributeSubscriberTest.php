@@ -3,7 +3,7 @@
 namespace test\eLife\Journal\EventListener;
 
 use eLife\Journal\EventListener\QueryStringParameterToSessionAttributeSubscriber;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
@@ -11,7 +11,7 @@ use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Traversable;
 
-final class QueryStringParameterToSessionAttributeSubscriberTest extends PHPUnit_Framework_TestCase
+final class QueryStringParameterToSessionAttributeSubscriberTest extends TestCase
 {
     /**
      * @test
