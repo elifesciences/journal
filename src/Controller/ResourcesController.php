@@ -3,10 +3,10 @@
 namespace eLife\Journal\Controller;
 
 use eLife\Journal\Helper\DownloadLink;
-use eLife\Journal\ViewModel\Paragraph;
 use eLife\Patterns\ViewModel\ArticleSection;
 use eLife\Patterns\ViewModel\ContentHeader;
 use eLife\Patterns\ViewModel\Listing;
+use eLife\Patterns\ViewModel\Paragraph;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
