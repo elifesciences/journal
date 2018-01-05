@@ -15,6 +15,22 @@ final class ResourcesControllerTest extends PageTestCase
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertSame('Resources', $crawler->filter('.content-header__title')->text());
+
+        $majorSections = $crawler->filter('h2.article-section__header_text');
+
+        $this->assertCount(6, $majorSections);
+
+        $this->assertSame(
+            [
+                'Posters',
+                'Presentations',
+                'Videos',
+                'Images',
+                'The eLife logo',
+                'Brand guide',
+            ],
+            array_map('trim', $majorSections->extract(['_text']))
+        );
     }
 
     /**
@@ -32,6 +48,8 @@ final class ResourcesControllerTest extends PageTestCase
         $this->assertSame('/resources', $crawler->filter('link[rel="canonical"]')->attr('href'));
         $this->assertSame('http://localhost/resources', $crawler->filter('meta[property="og:url"]')->attr('content'));
         $this->assertSame('Resources', $crawler->filter('meta[property="og:title"]')->attr('content'));
+        $this->assertSame('A collection of resources, from posters, videos, images, presentations and more, to the brand behind eLife.', $crawler->filter('meta[property="og:description"]')->attr('content'));
+        $this->assertSame('A collection of resources, from posters, videos, images, presentations and more, to the brand behind eLife.', $crawler->filter('meta[name="description"]')->attr('content'));
         $this->assertSame('summary', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
     }
 

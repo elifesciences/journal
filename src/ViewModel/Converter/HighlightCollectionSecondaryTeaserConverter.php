@@ -2,7 +2,6 @@
 
 namespace eLife\Journal\ViewModel\Converter;
 
-use Cocur\Slugify\SlugifyInterface;
 use eLife\ApiSdk\Model\Collection;
 use eLife\ApiSdk\Model\Highlight;
 use eLife\Patterns\ViewModel;
@@ -15,13 +14,13 @@ final class HighlightCollectionSecondaryTeaserConverter implements ViewModelConv
     use CreatesDate;
     use CreatesTeaserImage;
 
+    private $viewModelConverter;
     private $urlGenerator;
-    private $slugify;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator, SlugifyInterface $slugify)
+    public function __construct(ViewModelConverter $viewModelConverter, UrlGeneratorInterface $urlGenerator)
     {
+        $this->viewModelConverter = $viewModelConverter;
         $this->urlGenerator = $urlGenerator;
-        $this->slugify = $slugify;
     }
 
     /**
@@ -32,10 +31,15 @@ final class HighlightCollectionSecondaryTeaserConverter implements ViewModelConv
         /** @var Collection $collection */
         $collection = $object->getItem();
 
+        $curatedBy = 'Curated by '.$collection->getSelectedCurator()->getDetails()->getPreferredName();
+        if ($collection->selectedCuratorEtAl()) {
+            $curatedBy .= ' et al.';
+        }
+
         return ViewModel\Teaser::secondary(
             $object->getTitle(),
-            $this->urlGenerator->generate('collection', ['id' => $collection->getId(), 'slug' => $this->slugify->slugify($collection->getTitle())]),
-            $object->getAuthorLine(),
+            $this->urlGenerator->generate('collection', [$collection]),
+            $curatedBy,
             $this->createContextLabel($collection),
             $object->getThumbnail() ? $this->smallTeaserImage($object) : null,
             ViewModel\TeaserFooter::forNonArticle(
@@ -50,5 +54,10 @@ final class HighlightCollectionSecondaryTeaserConverter implements ViewModelConv
     public function supports($object, string $viewModel = null, array $context = []) : bool
     {
         return $object instanceof Highlight && ViewModel\Teaser::class === $viewModel && 'secondary' === ($context['variant'] ?? null) && $object->getItem() instanceof Collection;
+    }
+
+    protected function getViewModelConverter() : ViewModelConverter
+    {
+        return $this->viewModelConverter;
     }
 }

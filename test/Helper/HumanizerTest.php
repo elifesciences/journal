@@ -3,11 +3,11 @@
 namespace test\eLife\Journal\Helper;
 
 use eLife\Journal\Helper\Humanizer;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use test\eLife\Journal\Providers;
 use Traversable;
 
-final class HumanizerTest extends PHPUnit_Framework_TestCase
+final class HumanizerTest extends TestCase
 {
     use Providers;
 
@@ -26,6 +26,26 @@ final class HumanizerTest extends PHPUnit_Framework_TestCase
             'foo' => 'Foo',
             'foo_bar' => 'Foo bar',
             'foo-bar' => 'Foo bar',
+        ]);
+    }
+
+    /**
+     * @test
+     * @dataProvider listProvider
+     */
+    public function it_prettifies_lists(string $expected, ...$input)
+    {
+        $this->assertSame($expected, Humanizer::prettyList(...$input));
+    }
+
+    public function listProvider() : Traversable
+    {
+        return $this->arrayProvider([
+            '' => [],
+            'foo' => ['foo'],
+            'foo and bar' => ['foo', 'bar'],
+            'foo, bar and baz' => ['foo', 'bar', 'baz'],
+            'foo, bar, baz and qux' => ['foo', 'bar', 'baz', 'qux'],
         ]);
     }
 }

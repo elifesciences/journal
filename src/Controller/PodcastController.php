@@ -7,9 +7,9 @@ use eLife\ApiSdk\Model\PodcastEpisode;
 use eLife\Journal\Helper\Callback;
 use eLife\Journal\Helper\Paginator;
 use eLife\Journal\Pagerfanta\SequenceAdapter;
-use eLife\Patterns\ViewModel\AudioPlayer;
 use eLife\Patterns\ViewModel\ContentHeader;
 use eLife\Patterns\ViewModel\GridListing;
+use eLife\Patterns\ViewModel\ListHeading;
 use eLife\Patterns\ViewModel\ListingTeasers;
 use eLife\Patterns\ViewModel\MediaChapterListingItem;
 use eLife\Patterns\ViewModel\Teaser;
@@ -77,15 +77,12 @@ final class PodcastController extends Controller
         $arguments = $this->defaultPageArguments($request, $episode);
 
         $arguments['title'] = $episode
-            ->then(Callback::method('getFullTitle'));
+            ->then(Callback::method('getTitle'));
 
         $arguments['episode'] = $episode;
 
         $arguments['contentHeader'] = $arguments['episode']
             ->then($this->willConvertTo(ContentHeader::class));
-
-        $arguments['audioPlayer'] = $arguments['episode']
-            ->then($this->willConvertTo(AudioPlayer::class));
 
         $arguments['chapters'] = $arguments['episode']
             ->then(function (PodcastEpisode $episode) {
@@ -102,7 +99,7 @@ final class PodcastController extends Controller
             ->then(Callback::emptyOr(function (Sequence $articles) {
                 return ListingTeasers::basic(
                     $articles->map($this->willConvertTo(Teaser::class, ['variant' => 'secondary']))->toArray(),
-                    'Related'
+                    new ListHeading('Related')
                 );
             }));
 

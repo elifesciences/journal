@@ -2,10 +2,8 @@
 
 namespace eLife\Journal\ViewModel\Converter;
 
-use Cocur\Slugify\SlugifyInterface;
 use eLife\ApiSdk\Model\Collection;
 use eLife\ApiSdk\Model\Cover;
-use eLife\Journal\Helper\CreatesIiifUri;
 use eLife\Patterns\ViewModel;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -13,15 +11,14 @@ final class CoverCollectionSecondaryTeaserConverter implements ViewModelConverte
 {
     use CreatesContextLabel;
     use CreatesDate;
-    use CreatesIiifUri;
 
+    private $viewModelConverter;
     private $urlGenerator;
-    private $slugify;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator, SlugifyInterface $slugify)
+    public function __construct(ViewModelConverter $viewModelConverter, UrlGeneratorInterface $urlGenerator)
     {
+        $this->viewModelConverter = $viewModelConverter;
         $this->urlGenerator = $urlGenerator;
-        $this->slugify = $slugify;
     }
 
     /**
@@ -34,22 +31,16 @@ final class CoverCollectionSecondaryTeaserConverter implements ViewModelConverte
 
         $curatedBy = 'Curated by '.$collection->getSelectedCurator()->getDetails()->getPreferredName();
         if ($collection->selectedCuratorEtAl()) {
-            $curatedBy .= ' et al';
+            $curatedBy .= ' et al.';
         }
-        $curatedBy .= '.';
 
         return ViewModel\Teaser::secondary(
             $object->getTitle(),
-            $this->urlGenerator->generate('collection', ['id' => $collection->getId(), 'slug' => $this->slugify->slugify($collection->getTitle())]),
+            $this->urlGenerator->generate('collection', [$collection]),
             $curatedBy,
             $this->createContextLabel($collection),
             ViewModel\TeaserImage::small(
-                $this->iiifUri($object->getBanner(), 72, 72),
-                $object->getBanner()->getAltText(),
-                [
-                    144 => $this->iiifUri($object->getBanner(), 144, 144),
-                    72 => $this->iiifUri($object->getBanner(), 72, 72),
-                ]
+                $this->viewModelConverter->convert($object->getBanner(), null, ['width' => 72, 'height' => 72])
             ),
             ViewModel\TeaserFooter::forNonArticle(
                 ViewModel\Meta::withLink(

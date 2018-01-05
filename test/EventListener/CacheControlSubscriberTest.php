@@ -3,14 +3,16 @@
 namespace test\eLife\Journal\EventListener;
 
 use eLife\Journal\EventListener\CacheControlSubscriber;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
-final class CacheControlSubscriberTest extends PHPUnit_Framework_TestCase
+final class CacheControlSubscriberTest extends TestCase
 {
     /**
      * @test
@@ -76,6 +78,42 @@ final class CacheControlSubscriberTest extends PHPUnit_Framework_TestCase
         $subscriber = new CacheControlSubscriber();
 
         $subscriber->onKernelResponse(new FilterResponseEvent($this->createMock(HttpKernelInterface::class), new Request(), HttpKernelInterface::MASTER_REQUEST, $response = new Response('', Response::HTTP_NOT_MODIFIED)));
+
+        $this->assertSame('no-cache, private', $response->headers->get('Cache-Control'));
+        $this->assertEmpty($response->getVary());
+        $this->assertFalse($response->headers->has('Etag'));
+    }
+
+    /**
+     * @test
+     */
+    public function it_does_not_change_when_there_is_a_new_session()
+    {
+        $subscriber = new CacheControlSubscriber();
+
+        $request = new Request();
+        $request->setSession($session = new Session(new MockArraySessionStorage()));
+        $session->start();
+
+        $subscriber->onKernelResponse(new FilterResponseEvent($this->createMock(HttpKernelInterface::class), $request, HttpKernelInterface::MASTER_REQUEST, $response = new Response()));
+
+        $this->assertSame('no-cache, private', $response->headers->get('Cache-Control'));
+        $this->assertEmpty($response->getVary());
+        $this->assertFalse($response->headers->has('Etag'));
+    }
+
+    /**
+     * @test
+     */
+    public function it_does_not_change_when_there_is_a_previous_session()
+    {
+        $subscriber = new CacheControlSubscriber();
+
+        $request = new Request();
+        $request->setSession($session = new Session(new MockArraySessionStorage()));
+        $request->cookies->set($session->getName(), $session->getId());
+
+        $subscriber->onKernelResponse(new FilterResponseEvent($this->createMock(HttpKernelInterface::class), $request, HttpKernelInterface::MASTER_REQUEST, $response = new Response()));
 
         $this->assertSame('no-cache, private', $response->headers->get('Cache-Control'));
         $this->assertEmpty($response->getVary());

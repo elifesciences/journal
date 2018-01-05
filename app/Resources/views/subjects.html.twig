@@ -1,21 +1,19 @@
+{% set criticalCss = 'grid-listing' %}
+
 {% extends '::page.html.twig' %}
 
 {% block body %}
 
-    <div class="wrapper u-pad-top">
+    {{ render_pattern(contentHeader) }}
 
-        {{ render_pattern(contentHeader) }}
+    {% embed 'grid/listing-one-column.html.twig' with {fullWidth: true} %}
 
-        {% if subjects %}
+        {% block listing %}
 
             {{ render_pattern(subjects) }}
 
-        {% else %}
+        {% endblock %}
 
-            <p>No subjects available.</p>
-
-        {% endif %}
-
-    </div>
+    {% endembed %}
 
 {% endblock %}

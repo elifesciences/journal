@@ -19,7 +19,7 @@ final class LabsControllerTest extends PageTestCase
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertSame('eLife Labs', $crawler->filter('.content-header__title')->text());
-        $this->assertContains('No experiments available.', $crawler->filter('main')->text());
+        $this->assertContains('No posts available.', $crawler->filter('main')->text());
     }
 
     /**
@@ -37,8 +37,8 @@ final class LabsControllerTest extends PageTestCase
         $this->assertSame('/labs', $crawler->filter('link[rel="canonical"]')->attr('href'));
         $this->assertSame('http://localhost/labs', $crawler->filter('meta[property="og:url"]')->attr('content'));
         $this->assertSame('Labs', $crawler->filter('meta[property="og:title"]')->attr('content'));
-        $this->assertSame('Exploring open-source solutions at the intersection of research and technology. Learn more about innovation at eLife, or follow us on Twitter.', $crawler->filter('meta[property="og:description"]')->attr('content'));
-        $this->assertSame('Exploring open-source solutions at the intersection of research and technology. Learn more about innovation at eLife, or follow us on Twitter.', $crawler->filter('meta[name="description"]')->attr('content'));
+        $this->assertSame('Exploring open-source solutions at the intersection of research and technology. Learn more about innovation at eLife, follow us on Twitter, or sign up for our technology and innovation newsletter.', $crawler->filter('meta[property="og:description"]')->attr('content'));
+        $this->assertSame('Exploring open-source solutions at the intersection of research and technology. Learn more about innovation at eLife, follow us on Twitter, or sign up for our technology and innovation newsletter.', $crawler->filter('meta[name="description"]')->attr('content'));
         $this->assertSame('summary_large_image', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
         $this->assertSame('http://localhost/'.ltrim(self::$kernel->getContainer()->get('assets.packages')->getUrl('assets/images/banners/labs-1114x336.jpg'), '/'), $crawler->filter('meta[property="og:image"]')->attr('content'));
         $this->assertSame('1114', $crawler->filter('meta[property="og:image:width"]')->attr('content'));
@@ -75,8 +75,8 @@ final class LabsControllerTest extends PageTestCase
                     $this->mockApiResponse(
                         new Request(
                             'GET',
-                            'http://api.elifesciences.org/labs-experiments?page=1&per-page=1&order=desc',
-                            ['Accept' => 'application/vnd.elife.labs-experiment-list+json; version=1']
+                            'http://api.elifesciences.org/labs-posts?page=1&per-page=1&order=desc',
+                            ['Accept' => 'application/vnd.elife.labs-post-list+json; version=1']
                         ),
                         new Response(
                             404,
@@ -94,12 +94,12 @@ final class LabsControllerTest extends PageTestCase
         $this->mockApiResponse(
             new Request(
                 'GET',
-                'http://api.elifesciences.org/labs-experiments?page=1&per-page=8&order=desc',
-                ['Accept' => 'application/vnd.elife.labs-experiment-list+json; version=1']
+                'http://api.elifesciences.org/labs-posts?page=1&per-page=8&order=desc',
+                ['Accept' => 'application/vnd.elife.labs-post-list+json; version=1']
             ),
             new Response(
                 200,
-                ['Content-Type' => 'application/vnd.elife.labs-experiment-list+json; version=1'],
+                ['Content-Type' => 'application/vnd.elife.labs-post-list+json; version=1'],
                 json_encode([
                     'total' => 0,
                     'items' => [],

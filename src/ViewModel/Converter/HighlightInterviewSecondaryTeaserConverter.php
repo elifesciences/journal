@@ -2,10 +2,10 @@
 
 namespace eLife\Journal\ViewModel\Converter;
 
-use Cocur\Slugify\SlugifyInterface;
 use eLife\ApiSdk\Model\Highlight;
 use eLife\ApiSdk\Model\Interview;
 use eLife\Patterns\ViewModel;
+use eLife\Patterns\ViewModel\Link;
 use eLife\Patterns\ViewModel\Meta;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -15,13 +15,13 @@ final class HighlightInterviewSecondaryTeaserConverter implements ViewModelConve
     use CreatesDate;
     use CreatesTeaserImage;
 
+    private $viewModelConverter;
     private $urlGenerator;
-    private $slugify;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator, SlugifyInterface $slugify)
+    public function __construct(ViewModelConverter $viewModelConverter, UrlGeneratorInterface $urlGenerator)
     {
+        $this->viewModelConverter = $viewModelConverter;
         $this->urlGenerator = $urlGenerator;
-        $this->slugify = $slugify;
     }
 
     /**
@@ -34,12 +34,15 @@ final class HighlightInterviewSecondaryTeaserConverter implements ViewModelConve
 
         return ViewModel\Teaser::secondary(
             $object->getTitle(),
-            $this->urlGenerator->generate('interview', ['id' => $interview->getId(), 'slug' => $this->slugify->slugify($interview->getInterviewee()->getPerson()->getPreferredName())]),
-            $object->getAuthorLine(),
+            $this->urlGenerator->generate('interview', [$interview]),
+            null,
             $this->createContextLabel($interview),
             $object->getThumbnail() ? $this->smallTeaserImage($object) : null,
             ViewModel\TeaserFooter::forNonArticle(
-                Meta::withText('Interview', $this->simpleDate($interview, $context))
+                Meta::withLink(
+                    new Link('Interview', $this->urlGenerator->generate('interviews')),
+                    $this->simpleDate($interview, $context)
+                )
             )
         );
     }
@@ -47,5 +50,10 @@ final class HighlightInterviewSecondaryTeaserConverter implements ViewModelConve
     public function supports($object, string $viewModel = null, array $context = []) : bool
     {
         return $object instanceof Highlight && ViewModel\Teaser::class === $viewModel && 'secondary' === ($context['variant'] ?? null) && $object->getItem() instanceof Interview;
+    }
+
+    protected function getViewModelConverter() : ViewModelConverter
+    {
+        return $this->viewModelConverter;
     }
 }

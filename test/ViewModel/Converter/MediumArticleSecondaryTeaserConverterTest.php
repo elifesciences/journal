@@ -3,12 +3,13 @@
 namespace test\eLife\Journal\ViewModel\Converter;
 
 use eLife\Journal\ViewModel\Converter\MediumArticleSecondaryTeaserConverter;
-use eLife\Patterns\ViewModel\Teaser;
+use eLife\Journal\ViewModel\Converter\ViewModelConverter;
+use eLife\Patterns\ViewModel;
 
 final class MediumArticleSecondaryTeaserConverterTest extends ModelConverterTestCase
 {
     protected $models = ['medium-article'];
-    protected $viewModelClasses = [Teaser::class];
+    protected $viewModelClasses = [ViewModel\Teaser::class];
     protected $context = ['variant' => 'secondary'];
 
     /**
@@ -16,6 +17,16 @@ final class MediumArticleSecondaryTeaserConverterTest extends ModelConverterTest
      */
     public function setUpConverter()
     {
-        $this->converter = new MediumArticleSecondaryTeaserConverter();
+        $this->converter = new MediumArticleSecondaryTeaserConverter(
+            $viewModelConverter = $this->createMock(ViewModelConverter::class)
+        );
+
+        $viewModelConverter
+            ->expects($this->any())
+            ->method('convert')
+            ->will($this->returnValue(new ViewModel\Picture(
+                [],
+                new ViewModel\Image('/image.jpg')
+            )));
     }
 }

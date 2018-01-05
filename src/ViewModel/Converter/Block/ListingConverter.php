@@ -2,6 +2,7 @@
 
 namespace eLife\Journal\ViewModel\Converter\Block;
 
+use eLife\ApiSdk\Collection\Sequence;
 use eLife\ApiSdk\Model\Block;
 use eLife\Journal\ViewModel\Converter\ViewModelConverter;
 use eLife\Patterns\PatternRenderer;
@@ -25,15 +26,15 @@ final class ListingConverter implements ViewModelConverter
     {
         $context['level'] = ($context['level'] ?? 1) + 1;
 
-        $items = array_map(function ($listingItems) use ($context) {
-            if (is_string($listingItems)) {
-                return $listingItems;
+        $items = $object->getItems()->map(function ($listingItems) use ($context) {
+            if ($listingItems instanceof Sequence) {
+                return implode('', $listingItems->map(function (Block $block) use ($context) {
+                    return $this->patternRenderer->render($this->viewModelConverter->convert($block, null, $context));
+                })->toArray());
             }
 
-            return implode('', array_map(function (Block $block) use ($context) {
-                return $this->patternRenderer->render($this->viewModelConverter->convert($block, null, $context));
-            }, $listingItems));
-        }, $object->getItems());
+            return $listingItems;
+        })->toArray();
 
         switch ($object->getPrefix()) {
             case 'alpha-lower':

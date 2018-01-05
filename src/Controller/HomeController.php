@@ -12,6 +12,7 @@ use eLife\Patterns\ViewModel\CarouselItem;
 use eLife\Patterns\ViewModel\LeadPara;
 use eLife\Patterns\ViewModel\LeadParas;
 use eLife\Patterns\ViewModel\Link;
+use eLife\Patterns\ViewModel\ListHeading;
 use eLife\Patterns\ViewModel\ListingTeasers;
 use eLife\Patterns\ViewModel\SectionListing;
 use eLife\Patterns\ViewModel\SectionListingLink;
@@ -27,12 +28,12 @@ final class HomeController extends Controller
     public function homeAction(Request $request) : Response
     {
         $page = (int) $request->query->get('page', 1);
-        $perPage = 6;
+        $perPage = 10;
 
         $arguments = $this->defaultPageArguments($request);
 
         $latestResearch = promise_for($this->get('elife.api_sdk.search')
-            ->forType('research-advance', 'research-article', 'research-exchange', 'short-report', 'tools-resources', 'replication-study')
+            ->forType('research-advance', 'research-article', 'scientific-correspondence', 'short-report', 'tools-resources', 'replication-study')
             ->sortBy('date'))
             ->then(function (Sequence $sequence) use ($page, $perPage) {
                 $pagerfanta = new Pagerfanta(new SequenceAdapter($sequence, $this->willConvertTo(Teaser::class)));
@@ -73,7 +74,7 @@ final class HomeController extends Controller
             ->getCurrent()
             ->map($this->willConvertTo(CarouselItem::class))
             ->then(Callback::emptyOr(function (Sequence $covers) {
-                return new Carousel(...$covers);
+                return new Carousel($covers->toArray(), new ListHeading('Highlights', 'highlights'));
             }))
             ->otherwise($this->softFailure('Failed to load covers'));
 
@@ -85,10 +86,10 @@ final class HomeController extends Controller
             ->reverse()
             ->slice(1, 100)
             ->map(function (Subject $subject) {
-                return new Link($subject->getName(), $this->get('router')->generate('subject', ['id' => $subject->getId()]));
+                return new Link($subject->getName(), $this->get('router')->generate('subject', [$subject]));
             })
             ->then(function (Sequence $links) {
-                return new SectionListing('subjects', $links->toArray(), false, 'strapline');
+                return new SectionListing('subjects', $links->toArray(), new ListHeading('Research categories'), false, 'strapline');
             })
             ->otherwise($this->softFailure('Failed to load subjects list'));
 
@@ -100,7 +101,7 @@ final class HomeController extends Controller
                 return ListingTeasers::withSeeMore(
                     $result->map($this->willConvertTo(Teaser::class, ['variant' => 'secondary']))->toArray(),
                     new SeeMoreLink(new Link('See more Magazine articles', $this->get('router')->generate('magazine'))),
-                    'Magazine'
+                    new ListHeading('Magazine')
                 );
             }))
             ->otherwise($this->softFailure('Failed to load Magazine list'));

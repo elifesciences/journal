@@ -34,7 +34,7 @@ final class ArticleReadMoreItemConverter implements ViewModelConverter
         return new ViewModel\ReadMoreItem(
             new ViewModel\ContentHeaderReadMore(
                 $object->getFullTitle(),
-                $this->urlGenerator->generate('article', ['id' => $object->getId()]),
+                $this->urlGenerator->generate('article', [$object]),
                 $object->getSubjects()->map(function (Subject $subject) {
                     return new ViewModel\Link($subject->getName());
                 })->toArray(),
@@ -47,7 +47,8 @@ final class ArticleReadMoreItemConverter implements ViewModelConverter
                     $this->simpleDate($object, $context)
                 )
             ),
-            $object->getAbstract() ? $this->patternRenderer->render(...$this->convertContent($object->getAbstract())) : null
+            $object->getAbstract() ? $this->patternRenderer->render(...$this->convertContent($object->getAbstract())) : null,
+            $context['isRelated'] ?? false
         );
     }
 

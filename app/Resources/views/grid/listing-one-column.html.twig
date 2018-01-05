@@ -1,0 +1,15 @@
+<div class="wrapper wrapper--listing">
+
+    {% set listing = block('listing') %}
+
+    <div class="grid">
+
+        <div class="grid__item one-whole{% if not fullWidth ?? false %} x-large--eight-twelfths push--x-large--two-twelfths{% endif %} grid-column">
+
+            {{ listing|raw }}
+
+        </div>
+
+    </div>
+
+</div>

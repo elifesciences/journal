@@ -3,9 +3,9 @@
 namespace eLife\Journal\Controller;
 
 use eLife\ApiClient\Exception\BadResponse;
-use eLife\ApiSdk\Model\Model;
 use eLife\Journal\Exception\EarlyResponse;
 use eLife\Journal\Form\Type\EmailCtaType;
+use eLife\Journal\Helper\CanCheckAuthorization;
 use eLife\Journal\Helper\CanConvertContent;
 use eLife\Journal\Helper\Paginator;
 use eLife\Journal\ViewModel\Converter\ViewModelConverter;
@@ -13,6 +13,7 @@ use eLife\Patterns\ViewModel;
 use eLife\Patterns\ViewModel\ContentHeaderSimple;
 use eLife\Patterns\ViewModel\InfoBar;
 use GuzzleHttp\Promise\PromiseInterface;
+use GuzzleHttp\Promise\RejectedPromise;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Form\FormInterface;
@@ -20,13 +21,16 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use UnexpectedValueException;
+use function GuzzleHttp\Promise\all;
 use function GuzzleHttp\Promise\exception_for;
 use function GuzzleHttp\Promise\promise_for;
 use function GuzzleHttp\Promise\rejection_for;
 
 abstract class Controller implements ContainerAwareInterface
 {
+    use CanCheckAuthorization;
     use CanConvertContent;
 
     /**
@@ -57,6 +61,11 @@ abstract class Controller implements ContainerAwareInterface
     final protected function getViewModelConverter() : ViewModelConverter
     {
         return $this->get('elife.journal.view_model.converter');
+    }
+
+    final protected function getAuthorizationChecker() : AuthorizationCheckerInterface
+    {
+        return $this->get('security.authorization_checker');
     }
 
     final protected function render(ViewModel ...$viewModels) : string
@@ -107,6 +116,7 @@ abstract class Controller implements ContainerAwareInterface
     final protected function softFailure(string $message = null, $default = null) : callable
     {
         return function ($reason) use ($message, $default) {
+            //return new RejectedPromise($reason);
             $e = exception_for($reason);
 
             if (false === $e instanceof HttpException) {
@@ -143,51 +153,83 @@ abstract class Controller implements ContainerAwareInterface
         return $response;
     }
 
+    final protected function ifFormSubmitted(Request $request, FormInterface $form, callable $onValid)
+    {
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted()) {
+            if ($form->isValid()) {
+                $onValid();
+
+                throw new EarlyResponse(new RedirectResponse($request->getUri()));
+            }
+
+            if (count($form->getErrors()) > 0) {
+                foreach ($form->getErrors() as $error) {
+                    $this->get('session')
+                        ->getFlashBag()
+                        ->add(InfoBar::TYPE_ATTENTION, $error->getMessage());
+                }
+            } else {
+                $this->get('session')
+                    ->getFlashBag()
+                    ->add(InfoBar::TYPE_ATTENTION, 'There were problems submitting the form.');
+            }
+        }
+    }
+
     final protected function defaultPageArguments(Request $request, PromiseInterface $model = null) : array
     {
         /** @var FormInterface $form */
         $form = $this->get('form.factory')
             ->create(EmailCtaType::class, null, ['action' => $request->getUri()]);
 
-        $form->handleRequest($request);
+        $this->ifFormSubmitted($request, $form, function () use ($form) {
+            $goutte = $this->get('elife.journal.goutte');
 
-        if ($form->isSubmitted()) {
-            if ($form->isValid()) {
-                $goutte = $this->get('elife.journal.goutte');
+            $crawler = $goutte->request('GET', $this->getParameter('crm_url').'profile/create?reset=1&gid=18');
+            $button = $crawler->selectButton('Save');
 
-                $crawler = $goutte->request('GET', $this->getParameter('crm_url').'profile/create?reset=1&gid=18');
-                $button = $crawler->selectButton('Save');
+            $crawler = $goutte->submit($button->form(), ['email-3' => $form->get('email')->getData()]);
 
-                $crawler = $goutte->submit($button->form(), ['email-3' => $form->get('email')->getData()]);
-
-                if ($crawler->filter('.messages:contains("Your subscription request has been submitted")')->count()) {
-                    $this->get('session')
-                        ->getFlashBag()
-                        ->add(ViewModel\InfoBar::TYPE_SUCCESS, 'Almost finished! Click the link in the email we just sent you to confirm your subscription.');
-                } elseif ($crawler->filter('.msg-text:contains("Your information has been saved")')->count()) {
-                    $this->get('session')
-                        ->getFlashBag()
-                        ->add(ViewModel\InfoBar::TYPE_SUCCESS, 'You are already subscribed!');
-                } else {
-                    throw new UnexpectedValueException('Couldn\'t read CRM response');
-                }
-
-                throw new EarlyResponse(new RedirectResponse($request->getUri()));
-            }
-
-            foreach ($form->getErrors(true) as $error) {
+            if ($crawler->filter('.messages:contains("Your subscription request has been submitted")')->count()) {
                 $this->get('session')
                     ->getFlashBag()
-                    ->add(InfoBar::TYPE_ATTENTION, $error->getMessage());
+                    ->add(ViewModel\InfoBar::TYPE_SUCCESS, 'Almost finished! Click the link in the email we just sent you to confirm your subscription.');
+            } elseif ($crawler->filter('.msg-text:contains("Your information has been saved")')->count()) {
+                $this->get('session')
+                    ->getFlashBag()
+                    ->add(ViewModel\InfoBar::TYPE_SUCCESS, 'You are already subscribed!');
+            } else {
+                throw new UnexpectedValueException('Couldn\'t read CRM response');
             }
+        });
+
+        if ($this->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+            $user = $this->get('security.token_storage')->getToken()->getUser();
+            $profile = $this->get('elife.api_sdk.profiles')->get($user->getUsername())
+                ->otherwise(function ($reason) use ($user, $request) {
+                    $request->getSession()->invalidate();
+
+                    $response = new RedirectResponse($request->getUri());
+                    $response->headers->clearCookie($this->container->getParameter('session_name'));
+
+                    $e = exception_for($reason);
+                    $this->get('logger')->error("Logged user {$user->getUsername()} out due to {$e->getMessage()}", ['exception' => $e]);
+
+                    throw new EarlyResponse($response);
+                });
         }
 
         return [
-            'header' => promise_for($model)->then(function (Model $model = null) : ViewModel\SiteHeader {
-                return $this->get('elife.journal.view_model.factory.site_header')->createSiteHeader($model);
-            }),
+            'header' => all(['model' => promise_for($model), 'profile' => promise_for($profile ?? null)])
+                ->then(function (array $parts) {
+                    return $this->get('elife.journal.view_model.factory.site_header')->createSiteHeader($parts['model'], $parts['profile']);
+                }),
+            'infoBars' => [],
             'emailCta' => $this->get('elife.journal.view_model.converter')->convert($form->createView()),
             'footer' => $this->get('elife.journal.view_model.factory.footer')->createFooter(),
+            'user' => $user ?? null,
         ];
     }
 }

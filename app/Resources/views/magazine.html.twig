@@ -1,14 +1,12 @@
+{% set criticalCss = 'magazine' %}
+
 {% extends '::page.html.twig' %}
 
 {% block body %}
 
     {{ render_pattern(contentHeader) }}
 
-    {% if audio_player %}
-        {{ render_pattern(audio_player) }}
-    {% endif %}
-
-    <div class="wrapper u-pad-top">
+    <div class="wrapper">
 
         {{ render_pattern(menuLink) }}
 
@@ -16,7 +14,7 @@
 
     {% if highlights %}
 
-        <div class="wrapper u-pad-top">
+        <div class="wrapper">
 
             {{ render_pattern(highlights) }}
 
@@ -24,39 +22,40 @@
 
     {% endif %}
 
-    <div class="wrapper u-pad-top-lg">
+    {% embed 'grid/listing-two-column.html.twig' %}
 
-        <div class="grid">
+        {% block main %}
 
-            <div class="listing-column-container">
+            {{ render_pattern(listing) }}
 
-                <div class="grid__item large--eight-twelfths listing-column-main {% if not events and not elifeDigests %}push--large--two-twelfths{% endif %}">
+        {% endblock %}
 
-                    {{ render_pattern(listing) }}
+
+        {% block secondary %}
+
+            {% if events %}
+
+                <div class="grid-secondary-column__item">
+
+                    {{ render_pattern(events) }}
 
                 </div>
 
-                {% if events or elifeDigests %}
+            {% endif %}
 
-                    <div class="grid__item large--four-twelfths listing-column-secondary">
+            {% if elifeDigests %}
 
-                        {% if events %}
-                            {{ render_pattern(events) }}
-                        {% endif %}
+                <div class="grid-secondary-column__item">
 
-                        {% if elifeDigests %}
-                            {{ render_pattern(elifeDigests) }}
-                        {% endif %}
+                    {{ render_pattern(elifeDigests) }}
 
-                    </div>
+                </div>
 
-                {% endif %}
+            {% endif %}
 
-            </div>
+        {% endblock %}
 
-        </div>
-
-    </div>
+    {% endembed %}
 
     <div class="wrapper">
 

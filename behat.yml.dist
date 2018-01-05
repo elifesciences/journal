@@ -64,6 +64,16 @@ default:
                 tags: '@homepage'
             contexts:
               - HomepageContext
+        interview:
+            filters:
+                tags: '@interview'
+            contexts:
+              - InterviewContext
+        jobs:
+            filters:
+                tags: '@jobs'
+            contexts:
+              - JobsContext
         labs:
             filters:
                 tags: '@labs'
@@ -74,6 +84,11 @@ default:
                 tags: '@magazine'
             contexts:
               - MagazineContext
+        people:
+            filters:
+                tags: '@people'
+            contexts:
+              - PeopleContext
         podcast:
             filters:
                 tags: '@podcast'

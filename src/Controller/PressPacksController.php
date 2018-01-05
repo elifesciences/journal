@@ -7,8 +7,12 @@ use eLife\Journal\Helper\Callback;
 use eLife\Journal\Helper\HasPages;
 use eLife\Patterns\ViewModel\ArticleSection;
 use eLife\Patterns\ViewModel\ContentHeader;
+use eLife\Patterns\ViewModel\ContextualData;
+use eLife\Patterns\ViewModel\ContextualDataMetric;
+use eLife\Patterns\ViewModel\HypothesisOpener;
 use eLife\Patterns\ViewModel\Listing;
 use eLife\Patterns\ViewModel\ListingTeasers;
+use eLife\Patterns\ViewModel\Paragraph;
 use eLife\Patterns\ViewModel\Teaser;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,14 +24,15 @@ final class PressPacksController extends Controller
     public function listAction(Request $request) : Response
     {
         $page = (int) $request->query->get('page', 1);
-        $perPage = 6;
+        $perPage = 10;
 
         $arguments = $this->defaultPageArguments($request);
 
         $latest = $this->pagerfantaPromise(
             $this->get('elife.api_sdk.press_packages'),
             $page,
-            $perPage
+            $perPage,
+            $this->willConvertTo(Teaser::class)
         );
 
         $arguments['title'] = 'For the press';
@@ -53,6 +58,14 @@ final class PressPacksController extends Controller
     {
         $arguments['contentHeader'] = new ContentHeader($arguments['title']);
 
+        $arguments['sidebar'] = [
+            new Paragraph('Enquiries about published papers, material in press and eLife may be directed to <a href="mailto:press@elifesciences.org">press@elifesciences.org</a>, or +44&nbsp;1223&nbsp;855373.'),
+            new Paragraph('If you’re writing about an eLife study, please cite eLife as the source of the article and include a link to either the article or elifesciences.org, preferably using our DOI: https://doi.org/10.7554/eLife – with the article’s five-digit extension (e.g. https://doi.org/10.7554/eLife.00000). Thank you!'),
+            new Paragraph('All content, unless otherwise stated, is available under a <a href="https://creativecommons.org/licenses/by/4.0">Creative Commons Attribution License (CC-BY)</a>. All are free to use and reuse the content provided the original source and authors are credited.'),
+            new Paragraph('The eLife media policy, encouraging authors to present and discuss their works ahead of publication and indicating that eLife will not release content under embargo, can be found under the Media Policy heading in our <a href="https://submit.elifesciences.org/html/elife_author_instructions.html#policies">Journal Policies</a>.'),
+            new Paragraph('Please don’t hesitate to contact us if you have any questions.'),
+        ];
+
         return new Response($this->get('templating')->render('::press-packs.html.twig', $arguments));
     }
 
@@ -73,6 +86,13 @@ final class PressPacksController extends Controller
         $arguments['contentHeader'] = $arguments['package']
             ->then($this->willConvertTo(ContentHeader::class));
 
+        $arguments['contextualData'] = $arguments['package']
+            ->then($this->ifGranted(['FEATURE_CAN_USE_HYPOTHESIS'], function (PressPackage $package) {
+                $metrics = [new ContextualDataMetric('Annotations', 0, 'annotation-count')];
+
+                return ContextualData::withMetrics($metrics);
+            }));
+
         $arguments['blocks'] = $arguments['package']
             ->then(function (PressPackage $package) {
                 $parts = $this->convertContent($package)->toArray();
@@ -90,10 +110,14 @@ final class PressPacksController extends Controller
                 return $parts;
             });
 
+        if ($this->isGranted('FEATURE_CAN_USE_HYPOTHESIS')) {
+            $arguments['hypothesisOpener'] = new HypothesisOpener();
+        }
+
         $arguments['relatedContent'] = $arguments['package']
-            ->then(function (PressPackage $package) {
+            ->then(Callback::methodEmptyOr('getRelatedContent', function (PressPackage $package) {
                 return ListingTeasers::basic($package->getRelatedContent()->map($this->willConvertTo(Teaser::class, ['variant' => 'secondary']))->toArray());
-            });
+            }));
 
         return new Response($this->get('templating')->render('::press-pack.html.twig', $arguments));
     }

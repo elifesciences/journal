@@ -21,7 +21,11 @@ final class CacheControlSubscriber implements EventSubscriberInterface
         $request = $event->getRequest();
         $response = $event->getResponse();
 
-        if (!$request->isMethodCacheable() || $response instanceof StreamedResponse || Response::HTTP_NOT_MODIFIED === $response->getStatusCode()) {
+        if (!$event->isMasterRequest()) {
+            return;
+        }
+
+        if (!$request->isMethodCacheable() || $response instanceof StreamedResponse || Response::HTTP_NOT_MODIFIED === $response->getStatusCode() || ($request->hasSession() && $request->getSession()->isStarted() || $request->hasPreviousSession())) {
             return;
         }
 

@@ -2,6 +2,9 @@
 
 namespace test\eLife\Journal\Controller;
 
+use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Psr7\Response;
+
 final class AboutPeopleControllerTest extends PageTestCase
 {
     /**
@@ -37,6 +40,38 @@ final class AboutPeopleControllerTest extends PageTestCase
 
     protected function getUrl() : string
     {
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/people?page=1&per-page=1&order=asc&type=leadership',
+                ['Accept' => 'application/vnd.elife.person-list+json; version=1']
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.person-list+json; version=1'],
+                json_encode([
+                    'total' => 0,
+                    'items' => [],
+                ])
+            )
+        );
+
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/people?page=1&per-page=1&order=asc&type=senior-editor',
+                ['Accept' => 'application/vnd.elife.person-list+json; version=1']
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.person-list+json; version=1'],
+                json_encode([
+                    'total' => 0,
+                    'items' => [],
+                ])
+            )
+        );
+
         return '/about/people';
     }
 }

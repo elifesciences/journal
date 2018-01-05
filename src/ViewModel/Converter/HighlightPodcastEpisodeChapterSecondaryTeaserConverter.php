@@ -13,10 +13,12 @@ final class HighlightPodcastEpisodeChapterSecondaryTeaserConverter implements Vi
     use CreatesDate;
     use CreatesTeaserImage;
 
+    private $viewModelConverter;
     private $urlGenerator;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator)
+    public function __construct(ViewModelConverter $viewModelConverter, UrlGeneratorInterface $urlGenerator)
     {
+        $this->viewModelConverter = $viewModelConverter;
         $this->urlGenerator = $urlGenerator;
     }
 
@@ -30,8 +32,8 @@ final class HighlightPodcastEpisodeChapterSecondaryTeaserConverter implements Vi
 
         return ViewModel\Teaser::secondary(
             $object->getTitle(),
-            $this->urlGenerator->generate('podcast-episode', ['number' => $model->getEpisode()->getNumber()]).'#'.$model->getChapter()->getTime(),
-            $object->getAuthorLine(),
+            $this->urlGenerator->generate('podcast-episode', [$model]),
+            null,
             $this->createContextLabel($model->getEpisode()),
             $object->getThumbnail() ? $this->smallTeaserImage($object) : null,
             ViewModel\TeaserFooter::forNonArticle(
@@ -46,5 +48,10 @@ final class HighlightPodcastEpisodeChapterSecondaryTeaserConverter implements Vi
     public function supports($object, string $viewModel = null, array $context = []) : bool
     {
         return $object instanceof Highlight && ViewModel\Teaser::class === $viewModel && 'secondary' === ($context['variant'] ?? null) && $object->getItem() instanceof PodcastEpisodeChapterModel;
+    }
+
+    protected function getViewModelConverter() : ViewModelConverter
+    {
+        return $this->viewModelConverter;
     }
 }

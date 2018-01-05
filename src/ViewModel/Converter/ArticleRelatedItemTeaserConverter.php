@@ -17,10 +17,12 @@ final class ArticleRelatedItemTeaserConverter implements ViewModelConverter
     use CreatesDate;
     use CreatesTeaserImage;
 
+    private $viewModelConverter;
     private $urlGenerator;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator)
+    public function __construct(ViewModelConverter $viewModelConverter, UrlGeneratorInterface $urlGenerator)
     {
+        $this->viewModelConverter = $viewModelConverter;
         $this->urlGenerator = $urlGenerator;
     }
 
@@ -37,9 +39,9 @@ final class ArticleRelatedItemTeaserConverter implements ViewModelConverter
 
         return Teaser::relatedItem(
             $object->getFullTitle(),
-            $this->urlGenerator->generate('article', ['id' => $object->getId()]),
+            $this->urlGenerator->generate('article', [$object]),
             $object->getAuthorLine(),
-            new ViewModel\ContextLabel(new ViewModel\Link(ModelRelationship::get($context['from'], $object->getType()))),
+            new ViewModel\ContextLabel(new ViewModel\Link(ModelRelationship::get($context['from'], $object->getType(), $context['unrelated'] ?? true))),
             $image,
             TeaserFooter::forNonArticle(
                 Meta::withLink(
@@ -56,5 +58,10 @@ final class ArticleRelatedItemTeaserConverter implements ViewModelConverter
     public function supports($object, string $viewModel = null, array $context = []) : bool
     {
         return $object instanceof ArticleVersion && !empty($context['from']) && ViewModel\Teaser::class === $viewModel && 'relatedItem' === ($context['variant'] ?? null);
+    }
+
+    protected function getViewModelConverter() : ViewModelConverter
+    {
+        return $this->viewModelConverter;
     }
 }

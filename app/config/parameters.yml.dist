@@ -1,10 +1,12 @@
 parameters:
-    api_url: https://api.elifesciences.org/
+    api_url: https://api.elifesciences.org
     api_url_public: '%api_url%'
     api_key: public
+    side_by_side_view_url: https://lens.elifesciences.org/
     secret: ThisTokenIsNotSoSecretChangeIt
     session_name: journal
-    redis_cache: redis://localhost
+    redis_cache: ~
+    redis_sessions: ~
     mailer_transport: smtp
     mailer_host: 127.0.0.1
     mailer_port: ~
@@ -13,7 +15,14 @@ parameters:
     mailer_encryption: ~
     crm_url: https://crm.elifesciences.org/crm/civicrm/
     disqus_domain: elifesciences
+    gtm_id: ~
     trusted_hosts:
       - .*\.?elifesciences.org$
     status_checks:
         Articles: articles
+    oauth2_client_id: some-id
+    oauth2_client_secret: ThisIsASecret
+    hypothesis_api: https://hypothes.is/api/
+    hypothesis_authority: some-authority
+    hypothesis_client_id: some-id
+    hypothesis_client_secret: ThisIsASecret

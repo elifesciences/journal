@@ -1,3 +1,5 @@
+{% set hypothesis = true %}
+
 {% extends '::page.html.twig' %}
 
 {% block title %}{{ title|striptags }} | Interviews{% endblock %}
@@ -10,24 +12,50 @@
 
     {{ render_pattern(contentHeader) }}
 
-    <div class="wrapper u-pad-top-lg">
+    {% if contextualData %}
 
-        <div class="grid">
+        <div class="wrapper">
 
-            <div class="grid__item medium--six-twelfths push--large--three-twelfths u-pad-top">
-
-                {% for block in blocks %}
-                    {{ render_pattern(block) }}
-                {% endfor %}
-
-                {% if cv %}
-                    {{ render_pattern(cv) }}
-                {% endif %}
-
-            </div>
+            {{ render_pattern(contextualData) }}
 
         </div>
 
-    </div>
+    {% endif %}
+
+    {% embed 'grid/content.html.twig' %}
+
+        {% block main %}
+
+            {% for block in blocks %}
+                {{ render_pattern(block) }}
+            {% endfor %}
+
+            {% if cv %}
+                {{ render_pattern(cv) }}
+            {% endif %}
+
+            {% if hypothesisOpener is defined %}
+
+                {{ render_pattern(hypothesisOpener) }}
+
+            {% endif %}
+
+        {% endblock %}
+
+        {% block secondary %}
+
+            {% if collections %}
+
+                <div class="grid-secondary-column__item">
+
+                    {{ render_pattern(collections) }}
+
+                </div>
+
+            {% endif %}
+
+        {% endblock %}
+
+    {% endembed %}
 
 {% endblock %}

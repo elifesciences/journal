@@ -6,6 +6,7 @@ use eLife\Journal\Helper\HasPages;
 use eLife\Journal\Helper\Paginator;
 use eLife\Patterns\ViewModel\ContentHeader;
 use eLife\Patterns\ViewModel\ListingTeasers;
+use eLife\Patterns\ViewModel\Teaser;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -16,14 +17,15 @@ final class AnnualReportsController extends Controller
     public function listAction(Request $request) : Response
     {
         $page = (int) $request->query->get('page', 1);
-        $perPage = 6;
+        $perPage = 10;
 
         $arguments = $this->defaultPageArguments($request);
 
         $annualReports = $this->pagerfantaPromise(
             $this->get('elife.api_sdk.annual_reports'),
             $page,
-            $perPage
+            $perPage,
+            $this->willConvertTo(Teaser::class)
         );
 
         $arguments['title'] = 'Annual reports';

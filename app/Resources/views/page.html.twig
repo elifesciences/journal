@@ -1,13 +1,13 @@
-<!doctype html>
+{% extends '::base.html.twig' %}
 
-<html lang="en" prefix="og: http://ogp.me/ns#">
+{% block head %}
 
-<head>
-
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
-
-    <title>{% block title %}{{ title|striptags }}{% endblock %} | eLife</title>
+    <style>
+        {% if criticalCss is not defined %}
+        {% set criticalCss = 'default' %}
+        {% endif %}
+        {% include '@critical-css/' ~ criticalCss ~ '.css' ignore missing %}
+    </style>
 
     {# We don't use gulp-favicon's generated file as it includes things we don't want, such as apple-mobile-web-app-capable #}
     <link rel="apple-touch-icon" sizes="57x57" href="{{ asset('assets/favicons/apple-touch-icon-57x57.png') }}">
@@ -19,6 +19,7 @@
     <link rel="apple-touch-icon" sizes="144x144" href="{{ asset('assets/favicons/apple-touch-icon-144x144.png') }}">
     <link rel="apple-touch-icon" sizes="152x152" href="{{ asset('assets/favicons/apple-touch-icon-152x152.png') }}">
     <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('assets/favicons/apple-touch-icon-180x180.png') }}">
+    <link rel="icon" type="image/svg+xml" href="{{ asset('assets/favicons/favicon.svg') }}">
     <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('assets/favicons/favicon-32x32.png') }}">
     <link rel="icon" type="image/png" sizes="192x192" href="{{ asset('assets/favicons/android-chrome-192x192.png') }}">
     <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('assets/favicons/favicon-16x16.png') }}">
@@ -26,14 +27,6 @@
     <link rel="manifest" href="{{ asset('assets/favicons/manifest.json') }}">
     <meta name="theme-color" content="#ffffff">
     <meta name="application-name" content="eLife">
-
-    {% block stylesheets deferred %}
-    {% for stylesheet in stylesheets %}
-        <link href="{{ asset(stylesheet) }}" rel="stylesheet">
-    {% endfor %}
-    {% endblock %}
-
-    <meta name="format-detection" content="telephone=no">
 
     {% block meta %}
 
@@ -97,7 +90,6 @@
 
     <!--[if lt IE 9]>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
-    <script>document.createElement('picture');</script>
     <![endif]-->
 
     <script>
@@ -107,6 +99,21 @@
                 urls: ["{{ asset('assets/patterns/fonts/fonts.css') }}"]
             }
         };
+
+        {% if gtm_id %}
+        (function (w, d, s, l, i) {
+            w[l] = w[l] || [];
+            w[l].push({
+                'gtm.start': new Date().getTime(), event: 'gtm.js'
+            });
+            var f = d.getElementsByTagName(s)[0],
+                j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : '';
+            j.async = true;
+            j.src =
+                'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+            f.parentNode.insertBefore(j, f);
+        })(window, document, 'script', 'dataLayer', '{{ gtm_id }}');
+        {% endif %}
 
         (function (d) {
             var wf = d.createElement("script");
@@ -118,52 +125,132 @@
         })(document);
     </script>
 
-</head>
+{% endblock %}
 
-<body class="body">
+{% block content %}
+    {% if gtm_id %}
+        <noscript>
+            <iframe src="https://www.googletagmanager.com/ns.html?id={{ gtm_id }}" height="0" width="0"
+                    style="display:none; visibility:hidden"></iframe>
+        </noscript>
+    {% endif %}
 
-<div class="global-wrapper">
+    <div class="global-wrapper" data-behaviour="FragmentHandler Math">
 
-    <div class="global-inner">
+        <div class="global-inner">
 
-        {% if header %}
-            {{ render_pattern(header) }}
-        {% endif %}
+            {% if header %}
+                <div class="wrapper wrapper--site-header">
+                    {{ render_pattern(header) }}
+                </div>
+            {% endif %}
 
-        {% if app.request.hasPreviousSession %}
-            {% for type, messages in app.session.flashbag.all %}
-                {% for message in messages %}
-                    {{ info_bar(message, type) }}
+            {% if (app.session and app.session.started) or app.request.hasPreviousSession %}
+                {% for type, messages in app.session.flashbag.all %}
+                    {% for message in messages %}
+                        {{ info_bar(message, type) }}
+                    {% endfor %}
                 {% endfor %}
+            {% endif %}
+
+            {% for infoBar in infoBars %}
+                {{ render_pattern(infoBar) }}
             {% endfor %}
-        {% endif %}
 
-        {% block info_bar %}{% endblock %}
+            <main role="main" class="main">
 
-        <main role="main" class="blg-margin-bottom-large">
+                {% block body %}{% endblock %}
 
-            {% block body %}{% endblock %}
+            </main>
 
-        </main>
+            {% if emailCta %}
+                {{ render_pattern(emailCta) }}
+            {% endif %}
 
-        {% if emailCta %}
-            {{ render_pattern(emailCta) }}
-        {% endif %}
+            {% if footer %}
+                {{ render_pattern(footer) }}
+            {% endif %}
 
-        {% if footer %}
-            {{ render_pattern(footer) }}
-        {% endif %}
+        </div>
 
     </div>
 
-</div>
+    {% block javascripts deferred %}
+    {% for javascript in javascripts %}
+        <script async src="{{ asset(javascript) }}"></script>
+    {% endfor %}
 
-{% block javascripts deferred %}
-{% for javascript in javascripts %}
-    <script src="{{ asset(javascript) }}"></script>
-{% endfor %}
+    {% if hypothesis ?? false and is_granted('FEATURE_CAN_USE_HYPOTHESIS') %}
+        <script>
+            if (!!document.createElement('div').dataset) {
+                window.hypothesisConfig = function () {
+                    return {
+                        branding: {
+                            accentColor: '#0288D1',
+                            appBackgroundColor: 'white',
+                            ctaBackgroundColor: '#0288D1',
+                            ctaTextColor: 'white',
+                            selectionFontFamily: 'Georgia, Times, serif',
+                            annotationFontFamily: 'Georgia, Times, serif'
+                        },
+                        disableToolbarCloseBtn: false,
+                        disableToolbarMinimizeBtn: true,
+                        disableToolbarHighlightsBtn: true,
+                        disableToolbarNewNoteBtn: true,
+                        disableBucketBar: true,
+                        enableSidebarDropShadow: true,
+                        enableExperimentalNewNoteButton: true,
+                        enableCleanOnboardingTheme: true,
+                        theme: 'clean',
+                        usernameUrl: '{{ absolute_url(path('profile-no-id')) }}',
+                        services: [{
+                            apiUrl: '{{ hypothesis_api }}',
+                            authority: '{{ hypothesis_authority }}',
+                            grantToken: {% if app.user %}'{{ hypothesis_token(app.user) }}'{% else %}null{% endif %},
+                            icon: '{{ absolute_url(asset('assets/favicons/favicon.svg')) }}'
+                            {%- if not app.user %},
+                            onLoginRequest: function () {
+                                window.location.assign('{{ path('log-in') }}');
+                            },
+                            onSignupRequest: function () {
+                                window.location.assign('{{ path('log-in') }}');
+                            }
+                            {%- else %},
+                            onLogoutRequest: function () {
+                                window.location.assign('{{ path('log-out') }}');
+                            },
+                            onProfileRequest: function () {
+                                window.location.assign('{{ path('profile', {id: app.user.username}) }}');
+                            }
+                            {%- endif %}
+                        }],
+                        showHighlights: 'whenSidebarOpen'
+                    };
+                };
+
+                (function () {
+                    var d = document, s = d.createElement('script'), c = d.getElementById('annotation-count');
+                    if (!!c) {
+                        c.dataset.hypothesisAnnotationCount = '';
+                        c.previousElementSibling.dataset.hypothesisTrigger = '';
+                    }
+                    s.src = 'https://hypothes.is/embed.js';
+                    s.async = true;
+                    s.addEventListener('error', function () {
+                        {# Do nothing #}
+                    });
+                    d.head.appendChild(s);
+                })();
+            }
+        </script>
+    {% endif %}
+
 {% endblock %}
 
-</body>
+    {% block stylesheets deferred %}
+    {% for stylesheet in stylesheets %}
+        <link href="{{ asset(stylesheet) }}" rel="stylesheet">
+    {% endfor %}
+    {% endblock %}
 
-</html>
+{% endblock %}

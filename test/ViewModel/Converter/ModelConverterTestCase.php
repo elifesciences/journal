@@ -2,18 +2,17 @@
 
 namespace test\eLife\Journal\ViewModel\Converter;
 
-use Cocur\Slugify\SlugifyInterface;
 use ComposerLocator;
 use eLife\ApiSdk\Collection;
 use eLife\ApiSdk\Model;
 use eLife\Journal\ViewModel\Converter\ViewModelConverter;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Traversable;
 use function GuzzleHttp\json_decode;
 
-abstract class ModelConverterTestCase extends PHPUnit_Framework_TestCase
+abstract class ModelConverterTestCase extends TestCase
 {
     private static $classes = [
         'annual-report' => Model\AnnualReport::class,
@@ -26,12 +25,14 @@ abstract class ModelConverterTestCase extends PHPUnit_Framework_TestCase
         'external-article' => Model\ExternalArticle::class,
         'highlight' => Model\Highlight::class,
         'interview' => Model\Interview::class,
-        'labs-experiment' => Model\LabsExperiment::class,
+        'job-advert' => Model\JobAdvert::class,
+        'labs-post' => Model\LabsPost::class,
         'medium-article' => Model\MediumArticle::class,
         'person' => Model\Person::class,
         'podcast-episode' => Model\PodcastEpisode::class,
         'podcast-episode-chapter' => Model\PodcastEpisodeChapterModel::class,
         'press-package' => Model\PressPackage::class,
+        'profile' => Model\Profile::class,
         'subject' => Model\Subject::class,
     ];
 
@@ -91,13 +92,16 @@ abstract class ModelConverterTestCase extends PHPUnit_Framework_TestCase
         $this->assertInternalType('array', $this->context);
 
         foreach ($this->models as $originalModel) {
+            $model = $originalModel;
+            $list = false;
+            $version = 1;
             switch ($originalModel) {
                 case 'cover':
                     $model = 'cover-list';
                     $list = true;
                     break;
                 case 'highlight':
-                    $model = 'highlights';
+                    $model = 'highlight-list';
                     $list = true;
                     break;
                 case 'medium-article':
@@ -114,12 +118,20 @@ abstract class ModelConverterTestCase extends PHPUnit_Framework_TestCase
                     $type = true;
                     $list = true;
                     break;
-                default:
-                    $model = $originalModel;
-                    $list = false;
+                case 'article-poa':
+                case 'article-vor':
+                case 'blog-article':
+                case 'event':
+                case 'interview':
+                case 'labs-post':
+                    $version = 2;
+                    break;
+                case 'press-package':
+                    $version = 3;
+                    break;
             }
 
-            $samples = Finder::create()->files()->in(ComposerLocator::getPath('elife/api')."/dist/samples/{$model}/v1");
+            $samples = Finder::create()->files()->in(ComposerLocator::getPath('elife/api')."/dist/samples/{$model}/v{$version}");
 
             foreach ($samples as $sample) {
                 $name = $model.'/v1/'.$sample->getBasename();
@@ -172,11 +184,9 @@ abstract class ModelConverterTestCase extends PHPUnit_Framework_TestCase
 
     final protected function stubUrlGenerator() : UrlGeneratorInterface
     {
-        return $this->createMock(UrlGeneratorInterface::class);
-    }
+        $urlGenerator = $this->createMock(UrlGeneratorInterface::class);
+        $urlGenerator->method('generate')->willReturn('#');
 
-    final protected function stubSlugify() : SlugifyInterface
-    {
-        return $this->createMock(SlugifyInterface::class);
+        return $urlGenerator;
     }
 }

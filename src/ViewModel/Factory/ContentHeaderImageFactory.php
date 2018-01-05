@@ -4,77 +4,66 @@ namespace eLife\Journal\ViewModel\Factory;
 
 use eLife\ApiSdk\Model\Image;
 use eLife\Journal\Helper\CreatesIiifUri;
+use eLife\Journal\Helper\MediaTypes;
+use eLife\Journal\ViewModel\Builder\PictureBuilder;
 use eLife\Patterns\ViewModel;
-use Exception;
 use Symfony\Component\Asset\Packages;
 
 final class ContentHeaderImageFactory
 {
     use CreatesIiifUri;
 
+    private $pictureBuilderFactory;
     private $packages;
 
-    public function __construct(Packages $packages)
+    public function __construct(PictureBuilderFactory $pictureBuilderFactory, Packages $packages)
     {
+        $this->pictureBuilderFactory = $pictureBuilderFactory;
         $this->packages = $packages;
     }
 
-    public function forLocalFile(string $filename) : ViewModel\Picture
+    public function forLocalFile(string $filename, bool $creditOverlay = false) : ViewModel\ContentHeaderImage
     {
-        return $this->create(function (int $width, int $height) use ($filename) {
-            return $this->packages->getUrl("assets/images/banners/{$filename}-{$width}x{$height}.jpg");
-        });
-    }
-
-    public function forImage(Image $image) : ViewModel\Picture
-    {
-        return $this->create(function (int $width, int $height) use ($image) {
-            return $this->iiifUri($image, $width, $height);
-        });
-    }
-
-    private function create(callable $callback) : ViewModel\Picture
-    {
-        $sources = [];
-
-        foreach ([450 => 264, 767 => 264, 1023 => 288] as $width => $height) {
-            if (empty($srcset = $this->createSrcset($callback, $width, $height))) {
-                continue;
-            }
-
-            $sources[] = [
-                'srcset' => $this->srcsetToString($srcset),
-                'media' => "(max-width: {$width}px)",
-            ];
-        }
-
-        $srcset = $this->createSrcset($callback, 1114, 336);
-        $default = end($srcset);
-        reset($srcset);
-
-        return new ViewModel\Picture(
-            $sources,
-            new ViewModel\Image($default, count($srcset) > 1 ? $srcset : [])
+        return new ViewModel\ContentHeaderImage(
+            $this->pictureForLocalFile($filename),
+            'Illustration by <a href="http://www.davidebonazzi.com/">Davide Bonazzi</a>',
+            $creditOverlay
         );
     }
 
-    private function createSrcset(callable $callback, int $width, int $height) : array
+    public function forImage(Image $image, bool $creditOverlay = false) : ViewModel\ContentHeaderImage
     {
-        return array_reduce(range(2, 1), function (array $carry, int $factor) use ($callback, $width, $height) {
-            try {
-                $carry[$width * $factor] = $callback($width * $factor, $height * $factor);
-            } catch (Exception $e) {
-                // Do nothing.
-            }
-
-            return $carry;
-        }, []);
+        return new ViewModel\ContentHeaderImage(
+            $this->pictureForImage($image),
+            $image->getAttribution()->notEmpty() ? implode(' ', $image->getAttribution()->toArray()) : null,
+            $creditOverlay
+        );
     }
 
-    private function srcsetToString(array $srcset) : string
+    public function pictureForLocalFile(string $filename) : ViewModel\Picture
     {
-        return implode(', ', array_map(function (int $width, string $uri) {
-            return "{$uri} {$width}w";
-        }, array_keys($srcset), array_values($srcset)));
+        $builder = $this->pictureBuilderFactory
+            ->create(function (string $type, int $width, int $height = null) use ($filename) {
+                $extension = MediaTypes::toExtension($type);
+
+                return $this->packages->getUrl("assets/images/banners/{$filename}-{$width}x{$height}.{$extension}");
+            }, 'image/jpeg', 1114, 336);
+
+        return $this->addSizes($builder)->build();
+    }
+
+    public function pictureForImage(Image $image) : ViewModel\Picture
+    {
+        $builder = $this->pictureBuilderFactory->forImage($image, 1114, 336);
+
+        return $this->addSizes($builder)->build();
+    }
+
+    private function addSizes(PictureBuilder $builder) : PictureBuilder
+    {
+        return $builder
+            ->addSize(450, 264, '(max-width: 450px)')
+            ->addSize(767, 264, '(max-width: 767px)')
+            ->addSize(1023, 288, '(max-width: 1023px)');
     }
 }

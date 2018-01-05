@@ -14,10 +14,12 @@ final class ArticleTeaserConverter implements ViewModelConverter
     use CreatesDate;
     use CreatesTeaserImage;
 
+    private $viewModelConverter;
     private $urlGenerator;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator)
+    public function __construct(ViewModelConverter $viewModelConverter, UrlGeneratorInterface $urlGenerator)
     {
+        $this->viewModelConverter = $viewModelConverter;
         $this->urlGenerator = $urlGenerator;
     }
 
@@ -34,7 +36,7 @@ final class ArticleTeaserConverter implements ViewModelConverter
 
         return ViewModel\Teaser::main(
             $object->getFullTitle(),
-            $this->urlGenerator->generate('article', ['id' => $object->getId()]),
+            $this->urlGenerator->generate('article', [$object]),
             $object instanceof ArticleVoR ? $object->getImpactStatement() : null,
             $object->getAuthorLine(),
             $this->createContextLabel($object),
@@ -47,7 +49,8 @@ final class ArticleTeaserConverter implements ViewModelConverter
                     ),
                     $this->simpleDate($object, $context)
                 ),
-                $object instanceof ArticleVoR
+                $object instanceof ArticleVoR || null === $object->getPdf(),
+                null !== $object->getPdf()
             )
         );
     }
@@ -55,5 +58,10 @@ final class ArticleTeaserConverter implements ViewModelConverter
     public function supports($object, string $viewModel = null, array $context = []) : bool
     {
         return $object instanceof ArticleVersion && ViewModel\Teaser::class === $viewModel && empty($context['variant']);
+    }
+
+    protected function getViewModelConverter() : ViewModelConverter
+    {
+        return $this->viewModelConverter;
     }
 }

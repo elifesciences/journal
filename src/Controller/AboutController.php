@@ -2,15 +2,30 @@
 
 namespace eLife\Journal\Controller;
 
+use eLife\ApiSdk\Collection\EmptySequence;
+use eLife\ApiSdk\Collection\PromiseSequence;
+use eLife\ApiSdk\Collection\Sequence;
+use eLife\ApiSdk\Model\Person;
+use eLife\ApiSdk\Model\Subject;
+use eLife\Journal\Helper\Callback;
 use eLife\Journal\ViewModel\DefinitionList;
-use eLife\Journal\ViewModel\Paragraph;
+use eLife\Patterns\ViewModel\AboutProfile;
+use eLife\Patterns\ViewModel\AboutProfiles;
 use eLife\Patterns\ViewModel\ArticleSection;
+use eLife\Patterns\ViewModel\Button;
 use eLife\Patterns\ViewModel\ContentHeader;
+use eLife\Patterns\ViewModel\FormLabel;
 use eLife\Patterns\ViewModel\IFrame;
 use eLife\Patterns\ViewModel\Link;
+use eLife\Patterns\ViewModel\ListHeading;
 use eLife\Patterns\ViewModel\Listing;
+use eLife\Patterns\ViewModel\Paragraph;
 use eLife\Patterns\ViewModel\SectionListing;
 use eLife\Patterns\ViewModel\SectionListingLink;
+use eLife\Patterns\ViewModel\Select;
+use eLife\Patterns\ViewModel\SelectNav;
+use eLife\Patterns\ViewModel\SelectOption;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -28,7 +43,7 @@ final class AboutController extends Controller
         $arguments['body'] = [
             new Paragraph('eLife is a non-profit organisation inspired by research funders and led by scientists. Our mission is to help scientists accelerate discovery by operating a platform for research communication that encourages and recognises the most responsible behaviours in science.'),
             new Paragraph('eLife publishes important research in all areas of the life and biomedical sciences. The research is selected and evaluated by working scientists and is made freely available to all readers without delay. eLife also invests in <a href="'.$this->get('router')->generate('about-innovation').'">innovation</a> through open-source tool development to accelerate research communication and discovery. Our work is guided by the <a href="'.$this->get('router')->generate('about-people').'">communities</a> we serve.'),
-            new Paragraph('eLife was founded in 2011 by the Howard Hughes Medical Institute, the Max Planck Society and the Wellcome Trust, who provide financial support and strategic guidance. In 2017, eLife introduced <a href="'.$this->get('router')->generate('inside-elife-article', ['id' => 'b6365b76']).'">publication fees</a> to cover some of our <a href="'.$this->get('router')->generate('inside-elife-article', ['id' => 'a058ec77']).'">core publishing costs</a>. Annual reports and financial statements are <a href="'.$this->get('router')->generate('annual-reports').'">openly available</a>.'),
+            new Paragraph('eLife was founded in 2011 by the Howard Hughes Medical Institute, the Max Planck Society and the Wellcome Trust​. These organisations continue to provide financial and strategic support, and were joined by the Knut and Alice Wallenberg Foundation for 2018. <a href="'.$this->get('router')->generate('inside-elife-article', ['id' => 'b6365b76']).'">Publication fees​</a>​ ​were introduced in 2017 ​to cover some of ​eLife\'s <a href="'.$this->get('router')->generate('inside-elife-article', ['id' => 'a058ec77']).'">core publishing costs</a>. <a href="'.$this->get('router')->generate('annual-reports').'">​Annual reports​</a>​ and financial statements are openly available.'),
             ArticleSection::basic('Related links', 2,
                 $this->render(Listing::unordered([
                     '<a href="'.$this->get('router')->generate('inside-elife').'">Inside eLife</a>',
@@ -137,7 +152,7 @@ final class AboutController extends Controller
             'The community behind eLife wants to help address some of the pressures on early-career scientists');
 
         $arguments['body'] = [
-            new Paragraph('The community behind eLife – including the research funders who support the journal, the editors and referees who run the peer-review process, and our Early-Career Advisory Group – are keenly aware of the pressures faced by junior investigators, and are working to create a more positive publishing experience that will, among other things, help early-career researchers receive the recognition they deserve.'),
+            new Paragraph('The community behind eLife – including the research funders who support the journal, the editors and referees who run the peer-review process, and our <a href="'.$this->get('router')->generate('about-people', ['type' => 'early-career']).'">Early-Career Advisory Group</a> – are keenly aware of the pressures faced by junior investigators, and are working to create a more positive publishing experience that will, among other things, help early-career researchers receive the recognition they deserve.'),
             new Paragraph('eLife supports and showcases early-career scientists and their work in a number of ways:'),
             new DefinitionList([
                 '<a href="'.$this->get('router')->generate('magazine').'">Magazine features</a>' => 'Early-career researchers and issues of concern to them are regularly featured in interviews, podcasts and articles in the Magazine section of eLife',
@@ -153,16 +168,97 @@ final class AboutController extends Controller
         return new Response($this->get('templating')->render('::about.html.twig', $arguments));
     }
 
-    public function peopleAction(Request $request) : Response
+    public function peopleAction(Request $request, string $type) : Response
     {
+        if ($request->query->has('type')) {
+            return new RedirectResponse(
+                $this->get('router')->generate('about-people', ['type' => $request->query->get('type')]),
+                Response::HTTP_MOVED_PERMANENTLY
+            );
+        }
+
         $arguments = $this->aboutPageArguments($request);
 
         $arguments['title'] = 'People';
 
         $arguments['contentHeader'] = new ContentHeader($arguments['title'], null,
             'The working scientists who serve as eLife editors, our early-career advisors, governing board, and our executive staff all work in concert to realise eLife’s mission to accelerate discovery');
+        $subjects = $this->get('elife.api_sdk.subjects')->reverse();
+
+        $allSubjects = $subjects->slice(0, 100)
+            ->otherwise($this->softFailure('Failed to load subjects for people', new EmptySequence()));
+
+        $types = (new PromiseSequence($allSubjects))
+            ->map(function (Subject $subject) use ($type) {
+                return new SelectOption($subject->getId(), $subject->getName(), $subject->getId() === $type);
+            });
+
+        $types = $types
+            ->prepend(new SelectOption('', 'Leadership team', '' === $type))
+            ->append(new SelectOption('directors', 'Board of directors', 'directors' === $type))
+            ->append(new SelectOption('early-career', 'Early-career advisory group', 'early-career' === $type))
+            ->append(new SelectOption('staff', 'Executive staff', 'staff' === $type));
+
+        $arguments['contentHeader'] = (new PromiseSequence($types))
+            ->then(function (Sequence $types) use ($arguments) {
+                return new ContentHeader($arguments['title'], null, 'The working scientists who serve as eLife editors, our early-career advisors, governing board, and our executive staff all work in concert to realise eLife’s mission to accelerate discovery',
+                    false, [], null, [], [], null, null,
+                    new SelectNav(
+                        $this->get('router')->generate('about-people'),
+                        new Select('type', $types->toArray(), new FormLabel('Type', true), 'type'),
+                        Button::form('Go', Button::TYPE_SUBMIT, 'go', Button::SIZE_EXTRA_SMALL)
+                    )
+                );
+            });
+
+        $people = $this->get('elife.api_sdk.people')->reverse();
+
+        $arguments['lists'] = [];
+
+        switch ($type) {
+            case '':
+                $leadership = $people->forType('leadership');
+
+                $editorInChief = $leadership->filter(function (Person $person) {
+                    return 'Editor-in-Chief' === $person->getTypeLabel();
+                });
+                $deputyEditors = $leadership->filter(function (Person $person) {
+                    return 'Editor-in-Chief' !== $person->getTypeLabel();
+                });
+
+                $arguments['lists'][] = $this->createAboutProfiles($editorInChief, 'Editor-in-Chief');
+                $arguments['lists'][] = $this->createAboutProfiles($deputyEditors, 'Deputy editors');
+                $arguments['lists'][] = $this->createAboutProfiles($people->forType('senior-editor'), 'Senior editors');
+                break;
+            case 'directors':
+                $arguments['lists'][] = $this->createAboutProfiles($people->forType('director'), 'Board of directors');
+                break;
+            case 'early-career':
+                $arguments['lists'][] = $this->createAboutProfiles($people->forType('early-career'), 'Early-career advisory group');
+                break;
+            case 'staff':
+                $arguments['lists'][] = $this->createAboutProfiles($people->forType('executive'), 'Executive staff');
+                break;
+            default:
+                $arguments['subject'] = $subjects->get($type)->otherwise($this->mightNotExist());
+
+                $people = $people->forSubject($type);
+                $arguments['lists'][] = $this->createAboutProfiles($people->forType('senior-editor'), 'Senior editors');
+                $arguments['lists'][] = $this->createAboutProfiles($people->forType('reviewing-editor'), 'Reviewing editors', true);
+        }
+
+        $arguments['lists'] = array_filter($arguments['lists'], Callback::isNotEmpty());
 
         return new Response($this->get('templating')->render('::about-people.html.twig', $arguments));
+    }
+
+    private function createAboutProfiles(Sequence $people, string $heading, bool $compact = false)
+    {
+        if ($people->isEmpty()) {
+            return null;
+        }
+
+        return new AboutProfiles($people->map($this->willConvertTo(AboutProfile::class, compact('compact')))->toArray(), new ListHeading($heading), $compact);
     }
 
     private function aboutPageArguments(Request $request) : array
@@ -186,7 +282,7 @@ final class AboutController extends Controller
             return new Link($text, $path, $path === $currentPath);
         }, array_keys($menuItems), array_values($menuItems));
 
-        $arguments['menu'] = new SectionListing('sections', $menuItems, true);
+        $arguments['menu'] = new SectionListing('sections', $menuItems, new ListHeading('About sections'), true);
 
         return $arguments;
     }

@@ -22,7 +22,7 @@ final class PodcastEpisodeAudioPlayerConverterTest extends ModelConverterTestCas
             ->method('convert')
             ->will($this->returnValue($this->aMediaChapterListingItem()));
 
-        $this->converter = new PodcastEpisodeAudioPlayerConverter($this->viewModelConverter);
+        $this->converter = new PodcastEpisodeAudioPlayerConverter($this->viewModelConverter, $this->stubUrlGenerator());
     }
 
     private function aMediaChapterListingItem()

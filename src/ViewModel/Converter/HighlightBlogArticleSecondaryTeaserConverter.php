@@ -2,7 +2,6 @@
 
 namespace eLife\Journal\ViewModel\Converter;
 
-use Cocur\Slugify\SlugifyInterface;
 use eLife\ApiSdk\Model\BlogArticle;
 use eLife\ApiSdk\Model\Highlight;
 use eLife\Patterns\ViewModel;
@@ -15,13 +14,13 @@ final class HighlightBlogArticleSecondaryTeaserConverter implements ViewModelCon
     use CreatesDate;
     use CreatesTeaserImage;
 
+    private $viewModelConverter;
     private $urlGenerator;
-    private $slugify;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator, SlugifyInterface $slugify)
+    public function __construct(ViewModelConverter $viewModelConverter, UrlGeneratorInterface $urlGenerator)
     {
+        $this->viewModelConverter = $viewModelConverter;
         $this->urlGenerator = $urlGenerator;
-        $this->slugify = $slugify;
     }
 
     /**
@@ -34,8 +33,8 @@ final class HighlightBlogArticleSecondaryTeaserConverter implements ViewModelCon
 
         return ViewModel\Teaser::secondary(
             $object->getTitle(),
-            $this->urlGenerator->generate('inside-elife-article', ['id' => $article->getId(), 'slug' => $this->slugify->slugify($object->getTitle())]),
-            $object->getAuthorLine(),
+            $this->urlGenerator->generate('inside-elife-article', [$article]),
+            null,
             $this->createContextLabel($article),
             $object->getThumbnail() ? $this->smallTeaserImage($object) : null,
             ViewModel\TeaserFooter::forNonArticle(
@@ -50,5 +49,10 @@ final class HighlightBlogArticleSecondaryTeaserConverter implements ViewModelCon
     public function supports($object, string $viewModel = null, array $context = []) : bool
     {
         return $object instanceof Highlight && ViewModel\Teaser::class === $viewModel && 'secondary' === ($context['variant'] ?? null) && $object->getItem() instanceof BlogArticle;
+    }
+
+    protected function getViewModelConverter() : ViewModelConverter
+    {
+        return $this->viewModelConverter;
     }
 }

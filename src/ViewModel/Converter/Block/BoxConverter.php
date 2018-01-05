@@ -30,7 +30,7 @@ final class BoxConverter implements ViewModelConverter
     /**
      * @param Block\Box $object
      */
-    public function convert($object, string $viewModel = null, array $context = []): ViewModel
+    public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
         $level = $context['level'] ?? 1;
 
@@ -40,16 +40,16 @@ final class BoxConverter implements ViewModelConverter
             $object->getTitle(),
             $level,
             $this->createDoi($object),
-            $this->patternRenderer->render(...$this->convertContent($object, $level + 1))
+            $this->patternRenderer->render(...$this->convertContent($object, $level + 1, $context))
         );
     }
 
-    public function supports($object, string $viewModel = null, array $context = []): bool
+    public function supports($object, string $viewModel = null, array $context = []) : bool
     {
         return $object instanceof Block\Box;
     }
 
-    protected function getViewModelConverter(): ViewModelConverter
+    protected function getViewModelConverter() : ViewModelConverter
     {
         return $this->viewModelConverter;
     }

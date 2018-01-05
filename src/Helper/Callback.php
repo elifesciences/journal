@@ -22,6 +22,31 @@ final class Callback
         });
     }
 
+    public static function methodIsInstanceOf(string $method, string $class) : Callback
+    {
+        return new self(function ($object) use ($method, $class) {
+            return call_user_func([$object, $method]) instanceof $class;
+        });
+    }
+
+    public static function methodIsValue(string $method, $value) : Callback
+    {
+        return new self(function ($object) use ($method, $value) {
+            return call_user_func([$object, $method]) === $value;
+        });
+    }
+
+    public static function isNotEmpty() : Callback
+    {
+        return new self(function ($test) {
+            if (empty($test) || ((is_array($test) || $test instanceof Countable) && 0 === count($test)) || ($test instanceof Paginator && 0 === $test->getTotal())) {
+                return false;
+            }
+
+            return true;
+        });
+    }
+
     public static function mustBeInstanceOf(string $class, Exception $exception = null) : Callback
     {
         if (null === $exception) {
@@ -69,6 +94,13 @@ final class Callback
         });
     }
 
+    public static function apply(string $function) : Callback
+    {
+        return new self(function ($object) use ($function) {
+            return $function($object);
+        });
+    }
+
     public static function method(string $method, ...$values) : Callback
     {
         return new self(function ($object) use ($method, $values) {
@@ -76,10 +108,10 @@ final class Callback
         });
     }
 
-    public static function pick(string $key) : Callback
+    public static function call(callable $callable, ...$values) : Callback
     {
-        return new self(function (array $object) use ($key) {
-            return $object[$key];
+        return new self(function () use ($callable, $values) {
+            return call_user_func($callable, ...$values);
         });
     }
 

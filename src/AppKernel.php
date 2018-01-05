@@ -6,17 +6,21 @@ use Bobthecow\Bundle\MustacheBundle\BobthecowMustacheBundle;
 use Cocur\Slugify\Bridge\Symfony\CocurSlugifyBundle;
 use Csa\Bundle\GuzzleBundle\CsaGuzzleBundle;
 use eLife\Journal\Expression\ComposerLocateFunctionProvider;
-use Irozgar\GulpRevVersionsBundle\IrozgarGulpRevVersionsBundle;
+use eLife\Journal\Expression\TimeFunctionProvider;
+use HWI\Bundle\OAuthBundle\HWIOAuthBundle;
+use Isometriks\Bundle\SpamBundle\IsometriksSpamBundle;
+use Nelmio\SecurityBundle\NelmioSecurityBundle;
 use PackageVersions\Versions;
 use Sensio\Bundle\DistributionBundle\SensioDistributionBundle;
 use Symfony\Bundle\DebugBundle\DebugBundle;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Bundle\MonologBundle\MonologBundle;
+use Symfony\Bundle\SecurityBundle\SecurityBundle;
 use Symfony\Bundle\SwiftmailerBundle\SwiftmailerBundle;
 use Symfony\Bundle\TwigBundle\TwigBundle;
 use Symfony\Bundle\WebProfilerBundle\WebProfilerBundle;
+use Symfony\Bundle\WebServerBundle\WebServerBundle;
 use Symfony\Component\Config\Loader\LoaderInterface;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Kernel;
 use WhiteOctober\PagerfantaBundle\WhiteOctoberPagerfantaBundle;
@@ -42,7 +46,7 @@ class AppKernel extends Kernel
         $this->version = $version;
     }
 
-    public function registerBundles() : array
+    public function registerBundles()
     {
         $bundles = [
             new AppBundle(),
@@ -50,8 +54,11 @@ class AppKernel extends Kernel
             new CocurSlugifyBundle(),
             new CsaGuzzleBundle(),
             new FrameworkBundle(),
-            new IrozgarGulpRevVersionsBundle(),
+            new HWIOAuthBundle(),
+            new IsometriksSpamBundle(),
             new MonologBundle(),
+            new NelmioSecurityBundle(),
+            new SecurityBundle(),
             new SwiftmailerBundle(),
             new TwigBundle(),
             new WhiteOctoberPagerfantaBundle(),
@@ -63,37 +70,41 @@ class AppKernel extends Kernel
             $bundles[] = new WebProfilerBundle();
         }
 
+        if ('dev' === $this->getEnvironment()) {
+            $bundles[] = new WebServerBundle();
+        }
+
         return $bundles;
     }
 
-    public function getName() : string
+    public function getName()
     {
         return 'journal';
     }
 
-    public function getVersion() : string
+    public function getVersion()
     {
         return $this->version;
     }
 
-    public function getRootDir() : string
+    public function getRootDir()
     {
-        return __DIR__.'/../app';
+        return $this->getProjectDir().'/app';
     }
 
-    public function getCacheDir() : string
+    public function getCacheDir()
     {
-        return $this->getRootDir().'/../var/cache/'.$this->getEnvironment();
+        return $this->getProjectDir().'/var/cache/'.$this->getEnvironment();
     }
 
-    public function getLogDir() : string
+    public function getLogDir()
     {
-        return $this->getRootDir().'/../var/logs';
+        return $this->getProjectDir().'/var/logs';
     }
 
     public function registerContainerConfiguration(LoaderInterface $loader)
     {
-        $loader->load($this->getRootDir().'/config/config_'.$this->getEnvironment().'.yml');
+        $loader->load($this->getProjectDir().'/app/config/config_'.$this->getEnvironment().'.yml');
     }
 
     public function run(Request $request)
@@ -103,11 +114,12 @@ class AppKernel extends Kernel
         $this->terminate($request, $response);
     }
 
-    protected function buildContainer() : ContainerBuilder
+    protected function buildContainer()
     {
         $builder = parent::buildContainer();
 
         $builder->addExpressionLanguageProvider(new ComposerLocateFunctionProvider());
+        $builder->addExpressionLanguageProvider(new TimeFunctionProvider());
 
         return $builder;
     }

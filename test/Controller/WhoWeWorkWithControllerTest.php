@@ -16,10 +16,10 @@ final class WhoWeWorkWithControllerTest extends PageTestCase
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertSame('Who we work with', $crawler->filter('.content-header__title')->text());
 
-        $this->assertNotEmpty($crawler->filter('.grid-listing-heading:contains("Memberships") + .grid-listing > .grid-listing-item'));
-        $this->assertNotEmpty($crawler->filter('.grid-listing-heading:contains("Service providers") + .grid-listing > .grid-listing-item'));
-        $this->assertNotEmpty($crawler->filter('.grid-listing-heading:contains("Content availability and archiving") + .grid-listing > .grid-listing-item'));
-        $this->assertNotEmpty($crawler->filter('.grid-listing-heading:contains("Committees and initiatives") + .grid-listing > .grid-listing-item'));
+        $this->assertNotEmpty($crawler->filter('.list-heading:contains("Memberships") + .grid-listing > .grid-listing-item'));
+        $this->assertNotEmpty($crawler->filter('.list-heading:contains("Service providers") + .grid-listing > .grid-listing-item'));
+        $this->assertNotEmpty($crawler->filter('.list-heading:contains("Content availability and archiving") + .grid-listing > .grid-listing-item'));
+        $this->assertNotEmpty($crawler->filter('.list-heading:contains("Committees and initiatives") + .grid-listing > .grid-listing-item'));
     }
 
     /**

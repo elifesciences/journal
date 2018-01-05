@@ -10,13 +10,14 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 final class HighlightPodcastEpisodeSecondaryTeaserConverter implements ViewModelConverter
 {
     use CreatesContextLabel;
-    use CreatesDate;
     use CreatesTeaserImage;
 
+    private $viewModelConverter;
     private $urlGenerator;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator)
+    public function __construct(ViewModelConverter $viewModelConverter, UrlGeneratorInterface $urlGenerator)
     {
+        $this->viewModelConverter = $viewModelConverter;
         $this->urlGenerator = $urlGenerator;
     }
 
@@ -30,14 +31,13 @@ final class HighlightPodcastEpisodeSecondaryTeaserConverter implements ViewModel
 
         return ViewModel\Teaser::secondary(
             $object->getTitle(),
-            $this->urlGenerator->generate('podcast-episode', ['number' => $episode->getNumber()]),
-            $object->getAuthorLine(),
+            $this->urlGenerator->generate('podcast-episode', [$episode]),
+            null,
             $this->createContextLabel($episode),
             $object->getThumbnail() ? $this->smallTeaserImage($object) : null,
             ViewModel\TeaserFooter::forNonArticle(
                 ViewModel\Meta::withLink(
-                    new ViewModel\Link('Podcast', $this->urlGenerator->generate('podcast')),
-                    $this->simpleDate($episode, $context)
+                    new ViewModel\Link('Podcast', $this->urlGenerator->generate('podcast'))
                 )
             )
         );
@@ -46,5 +46,10 @@ final class HighlightPodcastEpisodeSecondaryTeaserConverter implements ViewModel
     public function supports($object, string $viewModel = null, array $context = []) : bool
     {
         return $object instanceof Highlight && ViewModel\Teaser::class === $viewModel && 'secondary' === ($context['variant'] ?? null) && $object->getItem() instanceof PodcastEpisode;
+    }
+
+    protected function getViewModelConverter() : ViewModelConverter
+    {
+        return $this->viewModelConverter;
     }
 }

@@ -39,7 +39,7 @@ final class EventContext extends Context
         $this->mockApiResponse(
             new Request(
                 'GET',
-                'http://api.elifesciences.org/events?page=1&per-page=1&type=open&order=asc',
+                'http://api.elifesciences.org/events?page=1&per-page=1&show=open&order=asc',
                 ['Accept' => 'application/vnd.elife.event-list+json; version=1']
             ),
             new Response(
@@ -56,13 +56,13 @@ final class EventContext extends Context
             )
         );
 
-        foreach (array_chunk($events, 6) as $i => $eventsChunk) {
+        foreach (array_chunk($events, $chunk = 10) as $i => $eventsChunk) {
             $page = $i + 1;
 
             $this->mockApiResponse(
                 new Request(
                     'GET',
-                    "http://api.elifesciences.org/events?page=$page&per-page=6&type=open&order=asc",
+                    "http://api.elifesciences.org/events?page=$page&per-page=$chunk&show=open&order=asc",
                     ['Accept' => 'application/vnd.elife.event-list+json; version=1']
                 ),
                 new Response(
@@ -84,11 +84,11 @@ final class EventContext extends Context
                     new Request(
                         'GET',
                         'http://api.elifesciences.org/events/'.$event['id'],
-                        ['Accept' => 'application/vnd.elife.event+json; version=1']
+                        ['Accept' => 'application/vnd.elife.event+json; version=2']
                     ),
                     new Response(
                         200,
-                        ['Content-Type' => 'application/vnd.elife.event+json; version=1'],
+                        ['Content-Type' => 'application/vnd.elife.event+json; version=2'],
                         json_encode($event)
                     )
                 );
@@ -109,7 +109,7 @@ final class EventContext extends Context
      */
     public function iLoadMoreEvents()
     {
-        $this->getSession()->getPage()->clickLink('More events');
+        $this->getSession()->getPage()->clickLink('Load more');
     }
 
     /**

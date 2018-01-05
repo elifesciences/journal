@@ -9,15 +9,15 @@ trait CanConvertContent
 {
     use CanConvert;
 
-    final protected function willConvertContent(int $level = 2): callable
+    final protected function willConvertContent(int $level = 2, array $context = []) : callable
     {
-        return function (HasContent $object) use ($level) {
-            return $this->convertContent($object, $level);
+        return function (HasContent $object) use ($level, $context) {
+            return $this->convertContent($object, $level, $context);
         };
     }
 
-    final protected function convertContent(HasContent $object, int $level = 2): Sequence
+    final protected function convertContent(HasContent $object, int $level = 2, array $context = []) : Sequence
     {
-        return $object->getContent()->map($this->willConvertTo(null, ['level' => $level]));
+        return $object->getContent()->map($this->willConvertTo(null, $context + ['level' => $level]));
     }
 }

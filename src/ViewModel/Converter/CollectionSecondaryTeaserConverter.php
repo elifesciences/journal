@@ -2,7 +2,6 @@
 
 namespace eLife\Journal\ViewModel\Converter;
 
-use Cocur\Slugify\SlugifyInterface;
 use eLife\ApiSdk\Model\Collection;
 use eLife\Patterns\ViewModel;
 use eLife\Patterns\ViewModel\Link;
@@ -17,13 +16,13 @@ final class CollectionSecondaryTeaserConverter implements ViewModelConverter
     use CreatesDate;
     use CreatesTeaserImage;
 
+    private $viewModelConverter;
     private $urlGenerator;
-    private $slugify;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator, SlugifyInterface $slugify)
+    public function __construct(ViewModelConverter $viewModelConverter, UrlGeneratorInterface $urlGenerator)
     {
+        $this->viewModelConverter = $viewModelConverter;
         $this->urlGenerator = $urlGenerator;
-        $this->slugify = $slugify;
     }
 
     /**
@@ -33,13 +32,12 @@ final class CollectionSecondaryTeaserConverter implements ViewModelConverter
     {
         $curatedBy = 'Curated by '.$object->getSelectedCurator()->getDetails()->getPreferredName();
         if ($object->selectedCuratorEtAl()) {
-            $curatedBy .= ' et al';
+            $curatedBy .= ' et al.';
         }
-        $curatedBy .= '.';
 
         return Teaser::secondary(
             $object->getTitle(),
-            $this->urlGenerator->generate('collection', ['id' => $object->getId(), 'slug' => $this->slugify->slugify($object->getTitle())]),
+            $this->urlGenerator->generate('collection', [$object]),
             $curatedBy,
             $this->createContextLabel($object),
             $this->smallTeaserImage($object),
@@ -52,5 +50,10 @@ final class CollectionSecondaryTeaserConverter implements ViewModelConverter
     public function supports($object, string $viewModel = null, array $context = []) : bool
     {
         return $object instanceof Collection && ViewModel\Teaser::class === $viewModel && 'secondary' === ($context['variant'] ?? null);
+    }
+
+    protected function getViewModelConverter() : ViewModelConverter
+    {
+        return $this->viewModelConverter;
     }
 }

@@ -5,6 +5,7 @@ namespace eLife\Journal\ViewModel\Converter;
 use eLife\Journal\Helper\Paginator;
 use eLife\Journal\ViewModel\EmptyListing;
 use eLife\Patterns\ViewModel;
+use eLife\Patterns\ViewModel\ListHeading;
 
 final class PaginatorListingTeasersConverter implements ViewModelConverter
 {
@@ -15,8 +16,11 @@ final class PaginatorListingTeasersConverter implements ViewModelConverter
     {
         $type = $context['type'] ?? null;
 
-        $heading = $context['heading'] ?? trim('Latest '.$type);
-        $loadMoreText = $type ? 'More '.$type : 'Load more';
+        if (isset($context['heading']) && '' === $context['heading']) {
+            $heading = null;
+        } else {
+            $heading = new ListHeading($context['heading'] ?? trim('Latest '.$type));
+        }
         $prevText = trim('Newer '.$type);
         $nextText = trim('Older '.$type);
         $emptyText = $context['emptyText'] ?? (trim('No '.($type ?? 'items').' available.'));
@@ -37,7 +41,7 @@ final class PaginatorListingTeasersConverter implements ViewModelConverter
             return ViewModel\ListingTeasers::withPagination(
                 $object->getItems(),
                 $object->getNextPage()
-                    ? ViewModel\Pager::firstPage(new ViewModel\Link($loadMoreText, $object->getNextPagePath()), 'listing')
+                    ? ViewModel\Pager::firstPage(new ViewModel\Link('Load more', $object->getNextPagePath()), 'listing')
                     : null,
                 $heading,
                 'listing'

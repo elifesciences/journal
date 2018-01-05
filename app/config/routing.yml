@@ -1,5 +1,13 @@
-_legacy:
-    resource: routing_legacy.yml
+log-in:
+    path: /log-in
+    defaults:
+        _controller: AppBundle:Auth:redirect
+
+log-in-check:
+    path: /log-in/check
+
+log-out:
+    path: /log-out
 
 home:
     path: /
@@ -72,7 +80,7 @@ article-version:
     defaults:
          _controller: AppBundle:Articles:text
     requirements:
-        volume: '[1-9][0-9]*'
+        id: '[a-z0-9-]+'
         version: '[1-9][0-9]*'
 
 article-bibtex:
@@ -80,35 +88,35 @@ article-bibtex:
     defaults:
          _controller: AppBundle:Articles:bibTex
     requirements:
-        volume: '[1-9][0-9]*'
+        id: '[a-z0-9-]+'
 
 article-ris:
     path: /articles/{id}.ris
     defaults:
          _controller: AppBundle:Articles:ris
     requirements:
-        volume: '[1-9][0-9]*'
+        id: '[a-z0-9-]+'
 
 article-type:
     path: /articles/{type}
     defaults:
          _controller: AppBundle:ArticleTypes:list
     requirements:
-        type: '(correction|editorial|feature|insight|research-advance|research-article|research-exchange|retraction|registered-report|replication-study|short-report|tools-resources)'
+        type: '(correction|editorial|feature|insight|research-advance|research-article|retraction|registered-report|replication-study|scientific-correspondence|short-report|tools-resources)'
 
 article:
     path: /articles/{id}
     defaults:
          _controller: AppBundle:Articles:text
     requirements:
-        volume: '[1-9][0-9]*'
+        id: '[a-z0-9-]+'
 
 article-version-figures:
     path: /articles/{id}v{version}/figures
     defaults:
          _controller: AppBundle:Articles:figures
     requirements:
-        volume: '[1-9][0-9]*'
+        id: '[a-z0-9-]+'
         version: '[1-9][0-9]*'
 
 article-figures:
@@ -116,13 +124,15 @@ article-figures:
     defaults:
          _controller: AppBundle:Articles:figures
     requirements:
-        volume: '[1-9][0-9]*'
+        id: '[a-z0-9-]+'
 
 collection:
     path: /collections/{id}/{slug}
     defaults:
          _controller: AppBundle:Collections:collection
          slug: ''
+    requirements:
+        id: '[a-z0-9-]+'
 
 collections:
     path: /collections
@@ -139,6 +149,20 @@ contact:
     defaults:
          _controller: AppBundle:Contact:contact
 
+doi:
+    path: /lookup/doi/{doi}
+    defaults:
+         _controller: AppBundle:Doi:doi
+    requirements:
+        doi: 10\.7554/eLife\.([a-z0-9-]+)
+
+doi-sub:
+    path: /lookup/doi/{doi}
+    defaults:
+         _controller: AppBundle:Doi:subDoi
+    requirements:
+        doi: 10\.7554/eLife\.([a-z0-9-.]+)
+
 download:
     path: /download/{uri}/{name}
     defaults:
@@ -149,6 +173,8 @@ event:
     defaults:
          _controller: AppBundle:Events:event
          slug: ''
+    requirements:
+        id: '[a-z0-9-]+'
 
 events:
     path: /events
@@ -160,6 +186,24 @@ interview:
     defaults:
          _controller: AppBundle:Interviews:interview
          slug: ''
+    requirements:
+        id: '[a-z0-9-]+'
+
+interviews:
+    path: /interviews
+    defaults:
+         _controller: AppBundle:Interviews:list
+
+job-advert:
+    path: /jobs/{id}/{slug}
+    defaults:
+         _controller: AppBundle:JobAdverts:jobAdvert
+         slug: ''
+
+job-adverts:
+    path: /jobs
+    defaults:
+         _controller: AppBundle:JobAdverts:list
 
 magazine:
     path: /magazine
@@ -171,6 +215,8 @@ press-pack:
     defaults:
          _controller: AppBundle:PressPacks:pressPack
          slug: ''
+    requirements:
+        id: '[a-z0-9-]+'
 
 press-packs:
     path: /for-the-press
@@ -187,18 +233,21 @@ inside-elife-article:
     defaults:
          _controller: AppBundle:InsideElife:article
          slug: ''
+    requirements:
+        id: '[a-z0-9-]+'
 
 labs:
     path: /labs
     defaults:
          _controller: AppBundle:Labs:list
 
-labs-experiment:
-    path: /labs/experiment{number}
+labs-post:
+    path: /labs/{id}/{slug}
     defaults:
-         _controller: AppBundle:Labs:experiment
+         _controller: AppBundle:Labs:post
+         slug: ''
     requirements:
-        number: '[1-9][0-9]*'
+        id: '[a-z0-9-]+'
 
 podcast:
     path: /podcast
@@ -211,6 +260,16 @@ podcast-episode:
          _controller: AppBundle:Podcast:episode
     requirements:
         number: '[1-9][0-9]*'
+
+profile:
+    path: /profiles/{id}
+    defaults:
+         _controller: AppBundle:Profiles:profile
+    requirements:
+        id: '[a-z0-9-]+'
+
+profile-no-id: # Truncated version of 'profile' for Hypothesis config, no controller here.
+    path: /profiles/
 
 resources:
     path: /resources
@@ -232,6 +291,8 @@ subject:
     path: /subjects/{id}
     defaults:
          _controller: AppBundle:Subjects:subject
+    requirements:
+        id: '[a-z0-9-]+'
 
 subjects:
     path: /subjects
@@ -244,7 +305,7 @@ terms:
          _controller: AppBundle:Terms:terms
 
 who-we-work-with:
-    path: who-we-work-with
+    path: /who-we-work-with
     defaults:
          _controller: AppBundle:WhoWeWorkWith:whoWeWorkWith
 
@@ -257,3 +318,10 @@ status:
     path: /status
     defaults:
          _controller: AppBundle:Status:status
+
+nelmio_security:
+    path: /nelmio/csp/report
+    defaults:
+        _controller: nelmio_security.csp_reporter_controller:indexAction
+    methods:
+      - POST

@@ -24,7 +24,7 @@ final class EventControllerTest extends PageTestCase
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertSame('Event title', $crawler->filter('.content-header__title')->text());
-        $this->assertContains('Event text.', $crawler->filter('.wrapper')->text());
+        $this->assertContains('Event text.', $crawler->filter('main > div.wrapper')->text());
     }
 
     /**
@@ -57,11 +57,11 @@ final class EventControllerTest extends PageTestCase
             new Request(
                 'GET',
                 'http://api.elifesciences.org/events/1',
-                ['Accept' => 'application/vnd.elife.event+json; version=1']
+                ['Accept' => 'application/vnd.elife.event+json; version=2']
             ),
             new Response(
                 200,
-                ['Content-Type' => 'application/vnd.elife.event+json; version=1'],
+                ['Content-Type' => 'application/vnd.elife.event+json; version=2'],
                 json_encode([
                     'id' => '1',
                     'title' => 'Event title',
@@ -96,11 +96,11 @@ final class EventControllerTest extends PageTestCase
             new Request(
                 'GET',
                 'http://api.elifesciences.org/events/1',
-                ['Accept' => 'application/vnd.elife.event+json; version=1']
+                ['Accept' => 'application/vnd.elife.event+json; version=2']
             ),
             new Response(
                 200,
-                ['Content-Type' => 'application/vnd.elife.event+json; version=1'],
+                ['Content-Type' => 'application/vnd.elife.event+json; version=2'],
                 json_encode([
                     'id' => '1',
                     'title' => 'Event title',
@@ -149,7 +149,7 @@ final class EventControllerTest extends PageTestCase
                 'GET',
                 'http://api.elifesciences.org/events/1',
                 [
-                    'Accept' => 'application/vnd.elife.event+json; version=1',
+                    'Accept' => 'application/vnd.elife.event+json; version=2',
                 ]
             ),
             new Response(
@@ -174,11 +174,11 @@ final class EventControllerTest extends PageTestCase
             new Request(
                 'GET',
                 'http://api.elifesciences.org/events/1',
-                ['Accept' => 'application/vnd.elife.event+json; version=1']
+                ['Accept' => 'application/vnd.elife.event+json; version=2']
             ),
             new Response(
                 200,
-                ['Content-Type' => 'application/vnd.elife.event+json; version=1'],
+                ['Content-Type' => 'application/vnd.elife.event+json; version=2'],
                 json_encode([
                     'id' => '1',
                     'title' => 'Event title',

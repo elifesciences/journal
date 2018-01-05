@@ -3,12 +3,12 @@
 namespace test\eLife\Journal\Twig;
 
 use eLife\Journal\Twig\SingleLineExtension;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Twig_Environment;
 use Twig_ExtensionInterface;
 use Twig_Loader_Array;
 
-final class SingleLineExtensionTest extends PHPUnit_Framework_TestCase
+final class SingleLineExtensionTest extends TestCase
 {
     /**
      * @test

@@ -37,7 +37,7 @@ final class SearchController extends Controller
         'feature',
         'insight',
         'interview',
-        'labs-experiment',
+        'labs-post',
         'podcast-episode',
     ];
 
@@ -47,8 +47,8 @@ final class SearchController extends Controller
         'replication-study',
         'research-advance',
         'research-article',
-        'research-exchange',
         'retraction',
+        'scientific-correspondence',
         'short-report',
         'tools-resources',
     ];
@@ -56,7 +56,7 @@ final class SearchController extends Controller
     public function queryAction(Request $request) : Response
     {
         $page = (int) $request->query->get('page', 1);
-        $perPage = 6;
+        $perPage = 10;
 
         $arguments = $this->defaultPageArguments($request);
 
@@ -138,14 +138,17 @@ final class SearchController extends Controller
                     return new MessageBar('1 result found');
                 }
 
-                return new MessageBar(number_format($paginator->getTotal()).' results found');
+                return new MessageBar('<b>'.number_format($paginator->getTotal()).'</b> results found');
             });
+
+        $currentOrder = SortControlOption::ASC === $arguments['query']['order'] ? SortControlOption::ASC : SortControlOption::DESC;
+        $inverseOrder = SortControlOption::ASC === $arguments['query']['order'] ? SortControlOption::DESC : SortControlOption::ASC;
 
         $relevanceQuery = array_merge(
             $arguments['query'],
             [
                 'sort' => 'relevance',
-                'order' => SortControlOption::ASC === $arguments['query']['order'] ? SortControlOption::DESC : SortControlOption::ASC,
+                'order' => 'relevance' === $arguments['query']['sort'] ? $inverseOrder : SortControlOption::DESC,
             ]
         );
 
@@ -153,37 +156,24 @@ final class SearchController extends Controller
             $arguments['query'],
             [
                 'sort' => 'date',
-                'order' => SortControlOption::ASC === $arguments['query']['order'] ? SortControlOption::DESC : SortControlOption::ASC,
+                'order' => 'date' === $arguments['query']['sort'] ? $inverseOrder : SortControlOption::DESC,
             ]
         );
 
         $arguments['sortControl'] = new SortControl([
             new SortControlOption(
                 new Link('Relevance', $this->get('router')->generate('search', $relevanceQuery)),
-                SortControlOption::ASC === $arguments['query']['order'] ? SortControlOption::ASC : SortControlOption::DESC
+                'relevance' === $arguments['query']['sort'] ? $currentOrder : null
             ),
             new SortControlOption(
                 new Link('Date', $this->get('router')->generate('search', $dateQuery)),
-                SortControlOption::ASC === $arguments['query']['order'] ? SortControlOption::ASC : SortControlOption::DESC
+                'date' === $arguments['query']['sort'] ? $currentOrder : null
             ),
         ]);
 
         $arguments['filterPanel'] = $search
             ->then(function (Search $search) use ($arguments) {
                 $filterGroups = [];
-
-                if (count($search->subjects())) {
-                    $subjectFilters = [];
-                    foreach ($search->subjects() as $subject => $results) {
-                        $subjectFilters[] = new Filter(in_array($subject->getId(), $arguments['query']['subjects']), $subject->getName(), $results, 'subjects[]', $subject->getId());
-                    }
-
-                    usort($subjectFilters, function (Filter $a, Filter $b) {
-                        return $a['label'] <=> $b['label'];
-                    });
-
-                    $filterGroups[] = new FilterGroup('Subject', $subjectFilters);
-                }
 
                 $allTypes = $search->types();
 
@@ -195,10 +185,23 @@ final class SearchController extends Controller
                     ]
                 );
 
+                if (count($search->subjects())) {
+                    $subjectFilters = [];
+                    foreach ($search->subjects() as $subject => $results) {
+                        $subjectFilters[] = new Filter(in_array($subject->getId(), $arguments['query']['subjects']), $subject->getName(), $results, 'subjects[]', $subject->getId());
+                    }
+
+                    usort($subjectFilters, function (Filter $a, Filter $b) {
+                        return $a['label'] <=> $b['label'];
+                    });
+
+                    $filterGroups[] = new FilterGroup('Research categories', $subjectFilters);
+                }
+
                 return new FilterPanel(
                     'Refine your results by:',
                     $filterGroups,
-                    Button::form('Refine results', Button::TYPE_SUBMIT, null, Button::SIZE_SMALL)
+                    Button::form('Refine results', Button::TYPE_SUBMIT)
                 );
             });
 

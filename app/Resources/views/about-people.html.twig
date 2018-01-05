@@ -1,22 +1,30 @@
+{% set criticalCss = 'people' %}
+
 {% extends '::page.html.twig' %}
 
 {% block title %}{{ title }} | About{% endblock %}
-
-{% block info_bar %}
-
-    {{ info_bar('This page is incomplete.') }}
-
-{% endblock %}
 
 {% block body %}
 
     {{ render_pattern(contentHeader) }}
 
-    <div class="wrapper u-pad-top">
+    <div class="wrapper">
 
         {{ render_pattern(menuLink) }}
 
     </div>
+
+    {% embed 'grid/listing-one-column.html.twig' with {fullWidth: true} %}
+
+        {% block listing %}
+
+            {% for list in lists %}
+                {{ render_pattern(list) }}
+            {% endfor %}
+
+        {% endblock %}
+
+    {% endembed %}
 
     <div class="wrapper">
 

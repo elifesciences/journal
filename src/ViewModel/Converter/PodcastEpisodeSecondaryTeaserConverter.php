@@ -4,6 +4,7 @@ namespace eLife\Journal\ViewModel\Converter;
 
 use eLife\ApiSdk\Model\PodcastEpisode;
 use eLife\Patterns\ViewModel;
+use eLife\Patterns\ViewModel\Link;
 use eLife\Patterns\ViewModel\Meta;
 use eLife\Patterns\ViewModel\Teaser;
 use eLife\Patterns\ViewModel\TeaserFooter;
@@ -12,13 +13,14 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 final class PodcastEpisodeSecondaryTeaserConverter implements ViewModelConverter
 {
     use CreatesContextLabel;
-    use CreatesDate;
     use CreatesTeaserImage;
 
+    private $viewModelConverter;
     private $urlGenerator;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator)
+    public function __construct(ViewModelConverter $viewModelConverter, UrlGeneratorInterface $urlGenerator)
     {
+        $this->viewModelConverter = $viewModelConverter;
         $this->urlGenerator = $urlGenerator;
     }
 
@@ -29,12 +31,14 @@ final class PodcastEpisodeSecondaryTeaserConverter implements ViewModelConverter
     {
         return Teaser::secondary(
             $object->getTitle(),
-            $this->urlGenerator->generate('podcast-episode', ['number' => $object->getNumber()]),
-            'Episode '.$object->getNumber(),
+            $this->urlGenerator->generate('podcast-episode', [$object]),
+            null,
             $this->createContextLabel($object),
             $this->smallTeaserImage($object),
             TeaserFooter::forNonArticle(
-                Meta::withText('Podcast', $this->simpleDate($object, $context))
+                Meta::withLink(
+                    new Link('Podcast', $this->urlGenerator->generate('podcast'))
+                )
             )
         );
     }
@@ -42,5 +46,10 @@ final class PodcastEpisodeSecondaryTeaserConverter implements ViewModelConverter
     public function supports($object, string $viewModel = null, array $context = []) : bool
     {
         return $object instanceof PodcastEpisode && ViewModel\Teaser::class === $viewModel && 'secondary' === ($context['variant'] ?? null);
+    }
+
+    protected function getViewModelConverter() : ViewModelConverter
+    {
+        return $this->viewModelConverter;
     }
 }

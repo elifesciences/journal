@@ -11,17 +11,17 @@ use InvalidArgumentException;
 use LogicException;
 use Pagerfanta\Adapter\NullAdapter;
 use Pagerfanta\Pagerfanta;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Traversable;
 
-final class CallbackTest extends PHPUnit_Framework_TestCase
+final class CallbackTest extends TestCase
 {
     /**
      * @test
      */
     public function it_creates_is_instance_of()
     {
-        $callback = Callback::isInstanceOf(PHPUnit_Framework_TestCase::class);
+        $callback = Callback::isInstanceOf(TestCase::class);
 
         $this->assertTrue($callback($this));
         $this->assertFalse($callback('foo'));
@@ -32,13 +32,73 @@ final class CallbackTest extends PHPUnit_Framework_TestCase
      */
     public function it_creates_must_be_an_instance_of()
     {
-        $callback = Callback::mustBeInstanceOf(PHPUnit_Framework_TestCase::class);
+        $callback = Callback::mustBeInstanceOf(TestCase::class);
 
         $this->assertSame($this, $callback($this));
 
         $this->expectException(InvalidArgumentException::class);
 
         $callback('foo');
+    }
+
+    /**
+     * @test
+     */
+    public function it_creates_method_is_value()
+    {
+        $object1 = new class($this) {
+            private $item;
+
+            public function __construct($item)
+            {
+                $this->item = $item;
+            }
+
+            public function get()
+            {
+                return $this->item;
+            }
+        };
+        $object2 = new class('foo') {
+            private $item;
+
+            public function __construct($item)
+            {
+                $this->item = $item;
+            }
+
+            public function get()
+            {
+                return $this->item;
+            }
+        };
+
+        $callback = Callback::methodIsValue('get', $this);
+
+        $this->assertTrue($callback($object1));
+        $this->assertFalse($callback($object2));
+    }
+
+    /**
+     * @test
+     * @dataProvider notEmptyProvider
+     */
+    public function it_creates_is_not_empty_with_not_empty($item)
+    {
+        $callback = Callback::isNotEmpty();
+
+        $this->assertTrue($callback($item));
+    }
+
+    /**
+     * @test
+     * @dataProvider emptyProvider
+     */
+    public function it_creates_is_not_empty_with_empty($item)
+    {
+        $callback = Callback::isNotEmpty();
+
+        $this->assertFalse($callback($item));
     }
 
     /**
@@ -120,6 +180,16 @@ final class CallbackTest extends PHPUnit_Framework_TestCase
     /**
      * @test
      */
+    public function it_creates_apply()
+    {
+        $callback = Callback::apply('end');
+
+        $this->assertSame('bar', $callback(['foo', 'bar']));
+    }
+
+    /**
+     * @test
+     */
     public function it_creates_method()
     {
         $date = new DateTimeImmutable();
@@ -129,6 +199,16 @@ final class CallbackTest extends PHPUnit_Framework_TestCase
 
         $this->assertSame($date->getTimestamp(), $callback1($date));
         $this->assertSame($date->format('c'), $callback2($date));
+    }
+
+    /**
+     * @test
+     */
+    public function it_creates_call()
+    {
+        $callback = Callback::call('range', 2, 5);
+
+        $this->assertSame(range(2, 5), $callback('foo'));
     }
 
     /**

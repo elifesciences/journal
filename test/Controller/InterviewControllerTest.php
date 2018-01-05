@@ -23,6 +23,69 @@ final class InterviewControllerTest extends PageTestCase
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertSame('Interview title', $crawler->filter('.content-header__title')->text());
         $this->assertSame('Interview Jan 1, 2010', trim(preg_replace('!\s+!', ' ', $crawler->filter('.content-header .meta')->text())));
+        $this->assertEmpty($crawler->filter('.contextual-data'));
+    }
+
+    /**
+     * @test
+     */
+    public function it_displays_collections()
+    {
+        $client = static::createClient();
+
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/collections?page=1&per-page=10&order=desc&containing[]=interview/1',
+                ['Accept' => 'application/vnd.elife.collection-list+json; version=1']
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.collection-list+json; version=1'],
+                json_encode([
+                    'total' => 1,
+                    'items' => [
+                        [
+                            'id' => '1',
+                            'title' => 'Collection title',
+                            'published' => '2010-01-01T00:00:00Z',
+                            'image' => [
+                                'thumbnail' => [
+                                    'uri' => 'https://www.example.com/iiif/image',
+                                    'alt' => '',
+                                    'source' => [
+                                        'mediaType' => 'image/jpeg',
+                                        'uri' => 'https://www.example.com/image.jpg',
+                                        'filename' => 'image.jpg',
+                                    ],
+                                    'size' => [
+                                        'width' => 800,
+                                        'height' => 600,
+                                    ],
+                                ],
+                            ],
+                            'selectedCurator' => [
+                                'id' => 'person',
+                                'type' => [
+                                    'id' => 'senior-editor',
+                                    'label' => 'Senior editor',
+                                ],
+                                'name' => [
+                                    'preferred' => 'Person One',
+                                    'index' => 'Person One',
+                                ],
+                            ],
+                        ],
+                    ],
+                ])
+            )
+        );
+
+        $crawler = $client->request('GET', $this->getUrl());
+
+        $this->assertSame(200, $client->getResponse()->getStatusCode());
+        $this->assertSame('Part of', $crawler->filter('.teaser--related .teaser__context_label')->text());
+        $this->assertSame('Collection title', trim(preg_replace('!\s+!', ' ', $crawler->filter('.teaser--related .teaser__header_text')->text())));
     }
 
     /**
@@ -44,6 +107,18 @@ final class InterviewControllerTest extends PageTestCase
         $this->assertSame('Interview impact statement', $crawler->filter('meta[name="description"]')->attr('content'));
         $this->assertSame('article', $crawler->filter('meta[property="og:type"]')->attr('content'));
         $this->assertSame('summary', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
+    }
+
+    /**
+     * @test
+     */
+    public function it_shows_annotations_when_the_feature_flag_is_enabled()
+    {
+        $client = static::createClient();
+
+        $crawler = $client->request('GET', "{$this->getUrl()}?open-sesame");
+
+        $this->assertContains('Annotations', $crawler->filter('.contextual-data__list')->text());
     }
 
     /**
@@ -78,7 +153,7 @@ final class InterviewControllerTest extends PageTestCase
                 'GET',
                 'http://api.elifesciences.org/interviews/1',
                 [
-                    'Accept' => 'application/vnd.elife.interview+json; version=1',
+                    'Accept' => 'application/vnd.elife.interview+json; version=2',
                 ]
             ),
             new Response(
@@ -109,13 +184,13 @@ final class InterviewControllerTest extends PageTestCase
         $this->assertSame(200, $client->getResponse()->getStatusCode());
 
         $this->assertSame('Question?',
-            $crawler->filter('main > .wrapper > div > div > section:nth-of-type(1) > header > h3')->text());
+            $crawler->filter('main > div.wrapper > div > div > section:nth-of-type(1) > header > h3')->text());
         $this->assertSame('Answer.',
-            $crawler->filter('main > .wrapper > div > div > section:nth-of-type(1) > div > p')->text());
+            $crawler->filter('main > div.wrapper > div > div > section:nth-of-type(1) > div > p')->text());
         $this->assertSame('Interviewee CV',
-            $crawler->filter('main > .wrapper > div > div > section:nth-of-type(2) > header > h2')->text());
+            $crawler->filter('main > div.wrapper > div > div > section:nth-of-type(2) > header > h2')->text());
         $this->assertSame('2013 – Present: Somewhere',
-            $crawler->filter('main > .wrapper > div > div > section:nth-of-type(2) > div > ol > li')->text());
+            $crawler->filter('main > div.wrapper > div > div > section:nth-of-type(2) > div > ol > li')->text());
     }
 
     protected function getUrl() : string
@@ -124,11 +199,11 @@ final class InterviewControllerTest extends PageTestCase
             new Request(
                 'GET',
                 'http://api.elifesciences.org/interviews/1',
-                ['Accept' => 'application/vnd.elife.interview+json; version=1']
+                ['Accept' => 'application/vnd.elife.interview+json; version=2']
             ),
             new Response(
                 200,
-                ['Content-Type' => 'application/vnd.elife.interview+json; version=1'],
+                ['Content-Type' => 'application/vnd.elife.interview+json; version=2'],
                 json_encode([
                     'id' => '1',
                     'interviewee' => [

@@ -3,7 +3,6 @@
 namespace eLife\Journal\ViewModel\Converter;
 
 use eLife\ApiSdk\Model\Collection;
-use eLife\Journal\Helper\CreatesIiifUri;
 use eLife\Journal\ViewModel\Factory\ContentHeaderImageFactory;
 use eLife\Patterns\ViewModel;
 use eLife\Patterns\ViewModel\Link;
@@ -12,13 +11,14 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 final class CollectionContentHeaderConverter implements ViewModelConverter
 {
     use CreatesDate;
-    use CreatesIiifUri;
 
+    private $viewModelConverter;
     private $urlGenerator;
     private $contentHeaderImageFactory;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator, ContentHeaderImageFactory $contentHeaderImageFactory)
+    public function __construct(ViewModelConverter $viewModelConverter, UrlGeneratorInterface $urlGenerator, ContentHeaderImageFactory $contentHeaderImageFactory)
     {
+        $this->viewModelConverter = $viewModelConverter;
         $this->urlGenerator = $urlGenerator;
         $this->contentHeaderImageFactory = $contentHeaderImageFactory;
     }
@@ -30,25 +30,17 @@ final class CollectionContentHeaderConverter implements ViewModelConverter
     {
         $curatorName = $object->getSelectedCurator()->getDetails()->getPreferredName();
         if ($object->selectedCuratorEtAl()) {
-            $curatorName .= ' et al';
+            $curatorName .= ' et al.';
         }
         if ($object->getSelectedCurator()->getThumbnail()) {
-            $curatorImage = new ViewModel\Picture(
-                [],
-                new ViewModel\Image(
-                    $this->iiifUri($object->getSelectedCurator()->getThumbnail(), 40, 40),
-                    [
-                        80 => $this->iiifUri($object->getSelectedCurator()->getThumbnail(), 80, 80),
-                    ]
-                )
-            );
+            $curatorImage = $this->viewModelConverter->convert($object->getSelectedCurator()->getThumbnail(), null, ['width' => 48, 'height' => 48]);
         } else {
             $curatorImage = null;
         }
 
         return new ViewModel\ContentHeader(
             $object->getTitle(),
-            $this->contentHeaderImageFactory->forImage($object->getBanner()), $object->getImpactStatement(), true, [], new ViewModel\Profile(new Link($curatorName), $curatorImage), null, [], [], null, null, null,
+            $this->contentHeaderImageFactory->forImage($object->getBanner()), $object->getImpactStatement(), true, [], new ViewModel\Profile(new Link($curatorName), $curatorImage), [], [], null, null, null,
             ViewModel\Meta::withLink(
                 new Link('Collection', $this->urlGenerator->generate('collections')),
                 $this->simpleDate($object, ['date' => 'published'] + $context)

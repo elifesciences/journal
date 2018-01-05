@@ -3,10 +3,14 @@
 namespace eLife\Journal\Controller;
 
 use eLife\ApiSdk\Collection\Sequence;
+use eLife\ApiSdk\Model\BlogArticle;
 use eLife\Journal\Helper\Callback;
 use eLife\Journal\Helper\Paginator;
 use eLife\Journal\Pagerfanta\SequenceAdapter;
 use eLife\Patterns\ViewModel\ContentHeader;
+use eLife\Patterns\ViewModel\ContextualData;
+use eLife\Patterns\ViewModel\ContextualDataMetric;
+use eLife\Patterns\ViewModel\HypothesisOpener;
 use eLife\Patterns\ViewModel\ListingTeasers;
 use eLife\Patterns\ViewModel\Teaser;
 use Pagerfanta\Pagerfanta;
@@ -19,7 +23,7 @@ final class InsideElifeController extends Controller
     public function listAction(Request $request) : Response
     {
         $page = (int) $request->query->get('page', 1);
-        $perPage = 6;
+        $perPage = 10;
 
         $arguments = $this->defaultPageArguments($request);
 
@@ -81,8 +85,19 @@ final class InsideElifeController extends Controller
         $arguments['contentHeader'] = $arguments['article']
             ->then($this->willConvertTo(ContentHeader::class));
 
+        $arguments['contextualData'] = $arguments['article']
+            ->then($this->ifGranted(['FEATURE_CAN_USE_HYPOTHESIS'], function (BlogArticle $article) {
+                $metrics = [new ContextualDataMetric('Annotations', 0, 'annotation-count')];
+
+                return ContextualData::withMetrics($metrics);
+            }));
+
         $arguments['blocks'] = $arguments['article']
             ->then($this->willConvertContent());
+
+        if ($this->isGranted('FEATURE_CAN_USE_HYPOTHESIS')) {
+            $arguments['hypothesisOpener'] = new HypothesisOpener();
+        }
 
         return new Response($this->get('templating')->render('::inside-elife-article.html.twig', $arguments));
     }

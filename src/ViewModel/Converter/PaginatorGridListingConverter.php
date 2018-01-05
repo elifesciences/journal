@@ -5,6 +5,7 @@ namespace eLife\Journal\ViewModel\Converter;
 use eLife\Journal\Helper\Paginator;
 use eLife\Journal\ViewModel\EmptyListing;
 use eLife\Patterns\ViewModel;
+use eLife\Patterns\ViewModel\ListHeading;
 
 final class PaginatorGridListingConverter implements ViewModelConverter
 {
@@ -15,8 +16,7 @@ final class PaginatorGridListingConverter implements ViewModelConverter
     {
         $type = $context['type'] ?? null;
 
-        $heading = $context['heading'] ?? trim('Latest '.$type);
-        $loadMoreText = $type ? 'More '.$type : 'Load more';
+        $heading = new ListHeading($context['heading'] ?? trim('Latest '.$type));
         $prevText = trim('Newer '.$type);
         $nextText = trim('Older '.$type);
         $emptyText = trim('No '.($type ?? 'items').' available.');
@@ -39,7 +39,7 @@ final class PaginatorGridListingConverter implements ViewModelConverter
                 $object->getItems(),
                 $heading,
                 $object->getNextPage()
-                    ? ViewModel\Pager::firstPage(new ViewModel\Link($loadMoreText, $object->getNextPagePath()), 'listing')
+                    ? ViewModel\Pager::firstPage(new ViewModel\Link('Load more', $object->getNextPagePath()), 'listing')
                     : null,
                 'listing'
             );

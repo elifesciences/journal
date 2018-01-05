@@ -1,0 +1,39 @@
+{% set hypothesis = true %}
+
+{% extends '::page.html.twig' %}
+
+{% block title %}{{ title|striptags }} | Labs{% endblock %}
+
+{% block body %}
+
+    {{ render_pattern(contentHeader) }}
+
+    {% if contextualData %}
+
+        <div class="wrapper">
+
+            {{ render_pattern(contextualData) }}
+
+        </div>
+
+    {% endif %}
+
+    {% embed 'grid/content.html.twig' %}
+
+        {% block main %}
+
+            {% for block in blocks %}
+                {{ render_pattern(block) }}
+            {% endfor %}
+
+            {% if hypothesisOpener is defined %}
+
+                {{ render_pattern(hypothesisOpener) }}
+
+            {% endif %}
+
+        {% endblock %}
+
+    {% endembed %}
+
+{% endblock %}

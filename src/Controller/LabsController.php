@@ -3,25 +3,19 @@
 namespace eLife\Journal\Controller;
 
 use eLife\ApiSdk\Collection\Sequence;
-use eLife\ApiSdk\Model\LabsExperiment;
-use eLife\Journal\Exception\EarlyResponse;
-use eLife\Journal\Form\Type\LabsExperimentFeedbackType;
+use eLife\ApiSdk\Model\LabsPost;
 use eLife\Journal\Helper\Callback;
-use eLife\Journal\Helper\Humanizer;
 use eLife\Journal\Helper\Paginator;
 use eLife\Journal\Pagerfanta\SequenceAdapter;
-use eLife\Patterns\ViewModel\ArticleSection;
 use eLife\Patterns\ViewModel\ContentHeader;
+use eLife\Patterns\ViewModel\ContextualData;
+use eLife\Patterns\ViewModel\ContextualDataMetric;
 use eLife\Patterns\ViewModel\GridListing;
-use eLife\Patterns\ViewModel\InfoBar;
+use eLife\Patterns\ViewModel\HypothesisOpener;
 use eLife\Patterns\ViewModel\Teaser;
 use Pagerfanta\Pagerfanta;
-use Swift_Message;
-use Symfony\Component\Form\FormInterface;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use function GuzzleHttp\Promise\promise_for;
 
 final class LabsController extends Controller
@@ -33,7 +27,7 @@ final class LabsController extends Controller
 
         $arguments = $this->defaultPageArguments($request);
 
-        $experiments = promise_for($this->get('elife.api_sdk.labs_experiments'))
+        $posts = promise_for($this->get('elife.api_sdk.labs_posts'))
             ->then(function (Sequence $sequence) use ($page, $perPage) {
                 $pagerfanta = new Pagerfanta(new SequenceAdapter($sequence, $this->willConvertTo(Teaser::class, ['variant' => 'grid'])));
                 $pagerfanta->setMaxPerPage($perPage)->setCurrentPage($page);
@@ -43,10 +37,10 @@ final class LabsController extends Controller
 
         $arguments['title'] = 'Labs';
 
-        $arguments['paginator'] = $experiments
+        $arguments['paginator'] = $posts
             ->then(function (Pagerfanta $pagerfanta) use ($request) {
                 return new Paginator(
-                    'Browse our experiments',
+                    'Browse our posts',
                     $pagerfanta,
                     function (int $page = null) use ($request) {
                         $routeParams = $request->attributes->get('_route_params');
@@ -58,7 +52,7 @@ final class LabsController extends Controller
             });
 
         $arguments['listing'] = $arguments['paginator']
-            ->then($this->willConvertTo(GridListing::class, ['heading' => 'Latest', 'type' => 'experiments']));
+            ->then($this->willConvertTo(GridListing::class, ['heading' => 'Latest', 'type' => 'posts']));
 
         if (1 === $page) {
             return $this->createFirstPage($arguments);
@@ -73,92 +67,44 @@ final class LabsController extends Controller
             'eLife Labs',
             $this->get('elife.journal.view_model.factory.content_header_image')->forLocalFile('labs'),
             'Exploring open-source solutions at the intersection of research and technology.
-Learn more about <a href="'.$this->get('router')->generate('about-innovation').'">innovation at eLife</a>, or follow us on <a href="https://twitter.com/eLifeInnovation">Twitter</a>.'
+Learn more about <a href="'.$this->get('router')->generate('about-innovation').'">innovation at eLife</a>, follow us on <a href="https://twitter.com/eLifeInnovation">Twitter</a>, or sign up for our <a href="https://crm.elifesciences.org/crm/tech-news?utm_source=Labs-home&utm_medium=website&utm_campaign=technews">technology and innovation newsletter</a>.'
         );
 
         return new Response($this->get('templating')->render('::labs.html.twig', $arguments));
     }
 
-    public function experimentAction(Request $request, int $number) : Response
+    public function postAction(Request $request, string $id) : Response
     {
-        $experiment = $this->get('elife.api_sdk.labs_experiments')
-            ->get($number)
-            ->otherwise($this->mightNotExist());
+        $post = $this->get('elife.api_sdk.labs_posts')
+            ->get($id)
+            ->otherwise($this->mightNotExist())
+            ->then($this->checkSlug($request, Callback::method('getTitle')));
 
-        $arguments = $this->defaultPageArguments($request, $experiment);
+        $arguments = $this->defaultPageArguments($request, $post);
 
-        $arguments['title'] = $experiment
+        $arguments['title'] = $post
             ->then(Callback::method('getTitle'));
 
-        $arguments['experiment'] = $experiment;
+        $arguments['post'] = $post;
 
-        $arguments['feedbackForm'] = $experiment
-            ->then(function (LabsExperiment $experiment) use ($request) {
-                $uri = $this->get('router')->generate('labs-experiment', ['number' => $experiment->getNumber()], UrlGeneratorInterface::ABSOLUTE_URL);
-
-                /** @var FormInterface $form */
-                $form = $this->get('form.factory')
-                    ->create(LabsExperimentFeedbackType::class, null, ['action' => $uri]);
-
-                $form->handleRequest($request);
-
-                if ($form->isSubmitted()) {
-                    if ($form->isValid()) {
-                        $this->get('session')
-                            ->getFlashBag()
-                            ->add(InfoBar::TYPE_SUCCESS,
-                                'Thanks '.$form->get('name')->getData().', we have received your comment.');
-
-                        $response = implode("\n\n", array_map(function (FormInterface $child) {
-                            $label = ($child->getConfig()->getOption('label') ?? Humanizer::humanize($child->getName()));
-
-                            return $label."\n".str_repeat('-', strlen($label))."\n".$child->getData();
-                        }, array_filter(iterator_to_array($form), function (FormInterface $child) {
-                            return !in_array($child->getConfig()->getType()->getBlockPrefix(), ['submit']);
-                        })));
-
-                        $message1 = Swift_Message::newInstance()
-                            ->setSubject('Comment on eLife Labs')
-                            ->setFrom('do_not_reply@elifesciences.org')
-                            ->setTo($form->get('email')->getData(), $form->get('name')->getData())
-                            ->setBody('Thanks for your comment. We will respond as soon as we can.
-
-eLife Sciences Publications, Ltd is a limited liability non-profit non-stock corporation incorporated in the State of Delaware, USA, with company number 5030732, and is registered in the UK with company number FC030576 and branch number BR015634 at the address First Floor, 24 Hills Road, Cambridge CB2 1JP.');
-
-                        $message2 = Swift_Message::newInstance()
-                            ->setSubject('Comment submitted')
-                            ->setFrom('do_not_reply@elifesciences.org')
-                            ->setTo('labs@elifesciences.org')
-                            ->setBody("A comment has been submitted on $uri\n\n$response");
-
-                        $this->get('mailer')->send($message1);
-                        $this->get('mailer')->send($message2);
-
-                        throw new EarlyResponse(new RedirectResponse($uri));
-                    }
-
-                    foreach ($form->getErrors(true) as $error) {
-                        $this->get('session')
-                            ->getFlashBag()
-                            ->add(InfoBar::TYPE_ATTENTION, $error->getMessage());
-                    }
-                }
-
-                return ArticleSection::basic('Feedback', 2, $this->render($this->get('elife.journal.view_model.converter')->convert($form->createView())));
-            });
-
-        $arguments['contentHeader'] = $arguments['experiment']
+        $arguments['contentHeader'] = $arguments['post']
             ->then($this->willConvertTo(ContentHeader::class));
 
-        $arguments['blocks'] = $arguments['experiment']
+        $arguments['contextualData'] = $arguments['post']
+            ->then($this->ifGranted(['FEATURE_CAN_USE_HYPOTHESIS'], function (LabsPost $post) {
+                $metrics = [new ContextualDataMetric('Annotations', 0, 'annotation-count')];
+
+                return ContextualData::withMetrics($metrics);
+            }));
+
+        $arguments['blocks'] = $arguments['post']
             ->then($this->willConvertContent());
 
-        $response = new Response($this->get('templating')->render('::labs-experiment.html.twig', $arguments));
+        if ($this->isGranted('FEATURE_CAN_USE_HYPOTHESIS')) {
+            $arguments['hypothesisOpener'] = new HypothesisOpener();
+        }
 
-        $response->setPrivate();
-        $response->headers->addCacheControlDirective('no-cache');
-        $response->headers->addCacheControlDirective('no-store');
-        $response->headers->addCacheControlDirective('must-revalidate');
+        $response = new Response($this->get('templating')->render('::labs-post.html.twig', $arguments));
 
         return $response;
     }

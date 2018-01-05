@@ -1,31 +1,21 @@
+{% set criticalCss = 'listing' %}
+
 {% extends '::page.html.twig' %}
 
 {% block title %}{{ title|striptags }}, page {{ paginator.currentPage }}{% endblock %}
 
 {% block body %}
 
-    <div class="wrapper u-pad-top">
+    {{ render_pattern(contentHeader) }}
 
-        {{ render_pattern(contentHeader) }}
+    {% embed 'grid/listing-one-column.html.twig' %}
 
         {% block listing %}
 
-            <div class="grid">
-
-                <div class="listing-column-container">
-
-                    <div class="grid__item large--eight-twelfths listing-column-main push--large--two-twelfths">
-
-                        {{ render_pattern(listing) }}
-
-                    </div>
-
-                </div>
-
-            </div>
+            {{ render_pattern(listing) }}
 
         {% endblock %}
 
-    </div>
+    {% endembed %}
 
 {% endblock %}

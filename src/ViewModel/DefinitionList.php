@@ -20,8 +20,8 @@ final class DefinitionList implements ViewModel
     {
         Assertion::notEmpty($items);
 
-        $this->items = array_map(function (string $term, string $descriptor) {
-            return compact('term', 'descriptor');
+        $this->items = array_map(function (string $term, $descriptors) {
+            return compact('term', 'descriptors');
         }, array_keys($items), array_values($items));
     }
 

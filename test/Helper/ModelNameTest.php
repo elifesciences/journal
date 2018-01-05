@@ -4,11 +4,11 @@ namespace test\eLife\Journal\Helper;
 
 use eLife\Journal\Helper\ModelName;
 use InvalidArgumentException;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use test\eLife\Journal\Providers;
 use Traversable;
 
-final class ModelNameTest extends PHPUnit_Framework_TestCase
+final class ModelNameTest extends TestCase
 {
     use Providers;
 
@@ -16,23 +16,42 @@ final class ModelNameTest extends PHPUnit_Framework_TestCase
      * @test
      * @dataProvider validModelProvider
      */
-    public function it_providers_a_singular(string $id)
+    public function it_providers_a_singular(string $id, string $singular)
     {
-        ModelName::singular($id);
+        $this->assertSame($singular, ModelName::singular($id));
     }
 
     /**
      * @test
      * @dataProvider validModelProvider
      */
-    public function it_providers_a_plural(string $id)
+    public function it_providers_a_plural(string $id, string $singular, string $plural)
     {
-        ModelName::plural($id);
+        $this->assertSame($plural, ModelName::plural($id));
     }
 
     public function validModelProvider() : Traversable
     {
-        return $this->stringProvider('correction', 'editorial', 'feature', 'insight', 'research-advance', 'research-article', 'research-exchange', 'retraction', 'registered-report', 'replication-study', 'short-report', 'tools-resources', 'blog-article', 'collection', 'event', 'labs-experiment', 'interview', 'podcast-episode');
+        return $this->arrayProvider([
+            'correction' => ['Correction', 'Corrections'],
+            'editorial' => ['Editorial', 'Editorials'],
+            'feature' => ['Feature Article', 'Feature Articles'],
+            'insight' => ['Insight', 'Insights'],
+            'research-advance' => ['Research Advance', 'Research Advances'],
+            'research-article' => ['Research Article', 'Research Articles'],
+            'retraction' => ['Retraction', 'Retractions'],
+            'registered-report' => ['Registered Report', 'Registered Reports'],
+            'replication-study' => ['Replication Study', 'Replication Studies'],
+            'scientific-correspondence' => ['Scientific Correspondence', 'Scientific Correspondences'],
+            'short-report' => ['Short Report', 'Short Reports'],
+            'tools-resources' => ['Tools and Resources', 'Tools and Resources'],
+            'blog-article' => ['Inside eLife', 'Inside eLife'],
+            'collection' => ['Collection', 'Collections'],
+            'event' => ['Event', 'Events'],
+            'labs-post' => ['Labs Post', 'Labs Posts'],
+            'interview' => ['Interview', 'Interviews'],
+            'podcast-episode' => ['Podcast', 'Podcasts'],
+        ]);
     }
 
     /**

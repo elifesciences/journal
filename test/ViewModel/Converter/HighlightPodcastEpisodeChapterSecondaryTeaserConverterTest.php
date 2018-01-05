@@ -6,13 +6,14 @@ use eLife\ApiSdk\Model\Highlight;
 use eLife\ApiSdk\Model\Model;
 use eLife\ApiSdk\Model\PodcastEpisodeChapterModel;
 use eLife\Journal\ViewModel\Converter\HighlightPodcastEpisodeChapterSecondaryTeaserConverter;
-use eLife\Patterns\ViewModel\Teaser;
+use eLife\Journal\ViewModel\Converter\ViewModelConverter;
+use eLife\Patterns\ViewModel;
 use Traversable;
 
 final class HighlightPodcastEpisodeChapterSecondaryTeaserConverterTest extends ModelConverterTestCase
 {
     protected $models = ['highlight'];
-    protected $viewModelClasses = [Teaser::class];
+    protected $viewModelClasses = [ViewModel\Teaser::class];
     protected $context = ['variant' => 'secondary'];
 
     /**
@@ -20,7 +21,18 @@ final class HighlightPodcastEpisodeChapterSecondaryTeaserConverterTest extends M
      */
     public function setUpConverter()
     {
-        $this->converter = new HighlightPodcastEpisodeChapterSecondaryTeaserConverter($this->stubUrlGenerator(), $this->stubSlugify());
+        $this->converter = new HighlightPodcastEpisodeChapterSecondaryTeaserConverter(
+            $viewModelConverter = $this->createMock(ViewModelConverter::class),
+            $this->stubUrlGenerator()
+        );
+
+        $viewModelConverter
+            ->expects($this->any())
+            ->method('convert')
+            ->will($this->returnValue(new ViewModel\Picture(
+                [],
+                new ViewModel\Image('/image.jpg')
+            )));
     }
 
     /**

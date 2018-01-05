@@ -249,7 +249,7 @@ final class PodcastContext extends Context
      */
     public function iLoadMoreEpisodes()
     {
-        $this->getSession()->getPage()->clickLink('More episodes');
+        $this->getSession()->getPage()->clickLink('Load more');
     }
 
     /**
@@ -278,13 +278,13 @@ final class PodcastContext extends Context
         $this->spin(function () {
             $this->assertSession()
                 ->elementExists('css',
-                    '.list-heading:contains("Chapters") + .listing-list > .listing-list__item:nth-child(2) .teaser__header_text_link');
+                    '.list-heading:contains("Chapters") + .listing-list > .listing-list__item:nth-child(2) .media-chapter-listing-item__header_text_link');
         });
 
         $this->getSession()
             ->getPage()
             ->find('css',
-                '.list-heading:contains("Chapters") + .listing-list > .listing-list__item:nth-child(2) .teaser__header_text_link')
+                '.list-heading:contains("Chapters") + .listing-list > .listing-list__item:nth-child(2) .media-chapter-listing-item__header_text_link')
             ->click();
     }
 
@@ -295,7 +295,7 @@ final class PodcastContext extends Context
     {
         $this->spin(function () use ($number) {
             $this->assertSession()
-                ->elementsCount('css', '.grid-listing-heading:contains("Latest episodes") + .grid-listing > .grid-listing-item', $number);
+                ->elementsCount('css', '.list-heading:contains("Latest episodes") + .grid-listing > .grid-listing-item', $number);
 
             for ($i = $number; $i > 0; --$i) {
                 $nthChild = ($number - $i + 1);
@@ -303,7 +303,7 @@ final class PodcastContext extends Context
 
                 $this->assertSession()->elementContains(
                     'css',
-                    '.grid-listing-heading:contains("Latest episodes") + .grid-listing > .grid-listing-item:nth-child('.$nthChild.')',
+                    '.list-heading:contains("Latest episodes") + .grid-listing > .grid-listing-item:nth-child('.$nthChild.')',
                     'Episode '.$expectedNumber.' title'
                 );
             }

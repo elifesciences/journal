@@ -2,7 +2,6 @@
 
 namespace eLife\Journal\ViewModel\Converter;
 
-use Cocur\Slugify\SlugifyInterface;
 use eLife\ApiSdk\Model\Event;
 use eLife\Patterns\ViewModel;
 use eLife\Patterns\ViewModel\Date;
@@ -12,12 +11,10 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 final class EventTeaserConverter implements ViewModelConverter
 {
     private $urlGenerator;
-    private $slugify;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator, SlugifyInterface $slugify)
+    public function __construct(UrlGeneratorInterface $urlGenerator)
     {
         $this->urlGenerator = $urlGenerator;
-        $this->slugify = $slugify;
     }
 
     /**
@@ -27,7 +24,7 @@ final class EventTeaserConverter implements ViewModelConverter
     {
         return Teaser::event(
             $object->getTitle(),
-            $object->getUri() ?? $this->urlGenerator->generate('event', ['id' => $object->getId(), 'slug' => $this->slugify->slugify($object->getTitle())]),
+            $object->getUri() ?? $this->urlGenerator->generate('event', [$object]),
             null,
             Date::expanded($object->getStarts()),
             'secondary' === ($context['variant'] ?? null)

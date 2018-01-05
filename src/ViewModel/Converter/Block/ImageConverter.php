@@ -3,43 +3,47 @@
 namespace eLife\Journal\ViewModel\Converter\Block;
 
 use eLife\ApiSdk\Model\Block;
-use eLife\Journal\Helper\CreatesIiifUri;
-use eLife\Journal\ViewModel\CaptionlessImage;
 use eLife\Journal\ViewModel\Converter\ViewModelConverter;
+use eLife\Patterns\PatternRenderer;
 use eLife\Patterns\ViewModel;
 
 final class ImageConverter implements ViewModelConverter
 {
-    use CreatesIiifUri;
+    use CreatesCaptionedAsset;
+
+    private $viewModelConverter;
+    private $patternRenderer;
+
+    public function __construct(ViewModelConverter $viewModelConverter, PatternRenderer $patternRenderer)
+    {
+        $this->viewModelConverter = $viewModelConverter;
+        $this->patternRenderer = $patternRenderer;
+    }
 
     /**
      * @param Block\Image $object
      */
     public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
-        $image = $object->getImage()->getImage();
+        $image = $object->getImage();
 
-        $srcset = [];
-        $baseWidth = 538;
-        if ($image->getWidth() > $baseWidth) {
-            $width = $baseWidth * 2;
-            if ($width > $image->getWidth()) {
-                $width = $image->getWidth();
-            }
-            $srcset[$width] = $this->iiifUri($image, $width);
-        }
+        $imageViewModel = $this->viewModelConverter->convert($image, null, ['width' => $object->isInline() ? 365 : 538]);
 
-        return new CaptionlessImage(
-            new ViewModel\Image(
-                $this->iiifUri($image, $image->getWidth() >= $baseWidth ? $baseWidth : null),
-                $srcset,
-                $object->getImage()->getImage()->getAltText()
-            )
-        );
+        return $this->createCaptionedAsset($imageViewModel, $object);
     }
 
     public function supports($object, string $viewModel = null, array $context = []) : bool
     {
-        return $object instanceof Block\Image && !$object->getImage()->getTitle();
+        return $object instanceof Block\Image;
+    }
+
+    protected function getViewModelConverter() : ViewModelConverter
+    {
+        return $this->viewModelConverter;
+    }
+
+    protected function getPatternRenderer() : PatternRenderer
+    {
+        return $this->patternRenderer;
     }
 }

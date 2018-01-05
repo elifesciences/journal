@@ -23,10 +23,11 @@ final class PressPackControllerTest extends PageTestCase
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertSame('Press package title', $crawler->filter('.content-header__title')->text());
         $this->assertSame('Press pack Jan 1, 2010', trim(preg_replace('!\s+!', ' ', $crawler->filter('.content-header .meta')->text())));
-        $this->assertContains('Press package text.', $crawler->filter('.wrapper')->text());
-        $this->assertContains('Article title', $crawler->filter('.teaser__header_text')->text());
-        $this->assertNotContains('Media contacts', $crawler->filter('.wrapper')->text());
-        $this->assertNotContains('About', $crawler->filter('.wrapper')->text());
+        $this->assertEmpty($crawler->filter('.contextual-data'));
+        $this->assertContains('Press package text.', $crawler->filter('main > div.wrapper')->text());
+        $this->assertCount(0, $crawler->filter('.teaser--secondary'));
+        $this->assertNotContains('Media contacts', $crawler->filter('main > div.wrapper')->text());
+        $this->assertNotContains('About', $crawler->filter('main > div.wrapper')->text());
     }
 
     /**
@@ -40,11 +41,11 @@ final class PressPackControllerTest extends PageTestCase
             new Request(
                 'GET',
                 'http://api.elifesciences.org/press-packages/1',
-                ['Accept' => 'application/vnd.elife.press-package+json; version=1']
+                ['Accept' => 'application/vnd.elife.press-package+json; version=3']
             ),
             new Response(
                 200,
-                ['Content-Type' => 'application/vnd.elife.press-package+json; version=1'],
+                ['Content-Type' => 'application/vnd.elife.press-package+json; version=3'],
                 json_encode([
                     'id' => '1',
                     'title' => 'Press package title',
@@ -53,22 +54,6 @@ final class PressPackControllerTest extends PageTestCase
                         [
                             'type' => 'paragraph',
                             'text' => 'Press package text.',
-                        ],
-                    ],
-                    'relatedContent' => [
-                        [
-                            'status' => 'vor',
-                            'stage' => 'published',
-                            'id' => '00001',
-                            'version' => 1,
-                            'type' => 'research-article',
-                            'doi' => '10.7554/eLife.00001',
-                            'title' => 'Article title',
-                            'published' => '2010-01-01T00:00:00Z',
-                            'versionDate' => '2010-01-01T00:00:00Z',
-                            'statusDate' => '2010-01-01T00:00:00Z',
-                            'volume' => 1,
-                            'elocationId' => 'e00001',
                         ],
                     ],
                     'mediaContacts' => [
@@ -129,6 +114,58 @@ final class PressPackControllerTest extends PageTestCase
     /**
      * @test
      */
+    public function it_displays_related_content()
+    {
+        $client = static::createClient();
+
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/press-packages/1',
+                ['Accept' => 'application/vnd.elife.press-package+json; version=3']
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.press-package+json; version=3'],
+                json_encode([
+                    'id' => '1',
+                    'title' => 'Press package title',
+                    'published' => '2010-01-01T00:00:00Z',
+                    'content' => [
+                        [
+                            'type' => 'paragraph',
+                            'text' => 'Press package text.',
+                        ],
+                    ],
+                    'relatedContent' => [
+                        [
+                            'status' => 'vor',
+                            'stage' => 'published',
+                            'id' => '00001',
+                            'version' => 1,
+                            'type' => 'research-article',
+                            'doi' => '10.7554/eLife.00001',
+                            'title' => 'Article title',
+                            'published' => '2010-01-01T00:00:00Z',
+                            'versionDate' => '2010-01-01T00:00:00Z',
+                            'statusDate' => '2010-01-01T00:00:00Z',
+                            'volume' => 1,
+                            'elocationId' => 'e00001',
+                        ],
+                    ],
+                ])
+            )
+        );
+
+        $crawler = $client->request('GET', '/for-the-press/1/press-package-title');
+
+        $this->assertSame(200, $client->getResponse()->getStatusCode());
+        $this->assertContains('Article title', $crawler->filter('.teaser--secondary ')->text());
+    }
+
+    /**
+     * @test
+     */
     public function it_has_metadata()
     {
         $client = static::createClient();
@@ -143,6 +180,18 @@ final class PressPackControllerTest extends PageTestCase
         $this->assertSame('Press package title', $crawler->filter('meta[property="og:title"]')->attr('content'));
         $this->assertSame('article', $crawler->filter('meta[property="og:type"]')->attr('content'));
         $this->assertSame('summary', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
+    }
+
+    /**
+     * @test
+     */
+    public function it_shows_annotations_when_the_feature_flag_is_enabled()
+    {
+        $client = static::createClient();
+
+        $crawler = $client->request('GET', "{$this->getUrl()}?open-sesame");
+
+        $this->assertContains('Annotations', $crawler->filter('.contextual-data__list')->text());
     }
 
     /**
@@ -177,7 +226,7 @@ final class PressPackControllerTest extends PageTestCase
                 'GET',
                 'http://api.elifesciences.org/press-packages/1',
                 [
-                    'Accept' => 'application/vnd.elife.press-package+json; version=1',
+                    'Accept' => 'application/vnd.elife.press-package+json; version=3',
                 ]
             ),
             new Response(
@@ -202,11 +251,11 @@ final class PressPackControllerTest extends PageTestCase
             new Request(
                 'GET',
                 'http://api.elifesciences.org/press-packages/1',
-                ['Accept' => 'application/vnd.elife.press-package+json; version=1']
+                ['Accept' => 'application/vnd.elife.press-package+json; version=3']
             ),
             new Response(
                 200,
-                ['Content-Type' => 'application/vnd.elife.press-package+json; version=1'],
+                ['Content-Type' => 'application/vnd.elife.press-package+json; version=3'],
                 json_encode([
                     'id' => '1',
                     'title' => 'Press package title',
@@ -215,22 +264,6 @@ final class PressPackControllerTest extends PageTestCase
                         [
                             'type' => 'paragraph',
                             'text' => 'Press package text.',
-                        ],
-                    ],
-                    'relatedContent' => [
-                        [
-                            'status' => 'vor',
-                            'stage' => 'published',
-                            'id' => '00001',
-                            'version' => 1,
-                            'type' => 'research-article',
-                            'doi' => '10.7554/eLife.00001',
-                            'title' => 'Article title',
-                            'published' => '2010-01-01T00:00:00Z',
-                            'versionDate' => '2010-01-01T00:00:00Z',
-                            'statusDate' => '2010-01-01T00:00:00Z',
-                            'volume' => 1,
-                            'elocationId' => 'e00001',
                         ],
                     ],
                 ])

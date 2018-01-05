@@ -5,21 +5,22 @@ namespace eLife\Journal\ViewModel\Converter;
 use eLife\ApiSdk\Model\ArticleVersion;
 use eLife\ApiSdk\Model\Cover;
 use eLife\ApiSdk\Model\Subject;
-use eLife\Journal\Helper\CreatesIiifUri;
 use eLife\Journal\Helper\ModelName;
+use eLife\Journal\ViewModel\Factory\ContentHeaderImageFactory;
 use eLife\Patterns\ViewModel;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 final class CoverArticleCarouselItemConverter implements ViewModelConverter
 {
     use CreatesDate;
-    use CreatesIiifUri;
 
     private $urlGenerator;
+    private $contentHeaderImageFactory;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator)
+    public function __construct(UrlGeneratorInterface $urlGenerator, ContentHeaderImageFactory $contentHeaderImageFactory)
     {
         $this->urlGenerator = $urlGenerator;
+        $this->contentHeaderImageFactory = $contentHeaderImageFactory;
     }
 
     /**
@@ -32,11 +33,11 @@ final class CoverArticleCarouselItemConverter implements ViewModelConverter
 
         return new ViewModel\CarouselItem(
             $article->getSubjects()->map(function (Subject $subject) {
-                return new ViewModel\Link($subject->getName(), $this->urlGenerator->generate('subject', ['id' => $subject->getId()]));
+                return new ViewModel\Link($subject->getName(), $this->urlGenerator->generate('subject', [$subject]));
             })->toArray(),
             new ViewModel\Link(
                 $object->getTitle(),
-                $this->urlGenerator->generate('article', ['id' => $article->getId()])
+                $this->urlGenerator->generate('article', [$article])
             ),
             'Read article',
             ViewModel\Meta::withLink(
@@ -46,10 +47,7 @@ final class CoverArticleCarouselItemConverter implements ViewModelConverter
                 ),
                 $this->simpleDate($article, $context)
             ),
-            new ViewModel\BackgroundImage(
-                $this->iiifUri($object->getBanner(), 900, 450),
-                $this->iiifUri($object->getBanner(), 1800, 900)
-            )
+            $this->contentHeaderImageFactory->pictureForImage($object->getBanner())
         );
     }
 

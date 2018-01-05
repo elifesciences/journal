@@ -1,13 +1,19 @@
+{% set criticalCss = 'grid-listing' %}
+
 {% extends '::page.html.twig' %}
 
 {% block body %}
 
     {{ render_pattern(contentHeader) }}
 
-    <div class="wrapper">
+    {% embed 'grid/listing-one-column.html.twig' with {fullWidth: true} %}
 
-        {{ render_pattern(listing) }}
+        {% block listing %}
 
-    </div>
+            {{ render_pattern(listing) }}
+
+        {% endblock %}
+
+    {% endembed %}
 
 {% endblock %}

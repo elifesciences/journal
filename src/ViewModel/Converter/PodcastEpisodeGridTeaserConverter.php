@@ -8,13 +8,14 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 final class PodcastEpisodeGridTeaserConverter implements ViewModelConverter
 {
-    use CreatesDate;
     use CreatesTeaserImage;
 
+    private $viewModelConverter;
     private $urlGenerator;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator)
+    public function __construct(ViewModelConverter $viewModelConverter, UrlGeneratorInterface $urlGenerator)
     {
+        $this->viewModelConverter = $viewModelConverter;
         $this->urlGenerator = $urlGenerator;
     }
 
@@ -25,14 +26,13 @@ final class PodcastEpisodeGridTeaserConverter implements ViewModelConverter
     {
         return ViewModel\Teaser::withGrid(
             $object->getTitle(),
-            $this->urlGenerator->generate('podcast-episode', ['number' => $object->getNumber()]),
+            $this->urlGenerator->generate('podcast-episode', [$object]),
             $object->getImpactStatement(),
-            'Episode '.$object->getNumber(),
+            null,
             $this->prominentTeaserImage($object),
             ViewModel\TeaserFooter::forNonArticle(
                 ViewModel\Meta::withLink(
-                    new ViewModel\Link('Podcast', $this->urlGenerator->generate('podcast')),
-                    $this->simpleDate($object, $context)
+                    new ViewModel\Link('Podcast', $this->urlGenerator->generate('podcast'))
                 )
             )
         );
@@ -41,5 +41,10 @@ final class PodcastEpisodeGridTeaserConverter implements ViewModelConverter
     public function supports($object, string $viewModel = null, array $context = []) : bool
     {
         return $object instanceof PodcastEpisode && ViewModel\Teaser::class === $viewModel && 'grid' === ($context['variant'] ?? null);
+    }
+
+    protected function getViewModelConverter() : ViewModelConverter
+    {
+        return $this->viewModelConverter;
     }
 }

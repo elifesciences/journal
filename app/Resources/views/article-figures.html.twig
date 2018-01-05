@@ -6,18 +6,34 @@
 
 {% block article_body %}
 
-    <div class="grid__item large--eight-twelfths blg-pad-top-medium" data-behaviour="FragmentHandler">
+    {% embed 'grid/content.html.twig' %}
 
-        {% fragment_link_rewrite textPath %}
+        {% block navigation %}
 
-        {% for part in body %}
+            {% if viewSelector %}
 
-            {{ render_pattern(part) }}
+                {{ render_pattern(viewSelector) }}
 
-        {% endfor %}
+            {% endif %}
 
-        {% end_fragment_link_rewrite %}
+        {% endblock %}
 
-    </div>
+        {% block main %}
+
+            {{ render_pattern(messageBar) }}
+
+            {% fragment_link_rewrite textPath %}
+
+            {% for part in body %}
+
+                {{ render_pattern(part) }}
+
+            {% endfor %}
+
+            {% end_fragment_link_rewrite %}
+
+        {% endblock %}
+
+    {% endembed %}
 
 {% endblock %}

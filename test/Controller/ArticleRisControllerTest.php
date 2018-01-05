@@ -21,12 +21,7 @@ final class ArticleRisControllerTest extends WebTestCase
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001',
-                [
-                    'Accept' => [
-                        'application/vnd.elife.article-poa+json; version=1',
-                        'application/vnd.elife.article-vor+json; version=1',
-                    ],
-                ]
+                ['Accept' => 'application/vnd.elife.article-poa+json; version=2, application/vnd.elife.article-vor+json; version=2']
             ),
             new Response(
                 200,
@@ -63,7 +58,7 @@ final class ArticleRisControllerTest extends WebTestCase
                     'license' => 'CC0-1.0',
                     'statement' => 'Statement.',
                 ],
-                'authorLine' => 'Foo Bar et al',
+                'authorLine' => 'Foo Bar et al.',
                 'authors' => [
                     [
                         'type' => 'person',
@@ -112,10 +107,10 @@ EOT
                 'elocationId' => 'e00001',
                 'copyright' => [
                     'license' => 'CC-BY-4.0',
-                    'holder' => 'Author One et al',
+                    'holder' => 'Author One et al.',
                     'statement' => 'Statement.',
                 ],
-                'authorLine' => 'Author One et al',
+                'authorLine' => 'Author One et al.',
                 'authors' => [
                     [
                         'type' => 'person',
@@ -241,12 +236,7 @@ EOT
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001',
-                [
-                    'Accept' => [
-                        'application/vnd.elife.article-poa+json; version=1',
-                        'application/vnd.elife.article-vor+json; version=1',
-                    ],
-                ]
+                ['Accept' => 'application/vnd.elife.article-poa+json; version=2, application/vnd.elife.article-vor+json; version=2']
             ),
             new Response(
                 404,
@@ -296,16 +286,11 @@ EOT
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001',
-                [
-                    'Accept' => [
-                        'application/vnd.elife.article-poa+json; version=1',
-                        'application/vnd.elife.article-vor+json; version=1',
-                    ],
-                ]
+                ['Accept' => 'application/vnd.elife.article-poa+json; version=2, application/vnd.elife.article-vor+json; version=2']
             ),
             new Response(
                 200,
-                ['Content-Type' => 'application/vnd.elife.article-poa+json; version=1'],
+                ['Content-Type' => 'application/vnd.elife.article-poa+json; version=2'],
                 json_encode([
                     'status' => 'poa',
                     'id' => '00001',
@@ -320,7 +305,7 @@ EOT
                         'license' => 'CC0-1.0',
                         'statement' => 'Statement.',
                     ],
-                    'authorLine' => 'Foo Bar et al',
+                    'authorLine' => 'Foo Bar et al.',
                     'authors' => [
                         [
                             'type' => 'person',

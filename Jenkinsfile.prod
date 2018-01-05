@@ -1,16 +1,23 @@
 elifePipeline {
-    stage 'Checkout approved'
-    checkout scm
-    def commit = elifeGitRevision()
+    def commit
+    stage 'Checkout approved', {
+        checkout scm
+        commit = elifeGitRevision()
+    }
 
-    stage 'Deploy to preview'
-    elifeDeploySlackNotification 'journal', 'preview'
-    elifeGitMoveToBranch commit, 'master'
-    builderDeployRevision 'journal--preview', commit
-    builderSmokeTests 'journal--preview', '/srv/journal'
+    stage 'Deploy to preview', {
+        elifeDeploySlackNotification 'journal', 'preview'
+        elifeGitMoveToBranch commit, 'master'
+        builderDeployRevision 'journal--preview', commit
+        builderSmokeTests 'journal--preview', '/srv/journal'
+    }
 
-    stage 'Deploy to prod'
-    elifeDeploySlackNotification 'journal', 'prod'
-    builderDeployRevision 'journal--prod', commit
-    builderSmokeTests 'journal--prod', '/srv/journal'
+    stage 'Deploy to prod', {
+        if (!params.force) {
+            elifeNewRelicEnsureApdex(29775807)
+        }
+        elifeDeploySlackNotification 'journal', 'prod'
+        builderDeployRevision 'journal--prod', commit, 'blue-green'
+        builderSmokeTests 'journal--prod', '/srv/journal'
+    }
 }

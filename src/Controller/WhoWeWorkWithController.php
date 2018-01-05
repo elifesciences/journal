@@ -2,11 +2,11 @@
 
 namespace eLife\Journal\Controller;
 
+use eLife\Journal\Helper\MediaTypes;
 use eLife\Patterns\ViewModel\ContentHeader;
 use eLife\Patterns\ViewModel\GridListing;
-use eLife\Patterns\ViewModel\Image;
 use eLife\Patterns\ViewModel\ImageLink;
-use eLife\Patterns\ViewModel\Picture;
+use eLife\Patterns\ViewModel\ListHeading;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -24,31 +24,31 @@ final class WhoWeWorkWithController extends Controller
             [
                 'name' => 'The Association of Learned & Professional Society Publishers',
                 'filename' => 'alpsp',
-                'svg' => false,
+                'type' => 'image/png',
                 'uri' => 'http://www.alpsp.org/',
             ],
             [
                 'name' => 'Committee on Publication Ethics',
                 'filename' => 'cope',
-                'svg' => false,
+                'type' => 'image/png',
                 'uri' => 'http://publicationethics.org/',
             ],
             [
                 'name' => 'Crossref',
                 'filename' => 'crossref',
-                'svg' => true,
+                'type' => 'image/svg+xml',
                 'uri' => 'https://www.crossref.org/',
             ],
             [
                 'name' => 'Open Access Scholarly Publishers Association',
                 'filename' => 'oaspa',
-                'svg' => true,
+                'type' => 'image/svg+xml',
                 'uri' => 'https://oaspa.org/',
             ],
             [
                 'name' => 'ORCID',
                 'filename' => 'orcid',
-                'svg' => true,
+                'type' => 'image/svg+xml',
                 'uri' => 'https://orcid.org/',
             ],
         ];
@@ -57,79 +57,79 @@ final class WhoWeWorkWithController extends Controller
             [
                 'name' => 'Amazon Web Services',
                 'filename' => 'aws',
-                'svg' => true,
+                'type' => 'image/svg+xml',
                 'uri' => 'https://aws.amazon.com/',
             ],
             [
                 'name' => 'Digirati',
                 'filename' => 'digirati',
-                'svg' => true,
+                'type' => 'image/svg+xml',
                 'uri' => 'https://digirati.com/',
             ],
             [
                 'name' => 'Editorial Office Ltd',
                 'filename' => 'ed-office',
-                'svg' => true,
+                'type' => 'image/svg+xml',
                 'uri' => 'http://editorialoffice.co.uk/',
             ],
             [
                 'name' => 'eJournalPress',
                 'filename' => 'ejp',
-                'svg' => true,
+                'type' => 'image/svg+xml',
                 'uri' => 'https://www.ejournalpress.com/',
             ],
             [
                 'name' => 'Exeter Premedia Services',
                 'filename' => 'exeter',
-                'svg' => false,
+                'type' => 'image/png',
                 'uri' => 'http://www.exeterpremedia.com/',
             ],
             [
                 'name' => 'GitHub',
                 'filename' => 'github',
-                'svg' => true,
+                'type' => 'image/svg+xml',
                 'uri' => 'https://github.com/',
             ],
             [
                 'name' => 'Glencoe Software',
                 'filename' => 'glencoe',
-                'svg' => true,
+                'type' => 'image/svg+xml',
                 'uri' => 'https://glencoesoftware.com/',
             ],
             [
                 'name' => 'JIRA',
                 'filename' => 'jira',
-                'svg' => true,
+                'type' => 'image/svg+xml',
                 'uri' => 'https://www.atlassian.com/software/jira',
             ],
             [
                 'name' => 'Loggly',
                 'filename' => 'loggly',
-                'svg' => true,
+                'type' => 'image/svg+xml',
                 'uri' => 'https://www.loggly.com/',
             ],
             [
                 'name' => 'The Naked Scientists',
                 'filename' => 'naked-scientists',
-                'svg' => false,
+                'type' => 'image/png',
                 'uri' => 'https://www.thenakedscientists.com/',
             ],
             [
                 'name' => 'New Relic',
                 'filename' => 'new-relic',
-                'svg' => true,
+                'type' => 'image/svg+xml',
                 'uri' => 'https://newrelic.com/',
             ],
             [
                 'name' => 'Publons',
                 'filename' => 'publons',
-                'svg' => true,
+                'type' => 'image/svg+xml',
                 'uri' => 'https://publons.com/',
             ],
             [
                 'name' => 'Slack',
                 'filename' => 'slack',
-                'svg' => true,
+                'type' => 'image/svg+xml',
                 'uri' => 'https://slack.com/',
             ],
         ];
@@ -138,55 +138,55 @@ final class WhoWeWorkWithController extends Controller
             [
                 'name' => 'CLOCKSS',
                 'filename' => 'clockss',
-                'svg' => false,
+                'type' => 'image/png',
                 'uri' => 'https://www.clockss.org/',
             ],
             [
                 'name' => 'Europe PubMed Central',
                 'filename' => 'europe-pmc',
-                'svg' => false,
+                'type' => 'image/png',
                 'uri' => 'https://europepmc.org/',
             ],
             [
                 'name' => 'Go OA',
                 'filename' => 'gooa',
-                'svg' => false,
+                'type' => 'image/png',
                 'uri' => 'http://gooa.las.ac.cn/',
             ],
             [
                 'name' => 'Jisc',
                 'filename' => 'jisc',
-                'svg' => true,
+                'type' => 'image/svg+xml',
                 'uri' => 'https://www.jisc.ac.uk/',
             ],
             [
                 'name' => 'LOCKSS',
                 'filename' => 'lockss',
-                'svg' => true,
+                'type' => 'image/svg+xml',
                 'uri' => 'https://www.lockss.org/',
             ],
             [
                 'name' => 'Mendeley',
                 'filename' => 'mendeley',
-                'svg' => true,
+                'type' => 'image/svg+xml',
                 'uri' => 'https://www.mendeley.com/',
             ],
             [
                 'name' => 'Paperity',
                 'filename' => 'paperity',
-                'svg' => true,
+                'type' => 'image/svg+xml',
                 'uri' => 'http://paperity.org/',
             ],
             [
                 'name' => 'PubMed Central',
                 'filename' => 'pmc',
-                'svg' => false,
+                'type' => 'image/png',
                 'uri' => 'https://www.ncbi.nlm.nih.gov/pmc/',
             ],
             [
                 'name' => 'SHARE',
                 'filename' => 'share',
-                'svg' => true,
+                'type' => 'image/svg+xml',
                 'uri' => 'http://www.share-research.org/',
             ],
         ];
@@ -195,40 +195,40 @@ final class WhoWeWorkWithController extends Controller
             [
                 'name' => 'Crossref',
                 'filename' => 'crossref',
-                'svg' => true,
+                'type' => 'image/svg+xml',
                 'uri' => 'https://www.crossref.org/',
             ],
             [
                 'name' => 'FORCE11',
                 'filename' => 'force11',
-                'svg' => false,
+                'type' => 'image/png',
                 'uri' => 'https://www.force11.org/about/directors-and-advisors',
             ],
             [
                 'name' => 'JATS for Reuse',
                 'filename' => 'jats4r',
-                'svg' => false,
+                'type' => 'image/png',
                 'uri' => 'http://jats4r.org/',
             ],
             [
                 'name' => 'Open Access Scholarly Publishers Association',
                 'filename' => 'oaspa',
-                'svg' => true,
+                'type' => 'image/svg+xml',
                 'uri' => 'https://oaspa.org/',
             ],
             [
                 'name' => 'Publons',
                 'filename' => 'publons',
-                'svg' => true,
+                'type' => 'image/svg+xml',
                 'uri' => 'https://publons.com/',
             ],
         ];
 
         $arguments['listings'] = [
-            GridListing::forImageLinks($this->toImageLinks($memberships), 'Memberships'),
-            GridListing::forImageLinks($this->toImageLinks($serviceProviders), 'Service providers'),
-            GridListing::forImageLinks($this->toImageLinks($content), 'Content availability and archiving'),
-            GridListing::forImageLinks($this->toImageLinks($committees), 'Committees and initiatives'),
+            GridListing::forImageLinks($this->toImageLinks($memberships), new ListHeading('Memberships')),
+            GridListing::forImageLinks($this->toImageLinks($serviceProviders), new ListHeading('Service providers')),
+            GridListing::forImageLinks($this->toImageLinks($content), new ListHeading('Content availability and archiving')),
+            GridListing::forImageLinks($this->toImageLinks($committees), new ListHeading('Committees and initiatives')),
         ];
 
         return new Response($this->get('templating')->render('::who-we-work-with.html.twig', $arguments));
@@ -237,24 +237,22 @@ final class WhoWeWorkWithController extends Controller
     private function toImageLinks(array $items) : array
     {
         return array_map(function (array $item) : ImageLink {
-            $sources = [];
-            if ($item['svg']) {
-                $sources[] = ['srcset' => $this->get('assets.packages')->getUrl("assets/images/logos/{$item['filename']}.svg"), 'type' => 'image/svg+xml'];
-            }
-            $sources[] = ['srcset' => sprintf('%s 250w, %s 500w', $this->get('assets.packages')->getUrl("assets/images/logos/{$item['filename']}-250.webp"), $this->get('assets.packages')->getUrl("assets/images/logos/{$item['filename']}-500.webp")), 'type' => 'image/webp'];
+            $builder = $this->get('elife.journal.view_model.factory.picture_builder')
+                ->create(function (string $type, int $width) use ($item) {
+                    $extension = MediaTypes::toExtension($type);
+
+                    $path = "assets/images/logos/{$item['filename']}";
+
+                    if ('svg' !== $extension) {
+                        $path .= "-{$width}";
+                    }
+
+                    return $this->get('assets.packages')->getUrl("{$path}.{$extension}");
+                }, $item['type'], 180, null, $item['name']);
 
             return new ImageLink(
                 $item['uri'],
-                new Picture(
-                    $sources,
-                    new Image(
-                        $this->get('assets.packages')->getUrl("assets/images/logos/{$item['filename']}-250.png"),
-                        [
-                            500 => $this->get('assets.packages')->getUrl("assets/images/logos/{$item['filename']}-500.png"),
-                        ],
-                        $item['name']
-                    )
-                )
+                $builder->build()
             );
         }, $items);
     }

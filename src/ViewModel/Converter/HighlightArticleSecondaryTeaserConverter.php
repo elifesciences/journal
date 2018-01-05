@@ -15,10 +15,12 @@ final class HighlightArticleSecondaryTeaserConverter implements ViewModelConvert
     use CreatesDate;
     use CreatesTeaserImage;
 
+    private $viewModelConverter;
     private $urlGenerator;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator)
+    public function __construct(ViewModelConverter $viewModelConverter, UrlGeneratorInterface $urlGenerator)
     {
+        $this->viewModelConverter = $viewModelConverter;
         $this->urlGenerator = $urlGenerator;
     }
 
@@ -32,8 +34,8 @@ final class HighlightArticleSecondaryTeaserConverter implements ViewModelConvert
 
         return ViewModel\Teaser::secondary(
             $object->getTitle(),
-            $this->urlGenerator->generate('article', ['id' => $article->getId()]),
-            $object->getAuthorLine(),
+            $this->urlGenerator->generate('article', [$article]),
+            $article->getAuthorLine(),
             $this->createContextLabel($article),
             $object->getThumbnail() ? $this->smallTeaserImage($object) : null,
             ViewModel\TeaserFooter::forNonArticle(
@@ -51,5 +53,10 @@ final class HighlightArticleSecondaryTeaserConverter implements ViewModelConvert
     public function supports($object, string $viewModel = null, array $context = []) : bool
     {
         return $object instanceof Highlight && ViewModel\Teaser::class === $viewModel && 'secondary' === ($context['variant'] ?? null) && $object->getItem() instanceof ArticleVersion;
+    }
+
+    protected function getViewModelConverter() : ViewModelConverter
+    {
+        return $this->viewModelConverter;
     }
 }

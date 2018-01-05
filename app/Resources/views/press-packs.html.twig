@@ -1,31 +1,29 @@
 {% extends '::page.html.twig' %}
 
-{% block info_bar %}
-
-    {{ info_bar('This page is incomplete.') }}
-
-{% endblock %}
-
 {% block body %}
 
     {{ render_pattern(contentHeader) }}
 
-    <div class="wrapper u-pad-top-lg">
+    {% embed 'grid/listing-two-column.html.twig' %}
 
-        <div class="grid">
+        {% block main %}
 
-            <div class="listing-column-container">
+            {{ render_pattern(listing) }}
 
-                <div class="grid__item large--eight-twelfths listing-column-main push--large--two-twelfths">
+        {% endblock %}
 
-                    {{ render_pattern(listing) }}
+        {% block secondary %}
 
-                </div>
+            <div class="grid-secondary-column__item">
+
+                {% for item in sidebar %}
+                    {{ render_pattern(item) }}
+                {% endfor %}
 
             </div>
 
-        </div>
+        {% endblock %}
 
-    </div>
+    {% endembed %}
 
 {% endblock %}

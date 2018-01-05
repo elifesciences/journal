@@ -2,21 +2,27 @@
 
 namespace eLife\Journal\ViewModel\Converter;
 
+use eLife\Journal\Helper\Callback;
 use eLife\Journal\Helper\Humanizer;
 use eLife\Journal\ViewModel\Form;
 use eLife\Journal\ViewModel\HiddenInput;
+use eLife\Journal\ViewModel\HoneypotField;
 use eLife\Patterns\PatternRenderer;
 use eLife\Patterns\ViewModel;
+use eLife\Patterns\ViewModel\MessageGroup;
 use InvalidArgumentException;
+use Symfony\Component\Form\ChoiceList\View\ChoiceView;
 use Symfony\Component\Form\FormView;
 
 final class FormViewConverter implements ViewModelConverter
 {
     private $patternRenderer;
+    private $honeypotField;
 
-    public function __construct(PatternRenderer $patternRenderer)
+    public function __construct(PatternRenderer $patternRenderer, string $honeypotField = null)
     {
         $this->patternRenderer = $patternRenderer;
+        $this->honeypotField = $honeypotField;
     }
 
     /**
@@ -28,12 +34,25 @@ final class FormViewConverter implements ViewModelConverter
 
         foreach (array_reverse($object->vars['block_prefixes']) as $prefix) {
             switch ($prefix) {
+                case 'choice':
+                    $options = array_map(function (ChoiceView $choice) use ($object) {
+                        return new ViewModel\SelectOption($choice->value, $choice->label, $choice->value === $object->vars['value']);
+                    }, $object->vars['choices']);
+
+                    if (!empty($object->vars['placeholder'])) {
+                        array_unshift($options, new ViewModel\SelectOption('', $object->vars['placeholder']));
+                    }
+
+                    return new ViewModel\Select($object->vars['id'], $options, new ViewModel\FormLabel($this->getLabel($object)),
+                        $object->vars['full_name'], $object->vars['required'], $object->vars['disabled'], $this->getState($object),
+                        $this->getMessageGroup($object));
+                    break;
                 case 'email':
-                    return ViewModel\TextField::emailInput(new ViewModel\FormLabel($this->getLabel($object), $object->vars['id']),
+                    return ViewModel\TextField::emailInput(new ViewModel\FormLabel($this->getLabel($object)),
                         $object->vars['id'], $object->vars['full_name'], $object->vars['attr']['placeholder'] ?? null,
                         $object->vars['required'],
-                        $object->vars['disabled'], $object->vars['attr']['autofocus'] ?? false, $object->vars['value'],
-                        $this->getState($object));
+                        $object->vars['disabled'], $this->getAutofocus($object), $object->vars['value'],
+                        $this->getState($object), $this->getMessageGroup($object));
                 case 'form':
                     $form = new ViewModel\Form($object->vars['action'], $object->vars['full_name'], $object->vars['method']);
 
@@ -50,9 +69,14 @@ final class FormViewConverter implements ViewModelConverter
                                     $children['email']['inputType'],
                                     $children['email']['name'],
                                     $children['email']['value'],
-                                    $children['email']['placeholder']
+                                    $children['email']['placeholder'],
+                                    $children['email']['autofocus']
                                 ),
-                                $children['submit']['text']
+                                $children['submit']['text'],
+                                $children['email']['state'],
+                                $children['email']['messageGroup'],
+                                [],
+                                $children[$this->honeypotField] ?? null
                             )
                         );
                     }
@@ -65,23 +89,31 @@ final class FormViewConverter implements ViewModelConverter
                         ViewModel\Button::STYLE_DEFAULT, $object->vars['id'], true, false
                     );
                 case 'text':
-                    return ViewModel\TextField::textInput(new ViewModel\FormLabel($this->getLabel($object), $object->vars['id']),
+                    $field = ViewModel\TextField::textInput(new ViewModel\FormLabel($this->getLabel($object)),
                         $object->vars['id'], $object->vars['full_name'], $object->vars['attr']['placeholder'] ?? null,
-                        $object->vars['required'], $object->vars['disabled'], $object->vars['attr']['autofocus'] ?? false, $object->vars['value'],
-                        $this->getState($object));
+                        $object->vars['required'], $object->vars['disabled'], $this->getAutofocus($object), $object->vars['value'],
+                        $this->getState($object), $this->getMessageGroup($object));
+
+                    if ($object->vars['name'] === $this->honeypotField) {
+                        return new ViewModel\Honeypot($field);
+                    }
+
+                    return $field;
                 case 'textarea':
-                    return new ViewModel\TextArea(new ViewModel\FormLabel($this->getLabel($object), $object->vars['id']),
+                    return new ViewModel\TextArea(new ViewModel\FormLabel($this->getLabel($object)),
                         $object->vars['id'],
                         $object->vars['full_name'],
                         $object->vars['value'],
                         $object->vars['attr']['placeholder'] ?? null,
                         $object->vars['required'],
                         $object->vars['disabled'],
-                        $object->vars['attr']['autofocus'] ?? false,
+                        $this->getAutofocus($object),
                         null,
                         10,
                         null,
-                        $this->getState($object));
+                        $this->getState($object),
+                        $this->getMessageGroup($object)
+                    );
             }
         }
 
@@ -97,7 +129,26 @@ final class FormViewConverter implements ViewModelConverter
             return null;
         }
 
-        return count($form->vars['errors']) ? ViewModel\TextField::STATUS_ERROR : ViewModel\TextField::STATUS_VALID;
+        return count($form->vars['errors']) ? ViewModel\TextField::STATE_INVALID : ViewModel\TextField::STATE_VALID;
+    }
+
+    /**
+     * @param MessageGroup|null
+     */
+    private function getMessageGroup(FormView $form)
+    {
+        if (0 === count($form->vars['errors'])) {
+            return null;
+        }
+
+        $errors = array_map(Callback::method('getMessage'), iterator_to_array($form->vars['errors']));
+
+        return MessageGroup::forErrorText(implode(' ', $errors));
+    }
+
+    private function getAutofocus(FormView $form) : bool
+    {
+        return $object->vars['attr']['autofocus'] ?? count($form->vars['errors']) > 0 ?? false;
     }
 
     private function getLabel(FormView $form) : string

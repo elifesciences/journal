@@ -4,21 +4,22 @@ namespace eLife\Journal\Controller;
 
 use eLife\ApiSdk\Collection\PromiseSequence;
 use eLife\ApiSdk\Collection\Sequence;
-use eLife\ApiSdk\Model\Highlight;
-use eLife\ApiSdk\Model\PodcastEpisode;
-use eLife\ApiSdk\Model\PodcastEpisodeChapterModel;
-use eLife\ApiSdk\Model\Subject;
+use eLife\ApiSdk\Model\Person;
 use eLife\Journal\Helper\Callback;
 use eLife\Journal\Helper\CreatesIiifUri;
 use eLife\Journal\Helper\Paginator;
 use eLife\Journal\Pagerfanta\SequenceAdapter;
-use eLife\Patterns\ViewModel\BackgroundImage;
+use eLife\Journal\ViewModel\EmptyListing;
 use eLife\Patterns\ViewModel\BlockLink;
 use eLife\Patterns\ViewModel\ContentHeader;
 use eLife\Patterns\ViewModel\ContentHeaderSimple;
 use eLife\Patterns\ViewModel\GridListing;
 use eLife\Patterns\ViewModel\Link;
+use eLife\Patterns\ViewModel\ListHeading;
+use eLife\Patterns\ViewModel\ListingProfileSnippets;
 use eLife\Patterns\ViewModel\ListingTeasers;
+use eLife\Patterns\ViewModel\ProfileSnippet;
+use eLife\Patterns\ViewModel\SeeMoreLink;
 use eLife\Patterns\ViewModel\Teaser;
 use Pagerfanta\Pagerfanta;
 use Symfony\Component\HttpFoundation\Request;
@@ -41,22 +42,14 @@ final class SubjectsController extends Controller
         $arguments['subjects'] = $this->get('elife.api_sdk.subjects')
             ->reverse()
             ->slice(1, 100)
-            ->map(function (Subject $subject) {
-                return new BlockLink(
-                    new Link(
-                        $subject->getName(),
-                        $this->get('router')->generate('subject', ['id' => $subject->getId()])
-                    ),
-                    new BackgroundImage(
-                        $this->iiifUri($subject->getThumbnail(), 263, 152),
-                        $this->iiifUri($subject->getThumbnail(), 526, 304),
-                        600
-                    )
-                );
-            })
-            ->then(Callback::emptyOr(function (Sequence $subjects) {
+            ->map($this->willConvertTo(BlockLink::class))
+            ->then(function (Sequence $subjects) {
+                if ($subjects->isEmpty()) {
+                    return new EmptyListing(null, 'No subjects available.');
+                }
+
                 return GridListing::forBlockLinks($subjects->toArray());
-            }));
+            });
 
         return new Response($this->get('templating')->render('::subjects.html.twig', $arguments));
     }
@@ -64,7 +57,7 @@ final class SubjectsController extends Controller
     public function subjectAction(Request $request, string $id) : Response
     {
         $page = (int) $request->query->get('page', 1);
-        $perPage = 6;
+        $perPage = 10;
 
         $subject = $this->get('elife.api_sdk.subjects')
             ->get($id)
@@ -77,7 +70,7 @@ final class SubjectsController extends Controller
 
         $latestArticles = promise_for($this->get('elife.api_sdk.search')
             ->forSubject($id)
-            ->forType('research-article', 'research-advance', 'research-exchange', 'short-report', 'tools-resources', 'replication-study', 'editorial', 'insight', 'feature', 'collection')
+            ->forType('research-article', 'research-advance', 'scientific-correspondence', 'short-report', 'tools-resources', 'replication-study', 'editorial', 'insight', 'feature', 'collection')
             ->sortBy('date'))
             ->then(function (Sequence $sequence) use ($page, $perPage) {
                 $pagerfanta = new Pagerfanta(new SequenceAdapter($sequence, $this->willConvertTo(Teaser::class)));
@@ -121,34 +114,39 @@ final class SubjectsController extends Controller
         $arguments['contentHeader'] = $arguments['subject']
             ->then($this->willConvertTo(ContentHeader::class));
 
-        $podcastEpisode = $this->get('elife.api_sdk.search')
-            ->forType('podcast-episode')
-            ->forSubject($arguments['id'])
-            ->sortBy('date')
-            ->slice(0, 1)
-            ->otherwise($this->softFailure('Failed to load podcast episodes for '.$arguments['id']));
-
-        $highlights = (new PromiseSequence($this->get('elife.api_sdk.highlights')
-            ->get($arguments['id'])))
-            ->filter(function (Highlight $highlight) {
-                return false === $highlight->getItem() instanceof PodcastEpisode && false === $highlight->getItem() instanceof PodcastEpisodeChapterModel;
-            })
-            ->slice(0, 3)
+        $arguments['highlights'] = (new PromiseSequence($this->get('elife.api_sdk.highlights')
+            ->get($arguments['id'])
+            ->slice(0, 3)))
+            ->map($this->willConvertTo(Teaser::class, ['variant' => 'secondary']))
+            ->then(Callback::emptyOr(function (Sequence $result) {
+                return ListingTeasers::basic($result->toArray(), new ListHeading('Highlights'));
+            }))
             ->otherwise($this->softFailure('Failed to load highlights for '.$arguments['id']));
 
-        $arguments['highlights'] = all(compact('podcastEpisode', 'highlights'))
-            ->then(function (array $parts) {
-                return array_map(
-                    $this->willConvertTo(Teaser::class, ['variant' => 'secondary']),
-                    array_merge(
-                        $parts['podcastEpisode'] instanceof Sequence ? $parts['podcastEpisode']->toArray() : [],
-                        $parts['highlights'] instanceof Sequence ? $parts['highlights']->toArray() : []
-                    )
-                );
+        $arguments['seniorEditors'] = (new PromiseSequence($this->get('elife.api_sdk.people')
+            ->forType('senior-editor')
+            ->forSubject($arguments['id'])
+            ->reverse()
+            ->slice(0, 100)))
+            ->sort(Callback::call('rand', 0, 1))
+            ->slice(0, 3)
+            ->sort(function (Person $a, Person $b) {
+                return $a->getDetails()->getIndexName() <=> $b->getDetails()->getIndexName();
             })
-            ->then(Callback::emptyOr(function (array $result) {
-                return ListingTeasers::basic($result, 'Highlights');
-            }));
+            ->map($this->willConvertTo(ProfileSnippet::class, ['title' => 'institution']))
+            ->then(Callback::emptyOr(function (Sequence $result) use ($arguments) {
+                return ListingProfileSnippets::withSeeMoreLink(
+                    $result->toArray(),
+                    new SeeMoreLink(
+                        new Link(
+                            'See more editors',
+                            $this->get('router')->generate('about-people', ['type' => $arguments['id']])
+                        )
+                    ),
+                    new ListHeading('Senior editors')
+                );
+            }))
+            ->otherwise($this->softFailure("Failed to load senior editors for {$arguments['id']}"));
 
         return new Response($this->get('templating')->render('::subject.html.twig', $arguments));
     }
