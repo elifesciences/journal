@@ -142,7 +142,7 @@ final class PictureBuilderTest extends TestCase
                         'type' => 'image/png',
                     ],
                     [
-                        'srcset' => 'path:image/png:101:0 1.1x, path:image/png:90:0 1x',
+                        'srcset' => 'path:image/png:99:0 1.1x, path:image/png:90:0 1x',
                         'type' => 'image/png',
                     ],
                 ],
