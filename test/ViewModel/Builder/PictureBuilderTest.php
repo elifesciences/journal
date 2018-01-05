@@ -122,6 +122,39 @@ final class PictureBuilderTest extends TestCase
     /**
      * @test
      */
+    public function it_handles_rounding_correctly()
+    {
+        $builder = new PictureBuilder(function () {
+            return 'path:'.implode(':', func_get_args());
+        }, 'alt');
+
+        $builder = $builder
+            ->setOriginalSize(101, 101)
+            ->addType('image/png')
+            ->addSize(100)
+            ->addSize(90);
+
+        $this->assertEquals(
+            new ViewModel\Picture(
+                [
+                    [
+                        'srcset' => 'path:image/png:100:0',
+                        'type' => 'image/png',
+                    ],
+                    [
+                        'srcset' => 'path:image/png:101:0 1.1x, path:image/png:90:0 1x',
+                        'type' => 'image/png',
+                    ],
+                ],
+                new ViewModel\Image('path:', [], 'alt')
+            ),
+            $builder->build()
+        );
+    }
+
+    /**
+     * @test
+     */
     public function it_might_not_produce_any_size_based_sources_due_to_the_original_size()
     {
         $builder = new PictureBuilder(function () {

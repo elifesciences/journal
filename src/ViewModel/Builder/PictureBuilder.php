@@ -92,7 +92,7 @@ final class PictureBuilder
                     continue;
                 }
 
-                $srcset = implode(', ', array_filter(array_map(function (float $scale) use ($size, $type) {
+                $srcset = array_reduce([2, 1], function (array $carry, float $scale) use ($size, $type) {
                     $width = $size['width'] * $scale;
                     $height = $size['height'] * $scale;
 
@@ -104,18 +104,28 @@ final class PictureBuilder
                             }
                             $width = $this->originalWidth;
                         } else {
-                            return null;
+                            return $carry;
                         }
                     }
 
                     $uri = call_user_func($this->uriGenerator, $type, $width, $height);
                     $scalingFactor = round($width / $size['width'], 1);
 
-                    return "{$uri} {$scalingFactor}x";
-                }, [2, 1])));
+                    $carry[(string) $scalingFactor] = $uri;
+
+                    return $carry;
+                }, []);
 
                 if (empty($srcset)) {
                     continue;
+                }
+
+                if (1 === count($srcset)) {
+                    $srcset = $srcset[1];
+                } else {
+                    $srcset = implode(', ', array_map(function (float $scalingFactor, string $uri) {
+                        return "{$uri} {$scalingFactor}x";
+                    }, array_keys($srcset), array_values($srcset)));
                 }
 
                 $sources[] = array_filter([
