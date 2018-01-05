@@ -94,22 +94,27 @@ final class PictureBuilder
 
                 $srcset = array_reduce([2, 1], function (array $carry, float $scale) use ($size, $type) {
                     $width = $size['width'] * $scale;
-                    $height = $size['height'] * $scale;
 
                     if ($this->originalWidth && $width > $this->originalWidth) {
                         if ($this->originalWidth > $size['width']) {
-                            if ($height) {
-                                $ratio = $height / $width;
-                                $height = $this->originalWidth * $ratio;
-                            }
                             $width = $this->originalWidth;
                         } else {
                             return $carry;
                         }
                     }
 
-                    $scalingFactor = round($width / $size['width'], 1);
-                    $uri = call_user_func($this->uriGenerator, $type, round($size['width'] * $scalingFactor), $height);
+                    $floorp = function (float $val, int $precision) { // Oh for PHP_ROUND_DOWN
+                        $multiply = pow(10, $precision);
+
+                        return floor($val * $multiply) / $multiply;
+                    };
+
+                    $scalingFactor = $floorp($width / $size['width'], 1);
+
+                    $width = round($size['width'] * $scalingFactor);
+                    $height = round($size['height'] * $scalingFactor);
+
+                    $uri = call_user_func($this->uriGenerator, $type, $width, $height);
 
                     $carry[(string) $scalingFactor] = $uri;
 

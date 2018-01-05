@@ -150,6 +150,33 @@ final class PictureBuilderTest extends TestCase
             ),
             $builder->build()
         );
+
+        $builder = new PictureBuilder(function () {
+            return 'path:'.implode(':', func_get_args());
+        }, 'alt');
+
+        $builder = $builder
+            ->setOriginalSize(1800, 507)
+            ->addType('image/png')
+            ->addSize(1023, 288)
+            ->addSize(1114, 336);
+
+        $this->assertEquals(
+            new ViewModel\Picture(
+                [
+                    [
+                        'srcset' => 'path:image/png:1739:490 1.7x, path:image/png:1023:288 1x',
+                        'type' => 'image/png',
+                    ],
+                    [
+                        'srcset' => 'path:image/png:1782:538 1.6x, path:image/png:1114:336 1x',
+                        'type' => 'image/png',
+                    ],
+                ],
+                new ViewModel\Image('path:', [], 'alt')
+            ),
+            $builder->build()
+        );
     }
 
     /**
