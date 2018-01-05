@@ -86,13 +86,13 @@ final class FooterFactory
             ],
             new InvestorLogos(...array_map(function (array $item) {
                 return $this->pictureBuilderFactory
-                    ->create(function (string $type, int $width) use ($item) {
+                    ->create(function (string $type, int $width, int $height = null, float $scale) use ($item) {
                         $extension = MediaTypes::toExtension($type);
 
                         $path = "assets/images/investors/{$item['filename']}";
 
                         if ('svg' !== $extension) {
-                            $path .= "-{$width}";
+                            $path .= "@{$scale}x";
                         }
 
                         return $this->packages->getUrl("{$path}.{$extension}");

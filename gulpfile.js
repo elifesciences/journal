@@ -68,33 +68,35 @@ gulp.task('images:clean', () => {
 });
 
 gulp.task('images:banners', ['images:clean'], () => {
-    const sizes = {2228: 672, 1114: 336, 2046: 576, 1023: 288, 1534: 528, 767: 264, 900: 528, 450: 264};
+    const sizes = {1114: 336, 1023: 288, 767: 264, 450: 264};
 
     return gulp.src('./app/Resources/images/banners/*.jpg')
         .pipe(responsive({
-            '*': Object.keys(sizes).reduce((acc, width) => {
-                let height = sizes[width];
+            '*': [1, 2].reduce((acc, scale) => {
+                return Object.keys(sizes).reduce((acc, width) => {
+                    const height = sizes[width];
 
-                acc.push({
-                    width: width,
-                    height: height,
-                    rename: {
-                        suffix: `-${width}x${height}`,
-                    },
-                    withoutEnlargement: false,
-                });
-                acc.push({
-                    width: width,
-                    height: height,
-                    quality: 65,
-                    rename: {
-                        suffix: `-${width}x${height}`,
-                        extname: '.webp',
-                    },
-                    withoutEnlargement: false,
-                });
+                    acc.push({
+                        width: width * scale,
+                        height: height * scale,
+                        rename: {
+                            suffix: `-${width}x${height}@${scale}`,
+                        },
+                        withoutEnlargement: false,
+                    });
+                    acc.push({
+                        width: width * scale,
+                        height: height * scale,
+                        quality: 65,
+                        rename: {
+                            suffix: `-${width}x${height}@${scale}`,
+                            extname: '.webp',
+                        },
+                        withoutEnlargement: false,
+                    });
 
-                return acc;
+                    return acc;
+                }, acc);
             }, []),
         }))
         .pipe(gulp.dest('./build/assets/images/banners'));
@@ -103,19 +105,26 @@ gulp.task('images:banners', ['images:clean'], () => {
 gulp.task('images:logos', ['images:clean'], () => {
     return gulp.src('./app/Resources/images/logos/*.{png,svg}')
         .pipe(responsive({
-            '*': [180, 360].reduce((acc, width) => {
+            '*': [1, 2].reduce((acc, scale) => {
+                const width = 180 * scale;
+                const height = 60 * scale;
+
                 acc.push({
                     width: width,
+                    height: height,
+                    max: true,
                     rename: {
-                        suffix: `-${width}`,
+                        suffix: `@${scale}x`,
                         extname: '.png',
                     },
                     withoutEnlargement: false,
                 });
                 acc.push({
                     width: width,
+                    height: height,
+                    max: true,
                     rename: {
-                        suffix: `-${width}`,
+                        suffix: `@${scale}x`,
                         extname: '.webp',
                     },
                     withoutEnlargement: false,
@@ -128,19 +137,18 @@ gulp.task('images:logos', ['images:clean'], () => {
 });
 
 gulp.task('images:investors', ['images:clean'], () => {
-    const sizes = {185: 72, 370: 144};
-
     return gulp.src('./app/Resources/images/investors/*.{png,svg}')
         .pipe(responsive({
-            '*': Object.keys(sizes).reduce((acc, width) => {
-                let height = sizes[width];
+            '*': [1, 2].reduce((acc, scale) => {
+                const width = 185 * scale;
+                const height = 72 * scale;
 
                 acc.push({
                     width: width,
                     height: height,
                     max: true,
                     rename: {
-                        suffix: `-${width}`,
+                        suffix: `@${scale}x`,
                         extname: '.png',
                     },
                     withoutEnlargement: false,
@@ -151,7 +159,7 @@ gulp.task('images:investors', ['images:clean'], () => {
                     max: true,
                     quality: 65,
                     rename: {
-                        suffix: `-${width}`,
+                        suffix: `@${scale}x`,
                         extname: '.webp',
                     },
                     withoutEnlargement: false,

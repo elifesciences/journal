@@ -111,10 +111,7 @@ final class PictureBuilder
 
                     $scalingFactor = $floorp($width / $size['width'], 1);
 
-                    $width = round($size['width'] * $scalingFactor);
-                    $height = round($size['height'] * $scalingFactor);
-
-                    $uri = call_user_func($this->uriGenerator, $type, $width, $height);
+                    $uri = call_user_func($this->uriGenerator, $type, $size['width'], $size['height'], $scalingFactor);
 
                     $carry[(string) $scalingFactor] = $uri;
 

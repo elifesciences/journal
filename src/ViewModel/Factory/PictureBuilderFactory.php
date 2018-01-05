@@ -19,8 +19,8 @@ final class PictureBuilderFactory
             $defaultType = 'image/png';
         }
 
-        $builder = new PictureBuilder(function (string $type = null, int $width = null, int $height = null) use ($uriGenerator, $defaultType, $defaultWidth, $defaultHeight) {
-            return $uriGenerator($type ?? $defaultType, $width ?? $defaultWidth, $height ?? $defaultHeight);
+        $builder = new PictureBuilder(function (string $type = null, int $width = null, int $height = null, float $scale = 1) use ($uriGenerator, $defaultType, $defaultWidth, $defaultHeight) {
+            return $uriGenerator($type ?? $defaultType, $width ?? $defaultWidth, $height ?? $defaultHeight, $scale);
         }, $altText);
 
         $builder = $builder
@@ -48,8 +48,15 @@ final class PictureBuilderFactory
             $defaultWidth = null;
         }
 
-        $builder = $this->create(function (string $type, int $width = null, int $height = null) use ($image) {
+        $builder = $this->create(function (string $type, int $width = null, int $height = null, float $scale = 1) use ($image) {
             $extension = MediaTypes::toExtension($type);
+
+            if ($width) {
+                $width = $width * $scale;
+            }
+            if ($height) {
+                $height = $height * $scale;
+            }
 
             return $this->iiifUri($image, $width, $height, $extension);
         }, $type, $defaultWidth, $defaultHeight, $image->getAltText());
