@@ -76,11 +76,11 @@ final class BlogContext extends Context
                     new Request(
                         'GET',
                         'http://api.elifesciences.org/blog-articles/'.$article['id'],
-                        ['Accept' => 'application/vnd.elife.blog-article+json; version=1']
+                        ['Accept' => 'application/vnd.elife.blog-article+json; version=2']
                     ),
                     new Response(
                         200,
-                        ['Content-Type' => 'application/vnd.elife.blog-article+json; version=1'],
+                        ['Content-Type' => 'application/vnd.elife.blog-article+json; version=2'],
                         json_encode($article)
                     )
                 );

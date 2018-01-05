@@ -6,8 +6,8 @@ use Bobthecow\Bundle\MustacheBundle\BobthecowMustacheBundle;
 use Cocur\Slugify\Bridge\Symfony\CocurSlugifyBundle;
 use Csa\Bundle\GuzzleBundle\CsaGuzzleBundle;
 use eLife\Journal\Expression\ComposerLocateFunctionProvider;
+use eLife\Journal\Expression\TimeFunctionProvider;
 use HWI\Bundle\OAuthBundle\HWIOAuthBundle;
-use Irozgar\GulpRevVersionsBundle\IrozgarGulpRevVersionsBundle;
 use Isometriks\Bundle\SpamBundle\IsometriksSpamBundle;
 use Nelmio\SecurityBundle\NelmioSecurityBundle;
 use PackageVersions\Versions;
@@ -19,6 +19,7 @@ use Symfony\Bundle\SecurityBundle\SecurityBundle;
 use Symfony\Bundle\SwiftmailerBundle\SwiftmailerBundle;
 use Symfony\Bundle\TwigBundle\TwigBundle;
 use Symfony\Bundle\WebProfilerBundle\WebProfilerBundle;
+use Symfony\Bundle\WebServerBundle\WebServerBundle;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Kernel;
@@ -54,7 +55,6 @@ class AppKernel extends Kernel
             new CsaGuzzleBundle(),
             new FrameworkBundle(),
             new HWIOAuthBundle(),
-            new IrozgarGulpRevVersionsBundle(),
             new IsometriksSpamBundle(),
             new MonologBundle(),
             new NelmioSecurityBundle(),
@@ -68,6 +68,10 @@ class AppKernel extends Kernel
             $bundles[] = new DebugBundle();
             $bundles[] = new SensioDistributionBundle();
             $bundles[] = new WebProfilerBundle();
+        }
+
+        if ('dev' === $this->getEnvironment()) {
+            $bundles[] = new WebServerBundle();
         }
 
         return $bundles;
@@ -85,22 +89,22 @@ class AppKernel extends Kernel
 
     public function getRootDir()
     {
-        return __DIR__.'/../app';
+        return $this->getProjectDir().'/app';
     }
 
     public function getCacheDir()
     {
-        return $this->getRootDir().'/../var/cache/'.$this->getEnvironment();
+        return $this->getProjectDir().'/var/cache/'.$this->getEnvironment();
     }
 
     public function getLogDir()
     {
-        return $this->getRootDir().'/../var/logs';
+        return $this->getProjectDir().'/var/logs';
     }
 
     public function registerContainerConfiguration(LoaderInterface $loader)
     {
-        $loader->load($this->getRootDir().'/config/config_'.$this->getEnvironment().'.yml');
+        $loader->load($this->getProjectDir().'/app/config/config_'.$this->getEnvironment().'.yml');
     }
 
     public function run(Request $request)
@@ -114,9 +118,8 @@ class AppKernel extends Kernel
     {
         $builder = parent::buildContainer();
 
-        $builder->getParameterBag()->add($this->getEnvParameters()); // https://github.com/symfony/symfony/issues/7555
-
         $builder->addExpressionLanguageProvider(new ComposerLocateFunctionProvider());
+        $builder->addExpressionLanguageProvider(new TimeFunctionProvider());
 
         return $builder;
     }

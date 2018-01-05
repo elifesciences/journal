@@ -2,6 +2,7 @@
 
 namespace eLife\Journal\ViewModel\Converter;
 
+use eLife\ApiSdk\Model\AccessControl;
 use eLife\ApiSdk\Model\Profile;
 use eLife\Journal\Helper\Callback;
 use eLife\Patterns\ViewModel;
@@ -22,11 +23,15 @@ final class ProfileContentHeaderProfileConverter implements ViewModelConverter
     public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
         $affiliations = array_unique($object->getAffiliations()
+            ->filter(Callback::methodIsValue('getAccess', AccessControl::ACCESS_PUBLIC))
+            ->map(Callback::method('getValue'))
             ->map(Callback::method('getName'))
             ->map(Callback::apply('end'))
             ->toArray());
 
-        $emailAddress = $object->getEmailAddresses()[0];
+        $emailAddress = $object->getEmailAddresses()
+            ->filter(Callback::methodIsValue('getAccess', AccessControl::ACCESS_PUBLIC))
+            ->map(Callback::method('getValue'))[0];
 
         if ($context['isUser'] ?? false) {
             return ViewModel\ContentHeaderProfile::loggedIn(

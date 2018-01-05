@@ -97,11 +97,11 @@ final class LabsContext extends Context
                     new Request(
                         'GET',
                         'http://api.elifesciences.org/labs-posts/'.$post['id'],
-                        ['Accept' => 'application/vnd.elife.labs-post+json; version=1']
+                        ['Accept' => 'application/vnd.elife.labs-post+json; version=2']
                     ),
                     new Response(
                         200,
-                        ['Content-Type' => 'application/vnd.elife.labs-post+json; version=1'],
+                        ['Content-Type' => 'application/vnd.elife.labs-post+json; version=2'],
                         json_encode($post)
                     )
                 );

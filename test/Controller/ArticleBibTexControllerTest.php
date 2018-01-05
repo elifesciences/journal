@@ -21,12 +21,7 @@ final class ArticleBibTexControllerTest extends WebTestCase
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001',
-                [
-                    'Accept' => [
-                        'application/vnd.elife.article-poa+json; version=1',
-                        'application/vnd.elife.article-vor+json; version=1',
-                    ],
-                ]
+                ['Accept' => 'application/vnd.elife.article-poa+json; version=2, application/vnd.elife.article-vor+json; version=2']
             ),
             new Response(
                 200,
@@ -75,7 +70,7 @@ final class ArticleBibTexControllerTest extends WebTestCase
                 ],
             ],
             <<<'EOT'
-@article {10.7554/eLife.00001},
+@article {10.7554/eLife.00001,
 article_type = {journal},
 title = {Title},
 author = {Bar, Foo},
@@ -205,7 +200,7 @@ EOT
                 ],
             ],
             <<<'EOT'
-@article {10.7554/eLife.00001},
+@article {10.7554/eLife.00001,
 article_type = {journal},
 title = {Prefix: \textit{Title}},
 author = {One, Author and Group One and Group Two},
@@ -219,7 +214,7 @@ pages = {e00001},
 citation = {eLife 2016;1:e00001},
 doi = {10.7554/eLife.00001},
 url = {https://doi.org/10.7554/eLife.00001},
-abstract = {Lorem \textbf{ipsum} \textit{dolor} \uline{sit} \texttt{amet}, \textsc{consectetur} \textsubscript{adipiscing} \textsuperscript{elit}. \textbf{\textit{D\textsubscript{u}i}s} ornare \&\%\$\#\_\{\}\textasciitilde\textasciicircum\textbackslash>< nunc.},
+abstract = {Lorem \textbf{ipsum} \textit{dolor} \uline{sit} \texttt{amet}, \textsc{consectetur} \textsubscript{adipiscing} \textsuperscript{elit}. \textbf{\textit{D\textsubscript{u}i}s} ornare \&\%\$\#\_\textbraceleft\textbraceright\textasciitilde\textasciicircum\textbackslash>< nunc.},
 keywords = {\textit{Keyword one}, Keyword two},
 journal = {eLife},
 issn = {2050-084X},
@@ -241,12 +236,7 @@ EOT
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001',
-                [
-                    'Accept' => [
-                        'application/vnd.elife.article-poa+json; version=1',
-                        'application/vnd.elife.article-vor+json; version=1',
-                    ],
-                ]
+                ['Accept' => 'application/vnd.elife.article-poa+json; version=2, application/vnd.elife.article-vor+json; version=2']
             ),
             new Response(
                 404,
@@ -296,16 +286,11 @@ EOT
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001',
-                [
-                    'Accept' => [
-                        'application/vnd.elife.article-poa+json; version=1',
-                        'application/vnd.elife.article-vor+json; version=1',
-                    ],
-                ]
+                ['Accept' => 'application/vnd.elife.article-poa+json; version=2, application/vnd.elife.article-vor+json; version=2']
             ),
             new Response(
                 200,
-                ['Content-Type' => 'application/vnd.elife.article-poa+json; version=1'],
+                ['Content-Type' => 'application/vnd.elife.article-poa+json; version=2'],
                 json_encode([
                     'status' => 'poa',
                     'id' => '00001',

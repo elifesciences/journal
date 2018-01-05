@@ -84,11 +84,11 @@ final class EventContext extends Context
                     new Request(
                         'GET',
                         'http://api.elifesciences.org/events/'.$event['id'],
-                        ['Accept' => 'application/vnd.elife.event+json; version=1']
+                        ['Accept' => 'application/vnd.elife.event+json; version=2']
                     ),
                     new Response(
                         200,
-                        ['Content-Type' => 'application/vnd.elife.event+json; version=1'],
+                        ['Content-Type' => 'application/vnd.elife.event+json; version=2'],
                         json_encode($event)
                     )
                 );

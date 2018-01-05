@@ -2,10 +2,10 @@
 
 namespace eLife\Journal\Controller;
 
-use eLife\Journal\ViewModel\Paragraph;
 use eLife\Patterns\ViewModel\ArticleSection;
 use eLife\Patterns\ViewModel\ContentHeader;
 use eLife\Patterns\ViewModel\Listing;
+use eLife\Patterns\ViewModel\Paragraph;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -18,6 +18,9 @@ final class TermsController extends Controller
         $arguments['title'] = 'Terms and policy';
 
         $arguments['contentHeader'] = new ContentHeader($arguments['title']);
+
+        $comments = $this->isGranted('FEATURE_CAN_USE_HYPOTHESIS') ? 'Annotations' : 'Comments';
+        $commenter = $this->isGranted('FEATURE_CAN_USE_HYPOTHESIS') ? 'annotator' : 'commenter';
 
         $arguments['body'] = [
             ArticleSection::basic('Terms and Conditions of Use', 2, $this->render(
@@ -154,14 +157,14 @@ final class TermsController extends Controller
                     new Paragraph('In the course of using the eLife Sites, you may provide eLife with feedback,
                               including but not limited to suggestions, observations, errors, problems, and
                               defects regarding the eLife Sites (collectively &quot;Feedback&quot;) as well as
-                              comments on journal content ("Comments"). You hereby grant eLife a worldwide,
-                              irrevocable, perpetual, royalty-free, transferable, and sub-licensable,
+                              '.strtolower($comments)." on journal content (\"{$comments}\"). You hereby grant eLife a
+                              worldwide, irrevocable, perpetual, royalty-free, transferable, and sub-licensable,
                               non-exclusive right to use, copy, modify, distribute, display, perform, create
-                              derivative works from and otherwise exploit all such Feedback and Comments.
-                              All such Feedback and Comments shall comply with these Terms and Conditions
+                              derivative works from and otherwise exploit all such Feedback and {$comments}.
+                              All such Feedback and {$comments} shall comply with these Terms and Conditions
                               generally and in particular the restrictions in Impermissible Uses above. In
                               addition, content provided by authors for submission shall be subject to the
-                              Author Guide and Policies.')
+                              Author Guide and Policies.")
                 )),
                 ArticleSection::basic('Infringement', 3, $this->render(
                     new Paragraph('If you believe that your work has been copied in a way that constitutes
@@ -235,7 +238,7 @@ final class TermsController extends Controller
                         eLife Sciences Publications, Ltd. (&ldquo;eLife&rdquo;) operates a Website at <a href="https://elifesciences.org/">elifesciences.org</a>. It is eLife&rsquo;s policy
                         to respect your privacy regarding any information we may collect while operating our Web sites.'),
                 ArticleSection::basic('Website visitors', 3, $this->render(
-                    new Paragraph('Like most Website operators, eLife collects non-personally identifying information of the sort that Web browsers and servers typically make available, such as the browser type, language preference, referring site, and the date and time of each visitor request. eLife&rsquo;s purpose in collecting non-personally identifying information is to better understand how eLife&rsquo;s visitors use its Website. From time to time, eLife may release non-personally identifying information in the aggregate, e.g., by publishing a report on trends in the usage of its Website. eLife also collects potentially personally identifying information like Internet Protocol (IP) addresses for logged in users and for users leaving comments on our site. eLife only discloses logged in user and commenter IP addresses under the same circumstances that it uses and discloses personally identifying information as described below, except that commenter IP addresses are visible and disclosed to the administrator.')
+                    new Paragraph("Like most Website operators, eLife collects non-personally identifying information of the sort that Web browsers and servers typically make available, such as the browser type, language preference, referring site, and the date and time of each visitor request. eLife&rsquo;s purpose in collecting non-personally identifying information is to better understand how eLife&rsquo;s visitors use its Website. From time to time, eLife may release non-personally identifying information in the aggregate, e.g., by publishing a report on trends in the usage of its Website. eLife also collects potentially personally identifying information like Internet Protocol (IP) addresses for logged in users and for users leaving {$comments} on our site. eLife only discloses logged in user and {$commenter} IP addresses under the same circumstances that it uses and discloses personally identifying information as described below, except that {$commenter} IP addresses are visible and disclosed to the administrator.")
                 )),
                 ArticleSection::basic('Gathering of personally identifying information', 3, $this->render(
                     new Paragraph('Certain visitors to eLife&rsquo;s Websites choose to interact with eLife in ways that require eLife to gather personally identifying information. The amount and type of information that eLife gathers depends on the nature of the interaction. For example, eLife operates a permission-based email communication system, which allows us to collect personal information and send emails to people who want to receive them. In each case, eLife collects such information only insofar as is necessary or appropriate to fulfil the purpose of the visitor&rsquo;s interaction with eLife. eLife does not disclose personally identifying information other than as described below. And visitors can always refuse to supply personally identifying information, with the caveat that it may prevent them from engaging in certain Website-related activities.')

@@ -23,6 +23,7 @@ final class InterviewControllerTest extends PageTestCase
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertSame('Interview title', $crawler->filter('.content-header__title')->text());
         $this->assertSame('Interview Jan 1, 2010', trim(preg_replace('!\s+!', ' ', $crawler->filter('.content-header .meta')->text())));
+        $this->assertEmpty($crawler->filter('.contextual-data'));
     }
 
     /**
@@ -110,6 +111,18 @@ final class InterviewControllerTest extends PageTestCase
 
     /**
      * @test
+     */
+    public function it_shows_annotations_when_the_feature_flag_is_enabled()
+    {
+        $client = static::createClient();
+
+        $crawler = $client->request('GET', "{$this->getUrl()}?open-sesame");
+
+        $this->assertContains('Annotations', $crawler->filter('.contextual-data__list')->text());
+    }
+
+    /**
+     * @test
      * @dataProvider incorrectSlugProvider
      */
     public function it_redirects_if_the_slug_is_not_correct(string $url)
@@ -140,7 +153,7 @@ final class InterviewControllerTest extends PageTestCase
                 'GET',
                 'http://api.elifesciences.org/interviews/1',
                 [
-                    'Accept' => 'application/vnd.elife.interview+json; version=1',
+                    'Accept' => 'application/vnd.elife.interview+json; version=2',
                 ]
             ),
             new Response(
@@ -186,11 +199,11 @@ final class InterviewControllerTest extends PageTestCase
             new Request(
                 'GET',
                 'http://api.elifesciences.org/interviews/1',
-                ['Accept' => 'application/vnd.elife.interview+json; version=1']
+                ['Accept' => 'application/vnd.elife.interview+json; version=2']
             ),
             new Response(
                 200,
-                ['Content-Type' => 'application/vnd.elife.interview+json; version=1'],
+                ['Content-Type' => 'application/vnd.elife.interview+json; version=2'],
                 json_encode([
                     'id' => '1',
                     'interviewee' => [

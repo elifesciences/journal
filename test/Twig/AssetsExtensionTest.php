@@ -5,12 +5,12 @@ namespace test\eLife\Journal\Twig;
 use ArrayObject;
 use eLife\Journal\Twig\AssetsExtension;
 use eLife\Patterns\HasAssets;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Twig_Environment;
 use Twig_ExtensionInterface;
 use Twig_Loader_Array;
 
-final class AssetsExtensionTest extends PHPUnit_Framework_TestCase
+final class AssetsExtensionTest extends TestCase
 {
     /**
      * @test

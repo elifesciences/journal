@@ -21,6 +21,7 @@ final class ArticleFiguresControllerTest extends PageTestCase
         $this->assertSame('Foo Bar', trim($crawler->filter('.content-header__author_list')->text()));
         $this->assertEmpty($crawler->filter('.content-header__institution_list'));
 
+        $this->assertNotContains('Annotations', $crawler->filter('.contextual-data__list')->text());
         $this->assertContains('Cite as: eLife 2010;1:e00001',
             $crawler->filter('.contextual-data__cite_wrapper')->text());
         $this->assertContains('doi: 10.7554/eLife.00001', $crawler->filter('.contextual-data__cite_wrapper')->text());
@@ -125,6 +126,19 @@ final class ArticleFiguresControllerTest extends PageTestCase
     /**
      * @test
      */
+    public function it_shows_annotations_rather_than_comments_when_the_feature_flag_is_enabled()
+    {
+        $client = static::createClient();
+
+        $crawler = $client->request('GET', "{$this->getUrl()}?open-sesame");
+
+        $this->assertNotContains('Comments', $crawler->text());
+        $this->assertContains('Annotations', $crawler->filter('.contextual-data__list')->text());
+    }
+
+    /**
+     * @test
+     */
     public function it_has_metadata_for_previous_versions()
     {
         $client = static::createClient();
@@ -152,12 +166,7 @@ final class ArticleFiguresControllerTest extends PageTestCase
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001',
-                [
-                    'Accept' => [
-                        'application/vnd.elife.article-poa+json; version=1',
-                        'application/vnd.elife.article-vor+json; version=1',
-                    ],
-                ]
+                ['Accept' => 'application/vnd.elife.article-poa+json; version=2, application/vnd.elife.article-vor+json; version=2']
             ),
             new Response(
                 404,
@@ -207,16 +216,11 @@ final class ArticleFiguresControllerTest extends PageTestCase
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001',
-                [
-                    'Accept' => [
-                        'application/vnd.elife.article-poa+json; version=1',
-                        'application/vnd.elife.article-vor+json; version=1',
-                    ],
-                ]
+                ['Accept' => 'application/vnd.elife.article-poa+json; version=2, application/vnd.elife.article-vor+json; version=2']
             ),
             new Response(
                 200,
-                ['Content-Type' => 'application/vnd.elife.article-vor+json; version=1'],
+                ['Content-Type' => 'application/vnd.elife.article-vor+json; version=2'],
                 json_encode([
                     'status' => 'vor',
                     'stage' => 'published',
@@ -313,16 +317,11 @@ final class ArticleFiguresControllerTest extends PageTestCase
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001',
-                [
-                    'Accept' => [
-                        'application/vnd.elife.article-poa+json; version=1',
-                        'application/vnd.elife.article-vor+json; version=1',
-                    ],
-                ]
+                ['Accept' => 'application/vnd.elife.article-poa+json; version=2, application/vnd.elife.article-vor+json; version=2']
             ),
             new Response(
                 200,
-                ['Content-Type' => 'application/vnd.elife.article-vor+json; version=1'],
+                ['Content-Type' => 'application/vnd.elife.article-vor+json; version=2'],
                 json_encode([
                     'status' => 'vor',
                     'stage' => 'published',
@@ -620,16 +619,11 @@ final class ArticleFiguresControllerTest extends PageTestCase
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001/versions/1',
-                [
-                    'Accept' => [
-                        'application/vnd.elife.article-poa+json; version=1',
-                        'application/vnd.elife.article-vor+json; version=1',
-                    ],
-                ]
+                ['Accept' => 'application/vnd.elife.article-poa+json; version=2, application/vnd.elife.article-vor+json; version=2']
             ),
             new Response(
                 200,
-                ['Content-Type' => 'application/vnd.elife.article-poa+json; version=1'],
+                ['Content-Type' => 'application/vnd.elife.article-poa+json; version=2'],
                 json_encode([
                     'status' => 'poa',
                     'stage' => 'published',

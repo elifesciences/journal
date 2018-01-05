@@ -1,3 +1,5 @@
+{% set hypothesis = true %}
+
 {% extends '::page.html.twig' %}
 
 {% block title %}{{ title|striptags }} | Interviews{% endblock %}
@@ -10,6 +12,16 @@
 
     {{ render_pattern(contentHeader) }}
 
+    {% if contextualData %}
+
+        <div class="wrapper">
+
+            {{ render_pattern(contextualData) }}
+
+        </div>
+
+    {% endif %}
+
     {% embed 'grid/content.html.twig' %}
 
         {% block main %}
@@ -20,6 +32,12 @@
 
             {% if cv %}
                 {{ render_pattern(cv) }}
+            {% endif %}
+
+            {% if hypothesisOpener is defined %}
+
+                {{ render_pattern(hypothesisOpener) }}
+
             {% endif %}
 
         {% endblock %}

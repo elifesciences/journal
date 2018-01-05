@@ -3,11 +3,11 @@
 namespace test\eLife\Journal\Security\Authorization;
 
 use eLife\Journal\Security\Authorization\MissingCredentialsAuthorizationChecker;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationCredentialsNotFoundException;
 
-final class MissingCredentialsAuthorizationCheckerTest extends PHPUnit_Framework_TestCase
+final class MissingCredentialsAuthorizationCheckerTest extends TestCase
 {
     /**
      * @test

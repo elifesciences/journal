@@ -23,6 +23,7 @@ final class LabsPostControllerTest extends PageTestCase
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertSame('Post title', $crawler->filter('.content-header__title')->text());
         $this->assertSame('Labs Jan 1, 2010', trim(preg_replace('!\s+!', ' ', $crawler->filter('.content-header .meta')->text())));
+        $this->assertEmpty($crawler->filter('.contextual-data'));
         $this->assertContains('Post text.', $crawler->filter('main > div.wrapper')->text());
     }
 
@@ -45,6 +46,18 @@ final class LabsPostControllerTest extends PageTestCase
         $this->assertSame('Post impact statement', $crawler->filter('meta[name="description"]')->attr('content'));
         $this->assertSame('article', $crawler->filter('meta[property="og:type"]')->attr('content'));
         $this->assertSame('summary', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
+    }
+
+    /**
+     * @test
+     */
+    public function it_shows_annotations_when_the_feature_flag_is_enabled()
+    {
+        $client = static::createClient();
+
+        $crawler = $client->request('GET', "{$this->getUrl()}?open-sesame");
+
+        $this->assertContains('Annotations', $crawler->filter('.contextual-data__list')->text());
     }
 
     /**
@@ -79,7 +92,7 @@ final class LabsPostControllerTest extends PageTestCase
                 'GET',
                 'http://api.elifesciences.org/labs-posts/1',
                 [
-                    'Accept' => 'application/vnd.elife.labs-post+json; version=1',
+                    'Accept' => 'application/vnd.elife.labs-post+json; version=2',
                 ]
             ),
             new Response(
@@ -104,11 +117,11 @@ final class LabsPostControllerTest extends PageTestCase
             new Request(
                 'GET',
                 'http://api.elifesciences.org/labs-posts/1',
-                ['Accept' => 'application/vnd.elife.labs-post+json; version=1']
+                ['Accept' => 'application/vnd.elife.labs-post+json; version=2']
             ),
             new Response(
                 200,
-                ['Content-Type' => 'application/vnd.elife.labs-post+json; version=1'],
+                ['Content-Type' => 'application/vnd.elife.labs-post+json; version=2'],
                 json_encode([
                     'id' => '1',
                     'title' => 'Post title',

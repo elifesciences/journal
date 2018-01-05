@@ -9,7 +9,6 @@ use eLife\ApiSdk\Model\Person;
 use eLife\ApiSdk\Model\Subject;
 use eLife\Journal\Helper\Callback;
 use eLife\Journal\ViewModel\DefinitionList;
-use eLife\Journal\ViewModel\Paragraph;
 use eLife\Patterns\ViewModel\AboutProfile;
 use eLife\Patterns\ViewModel\AboutProfiles;
 use eLife\Patterns\ViewModel\ArticleSection;
@@ -20,6 +19,7 @@ use eLife\Patterns\ViewModel\IFrame;
 use eLife\Patterns\ViewModel\Link;
 use eLife\Patterns\ViewModel\ListHeading;
 use eLife\Patterns\ViewModel\Listing;
+use eLife\Patterns\ViewModel\Paragraph;
 use eLife\Patterns\ViewModel\SectionListing;
 use eLife\Patterns\ViewModel\SectionListingLink;
 use eLife\Patterns\ViewModel\Select;
@@ -43,7 +43,7 @@ final class AboutController extends Controller
         $arguments['body'] = [
             new Paragraph('eLife is a non-profit organisation inspired by research funders and led by scientists. Our mission is to help scientists accelerate discovery by operating a platform for research communication that encourages and recognises the most responsible behaviours in science.'),
             new Paragraph('eLife publishes important research in all areas of the life and biomedical sciences. The research is selected and evaluated by working scientists and is made freely available to all readers without delay. eLife also invests in <a href="'.$this->get('router')->generate('about-innovation').'">innovation</a> through open-source tool development to accelerate research communication and discovery. Our work is guided by the <a href="'.$this->get('router')->generate('about-people').'">communities</a> we serve.'),
-            new Paragraph('eLife was founded in 2011 by the Howard Hughes Medical Institute, the Max Planck Society and the Wellcome Trust, who provide financial support and strategic guidance. In 2017, eLife introduced <a href="'.$this->get('router')->generate('inside-elife-article', ['id' => 'b6365b76']).'">publication fees</a> to cover some of our <a href="'.$this->get('router')->generate('inside-elife-article', ['id' => 'a058ec77']).'">core publishing costs</a>. Annual reports and financial statements are <a href="'.$this->get('router')->generate('annual-reports').'">openly available</a>.'),
+            new Paragraph('eLife was founded in 2011 by the Howard Hughes Medical Institute, the Max Planck Society and the Wellcome Trust​. These organisations continue to provide financial and strategic support, and were joined by the Knut and Alice Wallenberg Foundation for 2018. <a href="'.$this->get('router')->generate('inside-elife-article', ['id' => 'b6365b76']).'">Publication fees​</a>​ ​were introduced in 2017 ​to cover some of ​eLife\'s <a href="'.$this->get('router')->generate('inside-elife-article', ['id' => 'a058ec77']).'">core publishing costs</a>. <a href="'.$this->get('router')->generate('annual-reports').'">​Annual reports​</a>​ and financial statements are openly available.'),
             ArticleSection::basic('Related links', 2,
                 $this->render(Listing::unordered([
                     '<a href="'.$this->get('router')->generate('inside-elife').'">Inside eLife</a>',

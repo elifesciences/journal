@@ -383,27 +383,32 @@
 
     {{ parent() }}
 
-    <script>
-        if (!!document.createElement('div').dataset) {
-            var disqus_config = function () {
-                this.page.url = '{{ url('article', {id: article.id}) }}';
-                this.page.title = '{{ article.fullTitle|striptags }}';
-                this.page.identifier = 'article:{{ article.id }}';
-            };
+    {% if not is_granted('FEATURE_CAN_USE_HYPOTHESIS') %}
 
-            (function () {
-                var d = document, s = d.createElement('script'), c = document.getElementById('disqus-comment-count');
-                s.id = 'dsq-count-scr';
-                s.src = 'https://{{ disqus_domain }}.disqus.com/count.js';
-                s.async = true;
-                s.addEventListener('error', function () {
-                    {# Do nothing #}
-                });
-                c.classList.add('disqus-comment-count');
-                c.setAttribute('data-disqus-identifier', 'article:{{ article.id }}');
-                d.head.appendChild(s);
-            })();
-        }
-    </script>
+        <script>
+            if (!!document.createElement('div').dataset) {
+                var disqus_config = function () {
+                    this.page.url = '{{ url('article', {id: article.id}) }}';
+                    this.page.title = '{{ article.fullTitle|striptags }}';
+                    this.page.identifier = 'article:{{ article.id }}';
+                };
+
+                (function () {
+                    var d = document, s = d.createElement('script'),
+                        c = document.getElementById('disqus-comment-count');
+                    s.id = 'dsq-count-scr';
+                    s.src = 'https://{{ disqus_domain }}.disqus.com/count.js';
+                    s.async = true;
+                    s.addEventListener('error', function () {
+                        {# Do nothing #}
+                    });
+                    c.classList.add('disqus-comment-count');
+                    c.setAttribute('data-disqus-identifier', 'article:{{ article.id }}');
+                    d.head.appendChild(s);
+                })();
+            }
+        </script>
+
+    {% endif %}
 
 {% endblock %}

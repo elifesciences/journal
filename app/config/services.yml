@@ -205,7 +205,7 @@ services:
         class: Mustache_Loader_FilesystemLoader
         public: false
         arguments:
-          - '@=service("kernel").getRootDir()~"/Resources/patterns"'
+          - '@=service("kernel").getProjectDir()~"/app/Resources/patterns"'
 
     elife.journal.router.parameter_resolver.model:
       class: eLife\Journal\Router\ModelParameterResolver
@@ -228,6 +228,14 @@ services:
         arguments:
           - '@elife.journal.security.authorization.checker.missing_credentials.inner'
 
+    elife.journal.security.hypothesis.token_generator:
+        class: eLife\Journal\Security\HypothesisTokenGenerator
+        public: false
+        arguments:
+          - '%hypothesis_authority%'
+          - '%hypothesis_client_id%'
+          - '%hypothesis_client_secret%'
+
     elife.journal.security.voter.feature.can_authenticate:
         class: eLife\Journal\Security\Voter\SessionAttributeVoter
         public: false
@@ -238,14 +246,13 @@ services:
         tags:
           - name: security.voter
 
-    elife.journal.security.voter.feature.can_view_webp:
-        class: eLife\Journal\Security\Voter\RequestHeaderVoter
+    elife.journal.security.voter.feature.use_hypothesis:
+        class: eLife\Journal\Security\Voter\SessionAttributeVoter
         public: false
         arguments:
           - '@request_stack'
-          - FEATURE_CAN_VIEW_WEBP
-          - CloudFront-Viewer-Country
-          - '%feature_can_view_webp_countries%'
+          - FEATURE_CAN_USE_HYPOTHESIS
+          - open-sesame
         tags:
           - name: security.voter
 
@@ -276,6 +283,13 @@ services:
         class: eLife\Journal\Twig\FragmentLinkRewriterExtension
         arguments:
           - '@elife.journal.helper.fragment_link_rewriter'
+        tags:
+          - name: twig.extension
+
+    elife.journal.twig.extension.hypothesis_token:
+        class: eLife\Journal\Twig\HypothesisTokenExtension
+        arguments:
+          - '@elife.journal.security.hypothesis.token_generator'
         tags:
           - name: twig.extension
 
@@ -315,8 +329,6 @@ services:
 
     elife.journal.view_model.factory.picture_builder:
         class: eLife\Journal\ViewModel\Factory\PictureBuilderFactory
-        arguments:
-          - '@security.authorization_checker'
 
     elife.journal.view_model.factory.content_header_image:
         class: eLife\Journal\ViewModel\Factory\ContentHeaderImageFactory
@@ -328,6 +340,9 @@ services:
         class: eLife\Journal\ViewModel\Factory\FooterFactory
         arguments:
           - '@router'
+          - '@elife.journal.view_model.factory.picture_builder'
+          - '@assets.packages'
+          - '@security.authorization_checker'
 
     elife.journal.view_model.factory.site_header:
         class: eLife\Journal\ViewModel\Factory\SiteHeaderFactory
@@ -541,6 +556,15 @@ services:
     elife.journal.view_model.converter.block.paragraph:
         class: eLife\Journal\ViewModel\Converter\Block\ParagraphConverter
         public: false
+        tags:
+          - name: view_model.converter
+
+    elife.journal.view_model.converter.block.profile:
+        class: eLife\Journal\ViewModel\Converter\Block\ProfileConverter
+        public: false
+        arguments:
+          - '@elife.journal.view_model.converter'
+          - '@elife.patterns.pattern_renderer'
         tags:
           - name: view_model.converter
 
