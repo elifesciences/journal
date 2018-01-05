@@ -13,7 +13,7 @@ trait CreatesTeaserImage
     final private function prominentTeaserImage(HasThumbnail $object) : ViewModel\TeaserImage
     {
         return ViewModel\TeaserImage::prominent(
-            $this->getViewModelConverter()->convert($object->getThumbnail(), null, ['width' => 263, 'height' => 148])
+            $this->getViewModelConverter()->convert($object->getThumbnail(), null, ['width' => 251, 'height' => 141])
         );
     }
 
