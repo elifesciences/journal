@@ -36,8 +36,15 @@ final class SubjectBlockLinkConverter implements ViewModelConverter
         }
 
         $builder = $this->pictureBuilderFactory
-            ->create(function (string $type, int $width = null, int $height = null) use ($image) {
+            ->create(function (string $type, int $width = null, int $height = null, float $scale = 1) use ($image) {
                 $extension = MediaTypes::toExtension($type);
+
+                if ($width) {
+                    $width = $width * $scale;
+                }
+                if ($height) {
+                    $height = $height * $scale;
+                }
 
                 if (null === $width && null === $height) {
                     // No picture is displayed at smaller sizes, this prevents an image from being downloaded at all.
