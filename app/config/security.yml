@@ -1,7 +1,7 @@
 security:
     providers:
         oauth:
-            id: elife.journal.security.user.oauth_provider
+            id: knpu.oauth2.user_provider
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt))/

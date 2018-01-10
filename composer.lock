@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "8fdcce847b3aca2c601b23f5d35eef97",
+    "content-hash": "f9e31913c6287533ec5b3a214e7b02b7",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -1460,16 +1460,16 @@
         },
         {
             "name": "knpuniversity/oauth2-client-bundle",
-            "version": "1.15.1",
+            "version": "1.16.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/knpuniversity/oauth2-client-bundle.git",
-                "reference": "463e9d478bbda11cc50669d0f4a3aac49ef076e3"
+                "reference": "2649cf98d737199e06f3492b54db34dbd05c9b45"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/knpuniversity/oauth2-client-bundle/zipball/463e9d478bbda11cc50669d0f4a3aac49ef076e3",
-                "reference": "463e9d478bbda11cc50669d0f4a3aac49ef076e3",
+                "url": "https://api.github.com/repos/knpuniversity/oauth2-client-bundle/zipball/2649cf98d737199e06f3492b54db34dbd05c9b45",
+                "reference": "2649cf98d737199e06f3492b54db34dbd05c9b45",
                 "shasum": ""
             },
             "require": {
@@ -1510,7 +1510,7 @@
                 "oauth",
                 "oauth2"
             ],
-            "time": "2017-12-25T17:51:35+00:00"
+            "time": "2018-01-08T15:18:14+00:00"
         },
         {
             "name": "league/oauth2-client",

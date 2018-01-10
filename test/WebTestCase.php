@@ -2,9 +2,9 @@
 
 namespace test\eLife\Journal;
 
-use eLife\Journal\Security\User\OAuthUser;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use KnpU\OAuth2ClientBundle\Security\User\OAuthUser;
 use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase as BaseWebTestCase;
 use Symfony\Component\BrowserKit\Cookie;
