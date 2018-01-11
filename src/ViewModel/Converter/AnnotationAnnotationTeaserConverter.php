@@ -4,6 +4,7 @@ namespace eLife\Journal\ViewModel\Converter;
 
 use eLife\ApiSdk\Model\Annotation;
 use eLife\Journal\Helper\CanConvert;
+use eLife\Journal\Helper\Html;
 use eLife\Patterns\PatternRenderer;
 use eLife\Patterns\ViewModel;
 
@@ -29,7 +30,7 @@ final class AnnotationAnnotationTeaserConverter implements ViewModelConverter
         $isRestricted = 'public' !== $object->getAccess();
 
         $content = $this->patternRenderer->render(...$object->getContent()->map($this->willConvertTo()));
-        $content = preg_replace('/<a href=\"(.*?)\">(.*?)<\/a>/', '\\2', $content); // TODO sort out
+        $content = Html::stripElement($content, 'a');
 
         if ($object->getParents()->notEmpty()) {
             return ViewModel\AnnotationTeaser::forReply(
