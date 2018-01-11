@@ -32,7 +32,7 @@ final class AnnotationAnnotationTeaserConverter implements ViewModelConverter
         $content = preg_replace('/<a href=\"(.*?)\">(.*?)<\/a>/', '\\2', $content); // TODO sort out
 
         if ($object->getParents()->notEmpty()) {
-            return ViewModel\AnnotationTeaser::reply(
+            return ViewModel\AnnotationTeaser::forReply(
                 $object->getDocument()->getTitle(),
                 $date,
                 $object->getDocument()->getUri(),
@@ -42,7 +42,7 @@ final class AnnotationAnnotationTeaserConverter implements ViewModelConverter
         }
 
         if ($object->getHighlight() && !$content) {
-            return ViewModel\AnnotationTeaser::highlight(
+            return ViewModel\AnnotationTeaser::forHighlight(
                 $object->getDocument()->getTitle(),
                 $date,
                 $object->getDocument()->getUri(),
@@ -52,7 +52,7 @@ final class AnnotationAnnotationTeaserConverter implements ViewModelConverter
         }
 
         if (!$object->getHighlight() && $content) {
-            return ViewModel\AnnotationTeaser::pageNote(
+            return ViewModel\AnnotationTeaser::forPageNote(
                 $object->getDocument()->getTitle(),
                 $date,
                 $object->getDocument()->getUri(),
