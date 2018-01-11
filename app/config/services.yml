@@ -270,15 +270,6 @@ services:
         tags:
           - name: security.voter
 
-    elife.journal.security.voter.feature.wallenberg:
-        class: eLife\Journal\Security\Voter\TimeVoter
-        public: false
-        arguments:
-          - FEATURE_WALLENBERG
-          - "@=strtotime('2018-01-01T00:00:00Z')"
-        tags:
-          - name: security.voter
-
     elife.journal.templating.promise_aware:
         class: eLife\Journal\Templating\PromiseAwareEngine
         decorates: templating

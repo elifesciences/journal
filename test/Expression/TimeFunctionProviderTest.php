@@ -3,10 +3,10 @@
 namespace test\eLife\Journal\Expression;
 
 use eLife\Journal\Expression\TimeFunctionProvider;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
-final class TimeFunctionProviderTest extends PHPUnit_Framework_TestCase
+final class TimeFunctionProviderTest extends TestCase
 {
     /**
      * @test

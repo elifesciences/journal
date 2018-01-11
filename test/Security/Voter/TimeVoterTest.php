@@ -3,13 +3,13 @@
 namespace test\eLife\Journal\Security\Voter;
 
 use eLife\Journal\Security\Voter\TimeVoter;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Bridge\PhpUnit\ClockMock;
 use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
 use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 use Traversable;
 
-final class TimeVoterTest extends PHPUnit_Framework_TestCase
+final class TimeVoterTest extends TestCase
 {
     /**
      * @test

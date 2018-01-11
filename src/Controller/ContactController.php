@@ -41,7 +41,7 @@ final class ContactController extends Controller
                 return !in_array($child->getConfig()->getType()->getBlockPrefix(), ['submit']);
             })));
 
-            $message1 = Swift_Message::newInstance()
+            $message1 = (new Swift_Message())
                 ->setSubject('Question to eLife')
                 ->setFrom('do_not_reply@elifesciences.org')
                 ->setTo($form->get('email')->getData(), $form->get('name')->getData())
@@ -49,7 +49,7 @@ final class ContactController extends Controller
 
 eLife Sciences Publications, Ltd is a limited liability non-profit non-stock corporation incorporated in the State of Delaware, USA, with company number 5030732, and is registered in the UK with company number FC030576 and branch number BR015634 at the address First Floor, 24 Hills Road, Cambridge CB2 1JP.');
 
-            $message2 = Swift_Message::newInstance()
+            $message2 = (new Swift_Message())
                 ->setSubject('Question submitted: '.$form->get('subject')->getData())
                 ->setFrom('do_not_reply@elifesciences.org')
                 ->setTo('staff@elifesciences.org')

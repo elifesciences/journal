@@ -16,7 +16,10 @@ trait Providers
     final protected function arrayProvider(array $array) : Traversable
     {
         foreach ($array as $key => $value) {
-            yield $key => [$key, $value];
+            $values = (array) $value;
+            array_unshift($values, $key);
+
+            yield $key => $values;
         }
     }
 }

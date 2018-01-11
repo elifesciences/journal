@@ -4,14 +4,14 @@ namespace test\eLife\Journal\Templating;
 
 use eLife\Journal\Templating\PromiseAwareEngine;
 use GuzzleHttp\Promise\FulfilledPromise;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Bridge\Twig\TwigEngine;
 use Symfony\Component\Templating\EngineInterface;
 use Symfony\Component\Templating\TemplateNameParser;
 use Twig_Environment;
 use Twig_Loader_Array;
 
-final class PromiseAwareEngineTest extends PHPUnit_Framework_TestCase
+final class PromiseAwareEngineTest extends TestCase
 {
     /**
      * @test

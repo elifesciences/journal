@@ -4,10 +4,10 @@ namespace test\eLife\Journal\Expression;
 
 use ComposerLocator;
 use eLife\Journal\Expression\ComposerLocateFunctionProvider;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
-final class ComposerLocateFunctionProviderTest extends PHPUnit_Framework_TestCase
+final class ComposerLocateFunctionProviderTest extends TestCase
 {
     /**
      * @test

@@ -4,9 +4,9 @@ namespace test\eLife\Journal\ViewModel\Converter;
 
 use eLife\Journal\ViewModel\Converter\AnnotationAnnotationTeaserConverter;
 use eLife\Journal\ViewModel\Converter\ViewModelConverter;
-use eLife\Journal\ViewModel\Paragraph;
 use eLife\Patterns\PatternRenderer;
 use eLife\Patterns\ViewModel\AnnotationTeaser;
+use eLife\Patterns\ViewModel\Paragraph;
 
 final class AnnotationAnnotationTeaserConverterTest extends ModelConverterTestCase
 {

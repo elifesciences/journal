@@ -6,12 +6,12 @@ use eLife\Journal\Mustache\PackagesHelper;
 use Mustache_Context;
 use Mustache_Engine;
 use Mustache_LambdaHelper;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Asset\Packages;
 use Symfony\Component\Asset\PathPackage;
 use Symfony\Component\Asset\VersionStrategy\EmptyVersionStrategy;
 
-final class PackagesHelperTest extends PHPUnit_Framework_TestCase
+final class PackagesHelperTest extends TestCase
 {
     private $packages;
     private $lambdaHelper;

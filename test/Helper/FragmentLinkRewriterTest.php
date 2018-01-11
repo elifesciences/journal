@@ -3,9 +3,9 @@
 namespace test\eLife\Journal\Helper;
 
 use eLife\Journal\Helper\FragmentLinkRewriter;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-final class FragmentLinkRewriterTest extends PHPUnit_Framework_TestCase
+final class FragmentLinkRewriterTest extends TestCase
 {
     /**
      * @test
