@@ -27,7 +27,7 @@ final class ImageConverter implements ViewModelConverter
     {
         $image = $object->getImage();
 
-        $imageViewModel = $this->viewModelConverter->convert($image, null, ['width' => $object->isInline() ? 365 : 538]);
+        $imageViewModel = $this->viewModelConverter->convert($image, null, ['width' => $object->isInline() ? 293 : 610]);
 
         return $this->createCaptionedAsset($imageViewModel, $object);
     }

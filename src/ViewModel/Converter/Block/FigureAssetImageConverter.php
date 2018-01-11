@@ -37,7 +37,7 @@ final class FigureAssetImageConverter implements ViewModelConverter
         $asset = $object->getAsset();
         $image = $asset->getImage();
 
-        $assetViewModel = $this->viewModelConverter->convert($image, null, ['width' => 538]);
+        $assetViewModel = $this->viewModelConverter->convert($image, null, ['width' => 610]);
 
         $download = new ViewModel\Link('Download', $this->downloadLinkUriGenerator->generate(new DownloadLink($image->getSource()->getUri(), $image->getSource()->getFilename())));
 
