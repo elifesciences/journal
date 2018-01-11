@@ -40,7 +40,7 @@ final class FigureAssetVideoConverter implements ViewModelConverter
             array_map(function (Block\VideoSource $source) {
                 return new ViewModel\MediaSource($source->getUri(), new ViewModel\MediaType($source->getMediaType()));
             }, $asset->getSources()),
-            $asset->getPlaceholder() ? $this->iiifUri($asset->getPlaceholder(), $asset->getWidth(), $asset->getHeight()) : null,
+            $asset->getPlaceholder() ? $this->iiifUri($asset->getPlaceholder(), 632) : null,
             $asset->isAutoplay(),
             $asset->isLoop()
         );

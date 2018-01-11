@@ -31,7 +31,7 @@ final class VideoConverter implements ViewModelConverter
             array_map(function (Block\VideoSource $source) {
                 return new ViewModel\MediaSource($source->getUri(), new ViewModel\MediaType($source->getMediaType()));
             }, $object->getSources()),
-            $object->getPlaceholder() ? $this->iiifUri($object->getPlaceholder(), $object->getWidth(), $object->getHeight()) : null,
+            $object->getPlaceholder() ? $this->iiifUri($object->getPlaceholder(), 632) : null,
             $object->isAutoplay(),
             $object->isLoop()
         );
