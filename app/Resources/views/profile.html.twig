@@ -10,9 +10,7 @@
 
         {% block listing %}
 
-            {% for item in listing %}
-                {{ render_pattern(item) }}
-            {% endfor %}
+            {{ render_pattern(listing) }}
 
         {% endblock %}
 

@@ -6,10 +6,9 @@ use eLife\ApiSdk\Collection\Sequence;
 use eLife\ApiSdk\Model\Profile;
 use eLife\Journal\Helper\Paginator;
 use eLife\Journal\Pagerfanta\SequenceAdapter;
-use eLife\Journal\ViewModel\EmptyListing;
 use eLife\Patterns\ViewModel\AnnotationTeaser;
 use eLife\Patterns\ViewModel\ContentHeaderProfile;
-use eLife\Patterns\ViewModel\ListHeading;
+use eLife\Patterns\ViewModel\ListingAnnotationTeasers;
 use Pagerfanta\Pagerfanta;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -72,15 +71,7 @@ final class ProfilesController extends Controller
             });
 
         $arguments['listing'] = $arguments['paginator']
-            ->then(function (Paginator $paginator) {
-                // TODO replace with listing pattern
-
-                if (0 === count($paginator->getItems())) {
-                    return [new EmptyListing(new ListHeading('Annotations'), 'No annotations available.')];
-                }
-
-                return $paginator->getItems();
-            });
+            ->then($this->willConvertTo(ListingAnnotationTeasers::class, ['heading' => 'Annotations', 'emptyText' => 'No annotations available.']));
 
         if (1 === $page) {
             return $this->createFirstPage($arguments);

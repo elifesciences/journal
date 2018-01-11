@@ -984,6 +984,12 @@ services:
         tags:
           - name: view_model.converter
 
+    elife.journal.view_model.converter.paginator.listing_annotation_teasers:
+        class: eLife\Journal\ViewModel\Converter\PaginatorListingAnnotationTeasersConverter
+        public: false
+        tags:
+          - name: view_model.converter
+
     elife.journal.view_model.converter.paginator.listing_read_more:
         class: eLife\Journal\ViewModel\Converter\PaginatorListingReadMoreConverter
         public: false
