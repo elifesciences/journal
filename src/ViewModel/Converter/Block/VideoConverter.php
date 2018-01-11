@@ -27,11 +27,16 @@ final class VideoConverter implements ViewModelConverter
      */
     public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
+        $width = 632;
+        if ($width > $object->getPlaceholder()->getWidth()) {
+            $width = $object->getPlaceholder()->getWidth();
+        }
+
         $video = new ViewModel\Video(
             array_map(function (Block\VideoSource $source) {
                 return new ViewModel\MediaSource($source->getUri(), new ViewModel\MediaType($source->getMediaType()));
             }, $object->getSources()),
-            $object->getPlaceholder() ? $this->iiifUri($object->getPlaceholder(), 632) : null,
+            $object->getPlaceholder() ? $this->iiifUri($object->getPlaceholder(), $width) : null,
             $object->isAutoplay(),
             $object->isLoop()
         );
