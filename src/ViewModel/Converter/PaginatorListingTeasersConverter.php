@@ -53,6 +53,6 @@ final class PaginatorListingTeasersConverter implements ViewModelConverter
 
     public function supports($object, string $viewModel = null, array $context = []) : bool
     {
-        return $object instanceof Paginator && (ViewModel\ListingTeasers::class === $viewModel || ViewModel\ListingAnnotationTeasers::class === $viewModel);
+        return $object instanceof Paginator && in_array($viewModel, [ViewModel\ListingTeasers::class, ViewModel\ListingAnnotationTeasers::class]);
     }
 }
