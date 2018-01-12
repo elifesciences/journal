@@ -1,4 +1,4 @@
-@profile @wip
+@profile
 Feature: Profile page
 
   Rules:
