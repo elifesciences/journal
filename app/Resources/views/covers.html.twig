@@ -1,0 +1,21 @@
+{% set criticalCss = 'grid-listing' %}
+
+{% extends '::page.html.twig' %}
+
+{% block body %}
+
+    {% embed 'grid/listing-one-column.html.twig' with {fullWidth: true} %}
+
+        {% block listing %}
+            <div style="text-align: center">
+            {% for listing in body %}
+
+                {{ render_pattern(listing) }}
+
+            {% endfor %}
+            </div>
+        {% endblock %}
+
+    {% endembed %}
+
+{% endblock %}
