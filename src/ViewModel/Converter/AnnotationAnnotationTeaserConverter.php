@@ -62,7 +62,7 @@ final class AnnotationAnnotationTeaserConverter implements ViewModelConverter
             );
         }
 
-        return ViewModel\AnnotationTeaser::full(
+        return ViewModel\AnnotationTeaser::forAnnotation(
             $object->getDocument()->getTitle(),
             $date,
             $object->getDocument()->getUri(),
