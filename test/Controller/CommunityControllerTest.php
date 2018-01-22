@@ -178,9 +178,9 @@ final class CommunityControllerTest extends PageTestCase
         $this->assertSame('The eLife community is working to help address some of the pressures on early-career scientists in a number of ways. Learn more about our work and advisory group, sign up for our bi-monthly news, follow us on Twitter, and explore recent activities below.', $crawler->filter('meta[property="og:description"]')->attr('content'));
         $this->assertSame('The eLife community is working to help address some of the pressures on early-career scientists in a number of ways. Learn more about our work and advisory group, sign up for our bi-monthly news, follow us on Twitter, and explore recent activities below.', $crawler->filter('meta[name="description"]')->attr('content'));
         $this->assertSame('summary_large_image', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
-        $this->assertSame('http://localhost/'.ltrim(self::$kernel->getContainer()->get('assets.packages')->getUrl('assets/images/banners/community-1114x336.jpg'), '/'), $crawler->filter('meta[property="og:image"]')->attr('content'));
+        $this->assertSame('http://localhost/'.ltrim(self::$kernel->getContainer()->get('assets.packages')->getUrl('assets/images/banners/community-1114x359.jpg'), '/'), $crawler->filter('meta[property="og:image"]')->attr('content'));
         $this->assertSame('1114', $crawler->filter('meta[property="og:image:width"]')->attr('content'));
-        $this->assertSame('336', $crawler->filter('meta[property="og:image:height"]')->attr('content'));
+        $this->assertSame('359', $crawler->filter('meta[property="og:image:height"]')->attr('content'));
     }
 
     /**

@@ -47,14 +47,14 @@ final class ContentHeaderImageFactory
                 $extension = MediaTypes::toExtension($type);
 
                 return $this->packages->getUrl("assets/images/banners/{$filename}-{$width}x{$height}.{$extension}");
-            }, 'image/jpeg', 1114, 336);
+            }, 'image/jpeg', 1114, 359);
 
         return $this->addSizes($builder)->build();
     }
 
     public function pictureForImage(Image $image) : ViewModel\Picture
     {
-        $builder = $this->pictureBuilderFactory->forImage($image, 1114, 336);
+        $builder = $this->pictureBuilderFactory->forImage($image, 1114, 359);
 
         return $this->addSizes($builder)->build();
     }
@@ -62,8 +62,9 @@ final class ContentHeaderImageFactory
     private function addSizes(PictureBuilder $builder) : PictureBuilder
     {
         return $builder
-            ->addSize(450, 264, '(max-width: 450px)')
-            ->addSize(767, 264, '(max-width: 767px)')
-            ->addSize(1023, 288, '(max-width: 1023px)');
+            ->addSize(450, 287, '(max-width: 450px)')
+            ->addSize(729, 287, '(max-width: 729px)')
+            ->addSize(899, 311, '(max-width: 899px)')
+            ->addSize(1023, 359, '(max-width: 1023px)');
     }
 }
