@@ -647,7 +647,7 @@ final class HomepageContext extends Context
                 'css',
                 '.carousel-item__image',
                 'src',
-                'https://www.example.com/iiif/image/0,510,1800,581/1114,359/0/default.jpg"'
+                'https://www.example.com/iiif/image/0,510,1800,581/1114,359/0/default.jpg'
             );
         });
     }
