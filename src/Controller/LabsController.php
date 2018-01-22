@@ -9,7 +9,6 @@ use eLife\Journal\Helper\Paginator;
 use eLife\Journal\Pagerfanta\SequenceAdapter;
 use eLife\Patterns\ViewModel\ContentHeader;
 use eLife\Patterns\ViewModel\ContextualData;
-use eLife\Patterns\ViewModel\ContextualDataMetric;
 use eLife\Patterns\ViewModel\GridListing;
 use eLife\Patterns\ViewModel\HypothesisOpener;
 use eLife\Patterns\ViewModel\Teaser;
@@ -92,16 +91,14 @@ Learn more about <a href="'.$this->get('router')->generate('about-innovation').'
 
         $arguments['contextualData'] = $arguments['post']
             ->then($this->ifGranted(['FEATURE_CAN_USE_HYPOTHESIS'], function (LabsPost $post) {
-                $metrics = [new ContextualDataMetric('Annotations', 0, 'annotation-count')];
-
-                return ContextualData::withMetrics($metrics);
+                return ContextualData::hypothesisOnly(HypothesisOpener::forContextualData());
             }));
 
         $arguments['blocks'] = $arguments['post']
             ->then($this->willConvertContent());
 
         if ($this->isGranted('FEATURE_CAN_USE_HYPOTHESIS')) {
-            $arguments['hypothesisOpener'] = new HypothesisOpener();
+            $arguments['hypothesisOpener'] = HypothesisOpener::forArticleBody();
         }
 
         $response = new Response($this->get('templating')->render('::labs-post.html.twig', $arguments));

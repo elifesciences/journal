@@ -8,7 +8,6 @@ use eLife\Journal\Helper\HasPages;
 use eLife\Patterns\ViewModel\ArticleSection;
 use eLife\Patterns\ViewModel\ContentHeader;
 use eLife\Patterns\ViewModel\ContextualData;
-use eLife\Patterns\ViewModel\ContextualDataMetric;
 use eLife\Patterns\ViewModel\HypothesisOpener;
 use eLife\Patterns\ViewModel\Listing;
 use eLife\Patterns\ViewModel\ListingTeasers;
@@ -88,9 +87,7 @@ final class PressPacksController extends Controller
 
         $arguments['contextualData'] = $arguments['package']
             ->then($this->ifGranted(['FEATURE_CAN_USE_HYPOTHESIS'], function (PressPackage $package) {
-                $metrics = [new ContextualDataMetric('Annotations', 0, 'annotation-count')];
-
-                return ContextualData::withMetrics($metrics);
+                return ContextualData::hypothesisOnly(HypothesisOpener::forContextualData());
             }));
 
         $arguments['blocks'] = $arguments['package']
@@ -111,7 +108,7 @@ final class PressPacksController extends Controller
             });
 
         if ($this->isGranted('FEATURE_CAN_USE_HYPOTHESIS')) {
-            $arguments['hypothesisOpener'] = new HypothesisOpener();
+            $arguments['hypothesisOpener'] = HypothesisOpener::forArticleBody();
         }
 
         $arguments['relatedContent'] = $arguments['package']
