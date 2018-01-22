@@ -43,7 +43,7 @@ final class NormalizingStorageAdapter implements StorageAdapterInterface
             try {
                 if ('application/x-www-form-urlencoded' === $request->getHeaderLine('Content-Type')) {
                     $body = UriNormalizer::normalize(new Uri("'?{$body}"), self::URI_FLAGS)->getQuery();
-                } elseif (false !== strpos('json', $request->getHeaderLine('Content-Type'))) {
+                } elseif (false !== strpos($request->getHeaderLine('Content-Type'), 'json')) {
                     $body = json_encode(json_decode($body));
                 }
             } catch (Throwable $e) {
