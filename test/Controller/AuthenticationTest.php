@@ -251,6 +251,21 @@ final class AuthenticationTest extends WebTestCase
         $this->logIn($client);
 
         $this->readyHomePage();
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/annotations?by=jcarberry&page=1&per-page=10&order=desc&use-date=updated',
+                ['Accept' => 'application/vnd.elife.annotation-list+json; version=1']
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.annotation-list+json; version=1'],
+                json_encode([
+                    'total' => 0,
+                    'items' => [],
+                ])
+            )
+        );
 
         $crawler = $client->request('GET', '/');
 
