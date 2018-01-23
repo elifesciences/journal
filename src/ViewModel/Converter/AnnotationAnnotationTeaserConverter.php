@@ -36,7 +36,7 @@ final class AnnotationAnnotationTeaserConverter implements ViewModelConverter
             return ViewModel\AnnotationTeaser::forReply(
                 $object->getDocument()->getTitle(),
                 $date,
-                $object->getDocument()->getUri(),
+                $this->generateUri($object),
                 $content,
                 $isRestricted
             );
@@ -46,7 +46,7 @@ final class AnnotationAnnotationTeaserConverter implements ViewModelConverter
             return ViewModel\AnnotationTeaser::forHighlight(
                 $object->getDocument()->getTitle(),
                 $date,
-                $object->getDocument()->getUri(),
+                $this->generateUri($object),
                 $object->getHighlight(),
                 $isRestricted
             );
@@ -56,7 +56,7 @@ final class AnnotationAnnotationTeaserConverter implements ViewModelConverter
             return ViewModel\AnnotationTeaser::forPageNote(
                 $object->getDocument()->getTitle(),
                 $date,
-                $object->getDocument()->getUri(),
+                $this->generateUri($object),
                 $content,
                 $isRestricted
             );
@@ -65,7 +65,7 @@ final class AnnotationAnnotationTeaserConverter implements ViewModelConverter
         return ViewModel\AnnotationTeaser::forAnnotation(
             $object->getDocument()->getTitle(),
             $date,
-            $object->getDocument()->getUri(),
+            $this->generateUri($object),
             $object->getHighlight(),
             $content,
             $isRestricted
@@ -80,5 +80,16 @@ final class AnnotationAnnotationTeaserConverter implements ViewModelConverter
     protected function getViewModelConverter() : ViewModelConverter
     {
         return $this->viewModelConverter;
+    }
+
+    private function generateUri(Annotation $annotation) : string
+    {
+        if ($annotation->getParents()->notEmpty()) {
+            $id = $annotation->getParents()[0];
+        } else {
+            $id = $annotation->getId();
+        }
+
+        return "{$annotation->getDocument()->getUri()}#annotations:{$id}";
     }
 }
