@@ -91,6 +91,5 @@ final class AnnotationAnnotationTeaserConverter implements ViewModelConverter
         }
 
         return "{$annotation->getDocument()->getUri()}#annotations:{$id}";
-
     }
 }
