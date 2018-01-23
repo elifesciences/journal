@@ -248,10 +248,6 @@ services:
           - '@router'
           - '@security.http_utils'
 
-    elife.journal.security.user.oauth_provider:
-        class: eLife\Journal\Security\User\OAuthUserProvider
-        public: false
-
     elife.journal.security.voter.feature.can_authenticate:
         class: eLife\Journal\Security\Voter\SessionAttributeVoter
         public: false
