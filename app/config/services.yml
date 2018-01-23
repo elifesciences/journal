@@ -242,6 +242,7 @@ services:
         arguments:
           - '@oauth2.registry'
           - '@router'
+          - '@security.http_utils'
 
     elife.journal.security.user.oauth_provider:
         class: eLife\Journal\Security\User\OAuthUserProvider
