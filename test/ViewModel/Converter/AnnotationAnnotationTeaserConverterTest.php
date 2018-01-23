@@ -2,17 +2,16 @@
 
 namespace test\eLife\Journal\ViewModel\Converter;
 
-use eLife\Journal\ViewModel\Converter\ArticleReadMoreItemConverter;
+use eLife\Journal\ViewModel\Converter\AnnotationAnnotationTeaserConverter;
 use eLife\Journal\ViewModel\Converter\ViewModelConverter;
 use eLife\Patterns\PatternRenderer;
+use eLife\Patterns\ViewModel\AnnotationTeaser;
 use eLife\Patterns\ViewModel\Paragraph;
-use eLife\Patterns\ViewModel\ReadMoreItem;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-final class ArticleReadMoreItemConverterTest extends ModelConverterTestCase
+final class AnnotationAnnotationTeaserConverterTest extends ModelConverterTestCase
 {
-    protected $models = ['article-poa', 'article-vor'];
-    protected $viewModelClasses = [ReadMoreItem::class];
+    protected $models = ['annotation'];
+    protected $viewModelClasses = [AnnotationTeaser::class];
 
     /**
      * @before
@@ -30,12 +29,6 @@ final class ArticleReadMoreItemConverterTest extends ModelConverterTestCase
             ->method('render')
             ->will($this->returnValue('...'));
 
-        $urlGenerator = $this->createMock(UrlGeneratorInterface::class);
-        $urlGenerator
-            ->expects($this->any())
-            ->method('generate')
-            ->will($this->returnValue('/'));
-
-        $this->converter = new ArticleReadMoreItemConverter($viewModelConverter, $patternRenderer, $urlGenerator);
+        $this->converter = new AnnotationAnnotationTeaserConverter($viewModelConverter, $patternRenderer);
     }
 }

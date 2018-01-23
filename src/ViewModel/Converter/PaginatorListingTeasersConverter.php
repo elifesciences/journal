@@ -28,7 +28,7 @@ final class PaginatorListingTeasersConverter implements ViewModelConverter
         if (0 === count($object->getItems())) {
             return new EmptyListing($heading, $emptyText);
         } elseif ($object->getCurrentPage() > 1) {
-            return ViewModel\ListingTeasers::withPagination(
+            return $viewModel::withPagination(
                 $object->getItems(),
                 ViewModel\Pager::subsequentPage(
                     new ViewModel\Link($prevText, $object->getPreviousPagePath()),
@@ -38,7 +38,7 @@ final class PaginatorListingTeasersConverter implements ViewModelConverter
                 )
             );
         } elseif ($object->getNextPage()) {
-            return ViewModel\ListingTeasers::withPagination(
+            return $viewModel::withPagination(
                 $object->getItems(),
                 $object->getNextPage()
                     ? ViewModel\Pager::firstPage(new ViewModel\Link('Load more', $object->getNextPagePath()), 'listing')
@@ -48,11 +48,11 @@ final class PaginatorListingTeasersConverter implements ViewModelConverter
             );
         }
 
-        return ViewModel\ListingTeasers::basic($object->getItems(), $heading, 'listing');
+        return $viewModel::basic($object->getItems(), $heading, 'listing');
     }
 
     public function supports($object, string $viewModel = null, array $context = []) : bool
     {
-        return $object instanceof Paginator && ViewModel\ListingTeasers::class === $viewModel;
+        return $object instanceof Paginator && in_array($viewModel, [ViewModel\ListingTeasers::class, ViewModel\ListingAnnotationTeasers::class]);
     }
 }

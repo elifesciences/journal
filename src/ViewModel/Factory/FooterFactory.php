@@ -51,15 +51,12 @@ final class FooterFactory
                 'filename' => 'max',
                 'type' => 'image/svg+xml',
             ],
-        ];
-
-        if ($this->authorizationChecker->isGranted('FEATURE_WALLENBERG')) {
-            $investors[] = [
+            [
                 'name' => 'Knut and Alice Wallenberg Foundation',
                 'filename' => 'kaw',
                 'type' => 'image/svg+xml',
-            ];
-        }
+            ],
+        ];
 
         return new Footer(
             new MainMenu([

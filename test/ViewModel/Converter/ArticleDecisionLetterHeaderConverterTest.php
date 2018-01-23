@@ -7,9 +7,9 @@ use eLife\ApiSdk\Model\Block;
 use eLife\ApiSdk\Model\Model;
 use eLife\Journal\ViewModel\Converter\ArticleDecisionLetterHeaderConverter;
 use eLife\Journal\ViewModel\Converter\ViewModelConverter;
-use eLife\Journal\ViewModel\Paragraph;
 use eLife\Patterns\PatternRenderer;
 use eLife\Patterns\ViewModel\DecisionLetterHeader;
+use eLife\Patterns\ViewModel\Paragraph;
 use eLife\Patterns\ViewModel\ProfileSnippet;
 use Traversable;
 

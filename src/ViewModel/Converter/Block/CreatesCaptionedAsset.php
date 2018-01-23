@@ -7,8 +7,8 @@ use eLife\ApiSdk\Model\HasAttribution;
 use eLife\ApiSdk\Model\HasCaption;
 use eLife\Journal\Helper\HasPatternRenderer;
 use eLife\Journal\Helper\HasViewModelConverter;
-use eLife\Journal\ViewModel\Paragraph;
 use eLife\Patterns\ViewModel;
+use eLife\Patterns\ViewModel\Paragraph;
 
 trait CreatesCaptionedAsset
 {
