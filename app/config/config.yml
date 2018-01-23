@@ -87,6 +87,7 @@ hwi_oauth:
                 realname: name
             options:
                 csrf: true
+    use_referer: true
 
 isometriks_spam:
     honeypot:
@@ -112,7 +113,7 @@ nelmio_security:
     referrer_policy:
         enabled: true
         policies:
-          - no-referrer
+          - no-referrer-when-downgrade
           - strict-origin-when-cross-origin
     xss_protection:
         enabled: true
