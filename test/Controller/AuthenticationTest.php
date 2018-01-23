@@ -5,12 +5,16 @@ namespace test\eLife\Journal\Controller;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\Uri;
+use test\eLife\Journal\Providers;
 use test\eLife\Journal\WebTestCase;
+use Traversable;
 use function GuzzleHttp\Psr7\build_query;
 use function GuzzleHttp\Psr7\parse_query;
 
 final class AuthenticationTest extends WebTestCase
 {
+    use Providers;
+
     /**
      * @test
      */
@@ -80,6 +84,41 @@ final class AuthenticationTest extends WebTestCase
         $crawler = $client->request('GET', "/log-in/check?code=foo&state=$state");
 
         $this->assertContains('Josiah Carberry', $crawler->filter('.login-control')->text());
+    }
+
+    /**
+     * @test
+     * @dataProvider refererProvider
+     */
+    public function it_uses_the_referer_header_for_redirecting_after_logging_in(string $referer, string $expectedRedirect)
+    {
+        $client = static::createClient();
+        $client->followRedirects(false);
+
+        $client->request('GET', '/log-in?open-sesame', [], [], ['HTTP_REFERER' => $referer]);
+        $response = $client->getResponse();
+
+        $this->assertTrue($response->isRedirect());
+
+        $state = parse_query((new Uri($response->headers->get('Location')))->getQuery())['state'];
+
+        $this->readyToken();
+
+        $client->request('GET', "/log-in/check?code=foo&state=$state");
+        $response = $client->getResponse();
+
+        $this->assertTrue($response->isRedirect());
+        $this->assertSame($expectedRedirect, $response->headers->get('Location'));
+    }
+
+    public function refererProvider() : Traversable
+    {
+        return $this->arrayProvider([
+            'http://localhost/' => 'http://localhost/',
+            'http://localhost/foo' => 'http://localhost/foo',
+            'http://www.example.com/' => 'http://localhost/',
+            'http://www.example.com/foo' => 'http://localhost/',
+        ]);
     }
 
     /**
