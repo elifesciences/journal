@@ -5,7 +5,6 @@ namespace test\eLife\Journal\Controller;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\Uri;
-use test\eLife\Journal\Providers;
 use test\eLife\Journal\WebTestCase;
 use Traversable;
 use function GuzzleHttp\Psr7\build_query;
@@ -13,8 +12,6 @@ use function GuzzleHttp\Psr7\parse_query;
 
 final class AuthenticationTest extends WebTestCase
 {
-    use Providers;
-
     /**
      * @test
      */
@@ -95,7 +92,7 @@ final class AuthenticationTest extends WebTestCase
         $client = static::createClient();
         $client->followRedirects(false);
 
-        $client->request('GET', '/log-in?open-sesame', [], [], ['HTTP_REFERER' => $referer]);
+        $client->request('GET', '/log-in?open-sesame', [], [], array_filter(['HTTP_REFERER' => $referer]));
         $response = $client->getResponse();
 
         $this->assertTrue($response->isRedirect());
@@ -113,12 +110,12 @@ final class AuthenticationTest extends WebTestCase
 
     public function refererProvider() : Traversable
     {
-        return $this->arrayProvider([
-            'http://localhost/' => 'http://localhost/',
-            'http://localhost/foo' => 'http://localhost/foo',
-            'http://www.example.com/' => 'http://localhost/',
-            'http://www.example.com/foo' => 'http://localhost/',
-        ]);
+        yield 'no header' => ['', 'http://localhost/'];
+        yield 'homepage' => ['http://localhost/', 'http://localhost/'];
+        yield 'local path' => ['http://localhost/foo', 'http://localhost/foo'];
+        yield 'local path with query string' => ['http://localhost/foo?bar', 'http://localhost/foo?bar'];
+        yield 'external site' => ['http://www.example.com/', 'http://localhost/'];
+        yield 'external site with path' => ['http://www.example.com/foo', 'http://localhost/'];
     }
 
     /**
