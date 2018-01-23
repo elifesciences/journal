@@ -159,7 +159,7 @@ final class AuthenticationTest extends WebTestCase
         $this->assertTrue($response->isRedirect());
 
         $location = Uri::withoutQueryValue(new Uri($response->headers->get('Location')), 'state');
-        $this->assertSameUri('http://api.elifesciences.org/oauth2/authorize?response_type=code&client_id=journal_client_id&redirect_uri=http%3A%2F%2Flocalhost%2Flog-in%2Fcheck', $location->__toString());
+        $this->assertSameUri('http://api.elifesciences.org/oauth2/authorize?response_type=code&client_id=journal_client_id&redirect_uri=http%3A%2F%2Flocalhost%2Flog-in%2Fcheck', $location);
 
         $state = parse_query((new Uri($response->headers->get('Location')))->getQuery())['state'];
 
