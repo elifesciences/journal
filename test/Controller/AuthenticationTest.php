@@ -111,7 +111,7 @@ final class AuthenticationTest extends WebTestCase
     public function refererProvider() : Traversable
     {
         yield 'no header' => ['', 'http://localhost/'];
-        yield 'string header' => ['http://', 'http://localhost/'];
+        yield 'string header' => ['foo', 'http://localhost/'];
         yield 'route-name header' => ['about', 'http://localhost/'];
         yield 'invalid uri header' => ['http://', 'http://localhost/'];
         yield 'homepage' => ['http://localhost/', 'http://localhost/'];
