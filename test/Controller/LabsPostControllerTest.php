@@ -46,6 +46,8 @@ final class LabsPostControllerTest extends PageTestCase
         $this->assertSame('Post impact statement', $crawler->filter('meta[name="description"]')->attr('content'));
         $this->assertSame('article', $crawler->filter('meta[property="og:type"]')->attr('content'));
         $this->assertSame('summary', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
+        $this->assertSame('labs-post/1', $crawler->filter('meta[name="dc.identifier"]')->attr('content'));
+        $this->assertSame('elifesciences.org', $crawler->filter('meta[name="dc.relation.ispartof"]')->attr('content'));
     }
 
     /**

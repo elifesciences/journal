@@ -378,6 +378,8 @@ final class CollectionControllerTest extends PageTestCase
         $this->assertSame('https://www.example.com/iiif/banner/0,529,1800,543/1114,336/0/default.jpg', $crawler->filter('meta[property="og:image"]')->attr('content'));
         $this->assertSame('1114', $crawler->filter('meta[property="og:image:width"]')->attr('content'));
         $this->assertSame('336', $crawler->filter('meta[property="og:image:height"]')->attr('content'));
+        $this->assertSame('collection/1', $crawler->filter('meta[name="dc.identifier"]')->attr('content'));
+        $this->assertSame('elifesciences.org', $crawler->filter('meta[name="dc.relation.ispartof"]')->attr('content'));
     }
 
     /**

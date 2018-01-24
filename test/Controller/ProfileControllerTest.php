@@ -207,6 +207,8 @@ final class ProfileControllerTest extends PageTestCase
         $this->assertSame('http://localhost/profiles/1', $crawler->filter('meta[property="og:url"]')->attr('content'));
         $this->assertSame('Preferred Name', $crawler->filter('meta[property="og:title"]')->attr('content'));
         $this->assertSame('summary', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
+        $this->assertSame('profile/1', $crawler->filter('meta[name="dc.identifier"]')->attr('content'));
+        $this->assertSame('elifesciences.org', $crawler->filter('meta[name="dc.relation.ispartof"]')->attr('content'));
     }
 
     /**
