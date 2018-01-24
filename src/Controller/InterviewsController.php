@@ -74,34 +74,32 @@ final class InterviewsController extends Controller
 
     public function interviewAction(Request $request, string $id) : Response
     {
-        $interview = $this->get('elife.api_sdk.interviews')
+        $arguments['item'] = $this->get('elife.api_sdk.interviews')
             ->get($id)
             ->otherwise($this->mightNotExist())
             ->then($this->checkSlug($request, function (Interview $interview) {
                 return $interview->getInterviewee()->getPerson()->getPreferredName();
             }));
 
-        $arguments = $this->defaultPageArguments($request, $interview);
+        $arguments = $this->defaultPageArguments($request, $arguments['item']);
 
-        $arguments['title'] = $interview
+        $arguments['title'] = $arguments['item']
             ->then(Callback::method('getTitle'));
 
-        $arguments['interview'] = $interview;
-
-        $arguments['contentHeader'] = $arguments['interview']
+        $arguments['contentHeader'] = $arguments['item']
             ->then($this->willConvertTo(ContentHeader::class));
 
-        $arguments['contextualData'] = $arguments['interview']
+        $arguments['contextualData'] = $arguments['item']
             ->then($this->ifGranted(['FEATURE_CAN_USE_HYPOTHESIS'], function (Interview $interview) {
                 $metrics = [new ContextualDataMetric('Annotations', 0, 'annotation-count')];
 
                 return ContextualData::withMetrics($metrics);
             }));
 
-        $arguments['blocks'] = $arguments['interview']
+        $arguments['blocks'] = $arguments['item']
             ->then($this->willConvertContent());
 
-        $arguments['cv'] = $arguments['interview']
+        $arguments['cv'] = $arguments['item']
             ->then(function (Interview $interview) {
                 if ($interview->getInterviewee()->getCvLines()->isEmpty()) {
                     return null;

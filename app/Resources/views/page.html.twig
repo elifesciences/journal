@@ -38,13 +38,24 @@
             {% set canonical = path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) %}
         {% endif %}
 
+        {% block dublin_core %}
+
+            {% if item is defined and item.identifier is defined %}
+
+                <meta name="dc.identifier" content="{{ item.identifier }}">
+                <meta name="dc.relation.ispartof" content="elifesciences.org">
+
+            {% endif %}
+
+        {% endblock %}
+
         <meta property="og:site_name" content="eLife">
         <meta property="og:url" content="{{ absolute_url(canonical) }}">
         <meta property="og:title" content="{{ title|striptags }}">
         <meta name="twitter:site" content="@eLife">
 
-        {% if block('description') is defined and block('description')|trim != '' %}
-            {% set description = block('description') %}
+        {% if item is defined and item.impactStatement is defined %}
+            {% set description = item.impactStatement %}
         {% elseif contentHeader is defined and contentHeader.impactStatement is defined %}
             {% set description = contentHeader.impactStatement %}
         {% elseif leadParas is defined and leadParas %}
