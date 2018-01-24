@@ -40,10 +40,61 @@
 
         {% block dublin_core %}
 
-            {% if item is defined and item.identifier is defined %}
+            {% if item and item.title is defined %}
 
-                <meta name="dc.identifier" content="{{ item.identifier }}">
-                <meta name="dc.relation.ispartof" content="elifesciences.org">
+                <meta name="dc.format" content="text/html">
+                <meta name="dc.language" content="en">
+                <meta name="dc.publisher" content="eLife Sciences Publications Limited">
+
+                {% if item.fullTitle is defined and item.fullTitle %}
+                    <meta name="dc.title" content="{{ item.fullTitle|striptags }}">
+                {% else %}
+                    <meta name="dc.title" content="{{ item.title|striptags }}">
+                {% endif %}
+
+                {% if item.doi is defined and item.doi %}
+                    <meta name="dc.identifier" content="doi:{{ item.doi }}">
+                {% elseif item.identifier is defined %}
+                    <meta name="dc.identifier" content="{{ item.identifier }}">
+                    <meta name="dc.relation.ispartof" content="elifesciences.org">
+                {% endif %}
+
+                {% if item.publishedDate is defined and item.publishedDate %}
+                    <meta name="dc.date" content="{{ item.publishedDate|date('Y-m-d', 'UTC') }}">
+
+                    {% if item.copyright is defined and item.copyright %}
+                        <meta name="dc.rights" content="
+                            {%- if item.copyright.holder -%}© {{ item.publishedDate|date('Y', 'UTC') }} {{ item.copyright.holder }}. {% endif -%}
+                            {{- item.copyright.statement|striptags -}}
+                        ">
+                    {% else %}
+                        <meta name="dc.rights"
+                              content="© {{ item.publishedDate|date('Y', 'UTC') }} eLife Sciences Publications Limited. This article is distributed under the terms of the Creative Commons Attribution License, which permits unrestricted use and redistribution provided that the original author and source are credited.">
+                    {% endif %}
+
+                {% endif %}
+
+                {% if item.digest is defined and item.digest and item.digest.content|length %}
+                    <meta name="dc.description" content="
+                        {%- for paragraph in item.digest.content -%}
+                            {{ paragraph.text|striptags }}
+                            {%- if not loop.last %} {% endif %}
+                        {%- endfor -%}
+                    ">
+                {% endif %}
+
+                {% if item.authors is defined %}
+                    {% for author in item.authors %}
+                        {% if author.affiliations is defined %}
+                            <meta name="dc.contributor" content="{{ author.toString }}">
+                            {% if author.people is defined %}
+                                {% for person in author.people %}
+                                    <meta name="dc.contributor" content="{{ person.preferredName }}">
+                                {% endfor %}
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
 
             {% endif %}
 

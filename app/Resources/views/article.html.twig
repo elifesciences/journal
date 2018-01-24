@@ -10,44 +10,6 @@
 
     {{ parent() }}
 
-    {% block dublin_core %}
-
-        <meta name="DC.Format" content="text/html">
-        <meta name="DC.Language" content="en">
-        <meta name="DC.Title" content="{{ item.fullTitle|striptags }}">
-        <meta name="DC.Identifier" content="{{ item.doi }}">
-        {% if item.publishedDate %}
-            <meta name="DC.Date" content="{{ item.publishedDate|date('Y-m-d', 'UTC') }}">
-        {% endif %}
-        <meta name="DC.Publisher" content="eLife Sciences Publications Limited">
-
-        <meta name="DC.Rights" content="
-            {%- if item.copyright.holder -%}© {{ item.publishedDate|date('Y', 'UTC') }} {{ item.copyright.holder }}. {% endif -%}
-            {{- item.copyright.statement|striptags -}}
-        ">
-
-        {% if item.digest is defined and item.digest and item.digest.content|length %}
-            <meta name="DC.Description" content="
-                {%- for paragraph in item.digest.content -%}
-                    {{ paragraph.text|striptags }}
-                    {%- if not loop.last %} {% endif %}
-                {%- endfor -%}
-            ">
-        {% endif %}
-
-        {% for author in item.authors %}
-            {% if author.affiliations is defined %}
-                <meta name="DC.Contributor" content="{{ author.toString }}">
-                {% if author.people is defined %}
-                    {% for person in author.people %}
-                        <meta name="DC.Contributor" content="{{ person.preferredName }}">
-                    {% endfor %}
-                {% endif %}
-            {% endif %}
-        {% endfor %}
-
-    {% endblock %}
-
     {% block google_scholar %}
 
         <meta name="citation_journal_title" content="eLife">
