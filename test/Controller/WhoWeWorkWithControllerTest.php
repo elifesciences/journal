@@ -37,7 +37,16 @@ final class WhoWeWorkWithControllerTest extends PageTestCase
         $this->assertSame('/who-we-work-with', $crawler->filter('link[rel="canonical"]')->attr('href'));
         $this->assertSame('http://localhost/who-we-work-with', $crawler->filter('meta[property="og:url"]')->attr('content'));
         $this->assertSame('Who we work with', $crawler->filter('meta[property="og:title"]')->attr('content'));
+        $this->assertEmpty($crawler->filter('meta[property="og:description"]'));
+        $this->assertEmpty($crawler->filter('meta[name="description"]'));
         $this->assertSame('summary', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
+        $this->assertEmpty($crawler->filter('meta[property="og:image"]'));
+        $this->assertEmpty($crawler->filter('meta[name="dc.identifier"]'));
+        $this->assertEmpty($crawler->filter('meta[name="dc.relation.ispartof"]'));
+        $this->assertEmpty($crawler->filter('meta[name="dc.title"]'));
+        $this->assertEmpty($crawler->filter('meta[name="dc.description"]'));
+        $this->assertEmpty($crawler->filter('meta[name="dc.date"]'));
+        $this->assertEmpty($crawler->filter('meta[name="dc.rights"]'));
     }
 
     protected function getUrl() : string

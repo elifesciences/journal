@@ -46,8 +46,13 @@ final class LabsPostControllerTest extends PageTestCase
         $this->assertSame('Post impact statement', $crawler->filter('meta[name="description"]')->attr('content'));
         $this->assertSame('article', $crawler->filter('meta[property="og:type"]')->attr('content'));
         $this->assertSame('summary', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
+        $this->assertEmpty($crawler->filter('meta[property="og:image"]'));
         $this->assertSame('labs-post/1', $crawler->filter('meta[name="dc.identifier"]')->attr('content'));
         $this->assertSame('elifesciences.org', $crawler->filter('meta[name="dc.relation.ispartof"]')->attr('content'));
+        $this->assertSame('Post title', $crawler->filter('meta[name="dc.title"]')->attr('content'));
+        $this->assertEmpty($crawler->filter('meta[name="dc.description"]'));
+        $this->assertSame('2010-01-01', $crawler->filter('meta[name="dc.date"]')->attr('content'));
+        $this->assertSame('© 2010 eLife Sciences Publications Limited. This article is distributed under the terms of the Creative Commons Attribution License, which permits unrestricted use and redistribution provided that the original author and source are credited.', $crawler->filter('meta[name="dc.rights"]')->attr('content'));
     }
 
     /**

@@ -37,7 +37,16 @@ final class InterviewsControllerTest extends PageTestCase
         $this->assertSame('/interviews', $crawler->filter('link[rel="canonical"]')->attr('href'));
         $this->assertSame('http://localhost/interviews', $crawler->filter('meta[property="og:url"]')->attr('content'));
         $this->assertSame('Interviews', $crawler->filter('meta[property="og:title"]')->attr('content'));
+        $this->assertEmpty($crawler->filter('meta[property="og:description"]'));
+        $this->assertEmpty($crawler->filter('meta[name="description"]'));
         $this->assertSame('summary', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
+        $this->assertEmpty($crawler->filter('meta[property="og:image"]'));
+        $this->assertEmpty($crawler->filter('meta[name="dc.identifier"]'));
+        $this->assertEmpty($crawler->filter('meta[name="dc.relation.ispartof"]'));
+        $this->assertEmpty($crawler->filter('meta[name="dc.title"]'));
+        $this->assertEmpty($crawler->filter('meta[name="dc.description"]'));
+        $this->assertEmpty($crawler->filter('meta[name="dc.date"]'));
+        $this->assertEmpty($crawler->filter('meta[name="dc.rights"]'));
     }
 
     /**
