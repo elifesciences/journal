@@ -99,6 +99,11 @@ default:
                 tags: '@press-packs'
             contexts:
               - PressPackageContext
+        profile:
+            filters:
+                tags: '@profile'
+            contexts:
+              - ProfileContext
         search:
             filters:
                 tags: '@search'

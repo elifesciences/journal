@@ -6,6 +6,7 @@ use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\Uri;
 use test\eLife\Journal\WebTestCase;
+use Traversable;
 use function GuzzleHttp\Psr7\build_query;
 use function GuzzleHttp\Psr7\parse_query;
 
@@ -80,6 +81,41 @@ final class AuthenticationTest extends WebTestCase
         $crawler = $client->request('GET', "/log-in/check?code=foo&state=$state");
 
         $this->assertContains('Josiah Carberry', $crawler->filter('.login-control')->text());
+    }
+
+    /**
+     * @test
+     * @dataProvider refererProvider
+     */
+    public function it_uses_the_referer_header_for_redirecting_after_logging_in(string $referer, string $expectedRedirect)
+    {
+        $client = static::createClient();
+        $client->followRedirects(false);
+
+        $client->request('GET', '/log-in?open-sesame', [], [], array_filter(['HTTP_REFERER' => $referer]));
+        $response = $client->getResponse();
+
+        $this->assertTrue($response->isRedirect());
+
+        $state = parse_query((new Uri($response->headers->get('Location')))->getQuery())['state'];
+
+        $this->readyToken();
+
+        $client->request('GET', "/log-in/check?code=foo&state=$state");
+        $response = $client->getResponse();
+
+        $this->assertTrue($response->isRedirect());
+        $this->assertSame($expectedRedirect, $response->headers->get('Location'));
+    }
+
+    public function refererProvider() : Traversable
+    {
+        yield 'no header' => ['', 'http://localhost/'];
+        yield 'homepage' => ['http://localhost/', 'http://localhost/'];
+        yield 'local path' => ['http://localhost/foo', 'http://localhost/foo'];
+        yield 'local path with query string' => ['http://localhost/foo?bar', 'http://localhost/foo?bar'];
+        yield 'external site' => ['http://www.example.com/', 'http://localhost/'];
+        yield 'external site with path' => ['http://www.example.com/foo', 'http://localhost/'];
     }
 
     /**
@@ -251,6 +287,21 @@ final class AuthenticationTest extends WebTestCase
         $this->logIn($client);
 
         $this->readyHomePage();
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/annotations?by=jcarberry&page=1&per-page=10&order=desc&use-date=updated',
+                ['Accept' => 'application/vnd.elife.annotation-list+json; version=1']
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.annotation-list+json; version=1'],
+                json_encode([
+                    'total' => 0,
+                    'items' => [],
+                ])
+            )
+        );
 
         $crawler = $client->request('GET', '/');
 
