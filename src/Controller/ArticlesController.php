@@ -29,12 +29,12 @@ use eLife\Patterns\ViewModel\ArticleSection;
 use eLife\Patterns\ViewModel\ContentHeader;
 use eLife\Patterns\ViewModel\ContextualData;
 use eLife\Patterns\ViewModel\Doi;
-use eLife\Patterns\ViewModel\HypothesisOpener;
 use eLife\Patterns\ViewModel\InfoBar;
 use eLife\Patterns\ViewModel\Link;
 use eLife\Patterns\ViewModel\Listing;
 use eLife\Patterns\ViewModel\Paragraph;
 use eLife\Patterns\ViewModel\ReadMoreItem;
+use eLife\Patterns\ViewModel\SpeechBubble;
 use eLife\Patterns\ViewModel\ViewSelector;
 use GuzzleHttp\Promise\PromiseInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -84,7 +84,7 @@ final class ArticlesController extends Controller
         $arguments['relatedItem'] = $arguments['furtherReading']->then(Callback::method('offsetGet', 0));
 
         if ($this->isGranted('FEATURE_CAN_USE_HYPOTHESIS')) {
-            $arguments['hypothesisOpener'] = HypothesisOpener::forArticleBody();
+            $arguments['speechBubble'] = SpeechBubble::forArticleBody();
         }
 
         $furtherReading = $this->pagerfantaPromise(
@@ -198,21 +198,21 @@ final class ArticlesController extends Controller
                 $metrics = $parts['metrics'];
 
                 if ($this->isGranted('FEATURE_CAN_USE_HYPOTHESIS')) {
-                    $hypothesisOpener = HypothesisOpener::forContextualData();
+                    $speechBubble = SpeechBubble::forContextualData();
                 } else {
                     $metrics[] = sprintf('<a href="#comments">Comments <span class="disqus-comment-count" data-disqus-identifier="article:%s">0</span></a>', $article->getId());
-                    $hypothesisOpener = null;
+                    $speechBubble = null;
                 }
 
                 if (!$article->getCiteAs()) {
                     if (empty($metrics)) {
-                        return ContextualData::hypothesisOnly($hypothesisOpener);
+                        return ContextualData::annotationsOnly($speechBubble);
                     }
 
-                    return ContextualData::withMetrics($metrics, null, null, $hypothesisOpener);
+                    return ContextualData::withMetrics($metrics, null, null, $speechBubble);
                 }
 
-                return ContextualData::withCitation($article->getCiteAs(), new Doi($article->getDoi()), $metrics, $hypothesisOpener);
+                return ContextualData::withCitation($article->getCiteAs(), new Doi($article->getDoi()), $metrics, $speechBubble);
             });
 
         $context = all(['article' => $arguments['article'], 'history' => $arguments['history'], 'hasFigures' => $arguments['hasFigures']])

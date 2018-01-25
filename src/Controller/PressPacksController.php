@@ -8,10 +8,10 @@ use eLife\Journal\Helper\HasPages;
 use eLife\Patterns\ViewModel\ArticleSection;
 use eLife\Patterns\ViewModel\ContentHeader;
 use eLife\Patterns\ViewModel\ContextualData;
-use eLife\Patterns\ViewModel\HypothesisOpener;
 use eLife\Patterns\ViewModel\Listing;
 use eLife\Patterns\ViewModel\ListingTeasers;
 use eLife\Patterns\ViewModel\Paragraph;
+use eLife\Patterns\ViewModel\SpeechBubble;
 use eLife\Patterns\ViewModel\Teaser;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -87,7 +87,7 @@ final class PressPacksController extends Controller
 
         $arguments['contextualData'] = $arguments['package']
             ->then($this->ifGranted(['FEATURE_CAN_USE_HYPOTHESIS'], function (PressPackage $package) {
-                return ContextualData::hypothesisOnly(HypothesisOpener::forContextualData());
+                return ContextualData::annotationsOnly(SpeechBubble::forContextualData());
             }));
 
         $arguments['blocks'] = $arguments['package']
@@ -108,7 +108,7 @@ final class PressPacksController extends Controller
             });
 
         if ($this->isGranted('FEATURE_CAN_USE_HYPOTHESIS')) {
-            $arguments['hypothesisOpener'] = HypothesisOpener::forArticleBody();
+            $arguments['speechBubble'] = SpeechBubble::forArticleBody();
         }
 
         $arguments['relatedContent'] = $arguments['package']

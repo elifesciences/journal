@@ -9,8 +9,8 @@ use eLife\Journal\Helper\Paginator;
 use eLife\Journal\Pagerfanta\SequenceAdapter;
 use eLife\Patterns\ViewModel\ContentHeader;
 use eLife\Patterns\ViewModel\ContextualData;
-use eLife\Patterns\ViewModel\HypothesisOpener;
 use eLife\Patterns\ViewModel\ListingTeasers;
+use eLife\Patterns\ViewModel\SpeechBubble;
 use eLife\Patterns\ViewModel\Teaser;
 use Pagerfanta\Pagerfanta;
 use Symfony\Component\HttpFoundation\Request;
@@ -86,14 +86,14 @@ final class InsideElifeController extends Controller
 
         $arguments['contextualData'] = $arguments['article']
             ->then($this->ifGranted(['FEATURE_CAN_USE_HYPOTHESIS'], function (BlogArticle $article) {
-                return ContextualData::hypothesisOnly(HypothesisOpener::forContextualData());
+                return ContextualData::annotationsOnly(SpeechBubble::forContextualData());
             }));
 
         $arguments['blocks'] = $arguments['article']
             ->then($this->willConvertContent());
 
         if ($this->isGranted('FEATURE_CAN_USE_HYPOTHESIS')) {
-            $arguments['hypothesisOpener'] = HypothesisOpener::forArticleBody();
+            $arguments['speechBubble'] = SpeechBubble::forArticleBody();
         }
 
         return new Response($this->get('templating')->render('::inside-elife-article.html.twig', $arguments));

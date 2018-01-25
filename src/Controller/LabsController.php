@@ -10,7 +10,7 @@ use eLife\Journal\Pagerfanta\SequenceAdapter;
 use eLife\Patterns\ViewModel\ContentHeader;
 use eLife\Patterns\ViewModel\ContextualData;
 use eLife\Patterns\ViewModel\GridListing;
-use eLife\Patterns\ViewModel\HypothesisOpener;
+use eLife\Patterns\ViewModel\SpeechBubble;
 use eLife\Patterns\ViewModel\Teaser;
 use Pagerfanta\Pagerfanta;
 use Symfony\Component\HttpFoundation\Request;
@@ -91,14 +91,14 @@ Learn more about <a href="'.$this->get('router')->generate('about-innovation').'
 
         $arguments['contextualData'] = $arguments['post']
             ->then($this->ifGranted(['FEATURE_CAN_USE_HYPOTHESIS'], function (LabsPost $post) {
-                return ContextualData::hypothesisOnly(HypothesisOpener::forContextualData());
+                return ContextualData::annotationsOnly(SpeechBubble::forContextualData());
             }));
 
         $arguments['blocks'] = $arguments['post']
             ->then($this->willConvertContent());
 
         if ($this->isGranted('FEATURE_CAN_USE_HYPOTHESIS')) {
-            $arguments['hypothesisOpener'] = HypothesisOpener::forArticleBody();
+            $arguments['speechBubble'] = SpeechBubble::forArticleBody();
         }
 
         $response = new Response($this->get('templating')->render('::labs-post.html.twig', $arguments));
