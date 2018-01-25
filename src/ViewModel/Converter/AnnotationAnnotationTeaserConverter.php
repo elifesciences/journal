@@ -32,7 +32,7 @@ final class AnnotationAnnotationTeaserConverter implements ViewModelConverter
         $content = $this->patternRenderer->render(...$object->getContent()->map($this->willConvertTo()));
         $content = Html::stripElement($content, 'a');
 
-        if ($object->getParents()->notEmpty()) {
+        if ($object->getAncestors()->notEmpty()) {
             return ViewModel\AnnotationTeaser::forReply(
                 $object->getDocument()->getTitle(),
                 $date,
@@ -84,8 +84,8 @@ final class AnnotationAnnotationTeaserConverter implements ViewModelConverter
 
     private function generateUri(Annotation $annotation) : string
     {
-        if ($annotation->getParents()->notEmpty()) {
-            $id = $annotation->getParents()[0];
+        if ($annotation->getAncestors()->notEmpty()) {
+            $id = $annotation->getAncestors()[0];
         } else {
             $id = $annotation->getId();
         }
