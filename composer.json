@@ -60,6 +60,14 @@
         "phpunit/phpunit": "^6.5",
         "symfony/phpunit-bridge": "^4.0"
     },
+    "replace": {
+        "paragonie/random_compat": "*",
+        "symfony/polyfill-apcu": "*",
+        "symfony/polyfill-intl-icu": "*",
+        "symfony/polyfill-mbstring": "*",
+        "symfony/polyfill-php56": "*",
+        "symfony/polyfill-php70": "*"
+    },
     "scripts": {
         "post-install-cmd": [
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
