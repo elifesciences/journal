@@ -170,7 +170,7 @@ final class AuthenticationTest extends WebTestCase
 
         $this->assertCount(1, $crawler->filter('.info-bar'));
         $this->assertSame('Failed to log in, please try again.', trim($crawler->filter('.info-bar')->text()));
-        $this->assertSame('no-cache, private', $client->getResponse()->headers->get('Cache-Control'));
+        $this->assertSame('max-age=0, must-revalidate, private', $client->getResponse()->headers->get('Cache-Control'));
         $this->assertEmpty($client->getResponse()->getVary());
 
         $crawler = $client->reload();
@@ -228,7 +228,7 @@ final class AuthenticationTest extends WebTestCase
 
         $this->assertCount(1, $crawler->filter('.info-bar'));
         $this->assertSame('Please adjust your ORCID privacy settings for eLife to display your name.', trim($crawler->filter('.info-bar')->text()));
-        $this->assertSame('no-cache, private', $client->getResponse()->headers->get('Cache-Control'));
+        $this->assertSame('max-age=0, must-revalidate, private', $client->getResponse()->headers->get('Cache-Control'));
         $this->assertEmpty($client->getResponse()->getVary());
 
         $crawler = $client->reload();

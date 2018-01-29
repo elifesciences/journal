@@ -29,12 +29,12 @@ use eLife\Patterns\ViewModel\ArticleSection;
 use eLife\Patterns\ViewModel\ContentHeader;
 use eLife\Patterns\ViewModel\ContextualData;
 use eLife\Patterns\ViewModel\Doi;
-use eLife\Patterns\ViewModel\HypothesisOpener;
 use eLife\Patterns\ViewModel\InfoBar;
 use eLife\Patterns\ViewModel\Link;
 use eLife\Patterns\ViewModel\Listing;
 use eLife\Patterns\ViewModel\Paragraph;
 use eLife\Patterns\ViewModel\ReadMoreItem;
+use eLife\Patterns\ViewModel\SpeechBubble;
 use eLife\Patterns\ViewModel\ViewSelector;
 use GuzzleHttp\Promise\PromiseInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -84,7 +84,7 @@ final class ArticlesController extends Controller
         $arguments['relatedItem'] = $arguments['furtherReading']->then(Callback::method('offsetGet', 0));
 
         if ($this->isGranted('FEATURE_CAN_USE_HYPOTHESIS')) {
-            $arguments['hypothesisOpener'] = new HypothesisOpener();
+            $arguments['speechBubble'] = SpeechBubble::forArticleBody();
         }
 
         $furtherReading = $this->pagerfantaPromise(
@@ -188,6 +188,31 @@ final class ArticlesController extends Controller
                     $article->getAdditionalFiles()->notEmpty()
                     ||
                     $hasFigures;
+            });
+
+        $arguments['contextualData'] = all(['article' => $arguments['article'], 'metrics' => $arguments['contextualDataMetrics']])
+            ->then(function (array $parts) {
+                /** @var ArticleVersion $article */
+                $article = $parts['article'];
+                /** @var array $metrics */
+                $metrics = $parts['metrics'];
+
+                if ($this->isGranted('FEATURE_CAN_USE_HYPOTHESIS')) {
+                    $speechBubble = SpeechBubble::forContextualData();
+                } else {
+                    $metrics[] = sprintf('<a href="#comments">Comments <span class="disqus-comment-count" data-disqus-identifier="article:%s">0</span></a>', $article->getId());
+                    $speechBubble = null;
+                }
+
+                if (!$article->getCiteAs()) {
+                    if (empty($metrics)) {
+                        return ContextualData::annotationsOnly($speechBubble);
+                    }
+
+                    return ContextualData::withMetrics($metrics, null, null, $speechBubble);
+                }
+
+                return ContextualData::withCitation($article->getCiteAs(), new Doi($article->getDoi()), $metrics, $speechBubble);
             });
 
         $context = all(['article' => $arguments['article'], 'history' => $arguments['history'], 'hasFigures' => $arguments['hasFigures']])
@@ -498,6 +523,24 @@ final class ArticlesController extends Controller
                 return 'Figures and data in '.$title;
             });
 
+        $arguments['contextualData'] = all(['article' => $arguments['article'], 'metrics' => $arguments['contextualDataMetrics']])
+            ->then(function (array $parts) {
+                /** @var ArticleVersion $article */
+                $article = $parts['article'];
+                /** @var array $metrics */
+                $metrics = $parts['metrics'];
+
+                if (!$article->getCiteAs()) {
+                    if (empty($metrics)) {
+                        return null;
+                    }
+
+                    return ContextualData::withMetrics($metrics);
+                }
+
+                return ContextualData::withCitation($article->getCiteAs(), new Doi($article->getDoi()), $metrics);
+            });
+
         $allFigures = $this->findFigures($arguments['article']);
 
         $figures = $allFigures
@@ -763,10 +806,12 @@ final class ArticlesController extends Controller
             ->otherwise($this->mightNotExist())
             ->otherwise($this->softFailure('Failed to load page views count'));
 
-        $arguments['contextualData'] = all(['article' => $arguments['article'], 'citations' => $arguments['citations'], 'pageViews' => $arguments['pageViews']])
+        $arguments['contextualDataMetrics'] = all(['article' => $arguments['article'], 'history' => $arguments['history'], 'citations' => $arguments['citations'], 'pageViews' => $arguments['pageViews']])
             ->then(function (array $parts) {
                 /** @var ArticleVersion $article */
                 $article = $parts['article'];
+                /** @var ArticleHistory $history */
+                $history = $parts['history'];
                 /** @var CitationsMetric|null $citations */
                 $citations = $parts['citations'];
                 /** @var int|null $pageViews */
@@ -775,23 +820,13 @@ final class ArticlesController extends Controller
                 $metrics = [];
 
                 if (null !== $citations) {
-                    $metrics[] = new ViewModel\ContextualDataMetric('Cited', number_format($citations->getHighest()->getCitations()));
+                    $metrics[] = 'Cited '.number_format($citations->getHighest()->getCitations());
                 }
                 if (null !== $pageViews) {
-                    $metrics[] = new ViewModel\ContextualDataMetric('Views', number_format($pageViews));
+                    $metrics[] = sprintf('<a href="%s">Views %s</a>', $this->generateTextPath($history, $article->getVersion(), 'metrics'), number_format($pageViews));
                 }
 
-                if ($this->isGranted('FEATURE_CAN_USE_HYPOTHESIS')) {
-                    $metrics[] = new ViewModel\ContextualDataMetric('Annotations', 0, 'annotation-count');
-                } else {
-                    $metrics[] = new ViewModel\ContextualDataMetric('Comments', 0, 'disqus-comment-count');
-                }
-
-                if (!$article->getCiteAs()) {
-                    return ContextualData::withMetrics($metrics);
-                }
-
-                return ContextualData::withCitation($article->getCiteAs(), new Doi($article->getDoi()), $metrics);
+                return $metrics;
             });
 
         $arguments['downloadLinks'] = $arguments['article']
@@ -860,7 +895,7 @@ final class ArticlesController extends Controller
         }));
     }
 
-    private function generateTextPath(ArticleHistory $history, int $forVersion = null) : string
+    private function generateTextPath(ArticleHistory $history, int $forVersion = null, string $fragment = null) : string
     {
         $currentVersion = $history->getVersions()[count($history->getVersions()) - 1];
 
@@ -869,10 +904,10 @@ final class ArticlesController extends Controller
         }
 
         if ($forVersion === $currentVersion->getVersion()) {
-            return $this->get('router')->generate('article', [$currentVersion]);
+            return $this->get('router')->generate('article', [$currentVersion, '_fragment' => $fragment]);
         }
 
-        return $this->get('router')->generate('article-version', [$currentVersion, 'version' => $forVersion]);
+        return $this->get('router')->generate('article-version', [$currentVersion, 'version' => $forVersion, '_fragment' => $fragment]);
     }
 
     private function generateFiguresPath(ArticleHistory $history, int $forVersion = null) : string

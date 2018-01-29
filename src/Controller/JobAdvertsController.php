@@ -83,12 +83,12 @@ final class JobAdvertsController extends Controller
         $arguments['title'] = $jobAdvert
             ->then(Callback::method('getTitle'));
 
-        $arguments['job-advert'] = $jobAdvert;
+        $arguments['jobAdvert'] = $jobAdvert;
 
-        $arguments['contentHeader'] = $arguments['job-advert']
+        $arguments['contentHeader'] = $arguments['jobAdvert']
             ->then($this->willConvertTo(ContentHeader::class));
 
-        $arguments['blocks'] = $arguments['job-advert']
+        $arguments['blocks'] = $arguments['jobAdvert']
             ->then(function (JobAdvert $jobAdvert) {
                 if ($jobAdvert->getClosingDate() > new DateTimeImmutable('now')) {
                     return $this->convertContent($jobAdvert)

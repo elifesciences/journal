@@ -206,10 +206,11 @@ services:
             - '@elife.journal.mustache.loader.local'
 
     elife.journal.mustache.loader.local:
-        class: Mustache_Loader_FilesystemLoader
+        class: Mustache_Loader_ProductionFilesystemLoader
         public: false
         arguments:
           - '@=service("kernel").getProjectDir()~"/app/Resources/patterns"'
+          - stat_props: '%mustache_stat_props%'
 
     elife.journal.router.parameter_resolver.model:
       class: eLife\Journal\Router\ModelParameterResolver
@@ -1252,16 +1253,11 @@ services:
           - '@assets.packages'
 
     elife.patterns.mustache.loader.filesystem:
-        class: Mustache_Loader_FilesystemLoader
+        class: Mustache_Loader_ProductionFilesystemLoader
         public: false
         arguments:
           - '@=composer_locate("elife/patterns")'
-
-    elife.patterns.mustache.loader.pattern_lab:
-        class: eLife\Patterns\Mustache\PatternLabLoader
-        public: false
-        arguments:
-          - '@=composer_locate("elife/patterns")~"/resources/templates"'
+          - stat_props: '%mustache_stat_props%'
 
     phive.twig.deferred:
         class: Phive\Twig\Extensions\Deferred\DeferredExtension
