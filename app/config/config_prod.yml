@@ -6,6 +6,7 @@ parameters:
     api_timeout: 1
     api_connect_timeout_slow: 1
     api_timeout_slow: 3
+    mustache_stat_props: ~
 
 framework:
     session:
