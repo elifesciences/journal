@@ -29,6 +29,7 @@
         "isometriks/spam-bundle": "^1.0",
         "kevinrob/guzzle-cache-middleware": "^3.2",
         "mindplay/composer-locator": "^2.1",
+        "mustache/mustache": "^2.12",
         "nelmio/security-bundle": "^2.4",
         "ocramius/package-versions": "^1.2",
         "pagerfanta/pagerfanta": "^1.0",
@@ -58,6 +59,14 @@
         "phpspec/prophecy": "^1.7",
         "phpunit/phpunit": "^6.5",
         "symfony/phpunit-bridge": "^4.0"
+    },
+    "replace": {
+        "paragonie/random_compat": "*",
+        "symfony/polyfill-apcu": "*",
+        "symfony/polyfill-intl-icu": "*",
+        "symfony/polyfill-mbstring": "*",
+        "symfony/polyfill-php56": "*",
+        "symfony/polyfill-php70": "*"
     },
     "scripts": {
         "post-install-cmd": [
