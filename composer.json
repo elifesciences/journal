@@ -29,6 +29,7 @@
         "isometriks/spam-bundle": "^1.0",
         "kevinrob/guzzle-cache-middleware": "^3.2",
         "mindplay/composer-locator": "^2.1",
+        "mustache/mustache": "^2.12",
         "nelmio/security-bundle": "^2.4",
         "ocramius/package-versions": "^1.2",
         "pagerfanta/pagerfanta": "^1.0",

@@ -575,8 +575,14 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertSame('Article title', $crawler->filter('.content-header__title')->text());
 
-        $this->assertContains('1,234', $crawler->filter('.contextual-data__list_title:contains("Cited") + .contextual-data__list_desc')->text());
-        $this->assertContains('5,678', $crawler->filter('.contextual-data__list_title:contains("Views") + .contextual-data__list_desc')->text());
+        $this->assertSame(
+            [
+                'Cited 1,234',
+                'Views 5,678',
+                'Comments 0',
+            ],
+            array_map('trim', $crawler->filter('.contextual-data__item')->extract('_text'))
+        );
 
         $metrics = $crawler->filter('.grid-column > section:nth-of-type(3)');
         $this->assertSame('Metrics', $metrics->filter('header > h2')->text());
