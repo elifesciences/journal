@@ -15,7 +15,7 @@ const request = require('request');
 const rev = require('gulp-rev-all');
 const svg2png = require('gulp-svg2png');
 
-const criticalCssPageTypes = require('./critical-css.json')
+const criticalCssPageTypes = require('./critical-css.json');
 
 
 gulp.task('default', ['assets']);
