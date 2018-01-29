@@ -4,6 +4,10 @@ imports:
   - resource: services.yml
 
 parameters:
+    api_connect_timeout: 2
+    api_timeout: 5
+    api_connect_timeout_slow: 3
+    api_timeout_slow: 10
     honeypot_field: email_address
 
 bobthecow_mustache:
@@ -18,30 +22,30 @@ csa_guzzle:
         elife_api:
             config:
                 base_uri: '%api_url%'
-                connect_timeout: 0.5
+                connect_timeout: '%api_connect_timeout%'
                 headers:
                     Authorization: '%api_key%'
-                timeout: 1
+                timeout: '%api_timeout%'
         elife_crm:
             config:
                 base_uri: '%crm_url%'
-                connect_timeout: 1
-                timeout: 3
+                connect_timeout: '%api_connect_timeout_slow%'
+                timeout: '%api_timeout_slow%'
         file_download:
             config:
-                connect_timeout: 0.5
+                connect_timeout: '%api_connect_timeout%'
                 http_errors: false
                 stream: true
         oauth:
             config:
-                connect_timeout: 1
-                timeout: 3
+                connect_timeout: '%api_connect_timeout_slow%'
+                timeout: '%api_timeout_slow%'
 
 framework:
     assets:
-        version_strategy: irozgar_gulp_rev_versions.asset.gulp_rev_version_strategy
+        json_manifest_path: '%kernel.project_dir%/build/rev-manifest.json'
     cache:
-        default_redis_provider: '%redis%'
+        default_redis_provider: '%redis_cache%'
         pools:
             cache.doi:
                 adapter: cache.app
@@ -55,12 +59,12 @@ framework:
     csrf_protection: ~
     form: ~
     router:
-        resource: '%kernel.root_dir%/config/routing.yml'
+        resource: '%kernel.project_dir%/app/config/routing.yml'
     secret: '%secret%'
     session:
         cookie_lifetime: 86400 # 1 day
         name: '%session_name%'
-        save_path: '0;660;%kernel.root_dir%/../var/sessions/%kernel.environment%'
+        save_path: '0;660;%kernel.project_dir%/var/sessions/%kernel.environment%'
     templating:
         engines:
           - mustache
@@ -83,9 +87,7 @@ hwi_oauth:
                 realname: name
             options:
                 csrf: true
-
-irozgar_gulp_rev_versions:
-    manifest_path: '../build/rev-manifest.json'
+    use_referer: true
 
 isometriks_spam:
     honeypot:
@@ -111,7 +113,7 @@ nelmio_security:
     referrer_policy:
         enabled: true
         policies:
-          - no-referrer
+          - no-referrer-when-downgrade
           - strict-origin-when-cross-origin
     xss_protection:
         enabled: true
@@ -136,5 +138,5 @@ twig:
         hypothesis_api: '%hypothesis_api%'
         hypothesis_authority: '%hypothesis_authority%'
     paths:
-        '%kernel.root_dir%/../build/critical-css': 'critical-css'
+        '%kernel.project_dir%/build/critical-css': 'critical-css'
     strict_variables: '%kernel.debug%'

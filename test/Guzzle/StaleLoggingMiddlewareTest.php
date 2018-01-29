@@ -6,11 +6,11 @@ use eLife\Journal\Guzzle\StaleLoggingMiddleware;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use Kevinrob\GuzzleCache\CacheMiddleware;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use function GuzzleHttp\Promise\promise_for;
 
-final class StaleLoggingMiddlewareTest extends PHPUnit_Framework_TestCase
+final class StaleLoggingMiddlewareTest extends TestCase
 {
     /** @var LoggerInterface */
     private $logger;

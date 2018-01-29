@@ -8,9 +8,9 @@ use eLife\ApiSdk\Model\JobAdvert;
 use eLife\Journal\Helper\Callback;
 use eLife\Journal\Helper\Paginator;
 use eLife\Journal\Pagerfanta\SequenceAdapter;
-use eLife\Journal\ViewModel\Paragraph;
 use eLife\Patterns\ViewModel\ContentHeader;
 use eLife\Patterns\ViewModel\ListingTeasers;
+use eLife\Patterns\ViewModel\Paragraph;
 use eLife\Patterns\ViewModel\Teaser;
 use Pagerfanta\Pagerfanta;
 use Symfony\Component\HttpFoundation\Request;
@@ -83,12 +83,12 @@ final class JobAdvertsController extends Controller
         $arguments['title'] = $jobAdvert
             ->then(Callback::method('getTitle'));
 
-        $arguments['job-advert'] = $jobAdvert;
+        $arguments['jobAdvert'] = $jobAdvert;
 
-        $arguments['contentHeader'] = $arguments['job-advert']
+        $arguments['contentHeader'] = $arguments['jobAdvert']
             ->then($this->willConvertTo(ContentHeader::class));
 
-        $arguments['blocks'] = $arguments['job-advert']
+        $arguments['blocks'] = $arguments['jobAdvert']
             ->then(function (JobAdvert $jobAdvert) {
                 if ($jobAdvert->getClosingDate() > new DateTimeImmutable('now')) {
                     return $this->convertContent($jobAdvert)

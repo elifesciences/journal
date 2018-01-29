@@ -5,7 +5,8 @@ parameters:
     side_by_side_view_url: https://lens.elifesciences.org/
     secret: ThisTokenIsNotSoSecretChangeIt
     session_name: journal
-    redis: ~
+    redis_cache: ~
+    redis_sessions: ~
     mailer_transport: smtp
     mailer_host: 127.0.0.1
     mailer_port: ~
@@ -25,4 +26,3 @@ parameters:
     hypothesis_authority: some-authority
     hypothesis_client_id: some-id
     hypothesis_client_secret: ThisIsASecret
-    feature_can_view_webp_countries: ['GB']

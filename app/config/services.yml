@@ -25,6 +25,10 @@ services:
         arguments:
           - '@elife.api_client.client'
 
+    elife.api_sdk.annotations:
+        class: eLife\ApiSdk\Client\Annotations
+        factory: ['@elife.api_sdk', annotations]
+
     elife.api_sdk.annual_reports:
         class: eLife\ApiSdk\Client\AnnualReports
         factory: ['@elife.api_sdk', annualReports]
@@ -205,7 +209,7 @@ services:
         class: Mustache_Loader_FilesystemLoader
         public: false
         arguments:
-          - '@=service("kernel").getRootDir()~"/Resources/patterns"'
+          - '@=service("kernel").getProjectDir()~"/app/Resources/patterns"'
 
     elife.journal.router.parameter_resolver.model:
       class: eLife\Journal\Router\ModelParameterResolver
@@ -243,17 +247,6 @@ services:
           - '@request_stack'
           - FEATURE_CAN_AUTHENTICATE
           - open-sesame
-        tags:
-          - name: security.voter
-
-    elife.journal.security.voter.feature.can_view_webp:
-        class: eLife\Journal\Security\Voter\RequestHeaderVoter
-        public: false
-        arguments:
-          - '@request_stack'
-          - FEATURE_CAN_VIEW_WEBP
-          - CloudFront-Viewer-Country
-          - '%feature_can_view_webp_countries%'
         tags:
           - name: security.voter
 
@@ -340,8 +333,6 @@ services:
 
     elife.journal.view_model.factory.picture_builder:
         class: eLife\Journal\ViewModel\Factory\PictureBuilderFactory
-        arguments:
-          - '@security.authorization_checker'
 
     elife.journal.view_model.factory.content_header_image:
         class: eLife\Journal\ViewModel\Factory\ContentHeaderImageFactory
@@ -353,6 +344,9 @@ services:
         class: eLife\Journal\ViewModel\Factory\FooterFactory
         arguments:
           - '@router'
+          - '@elife.journal.view_model.factory.picture_builder'
+          - '@assets.packages'
+          - '@security.authorization_checker'
 
     elife.journal.view_model.factory.site_header:
         class: eLife\Journal\ViewModel\Factory\SiteHeaderFactory
@@ -364,6 +358,15 @@ services:
 
     elife.journal.view_model.converter:
         class: eLife\Journal\ViewModel\Converter\ViewModelConverterRegistry
+
+    elife.journal.view_model.converter.annotation.annotation_teaser:
+        class: eLife\Journal\ViewModel\Converter\AnnotationAnnotationTeaserConverter
+        public: false
+        arguments:
+          - '@elife.journal.view_model.converter'
+          - '@elife.patterns.pattern_renderer'
+        tags:
+          - name: view_model.converter
 
     elife.journal.view_model.converter.annual_report.teaser:
         class: eLife\Journal\ViewModel\Converter\AnnualReportTeaserConverter

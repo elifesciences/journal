@@ -4,8 +4,8 @@ namespace eLife\Journal\ViewModel\Converter;
 
 use eLife\ApiSdk\Model\MediaContact;
 use eLife\ApiSdk\Model\Place;
-use eLife\Journal\ViewModel\Paragraph;
 use eLife\Patterns\ViewModel;
+use eLife\Patterns\ViewModel\Paragraph;
 
 final class MediaContactParagraphConverter implements ViewModelConverter
 {

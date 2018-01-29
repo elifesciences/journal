@@ -9,9 +9,8 @@ use eLife\Journal\Helper\Paginator;
 use eLife\Journal\Pagerfanta\SequenceAdapter;
 use eLife\Patterns\ViewModel\ContentHeader;
 use eLife\Patterns\ViewModel\ContextualData;
-use eLife\Patterns\ViewModel\ContextualDataMetric;
-use eLife\Patterns\ViewModel\HypothesisOpener;
 use eLife\Patterns\ViewModel\ListingTeasers;
+use eLife\Patterns\ViewModel\SpeechBubble;
 use eLife\Patterns\ViewModel\Teaser;
 use Pagerfanta\Pagerfanta;
 use Symfony\Component\HttpFoundation\Request;
@@ -87,9 +86,7 @@ final class InsideElifeController extends Controller
 
         $arguments['contextualData'] = $arguments['article']
             ->then($this->ifGranted(['FEATURE_CAN_USE_HYPOTHESIS'], function (BlogArticle $article) {
-                $metrics = [new ContextualDataMetric('Annotations', 0, 'annotation-count')];
-
-                return ContextualData::withMetrics($metrics);
+                return ContextualData::annotationsOnly(SpeechBubble::forContextualData());
             }));
 
         $arguments['blocks'] = $arguments['article']
@@ -99,7 +96,7 @@ final class InsideElifeController extends Controller
                     return $blocks;
                 }
 
-                return $blocks->prepend(new HypothesisOpener());
+                return $blocks->prepend(SpeechBubble::forArticleBody());
             });
 
         return new Response($this->get('templating')->render('::inside-elife-article.html.twig', $arguments));

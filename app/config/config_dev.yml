@@ -8,18 +8,18 @@ csa_guzzle:
 framework:
     profiler: ~
     router:
-        resource: '%kernel.root_dir%/config/routing_dev.yml'
+        resource: '%kernel.project_dir%/app/config/routing_dev.yml'
 
 monolog:
     handlers:
         console:
             channels:
-              - !event
+              - '!event'
             type: console
             formatter: monolog.formatter.line
         main:
             channels:
-              - !event
+              - '!event'
             level: debug
             path: '%kernel.logs_dir%/%kernel.environment%.log'
             type: stream

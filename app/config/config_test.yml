@@ -18,7 +18,7 @@ framework:
         collect: false
         enabled: true
     router:
-        resource: '%kernel.root_dir%/config/routing_test.yml'
+        resource: '%kernel.project_dir%/app/config/routing_test.yml'
     session:
         storage_id: session.storage.mock_file
     test: ~

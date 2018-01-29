@@ -12,10 +12,9 @@ use eLife\Journal\Pagerfanta\SequenceAdapter;
 use eLife\Patterns\ViewModel\ArticleSection;
 use eLife\Patterns\ViewModel\ContentHeader;
 use eLife\Patterns\ViewModel\ContextualData;
-use eLife\Patterns\ViewModel\ContextualDataMetric;
-use eLife\Patterns\ViewModel\HypothesisOpener;
 use eLife\Patterns\ViewModel\Listing;
 use eLife\Patterns\ViewModel\ListingTeasers;
+use eLife\Patterns\ViewModel\SpeechBubble;
 use eLife\Patterns\ViewModel\Teaser;
 use Pagerfanta\Pagerfanta;
 use Symfony\Component\HttpFoundation\Request;
@@ -93,9 +92,7 @@ final class InterviewsController extends Controller
 
         $arguments['contextualData'] = $arguments['interview']
             ->then($this->ifGranted(['FEATURE_CAN_USE_HYPOTHESIS'], function (Interview $interview) {
-                $metrics = [new ContextualDataMetric('Annotations', 0, 'annotation-count')];
-
-                return ContextualData::withMetrics($metrics);
+                return ContextualData::annotationsOnly(SpeechBubble::forContextualData());
             }));
 
         $arguments['blocks'] = $arguments['interview']
@@ -105,8 +102,9 @@ final class InterviewsController extends Controller
                     return $blocks;
                 }
 
-                return $blocks->append(new HypothesisOpener());
+                return $blocks->prepend(SpeechBubble::forArticleBody());
             });
+
         $arguments['cv'] = $arguments['interview']
             ->then(function (Interview $interview) {
                 if ($interview->getInterviewee()->getCvLines()->isEmpty()) {
@@ -123,10 +121,6 @@ final class InterviewsController extends Controller
                     $this->render($cv)
                 );
             });
-
-        if ($this->isGranted('FEATURE_CAN_USE_HYPOTHESIS')) {
-            $arguments['hypothesisOpener'] = new HypothesisOpener();
-        }
 
         $arguments['collections'] = $this->get('elife.api_sdk.collections')
             ->containing(Identifier::interview($id))

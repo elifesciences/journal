@@ -99,8 +99,8 @@ final class SignUpTest extends WebTestCase
 
         $client->request('GET', $this->getUrl());
         $this->assertSame(200, $client->getResponse()->getStatusCode());
-        $this->assertSame('no-cache, private', $client->getResponse()->headers->get('Cache-Control'));
-        $this->assertEmpty($client->getResponse()->getVary());
+        $this->assertSame('max-age=300, public, stale-if-error=86400, stale-while-revalidate=300', $client->getResponse()->headers->get('Cache-Control'));
+        $this->assertSame(['Cookie'], $client->getResponse()->getVary());
     }
 
     /**

@@ -102,7 +102,7 @@ final class DownloadControllerTest extends WebTestCase
      */
     public function it_adds_x_forwarded_for_when_through_a_trusted_proxy()
     {
-        HttpFoundationRequest::setTrustedProxies(['127.0.0.1']);
+        HttpFoundationRequest::setTrustedProxies(['127.0.0.1'], HttpFoundationRequest::HEADER_X_FORWARDED_ALL);
 
         $client = static::createClient();
 

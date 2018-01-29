@@ -7,11 +7,10 @@ use eLife\ApiSdk\ApiSdk;
 use eLife\ApiSdk\Model\Image;
 use eLife\Journal\ViewModel\Factory\PictureBuilderFactory;
 use eLife\Patterns\ViewModel;
-use PHPUnit_Framework_TestCase;
-use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
-final class PictureBuilderFactoryTest extends PHPUnit_Framework_TestCase
+final class PictureBuilderFactoryTest extends TestCase
 {
     /** @var DenormalizerInterface */
     private $denormalizer;
@@ -39,7 +38,12 @@ final class PictureBuilderFactoryTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             new ViewModel\Picture(
-                [],
+                [
+                    [
+                        'srcset' => 'path:image/webp::',
+                        'type' => 'image/webp',
+                    ],
+                ],
                 new ViewModel\Image('path:image/jpeg::', [], 'alt')
             ),
             $builder->build()
@@ -60,6 +64,10 @@ final class PictureBuilderFactoryTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(
             new ViewModel\Picture(
                 [
+                    [
+                        'srcset' => 'path:image/webp:200:200 200w, path:image/webp:100:100 100w',
+                        'type' => 'image/webp',
+                    ],
                     [
                         'srcset' => 'path:image/jpeg:200:200 200w, path:image/jpeg:100:100 100w',
                         'type' => 'image/jpeg',
@@ -92,11 +100,15 @@ final class PictureBuilderFactoryTest extends PHPUnit_Framework_TestCase
                         'type' => 'image/svg+xml',
                     ],
                     [
+                        'srcset' => 'path:image/webp:200:0 200w, path:image/webp:100:0 100w',
+                        'type' => 'image/webp',
+                    ],
+                    [
                         'srcset' => 'path:image/png:200:0 200w, path:image/png:100:0 100w',
                         'type' => 'image/png',
                     ],
                 ],
-                new ViewModel\Image('path:image/svg+xml::')
+                new ViewModel\Image('path:image/png::')
             ),
             $builder->build()
         );
@@ -128,6 +140,10 @@ final class PictureBuilderFactoryTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(
             new ViewModel\Picture(
                 [
+                    [
+                        'srcset' => 'https://example.com/image/full/100,/0/default.webp 100w, https://example.com/image/full/50,/0/default.webp 50w',
+                        'type' => 'image/webp',
+                    ],
                     [
                         'srcset' => 'https://example.com/image/full/100,/0/default.jpg 100w, https://example.com/image/full/50,/0/default.jpg 50w',
                         'type' => 'image/jpeg',
@@ -163,7 +179,12 @@ final class PictureBuilderFactoryTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             new ViewModel\Picture(
-                [],
+                [
+                    [
+                        'srcset' => 'https://example.com/image/full/full/0/default.webp',
+                        'type' => 'image/webp',
+                    ],
+                ],
                 new ViewModel\Image('https://example.com/image/full/full/0/default.jpg', [], 'alt')
             ),
             $builder->build()
@@ -194,7 +215,12 @@ final class PictureBuilderFactoryTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             new ViewModel\Picture(
-                [],
+                [
+                    [
+                        'srcset' => 'https://example.com/image/full/400,/0/default.webp',
+                        'type' => 'image/webp',
+                    ],
+                ],
                 new ViewModel\Image('https://example.com/image/full/400,/0/default.jpg', [], 'alt')
             ),
             $builder->build()
@@ -228,6 +254,10 @@ final class PictureBuilderFactoryTest extends PHPUnit_Framework_TestCase
             new ViewModel\Picture(
                 [
                     [
+                        'srcset' => 'https://example.com/image/full/100,/0/default.webp 100w, https://example.com/image/full/50,/0/default.webp 50w',
+                        'type' => 'image/webp',
+                    ],
+                    [
                         'srcset' => 'https://example.com/image/full/100,/0/default.png 100w, https://example.com/image/full/50,/0/default.png 50w',
                         'type' => 'image/png',
                     ],
@@ -244,46 +274,6 @@ final class PictureBuilderFactoryTest extends PHPUnit_Framework_TestCase
     public function it_creates_a_builder_for_other_image_types()
     {
         $factory = new PictureBuilderFactory();
-
-        $image = $this->createImage([
-            'uri' => 'https://example.com/image',
-            'alt' => 'alt',
-            'size' => [
-                'width' => 200,
-                'height' => 100,
-            ],
-            'source' => [
-                'mediaType' => 'image/tiff',
-                'uri' => 'https://example.com/image.tif',
-                'filename' => 'Image.tif',
-            ],
-        ]);
-
-        $builder = $factory->forImage($image, 50);
-
-        $this->assertEquals(
-            new ViewModel\Picture(
-                [
-                    [
-                        'srcset' => 'https://example.com/image/full/100,/0/default.jpg 100w, https://example.com/image/full/50,/0/default.jpg 50w',
-                        'type' => 'image/jpeg',
-                    ],
-                ],
-                new ViewModel\Image('https://example.com/image/full/50,/0/default.jpg', [], 'alt')
-            ),
-            $builder->build()
-        );
-    }
-
-    /**
-     * @test
-     */
-    public function it_adds_webp_when_the_feature_flag_is_enabled()
-    {
-        $authorizationChecker = $this->prophesize(AuthorizationCheckerInterface::class);
-        $factory = new PictureBuilderFactory($authorizationChecker->reveal());
-
-        $authorizationChecker->isGranted('FEATURE_CAN_VIEW_WEBP')->willReturn(true);
 
         $image = $this->createImage([
             'uri' => 'https://example.com/image',
