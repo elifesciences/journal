@@ -247,6 +247,7 @@ const criticalCssConfig = (function () {
             'p',
             /\.content-header.*/,
             /\.meta.*/,
+            '.hidden',
             '.wrapper.wrapper--content',
         ];
         const highlights = [/.*\.highlights.*$/];
@@ -270,6 +271,8 @@ const criticalCssConfig = (function () {
             article: global.concat(
                 /\.content-header__item_toggle--.*$/,
                 /\.contextual-data.*/,
+                /\.login-control.*/,
+                /\.speech-bubble.*/,
                 /\.view-selector.*/,
                 'h2',
                 '.article-section__header_text',
@@ -346,7 +349,7 @@ const criticalCssConfig = (function () {
     }());
 
     return {
-        baseUrl: 'http://localhost:8080',
+        baseUrl: 'http://localhost:8080?open-sesame',
         baseFilePath: './build/critical-css',
         assetPathPrefix: '/assets/patterns',
         dimensions: [
