@@ -7,10 +7,10 @@ use eLife\ApiSdk\ApiSdk;
 use eLife\ApiSdk\Model\Image;
 use eLife\Journal\ViewModel\Factory\PictureBuilderFactory;
 use eLife\Patterns\ViewModel;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
-final class PictureBuilderFactoryTest extends PHPUnit_Framework_TestCase
+final class PictureBuilderFactoryTest extends TestCase
 {
     /** @var DenormalizerInterface */
     private $denormalizer;

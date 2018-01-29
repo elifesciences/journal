@@ -5,6 +5,7 @@ namespace test\eLife\Journal\ViewModel\Factory;
 use eLife\Journal\ViewModel\Factory\FooterFactory;
 use eLife\Patterns\ViewModel\Footer;
 use Symfony\Bridge\PhpUnit\ClockMock;
+use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
 use test\eLife\Journal\KernelTestCase;
 use Traversable;
@@ -66,29 +67,24 @@ final class FooterFactoryTest extends KernelTestCase
 
     /**
      * @test
-     * @group time-sensitive
      */
-    public function it_does_not_display_wallenberg_information_early()
+    public function it_displays_investor_logos()
     {
-        ClockMock::withClockMock(strtotime('2017-12-31T23:59:59Z'));
-
         $footer = $this->footerFactory->createFooter();
         $patternRenderer = static::$kernel->getContainer()->get('elife.patterns.pattern_renderer');
+        $crawler = new Crawler($patternRenderer->render($footer));
 
-        $this->assertNotContains('Wallenberg', $patternRenderer->render($footer));
-    }
+        $logos = $crawler->filter('.investor-logos__img');
 
-    /**
-     * @test
-     * @group time-sensitive
-     */
-    public function it_displays_wallenberg_information_from_2018()
-    {
-        ClockMock::withClockMock(strtotime('2018-01-01T00:00:00Z'));
-
-        $footer = $this->footerFactory->createFooter();
-        $patternRenderer = static::$kernel->getContainer()->get('elife.patterns.pattern_renderer');
-
-        $this->assertContains('Wallenberg', $patternRenderer->render($footer));
+        $this->assertCount(4, $logos);
+        $this->assertSame(
+            [
+                'Howard Hughes Medical Institute',
+                'Wellcome Trust',
+                'Max-Planck-Gesellschaft',
+                'Knut and Alice Wallenberg Foundation',
+            ],
+            $logos->extract(['alt'])
+        );
     }
 }

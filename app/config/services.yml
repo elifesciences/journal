@@ -25,6 +25,10 @@ services:
         arguments:
           - '@elife.api_client.client'
 
+    elife.api_sdk.annotations:
+        class: eLife\ApiSdk\Client\Annotations
+        factory: ['@elife.api_sdk', annotations]
+
     elife.api_sdk.annual_reports:
         class: eLife\ApiSdk\Client\AnnualReports
         factory: ['@elife.api_sdk', annualReports]
@@ -267,15 +271,6 @@ services:
         tags:
           - name: security.voter
 
-    elife.journal.security.voter.feature.wallenberg:
-        class: eLife\Journal\Security\Voter\TimeVoter
-        public: false
-        arguments:
-          - FEATURE_WALLENBERG
-          - "@=strtotime('2018-01-01T00:00:00Z')"
-        tags:
-          - name: security.voter
-
     elife.journal.templating.promise_aware:
         class: eLife\Journal\Templating\PromiseAwareEngine
         decorates: templating
@@ -364,6 +359,15 @@ services:
 
     elife.journal.view_model.converter:
         class: eLife\Journal\ViewModel\Converter\ViewModelConverterRegistry
+
+    elife.journal.view_model.converter.annotation.annotation_teaser:
+        class: eLife\Journal\ViewModel\Converter\AnnotationAnnotationTeaserConverter
+        public: false
+        arguments:
+          - '@elife.journal.view_model.converter'
+          - '@elife.patterns.pattern_renderer'
+        tags:
+          - name: view_model.converter
 
     elife.journal.view_model.converter.annual_report.teaser:
         class: eLife\Journal\ViewModel\Converter\AnnualReportTeaserConverter

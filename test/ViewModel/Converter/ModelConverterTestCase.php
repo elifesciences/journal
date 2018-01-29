@@ -6,15 +6,16 @@ use ComposerLocator;
 use eLife\ApiSdk\Collection;
 use eLife\ApiSdk\Model;
 use eLife\Journal\ViewModel\Converter\ViewModelConverter;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Traversable;
 use function GuzzleHttp\json_decode;
 
-abstract class ModelConverterTestCase extends PHPUnit_Framework_TestCase
+abstract class ModelConverterTestCase extends TestCase
 {
     private static $classes = [
+        'annotation' => Model\Annotation::class,
         'annual-report' => Model\AnnualReport::class,
         'article-poa' => Model\ArticlePoA::class,
         'article-vor' => Model\ArticleVoR::class,
@@ -96,6 +97,10 @@ abstract class ModelConverterTestCase extends PHPUnit_Framework_TestCase
             $list = false;
             $version = 1;
             switch ($originalModel) {
+                case 'annotation':
+                    $model = 'annotation-list';
+                    $list = true;
+                    break;
                 case 'cover':
                     $model = 'cover-list';
                     $list = true;

@@ -2,8 +2,6 @@
 
 namespace test\eLife\Journal\Controller;
 
-use Symfony\Bridge\PhpUnit\ClockMock;
-
 final class AboutControllerTest extends PageTestCase
 {
     /**
@@ -17,38 +15,6 @@ final class AboutControllerTest extends PageTestCase
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertSame('About eLife', $crawler->filter('.content-header__title')->text());
-    }
-
-    /**
-     * @test
-     * @group time-sensitive
-     */
-    public function it_does_not_display_wallenberg_information_early()
-    {
-        ClockMock::withClockMock(strtotime('2017-12-31T23:59:59Z'));
-
-        $client = static::createClient();
-
-        $crawler = $client->request('GET', $this->getUrl());
-
-        $this->assertSame(200, $client->getResponse()->getStatusCode());
-        $this->assertNotContains('Wallenberg', $crawler->text());
-    }
-
-    /**
-     * @test
-     * @group time-sensitive
-     */
-    public function it_displays_wallenberg_information_from_2018()
-    {
-        ClockMock::withClockMock(strtotime('2018-01-01T00:00:00Z'));
-
-        $client = static::createClient();
-
-        $crawler = $client->request('GET', $this->getUrl());
-
-        $this->assertSame(200, $client->getResponse()->getStatusCode());
-        $this->assertContains('Wallenberg', $crawler->text());
     }
 
     /**

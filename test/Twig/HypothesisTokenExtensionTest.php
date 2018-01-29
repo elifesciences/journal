@@ -4,13 +4,13 @@ namespace test\eLife\Journal\Twig;
 
 use eLife\Journal\Security\HypothesisTokenGenerator;
 use eLife\Journal\Twig\HypothesisTokenExtension;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Security\Core\User\User;
 use Twig_Environment;
 use Twig_ExtensionInterface;
 use Twig_Loader_Array;
 
-final class HypothesisTokenExtensionTest extends PHPUnit_Framework_TestCase
+final class HypothesisTokenExtensionTest extends TestCase
 {
     /**
      * @test

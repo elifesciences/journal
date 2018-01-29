@@ -5,10 +5,10 @@ namespace test\eLife\Journal\ViewModel\Converter;
 use DateTimeImmutable;
 use eLife\Journal\ViewModel\Converter\ViewModelConverter;
 use eLife\Journal\ViewModel\Converter\ViewModelConverterRegistry;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use stdClass;
 
-final class ViewModelConverterRegistryTest extends PHPUnit_Framework_TestCase
+final class ViewModelConverterRegistryTest extends TestCase
 {
     /**
      * @test

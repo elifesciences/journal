@@ -6,13 +6,13 @@ use eLife\ApiClient\Exception\ApiTimeout;
 use eLife\ApiClient\Exception\NetworkProblem;
 use eLife\Journal\EventListener\ApiTimeoutSubscriber;
 use GuzzleHttp\Psr7\Request as GuzzleRequest;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
-final class ApiTimeoutSubscriberTest extends PHPUnit_Framework_TestCase
+final class ApiTimeoutSubscriberTest extends TestCase
 {
     /**
      * @test
