@@ -66,8 +66,7 @@
         "symfony/polyfill-intl-icu": "*",
         "symfony/polyfill-mbstring": "*",
         "symfony/polyfill-php56": "*",
-        "symfony/polyfill-php70": "*",
-        "symfony/polyfill-util": "*"
+        "symfony/polyfill-php70": "*"
     },
     "scripts": {
         "post-install-cmd": [
