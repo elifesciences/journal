@@ -220,7 +220,7 @@ final class ProfileControllerTest extends PageTestCase
 
         $client->request('GET', $this->getUrl());
 
-        $this->assertSame('no-cache, private', $client->getResponse()->headers->get('Cache-Control'));
+        $this->assertSame('max-age=0, must-revalidate, private', $client->getResponse()->headers->get('Cache-Control'));
         $this->assertEmpty($client->getResponse()->getVary());
     }
 
