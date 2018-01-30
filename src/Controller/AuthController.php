@@ -2,24 +2,27 @@
 
 namespace eLife\Journal\Controller;
 
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\HttpKernel\HttpKernelInterface;
+use Symfony\Component\Security\Http\Util\TargetPathTrait;
 
 final class AuthController extends Controller
 {
-    public function redirectAction() : Response
+    use TargetPathTrait;
+
+    public function redirectAction(Request $request) : Response
     {
         if (!$this->isGranted('FEATURE_CAN_AUTHENTICATE')) {
             throw new NotFoundHttpException('Not found');
         }
 
-        $request = $this->get('request_stack')->getCurrentRequest();
-        $path['_forwarded'] = $request->attributes;
-        $path['_controller'] = 'HWIOAuthBundle:Connect:redirectToService';
-        $path['service'] = 'elife';
-        $subRequest = $request->duplicate([], null, $path);
+        if ($referer = trim($request->headers->get('Referer'))) {
+            $this->saveTargetPath($request->getSession(), 'main', $referer);
+        }
 
-        return $this->get('http_kernel')->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
+        return $this->get('oauth2.registry')
+            ->getClient('elife')
+            ->redirect();
     }
 }

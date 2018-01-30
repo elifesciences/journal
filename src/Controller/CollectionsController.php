@@ -62,22 +62,20 @@ final class CollectionsController extends Controller
 
     public function collectionAction(Request $request, string $id) : Response
     {
-        $collection = $this->get('elife.api_sdk.collections')
+        $arguments['item'] = $this->get('elife.api_sdk.collections')
             ->get($id)
             ->otherwise($this->mightNotExist())
             ->then($this->checkSlug($request, Callback::method('getTitle')));
 
-        $arguments = $this->defaultPageArguments($request, $collection);
+        $arguments = $this->defaultPageArguments($request, $arguments['item']);
 
-        $arguments['title'] = $collection
+        $arguments['title'] = $arguments['item']
             ->then(Callback::method('getTitle'));
 
-        $arguments['collection'] = $collection;
-
-        $arguments['contentHeader'] = $arguments['collection']
+        $arguments['contentHeader'] = $arguments['item']
             ->then($this->willConvertTo(ContentHeader::class));
 
-        $arguments['body'] = $arguments['collection']
+        $arguments['body'] = $arguments['item']
             ->then(function (Collection $collection) {
                 if ($collection->getSummary()->notEmpty()) {
                     yield from $collection->getSummary()->map($this->willConvertTo());
@@ -89,7 +87,7 @@ final class CollectionsController extends Controller
                 );
             });
 
-        $arguments['multimedia'] = $arguments['collection']
+        $arguments['multimedia'] = $arguments['item']
             ->then(Callback::method('getPodcastEpisodes'))
             ->then(Callback::emptyOr(function (Sequence $podcastEpisodes) {
                 return ListingTeasers::basic(
@@ -98,7 +96,7 @@ final class CollectionsController extends Controller
                 );
             }));
 
-        $arguments['related'] = $arguments['collection']
+        $arguments['related'] = $arguments['item']
             ->then(Callback::method('getRelatedContent'))
             ->then(Callback::emptyOr(function (Sequence $relatedContent) {
                 return ListingTeasers::basic(
@@ -107,7 +105,7 @@ final class CollectionsController extends Controller
                 );
             }));
 
-        $arguments['contributors'] = $arguments['collection']
+        $arguments['contributors'] = $arguments['item']
             ->then(Callback::method('getCurators'))
             ->then(function (Sequence $curators) {
                 return ListingProfileSnippets::basic(

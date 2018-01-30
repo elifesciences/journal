@@ -40,7 +40,7 @@ final class SiteHeaderFactory
         $this->authorizationChecker = $authorizationChecker;
     }
 
-    public function createSiteHeader(Model $model = null, Profile $profile = null) : SiteHeader
+    public function createSiteHeader(Model $item = null, Profile $profile = null) : SiteHeader
     {
         if ($this->requestStack->getCurrentRequest() && 'search' !== $this->requestStack->getCurrentRequest()->get('_route')) {
             $searchItem = NavLinkedItem::asIcon(new Link('Search', $this->urlGenerator->generate('search')),
@@ -155,10 +155,10 @@ final class SiteHeaderFactory
 
         $secondaryLinks = SiteHeaderNavBar::secondary($secondaryLinks);
 
-        if ($model instanceof HasSubjects) {
-            $subject = $model->getSubjects()[0];
-        } elseif ($model instanceof Subject) {
-            $subject = $model;
+        if ($item instanceof HasSubjects) {
+            $subject = $item->getSubjects()[0];
+        } elseif ($item instanceof Subject) {
+            $subject = $item;
         } else {
             $subject = null;
         }

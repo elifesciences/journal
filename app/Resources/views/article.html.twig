@@ -3,56 +3,12 @@
 {% extends '::page.html.twig' %}
 
 {% block canonical %}
-    {{ path('article', {id: article.id}) }}
+    {{ path('article', {id: item.id}) }}
 {% endblock %}
-
-    {% block description %}
-        {% if article.impactStatement is defined %}
-            {{ article.impactStatement|raw }}
-        {% endif %}
-    {% endblock %}
 
 {% block meta %}
 
     {{ parent() }}
-
-    {% block dublin_core %}
-
-        <meta name="DC.Format" content="text/html">
-        <meta name="DC.Language" content="en">
-        <meta name="DC.Title" content="{{ article.fullTitle|striptags }}">
-        <meta name="DC.Identifier" content="{{ article.doi }}">
-        {% if article.publishedDate %}
-            <meta name="DC.Date" content="{{ article.publishedDate|date('Y-m-d', 'UTC') }}">
-        {% endif %}
-        <meta name="DC.Publisher" content="eLife Sciences Publications Limited">
-
-        <meta name="DC.Rights" content="
-            {%- if article.copyright.holder -%}© {{ article.publishedDate|date('Y', 'UTC') }} {{ article.copyright.holder }}. {% endif -%}
-            {{- article.copyright.statement|striptags -}}
-        ">
-
-        {% if article.digest is defined and article.digest and article.digest.content|length %}
-            <meta name="DC.Description" content="
-                {%- for paragraph in article.digest.content -%}
-                    {{ paragraph.text|striptags }}
-                    {%- if not loop.last %} {% endif %}
-                {%- endfor -%}
-            ">
-        {% endif %}
-
-        {% for author in article.authors %}
-            {% if author.affiliations is defined %}
-                <meta name="DC.Contributor" content="{{ author.toString }}">
-                {% if author.people is defined %}
-                    {% for person in author.people %}
-                        <meta name="DC.Contributor" content="{{ person.preferredName }}">
-                    {% endfor %}
-                {% endif %}
-            {% endif %}
-        {% endfor %}
-
-    {% endblock %}
 
     {% block google_scholar %}
 
@@ -63,23 +19,23 @@
         <meta name="citation_fulltext_world_readable" content="">
         <meta name="citation_language" content="en">
 
-        <meta name="citation_title" content="{{ article.fullTitle|striptags }}">
+        <meta name="citation_title" content="{{ item.fullTitle|striptags }}">
         <meta name="citation_id"
-              content="eLife {{ article.publishedDate|date('Y', 'UTC') }};{{ article.volume }}:{{ article.eLocationId }}">
-        <meta name="citation_firstpage" content="{{ article.eLocationId }}">
-        <meta name="citation_public_url" content="{{ url('article', {id: article.id}) }}">
-        <meta name="citation_pdf_url" content="{{ article.pdf }}">
-        <meta name="citation_doi" content="{{ article.doi }}">
-        <meta name="citation_volume" content="{{ article.volume }}">
-        {% if article.issue %}
-            <meta name="citation_issue" content="{{ article.issue }}">
+              content="eLife {{ item.publishedDate|date('Y', 'UTC') }};{{ item.volume }}:{{ item.eLocationId }}">
+        <meta name="citation_firstpage" content="{{ item.eLocationId }}">
+        <meta name="citation_public_url" content="{{ url('article', {id: item.id}) }}">
+        <meta name="citation_pdf_url" content="{{ item.pdf }}">
+        <meta name="citation_doi" content="{{ item.doi }}">
+        <meta name="citation_volume" content="{{ item.volume }}">
+        {% if item.issue %}
+            <meta name="citation_issue" content="{{ item.issue }}">
         {% endif %}
-        {% if article.publishedDate %}
-            <meta name="citation_publication_date" content="{{ article.publishedDate|date('Y/m/d', 'UTC') }}">
+        {% if item.publishedDate %}
+            <meta name="citation_publication_date" content="{{ item.publishedDate|date('Y/m/d', 'UTC') }}">
         {% endif %}
 
-        {% if article.funding is defined and article.funding %}
-            {% for award in article.funding.awards %}
+        {% if item.funding is defined and item.funding %}
+            {% for award in item.funding.awards %}
                 <meta name="citation_funding_source" content="citation_funder={{ award.source.place.toString }};
                     {%- if award.source.funderId -%}
                         citation_funder_id={{ award.source.funderId }};
@@ -94,25 +50,25 @@
             {% endfor %}
         {% endif %}
 
-        {% if article.keywords is defined and article.keywords|length %}
+        {% if item.keywords is defined and item.keywords|length %}
             <meta name="citation_keywords" content="
-                {%- for keyword in article.keywords -%}
+                {%- for keyword in item.keywords -%}
                     {{- keyword|striptags -}}
                     {%- if not loop.last %}; {% endif -%}
                 {%- endfor -%}
             ">
         {% endif %}
 
-        {% if article.subjects|length %}
+        {% if item.subjects|length %}
             <meta name="citation_section" content="
-                {%- for subject in article.subjects -%}
+                {%- for subject in item.subjects -%}
                     {{- subject.name|striptags -}}
                     {%- if not loop.last %}; {% endif -%}
                 {%- endfor -%}
             ">
         {% endif %}
 
-        {% for author in article.authors %}
+        {% for author in item.authors %}
             {% if author.affiliations is defined %}
                 <meta name="citation_author" content="{{ author.toString }}">
                 {% for institution in author.affiliations %}
@@ -129,9 +85,9 @@
             {% endif %}
         {% endfor %}
 
-        {% if article.references is defined -%}
+        {% if item.references is defined -%}
 
-            {%- for reference in article.references %}
+            {%- for reference in item.references %}
 
                 {%- set type = reference_type(reference) -%}
 

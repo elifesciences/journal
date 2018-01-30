@@ -50,7 +50,7 @@ final class AuthenticationTest extends WebTestCase
         $this->assertTrue($response->isRedirect());
 
         $location = Uri::withoutQueryValue(new Uri($response->headers->get('Location')), 'state');
-        $this->assertSame('http://api.elifesciences.org/oauth2/authorize?response_type=code&client_id=journal_client_id&redirect_uri=http%3A%2F%2Flocalhost%2Flog-in%2Fcheck', $location->__toString());
+        $this->assertSameUri('http://api.elifesciences.org/oauth2/authorize?response_type=code&client_id=journal_client_id&redirect_uri=http%3A%2F%2Flocalhost%2Flog-in%2Fcheck', $location);
 
         $state = parse_query((new Uri($response->headers->get('Location')))->getQuery())['state'];
 
@@ -105,12 +105,15 @@ final class AuthenticationTest extends WebTestCase
         $response = $client->getResponse();
 
         $this->assertTrue($response->isRedirect());
-        $this->assertSame($expectedRedirect, $response->headers->get('Location'));
+        $this->assertSameUri($expectedRedirect, $response->headers->get('Location'));
     }
 
     public function refererProvider() : Traversable
     {
         yield 'no header' => ['', 'http://localhost/'];
+        yield 'string header' => ['foo', 'http://localhost/'];
+        yield 'route-name header' => ['about', 'http://localhost/'];
+        yield 'invalid uri header' => ['http://', 'http://localhost/'];
         yield 'homepage' => ['http://localhost/', 'http://localhost/'];
         yield 'local path' => ['http://localhost/foo', 'http://localhost/foo'];
         yield 'local path with query string' => ['http://localhost/foo?bar', 'http://localhost/foo?bar'];
@@ -138,7 +141,7 @@ final class AuthenticationTest extends WebTestCase
         $this->assertTrue($response->isRedirect());
 
         $location = Uri::withoutQueryValue(new Uri($response->headers->get('Location')), 'state');
-        $this->assertSame('http://api.elifesciences.org/oauth2/authorize?response_type=code&client_id=journal_client_id&redirect_uri=http%3A%2F%2Flocalhost%2Flog-in%2Fcheck', $location->__toString());
+        $this->assertSameUri('http://api.elifesciences.org/oauth2/authorize?response_type=code&client_id=journal_client_id&redirect_uri=http%3A%2F%2Flocalhost%2Flog-in%2Fcheck', $location);
 
         $state = parse_query((new Uri($response->headers->get('Location')))->getQuery())['state'];
 
@@ -195,7 +198,7 @@ final class AuthenticationTest extends WebTestCase
         $this->assertTrue($response->isRedirect());
 
         $location = Uri::withoutQueryValue(new Uri($response->headers->get('Location')), 'state');
-        $this->assertSame('http://api.elifesciences.org/oauth2/authorize?response_type=code&client_id=journal_client_id&redirect_uri=http%3A%2F%2Flocalhost%2Flog-in%2Fcheck', $location->__toString());
+        $this->assertSameUri('http://api.elifesciences.org/oauth2/authorize?response_type=code&client_id=journal_client_id&redirect_uri=http%3A%2F%2Flocalhost%2Flog-in%2Fcheck', $location);
 
         $state = parse_query((new Uri($response->headers->get('Location')))->getQuery())['state'];
 

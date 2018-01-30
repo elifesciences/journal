@@ -74,32 +74,33 @@ Learn more about <a href="'.$this->get('router')->generate('about-innovation').'
 
     public function postAction(Request $request, string $id) : Response
     {
-        $post = $this->get('elife.api_sdk.labs_posts')
+        $item = $this->get('elife.api_sdk.labs_posts')
             ->get($id)
             ->otherwise($this->mightNotExist())
             ->then($this->checkSlug($request, Callback::method('getTitle')));
 
-        $arguments = $this->defaultPageArguments($request, $post);
+        $arguments = $this->defaultPageArguments($request, $item);
 
-        $arguments['title'] = $post
+        $arguments['title'] = $arguments['item']
             ->then(Callback::method('getTitle'));
 
-        $arguments['post'] = $post;
-
-        $arguments['contentHeader'] = $arguments['post']
+        $arguments['contentHeader'] = $arguments['item']
             ->then($this->willConvertTo(ContentHeader::class));
 
-        $arguments['contextualData'] = $arguments['post']
+        $arguments['contextualData'] = $arguments['item']
             ->then($this->ifGranted(['FEATURE_CAN_USE_HYPOTHESIS'], function (LabsPost $post) {
                 return ContextualData::annotationsOnly(SpeechBubble::forContextualData());
             }));
 
-        $arguments['blocks'] = $arguments['post']
-            ->then($this->willConvertContent());
+        $arguments['blocks'] = $arguments['item']
+        ->then($this->willConvertContent())
+        ->then(function (Sequence $blocks) {
+            if (!$this->isGranted('FEATURE_CAN_USE_HYPOTHESIS')) {
+                return $blocks;
+            }
 
-        if ($this->isGranted('FEATURE_CAN_USE_HYPOTHESIS')) {
-            $arguments['speechBubble'] = SpeechBubble::forArticleBody();
-        }
+            return $blocks->prepend(SpeechBubble::forArticleBody());
+        });
 
         $response = new Response($this->get('templating')->render('::labs-post.html.twig', $arguments));
 

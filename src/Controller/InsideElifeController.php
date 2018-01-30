@@ -69,32 +69,33 @@ final class InsideElifeController extends Controller
 
     public function articleAction(Request $request, string $id) : Response
     {
-        $article = $this->get('elife.api_sdk.blog_articles')
+        $arguments['item'] = $this->get('elife.api_sdk.blog_articles')
             ->get($id)
             ->otherwise($this->mightNotExist())
             ->then($this->checkSlug($request, Callback::method('getTitle')));
 
-        $arguments = $this->defaultPageArguments($request, $article);
+        $arguments = $this->defaultPageArguments($request, $arguments['item']);
 
-        $arguments['title'] = $article
+        $arguments['title'] = $arguments['item']
             ->then(Callback::method('getTitle'));
 
-        $arguments['article'] = $article;
-
-        $arguments['contentHeader'] = $arguments['article']
+        $arguments['contentHeader'] = $arguments['item']
             ->then($this->willConvertTo(ContentHeader::class));
 
-        $arguments['contextualData'] = $arguments['article']
+        $arguments['contextualData'] = $arguments['item']
             ->then($this->ifGranted(['FEATURE_CAN_USE_HYPOTHESIS'], function (BlogArticle $article) {
                 return ContextualData::annotationsOnly(SpeechBubble::forContextualData());
             }));
 
-        $arguments['blocks'] = $arguments['article']
-            ->then($this->willConvertContent());
+        $arguments['blocks'] = $arguments['item']
+            ->then($this->willConvertContent())
+            ->then(function (Sequence $blocks) {
+                if (!$this->isGranted('FEATURE_CAN_USE_HYPOTHESIS')) {
+                    return $blocks;
+                }
 
-        if ($this->isGranted('FEATURE_CAN_USE_HYPOTHESIS')) {
-            $arguments['speechBubble'] = SpeechBubble::forArticleBody();
-        }
+                return $blocks->prepend(SpeechBubble::forArticleBody());
+            });
 
         return new Response($this->get('templating')->render('::inside-elife-article.html.twig', $arguments));
     }
