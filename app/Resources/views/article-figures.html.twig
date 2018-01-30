@@ -1,7 +1,7 @@
 {% extends '::article.html.twig' %}
 
 {% block canonical %}
-    {{ path('article-figures', {id: article.id}) }}
+    {{ path('article-figures', {id: item.id}) }}
 {% endblock %}
 
 {% block article_body %}

@@ -6,7 +6,7 @@
 
     {{ parent() }}
 
-    {% if date(jobAdvert.closingDate) < date() %}
+    {% if date(item.closingDate) < date() %}
         <meta name="robots" content="noindex">
     {% endif %}
 

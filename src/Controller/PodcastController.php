@@ -70,26 +70,24 @@ final class PodcastController extends Controller
 
     public function episodeAction(Request $request, int $number) : Response
     {
-        $episode = $this->get('elife.api_sdk.podcast_episodes')
+        $item = $this->get('elife.api_sdk.podcast_episodes')
             ->get($number)
             ->otherwise($this->mightNotExist());
 
-        $arguments = $this->defaultPageArguments($request, $episode);
+        $arguments = $this->defaultPageArguments($request, $item);
 
-        $arguments['title'] = $episode
+        $arguments['title'] = $item
             ->then(Callback::method('getTitle'));
 
-        $arguments['episode'] = $episode;
-
-        $arguments['contentHeader'] = $arguments['episode']
+        $arguments['contentHeader'] = $arguments['item']
             ->then($this->willConvertTo(ContentHeader::class));
 
-        $arguments['chapters'] = $arguments['episode']
+        $arguments['chapters'] = $arguments['item']
             ->then(function (PodcastEpisode $episode) {
                 return $episode->getChapters()->map($this->willConvertTo(MediaChapterListingItem::class));
             });
 
-        $arguments['related'] = $arguments['episode']
+        $arguments['related'] = $arguments['item']
             ->then(function (PodcastEpisode $episode) {
                 return $episode->getChapters()
                     ->map(Callback::method('getContent'))

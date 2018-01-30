@@ -71,7 +71,7 @@ final class EventsController extends Controller
 
     public function eventAction(Request $request, string $id) : Response
     {
-        $event = $this->get('elife.api_sdk.events')
+        $arguments['item'] = $this->get('elife.api_sdk.events')
             ->get($id)
             ->otherwise($this->mightNotExist())
             ->then(function (Event $event) {
@@ -83,17 +83,15 @@ final class EventsController extends Controller
             })
             ->then($this->checkSlug($request, Callback::method('getTitle')));
 
-        $arguments = $this->defaultPageArguments($request, $event);
+        $arguments = $this->defaultPageArguments($request, $arguments['item']);
 
-        $arguments['title'] = $event
+        $arguments['title'] = $arguments['item']
             ->then(Callback::method('getTitle'));
 
-        $arguments['event'] = $event;
-
-        $arguments['contentHeader'] = $arguments['event']
+        $arguments['contentHeader'] = $arguments['item']
             ->then($this->willConvertTo(ContentHeader::class));
 
-        $arguments['blocks'] = $arguments['event']
+        $arguments['blocks'] = $arguments['item']
             ->then($this->willConvertContent());
 
         return new Response($this->get('templating')->render('::event.html.twig', $arguments));

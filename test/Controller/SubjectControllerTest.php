@@ -43,6 +43,12 @@ final class SubjectControllerTest extends PageTestCase
         $this->assertSame('https://www.example.com/iiif/banner/0,529,1800,543/1114,336/0/default.jpg', $crawler->filter('meta[property="og:image"]')->attr('content'));
         $this->assertSame('1114', $crawler->filter('meta[property="og:image:width"]')->attr('content'));
         $this->assertSame('336', $crawler->filter('meta[property="og:image:height"]')->attr('content'));
+        $this->assertEmpty($crawler->filter('meta[name="dc.identifier"]'));
+        $this->assertEmpty($crawler->filter('meta[name="dc.relation.ispartof"]'));
+        $this->assertEmpty($crawler->filter('meta[name="dc.title"]'));
+        $this->assertEmpty($crawler->filter('meta[name="dc.description"]'));
+        $this->assertEmpty($crawler->filter('meta[name="dc.date"]'));
+        $this->assertEmpty($crawler->filter('meta[name="dc.rights"]'));
     }
 
     /**

@@ -4,10 +4,6 @@
 
 {% block title %}{{ title|striptags }} | Interviews{% endblock %}
 
-{% block description %}
-    {{ interview.impactStatement|raw }}
-{% endblock %}
-
 {% block body %}
 
     {{ render_pattern(contentHeader) }}

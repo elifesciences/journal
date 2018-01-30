@@ -26,7 +26,7 @@ final class ProfilesController extends Controller
         $page = (int) $request->query->get('page', 1);
         $perPage = 10;
 
-        $profile = $this->get('elife.api_sdk.profiles')
+        $item = $this->get('elife.api_sdk.profiles')
             ->get($id)
             ->otherwise($this->mightNotExist());
 
@@ -38,16 +38,14 @@ final class ProfilesController extends Controller
                 return $pagerfanta;
             });
 
-        $arguments = $this->defaultPageArguments($request, $profile);
+        $arguments = $this->defaultPageArguments($request, $item);
 
-        $arguments['title'] = $profile
+        $arguments['title'] = $arguments['item']
             ->then(function (Profile $profile) {
                 return $profile->getDetails()->getPreferredName();
             });
 
-        $arguments['profile'] = $profile;
-
-        $arguments['contentHeader'] = $arguments['profile']
+        $arguments['contentHeader'] = $arguments['item']
             ->then(function (Profile $profile) use ($arguments) {
                 if ($arguments['user'] && $profile->getId() === $arguments['user']->getUsername()) {
                     $isUser = true;
