@@ -18,8 +18,7 @@ final class AuthController extends Controller
         }
 
         if ($referer = trim($request->headers->get('Referer'))) {
-            $firewall = $this->get('security.firewall.map')->getFirewallConfig($request);
-            $this->saveTargetPath($request->getSession(), $firewall->getName(), $referer);
+            $this->saveTargetPath($request->getSession(), 'main', $referer);
         }
 
         return $this->get('oauth2.registry')
