@@ -15,7 +15,7 @@ const request = require('request');
 const rev = require('gulp-rev-all');
 const svg2png = require('gulp-svg2png');
 
-const criticalCssPageTypes = require('./critical-css.json')
+const criticalCssPageTypes = require('./critical-css.json');
 
 
 gulp.task('default', ['assets']);
@@ -247,7 +247,11 @@ const criticalCssConfig = (function () {
             'p',
             /\.content-header.*/,
             /\.meta.*/,
+            '.hidden',
             '.wrapper.wrapper--content',
+            /\.contextual-data.*/,
+            /\.login-control.*/,
+            /\.speech-bubble.*/,
         ];
         const highlights = [/.*\.highlights.*$/];
         const listing = [
@@ -269,7 +273,6 @@ const criticalCssConfig = (function () {
         return {
             article: global.concat(
                 /\.content-header__item_toggle--.*$/,
-                /\.contextual-data.*/,
                 /\.view-selector.*/,
                 'h2',
                 '.article-section__header_text',
@@ -346,7 +349,7 @@ const criticalCssConfig = (function () {
     }());
 
     return {
-        baseUrl: 'http://localhost:8080',
+        baseUrl: 'http://localhost:8080?open-sesame',
         baseFilePath: './build/critical-css',
         assetPathPrefix: '/assets/patterns',
         dimensions: [
