@@ -3,6 +3,8 @@ set -e
 
 rm -f build/*.xml
 
+export SYMFONY__FEATURE_CAN_ALWAYS_USE_HYPOTHESIS__OVERRIDE=false
+
 echo "cache:clear"
 bin/console cache:clear --env=test --no-warmup
 
