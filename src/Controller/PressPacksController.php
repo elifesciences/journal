@@ -2,6 +2,7 @@
 
 namespace eLife\Journal\Controller;
 
+use eLife\ApiSdk\Collection\Sequence;
 use eLife\ApiSdk\Model\PressPackage;
 use eLife\Journal\Helper\Callback;
 use eLife\Journal\Helper\HasPages;
@@ -70,48 +71,49 @@ final class PressPacksController extends Controller
 
     public function pressPackAction(Request $request, string $id) : Response
     {
-        $package = $this->get('elife.api_sdk.press_packages')
+        $item = $this->get('elife.api_sdk.press_packages')
             ->get($id)
             ->otherwise($this->mightNotExist())
             ->then($this->checkSlug($request, Callback::method('getTitle')));
 
-        $arguments = $this->defaultPageArguments($request, $package);
+        $arguments = $this->defaultPageArguments($request, $item);
 
-        $arguments['title'] = $package
+        $arguments['title'] = $arguments['item']
             ->then(Callback::method('getTitle'));
 
-        $arguments['package'] = $package;
-
-        $arguments['contentHeader'] = $arguments['package']
+        $arguments['contentHeader'] = $arguments['item']
             ->then($this->willConvertTo(ContentHeader::class));
 
-        $arguments['contextualData'] = $arguments['package']
+        $arguments['contextualData'] = $arguments['item']
             ->then($this->ifGranted(['FEATURE_CAN_USE_HYPOTHESIS'], function (PressPackage $package) {
                 return ContextualData::annotationsOnly(SpeechBubble::forContextualData());
             }));
 
-        $arguments['blocks'] = $arguments['package']
+        $arguments['blocks'] = $arguments['item']
             ->then(function (PressPackage $package) {
-                $parts = $this->convertContent($package)->toArray();
+                $parts = $this->convertContent($package);
 
                 if ($package->getMediaContacts()->notEmpty()) {
                     $mediaContacts = Listing::ordered($package->getMediaContacts()->map($this->willConvertTo())->map($this->willRender())->toArray());
 
-                    $parts[] = ArticleSection::basic('Media contacts', 2, $this->render($mediaContacts));
+                    $parts = $parts->append(ArticleSection::basic('Media contacts', 2, $this->render($mediaContacts)));
                 }
 
                 if ($package->getAbout()->notEmpty()) {
-                    $parts[] = ArticleSection::basic('About', 2, $this->render(...$package->getAbout()->map($this->willConvertTo(null, ['level' => 2]))));
+                    $parts = $parts->append(ArticleSection::basic('About', 2, $this->render(...$package->getAbout()->map($this->willConvertTo(null, ['level' => 2])))));
                 }
 
                 return $parts;
+            })
+            ->then(function (Sequence $blocks) {
+                if (!$this->isGranted('FEATURE_CAN_USE_HYPOTHESIS')) {
+                    return $blocks;
+                }
+
+                return $blocks->prepend(SpeechBubble::forArticleBody());
             });
 
-        if ($this->isGranted('FEATURE_CAN_USE_HYPOTHESIS')) {
-            $arguments['speechBubble'] = SpeechBubble::forArticleBody();
-        }
-
-        $arguments['relatedContent'] = $arguments['package']
+        $arguments['relatedContent'] = $arguments['item']
             ->then(Callback::methodEmptyOr('getRelatedContent', function (PressPackage $package) {
                 return ListingTeasers::basic($package->getRelatedContent()->map($this->willConvertTo(Teaser::class, ['variant' => 'secondary']))->toArray());
             }));

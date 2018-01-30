@@ -1,27 +1,27 @@
 {% autoescape false %}
-@article {{ '{' }}{{ article.doi }},
+@article {{ '{' }}{{ item.doi }},
 article_type = {{ '{' }}journal{{ '}' }},
-title = {{ '{' }}{{ article.fullTitle|html2tex }}{{ '}' }},
-author = {{ '{' }}{% for author in article.authors %}{% if author.indexName is defined %}{% if not loop.first %} and {% endif %}{{ author.indexName }}{% elseif author.name is defined %}{% if not loop.first %} and {% endif %}{{ author.name }}{% endif %}{% endfor %}{{ '}' }},
-{% if article.reviewers|length %}
-editor = {{ '{' }}{% for reviewer in article.reviewers %}{{ reviewer.indexName }}{% if not loop.last %} and {% endif %}{% endfor %}{{ '}' }},
+title = {{ '{' }}{{ item.fullTitle|html2tex }}{{ '}' }},
+author = {{ '{' }}{% for author in item.authors %}{% if author.indexName is defined %}{% if not loop.first %} and {% endif %}{{ author.indexName }}{% elseif author.name is defined %}{% if not loop.first %} and {% endif %}{{ author.name }}{% endif %}{% endfor %}{{ '}' }},
+{% if item.reviewers|length %}
+editor = {{ '{' }}{% for reviewer in item.reviewers %}{{ reviewer.indexName }}{% if not loop.last %} and {% endif %}{% endfor %}{{ '}' }},
 {% endif %}
-volume = {{ article.volume }},
-{% if article.issue %}
-number = {{ article.issue }},
+volume = {{ item.volume }},
+{% if item.issue %}
+number = {{ item.issue }},
 {% endif %}
-year = {{ article.publishedDate|date('Y', 'UTC') }},
-month = {{ '{' }}{{ article.publishedDate|date('M', 'UTC')|lower }}{{ '}' }},
-pub_date = {{ '{' }}{{ article.publishedDate|date('Y-m-d', 'UTC') }}{{ '}' }},
-pages = {{ '{' }}{{ article.eLocationId }}{{ '}' }},
-citation = {{ '{' }}{{ article.citeAs }}{{ '}' }},
-doi = {{ '{' }}{{ article.doi }}{{ '}' }},
-url = {{ '{' }}https://doi.org/{{ article.doi }}{{ '}' }},
-{% if article.abstract %}
-abstract = {{ '{' }}{% for paragraph in article.abstract.content %}{{ paragraph.text|html2tex }}{% if not loop.last %} {% endif %}{% endfor %}{{ '}' }},
+year = {{ item.publishedDate|date('Y', 'UTC') }},
+month = {{ '{' }}{{ item.publishedDate|date('M', 'UTC')|lower }}{{ '}' }},
+pub_date = {{ '{' }}{{ item.publishedDate|date('Y-m-d', 'UTC') }}{{ '}' }},
+pages = {{ '{' }}{{ item.eLocationId }}{{ '}' }},
+citation = {{ '{' }}{{ item.citeAs }}{{ '}' }},
+doi = {{ '{' }}{{ item.doi }}{{ '}' }},
+url = {{ '{' }}https://doi.org/{{ item.doi }}{{ '}' }},
+{% if item.abstract %}
+abstract = {{ '{' }}{% for paragraph in item.abstract.content %}{{ paragraph.text|html2tex }}{% if not loop.last %} {% endif %}{% endfor %}{{ '}' }},
 {% endif %}
-{% if article.keywords is defined and article.keywords|length %}
-keywords = {{ '{' }}{% for keyword in article.keywords %}{{ keyword|html2tex }}{% if not loop.last %}, {% endif %}{% endfor %}{{ '}' }},
+{% if item.keywords is defined and item.keywords|length %}
+keywords = {{ '{' }}{% for keyword in item.keywords %}{{ keyword|html2tex }}{% if not loop.last %}, {% endif %}{% endfor %}{{ '}' }},
 {% endif %}
 journal = {{ '{' }}eLife{{ '}' }},
 issn = {{ '{' }}2050-084X{{ '}' }},

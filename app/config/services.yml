@@ -241,6 +241,14 @@ services:
           - '%hypothesis_client_id%'
           - '%hypothesis_client_secret%'
 
+    elife.journal.security.authenticator.elife:
+        class: eLife\Journal\Security\Authenticator\ElifeAuthenticator
+        public: false
+        arguments:
+          - '@oauth2.registry'
+          - '@router'
+          - '@security.http_utils'
+
     elife.journal.security.voter.feature.can_authenticate:
         class: eLife\Journal\Security\Voter\SessionAttributeVoter
         public: false
@@ -306,7 +314,7 @@ services:
           - name: twig.extension
 
     elife.journal.twig.extension.pattern:
-        class: eLife\Journal\Twig\PatternExtension
+        class: eLife\Patterns\Twig\PatternExtension
         arguments:
           - '@elife.patterns.pattern_renderer'
         tags:
