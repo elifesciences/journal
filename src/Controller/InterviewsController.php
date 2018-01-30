@@ -94,7 +94,14 @@ final class InterviewsController extends Controller
             }));
 
         $arguments['blocks'] = $arguments['item']
-            ->then($this->willConvertContent());
+            ->then($this->willConvertContent())
+            ->then(function (Sequence $blocks) {
+                if (!$this->isGranted('FEATURE_CAN_USE_HYPOTHESIS')) {
+                    return $blocks;
+                }
+
+                return $blocks->prepend(SpeechBubble::forArticleBody());
+            });
 
         $arguments['cv'] = $arguments['item']
             ->then(function (Interview $interview) {
@@ -112,10 +119,6 @@ final class InterviewsController extends Controller
                     $this->render($cv)
                 );
             });
-
-        if ($this->isGranted('FEATURE_CAN_USE_HYPOTHESIS')) {
-            $arguments['speechBubble'] = SpeechBubble::forArticleBody();
-        }
 
         $arguments['collections'] = $this->get('elife.api_sdk.collections')
             ->containing(Identifier::interview($id))

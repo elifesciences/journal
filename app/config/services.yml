@@ -314,7 +314,7 @@ services:
           - name: twig.extension
 
     elife.journal.twig.extension.pattern:
-        class: eLife\Journal\Twig\PatternExtension
+        class: eLife\Patterns\Twig\PatternExtension
         arguments:
           - '@elife.patterns.pattern_renderer'
         tags:

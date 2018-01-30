@@ -2,6 +2,7 @@
 
 namespace eLife\Journal\Controller;
 
+use eLife\ApiSdk\Collection\Sequence;
 use eLife\ApiSdk\Model\PressPackage;
 use eLife\Journal\Helper\Callback;
 use eLife\Journal\Helper\HasPages;
@@ -90,24 +91,27 @@ final class PressPacksController extends Controller
 
         $arguments['blocks'] = $arguments['item']
             ->then(function (PressPackage $package) {
-                $parts = $this->convertContent($package)->toArray();
+                $parts = $this->convertContent($package);
 
                 if ($package->getMediaContacts()->notEmpty()) {
                     $mediaContacts = Listing::ordered($package->getMediaContacts()->map($this->willConvertTo())->map($this->willRender())->toArray());
 
-                    $parts[] = ArticleSection::basic('Media contacts', 2, $this->render($mediaContacts));
+                    $parts = $parts->append(ArticleSection::basic('Media contacts', 2, $this->render($mediaContacts)));
                 }
 
                 if ($package->getAbout()->notEmpty()) {
-                    $parts[] = ArticleSection::basic('About', 2, $this->render(...$package->getAbout()->map($this->willConvertTo(null, ['level' => 2]))));
+                    $parts = $parts->append(ArticleSection::basic('About', 2, $this->render(...$package->getAbout()->map($this->willConvertTo(null, ['level' => 2])))));
                 }
 
                 return $parts;
-            });
+            })
+            ->then(function (Sequence $blocks) {
+                if (!$this->isGranted('FEATURE_CAN_USE_HYPOTHESIS')) {
+                    return $blocks;
+                }
 
-        if ($this->isGranted('FEATURE_CAN_USE_HYPOTHESIS')) {
-            $arguments['speechBubble'] = SpeechBubble::forArticleBody();
-        }
+                return $blocks->prepend(SpeechBubble::forArticleBody());
+            });
 
         $arguments['relatedContent'] = $arguments['item']
             ->then(Callback::methodEmptyOr('getRelatedContent', function (PressPackage $package) {
