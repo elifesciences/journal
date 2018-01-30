@@ -4,7 +4,6 @@ namespace test\eLife\Journal\Controller;
 
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
-use Symfony\Component\BrowserKit\Client;
 
 final class ProfileControllerTest extends PageTestCase
 {

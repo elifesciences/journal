@@ -2,7 +2,6 @@
 
 namespace eLife\Journal\Controller;
 
-use eLife\ApiSdk\Collection\Sequence;
 use eLife\ApiSdk\Model\PressPackage;
 use eLife\Journal\Helper\Callback;
 use eLife\Journal\Helper\HasPages;
