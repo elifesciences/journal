@@ -249,6 +249,9 @@ const criticalCssConfig = (function () {
             /\.meta.*/,
             '.hidden',
             '.wrapper.wrapper--content',
+            /\.contextual-data.*/,
+            /\.login-control.*/,
+            /\.speech-bubble.*/,
         ];
         const highlights = [/.*\.highlights.*$/];
         const listing = [
@@ -270,9 +273,6 @@ const criticalCssConfig = (function () {
         return {
             article: global.concat(
                 /\.content-header__item_toggle--.*$/,
-                /\.contextual-data.*/,
-                /\.login-control.*/,
-                /\.speech-bubble.*/,
                 /\.view-selector.*/,
                 'h2',
                 '.article-section__header_text',
