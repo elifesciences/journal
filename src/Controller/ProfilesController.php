@@ -19,10 +19,6 @@ final class ProfilesController extends Controller
 {
     public function profileAction(Request $request, string $id) : Response
     {
-        if (!$this->isGranted('FEATURE_CAN_VIEW_PROFILES')) {
-            throw new NotFoundHttpException('Not found');
-        }
-
         $page = (int) $request->query->get('page', 1);
         $perPage = 10;
 

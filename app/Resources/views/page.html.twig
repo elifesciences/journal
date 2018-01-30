@@ -242,7 +242,7 @@
         <script async src="{{ asset(javascript) }}"></script>
     {% endfor %}
 
-    {% if hypothesis ?? false and is_granted('FEATURE_CAN_USE_HYPOTHESIS') %}
+    {% if hypothesis ?? false %}
         <script>
             if (!!document.createElement('div').dataset) {
                 window.hypothesisConfig = function () {

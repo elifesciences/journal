@@ -9,14 +9,6 @@ final class ProfileContext extends Context
     private $numberOfAnnotations;
 
     /**
-     * @BeforeScenario
-     */
-    public function enableFeature()
-    {
-        $this->visitPath('/about?open-sesame');
-    }
-
-    /**
      * @Given /^([A-Za-z\s]+) has (\d+) annotations?$/
      */
     public function profileHasAnnotations(string $name, int $number)

@@ -61,6 +61,8 @@ final class ElifeAuthenticator extends SocialAuthenticator
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey) : Response
     {
+        $request->getSession()->migrate(true);
+
         if ($targetPath = $this->getTargetPath($request->getSession(), $providerKey)) {
             $this->removeTargetPath($request->getSession(), $providerKey);
 

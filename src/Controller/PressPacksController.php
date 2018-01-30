@@ -84,10 +84,7 @@ final class PressPacksController extends Controller
         $arguments['contentHeader'] = $arguments['item']
             ->then($this->willConvertTo(ContentHeader::class));
 
-        $arguments['contextualData'] = $arguments['item']
-            ->then($this->ifGranted(['FEATURE_CAN_USE_HYPOTHESIS'], function (PressPackage $package) {
-                return ContextualData::annotationsOnly(SpeechBubble::forContextualData());
-            }));
+        $arguments['contextualData'] = ContextualData::annotationsOnly(SpeechBubble::forContextualData());
 
         $arguments['blocks'] = $arguments['item']
             ->then(function (PressPackage $package) {
@@ -103,14 +100,7 @@ final class PressPacksController extends Controller
                     $parts = $parts->append(ArticleSection::basic('About', 2, $this->render(...$package->getAbout()->map($this->willConvertTo(null, ['level' => 2])))));
                 }
 
-                return $parts;
-            })
-            ->then(function (Sequence $blocks) {
-                if (!$this->isGranted('FEATURE_CAN_USE_HYPOTHESIS')) {
-                    return $blocks;
-                }
-
-                return $blocks->prepend(SpeechBubble::forArticleBody());
+                return $parts->prepend(SpeechBubble::forArticleBody());
             });
 
         $arguments['relatedContent'] = $arguments['item']

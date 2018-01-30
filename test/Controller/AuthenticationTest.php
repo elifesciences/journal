@@ -15,25 +15,7 @@ final class AuthenticationTest extends WebTestCase
     /**
      * @test
      */
-    public function it_does_not_let_you_log_in_when_the_feature_flag_is_disabled()
-    {
-        $client = static::createClient();
-
-        $this->readyHomePage();
-
-        $crawler = $client->request('GET', '/');
-
-        $this->assertEmpty($crawler->filter('.login-control'));
-
-        $client->request('GET', '/log-in');
-
-        $this->assertSame(404, $client->getResponse()->getStatusCode());
-    }
-
-    /**
-     * @test
-     */
-    public function it_lets_you_log_in_when_the_feature_flag_is_enabled()
+    public function it_lets_you_log_in()
     {
         $client = static::createClient();
 
@@ -41,7 +23,7 @@ final class AuthenticationTest extends WebTestCase
 
         $this->readyHomePage();
 
-        $crawler = $client->request('GET', '/?open-sesame');
+        $crawler = $client->request('GET', '/');
 
         $client->click($crawler->filter('a:contains("Log in/Register (via ORCID)")')->link());
 
@@ -92,7 +74,7 @@ final class AuthenticationTest extends WebTestCase
         $client = static::createClient();
         $client->followRedirects(false);
 
-        $client->request('GET', '/log-in?open-sesame', [], [], array_filter(['HTTP_REFERER' => $referer]));
+        $client->request('GET', '/log-in', [], [], array_filter(['HTTP_REFERER' => $referer]));
         $response = $client->getResponse();
 
         $this->assertTrue($response->isRedirect());
@@ -132,10 +114,7 @@ final class AuthenticationTest extends WebTestCase
 
         $this->readyHomePage();
 
-        $crawler = $client->request('GET', '/?open-sesame');
-
-        $client->click($crawler->filter('a:contains("Log in/Register (via ORCID)")')->link());
-
+        $client->request('GET', '/log-in');
         $response = $client->getResponse();
 
         $this->assertTrue($response->isRedirect());
@@ -189,10 +168,7 @@ final class AuthenticationTest extends WebTestCase
 
         $this->readyHomePage();
 
-        $crawler = $client->request('GET', '/?open-sesame');
-
-        $client->click($crawler->filter('a:contains("Log in/Register (via ORCID)")')->link());
-
+        $client->request('GET', '/log-in');
         $response = $client->getResponse();
 
         $this->assertTrue($response->isRedirect());
@@ -275,13 +251,13 @@ final class AuthenticationTest extends WebTestCase
         $crawler = $client->followRedirect();
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
-        $this->assertEmpty($crawler->filter('.login-control'));
+        $this->assertCount(1, $crawler->filter('a:contains("Log in/Register (via ORCID)")'));
     }
 
     /**
      * @test
      */
-    public function it_disables_the_feature_flag_when_you_log_out()
+    public function it_lets_you_log_out()
     {
         $client = static::createClient();
 
@@ -311,7 +287,7 @@ final class AuthenticationTest extends WebTestCase
         $crawler = $client->click($crawler->filter('a:contains("Josiah Carberry")')->link());
         $crawler = $client->click($crawler->filter('a:contains("Log out")')->link());
 
-        $this->assertEmpty($crawler->filter('.login-control'));
+        $this->assertCount(1, $crawler->filter('a:contains("Log in/Register (via ORCID)")'));
     }
 
     private function readyHomePage()

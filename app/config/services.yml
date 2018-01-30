@@ -189,14 +189,6 @@ services:
         tags:
           - name: kernel.event_subscriber
 
-    elife.journal.listener.open_sesame:
-        class: eLife\Journal\EventListener\QueryStringParameterToSessionAttributeSubscriber
-        arguments:
-          - 'open-sesame'
-          - 'open-sesame'
-        tags:
-          - name: kernel.event_subscriber
-
     elife.journal.mustache.loader:
         class: Mustache_Loader_CascadingLoader
         public: false
@@ -248,36 +240,6 @@ services:
           - '@oauth2.registry'
           - '@router'
           - '@security.http_utils'
-
-    elife.journal.security.voter.feature.can_authenticate:
-        class: eLife\Journal\Security\Voter\SessionAttributeVoter
-        public: false
-        arguments:
-          - '@request_stack'
-          - FEATURE_CAN_AUTHENTICATE
-          - open-sesame
-        tags:
-          - name: security.voter
-
-    elife.journal.security.voter.feature.use_hypothesis:
-        class: eLife\Journal\Security\Voter\SessionAttributeVoter
-        public: false
-        arguments:
-          - '@request_stack'
-          - FEATURE_CAN_USE_HYPOTHESIS
-          - open-sesame
-        tags:
-          - name: security.voter
-
-    elife.journal.security.voter.feature.view_profiles:
-        class: eLife\Journal\Security\Voter\SessionAttributeVoter
-        public: false
-        arguments:
-          - '@request_stack'
-          - FEATURE_CAN_VIEW_PROFILES
-          - open-sesame
-        tags:
-          - name: security.voter
 
     elife.journal.templating.promise_aware:
         class: eLife\Journal\Templating\PromiseAwareEngine
