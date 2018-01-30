@@ -2,4 +2,4 @@ imports:
   - resource: config_test.yml
 
 parameters:
-    feature_can_always_use_hypothesis.override: false # can't get this set back to the parameters.yml value
+    feature_can_always_use_hypothesis: false # can't get this set back to the parameters.yml value
