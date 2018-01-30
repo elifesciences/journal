@@ -83,10 +83,6 @@ final class ArticlesController extends Controller
 
         $arguments['relatedItem'] = $arguments['furtherReading']->then(Callback::method('offsetGet', 0));
 
-        if ($this->isGranted('FEATURE_CAN_USE_HYPOTHESIS')) {
-            $arguments['speechBubble'] = SpeechBubble::forArticleBody();
-        }
-
         $furtherReading = $this->pagerfantaPromise(
             $arguments['furtherReading'],
             $page,
@@ -290,6 +286,10 @@ final class ArticlesController extends Controller
 
                         return $section;
                     })->toArray());
+                }
+
+                if ($this->isGranted('FEATURE_CAN_USE_HYPOTHESIS')) {
+                    $parts[] = SpeechBubble::forArticleBody();
                 }
 
                 if ($item instanceof ArticleVoR) {

@@ -93,11 +93,14 @@ Learn more about <a href="'.$this->get('router')->generate('about-innovation').'
             }));
 
         $arguments['blocks'] = $arguments['item']
-            ->then($this->willConvertContent());
+        ->then($this->willConvertContent())
+        ->then(function (Sequence $blocks) {
+            if (!$this->isGranted('FEATURE_CAN_USE_HYPOTHESIS')) {
+                return $blocks;
+            }
 
-        if ($this->isGranted('FEATURE_CAN_USE_HYPOTHESIS')) {
-            $arguments['speechBubble'] = SpeechBubble::forArticleBody();
-        }
+            return $blocks->prepend(SpeechBubble::forArticleBody());
+        });
 
         $response = new Response($this->get('templating')->render('::labs-post.html.twig', $arguments));
 
