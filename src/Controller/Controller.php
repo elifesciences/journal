@@ -178,7 +178,7 @@ abstract class Controller implements ContainerAwareInterface
         }
     }
 
-    final protected function defaultPageArguments(Request $request, PromiseInterface $model = null) : array
+    final protected function defaultPageArguments(Request $request, PromiseInterface $item = null) : array
     {
         /** @var FormInterface $form */
         $form = $this->get('form.factory')
@@ -222,14 +222,15 @@ abstract class Controller implements ContainerAwareInterface
         }
 
         return [
-            'header' => all(['model' => promise_for($model), 'profile' => promise_for($profile ?? null)])
+            'header' => all(['item' => promise_for($item), 'profile' => promise_for($profile ?? null)])
                 ->then(function (array $parts) {
-                    return $this->get('elife.journal.view_model.factory.site_header')->createSiteHeader($parts['model'], $parts['profile']);
+                    return $this->get('elife.journal.view_model.factory.site_header')->createSiteHeader($parts['item'], $parts['profile']);
                 }),
             'infoBars' => [],
             'emailCta' => $this->get('elife.journal.view_model.converter')->convert($form->createView()),
             'footer' => $this->get('elife.journal.view_model.factory.footer')->createFooter(),
             'user' => $user ?? null,
+            'item' => $item,
         ];
     }
 }

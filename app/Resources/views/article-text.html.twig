@@ -89,9 +89,9 @@
         <script>
             if (!!document.createElement('div').dataset) {
                 var disqus_config = function () {
-                    this.page.url = '{{ url('article', {id: article.id}) }}';
-                    this.page.title = '{{ article.fullTitle|striptags }}';
-                    this.page.identifier = 'article:{{ article.id }}';
+                    this.page.url = '{{ url('article', {id: item.id}) }}';
+                    this.page.title = '{{ item.fullTitle|striptags }}';
+                    this.page.identifier = 'article:{{ item.id }}';
                 };
 
                 (function () {
