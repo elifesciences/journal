@@ -59,14 +59,13 @@ final class SubjectsController extends Controller
         $page = (int) $request->query->get('page', 1);
         $perPage = 10;
 
-        $subject = $this->get('elife.api_sdk.subjects')
+        $item = $this->get('elife.api_sdk.subjects')
             ->get($id)
             ->otherwise($this->mightNotExist());
 
-        $arguments = $this->defaultPageArguments($request, $subject);
+        $arguments = $this->defaultPageArguments($request, $item);
 
         $arguments['id'] = $id;
-        $arguments['subject'] = $subject;
 
         $latestArticles = promise_for($this->get('elife.api_sdk.search')
             ->forSubject($id)
@@ -79,16 +78,16 @@ final class SubjectsController extends Controller
                 return $pagerfanta;
             });
 
-        $arguments['title'] = $arguments['subject']
+        $arguments['title'] = $arguments['item']
             ->then(Callback::method('getName'));
 
-        $arguments['paginator'] = all(['subject' => $arguments['subject'], 'latestArticles' => $latestArticles])
+        $arguments['paginator'] = all(['item' => $arguments['item'], 'latestArticles' => $latestArticles])
             ->then(function (array $parts) use ($request) {
-                $subject = $parts['subject'];
+                $item = $parts['item'];
                 $latestArticles = $parts['latestArticles'];
 
                 return new Paginator(
-                    sprintf('Browse our latest %s articles', $subject->getName()),
+                    sprintf('Browse our latest %s articles', $item->getName()),
                     $latestArticles,
                     function (int $page = null) use ($request) {
                         $routeParams = $request->attributes->get('_route_params');
@@ -111,7 +110,7 @@ final class SubjectsController extends Controller
 
     private function createFirstPage(array $arguments) : Response
     {
-        $arguments['contentHeader'] = $arguments['subject']
+        $arguments['contentHeader'] = $arguments['item']
             ->then($this->willConvertTo(ContentHeader::class));
 
         $arguments['highlights'] = (new PromiseSequence($this->get('elife.api_sdk.highlights')

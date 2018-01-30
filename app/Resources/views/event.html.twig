@@ -6,7 +6,7 @@
 
     {{ parent() }}
 
-    {% if date(event.ends) < date() %}
+    {% if date(item.ends) < date() %}
         <meta name="robots" content="noindex">
     {% endif %}
 
@@ -14,7 +14,7 @@
 
 {% block body %}
 
-    {% if date(event.ends) < date() %}
+    {% if date(item.ends) < date() %}
         {{ info_bar('This event has finished.', constant('eLife\\Patterns\\ViewModel\\InfoBar::TYPE_ATTENTION')) }}
     {% endif %}
 

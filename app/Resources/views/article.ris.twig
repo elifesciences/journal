@@ -1,34 +1,34 @@
 {% autoescape false %}
 TY  - JOUR
-TI  - {{ article.title|html2ris }}
-{% for author in article.authors %}
+TI  - {{ item.title|html2ris }}
+{% for author in item.authors %}
 {% if author.indexName is defined %}
 AU  - {{ author.indexName }}
 {% elseif author.name is defined %}
 AU  - {{ author.name }}
 {% endif %}
 {% endfor %}
-{% if article.reviewers|length %}
-{% for reviewer in article.reviewers %}
+{% if item.reviewers|length %}
+{% for reviewer in item.reviewers %}
 A2  - {{ reviewer.indexName }}
 {% endfor %}
 {% endif %}
-VL  - {{ article.volume }}
-{% if article.issue %}
-IS  - {{ article.issue }}
+VL  - {{ item.volume }}
+{% if item.issue %}
+IS  - {{ item.issue }}
 {% endif %}
-PY  - {{ article.publishedDate|date('Y', 'UTC') }}
-DA  - {{ article.publishedDate|date('Y/m/d', 'UTC') }}
-SP  - {{ article.eLocationId }}
-C1  - {{ article.citeAs }}
-DO  - {{ article.doi }}
-UR  - https://doi.org/{{ article.doi }}
-{% if article.abstract %}
-AB  - {% for paragraph in article.abstract.content %}{{ paragraph.text|html2ris }}{% if not loop.last %} {% endif %}{% endfor %}
+PY  - {{ item.publishedDate|date('Y', 'UTC') }}
+DA  - {{ item.publishedDate|date('Y/m/d', 'UTC') }}
+SP  - {{ item.eLocationId }}
+C1  - {{ item.citeAs }}
+DO  - {{ item.doi }}
+UR  - https://doi.org/{{ item.doi }}
+{% if item.abstract %}
+AB  - {% for paragraph in item.abstract.content %}{{ paragraph.text|html2ris }}{% if not loop.last %} {% endif %}{% endfor %}
 
 {% endif %}
-{% if article.keywords is defined and article.keywords|length %}
-{% for keyword in article.keywords %}
+{% if item.keywords is defined and item.keywords|length %}
+{% for keyword in item.keywords %}
 KW  - {{ keyword|html2ris }}
 {% endfor %}
 {% endif %}

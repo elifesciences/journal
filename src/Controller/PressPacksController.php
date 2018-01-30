@@ -71,27 +71,25 @@ final class PressPacksController extends Controller
 
     public function pressPackAction(Request $request, string $id) : Response
     {
-        $package = $this->get('elife.api_sdk.press_packages')
+        $item = $this->get('elife.api_sdk.press_packages')
             ->get($id)
             ->otherwise($this->mightNotExist())
             ->then($this->checkSlug($request, Callback::method('getTitle')));
 
-        $arguments = $this->defaultPageArguments($request, $package);
+        $arguments = $this->defaultPageArguments($request, $item);
 
-        $arguments['title'] = $package
+        $arguments['title'] = $arguments['item']
             ->then(Callback::method('getTitle'));
 
-        $arguments['package'] = $package;
-
-        $arguments['contentHeader'] = $arguments['package']
+        $arguments['contentHeader'] = $arguments['item']
             ->then($this->willConvertTo(ContentHeader::class));
 
-        $arguments['contextualData'] = $arguments['package']
+        $arguments['contextualData'] = $arguments['item']
             ->then($this->ifGranted(['FEATURE_CAN_USE_HYPOTHESIS'], function (PressPackage $package) {
                 return ContextualData::annotationsOnly(SpeechBubble::forContextualData());
             }));
 
-        $arguments['blocks'] = $arguments['package']
+        $arguments['blocks'] = $arguments['item']
             ->then(function (PressPackage $package) {
                 $parts = $this->convertContent($package);
 
@@ -115,7 +113,7 @@ final class PressPacksController extends Controller
                 return $blocks->prepend(SpeechBubble::forArticleBody());
             });
 
-        $arguments['relatedContent'] = $arguments['package']
+        $arguments['relatedContent'] = $arguments['item']
             ->then(Callback::methodEmptyOr('getRelatedContent', function (PressPackage $package) {
                 return ListingTeasers::basic($package->getRelatedContent()->map($this->willConvertTo(Teaser::class, ['variant' => 'secondary']))->toArray());
             }));

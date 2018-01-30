@@ -35,6 +35,13 @@ final class AboutControllerTest extends PageTestCase
         $this->assertSame('We want to improve all aspects of research communication in support of excellence in science', $crawler->filter('meta[property="og:description"]')->attr('content'));
         $this->assertSame('We want to improve all aspects of research communication in support of excellence in science', $crawler->filter('meta[name="description"]')->attr('content'));
         $this->assertSame('summary', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
+        $this->assertEmpty($crawler->filter('meta[property="og:image"]'));
+        $this->assertEmpty($crawler->filter('meta[name="dc.identifier"]'));
+        $this->assertEmpty($crawler->filter('meta[name="dc.relation.ispartof"]'));
+        $this->assertEmpty($crawler->filter('meta[name="dc.title"]'));
+        $this->assertEmpty($crawler->filter('meta[name="dc.description"]'));
+        $this->assertEmpty($crawler->filter('meta[name="dc.date"]'));
+        $this->assertEmpty($crawler->filter('meta[name="dc.rights"]'));
     }
 
     protected function getUrl() : string

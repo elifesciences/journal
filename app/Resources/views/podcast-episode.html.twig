@@ -6,7 +6,7 @@
 
     {{ parent() }}
 
-    {% for source in episode.sources %}
+    {% for source in item.sources %}
         <meta property="og:audio:url" content="{{ source.uri }}">
         <meta property="og:audio:type" content="{{ source.mediaType }}">
     {% endfor %}

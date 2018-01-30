@@ -2,59 +2,42 @@
 
 namespace eLife\Journal\Security\OAuth2;
 
-use Http\Client\Exception\HttpException;
-use HWI\Bundle\OAuthBundle\OAuth\Exception\HttpTransportException;
-use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\GenericOAuth2ResourceOwner;
-use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
-use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use League\OAuth2\Client\Provider\ResourceOwnerInterface;
 
-final class ElifeResourceOwner extends GenericOAuth2ResourceOwner
+final class ElifeResourceOwner implements ResourceOwnerInterface
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function getUserInformation(array $accessToken, array $extraParameters = [])
+    private $id;
+    private $orcid;
+    private $name;
+
+    public function __construct(string $id, string $orcid, string $name)
     {
-        $response = $this->getUserResponse();
-        $response->setData($accessToken);
-
-        $response->setResourceOwner($this);
-        $response->setOAuthToken(new OAuthToken($accessToken));
-
-        return $response;
+        $this->id = $id;
+        $this->orcid = $orcid;
+        $this->name = $name;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function doGetTokenRequest($url, array $parameters = [])
+    public function getId() : string
     {
-        try {
-            return $this->httpRequest(
-                $url,
-                http_build_query($parameters, '', '&'),
-                ['Content-Type' => 'application/x-www-form-urlencoded'],
-                'POST'
-            );
-        } catch (HttpTransportException $e) {
-            $previous = $e->getPrevious();
-            if (false === $previous instanceof HttpException) {
-                throw $e;
-            }
-
-            if (false !== strpos($previous->getResponse()->getBody(), 'No name visible')) {
-                throw new AuthenticationException('No name visible', 0, $e);
-            }
-
-            throw $e;
-        }
+        return $this->id;
     }
 
-    protected function configureOptions(OptionsResolver $resolver)
+    public function getOrcid() : string
     {
-        parent::configureOptions($resolver);
+        return $this->orcid;
+    }
 
-        $resolver->remove('infos_url');
+    public function getName() : string
+    {
+        return $this->name;
+    }
+
+    public function toArray() : array
+    {
+        return [
+            'id' => $this->id,
+            'orcid' => $this->orcid,
+            'name' => $this->name,
+        ];
     }
 }
