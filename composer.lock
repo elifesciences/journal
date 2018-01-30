@@ -956,7 +956,7 @@
                 "MIT"
             ],
             "description": "eLife Sciences API client",
-            "time": "2018-01-22T10:57:35+00:00"
+            "time": "2018-01-22 10:57:35"
         },
         {
             "name": "elife/api-sdk",
@@ -1005,7 +1005,7 @@
                 "MIT"
             ],
             "description": "eLife Sciences API SDK",
-            "time": "2018-01-24T09:33:35+00:00"
+            "time": "2018-01-24 09:33:35"
         },
         {
             "name": "elife/patterns",
@@ -1013,12 +1013,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/patterns-php.git",
-                "reference": "bd4b8bfb40bde90f5c669b240d37fc2afcff3556"
+                "reference": "5eeecf0fc1237d1a256a96981ce7c4d006e468eb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/bd4b8bfb40bde90f5c669b240d37fc2afcff3556",
-                "reference": "bd4b8bfb40bde90f5c669b240d37fc2afcff3556",
+                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/5eeecf0fc1237d1a256a96981ce7c4d006e468eb",
+                "reference": "5eeecf0fc1237d1a256a96981ce7c4d006e468eb",
                 "shasum": ""
             },
             "require": {
@@ -1035,7 +1035,11 @@
                 "symfony/filesystem": "^3.0",
                 "symfony/finder": "^3.0",
                 "symfony/process": "^3.0",
-                "symfony/yaml": "^3.1"
+                "symfony/yaml": "^3.1",
+                "twig/twig": "^2.0"
+            },
+            "suggest": {
+                "twig/twig": "^2.0, to use PatternExtension"
             },
             "type": "library",
             "autoload": {
@@ -1051,7 +1055,7 @@
                 "MIT"
             ],
             "description": "eLife patterns",
-            "time": "2018-01-29T13:00:13+00:00"
+            "time": "2018-01-30 12:03:06"
         },
         {
             "name": "fabpot/goutte",
@@ -1395,12 +1399,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/hwi/HWIOAuthBundle.git",
-                "reference": "2a6f3d983f35bf5b8273d015ec7b3eb5d64d9316"
+                "reference": "e9e1c4d08d32e31aed53341d27d950be7bb2ac66"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/hwi/HWIOAuthBundle/zipball/2a6f3d983f35bf5b8273d015ec7b3eb5d64d9316",
-                "reference": "2a6f3d983f35bf5b8273d015ec7b3eb5d64d9316",
+                "url": "https://api.github.com/repos/hwi/HWIOAuthBundle/zipball/e9e1c4d08d32e31aed53341d27d950be7bb2ac66",
+                "reference": "e9e1c4d08d32e31aed53341d27d950be7bb2ac66",
                 "shasum": ""
             },
             "require": {
@@ -1408,16 +1412,15 @@
                 "php-http/client-common": "^1.3",
                 "php-http/client-implementation": "^1.0",
                 "php-http/discovery": "^1.0",
-                "php-http/guzzle6-adapter": "^1.1",
                 "php-http/httplug": "^1.0",
                 "php-http/message-factory": "^1.0",
                 "psr/http-message": "^1.0",
-                "symfony/form": "^2.7|^3.0|^4.0",
-                "symfony/framework-bundle": "^2.7|^3.0|^4.0",
-                "symfony/options-resolver": "^2.7|^3.0|^4.0",
-                "symfony/security-bundle": "^2.7|^3.0|^4.0",
-                "symfony/templating": "^2.7|^3.0|^4.0",
-                "symfony/yaml": "^2.7|^3.0|^4.0"
+                "symfony/form": "^2.8|^3.0|^4.0",
+                "symfony/framework-bundle": "^2.8|^3.0|^4.0",
+                "symfony/options-resolver": "^2.8|^3.0|^4.0",
+                "symfony/security-bundle": "^2.8|^3.0|^4.0",
+                "symfony/templating": "^2.8|^3.0|^4.0",
+                "symfony/yaml": "^2.8|^3.0|^4.0"
             },
             "conflict": {
                 "twig/twig": "<1.12"
@@ -1426,16 +1429,19 @@
                 "doctrine/orm": "^2.3",
                 "friendsofphp/php-cs-fixer": "^2.0",
                 "friendsofsymfony/user-bundle": "^1.3|^2.0",
+                "php-http/guzzle6-adapter": "^1.1",
+                "php-http/httplug-bundle": "^1.7",
                 "phpunit/phpunit": "^5.7",
-                "symfony/phpunit-bridge": "^2.7|^3.0|^4.0",
-                "symfony/property-access": "^2.7|^3.0|^4.0",
-                "symfony/stopwatch": "^2.7|^3.0|^4.0",
-                "symfony/twig-bundle": "^2.7|^3.0|^4.0",
-                "symfony/validator": "^2.7|^3.0|^4.0"
+                "symfony/phpunit-bridge": "^2.8|^3.0|^4.0",
+                "symfony/property-access": "^2.8|^3.0|^4.0",
+                "symfony/stopwatch": "^2.8|^3.0|^4.0",
+                "symfony/twig-bundle": "^2.8|^3.0|^4.0",
+                "symfony/validator": "^2.8|^3.0|^4.0"
             },
             "suggest": {
                 "doctrine/doctrine-bundle": "to use Doctrine user provider",
                 "friendsofsymfony/user-bundle": "to connect FOSUB with this bundle",
+                "php-http/httplug-bundle": "to provide required HTTP client with ease.",
                 "symfony/property-access": "to use FOSUB integration with this bundle",
                 "symfony/twig-bundle": "to use the Twig hwi_oauth_* functions"
             },
@@ -1543,7 +1549,7 @@
                 "yandex",
                 "youtube"
             ],
-            "time": "2017-08-27T08:33:01+00:00"
+            "time": "2018-01-23 14:29:00"
         },
         {
             "name": "isometriks/spam-bundle",
@@ -4012,7 +4018,7 @@
                 "MIT"
             ],
             "description": "eLife Sciences API specification",
-            "time": "2018-01-24T08:11:41+00:00"
+            "time": "2018-01-24 08:11:41"
         },
         {
             "name": "elife/api-validator",
@@ -4056,7 +4062,7 @@
                 "MIT"
             ],
             "description": "eLife Sciences API validator",
-            "time": "2017-09-06T06:41:40+00:00"
+            "time": "2017-09-06 06:41:40"
         },
         {
             "name": "instaclick/php-webdriver",
