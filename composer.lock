@@ -961,12 +961,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/patterns-php.git",
-                "reference": "df596ba8dfe3af2c85080e9f1cc44865c7ca21e7"
+                "reference": "5eeecf0fc1237d1a256a96981ce7c4d006e468eb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/df596ba8dfe3af2c85080e9f1cc44865c7ca21e7",
-                "reference": "df596ba8dfe3af2c85080e9f1cc44865c7ca21e7",
+                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/5eeecf0fc1237d1a256a96981ce7c4d006e468eb",
+                "reference": "5eeecf0fc1237d1a256a96981ce7c4d006e468eb",
                 "shasum": ""
             },
             "require": {
@@ -983,7 +983,11 @@
                 "symfony/filesystem": "^3.0",
                 "symfony/finder": "^3.0",
                 "symfony/process": "^3.0",
-                "symfony/yaml": "^3.1"
+                "symfony/yaml": "^3.1",
+                "twig/twig": "^2.0"
+            },
+            "suggest": {
+                "twig/twig": "^2.0, to use PatternExtension"
             },
             "type": "library",
             "autoload": {
@@ -999,7 +1003,7 @@
                 "MIT"
             ],
             "description": "eLife patterns",
-            "time": "2018-01-30T08:18:39+00:00"
+            "time": "2018-01-30T12:03:06+00:00"
         },
         {
             "name": "fabpot/goutte",
