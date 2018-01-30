@@ -44,7 +44,7 @@ final class ContactControllerTest extends PageTestCase
 
         $client->request('GET', $this->getUrl());
 
-        $this->assertSame('must-revalidate, no-cache, no-store, private', $client->getResponse()->headers->get('Cache-Control'));
+        $this->assertSame('max-age=0, must-revalidate, no-cache, no-store, private', $client->getResponse()->headers->get('Cache-Control'));
         $this->assertEmpty($client->getResponse()->getVary());
     }
 
