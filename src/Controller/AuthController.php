@@ -13,7 +13,7 @@ final class AuthController extends Controller
 
     public function redirectAction(Request $request) : Response
     {
-        if (!$this->isGranted('FEATURE_CAN_AUTHENTICATE')) {
+        if (!$this->isGranted('FEATURE_CAN_USE_HYPOTHESIS')) {
             throw new NotFoundHttpException('Not found');
         }
 

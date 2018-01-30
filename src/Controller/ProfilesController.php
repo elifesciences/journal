@@ -19,7 +19,7 @@ final class ProfilesController extends Controller
 {
     public function profileAction(Request $request, string $id) : Response
     {
-        if (!$this->isGranted('FEATURE_CAN_VIEW_PROFILES')) {
+        if (!$this->isGranted('FEATURE_CAN_USE_HYPOTHESIS')) {
             throw new NotFoundHttpException('Not found');
         }
 
