@@ -4,7 +4,7 @@ set -e
 rm -f build/*.xml
 
 echo "cache:clear"
-rm -rf var/cache/test/ # temporary change to see the build complete, formula change is actually needed
+bin/console cache:clear --env=test --no-warmup
 
 echo "security:check"
 bin/console security:check
