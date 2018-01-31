@@ -852,13 +852,13 @@ final class ArticlesController extends Controller
 
                 return new ViewSelector(
                     $this->generateTextPath($history, $item->getVersion()),
-                    array_filter(array_map(function (ViewModel $viewModel) {
+                    array_values(array_filter(array_map(function (ViewModel $viewModel) {
                         if ($viewModel instanceof ArticleSection) {
                             return new Link($viewModel['title'], '#'.$viewModel['id']);
                         }
 
                         return null;
-                    }, $sections)),
+                    }, $sections))),
                     $hasFigures ? $this->generateFiguresPath($history, $item->getVersion()) : null,
                     $isFiguresPage,
                     $item instanceof ArticleVoR
