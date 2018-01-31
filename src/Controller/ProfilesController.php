@@ -33,7 +33,7 @@ final class ProfilesController extends Controller
         if ($this->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             $user = $this->get('security.token_storage')->getToken()->getUser();
 
-            if ($user->getUsername() === $id) {
+            if ($id === $user->getUsername()) {
                 $access = 'restricted';
             }
         }
