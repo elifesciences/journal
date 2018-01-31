@@ -63,7 +63,7 @@ framework:
         resource: '%kernel.project_dir%/app/config/routing.yml'
     secret: '%secret%'
     session:
-        cookie_lifetime: 86400 # 1 day
+        cookie_lifetime: 2592000 # 30 days
         name: '%session_name%'
         save_path: '0;660;%kernel.project_dir%/var/sessions/%kernel.environment%'
     templating:
