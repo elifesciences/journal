@@ -85,6 +85,25 @@ final class AuthenticationTest extends WebTestCase
 
     /**
      * @test
+     * @runInSeparateProcess
+     */
+    public function it_lets_you_log_in_when_the_feature_flag_is_forced()
+    {
+        $_ENV['FEATURE_CAN_ALWAYS_USE_HYPOTHESIS'] = true;
+
+        $client = static::createClient();
+
+        $client->followRedirects(false);
+
+        $this->readyHomePage();
+
+        $crawler = $client->request('GET', '/');
+
+        $this->assertCount(1, $crawler->filter('a:contains("Log in/Register (via ORCID)")'));
+    }
+
+    /**
+     * @test
      * @dataProvider refererProvider
      */
     public function it_uses_the_referer_header_for_redirecting_after_logging_in(string $referer, string $expectedRedirect)

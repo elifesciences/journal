@@ -249,16 +249,6 @@ services:
           - '@router'
           - '@security.http_utils'
 
-    elife.journal.security.voter.feature.can_authenticate:
-        class: eLife\Journal\Security\Voter\SessionAttributeVoter
-        public: false
-        arguments:
-          - '@request_stack'
-          - FEATURE_CAN_AUTHENTICATE
-          - open-sesame
-        tags:
-          - name: security.voter
-
     elife.journal.security.voter.feature.use_hypothesis:
         class: eLife\Journal\Security\Voter\SessionAttributeVoter
         public: false
@@ -269,13 +259,12 @@ services:
         tags:
           - name: security.voter
 
-    elife.journal.security.voter.feature.view_profiles:
-        class: eLife\Journal\Security\Voter\SessionAttributeVoter
+    elife.journal.security.voter.feature.use_hypothesis.force:
+        class: eLife\Journal\Security\Voter\FixedVoter
         public: false
         arguments:
-          - '@request_stack'
-          - FEATURE_CAN_VIEW_PROFILES
-          - open-sesame
+          - FEATURE_CAN_USE_HYPOTHESIS
+          - '%feature_can_always_use_hypothesis%'
         tags:
           - name: security.voter
 
