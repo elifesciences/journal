@@ -3,10 +3,10 @@ set -e
 
 rm -f build/*.xml
 
-export SYMFONY__FEATURE_CAN_ALWAYS_USE_HYPOTHESIS__OVERRIDE=false
+export SYMFONY_ENV=test
 
 echo "cache:clear"
-bin/console cache:clear --env=test --no-warmup
+bin/console cache:clear --no-warmup
 
 echo "security:check"
 bin/console security:check
