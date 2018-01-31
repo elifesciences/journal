@@ -312,7 +312,7 @@ final class AuthenticationTest extends WebTestCase
         $this->mockApiResponse(
             new Request(
                 'GET',
-                'http://api.elifesciences.org/annotations?by=jcarberry&page=1&per-page=10&order=desc&use-date=updated',
+                'http://api.elifesciences.org/annotations?by=jcarberry&page=1&per-page=10&order=desc&use-date=updated&access=restricted',
                 ['Accept' => 'application/vnd.elife.annotation-list+json; version=1']
             ),
             new Response(

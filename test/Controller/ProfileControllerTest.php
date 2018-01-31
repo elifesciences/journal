@@ -288,7 +288,7 @@ final class ProfileControllerTest extends PageTestCase
         $this->mockApiResponse(
             new Request(
                 'GET',
-                'http://api.elifesciences.org/annotations?by=1&page=1&per-page=10&order=desc&use-date=updated',
+                'http://api.elifesciences.org/annotations?by=1&page=1&per-page=10&order=desc&use-date=updated&access=public',
                 ['Accept' => 'application/vnd.elife.annotation-list+json; version=1']
             ),
             new Response(
