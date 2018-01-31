@@ -7,8 +7,8 @@ parameters:
     api_url_public: http://api.elifesciences.org
     api_mock: '%kernel.cache_dir%/guzzle/fixtures'
     crm_url: http://crm.elifesciences.org/crm/civicrm/
-    feature_can_always_use_hypothesis: '%env(FEATURE_CAN_ALWAYS_USE_HYPOTHESIS_OVERRIDE)%'
-    env(FEATURE_CAN_ALWAYS_USE_HYPOTHESIS_OVERRIDE): false
+    feature_can_always_use_hypothesis: '%env(FEATURE_CAN_ALWAYS_USE_HYPOTHESIS)%'
+    env(FEATURE_CAN_ALWAYS_USE_HYPOTHESIS): false
     oauth2_client_id: journal_client_id
     oauth2_client_secret: journal_client_secret
     status_checks:
