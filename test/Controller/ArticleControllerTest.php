@@ -1309,6 +1309,14 @@ final class ArticleControllerTest extends PageTestCase
 
         $this->assertNotContains('Comments', $crawler->text());
         $this->assertContains('Annotations', $crawler->filter('.contextual-data__list')->text());
+
+        $this->assertSame(
+            [
+                'Introduction',
+                'Article information',
+            ],
+            array_map('trim', $crawler->filter('.view-selector__jump_link_item')->extract('_text'))
+        );
     }
 
     /**
