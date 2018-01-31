@@ -8,11 +8,11 @@ Feature: Profile page
   Background:
     Given Josiah Carberry has 30 public annotations
 
-  Scenario: List shows 10 most-recently-updated public annotations
+  Scenario: List shows 10 most-recently-updated public annotations on someone else's page
     When I go to Josiah Carberry's profile page
     Then I should see his 10 most-recently-updated public annotations in the 'Annotations' list
 
-  Scenario: List shows 10 most-recently-updated public annotations
+  Scenario: List shows 10 most-recently-updated annotations on your own page
     Given I am Josiah Carberry
     And I have logged in
     And I have 30 public and private annotations
