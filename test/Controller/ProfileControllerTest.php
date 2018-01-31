@@ -39,6 +39,21 @@ final class ProfileControllerTest extends PageTestCase
     /**
      * @test
      */
+    public function it_displays_public_annotations_when_it_is_not_your_profile_page()
+    {
+        $client = static::createClient();
+
+        $this->logIn($client);
+
+        $crawler = $client->request('GET', $this->getUrl());
+
+        $this->assertSame(200, $client->getResponse()->getStatusCode());
+        $this->assertContains('No annotations available.', $crawler->text());
+    }
+
+    /**
+     * @test
+     */
     public function it_displays_a_profile_page_with_public_information()
     {
         $client = static::createClient();
