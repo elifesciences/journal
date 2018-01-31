@@ -89,7 +89,7 @@ final class AuthenticationTest extends WebTestCase
      */
     public function it_lets_you_log_in_when_the_feature_flag_is_forced()
     {
-        $_SERVER['FEATURE_CAN_ALWAYS_USE_HYPOTHESIS'] = true;
+        $_ENV['FEATURE_CAN_ALWAYS_USE_HYPOTHESIS'] = true;
 
         $client = static::createClient();
 
