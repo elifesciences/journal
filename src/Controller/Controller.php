@@ -210,9 +210,9 @@ abstract class Controller implements ContainerAwareInterface
             $profile = $this->get('elife.api_sdk.profiles')->get($user->getUsername())
                 ->otherwise(function ($reason) use ($user, $request) {
                     $request->getSession()->invalidate();
+                    $this->get('security.token_storage')->setToken(null);
 
                     $response = new RedirectResponse($request->getUri());
-                    $response->headers->clearCookie($this->container->getParameter('session_name'));
 
                     $e = exception_for($reason);
                     $this->get('logger')->error("Logged user {$user->getUsername()} out due to {$e->getMessage()}", ['exception' => $e]);
