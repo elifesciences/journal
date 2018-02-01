@@ -30,7 +30,15 @@ final class ProfilesController extends Controller
             ->get($id)
             ->otherwise($this->mightNotExist());
 
-        $annotations = promise_for($this->get('elife.api_sdk.annotations')->list($id))
+        if ($this->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+            $user = $this->get('security.token_storage')->getToken()->getUser();
+
+            if ($id === $user->getUsername()) {
+                $access = 'restricted';
+            }
+        }
+
+        $annotations = promise_for($this->get('elife.api_sdk.annotations')->list($id, $access ?? 'public'))
             ->then(function (Sequence $sequence) use ($page, $perPage) {
                 $pagerfanta = new Pagerfanta(new SequenceAdapter($sequence, $this->willConvertTo(AnnotationTeaser::class)));
                 $pagerfanta->setMaxPerPage($perPage)->setCurrentPage($page);
