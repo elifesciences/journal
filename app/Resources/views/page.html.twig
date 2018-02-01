@@ -163,6 +163,8 @@
         };
 
         {% if gtm_id %}
+        var gtmDataLayer = window.gtmDataLayer = window.gtmDataLayer || [];
+        {% block gtm %}{% endblock %}
         (function (w, d, s, l, i) {
             w[l] = w[l] || [];
             w[l].push({
@@ -174,7 +176,7 @@
             j.src =
                 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
             f.parentNode.insertBefore(j, f);
-        })(window, document, 'script', 'dataLayer', '{{ gtm_id }}');
+        })(window, document, 'script', 'gtmDataLayer', '{{ gtm_id }}');
         {% endif %}
 
         (function (d) {
