@@ -265,6 +265,10 @@ final class AuthenticationTest extends WebTestCase
 
         $client->request('GET', '/');
 
+        $this->assertTrue($client->getResponse()->isRedirect('http://localhost/log-out'));
+
+        $client->followRedirect();
+
         $this->assertTrue($client->getResponse()->isRedirect('http://localhost/'));
 
         $crawler = $client->followRedirect();
