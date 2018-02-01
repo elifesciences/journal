@@ -21,6 +21,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use UnexpectedValueException;
 use function GuzzleHttp\Promise\all;
@@ -208,16 +209,11 @@ abstract class Controller implements ContainerAwareInterface
         if ($this->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             $user = $this->get('security.token_storage')->getToken()->getUser();
             $profile = $this->get('elife.api_sdk.profiles')->get($user->getUsername())
-                ->otherwise(function ($reason) use ($user, $request) {
-                    $request->getSession()->invalidate();
-
-                    $response = new RedirectResponse($request->getUri());
-                    $response->headers->clearCookie($this->container->getParameter('session_name'));
-
+                ->otherwise(function ($reason) use ($user) {
                     $e = exception_for($reason);
-                    $this->get('logger')->error("Logged user {$user->getUsername()} out due to {$e->getMessage()}", ['exception' => $e]);
+                    $this->get('logger')->error("Logging user {$user->getUsername()} out due to {$e->getMessage()}", ['exception' => $e]);
 
-                    throw new EarlyResponse($response);
+                    throw new EarlyResponse(new RedirectResponse($this->get('router')->generate('log-out', [], UrlGeneratorInterface::ABSOLUTE_URL)));
                 });
         }
 
