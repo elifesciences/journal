@@ -158,13 +158,13 @@ final class AboutController extends Controller
                 'Early Career Advisory Group' => 'eLife has invited a group of talented graduate students, postdocs and junior group leaders from across the world to our <a href="'.$this->get('router')->generate('about-people', ['type' => 'early-career']).'">Early-Career Advisory Group</a>. The ECAG acts as a voice for early-career researchers (ECRs) within eLife, representing their needs and aspirations and helping to develop new initiatives and shape current practices to change academic publishing for the better.',
             ]),
             new Paragraph('The role of the ECAG includes:'),
-            new Listing([
+            Listing::unordered([
                 'Offering ideas and advice on new and ongoing efforts with the potential to help early-career scientists',
                 'Providing direct support for ongoing programs, such as monthly webinars',
                 'Leading efforts to reach out to early-stage colleagues, to gather their feedback and/or connect them to the network',
                 'Participating in online or in-person events about issues of concern to early-stage researchers',
                 'Attending quarterly phone calls and an annual in-person meeting',
-            ]),
+            ], 'bullet'),
             new Paragraph('For more information, take a look at this <a href="'.$this->get('router')->generate('inside-elife-article', ['id' => '140901c3']).'">video message</a> from the ECAG.'),
             new DefinitionList([
                 'Involvement in peer review' => 'eLife encourages reviewers to involve junior colleagues as co-reviewers; we involve outstanding early-stage researchers as reviewers <a href="'.$this->get('router')->generate('inside-elife-article', ['id' => '31a5173b']).'">in their own right</a>; and we enable all reviewers to receive credit for their contributions through services such as Publons and ORCID',
