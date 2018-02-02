@@ -775,7 +775,7 @@ final class ArticlesController extends Controller
                             $infoBars[] = new InfoBar('This is a correction notice. Read the <a href="'.$this->get('router')->generate('article', [$relatedArticles[0]]).'">corrected article</a>.', InfoBar::TYPE_CORRECTION);
                             break;
                         case 'retraction':
-                            $infoBars[] = new InfoBar('This is a retraction notice. Read the <a href="'.$this->get('router')->generate('article', [$relatedArticles[0]]).'">retraction notice</a>.', InfoBar::TYPE_ATTENTION);
+                            $infoBars[] = new InfoBar('This is a retraction notice. Read the <a href="'.$this->get('router')->generate('article', [$relatedArticles[0]]).'">retracted article</a>.', InfoBar::TYPE_ATTENTION);
                             break;
                     }
 
