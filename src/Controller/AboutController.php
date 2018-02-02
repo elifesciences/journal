@@ -155,18 +155,18 @@ final class AboutController extends Controller
             new Paragraph('The community behind eLife – including the research funders who support the journal, the editors and referees who run the peer-review process, and our Early-Career Advisory Group – are keenly aware of the pressures faced by early-stage investigators. That’s one reason we’re working to create a more positive publishing experience that will, among other things, help early-career researchers receive the recognition they deserve.'),
             new Paragraph('eLife supports and showcases early-career scientists and their work in a number of ways:'),
             new DefinitionList([
-                'Early Career Advisory Group' => 'eLife has invited a group of talented graduate students, postdocs and junior group leaders from across the world to our <a href="'.$this->get('router')->generate('about-people', ['type' => 'early-career']).'">Early-Career Advisory Group</a>. The ECAG acts as a voice for early-career researchers (ECRs) within eLife, representing their needs and aspirations and helping to develop new initiatives and shape current practices to change academic publishing for the better.',
-            ]),
-            new Paragraph('The role of the ECAG includes:'),
-            Listing::unordered([
-                'Offering ideas and advice on new and ongoing efforts with the potential to help early-career scientists',
-                'Providing direct support for ongoing programs, such as monthly webinars',
-                'Leading efforts to reach out to early-stage colleagues, to gather their feedback and/or connect them to the network',
-                'Participating in online or in-person events about issues of concern to early-stage researchers',
-                'Attending quarterly phone calls and an annual in-person meeting',
-            ], 'bullet'),
-            new Paragraph('For more information, take a look at this <a href="'.$this->get('router')->generate('inside-elife-article', ['id' => '140901c3']).'">video message from the ECAG</a>.'),
-            new DefinitionList([
+                'Early Career Advisory Group' => $this->render(
+                    new Paragraph('eLife has invited a group of talented graduate students, postdocs and junior group leaders from across the world to our <a href="'.$this->get('router')->generate('about-people', ['type' => 'early-career']).'">Early-Career Advisory Group</a>. The ECAG acts as a voice for early-career researchers (ECRs) within eLife, representing their needs and aspirations and helping to develop new initiatives and shape current practices to change academic publishing for the better.'),
+                    new Paragraph('The role of the ECAG includes:'),
+                    Listing::unordered([
+                        'Offering ideas and advice on new and ongoing efforts with the potential to help early-career scientists',
+                        'Providing direct support for ongoing programs, such as monthly webinars',
+                        'Leading efforts to reach out to early-stage colleagues, to gather their feedback and/or connect them to the network',
+                        'Participating in online or in-person events about issues of concern to early-stage researchers',
+                        'Attending quarterly phone calls and an annual in-person meeting',
+                    ], 'bullet'),
+                    new Paragraph('For more information, take a look at this <a href="'.$this->get('router')->generate('inside-elife-article', ['id' => '140901c3']).'">video message from the ECAG</a>.')
+                ),
                 'Involvement in peer review' => 'eLife encourages reviewers to involve junior colleagues as co-reviewers; we involve outstanding early-stage researchers as reviewers <a href="'.$this->get('router')->generate('inside-elife-article', ['id' => '31a5173b']).'">in their own right</a>; and we enable all reviewers to receive credit for their contributions through services such as Publons and ORCID',
                 'Travel grants' => 'eLife offers funding to help early-career scientists get exposure and recognition for their work among leading scientists in their fields. New travel grant programmes are announced at the start of each year. Sign up to our <a href="https://crm.elifesciences.org/crm/civicrm/profile/create?reset=1&gid=26">early-career newsletter</a> for updates and information on how to apply.',
                 'Webinars' => 'A platform for the early-career community to share opportunities and explore issues around building a successful research career, on the last Wednesday of the month. Upcoming webinars can be found on our <a href="'.$this->get('router')->generate('events').'">events page</a>.',
