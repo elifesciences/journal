@@ -165,7 +165,7 @@ final class AboutController extends Controller
                 'Participating in online or in-person events about issues of concern to early-stage researchers',
                 'Attending quarterly phone calls and an annual in-person meeting',
             ], 'bullet'),
-            new Paragraph('For more information, take a look at this <a href="'.$this->get('router')->generate('inside-elife-article', ['id' => '140901c3']).'">video message</a> from the ECAG.'),
+            new Paragraph('For more information, take a look at this <a href="'.$this->get('router')->generate('inside-elife-article', ['id' => '140901c3']).'">video message from the ECAG</a>.'),
             new DefinitionList([
                 'Involvement in peer review' => 'eLife encourages reviewers to involve junior colleagues as co-reviewers; we involve outstanding early-stage researchers as reviewers <a href="'.$this->get('router')->generate('inside-elife-article', ['id' => '31a5173b']).'">in their own right</a>; and we enable all reviewers to receive credit for their contributions through services such as Publons and ORCID',
                 'Travel grants' => 'eLife offers funding to help early-career scientists get exposure and recognition for their work among leading scientists in their fields. New travel grant programmes are announced at the start of each year. Sign up to our <a href="https://crm.elifesciences.org/crm/civicrm/profile/create?reset=1&gid=26">early-career newsletter</a> for updates and information on how to apply.',
