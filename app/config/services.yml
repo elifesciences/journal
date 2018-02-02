@@ -302,6 +302,11 @@ services:
         tags:
           - name: twig.extension
 
+    elife.journal.twig.extension.model_name:
+        class: eLife\Journal\Twig\ModelNameExtension
+        tags:
+          - name: twig.extension
+
     elife.journal.twig.extension.pattern:
         class: eLife\Patterns\Twig\PatternExtension
         arguments:

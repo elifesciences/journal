@@ -2,6 +2,25 @@
 
 {% extends '::article.html.twig' %}
 
+{% block gtm %}
+
+    {{ parent() }}
+
+    {% if item.publishedDate %}
+        window.gtmDataLayer.push(
+        {
+        {% if item.subjects|length -%}
+            'articleSubjects': '{% for subject in item.subjects %}{{ subject.name }}{% if not loop.last %}, {% endif %}{% endfor %}',
+        {%- endif %}
+
+        'articleType': '{{ model_name(item.type) }}',
+        'articlePublishDate': '{{ item.publishedDate|date('M j, Y') }}'
+        }
+        );
+    {% endif %}
+
+{% endblock %}
+
 {% block article_body %}
 
     {% embed 'grid/content.html.twig' %}
