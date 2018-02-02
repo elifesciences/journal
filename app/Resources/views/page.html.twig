@@ -163,7 +163,7 @@
         };
 
         {% if gtm_id %}
-        var gtmDataLayer = window.gtmDataLayer = window.gtmDataLayer || [];
+        window.gtmDataLayer = window.gtmDataLayer || [];
         {% block gtm %}{% endblock %}
         (function (w, d, s, l, i) {
             w[l] = w[l] || [];

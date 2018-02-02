@@ -7,7 +7,7 @@
     {{ parent() }}
 
     {% if item.publishedDate %}
-        gtmDataLayer.push(
+        window.gtmDataLayer.push(
         {
         {% if item.subjects|length -%}
             'articleSubjects': '{% for subject in item.subjects %}{{ subject.name }}{% if not loop.last %}, {% endif %}{% endfor %}',
