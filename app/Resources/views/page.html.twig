@@ -248,13 +248,6 @@
         <script>
             if (!!document.createElement('div').dataset) {
                 window.hypothesisConfig = function () {
-                    var openSidebarValue = false;
-                    if (window.location.hash) {
-                        var hash = window.location.hash.substring(1);
-                        if (hash === 'annotations') {
-                            openSidebarValue = true;
-                        }
-                    }
                     return {
                         branding: {
                             accentColor: '#0288D1',
@@ -264,7 +257,7 @@
                             selectionFontFamily: 'Georgia, Times, serif',
                             annotationFontFamily: 'Georgia, Times, serif'
                         },
-                        openSidebar: openSidebarValue,
+                        openSidebar: ('#annotations' === window.location.hash),
                         disableToolbarCloseBtn: false,
                         disableToolbarMinimizeBtn: true,
                         disableToolbarHighlightsBtn: true,
