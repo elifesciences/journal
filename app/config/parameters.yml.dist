@@ -25,4 +25,3 @@ parameters:
     hypothesis_authority: some-authority
     hypothesis_client_id: some-id
     hypothesis_client_secret: ThisIsASecret
-    feature_can_always_use_hypothesis: true
