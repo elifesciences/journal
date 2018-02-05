@@ -75,9 +75,17 @@ final class ModelName
             'singular' => 'Interview',
             'plural' => 'Interviews',
         ],
+        'job-advert' => [
+            'singular' => 'eLife Jobs',
+            'plural' => 'eLife Jobs',
+        ],
         'podcast-episode' => [
             'singular' => 'Podcast',
             'plural' => 'Podcasts',
+        ],
+        'press-package' => [
+            'singular' => 'Press Pack',
+            'plural' => 'Press Packs',
         ],
     ];
 
