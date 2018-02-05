@@ -164,7 +164,20 @@
 
         {% if gtm_id %}
         window.gtmDataLayer = window.gtmDataLayer || [];
-        {% block gtm %}{% endblock %}
+
+        {% if item.publishedDate is defined and item.publishedDate %}
+        window.gtmDataLayer.push(
+            {
+                {% if item.subjects is defined and item.subjects|length -%}
+                'articleSubjects': '{% for subject in item.subjects %}{{ subject.name }}{% if not loop.last %}, {% endif %}{% endfor %}',
+                {%- endif %}
+
+                'articleType': '{% if item.type is defined %}{{ model_name(item.type) }}{% else %}{{ model_name(item.identifier.type) }}{% endif %}',
+                'articlePublishDate': '{{ item.publishedDate|date('M j, Y') }}'
+            }
+        );
+        {% endif %}
+
         (function (w, d, s, l, i) {
             w[l] = w[l] || [];
             w[l].push({
@@ -257,6 +270,7 @@
                             selectionFontFamily: 'Georgia, Times, serif',
                             annotationFontFamily: 'Georgia, Times, serif'
                         },
+                        openSidebar: '#annotations' === window.location.hash,
                         disableToolbarCloseBtn: false,
                         disableToolbarMinimizeBtn: true,
                         disableToolbarHighlightsBtn: true,
