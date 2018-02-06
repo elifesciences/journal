@@ -157,6 +157,14 @@ services:
             alias: state_logging
             priority: -1499
 
+    elife.journal.guzzle.subject_rewriting:
+        class: eLife\Journal\Guzzle\SubjectRewritingMiddleware
+        public: false
+        tags:
+          - name: csa_guzzle.middleware
+            alias: subject_rewriting
+            priority: 1500
+
     elife.journal.helper.fragment_link_rewriter:
         class: eLife\Journal\Helper\FragmentLinkRewriter
         public: false
