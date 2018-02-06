@@ -3,7 +3,6 @@
 namespace eLife\Journal\Controller;
 
 use eLife\ApiSdk\Collection\Sequence;
-use eLife\ApiSdk\Model\BlogArticle;
 use eLife\Journal\Helper\Callback;
 use eLife\Journal\Helper\Paginator;
 use eLife\Journal\Pagerfanta\SequenceAdapter;
@@ -82,18 +81,11 @@ final class InsideElifeController extends Controller
         $arguments['contentHeader'] = $arguments['item']
             ->then($this->willConvertTo(ContentHeader::class));
 
-        $arguments['contextualData'] = $arguments['item']
-            ->then($this->ifGranted(['FEATURE_CAN_USE_HYPOTHESIS'], function (BlogArticle $article) {
-                return ContextualData::annotationsOnly(SpeechBubble::forContextualData());
-            }));
+        $arguments['contextualData'] = ContextualData::annotationsOnly(SpeechBubble::forContextualData());
 
         $arguments['blocks'] = $arguments['item']
             ->then($this->willConvertContent())
             ->then(function (Sequence $blocks) {
-                if (!$this->isGranted('FEATURE_CAN_USE_HYPOTHESIS')) {
-                    return $blocks;
-                }
-
                 return $blocks->prepend(SpeechBubble::forArticleBody());
             });
 

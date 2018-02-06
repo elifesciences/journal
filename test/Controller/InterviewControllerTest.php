@@ -23,7 +23,8 @@ final class InterviewControllerTest extends PageTestCase
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertSame('Interview title', $crawler->filter('.content-header__title')->text());
         $this->assertSame('Interview Jan 1, 2010', trim(preg_replace('!\s+!', ' ', $crawler->filter('.content-header .meta')->text())));
-        $this->assertEmpty($crawler->filter('.contextual-data'));
+        $this->assertContains('Annotations', $crawler->filter('.contextual-data__list')->text());
+        $this->assertContains('Question?', $crawler->filter('.wrapper--content')->text());
     }
 
     /**
@@ -114,18 +115,6 @@ final class InterviewControllerTest extends PageTestCase
         $this->assertEmpty($crawler->filter('meta[name="dc.description"]'));
         $this->assertSame('2010-01-01', $crawler->filter('meta[name="dc.date"]')->attr('content'));
         $this->assertSame('© 2010 eLife Sciences Publications Limited. This article is distributed under the terms of the Creative Commons Attribution License, which permits unrestricted use and redistribution provided that the original author and source are credited.', $crawler->filter('meta[name="dc.rights"]')->attr('content'));
-    }
-
-    /**
-     * @test
-     */
-    public function it_shows_annotations_when_the_feature_flag_is_enabled()
-    {
-        $client = static::createClient();
-
-        $crawler = $client->request('GET', "{$this->getUrl()}?open-sesame");
-
-        $this->assertContains('Annotations', $crawler->filter('.contextual-data__list')->text());
     }
 
     /**

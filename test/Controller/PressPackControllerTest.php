@@ -23,11 +23,11 @@ final class PressPackControllerTest extends PageTestCase
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertSame('Press package title', $crawler->filter('.content-header__title')->text());
         $this->assertSame('Press pack Jan 1, 2010', trim(preg_replace('!\s+!', ' ', $crawler->filter('.content-header .meta')->text())));
-        $this->assertEmpty($crawler->filter('.contextual-data'));
-        $this->assertContains('Press package text.', $crawler->filter('main > div.wrapper')->text());
+        $this->assertContains('Annotations', $crawler->filter('.contextual-data__list')->text());
+        $this->assertContains('Press package text.', $crawler->filter('.wrapper--content')->text());
         $this->assertCount(0, $crawler->filter('.teaser--secondary'));
-        $this->assertNotContains('Media contacts', $crawler->filter('main > div.wrapper')->text());
-        $this->assertNotContains('About', $crawler->filter('main > div.wrapper')->text());
+        $this->assertNotContains('Media contacts', $crawler->filter('.wrapper--content')->text());
+        $this->assertNotContains('About', $crawler->filter('.wrapper--content')->text());
     }
 
     /**
@@ -187,18 +187,6 @@ final class PressPackControllerTest extends PageTestCase
         $this->assertEmpty($crawler->filter('meta[name="dc.description"]'));
         $this->assertSame('2010-01-01', $crawler->filter('meta[name="dc.date"]')->attr('content'));
         $this->assertSame('© 2010 eLife Sciences Publications Limited. This article is distributed under the terms of the Creative Commons Attribution License, which permits unrestricted use and redistribution provided that the original author and source are credited.', $crawler->filter('meta[name="dc.rights"]')->attr('content'));
-    }
-
-    /**
-     * @test
-     */
-    public function it_shows_annotations_when_the_feature_flag_is_enabled()
-    {
-        $client = static::createClient();
-
-        $crawler = $client->request('GET', "{$this->getUrl()}?open-sesame");
-
-        $this->assertContains('Annotations', $crawler->filter('.contextual-data__list')->text());
     }
 
     /**

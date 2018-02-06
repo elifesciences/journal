@@ -17,8 +17,6 @@ abstract class WebTestCase extends BaseWebTestCase
 
     final protected function logIn(Client $client)
     {
-        $client->request('GET', '/?open-sesame');
-
         $session = $client->getContainer()->get('session');
 
         $token = new PostAuthenticationGuardToken(new OAuthUser('jcarberry', $roles = ['ROLE_USER', 'ROLE_OAUTH_USER']), 'main', $roles);

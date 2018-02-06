@@ -88,18 +88,11 @@ final class InterviewsController extends Controller
         $arguments['contentHeader'] = $arguments['item']
             ->then($this->willConvertTo(ContentHeader::class));
 
-        $arguments['contextualData'] = $arguments['item']
-            ->then($this->ifGranted(['FEATURE_CAN_USE_HYPOTHESIS'], function (Interview $interview) {
-                return ContextualData::annotationsOnly(SpeechBubble::forContextualData());
-            }));
+        $arguments['contextualData'] = ContextualData::annotationsOnly(SpeechBubble::forContextualData());
 
         $arguments['blocks'] = $arguments['item']
             ->then($this->willConvertContent())
             ->then(function (Sequence $blocks) {
-                if (!$this->isGranted('FEATURE_CAN_USE_HYPOTHESIS')) {
-                    return $blocks;
-                }
-
                 return $blocks->prepend(SpeechBubble::forArticleBody());
             });
 
