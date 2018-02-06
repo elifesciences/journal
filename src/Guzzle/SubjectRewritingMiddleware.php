@@ -3,7 +3,6 @@
 namespace eLife\Journal\Guzzle;
 
 use GuzzleHttp\Promise\PromiseInterface;
-use GuzzleHttp\Psr7\Uri;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use function GuzzleHttp\json_decode;
@@ -37,14 +36,10 @@ final class SubjectRewritingMiddleware
 
                 foreach ($this->replacements as $replaced => $replacement) {
                     if (isset($subjects[$replaced])) {
-                        unset($subjects[$replaced]);
-                        $subjects[$replacement['id']] = null;
+                        $uri = $uri->withQuery("{$uri->getQuery()}&subject[]={$replacement['id']}");
+                    } elseif (isset($subjects[$replacement['id']])) {
+                        $uri = $uri->withQuery("{$uri->getQuery()}&subject[]={$replaced}");
                     }
-                }
-
-                $uri = Uri::withoutQueryValue($uri, 'subject[]');
-                foreach (array_keys($subjects) as $subject) {
-                    $uri = Uri::withQueryValue($uri, 'subject[]', $subject);
                 }
             }
 
