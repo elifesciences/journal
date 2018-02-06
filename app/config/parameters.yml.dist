@@ -14,7 +14,6 @@ parameters:
     mailer_password: ~
     mailer_encryption: ~
     crm_url: https://crm.elifesciences.org/crm/civicrm/
-    disqus_domain: elifesciences
     gtm_id: ~
     trusted_hosts:
       - .*\.?elifesciences.org$
@@ -26,4 +25,3 @@ parameters:
     hypothesis_authority: some-authority
     hypothesis_client_id: some-id
     hypothesis_client_secret: ThisIsASecret
-    feature_can_always_use_hypothesis: true
