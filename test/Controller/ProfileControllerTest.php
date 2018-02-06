@@ -4,23 +4,9 @@ namespace test\eLife\Journal\Controller;
 
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
-use Symfony\Component\BrowserKit\Client;
 
 final class ProfileControllerTest extends PageTestCase
 {
-    /**
-     * @test
-     */
-    public function it_displays_a_404_if_the_feature_flag_is_disabled()
-    {
-        $client = static::createClient();
-        $client->getCookieJar()->clear();
-
-        $client->request('GET', $this->getUrl());
-
-        $this->assertSame(404, $client->getResponse()->getStatusCode());
-    }
-
     /**
      * @test
      */
@@ -211,8 +197,6 @@ final class ProfileControllerTest extends PageTestCase
     {
         $client = static::createClient();
 
-        $client->request('GET', '/?open-sesame');
-
         $crawler = $client->request('GET', $this->getUrl().'?foo');
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
@@ -234,26 +218,9 @@ final class ProfileControllerTest extends PageTestCase
     /**
      * @test
      */
-    public function it_has_cache_headers()
-    {
-        $client = static::createClient();
-
-        $client->request('GET', '/?open-sesame');
-
-        $client->request('GET', $this->getUrl());
-
-        $this->assertSame('max-age=0, must-revalidate, private', $client->getResponse()->headers->get('Cache-Control'));
-        $this->assertEmpty($client->getResponse()->getVary());
-    }
-
-    /**
-     * @test
-     */
     public function it_displays_a_404_if_the_profile_is_not_found()
     {
         $client = static::createClient();
-
-        $client->request('GET', '/?open-sesame');
 
         static::mockApiResponse(
             new Request(
@@ -317,10 +284,5 @@ final class ProfileControllerTest extends PageTestCase
         );
 
         return '/profiles/1';
-    }
-
-    protected static function onCreateClient(Client $client)
-    {
-        $client->request('GET', '/?open-sesame');
     }
 }

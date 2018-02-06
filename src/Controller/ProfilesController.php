@@ -12,17 +12,12 @@ use eLife\Patterns\ViewModel\ListingAnnotationTeasers;
 use Pagerfanta\Pagerfanta;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use function GuzzleHttp\Promise\promise_for;
 
 final class ProfilesController extends Controller
 {
     public function profileAction(Request $request, string $id) : Response
     {
-        if (!$this->isGranted('FEATURE_CAN_USE_HYPOTHESIS')) {
-            throw new NotFoundHttpException('Not found');
-        }
-
         $page = (int) $request->query->get('page', 1);
         $perPage = 10;
 
