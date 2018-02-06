@@ -40,7 +40,6 @@ use GuzzleHttp\Promise\PromiseInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use function GuzzleHttp\Promise\all;
 use function GuzzleHttp\Promise\promise_for;
 
@@ -193,12 +192,7 @@ final class ArticlesController extends Controller
                 /** @var array $metrics */
                 $metrics = $parts['metrics'];
 
-                if ($this->isGranted('FEATURE_CAN_USE_HYPOTHESIS')) {
-                    $speechBubble = SpeechBubble::forContextualData();
-                } else {
-                    $metrics[] = sprintf('<a href="#comments">Comments <span class="disqus-comment-count" data-disqus-identifier="article:%s">0</span></a>', $item->getId());
-                    $speechBubble = null;
-                }
+                $speechBubble = SpeechBubble::forContextualData();
 
                 if (!$item->getCiteAs()) {
                     if (empty($metrics)) {
@@ -288,9 +282,7 @@ final class ArticlesController extends Controller
                     })->toArray());
                 }
 
-                if ($this->isGranted('FEATURE_CAN_USE_HYPOTHESIS')) {
-                    $parts[] = SpeechBubble::forArticleBody();
-                }
+                $parts[] = SpeechBubble::forArticleBody();
 
                 if ($item instanceof ArticleVoR) {
                     $parts = array_merge($parts, $item->getAppendices()->map(function (Appendix $appendix) use ($context) {
@@ -479,16 +471,6 @@ final class ArticlesController extends Controller
                         'Metrics',
                         2,
                         $this->render(new ViewModel\StatisticCollection(...$statistics), ...$statisticsExtra),
-                        true
-                    );
-                }
-
-                if (!$this->isGranted('FEATURE_CAN_USE_HYPOTHESIS')) {
-                    $parts[] = ArticleSection::collapsible(
-                        'comments',
-                        'Comments',
-                        2,
-                        '<div id="disqus_thread">'.$this->render(ViewModel\Button::link('View the discussion thread', 'https://'.$this->getParameter('disqus_domain').'.disqus.com/?url='.urlencode($this->get('router')->generate('article', [$item], UrlGeneratorInterface::ABSOLUTE_URL)))).'</div>',
                         true
                     );
                 }
@@ -842,7 +824,9 @@ final class ArticlesController extends Controller
                 $history = $sections['history'];
                 $sections = $sections['sections'];
 
-                if ((count($sections) < 2 || false === $sections[0] instanceof ArticleSection)) {
+                $sections = array_filter($sections, Callback::isInstanceOf(ArticleSection::class));
+
+                if (count($sections) < 2) {
                     if (!$hasFigures) {
                         return null;
                     }

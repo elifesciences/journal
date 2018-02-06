@@ -127,7 +127,6 @@ twig:
     debug: '%kernel.debug%'
     exception_controller: AppBundle:Exception:show
     globals:
-        disqus_domain: '%disqus_domain%'
         gtm_id: '%gtm_id%'
         hypothesis_api: '%hypothesis_api%'
         hypothesis_authority: '%hypothesis_authority%'

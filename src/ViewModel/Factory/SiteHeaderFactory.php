@@ -144,7 +144,7 @@ final class SiteHeaderFactory
                     ]
                 )
             );
-        } elseif ($this->authorizationChecker->isGranted('FEATURE_CAN_USE_HYPOTHESIS')) {
+        } else {
             $secondaryLinks[] = NavLinkedItem::asLoginControl(
                 LoginControl::notLoggedIn(
                     mixed_visibility_text('', 'Log in/Register', '(via ORCID)'),

@@ -14,14 +14,6 @@ final class ProfileContext extends Context
     private $numberOfPublicAnnotations;
 
     /**
-     * @BeforeScenario
-     */
-    public function enableFeature()
-    {
-        $this->visitPath('/about?open-sesame');
-    }
-
-    /**
      * @Given /^I am ([A-Za-z\s]+)$/
      */
     public function iAm(string $name)
