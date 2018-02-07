@@ -4,7 +4,8 @@ namespace eLife\Journal\Helper;
 
 final class ModelRelationship
 {
-    private static $default = 'Of interest';
+    private static $defaultRelated = 'Related to';
+    private static $defaultUnrelated = 'Of interest';
     private static $fromRelationship = [
         'registered-report' => [
             'to' => [
@@ -45,10 +46,10 @@ final class ModelRelationship
     {
     }
 
-    public static function get(string $from, string $to, bool $unrelated = false) : string
+    public static function get(string $from, string $to, bool $related = false) : string
     {
-        if ($unrelated) {
-            return self::$default;
+        if (!$related) {
+            return self::$defaultUnrelated;
         }
 
         if (!empty(self::$fromRelationship[$from])) {
@@ -60,7 +61,7 @@ final class ModelRelationship
                 return self::$fromRelationship[$from]['text'];
             }
 
-            return self::$default;
+            return self::$defaultRelated;
         }
 
         if (!empty(self::$toRelationship[$to])) {
@@ -72,9 +73,9 @@ final class ModelRelationship
                 return self::$toRelationship[$to]['text'];
             }
 
-            return self::$default;
+            return self::$defaultRelated;
         }
 
-        return self::$default;
+        return self::$defaultRelated;
     }
 }

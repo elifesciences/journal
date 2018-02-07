@@ -29,7 +29,7 @@ final class PodcastEpisodeChapterRelatedItemTeaserConverter implements ViewModel
             $chapter->getLongTitle() ?? $chapter->getTitle(),
             $this->urlGenerator->generate('podcast-episode', [$object]),
             null,
-            new ViewModel\ContextLabel(new ViewModel\Link(ModelRelationship::get($context['from'], 'podcast-episode-chapter', $context['unrelated'] ?? true))),
+            new ViewModel\ContextLabel(new ViewModel\Link(ModelRelationship::get($context['from'], 'podcast-episode-chapter', $context['related'] ?? false))),
             null,
             TeaserFooter::forNonArticle(
                 ViewModel\Meta::withLink(
