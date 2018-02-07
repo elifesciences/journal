@@ -3,6 +3,7 @@
 namespace eLife\Journal\Guzzle;
 
 use GuzzleHttp\Promise\PromiseInterface;
+use InvalidArgumentException;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use function GuzzleHttp\json_decode;
@@ -54,7 +55,11 @@ final class SubjectRewritingMiddleware
             $promise = $handler($request, $options);
 
             return $promise->then(function (ResponseInterface $response) use ($request) {
-                $data = json_decode($response->getBody(), true);
+                try {
+                    $data = json_decode($response->getBody(), true);
+                } catch (InvalidArgumentException $e) {
+                    return $response;
+                }
 
                 if (0 === strncmp($request->getUri()->getPath(), '/subjects/', 10) || 0 === strncmp($request->getUri()->getPath(), '/highlights/', 12)) {
                     // Nothing to do.
