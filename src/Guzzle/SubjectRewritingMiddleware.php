@@ -62,12 +62,7 @@ final class SubjectRewritingMiddleware
                     return $response;
                 }
 
-
                 switch (normalize_header($response->getHeaderLine('Content-Type'))[0]) {
-                    case 'application/vnd.elife.subject+json;version=1':
-                    case 'application/vnd.elife.highlight-list+json;version=1':
-                        // Nothing to do.
-                        break;
                     case 'application/vnd.elife.subject-list+json;version=1':
                         $before = count($data['items']); // This won't work across pages.
 
@@ -79,39 +74,119 @@ final class SubjectRewritingMiddleware
 
                         $data['total'] = $data['total'] - ($before - $after);
                         break;
-                    default:
-                        $visit = function ($item) use (&$visit) {
-                            if (!is_array($item)) {
-                                return $item;
-                            }
 
-                            if (!empty($item['id']) && !empty($item['name'])) {
-                                $keys = array_keys($item);
-                                sort($keys);
-                                if ($keys === ['id', 'name']) {
-                                    if (isset($this->replacements[$item['id']])) {
-                                        return $this->replacements[$item['id']];
+                    case 'application/vnd.elife.article-history+json;version=1':
+                        $data['versions'] = $this->updateItems($data['versions']);
+                        break;
+
+                    case 'application/vnd.elife.article-list+json;version=1':
+                    case 'application/vnd.elife.article-related+json;version=1':
+                    case 'application/vnd.elife.blog-article-list+json;version=1':
+                    case 'application/vnd.elife.collection-list+json;version=1':
+                    case 'application/vnd.elife.community-list+json;version=1':
+                    case 'application/vnd.elife.cover-list+json;version=1':
+                    case 'application/vnd.elife.highlight-list+json;version=1':
+                    case 'application/vnd.elife.press-package-list+json;version=1':
+                    case 'application/vnd.elife.recommendations+json;version=1':
+                        $data['items'] = $this->updateItems($data['items']);
+                        break;
+
+                    case 'application/vnd.elife.article-poa+json;version=2':
+                    case 'application/vnd.elife.article-vor+json;version=2':
+                    case 'application/vnd.elife.blog-article+json;version=2':
+                        $data = $this->updateItem($data);
+                        break;
+
+                    case 'application/vnd.elife.collection+json;version=1':
+                        $data = $this->updateItem($data);
+                        $data['content'] = $this->updateItems($data['content']);
+                        $data['relatedContent'] = $this->updateItems($data['relatedContent'] ?? []);
+                        break;
+
+                    case 'application/vnd.elife.podcast-episode+json;version=1':
+                        $data['chapters'] = array_map(function (array $chapter) {
+                            $chapter['content'] = $this->updateItems($chapter['content'] ?? []);
+
+                            return $chapter;
+                        }, $data['chapters']);
+                        break;
+
+                    case 'application/vnd.elife.person-list+json;version=1':
+                        $data['items'] = array_map([$this, 'updatePerson'], $data['items']);
+                        break;
+
+                    case 'application/vnd.elife.person+json;version=1':
+                        $data = $this->updatePerson($data);
+                        break;
+
+                    case 'application/vnd.elife.press-package+json;version=3':
+                        $data = $this->updateItem($data);
+                        $data['relatedContent'] = $this->updateItems($data['relatedContent'] ?? []);
+                        break;
+
+                    case 'application/vnd.elife.search+json;version=1':
+                        $data['items'] = $this->updateItems($data['items']);
+                        foreach ($this->replacements as $replaced => $replacement) {
+                            $total = 0;
+                            foreach ($data['subjects'] as $i => $subject) {
+                                if ($replaced === $subject['id']) {
+                                    $total = $subject['results'];
+                                    unset($data['subjects'][$i]);
+                                    break;
+                                }
+                            }
+                            if ($total > 0) {
+                                foreach ($data['subjects'] as $i => $subject) {
+                                    if ($replacement['id'] === $subject['id']) {
+                                        $data['subjects'][$i]['results'] += $total;
+                                        break;
                                     }
                                 }
                             }
-
-                            foreach ($item as $key => $value) {
-                                $item[$key] = $visit($value);
-
-                                if (in_array($key, ['expertises', 'subjects'], true)) {
-                                    $item[$key] = array_unique($item[$key], SORT_REGULAR);
-                                }
-                            }
-
-                            return $item;
-                        };
-
-                        $data = $visit($data);
+                        }
                         break;
                 }
 
                 return $response->withBody(stream_for(json_encode($data)));
             });
         };
+    }
+
+    private function updateItems(array $items) : array
+    {
+        return array_map([$this, 'updateItem'], $items);
+    }
+
+    private function updateItem(array $item) : array
+    {
+        $item['subjects'] = $this->updateSubjects($item['subjects'] ?? []);
+
+        return $item;
+    }
+
+    private function updatePerson(array $person) : array
+    {
+        if (!isset($person['research'])) {
+            return $person;
+        }
+
+        $person['research']['expertises'] = $this->updateSubjects($person['research']['expertises']);
+
+        return $person;
+    }
+
+    private function updateSubjects(array $subjects) : array
+    {
+        if (empty($subjects)) {
+            return $subjects;
+        }
+
+        foreach ($subjects as $x => $subject) {
+            if (isset($this->replacements[$subject['id']])) {
+                $subjects[$x] = $this->replacements[$subject['id']];
+            }
+        }
+
+        return array_values(array_unique($subjects, SORT_REGULAR));
     }
 }
