@@ -20,15 +20,16 @@ final class ModelRelationshipTest extends TestCase
     public function typesProvider() : Traversable
     {
         yield ['foo', 'bar', true, 'Of interest'];
-        yield ['foo', 'bar', false, 'Of interest'];
+        yield ['foo', 'bar', false, 'Related to'];
 
         yield ['registered-report', 'external-article', false, 'Original article'];
         yield ['registered-report', 'external-article', true, 'Of interest'];
-        yield ['registered-report', 'research-article', false, 'Of interest'];
+        yield ['registered-report', 'research-article', false, 'Related to'];
 
         yield ['research-advance', 'research-article', false, 'Builds upon'];
         yield ['research-advance', 'research-article', true, 'Of interest'];
         yield ['research-advance', 'correction', true, 'Of interest'];
+        yield ['research-advance', 'correction', false, 'Related to'];
 
         yield ['research-article', 'collection', false, 'Part of'];
         yield ['correction', 'collection', false, 'Part of'];
@@ -41,5 +42,6 @@ final class ModelRelationshipTest extends TestCase
         yield ['research-article', 'research-advance', false, 'Built upon by'];
         yield ['research-article', 'research-advance', true, 'Of interest'];
         yield ['correction', 'research-advance', true, 'Of interest'];
+        yield ['correction', 'research-advance', false, 'Related to'];
     }
 }
