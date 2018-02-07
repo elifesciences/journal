@@ -143,18 +143,15 @@ final class ArticlesController extends Controller
                 }
 
                 if ($relatedItem instanceof Article) {
-                    $unrelated = true;
                     foreach ($relatedArticles as $relatedArticle) {
                         if ($relatedArticle->getId() === $relatedItem->getId()) {
-                            $unrelated = false;
+                            $related = true;
                             break;
                         }
                     }
-                } else {
-                    $unrelated = false;
                 }
 
-                $item = $this->convertTo($relatedItem, ViewModel\Teaser::class, ['variant' => 'relatedItem', 'from' => $item->getType(), 'unrelated' => $unrelated]);
+                $item = $this->convertTo($relatedItem, ViewModel\Teaser::class, ['variant' => 'relatedItem', 'from' => $item->getType(), 'related' => $related ?? false]);
 
                 if ($listing) {
                     return ViewModel\ListingTeasers::withSeeMore([$item], new ViewModel\SeeMoreLink(new Link('Further reading', '#listing')));

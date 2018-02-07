@@ -46,9 +46,9 @@ final class ModelRelationship
     {
     }
 
-    public static function get(string $from, string $to, bool $unrelated = false) : string
+    public static function get(string $from, string $to, bool $related = false) : string
     {
-        if ($unrelated) {
+        if (!$related) {
             return self::$defaultUnrelated;
         }
 
