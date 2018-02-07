@@ -25,8 +25,13 @@ final class SubjectRewritingMiddleware
             $uri = $request->getUri();
 
             foreach ($this->replacements as $replaced => $replacement) {
-                if (in_array($uri->getPath(), ["/highlights/{$replaced}", "/subjects/{$replaced}"])) {
-                    $uri = $uri->withPath("/subjects/{$replacement['id']}");
+                switch ($uri->getPath()) {
+                    case "/highlights/{$replaced}":
+                        $uri = $uri->withPath("/highlights/{$replacement['id']}");
+                        break;
+                    case  "/subjects/{$replaced}":
+                        $uri = $uri->withPath("/subjects/{$replacement['id']}");
+                        break;
                 }
             }
 
