@@ -7,6 +7,7 @@ use InvalidArgumentException;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use function GuzzleHttp\json_decode;
+use function GuzzleHttp\Psr7\normalize_header;
 use function GuzzleHttp\Psr7\parse_query;
 use function GuzzleHttp\Psr7\stream_for;
 
@@ -61,46 +62,52 @@ final class SubjectRewritingMiddleware
                     return $response;
                 }
 
-                if (0 === strncmp($request->getUri()->getPath(), '/subjects/', 10) || 0 === strncmp($request->getUri()->getPath(), '/highlights/', 12)) {
-                    // Nothing to do.
-                } elseif ($request->getUri()->getPath() === '/subjects') {
-                    $before = count($data['items']); // This won't work across pages.
 
-                    $data['items'] = array_filter($data['items'], function (array $subject) {
-                        return !in_array($subject['id'], array_keys($this->replacements));
-                    });
+                switch (normalize_header($response->getHeaderLine('Content-Type'))[0]) {
+                    case 'application/vnd.elife.subject+json;version=1':
+                    case 'application/vnd.elife.highlight-list+json;version=1':
+                        // Nothing to do.
+                        break;
+                    case 'application/vnd.elife.subject-list+json;version=1':
+                        $before = count($data['items']); // This won't work across pages.
 
-                    $after = count($data['items']);
+                        $data['items'] = array_filter($data['items'], function (array $subject) {
+                            return !in_array($subject['id'], array_keys($this->replacements));
+                        });
 
-                    $data['total'] = $data['total'] - ($before - $after);
-                } else {
-                    $visit = function ($item) use (&$visit) {
-                        if (!is_array($item)) {
-                            return $item;
-                        }
+                        $after = count($data['items']);
 
-                        if (!empty($item['id']) && !empty($item['name'])) {
-                            $keys = array_keys($item);
-                            sort($keys);
-                            if ($keys === ['id', 'name']) {
-                                if (isset($this->replacements[$item['id']])) {
-                                    return $this->replacements[$item['id']];
+                        $data['total'] = $data['total'] - ($before - $after);
+                        break;
+                    default:
+                        $visit = function ($item) use (&$visit) {
+                            if (!is_array($item)) {
+                                return $item;
+                            }
+
+                            if (!empty($item['id']) && !empty($item['name'])) {
+                                $keys = array_keys($item);
+                                sort($keys);
+                                if ($keys === ['id', 'name']) {
+                                    if (isset($this->replacements[$item['id']])) {
+                                        return $this->replacements[$item['id']];
+                                    }
                                 }
                             }
-                        }
 
-                        foreach ($item as $key => $value) {
-                            $item[$key] = $visit($value);
+                            foreach ($item as $key => $value) {
+                                $item[$key] = $visit($value);
 
-                            if (in_array($key, ['expertises', 'subjects'], true)) {
-                                $item[$key] = array_unique($item[$key], SORT_REGULAR);
+                                if (in_array($key, ['expertises', 'subjects'], true)) {
+                                    $item[$key] = array_unique($item[$key], SORT_REGULAR);
+                                }
                             }
-                        }
 
-                        return $item;
-                    };
+                            return $item;
+                        };
 
-                    $data = $visit($data);
+                        $data = $visit($data);
+                        break;
                 }
 
                 return $response->withBody(stream_for(json_encode($data)));
