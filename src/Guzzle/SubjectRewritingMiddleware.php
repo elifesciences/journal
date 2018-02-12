@@ -84,8 +84,6 @@ final class SubjectRewritingMiddleware
                     case 'application/vnd.elife.blog-article-list+json; version=1':
                     case 'application/vnd.elife.collection-list+json; version=1':
                     case 'application/vnd.elife.community-list+json; version=1':
-                    case 'application/vnd.elife.cover-list+json; version=1':
-                    case 'application/vnd.elife.highlight-list+json; version=1':
                     case 'application/vnd.elife.press-package-list+json; version=1':
                     case 'application/vnd.elife.recommendations+json; version=1':
                         $data['items'] = $this->updateItems($data['items']);
@@ -107,6 +105,15 @@ final class SubjectRewritingMiddleware
                         $data = $this->updateItem($data);
                         $data['content'] = $this->updateItems($data['content']);
                         $data['relatedContent'] = $this->updateItems($data['relatedContent'] ?? []);
+                        break;
+
+                    case 'application/vnd.elife.cover-list+json; version=1':
+                    case 'application/vnd.elife.highlight-list+json; version=1':
+                        $data['items'] = array_map(function (array $cover) {
+                            $cover['item'] = $this->updateItem($cover['item']);
+
+                            return $cover;
+                        }, $data['items']);
                         break;
 
                     case 'application/vnd.elife.podcast-episode+json; version=1':
@@ -150,6 +157,7 @@ final class SubjectRewritingMiddleware
                                 }
                             }
                         }
+                        $data['subjects'] = array_values($data['subjects']);
                         break;
                 }
 

@@ -174,6 +174,219 @@ final class SubjectRewritingMiddlewareTest extends KernelTestCase
                 $this->createArticleVoR(false, false),
                 $this->createArticleVoR(true, false),
             ],
+            'application/vnd.elife.blog-article+json; version=2' => [
+                $this->createBlogArticle(false, false),
+                $this->createBlogArticle(true, false),
+            ],
+            'application/vnd.elife.blog-article-list+json; version=1' => [
+                [
+                    'total' => 1,
+                    'items' => [
+                        $this->createBlogArticle(false),
+                    ],
+                ],
+                [
+                    'total' => 1,
+                    'items' => [
+                        $this->createBlogArticle(true),
+                    ],
+                ],
+            ],
+            'application/vnd.elife.collection+json; version=1' => [
+                $this->createCollection(false, false),
+                $this->createCollection(true, false),
+            ],
+            'application/vnd.elife.collection-list+json; version=1' => [
+                [
+                    'total' => 1,
+                    'items' => [
+                        $this->createCollection(false),
+                    ],
+                ],
+                [
+                    'total' => 1,
+                    'items' => [
+                        $this->createCollection(true),
+                    ],
+                ],
+            ],
+            'application/vnd.elife.community-list+json; version=1' => [
+                [
+                    'total' => 2,
+                    'items' => [
+                        $this->createArticlePoA(false),
+                        $this->createArticleVoR(false),
+                    ],
+                ],
+                [
+                    'total' => 2,
+                    'items' => [
+                        $this->createArticlePoA(true),
+                        $this->createArticleVoR(true),
+                    ],
+                ],
+            ],
+            'application/vnd.elife.cover-list+json; version=1' => [
+                [
+                    'total' => 1,
+                    'items' => [
+                        [
+                            'title' => 'Cover title',
+                            'image' => $this->createImage(),
+                            'item' => $this->createArticlePoA(false),
+                        ],
+                    ],
+                ],
+                [
+                    'total' => 1,
+                    'items' => [
+                        [
+                            'title' => 'Cover title',
+                            'image' => $this->createImage(),
+                            'item' => $this->createArticlePoA(true),
+                        ],
+                    ],
+                ],
+            ],
+            'application/vnd.elife.highlight-list+json; version=1' => [
+                [
+                    'total' => 1,
+                    'items' => [
+                        [
+                            'title' => 'Highlight title',
+                            'item' => $this->createArticlePoA(false),
+                        ],
+                    ],
+                ],
+                [
+                    'total' => 1,
+                    'items' => [
+                        [
+                            'title' => 'Highlight title',
+                            'item' => $this->createArticlePoA(true),
+                        ],
+                    ],
+                ],
+            ],
+            'application/vnd.elife.person+json; version=1' => [
+                $this->createPerson(false, false),
+                $this->createPerson(true, false),
+            ],
+            'application/vnd.elife.person-list+json; version=1' => [
+                [
+                    'total' => 1,
+                    'items' => [
+                        $this->createPerson(false, false),
+                    ],
+                ],
+                [
+                    'total' => 1,
+                    'items' => [
+                        $this->createPerson(true, false),
+                    ],
+                ],
+            ],
+            'application/vnd.elife.podcast-episode+json; version=1' => [
+                $this->createPodcastEpisode(false, false),
+                $this->createPodcastEpisode(true, false),
+            ],
+            'application/vnd.elife.press-package+json; version=3' => [
+                $this->createPressPackage(false, false),
+                $this->createPressPackage(true, false),
+            ],
+            'application/vnd.elife.press-package-list+json; version=1' => [
+                [
+                    'total' => 1,
+                    'items' => [
+                        $this->createPressPackage(false),
+                    ],
+                ],
+                [
+                    'total' => 1,
+                    'items' => [
+                        $this->createPressPackage(true),
+                    ],
+                ],
+            ],
+            'application/vnd.elife.recommendations+json; version=1' => [
+                [
+                    'total' => 2,
+                    'items' => [
+                        $this->createArticlePoA(false),
+                        $this->createArticleVoR(false),
+                    ],
+                ],
+                [
+                    'total' => 2,
+                    'items' => [
+                        $this->createArticlePoA(true),
+                        $this->createArticleVoR(true),
+                    ],
+                ],
+            ],
+            'application/vnd.elife.search+json; version=1' => [
+                [
+                    'total' => 2,
+                    'items' => [
+                        $this->createArticlePoA(false),
+                        $this->createArticleVoR(false),
+                    ],
+                    'subjects' => [
+                        $this->createSubject('old-subject', 'Old Subject') + ['results' => 2],
+                        $this->createSubject('new-subject', 'New Subject') + ['results' => 2],
+                        $this->createSubject('other-subject', 'Other Subject') + ['results' => 2],
+                    ],
+                    'types' => [
+                        'correction' => 0,
+                        'editorial' => 0,
+                        'feature' => 0,
+                        'insight' => 0,
+                        'research-advance' => 0,
+                        'research-article' => 2,
+                        'retraction' => 0,
+                        'registered-report' => 0,
+                        'replication-study' => 0,
+                        'scientific-correspondence' => 0,
+                        'short-report' => 0,
+                        'tools-resources' => 0,
+                        'blog-article' => 0,
+                        'collection' => 0,
+                        'interview' => 0,
+                        'labs-post' => 0,
+                        'podcast-episode' => 0,
+                    ],
+                ],
+                [
+                    'total' => 2,
+                    'items' => [
+                        $this->createArticlePoA(true),
+                        $this->createArticleVoR(true),
+                    ],
+                    'subjects' => [
+                        $this->createSubject('new-subject', 'New Subject') + ['results' => 4],
+                        $this->createSubject('other-subject', 'Other Subject') + ['results' => 2],
+                    ],
+                    'types' => [
+                        'correction' => 0,
+                        'editorial' => 0,
+                        'feature' => 0,
+                        'insight' => 0,
+                        'research-advance' => 0,
+                        'research-article' => 2,
+                        'retraction' => 0,
+                        'registered-report' => 0,
+                        'replication-study' => 0,
+                        'scientific-correspondence' => 0,
+                        'short-report' => 0,
+                        'tools-resources' => 0,
+                        'blog-article' => 0,
+                        'collection' => 0,
+                        'interview' => 0,
+                        'labs-post' => 0,
+                        'podcast-episode' => 0,
+                    ],
+                ],
+            ],
             'application/vnd.elife.subject-list+json; version=1' => [
                 [
                     'total' => 3,
@@ -276,6 +489,173 @@ final class SubjectRewritingMiddlewareTest extends KernelTestCase
         return $article;
     }
 
+    private function createBlogArticle(bool $rewritten = false, bool $snippet = true) : array
+    {
+        $article = [
+            'id' => '1',
+            'title' => 'Blog article title',
+            'published' => '2010-01-01T00:00:00Z',
+            'subjects' => [
+                $this->createSubject('new-subject', 'New Subject'),
+                $this->createSubject('other-subject', 'Other Subject'),
+            ],
+        ];
+
+        if (!$rewritten) {
+            $article['subjects'][] = $this->createSubject('old-subject', 'Old Subject');
+        }
+
+        if (!$snippet) {
+            $article['content'] = [
+                [
+                    'type' => 'paragraph',
+                    'text' => 'text',
+                ],
+            ];
+        }
+
+        return $article;
+    }
+
+    private function createCollection(bool $rewritten = false, bool $snippet = true) : array
+    {
+        $collection = [
+            'id' => '1',
+            'title' => 'Collection title',
+            'published' => '2010-01-01T00:00:00Z',
+            'image' => [
+                'thumbnail' => $this->createImage(),
+            ],
+            'selectedCurator' => $this->createPerson($rewritten, true),
+            'subjects' => [
+                $this->createSubject('new-subject', 'New Subject'),
+                $this->createSubject('other-subject', 'Other Subject'),
+            ],
+        ];
+
+        if (!$rewritten) {
+            $collection['subjects'][] = $this->createSubject('old-subject', 'Old Subject');
+        }
+
+        if (!$snippet) {
+            $collection['content'] = [
+                $this->createArticleVoR($rewritten),
+                $this->createBlogArticle($rewritten) + ['type' => 'blog-article'],
+            ];
+
+            $collection['curators'] = [$collection['selectedCurator']];
+
+            $collection['image']['banner'] = $this->createImage();
+
+            $collection['relatedContent'] = [
+                $this->createArticleVoR($rewritten),
+                $this->createBlogArticle($rewritten) + ['type' => 'blog-article'],
+            ];
+        }
+
+        return $collection;
+    }
+
+    private function createPerson(bool $rewritten = false, bool $snippet = true) : array
+    {
+        $person = [
+            'id' => 'person1',
+            'type' => [
+                'id' => 'senior-editor',
+                'label' => 'Senior Editor',
+            ],
+            'name' => [
+                'preferred' => 'Person 1',
+                'index' => 'Person 1',
+            ],
+        ];
+
+        if (!$snippet) {
+            $person['research'] = [
+                'expertises' => [
+                    $this->createSubject('new-subject', 'New Subject'),
+                    $this->createSubject('other-subject', 'Other Subject'),
+                ],
+                'focuses' => [],
+            ];
+
+            if (!$rewritten) {
+                $person['research']['expertises'][] = $this->createSubject('old-subject', 'Old Subject');
+            }
+        }
+
+        return $person;
+    }
+
+    private function createPodcastEpisode(bool $rewritten = false, bool $snippet = true) : array
+    {
+        $podcast = [
+            'number' => 1,
+            'title' => 'Podcast episode 1',
+            'published' => '2010-01-01T00:00:00Z',
+            'image' => [
+                'thumbnail' => $this->createImage(),
+            ],
+            'sources' => [
+                [
+                    'mediaType' => 'audio/mpeg',
+                    'uri' => 'https://www.example.com/episode1.mp3',
+                ],
+            ],
+        ];
+
+        if (!$snippet) {
+            $podcast['chapters'] = [
+                [
+                    'number' => 1,
+                    'title' => 'Chapter 1',
+                    'time' => 0,
+                    'content' => [
+                        $this->createArticlePoA($rewritten, true),
+                        $this->createArticleVoR($rewritten, true),
+                    ],
+                ],
+            ];
+
+            $podcast['image']['banner'] = $this->createImage();
+        }
+
+        return $podcast;
+    }
+
+    private function createPressPackage(bool $rewritten = false, bool $snippet = true) : array
+    {
+        $pressPackage = [
+            'id' => '1',
+            'title' => 'Press package title',
+            'published' => '2010-01-01T00:00:00Z',
+            'subjects' => [
+                $this->createSubject('new-subject', 'New Subject'),
+                $this->createSubject('other-subject', 'Other Subject'),
+            ],
+        ];
+
+        if (!$rewritten) {
+            $pressPackage['subjects'][] = $this->createSubject('old-subject', 'Old Subject');
+        }
+
+        if (!$snippet) {
+            $pressPackage['content'] = [
+                [
+                    'type' => 'paragraph',
+                    'text' => 'text',
+                ],
+            ];
+
+            $pressPackage['relatedContent'] = [
+                $this->createArticlePoA($rewritten),
+                $this->createArticleVoR($rewritten),
+            ];
+        }
+
+        return $pressPackage;
+    }
+
     private function createSubject(string $id, string $name, bool $snippet = true) : array
     {
         $subject = [
@@ -286,35 +666,28 @@ final class SubjectRewritingMiddlewareTest extends KernelTestCase
         if (!$snippet) {
             $subject['impactStatement'] = 'Subject impact statement.';
             $subject['image'] = [
-                'banner' => [
-                    'uri' => 'https://www.example.com/iiif/image',
-                    'alt' => '',
-                    'source' => [
-                        'mediaType' => 'image/jpeg',
-                        'uri' => 'https://www.example.com/image.jpg',
-                        'filename' => 'image.jpg',
-                    ],
-                    'size' => [
-                        'width' => 800,
-                        'height' => 600,
-                    ],
-                ],
-                'thumbnail' => [
-                    'uri' => 'https://www.example.com/iiif/image',
-                    'alt' => '',
-                    'source' => [
-                        'mediaType' => 'image/jpeg',
-                        'uri' => 'https://www.example.com/image.jpg',
-                        'filename' => 'image.jpg',
-                    ],
-                    'size' => [
-                        'width' => 800,
-                        'height' => 600,
-                    ],
-                ],
+                'banner' => $this->createImage(),
+                'thumbnail' => $this->createImage(),
             ];
         }
 
         return $subject;
+    }
+
+    private function createImage() : array
+    {
+        return [
+            'uri' => 'https://www.example.com/iiif/image',
+            'alt' => '',
+            'source' => [
+                'mediaType' => 'image/jpeg',
+                'uri' => 'https://www.example.com/image.jpg',
+                'filename' => 'image.jpg',
+            ],
+            'size' => [
+                'width' => 800,
+                'height' => 600,
+            ],
+        ];
     }
 }
