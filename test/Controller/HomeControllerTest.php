@@ -339,6 +339,101 @@ final class HomeControllerTest extends PageTestCase
         $this->assertSame('Subject name', trim($crawler->filter('.section-listing__list_item')->text()));
     }
 
+    /**
+     * @test
+     */
+    public function subjects_are_rewritten()
+    {
+        $client = static::createClient();
+
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/subjects?page=1&per-page=100&order=asc',
+                ['Accept' => 'application/vnd.elife.subject-list+json; version=1']
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.subject-list+json; version=1'],
+                json_encode([
+                    'total' => 2,
+                    'items' => [
+                        [
+                            'id' => 'old-subject',
+                            'name' => 'Old Subject',
+                            'impactStatement' => 'Subject impact statement.',
+                            'image' => [
+                                'banner' => [
+                                    'uri' => 'https://www.example.com/iiif/image',
+                                    'alt' => '',
+                                    'source' => [
+                                        'mediaType' => 'image/jpeg',
+                                        'uri' => 'https://www.example.com/image.jpg',
+                                        'filename' => 'image.jpg',
+                                    ],
+                                    'size' => [
+                                        'width' => 800,
+                                        'height' => 600,
+                                    ],
+                                ],
+                                'thumbnail' => [
+                                    'uri' => 'https://www.example.com/iiif/image',
+                                    'alt' => '',
+                                    'source' => [
+                                        'mediaType' => 'image/jpeg',
+                                        'uri' => 'https://www.example.com/image.jpg',
+                                        'filename' => 'image.jpg',
+                                    ],
+                                    'size' => [
+                                        'width' => 800,
+                                        'height' => 600,
+                                    ],
+                                ],
+                            ],
+                        ],
+                        [
+                            'id' => 'new-subject',
+                            'name' => 'New Subject',
+                            'impactStatement' => 'Subject impact statement.',
+                            'image' => [
+                                'banner' => [
+                                    'uri' => 'https://www.example.com/iiif/image',
+                                    'alt' => '',
+                                    'source' => [
+                                        'mediaType' => 'image/jpeg',
+                                        'uri' => 'https://www.example.com/image.jpg',
+                                        'filename' => 'image.jpg',
+                                    ],
+                                    'size' => [
+                                        'width' => 800,
+                                        'height' => 600,
+                                    ],
+                                ],
+                                'thumbnail' => [
+                                    'uri' => 'https://www.example.com/iiif/image',
+                                    'alt' => '',
+                                    'source' => [
+                                        'mediaType' => 'image/jpeg',
+                                        'uri' => 'https://www.example.com/image.jpg',
+                                        'filename' => 'image.jpg',
+                                    ],
+                                    'size' => [
+                                        'width' => 800,
+                                        'height' => 600,
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ])
+            )
+        );
+
+        $crawler = $client->request('GET', $this->getUrl());
+
+        $this->assertSame(['New Subject'], array_map('trim', $crawler->filter('.section-listing__list_item')->extract('_text')));
+    }
+
     protected function getUrl() : string
     {
         $this->mockApiResponse(

@@ -171,6 +171,69 @@ final class SubjectControllerTest extends PageTestCase
         $this->assertSame(404, $client->getResponse()->getStatusCode());
     }
 
+    /**
+     * @test
+     */
+    public function it_redirects_if_the_subject_is_rewritten()
+    {
+        $client = static::createClient();
+
+        static::mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/subjects/new-subject',
+                [
+                    'Accept' => 'application/vnd.elife.subject+json; version=1',
+                ]
+            ),
+            new Response(
+                200,
+                [
+                    'Content-Type' => 'application/vnd.elife.subject+json; version=1',
+                ],
+                json_encode([
+                    'id' => 'new-subject',
+                    'name' => 'New Subject',
+                    'impactStatement' => 'Subject impact statement.',
+                    'image' => [
+                        'banner' => [
+                            'uri' => 'https://www.example.com/iiif/banner',
+                            'alt' => '',
+                            'source' => [
+                                'mediaType' => 'image/jpeg',
+                                'uri' => 'https://www.example.com/banner.jpg',
+                                'filename' => 'image.jpg',
+                            ],
+                            'size' => [
+                                'width' => 1800,
+                                'height' => 1600,
+                            ],
+                        ],
+                        'thumbnail' => [
+                            'uri' => 'https://www.example.com/iiif/image',
+                            'alt' => '',
+                            'source' => [
+                                'mediaType' => 'image/jpeg',
+                                'uri' => 'https://www.example.com/image.jpg',
+                                'filename' => 'image.jpg',
+                            ],
+                            'size' => [
+                                'width' => 800,
+                                'height' => 600,
+                            ],
+                        ],
+                    ],
+                ])
+            )
+        );
+
+        $client->followRedirects(false);
+
+        $client->request('GET', '/subjects/old-subject');
+
+        $this->assertTrue($client->getResponse()->isRedirect('/subjects/new-subject'));
+    }
+
     protected function getUrl() : string
     {
         static::mockApiResponse(
