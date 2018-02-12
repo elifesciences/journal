@@ -116,7 +116,7 @@ final class InterviewsController extends Controller
         $arguments['collections'] = $this->get('elife.api_sdk.collections')
             ->containing(Identifier::interview($id))
             ->slice(0, 10)
-            ->map($this->willConvertTo(Teaser::class, ['variant' => 'relatedItem', 'from' => 'interview', 'unrelated' => false]))
+            ->map($this->willConvertTo(Teaser::class, ['variant' => 'relatedItem', 'from' => 'interview', 'related' => true]))
             ->then(Callback::emptyOr(function (Sequence $collections) {
                 return ListingTeasers::basic($collections->toArray());
             }))

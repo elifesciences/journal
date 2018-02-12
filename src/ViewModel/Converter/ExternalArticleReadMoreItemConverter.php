@@ -20,6 +20,7 @@ final class ExternalArticleReadMoreItemConverter implements ViewModelConverter
                 $object->getAuthorLine(),
                 ViewModel\Meta::withText($object->getJournal())
             ),
+            null,
             $context['isRelated'] ?? false
         );
     }
