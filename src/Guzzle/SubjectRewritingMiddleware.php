@@ -2,12 +2,12 @@
 
 namespace eLife\Journal\Guzzle;
 
+use eLife\ApiClient\MediaType;
 use GuzzleHttp\Promise\PromiseInterface;
 use InvalidArgumentException;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use function GuzzleHttp\json_decode;
-use function GuzzleHttp\Psr7\normalize_header;
 use function GuzzleHttp\Psr7\parse_query;
 use function GuzzleHttp\Psr7\stream_for;
 
@@ -65,8 +65,8 @@ final class SubjectRewritingMiddleware
                     return $response;
                 }
 
-                switch (normalize_header($response->getHeaderLine('Content-Type'))[0]) {
-                    case 'application/vnd.elife.subject-list+json;version=1':
+                switch ((string) MediaType::fromString($response->getHeaderLine('Content-Type'))) {
+                    case 'application/vnd.elife.subject-list+json; version=1':
                         $before = count($data['items']); // This won't work across pages.
 
                         $data['items'] = array_filter($data['items'], function (array $subject) {
@@ -78,37 +78,37 @@ final class SubjectRewritingMiddleware
                         $data['total'] = $data['total'] - ($before - $after);
                         break;
 
-                    case 'application/vnd.elife.article-history+json;version=1':
+                    case 'application/vnd.elife.article-history+json; version=1':
                         $data['versions'] = $this->updateItems($data['versions']);
                         break;
 
-                    case 'application/vnd.elife.article-list+json;version=1':
-                    case 'application/vnd.elife.article-related+json;version=1':
-                    case 'application/vnd.elife.blog-article-list+json;version=1':
-                    case 'application/vnd.elife.collection-list+json;version=1':
-                    case 'application/vnd.elife.community-list+json;version=1':
-                    case 'application/vnd.elife.cover-list+json;version=1':
-                    case 'application/vnd.elife.highlight-list+json;version=1':
-                    case 'application/vnd.elife.press-package-list+json;version=1':
-                    case 'application/vnd.elife.recommendations+json;version=1':
+                    case 'application/vnd.elife.article-list+json; version=1':
+                    case 'application/vnd.elife.article-related+json; version=1':
+                    case 'application/vnd.elife.blog-article-list+json; version=1':
+                    case 'application/vnd.elife.collection-list+json; version=1':
+                    case 'application/vnd.elife.community-list+json; version=1':
+                    case 'application/vnd.elife.cover-list+json; version=1':
+                    case 'application/vnd.elife.highlight-list+json; version=1':
+                    case 'application/vnd.elife.press-package-list+json; version=1':
+                    case 'application/vnd.elife.recommendations+json; version=1':
                         $data['items'] = $this->updateItems($data['items']);
                         break;
 
-                    case 'application/vnd.elife.article-poa+json;version=1':
-                    case 'application/vnd.elife.article-poa+json;version=2':
-                    case 'application/vnd.elife.article-vor+json;version=1':
-                    case 'application/vnd.elife.article-vor+json;version=2':
-                    case 'application/vnd.elife.blog-article+json;version=2':
+                    case 'application/vnd.elife.article-poa+json; version=1':
+                    case 'application/vnd.elife.article-poa+json; version=2':
+                    case 'application/vnd.elife.article-vor+json; version=1':
+                    case 'application/vnd.elife.article-vor+json; version=2':
+                    case 'application/vnd.elife.blog-article+json; version=2':
                         $data = $this->updateItem($data);
                         break;
 
-                    case 'application/vnd.elife.collection+json;version=1':
+                    case 'application/vnd.elife.collection+json; version=1':
                         $data = $this->updateItem($data);
                         $data['content'] = $this->updateItems($data['content']);
                         $data['relatedContent'] = $this->updateItems($data['relatedContent'] ?? []);
                         break;
 
-                    case 'application/vnd.elife.podcast-episode+json;version=1':
+                    case 'application/vnd.elife.podcast-episode+json; version=1':
                         $data['chapters'] = array_map(function (array $chapter) {
                             $chapter['content'] = $this->updateItems($chapter['content'] ?? []);
 
@@ -116,20 +116,20 @@ final class SubjectRewritingMiddleware
                         }, $data['chapters']);
                         break;
 
-                    case 'application/vnd.elife.person-list+json;version=1':
+                    case 'application/vnd.elife.person-list+json; version=1':
                         $data['items'] = array_map([$this, 'updatePerson'], $data['items']);
                         break;
 
-                    case 'application/vnd.elife.person+json;version=1':
+                    case 'application/vnd.elife.person+json; version=1':
                         $data = $this->updatePerson($data);
                         break;
 
-                    case 'application/vnd.elife.press-package+json;version=3':
+                    case 'application/vnd.elife.press-package+json; version=3':
                         $data = $this->updateItem($data);
                         $data['relatedContent'] = $this->updateItems($data['relatedContent'] ?? []);
                         break;
 
-                    case 'application/vnd.elife.search+json;version=1':
+                    case 'application/vnd.elife.search+json; version=1':
                         $data['items'] = $this->updateItems($data['items']);
                         foreach ($this->replacements as $replaced => $replacement) {
                             $total = 0;
