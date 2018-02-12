@@ -60,12 +60,13 @@ final class SubjectRewritingMiddleware
 
             return $promise->then(function (ResponseInterface $response) use ($request) {
                 try {
+                    $mediaType = MediaType::fromString($response->getHeaderLine('Content-Type'));
                     $data = json_decode($response->getBody(), true);
                 } catch (InvalidArgumentException $e) {
                     return $response;
                 }
 
-                switch ((string) MediaType::fromString($response->getHeaderLine('Content-Type'))) {
+                switch ((string) $mediaType) {
                     case 'application/vnd.elife.subject-list+json; version=1':
                         $before = count($data['items']); // This won't work across pages.
 
