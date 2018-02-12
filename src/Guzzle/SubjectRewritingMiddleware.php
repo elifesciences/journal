@@ -3,11 +3,11 @@
 namespace eLife\Journal\Guzzle;
 
 use eLife\ApiClient\MediaType;
-use GuzzleHttp\Promise\PromiseInterface;
 use InvalidArgumentException;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use function GuzzleHttp\json_decode;
+use function GuzzleHttp\Promise\promise_for;
 use function GuzzleHttp\Psr7\parse_query;
 use function GuzzleHttp\Psr7\stream_for;
 
@@ -26,7 +26,7 @@ final class SubjectRewritingMiddleware
             return $handler;
         }
 
-        return function (RequestInterface $request, array $options) use (&$handler) {
+        return function (RequestInterface $request, array $options = []) use (&$handler) {
             $uri = $request->getUri();
 
             foreach ($this->replacements as $replaced => $replacement) {
@@ -55,10 +55,7 @@ final class SubjectRewritingMiddleware
 
             $request = $request->withUri($uri);
 
-            /** @var PromiseInterface $promise */
-            $promise = $handler($request, $options);
-
-            return $promise->then(function (ResponseInterface $response) use ($request) {
+            return promise_for($handler($request, $options))->then(function (ResponseInterface $response) use ($request) {
                 try {
                     $mediaType = MediaType::fromString($response->getHeaderLine('Content-Type'));
                     $data = json_decode($response->getBody(), true);
@@ -70,9 +67,9 @@ final class SubjectRewritingMiddleware
                     case 'application/vnd.elife.subject-list+json; version=1':
                         $before = count($data['items']); // This won't work across pages.
 
-                        $data['items'] = array_filter($data['items'], function (array $subject) {
+                        $data['items'] = array_values(array_filter($data['items'], function (array $subject) {
                             return !in_array($subject['id'], array_keys($this->replacements));
-                        });
+                        }));
 
                         $after = count($data['items']);
 
