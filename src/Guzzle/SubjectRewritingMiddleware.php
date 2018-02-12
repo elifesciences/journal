@@ -13,16 +13,19 @@ use function GuzzleHttp\Psr7\stream_for;
 
 final class SubjectRewritingMiddleware
 {
-    private $replacements = [
-        // Dummy rewrite
-        'cancer-biology' => [
-            'id' => 'immunology',
-            'name' => 'Immunology',
-        ],
-    ];
+    private $replacements;
 
-    public function __invoke(callable $handler)
+    public function __construct(array $replacements = [])
     {
+        $this->replacements = $replacements;
+    }
+
+    public function __invoke(callable $handler) : callable
+    {
+        if (empty($this->replacements)) {
+            return $handler;
+        }
+
         return function (RequestInterface $request, array $options) use (&$handler) {
             $uri = $request->getUri();
 

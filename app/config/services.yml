@@ -160,6 +160,8 @@ services:
     elife.journal.guzzle.subject_rewriting:
         class: eLife\Journal\Guzzle\SubjectRewritingMiddleware
         public: false
+        arguments:
+          - '%subject_rewrites%'
         tags:
           - name: csa_guzzle.middleware
             alias: subject_rewriting
