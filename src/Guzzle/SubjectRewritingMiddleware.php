@@ -144,25 +144,7 @@ final class SubjectRewritingMiddleware
 
                     case 'application/vnd.elife.search+json; version=1':
                         $data['items'] = $this->updateItems($data['items']);
-                        foreach ($this->replacements as $replaced => $replacement) {
-                            $total = 0;
-                            foreach ($data['subjects'] as $i => $subject) {
-                                if ($replaced === $subject['id']) {
-                                    $total = $subject['results'];
-                                    unset($data['subjects'][$i]);
-                                    break;
-                                }
-                            }
-                            if ($total > 0) {
-                                foreach ($data['subjects'] as $i => $subject) {
-                                    if ($replacement['id'] === $subject['id']) {
-                                        $data['subjects'][$i]['results'] += $total;
-                                        break;
-                                    }
-                                }
-                            }
-                        }
-                        $data['subjects'] = array_values($data['subjects']);
+                        $data['subjects'] = $this->updateSearchSubjects($data['subjects'] ?? []);
                         break;
                 }
 
@@ -192,6 +174,30 @@ final class SubjectRewritingMiddleware
         $person['research']['expertises'] = $this->updateSubjects($person['research']['expertises']);
 
         return $person;
+    }
+
+    private function updateSearchSubjects(array $subjects) : array
+    {
+        foreach ($this->replacements as $replaced => $replacement) {
+            $total = 0;
+            foreach ($subjects as $i => $subject) {
+                if ($replaced === $subject['id']) {
+                    $total = $subject['results'];
+                    unset($subjects[$i]);
+                    break;
+                }
+            }
+            if ($total > 0) {
+                foreach ($subjects as $i => $subject) {
+                    if ($replacement['id'] === $subject['id']) {
+                        $subjects[$i]['results'] += $total;
+                        break;
+                    }
+                }
+            }
+        }
+
+        return array_values($subjects);
     }
 
     private function updateSubjects(array $subjects) : array
