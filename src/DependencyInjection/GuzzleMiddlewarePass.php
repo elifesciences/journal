@@ -13,7 +13,7 @@ final class GuzzleMiddlewarePass implements CompilerPassInterface
             $handler = $container->getDefinition("csa_guzzle.client.$id")->getArgument(0)['handler'];
 
             $handler->setMethodCalls(array_filter($handler->getMethodCalls(), function (array $methodCall) {
-                return 'push' !== $methodCall[0] || 'cache' !== $methodCall[1][1];
+                return 'push' !== $methodCall[0] || !in_array($methodCall[1][1], ['cache', 'remove_validation']);
             }));
         }
     }
