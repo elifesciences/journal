@@ -333,8 +333,8 @@ final class SubjectRewritingMiddlewareTest extends KernelTestCase
                     ],
                     'subjects' => [
                         $this->createSubject('old-subject', 'Old Subject') + ['results' => 2],
-                        $this->createSubject('new-subject', 'New Subject') + ['results' => 2],
-                        $this->createSubject('other-subject', 'Other Subject') + ['results' => 2],
+                        $this->createSubject('new-subject', 'New Subject') + ['results' => 4],
+                        $this->createSubject('other-subject', 'Other Subject') + ['results' => 8],
                     ],
                     'types' => [
                         'correction' => 0,
@@ -363,8 +363,8 @@ final class SubjectRewritingMiddlewareTest extends KernelTestCase
                         $this->createArticleVoR(true),
                     ],
                     'subjects' => [
-                        $this->createSubject('new-subject', 'New Subject') + ['results' => 4],
-                        $this->createSubject('other-subject', 'Other Subject') + ['results' => 2],
+                        $this->createSubject('new-subject', 'New Subject') + ['results' => 6],
+                        $this->createSubject('other-subject', 'Other Subject') + ['results' => 8],
                     ],
                     'types' => [
                         'correction' => 0,
