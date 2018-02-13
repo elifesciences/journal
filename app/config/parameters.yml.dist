@@ -26,6 +26,6 @@ parameters:
     hypothesis_client_id: some-id
     hypothesis_client_secret: ThisIsASecret
     subject_rewrites:
-        from-subject:
-            id: to-subject
-            name: To Subject Name
+      - from_id: from-subject
+        to_id: to-subject
+        to_name: To Subject Name

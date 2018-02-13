@@ -17,7 +17,12 @@ final class SubjectRewritingMiddleware
 
     public function __construct(array $replacements = [])
     {
-        $this->replacements = $replacements;
+        $this->replacements = array_reduce($replacements, function (array $carry, array $rewrite) {
+            return $carry + [$rewrite['from_id'] => [
+                    'id' => $rewrite['to_id'],
+                    'name' => $rewrite['to_name'],
+                ]];
+        }, []);
     }
 
     public function __invoke(callable $handler) : callable

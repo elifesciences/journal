@@ -17,8 +17,8 @@ final class SubjectRewritingMiddlewareTest extends KernelTestCase
     use Assertions;
     use Providers;
 
-    private static $rewrite = [
-        'old-subject' => ['id' => 'new-subject', 'name' => 'New Subject'],
+    private static $rewrites = [
+        ['from_id' => 'old-subject', 'to_id' => 'new-subject', 'to_name' => 'New Subject'],
     ];
 
     /**
@@ -38,7 +38,7 @@ final class SubjectRewritingMiddlewareTest extends KernelTestCase
      */
     public function it_changes_highlights_targets()
     {
-        $middleware = new SubjectRewritingMiddleware(self::$rewrite);
+        $middleware = new SubjectRewritingMiddleware(self::$rewrites);
 
         $middleware(function (RequestInterface $request) {
             $this->assertSameUri('http://api.elifesciences.org/highlights/new-subject', $request->getUri());
@@ -52,7 +52,7 @@ final class SubjectRewritingMiddlewareTest extends KernelTestCase
      */
     public function it_changes_subject_targets()
     {
-        $middleware = new SubjectRewritingMiddleware(self::$rewrite);
+        $middleware = new SubjectRewritingMiddleware(self::$rewrites);
 
         $middleware(function (RequestInterface $request) {
             $this->assertSameUri('http://api.elifesciences.org/subjects/new-subject', $request->getUri());
@@ -66,7 +66,7 @@ final class SubjectRewritingMiddlewareTest extends KernelTestCase
      */
     public function it_adds_to_query_strings()
     {
-        $middleware = new SubjectRewritingMiddleware(self::$rewrite);
+        $middleware = new SubjectRewritingMiddleware(self::$rewrites);
 
         $middleware(function (RequestInterface $request) {
             $this->assertSameUri('http://api.elifesciences.org/subjects?subject[]=old-subject&subject[]=new-subject', $request->getUri());
@@ -88,7 +88,7 @@ final class SubjectRewritingMiddlewareTest extends KernelTestCase
     public function it_rewrites_responses(string $mediaType, array $realResponse, array $expectedResponse)
     {
         $validator = self::bootKernel()->getContainer()->get('elife.api_validator.validator');
-        $middleware = new SubjectRewritingMiddleware(self::$rewrite);
+        $middleware = new SubjectRewritingMiddleware(self::$rewrites);
 
         $request = new Request(
             'GET',

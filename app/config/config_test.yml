@@ -13,9 +13,9 @@ parameters:
         Check 1: foo
         Check 2: bar
     subject_rewrites:
-        old-subject:
-            id: new-subject
-            name: New Subject
+      - from_id: old-subject
+        to_id: new-subject
+        to_name: New Subject
 
 framework:
     profiler:
