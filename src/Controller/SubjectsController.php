@@ -5,6 +5,8 @@ namespace eLife\Journal\Controller;
 use eLife\ApiSdk\Collection\PromiseSequence;
 use eLife\ApiSdk\Collection\Sequence;
 use eLife\ApiSdk\Model\Person;
+use eLife\ApiSdk\Model\Subject;
+use eLife\Journal\Exception\EarlyResponse;
 use eLife\Journal\Helper\Callback;
 use eLife\Journal\Helper\CreatesIiifUri;
 use eLife\Journal\Helper\Paginator;
@@ -22,6 +24,7 @@ use eLife\Patterns\ViewModel\ProfileSnippet;
 use eLife\Patterns\ViewModel\SeeMoreLink;
 use eLife\Patterns\ViewModel\Teaser;
 use Pagerfanta\Pagerfanta;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use function GuzzleHttp\Promise\all;
@@ -61,7 +64,14 @@ final class SubjectsController extends Controller
 
         $item = $this->get('elife.api_sdk.subjects')
             ->get($id)
-            ->otherwise($this->mightNotExist());
+            ->otherwise($this->mightNotExist())
+            ->then(function (Subject $subject) use ($id) {
+                if ($subject->getId() !== $id) {
+                    throw new EarlyResponse(new RedirectResponse($this->get('router')->generate('subject', [$subject])));
+                }
+
+                return $subject;
+            });
 
         $arguments = $this->defaultPageArguments($request, $item);
 

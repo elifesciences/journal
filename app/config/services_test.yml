@@ -2,7 +2,6 @@ services:
 
     elife.api_validator.validator:
         class: eLife\ApiValidator\MessageValidator\JsonMessageValidator
-        public: false
         arguments:
           - '@elife.api_validator.schema_finder'
           - '@elife.api_validator.schema_validator'

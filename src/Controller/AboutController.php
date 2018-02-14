@@ -7,6 +7,7 @@ use eLife\ApiSdk\Collection\PromiseSequence;
 use eLife\ApiSdk\Collection\Sequence;
 use eLife\ApiSdk\Model\Person;
 use eLife\ApiSdk\Model\Subject;
+use eLife\Journal\Exception\EarlyResponse;
 use eLife\Journal\Helper\Callback;
 use eLife\Journal\ViewModel\DefinitionList;
 use eLife\Patterns\ViewModel\AboutProfile;
@@ -250,7 +251,14 @@ final class AboutController extends Controller
                 $arguments['lists'][] = $this->createAboutProfiles($people->forType('executive'), 'Executive staff');
                 break;
             default:
-                $arguments['subject'] = $subjects->get($type)->otherwise($this->mightNotExist());
+                $arguments['subject'] = $subjects->get($type)->otherwise($this->mightNotExist())
+                    ->then(function (Subject $subject) use ($type) {
+                        if ($subject->getId() !== $type) {
+                            throw new EarlyResponse(new RedirectResponse($this->get('router')->generate('about-people', ['type' => $subject->getId()])));
+                        }
+
+                        return $subject;
+                    });
 
                 $people = $people->forSubject($type);
                 $arguments['lists'][] = $this->createAboutProfiles($people->forType('senior-editor'), 'Senior editors');
