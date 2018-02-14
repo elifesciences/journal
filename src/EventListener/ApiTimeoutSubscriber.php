@@ -3,6 +3,7 @@
 namespace eLife\Journal\EventListener;
 
 use eLife\ApiClient\Exception\ApiTimeout;
+use eLife\ApiClient\Exception\BadResponse;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
@@ -21,7 +22,7 @@ final class ApiTimeoutSubscriber implements EventSubscriberInterface
     {
         $exception = $event->getException();
 
-        if ($exception instanceof ApiTimeout) {
+        if ($exception instanceof ApiTimeout || ($exception instanceof BadResponse && Response::HTTP_GATEWAY_TIMEOUT === $exception->getResponse()->getStatusCode())) {
             $event->setException(new HttpException(Response::HTTP_GATEWAY_TIMEOUT, $exception->getMessage(), $exception));
         }
     }
