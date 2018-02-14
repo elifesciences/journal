@@ -9,7 +9,7 @@ use eLife\Patterns\ViewModel;
 final class ButtonConverterTest extends BlockConverterTestCase
 {
     protected $blockClass = Block\Button::class;
-    protected $viewModelClasses = [ViewModel\Button::class];
+    protected $viewModelClasses = [ViewModel\ButtonCollection::class];
 
     /**
      * @before

@@ -1,23 +1,19 @@
 security:
     providers:
         oauth:
-            id: hwi_oauth.user.provider
+            id: knpu.oauth2.user_provider
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt))/
             security: false
         main:
             anonymous: ~
+            guard:
+                authenticators:
+                  - elife.journal.security.authenticator.elife
             logout:
                 path: /log-out
                 target: /
-            oauth:
-                login_path: /log-in
-                failure_path: /
-                oauth_user_provider:
-                    service: hwi_oauth.user.provider
-                resource_owners:
-                    elife: /log-in/check
     access_control:
         - path: ^/log-in
           roles: IS_AUTHENTICATED_ANONYMOUSLY

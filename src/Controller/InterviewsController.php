@@ -12,10 +12,9 @@ use eLife\Journal\Pagerfanta\SequenceAdapter;
 use eLife\Patterns\ViewModel\ArticleSection;
 use eLife\Patterns\ViewModel\ContentHeader;
 use eLife\Patterns\ViewModel\ContextualData;
-use eLife\Patterns\ViewModel\ContextualDataMetric;
-use eLife\Patterns\ViewModel\HypothesisOpener;
 use eLife\Patterns\ViewModel\Listing;
 use eLife\Patterns\ViewModel\ListingTeasers;
+use eLife\Patterns\ViewModel\SpeechBubble;
 use eLife\Patterns\ViewModel\Teaser;
 use Pagerfanta\Pagerfanta;
 use Symfony\Component\HttpFoundation\Request;
@@ -74,34 +73,30 @@ final class InterviewsController extends Controller
 
     public function interviewAction(Request $request, string $id) : Response
     {
-        $interview = $this->get('elife.api_sdk.interviews')
+        $arguments['item'] = $this->get('elife.api_sdk.interviews')
             ->get($id)
             ->otherwise($this->mightNotExist())
             ->then($this->checkSlug($request, function (Interview $interview) {
                 return $interview->getInterviewee()->getPerson()->getPreferredName();
             }));
 
-        $arguments = $this->defaultPageArguments($request, $interview);
+        $arguments = $this->defaultPageArguments($request, $arguments['item']);
 
-        $arguments['title'] = $interview
+        $arguments['title'] = $arguments['item']
             ->then(Callback::method('getTitle'));
 
-        $arguments['interview'] = $interview;
-
-        $arguments['contentHeader'] = $arguments['interview']
+        $arguments['contentHeader'] = $arguments['item']
             ->then($this->willConvertTo(ContentHeader::class));
 
-        $arguments['contextualData'] = $arguments['interview']
-            ->then($this->ifGranted(['FEATURE_CAN_USE_HYPOTHESIS'], function (Interview $interview) {
-                $metrics = [new ContextualDataMetric('Annotations', 0, 'annotation-count')];
+        $arguments['contextualData'] = ContextualData::annotationsOnly(SpeechBubble::forContextualData());
 
-                return ContextualData::withMetrics($metrics);
-            }));
+        $arguments['blocks'] = $arguments['item']
+            ->then($this->willConvertContent())
+            ->then(function (Sequence $blocks) {
+                return $blocks->prepend(SpeechBubble::forArticleBody());
+            });
 
-        $arguments['blocks'] = $arguments['interview']
-            ->then($this->willConvertContent());
-
-        $arguments['cv'] = $arguments['interview']
+        $arguments['cv'] = $arguments['item']
             ->then(function (Interview $interview) {
                 if ($interview->getInterviewee()->getCvLines()->isEmpty()) {
                     return null;
@@ -118,14 +113,10 @@ final class InterviewsController extends Controller
                 );
             });
 
-        if ($this->isGranted('FEATURE_CAN_USE_HYPOTHESIS')) {
-            $arguments['hypothesisOpener'] = new HypothesisOpener();
-        }
-
         $arguments['collections'] = $this->get('elife.api_sdk.collections')
             ->containing(Identifier::interview($id))
             ->slice(0, 10)
-            ->map($this->willConvertTo(Teaser::class, ['variant' => 'relatedItem', 'from' => 'interview', 'unrelated' => false]))
+            ->map($this->willConvertTo(Teaser::class, ['variant' => 'relatedItem', 'from' => 'interview', 'related' => true]))
             ->then(Callback::emptyOr(function (Sequence $collections) {
                 return ListingTeasers::basic($collections->toArray());
             }))

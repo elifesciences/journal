@@ -38,13 +38,75 @@
             {% set canonical = path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) %}
         {% endif %}
 
+        {% block dublin_core %}
+
+            {% if item and item.title is defined %}
+
+                <meta name="dc.format" content="text/html">
+                <meta name="dc.language" content="en">
+                <meta name="dc.publisher" content="eLife Sciences Publications Limited">
+
+                {% if item.fullTitle is defined and item.fullTitle %}
+                    <meta name="dc.title" content="{{ item.fullTitle|striptags }}">
+                {% else %}
+                    <meta name="dc.title" content="{{ item.title|striptags }}">
+                {% endif %}
+
+                {% if item.doi is defined and item.doi %}
+                    <meta name="dc.identifier" content="doi:{{ item.doi }}">
+                {% elseif item.identifier is defined %}
+                    <meta name="dc.identifier" content="{{ item.identifier }}">
+                    <meta name="dc.relation.ispartof" content="elifesciences.org">
+                {% endif %}
+
+                {% if item.publishedDate is defined and item.publishedDate %}
+                    <meta name="dc.date" content="{{ item.publishedDate|date('Y-m-d', 'UTC') }}">
+
+                    {% if item.copyright is defined and item.copyright %}
+                        <meta name="dc.rights" content="
+                            {%- if item.copyright.holder -%}© {{ item.publishedDate|date('Y', 'UTC') }} {{ item.copyright.holder }}. {% endif -%}
+                            {{- item.copyright.statement|striptags -}}
+                        ">
+                    {% else %}
+                        <meta name="dc.rights"
+                              content="© {{ item.publishedDate|date('Y', 'UTC') }} eLife Sciences Publications Limited. This article is distributed under the terms of the Creative Commons Attribution License, which permits unrestricted use and redistribution provided that the original author and source are credited.">
+                    {% endif %}
+
+                {% endif %}
+
+                {% if item.digest is defined and item.digest and item.digest.content|length %}
+                    <meta name="dc.description" content="
+                        {%- for paragraph in item.digest.content -%}
+                            {{ paragraph.text|striptags }}
+                            {%- if not loop.last %} {% endif %}
+                        {%- endfor -%}
+                    ">
+                {% endif %}
+
+                {% if item.authors is defined %}
+                    {% for author in item.authors %}
+                        {% if author.affiliations is defined %}
+                            <meta name="dc.contributor" content="{{ author.toString }}">
+                            {% if author.people is defined %}
+                                {% for person in author.people %}
+                                    <meta name="dc.contributor" content="{{ person.preferredName }}">
+                                {% endfor %}
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+
+            {% endif %}
+
+        {% endblock %}
+
         <meta property="og:site_name" content="eLife">
         <meta property="og:url" content="{{ absolute_url(canonical) }}">
         <meta property="og:title" content="{{ title|striptags }}">
         <meta name="twitter:site" content="@eLife">
 
-        {% if block('description') is defined and block('description')|trim != '' %}
-            {% set description = block('description') %}
+        {% if item is defined and item.impactStatement is defined %}
+            {% set description = item.impactStatement %}
         {% elseif contentHeader is defined and contentHeader.impactStatement is defined %}
             {% set description = contentHeader.impactStatement %}
         {% elseif leadParas is defined and leadParas %}
@@ -101,6 +163,21 @@
         };
 
         {% if gtm_id %}
+        window.gtmDataLayer = window.gtmDataLayer || [];
+
+        {% if item.publishedDate is defined and item.publishedDate %}
+        window.gtmDataLayer.push(
+            {
+                {% if item.subjects is defined and item.subjects|length -%}
+                'articleSubjects': '{% for subject in item.subjects %}{{ subject.name }}{% if not loop.last %}, {% endif %}{% endfor %}',
+                {%- endif %}
+
+                'articleType': '{% if item.type is defined %}{{ model_name(item.type) }}{% else %}{{ model_name(item.identifier.type) }}{% endif %}',
+                'articlePublishDate': '{{ item.publishedDate|date('M j, Y') }}'
+            }
+        );
+        {% endif %}
+
         (function (w, d, s, l, i) {
             w[l] = w[l] || [];
             w[l].push({
@@ -112,7 +189,7 @@
             j.src =
                 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
             f.parentNode.insertBefore(j, f);
-        })(window, document, 'script', 'dataLayer', '{{ gtm_id }}');
+        })(window, document, 'script', 'gtmDataLayer', '{{ gtm_id }}');
         {% endif %}
 
         (function (d) {
@@ -180,7 +257,7 @@
         <script async src="{{ asset(javascript) }}"></script>
     {% endfor %}
 
-    {% if hypothesis ?? false and is_granted('FEATURE_CAN_USE_HYPOTHESIS') %}
+    {% if hypothesis ?? false %}
         <script>
             if (!!document.createElement('div').dataset) {
                 window.hypothesisConfig = function () {
@@ -193,6 +270,7 @@
                             selectionFontFamily: 'Georgia, Times, serif',
                             annotationFontFamily: 'Georgia, Times, serif'
                         },
+                        openSidebar: '#annotations' === window.location.hash,
                         disableToolbarCloseBtn: false,
                         disableToolbarMinimizeBtn: true,
                         disableToolbarHighlightsBtn: true,

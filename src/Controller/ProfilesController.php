@@ -12,25 +12,28 @@ use eLife\Patterns\ViewModel\ListingAnnotationTeasers;
 use Pagerfanta\Pagerfanta;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use function GuzzleHttp\Promise\promise_for;
 
 final class ProfilesController extends Controller
 {
     public function profileAction(Request $request, string $id) : Response
     {
-        if (!$this->isGranted('FEATURE_CAN_VIEW_PROFILES')) {
-            throw new NotFoundHttpException('Not found');
-        }
-
         $page = (int) $request->query->get('page', 1);
         $perPage = 10;
 
-        $profile = $this->get('elife.api_sdk.profiles')
+        $item = $this->get('elife.api_sdk.profiles')
             ->get($id)
             ->otherwise($this->mightNotExist());
 
-        $annotations = promise_for($this->get('elife.api_sdk.annotations')->list($id))
+        if ($this->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+            $user = $this->get('security.token_storage')->getToken()->getUser();
+
+            if ($id === $user->getUsername()) {
+                $access = 'restricted';
+            }
+        }
+
+        $annotations = promise_for($this->get('elife.api_sdk.annotations')->list($id, $access ?? 'public'))
             ->then(function (Sequence $sequence) use ($page, $perPage) {
                 $pagerfanta = new Pagerfanta(new SequenceAdapter($sequence, $this->willConvertTo(AnnotationTeaser::class)));
                 $pagerfanta->setMaxPerPage($perPage)->setCurrentPage($page);
@@ -38,16 +41,14 @@ final class ProfilesController extends Controller
                 return $pagerfanta;
             });
 
-        $arguments = $this->defaultPageArguments($request, $profile);
+        $arguments = $this->defaultPageArguments($request, $item);
 
-        $arguments['title'] = $profile
+        $arguments['title'] = $arguments['item']
             ->then(function (Profile $profile) {
                 return $profile->getDetails()->getPreferredName();
             });
 
-        $arguments['profile'] = $profile;
-
-        $arguments['contentHeader'] = $arguments['profile']
+        $arguments['contentHeader'] = $arguments['item']
             ->then(function (Profile $profile) use ($arguments) {
                 if ($arguments['user'] && $profile->getId() === $arguments['user']->getUsername()) {
                     $isUser = true;

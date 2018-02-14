@@ -4,23 +4,9 @@ namespace test\eLife\Journal\Controller;
 
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
-use Symfony\Component\BrowserKit\Client;
 
 final class ProfileControllerTest extends PageTestCase
 {
-    /**
-     * @test
-     */
-    public function it_displays_a_404_if_the_feature_flag_is_disabled()
-    {
-        $client = static::createClient();
-        $client->getCookieJar()->clear();
-
-        $client->request('GET', $this->getUrl());
-
-        $this->assertSame(404, $client->getResponse()->getStatusCode());
-    }
-
     /**
      * @test
      */
@@ -33,6 +19,21 @@ final class ProfileControllerTest extends PageTestCase
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertSame('Preferred Name', $crawler->filter('.content-header-profile__display_name')->text());
         $this->assertEmpty($crawler->filter('.content-header-profile__details'));
+        $this->assertContains('No annotations available.', $crawler->text());
+    }
+
+    /**
+     * @test
+     */
+    public function it_displays_public_annotations_when_it_is_not_your_profile_page()
+    {
+        $client = static::createClient();
+
+        $this->logIn($client);
+
+        $crawler = $client->request('GET', $this->getUrl());
+
+        $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertContains('No annotations available.', $crawler->text());
     }
 
@@ -196,8 +197,6 @@ final class ProfileControllerTest extends PageTestCase
     {
         $client = static::createClient();
 
-        $client->request('GET', '/?open-sesame');
-
         $crawler = $client->request('GET', $this->getUrl().'?foo');
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
@@ -207,21 +206,13 @@ final class ProfileControllerTest extends PageTestCase
         $this->assertSame('http://localhost/profiles/1', $crawler->filter('meta[property="og:url"]')->attr('content'));
         $this->assertSame('Preferred Name', $crawler->filter('meta[property="og:title"]')->attr('content'));
         $this->assertSame('summary', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
-    }
-
-    /**
-     * @test
-     */
-    public function it_has_cache_headers()
-    {
-        $client = static::createClient();
-
-        $client->request('GET', '/?open-sesame');
-
-        $client->request('GET', $this->getUrl());
-
-        $this->assertSame('no-cache, private', $client->getResponse()->headers->get('Cache-Control'));
-        $this->assertEmpty($client->getResponse()->getVary());
+        $this->assertEmpty($crawler->filter('meta[property="og:image"]'));
+        $this->assertEmpty($crawler->filter('meta[name="dc.identifier"]'));
+        $this->assertEmpty($crawler->filter('meta[name="dc.relation.ispartof"]'));
+        $this->assertEmpty($crawler->filter('meta[name="dc.title"]'));
+        $this->assertEmpty($crawler->filter('meta[name="dc.description"]'));
+        $this->assertEmpty($crawler->filter('meta[name="dc.date"]'));
+        $this->assertEmpty($crawler->filter('meta[name="dc.rights"]'));
     }
 
     /**
@@ -230,8 +221,6 @@ final class ProfileControllerTest extends PageTestCase
     public function it_displays_a_404_if_the_profile_is_not_found()
     {
         $client = static::createClient();
-
-        $client->request('GET', '/?open-sesame');
 
         static::mockApiResponse(
             new Request(
@@ -281,7 +270,7 @@ final class ProfileControllerTest extends PageTestCase
         $this->mockApiResponse(
             new Request(
                 'GET',
-                'http://api.elifesciences.org/annotations?by=1&page=1&per-page=10&order=desc&use-date=updated',
+                'http://api.elifesciences.org/annotations?by=1&page=1&per-page=10&order=desc&use-date=updated&access=public',
                 ['Accept' => 'application/vnd.elife.annotation-list+json; version=1']
             ),
             new Response(
@@ -295,10 +284,5 @@ final class ProfileControllerTest extends PageTestCase
         );
 
         return '/profiles/1';
-    }
-
-    protected static function onCreateClient(Client $client)
-    {
-        $client->request('GET', '/?open-sesame');
     }
 }

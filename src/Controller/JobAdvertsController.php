@@ -73,22 +73,20 @@ final class JobAdvertsController extends Controller
 
     public function jobAdvertAction(Request $request, string $id) : Response
     {
-        $jobAdvert = $this->get('elife.api_sdk.job_adverts')
+        $arguments['item'] = $this->get('elife.api_sdk.job_adverts')
             ->get($id)
             ->otherwise($this->mightNotExist())
             ->then($this->checkSlug($request, Callback::method('getTitle')));
 
-        $arguments = $this->defaultPageArguments($request, $jobAdvert);
+        $arguments = $this->defaultPageArguments($request, $arguments['item']);
 
-        $arguments['title'] = $jobAdvert
+        $arguments['title'] = $arguments['item']
             ->then(Callback::method('getTitle'));
 
-        $arguments['job-advert'] = $jobAdvert;
-
-        $arguments['contentHeader'] = $arguments['job-advert']
+        $arguments['contentHeader'] = $arguments['item']
             ->then($this->willConvertTo(ContentHeader::class));
 
-        $arguments['blocks'] = $arguments['job-advert']
+        $arguments['blocks'] = $arguments['item']
             ->then(function (JobAdvert $jobAdvert) {
                 if ($jobAdvert->getClosingDate() > new DateTimeImmutable('now')) {
                     return $this->convertContent($jobAdvert)

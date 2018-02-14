@@ -50,7 +50,9 @@ final class ModelNameTest extends TestCase
             'event' => ['Event', 'Events'],
             'labs-post' => ['Labs Post', 'Labs Posts'],
             'interview' => ['Interview', 'Interviews'],
+            'job-advert' => ['eLife Jobs', 'eLife Jobs'],
             'podcast-episode' => ['Podcast', 'Podcasts'],
+            'press-package' => ['Press Pack', 'Press Packs'],
         ]);
     }
 

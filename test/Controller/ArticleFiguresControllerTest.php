@@ -21,7 +21,7 @@ final class ArticleFiguresControllerTest extends PageTestCase
         $this->assertSame('Foo Bar', trim($crawler->filter('.content-header__author_list')->text()));
         $this->assertEmpty($crawler->filter('.content-header__institution_list'));
 
-        $this->assertNotContains('Annotations', $crawler->filter('.contextual-data__list')->text());
+        $this->assertEmpty($crawler->filter('.contextual-data__list'));
         $this->assertContains('Cite as: eLife 2010;1:e00001',
             $crawler->filter('.contextual-data__cite_wrapper')->text());
         $this->assertContains('doi: 10.7554/eLife.00001', $crawler->filter('.contextual-data__cite_wrapper')->text());
@@ -89,6 +89,13 @@ final class ArticleFiguresControllerTest extends PageTestCase
         $this->assertSame('Figures and data in Article title', $crawler->filter('meta[property="og:title"]')->attr('content'));
         $this->assertSame('article', $crawler->filter('meta[property="og:type"]')->attr('content'));
         $this->assertSame('summary', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
+        $this->assertEmpty($crawler->filter('meta[property="og:image"]'));
+        $this->assertSame('doi:10.7554/eLife.00001', $crawler->filter('meta[name="dc.identifier"]')->attr('content'));
+        $this->assertEmpty($crawler->filter('meta[name="dc.relation.ispartof"]'));
+        $this->assertSame('Article title', $crawler->filter('meta[name="dc.title"]')->attr('content'));
+        $this->assertEmpty($crawler->filter('meta[name="dc.description"]'));
+        $this->assertSame('2010-01-01', $crawler->filter('meta[name="dc.date"]')->attr('content'));
+        $this->assertSame('© 2010 Bar. Copyright statement', $crawler->filter('meta[name="dc.rights"]')->attr('content'));
     }
 
     /**
@@ -126,19 +133,6 @@ final class ArticleFiguresControllerTest extends PageTestCase
     /**
      * @test
      */
-    public function it_shows_annotations_rather_than_comments_when_the_feature_flag_is_enabled()
-    {
-        $client = static::createClient();
-
-        $crawler = $client->request('GET', "{$this->getUrl()}?open-sesame");
-
-        $this->assertNotContains('Comments', $crawler->text());
-        $this->assertContains('Annotations', $crawler->filter('.contextual-data__list')->text());
-    }
-
-    /**
-     * @test
-     */
     public function it_has_metadata_for_previous_versions()
     {
         $client = static::createClient();
@@ -153,6 +147,13 @@ final class ArticleFiguresControllerTest extends PageTestCase
         $this->assertSame('Figures and data in Article title', $crawler->filter('meta[property="og:title"]')->attr('content'));
         $this->assertSame('article', $crawler->filter('meta[property="og:type"]')->attr('content'));
         $this->assertSame('summary', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
+        $this->assertEmpty($crawler->filter('meta[property="og:image"]'));
+        $this->assertSame('doi:10.7554/eLife.00001', $crawler->filter('meta[name="dc.identifier"]')->attr('content'));
+        $this->assertEmpty($crawler->filter('meta[name="dc.relation.ispartof"]'));
+        $this->assertSame('Article title', $crawler->filter('meta[name="dc.title"]')->attr('content'));
+        $this->assertEmpty($crawler->filter('meta[name="dc.description"]'));
+        $this->assertSame('2010-01-01', $crawler->filter('meta[name="dc.date"]')->attr('content'));
+        $this->assertSame('© 2010 Foo Bar. Copyright statement.', $crawler->filter('meta[name="dc.rights"]')->attr('content'));
     }
 
     /**

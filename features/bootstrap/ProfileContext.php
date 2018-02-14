@@ -3,23 +3,46 @@
 use eLife\ApiSdk\ApiSdk;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use KnpU\OAuth2ClientBundle\Security\User\OAuthUser;
+use Symfony\Component\BrowserKit\Cookie;
+use Symfony\Component\Security\Guard\Token\PostAuthenticationGuardToken;
 
 final class ProfileContext extends Context
 {
+    private $name;
     private $numberOfAnnotations;
+    private $numberOfPublicAnnotations;
 
     /**
-     * @BeforeScenario
+     * @Given /^I am ([A-Za-z\s]+)$/
      */
-    public function enableFeature()
+    public function iAm(string $name)
     {
-        $this->visitPath('/about?open-sesame');
+        $this->name = $name;
     }
 
     /**
-     * @Given /^([A-Za-z\s]+) has (\d+) annotations?$/
+     * @Given /^I have logged in$/
      */
-    public function profileHasAnnotations(string $name, int $number)
+    public function iHaveLoggedIn()
+    {
+        $session = $this->kernel->getContainer()->get('session');
+
+        $id = $this->createId($this->name);
+
+        $token = new PostAuthenticationGuardToken(new OAuthUser($id, $roles = ['ROLE_USER', 'ROLE_OAUTH_USER']), 'main', $roles);
+
+        $session->set('_security_main', serialize($token));
+        $session->save();
+
+        $cookie = new Cookie($session->getName(), $session->getId());
+        $this->getMink()->getSession()->getDriver()->getClient()->getCookieJar()->set($cookie);
+    }
+
+    /**
+     * @Given /^([A-Za-z\s]+) has (\d+) public annotations?$/
+     */
+    public function profileHasPublicAnnotations(string $name, int $number)
     {
         $id = $this->createId($name);
 
@@ -42,7 +65,7 @@ final class ProfileContext extends Context
             )
         );
 
-        $this->numberOfAnnotations = $number;
+        $this->numberOfPublicAnnotations = $number;
 
         $annotations = [];
 
@@ -58,14 +81,14 @@ final class ProfileContext extends Context
                 ],
                 'parents' => [],
                 'created' => $today->format(ApiSdk::DATE_FORMAT),
-                'highlight' => "Annotation {$i} text",
+                'highlight' => "Public annotation {$i} text",
             ];
         }
 
         $this->mockApiResponse(
             new Request(
                 'GET',
-                "http://api.elifesciences.org/annotations?by={$id}&page=1&per-page=1&order=desc&use-date=updated",
+                "http://api.elifesciences.org/annotations?by={$id}&page=1&per-page=1&order=desc&use-date=updated&access=public",
                 ['Accept' => 'application/vnd.elife.annotation-list+json; version=1']
             ),
             new Response(
@@ -84,7 +107,92 @@ final class ProfileContext extends Context
             $this->mockApiResponse(
                 new Request(
                     'GET',
-                    "http://api.elifesciences.org/annotations?by={$id}&page={$page}&per-page={$chunk}&order=desc&use-date=updated",
+                    "http://api.elifesciences.org/annotations?by={$id}&page={$page}&per-page={$chunk}&order=desc&use-date=updated&access=public",
+                    ['Accept' => 'application/vnd.elife.annotation-list+json; version=1']
+                ),
+                new Response(
+                    200,
+                    ['Content-Type' => 'application/vnd.elife.annotation-list+json; version=1'],
+                    json_encode([
+                        'total' => $number,
+                        'items' => $annotationsChunk,
+                    ])
+                )
+            );
+        }
+    }
+
+    /**
+     * @Given /^I have (\d+) public and private annotations?$/
+     */
+    public function profileHasAnnotations(int $number)
+    {
+        $id = $this->createId($this->name);
+
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                "http://api.elifesciences.org/profiles/{$id}",
+                ['Accept' => 'application/vnd.elife.profile+json; version=1']
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.profile+json; version=1'],
+                json_encode([
+                    'id' => $id,
+                    'name' => [
+                        'preferred' => $this->name,
+                        'index' => $this->name,
+                    ],
+                ])
+            )
+        );
+
+        $this->numberOfAnnotations = $number;
+
+        $annotations = [];
+
+        $today = (new DateTimeImmutable())->setTime(0, 0, 0);
+
+        for ($i = $number; $i > 0; --$i) {
+            $access = (0 === $i % 2) ? 'restricted' : 'public';
+
+            $annotations[] = [
+                'id' => "annotation-{$i}",
+                'access' => $access,
+                'document' => [
+                    'title' => 'Article title',
+                    'uri' => $this->locatePath('/articles/00001'),
+                ],
+                'parents' => [],
+                'created' => $today->format(ApiSdk::DATE_FORMAT),
+                'highlight' => ucfirst($access)." annotation {$i} text",
+            ];
+        }
+
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                "http://api.elifesciences.org/annotations?by={$id}&page=1&per-page=1&order=desc&use-date=updated&access=restricted",
+                ['Accept' => 'application/vnd.elife.annotation-list+json; version=1']
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.annotation-list+json; version=1'],
+                json_encode([
+                    'total' => $number,
+                    'items' => [$annotations[0]],
+                ])
+            )
+        );
+
+        foreach (array_chunk($annotations, $chunk = 10) as $i => $annotationsChunk) {
+            $page = $i + 1;
+
+            $this->mockApiResponse(
+                new Request(
+                    'GET',
+                    "http://api.elifesciences.org/annotations?by={$id}&page={$page}&per-page={$chunk}&order=desc&use-date=updated&access=restricted",
                     ['Accept' => 'application/vnd.elife.annotation-list+json; version=1']
                 ),
                 new Response(
@@ -101,10 +209,11 @@ final class ProfileContext extends Context
 
     /**
      * @When /^I go to ([A-Za-z\s]+)'s profile page$/
+     * @When /^I go to my profile page$/
      */
-    public function iGoToProfilePage(string $name)
+    public function iGoToProfilePage(string $name = null)
     {
-        $this->visitPath("/profiles/{$this->createId($name)}");
+        $this->visitPath("/profiles/{$this->createId($name ?? $this->name)}");
     }
 
     /**
@@ -116,7 +225,29 @@ final class ProfileContext extends Context
     }
 
     /**
-     * @Then /^I should see his (\d+) most\-recently\-updated annotations in the 'Annotations' list$/
+     * @Then /^I should see his (\d+) most\-recently\-updated public annotations in the 'Annotations' list$/
+     */
+    public function iShouldSeeMostRecentlyUpdatedPublicAnnotationsInTheList(int $number)
+    {
+        $this->spin(function () use ($number) {
+            $this->assertSession()->elementsCount('css', '.list-heading:contains("Annotations") + .listing-list > .listing-list__item', $number);
+
+            for ($i = $number; $i > 0; --$i) {
+                $nthChild = ($number - $i + 1);
+
+                $expectedNumber = ($this->numberOfPublicAnnotations - $nthChild + 1);
+
+                $this->assertSession()->elementContains(
+                    'css',
+                    ".list-heading:contains('Annotations') + .listing-list > .listing-list__item:nth-child({$nthChild})",
+                    "Public annotation {$expectedNumber} text"
+                );
+            }
+        });
+    }
+
+    /**
+     * @Then /^I should see my (\d+) most\-recently\-updated annotations in the 'Annotations' list$/
      */
     public function iShouldSeeMostRecentlyUpdatedAnnotationsInTheList(int $number)
     {
@@ -125,12 +256,15 @@ final class ProfileContext extends Context
 
             for ($i = $number; $i > 0; --$i) {
                 $nthChild = ($number - $i + 1);
+
                 $expectedNumber = ($this->numberOfAnnotations - $nthChild + 1);
+
+                $access = (0 === $i % 2) ? 'Restricted' : 'Public';
 
                 $this->assertSession()->elementContains(
                     'css',
                     ".list-heading:contains('Annotations') + .listing-list > .listing-list__item:nth-child({$nthChild})",
-                    "Annotation {$expectedNumber} text"
+                    "{$access} annotation {$expectedNumber} text"
                 );
             }
         });

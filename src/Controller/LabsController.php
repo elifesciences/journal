@@ -3,15 +3,13 @@
 namespace eLife\Journal\Controller;
 
 use eLife\ApiSdk\Collection\Sequence;
-use eLife\ApiSdk\Model\LabsPost;
 use eLife\Journal\Helper\Callback;
 use eLife\Journal\Helper\Paginator;
 use eLife\Journal\Pagerfanta\SequenceAdapter;
 use eLife\Patterns\ViewModel\ContentHeader;
 use eLife\Patterns\ViewModel\ContextualData;
-use eLife\Patterns\ViewModel\ContextualDataMetric;
 use eLife\Patterns\ViewModel\GridListing;
-use eLife\Patterns\ViewModel\HypothesisOpener;
+use eLife\Patterns\ViewModel\SpeechBubble;
 use eLife\Patterns\ViewModel\Teaser;
 use Pagerfanta\Pagerfanta;
 use Symfony\Component\HttpFoundation\Request;
@@ -67,7 +65,9 @@ final class LabsController extends Controller
             'eLife Labs',
             $this->get('elife.journal.view_model.factory.content_header_image')->forLocalFile('labs'),
             'Exploring open-source solutions at the intersection of research and technology.
-Learn more about <a href="'.$this->get('router')->generate('about-innovation').'">innovation at eLife</a>, follow us on <a href="https://twitter.com/eLifeInnovation">Twitter</a>, or sign up for our <a href="https://crm.elifesciences.org/crm/tech-news?utm_source=Labs-home&utm_medium=website&utm_campaign=technews">technology and innovation newsletter</a>.'
+            <a href="https://elifesciences.org/events/c40798c3/elife-innovation-sprint-2018?utm_source=Labs-home&utm_medium=website&utm_campaign=Sprint-apply">Join us</a> to prototype ideas to bring cutting-edge technology to open research this May.'
+// ON MARCH 5, REVERT LINE ABOVE BACK TO: Learn more about <a href="'.$this->get('router')->generate('about-innovation').'">innovation at eLife</a>, follow us on <a href="https://twitter.com/eLifeInnovation">Twitter</a>, or sign up for our <a href="https://crm.elifesciences.org/crm/tech-news?utm_source=Labs-home&utm_medium=website&utm_campaign=technews">technology and innovation newsletter</a>.'
+
         );
 
         return new Response($this->get('templating')->render('::labs.html.twig', $arguments));
@@ -75,34 +75,26 @@ Learn more about <a href="'.$this->get('router')->generate('about-innovation').'
 
     public function postAction(Request $request, string $id) : Response
     {
-        $post = $this->get('elife.api_sdk.labs_posts')
+        $item = $this->get('elife.api_sdk.labs_posts')
             ->get($id)
             ->otherwise($this->mightNotExist())
             ->then($this->checkSlug($request, Callback::method('getTitle')));
 
-        $arguments = $this->defaultPageArguments($request, $post);
+        $arguments = $this->defaultPageArguments($request, $item);
 
-        $arguments['title'] = $post
+        $arguments['title'] = $arguments['item']
             ->then(Callback::method('getTitle'));
 
-        $arguments['post'] = $post;
-
-        $arguments['contentHeader'] = $arguments['post']
+        $arguments['contentHeader'] = $arguments['item']
             ->then($this->willConvertTo(ContentHeader::class));
 
-        $arguments['contextualData'] = $arguments['post']
-            ->then($this->ifGranted(['FEATURE_CAN_USE_HYPOTHESIS'], function (LabsPost $post) {
-                $metrics = [new ContextualDataMetric('Annotations', 0, 'annotation-count')];
+        $arguments['contextualData'] = ContextualData::annotationsOnly(SpeechBubble::forContextualData());
 
-                return ContextualData::withMetrics($metrics);
-            }));
-
-        $arguments['blocks'] = $arguments['post']
-            ->then($this->willConvertContent());
-
-        if ($this->isGranted('FEATURE_CAN_USE_HYPOTHESIS')) {
-            $arguments['hypothesisOpener'] = new HypothesisOpener();
-        }
+        $arguments['blocks'] = $arguments['item']
+        ->then($this->willConvertContent())
+        ->then(function (Sequence $blocks) {
+            return $blocks->prepend(SpeechBubble::forArticleBody());
+        });
 
         $response = new Response($this->get('templating')->render('::labs-post.html.twig', $arguments));
 
