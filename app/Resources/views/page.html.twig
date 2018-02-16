@@ -148,7 +148,9 @@
 
         {% endif %}
 
+        {% if item is defined and item is not null %}
         <meta property="dc.type" content="{% if item.type is defined %}{{ model_name(item.type) }}{% else %}{{ model_name(item.identifier.type) }}{% endif %}">
+        {% endif %}
     {% endblock %}
 
     <!--[if lt IE 9]>
