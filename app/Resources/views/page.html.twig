@@ -148,6 +148,7 @@
 
         {% endif %}
 
+        <meta property="dc.type" content="{% if item.type is defined %}{{ model_name(item.type) }}{% else %}{{ model_name(item.identifier.type) }}{% endif %}">
     {% endblock %}
 
     <!--[if lt IE 9]>
