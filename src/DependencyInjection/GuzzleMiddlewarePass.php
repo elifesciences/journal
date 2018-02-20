@@ -16,5 +16,11 @@ final class GuzzleMiddlewarePass implements CompilerPassInterface
                 return 'push' !== $methodCall[0] || !in_array($methodCall[1][1], ['cache', 'subject_rewriting']);
             }));
         }
+
+        $handler = $container->getDefinition('elife.journal.guzzle.cache.client')->getArgument(0)['handler'];
+
+        $handler->setMethodCalls(array_filter($handler->getMethodCalls(), function (array $methodCall) {
+            return 'push' !== $methodCall[0] || 'subject_rewriting' !== $methodCall[1][1];
+        }));
     }
 }
