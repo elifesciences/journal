@@ -23,24 +23,24 @@ csa_guzzle:
         elife_api:
             config:
                 base_uri: '%api_url%'
-                connect_timeout: '%api_connect_timeout%'
+#                connect_timeout: '%api_connect_timeout%'
                 headers:
                     Authorization: '%api_key%'
-                timeout: '%api_timeout%'
+#                timeout: '%api_timeout%'
         elife_crm:
             config:
                 base_uri: '%crm_url%'
-                connect_timeout: '%api_connect_timeout_slow%'
-                timeout: '%api_timeout_slow%'
+#                connect_timeout: '%api_connect_timeout_slow%'
+#                timeout: '%api_timeout_slow%'
         file_download:
             config:
-                connect_timeout: '%api_connect_timeout%'
+#                connect_timeout: '%api_connect_timeout%'
                 http_errors: false
                 stream: true
         oauth:
             config:
-                connect_timeout: '%api_connect_timeout_slow%'
-                timeout: '%api_timeout_slow%'
+#                connect_timeout: '%api_connect_timeout_slow%'
+#                timeout: '%api_timeout_slow%'
 
 framework:
     assets:
