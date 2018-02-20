@@ -214,7 +214,7 @@
 
     <div class="global-wrapper" data-behaviour="FragmentHandler Math"
         {% if item is defined and item is not null %}
-            data-article-type="{% if item.type is defined %}{{ model_name(item.type) }}{% else %}{{ model_name(item.identifier.type) }}{% endif %}"
+            data-article-type="{% if item.type is defined %}{{ item.type }}{% else %}{{ item.identifier.type }}{% endif %}"
         {% endif %}
     >
 
