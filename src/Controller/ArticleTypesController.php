@@ -71,7 +71,7 @@ final class ArticleTypesController extends Controller
             'editorial' => 'Editorials are written by eLife editors or staff.',
             'feature' => 'eLife Feature Articles allow authors to discuss science policy and funding, careers in science, research conduct, public engagement, and a variety of other topics related to science and research.',
             'insight' => 'Insight articles are related to original research papers in eLife and explain why the results reported in the paper are significant in a given field of research. Insight articles are commissioned by eLife staff.',
-            'research-advance' => 'A Research Advance is a short article that allows the authors of an eLife paper to publish new results that build on their original research paper in an important way.',
+            'research-advance' => 'A Research Advance is a short article that allows either the authors of an eLife paper or other researchers to publish new results that build on the original research paper in an important way.',
             'research-article' => 'Research Articles published by eLife are full-length studies that present important breakthroughs across the life sciences and biomedicine. There is no maximum length and no limits on the number of display items.',
             'registered-report' => 'Registered Reports outline the proposed experimental designs and protocols, which are peer reviewed and published prior to data collection, as part of the Reproducibility Project: Cancer Biology, published by eLife.',
             'short-report' => 'A Short Report allows authors to publish the results of a small number of experiments, provided the conclusion is clear and justified, and the findings are novel and judged to be of high importance.',

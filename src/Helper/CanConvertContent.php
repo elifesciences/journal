@@ -18,6 +18,6 @@ trait CanConvertContent
 
     final protected function convertContent(HasContent $object, int $level = 2, array $context = []) : Sequence
     {
-        return $object->getContent()->map($this->willConvertTo(null, $context + ['level' => $level]));
+        return $object->getContent()->map($this->willConvertTo(null, ['level' => $level] + $context));
     }
 }
