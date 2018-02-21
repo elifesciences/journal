@@ -37,7 +37,7 @@ final class CoverArticleSecondaryTeaserConverter implements ViewModelConverter
             $article->getAuthorLine(),
             $this->createContextLabel($article),
             ViewModel\TeaserImage::small(
-                $this->viewModelConverter->convert($object->getBanner(), null, ['width' => 70, 'height' => 70])
+                $this->viewModelConverter->convert($object->getBanner(), null, ['width' => 72, 'height' => 72])
             ),
             ViewModel\TeaserFooter::forNonArticle(
                 Meta::withLink(

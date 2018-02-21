@@ -40,7 +40,7 @@ final class CoverCollectionSecondaryTeaserConverter implements ViewModelConverte
             $curatedBy,
             $this->createContextLabel($collection),
             ViewModel\TeaserImage::small(
-                $this->viewModelConverter->convert($object->getBanner(), null, ['width' => 70, 'height' => 70])
+                $this->viewModelConverter->convert($object->getBanner(), null, ['width' => 72, 'height' => 72])
             ),
             ViewModel\TeaserFooter::forNonArticle(
                 ViewModel\Meta::withLink(

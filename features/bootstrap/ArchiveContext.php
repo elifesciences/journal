@@ -601,7 +601,7 @@ final class ArchiveContext extends Context
             'css',
             '.list-heading:contains("Monthly archive") + .grid-listing > .grid-listing-item:contains("'.$month.' '.$year.'") .block-link__image',
             'src',
-            'https://www.example.com/iiif/image'.$this->createId($article).'/0,198,1800,1205/263,176/0/default.jpg'
+            'https://www.example.com/iiif/image'.$this->createId($article).'/0,194,1800,1212/251,169/0/default.jpg'
         );
     }
 
