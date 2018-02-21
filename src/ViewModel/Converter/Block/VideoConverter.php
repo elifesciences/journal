@@ -27,7 +27,7 @@ final class VideoConverter implements ViewModelConverter
      */
     public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
-        $width = 632;
+        $width = 639;
         if ($width > $object->getPlaceholder()->getWidth()) {
             $width = $object->getPlaceholder()->getWidth();
         }

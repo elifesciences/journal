@@ -36,7 +36,7 @@ final class FigureAssetVideoConverter implements ViewModelConverter
         /** @var Block\Video $asset */
         $asset = $object->getAsset();
 
-        $width = 632;
+        $width = 639;
         if ($width > $asset->getPlaceholder()->getWidth()) {
             $width = $asset->getPlaceholder()->getWidth();
         }
