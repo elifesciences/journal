@@ -33,6 +33,8 @@ final class ProfileContentHeaderProfileConverter implements ViewModelConverter
             ->filter(Callback::methodIsValue('getAccess', AccessControl::ACCESS_PUBLIC))
             ->map(Callback::method('getValue'))[0];
 
+        $orcid = $object->getDetails()->getOrcid() ? new ViewModel\Orcid($object->getDetails()->getOrcid()) : null;
+
         if ($context['isUser'] ?? false) {
             return ViewModel\ContentHeaderProfile::loggedIn(
                 $object->getDetails()->getPreferredName(),
@@ -41,14 +43,16 @@ final class ProfileContentHeaderProfileConverter implements ViewModelConverter
                     new ViewModel\Link('Manage my ORCID', 'https://orcid.org/my-orcid'),
                 ],
                 $affiliations,
-                $emailAddress
+                $emailAddress,
+                $orcid
             );
         }
 
         return ViewModel\ContentHeaderProfile::notLoggedIn(
             $object->getDetails()->getPreferredName(),
             $affiliations,
-            $emailAddress
+            $emailAddress,
+            $orcid
         );
     }
 

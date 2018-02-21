@@ -37,7 +37,7 @@ final class PersonAuthorDetailsConverter implements ViewModelConverter
             $this->createId($object),
             $name,
             $this->findDetails($object, $context['authors'] ?? new EmptySequence()),
-            $object->getOrcid()
+            $object->getOrcid() ? new ViewModel\Orcid($object->getOrcid()) : null
         );
     }
 
