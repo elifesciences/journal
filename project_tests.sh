@@ -16,7 +16,7 @@ proofreader app/ bin/ src/ web/
 proofreader --no-phpcpd features/ test/
 
 echo "PHPUnit tests"
-vendor/bin/phpunit --log-junit build/phpunit.xml
+vendor/bin/paratest test --log-junit build/phpunit.xml --runner WrapperRunner
 
 echo "Behat tests"
 vendor/bin/behat --strict --tags '~wip' --format junit --format progress
