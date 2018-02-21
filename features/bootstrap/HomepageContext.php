@@ -647,7 +647,7 @@ final class HomepageContext extends Context
                 'css',
                 '.carousel-item__image',
                 'src',
-                'https://www.example.com/iiif/image/0,510,1800,581/1114,359/0/default.jpg'
+                'https://www.example.com/iiif/image/0,529,1800,543/1114,336/0/default.jpg'
             );
         });
     }
@@ -662,7 +662,7 @@ final class HomepageContext extends Context
                 'css',
                 '.carousel-item__image',
                 'src',
-                'https://www.example.com/iiif/image/0,510,1800,581/1114,359/0/default.png'
+                'https://www.example.com/iiif/image/0,529,1800,543/1114,336/0/default.png'
             );
         });
     }

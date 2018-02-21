@@ -40,9 +40,9 @@ final class LabsControllerTest extends PageTestCase
         $this->assertSame('Exploring open-source solutions at the intersection of research and technology. Join us to prototype ideas to bring cutting-edge technology to open research this May.', $crawler->filter('meta[property="og:description"]')->attr('content'));
         $this->assertSame('Exploring open-source solutions at the intersection of research and technology. Join us to prototype ideas to bring cutting-edge technology to open research this May.', $crawler->filter('meta[name="description"]')->attr('content'));
         $this->assertSame('summary_large_image', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
-        $this->assertSame('http://localhost/'.ltrim(self::$kernel->getContainer()->get('assets.packages')->getUrl('assets/images/banners/labs-1114x359.jpg'), '/'), $crawler->filter('meta[property="og:image"]')->attr('content'));
+        $this->assertSame('http://localhost/'.ltrim(self::$kernel->getContainer()->get('assets.packages')->getUrl('assets/images/banners/labs-1114x336.jpg'), '/'), $crawler->filter('meta[property="og:image"]')->attr('content'));
         $this->assertSame('1114', $crawler->filter('meta[property="og:image:width"]')->attr('content'));
-        $this->assertSame('359', $crawler->filter('meta[property="og:image:height"]')->attr('content'));
+        $this->assertSame('336', $crawler->filter('meta[property="og:image:height"]')->attr('content'));
         $this->assertEmpty($crawler->filter('meta[name="dc.identifier"]'));
         $this->assertEmpty($crawler->filter('meta[name="dc.relation.ispartof"]'));
         $this->assertEmpty($crawler->filter('meta[name="dc.title"]'));

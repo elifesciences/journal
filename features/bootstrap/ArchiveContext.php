@@ -614,7 +614,7 @@ final class ArchiveContext extends Context
             'css',
             '.content-header .content-header__image',
             'src',
-            'https://www.example.com/iiif/image'.$this->createId($article).'/0,510,1800,581/1114,359/0/default.jpg'
+            'https://www.example.com/iiif/image'.$this->createId($article).'/0,529,1800,543/1114,336/0/default.jpg'
         );
     }
 

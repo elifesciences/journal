@@ -68,7 +68,7 @@ gulp.task('images:clean', () => {
 });
 
 gulp.task('images:banners', ['images:clean'], () => {
-    const sizes = {2228: 718, 1114: 359, 1798: 622, 899: 311, 2046: 718, 1023: 359, 1458: 574, 729: 287, 900: 574, 450: 287};
+    const sizes = {2228: 672, 1114: 336, 2046: 576, 1023: 288, 1798: 576, 899: 288, 1534: 528, 767: 264, 900: 528, 450: 264};
 
     return gulp.src('./app/Resources/images/banners/*.jpg')
         .pipe(responsive({
