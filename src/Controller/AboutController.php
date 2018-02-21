@@ -29,6 +29,8 @@ use eLife\Patterns\ViewModel\SelectOption;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use function GuzzleHttp\Promise\all;
+use function GuzzleHttp\Promise\promise_for;
 
 final class AboutController extends Controller
 {
@@ -147,7 +149,7 @@ final class AboutController extends Controller
     {
         $arguments = $this->aboutPageArguments($request);
 
-        $arguments['title'] = 'Early-career scientists';
+        $arguments['title'] = 'Early-careers';
 
         $arguments['contentHeader'] = new ContentHeader($arguments['title'], null,
             'The community behind eLife wants to help address some of the pressures on early-career scientists');
@@ -190,10 +192,6 @@ final class AboutController extends Controller
 
         $arguments = $this->aboutPageArguments($request);
 
-        $arguments['title'] = 'People';
-
-        $arguments['contentHeader'] = new ContentHeader($arguments['title'], null,
-            'The working scientists who serve as eLife editors, our early-career advisors, governing board, and our executive staff all work in concert to realise eLife’s mission to accelerate discovery');
         $subjects = $this->get('elife.api_sdk.subjects')->reverse();
 
         $allSubjects = $subjects->slice(0, 100)
@@ -210,24 +208,14 @@ final class AboutController extends Controller
             ->append(new SelectOption('early-career', 'Early-career advisory group', 'early-career' === $type))
             ->append(new SelectOption('staff', 'Executive staff', 'staff' === $type));
 
-        $arguments['contentHeader'] = (new PromiseSequence($types))
-            ->then(function (Sequence $types) use ($arguments) {
-                return new ContentHeader($arguments['title'], null, 'The working scientists who serve as eLife editors, our early-career advisors, governing board, and our executive staff all work in concert to realise eLife’s mission to accelerate discovery',
-                    false, [], null, [], [], null, null,
-                    new SelectNav(
-                        $this->get('router')->generate('about-people'),
-                        new Select('type', $types->toArray(), new FormLabel('Type', true), 'type'),
-                        Button::form('Go', Button::TYPE_SUBMIT, 'go', Button::SIZE_EXTRA_SMALL)
-                    )
-                );
-            });
-
         $people = $this->get('elife.api_sdk.people')->reverse();
 
         $arguments['lists'] = [];
 
         switch ($type) {
             case '':
+                $arguments['title'] = 'Leadership team';
+
                 $leadership = $people->forType('leadership');
 
                 $editorInChief = $leadership->filter(function (Person $person) {
@@ -242,12 +230,18 @@ final class AboutController extends Controller
                 $arguments['lists'][] = $this->createAboutProfiles($people->forType('senior-editor'), 'Senior editors');
                 break;
             case 'directors':
+                $arguments['title'] = 'Board of directors';
+
                 $arguments['lists'][] = $this->createAboutProfiles($people->forType('director'), 'Board of directors');
                 break;
             case 'early-career':
+                $arguments['title'] = 'Early-career advisory group';
+
                 $arguments['lists'][] = $this->createAboutProfiles($people->forType('early-career'), 'Early-career advisory group');
                 break;
             case 'staff':
+                $arguments['title'] = 'Executive staff';
+
                 $arguments['lists'][] = $this->createAboutProfiles($people->forType('executive'), 'Executive staff');
                 break;
             default:
@@ -260,10 +254,26 @@ final class AboutController extends Controller
                         return $subject;
                     });
 
+                $arguments['title'] = $arguments['subject']->then(function (Subject $subject) {
+                    return "Editors for {$subject->getName()}";
+                });
+
                 $people = $people->forSubject($type);
                 $arguments['lists'][] = $this->createAboutProfiles($people->forType('senior-editor'), 'Senior editors');
                 $arguments['lists'][] = $this->createAboutProfiles($people->forType('reviewing-editor'), 'Reviewing editors', true);
         }
+
+        $arguments['contentHeader'] = all(['types' => $types, 'title' => promise_for($arguments['title'])])
+            ->then(function (array $parts) use ($arguments) {
+                return new ContentHeader($parts['title'], null, 'The working scientists who serve as eLife editors, our early-career advisors, governing board, and our executive staff all work in concert to realise eLife’s mission to accelerate discovery',
+                    false, [], null, [], [], null, null,
+                    new SelectNav(
+                        $this->get('router')->generate('about-people'),
+                        new Select('type', $parts['types']->toArray(), new FormLabel('Type', true), 'type'),
+                        Button::form('Go', Button::TYPE_SUBMIT, 'go', Button::SIZE_EXTRA_SMALL)
+                    )
+                );
+            });
 
         $arguments['lists'] = array_filter($arguments['lists'], Callback::isNotEmpty());
 
@@ -287,11 +297,11 @@ final class AboutController extends Controller
 
         $menuItems = [
             'About eLife' => $this->get('router')->generate('about'),
+            'Editors and people' => $this->get('router')->generate('about-people'),
             'Peer review' => $this->get('router')->generate('about-peer-review'),
             'Openness' => $this->get('router')->generate('about-openness'),
             'Innovation' => $this->get('router')->generate('about-innovation'),
-            'Early-career scientists' => $this->get('router')->generate('about-early-career'),
-            'People' => $this->get('router')->generate('about-people'),
+            'Early-careers' => $this->get('router')->generate('about-early-career'),
         ];
 
         $currentPath = $this->get('router')->generate($request->attributes->get('_route'), $request->attributes->get('_route_params'));
