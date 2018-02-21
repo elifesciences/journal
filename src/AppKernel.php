@@ -7,8 +7,8 @@ use Cocur\Slugify\Bridge\Symfony\CocurSlugifyBundle;
 use Csa\Bundle\GuzzleBundle\CsaGuzzleBundle;
 use eLife\Journal\Expression\ComposerLocateFunctionProvider;
 use eLife\Journal\Expression\TimeFunctionProvider;
-use HWI\Bundle\OAuthBundle\HWIOAuthBundle;
 use Isometriks\Bundle\SpamBundle\IsometriksSpamBundle;
+use KnpU\OAuth2ClientBundle\KnpUOAuth2ClientBundle;
 use Nelmio\SecurityBundle\NelmioSecurityBundle;
 use PackageVersions\Versions;
 use Sensio\Bundle\DistributionBundle\SensioDistributionBundle;
@@ -54,8 +54,8 @@ class AppKernel extends Kernel
             new CocurSlugifyBundle(),
             new CsaGuzzleBundle(),
             new FrameworkBundle(),
-            new HWIOAuthBundle(),
             new IsometriksSpamBundle(),
+            new KnpUOAuth2ClientBundle(),
             new MonologBundle(),
             new NelmioSecurityBundle(),
             new SecurityBundle(),

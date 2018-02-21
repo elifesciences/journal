@@ -21,6 +21,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use UnexpectedValueException;
 use function GuzzleHttp\Promise\all;
@@ -178,7 +179,7 @@ abstract class Controller implements ContainerAwareInterface
         }
     }
 
-    final protected function defaultPageArguments(Request $request, PromiseInterface $model = null) : array
+    final protected function defaultPageArguments(Request $request, PromiseInterface $item = null) : array
     {
         /** @var FormInterface $form */
         $form = $this->get('form.factory')
@@ -208,28 +209,24 @@ abstract class Controller implements ContainerAwareInterface
         if ($this->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             $user = $this->get('security.token_storage')->getToken()->getUser();
             $profile = $this->get('elife.api_sdk.profiles')->get($user->getUsername())
-                ->otherwise(function ($reason) use ($user, $request) {
-                    $request->getSession()->invalidate();
-
-                    $response = new RedirectResponse($request->getUri());
-                    $response->headers->clearCookie($this->container->getParameter('session_name'));
-
+                ->otherwise(function ($reason) use ($user) {
                     $e = exception_for($reason);
-                    $this->get('logger')->error("Logged user {$user->getUsername()} out due to {$e->getMessage()}", ['exception' => $e]);
+                    $this->get('logger')->error("Logging user {$user->getUsername()} out due to {$e->getMessage()}", ['exception' => $e]);
 
-                    throw new EarlyResponse($response);
+                    throw new EarlyResponse(new RedirectResponse($this->get('router')->generate('log-out', [], UrlGeneratorInterface::ABSOLUTE_URL)));
                 });
         }
 
         return [
-            'header' => all(['model' => promise_for($model), 'profile' => promise_for($profile ?? null)])
+            'header' => all(['item' => promise_for($item), 'profile' => promise_for($profile ?? null)])
                 ->then(function (array $parts) {
-                    return $this->get('elife.journal.view_model.factory.site_header')->createSiteHeader($parts['model'], $parts['profile']);
+                    return $this->get('elife.journal.view_model.factory.site_header')->createSiteHeader($parts['item'], $parts['profile']);
                 }),
             'infoBars' => [],
             'emailCta' => $this->get('elife.journal.view_model.converter')->convert($form->createView()),
             'footer' => $this->get('elife.journal.view_model.factory.footer')->createFooter(),
             'user' => $user ?? null,
+            'item' => $item,
         ];
     }
 }

@@ -2,6 +2,16 @@
 
 {% block title %}{{ title|striptags }} | Jobs{% endblock %}
 
+{% block meta %}
+
+    {{ parent() }}
+
+    {% if date(item.closingDate) < date() %}
+        <meta name="robots" content="noindex">
+    {% endif %}
+
+{% endblock %}
+
 {% block body %}
 
     {{ render_pattern(contentHeader) }}

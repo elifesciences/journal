@@ -35,7 +35,16 @@ final class AboutPeopleControllerTest extends PageTestCase
         $this->assertSame('/about/people', $crawler->filter('link[rel="canonical"]')->attr('href'));
         $this->assertSame('http://localhost/about/people', $crawler->filter('meta[property="og:url"]')->attr('content'));
         $this->assertSame('People', $crawler->filter('meta[property="og:title"]')->attr('content'));
+        $this->assertSame('The working scientists who serve as eLife editors, our early-career advisors, governing board, and our executive staff all work in concert to realise eLife’s mission to accelerate discovery', $crawler->filter('meta[property="og:description"]')->attr('content'));
+        $this->assertSame('The working scientists who serve as eLife editors, our early-career advisors, governing board, and our executive staff all work in concert to realise eLife’s mission to accelerate discovery', $crawler->filter('meta[name="description"]')->attr('content'));
         $this->assertSame('summary', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
+        $this->assertEmpty($crawler->filter('meta[property="og:image"]'));
+        $this->assertEmpty($crawler->filter('meta[name="dc.identifier"]'));
+        $this->assertEmpty($crawler->filter('meta[name="dc.relation.ispartof"]'));
+        $this->assertEmpty($crawler->filter('meta[name="dc.title"]'));
+        $this->assertEmpty($crawler->filter('meta[name="dc.description"]'));
+        $this->assertEmpty($crawler->filter('meta[name="dc.date"]'));
+        $this->assertEmpty($crawler->filter('meta[name="dc.rights"]'));
     }
 
     protected function getUrl() : string

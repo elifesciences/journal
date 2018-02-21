@@ -12,6 +12,10 @@ parameters:
     status_checks:
         Check 1: foo
         Check 2: bar
+    subject_rewrites:
+      - from_id: old-subject
+        to_id: new-subject
+        to_name: New Subject
 
 framework:
     profiler:

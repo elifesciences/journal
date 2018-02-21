@@ -25,7 +25,7 @@ final class CoverBlockLinkConverter implements ViewModelConverter
     {
         $image = $object->getBanner();
 
-        $builder = $this->pictureBuilderFactory->forImage($image, 263, 176);
+        $builder = $this->pictureBuilderFactory->forImage($image, 251, 169);
 
         return new ViewModel\BlockLink(
             $context['link'],

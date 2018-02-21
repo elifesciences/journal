@@ -13,7 +13,7 @@ final class ButtonConverter implements ViewModelConverter
      */
     public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
-        return ViewModel\Button::link($object->getText(), $object->getUri());
+        return new ViewModel\ButtonCollection([ViewModel\Button::link($object->getText(), $object->getUri())]);
     }
 
     public function supports($object, string $viewModel = null, array $context = []) : bool

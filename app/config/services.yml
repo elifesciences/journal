@@ -25,6 +25,10 @@ services:
         arguments:
           - '@elife.api_client.client'
 
+    elife.api_sdk.annotations:
+        class: eLife\ApiSdk\Client\Annotations
+        factory: ['@elife.api_sdk', annotations]
+
     elife.api_sdk.annual_reports:
         class: eLife\ApiSdk\Client\AnnualReports
         factory: ['@elife.api_sdk', annualReports]
@@ -153,6 +157,16 @@ services:
             alias: state_logging
             priority: -1499
 
+    elife.journal.guzzle.subject_rewriting:
+        class: eLife\Journal\Guzzle\SubjectRewritingMiddleware
+        public: false
+        arguments:
+          - '%subject_rewrites%'
+        tags:
+          - name: csa_guzzle.middleware
+            alias: subject_rewriting
+            priority: 1500
+
     elife.journal.helper.fragment_link_rewriter:
         class: eLife\Journal\Helper\FragmentLinkRewriter
         public: false
@@ -185,14 +199,6 @@ services:
         tags:
           - name: kernel.event_subscriber
 
-    elife.journal.listener.open_sesame:
-        class: eLife\Journal\EventListener\QueryStringParameterToSessionAttributeSubscriber
-        arguments:
-          - 'open-sesame'
-          - 'open-sesame'
-        tags:
-          - name: kernel.event_subscriber
-
     elife.journal.mustache.loader:
         class: Mustache_Loader_CascadingLoader
         public: false
@@ -202,10 +208,11 @@ services:
             - '@elife.journal.mustache.loader.local'
 
     elife.journal.mustache.loader.local:
-        class: Mustache_Loader_FilesystemLoader
+        class: Mustache_Loader_ProductionFilesystemLoader
         public: false
         arguments:
           - '@=service("kernel").getProjectDir()~"/app/Resources/patterns"'
+          - stat_props: '%mustache_stat_props%'
 
     elife.journal.router.parameter_resolver.model:
       class: eLife\Journal\Router\ModelParameterResolver
@@ -236,35 +243,13 @@ services:
           - '%hypothesis_client_id%'
           - '%hypothesis_client_secret%'
 
-    elife.journal.security.voter.feature.can_authenticate:
-        class: eLife\Journal\Security\Voter\SessionAttributeVoter
+    elife.journal.security.authenticator.elife:
+        class: eLife\Journal\Security\Authenticator\ElifeAuthenticator
         public: false
         arguments:
-          - '@request_stack'
-          - FEATURE_CAN_AUTHENTICATE
-          - open-sesame
-        tags:
-          - name: security.voter
-
-    elife.journal.security.voter.feature.use_hypothesis:
-        class: eLife\Journal\Security\Voter\SessionAttributeVoter
-        public: false
-        arguments:
-          - '@request_stack'
-          - FEATURE_CAN_USE_HYPOTHESIS
-          - open-sesame
-        tags:
-          - name: security.voter
-
-    elife.journal.security.voter.feature.view_profiles:
-        class: eLife\Journal\Security\Voter\SessionAttributeVoter
-        public: false
-        arguments:
-          - '@request_stack'
-          - FEATURE_CAN_VIEW_PROFILES
-          - open-sesame
-        tags:
-          - name: security.voter
+          - '@oauth2.registry'
+          - '@router'
+          - '@security.http_utils'
 
     elife.journal.templating.promise_aware:
         class: eLife\Journal\Templating\PromiseAwareEngine
@@ -300,8 +285,13 @@ services:
         tags:
           - name: twig.extension
 
+    elife.journal.twig.extension.model_name:
+        class: eLife\Journal\Twig\ModelNameExtension
+        tags:
+          - name: twig.extension
+
     elife.journal.twig.extension.pattern:
-        class: eLife\Journal\Twig\PatternExtension
+        class: eLife\Patterns\Twig\PatternExtension
         arguments:
           - '@elife.patterns.pattern_renderer'
         tags:
@@ -354,6 +344,15 @@ services:
 
     elife.journal.view_model.converter:
         class: eLife\Journal\ViewModel\Converter\ViewModelConverterRegistry
+
+    elife.journal.view_model.converter.annotation.annotation_teaser:
+        class: eLife\Journal\ViewModel\Converter\AnnotationAnnotationTeaserConverter
+        public: false
+        arguments:
+          - '@elife.journal.view_model.converter'
+          - '@elife.patterns.pattern_renderer'
+        tags:
+          - name: view_model.converter
 
     elife.journal.view_model.converter.annual_report.teaser:
         class: eLife\Journal\ViewModel\Converter\AnnualReportTeaserConverter
@@ -1231,16 +1230,11 @@ services:
           - '@assets.packages'
 
     elife.patterns.mustache.loader.filesystem:
-        class: Mustache_Loader_FilesystemLoader
+        class: Mustache_Loader_ProductionFilesystemLoader
         public: false
         arguments:
           - '@=composer_locate("elife/patterns")'
-
-    elife.patterns.mustache.loader.pattern_lab:
-        class: eLife\Patterns\Mustache\PatternLabLoader
-        public: false
-        arguments:
-          - '@=composer_locate("elife/patterns")~"/resources/templates"'
+          - stat_props: '%mustache_stat_props%'
 
     phive.twig.deferred:
         class: Phive\Twig\Extensions\Deferred\DeferredExtension

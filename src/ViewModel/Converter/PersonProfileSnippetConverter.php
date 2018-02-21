@@ -20,7 +20,7 @@ final class PersonProfileSnippetConverter implements ViewModelConverter
     public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
         if ($object->getThumbnail()) {
-            $image = $this->viewModelConverter->convert($object->getThumbnail(), null, ['width' => 70, 'height' => 70]);
+            $image = $this->viewModelConverter->convert($object->getThumbnail(), null, ['width' => 72, 'height' => 72]);
         } else {
             $image = null;
         }

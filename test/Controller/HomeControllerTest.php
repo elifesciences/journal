@@ -141,7 +141,16 @@ final class HomeControllerTest extends PageTestCase
         $this->assertSame('/', $crawler->filter('link[rel="canonical"]')->attr('href'));
         $this->assertSame('http://localhost/', $crawler->filter('meta[property="og:url"]')->attr('content'));
         $this->assertSame('Latest research', $crawler->filter('meta[property="og:title"]')->attr('content'));
+        $this->assertSame('eLife is an open-access journal that publishes promising research in the life and biomedical sciences', $crawler->filter('meta[property="og:description"]')->attr('content'));
+        $this->assertSame('eLife is an open-access journal that publishes promising research in the life and biomedical sciences', $crawler->filter('meta[name="description"]')->attr('content'));
         $this->assertSame('summary', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
+        $this->assertEmpty($crawler->filter('meta[property="og:image"]'));
+        $this->assertEmpty($crawler->filter('meta[name="dc.identifier"]'));
+        $this->assertEmpty($crawler->filter('meta[name="dc.relation.ispartof"]'));
+        $this->assertEmpty($crawler->filter('meta[name="dc.title"]'));
+        $this->assertEmpty($crawler->filter('meta[name="dc.description"]'));
+        $this->assertEmpty($crawler->filter('meta[name="dc.date"]'));
+        $this->assertEmpty($crawler->filter('meta[name="dc.rights"]'));
     }
 
     /**
@@ -328,6 +337,101 @@ final class HomeControllerTest extends PageTestCase
         $crawler = $client->request('GET', $this->getUrl());
 
         $this->assertSame('Subject name', trim($crawler->filter('.section-listing__list_item')->text()));
+    }
+
+    /**
+     * @test
+     */
+    public function subjects_are_rewritten()
+    {
+        $client = static::createClient();
+
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/subjects?page=1&per-page=100&order=asc',
+                ['Accept' => 'application/vnd.elife.subject-list+json; version=1']
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.subject-list+json; version=1'],
+                json_encode([
+                    'total' => 2,
+                    'items' => [
+                        [
+                            'id' => 'old-subject',
+                            'name' => 'Old Subject',
+                            'impactStatement' => 'Subject impact statement.',
+                            'image' => [
+                                'banner' => [
+                                    'uri' => 'https://www.example.com/iiif/image',
+                                    'alt' => '',
+                                    'source' => [
+                                        'mediaType' => 'image/jpeg',
+                                        'uri' => 'https://www.example.com/image.jpg',
+                                        'filename' => 'image.jpg',
+                                    ],
+                                    'size' => [
+                                        'width' => 800,
+                                        'height' => 600,
+                                    ],
+                                ],
+                                'thumbnail' => [
+                                    'uri' => 'https://www.example.com/iiif/image',
+                                    'alt' => '',
+                                    'source' => [
+                                        'mediaType' => 'image/jpeg',
+                                        'uri' => 'https://www.example.com/image.jpg',
+                                        'filename' => 'image.jpg',
+                                    ],
+                                    'size' => [
+                                        'width' => 800,
+                                        'height' => 600,
+                                    ],
+                                ],
+                            ],
+                        ],
+                        [
+                            'id' => 'new-subject',
+                            'name' => 'New Subject',
+                            'impactStatement' => 'Subject impact statement.',
+                            'image' => [
+                                'banner' => [
+                                    'uri' => 'https://www.example.com/iiif/image',
+                                    'alt' => '',
+                                    'source' => [
+                                        'mediaType' => 'image/jpeg',
+                                        'uri' => 'https://www.example.com/image.jpg',
+                                        'filename' => 'image.jpg',
+                                    ],
+                                    'size' => [
+                                        'width' => 800,
+                                        'height' => 600,
+                                    ],
+                                ],
+                                'thumbnail' => [
+                                    'uri' => 'https://www.example.com/iiif/image',
+                                    'alt' => '',
+                                    'source' => [
+                                        'mediaType' => 'image/jpeg',
+                                        'uri' => 'https://www.example.com/image.jpg',
+                                        'filename' => 'image.jpg',
+                                    ],
+                                    'size' => [
+                                        'width' => 800,
+                                        'height' => 600,
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ])
+            )
+        );
+
+        $crawler = $client->request('GET', $this->getUrl());
+
+        $this->assertSame(['New Subject'], array_map('trim', $crawler->filter('.section-listing__list_item')->extract('_text')));
     }
 
     protected function getUrl() : string

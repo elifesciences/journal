@@ -4,10 +4,6 @@
 
 {% block title %}{{ title|striptags }} | Interviews{% endblock %}
 
-{% block description %}
-    {{ interview.impactStatement|raw }}
-{% endblock %}
-
 {% block body %}
 
     {{ render_pattern(contentHeader) }}
@@ -32,12 +28,6 @@
 
             {% if cv %}
                 {{ render_pattern(cv) }}
-            {% endif %}
-
-            {% if hypothesisOpener is defined %}
-
-                {{ render_pattern(hypothesisOpener) }}
-
             {% endif %}
 
         {% endblock %}

@@ -66,12 +66,12 @@ final class SignUpTest extends WebTestCase
         $this->assertCount(1, $crawler->filter('.info-bar'));
         $this->assertSame('Almost finished! Click the link in the email we just sent you to confirm your subscription.', trim($crawler->filter('.info-bar')->text()));
 
-        $this->assertSame('no-cache, private', $client->getResponse()->headers->get('Cache-Control'));
+        $this->assertSame('max-age=0, must-revalidate, private', $client->getResponse()->headers->get('Cache-Control'));
         $this->assertEmpty($client->getResponse()->getVary());
 
         $client->request('GET', $this->getUrl());
         $this->assertSame(200, $client->getResponse()->getStatusCode());
-        $this->assertSame('no-cache, private', $client->getResponse()->headers->get('Cache-Control'));
+        $this->assertSame('max-age=0, must-revalidate, private', $client->getResponse()->headers->get('Cache-Control'));
         $this->assertEmpty($client->getResponse()->getVary());
     }
 
@@ -94,7 +94,7 @@ final class SignUpTest extends WebTestCase
         $this->assertSame('There were problems submitting the form.', trim($crawler->filter('.info-bar')->text()));
         $this->assertSame('Please provide your email address.', $crawler->filter('.compact-form__message')->text());
 
-        $this->assertSame('no-cache, private', $client->getResponse()->headers->get('Cache-Control'));
+        $this->assertSame('max-age=0, must-revalidate, private', $client->getResponse()->headers->get('Cache-Control'));
         $this->assertEmpty($client->getResponse()->getVary());
 
         $client->request('GET', $this->getUrl());

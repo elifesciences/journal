@@ -21,7 +21,6 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertEmpty($crawler->filter('.content-header__institution_list'));
         $this->assertSame('Research Article Jan 1, 2010', trim(preg_replace('!\s+!', ' ', $crawler->filter('.content-header .meta')->text())));
 
-        $this->assertNotContains('Annotations', $crawler->filter('.contextual-data__list')->text());
         $this->assertContains('Cite as: eLife 2010;1:e00001',
             $crawler->filter('.contextual-data__cite_wrapper')->text());
         $this->assertContains('doi: 10.7554/eLife.00001', $crawler->filter('.contextual-data__cite_wrapper')->text());
@@ -138,6 +137,13 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertSame('Article title', $crawler->filter('meta[property="og:title"]')->attr('content'));
         $this->assertSame('article', $crawler->filter('meta[property="og:type"]')->attr('content'));
         $this->assertSame('summary', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
+        $this->assertEmpty($crawler->filter('meta[property="og:image"]'));
+        $this->assertSame('doi:10.7554/eLife.00001', $crawler->filter('meta[name="dc.identifier"]')->attr('content'));
+        $this->assertEmpty($crawler->filter('meta[name="dc.relation.ispartof"]'));
+        $this->assertSame('Article title', $crawler->filter('meta[name="dc.title"]')->attr('content'));
+        $this->assertEmpty($crawler->filter('meta[name="dc.description"]'));
+        $this->assertSame('2010-01-01', $crawler->filter('meta[name="dc.date"]')->attr('content'));
+        $this->assertSame('© 2010 Bar. Copyright statement.', $crawler->filter('meta[name="dc.rights"]')->attr('content'));
     }
 
     /**
@@ -575,8 +581,16 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertSame('Article title', $crawler->filter('.content-header__title')->text());
 
-        $this->assertContains('1,234', $crawler->filter('.contextual-data__list_title:contains("Cited") + .contextual-data__list_desc')->text());
-        $this->assertContains('5,678', $crawler->filter('.contextual-data__list_title:contains("Views") + .contextual-data__list_desc')->text());
+        $this->assertSame(
+            [
+                'Cited 1,234',
+                'Views 5,678',
+                'Annotations 0 Open annotations (there are currently 0 annotations on this page).',
+            ],
+            array_map(function (string $text) {
+                return trim(preg_replace('!\s+!', ' ', $text));
+            }, $crawler->filter('.contextual-data__item')->extract('_text'))
+        );
 
         $metrics = $crawler->filter('.grid-column > section:nth-of-type(3)');
         $this->assertSame('Metrics', $metrics->filter('header > h2')->text());
@@ -708,8 +722,7 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertContains('Accepted manuscript, PDF only. Full online edition to follow.',
             array_map('trim', $crawler->filter('.info-bar')->extract(['_text'])));
-
-        $this->assertNull($crawler->filter('.view-selector')->attr('data-side-by-side-link'));
+        $this->assertEmpty($crawler->filter('.view-selector'));
         $articleInfo = $crawler->filter('.grid-column > section:nth-of-type(1)');
         $this->assertSame('Article and author information',
             $articleInfo->filter('header > h2')->text());
@@ -733,11 +746,9 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertContains('© 2012, Author One', $copyright->filter('div')->text());
         $this->assertContains('Copyright statement.', $copyright->filter('div')->text());
 
-        $this->assertSame('Comments', $crawler->filter('.grid-column > section:nth-of-type(2) .article-section__header_text')->text());
+        $this->assertSame('Download links', $crawler->filter('.grid-column > section:nth-of-type(2) .article-section__header_text')->text());
 
-        $this->assertSame('Download links', $crawler->filter('.grid-column > section:nth-of-type(3) .article-section__header_text')->text());
-
-        $this->assertSame('Categories and tags', $crawler->filter('.grid-column > section:nth-of-type(4) .article-meta__group_title')->text());
+        $this->assertSame('Categories and tags', $crawler->filter('.grid-column > section:nth-of-type(3) .article-meta__group_title')->text());
     }
 
     /**
@@ -770,6 +781,13 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertSame('Article title', $crawler->filter('meta[property="og:title"]')->attr('content'));
         $this->assertSame('article', $crawler->filter('meta[property="og:type"]')->attr('content'));
         $this->assertSame('summary', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
+        $this->assertEmpty($crawler->filter('meta[property="og:image"]'));
+        $this->assertSame('doi:10.7554/eLife.00001', $crawler->filter('meta[name="dc.identifier"]')->attr('content'));
+        $this->assertEmpty($crawler->filter('meta[name="dc.relation.ispartof"]'));
+        $this->assertSame('Article title', $crawler->filter('meta[name="dc.title"]')->attr('content'));
+        $this->assertEmpty($crawler->filter('meta[name="dc.description"]'));
+        $this->assertSame('2010-01-01', $crawler->filter('meta[name="dc.date"]')->attr('content'));
+        $this->assertSame('© 2010 Author One. Copyright statement.', $crawler->filter('meta[name="dc.rights"]')->attr('content'));
     }
 
     /**
@@ -1254,11 +1272,9 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertContains('© 2012, Bar', $copyright->filter('div')->text());
         $this->assertContains('Copyright statement.', $copyright->filter('div')->text());
 
-        $this->assertSame('Comments', $crawler->filter('.grid-column > section:nth-of-type(9) .article-section__header_text')->text());
+        $this->assertSame('Download links', $crawler->filter('.grid-column > section:nth-of-type(9) .article-section__header_text')->text());
 
-        $this->assertSame('Download links', $crawler->filter('.grid-column > section:nth-of-type(10) .article-section__header_text')->text());
-
-        $this->assertSame('Categories and tags', $crawler->filter('.grid-column > section:nth-of-type(11) .article-meta__group_title')->text());
+        $this->assertSame('Categories and tags', $crawler->filter('.grid-column > section:nth-of-type(10) .article-meta__group_title')->text());
 
         $this->assertRegexp('|^https://.*/00001$|', $crawler->filter('.view-selector')->attr('data-side-by-side-link'));
 
@@ -1272,23 +1288,9 @@ final class ArticleControllerTest extends PageTestCase
                 'Decision letter',
                 'Author response',
                 'Article and author information',
-                'Comments',
             ],
             array_map('trim', $crawler->filter('.view-selector__jump_link_item')->extract('_text'))
         );
-    }
-
-    /**
-     * @test
-     */
-    public function it_shows_annotations_rather_than_comments_when_the_feature_flag_is_enabled()
-    {
-        $client = static::createClient();
-
-        $crawler = $client->request('GET', "{$this->getUrl()}?open-sesame");
-
-        $this->assertNotContains('Comments', $crawler->text());
-        $this->assertContains('Annotations', $crawler->filter('.contextual-data__list')->text());
     }
 
     /**

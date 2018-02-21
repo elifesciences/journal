@@ -4,38 +4,43 @@ imports:
   - resource: services.yml
 
 parameters:
+    api_connect_timeout: 2
+    api_timeout: 5
+    api_connect_timeout_slow: 3
+    api_timeout_slow: 10
     honeypot_field: email_address
+    mustache_stat_props: [size, mtime]
 
 bobthecow_mustache:
     globals:
         assetRewrite: '@elife.patterns.mustache.helpers.asset_rewrite'
         assetsPath: 'assets/patterns'
     loader_id: elife.journal.mustache.loader
-    partials_loader_id: elife.patterns.mustache.loader.pattern_lab
+    partials_loader_id: elife.journal.mustache.loader
 
 csa_guzzle:
     clients:
         elife_api:
             config:
                 base_uri: '%api_url%'
-                connect_timeout: 0.5
+                connect_timeout: '%api_connect_timeout%'
                 headers:
                     Authorization: '%api_key%'
-                timeout: 1
+                timeout: '%api_timeout%'
         elife_crm:
             config:
                 base_uri: '%crm_url%'
-                connect_timeout: 1
-                timeout: 3
+                connect_timeout: '%api_connect_timeout_slow%'
+                timeout: '%api_timeout_slow%'
         file_download:
             config:
-                connect_timeout: 0.5
+                connect_timeout: '%api_connect_timeout%'
                 http_errors: false
                 stream: true
         oauth:
             config:
-                connect_timeout: 1
-                timeout: 3
+                connect_timeout: '%api_connect_timeout_slow%'
+                timeout: '%api_timeout_slow%'
 
 framework:
     assets:
@@ -58,7 +63,7 @@ framework:
         resource: '%kernel.project_dir%/app/config/routing.yml'
     secret: '%secret%'
     session:
-        cookie_lifetime: 86400 # 1 day
+        cookie_lifetime: 2592000 # 30 days
         name: '%session_name%'
         save_path: '0;660;%kernel.project_dir%/var/sessions/%kernel.environment%'
     templating:
@@ -66,29 +71,23 @@ framework:
           - mustache
           - twig
 
-hwi_oauth:
-    firewall_names:
-      - main
-    resource_owners:
-        elife:
-            type: oauth2
-            class: eLife\Journal\Security\OAuth2\ElifeResourceOwner
-            client_id: '%oauth2_client_id%'
-            client_secret: '%oauth2_client_secret%'
-            access_token_url: '%api_url%/oauth2/token'
-            authorization_url: '%api_url_public%/oauth2/authorize'
-            paths:
-                identifier: id
-                nickname: id
-                realname: name
-            options:
-                csrf: true
-
 isometriks_spam:
     honeypot:
         field: '%honeypot_field%'
         global: true
         message: Please try submitting the form again.
+
+knpu_oauth2_client:
+    clients:
+        elife:
+            type: generic
+            provider_class: eLife\Journal\Security\OAuth2\ElifeProvider
+            client_id: '%oauth2_client_id%'
+            client_secret: '%oauth2_client_secret%'
+            redirect_route: log-in-check
+            provider_options:
+                api_url: '%api_url%'
+                api_url_public: '%api_url_public%'
 
 monolog:
     channels:
@@ -108,7 +107,7 @@ nelmio_security:
     referrer_policy:
         enabled: true
         policies:
-          - no-referrer
+          - no-referrer-when-downgrade
           - strict-origin-when-cross-origin
     xss_protection:
         enabled: true
@@ -128,7 +127,6 @@ twig:
     debug: '%kernel.debug%'
     exception_controller: AppBundle:Exception:show
     globals:
-        disqus_domain: '%disqus_domain%'
         gtm_id: '%gtm_id%'
         hypothesis_api: '%hypothesis_api%'
         hypothesis_authority: '%hypothesis_authority%'

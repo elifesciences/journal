@@ -63,7 +63,8 @@ final class ContentHeaderImageFactory
     {
         return $builder
             ->addSize(450, 264, '(max-width: 450px)')
-            ->addSize(767, 264, '(max-width: 767px)')
-            ->addSize(1023, 288, '(max-width: 1023px)');
+            ->addSize(729, 264, '(max-width: 729px)')
+            ->addSize(899, 288, '(max-width: 899px)')
+            ->addSize(1023, 336, '(max-width: 1023px)');
     }
 }

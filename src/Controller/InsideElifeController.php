@@ -3,15 +3,13 @@
 namespace eLife\Journal\Controller;
 
 use eLife\ApiSdk\Collection\Sequence;
-use eLife\ApiSdk\Model\BlogArticle;
 use eLife\Journal\Helper\Callback;
 use eLife\Journal\Helper\Paginator;
 use eLife\Journal\Pagerfanta\SequenceAdapter;
 use eLife\Patterns\ViewModel\ContentHeader;
 use eLife\Patterns\ViewModel\ContextualData;
-use eLife\Patterns\ViewModel\ContextualDataMetric;
-use eLife\Patterns\ViewModel\HypothesisOpener;
 use eLife\Patterns\ViewModel\ListingTeasers;
+use eLife\Patterns\ViewModel\SpeechBubble;
 use eLife\Patterns\ViewModel\Teaser;
 use Pagerfanta\Pagerfanta;
 use Symfony\Component\HttpFoundation\Request;
@@ -70,34 +68,26 @@ final class InsideElifeController extends Controller
 
     public function articleAction(Request $request, string $id) : Response
     {
-        $article = $this->get('elife.api_sdk.blog_articles')
+        $arguments['item'] = $this->get('elife.api_sdk.blog_articles')
             ->get($id)
             ->otherwise($this->mightNotExist())
             ->then($this->checkSlug($request, Callback::method('getTitle')));
 
-        $arguments = $this->defaultPageArguments($request, $article);
+        $arguments = $this->defaultPageArguments($request, $arguments['item']);
 
-        $arguments['title'] = $article
+        $arguments['title'] = $arguments['item']
             ->then(Callback::method('getTitle'));
 
-        $arguments['article'] = $article;
-
-        $arguments['contentHeader'] = $arguments['article']
+        $arguments['contentHeader'] = $arguments['item']
             ->then($this->willConvertTo(ContentHeader::class));
 
-        $arguments['contextualData'] = $arguments['article']
-            ->then($this->ifGranted(['FEATURE_CAN_USE_HYPOTHESIS'], function (BlogArticle $article) {
-                $metrics = [new ContextualDataMetric('Annotations', 0, 'annotation-count')];
+        $arguments['contextualData'] = ContextualData::annotationsOnly(SpeechBubble::forContextualData());
 
-                return ContextualData::withMetrics($metrics);
-            }));
-
-        $arguments['blocks'] = $arguments['article']
-            ->then($this->willConvertContent());
-
-        if ($this->isGranted('FEATURE_CAN_USE_HYPOTHESIS')) {
-            $arguments['hypothesisOpener'] = new HypothesisOpener();
-        }
+        $arguments['blocks'] = $arguments['item']
+            ->then($this->willConvertContent())
+            ->then(function (Sequence $blocks) {
+                return $blocks->prepend(SpeechBubble::forArticleBody());
+            });
 
         return new Response($this->get('templating')->render('::inside-elife-article.html.twig', $arguments));
     }

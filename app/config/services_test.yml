@@ -2,7 +2,6 @@ services:
 
     elife.api_validator.validator:
         class: eLife\ApiValidator\MessageValidator\JsonMessageValidator
-        public: false
         arguments:
           - '@elife.api_validator.schema_finder'
           - '@elife.api_validator.schema_validator'
@@ -27,7 +26,7 @@ services:
         class: Csa\Bundle\GuzzleBundle\Cache\MockStorageAdapter
         arguments:
           - '%api_mock%'
-          - ['Authorization', 'Content-Length', 'Host', 'host', 'Referer', 'referer', 'User-Agent', 'user-agent', 'X-Guzzle-Cache']
+          - ['authorization', 'content-length', 'host', 'referer', 'user-agent', 'x-guzzle-cache']
 
     elife.guzzle.middleware.mock.storage.validating:
         class: test\eLife\Journal\ValidatingStorageAdapter
@@ -35,6 +34,12 @@ services:
         arguments:
           - '@elife.guzzle.middleware.mock.storage.validating.inner'
           - '@elife.api_validator.validator'
+
+    elife.guzzle.middleware.mock.storage.normalizing:
+        class: test\eLife\Journal\NormalizingStorageAdapter
+        decorates: elife.guzzle.middleware.mock.storage
+        arguments:
+          - '@elife.guzzle.middleware.mock.storage.normalizing.inner'
 
     elife.guzzle.middleware.mock:
         class: Csa\Bundle\GuzzleBundle\GuzzleHttp\Middleware\MockMiddleware
