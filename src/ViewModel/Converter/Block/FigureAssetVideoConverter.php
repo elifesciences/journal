@@ -36,11 +36,16 @@ final class FigureAssetVideoConverter implements ViewModelConverter
         /** @var Block\Video $asset */
         $asset = $object->getAsset();
 
+        $width = 639;
+        if ($width > $asset->getPlaceholder()->getWidth()) {
+            $width = $asset->getPlaceholder()->getWidth();
+        }
+
         $assetViewModel = new ViewModel\Video(
             array_map(function (Block\VideoSource $source) {
                 return new ViewModel\MediaSource($source->getUri(), new ViewModel\MediaType($source->getMediaType()));
             }, $asset->getSources()),
-            $asset->getPlaceholder() ? $this->iiifUri($asset->getPlaceholder(), $asset->getWidth(), $asset->getHeight()) : null,
+            $asset->getPlaceholder() ? $this->iiifUri($asset->getPlaceholder(), $width) : null,
             $asset->isAutoplay(),
             $asset->isLoop()
         );

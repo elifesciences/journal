@@ -33,7 +33,7 @@ final class CollectionContentHeaderConverter implements ViewModelConverter
             $curatorName .= ' et al.';
         }
         if ($object->getSelectedCurator()->getThumbnail()) {
-            $curatorImage = $this->viewModelConverter->convert($object->getSelectedCurator()->getThumbnail(), null, ['width' => 70, 'height' => 70]);
+            $curatorImage = $this->viewModelConverter->convert($object->getSelectedCurator()->getThumbnail(), null, ['width' => 48, 'height' => 48]);
         } else {
             $curatorImage = null;
         }

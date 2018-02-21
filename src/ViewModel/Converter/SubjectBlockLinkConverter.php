@@ -49,7 +49,7 @@ final class SubjectBlockLinkConverter implements ViewModelConverter
 
         $builder = $builder
             ->setOriginalSize($image->getWidth(), $image->getHeight())
-            ->addSize(263, 148, '(min-width: 600px)');
+            ->addSize(251, 145, '(min-width: 600px)');
 
         return new ViewModel\BlockLink(
             new ViewModel\Link(
