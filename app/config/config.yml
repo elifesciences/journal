@@ -9,7 +9,6 @@ parameters:
     api_connect_timeout_slow: 3
     api_timeout_slow: 10
     honeypot_field: email_address
-    instance: default
     mustache_stat_props: [size, mtime]
 
 bobthecow_mustache:
