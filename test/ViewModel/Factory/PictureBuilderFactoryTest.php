@@ -40,11 +40,11 @@ final class PictureBuilderFactoryTest extends TestCase
             new ViewModel\Picture(
                 [
                     [
-                        'srcset' => 'path:image/webp::',
+                        'srcset' => 'path:image/webp:::1',
                         'type' => 'image/webp',
                     ],
                 ],
-                new ViewModel\Image('path:image/jpeg::', [], 'alt')
+                new ViewModel\Image('path:image/jpeg:::1', [], 'alt')
             ),
             $builder->build()
         );
@@ -65,15 +65,15 @@ final class PictureBuilderFactoryTest extends TestCase
             new ViewModel\Picture(
                 [
                     [
-                        'srcset' => 'path:image/webp:200:200 200w, path:image/webp:100:100 100w',
+                        'srcset' => 'path:image/webp:100:100:2 2x, path:image/webp:100:100:1 1x',
                         'type' => 'image/webp',
                     ],
                     [
-                        'srcset' => 'path:image/jpeg:200:200 200w, path:image/jpeg:100:100 100w',
+                        'srcset' => 'path:image/jpeg:100:100:2 2x, path:image/jpeg:100:100:1 1x',
                         'type' => 'image/jpeg',
                     ],
                 ],
-                new ViewModel\Image('path:image/jpeg:100:100')
+                new ViewModel\Image('path:image/jpeg:100:100:1')
             ),
             $builder->build()
         );
@@ -96,19 +96,19 @@ final class PictureBuilderFactoryTest extends TestCase
             new ViewModel\Picture(
                 [
                     [
-                        'srcset' => 'path:image/svg+xml:100:',
+                        'srcset' => 'path:image/svg+xml:100::1',
                         'type' => 'image/svg+xml',
                     ],
                     [
-                        'srcset' => 'path:image/webp:200:0 200w, path:image/webp:100:0 100w',
+                        'srcset' => 'path:image/webp:100::2 2x, path:image/webp:100::1 1x',
                         'type' => 'image/webp',
                     ],
                     [
-                        'srcset' => 'path:image/png:200:0 200w, path:image/png:100:0 100w',
+                        'srcset' => 'path:image/png:100::2 2x, path:image/png:100::1 1x',
                         'type' => 'image/png',
                     ],
                 ],
-                new ViewModel\Image('path:image/png::')
+                new ViewModel\Image('path:image/png:::1')
             ),
             $builder->build()
         );
@@ -141,11 +141,11 @@ final class PictureBuilderFactoryTest extends TestCase
             new ViewModel\Picture(
                 [
                     [
-                        'srcset' => 'https://example.com/image/full/100,/0/default.webp 100w, https://example.com/image/full/50,/0/default.webp 50w',
+                        'srcset' => 'https://example.com/image/full/100,/0/default.webp 2x, https://example.com/image/full/50,/0/default.webp 1x',
                         'type' => 'image/webp',
                     ],
                     [
-                        'srcset' => 'https://example.com/image/full/100,/0/default.jpg 100w, https://example.com/image/full/50,/0/default.jpg 50w',
+                        'srcset' => 'https://example.com/image/full/100,/0/default.jpg 2x, https://example.com/image/full/50,/0/default.jpg 1x',
                         'type' => 'image/jpeg',
                     ],
                 ],
@@ -254,11 +254,11 @@ final class PictureBuilderFactoryTest extends TestCase
             new ViewModel\Picture(
                 [
                     [
-                        'srcset' => 'https://example.com/image/full/100,/0/default.webp 100w, https://example.com/image/full/50,/0/default.webp 50w',
+                        'srcset' => 'https://example.com/image/full/100,/0/default.webp 2x, https://example.com/image/full/50,/0/default.webp 1x',
                         'type' => 'image/webp',
                     ],
                     [
-                        'srcset' => 'https://example.com/image/full/100,/0/default.png 100w, https://example.com/image/full/50,/0/default.png 50w',
+                        'srcset' => 'https://example.com/image/full/100,/0/default.png 2x, https://example.com/image/full/50,/0/default.png 1x',
                         'type' => 'image/png',
                     ],
                 ],
@@ -295,11 +295,11 @@ final class PictureBuilderFactoryTest extends TestCase
             new ViewModel\Picture(
                 [
                     [
-                        'srcset' => 'https://example.com/image/full/100,/0/default.webp 100w, https://example.com/image/full/50,/0/default.webp 50w',
+                        'srcset' => 'https://example.com/image/full/100,/0/default.webp 2x, https://example.com/image/full/50,/0/default.webp 1x',
                         'type' => 'image/webp',
                     ],
                     [
-                        'srcset' => 'https://example.com/image/full/100,/0/default.jpg 100w, https://example.com/image/full/50,/0/default.jpg 50w',
+                        'srcset' => 'https://example.com/image/full/100,/0/default.jpg 2x, https://example.com/image/full/50,/0/default.jpg 1x',
                         'type' => 'image/jpeg',
                     ],
                 ],
