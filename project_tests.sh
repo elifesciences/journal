@@ -1,13 +1,11 @@
 #!/usr/bin/env bash
 set -e
 
-export SYMFONY_ENV=test
-
 echo "cache:clear"
 rm -rf var/cache
 
 echo "security:check"
-bin/console security:check
+vendor/bin/security-checker security:check
 
 echo "proofreader"
 proofreader app/ bin/ src/ web/
