@@ -8,9 +8,6 @@ export SYMFONY_ENV=test
 echo "cache:clear"
 bin/console cache:clear --no-warmup
 
-echo "security:check"
-bin/console security:check
-
 echo "PHPUnit tests"
 vendor/bin/phpunit --log-junit build/phpunit.xml
 
