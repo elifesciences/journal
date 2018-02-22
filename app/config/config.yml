@@ -58,7 +58,6 @@ framework:
                 clearer: ~
                 default_lifetime: 31536000 # 1 year
                 public: true
-        prefix_seed: '%instance%'
     csrf_protection: ~
     form: ~
     router:

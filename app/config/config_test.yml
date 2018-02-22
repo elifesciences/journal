@@ -5,10 +5,8 @@ imports:
 parameters:
     api_url: http://api.elifesciences.org
     api_url_public: http://api.elifesciences.org
-    api_mock: '%kernel.cache_dir%/guzzle/fixtures/%instance%'
+    api_mock: '%kernel.cache_dir%/guzzle/fixtures'
     crm_url: http://crm.elifesciences.org/crm/civicrm/
-    instance: '%env(TEST_TOKEN)%'
-    env(TEST_TOKEN): '1'
     oauth2_client_id: journal_client_id
     oauth2_client_secret: journal_client_secret
     status_checks:

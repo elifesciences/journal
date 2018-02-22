@@ -12,8 +12,6 @@ final class HttpCachePass implements CompilerPassInterface
 
     public function process(ContainerBuilder $container)
     {
-        $seed = $container->getParameter('cache.prefix.seed');
-
         $definition = $container->findDefinition('cache.guzzle');
 
         $tags = $definition->getTags();
@@ -21,7 +19,7 @@ final class HttpCachePass implements CompilerPassInterface
         $namespace = crc32(implode(',', array_map(Versions::class.'::getVersion', self::$packages)));
 
         // Make updates to a library invalidate the cache.
-        $tags['cache.pool'][0]['namespace'] = "$seed-http-$namespace";
+        $tags['cache.pool'][0]['namespace'] = "http-$namespace";
 
         $definition->setTags($tags);
     }

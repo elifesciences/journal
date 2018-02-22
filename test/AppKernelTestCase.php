@@ -9,11 +9,6 @@ use Symfony\Component\Filesystem\Filesystem;
 
 trait AppKernelTestCase
 {
-    final protected static function getKernelClass() : string
-    {
-        return AppKernel::class;
-    }
-
     final protected static function bootKernel(array $options = [])
     {
         parent::bootKernel($options);
@@ -22,6 +17,11 @@ trait AppKernelTestCase
         static::$kernel->getContainer()->get('cache.guzzle')->clear();
 
         return static::$kernel;
+    }
+
+    protected static function createKernel(array $options = [])
+    {
+        return new AppKernel($options['environment'] ?? 'test', $options['debug'] ?? true, getenv('TEST_TOKEN'));
     }
 
     final protected static function mockApiResponse(RequestInterface $request, ResponseInterface $response)

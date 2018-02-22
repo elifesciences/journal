@@ -28,8 +28,9 @@ use WhiteOctober\PagerfantaBundle\WhiteOctoberPagerfantaBundle;
 class AppKernel extends Kernel
 {
     private $version;
+    private $instance;
 
-    public function __construct(string $environment, bool $debug)
+    public function __construct(string $environment, bool $debug, int $instance = null)
     {
         parent::__construct($environment, $debug);
 
@@ -44,6 +45,7 @@ class AppKernel extends Kernel
         }
 
         $this->version = $version;
+        $this->instance = $instance;
     }
 
     public function registerBundles()
@@ -94,7 +96,7 @@ class AppKernel extends Kernel
 
     public function getCacheDir()
     {
-        return $this->getProjectDir().'/var/cache/'.$this->getEnvironment();
+        return "{$this->getProjectDir()}/var/cache/{$this->getEnvironment()}{$this->instance}";
     }
 
     public function getLogDir()
@@ -120,6 +122,8 @@ class AppKernel extends Kernel
 
         $builder->addExpressionLanguageProvider(new ComposerLocateFunctionProvider());
         $builder->addExpressionLanguageProvider(new TimeFunctionProvider());
+
+        $builder->setParameter('kernel.instance', $this->instance ?? '');
 
         return $builder;
     }
