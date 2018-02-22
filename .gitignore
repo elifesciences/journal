@@ -1,3 +1,4 @@
+/.php_cs.cache
 /.web-server-pid
 /app/config/parameters.yml
 /behat.yml
