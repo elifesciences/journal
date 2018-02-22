@@ -1,12 +1,10 @@
 #!/usr/bin/env bash
 set -e
 
-rm -f build/*.xml
-
 export SYMFONY_ENV=test
 
 echo "cache:clear"
-bin/console cache:clear --no-warmup
+rm -rf var/cache
 
 echo "security:check"
 bin/console security:check
@@ -16,10 +14,12 @@ proofreader app/ bin/ src/ web/
 proofreader --no-phpcpd features/ test/
 
 echo "PHPUnit tests"
-vendor/bin/paratest test --log-junit build/phpunit.xml --runner WrapperRunner
+rm -rf build/phpunit/
+vendor/bin/fastest --no-interaction --xml phpunit.xml.dist "vendor/bin/phpunit --log-junit build/phpunit/{n}.xml {};"
 
 echo "Behat tests"
-vendor/bin/behat --strict --tags '~wip' --format junit --format progress
+rm -rf build/behat/
+vendor/bin/behat --list-scenarios --tags '~wip' | vendor/bin/fastest --no-interaction "JARNAIZ_JUNIT_OUTPUTDIR=build/behat JARNAIZ_JUNIT_FILENAME={n}.xml vendor/bin/behat --strict --format junit {};"
 
 # Tenon disabled as flaky and not (yet) used much
 # echo "Tenon tests"

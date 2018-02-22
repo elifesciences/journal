@@ -4,6 +4,7 @@ use Behat\Mink\Driver\BrowserKitDriver;
 use Behat\Mink\Exception\UnsupportedDriverActionException;
 use Behat\MinkExtension\Context\RawMinkContext;
 use Behat\Symfony2Extension\Context\KernelAwareContext;
+use Liuggio\Fastest\Process\EnvCommandCreator;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Symfony\Bundle\SwiftmailerBundle\DataCollector\MessageDataCollector;
@@ -32,6 +33,16 @@ abstract class Context extends RawMinkContext implements KernelAwareContext
         $this->kernel->getContainer()
             ->get('elife.guzzle.middleware.mock.storage')
             ->save($request, $response);
+    }
+
+    /**
+     * @BeforeScenario
+     */
+    final public function setTestChannelCookie()
+    {
+        if (getenv(EnvCommandCreator::ENV_TEST_CHANNEL)) {
+            $this->visitPath('/?'.EnvCommandCreator::ENV_TEST_CHANNEL.'='.(getenv(EnvCommandCreator::ENV_TEST_CHANNEL) ?? 1));
+        }
     }
 
     /**

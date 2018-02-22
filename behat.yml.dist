@@ -10,9 +10,8 @@ default:
         Behat\Symfony2Extension:
             kernel:
                 class: eLife\Journal\AppKernel
-        jarnaiz\JUnitFormatter\JUnitFormatterExtension:
-            filename: behat.xml
-            outputDir: %paths.base%/build
+        jarnaiz\JUnitFormatter\JUnitFormatterExtension: ~
+        Liuggio\Fastest\Behat\ListFeaturesExtension\Extension: ~
     suites:
         annual-report:
             filters:
