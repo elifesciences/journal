@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+set -e
+
+echo "proofreader"
+proofreader app/ bin/ src/ web/
+proofreader --no-phpcpd features/ test/
