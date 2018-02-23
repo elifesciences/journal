@@ -9,7 +9,6 @@ use eLife\Journal\Expression\ComposerLocateFunctionProvider;
 use eLife\Journal\Expression\TimeFunctionProvider;
 use Isometriks\Bundle\SpamBundle\IsometriksSpamBundle;
 use KnpU\OAuth2ClientBundle\KnpUOAuth2ClientBundle;
-use Liuggio\Fastest\Process\EnvCommandCreator;
 use Nelmio\SecurityBundle\NelmioSecurityBundle;
 use PackageVersions\Versions;
 use Sensio\Bundle\DistributionBundle\SensioDistributionBundle;
@@ -46,7 +45,7 @@ class AppKernel extends Kernel
         }
 
         $this->version = $version;
-        $this->instance = getenv(EnvCommandCreator::ENV_TEST_CHANNEL) ?: null;
+        $this->instance = getenv('JOURNAL_INSTANCE') ?: null;
     }
 
     public function registerBundles()

@@ -1,8 +1,0 @@
-#!/usr/bin/env bash
-set -e
-
-rm -rf build/phpunit/
-vendor/bin/fastest --no-interaction --process 4 --xml phpunit.xml.dist "vendor/bin/phpunit --log-junit build/phpunit/{n}.xml {};"
-
-rm -rf build/behat/
-vendor/bin/behat --list-scenarios --tags '~wip' | vendor/bin/fastest --no-interaction --process 4 "JARNAIZ_JUNIT_OUTPUTDIR=build/behat JARNAIZ_JUNIT_FILENAME={n}.xml vendor/bin/behat --strict --format junit {};"

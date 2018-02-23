@@ -4,7 +4,6 @@ use Behat\Mink\Driver\BrowserKitDriver;
 use Behat\Mink\Exception\UnsupportedDriverActionException;
 use Behat\MinkExtension\Context\RawMinkContext;
 use Behat\Symfony2Extension\Context\KernelAwareContext;
-use Liuggio\Fastest\Process\EnvCommandCreator;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Symfony\Bundle\SwiftmailerBundle\DataCollector\MessageDataCollector;
@@ -40,8 +39,8 @@ abstract class Context extends RawMinkContext implements KernelAwareContext
      */
     final public function setTestChannelCookie()
     {
-        if (getenv(EnvCommandCreator::ENV_TEST_CHANNEL)) {
-            $this->visitPath('/?'.EnvCommandCreator::ENV_TEST_CHANNEL.'='.(getenv(EnvCommandCreator::ENV_TEST_CHANNEL) ?? 1));
+        if (getenv('JOURNAL_INSTANCE')) {
+            $this->visitPath('/?JOURNAL_INSTANCE='.getenv('JOURNAL_INSTANCE'));
         }
     }
 
