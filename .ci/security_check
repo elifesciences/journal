@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 set -e
 
-SYMFONY_ENV=test bin/console security:check
+vendor/bin/security-checker security:check
