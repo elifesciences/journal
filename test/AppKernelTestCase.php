@@ -24,7 +24,7 @@ trait AppKernelTestCase
         return static::$kernel;
     }
 
-    protected static function createKernel(array $options = [])
+    final protected static function createKernel(array $options = [])
     {
         $kernel = parent::createKernel($options);
 
