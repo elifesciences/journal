@@ -24,6 +24,17 @@ trait AppKernelTestCase
         return static::$kernel;
     }
 
+    protected static function createKernel(array $options = [])
+    {
+        $kernel = parent::createKernel($options);
+
+        if (!$kernel->isDebug()) {
+            (new Filesystem())->remove($kernel->getCacheDir());
+        }
+
+        return $kernel;
+    }
+
     final protected static function mockApiResponse(RequestInterface $request, ResponseInterface $response)
     {
         static::$kernel->getContainer()
