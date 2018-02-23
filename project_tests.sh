@@ -5,9 +5,6 @@ rm -f build/*.xml
 
 export SYMFONY_ENV=test
 
-echo "cache:clear"
-bin/console cache:clear --no-warmup
-
 echo "PHPUnit tests"
 vendor/bin/phpunit --log-junit build/phpunit.xml
 

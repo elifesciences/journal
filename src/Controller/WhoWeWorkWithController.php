@@ -238,13 +238,13 @@ final class WhoWeWorkWithController extends Controller
     {
         return array_map(function (array $item) : ImageLink {
             $builder = $this->get('elife.journal.view_model.factory.picture_builder')
-                ->create(function (string $type, int $width) use ($item) {
+                ->create(function (string $type, int $width, int $height = null, float $scale) use ($item) {
                     $extension = MediaTypes::toExtension($type);
 
                     $path = "assets/images/logos/{$item['filename']}";
 
                     if ('svg' !== $extension) {
-                        $path .= "-{$width}";
+                        $path .= "@{$scale}x";
                     }
 
                     return $this->get('assets.packages')->getUrl("{$path}.{$extension}");

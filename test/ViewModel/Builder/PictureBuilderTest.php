@@ -52,12 +52,12 @@ final class PictureBuilderTest extends TestCase
                         'media' => '(media)',
                     ],
                     [
-                        'srcset' => 'path:image/webp:400:600 400w, path:image/webp:200:300 200w',
+                        'srcset' => 'path:image/webp:200:300:2 2x, path:image/webp:200:300:1 1x',
                         'type' => 'image/webp',
                         'media' => '(media)',
                     ],
                     [
-                        'srcset' => 'path:image/png:400:600 400w, path:image/png:200:300 200w',
+                        'srcset' => 'path:image/png:200:300:2 2x, path:image/png:200:300:1 1x',
                         'type' => 'image/png',
                         'media' => '(media)',
                     ],
@@ -66,11 +66,11 @@ final class PictureBuilderTest extends TestCase
                         'type' => 'image/svg+xml',
                     ],
                     [
-                        'srcset' => 'path:image/webp:200:0 200w, path:image/webp:100:0 100w',
+                        'srcset' => 'path:image/webp:100::2 2x, path:image/webp:100::1 1x',
                         'type' => 'image/webp',
                     ],
                     [
-                        'srcset' => 'path:image/png:200:0 200w, path:image/png:100:0 100w',
+                        'srcset' => 'path:image/png:100::2 2x, path:image/png:100::1 1x',
                         'type' => 'image/png',
                     ],
                 ],
@@ -109,7 +109,67 @@ final class PictureBuilderTest extends TestCase
                         'type' => 'image/svg+xml',
                     ],
                     [
-                        'srcset' => 'path:image/png:150:0 150w, path:image/png:100:0 100w',
+                        'srcset' => 'path:image/png:100::1.5 1.5x, path:image/png:100::1 1x',
+                        'type' => 'image/png',
+                    ],
+                ],
+                new ViewModel\Image('path:', [], 'alt')
+            ),
+            $builder->build()
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function it_handles_rounding_correctly()
+    {
+        $builder = new PictureBuilder(function () {
+            return 'path:'.implode(':', func_get_args());
+        }, 'alt');
+
+        $builder = $builder
+            ->setOriginalSize(101, 101)
+            ->addType('image/png')
+            ->addSize(100)
+            ->addSize(90);
+
+        $this->assertEquals(
+            new ViewModel\Picture(
+                [
+                    [
+                        'srcset' => 'path:image/png:100::1',
+                        'type' => 'image/png',
+                    ],
+                    [
+                        'srcset' => 'path:image/png:90::1.1 1.1x, path:image/png:90::1 1x',
+                        'type' => 'image/png',
+                    ],
+                ],
+                new ViewModel\Image('path:', [], 'alt')
+            ),
+            $builder->build()
+        );
+
+        $builder = new PictureBuilder(function () {
+            return 'path:'.implode(':', func_get_args());
+        }, 'alt');
+
+        $builder = $builder
+            ->setOriginalSize(1800, 507)
+            ->addType('image/png')
+            ->addSize(1023, 288)
+            ->addSize(1114, 336);
+
+        $this->assertEquals(
+            new ViewModel\Picture(
+                [
+                    [
+                        'srcset' => 'path:image/png:1023:288:1.7 1.7x, path:image/png:1023:288:1 1x',
+                        'type' => 'image/png',
+                    ],
+                    [
+                        'srcset' => 'path:image/png:1114:336:1.6 1.6x, path:image/png:1114:336:1 1x',
                         'type' => 'image/png',
                     ],
                 ],

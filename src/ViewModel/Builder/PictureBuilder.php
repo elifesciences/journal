@@ -92,29 +92,42 @@ final class PictureBuilder
                     continue;
                 }
 
-                $srcset = implode(', ', array_filter(array_map(function (int $scale) use ($size, $type) {
+                $srcset = array_reduce([2, 1], function (array $carry, float $scale) use ($size, $type) {
                     $width = $size['width'] * $scale;
-                    $height = $size['height'] * $scale;
 
                     if ($this->originalWidth && $width > $this->originalWidth) {
                         if ($this->originalWidth > $size['width']) {
-                            if ($height) {
-                                $ratio = $height / $width;
-                                $height = $this->originalWidth * $ratio;
-                            }
                             $width = $this->originalWidth;
                         } else {
-                            return null;
+                            return $carry;
                         }
                     }
 
-                    $uri = call_user_func($this->uriGenerator, $type, $width, $height);
+                    $floorp = function (float $val, int $precision) { // Oh for PHP_ROUND_DOWN
+                        $multiply = pow(10, $precision);
 
-                    return "{$uri} {$width}w";
-                }, [2, 1])));
+                        return floor($val * $multiply) / $multiply;
+                    };
+
+                    $scalingFactor = $floorp($width / $size['width'], 1);
+
+                    $uri = call_user_func($this->uriGenerator, $type, $size['width'], $size['height'], $scalingFactor);
+
+                    $carry[(string) $scalingFactor] = $uri;
+
+                    return $carry;
+                }, []);
 
                 if (empty($srcset)) {
                     continue;
+                }
+
+                if (1 === count($srcset)) {
+                    $srcset = $srcset[1];
+                } else {
+                    $srcset = implode(', ', array_map(function (float $scalingFactor, string $uri) {
+                        return "{$uri} {$scalingFactor}x";
+                    }, array_keys($srcset), array_values($srcset)));
                 }
 
                 $sources[] = array_filter([
