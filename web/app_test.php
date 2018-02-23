@@ -1,7 +1,6 @@
 <?php
 
 use eLife\Journal\AppKernel;
-use Liuggio\Fastest\Process\EnvCommandCreator;
 use Symfony\Component\Debug\Debug;
 use Symfony\Component\HttpFoundation\Request;
 
