@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "b0c5e6f3b9e43ef49dbe4562f6d249d6",
+    "content-hash": "bb579fcd7aca63e45a04db805e76ced7",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -3727,6 +3727,63 @@
                 "schema"
             ],
             "time": "2017-10-21T13:15:38+00:00"
+        },
+        {
+            "name": "liuggio/fastest",
+            "version": "v1.6.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/liuggio/fastest.git",
+                "reference": "171919067208ac67d1e21cf2cf893cb7bd9909a4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/liuggio/fastest/zipball/171919067208ac67d1e21cf2cf893cb7bd9909a4",
+                "reference": "171919067208ac67d1e21cf2cf893cb7bd9909a4",
+                "shasum": ""
+            },
+            "require": {
+                "doctrine/collections": "^1.2",
+                "php": "^5.6|^7.0",
+                "symfony/console": "^2.7|^3.0|^4.0",
+                "symfony/process": "^2.7|^3.0|^4.0",
+                "symfony/stopwatch": "^2.7|^3.0|^4.0"
+            },
+            "require-dev": {
+                "behat/behat": "^3.3"
+            },
+            "suggest": {
+                "behat/behat": "Install it if you want to run tests with the provided Behat extension"
+            },
+            "bin": [
+                "fastest"
+            ],
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.6-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Liuggio\\Fastest\\": [
+                        "src",
+                        "adapters"
+                    ]
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "liuggio",
+                    "email": "liuggio@gmail.com"
+                }
+            ],
+            "description": "Simple parallel testing execution... with some goodies for functional tests.",
+            "time": "2017-12-22T12:19:20+00:00"
         },
         {
             "name": "myclabs/deep-copy",
