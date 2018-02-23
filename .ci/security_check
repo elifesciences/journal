@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+set -e
+
+vendor/bin/security-checker security:check
