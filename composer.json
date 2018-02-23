@@ -58,6 +58,7 @@
         "namshi/cuzzle": "^2.0",
         "phpspec/prophecy": "^1.7",
         "phpunit/phpunit": "^6.5",
+        "sensiolabs/security-checker": "^4.1",
         "symfony/phpunit-bridge": "^4.0"
     },
     "replace": {
