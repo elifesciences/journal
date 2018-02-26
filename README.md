@@ -29,3 +29,4 @@ Running the site
 `bin/console server:start`
 
 *Note in production [use a proper server](https://symfony.com/doc/current/cookbook/configuration/web_server_configuration.html).*
+
