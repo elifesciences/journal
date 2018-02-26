@@ -21,7 +21,7 @@ monolog:
             channels:
               - '!event'
             level: debug
-            path: '%kernel.logs_dir%/%kernel.environment%.log'
+            path: '%kernel.logs_dir%/%kernel.environment%%kernel.instance%.log'
             type: stream
             formatter: monolog.formatter.line
 

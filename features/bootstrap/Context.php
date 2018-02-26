@@ -37,6 +37,16 @@ abstract class Context extends RawMinkContext implements KernelAwareContext
     /**
      * @BeforeScenario
      */
+    final public function setTestChannelCookie()
+    {
+        if (getenv('JOURNAL_INSTANCE')) {
+            $this->visitPath('/?JOURNAL_INSTANCE='.getenv('JOURNAL_INSTANCE'));
+        }
+    }
+
+    /**
+     * @BeforeScenario
+     */
     final public function clearMockedApiResponses()
     {
         (new Filesystem())->remove($this->kernel->getContainer()->getParameter('api_mock'));
