@@ -284,7 +284,7 @@
                         enableExperimentalNewNoteButton: true,
                         enableCleanOnboardingTheme: true,
                         theme: 'clean',
-                        usernameUrl: '{{ absolute_url(path('profile-no-id')) }}',
+                        usernameUrl: '{{ absolute_url(path('profile', {id: 'replace'})|replace({'replace': ''})) }}',
                         services: [{
                             apiUrl: '{{ hypothesis_api }}',
                             authority: '{{ hypothesis_authority }}',
