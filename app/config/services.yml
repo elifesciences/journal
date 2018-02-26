@@ -335,7 +335,7 @@ services:
           - '@security.authorization_checker'
 
     elife.journal.view_model.factory.hypothesis_loader:
-        class: eLife\Journal\ViewModel\Factory\HypothesisLoader
+        class: eLife\Journal\ViewModel\Factory\HypothesisLoaderFactory
         #TODO: Replace these arguments with values that actually work.
         arguments:
           - !!app.user
