@@ -8,7 +8,7 @@ elifePipeline {
     stage 'Project tests', {
         lock('journal--ci') {
             builderDeployRevision 'journal--ci', commit
-            builderProjectTests 'journal--ci', '/srv/journal', ['/srv/journal/build/phpunit.xml', '/srv/journal/build/behat.xml'], ['smoke', 'project']
+            builderProjectTests 'journal--ci', '/srv/journal', ['/srv/journal/build/phpunit/*.xml', '/srv/journal/build/behat/*.xml'], ['smoke', 'project']
         }
     }
 

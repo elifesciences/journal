@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+set -e
+
+rm -rf build/phpunit/
+vendor/bin/fastest --no-interaction --process 4 --xml phpunit.xml.dist "JOURNAL_INSTANCE=phpunit{p} vendor/bin/phpunit --log-junit build/phpunit/{n}.xml {};"
