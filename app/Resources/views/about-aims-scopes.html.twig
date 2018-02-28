@@ -1,0 +1,33 @@
+{% set criticalCss = 'aims-scopes' %}
+
+{% extends '::page.html.twig' %}
+
+{% block title %}{{ title }}{% if title != 'About' %} | About{% endif %}{% endblock %}
+
+{% block body %}
+
+    {{ render_pattern(contentHeader) }}
+
+    <div class="wrapper">
+
+        {{ render_pattern(menuLink) }}
+
+    </div>
+
+    {% embed 'grid/listing-one-column.html.twig' with {fullWidth: true} %}
+
+        {% block listing %}
+
+            {{ render_pattern(listing) }}
+
+        {% endblock %}
+
+    {% endembed %}
+
+    <div class="wrapper">
+
+        {{ render_pattern(menu) }}
+
+    </div>
+
+{% endblock %}

@@ -19,6 +19,11 @@ about:
     defaults:
          _controller: AppBundle:About:about
 
+about-aims-scopes:
+    path: /about/aims-scopes
+    defaults:
+         _controller: AppBundle:About:aimsScopes
+
 about-early-career:
     path: /about/early-career
     defaults:

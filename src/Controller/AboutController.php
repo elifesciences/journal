@@ -9,6 +9,7 @@ use eLife\ApiSdk\Model\Person;
 use eLife\ApiSdk\Model\Subject;
 use eLife\Journal\Exception\EarlyResponse;
 use eLife\Journal\Helper\Callback;
+use eLife\Journal\Helper\HasPages;
 use eLife\Journal\ViewModel\DefinitionList;
 use eLife\Patterns\ViewModel\AboutProfile;
 use eLife\Patterns\ViewModel\AboutProfiles;
@@ -20,12 +21,14 @@ use eLife\Patterns\ViewModel\IFrame;
 use eLife\Patterns\ViewModel\Link;
 use eLife\Patterns\ViewModel\ListHeading;
 use eLife\Patterns\ViewModel\Listing;
+use eLife\Patterns\ViewModel\ListingTeasers;
 use eLife\Patterns\ViewModel\Paragraph;
 use eLife\Patterns\ViewModel\SectionListing;
 use eLife\Patterns\ViewModel\SectionListingLink;
 use eLife\Patterns\ViewModel\Select;
 use eLife\Patterns\ViewModel\SelectNav;
 use eLife\Patterns\ViewModel\SelectOption;
+use eLife\Patterns\ViewModel\Teaser;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -34,6 +37,8 @@ use function GuzzleHttp\Promise\promise_for;
 
 final class AboutController extends Controller
 {
+    use HasPages;
+
     public function aboutAction(Request $request) : Response
     {
         $arguments = $this->aboutPageArguments($request);
@@ -58,6 +63,35 @@ final class AboutController extends Controller
         ];
 
         return new Response($this->get('templating')->render('::about.html.twig', $arguments));
+    }
+
+    public function aimsScopesAction(Request $request) : Response
+    {
+        $arguments = $this->aboutPageArguments($request);
+
+        $arguments['title'] = 'Aims and scopes';
+
+        $arguments['contentHeader'] = new ContentHeader('Aims and scopes', null,
+            'eLife welcomes the submission of Research Articles, Short Reports, Tools and Resources articles, and Research Advances (read more about <a href="https://submit.elifesciences.org/html/elife_author_instructions.html#types">article types</a>) in the following subject areas.');
+
+        $aimsScopes = $this->pagerfantaPromise(
+            $this->get('elife.api_sdk.subjects')->reverse(),
+            1,
+            100,
+            $this->willConvertTo(Teaser::class)
+        );
+
+        $arguments['paginator'] = $this->paginator(
+            $aimsScopes,
+            $request,
+            'Browse our aims and scopes',
+            'about-aims-scopes'
+        );
+
+        $arguments['listing'] = $arguments['paginator']
+            ->then(Callback::methodEmptyOr('getTotal', $this->willConvertTo(ListingTeasers::class, ['heading' => ''])));
+
+        return new Response($this->get('templating')->render('::about-aims-scopes.html.twig', $arguments));
     }
 
     public function peerReviewAction(Request $request) : Response
@@ -302,6 +336,7 @@ final class AboutController extends Controller
             'Openness' => $this->get('router')->generate('about-openness'),
             'Innovation' => $this->get('router')->generate('about-innovation'),
             'Early-careers' => $this->get('router')->generate('about-early-career'),
+            'Aims and scopes' => $this->get('router')->generate('about-aims-scopes'),
         ];
 
         $currentPath = $this->get('router')->generate($request->attributes->get('_route'), $request->attributes->get('_route_params'));
