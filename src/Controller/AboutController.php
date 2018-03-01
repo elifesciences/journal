@@ -21,14 +21,13 @@ use eLife\Patterns\ViewModel\IFrame;
 use eLife\Patterns\ViewModel\Link;
 use eLife\Patterns\ViewModel\ListHeading;
 use eLife\Patterns\ViewModel\Listing;
-use eLife\Patterns\ViewModel\ListingTeasers;
 use eLife\Patterns\ViewModel\Paragraph;
 use eLife\Patterns\ViewModel\SectionListing;
 use eLife\Patterns\ViewModel\SectionListingLink;
+use eLife\Patterns\ViewModel\SeeMoreLink;
 use eLife\Patterns\ViewModel\Select;
 use eLife\Patterns\ViewModel\SelectNav;
 use eLife\Patterns\ViewModel\SelectOption;
-use eLife\Patterns\ViewModel\Teaser;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -74,24 +73,28 @@ final class AboutController extends Controller
         $arguments['contentHeader'] = new ContentHeader('Aims and scopes', null,
             'eLife welcomes the submission of Research Articles, Short Reports, Tools and Resources articles, and Research Advances (read more about <a href="https://submit.elifesciences.org/html/elife_author_instructions.html#types">article types</a>) in the following subject areas.');
 
-        $aimsScopes = $this->pagerfantaPromise(
-            $this->get('elife.api_sdk.subjects')->reverse(),
-            1,
-            100,
-            $this->willConvertTo(Teaser::class)
-        );
+        $subjects = $this->get('elife.api_sdk.subjects')->reverse();
 
-        $arguments['paginator'] = $this->paginator(
-            $aimsScopes,
-            $request,
-            'Browse our aims and scopes',
-            'about-aims-scopes'
-        );
+        $allSubjects = $subjects->slice(0, 100)
+            ->otherwise($this->softFailure('Failed to load subjects for aims and scopes', new EmptySequence()));
 
-        $arguments['listing'] = $arguments['paginator']
-            ->then(Callback::methodEmptyOr('getTotal', $this->willConvertTo(ListingTeasers::class, ['heading' => ''])));
+        $arguments['body'] = (new PromiseSequence($allSubjects))
+            ->map(function (Subject $subject) {
+                $body = $this->render(...$subject->getAimsAndScope()->map(
+                    $this->willConvertTo(Paragraph::class, ['level' => 2])
+                )->append(
+                    new SeeMoreLink(
+                        new Link('See Editors', $this->get('router')->generate('about-people', ['type' => $subject->getId()])), true)
+                ));
 
-        return new Response($this->get('templating')->render('::about-aims-scopes.html.twig', $arguments));
+                return ArticleSection::basic(
+                    $subject->getName(),
+                    2,
+                    $body
+                );
+            });
+
+        return new Response($this->get('templating')->render('::about.html.twig', $arguments));
     }
 
     public function peerReviewAction(Request $request) : Response

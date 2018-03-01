@@ -18,7 +18,7 @@ final class SectionConverterTest extends BlockConverterTestCase
      */
     public function setUpConverter()
     {
-        $this->converter = new SectionConverter(
+        $this->converter =  new SectionConverter(
             $this->createMock(ViewModelConverter::class),
             $patternRenderer = $this->createMock(PatternRenderer::class)
         );

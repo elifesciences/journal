@@ -1212,16 +1212,6 @@ services:
         tags:
           - name: view_model.converter
 
-    elife.journal.view_model.converter.subject.teaser:
-        class: eLife\Journal\ViewModel\Converter\SubjectTeaserConverter
-        public: false
-        arguments:
-          - '@elife.journal.view_model.converter'
-          - '@router'
-          - '@elife.patterns.pattern_renderer'
-        tags:
-          - name: view_model.converter
-
     elife.patterns.pattern_renderer:
         class: eLife\Patterns\PatternRenderer\MustachePatternRenderer
         arguments:
