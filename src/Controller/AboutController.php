@@ -64,19 +64,19 @@ final class AboutController extends Controller
         return new Response($this->get('templating')->render('::about.html.twig', $arguments));
     }
 
-    public function aimsScopesAction(Request $request) : Response
+    public function aimsScopeAction(Request $request) : Response
     {
         $arguments = $this->aboutPageArguments($request);
 
-        $arguments['title'] = 'Aims and scopes';
+        $arguments['title'] = 'Aims and scope';
 
-        $arguments['contentHeader'] = new ContentHeader('Aims and scopes', null,
+        $arguments['contentHeader'] = new ContentHeader('Aims and scope', null,
             'eLife welcomes the submission of Research Articles, Short Reports, Tools and Resources articles, and Research Advances (read more about <a href="https://submit.elifesciences.org/html/elife_author_instructions.html#types">article types</a>) in the following subject areas.');
 
         $subjects = $this->get('elife.api_sdk.subjects')->reverse();
 
         $allSubjects = $subjects->slice(0, 100)
-            ->otherwise($this->softFailure('Failed to load subjects for aims and scopes', new EmptySequence()));
+            ->otherwise($this->softFailure('Failed to load subjects for aims and scope', new EmptySequence()));
 
         $arguments['body'] = (new PromiseSequence($allSubjects))
             ->map(function (Subject $subject) {
@@ -334,12 +334,12 @@ final class AboutController extends Controller
 
         $menuItems = [
             'About eLife' => $this->get('router')->generate('about'),
+            'Aims and scope' => $this->get('router')->generate('about-aims-scope'),
             'Editors and people' => $this->get('router')->generate('about-people'),
             'Peer review' => $this->get('router')->generate('about-peer-review'),
             'Openness' => $this->get('router')->generate('about-openness'),
             'Innovation' => $this->get('router')->generate('about-innovation'),
             'Early-careers' => $this->get('router')->generate('about-early-career'),
-            'Aims and scopes' => $this->get('router')->generate('about-aims-scopes'),
         ];
 
         $currentPath = $this->get('router')->generate($request->attributes->get('_route'), $request->attributes->get('_route_params'));

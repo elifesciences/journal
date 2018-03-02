@@ -5,19 +5,19 @@ namespace test\eLife\Journal\Controller;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 
-final class AboutAimsScopesControllerTest extends PageTestCase
+final class AboutAimsScopeControllerTest extends PageTestCase
 {
     /**
      * @test
      */
-    public function it_displays_the_aims_and_scopes_page()
+    public function it_displays_the_aims_and_scope_page()
     {
         $client = static::createClient();
 
         $crawler = $client->request('GET', $this->getUrl());
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
-        $this->assertSame('Aims and scopes', $crawler->filter('.content-header__title')->text());
+        $this->assertSame('Aims and scope', $crawler->filter('.content-header__title')->text());
     }
 
     /**
@@ -31,10 +31,10 @@ final class AboutAimsScopesControllerTest extends PageTestCase
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
 
-        $this->assertSame('Aims and scopes | About | eLife', $crawler->filter('title')->text());
-        $this->assertSame('/about/aims-scopes', $crawler->filter('link[rel="canonical"]')->attr('href'));
-        $this->assertSame('http://localhost/about/aims-scopes', $crawler->filter('meta[property="og:url"]')->attr('content'));
-        $this->assertSame('Aims and scopes', $crawler->filter('meta[property="og:title"]')->attr('content'));
+        $this->assertSame('Aims and scope | About | eLife', $crawler->filter('title')->text());
+        $this->assertSame('/about/aims-scope', $crawler->filter('link[rel="canonical"]')->attr('href'));
+        $this->assertSame('http://localhost/about/aims-scope', $crawler->filter('meta[property="og:url"]')->attr('content'));
+        $this->assertSame('Aims and scope', $crawler->filter('meta[property="og:title"]')->attr('content'));
         $this->assertSame('eLife welcomes the submission of Research Articles, Short Reports, Tools and Resources articles, and Research Advances (read more about article types) in the following subject areas.', $crawler->filter('meta[property="og:description"]')->attr('content'));
         $this->assertSame('eLife welcomes the submission of Research Articles, Short Reports, Tools and Resources articles, and Research Advances (read more about article types) in the following subject areas.', $crawler->filter('meta[name="description"]')->attr('content'));
         $this->assertSame('summary', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
@@ -65,6 +65,6 @@ final class AboutAimsScopesControllerTest extends PageTestCase
             )
         );
 
-        return '/about/aims-scopes';
+        return '/about/aims-scope';
     }
 }
