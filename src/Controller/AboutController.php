@@ -98,6 +98,13 @@ final class AboutController extends Controller
                     2,
                     $this->render(...$body)
                 );
+            })
+            ->then(function (Sequence $sections) {
+                if ($sections->isEmpty()) {
+                    $sections = $sections->append(new Paragraph('No subjects available.'));
+                }
+
+                return $sections;
             });
 
         return new Response($this->get('templating')->render('::about.html.twig', $arguments));
