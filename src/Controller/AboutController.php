@@ -298,8 +298,7 @@ final class AboutController extends Controller
                     });
 
                 $arguments['title'] = $arguments['subject']->then(function (Subject $subject) {
-                    return "Editors for {
-                        $subject->getName()}";
+                    return "Editors for {$subject->getName()}";
                 });
 
                 $people = $people->forSubject($type);
