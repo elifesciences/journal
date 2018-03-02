@@ -9,7 +9,6 @@ use eLife\ApiSdk\Model\Person;
 use eLife\ApiSdk\Model\Subject;
 use eLife\Journal\Exception\EarlyResponse;
 use eLife\Journal\Helper\Callback;
-use eLife\Journal\Helper\HasPages;
 use eLife\Journal\ViewModel\DefinitionList;
 use eLife\Patterns\ViewModel\AboutProfile;
 use eLife\Patterns\ViewModel\AboutProfiles;
@@ -36,8 +35,6 @@ use function GuzzleHttp\Promise\promise_for;
 
 final class AboutController extends Controller
 {
-    use HasPages;
-
     public function aboutAction(Request $request) : Response
     {
         $arguments = $this->aboutPageArguments($request);
@@ -79,12 +76,15 @@ final class AboutController extends Controller
 
         $arguments['body'] = (new PromiseSequence($allSubjects))
             ->map(function (Subject $subject) {
-                $body = $this->render(...$subject->getAimsAndScope()->map(
-                    $this->willConvertTo(Paragraph::class, ['level' => 2])
-                )->append(
-                    new SeeMoreLink(
-                        new Link('See Editors', $this->get('router')->generate('about-people', ['type' => $subject->getId()])), true)
-                ));
+                $body = $this->render(...$subject->getAimsAndScope()
+                    ->map($this->willConvertTo(null, ['level' => 2]))
+                    ->append(
+                        new SeeMoreLink(
+                            new Link('See Editors', $this->get('router')->generate('about-people', ['type' => $subject->getId()])),
+                            true
+                        )
+                    )
+                );
 
                 return ArticleSection::basic(
                     $subject->getName(),
