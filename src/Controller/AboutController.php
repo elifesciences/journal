@@ -15,6 +15,7 @@ use eLife\Patterns\ViewModel\AboutProfiles;
 use eLife\Patterns\ViewModel\ArticleSection;
 use eLife\Patterns\ViewModel\Button;
 use eLife\Patterns\ViewModel\ContentHeader;
+use eLife\Patterns\ViewModel\FlexibleViewModel;
 use eLife\Patterns\ViewModel\FormLabel;
 use eLife\Patterns\ViewModel\IFrame;
 use eLife\Patterns\ViewModel\Link;
@@ -76,20 +77,26 @@ final class AboutController extends Controller
 
         $arguments['body'] = (new PromiseSequence($allSubjects))
             ->map(function (Subject $subject) {
-                $body = $this->render(...$subject->getAimsAndScope()
-                    ->map($this->willConvertTo(null, ['level' => 2]))
-                    ->append(
-                        new SeeMoreLink(
-                            new Link('See Editors', $this->get('router')->generate('about-people', ['type' => $subject->getId()])),
-                            true
-                        )
-                    )
-                );
+                $body = $subject->getAimsAndScope()
+                    ->map($this->willConvertTo(null, ['level' => 2]));
+
+                $editorsLink = $this->render(new SeeMoreLink(
+                    new Link('See Editors', $this->get('router')->generate('about-people', ['type' => $subject->getId()])),
+                    true
+                ));
+
+                $lastItem = $body[$i = count($body) - 1];
+                if ($body[$i = count($body) - 1] instanceof Paragraph) {
+                    $body = $body->set($i, FlexibleViewModel::fromViewModel($lastItem)
+                        ->withProperty('text', "{$lastItem['text']} $editorsLink"));
+                } else {
+                    $body = $body->append(new Paragraph($editorsLink));
+                }
 
                 return ArticleSection::basic(
                     $subject->getName(),
                     2,
-                    $body
+                    $this->render(...$body)
                 );
             });
 
@@ -291,7 +298,8 @@ final class AboutController extends Controller
                     });
 
                 $arguments['title'] = $arguments['subject']->then(function (Subject $subject) {
-                    return "Editors for {$subject->getName()}";
+                    return "Editors for {
+                        $subject->getName()}";
                 });
 
                 $people = $people->forSubject($type);
