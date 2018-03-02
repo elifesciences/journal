@@ -324,7 +324,7 @@ final class SubjectRewritingMiddlewareTest extends KernelTestCase
                     ],
                 ],
             ],
-            'application/vnd.elife.search+json; version=1' => [
+            'application/vnd.elife.search+json; version=1; with new subject' => [
                 [
                     'total' => 2,
                     'items' => [
@@ -365,6 +365,68 @@ final class SubjectRewritingMiddlewareTest extends KernelTestCase
                     'subjects' => [
                         $this->createSubject('new-subject', 'New Subject') + ['results' => 6],
                         $this->createSubject('other-subject', 'Other Subject') + ['results' => 8],
+                    ],
+                    'types' => [
+                        'correction' => 0,
+                        'editorial' => 0,
+                        'feature' => 0,
+                        'insight' => 0,
+                        'research-advance' => 0,
+                        'research-article' => 2,
+                        'retraction' => 0,
+                        'registered-report' => 0,
+                        'replication-study' => 0,
+                        'scientific-correspondence' => 0,
+                        'short-report' => 0,
+                        'tools-resources' => 0,
+                        'blog-article' => 0,
+                        'collection' => 0,
+                        'interview' => 0,
+                        'labs-post' => 0,
+                        'podcast-episode' => 0,
+                    ],
+                ],
+            ],
+            'application/vnd.elife.search+json; version=1; without new subject' => [
+                [
+                    'total' => 2,
+                    'items' => [
+                        $this->createArticlePoA(false),
+                        $this->createArticleVoR(false),
+                    ],
+                    'subjects' => [
+                        $this->createSubject('old-subject', 'Old Subject') + ['results' => 2],
+                        $this->createSubject('other-subject', 'Other Subject') + ['results' => 8],
+                    ],
+                    'types' => [
+                        'correction' => 0,
+                        'editorial' => 0,
+                        'feature' => 0,
+                        'insight' => 0,
+                        'research-advance' => 0,
+                        'research-article' => 2,
+                        'retraction' => 0,
+                        'registered-report' => 0,
+                        'replication-study' => 0,
+                        'scientific-correspondence' => 0,
+                        'short-report' => 0,
+                        'tools-resources' => 0,
+                        'blog-article' => 0,
+                        'collection' => 0,
+                        'interview' => 0,
+                        'labs-post' => 0,
+                        'podcast-episode' => 0,
+                    ],
+                ],
+                [
+                    'total' => 2,
+                    'items' => [
+                        $this->createArticlePoA(true),
+                        $this->createArticleVoR(true),
+                    ],
+                    'subjects' => [
+                        $this->createSubject('other-subject', 'Other Subject') + ['results' => 8],
+                        $this->createSubject('new-subject', 'New Subject') + ['results' => 2],
                     ],
                     'types' => [
                         'correction' => 0,

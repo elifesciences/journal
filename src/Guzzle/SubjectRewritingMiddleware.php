@@ -191,9 +191,10 @@ final class SubjectRewritingMiddleware
                 foreach ($subjects as $i => $subject) {
                     if ($replacement['id'] === $subject['id']) {
                         $subjects[$i]['results'] += $total;
-                        break;
+                        continue 2;
                     }
                 }
+                $subjects[] = $replacement + ['results' => $total];
             }
         }
 
