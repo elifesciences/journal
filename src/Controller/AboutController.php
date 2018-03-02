@@ -81,7 +81,7 @@ final class AboutController extends Controller
                     ->map($this->willConvertTo(null, ['level' => 2]));
 
                 $editorsLink = $this->render(new SeeMoreLink(
-                    new Link('See Editors', $this->get('router')->generate('about-people', ['type' => $subject->getId()])),
+                    new Link('See editors', $this->get('router')->generate('about-people', ['type' => $subject->getId()])),
                     true
                 ));
 

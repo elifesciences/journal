@@ -23,6 +23,117 @@ final class AboutAimsScopeControllerTest extends PageTestCase
     /**
      * @test
      */
+    public function it_shows_aims_and_scope_for_each_subject()
+    {
+        $client = static::createClient();
+
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/subjects?page=1&per-page=100&order=asc',
+                ['Accept' => 'application/vnd.elife.subject-list+json; version=1']
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.subject-list+json; version=1'],
+                json_encode([
+                    'total' => 2,
+                    'items' => [
+                        [
+                            'id' => 'subject1',
+                            'name' => 'Subject 1',
+                            'impactStatement' => 'Subject 1 impact statement.',
+                            'aimsAndScope' => [
+                                [
+                                    'type' => 'paragraph',
+                                    'text' => 'Paragraph 1.',
+                                ],
+                                [
+                                    'type' => 'paragraph',
+                                    'text' => 'Paragraph 2.',
+                                ],
+                            ],
+                            'image' => [
+                                'banner' => [
+                                    'uri' => 'https://www.example.com/iiif/banner',
+                                    'alt' => '',
+                                    'source' => [
+                                        'mediaType' => 'image/jpeg',
+                                        'uri' => 'https://www.example.com/banner.jpg',
+                                        'filename' => 'image.jpg',
+                                    ],
+                                    'size' => [
+                                        'width' => 1800,
+                                        'height' => 1600,
+                                    ],
+                                ],
+                                'thumbnail' => [
+                                    'uri' => 'https://www.example.com/iiif/image',
+                                    'alt' => '',
+                                    'source' => [
+                                        'mediaType' => 'image/jpeg',
+                                        'uri' => 'https://www.example.com/image.jpg',
+                                        'filename' => 'image.jpg',
+                                    ],
+                                    'size' => [
+                                        'width' => 800,
+                                        'height' => 600,
+                                    ],
+                                ],
+                            ],
+                        ],
+                        [
+                            'id' => 'subject2',
+                            'name' => 'Subject 2',
+                            'impactStatement' => 'Subject 2 impact statement.',
+                            'image' => [
+                                'banner' => [
+                                    'uri' => 'https://www.example.com/iiif/banner',
+                                    'alt' => '',
+                                    'source' => [
+                                        'mediaType' => 'image/jpeg',
+                                        'uri' => 'https://www.example.com/banner.jpg',
+                                        'filename' => 'image.jpg',
+                                    ],
+                                    'size' => [
+                                        'width' => 1800,
+                                        'height' => 1600,
+                                    ],
+                                ],
+                                'thumbnail' => [
+                                    'uri' => 'https://www.example.com/iiif/image',
+                                    'alt' => '',
+                                    'source' => [
+                                        'mediaType' => 'image/jpeg',
+                                        'uri' => 'https://www.example.com/image.jpg',
+                                        'filename' => 'image.jpg',
+                                    ],
+                                    'size' => [
+                                        'width' => 800,
+                                        'height' => 600,
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ])
+            )
+        );
+
+        $crawler = $client->request('GET', '/about/aims-scope');
+
+        $this->assertSame(200, $client->getResponse()->getStatusCode());
+
+        $this->assertCount(2, $crawler->filter('.article-section'));
+        $this->assertSame('Subject 1', trim($crawler->filter('.article-section:nth-child(1) .article-section__header')->text()));
+        $this->assertSame("Paragraph 1.\nParagraph 2. See editors", trim($crawler->filter('.article-section:nth-child(1) .article-section__body')->text()));
+        $this->assertSame('Subject 2', trim($crawler->filter('.article-section:nth-child(2) .article-section__header')->text()));
+        $this->assertSame('See editors', trim($crawler->filter('.article-section:nth-child(2) .article-section__body')->text()));
+    }
+
+    /**
+     * @test
+     */
     public function it_has_metadata()
     {
         $client = static::createClient();
