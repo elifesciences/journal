@@ -68,17 +68,14 @@ final class AboutController extends Controller
 
         $arguments['title'] = 'Aims and scope';
 
-        $arguments['contentHeader'] = new ContentHeader('Aims and scope', null,
+        $arguments['contentHeader'] = new ContentHeader($arguments['title'], null,
             'eLife welcomes the submission of Research Articles, Short Reports, Tools and Resources articles, and Research Advances (read more about <a href="https://submit.elifesciences.org/html/elife_author_instructions.html#types">article types</a>) in the following subject areas.');
 
-        $subjects = $this->get('elife.api_sdk.subjects')->reverse();
+        $subjects = $this->get('elife.api_sdk.subjects')->reverse()->slice(0, 100);
 
-        $allSubjects = $subjects->slice(0, 100);
-
-        $arguments['body'] = (new PromiseSequence($allSubjects))
+        $arguments['body'] = (new PromiseSequence($subjects))
             ->map(function (Subject $subject) {
-                $body = $subject->getAimsAndScope()
-                    ->map($this->willConvertTo(null, ['level' => 2]));
+                $body = $subject->getAimsAndScope()->map($this->willConvertTo(null, ['level' => 2]));
 
                 $editorsLink = $this->render(new SeeMoreLink(
                     new Link('See editors', $this->get('router')->generate('about-people', ['type' => $subject->getId()])),
