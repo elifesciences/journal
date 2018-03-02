@@ -52,7 +52,7 @@ final class AboutAimsScopeControllerTest extends PageTestCase
         $this->mockApiResponse(
             new Request(
                 'GET',
-                'http://api.elifesciences.org/subjects?page=1&per-page=100&order=desc',
+                'http://api.elifesciences.org/subjects?page=1&per-page=100&order=asc',
                 ['Accept' => 'application/vnd.elife.subject-list+json; version=1']
             ),
             new Response(

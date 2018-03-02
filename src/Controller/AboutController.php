@@ -75,8 +75,7 @@ final class AboutController extends Controller
 
         $subjects = $this->get('elife.api_sdk.subjects')->reverse();
 
-        $allSubjects = $subjects->slice(0, 100)
-            ->otherwise($this->softFailure('Failed to load subjects for aims and scope', new EmptySequence()));
+        $allSubjects = $subjects->slice(0, 100);
 
         $arguments['body'] = (new PromiseSequence($allSubjects))
             ->map(function (Subject $subject) {
