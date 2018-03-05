@@ -256,33 +256,33 @@
 
     </div>
 
-    {% if hypothesis ?? false %}
         <script>
             window.elifeConfig = window.elifeConfig || {};
-            window.elifeConfig.hypothesis = {
-              usernameUrl: '{{ absolute_url(path('profile', {id: 'placeholder'})|replace({'placeholder': ''})) }}',
-              services: [{
-                apiUrl: '{{ hypothesis_api }}',
-                authority: '{{ hypothesis_authority }}',
-                grantToken: {% if app.user %}'{{ hypothesis_token(app.user) }}'{% else %}null{% endif %},
-                icon: '{{ absolute_url(asset('assets/favicons/favicon.svg')) }}'
-                  {%- if not app.user %},
-                onLoginRequest: function () {
-                  window.location.assign('{{ path('log-in') }}');
-                },
-                onSignupRequest: function () {
-                  window.location.assign('{{ path('log-in') }}');
-                }
-                  {%- else %},
-                onLogoutRequest: function () {
-                  window.location.assign('{{ path('log-out') }}');
-                },
-                onProfileRequest: function () {
-                  window.location.assign('{{ path('profile', {id: app.user.username}) }}');
-                }
-                  {%- endif %}
-              }]
-            };
+            {% if hypothesis ?? false %}
+                window.elifeConfig.hypothesis = {
+                  usernameUrl: '{{ absolute_url(path('profile', {id: 'placeholder'})|replace({'placeholder': ''})) }}',
+                  services: [{
+                    apiUrl: '{{ hypothesis_api }}',
+                    authority: '{{ hypothesis_authority }}',
+                    grantToken: {% if app.user %}'{{ hypothesis_token(app.user) }}'{% else %}null{% endif %},
+                    icon: '{{ absolute_url(asset('assets/favicons/favicon.svg')) }}'
+                      {%- if not app.user %},
+                    onLoginRequest: function () {
+                      window.location.assign('{{ path('log-in') }}');
+                    },
+                    onSignupRequest: function () {
+                      window.location.assign('{{ path('log-in') }}');
+                    }
+                      {%- else %},
+                    onLogoutRequest: function () {
+                      window.location.assign('{{ path('log-out') }}');
+                    },
+                    onProfileRequest: function () {
+                      window.location.assign('{{ path('profile', {id: app.user.username}) }}');
+                    }
+                      {%- endif %}
+                  }]
+                };
         </script>
     {% endif %}
 
