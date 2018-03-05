@@ -15,6 +15,7 @@ use eLife\Patterns\ViewModel\AboutProfiles;
 use eLife\Patterns\ViewModel\ArticleSection;
 use eLife\Patterns\ViewModel\Button;
 use eLife\Patterns\ViewModel\ContentHeader;
+use eLife\Patterns\ViewModel\FlexibleViewModel;
 use eLife\Patterns\ViewModel\FormLabel;
 use eLife\Patterns\ViewModel\IFrame;
 use eLife\Patterns\ViewModel\Link;
@@ -23,6 +24,7 @@ use eLife\Patterns\ViewModel\Listing;
 use eLife\Patterns\ViewModel\Paragraph;
 use eLife\Patterns\ViewModel\SectionListing;
 use eLife\Patterns\ViewModel\SectionListingLink;
+use eLife\Patterns\ViewModel\SeeMoreLink;
 use eLife\Patterns\ViewModel\Select;
 use eLife\Patterns\ViewModel\SelectNav;
 use eLife\Patterns\ViewModel\SelectOption;
@@ -56,6 +58,51 @@ final class AboutController extends Controller
                 ], 'bullet'))
             ),
         ];
+
+        return new Response($this->get('templating')->render('::about.html.twig', $arguments));
+    }
+
+    public function aimsScopeAction(Request $request) : Response
+    {
+        $arguments = $this->aboutPageArguments($request);
+
+        $arguments['title'] = 'Aims and scope';
+
+        $arguments['contentHeader'] = new ContentHeader($arguments['title'], null,
+            'eLife welcomes the submission of Research Articles, Short Reports, Tools and Resources articles, and Research Advances (read more about <a href="https://submit.elifesciences.org/html/elife_author_instructions.html#types">article types</a>) in the following subject areas.');
+
+        $subjects = $this->get('elife.api_sdk.subjects')->reverse()->slice(0, 100);
+
+        $arguments['body'] = (new PromiseSequence($subjects))
+            ->map(function (Subject $subject) {
+                $body = $subject->getAimsAndScope()->map($this->willConvertTo(null, ['level' => 2]));
+
+                $editorsLink = $this->render(new SeeMoreLink(
+                    new Link('See editors', $this->get('router')->generate('about-people', ['type' => $subject->getId()])),
+                    true
+                ));
+
+                $lastItem = $body[$i = count($body) - 1];
+                if ($body[$i = count($body) - 1] instanceof Paragraph) {
+                    $body = $body->set($i, FlexibleViewModel::fromViewModel($lastItem)
+                        ->withProperty('text', "{$lastItem['text']} $editorsLink"));
+                } else {
+                    $body = $body->append(new Paragraph($editorsLink));
+                }
+
+                return ArticleSection::basic(
+                    $subject->getName(),
+                    2,
+                    $this->render(...$body)
+                );
+            })
+            ->then(function (Sequence $sections) {
+                if ($sections->isEmpty()) {
+                    $sections = $sections->append(new Paragraph('No subjects available.'));
+                }
+
+                return $sections;
+            });
 
         return new Response($this->get('templating')->render('::about.html.twig', $arguments));
     }
@@ -297,6 +344,7 @@ final class AboutController extends Controller
 
         $menuItems = [
             'About eLife' => $this->get('router')->generate('about'),
+            'Aims and scope' => $this->get('router')->generate('about-aims-scope'),
             'Editors and people' => $this->get('router')->generate('about-people'),
             'Peer review' => $this->get('router')->generate('about-peer-review'),
             'Openness' => $this->get('router')->generate('about-openness'),
