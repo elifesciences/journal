@@ -334,20 +334,6 @@ services:
           - '@assets.packages'
           - '@security.authorization_checker'
 
-    elife.journal.view_model.factory.hypothesis_loader:
-        class: eLife\Journal\ViewModel\Factory\HypothesisLoaderFactory
-        #TODO: Replace these arguments with values that actually work.
-        arguments:
-          - !!app.user
-          - absolute_url(path('profile-no-id'))
-          - hypothesis_api
-          - hypothesis_authority
-          - absolute_url(asset('assets/favicons/favicon.svg'))
-          - path('log-in')
-          - path('profile', {id: app.user.username})
-          - path('log-out'),
-          - hypothesis_token(app.user)
-
     elife.journal.view_model.factory.site_header:
         class: eLife\Journal\ViewModel\Factory\SiteHeaderFactory
         arguments:
