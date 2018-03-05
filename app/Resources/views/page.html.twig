@@ -258,7 +258,6 @@
 
     {% if hypothesis ?? false %}
         <script>
-          if (!!document.createElement('div').dataset) {
             window.elifeConfig = window.elifeConfig || {};
             window.elifeConfig.hypothesis = {
               usernameUrl: '{{ absolute_url(path('profile', {id: 'placeholder'})|replace({'placeholder': ''})) }}',
@@ -284,7 +283,6 @@
                   {%- endif %}
               }]
             };
-          }
         </script>
     {% endif %}
 
