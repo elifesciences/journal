@@ -70,9 +70,6 @@ class AppKernel extends Kernel
             $bundles[] = new DebugBundle();
             $bundles[] = new SensioDistributionBundle();
             $bundles[] = new WebProfilerBundle();
-        }
-
-        if ('dev' === $this->getEnvironment()) {
             $bundles[] = new WebServerBundle();
         }
 
