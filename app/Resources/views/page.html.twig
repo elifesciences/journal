@@ -257,10 +257,9 @@
     </div>
         <script>
             window.elifeConfig = window.elifeConfig || {};
-        </script>
-        {% if hypothesis ?? false %}
-            <script>
-              window.elifeConfig.hypothesis = {
+
+            {% if hypothesis ?? false %}
+            window.elifeConfig.hypothesis = {
               usernameUrl: '{{ absolute_url(path('profile', {id: 'placeholder'})|replace({'placeholder': ''})) }}',
               services: [{
                 apiUrl: '{{ hypothesis_api }}',
@@ -284,8 +283,9 @@
                   {%- endif %}
               }]
             };
-            </script>
-        {% endif %}
+            {% endif %}
+
+        </script>
 
     {% block javascripts deferred %}
     {% for javascript in javascripts %}
