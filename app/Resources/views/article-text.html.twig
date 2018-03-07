@@ -18,6 +18,12 @@
 
         {% block main %}
 
+            {% if viewSelector %}
+
+                <div data-behaviour="FragmentHandler">
+
+            {% endif %}
+
             {% if hasFigures %}
 
                 {% fragment_link_rewrite figuresPath %}
@@ -37,6 +43,13 @@
                     {{ render_pattern(part) }}
 
                 {% endfor %}
+
+            {% endif %}
+
+
+            {% if viewSelector %}
+
+            </div>
 
             {% endif %}
 
