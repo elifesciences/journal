@@ -212,7 +212,7 @@
         </noscript>
     {% endif %}
 
-    <div class="global-wrapper" data-behaviour="FragmentHandler Math"
+    <div class="global-wrapper" data-behaviour="FragmentHandler Math{% if hypothesis ?? false %} HypothesisLoader{% endif %}"
         {% if item is defined and item is not null %}
             data-item-type="{% if item.type is defined %}{{ item.type }}{% else %}{{ item.identifier.type }}{% endif %}"
         {% endif %}
@@ -255,77 +255,42 @@
         </div>
 
     </div>
+        <script>
+            window.elifeConfig = window.elifeConfig || {};
+
+            {% if hypothesis ?? false %}
+            window.elifeConfig.hypothesis = {
+              usernameUrl: '{{ absolute_url(path('profile', {id: 'placeholder'})|replace({'placeholder': ''})) }}',
+              services: [{
+                apiUrl: '{{ hypothesis_api }}',
+                authority: '{{ hypothesis_authority }}',
+                grantToken: {% if app.user %}'{{ hypothesis_token(app.user) }}'{% else %}null{% endif %},
+                icon: '{{ absolute_url(asset('assets/favicons/favicon.svg')) }}'
+                  {%- if not app.user %},
+                onLoginRequest: function () {
+                  window.location.assign('{{ path('log-in') }}');
+                },
+                onSignupRequest: function () {
+                  window.location.assign('{{ path('log-in') }}');
+                }
+                  {%- else %},
+                onLogoutRequest: function () {
+                  window.location.assign('{{ path('log-out') }}');
+                },
+                onProfileRequest: function () {
+                  window.location.assign('{{ path('profile', {id: app.user.username}) }}');
+                }
+                  {%- endif %}
+              }]
+            };
+            {% endif %}
+
+        </script>
 
     {% block javascripts deferred %}
     {% for javascript in javascripts %}
         <script async src="{{ asset(javascript) }}"></script>
     {% endfor %}
-
-    {% if hypothesis ?? false %}
-        <script>
-            if (!!document.createElement('div').dataset) {
-                window.hypothesisConfig = function () {
-                    return {
-                        branding: {
-                            accentColor: '#0288D1',
-                            appBackgroundColor: 'white',
-                            ctaBackgroundColor: '#0288D1',
-                            ctaTextColor: 'white',
-                            selectionFontFamily: 'Georgia, Times, serif',
-                            annotationFontFamily: 'Georgia, Times, serif'
-                        },
-                        openSidebar: '#annotations' === window.location.hash,
-                        disableToolbarCloseBtn: false,
-                        disableToolbarMinimizeBtn: true,
-                        disableToolbarHighlightsBtn: true,
-                        disableToolbarNewNoteBtn: true,
-                        disableBucketBar: true,
-                        enableSidebarDropShadow: true,
-                        enableExperimentalNewNoteButton: true,
-                        enableCleanOnboardingTheme: true,
-                        theme: 'clean',
-                        usernameUrl: '{{ absolute_url(path('profile', {id: 'placeholder'})|replace({'placeholder': ''})) }}',
-                        services: [{
-                            apiUrl: '{{ hypothesis_api }}',
-                            authority: '{{ hypothesis_authority }}',
-                            grantToken: {% if app.user %}'{{ hypothesis_token(app.user) }}'{% else %}null{% endif %},
-                            icon: '{{ absolute_url(asset('assets/favicons/favicon.svg')) }}'
-                            {%- if not app.user %},
-                            onLoginRequest: function () {
-                                window.location.assign('{{ path('log-in') }}');
-                            },
-                            onSignupRequest: function () {
-                                window.location.assign('{{ path('log-in') }}');
-                            }
-                            {%- else %},
-                            onLogoutRequest: function () {
-                                window.location.assign('{{ path('log-out') }}');
-                            },
-                            onProfileRequest: function () {
-                                window.location.assign('{{ path('profile', {id: app.user.username}) }}');
-                            }
-                            {%- endif %}
-                        }],
-                        showHighlights: 'whenSidebarOpen'
-                    };
-                };
-
-                (function () {
-                    var d = document, s = d.createElement('script'), c = d.getElementById('annotation-count');
-                    if (!!c) {
-                        c.dataset.hypothesisAnnotationCount = '';
-                        c.previousElementSibling.dataset.hypothesisTrigger = '';
-                    }
-                    s.src = 'https://hypothes.is/embed.js';
-                    s.async = true;
-                    s.addEventListener('error', function () {
-                        {# Do nothing #}
-                    });
-                    d.head.appendChild(s);
-                })();
-            }
-        </script>
-    {% endif %}
 
 {% endblock %}
 
