@@ -310,9 +310,11 @@ final class AboutController extends Controller
                 $arguments['lists'][] = $this->createAboutProfiles($people->forType('reviewing-editor'), 'Reviewing editors', true);
         }
 
-        $arguments['contentHeader'] = all(['types' => $types, 'title' => promise_for($arguments['title'])])
+        $arguments['contentHeader'] = all(['types' => $types, 'title' => promise_for($arguments['title']), 'subject' => promise_for($arguments['subject'] ?? null)])
             ->then(function (array $parts) use ($arguments) {
-                return new ContentHeader($parts['title'], null, 'The working scientists who serve as eLife editors, our early-career advisors, governing board, and our executive staff all work in concert to realise eLife’s mission to accelerate discovery',
+                $aimsScope = ($parts['subject'] && $parts['subject']->getAimsAndScope()->offsetExists(0)) ? $parts['subject']->getAimsAndScope()->offsetGet(0)->getText() : null;
+
+                return new ContentHeader($parts['title'], null, $aimsScope ?? 'The working scientists who serve as eLife editors, our early-career advisors, governing board, and our executive staff all work in concert to realise eLife’s mission to accelerate discovery',
                     false, [], null, [], [], null, null,
                     new SelectNav(
                         $this->get('router')->generate('about-people'),
