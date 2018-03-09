@@ -83,37 +83,7 @@ final class AboutPeopleControllerTest extends PageTestCase
             )
         );
 
-        $this->mockApiResponse(
-            new Request(
-                'GET',
-                'http://api.elifesciences.org/people?page=1&per-page=1&order=asc&subject[]=subject&type=senior-editor',
-                ['Accept' => 'application/vnd.elife.person-list+json; version=1']
-            ),
-            new Response(
-                200,
-                ['Content-Type' => 'application/vnd.elife.person-list+json; version=1'],
-                json_encode([
-                    'total' => 0,
-                    'items' => [],
-                ])
-            )
-        );
-
-        $this->mockApiResponse(
-            new Request(
-                'GET',
-                'http://api.elifesciences.org/people?page=1&per-page=1&order=asc&subject[]=subject&type=reviewing-editor',
-                ['Accept' => 'application/vnd.elife.person-list+json; version=1']
-            ),
-            new Response(
-                200,
-                ['Content-Type' => 'application/vnd.elife.person-list+json; version=1'],
-                json_encode([
-                    'total' => 0,
-                    'items' => [],
-                ])
-            )
-        );
+        $this->mockPeopleApi(['senior-editor', 'reviewing-editor'], 'subject');
 
         $crawler = $client->request('GET', '/about/people/subject');
 
@@ -174,43 +144,13 @@ final class AboutPeopleControllerTest extends PageTestCase
             )
         );
 
-        $this->mockApiResponse(
-            new Request(
-                'GET',
-                'http://api.elifesciences.org/people?page=1&per-page=1&order=asc&subject[]=subject&type=senior-editor',
-                ['Accept' => 'application/vnd.elife.person-list+json; version=1']
-            ),
-            new Response(
-                200,
-                ['Content-Type' => 'application/vnd.elife.person-list+json; version=1'],
-                json_encode([
-                    'total' => 0,
-                    'items' => [],
-                ])
-            )
-        );
-
-        $this->mockApiResponse(
-            new Request(
-                'GET',
-                'http://api.elifesciences.org/people?page=1&per-page=1&order=asc&subject[]=subject&type=reviewing-editor',
-                ['Accept' => 'application/vnd.elife.person-list+json; version=1']
-            ),
-            new Response(
-                200,
-                ['Content-Type' => 'application/vnd.elife.person-list+json; version=1'],
-                json_encode([
-                    'total' => 0,
-                    'items' => [],
-                ])
-            )
-        );
+        $this->mockPeopleApi(['senior-editor', 'reviewing-editor'], 'subject');
 
         $crawler = $client->request('GET', '/about/people/subject');
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
 
-        $this->assertSame('The working scientists who serve as eLife editors, our early-career advisors, governing board, and our executive staff all work in concert to realise eLife’s mission to accelerate discovery', $crawler->filter('.content-header__impact-statement')->text());
+        $this->assertSame('The working scientists who serve as eLife editors, our early-career advisors, governing board, and our executive staff all work in concert to realise eLife’s mission to accelerate discovery.', $crawler->filter('.content-header__impact-statement')->text());
     }
 
     /**
@@ -228,8 +168,8 @@ final class AboutPeopleControllerTest extends PageTestCase
         $this->assertSame('/about/people', $crawler->filter('link[rel="canonical"]')->attr('href'));
         $this->assertSame('http://localhost/about/people', $crawler->filter('meta[property="og:url"]')->attr('content'));
         $this->assertSame('Leadership team', $crawler->filter('meta[property="og:title"]')->attr('content'));
-        $this->assertSame('The working scientists who serve as eLife editors, our early-career advisors, governing board, and our executive staff all work in concert to realise eLife’s mission to accelerate discovery', $crawler->filter('meta[property="og:description"]')->attr('content'));
-        $this->assertSame('The working scientists who serve as eLife editors, our early-career advisors, governing board, and our executive staff all work in concert to realise eLife’s mission to accelerate discovery', $crawler->filter('meta[name="description"]')->attr('content'));
+        $this->assertSame('The working scientists who serve as eLife editors, our early-career advisors, governing board, and our executive staff all work in concert to realise eLife’s mission to accelerate discovery.', $crawler->filter('meta[property="og:description"]')->attr('content'));
+        $this->assertSame('The working scientists who serve as eLife editors, our early-career advisors, governing board, and our executive staff all work in concert to realise eLife’s mission to accelerate discovery.', $crawler->filter('meta[name="description"]')->attr('content'));
         $this->assertSame('summary', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
         $this->assertEmpty($crawler->filter('meta[property="og:image"]'));
         $this->assertEmpty($crawler->filter('meta[name="dc.identifier"]'));
@@ -242,38 +182,30 @@ final class AboutPeopleControllerTest extends PageTestCase
 
     protected function getUrl() : string
     {
-        $this->mockApiResponse(
-            new Request(
-                'GET',
-                'http://api.elifesciences.org/people?page=1&per-page=1&order=asc&type=leadership',
-                ['Accept' => 'application/vnd.elife.person-list+json; version=1']
-            ),
-            new Response(
-                200,
-                ['Content-Type' => 'application/vnd.elife.person-list+json; version=1'],
-                json_encode([
-                    'total' => 0,
-                    'items' => [],
-                ])
-            )
-        );
-
-        $this->mockApiResponse(
-            new Request(
-                'GET',
-                'http://api.elifesciences.org/people?page=1&per-page=1&order=asc&type=senior-editor',
-                ['Accept' => 'application/vnd.elife.person-list+json; version=1']
-            ),
-            new Response(
-                200,
-                ['Content-Type' => 'application/vnd.elife.person-list+json; version=1'],
-                json_encode([
-                    'total' => 0,
-                    'items' => [],
-                ])
-            )
-        );
+        $this->mockPeopleApi(['leadership', 'senior-editor']);
 
         return '/about/people';
+    }
+
+    protected function mockPeopleApi(array $types, $subject = null)
+    {
+        $subject_filter = ($subject) ? '&subject[]='.$subject : '';
+        foreach ($types as $type) {
+            $this->mockApiResponse(
+                new Request(
+                    'GET',
+                    'http://api.elifesciences.org/people?page=1&per-page=1&order=asc'.$subject_filter.'&type='.$type,
+                    ['Accept' => 'application/vnd.elife.person-list+json; version=1']
+                ),
+                new Response(
+                    200,
+                    ['Content-Type' => 'application/vnd.elife.person-list+json; version=1'],
+                    json_encode([
+                        'total' => 0,
+                        'items' => [],
+                    ])
+                )
+            );
+        }
     }
 }
