@@ -19,6 +19,78 @@ final class SubjectControllerTest extends PageTestCase
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertSame('Subject', $crawler->filter('.content-header__title')->text());
+        $this->assertSame('Subject impact statement.', $crawler->filter('.content-header__impact-statement')->text());
+        $this->assertContains('No articles available.', $crawler->filter('main')->text());
+    }
+
+    /**
+     * @test
+     */
+    public function it_displays_a_link_to_aims_and_scope()
+    {
+        $client = static::createClient();
+
+        $url = $this->getUrl();
+
+        static::mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/subjects/subject',
+                [
+                    'Accept' => 'application/vnd.elife.subject+json; version=1',
+                ]
+            ),
+            new Response(
+                200,
+                [
+                    'Content-Type' => 'application/vnd.elife.subject+json; version=1',
+                ],
+                json_encode([
+                    'id' => 'subject',
+                    'name' => 'Subject',
+                    'impactStatement' => 'Subject impact statement.',
+                    'aimsAndScope' => [
+                        [
+                            'type' => 'paragraph',
+                            'text' => 'Subject aims and scope.',
+                        ],
+                    ],
+                    'image' => [
+                        'banner' => [
+                            'uri' => 'https://www.example.com/iiif/banner',
+                            'alt' => '',
+                            'source' => [
+                                'mediaType' => 'image/jpeg',
+                                'uri' => 'https://www.example.com/banner.jpg',
+                                'filename' => 'image.jpg',
+                            ],
+                            'size' => [
+                                'width' => 1800,
+                                'height' => 1600,
+                            ],
+                        ],
+                        'thumbnail' => [
+                            'uri' => 'https://www.example.com/iiif/image',
+                            'alt' => '',
+                            'source' => [
+                                'mediaType' => 'image/jpeg',
+                                'uri' => 'https://www.example.com/image.jpg',
+                                'filename' => 'image.jpg',
+                            ],
+                            'size' => [
+                                'width' => 800,
+                                'height' => 600,
+                            ],
+                        ],
+                    ],
+                ])
+            )
+        );
+
+        $crawler = $client->request('GET', $url);
+
+        $this->assertSame(200, $client->getResponse()->getStatusCode());
+        $this->assertSame('Find out more about submitting work to this area', $crawler->filter('.content-header__impact-statement')->text());
         $this->assertContains('No articles available.', $crawler->filter('main')->text());
     }
 
