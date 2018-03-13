@@ -20,6 +20,7 @@ final class SubjectContentHeaderConverterTest extends ModelConverterTestCase
     public function setUpConverter()
     {
         $this->converter = new SubjectContentHeaderConverter(
+            $this->stubUrlGenerator(),
             new ContentHeaderImageFactory(new PictureBuilderFactory(), new Packages())
         );
     }
