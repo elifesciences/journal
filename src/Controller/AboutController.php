@@ -308,13 +308,21 @@ final class AboutController extends Controller
                 $people = $people->forSubject($type);
                 $arguments['lists'][] = $this->createAboutProfiles($people->forType('senior-editor'), 'Senior editors');
                 $arguments['lists'][] = $this->createAboutProfiles($people->forType('reviewing-editor'), 'Reviewing editors', true);
+
+                $impactStatement = $arguments['subject']->then(function (Subject $subject) {
+                    if ($subject->getAimsAndScope()->notEmpty()) {
+                        return $subject->getAimsAndScope()[0]->getText();
+                    }
+
+                    return null;
+                });
         }
 
-        $arguments['contentHeader'] = all(['types' => $types, 'title' => promise_for($arguments['title']), 'subject' => promise_for($arguments['subject'] ?? null)])
-            ->then(function (array $parts) use ($arguments) {
-                $aimsScope = ($parts['subject'] && $parts['subject']->getAimsAndScope()->offsetExists(0)) ? $parts['subject']->getAimsAndScope()->offsetGet(0)->getText() : null;
+        $arguments['contentHeader'] = all(['types' => $types, 'title' => promise_for($arguments['title']), 'impactStatement' => promise_for($impactStatement ?? null)])
+            ->then(function (array $parts) {
+                $impactStatement = $parts['impactStatement'] ?? 'The working scientists who serve as eLife editors, our early-career advisors, governing board, and our executive staff all work in concert to realise eLife’s mission to accelerate discovery.';
 
-                return new ContentHeader($parts['title'], null, $aimsScope ?? 'The working scientists who serve as eLife editors, our early-career advisors, governing board, and our executive staff all work in concert to realise eLife’s mission to accelerate discovery.',
+                return new ContentHeader($parts['title'], null, $impactStatement,
                     false, [], null, [], [], null, null,
                     new SelectNav(
                         $this->get('router')->generate('about-people'),
