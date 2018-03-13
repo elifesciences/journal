@@ -188,16 +188,26 @@ final class SubjectRewritingMiddleware
                 }
             }
             if ($total > 0) {
-                foreach ($subjects as $i => $subject) {
-                    if ($replacement['id'] === $subject['id']) {
-                        $subjects[$i]['results'] += $total;
-                        break;
-                    }
-                }
+                $subjects = $this->ensureSearchSubject($subjects, $replacement, $total);
             }
         }
 
         return array_values($subjects);
+    }
+
+    private function ensureSearchSubject(array $subjects, array $subject, int $total) : array
+    {
+        foreach ($subjects as $i => $existingSubject) {
+            if ($subject['id'] === $existingSubject['id']) {
+                $subjects[$i]['results'] += $total;
+
+                return $subjects;
+            }
+        }
+
+        $subjects[] = $subject + ['results' => $total];
+
+        return $subjects;
     }
 
     private function updateSubjects(array $subjects) : array
