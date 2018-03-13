@@ -90,6 +90,8 @@ final class AboutPeopleControllerTest extends PageTestCase
         $this->assertSame(200, $client->getResponse()->getStatusCode());
 
         $this->assertSame('Subject aims and scope.', $crawler->filter('.content-header__impact-statement')->text());
+        $this->assertSame('Subject aims and scope.', $crawler->filter('meta[property="og:description"]')->attr('content'));
+        $this->assertSame('Subject aims and scope.', $crawler->filter('meta[name="description"]')->attr('content'));
     }
 
     /**
