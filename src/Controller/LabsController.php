@@ -65,8 +65,7 @@ final class LabsController extends Controller
             'eLife Labs',
             $this->get('elife.journal.view_model.factory.content_header_image')->forLocalFile('labs'),
             'Exploring open-source solutions at the intersection of research and technology.
-            <a href="https://elifesciences.org/events/c40798c3/elife-innovation-sprint-2018?utm_source=Labs-home&utm_medium=website&utm_campaign=Sprint-apply">Join us</a> to prototype ideas to bring cutting-edge technology to open research this May.'
-// ON MARCH 5, REVERT LINE ABOVE BACK TO: Learn more about <a href="'.$this->get('router')->generate('about-innovation').'">innovation at eLife</a>, follow us on <a href="https://twitter.com/eLifeInnovation">Twitter</a>, or sign up for our <a href="https://crm.elifesciences.org/crm/tech-news?utm_source=Labs-home&utm_medium=website&utm_campaign=technews">technology and innovation newsletter</a>.'
+            Learn more about <a href="'.$this->get('router')->generate('about-innovation').'">innovation at eLife</a>, follow us on <a href="https://twitter.com/eLifeInnovation">Twitter</a>, or sign up for our <a href="https://crm.elifesciences.org/crm/tech-news?utm_source=Labs-home&utm_medium=website&utm_campaign=technews">technology and innovation newsletter</a>.'
 
         );
 
