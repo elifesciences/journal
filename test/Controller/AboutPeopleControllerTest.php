@@ -23,7 +23,7 @@ final class AboutPeopleControllerTest extends PageTestCase
     /**
      * @test
      */
-    public function it_shows_aims_and_scope_for_a_subject()
+    public function it_shows_the_first_paragraph_of_aims_and_scope_for_a_subject()
     {
         $client = static::createClient();
 
@@ -45,7 +45,6 @@ final class AboutPeopleControllerTest extends PageTestCase
                             'type' => 'paragraph',
                             'text' => 'Subject aims and scope.',
                         ],
-                        // Only a single paragraph is supported on the people page.
                         [
                             'type' => 'paragraph',
                             'text' => 'Subject aims and scope more.',
