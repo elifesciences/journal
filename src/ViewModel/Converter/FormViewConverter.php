@@ -6,7 +6,6 @@ use eLife\Journal\Helper\Callback;
 use eLife\Journal\Helper\Humanizer;
 use eLife\Journal\ViewModel\Form;
 use eLife\Journal\ViewModel\HiddenInput;
-use eLife\Journal\ViewModel\HoneypotField;
 use eLife\Patterns\PatternRenderer;
 use eLife\Patterns\ViewModel;
 use eLife\Patterns\ViewModel\MessageGroup;
