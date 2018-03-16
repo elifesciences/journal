@@ -24,7 +24,12 @@
               content="eLife {{ item.publishedDate|date('Y', 'UTC') }};{{ item.volume }}:{{ item.eLocationId }}">
         <meta name="citation_firstpage" content="{{ item.eLocationId }}">
         <meta name="citation_public_url" content="{{ url('article', {id: item.id}) }}">
-        <meta name="citation_pdf_url" content="{{ item.pdf }}">
+        {% if item.pdf %}
+            <meta name="citation_pdf_url" content="{{ item.pdf }}">
+        {% endif %}
+        {% if item.xml %}
+            <meta name="citation_xml_url" content="{{ item.xml }}">
+        {% endif %}
         <meta name="citation_doi" content="{{ item.doi }}">
         <meta name="citation_volume" content="{{ item.volume }}">
         {% if item.issue %}
