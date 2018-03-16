@@ -22,7 +22,7 @@ trait HasPages
             });
     }
 
-    final private function paginator(PromiseInterface $pagerfantaPromise, Request $request, string $title, string $route): PromiseInterface
+    final private function paginator(PromiseInterface $pagerfantaPromise, Request $request, string $title, string $route) : PromiseInterface
     {
         return $pagerfantaPromise
             ->then(function (Pagerfanta $pagerfanta) use ($request, $title, $route) {

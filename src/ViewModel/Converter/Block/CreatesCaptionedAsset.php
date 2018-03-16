@@ -15,7 +15,7 @@ trait CreatesCaptionedAsset
     use HasPatternRenderer;
     use HasViewModelConverter;
 
-    final private function createCaptionedAsset(ViewModel\IsCaptioned $viewModel, HasCaption $asset, ViewModel\Doi $doi = null): ViewModel\CaptionedAsset
+    final private function createCaptionedAsset(ViewModel\IsCaptioned $viewModel, HasCaption $asset, ViewModel\Doi $doi = null) : ViewModel\CaptionedAsset
     {
         $caption = $asset->getCaption()->map(function (Block $block) {
             return $this->getViewModelConverter()->convert($block);

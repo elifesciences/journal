@@ -86,7 +86,7 @@ abstract class ModelConverterTestCase extends TestCase
         }
     }
 
-    final private function findSamples() : Traversable
+    private function findSamples() : Traversable
     {
         $this->assertInternalType('array', $this->models);
         $this->assertInternalType('array', $this->viewModelClasses);
