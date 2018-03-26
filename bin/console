@@ -12,7 +12,7 @@ set_time_limit(0);
 
 $input = new ArgvInput();
 $env = $input->getParameterOption(['--env', '-e'], getenv('SYMFONY_ENV') ?: 'dev');
-$debug = getenv('SYMFONY_DEBUG') !== '0' && !$input->hasParameterOption(['--no-debug', '']) && !in_array($env, ['demo', 'end2end', 'continuumtest', 'continuumtestpreview', 'prod', 'preview', 'baseline']);
+$debug = '0' !== getenv('SYMFONY_DEBUG') && !$input->hasParameterOption(['--no-debug', '']) && !in_array($env, ['demo', 'end2end', 'continuumtest', 'continuumtestpreview', 'prod', 'preview', 'baseline']);
 
 if ($debug) {
     Debug::enable();

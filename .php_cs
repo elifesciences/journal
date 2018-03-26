@@ -16,4 +16,5 @@ return PhpCsFixer\Config::create()
         'return_type_declaration' => ['space_before' => 'one'],
     ])
     ->setUsingCache(true)
+    ->setFinder($finder)
 ;
