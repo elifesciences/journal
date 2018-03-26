@@ -47,7 +47,7 @@ final class ArticleFiguresControllerTest extends PageTestCase
         $tables = $figureTypes->eq(2)->filter('.asset-viewer-inline');
         $this->assertSame('Table 1 label', trim($tables->eq(0)->filter('.asset-viewer-inline__header_text')->text()));
 
-        $this->assertSame('Data sets', $figureTypes->eq(3)->filter('.article-section__header_text')->text());
+        $this->assertSame('Data availability', $figureTypes->eq(3)->filter('.article-section__header_text')->text());
         $dataSets = $figureTypes->eq(3)->filter('.article-section__body')->children();
         $this->assertSame('The following data sets were generated', trim($dataSets->eq(0)->text()));
         $this->assertSame('Data set 1', trim($dataSets->eq(1)->filter('.reference__title')->text()));
@@ -65,7 +65,7 @@ final class ArticleFiguresControllerTest extends PageTestCase
                 'Figures',
                 'Videos',
                 'Tables',
-                'Data sets',
+                'Data availability',
                 'Additional files',
             ],
             array_map('trim', $crawler->filter('.view-selector__jump_link_item')->extract('_text'))

@@ -581,7 +581,7 @@ final class ArticlesController extends Controller
                     'figures' => $all['figures'],
                     'videos' => $all['videos'],
                     'tables' => $all['tables'],
-                    'data' => $all['dataAvailability']->append(...$all['generatedDataSets'], ...$all['usedDataSets']),
+                    'data sets' => $all['generatedDataSets']->append(...$all['usedDataSets']),
                     'additional files' => $all['additionalFiles'],
                 ], Callback::method('notEmpty'));
             })
@@ -607,7 +607,7 @@ final class ArticlesController extends Controller
                     new ViewModel\MessageBar('The following data sets were generated'),
                     new ViewModel\ReferenceList(...$generatedDataSets),
                 ];
-            }));
+            }, []));
 
         $usedDataSets = $usedDataSets
             ->then(Callback::emptyOr(function (Sequence $usedDataSets) {
@@ -615,7 +615,7 @@ final class ArticlesController extends Controller
                     new ViewModel\MessageBar('The following previously published data sets were used'),
                     new ViewModel\ReferenceList(...$usedDataSets),
                 ];
-            }));
+            }, []));
 
         $data = all(['availability' => $dataAvailability, 'generated' => $generateDataSets, 'used' => $usedDataSets])
             ->then(function (array $data) {
