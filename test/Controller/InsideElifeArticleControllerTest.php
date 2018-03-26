@@ -119,7 +119,7 @@ final class InsideElifeArticleControllerTest extends PageTestCase
                 ['Content-Type' => 'application/vnd.elife.blog-article+json; version=2'],
                 json_encode([
                     'id' => '1',
-                    'title' => 'Blog article title',
+                    'title' => 'Blog article <i>title</i>',
                     'published' => '2010-01-01T00:00:00Z',
                     'impactStatement' => 'Blog article impact statement',
                     'content' => [

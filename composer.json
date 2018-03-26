@@ -94,6 +94,9 @@
             "bobthecow/mustache-bundle": {
                 "Remove superfluous argument": "https://github.com/bobthecow/BobthecowMustacheBundle/pull/9.patch"
             },
+            "cocur/slugify": {
+                "strip_tags": "https://github.com/cocur/slugify/pull/201.patch"
+            },
             "isometriks/spam-bundle": {
                 "Add field label": "https://github.com/isometriks/IsometriksSpamBundle/pull/9.patch"
             },
