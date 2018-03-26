@@ -173,6 +173,8 @@ final class ArticlesController extends Controller
                 $hasFigures = $parts['hasFigures'];
 
                 return
+                    $item->getDataAvailability()->notEmpty()
+                    ||
                     $item->getGeneratedDataSets()->notEmpty()
                     ||
                     $item->getUsedDataSets()->notEmpty()
