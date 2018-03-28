@@ -60,15 +60,7 @@
 
     {% if listing %}
 
-        {% embed 'grid/content.html.twig' with { 'isSubsequent': true } %}
-
-            {% block main %}
-
-                {{ render_pattern(listing) }}
-
-            {% endblock %}
-
-        {% endembed %}
+        {{ render_pattern(listing) }}
 
     {% endif %}
 
