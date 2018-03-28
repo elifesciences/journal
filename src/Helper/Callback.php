@@ -115,24 +115,24 @@ final class Callback
         });
     }
 
-    public static function emptyOr(callable $callback) : Callback
+    public static function emptyOr(callable $callback, $default = null) : Callback
     {
-        return new self(function ($object) use ($callback) {
+        return new self(function ($object) use ($callback, $default) {
             if (empty($object) || ((is_array($object) || $object instanceof Countable) && 0 === count($object)) || ($object instanceof Paginator && 0 === $object->getTotal())) {
-                return null;
+                return $default;
             }
 
             return call_user_func($callback, $object);
         });
     }
 
-    public static function methodEmptyOr(string $method, callable $callback) : Callback
+    public static function methodEmptyOr(string $method, callable $callback, $default = null) : Callback
     {
-        return new self(function ($object) use ($method, $callback) {
+        return new self(function ($object) use ($method, $callback, $default) {
             $test = call_user_func([$object, $method]);
 
             if (empty($test) || ((is_array($test) || $test instanceof Countable) && 0 === count($test)) || ($test instanceof Paginator && 0 === $test->getTotal())) {
-                return null;
+                return $default;
             }
 
             return call_user_func($callback, $object);
