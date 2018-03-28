@@ -323,7 +323,7 @@ final class AboutController extends Controller
                 $impactStatement = $parts['impactStatement'] ?? 'The working scientists who serve as eLife editors, our early-career advisors, governing board, and our executive staff all work in concert to realise eLife’s mission to accelerate discovery.';
 
                 return new ContentHeader($parts['title'], null, $impactStatement,
-                    false, [], null, [], [], null, null,
+                    false, [], null, [], [], null,
                     new SelectNav(
                         $this->get('router')->generate('about-people'),
                         new Select('type', $parts['types']->toArray(), new FormLabel('Type', true), 'type'),

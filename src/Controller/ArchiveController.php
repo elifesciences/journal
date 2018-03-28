@@ -90,7 +90,6 @@ final class ArchiveController extends Controller
             [],
             [],
             null,
-            null,
             new SelectNav(
                 $this->get('router')->generate('archive'),
                 new Select('year', $years, new FormLabel('Archive year', true), 'year'),
