@@ -13,6 +13,32 @@ final class CollectionControllerTest extends PageTestCase
 
     /**
      * @test
+     * @dataProvider queryParameterProvider
+     */
+    public function it_preserves_the_query_parameters(string $query, string $expected)
+    {
+        $client = static::createClient();
+
+        $url = $this->getUrl();
+
+        $client->request('GET', '/collections/1?'.$query);
+
+        $this->assertTrue($client->getResponse()->isRedirect($url.'?'.$expected));
+    }
+
+    public function queryParameterProvider() : Traversable
+    {
+        return $this->arrayProvider([
+            'foo' => 'foo=',
+            'foo=bar' => 'foo=bar',
+            'a=b&b=a' => 'a=b&b=a',
+            'a&b=a&c=d' => 'a=&b=a&c=d',
+            'b=a&a=b' => 'b=a&a=b',
+        ]);
+    }
+
+    /**
+     * @test
      */
     public function it_displays_a_collection_page()
     {
