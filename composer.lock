@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "bb579fcd7aca63e45a04db805e76ced7",
+    "content-hash": "ff8570391f51bb516918546a36d54a6e",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -115,16 +115,16 @@
         },
         {
             "name": "cocur/slugify",
-            "version": "v3.0.1",
+            "version": "v3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cocur/slugify.git",
-                "reference": "1fdf2b1219a199301db3d7c60c16d895bba6ccde"
+                "reference": "b2ccf7b735f4f3df3979aef2e1ebf8e19ca772f7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cocur/slugify/zipball/1fdf2b1219a199301db3d7c60c16d895bba6ccde",
-                "reference": "1fdf2b1219a199301db3d7c60c16d895bba6ccde",
+                "url": "https://api.github.com/repos/cocur/slugify/zipball/b2ccf7b735f4f3df3979aef2e1ebf8e19ca772f7",
+                "reference": "b2ccf7b735f4f3df3979aef2e1ebf8e19ca772f7",
                 "shasum": ""
             },
             "require": {
@@ -151,6 +151,11 @@
                 "zendframework/zend-view": "~2.2"
             },
             "type": "library",
+            "extra": {
+                "patches_applied": {
+                    "strip_tags": "https://github.com/cocur/slugify/pull/201.patch"
+                }
+            },
             "autoload": {
                 "psr-4": {
                     "Cocur\\Slugify\\": "src"
@@ -176,7 +181,7 @@
                 "slug",
                 "slugify"
             ],
-            "time": "2017-09-24T10:29:04+00:00"
+            "time": "2018-01-22T09:00:48+00:00"
         },
         {
             "name": "composer/ca-bundle",
@@ -912,12 +917,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-sdk-php.git",
-                "reference": "535ae5af297f5eeed9f3419b6a959e363ce0b9f2"
+                "reference": "df953302a4931eed85166a55649c0ad9f436d526"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/535ae5af297f5eeed9f3419b6a959e363ce0b9f2",
-                "reference": "535ae5af297f5eeed9f3419b6a959e363ce0b9f2",
+                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/df953302a4931eed85166a55649c0ad9f436d526",
+                "reference": "df953302a4931eed85166a55649c0ad9f436d526",
                 "shasum": ""
             },
             "require": {
@@ -953,7 +958,7 @@
                 "MIT"
             ],
             "description": "eLife Sciences API SDK",
-            "time": "2018-03-16T11:48:45+00:00"
+            "time": "2018-03-26T13:10:06+00:00"
         },
         {
             "name": "elife/patterns",
@@ -961,12 +966,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/patterns-php.git",
-                "reference": "95fe65560d8b6145fe120fc7fbeceff35d089493"
+                "reference": "6773648adf7fa658debeae869797eb8a4d23d271"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/95fe65560d8b6145fe120fc7fbeceff35d089493",
-                "reference": "95fe65560d8b6145fe120fc7fbeceff35d089493",
+                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/6773648adf7fa658debeae869797eb8a4d23d271",
+                "reference": "6773648adf7fa658debeae869797eb8a4d23d271",
                 "shasum": ""
             },
             "require": {
@@ -1003,7 +1008,7 @@
                 "MIT"
             ],
             "description": "eLife patterns",
-            "time": "2018-03-13T12:47:00+00:00"
+            "time": "2018-03-28T09:08:18+00:00"
         },
         {
             "name": "fabpot/goutte",
@@ -3501,12 +3506,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-raml.git",
-                "reference": "d26f104c4bc066f640b51bce5310435d4a35391f"
+                "reference": "2ceb798da35b1bd7f26d81aaa6ae535bd958dd41"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-raml/zipball/d26f104c4bc066f640b51bce5310435d4a35391f",
-                "reference": "d26f104c4bc066f640b51bce5310435d4a35391f",
+                "url": "https://api.github.com/repos/elifesciences/api-raml/zipball/2ceb798da35b1bd7f26d81aaa6ae535bd958dd41",
+                "reference": "2ceb798da35b1bd7f26d81aaa6ae535bd958dd41",
                 "shasum": ""
             },
             "conflict": {
@@ -3518,7 +3523,7 @@
                 "MIT"
             ],
             "description": "eLife Sciences API specification",
-            "time": "2018-03-16T10:13:35+00:00"
+            "time": "2018-03-26T12:08:31+00:00"
         },
         {
             "name": "elife/api-validator",

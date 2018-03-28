@@ -33,6 +33,10 @@ final class PersonAuthorDetailsConverter implements ViewModelConverter
             $name .= ", {$object->getRole()}";
         }
 
+        if ($object->isDeceased()) {
+            $name .= ' (deceased)';
+        }
+
         return AuthorDetails::forPerson(
             $this->createId($object),
             $name,

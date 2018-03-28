@@ -18,6 +18,9 @@ bobthecow_mustache:
     loader_id: elife.journal.mustache.loader
     partials_loader_id: elife.journal.mustache.loader
 
+cocur_slugify:
+    strip_tags: true
+
 csa_guzzle:
     clients:
         elife_api:

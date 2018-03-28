@@ -173,6 +173,8 @@ final class ArticlesController extends Controller
                 $hasFigures = $parts['hasFigures'];
 
                 return
+                    $item->getDataAvailability()->notEmpty()
+                    ||
                     $item->getGeneratedDataSets()->notEmpty()
                     ||
                     $item->getUsedDataSets()->notEmpty()
@@ -540,6 +542,10 @@ final class ArticlesController extends Controller
             })
             ->map($this->willConvertTo(null, ['complete' => true]));
 
+        $dataAvailability = (new PromiseSequence($arguments['item']
+            ->then(Callback::method('getDataAvailability'))))
+            ->map($this->willConvertTo());
+
         $generateDataSets = $arguments['item']
             ->then(function (ArticleVersion $item) {
                 return $item->getGeneratedDataSets()
@@ -565,6 +571,7 @@ final class ArticlesController extends Controller
             'figures' => $figures,
             'videos' => $videos,
             'tables' => $tables,
+            'dataAvailability' => $dataAvailability,
             'generatedDataSets' => $generateDataSets,
             'usedDataSets' => $usedDataSets,
             'additionalFiles' => $additionalFiles,
@@ -600,7 +607,7 @@ final class ArticlesController extends Controller
                     new ViewModel\MessageBar('The following data sets were generated'),
                     new ViewModel\ReferenceList(...$generatedDataSets),
                 ];
-            }));
+            }, []));
 
         $usedDataSets = $usedDataSets
             ->then(Callback::emptyOr(function (Sequence $usedDataSets) {
@@ -608,18 +615,18 @@ final class ArticlesController extends Controller
                     new ViewModel\MessageBar('The following previously published data sets were used'),
                     new ViewModel\ReferenceList(...$usedDataSets),
                 ];
-            }));
+            }, []));
 
-        $dataSets = all(['generated' => $generateDataSets, 'used' => $usedDataSets])
-            ->then(function (array $dataSets) {
-                return array_filter(array_merge((array) $dataSets['generated'], (array) $dataSets['used']));
+        $data = all(['availability' => $dataAvailability, 'generated' => $generateDataSets, 'used' => $usedDataSets])
+            ->then(function (array $data) {
+                return $data['availability']->append(...$data['generated'], ...$data['used']);
             });
 
         $arguments['body'] = all([
             'figures' => $figures,
             'videos' => $videos,
             'tables' => $tables,
-            'dataSets' => $dataSets,
+            'data' => $data,
             'additionalFiles' => $additionalFiles,
         ])
             ->then(function (array $all) {
@@ -642,8 +649,8 @@ final class ArticlesController extends Controller
                     $first = false;
                 }
 
-                if (!empty($all['dataSets'])) {
-                    $parts[] = ArticleSection::collapsible('data-sets', 'Data sets', 2, $this->render(...$all['dataSets']), false, $first);
+                if ($all['data']->notEmpty()) {
+                    $parts[] = ArticleSection::collapsible('data', 'Data availability', 2, $this->render(...$all['data']), false, $first);
                     $first = false;
                 }
 
