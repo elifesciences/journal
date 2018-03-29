@@ -36,7 +36,8 @@ final class PodcastEpisodeContentHeaderConverter implements ViewModelConverter
         return new ViewModel\ContentHeader(
             $object->getTitle(),
             $this->contentHeaderImageFactory->forImage($object->getBanner()), $object->getImpactStatement(), true, [], null, [], [],
-            $this->downloadLinkUriGenerator->generate(DownloadLink::fromUri($object->getSources()[0]->getUri())), null,
+            $this->downloadLinkUriGenerator->generate(DownloadLink::fromUri($object->getSources()[0]->getUri())),
+            new ViewModel\SocialMediaSharers($object->getTitle(), $this->urlGenerator->generate('podcast-episode', ['number' => $object->getNumber()], $this->urlGenerator::ABSOLUTE_URL)),
           null,
             ViewModel\Meta::withLink(new ViewModel\Link('Podcast', $this->urlGenerator->generate('podcast'))), null,
             $this->viewModelConverter->convert($object, ViewModel\AudioPlayer::class)
