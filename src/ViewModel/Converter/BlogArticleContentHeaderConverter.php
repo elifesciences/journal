@@ -26,7 +26,16 @@ final class BlogArticleContentHeaderConverter implements ViewModelConverter
     {
         return new ViewModel\ContentHeader(
             $object->getTitle(), null, $object->getImpactStatement(), true, [],
-            null, [], [], null, null, null,
+            null, [], [], null,
+          new ViewModel\SocialMediaSharers(
+            $object->getTitle(),
+            $this->urlGenerator->generate('inside-elife-article',
+              [
+                'id' => $object->getId(),
+              ],
+              $this->urlGenerator::ABSOLUTE_URL)
+          )
+            , null,
             ViewModel\Meta::withLink(
                 new Link('Inside eLife', $this->urlGenerator->generate('inside-elife')),
                 $this->simpleDate($object, ['date' => 'published'] + $context)
