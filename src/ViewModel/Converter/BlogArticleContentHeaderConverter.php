@@ -34,8 +34,7 @@ final class BlogArticleContentHeaderConverter implements ViewModelConverter
                 'id' => $object->getId(),
               ],
               $this->urlGenerator::ABSOLUTE_URL)
-          )
-            , null,
+          ), null,
             ViewModel\Meta::withLink(
                 new Link('Inside eLife', $this->urlGenerator->generate('inside-elife')),
                 $this->simpleDate($object, ['date' => 'published'] + $context)
