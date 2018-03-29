@@ -33,8 +33,15 @@ final class InterviewContentHeaderConverter implements ViewModelConverter
             [],
             [],
             null,
+            new ViewModel\SocialMediaSharers(
+              $object->getTitle(),
+              $this->urlGenerator->generate('interview',
+                [
+                  'id' => $object->getId(),
+                ],
+                $this->urlGenerator::ABSOLUTE_URL)
+            ),
             null,
-             null,
             ViewModel\Meta::withLink(
                 new ViewModel\Link('Interview', $this->urlGenerator->generate('interviews')),
                 $this->simpleDate($object, ['date' => 'published'] + $context)
