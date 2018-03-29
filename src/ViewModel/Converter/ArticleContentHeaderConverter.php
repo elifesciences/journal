@@ -82,8 +82,10 @@ final class ArticleContentHeaderConverter implements ViewModelConverter
             $institutions,
             '#downloads',
             null,
+            null,
             $meta,
-            LicenceUri::forCode($object->getCopyright()->getLicense())
+            LicenceUri::forCode($object->getCopyright()->getLicense()),
+            null
         );
     }
 

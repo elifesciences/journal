@@ -324,6 +324,7 @@ final class AboutController extends Controller
 
                 return new ContentHeader($parts['title'], null, $impactStatement,
                     false, [], null, [], [], null,
+                  null,
                     new SelectNav(
                         $this->get('router')->generate('about-people'),
                         new Select('type', $parts['types']->toArray(), new FormLabel('Type', true), 'type'),

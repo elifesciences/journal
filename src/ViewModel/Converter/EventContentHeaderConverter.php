@@ -32,6 +32,7 @@ final class EventContentHeaderConverter implements ViewModelConverter
             [],
             null,
             null,
+            null,
             ViewModel\Meta::withLink(new ViewModel\Link('Event', $this->urlGenerator->generate('events')), ViewModel\Date::simple($object->getStarts())),
             LicenceUri::default()
         );

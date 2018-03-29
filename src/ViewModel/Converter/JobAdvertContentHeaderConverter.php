@@ -35,6 +35,7 @@ final class JobAdvertContentHeaderConverter implements ViewModelConverter
             [],
             null,
             null,
+            null,
             Meta::withLink(
                 new Link('eLife jobs', $this->urlGenerator->generate('job-adverts')),
                 $this->simpleDate($object, ['date' => 'published'] + $context)
