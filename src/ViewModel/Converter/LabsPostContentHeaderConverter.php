@@ -27,15 +27,11 @@ final class LabsPostContentHeaderConverter implements ViewModelConverter
         return new ViewModel\ContentHeader(
             $object->getTitle(),
             null, $object->getImpactStatement(), true, [], null, [], [], null,
-          new ViewModel\SocialMediaSharers(
-            $object->getTitle(),
-            $this->urlGenerator->generate('labs-post',
-              [
-                'id' => $object->getId(),
-              ],
-              $this->urlGenerator::ABSOLUTE_URL)
-          ),
-          null,
+            new ViewModel\SocialMediaSharers(
+                $object->getTitle(),
+                $this->urlGenerator->generate('labs-post', [$object], UrlGeneratorInterface::ABSOLUTE_URL)
+            ),
+            null,
             ViewModel\Meta::withLink(
                 new Link('Labs', $this->urlGenerator->generate('labs')),
                 $this->simpleDate($object, ['date' => 'published'] + $context)

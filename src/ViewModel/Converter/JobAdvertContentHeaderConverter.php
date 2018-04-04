@@ -34,14 +34,10 @@ final class JobAdvertContentHeaderConverter implements ViewModelConverter
             [],
             [],
             null,
-          new ViewModel\SocialMediaSharers(
-            $object->getTitle(),
-            $this->urlGenerator->generate('job-advert',
-              [
-                'id' => $object->getId(),
-              ],
-              $this->urlGenerator::ABSOLUTE_URL)
-          ),
+            new ViewModel\SocialMediaSharers(
+                $object->getTitle(),
+                $this->urlGenerator->generate('job-advert', [$object], UrlGeneratorInterface::ABSOLUTE_URL)
+            ),
             null,
             Meta::withLink(
                 new Link('eLife jobs', $this->urlGenerator->generate('job-adverts')),

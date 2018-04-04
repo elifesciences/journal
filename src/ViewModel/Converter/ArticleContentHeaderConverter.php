@@ -84,8 +84,7 @@ final class ArticleContentHeaderConverter implements ViewModelConverter
             new ViewModel\SocialMediaSharers($object->getTitle(), "https://doi.org/{$object->getDoi()}"),
             null,
             $meta,
-            LicenceUri::forCode($object->getCopyright()->getLicense()),
-            null
+            LicenceUri::forCode($object->getCopyright()->getLicense())
         );
     }
 
