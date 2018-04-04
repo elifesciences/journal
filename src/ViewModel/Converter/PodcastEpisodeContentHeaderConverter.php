@@ -8,6 +8,7 @@ use eLife\Journal\Helper\DownloadLinkUriGenerator;
 use eLife\Journal\ViewModel\Factory\ContentHeaderImageFactory;
 use eLife\Patterns\ViewModel;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use function strip_tags;
 
 final class PodcastEpisodeContentHeaderConverter implements ViewModelConverter
 {
@@ -36,7 +37,12 @@ final class PodcastEpisodeContentHeaderConverter implements ViewModelConverter
         return new ViewModel\ContentHeader(
             $object->getTitle(),
             $this->contentHeaderImageFactory->forImage($object->getBanner()), $object->getImpactStatement(), true, [], null, [], [],
-            $this->downloadLinkUriGenerator->generate(DownloadLink::fromUri($object->getSources()[0]->getUri())), null, null,
+            $this->downloadLinkUriGenerator->generate(DownloadLink::fromUri($object->getSources()[0]->getUri())),
+            new ViewModel\SocialMediaSharers(
+                strip_tags($object->getTitle()),
+                $this->urlGenerator->generate('podcast-episode', [$object], UrlGeneratorInterface::ABSOLUTE_URL)
+            ),
+            null,
             ViewModel\Meta::withLink(new ViewModel\Link('Podcast', $this->urlGenerator->generate('podcast'))), null,
             $this->viewModelConverter->convert($object, ViewModel\AudioPlayer::class)
         );

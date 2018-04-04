@@ -10,6 +10,7 @@ use eLife\Journal\Helper\LicenceUri;
 use eLife\Journal\Helper\ModelName;
 use eLife\Patterns\ViewModel;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use function strip_tags;
 
 final class ArticleContentHeaderConverter implements ViewModelConverter
 {
@@ -81,7 +82,10 @@ final class ArticleContentHeaderConverter implements ViewModelConverter
             $authors,
             $institutions,
             '#downloads',
-            null,
+            new ViewModel\SocialMediaSharers(
+                strip_tags($object->getFullTitle()),
+                "https://doi.org/{$object->getDoi()}"
+            ),
             null,
             $meta,
             LicenceUri::forCode($object->getCopyright()->getLicense())

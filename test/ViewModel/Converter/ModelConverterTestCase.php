@@ -190,7 +190,7 @@ abstract class ModelConverterTestCase extends TestCase
     final protected function stubUrlGenerator() : UrlGeneratorInterface
     {
         $urlGenerator = $this->createMock(UrlGeneratorInterface::class);
-        $urlGenerator->method('generate')->willReturn('#');
+        $urlGenerator->method('generate')->willReturn('http://www.example.com/');
 
         return $urlGenerator;
     }

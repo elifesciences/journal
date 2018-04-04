@@ -6,6 +6,7 @@ use eLife\ApiSdk\Model\Event;
 use eLife\Journal\Helper\LicenceUri;
 use eLife\Patterns\ViewModel;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use function strip_tags;
 
 final class EventContentHeaderConverter implements ViewModelConverter
 {
@@ -31,7 +32,10 @@ final class EventContentHeaderConverter implements ViewModelConverter
             [],
             [],
             null,
-            null,
+            new ViewModel\SocialMediaSharers(
+                strip_tags($object->getTitle()),
+                $this->urlGenerator->generate('event', [$object], UrlGeneratorInterface::ABSOLUTE_URL)
+            ),
             null,
             ViewModel\Meta::withLink(new ViewModel\Link('Event', $this->urlGenerator->generate('events')), ViewModel\Date::simple($object->getStarts())),
             LicenceUri::default()
