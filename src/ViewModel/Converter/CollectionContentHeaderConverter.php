@@ -40,7 +40,16 @@ final class CollectionContentHeaderConverter implements ViewModelConverter
 
         return new ViewModel\ContentHeader(
             $object->getTitle(),
-            $this->contentHeaderImageFactory->forImage($object->getBanner()), $object->getImpactStatement(), true, [], new ViewModel\Profile(new Link($curatorName), $curatorImage), [], [], null, null, null,
+            $this->contentHeaderImageFactory->forImage($object->getBanner()), $object->getImpactStatement(), true, [], new ViewModel\Profile(new Link($curatorName), $curatorImage), [], [], null,
+            new ViewModel\SocialMediaSharers(
+              $object->getTitle(),
+              $this->urlGenerator->generate('collection',
+                [
+                  'id' => $object->getId(),
+                ],
+                $this->urlGenerator::ABSOLUTE_URL)
+            ),
+          null,
             ViewModel\Meta::withLink(
                 new Link('Collection', $this->urlGenerator->generate('collections')),
                 $this->simpleDate($object, ['date' => 'published'] + $context)
