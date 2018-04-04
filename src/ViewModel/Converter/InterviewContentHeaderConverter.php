@@ -6,6 +6,7 @@ use eLife\ApiSdk\Model\Interview;
 use eLife\Journal\Helper\LicenceUri;
 use eLife\Patterns\ViewModel;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use function strip_tags;
 
 final class InterviewContentHeaderConverter implements ViewModelConverter
 {
@@ -34,7 +35,7 @@ final class InterviewContentHeaderConverter implements ViewModelConverter
             [],
             null,
             new ViewModel\SocialMediaSharers(
-                $object->getTitle(),
+                strip_tags($object->getTitle()),
                 $this->urlGenerator->generate('interview', [$object], UrlGeneratorInterface::ABSOLUTE_URL)
             ),
             null,

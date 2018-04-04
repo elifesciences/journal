@@ -7,6 +7,7 @@ use eLife\Journal\Helper\LicenceUri;
 use eLife\Patterns\ViewModel;
 use eLife\Patterns\ViewModel\Link;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use function strip_tags;
 
 final class BlogArticleContentHeaderConverter implements ViewModelConverter
 {
@@ -28,7 +29,7 @@ final class BlogArticleContentHeaderConverter implements ViewModelConverter
             $object->getTitle(), null, $object->getImpactStatement(), true, [],
             null, [], [], null,
             new ViewModel\SocialMediaSharers(
-                $object->getTitle(),
+                strip_tags($object->getTitle()),
                 $this->urlGenerator->generate('inside-elife-article', [$object], UrlGeneratorInterface::ABSOLUTE_URL)
             ),
             null,

@@ -7,6 +7,7 @@ use eLife\Journal\ViewModel\Factory\ContentHeaderImageFactory;
 use eLife\Patterns\ViewModel;
 use eLife\Patterns\ViewModel\Link;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use function strip_tags;
 
 final class CollectionContentHeaderConverter implements ViewModelConverter
 {
@@ -42,7 +43,7 @@ final class CollectionContentHeaderConverter implements ViewModelConverter
             $object->getTitle(),
             $this->contentHeaderImageFactory->forImage($object->getBanner()), $object->getImpactStatement(), true, [], new ViewModel\Profile(new Link($curatorName), $curatorImage), [], [], null,
             new ViewModel\SocialMediaSharers(
-                $object->getTitle(),
+                strip_tags($object->getTitle()),
                 $this->urlGenerator->generate('collection', [$object], UrlGeneratorInterface::ABSOLUTE_URL)
             ),
             null,

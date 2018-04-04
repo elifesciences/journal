@@ -9,6 +9,7 @@ use eLife\Patterns\ViewModel;
 use eLife\Patterns\ViewModel\Link;
 use eLife\Patterns\ViewModel\Meta;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use function strip_tags;
 
 final class PressPackageContentHeaderConverter implements ViewModelConverter
 {
@@ -33,7 +34,7 @@ final class PressPackageContentHeaderConverter implements ViewModelConverter
         return new ViewModel\ContentHeader($object->getTitle(), null, $object->getImpactStatement(), true,
             $subjects, null, [], [], null,
             new ViewModel\SocialMediaSharers(
-                $object->getTitle(),
+                strip_tags($object->getTitle()),
                 $this->urlGenerator->generate('press-pack', [$object], UrlGeneratorInterface::ABSOLUTE_URL)
             ),
             null,
