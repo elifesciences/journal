@@ -33,6 +33,8 @@ final class PersonAboutProfileConverter implements ViewModelConverter
             'Competing interests statement' => $object->getCompetingInterests(),
         ]);
 
+        $extra = $extra ? new ViewModel\DefinitionList($extra, true) : null;
+
         if ($object->getAffiliations()->notEmpty()) {
             $role = implode('<br>', $object->getAffiliations()->map(Callback::method('toString'))->toArray());
         } else {
@@ -40,15 +42,11 @@ final class PersonAboutProfileConverter implements ViewModelConverter
         }
 
         if ($context['compact'] ?? false) {
-            if ($extra) {
-                $extra = $this->patternRenderer->render(new ViewModel\DefinitionList($extra, true));
-            }
-
             return new ViewModel\AboutProfile(
                 $object->getDetails()->getPreferredName(),
                 $role,
                 null,
-                $extra
+                $extra ? $this->patternRenderer->render($extra) : null
             );
         }
 
@@ -61,7 +59,7 @@ final class PersonAboutProfileConverter implements ViewModelConverter
         $profile = $object->getProfile()->map($this->willConvertTo());
 
         if ($extra) {
-            $profile = $profile->append(new ViewModel\DefinitionList($extra, true));
+            $profile = $profile->append($extra);
         }
 
         return new ViewModel\AboutProfile(
