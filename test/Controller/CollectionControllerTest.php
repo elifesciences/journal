@@ -29,11 +29,11 @@ final class CollectionControllerTest extends PageTestCase
     public function queryParameterProvider() : Traversable
     {
         return $this->arrayProvider([
-            'foo' => 'foo=',
+            'foo' => 'foo',
             'foo=bar' => 'foo=bar',
             'a=b&b=a' => 'a=b&b=a',
-            'a&b=a&c=d' => 'a=&b=a&c=d',
-            'b=a&a=b' => 'b=a&a=b',
+            'a&b=a&c=d' => 'a&b=a&c=d',
+            'b=a&a=b' => 'a=b&b=a',
         ]);
     }
 

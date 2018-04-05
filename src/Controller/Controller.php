@@ -91,9 +91,12 @@ abstract class Controller implements ContainerAwareInterface
                 $route = $request->attributes->get('_route');
                 $routeParams = $request->attributes->get('_route_params');
                 $routeParams['slug'] = $correctSlug;
-                $queryParams = $request->query->all();
+                $url = $this->get('router')->generate($route, $routeParams);
+                if ($queryParams = $request->getQueryString()) {
+                    $url .= '?'.$queryParams;
+                }
 
-                throw new EarlyResponse(new RedirectResponse($this->get('router')->generate($route, $routeParams + $queryParams), Response::HTTP_MOVED_PERMANENTLY));
+                throw new EarlyResponse(new RedirectResponse($url, Response::HTTP_MOVED_PERMANENTLY));
             }
 
             return $object;
