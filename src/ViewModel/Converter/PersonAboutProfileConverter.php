@@ -5,7 +5,6 @@ namespace eLife\Journal\ViewModel\Converter;
 use eLife\ApiSdk\Model\Person;
 use eLife\Journal\Helper\Callback;
 use eLife\Journal\Helper\CanConvert;
-use eLife\Journal\ViewModel\DefinitionList;
 use eLife\Patterns\PatternRenderer;
 use eLife\Patterns\ViewModel;
 
@@ -34,11 +33,7 @@ final class PersonAboutProfileConverter implements ViewModelConverter
             'Competing interests statement' => $object->getCompetingInterests(),
         ]);
 
-        if ($extra) {
-            $extra = $this->patternRenderer->render(new DefinitionList($extra));
-        } else {
-            $extra = null;
-        }
+        $extra = $extra ? new ViewModel\DefinitionList($extra, true) : null;
 
         if ($object->getAffiliations()->notEmpty()) {
             $role = implode('<br>', $object->getAffiliations()->map(Callback::method('toString'))->toArray());
@@ -51,7 +46,7 @@ final class PersonAboutProfileConverter implements ViewModelConverter
                 $object->getDetails()->getPreferredName(),
                 $role,
                 null,
-                $extra
+                $extra ? $this->patternRenderer->render($extra) : null
             );
         }
 
@@ -64,18 +59,7 @@ final class PersonAboutProfileConverter implements ViewModelConverter
         $profile = $object->getProfile()->map($this->willConvertTo());
 
         if ($extra) {
-            $profile = $profile->append();
-        }
-
-        $extra = array_filter([
-            'Expertise' => $object->getResearch() ? $object->getResearch()->getExpertises()->map(Callback::method('getName'))->toArray() : [],
-            'Research focus' => $object->getResearch() ? $object->getResearch()->getFocuses() : [],
-            'Experimental organism' => $object->getResearch() ? $object->getResearch()->getOrganisms() : [],
-            'Competing interests statement' => $object->getCompetingInterests(),
-        ]);
-
-        if ($extra) {
-            $profile = $profile->append(new DefinitionList($extra));
+            $profile = $profile->append($extra);
         }
 
         return new ViewModel\AboutProfile(
