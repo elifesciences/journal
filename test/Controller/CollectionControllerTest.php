@@ -33,7 +33,7 @@ final class CollectionControllerTest extends PageTestCase
             'foo=bar' => 'foo=bar',
             'a=b&b=a' => 'a=b&b=a',
             'a&b=a&c=d' => 'a&b=a&c=d',
-            'b=a&a=b' => 'a=b&b=a',
+            'b=a&a=b' => 'b=a&a=b',
         ]);
     }
 
