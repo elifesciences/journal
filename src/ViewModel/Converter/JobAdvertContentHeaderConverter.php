@@ -7,6 +7,7 @@ use eLife\Patterns\ViewModel;
 use eLife\Patterns\ViewModel\Link;
 use eLife\Patterns\ViewModel\Meta;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use function strip_tags;
 
 final class JobAdvertContentHeaderConverter implements ViewModelConverter
 {
@@ -34,7 +35,10 @@ final class JobAdvertContentHeaderConverter implements ViewModelConverter
             [],
             [],
             null,
-            null,
+            new ViewModel\SocialMediaSharers(
+                strip_tags($object->getTitle()),
+                $this->urlGenerator->generate('job-advert', [$object], UrlGeneratorInterface::ABSOLUTE_URL)
+            ),
             null,
             Meta::withLink(
                 new Link('eLife jobs', $this->urlGenerator->generate('job-adverts')),
