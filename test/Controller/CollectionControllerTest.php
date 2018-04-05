@@ -13,20 +13,20 @@ final class CollectionControllerTest extends PageTestCase
 
     /**
      * @test
-     * @dataProvider queryParameterProvider
+     * @dataProvider queryStringProvider
      */
-    public function it_preserves_the_query_parameters(string $query)
+    public function it_preserves_the_query_string(string $queryString)
     {
         $client = static::createClient();
 
         $url = $this->getUrl();
 
-        $client->request('GET', '/collections/1?'.$query);
+        $client->request('GET', "/collections/1?{$queryString}");
 
-        $this->assertTrue($client->getResponse()->isRedirect($url.'?'.$query));
+        $this->assertTrue($client->getResponse()->isRedirect("{$url}?{$queryString}"));
     }
 
-    public function queryParameterProvider() : Traversable
+    public function queryStringProvider() : Traversable
     {
         return $this->stringProvider('foo', 'foo=bar', 'a=b&b=a', 'a&b=a&c=d', 'b=a&a=b');
     }
