@@ -9,12 +9,12 @@ use eLife\ApiSdk\Model\Person;
 use eLife\ApiSdk\Model\Subject;
 use eLife\Journal\Exception\EarlyResponse;
 use eLife\Journal\Helper\Callback;
-use eLife\Journal\ViewModel\DefinitionList;
 use eLife\Patterns\ViewModel\AboutProfile;
 use eLife\Patterns\ViewModel\AboutProfiles;
 use eLife\Patterns\ViewModel\ArticleSection;
 use eLife\Patterns\ViewModel\Button;
 use eLife\Patterns\ViewModel\ContentHeader;
+use eLife\Patterns\ViewModel\DefinitionList;
 use eLife\Patterns\ViewModel\FlexibleViewModel;
 use eLife\Patterns\ViewModel\FormLabel;
 use eLife\Patterns\ViewModel\IFrame;
@@ -152,10 +152,10 @@ final class AboutController extends Controller
             new Paragraph('Having free and open access to the outcomes of research helps make achievements more visible, accessible and usable – ultimately accelerating discoveries and their applications.'),
             new Paragraph('At eLife, we are actively working to promote openness by:'),
             new DefinitionList([
-                'Providing open access to research results' => 'We publish using the <a href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution</a> (CC-BY) license so that users can read, download and reuse text and data for free – provided the authors are given appropriate credit. We also distribute content to digital repositories and other networks.',
-                'Promoting understanding of research' => 'For selected papers, we prepare non-technical summaries (<a href="'.$this->get('router')->generate('magazine').'">eLife digests</a>) so that the research we publish is accessible to a broader audience, including scientists in other fields, students, funders, policy makers and others.',
-                'Supporting reproducibility' => 'eLife authors are encouraged to publish their work in full and are required to provide the key underlying data as part of their paper. We support projects such as Research Resource Identifiers (RRIDs) that promote unambiguous identification of reagents and materials. eLife is also the publishing partner for the <a href="'.$this->get('router')->generate('collection', ['id' => '9b1e83d1']).'">Reproducibility Project in Cancer Biology</a>.',
-                'Making our software open-source' => 'The tools we develop to support research communication, including <a href="'.$this->get('router')->generate('inside-elife-article', ['id' => '0414db99']).'">eLife Lens</a> and <a href="'.$this->get('router')->generate('inside-elife-article', ['id' => '33e4127f']).'">Continuum</a>, are made openly available so that others can use and build upon them without constraint.',
+                'Providing open access to research results' => ['We publish using the <a href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution</a> (CC-BY) license so that users can read, download and reuse text and data for free – provided the authors are given appropriate credit. We also distribute content to digital repositories and other networks.'],
+                'Promoting understanding of research' => ['For selected papers, we prepare non-technical summaries (<a href="'.$this->get('router')->generate('magazine').'">eLife digests</a>) so that the research we publish is accessible to a broader audience, including scientists in other fields, students, funders, policy makers and others.'],
+                'Supporting reproducibility' => ['eLife authors are encouraged to publish their work in full and are required to provide the key underlying data as part of their paper. We support projects such as Research Resource Identifiers (RRIDs) that promote unambiguous identification of reagents and materials. eLife is also the publishing partner for the <a href="'.$this->get('router')->generate('collection', ['id' => '9b1e83d1']).'">Reproducibility Project in Cancer Biology</a>.'],
+                'Making our software open-source' => ['The tools we develop to support research communication, including <a href="'.$this->get('router')->generate('inside-elife-article', ['id' => '0414db99']).'">eLife Lens</a> and <a href="'.$this->get('router')->generate('inside-elife-article', ['id' => '33e4127f']).'">Continuum</a>, are made openly available so that others can use and build upon them without constraint.'],
             ]),
             ArticleSection::basic('Related links', 2,
                 $this->render(Listing::unordered([
@@ -205,7 +205,7 @@ final class AboutController extends Controller
             new Paragraph('The community behind eLife – including the research funders who support the journal, the editors and referees who run the peer-review process, and our Early-Career Advisory Group – are keenly aware of the pressures faced by early-stage investigators. That’s one reason we’re working to create a more positive publishing experience that will, among other things, help early-career researchers receive the recognition they deserve.'),
             new Paragraph('eLife supports and showcases early-career scientists and their work in a number of ways:'),
             new DefinitionList([
-                'Early Career Advisory Group' => $this->render(
+                'Early Career Advisory Group' => [$this->render(
                     new Paragraph('eLife has invited a group of talented graduate students, postdocs and junior group leaders from across the world to our <a href="'.$this->get('router')->generate('about-people', ['type' => 'early-career']).'">Early-Career Advisory Group</a>. The ECAG acts as a voice for early-career researchers (ECRs) within eLife, representing their needs and aspirations and helping to develop new initiatives and shape current practices to change academic publishing for the better.'),
                     new Paragraph('The role of the ECAG includes:'),
                     Listing::unordered([
@@ -216,11 +216,11 @@ final class AboutController extends Controller
                         'Attending quarterly phone calls and an annual in-person meeting',
                     ], 'bullet'),
                     new Paragraph('For more information, take a look at this <a href="'.$this->get('router')->generate('inside-elife-article', ['id' => '140901c3']).'">video message from the ECAG</a>.')
-                ),
-                'Involvement in peer review' => 'eLife encourages reviewers to involve junior colleagues as co-reviewers; we involve outstanding early-stage researchers as reviewers <a href="'.$this->get('router')->generate('inside-elife-article', ['id' => '31a5173b']).'">in their own right</a>; and we enable all reviewers to receive credit for their contributions through services such as Publons and ORCID',
-                'Travel grants' => 'eLife offers funding to help early-career scientists get exposure and recognition for their work among leading scientists in their fields. New travel grant programmes are announced at the start of each year. Sign up to our <a href="https://crm.elifesciences.org/crm/civicrm/profile/create?reset=1&gid=26">early-career newsletter</a> for updates and information on how to apply.',
-                'Webinars' => 'A platform for the early-career community to share opportunities and explore issues around building a successful research career, on the last Wednesday of the month. Upcoming webinars can be found on our <a href="'.$this->get('router')->generate('events').'">events page</a>.',
-                'Magazine features' => 'Early-career researchers and issues of concern to them are regularly featured in interviews, podcasts and articles in the <a href="'.$this->get('router')->generate('magazine').'">Magazine section</a> of eLife',
+                )],
+                'Involvement in peer review' => ['eLife encourages reviewers to involve junior colleagues as co-reviewers; we involve outstanding early-stage researchers as reviewers <a href="'.$this->get('router')->generate('inside-elife-article', ['id' => '31a5173b']).'">in their own right</a>; and we enable all reviewers to receive credit for their contributions through services such as Publons and ORCID'],
+                'Travel grants' => ['eLife offers funding to help early-career scientists get exposure and recognition for their work among leading scientists in their fields. New travel grant programmes are announced at the start of each year. Sign up to our <a href="https://crm.elifesciences.org/crm/civicrm/profile/create?reset=1&gid=26">early-career newsletter</a> for updates and information on how to apply.'],
+                'Webinars' => ['A platform for the early-career community to share opportunities and explore issues around building a successful research career, on the last Wednesday of the month. Upcoming webinars can be found on our <a href="'.$this->get('router')->generate('events').'">events page</a>.'],
+                'Magazine features' => ['Early-career researchers and issues of concern to them are regularly featured in interviews, podcasts and articles in the <a href="'.$this->get('router')->generate('magazine').'">Magazine section</a> of eLife'],
             ]),
             new Paragraph('For the latest in our work to support early-career scientists, explore our <a href="'.$this->get('router')->generate('community').'">Community page</a> and sign up for eLife <a href="https://crm.elifesciences.org/crm/civicrm/profile/create?reset=1&gid=26">News for Early-Career Researchers</a>. You can also find us on Twitter: <a href="https://twitter.com/eLifeCommunity">@eLifeCommunity</a>'),
         ];

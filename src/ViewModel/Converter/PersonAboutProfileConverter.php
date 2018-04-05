@@ -5,7 +5,6 @@ namespace eLife\Journal\ViewModel\Converter;
 use eLife\ApiSdk\Model\Person;
 use eLife\Journal\Helper\Callback;
 use eLife\Journal\Helper\CanConvert;
-use eLife\Journal\ViewModel\DefinitionList;
 use eLife\Patterns\PatternRenderer;
 use eLife\Patterns\ViewModel;
 
@@ -28,17 +27,14 @@ final class PersonAboutProfileConverter implements ViewModelConverter
     public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
         $extra = array_filter([
-            'Expertise' => $object->getResearch() ? $object->getResearch()->getExpertises()->map(Callback::method('getName'))->toArray() : [],
+            'Expertise' => $object->getResearch() ? $object->getResearch()
+                ->getExpertises()
+                ->map(Callback::method('getName'))
+                ->toArray() : [],
             'Research focus' => $object->getResearch() ? $object->getResearch()->getFocuses() : [],
             'Experimental organism' => $object->getResearch() ? $object->getResearch()->getOrganisms() : [],
             'Competing interests statement' => $object->getCompetingInterests(),
         ]);
-
-        if ($extra) {
-            $extra = $this->patternRenderer->render(new DefinitionList($extra));
-        } else {
-            $extra = null;
-        }
 
         if ($object->getAffiliations()->notEmpty()) {
             $role = implode('<br>', $object->getAffiliations()->map(Callback::method('toString'))->toArray());
@@ -47,6 +43,10 @@ final class PersonAboutProfileConverter implements ViewModelConverter
         }
 
         if ($context['compact'] ?? false) {
+            if ($extra) {
+                $extra = $this->patternRenderer->render(new ViewModel\DefinitionList($extra, true));
+            }
+
             return new ViewModel\AboutProfile(
                 $object->getDetails()->getPreferredName(),
                 $role,
@@ -64,18 +64,7 @@ final class PersonAboutProfileConverter implements ViewModelConverter
         $profile = $object->getProfile()->map($this->willConvertTo());
 
         if ($extra) {
-            $profile = $profile->append();
-        }
-
-        $extra = array_filter([
-            'Expertise' => $object->getResearch() ? $object->getResearch()->getExpertises()->map(Callback::method('getName'))->toArray() : [],
-            'Research focus' => $object->getResearch() ? $object->getResearch()->getFocuses() : [],
-            'Experimental organism' => $object->getResearch() ? $object->getResearch()->getOrganisms() : [],
-            'Competing interests statement' => $object->getCompetingInterests(),
-        ]);
-
-        if ($extra) {
-            $profile = $profile->append(new DefinitionList($extra));
+            $profile = $profile->append(new ViewModel\DefinitionList($extra, true));
         }
 
         return new ViewModel\AboutProfile(
