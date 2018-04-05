@@ -27,10 +27,7 @@ final class PersonAboutProfileConverter implements ViewModelConverter
     public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
         $extra = array_filter([
-            'Expertise' => $object->getResearch() ? $object->getResearch()
-                ->getExpertises()
-                ->map(Callback::method('getName'))
-                ->toArray() : [],
+            'Expertise' => $object->getResearch() ? $object->getResearch()->getExpertises()->map(Callback::method('getName'))->toArray() : [],
             'Research focus' => $object->getResearch() ? $object->getResearch()->getFocuses() : [],
             'Experimental organism' => $object->getResearch() ? $object->getResearch()->getOrganisms() : [],
             'Competing interests statement' => $object->getCompetingInterests(),
