@@ -7,7 +7,6 @@ use eLife\ApiSdk\ApiSdk;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use test\eLife\Journal\Providers;
-use Traversable;
 
 final class EventControllerTest extends PageTestCase
 {
@@ -128,20 +127,21 @@ final class EventControllerTest extends PageTestCase
      * @test
      * @dataProvider incorrectSlugProvider
      */
-    public function it_redirects_if_the_slug_is_not_correct(string $url)
+    public function it_redirects_if_the_slug_is_not_correct(string $slug = null, string $queryString = null)
     {
         $client = static::createClient();
 
+        $url = "/events/1{$slug}";
+
         $expectedUrl = $this->getUrl();
+        if ($queryString) {
+            $url .= "?{$queryString}";
+            $expectedUrl .= "?{$queryString}";
+        }
 
         $client->request('GET', $url);
 
         $this->assertTrue($client->getResponse()->isRedirect($expectedUrl));
-    }
-
-    public function incorrectSlugProvider() : Traversable
-    {
-        return $this->stringProvider('/events/1', '/events/1/foo');
     }
 
     /**
