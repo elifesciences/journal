@@ -96,10 +96,7 @@ abstract class Controller implements ContainerAwareInterface
                     $url .= '?'.$queryParams;
                 }
 
-                $redirectResponse = new RedirectResponse($url, Response::HTTP_MOVED_PERMANENTLY);
-                $earlyResponse = new EarlyResponse($redirectResponse);
-
-                throw $earlyResponse;
+                throw new EarlyResponse(new RedirectResponse($url, Response::HTTP_MOVED_PERMANENTLY));
             }
 
             return $object;
