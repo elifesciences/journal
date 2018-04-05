@@ -5,7 +5,6 @@ namespace test\eLife\Journal\Controller;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use test\eLife\Journal\Providers;
-use Traversable;
 
 final class PressPackControllerTest extends PageTestCase
 {
@@ -193,20 +192,21 @@ final class PressPackControllerTest extends PageTestCase
      * @test
      * @dataProvider incorrectSlugProvider
      */
-    public function it_redirects_if_the_slug_is_not_correct(string $url)
+    public function it_redirects_if_the_slug_is_not_correct(string $slug = null, string $queryString = null)
     {
         $client = static::createClient();
 
+        $url = "/for-the-press/1{$slug}";
+
         $expectedUrl = $this->getUrl();
+        if ($queryString) {
+            $url .= "?{$queryString}";
+            $expectedUrl .= "?{$queryString}";
+        }
 
         $client->request('GET', $url);
 
         $this->assertTrue($client->getResponse()->isRedirect($expectedUrl));
-    }
-
-    public function incorrectSlugProvider() : Traversable
-    {
-        return $this->stringProvider('/for-the-press/1', '/for-the-press/1/foo');
     }
 
     /**

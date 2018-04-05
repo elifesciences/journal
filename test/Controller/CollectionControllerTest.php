@@ -5,31 +5,10 @@ namespace test\eLife\Journal\Controller;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use test\eLife\Journal\Providers;
-use Traversable;
 
 final class CollectionControllerTest extends PageTestCase
 {
     use Providers;
-
-    /**
-     * @test
-     * @dataProvider queryStringProvider
-     */
-    public function it_preserves_the_query_string(string $queryString)
-    {
-        $client = static::createClient();
-
-        $url = $this->getUrl();
-
-        $client->request('GET', "/collections/1?{$queryString}");
-
-        $this->assertTrue($client->getResponse()->isRedirect("{$url}?{$queryString}"));
-    }
-
-    public function queryStringProvider() : Traversable
-    {
-        return $this->stringProvider('foo', 'foo=bar', 'a=b&b=a', 'a&b=a&c=d', 'b=a&a=b');
-    }
 
     /**
      * @test
@@ -410,20 +389,21 @@ final class CollectionControllerTest extends PageTestCase
      * @test
      * @dataProvider incorrectSlugProvider
      */
-    public function it_redirects_if_the_slug_is_not_correct(string $url)
+    public function it_redirects_if_the_slug_is_not_correct(string $slug = null, string $queryString = null)
     {
         $client = static::createClient();
 
+        $url = "/collections/1{$slug}";
+
         $expectedUrl = $this->getUrl();
+        if ($queryString) {
+            $url .= "?{$queryString}";
+            $expectedUrl .= "?{$queryString}";
+        }
 
         $client->request('GET', $url);
 
         $this->assertTrue($client->getResponse()->isRedirect($expectedUrl));
-    }
-
-    public function incorrectSlugProvider() : Traversable
-    {
-        return $this->stringProvider('/collections/1', '/collections/1/foo');
     }
 
     /**
