@@ -15,7 +15,7 @@ final class CollectionControllerTest extends PageTestCase
      * @test
      * @dataProvider queryParameterProvider
      */
-    public function it_preserves_the_query_parameters(string $query, string $expected)
+    public function it_preserves_the_query_parameters(string $query)
     {
         $client = static::createClient();
 
@@ -23,18 +23,12 @@ final class CollectionControllerTest extends PageTestCase
 
         $client->request('GET', '/collections/1?'.$query);
 
-        $this->assertTrue($client->getResponse()->isRedirect($url.'?'.$expected));
+        $this->assertTrue($client->getResponse()->isRedirect($url.'?'.$query));
     }
 
     public function queryParameterProvider() : Traversable
     {
-        return $this->arrayProvider([
-            'foo' => 'foo',
-            'foo=bar' => 'foo=bar',
-            'a=b&b=a' => 'a=b&b=a',
-            'a&b=a&c=d' => 'a&b=a&c=d',
-            'b=a&a=b' => 'b=a&a=b',
-        ]);
+        return $this->stringProvider('foo', 'foo=bar', 'a=b&b=a', 'a&b=a&c=d', 'b=a&a=b');
     }
 
     /**
