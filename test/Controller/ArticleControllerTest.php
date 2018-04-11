@@ -377,19 +377,19 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertSame('Article title', $crawler->filter('.content-header__title')->text());
         $this->assertCount(5, $crawler->filter('.content-header__author_list_item'));
-        $this->assertSame('Author One', trim($crawler->filter('.content-header__author_list_item')->eq(0)->text()));
-        $this->assertSame('Author Two', trim($crawler->filter('.content-header__author_list_item')->eq(1)->text()));
-        $this->assertSame('Author Three', trim($crawler->filter('.content-header__author_list_item')->eq(2)->text()));
-        $this->assertSame('Author Four', trim($crawler->filter('.content-header__author_list_item')->eq(3)->text()));
+        $this->assertSame('Author One', trim($crawler->filter('.content-header__author_list_item')->eq(0)->text(), " \n,"));
+        $this->assertSame('Author Two', trim($crawler->filter('.content-header__author_list_item')->eq(1)->text(), " \n,"));
+        $this->assertSame('Author Three', trim($crawler->filter('.content-header__author_list_item')->eq(2)->text(), " \n,"));
+        $this->assertSame('Author Four', trim($crawler->filter('.content-header__author_list_item')->eq(3)->text(), " \n,"));
         $this->assertSame('on behalf of Institution Four',
-            trim($crawler->filter('.content-header__author_list_item')->eq(4)->text()));
+            trim($crawler->filter('.content-header__author_list_item')->eq(4)->text(), " \n,"));
         $this->assertCount(3, $crawler->filter('.content-header__institution_list_item'));
         $this->assertSame('Institution One, Country One',
-            trim($crawler->filter('.content-header__institution_list_item')->eq(0)->text()));
+            trim($crawler->filter('.content-header__institution_list_item')->eq(0)->text(), " \n;"));
         $this->assertSame('Institution Two, Country Two',
-            trim($crawler->filter('.content-header__institution_list_item')->eq(1)->text()));
+            trim($crawler->filter('.content-header__institution_list_item')->eq(1)->text(), " \n;"));
         $this->assertSame('Institution Three',
-            trim($crawler->filter('.content-header__institution_list_item')->eq(2)->text()));
+            trim($crawler->filter('.content-header__institution_list_item')->eq(2)->text(), " \n;"));
     }
 
     /**
