@@ -18,7 +18,7 @@ final class ArticleFiguresControllerTest extends PageTestCase
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertSame('Article title', $crawler->filter('.content-header__title')->text());
-        $this->assertSame('Foo Bar', trim($crawler->filter('.content-header__author_list')->text()));
+        $this->assertSame('Foo Bar', trim($crawler->filter('.content-header__author_list')->text(), " \n,"));
         $this->assertEmpty($crawler->filter('.content-header__institution_list'));
 
         $this->assertEmpty($crawler->filter('.contextual-data__list'));
@@ -110,7 +110,7 @@ final class ArticleFiguresControllerTest extends PageTestCase
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertSame('Article title', $crawler->filter('.content-header__title')->text());
-        $this->assertSame('Foo Bar', trim($crawler->filter('.content-header__author_list')->text()));
+        $this->assertSame('Foo Bar', trim($crawler->filter('.content-header__author_list')->text(), " \n,"));
         $this->assertEmpty($crawler->filter('.content-header__institution_list'));
 
         $this->assertContains('Cite as: eLife 2010;1:e00001',
