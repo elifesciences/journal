@@ -199,10 +199,28 @@ final class WhoWeWorkWithController extends Controller
                 'uri' => 'https://www.crossref.org/',
             ],
             [
+                'name' => 'Declaration on Research Assessment',
+                'filename' => 'dora',
+                'type' => 'image/svg+xml',
+                'uri' => 'https://sfdora.org/',
+            ],
+            [
+                'name' => 'Directory of Open Access Journals',
+                'filename' => 'doaj',
+                'type' => 'image/svg+xml',
+                'uri' => 'https://doaj.org/',
+            ],
+            [
                 'name' => 'FORCE11',
                 'filename' => 'force11',
                 'type' => 'image/png',
                 'uri' => 'https://www.force11.org/about/directors-and-advisors',
+            ],
+            [
+                'name' => 'Initiative for Open Citations',
+                'filename' => 'io4c',
+                'type' => 'image/svg+xml',
+                'uri' => 'https://i4oc.org/',
             ],
             [
                 'name' => 'JATS for Reuse',
