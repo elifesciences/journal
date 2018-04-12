@@ -93,7 +93,8 @@ final class AboutController extends Controller
                 return ArticleSection::basic(
                     $subject->getName(),
                     2,
-                    $this->render(...$body)
+                    $this->render(...$body),
+                    $subject->getId()
                 );
             })
             ->then(function (Sequence $sections) {
