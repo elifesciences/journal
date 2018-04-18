@@ -45,7 +45,7 @@ final class ModelName
         ],
         'scientific-correspondence' => [
             'singular' => 'Scientific Correspondence',
-            'plural' => 'Scientific Correspondences',
+            'plural' => 'Scientific Correspondence',
         ],
         'short-report' => [
             'singular' => 'Short Report',
