@@ -8,5 +8,8 @@
     "magazine": "/magazine",
     "listing": "/?page=2",
     "grid-listing": "/archive/2016",
-    "people": "/about/people"
+    "people": "/about/people",
+    "post": "/inside-elife/dec92dc7",
+    "collection": "/collections/29e48019",
+    "podcast-episode": "/podcast/episode46"
 }

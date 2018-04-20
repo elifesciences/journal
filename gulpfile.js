@@ -316,6 +316,8 @@ const criticalCssConfig = (function () {
                 /\.teaser.*$/
             ),
 
+            collection: global.concat(listing),
+
             home: global.concat(
                 listing,
                 listingMenu,
@@ -348,6 +350,14 @@ const criticalCssConfig = (function () {
                 '.article-section__header_text',
                 '.list--bullet a'
             ),
+
+            'podcast-episode': global.concat(
+              listing,
+              /.*\.audio-player.*$/,
+              '.media-chapter-listing-item__header_text_link'
+            ),
+
+            post: global,
 
             default: global.concat(
                 '.article-section__header_text',
