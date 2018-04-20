@@ -351,6 +351,12 @@ const criticalCssConfig = (function () {
                 '.list--bullet a'
             ),
 
+            'podcast-episode': global.concat(
+              listing,
+              /.*\.audio-player.*$/,
+              '.media-chapter-listing-item__header_text_link'
+            ),
+
             post: global,
 
             default: global.concat(
