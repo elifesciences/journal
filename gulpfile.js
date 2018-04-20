@@ -316,6 +316,8 @@ const criticalCssConfig = (function () {
                 /\.teaser.*$/
             ),
 
+            collection: global.concat(listing),
+
             home: global.concat(
                 listing,
                 listingMenu,
