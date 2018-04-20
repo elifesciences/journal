@@ -349,6 +349,8 @@ const criticalCssConfig = (function () {
                 '.list--bullet a'
             ),
 
+            post: global,
+
             default: global.concat(
                 '.article-section__header_text',
                 '.list--bullet a'
