@@ -1,0 +1,15 @@
+version: '3'
+
+services:
+    composer:
+        build:
+            args:
+                composer_dev_arg: --no-dev
+    composer-dev:
+        build:
+            context: .
+            dockerfile: Dockerfile.composer
+            args:
+                composer_dev_arg:
+        image: elifesciences/journal_composer_dev:${IMAGE_TAG}
+        command: /bin/bash

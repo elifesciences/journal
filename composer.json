@@ -70,25 +70,10 @@
         "symfony/polyfill-php56": "*",
         "symfony/polyfill-php70": "*"
     },
-    "scripts": {
-        "post-install-cmd": [
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets"
-        ],
-        "post-update-cmd": [
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets"
-        ]
-    },
     "config": {
         "sort-packages": true
     },
     "extra": {
-        "symfony-app-dir": "app",
-        "symfony-bin-dir": "bin",
-        "symfony-var-dir": "var",
-        "symfony-web-dir": "web",
-        "symfony-assets-install": "relative",
         "composer-exit-on-patch-failure": true,
         "patches": {
             "bobthecow/mustache-bundle": {

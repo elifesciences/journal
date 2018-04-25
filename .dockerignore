@@ -1,0 +1,9 @@
+app/config/parameters.yml*
+build/
+docker-compose*.yml
+.git/
+.gitignore
+Jenkinsfile*
+node_modules/
+var/
+vendor/
