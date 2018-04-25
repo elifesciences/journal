@@ -8,6 +8,7 @@ elifePipeline {
     elifeOnNode(
         {
             stage 'Build image', {
+                checkout scm
                 sh "IMAGE_TAG=${commit} docker-compose -f docker-compose.yml build"
             }
         },
