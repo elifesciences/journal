@@ -5,9 +5,14 @@ elifePipeline {
         commit = elifeGitRevision()
     }
 
-    stage 'Build image', {
-        sh "IMAGE_TAG=${commit} docker-compose -f docker-compose.yml build"
-    }
+    elifeOnNode(
+        {
+            stage 'Build image', {
+                sh "IMAGE_TAG=${commit} docker-compose -f docker-compose.yml build"
+            }
+        },
+        'containers--medium'
+    )
 
     stage 'Project tests', {
         lock('journal--ci') {
