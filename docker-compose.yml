@@ -1,6 +1,16 @@
 version: '3'
 
 services:
+    assets:
+        build:
+            context: .
+            dockerfile: Dockerfile.assets
+            args:
+                image_tag: ${IMAGE_TAG}
+        image: elifesciences/journal_assets:${IMAGE_TAG}
+        depends_on:
+            - composer
+            - npm
     composer:
         build:
             context: .
@@ -9,3 +19,8 @@ services:
                 composer_dev_arg: ${COMPOSER_DEV_ARG}
         image: elifesciences/journal_composer:${IMAGE_TAG}
         command: /bin/bash
+    npm:
+        build:
+            context: .
+            dockerfile: Dockerfile.npm
+        image: elifesciences/journal_npm:${IMAGE_TAG}
