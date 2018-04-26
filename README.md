@@ -17,6 +17,7 @@ Installation
 2. `npm install`
 3. `composer install`
 4. `node_modules/.bin/gulp`
+5. `bin/console assets:install --symlink`
 
 Running the tests
 -----------------
