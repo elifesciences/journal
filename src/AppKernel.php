@@ -11,7 +11,6 @@ use Isometriks\Bundle\SpamBundle\IsometriksSpamBundle;
 use KnpU\OAuth2ClientBundle\KnpUOAuth2ClientBundle;
 use Nelmio\SecurityBundle\NelmioSecurityBundle;
 use PackageVersions\Versions;
-use Sensio\Bundle\DistributionBundle\SensioDistributionBundle;
 use Symfony\Bundle\DebugBundle\DebugBundle;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Bundle\MonologBundle\MonologBundle;
@@ -68,7 +67,6 @@ class AppKernel extends Kernel
 
         if (in_array($this->getEnvironment(), ['dev', 'test', 'ci'], true)) {
             $bundles[] = new DebugBundle();
-            $bundles[] = new SensioDistributionBundle();
             $bundles[] = new WebProfilerBundle();
             $bundles[] = new WebServerBundle();
         }
