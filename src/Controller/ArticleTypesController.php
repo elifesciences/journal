@@ -74,6 +74,7 @@ final class ArticleTypesController extends Controller
             'research-advance' => 'A Research Advance is a short article that allows either the authors of an eLife paper or other researchers to publish new results that build on the original research paper in an important way.',
             'research-article' => 'Research Articles published by eLife are full-length studies that present important breakthroughs across the life sciences and biomedicine. There is no maximum length and no limits on the number of display items.',
             'registered-report' => 'Registered Reports outline the proposed experimental designs and protocols, which are peer reviewed and published prior to data collection, as part of the Reproducibility Project: Cancer Biology, published by eLife.',
+            'scientific-correspondence' => 'Scientific Correspondence allows authors to challenge the central findings of a published paper, and gives the original authors an opportunity to respond.',
             'short-report' => 'A Short Report allows authors to publish the results of a small number of experiments, provided the conclusion is clear and justified, and the findings are novel and judged to be of high importance.',
             'tools-resources' => 'A Tools and Resources article allows authors to publish the details of new experimental techniques, datasets, software tools, and other resources.',
         ];
