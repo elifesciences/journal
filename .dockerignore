@@ -7,3 +7,6 @@ Jenkinsfile*
 node_modules/
 var/
 vendor/
+web/assets/
+web/bundles/
+web/favicon.ico

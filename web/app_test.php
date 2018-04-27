@@ -4,7 +4,7 @@ use eLife\Journal\AppKernel;
 use Symfony\Component\Debug\Debug;
 use Symfony\Component\HttpFoundation\Request;
 
-require_once __DIR__.'/../app/autoload.php';
+require_once __DIR__.'/../vendor/autoload.php';
 Debug::enable();
 
 if (!empty($_GET['JOURNAL_INSTANCE'])) {

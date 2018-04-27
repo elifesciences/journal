@@ -6,7 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Debug\Debug;
 
-require_once __DIR__.'/../app/autoload.php';
+require_once __DIR__.'/../vendor/autoload.php';
 
 set_time_limit(0);
 
