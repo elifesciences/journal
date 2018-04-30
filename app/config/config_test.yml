@@ -27,5 +27,11 @@ framework:
         storage_id: session.storage.mock_file
     test: ~
 
+monolog:
+     handlers:
+         main:
+            path: '%kernel.logs_dir%/%kernel.environment%%kernel.instance%.log'
+            formatter: monolog.formatter.line
+
 web_profiler:
     toolbar: false

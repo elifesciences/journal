@@ -7,20 +7,29 @@ elifePipeline {
 
     elifeOnNode(
         {
-            stage 'Build image', {
+            stage 'Build images', {
                 checkout scm
-                sh "IMAGE_TAG=${commit} docker-compose -f docker-compose.yml build"
+                sh "IMAGE_TAG=${commit} docker-compose -f docker-compose.yml -f docker-compose.ci.yml build"
+            }
+
+            stage 'Project tests', {
+                try {
+                    sh "docker run --name journal_phpunit_${commit} elifesciences/journal_ci:${commit} vendor/bin/phpunit --log-junit build/ci/phpunit.xml"
+                    sh "docker cp journal_phpunit_${commit}:/srv/journal/build/ci/phpunit.xml build"
+                    step([$class: "JUnitResultArchiver", testResults: 'build/phpunit.xml'])
+                } finally {
+                    sh "docker rm journal_phpunit_${commit}"
+                }
+
+                try {
+                    sh "IMAGE_TAG=${commit} docker-compose -f docker-compose.yml -f docker-compose.ci.yml up -d cli fpm web"
+                } finally {
+                    sh 'docker-compose -f docker-compose.yml -f docker-compose.ci.yml down'
+                }
             }
         },
         'containers--medium'
     )
-
-    stage 'Project tests', {
-        lock('journal--ci') {
-            builderDeployRevision 'journal--ci', commit
-            builderProjectTests 'journal--ci', '/srv/journal', ['/srv/journal/build/phpunit/*.xml', '/srv/journal/build/behat/*.xml'], ['smoke', 'project']
-        }
-    }
 
     elifeMainlineOnly {
         stage 'End2end tests', {

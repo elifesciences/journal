@@ -1,0 +1,18 @@
+ARG image_tag=latest
+FROM elifesciences/journal_composer_dev:${image_tag} AS composer
+FROM elifesciences/journal_cli:${image_tag}
+
+USER root
+RUN mkdir -p app build/ci && \
+    chown www-data:www-data build/ci
+
+COPY --chown=elife:elife \
+    behat.yml.dist \
+    phpunit.xml.dist \
+    .php_cs \
+    ./
+COPY --from=composer --chown=elife:elife /app/vendor/ vendor/
+COPY --chown=elife:elife features/ features/
+COPY --chown=elife:elife test/ test/
+
+USER www-data

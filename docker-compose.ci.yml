@@ -1,6 +1,15 @@
 version: '3'
 
 services:
+    ci:
+        build:
+            context: .
+            dockerfile: Dockerfile.ci
+            args:
+                image_tag: ${IMAGE_TAG}
+        image: elifesciences/journal_ci:${IMAGE_TAG}
+        depends_on:
+            - cli
     composer:
         build:
             args:
