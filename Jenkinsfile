@@ -14,7 +14,10 @@ elifePipeline {
 
             stage 'Project tests', {
                 sh "IMAGE_TAG=${commit} docker-compose -f docker-compose.yml -f docker-compose.ci.yml up -d"
-                dockerComposeProjectTestsParallel('journal', commit, [])
+                dockerComposeProjectTestsParallel('journal', commit, [
+                    'phpunit': '/srv/journal/build/phpunit/*.xml',
+                    'behat': '/srv/journal/build/behat/*.xml'
+                ])
 
                 try {
                     sh "IMAGE_TAG=${commit} docker-compose -f docker-compose.yml -f docker-compose.ci.yml up -d cli fpm web"
