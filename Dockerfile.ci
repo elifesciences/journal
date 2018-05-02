@@ -18,6 +18,7 @@ COPY --chown=elife:elife \
     ./
 COPY --chown=elife:elife .ci/ .ci/
 COPY --chown=elife:elife web/ web/
+COPY --chown=elife:elife composer.lock .
 COPY --from=composer --chown=elife:elife /app/vendor/ vendor/
 COPY --chown=elife:elife features/ features/
 COPY --chown=elife:elife test/ test/
