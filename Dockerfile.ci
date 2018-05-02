@@ -1,10 +1,15 @@
 ARG image_tag=latest
+FROM elifesciences/proofreader-php:0.2 AS proofreader
 FROM elifesciences/journal_composer_dev:${image_tag} AS composer
 FROM elifesciences/journal_cli:${image_tag}
 
 USER root
 RUN mkdir -p app build/ci && \
-    chown www-data:www-data build/ci
+    touch .php_cs.cache && \
+    chown --recursive www-data:www-data build .php_cs.cache
+
+COPY --from=proofreader --chown=elife:elife /srv/proofreader-php /srv/proofreader-php
+RUN ln -s /srv/proofreader-php/bin/proofreader /srv/bin/proofreader
 
 COPY --chown=elife:elife \
     behat.yml.dist \
@@ -12,6 +17,7 @@ COPY --chown=elife:elife \
     .php_cs \
     ./
 COPY --chown=elife:elife .ci/ .ci/
+COPY --chown=elife:elife web/ web/
 COPY --from=composer --chown=elife:elife /app/vendor/ vendor/
 COPY --chown=elife:elife features/ features/
 COPY --chown=elife:elife test/ test/
