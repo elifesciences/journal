@@ -13,13 +13,11 @@ elifePipeline {
             }
 
             stage 'Project tests', {
-                try {
-                    sh "docker run --name journal_phpunit_${commit} elifesciences/journal_ci:${commit} vendor/bin/phpunit --log-junit build/ci/phpunit.xml"
-                    sh "docker cp journal_phpunit_${commit}:/srv/journal/build/ci/phpunit.xml build"
-                    step([$class: "JUnitResultArchiver", testResults: 'build/phpunit.xml'])
-                } finally {
-                    sh "docker rm journal_phpunit_${commit}"
-                }
+                sh "IMAGE_TAG=${commit} docker-compose -f docker-compose.yml -f docker-compose.ci.yml up -d"
+                dockerComposeProjectTestsParallel('journal', commit, [
+                    'phpunit': '/srv/journal/build/phpunit/*.xml',
+                    'behat': '/srv/journal/build/behat/*.xml'
+                ])
 
                 try {
                     sh "IMAGE_TAG=${commit} docker-compose -f docker-compose.yml -f docker-compose.ci.yml up -d cli fpm web"

@@ -9,6 +9,7 @@ default:
             base_url: http://localhost/
         Behat\Symfony2Extension:
             kernel:
+                bootstrap: ~
                 class: eLife\Journal\AppKernel
         jarnaiz\JUnitFormatter\JUnitFormatterExtension: ~
         Liuggio\Fastest\Behat\ListFeaturesExtension\Extension: ~
