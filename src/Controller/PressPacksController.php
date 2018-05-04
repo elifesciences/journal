@@ -109,4 +109,9 @@ final class PressPacksController extends Controller
 
         return new Response($this->get('templating')->render('::press-pack.html.twig', $arguments));
     }
+
+    private function generateDownloadLink(string $uri) : string
+    {
+        return $this->get('elife.journal.helper.download_link_uri_generator')->generate(DownloadLink::fromUri($uri));
+    }
 }
