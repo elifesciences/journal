@@ -1,0 +1,9 @@
+FROM selenium/standalone-firefox:2.53.0
+
+USER root
+RUN apt-get update && apt-get install -y \
+    linux-sound-base \
+    mplayer \
+    && rm -rf /var/lib/apt/lists/*
+
+USER seluser

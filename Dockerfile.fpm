@@ -1,15 +1,16 @@
 ARG image_tag=latest
+ARG composer=composer
 FROM elifesciences/journal_assets:${image_tag} AS assets
-FROM elifesciences/journal_composer:${image_tag} AS composer
+FROM elifesciences/journal_${composer}:${image_tag} AS composer
 FROM elifesciences/php_7.0_fpm:2f00bfb3e9385f38997f04cea41ffbd3ff9d10a8
 
 ENV PROJECT_FOLDER=/srv/journal
-ENV PHP_ENTRYPOINT=web/app_dev.php
+ENV PHP_ENTRYPOINT=web/app_test.php
 
 USER root
 
 WORKDIR ${PROJECT_FOLDER}
-RUN mkdir -p app build/critical-css var/cache var/logs var/sessions web/bundles && \
+RUN mkdir -p app build/critical-css var/cache/testbehat1/guzzle var/logs var/sessions web/bundles && \
     chown --recursive elife:elife .
 
 COPY --chown=elife:elife bin/ bin/
@@ -22,6 +23,7 @@ COPY --from=assets --chown=elife:elife /build/rev-manifest.json build/
 COPY --from=assets --chown=elife:elife /web/assets/ web/assets/
 COPY --from=composer --chown=elife:elife /app/vendor/ vendor/
 COPY --chown=elife:elife src/ src/
+COPY --chown=elife:elife test/ test/
 
 RUN bin/console assets:install
 

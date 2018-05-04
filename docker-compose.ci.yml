@@ -9,7 +9,7 @@ services:
                 image_tag: ${IMAGE_TAG}
         image: elifesciences/journal_ci:${IMAGE_TAG}
         volumes:
-            - fixtures:/srv/journal/var/cache/guzzle/fixtures
+            - fixtures:/srv/journal/var/cache/testbehat1/guzzle
         depends_on:
             - cli
             - fpm
@@ -27,10 +27,16 @@ services:
         image: elifesciences/journal_composer_dev:${IMAGE_TAG}
         command: /bin/bash
     fpm:
+        build:
+            args:
+                composer: composer_dev
         volumes:
-            - fixtures:/srv/journal/var/cache/guzzle/fixtures
+            - fixtures:/srv/journal/var/cache/testbehat1/guzzle
     selenium:
-        image: selenium/standalone-firefox:2.53.0
+        build:
+            context: .
+            dockerfile: Dockerfile.selenium
+        image: elifesciences/journal_selenium:${IMAGE_TAG}
         volumes:
             - /dev/shm:/dev/shm
         depends_on:
