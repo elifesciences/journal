@@ -4,6 +4,7 @@ namespace eLife\Journal\Controller;
 
 use eLife\ApiSdk\Model\PressPackage;
 use eLife\Journal\Helper\Callback;
+use eLife\Journal\Helper\DownloadLink;
 use eLife\Journal\Helper\HasPages;
 use eLife\Patterns\ViewModel\ArticleSection;
 use eLife\Patterns\ViewModel\ContentHeader;
