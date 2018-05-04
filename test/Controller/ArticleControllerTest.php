@@ -585,7 +585,7 @@ final class ArticleControllerTest extends PageTestCase
             [
                 'Cited 1,234',
                 'Views 5,678',
-                'Annotations 0 Open annotations (there are currently 0 annotations on this page).',
+                'Annotations Open annotations. The current annotation count on this page is being calculated.',
             ],
             array_map(function (string $text) {
                 return trim(preg_replace('!\s+!', ' ', $text));
