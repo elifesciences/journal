@@ -5,10 +5,9 @@ default:
                 default:
                     symfony2: ~
                 javascript:
-                    selenium2: ~
+                    selenium2:
+                        wd_host: http://selenium:4444/wd/hub
             base_url: http://web/
-            selenium2:
-                wd_host: http://selenium:4444/wd/hub
         Behat\Symfony2Extension:
             kernel:
                 bootstrap: ~
