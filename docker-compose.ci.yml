@@ -8,8 +8,12 @@ services:
             args:
                 image_tag: ${IMAGE_TAG}
         image: elifesciences/journal_ci:${IMAGE_TAG}
+        volumes:
+            - fixtures:/srv/journal/var/cache/guzzle/fixtures
         depends_on:
             - cli
+            - fpm
+            - selenium
     composer:
         build:
             args:
@@ -22,3 +26,15 @@ services:
                 composer_dev_arg:
         image: elifesciences/journal_composer_dev:${IMAGE_TAG}
         command: /bin/bash
+    fpm:
+        volumes:
+            - fixtures:/srv/journal/var/cache/guzzle/fixtures
+    selenium:
+        image: selenium/standalone-firefox:2.53.0
+        volumes:
+            - /dev/shm:/dev/shm
+        depends_on:
+            - web
+
+volumes:
+    fixtures:
