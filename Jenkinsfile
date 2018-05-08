@@ -19,11 +19,11 @@ elifePipeline {
                     'behat': '/srv/journal/build/behat/*.xml'
                 ])
 
-                try {
-                    sh "IMAGE_TAG=${commit} docker-compose -f docker-compose.yml -f docker-compose.ci.yml up -d cli fpm web"
-                } finally {
-                    sh 'docker-compose -f docker-compose.yml -f docker-compose.ci.yml down --volumes'
-                }
+                dockerComposeSmokeTests('journal', commit, [
+                    'scripts': [
+                        'cli': './smoke_tests_cli.sh',
+                    ],
+                ])
             }
         },
         'containers--medium'

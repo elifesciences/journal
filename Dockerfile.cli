@@ -11,6 +11,7 @@ WORKDIR ${PROJECT_FOLDER}
 RUN mkdir -p build/critical-css var/cache var/logs && \
     chown --recursive elife:elife .
 
+COPY --chown=elife:elife smoke_tests_cli.sh/ ./
 COPY --chown=elife:elife bin/ bin/
 COPY --chown=elife:elife app/Resources/ app/Resources/
 COPY --chown=elife:elife app/config/ app/config/
