@@ -12,6 +12,7 @@ default:
             kernel:
                 bootstrap: ~
                 class: eLife\Journal\AppKernel
+                env: ci
         jarnaiz\JUnitFormatter\JUnitFormatterExtension: ~
         Liuggio\Fastest\Behat\ListFeaturesExtension\Extension: ~
     suites:
