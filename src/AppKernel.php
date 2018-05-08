@@ -65,7 +65,7 @@ class AppKernel extends Kernel
             new WhiteOctoberPagerfantaBundle(),
         ];
 
-        if (in_array($this->getEnvironment(), ['dev', 'test', 'ci'], true)) {
+        if (in_array($this->getEnvironment(), ['ci', 'dev'], true)) {
             $bundles[] = new DebugBundle();
             $bundles[] = new WebProfilerBundle();
             $bundles[] = new WebServerBundle();
