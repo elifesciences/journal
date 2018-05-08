@@ -10,7 +10,7 @@ ENV PHP_ENTRYPOINT=web/app.php
 USER root
 
 WORKDIR ${PROJECT_FOLDER}
-RUN mkdir -p app build/critical-css var/cache/testbehat1/guzzle var/logs var/sessions web/bundles && \
+RUN mkdir -p app build/critical-css var/cache/cibehat1/guzzle var/logs var/sessions web/bundles && \
     chown --recursive elife:elife .
 
 COPY --chown=elife:elife bin/ bin/

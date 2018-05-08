@@ -4,7 +4,7 @@ FROM elifesciences/journal_composer_dev:${image_tag} AS composer
 FROM elifesciences/journal_cli:${image_tag}
 
 USER root
-RUN mkdir -p app build/ci var/cache/testbehat1/guzzle && \
+RUN mkdir -p app build/ci var/cache/cibehat1/guzzle && \
     touch .php_cs.cache && \
     chown --recursive www-data:www-data build .php_cs.cache var/cache
 

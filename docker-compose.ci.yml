@@ -9,7 +9,7 @@ services:
                 image_tag: ${IMAGE_TAG}
         image: elifesciences/journal_ci:${IMAGE_TAG}
         volumes:
-            - fixtures:/srv/journal/var/cache/testbehat1/guzzle
+            - fixtures:/srv/journal/var/cache/cibehat1/guzzle
         environment:
             - APP_ENV=ci
         depends_on:
@@ -37,7 +37,7 @@ services:
             args:
                 composer: composer_dev
         volumes:
-            - fixtures:/srv/journal/var/cache/testbehat1/guzzle
+            - fixtures:/srv/journal/var/cache/cibehat1/guzzle
         environment:
             - APP_ENV=ci
     selenium:
