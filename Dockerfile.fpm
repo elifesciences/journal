@@ -5,7 +5,7 @@ FROM elifesciences/journal_${composer}:${image_tag} AS composer
 FROM elifesciences/php_7.0_fpm:2f00bfb3e9385f38997f04cea41ffbd3ff9d10a8
 
 ENV PROJECT_FOLDER=/srv/journal
-ENV PHP_ENTRYPOINT=web/app_test.php
+ENV PHP_ENTRYPOINT=web/app.php
 
 USER root
 

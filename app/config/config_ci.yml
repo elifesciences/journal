@@ -1,2 +1,31 @@
 imports:
-  - resource: config_test.yml
+  - resource: config_dev.yml
+  - resource: services_ci.yml
+
+parameters:
+    api_url: http://api.elifesciences.org
+    api_url_public: http://api.elifesciences.org
+    api_mock: '%kernel.cache_dir%/guzzle/fixtures'
+    crm_url: http://crm.elifesciences.org/crm/civicrm/
+    oauth2_client_id: journal_client_id
+    oauth2_client_secret: journal_client_secret
+    status_checks:
+        Check 1: foo
+        Check 2: bar
+    subject_rewrites:
+      - from_id: old-subject
+        to_id: new-subject
+        to_name: New Subject
+
+framework:
+    profiler:
+        collect: false
+        enabled: true
+    router:
+        resource: '%kernel.project_dir%/app/config/routing_ci.yml'
+    session:
+        storage_id: session.storage.mock_file
+    test: ~
+
+web_profiler:
+    toolbar: false

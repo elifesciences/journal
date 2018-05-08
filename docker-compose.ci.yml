@@ -10,11 +10,15 @@ services:
         image: elifesciences/journal_ci:${IMAGE_TAG}
         volumes:
             - fixtures:/srv/journal/var/cache/testbehat1/guzzle
+        environment:
+            - APP_ENV=ci
         depends_on:
             - cli
             - fpm
             - selenium
     cli:
+        environment:
+            - APP_ENV=ci
         command: sleep infinity
     composer:
         build:
@@ -34,6 +38,8 @@ services:
                 composer: composer_dev
         volumes:
             - fixtures:/srv/journal/var/cache/testbehat1/guzzle
+        environment:
+            - APP_ENV=ci
     selenium:
         build:
             context: .
