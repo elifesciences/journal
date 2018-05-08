@@ -4,6 +4,7 @@ namespace eLife\Journal\Controller;
 
 use eLife\ApiSdk\Model\PressPackage;
 use eLife\Journal\Helper\Callback;
+use eLife\Journal\Helper\DownloadLink;
 use eLife\Journal\Helper\HasPages;
 use eLife\Patterns\ViewModel\ArticleSection;
 use eLife\Patterns\ViewModel\ContentHeader;
@@ -61,7 +62,7 @@ final class PressPacksController extends Controller
             new Paragraph('Enquiries about published papers, material in press and eLife may be directed to <a href="mailto:press@elifesciences.org">press@elifesciences.org</a>, or +44&nbsp;1223&nbsp;855373.'),
             new Paragraph('If you’re writing about an eLife study, please cite eLife as the source of the article and include a link to either the article or elifesciences.org, preferably using our DOI: https://doi.org/10.7554/eLife – with the article’s five-digit extension (e.g. https://doi.org/10.7554/eLife.00000). Thank you!'),
             new Paragraph('All content, unless otherwise stated, is available under a <a href="https://creativecommons.org/licenses/by/4.0">Creative Commons Attribution License (CC-BY)</a>. All are free to use and reuse the content provided the original source and authors are credited.'),
-            new Paragraph('The eLife media policy, encouraging authors to present and discuss their works ahead of publication and indicating that eLife will not release content under embargo, can be found under the Media Policy heading in our <a href="https://submit.elifesciences.org/html/elife_author_instructions.html#policies">Journal Policies</a>.'),
+            new Paragraph('The <a href="'.$this->generateDownloadLink('https://cdn.elifesciences.org/downloads/eLife-media-policy-For-the-Press.pdf').'">eLife media policy</a> encourages authors to present and discuss their works ahead of publication and indicates that eLife does not release content under embargo, except in exceptional circumstances.'),
             new Paragraph('Please don’t hesitate to contact us if you have any questions.'),
         ];
 
@@ -108,5 +109,10 @@ final class PressPacksController extends Controller
             }));
 
         return new Response($this->get('templating')->render('::press-pack.html.twig', $arguments));
+    }
+
+    private function generateDownloadLink(string $uri) : string
+    {
+        return $this->get('elife.journal.helper.download_link_uri_generator')->generate(DownloadLink::fromUri($uri));
     }
 }
