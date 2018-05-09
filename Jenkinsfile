@@ -19,9 +19,10 @@ elifePipeline {
                     'behat': '/srv/journal/build/ci/behat/*.xml'
                 ])
 
-                dockerComposeSmokeTests('journal', commit, [
+                dockerComposeSmokeTests('profiles', commit, [
                     'scripts': [
                         'cli': './smoke_tests_cli.sh',
+                        'fpm': './smoke_tests_fpm.sh',
                     ],
                 ])
             }

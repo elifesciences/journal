@@ -14,6 +14,7 @@ RUN mkdir -p app build/critical-css var/cache var/fixtures var/logs var/sessions
     chown --recursive elife:elife . && \
     chown --recursive www-data:www-data var/*
 
+COPY --chown=elife:elife smoke_tests_fpm.sh ./
 COPY --chown=elife:elife bin/ bin/
 COPY --chown=elife:elife web/ web/
 COPY --chown=elife:elife app/Resources/ app/Resources/
