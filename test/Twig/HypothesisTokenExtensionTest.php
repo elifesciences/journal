@@ -25,6 +25,7 @@ final class HypothesisTokenExtensionTest extends TestCase
     /**
      * @test
      * @depends it_is_a_twig_extension
+     * @group time-sensitive
      */
     public function it_generates_a_token()
     {
