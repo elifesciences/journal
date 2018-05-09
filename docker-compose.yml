@@ -40,7 +40,6 @@ services:
         image: elifesciences/journal_fpm:${IMAGE_TAG}
         volumes:
             - ./.docker/parameters.yml:/srv/journal/app/config/parameters.yml
-            - web:/srv/journal/web
         depends_on:
             - assets
             - composer
@@ -50,14 +49,13 @@ services:
             dockerfile: Dockerfile.npm
         image: elifesciences/journal_npm:${IMAGE_TAG}
     web:
-        image: nginx:1.13.7
+        build:
+            context: .
+            dockerfile: Dockerfile.web
+            args:
+                image_tag: ${IMAGE_TAG}
+        image: elifesciences/journal_web:${IMAGE_TAG}
         ports:
             - '8080:80'
-        volumes:
-            - ./.docker/nginx-default.conf:/etc/nginx/conf.d/default.conf
-            - web:/srv/journal/web
         depends_on:
             - fpm
-
-volumes:
-    web:
