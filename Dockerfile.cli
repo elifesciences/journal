@@ -8,7 +8,7 @@ ENV PROJECT_FOLDER=/srv/journal
 USER root
 
 WORKDIR ${PROJECT_FOLDER}
-RUN mkdir -p build/critical-css var/cache var/logs && \
+RUN mkdir -p app build/critical-css var/cache var/logs && \
     chown --recursive elife:elife . && \
     chown --recursive www-data:www-data var/*
 
