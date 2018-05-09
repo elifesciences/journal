@@ -11,7 +11,8 @@ USER root
 
 WORKDIR ${PROJECT_FOLDER}
 RUN mkdir -p app build/critical-css var/cache var/fixtures var/logs var/sessions web/bundles && \
-    chown --recursive elife:elife .
+    chown --recursive elife:elife . && \
+    chown --recursive www-data:www-data var/*
 
 COPY --chown=elife:elife bin/ bin/
 COPY --chown=elife:elife web/ web/
@@ -24,9 +25,5 @@ COPY --from=assets --chown=elife:elife /web/assets/ web/assets/
 COPY --from=composer --chown=elife:elife /app/vendor/ vendor/
 COPY --chown=elife:elife src/ src/
 COPY --chown=elife:elife test/ test/
-
-RUN bin/console assets:install
-
-RUN chown --recursive www-data:www-data var/cache var/fixtures var/logs var/sessions
 
 USER www-data

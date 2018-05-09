@@ -4,9 +4,9 @@ FROM elifesciences/journal_composer_dev:${image_tag} AS composer
 FROM elifesciences/journal_cli:${image_tag}
 
 USER root
-RUN mkdir -p app build/ci var/cache var/fixtures && \
+RUN mkdir -p app build/ci var/fixtures && \
     touch .php_cs.cache && \
-    chown --recursive www-data:www-data build .php_cs.cache var/cache var/fixtures
+    chown --recursive www-data:www-data build/ci .php_cs.cache var/fixtures
 
 COPY --from=proofreader --chown=elife:elife /srv/proofreader-php /srv/proofreader-php
 RUN ln -s /srv/proofreader-php/bin/proofreader /srv/bin/proofreader
