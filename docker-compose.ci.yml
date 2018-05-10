@@ -9,12 +9,14 @@ services:
                 image_tag: ${IMAGE_TAG}
         image: elifesciences/journal_ci:${IMAGE_TAG}
         volumes:
+            - ./.docker/parameters.yml:/srv/journal/app/config/parameters.yml
             - fixtures:/srv/journal/var/fixtures
+            - tests:/srv/journal/test
+            - vendor:/srv/journal/vendor
         environment:
             - APP_ENV=ci
         depends_on:
             - cli
-            - fpm
             - selenium
     cli:
         environment:
@@ -33,13 +35,14 @@ services:
         image: elifesciences/journal_composer_dev:${IMAGE_TAG}
         command: /bin/bash
     fpm:
-        build:
-            args:
-                composer: composer_dev
         volumes:
             - fixtures:/srv/journal/var/fixtures
+            - tests:/srv/journal/test
+            - vendor:/srv/journal/vendor
         environment:
             - APP_ENV=ci
+        depends_on:
+            - ci
     selenium:
         build:
             context: .
@@ -47,8 +50,8 @@ services:
         image: elifesciences/journal_selenium:${IMAGE_TAG}
         volumes:
             - /dev/shm:/dev/shm
-        depends_on:
-            - web
 
 volumes:
     fixtures:
+    tests:
+    vendor:

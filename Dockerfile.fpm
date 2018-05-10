@@ -1,7 +1,6 @@
 ARG image_tag=latest
-ARG composer=composer
 FROM elifesciences/journal_assets:${image_tag} AS assets
-FROM elifesciences/journal_${composer}:${image_tag} AS composer
+FROM elifesciences/journal_composer:${image_tag} AS composer
 FROM elifesciences/php_7.0_fpm:2f00bfb3e9385f38997f04cea41ffbd3ff9d10a8
 
 ENV PROJECT_FOLDER=/srv/journal
@@ -10,19 +9,15 @@ ENV PHP_ENTRYPOINT=web/app.php
 USER root
 
 WORKDIR ${PROJECT_FOLDER}
-RUN mkdir -p app build/critical-css var/cache var/fixtures var/logs var/sessions web/bundles && \
+RUN mkdir -p build/critical-css var/cache var/fixtures var/logs var/sessions && \
     chown --recursive elife:elife . && \
     chown --recursive www-data:www-data var/*
 
 COPY --chown=elife:elife smoke_tests_fpm.sh ./
-COPY --chown=elife:elife bin/ bin/
 COPY --chown=elife:elife web/ web/
-COPY --chown=elife:elife app/Resources/ app/Resources/
-COPY --chown=elife:elife app/config/ app/config/
-COPY --chown=elife:elife .docker/parameters.yml app/config/
+COPY --chown=elife:elife app/ app/
 COPY --from=assets --chown=elife:elife /build/rev-manifest.json build/
 COPY --from=composer --chown=elife:elife /app/vendor/ vendor/
 COPY --chown=elife:elife src/ src/
-COPY --chown=elife:elife test/ test/
 
 USER www-data

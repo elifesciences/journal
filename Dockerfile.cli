@@ -8,15 +8,13 @@ ENV PROJECT_FOLDER=/srv/journal
 USER root
 
 WORKDIR ${PROJECT_FOLDER}
-RUN mkdir -p app build/critical-css var/cache var/logs && \
+RUN mkdir -p build/critical-css var/cache var/logs && \
     chown --recursive elife:elife . && \
     chown --recursive www-data:www-data var/*
 
 COPY --chown=elife:elife smoke_tests_cli.sh ./
 COPY --chown=elife:elife bin/ bin/
-COPY --chown=elife:elife app/Resources/ app/Resources/
-COPY --chown=elife:elife app/config/ app/config/
-COPY --chown=elife:elife .docker/parameters.yml app/config/
+COPY --chown=elife:elife app/ app/
 COPY --from=assets --chown=elife:elife /build/rev-manifest.json build/
 COPY --from=composer --chown=elife:elife /app/vendor/ vendor/
 COPY --chown=elife:elife src/ src/
