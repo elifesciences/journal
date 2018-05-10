@@ -1,12 +1,7 @@
 <?php
 
-use eLife\Journal\AppKernel;
-use Symfony\Component\HttpFoundation\Request;
+// Deprecated, use app.php
 
-require_once __DIR__.'/../app/autoload.php';
+$_SERVER['APP_ENV'] = 'continuumtest';
 
-$kernel = new AppKernel('continuumtest', false);
-
-Request::enableHttpMethodParameterOverride();
-
-$kernel->run(Request::createFromGlobals());
+require 'app.php';

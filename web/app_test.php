@@ -1,22 +1,7 @@
 <?php
 
-use eLife\Journal\AppKernel;
-use Symfony\Component\Debug\Debug;
-use Symfony\Component\HttpFoundation\Request;
+// Deprecated, use app.php
 
-require_once __DIR__.'/../app/autoload.php';
-Debug::enable();
+$_SERVER['APP_ENV'] = 'test';
 
-if (!empty($_GET['JOURNAL_INSTANCE'])) {
-    setcookie('JOURNAL_INSTANCE', $_GET['JOURNAL_INSTANCE']);
-    die;
-}
-
-if (!empty($_COOKIE['JOURNAL_INSTANCE'])) {
-    putenv('JOURNAL_INSTANCE'.'='.$_COOKIE['JOURNAL_INSTANCE']);
-    unset($_COOKIE['JOURNAL_INSTANCE']);
-}
-
-$kernel = new AppKernel('test', true);
-
-$kernel->run(Request::createFromGlobals());
+require 'app.php';

@@ -1,14 +1,8 @@
 <?php
 
-use eLife\Journal\AppKernel;
-use Symfony\Component\HttpFoundation\Request;
+// Deprecated, use app.php
 
-require_once __DIR__.'/../app/autoload.php';
+$_SERVER['APP_ENV'] = 'baseline';
+$_SERVER['APP_ELB'] = true;
 
-$kernel = new AppKernel('baseline', false);
-
-Request::enableHttpMethodParameterOverride();
-
-Request::setTrustedProxies([$_SERVER['REMOTE_ADDR']], Request::HEADER_X_FORWARDED_AWS_ELB);
-
-$kernel->run(Request::createFromGlobals());
+require 'app.php';
