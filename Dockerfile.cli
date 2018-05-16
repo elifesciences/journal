@@ -1,7 +1,8 @@
 ARG image_tag=latest
+ARG php_version
 FROM elifesciences/journal_assets:${image_tag} AS assets
 FROM elifesciences/journal_composer:${image_tag} AS composer
-FROM elifesciences/php_7.0_cli:2f00bfb3e9385f38997f04cea41ffbd3ff9d10a8
+FROM elifesciences/php_7.0_cli:${php_version}
 
 ENV PROJECT_FOLDER=/srv/journal
 
