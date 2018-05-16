@@ -70,6 +70,9 @@
         "symfony/polyfill-php70": "*"
     },
     "config": {
+        "platform": {
+            "php": "7.0.29"
+        },
         "sort-packages": true
     },
     "extra": {

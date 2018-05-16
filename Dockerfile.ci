@@ -1,4 +1,5 @@
 ARG image_tag=latest
+FROM pinterb/jq:0.0.16 AS jq
 FROM elifesciences/proofreader-php:0.2 AS proofreader
 FROM elifesciences/journal_composer_dev:${image_tag} AS composer
 FROM elifesciences/journal_cli:${image_tag}
@@ -8,8 +9,12 @@ RUN mkdir -p app build/ci var/fixtures && \
     touch .php_cs.cache && \
     chown --recursive www-data:www-data build/ci .php_cs.cache var/fixtures
 
+COPY --from=jq /usr/local/bin/jq /usr/bin/jq
+
 COPY --from=proofreader --chown=elife:elife /srv/proofreader-php /srv/proofreader-php
 RUN ln -s /srv/proofreader-php/bin/proofreader /srv/bin/proofreader
+
+COPY --from=composer /usr/bin/composer /usr/bin/composer
 
 COPY --chown=elife:elife \
     behat.yml.dist \
@@ -18,7 +23,7 @@ COPY --chown=elife:elife \
     ./
 COPY --chown=elife:elife .ci/ .ci/
 COPY --chown=elife:elife web/ web/
-COPY --chown=elife:elife composer.lock .
+COPY --chown=elife:elife composer.json composer.lock ./
 COPY --from=composer --chown=elife:elife /app/vendor/ vendor/
 COPY --chown=elife:elife features/ features/
 COPY --chown=elife:elife test/ test/
