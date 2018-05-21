@@ -37,7 +37,7 @@ final class DownloadControllerTest extends WebTestCase
             new Response(
                 200,
                 ['Content-Type' => 'audio/mp3'],
-                fopen($mp3 = __DIR__.'/../../app/Resources/tests/blank.mp3', 'r')
+                fopen($mp3 = __DIR__.'/../../assets/tests/blank.mp3', 'r')
             )
         );
 
