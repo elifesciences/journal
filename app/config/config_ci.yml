@@ -21,8 +21,6 @@ framework:
     profiler:
         collect: false
         enabled: true
-    router:
-        resource: '%kernel.project_dir%/app/config/routing_ci.yml'
     session:
         storage_id: session.storage.mock_file
     test: ~

@@ -50,6 +50,9 @@ services:
         image: elifesciences/journal_selenium:${IMAGE_TAG}
         volumes:
             - /dev/shm:/dev/shm
+    web:
+        volumes:
+            - ./app/Resources/tests:/srv/journal/web/tests
 
 volumes:
     fixtures:

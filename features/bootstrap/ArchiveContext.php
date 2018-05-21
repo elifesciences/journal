@@ -404,7 +404,7 @@ final class ArchiveContext extends Context
                         'sources' => [
                             [
                                 'mediaType' => 'audio/mpeg',
-                                'uri' => $this->locatePath('/audio-file'),
+                                'uri' => $this->locatePath('/tests/blank.mp3'),
                             ],
                         ],
                     ];

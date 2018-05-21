@@ -11,13 +11,13 @@ WORKDIR ${PROJECT_FOLDER}
 USER root
 RUN pecl install redis && \
     docker-php-ext-enable redis
-RUN mkdir -p build/critical-css var/cache var/fixtures var/logs var/sessions && \
+RUN mkdir -p app build/critical-css var/cache var/fixtures var/logs var/sessions && \
     chown --recursive elife:elife . && \
     chown --recursive www-data:www-data var/*
 
 COPY --chown=elife:elife smoke_tests_fpm.sh ./
 COPY --chown=elife:elife web/ web/
-COPY --chown=elife:elife app/ app/
+COPY --chown=elife:elife app/config/ app/config/
 COPY --from=assets --chown=elife:elife /build/rev-manifest.json build/
 COPY --from=composer --chown=elife:elife /app/vendor/ vendor/
 COPY --chown=elife:elife src/ src/
