@@ -5,7 +5,7 @@ FROM node:6.14.1
 
 COPY --from=npm /node_modules/ node_modules/
 
-COPY app/Resources/images/ app/Resources/images/
+COPY assets/images/ assets/images/
 COPY critical-css.json \
     gulpfile.js \
     ./

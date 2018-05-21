@@ -25,7 +25,7 @@ gulp.task('favicons:clean', () => {
 });
 
 gulp.task('favicons:build', ['favicons:clean'], () => {
-    return gulp.src('./app/Resources/images/favicon.svg')
+    return gulp.src('./assets/images/favicon.svg')
         .pipe(svg2png({width: 512, height: 512}))
         .pipe(favicons({
             appName: 'eLife',
@@ -54,7 +54,7 @@ gulp.task('favicons:build', ['favicons:clean'], () => {
 });
 
 gulp.task('favicons:svg', ['favicons:clean'], () => {
-    return gulp.src('./app/Resources/images/favicon.svg')
+    return gulp.src('./assets/images/favicon.svg')
         .pipe(gulp.dest('./build/assets/favicons'));
 });
 
@@ -70,7 +70,7 @@ gulp.task('images:clean', () => {
 gulp.task('images:banners', ['images:clean'], () => {
     const sizes = {1114: 336, 1023: 336, 899: 288, 729: 264, 450: 264};
 
-    return gulp.src('./app/Resources/images/banners/*.jpg')
+    return gulp.src('./assets/images/banners/*.jpg')
         .pipe(responsive({
             '*': [1, 2].reduce((acc, scale) => {
                 return Object.keys(sizes).reduce((acc, width) => {
@@ -103,7 +103,7 @@ gulp.task('images:banners', ['images:clean'], () => {
 });
 
 gulp.task('images:logos', ['images:clean'], () => {
-    return gulp.src('./app/Resources/images/logos/*.{png,svg}')
+    return gulp.src('./assets/images/logos/*.{png,svg}')
         .pipe(responsive({
             '*': [1, 2].reduce((acc, scale) => {
                 const width = 180 * scale;
@@ -137,7 +137,7 @@ gulp.task('images:logos', ['images:clean'], () => {
 });
 
 gulp.task('images:investors', ['images:clean'], () => {
-    return gulp.src('./app/Resources/images/investors/*.{png,svg}')
+    return gulp.src('./assets/images/investors/*.{png,svg}')
         .pipe(responsive({
             '*': [1, 2].reduce((acc, scale) => {
                 const width = 185 * scale;
@@ -172,7 +172,7 @@ gulp.task('images:investors', ['images:clean'], () => {
 });
 
 gulp.task('images:svgs', ['images:clean'], () => {
-    return gulp.src('./app/Resources/images/*/*.svg')
+    return gulp.src('./assets/images/*/*.svg')
         .pipe(gulp.dest('./build/assets/images'));
 });
 

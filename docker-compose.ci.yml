@@ -52,7 +52,7 @@ services:
             - /dev/shm:/dev/shm
     web:
         volumes:
-            - ./app/Resources/tests:/srv/journal/web/tests
+            - ./assets/tests:/srv/journal/web/tests
 
 volumes:
     fixtures:
