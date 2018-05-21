@@ -6,10 +6,11 @@ FROM elifesciences/php_7.0_fpm:${php_version}
 
 ENV PROJECT_FOLDER=/srv/journal
 ENV PHP_ENTRYPOINT=web/app.php
+WORKDIR ${PROJECT_FOLDER}
 
 USER root
-
-WORKDIR ${PROJECT_FOLDER}
+RUN pecl install redis && \
+    docker-php-ext-enable redis
 RUN mkdir -p build/critical-css var/cache var/fixtures var/logs var/sessions && \
     chown --recursive elife:elife . && \
     chown --recursive www-data:www-data var/*
