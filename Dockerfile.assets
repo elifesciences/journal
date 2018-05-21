@@ -12,3 +12,5 @@ COPY critical-css.json \
 COPY --from=composer /app/vendor/elife/patterns/resources/assets/ vendor/elife/patterns/resources/assets/
 
 RUN node_modules/.bin/gulp assets
+
+COPY --from=composer /app/web/bundles/ /web/bundles/

@@ -15,3 +15,10 @@ COPY test/ test/
 COPY src/ src/
 
 RUN composer --no-interaction dump-autoload ${composer_dev_arg} --classmap-authoritative
+
+RUN mkdir web
+COPY app/ app/
+COPY .docker/parameters.yml app/config/
+COPY bin/ bin/
+
+RUN bin/console assets:install
