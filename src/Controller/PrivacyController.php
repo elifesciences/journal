@@ -179,15 +179,15 @@ final class PrivacyController extends Controller
 <table>
 <tbody>
 <tr>
-<th>5&nbsp;Dec&nbsp;12</th>
+<th>Dec&nbsp;5,&nbsp;2012</th>
 <td>Added paragraphs on cookies</td>
 </tr>
 <tr>
-<th>3&nbsp;Apr&nbsp;12</th>
+<th>Apr&nbsp;3,&nbsp;2012</th>
 <td>Removed section on advertisers</td>
 </tr>
 <tr>
-<th>23&nbsp;May&nbsp;18</th>
+<th>May&nbsp;23,&nbsp;2018</th>
 <td>Completely restructured and expanded to comply with new legislation. Sections on author and editor data added.</td>
 </tr>
 </tbody>
