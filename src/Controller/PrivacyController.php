@@ -27,7 +27,7 @@ final class PrivacyController extends Controller
                     new Paragraph('eLife collects information of the sort that web browsers typically make available (such as IP address, browser type, language preference and referring site). In addition we use cookies, including analytics and login cookies, and local storage. We use this information for the legitimate interests of administering the sites, malicious activity tracking, and business analysis and development. This allows us to understand better how our visitors use the website, and to improve the design of the site and decide where to target business development activities.'),
                     new Paragraph('We operate a permission-based email communication system, which allows the collection of personal information to send emails to people who have consented to receive them. Each email contains the option to unsubscribe. We may also use this data for the legitimate interest of business analysis and planning.'),
                     new Paragraph('Cookies allow us to make the website work more smoothly for users. For users who are logged in, the cookies allow them to move between pages and remain logged in. We use analytics cookies to allow a better understanding, at an anonymous aggregated level, of how users use the site, and broad categories of users, including their location. Local storage is an area of your browser used by websites to store information on your computer rather than making additional web requests, and can speed up browsing.'),
-                    new Paragraph('Visitors who do not wish to have cookies placed on their computers should set their browsers to refuse cookies before using eLife’s websites, with the drawback that certain features of our websites may not function properly without the aid of cookies. You can modify your browser settings to notify you each time a cookie is sent to it and you can decide whether or not to accept. Alternatively, you can set your browser to refuse all cookies. Cookies that have already been set can be deleted at any time using your browser settings. The independent website at www.aboutcookies.org contains comprehensive information on how to modify your browser settings. You can conceal your true IP address by using a virtual private network (VPN).')
+                    new Paragraph('Visitors who do not wish to have cookies placed on their computers should set their browsers to refuse cookies before using eLife’s websites, with the drawback that certain features of our websites may not function properly without the aid of cookies. You can modify your browser settings to notify you each time a cookie is sent to it and you can decide whether or not to accept. Alternatively, you can set your browser to refuse all cookies. Cookies that have already been set can be deleted at any time using your browser settings. The independent <a href="https://www.aboutcookies.org/">AboutCookies.org</a> website contains comprehensive information on how to modify your browser settings. You can conceal your true IP address by using a virtual private network (VPN).')
                 )),
                 ArticleSection::basic('What types of personal data do we hold?', 3, $this->render(
                     new Paragraph('Cookies do not necessarily identify you personally, but if you also log in to a service on our site (such as to leave an annotation, or to interact with the submission or payments systems) then they can be matched to an individual. The analytics cookies used for site usage monitoring only allow us to see anonymous and aggregated information. IP addresses might potentially identify individual users, but only when combined with other information, which we do not do.'),
@@ -88,8 +88,8 @@ final class PrivacyController extends Controller
                 )),
                 ArticleSection::basic('Who do we share the data with, and why?', 3, $this->render(
                     new Paragraph('We share your data with editors and reviewers, and with organisations that help us deliver our services.
-In addition, if your manuscript is published, then all the personal information normally associated with a published manuscript will be made public. In line with normal practice, we will also send this data, or make it available, to other publishing services, repositories and indexing services. Read more
-We share the data with the following classes of data processor:'),
+In addition, if your manuscript is published, then all the personal information normally associated with a published manuscript will be made public. In line with normal practice, we will also send this data, or make it available, to other publishing services, repositories and indexing services.'),
+                    new Paragraph('We share the data with the following classes of data processor:'),
                     Listing::unordered([
                         'our editors and reviewers',
                         'the organisations that provide our submission, editorial support, production and publication fee billing, and accounting services and systems',
@@ -141,11 +141,13 @@ For promoting our services to you we use email address and affiliation, speciali
                     new Paragraph('If we pay you a fee, then we will have details of your bank account and personal address, and in some cases, your personal tax reference number.')
                 )),
                 ArticleSection::basic('Who do we share the data with, and why?', 3, $this->render(
-                    new Paragraph('We share your data with other editors and reviewers, and with organisations that help us deliver our services. In some cases, where you have consented, your name will be shown on a published manuscript that you have reviewed, and so will be public. Read more
-We share the data with the following classes of data processor:
-other editors and reviewers;
-the organisations that provide our submission, editorial support, production, accounting services and accounting systems;
-online data storage organisations.'),
+                    new Paragraph('We share your data with other editors and reviewers, and with organisations that help us deliver our services. In some cases, where you have consented, your name will be shown on a published manuscript that you have reviewed, and so will be public.'),
+                    new Paragraph('We share the data with the following classes of data processor:'),
+                    Listing::unordered([
+                        'other editors and reviewers',
+                        'the organisations that provide our submission, editorial support, production, accounting services and accounting systems',
+                        'online data storage organisations',
+                    ], 'bullet'),
                     new Paragraph('Data related to the payment of fees is in some cases shared with tax authorities.'),
                     new Paragraph('We only share as much information as is necessary for each purpose. Some of these individuals and organisations are outside the European Economic Area (EEA).'),
                     new Paragraph('If eLife, or substantially all of its assets, were acquired, or in the unlikely event that eLife went out of business or entered bankruptcy, personal information might be one of the assets that was acquired by a third party. In that case, the personal information might be used by a third party in accordance with this notice.')
