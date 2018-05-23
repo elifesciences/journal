@@ -87,8 +87,8 @@ final class PrivacyController extends Controller
                     new Paragraph('For business analysis and planning purposes we use: author and funder details; decisions taken on manuscript and related processing dates; names of editors and reviewers who handled the manuscript.')
                 )),
                 ArticleSection::basic('Who do we share the data with, and why?', 3, $this->render(
-                    new Paragraph('We share your data with editors and reviewers, and with organisations that help us deliver our services.
-In addition, if your manuscript is published, then all the personal information normally associated with a published manuscript will be made public. In line with normal practice, we will also send this data, or make it available, to other publishing services, repositories and indexing services.'),
+                    new Paragraph('We share your data with editors and reviewers, and with organisations that help us deliver our services.'),
+                    new Paragraph('In addition, if your manuscript is published, then all the personal information normally associated with a published manuscript will be made public. In line with normal practice, we will also send this data, or make it available, to other publishing services, repositories and indexing services.'),
                     new Paragraph('We share the data with the following classes of data processor:'),
                     Listing::unordered([
                         'our editors and reviewers',
@@ -96,8 +96,8 @@ In addition, if your manuscript is published, then all the personal information 
                         'online data storage organisations',
                     ], 'bullet'),
                     new Paragraph('We only share as much information as is necessary for each purpose.'),
-                    new Paragraph('If you ask us to, we may share some of your data with organisations such as Dryad, Publons, ORCID and bioRxiv.
-If your manuscript is rejected, and if you ask us to, we may pass data to another journal to which you are submitting the manuscript.'),
+                    new Paragraph('If you ask us to, we may share some of your data with organisations such as Dryad, Publons, ORCID and bioRxiv.'),
+                    new Paragraph('If your manuscript is rejected, and if you ask us to, we may pass data to another journal to which you are submitting the manuscript.'),
                     new Paragraph('Some of these individuals and organisations are outside the European Economic Area (EEA).'),
                     new Paragraph('If eLife, or substantially all of its assets, were acquired, or in the unlikely event that eLife went out of business or entered bankruptcy, personal information might be one of the assets that was acquired by a third party. In that case, the personal information might be used by a third party in accordance with this notice.')
                 )),
@@ -136,8 +136,8 @@ If your manuscript is rejected, and if you ask us to, we may pass data to anothe
                 ArticleSection::basic('What types of personal data do we hold?', 3, $this->render(
                     new Paragraph('To administer reviewing activities we hold your contact information and details about your specialisms and availability. The review process generates additional information, such as your review comments and other correspondence.'),
                     new Paragraph('The basic contact information we request includes: name, email address, phone number, affiliation, institutional role and ORCID iD. We will also have information about your specialisms, and this may be supplemented with personal information you have chosen to make public at ORCID, such as institution or employer, and past published papers. You may also have provided biographical information for publication on eLife’s website and in other eLife publications.'),
-                    new Paragraph('Additional information generated during reviewing activities includes: information about manuscripts you have reviewed (and others that we have requested you to review), comments and decisions you have made and general correspondence, and dates of reviewing events, acceptance rates and processing times. We will also record your participation in eLife activities such as conference calls, meetings and exhibitions.
-For promoting our services to you we use email address and affiliation, specialisms and preferences you have expressed about the type of information you wish to receive.'),
+                    new Paragraph('Additional information generated during reviewing activities includes: information about manuscripts you have reviewed (and others that we have requested you to review), comments and decisions you have made and general correspondence, and dates of reviewing events, acceptance rates and processing times. We will also record your participation in eLife activities such as conference calls, meetings and exhibitions.'),
+                    new Paragraph('For promoting our services to you we use email address and affiliation, specialisms and preferences you have expressed about the type of information you wish to receive.'),
                     new Paragraph('If we pay you a fee, then we will have details of your bank account and personal address, and in some cases, your personal tax reference number.')
                 )),
                 ArticleSection::basic('Who do we share the data with, and why?', 3, $this->render(
@@ -166,8 +166,8 @@ For promoting our services to you we use email address and affiliation, speciali
                     new Paragraph('Where we are processing your data on the basis of a legitimate interest, which applies to business analysis and planning, and promotional activities, you may object to us processing your data.'),
                     new Paragraph('You may ask us to erase your data if we are using it for promotional purposes, and in some other limited cases.'),
                     new Paragraph('You may also customise how we use your data for promotional purposes by visiting your <a href="https://crm.elifesciences.org/crm/preferences">preferences centre</a>.'),
-                    new Paragraph('You may ask us to erase your data if we are using it for promotional purposes; the data is no longer necessary for the purpose for which we originally collected or processed it; we are relying on legitimate interests as the basis for processing, and you object to the processing of your data, and there is no overriding legitimate interest to continue this processing; or we have processed the personal data unlawfully.
-You may also ask us to stop processing your data in certain specific circumstances: you contest the accuracy of the personal data and we are verifying the accuracy; the data has been unlawfully processed and you oppose erasure and request restriction instead; we no longer need the personal data, but you need us to keep it in order to establish, exercise or defend a legal claim; or you have objected to us processing your data and we are considering whether our legitimate grounds override yours.'),
+                    new Paragraph('You may ask us to erase your data if we are using it for promotional purposes; the data is no longer necessary for the purpose for which we originally collected or processed it; we are relying on legitimate interests as the basis for processing, and you object to the processing of your data, and there is no overriding legitimate interest to continue this processing; or we have processed the personal data unlawfully.'),
+                    new Paragraph('You may also ask us to stop processing your data in certain specific circumstances: you contest the accuracy of the personal data and we are verifying the accuracy; the data has been unlawfully processed and you oppose erasure and request restriction instead; we no longer need the personal data, but you need us to keep it in order to establish, exercise or defend a legal claim; or you have objected to us processing your data and we are considering whether our legitimate grounds override yours.'),
                     new Paragraph('To exercise these rights please contact <a href="mailto:data@elifesciences.org">data@elifesciences.org</a>.'),
                     new Paragraph('You may complain about our retention and processing of your personal data to the Information Commissioner’s Office, the supervisory authority for data protection issues in England and Wales.')
                 ))
