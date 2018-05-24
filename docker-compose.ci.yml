@@ -38,7 +38,7 @@ services:
         volumes:
             - fixtures:/srv/journal/var/fixtures
             #- tests:/srv/journal/test
-            #- vendor:/srv/journal/vendor
+            - vendor:/srv/journal/vendor
         environment:
             - APP_ENV=ci
         depends_on:
