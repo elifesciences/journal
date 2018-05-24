@@ -288,11 +288,23 @@
         </script>
 
     {% block javascripts deferred %}
-    {% for javascript in javascripts %}
-        <script async src="{{ asset(javascript) }}"></script>
-    {% endfor %}
+    <script>
+        if (
+          window.localStorage &&
+          document.querySelector &&
+          window.addEventListener &&
+          !!(document.createElement('div')).dataset)
+        {
+            var $body = document.querySelector('body');
+            {% for javascript in javascripts %}
+                const $script = document.createElement('script');
+                $script.src = '{{ asset(javascript) }}';
+                $body.appendChild($script);
+            {% endfor %}
+        }
 
-{% endblock %}
+    </script>
+    {% endblock %}
 
     {% block stylesheets deferred %}
     {% for stylesheet in stylesheets %}
