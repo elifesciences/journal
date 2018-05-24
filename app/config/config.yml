@@ -130,6 +130,7 @@ twig:
     debug: '%kernel.debug%'
     exception_controller: AppBundle:Exception:show
     globals:
+        cookie_consent: '%cookie_consent%'
         gtm_id: '%gtm_id%'
         hypothesis_api: '%hypothesis_api%'
         hypothesis_authority: '%hypothesis_authority%'
