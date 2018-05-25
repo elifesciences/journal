@@ -298,8 +298,8 @@
             var $body = document.querySelector('body');
             {% for javascript in javascripts %}
                 var $script{{loop.index}} = document.createElement('script');
-                $script.src = '{{ asset(javascript) }}';
-                $body.appendChild($script);
+                $script{{loop.index}}.src = '{{ asset(javascript) }}';
+                $body.appendChild($script{{loop.index}});
             {% endfor %}
         }
 
