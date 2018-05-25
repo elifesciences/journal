@@ -297,7 +297,7 @@
         {
             var $body = document.querySelector('body');
             {% for javascript in javascripts %}
-                const $script = document.createElement('script');
+                var $script{{loop.index}} = document.createElement('script');
                 $script.src = '{{ asset(javascript) }}';
                 $body.appendChild($script);
             {% endfor %}
