@@ -109,6 +109,14 @@ services:
         class: eLife\ApiSdk\Client\Subjects
         factory: ['@elife.api_sdk', subjects]
 
+    elife.journal.form.extension.info_link:
+        class: eLife\Journal\Form\Extension\InfoLinkExtension
+        arguments:
+          - '@router'
+        tags:
+          - name: form.type_extension
+            extended_type: Symfony\Component\Form\Extension\Core\Type\EmailType
+
     elife.journal.goutte:
         class: Goutte\Client
         calls:
