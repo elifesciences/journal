@@ -12,9 +12,9 @@ USER root
 RUN pecl install redis && \
     docker-php-ext-enable redis && \
     rm -rf /tmp/pear/
-RUN mkdir -p build/critical-css var/cache var/fixtures var/logs var/sessions && \
+RUN mkdir -p build/critical-css var && \
     chown --recursive elife:elife . && \
-    chown --recursive www-data:www-data var/*
+    chown --recursive www-data:www-data var
 
 COPY --chown=elife:elife smoke_tests_fpm.sh ./
 COPY --chown=elife:elife web/ web/

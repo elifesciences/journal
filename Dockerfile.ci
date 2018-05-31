@@ -5,7 +5,7 @@ FROM elifesciences/journal_composer_dev:${image_tag} AS composer
 FROM elifesciences/journal_cli:${image_tag}
 
 USER root
-RUN mkdir -p app build/ci var/fixtures && \
+RUN mkdir -p build/ci var/fixtures && \
     touch .php_cs.cache && \
     chown --recursive www-data:www-data build/ci .php_cs.cache var/fixtures
 
