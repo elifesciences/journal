@@ -64,6 +64,7 @@
     "replace": {
         "paragonie/random_compat": "*",
         "symfony/polyfill-apcu": "*",
+        "symfony/polyfill-ctype": "*",
         "symfony/polyfill-intl-icu": "*",
         "symfony/polyfill-mbstring": "*",
         "symfony/polyfill-php56": "*",
