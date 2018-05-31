@@ -1,17 +1,21 @@
 version: '3'
 
 services:
-    assets:
+    composer:
         build:
             context: .
-            dockerfile: Dockerfile.assets
+            dockerfile: Dockerfile.composer
             args:
-                image_tag: ${IMAGE_TAG}
-        image: elifesciences/journal_assets:${IMAGE_TAG}
-        depends_on:
-            - cli
-            - composer
-            - npm
+                composer_dev_arg: ${COMPOSER_DEV_ARG}
+        image: elifesciences/journal_composer:${IMAGE_TAG}
+        command: /bin/bash
+    npm:
+        build:
+            context: .
+            dockerfile: Dockerfile.npm
+        image: elifesciences/journal_npm:${IMAGE_TAG}
+    redis:
+        image: redis:3.2.10-alpine
     cli:
         build:
             context: .
@@ -25,14 +29,17 @@ services:
         depends_on:
             - composer
             - redis
-    composer:
+    assets:
         build:
             context: .
-            dockerfile: Dockerfile.composer
+            dockerfile: Dockerfile.assets
             args:
-                composer_dev_arg: ${COMPOSER_DEV_ARG}
-        image: elifesciences/journal_composer:${IMAGE_TAG}
-        command: /bin/bash
+                image_tag: ${IMAGE_TAG}
+        image: elifesciences/journal_assets:${IMAGE_TAG}
+        depends_on:
+            - cli
+            - composer
+            - npm
     fpm:
         build:
             context: .
@@ -47,13 +54,6 @@ services:
             - assets
             - composer
             - redis
-    npm:
-        build:
-            context: .
-            dockerfile: Dockerfile.npm
-        image: elifesciences/journal_npm:${IMAGE_TAG}
-    redis:
-        image: redis:3.2.10-alpine
     web:
         build:
             context: .
