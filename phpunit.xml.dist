@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/5.4/phpunit.xsd"
-         backupGlobals="false" colors="true" bootstrap="app/autoload.php">
+         xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/6.5/phpunit.xsd"
+         colors="true" bootstrap="vendor/autoload.php">
 
     <php>
         <ini name="error_reporting" value="-1"/>
+        <env name="APP_ENV" value="ci"/>
         <env name="SYMFONY_DEPRECATIONS_HELPER" value="weak_vendors"/>
         <!-- Make sure that we handle all dates as UTC even if the system's timezone is not UTC -->
         <ini name="date.timezone" value="America/Los_Angeles"/>

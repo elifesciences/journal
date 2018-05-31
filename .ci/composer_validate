@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+set -e
+
+composer validate --no-check-all --no-check-publish

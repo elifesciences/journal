@@ -162,7 +162,7 @@ final class MagazineContext extends Context
                 'sources' => [
                     [
                         'mediaType' => 'audio/mpeg',
-                        'uri' => $this->locatePath('/audio-file'),
+                        'uri' => $this->locatePath('/tests/blank.mp3'),
                     ],
                 ],
                 'chapters' => [
@@ -604,7 +604,7 @@ final class MagazineContext extends Context
                 'Episode '.$this->numberOfPodcastEpisodes);
         $this->assertSession()
             ->elementAttributeContains('css', '.audio-player__player source', 'src',
-                $this->locatePath('/audio-file'));
+                $this->locatePath('/tests/blank.mp3'));
     }
 
     /**

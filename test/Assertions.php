@@ -14,7 +14,7 @@ trait Assertions
      */
     final protected function assertSameUri($expected, $actual, string $message = '')
     {
-        $flags = NormalizingStorageAdapter::URI_FLAGS;
+        $flags = UriNormalizer::PRESERVING_NORMALIZATIONS | UriNormalizer::SORT_QUERY_PARAMETERS;
 
         $normalizedExpected = UriNormalizer::normalize(uri_for($expected), $flags)->__toString();
         $normalizedActual = UriNormalizer::normalize(uri_for($actual), $flags)->__toString();

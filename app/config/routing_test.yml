@@ -1,7 +1,0 @@
-_main:
-    resource: routing_dev.yml
-
-audio-file:
-    path: /audio-file
-    defaults:
-         _controller: AppBundle:AudioFile:AudioFile

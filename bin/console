@@ -6,18 +6,19 @@ use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Debug\Debug;
 
-require_once __DIR__.'/../app/autoload.php';
+require_once __DIR__.'/../vendor/autoload.php';
 
 set_time_limit(0);
 
-$input = new ArgvInput();
-$env = $input->getParameterOption(['--env', '-e'], getenv('SYMFONY_ENV') ?: 'dev');
-$debug = '0' !== getenv('SYMFONY_DEBUG') && !$input->hasParameterOption(['--no-debug', '']) && !in_array($env, ['demo', 'end2end', 'continuumtest', 'continuumtestpreview', 'prod', 'preview']);
+$_SERVER['APP_ENV'] = $_SERVER['APP_ENV'] ?? 'dev';
+$_SERVER['APP_DEBUG'] = in_array($_SERVER['APP_ENV'], ['ci', 'dev']);
 
-if ($debug) {
+$input = new ArgvInput();
+
+if ($_SERVER['APP_DEBUG']) {
     Debug::enable();
 }
 
-$kernel = new AppKernel($env, $debug);
+$kernel = new AppKernel($_SERVER['APP_ENV'], $_SERVER['APP_DEBUG']);
 $application = new Application($kernel);
 $application->run($input);

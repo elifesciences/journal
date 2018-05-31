@@ -57,7 +57,7 @@ final class PodcastContext extends Context
                 'sources' => [
                     [
                         'mediaType' => 'audio/mpeg',
-                        'uri' => $this->locatePath('/audio-file'),
+                        'uri' => $this->locatePath('/tests/blank.mp3'),
                     ],
                 ],
                 'chapters' => [
@@ -182,7 +182,7 @@ final class PodcastContext extends Context
                     'sources' => [
                         [
                             'mediaType' => 'audio/mpeg',
-                            'uri' => $this->locatePath('/audio-file'),
+                            'uri' => $this->locatePath('/tests/blank.mp3'),
                         ],
                     ],
                     'chapters' => [
