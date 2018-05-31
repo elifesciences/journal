@@ -1,4 +1,5 @@
 ARG image_tag=latest
+ARG node_version
 FROM elifesciences/journal_npm:${image_tag} as npm
 FROM elifesciences/journal_cli:${image_tag} AS cli
 
@@ -9,7 +10,7 @@ COPY .docker/parameters.yml app/config/
 RUN mkdir web && \
     bin/console assets:install
 
-FROM node:6.14.1
+FROM node:${node_version}
 
 COPY --from=npm /node_modules/ node_modules/
 

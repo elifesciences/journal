@@ -1,4 +1,5 @@
-FROM node:6.14.1 as npm
+ARG node_version
+FROM node:${node_version} as npm
 
 COPY npm-shrinkwrap.json \
     package.json \
