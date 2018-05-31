@@ -46,12 +46,10 @@ services:
           - name: optional
 
     elife.guzzle.middleware.mock.storage.normalizing:
-        class: test\eLife\Journal\NormalizingStorageAdapter
+        class: eLife\Journal\Guzzle\NormalizingStorageAdapter
         decorates: elife.guzzle.middleware.mock.storage
         arguments:
           - '@elife.guzzle.middleware.mock.storage.normalizing.inner'
-        tags:
-          - name: optional
 
     elife.guzzle.middleware.mock:
         class: Csa\Bundle\GuzzleBundle\GuzzleHttp\Middleware\MockMiddleware
