@@ -5,22 +5,30 @@ services:
         arguments:
           - '@elife.api_validator.schema_finder'
           - '@elife.api_validator.schema_validator'
+        tags:
+          - name: optional
 
     elife.api_validator.validator.fake_https:
         class: eLife\ApiValidator\MessageValidator\FakeHttpsMessageValidator
         decorates: elife.api_validator.validator
         arguments:
           - '@elife.api_validator.validator.fake_https.inner'
+        tags:
+          - name: optional
 
     elife.api_validator.schema_validator:
         class: JsonSchema\Validator
         public: false
+        tags:
+          - name: optional
 
     elife.api_validator.schema_finder:
         class: eLife\ApiValidator\SchemaFinder\PathBasedSchemaFinder
         public: false
         arguments:
           - '@=composer_locate("elife/api")~"/dist/model"'
+        tags:
+          - name: optional
 
     elife.guzzle.middleware.mock.storage:
         class: Csa\Bundle\GuzzleBundle\Cache\MockStorageAdapter
@@ -34,12 +42,16 @@ services:
         arguments:
           - '@elife.guzzle.middleware.mock.storage.validating.inner'
           - '@elife.api_validator.validator'
+        tags:
+          - name: optional
 
     elife.guzzle.middleware.mock.storage.normalizing:
         class: test\eLife\Journal\NormalizingStorageAdapter
         decorates: elife.guzzle.middleware.mock.storage
         arguments:
           - '@elife.guzzle.middleware.mock.storage.normalizing.inner'
+        tags:
+          - name: optional
 
     elife.guzzle.middleware.mock:
         class: Csa\Bundle\GuzzleBundle\GuzzleHttp\Middleware\MockMiddleware

@@ -8,6 +8,7 @@ use eLife\Journal\DependencyInjection\MonologStacktracesPass;
 use eLife\Journal\DependencyInjection\OAuthClientPass;
 use eLife\Journal\DependencyInjection\RedisCachePass;
 use eLife\Journal\DependencyInjection\RedisSessionsPass;
+use eLife\Journal\DependencyInjection\RemoveOptionalServicesPass;
 use eLife\Journal\DependencyInjection\ViewModelConverterPass;
 use Symfony\Component\DependencyInjection\Compiler\PassConfig;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -23,6 +24,7 @@ final class AppBundle extends Bundle
         $container->addCompilerPass(new OAuthClientPass());
         $container->addCompilerPass(new RedisCachePass(), PassConfig::TYPE_BEFORE_OPTIMIZATION, 34);
         $container->addCompilerPass(new RedisSessionsPass(), PassConfig::TYPE_BEFORE_OPTIMIZATION, 34);
+        $container->addCompilerPass(new RemoveOptionalServicesPass(), PassConfig::TYPE_BEFORE_OPTIMIZATION);
         $container->addCompilerPass(new ViewModelConverterPass());
     }
 }
