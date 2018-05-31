@@ -31,8 +31,6 @@ services:
     web:
         volumes:
             - assets:/srv/journal/web
-        depends_on:
-            - assets
 
 volumes:
     assets:
