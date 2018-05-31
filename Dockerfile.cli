@@ -1,6 +1,5 @@
 ARG image_tag=latest
 ARG php_version
-FROM elifesciences/journal_assets:${image_tag} AS assets
 FROM elifesciences/journal_composer:${image_tag} AS composer
 FROM elifesciences/php_7.0_cli:${php_version}
 
@@ -12,13 +11,13 @@ RUN pecl install redis && \
     docker-php-ext-enable redis && \
     rm -rf /tmp/pear/
 RUN mkdir -p build/critical-css var && \
+    echo "{}" > build/rev-manifest.json && \
     chown --recursive elife:elife . && \
     chown --recursive www-data:www-data var
 
 COPY --chown=elife:elife smoke_tests_cli.sh ./
 COPY --chown=elife:elife bin/ bin/
 COPY --chown=elife:elife app/ app/
-COPY --from=assets --chown=elife:elife /build/rev-manifest.json build/
 COPY --from=composer --chown=elife:elife /app/vendor/ vendor/
 COPY --chown=elife:elife src/ src/
 

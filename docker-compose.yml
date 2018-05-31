@@ -9,6 +9,7 @@ services:
                 image_tag: ${IMAGE_TAG}
         image: elifesciences/journal_assets:${IMAGE_TAG}
         depends_on:
+            - cli
             - composer
             - npm
     cli:
@@ -22,7 +23,6 @@ services:
         volumes:
             - ./.docker/parameters.yml:/srv/journal/app/config/parameters.yml
         depends_on:
-            - assets
             - composer
             - redis
     composer:

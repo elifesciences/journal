@@ -1,6 +1,14 @@
 ARG image_tag=latest
-FROM elifesciences/journal_composer:${image_tag} as composer
 FROM elifesciences/journal_npm:${image_tag} as npm
+FROM elifesciences/journal_cli:${image_tag} AS cli
+
+USER root
+
+COPY .docker/parameters.yml app/config/
+
+RUN mkdir web && \
+    bin/console assets:install
+
 FROM node:6.14.1
 
 COPY --from=npm /node_modules/ node_modules/
@@ -9,8 +17,8 @@ COPY assets/images/ assets/images/
 COPY critical-css.json \
     gulpfile.js \
     ./
-COPY --from=composer /app/vendor/elife/patterns/resources/assets/ vendor/elife/patterns/resources/assets/
+COPY --from=cli /srv/journal/vendor/elife/patterns/resources/assets/ vendor/elife/patterns/resources/assets/
 
 RUN node_modules/.bin/gulp assets
 
-COPY --from=composer /app/web/bundles/ /web/bundles/
+COPY --from=cli /srv/journal/web/bundles/ /web/bundles/
