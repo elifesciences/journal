@@ -48,7 +48,8 @@ final class FormViewConverter implements ViewModelConverter
                     break;
                 case 'email':
                     return ViewModel\TextField::emailInput(new ViewModel\FormLabel($this->getLabel($object)),
-                        $object->vars['id'], $object->vars['full_name'], $object->vars['attr']['placeholder'] ?? null,
+                        $object->vars['id'], $object->vars['full_name'], $this->getInfoLink($object),
+                        $object->vars['attr']['placeholder'] ?? null,
                         $object->vars['required'],
                         $object->vars['disabled'], $this->getAutofocus($object), $object->vars['value'],
                         $this->getState($object), $this->getMessageGroup($object));
@@ -76,7 +77,8 @@ final class FormViewConverter implements ViewModelConverter
                                 $children['email']['messageGroup'],
                                 [],
                                 $children[$this->honeypotField] ?? null
-                            )
+                            ),
+                            $children['email']['formFieldInfoLink']
                         );
                     }
 
@@ -153,6 +155,18 @@ final class FormViewConverter implements ViewModelConverter
     private function getLabel(FormView $form) : string
     {
         return $form->vars['label'] ?? Humanizer::humanize($form->vars['name']);
+    }
+
+    /**
+     * @return ViewModel\FormFieldInfoLink|null
+     */
+    private function getInfoLink(FormView $form)
+    {
+        if (empty($form->vars['info_link'])) {
+            return null;
+        }
+
+        return new ViewModel\FormFieldInfoLink($form->vars['info_link']['name'], $form->vars['info_link']['url']);
     }
 
     public function supports($object, string $viewModel = null, array $context = []) : bool

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "fa4c0daf3db982f819e461f4ff645ce2",
+    "content-hash": "965a22567dac0b1a378e39d112d62226",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -910,12 +910,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/patterns-php.git",
-                "reference": "57babf2384747ed3b67f82550f84f941c13e983c"
+                "reference": "0d642a841414b7c2d1eb50e333e43a93caee380d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/57babf2384747ed3b67f82550f84f941c13e983c",
-                "reference": "57babf2384747ed3b67f82550f84f941c13e983c",
+                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/0d642a841414b7c2d1eb50e333e43a93caee380d",
+                "reference": "0d642a841414b7c2d1eb50e333e43a93caee380d",
                 "shasum": ""
             },
             "require": {
@@ -951,7 +951,7 @@
                 "MIT"
             ],
             "description": "eLife patterns",
-            "time": "2018-05-21T11:31:22+00:00"
+            "time": "2018-05-30T13:56:01+00:00"
         },
         {
             "name": "fabpot/goutte",
@@ -2458,16 +2458,16 @@
         },
         {
             "name": "symfony/symfony",
-            "version": "v3.4.4",
+            "version": "v3.4.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/symfony.git",
-                "reference": "5220b6f9fcdee261c6fdd3e096f3b204fba5d906"
+                "reference": "8eb567d8398ce31a402ea8db3e6b5b1faf121cbc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/symfony/zipball/5220b6f9fcdee261c6fdd3e096f3b204fba5d906",
-                "reference": "5220b6f9fcdee261c6fdd3e096f3b204fba5d906",
+                "url": "https://api.github.com/repos/symfony/symfony/zipball/8eb567d8398ce31a402ea8db3e6b5b1faf121cbc",
+                "reference": "8eb567d8398ce31a402ea8db3e6b5b1faf121cbc",
                 "shasum": ""
             },
             "require": {
@@ -2481,6 +2481,7 @@
                 "psr/log": "~1.0",
                 "psr/simple-cache": "^1.0",
                 "symfony/polyfill-apcu": "~1.1",
+                "symfony/polyfill-ctype": "~1.8",
                 "symfony/polyfill-intl-icu": "~1.0",
                 "symfony/polyfill-mbstring": "~1.0",
                 "symfony/polyfill-php56": "~1.0",
@@ -2608,7 +2609,7 @@
             "keywords": [
                 "framework"
             ],
-            "time": "2018-01-29T12:30:04+00:00"
+            "time": "2018-05-25T13:16:49+00:00"
         },
         {
             "name": "twig/twig",
