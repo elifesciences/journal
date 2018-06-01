@@ -29,3 +29,11 @@ Running the tests
 -----------------
 
 `docker-compose run cli vendor/bin/phpunit`
+
+Reproduce a ci failure
+----------------------
+
+```
+SELENIUM_IMAGE_SUFFIX=-debug docker-compose -f docker-compose.yml -f docker-compose.ci.yml up --build -V
+docker-compose -f docker-compose.yml -f docker-compose.ci.yml run ci .ci/behat
+```
