@@ -14,7 +14,10 @@ services:
         image: elifesciences/journal_composer_dev:${IMAGE_TAG}
         command: /bin/bash
     selenium:
-        image: selenium/standalone-chrome:2.53.1
+        image: selenium/standalone-chrome${SELENIUM_IMAGE_SUFFIX}:2.53.1
+        ports:
+            - "4444:4444" # http://localhost:4444/wd/hub/static/resource/hub.html
+            - "5900:5900" # VNC connection for debug images
         volumes:
             - /dev/shm:/dev/shm
     cli:
