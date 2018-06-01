@@ -4,6 +4,8 @@ use eLife\Journal\AppKernel;
 use Symfony\Component\Debug\Debug;
 use Symfony\Component\HttpFoundation\Request;
 
+umask(0002);
+
 require_once __DIR__.'/../vendor/autoload.php';
 
 $_SERVER['APP_ENV'] = $_SERVER['APP_ENV'] ?? 'dev';
