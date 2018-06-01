@@ -634,7 +634,9 @@ final class HomepageContext extends Context
      */
     public function iShouldSeeTheCoverInTheCarousel(string $name)
     {
-        $this->assertSession()->elementAttributeContains('css', '.carousel-item__title_link', 'href', $this->createId($name));
+        $this->spin(function () use ($name) {
+            $this->assertSession()->elementAttributeContains('css', '.carousel-item__title_link', 'href', $this->createId($name));
+        });
     }
 
     /**
