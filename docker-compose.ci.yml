@@ -14,10 +14,7 @@ services:
         image: elifesciences/journal_composer_dev:${IMAGE_TAG}
         command: /bin/bash
     selenium:
-        build:
-            context: .
-            dockerfile: Dockerfile.selenium
-        image: elifesciences/journal_selenium:${IMAGE_TAG}
+        image: selenium/standalone-chrome:2.53.1
         volumes:
             - /dev/shm:/dev/shm
     cli:

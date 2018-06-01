@@ -6,6 +6,7 @@ default:
                     symfony2: ~
                 javascript:
                     selenium2:
+                        browser: chrome
                         wd_host: http://selenium:4444/wd/hub
             base_url: http://web/
         Behat\Symfony2Extension:
