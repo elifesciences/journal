@@ -46,6 +46,7 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use function GuzzleHttp\Promise\all;
 use function GuzzleHttp\Promise\promise_for;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 final class ArticlesController extends Controller
 {
@@ -507,8 +508,6 @@ final class ArticlesController extends Controller
             ->then(function (string $title) {
                 return 'Figures and data in '.$title;
             });
-
-        $arguments['xml'] = $this->get('router')->generate('article-version-xml', []);
 
         $arguments['contextualData'] = all(['item' => $arguments['item'], 'metrics' => $arguments['contextualDataMetrics']])
             ->then(function (array $parts) {
@@ -1004,6 +1003,6 @@ final class ArticlesController extends Controller
             return $this->get('router')->generate('article-xml', [$currentVersion, '_fragment' => $fragment]);
         }
 
-        return $this->get('router')->generate('article-version-xml', [$currentVersion, 'version' => $forVersion, '_fragment' => $fragment]);
+        return $this->get('router')->generate('article-version-xml', [$currentVersion, 'version' => $forVersion, '_fragment' => $fragment], UrlGeneratorInterface::ABSOLUTE_URL);
     }
 }
