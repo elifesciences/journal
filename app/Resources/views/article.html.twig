@@ -27,8 +27,8 @@
         {% if item.pdf %}
             <meta name="citation_pdf_url" content="{{ item.pdf }}">
         {% endif %}
-        {% if item.xml %}
-            <meta name="citation_xml_url" content="{{ item.xml }}">
+        {% if xmlPath %}
+            <meta name="citation_xml_url" content="{{ xmlPath }}">
         {% endif %}
         <meta name="citation_doi" content="{{ item.doi }}">
         <meta name="citation_volume" content="{{ item.volume }}">

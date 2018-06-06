@@ -109,6 +109,21 @@ article-type:
     requirements:
         type: '(correction|editorial|feature|insight|research-advance|research-article|retraction|registered-report|replication-study|scientific-correspondence|short-report|tools-resources)'
 
+article-version-xml:
+    path: /articles/{id}v{version}.xml
+    defaults:
+         _controller: AppBundle:Articles:xml
+    requirements:
+        id: '[a-z0-9-]+'
+        version: '[1-9][0-9]*'
+
+article-xml:
+    path: /articles/{id}.xml
+    defaults:
+         _controller: AppBundle:Articles:xml
+    requirements:
+        id: '[a-z0-9-]+'
+
 article:
     path: /articles/{id}
     defaults:
