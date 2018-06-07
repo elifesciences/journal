@@ -65,7 +65,7 @@ services:
                 image_tag: ${IMAGE_TAG}
         image: elifesciences/journal_web:${IMAGE_TAG}
         ports:
-            - '8080:80'
+            - '${JOURNAL_PORT}:80'
         depends_on:
             - assets
             - fpm
