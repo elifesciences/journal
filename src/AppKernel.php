@@ -65,7 +65,7 @@ class AppKernel extends Kernel
             new WhiteOctoberPagerfantaBundle(),
         ];
 
-        if (in_array($this->getEnvironment(), ['dev', 'test', 'ci'], true)) {
+        if (in_array($this->getEnvironment(), ['ci', 'dev'], true)) {
             $bundles[] = new DebugBundle();
             $bundles[] = new WebProfilerBundle();
             $bundles[] = new WebServerBundle();
@@ -87,6 +87,11 @@ class AppKernel extends Kernel
     public function getRootDir()
     {
         return $this->getProjectDir().'/app';
+    }
+
+    public function getProjectDir()
+    {
+        return __DIR__.'/..';
     }
 
     public function getCacheDir()

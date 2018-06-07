@@ -1,6 +1,6 @@
 <?php
 
-namespace test\eLife\Journal;
+namespace eLife\Journal\Guzzle;
 
 use Csa\Bundle\GuzzleBundle\Cache\StorageAdapterInterface;
 use GuzzleHttp\Psr7\Request;

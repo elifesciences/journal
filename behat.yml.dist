@@ -5,11 +5,15 @@ default:
                 default:
                     symfony2: ~
                 javascript:
-                    selenium2: ~
-            base_url: http://localhost/
+                    selenium2:
+                        browser: chrome
+                        wd_host: http://selenium:4444/wd/hub
+            base_url: http://web/
         Behat\Symfony2Extension:
             kernel:
+                bootstrap: ~
                 class: eLife\Journal\AppKernel
+                env: ci
         jarnaiz\JUnitFormatter\JUnitFormatterExtension: ~
         Liuggio\Fastest\Behat\ListFeaturesExtension\Extension: ~
     suites:

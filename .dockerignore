@@ -1,0 +1,12 @@
+app/config/parameters.yml*
+build/
+docker-compose*.yml
+.git/
+.gitignore
+Jenkinsfile*
+node_modules/
+var/
+vendor/
+web/assets/
+web/bundles/
+web/favicon.ico

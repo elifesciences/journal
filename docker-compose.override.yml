@@ -1,0 +1,38 @@
+version: '3'
+
+services:
+    composer:
+        volumes:
+            - ./composer.json:/app/composer.json
+            - ./composer.lock:/app/composer.lock
+            - vendor:/app/vendor
+    npm:
+        volumes:
+            - ./npm-shrinkwrap.json:/npm-shrinkwrap.json
+            - ./package.json:/package.json
+            - node_modules:/node_modules
+    cli:
+        volumes:
+            - ./:/srv/journal
+            - /srv/journal/build
+            - /srv/journal/var
+            - vendor:/srv/journal/vendor
+    assets:
+        volumes:
+            - ./assets/images:/assets/images
+            - assets:/web
+            - node_modules:/node_modules
+    fpm:
+        volumes:
+            - ./:/srv/journal
+            - /srv/journal/build
+            - /srv/journal/var
+            - vendor:/srv/journal/vendor
+    web:
+        volumes:
+            - assets:/srv/journal/web
+
+volumes:
+    assets:
+    node_modules:
+    vendor:

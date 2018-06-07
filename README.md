@@ -19,14 +19,21 @@ Installation
 4. `node_modules/.bin/gulp`
 5. `bin/console assets:install --symlink`
 
+Running the site locally
+------------------------
+
+1. `docker-compose up --build -V`
+2. Open `http://localhost:8080` in your browser.
+
 Running the tests
 -----------------
 
-`vendor/bin/phpunit`
+`docker-compose run cli vendor/bin/phpunit`
 
-Running the site
-----------------
+Reproduce a ci failure
+----------------------
 
-`bin/console server:start`
-
-*Note in production [use a proper server](https://symfony.com/doc/current/cookbook/configuration/web_server_configuration.html).*
+```
+SELENIUM_IMAGE_SUFFIX=-debug docker-compose -f docker-compose.yml -f docker-compose.ci.yml up --build -V
+docker-compose -f docker-compose.yml -f docker-compose.ci.yml run ci .ci/behat
+```

@@ -55,6 +55,14 @@ abstract class Context extends RawMinkContext implements KernelAwareContext
     /**
      * @BeforeScenario
      */
+    final public function clearHttpCache()
+    {
+        $this->kernel->getContainer()->get('cache.guzzle')->clear();
+    }
+
+    /**
+     * @BeforeScenario
+     */
     final public function resetEmails()
     {
         $this->emails = [];

@@ -21,9 +21,8 @@ monolog:
             channels:
               - '!event'
             level: debug
-            path: '%kernel.logs_dir%/%kernel.environment%%kernel.instance%.log'
+            path: 'php://stderr'
             type: stream
-            formatter: monolog.formatter.line
 
 swiftmailer:
     disable_delivery: true

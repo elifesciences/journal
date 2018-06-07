@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+set -e
+
+EXPECTED_PLATFORM=$(cat <<EOF
+{
+    "php": "${PHP_VERSION}"
+}
+EOF
+)
+
+diff <(cat composer.json | jq .config.platform) <(echo ${EXPECTED_PLATFORM} | jq .)
+composer check-platform-reqs
