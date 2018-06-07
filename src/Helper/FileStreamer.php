@@ -21,7 +21,6 @@ final class FileStreamer
 
     public function getResponse(Request $request, string $uri) : Response
     {
-
         $xForwardedFor = array_filter(array_map('trim', explode(',', $request->isFromTrustedProxy() ? $request->headers->get('X-Forwarded-For') : '')));
         $xForwardedFor[] = $request->server->get('REMOTE_ADDR');
 
