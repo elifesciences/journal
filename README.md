@@ -37,7 +37,18 @@ Behat needs the `ci` image to run, so it needs to build an additional image and 
 
 ```
 docker-compose -f docker-compose.yml -f docker-compose.ci.yml up --build --detach
-docker-compose -f docker-compose.yml -f docker-compose.ci.yml run ci /bin/bash -c "JARNAIZ_JUNIT_OUTPUTDIR=build/ci/behat vendor/bin/behat features/article.feature
+```
+
+To run all scenarios:
+
+```
+docker-compose -f docker-compose.yml -f docker-compose.ci.yml run ci .ci/behat
+```
+
+To run a single scenario:
+
+```
+docker-compose -f docker-compose.yml -f docker-compose.ci.yml run ci /bin/bash -c "JARNAIZ_JUNIT_OUTPUTDIR=build/ci/behat vendor/bin/behat features/article.feature"
 ```
 
 Reproduce a ci failure
