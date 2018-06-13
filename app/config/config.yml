@@ -42,7 +42,6 @@ csa_guzzle:
         streamer:
             config:
                 connect_timeout: '%api_connect_timeout%'
-                http_errors: false
                 stream: true
 
 framework:

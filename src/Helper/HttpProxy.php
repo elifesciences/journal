@@ -4,11 +4,9 @@ namespace eLife\Journal\Helper;
 
 use GuzzleHttp\ClientInterface;
 use Psr\Http\Message\ResponseInterface;
-use RuntimeException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 
 final class HttpProxy
 {
@@ -37,6 +35,7 @@ final class HttpProxy
                 'X-Forwarded-Port' => $request->getPort(),
                 'X-Forwarded-Proto' => $request->getScheme(),
             ]),
+            ['http_errors' => false],
         ]);
 
         switch ($backendResponse->getStatusCode()) {
@@ -62,9 +61,9 @@ final class HttpProxy
                 break;
             case Response::HTTP_NOT_FOUND:
             case Response::HTTP_GONE:
-                throw new HttpException($backendResponse->getStatusCode(), $backendResponse->getReasonPhrase());
+                return new Response('', $backendResponse->getStatusCode());
             default:
-                throw new RuntimeException("Failed: {$backendResponse->getStatusCode()}, {$backendResponse->getReasonPhrase()}");
+                return new Response('', Response::HTTP_BAD_GATEWAY);
         }
 
         $response->headers->remove('Cache-Control');

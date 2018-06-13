@@ -762,6 +762,8 @@ final class ArticleControllerTest extends PageTestCase
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertContains('Read the most recent version of this article.', array_map('trim', $crawler->filter('.info-bar')->extract(['_text'])));
+
+        $this->assertSame('http://localhost/articles/00001v1.xml', $crawler->filter('meta[name="citation_xml_url"]')->attr('content'));
     }
 
     /**
@@ -1691,6 +1693,7 @@ final class ArticleControllerTest extends PageTestCase
                     'statusDate' => '2011-01-01T00:00:00Z',
                     'volume' => 1,
                     'elocationId' => 'e00001',
+                    'xml' => 'http://www.example.com/xml',
                     'copyright' => [
                         'license' => 'CC-BY-4.0',
                         'holder' => 'Bar',
@@ -1782,6 +1785,7 @@ final class ArticleControllerTest extends PageTestCase
                     'statusDate' => '2010-01-01T00:00:00Z',
                     'volume' => 1,
                     'elocationId' => 'e00001',
+                    'xml' => 'http://www.example.com/xml',
                     'copyright' => [
                         'license' => 'CC-BY-4.0',
                         'holder' => 'Author One',
