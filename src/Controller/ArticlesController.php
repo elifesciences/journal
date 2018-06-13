@@ -704,6 +704,10 @@ final class ArticlesController extends Controller
             ->then(Callback::method('getXml'))
             ->wait();
 
+        if (!$xml) {
+            throw new NotFoundHttpException();
+        }
+
         return $this->get('elife.journal.helper.http_proxy')->send($request, $xml);
     }
 
