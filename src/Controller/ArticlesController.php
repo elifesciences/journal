@@ -208,7 +208,7 @@ final class ArticlesController extends Controller
             ->then(function (array $parts) {
                 $context = [];
                 if ($parts['hasFigures']) {
-                    $context['figuresUri'] = $this->generateFiguresPath($parts['history'], $parts['item']->getVersion());
+                    $context['figuresUri'] = $this->generatePath($parts['history'], $parts['item']->getVersion(), 'figures');
                 }
 
                 return $context;
@@ -411,13 +411,13 @@ final class ArticlesController extends Controller
                 $publicationHistory = array_merge($publicationHistory, $history->getVersions()
                     ->filter(Callback::isInstanceOf(ArticlePoA::class))
                     ->map(function (ArticlePoA $itemVersion, int $number) use ($history) {
-                        return sprintf('Accepted Manuscript %s: <a href="%s">%s (version %s)</a>', 0 === $number ? 'published' : 'updated', $this->generateTextPath($history, $itemVersion->getVersion()), $itemVersion->getVersionDate() ? $itemVersion->getVersionDate()->format('F j, Y') : '', $itemVersion->getVersion());
+                        return sprintf('Accepted Manuscript %s: <a href="%s">%s (version %s)</a>', 0 === $number ? 'published' : 'updated', $this->generatePath($history, $itemVersion->getVersion()), $itemVersion->getVersionDate() ? $itemVersion->getVersionDate()->format('F j, Y') : '', $itemVersion->getVersion());
                     })->toArray());
 
                 $publicationHistory = array_merge($publicationHistory, $history->getVersions()
                     ->filter(Callback::isInstanceOf(ArticleVoR::class))
                     ->map(function (ArticleVoR $itemVersion, int $number) use ($history) {
-                        return sprintf('Version of Record %s: <a href="%s">%s (version %s)</a>', 0 === $number ? 'published' : 'updated', $this->generateTextPath($history, $itemVersion->getVersion()), $itemVersion->getVersionDate() ? $itemVersion->getVersionDate()->format('F j, Y') : '', $itemVersion->getVersion());
+                        return sprintf('Version of Record %s: <a href="%s">%s (version %s)</a>', 0 === $number ? 'published' : 'updated', $this->generatePath($history, $itemVersion->getVersion()), $itemVersion->getVersionDate() ? $itemVersion->getVersionDate()->format('F j, Y') : '', $itemVersion->getVersion());
                     })->toArray());
 
                 $infoSections[] = ArticleSection::basic(
@@ -738,17 +738,17 @@ final class ArticlesController extends Controller
 
         $arguments['textPath'] = $arguments['history']
             ->then(function (ArticleHistory $history) use ($version) {
-                return $this->generateTextPath($history, $version);
+                return $this->generatePath($history, $version);
             });
 
         $arguments['figuresPath'] = $arguments['history']
             ->then(function (ArticleHistory $history) use ($version) {
-                return $this->generateFiguresPath($history, $version);
+                return $this->generatePath($history, $version, 'figures');
             });
 
         $arguments['xmlPath'] = $arguments['history']
             ->then(function (ArticleHistory $history) use ($version) {
-                return $this->generateXmlPath($history, $version);
+                return $this->generatePath($history, $version, 'xml');
             });
 
         $arguments['contentHeader'] = $arguments['item']
@@ -766,7 +766,7 @@ final class ArticlesController extends Controller
                 $infoBars = [];
 
                 if ($item->getVersion() < $history->getVersions()[count($history->getVersions()) - 1]->getVersion()) {
-                    $infoBars[] = new InfoBar('Read the <a href="'.$this->generateTextPath($history).'">most recent version of this article</a>.', InfoBar::TYPE_MULTIPLE_VERSIONS);
+                    $infoBars[] = new InfoBar('Read the <a href="'.$this->generatePath($history).'">most recent version of this article</a>.', InfoBar::TYPE_MULTIPLE_VERSIONS);
                 }
 
                 if ($item instanceof ArticlePoA) {
@@ -825,7 +825,7 @@ final class ArticlesController extends Controller
                     $metrics[] = 'Cited '.number_format($citations->getHighest()->getCitations());
                 }
                 if (null !== $pageViews) {
-                    $metrics[] = sprintf('<a href="%s">Views %s</a>', $this->generateTextPath($history, $item->getVersion(), 'metrics'), number_format($pageViews));
+                    $metrics[] = sprintf('<a href="%s">Views %s</a>', $this->generatePath($history, $item->getVersion(), null, 'metrics'), number_format($pageViews));
                 }
 
                 return $metrics;
@@ -857,7 +857,7 @@ final class ArticlesController extends Controller
                 }
 
                 return new ViewSelector(
-                    $this->generateTextPath($history, $item->getVersion()),
+                    $this->generatePath($history, $item->getVersion()),
                     array_values(array_filter(array_map(function (ViewModel $viewModel) {
                         if ($viewModel instanceof ArticleSection) {
                             return new Link($viewModel['title'], '#'.$viewModel['id']);
@@ -865,7 +865,7 @@ final class ArticlesController extends Controller
 
                         return null;
                     }, $sections))),
-                    $hasFigures ? $this->generateFiguresPath($history, $item->getVersion()) : null,
+                    $hasFigures ? $this->generatePath($history, $item->getVersion(), 'figures') : null,
                     $isFiguresPage,
                     $item instanceof ArticleVoR
                         ? rtrim($this->getParameter('side_by_side_view_url'), '/').'/'.$item->getId()
@@ -899,8 +899,12 @@ final class ArticlesController extends Controller
         }));
     }
 
-    private function generateTextPath(ArticleHistory $history, int $forVersion = null, string $fragment = null) : string
+    private function generatePath(ArticleHistory $history, int $forVersion = null, string $subRoute = null, string $fragment = null) : string
     {
+        if ($subRoute) {
+            $subRoute = "-{$subRoute}";
+        }
+
         $currentVersion = $history->getVersions()[count($history->getVersions()) - 1];
 
         if (null === $forVersion) {
@@ -908,39 +912,9 @@ final class ArticlesController extends Controller
         }
 
         if ($forVersion === $currentVersion->getVersion()) {
-            return $this->get('router')->generate('article', [$currentVersion, '_fragment' => $fragment]);
+            return $this->get('router')->generate("article{$subRoute}", [$currentVersion, '_fragment' => $fragment]);
         }
 
-        return $this->get('router')->generate('article-version', [$currentVersion, 'version' => $forVersion, '_fragment' => $fragment]);
-    }
-
-    private function generateFiguresPath(ArticleHistory $history, int $forVersion = null) : string
-    {
-        $currentVersion = $history->getVersions()[count($history->getVersions()) - 1];
-
-        if (null === $forVersion) {
-            $forVersion = $currentVersion->getVersion();
-        }
-
-        if ($forVersion === $currentVersion->getVersion()) {
-            return $this->get('router')->generate('article-figures', [$currentVersion]);
-        }
-
-        return $this->get('router')->generate('article-version-figures', [$currentVersion, 'version' => $forVersion]);
-    }
-
-    private function generateXmlPath(ArticleHistory $history, int $forVersion = null, string $fragment = null) : string
-    {
-        $currentVersion = $history->getVersions()[count($history->getVersions()) - 1];
-
-        if (null === $forVersion) {
-            $forVersion = $currentVersion->getVersion();
-        }
-
-        if ($forVersion === $currentVersion->getVersion()) {
-            return $this->get('router')->generate('article-xml', [$currentVersion, '_fragment' => $fragment]);
-        }
-
-        return $this->get('router')->generate('article-version-xml', [$currentVersion, 'version' => $forVersion, '_fragment' => $fragment]);
+        return $this->get('router')->generate("article-version{$subRoute}", [$currentVersion, 'version' => $forVersion, '_fragment' => $fragment]);
     }
 }
