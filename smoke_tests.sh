@@ -5,8 +5,8 @@ hostname="${1:-$(hostname)}"
 port="${2:-80}"
 
 # retrieve manifest from container, if present
-if docker container ls | grep journal_fpm_1; then
-    docker cp journal_fpm_1:/srv/journal/build/rev-manifest.json build/
+if docker container ls | grep journal_assets_1; then
+    docker cp journal_assets_1:/srv/journal/build/rev-manifest.json build/
 fi
 
 function from_manifest {
