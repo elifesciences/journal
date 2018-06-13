@@ -33,7 +33,7 @@ $kernel = new AppKernel($_SERVER['APP_ENV'], $_SERVER['APP_DEBUG']);
 Request::enableHttpMethodParameterOverride();
 
 if ($_SERVER['APP_ELB']) {
-    Request::setTrustedProxies([$_SERVER['REMOTE_ADDR']], Request::HEADER_X_FORWARDED_AWS_ELB);
+    Request::setTrustedProxies([$_SERVER['REMOTE_ADDR']], Request::HEADER_X_FORWARDED_ALL);
 }
 
 $kernel->run(Request::createFromGlobals());
