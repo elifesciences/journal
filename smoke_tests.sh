@@ -20,7 +20,7 @@ smoke_url_ok $hostname:$port/$(from_manifest assets/images/banners/magazine-1114
 smoke_url_ok $hostname:$port/ping
     smoke_assert_body "pong"
 
-if [ "$ENVIRONMENT_NAME" != "ci" && "$ENVIRONMENT_NAME" != "dev" ]
+if [ "$ENVIRONMENT_NAME" != "ci" ] && [ "$ENVIRONMENT_NAME" != "dev" ]
   then
     set -e
     retry "./status_test.sh $hostname $port" 2
