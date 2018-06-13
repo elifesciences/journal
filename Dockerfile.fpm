@@ -19,6 +19,7 @@ RUN mkdir -p build/critical-css var && \
 COPY --chown=elife:elife smoke_tests_fpm.sh ./
 COPY --chown=elife:elife web/ web/
 COPY --chown=elife:elife app/ app/
+COPY --from=assets --chown=elife:elife /build/assets/patterns/js/elife-loader.js build/assets/patterns/js/
 COPY --from=assets --chown=elife:elife /build/rev-manifest.json build/
 COPY --from=composer --chown=elife:elife /app/vendor/ vendor/
 COPY --chown=elife:elife src/ src/

@@ -6,7 +6,7 @@
         {% if criticalCss is not defined %}
         {% set criticalCss = 'default' %}
         {% endif %}
-        {% include '@critical-css/' ~ criticalCss ~ '.css' ignore missing %}
+        {% include '@build/critical-css/' ~ criticalCss ~ '.css' ignore missing %}
     </style>
 
     {# We don't use gulp-favicon's generated file as it includes things we don't want, such as apple-mobile-web-app-capable #}
@@ -293,9 +293,9 @@
             };
             {% endif %}
 
-        </script>
+            {% include '@build/assets/patterns/js/elife-loader.js' %}
 
-    <script src="{{ asset('assets/patterns/js/elife-loader.js') }}"></script>
+        </script>
 
     {% block stylesheets deferred %}
     {% for stylesheet in stylesheets %}
