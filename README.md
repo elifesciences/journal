@@ -30,6 +30,27 @@ Running the tests
 
 `docker-compose run cli vendor/bin/phpunit`
 
+Running Behat
+-------------
+
+Behat needs the `ci` image to run, so it needs to build an additional image and use the ci configuration:
+
+```
+docker-compose -f docker-compose.yml -f docker-compose.ci.yml up --build --detach
+```
+
+To run all scenarios:
+
+```
+docker-compose -f docker-compose.yml -f docker-compose.ci.yml run ci .ci/behat
+```
+
+To run a single scenario:
+
+```
+docker-compose -f docker-compose.yml -f docker-compose.ci.yml run ci vendor/bin/behat features/article.feature"
+```
+
 Reproduce a ci failure
 ----------------------
 
