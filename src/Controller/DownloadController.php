@@ -18,7 +18,7 @@ final class DownloadController extends Controller
             throw new NotFoundHttpException('Not a valid signed URI', $e);
         }
 
-        $response = $this->get('elife.journal.helper.file_streamer')->getResponse($request, $link->getUri());
+        $response = $this->get('elife.journal.helper.http_proxy')->send($request, $link->getUri());
 
         $response->headers->set('Content-Disposition', $response->headers->makeDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $link->getFilename()));
 

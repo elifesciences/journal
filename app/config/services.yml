@@ -185,10 +185,10 @@ services:
           - '@router'
           - '@uri_signer'
 
-    elife.journal.helper.file_streamer:
-        class: eLife\Journal\Helper\FileStreamer
+    elife.journal.helper.http_proxy:
+        class: eLife\Journal\Helper\HttpProxy
         arguments:
-          - '@csa_guzzle.client.file_download'
+          - '@csa_guzzle.client.streamer'
 
     elife.journal.listener.authentication_error:
         class: eLife\Journal\EventListener\AuthenticationErrorSubscriber

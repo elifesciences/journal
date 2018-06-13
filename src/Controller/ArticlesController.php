@@ -701,12 +701,10 @@ final class ArticlesController extends Controller
         $arguments = $this->defaultArticleArguments($request, $id, $version);
 
         $xml = $arguments['item']
-            ->then(Callback::method('getXML'))
+            ->then(Callback::method('getXml'))
             ->wait();
 
-        $response = $this->get('elife.journal.helper.file_streamer')->getResponse($request, $xml);
-
-        return $response;
+        return $this->get('elife.journal.helper.http_proxy')->send($request, $xml);
     }
 
     private function defaultArticleArguments(Request $request, string $id, int $version = null) : array
