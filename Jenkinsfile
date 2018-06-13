@@ -25,6 +25,8 @@ elifePipeline {
                         'fpm': './smoke_tests_fpm.sh',
                     ],
                 ])
+
+                sh "./smoke_tests.sh localhost 8080"
             }
         },
         'containers--medium'

@@ -1,7 +1,10 @@
 #!/usr/bin/env bash
 . /opt/smoke.sh/smoke.sh
 
-checks=$(curl -v $(hostname)/status | grep check__name)
+hostname="${1:-$(hostname)}"
+port="${2:-80}"
+
+checks=$(curl -v $hostname:$port/status | grep check__name)
 echo $checks
 good_checks=$(echo $checks | grep -o ✔ | wc -l)
 bad_checks=$(echo $checks | grep -o ✘ | wc -l)
