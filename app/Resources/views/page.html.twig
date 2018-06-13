@@ -258,6 +258,13 @@
         <script>
             window.elifeConfig = window.elifeConfig || {};
 
+            window.elifeConfig.scriptPaths = [];
+
+            // Should exclude path-to-elife-loader.js
+            {% for javascript in javascripts %}
+                window.elifeConfig.scriptPaths[{{ loop.index }}] = {{ asset(javascript) }};
+            {% endfor %}
+
             {% if hypothesis ?? false %}
             window.elifeConfig.hypothesis = {
               usernameUrl: '{{ absolute_url(path('profile', {id: 'placeholder'})|replace({'placeholder': ''})) }}',
@@ -288,22 +295,7 @@
         </script>
 
     {% block javascripts deferred %}
-    <script>
-        if (
-          window.localStorage &&
-          document.querySelector &&
-          window.addEventListener &&
-          !!(document.createElement('div')).dataset)
-        {
-            var $body = document.querySelector('body');
-            {% for javascript in javascripts %}
-                var $script{{loop.index}} = document.createElement('script');
-                $script{{loop.index}}.src = '{{ asset(javascript) }}';
-                $body.appendChild($script{{loop.index}});
-            {% endfor %}
-        }
-
-    </script>
+    <script src="[path-to-elife-loader.js]"></script>
     {% endblock %}
 
     {% block stylesheets deferred %}
