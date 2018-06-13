@@ -24,9 +24,11 @@ elifePipeline {
                         'cli': './smoke_tests_cli.sh',
                         'fpm': './smoke_tests_fpm.sh',
                     ],
+                    'blackbox': [
+                        './smoke_tests.sh localhost 8080',
+                    ]
                 ])
 
-                sh "./smoke_tests.sh localhost 8080"
             }
         },
         'containers--medium'
