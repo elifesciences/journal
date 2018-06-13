@@ -258,12 +258,11 @@
         <script>
             window.elifeConfig = window.elifeConfig || {};
 
-            window.elifeConfig.scriptPaths = [];
-
-            // Should exclude path-to-elife-loader.js
-            {% for javascript in javascripts %}
-                window.elifeConfig.scriptPaths[{{ loop.index }}] = {{ asset(javascript) }};
-            {% endfor %}
+            window.elifeConfig.scriptPaths = [
+                {% for javascript in javascripts %}
+                    '{{ asset(javascript) }}'{% if not loop.last %},{% endif %}
+                {% endfor %}
+            ];
 
             {% if hypothesis ?? false %}
             window.elifeConfig.hypothesis = {
@@ -295,7 +294,7 @@
         </script>
 
     {% block javascripts deferred %}
-    <script src="[path-to-elife-loader.js]"></script>
+    <script src="{{ asset('assets/patterns/js/elife-loader.js') }}"></script>
     {% endblock %}
 
     {% block stylesheets deferred %}
