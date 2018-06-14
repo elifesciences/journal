@@ -19,12 +19,16 @@ elifePipeline {
                     'behat': '/srv/journal/build/ci/behat/*.xml'
                 ])
 
-                dockerComposeSmokeTests('profiles', commit, [
-                    'scripts': [
+                dockerComposeSmokeTests(commit, [
+                    'services': [
                         'cli': './smoke_tests_cli.sh',
                         'fpm': './smoke_tests_fpm.sh',
                     ],
+                    'blackbox': [
+                        './smoke_tests.sh localhost 8080',
+                    ]
                 ])
+
             }
         },
         'containers--medium'

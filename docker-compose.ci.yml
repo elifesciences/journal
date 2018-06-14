@@ -37,6 +37,7 @@ services:
         environment:
             - APP_ENV=ci
         depends_on:
+            - composer-dev
             - cli
             - selenium
     fpm:
