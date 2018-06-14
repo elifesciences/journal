@@ -134,5 +134,5 @@ twig:
         hypothesis_api: '%hypothesis_api%'
         hypothesis_authority: '%hypothesis_authority%'
     paths:
-        '%kernel.project_dir%/build/critical-css': 'critical-css'
+        '%kernel.project_dir%/build': 'build'
     strict_variables: '%kernel.debug%'

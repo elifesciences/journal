@@ -10,7 +10,8 @@ USER root
 RUN pecl install redis && \
     docker-php-ext-enable redis && \
     rm -rf /tmp/pear/
-RUN mkdir -p build/critical-css var && \
+RUN mkdir -p build/assets/patterns/js build/critical-css var && \
+    touch build/assets/patterns/js/elife-loader.js && \
     echo "{}" > build/rev-manifest.json && \
     chown --recursive elife:elife . && \
     chown --recursive www-data:www-data var

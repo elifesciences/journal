@@ -205,7 +205,11 @@ gulp.task('assets:clean', () => {
 });
 
 gulp.task('assets', ['assets:clean', 'favicons', 'images', 'patterns'], () => {
-    return gulp.src('./build/assets/**/*.*', {base: "./build", follow: true})
+    return gulp.src(
+        [
+            './build/assets/**/*.*',
+            '!./build/assets/patterns/js/elife-loader.js',
+        ], {base: "./build", follow: true})
         .pipe(rev.revision({
             includeFilesInManifest: ['.css', '.jpg', '.js', '.json', '.ico', '.png', '.svg', '.webp', '.woff', '.woff2'],
             replaceInExtensions: ['.css', '.js', '.json'],
