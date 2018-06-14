@@ -13,6 +13,7 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request as HttpFoundationRequest;
 use Symfony\Component\HttpFoundation\Response as HttpFoundationResponse;
 use Symfony\Component\HttpFoundation\StreamedResponse;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use test\eLife\Journal\InMemoryStorageAdapter;
 use test\eLife\Journal\Providers;
 use Traversable;
@@ -332,9 +333,12 @@ final class HttpProxyTest extends TestCase
 
         $request = HttpFoundationRequest::create('GET', 'http://www.example.com/');
 
-        $response = $this->httpProxy->send($request, 'http://www.example.com/test.txt');
-
-        $this->assertSame($expected, $response->getStatusCode());
+        try {
+            $this->httpProxy->send($request, 'http://www.example.com/test.txt');
+            $this->fail('Expected HttpException to be thrown');
+        } catch (HttpException $e) {
+            $this->assertSame($expected, $e->getStatusCode());
+        }
     }
 
     public function statusCodeProvider() : Traversable
