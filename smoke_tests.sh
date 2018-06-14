@@ -5,7 +5,7 @@ hostname="${1:-$(hostname)}"
 port="${2:-80}"
 
 # retrieve manifest from container, if present
-if docker container ls -a | grep journal_assets_1; then
+if which docker && docker container ls -a | grep journal_assets_1; then
     docker cp journal_assets_1:/build/rev-manifest.json build/
 fi
 
