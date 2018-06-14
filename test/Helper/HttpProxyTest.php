@@ -24,7 +24,7 @@ final class HttpProxyTest extends TestCase
     private $httpProxy;
     private $storage;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->storage = new NormalizingStorageAdapter(
             new InMemoryStorageAdapter(
@@ -38,6 +38,11 @@ final class HttpProxyTest extends TestCase
         $httpClient = new Client(['handler' => $stack, 'http_errors' => false]);
 
         $this->httpProxy = new HttpProxy($httpClient);
+    }
+
+    protected function tearDown()
+    {
+        HttpFoundationRequest::setTrustedProxies([], -1);
     }
 
     /**
