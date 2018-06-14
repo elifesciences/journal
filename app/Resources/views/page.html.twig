@@ -6,7 +6,7 @@
         {% if criticalCss is not defined %}
         {% set criticalCss = 'default' %}
         {% endif %}
-        {% include '@critical-css/' ~ criticalCss ~ '.css' ignore missing %}
+        {% include '@build/critical-css/' ~ criticalCss ~ '.css' ignore missing %}
     </style>
 
     {# We don't use gulp-favicon's generated file as it includes things we don't want, such as apple-mobile-web-app-capable #}
@@ -258,6 +258,14 @@
         <script>
             window.elifeConfig = window.elifeConfig || {};
 
+            window.elifeConfig.scriptPaths = [
+                {% block javascripts deferred %}
+                    {% for javascript in javascripts %}
+                        '{{ asset(javascript) }}'{% if not loop.last %},{% endif %}
+                    {% endfor %}
+                {% endblock %}
+            ];
+
             {% if hypothesis ?? false %}
             window.elifeConfig.hypothesis = {
               usernameUrl: '{{ absolute_url(path('profile', {id: 'placeholder'})|replace({'placeholder': ''})) }}',
@@ -285,14 +293,9 @@
             };
             {% endif %}
 
+            {% include '@build/assets/patterns/js/elife-loader.js' %}
+
         </script>
-
-    {% block javascripts deferred %}
-    {% for javascript in javascripts %}
-        <script async src="{{ asset(javascript) }}"></script>
-    {% endfor %}
-
-{% endblock %}
 
     {% block stylesheets deferred %}
     {% for stylesheet in stylesheets %}
