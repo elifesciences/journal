@@ -41,7 +41,6 @@ services:
         image: elifesciences/journal_assets:${IMAGE_TAG}
         depends_on:
             - cli
-            - composer
             - npm
     fpm:
         build:

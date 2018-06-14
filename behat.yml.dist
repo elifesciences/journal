@@ -14,7 +14,9 @@ default:
                 bootstrap: ~
                 class: eLife\Journal\AppKernel
                 env: ci
-        jarnaiz\JUnitFormatter\JUnitFormatterExtension: ~
+        jarnaiz\JUnitFormatter\JUnitFormatterExtension:
+            filename: behat.xml
+            outputDir: %paths.base%/build
         Liuggio\Fastest\Behat\ListFeaturesExtension\Extension: ~
     suites:
         annual-report:
