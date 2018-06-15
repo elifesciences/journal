@@ -261,7 +261,7 @@
             window.elifeConfig.scriptPaths = [
                 {% block javascripts deferred %}
                     {% for javascript in javascripts %}
-                        '{{ asset(javascript) }}'{% if not loop.last %},{% endif %}
+                        '{{ preload(asset(javascript), {as: 'script', nopush: true}) }}'{% if not loop.last %},{% endif %}
                     {% endfor %}
                 {% endblock %}
             ];
@@ -299,7 +299,7 @@
 
     {% block stylesheets deferred %}
     {% for stylesheet in stylesheets %}
-        <link href="{{ asset(stylesheet) }}" rel="stylesheet">
+        <link href="{{ preload(asset(stylesheet), {as: 'style', nopush: true}) }}" rel="stylesheet">
     {% endfor %}
     {% endblock %}
 
