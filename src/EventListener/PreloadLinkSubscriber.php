@@ -10,6 +10,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use function GuzzleHttp\Psr7\uri_for;
+use function strpos;
 
 final class PreloadLinkSubscriber implements EventSubscriberInterface
 {
