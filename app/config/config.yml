@@ -35,15 +35,14 @@ csa_guzzle:
                 base_uri: '%crm_url%'
                 connect_timeout: '%api_connect_timeout_slow%'
                 timeout: '%api_timeout_slow%'
-        file_download:
-            config:
-                connect_timeout: '%api_connect_timeout%'
-                http_errors: false
-                stream: true
         oauth:
             config:
                 connect_timeout: '%api_connect_timeout_slow%'
                 timeout: '%api_timeout_slow%'
+        streamer:
+            config:
+                connect_timeout: '%api_connect_timeout%'
+                stream: true
 
 framework:
     assets:
