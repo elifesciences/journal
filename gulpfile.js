@@ -209,6 +209,7 @@ gulp.task('assets', ['assets:clean', 'favicons', 'images', 'patterns'], () => {
         [
             './build/assets/**/*.*',
             '!./build/assets/patterns/js/elife-loader.js',
+            '!./build/assets/patterns/preload.json',
         ], {base: "./build", follow: true})
         .pipe(rev.revision({
             includeFilesInManifest: ['.css', '.jpg', '.js', '.json', '.ico', '.png', '.svg', '.webp', '.woff', '.woff2'],
