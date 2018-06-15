@@ -762,6 +762,8 @@ final class ArticleControllerTest extends PageTestCase
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertContains('Read the most recent version of this article.', array_map('trim', $crawler->filter('.info-bar')->extract(['_text'])));
+
+        $this->assertSame('http://localhost/articles/00001v1.xml', $crawler->filter('meta[name="citation_xml_url"]')->attr('content'));
     }
 
     /**
@@ -1171,7 +1173,7 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertSame('10.7554/eLife.00001', $crawler->filter('meta[name="citation_doi"]')->attr('content'));
         $this->assertSame('eLife 2007;1:e00001', $crawler->filter('meta[name="citation_id"]')->attr('content'));
         $this->assertSame('http://www.example.com/pdf', $crawler->filter('meta[name="citation_pdf_url"]')->attr('content'));
-        $this->assertSame('http://www.example.com/xml', $crawler->filter('meta[name="citation_xml_url"]')->attr('content'));
+        $this->assertSame('http://localhost/articles/00001.xml', $crawler->filter('meta[name="citation_xml_url"]')->attr('content'));
         $this->assertSame('2007/01/01', $crawler->filter('meta[name="citation_publication_date"]')->attr('content'));
         $this->assertCount(2, $crawler->filter('meta[name="citation_author"]'));
         $this->assertCount(1, $crawler->filter('meta[name="citation_reference"]'));
@@ -1691,6 +1693,7 @@ final class ArticleControllerTest extends PageTestCase
                     'statusDate' => '2011-01-01T00:00:00Z',
                     'volume' => 1,
                     'elocationId' => 'e00001',
+                    'xml' => 'http://www.example.com/xml',
                     'copyright' => [
                         'license' => 'CC-BY-4.0',
                         'holder' => 'Bar',
@@ -1782,6 +1785,7 @@ final class ArticleControllerTest extends PageTestCase
                     'statusDate' => '2010-01-01T00:00:00Z',
                     'volume' => 1,
                     'elocationId' => 'e00001',
+                    'xml' => 'http://www.example.com/xml',
                     'copyright' => [
                         'license' => 'CC-BY-4.0',
                         'holder' => 'Author One',
