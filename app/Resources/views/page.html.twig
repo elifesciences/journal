@@ -293,7 +293,7 @@
             };
             {% endif %}
 
-            window.elifeConfig.domain = '{{ app.request.host }}';
+            window.elifeConfig.domain = '{{ app.request.host|split('.')|slice(-2)|join('.') }}';
 
             {% include '@build/assets/patterns/js/elife-loader.js' %}
 
