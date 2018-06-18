@@ -156,6 +156,21 @@ final class HomeControllerTest extends PageTestCase
     /**
      * @test
      */
+    public function it_configures_javascript_libraries_through_a_script_element()
+    {
+        $client = static::createClient();
+
+        $crawler = $client->request('GET', $this->getUrl().'?foo');
+
+        $this->assertSame(200, $client->getResponse()->getStatusCode());
+
+        $scriptTag = $crawler->filter('script')->last()->text();
+        $this->assertContains('window.elifeConfig.domain = \'localhost\';', $scriptTag);
+    }
+
+    /**
+     * @test
+     */
     public function it_displays_the_homepage_even_if_the_api_is_unavailable()
     {
         $client = static::createClient();
