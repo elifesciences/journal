@@ -46,7 +46,10 @@ final class SiteHeaderFactory
             $searchItem = NavLinkedItem::asIcon(new Link('Search', $this->urlGenerator->generate('search')),
                 new Picture(
                     [
-                        ['srcset' => $this->packages->getUrl('assets/patterns/img/patterns/molecules/nav-primary-search-ic.svg')],
+                        [
+                            'srcset' => $this->packages->getUrl('assets/patterns/img/patterns/molecules/nav-primary-search-ic.svg'),
+                            'type' => 'image/svg+xml',
+                        ],
                     ],
                     new Image(
                         $this->packages->getUrl('assets/patterns/img/patterns/molecules/nav-primary-search-ic_1x.png'),
@@ -65,7 +68,10 @@ final class SiteHeaderFactory
             $searchItem = NavLinkedItem::asIcon(new Link('Search'),
                 new Picture(
                     [
-                        ['srcset' => $this->packages->getUrl('assets/patterns/img/patterns/molecules/nav-primary-search-disabled-ic.svg')],
+                        [
+                            'srcset' => $this->packages->getUrl('assets/patterns/img/patterns/molecules/nav-primary-search-disabled-ic.svg'),
+                            'type' => 'image/svg+xml',
+                        ],
                     ],
                     new Image(
                         $this->packages->getUrl('assets/patterns/img/patterns/molecules/nav-primary-search-disabled-ic_1x.png'),
@@ -87,7 +93,10 @@ final class SiteHeaderFactory
                 new Link('Menu', '#mainMenu'),
                 new Picture(
                     [
-                        ['srcset' => $this->packages->getUrl('assets/patterns/img/patterns/molecules/nav-primary-menu-ic.svg')],
+                        [
+                            'srcset' => $this->packages->getUrl('assets/patterns/img/patterns/molecules/nav-primary-menu-ic.svg'),
+                            'type' => 'image/svg+xml',
+                        ],
                     ],
                     new Image(
                         $this->packages->getUrl('assets/patterns/img/patterns/molecules/nav-primary-menu-ic_1x.png'),
