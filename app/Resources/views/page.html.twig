@@ -158,7 +158,7 @@
         WebFontConfig = {
             custom: {
                 families: ["Avenir Next Webfont"],
-                urls: ["{{ asset('assets/patterns/fonts/fonts.css') }}"]
+                urls: ["{{ preload(asset('assets/patterns/fonts/fonts.css'), {as: 'style', nopush: true}) }}"]
             }
         };
 
@@ -195,7 +195,7 @@
         (function (d) {
             var wf = d.createElement("script");
             var s = d.scripts[0];
-            wf.src = "https://ajax.googleapis.com/ajax/libs/webfont/1.6.16/webfont.js";
+            wf.src = "{{ preload('https://ajax.googleapis.com/ajax/libs/webfont/1.6.16/webfont.js', {as: 'script', nopush: true}) }}";
             wf.integrity = 'sha384-0bIyOfFEbXDmR9pWVT6PKyzSRIx8gTXuOsrfXQA51wfXn3LRXt+ih6riwq9Zv2yn';
             wf.crossOrigin = 'anonymous';
             s.parentNode.insertBefore(wf, s);
@@ -261,7 +261,7 @@
             window.elifeConfig.scriptPaths = [
                 {% block javascripts deferred %}
                     {% for javascript in javascripts %}
-                        '{{ asset(javascript) }}'{% if not loop.last %},{% endif %}
+                        '{{ preload(asset(javascript), {as: 'script', nopush: true}) }}'{% if not loop.last %},{% endif %}
                     {% endfor %}
                 {% endblock %}
             ];
@@ -301,7 +301,7 @@
 
     {% block stylesheets deferred %}
     {% for stylesheet in stylesheets %}
-        <link href="{{ asset(stylesheet) }}" rel="stylesheet">
+        <link href="{{ preload(asset(stylesheet), {as: 'style', nopush: true}) }}" rel="stylesheet">
     {% endfor %}
     {% endblock %}
 
