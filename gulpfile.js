@@ -195,7 +195,7 @@ gulp.task('patterns:clean', () => {
     return del(['./build/assets/patterns/**/*']);
 });
 
-gulp.task('patterns', () => {
+gulp.task('patterns', ['patterns:clean'], () => {
     return gulp.src('./vendor/elife/patterns/resources/assets/**/*')
         .pipe(gulp.dest('./build/assets/patterns'));
 });
