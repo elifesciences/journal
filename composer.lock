@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0e96adf959fc657d1a6a7ff61e61e67d",
+    "content-hash": "37a1df598122025f93a9695102fe77bf",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -2572,6 +2572,9 @@
             "extra": {
                 "branch-alias": {
                     "dev-master": "3.4-dev"
+                },
+                "patches_applied": {
+                    "Make AbstractTestSessionListener compatible with CookieClearingLogoutHandler": "https://github.com/symfony/symfony/pull/27659.patch"
                 }
             },
             "autoload": {

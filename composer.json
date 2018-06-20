@@ -90,6 +90,9 @@
             },
             "monolog/monolog": {
                 "Fix WhatFailureGroupHandler::handleBatch when the handler has processors": "https://github.com/Seldaek/monolog/pull/1022.patch"
+            },
+            "symfony/symfony": {
+                "Make AbstractTestSessionListener compatible with CookieClearingLogoutHandler": "https://github.com/symfony/symfony/pull/27659.patch"
             }
         }
     }
