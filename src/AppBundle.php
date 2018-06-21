@@ -6,6 +6,7 @@ use eLife\Journal\DependencyInjection\GuzzleMiddlewarePass;
 use eLife\Journal\DependencyInjection\HttpCachePass;
 use eLife\Journal\DependencyInjection\MonologStacktracesPass;
 use eLife\Journal\DependencyInjection\OAuthClientPass;
+use eLife\Journal\DependencyInjection\PreloadPass;
 use eLife\Journal\DependencyInjection\RedisCachePass;
 use eLife\Journal\DependencyInjection\RedisSessionsPass;
 use eLife\Journal\DependencyInjection\RemoveOptionalServicesPass;
@@ -22,6 +23,7 @@ final class AppBundle extends Bundle
         $container->addCompilerPass(new HttpCachePass(), PassConfig::TYPE_BEFORE_OPTIMIZATION, 33);
         $container->addCompilerPass(new MonologStacktracesPass());
         $container->addCompilerPass(new OAuthClientPass());
+        $container->addCompilerPass(new PreloadPass());
         $container->addCompilerPass(new RedisCachePass(), PassConfig::TYPE_BEFORE_OPTIMIZATION, 34);
         $container->addCompilerPass(new RedisSessionsPass(), PassConfig::TYPE_BEFORE_OPTIMIZATION, 34);
         $container->addCompilerPass(new RemoveOptionalServicesPass(), PassConfig::TYPE_BEFORE_OPTIMIZATION);
