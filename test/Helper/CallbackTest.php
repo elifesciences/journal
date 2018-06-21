@@ -228,13 +228,13 @@ final class CallbackTest extends TestCase
      * @test
      * @dataProvider emptyProvider
      */
-    public function it_creates_empty_or_with_empty($item, $default = null)
+    public function it_creates_empty_or_with_empty($item, $default = null, $expected = null)
     {
         $callback = Callback::emptyOr(function () {
             throw new LogicException('Should not be called');
         }, $default);
 
-        $this->assertSame($default, $callback($item));
+        $this->assertSame($expected, $callback($item));
     }
 
     /**
@@ -268,7 +268,7 @@ final class CallbackTest extends TestCase
      * @test
      * @dataProvider emptyProvider
      */
-    public function it_creates_method_empty_or_with_empty($item, $default = null)
+    public function it_creates_method_empty_or_with_empty($item, $default = null, $expected = null)
     {
         $object = new class($item) {
             private $item;
@@ -288,7 +288,7 @@ final class CallbackTest extends TestCase
             throw new LogicException('Should not be called');
         }, $default);
 
-        $this->assertSame($default, $callback($object));
+        $this->assertSame($expected, $callback($object));
     }
 
     public function notEmptyProvider() : Traversable
@@ -309,6 +309,9 @@ final class CallbackTest extends TestCase
         })];
         yield '0' => [0];
         yield 'null' => [null];
-        yield 'null with default' => [null, 'foo'];
+        yield 'null with default' => [null, 'foo', 'foo'];
+        yield 'null with callable default' => [null, function () {
+            return 'foo';
+        }, 'foo'];
     }
 }
