@@ -212,6 +212,14 @@ services:
         tags:
           - name: kernel.event_subscriber
 
+    elife.journal.listener.preload_link:
+        class: eLife\Journal\EventListener\PreloadLinkSubscriber
+        arguments:
+          - '@assets.packages'
+          - '%preload_links%'
+        tags:
+          - name: kernel.event_subscriber
+
     elife.journal.mustache.loader:
         class: Mustache_Loader_CascadingLoader
         public: false
