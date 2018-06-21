@@ -196,7 +196,11 @@ gulp.task('patterns:clean', () => {
 });
 
 gulp.task('patterns', ['patterns:clean'], () => {
-    return gulp.src('./vendor/elife/patterns/resources/assets/**/*')
+    return gulp.src([
+        './vendor/elife/patterns/resources/assets/**/*',
+        '!./vendor/elife/patterns/resources/assets/js/elife-loader.js',
+        '!./vendor/elife/patterns/resources/assets/preload.json',
+    ])
         .pipe(gulp.dest('./build/assets/patterns'));
 });
 
@@ -205,12 +209,7 @@ gulp.task('assets:clean', () => {
 });
 
 gulp.task('assets', ['assets:clean', 'favicons', 'images', 'patterns'], () => {
-    return gulp.src(
-        [
-            './build/assets/**/*.*',
-            '!./build/assets/patterns/js/elife-loader.js',
-            '!./build/assets/patterns/preload.json',
-        ], {base: "./build", follow: true})
+    return gulp.src('./build/assets/**/*.*', {base: "./build", follow: true})
         .pipe(rev.revision({
             includeFilesInManifest: ['.css', '.jpg', '.js', '.json', '.ico', '.png', '.svg', '.webp', '.woff', '.woff2'],
             replaceInExtensions: ['.css', '.js', '.json'],
@@ -357,9 +356,9 @@ const criticalCssConfig = (function () {
             ),
 
             'podcast-episode': global.concat(
-              listing,
-              /.*\.audio-player.*$/,
-              '.media-chapter-listing-item__header_text_link'
+                listing,
+                /.*\.audio-player.*$/,
+                '.media-chapter-listing-item__header_text_link'
             ),
 
             post: global,
