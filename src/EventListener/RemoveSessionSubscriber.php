@@ -8,13 +8,6 @@ use Symfony\Component\HttpKernel\KernelEvents;
 
 final class RemoveSessionSubscriber implements EventSubscriberInterface
 {
-    private $sessionName;
-
-    public function __construct(string $sessionName)
-    {
-        $this->sessionName = $sessionName;
-    }
-
     public static function getSubscribedEvents() : array
     {
         return [KernelEvents::RESPONSE => ['onKernelResponse', -1000]];
@@ -35,7 +28,7 @@ final class RemoveSessionSubscriber implements EventSubscriberInterface
 
         if (empty($session->all())) {
             $session->invalidate();
-            $event->getResponse()->headers->clearCookie($this->sessionName);
+            $event->getResponse()->headers->clearCookie($session->getName());
         }
     }
 }

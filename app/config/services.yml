@@ -222,8 +222,6 @@ services:
 
     elife.journal.listener.remove_session:
         class: eLife\Journal\EventListener\RemoveSessionSubscriber
-        arguments:
-          - '%session_name%'
         tags:
           - name: kernel.event_subscriber
 
