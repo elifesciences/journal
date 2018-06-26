@@ -109,6 +109,15 @@ services:
         class: eLife\ApiSdk\Client\Subjects
         factory: ['@elife.api_sdk', subjects]
 
+    elife.journal.form.extension.authenticated_csrf:
+        class: eLife\Journal\Form\Extension\AuthenticatedCsrfExtension
+        arguments:
+          - '@security.authorization_checker'
+        tags:
+          - name: form.type_extension
+            extended_type: Symfony\Component\Form\Extension\Core\Type\FormType
+            priority: -1
+
     elife.journal.form.extension.info_link:
         class: eLife\Journal\Form\Extension\InfoLinkExtension
         arguments:
@@ -116,13 +125,6 @@ services:
         tags:
           - name: form.type_extension
             extended_type: Symfony\Component\Form\Extension\Core\Type\EmailType
-
-    elife.journal.form.factory.csrf:
-        class: eLife\Journal\Form\CsrfFormFactory
-        decorates: form.factory
-        arguments:
-          - '@elife.journal.form.factory.csrf.inner'
-          - '@security.authorization_checker'
 
     elife.journal.goutte:
         class: Goutte\Client
