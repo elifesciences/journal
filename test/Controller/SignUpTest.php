@@ -68,11 +68,7 @@ final class SignUpTest extends WebTestCase
 
         $this->assertSame('max-age=0, must-revalidate, private', $client->getResponse()->headers->get('Cache-Control'));
         $this->assertEmpty($client->getResponse()->getVary());
-
-        $client->request('GET', $this->getUrl());
-        $this->assertSame(200, $client->getResponse()->getStatusCode());
-        $this->assertSame('max-age=0, must-revalidate, private', $client->getResponse()->headers->get('Cache-Control'));
-        $this->assertEmpty($client->getResponse()->getVary());
+        $this->assertEmpty($client->getCookieJar()->all());
     }
 
     /**

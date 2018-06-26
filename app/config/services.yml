@@ -220,6 +220,13 @@ services:
         tags:
           - name: kernel.event_subscriber
 
+    elife.journal.listener.remove_session:
+        class: eLife\Journal\EventListener\RemoveSessionSubscriber
+        arguments:
+          - '%session_name%'
+        tags:
+          - name: kernel.event_subscriber
+
     elife.journal.mustache.loader:
         class: Mustache_Loader_CascadingLoader
         public: false
