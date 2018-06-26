@@ -109,8 +109,8 @@ services:
         class: eLife\ApiSdk\Client\Subjects
         factory: ['@elife.api_sdk', subjects]
 
-    elife.journal.form.extension.authenticated_csrf:
-        class: eLife\Journal\Form\Extension\AuthenticatedCsrfExtension
+    elife.journal.form.extension.anonymous_csrf:
+        class: eLife\Journal\Form\Extension\DisableAnonymousCsrfExtension
         arguments:
           - '@security.authorization_checker'
         tags:

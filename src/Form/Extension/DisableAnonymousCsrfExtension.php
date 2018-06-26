@@ -7,7 +7,7 @@ use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
-final class AuthenticatedCsrfExtension extends AbstractTypeExtension
+final class DisableAnonymousCsrfExtension extends AbstractTypeExtension
 {
     private $authorizationChecker;
 
@@ -18,7 +18,11 @@ final class AuthenticatedCsrfExtension extends AbstractTypeExtension
 
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefault('csrf_protection', $this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED'));
+        if ($this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+            return;
+        }
+
+        $resolver->setDefault('csrf_protection', false);
     }
 
     public function getExtendedType() : string
