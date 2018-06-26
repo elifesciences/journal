@@ -117,6 +117,13 @@ services:
           - name: form.type_extension
             extended_type: Symfony\Component\Form\Extension\Core\Type\EmailType
 
+    elife.journal.form.factory.csrf:
+        class: eLife\Journal\Form\CsrfFormFactory
+        decorates: form.factory
+        arguments:
+          - '@elife.journal.form.factory.csrf.inner'
+          - '@security.authorization_checker'
+
     elife.journal.goutte:
         class: Goutte\Client
         calls:
