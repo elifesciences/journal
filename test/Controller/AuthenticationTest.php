@@ -256,6 +256,7 @@ final class AuthenticationTest extends WebTestCase
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertCount(1, $crawler->filter('a:contains("Log in/Register (via ORCID)")'));
+        $this->assertEmpty($client->getCookieJar()->all());
     }
 
     /**
