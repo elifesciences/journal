@@ -89,6 +89,9 @@
             "isometriks/spam-bundle": {
                 "Add field label": "https://github.com/isometriks/IsometriksSpamBundle/pull/9.patch"
             },
+            "knpuniversity/oauth2-client-bundle": {
+                "Remove state from the session": "https://github.com/knpuniversity/oauth2-client-bundle/pull/106.patch"
+            },
             "monolog/monolog": {
                 "Fix WhatFailureGroupHandler::handleBatch when the handler has processors": "https://github.com/Seldaek/monolog/pull/1022.patch"
             },
