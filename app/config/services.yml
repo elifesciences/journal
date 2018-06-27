@@ -109,6 +109,15 @@ services:
         class: eLife\ApiSdk\Client\Subjects
         factory: ['@elife.api_sdk', subjects]
 
+    elife.journal.form.extension.anonymous_csrf:
+        class: eLife\Journal\Form\Extension\DisableAnonymousCsrfExtension
+        arguments:
+          - '@security.authorization_checker'
+        tags:
+          - name: form.type_extension
+            extended_type: Symfony\Component\Form\Extension\Core\Type\FormType
+            priority: -1
+
     elife.journal.form.extension.info_link:
         class: eLife\Journal\Form\Extension\InfoLinkExtension
         arguments:
