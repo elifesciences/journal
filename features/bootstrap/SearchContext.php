@@ -24,6 +24,7 @@ final class SearchContext extends Context
         'replication-study',
         'research-advance',
         'research-article',
+        'research-communication',
         'retraction',
         'scientific-correspondence',
         'short-report',
