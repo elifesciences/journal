@@ -29,7 +29,7 @@
         "guzzlehttp/psr7": "^1.4",
         "isometriks/spam-bundle": "^1.0",
         "kevinrob/guzzle-cache-middleware": "^3.2",
-        "knpuniversity/oauth2-client-bundle": "^1.16",
+        "knpuniversity/oauth2-client-bundle": "^1.20",
         "mindplay/composer-locator": "^2.1",
         "mustache/mustache": "^2.12",
         "nelmio/security-bundle": "^2.4",
@@ -88,9 +88,6 @@
             },
             "isometriks/spam-bundle": {
                 "Add field label": "https://github.com/isometriks/IsometriksSpamBundle/pull/9.patch"
-            },
-            "knpuniversity/oauth2-client-bundle": {
-                "Remove state from the session": "https://github.com/knpuniversity/oauth2-client-bundle/pull/106.patch"
             },
             "monolog/monolog": {
                 "Fix WhatFailureGroupHandler::handleBatch when the handler has processors": "https://github.com/Seldaek/monolog/pull/1022.patch"
