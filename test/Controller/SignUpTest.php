@@ -102,6 +102,22 @@ final class SignUpTest extends WebTestCase
     /**
      * @test
      */
+    public function it_has_a_csrf_token_if_you_are_logged_in()
+    {
+        $client = static::createClient();
+
+        $this->logIn($client);
+
+        $crawler = $client->request('GET', $this->getUrl());
+
+        $form = $crawler->selectButton('Sign up')->form();
+
+        $this->assertTrue($form->has('email_cta[_token]'));
+    }
+
+    /**
+     * @test
+     */
     public function it_has_a_honeypot()
     {
         $client = static::createClient();
