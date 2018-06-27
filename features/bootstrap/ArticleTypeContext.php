@@ -46,7 +46,7 @@ final class ArticleTypeContext extends Context
         $this->mockApiResponse(
             new Request(
                 'GET',
-                'http://api.elifesciences.org/search?for=&page=1&per-page=1&sort=date&order=desc&type[]=research-article&use-date=default',
+                'http://api.elifesciences.org/search?for=&page=1&per-page=1&sort=date&order=desc&type[]=research-article&type[]=research-communication&use-date=default',
                 ['Accept' => 'application/vnd.elife.search+json; version=1']
             ),
             new Response(
@@ -69,6 +69,7 @@ final class ArticleTypeContext extends Context
                         'insight' => 0,
                         'research-advance' => 0,
                         'research-article' => $this->numberOfArticles,
+                        'research-communication' => 0,
                         'retraction' => 0,
                         'registered-report' => 0,
                         'replication-study' => 0,
@@ -91,7 +92,7 @@ final class ArticleTypeContext extends Context
             $this->mockApiResponse(
                 new Request(
                     'GET',
-                    "http://api.elifesciences.org/search?for=&page=$page&per-page=$chunk&sort=date&order=desc&type[]=research-article&use-date=default",
+                    "http://api.elifesciences.org/search?for=&page=$page&per-page=$chunk&sort=date&order=desc&type[]=research-article&type[]=research-communication&use-date=default",
                     ['Accept' => 'application/vnd.elife.search+json; version=1']
                 ),
                 new Response(
@@ -114,6 +115,7 @@ final class ArticleTypeContext extends Context
                             'insight' => 0,
                             'research-advance' => 0,
                             'research-article' => $this->numberOfArticles,
+                            'research-communication' => 0,
                             'retraction' => 0,
                             'registered-report' => 0,
                             'replication-study' => 0,
