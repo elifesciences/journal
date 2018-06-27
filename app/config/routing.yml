@@ -261,6 +261,12 @@ labs:
     defaults:
          _controller: AppBundle:Labs:list
 
+innovation:
+    path: /innovation
+    controller: Symfony\Bundle\FrameworkBundle\Controller\RedirectController::redirectAction
+    defaults:
+        route: labs
+
 labs-post:
     path: /labs/{id}/{slug}
     defaults:
