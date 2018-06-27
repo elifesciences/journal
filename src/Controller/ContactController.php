@@ -63,12 +63,6 @@ eLife Sciences Publications, Ltd is a limited liability non-profit non-stock cor
 
         $arguments['form'] = $this->get('elife.journal.view_model.converter')->convert($form->createView());
 
-        $response = new Response($this->get('templating')->render('::contact.html.twig', $arguments));
-        $response->setPrivate();
-        $response->headers->addCacheControlDirective('no-cache');
-        $response->headers->addCacheControlDirective('no-store');
-        $response->headers->addCacheControlDirective('must-revalidate');
-
-        return $response;
+        return new Response($this->get('templating')->render('::contact.html.twig', $arguments));
     }
 }

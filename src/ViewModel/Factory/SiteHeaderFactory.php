@@ -43,7 +43,7 @@ final class SiteHeaderFactory
     public function createSiteHeader(Model $item = null, Profile $profile = null) : SiteHeader
     {
         if ($this->requestStack->getCurrentRequest() && 'search' !== $this->requestStack->getCurrentRequest()->get('_route')) {
-            $searchItem = NavLinkedItem::asIcon(new Link('Search', $this->urlGenerator->generate('search')),
+            $searchItem = NavLinkedItem::asIcon(new Link('Search the eLife site', $this->urlGenerator->generate('search')),
                 new Picture(
                     [
                         [
@@ -57,7 +57,7 @@ final class SiteHeaderFactory
                             2 => $this->packages->getUrl('assets/patterns/img/patterns/molecules/nav-primary-search-ic_2x.png'),
                             1 => $this->packages->getUrl('assets/patterns/img/patterns/molecules/nav-primary-search-ic_1x.png'),
                         ],
-                        'Search icon'
+                        ''
                     )
                 ),
                 false,

@@ -13,11 +13,13 @@ elifePipeline {
     }
 
     stage 'Deploy to prod', {
-        if (!params.force) {
-            elifeNewRelicEnsureApdex(29775807)
+        lock('journal--prod') {
+            if (!params.force) {
+                elifeNewRelicEnsureApdex(29775807)
+            }
+            elifeDeploySlackNotification 'journal', 'prod'
+            builderDeployRevision 'journal--prod', commit, 'blue-green'
+            builderSmokeTests 'journal--prod', '/srv/journal'
         }
-        elifeDeploySlackNotification 'journal', 'prod'
-        builderDeployRevision 'journal--prod', commit, 'blue-green'
-        builderSmokeTests 'journal--prod', '/srv/journal'
     }
 }
