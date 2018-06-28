@@ -287,13 +287,6 @@ services:
         arguments:
           - '@elife.journal.templating.promise_aware.inner'
 
-    elife.journal.twig.extension.assets:
-        class: eLife\Journal\Twig\AssetsExtension
-        arguments:
-          - '@elife.patterns.pattern_renderer.asset_recording'
-        tags:
-          - name: twig.extension
-
     elife.journal.twig.extension.fragment_link_rewriter:
         class: eLife\Journal\Twig\FragmentLinkRewriterExtension
         arguments:
@@ -1247,12 +1240,6 @@ services:
         arguments:
           - '@mustache'
 
-    elife.patterns.pattern_renderer.asset_recording:
-        class: eLife\Patterns\PatternRenderer\AssetRecordingPatternRenderer
-        decorates: elife.patterns.pattern_renderer
-        arguments:
-          - '@elife.patterns.pattern_renderer.asset_recording.inner'
-
     elife.patterns.mustache.helpers.asset_rewrite:
         class: eLife\Journal\Mustache\PackagesHelper
         public: false
@@ -1265,11 +1252,6 @@ services:
         arguments:
           - '@=composer_locate("elife/patterns")'
           - stat_props: '%mustache_stat_props%'
-
-    phive.twig.deferred:
-        class: Phive\Twig\Extensions\Deferred\DeferredExtension
-        tags:
-          - name: twig.extension
 
     monolog.processor.http_message:
         class: eLife\ApiClient\Log\HttpMessageProcessor
