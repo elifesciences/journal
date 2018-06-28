@@ -4,16 +4,13 @@ namespace eLife\Journal\ViewModel;
 
 use eLife\Patterns\ArrayAccessFromProperties;
 use eLife\Patterns\ArrayFromProperties;
-use eLife\Patterns\ComposedAssets;
 use eLife\Patterns\ViewModel;
 use eLife\Patterns\ViewModel\AssetViewerInline;
-use Traversable;
 
 final class AssetViewerInlineSet implements ViewModel
 {
     use ArrayAccessFromProperties;
     use ArrayFromProperties;
-    use ComposedAssets;
 
     private $viewers;
 
@@ -25,10 +22,5 @@ final class AssetViewerInlineSet implements ViewModel
     public function getTemplateName() : string
     {
         return 'asset-viewer-inline-set.mustache';
-    }
-
-    protected function getComposedViewModels() : Traversable
-    {
-        yield from $this->viewers;
     }
 }
