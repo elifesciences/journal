@@ -5,34 +5,30 @@ elifePipeline {
         commit = elifeGitRevision()
     }
 
-    elifeOnNode(
-        {
-            stage 'Build images', {
-                checkout scm
-                dockerComposeBuild commit
-            }
+    node('containers-jenkins-plugin') {
+        stage 'Build images', {
+            checkout scm
+            dockerComposeBuild commit
+        }
 
-            stage 'Project tests', {
-                sh "IMAGE_TAG=${commit} docker-compose -f docker-compose.yml -f docker-compose.ci.yml up -d"
-                dockerComposeProjectTestsParallel('journal', commit, [
-                    'phpunit': '/srv/journal/build/ci/phpunit/*.xml',
-                    'behat': '/srv/journal/build/ci/behat/*.xml'
-                ])
+        stage 'Project tests', {
+            sh "IMAGE_TAG=${commit} docker-compose -f docker-compose.yml -f docker-compose.ci.yml up -d"
+            dockerComposeProjectTestsParallel('journal', commit, [
+                'phpunit': '/srv/journal/build/ci/phpunit/*.xml',
+                'behat': '/srv/journal/build/ci/behat/*.xml'
+            ])
 
-                dockerComposeSmokeTests(commit, [
-                    'services': [
-                        'cli': './smoke_tests_cli.sh',
-                        'fpm': './smoke_tests_fpm.sh',
-                    ],
-                    'blackbox': [
-                        './smoke_tests.sh localhost 8080',
-                    ]
-                ])
-
-            }
-        },
-        'containers--medium'
-    )
+            dockerComposeSmokeTests(commit, [
+                'services': [
+                    'cli': './smoke_tests_cli.sh',
+                    'fpm': './smoke_tests_fpm.sh',
+                ],
+                'blackbox': [
+                    './smoke_tests.sh localhost 8080',
+                ]
+            ])
+        }
+    }
 
     elifeMainlineOnly {
         stage 'End2end tests', {

@@ -5,13 +5,14 @@ namespace eLife\Journal\ViewModel\Converter;
 use eLife\Journal\Helper\Callback;
 use eLife\Journal\Helper\Humanizer;
 use eLife\Journal\ViewModel\Form;
-use eLife\Journal\ViewModel\HiddenInput;
 use eLife\Patterns\PatternRenderer;
 use eLife\Patterns\ViewModel;
 use eLife\Patterns\ViewModel\MessageGroup;
 use InvalidArgumentException;
 use Symfony\Component\Form\ChoiceList\View\ChoiceView;
 use Symfony\Component\Form\FormView;
+use function array_filter;
+use function array_values;
 
 final class FormViewConverter implements ViewModelConverter
 {
@@ -75,7 +76,9 @@ final class FormViewConverter implements ViewModelConverter
                                 $children['submit']['text'],
                                 $children['email']['state'],
                                 $children['email']['messageGroup'],
-                                [],
+                                array_values(array_filter($children, function ($child) {
+                                    return $child instanceof ViewModel\HiddenField;
+                                })),
                                 $children[$this->honeypotField] ?? null
                             ),
                             $children['email']['formFieldInfoLink']
@@ -84,7 +87,7 @@ final class FormViewConverter implements ViewModelConverter
 
                     return new Form($form, $this->patternRenderer->render(...array_values($children)));
                 case 'hidden':
-                    return new HiddenInput($object->vars['full_name'], $object->vars['id'], $object->vars['value']);
+                    return new ViewModel\HiddenField($object->vars['full_name'], $object->vars['id'], $object->vars['value']);
                 case 'submit':
                     return ViewModel\Button::form($this->getLabel($object), ViewModel\Button::TYPE_SUBMIT, $object->vars['full_name'], ViewModel\Button::SIZE_MEDIUM,
                         ViewModel\Button::STYLE_DEFAULT, $object->vars['id'], true, false

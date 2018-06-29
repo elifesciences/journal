@@ -243,11 +243,7 @@
             window.elifeConfig = window.elifeConfig || {};
 
             window.elifeConfig.scriptPaths = [
-                {% block javascripts deferred %}
-                    {% for javascript in javascripts %}
-                        '{{ preload(asset(javascript), {as: 'script', nopush: true}) }}'{% if not loop.last %},{% endif %}
-                    {% endfor %}
-                {% endblock %}
+                '{{ preload(asset('assets/patterns/js/main.js'), {as: 'script', nopush: true}) }}'
             ];
 
             {% if hypothesis ?? false %}
@@ -283,10 +279,6 @@
 
         </script>
 
-    {% block stylesheets deferred %}
-    {% for stylesheet in stylesheets %}
-        <link href="{{ preload(asset(stylesheet), {as: 'style', nopush: true}) }}" rel="stylesheet">
-    {% endfor %}
-    {% endblock %}
+    <link href="{{ preload(asset('assets/patterns/css/all.css'), {as: 'style', nopush: true}) }}" rel="stylesheet">
 
 {% endblock %}

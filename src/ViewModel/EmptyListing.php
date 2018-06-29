@@ -4,7 +4,6 @@ namespace eLife\Journal\ViewModel;
 
 use eLife\Patterns\ArrayAccessFromProperties;
 use eLife\Patterns\ArrayFromProperties;
-use eLife\Patterns\SimplifyAssets;
 use eLife\Patterns\ViewModel;
 use eLife\Patterns\ViewModel\ListHeading;
 
@@ -12,7 +11,6 @@ final class EmptyListing implements ViewModel
 {
     use ArrayAccessFromProperties;
     use ArrayFromProperties;
-    use SimplifyAssets;
 
     private $heading;
     private $text;
