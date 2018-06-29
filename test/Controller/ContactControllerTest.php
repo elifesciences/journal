@@ -47,19 +47,6 @@ final class ContactControllerTest extends PageTestCase
     /**
      * @test
      */
-    public function it_has_cache_headers()
-    {
-        $client = static::createClient();
-
-        $client->request('GET', $this->getUrl());
-
-        $this->assertSame('max-age=0, must-revalidate, no-cache, no-store, private', $client->getResponse()->headers->get('Cache-Control'));
-        $this->assertEmpty($client->getResponse()->getVary());
-    }
-
-    /**
-     * @test
-     */
     public function it_requires_all_the_fields_to_be_completed()
     {
         $client = static::createClient();
@@ -99,6 +86,22 @@ final class ContactControllerTest extends PageTestCase
             ['Please provide a valid email address.'],
             array_map('trim', $crawler->filter('.form-item__message')->extract(['_text']))
         );
+    }
+
+    /**
+     * @test
+     */
+    public function it_has_a_csrf_token_if_you_are_logged_in()
+    {
+        $client = static::createClient();
+
+        $this->logIn($client);
+
+        $crawler = $client->request('GET', '/contact');
+
+        $form = $crawler->selectButton('Submit')->form();
+
+        $this->assertTrue($form->has('contact[_token]'));
     }
 
     /**
