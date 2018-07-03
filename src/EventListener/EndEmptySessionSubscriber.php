@@ -6,7 +6,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
-final class RemoveSessionSubscriber implements EventSubscriberInterface
+final class EndEmptySessionSubscriber implements EventSubscriberInterface
 {
     public static function getSubscribedEvents() : array
     {
