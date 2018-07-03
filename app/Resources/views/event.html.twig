@@ -22,6 +22,16 @@
 
     {{ render_pattern(contentHeader) }}
 
+    {% if contextualData %}
+
+        <div class="wrapper">
+
+            {{ render_pattern(contextualData) }}
+
+        </div>
+
+    {% endif %}
+
     {% embed 'grid/content.html.twig' %}
 
         {% block main %}

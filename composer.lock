@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6186dbb13c25199016dbfaa536a4a60b",
+    "content-hash": "f28b3375b46d71c8e45560c2f76005c5",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -861,12 +861,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-sdk-php.git",
-                "reference": "df953302a4931eed85166a55649c0ad9f436d526"
+                "reference": "060d26201e4da2aa968c2900f3f2f4891c77ffdb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/df953302a4931eed85166a55649c0ad9f436d526",
-                "reference": "df953302a4931eed85166a55649c0ad9f436d526",
+                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/060d26201e4da2aa968c2900f3f2f4891c77ffdb",
+                "reference": "060d26201e4da2aa968c2900f3f2f4891c77ffdb",
                 "shasum": ""
             },
             "require": {
@@ -902,20 +902,20 @@
                 "MIT"
             ],
             "description": "eLife Sciences API SDK",
-            "time": "2018-03-26T13:10:06+00:00"
+            "time": "2018-07-03T07:57:11+00:00"
         },
         {
             "name": "elife/patterns",
-            "version": "dev-update-site-nav",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/patterns-php.git",
-                "reference": "6c3239e3ffdf9f01eb891e7a4b81e242506e7f15"
+                "reference": "470dfc7f679b883e1d61030d06da871531e6ea06"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/6c3239e3ffdf9f01eb891e7a4b81e242506e7f15",
-                "reference": "6c3239e3ffdf9f01eb891e7a4b81e242506e7f15",
+                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/470dfc7f679b883e1d61030d06da871531e6ea06",
+                "reference": "470dfc7f679b883e1d61030d06da871531e6ea06",
                 "shasum": ""
             },
             "require": {
@@ -951,7 +951,7 @@
                 "MIT"
             ],
             "description": "eLife patterns",
-            "time": "2018-07-02T15:14:49+00:00"
+            "time": "2018-07-03T08:50:19+00:00"
         },
         {
             "name": "fabpot/goutte",
@@ -1413,16 +1413,16 @@
         },
         {
             "name": "knpuniversity/oauth2-client-bundle",
-            "version": "1.16.1",
+            "version": "v1.20.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/knpuniversity/oauth2-client-bundle.git",
-                "reference": "86084234deb173c10d2258777037dddf958f8875"
+                "reference": "71642a344617bf227aabdb64d7554e36b79d8a1b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/knpuniversity/oauth2-client-bundle/zipball/86084234deb173c10d2258777037dddf958f8875",
-                "reference": "86084234deb173c10d2258777037dddf958f8875",
+                "url": "https://api.github.com/repos/knpuniversity/oauth2-client-bundle/zipball/71642a344617bf227aabdb64d7554e36b79d8a1b",
+                "reference": "71642a344617bf227aabdb64d7554e36b79d8a1b",
                 "shasum": ""
             },
             "require": {
@@ -1463,7 +1463,7 @@
                 "oauth",
                 "oauth2"
             ],
-            "time": "2018-01-22T16:50:52+00:00"
+            "time": "2018-06-27T02:29:56+00:00"
         },
         {
             "name": "league/oauth2-client",
@@ -2529,6 +2529,9 @@
             "extra": {
                 "branch-alias": {
                     "dev-master": "3.4-dev"
+                },
+                "patches_applied": {
+                    "Make AbstractTestSessionListener compatible with CookieClearingLogoutHandler": "https://github.com/symfony/symfony/pull/27659.patch"
                 }
             },
             "autoload": {
@@ -3366,12 +3369,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-raml.git",
-                "reference": "2ceb798da35b1bd7f26d81aaa6ae535bd958dd41"
+                "reference": "ff365252d54ff5e74c314149a83116771865ece8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-raml/zipball/2ceb798da35b1bd7f26d81aaa6ae535bd958dd41",
-                "reference": "2ceb798da35b1bd7f26d81aaa6ae535bd958dd41",
+                "url": "https://api.github.com/repos/elifesciences/api-raml/zipball/ff365252d54ff5e74c314149a83116771865ece8",
+                "reference": "ff365252d54ff5e74c314149a83116771865ece8",
                 "shasum": ""
             },
             "conflict": {
@@ -3383,7 +3386,7 @@
                 "MIT"
             ],
             "description": "eLife Sciences API specification",
-            "time": "2018-03-26T12:08:31+00:00"
+            "time": "2018-07-03T07:53:22+00:00"
         },
         {
             "name": "elife/api-validator",

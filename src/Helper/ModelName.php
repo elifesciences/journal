@@ -31,6 +31,10 @@ final class ModelName
             'singular' => 'Research Article',
             'plural' => 'Research Articles',
         ],
+        'research-communication' => [
+            'singular' => 'Research Communication',
+            'plural' => 'Research Communication',
+        ],
         'retraction' => [
             'singular' => 'Retraction',
             'plural' => 'Retractions',

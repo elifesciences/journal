@@ -39,6 +39,7 @@ final class ModelNameTest extends TestCase
             'insight' => ['Insight', 'Insights'],
             'research-advance' => ['Research Advance', 'Research Advances'],
             'research-article' => ['Research Article', 'Research Articles'],
+            'research-communication' => ['Research Communication', 'Research Communication'],
             'retraction' => ['Retraction', 'Retractions'],
             'registered-report' => ['Registered Report', 'Registered Reports'],
             'replication-study' => ['Replication Study', 'Replication Studies'],

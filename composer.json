@@ -21,7 +21,7 @@
         "cweagans/composer-patches": "^1.6",
         "elife/api-client": "^1.0@dev",
         "elife/api-sdk": "^1.0@dev",
-        "elife/patterns": "dev-update-site-nav",
+        "elife/patterns": "dev-master",
         "fabpot/goutte": "^3.2",
         "fig/link-util": "^1.0",
         "firebase/php-jwt": "^5.0",
@@ -29,7 +29,7 @@
         "guzzlehttp/psr7": "^1.4",
         "isometriks/spam-bundle": "^1.0",
         "kevinrob/guzzle-cache-middleware": "^3.2",
-        "knpuniversity/oauth2-client-bundle": "^1.16",
+        "knpuniversity/oauth2-client-bundle": "^1.20",
         "mindplay/composer-locator": "^2.1",
         "mustache/mustache": "^2.12",
         "nelmio/security-bundle": "^2.4",
@@ -90,6 +90,9 @@
             },
             "monolog/monolog": {
                 "Fix WhatFailureGroupHandler::handleBatch when the handler has processors": "https://github.com/Seldaek/monolog/pull/1022.patch"
+            },
+            "symfony/symfony": {
+                "Make AbstractTestSessionListener compatible with CookieClearingLogoutHandler": "https://github.com/symfony/symfony/pull/27659.patch"
             }
         }
     }
