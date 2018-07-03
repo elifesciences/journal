@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "689af3b8f8f57e87faf7d49127ef9f45",
+    "content-hash": "f28b3375b46d71c8e45560c2f76005c5",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -1413,16 +1413,16 @@
         },
         {
             "name": "knpuniversity/oauth2-client-bundle",
-            "version": "1.16.1",
+            "version": "v1.20.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/knpuniversity/oauth2-client-bundle.git",
-                "reference": "86084234deb173c10d2258777037dddf958f8875"
+                "reference": "71642a344617bf227aabdb64d7554e36b79d8a1b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/knpuniversity/oauth2-client-bundle/zipball/86084234deb173c10d2258777037dddf958f8875",
-                "reference": "86084234deb173c10d2258777037dddf958f8875",
+                "url": "https://api.github.com/repos/knpuniversity/oauth2-client-bundle/zipball/71642a344617bf227aabdb64d7554e36b79d8a1b",
+                "reference": "71642a344617bf227aabdb64d7554e36b79d8a1b",
                 "shasum": ""
             },
             "require": {
@@ -1463,7 +1463,7 @@
                 "oauth",
                 "oauth2"
             ],
-            "time": "2018-01-22T16:50:52+00:00"
+            "time": "2018-06-27T02:29:56+00:00"
         },
         {
             "name": "league/oauth2-client",
@@ -2529,6 +2529,9 @@
             "extra": {
                 "branch-alias": {
                     "dev-master": "3.4-dev"
+                },
+                "patches_applied": {
+                    "Make AbstractTestSessionListener compatible with CookieClearingLogoutHandler": "https://github.com/symfony/symfony/pull/27659.patch"
                 }
             },
             "autoload": {

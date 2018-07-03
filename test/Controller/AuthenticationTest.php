@@ -5,6 +5,7 @@ namespace test\eLife\Journal\Controller;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\Uri;
+use Symfony\Component\BrowserKit\Cookie;
 use test\eLife\Journal\WebTestCase;
 use Traversable;
 use function GuzzleHttp\Psr7\build_query;
@@ -151,10 +152,7 @@ final class AuthenticationTest extends WebTestCase
         $this->assertSame('Failed to log in, please try again.', trim($crawler->filter('.info-bar')->text()));
         $this->assertSame('max-age=0, must-revalidate, private', $client->getResponse()->headers->get('Cache-Control'));
         $this->assertEmpty($client->getResponse()->getVary());
-
-        $crawler = $client->reload();
-        $this->assertSame(200, $client->getResponse()->getStatusCode());
-        $this->assertCount(0, $crawler->filter('.info-bar'));
+        $this->assertEmpty($client->getCookieJar()->all());
     }
 
     /**
@@ -206,10 +204,7 @@ final class AuthenticationTest extends WebTestCase
         $this->assertSame('Please adjust your ORCID privacy settings for eLife to display your name.', trim($crawler->filter('.info-bar')->text()));
         $this->assertSame('max-age=0, must-revalidate, private', $client->getResponse()->headers->get('Cache-Control'));
         $this->assertEmpty($client->getResponse()->getVary());
-
-        $crawler = $client->reload();
-        $this->assertSame(200, $client->getResponse()->getStatusCode());
-        $this->assertCount(0, $crawler->filter('.info-bar'));
+        $this->assertEmpty($client->getCookieJar()->all());
     }
 
     /**
@@ -256,6 +251,28 @@ final class AuthenticationTest extends WebTestCase
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertCount(1, $crawler->filter('a:contains("Log in/Register (via ORCID)")'));
+        $this->assertEmpty($client->getCookieJar()->all());
+    }
+
+    /**
+     * @test
+     */
+    public function it_removes_the_cookie_if_the_session_does_not_exist()
+    {
+        $client = static::createClient();
+
+        $session = $client->getContainer()->get('session');
+
+        $cookie = new Cookie($session->getName(), 'foo', null, null, 'localhost');
+        $client->getCookieJar()->set($cookie);
+
+        $this->readyHomePage();
+
+        $crawler = $client->request('GET', '/');
+
+        $this->assertSame(200, $client->getResponse()->getStatusCode());
+        $this->assertCount(1, $crawler->filter('a:contains("Log in/Register (via ORCID)")'));
+        $this->assertEmpty($client->getCookieJar()->all());
     }
 
     /**
@@ -292,6 +309,7 @@ final class AuthenticationTest extends WebTestCase
         $crawler = $client->click($crawler->filter('a:contains("Log out")')->link());
 
         $this->assertCount(1, $crawler->filter('a:contains("Log in/Register (via ORCID)")'));
+        $this->assertEmpty($client->getCookieJar()->all());
     }
 
     private function readyHomePage()
