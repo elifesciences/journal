@@ -109,7 +109,7 @@ final class LabsControllerTest extends PageTestCase
         $response = $client->getResponse();
 
         $this->assertSame(302, $response->getStatusCode());
-        $this->assertSame('/labs', $response->headers->get('Location'));
+        $this->assertSame('http://localhost/labs', $response->headers->get('Location'));
     }
 
     protected function getUrl() : string
