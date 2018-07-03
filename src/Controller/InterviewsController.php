@@ -88,7 +88,17 @@ final class InterviewsController extends Controller
         $arguments['contentHeader'] = $arguments['item']
             ->then($this->willConvertTo(ContentHeader::class));
 
-        $arguments['contextualData'] = ContextualData::annotationsOnly(SpeechBubble::forContextualData());
+        $arguments['pageViews'] = $this->get('elife.api_sdk.metrics')
+            ->totalPageViews(Identifier::interview($id))
+            ->otherwise($this->mightNotExist())
+            ->otherwise($this->softFailure('Failed to load page views count'));
+
+        $arguments['contextualData'] = $arguments['pageViews']
+            ->then(Callback::emptyOr(function (int $pageViews) {
+                return ContextualData::withMetrics([sprintf('Views %s', number_format($pageViews))], null, null, SpeechBubble::forContextualData());
+            }, function () {
+                return ContextualData::annotationsOnly(SpeechBubble::forContextualData());
+            }));
 
         $arguments['blocks'] = $arguments['item']
             ->then($this->willConvertContent())

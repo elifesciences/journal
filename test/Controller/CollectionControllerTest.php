@@ -31,6 +31,54 @@ final class CollectionControllerTest extends PageTestCase
     /**
      * @test
      */
+    public function it_displays_metrics()
+    {
+        $client = static::createClient();
+
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/metrics/collection/1/page-views?by=month&page=1&per-page=20&order=desc',
+                ['Accept' => 'application/vnd.elife.metric-time-period+json; version=1']
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.metric-time-period+json; version=1'],
+                json_encode([
+                    'totalPeriods' => 2,
+                    'totalValue' => 5678,
+                    'periods' => [
+                        [
+                            'period' => '2016-01-01',
+                            'value' => 2839,
+                        ],
+                        [
+                            'period' => '2016-01-02',
+                            'value' => 2839,
+                        ],
+                    ],
+                ])
+            )
+        );
+
+        $crawler = $client->request('GET', $this->getUrl());
+
+        $this->assertSame(200, $client->getResponse()->getStatusCode());
+        $this->assertSame('Collection title', $crawler->filter('.content-header__title')->text());
+
+        $this->assertSame(
+            [
+                'Views 5,678',
+            ],
+            array_map(function (string $text) {
+                return trim(preg_replace('!\s+!', ' ', $text));
+            }, $crawler->filter('.contextual-data__item')->extract('_text'))
+        );
+    }
+
+    /**
+     * @test
+     */
     public function it_displays_multimedia()
     {
         $client = static::createClient();
