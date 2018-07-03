@@ -17,6 +17,7 @@ final class ModelRelationship
             'to' => [
                 'research-advance',
                 'research-article',
+                'research-communication',
                 'scientific-correspondence',
                 'short-report',
                 'tools-resources',
@@ -33,6 +34,7 @@ final class ModelRelationship
             'from' => [
                 'research-advance',
                 'research-article',
+                'research-communication',
                 'scientific-correspondence',
                 'short-report',
                 'tools-resources',

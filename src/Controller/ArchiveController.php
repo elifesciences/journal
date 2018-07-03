@@ -181,7 +181,7 @@ final class ArchiveController extends Controller
             ->otherwise($this->softFailure('Failed to load cover articles for '.$starts->format('F Y')));
 
         $arguments['listing'] = $research = $this->get('elife.api_sdk.search')
-            ->forType('research-advance', 'research-article', 'scientific-correspondence', 'short-report', 'tools-resources', 'replication-study')
+            ->forType('research-advance', 'research-article', 'research-communication', 'scientific-correspondence', 'short-report', 'tools-resources', 'replication-study')
             ->sortBy('date')
             ->startDate($starts)
             ->endDate($ends)
