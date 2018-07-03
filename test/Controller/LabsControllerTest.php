@@ -95,6 +95,23 @@ final class LabsControllerTest extends PageTestCase
         }
     }
 
+    /**
+     * @test
+     */
+    public function it_redirects_from_innovation()
+    {
+        $client = static::createClient();
+
+        $client->followRedirects(false);
+
+        $client->request('GET', '/innovation');
+
+        $response = $client->getResponse();
+
+        $this->assertSame(302, $response->getStatusCode());
+        $this->assertSame('http://localhost/labs', $response->headers->get('Location'));
+    }
+
     protected function getUrl() : string
     {
         $this->mockApiResponse(
