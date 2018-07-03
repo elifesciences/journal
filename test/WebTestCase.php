@@ -24,7 +24,7 @@ abstract class WebTestCase extends BaseWebTestCase
         $session->set('_security_main', serialize($token));
         $session->save();
 
-        $cookie = new Cookie($session->getName(), $session->getId());
+        $cookie = new Cookie($session->getName(), $session->getId(), null, null, 'localhost');
         $client->getCookieJar()->set($cookie);
 
         $this->mockApiResponse(

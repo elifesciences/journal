@@ -106,7 +106,6 @@ nelmio_security:
         enforce:
             frame-ancestors:
               - none
-            report-uri: '%router.request_context.base_url%/nelmio/csp/report'
     referrer_policy:
         enabled: true
         policies:
