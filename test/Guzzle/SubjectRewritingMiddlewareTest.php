@@ -743,7 +743,7 @@ final class SubjectRewritingMiddlewareTest extends KernelTestCase
     private function createImage() : array
     {
         return [
-            'uri' => 'https://www.example.com/iiif/image',
+            'uri' => 'https://www.example.com/prefix/iden%2Ftifer',
             'alt' => '',
             'source' => [
                 'mediaType' => 'image/jpeg',

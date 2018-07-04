@@ -26,7 +26,7 @@ final class PeopleContext extends Context
             'impactStatement' => "Subject $name impact statement.",
             'image' => [
                 'banner' => [
-                    'uri' => 'https://www.example.com/iiif/banner',
+                    'uri' => 'https://www.example.com/iiif/ban%2Fner',
                     'alt' => '',
                     'source' => [
                         'mediaType' => 'image/jpeg',
@@ -39,7 +39,7 @@ final class PeopleContext extends Context
                     ],
                 ],
                 'thumbnail' => [
-                    'uri' => 'https://www.example.com/iiif/thumbnail',
+                    'uri' => 'https://www.example.com/iiif/thumb%2Fnail',
                     'alt' => '',
                     'source' => [
                         'mediaType' => 'image/jpeg',

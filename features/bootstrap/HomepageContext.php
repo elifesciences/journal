@@ -165,7 +165,7 @@ final class HomepageContext extends Context
                 'published' => $today->format(ApiSdk::DATE_FORMAT),
                 'image' => [
                     'thumbnail' => [
-                        'uri' => 'https://www.example.com/iiif/image',
+                        'uri' => 'https://www.example.com/iiif/iden%2Ftifer',
                         'alt' => '',
                         'source' => [
                             'mediaType' => 'image/jpeg',
@@ -267,7 +267,7 @@ final class HomepageContext extends Context
                         [
                             'title' => $collectionName,
                             'image' => [
-                                'uri' => 'https://www.example.com/iiif/image',
+                                'uri' => 'https://www.example.com/iiif/iden%2Ftifier',
                                 'alt' => '',
                                 'source' => [
                                     'mediaType' => 'image/jpeg',
@@ -286,7 +286,7 @@ final class HomepageContext extends Context
                                 'published' => $today->format(ApiSdk::DATE_FORMAT),
                                 'image' => [
                                     'banner' => [
-                                        'uri' => 'https://www.example.com/iiif/banner',
+                                        'uri' => 'https://www.example.com/iiif/ban%2Fner',
                                         'alt' => '',
                                         'source' => [
                                             'mediaType' => 'image/jpeg',
@@ -299,7 +299,7 @@ final class HomepageContext extends Context
                                         ],
                                     ],
                                     'thumbnail' => [
-                                        'uri' => 'https://www.example.com/iiif/thumbnail',
+                                        'uri' => 'https://www.example.com/iiif/thumb%2Fnail',
                                         'alt' => '',
                                         'source' => [
                                             'mediaType' => 'image/jpeg',
@@ -355,7 +355,7 @@ final class HomepageContext extends Context
                         [
                             'title' => 'Cover',
                             'image' => [
-                                'uri' => 'https://www.example.com/iiif/image',
+                                'uri' => 'https://www.example.com/iiif/iden%2Ftifier',
                                 'alt' => '',
                                 'source' => [
                                     'mediaType' => 'image/png',
@@ -385,7 +385,7 @@ final class HomepageContext extends Context
                                 ],
                                 'image' => [
                                     'banner' => [
-                                        'uri' => 'https://www.example.com/iiif/banner',
+                                        'uri' => 'https://www.example.com/iiif/ban%2Fner',
                                         'alt' => '',
                                         'source' => [
                                             'mediaType' => 'image/jpeg',
@@ -398,7 +398,7 @@ final class HomepageContext extends Context
                                         ],
                                     ],
                                     'thumbnail' => [
-                                        'uri' => 'https://www.example.com/iiif/thumbnail',
+                                        'uri' => 'https://www.example.com/iiif/thumb%2Fnail',
                                         'alt' => '',
                                         'source' => [
                                             'mediaType' => 'image/jpeg',
@@ -654,7 +654,7 @@ final class HomepageContext extends Context
                 'css',
                 '.carousel-item__image',
                 'src',
-                'https://www.example.com/iiif/image/0,529,1800,543/1114,336/0/default.jpg'
+                'https://www.example.com/iiif/iden%2Ftifier/0,529,1800,543/1114,336/0/default.jpg'
             );
         });
     }
@@ -669,7 +669,7 @@ final class HomepageContext extends Context
                 'css',
                 '.carousel-item__image',
                 'src',
-                'https://www.example.com/iiif/image/0,529,1800,543/1114,336/0/default.png'
+                'https://www.example.com/iiif/iden%2Ftifier/0,529,1800,543/1114,336/0/default.png'
             );
         });
     }

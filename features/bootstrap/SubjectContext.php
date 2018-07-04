@@ -38,7 +38,7 @@ final class SubjectContext extends Context
                 'impactStatement' => 'Subject '.$i.' impact statement.',
                 'image' => [
                     'banner' => [
-                        'uri' => "https://www.example.com/iiif/banner$i",
+                        'uri' => "https://www.example.com/iiif/banner%2F$i",
                         'alt' => '',
                         'source' => [
                             'mediaType' => 'image/jpeg',
@@ -51,7 +51,7 @@ final class SubjectContext extends Context
                         ],
                     ],
                     'thumbnail' => [
-                        'uri' => "https://www.example.com/iiif/thumbnail$i",
+                        'uri' => "https://www.example.com/iiif/thumbnail%2F$i",
                         'alt' => '',
                         'source' => [
                             'mediaType' => 'image/jpeg',
@@ -111,7 +111,7 @@ final class SubjectContext extends Context
                     'impactStatement' => "$subject impact statement.",
                     'image' => [
                         'banner' => [
-                            'uri' => 'https://www.example.com/iiif/banner',
+                            'uri' => 'https://www.example.com/iiif/ban%2Fner',
                             'alt' => '',
                             'source' => [
                                 'mediaType' => 'image/jpeg',
@@ -124,7 +124,7 @@ final class SubjectContext extends Context
                             ],
                         ],
                         'thumbnail' => [
-                            'uri' => 'https://www.example.com/iiif/thumbnail',
+                            'uri' => 'https://www.example.com/iiif/thumb%2Fnail',
                             'alt' => '',
                             'source' => [
                                 'mediaType' => 'image/jpeg',
@@ -166,7 +166,7 @@ final class SubjectContext extends Context
                 'published' => $today->format(ApiSdk::DATE_FORMAT),
                 'image' => [
                     'banner' => [
-                        'uri' => 'https://www.example.com/iiif/banner',
+                        'uri' => 'https://www.example.com/iiif/ban%2Fner',
                         'alt' => '',
                         'source' => [
                             'mediaType' => 'image/jpeg',
@@ -179,7 +179,7 @@ final class SubjectContext extends Context
                         ],
                     ],
                     'thumbnail' => [
-                        'uri' => 'https://www.example.com/iiif/image',
+                        'uri' => 'https://www.example.com/iiif/iden%2Ftifier',
                         'alt' => '',
                         'source' => [
                             'mediaType' => 'image/jpeg',
@@ -361,7 +361,7 @@ final class SubjectContext extends Context
                     'published' => $today->format(ApiSdk::DATE_FORMAT),
                     'image' => [
                         'thumbnail' => [
-                            'uri' => 'https://www.example.com/iiif/image',
+                            'uri' => 'https://www.example.com/iiif/iden%2Ftifier',
                             'alt' => '',
                             'source' => [
                                 'mediaType' => 'image/jpeg',

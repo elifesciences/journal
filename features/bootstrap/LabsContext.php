@@ -26,7 +26,7 @@ final class LabsContext extends Context
                 'published' => $today->format(ApiSdk::DATE_FORMAT),
                 'image' => [
                     'thumbnail' => [
-                        'uri' => "https://www.example.com/iiif/thumbnail$i",
+                        'uri' => "https://www.example.com/iiif/thumbnail%2F$i",
                         'alt' => '',
                         'source' => [
                             'mediaType' => 'image/jpeg',
