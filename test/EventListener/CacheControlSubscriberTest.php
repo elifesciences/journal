@@ -19,7 +19,7 @@ final class CacheControlSubscriberTest extends TestCase
      */
     public function it_adds_cache_headers_if_none_are_set()
     {
-        $subscriber = new CacheControlSubscriber(1, 2, 3);
+        $subscriber = new CacheControlSubscriber('public, max-age=1, stale-while-revalidate=2, stale-if-error=3');
 
         $subscriber->onKernelResponse(new FilterResponseEvent($this->createMock(HttpKernelInterface::class), new Request(), HttpKernelInterface::MASTER_REQUEST, $response = new Response('foo')));
 
@@ -33,7 +33,7 @@ final class CacheControlSubscriberTest extends TestCase
      */
     public function it_adds_a_vary_header()
     {
-        $subscriber = new CacheControlSubscriber(1, 2, 3);
+        $subscriber = new CacheControlSubscriber('public, max-age=1');
 
         $subscriber->onKernelResponse(new FilterResponseEvent($this->createMock(HttpKernelInterface::class), new Request(), HttpKernelInterface::MASTER_REQUEST, $response = new Response('foo', Response::HTTP_OK, ['Cache-Control' => 'public'])));
 
@@ -47,7 +47,7 @@ final class CacheControlSubscriberTest extends TestCase
      */
     public function it_does_not_change_for_post_requests()
     {
-        $subscriber = new CacheControlSubscriber(1, 2, 3);
+        $subscriber = new CacheControlSubscriber('public, max-age=1');
 
         $subscriber->onKernelResponse(new FilterResponseEvent($this->createMock(HttpKernelInterface::class), Request::create('foo', Request::METHOD_POST), HttpKernelInterface::MASTER_REQUEST, $response = new Response('foo')));
 
@@ -61,7 +61,7 @@ final class CacheControlSubscriberTest extends TestCase
      */
     public function it_does_not_change_for_streamed_responses()
     {
-        $subscriber = new CacheControlSubscriber(1, 2, 3);
+        $subscriber = new CacheControlSubscriber('public, max-age=1');
 
         $subscriber->onKernelResponse(new FilterResponseEvent($this->createMock(HttpKernelInterface::class), new Request(), HttpKernelInterface::MASTER_REQUEST, $response = new StreamedResponse()));
 
@@ -75,7 +75,7 @@ final class CacheControlSubscriberTest extends TestCase
      */
     public function it_does_not_change_for_already_not_modified_responses()
     {
-        $subscriber = new CacheControlSubscriber(1, 2, 3);
+        $subscriber = new CacheControlSubscriber('public, max-age=1');
 
         $subscriber->onKernelResponse(new FilterResponseEvent($this->createMock(HttpKernelInterface::class), new Request(), HttpKernelInterface::MASTER_REQUEST, $response = new Response('', Response::HTTP_NOT_MODIFIED)));
 
@@ -89,7 +89,7 @@ final class CacheControlSubscriberTest extends TestCase
      */
     public function it_does_not_change_when_there_is_a_new_session()
     {
-        $subscriber = new CacheControlSubscriber(1, 2, 3);
+        $subscriber = new CacheControlSubscriber('public, max-age=1');
 
         $request = new Request();
         $request->setSession($session = new Session(new MockArraySessionStorage()));
@@ -107,7 +107,7 @@ final class CacheControlSubscriberTest extends TestCase
      */
     public function it_does_not_change_when_there_is_a_previous_session()
     {
-        $subscriber = new CacheControlSubscriber(1, 2, 3);
+        $subscriber = new CacheControlSubscriber('public, max-age=1');
 
         $request = new Request();
         $request->setSession($session = new Session(new MockArraySessionStorage()));

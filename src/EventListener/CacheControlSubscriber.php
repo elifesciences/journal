@@ -9,15 +9,11 @@ use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 
 final class CacheControlSubscriber implements EventSubscriberInterface
 {
-    private $maxAge;
-    private $staleWhileRevalidate;
-    private $staleIfError;
+    private $cacheControl;
 
-    public function __construct(int $maxAge, int $staleWhileRevalidate, int $staleIfError)
+    public function __construct(string $cacheControl)
     {
-        $this->maxAge = $maxAge;
-        $this->staleWhileRevalidate = $staleWhileRevalidate;
-        $this->staleIfError = $staleIfError;
+        $this->cacheControl = $cacheControl;
     }
 
     public static function getSubscribedEvents() : array
@@ -43,7 +39,7 @@ final class CacheControlSubscriber implements EventSubscriberInterface
         if ('no-cache, private' === $response->headers->get('Cache-Control')) {
             // Default Symfony value, so treat as untouched.
 
-            $response->headers->set('Cache-Control', "public, max-age={$this->maxAge}, stale-while-revalidate={$this->staleWhileRevalidate}, stale-if-error={$this->staleIfError}");
+            $response->headers->set('Cache-Control', $this->cacheControl);
         }
 
         $response->setEtag(md5($response->getContent()));
