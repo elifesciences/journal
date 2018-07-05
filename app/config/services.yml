@@ -208,6 +208,10 @@ services:
 
     elife.journal.listener.cache_control:
         class: eLife\Journal\EventListener\CacheControlSubscriber
+        arguments:
+          - '%cache_max_age%'
+          - '%cache_stale_while_revalidate%'
+          - '%cache_stale_if_error%'
         tags:
           - name: kernel.event_subscriber
 
