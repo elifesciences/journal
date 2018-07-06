@@ -26,7 +26,7 @@ final class ArticleFiguresControllerTest extends PageTestCase
             $crawler->filter('.contextual-data__cite_wrapper')->text());
         $this->assertContains('doi: 10.7554/eLife.00001', $crawler->filter('.contextual-data__cite_wrapper')->text());
 
-        $this->assertSame('2 figures, 1 video, 1 table, 2 data sets and 1 additional file', trim($crawler->filter('.message-bar')->text()));
+        $this->assertSame('4 figures, 1 video, 1 table, 2 data sets and 1 additional file', trim($crawler->filter('.message-bar')->text()));
 
         $figureTypes = $crawler->filter('.grid-column > section');
         $this->assertCount(6, $figureTypes);
@@ -38,6 +38,8 @@ final class ArticleFiguresControllerTest extends PageTestCase
         $this->assertSame('Image 2 source data 1 label', trim($figures->eq(1)->filter('.additional-assets__list .caption-text__heading')->text()));
         $this->assertSame('Image 2 supplement 1 label', trim($figures->eq(2)->filter('.asset-viewer-inline__header_text')->text()));
         $this->assertSame('Image 2 supplement 1 source data 1 label', trim($figures->eq(2)->filter('.additional-assets__list .caption-text__heading')->text()));
+        $this->assertSame('Appendix image label', trim($figures->eq(3)->filter('.asset-viewer-inline__header_text')->text()));
+        $this->assertSame('Author response image label', trim($figures->eq(4)->filter('.asset-viewer-inline__header_text')->text()));
 
         $this->assertSame('Videos', $figureTypes->eq(1)->filter('.article-section__header_text')->text());
         $videos = $figureTypes->eq(1)->filter('.asset-viewer-inline');
@@ -510,6 +512,82 @@ final class ArticleFiguresControllerTest extends PageTestCase
                                             'title' => 'Table 1 title',
                                             'tables' => [
                                                 '<table><tbody><tr><td>Table</td></tr></tbody></table>',
+                                            ],
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                    'appendices' => [
+                        [
+                            'id' => 'app',
+                            'title' => 'Appendix',
+                            'content' => [
+                                [
+                                    'type' => 'figure',
+                                    'assets' => [
+                                        [
+                                            'type' => 'image',
+                                            'id' => 'appimage',
+                                            'label' => 'Appendix image label',
+                                            'title' => 'Appendix image title',
+                                            'image' => [
+                                                'uri' => 'https://www.example.com/iiif/image',
+                                                'alt' => '',
+                                                'source' => [
+                                                    'mediaType' => 'image/jpeg',
+                                                    'uri' => 'https://www.example.com/image.jpg',
+                                                    'filename' => 'image.jpg',
+                                                ],
+                                                'size' => [
+                                                    'width' => 800,
+                                                    'height' => 600,
+                                                ],
+                                            ],
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                    'decisionLetter' => [
+                        'doi' => '10.7554/eLife.00001.001',
+                        'description' => [
+                            [
+                                'type' => 'paragraph',
+                                'text' => 'Decision letter description',
+                            ],
+                        ],
+                        'content' => [
+                            [
+                                'type' => 'paragraph',
+                                'text' => 'Decision letter text',
+                            ],
+                        ],
+                    ],
+                    'authorResponse' => [
+                        'doi' => '10.7554/eLife.00001.002',
+                        'content' => [
+                            [
+                                'type' => 'figure',
+                                'assets' => [
+                                    [
+                                        'type' => 'image',
+                                        'id' => 'arimage',
+                                        'label' => 'Author response image label',
+                                        'title' => 'Author response image title',
+                                        'image' => [
+                                            'uri' => 'https://www.example.com/iiif/image',
+                                            'alt' => '',
+                                            'source' => [
+                                                'mediaType' => 'image/jpeg',
+                                                'uri' => 'https://www.example.com/image.jpg',
+                                                'filename' => 'image.jpg',
+                                            ],
+                                            'size' => [
+                                                'width' => 800,
+                                                'height' => 600,
                                             ],
                                         ],
                                     ],
