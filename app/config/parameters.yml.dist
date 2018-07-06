@@ -30,3 +30,4 @@ parameters:
       - from_id: from-subject
         to_id: to-subject
         to_name: To Subject Name
+    cache_control: public, max-age=300, stale-while-revalidate=300, stale-if-error=86400

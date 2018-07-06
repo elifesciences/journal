@@ -9,6 +9,13 @@ use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 
 final class CacheControlSubscriber implements EventSubscriberInterface
 {
+    private $cacheControl;
+
+    public function __construct(string $cacheControl)
+    {
+        $this->cacheControl = $cacheControl;
+    }
+
     public static function getSubscribedEvents() : array
     {
         return [
@@ -32,7 +39,7 @@ final class CacheControlSubscriber implements EventSubscriberInterface
         if ('no-cache, private' === $response->headers->get('Cache-Control')) {
             // Default Symfony value, so treat as untouched.
 
-            $response->headers->set('Cache-Control', 'public, max-age=300, stale-while-revalidate=300, stale-if-error=86400');
+            $response->headers->set('Cache-Control', $this->cacheControl);
         }
 
         $response->setEtag(md5($response->getContent()));

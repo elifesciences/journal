@@ -6,6 +6,7 @@ parameters:
     api_url: http://api.elifesciences.org
     api_url_public: http://api.elifesciences.org
     api_mock: '%kernel.project_dir%/var/fixtures/instance_%kernel.instance%'
+    cache_control: public, max-age=300, stale-while-revalidate=300, stale-if-error=86400
     crm_url: http://crm.elifesciences.org/crm/civicrm/
     oauth2_client_id: journal_client_id
     oauth2_client_secret: journal_client_secret

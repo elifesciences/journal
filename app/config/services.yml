@@ -208,6 +208,8 @@ services:
 
     elife.journal.listener.cache_control:
         class: eLife\Journal\EventListener\CacheControlSubscriber
+        arguments:
+          - '%cache_control%'
         tags:
           - name: kernel.event_subscriber
 

@@ -27,3 +27,4 @@ parameters:
     hypothesis_client_id: some-id
     hypothesis_client_secret: ThisIsASecret
     subject_rewrites: []
+    cache_control: private, no-cache, no-store, must-revalidate
