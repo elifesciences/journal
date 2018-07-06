@@ -40,7 +40,7 @@ final class PodcastEpisodeControllerTest extends PageTestCase
         $this->assertSame('Episode impact statement', $crawler->filter('meta[name="description"]')->attr('content'));
         $this->assertSame('article', $crawler->filter('meta[property="og:type"]')->attr('content'));
         $this->assertSame('summary_large_image', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
-        $this->assertSame('https://www.example.com/iiif/banner/0,529,1800,543/1114,336/0/default.jpg', $crawler->filter('meta[property="og:image"]')->attr('content'));
+        $this->assertSame('https://www.example.com/iiif/ban%2Fner/0,529,1800,543/1114,336/0/default.jpg', $crawler->filter('meta[property="og:image"]')->attr('content'));
         $this->assertSame('1114', $crawler->filter('meta[property="og:image:width"]')->attr('content'));
         $this->assertSame('336', $crawler->filter('meta[property="og:image:height"]')->attr('content'));
         $this->assertSame('https://www.example.com/episode1.mp3', $crawler->filter('meta[property="og:audio:url"]')->attr('content'));
@@ -100,7 +100,7 @@ final class PodcastEpisodeControllerTest extends PageTestCase
                     'published' => '2010-01-01T00:00:00Z',
                     'image' => [
                         'banner' => [
-                            'uri' => 'https://www.example.com/iiif/banner',
+                            'uri' => 'https://www.example.com/iiif/ban%2Fner',
                             'alt' => '',
                             'source' => [
                                 'mediaType' => 'image/jpeg',

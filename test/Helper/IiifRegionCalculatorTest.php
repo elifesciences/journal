@@ -18,7 +18,7 @@ final class IiifRegionCalculatorTest extends TestCase
     public function it_calculates_regions_for_an_image()
     {
         $json = [
-            'uri' => 'https://www.example.com/iiif/image',
+            'uri' => 'https://www.example.com/iiif/iden%2Ftifier',
             'alt' => '',
             'source' => [
                 'mediaType' => 'image/jpeg',
