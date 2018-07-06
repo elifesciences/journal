@@ -85,6 +85,12 @@ final class WhoWeWorkWithController extends Controller
                 'uri' => 'http://www.exeterpremedia.com/',
             ],
             [
+                'name' => 'Fastly',
+                'filename' => 'fastly',
+                'type' => 'image/svg+xml',
+                'uri' => 'https://www.fastly.com/',
+            ],
+            [
                 'name' => 'GitHub',
                 'filename' => 'github',
                 'type' => 'image/svg+xml',
@@ -201,7 +207,7 @@ final class WhoWeWorkWithController extends Controller
             [
                 'name' => 'Declaration on Research Assessment',
                 'filename' => 'dora',
-                'type' => 'image/svg+xml',
+                'type' => 'image/png',
                 'uri' => 'https://sfdora.org/',
             ],
             [
