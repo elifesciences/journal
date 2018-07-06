@@ -55,7 +55,7 @@ final class AboutAimsScopeControllerTest extends PageTestCase
                             ],
                             'image' => [
                                 'banner' => [
-                                    'uri' => 'https://www.example.com/iiif/banner',
+                                    'uri' => 'https://www.example.com/iiif/ban%2Fner',
                                     'alt' => '',
                                     'source' => [
                                         'mediaType' => 'image/jpeg',
@@ -88,7 +88,7 @@ final class AboutAimsScopeControllerTest extends PageTestCase
                             'impactStatement' => 'Subject 2 impact statement.',
                             'image' => [
                                 'banner' => [
-                                    'uri' => 'https://www.example.com/iiif/banner',
+                                    'uri' => 'https://www.example.com/iiif/ban%2Fner',
                                     'alt' => '',
                                     'source' => [
                                         'mediaType' => 'image/jpeg',

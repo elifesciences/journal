@@ -49,7 +49,7 @@ final class ArchiveContext extends Context
             return [
                 'title' => $coverData['Cover text'],
                 'image' => [
-                    'uri' => "https://www.example.com/iiif/image$id",
+                    'uri' => "https://www.example.com/iiif/image%2F$id",
                     'alt' => '',
                     'source' => [
                         'mediaType' => 'image/jpeg',
@@ -392,7 +392,7 @@ final class ArchiveContext extends Context
                         'published' => $date->format(ApiSdk::DATE_FORMAT),
                         'image' => [
                             'thumbnail' => [
-                                'uri' => "https://www.example.com/iiif/image$podcastNumber",
+                                'uri' => "https://www.example.com/iiif/image%2F$podcastNumber",
                                 'alt' => '',
                                 'source' => [
                                     'mediaType' => 'image/jpeg',
@@ -608,7 +608,7 @@ final class ArchiveContext extends Context
             'css',
             '.list-heading:contains("Monthly archive") + .grid-listing > .grid-listing-item:contains("'.$month.' '.$year.'") .block-link__image',
             'src',
-            'https://www.example.com/iiif/image'.$this->createId($article).'/0,194,1800,1212/251,169/0/default.jpg'
+            'https://www.example.com/iiif/image%2F'.$this->createId($article).'/0,194,1800,1212/251,169/0/default.jpg'
         );
     }
 
@@ -621,7 +621,7 @@ final class ArchiveContext extends Context
             'css',
             '.content-header .content-header__image',
             'src',
-            'https://www.example.com/iiif/image'.$this->createId($article).'/0,529,1800,543/1114,336/0/default.jpg'
+            'https://www.example.com/iiif/image%2F'.$this->createId($article).'/0,529,1800,543/1114,336/0/default.jpg'
         );
     }
 

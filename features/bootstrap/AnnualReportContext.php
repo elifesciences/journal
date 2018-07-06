@@ -22,7 +22,7 @@ final class AnnualReportContext extends Context
                 'uri' => 'http://www.example.com/',
                 'title' => "$year Annual Report",
                 'image' => [
-                    'uri' => 'https://www.example.com/iiif/image',
+                    'uri' => 'https://www.example.com/iiif/iden%2Ftifier',
                     'alt' => '',
                     'source' => [
                         'mediaType' => 'image/jpeg',

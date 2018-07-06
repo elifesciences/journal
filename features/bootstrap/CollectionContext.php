@@ -26,7 +26,7 @@ final class CollectionContext extends Context
                 'published' => $today->format(ApiSdk::DATE_FORMAT),
                 'image' => [
                     'banner' => [
-                        'uri' => "https://www.example.com/iiif/banner$i",
+                        'uri' => "https://www.example.com/iiif/banner%2F$i",
                         'alt' => '',
                         'source' => [
                             'mediaType' => 'image/jpeg',
@@ -39,7 +39,7 @@ final class CollectionContext extends Context
                         ],
                     ],
                     'thumbnail' => [
-                        'uri' => "https://www.example.com/iiif/thumbnail$i",
+                        'uri' => "https://www.example.com/iiif/thumbnail%2F$i",
                         'alt' => '',
                         'source' => [
                             'mediaType' => 'image/jpeg',

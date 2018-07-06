@@ -894,7 +894,11 @@ final class ArticlesController extends Controller
             };
 
             /* @var ArticleVoR $item */
-            return $item->getContent()->map($map)->flatten()
+            return $item->getContent()
+                ->append(...$item->getAppendices())
+                ->append($item->getAuthorResponse())
+                ->map($map)
+                ->flatten()
                 ->filter(function ($item) {
                     return $item instanceof Block\Figure;
                 });
