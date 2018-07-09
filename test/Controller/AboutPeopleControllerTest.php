@@ -82,7 +82,7 @@ final class AboutPeopleControllerTest extends PageTestCase
             )
         );
 
-        $this->mockPeopleApi(['senior-editor', 'reviewing-editor'], 'subject');
+        $this->mockPeopleApi([['leadership', 'senior-editor'], 'reviewing-editor'], 'subject');
 
         $crawler = $client->request('GET', '/about/people/subject');
 
@@ -145,7 +145,7 @@ final class AboutPeopleControllerTest extends PageTestCase
             )
         );
 
-        $this->mockPeopleApi(['senior-editor', 'reviewing-editor'], 'subject');
+        $this->mockPeopleApi([['leadership', 'senior-editor'], 'reviewing-editor'], 'subject');
 
         $crawler = $client->request('GET', '/about/people/subject');
 
@@ -192,10 +192,13 @@ final class AboutPeopleControllerTest extends PageTestCase
     {
         $subject_filter = ($subject) ? '&subject[]='.$subject : '';
         foreach ($types as $type) {
+            $type = implode('', array_map(function (string $type) {
+                return "&type[]={$type}";
+            }, (array) $type));
             $this->mockApiResponse(
                 new Request(
                     'GET',
-                    'http://api.elifesciences.org/people?page=1&per-page=1&order=asc'.$subject_filter.'&type='.$type,
+                    'http://api.elifesciences.org/people?page=1&per-page=1&order=asc'.$subject_filter.$type,
                     ['Accept' => 'application/vnd.elife.person-list+json; version=1']
                 ),
                 new Response(
