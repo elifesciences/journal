@@ -133,7 +133,7 @@ final class SubjectsController extends Controller
             ->otherwise($this->softFailure('Failed to load highlights for '.$arguments['id']));
 
         $arguments['seniorEditors'] = (new PromiseSequence($this->get('elife.api_sdk.people')
-            ->forType('senior-editor')
+            ->forType('leadership', 'senior-editor')
             ->forSubject($arguments['id'])
             ->reverse()
             ->slice(0, 100)))
