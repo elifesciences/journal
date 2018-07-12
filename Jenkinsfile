@@ -6,7 +6,7 @@ elifePipeline {
     }
 
     node('containers-jenkins-plugin') {
-        stage 'Build critical CSS images', {
+        stage 'Generate critical CSS', {
             checkout scm
             sh "./generate_critical_css.sh"
         }
