@@ -6,8 +6,12 @@ elifePipeline {
     }
 
     node('containers-jenkins-plugin') {
-        stage 'Build images', {
+        stage 'Build critical CSS images', {
             checkout scm
+            sh "./generate_critical_css.sh"
+        }
+
+        stage 'Build images', {
             dockerComposeBuild commit
         }
 

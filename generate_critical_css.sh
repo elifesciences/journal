@@ -11,8 +11,12 @@ function finish {
 
 trap finish EXIT
 
-echo "Starting containers..."
+echo "Building containers..."
 finish &> /dev/null
+docker-compose -f docker-compose.yml -f docker-compose.critical-css.yml build
+echo "Done"
+
+echo "Starting containers..."
 docker-compose -f docker-compose.yml -f docker-compose.critical-css.yml up --detach
 echo "Done"
 
