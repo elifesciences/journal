@@ -375,7 +375,7 @@ const criticalCssConfig = (function () {
     }());
 
     return {
-        baseUrl: 'http://web',
+        baseUrl: process.env.CRITICAL_CSS_BASE_URL || 'http://localhost:8080',
         baseFilePath: './build/critical-css',
         assetPathPrefix: '/assets/patterns',
         dimensions: [
