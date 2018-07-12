@@ -2,6 +2,7 @@
 set -e
 
 folder="build/critical-css"
+temporary_css="${folder}/temp.css"
 
 function finish {
     echo "Stopping containers..."
@@ -9,26 +10,28 @@ function finish {
     echo "Done"
 }
 
+function clean {
+    find ${folder} -name "*.css" -type f -delete
+}
+
 trap finish EXIT
 
-echo "Building containers..."
-finish &> /dev/null
-docker-compose -f docker-compose.yml -f docker-compose.critical-css.yml build
+echo "Cleaning existing critical CSS..."
+clean
+touch ${temporary_css} # Something has to exist for a Docker COPY to work
 echo "Done"
 
 echo "Starting containers..."
-docker-compose -f docker-compose.yml -f docker-compose.critical-css.yml up --detach
+finish &> /dev/null
+docker-compose -f docker-compose.yml -f docker-compose.critical-css.yml up --build --detach critical_css
 echo "Done"
 
 echo "Generating critical CSS..."
 docker-compose -f docker-compose.yml -f docker-compose.critical-css.yml exec -T critical_css node_modules/.bin/gulp critical-css:generate
 echo "Done"
 
-echo "Cleaning existing critical CSS..."
-find ${folder} -name "*.css" -type f -delete
-echo "Done"
-
 echo "Copying critical CSS..."
+rm ${temporary_css}
 docker cp journal_critical_css_1:build/critical-css/. build/critical-css/
 echo "Done"
 
