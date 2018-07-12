@@ -15,9 +15,7 @@ FROM node:${node_version}
 COPY --from=npm /node_modules/ node_modules/
 
 COPY assets/images/ assets/images/
-COPY critical-css.json \
-    gulpfile.js \
-    ./
+COPY gulpfile.js ./
 COPY --from=cli /srv/journal/vendor/elife/patterns/resources/assets/ vendor/elife/patterns/resources/assets/
 
 RUN node_modules/.bin/gulp assets
