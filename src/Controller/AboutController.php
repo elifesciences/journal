@@ -307,7 +307,7 @@ final class AboutController extends Controller
                 });
 
                 $people = $people->forSubject($type);
-                $arguments['lists'][] = $this->createAboutProfiles($people->forType('senior-editor'), 'Senior editors');
+                $arguments['lists'][] = $this->createAboutProfiles($people->forType('leadership', 'senior-editor'), 'Senior editors');
                 $arguments['lists'][] = $this->createAboutProfiles($people->forType('reviewing-editor'), 'Reviewing editors', true);
 
                 $impactStatement = $arguments['subject']->then(function (Subject $subject) {

@@ -458,7 +458,7 @@ final class SubjectContext extends Context
             $this->mockApiResponse(
                 new Request(
                     'GET',
-                    "http://api.elifesciences.org/people?page=$page&per-page=100&order=asc&subject[]=$subjectId&type=senior-editor",
+                    "http://api.elifesciences.org/people?page=$page&per-page=100&order=asc&subject[]=$subjectId&type[]=leadership&type[]=senior-editor",
                     ['Accept' => 'application/vnd.elife.person-list+json; version=1']
                 ),
                 new Response(

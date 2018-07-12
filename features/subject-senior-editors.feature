@@ -2,7 +2,7 @@
 Feature: Subject page senior editors
 
   Rules:
-  - Show 3 current senior editors for the MSA
+  - Show 3 current leadership and senior editors for the MSA
   - Picked at random, then sorted by surname
 
   Scenario: MSA has many senior editors

@@ -108,7 +108,7 @@ final class PeopleContext extends Context
         $this->mockApiResponse(
             new Request(
                 'GET',
-                'http://api.elifesciences.org/people?page=1&per-page=1&order=asc&type=leadership',
+                'http://api.elifesciences.org/people?page=1&per-page=1&order=asc&type[]=leadership',
                 ['Accept' => 'application/vnd.elife.person-list+json; version=1']
             ),
             new Response(
@@ -124,7 +124,7 @@ final class PeopleContext extends Context
         $this->mockApiResponse(
             new Request(
                 'GET',
-                'http://api.elifesciences.org/people?page=1&per-page=100&order=asc&type=leadership',
+                'http://api.elifesciences.org/people?page=1&per-page=100&order=asc&type[]=leadership',
                 ['Accept' => 'application/vnd.elife.person-list+json; version=1']
             ),
             new Response(
@@ -166,7 +166,7 @@ final class PeopleContext extends Context
         $this->mockApiResponse(
             new Request(
                 'GET',
-                'http://api.elifesciences.org/people?page=1&per-page=1&order=asc&type=leadership',
+                'http://api.elifesciences.org/people?page=1&per-page=1&order=asc&type[]=leadership',
                 ['Accept' => 'application/vnd.elife.person-list+json; version=1']
             ),
             new Response(
@@ -184,7 +184,7 @@ final class PeopleContext extends Context
             $this->mockApiResponse(
                 new Request(
                     'GET',
-                    "http://api.elifesciences.org/people?page=$page&per-page=100&order=asc&type=leadership",
+                    "http://api.elifesciences.org/people?page=$page&per-page=100&order=asc&type[]=leadership",
                     ['Accept' => 'application/vnd.elife.person-list+json; version=1']
                 ),
                 new Response(
@@ -227,7 +227,7 @@ final class PeopleContext extends Context
         $this->mockApiResponse(
             new Request(
                 'GET',
-                'http://api.elifesciences.org/people?page=1&per-page=1&order=asc&type=senior-editor',
+                'http://api.elifesciences.org/people?page=1&per-page=1&order=asc&type[]=senior-editor',
                 ['Accept' => 'application/vnd.elife.person-list+json; version=1']
             ),
             new Response(
@@ -245,7 +245,7 @@ final class PeopleContext extends Context
             $this->mockApiResponse(
                 new Request(
                     'GET',
-                    "http://api.elifesciences.org/people?page=$page&per-page=100&order=asc&type=senior-editor",
+                    "http://api.elifesciences.org/people?page=$page&per-page=100&order=asc&type[]=senior-editor",
                     ['Accept' => 'application/vnd.elife.person-list+json; version=1']
                 ),
                 new Response(
@@ -273,8 +273,8 @@ final class PeopleContext extends Context
             return [
                 'id' => $this->createId("{$name['Forename']} {$name['Surname']}"),
                 'type' => [
-                    'id' => 'senior-editor',
-                    'label' => 'Senior Editor',
+                    'id' => $name['Leadership'] ? 'leadership' : 'senior-editor',
+                    'label' => $name['Leadership'] ? 'Leadership' : 'Senior Editor',
                 ],
                 'name' => [
                     'preferred' => "{$name['Forename']} {$name['Surname']}",
@@ -299,7 +299,7 @@ final class PeopleContext extends Context
         $this->mockApiResponse(
             new Request(
                 'GET',
-                "http://api.elifesciences.org/people?page=1&per-page=1&order=asc&subject[]=$subjectId&type=senior-editor",
+                "http://api.elifesciences.org/people?page=1&per-page=1&order=asc&subject[]=$subjectId&type[]=leadership&type[]=senior-editor",
                 ['Accept' => 'application/vnd.elife.person-list+json; version=1']
             ),
             new Response(
@@ -317,7 +317,7 @@ final class PeopleContext extends Context
             $this->mockApiResponse(
                 new Request(
                     'GET',
-                    "http://api.elifesciences.org/people?page=$page&per-page=100&order=asc&subject[]=$subjectId&type=senior-editor",
+                    "http://api.elifesciences.org/people?page=$page&per-page=100&order=asc&subject[]=$subjectId&type[]=leadership&type[]=senior-editor",
                     ['Accept' => 'application/vnd.elife.person-list+json; version=1']
                 ),
                 new Response(
@@ -371,7 +371,7 @@ final class PeopleContext extends Context
         $this->mockApiResponse(
             new Request(
                 'GET',
-                "http://api.elifesciences.org/people?page=1&per-page=1&order=asc&subject[]=$subjectId&type=reviewing-editor",
+                "http://api.elifesciences.org/people?page=1&per-page=1&order=asc&subject[]=$subjectId&type[]=reviewing-editor",
                 ['Accept' => 'application/vnd.elife.person-list+json; version=1']
             ),
             new Response(
@@ -389,7 +389,7 @@ final class PeopleContext extends Context
             $this->mockApiResponse(
                 new Request(
                     'GET',
-                    "http://api.elifesciences.org/people?page=$page&per-page=100&order=asc&subject[]=$subjectId&type=reviewing-editor",
+                    "http://api.elifesciences.org/people?page=$page&per-page=100&order=asc&subject[]=$subjectId&type[]=reviewing-editor",
                     ['Accept' => 'application/vnd.elife.person-list+json; version=1']
                 ),
                 new Response(
@@ -413,7 +413,7 @@ final class PeopleContext extends Context
             $this->mockApiResponse(
                 new Request(
                     'GET',
-                    'http://api.elifesciences.org/people?page=1&per-page=1&order=asc&type=leadership',
+                    'http://api.elifesciences.org/people?page=1&per-page=1&order=asc&type[]=leadership',
                     ['Accept' => 'application/vnd.elife.person-list+json; version=1']
                 ),
                 new Response(
@@ -431,7 +431,7 @@ final class PeopleContext extends Context
             $this->mockApiResponse(
                 new Request(
                     'GET',
-                    'http://api.elifesciences.org/people?page=1&per-page=1&order=asc&type=senior-editor',
+                    'http://api.elifesciences.org/people?page=1&per-page=1&order=asc&type[]=senior-editor',
                     ['Accept' => 'application/vnd.elife.person-list+json; version=1']
                 ),
                 new Response(
@@ -457,7 +457,7 @@ final class PeopleContext extends Context
             $this->mockApiResponse(
                 new Request(
                     'GET',
-                    "http://api.elifesciences.org/people?page=1&per-page=1&order=asc&subject[]={$this->subject}&type=senior-editor",
+                    "http://api.elifesciences.org/people?page=1&per-page=1&order=asc&subject[]={$this->subject}&type[]=leadership&type[]=senior-editor",
                     ['Accept' => 'application/vnd.elife.person-list+json; version=1']
                 ),
                 new Response(
@@ -475,7 +475,7 @@ final class PeopleContext extends Context
             $this->mockApiResponse(
                 new Request(
                     'GET',
-                    "http://api.elifesciences.org/people?page=1&per-page=1&order=asc&subject[]={$this->subject}&type=reviewing-editor",
+                    "http://api.elifesciences.org/people?page=1&per-page=1&order=asc&subject[]={$this->subject}&type[]=reviewing-editor",
                     ['Accept' => 'application/vnd.elife.person-list+json; version=1']
                 ),
                 new Response(
