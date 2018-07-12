@@ -1,8 +1,8 @@
 #!/bin/bash
 set -e
 
-folder="build/critical-css/"
-expected_list=$(jq -r '. | keys[] | "'$folder'\(.).css"' < critical-css.json | sort)
+folder="build/critical-css"
+expected_list=$(jq -r '. | keys[] | "'$folder'/\(.).css"' < critical-css.json | sort)
 actual_list=$(find "$folder" -name '*.css' | sort)
 
 echo "Expected list of files in $folder:"

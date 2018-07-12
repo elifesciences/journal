@@ -1,0 +1,28 @@
+version: '3'
+
+services:
+    composer:
+        build:
+            args:
+                composer_dev_arg: --no-dev
+    critical_css:
+        build:
+            context: .
+            dockerfile: Dockerfile.critical_css
+            args:
+                image_tag: ${IMAGE_TAG}
+                node_version: ${NODE_VERSION}
+        image: elifesciences/journal_critical_css:${IMAGE_TAG}
+        command: sleep infinity
+        depends_on:
+            - npm
+            - web
+    fpm:
+        volumes:
+            - ./.docker/parameters.critical-css.yml:/srv/journal/app/config/parameters.yml
+        environment:
+            - APP_ENV=demo
+        depends_on:
+            - api_dummy
+    api_dummy:
+        image: elifesciences/api-dummy:${DEPENDENCIES_API_DUMMY}
