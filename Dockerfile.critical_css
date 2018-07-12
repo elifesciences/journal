@@ -1,5 +1,6 @@
 ARG image_tag=latest
 ARG node_version
+FROM pinterb/jq:0.0.16 AS jq
 FROM elifesciences/journal_npm:${image_tag} as npm
 
 FROM node:${node_version}
@@ -30,10 +31,14 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
     unzip \
     xdg-utils \
     && rm -rf /var/lib/apt/lists/*
+
+COPY --from=jq /usr/local/bin/jq /usr/bin/jq
+
 RUN mkdir -p build/critical-css
 
 COPY --from=npm /node_modules/ node_modules/
 
-COPY critical-css.json \
+COPY check_critical_css.sh \
+    critical-css.json \
     gulpfile.js \
     ./
