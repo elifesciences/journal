@@ -7,6 +7,7 @@ use InvalidArgumentException;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use function GuzzleHttp\json_decode;
+use function GuzzleHttp\json_encode;
 use function GuzzleHttp\Promise\promise_for;
 use function GuzzleHttp\Psr7\parse_query;
 use function GuzzleHttp\Psr7\stream_for;
