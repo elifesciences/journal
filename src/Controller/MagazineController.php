@@ -114,6 +114,7 @@ final class MagazineController extends Controller
             new Link(ModelName::plural('podcast-episode'), $this->get('router')->generate('podcast')),
             new Link(ModelName::plural('collection'), $this->get('router')->generate('collections')),
             new Link('Community', $this->get('router')->generate('community')),
+            new Link('Science Digests', $this->get('router')->generate('digests')),
         ], new ListHeading('Magazine sections'), true);
 
         $arguments['events'] = $events

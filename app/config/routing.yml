@@ -169,6 +169,19 @@ contact:
     defaults:
          _controller: AppBundle:Contact:contact
 
+digest:
+    path: /digests/{id}/{slug}
+    defaults:
+         _controller: AppBundle:Digests:digest
+         slug: ''
+    requirements:
+        id: '[a-z0-9-]+'
+
+digests:
+    path: /digests
+    defaults:
+         _controller: AppBundle:Digests:list
+
 doi:
     path: /lookup/doi/{doi}
     defaults:
