@@ -66,7 +66,8 @@ final class DigestsController extends Controller
 
     private function createFirstPage(array $arguments) : Response
     {
-        $arguments['contentHeader'] = new ContentHeader($arguments['title']);
+        $arguments['contentHeader'] = new ContentHeader($arguments['title'], null,
+            'Short article written in plain language to explain recent eLife papers to a broad audience.');
 
         return new Response($this->get('templating')->render('::digests.html.twig', $arguments));
     }
