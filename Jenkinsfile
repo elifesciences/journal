@@ -6,22 +6,23 @@ elifePipeline {
     }
 
     node('containers-jenkins-plugin') {
-        stage 'Build critical CSS images', {
+        stage 'Build images', {
             checkout scm
             sh "find build/critical-css -name '*.css' -type f -delete"
             sh "touch build/critical-css/default.css"
-            sh "IMAGE_TAG=${commit} docker-compose -f docker-compose.yml -f docker-compose.ci.yml up -d --build critical_css"
+            dockerComposeBuild commit
         }
 
         stage 'Generate critical CSS', {
+            sh "IMAGE_TAG=${commit} docker-compose -f docker-compose.yml -f docker-compose.ci.yml up -d critical_css"
             sh "IMAGE_TAG=${commit} docker-compose -f docker-compose.yml -f docker-compose.ci.yml exec -T critical_css node_modules/.bin/gulp critical-css:generate"
             sh "IMAGE_TAG=${commit} docker-compose -f docker-compose.yml -f docker-compose.ci.yml exec -T critical_css ./check_critical_css.sh"
             sh "docker cp journal_critical_css_1:build/critical-css/. build/critical-css/"
             sh "docker-compose -f docker-compose.yml -f docker-compose.ci.yml down"
         }
 
-        stage 'Build images', {
-            dockerComposeBuild commit
+        stage 'Rebuild FPM image', {
+            sh "IMAGE_TAG=${commit} docker-compose -f docker-compose.yml -f docker-compose.ci.yml build fpm"
         }
 
         stage 'Project tests', {
