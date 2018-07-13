@@ -14,6 +14,7 @@ services:
     cli:
         volumes:
             - ./:/srv/journal
+            - ./.docker/php.ini:/usr/local/etc/php/conf.d/x-dev.ini
             - /srv/journal/build
             - /srv/journal/var
             - vendor:/srv/journal/vendor
@@ -25,6 +26,7 @@ services:
     fpm:
         volumes:
             - ./:/srv/journal
+            - ./.docker/php.ini:/usr/local/etc/php/conf.d/x-dev.ini
             - /srv/journal/build
             - /srv/journal/var
             - critical_css:/srv/journal/build/critical-css
