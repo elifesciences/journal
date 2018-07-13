@@ -68,3 +68,20 @@ services:
         depends_on:
             - assets
             - fpm
+    api_dummy:
+        image: elifesciences/api-dummy:${DEPENDENCIES_API_DUMMY}
+    critical_css:
+        build:
+            context: .
+            dockerfile: Dockerfile.critical_css
+            args:
+                image_tag: ${IMAGE_TAG}
+                node_version: ${NODE_VERSION}
+        environment:
+            - CRITICAL_CSS_BASE_URL=http://web:8080
+        image: elifesciences/journal_critical_css:${IMAGE_TAG}
+        command: sleep infinity
+        depends_on:
+            - npm
+            - web
+            - api_dummy

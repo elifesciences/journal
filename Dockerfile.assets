@@ -8,7 +8,7 @@ USER root
 COPY .docker/parameters.yml app/config/
 
 RUN mkdir web && \
-    bin/console assets:install
+    SYMFONY__API_URL=https://api.elifesciences.org bin/console assets:install
 
 FROM node:${node_version}
 

@@ -27,12 +27,19 @@ services:
             - ./:/srv/journal
             - /srv/journal/build
             - /srv/journal/var
+            - critical_css:/srv/journal/build/critical-css
             - vendor:/srv/journal/vendor
     web:
         volumes:
             - assets:/srv/journal/web
+    critical_css:
+        command: node_modules/.bin/gulp critical-css:generate
+        volumes:
+            - critical_css:/build/critical-css
+            - node_modules:/node_modules
 
 volumes:
     assets:
+    critical_css:
     node_modules:
     vendor:
