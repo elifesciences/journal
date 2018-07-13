@@ -8,7 +8,7 @@ elifePipeline {
     node('containers-jenkins-plugin') {
         stage 'Build critical CSS images', {
             checkout scm
-            sh "find build/critical-css -name "*.css" -type f -delete"
+            sh "find build/critical-css -name '*.css' -type f -delete"
             sh "touch build/critical-css/default.css"
             sh "IMAGE_TAG=${commit} docker-compose -f docker-compose.yml -f docker-compose.ci.yml up --d critical_css"
         }
