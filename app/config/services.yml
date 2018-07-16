@@ -223,6 +223,11 @@ services:
         tags:
           - name: kernel.event_subscriber
 
+    elife.journal.listener.api_too_many_requests:
+        class: eLife\Journal\EventListener\ApiTooManyRequestsSubscriber
+        tags:
+          - name: kernel.event_subscriber
+
     elife.journal.listener.preload_link:
         class: eLife\Journal\EventListener\PreloadLinkSubscriber
         arguments:
