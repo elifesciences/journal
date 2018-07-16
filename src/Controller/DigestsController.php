@@ -4,7 +4,6 @@ namespace eLife\Journal\Controller;
 
 use eLife\ApiSdk\Collection\PromiseSequence;
 use eLife\ApiSdk\Collection\Sequence;
-use eLife\ApiSdk\Model\Digest;
 use eLife\ApiSdk\Model\Identifier;
 use eLife\Journal\Helper\Callback;
 use eLife\Journal\Helper\Paginator;
@@ -12,15 +11,14 @@ use eLife\Journal\Pagerfanta\SequenceAdapter;
 use eLife\Patterns\ViewModel\ContentHeader;
 use eLife\Patterns\ViewModel\ContextualData;
 use eLife\Patterns\ViewModel\GridListing;
-use eLife\Patterns\ViewModel\ListHeading;
 use eLife\Patterns\ViewModel\ListingTeasers;
 use eLife\Patterns\ViewModel\SpeechBubble;
 use eLife\Patterns\ViewModel\Teaser;
 use Pagerfanta\Pagerfanta;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use function GuzzleHttp\Promise\promise_for;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use function GuzzleHttp\Promise\promise_for;
 
 final class DigestsController extends Controller
 {
