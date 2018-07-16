@@ -117,7 +117,7 @@ final class ArticlesController extends Controller
             ->then(Callback::emptyOr($this->willConvertTo(ViewModel\ListingReadMore::class)));
 
         if (1 === $page) {
-            return $this->createFirstPage($id, $arguments);
+            return $this->createFirstPage($request, $id, $arguments);
         }
 
         $arguments['title'] = 'Browse further reading';
@@ -125,7 +125,7 @@ final class ArticlesController extends Controller
         return $this->createSubsequentPage($request, $arguments);
     }
 
-    private function createFirstPage(string $id, array $arguments) : Response
+    private function createFirstPage(Request $request, string $id, array $arguments) : Response
     {
         $arguments['relatedItem'] = all(['relatedItem' => $arguments['relatedItem'], 'item' => $arguments['item'], 'listing' => $arguments['listing'], 'relatedArticles' => $arguments['relatedArticles']])
             ->then(function (array $parts) {
@@ -492,7 +492,9 @@ final class ArticlesController extends Controller
                 return $body;
             });
 
-        return new Response($this->get('templating')->render('::article-text.html.twig', $arguments));
+        $arguments['google_scholar_metadata'] = (bool) $request->headers->get('X-eLife-Google-Scholar-Metadata', false);
+
+        return new Response($this->get('templating')->render('::article-text.html.twig', $arguments), Response::HTTP_OK, ['Vary' => 'X-eLife-Google-Scholar-Metadata']);
     }
 
     public function figuresAction(Request $request, string $id, int $version = null) : Response
