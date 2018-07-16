@@ -107,15 +107,20 @@ final class MagazineController extends Controller
 
         $arguments['menuLink'] = new SectionListingLink('All sections', 'sections');
 
-        $arguments['menu'] = new SectionListing('sections', [
+        $menu = [
             new Link(ModelName::plural('editorial'), $this->get('router')->generate('article-type', ['type' => 'editorial'])),
             new Link(ModelName::plural('insight'), $this->get('router')->generate('article-type', ['type' => 'insight'])),
             new Link(ModelName::plural('feature'), $this->get('router')->generate('article-type', ['type' => 'feature'])),
             new Link(ModelName::plural('podcast-episode'), $this->get('router')->generate('podcast')),
             new Link(ModelName::plural('collection'), $this->get('router')->generate('collections')),
             new Link('Community', $this->get('router')->generate('community')),
-            new Link('Science Digests', $this->get('router')->generate('digests')),
-        ], new ListHeading('Magazine sections'), true);
+        ];
+
+        if ($this->isGranted('FEATURE_DIGEST_CHANNEL')) {
+            $menu[] = new Link('Science Digests', $this->get('router')->generate('digests'));
+        }
+
+        $arguments['menu'] = new SectionListing('sections', $menu, new ListHeading('Magazine sections'), true);
 
         $arguments['events'] = $events
             ->slice(0, 3)
