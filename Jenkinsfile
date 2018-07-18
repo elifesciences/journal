@@ -32,12 +32,10 @@ elifePipeline {
 
         stage 'Generate critical CSS', {
             try {
-                sh "IMAGE_TAG=${commit} docker-compose -f docker-compose.yml -f docker-compose.ci.yml up -d critical_css"
-                sh "IMAGE_TAG=${commit} docker-compose -f docker-compose.yml -f docker-compose.ci.yml exec -T critical_css node_modules/.bin/gulp critical-css:generate"
-                sh "IMAGE_TAG=${commit} docker-compose -f docker-compose.yml -f docker-compose.ci.yml exec -T critical_css ./check_critical_css.sh"
-                sh "docker cp journal_critical_css_1:build/critical-css/. build/critical-css/"
+                sh "IMAGE_TAG=${commit} docker-compose -f docker-compose.yml -f docker-compose.ci.yml run --name=journal_critical_css critical_css"
+                sh "docker cp journal_critical_css:build/critical-css/. build/critical-css/"
             } finally {
-                sh "docker-compose -f docker-compose.yml -f docker-compose.ci.yml down -v"
+                sh "docker-compose -f docker-compose.yml -f docker-compose.ci.yml rm -v --stop --force"
             }
         }
 

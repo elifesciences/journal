@@ -50,8 +50,6 @@ services:
     web:
         volumes:
             - ./assets/tests:/srv/journal/web/tests
-    critical_css:
-        command: sleep infinity
 
 volumes:
     fixtures:
