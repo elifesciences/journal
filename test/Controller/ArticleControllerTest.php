@@ -144,6 +144,399 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertEmpty($crawler->filter('meta[name="dc.description"]'));
         $this->assertSame('2010-01-01', $crawler->filter('meta[name="dc.date"]')->attr('content'));
         $this->assertSame('© 2010 Bar. Copyright statement.', $crawler->filter('meta[name="dc.rights"]')->attr('content'));
+
+        $this->assertEmpty($crawler->filter('meta[name^="citation_"]'));
+    }
+
+    /**
+     * @test
+     */
+    public function it_has_citation_metadata()
+    {
+        $client = static::createClient();
+
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/articles/00001',
+                ['Accept' => 'application/vnd.elife.article-poa+json; version=2, application/vnd.elife.article-vor+json; version=2']
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.article-vor+json; version=2'],
+                json_encode([
+                    'status' => 'vor',
+                    'stage' => 'published',
+                    'id' => '00001',
+                    'version' => 4,
+                    'type' => 'research-advance',
+                    'doi' => '10.7554/eLife.00001',
+                    'title' => 'Article title',
+                    'titlePrefix' => 'Title prefix',
+                    'published' => '2007-01-01T00:00:00Z',
+                    'versionDate' => '2010-01-01T00:00:00Z',
+                    'statusDate' => '2009-01-01T00:00:00Z',
+                    'volume' => 1,
+                    'elocationId' => 'e00001',
+                    'pdf' => 'http://www.example.com/pdf',
+                    'xml' => 'http://www.example.com/xml',
+                    'copyright' => [
+                        'license' => 'CC-BY-4.0',
+                        'holder' => 'Bar',
+                        'statement' => 'Copyright statement.',
+                    ],
+                    'authorLine' => 'Foo Bar',
+                    'authors' => [
+                        [
+                            'type' => 'person',
+                            'name' => [
+                                'preferred' => 'Foo Bar',
+                                'index' => 'Bar, Foo',
+                            ],
+                            'role' => 'Role',
+                        ],
+                        [
+                            'type' => 'group',
+                            'name' => 'Baz',
+                        ],
+                    ],
+                    'reviewers' => [
+                        [
+                            'name' => [
+                                'preferred' => 'Reviewer 1',
+                                'index' => 'Reviewer 1',
+                            ],
+                            'role' => 'role',
+                            'affiliations' => [
+                                [
+                                    'name' => ['Institution'],
+                                    'address' => [
+                                        'formatted' => ['Country'],
+                                        'components' => [
+                                            'country' => 'Country',
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                        [
+                            'name' => [
+                                'preferred' => 'Reviewer 2',
+                                'index' => 'Reviewer 2',
+                            ],
+                            'role' => 'role',
+                        ],
+                    ],
+                    'abstract' => [
+                        'doi' => '10.7554/eLife.09560.001',
+                        'content' => [
+                            [
+                                'type' => 'paragraph',
+                                'text' => 'Abstract text',
+                            ],
+                        ],
+                    ],
+                    'digest' => [
+                        'doi' => '10.7554/eLife.09560.002',
+                        'content' => [
+                            [
+                                'type' => 'paragraph',
+                                'text' => 'Digest text',
+                            ],
+                        ],
+                    ],
+                    'body' => [
+                        [
+                            'type' => 'section',
+                            'id' => 's-1',
+                            'title' => 'Body title',
+                            'content' => [
+                                [
+                                    'type' => 'paragraph',
+                                    'text' => 'Body text',
+                                ],
+                                [
+                                    'type' => 'figure',
+                                    'assets' => [
+                                        [
+                                            'type' => 'image',
+                                            'id' => 'image1',
+                                            'label' => 'Image 1 label',
+                                            'title' => 'Image 1 title',
+                                            'image' => [
+                                                'uri' => 'https://www.example.com/iiif/image',
+                                                'alt' => '',
+                                                'source' => [
+                                                    'mediaType' => 'image/jpeg',
+                                                    'uri' => 'https://www.example.com/image.jpg',
+                                                    'filename' => 'image.jpg',
+                                                ],
+                                                'size' => [
+                                                    'width' => 800,
+                                                    'height' => 600,
+                                                ],
+                                            ],
+                                        ],
+                                        [
+                                            'type' => 'image',
+                                            'id' => 'image1s1',
+                                            'label' => 'Image 1 supplement 1 label',
+                                            'title' => 'Image 1 supplement 1 title',
+                                            'image' => [
+                                                'uri' => 'https://www.example.com/iiif/image',
+                                                'alt' => '',
+                                                'source' => [
+                                                    'mediaType' => 'image/jpeg',
+                                                    'uri' => 'https://www.example.com/image.jpg',
+                                                    'filename' => 'image.jpg',
+                                                ],
+                                                'size' => [
+                                                    'width' => 800,
+                                                    'height' => 600,
+                                                ],
+                                            ],
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                    'appendices' => [
+                        [
+                            'id' => 'app1',
+                            'doi' => '10.7554/eLife.09560.005',
+                            'title' => 'Appendix 1',
+                            'content' => [
+                                [
+                                    'type' => 'section',
+                                    'id' => 'app1-1',
+                                    'title' => 'Appendix title',
+                                    'content' => [
+                                        [
+                                            'type' => 'paragraph',
+                                            'text' => 'Appendix text',
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                    'references' => [
+                        [
+                            'type' => 'journal',
+                            'id' => 'bib1',
+                            'date' => '2013',
+                            'authors' => [
+                                [
+                                    'type' => 'person',
+                                    'name' => [
+                                        'preferred' => 'Person One',
+                                        'index' => 'One, Person',
+                                    ],
+                                ],
+                            ],
+                            'articleTitle' => 'Journal article',
+                            'journal' => 'A journal',
+                            'pages' => 'In press',
+                        ],
+                    ],
+                    'acknowledgements' => [
+                        [
+                            'type' => 'paragraph',
+                            'text' => 'Acknowledgements text',
+                        ],
+                    ],
+                    'ethics' => [
+                        [
+                            'type' => 'paragraph',
+                            'text' => 'Ethics text',
+                        ],
+                    ],
+                    'funding' => [
+                        'awards' => [
+                            [
+                                'id' => 'award1',
+                                'source' => [
+                                    'name' => [
+                                        'Funding source',
+                                    ],
+                                ],
+                                'awardId' => 'Award ID',
+                                'recipients' => [
+                                    [
+                                        'type' => 'person',
+                                        'name' => [
+                                            'preferred' => 'Foo Bar',
+                                            'index' => 'Bar, Foo',
+                                        ],
+                                    ],
+                                ],
+                            ],
+                            [
+                                'id' => 'award2',
+                                'source' => [
+                                    'name' => [
+                                        'Other funding source',
+                                    ],
+                                ],
+                                'recipients' => [
+                                    [
+                                        'type' => 'group',
+                                        'name' => 'Baz',
+                                    ],
+                                ],
+                            ],
+                        ],
+                        'statement' => 'Funding statement',
+                    ],
+                    'decisionLetter' => [
+                        'doi' => '10.7554/eLife.09560.003',
+                        'description' => [
+                            [
+                                'type' => 'paragraph',
+                                'text' => 'Decision letter description',
+                            ],
+                        ],
+                        'content' => [
+                            [
+                                'type' => 'paragraph',
+                                'text' => 'Decision letter text',
+                            ],
+                        ],
+                    ],
+                    'authorResponse' => [
+                        'doi' => '10.7554/eLife.09560.003',
+                        'content' => [
+                            [
+                                'type' => 'paragraph',
+                                'text' => 'Author response text',
+                            ],
+                        ],
+                    ],
+                ])
+            )
+        );
+
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/articles/00001/versions',
+                [
+                    'Accept' => [
+                        'application/vnd.elife.article-history+json; version=1',
+                    ],
+                ]
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.article-history+json; version=1'],
+                json_encode([
+                    'received' => '2006-12-30',
+                    'accepted' => '2006-12-31',
+                    'versions' => [
+                        [
+                            'status' => 'poa',
+                            'stage' => 'published',
+                            'id' => '00001',
+                            'version' => 1,
+                            'type' => 'research-advance',
+                            'doi' => '10.7554/eLife.00001',
+                            'title' => 'Article title',
+                            'titlePrefix' => 'Title prefix',
+                            'published' => '2007-01-01T00:00:00Z',
+                            'versionDate' => '2007-01-01T00:00:00Z',
+                            'statusDate' => '2007-01-01T00:00:00Z',
+                            'volume' => 1,
+                            'elocationId' => 'e00001',
+                            'copyright' => [
+                                'license' => 'CC-BY-4.0',
+                                'holder' => 'Bar',
+                                'statement' => 'Copyright statement.',
+                            ],
+                            'authorLine' => 'Foo Bar',
+                        ],
+                        [
+                            'status' => 'poa',
+                            'stage' => 'published',
+                            'id' => '00001',
+                            'version' => 2,
+                            'type' => 'research-advance',
+                            'doi' => '10.7554/eLife.00001',
+                            'title' => 'Article title',
+                            'titlePrefix' => 'Title prefix',
+                            'published' => '2007-01-01T00:00:00Z',
+                            'versionDate' => '2008-01-01T00:00:00Z',
+                            'statusDate' => '2007-01-01T00:00:00Z',
+                            'volume' => 1,
+                            'elocationId' => 'e00001',
+                            'copyright' => [
+                                'license' => 'CC-BY-4.0',
+                                'holder' => 'Bar',
+                                'statement' => 'Copyright statement.',
+                            ],
+                            'authorLine' => 'Foo Bar',
+                        ],
+                        [
+                            'status' => 'vor',
+                            'stage' => 'published',
+                            'id' => '00001',
+                            'version' => 3,
+                            'type' => 'research-advance',
+                            'doi' => '10.7554/eLife.00001',
+                            'title' => 'Article title',
+                            'titlePrefix' => 'Title prefix',
+                            'published' => '2007-01-01T00:00:00Z',
+                            'versionDate' => '2009-01-01T00:00:00Z',
+                            'statusDate' => '2009-01-01T00:00:00Z',
+                            'volume' => 1,
+                            'elocationId' => 'e00001',
+                            'copyright' => [
+                                'license' => 'CC-BY-4.0',
+                                'holder' => 'Bar',
+                                'statement' => 'Copyright statement.',
+                            ],
+                            'authorLine' => 'Foo Bar',
+                        ],
+                        [
+                            'status' => 'vor',
+                            'stage' => 'published',
+                            'id' => '00001',
+                            'version' => 4,
+                            'type' => 'research-advance',
+                            'doi' => '10.7554/eLife.00001',
+                            'title' => 'Article title',
+                            'titlePrefix' => 'Title prefix',
+                            'published' => '2008-01-01T00:00:00Z',
+                            'versionDate' => '2010-01-01T00:00:00Z',
+                            'statusDate' => '2009-01-01T00:00:00Z',
+                            'volume' => 1,
+                            'elocationId' => 'e00001',
+                            'copyright' => [
+                                'license' => 'CC-BY-4.0',
+                                'holder' => 'Bar',
+                                'statement' => 'Copyright statement.',
+                            ],
+                            'authorLine' => 'Foo Bar',
+                        ],
+                    ],
+                ])
+            )
+        );
+
+        $crawler = $client->request('GET', '/articles/00001', [], [], ['HTTP_X_ELIFE_GOOGLE_SCHOLAR_METADATA' => '1']);
+
+        $this->assertSame(200, $client->getResponse()->getStatusCode());
+
+        $this->assertNotEmpty($crawler->filter('meta[name^="citation_"]'));
+        $this->assertSame('http://localhost/articles/00001.xml', $crawler->filter('meta[name="citation_xml_url"]')->attr('content'));
+        $this->assertSame('Title prefix: Article title', $crawler->filter('meta[name="citation_title"]')->attr('content'));
+        $this->assertSame('10.7554/eLife.00001', $crawler->filter('meta[name="citation_doi"]')->attr('content'));
+        $this->assertSame('eLife 2007;1:e00001', $crawler->filter('meta[name="citation_id"]')->attr('content'));
+        $this->assertSame('http://www.example.com/pdf', $crawler->filter('meta[name="citation_pdf_url"]')->attr('content'));
+        $this->assertSame('http://localhost/articles/00001.xml', $crawler->filter('meta[name="citation_xml_url"]')->attr('content'));
+        $this->assertSame('2007/01/01', $crawler->filter('meta[name="citation_publication_date"]')->attr('content'));
+        $this->assertCount(2, $crawler->filter('meta[name="citation_author"]'));
+        $this->assertCount(1, $crawler->filter('meta[name="citation_reference"]'));
     }
 
     /**
@@ -762,8 +1155,6 @@ final class ArticleControllerTest extends PageTestCase
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertContains('Read the most recent version of this article.', array_map('trim', $crawler->filter('.info-bar')->extract(['_text'])));
-
-        $this->assertSame('http://localhost/articles/00001v1.xml', $crawler->filter('meta[name="citation_xml_url"]')->attr('content'));
     }
 
     /**
@@ -790,6 +1181,23 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertEmpty($crawler->filter('meta[name="dc.description"]'));
         $this->assertSame('2010-01-01', $crawler->filter('meta[name="dc.date"]')->attr('content'));
         $this->assertSame('© 2010 Author One. Copyright statement.', $crawler->filter('meta[name="dc.rights"]')->attr('content'));
+
+        $this->assertEmpty($crawler->filter('meta[name^="citation_"]'));
+    }
+
+    /**
+     * @test
+     */
+    public function it_has_citation_metadata_on_previous_versions()
+    {
+        $client = static::createClient();
+
+        $crawler = $client->request('GET', $this->getPreviousVersionUrl(), [], [], ['HTTP_X_ELIFE_GOOGLE_SCHOLAR_METADATA' => '1']);
+
+        $this->assertSame(200, $client->getResponse()->getStatusCode());
+
+        $this->assertNotEmpty($crawler->filter('meta[name^="citation_"]'));
+        $this->assertSame('http://localhost/articles/00001v1.xml', $crawler->filter('meta[name="citation_xml_url"]')->attr('content'));
     }
 
     /**
@@ -1168,15 +1576,6 @@ final class ArticleControllerTest extends PageTestCase
         );
 
         $crawler = $client->request('GET', '/articles/00001');
-
-        $this->assertSame('Title prefix: Article title', $crawler->filter('meta[name="citation_title"]')->attr('content'));
-        $this->assertSame('10.7554/eLife.00001', $crawler->filter('meta[name="citation_doi"]')->attr('content'));
-        $this->assertSame('eLife 2007;1:e00001', $crawler->filter('meta[name="citation_id"]')->attr('content'));
-        $this->assertSame('http://www.example.com/pdf', $crawler->filter('meta[name="citation_pdf_url"]')->attr('content'));
-        $this->assertSame('http://localhost/articles/00001.xml', $crawler->filter('meta[name="citation_xml_url"]')->attr('content'));
-        $this->assertSame('2007/01/01', $crawler->filter('meta[name="citation_publication_date"]')->attr('content'));
-        $this->assertCount(2, $crawler->filter('meta[name="citation_author"]'));
-        $this->assertCount(1, $crawler->filter('meta[name="citation_reference"]'));
 
         $this->assertSame('Title prefix: Article title', $crawler->filter('.content-header__title')->text());
 
