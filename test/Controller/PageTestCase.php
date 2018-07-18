@@ -71,7 +71,7 @@ abstract class PageTestCase extends WebTestCase
         $client->request('GET', $this->getUrl());
 
         $this->assertSame('max-age=300, public, stale-if-error=86400, stale-while-revalidate=300', $client->getResponse()->headers->get('Cache-Control'));
-        $this->assertSame(['Cookie'], $client->getResponse()->getVary());
+        $this->assertContains('Cookie', $client->getResponse()->getVary());
 
         $client->request('GET', $this->getUrl(), [], [], ['HTTP_IF_NONE_MATCH' => $client->getResponse()->headers->get('Etag')]);
 
