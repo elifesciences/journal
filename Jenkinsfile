@@ -13,18 +13,6 @@ elifePipeline {
             dockerComposeBuild commit
         }
 
-        stage 'Generate critical CSS', {
-            sh "IMAGE_TAG=${commit} docker-compose -f docker-compose.yml -f docker-compose.ci.yml up -d critical_css"
-            sh "IMAGE_TAG=${commit} docker-compose -f docker-compose.yml -f docker-compose.ci.yml exec -T critical_css node_modules/.bin/gulp critical-css:generate"
-            sh "IMAGE_TAG=${commit} docker-compose -f docker-compose.yml -f docker-compose.ci.yml exec -T critical_css ./check_critical_css.sh"
-            sh "docker cp journal_critical_css_1:build/critical-css/. build/critical-css/"
-            sh "docker-compose -f docker-compose.yml -f docker-compose.ci.yml down -v"
-        }
-
-        stage 'Rebuild FPM image', {
-            sh "IMAGE_TAG=${commit} docker-compose -f docker-compose.yml -f docker-compose.ci.yml build fpm"
-        }
-
         stage 'Project tests', {
             sh "IMAGE_TAG=${commit} docker-compose -f docker-compose.yml -f docker-compose.ci.yml up -d"
             dockerComposeProjectTestsParallel('journal', commit, [
@@ -41,6 +29,18 @@ elifePipeline {
                     './smoke_tests.sh localhost 8080',
                 ]
             ])
+        }
+
+        stage 'Generate critical CSS', {
+            sh "IMAGE_TAG=${commit} docker-compose -f docker-compose.yml -f docker-compose.ci.yml up -d critical_css"
+            sh "IMAGE_TAG=${commit} docker-compose -f docker-compose.yml -f docker-compose.ci.yml exec -T critical_css node_modules/.bin/gulp critical-css:generate"
+            sh "IMAGE_TAG=${commit} docker-compose -f docker-compose.yml -f docker-compose.ci.yml exec -T critical_css ./check_critical_css.sh"
+            sh "docker cp journal_critical_css_1:build/critical-css/. build/critical-css/"
+            sh "docker-compose -f docker-compose.yml -f docker-compose.ci.yml down -v"
+        }
+
+        stage 'Rebuild FPM image', {
+            sh "IMAGE_TAG=${commit} docker-compose -f docker-compose.yml -f docker-compose.ci.yml build fpm"
         }
     }
 
