@@ -35,7 +35,6 @@ services:
         volumes:
             - assets:/srv/journal/web
     critical_css:
-        command: node_modules/.bin/gulp critical-css:generate
         volumes:
             - critical_css:/build/critical-css
             - node_modules:/node_modules

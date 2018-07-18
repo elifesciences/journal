@@ -43,3 +43,5 @@ COPY check_critical_css.sh \
     critical-css.json \
     gulpfile.js \
     ./
+
+CMD ["node_modules/.bin/gulp", "critical-css:generate"]
