@@ -15,5 +15,5 @@ Feature: Science Digests page
   @javascript
   Scenario: Loading more posts adds previous 8 to the list
     When I go the Science Digests page
-    And I load more posts
+    And I load more digests
     Then I should see the latest 16 digests in the 'Latest' list

@@ -74,6 +74,26 @@ final class DigestContext extends Context
             ];
         }
 
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/digests?page=1&per-page=1&order=desc',
+                ['Accept' => 'application/vnd.elife.digest-list+json; version=1']
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.digest-list+json; version=1'],
+                json_encode([
+                    'total' => $number,
+                    'items' => array_map(function (array $digest) {
+                        unset($digest['content']);
+
+                        return $digest;
+                    }, [$digests[0]]),
+                ])
+            )
+        );
+
         foreach (array_chunk($digests, $chunk = 8) as $i => $digestsChunk) {
             $page = $i + 1;
 
