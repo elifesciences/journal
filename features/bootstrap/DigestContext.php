@@ -9,6 +9,15 @@ final class DigestContext extends Context
     private $numberOfDigests;
 
     /**
+     * @BeforeScenario
+     */
+    final public function setFeatureFlagCookie()
+    {
+        putenv('FEATURE_DIGEST_CHANNEL=true');
+        $this->visitPath('/?FEATURE_DIGEST_CHANNEL=true');
+    }
+
+    /**
      * @Given /^there are (\d+) digests$/
      */
     public function thereAreDigests(int $number)
