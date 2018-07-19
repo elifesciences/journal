@@ -29,7 +29,7 @@ final class DigestsController extends Controller
         }
 
         $page = (int) $request->query->get('page', 1);
-        $perPage = 10;
+        $perPage = 8;
 
         $arguments = $this->defaultPageArguments($request);
 
