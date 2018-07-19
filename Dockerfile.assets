@@ -8,16 +8,14 @@ USER root
 COPY .docker/parameters.yml app/config/
 
 RUN mkdir web && \
-    bin/console assets:install
+    SYMFONY__API_URL=https://api.elifesciences.org bin/console assets:install
 
 FROM node:${node_version}
 
 COPY --from=npm /node_modules/ node_modules/
 
 COPY assets/images/ assets/images/
-COPY critical-css.json \
-    gulpfile.js \
-    ./
+COPY gulpfile.js ./
 COPY --from=cli /srv/journal/vendor/elife/patterns/resources/assets/ vendor/elife/patterns/resources/assets/
 
 RUN node_modules/.bin/gulp assets

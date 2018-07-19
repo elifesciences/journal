@@ -8,6 +8,7 @@ elifePipeline {
     node('containers-jenkins-plugin') {
         stage 'Build images', {
             checkout scm
+            sh "find build/critical-css -name '*.css' -type f -delete"
             dockerComposeBuild commit
         }
 
@@ -27,6 +28,19 @@ elifePipeline {
                     './smoke_tests.sh localhost 8080',
                 ]
             ])
+        }
+
+        stage 'Generate critical CSS', {
+            try {
+                sh "IMAGE_TAG=${commit} docker-compose -f docker-compose.yml -f docker-compose.ci.yml run --name=journal_critical_css critical_css"
+                sh "docker cp journal_critical_css:build/critical-css/. build/critical-css/"
+            } finally {
+                sh "docker-compose -f docker-compose.yml -f docker-compose.ci.yml rm -v --stop --force"
+            }
+        }
+
+        stage 'Rebuild FPM image', {
+            sh "IMAGE_TAG=${commit} docker-compose -f docker-compose.yml -f docker-compose.ci.yml build fpm"
         }
     }
 

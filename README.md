@@ -25,6 +25,11 @@ Running the site locally
 1. `docker-compose up --build -V`
 2. Open `http://localhost:8080` in your browser.
 
+Regenerating critical CSS
+-------------------------
+
+`docker-compose run critical_css`
+
 Running the tests
 -----------------
 

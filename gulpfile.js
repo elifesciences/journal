@@ -15,8 +15,12 @@ const request = require('request');
 const rev = require('gulp-rev-all');
 const svg2png = require('gulp-svg2png');
 
-const criticalCssPageTypes = require('./critical-css.json');
-
+let criticalCssPageTypes = {};
+try {
+    criticalCssPageTypes = require('./critical-css.json');
+} catch (exception) {
+    // Do nothing.
+}
 
 gulp.task('default', ['assets']);
 
@@ -371,7 +375,7 @@ const criticalCssConfig = (function () {
     }());
 
     return {
-        baseUrl: 'http://localhost:8080',
+        baseUrl: process.env.CRITICAL_CSS_BASE_URL || 'http://localhost:8080',
         baseFilePath: './build/critical-css',
         assetPathPrefix: '/assets/patterns',
         dimensions: [

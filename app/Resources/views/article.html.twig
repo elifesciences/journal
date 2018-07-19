@@ -10,7 +10,7 @@
 
     {{ parent() }}
 
-    {% block google_scholar %}
+    {% if google_scholar_metadata ?? false %}
 
         <meta name="citation_journal_title" content="eLife">
         <meta name="citation_publisher" content="eLife Sciences Publications Limited">
@@ -314,7 +314,7 @@
 
         {%- endif %}
 
-    {% endblock %}
+    {%- endif %}
 
 {% endblock %}
 
