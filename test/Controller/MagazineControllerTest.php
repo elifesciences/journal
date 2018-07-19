@@ -46,6 +46,26 @@ final class MagazineControllerTest extends PageTestCase
 
     /**
      * @test
+     * @backupGlobals enabled
+     */
+    public function it_display_the_magazine_navigation_with_science_digests_when_the_feature_flag_is_enabled()
+    {
+        $_ENV['FEATURE_DIGEST_CHANNEL'] = true;
+
+        $client = static::createClient();
+
+        $crawler = $client->request('GET', $this->getUrl());
+
+        $this->assertSame(200, $client->getResponse()->getStatusCode());
+
+        $sections = $crawler->filter('.section-listing__list_item');
+
+        $this->assertCount(7, $sections);
+        $this->assertSame('Science Digests', trim($sections->eq(6)->text()));
+    }
+
+    /**
+     * @test
      */
     public function it_has_metadata()
     {
