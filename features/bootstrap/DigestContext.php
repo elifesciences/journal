@@ -11,7 +11,7 @@ final class DigestContext extends Context
     /**
      * @BeforeScenario
      */
-    final public function setFeatureFlagCookie()
+    public function setFeatureFlagCookie()
     {
         putenv('FEATURE_DIGEST_CHANNEL=true');
         $this->visitPath('/?FEATURE_DIGEST_CHANNEL=true');
