@@ -1,5 +1,6 @@
 <?php
 
+use Behat\Symfony2Extension\Driver\KernelDriver;
 use eLife\ApiSdk\ApiSdk;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
@@ -13,7 +14,12 @@ final class DigestContext extends Context
      */
     public function setFeatureFlagCookie()
     {
-        putenv('FEATURE_DIGEST_CHANNEL=true');
+        if ($this->getSession()->getDriver() instanceof KernelDriver) {
+            putenv('FEATURE_DIGEST_CHANNEL=true');
+
+            return;
+        }
+
         $this->visitPath('/?FEATURE_DIGEST_CHANNEL=true');
     }
 
