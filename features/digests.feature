@@ -6,7 +6,8 @@ Feature: Science Digests page
   - Digests are shown most recent first
 
   Background:
-    Given there are 20 digests
+    Given that Science Digests are enabled
+    And there are 20 digests
 
   Scenario: List shows latest 8 posts
     When I go the Science Digests page

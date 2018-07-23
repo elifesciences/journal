@@ -9,6 +9,7 @@ final class MagazineContext extends Context
     private $numberOfArticles;
     private $numberOfPodcastEpisodes;
     private $numberOfEvents;
+    private $numberOfDigests;
     private $numberOfMediumArticles;
 
     /**
@@ -519,6 +520,133 @@ final class MagazineContext extends Context
     }
 
     /**
+     * @Given /^there are no digests$/
+     */
+    public function thereAreNoDigests()
+    {
+        $this->thereAreDigests(0);
+    }
+
+    /**
+     * @Given /^there are (\d+) digests$/
+     */
+    public function thereAreDigests(int $number)
+    {
+        $this->numberOfDigests = $number;
+
+        $digests = [];
+
+        $today = (new DateTimeImmutable())->setTime(0, 0, 0);
+
+        for ($i = $number; $i > 0; --$i) {
+            $digests[] = [
+                'id' => "{$i}",
+                'title' => "Digest {$i} title",
+                'published' => $today->format(ApiSdk::DATE_FORMAT),
+                'image' => [
+                    'thumbnail' => [
+                        'uri' => "https://www.example.com/iiif/thumbnail%2F$i",
+                        'alt' => '',
+                        'source' => [
+                            'mediaType' => 'image/jpeg',
+                            'uri' => "https://www.example.com/thumbnail$i.jpg",
+                            'filename' => "thumbnail$i.jpg",
+                        ],
+                        'size' => [
+                            'width' => 800,
+                            'height' => 600,
+                        ],
+                    ],
+                ],
+                'content' => [
+                    [
+                        'type' => 'paragraph',
+                        'text' => "Digest {$i} content.",
+                    ],
+                ],
+                'relatedContent' => [
+                    [
+                        'type' => 'research-article',
+                        'status' => 'vor',
+                        'stage' => 'published',
+                        'id' => '12345',
+                        'version' => 1,
+                        'doi' => '10.7554/eLife.12345',
+                        'title' => 'Article 12345',
+                        'published' => '2010-01-01T00:00:00Z',
+                        'versionDate' => '2010-01-01T00:00:00Z',
+                        'statusDate' => '2010-01-01T00:00:00Z',
+                        'volume' => 5,
+                        'elocationId' => 'e12345',
+                        'authorLine' => 'Foo Bar',
+                    ],
+                ],
+            ];
+        }
+
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/digests?page=1&per-page=1&order=desc',
+                ['Accept' => 'application/vnd.elife.digest-list+json; version=1']
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.digest-list+json; version=1'],
+                json_encode([
+                    'total' => $number,
+                    'items' => array_map(function (array $digest) {
+                        unset($digest['content']);
+                        unset($digest['relatedContent']);
+
+                        return $digest;
+                    }, count($digests) ? [$digests[0]] : []),
+                ])
+            )
+        );
+
+        foreach (array_chunk($digests, $chunk = 3) as $i => $digestsChunk) {
+            $page = $i + 1;
+
+            $this->mockApiResponse(
+                new Request(
+                    'GET',
+                    "http://api.elifesciences.org/digests?page={$page}&per-page={$chunk}&order=desc",
+                    ['Accept' => 'application/vnd.elife.digest-list+json; version=1']
+                ),
+                new Response(
+                    200,
+                    ['Content-Type' => 'application/vnd.elife.digest-list+json; version=1'],
+                    json_encode([
+                        'total' => $number,
+                        'items' => array_map(function (array $digest) {
+                            unset($digest['content']);
+                            unset($digest['relatedContent']);
+
+                            return $digest;
+                        }, $digestsChunk),
+                    ])
+                )
+            );
+
+            foreach ($digestsChunk as $digest) {
+                $this->mockApiResponse(
+                    new Request(
+                        'GET',
+                        "http://api.elifesciences.org/digests/{$digest['id']}",
+                        ['Accept' => 'application/vnd.elife.digest+json; version=1']
+                    ),
+                    new Response(
+                        200,
+                        ['Content-Type' => 'application/vnd.elife.digest+json; version=1'],
+                        json_encode($digest)
+                    )
+                );
+            }
+        }
+    }
+
+    /**
      * @Given /^there are (\d+) digests on https:\/\/medium\.com\/@elife$/
      */
     public function thereAreDigestsOnHttpsMediumComElife(int $number)
@@ -563,6 +691,45 @@ final class MagazineContext extends Context
      */
     public function iGoToTheMagazinePage()
     {
+        if (null === $this->numberOfArticles) {
+            $this->mockApiResponse(
+                new Request(
+                    'GET',
+                    'http://api.elifesciences.org/search?for=&page=1&per-page=10&sort=date&order=desc&type[]=editorial&type[]=insight&type[]=feature&type[]=collection&type[]=interview&type[]=podcast-episode&use-date=default',
+                    ['Accept' => 'application/vnd.elife.search+json; version=1']
+                ),
+                new Response(
+                    200,
+                    ['Content-Type' => 'application/vnd.elife.search+json; version=1'],
+                    json_encode([
+                        'total' => 0,
+                        'items' => [],
+                        'subjects' => [],
+                        'types' => [
+                            'correction' => 0,
+                            'editorial' => 0,
+                            'feature' => 0,
+                            'insight' => 0,
+                            'research-advance' => 0,
+                            'research-article' => 0,
+                            'research-communication' => 0,
+                            'retraction' => 0,
+                            'registered-report' => 0,
+                            'replication-study' => 0,
+                            'scientific-correspondence' => 0,
+                            'short-report' => 0,
+                            'tools-resources' => 0,
+                            'blog-article' => 0,
+                            'collection' => 0,
+                            'interview' => 0,
+                            'labs-post' => 0,
+                            'podcast-episode' => 0,
+                        ],
+                    ])
+                )
+            );
+        }
+
         $this->visitPath('/magazine');
     }
 
@@ -713,6 +880,62 @@ final class MagazineContext extends Context
             'css',
             '.list-heading:contains("eLife digests") + .listing-list > .listing-list__item:nth-child('.($number + 1).')',
             'See more eLife digests on Medium'
+        );
+    }
+
+    /**
+     * @Then /^I should not see the 'Science Digests' list$/
+     */
+    public function iShouldNotSeeTheScienceDigestsList()
+    {
+        $this->assertSession()->elementNotExists('css', '.list-heading:contains("Science Digests")');
+    }
+
+    /**
+     * @Then /^I should see the latest (\d+) digests in the 'Science Digests' list$/
+     */
+    public function iShouldSeeTheLatestDigestsInTheScienceDigestsList(int $number)
+    {
+        if ($this->numberOfDigests > 3) {
+            $this->assertSession()->elementsCount('css', '.list-heading:contains("Science Digests") + .listing-list > .listing-list__item', $number + 1);
+        } else {
+            $this->assertSession()->elementsCount('css', '.list-heading:contains("Science Digests") + .listing-list > .listing-list__item', $number);
+        }
+
+        for ($i = $number; $i > 0; --$i) {
+            $nthChild = ($number - $i + 1);
+            $expectedNumber = ($this->numberOfDigests - $nthChild + 1);
+
+            $this->assertSession()->elementContains(
+                'css',
+                ".list-heading:contains('Science Digests') + .listing-list > .listing-list__item:nth-child({$nthChild})",
+                "Digest {$expectedNumber} title"
+            );
+        }
+    }
+
+    /**
+     * @Then /^I should not see a 'See more Science Digests' link$/
+     */
+    public function iShouldNotSeeASeeMoreScienceDigestsLink()
+    {
+        $this->assertSession()->elementNotExists('css', '.list-heading:contains("Science Digests") + .listing-list > .listing-list__item:nth-child(4)');
+        $this->assertSession()->elementTextNotContains(
+            'css',
+            '.list-heading:contains("Science Digests") + .listing-list',
+            'See more Science Digests'
+        );
+    }
+
+    /**
+     * @Given /^I should see a 'See more Science Digests' link$/
+     */
+    public function iShouldSeeASeeMoreScienceDigestsLink()
+    {
+        $this->assertSession()->elementContains(
+            'css',
+            '.list-heading:contains("Science Digests") + .listing-list > .listing-list__item:nth-child(4)',
+            'See more Science Digests'
         );
     }
 

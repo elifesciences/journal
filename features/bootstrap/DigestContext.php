@@ -1,6 +1,5 @@
 <?php
 
-use Behat\Symfony2Extension\Driver\KernelDriver;
 use eLife\ApiSdk\ApiSdk;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
@@ -8,20 +7,6 @@ use GuzzleHttp\Psr7\Response;
 final class DigestContext extends Context
 {
     private $numberOfDigests;
-
-    /**
-     * @BeforeScenario
-     */
-    public function setFeatureFlagCookie()
-    {
-        if ($this->getSession()->getDriver() instanceof KernelDriver) {
-            putenv('FEATURE_DIGEST_CHANNEL=true');
-
-            return;
-        }
-
-        $this->visitPath('/?FEATURE_DIGEST_CHANNEL=true');
-    }
 
     /**
      * @Given /^there are (\d+) digests$/
@@ -93,6 +78,7 @@ final class DigestContext extends Context
                     'total' => $number,
                     'items' => array_map(function (array $digest) {
                         unset($digest['content']);
+                        unset($digest['relatedContent']);
 
                         return $digest;
                     }, [$digests[0]]),
@@ -102,8 +88,6 @@ final class DigestContext extends Context
 
         foreach (array_chunk($digests, $chunk = 8) as $i => $digestsChunk) {
             $page = $i + 1;
-
-            unset($digestsChunk['content']);
 
             $this->mockApiResponse(
                 new Request(
@@ -116,7 +100,12 @@ final class DigestContext extends Context
                     ['Content-Type' => 'application/vnd.elife.digest-list+json; version=1'],
                     json_encode([
                         'total' => $number,
-                        'items' => $digestsChunk,
+                        'items' => array_map(function (array $digest) {
+                            unset($digest['content']);
+                            unset($digest['relatedContent']);
+
+                            return $digest;
+                        }, $digestsChunk),
                     ])
                 )
             );
