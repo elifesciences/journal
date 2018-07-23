@@ -11,14 +11,7 @@ services:
             - ./npm-shrinkwrap.json:/npm-shrinkwrap.json
             - ./package.json:/package.json
             - node_modules:/node_modules
-    cli:
-        volumes:
-            - ./:/srv/journal
-            - ./.docker/php.ini:/usr/local/etc/php/conf.d/x-dev.ini
-            - /srv/journal/build
-            - /srv/journal/var
-            - vendor:/srv/journal/vendor
-    assets:
+    assets_builder:
         volumes:
             - ./assets/images:/assets/images
             - assets:/web

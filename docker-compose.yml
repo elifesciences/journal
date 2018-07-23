@@ -18,42 +18,28 @@ services:
         image: elifesciences/journal_npm:${IMAGE_TAG}
     redis:
         image: redis:3.2.10-alpine
-    cli:
+    assets_builder:
         build:
             context: .
-            dockerfile: Dockerfile.cli
-            args:
-                image_tag: ${IMAGE_TAG}
-                php_version: ${PHP_VERSION}
-        image: elifesciences/journal_cli:${IMAGE_TAG}
-        volumes:
-            - ./.docker/parameters.yml:/srv/journal/app/config/parameters.yml
-        depends_on:
-            - composer
-            - redis
-    assets:
-        build:
-            context: .
-            dockerfile: Dockerfile.assets
+            dockerfile: Dockerfile.assets_builder
             args:
                 image_tag: ${IMAGE_TAG}
                 node_version: ${NODE_VERSION}
-        image: elifesciences/journal_assets:${IMAGE_TAG}
+        image: elifesciences/journal_assets_builder:${IMAGE_TAG}
         depends_on:
-            - cli
+            - composer
             - npm
     fpm:
         build:
             context: .
-            dockerfile: Dockerfile.fpm
             args:
                 image_tag: ${IMAGE_TAG}
                 php_version: ${PHP_VERSION}
-        image: elifesciences/journal_fpm:${IMAGE_TAG}
+        image: elifesciences/journal:${IMAGE_TAG}
         volumes:
             - ./.docker/parameters.yml:/srv/journal/app/config/parameters.yml
         depends_on:
-            - assets
+            - assets_builder
             - composer
             - redis
     web:
@@ -66,7 +52,6 @@ services:
         ports:
             - '${JOURNAL_PORT}:80'
         depends_on:
-            - assets
             - fpm
     api_dummy:
         image: elifesciences/api-dummy:${DEPENDENCIES_API_DUMMY}

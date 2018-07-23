@@ -20,10 +20,6 @@ services:
             - "5900:5900" # VNC connection for debug images
         volumes:
             - /dev/shm:/dev/shm
-    cli:
-        environment:
-            - APP_ENV=ci
-        command: sleep infinity
     ci:
         build:
             context: .
@@ -38,15 +34,12 @@ services:
             - APP_ENV=ci
         depends_on:
             - composer-dev
-            - cli
             - selenium
     fpm:
         volumes:
             - fixtures:/srv/journal/var/fixtures
         environment:
             - APP_ENV=ci
-        depends_on:
-            - ci
     web:
         volumes:
             - ./assets/tests:/srv/journal/web/tests

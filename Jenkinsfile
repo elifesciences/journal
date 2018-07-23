@@ -21,7 +21,7 @@ elifePipeline {
 
             dockerComposeSmokeTests(commit, [
                 'services': [
-                    'cli': './smoke_tests_cli.sh',
+                    'fpm': './smoke_tests_cli.sh',
                     'fpm': './smoke_tests_fpm.sh',
                 ],
                 'blackbox': [
