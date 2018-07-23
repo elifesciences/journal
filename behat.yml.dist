@@ -59,6 +59,11 @@ default:
                 tags: '@contact'
             contexts:
               - ContactContext
+        digest:
+            filters:
+                tags: '@digest'
+            contexts:
+              - DigestContext
         event:
             filters:
                 tags: '@event'

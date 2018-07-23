@@ -1,0 +1,49 @@
+{% set criticalCss = 'post' %}
+
+{% set hypothesis = true %}
+
+{% extends '::page.html.twig' %}
+
+{% block title %}{{ title|striptags }} | eLife Science Digests{% endblock %}
+
+{% block body %}
+
+    {{ render_pattern(contentHeader) }}
+
+    {% if contextualData %}
+
+        <div class="wrapper">
+
+            {{ render_pattern(contextualData) }}
+
+        </div>
+
+    {% endif %}
+
+    {% embed 'grid/content.html.twig' %}
+
+        {% block main %}
+
+            {% for block in blocks %}
+                {{ render_pattern(block) }}
+            {% endfor %}
+
+        {% endblock %}
+
+        {% block secondary %}
+
+            {% if relatedContent %}
+
+                <div class="grid-secondary-column__item">
+
+                    {{ render_pattern(relatedContent) }}
+
+                </div>
+
+            {% endif %}
+
+        {% endblock %}
+
+    {% endembed %}
+
+{% endblock %}

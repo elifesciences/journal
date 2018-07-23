@@ -53,6 +53,10 @@ services:
         class: eLife\ApiSdk\Client\Covers
         factory: ['@elife.api_sdk', covers]
 
+    elife.api_sdk.digests:
+        class: eLife\ApiSdk\Client\Digests
+        factory: ['@elife.api_sdk', digests]
+
     elife.api_sdk.events:
         class: eLife\ApiSdk\Client\Events
         factory: ['@elife.api_sdk', events]
@@ -292,6 +296,15 @@ services:
           - '@oauth2.registry'
           - '@router'
           - '@security.http_utils'
+
+    elife.journal.security.voter.feature.digest_channel:
+        class: eLife\Journal\Security\Voter\FixedVoter
+        public: false
+        arguments:
+          - FEATURE_DIGEST_CHANNEL
+          - '%feature_digest_channel%'
+        tags:
+          - name: security.voter
 
     elife.journal.templating.promise_aware:
         class: eLife\Journal\Templating\PromiseAwareEngine
@@ -788,6 +801,23 @@ services:
     elife.journal.view_model.converter.data_set:
         class: eLife\Journal\ViewModel\Converter\DataSetConverter
         public: false
+        tags:
+          - name: view_model.converter
+
+    elife.journal.view_model.converter.digest.header:
+        class: eLife\Journal\ViewModel\Converter\DigestContentHeaderConverter
+        public: false
+        arguments:
+          - '@router'
+        tags:
+          - name: view_model.converter
+
+    elife.journal.view_model.converter.digest.teaser.grid:
+        class: eLife\Journal\ViewModel\Converter\DigestGridTeaserConverter
+        public: false
+        arguments:
+          - '@elife.journal.view_model.converter'
+          - '@router'
         tags:
           - name: view_model.converter
 

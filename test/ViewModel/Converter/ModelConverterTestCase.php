@@ -22,6 +22,7 @@ abstract class ModelConverterTestCase extends TestCase
         'blog-article' => Model\BlogArticle::class,
         'collection' => Model\Collection::class,
         'cover' => Model\Cover::class,
+        'digest' => Model\Digest::class,
         'event' => Model\Event::class,
         'external-article' => Model\ExternalArticle::class,
         'highlight' => Model\Highlight::class,
