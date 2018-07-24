@@ -16,10 +16,7 @@ RUN mkdir -p build var && \
     chown --recursive elife:elife . && \
     chown --recursive www-data:www-data var
 
-COPY --chown=elife:elife \
-    smoke_tests_cli.sh \
-    smoke_tests_fpm.sh \
-    ./
+COPY --chown=elife:elife .docker/smoke_tests.sh ./
 COPY --chown=elife:elife bin/ bin/
 COPY --chown=elife:elife web/ web/
 COPY --chown=elife:elife app/ app/
