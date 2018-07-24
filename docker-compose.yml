@@ -29,7 +29,7 @@ services:
         depends_on:
             - composer
             - npm
-    fpm:
+    app:
         build:
             context: .
             args:
@@ -54,7 +54,7 @@ services:
         ports:
             - '${JOURNAL_PORT}:80'
         depends_on:
-            - fpm
+            - app
     api_dummy:
         image: elifesciences/api-dummy:${DEPENDENCIES_API_DUMMY}
     critical_css:

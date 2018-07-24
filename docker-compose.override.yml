@@ -16,7 +16,7 @@ services:
             - ./assets/images:/assets/images
             - assets:/web
             - node_modules:/node_modules
-    fpm:
+    app:
         volumes:
             - ./:/srv/journal
             - ./.docker/php.ini:/usr/local/etc/php/conf.d/x-dev.ini

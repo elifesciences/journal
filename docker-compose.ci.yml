@@ -34,9 +34,9 @@ services:
             - APP_ENV=ci
         depends_on:
             - composer-dev
-            - fpm
+            - app
             - selenium
-    fpm:
+    app:
         volumes:
             - fixtures:/srv/journal/var/fixtures
         environment:
