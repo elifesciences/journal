@@ -49,6 +49,8 @@ services:
             args:
                 image_tag: ${IMAGE_TAG}
                 php_version: ${PHP_VERSION}
+        environment:
+            - SYMFONY__API_URL=${API_URL}
         image: elifesciences/journal_fpm:${IMAGE_TAG}
         volumes:
             - ./.docker/parameters.yml:/srv/journal/app/config/parameters.yml
