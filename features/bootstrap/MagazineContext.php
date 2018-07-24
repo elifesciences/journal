@@ -928,7 +928,7 @@ final class MagazineContext extends Context
     }
 
     /**
-     * @Given /^I should see a 'See more Science Digests' link$/
+     * @Then /^I should see a 'See more Science Digests' link$/
      */
     public function iShouldSeeASeeMoreScienceDigestsLink()
     {
