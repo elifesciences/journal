@@ -4,6 +4,7 @@ use Behat\Mink\Driver\BrowserKitDriver;
 use Behat\Mink\Exception\UnsupportedDriverActionException;
 use Behat\MinkExtension\Context\RawMinkContext;
 use Behat\Symfony2Extension\Context\KernelAwareContext;
+use Behat\Symfony2Extension\Driver\KernelDriver;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Symfony\Bundle\SwiftmailerBundle\DataCollector\MessageDataCollector;
@@ -151,5 +152,29 @@ abstract class Context extends RawMinkContext implements KernelAwareContext
         } catch (UnsupportedDriverActionException $e) {
             return false;
         }
+    }
+
+    /**
+     * @Given /^that Science Digests are disabled$/
+     */
+    public function thatScienceDigestsAreDisabled()
+    {
+        if ($this->getSession()->getDriver() instanceof KernelDriver) {
+            putenv('FEATURE_DIGEST_CHANNEL');
+        }
+    }
+
+    /**
+     * @Given /^that Science Digests are enabled$/
+     */
+    public function thatScienceDigestsAreEnabled()
+    {
+        if ($this->getSession()->getDriver() instanceof KernelDriver) {
+            putenv('FEATURE_DIGEST_CHANNEL=true');
+
+            return;
+        }
+
+        $this->visitPath('/?FEATURE_DIGEST_CHANNEL=true');
     }
 }

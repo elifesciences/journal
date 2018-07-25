@@ -140,16 +140,38 @@ final class MagazineController extends Controller
             }))
             ->otherwise($this->softFailure('Failed to load events'));
 
-        $arguments['elifeDigests'] = $this->get('elife.api_sdk.medium_articles')
-            ->slice(0, 3)
-            ->then(Callback::emptyOr(function (Sequence $result) {
-                return ListingTeasers::withSeeMore(
-                    $result->map($this->willConvertTo(Teaser::class, ['variant' => 'secondary']))->toArray(),
-                    new SeeMoreLink(new Link('See more eLife digests on Medium', 'https://medium.com/@elife')),
-                    new ListHeading('eLife digests')
-                );
-            }))
-            ->otherwise($this->softFailure('Failed to load Medium articles'));
+        if ($this->isGranted('FEATURE_DIGEST_CHANNEL')) {
+            $digests = $this->get('elife.api_sdk.digests');
+
+            $arguments['digests'] = $digests
+                ->slice(0, 3)
+                ->then(Callback::emptyOr(function (Sequence $result) use ($digests) {
+                    $items = $result->map($this->willConvertTo(Teaser::class, ['variant' => 'secondary']))->toArray();
+                    $heading = new ListHeading('Science Digests');
+
+                    if (count($digests) > 3) {
+                        return ListingTeasers::withSeeMore(
+                            $items,
+                            new SeeMoreLink(new Link('See more Science Digests', $this->get('router')->generate('digests'))),
+                            $heading
+                        );
+                    }
+
+                    return ListingTeasers::basic($items, $heading);
+                }))
+                ->otherwise($this->softFailure('Failed to load Science Digests'));
+        } else {
+            $arguments['digests'] = $this->get('elife.api_sdk.medium_articles')
+                ->slice(0, 3)
+                ->then(Callback::emptyOr(function (Sequence $result) {
+                    return ListingTeasers::withSeeMore(
+                        $result->map($this->willConvertTo(Teaser::class, ['variant' => 'secondary']))->toArray(),
+                        new SeeMoreLink(new Link('See more eLife digests on Medium', 'https://medium.com/@elife')),
+                        new ListHeading('eLife digests')
+                    );
+                }))
+                ->otherwise($this->softFailure('Failed to load Medium articles'));
+        }
 
         return new Response($this->get('templating')->render('::magazine.html.twig', $arguments));
     }
