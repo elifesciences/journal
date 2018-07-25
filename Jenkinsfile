@@ -21,8 +21,7 @@ elifePipeline {
 
             dockerComposeSmokeTests(commit, [
                 'services': [
-                    'cli': './smoke_tests_cli.sh',
-                    'fpm': './smoke_tests_fpm.sh',
+                    'app': './smoke_tests.sh',
                 ],
                 'blackbox': [
                     './smoke_tests.sh localhost 8080',
@@ -39,8 +38,8 @@ elifePipeline {
             }
         }
 
-        stage 'Rebuild FPM image', {
-            sh "IMAGE_TAG=${commit} docker-compose -f docker-compose.yml -f docker-compose.ci.yml build fpm"
+        stage 'Rebuild app image', {
+            sh "IMAGE_TAG=${commit} docker-compose -f docker-compose.yml -f docker-compose.ci.yml build app"
         }
     }
 

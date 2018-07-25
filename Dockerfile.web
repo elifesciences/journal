@@ -1,6 +1,6 @@
 ARG image_tag=latest
-FROM elifesciences/journal_assets:${image_tag} AS assets
+FROM elifesciences/journal:${image_tag} AS app
 FROM nginx:1.13.12-alpine
 
 COPY .docker/nginx-default.conf /etc/nginx/conf.d/default.conf
-COPY --from=assets /web/ /srv/journal/web/
+COPY --from=app /srv/journal/web/ /srv/journal/web/
