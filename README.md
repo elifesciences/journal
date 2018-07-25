@@ -33,7 +33,7 @@ Regenerating critical CSS
 Running the tests
 -----------------
 
-`docker-compose run cli vendor/bin/phpunit`
+`docker-compose run app vendor/bin/phpunit`
 
 Running Behat
 -------------
