@@ -663,6 +663,9 @@ services:
     elife.journal.view_model.converter.block.youtube:
         class: eLife\Journal\ViewModel\Converter\Block\YouTubeConverter
         public: false
+        arguments:
+          - '@elife.journal.view_model.converter'
+          - '@elife.patterns.pattern_renderer'
         tags:
           - name: view_model.converter
 
