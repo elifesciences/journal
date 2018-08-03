@@ -21,19 +21,6 @@ final class AnnualReportContext extends Context
                 'year' => $year,
                 'uri' => 'http://www.example.com/',
                 'title' => "$year Annual Report",
-                'image' => [
-                    'uri' => 'https://www.example.com/iiif/iden%2Ftifier',
-                    'alt' => '',
-                    'source' => [
-                        'mediaType' => 'image/jpeg',
-                        'uri' => 'https://www.example.com/image.jpg',
-                        'filename' => 'image.jpg',
-                    ],
-                    'size' => [
-                        'width' => 800,
-                        'height' => 600,
-                    ],
-                ],
             ];
         }
 
@@ -41,11 +28,11 @@ final class AnnualReportContext extends Context
             new Request(
                 'GET',
                 'http://api.elifesciences.org/annual-reports?page=1&per-page=1&order=desc',
-                ['Accept' => 'application/vnd.elife.annual-report-list+json; version=1']
+                ['Accept' => 'application/vnd.elife.annual-report-list+json; version=2']
             ),
             new Response(
                 200,
-                ['Content-Type' => 'application/vnd.elife.annual-report-list+json; version=1'],
+                ['Content-Type' => 'application/vnd.elife.annual-report-list+json; version=2'],
                 json_encode([
                     'total' => $number,
                     'items' => [$annualReports[0]],
@@ -60,11 +47,11 @@ final class AnnualReportContext extends Context
                 new Request(
                     'GET',
                     "http://api.elifesciences.org/annual-reports?page=$page&per-page=$chunk&order=desc",
-                    ['Accept' => 'application/vnd.elife.annual-report-list+json; version=1']
+                    ['Accept' => 'application/vnd.elife.annual-report-list+json; version=2']
                 ),
                 new Response(
                     200,
-                    ['Content-Type' => 'application/vnd.elife.annual-report-list+json; version=1'],
+                    ['Content-Type' => 'application/vnd.elife.annual-report-list+json; version=2'],
                     json_encode([
                         'total' => $number,
                         'items' => $annualReportsChunk,
@@ -77,11 +64,11 @@ final class AnnualReportContext extends Context
                     new Request(
                         'GET',
                         "http://api.elifesciences.org/annual-reports/{$annualReport['year']}",
-                        ['Accept' => 'application/vnd.elife.annual-report+json; version=1']
+                        ['Accept' => 'application/vnd.elife.annual-report+json; version=2']
                     ),
                     new Response(
                         200,
-                        ['Content-Type' => 'application/vnd.elife.annual-report+json; version=1'],
+                        ['Content-Type' => 'application/vnd.elife.annual-report+json; version=2'],
                         json_encode($annualReport)
                     )
                 );
