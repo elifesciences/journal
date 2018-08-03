@@ -214,6 +214,7 @@ final class DigestControllerTest extends PageTestCase
                     'id' => '1',
                     'title' => 'Digest <i>title</i>',
                     'impactStatement' => 'Digest impact statement',
+                    'stage' => 'published',
                     'published' => '2010-01-01T00:00:00Z',
                     'image' => [
                         'thumbnail' => [

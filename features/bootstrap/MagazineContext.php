@@ -542,6 +542,7 @@ final class MagazineContext extends Context
             $digests[] = [
                 'id' => "{$i}",
                 'title' => "Digest {$i} title",
+                'stage' => 'published',
                 'published' => $today->format(ApiSdk::DATE_FORMAT),
                 'image' => [
                     'thumbnail' => [
