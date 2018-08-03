@@ -3391,12 +3391,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-validator-php.git",
-                "reference": "53f10fb73c68badc999e294ab22e5d340f9ab539"
+                "reference": "4a3d68807949ae02603936d514cc4cd13db42820"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-validator-php/zipball/53f10fb73c68badc999e294ab22e5d340f9ab539",
-                "reference": "53f10fb73c68badc999e294ab22e5d340f9ab539",
+                "url": "https://api.github.com/repos/elifesciences/api-validator-php/zipball/4a3d68807949ae02603936d514cc4cd13db42820",
+                "reference": "4a3d68807949ae02603936d514cc4cd13db42820",
                 "shasum": ""
             },
             "require": {
@@ -3427,7 +3427,7 @@
                 "MIT"
             ],
             "description": "eLife Sciences API validator",
-            "time": "2017-09-06T06:41:40+00:00"
+            "time": "2018-03-15T10:16:56+00:00"
         },
         {
             "name": "instaclick/php-webdriver",
