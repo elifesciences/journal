@@ -80,7 +80,7 @@ final class AnnualReportsControllerTest extends PageTestCase
                         new Request(
                             'GET',
                             'http://api.elifesciences.org/annual-reports?page=1&per-page=1&order=desc',
-                            ['Accept' => 'application/vnd.elife.annual-report-list+json; version=1']
+                            ['Accept' => 'application/vnd.elife.annual-report-list+json; version=2']
                         ),
                         new Response(
                             404,
@@ -99,11 +99,11 @@ final class AnnualReportsControllerTest extends PageTestCase
             new Request(
                 'GET',
                 'http://api.elifesciences.org/annual-reports?page=1&per-page=10&order=desc',
-                ['Accept' => 'application/vnd.elife.annual-report-list+json; version=1']
+                ['Accept' => 'application/vnd.elife.annual-report-list+json; version=2']
             ),
             new Response(
                 200,
-                ['Content-Type' => 'application/vnd.elife.annual-report-list+json; version=1'],
+                ['Content-Type' => 'application/vnd.elife.annual-report-list+json; version=2'],
                 json_encode([
                     'total' => 0,
                     'items' => [],
