@@ -11,7 +11,7 @@ use eLife\Patterns\ViewModel;
 final class YouTubeConverterTest extends BlockConverterTestCase
 {
     protected $blockClass = Block\YouTube::class;
-    protected $viewModelClasses = [ViewModel\IFrame::class];
+    protected $viewModelClasses = [ViewModel\IFrame::class, ViewModel\CaptionedAsset::class];
 
     /**
      * @before
