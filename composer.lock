@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "756242c94521a3033876cb3fa4100cd9",
+    "content-hash": "ec68165795cace82cc4365f4b5d18ee1",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -857,16 +857,16 @@
         },
         {
             "name": "elife/api-sdk",
-            "version": "dev-youtube-caption",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-sdk-php.git",
-                "reference": "d0c09e679b66359dfe48ea0fd6be1f2871e3156e"
+                "reference": "4c50e45c8b05fe6850fd6cff910780a01d1c6f9b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/d0c09e679b66359dfe48ea0fd6be1f2871e3156e",
-                "reference": "d0c09e679b66359dfe48ea0fd6be1f2871e3156e",
+                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/4c50e45c8b05fe6850fd6cff910780a01d1c6f9b",
+                "reference": "4c50e45c8b05fe6850fd6cff910780a01d1c6f9b",
                 "shasum": ""
             },
             "require": {
@@ -902,7 +902,7 @@
                 "MIT"
             ],
             "description": "eLife Sciences API SDK",
-            "time": "2018-08-03T13:12:43+00:00"
+            "time": "2018-08-06T07:22:50+00:00"
         },
         {
             "name": "elife/patterns",
@@ -910,12 +910,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/patterns-php.git",
-                "reference": "837f1095599122227bc0d04ebd21bc3b9dbcbfd3"
+                "reference": "503ff586e2abf7f7524d881adaf64c82f4e2ff3a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/837f1095599122227bc0d04ebd21bc3b9dbcbfd3",
-                "reference": "837f1095599122227bc0d04ebd21bc3b9dbcbfd3",
+                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/503ff586e2abf7f7524d881adaf64c82f4e2ff3a",
+                "reference": "503ff586e2abf7f7524d881adaf64c82f4e2ff3a",
                 "shasum": ""
             },
             "require": {
@@ -951,7 +951,7 @@
                 "MIT"
             ],
             "description": "eLife patterns",
-            "time": "2018-07-23T06:24:31+00:00"
+            "time": "2018-08-06T07:22:42+00:00"
         },
         {
             "name": "fabpot/goutte",
@@ -3366,12 +3366,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-raml.git",
-                "reference": "3636c5ceea8bdf5fa50902a9b6940cb42bc44138"
+                "reference": "534c9dde2965337a91f5a41b0b9744d644e87249"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-raml/zipball/3636c5ceea8bdf5fa50902a9b6940cb42bc44138",
-                "reference": "3636c5ceea8bdf5fa50902a9b6940cb42bc44138",
+                "url": "https://api.github.com/repos/elifesciences/api-raml/zipball/534c9dde2965337a91f5a41b0b9744d644e87249",
+                "reference": "534c9dde2965337a91f5a41b0b9744d644e87249",
                 "shasum": ""
             },
             "conflict": {
@@ -3383,7 +3383,7 @@
                 "MIT"
             ],
             "description": "eLife Sciences API specification",
-            "time": "2018-07-31T10:50:36+00:00"
+            "time": "2018-08-06T07:01:55+00:00"
         },
         {
             "name": "elife/api-validator",
@@ -3391,12 +3391,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-validator-php.git",
-                "reference": "53f10fb73c68badc999e294ab22e5d340f9ab539"
+                "reference": "4a3d68807949ae02603936d514cc4cd13db42820"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-validator-php/zipball/53f10fb73c68badc999e294ab22e5d340f9ab539",
-                "reference": "53f10fb73c68badc999e294ab22e5d340f9ab539",
+                "url": "https://api.github.com/repos/elifesciences/api-validator-php/zipball/4a3d68807949ae02603936d514cc4cd13db42820",
+                "reference": "4a3d68807949ae02603936d514cc4cd13db42820",
                 "shasum": ""
             },
             "require": {
@@ -3427,7 +3427,7 @@
                 "MIT"
             ],
             "description": "eLife Sciences API validator",
-            "time": "2017-09-06T06:41:40+00:00"
+            "time": "2018-03-15T10:16:56+00:00"
         },
         {
             "name": "instaclick/php-webdriver",
