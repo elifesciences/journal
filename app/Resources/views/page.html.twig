@@ -248,6 +248,7 @@
 
             {% if hypothesis ?? false %}
             window.elifeConfig.hypothesis = {
+              showHighlights: true,
               usernameUrl: '{{ absolute_url(path('profile', {id: 'placeholder'})|replace({'placeholder': ''})) }}',
               services: [{
                 apiUrl: '{{ hypothesis_api }}',
