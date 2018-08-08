@@ -117,7 +117,7 @@ final class MagazineController extends Controller
         ];
 
         if ($this->isGranted('FEATURE_DIGEST_CHANNEL')) {
-            $menu[] = new Link('Science Digests', $this->get('router')->generate('digests'));
+            $menu[] = new Link('Digests', $this->get('router')->generate('digests'));
         }
 
         $arguments['menu'] = new SectionListing('sections', $menu, new ListHeading('Magazine sections'), true);
@@ -147,19 +147,19 @@ final class MagazineController extends Controller
                 ->slice(0, 3)
                 ->then(Callback::emptyOr(function (Sequence $result) use ($digests) {
                     $items = $result->map($this->willConvertTo(Teaser::class, ['variant' => 'secondary']))->toArray();
-                    $heading = new ListHeading('Science Digests');
+                    $heading = new ListHeading('Digests');
 
                     if (count($digests) > 3) {
                         return ListingTeasers::withSeeMore(
                             $items,
-                            new SeeMoreLink(new Link('See more Science Digests', $this->get('router')->generate('digests'))),
+                            new SeeMoreLink(new Link('See more eLife digests', $this->get('router')->generate('digests'))),
                             $heading
                         );
                     }
 
                     return ListingTeasers::basic($items, $heading);
                 }))
-                ->otherwise($this->softFailure('Failed to load Science Digests'));
+                ->otherwise($this->softFailure('Failed to load digests'));
         } else {
             $arguments['digests'] = $this->get('elife.api_sdk.medium_articles')
                 ->slice(0, 3)
