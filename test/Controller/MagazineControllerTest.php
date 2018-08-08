@@ -61,7 +61,7 @@ final class MagazineControllerTest extends PageTestCase
         $sections = $crawler->filter('.section-listing__list_item');
 
         $this->assertCount(7, $sections);
-        $this->assertSame('Science Digests', trim($sections->eq(6)->text()));
+        $this->assertSame('Digests', trim($sections->eq(6)->text()));
     }
 
     /**
