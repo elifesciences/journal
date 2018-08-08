@@ -70,7 +70,7 @@ final class DigestsController extends Controller
     private function createFirstPage(array $arguments) : Response
     {
         $arguments['contentHeader'] = new ContentHeader($arguments['title'], null,
-            'Short article written in plain language to explain recent eLife papers to a broad audience.');
+            'Cutting the jargon and putting the research in context, <a href="https://doi.org/10.7554/eLife.25410">eLife digests</a> showcase some of the latest articles published in the journal.');
 
         return new Response($this->get('templating')->render('::digests.html.twig', $arguments));
     }

@@ -885,22 +885,22 @@ final class MagazineContext extends Context
     }
 
     /**
-     * @Then /^I should not see the 'Science Digests' list$/
+     * @Then /^I should not see the 'Digests' list$/
      */
-    public function iShouldNotSeeTheScienceDigestsList()
+    public function iShouldNotSeeTheDigestsList()
     {
-        $this->assertSession()->elementNotExists('css', '.list-heading:contains("Science Digests")');
+        $this->assertSession()->elementNotExists('css', '.list-heading:contains("Digests")');
     }
 
     /**
-     * @Then /^I should see the latest (\d+) digests in the 'Science Digests' list$/
+     * @Then /^I should see the latest (\d+) digests in the 'Digests' list$/
      */
-    public function iShouldSeeTheLatestDigestsInTheScienceDigestsList(int $number)
+    public function iShouldSeeTheLatestDigestsInTheDigestsList(int $number)
     {
         if ($this->numberOfDigests > 3) {
-            $this->assertSession()->elementsCount('css', '.list-heading:contains("Science Digests") + .listing-list > .listing-list__item', $number + 1);
+            $this->assertSession()->elementsCount('css', '.list-heading:contains("Digests") + .listing-list > .listing-list__item', $number + 1);
         } else {
-            $this->assertSession()->elementsCount('css', '.list-heading:contains("Science Digests") + .listing-list > .listing-list__item', $number);
+            $this->assertSession()->elementsCount('css', '.list-heading:contains("Digests") + .listing-list > .listing-list__item', $number);
         }
 
         for ($i = $number; $i > 0; --$i) {
@@ -909,34 +909,34 @@ final class MagazineContext extends Context
 
             $this->assertSession()->elementContains(
                 'css',
-                ".list-heading:contains('Science Digests') + .listing-list > .listing-list__item:nth-child({$nthChild})",
+                ".list-heading:contains('Digests') + .listing-list > .listing-list__item:nth-child({$nthChild})",
                 "Digest {$expectedNumber} title"
             );
         }
     }
 
     /**
-     * @Then /^I should not see a 'See more Science Digests' link$/
+     * @Then /^I should not see a 'See more eLife digests' link$/
      */
-    public function iShouldNotSeeASeeMoreScienceDigestsLink()
+    public function iShouldNotSeeASeeMoreDigestsLink()
     {
-        $this->assertSession()->elementNotExists('css', '.list-heading:contains("Science Digests") + .listing-list > .listing-list__item:nth-child(4)');
+        $this->assertSession()->elementNotExists('css', '.list-heading:contains("Digests") + .listing-list > .listing-list__item:nth-child(4)');
         $this->assertSession()->elementTextNotContains(
             'css',
-            '.list-heading:contains("Science Digests") + .listing-list',
-            'See more Science Digests'
+            '.list-heading:contains("Digests") + .listing-list',
+            'See more eLife digests'
         );
     }
 
     /**
-     * @Then /^I should see a 'See more Science Digests' link$/
+     * @Then /^I should see a 'See more eLife digests' link$/
      */
-    public function iShouldSeeASeeMoreScienceDigestsLink()
+    public function iShouldSeeASeeMoreDigestsLink()
     {
         $this->assertSession()->elementContains(
             'css',
-            '.list-heading:contains("Science Digests") + .listing-list > .listing-list__item:nth-child(4)',
-            'See more Science Digests'
+            '.list-heading:contains("Digests") + .listing-list > .listing-list__item:nth-child(4)',
+            'See more eLife digests'
         );
     }
 
