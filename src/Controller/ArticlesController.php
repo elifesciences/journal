@@ -303,7 +303,7 @@ final class ArticlesController extends Controller
 
                 if ($item instanceof ArticleVoR && $item->getDecisionLetter()) {
                     $parts[] = ArticleSection::collapsible(
-                        'decision-letter',
+                        $item->getDecisionLetter()->getId() ?? 'decision-letter',
                         'Decision letter',
                         2,
                         $this->render($this->convertTo($item, ViewModel\DecisionLetterHeader::class)).
@@ -316,7 +316,7 @@ final class ArticlesController extends Controller
 
                 if ($item instanceof ArticleVoR && $item->getAuthorResponse()) {
                     $parts[] = ArticleSection::collapsible(
-                        'author-response',
+                        $item->getAuthorResponse()->getId() ?? 'author-response',
                         'Author response',
                         2,
                         $this->render(...$this->convertContent($item->getAuthorResponse(), 2, $context)),

@@ -1442,6 +1442,7 @@ final class ArticleControllerTest extends PageTestCase
                         'statement' => 'Funding statement',
                     ],
                     'decisionLetter' => [
+                        'id' => 'decision-letter-id',
                         'doi' => '10.7554/eLife.09560.003',
                         'description' => [
                             [
@@ -1457,6 +1458,7 @@ final class ArticleControllerTest extends PageTestCase
                         ],
                     ],
                     'authorResponse' => [
+                        'id' => 'author-response-id',
                         'doi' => '10.7554/eLife.09560.003',
                         'content' => [
                             [
@@ -1611,6 +1613,7 @@ final class ArticleControllerTest extends PageTestCase
             $references->filter('div > ol > li:nth-of-type(1) .reference-list__ordinal_number')->text());
         $this->assertSame('Journal article',
             $references->filter('div > ol > li:nth-of-type(1) .reference__title')->text());
+        $this->assertSame('Decision letter', $crawler->filter('#decision-letter-id h2')->text());
         $this->assertSame('Decision letter',
             $crawler->filter('.grid-column > section:nth-of-type(6) > header > h2')->text());
         $this->assertCount(2, $crawler->filter('.grid-column > section:nth-of-type(6) > div .profile-snippet__name'));
@@ -1622,6 +1625,7 @@ final class ArticleControllerTest extends PageTestCase
             $crawler->filter('.grid-column > section:nth-of-type(6) > div .decision-letter-header__main_text > p')->text());
         $this->assertSame('Decision letter text',
             $crawler->filter('.grid-column > section:nth-of-type(6) > div > p')->text());
+        $this->assertSame('Author response', $crawler->filter('#author-response-id h2')->text());
         $this->assertSame('Author response',
             $crawler->filter('.grid-column > section:nth-of-type(7) > header > h2')->text());
         $this->assertSame('Author response text',
