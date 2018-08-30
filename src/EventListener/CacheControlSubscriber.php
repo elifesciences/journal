@@ -9,6 +9,8 @@ use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 
 final class CacheControlSubscriber implements EventSubscriberInterface
 {
+    const NOT_FOUND_MAX_AGE = 5 * 60;
+
     private $cacheControl;
 
     public function __construct(string $cacheControl)
@@ -40,6 +42,15 @@ final class CacheControlSubscriber implements EventSubscriberInterface
             // Default Symfony value, so treat as untouched.
 
             $response->headers->set('Cache-Control', $this->cacheControl);
+        }
+
+        // Cap 404 cache length (see https://github.com/elifesciences/issues/issues/4400)
+        if (Response::HTTP_NOT_FOUND === $response->getStatusCode()) {
+            if (($response->getMaxAge() ?? 0) > self::NOT_FOUND_MAX_AGE) {
+                $response->setMaxAge(self::NOT_FOUND_MAX_AGE);
+                $response->headers->removeCacheControlDirective('s-maxage');
+            }
+            $response->headers->removeCacheControlDirective('stale-while-revalidate');
         }
 
         $response->setEtag(md5($response->getContent()));
