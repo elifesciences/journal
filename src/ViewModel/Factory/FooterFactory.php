@@ -68,7 +68,7 @@ final class FooterFactory
                 new Link('About', $this->urlGenerator->generate('about')),
                 new Link('Inside eLife', $this->urlGenerator->generate('inside-elife')),
                 new Link('Community', $this->urlGenerator->generate('community')),
-                new Link('Labs', $this->urlGenerator->generate('labs')),
+                new Link('Innovation', $this->urlGenerator->generate('labs')),
             ]),
             [
                 new Link('About', $this->urlGenerator->generate('about')),
