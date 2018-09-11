@@ -61,6 +61,12 @@ final class WhoWeWorkWithController extends Controller
                 'uri' => 'https://aws.amazon.com/',
             ],
             [
+                'name' => 'Browserstack',
+                'filename' => 'browserstack',
+                'type' => 'image/png',
+                'uri' => 'https://browserstack.com/',
+            ],
+            [
                 'name' => 'Digirati',
                 'filename' => 'digirati',
                 'type' => 'image/svg+xml',
