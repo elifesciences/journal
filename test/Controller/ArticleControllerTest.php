@@ -1045,7 +1045,7 @@ final class ArticleControllerTest extends PageTestCase
                                 'preferred' => 'Reviewer 1',
                                 'index' => 'Reviewer 1',
                             ],
-                            'role' => 'role',
+                            'role' => 'Reviewer',
                             'affiliations' => [
                                 [
                                     'name' => ['Institution'],
@@ -1057,13 +1057,6 @@ final class ArticleControllerTest extends PageTestCase
                                     ],
                                 ],
                             ],
-                        ],
-                        [
-                            'name' => [
-                                'preferred' => 'Reviewer 2',
-                                'index' => 'Reviewer 2',
-                            ],
-                            'role' => 'role',
                         ],
                     ],
                 ])
@@ -1127,7 +1120,7 @@ final class ArticleControllerTest extends PageTestCase
         $articleInfo = $crawler->filter('.grid-column > section:nth-of-type(1) > div > section');
 
         $reviewers = $articleInfo->eq(0);
-        $this->assertSame('Reviewing Editor', $reviewers->filter('header > h3')->text());
+        $this->assertSame('Reviewer', $reviewers->filter('header > h3')->text());
 
         $publicationHistory = $articleInfo->eq(1);
         $this->assertSame('Publication history', $publicationHistory->filter('header > h3')->text());
@@ -1258,7 +1251,32 @@ final class ArticleControllerTest extends PageTestCase
                                 'preferred' => 'Reviewer 1',
                                 'index' => 'Reviewer 1',
                             ],
-                            'role' => 'role',
+                            'role' => 'Reviewer',
+                            'affiliations' => [
+                                [
+                                    'name' => ['Institution'],
+                                    'address' => [
+                                        'formatted' => ['Country'],
+                                        'components' => [
+                                            'country' => 'Country',
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                        [
+                            'name' => [
+                                'preferred' => 'Reviewing Editor 1',
+                                'index' => 'Reviewing Editor 1',
+                            ],
+                            'role' => 'Reviewing Editor',
+                        ],
+                        [
+                            'name' => [
+                                'preferred' => 'Senior Editor 1',
+                                'index' => 'Senior Editor 1',
+                            ],
+                            'role' => 'Senior Editor',
                             'affiliations' => [
                                 [
                                     'name' => ['Institution'],
@@ -1276,7 +1294,7 @@ final class ArticleControllerTest extends PageTestCase
                                 'preferred' => 'Reviewer 2',
                                 'index' => 'Reviewer 2',
                             ],
-                            'role' => 'role',
+                            'role' => 'Reviewer',
                         ],
                     ],
                     'abstract' => [
@@ -1616,11 +1634,15 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertSame('Decision letter', $crawler->filter('#decision-letter-id h2')->text());
         $this->assertSame('Decision letter',
             $crawler->filter('.grid-column > section:nth-of-type(6) > header > h2')->text());
-        $this->assertCount(2, $crawler->filter('.grid-column > section:nth-of-type(6) > div .profile-snippet__name'));
+        $this->assertCount(4, $crawler->filter('.grid-column > section:nth-of-type(6) > div .profile-snippet__name'));
         $this->assertSame('Reviewer 1',
             $crawler->filter('.grid-column > section:nth-of-type(6) > div .profile-snippet__name')->eq(0)->text());
-        $this->assertSame('Reviewer 2',
+        $this->assertSame('Reviewing Editor 1',
             $crawler->filter('.grid-column > section:nth-of-type(6) > div .profile-snippet__name')->eq(1)->text());
+        $this->assertSame('Senior Editor 1',
+            $crawler->filter('.grid-column > section:nth-of-type(6) > div .profile-snippet__name')->eq(2)->text());
+        $this->assertSame('Reviewer 2',
+            $crawler->filter('.grid-column > section:nth-of-type(6) > div .profile-snippet__name')->eq(3)->text());
         $this->assertSame('Decision letter description',
             $crawler->filter('.grid-column > section:nth-of-type(6) > div .decision-letter-header__main_text > p')->text());
         $this->assertSame('Decision letter text',
@@ -1659,14 +1681,28 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertSame('Ethics text', trim($ethics->filter('div')->text()));
 
         $reviewers = $articleInfo->eq(3);
+        $this->assertSame('Senior Editor', $reviewers->filter('header > h3')->text());
+
+        $reviewerDetails = $reviewers->filter('li');
+        $this->assertCount(1, $reviewerDetails);
+        $this->assertSame('Senior Editor 1, Institution, Country', $reviewerDetails->eq(0)->text());
+
+        $reviewers = $articleInfo->eq(4);
         $this->assertSame('Reviewing Editor', $reviewers->filter('header > h3')->text());
 
         $reviewerDetails = $reviewers->filter('li');
-        $this->assertCount(2, $reviewerDetails);
-        $this->assertSame('Reviewer 1, role, Institution, Country', $reviewerDetails->eq(0)->text());
-        $this->assertSame('Reviewer 2, role', $reviewerDetails->eq(1)->text());
+        $this->assertCount(1, $reviewerDetails);
+        $this->assertSame('Reviewing Editor 1', $reviewerDetails->eq(0)->text());
 
-        $publicationHistory = $articleInfo->eq(4);
+        $reviewers = $articleInfo->eq(5);
+        $this->assertSame('Reviewers', $reviewers->filter('header > h3')->text());
+
+        $reviewerDetails = $reviewers->filter('li');
+        $this->assertCount(2, $reviewerDetails);
+        $this->assertSame('Reviewer 1, Institution, Country', $reviewerDetails->eq(0)->text());
+        $this->assertSame('Reviewer 2', $reviewerDetails->eq(1)->text());
+
+        $publicationHistory = $articleInfo->eq(6);
         $this->assertSame('Publication history', $publicationHistory->filter('header > h3')->text());
         $this->assertCount(6, $publicationHistory->filter('ol')->children());
         $this->assertSame('Received: December 30, 2006', $publicationHistory->filter('ol')->children()->eq(0)->text());
@@ -1676,7 +1712,7 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertSame('Version of Record published: January 1, 2009 (version 3)', $publicationHistory->filter('ol')->children()->eq(4)->text());
         $this->assertSame('Version of Record updated: January 1, 2010 (version 4)', $publicationHistory->filter('ol')->children()->eq(5)->text());
 
-        $copyright = $articleInfo->eq(5);
+        $copyright = $articleInfo->eq(7);
         $this->assertSame('Copyright', $copyright->filter('header > h3')->text());
         $this->assertContains('© 2012, Bar', $copyright->filter('div')->text());
         $this->assertContains('Copyright statement.', $copyright->filter('div')->text());
