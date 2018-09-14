@@ -42,6 +42,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use function GuzzleHttp\Promise\all;
 use function GuzzleHttp\Promise\promise_for;
+use function uksort;
 
 final class ArticlesController extends Controller
 {
@@ -377,25 +378,47 @@ final class ArticlesController extends Controller
                 }
 
                 if ($item->getReviewers()->notEmpty()) {
-                    $infoSections[] = ArticleSection::basic(
-                        'Reviewing Editor',
-                        3,
-                        $this->render(
-                            Listing::ordered(
-                                $item->getReviewers()
-                                    ->map(function (Reviewer $reviewer) {
-                                        $parts = [$reviewer->getPreferredName(), $reviewer->getRole()];
+                    $roles = $item->getReviewers()
+                        ->reduce(function (array $roles, Reviewer $reviewer) {
+                            $entry = $reviewer->getPreferredName();
 
-                                        foreach ($reviewer->getAffiliations() as $affiliation) {
-                                            $parts[] = $affiliation->toString();
-                                        }
+                            foreach ($reviewer->getAffiliations() as $affiliation) {
+                                $entry .= ", {$affiliation->toString()}";
+                            }
 
-                                        return implode(', ', $parts);
-                                    })
-                                    ->toArray()
-                            )
-                        )
-                    );
+                            $roles[$reviewer->getRole()][] = $entry;
+
+                            return $roles;
+                        }, []);
+
+                    uksort($roles, function (string $a, string $b) : int {
+                        if (false !== stripos($a, 'Senior')) {
+                            return -1;
+                        }
+                        if (false !== stripos($b, 'Senior')) {
+                            return 1;
+                        }
+                        if (false !== stripos($a, 'Editor')) {
+                            return -1;
+                        }
+                        if (false !== stripos($b, 'Editor')) {
+                            return 1;
+                        }
+
+                        return 0;
+                    });
+
+                    foreach ($roles as $role => $reviewers) {
+                        if (count($reviewers) > 1) {
+                            $role = "${role}s";
+                        }
+
+                        $infoSections[] = ArticleSection::basic(
+                            $role,
+                            3,
+                            $this->render(Listing::ordered($reviewers))
+                        );
+                    }
                 }
 
                 $publicationHistory = [];
