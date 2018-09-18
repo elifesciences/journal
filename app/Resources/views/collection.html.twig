@@ -8,15 +8,15 @@
 
     {{ render_pattern(contentHeader) }}
 
-    {% if contextualData %}
+    <div class="wrapper">
 
-        <div class="wrapper">
+        {% if contextualData %}
 
             {{ render_pattern(contextualData) }}
 
-        </div>
+        {% endif %}
 
-    {% endif %}
+    </div>
 
     {% embed 'grid/listing-two-column.html.twig' %}
 
