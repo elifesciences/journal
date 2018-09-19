@@ -48,6 +48,7 @@ final class ModelNameTest extends TestCase
             'tools-resources' => ['Tools and Resources', 'Tools and Resources'],
             'blog-article' => ['Inside eLife', 'Inside eLife'],
             'collection' => ['Collection', 'Collections'],
+            'digest' => ['Digest', 'Digests'],
             'event' => ['Event', 'Events'],
             'labs-post' => ['Labs Post', 'Labs Posts'],
             'interview' => ['Interview', 'Interviews'],
