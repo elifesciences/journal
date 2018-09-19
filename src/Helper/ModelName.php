@@ -67,6 +67,10 @@ final class ModelName
             'singular' => 'Collection',
             'plural' => 'Collections',
         ],
+        'digest' => [
+            'singular' => 'Digest',
+            'plural' => 'Digests',
+        ],
         'event' => [
             'singular' => 'Event',
             'plural' => 'Events',
