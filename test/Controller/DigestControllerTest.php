@@ -136,8 +136,10 @@ final class DigestControllerTest extends PageTestCase
             ->attr('content'));
         $this->assertSame('Digest impact statement', $crawler->filter('meta[name="description"]')->attr('content'));
         $this->assertSame('article', $crawler->filter('meta[property="og:type"]')->attr('content'));
-        $this->assertSame('summary', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
-        $this->assertEmpty($crawler->filter('meta[property="og:image"]'));
+        $this->assertSame('summary_large_image', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
+        $this->assertSame('https://www.example.com/iiif/thumb%2Fnail/full/full/0/default.jpg', $crawler->filter('meta[property="og:image"]')->attr('content'));
+        $this->assertSame('800', $crawler->filter('meta[property="og:image:width"]')->attr('content'));
+        $this->assertSame('600', $crawler->filter('meta[property="og:image:height"]')->attr('content'));
         $this->assertSame('digest/1', $crawler->filter('meta[name="dc.identifier"]')->attr('content'));
         $this->assertSame('elifesciences.org', $crawler->filter('meta[name="dc.relation.ispartof"]')->attr('content'));
         $this->assertSame('Digest title', $crawler->filter('meta[name="dc.title"]')->attr('content'));
@@ -218,7 +220,7 @@ final class DigestControllerTest extends PageTestCase
                     'published' => '2010-01-01T00:00:00Z',
                     'image' => [
                         'thumbnail' => [
-                            'uri' => 'https://www.example.com/iiif/image',
+                            'uri' => 'https://www.example.com/iiif/thumb%2Fnail',
                             'alt' => '',
                             'source' => [
                                 'mediaType' => 'image/jpeg',
