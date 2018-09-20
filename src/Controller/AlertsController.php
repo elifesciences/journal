@@ -35,7 +35,7 @@ final class AlertsController extends Controller
             )),
             ArticleSection::basic('Community-building', 2, $this->render(
                 Listing::unordered([
-                    '<a href="https://crm.elifesciences.org/crm/civicrm/profile/create?reset=1&gid=26">Sign up to our bi-monthly community newsletter</a> for details on upcoming webinars, travel grant deadlines, interviews, and other efforts to connect and support especially early-career researchers in life sciences and biomedicine',
+                    '<a href="https://crm.elifesciences.org/crm/community-news">Sign up to our monthly community newsletter</a> for details on upcoming webinars, travel grant deadlines, interviews, and other efforts to connect and support especially early-career researchers in life sciences and biomedicine',
                 ], 'bullet')
             )),
             ArticleSection::basic('eLife&apos;s Innovation Initiative and technology news', 2, $this->render(
