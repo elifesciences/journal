@@ -40,9 +40,9 @@ final class SubjectControllerTest extends PageTestCase
         $this->assertSame('Subject impact statement.', $crawler->filter('meta[property="og:description"]')->attr('content'));
         $this->assertSame('Subject impact statement.', $crawler->filter('meta[name="description"]')->attr('content'));
         $this->assertSame('summary_large_image', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
-        $this->assertSame('https://www.example.com/iiif/ban%2Fner/0,529,1800,543/1114,336/0/default.jpg', $crawler->filter('meta[property="og:image"]')->attr('content'));
-        $this->assertSame('1114', $crawler->filter('meta[property="og:image:width"]')->attr('content'));
-        $this->assertSame('336', $crawler->filter('meta[property="og:image:height"]')->attr('content'));
+        $this->assertSame('https://www.example.com/iiif/ban%2Fner/full/full/0/default.jpg', $crawler->filter('meta[property="og:image"]')->attr('content'));
+        $this->assertSame('1800', $crawler->filter('meta[property="og:image:width"]')->attr('content'));
+        $this->assertSame('1600', $crawler->filter('meta[property="og:image:height"]')->attr('content'));
         $this->assertEmpty($crawler->filter('meta[name="dc.identifier"]'));
         $this->assertEmpty($crawler->filter('meta[name="dc.relation.ispartof"]'));
         $this->assertEmpty($crawler->filter('meta[name="dc.title"]'));

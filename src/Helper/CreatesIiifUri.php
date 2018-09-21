@@ -20,12 +20,15 @@ trait CreatesIiifUri
         if ($width && $height) {
             if (($width / $height) !== ($image->getWidth() / $image->getHeight())) {
                 $region = IiifRegionCalculator::calculateForImage($image, $width, $height);
-                if ($width === $image->getWidth()) {
-                    $width = '';
+
+                if (!$this->dimensionNeeded($image->getHeight(), $image->getWidth(), $height, $width)) {
+                    $height = null;
                 }
-                if ($height === $image->getHeight()) {
-                    $height = '';
+
+                if (!$this->dimensionNeeded($image->getWidth(), $image->getHeight(), $width, $height)) {
+                    $width = null;
                 }
+
                 $size = "$width,$height";
                 if (',' === $size) {
                     $size = 'full';
@@ -53,5 +56,18 @@ trait CreatesIiifUri
         }
 
         return "$uri/$region/$size/0/default.$extension";
+    }
+
+    private function dimensionNeeded(int $originalOne, int $originalTwo, int $one = null, int $two = null) : bool
+    {
+        if ($one === $originalOne) {
+            return false;
+        }
+
+        if ($two && $one === (int) ($two * ($originalOne / $originalTwo))) {
+            return false;
+        }
+
+        return true;
     }
 }

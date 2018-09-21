@@ -326,6 +326,11 @@ services:
         tags:
           - name: twig.extension
 
+    elife.journal.twig.extension.iiif_open_graph:
+        class: eLife\Journal\Twig\IiifOpenGraphExtension
+        tags:
+          - name: twig.extension
+
     elife.journal.twig.extension.info_bar:
         class: eLife\Journal\Twig\InfoBarExtension
         arguments:
