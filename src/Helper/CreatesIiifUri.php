@@ -20,12 +20,18 @@ trait CreatesIiifUri
         if ($width && $height) {
             if (($width / $height) !== ($image->getWidth() / $image->getHeight())) {
                 $region = IiifRegionCalculator::calculateForImage($image, $width, $height);
-                if ($width === $image->getWidth()) {
-                    $width = '';
-                }
                 if ($height === $image->getHeight()) {
                     $height = '';
+                } elseif ($width && $height === (int) ($width * ($image->getHeight() / $image->getWidth()))) {
+                    $height = '';
                 }
+
+                if ($width === $image->getWidth()) {
+                    $width = '';
+                } elseif ($height && $width === (int) ($height * ($image->getWidth() / $image->getHeight()))) {
+                    $width = '';
+                }
+
                 $size = "$width,$height";
                 if (',' === $size) {
                     $size = 'full';

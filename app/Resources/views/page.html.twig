@@ -119,14 +119,10 @@
 
         {% if item is defined and item.banner is defined and item.banner %}
             <meta name="twitter:card" content="summary_large_image">
-            <meta property="og:image" content="{{ iiif_uri(item.banner) }}">
-            <meta property="og:image:width" content="{{ item.banner.width }}">
-            <meta property="og:image:height" content="{{ item.banner.height }}">
+            {{ iiif_og_image(item.banner) }}
         {% elseif item is defined and item.thumbnail is defined and item.thumbnail %}
             <meta name="twitter:card" content="summary_large_image">
-            <meta property="og:image" content="{{ iiif_uri(item.thumbnail) }}">
-            <meta property="og:image:width" content="{{ item.thumbnail.width }}">
-            <meta property="og:image:height" content="{{ item.thumbnail.height }}">
+            {{ iiif_og_image(item.thumbnail) }}
         {% elseif contentHeader is defined and contentHeader.image is defined %}
             <meta name="twitter:card" content="summary_large_image">
             <meta property="og:image" content="{{ absolute_url(contentHeader.image.fallback.defaultPath) }}">

@@ -326,8 +326,8 @@ services:
         tags:
           - name: twig.extension
 
-    elife.journal.twig.extension.iiif:
-        class: eLife\Journal\Twig\IiifExtension
+    elife.journal.twig.extension.iiif_open_graph:
+        class: eLife\Journal\Twig\IiifOpenGraphExtension
         tags:
           - name: twig.extension
 

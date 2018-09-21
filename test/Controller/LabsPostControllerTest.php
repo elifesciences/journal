@@ -95,8 +95,8 @@ final class LabsPostControllerTest extends PageTestCase
         $this->assertSame('article', $crawler->filter('meta[property="og:type"]')->attr('content'));
         $this->assertSame('summary_large_image', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
         $this->assertSame('https://www.example.com/iiif/thumb%2Fnail/full/full/0/default.jpg', $crawler->filter('meta[property="og:image"]')->attr('content'));
-        $this->assertSame('800', $crawler->filter('meta[property="og:image:width"]')->attr('content'));
-        $this->assertSame('600', $crawler->filter('meta[property="og:image:height"]')->attr('content'));
+        $this->assertSame('600', $crawler->filter('meta[property="og:image:width"]')->attr('content'));
+        $this->assertSame('800', $crawler->filter('meta[property="og:image:height"]')->attr('content'));
         $this->assertSame('labs-post/1', $crawler->filter('meta[name="dc.identifier"]')->attr('content'));
         $this->assertSame('elifesciences.org', $crawler->filter('meta[name="dc.relation.ispartof"]')->attr('content'));
         $this->assertSame('Post title', $crawler->filter('meta[name="dc.title"]')->attr('content'));
@@ -182,8 +182,8 @@ final class LabsPostControllerTest extends PageTestCase
                                 'filename' => 'image.jpg',
                             ],
                             'size' => [
-                                'width' => 800,
-                                'height' => 600,
+                                'width' => 600,
+                                'height' => 800,
                             ],
                         ],
                     ],
