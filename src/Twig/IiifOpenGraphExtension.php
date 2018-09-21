@@ -10,6 +10,8 @@ use function min;
 
 final class IiifOpenGraphExtension extends Twig_Extension
 {
+    const MAX_SIZE = 2000;
+
     use CreatesIiifUri;
 
     public function getFunctions()
@@ -22,15 +24,21 @@ final class IiifOpenGraphExtension extends Twig_Extension
     public function createOpenGraphImage(Image $image) : string
     {
         if ($image->getWidth() > $image->getHeight()) {
-            $width = min($image->getWidth(), 2000);
-            $height = (int) ($width * ($image->getHeight() / $image->getWidth()));
+            list($width, $height) = $this->determineSizes($image->getWidth(), $image->getHeight());
         } else {
-            $height = min($image->getHeight(), 2000);
-            $width = (int) ($height * ($image->getWidth() / $image->getHeight()));
+            list($height, $width) = $this->determineSizes($image->getHeight(), $image->getWidth());
         }
 
         return "<meta property=\"og:image\" content=\"{$this->iiifUri($image, $width, $height)}\">
             <meta property=\"og:image:width\" content=\"{$width}\">
             <meta property=\"og:image:height\" content=\"{$height}\">";
+    }
+
+    private function determineSizes(int $one, int $two) : array
+    {
+        $returnOne = min($one, self::MAX_SIZE);
+        $returnTwo = (int) ($returnOne * ($two / $one));
+
+        return [$returnOne, $returnTwo];
     }
 }
