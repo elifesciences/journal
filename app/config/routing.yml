@@ -361,7 +361,6 @@ research-categories:
   defaults:
     route: subjects
 
-
 status:
     path: /status
     defaults:
