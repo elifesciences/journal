@@ -355,6 +355,12 @@ ping:
     defaults:
          _controller: AppBundle:Status:ping
 
+research-categories:
+  path: /research-categories
+  controller: Symfony\Bundle\FrameworkBundle\Controller\RedirectController::redirectAction
+  defaults:
+    route: subjects
+
 status:
     path: /status
     defaults:
