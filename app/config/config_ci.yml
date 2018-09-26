@@ -29,5 +29,10 @@ framework:
         storage_id: session.storage.mock_file
     test: ~
 
+monolog:
+    handlers:
+        main:
+            type: 'null'
+
 web_profiler:
     toolbar: false
