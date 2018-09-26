@@ -916,7 +916,7 @@ final class MagazineContext extends Context
     }
 
     /**
-     * @Then /^I should not see a 'See more eLife digests' link$/
+     * @Then /^I should not see a 'See more digests' link$/
      */
     public function iShouldNotSeeASeeMoreDigestsLink()
     {
@@ -924,19 +924,19 @@ final class MagazineContext extends Context
         $this->assertSession()->elementTextNotContains(
             'css',
             '.list-heading:contains("Digests") + .listing-list',
-            'See more eLife digests'
+            'See more digests'
         );
     }
 
     /**
-     * @Then /^I should see a 'See more eLife digests' link$/
+     * @Then /^I should see a 'See more digests' link$/
      */
     public function iShouldSeeASeeMoreDigestsLink()
     {
         $this->assertSession()->elementContains(
             'css',
             '.list-heading:contains("Digests") + .listing-list > .listing-list__item:nth-child(4)',
-            'See more eLife digests'
+            'See more digests'
         );
     }
 
