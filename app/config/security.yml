@@ -17,6 +17,7 @@ security:
                         name: '%session_name%' # https://github.com/symfony/symfony/pull/24018
                 path: /log-out
                 target: /
+            logout_on_user_change: true
     access_control:
         - path: ^/log-in
           roles: IS_AUTHENTICATED_ANONYMOUSLY

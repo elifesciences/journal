@@ -266,9 +266,11 @@ final class WhoWeWorkWithController extends Controller
 
     private function toImageLinks(array $items) : array
     {
-        return array_map(function (array $item) : ImageLink {
+        $packages = $this->get('elife.assets.packages');
+
+        return array_map(function (array $item) use ($packages) : ImageLink {
             $builder = $this->get('elife.journal.view_model.factory.picture_builder')
-                ->create(function (string $type, int $width, int $height = null, float $scale) use ($item) {
+                ->create(function (string $type, int $width, int $height = null, float $scale) use ($item, $packages) {
                     $extension = MediaTypes::toExtension($type);
 
                     $path = "assets/images/logos/{$item['filename']}";
@@ -277,7 +279,7 @@ final class WhoWeWorkWithController extends Controller
                         $path .= "@{$scale}x";
                     }
 
-                    return $this->get('assets.packages')->getUrl("{$path}.{$extension}");
+                    return $packages->getUrl("{$path}.{$extension}");
                 }, $item['type'], 180, null, $item['name']);
 
             return new ImageLink(

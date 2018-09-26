@@ -85,7 +85,7 @@ abstract class Controller implements ContainerAwareInterface
     {
         return function ($object) use ($request, $toSlugify) {
             $slug = $request->attributes->get('_route_params')['slug'];
-            $correctSlug = $this->get('slugify')->slugify($toSlugify($object));
+            $correctSlug = $this->get('elife.slugify')->slugify($toSlugify($object));
 
             if ($slug !== $correctSlug) {
                 $route = $request->attributes->get('_route');
@@ -125,7 +125,7 @@ abstract class Controller implements ContainerAwareInterface
             $e = exception_for($reason);
 
             if (false === $e instanceof HttpException) {
-                $this->get('logger')->error($message ?? $e->getMessage(), ['exception' => $e]);
+                $this->get('elife.logger')->error($message ?? $e->getMessage(), ['exception' => $e]);
             }
 
             return $default;
@@ -215,7 +215,7 @@ abstract class Controller implements ContainerAwareInterface
             $profile = $this->get('elife.api_sdk.profiles')->get($user->getUsername())
                 ->otherwise(function ($reason) use ($user) {
                     $e = exception_for($reason);
-                    $this->get('logger')->error("Logging user {$user->getUsername()} out due to {$e->getMessage()}", ['exception' => $e]);
+                    $this->get('elife.logger')->error("Logging user {$user->getUsername()} out due to {$e->getMessage()}", ['exception' => $e]);
 
                     throw new EarlyResponse(new RedirectResponse($this->get('router')->generate('log-out', [], UrlGeneratorInterface::ABSOLUTE_URL)));
                 });

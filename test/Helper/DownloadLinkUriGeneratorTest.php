@@ -28,7 +28,7 @@ final class DownloadLinkUriGeneratorTest extends KernelTestCase
 
         $container = static::$kernel->getContainer();
         $this->downloadLinkUriGenerator = $container->get('elife.journal.helper.download_link_uri_generator');
-        $this->uriSigner = $container->get('uri_signer');
+        $this->uriSigner = $container->get('elife.uri_signer');
         $this->defaultBaseUrl =
             $container->getParameter('router.request_context.scheme')
             .'://'
