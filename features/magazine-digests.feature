@@ -16,10 +16,10 @@ Feature: Magazine 'Digests' list
     Given there are 3 digests
     When I go to the Magazine page
     Then I should see the latest 3 digests in the 'Digests' list
-    And I should not see a 'See more eLife digests' link
+    And I should not see a 'See more digests' link
 
   Scenario: 4 digests
     Given there are 4 digests
     When I go to the Magazine page
     Then I should see the latest 3 digests in the 'Digests' list
-    And I should see a 'See more eLife digests' link
+    And I should see a 'See more digests' link
