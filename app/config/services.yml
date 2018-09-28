@@ -295,7 +295,8 @@ services:
     elife.journal.security.xpub.token_generator:
         class: eLife\Journal\Security\XpubTokenGenerator
         arguments:
-          - '%xpub_secret%'
+          - '%xpub_client_id%'
+          - '%xpub_client_secret%'
 
     elife.journal.security.authenticator.elife:
         class: eLife\Journal\Security\Authenticator\ElifeAuthenticator

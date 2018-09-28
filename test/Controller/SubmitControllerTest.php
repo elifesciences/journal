@@ -66,7 +66,7 @@ final class SubmitControllerTest extends WebTestCase
 
         $this->assertSameUri('http://submit.elifesciences.org/path', $redirectUri->withFragment(''));
 
-        JWT::decode($redirectUri->getFragment(), $this->getParameter('xpub_secret'), ['HS256']);
+        JWT::decode($redirectUri->getFragment(), $this->getParameter('xpub_client_secret'), ['HS256']);
     }
 
     protected static function createClient(array $options = [], array $server = [])

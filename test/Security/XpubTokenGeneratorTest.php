@@ -20,13 +20,14 @@ final class XpubTokenGeneratorTest extends TestCase
 
         ClockMock::withClockMock($now);
 
-        $tokenGenerator = new XpubTokenGenerator('key');
+        $tokenGenerator = new XpubTokenGenerator('client_id', 'client_secret');
 
         $token = $tokenGenerator->generate(new User('username', 'password'));
 
-        $generated = (array) JWT::decode($token, 'key', ['HS256']);
+        $generated = (array) JWT::decode($token, 'client_secret', ['HS256']);
 
-        $this->assertCount(3, $generated);
+        $this->assertCount(4, $generated);
+        $this->assertSame('client_id', $generated['iss']);
         $this->assertSame($now, $generated['iat']);
         $this->assertSame($now + 60, $generated['exp']);
         $this->assertSame('username', $generated['id']);
