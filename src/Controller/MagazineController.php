@@ -152,7 +152,7 @@ final class MagazineController extends Controller
                     if (count($digests) > 3) {
                         return ListingTeasers::withSeeMore(
                             $items,
-                            new SeeMoreLink(new Link('See more eLife digests', $this->get('router')->generate('digests'))),
+                            new SeeMoreLink(new Link('See more digests', $this->get('router')->generate('digests'))),
                             $heading
                         );
                     }
