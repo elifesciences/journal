@@ -37,6 +37,8 @@ services:
                 php_version: ${PHP_VERSION}
         environment:
             - SYMFONY__API_URL=${API_URL}
+            - SYMFONY__API_URL_PUBLIC=${API_URL_PUBLIC}
+            - SYMFONY__API_KEY=${API_KEY}
         image: elifesciences/journal:${IMAGE_TAG}
         volumes:
             - ./.docker/parameters.yml:/srv/journal/app/config/parameters.yml
@@ -57,6 +59,8 @@ services:
             - app
     api_dummy:
         image: elifesciences/api-dummy:${DEPENDENCIES_API_DUMMY}
+        ports:
+        - '${JOURNAL_API_DUMMY_PORT}:8080'
     critical_css:
         build:
             context: .
