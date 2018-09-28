@@ -22,7 +22,7 @@ final class StatusController extends Controller
     public function statusAction() : Response
     {
         $requests = array_map(function (string $uri) {
-            return $this->get('csa_guzzle.client.elife_api')->requestAsync('GET', $uri, ['headers' => ['Cache-Control' => 'no-cache, no-store']]);
+            return $this->get('elife.csa_guzzle.client.elife_api')->requestAsync('GET', $uri, ['headers' => ['Cache-Control' => 'no-cache, no-store']]);
         }, $this->getParameter('status_checks'));
 
         try {
@@ -45,7 +45,7 @@ final class StatusController extends Controller
                 })
                 ->otherwise(function ($reason) use ($name) {
                     $exception = exception_for($reason);
-                    $this->get('logger')->critical("$name status check failed", compact('exception'));
+                    $this->get('elife.logger')->critical("$name status check failed", compact('exception'));
 
                     return [
                         'name' => $name,
