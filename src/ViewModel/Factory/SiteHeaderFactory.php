@@ -31,13 +31,15 @@ final class SiteHeaderFactory
     private $packages;
     private $requestStack;
     private $authorizationChecker;
+    private $submitUrl;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator, Packages $packages, RequestStack $requestStack, AuthorizationCheckerInterface $authorizationChecker)
+    public function __construct(UrlGeneratorInterface $urlGenerator, Packages $packages, RequestStack $requestStack, AuthorizationCheckerInterface $authorizationChecker, string $submitUrl)
     {
         $this->urlGenerator = $urlGenerator;
         $this->packages = $packages;
         $this->requestStack = $requestStack;
         $this->authorizationChecker = $authorizationChecker;
+        $this->submitUrl = $submitUrl;
     }
 
     public function createSiteHeader(Model $item = null, Profile $profile = null) : SiteHeader
@@ -117,11 +119,15 @@ final class SiteHeaderFactory
             $searchItem,
         ]);
 
+        if ($this->authorizationChecker->isGranted('FEATURE_XPUB')) {
+            $submitUrl = $this->urlGenerator->generate('submit');
+        }
+
         $secondaryLinks = [
             NavLinkedItem::asLink(new Link('About', $this->urlGenerator->generate('about'))),
             NavLinkedItem::asLink(new Link('Community', $this->urlGenerator->generate('community'))),
             NavLinkedItem::asButton(
-                Button::link('Submit my research', 'http://submit.elifesciences.org/', Button::SIZE_EXTRA_SMALL)
+                Button::link('Submit my research', $submitUrl ?? $this->submitUrl, Button::SIZE_EXTRA_SMALL)
             ),
         ];
 

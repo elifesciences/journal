@@ -13,6 +13,7 @@ parameters:
     mailer_username: ~
     mailer_password: ~
     mailer_encryption: ~
+    submit_url: https://submit.elifesciences.org/
     crm_url: https://crm.elifesciences.org/crm/civicrm/
     gtm_id: ~
     cookie_consent: true
@@ -26,9 +27,11 @@ parameters:
     hypothesis_authority: some-authority
     hypothesis_client_id: some-id
     hypothesis_client_secret: ThisIsASecret
+    xpub_secret: ThisIsASecret
     subject_rewrites:
       - from_id: from-subject
         to_id: to-subject
         to_name: To Subject Name
     cache_control: public, max-age=300, stale-while-revalidate=300, stale-if-error=86400
     feature_digest_channel: true
+    feature_xpub: true

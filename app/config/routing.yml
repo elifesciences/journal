@@ -340,6 +340,11 @@ subjects:
     defaults:
          _controller: AppBundle:Subjects:list
 
+submit:
+    path: /submit
+    defaults:
+        _controller: AppBundle:Submit:redirect
+
 terms:
     path: /terms
     defaults:
