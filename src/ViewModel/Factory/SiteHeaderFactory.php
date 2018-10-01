@@ -156,7 +156,7 @@ final class SiteHeaderFactory
         } else {
             $secondaryLinks[] = NavLinkedItem::asLoginControl(
                 LoginControl::notLoggedIn(
-                    mixed_visibility_text('', 'Log in/Register', '(via ORCID)'),
+                    mixed_visibility_text('', 'Log in/Register', '(via ORCID - An ORCID is a persistent digital identifier for researchers)'),
                     $this->urlGenerator->generate('log-in')
                 )
             );
