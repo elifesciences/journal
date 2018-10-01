@@ -1,5 +1,8 @@
 services:
 
+    _defaults:
+        public: true
+
     elife.api_validator.validator:
         class: eLife\ApiValidator\MessageValidator\JsonMessageValidator
         arguments:

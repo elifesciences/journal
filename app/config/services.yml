@@ -1,5 +1,8 @@
 services:
 
+    _defaults:
+        public: true
+
     elife.api_client.client:
         class: eLife\ApiClient\HttpClient\Guzzle6HttpClient
         arguments:
@@ -1316,3 +1319,20 @@ services:
         class: eLife\ApiClient\Log\HttpMessageProcessor
         tags:
             - { name: monolog.processor, method: __invoke }
+
+    # Public aliases for private services
+
+    elife.assets.packages:
+        alias: 'assets.packages'
+
+    elife.csa_guzzle.client.elife_api:
+        alias: 'csa_guzzle.client.elife_api'
+
+    elife.logger:
+        alias: 'logger'
+
+    elife.slugify:
+        alias: 'slugify'
+
+    elife.uri_signer:
+        alias: 'uri_signer'
