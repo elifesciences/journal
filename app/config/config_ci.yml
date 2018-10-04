@@ -10,6 +10,8 @@ parameters:
     crm_url: http://crm.elifesciences.org/crm/civicrm/
     feature_digest_channel: '%env(FEATURE_DIGEST_CHANNEL)%'
     env(FEATURE_DIGEST_CHANNEL): false
+    feature_xpub: '%env(FEATURE_XPUB)%'
+    env(FEATURE_XPUB): false
     oauth2_client_id: journal_client_id
     oauth2_client_secret: journal_client_secret
     session_name: MOCKSESSID
@@ -20,6 +22,7 @@ parameters:
       - from_id: old-subject
         to_id: new-subject
         to_name: New Subject
+    submit_url: http://submit.elifesciences.org/path
 
 framework:
     profiler:
