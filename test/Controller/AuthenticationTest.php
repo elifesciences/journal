@@ -146,7 +146,7 @@ final class AuthenticationTest extends WebTestCase
         $crawler = $client->request('GET', "/log-in/check?code=foo&state=$state");
 
         $this->assertNotContains('Log out', $crawler->text());
-        $this->assertContains('Log in/Register (via ORCID)', $crawler->text());
+        $this->assertContains('Log in/Register (via ORCID - An ORCID is a persistent digital identifier for researchers)', $crawler->text());
 
         $this->assertCount(1, $crawler->filter('.info-bar'));
         $this->assertSame('Failed to log in, please try again.', trim($crawler->filter('.info-bar')->text()));
@@ -198,7 +198,7 @@ final class AuthenticationTest extends WebTestCase
         $crawler = $client->request('GET', "/log-in/check?code=foo&state=$state");
 
         $this->assertNotContains('Log out', $crawler->text());
-        $this->assertContains('Log in/Register (via ORCID)', $crawler->text());
+        $this->assertContains('Log in/Register (via ORCID - An ORCID is a persistent digital identifier for researchers)', $crawler->text());
 
         $this->assertCount(1, $crawler->filter('.info-bar'));
         $this->assertSame('Please adjust your ORCID privacy settings for eLife to display your name.', trim($crawler->filter('.info-bar')->text()));
@@ -250,7 +250,7 @@ final class AuthenticationTest extends WebTestCase
         $crawler = $client->followRedirect();
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
-        $this->assertCount(1, $crawler->filter('a:contains("Log in/Register (via ORCID)")'));
+        $this->assertCount(1, $crawler->filter('a:contains("Log in/Register (via ORCID - An ORCID is a persistent digital identifier for researchers)")'));
         $this->assertEmpty($client->getCookieJar()->all());
     }
 
@@ -271,7 +271,7 @@ final class AuthenticationTest extends WebTestCase
         $crawler = $client->request('GET', '/');
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
-        $this->assertCount(1, $crawler->filter('a:contains("Log in/Register (via ORCID)")'));
+        $this->assertCount(1, $crawler->filter('a:contains("Log in/Register (via ORCID - An ORCID is a persistent digital identifier for researchers)")'));
         $this->assertEmpty($client->getCookieJar()->all());
     }
 
@@ -308,7 +308,7 @@ final class AuthenticationTest extends WebTestCase
         $crawler = $client->click($crawler->filter('a:contains("Josiah Carberry")')->link());
         $crawler = $client->click($crawler->filter('a:contains("Log out")')->link());
 
-        $this->assertCount(1, $crawler->filter('a:contains("Log in/Register (via ORCID)")'));
+        $this->assertCount(1, $crawler->filter('a:contains("Log in/Register (via ORCID - An ORCID is a persistent digital identifier for researchers)")'));
         $this->assertEmpty($client->getCookieJar()->all());
     }
 
