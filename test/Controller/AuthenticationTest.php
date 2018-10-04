@@ -26,7 +26,7 @@ final class AuthenticationTest extends WebTestCase
 
         $crawler = $client->request('GET', '/');
 
-        $client->click($crawler->filter('a:contains("Log in/Register (via ORCID)")')->link());
+        $client->click($crawler->filter('a:contains("Log in/Register (via ORCID - An ORCID is a persistent digital identifier for researchers)")')->link());
 
         $response = $client->getResponse();
 
