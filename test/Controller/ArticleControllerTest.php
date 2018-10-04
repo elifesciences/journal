@@ -21,8 +21,8 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertEmpty($crawler->filter('.content-header__institution_list'));
         $this->assertSame('Research Article Jan 1, 2010', trim(preg_replace('!\s+!', ' ', $crawler->filter('.content-header .meta')->text())));
 
-        $this->assertContains('Cite as: eLife 2010;1:e00001',
-            $crawler->filter('.contextual-data__cite_wrapper')->text());
+        $this->assertContains('Cite this article as: eLife 2010;1:e00001',
+            preg_replace('!\s+!', ' ', $crawler->filter('.contextual-data__cite_wrapper')->text()));
         $this->assertContains('doi: 10.7554/eLife.00001', $crawler->filter('.contextual-data__cite_wrapper')->text());
     }
 
