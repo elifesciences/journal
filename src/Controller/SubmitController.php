@@ -6,6 +6,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\KernelInterface;
 
 final class SubmitController extends Controller
 {
@@ -18,7 +19,14 @@ final class SubmitController extends Controller
         $user = $this->get('security.token_storage')->getToken()->getUser();
 
         if (!$this->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
-            return new RedirectResponse($this->get('router')->generate('log-in'));
+            $path = [
+                '_forwarded' => $request->attributes,
+                '_controller' => 'AppBundle:Auth:redirect',
+            ];
+            $subRequest = $request->duplicate(null, null, $path);
+            $subRequest->headers->set('Referer', $request->getUri());
+
+            return $this->get('kernel')->handle($subRequest, KernelInterface::SUB_REQUEST);
         }
 
         $jwt = $this->get('elife.journal.security.xpub.token_generator')->generate($user);

@@ -5,6 +5,7 @@ namespace test\eLife\Journal\Controller;
 use Firebase\JWT\JWT;
 use GuzzleHttp\Psr7\Uri;
 use test\eLife\Journal\WebTestCase;
+use function GuzzleHttp\Psr7\parse_query;
 
 /**
  * @backupGlobals enabled
@@ -41,11 +42,31 @@ final class SubmitControllerTest extends WebTestCase
         $client = static::createClient();
 
         $client->request('GET', '/submit');
-
         $response = $client->getResponse();
 
         $this->assertTrue($response->isRedirect());
-        $this->assertSameUri('/log-in', $response->headers->get('Location'));
+        $location = Uri::withoutQueryValue(new Uri($response->headers->get('Location')), 'state');
+        $this->assertSameUri('http://api.elifesciences.org/oauth2/authorize?response_type=code&client_id=journal_client_id&redirect_uri=http%3A%2F%2Flocalhost%2Flog-in%2Fcheck', $location);
+
+        $state = parse_query((new Uri($response->headers->get('Location')))->getQuery())['state'];
+
+        $this->readyToken();
+
+        $client->request('GET', "/log-in/check?code=foo&state={$state}");
+        $response = $client->getResponse();
+
+        $this->assertTrue($response->isRedirect());
+        $this->assertSameUri('http://localhost/submit', $response->headers->get('Location'));
+
+        $client->followRedirect();
+        $response = $client->getResponse();
+
+        $this->assertTrue($response->isRedirect());
+        $location = new Uri($response->headers->get('Location'));
+
+        $this->assertSameUri('http://submit.elifesciences.org/path', $location->withFragment(''));
+
+        JWT::decode($location->getFragment(), $this->getParameter('xpub_client_secret'), ['HS256']);
     }
 
     /**
@@ -57,16 +78,14 @@ final class SubmitControllerTest extends WebTestCase
         $this->logIn($client);
 
         $client->request('GET', '/submit');
-
         $response = $client->getResponse();
 
         $this->assertTrue($response->isRedirect());
+        $location = new Uri($response->headers->get('Location'));
 
-        $redirectUri = new Uri($response->headers->get('Location'));
+        $this->assertSameUri('http://submit.elifesciences.org/path', $location->withFragment(''));
 
-        $this->assertSameUri('http://submit.elifesciences.org/path', $redirectUri->withFragment(''));
-
-        JWT::decode($redirectUri->getFragment(), $this->getParameter('xpub_client_secret'), ['HS256']);
+        JWT::decode($location->getFragment(), $this->getParameter('xpub_client_secret'), ['HS256']);
     }
 
     protected static function createClient(array $options = [], array $server = [])
