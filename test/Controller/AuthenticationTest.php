@@ -357,28 +357,4 @@ final class AuthenticationTest extends WebTestCase
             )
         );
     }
-
-    private function readyToken()
-    {
-        $this->mockApiResponse(
-            new Request(
-                'POST',
-                'http://api.elifesciences.org/oauth2/token',
-                ['Content-Type' => 'application/x-www-form-urlencoded'],
-                build_query(['code' => 'foo', 'grant_type' => 'authorization_code', 'client_id' => 'journal--local-id', 'client_secret' => 'journal--local-secret', 'redirect_uri' => 'http://localhost/log-in/check'])
-            ),
-            new Response(
-                200,
-                ['Content-Type' => 'application/json'],
-                json_encode([
-                    'access_token' => 'token',
-                    'expires_in' => 3920,
-                    'token_type' => 'Bearer',
-                    'id' => 'jcarberry',
-                    'orcid' => '0000-0002-1825-0097',
-                    'name' => 'Josiah Carberry',
-                ])
-            )
-        );
-    }
 }
