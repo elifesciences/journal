@@ -22,14 +22,15 @@ final class XpubTokenGeneratorTest extends TestCase
 
         $tokenGenerator = new XpubTokenGenerator('client_id', 'client_secret');
 
-        $token = $tokenGenerator->generate(new User('username', 'password'));
+        $token = $tokenGenerator->generate(new User('username', 'password'), true);
 
         $generated = (array) JWT::decode($token, 'client_secret', ['HS256']);
 
-        $this->assertCount(4, $generated);
+        $this->assertCount(5, $generated);
         $this->assertSame('client_id', $generated['iss']);
         $this->assertSame($now, $generated['iat']);
         $this->assertSame($now + 60, $generated['exp']);
         $this->assertSame('username', $generated['id']);
+        $this->assertTrue($generated['new-session']);
     }
 }
