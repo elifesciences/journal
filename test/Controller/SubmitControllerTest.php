@@ -66,7 +66,9 @@ final class SubmitControllerTest extends WebTestCase
 
         $this->assertSameUri('http://submit.elifesciences.org/path', $location->withFragment(''));
 
-        JWT::decode($location->getFragment(), $this->getParameter('xpub_client_secret'), ['HS256']);
+        $jwt = (array) JWT::decode($location->getFragment(), $this->getParameter('xpub_client_secret'), ['HS256']);
+
+        $this->assertTrue($jwt['new-session']);
     }
 
     /**
@@ -85,7 +87,9 @@ final class SubmitControllerTest extends WebTestCase
 
         $this->assertSameUri('http://submit.elifesciences.org/path', $location->withFragment(''));
 
-        JWT::decode($location->getFragment(), $this->getParameter('xpub_client_secret'), ['HS256']);
+        $jwt = (array) JWT::decode($location->getFragment(), $this->getParameter('xpub_client_secret'), ['HS256']);
+
+        $this->assertFalse($jwt['new-session']);
     }
 
     protected static function createClient(array $options = [], array $server = [])

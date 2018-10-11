@@ -18,13 +18,14 @@ final class XpubTokenGenerator
         $this->clientSecret = $clientSecret;
     }
 
-    public function generate(UserInterface $user) : string
+    public function generate(UserInterface $user, bool $newSession = false) : string
     {
         return JWT::encode([
             'iss' => $this->clientId,
             'iat' => time(),
             'exp' => time() + self::TOKEN_TTL,
             'id' => $user->getUsername(),
+            'new-session' => $newSession,
         ], $this->clientSecret);
     }
 }
