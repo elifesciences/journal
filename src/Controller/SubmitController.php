@@ -25,11 +25,12 @@ final class SubmitController extends Controller
             ];
             $subRequest = $request->duplicate(null, null, $path);
             $subRequest->headers->set('Referer', $request->getUri());
+            $subRequest->getSession()->set('journal.submit', true);
 
             return $this->get('kernel')->handle($subRequest, KernelInterface::SUB_REQUEST);
         }
 
-        $jwt = $this->get('elife.journal.security.xpub.token_generator')->generate($user);
+        $jwt = $this->get('elife.journal.security.xpub.token_generator')->generate($user, $request->getSession()->remove('journal.submit') ?? false);
 
         return new RedirectResponse("{$this->getParameter('submit_url')}#{$jwt}");
     }
