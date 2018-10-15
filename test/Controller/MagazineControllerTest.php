@@ -35,32 +35,13 @@ final class MagazineControllerTest extends PageTestCase
 
         $sections = $crawler->filter('.section-listing__list_item');
 
-        $this->assertCount(6, $sections);
+        $this->assertCount(7, $sections);
         $this->assertSame('Editorials', trim($sections->eq(0)->text()));
         $this->assertSame('Insights', trim($sections->eq(1)->text()));
         $this->assertSame('Feature Articles', trim($sections->eq(2)->text()));
         $this->assertSame('Podcasts', trim($sections->eq(3)->text()));
         $this->assertSame('Collections', trim($sections->eq(4)->text()));
         $this->assertSame('Community', trim($sections->eq(5)->text()));
-    }
-
-    /**
-     * @test
-     * @backupGlobals enabled
-     */
-    public function it_display_the_magazine_navigation_with_science_digests_when_the_feature_flag_is_enabled()
-    {
-        $_ENV['FEATURE_DIGEST_CHANNEL'] = true;
-
-        $client = static::createClient();
-
-        $crawler = $client->request('GET', $this->getUrl());
-
-        $this->assertSame(200, $client->getResponse()->getStatusCode());
-
-        $sections = $crawler->filter('.section-listing__list_item');
-
-        $this->assertCount(7, $sections);
         $this->assertSame('Digests', trim($sections->eq(6)->text()));
     }
 

@@ -18,19 +18,9 @@ if ('ci' === $_SERVER['APP_ENV']) {
         die;
     }
 
-    if (!empty($_GET['FEATURE_DIGEST_CHANNEL'])) {
-        setcookie('FEATURE_DIGEST_CHANNEL', $_GET['FEATURE_DIGEST_CHANNEL']);
-        die;
-    }
-
     if (!empty($_COOKIE['JOURNAL_INSTANCE'])) {
         putenv("JOURNAL_INSTANCE={$_COOKIE['JOURNAL_INSTANCE']}");
         unset($_COOKIE['JOURNAL_INSTANCE']);
-    }
-
-    if (!empty($_COOKIE['FEATURE_DIGEST_CHANNEL'])) {
-        putenv('FEATURE_DIGEST_CHANNEL=true');
-        unset($_COOKIE['FEATURE_DIGEST_CHANNEL']);
     }
 }
 

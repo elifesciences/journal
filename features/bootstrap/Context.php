@@ -153,28 +153,4 @@ abstract class Context extends RawMinkContext implements KernelAwareContext
             return false;
         }
     }
-
-    /**
-     * @Given /^that Science Digests are disabled$/
-     */
-    public function thatScienceDigestsAreDisabled()
-    {
-        if ($this->getSession()->getDriver() instanceof KernelDriver) {
-            putenv('FEATURE_DIGEST_CHANNEL');
-        }
-    }
-
-    /**
-     * @Given /^that Science Digests are enabled$/
-     */
-    public function thatScienceDigestsAreEnabled()
-    {
-        if ($this->getSession()->getDriver() instanceof KernelDriver) {
-            putenv('FEATURE_DIGEST_CHANNEL=true');
-
-            return;
-        }
-
-        $this->visitPath('/?FEATURE_DIGEST_CHANNEL=true');
-    }
 }

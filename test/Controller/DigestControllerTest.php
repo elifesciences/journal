@@ -6,34 +6,9 @@ use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use test\eLife\Journal\Providers;
 
-/**
- * @backupGlobals enabled
- */
 final class DigestControllerTest extends PageTestCase
 {
     use Providers;
-
-    /**
-     * @before
-     */
-    public function enableFeatureFlag()
-    {
-        $_ENV['FEATURE_DIGEST_CHANNEL'] = true;
-    }
-
-    /**
-     * @test
-     */
-    public function it_does_not_display_a_digest_page_if_the_feature_flag_is_disabled()
-    {
-        $_ENV['FEATURE_DIGEST_CHANNEL'] = false;
-
-        $client = static::createClient();
-
-        $client->request('GET', $this->getUrl());
-
-        $this->assertSame(404, $client->getResponse()->getStatusCode());
-    }
 
     /**
      * @test

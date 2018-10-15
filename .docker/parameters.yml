@@ -30,5 +30,4 @@ parameters:
     xpub_client_secret: ThisIsASecret
     subject_rewrites: []
     cache_control: private, no-cache, no-store, must-revalidate
-    feature_digest_channel: true
     feature_xpub: true
