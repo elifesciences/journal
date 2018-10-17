@@ -268,6 +268,26 @@ final class SubjectRewritingMiddlewareTest extends KernelTestCase
                     ],
                 ],
             ],
+            'application/vnd.elife.highlight-list+json; version=2' => [
+                [
+                    'total' => 1,
+                    'items' => [
+                        [
+                            'title' => 'Highlight title',
+                            'item' => $this->createArticlePoA(false),
+                        ],
+                    ],
+                ],
+                [
+                    'total' => 1,
+                    'items' => [
+                        [
+                            'title' => 'Highlight title',
+                            'item' => $this->createArticlePoA(true),
+                        ],
+                    ],
+                ],
+            ],
             'application/vnd.elife.person+json; version=1' => [
                 $this->createPerson(false, false),
                 $this->createPerson(true, false),
