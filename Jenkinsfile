@@ -34,7 +34,7 @@ elifePipeline {
                 sh "IMAGE_TAG=${commit} docker-compose -f docker-compose.yml -f docker-compose.ci.yml run --name=journal_critical_css critical_css"
                 sh "docker cp journal_critical_css:build/critical-css/. build/critical-css/"
             } finally {
-                sh "docker cp journal_app_1:var/logs/demo.json.log build/demo.json.log"
+                sh "docker cp journal_app_1:/srv/journal/var/logs/demo.json.log build/demo.json.log"
                 archiveArtifacts artifacts: "build/demo.json.log", fingerprint: true
                 sh "docker-compose -f docker-compose.yml -f docker-compose.ci.yml rm -v --stop --force"
             }
