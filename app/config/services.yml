@@ -839,6 +839,15 @@ services:
         tags:
           - name: view_model.converter
 
+    elife.journal.view_model.converter.digest.teaser:
+        class: eLife\Journal\ViewModel\Converter\DigestTeaserConverter
+        public: false
+        arguments:
+          - '@elife.journal.view_model.converter'
+          - '@router'
+        tags:
+          - name: view_model.converter
+
     elife.journal.view_model.converter.digest.teaser.grid:
         class: eLife\Journal\ViewModel\Converter\DigestGridTeaserConverter
         public: false
