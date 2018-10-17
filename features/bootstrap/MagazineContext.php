@@ -334,11 +334,11 @@ final class MagazineContext extends Context
             new Request(
                 'GET',
                 'http://api.elifesciences.org/highlights/magazine?page=1&per-page=6&order=desc',
-                ['Accept' => 'application/vnd.elife.highlight-list+json; version=1']
+                ['Accept' => 'application/vnd.elife.highlight-list+json; version=2']
             ),
             new Response(
                 200,
-                ['Content-Type' => 'application/vnd.elife.highlight-list+json; version=1'],
+                ['Content-Type' => 'application/vnd.elife.highlight-list+json; version=2'],
                 json_encode([
                     'total' => 3,
                     'items' => [

@@ -402,11 +402,11 @@ final class SubjectContext extends Context
                 new Request(
                     'GET',
                     "http://api.elifesciences.org/highlights/$subjectId?page=$page&per-page=3&order=desc",
-                    ['Accept' => 'application/vnd.elife.highlight-list+json; version=1']
+                    ['Accept' => 'application/vnd.elife.highlight-list+json; version=2']
                 ),
                 new Response(
                     200,
-                    ['Content-Type' => 'application/vnd.elife.highlight-list+json; version=1'],
+                    ['Content-Type' => 'application/vnd.elife.highlight-list+json; version=2'],
                     json_encode([
                         'total' => $number,
                         'items' => $articlesChunk,
