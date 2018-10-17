@@ -109,6 +109,7 @@ abstract class ModelConverterTestCase extends TestCase
                 case 'highlight':
                     $model = 'highlight-list';
                     $list = true;
+                    $version = 2;
                     break;
                 case 'medium-article':
                     $model = 'medium-article-list';
@@ -128,6 +129,7 @@ abstract class ModelConverterTestCase extends TestCase
                 case 'article-poa':
                 case 'article-vor':
                 case 'blog-article':
+                case 'collection':
                 case 'event':
                 case 'interview':
                 case 'labs-post':
@@ -141,7 +143,7 @@ abstract class ModelConverterTestCase extends TestCase
             $samples = Finder::create()->files()->in(ComposerLocator::getPath('elife/api')."/dist/samples/{$model}/v{$version}");
 
             foreach ($samples as $sample) {
-                $name = $model.'/v1/'.$sample->getBasename();
+                $name = "{$model}/v{$version}/{$sample->getBasename()}";
                 $contents = json_decode($sample->getContents(), true);
                 if ($list) {
                     if (isset($contents['items'])) {

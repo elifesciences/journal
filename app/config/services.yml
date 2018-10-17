@@ -930,6 +930,15 @@ services:
         tags:
           - name: view_model.converter
 
+    elife.journal.view_model.converter.highlight.digest.teaser.secondary:
+        class: eLife\Journal\ViewModel\Converter\HighlightDigestSecondaryTeaserConverter
+        public: false
+        arguments:
+          - '@elife.journal.view_model.converter'
+          - '@router'
+        tags:
+          - name: view_model.converter
+
     elife.journal.view_model.converter.highlight.event.teaser.secondary:
         class: eLife\Journal\ViewModel\Converter\HighlightEventSecondaryTeaserConverter
         public: false
