@@ -192,7 +192,7 @@ final class SubjectRewritingMiddlewareTest extends KernelTestCase
                     ],
                 ],
             ],
-            'application/vnd.elife.collection+json; version=1' => [
+            'application/vnd.elife.collection+json; version=2' => [
                 $this->createCollection(false, false),
                 $this->createCollection(true, false),
             ],
@@ -243,26 +243,6 @@ final class SubjectRewritingMiddlewareTest extends KernelTestCase
                         [
                             'title' => 'Cover title',
                             'image' => $this->createImage(),
-                            'item' => $this->createArticlePoA(true),
-                        ],
-                    ],
-                ],
-            ],
-            'application/vnd.elife.highlight-list+json; version=1' => [
-                [
-                    'total' => 1,
-                    'items' => [
-                        [
-                            'title' => 'Highlight title',
-                            'item' => $this->createArticlePoA(false),
-                        ],
-                    ],
-                ],
-                [
-                    'total' => 1,
-                    'items' => [
-                        [
-                            'title' => 'Highlight title',
                             'item' => $this->createArticlePoA(true),
                         ],
                     ],
