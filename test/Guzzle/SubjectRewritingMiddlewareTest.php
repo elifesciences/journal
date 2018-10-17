@@ -192,7 +192,7 @@ final class SubjectRewritingMiddlewareTest extends KernelTestCase
                     ],
                 ],
             ],
-            'application/vnd.elife.collection+json; version=2' => [
+            'application/vnd.elife.collection+json; version=1' => [
                 $this->createCollection(false, false),
                 $this->createCollection(true, false),
             ],
