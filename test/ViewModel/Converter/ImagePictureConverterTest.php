@@ -14,7 +14,7 @@ use Traversable;
 
 final class ImagePictureConverterTest extends ModelConverterTestCase
 {
-    protected $models = ['article-vor', 'collection', 'interview', 'labs-post', 'medium-article', 'podcast-episode', 'subject'];
+    protected $models = ['article-vor', 'collection', 'digest', 'interview', 'labs-post', 'podcast-episode', 'subject'];
     protected $viewModelClasses = [ViewModel\Picture::class];
     protected $context = ['width' => 100];
 

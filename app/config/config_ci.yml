@@ -8,8 +8,6 @@ parameters:
     api_mock: '%kernel.project_dir%/var/fixtures/instance_%kernel.instance%'
     cache_control: public, max-age=300, stale-while-revalidate=300, stale-if-error=86400
     crm_url: http://crm.elifesciences.org/crm/civicrm/
-    feature_digest_channel: '%env(FEATURE_DIGEST_CHANNEL)%'
-    env(FEATURE_DIGEST_CHANNEL): false
     feature_xpub: '%env(FEATURE_XPUB)%'
     env(FEATURE_XPUB): false
     oauth2_client_id: journal_client_id
