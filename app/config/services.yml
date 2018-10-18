@@ -826,6 +826,15 @@ services:
         tags:
           - name: view_model.converter
 
+    elife.journal.view_model.converter.digest.teaser:
+        class: eLife\Journal\ViewModel\Converter\DigestTeaserConverter
+        public: false
+        arguments:
+          - '@elife.journal.view_model.converter'
+          - '@router'
+        tags:
+          - name: view_model.converter
+
     elife.journal.view_model.converter.digest.teaser.grid:
         class: eLife\Journal\ViewModel\Converter\DigestGridTeaserConverter
         public: false
@@ -901,6 +910,15 @@ services:
 
     elife.journal.view_model.converter.highlight.collection.teaser.secondary:
         class: eLife\Journal\ViewModel\Converter\HighlightCollectionSecondaryTeaserConverter
+        public: false
+        arguments:
+          - '@elife.journal.view_model.converter'
+          - '@router'
+        tags:
+          - name: view_model.converter
+
+    elife.journal.view_model.converter.highlight.digest.teaser.secondary:
+        class: eLife\Journal\ViewModel\Converter\HighlightDigestSecondaryTeaserConverter
         public: false
         arguments:
           - '@elife.journal.view_model.converter'
