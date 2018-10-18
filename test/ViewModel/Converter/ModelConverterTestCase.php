@@ -29,7 +29,6 @@ abstract class ModelConverterTestCase extends TestCase
         'interview' => Model\Interview::class,
         'job-advert' => Model\JobAdvert::class,
         'labs-post' => Model\LabsPost::class,
-        'medium-article' => Model\MediumArticle::class,
         'person' => Model\Person::class,
         'podcast-episode' => Model\PodcastEpisode::class,
         'podcast-episode-chapter' => Model\PodcastEpisodeChapterModel::class,
@@ -110,10 +109,6 @@ abstract class ModelConverterTestCase extends TestCase
                     $model = 'highlight-list';
                     $list = true;
                     $version = 2;
-                    break;
-                case 'medium-article':
-                    $model = 'medium-article-list';
-                    $list = true;
                     break;
                 case 'podcast-episode-chapter':
                     $model = 'recommendations';

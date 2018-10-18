@@ -114,11 +114,8 @@ final class MagazineController extends Controller
             new Link(ModelName::plural('podcast-episode'), $this->get('router')->generate('podcast')),
             new Link(ModelName::plural('collection'), $this->get('router')->generate('collections')),
             new Link('Community', $this->get('router')->generate('community')),
+            new Link('Digests', $this->get('router')->generate('digests')),
         ];
-
-        if ($this->isGranted('FEATURE_DIGEST_CHANNEL')) {
-            $menu[] = new Link('Digests', $this->get('router')->generate('digests'));
-        }
 
         $arguments['menu'] = new SectionListing('sections', $menu, new ListHeading('Magazine sections'), true);
 
@@ -140,38 +137,25 @@ final class MagazineController extends Controller
             }))
             ->otherwise($this->softFailure('Failed to load events'));
 
-        if ($this->isGranted('FEATURE_DIGEST_CHANNEL')) {
-            $digests = $this->get('elife.api_sdk.digests');
+        $digests = $this->get('elife.api_sdk.digests');
 
-            $arguments['digests'] = $digests
-                ->slice(0, 3)
-                ->then(Callback::emptyOr(function (Sequence $result) use ($digests) {
-                    $items = $result->map($this->willConvertTo(Teaser::class, ['variant' => 'secondary']))->toArray();
-                    $heading = new ListHeading('Digests');
+        $arguments['digests'] = $digests
+            ->slice(0, 3)
+            ->then(Callback::emptyOr(function (Sequence $result) use ($digests) {
+                $items = $result->map($this->willConvertTo(Teaser::class, ['variant' => 'secondary']))->toArray();
+                $heading = new ListHeading('Digests');
 
-                    if (count($digests) > 3) {
-                        return ListingTeasers::withSeeMore(
-                            $items,
-                            new SeeMoreLink(new Link('See more digests', $this->get('router')->generate('digests'))),
-                            $heading
-                        );
-                    }
-
-                    return ListingTeasers::basic($items, $heading);
-                }))
-                ->otherwise($this->softFailure('Failed to load digests'));
-        } else {
-            $arguments['digests'] = $this->get('elife.api_sdk.medium_articles')
-                ->slice(0, 3)
-                ->then(Callback::emptyOr(function (Sequence $result) {
+                if (count($digests) > 3) {
                     return ListingTeasers::withSeeMore(
-                        $result->map($this->willConvertTo(Teaser::class, ['variant' => 'secondary']))->toArray(),
-                        new SeeMoreLink(new Link('See more eLife digests on Medium', 'https://medium.com/@elife')),
-                        new ListHeading('eLife digests')
+                        $items,
+                        new SeeMoreLink(new Link('See more digests', $this->get('router')->generate('digests'))),
+                        $heading
                     );
-                }))
-                ->otherwise($this->softFailure('Failed to load Medium articles'));
-        }
+                }
+
+                return ListingTeasers::basic($items, $heading);
+            }))
+            ->otherwise($this->softFailure('Failed to load digests'));
 
         return new Response($this->get('templating')->render('::magazine.html.twig', $arguments));
     }
