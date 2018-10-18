@@ -127,7 +127,7 @@ final class SiteHeaderFactory
             NavLinkedItem::asLink(new Link('About', $this->urlGenerator->generate('about'))),
             NavLinkedItem::asLink(new Link('Community', $this->urlGenerator->generate('community'))),
             NavLinkedItem::asButton(
-                Button::link('Submit my research', $submitUrl ?? $this->submitUrl, Button::SIZE_EXTRA_SMALL)
+                Button::link('Submit my research', $submitUrl ?? $this->submitUrl, Button::SIZE_EXTRA_SMALL, Button::STYLE_DEFAULT, true, false, 'submitResearchButton')
             ),
         ];
 
