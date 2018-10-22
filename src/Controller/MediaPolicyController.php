@@ -35,7 +35,6 @@ final class MediaPolicyController extends Controller
             ArticleSection::basic('Corporate news and announcements', 2, $this->render(
                 new Paragraph('In addition to research content published in eLife, we distribute press releases relating to developments within our organisation. As this is non-research content, we may issue it in advance with an embargo if we feel it necessary to do so.')
             )),
-            
         ];
 
         return new Response($this->get('templating')->render('::media-policy.html.twig', $arguments));
