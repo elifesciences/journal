@@ -15,6 +15,17 @@ final class MediaPolicyControllerTest extends PageTestCase
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertSame('Media Policy', $crawler->filter('.content-header__title')->text());
+
+        $majorSections = $crawler->filter('h2.article-section__header_text');
+
+        $this->assertCount(4, $majorSections);
+
+        $this->assertSame([
+            'Media outreach prior to publication',
+            'Our policy not to embargo eLife papers',
+            'Making research content widely accessible',
+            'Corporate news and announcements',
+        ], $majorSections->extract('_text'));
     }
 
     /**
