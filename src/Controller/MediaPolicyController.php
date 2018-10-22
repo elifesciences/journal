@@ -18,7 +18,6 @@ final class MediaPolicyController extends Controller
 
         $arguments['title'] = 'Media Policy';
 
-        $arguments['contentHeader'] = new ContentHeader($arguments['title']);
         $arguments['contentHeader'] = new ContentHeader($arguments['title'], null, 'eLife\'s media policy is designed to encourage high-quality, informed and widespread discussion of new research - before and after publication.');
 
         $arguments['body'] = [
