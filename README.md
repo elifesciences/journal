@@ -60,7 +60,7 @@ Reproduce a ci failure
 ----------------------
 
 ```
-docker-compose down -v
+docker-compose -f docker-compose.yml -f docker-compose.ci.yml down -v
 SELENIUM_IMAGE_SUFFIX=-debug docker-compose -f docker-compose.yml -f docker-compose.ci.yml up --build
 docker-compose -f docker-compose.yml -f docker-compose.ci.yml run ci .ci/behat
 ```
