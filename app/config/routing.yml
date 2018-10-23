@@ -308,7 +308,7 @@ privacy:
 media-policy:
     path: /media-policy
     defaults:
-         _controller: AppBundle:MediaPolicy:mediapolicy
+         _controller: AppBundle:MediaPolicy:mediaPolicy
 
 profile:
     path: /profiles/{id}
