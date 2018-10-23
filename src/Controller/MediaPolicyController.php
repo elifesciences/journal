@@ -12,13 +12,13 @@ use Symfony\Component\HttpFoundation\Response;
 
 final class MediaPolicyController extends Controller
 {
-    public function mediapolicyAction(Request $request) : Response
+    public function mediaPolicyAction(Request $request) : Response
     {
         $arguments = $this->defaultPageArguments($request);
 
-        $arguments['title'] = 'Media Policy';
+        $arguments['title'] = 'Media policy';
 
-        $arguments['contentHeader'] = new ContentHeader($arguments['title'], null, 'eLife\'s media policy is designed to encourage high-quality, informed and widespread discussion of new research - before and after publication.');
+        $arguments['contentHeader'] = new ContentHeader($arguments['title'], null, 'eLife\'s media policy is designed to encourage high-quality, informed and widespread discussion of new research &mdash; before and after publication.');
 
         $arguments['body'] = [
             ArticleSection::basic('Media outreach prior to publication', 2, $this->render(

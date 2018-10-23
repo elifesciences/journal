@@ -14,7 +14,7 @@ final class MediaPolicyControllerTest extends PageTestCase
         $crawler = $client->request('GET', '/media-policy');
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
-        $this->assertSame('Media Policy', $crawler->filter('.content-header__title')->text());
+        $this->assertSame('Media policy', $crawler->filter('.content-header__title')->text());
 
         $majorSections = $crawler->filter('h2.article-section__header_text');
 
@@ -39,11 +39,11 @@ final class MediaPolicyControllerTest extends PageTestCase
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
 
-        $this->assertSame('Media Policy | eLife', $crawler->filter('title')->text());
+        $this->assertSame('Media policy | eLife', $crawler->filter('title')->text());
         $this->assertSame('/media-policy', $crawler->filter('link[rel="canonical"]')->attr('href'));
         $this->assertSame('http://localhost/media-policy', $crawler->filter('meta[property="og:url"]')->attr('content'));
-        $this->assertSame('Media Policy', $crawler->filter('meta[property="og:title"]')->attr('content'));
-        $this->assertSame('eLife\'s media policy is designed to encourage high-quality, informed and widespread discussion of new research - before and after publication.', $crawler->filter('meta[name="description"]')->attr('content'));
+        $this->assertSame('Media policy', $crawler->filter('meta[property="og:title"]')->attr('content'));
+        $this->assertSame('eLife\'s media policy is designed to encourage high-quality, informed and widespread discussion of new research &mdash; before and after publication.', $crawler->filter('meta[name="description"]')->attr('content'));
         $this->assertSame('summary', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
         $this->assertEmpty($crawler->filter('meta[property="og:image"]'));
         $this->assertEmpty($crawler->filter('meta[name="dc.identifier"]'));
