@@ -10,7 +10,6 @@ final class MagazineContext extends Context
     private $numberOfPodcastEpisodes;
     private $numberOfEvents;
     private $numberOfDigests;
-    private $numberOfMediumArticles;
 
     /**
      * @Given /^(\d+) Magazine articles have been published$/
@@ -261,11 +260,11 @@ final class MagazineContext extends Context
             new Request(
                 'GET',
                 'http://api.elifesciences.org/highlights/magazine?page=1&per-page=6&order=desc',
-                ['Accept' => 'application/vnd.elife.highlight-list+json; version=1']
+                ['Accept' => 'application/vnd.elife.highlight-list+json; version=2']
             ),
             new Response(
                 200,
-                ['Content-Type' => 'application/vnd.elife.highlight-list+json; version=1'],
+                ['Content-Type' => 'application/vnd.elife.highlight-list+json; version=2'],
                 json_encode([
                     'total' => 3,
                     'items' => array_fill(0, 3, [
@@ -334,11 +333,11 @@ final class MagazineContext extends Context
             new Request(
                 'GET',
                 'http://api.elifesciences.org/highlights/magazine?page=1&per-page=6&order=desc',
-                ['Accept' => 'application/vnd.elife.highlight-list+json; version=1']
+                ['Accept' => 'application/vnd.elife.highlight-list+json; version=2']
             ),
             new Response(
                 200,
-                ['Content-Type' => 'application/vnd.elife.highlight-list+json; version=1'],
+                ['Content-Type' => 'application/vnd.elife.highlight-list+json; version=2'],
                 json_encode([
                     'total' => 3,
                     'items' => [
@@ -648,46 +647,6 @@ final class MagazineContext extends Context
     }
 
     /**
-     * @Given /^there are (\d+) digests on https:\/\/medium\.com\/@elife$/
-     */
-    public function thereAreDigestsOnHttpsMediumComElife(int $number)
-    {
-        $this->numberOfMediumArticles = $number;
-
-        $articles = [];
-
-        $today = (new DateTimeImmutable())->setTime(0, 0, 0);
-
-        for ($i = $number; $i > 0; --$i) {
-            $articles[] = [
-                'uri' => 'https://medium.com/@elife/'.$i,
-                'title' => 'Medium article '.$i.' title',
-                'published' => $today->format(ApiSdk::DATE_FORMAT),
-            ];
-        }
-
-        foreach (array_chunk($articles, 3) as $i => $articlesChunk) {
-            $page = $i + 1;
-
-            $this->mockApiResponse(
-                new Request(
-                    'GET',
-                    "http://api.elifesciences.org/medium-articles?page=$page&per-page=3&order=desc",
-                    ['Accept' => 'application/vnd.elife.medium-article-list+json; version=1']
-                ),
-                new Response(
-                    200,
-                    ['Content-Type' => 'application/vnd.elife.medium-article-list+json; version=1'],
-                    json_encode([
-                        'total' => $number,
-                        'items' => $articlesChunk,
-                    ])
-                )
-            );
-        }
-    }
-
-    /**
      * @When /^I go to the Magazine page$/
      */
     public function iGoToTheMagazinePage()
@@ -856,31 +815,6 @@ final class MagazineContext extends Context
             'css',
             '.list-heading:contains("Events") + .listing-list > .listing-list__item:nth-child(4)',
             'See more events'
-        );
-    }
-
-    /**
-     * @Then /^I should see the latest (\d+) digests in the 'eLife digests' list$/
-     */
-    public function iShouldSeeTheLatestDigestsInTheList(int $number)
-    {
-        $this->assertSession()->elementsCount('css', '.list-heading:contains("eLife digests") + .listing-list > .listing-list__item', $number + 1);
-
-        for ($i = $number; $i > 0; --$i) {
-            $nthChild = ($number - $i + 1);
-            $expectedNumber = ($this->numberOfMediumArticles - $nthChild + 1);
-
-            $this->assertSession()->elementContains(
-                'css',
-                '.list-heading:contains("eLife digests") + .listing-list > .listing-list__item:nth-child('.$nthChild.')',
-                'Medium article '.$expectedNumber.' title'
-            );
-        }
-
-        $this->assertSession()->elementContains(
-            'css',
-            '.list-heading:contains("eLife digests") + .listing-list > .listing-list__item:nth-child('.($number + 1).')',
-            'See more eLife digests on Medium'
         );
     }
 

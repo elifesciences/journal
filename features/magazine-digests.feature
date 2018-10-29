@@ -4,9 +4,6 @@ Feature: Magazine 'Digests' list
   Rules:
   - List contains the first 3 digests from the Science Digests page
 
-  Background:
-    Given that Science Digests are enabled
-
   Scenario: No digests
     Given there are no digests
     When I go to the Magazine page

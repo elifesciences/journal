@@ -6,33 +6,8 @@ use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use Traversable;
 
-/**
- * @backupGlobals enabled
- */
 final class DigestsControllerTest extends PageTestCase
 {
-    /**
-     * @before
-     */
-    public function enableFeatureFlag()
-    {
-        $_ENV['FEATURE_DIGEST_CHANNEL'] = true;
-    }
-
-    /**
-     * @test
-     */
-    public function it_does_not_display_the_digests_page_if_the_feature_flag_is_disabled()
-    {
-        $_ENV['FEATURE_DIGEST_CHANNEL'] = false;
-
-        $client = static::createClient();
-
-        $client->request('GET', $this->getUrl());
-
-        $this->assertSame(404, $client->getResponse()->getStatusCode());
-    }
-
     /**
      * @test
      */
