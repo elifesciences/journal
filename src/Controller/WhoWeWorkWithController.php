@@ -109,6 +109,12 @@ final class WhoWeWorkWithController extends Controller
                 'uri' => 'https://glencoesoftware.com/',
             ],
             [
+                'name' => 'Hypothesis',
+                'filename' => 'hypothesislogomarkretina',
+                'type' => 'image/png',
+                'uri' => 'https://hypothes.is',
+            ],
+            [
                 'name' => 'JIRA',
                 'filename' => 'jira',
                 'type' => 'image/svg+xml',
