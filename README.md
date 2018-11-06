@@ -22,7 +22,7 @@ Installation
 Running the site locally
 ------------------------
 
-1. `docker-compose up --build -V`
+1. `docker-compose down -v && docker-compose up --build`
 2. Open `http://localhost:8080` in your browser.
 
 Regenerating critical CSS
@@ -60,6 +60,7 @@ Reproduce a ci failure
 ----------------------
 
 ```
-SELENIUM_IMAGE_SUFFIX=-debug docker-compose -f docker-compose.yml -f docker-compose.ci.yml up --build -V
+docker-compose -f docker-compose.yml -f docker-compose.ci.yml down -v
+SELENIUM_IMAGE_SUFFIX=-debug docker-compose -f docker-compose.yml -f docker-compose.ci.yml up --build
 docker-compose -f docker-compose.yml -f docker-compose.ci.yml run ci .ci/behat
 ```
