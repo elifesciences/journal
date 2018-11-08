@@ -110,8 +110,8 @@ final class WhoWeWorkWithController extends Controller
             ],
             [
                 'name' => 'Hypothesis',
-                'filename' => 'hypothesislogomarkretina',
-                'type' => 'image/png',
+                'filename' => 'hypothesisLogo',
+                'type' => 'image/svg+xml',
                 'uri' => 'https://hypothes.is',
             ],
             [
