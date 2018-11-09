@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="504px" height="112px" viewBox="0 0 504 112" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="HypothesisHorizontal">
+            <text id="." fill="#BD1C2B" font-family="Helvetica" font-size="76" font-weight="normal">
+                <tspan x="425.532" y="75">.</tspan>
+            </text>
+            <text id="hypothes-is" fill="#1D1D1D" font-family="Helvetica" font-size="76" font-weight="normal">
+                <tspan x="118.242" y="75">hypothes is</tspan>
+            </text>
+            <path d="M60.2352941,96 L88.0007542,96 C92.4118951,96 96,92.4186157 96,88.0007542 L96,7.9992458 C96,3.5881049 92.4186157,0 88.0007542,0 L7.9992458,0 C3.5881049,0 0,3.58138434 0,7.9992458 L0,88.0007542 C0,92.4118951 3.58138434,96 7.9992458,96 L35.7647059,96 L48,112 L60.2352941,96 Z" id="Path" fill="#BD1C2B"></path>
+            <path d="M76,79.9476007 C80.418278,79.9476007 84,76.3776087 84,71.9738004 C84,67.569992 80.418278,64 76,64 C71.581722,64 68,67.569992 68,71.9738004 C68,76.3776087 71.581722,79.9476007 76,79.9476007 Z" id="Path" fill="#FFFFFF"></path>
+            <path d="M28.0324518,16 L16,16 L16,80 L28.0324518,80 L28.0324518,62.0115899 C28.0324516,52.4351463 32,49 36,48 C40,47 44.0757208,49.2426854 44.0757208,56.0139079 L44.0757208,80 L56.1081726,80 L56.1081726,52.4351447 C56.1081734,40 48,36.0123615 40,36.0123626 C32.043269,36.0123636 28.0324516,44.0077267 28.0324518,44.0077266 L28.0324518,16 Z" id="Path" fill="#FFFFFF"></path>
+        </g>
+    </g>
+</svg>
