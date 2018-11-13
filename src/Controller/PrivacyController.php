@@ -92,6 +92,7 @@ final class PrivacyController extends Controller
                 ArticleSection::basic('What is your personal data used for, and why?', 3, $this->render(
                     new Paragraph('We collect your personal data to allow us to review and publish your manuscript, and (where applicable) charge you a publication fee. In addition we may use your contact details for promoting our activities to you, unless you opt out.'),
                     new Paragraph('Almost all the personal data we collect about you is to enable us to perform our contract with you to review your manuscript, and if accepted, to publish it and charge you a publication fee. Without this data we are not able to perform this contract with you.'),
+                    new Paragraph('We also use this data for the legitimate interest of identifying potential reviewers for other manuscripts, and for research or statistical purposes.'),
                     new Paragraph('We use a small part of that data, plus some additional data, for the legitimate interest of promoting our activities to you and seeking your opinions.'),
                     new Paragraph('We also use some of your data for the legitimate interest of business analysis and planning.')
                 ), 'authors-for'),
@@ -213,6 +214,10 @@ final class PrivacyController extends Controller
 <tr>
 <th>May&nbsp;23,&nbsp;2018</th>
 <td>Completely restructured and expanded to comply with new legislation. Sections on author and editor data added.</td>
+</tr>
+<tr>
+<th>Nov&nbsp;12,&nbsp;2018</th>
+<td>Clarified use of author data for research purposes and identifying reviewers</td>
 </tr>
 </tbody>
 </table>
