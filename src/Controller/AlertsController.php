@@ -23,7 +23,7 @@ final class AlertsController extends Controller
         $arguments['body'] = [
             ArticleSection::basic('New Research', 2, $this->render(
                 Listing::unordered([
-                    'Use our <a href="https://crm.elifesciences.org/crm/node/3">email preference management center</a> to sign up for weekly notifications of new published research plus papers available in PDF shortly after acceptance',
+                    'Receive <a href="https://crm.elifesciences.org/crm/content-alerts">weekly updates of the latest published research</a>',
                     'To stay on top of new research available every day, subscribe to our RSS feeds for <a href="'.$this->get('router')->generate('rss-ahead').'">author PDFs</a> and <a href="'.$this->get('router')->generate('rss-recent').'">published articles</a>',
                     'See the highlights of recently published research and more on <a href="https://www.twitter.com/elife">Twitter</a> or <a href="https://www.facebook.com/elifesciences">Facebook</a>',
                 ], 'bullet')
@@ -43,7 +43,12 @@ final class AlertsController extends Controller
                     'For the latest in eLife Labs, innovation, and new tools, <a href="https://crm.elifesciences.org/crm/node/8">sign up for our technology and innovation newsletter</a>',
                 ], 'bullet')
             )),
-            new Paragraph('eLife is also on <a href="https://www.linkedin.com/company/elife-sciences-publications-ltd">LinkedIn</a> and <a href="https://plus.google.com/102129675554093758550/posts">Google Plus</a>.'),
+            ArticleSection::basic('The latest from eLife', 2, $this->render(
+                Listing::unordered([
+                    'Sign up to receive our <a href="https://crm.elifesciences.org/crm/elife-news">bi-monthly newsletter</a> for recent developments at eLife, new products and collaborations and changes to editorial policy.</a>',
+                ], 'bullet')
+            )),
+            new Paragraph('eLife is also on <a href="https://www.linkedin.com/company/elife-sciences-publications-ltd">LinkedIn</a> and <a href="https://www.youtube.com/channel/UCNEHLtAc_JPI84xW8V4XWyw">YouTube</a>.'),
         ];
 
         return new Response($this->get('templating')->render('::alerts.html.twig', $arguments));
