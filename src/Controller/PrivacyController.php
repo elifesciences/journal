@@ -205,11 +205,11 @@ final class PrivacyController extends Controller
 <tbody>
 <tr>
 <th>Dec&nbsp;5,&nbsp;2012</th>
-<td>Added paragraphs on cookies</td>
+<td>Added paragraphs on cookies.</td>
 </tr>
 <tr>
 <th>Apr&nbsp;3,&nbsp;2012</th>
-<td>Removed section on advertisers</td>
+<td>Removed section on advertisers.</td>
 </tr>
 <tr>
 <th>May&nbsp;23,&nbsp;2018</th>
@@ -217,7 +217,7 @@ final class PrivacyController extends Controller
 </tr>
 <tr>
 <th>Nov&nbsp;12,&nbsp;2018</th>
-<td>Clarified use of author data for research purposes and identifying reviewers</td>
+<td>Clarified use of author data for research purposes and identifying reviewers.</td>
 </tr>
 </tbody>
 </table>
