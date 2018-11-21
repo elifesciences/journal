@@ -119,7 +119,7 @@ final class SiteHeaderFactory
             $searchItem,
         ]);
 
-        if ($this->authorizationChecker->isGranted('FEATURE_XPUB') && $this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+        if ($this->authorizationChecker->isGranted('FEATURE_XPUB')) {
             $submitUrl = $this->urlGenerator->generate('submit');
         }
 
