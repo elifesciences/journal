@@ -78,7 +78,7 @@ final class HomeController extends Controller
             }))
             ->otherwise($this->softFailure('Failed to load covers'));
 
-        $arguments['leadParas'] = new LeadParas([new LeadPara('eLife is an open-access journal that publishes promising research in the life and biomedical sciences', 'strapline')]);
+        $arguments['leadParas'] = new LeadParas([new LeadPara('eLife works to improve research communication through open science and open technology innovation', 'strapline')]);
 
         $arguments['subjectsLink'] = new SectionListingLink('All research categories', 'subjects');
 
