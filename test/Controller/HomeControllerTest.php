@@ -25,6 +25,100 @@ final class HomeControllerTest extends PageTestCase
     /**
      * @test
      */
+    public function it_has_highlights()
+    {
+        $client = static::createClient();
+
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/highlights/announcements?page=1&per-page=3&order=desc',
+                ['Accept' => 'application/vnd.elife.highlight-list+json; version=2']
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.highlight-list+json; version=2'],
+                json_encode([
+                    'total' => 2,
+                    'items' => [
+                        [
+                            'title' => 'Article highlight',
+                            'item' => [
+                                'status' => 'vor',
+                                'stage' => 'preview',
+                                'id' => '00001',
+                                'version' => 1,
+                                'type' => 'research-article',
+                                'doi' => '10.7554/eLife.00001',
+                                'title' => 'Article',
+                                'volume' => 1,
+                                'elocationId' => 'e00001',
+                                'copyright' => [
+                                    'license' => 'CC-BY-4.0',
+                                    'holder' => 'Bar',
+                                    'statement' => 'Copyright statement.',
+                                ],
+                                'subjects' => [
+                                    [
+                                        'id' => 'subject',
+                                        'name' => 'Subject',
+                                    ],
+                                ],
+                            ],
+                        ],
+                        [
+                            'title' => 'Podcast episode highlight',
+                            'item' => [
+                                'type' => 'podcast-episode',
+                                'number' => 1,
+                                'title' => 'Podcast episode',
+                                'published' => '2000-01-01T00:00:00Z',
+                                'image' => [
+                                    'thumbnail' => [
+                                        'uri' => 'https://www.example.com/iiif/image',
+                                        'alt' => '',
+                                        'source' => [
+                                            'mediaType' => 'image/jpeg',
+                                            'uri' => 'https://www.example.com/image.jpg',
+                                            'filename' => 'image.jpg',
+                                        ],
+                                        'size' => [
+                                            'width' => 800,
+                                            'height' => 600,
+                                        ],
+                                    ],
+                                ],
+                                'sources' => [
+                                    [
+                                        'mediaType' => 'audio/mpeg',
+                                        'uri' => 'https://nakeddiscovery.com/scripts/mp3s/audio/eLife_Podcast_16.05.mp3',
+                                    ],
+                                ],
+                                'subjects' => [
+                                    [
+                                        'id' => 'subject',
+                                        'name' => 'Subject',
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ])
+            )
+        );
+
+        $crawler = $client->request('GET', $this->getUrl());
+
+        $this->assertSame(200, $client->getResponse()->getStatusCode());
+
+        $this->assertCount(2, $crawler->filter('.list-heading:contains("New from eLife") + .listing-list > .listing-list__item'));
+        $this->assertContains('Article highlight', $crawler->filter('.list-heading:contains("New from eLife") + .listing-list > .listing-list__item:nth-child(1)')->text());
+        $this->assertContains('Podcast episode highlight', $crawler->filter('.list-heading:contains("New from eLife") + .listing-list > .listing-list__item:nth-child(2)')->text());
+    }
+
+    /**
+     * @test
+     */
     public function it_displays_the_correct_dates_in_the_latest_research_list()
     {
         $client = static::createClient();
