@@ -4,9 +4,7 @@ namespace test\eLife\Journal\ViewModel\Factory;
 
 use eLife\Journal\ViewModel\Factory\SiteHeaderFactory;
 use eLife\Patterns\ViewModel\SiteHeader;
-use KnpU\OAuth2ClientBundle\Security\User\OAuthUser;
 use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
-use Symfony\Component\Security\Guard\Token\PostAuthenticationGuardToken;
 use test\eLife\Journal\KernelTestCase;
 
 final class SiteHeaderFactoryTest extends KernelTestCase
