@@ -93,6 +93,15 @@ final class HomeController extends Controller
             })
             ->otherwise($this->softFailure('Failed to load subjects list'));
 
+        $arguments['announcements'] = $this->get('elife.api_sdk.highlights')
+            ->get('announcements')
+            ->slice(0, 3)
+            ->map($this->willConvertTo(Teaser::class, ['variant' => 'secondary']))
+            ->then(Callback::emptyOr(function (Sequence $highlights) {
+                return ListingTeasers::basic($highlights->toArray(), new ListHeading('New from eLife'));
+            }))
+            ->otherwise($this->softFailure('Failed to load highlights for announcements'));
+
         $arguments['magazine'] = $this->get('elife.api_sdk.search')
             ->forType('editorial', 'insight', 'feature', 'collection', 'interview', 'podcast-episode')
             ->sortBy('date')
