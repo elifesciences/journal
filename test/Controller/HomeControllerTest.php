@@ -25,7 +25,7 @@ final class HomeControllerTest extends PageTestCase
     /**
      * @test
      */
-    public function it_has_highlights()
+    public function it_has_announcements()
     {
         $client = static::createClient();
 
