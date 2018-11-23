@@ -36,6 +36,16 @@
 
         {% block secondary %}
 
+            {% if announcements %}
+
+                <div class="grid-secondary-column__item">
+
+                    {{ render_pattern(announcements) }}
+
+                </div>
+
+            {% endif %}
+
             {% if magazine %}
 
                 <div class="grid-secondary-column__item">
