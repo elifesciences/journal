@@ -100,7 +100,7 @@ final class HomeController extends Controller
             ->then(Callback::emptyOr(function (Sequence $highlights) {
                 return ListingTeasers::basic($highlights->toArray(), new ListHeading('New from eLife'));
             }))
-            ->otherwise($this->softFailure('Failed to load highlights for announcements'));
+            ->otherwise($this->softFailure('Failed to load announcements'));
 
         $arguments['magazine'] = $this->get('elife.api_sdk.search')
             ->forType('editorial', 'insight', 'feature', 'collection', 'interview', 'podcast-episode')
