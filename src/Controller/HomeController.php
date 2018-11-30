@@ -78,7 +78,7 @@ final class HomeController extends Controller
             }))
             ->otherwise($this->softFailure('Failed to load covers'));
 
-        $arguments['leadParas'] = new LeadParas([new LeadPara('eLife is an open-access journal that publishes promising research in the life and biomedical sciences', 'strapline')]);
+        $arguments['leadParas'] = new LeadParas([new LeadPara('eLife works to improve research communication through open science and open technology innovation', 'strapline')]);
 
         $arguments['subjectsLink'] = new SectionListingLink('All research categories', 'subjects');
 
@@ -92,6 +92,15 @@ final class HomeController extends Controller
                 return new SectionListing('subjects', $links->toArray(), new ListHeading('Research categories'), false, 'strapline');
             })
             ->otherwise($this->softFailure('Failed to load subjects list'));
+
+        $arguments['announcements'] = $this->get('elife.api_sdk.highlights')
+            ->get('announcements')
+            ->slice(0, 3)
+            ->map($this->willConvertTo(Teaser::class, ['variant' => 'secondary']))
+            ->then(Callback::emptyOr(function (Sequence $highlights) {
+                return ListingTeasers::basic($highlights->toArray(), new ListHeading('New from eLife'));
+            }))
+            ->otherwise($this->softFailure('Failed to load announcements'));
 
         $arguments['magazine'] = $this->get('elife.api_sdk.search')
             ->forType('editorial', 'insight', 'feature', 'collection', 'interview', 'podcast-episode')
