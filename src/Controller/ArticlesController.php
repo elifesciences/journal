@@ -822,8 +822,10 @@ final class ArticlesController extends Controller
                     }
                 }
 
-                if ($item->getId() == '30274') {
-                  $infoBars[] = new InfoBar('This research is available in a <a href="https://repro.elifesciences.org/example.html">reproducible view</a>.', InfoBar::TYPE_WARNING);
+                $rdsArticles = $this->getParameter('rds_articles');
+
+                if (isset($rdsArticles[$item->getId()])) {
+                    $infoBars[] = new InfoBar('This research is available in a <a href="'.$rdsArticles[$item->getId()].'">reproducible view</a>.', InfoBar::TYPE_WARNING);
                 }
 
                 return $infoBars;
