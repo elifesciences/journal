@@ -1248,7 +1248,7 @@ final class ArticleControllerTest extends PageTestCase
     $crawler = $client->request('GET', '/articles/12345');
 
     $this->assertSame(200, $client->getResponse()->getStatusCode());
-    $this->assertContains('This research is available in a reproducible view',
+    $this->assertContains('This research is available in a reproducible view.',
       array_map('trim', $crawler->filter('.info-bar--warning')->extract(['_text'])));
   }
   /**
