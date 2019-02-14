@@ -269,13 +269,17 @@ final class AboutController extends Controller
                 $editorInChief = $leadership->filter(function (Person $person) {
                     return 'Editor-in-Chief' === $person->getTypeLabel();
                 });
+                $foundingEditorInChief = $leadership->filter(function (Person $person) {
+                    return 'Founding Editor-in-Chief' === $person->getTypeLabel();
+                });
                 $deputyEditors = $leadership->filter(function (Person $person) {
-                    return 'Editor-in-Chief' !== $person->getTypeLabel();
+                    return !in_array($person->getTypeLabel(), ['Editor-in-Chief', 'Founding Editor-in-Chief']);
                 });
 
                 $arguments['lists'][] = $this->createAboutProfiles($editorInChief, 'Editor-in-Chief');
                 $arguments['lists'][] = $this->createAboutProfiles($deputyEditors, 'Deputy editors');
                 $arguments['lists'][] = $this->createAboutProfiles($people->forType('senior-editor'), 'Senior editors');
+                $arguments['lists'][] = $this->createAboutProfiles($foundingEditorInChief, 'Founding Editor-in-Chief');
                 break;
             case 'directors':
                 $arguments['title'] = 'Board of directors';
