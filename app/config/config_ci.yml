@@ -21,7 +21,7 @@ parameters:
         to_id: new-subject
         to_name: New Subject
     rds_articles:
-      12345: https://repro.elifesciences.org/example.html
+        12345: https://repro.elifesciences.org/example.html
     submit_url: http://submit.elifesciences.org/path
 
 framework:
