@@ -1370,6 +1370,7 @@ final class ArticleControllerTest extends PageTestCase
             array_map('trim', $crawler->filter('.info-bar')->eq(0)->extract(['_text']))
         );
     }
+
     /**
      * @test
      */
