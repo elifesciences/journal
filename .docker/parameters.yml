@@ -30,6 +30,6 @@ parameters:
     xpub_client_secret: ThisIsASecret
     subject_rewrites: []
     rds_articles:
-        30274: https://repro.elifesciences.org/example.html
+        16846: https://repro.elifesciences.org/example.html
     cache_control: private, no-cache, no-store, must-revalidate
     feature_xpub: true
