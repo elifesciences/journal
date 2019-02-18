@@ -822,6 +822,12 @@ final class ArticlesController extends Controller
                     }
                 }
 
+                $rdsArticles = $this->getParameter('rds_articles');
+
+                if (isset($rdsArticles[$item->getId()])) {
+                    $infoBars[] = new InfoBar('This research is available in a <a href="'.$rdsArticles[$item->getId()].'">reproducible view</a>.', InfoBar::TYPE_WARNING);
+                }
+
                 return $infoBars;
             });
 
