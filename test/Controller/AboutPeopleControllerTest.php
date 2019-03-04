@@ -184,6 +184,7 @@ final class AboutPeopleControllerTest extends PageTestCase
     protected function getUrl() : string
     {
         $this->mockPeopleApi(['leadership', 'senior-editor']);
+        $this->mockPeopleApi(['']);
 
         return '/about/people';
     }
@@ -193,7 +194,7 @@ final class AboutPeopleControllerTest extends PageTestCase
         $subject_filter = ($subject) ? '&subject[]='.$subject : '';
         foreach ($types as $type) {
             $type = implode('', array_map(function (string $type) {
-                return "&type[]={$type}";
+                return !empty($type) ? "&type[]={$type}" : '';
             }, (array) $type));
             $this->mockApiResponse(
                 new Request(
