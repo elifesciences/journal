@@ -56,7 +56,7 @@ To run a single scenario:
 docker-compose -f docker-compose.yml -f docker-compose.ci.yml run ci vendor/bin/behat features/article.feature
 ```
 
-If you have made changes to the code and want to re-run a test then you will rebuild your docker containers:
+If you have made changes to the code and want to re-run a test then you will need to rebuild your docker containers:
 
 ```
 docker-compose -f docker-compose.yml -f docker-compose.ci.yml down && docker-compose -f docker-compose.yml -f docker-compose.ci.yml up --build --detach
