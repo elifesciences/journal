@@ -3,6 +3,7 @@
 namespace eLife\Journal\Controller;
 
 use eLife\ApiClient\Exception\BadResponse;
+use eLife\ApiSdk\Model\Image;
 use eLife\Journal\Exception\EarlyResponse;
 use eLife\Journal\Form\Type\EmailCtaType;
 use eLife\Journal\Helper\CanCheckAuthorization;
@@ -28,6 +29,7 @@ use function GuzzleHttp\Promise\all;
 use function GuzzleHttp\Promise\exception_for;
 use function GuzzleHttp\Promise\promise_for;
 use function GuzzleHttp\Promise\rejection_for;
+use function preg_match;
 
 abstract class Controller implements ContainerAwareInterface
 {
@@ -183,6 +185,40 @@ abstract class Controller implements ContainerAwareInterface
         }
     }
 
+    private function getCallsToAction(Request $request) : array {
+        return array_map(
+            function (array $callToAction) : ViewModel\CallToAction {
+                return new ViewModel\CallToAction(
+                    $this->convertTo(
+                        $this->get('elife.api_sdk.serializer')->denormalize($callToAction['image'], Image::class),
+                        Picture::class,
+                        ['width' => 80, 'height' => 80]
+                    ),
+                    $callToAction['text'],
+                    ViewModel\Button::link($callToAction['button']['text'], $callToAction['button']['path'])
+                );
+            },
+            array_filter(
+                $this->getParameter('calls_to_action'),
+                function (array $callToAction) use ($request) : bool {
+                    if (isset($callToAction['from']) && time() < $callToAction['from']) {
+                        return false;
+                    }
+
+                    if (
+                        isset($callToAction['path'])
+                        &&
+                        !preg_match("~${callToAction['path']}~", $request->getPathInfo())
+                    ) {
+                        return false;
+                    }
+
+                    return true;
+                }
+            )
+        );
+    }
+
     final protected function defaultPageArguments(Request $request, PromiseInterface $item = null) : array
     {
         /** @var FormInterface $form */
@@ -227,6 +263,7 @@ abstract class Controller implements ContainerAwareInterface
                     return $this->get('elife.journal.view_model.factory.site_header')->createSiteHeader($parts['item'], $parts['profile']);
                 }),
             'infoBars' => [],
+            'callsToAction' => $this->getCallsToAction($request),
             'emailCta' => $this->get('elife.journal.view_model.converter')->convert($form->createView()),
             'footer' => $this->get('elife.journal.view_model.factory.footer')->createFooter(),
             'user' => $user ?? null,

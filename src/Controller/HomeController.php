@@ -3,13 +3,10 @@
 namespace eLife\Journal\Controller;
 
 use eLife\ApiSdk\Collection\Sequence;
-use eLife\ApiSdk\Model\Image;
 use eLife\ApiSdk\Model\Subject;
 use eLife\Journal\Helper\Callback;
 use eLife\Journal\Helper\Paginator;
 use eLife\Journal\Pagerfanta\SequenceAdapter;
-use eLife\Patterns\ViewModel\Button;
-use eLife\Patterns\ViewModel\CallToAction;
 use eLife\Patterns\ViewModel\Carousel;
 use eLife\Patterns\ViewModel\CarouselItem;
 use eLife\Patterns\ViewModel\LeadPara;
@@ -17,7 +14,6 @@ use eLife\Patterns\ViewModel\LeadParas;
 use eLife\Patterns\ViewModel\Link;
 use eLife\Patterns\ViewModel\ListHeading;
 use eLife\Patterns\ViewModel\ListingTeasers;
-use eLife\Patterns\ViewModel\Picture;
 use eLife\Patterns\ViewModel\SectionListing;
 use eLife\Patterns\ViewModel\SectionListingLink;
 use eLife\Patterns\ViewModel\SeeMoreLink;
@@ -83,30 +79,6 @@ final class HomeController extends Controller
             ->otherwise($this->softFailure('Failed to load covers'));
 
         $arguments['leadParas'] = new LeadParas([new LeadPara('eLife works to improve research communication through open science and open technology innovation', 'strapline')]);
-
-        $arguments['callsToAction'] = array_map(
-            function (array $callToAction) : CallToAction {
-                return new CallToAction(
-                    $this->convertTo(
-                        $this->get('elife.api_sdk.serializer')->denormalize($callToAction['image'], Image::class),
-                        Picture::class,
-                        ['width' => 80, 'height' => 80]
-                    ),
-                    $callToAction['text'],
-                    Button::link($callToAction['button']['text'], $callToAction['button']['path'])
-                );
-            },
-            array_filter(
-                $this->getParameter('calls_to_action'),
-                function (array $callToAction) : bool {
-                    if (!isset($callToAction['from'])) {
-                        return true;
-                    }
-
-                    return time() >= $callToAction['from'];
-                }
-            )
-        );
 
         $arguments['subjectsLink'] = new SectionListingLink('All research categories', 'subjects');
 

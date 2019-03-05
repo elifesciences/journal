@@ -39,6 +39,7 @@ parameters:
     feature_xpub: true
     calls_to_action:
       - from: 2018-01-01T00:00:00Z
+        path: ^(/$|/for-the-press)
         text: Here's something important
         button:
             text: Sign up for eLife news

@@ -1,0 +1,7 @@
+{% if callsToAction|default([]) %}
+
+    {% for callToAction in callsToAction %}
+        {{ render_pattern(callToAction) }}
+    {% endfor %}
+
+{% endif %}
