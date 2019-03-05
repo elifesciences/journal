@@ -63,7 +63,7 @@
         "namshi/cuzzle": "^2.0",
         "phpspec/prophecy": "^1.7",
         "phpunit/phpunit": "^6.5",
-        "sensiolabs/security-checker": "^4.1",
+        "sensiolabs/security-checker": "^5.0",
         "symfony/phpunit-bridge": "^4.0"
     },
     "replace": {
@@ -97,5 +97,11 @@
                 "Fix WhatFailureGroupHandler::handleBatch when the handler has processors": "https://github.com/Seldaek/monolog/pull/1022.patch"
             }
         }
-    }
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/elifesciences/patterns-php"
+        }
+    ]
 }

@@ -28,6 +28,10 @@ services:
         arguments:
           - '@elife.api_client.client'
 
+    elife.api_sdk.serializer:
+        class: Symfony\Component\Serializer\Serializer
+        factory: ['@elife.api_sdk', getSerializer]
+
     elife.api_sdk.annotations:
         class: eLife\ApiSdk\Client\Annotations
         factory: ['@elife.api_sdk', annotations]
