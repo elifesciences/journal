@@ -185,7 +185,8 @@ abstract class Controller implements ContainerAwareInterface
         }
     }
 
-    private function getCallsToAction(Request $request) : array {
+    private function getCallsToAction(Request $request) : array
+    {
         return array_map(
             function (array $callToAction) : ViewModel\CallToAction {
                 return new ViewModel\CallToAction(
