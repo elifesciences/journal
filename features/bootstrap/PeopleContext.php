@@ -10,6 +10,7 @@ final class PeopleContext extends Context
     private $numberOfLeadershipPeople;
     private $numberOfSeniorEditors;
     private $numberOfReviewingEditors;
+    private $numberOfPeople;
 
     /**
      * @Given /^there is the MSA \'([^\']*)\'$/
@@ -80,6 +81,60 @@ final class PeopleContext extends Context
                 200,
                 ['Content-Type' => 'application/vnd.elife.subject+json; version=1'],
                 json_encode($subject)
+            )
+        );
+    }
+
+    /**
+     * @Given /^([A-Za-z\s]+) is the Founding Editor\-in\-Chief$/
+     */
+    public function isTheFoundingEditorInChief(string $name)
+    {
+        $this->numberOfPeople = 1;
+
+        $id = $this->createId($name);
+
+        $person = [
+            'id' => $id,
+            'type' => [
+                'id' => 'reviewing-editor',
+                'label' => 'Founding Editor-in-Chief',
+            ],
+            'name' => [
+                'preferred' => $name,
+                'index' => $name,
+            ],
+        ];
+
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/people?page=1&per-page=1&order=asc',
+                ['Accept' => 'application/vnd.elife.person-list+json; version=1']
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.person-list+json; version=1'],
+                json_encode([
+                    'total' => 1,
+                    'items' => [$person],
+                ])
+            )
+        );
+
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/people?page=1&per-page=100&order=asc',
+                ['Accept' => 'application/vnd.elife.person-list+json; version=1']
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.person-list+json; version=1'],
+                json_encode([
+                    'total' => 1,
+                    'items' => [$person],
+                ])
             )
         );
     }
@@ -445,6 +500,24 @@ final class PeopleContext extends Context
             );
         }
 
+        if (null === $this->numberOfPeople) {
+            $this->mockApiResponse(
+                new Request(
+                    'GET',
+                    'http://api.elifesciences.org/people?page=1&per-page=1&order=asc',
+                    ['Accept' => 'application/vnd.elife.person-list+json; version=1']
+                ),
+                new Response(
+                    200,
+                    ['Content-Type' => 'application/vnd.elife.person-list+json; version=1'],
+                    json_encode([
+                        'total' => 0,
+                        'items' => [],
+                    ])
+                )
+            );
+        }
+
         $this->visitPath('/about/people');
     }
 
@@ -502,6 +575,20 @@ final class PeopleContext extends Context
         $this->assertSession()->elementContains(
             'css',
             '.list-heading:contains("Editor-in-Chief") + .about-profiles > .about-profiles__item:nth-child(1)',
+            $name
+        );
+    }
+
+    /**
+     * @Then /^I should see ([A-Za-z\s]+) in the 'Founding Editor\-in\-Chief' list$/
+     */
+    public function iShouldSeeInTheFoundingEditorInChiefList(string $name)
+    {
+        $this->assertSession()->elementsCount('css', '.list-heading:contains("Founding Editor-in-Chief") + .about-profiles > .about-profiles__item', 1);
+
+        $this->assertSession()->elementContains(
+            'css',
+            '.list-heading:contains("Founding Editor-in-Chief") + .about-profiles > .about-profiles__item:nth-child(1)',
             $name
         );
     }
