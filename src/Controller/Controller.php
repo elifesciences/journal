@@ -210,7 +210,7 @@ abstract class Controller implements ContainerAwareInterface
                     if (
                         isset($callToAction['path'])
                         &&
-                        !preg_match("~${callToAction['path']}~", $request->getPathInfo())
+                        !preg_match("~{$callToAction['path']}~", $request->getPathInfo())
                     ) {
                         return false;
                     }

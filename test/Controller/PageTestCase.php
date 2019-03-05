@@ -25,6 +25,22 @@ abstract class PageTestCase extends WebTestCase
     /**
      * @test
      */
+    final public function it_may_have_a_call_to_action()
+    {
+        $client = static::createClient();
+
+        $crawler = $client->request('GET', $this->getUrl());
+
+        $callsToAction = $crawler->filter('.call-to-action');
+
+        $this->assertCount(2, $callsToAction);
+        $this->assertContains('Call to action 1', $callsToAction->eq(0)->text());
+        $this->assertContains('Call to action 4', $callsToAction->eq(1)->text());
+    }
+
+    /**
+     * @test
+     */
     final public function it_has_the_sign_up_form()
     {
         $client = static::createClient();
