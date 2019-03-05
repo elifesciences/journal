@@ -190,6 +190,7 @@ abstract class Controller implements ContainerAwareInterface
         return array_map(
             function (array $callToAction) : ViewModel\CallToAction {
                 return new ViewModel\CallToAction(
+                    $callToAction['id'],
                     $this->convertTo(
                         $this->get('elife.api_sdk.serializer')->denormalize($callToAction['image'], Image::class),
                         Picture::class,

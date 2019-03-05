@@ -34,7 +34,8 @@ parameters:
     cache_control: private, no-cache, no-store, must-revalidate
     feature_xpub: true
     calls_to_action:
-      - path: ^(/$|/for-the-press)
+      - id: something-important
+        path: ^(/$|/for-the-press)
         text: Here's something important
         button:
             text: Sign up for eLife news
