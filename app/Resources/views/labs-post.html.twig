@@ -10,7 +10,9 @@
 
     {{ render_pattern(contentHeader) }}
 
-    {% include 'calls-to-action.html.twig' %}
+    <div class="wrapper">
+        {% include 'calls-to-action.html.twig' %}
+    </div>
 
     {% if contextualData %}
 

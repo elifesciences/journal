@@ -332,7 +332,9 @@
 
     {% endif %}
 
-    {% include 'calls-to-action.html.twig' %}
+    <div class="wrapper">
+        {% include 'calls-to-action.html.twig' %}
+    </div>
 
     <div data-behaviour="DelegateBehaviour" data-delegate-behaviour="Popup" data-selector=".article-section:not(#abstract) a">
 
