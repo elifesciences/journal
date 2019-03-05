@@ -15,7 +15,6 @@
     "require": {
         "php": "^7.0",
         "ext-hash": "*",
-        "ext-json": "*",
         "beberlei/assert": "^2.8",
         "bobthecow/mustache-bundle": "^1.2",
         "cocur/slugify": "^3.0",
@@ -65,7 +64,7 @@
         "namshi/cuzzle": "^2.0",
         "phpspec/prophecy": "^1.7",
         "phpunit/phpunit": "^6.5",
-        "sensiolabs/security-checker": "^4.1",
+        "sensiolabs/security-checker": "^5.0",
         "symfony/phpunit-bridge": "^4.0"
     },
     "replace": {
