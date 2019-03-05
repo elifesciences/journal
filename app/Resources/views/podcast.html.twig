@@ -4,6 +4,8 @@
 
     {{ render_pattern(contentHeader) }}
 
+    {% include 'calls-to-action.html.twig' %}
+
     {% embed 'grid/listing-one-column.html.twig' with {fullWidth: true} %}
 
         {% block listing %}
