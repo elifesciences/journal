@@ -16,6 +16,14 @@
 
     </div>
 
+    {% if callsToAction %}
+
+        {% for callToAction in callsToAction %}
+            {{ render_pattern(callToAction) }}
+        {% endfor %}
+
+    {% endif %}
+
     {% if subjects %}
 
         <div class="wrapper">

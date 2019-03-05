@@ -37,3 +37,19 @@ parameters:
         '30274': https://repro.elifesciences.org/example.html
     cache_control: public, max-age=300, stale-while-revalidate=300, stale-if-error=86400
     feature_xpub: true
+    calls_to_action:
+      - from: 2018-01-01T00:00:00Z
+        text: Here's something important
+        button:
+            text: Sign up for eLife news
+            path: https://elifesciences.org/
+        image:
+            alt: ''
+            uri: https://iiif.elifesciences.org/lax/09560%%2Felife-09560-fig1-v1.tif
+            source:
+                mediaType: image/jpg
+                uri: https://iiif.elifesciences.org/lax/09560%%2Felife-09560-fig1-v1.tif/full/full/0/default.jpg
+                filename: elife-09560-fig1-v1.jpg
+            size:
+                width: 4194
+                height: 4714

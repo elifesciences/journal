@@ -15,6 +15,7 @@
     "require": {
         "php": "^7.0",
         "ext-hash": "*",
+        "ext-json": "*",
         "beberlei/assert": "^2.8",
         "bobthecow/mustache-bundle": "^1.2",
         "cocur/slugify": "^3.0",
@@ -22,7 +23,7 @@
         "cweagans/composer-patches": "^1.6",
         "elife/api-client": "^1.0@dev",
         "elife/api-sdk": "^1.0@dev",
-        "elife/patterns": "dev-master",
+        "elife/patterns": "dev-call-to-action",
         "fabpot/goutte": "^3.2",
         "fig/link-util": "^1.0",
         "firebase/php-jwt": "^5.0",
@@ -46,7 +47,8 @@
         "symfony/swiftmailer-bundle": "^3.1",
         "symfony/symfony": "^3.4",
         "twig/twig": "^2.4",
-        "white-october/pagerfanta-bundle": "^1.1"
+        "white-october/pagerfanta-bundle": "^1.1",
+        "ext-json": "*"
     },
     "require-dev": {
         "behat/behat": "^3.4",
@@ -97,5 +99,11 @@
                 "Fix WhatFailureGroupHandler::handleBatch when the handler has processors": "https://github.com/Seldaek/monolog/pull/1022.patch"
             }
         }
-    }
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/elifesciences/patterns-php"
+        }
+    ]
 }

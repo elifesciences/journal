@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ec68165795cace82cc4365f4b5d18ee1",
+    "content-hash": "041a60c1015321132e130494ce2053f7",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -906,16 +906,16 @@
         },
         {
             "name": "elife/patterns",
-            "version": "dev-master",
+            "version": "dev-call-to-action",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/patterns-php.git",
-                "reference": "407557716d6763ed48c4c0e127bfadda460c5eee"
+                "reference": "833e703c12e7b86e58b7674265ba5e6adb12513e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/407557716d6763ed48c4c0e127bfadda460c5eee",
-                "reference": "407557716d6763ed48c4c0e127bfadda460c5eee",
+                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/833e703c12e7b86e58b7674265ba5e6adb12513e",
+                "reference": "833e703c12e7b86e58b7674265ba5e6adb12513e",
                 "shasum": ""
             },
             "require": {
@@ -946,12 +946,19 @@
                     "eLife\\Patterns\\": "./src"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
+            "autoload-dev": {
+                "psr-4": {
+                    "tests\\eLife\\Patterns\\": "./tests/src"
+                }
+            },
             "license": [
                 "MIT"
             ],
             "description": "eLife patterns",
-            "time": "2019-02-19T13:49:38+00:00"
+            "support": {
+                "source": "https://github.com/elifesciences/patterns-php/tree/call-to-action"
+            },
+            "time": "2019-03-05T09:22:21+00:00"
         },
         {
             "name": "fabpot/goutte",
@@ -4458,7 +4465,6 @@
                 "mock",
                 "xunit"
             ],
-            "abandoned": true,
             "time": "2018-07-13T03:27:23+00:00"
         },
         {
