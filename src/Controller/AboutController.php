@@ -2,6 +2,7 @@
 
 namespace eLife\Journal\Controller;
 
+use eLife\ApiSdk\Collection\ArraySequence;
 use eLife\ApiSdk\Collection\EmptySequence;
 use eLife\ApiSdk\Collection\PromiseSequence;
 use eLife\ApiSdk\Collection\Sequence;
@@ -270,9 +271,14 @@ final class AboutController extends Controller
                 $editorInChief = $leadership->filter(function (Person $person) {
                     return 'Editor-in-Chief' === $person->getTypeLabel();
                 });
-                $foundingEditorInChief = $people->filter(function (Person $person) {
-                    return 'Founding Editor-in-Chief' === $person->getTypeLabel();
-                });
+                // Load Founding Editor-in-Chief.
+                $foundingEditorInChief = $people->get('6d42f4fe')
+                    ->then(function (Person $person) {
+                        return new ArraySequence([$person]);
+                    })
+                    ->otherwise(function () {
+                        return new EmptySequence();
+                    });
                 $deputyEditors = $leadership->filter(function (Person $person) {
                     return 'Editor-in-Chief' !== $person->getTypeLabel();
                 });
@@ -280,7 +286,7 @@ final class AboutController extends Controller
                 $arguments['lists'][] = $this->createAboutProfiles($editorInChief, 'Editor-in-Chief');
                 $arguments['lists'][] = $this->createAboutProfiles($deputyEditors, 'Deputy editors');
                 $arguments['lists'][] = $this->createAboutProfiles($people->forType('senior-editor'), 'Senior editors');
-                $arguments['lists'][] = $this->createAboutProfiles($foundingEditorInChief, 'Founding Editor-in-Chief');
+                $arguments['lists'][] = $this->createAboutProfiles($foundingEditorInChief->wait(), 'Founding Editor-in-Chief');
                 break;
             case 'directors':
                 $arguments['title'] = 'Board of directors';
