@@ -92,7 +92,7 @@ final class PeopleContext extends Context
     {
         $this->numberOfPeople = 1;
 
-        $id = $this->createId($name);
+        $id = '6d42f4fe';
 
         $person = [
             'id' => $id,
@@ -109,32 +109,13 @@ final class PeopleContext extends Context
         $this->mockApiResponse(
             new Request(
                 'GET',
-                'http://api.elifesciences.org/people?page=1&per-page=1&order=asc',
-                ['Accept' => 'application/vnd.elife.person-list+json; version=1']
+                'http://api.elifesciences.org/people/'.$id,
+                ['Accept' => 'application/vnd.elife.person+json; version=1']
             ),
             new Response(
                 200,
-                ['Content-Type' => 'application/vnd.elife.person-list+json; version=1'],
-                json_encode([
-                    'total' => 1,
-                    'items' => [$person],
-                ])
-            )
-        );
-
-        $this->mockApiResponse(
-            new Request(
-                'GET',
-                'http://api.elifesciences.org/people?page=1&per-page=100&order=asc',
-                ['Accept' => 'application/vnd.elife.person-list+json; version=1']
-            ),
-            new Response(
-                200,
-                ['Content-Type' => 'application/vnd.elife.person-list+json; version=1'],
-                json_encode([
-                    'total' => 1,
-                    'items' => [$person],
-                ])
+                ['Content-Type' => 'application/vnd.elife.person+json; version=1'],
+                json_encode($person)
             )
         );
     }
