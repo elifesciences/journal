@@ -10,7 +10,6 @@ final class PeopleContext extends Context
     private $numberOfLeadershipPeople;
     private $numberOfSeniorEditors;
     private $numberOfReviewingEditors;
-    private $numberOfPeople;
 
     /**
      * @Given /^there is the MSA \'([^\']*)\'$/
@@ -90,8 +89,6 @@ final class PeopleContext extends Context
      */
     public function isTheFoundingEditorInChief(string $name)
     {
-        $this->numberOfPeople = 1;
-
         $id = '6d42f4fe';
 
         $person = [
@@ -468,24 +465,6 @@ final class PeopleContext extends Context
                 new Request(
                     'GET',
                     'http://api.elifesciences.org/people?page=1&per-page=1&order=asc&type[]=senior-editor',
-                    ['Accept' => 'application/vnd.elife.person-list+json; version=1']
-                ),
-                new Response(
-                    200,
-                    ['Content-Type' => 'application/vnd.elife.person-list+json; version=1'],
-                    json_encode([
-                        'total' => 0,
-                        'items' => [],
-                    ])
-                )
-            );
-        }
-
-        if (null === $this->numberOfPeople) {
-            $this->mockApiResponse(
-                new Request(
-                    'GET',
-                    'http://api.elifesciences.org/people?page=1&per-page=1&order=asc',
                     ['Accept' => 'application/vnd.elife.person-list+json; version=1']
                 ),
                 new Response(
