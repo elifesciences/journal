@@ -193,7 +193,7 @@ final class AboutPeopleControllerTest extends PageTestCase
         $subject_filter = ($subject) ? '&subject[]='.$subject : '';
         foreach ($types as $type) {
             $type = implode('', array_map(function (string $type) {
-                return !empty($type) ? "&type[]={$type}" : '';
+                return "&type[]={$type}";
             }, (array) $type));
             $this->mockApiResponse(
                 new Request(
