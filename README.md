@@ -22,7 +22,7 @@ Installation
 Running the site locally
 ------------------------
 
-1. `docker-compose down -v  --remove-orphans && docker-compose up --build`
+1. `docker-compose down --volumes --remove-orphans && docker-compose up --build`
 2. Open `http://localhost:8080` in your browser.
 
 Changing parameters
@@ -30,7 +30,7 @@ Changing parameters
 When running the site locally via Docker, the parameters are supplied by `/.docker/parameters.yaml`.
 
 To change a configuration that is supplied by an environment variable, pass in the environment variable at start up. For example, to change the API URL:
-`docker-compose down -v --remove-orphans && API_URL=https://prod--gateway.elifesciences.org docker-compose up --build`.
+`docker-compose down --volumes --remove-orphans && API_URL=https://prod--gateway.elifesciences.org docker-compose up --build`.
 
 See `/.env` for the list of environment variables that can be passed in this way.  
 
