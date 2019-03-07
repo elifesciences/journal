@@ -29,8 +29,8 @@ Changing parameters
 ------------------------
 When running the site locally via Docker, the parameters are supplied by `/.docker/parameters.yaml`.
 
-To change e.g. API values, edit `/.env`, or pass in as environment variables at startupq like this:
-`API_URL=https://prod--gateway.elifesciences.org; docker-compose down -v --remove-orphans && docker-compose up --build`  
+To change a configuration that is supplied by an environment variable, edit `/.env`, or pass in as an environment variable at start up. For example, to change the API URL:
+`docker-compose down -v --remove-orphans && API_URL=https://prod--gateway.elifesciences.org docker-compose up --build`  
 
 Regenerating critical CSS
 -------------------------
