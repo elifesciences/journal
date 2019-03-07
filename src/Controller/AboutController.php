@@ -37,6 +37,8 @@ use function GuzzleHttp\Promise\promise_for;
 
 final class AboutController extends Controller
 {
+    const FOUNDING_EDITOR_IN_CHIEF_ID = '6d42f4fe';
+
     public function aboutAction(Request $request) : Response
     {
         $arguments = $this->aboutPageArguments($request);
@@ -271,14 +273,11 @@ final class AboutController extends Controller
                 $editorInChief = $leadership->filter(function (Person $person) {
                     return 'Editor-in-Chief' === $person->getTypeLabel();
                 });
-                // Load Founding Editor-in-Chief.
-                $foundingEditorInChief = $people->get('6d42f4fe')
+                $foundingEditorInChief = $people->get(self::FOUNDING_EDITOR_IN_CHIEF_ID)
                     ->then(function (Person $person) {
                         return new ArraySequence([$person]);
                     })
-                    ->otherwise(function () {
-                        return new EmptySequence();
-                    });
+                    ->otherwise($this->softFailure('Failed to load the Founding Editor-in-Chief', new EmptySequence()));
                 $deputyEditors = $leadership->filter(function (Person $person) {
                     return 'Editor-in-Chief' !== $person->getTypeLabel();
                 });
