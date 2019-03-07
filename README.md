@@ -25,6 +25,13 @@ Running the site locally
 1. `docker-compose down -v && docker-compose up --build`
 2. Open `http://localhost:8080` in your browser.
 
+Changing parameters
+------------------------
+When running the site locally via Docker, the parameters are supplied by `/.docker/parameters.yaml`.
+
+To change e.g. API values, edit `/.env`, or pass in as environment variables at startupq like this:
+`API_URL=https://prod--gateway.elifesciences.org; docker-compose down -v --remove-orphans && docker-compose up --build`  
+
 Regenerating critical CSS
 -------------------------
 
