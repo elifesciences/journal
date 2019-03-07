@@ -184,7 +184,6 @@ final class AboutPeopleControllerTest extends PageTestCase
     protected function getUrl() : string
     {
         $this->mockPeopleApi(['leadership', 'senior-editor']);
-        $this->mockPeopleApi(['']);
 
         return '/about/people';
     }
