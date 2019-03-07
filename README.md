@@ -22,7 +22,7 @@ Installation
 Running the site locally
 ------------------------
 
-1. `docker-compose down -v && docker-compose up --build`
+1. `docker-compose down -v  --remove-orphans && docker-compose up --build`
 2. Open `http://localhost:8080` in your browser.
 
 Changing parameters
