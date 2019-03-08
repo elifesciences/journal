@@ -2,6 +2,7 @@
 
 namespace eLife\Journal\Controller;
 
+use eLife\ApiSdk\Collection\ArraySequence;
 use eLife\ApiSdk\Collection\EmptySequence;
 use eLife\ApiSdk\Collection\PromiseSequence;
 use eLife\ApiSdk\Collection\Sequence;
@@ -36,6 +37,8 @@ use function GuzzleHttp\Promise\promise_for;
 
 final class AboutController extends Controller
 {
+    const FOUNDING_EDITOR_IN_CHIEF_ID = '6d42f4fe';
+
     public function aboutAction(Request $request) : Response
     {
         $arguments = $this->aboutPageArguments($request);
@@ -270,17 +273,19 @@ final class AboutController extends Controller
                 $editorInChief = $leadership->filter(function (Person $person) {
                     return 'Editor-in-Chief' === $person->getTypeLabel();
                 });
-                $foundingEditorInChief = $leadership->filter(function (Person $person) {
-                    return 'Founding Editor-in-Chief' === $person->getTypeLabel();
-                });
+                $foundingEditorInChief = $people->get(self::FOUNDING_EDITOR_IN_CHIEF_ID)
+                    ->then(function (Person $person) {
+                        return new ArraySequence([$person]);
+                    })
+                    ->otherwise($this->softFailure('Failed to load the Founding Editor-in-Chief', new EmptySequence()));
                 $deputyEditors = $leadership->filter(function (Person $person) {
-                    return !in_array($person->getTypeLabel(), ['Editor-in-Chief', 'Founding Editor-in-Chief']);
+                    return 'Editor-in-Chief' !== $person->getTypeLabel();
                 });
 
                 $arguments['lists'][] = $this->createAboutProfiles($editorInChief, 'Editor-in-Chief');
                 $arguments['lists'][] = $this->createAboutProfiles($deputyEditors, 'Deputy editors');
                 $arguments['lists'][] = $this->createAboutProfiles($people->forType('senior-editor'), 'Senior editors');
-                $arguments['lists'][] = $this->createAboutProfiles($foundingEditorInChief, 'Founding Editor-in-Chief');
+                $arguments['lists'][] = $this->createAboutProfiles($foundingEditorInChief->wait(), 'Founding Editor-in-Chief');
                 break;
             case 'directors':
                 $arguments['title'] = 'Board of directors';
