@@ -12,6 +12,11 @@ Feature: People leadership team page
     When I go to the People page
     Then I should see Randy Schekman in the 'Editor-in-Chief' list
 
+  Scenario: Founding Editor-in-Chief appears last
+    Given Randy Schekman is the Founding Editor-in-Chief
+    When I go to the People page
+    Then I should see Randy Schekman in the 'Founding Editor-in-Chief' list
+
   Scenario: Deputy editors appears second
     Given there are deputy editors:
       | Forename | Surname |

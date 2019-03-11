@@ -85,6 +85,39 @@ final class PeopleContext extends Context
     }
 
     /**
+     * @Given /^([A-Za-z\s]+) is the Founding Editor\-in\-Chief$/
+     */
+    public function isTheFoundingEditorInChief(string $name)
+    {
+        $id = '6d42f4fe';
+
+        $person = [
+            'id' => $id,
+            'type' => [
+                'id' => 'reviewing-editor',
+                'label' => 'Founding Editor-in-Chief',
+            ],
+            'name' => [
+                'preferred' => $name,
+                'index' => $name,
+            ],
+        ];
+
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/people/'.$id,
+                ['Accept' => 'application/vnd.elife.person+json; version=1']
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.person+json; version=1'],
+                json_encode($person)
+            )
+        );
+    }
+
+    /**
      * @Given /^([A-Za-z\s]+) is the Editor\-in\-Chief$/
      */
     public function isTheEditorInChief(string $name)
@@ -502,6 +535,20 @@ final class PeopleContext extends Context
         $this->assertSession()->elementContains(
             'css',
             '.list-heading:contains("Editor-in-Chief") + .about-profiles > .about-profiles__item:nth-child(1)',
+            $name
+        );
+    }
+
+    /**
+     * @Then /^I should see ([A-Za-z\s]+) in the 'Founding Editor\-in\-Chief' list$/
+     */
+    public function iShouldSeeInTheFoundingEditorInChiefList(string $name)
+    {
+        $this->assertSession()->elementsCount('css', '.list-heading:contains("Founding Editor-in-Chief") + .about-profiles > .about-profiles__item', 1);
+
+        $this->assertSession()->elementContains(
+            'css',
+            '.list-heading:contains("Founding Editor-in-Chief") + .about-profiles > .about-profiles__item:nth-child(1)',
             $name
         );
     }
