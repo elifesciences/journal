@@ -63,7 +63,7 @@ final class PrivacyController extends Controller
                 ArticleSection::basic('How long do we retain the data for?', 3, $this->render(
                     new Paragraph('We keep your personal data for no longer than reasonably necessary for the purpose for which it was collected.'),
                     new Paragraph('Cookies and local storage are stored on your computer, and so are only available to us when you visit our site.'),
-                    new Paragraph('Aggregated analytics data and interaction data are is retained for as long as it is relevant to business analysis and site development.'),
+                    new Paragraph('Aggregated analytics data and interaction data are retained for as long as it is relevant to business analysis and site development.'),
                     new Paragraph('If you add annotations to our site then they remain there indefinitely, but you can login and delete them at any time.'),
                     new Paragraph('For data that has been provided with consent (such as email addresses) we will hold this for three years in order to provide the communications you have requested. After this period we will contact you to confirm whether you wish to continue to receive communications, or wish to unsubscribe.')
                 ), 'users-long'),
