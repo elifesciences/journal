@@ -23,7 +23,7 @@ smoke_url_ok "$hostname:$port/ping"
 if [ "$ENVIRONMENT_NAME" != "ci" ] && [ "$ENVIRONMENT_NAME" != "dev" ]
   then
     set -e
-    retry "./status_test.sh $hostname $port" 2
+    retry "./status_test.sh $hostname $port" 3 5
     set +e
     smoke_url_ok "$hostname:$port/"
 fi
