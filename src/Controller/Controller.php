@@ -197,7 +197,8 @@ abstract class Controller implements ContainerAwareInterface
                         ['width' => 80, 'height' => 80]
                     ),
                     $callToAction['text'],
-                    ViewModel\Button::link($callToAction['button']['text'], $callToAction['button']['path'])
+                    ViewModel\Button::link($callToAction['button']['text'], $callToAction['button']['path']),
+                    $callToAction['needsJs'] ?? false
                 );
             },
             array_filter(

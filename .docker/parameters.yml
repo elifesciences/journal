@@ -50,3 +50,4 @@ parameters:
             size:
                 width: 4194
                 height: 4714
+        needsJs: false
