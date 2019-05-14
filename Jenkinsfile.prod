@@ -18,6 +18,9 @@ elifePipeline {
                 elifeNewRelicEnsureApdex(29775807)
             }
             elifeDeploySlackNotification 'journal', 'prod'
+            node('containers-jenkins-plugin') {
+                DockerImage.elifesciences(this, "journal", commit).pull().tag('latest').push()
+            }
             builderDeployRevision 'journal--prod', commit, 'blue-green'
             builderSmokeTests 'journal--prod', '/srv/journal'
         }
