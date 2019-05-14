@@ -81,11 +81,6 @@
                 "php": ">=5.3.2"
             },
             "type": "symfony-bundle",
-            "extra": {
-                "patches_applied": {
-                    "Remove superfluous argument": "https://github.com/bobthecow/BobthecowMustacheBundle/pull/9.patch"
-                }
-            },
             "autoload": {
                 "psr-0": {
                     "Bobthecow\\Bundle\\MustacheBundle": ""
@@ -111,7 +106,12 @@
                 "symfony",
                 "templating"
             ],
-            "time": "2014-07-10T12:09:42+00:00"
+            "time": "2014-07-10T12:09:42+00:00",
+            "extra": {
+                "patches_applied": {
+                    "Remove superfluous argument": "https://github.com/bobthecow/BobthecowMustacheBundle/pull/9.patch"
+                }
+            }
         },
         {
             "name": "cocur/slugify",
@@ -151,11 +151,6 @@
                 "zendframework/zend-view": "~2.2"
             },
             "type": "library",
-            "extra": {
-                "patches_applied": {
-                    "strip_tags": "https://github.com/cocur/slugify/pull/201.patch"
-                }
-            },
             "autoload": {
                 "psr-4": {
                     "Cocur\\Slugify\\": "src"
@@ -181,7 +176,12 @@
                 "slug",
                 "slugify"
             ],
-            "time": "2018-01-22T09:00:48+00:00"
+            "time": "2018-01-22T09:00:48+00:00",
+            "extra": {
+                "patches_applied": {
+                    "strip_tags": "https://github.com/cocur/slugify/pull/201.patch"
+                }
+            }
         },
         {
             "name": "crell/api-problem",
@@ -805,12 +805,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-client-php.git",
-                "reference": "804a33fad1507975468b251d9c02157551103f8c"
+                "reference": "1230ee8529eac59e51ee95d9a2e9add486d1580e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-client-php/zipball/804a33fad1507975468b251d9c02157551103f8c",
-                "reference": "804a33fad1507975468b251d9c02157551103f8c",
+                "url": "https://api.github.com/repos/elifesciences/api-client-php/zipball/1230ee8529eac59e51ee95d9a2e9add486d1580e",
+                "reference": "1230ee8529eac59e51ee95d9a2e9add486d1580e",
                 "shasum": ""
             },
             "require": {
@@ -853,7 +853,7 @@
                 "MIT"
             ],
             "description": "eLife Sciences API client",
-            "time": "2018-07-19T13:30:10+00:00"
+            "time": "2018-09-19T16:14:15+00:00"
         },
         {
             "name": "elife/api-sdk",
@@ -1311,11 +1311,6 @@
                 "shasum": ""
             },
             "type": "library",
-            "extra": {
-                "patches_applied": {
-                    "Add field label": "https://github.com/isometriks/IsometriksSpamBundle/pull/9.patch"
-                }
-            },
             "autoload": {
                 "psr-4": {
                     "Isometriks\\Bundle\\SpamBundle\\": ""
@@ -1339,7 +1334,12 @@
                 "spam",
                 "symfony3"
             ],
-            "time": "2016-09-23T18:48:09+00:00"
+            "time": "2016-09-23T18:48:09+00:00",
+            "extra": {
+                "patches_applied": {
+                    "Add field label": "https://github.com/isometriks/IsometriksSpamBundle/pull/9.patch"
+                }
+            }
         },
         {
             "name": "kevinrob/guzzle-cache-middleware",
@@ -3010,16 +3010,16 @@
         },
         {
             "name": "behat/mink-extension",
-            "version": "2.3.0",
+            "version": "2.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Behat/MinkExtension.git",
-                "reference": "badc565b7a1d05c4a4bf49c789045bcf7af6c6de"
+                "reference": "80f7849ba53867181b7e412df9210e12fba50177"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Behat/MinkExtension/zipball/badc565b7a1d05c4a4bf49c789045bcf7af6c6de",
-                "reference": "badc565b7a1d05c4a4bf49c789045bcf7af6c6de",
+                "url": "https://api.github.com/repos/Behat/MinkExtension/zipball/80f7849ba53867181b7e412df9210e12fba50177",
+                "reference": "80f7849ba53867181b7e412df9210e12fba50177",
                 "shasum": ""
             },
             "require": {
@@ -3065,7 +3065,7 @@
                 "test",
                 "web"
             ],
-            "time": "2017-11-24T19:30:49+00:00"
+            "time": "2018-02-06T15:36:30+00:00"
         },
         {
             "name": "behat/mink-selenium2-driver",
@@ -3380,12 +3380,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-raml.git",
-                "reference": "3966aeb1666f8766e104ae17561f6e6f966e2a54"
+                "reference": "90eaabd0c642a70e39f1490dda33547c7b02f678"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-raml/zipball/3966aeb1666f8766e104ae17561f6e6f966e2a54",
-                "reference": "3966aeb1666f8766e104ae17561f6e6f966e2a54",
+                "url": "https://api.github.com/repos/elifesciences/api-raml/zipball/90eaabd0c642a70e39f1490dda33547c7b02f678",
+                "reference": "90eaabd0c642a70e39f1490dda33547c7b02f678",
                 "shasum": ""
             },
             "conflict": {
@@ -3397,7 +3397,7 @@
                 "MIT"
             ],
             "description": "eLife Sciences API specification",
-            "time": "2018-10-01T12:55:07+00:00"
+            "time": "2018-10-30T10:22:17+00:00"
         },
         {
             "name": "elife/api-validator",
