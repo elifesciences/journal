@@ -47,6 +47,7 @@ elifePipeline {
         elifeMainlineOnly {
             stage 'Push app image', {
                 DockerImage.elifesciences(this, "journal", commit).push()
+                DockerImage.elifesciences(this, "journal_web", commit).push()
             }
         }
     }
