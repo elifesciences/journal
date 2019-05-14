@@ -43,6 +43,12 @@ elifePipeline {
         stage 'Rebuild app image', {
             sh "IMAGE_TAG=${commit} docker-compose -f docker-compose.yml -f docker-compose.ci.yml build app"
         }
+
+        elifeMainlineOnly {
+            stage 'Push app image', {
+                DockerImage.elifesciences(this, "journal", commit).push()
+            }
+        }
     }
 
     elifeMainlineOnly {
