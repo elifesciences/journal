@@ -1,3 +1,9 @@
+def wrapper = { body ->
+    node('containers-jenkins-plugin') {
+        body()
+    }
+}
+
 elifeUpdatePipeline(
     { commit ->
         lock('journal--ci') {
@@ -12,5 +18,6 @@ elifeUpdatePipeline(
         def subrepositorySummary = elifeGitSubrepositorySummary 'vendor/elife/patterns'
         return "Updated elife/patterns to ${subrepositorySummary}"
     },
-    'update_patterns_php_'
+    'update_patterns_php_',
+    wrapper
 )
