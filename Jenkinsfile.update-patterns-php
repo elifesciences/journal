@@ -16,7 +16,8 @@ elifeUpdatePipeline(
         sh "git add composer.lock"
     },
     {
-        return "Updated elife/patterns to ${params.revision.substring(0, 7)}: ${params.message}"
+        def pullRequestReference = ~/ \(#\d+\)/
+        return "Updated elife/patterns to ${params.revision.substring(0, 7)}: ${params.message - pullRequestReference}"
     },
     'update_patterns_php_',
     wrapper
