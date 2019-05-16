@@ -3616,16 +3616,16 @@
         },
         {
             "name": "liuggio/fastest",
-            "version": "v1.6.0",
+            "version": "v1.6.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/liuggio/fastest.git",
-                "reference": "171919067208ac67d1e21cf2cf893cb7bd9909a4"
+                "reference": "f61c3b0936998dfb342e0882d510128212a5fe6f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/liuggio/fastest/zipball/171919067208ac67d1e21cf2cf893cb7bd9909a4",
-                "reference": "171919067208ac67d1e21cf2cf893cb7bd9909a4",
+                "url": "https://api.github.com/repos/liuggio/fastest/zipball/f61c3b0936998dfb342e0882d510128212a5fe6f",
+                "reference": "f61c3b0936998dfb342e0882d510128212a5fe6f",
                 "shasum": ""
             },
             "require": {
@@ -3669,7 +3669,7 @@
                 }
             ],
             "description": "Simple parallel testing execution... with some goodies for functional tests.",
-            "time": "2017-12-22T12:19:20+00:00"
+            "time": "2018-03-04T11:30:31+00:00"
         },
         {
             "name": "myclabs/deep-copy",
