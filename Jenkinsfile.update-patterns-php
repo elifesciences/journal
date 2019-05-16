@@ -1,16 +1,24 @@
+def wrapper = { body ->
+    node('containers-jenkins-plugin') {
+        body()
+    }
+}
+
 elifeUpdatePipeline(
     { commit ->
-        lock('journal--ci') {
-            builderDeployRevision 'journal--ci', commit
-            elifeWaitPackagist "elife/patterns", params.revision
-            builderCmd "journal--ci", "composer update elife/patterns --no-interaction", "/srv/journal"
-            builderSync "ci--journal.elifesciences.org", "/srv/journal/"
-            sh "git add composer.lock"
+        elifeWaitPackagist "elife/patterns", params.revision
+        try {
+            sh "docker-compose run --rm composer update elife/patterns --no-interaction"
+            // TODO: add check composer info matches params.revision
+        } finally {
+            sh "docker-compose down -v"
         }
+        sh "git add composer.lock"
     },
     {
-        def subrepositorySummary = elifeGitSubrepositorySummary 'vendor/elife/patterns'
-        return "Updated elife/patterns to ${subrepositorySummary}"
+        def pullRequestReference = ~/ \(#\d+\)/
+        return "Updated elife/patterns to ${params.revision.substring(0, 7)}: ${params.message - pullRequestReference}"
     },
-    'update_patterns_php_'
+    'update_patterns_php_',
+    wrapper
 )

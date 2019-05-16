@@ -44,8 +44,14 @@ elifePipeline {
             sh "IMAGE_TAG=${commit} docker-compose -f docker-compose.yml -f docker-compose.ci.yml build app"
         }
 
-        elifeMainlineOnly {
-            stage 'Push app image', {
+        stage 'Push app image', {
+            elifePullRequestOnly {
+                def branchName = env.CHANGE_BRANCH
+                DockerImage.elifesciences(this, "journal", commit).tag(branchName).push()
+                DockerImage.elifesciences(this, "journal_web", commit).tag(branchName)push()
+            }
+            
+            elifeMainlineOnly {
                 DockerImage.elifesciences(this, "journal", commit).push()
                 DockerImage.elifesciences(this, "journal_web", commit).push()
             }
