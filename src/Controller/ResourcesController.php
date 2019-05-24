@@ -21,17 +21,24 @@ final class ResourcesController extends Controller
         $arguments['contentHeader'] = new ContentHeader($arguments['title'], null, 'A collection of resources, from posters, videos, images, presentations and more, to the brand behind eLife.');
 
         $arguments['body'] = [
-            ArticleSection::basic('Posters', 2, $this->render(
-                new Paragraph('Ready to download, print, and use, the posters below have been created to spread the word about our initiatives for early-career researchers.'),
+            ArticleSection::basic('Posters and handouts', 2, $this->render(
+                new Paragraph('Ready to download, print, and use, the posters and handouts below have been created to spread the word about our initiatives for early-career researchers and what we publish.'),
                 Listing::unordered([
-                    '$1,000 Travel grants (2017) – <a href="'.$this->generateDownloadLink('https://cdn.elifesciences.org/downloads/a4-elife-travel-grants.pdf').'">A4 download</a> | <a href="'.$this->generateDownloadLink('https://cdn.elifesciences.org/downloads/letter-elife-travel-grants.pdf').'">US&nbsp;letter download</a>',
-                    '#ECRWednesday Webinars – <a href="'.$this->generateDownloadLink('https://cdn.elifesciences.org/downloads/a4-elife-ecr-wednesdays.pdf').'">A4 download</a> | <a href="'.$this->generateDownloadLink('https://cdn.elifesciences.org/downloads/letter-elife-ecr-wednesdays.pdf').'">US&nbsp;letter download</a>',
+                    '$1,000 Travel grants (2019) poster – <a href="'.$this->generateDownloadLink('https://cdn.elifesciences.org/documents/a4-elife-travel-grants-2019.pdf').'">A4 download</a> | <a href="'.$this->generateDownloadLink('https://cdn.elifesciences.org/downloads/letter-elife-travel-grants.pdf').'">US&nbsp;letter download</a>',
+                    '#ECRWednesday Webinars poster – <a href="'.$this->generateDownloadLink('https://cdn.elifesciences.org/documents/letter-elife-travel-grants.pdf').'">A4 download</a> | <a href="'.$this->generateDownloadLink('https://cdn.elifesciences.org/downloads/letter-elife-ecr-wednesdays.pdf').'">US&nbsp;letter download</a>',
+                    'Ambassador event poster - <a href="'.$this->generateDownloadLink('https://cdn.elifesciences.org/documents/').'">A4 download</a> | <a href="'.$this->generateDownloadLink('https://cdn.elifesciences.org/downloads').'">US&nbsp;letter download</a>',
+                    'eLife and early-career researchers handout - <a href="'.$this->generateDownloadLink('https://cdn.elifesciences.org/documents/a5-early-career-handout_2019.pdf').'">Download</a>',
+                    'Publishing with eLife handout - <a href="'.$this->generateDownloadLink('https://cdn.elifesciences.org/documents/About_eLife_handout.pdf').'">Download</a>'
                 ], 'bullet')
             )),
             ArticleSection::basic('Presentations', 2, $this->render(
                 new Paragraph('The team at eLife present at meetings across the globe, discussing the key challenges, opportunities and solutions to improve research communication and discovery. These presentations are available to view and share through our Figshare channel.'),
                 Listing::unordered([
                     '<a href="https://figshare.com/authors/eLife_Science/4385029">Visit Figshare</a>',
+                ], 'bullet'),
+                new Paragraph('We\'ve also created a set of slides about eLife that can be included in your own presentations.'),
+                Listing::unordered([
+                    '<a href="https://cdn.elifesciences.org/documents/eLife_the_introduction.pptx">Download eLife presentation</a>',
                 ], 'bullet')
             )),
             ArticleSection::basic('Videos', 2, $this->render(
