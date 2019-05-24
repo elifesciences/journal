@@ -278,7 +278,7 @@ final class AuthenticationTest extends WebTestCase
     /**
      * @test
      */
-    public function it_lets_you_log_out()
+    public function it_lets_you_log_out_and_redirects_you_to_the_homepage()
     {
         $client = static::createClient();
 
@@ -303,11 +303,12 @@ final class AuthenticationTest extends WebTestCase
             )
         );
 
-        $crawler = $client->request('GET', '/');
+        $crawler = $client->request('GET', '/about');
 
         $crawler = $client->click($crawler->filter('a:contains("Josiah Carberry")')->link());
         $crawler = $client->click($crawler->filter('a:contains("Log out")')->link());
-
+        
+        $this->assertEquals('http://localhost', $crawler->getUri());
         $this->assertCount(1, $crawler->filter('a:contains("Log in/Register (via ORCID - An ORCID is a persistent digital identifier for researchers)")'));
         $this->assertEmpty($client->getCookieJar()->all());
     }
