@@ -22,7 +22,7 @@ final class ResourcesControllerTest extends PageTestCase
 
         $this->assertSame(
             [
-                'Posters',
+                'Posters and handouts',
                 'Presentations',
                 'Videos',
                 'Images',
