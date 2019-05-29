@@ -28,7 +28,7 @@ final class ResourcesController extends Controller
                     '#ECRWednesday Webinars poster – <a href="'.$this->generateDownloadLink('https://cdn.elifesciences.org/documents/letter-elife-travel-grants.pdf').'">A4 download</a> | <a href="'.$this->generateDownloadLink('https://cdn.elifesciences.org/downloads/letter-elife-ecr-wednesdays.pdf').'">US&nbsp;letter download</a>',
                     'Ambassador event poster - <a href="'.$this->generateDownloadLink('https://cdn.elifesciences.org/documents/Ambassador_Pack_Poster_A4.pdf').'">A4 download</a> | <a href="'.$this->generateDownloadLink('https://cdn.elifesciences.org/documents/Ambassador_Pack_Poster_USletter.pdf').'">US&nbsp;letter download</a>',
                     'eLife and early-career researchers handout - <a href="'.$this->generateDownloadLink('https://cdn.elifesciences.org/documents/a5-early-career-handout_2019.pdf').'">Download</a>',
-                    'Publishing with eLife handout - <a href="'.$this->generateDownloadLink('https://cdn.elifesciences.org/documents/About_eLife_handout.pdf').'">Download</a>'
+                    'Publishing with eLife handout - <a href="'.$this->generateDownloadLink('https://cdn.elifesciences.org/documents/About_eLife_handout.pdf').'">Download</a>',
                 ], 'bullet')
             )),
             ArticleSection::basic('Presentations', 2, $this->render(
