@@ -27,3 +27,5 @@ COPY --from=composer --chown=elife:elife /app/vendor/ vendor/
 COPY --chown=elife:elife src/ src/
 
 USER www-data
+
+HEALTHCHECK --interval=5s CMD assert_fpm /ping 'pong'
