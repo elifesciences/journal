@@ -28,4 +28,4 @@ COPY --chown=elife:elife src/ src/
 
 USER www-data
 
-HEALTHCHECK --interval=5s CMD assert_fpm /ping 'pong'
+HEALTHCHECK --interval=5s CMD HTTP_HOST=localhost assert_fpm /ping 'pong'
