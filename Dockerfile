@@ -2,7 +2,7 @@ ARG image_tag=latest
 ARG php_version
 FROM elifesciences/journal_assets_builder:${image_tag} AS assets
 FROM elifesciences/journal_composer:${image_tag} AS composer
-FROM elifesciences/php_7.0_fpm:${php_version}
+FROM elifesciences/php_7.1_fpm:${php_version}
 
 ENV PROJECT_FOLDER=/srv/journal
 ENV PHP_ENTRYPOINT=web/app.php
@@ -28,4 +28,4 @@ COPY --chown=elife:elife src/ src/
 
 USER www-data
 
-HEALTHCHECK --interval=5s CMD assert_fpm /ping 'pong'
+HEALTHCHECK --interval=5s CMD HTTP_HOST=localhost assert_fpm /ping 'pong'
