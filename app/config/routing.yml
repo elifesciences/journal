@@ -95,6 +95,21 @@ article-bibtex:
     requirements:
         id: '[a-z0-9-]+'
 
+article-version-pdf:
+    path: /articles/{id}v{version}.pdf
+    defaults:
+        _controller: AppBundle:Articles:pdf
+    requirements:
+        id: '[a-z0-9-]+'
+        version: '[1-9][0-9]*'
+
+article-pdf:
+    path: /articles/{id}.pdf
+    defaults:
+        _controller: AppBundle:Articles:pdf
+    requirements:
+        id: '[a-z0-9-]+'
+
 article-ris:
     path: /articles/{id}.ris
     defaults:

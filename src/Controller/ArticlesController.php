@@ -711,6 +711,21 @@ final class ArticlesController extends Controller
         return new Response($this->get('templating')->render('::article.bib.twig', $arguments), Response::HTTP_OK, ['Content-Type' => 'application/x-bibtex']);
     }
 
+    public function pdfAction(Request $request, string $id, int $version = null) : Response
+    {
+        $arguments = $this->defaultArticleArguments($request, $id, $version);
+
+        $pdf = $arguments['item']
+            ->then(Callback::method('getPdf'))
+            ->wait();
+
+        if (!$pdf) {
+            throw new NotFoundHttpException();
+        }
+
+        return $this->get('elife.journal.helper.http_proxy')->send($request, $pdf);
+    }
+
     public function risAction(Request $request, string $id) : Response
     {
         $arguments = $this->defaultArticleArguments($request, $id);
@@ -771,6 +786,11 @@ final class ArticlesController extends Controller
         $arguments['figuresPath'] = $arguments['history']
             ->then(function (ArticleHistory $history) use ($version) {
                 return $this->generatePath($history, $version, 'figures');
+            });
+
+        $arguments['pdfPath'] = $arguments['history']
+            ->then(function (ArticleHistory $history) use ($version) {
+                return $this->generatePath($history, $version, 'pdf');
             });
 
         $arguments['xmlPath'] = $arguments['history']
