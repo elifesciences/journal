@@ -48,8 +48,8 @@ elifePipeline {
             elifePullRequestOnly {
                 def branchName = env.CHANGE_BRANCH
                 def tagName = branchName.replaceAll("/", "_")
-                DockerImage.elifesciences(this, "journal", commit).tag(branchName).push()
-                DockerImage.elifesciences(this, "journal_web", commit).tag(branchName)push()
+                DockerImage.elifesciences(this, "journal", commit).tag(tagName).push()
+                DockerImage.elifesciences(this, "journal_web", commit).tag(tagName)push()
             }
             
             elifeMainlineOnly {
