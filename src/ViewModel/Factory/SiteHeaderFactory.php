@@ -23,6 +23,7 @@ use Symfony\Component\Asset\Packages;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
 use function eLife\Patterns\mixed_visibility_text;
 
 final class SiteHeaderFactory
@@ -119,7 +120,7 @@ final class SiteHeaderFactory
             $searchItem,
         ]);
 
-        if ($this->authorizationChecker->isGranted('FEATURE_XPUB')) {
+        if ($this->authorizationChecker->isGranted('FEATURE_XPUB') && $this->authorizationChecker->isGranted(AuthenticatedVoter::IS_AUTHENTICATED_REMEMBERED)) {
             $submitUrl = $this->urlGenerator->generate('submit');
         }
 
@@ -131,7 +132,7 @@ final class SiteHeaderFactory
             ),
         ];
 
-        if ($this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED') && $profile) {
+        if ($this->authorizationChecker->isGranted(AuthenticatedVoter::IS_AUTHENTICATED_REMEMBERED) && $profile) {
             $secondaryLinks[] = NavLinkedItem::asLoginControl(
                 LoginControl::loggedIn(
                     $this->urlGenerator->generate('profile', ['id' => $profile->getId()]),
