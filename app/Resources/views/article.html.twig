@@ -25,7 +25,7 @@
         <meta name="citation_firstpage" content="{{ item.eLocationId }}">
         <meta name="citation_public_url" content="{{ url('article', {id: item.id}) }}">
         {% if item.pdf %}
-            <meta name="citation_pdf_url" content="{{ item.pdf }}">
+            <meta name="citation_pdf_url" content="{{ absolute_url(pdfPath) }}">
         {% endif %}
         {% if item.xml %}
             <meta name="citation_xml_url" content="{{ absolute_url(xmlPath) }}">
