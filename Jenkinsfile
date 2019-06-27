@@ -47,13 +47,12 @@ elifePipeline {
         stage 'Push app image', {
             elifePullRequestOnly {
                 def branchName = env.CHANGE_BRANCH
-                DockerImage.elifesciences(this, "journal", commit).tag(branchName).push()
-                DockerImage.elifesciences(this, "journal_web", commit).tag(branchName)push()
+                def tagName = branchName.replaceAll("/", "_")
+                DockerImage.elifesciences(this, "journal", commit).tag(tagName).push()
             }
             
             elifeMainlineOnly {
                 DockerImage.elifesciences(this, "journal", commit).push()
-                DockerImage.elifesciences(this, "journal_web", commit).push()
             }
         }
     }
