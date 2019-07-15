@@ -5,45 +5,45 @@ services:
         build:
             args:
                 composer_dev_arg: --no-dev
-    composer-dev:
-        build:
-            context: .
-            dockerfile: Dockerfile.composer
-            args:
-                composer_dev_arg:
-        image: elifesciences/journal_composer_dev:${IMAGE_TAG}
-        command: /bin/bash
-    selenium:
-        image: selenium/standalone-chrome${SELENIUM_IMAGE_SUFFIX}:2.53.1
-        ports:
-            - "4444:4444" # http://localhost:4444/wd/hub/static/resource/hub.html
-            - "5900:5900" # VNC connection for debug images
-        volumes:
-            - /dev/shm:/dev/shm
-    ci:
-        build:
-            context: .
-            dockerfile: Dockerfile.ci
-            args:
-                image_tag: ${IMAGE_TAG}
-        image: elifesciences/journal_ci:${IMAGE_TAG}
-        volumes:
-            - ./.docker/parameters.yml:/srv/journal/app/config/parameters.yml
-            - fixtures:/srv/journal/var/fixtures
-        environment:
-            - APP_ENV=ci
-        depends_on:
-            - composer-dev
-            - app
-            - selenium
-    app:
-        volumes:
-            - fixtures:/srv/journal/var/fixtures
-        environment:
-            - APP_ENV=ci
-    web:
-        volumes:
-            - ./assets/tests:/srv/journal/web/tests
+    #composer-dev:
+    #    build:
+    #        context: .
+    #        dockerfile: Dockerfile.composer
+    #        args:
+    #            composer_dev_arg:
+    #    image: elifesciences/journal_composer_dev:${IMAGE_TAG}
+    #    command: /bin/bash
+    #selenium:
+    #    image: selenium/standalone-chrome${SELENIUM_IMAGE_SUFFIX}:2.53.1
+    #    ports:
+    #        - "4444:4444" # http://localhost:4444/wd/hub/static/resource/hub.html
+    #        - "5900:5900" # VNC connection for debug images
+    #    volumes:
+    #        - /dev/shm:/dev/shm
+    #ci:
+    #    build:
+    #        context: .
+    #        dockerfile: Dockerfile.ci
+    #        args:
+    #            image_tag: ${IMAGE_TAG}
+    #    image: elifesciences/journal_ci:${IMAGE_TAG}
+    #    volumes:
+    #        - ./.docker/parameters.yml:/srv/journal/app/config/parameters.yml
+    #        - fixtures:/srv/journal/var/fixtures
+    #    environment:
+    #        - APP_ENV=ci
+    #    depends_on:
+    #        - composer-dev
+    #        - app
+    #        - selenium
+    #app:
+    #    volumes:
+    #        - fixtures:/srv/journal/var/fixtures
+    #    environment:
+    #        - APP_ENV=ci
+    #web:
+    #    volumes:
+    #        - ./assets/tests:/srv/journal/web/tests
 
 volumes:
     fixtures:

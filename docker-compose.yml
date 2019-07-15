@@ -18,60 +18,60 @@ services:
         image: elifesciences/journal_npm:${IMAGE_TAG}
     redis:
         image: redis:3.2.10-alpine
-    assets_builder:
-        build:
-            context: .
-            dockerfile: Dockerfile.assets_builder
-            args:
-                image_tag: ${IMAGE_TAG}
-                node_version: ${NODE_VERSION}
-        image: elifesciences/journal_assets_builder:${IMAGE_TAG}
-        depends_on:
-            - composer
-            - npm
-    app:
-        build:
-            context: .
-            args:
-                image_tag: ${IMAGE_TAG}
-                php_version: ${PHP_VERSION}
-        environment:
-            - SYMFONY__API_URL=${API_URL}
-            - SYMFONY__API_URL_PUBLIC=${API_URL_PUBLIC}
-            - SYMFONY__API_KEY=${API_KEY}
-        image: elifesciences/journal:${IMAGE_TAG}
-        volumes:
-            - ./.docker/parameters.yml:/srv/journal/app/config/parameters.yml
-        depends_on:
-            - assets_builder
-            - composer
-            - redis
-    web:
-        build:
-            context: .
-            dockerfile: Dockerfile.web
-            args:
-                image_tag: ${IMAGE_TAG}
-        image: elifesciences/journal_web:${IMAGE_TAG}
-        ports:
-            - '${JOURNAL_PORT}:80'
-        depends_on:
-            - app
-    api_dummy:
-        image: elifesciences/api-dummy:${DEPENDENCIES_API_DUMMY}
-        ports:
-        - '${JOURNAL_API_DUMMY_PORT}:8080'
-    critical_css:
-        build:
-            context: .
-            dockerfile: Dockerfile.critical_css
-            args:
-                image_tag: ${IMAGE_TAG}
-                node_version: ${NODE_VERSION}
-        environment:
-            - CRITICAL_CSS_BASE_URL=http://web:8080
-        image: elifesciences/journal_critical_css:${IMAGE_TAG}
-        depends_on:
-            - npm
-            - web
-            - api_dummy
+    #assets_builder:
+    #    build:
+    #        context: .
+    #        dockerfile: Dockerfile.assets_builder
+    #        args:
+    #            image_tag: ${IMAGE_TAG}
+    #            node_version: ${NODE_VERSION}
+    #    image: elifesciences/journal_assets_builder:${IMAGE_TAG}
+    #    depends_on:
+    #        - composer
+    #        - npm
+    #app:
+    #    build:
+    #        context: .
+    #        args:
+    #            image_tag: ${IMAGE_TAG}
+    #            php_version: ${PHP_VERSION}
+    #    environment:
+    #        - SYMFONY__API_URL=${API_URL}
+    #        - SYMFONY__API_URL_PUBLIC=${API_URL_PUBLIC}
+    #        - SYMFONY__API_KEY=${API_KEY}
+    #    image: elifesciences/journal:${IMAGE_TAG}
+    #    volumes:
+    #        - ./.docker/parameters.yml:/srv/journal/app/config/parameters.yml
+    #    depends_on:
+    #        - assets_builder
+    #        - composer
+    #        - redis
+    #web:
+    #    build:
+    #        context: .
+    #        dockerfile: Dockerfile.web
+    #        args:
+    #            image_tag: ${IMAGE_TAG}
+    #    image: elifesciences/journal_web:${IMAGE_TAG}
+    #    ports:
+    #        - '${JOURNAL_PORT}:80'
+    #    depends_on:
+    #        - app
+    #api_dummy:
+    #    image: elifesciences/api-dummy:${DEPENDENCIES_API_DUMMY}
+    #    ports:
+    #    - '${JOURNAL_API_DUMMY_PORT}:8080'
+    #critical_css:
+    #    build:
+    #        context: .
+    #        dockerfile: Dockerfile.critical_css
+    #        args:
+    #            image_tag: ${IMAGE_TAG}
+    #            node_version: ${NODE_VERSION}
+    #    environment:
+    #        - CRITICAL_CSS_BASE_URL=http://web:8080
+    #    image: elifesciences/journal_critical_css:${IMAGE_TAG}
+    #    depends_on:
+    #        - npm
+    #        - web
+    #        - api_dummy
