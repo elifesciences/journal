@@ -9,7 +9,7 @@ elifePipeline {
         stage 'Build images', {
             checkout scm
             sh "find build/critical-css -name '*.css' -type f -delete"
-            dockerComposeBuild commit
+            dockerComposeBuild commit, ['parallel': true]
         }
 
         stage 'Project tests', {
