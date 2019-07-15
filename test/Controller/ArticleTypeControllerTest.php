@@ -129,6 +129,7 @@ final class ArticleTypeControllerTest extends PageTestCase
                         'retraction' => 0,
                         'registered-report' => 0,
                         'replication-study' => 0,
+                        'review-article' => 0,
                         'scientific-correspondence' => 0,
                         'short-report' => 0,
                         'tools-resources' => 0,

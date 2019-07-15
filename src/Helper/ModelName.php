@@ -47,6 +47,10 @@ final class ModelName
             'singular' => 'Replication Study',
             'plural' => 'Replication Studies',
         ],
+        'review-article' => [
+            'singular' => 'Review Article',
+            'plural' => 'Review Articles',
+        ],
         'scientific-correspondence' => [
             'singular' => 'Scientific Correspondence',
             'plural' => 'Scientific Correspondence',

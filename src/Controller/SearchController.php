@@ -49,6 +49,7 @@ final class SearchController extends Controller
         'research-article',
         'research-communication',
         'retraction',
+        'review-article',
         'scientific-correspondence',
         'short-report',
         'tools-resources',
