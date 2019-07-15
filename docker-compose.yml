@@ -18,17 +18,17 @@ services:
         image: elifesciences/journal_npm:${IMAGE_TAG}
     redis:
         image: redis:3.2.10-alpine
-    #assets_builder:
-    #    build:
-    #        context: .
-    #        dockerfile: Dockerfile.assets_builder
-    #        args:
-    #            image_tag: ${IMAGE_TAG}
-    #            node_version: ${NODE_VERSION}
-    #    image: elifesciences/journal_assets_builder:${IMAGE_TAG}
-    #    depends_on:
-    #        - composer
-    #        - npm
+    assets_builder:
+        build:
+            context: .
+            dockerfile: Dockerfile.assets_builder
+            args:
+                image_tag: ${IMAGE_TAG}
+                node_version: ${NODE_VERSION}
+        image: elifesciences/journal_assets_builder:${IMAGE_TAG}
+        depends_on:
+            - composer
+            - npm
     #app:
     #    build:
     #        context: .
