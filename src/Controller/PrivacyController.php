@@ -226,7 +226,7 @@ final class PrivacyController extends Controller
 <td>Added explanation of use of anonymised data about how users interact with our sites.</td>
 </tr>
 <tr>
-<th>July&nbsp;24,&nbsp;2019</th>
+<th>Jul&nbsp;24,&nbsp;2019</th>
 <td>Added reference to information collected and used for research purposes about the group leader with principal responsibility for a submission.</td>
 </tr>
 </tbody>
