@@ -861,12 +861,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-sdk-php.git",
-                "reference": "05138ffe3d2a50a9f68174f157e9dbd9f51e3f30"
+                "reference": "971b50f572ac071146c533ff05262e1313582f64"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/05138ffe3d2a50a9f68174f157e9dbd9f51e3f30",
-                "reference": "05138ffe3d2a50a9f68174f157e9dbd9f51e3f30",
+                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/971b50f572ac071146c533ff05262e1313582f64",
+                "reference": "971b50f572ac071146c533ff05262e1313582f64",
                 "shasum": ""
             },
             "require": {
@@ -902,7 +902,7 @@
                 "MIT"
             ],
             "description": "eLife Sciences API SDK",
-            "time": "2018-10-17T10:28:05+00:00"
+            "time": "2019-07-29T08:18:46+00:00"
         },
         {
             "name": "elife/patterns",
@@ -3382,12 +3382,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-raml.git",
-                "reference": "90eaabd0c642a70e39f1490dda33547c7b02f678"
+                "reference": "0c93c466ceb5ff9d10c60f1511aec913aab54316"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-raml/zipball/90eaabd0c642a70e39f1490dda33547c7b02f678",
-                "reference": "90eaabd0c642a70e39f1490dda33547c7b02f678",
+                "url": "https://api.github.com/repos/elifesciences/api-raml/zipball/0c93c466ceb5ff9d10c60f1511aec913aab54316",
+                "reference": "0c93c466ceb5ff9d10c60f1511aec913aab54316",
                 "shasum": ""
             },
             "conflict": {
@@ -3399,7 +3399,7 @@
                 "MIT"
             ],
             "description": "eLife Sciences API specification",
-            "time": "2018-10-30T10:22:17+00:00"
+            "time": "2019-07-29T08:03:35+00:00"
         },
         {
             "name": "elife/api-validator",
