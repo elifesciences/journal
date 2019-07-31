@@ -11,7 +11,7 @@ final class EndEmptySessionSubscriber implements EventSubscriberInterface
 {
     public static function getSubscribedEvents() : array
     {
-        return [KernelEvents::RESPONSE => ['onKernelResponse', -127]]; # Before TestSessionListener
+        return [KernelEvents::RESPONSE => ['onKernelResponse', -127]]; // Before TestSessionListener
     }
 
     public function onKernelResponse(FilterResponseEvent $event)
