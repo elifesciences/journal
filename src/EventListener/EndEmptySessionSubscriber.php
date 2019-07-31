@@ -27,7 +27,7 @@ final class EndEmptySessionSubscriber implements EventSubscriberInterface
             return;
         }
 
-        if (!$session->isEmpty()) {
+        if ($session->isEmpty()) {
             $session->invalidate();
             $event->getResponse()->headers->clearCookie($session->getName());
         }
