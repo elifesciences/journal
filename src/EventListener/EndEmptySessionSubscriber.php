@@ -11,7 +11,7 @@ final class EndEmptySessionSubscriber implements EventSubscriberInterface
 {
     public static function getSubscribedEvents() : array
     {
-        return [KernelEvents::RESPONSE => ['onKernelResponse', -1000]];
+        return [KernelEvents::RESPONSE => ['onKernelResponse', -127]]; # Before TestSessionListener
     }
 
     public function onKernelResponse(FilterResponseEvent $event)
@@ -23,11 +23,7 @@ final class EndEmptySessionSubscriber implements EventSubscriberInterface
         $request = $event->getRequest();
         $session = $request->getSession();
 
-        if (!$session || (!$session->isStarted() && !$request->hasPreviousSession()) || !empty($session->all())) {
-            return;
-        }
-
-        if ($session instanceof Session && !empty($session->getFlashBag()->peekAll())) {
+        if (!$session instanceof Session || !$session->isStarted() || !$session->isEmpty()) {
             return;
         }
 
