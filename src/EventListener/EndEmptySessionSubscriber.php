@@ -3,6 +3,7 @@
 namespace eLife\Journal\EventListener;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
@@ -19,22 +20,18 @@ final class EndEmptySessionSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $response = $event->getResponse();
-
-        if ($response->headers->has('Set-Cookie')) {
-            return;
-        }
-
         $request = $event->getRequest();
         $session = $request->getSession();
 
-        if (!$session || (!$session->isStarted() && !$request->hasPreviousSession())) {
+        if (!$session || (!$session->isStarted() && !$request->hasPreviousSession()) || !empty($session->all())) {
             return;
         }
 
-        if (empty($session->all())) {
-            $session->invalidate();
-            $response->headers->clearCookie($session->getName());
+        if ($session instanceof Session && !empty($session->getFlashBag()->peekAll())) {
+            return;
         }
+
+        $session->invalidate();
+        $event->getResponse()->headers->clearCookie($session->getName());
     }
 }
