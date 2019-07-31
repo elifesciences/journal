@@ -19,6 +19,12 @@ final class EndEmptySessionSubscriber implements EventSubscriberInterface
             return;
         }
 
+        $response = $event->getResponse();
+
+        if ($response->headers->has('Set-Cookie')) {
+            return;
+        }
+
         $request = $event->getRequest();
         $session = $request->getSession();
 
@@ -28,7 +34,7 @@ final class EndEmptySessionSubscriber implements EventSubscriberInterface
 
         if (empty($session->all())) {
             $session->invalidate();
-            $event->getResponse()->headers->clearCookie($session->getName());
+            $response->headers->clearCookie($session->getName());
         }
     }
 }
