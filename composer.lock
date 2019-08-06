@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "07aec6871fba56ac11f3562fc9bb03a1",
+    "content-hash": "d973eb9acfe794c842d9a39762225d44",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -801,16 +801,16 @@
         },
         {
             "name": "elife/api-client",
-            "version": "dev-bioprotocol",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-client-php.git",
-                "reference": "b2975d7f94d8c58d5fcbcb0e49156434bc954a17"
+                "reference": "abc08e2b8ae22864d7dbc30a1e96912fbd81cb42"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-client-php/zipball/b2975d7f94d8c58d5fcbcb0e49156434bc954a17",
-                "reference": "b2975d7f94d8c58d5fcbcb0e49156434bc954a17",
+                "url": "https://api.github.com/repos/elifesciences/api-client-php/zipball/abc08e2b8ae22864d7dbc30a1e96912fbd81cb42",
+                "reference": "abc08e2b8ae22864d7dbc30a1e96912fbd81cb42",
                 "shasum": ""
             },
             "require": {
@@ -853,24 +853,24 @@
                 "MIT"
             ],
             "description": "eLife Sciences API client",
-            "time": "2019-08-01T10:36:51+00:00"
+            "time": "2019-08-06T08:48:30+00:00"
         },
         {
             "name": "elife/api-sdk",
-            "version": "dev-bioprotocol",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-sdk-php.git",
-                "reference": "7b8ff617177b21c9e97958059644694d434812f4"
+                "reference": "d033683035531c2bf30601e7c3a9fff9914f9fe1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/7b8ff617177b21c9e97958059644694d434812f4",
-                "reference": "7b8ff617177b21c9e97958059644694d434812f4",
+                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/d033683035531c2bf30601e7c3a9fff9914f9fe1",
+                "reference": "d033683035531c2bf30601e7c3a9fff9914f9fe1",
                 "shasum": ""
             },
             "require": {
-                "elife/api-client": "dev-bioprotocol",
+                "elife/api-client": "^1.0@dev",
                 "guzzlehttp/promises": "^1.0",
                 "ocramius/package-versions": "^1.1",
                 "php": "^7.0",
@@ -902,20 +902,20 @@
                 "MIT"
             ],
             "description": "eLife Sciences API SDK",
-            "time": "2019-08-01T12:50:28+00:00"
+            "time": "2019-08-06T08:56:34+00:00"
         },
         {
             "name": "elife/patterns",
-            "version": "dev-article-section-header-link",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/patterns-php.git",
-                "reference": "aa5b1148e8493c2022624db13585e8bfb17d45fe"
+                "reference": "e94c59503966f13cf5632f4e96a90340c715a9ba"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/aa5b1148e8493c2022624db13585e8bfb17d45fe",
-                "reference": "aa5b1148e8493c2022624db13585e8bfb17d45fe",
+                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/e94c59503966f13cf5632f4e96a90340c715a9ba",
+                "reference": "e94c59503966f13cf5632f4e96a90340c715a9ba",
                 "shasum": ""
             },
             "require": {
@@ -956,9 +956,9 @@
             ],
             "description": "eLife patterns",
             "support": {
-                "source": "https://github.com/elifesciences/patterns-php/tree/article-section-header-link"
+                "source": "https://github.com/elifesciences/patterns-php/tree/master"
             },
-            "time": "2019-08-01T10:33:10+00:00"
+            "time": "2019-08-06T08:51:34+00:00"
         },
         {
             "name": "fabpot/goutte",
