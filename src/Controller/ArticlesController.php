@@ -205,12 +205,19 @@ final class ArticlesController extends Controller
                 return ContextualData::withCitation($item->getCiteAs(), new Doi($item->getDoi()), $metrics, $speechBubble);
             });
 
-        $context = all(['item' => $arguments['item'], 'history' => $arguments['history'], 'hasFigures' => $arguments['hasFigures']])
+        $bioprotocols = $this->get('elife.api_sdk.bioprotocols')
+            ->list(Identifier::article($id))
+            ->otherwise($this->mightNotExist())
+            ->otherwise($this->softFailure('Failed to load bioprotocols', []));
+
+        $context = all(['item' => $arguments['item'], 'history' => $arguments['history'], 'hasFigures' => $arguments['hasFigures'], 'bioprotocols' => $bioprotocols])
             ->then(function (array $parts) {
                 $context = [];
                 if ($parts['hasFigures']) {
                     $context['figuresUri'] = $this->generatePath($parts['history'], $parts['item']->getVersion(), 'figures');
                 }
+
+                $context['bioprotocols'] = $parts['bioprotocols'];
 
                 return $context;
             });

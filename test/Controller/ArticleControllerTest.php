@@ -889,6 +889,53 @@ final class ArticleControllerTest extends PageTestCase
     /**
      * @test
      */
+    public function it_displays_bioprotocols()
+    {
+        $client = static::createClient();
+
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/bioprotocol/article/00001',
+                ['Accept' => 'application/vnd.elife.bioprotocol+json; version=1']
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.bioprotocol+json; version=1'],
+                json_encode([
+                    'total' => 2,
+                    'items' => [
+                        [
+                            'sectionId' => 's-1-1',
+                            'title' => 'Section 1.1',
+                            'status' => false,
+                            'uri' => 'https://www.example.com/s-1-1',
+                        ],
+                        [
+                            'sectionId' => 's-1-3',
+                            'title' => 'Section 1.3',
+                            'status' => true,
+                            'uri' => 'http://www.example.com/s-1-3',
+                        ],
+                    ],
+                ])
+            )
+        );
+
+        $crawler = $client->request('GET', $this->getUrl());
+
+        $this->assertSame(200, $client->getResponse()->getStatusCode());
+
+        $sections = $crawler->filter('.grid-column > .article-section:first-child > .article-section__body > .article-section');
+
+        $this->assertContains('Request a detailed protocol', $sections->eq(0)->filter('.article-section__header_link')->text());
+        $this->assertEmpty($sections->eq(1)->filter('.article-section__header_link'));
+        $this->assertContains('View detailed protocol', $sections->eq(2)->filter('.article-section__header_link')->text());
+    }
+
+    /**
+     * @test
+     */
     public function it_displays_metrics()
     {
         $client = static::createClient();
@@ -2382,6 +2429,39 @@ final class ArticleControllerTest extends PageTestCase
                                 [
                                     'type' => 'paragraph',
                                     'text' => 'Fossil hominins were first recognized in the Dinaledi Chamber in the Rising Star cave system in October 2013. During a relatively short excavation, our team recovered an extensive collection of 1550 hominin specimens, representing nearly every element of the skeleton multiple times (Figure 1), including many complete elements and morphologically informative fragments, some in articulation, as well as smaller fragments many of which could be refit into more complete elements. The collection is a morphologically homogeneous sample that can be attributed to no previously-known hominin species. Here we describe this new species, <i>Homo naledi</i>. We have not defined <i>H. naledi</i> narrowly based on a single jaw or skull because the entire body of material has informed our understanding of its biology.',
+                                ],
+                                [
+                                    'type' => 'section',
+                                    'id' => 's-1-1',
+                                    'title' => 'Section 1.1',
+                                    'content' => [
+                                        [
+                                            'type' => 'paragraph',
+                                            'text' => 'Content',
+                                        ],
+                                    ],
+                                ],
+                                [
+                                    'type' => 'section',
+                                    'id' => 's-1-2',
+                                    'title' => 'Section 1.2',
+                                    'content' => [
+                                        [
+                                            'type' => 'paragraph',
+                                            'text' => 'Content',
+                                        ],
+                                    ],
+                                ],
+                                [
+                                    'type' => 'section',
+                                    'id' => 's-1-3',
+                                    'title' => 'Section 1.3',
+                                    'content' => [
+                                        [
+                                            'type' => 'paragraph',
+                                            'text' => 'Content',
+                                        ],
+                                    ],
                                 ],
                             ],
                         ],

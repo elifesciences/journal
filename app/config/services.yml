@@ -44,6 +44,10 @@ services:
         class: eLife\ApiSdk\Client\Articles
         factory: ['@elife.api_sdk', articles]
 
+    elife.api_sdk.bioprotocols:
+        class: eLife\ApiSdk\Client\Bioprotocols
+        factory: ['@elife.api_sdk', bioprotocols]
+
     elife.api_sdk.blog_articles:
         class: eLife\ApiSdk\Client\BlogArticles
         factory: ['@elife.api_sdk', blogArticles]
