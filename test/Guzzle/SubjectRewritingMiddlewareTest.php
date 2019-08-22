@@ -174,6 +174,10 @@ final class SubjectRewritingMiddlewareTest extends KernelTestCase
                 $this->createArticleVoR(false, false),
                 $this->createArticleVoR(true, false),
             ],
+            'application/vnd.elife.article-vor+json; version=3' => [
+                $this->createArticleVoR(false, false),
+                $this->createArticleVoR(true, false),
+            ],
             'application/vnd.elife.blog-article+json; version=2' => [
                 $this->createBlogArticle(false, false),
                 $this->createBlogArticle(true, false),

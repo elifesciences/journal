@@ -263,7 +263,7 @@ final class ArticlesController extends Controller
                         $this->render(...$this->convertContent($item->getDigest(), 2, $context)),
                         false,
                         $first,
-                        new Doi($item->getDigest()->getDoi())
+                        $item->getDigest()->getDoi() ? new Doi($item->getDigest()->getDoi()) : null
                     );
 
                     $first = false;
@@ -318,7 +318,7 @@ final class ArticlesController extends Controller
                         $this->render(...$this->convertContent($item->getDecisionLetter(), 2, $context)),
                         true,
                         false,
-                        new Doi($item->getDecisionLetter()->getDoi())
+                        $item->getDecisionLetter()->getDoi() ? new Doi($item->getDecisionLetter()->getDoi()) : null
                     );
                 }
 
@@ -330,7 +330,7 @@ final class ArticlesController extends Controller
                         $this->render(...$this->convertContent($item->getAuthorResponse(), 2, $context)),
                         true,
                         false,
-                        new Doi($item->getAuthorResponse()->getDoi())
+                        $item->getAuthorResponse()->getDoi() ? new Doi($item->getAuthorResponse()->getDoi()) : null
                     );
                 }
 
