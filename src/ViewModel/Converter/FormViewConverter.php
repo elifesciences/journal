@@ -48,7 +48,7 @@ final class FormViewConverter implements ViewModelConverter
                         $this->getMessageGroup($object));
                     break;
                 case 'email':
-                    $field =  ViewModel\TextField::emailInput(new ViewModel\FormLabel($this->getLabel($object)),
+                    $field = ViewModel\TextField::emailInput(new ViewModel\FormLabel($this->getLabel($object)),
                         $object->vars['id'], $object->vars['full_name'], $this->getInfoLink($object),
                         $object->vars['attr']['placeholder'] ?? null,
                         $object->vars['required'],
@@ -58,7 +58,7 @@ final class FormViewConverter implements ViewModelConverter
                     if ($object->vars['name'] === $this->honeypotField) {
                         return new ViewModel\Honeypot($field);
                     }
-                    
+
                     return $field;
                 case 'form':
                     $form = new ViewModel\Form($object->vars['action'], $object->vars['full_name'], $object->vars['method']);
