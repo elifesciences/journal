@@ -91,7 +91,8 @@
                 "strip_tags": "https://github.com/cocur/slugify/pull/201.patch"
             },
             "isometriks/spam-bundle": {
-                "Add field label": "https://github.com/isometriks/IsometriksSpamBundle/pull/9.patch"
+                "Add field label": "https://github.com/isometriks/IsometriksSpamBundle/pull/9.patch",
+                "Use EmailType": "https://github.com/isometriks/IsometriksSpamBundle/pull/17.patch"
             },
             "monolog/monolog": {
                 "Fix WhatFailureGroupHandler::handleBatch when the handler has processors": "https://github.com/Seldaek/monolog/pull/1022.patch"
