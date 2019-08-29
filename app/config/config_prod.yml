@@ -18,11 +18,19 @@ monolog:
         console:
             type: console
         main:
+            channels:
+                - '!honeypot'
             action_level: error
             handler: composite
             type: fingers_crossed
             excluded_404s:
                 - ^/
+        honeypot:
+            channels:
+                - 'honeypot'
+            type: group
+            members:
+                - composite
         composite:
             type: whatfailuregroup
             members:

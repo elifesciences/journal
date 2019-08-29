@@ -95,6 +95,7 @@ knpu_oauth2_client:
 monolog:
     channels:
       - api
+      - honeypot
 
 nelmio_security:
     clickjacking: # Deprecated by frame-ancestors
