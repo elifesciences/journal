@@ -49,10 +49,20 @@ final class ContactController extends Controller
 
 eLife Sciences Publications, Ltd is a limited liability non-profit non-stock corporation incorporated in the State of Delaware, USA, with company number 5030732, and is registered in the UK with company number FC030576 and branch number BR015634 at the address Westbrook Centre, Milton Road, Cambridge CB4 1YG.');
 
+            switch($form->get('subject')->getData()) {
+                case "Press query":
+                $emailaddress = "press@elifesciences.org";
+                break;
+                case "Site feedback":
+                $emailaddress = "site-feedback@elifesciences.org";
+                break;
+                default: $emailaddress = "editorial@elifesciences.org";
+            }
+
             $message2 = (new Swift_Message())
                 ->setSubject('Question submitted: '.$form->get('subject')->getData())
                 ->setFrom('do_not_reply@elifesciences.org')
-                ->setTo('staff@elifesciences.org')
+                ->setTo($emailaddress)
                 ->setBody('A question has been submitted on '.$this->get('router')->generate('contact', [], UrlGeneratorInterface::ABSOLUTE_URL).'
 
 '.$response);
