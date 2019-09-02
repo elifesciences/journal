@@ -2,6 +2,8 @@
 
 final class ContactContext extends Context
 {
+    private $form;
+
     /**
      * @Given /^I am on the contact page$/
      */
@@ -11,13 +13,13 @@ final class ContactContext extends Context
     }
 
     /**
-     * @When /^I set the subject to '(.*?)'$/
+     * @When /^I set the subject to (.+)$/
      */
     public function iSetTheSubjectField($subject)
     {
         $page = $this->getSession()->getPage();
 
-        $page->fillField('contact[subject]', $subject);
+        $page->fillField('contact[subject]', $this->form['subject'] = $subject);
     }
 
     /**
@@ -29,13 +31,13 @@ final class ContactContext extends Context
 
         $page = $this->getSession()->getPage();
 
-        $page->fillField('contact[name]', 'Foo Bar');
-        $page->fillField('contact[email]', 'foo@example.com');
+        $page->fillField('contact[name]', $this->form['name'] = 'Foo Bar');
+        $page->fillField('contact[email]', $this->form['email'] = 'foo@example.com');
 
         if (!$page->findField('contact[subject]')->getValue()) {
-            $page->fillField('contact[subject]', 'Author query');
+            $page->fillField('contact[subject]', $this->form['subject'] = 'Author query');
         }
-        $page->fillField('contact[question]', "Lorem ipsum dolor sit amet, consectetur adipiscing elit.\n\nVivamus rhoncus turpis quam, sit amet finibus elit pharetra eget.");
+        $page->fillField('contact[question]', $this->form['question'] = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.\n\nVivamus rhoncus turpis quam, sit amet finibus elit pharetra eget.");
         $page->pressButton('Submit');
 
         $this->recordEmails();
@@ -62,45 +64,27 @@ eLife Sciences Publications, Ltd is a limited liability non-profit non-stock cor
     }
 
     /**
-     * @Then /^the completed form should be sent to (.*)$/
+     * @Then /^the completed form should be sent to (.+)$/
      */
-    public function theCompletedFormShouldBeSent($team)
+    public function theCompletedFormShouldBeSent($emailAddress)
     {
-        switch ($team) {
-            case 'Editorial':
-                $emailAddress = 'editorial@elifesciences.org';
-                $subject = 'Author query';
-                break;
-            case 'Communications':
-                $emailAddress = 'press@elifesciences.org';
-                $subject = 'Press query';
-                break;
-            case 'Site Feedback Google Group':
-                $emailAddress = 'site-feedback@elifesciences.org';
-                $subject = 'Site feedback';
-                break;
-            default:
-                throw new LogicException('Unknown Team');
-        }
         $this->assertEmailSent(['do_not_reply@elifesciences.org' => null], [$emailAddress => null],
-            'Question submitted: '.$subject, 'A question has been submitted on '.$this->locatePath('/contact').'
+            'Question submitted: '.$this->form['subject'], 'A question has been submitted on '.$this->locatePath('/contact').'
 
 Name
 ----
-Foo Bar
+'.$this->form['name'].'
 
 Email
 -----
-foo@example.com
+'.$this->form['email'].'
 
 Subject
 -------
-'.$subject.'
+'.$this->form['subject'].'
 
 Question
 --------
-Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-
-Vivamus rhoncus turpis quam, sit amet finibus elit pharetra eget.');
+'.$this->form['question']);
     }
 }
