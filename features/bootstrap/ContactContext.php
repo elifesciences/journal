@@ -35,7 +35,7 @@ final class ContactContext extends Context
         if (!$page->findField('contact[subject]')->getValue()) {
             $page->fillField('contact[subject]', 'Author query');
         }
-            $page->fillField('contact[question]', "Lorem ipsum dolor sit amet, consectetur adipiscing elit.\n\nVivamus rhoncus turpis quam, sit amet finibus elit pharetra eget.");
+        $page->fillField('contact[question]', "Lorem ipsum dolor sit amet, consectetur adipiscing elit.\n\nVivamus rhoncus turpis quam, sit amet finibus elit pharetra eget.");
         $page->pressButton('Submit');
 
         $this->recordEmails();
@@ -66,20 +66,20 @@ eLife Sciences Publications, Ltd is a limited liability non-profit non-stock cor
      */
     public function theCompletedFormShouldBeSentToStaffElifesciencesOrg($team)
     {
-        switch($team){
-            case "Editorial":
+        switch ($team) {
+            case 'Editorial':
             $emailAddress = 'editorial@elifesciences.org';
             $subject = 'Author query';
             break;
-            case "Communications":
+            case 'Communications':
             $emailAddress = 'press@elifesciences.org';
             $subject = 'Press query';
             break;
-            case "Site Feedback Google Group":
+            case 'Site Feedback Google Group':
             $emailAddress = 'site-feedback@elifesciences.org';
             $subject = 'Site feedback';
             break;
-            default: throw new logicexception("Unknown Team");
+            default: throw new logicexception('Unknown Team');
         }
         $this->assertEmailSent(['do_not_reply@elifesciences.org' => null], [$emailAddress => null],
             'Question submitted: '.$subject, 'A question has been submitted on '.$this->locatePath('/contact').'
