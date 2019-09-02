@@ -64,22 +64,23 @@ eLife Sciences Publications, Ltd is a limited liability non-profit non-stock cor
     /**
      * @Then /^the completed form should be sent to (.*)$/
      */
-    public function theCompletedFormShouldBeSentToStaffElifesciencesOrg($team)
+    public function theCompletedFormShouldBeSent($team)
     {
         switch ($team) {
             case 'Editorial':
-            $emailAddress = 'editorial@elifesciences.org';
-            $subject = 'Author query';
-            break;
+                $emailAddress = 'editorial@elifesciences.org';
+                $subject = 'Author query';
+                break;
             case 'Communications':
-            $emailAddress = 'press@elifesciences.org';
-            $subject = 'Press query';
-            break;
+                $emailAddress = 'press@elifesciences.org';
+                $subject = 'Press query';
+                break;
             case 'Site Feedback Google Group':
-            $emailAddress = 'site-feedback@elifesciences.org';
-            $subject = 'Site feedback';
-            break;
-            default: throw new LogicException('Unknown Team');
+                $emailAddress = 'site-feedback@elifesciences.org';
+                $subject = 'Site feedback';
+                break;
+            default:
+                throw new LogicException('Unknown Team');
         }
         $this->assertEmailSent(['do_not_reply@elifesciences.org' => null], [$emailAddress => null],
             'Question submitted: '.$subject, 'A question has been submitted on '.$this->locatePath('/contact').'
