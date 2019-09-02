@@ -10,20 +10,14 @@ Feature: Contact form
     Then I should see a 'thank you' message
     And I should be sent a 'thank you' email
 
-  Scenario: Completed Author Query form is sent to Editorial
+  Scenario Outline: Completed form is sent to eLife
     Given I am on the contact page
-    Then I set the subject to 'Author query'
+    Then I set the subject to <Subject>
     And I complete the form
-    Then the completed form should be sent to Editorial
+    Then the completed form should be sent to <Recipient>
 
-  Scenario: Completed Press Query form is sent to Communications
-    Given I am on the contact page
-    Then I set the subject to 'Press query'
-    And I complete the form
-    Then the completed form should be sent to Communications
-
-  Scenario: Completed Site Feedback form is sent to Site Feedback Google Group
-    Given I am on the contact page
-    Then I set the subject to 'Site feedback'
-    And I complete the form
-    Then the completed form should be sent to Site Feedback Google Group
+    Examples:
+      | Subject       | Recipient                       |
+      | Author query  | editorial@elifesciences.org     |
+      | Press query   | press@elifesciences.org         |
+      | Site feedback | site-feedback@elifesciences.org |
