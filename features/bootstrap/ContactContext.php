@@ -79,7 +79,7 @@ eLife Sciences Publications, Ltd is a limited liability non-profit non-stock cor
             $emailAddress = 'site-feedback@elifesciences.org';
             $subject = 'Site feedback';
             break;
-            default: throw new logicexception('Unknown Team');
+            default: throw new LogicException('Unknown Team');
         }
         $this->assertEmailSent(['do_not_reply@elifesciences.org' => null], [$emailAddress => null],
             'Question submitted: '.$subject, 'A question has been submitted on '.$this->locatePath('/contact').'
