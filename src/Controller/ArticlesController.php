@@ -882,7 +882,7 @@ final class ArticlesController extends Controller
                 $metrics = [];
 
                 if (null !== $citations) {
-                    $metrics[] = 'Cited '.number_format($citations->getHighest()->getCitations());
+                    $metrics[] = sprintf('<a href="%s">Cited %s</a>', $this->generatePath($history, $item->getVersion(), null, 'metrics'), number_format($citations->getHighest()->getCitations()));
                 }
                 if (null !== $pageViews) {
                     $metrics[] = sprintf('<a href="%s">Views %s</a>', $this->generatePath($history, $item->getVersion(), null, 'metrics'), number_format($pageViews));
