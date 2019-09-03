@@ -173,6 +173,10 @@ abstract class Controller implements ContainerAwareInterface
 
             if (count($form->getErrors()) > 0) {
                 foreach ($form->getErrors() as $error) {
+                    if ($error->getMessage() === $form->getConfig()->getOption('honeypot_message')) {
+                        $this->get('monolog.logger.honeypot')->info('Honeypot field filled in', ['extra' => ['request' => $request]]);
+                    }
+
                     $this->get('session')
                         ->getFlashBag()
                         ->add(InfoBar::TYPE_ATTENTION, $error->getMessage());
