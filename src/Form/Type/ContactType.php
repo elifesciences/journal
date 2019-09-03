@@ -44,7 +44,6 @@ final class ContactType extends AbstractType
                         'Author query',
                         'Press query',
                         'Site feedback',
-                        'Other',
                     ], $choices),
                 ]
             )

@@ -10,7 +10,14 @@ Feature: Contact form
     Then I should see a 'thank you' message
     And I should be sent a 'thank you' email
 
-  Scenario: Completed form is sent to eLife
+  Scenario Outline: Completed form is sent to eLife
     Given I am on the contact page
-    When I complete the form
-    Then the completed form should be sent to staff@elifesciences.org
+    Then I set the subject to <Subject>
+    And I complete the form
+    Then the completed form should be sent to <Recipient>
+
+    Examples:
+      | Subject       | Recipient                       |
+      | Author query  | editorial@elifesciences.org     |
+      | Press query   | press@elifesciences.org         |
+      | Site feedback | site-feedback@elifesciences.org |
