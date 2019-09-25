@@ -30,7 +30,7 @@ final class CollectionSecondaryTeaserConverter implements ViewModelConverter
      */
     public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
-        $curatedBy = 'Curated by '.$object->getSelectedCurator()->getDetails()->getPreferredName();
+        $curatedBy = 'Edited by '.$object->getSelectedCurator()->getDetails()->getPreferredName();
         if ($object->selectedCuratorEtAl()) {
             $curatedBy .= ' et al.';
         }

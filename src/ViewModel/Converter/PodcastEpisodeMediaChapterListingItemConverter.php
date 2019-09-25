@@ -37,7 +37,7 @@ final class PodcastEpisodeMediaChapterListingItemConverter implements ViewModelC
             } elseif ($model instanceof Collection) {
                 $name = ModelName::singular('collection');
                 $url = $this->urlGenerator->generate('collection', [$model]);
-                $text = ' curated by '.$model->getSelectedCurator()->getDetails()->getPreferredName();
+                $text = ' edited by '.$model->getSelectedCurator()->getDetails()->getPreferredName();
 
                 if ($model->selectedCuratorEtAl()) {
                     $text .= ' et al.';
