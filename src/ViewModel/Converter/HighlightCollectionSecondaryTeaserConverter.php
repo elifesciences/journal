@@ -31,7 +31,7 @@ final class HighlightCollectionSecondaryTeaserConverter implements ViewModelConv
         /** @var Collection $collection */
         $collection = $object->getItem();
 
-        $curatedBy = 'Curated by '.$collection->getSelectedCurator()->getDetails()->getPreferredName();
+        $curatedBy = 'Edited by '.$collection->getSelectedCurator()->getDetails()->getPreferredName();
         if ($collection->selectedCuratorEtAl()) {
             $curatedBy .= ' et al.';
         }
