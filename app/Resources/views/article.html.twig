@@ -340,8 +340,8 @@
                 "@type": "ImageObject",
                 "url": "https://elifesciences.org/assets/patterns/img/patterns/organisms/elife-logo-full.b1283c9a.svg"
                 }
-            },
-            "description": "{{ item.impactStatement }}"
+            }[{% if item.impactStatement is defined -%},
+            "description": " {{ item.impactStatement }}" {% endif %}]
         }
     </script>
 
