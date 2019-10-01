@@ -226,12 +226,12 @@ final class AboutController extends Controller
                     new Paragraph('eLife encourages editors to nominate and involve early-career researchers in the review process. The <a href="'.$this->get('router')->generate('inside-elife', ['id' => '31a5173b']).'">eLife pool of early-career reviewers</a> aims to provide outstanding early-stage researchers the opportunity to peer review manuscripts. Members of the pool are nominated and/or approved by the eLife editors.'),
                     new Paragraph('To be eligible, researchers have to be either a postdoctoral researcher or have spent less than five years in an independent research position (e.g. Group Leader). It is also a requirement to have had at least two first-author publications in an area of research within the scope of eLife. Researchers wishing to be considered for this pool should contact the journal staff (<a href="mailto:editorial@elifesciences.org">editorial@elifesciences.org</a>) and provide:'),
                     Listing::unordered([
-                        'a brief letter of endorsement from their supervisor (optional)',
-                        'their CV',
-                        'the link to their webpage or, at a minimum, another site with details about their work (e.g. Google Scholar, Publons or ORCID)',
-                        'two representative first-author publications',
-                        '4-8 keywords and 1-3 <a href="'.$this->get('router')->generate('subjects').'">subject areas of eLife </a>relevant to their research; and',
-                        'a short list of eLife Reviewing Editors they could work with',
+                        'A brief letter of endorsement from their supervisor (optional)',
+                        'Their CV',
+                        'The link to their webpage or, at a minimum, another site with details about their work (e.g. Google Scholar, Publons or ORCID)',
+                        'Two representative first-author publications',
+                        '4-8 keywords and 1-3 <a href="'.$this->get('router')->generate('subjects').'">subject areas of eLife </a>relevant to their research, and',
+                        'A short list of eLife Reviewing Editors they could work with',
                     ], 'bullet'),
                     new Paragraph('Self-nominations will be reviewed by at least one eLife Reviewing Editor.'),
                     new Paragraph('eLife also encourages reviewers to involve early-career colleagues as co-reviewers, and we enable all reviewers to receive credit for their contributions through services such as Publons and ORCID. ')
