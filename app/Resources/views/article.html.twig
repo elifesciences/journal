@@ -319,27 +319,19 @@
     <script>
         {
             "@context": "https://schema.org",
-            "@type": "Report",
+            "@type": "ScholarlyArticle",
             "mainEntityOfPage": {
                 "@type": "WebPage",
                 "@id": "{{ url('article', {id: item.id}) }}"
             },
             "headline": "{{ item.fullTitle|striptags }}",
-            "image": [
-                "https://iiif.elifesciences.org/journal-cms/cover%2F2019-07%2F46846-a_striking_image.jpg/0,179,1800,543/1114,336/0/default.jpg"
-            ],
             "datePublished": "{{ item.publishedDate|date('Y/m/d', 'UTC') }}",
             "author": [{% for author in item.authors %}{
-                "@type": "Person",
                 "name": "{{ author.toString }}"
             }{%- if not loop.last %}, {% endif -%}{% endfor %}],
             "publisher": {
-                "@type": "NGO",
-                "name": "eLife Sciences Publications Limited",
-                "logo": {
-                "@type": "ImageObject",
-                "url": "https://elifesciences.org/assets/patterns/img/patterns/organisms/elife-logo-full.b1283c9a.svg"
-                }
+                "@type": "Organization",
+                "name": "eLife Sciences Publications Limited"
             }[{% if item.impactStatement is defined -%},
             "description": " {{ item.impactStatement }}" {% endif %}]
         }
