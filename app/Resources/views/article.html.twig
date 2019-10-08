@@ -332,7 +332,7 @@
             "publisher": {
                 "@type": "Organization",
                 "name": "eLife Sciences Publications Limited"
-            }[{% if item.impactStatement is defined -%},
+            }[{% if item.impactStatement|default(null) -%},
             "description": " {{ item.impactStatement }}" {% endif %}]
         }
     </script>
