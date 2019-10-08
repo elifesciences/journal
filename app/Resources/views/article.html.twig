@@ -325,7 +325,7 @@
                 "@id": "{{ url('article', {id: item.id}) }}"
             },
             "headline": "{{ item.fullTitle|striptags }}",
-            "datePublished": "{{ item.publishedDate|date('Y/m/d', 'UTC') }}",
+            "datePublished": "{{ item.publishedDate|date('Y-m-d', 'UTC') }}",
             "author": [{% for author in item.authors %}{
                 "name": "{{ author.toString }}"
             }{%- if not loop.last %}, {% endif -%}{% endfor %}],
