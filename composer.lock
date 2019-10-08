@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d973eb9acfe794c842d9a39762225d44",
+    "content-hash": "0890082ccc9c4d1567816c630ec40a20",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -1314,7 +1314,8 @@
             "type": "library",
             "extra": {
                 "patches_applied": {
-                    "Add field label": "https://github.com/isometriks/IsometriksSpamBundle/pull/9.patch"
+                    "Add field label": "https://github.com/isometriks/IsometriksSpamBundle/pull/9.patch",
+                    "Use EmailType": "https://github.com/isometriks/IsometriksSpamBundle/pull/17.patch"
                 }
             },
             "autoload": {
