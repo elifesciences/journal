@@ -4,6 +4,9 @@ namespace test\eLife\Journal\Controller;
 
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use ML\JsonLD\JsonLD;
+use ML\JsonLD\RdfConstants;
+use ML\JsonLD\TypedValue;
 
 final class ArticleControllerTest extends PageTestCase
 {
@@ -537,6 +540,30 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertSame('2007/01/01', $crawler->filter('meta[name="citation_publication_date"]')->attr('content'));
         $this->assertCount(2, $crawler->filter('meta[name="citation_author"]'));
         $this->assertCount(1, $crawler->filter('meta[name="citation_reference"]'));
+    }
+
+    /**
+     * @test
+     */
+    public function it_has_schema_org_metadata()
+    {
+        $client = static::createClient();
+
+        $crawler = $client->request('GET', $this->getUrl());
+
+        $this->assertSame(200, $client->getResponse()->getStatusCode());
+
+        $script = $crawler->filter('script[type="application/ld+json"]');
+        $this->assertNotEmpty($script);
+
+        $value = $script->text();
+        $this->assertJson($value);
+
+        $graph = JsonLD::getDocument($value)->getGraph();
+        $node = $graph->getNodes()[0];
+
+        $this->assertEquals('http://schema.org/ScholarlyArticle', $node->getType()->getId());
+        $this->assertEquals(new TypedValue('Article title', RdfConstants::XSD_STRING), $node->getProperty('http://schema.org/headline'));
     }
 
     /**
