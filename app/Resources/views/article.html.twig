@@ -347,10 +347,7 @@
             "publisher": {
                 "@type": "Organization",
                 "name": "eLife Sciences Publications, Ltd",
-                "logo": {
-                "@type": "ImageObject",
                 "logo": "{{ absolute_url(asset('assets/patterns/img/patterns/organisms/elife-logo-full.svg')) }}"
-                }
             },
             {% if item.keywords is defined and item.keywords|length %}
                 "keywords": [
@@ -368,13 +365,14 @@
                     {% endfor %}
                 ],
             {% endif %}
+            {% if item.impactStatement|default(null) -%}
+                "description": "{{ item.impactStatement|striptags }}",
+            {% endif %}
             "isPartOf": {
                 "@type": "Periodical",
                 "name": "eLife",
                 "issn": "2050-084X"
             }
-            {% if item.impactStatement|default(null) -%},
-            "description": "{{ item.impactStatement|striptags }}" {% endif %}
         }
     </script>
 
