@@ -347,7 +347,10 @@
             "publisher": {
                 "@type": "Organization",
                 "name": "eLife Sciences Publications, Ltd",
-                "logo": "{{ absolute_url(asset('assets/patterns/img/patterns/organisms/elife-logo-full.svg')) }}"
+                "logo": {
+                    "@type": "ImageObject",
+                    "url": "{{ absolute_url(asset('assets/patterns/img/patterns/organisms/elife-logo-full.svg')) }}"
+                }
             },
             {% if item.keywords is defined and item.keywords|length %}
                 "keywords": [
