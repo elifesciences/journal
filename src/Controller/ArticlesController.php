@@ -205,12 +205,19 @@ final class ArticlesController extends Controller
                 return ContextualData::withCitation($item->getCiteAs(), new Doi($item->getDoi()), $metrics, $speechBubble);
             });
 
-        $context = all(['item' => $arguments['item'], 'history' => $arguments['history'], 'hasFigures' => $arguments['hasFigures']])
+        $bioprotocols = $this->get('elife.api_sdk.bioprotocols')
+            ->list(Identifier::article($id))
+            ->otherwise($this->mightNotExist())
+            ->otherwise($this->softFailure('Failed to load bioprotocols', []));
+
+        $context = all(['item' => $arguments['item'], 'history' => $arguments['history'], 'hasFigures' => $arguments['hasFigures'], 'bioprotocols' => $bioprotocols])
             ->then(function (array $parts) {
                 $context = [];
                 if ($parts['hasFigures']) {
                     $context['figuresUri'] = $this->generatePath($parts['history'], $parts['item']->getVersion(), 'figures');
                 }
+
+                $context['bioprotocols'] = $parts['bioprotocols'];
 
                 return $context;
             });
@@ -256,7 +263,7 @@ final class ArticlesController extends Controller
                         $this->render(...$this->convertContent($item->getDigest(), 2, $context)),
                         false,
                         $first,
-                        new Doi($item->getDigest()->getDoi())
+                        $item->getDigest()->getDoi() ? new Doi($item->getDigest()->getDoi()) : null
                     );
 
                     $first = false;
@@ -311,7 +318,7 @@ final class ArticlesController extends Controller
                         $this->render(...$this->convertContent($item->getDecisionLetter(), 2, $context)),
                         true,
                         false,
-                        new Doi($item->getDecisionLetter()->getDoi())
+                        $item->getDecisionLetter()->getDoi() ? new Doi($item->getDecisionLetter()->getDoi()) : null
                     );
                 }
 
@@ -323,7 +330,7 @@ final class ArticlesController extends Controller
                         $this->render(...$this->convertContent($item->getAuthorResponse(), 2, $context)),
                         true,
                         false,
-                        new Doi($item->getAuthorResponse()->getDoi())
+                        $item->getAuthorResponse()->getDoi() ? new Doi($item->getAuthorResponse()->getDoi()) : null
                     );
                 }
 
@@ -875,7 +882,7 @@ final class ArticlesController extends Controller
                 $metrics = [];
 
                 if (null !== $citations) {
-                    $metrics[] = 'Cited '.number_format($citations->getHighest()->getCitations());
+                    $metrics[] = sprintf('<a href="%s">Cited %s</a>', $this->generatePath($history, $item->getVersion(), null, 'metrics'), number_format($citations->getHighest()->getCitations()));
                 }
                 if (null !== $pageViews) {
                     $metrics[] = sprintf('<a href="%s">Views %s</a>', $this->generatePath($history, $item->getVersion(), null, 'metrics'), number_format($pageViews));

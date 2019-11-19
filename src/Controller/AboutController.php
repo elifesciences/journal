@@ -222,10 +222,23 @@ final class AboutController extends Controller
                     new Paragraph('For more information, take a look at this <a href="'.$this->get('router')->generate('inside-elife-article', ['id' => '140901c3']).'">video message from the ECAG</a>.')
                 ),
                 'Community Ambassadors' => 'We convene and facilitate a worldwide community of like-minded researchers, led by the ECAG. The eLife Community Ambassadors champion responsible behaviours in science among colleagues and create and deliver solutions that accelerate positive changes in scholarly culture.',
-                'Involvement in peer review' => 'eLife encourages reviewers to involve junior colleagues as co-reviewers; we involve outstanding early-stage researchers as reviewers <a href="'.$this->get('router')->generate('inside-elife-article', ['id' => '31a5173b']).'">in their own right</a>; and we enable all reviewers to receive credit for their contributions through services such as Publons and ORCID',
+                'Involvement in peer review' => $this->render(
+                    new Paragraph('eLife encourages editors to nominate and involve early-career researchers in the review process. The <a href="'.$this->get('router')->generate('inside-elife-article', ['id' => '31a5173b']).'">eLife pool of early-career reviewers</a> aims to provide outstanding early-stage researchers the opportunity to peer review manuscripts. Members of the pool are nominated and/or approved by the eLife editors.'),
+                    new Paragraph('To be eligible, researchers have to be either a postdoctoral researcher or have spent less than five years in an independent research position (e.g. Group Leader). It is also a requirement to have had at least two first-author publications in an area of research within the scope of eLife. Researchers wishing to be considered for this pool should contact the journal staff (<a href="mailto:editorial@elifesciences.org">editorial@elifesciences.org</a>) and provide:'),
+                    Listing::unordered([
+                        'A brief letter of endorsement from their supervisor (optional)',
+                        'Their CV',
+                        'The link to their webpage or, at a minimum, another site with details about their work (e.g. Google Scholar, Publons or ORCID)',
+                        'Two representative first-author publications',
+                        '4-8 keywords and 1-3 <a href="'.$this->get('router')->generate('subjects').'">subject areas of eLife </a>relevant to their research, and',
+                        'A short list of eLife Reviewing Editors they could work with',
+                    ], 'bullet'),
+                    new Paragraph('Self-nominations will be reviewed by at least one eLife Reviewing Editor.'),
+                    new Paragraph('eLife also encourages reviewers to involve early-career colleagues as co-reviewers, and we enable all reviewers to receive credit for their contributions through services such as Publons and ORCID. ')
+                ),
                 'Travel grants' => 'eLife offers funding to help early-career scientists get exposure and recognition for their work among leading scientists in their fields. New travel grant programmes are announced at the start of each year. Sign up to our <a href="https://crm.elifesciences.org/crm/community-news">early-career newsletter</a> for updates and information on how to apply.',
                 'Webinars' => 'A platform for the early-career community to share opportunities and explore issues around building a successful research career, on the last Wednesday of the month. Previous webinars can be found on our <a href="'.$this->get('router')->generate('collection', ['id' => '842f35d5']).'">collection page</a>.',
-                'Magazine features' => 'Early-career researchers and issues of concern to them are regularly featured in interviews, podcasts and articles in the <a href="'.$this->get('router')->generate('magazine').'">Magazine section</a> of eLife',
+                'Magazine features' => 'Early-career researchers and issues of concern to them are regularly featured in interviews, podcasts and articles in the <a href="'.$this->get('router')->generate('magazine').'">Magazine section</a> of eLife.',
             ]),
             new Paragraph('For the latest in our work to support early-career scientists, explore our <a href="'.$this->get('router')->generate('community').'">Community page</a> and sign up for eLife <a href="https://crm.elifesciences.org/crm/community-news">News for Early-Career Researchers</a>. You can also find us on Twitter: <a href="https://twitter.com/eLifeCommunity">@eLifeCommunity</a>'),
         ];

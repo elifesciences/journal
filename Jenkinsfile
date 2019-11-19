@@ -1,5 +1,6 @@
 elifePipeline {
     def commit
+    DockerImage image
     stage 'Checkout', {
         checkout scm
         commit = elifeGitRevision()
@@ -45,14 +46,16 @@ elifePipeline {
         }
 
         stage 'Push app image', {
+            image = DockerImage.elifesciences(this, "journal", commit)
+
             elifePullRequestOnly {
                 def branchName = env.CHANGE_BRANCH
                 def tagName = branchName.replaceAll("/", "_")
-                DockerImage.elifesciences(this, "journal", commit).tag(tagName).push()
+                image.tag(tagName).push()
             }
             
             elifeMainlineOnly {
-                DockerImage.elifesciences(this, "journal", commit).push()
+                image.push()
             }
         }
     }
@@ -96,6 +99,9 @@ elifePipeline {
 
         stage 'Approval', {
             elifeGitMoveToBranch commit, 'approved'
+            node('containers-jenkins-plugin') {
+                image.pull().tag('approved').push()
+            }
         }
     }
 }

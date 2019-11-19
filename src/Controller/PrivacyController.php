@@ -101,7 +101,9 @@ final class PrivacyController extends Controller
                     new Paragraph('Author and manuscript personal information collected at submission stage includes: name, email address, affiliation, institutional role, ORCID iD, contributions and competing interests and funding information.'),
                     new Paragraph('Additional information generated during the review and publication process includes: revised versions of the manuscript; correspondence between authors, eLife (and their agents) and editors, including the editors’ decision letter and author’s response; fee waiver requests and whether a waiver was granted. If you pay the publication fee by credit card, your credit card details will be passed directly to our credit card processor; we do not see or retain those details.'),
                     new Paragraph('For promoting our services to you we use email address and affiliation; information about manuscripts submitted, and whether they were accepted; preferences you have expressed about the type of information you wish to receive.'),
-                    new Paragraph('For business analysis and planning purposes we use: author and funder details; decisions taken on manuscript and related processing dates; names of editors and reviewers who handled the manuscript.')
+                    new Paragraph('For business analysis and planning purposes we use: author and funder details; decisions taken on manuscript and related processing dates; names of editors and reviewers who handled the manuscript.'),
+                    new Paragraph('Author and manuscript personal information collected at submission stage includes: name, email address, affiliation, institutional role, ORCID iD, contributions and competing interests and funding information.'),
+                    new Paragraph('We also request, for research purposes, the group leader\'s country of residence, gender and the year in which they became an independent researcher.')
                 ), 'authors-hold'),
                 ArticleSection::basic('Who do we share the data with, and why?', 3, $this->render(
                     new Paragraph('We share your data with editors and reviewers, and with organisations that help us deliver our services.'),
@@ -222,6 +224,10 @@ final class PrivacyController extends Controller
 <tr>
 <th>Mar&nbsp;12,&nbsp;2019</th>
 <td>Added explanation of use of anonymised data about how users interact with our sites.</td>
+</tr>
+<tr>
+<th>Jul&nbsp;24,&nbsp;2019</th>
+<td>Added reference to information collected and used for research purposes about the group leader with principal responsibility for a submission.</td>
 </tr>
 </tbody>
 </table>

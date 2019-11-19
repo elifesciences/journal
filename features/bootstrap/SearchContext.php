@@ -26,6 +26,7 @@ final class SearchContext extends Context
         'research-article',
         'research-communication',
         'retraction',
+        'review-article',
         'scientific-correspondence',
         'short-report',
         'tools-resources',
@@ -118,6 +119,7 @@ final class SearchContext extends Context
                         'retraction' => 0,
                         'registered-report' => 0,
                         'replication-study' => 0,
+                        'review-article' => 0,
                         'scientific-correspondence' => 0,
                         'short-report' => 0,
                         'tools-resources' => 0,
@@ -213,7 +215,7 @@ final class SearchContext extends Context
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001',
-                ['Accept' => 'application/vnd.elife.article-poa+json; version=2, application/vnd.elife.article-vor+json; version=2']
+                ['Accept' => 'application/vnd.elife.article-poa+json; version=2, application/vnd.elife.article-vor+json; version=3']
             ),
             new Response(
                 200,

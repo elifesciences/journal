@@ -4,6 +4,9 @@ namespace test\eLife\Journal\Controller;
 
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use ML\JsonLD\JsonLD;
+use ML\JsonLD\RdfConstants;
+use ML\JsonLD\TypedValue;
 
 final class ArticleControllerTest extends PageTestCase
 {
@@ -37,11 +40,11 @@ final class ArticleControllerTest extends PageTestCase
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001',
-                ['Accept' => 'application/vnd.elife.article-poa+json; version=2, application/vnd.elife.article-vor+json; version=2']
+                ['Accept' => 'application/vnd.elife.article-poa+json; version=2, application/vnd.elife.article-vor+json; version=3']
             ),
             new Response(
                 200,
-                ['Content-Type' => 'application/vnd.elife.article-vor+json; version=2'],
+                ['Content-Type' => 'application/vnd.elife.article-vor+json; version=3'],
                 json_encode([
                     'status' => 'vor',
                     'stage' => 'preview',
@@ -159,11 +162,11 @@ final class ArticleControllerTest extends PageTestCase
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001',
-                ['Accept' => 'application/vnd.elife.article-poa+json; version=2, application/vnd.elife.article-vor+json; version=2']
+                ['Accept' => 'application/vnd.elife.article-poa+json; version=2, application/vnd.elife.article-vor+json; version=3']
             ),
             new Response(
                 200,
-                ['Content-Type' => 'application/vnd.elife.article-vor+json; version=2'],
+                ['Content-Type' => 'application/vnd.elife.article-vor+json; version=3'],
                 json_encode([
                     'status' => 'vor',
                     'stage' => 'published',
@@ -542,6 +545,30 @@ final class ArticleControllerTest extends PageTestCase
     /**
      * @test
      */
+    public function it_has_schema_org_metadata()
+    {
+        $client = static::createClient();
+
+        $crawler = $client->request('GET', $this->getUrl());
+
+        $this->assertSame(200, $client->getResponse()->getStatusCode());
+
+        $script = $crawler->filter('script[type="application/ld+json"]');
+        $this->assertNotEmpty($script);
+
+        $value = $script->text();
+        $this->assertJson($value);
+
+        $graph = JsonLD::getDocument($value)->getGraph();
+        $node = $graph->getNodes()[0];
+
+        $this->assertEquals('http://schema.org/ScholarlyArticle', $node->getType()->getId());
+        $this->assertEquals(new TypedValue('Article title', RdfConstants::XSD_STRING), $node->getProperty('http://schema.org/headline'));
+    }
+
+    /**
+     * @test
+     */
     public function it_displays_a_404_if_the_article_is_not_found()
     {
         $client = static::createClient();
@@ -550,7 +577,7 @@ final class ArticleControllerTest extends PageTestCase
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001',
-                ['Accept' => 'application/vnd.elife.article-poa+json; version=2, application/vnd.elife.article-vor+json; version=2']
+                ['Accept' => 'application/vnd.elife.article-poa+json; version=2, application/vnd.elife.article-vor+json; version=3']
             ),
             new Response(
                 404,
@@ -600,11 +627,11 @@ final class ArticleControllerTest extends PageTestCase
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001',
-                ['Accept' => 'application/vnd.elife.article-poa+json; version=2, application/vnd.elife.article-vor+json; version=2']
+                ['Accept' => 'application/vnd.elife.article-poa+json; version=2, application/vnd.elife.article-vor+json; version=3']
             ),
             new Response(
                 200,
-                ['Content-Type' => 'application/vnd.elife.article-vor+json; version=2'],
+                ['Content-Type' => 'application/vnd.elife.article-vor+json; version=3'],
                 json_encode([
                     'status' => 'vor',
                     'stage' => 'published',
@@ -796,11 +823,11 @@ final class ArticleControllerTest extends PageTestCase
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001',
-                ['Accept' => 'application/vnd.elife.article-poa+json; version=2, application/vnd.elife.article-vor+json; version=2']
+                ['Accept' => 'application/vnd.elife.article-poa+json; version=2, application/vnd.elife.article-vor+json; version=3']
             ),
             new Response(
                 200,
-                ['Content-Type' => 'application/vnd.elife.article-vor+json; version=2'],
+                ['Content-Type' => 'application/vnd.elife.article-vor+json; version=3'],
                 json_encode([
                     'status' => 'vor',
                     'stage' => 'published',
@@ -884,6 +911,53 @@ final class ArticleControllerTest extends PageTestCase
 
         $articleInfo = $crawler->filter('.grid-column > section:nth-of-type(2)');
         $this->assertSame('Article information', $articleInfo->filter('header > h2')->text());
+    }
+
+    /**
+     * @test
+     */
+    public function it_displays_bioprotocols()
+    {
+        $client = static::createClient();
+
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/bioprotocol/article/00001',
+                ['Accept' => 'application/vnd.elife.bioprotocol+json; version=1']
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.bioprotocol+json; version=1'],
+                json_encode([
+                    'total' => 2,
+                    'items' => [
+                        [
+                            'sectionId' => 's-1-1',
+                            'title' => 'Section 1.1',
+                            'status' => false,
+                            'uri' => 'https://www.example.com/s-1-1',
+                        ],
+                        [
+                            'sectionId' => 's-1-3',
+                            'title' => 'Section 1.3',
+                            'status' => true,
+                            'uri' => 'http://www.example.com/s-1-3',
+                        ],
+                    ],
+                ])
+            )
+        );
+
+        $crawler = $client->request('GET', $this->getUrl());
+
+        $this->assertSame(200, $client->getResponse()->getStatusCode());
+
+        $sections = $crawler->filter('.grid-column > .article-section:first-child > .article-section__body > .article-section');
+
+        $this->assertContains('Request a detailed protocol', $sections->eq(0)->filter('.article-section__header_link')->text());
+        $this->assertEmpty($sections->eq(1)->filter('.article-section__header_link'));
+        $this->assertContains('View detailed protocol', $sections->eq(2)->filter('.article-section__header_link')->text());
     }
 
     /**
@@ -1006,7 +1080,7 @@ final class ArticleControllerTest extends PageTestCase
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001',
-                ['Accept' => 'application/vnd.elife.article-poa+json; version=2, application/vnd.elife.article-vor+json; version=2']
+                ['Accept' => 'application/vnd.elife.article-poa+json; version=2, application/vnd.elife.article-vor+json; version=3']
             ),
             new Response(
                 200,
@@ -1148,7 +1222,7 @@ final class ArticleControllerTest extends PageTestCase
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/12345',
-                ['Accept' => 'application/vnd.elife.article-poa+json; version=2, application/vnd.elife.article-vor+json; version=2']
+                ['Accept' => 'application/vnd.elife.article-poa+json; version=2, application/vnd.elife.article-vor+json; version=3']
             ),
             new Response(
                 200,
@@ -1265,7 +1339,7 @@ final class ArticleControllerTest extends PageTestCase
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001',
-                ['Accept' => 'application/vnd.elife.article-poa+json; version=2, application/vnd.elife.article-vor+json; version=2']
+                ['Accept' => 'application/vnd.elife.article-poa+json; version=2, application/vnd.elife.article-vor+json; version=3']
             ),
             new Response(
                 200,
@@ -1439,11 +1513,11 @@ final class ArticleControllerTest extends PageTestCase
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001',
-                ['Accept' => 'application/vnd.elife.article-poa+json; version=2, application/vnd.elife.article-vor+json; version=2']
+                ['Accept' => 'application/vnd.elife.article-poa+json; version=2, application/vnd.elife.article-vor+json; version=3']
             ),
             new Response(
                 200,
-                ['Content-Type' => 'application/vnd.elife.article-vor+json; version=2'],
+                ['Content-Type' => 'application/vnd.elife.article-vor+json; version=3'],
                 json_encode([
                     'status' => 'vor',
                     'stage' => 'published',
@@ -1984,7 +2058,7 @@ final class ArticleControllerTest extends PageTestCase
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001',
-                ['Accept' => 'application/vnd.elife.article-poa+json; version=2, application/vnd.elife.article-vor+json; version=2']
+                ['Accept' => 'application/vnd.elife.article-poa+json; version=2, application/vnd.elife.article-vor+json; version=3']
             ),
             new Response(
                 200,
@@ -2349,11 +2423,11 @@ final class ArticleControllerTest extends PageTestCase
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001',
-                ['Accept' => 'application/vnd.elife.article-poa+json; version=2, application/vnd.elife.article-vor+json; version=2']
+                ['Accept' => 'application/vnd.elife.article-poa+json; version=2, application/vnd.elife.article-vor+json; version=3']
             ),
             new Response(
                 200,
-                ['Content-Type' => 'application/vnd.elife.article-vor+json; version=2'],
+                ['Content-Type' => 'application/vnd.elife.article-vor+json; version=3'],
                 json_encode([
                     'status' => 'vor',
                     'stage' => 'published',
@@ -2382,6 +2456,39 @@ final class ArticleControllerTest extends PageTestCase
                                 [
                                     'type' => 'paragraph',
                                     'text' => 'Fossil hominins were first recognized in the Dinaledi Chamber in the Rising Star cave system in October 2013. During a relatively short excavation, our team recovered an extensive collection of 1550 hominin specimens, representing nearly every element of the skeleton multiple times (Figure 1), including many complete elements and morphologically informative fragments, some in articulation, as well as smaller fragments many of which could be refit into more complete elements. The collection is a morphologically homogeneous sample that can be attributed to no previously-known hominin species. Here we describe this new species, <i>Homo naledi</i>. We have not defined <i>H. naledi</i> narrowly based on a single jaw or skull because the entire body of material has informed our understanding of its biology.',
+                                ],
+                                [
+                                    'type' => 'section',
+                                    'id' => 's-1-1',
+                                    'title' => 'Section 1.1',
+                                    'content' => [
+                                        [
+                                            'type' => 'paragraph',
+                                            'text' => 'Content',
+                                        ],
+                                    ],
+                                ],
+                                [
+                                    'type' => 'section',
+                                    'id' => 's-1-2',
+                                    'title' => 'Section 1.2',
+                                    'content' => [
+                                        [
+                                            'type' => 'paragraph',
+                                            'text' => 'Content',
+                                        ],
+                                    ],
+                                ],
+                                [
+                                    'type' => 'section',
+                                    'id' => 's-1-3',
+                                    'title' => 'Section 1.3',
+                                    'content' => [
+                                        [
+                                            'type' => 'paragraph',
+                                            'text' => 'Content',
+                                        ],
+                                    ],
                                 ],
                             ],
                         ],
@@ -2441,7 +2548,7 @@ final class ArticleControllerTest extends PageTestCase
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001/versions/1',
-                ['Accept' => 'application/vnd.elife.article-poa+json; version=2, application/vnd.elife.article-vor+json; version=2']
+                ['Accept' => 'application/vnd.elife.article-poa+json; version=2, application/vnd.elife.article-vor+json; version=3']
             ),
             new Response(
                 200,

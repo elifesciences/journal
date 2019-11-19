@@ -43,6 +43,7 @@ final class ModelNameTest extends TestCase
             'retraction' => ['Retraction', 'Retractions'],
             'registered-report' => ['Registered Report', 'Registered Reports'],
             'replication-study' => ['Replication Study', 'Replication Studies'],
+            'review-article' => ['Review Article', 'Review Articles'],
             'scientific-correspondence' => ['Scientific Correspondence', 'Scientific Correspondence'],
             'short-report' => ['Short Report', 'Short Reports'],
             'tools-resources' => ['Tools and Resources', 'Tools and Resources'],

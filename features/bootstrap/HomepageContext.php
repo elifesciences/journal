@@ -58,7 +58,7 @@ final class HomepageContext extends Context
         $this->mockApiResponse(
             new Request(
                 'GET',
-                'http://api.elifesciences.org/search?for=&page=1&per-page=1&sort=date&order=desc&type[]=research-advance&type[]=research-article&type[]=research-communication&type[]=scientific-correspondence&type[]=short-report&type[]=tools-resources&type[]=replication-study&use-date=default',
+                'http://api.elifesciences.org/search?for=&page=1&per-page=1&sort=date&order=desc&type[]=research-advance&type[]=research-article&type[]=research-communication&type[]=review-article&type[]=scientific-correspondence&type[]=short-report&type[]=tools-resources&type[]=replication-study&use-date=default',
                 ['Accept' => 'application/vnd.elife.search+json; version=1']
             ),
             new Response(
@@ -85,6 +85,7 @@ final class HomepageContext extends Context
                         'retraction' => 0,
                         'registered-report' => 0,
                         'replication-study' => 0,
+                        'review-article' => 0,
                         'scientific-correspondence' => 0,
                         'short-report' => 0,
                         'tools-resources' => 0,
@@ -104,7 +105,7 @@ final class HomepageContext extends Context
             $this->mockApiResponse(
                 new Request(
                     'GET',
-                    "http://api.elifesciences.org/search?for=&page=$page&per-page=$chunk&sort=date&order=desc&type[]=research-advance&type[]=research-article&type[]=research-communication&type[]=scientific-correspondence&type[]=short-report&type[]=tools-resources&type[]=replication-study&use-date=default",
+                    "http://api.elifesciences.org/search?for=&page=$page&per-page=$chunk&sort=date&order=desc&type[]=research-advance&type[]=research-article&type[]=research-communication&type[]=review-article&type[]=scientific-correspondence&type[]=short-report&type[]=tools-resources&type[]=replication-study&use-date=default",
                     ['Accept' => 'application/vnd.elife.search+json; version=1']
                 ),
                 new Response(
@@ -131,6 +132,7 @@ final class HomepageContext extends Context
                             'retraction' => 0,
                             'registered-report' => 0,
                             'replication-study' => 0,
+                            'review-article' => 0,
                             'scientific-correspondence' => 0,
                             'short-report' => 0,
                             'tools-resources' => 0,
@@ -220,6 +222,7 @@ final class HomepageContext extends Context
                             'retraction' => 0,
                             'registered-report' => 0,
                             'replication-study' => 0,
+                            'review-article' => 0,
                             'scientific-correspondence' => 0,
                             'short-report' => 0,
                             'tools-resources' => 0,
@@ -437,7 +440,7 @@ final class HomepageContext extends Context
             $this->mockApiResponse(
                 new Request(
                     'GET',
-                    'http://api.elifesciences.org/search?for=&page=1&per-page=10&sort=date&order=desc&type[]=research-advance&type[]=research-article&type[]=research-communication&type[]=scientific-correspondence&type[]=short-report&type[]=tools-resources&type[]=replication-study&use-date=default',
+                    'http://api.elifesciences.org/search?for=&page=1&per-page=10&sort=date&order=desc&type[]=research-advance&type[]=research-article&type[]=research-communication&type[]=review-article&type[]=scientific-correspondence&type[]=short-report&type[]=tools-resources&type[]=replication-study&use-date=default',
                     ['Accept' => 'application/vnd.elife.search+json; version=1']
                 ),
                 new Response(
@@ -458,6 +461,7 @@ final class HomepageContext extends Context
                             'retraction' => 0,
                             'registered-report' => 0,
                             'replication-study' => 0,
+                            'review-article' => 0,
                             'scientific-correspondence' => 0,
                             'short-report' => 0,
                             'tools-resources' => 0,
@@ -551,7 +555,7 @@ final class HomepageContext extends Context
         $this->mockApiResponse(
             new Request(
                 'GET',
-                'http://api.elifesciences.org/search?for=&page=1&per-page=10&sort=date&order=desc&type[]=research-advance&type[]=research-article&type[]=research-communication&type[]=scientific-correspondence&type[]=short-report&type[]=tools-resources&type[]=replication-study&use-date=default',
+                'http://api.elifesciences.org/search?for=&page=1&per-page=10&sort=date&order=desc&type[]=research-advance&type[]=research-article&type[]=research-communication&type[]=review-article&type[]=scientific-correspondence&type[]=short-report&type[]=tools-resources&type[]=replication-study&use-date=default',
                 ['Accept' => 'application/vnd.elife.search+json; version=1']
             ),
             new Response(
@@ -572,6 +576,7 @@ final class HomepageContext extends Context
                         'retraction' => 0,
                         'registered-report' => 0,
                         'replication-study' => 0,
+                        'review-article' => 0,
                         'scientific-correspondence' => 0,
                         'short-report' => 0,
                         'tools-resources' => 0,
