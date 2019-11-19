@@ -63,7 +63,7 @@
         "ml/json-ld": "^1.1",
         "namshi/cuzzle": "^2.0",
         "phpspec/prophecy": "^1.7",
-        "phpunit/phpunit": "^6.5",
+        "phpunit/phpunit": "^7.1",
         "sensiolabs/security-checker": "^5.0",
         "symfony/phpunit-bridge": "^4.0"
     },
