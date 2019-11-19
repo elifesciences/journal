@@ -1299,17 +1299,20 @@
         },
         {
             "name": "isometriks/spam-bundle",
-            "version": "v1.0.0",
+            "version": "v1.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/isometriks/IsometriksSpamBundle.git",
-                "reference": "6750758208eacff872fb072843c39e0bda0a60f7"
+                "reference": "c0fae403e3b0c097282018c932fedff6d0b94de7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/isometriks/IsometriksSpamBundle/zipball/6750758208eacff872fb072843c39e0bda0a60f7",
-                "reference": "6750758208eacff872fb072843c39e0bda0a60f7",
+                "url": "https://api.github.com/repos/isometriks/IsometriksSpamBundle/zipball/c0fae403e3b0c097282018c932fedff6d0b94de7",
+                "reference": "c0fae403e3b0c097282018c932fedff6d0b94de7",
                 "shasum": ""
+            },
+            "require": {
+                "symfony/form": "~3.0|~4.0"
             },
             "type": "library",
             "autoload": {
@@ -1335,7 +1338,7 @@
                 "spam",
                 "symfony3"
             ],
-            "time": "2016-09-23T18:48:09+00:00",
+            "time": "2019-04-12T15:42:37+00:00",
             "extra": {
                 "patches_applied": {
                     "Add field label": "https://github.com/isometriks/IsometriksSpamBundle/pull/9.patch",
@@ -3322,6 +3325,7 @@
             ],
             "description": "Promoting the interoperability of container objects (DIC, SL, etc.)",
             "homepage": "https://github.com/container-interop/container-interop",
+            "abandoned": "psr/container",
             "time": "2017-02-14T19:40:03+00:00"
         },
         {
