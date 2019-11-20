@@ -1345,16 +1345,16 @@
         },
         {
             "name": "kevinrob/guzzle-cache-middleware",
-            "version": "v3.2.0",
+            "version": "v3.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Kevinrob/guzzle-cache-middleware.git",
-                "reference": "2a9684e8b19e2d2f1ef66eeb8da1a2ddb0d6d887"
+                "reference": "dda34401a68c54f06c9338a2cc30ae0aecd879a1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Kevinrob/guzzle-cache-middleware/zipball/2a9684e8b19e2d2f1ef66eeb8da1a2ddb0d6d887",
-                "reference": "2a9684e8b19e2d2f1ef66eeb8da1a2ddb0d6d887",
+                "url": "https://api.github.com/repos/Kevinrob/guzzle-cache-middleware/zipball/dda34401a68c54f06c9338a2cc30ae0aecd879a1",
+                "reference": "dda34401a68c54f06c9338a2cc30ae0aecd879a1",
                 "shasum": ""
             },
             "require": {
@@ -1418,7 +1418,7 @@
                 "rfc7234",
                 "validation"
             ],
-            "time": "2017-11-21T12:35:22+00:00"
+            "time": "2018-01-10T13:55:22+00:00"
         },
         {
             "name": "knpuniversity/oauth2-client-bundle",
