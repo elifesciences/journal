@@ -62,9 +62,9 @@ final class FooterFactory
             new MainMenu([
                 new Link('Research categories', $this->urlGenerator->generate('subjects')),
                 new Link('Author guide',
-                    'https://submit.elifesciences.org/html/elife_author_instructions.html'),
+                    'https://reviewer.elifesciences.org/author-guide/editorial-process'),
                 new Link('Reviewer guide',
-                    'https://submit.elifesciences.org/html/elife_reviewer_instructions.html'),
+                    'https://reviewer.elifesciences.org/reviewer-guide/review-process'),
                 new Link('About', $this->urlGenerator->generate('about')),
                 new Link('Inside eLife', $this->urlGenerator->generate('inside-elife')),
                 new Link('Community', $this->urlGenerator->generate('community')),
