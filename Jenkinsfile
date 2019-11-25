@@ -73,7 +73,7 @@ elifePipeline {
             )
         }
 
-        stage 'Deploy on demo, continuumtest', {
+        stage 'Deploy on demo, continuumtest, continuumtestpreview', {
             def deployments = [
                 demo: {
                     lock('journal--demo') {
