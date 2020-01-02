@@ -1562,7 +1562,6 @@ final class ArticleControllerTest extends PageTestCase
         );
     }
 
-
     /**
      * @test
      */
