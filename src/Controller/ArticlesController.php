@@ -855,8 +855,11 @@ final class ArticlesController extends Controller
                     $infoBars[] = new InfoBar('This research is available in a <a href="'.$rdsArticles[$item->getId()].'">reproducible view</a>.', InfoBar::TYPE_WARNING);
                 }
 
-                if (mb_stristr($item->getTitle(), 'aging')) {
-                    $infoBars[] = new InfoBar('Read the Aging call for papers', InfoBar::TYPE_INFO);
+                $infoBarArticles = $this->getParameter('info_bar_articles');
+                foreach ($infoBarArticles as $infoBarName => $infoBarConfiguration) {
+                    if (in_array($item->getId(), $infoBarConfiguration['ids'])) {
+                        $infoBars[] = new InfoBar($infoBarConfiguration['text'], InfoBar::TYPE_INFO);
+                    }
                 }
 
                 return $infoBars;

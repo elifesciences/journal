@@ -1448,14 +1448,14 @@ final class ArticleControllerTest extends PageTestCase
     /**
      * @test
      */
-    public function it_displays_dismissable_info_bar_when_article_is_relevant()
+    public function it_displays_info_bar_when_article_is_relevant()
     {
         $client = static::createClient();
 
         $this->mockApiResponse(
             new Request(
                 'GET',
-                'http://api.elifesciences.org/articles/12345',
+                'http://api.elifesciences.org/articles/28350',
                 ['Accept' => 'application/vnd.elife.article-poa+json; version=2, application/vnd.elife.article-vor+json; version=3']
             ),
             new Response(
@@ -1464,16 +1464,16 @@ final class ArticleControllerTest extends PageTestCase
                 json_encode([
                     'status' => 'poa',
                     'stage' => 'published',
-                    'id' => '12345',
+                    'id' => '28350',
                     'version' => 1,
                     'type' => 'research-article',
-                    'doi' => '10.7554/eLife.12345',
+                    'doi' => '10.7554/eLife.28350',
                     'title' => 'Aging in turtles',
                     'published' => '2010-01-01T00:00:00Z',
                     'versionDate' => '2010-01-01T00:00:00Z',
                     'statusDate' => '2010-01-01T00:00:00Z',
                     'volume' => 1,
-                    'elocationId' => 'e12345',
+                    'elocationId' => 'e28350',
                     'copyright' => [
                         'license' => 'CC-BY-4.0',
                         'holder' => 'Author One',
@@ -1516,7 +1516,7 @@ final class ArticleControllerTest extends PageTestCase
         $this->mockApiResponse(
             new Request(
                 'GET',
-                'http://api.elifesciences.org/articles/12345/versions',
+                'http://api.elifesciences.org/articles/28350/versions',
                 [
                     'Accept' => [
                         'application/vnd.elife.article-history+json; version=1',
@@ -1531,16 +1531,16 @@ final class ArticleControllerTest extends PageTestCase
                         [
                             'status' => 'poa',
                             'stage' => 'published',
-                            'id' => '12345',
+                            'id' => '28350',
                             'version' => 1,
                             'type' => 'research-article',
-                            'doi' => '10.7554/eLife.12345',
+                            'doi' => '10.7554/eLife.28350',
                             'title' => 'Aging in turtles',
                             'published' => '2010-01-01T00:00:00Z',
                             'versionDate' => '2010-01-01T00:00:00Z',
                             'statusDate' => '2010-01-01T00:00:00Z',
                             'volume' => 1,
-                            'elocationId' => 'e12345',
+                            'elocationId' => 'e28350',
                             'copyright' => [
                                 'license' => 'CC-BY-4.0',
                                 'holder' => 'Author One',
@@ -1553,7 +1553,7 @@ final class ArticleControllerTest extends PageTestCase
             )
         );
 
-        $crawler = $client->request('GET', '/articles/12345');
+        $crawler = $client->request('GET', '/articles/28350');
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertContains(
