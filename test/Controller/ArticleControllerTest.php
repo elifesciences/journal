@@ -1464,6 +1464,24 @@ final class ArticleControllerTest extends PageTestCase
     /**
      * @test
      */
+    public function it_does_not_display_dismissible_info_bars_when_it_is_a_poa_as_it_has_already_different_info_bars()
+    {
+        $client = static::createClient();
+
+        $crawler = $client->request('GET', $this->getPoaUrl('28350'));
+
+        $this->assertSame(200, $client->getResponse()->getStatusCode());
+
+        $this->assertEquals(1, $crawler->filter('.info-bar')->count());
+        //$this->assertNotContains(
+        //    'Read the Aging call for papers',
+        //    array_map('trim', $crawler->filter('.info-bar')->eq(0)->extract(['_text']))
+        //);
+    }
+
+    /**
+     * @test
+     */
     public function it_displays_previous_versions()
     {
         $client = static::createClient();
@@ -2662,5 +2680,111 @@ final class ArticleControllerTest extends PageTestCase
         );
 
         return '/articles/00001v1';
+    }
+
+    public function getPoaUrl($articleId = '12345') : string
+    {
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                "http://api.elifesciences.org/articles/${articleId}",
+                ['Accept' => 'application/vnd.elife.article-poa+json; version=2, application/vnd.elife.article-vor+json; version=3']
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.article-poa+json; version=2'],
+                json_encode([
+                    'status' => 'poa',
+                    'stage' => 'published',
+                    'id' => $articleId,
+                    'version' => 1,
+                    'type' => 'research-article',
+                    'doi' => "10.7554/eLife.{$articleId}",
+                    'title' => 'Article title',
+                    'published' => '2010-01-01T00:00:00Z',
+                    'versionDate' => '2010-01-01T00:00:00Z',
+                    'statusDate' => '2010-01-01T00:00:00Z',
+                    'volume' => 1,
+                    'elocationId' => "e{$articleId}",
+                    'copyright' => [
+                        'license' => 'CC-BY-4.0',
+                        'holder' => 'Author One',
+                        'statement' => 'Copyright statement.',
+                    ],
+                    'authorLine' => 'Author One et al.',
+                    'authors' => [
+                        [
+                            'type' => 'person',
+                            'name' => [
+                                'preferred' => 'Author One',
+                                'index' => 'Author One',
+                            ],
+                        ],
+                    ],
+                    'reviewers' => [
+                        [
+                            'name' => [
+                                'preferred' => 'Reviewer 1',
+                                'index' => 'Reviewer 1',
+                            ],
+                            'role' => 'Reviewer',
+                            'affiliations' => [
+                                [
+                                    'name' => ['Institution'],
+                                    'address' => [
+                                        'formatted' => ['Country'],
+                                        'components' => [
+                                            'country' => 'Country',
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ])
+            )
+        );
+
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                "http://api.elifesciences.org/articles/{$articleId}/versions",
+                [
+                    'Accept' => [
+                        'application/vnd.elife.article-history+json; version=1',
+                    ],
+                ]
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.article-history+json; version=1'],
+                json_encode([
+                    'versions' => [
+                        [
+                            'status' => 'poa',
+                            'stage' => 'published',
+                            'id' => $articleId,
+                            'version' => 1,
+                            'type' => 'research-article',
+                            'doi' => "10.7554/eLife.{$articleId}",
+                            'title' => 'Article title',
+                            'published' => '2010-01-01T00:00:00Z',
+                            'versionDate' => '2010-01-01T00:00:00Z',
+                            'statusDate' => '2010-01-01T00:00:00Z',
+                            'volume' => 1,
+                            'elocationId' => "e{$articleId}",
+                            'copyright' => [
+                                'license' => 'CC-BY-4.0',
+                                'holder' => 'Author One',
+                                'statement' => 'Copyright statement.',
+                            ],
+                            'authorLine' => 'Author One et al.',
+                        ],
+                    ],
+                ])
+            )
+        );
+
+        return "/articles/{$articleId}";
     }
 }
