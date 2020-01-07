@@ -31,10 +31,9 @@ parameters:
     subject_rewrites: []
     rds_articles:
         '16846': https://repro.elifesciences.org/example.html
-    # TODO: rename to dismissible_info_bar_articles?
-    info_bar_articles:
+    dismissible_info_bars:
         aging:
-            ids:
+            article_ids:
               - 28350
             text: "Read the Aging call for papers"
     cache_control: private, no-cache, no-store, must-revalidate
