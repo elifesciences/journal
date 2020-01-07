@@ -855,9 +855,12 @@ final class ArticlesController extends Controller
                     $infoBars[] = new InfoBar('This research is available in a <a href="'.$rdsArticles[$item->getId()].'">reproducible view</a>.', InfoBar::TYPE_WARNING);
                 }
 
-                $infoBarArticles = $this->getParameter('info_bar_articles');
-                foreach ($infoBarArticles as $infoBarName => $infoBarConfiguration) {
+                $dismissibleInfoBars = $this->getParameter('info_bar_articles');
+                foreach ($dismissibleInfoBars as $infoBarName => $infoBarConfiguration) {
                     if (in_array($item->getId(), $infoBarConfiguration['ids'])) {
+                        if ($item instanceof ArticlePoA) {
+                            continue;
+                        }
                         // TODO: use InfoBar::TYPE_DISMISSIBLE when available
                         // TODO: pass in `id`
                         // TODO: pass in `cookieDuration` or `cookieExpires` as constants
