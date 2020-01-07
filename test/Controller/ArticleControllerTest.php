@@ -2558,8 +2558,6 @@ final class ArticleControllerTest extends PageTestCase
 
     private function getPreviousVersionUrl() : string
     {
-        $client = static::createClient();
-
         $this->mockApiResponse(
             new Request(
                 'GET',
