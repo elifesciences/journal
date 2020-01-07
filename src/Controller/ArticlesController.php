@@ -858,6 +858,9 @@ final class ArticlesController extends Controller
                 $infoBarArticles = $this->getParameter('info_bar_articles');
                 foreach ($infoBarArticles as $infoBarName => $infoBarConfiguration) {
                     if (in_array($item->getId(), $infoBarConfiguration['ids'])) {
+                        // TODO: use InfoBar::TYPE_DISMISSIBLE when available
+                        // TODO: pass in `id`
+                        // TODO: pass in `cookieDuration` or `cookieExpires` as constants
                         $infoBars[] = new InfoBar($infoBarConfiguration['text'], InfoBar::TYPE_INFO);
                     }
                 }
