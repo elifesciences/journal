@@ -1452,7 +1452,7 @@ final class ArticleControllerTest extends PageTestCase
     {
         $client = static::createClient();
 
-        $crawler = $client->request('GET', $this->getUrl('28350'));
+        $crawler = $client->request('GET', $this->getUrl('26231'));
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertContains(
@@ -1468,7 +1468,7 @@ final class ArticleControllerTest extends PageTestCase
     {
         $client = static::createClient();
 
-        $crawler = $client->request('GET', $this->getPoaUrl('28350'));
+        $crawler = $client->request('GET', $this->getPoaUrl('26231'));
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
 

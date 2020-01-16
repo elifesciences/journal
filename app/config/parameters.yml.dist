@@ -38,7 +38,7 @@ parameters:
     info_bar_articles:
         aging:
             ids:
-              - 12345
+              - 26231
             text: "Read the Aging call for papers"
     cache_control: public, max-age=300, stale-while-revalidate=300, stale-if-error=86400
     feature_xpub: true

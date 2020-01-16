@@ -34,7 +34,7 @@ parameters:
     dismissible_info_bars:
         aging:
             article_ids:
-              - 28350
+              - 26231
             text: "Read the Aging call for papers"
     cache_control: private, no-cache, no-store, must-revalidate
     feature_xpub: true
