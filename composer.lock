@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f544679660858fc4b4adeb4fd3da538f",
+    "content-hash": "cb2589aa75e56f8c822c99a93b9eaf00",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -907,16 +907,16 @@
         },
         {
             "name": "elife/patterns",
-            "version": "dev-master",
+            "version": "dev-update-dismissible",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/patterns-php.git",
-                "reference": "97b63c6ee4e71f468b82c2deff27d546260ddd16"
+                "reference": "c69ab72e452d19f036a47104bf2d8bc82f1be632"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/97b63c6ee4e71f468b82c2deff27d546260ddd16",
-                "reference": "97b63c6ee4e71f468b82c2deff27d546260ddd16",
+                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/c69ab72e452d19f036a47104bf2d8bc82f1be632",
+                "reference": "c69ab72e452d19f036a47104bf2d8bc82f1be632",
                 "shasum": ""
             },
             "require": {
@@ -957,9 +957,9 @@
             ],
             "description": "eLife patterns",
             "support": {
-                "source": "https://github.com/elifesciences/patterns-php/tree/master"
+                "source": "https://github.com/elifesciences/patterns-php/tree/update-dismissible"
             },
-            "time": "2019-11-21T08:54:40+00:00"
+            "time": "2020-01-16T08:58:22+00:00"
         },
         {
             "name": "fabpot/goutte",
@@ -3322,7 +3322,6 @@
             ],
             "description": "Promoting the interoperability of container objects (DIC, SL, etc.)",
             "homepage": "https://github.com/container-interop/container-interop",
-            "abandoned": "psr/container",
             "time": "2017-02-14T19:40:03+00:00"
         },
         {
