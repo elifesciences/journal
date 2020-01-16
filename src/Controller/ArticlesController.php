@@ -862,7 +862,6 @@ final class ArticlesController extends Controller
                         if ($item instanceof ArticlePoA) {
                             continue;
                         }
-                        // TODO: pass in `cookieDuration` or `cookieExpires` as constants
                         $infoBars[] = new InfoBar($infoBarConfiguration['text'], InfoBar::TYPE_DISMISSIBLE, $infoBarName, new DateTimeImmutable('+365 days'));
                     }
                 }
