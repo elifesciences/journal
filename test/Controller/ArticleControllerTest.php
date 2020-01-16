@@ -1473,10 +1473,10 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertSame(200, $client->getResponse()->getStatusCode());
 
         $this->assertEquals(1, $crawler->filter('.info-bar')->count());
-        //$this->assertNotContains(
-        //    'Read the Aging call for papers',
-        //    array_map('trim', $crawler->filter('.info-bar')->eq(0)->extract(['_text']))
-        //);
+        $this->assertEquals(
+            [],
+            array_map('trim', $crawler->filter('.info-bar--dismissible')->extract(['_text']))
+        );
     }
 
     /**
