@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "cb2589aa75e56f8c822c99a93b9eaf00",
+    "content-hash": "f544679660858fc4b4adeb4fd3da538f",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -907,16 +907,16 @@
         },
         {
             "name": "elife/patterns",
-            "version": "dev-update-dismissible",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/patterns-php.git",
-                "reference": "c69ab72e452d19f036a47104bf2d8bc82f1be632"
+                "reference": "60bf9a81b54d007418c19b6cedd79c25427c711b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/c69ab72e452d19f036a47104bf2d8bc82f1be632",
-                "reference": "c69ab72e452d19f036a47104bf2d8bc82f1be632",
+                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/60bf9a81b54d007418c19b6cedd79c25427c711b",
+                "reference": "60bf9a81b54d007418c19b6cedd79c25427c711b",
                 "shasum": ""
             },
             "require": {
@@ -957,9 +957,9 @@
             ],
             "description": "eLife patterns",
             "support": {
-                "source": "https://github.com/elifesciences/patterns-php/tree/update-dismissible"
+                "source": "https://github.com/elifesciences/patterns-php/tree/master"
             },
-            "time": "2020-01-16T08:58:22+00:00"
+            "time": "2020-01-17T11:57:51+00:00"
         },
         {
             "name": "fabpot/goutte",
