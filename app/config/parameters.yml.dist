@@ -35,11 +35,7 @@ parameters:
         to_name: To Subject Name
     rds_articles:
         '30274': https://repro.elifesciences.org/example.html
-    info_bar_articles:
-        aging:
-            ids:
-              - 26231
-            text: "Read the Aging call for papers"
+    dismissible_info_bars: {}
     cache_control: public, max-age=300, stale-while-revalidate=300, stale-if-error=86400
     feature_xpub: true
     calls_to_action:
