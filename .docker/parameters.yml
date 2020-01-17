@@ -36,7 +36,7 @@ parameters:
             id: aging-special-issue
             text: '<a href="https://elifesciences.org/inside-elife/4f706531/special-issue-call-for-papers-in-aging-geroscience-and-longevity">Read the call for papers</a> for the eLife Special Issue on Aging, Geroscience and Longevity'
             article_ids:
-              - 26231
+              - '26231'
     cache_control: private, no-cache, no-store, must-revalidate
     feature_xpub: true
     calls_to_action:
