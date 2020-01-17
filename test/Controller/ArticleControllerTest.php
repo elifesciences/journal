@@ -1455,9 +1455,9 @@ final class ArticleControllerTest extends PageTestCase
         $crawler = $client->request('GET', $this->getUrl('26231'));
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
-        $this->assertContains(
-            'Read the Aging call for papers',
-            array_map('trim', $crawler->filter('.info-bar--dismissible')->extract(['_text']))
+        $this->assertEquals(
+            '<a href="https://elifesciences.org/inside-elife/4f706531/special-issue-call-for-papers-in-aging-geroscience-and-longevity">Read the call for papers</a> for the eLife Special Issue on Aging, Geroscience and Longevity',
+            $crawler->filter('.info-bar--dismissible .info-bar__text')->html()
         );
     }
 
