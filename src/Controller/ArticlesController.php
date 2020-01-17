@@ -857,12 +857,12 @@ final class ArticlesController extends Controller
                 }
 
                 $dismissibleInfoBars = $this->getParameter('dismissible_info_bars');
-                foreach ($dismissibleInfoBars as $infoBarName => $infoBarConfiguration) {
+                foreach ($dismissibleInfoBars as $infoBarConfiguration) {
                     if (in_array($item->getId(), $infoBarConfiguration['article_ids'])) {
                         if ($item instanceof ArticlePoA) {
                             continue;
                         }
-                        $infoBars[] = new InfoBar($infoBarConfiguration['text'], InfoBar::TYPE_DISMISSIBLE, $infoBarName, new DateTimeImmutable('+365 days'));
+                        $infoBars[] = new InfoBar($infoBarConfiguration['text'], InfoBar::TYPE_DISMISSIBLE, $infoBarConfiguration['id'], new DateTimeImmutable('+365 days'));
                     }
                 }
 
