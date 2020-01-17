@@ -47,6 +47,8 @@ use function uksort;
 
 final class ArticlesController extends Controller
 {
+    const DISMISSIBLE_INFO_BAR_COOKIE_DURATION = '+365 days';
+
     use HasPages;
 
     public function textAction(Request $request, string $id, int $version = null) : Response
@@ -862,7 +864,7 @@ final class ArticlesController extends Controller
                         if ($item instanceof ArticlePoA) {
                             continue;
                         }
-                        $infoBars[] = new InfoBar($infoBarConfiguration['text'], InfoBar::TYPE_DISMISSIBLE, $infoBarConfiguration['id'], new DateTimeImmutable('+365 days'));
+                        $infoBars[] = new InfoBar($infoBarConfiguration['text'], InfoBar::TYPE_DISMISSIBLE, $infoBarConfiguration['id'], new DateTimeImmutable(self::DISMISSIBLE_INFO_BAR_COOKIE_DURATION));
                     }
                 }
 
