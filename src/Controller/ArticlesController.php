@@ -2,6 +2,7 @@
 
 namespace eLife\Journal\Controller;
 
+use DateTimeImmutable;
 use eLife\ApiSdk\Collection\EmptySequence;
 use eLife\ApiSdk\Collection\PromiseSequence;
 use eLife\ApiSdk\Collection\Sequence;
@@ -46,6 +47,8 @@ use function uksort;
 
 final class ArticlesController extends Controller
 {
+    const DISMISSIBLE_INFO_BAR_COOKIE_DURATION = '+365 days';
+
     use HasPages;
 
     public function textAction(Request $request, string $id, int $version = null) : Response
@@ -853,6 +856,16 @@ final class ArticlesController extends Controller
 
                 if (isset($rdsArticles[$item->getId()])) {
                     $infoBars[] = new InfoBar('This research is available in a <a href="'.$rdsArticles[$item->getId()].'">reproducible view</a>.', InfoBar::TYPE_WARNING);
+                }
+
+                $dismissibleInfoBars = $this->getParameter('dismissible_info_bars');
+                foreach ($dismissibleInfoBars as $infoBarConfiguration) {
+                    if (in_array($item->getId(), $infoBarConfiguration['article_ids'])) {
+                        if ($item instanceof ArticlePoA) {
+                            continue;
+                        }
+                        $infoBars[] = new InfoBar($infoBarConfiguration['text'], InfoBar::TYPE_DISMISSIBLE, $infoBarConfiguration['id'], new DateTimeImmutable(self::DISMISSIBLE_INFO_BAR_COOKIE_DURATION));
+                    }
                 }
 
                 return $infoBars;
