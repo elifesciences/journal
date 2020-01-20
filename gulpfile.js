@@ -289,7 +289,7 @@ const criticalCssConfig = (function () {
         return {
             article: global.concat(
                 /\.content-header__item_toggle--.*$/,
-                /\.info-bar.*/,
+                /\.info-bar((--|__).+)?$/,
                 /\.view-selector.*/,
                 'h2',
                 '.article-section__header_text',
