@@ -1452,7 +1452,7 @@ final class ArticleControllerTest extends PageTestCase
     {
         $client = static::createClient();
 
-        $crawler = $client->request('GET', $this->getUrl('00569'));
+        $crawler = $client->request('GET', $this->getUrl('26231'));
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertEquals(
