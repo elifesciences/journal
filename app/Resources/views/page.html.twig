@@ -2,6 +2,10 @@
 
 {% block head %}
 
+    <script>
+        document.querySelector('html').classList.add('js');
+    </script>
+
     <style>
         {% if criticalCss is not defined %}
         {% set criticalCss = 'default' %}
