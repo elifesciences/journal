@@ -1,5 +1,23 @@
 {% extends '::page.html.twig' %}
 
+{% block head %}
+
+    {{ parent() }}
+
+    <style>
+        iframe.stencila-content {
+            border: none;
+            height: calc(100vh - 96px - 66px);
+            width: 100%;
+        }
+    </style>
+{% endblock %}
+
+
 {% block body %}
-    nothing
+    <iframe
+        src="/"
+        class="stencila-content"
+    ></iframe>
+
 {% endblock %}
