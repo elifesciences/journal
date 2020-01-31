@@ -616,7 +616,7 @@ final class ArticlesController extends Controller
                     'figures' => $all['figures'],
                     'videos' => $all['videos'],
                     'tables' => $all['tables'],
-                    'data sets' => $all['generatedDataSets']->append(...$all['usedDataSets']),
+                    'data sets' => $all['dataAvailability']->append(...$all['generatedDataSets'], ...$all['usedDataSets']),
                     'additional files' => $all['additionalFiles'],
                 ], Callback::method('notEmpty'));
             })
