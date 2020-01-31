@@ -748,12 +748,22 @@ final class ArticlesController extends Controller
 
     public function rdsAction(Request $request, string $id) : Response
   {
+    $rdsArticles = $this->getParameter('rds_articles');
+    if (!isset($rdsArticles[$id])) {
+      throw new NotFoundHttpException('No RDS companion associated with this article');
+    }
+
     $arguments = $this->defaultArticleArguments($request, $id);
     $arguments['footer'] = null;
     $arguments['callsToAction'] = null;
     $arguments['emailCta'] = null;
 
-    $arguments['rdsUri'] = "https://lens.elifesciences.org/${id}";
+    $rdsUri = $rdsArticles[$id];
+    $arguments['infoBars'][] = new InfoBar('View the <a href="'.$this->get('router')->generate('article', ['id' => $id]).'">original article</a>.', InfoBar::TYPE_WARNING);
+
+
+    $arguments['rdsUri'] = $rdsUri;
+
 
     return new Response($this->get('templating')->render('::article-rds.html.twig', $arguments));
   }
@@ -867,7 +877,7 @@ final class ArticlesController extends Controller
                 $rdsArticles = $this->getParameter('rds_articles');
 
                 if (isset($rdsArticles[$item->getId()])) {
-                    $infoBars[] = new InfoBar('This research is available in a <a href="'.$rdsArticles[$item->getId()].'">reproducible view</a>.', InfoBar::TYPE_WARNING);
+                    $infoBars[] = new InfoBar('This research is available in a <a href="'.$this->get('router')->generate('article-rds', [$item]).'">reproducible view</a>.', InfoBar::TYPE_WARNING);
                 }
 
                 $dismissibleInfoBars = $this->getParameter('dismissible_info_bars');

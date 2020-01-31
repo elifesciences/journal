@@ -30,7 +30,7 @@ parameters:
     xpub_client_secret: ThisIsASecret
     subject_rewrites: []
     rds_articles:
-        '16846': https://repro.elifesciences.org/example.html
+        '16846': https://lens.elifesciences.org/16846
     dismissible_info_bars:
         aging:
             id: aging-special-issue
