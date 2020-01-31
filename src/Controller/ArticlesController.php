@@ -746,6 +746,16 @@ final class ArticlesController extends Controller
         return new Response(preg_replace('~\R~u', "\r\n", $this->get('templating')->render('::article.ris.twig', $arguments)), Response::HTTP_OK, ['Content-Type' => 'application/x-research-info-systems']);
     }
 
+    public function rdsAction(Request $request, string $id) : Response
+  {
+    $arguments = $this->defaultArticleArguments($request, $id);
+    $arguments['footer'] = null;
+    $arguments['callsToAction'] = null;
+    $arguments['emailCta'] = null;
+
+    return new Response($this->get('templating')->render('::article-rds.html.twig', $arguments));
+  }
+
     public function xmlAction(Request $request, string $id, int $version = null) : Response
     {
         $arguments = $this->defaultArticleArguments($request, $id, $version);
