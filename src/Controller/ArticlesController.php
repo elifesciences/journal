@@ -753,6 +753,8 @@ final class ArticlesController extends Controller
     $arguments['callsToAction'] = null;
     $arguments['emailCta'] = null;
 
+    $arguments['rdsUri'] = "https://lens.elifesciences.org/${id}";
+
     return new Response($this->get('templating')->render('::article-rds.html.twig', $arguments));
   }
 
