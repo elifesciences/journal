@@ -748,6 +748,10 @@ final class ArticlesController extends Controller
 
     public function rdsAction(Request $request, string $id) : Response
   {
+    if (!$this->isGranted('FEATURE_RDS')) {
+      throw new NotFoundHttpException('Not allowed to see RDS companion article');
+    }
+
     $rdsArticles = $this->getParameter('rds_articles');
     if (!isset($rdsArticles[$id])) {
       throw new NotFoundHttpException('No RDS companion associated with this article');
@@ -876,7 +880,7 @@ final class ArticlesController extends Controller
 
                 $rdsArticles = $this->getParameter('rds_articles');
 
-                if (isset($rdsArticles[$item->getId()])) {
+                if (isset($rdsArticles[$item->getId()]) && $this->isGranted('FEATURE_RDS')) {
                     $infoBars[] = new InfoBar('This research is available in a <a href="'.$this->get('router')->generate('article-rds', [$item]).'">reproducible view</a>.', InfoBar::TYPE_WARNING);
                 }
 
