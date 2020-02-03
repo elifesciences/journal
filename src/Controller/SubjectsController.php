@@ -23,12 +23,12 @@ use eLife\Patterns\ViewModel\ListingTeasers;
 use eLife\Patterns\ViewModel\ProfileSnippet;
 use eLife\Patterns\ViewModel\SeeMoreLink;
 use eLife\Patterns\ViewModel\Teaser;
+use function GuzzleHttp\Promise\all;
+use function GuzzleHttp\Promise\promise_for;
 use Pagerfanta\Pagerfanta;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use function GuzzleHttp\Promise\all;
-use function GuzzleHttp\Promise\promise_for;
 
 final class SubjectsController extends Controller
 {

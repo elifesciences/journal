@@ -2,10 +2,10 @@
 
 namespace eLife\Journal\DependencyInjection;
 
-use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
 use function array_keys;
 use function class_exists;
+use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 final class RemoveOptionalServicesPass implements CompilerPassInterface
 {

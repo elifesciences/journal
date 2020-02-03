@@ -37,12 +37,12 @@ use eLife\Patterns\ViewModel\Paragraph;
 use eLife\Patterns\ViewModel\ReadMoreItem;
 use eLife\Patterns\ViewModel\SpeechBubble;
 use eLife\Patterns\ViewModel\ViewSelector;
+use function GuzzleHttp\Promise\all;
+use function GuzzleHttp\Promise\promise_for;
 use GuzzleHttp\Promise\PromiseInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use function GuzzleHttp\Promise\all;
-use function GuzzleHttp\Promise\promise_for;
 use function uksort;
 
 final class ArticlesController extends Controller

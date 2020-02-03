@@ -5,12 +5,12 @@ namespace test\eLife\Journal\Guzzle;
 use eLife\Journal\Guzzle\SubjectRewritingMiddleware;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use function GuzzleHttp\Psr7\str;
 use Psr\Http\Message\RequestInterface;
 use test\eLife\Journal\Assertions;
 use test\eLife\Journal\KernelTestCase;
 use test\eLife\Journal\Providers;
 use Traversable;
-use function GuzzleHttp\Psr7\str;
 
 final class SubjectRewritingMiddlewareTest extends KernelTestCase
 {

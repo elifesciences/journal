@@ -2,10 +2,10 @@
 
 namespace eLife\Journal\Controller;
 
-use Symfony\Component\HttpFoundation\Response;
-use Throwable;
 use function GuzzleHttp\Promise\all;
 use function GuzzleHttp\Promise\exception_for;
+use Symfony\Component\HttpFoundation\Response;
+use Throwable;
 
 final class StatusController extends Controller
 {

@@ -9,8 +9,8 @@ use eLife\ApiSdk\Model\Subject;
 use eLife\Journal\Helper\LicenceUri;
 use eLife\Journal\Helper\ModelName;
 use eLife\Patterns\ViewModel;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use function strip_tags;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 final class ArticleContentHeaderConverter implements ViewModelConverter
 {

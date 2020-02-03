@@ -2,7 +2,6 @@
 
 namespace test\eLife\Journal\ViewModel\Converter;
 
-use eLife\ApiSdk\Model\Interview;
 use eLife\Journal\ViewModel\Converter\InterviewContentHeaderConverter;
 use eLife\Patterns\ViewModel\ContentHeader;
 

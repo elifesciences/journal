@@ -22,11 +22,11 @@ use eLife\Patterns\ViewModel\SearchBox;
 use eLife\Patterns\ViewModel\SortControl;
 use eLife\Patterns\ViewModel\SortControlOption;
 use eLife\Patterns\ViewModel\Teaser;
+use function GuzzleHttp\Promise\promise_for;
 use GuzzleHttp\Promise\PromiseInterface;
 use Pagerfanta\Pagerfanta;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use function GuzzleHttp\Promise\promise_for;
 
 final class SearchController extends Controller
 {

@@ -7,7 +7,6 @@ use eLife\ApiSdk\Model\Collection;
 use eLife\ApiSdk\Model\Identifier;
 use eLife\Journal\Helper\Callback;
 use eLife\Journal\Helper\HasPages;
-use eLife\Journal\Helper\Paginator;
 use eLife\Patterns\ViewModel\ContentHeader;
 use eLife\Patterns\ViewModel\ContextualData;
 use eLife\Patterns\ViewModel\ListHeading;

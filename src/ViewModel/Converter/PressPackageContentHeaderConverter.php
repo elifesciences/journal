@@ -8,8 +8,8 @@ use eLife\Journal\Helper\LicenceUri;
 use eLife\Patterns\ViewModel;
 use eLife\Patterns\ViewModel\Link;
 use eLife\Patterns\ViewModel\Meta;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use function strip_tags;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 final class PressPackageContentHeaderConverter implements ViewModelConverter
 {

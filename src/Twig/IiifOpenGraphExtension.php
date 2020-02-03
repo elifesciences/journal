@@ -4,9 +4,9 @@ namespace eLife\Journal\Twig;
 
 use eLife\ApiSdk\Model\Image;
 use eLife\Journal\Helper\CreatesIiifUri;
+use function min;
 use Twig_Extension;
 use Twig_Function;
-use function min;
 
 final class IiifOpenGraphExtension extends Twig_Extension
 {

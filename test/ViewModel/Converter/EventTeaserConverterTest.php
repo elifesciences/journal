@@ -2,7 +2,6 @@
 
 namespace test\eLife\Journal\ViewModel\Converter;
 
-use eLife\ApiSdk\Model\Event;
 use eLife\Journal\ViewModel\Converter\EventTeaserConverter;
 use eLife\Patterns\ViewModel\Teaser;
 

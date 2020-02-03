@@ -2,7 +2,6 @@
 
 namespace test\eLife\Journal\ViewModel\Converter;
 
-use eLife\ApiSdk\Model\Collection;
 use eLife\Journal\ViewModel\Converter\CollectionContentHeaderConverter;
 use eLife\Journal\ViewModel\Converter\ViewModelConverter;
 use eLife\Journal\ViewModel\Factory\ContentHeaderImageFactory;

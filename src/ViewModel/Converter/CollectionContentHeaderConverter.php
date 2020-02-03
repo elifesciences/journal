@@ -6,8 +6,8 @@ use eLife\ApiSdk\Model\Collection;
 use eLife\Journal\ViewModel\Factory\ContentHeaderImageFactory;
 use eLife\Patterns\ViewModel;
 use eLife\Patterns\ViewModel\Link;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use function strip_tags;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 final class CollectionContentHeaderConverter implements ViewModelConverter
 {

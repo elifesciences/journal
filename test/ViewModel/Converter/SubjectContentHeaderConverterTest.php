@@ -2,7 +2,6 @@
 
 namespace test\eLife\Journal\ViewModel\Converter;
 
-use eLife\ApiSdk\Model\Subject;
 use eLife\Journal\ViewModel\Converter\SubjectContentHeaderConverter;
 use eLife\Journal\ViewModel\Factory\ContentHeaderImageFactory;
 use eLife\Journal\ViewModel\Factory\PictureBuilderFactory;

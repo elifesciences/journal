@@ -2,7 +2,6 @@
 
 namespace test\eLife\Journal\ViewModel\Converter;
 
-use eLife\ApiSdk\Model\Collection;
 use eLife\ApiSdk\Model\Cover;
 use eLife\ApiSdk\Model\HasBanner;
 use eLife\ApiSdk\Model\HasThumbnail;

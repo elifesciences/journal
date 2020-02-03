@@ -9,12 +9,12 @@ use eLife\Journal\Pagerfanta\SequenceAdapter;
 use eLife\Patterns\ViewModel\ContentHeader;
 use eLife\Patterns\ViewModel\ListingTeasers;
 use eLife\Patterns\ViewModel\Teaser;
+use function GuzzleHttp\Promise\promise_for;
 use InvalidArgumentException;
 use Pagerfanta\Pagerfanta;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use function GuzzleHttp\Promise\promise_for;
 
 final class ArticleTypesController extends Controller
 {

@@ -3,14 +3,13 @@
 namespace test\eLife\Journal\ViewModel\Converter;
 
 use ComposerLocator;
-use eLife\ApiSdk\Collection;
 use eLife\ApiSdk\Model;
 use eLife\Journal\ViewModel\Converter\ViewModelConverter;
+use function GuzzleHttp\json_decode;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Traversable;
-use function GuzzleHttp\json_decode;
 
 abstract class ModelConverterTestCase extends TestCase
 {

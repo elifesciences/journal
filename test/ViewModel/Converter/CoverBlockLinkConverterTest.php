@@ -2,7 +2,6 @@
 
 namespace test\eLife\Journal\ViewModel\Converter;
 
-use eLife\ApiSdk\Model\Cover;
 use eLife\Journal\ViewModel\Converter\CoverBlockLinkConverter;
 use eLife\Journal\ViewModel\Factory\PictureBuilderFactory;
 use eLife\Patterns\ViewModel;

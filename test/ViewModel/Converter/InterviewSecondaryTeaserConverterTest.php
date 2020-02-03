@@ -2,7 +2,6 @@
 
 namespace test\eLife\Journal\ViewModel\Converter;
 
-use eLife\ApiSdk\Model\Interview;
 use eLife\Journal\ViewModel\Converter\InterviewSecondaryTeaserConverter;
 use eLife\Journal\ViewModel\Converter\ViewModelConverter;
 use eLife\Patterns\ViewModel;

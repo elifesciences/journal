@@ -6,9 +6,9 @@ use eLife\ApiSdk\Model\ArticleVersion;
 use eLife\ApiSdk\Model\ArticleVoR;
 use eLife\Journal\Helper\DownloadLink;
 use eLife\Journal\Helper\DownloadLinkUriGenerator;
+use function eLife\Patterns\mixed_visibility_text;
 use eLife\Patterns\ViewModel;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use function eLife\Patterns\mixed_visibility_text;
 
 final class ArticleDownloadLinksListConverter implements ViewModelConverter
 {

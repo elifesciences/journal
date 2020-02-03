@@ -3,14 +3,14 @@
 namespace eLife\Journal\Guzzle;
 
 use Csa\Bundle\GuzzleBundle\Cache\StorageAdapterInterface;
+use function GuzzleHttp\json_decode;
+use function GuzzleHttp\json_encode;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Uri;
 use GuzzleHttp\Psr7\UriNormalizer;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Throwable;
-use function GuzzleHttp\json_decode;
-use function GuzzleHttp\json_encode;
 
 final class NormalizingStorageAdapter implements StorageAdapterInterface
 {

@@ -2,14 +2,14 @@
 
 namespace test\eLife\Journal\Controller;
 
+use function GuzzleHttp\Psr7\build_query;
+use function GuzzleHttp\Psr7\parse_query;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\Uri;
 use Symfony\Component\BrowserKit\Cookie;
 use test\eLife\Journal\WebTestCase;
 use Traversable;
-use function GuzzleHttp\Psr7\build_query;
-use function GuzzleHttp\Psr7\parse_query;
 
 final class AuthenticationTest extends WebTestCase
 {

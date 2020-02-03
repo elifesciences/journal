@@ -5,8 +5,8 @@ namespace eLife\Journal\ViewModel\Converter;
 use eLife\ApiSdk\Model\Interview;
 use eLife\Journal\Helper\LicenceUri;
 use eLife\Patterns\ViewModel;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use function strip_tags;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 final class InterviewContentHeaderConverter implements ViewModelConverter
 {

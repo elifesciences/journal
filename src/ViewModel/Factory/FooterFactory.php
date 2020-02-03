@@ -4,7 +4,6 @@ namespace eLife\Journal\ViewModel\Factory;
 
 use eLife\Journal\Helper\MediaTypes;
 use eLife\Patterns\ViewModel\Footer;
-use eLife\Patterns\ViewModel\Image;
 use eLife\Patterns\ViewModel\InvestorLogos;
 use eLife\Patterns\ViewModel\Link;
 use eLife\Patterns\ViewModel\MainMenu;

@@ -8,12 +8,12 @@ use eLife\Patterns\ViewModel\ClientError;
 use eLife\Patterns\ViewModel\NotFound;
 use eLife\Patterns\ViewModel\ServerError;
 use eLife\Patterns\ViewModel\ServiceUnavailable;
+use function GuzzleHttp\Promise\promise_for;
 use Symfony\Component\Debug\Exception\FlattenException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Log\DebugLoggerInterface;
 use Throwable;
-use function GuzzleHttp\Promise\promise_for;
 
 final class ExceptionController extends Controller
 {

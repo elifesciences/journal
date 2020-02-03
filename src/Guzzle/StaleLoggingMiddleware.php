@@ -3,13 +3,13 @@
 namespace eLife\Journal\Guzzle;
 
 use GuzzleHttp\Promise\PromiseInterface;
+use function GuzzleHttp\Psr7\str;
 use Kevinrob\GuzzleCache\CacheMiddleware;
 use Kevinrob\GuzzleCache\KeyValueHttpHeader;
 use Psr\Http\Message\MessageInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
-use function GuzzleHttp\Psr7\str;
 
 final class StaleLoggingMiddleware
 {

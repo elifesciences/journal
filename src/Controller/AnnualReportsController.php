@@ -3,7 +3,6 @@
 namespace eLife\Journal\Controller;
 
 use eLife\Journal\Helper\HasPages;
-use eLife\Journal\Helper\Paginator;
 use eLife\Patterns\ViewModel\ContentHeader;
 use eLife\Patterns\ViewModel\ListingTeasers;
 use eLife\Patterns\ViewModel\Teaser;

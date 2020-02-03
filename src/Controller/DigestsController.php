@@ -14,10 +14,10 @@ use eLife\Patterns\ViewModel\GridListing;
 use eLife\Patterns\ViewModel\ListingTeasers;
 use eLife\Patterns\ViewModel\SpeechBubble;
 use eLife\Patterns\ViewModel\Teaser;
+use function GuzzleHttp\Promise\promise_for;
 use Pagerfanta\Pagerfanta;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use function GuzzleHttp\Promise\promise_for;
 
 final class DigestsController extends Controller
 {

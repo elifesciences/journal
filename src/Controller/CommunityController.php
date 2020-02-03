@@ -6,7 +6,6 @@ use eLife\ApiSdk\Collection\PromiseSequence;
 use eLife\ApiSdk\Collection\Sequence;
 use eLife\Journal\Helper\Callback;
 use eLife\Journal\Helper\HasPages;
-use eLife\Journal\Helper\Paginator;
 use eLife\Patterns\ViewModel\ContentHeader;
 use eLife\Patterns\ViewModel\ListHeading;
 use eLife\Patterns\ViewModel\ListingTeasers;

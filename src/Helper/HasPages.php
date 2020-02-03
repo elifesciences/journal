@@ -4,10 +4,10 @@ namespace eLife\Journal\Helper;
 
 use eLife\ApiSdk\Collection\Sequence;
 use eLife\Journal\Pagerfanta\SequenceAdapter;
+use function GuzzleHttp\Promise\promise_for;
 use GuzzleHttp\Promise\PromiseInterface;
 use Pagerfanta\Pagerfanta;
 use Symfony\Component\HttpFoundation\Request;
-use function GuzzleHttp\Promise\promise_for;
 
 trait HasPages
 {

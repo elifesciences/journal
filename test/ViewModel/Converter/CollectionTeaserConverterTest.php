@@ -2,7 +2,6 @@
 
 namespace test\eLife\Journal\ViewModel\Converter;
 
-use eLife\ApiSdk\Model\Collection;
 use eLife\Journal\ViewModel\Converter\CollectionTeaserConverter;
 use eLife\Journal\ViewModel\Converter\ViewModelConverter;
 use eLife\Patterns\ViewModel;

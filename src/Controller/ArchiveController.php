@@ -30,12 +30,12 @@ use eLife\Patterns\ViewModel\Select;
 use eLife\Patterns\ViewModel\SelectNav;
 use eLife\Patterns\ViewModel\SelectOption;
 use eLife\Patterns\ViewModel\Teaser;
+use function GuzzleHttp\Promise\all;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use UnexpectedValueException;
-use function GuzzleHttp\Promise\all;
 
 final class ArchiveController extends Controller
 {

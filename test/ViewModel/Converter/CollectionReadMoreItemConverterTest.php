@@ -2,7 +2,6 @@
 
 namespace test\eLife\Journal\ViewModel\Converter;
 
-use eLife\ApiSdk\Model\Collection;
 use eLife\Journal\ViewModel\Converter\CollectionReadMoreItemConverter;
 use eLife\Patterns\PatternRenderer;
 use eLife\Patterns\ViewModel\ReadMoreItem;

@@ -4,13 +4,13 @@ namespace eLife\Journal\EventListener;
 
 use Fig\Link\GenericLinkProvider;
 use Fig\Link\Link;
+use function GuzzleHttp\Psr7\uri_for;
 use GuzzleHttp\Psr7\UriResolver;
+use function strpos;
 use Symfony\Component\Asset\Packages;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
-use function GuzzleHttp\Psr7\uri_for;
-use function strpos;
 
 final class PreloadLinkSubscriber implements EventSubscriberInterface
 {

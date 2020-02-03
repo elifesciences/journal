@@ -13,8 +13,13 @@ use eLife\Journal\ViewModel\Converter\ViewModelConverter;
 use eLife\Patterns\ViewModel;
 use eLife\Patterns\ViewModel\ContentHeaderSimple;
 use eLife\Patterns\ViewModel\InfoBar;
+use function GuzzleHttp\Promise\all;
+use function GuzzleHttp\Promise\exception_for;
+use function GuzzleHttp\Promise\promise_for;
 use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Promise\RejectedPromise;
+use function GuzzleHttp\Promise\rejection_for;
+use function preg_match;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Form\FormInterface;
@@ -25,11 +30,6 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use UnexpectedValueException;
-use function GuzzleHttp\Promise\all;
-use function GuzzleHttp\Promise\exception_for;
-use function GuzzleHttp\Promise\promise_for;
-use function GuzzleHttp\Promise\rejection_for;
-use function preg_match;
 
 abstract class Controller implements ContainerAwareInterface
 {

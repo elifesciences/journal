@@ -2,7 +2,6 @@
 
 namespace test\eLife\Journal\ViewModel\Converter;
 
-use eLife\ApiSdk\Model\Subject;
 use eLife\Journal\ViewModel\Converter\SubjectBlockLinkConverter;
 use eLife\Journal\ViewModel\Factory\PictureBuilderFactory;
 use eLife\Patterns\ViewModel;

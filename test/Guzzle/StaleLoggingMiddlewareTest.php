@@ -3,12 +3,12 @@
 namespace test\eLife\Journal\Guzzle;
 
 use eLife\Journal\Guzzle\StaleLoggingMiddleware;
+use function GuzzleHttp\Promise\promise_for;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use Kevinrob\GuzzleCache\CacheMiddleware;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
-use function GuzzleHttp\Promise\promise_for;
 
 final class StaleLoggingMiddlewareTest extends TestCase
 {

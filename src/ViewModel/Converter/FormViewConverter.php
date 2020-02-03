@@ -2,6 +2,8 @@
 
 namespace eLife\Journal\ViewModel\Converter;
 
+use function array_filter;
+use function array_values;
 use eLife\Journal\Helper\Callback;
 use eLife\Journal\Helper\Humanizer;
 use eLife\Journal\ViewModel\Form;
@@ -11,8 +13,6 @@ use eLife\Patterns\ViewModel\MessageGroup;
 use InvalidArgumentException;
 use Symfony\Component\Form\ChoiceList\View\ChoiceView;
 use Symfony\Component\Form\FormView;
-use function array_filter;
-use function array_values;
 
 final class FormViewConverter implements ViewModelConverter
 {

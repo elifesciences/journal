@@ -7,8 +7,8 @@ use eLife\Journal\Helper\DownloadLink;
 use eLife\Journal\Helper\DownloadLinkUriGenerator;
 use eLife\Journal\ViewModel\Factory\ContentHeaderImageFactory;
 use eLife\Patterns\ViewModel;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use function strip_tags;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 final class PodcastEpisodeContentHeaderConverter implements ViewModelConverter
 {

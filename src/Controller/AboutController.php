@@ -29,11 +29,11 @@ use eLife\Patterns\ViewModel\SeeMoreLink;
 use eLife\Patterns\ViewModel\Select;
 use eLife\Patterns\ViewModel\SelectNav;
 use eLife\Patterns\ViewModel\SelectOption;
+use function GuzzleHttp\Promise\all;
+use function GuzzleHttp\Promise\promise_for;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use function GuzzleHttp\Promise\all;
-use function GuzzleHttp\Promise\promise_for;
 
 final class AboutController extends Controller
 {

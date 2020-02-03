@@ -2,6 +2,8 @@
 
 namespace test\eLife\Journal;
 
+use function GuzzleHttp\json_encode;
+use function GuzzleHttp\Psr7\build_query;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use KnpU\OAuth2ClientBundle\Security\User\OAuthUser;
@@ -9,8 +11,6 @@ use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase as BaseWebTestCase;
 use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\Security\Guard\Token\PostAuthenticationGuardToken;
-use function GuzzleHttp\json_encode;
-use function GuzzleHttp\Psr7\build_query;
 
 abstract class WebTestCase extends BaseWebTestCase
 {
