@@ -60,9 +60,9 @@ final class ArticleRdsControllerTest extends WebTestCase
         $this->assertSame(200, $client->getResponse()->getStatusCode());
     }
 
-  private function mockArticle($articleId = '00001') : void
-  {
-    $this->mockApiResponse(
+    private function mockArticle($articleId = '00001') : void
+    {
+        $this->mockApiResponse(
       new Request(
         'GET',
         "http://api.elifesciences.org/articles/{$articleId}",
@@ -106,7 +106,5 @@ final class ArticleRdsControllerTest extends WebTestCase
         ])
       )
     );
-
-  }
-
+    }
 }
