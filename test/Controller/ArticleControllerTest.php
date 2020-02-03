@@ -1319,7 +1319,7 @@ final class ArticleControllerTest extends PageTestCase
             )
         );
 
-        $crawler = $client->request('GET', '/articles/12345');
+        $crawler = $client->request('GET', '/articles/16846');
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertContains(
