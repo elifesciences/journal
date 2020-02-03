@@ -747,30 +747,28 @@ final class ArticlesController extends Controller
     }
 
     public function rdsAction(Request $request, string $id) : Response
-  {
-    if (!$this->isGranted('FEATURE_RDS')) {
-      throw new NotFoundHttpException('Not allowed to see RDS companion article');
+    {
+        if (!$this->isGranted('FEATURE_RDS')) {
+            throw new NotFoundHttpException('Not allowed to see RDS companion article');
+        }
+
+        $rdsArticles = $this->getParameter('rds_articles');
+        if (!isset($rdsArticles[$id])) {
+            throw new NotFoundHttpException('No RDS companion associated with this article');
+        }
+
+        $arguments = $this->defaultArticleArguments($request, $id);
+        $arguments['footer'] = null;
+        $arguments['callsToAction'] = null;
+        $arguments['emailCta'] = null;
+
+        $rdsUri = $rdsArticles[$id];
+        $arguments['infoBars'][] = new InfoBar('View the <a href="'.$this->get('router')->generate('article', ['id' => $id]).'">original article</a>.', InfoBar::TYPE_WARNING);
+
+        $arguments['rdsUri'] = $rdsUri;
+
+        return new Response($this->get('templating')->render('::article-rds.html.twig', $arguments));
     }
-
-    $rdsArticles = $this->getParameter('rds_articles');
-    if (!isset($rdsArticles[$id])) {
-      throw new NotFoundHttpException('No RDS companion associated with this article');
-    }
-
-    $arguments = $this->defaultArticleArguments($request, $id);
-    $arguments['footer'] = null;
-    $arguments['callsToAction'] = null;
-    $arguments['emailCta'] = null;
-
-    $rdsUri = $rdsArticles[$id];
-    $arguments['infoBars'][] = new InfoBar('View the <a href="'.$this->get('router')->generate('article', ['id' => $id]).'">original article</a>.', InfoBar::TYPE_WARNING);
-
-
-    $arguments['rdsUri'] = $rdsUri;
-
-
-    return new Response($this->get('templating')->render('::article-rds.html.twig', $arguments));
-  }
 
     public function xmlAction(Request $request, string $id, int $version = null) : Response
     {
