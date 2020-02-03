@@ -631,9 +631,6 @@ final class ArticlesController extends Controller
 
                 return new ViewModel\MessageBar(Humanizer::prettyList(...array_map(function (string $text, Sequence $items) {
                     if (1 === count($items)) {
-                        if ('data availability statements' === $text) {
-                            return 'There are no figures or additional files';
-                        }
                         $text = substr($text, 0, strlen($text) - 1);
                     }
 
