@@ -9,7 +9,7 @@ use test\eLife\Journal\WebTestCase;
 /**
  * @backupGlobals enabled
  */
-final class RdsControllerTest extends WebTestCase
+final class ArticleRdsControllerTest extends WebTestCase
 {
     /**
      * @before
