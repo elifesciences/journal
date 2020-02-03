@@ -1323,7 +1323,7 @@ final class ArticleControllerTest extends PageTestCase
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertContains(
-            'This research is available in a reproducible view.',
+            'See this research in an executable code view.',
             array_map('trim', $crawler->filter('.info-bar--warning')->extract(['_text']))
         );
     }

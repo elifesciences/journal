@@ -763,7 +763,7 @@ final class ArticlesController extends Controller
         $arguments['emailCta'] = null;
 
         $rdsUri = $rdsArticles[$id];
-        $arguments['infoBars'][] = new InfoBar('View the <a href="'.$this->get('router')->generate('article', ['id' => $id]).'">original article</a>.', InfoBar::TYPE_WARNING);
+        $arguments['infoBars'][] = new InfoBar('This is an executable code view. <a href="'.$this->get('router')->generate('article', ['id' => $id]).'">See the original article</a>.', InfoBar::TYPE_WARNING);
 
         $arguments['rdsUri'] = $rdsUri;
 
@@ -784,6 +784,7 @@ final class ArticlesController extends Controller
 
         return $this->get('elife.journal.helper.http_proxy')->send($request, $xml);
     }
+
 
     private function defaultArticleArguments(Request $request, string $id, int $version = null) : array
     {
@@ -879,7 +880,7 @@ final class ArticlesController extends Controller
                 $rdsArticles = $this->getParameter('rds_articles');
 
                 if (isset($rdsArticles[$item->getId()]) && $this->isGranted('FEATURE_RDS')) {
-                    $infoBars[] = new InfoBar('This research is available in a <a href="'.$this->get('router')->generate('article-rds', [$item]).'">reproducible view</a>.', InfoBar::TYPE_WARNING);
+                    $infoBars[] = new InfoBar('See this research in an <a href="'.$this->get('router')->generate('article-rds', [$item]).'">executable code view</a>.', InfoBar::TYPE_WARNING);
                 }
 
                 $dismissibleInfoBars = $this->getParameter('dismissible_info_bars');
