@@ -612,21 +612,28 @@ final class ArticlesController extends Controller
             'additionalFiles' => $additionalFiles,
         ])
             ->then(function (array $all) {
-                $dataSets = $all['generatedDataSets']->append(...$all['usedDataSets']);
                 return array_filter([
                     'figures' => $all['figures'],
                     'videos' => $all['videos'],
                     'tables' => $all['tables'],
-                    'data availability statements' => $dataSets->notEmpty() ? new EmptySequence() : $all['dataAvailability'],
-                    'data sets' => $dataSets,
+                    'data availability' => $all['dataAvailability'],
+                    'data sets' => $all['generatedDataSets']->append(...$all['usedDataSets']),
                     'additional files' => $all['additionalFiles'],
                 ], Callback::method('notEmpty'));
             })
             ->then(Callback::mustNotBeEmpty(new NotFoundHttpException('Article version does not contain any figures or data')))
             ->then(function (array $all) {
+                if (1 === count($all) && isset($all['data availability'])) {
+                    return new ViewModel\MessageBar('There are no figures or additional files');
+                }
+
+                unset($all['data availability']);
 
                 return new ViewModel\MessageBar(Humanizer::prettyList(...array_map(function (string $text, Sequence $items) {
                     if (1 === count($items)) {
+                        if ($text === 'data availability statements') {
+                            return 'There are no figures or additional files';
+                        }
                         $text = substr($text, 0, strlen($text) - 1);
                     }
 
