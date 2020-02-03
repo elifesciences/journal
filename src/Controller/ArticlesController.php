@@ -785,7 +785,6 @@ final class ArticlesController extends Controller
         return $this->get('elife.journal.helper.http_proxy')->send($request, $xml);
     }
 
-
     private function defaultArticleArguments(Request $request, string $id, int $version = null) : array
     {
         $item = $this->get('elife.api_sdk.articles')
