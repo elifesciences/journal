@@ -26,7 +26,6 @@ final class RdsControllerTest extends WebTestCase
 
         $client = static::createClient();
 
-        // TODO: verify what the actual id should be for ci for an rds article
         $client->request('GET', '/articles/16846');
 
         $this->assertSame(404, $client->getResponse()->getStatusCode());
