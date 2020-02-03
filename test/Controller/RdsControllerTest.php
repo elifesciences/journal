@@ -2,6 +2,8 @@
 
 namespace test\eLife\Journal\Controller;
 
+use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Psr7\Response;
 use test\eLife\Journal\WebTestCase;
 
 /**
@@ -26,7 +28,8 @@ final class RdsControllerTest extends WebTestCase
 
         $client = static::createClient();
 
-        $client->request('GET', '/articles/16846');
+        $this->mockArticle('id-of-article-with-rds');
+        $client->request('GET', '/articles/id-of-article-with-rds/rds');
 
         $this->assertSame(404, $client->getResponse()->getStatusCode());
     }
@@ -38,7 +41,8 @@ final class RdsControllerTest extends WebTestCase
     {
         $client = static::createClient();
 
-        $client->request('GET', '/articles/26231/rds');
+        $this->mockArticle('id-of-article-without-rds');
+        $client->request('GET', '/articles/id-of-article-without-rds/rds');
 
         $this->assertSame(404, $client->getResponse()->getStatusCode());
     }
@@ -50,8 +54,59 @@ final class RdsControllerTest extends WebTestCase
     {
         $client = static::createClient();
 
-        $client->request('GET', '/articles/26231/rds');
+        $this->mockArticle('id-of-article-with-rds');
+        $client->request('GET', '/articles/id-of-article-with-rds/rds');
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
     }
+
+  private function mockArticle($articleId = '00001') : void
+  {
+    $this->mockApiResponse(
+      new Request(
+        'GET',
+        "http://api.elifesciences.org/articles/{$articleId}",
+        ['Accept' => 'application/vnd.elife.article-poa+json; version=2, application/vnd.elife.article-vor+json; version=3']
+      ),
+      new Response(
+        200,
+        ['Content-Type' => 'application/vnd.elife.article-vor+json; version=3'],
+        json_encode([
+          'status' => 'vor',
+          'stage' => 'published',
+          'id' => $articleId,
+          'version' => 3,
+          'type' => 'research-article',
+          'doi' => "10.7554/eLife.{$articleId}",
+          'title' => 'Article title',
+          'published' => '2010-01-01T00:00:00Z',
+          'versionDate' => '2012-01-01T00:00:00Z',
+          'statusDate' => '2011-01-01T00:00:00Z',
+          'volume' => 1,
+          'elocationId' => "e{$articleId}",
+          'xml' => 'http://www.example.com/xml',
+          'copyright' => [
+            'license' => 'CC-BY-4.0',
+            'holder' => 'Bar',
+            'statement' => 'Copyright statement.',
+          ],
+          'body' => [
+            [
+              'type' => 'section',
+              'id' => 's-1',
+              'title' => 'Section',
+              'content' => [
+                [
+                  'type' => 'paragraph',
+                  'text' => 'Text.',
+                ],
+              ],
+            ],
+          ],
+        ])
+      )
+    );
+
+  }
+
 }
