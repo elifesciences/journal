@@ -852,10 +852,10 @@ final class ArticlesController extends Controller
                     }
                 }
 
-                $rdsArticles = $this->getParameter('rds_articles');
+                $exampleRdsArticles = $this->getParameter('example_rds_articles');
 
-                if (isset($rdsArticles[$item->getId()])) {
-                    $infoBars[] = new InfoBar('This research is available in a <a href="'.$rdsArticles[$item->getId()].'">reproducible view</a>.', InfoBar::TYPE_WARNING);
+                if (isset($exampleRdsArticles[$item->getId()])) {
+                    $infoBars[] = new InfoBar('This research is available in a <a href="'.$exampleRdsArticles[$item->getId()].'">reproducible view</a>.', InfoBar::TYPE_WARNING);
                 }
 
                 $dismissibleInfoBars = $this->getParameter('dismissible_info_bars');
