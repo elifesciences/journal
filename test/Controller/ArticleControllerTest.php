@@ -1221,7 +1221,7 @@ final class ArticleControllerTest extends PageTestCase
         $this->mockApiResponse(
             new Request(
                 'GET',
-                'http://api.elifesciences.org/articles/12345',
+                'http://api.elifesciences.org/articles/id-of-article-with-rds',
                 ['Accept' => 'application/vnd.elife.article-poa+json; version=2, application/vnd.elife.article-vor+json; version=3']
             ),
             new Response(
@@ -1230,7 +1230,7 @@ final class ArticleControllerTest extends PageTestCase
                 json_encode([
                     'status' => 'poa',
                     'stage' => 'published',
-                    'id' => '12345',
+                    'id' => 'id-of-article-with-rds',
                     'version' => 1,
                     'type' => 'research-article',
                     'doi' => '10.7554/eLife.12345',
@@ -1282,7 +1282,7 @@ final class ArticleControllerTest extends PageTestCase
         $this->mockApiResponse(
             new Request(
                 'GET',
-                'http://api.elifesciences.org/articles/12345/versions',
+                'http://api.elifesciences.org/articles/id-of-article-with-rds/versions',
                 [
                     'Accept' => [
                         'application/vnd.elife.article-history+json; version=1',
@@ -1297,7 +1297,7 @@ final class ArticleControllerTest extends PageTestCase
                         [
                             'status' => 'poa',
                             'stage' => 'published',
-                            'id' => '12345',
+                            'id' => 'id-of-article-with-rds',
                             'version' => 1,
                             'type' => 'research-article',
                             'doi' => '10.7554/eLife.12345',
@@ -1319,7 +1319,7 @@ final class ArticleControllerTest extends PageTestCase
             )
         );
 
-        $crawler = $client->request('GET', '/articles/16846');
+        $crawler = $client->request('GET', '/articles/id-of-article-with-rds');
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertContains(
