@@ -1,6 +1,6 @@
 ARG image_tag=latest
 FROM pinterb/jq:0.0.16 AS jq
-FROM elifesciences/proofreader-php:0.2 AS proofreader
+FROM elifesciences/proofreader-php:0.3.1 AS proofreader
 FROM elifesciences/journal_composer_dev:${image_tag} AS composer
 FROM elifesciences/journal:${image_tag}
 
