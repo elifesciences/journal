@@ -616,18 +616,14 @@ final class ArticlesController extends Controller
                     'figures' => $all['figures'],
                     'videos' => $all['videos'],
                     'tables' => $all['tables'],
-                    'data availability' => $all['dataAvailability'],
                     'data sets' => $all['generatedDataSets']->append(...$all['usedDataSets']),
                     'additional files' => $all['additionalFiles'],
                 ], Callback::method('notEmpty'));
             })
-            ->then(Callback::mustNotBeEmpty(new NotFoundHttpException('Article version does not contain any figures or data')))
             ->then(function (array $all) {
-                if (1 === count($all) && isset($all['data availability'])) {
+                if (empty($all)) {
                     return new ViewModel\MessageBar('There are no figures or additional files');
                 }
-
-                unset($all['data availability']);
 
                 return new ViewModel\MessageBar(Humanizer::prettyList(...array_map(function (string $text, Sequence $items) {
                     if (1 === count($items)) {
@@ -701,7 +697,8 @@ final class ArticlesController extends Controller
                 }
 
                 return $parts;
-            });
+            })
+            ->then(Callback::mustNotBeEmpty(new NotFoundHttpException('Article version does not contain any figures or data')));
 
         $arguments['viewSelector'] = $this->createViewSelector($arguments['item'], promise_for(true), true, $arguments['history'], $arguments['body']);
 
