@@ -1216,6 +1216,7 @@ final class ArticleControllerTest extends PageTestCase
      */
     public function it_displays_rds_info_bar_when_it_has_associated_rds()
     {
+        $_ENV['FEATURE_RDS'] = true;
         $client = static::createClient();
 
         $this->mockApiResponse(
