@@ -50,7 +50,7 @@ final class ArticleRdsControllerTest extends WebTestCase
     /**
      * @test
      */
-    public function it_does_shows_the_rds_article_if_the_feature_flag_is_enabled_and_the_article_has_rds()
+    public function it_does_show_the_rds_article_if_the_feature_flag_is_enabled_and_the_article_has_rds()
     {
         $client = static::createClient();
 
