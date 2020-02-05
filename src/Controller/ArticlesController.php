@@ -885,7 +885,7 @@ final class ArticlesController extends Controller
                     $rdsInfoBarUrl = $exampleRdsArticles[$item->getId()];
                 }
                 if (strlen($rdsInfoBarUrl) > 0) {
-                  $infoBars[] = new InfoBar('See this research in an <a href="'.$rdsInfoBarUrl.'">executable code view</a>.', InfoBar::TYPE_WARNING);
+                    $infoBars[] = new InfoBar('See this research in an <a href="'.$rdsInfoBarUrl.'">executable code view</a>.', InfoBar::TYPE_WARNING);
                 }
 
                 $dismissibleInfoBars = $this->getParameter('dismissible_info_bars');
