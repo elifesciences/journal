@@ -35,6 +35,9 @@ parameters:
         to_name: To Subject Name
     example_rds_articles:
         '30274': https://repro.elifesciences.org/example.html
+    rds_articles:
+        '26231':
+            display: https://repro.elifesciences.org/example.html
     dismissible_info_bars: {}
     cache_control: public, max-age=300, stale-while-revalidate=300, stale-if-error=86400
     feature_xpub: true

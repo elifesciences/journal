@@ -766,7 +766,7 @@ final class ArticlesController extends Controller
         $arguments['callsToAction'] = null;
         $arguments['emailCta'] = null;
 
-        $rdsUri = $rdsArticles[$id];
+        $rdsUri = $rdsArticles[$id]['display'];
         $arguments['infoBars'][] = new InfoBar('This is an executable code view. <a href="'.$this->get('router')->generate('article', ['id' => $id]).'">See the original article</a>.', InfoBar::TYPE_WARNING);
 
         $arguments['rdsUri'] = $rdsUri;
