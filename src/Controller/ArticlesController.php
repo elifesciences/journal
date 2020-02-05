@@ -878,14 +878,10 @@ final class ArticlesController extends Controller
 
                 $exampleRdsArticles = $this->getParameter('example_rds_articles');
                 $rdsArticles = $this->getParameter('rds_articles');
-                $rdsInfoBarUrl = '';
                 if (isset($rdsArticles[$item->getId()]) && $this->isGranted('FEATURE_RDS')) {
-                    $rdsInfoBarUrl = $this->get('router')->generate('article-rds', [$item]);
+                    $infoBars[] = new InfoBar('See this research in an <a href="'.$this->get('router')->generate('article-rds', [$item]).'">executable code view</a>.', InfoBar::TYPE_WARNING);
                 } elseif (isset($exampleRdsArticles[$item->getId()])) {
-                    $rdsInfoBarUrl = $exampleRdsArticles[$item->getId()];
-                }
-                if (strlen($rdsInfoBarUrl) > 0) {
-                    $infoBars[] = new InfoBar('See this research in an <a href="'.$rdsInfoBarUrl.'">executable code view</a>.', InfoBar::TYPE_WARNING);
+                    $infoBars[] = new InfoBar('This research is available in a <a href="'.$exampleRdsArticles[$item->getId()].'">reproducible view</a>.', InfoBar::TYPE_WARNING);
                 }
 
                 $dismissibleInfoBars = $this->getParameter('dismissible_info_bars');
