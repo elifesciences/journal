@@ -1213,6 +1213,7 @@ final class ArticleControllerTest extends PageTestCase
 
     /**
      * @test
+     * @backupGlobals enabled
      */
     public function it_displays_rds_info_bar_when_it_has_associated_rds()
     {
