@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f544679660858fc4b4adeb4fd3da538f",
+    "content-hash": "cfc60fb97537e7d72681046f74bb0f6b",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -907,16 +907,16 @@
         },
         {
             "name": "elife/patterns",
-            "version": "dev-master",
+            "version": "dev-update-download-links-list",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/patterns-php.git",
-                "reference": "ef59661c19bfd1533f8ef4ad5d89d5df7166ed7d"
+                "reference": "2f1b0a60f46c266dac3bbae115219bfcc452a136"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/ef59661c19bfd1533f8ef4ad5d89d5df7166ed7d",
-                "reference": "ef59661c19bfd1533f8ef4ad5d89d5df7166ed7d",
+                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/2f1b0a60f46c266dac3bbae115219bfcc452a136",
+                "reference": "2f1b0a60f46c266dac3bbae115219bfcc452a136",
                 "shasum": ""
             },
             "require": {
@@ -957,9 +957,9 @@
             ],
             "description": "eLife patterns",
             "support": {
-                "source": "https://github.com/elifesciences/patterns-php/tree/master"
+                "source": "https://github.com/elifesciences/patterns-php/tree/update-download-links-list"
             },
-            "time": "2020-01-29T09:22:24+00:00"
+            "time": "2020-02-03T11:17:33+00:00"
         },
         {
             "name": "fabpot/goutte",
@@ -3322,7 +3322,6 @@
             ],
             "description": "Promoting the interoperability of container objects (DIC, SL, etc.)",
             "homepage": "https://github.com/container-interop/container-interop",
-            "abandoned": "psr/container",
             "time": "2017-02-14T19:40:03+00:00"
         },
         {
