@@ -89,6 +89,8 @@ parameters:
         to_name: New Subject
     rds_articles:
         'id-of-article-with-rds': https://repro.elifesciences.org/example.html
+    example_rds_articles:
+        '12345': https://repro.elifesciences.org/example.html
     submit_url: http://submit.elifesciences.org/path
 
 framework:
