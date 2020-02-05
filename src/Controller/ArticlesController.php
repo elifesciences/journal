@@ -620,8 +620,11 @@ final class ArticlesController extends Controller
                     'additional files' => $all['additionalFiles'],
                 ], Callback::method('notEmpty'));
             })
-            ->then(Callback::mustNotBeEmpty(new NotFoundHttpException('Article version does not contain any figures or data')))
             ->then(function (array $all) {
+                if (empty($all)) {
+                    return new ViewModel\MessageBar('There are no figures or additional files');
+                }
+
                 return new ViewModel\MessageBar(Humanizer::prettyList(...array_map(function (string $text, Sequence $items) {
                     if (1 === count($items)) {
                         $text = substr($text, 0, strlen($text) - 1);
@@ -694,7 +697,8 @@ final class ArticlesController extends Controller
                 }
 
                 return $parts;
-            });
+            })
+            ->then(Callback::mustNotBeEmpty(new NotFoundHttpException('Article version does not contain any figures or data')));
 
         $arguments['viewSelector'] = $this->createViewSelector($arguments['item'], promise_for(true), true, $arguments['history'], $arguments['body']);
 
