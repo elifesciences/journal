@@ -75,6 +75,8 @@ parameters:
     crm_url: http://crm.elifesciences.org/crm/civicrm/
     feature_xpub: '%env(FEATURE_XPUB)%'
     env(FEATURE_XPUB): false
+    feature_rds: '%env(FEATURE_RDS)%'
+    env(FEATURE_RDS): false
     oauth2_client_id: journal_client_id
     oauth2_client_secret: journal_client_secret
     session_name: MOCKSESSID
@@ -85,8 +87,11 @@ parameters:
       - from_id: old-subject
         to_id: new-subject
         to_name: New Subject
+    rds_articles:
+        'id-of-article-with-rds':
+            display: https://repro.elifesciences.org/example.html
     example_rds_articles:
-        '12345': https://repro.elifesciences.org/example.html
+        'id-of-article-with-example-rds': https://repro.elifesciences.org/example.html
     submit_url: http://submit.elifesciences.org/path
 
 framework:

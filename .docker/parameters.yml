@@ -31,6 +31,9 @@ parameters:
     subject_rewrites: []
     example_rds_articles:
         '16846': https://repro.elifesciences.org/example.html
+    rds_articles:
+        '45562':
+            display: https://repro.elifesciences.org/example.html
     dismissible_info_bars:
         aging:
             id: aging-special-issue
@@ -39,6 +42,7 @@ parameters:
               - '26231'
     cache_control: private, no-cache, no-store, must-revalidate
     feature_xpub: true
+    feature_rds: true
     calls_to_action:
       - id: something-important
         path: ^(/$|/for-the-press)

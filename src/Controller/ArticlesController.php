@@ -750,6 +750,30 @@ final class ArticlesController extends Controller
         return new Response(preg_replace('~\R~u', "\r\n", $this->get('templating')->render('::article.ris.twig', $arguments)), Response::HTTP_OK, ['Content-Type' => 'application/x-research-info-systems']);
     }
 
+    public function rdsAction(Request $request, string $id) : Response
+    {
+        if (!$this->isGranted('FEATURE_RDS')) {
+            throw new NotFoundHttpException('Not allowed to see RDS companion article');
+        }
+
+        $rdsArticles = $this->getParameter('rds_articles');
+        if (!isset($rdsArticles[$id])) {
+            throw new NotFoundHttpException('No RDS companion associated with this article');
+        }
+
+        $arguments = $this->defaultArticleArguments($request, $id);
+        $arguments['footer'] = null;
+        $arguments['callsToAction'] = null;
+        $arguments['emailCta'] = null;
+
+        $rdsUri = $rdsArticles[$id]['display'];
+        $arguments['infoBars'][] = new InfoBar('This is an executable code view. <a href="'.$this->get('router')->generate('article', ['id' => $id]).'">See the original article</a>.', InfoBar::TYPE_WARNING);
+
+        $arguments['rdsUri'] = $rdsUri;
+
+        return new Response($this->get('templating')->render('::article-rds.html.twig', $arguments));
+    }
+
     public function xmlAction(Request $request, string $id, int $version = null) : Response
     {
         $arguments = $this->defaultArticleArguments($request, $id, $version);
@@ -826,7 +850,9 @@ final class ArticlesController extends Controller
 
                 $infoBars = [];
 
-                if ($item->getVersion() < $history->getVersions()[count($history->getVersions()) - 1]->getVersion()) {
+                $latestVersion = $history->getVersions()[count($history->getVersions()) - 1]->getVersion();
+
+                if ($item->getVersion() < $latestVersion) {
                     $infoBars[] = new InfoBar('Read the <a href="'.$this->generatePath($history).'">most recent version of this article</a>.', InfoBar::TYPE_MULTIPLE_VERSIONS);
                 }
 
@@ -857,8 +883,10 @@ final class ArticlesController extends Controller
                 }
 
                 $exampleRdsArticles = $this->getParameter('example_rds_articles');
-
-                if (isset($exampleRdsArticles[$item->getId()])) {
+                $rdsArticles = $this->getParameter('rds_articles');
+                if (isset($rdsArticles[$item->getId()]) && $item->getVersion() === $latestVersion && $this->isGranted('FEATURE_RDS')) {
+                    $infoBars[] = new InfoBar('See this research in an <a href="'.$this->get('router')->generate('article-rds', [$item]).'">executable code view</a>.', InfoBar::TYPE_WARNING);
+                } elseif (isset($exampleRdsArticles[$item->getId()])) {
                     $infoBars[] = new InfoBar('This research is available in a <a href="'.$exampleRdsArticles[$item->getId()].'">reproducible view</a>.', InfoBar::TYPE_WARNING);
                 }
 

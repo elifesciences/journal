@@ -117,6 +117,13 @@ article-ris:
     requirements:
         id: '[a-z0-9-]+'
 
+article-rds:
+    path: /articles/{id}/rds
+    defaults:
+      _controller: AppBundle:Articles:rds
+    requirements:
+        id: '[a-z0-9-]+'
+
 article-type:
     path: /articles/{type}
     defaults:

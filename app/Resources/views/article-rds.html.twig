@@ -1,0 +1,23 @@
+{% extends '::page.html.twig' %}
+
+{% block head %}
+
+    {{ parent() }}
+
+    <style>
+
+        iframe.article-rds {
+            border: none;
+            height: calc(100vh - 96px - 66px);
+            width: 100%;
+        }
+
+    </style>
+
+{% endblock %}
+
+{% block body %}
+
+    <iframe src="{{ rdsUri }}" class="article-rds"></iframe>
+
+{% endblock %}
