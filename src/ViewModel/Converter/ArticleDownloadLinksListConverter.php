@@ -58,10 +58,6 @@ final class ArticleDownloadLinksListConverter implements ViewModelConverter
                     $this->downloadLinkUriGenerator->generate(DownloadLink::fromUri($context['dar-download'])),
                     false,
                     ['article-identifier' => $object->getDoi(), 'download-type' => 'dar-download']
-                ),
-                new ViewModel\Link(
-                    'Learn more about DAR',
-                    '#'
                 )
             );
         }
