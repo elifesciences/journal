@@ -839,8 +839,10 @@ final class ArticlesController extends Controller
         $arguments['contentHeader'] = $arguments['item']
             ->then($this->willConvertTo(ContentHeader::class));
 
+        $rdsArticles = $this->getParameter('rds_articles');
+
         $arguments['infoBars'] = all(['item' => $arguments['item'], 'history' => $arguments['history'], 'relatedArticles' => $arguments['relatedArticles']])
-            ->then(function (array $parts) {
+            ->then(function (array $parts) use ($rdsArticles) {
                 /** @var ArticleVersion $item */
                 $item = $parts['item'];
                 /** @var ArticleHistory $history */
@@ -883,7 +885,6 @@ final class ArticlesController extends Controller
                 }
 
                 $exampleRdsArticles = $this->getParameter('example_rds_articles');
-                $rdsArticles = $this->getParameter('rds_articles');
                 if (isset($rdsArticles[$item->getId()]) && $item->getVersion() === $latestVersion && $this->isGranted('FEATURE_RDS')) {
                     $infoBars[] = new InfoBar('See this research in an <a href="'.$this->get('router')->generate('article-rds', [$item]).'">executable code view</a>.', InfoBar::TYPE_WARNING);
                 } elseif (isset($exampleRdsArticles[$item->getId()])) {
@@ -936,8 +937,21 @@ final class ArticlesController extends Controller
                 return $metrics;
             });
 
-        $arguments['downloadLinks'] = $arguments['item']
-            ->then($this->willConvertTo(ViewModel\ArticleDownloadLinksList::class));
+        $arguments['downloadLinks'] = all(['item' => $arguments['item'], 'history' => $arguments['history']])
+            ->then(function (array $parts) use ($rdsArticles) {
+                /** @var ArticleVersion $item */
+                $item = $parts['item'];
+                /** @var ArticleHistory $history */
+                $history = $parts['history'];
+
+                $latestVersion = $history->getVersions()[count($history->getVersions()) - 1]->getVersion();
+
+                if (isset($rdsArticles[$item->getId()]['download']) && $item->getVersion() === $latestVersion && $this->isGranted('FEATURE_RDS')) {
+                    $dar = $rdsArticles[$item->getId()]['download'];
+                }
+
+                return $this->convertTo($item, ViewModel\ArticleDownloadLinksList::class, ['dar-download' => $dar ?? null]);
+            });
 
         return $arguments;
     }

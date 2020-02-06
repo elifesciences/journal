@@ -6,6 +6,7 @@ use eLife\ApiSdk\Model\ArticleVersion;
 use eLife\ApiSdk\Model\ArticleVoR;
 use eLife\Journal\Helper\DownloadLink;
 use eLife\Journal\Helper\DownloadLinkUriGenerator;
+use eLife\Journal\Helper\Humanizer;
 use eLife\Patterns\ViewModel;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use function eLife\Patterns\mixed_visibility_text;
@@ -28,26 +29,41 @@ final class ArticleDownloadLinksListConverter implements ViewModelConverter
     {
         $groups = [];
 
+        $downloads = [];
+        $types = [];
         if ($object->getPdf()) {
-            $items = [
-                new ViewModel\ArticleDownloadLink(new ViewModel\Link(
-                    'Article PDF',
-                    $this->downloadLinkUriGenerator->generate(DownloadLink::fromUri($object->getPdf())),
-                    false,
-                    ['article-identifier' => $object->getDoi(), 'download-type' => 'pdf-article']
-                )),
-            ];
+            $types[] = 'PDF';
+            $downloads[] = new ViewModel\ArticleDownloadLink(new ViewModel\Link(
+                'Article PDF',
+                $this->downloadLinkUriGenerator->generate(DownloadLink::fromUri($object->getPdf())),
+                false,
+                ['article-identifier' => $object->getDoi(), 'download-type' => 'pdf-article']
+            ));
 
             if ($object instanceof ArticleVor && $object->getFiguresPdf()) {
-                $items[] = new ViewModel\ArticleDownloadLink(new ViewModel\Link(
+                $downloads[] = new ViewModel\ArticleDownloadLink(new ViewModel\Link(
                     'Figures PDF',
                     $this->downloadLinkUriGenerator->generate(DownloadLink::fromUri($object->getFiguresPdf())),
                     false,
                     ['article-identifier' => $object->getDoi(), 'download-type' => 'pdf-figures']
                 ));
             }
+        }
 
-            $groups[mixed_visibility_text('', 'Downloads', '(link to download the article as PDF)')] = $items;
+        if (!empty($context['dar-download'])) {
+            $types[] = 'DAR';
+            $downloads[] = new ViewModel\ArticleDownloadLink(
+                new ViewModel\Link(
+                    'Executable DAR',
+                    $this->downloadLinkUriGenerator->generate(DownloadLink::fromUri($context['dar-download'])),
+                    false,
+                    ['article-identifier' => $object->getDoi(), 'download-type' => 'dar-download']
+                )
+            );
+        }
+
+        if ($downloads) {
+            $groups[mixed_visibility_text('', 'Downloads', '(link to download the article as '.Humanizer::prettyList(...$types).')')] = $downloads;
         }
 
         $articleUri = $this->urlGenerator->generate('article', [$object], UrlGeneratorInterface::ABSOLUTE_URL);

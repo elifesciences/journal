@@ -90,6 +90,7 @@ parameters:
     rds_articles:
         'id-of-article-with-rds':
             display: https://repro.elifesciences.org/example.html
+            download: https://repro.elifesciences.org/example.dar
     example_rds_articles:
         'id-of-article-with-example-rds': https://repro.elifesciences.org/example.html
     submit_url: http://submit.elifesciences.org/path
