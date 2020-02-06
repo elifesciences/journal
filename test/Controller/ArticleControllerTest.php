@@ -1218,108 +1218,7 @@ final class ArticleControllerTest extends PageTestCase
     {
         $client = static::createClient();
 
-        $this->mockApiResponse(
-            new Request(
-                'GET',
-                'http://api.elifesciences.org/articles/id-of-article-with-example-rds',
-                ['Accept' => 'application/vnd.elife.article-poa+json; version=2, application/vnd.elife.article-vor+json; version=3']
-            ),
-            new Response(
-                200,
-                ['Content-Type' => 'application/vnd.elife.article-poa+json; version=2'],
-                json_encode([
-                    'status' => 'poa',
-                    'stage' => 'published',
-                    'id' => 'id-of-article-with-example-rds',
-                    'version' => 1,
-                    'type' => 'research-article',
-                    'doi' => '10.7554/eLife.12345',
-                    'title' => 'Article title',
-                    'published' => '2010-01-01T00:00:00Z',
-                    'versionDate' => '2010-01-01T00:00:00Z',
-                    'statusDate' => '2010-01-01T00:00:00Z',
-                    'volume' => 1,
-                    'elocationId' => 'e12345',
-                    'copyright' => [
-                        'license' => 'CC-BY-4.0',
-                        'holder' => 'Author One',
-                        'statement' => 'Copyright statement.',
-                    ],
-                    'authorLine' => 'Author One et al.',
-                    'authors' => [
-                        [
-                            'type' => 'person',
-                            'name' => [
-                                'preferred' => 'Author One',
-                                'index' => 'Author One',
-                            ],
-                        ],
-                    ],
-                    'reviewers' => [
-                        [
-                            'name' => [
-                                'preferred' => 'Reviewer 1',
-                                'index' => 'Reviewer 1',
-                            ],
-                            'role' => 'Reviewer',
-                            'affiliations' => [
-                                [
-                                    'name' => ['Institution'],
-                                    'address' => [
-                                        'formatted' => ['Country'],
-                                        'components' => [
-                                            'country' => 'Country',
-                                        ],
-                                    ],
-                                ],
-                            ],
-                        ],
-                    ],
-                ])
-            )
-        );
-
-        $this->mockApiResponse(
-            new Request(
-                'GET',
-                'http://api.elifesciences.org/articles/id-of-article-with-example-rds/versions',
-                [
-                    'Accept' => [
-                        'application/vnd.elife.article-history+json; version=1',
-                    ],
-                ]
-            ),
-            new Response(
-                200,
-                ['Content-Type' => 'application/vnd.elife.article-history+json; version=1'],
-                json_encode([
-                    'versions' => [
-                        [
-                            'status' => 'poa',
-                            'stage' => 'published',
-                            'id' => 'id-of-article-with-example-rds',
-                            'version' => 1,
-                            'type' => 'research-article',
-                            'doi' => '10.7554/eLife.12345',
-                            'title' => 'Article title',
-                            'published' => '2010-01-01T00:00:00Z',
-                            'versionDate' => '2010-01-01T00:00:00Z',
-                            'statusDate' => '2010-01-01T00:00:00Z',
-                            'volume' => 1,
-                            'elocationId' => 'e12345',
-                            'copyright' => [
-                                'license' => 'CC-BY-4.0',
-                                'holder' => 'Author One',
-                                'statement' => 'Copyright statement.',
-                            ],
-                            'authorLine' => 'Author One et al.',
-                        ],
-                    ],
-                ])
-            )
-        );
-
-        $crawler = $client->request('GET', '/articles/id-of-article-with-example-rds');
+        $crawler = $client->request('GET', $this->getUrl('id-of-article-with-example-rds'));
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertContains(
@@ -1337,110 +1236,7 @@ final class ArticleControllerTest extends PageTestCase
         $_ENV['FEATURE_RDS'] = true;
         $client = static::createClient();
 
-        $this->mockApiResponse(
-            new Request(
-                'GET',
-                'http://api.elifesciences.org/articles/id-of-article-with-rds',
-                ['Accept' => 'application/vnd.elife.article-poa+json; version=2, application/vnd.elife.article-vor+json; version=3']
-            ),
-            new Response(
-                200,
-                ['Content-Type' => 'application/vnd.elife.article-poa+json; version=2'],
-                json_encode([
-                    'status' => 'poa',
-                    'stage' => 'published',
-                    'id' => 'id-of-article-with-rds',
-                    'version' => 1,
-                    'type' => 'research-article',
-                    'doi' => '10.7554/eLife.12345',
-                    'title' => 'Article title',
-                    'published' => '2010-01-01T00:00:00Z',
-                    'versionDate' => '2010-01-01T00:00:00Z',
-                    'statusDate' => '2010-01-01T00:00:00Z',
-                    'volume' => 1,
-                    'elocationId' => 'e12345',
-                    'copyright' => [
-                        'license' => 'CC-BY-4.0',
-                        'holder' => 'Author One',
-                        'statement' => 'Copyright statement.',
-                    ],
-                    'authorLine' => 'Author One et al.',
-                    'authors' => [
-                        [
-                            'type' => 'person',
-                            'name' => [
-                                'preferred' => 'Author One',
-                                'index' => 'Author One',
-                            ],
-                        ],
-                    ],
-                    'reviewers' => [
-                        [
-                            'name' => [
-                                'preferred' => 'Reviewer 1',
-                                'index' => 'Reviewer 1',
-                            ],
-                            'role' => 'Reviewer',
-                            'affiliations' => [
-                                [
-                                    'name' => ['Institution'],
-                                    'address' => [
-                                        'formatted' => ['Country'],
-                                        'components' => [
-                                            'country' => 'Country',
-                                        ],
-                                    ],
-                                ],
-                            ],
-                        ],
-                    ],
-                ])
-            )
-        );
-
-        $this->mockApiResponse(
-            new Request(
-                'GET',
-                'http://api.elifesciences.org/articles/id-of-article-with-rds/versions',
-                [
-                    'Accept' => [
-                        'application/vnd.elife.article-history+json; version=1',
-                    ],
-                ]
-            ),
-            new Response(
-                200,
-                ['Content-Type' => 'application/vnd.elife.article-history+json; version=1'],
-                json_encode(
-                    [
-                        'versions' => [
-                            [
-                                'status' => 'poa',
-                                'stage' => 'published',
-                                'id' => 'id-of-article-with-rds',
-                                'version' => 1,
-                                'type' => 'research-article',
-                                'doi' => '10.7554/eLife.12345',
-                                'title' => 'Article title',
-                                'published' => '2010-01-01T00:00:00Z',
-                                'versionDate' => '2010-01-01T00:00:00Z',
-                                'statusDate' => '2010-01-01T00:00:00Z',
-                                'volume' => 1,
-                                'elocationId' => 'e12345',
-                                'copyright' => [
-                                    'license' => 'CC-BY-4.0',
-                                    'holder' => 'Author One',
-                                    'statement' => 'Copyright statement.',
-                                ],
-                                'authorLine' => 'Author One et al.',
-                            ],
-                        ],
-                    ]
-                )
-            )
-        );
-
-        $crawler = $client->request('GET', '/articles/id-of-article-with-rds');
+        $crawler = $client->request('GET', $this->getUrl('id-of-article-with-rds'));
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertContains(
@@ -1452,112 +1248,26 @@ final class ArticleControllerTest extends PageTestCase
     /**
      * @test
      */
-    public function it_does_not_display_rds_info_bar_when_it_has_no_associated_rds()
+    public function it_does_not_displays_rds_info_bar_when_it_has_associated_rds_but_the_feature_is_disabled()
     {
         $client = static::createClient();
 
-        $this->mockApiResponse(
-            new Request(
-                'GET',
-                'http://api.elifesciences.org/articles/00001',
-                ['Accept' => 'application/vnd.elife.article-poa+json; version=2, application/vnd.elife.article-vor+json; version=3']
-            ),
-            new Response(
-                200,
-                ['Content-Type' => 'application/vnd.elife.article-poa+json; version=2'],
-                json_encode([
-                    'status' => 'poa',
-                    'stage' => 'published',
-                    'id' => '00001',
-                    'version' => 1,
-                    'type' => 'research-article',
-                    'doi' => '10.7554/eLife.00001',
-                    'title' => 'Article title',
-                    'published' => '2010-01-01T00:00:00Z',
-                    'versionDate' => '2010-01-01T00:00:00Z',
-                    'statusDate' => '2010-01-01T00:00:00Z',
-                    'volume' => 1,
-                    'elocationId' => 'e00001',
-                    'copyright' => [
-                        'license' => 'CC-BY-4.0',
-                        'holder' => 'Author One',
-                        'statement' => 'Copyright statement.',
-                    ],
-                    'authorLine' => 'Author One et al.',
-                    'authors' => [
-                        [
-                            'type' => 'person',
-                            'name' => [
-                                'preferred' => 'Author One',
-                                'index' => 'Author One',
-                            ],
-                        ],
-                    ],
-                    'reviewers' => [
-                        [
-                            'name' => [
-                                'preferred' => 'Reviewer 1',
-                                'index' => 'Reviewer 1',
-                            ],
-                            'role' => 'Reviewer',
-                            'affiliations' => [
-                                [
-                                    'name' => ['Institution'],
-                                    'address' => [
-                                        'formatted' => ['Country'],
-                                        'components' => [
-                                            'country' => 'Country',
-                                        ],
-                                    ],
-                                ],
-                            ],
-                        ],
-                    ],
-                ])
-            )
-        );
+        $crawler = $client->request('GET', $this->getUrl('id-of-article-with-rds'));
 
-        $this->mockApiResponse(
-            new Request(
-                'GET',
-                'http://api.elifesciences.org/articles/00001/versions',
-                [
-                    'Accept' => [
-                        'application/vnd.elife.article-history+json; version=1',
-                    ],
-                ]
-            ),
-            new Response(
-                200,
-                ['Content-Type' => 'application/vnd.elife.article-history+json; version=1'],
-                json_encode([
-                    'versions' => [
-                        [
-                            'status' => 'poa',
-                            'stage' => 'published',
-                            'id' => '00001',
-                            'version' => 1,
-                            'type' => 'research-article',
-                            'doi' => '10.7554/eLife.00001',
-                            'title' => 'Article title',
-                            'published' => '2010-01-01T00:00:00Z',
-                            'versionDate' => '2010-01-01T00:00:00Z',
-                            'statusDate' => '2010-01-01T00:00:00Z',
-                            'volume' => 1,
-                            'elocationId' => 'e00001',
-                            'copyright' => [
-                                'license' => 'CC-BY-4.0',
-                                'holder' => 'Author One',
-                                'statement' => 'Copyright statement.',
-                            ],
-                            'authorLine' => 'Author One et al.',
-                        ],
-                    ],
-                ])
-            )
-        );
+        $this->assertSame(200, $client->getResponse()->getStatusCode());
+        $this->assertEmpty($crawler->filter('.info-bar'));
+    }
 
-        $crawler = $client->request('GET', '/articles/00001');
+    /**
+     * @test
+     * @backupGlobals enabled
+     */
+    public function it_does_not_display_rds_info_bar_when_it_has_no_associated_rds()
+    {
+        $_ENV['FEATURE_RDS'] = true;
+        $client = static::createClient();
+
+        $crawler = $client->request('GET', $this->getUrl('00001'));
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertNotContains(
