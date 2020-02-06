@@ -32,7 +32,7 @@ parameters:
     example_rds_articles:
         '16846': https://repro.elifesciences.org/example.html
     rds_articles:
-        '26231':
+        '45562':
             display: https://repro.elifesciences.org/example.html
     dismissible_info_bars:
         aging:

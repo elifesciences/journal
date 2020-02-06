@@ -1247,6 +1247,21 @@ final class ArticleControllerTest extends PageTestCase
 
     /**
      * @test
+     * @backupGlobals enabled
+     */
+    public function it_does_not_displays_rds_info_bar_when_it_has_associated_rds_but_it_is_not_the_latest_version()
+    {
+        $_ENV['FEATURE_RDS'] = true;
+        $client = static::createClient();
+
+        $crawler = $client->request('GET', $this->getPreviousVersionUrl('id-of-article-with-rds'));
+
+        $this->assertSame(200, $client->getResponse()->getStatusCode());
+        $this->assertCount(2, $crawler->filter('.info-bar'));
+    }
+
+    /**
+     * @test
      */
     public function it_does_not_displays_rds_info_bar_when_it_has_associated_rds_but_the_feature_is_disabled()
     {
@@ -2381,7 +2396,7 @@ final class ArticleControllerTest extends PageTestCase
                             'status' => 'vor',
                             'stage' => 'published',
                             'id' => $articleId,
-                            'version' => 1,
+                            'version' => 3,
                             'type' => 'research-article',
                             'doi' => "10.7554/eLife.{$articleId}",
                             'title' => 'Article title',

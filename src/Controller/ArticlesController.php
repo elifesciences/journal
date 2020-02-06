@@ -850,7 +850,9 @@ final class ArticlesController extends Controller
 
                 $infoBars = [];
 
-                if ($item->getVersion() < $history->getVersions()[count($history->getVersions()) - 1]->getVersion()) {
+                $latestVersion = $history->getVersions()[count($history->getVersions()) - 1]->getVersion();
+
+                if ($item->getVersion() < $latestVersion) {
                     $infoBars[] = new InfoBar('Read the <a href="'.$this->generatePath($history).'">most recent version of this article</a>.', InfoBar::TYPE_MULTIPLE_VERSIONS);
                 }
 
@@ -882,7 +884,7 @@ final class ArticlesController extends Controller
 
                 $exampleRdsArticles = $this->getParameter('example_rds_articles');
                 $rdsArticles = $this->getParameter('rds_articles');
-                if (isset($rdsArticles[$item->getId()]) && $this->isGranted('FEATURE_RDS')) {
+                if (isset($rdsArticles[$item->getId()]) && $item->getVersion() === $latestVersion && $this->isGranted('FEATURE_RDS')) {
                     $infoBars[] = new InfoBar('See this research in an <a href="'.$this->get('router')->generate('article-rds', [$item]).'">executable code view</a>.', InfoBar::TYPE_WARNING);
                 } elseif (isset($exampleRdsArticles[$item->getId()])) {
                     $infoBars[] = new InfoBar('This research is available in a <a href="'.$exampleRdsArticles[$item->getId()].'">reproducible view</a>.', InfoBar::TYPE_WARNING);
