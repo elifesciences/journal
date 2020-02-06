@@ -2803,7 +2803,7 @@ final class ArticleControllerTest extends PageTestCase
         return '/articles/00001v1';
     }
 
-    public function getPoaUrl($articleId = 'id-of-article-with-example-rds') : string
+    public function getPoaUrl($articleId = '12345') : string
     {
         $this->mockApiResponse(
             new Request(
