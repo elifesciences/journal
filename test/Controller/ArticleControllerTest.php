@@ -1230,7 +1230,7 @@ final class ArticleControllerTest extends PageTestCase
                 json_encode([
                     'status' => 'poa',
                     'stage' => 'published',
-                    'id' => '12345',
+                    'id' => 'id-of-article-with-example-rds',
                     'version' => 1,
                     'type' => 'research-article',
                     'doi' => '10.7554/eLife.12345',
@@ -1297,7 +1297,7 @@ final class ArticleControllerTest extends PageTestCase
                         [
                             'status' => 'poa',
                             'stage' => 'published',
-                            'id' => '12345',
+                            'id' => 'id-of-article-with-example-rds',
                             'version' => 1,
                             'type' => 'research-article',
                             'doi' => '10.7554/eLife.12345',
