@@ -510,7 +510,29 @@ final class ArticlesController extends Controller
                 return $parts;
             });
 
-        $arguments['viewSelector'] = $this->createViewSelector($arguments['item'], $arguments['hasFigures'], false, $arguments['history'], $arguments['body']);
+        $otherLinks = all(['item' => $arguments['item'], 'history' => $arguments['history'], 'rdsArticle' => $arguments['rdsArticle']])
+            ->then(function (array $parts) {
+                /** @var ArticleVersion $item */
+                $item = $parts['item'];
+                /** @var ArticleHistory $history */
+                $history = $parts['history'];
+                /** @var array $rdsArticle */
+                $rdsArticle = $parts['rdsArticle'];
+
+                $latestVersion = $history->getVersions()[count($history->getVersions()) - 1]->getVersion();
+
+                $otherLinks = [];
+                if (isset($rdsArticle['display']) && $item->getVersion() === $latestVersion && $this->isGranted('FEATURE_RDS')) {
+                    $otherLinks[] = new Link(
+                        'Executable code',
+                        $this->get('router')->generate('article-rds', ['id' => $item->getId()])
+                    );
+                }
+
+                return $otherLinks;
+            });
+
+        $arguments['viewSelector'] = $this->createViewSelector($arguments['item'], $arguments['hasFigures'], false, $arguments['history'], $arguments['body'], $otherLinks);
 
         $arguments['body'] = all(['item' => $arguments['item'], 'body' => $arguments['body'], 'downloadLinks' => $arguments['downloadLinks']])
             ->then(function (array $parts) {
@@ -756,20 +778,17 @@ final class ArticlesController extends Controller
             throw new NotFoundHttpException('Not allowed to see RDS companion article');
         }
 
-        $rdsArticles = $this->getParameter('rds_articles');
-        if (!isset($rdsArticles[$id])) {
+        $arguments = $this->defaultArticleArguments($request, $id);
+
+        if (!$arguments['rdsArticle']['display']) {
             throw new NotFoundHttpException('No RDS companion associated with this article');
         }
 
-        $arguments = $this->defaultArticleArguments($request, $id);
         $arguments['footer'] = null;
         $arguments['callsToAction'] = null;
         $arguments['emailCta'] = null;
 
-        $rdsUri = $rdsArticles[$id]['display'];
         $arguments['infoBars'][] = new InfoBar('This is an executable code view. <a href="'.$this->get('router')->generate('article', ['id' => $id]).'">See the original article</a>.', InfoBar::TYPE_WARNING);
-
-        $arguments['rdsUri'] = $rdsUri;
 
         return new Response($this->get('templating')->render('::article-rds.html.twig', $arguments));
     }
@@ -799,6 +818,8 @@ final class ArticlesController extends Controller
 
         $arguments['title'] = $arguments['item']
             ->then(Callback::method('getFullTitle'));
+
+        $arguments['rdsArticle'] = $this->getParameter('rds_articles')[$id] ?? [];
 
         return $arguments;
     }
@@ -839,16 +860,16 @@ final class ArticlesController extends Controller
         $arguments['contentHeader'] = $arguments['item']
             ->then($this->willConvertTo(ContentHeader::class));
 
-        $rdsArticles = $this->getParameter('rds_articles');
-
-        $arguments['infoBars'] = all(['item' => $arguments['item'], 'history' => $arguments['history'], 'relatedArticles' => $arguments['relatedArticles']])
-            ->then(function (array $parts) use ($rdsArticles) {
+        $arguments['infoBars'] = all(['item' => $arguments['item'], 'history' => $arguments['history'], 'relatedArticles' => $arguments['relatedArticles'], 'rdsArticle' => $arguments['rdsArticle']])
+            ->then(function (array $parts) {
                 /** @var ArticleVersion $item */
                 $item = $parts['item'];
                 /** @var ArticleHistory $history */
                 $history = $parts['history'];
                 /** @var Sequence|Article[] $relatedArticles */
                 $relatedArticles = $parts['relatedArticles'];
+                /** @var array $rdsArticle */
+                $rdsArticle = $parts['rdsArticle'];
 
                 $infoBars = [];
 
@@ -885,7 +906,7 @@ final class ArticlesController extends Controller
                 }
 
                 $exampleRdsArticles = $this->getParameter('example_rds_articles');
-                if (isset($rdsArticles[$item->getId()]) && $item->getVersion() === $latestVersion && $this->isGranted('FEATURE_RDS')) {
+                if (isset($rdsArticle['display']) && $item->getVersion() === $latestVersion && $this->isGranted('FEATURE_RDS')) {
                     $infoBars[] = new InfoBar('See this research in an <a href="'.$this->get('router')->generate('article-rds', [$item]).'">executable code view</a>.', InfoBar::TYPE_WARNING);
                 } elseif (isset($exampleRdsArticles[$item->getId()])) {
                     $infoBars[] = new InfoBar('This research is available in a <a href="'.$exampleRdsArticles[$item->getId()].'">reproducible view</a>.', InfoBar::TYPE_WARNING);
@@ -937,17 +958,19 @@ final class ArticlesController extends Controller
                 return $metrics;
             });
 
-        $arguments['downloadLinks'] = all(['item' => $arguments['item'], 'history' => $arguments['history']])
-            ->then(function (array $parts) use ($rdsArticles) {
+        $arguments['downloadLinks'] = all(['item' => $arguments['item'], 'history' => $arguments['history'], 'rdsArticle' => $arguments['rdsArticle']])
+            ->then(function (array $parts) {
                 /** @var ArticleVersion $item */
                 $item = $parts['item'];
                 /** @var ArticleHistory $history */
                 $history = $parts['history'];
+                /** @var array $rdsArticle */
+                $rdsArticle = $parts['rdsArticle'];
 
                 $latestVersion = $history->getVersions()[count($history->getVersions()) - 1]->getVersion();
 
-                if (isset($rdsArticles[$item->getId()]['download']) && $item->getVersion() === $latestVersion && $this->isGranted('FEATURE_RDS')) {
-                    $dar = $rdsArticles[$item->getId()]['download'];
+                if (isset($rdsArticle['download']) && $item->getVersion() === $latestVersion && $this->isGranted('FEATURE_RDS')) {
+                    $dar = $rdsArticle['download'];
                 }
 
                 return $this->convertTo($item, ViewModel\ArticleDownloadLinksList::class, ['dar-download' => $dar ?? null]);
@@ -956,13 +979,14 @@ final class ArticlesController extends Controller
         return $arguments;
     }
 
-    private function createViewSelector(PromiseInterface $item, PromiseInterface $hasFigures, bool $isFiguresPage, PromiseInterface $history, PromiseInterface $sections) : PromiseInterface
+    private function createViewSelector(PromiseInterface $item, PromiseInterface $hasFigures, bool $isFiguresPage, PromiseInterface $history, PromiseInterface $sections, PromiseInterface $otherLinks) : PromiseInterface
     {
-        return all(['item' => $item, 'hasFigures' => $hasFigures, 'history' => $history, 'sections' => $sections])
+        return all(['item' => $item, 'hasFigures' => $hasFigures, 'history' => $history, 'sections' => $sections, 'otherLinks' => $otherLinks])
             ->then(function (array $sections) use ($isFiguresPage) {
                 $item = $sections['item'];
                 $hasFigures = $sections['hasFigures'];
                 $history = $sections['history'];
+                $otherLinks = $sections['otherLinks'];
                 $sections = $sections['sections'];
 
                 $sections = array_filter($sections, Callback::isInstanceOf(ArticleSection::class));
@@ -988,7 +1012,8 @@ final class ArticlesController extends Controller
                     $isFiguresPage,
                     $item instanceof ArticleVoR
                         ? rtrim($this->getParameter('side_by_side_view_url'), '/').'/'.$item->getId()
-                        : null
+                        : null,
+                    $otherLinks
                 );
             });
     }

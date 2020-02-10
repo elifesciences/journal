@@ -1226,6 +1226,7 @@ final class ArticleControllerTest extends PageTestCase
             array_map('trim', $crawler->filter('.info-bar--warning')->extract(['_text']))
         );
         $this->assertEmpty($crawler->filter('.article-download-links-list__link')->selectLink('Executable DAR'));
+        $this->assertNotContains('Executable code', $crawler->filter('.view-selector')->text());
     }
 
     /**
@@ -1245,6 +1246,7 @@ final class ArticleControllerTest extends PageTestCase
             array_map('trim', $crawler->filter('.info-bar--warning')->extract(['_text']))
         );
         $this->assertNotEmpty($crawler->filter('.article-download-links-list__link')->selectLink('Executable DAR'));
+        $this->assertContains('Executable code', $crawler->filter('.view-selector')->text());
     }
 
     /**
@@ -1261,6 +1263,7 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertCount(2, $crawler->filter('.info-bar'));
         $this->assertEmpty($crawler->filter('.article-download-links-list__link')->selectLink('Executable DAR'));
+        $this->assertEmpty($crawler->filter('.view-selector'));
     }
 
     /**
@@ -1275,6 +1278,7 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertEmpty($crawler->filter('.info-bar'));
         $this->assertEmpty($crawler->filter('.article-download-links-list__link')->selectLink('Executable DAR'));
+        $this->assertNotContains('Executable code', $crawler->filter('.view-selector')->text());
     }
 
     /**
@@ -1294,6 +1298,7 @@ final class ArticleControllerTest extends PageTestCase
             array_map('trim', $crawler->filter('.info-bar')->eq(0)->extract(['_text']))
         );
         $this->assertEmpty($crawler->filter('.article-download-links-list__link')->selectLink('Executable DAR'));
+        $this->assertNotContains('Executable code', $crawler->filter('.view-selector')->text());
     }
 
     /**
