@@ -911,12 +911,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/patterns-php.git",
-                "reference": "3067d615f0ea69a37d1717ae47a02574d3b5a1ff"
+                "reference": "198d4313839c3fd176e6d9279e04853c5b5bce56"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/3067d615f0ea69a37d1717ae47a02574d3b5a1ff",
-                "reference": "3067d615f0ea69a37d1717ae47a02574d3b5a1ff",
+                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/198d4313839c3fd176e6d9279e04853c5b5bce56",
+                "reference": "198d4313839c3fd176e6d9279e04853c5b5bce56",
                 "shasum": ""
             },
             "require": {
@@ -927,7 +927,7 @@
             "require-dev": {
                 "justinrainbow/json-schema": "^5.0",
                 "php-jsonpointer/php-jsonpointer": "^1.0",
-                "phpspec/prophecy": "^1.6",
+                "phpspec/prophecy": "^1.10",
                 "phpunit/phpunit": "^5.2",
                 "symfony/filesystem": "^3.0",
                 "symfony/finder": "^3.0",
@@ -959,7 +959,7 @@
             "support": {
                 "source": "https://github.com/elifesciences/patterns-php/tree/master"
             },
-            "time": "2020-02-06T10:24:35+00:00"
+            "time": "2020-02-10T13:35:29+00:00"
         },
         {
             "name": "fabpot/goutte",
