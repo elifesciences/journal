@@ -722,7 +722,7 @@ final class ArticlesController extends Controller
             })
             ->then(Callback::mustNotBeEmpty(new NotFoundHttpException('Article version does not contain any figures or data')));
 
-        $arguments['viewSelector'] = $this->createViewSelector($arguments['item'], promise_for(true), true, $arguments['history'], $arguments['body']);
+        $arguments['viewSelector'] = $this->createViewSelector($arguments['item'], promise_for(true), true, $arguments['history'], $arguments['body'], promise_for([]));
 
         $arguments['body'] = all(['body' => $arguments['body'], 'downloadLinks' => $arguments['downloadLinks']])
             ->then(function (array $parts) {
@@ -780,7 +780,7 @@ final class ArticlesController extends Controller
 
         $arguments = $this->defaultArticleArguments($request, $id);
 
-        if (!$arguments['rdsArticle']['display']) {
+        if (!isset($arguments['rdsArticle']['display'])) {
             throw new NotFoundHttpException('No RDS companion associated with this article');
         }
 
