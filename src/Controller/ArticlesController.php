@@ -510,29 +510,7 @@ final class ArticlesController extends Controller
                 return $parts;
             });
 
-        $otherLinks = all(['item' => $arguments['item'], 'history' => $arguments['history'], 'rdsArticle' => $arguments['rdsArticle']])
-            ->then(function (array $parts) {
-                /** @var ArticleVersion $item */
-                $item = $parts['item'];
-                /** @var ArticleHistory $history */
-                $history = $parts['history'];
-                /** @var array $rdsArticle */
-                $rdsArticle = $parts['rdsArticle'];
-
-                $latestVersion = $history->getVersions()[count($history->getVersions()) - 1]->getVersion();
-
-                $otherLinks = [];
-                if (isset($rdsArticle['display']) && $item->getVersion() === $latestVersion && $this->isGranted('FEATURE_RDS')) {
-                    $otherLinks[] = new Link(
-                        'Executable code',
-                        $this->get('router')->generate('article-rds', ['id' => $item->getId()])
-                    );
-                }
-
-                return $otherLinks;
-            });
-
-        $arguments['viewSelector'] = $this->createViewSelector($arguments['item'], $arguments['hasFigures'], false, $arguments['history'], $arguments['body'], $otherLinks);
+        $arguments['viewSelector'] = $this->createViewSelector($arguments['item'], $arguments['hasFigures'], false, $arguments['history'], $arguments['body'], $arguments['rdsArticle']);
 
         $arguments['body'] = all(['item' => $arguments['item'], 'body' => $arguments['body'], 'downloadLinks' => $arguments['downloadLinks']])
             ->then(function (array $parts) {
@@ -722,7 +700,7 @@ final class ArticlesController extends Controller
             })
             ->then(Callback::mustNotBeEmpty(new NotFoundHttpException('Article version does not contain any figures or data')));
 
-        $arguments['viewSelector'] = $this->createViewSelector($arguments['item'], promise_for(true), true, $arguments['history'], $arguments['body'], promise_for([]));
+        $arguments['viewSelector'] = $this->createViewSelector($arguments['item'], promise_for(true), true, $arguments['history'], $arguments['body'], $arguments['rdsArticle']);
 
         $arguments['body'] = all(['body' => $arguments['body'], 'downloadLinks' => $arguments['downloadLinks']])
             ->then(function (array $parts) {
@@ -979,14 +957,13 @@ final class ArticlesController extends Controller
         return $arguments;
     }
 
-    private function createViewSelector(PromiseInterface $item, PromiseInterface $hasFigures, bool $isFiguresPage, PromiseInterface $history, PromiseInterface $sections, PromiseInterface $otherLinks) : PromiseInterface
+    private function createViewSelector(PromiseInterface $item, PromiseInterface $hasFigures, bool $isFiguresPage, PromiseInterface $history, PromiseInterface $sections, array $rdsArticle) : PromiseInterface
     {
-        return all(['item' => $item, 'hasFigures' => $hasFigures, 'history' => $history, 'sections' => $sections, 'otherLinks' => $otherLinks])
-            ->then(function (array $sections) use ($isFiguresPage) {
+        return all(['item' => $item, 'hasFigures' => $hasFigures, 'history' => $history, 'sections' => $sections])
+            ->then(function (array $sections) use ($isFiguresPage, $rdsArticle) {
                 $item = $sections['item'];
                 $hasFigures = $sections['hasFigures'];
                 $history = $sections['history'];
-                $otherLinks = $sections['otherLinks'];
                 $sections = $sections['sections'];
 
                 $sections = array_filter($sections, Callback::isInstanceOf(ArticleSection::class));
@@ -997,6 +974,16 @@ final class ArticlesController extends Controller
                     }
 
                     $sections = [];
+                }
+
+                $latestVersion = $history->getVersions()[count($history->getVersions()) - 1]->getVersion();
+
+                $otherLinks = [];
+                if (isset($rdsArticle['display']) && $item->getVersion() === $latestVersion && $this->isGranted('FEATURE_RDS')) {
+                    $otherLinks[] = new Link(
+                        'Executable code',
+                        $this->get('router')->generate('article-rds', ['id' => $item->getId()])
+                    );
                 }
 
                 return new ViewSelector(
