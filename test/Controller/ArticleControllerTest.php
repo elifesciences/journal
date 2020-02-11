@@ -1245,6 +1245,7 @@ final class ArticleControllerTest extends PageTestCase
             array_map('trim', $crawler->filter('.info-bar--warning')->extract(['_text']))
         );
         $this->assertNotEmpty($crawler->filter('.article-download-links-list__link')->selectLink('Executable DAR'));
+        $this->assertNotEmpty($crawler->filter('.article-download-links-list__secondary_link')->selectLink('Learn more about DAR'));
     }
 
     /**
