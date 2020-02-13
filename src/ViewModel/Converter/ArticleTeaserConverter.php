@@ -7,6 +7,7 @@ use eLife\ApiSdk\Model\ArticleVoR;
 use eLife\Journal\Helper\ModelName;
 use eLife\Patterns\ViewModel;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 final class ArticleTeaserConverter implements ViewModelConverter
 {
@@ -16,11 +17,15 @@ final class ArticleTeaserConverter implements ViewModelConverter
 
     private $viewModelConverter;
     private $urlGenerator;
+    private $authorizationChecker;
+    private $rdsArticles;
 
-    public function __construct(ViewModelConverter $viewModelConverter, UrlGeneratorInterface $urlGenerator)
+    public function __construct(ViewModelConverter $viewModelConverter, UrlGeneratorInterface $urlGenerator, AuthorizationCheckerInterface $authorizationChecker, array $rdsArticles)
     {
         $this->viewModelConverter = $viewModelConverter;
         $this->urlGenerator = $urlGenerator;
+        $this->authorizationChecker = $authorizationChecker;
+        $this->rdsArticles = $rdsArticles;
     }
 
     /**
@@ -32,6 +37,20 @@ final class ArticleTeaserConverter implements ViewModelConverter
             $image = $this->smallTeaserImage($object);
         } else {
             $image = null;
+        }
+
+        $formats = [];
+
+        if ($object instanceof ArticleVoR) {
+            if (isset($this->rdsArticles[$object->getId()]['display']) && $this->authorizationChecker->isGranted('FEATURE_RDS')) {
+                $formats[] = 'Executable';
+            } else {
+                $formats[] = 'HTML';
+            }
+        }
+
+        if (null !== $object->getPdf()) {
+            $formats[] = 'PDF';
         }
 
         return ViewModel\Teaser::main(
@@ -49,8 +68,7 @@ final class ArticleTeaserConverter implements ViewModelConverter
                     ),
                     $this->simpleDate($object, $context)
                 ),
-                $object instanceof ArticleVoR || null === $object->getPdf(),
-                null !== $object->getPdf()
+                $formats
             )
         );
     }
