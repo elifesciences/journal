@@ -41,7 +41,7 @@ final class ArticleTeaserConverter implements ViewModelConverter
 
         $formats = [];
 
-        if ($object instanceof ArticleVoR || null === $object->getPdf()) {
+        if ($object instanceof ArticleVoR) {
             if (isset($this->rdsArticles[$object->getId()]['display']) && $this->authorizationChecker->isGranted('FEATURE_RDS')) {
                 $formats[] = 'Executable';
             } else {
