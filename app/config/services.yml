@@ -489,6 +489,8 @@ services:
         arguments:
           - '@elife.journal.view_model.converter'
           - '@router'
+          - '@security.authorization_checker'
+          - '%rds_articles%'
         tags:
           - name: view_model.converter
 

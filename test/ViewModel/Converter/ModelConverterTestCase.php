@@ -9,6 +9,7 @@ use eLife\Journal\ViewModel\Converter\ViewModelConverter;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Traversable;
 use function GuzzleHttp\json_decode;
 
@@ -192,5 +193,13 @@ abstract class ModelConverterTestCase extends TestCase
         $urlGenerator->method('generate')->willReturn('http://www.example.com/');
 
         return $urlGenerator;
+    }
+
+    final protected function stubAuthorizationChecker() : AuthorizationCheckerInterface
+    {
+        $authorizationChecker = $this->createMock(AuthorizationCheckerInterface::class);
+        $authorizationChecker->method('isGranted')->willReturn(true);
+
+        return $authorizationChecker;
     }
 }
