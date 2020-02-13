@@ -1,5 +1,9 @@
 {% extends '::page.html.twig' %}
 
+{% block canonical %}
+    {{ path('article', {id: item.id}) }}
+{% endblock %}
+
 {% block head %}
 
     {{ parent() }}
@@ -13,6 +17,14 @@
         }
 
     </style>
+
+{% endblock %}
+
+{% block meta %}
+
+    {{ parent() }}
+
+    <meta name="robots" content="noindex">
 
 {% endblock %}
 

@@ -60,6 +60,34 @@ final class ArticleRdsControllerTest extends WebTestCase
         $this->assertSame(200, $client->getResponse()->getStatusCode());
     }
 
+    /**
+     * @test
+     */
+    public function it_has_metadata()
+    {
+        $client = static::createClient();
+
+        $this->mockArticle('id-of-article-with-rds');
+        $crawler = $client->request('GET', '/articles/id-of-article-with-rds/rds?foo');
+
+        $this->assertSame(200, $client->getResponse()->getStatusCode());
+
+        $this->assertSame('Article title | eLife', $crawler->filter('title')->text());
+        $this->assertSame('/articles/id-of-article-with-rds', $crawler->filter('link[rel="canonical"]')->attr('href'));
+        $this->assertSame('http://localhost/articles/id-of-article-with-rds', $crawler->filter('meta[property="og:url"]')->attr('content'));
+        $this->assertSame('Article title', $crawler->filter('meta[property="og:title"]')->attr('content'));
+        $this->assertEmpty($crawler->filter('meta[property="og:type"]'));
+        $this->assertSame('summary', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
+        $this->assertEmpty($crawler->filter('meta[property="og:image"]'));
+        $this->assertSame('doi:10.7554/eLife.id-of-article-with-rds', $crawler->filter('meta[name="dc.identifier"]')->attr('content'));
+        $this->assertEmpty($crawler->filter('meta[name="dc.relation.ispartof"]'));
+        $this->assertSame('Article title', $crawler->filter('meta[name="dc.title"]')->attr('content'));
+        $this->assertEmpty($crawler->filter('meta[name="dc.description"]'));
+        $this->assertSame('2010-01-01', $crawler->filter('meta[name="dc.date"]')->attr('content'));
+        $this->assertSame('© 2010 Bar. Copyright statement.', $crawler->filter('meta[name="dc.rights"]')->attr('content'));
+        $this->assertSame('noindex', $crawler->filter('meta[name="robots"]')->attr('content'));
+    }
+
     private function mockArticle($articleId = '00001') : void
     {
         $this->mockApiResponse(
