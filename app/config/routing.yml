@@ -118,7 +118,7 @@ article-ris:
         id: '[a-z0-9-]+'
 
 article-rds:
-    path: /articles/{id}/rds
+    path: /articles/{id}/executable
     defaults:
       _controller: AppBundle:Articles:rds
     requirements:
