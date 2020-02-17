@@ -29,7 +29,7 @@ final class ArticleRdsControllerTest extends WebTestCase
         $client = static::createClient();
 
         $this->mockArticle('id-of-article-with-rds');
-        $client->request('GET', '/articles/id-of-article-with-rds/rds');
+        $client->request('GET', '/articles/id-of-article-with-rds/executable');
 
         $this->assertSame(404, $client->getResponse()->getStatusCode());
     }
@@ -42,7 +42,7 @@ final class ArticleRdsControllerTest extends WebTestCase
         $client = static::createClient();
 
         $this->mockArticle('id-of-article-without-rds');
-        $client->request('GET', '/articles/id-of-article-without-rds/rds');
+        $client->request('GET', '/articles/id-of-article-without-rds/executable');
 
         $this->assertSame(404, $client->getResponse()->getStatusCode());
     }
@@ -55,7 +55,7 @@ final class ArticleRdsControllerTest extends WebTestCase
         $client = static::createClient();
 
         $this->mockArticle('id-of-article-with-rds');
-        $client->request('GET', '/articles/id-of-article-with-rds/rds');
+        $client->request('GET', '/articles/id-of-article-with-rds/executable');
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
     }
@@ -68,7 +68,7 @@ final class ArticleRdsControllerTest extends WebTestCase
         $client = static::createClient();
 
         $this->mockArticle('id-of-article-with-rds');
-        $crawler = $client->request('GET', '/articles/id-of-article-with-rds/rds?foo');
+        $crawler = $client->request('GET', '/articles/id-of-article-with-rds/executable?foo');
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
 
