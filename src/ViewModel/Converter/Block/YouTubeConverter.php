@@ -25,7 +25,7 @@ final class YouTubeConverter implements ViewModelConverter
      */
     public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
-        $iframe = new ViewModel\IFrame('https://www.youtube.com/embed/'.$object->getId(), $object->getWidth(), $object->getHeight());
+        $iframe = new ViewModel\IFrame('https://www.youtube.com/embed/'.$object->getId().'?rel=0', $object->getWidth(), $object->getHeight());
 
         if (!$object->getTitle() && $object->getCaption()->isEmpty()) {
             return $iframe;
