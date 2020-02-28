@@ -990,6 +990,15 @@ services:
         tags:
           - name: view_model.converter
 
+    elife.journal.view_model.converter.highlight.press_package.teaser.secondary:
+        class: eLife\Journal\ViewModel\Converter\HighlightPressPackageSecondaryTeaserConverter
+        public: false
+        arguments:
+          - '@elife.journal.view_model.converter'
+          - '@router'
+        tags:
+          - name: view_model.converter
+
     elife.journal.view_model.converter.image:
         class: eLife\Journal\ViewModel\Converter\ImagePictureConverter
         public: false
