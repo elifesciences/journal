@@ -324,7 +324,7 @@
                 "@type": "WebPage",
                 "@id": "{{ url('article', {id: item.id}) }}"
             },
-            "headline": "{{ item.fullTitle|striptags }}",
+            "headline": {{ item.fullTitle|striptags| json_encode(constant('JSON_UNESCAPED_UNICODE'))|raw }},
             "datePublished": "{{ item.publishedDate|date('Y-m-d', 'UTC') }}",
             "author": [
                 {% for author in item.authors %}
