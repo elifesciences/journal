@@ -262,11 +262,11 @@ final class MagazineContext extends Context
             new Request(
                 'GET',
                 'http://api.elifesciences.org/highlights/magazine?page=1&per-page=6&order=desc',
-                ['Accept' => 'application/vnd.elife.highlight-list+json; version=2']
+                ['Accept' => 'application/vnd.elife.highlight-list+json; version=3']
             ),
             new Response(
                 200,
-                ['Content-Type' => 'application/vnd.elife.highlight-list+json; version=2'],
+                ['Content-Type' => 'application/vnd.elife.highlight-list+json; version=3'],
                 json_encode([
                     'total' => 3,
                     'items' => array_fill(0, 3, [
@@ -335,11 +335,11 @@ final class MagazineContext extends Context
             new Request(
                 'GET',
                 'http://api.elifesciences.org/highlights/magazine?page=1&per-page=6&order=desc',
-                ['Accept' => 'application/vnd.elife.highlight-list+json; version=2']
+                ['Accept' => 'application/vnd.elife.highlight-list+json; version=3']
             ),
             new Response(
                 200,
-                ['Content-Type' => 'application/vnd.elife.highlight-list+json; version=2'],
+                ['Content-Type' => 'application/vnd.elife.highlight-list+json; version=3'],
                 json_encode([
                     'total' => 3,
                     'items' => [

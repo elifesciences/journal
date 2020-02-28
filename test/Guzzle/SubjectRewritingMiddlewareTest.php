@@ -252,7 +252,7 @@ final class SubjectRewritingMiddlewareTest extends KernelTestCase
                     ],
                 ],
             ],
-            'application/vnd.elife.highlight-list+json; version=2' => [
+            'application/vnd.elife.highlight-list+json; version=3' => [
                 [
                     'total' => 1,
                     'items' => [

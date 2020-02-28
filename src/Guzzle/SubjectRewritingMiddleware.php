@@ -115,7 +115,7 @@ final class SubjectRewritingMiddleware
                         break;
 
                     case 'application/vnd.elife.cover-list+json; version=1':
-                    case 'application/vnd.elife.highlight-list+json; version=2':
+                    case 'application/vnd.elife.highlight-list+json; version=3':
                         $data['items'] = array_map(function (array $cover) {
                             $cover['item'] = $this->updateItem($cover['item']);
 
