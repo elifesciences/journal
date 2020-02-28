@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f544679660858fc4b4adeb4fd3da538f",
+    "content-hash": "40e62f7a507639b9480f520e6ffc6f2d",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -857,16 +857,16 @@
         },
         {
             "name": "elife/api-sdk",
-            "version": "dev-master",
+            "version": "dev-highlight-press-package",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-sdk-php.git",
-                "reference": "9e8929f74a86412a437b7bafd4e57bc0f50f3468"
+                "reference": "06f135710acd7a023e641d58fb8b52869ab697f4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/9e8929f74a86412a437b7bafd4e57bc0f50f3468",
-                "reference": "9e8929f74a86412a437b7bafd4e57bc0f50f3468",
+                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/06f135710acd7a023e641d58fb8b52869ab697f4",
+                "reference": "06f135710acd7a023e641d58fb8b52869ab697f4",
                 "shasum": ""
             },
             "require": {
@@ -875,6 +875,9 @@
                 "ocramius/package-versions": "^1.1",
                 "php": "^7.0",
                 "symfony/serializer": "^2.8.2 || ^3.0.2"
+            },
+            "conflict": {
+                "sebastian/comparator": "<1.2.3"
             },
             "require-dev": {
                 "csa/guzzle-cache-middleware": "^1.0",
@@ -903,7 +906,7 @@
                 "MIT"
             ],
             "description": "eLife Sciences API SDK",
-            "time": "2019-08-22T12:07:31+00:00"
+            "time": "2020-02-21T12:13:18+00:00"
         },
         {
             "name": "elife/patterns",
@@ -3387,12 +3390,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-raml.git",
-                "reference": "fb9244b3175bc63c17c9da873febe763283837c4"
+                "reference": "349c6280f44c95acf7eea49ad68901b3cf528db5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-raml/zipball/fb9244b3175bc63c17c9da873febe763283837c4",
-                "reference": "fb9244b3175bc63c17c9da873febe763283837c4",
+                "url": "https://api.github.com/repos/elifesciences/api-raml/zipball/349c6280f44c95acf7eea49ad68901b3cf528db5",
+                "reference": "349c6280f44c95acf7eea49ad68901b3cf528db5",
                 "shasum": ""
             },
             "conflict": {
@@ -3404,7 +3407,7 @@
                 "MIT"
             ],
             "description": "eLife Sciences API specification",
-            "time": "2019-08-22T09:15:05+00:00"
+            "time": "2020-02-18T11:53:51+00:00"
         },
         {
             "name": "elife/api-validator",
