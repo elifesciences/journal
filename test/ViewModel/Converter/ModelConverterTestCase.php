@@ -109,7 +109,7 @@ abstract class ModelConverterTestCase extends TestCase
                 case 'highlight':
                     $model = 'highlight-list';
                     $list = true;
-                    $version = 2;
+                    $version = 3;
                     break;
                 case 'podcast-episode-chapter':
                     $model = 'recommendations';
