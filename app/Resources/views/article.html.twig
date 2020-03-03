@@ -369,7 +369,7 @@
                 ],
             {% endif %}
             {% if item.impactStatement|default(null) -%}
-                "description": "{{ item.impactStatement|striptags|json_encode(constant('JSON_UNESCAPED_UNICODE'))|raw }}",
+                "description": {{ item.impactStatement|striptags|json_encode(constant('JSON_UNESCAPED_UNICODE'))|raw }},
             {% endif %}
             "isPartOf": {
                 "@type": "Periodical",
