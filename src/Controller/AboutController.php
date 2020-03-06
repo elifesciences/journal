@@ -118,24 +118,23 @@ final class AboutController extends Controller
         $arguments['title'] = 'Peer review';
 
         $arguments['contentHeader'] = new ContentHeader($arguments['title'], null,
-            '"Our goal at eLife is to publish papers that our reviewers and editors find authoritative, rigorous, insightful, enlightening or just beautiful"*');
+            'eLife is an initiative from research funders to transform research communication through improvements to science publishing, technology and research culture.');
 
         $arguments['body'] = [
-            new IFrame('https://www.youtube.com/embed/3pjXfgeOCho?rel=0', 1280, 720),
-            new Paragraph('At eLife, we publish highly influential research, in the form of <a href="'.$this->get('router')->generate('article-type', ['type' => 'research-article']).'">Research Articles</a> (with no limits to the length or number of figures), <a href="'.$this->get('router')->generate('article-type', ['type' => 'short-report']).'">Short Reports</a>, <a href="'.$this->get('router')->generate('article-type', ['type' => 'tools-resources']).'">Tools and Resources</a>, and <a href="'.$this->get('router')->generate('article-type', ['type' => 'research-advance']).'">Research Advances</a> (substantial developments that build on previous eLife papers). eLife is also home to a rich selection of <a href="'.$this->get('router')->generate('magazine').'">Magazine</a> content, including <a href="'.$this->get('router')
-                    ->generate('article-type', ['type' => 'editorial']).'">Editorials</a>, essays and opinions (<a href="'.$this->get('router')->generate('article-type', ['type' => 'feature']).'">Feature Articles</a>), expert commentaries on recent papers (<a href="'.$this->get('router')->generate('article-type', ['type' => 'insight']).'">Insights</a>), <a href="'.$this->get('router')->generate('podcast').'">podcasts</a>, and interviews. For details and requirements for each type of submission, please consult our <a href="https://submit.elifesciences.org/html/elife_author_instructions.html">Author Guide and Policies</a>.'),
-            new Paragraph('We do not artificially limit the number of articles we publish or have a set acceptance rate. Rather, we rely on the judgment of the working scientists who serve as our <a href="'.$this->get('router')->generate('about-people').'">editors</a> to select papers for peer review and publication. eLife does not support the <a href="https://doi.org/10.7554/elife.00855">Impact Factor</a>.'),
-            new Paragraph('Our goal is to make peer review constructive and collaborative: initial decisions are delivered quickly; working scientists make all editorial decisions; and revision requests are consolidated following an open, internal consultation among reviewers to deliver a single, concise set of the essential revisions. Post-review decisions and author responses for published papers are available for all to read.'),
-            new Paragraph('Regularly updated metrics relating to the eLife editorial process are available in our <a href="https://submit.elifesciences.org/html/elife_author_instructions.html">Author Guide</a>.'),
-            new Paragraph('*"<a href="https://doi.org/10.7554/eLife.05770">The pleasure of publishing</a>”, by Vivek Malhotra and Eve Marder'),
+            new Paragraph('eLife is a non-profit organisation created by funders and led by researchers. Our mission is to accelerate discovery by operating a platform for research communication that encourages and recognises the most responsible behaviours.'),
+            new Paragraph('We work across three major areas:'),
+            Listing::ordered([
+                'Publishing – eLife aims to publish work of the highest standards and importance in all areas of biology and medicine, while exploring creative new ways to improve how research is assessed and published.',
+                'Technology – eLife invests in open-source technology innovation to modernise the infrastructure for science publishing and improve online tools for sharing, using and interacting with new results.',
+                'Research culture – eLife is committed to working with the worldwide research community to promote responsible behaviours in <research class=""></research>)',
+            ], 'number'),
+            new Paragraph('eLife receives financial support and strategic guidance from the <a href="https://https://www.hhmi.org/">Howard Hughes Medical Institute</a>, the <a href="https://kaw.wallenberg.org/en">Knut and Alice Wallenberg Foundation</a>, the <a href="https://www.mpg.de/en">Max Planck Society</a> and <a href="https://wellcome.ac.uk/">Wellcome</a>. eLife Sciences Publications Ltd is publisher of the open-access eLife journal (ISSN 2050-084X).'),    
             ArticleSection::basic('Related links', 2,
                 $this->render(Listing::unordered([
-                    '<a href="https://www.youtube.com/watch?v=3pjXfgeOCho">eLife peer review: The author’s perspective</a> (video)',
-                    '<a href="https://www.youtube.com/watch?v=quCG17jZW-w">eLife: Changing the review process</a> (video)',
-                    '<a href="https://doi.org/10.7554/eLife.05770">The pleasure of publishing</a>',
-                    '<a href="https://doi.org/10.7554/eLife.11326">What makes an eLife paper in epidemiology and global health?</a>',
-                    '<a href="https://submit.elifesciences.org/html/elife_author_instructions.html">Author Guide and Policies</a>',
-                    '<a href="'.$this->get('router')->generate('alerts').'">Sign up for alerts and news</a>',
+                    '<a href="https://elifesciences.org/inside-elife">Inside eLife</a>',
+                    '<a href="https://elifesciences.org/annual-reports">Annual reports</a>',
+                    '<a href="https://elifesciences.org/for-the-press">For the press</a>',
+                    '<a href="https://elifesciences.org/resources">Resources to download</a>',
                 ], 'bullet'))
             ),
         ];
