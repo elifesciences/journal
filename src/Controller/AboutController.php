@@ -56,7 +56,7 @@ final class AboutController extends Controller
                 'Technology – eLife invests in open-source technology innovation to modernise the infrastructure for science publishing and improve online tools for sharing, using and interacting with new results.',
                 'Research culture – eLife is committed to working with the worldwide research community to promote responsible behaviours in <research class=""></research>)',
             ], 'number'),
-            new Paragraph('eLife receives financial support and strategic guidance from the <a href="https://https://www.hhmi.org/">Howard Hughes Medical Institute</a>, the <a href="https://kaw.wallenberg.org/en">Knut and Alice Wallenberg Foundation</a>, the <a href="https://www.mpg.de/en">Max Planck Society</a> and <a href="https://wellcome.ac.uk/">Wellcome</a>. eLife Sciences Publications Ltd is publisher of the open-access eLife journal (ISSN 2050-084X).'),    
+            new Paragraph('eLife receives financial support and strategic guidance from the <a href="https://https://www.hhmi.org/">Howard Hughes Medical Institute</a>, the <a href="https://kaw.wallenberg.org/en">Knut and Alice Wallenberg Foundation</a>, the <a href="https://www.mpg.de/en">Max Planck Society</a> and <a href="https://wellcome.ac.uk/">Wellcome</a>. eLife Sciences Publications Ltd is publisher of the open-access eLife journal (ISSN 2050-084X).'),
             ArticleSection::basic('Related links', 2,
                 $this->render(Listing::unordered([
                     '<a href="https://elifesciences.org/inside-elife">Inside eLife</a>',
