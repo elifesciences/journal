@@ -2,7 +2,7 @@
 
 namespace test\eLife\Journal\Controller;
 
-final class AboutInnovationControllerTest extends PageTestCase
+final class AboutResearchCultureControllerTest extends PageTestCase
 {
     /**
      * @test
@@ -14,7 +14,7 @@ final class AboutInnovationControllerTest extends PageTestCase
         $crawler = $client->request('GET', $this->getUrl());
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
-        $this->assertSame('Innovation', $crawler->filter('.content-header__title')->text());
+        $this->assertSame('Research culture', $crawler->filter('.content-header__title')->text());
     }
 
     /**
@@ -28,12 +28,12 @@ final class AboutInnovationControllerTest extends PageTestCase
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
 
-        $this->assertSame('Innovation | About | eLife', $crawler->filter('title')->text());
-        $this->assertSame('/about/innovation', $crawler->filter('link[rel="canonical"]')->attr('href'));
-        $this->assertSame('http://localhost/about/innovation', $crawler->filter('meta[property="og:url"]')->attr('content'));
-        $this->assertSame('Innovation', $crawler->filter('meta[property="og:title"]')->attr('content'));
-        $this->assertSame('eLife invests in open-source technology to deliver effective solutions to accelerate research communication and discovery', $crawler->filter('meta[property="og:description"]')->attr('content'));
-        $this->assertSame('eLife invests in open-source technology to deliver effective solutions to accelerate research communication and discovery', $crawler->filter('meta[name="description"]')->attr('content'));
+        $this->assertSame('Research culture | About | eLife', $crawler->filter('title')->text());
+        $this->assertSame('/about/research-culture', $crawler->filter('link[rel="canonical"]')->attr('href'));
+        $this->assertSame('http://localhost/about/research-culture', $crawler->filter('meta[property="og:url"]')->attr('content'));
+        $this->assertSame('Research culture', $crawler->filter('meta[property="og:title"]')->attr('content'));
+        $this->assertSame('eLife recognises that reforming research communication depends on improving research culture.', $crawler->filter('meta[property="og:description"]')->attr('content'));
+        $this->assertSame('eLife recognises that reforming research communication depends on improving research culture.', $crawler->filter('meta[name="description"]')->attr('content'));
         $this->assertSame('summary', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
         $this->assertEmpty($crawler->filter('meta[property="og:image"]'));
         $this->assertEmpty($crawler->filter('meta[name="dc.identifier"]'));
@@ -46,6 +46,6 @@ final class AboutInnovationControllerTest extends PageTestCase
 
     protected function getUrl() : string
     {
-        return '/about/innovation';
+        return '/about/research-culture';
     }
 }

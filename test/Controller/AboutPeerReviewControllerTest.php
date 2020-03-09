@@ -32,8 +32,8 @@ final class AboutPeerReviewControllerTest extends PageTestCase
         $this->assertSame('/about/peer-review', $crawler->filter('link[rel="canonical"]')->attr('href'));
         $this->assertSame('http://localhost/about/peer-review', $crawler->filter('meta[property="og:url"]')->attr('content'));
         $this->assertSame('Peer review', $crawler->filter('meta[property="og:title"]')->attr('content'));
-        $this->assertSame('eLife is an initiative from research funders to transform research communication through improvements to science publishing, technology and research culture.', $crawler->filter('meta[property="og:description"]')->attr('content'));
-        $this->assertSame('eLife is an initiative from research funders to transform research communication through improvements to science publishing, technology and research culture.', $crawler->filter('meta[name="description"]')->attr('content'));
+        $this->assertSame('eLife aims to improve the speed, visibility and usefulness of peer review.', $crawler->filter('meta[property="og:description"]')->attr('content'));
+        $this->assertSame('eLife aims to improve the speed, visibility and usefulness of peer review.', $crawler->filter('meta[name="description"]')->attr('content'));
         $this->assertSame('summary', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
         $this->assertEmpty($crawler->filter('meta[property="og:image"]'));
         $this->assertEmpty($crawler->filter('meta[name="dc.identifier"]'));
