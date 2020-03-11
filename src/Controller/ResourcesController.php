@@ -43,9 +43,9 @@ final class ResourcesController extends Controller
                 new Paragraph('The eLife logo is available to download below. Please ensure you are downloading the correct file type for your purpose.'),
                 ArticleSection::basic('Full-colour horizontal', 3, $this->render(
                     Listing::unordered([
-                        '<a href="'.$this->generateDownloadLink('https://cdn.elifesciences.org/style-guide-images/elife-full-color-horizontal.eps').'">Download .eps for print</a>',
-                        '<a href="'.$this->generateDownloadLink('https://cdn.elifesciences.org/style-guide-images/elife-full-color-horizontal.jpg').'">Download .jpg for web</a>',
-                        '<a href="'.$this->generateDownloadLink('https://cdn.elifesciences.org/style-guide-images/elife-full-color-horizontal.png').'">Download .png with transparent background</a>',
+                        '<a href="'.$this->generateDownloadLink('https://cdn.elifesciences.org/style-guide-images/elife-full-color-horizontal-2020.eps').'">Download .eps for print</a>',
+                        '<a href="'.$this->generateDownloadLink('https://cdn.elifesciences.org/style-guide-images/elife-full-color-horizontal-2020.jpg').'">Download .jpg for web</a>',
+                        '<a href="'.$this->generateDownloadLink('https://cdn.elifesciences.org/style-guide-images/elife-full-color-horizontal-2020.png').'">Download .png with transparent background</a>',
                     ], 'bullet')
                 ))
             )),
