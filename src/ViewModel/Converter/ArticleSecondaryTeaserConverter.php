@@ -43,12 +43,6 @@ final class ArticleSecondaryTeaserConverter implements ViewModelConverter
             $image = null;
         }
 
-        if ($object instanceof ArticleVoR && isset($this->rdsArticles[$object->getId()]['date']) && $this->authorizationChecker->isGranted('FEATURE_RDS')) {
-            $rdsArticleDate = new DateTimeImmutable($this->rdsArticles[$object->getId()]['date']);
-        } else {
-            $rdsArticleDate = null;
-        }
-
         return Teaser::secondary(
             $object->getFullTitle(),
             $this->urlGenerator->generate('article', [$object]),
@@ -61,7 +55,13 @@ final class ArticleSecondaryTeaserConverter implements ViewModelConverter
                         ModelName::singular($object->getType()),
                         $this->urlGenerator->generate('article-type', ['type' => $object->getType()])
                     ),
-                    $this->simpleDate($object, $context, $rdsArticleDate)
+                    $this->simpleDate(
+                        $object,
+                        $context,
+                        ($object instanceof ArticleVoR && isset($this->rdsArticles[$object->getId()]['date']) && $this->authorizationChecker->isGranted('FEATURE_RDS')) ?
+                            new DateTimeImmutable($this->rdsArticles[$object->getId()]['date']) :
+                            null
+                    )
                 )
             )
         );
