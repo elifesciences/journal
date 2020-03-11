@@ -18,6 +18,7 @@ trait CreatesDate
         if ('published' !== ($context['date'] ?? 'default')) {
             if ($model instanceof ArticleVersion) {
                 $statusDate = $statusDateOverride ?? $model->getStatusDate();
+
                 return $statusDate ? ViewModel\Date::simple($statusDate, $statusDate != $model->getPublishedDate()) : null;
             } elseif ($model instanceof Collection) {
                 return ViewModel\Date::simple($model->getUpdatedDate() ?? $model->getPublishedDate(), !empty($model->getUpdatedDate()));
