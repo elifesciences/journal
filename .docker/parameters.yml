@@ -31,7 +31,13 @@ parameters:
     subject_rewrites: []
     example_rds_articles:
         '16846': https://repro.elifesciences.org/example.html
+        '30274': https://repro.elifesciences.org/example.html
     rds_articles:
+        '30274':
+            date: '2030-01-01T00:00:00Z'
+            display: https://hub.stenci.la/elife/30274/main/?elife
+            # temporarily linking to Markdown version due to lack of a generated DAR
+            download: https://hub.stenci.la/elife/30274/files/download/article-30274.md
         '45562':
             display: https://repro.elifesciences.org/example.html
             download: https://repro.elifesciences.org/example.html
