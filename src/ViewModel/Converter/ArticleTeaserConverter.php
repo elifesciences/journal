@@ -55,9 +55,9 @@ final class ArticleTeaserConverter implements ViewModelConverter
         }
 
         if ($object instanceof ArticleVoR && isset($this->rdsArticles[$object->getId()]['date']) && $this->authorizationChecker->isGranted('FEATURE_RDS')) {
-            $date = ViewModel\Date::simple(new DateTimeImmutable($this->rdsArticles[$object->getId()]['date']), true);
+            $rdsArticleDate = new DateTimeImmutable($this->rdsArticles[$object->getId()]['date']);
         } else {
-            $date = $this->simpleDate($object, $context);
+            $rdsArticleDate = null;
         }
 
         return ViewModel\Teaser::main(
@@ -73,7 +73,7 @@ final class ArticleTeaserConverter implements ViewModelConverter
                         ModelName::singular($object->getType()),
                         $this->urlGenerator->generate('article-type', ['type' => $object->getType()])
                     ),
-                    $date
+                    $this->simpleDate($object, $context, $rdsArticleDate)
                 ),
                 $formats
             )

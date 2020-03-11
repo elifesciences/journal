@@ -19,7 +19,9 @@ final class ArticleRelatedItemTeaserConverterTest extends ModelConverterTestCase
     {
         $this->converter = new ArticleRelatedItemTeaserConverter(
             $viewModelConverter = $this->createMock(ViewModelConverter::class),
-            $this->stubUrlGenerator()
+            $this->stubUrlGenerator(),
+            $this->stubAuthorizationChecker(),
+            []
         );
 
         $viewModelConverter
