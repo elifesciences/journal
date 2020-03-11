@@ -2,6 +2,7 @@
 
 namespace eLife\Journal\ViewModel\Converter;
 
+use DateTimeImmutable;
 use eLife\ApiSdk\Model\ArticleVersion;
 use eLife\ApiSdk\Model\ArticleVoR;
 use eLife\Journal\Helper\ModelName;
@@ -53,6 +54,12 @@ final class ArticleTeaserConverter implements ViewModelConverter
             $formats[] = 'PDF';
         }
 
+        if ($object instanceof ArticleVoR && isset($this->rdsArticles[$object->getId()]['date']) && $this->authorizationChecker->isGranted('FEATURE_RDS')) {
+            $date = ViewModel\Date::simple(new DateTimeImmutable($this->rdsArticles[$object->getId()]['date']), true);
+        } else {
+            $date = $this->simpleDate($object, $context);
+        }
+
         return ViewModel\Teaser::main(
             $object->getFullTitle(),
             $this->urlGenerator->generate('article', [$object]),
@@ -66,7 +73,7 @@ final class ArticleTeaserConverter implements ViewModelConverter
                         ModelName::singular($object->getType()),
                         $this->urlGenerator->generate('article-type', ['type' => $object->getType()])
                     ),
-                    $this->simpleDate($object, $context)
+                    $date
                 ),
                 $formats
             )

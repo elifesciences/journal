@@ -11,6 +11,7 @@ use eLife\Patterns\ViewModel\Meta;
 use eLife\Patterns\ViewModel\Teaser;
 use eLife\Patterns\ViewModel\TeaserFooter;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 final class ArticleRelatedItemTeaserConverter implements ViewModelConverter
 {
@@ -19,11 +20,15 @@ final class ArticleRelatedItemTeaserConverter implements ViewModelConverter
 
     private $viewModelConverter;
     private $urlGenerator;
+    private $authorizationChecker;
+    private $rdsArticles;
 
-    public function __construct(ViewModelConverter $viewModelConverter, UrlGeneratorInterface $urlGenerator)
+    public function __construct(ViewModelConverter $viewModelConverter, UrlGeneratorInterface $urlGenerator, AuthorizationCheckerInterface $authorizationChecker, array $rdsArticles)
     {
         $this->viewModelConverter = $viewModelConverter;
         $this->urlGenerator = $urlGenerator;
+        $this->authorizationChecker = $authorizationChecker;
+        $this->rdsArticles = $rdsArticles;
     }
 
     /**
@@ -35,6 +40,12 @@ final class ArticleRelatedItemTeaserConverter implements ViewModelConverter
             $image = $this->smallTeaserImage($object);
         } else {
             $image = null;
+        }
+
+        if ($object instanceof ArticleVoR && isset($this->rdsArticles[$object->getId()]['date']) && $this->authorizationChecker->isGranted('FEATURE_RDS')) {
+            $date = ViewModel\Date::simple(new DateTimeImmutable($this->rdsArticles[$object->getId()]['date']), true);
+        } else {
+            $date = $this->simpleDate($object, $context);
         }
 
         return Teaser::relatedItem(
@@ -49,7 +60,7 @@ final class ArticleRelatedItemTeaserConverter implements ViewModelConverter
                         ModelName::singular($object->getType()),
                         $this->urlGenerator->generate('article-type', ['type' => $object->getType()])
                     ),
-                    $this->simpleDate($object, $context)
+                    $date
                 )
             )
         );
