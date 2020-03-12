@@ -57,10 +57,10 @@ final class AboutController extends Controller
             new Paragraph('eLife receives financial support and strategic guidance from the <a href="https://https://www.hhmi.org/">Howard Hughes Medical Institute</a>, the <a href="https://kaw.wallenberg.org/en">Knut and Alice Wallenberg Foundation</a>, the <a href="https://www.mpg.de/en">Max Planck Society</a> and <a href="https://wellcome.ac.uk/">Wellcome</a>. eLife Sciences Publications Ltd is publisher of the open-access eLife journal (ISSN 2050-084X).'),
             ArticleSection::basic('Related links', 2,
                 $this->render(Listing::unordered([
-                    '<a href="https://elifesciences.org/inside-elife">Inside eLife</a>',
-                    '<a href="https://elifesciences.org/annual-reports">Annual reports</a>',
-                    '<a href="https://elifesciences.org/for-the-press">For the press</a>',
-                    '<a href="https://elifesciences.org/resources">Resources to download</a>',
+                    '<a href="'.$this->get('router')->generate('inside-elife').'">Inside eLife</a>',
+                    '<a href="'.$this->get('router')->generate('annual-reports').'">Annual reports</a>',
+                    '<a href="'.$this->get('router')->generate('press-packs').'">For the press</a>',
+                    '<a href="'.$this->get('router')->generate('resources').'">Resources to download</a>',
                 ], 'bullet'))
             ),
         ];
@@ -141,7 +141,7 @@ final class AboutController extends Controller
             new Paragraph('The overall aim is to make peer review faster (by reducing rounds of revision and only requesting extra experiments when they are essential), fairer and more open. <a href="'.$this->get('router')->generate('article', ['id' => '00855']).'">eLife does not support the Impact Factor</a> and is a co-founder of the <a href="https://sfdora.org/">Declaration on Research Assessment (DORA)</a>. Regularly updated metrics relating to the eLife editorial process are available in our <a href="https://reviewer.elifesciences.org/author-guide/journal-metrics">Author Guide</a>.'),
             ArticleSection::basic('Related links', 2,
                 $this->render(Listing::unordered([
-                    '<a href="https://elifesciences.org/inside-elife/e9091cea/peer-review-new-initiatives-to-enhance-the-value-of-elife-s-process">Peer Review: New initiatives to enhance the value of eLife’s process</a> (Michael Eisen, eLife Editor-in-Chief, November 2019)',
+                    '<a href="'.$this->get('router')->generate('inside-elife-article', ['id' => 'e9091cea']).'">Peer Review: New initiatives to enhance the value of eLife’s process</a> (Michael Eisen, eLife Editor-in-Chief, November 2019)',
                     '<a href="https://reviewer.elifesciences.org/author-guide/editorial-process">Author Guide</a>',
                     '<a href="https://www.youtube.com/watch?v=quCG17jZW-w">eLife: Changing the review process</a> (video, February 2014)',
                 ], 'bullet'))
@@ -167,7 +167,7 @@ final class AboutController extends Controller
             ArticleSection::basic('Related links', 2,
                 $this->render(Listing::unordered([
                     '<a href="https://libero.pub/">Libero: eLife’s open-source platform for academic publishing</a>',
-                    '<a href="https://elifesciences.org/labs">eLife Labs</a>',
+                    '<a href="'.$this->get('router')->generate('labs').'">eLife Labs</a>',
                     '<a href="https://crm.elifesciences.org/crm/tech-news">Sign up for Technology and Innovation news from eLife</a>',
                 ], 'bullet'))
             ),
@@ -186,11 +186,11 @@ final class AboutController extends Controller
             'eLife recognises that reforming research communication depends on improving research culture.');
 
         $arguments['body'] = [
-            new Paragraph('eLife seeks to encourage and recognise responsible behaviours in research, and to promote a research culture that supports collaboration, diversity and inclusion, and openness. We support preprints and open-science practices, and publish articles on different aspects of research culture on our Community page. eLife was a founder of the San Francisco Declaration on Research Assessment (DORA).'),
-            new Paragraph('eLife invests in research culture in a variety of ways, many of which involve working closely with early-career researchers (ECRs). With the guidance of our Early-Career Advisory Group, we have established standards for diversity and inclusion across eLife, created peer networks and the eLife Ambassadors program, increased ECR involvement on our editorial board and reviewer pool, awarded grants to early-career authors, and showcased early-career talents and perspectives through interviews, podcasts and webinars.'),
+            new Paragraph('eLife seeks to encourage and recognise responsible behaviours in research, and to promote a research culture that supports collaboration, diversity and inclusion, and openness. We support preprints and open-science practices, and publish articles on different aspects of research culture on our <a href="'.$this->get('router')->generate('community').'">Community page</a>. eLife was a founder of the <a href="https://sfdora.org/">San Francisco Declaration on Research Assessment (DORA).</a>'),
+            new Paragraph('eLife invests in research culture in a variety of ways, many of which involve working closely with early-career researchers (ECRs). With the guidance of our <a href="'.$this->get('router')->generate('about-people', ['type' => 'early-career']).'"> Early-Career Advisory Group</a>, we have established standards for diversity and inclusion across eLife, created peer networks and the <a href="'.$this->get('router')->generate('inside-elife-article', ['id' => 'a946c355']).'">eLife Ambassadors program</a>, increased <a href="'.$this->get('router')->generate('inside-elife-article', ['id' => '31a5173b']).'">ECR involvement on our editorial board and reviewer pool</a>, awarded <a href="'.$this->get('router')->generate('inside-elife-article', ['id' => 'aff37cb5']).'">grants to early-career authors</a>, and showcased early-career talents and perspectives through interviews, podcasts and webinars.'),
             ArticleSection::basic('Related links', 2,
                 $this->render(Listing::unordered([
-                    '<a href="https://elifesciences.org/community">Community page</a>',
+                    '<a href="'.$this->get('router')->generate('community').'">Community page</a>',
                     '<a href="https://ecrlife.org/">ecrLife</a>',
                     'Sign up for our <a href="https://crm.elifesciences.org/crm/community-news">early-career newsletter</a>',
                 ], 'bullet'))
