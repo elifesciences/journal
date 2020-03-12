@@ -46,6 +46,7 @@ final class ResourcesController extends Controller
                         '<a href="'.$this->generateDownloadLink('https://cdn.elifesciences.org/style-guide-images/elife-full-color-horizontal-2020.eps').'">Download .eps for print</a>',
                         '<a href="'.$this->generateDownloadLink('https://cdn.elifesciences.org/style-guide-images/elife-full-color-horizontal-2020.jpg').'">Download .jpg for web</a>',
                         '<a href="'.$this->generateDownloadLink('https://cdn.elifesciences.org/style-guide-images/elife-full-color-horizontal-2020.png').'">Download .png with transparent background</a>',
+                        '<a href="'.$this->generateDownloadLink('https://cdn.elifesciences.org/style-guide-images/elife-full-color-horizontal-2020.svg').'">Download .svg for web</a>',
                     ], 'bullet')
                 ))
             )),
