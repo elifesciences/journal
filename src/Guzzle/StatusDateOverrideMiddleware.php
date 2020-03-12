@@ -6,11 +6,11 @@ use eLife\ApiClient\MediaType;
 use InvalidArgumentException;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use function GuzzleHttp\json_decode;
 use function GuzzleHttp\json_encode;
 use function GuzzleHttp\Promise\promise_for;
 use function GuzzleHttp\Psr7\stream_for;
-use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 final class StatusDateOverrideMiddleware
 {
@@ -108,6 +108,7 @@ final class StatusDateOverrideMiddleware
         if (isset($item['statusDate']) && isset($this->rdsArticles[$item['id']]['date']) && $this->authorizationChecker->isGranted('FEATURE_RDS')) {
             $item['statusDate'] = $this->rdsArticles[$item['id']]['date'];
         }
+
         return $item;
     }
 }
