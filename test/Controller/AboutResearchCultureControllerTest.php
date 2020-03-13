@@ -7,7 +7,7 @@ final class AboutResearchCultureControllerTest extends PageTestCase
     /**
      * @test
      */
-    public function it_displays_the_innovation_page()
+    public function it_displays_the_research_culture_page()
     {
         $client = static::createClient();
 
