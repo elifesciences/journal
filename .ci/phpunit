@@ -3,4 +3,4 @@ set -e
 
 export FASTEST_OUTPUT_DIR=build/ci/phpunit
 rm -rf "$FASTEST_OUTPUT_DIR" && mkdir -p "$FASTEST_OUTPUT_DIR"
-vendor/bin/phpunit --configuration phpunit.xml.dist --log-junit $FASTEST_OUTPUT_DIR/1.xml
+php -dmemory_limit=-1 vendor/bin/phpunit --configuration phpunit.xml.dist --log-junit $FASTEST_OUTPUT_DIR/1.xml
