@@ -7,7 +7,7 @@ final class AboutTechnologyControllerTest extends PageTestCase
     /**
      * @test
      */
-    public function it_displays_the_innovation_page()
+    public function it_displays_the_technology_page()
     {
         $client = static::createClient();
 
