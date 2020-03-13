@@ -16,7 +16,7 @@ final class AboutPeopleControllerTest extends PageTestCase
 
         $crawler = $client->request('GET', $this->getUrl());
 
-        $this->assertSame(200, $client->getResponse()->getStatusCode());
+        $this->assertSame(200, $client->getResponse()->getStatusCode(), $client->getResponse()->getContent());
         $this->assertSame('Leadership team', $crawler->filter('.content-header__title')->text());
     }
 
