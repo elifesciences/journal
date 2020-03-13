@@ -104,13 +104,6 @@ final class AboutController extends Controller
                 );
             })
             ->then(function (Sequence $sections) {
-                if ($sections->isEmpty()) {
-                    $sections = $sections->append(new Paragraph('No subjects available.'));
-                }
-
-                return $sections;
-            })
-            ->then(function (Sequence $sections) {
                 return $sections->prepend(
                     new Paragraph('eLife is an open-access journal and complies with all major funding agency requirements for immediate online access to the published results of their research grants.'),
                     new Paragraph('For further details, and requirements for each type of submission, please consult our <a href="https://reviewer.elifesciences.org/author-guide/types">Author Guide.</a>')
