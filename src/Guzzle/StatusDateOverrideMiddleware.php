@@ -80,10 +80,6 @@ final class StatusDateOverrideMiddleware
                         }, $data['chapters']);
                         break;
 
-                    case 'application/vnd.elife.person-list+json; version=1':
-                        $data['items'] = array_map([$this, 'updatePerson'], $data['items']);
-                        break;
-
                     case 'application/vnd.elife.press-package+json; version=3':
                         $data['relatedContent'] = $this->updateItems($data['relatedContent'] ?? []);
                         break;
