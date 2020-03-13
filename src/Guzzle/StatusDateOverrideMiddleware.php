@@ -17,7 +17,7 @@ final class StatusDateOverrideMiddleware
     private $authorizationChecker;
     private $rdsArticles;
 
-    public function __construct(AuthorizationCheckerInterface $authorizationChecker, array $rdsArticles)
+    public function __construct(AuthorizationCheckerInterface $authorizationChecker, array $rdsArticles = [])
     {
         $this->authorizationChecker = $authorizationChecker;
         $this->rdsArticles = $rdsArticles;
