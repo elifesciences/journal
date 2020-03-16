@@ -52,7 +52,7 @@ final class AboutController extends Controller
             Listing::ordered([
                 'Publishing – eLife aims to publish work of the highest standards and importance in all areas of biology and medicine, while exploring creative new ways to improve how research is assessed and published.',
                 'Technology – eLife invests in open-source technology innovation to modernise the infrastructure for science publishing and improve online tools for sharing, using and interacting with new results.',
-                'Research culture – eLife is committed to working with the worldwide research community to promote responsible behaviours in <research class=""></research>)',
+                'Research culture – eLife is committed to working with the worldwide research community to promote responsible behaviours in research.',
             ], 'number'),
             new Paragraph('eLife receives financial support and strategic guidance from the <a href="https://https://www.hhmi.org/">Howard Hughes Medical Institute</a>, the <a href="https://kaw.wallenberg.org/en">Knut and Alice Wallenberg Foundation</a>, the <a href="https://www.mpg.de/en">Max Planck Society</a> and <a href="https://wellcome.ac.uk/">Wellcome</a>. eLife Sciences Publications Ltd is publisher of the open-access eLife journal (ISSN 2050-084X).'),
             ArticleSection::basic('Related links', 2,
