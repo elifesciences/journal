@@ -24,20 +24,15 @@ about-aims-scope:
     defaults:
          _controller: AppBundle:About:aimsScope
 
-about-early-career:
-    path: /about/early-career
+about-research-culture:
+    path: /about/research-culture
     defaults:
-         _controller: AppBundle:About:earlyCareer
+         _controller: AppBundle:About:researchCulture
 
-about-innovation:
-    path: /about/innovation
+about-technology:
+    path: /about/technology
     defaults:
-         _controller: AppBundle:About:innovation
-
-about-openness:
-    path: /about/openness
-    defaults:
-         _controller: AppBundle:About:openness
+         _controller: AppBundle:About:technology
 
 about-peer-review:
     path: /about/peer-review
