@@ -21,24 +21,10 @@ final class ResourcesController extends Controller
         $arguments['contentHeader'] = new ContentHeader($arguments['title'], null, 'A collection of resources, from posters, videos, images, presentations and more, to the brand behind eLife.');
 
         $arguments['body'] = [
-            ArticleSection::basic('Posters and handouts', 2, $this->render(
-                new Paragraph('Ready to download, print, and use, the posters and handouts below have been created to spread the word about our initiatives for early-career researchers and what we publish.'),
-                Listing::unordered([
-                    '$1,000 Travel grants (2019) poster – <a href="'.$this->generateDownloadLink('https://cdn.elifesciences.org/documents/a4-elife-travel-grants-2019.pdf').'">A4 download</a> | <a href="'.$this->generateDownloadLink('https://cdn.elifesciences.org/downloads/letter-elife-travel-grants.pdf').'">US&nbsp;letter download</a>',
-                    '#ECRWednesday Webinars poster – <a href="'.$this->generateDownloadLink('https://cdn.elifesciences.org/documents/letter-elife-travel-grants.pdf').'">A4 download</a> | <a href="'.$this->generateDownloadLink('https://cdn.elifesciences.org/downloads/letter-elife-ecr-wednesdays.pdf').'">US&nbsp;letter download</a>',
-                    'Ambassador event poster – <a href="'.$this->generateDownloadLink('https://cdn.elifesciences.org/documents/Ambassador_Pack_Poster_A4.pdf').'">A4 download</a> | <a href="'.$this->generateDownloadLink('https://cdn.elifesciences.org/documents/Ambassador_Pack_Poster_USletter.pdf').'">US&nbsp;letter download</a>',
-                    'eLife and early-career researchers handout – <a href="'.$this->generateDownloadLink('https://cdn.elifesciences.org/documents/a5-early-career-handout_2019.pdf').'">Download</a>',
-                    'Publishing with eLife handout – <a href="'.$this->generateDownloadLink('https://cdn.elifesciences.org/documents/About_eLife_handout.pdf').'">Download</a>',
-                ], 'bullet')
-            )),
             ArticleSection::basic('Presentations', 2, $this->render(
                 new Paragraph('The team at eLife present at meetings across the globe, discussing the key challenges, opportunities and solutions to improve research communication and discovery. These presentations are available to view and share through our Figshare channel.'),
                 Listing::unordered([
                     '<a href="https://figshare.com/authors/eLife_Science/4385029">Visit Figshare</a>',
-                ], 'bullet'),
-                new Paragraph('We\'ve also created a set of slides about eLife that can be included in your own presentations.'),
-                Listing::unordered([
-                    '<a href="https://cdn.elifesciences.org/documents/eLife_the_introduction.pptx">Download eLife presentation</a>',
                 ], 'bullet')
             )),
             ArticleSection::basic('Videos', 2, $this->render(
@@ -50,24 +36,19 @@ final class ResourcesController extends Controller
             ArticleSection::basic('Images', 2, $this->render(
                 new Paragraph('A picture is worth a thousand words and we use imagery to create impact and capture the imagination of our readers. In our Flickr channel you’ll find images carefully selected from research articles or specifically created, available to use under the CC BY 2.0 licensing agreement.'),
                 Listing::unordered([
-                    '<a href="https://www.flickr.com/photos/128643624@N07/">Visit Flickr channel</a>',
+                    '<a href="https://www.flickr.com/photos/109374423@N04/albums">Visit Flickr channel</a>',
                 ], 'bullet')
             )),
             ArticleSection::basic('The eLife logo', 2, $this->render(
-                new Paragraph('The eLife logo is available to download below. Please refer to the brand guide for usage guidelines and ensure you are downloading the correct file type for your purpose.'),
+                new Paragraph('The eLife logo is available to download below. Please ensure you are downloading the correct file type for your purpose.'),
                 ArticleSection::basic('Full-colour horizontal', 3, $this->render(
                     Listing::unordered([
-                        '<a href="'.$this->generateDownloadLink('https://cdn.elifesciences.org/style-guide-images/elife-full-color-horizontal.eps').'">Download .eps for print</a>',
-                        '<a href="'.$this->generateDownloadLink('https://cdn.elifesciences.org/style-guide-images/elife-full-color-horizontal.jpg').'">Download .jpg for web</a>',
-                        '<a href="'.$this->generateDownloadLink('https://cdn.elifesciences.org/style-guide-images/elife-full-color-horizontal.png').'">Download .png with transparent background</a>',
+                        '<a href="'.$this->generateDownloadLink('https://cdn.elifesciences.org/style-guide-images/elife-full-color-horizontal-2020.eps').'">Download .eps for print</a>',
+                        '<a href="'.$this->generateDownloadLink('https://cdn.elifesciences.org/style-guide-images/elife-full-color-horizontal-2020.jpg').'">Download .jpg for web</a>',
+                        '<a href="'.$this->generateDownloadLink('https://cdn.elifesciences.org/style-guide-images/elife-full-color-horizontal-2020.png').'">Download .png with transparent background</a>',
+                        '<a href="'.$this->generateDownloadLink('https://cdn.elifesciences.org/style-guide-images/elife-full-color-horizontal-2020.svg').'">Download .svg for web</a>',
                     ], 'bullet')
                 ))
-            )),
-            ArticleSection::basic('Brand guide', 2, $this->render(
-                new Paragraph('The eLife brand guide has been developed to visualise our brand identity and offer guidance to our partners when working with us. We ask that you follow these guidelines when using the eLife name, logo or brand identity.'),
-                Listing::unordered([
-                    '<a href="'.$this->generateDownloadLink('https://cdn.elifesciences.org/images/eLife-brand-guide.pdf').'">Download PDF</a>',
-                ], 'bullet')
             )),
         ];
 
