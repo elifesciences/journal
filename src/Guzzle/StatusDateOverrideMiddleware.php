@@ -104,7 +104,7 @@ final class StatusDateOverrideMiddleware
 
     private function updateItem(array $item) : array
     {
-        if (isset($item['statusDate']) && isset($this->rdsArticles[$item['id']]['date']) && $this->authorizationChecker->isGranted('FEATURE_RDS')) {
+        if (isset($item['statusDate']) && isset($this->rdsArticles[$item['id']]) && $this->authorizationChecker->isGranted('FEATURE_RDS')) {
             $item['statusDate'] = $this->rdsArticles[$item['id']]['date'];
         }
 
