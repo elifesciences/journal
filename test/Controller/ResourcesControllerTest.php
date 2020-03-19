@@ -18,16 +18,14 @@ final class ResourcesControllerTest extends PageTestCase
 
         $majorSections = $crawler->filter('h2.article-section__header_text');
 
-        $this->assertCount(6, $majorSections);
+        $this->assertCount(4, $majorSections);
 
         $this->assertSame(
             [
-                'Posters and handouts',
                 'Presentations',
                 'Videos',
                 'Images',
                 'The eLife logo',
-                'Brand guide',
             ],
             array_map('trim', $majorSections->extract(['_text']))
         );

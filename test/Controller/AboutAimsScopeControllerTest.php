@@ -125,10 +125,10 @@ final class AboutAimsScopeControllerTest extends PageTestCase
         $this->assertSame(200, $client->getResponse()->getStatusCode());
 
         $this->assertCount(2, $crawler->filter('.article-section'));
-        $this->assertSame('Subject 1', trim($crawler->filter('.article-section:nth-child(1) .article-section__header')->text()));
-        $this->assertSame("Paragraph 1.\nParagraph 2. See editors", trim($crawler->filter('.article-section:nth-child(1) .article-section__body')->text()));
-        $this->assertSame('Subject 2', trim($crawler->filter('.article-section:nth-child(2) .article-section__header')->text()));
-        $this->assertSame('See editors', trim($crawler->filter('.article-section:nth-child(2) .article-section__body')->text()));
+        $this->assertSame('Subject 1', trim($crawler->filter('.article-section:nth-child(3) .article-section__header')->text()));
+        $this->assertSame("Paragraph 1.\nParagraph 2. See editors", trim($crawler->filter('.article-section:nth-child(3) .article-section__body')->text()));
+        $this->assertSame('Subject 2', trim($crawler->filter('.article-section:nth-child(4) .article-section__header')->text()));
+        $this->assertSame('See editors', trim($crawler->filter('.article-section:nth-child(4) .article-section__body')->text()));
     }
 
     /**
@@ -146,8 +146,8 @@ final class AboutAimsScopeControllerTest extends PageTestCase
         $this->assertSame('/about/aims-scope', $crawler->filter('link[rel="canonical"]')->attr('href'));
         $this->assertSame('http://localhost/about/aims-scope', $crawler->filter('meta[property="og:url"]')->attr('content'));
         $this->assertSame('Aims and scope', $crawler->filter('meta[property="og:title"]')->attr('content'));
-        $this->assertSame('eLife welcomes the submission of Research Articles, Short Reports, Tools and Resources articles, and Research Advances (read more about article types) in the following subject areas.', $crawler->filter('meta[property="og:description"]')->attr('content'));
-        $this->assertSame('eLife welcomes the submission of Research Articles, Short Reports, Tools and Resources articles, and Research Advances (read more about article types) in the following subject areas.', $crawler->filter('meta[name="description"]')->attr('content'));
+        $this->assertSame('eLife welcomes the submission of Research Articles, Short Reports, Tools and Resources articles, Research Advances, Scientific Correspondence and Review Articles in the subject areas below.', $crawler->filter('meta[property="og:description"]')->attr('content'));
+        $this->assertSame('eLife welcomes the submission of Research Articles, Short Reports, Tools and Resources articles, Research Advances, Scientific Correspondence and Review Articles in the subject areas below.', $crawler->filter('meta[name="description"]')->attr('content'));
         $this->assertSame('summary', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
         $this->assertEmpty($crawler->filter('meta[property="og:image"]'));
         $this->assertEmpty($crawler->filter('meta[name="dc.identifier"]'));
