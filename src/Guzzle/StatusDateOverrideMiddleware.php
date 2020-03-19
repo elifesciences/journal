@@ -25,7 +25,7 @@ final class StatusDateOverrideMiddleware
 
     public function __invoke(callable $handler) : callable
     {
-        if (empty($this->rdsArticles)) {
+        if (!$this->authorizationChecker->isGranted('FEATURE_RDS') || empty($this->rdsArticles)) {
             return $handler;
         }
 
@@ -104,7 +104,7 @@ final class StatusDateOverrideMiddleware
 
     private function updateItem(array $item) : array
     {
-        if (isset($item['statusDate']) && isset($this->rdsArticles[$item['id']]) && $this->authorizationChecker->isGranted('FEATURE_RDS')) {
+        if (isset($item['statusDate']) && isset($this->rdsArticles[$item['id']])) {
             $item['statusDate'] = $this->rdsArticles[$item['id']]['date'];
         }
 
