@@ -89,6 +89,7 @@ parameters:
         to_name: New Subject
     rds_articles:
         'id-of-article-with-rds':
+            date: '2030-01-01T00:00:00Z'
             display: https://repro.elifesciences.org/example.html
             download: https://repro.elifesciences.org/example.dar
     example_rds_articles:
