@@ -57,7 +57,7 @@ final class ArticleRdsControllerTest extends WebTestCase
         $this->mockArticle('id-of-article-with-rds');
         $client->request('GET', '/articles/id-of-article-with-rds/executable');
 
-        $this->assertSame(200, $client->getResponse()->getStatusCode());
+        $this->assertSame(200, $client->getResponse()->getStatusCode(), $client->getResponse()->getContent());
     }
 
     /**
