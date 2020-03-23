@@ -195,6 +195,17 @@ services:
             alias: subject_rewriting
             priority: 1500
 
+    elife.journal.guzzle.status_date_override:
+        class: eLife\Journal\Guzzle\StatusDateOverrideMiddleware
+        public: false
+        arguments:
+          - '@security.authorization_checker'
+          - '%rds_articles%'
+        tags:
+          - name: csa_guzzle.middleware
+            alias: status_date_override
+            priority: 1499
+
     elife.journal.helper.fragment_link_rewriter:
         class: eLife\Journal\Helper\FragmentLinkRewriter
         public: false
