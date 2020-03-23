@@ -27,7 +27,7 @@ final class StatusDateOverrideMiddlewareTest extends KernelTestCase
      */
     public function it_does_nothing_if_there_are_no_rds_articles()
     {
-        $middleware = new StatusDateOverrideMiddleware($this->stubAuthorizationChecker());
+        $middleware = new StatusDateOverrideMiddleware($this->alwaysGrantedAuthorizationChecker());
 
         $this->assertSame('foo', $middleware(function () {
             return 'foo';

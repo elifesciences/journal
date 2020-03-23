@@ -9,7 +9,7 @@ abstract class KernelTestCase extends BaseKernelTestCase
 {
     use AppKernelTestCase;
 
-    final protected function stubAuthorizationChecker() : AuthorizationCheckerInterface
+    final protected function alwaysGrantedAuthorizationChecker() : AuthorizationCheckerInterface
     {
         $authorizationChecker = $this->createMock(AuthorizationCheckerInterface::class);
         $authorizationChecker->method('isGranted')->willReturn(true);
