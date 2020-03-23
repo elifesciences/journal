@@ -41,7 +41,7 @@ final class StatusDateOverrideMiddlewareTest extends KernelTestCase
     public function it_rewrites_responses(string $mediaType, array $realResponse, array $expectedResponse)
     {
         $validator = self::bootKernel()->getContainer()->get('elife.api_validator.validator');
-        $middleware = new StatusDateOverrideMiddleware($this->stubAuthorizationChecker(), self::$rdsArticles);
+        $middleware = new StatusDateOverrideMiddleware($this->alwaysGrantedAuthorizationChecker(), self::$rdsArticles);
 
         $request = new Request(
             'GET',
