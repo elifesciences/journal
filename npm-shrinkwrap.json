@@ -2045,11 +2045,6 @@
         }
       }
     },
-    "gulp-svg2png": {
-      "version": "2.0.2",
-      "from": "gulp-svg2png@latest",
-      "resolved": "https://registry.npmjs.org/gulp-svg2png/-/gulp-svg2png-2.0.2.tgz"
-    },
     "gulp-util": {
       "version": "3.0.7",
       "from": "gulp-util@>=3.0.0 <4.0.0",
@@ -3228,23 +3223,6 @@
       "version": "1.0.1",
       "from": "map-obj@>=1.0.1 <2.0.0",
       "resolved": "https://registry.npmjs.org/map-obj/-/map-obj-1.0.1.tgz"
-    },
-    "map-stream": {
-      "version": "0.0.6",
-      "from": "map-stream@0.0.6",
-      "resolved": "https://registry.npmjs.org/map-stream/-/map-stream-0.0.6.tgz"
-    },
-    "map-stream-limit": {
-      "version": "1.1.0",
-      "from": "map-stream-limit@>=1.1.0 <2.0.0",
-      "resolved": "https://registry.npmjs.org/map-stream-limit/-/map-stream-limit-1.1.0.tgz",
-      "dependencies": {
-        "map-stream": {
-          "version": "0.0.3",
-          "from": "map-stream@0.0.3",
-          "resolved": "https://registry.npmjs.org/map-stream/-/map-stream-0.0.3.tgz"
-        }
-      }
     },
     "math-clamp-x": {
       "version": "1.2.0",
@@ -4650,11 +4628,6 @@
       "version": "1.0.0",
       "from": "throttleit@>=1.0.0 <2.0.0",
       "resolved": "https://registry.npmjs.org/throttleit/-/throttleit-1.0.0.tgz"
-    },
-    "through": {
-      "version": "2.3.8",
-      "from": "through@>=2.3.4 <2.4.0",
-      "resolved": "https://registry.npmjs.org/through/-/through-2.3.8.tgz"
     },
     "through2": {
       "version": "2.0.3",
