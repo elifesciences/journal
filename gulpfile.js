@@ -29,7 +29,6 @@ gulp.task('favicons:clean', () => {
 
 gulp.task('favicons:build', ['favicons:clean'], () => {
     return gulp.src('./assets/images/favicon.svg')
-
         .pipe(favicons({
             appName: 'eLife',
             appDescription: 'eLife is an open-access journal that publishes research in the life and biomedical sciences',
