@@ -13,7 +13,6 @@ const merge = require('merge-stream');
 const responsive = require('gulp-responsive');
 const request = require('request');
 const rev = require('gulp-rev-all');
-const svg2png = require('gulp-svg2png');
 
 let criticalCssPageTypes = {};
 try {
@@ -30,7 +29,7 @@ gulp.task('favicons:clean', () => {
 
 gulp.task('favicons:build', ['favicons:clean'], () => {
     return gulp.src('./assets/images/favicon.svg')
-        .pipe(svg2png({width: 512, height: 512}))
+
         .pipe(favicons({
             appName: 'eLife',
             appDescription: 'eLife is an open-access journal that publishes research in the life and biomedical sciences',
