@@ -37,6 +37,7 @@ parameters:
         '30274': https://repro.elifesciences.org/example.html
     rds_articles:
         '26231':
+            date: '2030-01-01T00:00:00Z'
             display: https://repro.elifesciences.org/example.html
             download: https://repro.elifesciences.org/example.dar
     dismissible_info_bars: {}
