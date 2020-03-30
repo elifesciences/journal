@@ -46,6 +46,8 @@ final class ModelParameterResolver implements ParameterResolver
             $new = ['number' => $model->getEpisode()->getNumber(), '_fragment' => $model->getChapter()->getTime()];
         } elseif ($model instanceof Model\PressPackage) {
             $new = ['id' => $model->getId(), 'slug' => $this->slugify->slugify($model->getTitle())];
+        } elseif ($model instanceof Model\RegionalCollection) {
+            $new = ['id' => $model->getId(), 'slug' => $this->slugify->slugify($model->getTitle())];
         } elseif ($model instanceof Model\Subject) {
             $new = ['id' => $model->getId()];
         } else {

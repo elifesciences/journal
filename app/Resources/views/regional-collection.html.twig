@@ -1,0 +1,67 @@
+{% set criticalCss = 'regional-collection' %}
+
+{% extends '::page.html.twig' %}
+
+{% block title %}{{ title|striptags }} | Regional collections{% endblock %}
+
+{% block body %}
+
+    {{ render_pattern(contentHeader) }}
+
+    <div class="wrapper">
+
+        {% if contextualData %}
+
+            {{ render_pattern(contextualData) }}
+
+        {% endif %}
+
+    </div>
+
+    {% include 'calls-to-action.html.twig' %}
+
+    {% embed 'grid/listing-two-column.html.twig' %}
+
+        {% block main %}
+
+            {% for part in body %}
+
+                {{ render_pattern(part) }}
+
+            {% endfor %}
+
+        {% endblock %}
+
+        {% block secondary %}
+
+            {% if multimedia %}
+
+                <div class="grid-secondary-column__item">
+
+                    {{ render_pattern(multimedia) }}
+
+                </div>
+
+            {% endif %}
+
+            {% if related %}
+
+                <div class="grid-secondary-column__item">
+
+                    {{ render_pattern(related) }}
+
+                </div>
+
+            {% endif %}
+
+            <div class="grid-secondary-column__item">
+
+                {{ render_pattern(editors) }}
+
+            </div>
+
+        {% endblock %}
+
+    {% endembed %}
+
+{% endblock %}

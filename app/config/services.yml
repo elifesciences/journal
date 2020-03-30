@@ -112,6 +112,10 @@ services:
         class: eLife\ApiSdk\Client\Recommendations
         factory: ['@elife.api_sdk', recommendations]
 
+    elife.api_sdk.regional-collections:
+        class: eLife\ApiSdk\Client\RegionalCollections
+        factory: ['@elife.api_sdk', regionalCollections]
+
     elife.api_sdk.search:
         class: eLife\ApiSdk\Client\Search
         factory: ['@elife.api_sdk', search]
@@ -1321,6 +1325,16 @@ services:
         public: false
         arguments:
           - '@elife.journal.view_model.converter'
+        tags:
+          - name: view_model.converter
+
+    elife.journal.view_model.converter.regional-collection.header:
+        class: eLife\Journal\ViewModel\Converter\RegionalCollectionContentHeaderConverter
+        public: false
+        arguments:
+          - '@elife.journal.view_model.converter'
+          - '@router'
+          - '@elife.journal.view_model.factory.content_header_image'
         tags:
           - name: view_model.converter
 

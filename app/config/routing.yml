@@ -334,6 +334,14 @@ profile:
     requirements:
         id: '[a-z0-9-]+'
 
+regional-collection:
+    path: /regional-collections/{id}/{slug}
+    defaults:
+         _controller: AppBundle:RegionalCollections:regionalCollection
+         slug: ''
+    requirements:
+        id: '[a-z0-9-]+'
+
 resources:
     path: /resources
     defaults:
