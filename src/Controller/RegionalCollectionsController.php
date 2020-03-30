@@ -18,7 +18,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 final class RegionalCollectionsController extends Controller
 {
-
     public function regionalCollectionAction(Request $request, string $id) : Response
     {
         $arguments['item'] = $this->get('elife.api_sdk.regional-collections')
