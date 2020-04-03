@@ -23,7 +23,7 @@ final class PromotionalCollectionControllerTest extends PageTestCase
         $this->assertSame('Promotional collection title', $crawler->filter('.content-header__title')->text());
         $this->assertSame('Promotional collection Jan 1, 2010', trim(preg_replace('!\s+!', ' ', $crawler->filter('.content-header .meta')->text())));
 
-        $content = $crawler->filter('.list-heading:contains("Promotional collection") + .listing-list > .listing-list__item');
+        $content = $crawler->filter('.list-heading:contains("Collection") + .listing-list > .listing-list__item');
         $this->assertCount(1, $content);
         $this->assertContains('Blog article title', $content->eq(0)->text());
     }
