@@ -54,11 +54,15 @@
 
             {% endif %}
 
-            <div class="grid-secondary-column__item">
+            {% if editors %}
 
-                {{ render_pattern(editors) }}
+                <div class="grid-secondary-column__item">
 
-            </div>
+                    {{ render_pattern(editors) }}
+
+                </div>
+
+            {% endif %}
 
         {% endblock %}
 
