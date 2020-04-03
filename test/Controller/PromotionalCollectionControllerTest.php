@@ -21,7 +21,7 @@ final class PromotionalCollectionControllerTest extends PageTestCase
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertSame('Promotional collection title', $crawler->filter('.content-header__title')->text());
-        $this->assertSame('Promotional collection Jan 1, 2010', trim(preg_replace('!\s+!', ' ', $crawler->filter('.content-header .meta')->text())));
+        $this->assertSame('Highlights Jan 1, 2010', trim(preg_replace('!\s+!', ' ', $crawler->filter('.content-header .meta')->text())));
 
         $content = $crawler->filter('.list-heading:contains("Collection") + .listing-list > .listing-list__item');
         $this->assertCount(1, $content);
@@ -381,7 +381,7 @@ final class PromotionalCollectionControllerTest extends PageTestCase
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
 
-        $this->assertSame('Promotional collection title | Promotional collections | eLife', $crawler->filter('title')->text());
+        $this->assertSame('Promotional collection title | Highlights | eLife', $crawler->filter('title')->text());
         $this->assertSame('/promotional-collections/1/promotional-collection-title', $crawler->filter('link[rel="canonical"]')->attr('href'));
         $this->assertSame('http://localhost/promotional-collections/1/promotional-collection-title', $crawler->filter('meta[property="og:url"]')->attr('content'));
         $this->assertSame('Promotional collection title', $crawler->filter('meta[property="og:title"]')->attr('content'));
