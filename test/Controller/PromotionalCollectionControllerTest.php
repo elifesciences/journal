@@ -367,7 +367,7 @@ final class PromotionalCollectionControllerTest extends PageTestCase
         $crawler = $client->request('GET', '/promotional-collections/1/promotional-collection-title');
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
-        $this->assertCount(2, $crawler->filter('.list-heading:contains("Local editors") + .listing-list > .listing-list__item'));
+        $this->assertCount(2, $crawler->filter('.list-heading:contains("Editors") + .listing-list > .listing-list__item'));
     }
 
     /**

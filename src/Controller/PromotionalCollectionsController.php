@@ -78,7 +78,7 @@ final class PromotionalCollectionsController extends Controller
             ->then(Callback::emptyOr(function (Sequence $editors) {
                 return ListingProfileSnippets::basic(
                     $editors->map($this->willConvertTo(ProfileSnippet::class))->toArray(),
-                    new ListHeading('Local editors')
+                    new ListHeading('Editors')
                 );
             }));
 
