@@ -112,9 +112,9 @@ services:
         class: eLife\ApiSdk\Client\Recommendations
         factory: ['@elife.api_sdk', recommendations]
 
-    elife.api_sdk.regional-collections:
-        class: eLife\ApiSdk\Client\RegionalCollections
-        factory: ['@elife.api_sdk', regionalCollections]
+    elife.api_sdk.promotional-collections:
+        class: eLife\ApiSdk\Client\PromotionalCollections
+        factory: ['@elife.api_sdk', promotionalCollections]
 
     elife.api_sdk.search:
         class: eLife\ApiSdk\Client\Search
@@ -1328,8 +1328,8 @@ services:
         tags:
           - name: view_model.converter
 
-    elife.journal.view_model.converter.regional-collection.header:
-        class: eLife\Journal\ViewModel\Converter\RegionalCollectionContentHeaderConverter
+    elife.journal.view_model.converter.promotional-collection.header:
+        class: eLife\Journal\ViewModel\Converter\PromotionalCollectionContentHeaderConverter
         public: false
         arguments:
           - '@elife.journal.view_model.converter'

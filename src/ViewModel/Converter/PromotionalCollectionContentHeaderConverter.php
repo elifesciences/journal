@@ -2,13 +2,13 @@
 
 namespace eLife\Journal\ViewModel\Converter;
 
-use eLife\ApiSdk\Model\RegionalCollection;
+use eLife\ApiSdk\Model\PromotionalCollection;
 use eLife\Journal\ViewModel\Factory\ContentHeaderImageFactory;
 use eLife\Patterns\ViewModel;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use function strip_tags;
 
-final class RegionalCollectionContentHeaderConverter implements ViewModelConverter
+final class PromotionalCollectionContentHeaderConverter implements ViewModelConverter
 {
     use CreatesDate;
 
@@ -24,7 +24,7 @@ final class RegionalCollectionContentHeaderConverter implements ViewModelConvert
     }
 
     /**
-     * @param RegionalCollection $object
+     * @param PromotionalCollection $object
      */
     public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
@@ -33,11 +33,11 @@ final class RegionalCollectionContentHeaderConverter implements ViewModelConvert
             $this->contentHeaderImageFactory->forImage($object->getBanner(), true), $object->getImpactStatement(), true, [], null, [], [], null,
             new ViewModel\SocialMediaSharers(
                 strip_tags($object->getTitle()),
-                $this->urlGenerator->generate('regional-collection', [$object], UrlGeneratorInterface::ABSOLUTE_URL)
+                $this->urlGenerator->generate('promotional-collection', [$object], UrlGeneratorInterface::ABSOLUTE_URL)
             ),
             null,
             ViewModel\Meta::withText(
-                'Regional collection',
+                'Highlights',
                 $this->simpleDate($object, ['date' => 'published'] + $context)
             )
         );
@@ -45,6 +45,6 @@ final class RegionalCollectionContentHeaderConverter implements ViewModelConvert
 
     public function supports($object, string $viewModel = null, array $context = []) : bool
     {
-        return $object instanceof RegionalCollection && ViewModel\ContentHeader::class === $viewModel;
+        return $object instanceof PromotionalCollection && ViewModel\ContentHeader::class === $viewModel;
     }
 }

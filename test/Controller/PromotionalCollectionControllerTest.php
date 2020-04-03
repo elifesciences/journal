@@ -6,24 +6,24 @@ use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use test\eLife\Journal\Providers;
 
-final class RegionalCollectionControllerTest extends PageTestCase
+final class PromotionalCollectionControllerTest extends PageTestCase
 {
     use Providers;
 
     /**
      * @test
      */
-    public function it_displays_a_regional_collection_page()
+    public function it_displays_a_promotional_collection_page()
     {
         $client = static::createClient();
 
         $crawler = $client->request('GET', $this->getUrl());
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
-        $this->assertSame('Regional collection title', $crawler->filter('.content-header__title')->text());
-        $this->assertSame('Regional collection Jan 1, 2010', trim(preg_replace('!\s+!', ' ', $crawler->filter('.content-header .meta')->text())));
+        $this->assertSame('Promotional collection title', $crawler->filter('.content-header__title')->text());
+        $this->assertSame('Promotional collection Jan 1, 2010', trim(preg_replace('!\s+!', ' ', $crawler->filter('.content-header .meta')->text())));
 
-        $content = $crawler->filter('.list-heading:contains("Regional collection") + .listing-list > .listing-list__item');
+        $content = $crawler->filter('.list-heading:contains("Promotional collection") + .listing-list > .listing-list__item');
         $this->assertCount(1, $content);
         $this->assertContains('Blog article title', $content->eq(0)->text());
     }
@@ -38,7 +38,7 @@ final class RegionalCollectionControllerTest extends PageTestCase
         $this->mockApiResponse(
             new Request(
                 'GET',
-                'http://api.elifesciences.org/metrics/regional-collection/1/page-views?by=month&page=1&per-page=20&order=desc',
+                'http://api.elifesciences.org/metrics/promotional-collection/1/page-views?by=month&page=1&per-page=20&order=desc',
                 ['Accept' => 'application/vnd.elife.metric-time-period+json; version=1']
             ),
             new Response(
@@ -64,7 +64,7 @@ final class RegionalCollectionControllerTest extends PageTestCase
         $crawler = $client->request('GET', $this->getUrl());
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
-        $this->assertSame('Regional collection title', $crawler->filter('.content-header__title')->text());
+        $this->assertSame('Promotional collection title', $crawler->filter('.content-header__title')->text());
 
         $this->assertSame(
             [
@@ -86,15 +86,15 @@ final class RegionalCollectionControllerTest extends PageTestCase
         $this->mockApiResponse(
             new Request(
                 'GET',
-                'http://api.elifesciences.org/regional-collections/1',
-                ['Accept' => 'application/vnd.elife.regional-collection+json; version=1']
+                'http://api.elifesciences.org/promotional-collections/1',
+                ['Accept' => 'application/vnd.elife.promotional-collection+json; version=1']
             ),
             new Response(
                 200,
-                ['Content-Type' => 'application/vnd.elife.regional-collection+json; version=1'],
+                ['Content-Type' => 'application/vnd.elife.promotional-collection+json; version=1'],
                 json_encode([
                     'id' => '1',
-                    'title' => 'Regional collection title',
+                    'title' => 'Promotional collection title',
                     'published' => '2010-01-01T00:00:00Z',
                     'updated' => '2011-01-01T00:00:00Z',
                     'image' => [
@@ -125,7 +125,7 @@ final class RegionalCollectionControllerTest extends PageTestCase
                             ],
                         ],
                     ],
-                    'impactStatement' => 'Regional collection impact statement',
+                    'impactStatement' => 'Promotional collection impact statement',
                     'editors' => [
                         [
                             'id' => 'person',
@@ -179,7 +179,7 @@ final class RegionalCollectionControllerTest extends PageTestCase
             )
         );
 
-        $crawler = $client->request('GET', '/regional-collections/1/regional-collection-title');
+        $crawler = $client->request('GET', '/promotional-collections/1/promotional-collection-title');
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $multimedia = $crawler->filter('.list-heading:contains("Multimedia") + .listing-list > .listing-list__item');
@@ -197,15 +197,15 @@ final class RegionalCollectionControllerTest extends PageTestCase
         $this->mockApiResponse(
             new Request(
                 'GET',
-                'http://api.elifesciences.org/regional-collections/1',
-                ['Accept' => 'application/vnd.elife.regional-collection+json; version=1']
+                'http://api.elifesciences.org/promotional-collections/1',
+                ['Accept' => 'application/vnd.elife.promotional-collection+json; version=1']
             ),
             new Response(
                 200,
-                ['Content-Type' => 'application/vnd.elife.regional-collection+json; version=1'],
+                ['Content-Type' => 'application/vnd.elife.promotional-collection+json; version=1'],
                 json_encode([
                     'id' => '1',
-                    'title' => 'Regional collection title',
+                    'title' => 'Promotional collection title',
                     'published' => '2010-01-01T00:00:00Z',
                     'updated' => '2011-01-01T00:00:00Z',
                     'image' => [
@@ -236,7 +236,7 @@ final class RegionalCollectionControllerTest extends PageTestCase
                             ],
                         ],
                     ],
-                    'impactStatement' => 'Regional collection impact statement',
+                    'impactStatement' => 'Promotional collection impact statement',
                     'editors' => [
                         [
                             'id' => 'person',
@@ -270,7 +270,7 @@ final class RegionalCollectionControllerTest extends PageTestCase
             )
         );
 
-        $crawler = $client->request('GET', '/regional-collections/1/regional-collection-title');
+        $crawler = $client->request('GET', '/promotional-collections/1/promotional-collection-title');
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $related = $crawler->filter('.list-heading:contains("Related") + .listing-list > .listing-list__item');
@@ -288,15 +288,15 @@ final class RegionalCollectionControllerTest extends PageTestCase
         $this->mockApiResponse(
             new Request(
                 'GET',
-                'http://api.elifesciences.org/regional-collections/1',
-                ['Accept' => 'application/vnd.elife.regional-collection+json; version=1']
+                'http://api.elifesciences.org/promotional-collections/1',
+                ['Accept' => 'application/vnd.elife.promotional-collection+json; version=1']
             ),
             new Response(
                 200,
-                ['Content-Type' => 'application/vnd.elife.regional-collection+json; version=1'],
+                ['Content-Type' => 'application/vnd.elife.promotional-collection+json; version=1'],
                 json_encode([
                     'id' => '1',
-                    'title' => 'Regional collection title',
+                    'title' => 'Promotional collection title',
                     'published' => '2010-01-01T00:00:00Z',
                     'updated' => '2011-01-01T00:00:00Z',
                     'image' => [
@@ -327,7 +327,7 @@ final class RegionalCollectionControllerTest extends PageTestCase
                             ],
                         ],
                     ],
-                    'impactStatement' => 'Regional collection impact statement',
+                    'impactStatement' => 'Promotional collection impact statement',
                     'editors' => [
                         [
                             'id' => 'person',
@@ -364,7 +364,7 @@ final class RegionalCollectionControllerTest extends PageTestCase
             )
         );
 
-        $crawler = $client->request('GET', '/regional-collections/1/regional-collection-title');
+        $crawler = $client->request('GET', '/promotional-collections/1/promotional-collection-title');
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertCount(2, $crawler->filter('.list-heading:contains("Local editors") + .listing-list > .listing-list__item'));
@@ -381,20 +381,20 @@ final class RegionalCollectionControllerTest extends PageTestCase
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
 
-        $this->assertSame('Regional collection title | Regional collections | eLife', $crawler->filter('title')->text());
-        $this->assertSame('/regional-collections/1/regional-collection-title', $crawler->filter('link[rel="canonical"]')->attr('href'));
-        $this->assertSame('http://localhost/regional-collections/1/regional-collection-title', $crawler->filter('meta[property="og:url"]')->attr('content'));
-        $this->assertSame('Regional collection title', $crawler->filter('meta[property="og:title"]')->attr('content'));
-        $this->assertSame('Regional collection impact statement', $crawler->filter('meta[property="og:description"]')->attr('content'));
-        $this->assertSame('Regional collection impact statement', $crawler->filter('meta[name="description"]')->attr('content'));
+        $this->assertSame('Promotional collection title | Promotional collections | eLife', $crawler->filter('title')->text());
+        $this->assertSame('/promotional-collections/1/promotional-collection-title', $crawler->filter('link[rel="canonical"]')->attr('href'));
+        $this->assertSame('http://localhost/promotional-collections/1/promotional-collection-title', $crawler->filter('meta[property="og:url"]')->attr('content'));
+        $this->assertSame('Promotional collection title', $crawler->filter('meta[property="og:title"]')->attr('content'));
+        $this->assertSame('Promotional collection impact statement', $crawler->filter('meta[property="og:description"]')->attr('content'));
+        $this->assertSame('Promotional collection impact statement', $crawler->filter('meta[name="description"]')->attr('content'));
         $this->assertSame('article', $crawler->filter('meta[property="og:type"]')->attr('content'));
         $this->assertSame('summary_large_image', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
         $this->assertSame('https://www.example.com/iiif/ban%2Fner/full/2000,/0/default.jpg', $crawler->filter('meta[property="og:image"]')->attr('content'));
         $this->assertSame('2000', $crawler->filter('meta[property="og:image:width"]')->attr('content'));
         $this->assertSame('1333', $crawler->filter('meta[property="og:image:height"]')->attr('content'));
-        $this->assertSame('regional-collection/1', $crawler->filter('meta[name="dc.identifier"]')->attr('content'));
+        $this->assertSame('promotional-collection/1', $crawler->filter('meta[name="dc.identifier"]')->attr('content'));
         $this->assertSame('elifesciences.org', $crawler->filter('meta[name="dc.relation.ispartof"]')->attr('content'));
-        $this->assertSame('Regional collection title', $crawler->filter('meta[name="dc.title"]')->attr('content'));
+        $this->assertSame('Promotional collection title', $crawler->filter('meta[name="dc.title"]')->attr('content'));
         $this->assertEmpty($crawler->filter('meta[name="dc.description"]'));
         $this->assertSame('2010-01-01', $crawler->filter('meta[name="dc.date"]')->attr('content'));
         $this->assertSame('© 2010 eLife Sciences Publications Limited. This article is distributed under the terms of the Creative Commons Attribution License, which permits unrestricted use and redistribution provided that the original author and source are credited.', $crawler->filter('meta[name="dc.rights"]')->attr('content'));
@@ -408,7 +408,7 @@ final class RegionalCollectionControllerTest extends PageTestCase
     {
         $client = static::createClient();
 
-        $url = "/regional-collections/1{$slug}";
+        $url = "/promotional-collections/1{$slug}";
 
         $expectedUrl = $this->getUrl();
         if ($queryString) {
@@ -424,16 +424,16 @@ final class RegionalCollectionControllerTest extends PageTestCase
     /**
      * @test
      */
-    public function it_displays_a_404_if_the_regional_collection_is_not_found()
+    public function it_displays_a_404_if_the_promotional_collection_is_not_found()
     {
         $client = static::createClient();
 
         static::mockApiResponse(
             new Request(
                 'GET',
-                'http://api.elifesciences.org/regional-collections/1',
+                'http://api.elifesciences.org/promotional-collections/1',
                 [
-                    'Accept' => 'application/vnd.elife.regional-collection+json; version=1',
+                    'Accept' => 'application/vnd.elife.promotional-collection+json; version=1',
                 ]
             ),
             new Response(
@@ -447,7 +447,7 @@ final class RegionalCollectionControllerTest extends PageTestCase
             )
         );
 
-        $client->request('GET', '/regional-collections/1');
+        $client->request('GET', '/promotional-collections/1');
 
         $this->assertSame(404, $client->getResponse()->getStatusCode());
     }
@@ -457,15 +457,15 @@ final class RegionalCollectionControllerTest extends PageTestCase
         $this->mockApiResponse(
             new Request(
                 'GET',
-                'http://api.elifesciences.org/regional-collections/1',
-                ['Accept' => 'application/vnd.elife.regional-collection+json; version=1']
+                'http://api.elifesciences.org/promotional-collections/1',
+                ['Accept' => 'application/vnd.elife.promotional-collection+json; version=1']
             ),
             new Response(
                 200,
-                ['Content-Type' => 'application/vnd.elife.regional-collection+json; version=1'],
+                ['Content-Type' => 'application/vnd.elife.promotional-collection+json; version=1'],
                 json_encode([
                     'id' => '1',
-                    'title' => 'Regional collection title',
+                    'title' => 'Promotional collection title',
                     'published' => '2010-01-01T00:00:00Z',
                     'updated' => '2011-01-01T00:00:00Z',
                     'image' => [
@@ -496,7 +496,7 @@ final class RegionalCollectionControllerTest extends PageTestCase
                             ],
                         ],
                     ],
-                    'impactStatement' => 'Regional collection impact statement',
+                    'impactStatement' => 'Promotional collection impact statement',
                     'editors' => [
                         [
                             'id' => 'person',
@@ -522,6 +522,6 @@ final class RegionalCollectionControllerTest extends PageTestCase
             )
         );
 
-        return '/regional-collections/1/regional-collection-title';
+        return '/promotional-collections/1/promotional-collection-title';
     }
 }

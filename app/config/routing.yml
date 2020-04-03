@@ -334,10 +334,10 @@ profile:
     requirements:
         id: '[a-z0-9-]+'
 
-regional-collection:
-    path: /regional-collections/{id}/{slug}
+promotional-collection:
+    path: /highlights/{id}/{slug}
     defaults:
-         _controller: AppBundle:RegionalCollections:regionalCollection
+         _controller: AppBundle:PromotionalCollections:promotionalCollection
          slug: ''
     requirements:
         id: '[a-z0-9-]+'

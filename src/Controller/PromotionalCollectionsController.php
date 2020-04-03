@@ -4,7 +4,7 @@ namespace eLife\Journal\Controller;
 
 use eLife\ApiSdk\Collection\Sequence;
 use eLife\ApiSdk\Model\Identifier;
-use eLife\ApiSdk\Model\RegionalCollection;
+use eLife\ApiSdk\Model\PromotionalCollection;
 use eLife\Journal\Helper\Callback;
 use eLife\Patterns\ViewModel\ContentHeader;
 use eLife\Patterns\ViewModel\ContextualData;
@@ -16,11 +16,11 @@ use eLife\Patterns\ViewModel\Teaser;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-final class RegionalCollectionsController extends Controller
+final class PromotionalCollectionsController extends Controller
 {
-    public function regionalCollectionAction(Request $request, string $id) : Response
+    public function promotionalCollectionAction(Request $request, string $id) : Response
     {
-        $arguments['item'] = $this->get('elife.api_sdk.regional-collections')
+        $arguments['item'] = $this->get('elife.api_sdk.promotional-collections')
             ->get($id)
             ->otherwise($this->mightNotExist())
             ->then($this->checkSlug($request, Callback::method('getTitle')));
@@ -31,7 +31,7 @@ final class RegionalCollectionsController extends Controller
             ->then(Callback::method('getTitle'));
 
         $arguments['pageViews'] = $this->get('elife.api_sdk.metrics')
-            ->totalPageViews(Identifier::regionalCollection($id))
+            ->totalPageViews(Identifier::promotionalCollection($id))
             ->otherwise($this->mightNotExist())
             ->otherwise($this->softFailure('Failed to load page views count'));
 
@@ -44,14 +44,14 @@ final class RegionalCollectionsController extends Controller
             ->then($this->willConvertTo(ContentHeader::class));
 
         $arguments['body'] = $arguments['item']
-            ->then(function (RegionalCollection $regionalCollection) {
-                if ($regionalCollection->getSummary()->notEmpty()) {
-                    yield from $regionalCollection->getSummary()->map($this->willConvertTo());
+            ->then(function (PromotionalCollection $promotionalCollection) {
+                if ($promotionalCollection->getSummary()->notEmpty()) {
+                    yield from $promotionalCollection->getSummary()->map($this->willConvertTo());
                 }
 
                 yield ListingTeasers::basic(
-                    $regionalCollection->getContent()->map($this->willConvertTo(Teaser::class))->toArray(),
-                    new ListHeading('Regional collection')
+                    $promotionalCollection->getContent()->map($this->willConvertTo(Teaser::class))->toArray(),
+                    new ListHeading('Collection')
                 );
             });
 
@@ -75,13 +75,13 @@ final class RegionalCollectionsController extends Controller
 
         $arguments['editors'] = $arguments['item']
             ->then(Callback::method('getEditors'))
-            ->then(function (Sequence $editors) {
+            ->then(Callback::emptyOr(function (Sequence $editors) {
                 return ListingProfileSnippets::basic(
                     $editors->map($this->willConvertTo(ProfileSnippet::class))->toArray(),
                     new ListHeading('Local editors')
                 );
-            });
+            }));
 
-        return new Response($this->get('templating')->render('::regional-collection.html.twig', $arguments));
+        return new Response($this->get('templating')->render('::promotional-collection.html.twig', $arguments));
     }
 }

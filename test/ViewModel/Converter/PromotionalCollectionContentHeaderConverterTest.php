@@ -2,16 +2,16 @@
 
 namespace test\eLife\Journal\ViewModel\Converter;
 
-use eLife\Journal\ViewModel\Converter\RegionalCollectionContentHeaderConverter;
+use eLife\Journal\ViewModel\Converter\PromotionalCollectionContentHeaderConverter;
 use eLife\Journal\ViewModel\Converter\ViewModelConverter;
 use eLife\Journal\ViewModel\Factory\ContentHeaderImageFactory;
 use eLife\Journal\ViewModel\Factory\PictureBuilderFactory;
 use eLife\Patterns\ViewModel;
 use Symfony\Component\Asset\Packages;
 
-final class RegionalCollectionContentHeaderConverterTest extends ModelConverterTestCase
+final class PromotionalCollectionContentHeaderConverterTest extends ModelConverterTestCase
 {
-    protected $models = ['regional-collection'];
+    protected $models = ['promotional-collection'];
     protected $viewModelClasses = [ViewModel\ContentHeader::class];
 
     /**
@@ -19,7 +19,7 @@ final class RegionalCollectionContentHeaderConverterTest extends ModelConverterT
      */
     public function setUpConverter()
     {
-        $this->converter = new RegionalCollectionContentHeaderConverter(
+        $this->converter = new PromotionalCollectionContentHeaderConverter(
             $viewModelConverter = $this->createMock(ViewModelConverter::class),
             $this->stubUrlGenerator(),
             new ContentHeaderImageFactory(new PictureBuilderFactory(), new Packages())
