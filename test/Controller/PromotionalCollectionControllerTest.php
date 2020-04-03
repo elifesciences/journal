@@ -179,7 +179,7 @@ final class PromotionalCollectionControllerTest extends PageTestCase
             )
         );
 
-        $crawler = $client->request('GET', '/promotional-collections/1/promotional-collection-title');
+        $crawler = $client->request('GET', '/highlights/1/promotional-collection-title');
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $multimedia = $crawler->filter('.list-heading:contains("Multimedia") + .listing-list > .listing-list__item');
@@ -270,7 +270,7 @@ final class PromotionalCollectionControllerTest extends PageTestCase
             )
         );
 
-        $crawler = $client->request('GET', '/promotional-collections/1/promotional-collection-title');
+        $crawler = $client->request('GET', '/highlights/1/promotional-collection-title');
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $related = $crawler->filter('.list-heading:contains("Related") + .listing-list > .listing-list__item');
@@ -364,7 +364,7 @@ final class PromotionalCollectionControllerTest extends PageTestCase
             )
         );
 
-        $crawler = $client->request('GET', '/promotional-collections/1/promotional-collection-title');
+        $crawler = $client->request('GET', '/highlights/1/promotional-collection-title');
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertCount(2, $crawler->filter('.list-heading:contains("Editors") + .listing-list > .listing-list__item'));
@@ -382,8 +382,8 @@ final class PromotionalCollectionControllerTest extends PageTestCase
         $this->assertSame(200, $client->getResponse()->getStatusCode());
 
         $this->assertSame('Promotional collection title | Highlights | eLife', $crawler->filter('title')->text());
-        $this->assertSame('/promotional-collections/1/promotional-collection-title', $crawler->filter('link[rel="canonical"]')->attr('href'));
-        $this->assertSame('http://localhost/promotional-collections/1/promotional-collection-title', $crawler->filter('meta[property="og:url"]')->attr('content'));
+        $this->assertSame('/highlights/1/promotional-collection-title', $crawler->filter('link[rel="canonical"]')->attr('href'));
+        $this->assertSame('http://localhost/highlights/1/promotional-collection-title', $crawler->filter('meta[property="og:url"]')->attr('content'));
         $this->assertSame('Promotional collection title', $crawler->filter('meta[property="og:title"]')->attr('content'));
         $this->assertSame('Promotional collection impact statement', $crawler->filter('meta[property="og:description"]')->attr('content'));
         $this->assertSame('Promotional collection impact statement', $crawler->filter('meta[name="description"]')->attr('content'));
@@ -408,7 +408,7 @@ final class PromotionalCollectionControllerTest extends PageTestCase
     {
         $client = static::createClient();
 
-        $url = "/promotional-collections/1{$slug}";
+        $url = "/highlights/1{$slug}";
 
         $expectedUrl = $this->getUrl();
         if ($queryString) {
@@ -522,6 +522,6 @@ final class PromotionalCollectionControllerTest extends PageTestCase
             )
         );
 
-        return '/promotional-collections/1/promotional-collection-title';
+        return '/highlights/1/promotional-collection-title';
     }
 }

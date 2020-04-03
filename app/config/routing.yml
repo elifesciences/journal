@@ -335,7 +335,7 @@ profile:
         id: '[a-z0-9-]+'
 
 promotional-collection:
-    path: /promotional-collections/{id}/{slug}
+    path: /highlights/{id}/{slug}
     defaults:
          _controller: AppBundle:PromotionalCollections:promotionalCollection
          slug: ''
