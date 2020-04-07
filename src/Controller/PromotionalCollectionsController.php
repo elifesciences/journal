@@ -3,11 +3,9 @@
 namespace eLife\Journal\Controller;
 
 use eLife\ApiSdk\Collection\Sequence;
-use eLife\ApiSdk\Model\Identifier;
 use eLife\ApiSdk\Model\PromotionalCollection;
 use eLife\Journal\Helper\Callback;
 use eLife\Patterns\ViewModel\ContentHeader;
-use eLife\Patterns\ViewModel\ContextualData;
 use eLife\Patterns\ViewModel\ListHeading;
 use eLife\Patterns\ViewModel\ListingProfileSnippets;
 use eLife\Patterns\ViewModel\ListingTeasers;
@@ -29,16 +27,6 @@ final class PromotionalCollectionsController extends Controller
 
         $arguments['title'] = $arguments['item']
             ->then(Callback::method('getTitle'));
-
-        $arguments['pageViews'] = $this->get('elife.api_sdk.metrics')
-            ->totalPageViews(Identifier::promotionalCollection($id))
-            ->otherwise($this->mightNotExist())
-            ->otherwise($this->softFailure('Failed to load page views count'));
-
-        $arguments['contextualData'] = $arguments['pageViews']
-            ->then(Callback::emptyOr(function (int $pageViews) {
-                return ContextualData::withMetrics([sprintf('Views %s', number_format($pageViews))]);
-            }));
 
         $arguments['contentHeader'] = $arguments['item']
             ->then($this->willConvertTo(ContentHeader::class));
