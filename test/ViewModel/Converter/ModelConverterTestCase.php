@@ -35,6 +35,7 @@ abstract class ModelConverterTestCase extends TestCase
         'podcast-episode-chapter' => Model\PodcastEpisodeChapterModel::class,
         'press-package' => Model\PressPackage::class,
         'profile' => Model\Profile::class,
+        'promotional-collection' => Model\PromotionalCollection::class,
         'subject' => Model\Subject::class,
     ];
 

@@ -334,6 +334,14 @@ profile:
     requirements:
         id: '[a-z0-9-]+'
 
+promotional-collection:
+    path: /highlights/{id}/{slug}
+    defaults:
+         _controller: AppBundle:PromotionalCollections:promotionalCollection
+         slug: ''
+    requirements:
+        id: '[a-z0-9-]+'
+
 resources:
     path: /resources
     defaults:
