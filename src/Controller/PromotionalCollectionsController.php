@@ -3,9 +3,11 @@
 namespace eLife\Journal\Controller;
 
 use eLife\ApiSdk\Collection\Sequence;
+use eLife\ApiSdk\Model\Identifier;
 use eLife\ApiSdk\Model\PromotionalCollection;
 use eLife\Journal\Helper\Callback;
 use eLife\Patterns\ViewModel\ContentHeader;
+use eLife\Patterns\ViewModel\ContextualData;
 use eLife\Patterns\ViewModel\ListHeading;
 use eLife\Patterns\ViewModel\ListingProfileSnippets;
 use eLife\Patterns\ViewModel\ListingTeasers;
@@ -27,6 +29,8 @@ final class PromotionalCollectionsController extends Controller
 
         $arguments['title'] = $arguments['item']
             ->then(Callback::method('getTitle'));
+
+        $arguments['contextualData'] = null;
 
         $arguments['contentHeader'] = $arguments['item']
             ->then($this->willConvertTo(ContentHeader::class));
