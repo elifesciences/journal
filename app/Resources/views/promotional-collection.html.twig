@@ -8,15 +8,8 @@
 
     {{ render_pattern(contentHeader) }}
 
-    <div class="wrapper">
-
-        {% if contextualData %}
-
-            {{ render_pattern(contextualData) }}
-
-        {% endif %}
-
-    </div>
+    {# This is need to provide padding between the banner and listing #}
+    <div class="wrapper"></div>
 
     {% include 'calls-to-action.html.twig' %}
 

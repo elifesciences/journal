@@ -28,8 +28,6 @@ final class PromotionalCollectionsController extends Controller
         $arguments['title'] = $arguments['item']
             ->then(Callback::method('getTitle'));
 
-        $arguments['contextualData'] = null;
-
         $arguments['contentHeader'] = $arguments['item']
             ->then($this->willConvertTo(ContentHeader::class));
 
