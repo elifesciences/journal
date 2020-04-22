@@ -8,7 +8,9 @@
 
     {{ render_pattern(contentHeader) }}
 
-    {# This is need to provide padding between the banner and listing #}
+    {# Temporary fix adds vertical whitespace between the bottom of a content header with an overlaid image credit, #}
+    {# and a following wrapper--listing element. #}
+    {# The long term fix is to update the pattern library to cater for this possibility. #}
     <div class="wrapper"></div>
 
     {% include 'calls-to-action.html.twig' %}
