@@ -10,7 +10,6 @@ use eLife\Patterns\ViewModel;
 
 final class TweetConverter implements ViewModelConverter
 {
-
     private $viewModelConverter;
     private $patternRenderer;
 
