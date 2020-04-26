@@ -41,14 +41,4 @@ final class TweetConverter implements ViewModelConverter
     {
         return $object instanceof Block\Tweet;
     }
-
-    protected function getViewModelConverter() : ViewModelConverter
-    {
-        return $this->viewModelConverter;
-    }
-
-    protected function getPatternRenderer() : PatternRenderer
-    {
-        return $this->patternRenderer;
-    }
 }
