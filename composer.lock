@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f544679660858fc4b4adeb4fd3da538f",
+    "content-hash": "834c72d23b8bae5393ba9bbfb5aa3b3e",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -857,16 +857,16 @@
         },
         {
             "name": "elife/api-sdk",
-            "version": "dev-master",
+            "version": "dev-block-google-map",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-sdk-php.git",
-                "reference": "397bf576c244a8b31f6f1f485378e23ac1ee55e8"
+                "reference": "63e325959f6bf601fa8c0061eb58e8862a4c4946"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/397bf576c244a8b31f6f1f485378e23ac1ee55e8",
-                "reference": "397bf576c244a8b31f6f1f485378e23ac1ee55e8",
+                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/63e325959f6bf601fa8c0061eb58e8862a4c4946",
+                "reference": "63e325959f6bf601fa8c0061eb58e8862a4c4946",
                 "shasum": ""
             },
             "require": {
@@ -881,7 +881,7 @@
             },
             "require-dev": {
                 "csa/guzzle-cache-middleware": "^1.0",
-                "elife/api": "dev-master",
+                "elife/api": "dev-block-google-map-compiled",
                 "elife/api-validator": "^1.0@dev",
                 "guzzlehttp/guzzle": "^6.0",
                 "justinrainbow/json-schema": "^3.0 || ^4.0 || ^5.0",
@@ -906,7 +906,7 @@
                 "MIT"
             ],
             "description": "eLife Sciences API SDK",
-            "time": "2020-04-06T16:15:40+00:00"
+            "time": "2020-04-26T18:25:22+00:00"
         },
         {
             "name": "elife/patterns",
@@ -3386,16 +3386,16 @@
         },
         {
             "name": "elife/api",
-            "version": "dev-master",
+            "version": "dev-block-google-map-compiled",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-raml.git",
-                "reference": "537aff4efe86f706d604b3c368268ab5ad85fc58"
+                "reference": "532771d7ecf02cb810b91ae48747decaab44a225"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-raml/zipball/537aff4efe86f706d604b3c368268ab5ad85fc58",
-                "reference": "537aff4efe86f706d604b3c368268ab5ad85fc58",
+                "url": "https://api.github.com/repos/elifesciences/api-raml/zipball/532771d7ecf02cb810b91ae48747decaab44a225",
+                "reference": "532771d7ecf02cb810b91ae48747decaab44a225",
                 "shasum": ""
             },
             "conflict": {
@@ -3407,7 +3407,7 @@
                 "MIT"
             ],
             "description": "eLife Sciences API specification",
-            "time": "2020-04-06T15:19:49+00:00"
+            "time": "2020-04-26T12:39:20+00:00"
         },
         {
             "name": "elife/api-validator",
