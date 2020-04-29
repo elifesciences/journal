@@ -56,6 +56,7 @@ final class ModelNameTest extends TestCase
             'job-advert' => ['eLife Jobs', 'eLife Jobs'],
             'podcast-episode' => ['Podcast', 'Podcasts'],
             'press-package' => ['Press Pack', 'Press Packs'],
+            'promotional-collection' => ['Highlight', 'Highlights'],
         ]);
     }
 
