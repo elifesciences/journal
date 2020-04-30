@@ -99,6 +99,10 @@ final class ModelName
             'singular' => 'Press Pack',
             'plural' => 'Press Packs',
         ],
+        'promotional-collection' => [
+            'singular' => 'Highlight',
+            'plural' => 'Highlights',
+        ],
     ];
 
     private function __construct()
