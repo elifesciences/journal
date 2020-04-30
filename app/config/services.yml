@@ -664,8 +664,7 @@ services:
           - name: view_model.converter
 
     elife.journal.view_model.converter.block.paragraph:
-        class: eLife\Journal\ViewModel\Converter\Block\P\
-      aragraphConverter
+        class: eLife\Journal\ViewModel\Converter\Block\ParagraphConverter
         public: false
         tags:
           - name: view_model.converter
