@@ -584,6 +584,15 @@ services:
         tags:
           - name: view_model.converter
 
+    elife.journal.view_model.converter.block.figshare:
+        class: eLife\Journal\ViewModel\Converter\Block\FigshareConverter
+        public: false
+        arguments:
+          - '@elife.journal.view_model.converter'
+          - '@elife.patterns.pattern_renderer'
+        tags:
+          - name: view_model.converter
+
     elife.journal.view_model.converter.block.figure:
         class: eLife\Journal\ViewModel\Converter\Block\FigureConverter
         public: false
@@ -655,7 +664,8 @@ services:
           - name: view_model.converter
 
     elife.journal.view_model.converter.block.paragraph:
-        class: eLife\Journal\ViewModel\Converter\Block\ParagraphConverter
+        class: eLife\Journal\ViewModel\Converter\Block\P\
+      aragraphConverter
         public: false
         tags:
           - name: view_model.converter
