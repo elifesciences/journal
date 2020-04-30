@@ -621,6 +621,15 @@ services:
         tags:
           - name: view_model.converter
 
+    elife.journal.view_model.converter.block.google_map:
+        class: eLife\Journal\ViewModel\Converter\Block\GoogleMapConverter
+        public: false
+        arguments:
+          - '@elife.journal.view_model.converter'
+          - '@elife.patterns.pattern_renderer'
+        tags:
+          - name: view_model.converter
+
     elife.journal.view_model.converter.block.image:
         class: eLife\Journal\ViewModel\Converter\Block\ImageConverter
         public: false
