@@ -4,12 +4,10 @@ namespace test\eLife\Journal\ViewModel\Converter\Block;
 
 use eLife\ApiSdk\Model\Block;
 use eLife\Journal\ViewModel\Converter\Block\TweetConverter;
-use eLife\Journal\ViewModel\Converter\Block\YouTubeConverter;
 use eLife\Journal\ViewModel\Converter\ViewModelConverter;
 use eLife\Patterns\PatternRenderer;
 use eLife\Patterns\ViewModel;
 use eLife\Patterns\ViewModel\Paragraph;
-use eLife\Patterns\ViewModel\ProfileSnippet;
 
 final class TweetConverterTest extends BlockConverterTestCase
 {
