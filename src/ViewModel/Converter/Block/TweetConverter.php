@@ -28,9 +28,7 @@ final class TweetConverter implements ViewModelConverter
             'https://twitter.com/'.$object->getAccountId().'/status/'.$object->getId(),
             $object->getAccountId(),
             $object->getAccountLabel(),
-            array_map(function (Block $block) {
-                return $this->viewModelConverter->convert($block);
-            }, $object->getText()),
+            $object->getText(),
             ViewModel\Date::simple(new DateTimeImmutable($object->getDate()->toString())),
             !$object->isConversation(),
             !$object->isMediaCard()
