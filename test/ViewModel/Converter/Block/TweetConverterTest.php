@@ -23,11 +23,5 @@ final class TweetConverterTest extends BlockConverterTestCase
             $viewModelConverter = $this->createMock(ViewModelConverter::class),
             $this->createMock(PatternRenderer::class)
         );
-        $viewModelConverter
-            ->expects($this->any())
-            ->method('convert')
-            ->will($this->returnCallback(function () {
-                return new Paragraph('...');
-            }));
     }
 }
