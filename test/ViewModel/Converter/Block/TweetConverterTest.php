@@ -7,7 +7,6 @@ use eLife\Journal\ViewModel\Converter\Block\TweetConverter;
 use eLife\Journal\ViewModel\Converter\ViewModelConverter;
 use eLife\Patterns\PatternRenderer;
 use eLife\Patterns\ViewModel;
-use eLife\Patterns\ViewModel\Paragraph;
 
 final class TweetConverterTest extends BlockConverterTestCase
 {
