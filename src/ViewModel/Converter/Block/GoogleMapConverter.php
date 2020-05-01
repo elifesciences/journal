@@ -25,7 +25,7 @@ final class GoogleMapConverter implements ViewModelConverter
      */
     public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
-        $iframe = new ViewModel\IFrame('https://www.google.com/maps/d/embed?mid='.$object->getId(), $object->getWidth(), $object->getHeight(), $object->getTitle());
+        $iframe = new ViewModel\IFrame('https://www.google.com/maps/d/embed?mid='.$object->getId(), 16, 9, $object->getTitle());
 
         if (!$object->getTitle() && $object->getCaption()->isEmpty()) {
             return $iframe;
