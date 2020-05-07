@@ -8,7 +8,7 @@ use eLife\Journal\ViewModel\Converter\ViewModelConverter;
 use eLife\Patterns\PatternRenderer;
 use eLife\Patterns\ViewModel;
 
-final class GoogleMapConverterTest extends BlockConverterTestCase
+final class FigshareConverterTest extends BlockConverterTestCase
 {
     protected $blockClass = Block\Figshare::class;
     protected $viewModelClasses = [ViewModel\IFrame::class, ViewModel\CaptionedAsset::class];
