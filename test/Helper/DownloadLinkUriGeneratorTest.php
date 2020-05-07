@@ -52,6 +52,18 @@ final class DownloadLinkUriGeneratorTest extends KernelTestCase
     /**
      * @test
      */
+    public function it_generates_a_uri_avoiding_unsafe_characters()
+    {
+        // See: https://stackoverflow.com/questions/1374753/passing-base64-encoded-strings-in-url
+        $this->assertSame(
+            $this->uriSigner->sign($this->defaultBaseUrl.'/download/aHR0cHM6Ly9odWIuc3RlbmNpLmxhL2FwaS9wcm9qZWN0cy8xNzYvc25hcHNob3RzLzI_Zm9ybWF0PXRhci5neg--/foo.bar'),
+            $this->downloadLinkUriGenerator->generate(new DownloadLink('https://hub.stenci.la/api/projects/176/snapshots/2?format=tar.gz', 'foo.bar'))
+        );
+    }
+
+    /**
+     * @test
+     */
     public function it_checks_a_uri()
     {
         $this->assertEquals(new DownloadLink('http://www.example.com/test.txt', 'foo.bar'), $this->downloadLinkUriGenerator->check($this->uriSigner->sign('http://localhost/download/aHR0cDovL3d3dy5leGFtcGxlLmNvbS90ZXN0LnR4dA==/foo.bar')));
