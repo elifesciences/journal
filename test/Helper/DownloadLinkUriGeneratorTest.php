@@ -44,7 +44,7 @@ final class DownloadLinkUriGeneratorTest extends KernelTestCase
     public function it_generates_a_uri()
     {
         $this->assertSame(
-            $this->uriSigner->sign($this->defaultBaseUrl.'/download/aHR0cDovL3d3dy5leGFtcGxlLmNvbS90ZXN0LnR4dA==/foo.bar'),
+            $this->uriSigner->sign($this->defaultBaseUrl.'/download/aHR0cDovL3d3dy5leGFtcGxlLmNvbS90ZXN0LnR4dA--/foo.bar'),
             $this->downloadLinkUriGenerator->generate(new DownloadLink('http://www.example.com/test.txt', 'foo.bar'))
         );
     }
@@ -66,7 +66,7 @@ final class DownloadLinkUriGeneratorTest extends KernelTestCase
      */
     public function it_checks_a_uri()
     {
-        $this->assertEquals(new DownloadLink('http://www.example.com/test.txt', 'foo.bar'), $this->downloadLinkUriGenerator->check($this->uriSigner->sign('http://localhost/download/aHR0cDovL3d3dy5leGFtcGxlLmNvbS90ZXN0LnR4dA==/foo.bar')));
+        $this->assertEquals(new DownloadLink('http://www.example.com/test.txt', 'foo.bar'), $this->downloadLinkUriGenerator->check($this->uriSigner->sign('http://localhost/download/aHR0cDovL3d3dy5leGFtcGxlLmNvbS90ZXN0LnR4dA--/foo.bar')));
     }
 
     /**
@@ -76,6 +76,6 @@ final class DownloadLinkUriGeneratorTest extends KernelTestCase
     {
         $this->expectException(UnexpectedValueException::class);
 
-        $this->downloadLinkUriGenerator->check('http://localhost/download/aHR0cDovL3d3dy5leGFtcGxlLmNvbS90ZXN0LnR4da==?_hash=uCm1Z0B%2FIH9%2FKn3icYBFW9ZhmguDotpC0Lp4j2vXmB0%3D');
+        $this->downloadLinkUriGenerator->check('http://localhost/download/aHR0cDovL3d3dy5leGFtcGxlLmNvbS90ZXN0LnR4da--?_hash=uCm1Z0B%2FIH9%2FKn3icYBFW9ZhmguDotpC0Lp4j2vXmB0%3D');
     }
 }
