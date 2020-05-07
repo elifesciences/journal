@@ -92,6 +92,49 @@ final class SubmitControllerTest extends WebTestCase
         $this->assertFalse($jwt['new-session']);
     }
 
+    /**
+     * @test
+     */
+    public function it_redirects_you_to_a_trusted_url_with_a_jwt()
+    {
+        $client = static::createClient();
+        $this->logIn($client);
+
+        $client->request('GET', '/submit?redirect_url=' . urlencode('http://localhost/path?query=arg'));
+        $response = $client->getResponse();
+
+        $this->assertTrue($response->isRedirect());
+        $location = new Uri($response->headers->get('Location'));
+
+        $this->assertSameUri('http://localhost/path?query=arg', $location->withFragment(''));
+
+        $jwt = (array) JWT::decode($location->getFragment(), $this->getParameter('xpub_client_secret'), ['HS256']);
+
+        $this->assertFalse($jwt['new-session']);
+    }
+
+    /**
+     * @test
+     */
+    public function it_redirects_you_to_a_trusted_url_with_a_jwt_in_query_argument()
+    {
+        $client = static::createClient();
+        $this->logIn($client);
+
+        $client->request('GET', '/submit?redirect_url=' . urlencode('http://localhost/path?query=arg&token_in_query_arg=true'));
+        $response = $client->getResponse();
+
+        $this->assertTrue($response->isRedirect());
+        $location = new Uri($response->headers->get('Location'));
+
+        $this->assertSameUri('http://localhost/path?query=arg', $location->withFragment(''));
+        $query = parse_str($location->getQuery());
+
+        $jwt = (array) JWT::decode($query['token'] ?? '', $this->getParameter('xpub_client_secret'), ['HS256']);
+
+        $this->assertFalse($jwt['new-session']);
+    }
+
     protected static function createClient(array $options = [], array $server = [])
     {
         $client = parent::createClient($options, $server);

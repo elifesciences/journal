@@ -32,6 +32,39 @@ final class SubmitController extends Controller
 
         $jwt = $this->get('elife.journal.security.xpub.token_generator')->generate($user, $request->getSession()->remove('journal.submit') ?? false);
 
-        return new RedirectResponse("{$this->getParameter('submit_url')}#{$jwt}");
+        // if a return url is specified, check that its from a trusted host
+        $returnUrl = $request->query->get('return_url', null);
+
+        if (is_null($returnUrl)) {
+            $returnUrl = $this->getParameter('submit_url');
+        } else {
+            $trustedHosts = $this->getParameter('trusted_hosts');
+            $trusted = false;
+
+            foreach ($trustedHosts as $trustedHost) {
+                if (preg_match("/{$trustedHost}/", $returnUrl)) {
+                    $trusted = true;
+                }
+            }
+
+            if (!$trusted) {
+                throw new NotFoundHttpException('Not allowed to see xPub');
+            } 
+        }
+
+        $redirectUrl = "{$returnUrl}#{$jwt}";
+
+        // return in query arg if specified
+        $tokenInQueryArg = $request->query->get('token_in_query_arg', false);
+
+        if ($tokenInQueryArg) {
+            $info = parse_url($returnUrl);
+            parse_str($info['query'] ?? '', $query);
+
+            $httpQuery = http_build_query(array_merge($query, ['token' => $jwt]));
+            $redirectUrl = $info['scheme'] . '://' . $info['host'] . $info['path'] . '?' . $httpQuery;
+        }
+
+        return new RedirectResponse($redirectUrl);
     }
 }
