@@ -19,7 +19,7 @@ final class DownloadLinkUriGenerator
 
     public function generate(DownloadLink $link) : string
     {
-        $uri = $this->urlGenerator->generate('download', ['uri' => base64_encode($link->getUri()), 'name' => $link->getFilename()], UrlGeneratorInterface::ABSOLUTE_URL);
+        $uri = $this->urlGenerator->generate('download', ['uri' => strtr(base64_encode($link->getUri()), '+/=', '._-'), 'name' => $link->getFilename()], UrlGeneratorInterface::ABSOLUTE_URL);
 
         return $this->uriSigner->sign($uri);
     }
@@ -35,6 +35,6 @@ final class DownloadLinkUriGenerator
         $name = array_pop($path);
         $uri = array_pop($path);
 
-        return new DownloadLink(base64_decode($uri), $name);
+        return new DownloadLink(base64_decode(strtr($uri, '._-', '+/=')), $name);
     }
 }
