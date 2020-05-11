@@ -2,6 +2,7 @@
 
 namespace eLife\Journal\Controller;
 
+use GuzzleHttp\Psr7\Uri;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -40,9 +41,10 @@ final class SubmitController extends Controller
         } else {
             $trustedHosts = $this->getParameter('trusted_hosts');
             $trusted = false;
-
+            
+            $uri = new Uri($returnUrl);
             foreach ($trustedHosts as $trustedHost) {
-                if (preg_match("/{$trustedHost}/", $returnUrl)) {
+                if (preg_match("/{$trustedHost}/", $uri->getHost())) {
                     $trusted = true;
                 }
             }
@@ -55,7 +57,7 @@ final class SubmitController extends Controller
         $redirectUrl = "{$returnUrl}#{$jwt}";
 
         // return in query arg if specified
-        $tokenInQueryArg = $request->query->get('token_in_query_arg', false);
+        $tokenInQueryArg = $request->query->get('token_in_query', false);
 
         if ($tokenInQueryArg) {
             $info = parse_url($returnUrl);

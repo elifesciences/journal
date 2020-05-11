@@ -6,6 +6,7 @@ use Firebase\JWT\JWT;
 use GuzzleHttp\Psr7\Uri;
 use test\eLife\Journal\WebTestCase;
 use function GuzzleHttp\Psr7\parse_query;
+use function GuzzleHttp\Psr7\uri_for;
 
 /**
  * @backupGlobals enabled
@@ -100,7 +101,7 @@ final class SubmitControllerTest extends WebTestCase
         $client = static::createClient();
         $this->logIn($client);
 
-        $client->request('GET', '/submit?redirect_url=' . urlencode('http://localhost/path?query=arg'));
+        $client->request('GET', '/submit?return_url=' . urlencode('http://localhost/path?query=arg'));
         $response = $client->getResponse();
 
         $this->assertTrue($response->isRedirect());
@@ -121,18 +122,36 @@ final class SubmitControllerTest extends WebTestCase
         $client = static::createClient();
         $this->logIn($client);
 
-        $client->request('GET', '/submit?redirect_url=' . urlencode('http://localhost/path?query=arg&token_in_query_arg=true'));
+        $client->request('GET', '/submit?return_url=' . urlencode('http://localhost/path?query=arg') . '&token_in_query=true');
         $response = $client->getResponse();
 
         $this->assertTrue($response->isRedirect());
         $location = new Uri($response->headers->get('Location'));
 
-        $this->assertSameUri('http://localhost/path?query=arg', $location->withFragment(''));
-        $query = parse_str($location->getQuery());
+        $this->assertUriStartsWith('http://localhost/path?query=arg', $location->withFragment(''));
+        $query = parse_query($location->getQuery());
 
         $jwt = (array) JWT::decode($query['token'] ?? '', $this->getParameter('xpub_client_secret'), ['HS256']);
 
         $this->assertFalse($jwt['new-session']);
+    }
+
+    /**
+     * @test
+     */
+    public function it_does_not_redirect_if_return_url_is_not_trusted()
+    {
+        $client = static::createClient();
+        $this->logIn($client);
+
+        $client->request('GET', '/submit?return_url=' . urlencode('http://localhostevil/path?query=arg') . '&token_in_query=true');
+
+        $this->assertSame(404, $client->getResponse()->getStatusCode());
+
+        $client->request('GET', '/submit?return_url=' . urlencode('http://evillocalhost/path?query=arg') . '&token_in_query=true');
+
+        $this->assertSame(404, $client->getResponse()->getStatusCode());
+
     }
 
     protected static function createClient(array $options = [], array $server = [])

@@ -16,8 +16,10 @@ parameters:
     gtm_id: ~
     cookie_consent: false
     trusted_hosts:
-      - localhost
-      - web
+      - .*\.localhost$
+      - ^localhost$
+      - .*\.?web$
+      - ^web$
     status_checks:
         Articles: articles
     oauth2_client_id: some-id
