@@ -60,11 +60,7 @@ final class SubmitController extends Controller
         $tokenInQueryArg = $request->query->get('token_in_query', false);
 
         if ($tokenInQueryArg) {
-            $info = parse_url($returnUrl);
-            parse_str($info['query'] ?? '', $query);
-
-            $httpQuery = http_build_query(array_merge($query, ['token' => $jwt]));
-            $redirectUrl = $info['scheme'] . '://' . $info['host'] . $info['path'] . '?' . $httpQuery;
+            $redirectUrl = Uri::withQueryValue(new Uri($returnUrl), 'token', $jwt);
         }
 
         return new RedirectResponse($redirectUrl);
