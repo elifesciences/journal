@@ -41,7 +41,7 @@ final class SubmitController extends Controller
         } else {
             $trustedHosts = $this->getParameter('trusted_hosts');
             $trusted = false;
-            
+
             $uri = new Uri($returnUrl);
             foreach ($trustedHosts as $trustedHost) {
                 if (preg_match("/{$trustedHost}/", $uri->getHost())) {
