@@ -3,10 +3,9 @@
 namespace test\eLife\Journal\Controller;
 
 use Firebase\JWT\JWT;
+use function GuzzleHttp\Psr7\parse_query;
 use GuzzleHttp\Psr7\Uri;
 use test\eLife\Journal\WebTestCase;
-use function GuzzleHttp\Psr7\parse_query;
-use function GuzzleHttp\Psr7\uri_for;
 
 /**
  * @backupGlobals enabled
@@ -101,7 +100,7 @@ final class SubmitControllerTest extends WebTestCase
         $client = static::createClient();
         $this->logIn($client);
 
-        $client->request('GET', '/submit?return_url=' . urlencode('http://localhost/path?query=arg'));
+        $client->request('GET', '/submit?return_url='.urlencode('http://localhost/path?query=arg'));
         $response = $client->getResponse();
 
         $this->assertTrue($response->isRedirect());
@@ -122,7 +121,7 @@ final class SubmitControllerTest extends WebTestCase
         $client = static::createClient();
         $this->logIn($client);
 
-        $client->request('GET', '/submit?return_url=' . urlencode('http://localhost/path?query=arg') . '&token_in_query=true');
+        $client->request('GET', '/submit?return_url='.urlencode('http://localhost/path?query=arg').'&token_in_query=true');
         $response = $client->getResponse();
 
         $this->assertTrue($response->isRedirect());
@@ -144,14 +143,13 @@ final class SubmitControllerTest extends WebTestCase
         $client = static::createClient();
         $this->logIn($client);
 
-        $client->request('GET', '/submit?return_url=' . urlencode('http://localhostevil/path?query=arg') . '&token_in_query=true');
+        $client->request('GET', '/submit?return_url='.urlencode('http://localhostevil/path?query=arg').'&token_in_query=true');
 
         $this->assertSame(404, $client->getResponse()->getStatusCode());
 
-        $client->request('GET', '/submit?return_url=' . urlencode('http://evillocalhost/path?query=arg') . '&token_in_query=true');
+        $client->request('GET', '/submit?return_url='.urlencode('http://evillocalhost/path?query=arg').'&token_in_query=true');
 
         $this->assertSame(404, $client->getResponse()->getStatusCode());
-
     }
 
     protected static function createClient(array $options = [], array $server = [])

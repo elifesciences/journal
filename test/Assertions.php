@@ -2,9 +2,9 @@
 
 namespace test\eLife\Journal;
 
+use function GuzzleHttp\Psr7\uri_for;
 use GuzzleHttp\Psr7\UriNormalizer;
 use Psr\Http\Message\UriInterface;
-use function GuzzleHttp\Psr7\uri_for;
 
 trait Assertions
 {
