@@ -51,7 +51,7 @@ final class SubmitController extends Controller
 
             if (!$trusted) {
                 throw new NotFoundHttpException('Not allowed to see xPub');
-            } 
+            }
         }
 
         $redirectUrl = "{$returnUrl}#{$jwt}";
