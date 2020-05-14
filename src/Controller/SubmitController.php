@@ -6,6 +6,7 @@ use GuzzleHttp\Psr7\Uri;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\KernelInterface;
 
@@ -39,18 +40,19 @@ final class SubmitController extends Controller
         if (is_null($returnUrl)) {
             $returnUrl = $this->getParameter('submit_url');
         } else {
-            $trustedHosts = $this->getParameter('trusted_hosts');
-            $trusted = false;
-
+            $allowedRedirects = $this->getParameter('submit_url_redirects');
+            $isAllowed = false;
             $uri = new Uri($returnUrl);
-            foreach ($trustedHosts as $trustedHost) {
-                if (preg_match("/{$trustedHost}/", $uri->getHost())) {
-                    $trusted = true;
+
+            foreach ($allowedRedirects as $allowed) {
+                if (preg_match('/'.$allowed.'/', $uri->getHost())) {
+                    echo 'allowed'.PHP_EOL;
+                    $isAllowed = true;
                 }
             }
 
-            if (!$trusted) {
-                throw new NotFoundHttpException('Not allowed to see xPub');
+            if (!$isAllowed) {
+                throw new BadRequestHttpException();
             }
         }
 

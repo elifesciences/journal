@@ -21,18 +21,4 @@ trait Assertions
 
         $this->assertEquals($normalizedExpected, $normalizedActual, $message);
     }
-
-    /**
-     * @param string|UriInterface $expected
-     * @param string|UriInterface $actual
-     */
-    final protected function assertUriStartsWith($expected, $actual, string $message = '')
-    {
-        $flags = UriNormalizer::PRESERVING_NORMALIZATIONS | UriNormalizer::SORT_QUERY_PARAMETERS;
-
-        $normalizedExpected = UriNormalizer::normalize(uri_for($expected), $flags)->__toString();
-        $normalizedActual = UriNormalizer::normalize(uri_for($actual), $flags)->__toString();
-
-        $this->assertStringStartsWith($normalizedExpected, $normalizedActual, $message);
-    }
 }
