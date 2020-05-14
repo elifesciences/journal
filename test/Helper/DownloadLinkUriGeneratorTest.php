@@ -44,7 +44,7 @@ final class DownloadLinkUriGeneratorTest extends KernelTestCase
     public function it_generates_a_uri()
     {
         $this->assertSame(
-            $this->uriSigner->sign($this->defaultBaseUrl.'/download/aHR0cDovL3d3dy5leGFtcGxlLmNvbS90ZXN0LnR4dA==/foo.bar'),
+            $this->uriSigner->sign($this->defaultBaseUrl.'/download/aHR0cDovL3d3dy5leGFtcGxlLmNvbS90ZXN0LnR4dA--/foo.bar'),
             $this->downloadLinkUriGenerator->generate(new DownloadLink('http://www.example.com/test.txt', 'foo.bar'))
         );
     }
@@ -54,8 +54,9 @@ final class DownloadLinkUriGeneratorTest extends KernelTestCase
      */
     public function it_generates_a_uri_avoiding_unsafe_characters()
     {
+        // See: https://stackoverflow.com/questions/1374753/passing-base64-encoded-strings-in-url
         $this->assertSame(
-            $this->uriSigner->sign($this->defaultBaseUrl.'/download/aHR0cHM6Ly9odWIuc3RlbmNpLmxhL2FwaS9wcm9qZWN0cy8xNzYvc25hcHNob3RzLzI%2FZm9ybWF0PXRhci5neg%3D%3D/foo.bar'),
+            $this->uriSigner->sign($this->defaultBaseUrl.'/download/aHR0cHM6Ly9odWIuc3RlbmNpLmxhL2FwaS9wcm9qZWN0cy8xNzYvc25hcHNob3RzLzI_Zm9ybWF0PXRhci5neg--/foo.bar'),
             $this->downloadLinkUriGenerator->generate(new DownloadLink('https://hub.stenci.la/api/projects/176/snapshots/2?format=tar.gz', 'foo.bar'))
         );
     }
@@ -65,7 +66,7 @@ final class DownloadLinkUriGeneratorTest extends KernelTestCase
      */
     public function it_checks_a_uri()
     {
-        $this->assertEquals(new DownloadLink('http://www.example.com/test.txt', 'foo.bar'), $this->downloadLinkUriGenerator->check($this->uriSigner->sign('http://localhost/download/aHR0cDovL3d3dy5leGFtcGxlLmNvbS90ZXN0LnR4dA==/foo.bar')));
+        $this->assertEquals(new DownloadLink('http://www.example.com/test.txt', 'foo.bar'), $this->downloadLinkUriGenerator->check($this->uriSigner->sign('http://localhost/download/aHR0cDovL3d3dy5leGFtcGxlLmNvbS90ZXN0LnR4dA--/foo.bar')));
     }
 
     /**
@@ -75,6 +76,6 @@ final class DownloadLinkUriGeneratorTest extends KernelTestCase
     {
         $this->expectException(UnexpectedValueException::class);
 
-        $this->downloadLinkUriGenerator->check('http://localhost/download/aHR0cDovL3d3dy5leGFtcGxlLmNvbS90ZXN0LnR4da==?_hash=uCm1Z0B%2FIH9%2FKn3icYBFW9ZhmguDotpC0Lp4j2vXmB0%3D');
+        $this->downloadLinkUriGenerator->check('http://localhost/download/aHR0cDovL3d3dy5leGFtcGxlLmNvbS90ZXN0LnR4da--?_hash=uCm1Z0B%2FIH9%2FKn3icYBFW9ZhmguDotpC0Lp4j2vXmB0%3D');
     }
 }
