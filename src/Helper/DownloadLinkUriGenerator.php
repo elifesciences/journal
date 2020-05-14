@@ -8,6 +8,9 @@ use UnexpectedValueException;
 
 final class DownloadLinkUriGenerator
 {
+    const URL_UNSAFE_CHARS = '+/=';
+    const URL_UNSAFE_REPLACES = '._-';
+
     private $urlGenerator;
     private $uriSigner;
 
@@ -19,7 +22,7 @@ final class DownloadLinkUriGenerator
 
     public function generate(DownloadLink $link) : string
     {
-        $uri = $this->urlGenerator->generate('download', ['uri' => strtr(base64_encode($link->getUri()), '+/=', '._-'), 'name' => $link->getFilename()], UrlGeneratorInterface::ABSOLUTE_URL);
+        $uri = $this->urlGenerator->generate('download', ['uri' => strtr(base64_encode($link->getUri()), self::URL_UNSAFE_CHARS, self::URL_UNSAFE_REPLACES), 'name' => $link->getFilename()], UrlGeneratorInterface::ABSOLUTE_URL);
 
         return $this->uriSigner->sign($uri);
     }
@@ -35,6 +38,6 @@ final class DownloadLinkUriGenerator
         $name = array_pop($path);
         $uri = array_pop($path);
 
-        return new DownloadLink(base64_decode(strtr($uri, '._-', '+/=')), $name);
+        return new DownloadLink(base64_decode(strtr($uri, self::URL_UNSAFE_REPLACES, self::URL_UNSAFE_CHARS)), $name);
     }
 }
