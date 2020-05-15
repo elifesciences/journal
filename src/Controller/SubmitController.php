@@ -46,8 +46,8 @@ final class SubmitController extends Controller
 
             foreach ($allowedRedirects as $allowed) {
                 if (preg_match('/'.$allowed.'/', $uri->getHost())) {
-                    echo 'allowed'.PHP_EOL;
                     $isAllowed = true;
+                    break;
                 }
             }
 
