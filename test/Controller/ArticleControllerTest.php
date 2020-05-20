@@ -559,6 +559,7 @@ final class ArticleControllerTest extends PageTestCase
         $value = $script->text();
         $this->assertJson($value);
 
+        // This has just started triggering an error!
         $graph = JsonLD::getDocument($value)->getGraph();
         $node = $graph->getNodes()[0];
 
