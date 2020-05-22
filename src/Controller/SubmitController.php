@@ -38,6 +38,7 @@ final class SubmitController extends Controller
         $returnUrl = $request->query->get('return_url', null);
 
         if (is_null($returnUrl)) {
+            // remove this case once libero reviewer is live and xpub retired
             $returnUrl = $this->getParameter('submit_url');
         } else {
             $allowedRedirects = $this->getParameter('submit_url_redirects');
@@ -56,6 +57,7 @@ final class SubmitController extends Controller
             }
         }
 
+        // remove this case once libero reviewer is live and xpub retired, only return token in query afterwards
         $redirectUrl = "{$returnUrl}#{$jwt}";
 
         // return in query arg if specified
