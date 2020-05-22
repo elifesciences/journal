@@ -81,19 +81,18 @@ elifePipeline {
                         builderSmokeTests 'journal--demo', '/srv/journal'
                     }
                 },
-                // locked and currently used for journal-cms integration testing
-                //continuumtest: {
-                //    lock('journal--continuumtest') {
-                //        builderDeployRevision 'journal--continuumtest', commit
-                //        builderSmokeTests 'journal--continuumtest', '/srv/journal'
-                //    }
-                //},
-                //continuumtestpreview: {
-                //    lock('journal--continuumtestpreview') {
-                //        builderDeployRevision 'journal--continuumtestpreview', commit
-                //        builderSmokeTests 'journal--continuumtestpreview', '/srv/journal'
-                //    }
-                //},
+                continuumtest: {
+                    lock('journal--continuumtest') {
+                        builderDeployRevision 'journal--continuumtest', commit
+                        builderSmokeTests 'journal--continuumtest', '/srv/journal'
+                    }
+                },
+                continuumtestpreview: {
+                    lock('journal--continuumtestpreview') {
+                        builderDeployRevision 'journal--continuumtestpreview', commit
+                        builderSmokeTests 'journal--continuumtestpreview', '/srv/journal'
+                    }
+                }
             ]
             parallel deployments
         }
