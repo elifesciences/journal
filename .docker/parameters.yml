@@ -11,7 +11,9 @@ parameters:
     mailer_username: ~
     mailer_password: ~
     mailer_encryption: ~
-    submit_url: https://xpub.elifesciences.org/
+    submit_url: https://submit.elifesciences.org/
+    submit_url_redirects:
+        - .*\.elifesciences.org$
     crm_url: https://crm.elifesciences.org/crm/civicrm/
     gtm_id: ~
     cookie_consent: false
