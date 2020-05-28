@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f544679660858fc4b4adeb4fd3da538f",
+    "content-hash": "e9456cb41718778d935f08dbf18d0fbe",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -81,6 +81,11 @@
                 "php": ">=5.3.2"
             },
             "type": "symfony-bundle",
+            "extra": {
+                "patches_applied": {
+                    "Remove superfluous argument": "https://github.com/bobthecow/BobthecowMustacheBundle/pull/9.patch"
+                }
+            },
             "autoload": {
                 "psr-0": {
                     "Bobthecow\\Bundle\\MustacheBundle": ""
@@ -106,12 +111,7 @@
                 "symfony",
                 "templating"
             ],
-            "time": "2014-07-10T12:09:42+00:00",
-            "extra": {
-                "patches_applied": {
-                    "Remove superfluous argument": "https://github.com/bobthecow/BobthecowMustacheBundle/pull/9.patch"
-                }
-            }
+            "time": "2014-07-10T12:09:42+00:00"
         },
         {
             "name": "cocur/slugify",
@@ -151,6 +151,11 @@
                 "zendframework/zend-view": "~2.2"
             },
             "type": "library",
+            "extra": {
+                "patches_applied": {
+                    "strip_tags": "https://github.com/cocur/slugify/pull/201.patch"
+                }
+            },
             "autoload": {
                 "psr-4": {
                     "Cocur\\Slugify\\": "src"
@@ -176,12 +181,7 @@
                 "slug",
                 "slugify"
             ],
-            "time": "2018-01-22T09:00:48+00:00",
-            "extra": {
-                "patches_applied": {
-                    "strip_tags": "https://github.com/cocur/slugify/pull/201.patch"
-                }
-            }
+            "time": "2018-01-22T09:00:48+00:00"
         },
         {
             "name": "composer/ca-bundle",
@@ -913,16 +913,16 @@
         },
         {
             "name": "elife/api-sdk",
-            "version": "dev-master",
+            "version": "dev-structured-abstract",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-sdk-php.git",
-                "reference": "397bf576c244a8b31f6f1f485378e23ac1ee55e8"
+                "reference": "6eac994f57e00a5e30ae5ad800489fd7acc07efc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/397bf576c244a8b31f6f1f485378e23ac1ee55e8",
-                "reference": "397bf576c244a8b31f6f1f485378e23ac1ee55e8",
+                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/6eac994f57e00a5e30ae5ad800489fd7acc07efc",
+                "reference": "6eac994f57e00a5e30ae5ad800489fd7acc07efc",
                 "shasum": ""
             },
             "require": {
@@ -937,7 +937,7 @@
             },
             "require-dev": {
                 "csa/guzzle-cache-middleware": "^1.0",
-                "elife/api": "dev-master",
+                "elife/api": "dev-structured-abstract-compiled",
                 "elife/api-validator": "^1.0@dev",
                 "guzzlehttp/guzzle": "^6.0",
                 "justinrainbow/json-schema": "^3.0 || ^4.0 || ^5.0",
@@ -962,7 +962,7 @@
                 "MIT"
             ],
             "description": "eLife Sciences API SDK",
-            "time": "2020-04-06T16:15:40+00:00"
+            "time": "2020-05-28T07:23:25+00:00"
         },
         {
             "name": "elife/patterns",
@@ -1371,6 +1371,12 @@
                 "shasum": ""
             },
             "type": "library",
+            "extra": {
+                "patches_applied": {
+                    "Add field label": "https://github.com/isometriks/IsometriksSpamBundle/pull/9.patch",
+                    "Use EmailType": "https://github.com/isometriks/IsometriksSpamBundle/pull/17.patch"
+                }
+            },
             "autoload": {
                 "psr-4": {
                     "Isometriks\\Bundle\\SpamBundle\\": ""
@@ -1394,13 +1400,7 @@
                 "spam",
                 "symfony3"
             ],
-            "time": "2016-09-23T18:48:09+00:00",
-            "extra": {
-                "patches_applied": {
-                    "Add field label": "https://github.com/isometriks/IsometriksSpamBundle/pull/9.patch",
-                    "Use EmailType": "https://github.com/isometriks/IsometriksSpamBundle/pull/17.patch"
-                }
-            }
+            "time": "2016-09-23T18:48:09+00:00"
         },
         {
             "name": "kevinrob/guzzle-cache-middleware",
@@ -3393,16 +3393,16 @@
         },
         {
             "name": "elife/api",
-            "version": "dev-master",
+            "version": "dev-structured-abstract-compiled",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-raml.git",
-                "reference": "537aff4efe86f706d604b3c368268ab5ad85fc58"
+                "reference": "9a54089498cc92dcd788bb44989f1b4584d3338a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-raml/zipball/537aff4efe86f706d604b3c368268ab5ad85fc58",
-                "reference": "537aff4efe86f706d604b3c368268ab5ad85fc58",
+                "url": "https://api.github.com/repos/elifesciences/api-raml/zipball/9a54089498cc92dcd788bb44989f1b4584d3338a",
+                "reference": "9a54089498cc92dcd788bb44989f1b4584d3338a",
                 "shasum": ""
             },
             "conflict": {
@@ -3414,7 +3414,7 @@
                 "MIT"
             ],
             "description": "eLife Sciences API specification",
-            "time": "2020-04-06T15:19:49+00:00"
+            "time": "2020-05-27T16:39:34+00:00"
         },
         {
             "name": "elife/api-validator",
@@ -5361,5 +5361,6 @@
     "platform-dev": [],
     "platform-overrides": {
         "php": "7.1.28"
-    }
+    },
+    "plugin-api-version": "1.1.0"
 }
