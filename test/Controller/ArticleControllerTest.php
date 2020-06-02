@@ -1264,7 +1264,7 @@ final class ArticleControllerTest extends PageTestCase
         $crawler = $client->request('GET', $this->getPreviousVersionUrl('id-of-article-with-rds'));
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
-        $this->assertCount(2, $crawler->filter('.info-bar'));
+        $this->assertCount(1, $crawler->filter('.info-bar'));
         $this->assertEmpty($crawler->filter('.article-download-links-list__link')->selectLink('Executable DAR'));
         $this->assertEmpty($crawler->filter('.view-selector'));
     }
