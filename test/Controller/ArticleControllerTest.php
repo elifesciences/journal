@@ -1216,7 +1216,8 @@ final class ArticleControllerTest extends PageTestCase
     /**
      * @test
      */
-    public function it_displays_pdf_only_info_bar_if_no_vor_available() {
+    public function it_displays_pdf_only_info_bar_if_no_vor_available()
+    {
         $client = static::createClient();
 
         $this->mockApiResponse(
@@ -1419,7 +1420,8 @@ final class ArticleControllerTest extends PageTestCase
     /**
      * @test
      */
-    public function it_does_not_display_pdf_only_info_bar_if_vor_available() {
+    public function it_does_not_display_pdf_only_info_bar_if_vor_available()
+    {
         $client = static::createClient();
 
         $crawler = $client->request('GET', $this->getPreviousVersionUrl());
