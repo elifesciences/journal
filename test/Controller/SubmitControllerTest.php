@@ -92,6 +92,74 @@ final class SubmitControllerTest extends WebTestCase
         $this->assertFalse($jwt['new-session']);
     }
 
+    /**
+     * @test
+     */
+    public function it_redirects_you_to_a_trusted_url_with_a_jwt()
+    {
+        $client = static::createClient();
+        $this->logIn($client);
+
+        $client->request('GET', '/submit?return_url='.urlencode('http://foo.elifesciences.org/path?query=arg'));
+        $response = $client->getResponse();
+
+        $this->assertTrue($response->isRedirect());
+        $location = new Uri($response->headers->get('Location'));
+
+        $this->assertSameUri('http://foo.elifesciences.org/path?query=arg', $location->withFragment(''));
+
+        $jwt = (array) JWT::decode($location->getFragment(), $this->getParameter('xpub_client_secret'), ['HS256']);
+
+        $this->assertFalse($jwt['new-session']);
+    }
+
+    /**
+     * @test
+     */
+    public function it_redirects_you_to_a_trusted_url_with_a_jwt_in_query_argument()
+    {
+        $client = static::createClient();
+        $this->logIn($client);
+
+        $client->request('GET', '/submit?return_url='.urlencode('http://foo.elifesciences.org/path?query=arg').'&token_in_query=true');
+        $response = $client->getResponse();
+
+        $this->assertTrue($response->isRedirect());
+        $location = new Uri($response->headers->get('Location'));
+        $locationWithoutToken = Uri::withoutQueryValue($location, 'token');
+
+        $this->assertSameUri('http://foo.elifesciences.org/path?query=arg', $locationWithoutToken->withFragment(''));
+        $query = parse_query($location->getQuery());
+
+        $jwt = (array) JWT::decode($query['token'] ?? '', $this->getParameter('xpub_client_secret'), ['HS256']);
+
+        $this->assertFalse($jwt['new-session']);
+    }
+
+    /**
+     * @test
+     * @dataProvider invalidDomainProvider
+     */
+    public function it_does_not_redirect_if_return_url_is_not_trusted_with_invalid_domain($domain)
+    {
+        $client = static::createClient();
+        $this->logIn($client);
+
+        $client->request('GET', '/submit?return_url='.urlencode($domain));
+
+        $this->assertSame(400, $client->getResponse()->getStatusCode());
+    }
+
+    public function invalidDomainProvider()
+    {
+        return [
+            ['http://elifesciences.org.uk'],
+            ['https://elifesciences.org.uk'],
+            ['http://subdomain.elifesciences.org.uk'],
+            ['https://subdomain.elifesciences.org.uk'],
+        ];
+    }
+
     protected static function createClient(array $options = [], array $server = [])
     {
         $client = parent::createClient($options, $server);

@@ -184,6 +184,62 @@
             "time": "2018-01-22T09:00:48+00:00"
         },
         {
+            "name": "composer/ca-bundle",
+            "version": "1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/composer/ca-bundle.git",
+                "reference": "943b2c4fcad1ef178d16a713c2468bf7e579c288"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/composer/ca-bundle/zipball/943b2c4fcad1ef178d16a713c2468bf7e579c288",
+                "reference": "943b2c4fcad1ef178d16a713c2468bf7e579c288",
+                "shasum": ""
+            },
+            "require": {
+                "ext-openssl": "*",
+                "ext-pcre": "*",
+                "php": "^5.3.2 || ^7.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.8.35",
+                "psr/log": "^1.0",
+                "symfony/process": "^2.5 || ^3.0 || ^4.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Composer\\CaBundle\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jordi Boggiano",
+                    "email": "j.boggiano@seld.be",
+                    "homepage": "http://seld.be"
+                }
+            ],
+            "description": "Lets you find a path to the system CA bundle, and includes a fallback to the Mozilla CA bundle.",
+            "keywords": [
+                "cabundle",
+                "cacert",
+                "certificate",
+                "ssl",
+                "tls"
+            ],
+            "time": "2017-11-29T09:37:33+00:00"
+        },
+        {
             "name": "crell/api-problem",
             "version": "2.0",
             "source": {
@@ -906,20 +962,20 @@
                 "MIT"
             ],
             "description": "eLife Sciences API SDK",
-            "time": "2020-05-01T14:14:16+00:00"
+            "time": "2020-04-06T16:15:40+00:00"
         },
         {
             "name": "elife/patterns",
-            "version": "dev-block-tweet",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/patterns-php.git",
-                "reference": "7b7d606dcd057b8bb1ca8b038d832a9f9b20c9a4"
+                "reference": "539feec72eff882d530602f101885d5d4244a8f6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/7b7d606dcd057b8bb1ca8b038d832a9f9b20c9a4",
-                "reference": "7b7d606dcd057b8bb1ca8b038d832a9f9b20c9a4",
+                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/539feec72eff882d530602f101885d5d4244a8f6",
+                "reference": "539feec72eff882d530602f101885d5d4244a8f6",
                 "shasum": ""
             },
             "require": {
@@ -960,9 +1016,9 @@
             ],
             "description": "eLife patterns",
             "support": {
-                "source": "https://github.com/elifesciences/patterns-php/tree/block-tweet"
+                "source": "https://github.com/elifesciences/patterns-php/tree/master"
             },
-            "time": "2020-05-01T14:17:34+00:00"
+            "time": "2020-06-03T15:28:34+00:00"
         },
         {
             "name": "fabpot/goutte",
@@ -1714,30 +1770,33 @@
         },
         {
             "name": "nelmio/security-bundle",
-            "version": "2.4.0",
+            "version": "v2.9.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nelmio/NelmioSecurityBundle.git",
-                "reference": "d0d7b151eda5f0ebe80562528f78b56954c1aec7"
+                "reference": "89ac385b28496691bfa7eef24d60aec9f20021a1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nelmio/NelmioSecurityBundle/zipball/d0d7b151eda5f0ebe80562528f78b56954c1aec7",
-                "reference": "d0d7b151eda5f0ebe80562528f78b56954c1aec7",
+                "url": "https://api.github.com/repos/nelmio/NelmioSecurityBundle/zipball/89ac385b28496691bfa7eef24d60aec9f20021a1",
+                "reference": "89ac385b28496691bfa7eef24d60aec9f20021a1",
                 "shasum": ""
             },
             "require": {
-                "paragonie/random_compat": "~1.0|~2.0",
-                "symfony/framework-bundle": "~2.3|~3.0",
-                "symfony/security": "~2.3|~3.0",
+                "paragonie/random_compat": "~1.0|~2.0|9.99.99",
+                "php": ">5.4",
+                "symfony/framework-bundle": "~2.3|~v3.0|~4.0|~5.0",
+                "symfony/security-core": "~2.3|~3.0|~4.0|~5.0",
+                "symfony/security-csrf": "~2.3|~3.0|~4.0|~5.0",
+                "symfony/security-http": "~2.3|~3.0|~4.0|~5.0",
                 "ua-parser/uap-php": "^3.4.4"
             },
             "require-dev": {
                 "doctrine/cache": "^1.0",
                 "psr/cache": "^1.0",
-                "symfony/phpunit-bridge": "^3.2",
-                "symfony/yaml": "~2.3|~3.0",
-                "twig/twig": "^1.24"
+                "symfony/phpunit-bridge": "^5.0.5",
+                "symfony/yaml": "~2.3|~3.0|~4.0|~5.0",
+                "twig/twig": "^1.38|^2.10|^3.0"
             },
             "suggest": {
                 "ua-parser/uap-php": "To allow adapt CSP directives given the user-agent"
@@ -1745,13 +1804,16 @@
             "type": "symfony-bundle",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.4.x-dev"
+                    "dev-master": "2.9.x-dev"
                 }
             },
             "autoload": {
                 "psr-4": {
                     "Nelmio\\SecurityBundle\\": ""
-                }
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -1771,7 +1833,7 @@
             "keywords": [
                 "security"
             ],
-            "time": "2017-06-22T08:11:46+00:00"
+            "time": "2020-05-11T08:12:17+00:00"
         },
         {
             "name": "ocramius/package-versions",
@@ -2649,23 +2711,24 @@
         },
         {
             "name": "ua-parser/uap-php",
-            "version": "v3.8.0",
+            "version": "v3.9.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ua-parser/uap-php.git",
-                "reference": "947f80b39130c83a3d1c75900ac1b58828ed8aef"
+                "reference": "7efc2f05b7d9817a59132e5d2e5ca91a1c071f6a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ua-parser/uap-php/zipball/947f80b39130c83a3d1c75900ac1b58828ed8aef",
-                "reference": "947f80b39130c83a3d1c75900ac1b58828ed8aef",
+                "url": "https://api.github.com/repos/ua-parser/uap-php/zipball/7efc2f05b7d9817a59132e5d2e5ca91a1c071f6a",
+                "reference": "7efc2f05b7d9817a59132e5d2e5ca91a1c071f6a",
                 "shasum": ""
             },
             "require": {
+                "composer/ca-bundle": "^1.1",
                 "php": ">=5.3.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "^4.0 || ^5.0",
+                "phpunit/phpunit": "<8",
                 "symfony/console": "^2.0 || ^3.0 || ^4.0",
                 "symfony/filesystem": "^2.0 || ^3.0 || ^4.0",
                 "symfony/finder": "^2.0 || ^3.0 || ^4.0",
@@ -2692,16 +2755,16 @@
             ],
             "authors": [
                 {
-                    "name": "Lars Strojny",
-                    "email": "lars@strojny.net"
-                },
-                {
                     "name": "Dave Olsen",
                     "email": "dmolsen@gmail.com"
+                },
+                {
+                    "name": "Lars Strojny",
+                    "email": "lars@strojny.net"
                 }
             ],
             "description": "A multi-language port of Browserscope's user agent parser.",
-            "time": "2018-12-14T12:44:10+00:00"
+            "time": "2020-02-21T09:54:14+00:00"
         },
         {
             "name": "white-october/pagerfanta-bundle",
@@ -3241,62 +3304,6 @@
             "time": "2017-04-04T11:38:05+00:00"
         },
         {
-            "name": "composer/ca-bundle",
-            "version": "1.1.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/composer/ca-bundle.git",
-                "reference": "943b2c4fcad1ef178d16a713c2468bf7e579c288"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/composer/ca-bundle/zipball/943b2c4fcad1ef178d16a713c2468bf7e579c288",
-                "reference": "943b2c4fcad1ef178d16a713c2468bf7e579c288",
-                "shasum": ""
-            },
-            "require": {
-                "ext-openssl": "*",
-                "ext-pcre": "*",
-                "php": "^5.3.2 || ^7.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^4.8.35",
-                "psr/log": "^1.0",
-                "symfony/process": "^2.5 || ^3.0 || ^4.0"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Composer\\CaBundle\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Jordi Boggiano",
-                    "email": "j.boggiano@seld.be",
-                    "homepage": "http://seld.be"
-                }
-            ],
-            "description": "Lets you find a path to the system CA bundle, and includes a fallback to the Mozilla CA bundle.",
-            "keywords": [
-                "cabundle",
-                "cacert",
-                "certificate",
-                "ssl",
-                "tls"
-            ],
-            "time": "2017-11-29T09:37:33+00:00"
-        },
-        {
             "name": "container-interop/container-interop",
             "version": "1.2.0",
             "source": {
@@ -3415,12 +3422,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-validator-php.git",
-                "reference": "4a3d68807949ae02603936d514cc4cd13db42820"
+                "reference": "b87e36a48be01b1c466c506d7024f5558974245a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-validator-php/zipball/4a3d68807949ae02603936d514cc4cd13db42820",
-                "reference": "4a3d68807949ae02603936d514cc4cd13db42820",
+                "url": "https://api.github.com/repos/elifesciences/api-validator-php/zipball/b87e36a48be01b1c466c506d7024f5558974245a",
+                "reference": "b87e36a48be01b1c466c506d7024f5558974245a",
                 "shasum": ""
             },
             "require": {
@@ -3451,7 +3458,7 @@
                 "MIT"
             ],
             "description": "eLife Sciences API validator",
-            "time": "2018-03-15T10:16:56+00:00"
+            "time": "2020-03-05T04:54:17+00:00"
         },
         {
             "name": "instaclick/php-webdriver",
@@ -5354,6 +5361,5 @@
     "platform-dev": [],
     "platform-overrides": {
         "php": "7.1.28"
-    },
-    "plugin-api-version": "1.1.0"
+    }
 }
