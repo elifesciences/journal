@@ -851,13 +851,14 @@ final class ArticlesController extends Controller
 
                 $infoBars = [];
 
-                $latestVersion = $history->getVersions()[count($history->getVersions()) - 1]->getVersion();
+                $latest = $history->getVersions()[count($history->getVersions()) - 1];
+                $latestVersion = $latest->getVersion();
 
                 if ($item->getVersion() < $latestVersion) {
                     $infoBars[] = new InfoBar('Read the <a href="'.$this->generatePath($history).'">most recent version of this article</a>.', InfoBar::TYPE_MULTIPLE_VERSIONS);
                 }
 
-                if ($item instanceof ArticlePoA && $latestVersion < 2) {
+                if ($latest instanceof ArticlePoA) {
                     $infoBars[] = new InfoBar('Accepted manuscript, PDF only. Full online edition to follow.');
                 }
 
