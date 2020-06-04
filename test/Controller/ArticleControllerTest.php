@@ -1405,12 +1405,14 @@ final class ArticleControllerTest extends PageTestCase
         $crawler = $client->request('GET', '/articles/00001');
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
+        $this->assertCount(1, $crawler->filter('.info-bar'));
         $this->assertContains('Accepted manuscript, PDF only. Full online edition to follow.',
             array_map('trim', $crawler->filter('.info-bar')->extract(['_text'])));
 
         $crawler = $client->request('GET', '/articles/00001v1');
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
+        $this->assertCount(2, $crawler->filter('.info-bar'));
         $this->assertContains('Accepted manuscript, PDF only. Full online edition to follow.',
             array_map('trim', $crawler->filter('.info-bar')->extract(['_text'])));
         $this->assertContains('Read the most recent version of this article.',
