@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f544679660858fc4b4adeb4fd3da538f",
+    "content-hash": "687fb4c64802c9af08e7cb174e2df3f5",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -81,6 +81,11 @@
                 "php": ">=5.3.2"
             },
             "type": "symfony-bundle",
+            "extra": {
+                "patches_applied": {
+                    "Remove superfluous argument": "https://github.com/bobthecow/BobthecowMustacheBundle/pull/9.patch"
+                }
+            },
             "autoload": {
                 "psr-0": {
                     "Bobthecow\\Bundle\\MustacheBundle": ""
@@ -106,12 +111,7 @@
                 "symfony",
                 "templating"
             ],
-            "time": "2014-07-10T12:09:42+00:00",
-            "extra": {
-                "patches_applied": {
-                    "Remove superfluous argument": "https://github.com/bobthecow/BobthecowMustacheBundle/pull/9.patch"
-                }
-            }
+            "time": "2014-07-10T12:09:42+00:00"
         },
         {
             "name": "cocur/slugify",
@@ -151,6 +151,11 @@
                 "zendframework/zend-view": "~2.2"
             },
             "type": "library",
+            "extra": {
+                "patches_applied": {
+                    "strip_tags": "https://github.com/cocur/slugify/pull/201.patch"
+                }
+            },
             "autoload": {
                 "psr-4": {
                     "Cocur\\Slugify\\": "src"
@@ -176,12 +181,7 @@
                 "slug",
                 "slugify"
             ],
-            "time": "2018-01-22T09:00:48+00:00",
-            "extra": {
-                "patches_applied": {
-                    "strip_tags": "https://github.com/cocur/slugify/pull/201.patch"
-                }
-            }
+            "time": "2018-01-22T09:00:48+00:00"
         },
         {
             "name": "composer/ca-bundle",
@@ -917,12 +917,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-sdk-php.git",
-                "reference": "397bf576c244a8b31f6f1f485378e23ac1ee55e8"
+                "reference": "5e033211f285ad28b6baa45e29258c63b247a09b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/397bf576c244a8b31f6f1f485378e23ac1ee55e8",
-                "reference": "397bf576c244a8b31f6f1f485378e23ac1ee55e8",
+                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/5e033211f285ad28b6baa45e29258c63b247a09b",
+                "reference": "5e033211f285ad28b6baa45e29258c63b247a09b",
                 "shasum": ""
             },
             "require": {
@@ -962,7 +962,7 @@
                 "MIT"
             ],
             "description": "eLife Sciences API SDK",
-            "time": "2020-04-06T16:15:40+00:00"
+            "time": "2020-06-03T15:43:38+00:00"
         },
         {
             "name": "elife/patterns",
@@ -970,12 +970,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/patterns-php.git",
-                "reference": "52ced61d171619785e5aa15b98434ba20e2821ad"
+                "reference": "539feec72eff882d530602f101885d5d4244a8f6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/52ced61d171619785e5aa15b98434ba20e2821ad",
-                "reference": "52ced61d171619785e5aa15b98434ba20e2821ad",
+                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/539feec72eff882d530602f101885d5d4244a8f6",
+                "reference": "539feec72eff882d530602f101885d5d4244a8f6",
                 "shasum": ""
             },
             "require": {
@@ -1018,7 +1018,7 @@
             "support": {
                 "source": "https://github.com/elifesciences/patterns-php/tree/master"
             },
-            "time": "2020-05-20T07:47:41+00:00"
+            "time": "2020-06-03T15:28:34+00:00"
         },
         {
             "name": "fabpot/goutte",
@@ -1371,6 +1371,12 @@
                 "shasum": ""
             },
             "type": "library",
+            "extra": {
+                "patches_applied": {
+                    "Add field label": "https://github.com/isometriks/IsometriksSpamBundle/pull/9.patch",
+                    "Use EmailType": "https://github.com/isometriks/IsometriksSpamBundle/pull/17.patch"
+                }
+            },
             "autoload": {
                 "psr-4": {
                     "Isometriks\\Bundle\\SpamBundle\\": ""
@@ -1394,13 +1400,7 @@
                 "spam",
                 "symfony3"
             ],
-            "time": "2016-09-23T18:48:09+00:00",
-            "extra": {
-                "patches_applied": {
-                    "Add field label": "https://github.com/isometriks/IsometriksSpamBundle/pull/9.patch",
-                    "Use EmailType": "https://github.com/isometriks/IsometriksSpamBundle/pull/17.patch"
-                }
-            }
+            "time": "2016-09-23T18:48:09+00:00"
         },
         {
             "name": "kevinrob/guzzle-cache-middleware",
@@ -3397,12 +3397,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-raml.git",
-                "reference": "537aff4efe86f706d604b3c368268ab5ad85fc58"
+                "reference": "7d1ba7eadb86499e32d70f4ef80d104359dfa886"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-raml/zipball/537aff4efe86f706d604b3c368268ab5ad85fc58",
-                "reference": "537aff4efe86f706d604b3c368268ab5ad85fc58",
+                "url": "https://api.github.com/repos/elifesciences/api-raml/zipball/7d1ba7eadb86499e32d70f4ef80d104359dfa886",
+                "reference": "7d1ba7eadb86499e32d70f4ef80d104359dfa886",
                 "shasum": ""
             },
             "conflict": {
@@ -3414,7 +3414,7 @@
                 "MIT"
             ],
             "description": "eLife Sciences API specification",
-            "time": "2020-04-06T15:19:49+00:00"
+            "time": "2020-06-03T14:59:36+00:00"
         },
         {
             "name": "elife/api-validator",
@@ -5361,5 +5361,6 @@
     "platform-dev": [],
     "platform-overrides": {
         "php": "7.1.28"
-    }
+    },
+    "plugin-api-version": "1.1.0"
 }

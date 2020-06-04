@@ -696,6 +696,15 @@ services:
         tags:
           - name: view_model.converter
 
+    elife.journal.view_model.converter.block.tweet:
+        class: eLife\Journal\ViewModel\Converter\Block\TweetConverter
+        public: false
+        arguments:
+          - '@elife.journal.view_model.converter'
+          - '@elife.patterns.pattern_renderer'
+        tags:
+          - name: view_model.converter
+
     elife.journal.view_model.converter.block.video:
         class: eLife\Journal\ViewModel\Converter\Block\VideoConverter
         public: false
