@@ -4,8 +4,6 @@ namespace test\eLife\Journal\ViewModel\Converter\Block;
 
 use eLife\ApiSdk\Model\Block;
 use eLife\Journal\ViewModel\Converter\Block\GoogleMapConverter;
-use eLife\Journal\ViewModel\Converter\ViewModelConverter;
-use eLife\Patterns\PatternRenderer;
 use eLife\Patterns\ViewModel;
 
 final class GoogleMapConverterTest extends BlockConverterTestCase
@@ -18,10 +16,7 @@ final class GoogleMapConverterTest extends BlockConverterTestCase
      */
     public function setUpConverter()
     {
-        $this->converter = new GoogleMapConverter(
-            $this->createMock(ViewModelConverter::class),
-            $this->createMock(PatternRenderer::class)
-        );
+        $this->converter = new GoogleMapConverter();
     }
 
     protected function unsupportedModelData() : array
