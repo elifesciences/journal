@@ -10,7 +10,7 @@ use eLife\Patterns\ViewModel;
 
 final class GoogleMapConverterTest extends BlockConverterTestCase
 {
-    protected $blockClass = Block\Figshare::class;
+    protected $blockClass = Block\GoogleMap::class;
     protected $viewModelClasses = [ViewModel\IFrame::class];
 
     /**
