@@ -584,6 +584,15 @@ services:
         tags:
           - name: view_model.converter
 
+    elife.journal.view_model.converter.block.figshare:
+        class: eLife\Journal\ViewModel\Converter\Block\FigshareConverter
+        public: false
+        arguments:
+          - '@elife.journal.view_model.converter'
+          - '@elife.patterns.pattern_renderer'
+        tags:
+          - name: view_model.converter
+
     elife.journal.view_model.converter.block.figure:
         class: eLife\Journal\ViewModel\Converter\Block\FigureConverter
         public: false
@@ -618,6 +627,15 @@ services:
           - '@elife.journal.view_model.converter'
           - '@elife.patterns.pattern_renderer'
           - '@elife.journal.helper.download_link_uri_generator'
+        tags:
+          - name: view_model.converter
+
+    elife.journal.view_model.converter.block.google_map:
+        class: eLife\Journal\ViewModel\Converter\Block\GoogleMapConverter
+        public: false
+        arguments:
+          - '@elife.journal.view_model.converter'
+          - '@elife.patterns.pattern_renderer'
         tags:
           - name: view_model.converter
 
