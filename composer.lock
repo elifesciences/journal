@@ -1371,17 +1371,20 @@
         },
         {
             "name": "isometriks/spam-bundle",
-            "version": "v1.0.0",
+            "version": "v1.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/isometriks/IsometriksSpamBundle.git",
-                "reference": "6750758208eacff872fb072843c39e0bda0a60f7"
+                "reference": "9bc86cc018725532367ba05e603b12175f85ca6e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/isometriks/IsometriksSpamBundle/zipball/6750758208eacff872fb072843c39e0bda0a60f7",
-                "reference": "6750758208eacff872fb072843c39e0bda0a60f7",
+                "url": "https://api.github.com/repos/isometriks/IsometriksSpamBundle/zipball/9bc86cc018725532367ba05e603b12175f85ca6e",
+                "reference": "9bc86cc018725532367ba05e603b12175f85ca6e",
                 "shasum": ""
+            },
+            "require": {
+                "symfony/form": "~3.0|~4.0"
             },
             "type": "library",
             "autoload": {
@@ -1407,7 +1410,7 @@
                 "spam",
                 "symfony3"
             ],
-            "time": "2016-09-23T18:48:09+00:00",
+            "time": "2019-11-19T21:20:04+00:00",
             "extra": {
                 "patches_applied": {
                     "Add field label": "https://github.com/isometriks/IsometriksSpamBundle/pull/9.patch",
