@@ -22,6 +22,10 @@ final class DownloadController extends Controller
 
         $response->headers->set('Content-Disposition', $response->headers->makeDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $link->getFilename()));
 
+        if ($link->getRelCanonical()) {
+            $response->headers->set('Link', sprintf('<%s>; rel="canonical"', $link->getRelCanonical()));
+        }
+
         return $response;
     }
 }

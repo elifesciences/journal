@@ -6,16 +6,18 @@ final class DownloadLink
 {
     private $uri;
     private $filename;
+    private $relCanonical;
 
-    public function __construct(string $uri, string $filename)
+    public function __construct(string $uri, string $filename, string $relCanonical = null)
     {
         $this->uri = $uri;
         $this->filename = $filename;
+        $this->relCanonical = $relCanonical;
     }
 
-    public static function fromUri(string $uri)
+    public static function fromUri(string $uri, string $relCanonical = null)
     {
-        return new self($uri, basename($uri));
+        return new self($uri, basename($uri), $relCanonical);
     }
 
     public function getUri() : string
@@ -26,5 +28,13 @@ final class DownloadLink
     public function getFilename() : string
     {
         return $this->filename;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getRelCanonical()
+    {
+        return $this->relCanonical;
     }
 }
