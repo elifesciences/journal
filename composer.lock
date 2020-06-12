@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e9456cb41718778d935f08dbf18d0fbe",
+    "content-hash": "3013a0680e8078671d62fe6348d84626",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -917,12 +917,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-sdk-php.git",
-                "reference": "6eac994f57e00a5e30ae5ad800489fd7acc07efc"
+                "reference": "2e72b611c40f6b03d1400499619b6cd8d792b7cd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/6eac994f57e00a5e30ae5ad800489fd7acc07efc",
-                "reference": "6eac994f57e00a5e30ae5ad800489fd7acc07efc",
+                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/2e72b611c40f6b03d1400499619b6cd8d792b7cd",
+                "reference": "2e72b611c40f6b03d1400499619b6cd8d792b7cd",
                 "shasum": ""
             },
             "require": {
@@ -937,7 +937,7 @@
             },
             "require-dev": {
                 "csa/guzzle-cache-middleware": "^1.0",
-                "elife/api": "dev-structured-abstract-compiled",
+                "elife/api": "dev-master",
                 "elife/api-validator": "^1.0@dev",
                 "guzzlehttp/guzzle": "^6.0",
                 "justinrainbow/json-schema": "^3.0 || ^4.0 || ^5.0",
@@ -962,7 +962,7 @@
                 "MIT"
             ],
             "description": "eLife Sciences API SDK",
-            "time": "2020-05-28T07:23:25+00:00"
+            "time": "2020-06-12T19:02:28+00:00"
         },
         {
             "name": "elife/patterns",
@@ -1889,12 +1889,12 @@
             "version": "v1.0.5",
             "source": {
                 "type": "git",
-                "url": "https://github.com/whiteoctober/Pagerfanta.git",
+                "url": "https://github.com/BabDev/Pagerfanta.git",
                 "reference": "29aade64addfdfb12c05aabf160f09d1aea6b143"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/whiteoctober/Pagerfanta/zipball/29aade64addfdfb12c05aabf160f09d1aea6b143",
+                "url": "https://api.github.com/repos/BabDev/Pagerfanta/zipball/29aade64addfdfb12c05aabf160f09d1aea6b143",
                 "reference": "29aade64addfdfb12c05aabf160f09d1aea6b143",
                 "shasum": ""
             },
@@ -2823,6 +2823,7 @@
                 "page",
                 "paging"
             ],
+            "abandoned": "babdev/pagerfanta-bundle",
             "time": "2018-05-03T09:45:56+00:00"
         }
     ],
@@ -3393,16 +3394,16 @@
         },
         {
             "name": "elife/api",
-            "version": "dev-structured-abstract-compiled",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-raml.git",
-                "reference": "9a54089498cc92dcd788bb44989f1b4584d3338a"
+                "reference": "354aab4e9991f92da721746c343dd7a30404338c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-raml/zipball/9a54089498cc92dcd788bb44989f1b4584d3338a",
-                "reference": "9a54089498cc92dcd788bb44989f1b4584d3338a",
+                "url": "https://api.github.com/repos/elifesciences/api-raml/zipball/354aab4e9991f92da721746c343dd7a30404338c",
+                "reference": "354aab4e9991f92da721746c343dd7a30404338c",
                 "shasum": ""
             },
             "conflict": {
@@ -3414,7 +3415,7 @@
                 "MIT"
             ],
             "description": "eLife Sciences API specification",
-            "time": "2020-05-27T16:39:34+00:00"
+            "time": "2020-06-12T19:55:13+00:00"
         },
         {
             "name": "elife/api-validator",
