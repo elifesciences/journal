@@ -99,7 +99,7 @@ final class DownloadControllerTest extends WebTestCase
     {
         $uriToEncode = $fileUri;
         if ($relCanonical) {
-            $uriToEncode .= DownloadLinkUriGenerator::WRAP_REL_CANONICAL . $relCanonical;
+            $uriToEncode .= DownloadLinkUriGenerator::WRAP_REL_CANONICAL.$relCanonical;
         }
 
         $uri = 'http://localhost/download/'.base64_encode($uriToEncode)."/$name";
