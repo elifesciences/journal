@@ -2,6 +2,7 @@
 
 namespace test\eLife\Journal\Controller;
 
+use eLife\Journal\Helper\DownloadLinkUriGenerator;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
@@ -94,9 +95,14 @@ final class DownloadControllerTest extends WebTestCase
         $this->assertSame(file_get_contents($mp3), $content);
     }
 
-    private function createDownloadUri(string $fileUri, string $name) : string
+    private function createDownloadUri(string $fileUri, string $name, string $relCanonical = null) : string
     {
-        $uri = 'http://localhost/download/'.base64_encode($fileUri)."/$name";
+        $uriToEncode = $fileUri;
+        if ($relCanonical) {
+            $uriToEncode .= DownloadLinkUriGenerator::WRAP_REL_CANONICAL . $relCanonical;
+        }
+
+        $uri = 'http://localhost/download/'.base64_encode($uriToEncode)."/$name";
 
         return self::$kernel->getContainer()->get('elife.uri_signer')->sign($uri);
     }
