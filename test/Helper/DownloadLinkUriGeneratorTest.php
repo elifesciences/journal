@@ -49,8 +49,8 @@ final class DownloadLinkUriGeneratorTest extends KernelTestCase
         );
 
         $this->assertSame(
-            $this->uriSigner->sign($this->defaultBaseUrl.'/download/aHR0cDovL3d3dy5leGFtcGxlLmNvbS90ZXN0LnR4dCVyZWxDYW5vbmljYWwlaHR0cDovL3d3dy5leGFtcGxlLmNvbS9jYW5vbmljYWw-/foo.bar'),
-            $this->downloadLinkUriGenerator->generate(new DownloadLink('http://www.example.com/test.txt', 'foo.bar', 'http://www.example.com/canonical'))
+            $this->uriSigner->sign($this->defaultBaseUrl.'/download/aHR0cDovL3d3dy5leGFtcGxlLmNvbS90ZXN0LnR4dD9jYW5vbmljYWxVcmk9aHR0cDovL3d3dy5leGFtcGxlLmNvbS9jYW5vbmljYWw-/foo.bar'),
+            $this->downloadLinkUriGenerator->generate(new DownloadLink('http://www.example.com/test.txt?canonicalUri=http://www.example.com/canonical', 'foo.bar'))
         );
     }
 

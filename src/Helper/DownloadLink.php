@@ -4,20 +4,21 @@ namespace eLife\Journal\Helper;
 
 final class DownloadLink
 {
+    const QUERY_PARAMETER_CANONICAL_URI = 'canonicalUri';
+
     private $uri;
     private $filename;
-    private $relCanonical;
+    private $canonicalUri = null;
 
-    public function __construct(string $uri, string $filename, string $relCanonical = null)
+    public function __construct(string $uri, string $filename)
     {
-        $this->uri = $uri;
+        $this->uri = $this->stripCanonicalUri($uri);
         $this->filename = $filename;
-        $this->relCanonical = $relCanonical;
     }
 
-    public static function fromUri(string $uri, string $relCanonical = null)
+    public static function fromUri(string $uri)
     {
-        return new self($uri, basename($uri), $relCanonical);
+        return new self($uri, basename(explode('?', $uri)[0]));
     }
 
     public function getUri() : string
@@ -33,8 +34,26 @@ final class DownloadLink
     /**
      * @return string|null
      */
-    public function getRelCanonical()
+    public function getCanonicalUri()
     {
-        return $this->relCanonical;
+        return $this->canonicalUri;
+    }
+
+    private function stripCanonicalUri(string $uri) : string
+    {
+        $parseUri = parse_url($uri);
+        if (!empty($parseUri['query'])) {
+            parse_str($parseUri['query'], $query);
+            if (isset($query[self::QUERY_PARAMETER_CANONICAL_URI])) {
+                $this->canonicalUri = $query[self::QUERY_PARAMETER_CANONICAL_URI] ?? null;
+                unset($query[self::QUERY_PARAMETER_CANONICAL_URI]);
+                $uri = "{$parseUri['scheme']}://{$parseUri['host']}{$parseUri['path']}";
+                if ($newQuery = http_build_query($query)) {
+                    $uri .= "?{$newQuery}";
+                }
+            }
+        }
+
+        return $uri;
     }
 }

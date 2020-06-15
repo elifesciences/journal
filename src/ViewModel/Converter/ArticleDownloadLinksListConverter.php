@@ -38,7 +38,7 @@ final class ArticleDownloadLinksListConverter implements ViewModelConverter
             $types[] = 'PDF';
             $downloads[] = new ViewModel\ArticleDownloadLink(new ViewModel\Link(
                 'Article PDF',
-                $this->downloadLinkUriGenerator->generate(DownloadLink::fromUri($object->getPdf(), $articleUri)),
+                $this->downloadLinkUriGenerator->generate(DownloadLink::fromUri($object->getPdf().'?'.DownloadLink::QUERY_PARAMETER_CANONICAL_URI.'='.$articleUri)),
                 false,
                 ['article-identifier' => $object->getDoi(), 'download-type' => 'pdf-article']
             ));

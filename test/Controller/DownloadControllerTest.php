@@ -62,7 +62,7 @@ final class DownloadControllerTest extends WebTestCase
         $this->mockApiResponse(
             new Request(
                 'GET',
-                'http://www.example.com/test.mp3',
+                'http://www.example.com/test.pdf',
                 [
                     'Accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
                     'Referer' => 'http://www.example.com/',
@@ -74,13 +74,13 @@ final class DownloadControllerTest extends WebTestCase
             ),
             new Response(
                 200,
-                ['Content-Type' => 'audio/mp3'],
-                fopen($mp3 = __DIR__.'/../../assets/tests/blank.mp3', 'r')
+                ['Content-Type' => 'application/pdf'],
+                fopen($mp3 = __DIR__.'/../../assets/tests/blank.pdf', 'r')
             )
         );
 
         $content = $this->captureContent(function () use ($client) {
-            $client->request('GET', $this->createDownloadUri('http://www.example.com/test.mp3', 'test.mp3', 'http://www.example.com/canonical'), [], [], ['HTTP_REFERER' => 'http://www.example.com/']);
+            $client->request('GET', $this->createDownloadUri('http://www.example.com/test.pdf?canonicalUri=http://www.example.com/canonical', 'test.pdf'), [], [], ['HTTP_REFERER' => 'http://www.example.com/']);
         });
 
         $response = $client->getResponse();
@@ -88,21 +88,16 @@ final class DownloadControllerTest extends WebTestCase
         $this->assertInstanceOf(StreamedResponse::class, $response);
         $this->assertSame(200, $response->getStatusCode());
         $this->assertArraySubset([
-            'content-type' => ['audio/mp3'],
-            'content-disposition' => ['attachment; filename="test.mp3"'],
+            'content-type' => ['application/pdf'],
+            'content-disposition' => ['attachment; filename="test.pdf"'],
             'link' => ['<http://www.example.com/canonical>; rel="canonical"'],
         ], $response->headers->all());
         $this->assertSame(file_get_contents($mp3), $content);
     }
 
-    private function createDownloadUri(string $fileUri, string $name, string $relCanonical = null) : string
+    private function createDownloadUri(string $fileUri, string $name) : string
     {
-        $uriToEncode = $fileUri;
-        if ($relCanonical) {
-            $uriToEncode .= DownloadLinkUriGenerator::WRAP_REL_CANONICAL.$relCanonical;
-        }
-
-        $uri = 'http://localhost/download/'.base64_encode($uriToEncode)."/$name";
+        $uri = 'http://localhost/download/'.base64_encode($fileUri)."/$name";
 
         return self::$kernel->getContainer()->get('elife.uri_signer')->sign($uri);
     }
