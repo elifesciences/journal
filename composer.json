@@ -17,7 +17,7 @@
         "ext-hash": "*",
         "beberlei/assert": "^2.8",
         "bobthecow/mustache-bundle": "^1.2",
-        "cocur/slugify": "^3.0",
+        "cocur/slugify": "^4.0",
         "csa/guzzle-bundle": "^2.2",
         "cweagans/composer-patches": "^1.6",
         "elife/api-client": "^1.0@dev",
