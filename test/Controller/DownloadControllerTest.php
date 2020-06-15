@@ -51,6 +51,49 @@ final class DownloadControllerTest extends WebTestCase
         $this->assertSame(file_get_contents($mp3), $content);
     }
 
+    /**
+     * @test
+     */
+    public function it_may_set_the_rel_canonical_link_header()
+    {
+        $client = static::createClient();
+
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://www.example.com/test.pdf?canonicalUri=http://www.example.com/canonical',
+                [
+                    'Accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+                    'Referer' => 'http://www.example.com/',
+                    'X-Forwarded-For' => '127.0.0.1',
+                    'X-Forwarded-Host' => 'localhost',
+                    'X-Forwarded-Port' => '80',
+                    'X-Forwarded-Proto' => 'http',
+                ]
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/pdf'],
+                fopen($mp3 = __DIR__.'/../../assets/tests/blank.pdf', 'r')
+            )
+        );
+
+        $content = $this->captureContent(function () use ($client) {
+            $client->request('GET', $this->createDownloadUri('http://www.example.com/test.pdf?canonicalUri=http://www.example.com/canonical', 'test.pdf'), [], [], ['HTTP_REFERER' => 'http://www.example.com/']);
+        });
+
+        $response = $client->getResponse();
+
+        $this->assertInstanceOf(StreamedResponse::class, $response);
+        $this->assertSame(200, $response->getStatusCode());
+        $this->assertArraySubset([
+            'content-type' => ['application/pdf'],
+            'content-disposition' => ['attachment; filename="test.pdf"'],
+            'link' => ['<http://www.example.com/canonical>; rel="canonical"'],
+        ], $response->headers->all());
+        $this->assertSame(file_get_contents($mp3), $content);
+    }
+
     private function createDownloadUri(string $fileUri, string $name) : string
     {
         $uri = 'http://localhost/download/'.base64_encode($fileUri)."/$name";
