@@ -61,7 +61,7 @@ final class DownloadControllerTest extends WebTestCase
         $this->mockApiResponse(
             new Request(
                 'GET',
-                'http://www.example.com/test.pdf',
+                'http://www.example.com/test.pdf?canonicalUri=http://www.example.com/canonical',
                 [
                     'Accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
                     'Referer' => 'http://www.example.com/',
