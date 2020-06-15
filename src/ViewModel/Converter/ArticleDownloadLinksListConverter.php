@@ -31,11 +31,14 @@ final class ArticleDownloadLinksListConverter implements ViewModelConverter
 
         $downloads = [];
         $types = [];
+
+        $articleUri = $this->urlGenerator->generate('article', [$object], UrlGeneratorInterface::ABSOLUTE_URL);
+
         if ($object->getPdf()) {
             $types[] = 'PDF';
             $downloads[] = new ViewModel\ArticleDownloadLink(new ViewModel\Link(
                 'Article PDF',
-                $this->downloadLinkUriGenerator->generate(DownloadLink::fromUri($object->getPdf())),
+                $this->downloadLinkUriGenerator->generate(DownloadLink::fromUri($object->getPdf().'?'.DownloadLink::QUERY_PARAMETER_CANONICAL_URI.'='.$articleUri)),
                 false,
                 ['article-identifier' => $object->getDoi(), 'download-type' => 'pdf-article']
             ));
@@ -69,8 +72,6 @@ final class ArticleDownloadLinksListConverter implements ViewModelConverter
         if ($downloads) {
             $groups[mixed_visibility_text('', 'Downloads', '(link to download the article as '.Humanizer::prettyList(...$types).')')] = $downloads;
         }
-
-        $articleUri = $this->urlGenerator->generate('article', [$object], UrlGeneratorInterface::ABSOLUTE_URL);
 
         if ($object->getPublishedDate()) {
             $groups[mixed_visibility_text('', 'Download citations', '(links to download the citations from this article in formats compatible with various reference manager tools)')] = [
