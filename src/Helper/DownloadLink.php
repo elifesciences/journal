@@ -8,12 +8,13 @@ final class DownloadLink
 
     private $uri;
     private $filename;
-    private $canonicalUri = null;
+    private $canonicalUri;
 
     public function __construct(string $uri, string $filename)
     {
-        $this->uri = $this->stripCanonicalUri($uri);
+        $this->uri = $uri;
         $this->filename = $filename;
+        $this->canonicalUri = $this->setCanonicalUri($uri);
     }
 
     public static function fromUri(string $uri)
@@ -39,21 +40,19 @@ final class DownloadLink
         return $this->canonicalUri;
     }
 
-    private function stripCanonicalUri(string $uri) : string
+    /**
+     * @return string|null
+     */
+    private function setCanonicalUri(string $uri)
     {
         $parseUri = parse_url($uri);
         if (!empty($parseUri['query'])) {
             parse_str($parseUri['query'], $query);
             if (isset($query[self::QUERY_PARAMETER_CANONICAL_URI])) {
-                $this->canonicalUri = $query[self::QUERY_PARAMETER_CANONICAL_URI] ?? null;
-                unset($query[self::QUERY_PARAMETER_CANONICAL_URI]);
-                $uri = "{$parseUri['scheme']}://{$parseUri['host']}{$parseUri['path']}";
-                if ($newQuery = http_build_query($query)) {
-                    $uri .= "?{$newQuery}";
-                }
+                return $query[self::QUERY_PARAMETER_CANONICAL_URI] ?? null;
             }
         }
 
-        return $uri;
+        return null;
     }
 }

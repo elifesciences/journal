@@ -53,11 +53,11 @@ final class DownloadLinkTest extends TestCase
     /**
      * @test
      */
-    public function it_can_be_created_from_a_uri_and_rel_canonical()
+    public function it_can_be_created_from_a_uri_and_canonical_uri()
     {
         $link = DownloadLink::fromUri('http://www.example.com/test.txt?canonicalUri=http://www.example.com/canonical');
 
-        $this->assertSame('http://www.example.com/test.txt', $link->getUri());
+        $this->assertSame('http://www.example.com/test.txt?canonicalUri=http://www.example.com/canonical', $link->getUri());
         $this->assertSame('test.txt', $link->getFilename());
         $this->assertSame('http://www.example.com/canonical', $link->getCanonicalUri());
     }
