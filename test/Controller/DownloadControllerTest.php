@@ -2,7 +2,6 @@
 
 namespace test\eLife\Journal\Controller;
 
-use eLife\Journal\Helper\DownloadLinkUriGenerator;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
