@@ -14,7 +14,7 @@ final class DownloadLink
     {
         $this->uri = $uri;
         $this->filename = $filename;
-        $this->canonicalUri = $this->setCanonicalUri($uri);
+        $this->canonicalUri = $this->findCanonicalUri($uri);
     }
 
     public static function fromUri(string $uri)
@@ -43,7 +43,7 @@ final class DownloadLink
     /**
      * @return string|null
      */
-    private function setCanonicalUri(string $uri)
+    private function findCanonicalUri(string $uri)
     {
         $parseUri = parse_url($uri);
         if (!empty($parseUri['query'])) {
