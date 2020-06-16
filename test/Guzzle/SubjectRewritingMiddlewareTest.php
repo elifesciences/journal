@@ -162,7 +162,7 @@ final class SubjectRewritingMiddlewareTest extends KernelTestCase
                 $this->createArticlePoA(false, false),
                 $this->createArticlePoA(true, false),
             ],
-            'application/vnd.elife.article-poa+json; version=2' => [
+            'application/vnd.elife.article-poa+json; version=3' => [
                 $this->createArticlePoA(false, false),
                 $this->createArticlePoA(true, false),
             ],
@@ -174,7 +174,7 @@ final class SubjectRewritingMiddlewareTest extends KernelTestCase
                 $this->createArticleVoR(false, false),
                 $this->createArticleVoR(true, false),
             ],
-            'application/vnd.elife.article-vor+json; version=3' => [
+            'application/vnd.elife.article-vor+json; version=4' => [
                 $this->createArticleVoR(false, false),
                 $this->createArticleVoR(true, false),
             ],
@@ -312,7 +312,7 @@ final class SubjectRewritingMiddlewareTest extends KernelTestCase
                     ],
                 ],
             ],
-            'application/vnd.elife.recommendations+json; version=1' => [
+            'application/vnd.elife.recommendations+json; version=2' => [
                 [
                     'total' => 2,
                     'items' => [
