@@ -20,20 +20,6 @@ final class SubmitController extends Controller
 
         $user = $this->get('security.token_storage')->getToken()->getUser();
 
-        if (!$this->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
-            $path = [
-                '_forwarded' => $request->attributes,
-                '_controller' => 'AppBundle:Auth:redirect',
-            ];
-            $subRequest = $request->duplicate(null, null, $path);
-            $subRequest->headers->set('Referer', $request->getUri());
-            $subRequest->getSession()->set('journal.submit', true);
-
-            return $this->get('kernel')->handle($subRequest, KernelInterface::SUB_REQUEST);
-        }
-
-        $jwt = $this->get('elife.journal.security.xpub.token_generator')->generate($user, $request->getSession()->remove('journal.submit') ?? false);
-
         // if a return url is specified, check that its from a trusted host
         $returnUrl = $request->query->get('return_url', null);
 
@@ -56,6 +42,20 @@ final class SubmitController extends Controller
                 throw new BadRequestHttpException();
             }
         }
+
+        if (!$this->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+            $path = [
+                '_forwarded' => $request->attributes,
+                '_controller' => 'AppBundle:Auth:redirect',
+            ];
+            $subRequest = $request->duplicate(null, null, $path);
+            $subRequest->headers->set('Referer', $request->getUri());
+            $subRequest->getSession()->set('journal.submit', true);
+
+            return $this->get('kernel')->handle($subRequest, KernelInterface::SUB_REQUEST);
+        }
+
+        $jwt = $this->get('elife.journal.security.xpub.token_generator')->generate($user, $request->getSession()->remove('journal.submit') ?? false);
 
         // remove this case once libero reviewer is live and xpub retired, only return token in query afterwards
         $redirectUrl = "{$returnUrl}#{$jwt}";
