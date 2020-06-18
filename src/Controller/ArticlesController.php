@@ -968,10 +968,10 @@ final class ArticlesController extends Controller
                 $latestVersion = $history->getVersions()[count($history->getVersions()) - 1]->getVersion();
 
                 if (isset($rdsArticle['download']) && $item->getVersion() === $latestVersion && $this->isGranted('FEATURE_RDS')) {
-                    $era = $rdsArticle['download'];
+                    $rdsDownload = $rdsArticle['download'];
                 }
 
-                return $this->convertTo($item, ViewModel\ArticleDownloadLinksList::class, ['era-download' => $era ?? null]);
+                return $this->convertTo($item, ViewModel\ArticleDownloadLinksList::class, ['rds-download' => $rdsDownload ?? null]);
             });
 
         return $arguments;
