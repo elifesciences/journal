@@ -57,7 +57,7 @@ final class DownloadLinkTest extends TestCase
     {
         $link = DownloadLink::fromUri('http://www.example.com/test?format=tar.gz');
 
-        $this->assertSame('http://www.example.com/test', $link->getUri());
+        $this->assertSame('http://www.example.com/test?format=tar.gz', $link->getUri());
         $this->assertSame('test.tar.gz', $link->getFilename());
     }
 
