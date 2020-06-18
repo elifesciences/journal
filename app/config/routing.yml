@@ -119,6 +119,13 @@ article-rds:
     requirements:
         id: '[a-z0-9-]+'
 
+article-rds-download:
+    path: /articles/{id}/executable/download
+    defaults:
+      _controller: AppBundle:Articles:rdsDownload
+    requirements:
+        id: '[a-z0-9-]+'
+
 article-type:
     path: /articles/{type}
     defaults:
@@ -145,13 +152,6 @@ article:
     path: /articles/{id}
     defaults:
          _controller: AppBundle:Articles:text
-    requirements:
-        id: '[a-z0-9-]+'
-
-article-era-download:
-    path: /articles/{id}/evecutable-version/snapshot
-    defaults:
-         _controller: AppBundle:Articles:executableVersionSnapshot
     requirements:
         id: '[a-z0-9-]+'
 

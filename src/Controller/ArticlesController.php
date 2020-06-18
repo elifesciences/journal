@@ -773,6 +773,24 @@ final class ArticlesController extends Controller
         return new Response($this->get('templating')->render('::article-rds.html.twig', $arguments));
     }
 
+    public function rdsDownloadAction(Request $request, string $id): Response
+    {
+        if (!$this->isGranted('FEATURE_RDS')) {
+            throw new NotFoundHttpException('Not allowed to see RDS companion article');
+        }
+
+        $arguments = $this->defaultArticleArguments($request, $id);
+
+        if (!isset($arguments['rdsArticle']['download'])) {
+            throw new NotFoundHttpException('No RDS companion associated with this article');
+        }
+
+        return new RedirectResponse(
+            $arguments['rdsArticle']['download'],
+            Response::HTTP_MOVED_PERMANENTLY
+        );
+    }
+
     public function xmlAction(Request $request, string $id, int $version = null) : Response
     {
         $arguments = $this->defaultArticleArguments($request, $id, $version);
@@ -786,16 +804,6 @@ final class ArticlesController extends Controller
         }
 
         return $this->get('elife.journal.helper.http_proxy')->send($request, $xml);
-    }
-
-    public function executableVersionSnapshotAction(Request $request, string $id): Response
-    {
-        if ($rds = $this->getParameter('rds_articles')[$id]) {
-            return new RedirectResponse(
-                $rds['download'],
-                Response::HTTP_MOVED_PERMANENTLY
-            );
-        }
     }
 
     private function defaultArticleArguments(Request $request, string $id, int $version = null) : array
