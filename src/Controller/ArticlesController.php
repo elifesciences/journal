@@ -23,7 +23,6 @@ use eLife\ApiSdk\Model\Identifier;
 use eLife\ApiSdk\Model\Model;
 use eLife\ApiSdk\Model\Reviewer;
 use eLife\Journal\Helper\Callback;
-use eLife\Journal\Helper\DownloadLink;
 use eLife\Journal\Helper\HasPages;
 use eLife\Journal\Helper\Humanizer;
 use eLife\Patterns\ViewModel;
@@ -793,7 +792,7 @@ final class ArticlesController extends Controller
     {
         if ($rds = $this->getParameter('rds_articles')[$id]) {
             return new RedirectResponse(
-                DownloadLink::fromUri($rds['download']),
+                $rds['download'],
                 Response::HTTP_MOVED_PERMANENTLY
             );
         }
