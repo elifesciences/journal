@@ -41,7 +41,7 @@ parameters:
         '26231':
             date: '2030-01-01T00:00:00Z'
             display: https://repro.elifesciences.org/example.html
-            download: https://repro.elifesciences.org/example.dar
+            download: https://hub.stenci.la/api/projects/1/snapshots/1?format=tar.gz
     dismissible_info_bars: {}
     cache_control: public, max-age=300, stale-while-revalidate=300, stale-if-error=86400
     feature_xpub: true
