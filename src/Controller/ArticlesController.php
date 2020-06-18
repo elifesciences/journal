@@ -23,6 +23,7 @@ use eLife\ApiSdk\Model\Identifier;
 use eLife\ApiSdk\Model\Model;
 use eLife\ApiSdk\Model\Reviewer;
 use eLife\Journal\Helper\Callback;
+use eLife\Journal\Helper\DownloadLink;
 use eLife\Journal\Helper\HasPages;
 use eLife\Journal\Helper\Humanizer;
 use eLife\Patterns\ViewModel;
@@ -38,8 +39,10 @@ use eLife\Patterns\ViewModel\ReadMoreItem;
 use eLife\Patterns\ViewModel\SpeechBubble;
 use eLife\Patterns\ViewModel\ViewSelector;
 use GuzzleHttp\Promise\PromiseInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use function GuzzleHttp\Promise\all;
 use function GuzzleHttp\Promise\promise_for;
@@ -784,6 +787,16 @@ final class ArticlesController extends Controller
         }
 
         return $this->get('elife.journal.helper.http_proxy')->send($request, $xml);
+    }
+
+    public function executableVersionSnapshotAction(Request $request, string $id): Response
+    {
+        if ($rds = $this->getParameter('rds_articles')[$id]) {
+            return new RedirectResponse(
+                DownloadLink::fromUri($rds['download']),
+                Response::HTTP_MOVED_PERMANENTLY
+            );
+        }
     }
 
     private function defaultArticleArguments(Request $request, string $id, int $version = null) : array
