@@ -772,7 +772,7 @@ final class ArticlesController extends Controller
         return new Response($this->get('templating')->render('::article-rds.html.twig', $arguments));
     }
 
-    public function rdsDownloadAction(Request $request, string $id): Response
+    public function rdsDownloadAction(Request $request, string $id) : Response
     {
         if (!$this->isGranted('FEATURE_RDS')) {
             throw new NotFoundHttpException('Not allowed to see RDS companion article');
