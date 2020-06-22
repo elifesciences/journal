@@ -91,7 +91,7 @@ parameters:
         'id-of-article-with-rds':
             date: '2030-01-01T00:00:00Z'
             display: https://repro.elifesciences.org/example.md
-            download: https://repro.elifesciences.org/example?format=tar.gz
+            download: https://repro.elifesciences.org/example.dar
     example_rds_articles:
         'id-of-article-with-example-rds': https://repro.elifesciences.org/example.html
     submit_url: http://submit.elifesciences.org/path
