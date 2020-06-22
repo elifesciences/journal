@@ -53,6 +53,17 @@ final class DownloadLinkTest extends TestCase
     /**
      * @test
      */
+    public function it_can_be_created_from_a_uri_with_a_format_query_parameter()
+    {
+        $link = DownloadLink::fromUri('http://www.example.com/test?format=tar.gz');
+
+        $this->assertSame('http://www.example.com/test?format=tar.gz', $link->getUri());
+        $this->assertSame('test.tar.gz', $link->getFilename());
+    }
+
+    /**
+     * @test
+     */
     public function it_can_be_created_from_a_uri_and_canonical_uri()
     {
         $link = DownloadLink::fromUri('http://www.example.com/test.txt?canonicalUri=http://www.example.com/canonical');
