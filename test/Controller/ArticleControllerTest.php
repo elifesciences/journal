@@ -1503,7 +1503,7 @@ final class ArticleControllerTest extends PageTestCase
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertEmpty($crawler->filter('.info-bar'));
-        $this->assertEmpty($crawler->filter('.article-download-links-list__link')->selectLink('Executable DAR'));
+        $this->assertEmpty($crawler->filter('.article-download-links-list__link')->selectLink('Executable version'));
         $this->assertNotContains('Executable code', $crawler->filter('.view-selector')->text());
     }
 
@@ -1523,7 +1523,7 @@ final class ArticleControllerTest extends PageTestCase
             'reproducible view',
             array_map('trim', $crawler->filter('.info-bar')->eq(0)->extract(['_text']))
         );
-        $this->assertEmpty($crawler->filter('.article-download-links-list__link')->selectLink('Executable DAR'));
+        $this->assertEmpty($crawler->filter('.article-download-links-list__link')->selectLink('Executable version'));
         $this->assertNotContains('Executable code', $crawler->filter('.view-selector')->text());
     }
 

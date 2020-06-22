@@ -54,7 +54,7 @@ final class ArticleDownloadLinksListConverter implements ViewModelConverter
         }
 
         if (!empty($context['rds-download'])) {
-            $types[] = 'Tar GZip';
+            $types[] = 'Executable version';
             $downloads[] = new ViewModel\ArticleDownloadLink(
                 new ViewModel\Link(
                     'Executable version',
