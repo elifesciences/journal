@@ -38,6 +38,7 @@ use eLife\Patterns\ViewModel\ReadMoreItem;
 use eLife\Patterns\ViewModel\SpeechBubble;
 use eLife\Patterns\ViewModel\ViewSelector;
 use GuzzleHttp\Promise\PromiseInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -769,6 +770,24 @@ final class ArticlesController extends Controller
         $arguments['infoBars'][] = new InfoBar('This is an executable code view. <a href="'.$this->get('router')->generate('article', ['id' => $id]).'">See the original article</a>.', InfoBar::TYPE_WARNING);
 
         return new Response($this->get('templating')->render('::article-rds.html.twig', $arguments));
+    }
+
+    public function rdsDownloadAction(Request $request, string $id) : Response
+    {
+        if (!$this->isGranted('FEATURE_RDS')) {
+            throw new NotFoundHttpException('Not allowed to see RDS companion article');
+        }
+
+        $arguments = $this->defaultArticleArguments($request, $id);
+
+        if (!isset($arguments['rdsArticle']['download'])) {
+            throw new NotFoundHttpException('No RDS companion associated with this article');
+        }
+
+        return new RedirectResponse(
+            $arguments['rdsArticle']['download'],
+            Response::HTTP_MOVED_PERMANENTLY
+        );
     }
 
     public function xmlAction(Request $request, string $id, int $version = null) : Response
