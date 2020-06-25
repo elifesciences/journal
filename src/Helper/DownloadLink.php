@@ -19,7 +19,16 @@ final class DownloadLink
 
     public static function fromUri(string $uri)
     {
-        return new self($uri, basename(explode('?', $uri)[0]));
+        $filename = basename(explode('?', $uri)[0]);
+        $parseUri = parse_url($uri);
+        if (!empty($parseUri['query'])) {
+            parse_str($parseUri['query'], $query);
+            if (!empty($query['format'])) {
+                $filename = explode('.', $filename)[0].'.'.$query['format'];
+            }
+        }
+
+        return new self($uri, $filename);
     }
 
     public function getUri() : string

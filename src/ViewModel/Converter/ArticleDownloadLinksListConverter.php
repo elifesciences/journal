@@ -53,17 +53,17 @@ final class ArticleDownloadLinksListConverter implements ViewModelConverter
             }
         }
 
-        if (!empty($context['dar-download'])) {
-            $types[] = 'DAR';
+        if (!empty($context['rds-download'])) {
+            $types[] = 'Executable version';
             $downloads[] = new ViewModel\ArticleDownloadLink(
                 new ViewModel\Link(
-                    'Executable DAR',
-                    $this->downloadLinkUriGenerator->generate(DownloadLink::fromUri($context['dar-download'])),
+                    'Executable version',
+                    $this->downloadLinkUriGenerator->generate(new DownloadLink($context['rds-download'], preg_replace('/^[^\.]+/', sprintf('elife-%s-v%d-era', $object->getId(), $object->getVersion()), DownloadLink::fromUri($context['rds-download'])->getFilename()))),
                     false,
-                    ['article-identifier' => $object->getDoi(), 'download-type' => 'dar-download']
+                    ['article-identifier' => $object->getDoi(), 'download-type' => 'rds-download']
                 ),
                 new ViewModel\Link(
-                    'Learn more about DAR',
+                    'What are executable versions?',
                     $this->urlGenerator->generate('labs-post', ['id' => '7dbeb390'])
                 )
             );
