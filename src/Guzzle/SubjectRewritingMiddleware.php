@@ -100,10 +100,10 @@ final class SubjectRewritingMiddleware
                         break;
 
                     case 'application/vnd.elife.article-poa+json; version=1':
-                    case 'application/vnd.elife.article-poa+json; version=2':
+                    case 'application/vnd.elife.article-poa+json; version=3':
                     case 'application/vnd.elife.article-vor+json; version=1':
                     case 'application/vnd.elife.article-vor+json; version=2':
-                    case 'application/vnd.elife.article-vor+json; version=3':
+                    case 'application/vnd.elife.article-vor+json; version=4':
                     case 'application/vnd.elife.blog-article+json; version=2':
                         $data = $this->updateItem($data);
                         break;
