@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4866765f9a5708b4d896e8141035fda1",
+    "content-hash": "614e5e5cf6c6bf23daf3d9e6a19d5a21",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -236,16 +236,6 @@
                 "certificate",
                 "ssl",
                 "tls"
-            ],
-            "funding": [
-                {
-                    "url": "https://packagist.com",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/composer/composer",
-                    "type": "tidelift"
-                }
             ],
             "time": "2020-04-08T08:27:21+00:00"
         },
@@ -930,16 +920,16 @@
         },
         {
             "name": "elife/api-sdk",
-            "version": "dev-structured-abstract",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-sdk-php.git",
-                "reference": "2e72b611c40f6b03d1400499619b6cd8d792b7cd"
+                "reference": "5047cba22f934b6fc89efd058a5731c49d066694"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/2e72b611c40f6b03d1400499619b6cd8d792b7cd",
-                "reference": "2e72b611c40f6b03d1400499619b6cd8d792b7cd",
+                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/5047cba22f934b6fc89efd058a5731c49d066694",
+                "reference": "5047cba22f934b6fc89efd058a5731c49d066694",
                 "shasum": ""
             },
             "require": {
@@ -979,7 +969,7 @@
                 "MIT"
             ],
             "description": "eLife Sciences API SDK",
-            "time": "2020-06-12T19:02:28+00:00"
+            "time": "2020-07-09T11:03:37+00:00"
         },
         {
             "name": "elife/patterns",
@@ -1984,12 +1974,6 @@
                 "paginator",
                 "paging"
             ],
-            "funding": [
-                {
-                    "url": "https://github.com/mbabker",
-                    "type": "github"
-                }
-            ],
             "time": "2017-03-20T13:46:15+00:00"
         },
         {
@@ -2644,20 +2628,6 @@
                 "portable",
                 "shim"
             ],
-            "funding": [
-                {
-                    "url": "https://symfony.com/sponsor",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://github.com/fabpot",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
-                    "type": "tidelift"
-                }
-            ],
             "time": "2020-05-12T16:47:27+00:00"
         },
         {
@@ -2712,20 +2682,6 @@
                 "polyfill",
                 "portable",
                 "shim"
-            ],
-            "funding": [
-                {
-                    "url": "https://symfony.com/sponsor",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://github.com/fabpot",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
-                    "type": "tidelift"
-                }
             ],
             "time": "2020-05-12T16:47:27+00:00"
         },
@@ -3691,12 +3647,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-raml.git",
-                "reference": "354aab4e9991f92da721746c343dd7a30404338c"
+                "reference": "ad0813d2d6c0a23b6eff9db9976a90eb7ba3cfdd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-raml/zipball/354aab4e9991f92da721746c343dd7a30404338c",
-                "reference": "354aab4e9991f92da721746c343dd7a30404338c",
+                "url": "https://api.github.com/repos/elifesciences/api-raml/zipball/ad0813d2d6c0a23b6eff9db9976a90eb7ba3cfdd",
+                "reference": "ad0813d2d6c0a23b6eff9db9976a90eb7ba3cfdd",
                 "shasum": ""
             },
             "conflict": {
@@ -3708,7 +3664,7 @@
                 "MIT"
             ],
             "description": "eLife Sciences API specification",
-            "time": "2020-06-12T19:55:13+00:00"
+            "time": "2020-07-06T03:03:02+00:00"
         },
         {
             "name": "elife/api-validator",
