@@ -2506,13 +2506,16 @@ final class ArticleControllerTest extends PageTestCase
                             ],
                             'abstract' => [
                                 'content' => [
-                                    'type' => 'section',
-                                    'title' => 'Introduction',
-                                    'content' => [
-                                        [
-                                            'type' => 'paragraph',
-                                            'text' => 'Abstract 00007.',
+                                    [
+                                        'type' => 'section',
+                                        'title' => 'Introduction',
+                                        'content' => [
+                                            [
+                                                'type' => 'paragraph',
+                                                'text' => 'Abstract 00007.',
+                                            ],
                                         ],
+
                                     ],
                                 ],
                             ],
