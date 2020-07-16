@@ -2515,7 +2515,6 @@ final class ArticleControllerTest extends PageTestCase
                                                 'text' => 'Abstract 00007.',
                                             ],
                                         ],
-
                                     ],
                                 ],
                             ],
