@@ -2356,13 +2356,13 @@ final class ArticleControllerTest extends PageTestCase
                 'http://api.elifesciences.org/recommendations/article/00001?page=1&per-page=100&order=desc',
                 [
                     'Accept' => [
-                        'application/vnd.elife.recommendations+json; version=1',
+                        'application/vnd.elife.recommendations+json; version=2',
                     ],
                 ]
             ),
             new Response(
                 200,
-                ['Content-Type' => 'application/vnd.elife.recommendations+json; version=1'],
+                ['Content-Type' => 'application/vnd.elife.recommendations+json; version=2'],
                 json_encode([
                     'total' => 7,
                     'items' => [
@@ -2503,6 +2503,18 @@ final class ArticleControllerTest extends PageTestCase
                                 'license' => 'CC-BY-4.0',
                                 'holder' => 'Author One',
                                 'statement' => 'Copyright statement.',
+                            ],
+                            'abstract' => [
+                                'content' => [
+                                    'type' => 'section',
+                                    'title' => 'Introduction',
+                                    'content' => [
+                                        [
+                                            'type' => 'paragraph',
+                                            'text' => 'Abstract 00007.',
+                                        ],
+                                    ],
+                                ],
                             ],
                             'authorLine' => 'Author One et al.',
                         ],
