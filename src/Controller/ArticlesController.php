@@ -38,6 +38,7 @@ use eLife\Patterns\ViewModel\ReadMoreItem;
 use eLife\Patterns\ViewModel\SpeechBubble;
 use eLife\Patterns\ViewModel\ViewSelector;
 use GuzzleHttp\Promise\PromiseInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -771,6 +772,24 @@ final class ArticlesController extends Controller
         return new Response($this->get('templating')->render('::article-rds.html.twig', $arguments));
     }
 
+    public function rdsDownloadAction(Request $request, string $id) : Response
+    {
+        if (!$this->isGranted('FEATURE_RDS')) {
+            throw new NotFoundHttpException('Not allowed to see RDS companion article');
+        }
+
+        $arguments = $this->defaultArticleArguments($request, $id);
+
+        if (!isset($arguments['rdsArticle']['download'])) {
+            throw new NotFoundHttpException('No RDS companion associated with this article');
+        }
+
+        return new RedirectResponse(
+            $arguments['rdsArticle']['download'],
+            Response::HTTP_MOVED_PERMANENTLY
+        );
+    }
+
     public function xmlAction(Request $request, string $id, int $version = null) : Response
     {
         $arguments = $this->defaultArticleArguments($request, $id, $version);
@@ -851,13 +870,14 @@ final class ArticlesController extends Controller
 
                 $infoBars = [];
 
-                $latestVersion = $history->getVersions()[count($history->getVersions()) - 1]->getVersion();
+                $latest = $history->getVersions()[count($history->getVersions()) - 1];
+                $latestVersion = $latest->getVersion();
 
                 if ($item->getVersion() < $latestVersion) {
                     $infoBars[] = new InfoBar('Read the <a href="'.$this->generatePath($history).'">most recent version of this article</a>.', InfoBar::TYPE_MULTIPLE_VERSIONS);
                 }
 
-                if ($item instanceof ArticlePoA) {
+                if ($latest instanceof ArticlePoA) {
                     $infoBars[] = new InfoBar('Accepted manuscript, PDF only. Full online edition to follow.');
                 }
 
@@ -948,10 +968,10 @@ final class ArticlesController extends Controller
                 $latestVersion = $history->getVersions()[count($history->getVersions()) - 1]->getVersion();
 
                 if (isset($rdsArticle['download']) && $item->getVersion() === $latestVersion && $this->isGranted('FEATURE_RDS')) {
-                    $dar = $rdsArticle['download'];
+                    $rdsDownload = $rdsArticle['download'];
                 }
 
-                return $this->convertTo($item, ViewModel\ArticleDownloadLinksList::class, ['dar-download' => $dar ?? null]);
+                return $this->convertTo($item, ViewModel\ArticleDownloadLinksList::class, ['rds-download' => $rdsDownload ?? null]);
             });
 
         return $arguments;

@@ -40,11 +40,11 @@ final class ArticleControllerTest extends PageTestCase
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001',
-                ['Accept' => 'application/vnd.elife.article-poa+json; version=2, application/vnd.elife.article-vor+json; version=3']
+                ['Accept' => 'application/vnd.elife.article-poa+json; version=3, application/vnd.elife.article-vor+json; version=4']
             ),
             new Response(
                 200,
-                ['Content-Type' => 'application/vnd.elife.article-vor+json; version=3'],
+                ['Content-Type' => 'application/vnd.elife.article-vor+json; version=4'],
                 json_encode([
                     'status' => 'vor',
                     'stage' => 'preview',
@@ -162,11 +162,11 @@ final class ArticleControllerTest extends PageTestCase
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001',
-                ['Accept' => 'application/vnd.elife.article-poa+json; version=2, application/vnd.elife.article-vor+json; version=3']
+                ['Accept' => 'application/vnd.elife.article-poa+json; version=3, application/vnd.elife.article-vor+json; version=4']
             ),
             new Response(
                 200,
-                ['Content-Type' => 'application/vnd.elife.article-vor+json; version=3'],
+                ['Content-Type' => 'application/vnd.elife.article-vor+json; version=4'],
                 json_encode([
                     'status' => 'vor',
                     'stage' => 'published',
@@ -579,7 +579,7 @@ final class ArticleControllerTest extends PageTestCase
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001',
-                ['Accept' => 'application/vnd.elife.article-poa+json; version=2, application/vnd.elife.article-vor+json; version=3']
+                ['Accept' => 'application/vnd.elife.article-poa+json; version=3, application/vnd.elife.article-vor+json; version=4']
             ),
             new Response(
                 404,
@@ -629,11 +629,11 @@ final class ArticleControllerTest extends PageTestCase
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001',
-                ['Accept' => 'application/vnd.elife.article-poa+json; version=2, application/vnd.elife.article-vor+json; version=3']
+                ['Accept' => 'application/vnd.elife.article-poa+json; version=3, application/vnd.elife.article-vor+json; version=4']
             ),
             new Response(
                 200,
-                ['Content-Type' => 'application/vnd.elife.article-vor+json; version=3'],
+                ['Content-Type' => 'application/vnd.elife.article-vor+json; version=4'],
                 json_encode([
                     'status' => 'vor',
                     'stage' => 'published',
@@ -825,11 +825,11 @@ final class ArticleControllerTest extends PageTestCase
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001',
-                ['Accept' => 'application/vnd.elife.article-poa+json; version=2, application/vnd.elife.article-vor+json; version=3']
+                ['Accept' => 'application/vnd.elife.article-poa+json; version=3, application/vnd.elife.article-vor+json; version=4']
             ),
             new Response(
                 200,
-                ['Content-Type' => 'application/vnd.elife.article-vor+json; version=3'],
+                ['Content-Type' => 'application/vnd.elife.article-vor+json; version=4'],
                 json_encode([
                     'status' => 'vor',
                     'stage' => 'published',
@@ -1082,11 +1082,11 @@ final class ArticleControllerTest extends PageTestCase
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001',
-                ['Accept' => 'application/vnd.elife.article-poa+json; version=2, application/vnd.elife.article-vor+json; version=3']
+                ['Accept' => 'application/vnd.elife.article-poa+json; version=3, application/vnd.elife.article-vor+json; version=4']
             ),
             new Response(
                 200,
-                ['Content-Type' => 'application/vnd.elife.article-poa+json; version=2'],
+                ['Content-Type' => 'application/vnd.elife.article-poa+json; version=3'],
                 json_encode([
                     'status' => 'poa',
                     'stage' => 'published',
@@ -1216,6 +1216,229 @@ final class ArticleControllerTest extends PageTestCase
     /**
      * @test
      */
+    public function it_displays_pdf_only_info_bar_if_no_vor_available()
+    {
+        $client = static::createClient();
+
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/articles/00001',
+                ['Accept' => 'application/vnd.elife.article-poa+json; version=3, application/vnd.elife.article-vor+json; version=4']
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.article-poa+json; version=3'],
+                json_encode([
+                    'status' => 'poa',
+                    'stage' => 'published',
+                    'id' => '00001',
+                    'version' => 2,
+                    'type' => 'research-article',
+                    'doi' => '10.7554/eLife.00001',
+                    'title' => 'Article title',
+                    'published' => '2010-01-01T00:00:00Z',
+                    'versionDate' => '2010-01-01T00:00:00Z',
+                    'statusDate' => '2010-01-01T00:00:00Z',
+                    'volume' => 1,
+                    'elocationId' => 'e00001',
+                    'copyright' => [
+                        'license' => 'CC-BY-4.0',
+                        'holder' => 'Author One',
+                        'statement' => 'Copyright statement.',
+                    ],
+                    'authorLine' => 'Author One et al.',
+                    'authors' => [
+                        [
+                            'type' => 'person',
+                            'name' => [
+                                'preferred' => 'Author One',
+                                'index' => 'Author One',
+                            ],
+                        ],
+                    ],
+                    'reviewers' => [
+                        [
+                            'name' => [
+                                'preferred' => 'Reviewer 1',
+                                'index' => 'Reviewer 1',
+                            ],
+                            'role' => 'Reviewer',
+                            'affiliations' => [
+                                [
+                                    'name' => ['Institution'],
+                                    'address' => [
+                                        'formatted' => ['Country'],
+                                        'components' => [
+                                            'country' => 'Country',
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ])
+            )
+        );
+
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/articles/00001/versions/1',
+                ['Accept' => 'application/vnd.elife.article-poa+json; version=3, application/vnd.elife.article-vor+json; version=4']
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.article-poa+json; version=3'],
+                json_encode([
+                    'status' => 'poa',
+                    'stage' => 'published',
+                    'id' => '00001',
+                    'version' => 1,
+                    'type' => 'research-article',
+                    'doi' => '10.7554/eLife.00001',
+                    'title' => 'Article title',
+                    'published' => '2010-01-01T00:00:00Z',
+                    'versionDate' => '2010-01-01T00:00:00Z',
+                    'statusDate' => '2010-01-01T00:00:00Z',
+                    'volume' => 1,
+                    'elocationId' => 'e00001',
+                    'copyright' => [
+                        'license' => 'CC-BY-4.0',
+                        'holder' => 'Author One',
+                        'statement' => 'Copyright statement.',
+                    ],
+                    'authorLine' => 'Author One et al.',
+                    'authors' => [
+                        [
+                            'type' => 'person',
+                            'name' => [
+                                'preferred' => 'Author One',
+                                'index' => 'Author One',
+                            ],
+                        ],
+                    ],
+                    'reviewers' => [
+                        [
+                            'name' => [
+                                'preferred' => 'Reviewer 1',
+                                'index' => 'Reviewer 1',
+                            ],
+                            'role' => 'Reviewer',
+                            'affiliations' => [
+                                [
+                                    'name' => ['Institution'],
+                                    'address' => [
+                                        'formatted' => ['Country'],
+                                        'components' => [
+                                            'country' => 'Country',
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ])
+            )
+        );
+
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/articles/00001/versions',
+                [
+                    'Accept' => [
+                        'application/vnd.elife.article-history+json; version=1',
+                    ],
+                ]
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.article-history+json; version=1'],
+                json_encode([
+                    'versions' => [
+                        [
+                            'status' => 'poa',
+                            'stage' => 'published',
+                            'id' => '00001',
+                            'version' => 1,
+                            'type' => 'research-article',
+                            'doi' => '10.7554/eLife.00001',
+                            'title' => 'Article title',
+                            'published' => '2010-01-01T00:00:00Z',
+                            'versionDate' => '2010-01-01T00:00:00Z',
+                            'statusDate' => '2010-01-01T00:00:00Z',
+                            'volume' => 1,
+                            'elocationId' => 'e00001',
+                            'copyright' => [
+                                'license' => 'CC-BY-4.0',
+                                'holder' => 'Author One',
+                                'statement' => 'Copyright statement.',
+                            ],
+                            'authorLine' => 'Author One et al.',
+                        ],
+                        [
+                            'status' => 'poa',
+                            'stage' => 'published',
+                            'id' => '00001',
+                            'version' => 2,
+                            'type' => 'research-article',
+                            'doi' => '10.7554/eLife.00001',
+                            'title' => 'Article title',
+                            'published' => '2010-01-01T00:00:00Z',
+                            'versionDate' => '2010-01-01T00:00:00Z',
+                            'statusDate' => '2010-01-01T00:00:00Z',
+                            'volume' => 1,
+                            'elocationId' => 'e00001',
+                            'copyright' => [
+                                'license' => 'CC-BY-4.0',
+                                'holder' => 'Author One',
+                                'statement' => 'Copyright statement.',
+                            ],
+                            'authorLine' => 'Author One et al.',
+                        ],
+                    ],
+                ])
+            )
+        );
+
+        $crawler = $client->request('GET', '/articles/00001');
+
+        $this->assertSame(200, $client->getResponse()->getStatusCode());
+        $this->assertCount(1, $crawler->filter('.info-bar'));
+        $this->assertContains('Accepted manuscript, PDF only. Full online edition to follow.',
+            array_map('trim', $crawler->filter('.info-bar')->extract(['_text'])));
+
+        $crawler = $client->request('GET', '/articles/00001v1');
+
+        $this->assertSame(200, $client->getResponse()->getStatusCode());
+        $this->assertCount(2, $crawler->filter('.info-bar'));
+        $this->assertContains('Accepted manuscript, PDF only. Full online edition to follow.',
+            array_map('trim', $crawler->filter('.info-bar')->extract(['_text'])));
+        $this->assertContains('Read the most recent version of this article.',
+            array_map('trim', $crawler->filter('.info-bar')->extract(['_text'])));
+    }
+
+    /**
+     * @test
+     */
+    public function it_does_not_display_pdf_only_info_bar_if_vor_available()
+    {
+        $client = static::createClient();
+
+        $crawler = $client->request('GET', $this->getPreviousVersionUrl());
+
+        $this->assertSame(200, $client->getResponse()->getStatusCode());
+        $this->assertCount(1, $crawler->filter('.info-bar'));
+        $this->assertNotContains(
+            'Accepted manuscript, PDF only. Full online edition to follow.',
+            array_map('trim', $crawler->filter('.info-bar')->eq(0)->extract(['_text']))
+        );
+    }
+
+    /**
+     * @test
+     */
     public function it_displays_example_rds_info_bar_when_it_has_an_example_rds()
     {
         $client = static::createClient();
@@ -1227,7 +1450,7 @@ final class ArticleControllerTest extends PageTestCase
             'This research is available in a reproducible view.',
             array_map('trim', $crawler->filter('.info-bar--warning')->extract(['_text']))
         );
-        $this->assertEmpty($crawler->filter('.article-download-links-list__link')->selectLink('Executable DAR'));
+        $this->assertEmpty($crawler->filter('.article-download-links-list__link')->selectLink('Executable version'));
         $this->assertNotContains('Executable code', $crawler->filter('.view-selector')->text());
     }
 
@@ -1247,8 +1470,9 @@ final class ArticleControllerTest extends PageTestCase
             'See this research in an executable code view.',
             array_map('trim', $crawler->filter('.info-bar--warning')->extract(['_text']))
         );
-        $this->assertNotEmpty($crawler->filter('.article-download-links-list__link')->selectLink('Executable DAR'));
-        $this->assertNotEmpty($crawler->filter('.article-download-links-list__secondary_link')->selectLink('Learn more about DAR'));
+        $this->assertNotEmpty($crawler->filter('.article-download-links-list__link')->selectLink('Executable version'));
+        $this->assertNotEmpty($crawler->filter('.article-download-links-list__secondary_link')->selectLink('What are executable versions?'));
+        $this->assertContains('/elife-id-of-article-with-rds-v3-era.dar', $crawler->filter('.article-download-links-list__link')->selectLink('Executable version')->attr('href'));
         $this->assertContains('Executable code', $crawler->filter('.view-selector')->text());
     }
 
@@ -1264,8 +1488,8 @@ final class ArticleControllerTest extends PageTestCase
         $crawler = $client->request('GET', $this->getPreviousVersionUrl('id-of-article-with-rds'));
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
-        $this->assertCount(2, $crawler->filter('.info-bar'));
-        $this->assertEmpty($crawler->filter('.article-download-links-list__link')->selectLink('Executable DAR'));
+        $this->assertCount(1, $crawler->filter('.info-bar'));
+        $this->assertEmpty($crawler->filter('.article-download-links-list__link')->selectLink('Executable version'));
         $this->assertEmpty($crawler->filter('.view-selector'));
     }
 
@@ -1280,7 +1504,7 @@ final class ArticleControllerTest extends PageTestCase
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertEmpty($crawler->filter('.info-bar'));
-        $this->assertEmpty($crawler->filter('.article-download-links-list__link')->selectLink('Executable DAR'));
+        $this->assertEmpty($crawler->filter('.article-download-links-list__link')->selectLink('Executable version'));
         $this->assertNotContains('Executable code', $crawler->filter('.view-selector')->text());
     }
 
@@ -1300,7 +1524,7 @@ final class ArticleControllerTest extends PageTestCase
             'reproducible view',
             array_map('trim', $crawler->filter('.info-bar')->eq(0)->extract(['_text']))
         );
-        $this->assertEmpty($crawler->filter('.article-download-links-list__link')->selectLink('Executable DAR'));
+        $this->assertEmpty($crawler->filter('.article-download-links-list__link')->selectLink('Executable version'));
         $this->assertNotContains('Executable code', $crawler->filter('.view-selector')->text());
     }
 
@@ -1406,11 +1630,11 @@ final class ArticleControllerTest extends PageTestCase
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001',
-                ['Accept' => 'application/vnd.elife.article-poa+json; version=2, application/vnd.elife.article-vor+json; version=3']
+                ['Accept' => 'application/vnd.elife.article-poa+json; version=3, application/vnd.elife.article-vor+json; version=4']
             ),
             new Response(
                 200,
-                ['Content-Type' => 'application/vnd.elife.article-vor+json; version=3'],
+                ['Content-Type' => 'application/vnd.elife.article-vor+json; version=4'],
                 json_encode([
                     'status' => 'vor',
                     'stage' => 'published',
@@ -1951,11 +2175,11 @@ final class ArticleControllerTest extends PageTestCase
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001',
-                ['Accept' => 'application/vnd.elife.article-poa+json; version=2, application/vnd.elife.article-vor+json; version=3']
+                ['Accept' => 'application/vnd.elife.article-poa+json; version=3, application/vnd.elife.article-vor+json; version=4']
             ),
             new Response(
                 200,
-                ['Content-Type' => 'application/vnd.elife.article-poa+json; version=2'],
+                ['Content-Type' => 'application/vnd.elife.article-poa+json; version=3'],
                 json_encode([
                     'status' => 'poa',
                     'stage' => 'published',
@@ -2132,13 +2356,13 @@ final class ArticleControllerTest extends PageTestCase
                 'http://api.elifesciences.org/recommendations/article/00001?page=1&per-page=100&order=desc',
                 [
                     'Accept' => [
-                        'application/vnd.elife.recommendations+json; version=1',
+                        'application/vnd.elife.recommendations+json; version=2',
                     ],
                 ]
             ),
             new Response(
                 200,
-                ['Content-Type' => 'application/vnd.elife.recommendations+json; version=1'],
+                ['Content-Type' => 'application/vnd.elife.recommendations+json; version=2'],
                 json_encode([
                     'total' => 7,
                     'items' => [
@@ -2280,6 +2504,20 @@ final class ArticleControllerTest extends PageTestCase
                                 'holder' => 'Author One',
                                 'statement' => 'Copyright statement.',
                             ],
+                            'abstract' => [
+                                'content' => [
+                                    [
+                                        'type' => 'section',
+                                        'title' => 'Introduction',
+                                        'content' => [
+                                            [
+                                                'type' => 'paragraph',
+                                                'text' => 'Abstract 00007.',
+                                            ],
+                                        ],
+                                    ],
+                                ],
+                            ],
                             'authorLine' => 'Author One et al.',
                         ],
                     ],
@@ -2316,11 +2554,11 @@ final class ArticleControllerTest extends PageTestCase
             new Request(
                 'GET',
                 "http://api.elifesciences.org/articles/{$articleId}",
-                ['Accept' => 'application/vnd.elife.article-poa+json; version=2, application/vnd.elife.article-vor+json; version=3']
+                ['Accept' => 'application/vnd.elife.article-poa+json; version=3, application/vnd.elife.article-vor+json; version=4']
             ),
             new Response(
                 200,
-                ['Content-Type' => 'application/vnd.elife.article-vor+json; version=3'],
+                ['Content-Type' => 'application/vnd.elife.article-vor+json; version=4'],
                 json_encode([
                     'status' => 'vor',
                     'stage' => 'published',
@@ -2439,11 +2677,11 @@ final class ArticleControllerTest extends PageTestCase
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001/versions/1',
-                ['Accept' => 'application/vnd.elife.article-poa+json; version=2, application/vnd.elife.article-vor+json; version=3']
+                ['Accept' => 'application/vnd.elife.article-poa+json; version=3, application/vnd.elife.article-vor+json; version=4']
             ),
             new Response(
                 200,
-                ['Content-Type' => 'application/vnd.elife.article-poa+json; version=2'],
+                ['Content-Type' => 'application/vnd.elife.article-poa+json; version=3'],
                 json_encode([
                     'status' => 'poa',
                     'stage' => 'published',
@@ -2547,11 +2785,11 @@ final class ArticleControllerTest extends PageTestCase
             new Request(
                 'GET',
                 "http://api.elifesciences.org/articles/${articleId}",
-                ['Accept' => 'application/vnd.elife.article-poa+json; version=2, application/vnd.elife.article-vor+json; version=3']
+                ['Accept' => 'application/vnd.elife.article-poa+json; version=3, application/vnd.elife.article-vor+json; version=4']
             ),
             new Response(
                 200,
-                ['Content-Type' => 'application/vnd.elife.article-poa+json; version=2'],
+                ['Content-Type' => 'application/vnd.elife.article-poa+json; version=3'],
                 json_encode([
                     'status' => 'poa',
                     'stage' => 'published',
