@@ -37,7 +37,7 @@ parameters:
         '30274':
             date: '2030-01-01T00:00:00Z'
             display: https://hub.stenci.la/api/projects/176/snapshots/2/article-30274.md
-            download: https://hub.stenci.la/api/projects/176/snapshots/2?format=tar.gz
+            download: https://hub.stenci.la/api/projects/518/snapshots/9/archive
         '45562':
             date: '2030-01-01T00:00:00Z'
             display: https://repro.elifesciences.org/example.html
