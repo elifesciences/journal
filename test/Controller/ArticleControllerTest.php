@@ -1472,7 +1472,7 @@ final class ArticleControllerTest extends PageTestCase
         );
         $this->assertNotEmpty($crawler->filter('.article-download-links-list__link')->selectLink('Executable version'));
         $this->assertNotEmpty($crawler->filter('.article-download-links-list__secondary_link')->selectLink('What are executable versions?'));
-        $this->assertContains('/elife-id-of-article-with-rds-v3-era.dar', $crawler->filter('.article-download-links-list__link')->selectLink('Executable version')->attr('href'));
+        $this->assertContains('/elife-id-of-article-with-rds-v3-era.zip', $crawler->filter('.article-download-links-list__link')->selectLink('Executable version')->attr('href'));
         $this->assertContains('Executable code', $crawler->filter('.view-selector')->text());
     }
 
