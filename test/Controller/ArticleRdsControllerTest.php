@@ -12,29 +12,6 @@ use test\eLife\Journal\WebTestCase;
 final class ArticleRdsControllerTest extends WebTestCase
 {
     /**
-     * @before
-     */
-    public function enableFeatureFlag()
-    {
-        $_ENV['FEATURE_RDS'] = true;
-    }
-
-    /**
-     * @test
-     */
-    public function it_does_not_show_rds_article_if_the_feature_flag_is_disabled()
-    {
-        $_ENV['FEATURE_RDS'] = false;
-
-        $client = static::createClient();
-
-        $this->mockArticle('id-of-article-with-rds');
-        $client->request('GET', '/articles/id-of-article-with-rds/executable');
-
-        $this->assertSame(404, $client->getResponse()->getStatusCode());
-    }
-
-    /**
      * @test
      */
     public function it_does_not_show_rds_article_if_the_feature_flag_is_enabled_but_the_article_has_no_rds()
