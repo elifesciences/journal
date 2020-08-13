@@ -1460,7 +1460,6 @@ final class ArticleControllerTest extends PageTestCase
      */
     public function it_displays_rds_info_bar_when_it_has_associated_rds()
     {
-        $_ENV['FEATURE_RDS'] = true;
         $client = static::createClient();
 
         $crawler = $client->request('GET', $this->getUrl('id-of-article-with-rds'));
@@ -1482,7 +1481,6 @@ final class ArticleControllerTest extends PageTestCase
      */
     public function it_does_not_displays_rds_info_bar_when_it_has_associated_rds_but_it_is_not_the_latest_version()
     {
-        $_ENV['FEATURE_RDS'] = true;
         $client = static::createClient();
 
         $crawler = $client->request('GET', $this->getPreviousVersionUrl('id-of-article-with-rds'));
@@ -1514,7 +1512,6 @@ final class ArticleControllerTest extends PageTestCase
      */
     public function it_does_not_display_rds_info_bar_when_it_has_no_associated_rds()
     {
-        $_ENV['FEATURE_RDS'] = true;
         $client = static::createClient();
 
         $crawler = $client->request('GET', $this->getUrl('00001'));
