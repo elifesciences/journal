@@ -11,7 +11,6 @@ use test\eLife\Journal\WebTestCase;
  */
 final class ArticleRdsDownloadControllerTest extends WebTestCase
 {
-
     /**
      * @test
      */
