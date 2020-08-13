@@ -58,7 +58,7 @@ final class ArticleRdsDownloadControllerTest extends WebTestCase
         $client->request('GET', '/articles/id-of-article-with-rds/executable/download');
 
         $this->assertSame(301, $client->getResponse()->getStatusCode());
-        $this->assertSame('https://repro.elifesciences.org/example', $client->getResponse()->headers->get('Location'));
+        $this->assertSame('https://repro.elifesciences.org/archive', $client->getResponse()->headers->get('Location'));
     }
 
     private function mockArticle($articleId = '00001') : void
