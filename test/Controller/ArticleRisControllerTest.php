@@ -223,6 +223,71 @@ ER  -
 EOT
             ,
         ];
+
+        yield 'structured abstract' => [
+            'poa',
+            [
+                'status' => 'poa',
+                'id' => '00001',
+                'version' => 1,
+                'type' => 'research-article',
+                'doi' => '10.7554/eLife.00001',
+                'title' => 'Title',
+                'stage' => 'published',
+                'published' => '2016-01-02T00:00:00Z',
+                'statusDate' => '2016-01-02T00:00:00Z',
+                'versionDate' => '2016-01-02T00:00:00Z',
+                'volume' => 1,
+                'elocationId' => 'e00001',
+                'copyright' => [
+                    'license' => 'CC0-1.0',
+                    'statement' => 'Statement.',
+                ],
+                'authorLine' => 'Foo Bar et al.',
+                'authors' => [
+                    [
+                        'type' => 'person',
+                        'name' => [
+                            'preferred' => 'Foo Bar',
+                            'index' => 'Bar, Foo',
+                        ],
+                    ],
+                ],
+                'abstract' => [
+                    'content' => [
+                        [
+                            'type' => 'section',
+                            'title' => 'Introduction',
+                            'content' => [
+                                [
+                                    'type' => 'paragraph',
+                                    'text' => 'Abstract 00001.',
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            <<<'EOT'
+TY  - JOUR
+TI  - Title
+AU  - Bar, Foo
+VL  - 1
+PY  - 2016
+DA  - 2016/01/02
+SP  - e00001
+C1  - eLife 2016;1:e00001
+DO  - 10.7554/eLife.00001
+UR  - https://doi.org/10.7554/eLife.00001
+AB  - Introduction. Abstract 00001.
+JF  - eLife
+SN  - 2050-084X
+PB  - eLife Sciences Publications, Ltd
+ER  -
+EOT
+            ,
+        ];
+
     }
 
     /**

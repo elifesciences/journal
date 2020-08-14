@@ -223,6 +223,72 @@ publisher = {eLife Sciences Publications, Ltd},
 EOT
             ,
         ];
+
+        yield 'structured abstract' => [
+            'poa',
+            [
+                'status' => 'poa',
+                'id' => '00001',
+                'version' => 1,
+                'type' => 'research-article',
+                'doi' => '10.7554/eLife.00001',
+                'title' => 'Title',
+                'stage' => 'published',
+                'published' => '2016-01-02T00:00:00Z',
+                'statusDate' => '2016-01-02T00:00:00Z',
+                'versionDate' => '2016-01-02T00:00:00Z',
+                'volume' => 1,
+                'elocationId' => 'e00001',
+                'copyright' => [
+                    'license' => 'CC0-1.0',
+                    'statement' => 'Statement.',
+                ],
+                'authorLine' => 'Foo Bar et al.',
+                'authors' => [
+                    [
+                        'type' => 'person',
+                        'name' => [
+                            'preferred' => 'Foo Bar',
+                            'index' => 'Bar, Foo',
+                        ],
+                    ],
+                ],
+                'abstract' => [
+                    'content' => [
+                        [
+                            'type' => 'section',
+                            'title' => 'Introduction',
+                            'content' => [
+                                [
+                                    'type' => 'paragraph',
+                                    'text' => 'Abstract 00001.',
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            <<<'EOT'
+@article {10.7554/eLife.00001,
+article_type = {journal},
+title = {Title},
+author = {Bar, Foo},
+volume = 1,
+year = 2016,
+month = {jan},
+pub_date = {2016-01-02},
+pages = {e00001},
+citation = {eLife 2016;1:e00001},
+doi = {10.7554/eLife.00001},
+url = {https://doi.org/10.7554/eLife.00001},
+abstract = {\textbf{Introduction} Abstract 00001.},
+journal = {eLife},
+issn = {2050-084X},
+publisher = {eLife Sciences Publications, Ltd},
+}
+EOT
+            ,
+        ];
     }
 
     /**
