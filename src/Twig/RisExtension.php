@@ -35,6 +35,7 @@ final class RisExtension extends Twig_Extension
             foreach ($contentItem->getContent() as $paragraph) {
                 $section[] = $this->item2ris($paragraph);
             }
+
             return implode(' ', $section);
         }
 

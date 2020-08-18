@@ -58,6 +58,7 @@ final class TexExtension extends Twig_Extension
             foreach ($contentItem->getContent() as $paragraph) {
                 $section[] = $this->item2tex($paragraph);
             }
+
             return implode(' ', $section);
         }
 
