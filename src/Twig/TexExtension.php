@@ -49,7 +49,8 @@ final class TexExtension extends Twig_Extension
     /**
      * @param Section|Paragraph $contentItem
      */
-    public function item2tex($contentItem) : string {
+    public function item2tex($contentItem) : string
+    {
         if ($contentItem instanceof Section) {
             $section = [
                 $this->html2tex('<b>'.$contentItem->getTitle().'</b>'),
