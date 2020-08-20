@@ -2,6 +2,8 @@
 
 namespace eLife\Journal\Twig;
 
+use eLife\ApiSdk\Model\Block\Paragraph;
+use eLife\ApiSdk\Model\Block\Section;
 use Twig_Extension;
 use Twig_Filter;
 
@@ -11,6 +13,7 @@ final class TexExtension extends Twig_Extension
     {
         return [
             new Twig_Filter('html2tex', [$this, 'html2tex']),
+            new Twig_Filter('item2tex', [$this, 'item2tex']),
         ];
     }
 
@@ -41,6 +44,26 @@ final class TexExtension extends Twig_Extension
         ];
 
         return str_replace('&', '\&', htmlspecialchars_decode(strip_tags(str_replace(array_keys($replacements), array_values($replacements), $string))));
+    }
+
+    /**
+     * @param Section|Paragraph $contentItem
+     */
+    public function item2tex($contentItem) : string
+    {
+        if ($contentItem instanceof Section) {
+            $section = [
+                $this->html2tex('<b>'.$contentItem->getTitle().'</b>'),
+            ];
+
+            foreach ($contentItem->getContent() as $paragraph) {
+                $section[] = $this->item2tex($paragraph);
+            }
+
+            return implode(' ', $section);
+        }
+
+        return $this->html2tex($contentItem->getText());
     }
 
     public function getName() : string
