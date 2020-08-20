@@ -18,7 +18,7 @@ citation = {{ '{' }}{{ item.citeAs }}{{ '}' }},
 doi = {{ '{' }}{{ item.doi }}{{ '}' }},
 url = {{ '{' }}https://doi.org/{{ item.doi }}{{ '}' }},
 {% if item.abstract %}
-abstract = {{ '{' }}{% for paragraph in item.abstract.content %}{{ paragraph.text|html2tex }}{% if not loop.last %} {% endif %}{% endfor %}{{ '}' }},
+abstract = {{ '{' }}{% for abstractItem in item.abstract.content %}{{ abstractItem|item2tex }}{% if not loop.last %} {% endif %}{% endfor %}{{ '}' }},
 {% endif %}
 {% if item.keywords is defined and item.keywords|length %}
 keywords = {{ '{' }}{% for keyword in item.keywords %}{{ keyword|html2tex }}{% if not loop.last %}, {% endif %}{% endfor %}{{ '}' }},
