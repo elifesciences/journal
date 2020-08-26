@@ -1291,12 +1291,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/patterns-php.git",
-                "reference": "b5da63a8b767935c8d25dc2d79a2c69e901d0b79"
+                "reference": "08ed83db24c8830adbce0da6c580cbb533a417da"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/b5da63a8b767935c8d25dc2d79a2c69e901d0b79",
-                "reference": "b5da63a8b767935c8d25dc2d79a2c69e901d0b79",
+                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/08ed83db24c8830adbce0da6c580cbb533a417da",
+                "reference": "08ed83db24c8830adbce0da6c580cbb533a417da",
                 "shasum": ""
             },
             "require": {
@@ -1339,7 +1339,7 @@
             "support": {
                 "source": "https://github.com/elifesciences/patterns-php/tree/accessibility-changes-phase2"
             },
-            "time": "2020-08-21T10:17:57+00:00"
+            "time": "2020-08-26T10:31:26+00:00"
         },
         {
             "name": "fabpot/goutte",
