@@ -263,8 +263,7 @@
               services: [{
                 apiUrl: '{{ hypothesis_api }}',
                 authority: '{{ hypothesis_authority }}',
-                grantToken: {% if app.user %}'{{ hypothesis_token(app.user) }}'{% else %}null{% endif %},
-                icon: '{{ absolute_url(asset('assets/favicons/favicon.svg')) }}'
+                grantToken: {% if app.user %}'{{ hypothesis_token(app.user) }}'{% else %}null{% endif %}
                   {%- if not app.user %},
                 onLoginRequest: function () {
                   window.location.assign('{{ path('log-in') }}');
