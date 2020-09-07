@@ -176,8 +176,6 @@ final class AuthenticationTest extends WebTestCase
 
         $state = parse_query((new Uri($response->headers->get('Location')))->getQuery())['state'];
 
-        $client->followRedirects();
-
         $this->mockApiResponse(
             new Request(
                 'POST',
@@ -196,6 +194,8 @@ final class AuthenticationTest extends WebTestCase
         );
 
         $client->request('GET', "/log-in/check?code=foo&state=$state");
+
+        $client->followRedirect();
 
         $this->assertTrue($client->getResponse()->isRedirect('http://localhost/log-in/orcid-visibility-setting'));
     }
