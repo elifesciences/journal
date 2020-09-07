@@ -42,6 +42,7 @@ final class AuthenticationErrorSubscriber implements EventSubscriberInterface
 
         if ('No name visible' === $error->getMessage()) {
             $event->setResponse(new RedirectResponse($this->urlGenerator->generate('log-in-orcid-visibility-setting', [], UrlGeneratorInterface::ABSOLUTE_URL)));
+
             return;
         }
 
