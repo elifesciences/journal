@@ -42,11 +42,11 @@ final class AuthenticationErrorSubscriber implements EventSubscriberInterface
 
         if ('No name visible' === $error->getMessage()) {
             $event->setResponse(new RedirectResponse($this->urlGenerator->generate('log-in-orcid-visibility-setting')));
+        } else {
+            $event->getRequest()
+                ->getSession()
+                ->getFlashBag()
+                ->add(InfoBar::TYPE_ATTENTION, 'Failed to log in, please try again.');
         }
-
-        $event->getRequest()
-            ->getSession()
-            ->getFlashBag()
-            ->add(InfoBar::TYPE_ATTENTION, $message ?? 'Failed to log in, please try again.');
     }
 }
