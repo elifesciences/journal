@@ -197,8 +197,6 @@ final class AuthenticationTest extends WebTestCase
 
         $client->request('GET', "/log-in/check?code=foo&state=$state");
 
-        $client->followRedirect();
-
         $this->assertTrue($client->getResponse()->isRedirect('http://localhost/log-in/orcid-visibility-setting'));
     }
 
