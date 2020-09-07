@@ -4,13 +4,16 @@ namespace eLife\Journal\EventListener;
 
 use eLife\Patterns\ViewModel\InfoBar;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 final class AuthenticationErrorSubscriber implements EventSubscriberInterface
 {
     private $authenticationUtils;
+    private $urlGenerator;
 
     public static function getSubscribedEvents() : array
     {
@@ -19,9 +22,10 @@ final class AuthenticationErrorSubscriber implements EventSubscriberInterface
         ];
     }
 
-    public function __construct(AuthenticationUtils $authenticationUtils)
+    public function __construct(AuthenticationUtils $authenticationUtils, UrlGeneratorInterface $urlGenerator)
     {
         $this->authenticationUtils = $authenticationUtils;
+        $this->urlGenerator = $urlGenerator;
     }
 
     public function onKernelRequest(GetResponseEvent $event)
@@ -37,7 +41,7 @@ final class AuthenticationErrorSubscriber implements EventSubscriberInterface
         }
 
         if ('No name visible' === $error->getMessage()) {
-            $message = 'Please adjust your <a href="https://orcid.org/my-orcid">ORCID privacy settings</a> for eLife to display your name.';
+            $event->setResponse(new RedirectResponse($this->urlGenerator->generate('log-in-orcid-visibility-setting')));
         }
 
         $event->getRequest()
