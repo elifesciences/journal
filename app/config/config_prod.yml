@@ -57,6 +57,10 @@ nelmio_security:
             default-src:
               - 'data:'
               - 'https:'
+              - 'https://*.hotjar.com:*'
+              - 'https://*.hotjar.io'
+              - 'wss://*.hotjar.com'
+              - unsafe-eval
               - unsafe-inline
     forced_ssl:
         whitelist:
