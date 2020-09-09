@@ -23,6 +23,7 @@ use eLife\ApiSdk\Model\Identifier;
 use eLife\ApiSdk\Model\Model;
 use eLife\ApiSdk\Model\Reviewer;
 use eLife\Journal\Helper\Callback;
+use eLife\Journal\Helper\DownloadLink;
 use eLife\Journal\Helper\HasPages;
 use eLife\Journal\Helper\Humanizer;
 use eLife\Patterns\ViewModel;
@@ -785,7 +786,16 @@ final class ArticlesController extends Controller
         }
 
         return new RedirectResponse(
-            $arguments['rdsArticle']['download'],
+            $this->get('elife.journal.helper.download_link_uri_generator')->generate(
+                new DownloadLink(
+                    $arguments['rdsArticle']['download'],
+                    $arguments['item']
+                        ->then(function (ArticleVersion $item) {
+                            return sprintf('elife-%s-v%d-era.zip', $item->getId(), $item->getVersion());
+                        })
+                        ->wait()
+                )
+            ),
             Response::HTTP_MOVED_PERMANENTLY
         );
     }
