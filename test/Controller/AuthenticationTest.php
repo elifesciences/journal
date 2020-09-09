@@ -158,7 +158,7 @@ final class AuthenticationTest extends WebTestCase
     /**
      * @test
      */
-    public function it_shows_an_error_message_when_no_name_is_available()
+    public function it_redirects_to_help_page_when_no_name_is_available()
     {
         $client = static::createClient();
 
