@@ -158,7 +158,7 @@ final class AuthenticationTest extends WebTestCase
     /**
      * @test
      */
-    public function it_shows_an_error_message_when_no_name_is_available()
+    public function it_redirects_to_help_page_when_no_name_is_available()
     {
         $client = static::createClient();
 
@@ -175,8 +175,6 @@ final class AuthenticationTest extends WebTestCase
         $this->assertSameUri('http://api.elifesciences.org/oauth2/authorize?response_type=code&client_id=journal_client_id&redirect_uri=http%3A%2F%2Flocalhost%2Flog-in%2Fcheck', $location);
 
         $state = parse_query((new Uri($response->headers->get('Location')))->getQuery())['state'];
-
-        $client->followRedirects();
 
         $this->mockApiResponse(
             new Request(
@@ -195,16 +193,11 @@ final class AuthenticationTest extends WebTestCase
             )
         );
 
-        $crawler = $client->request('GET', "/log-in/check?code=foo&state=$state");
+        $client->request('GET', "/log-in/check?code=foo&state=$state");
 
-        $this->assertNotContains('Log out', $crawler->text());
-        $this->assertContains('Log in/Register (via ORCID - An ORCID is a persistent digital identifier for researchers)', $crawler->text());
+        $client->followRedirect();
 
-        $this->assertCount(1, $crawler->filter('.info-bar'));
-        $this->assertSame('Please adjust your ORCID privacy settings for eLife to display your name.', trim($crawler->filter('.info-bar')->text()));
-        $this->assertSame('max-age=0, must-revalidate, private', $client->getResponse()->headers->get('Cache-Control'));
-        $this->assertEmpty($client->getResponse()->getVary());
-        $this->assertEmpty($client->getCookieJar()->all());
+        $this->assertTrue($client->getResponse()->isRedirect('http://localhost/log-in/orcid-visibility-setting'));
     }
 
     /**
