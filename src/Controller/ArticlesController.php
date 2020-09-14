@@ -782,13 +782,14 @@ final class ArticlesController extends Controller
                 new DownloadLink(
                     $arguments['rdsArticle']['download'],
                     $arguments['item']
-                        ->then(function (ArticleVersion $item) {
-                            return sprintf('elife-%s-v%d-era.zip', $item->getId(), $item->getVersion());
+                        ->then(Callback::method('getVersion'))
+                        ->then(function (int $version) use ($id) {
+                            return sprintf('elife-%s-v%d-era.zip', $id, $version);
                         })
                         ->wait()
                 )
             ),
-            Response::HTTP_MOVED_PERMANENTLY
+            Response::HTTP_FOUND
         );
     }
 
