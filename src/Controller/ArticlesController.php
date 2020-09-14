@@ -753,10 +753,6 @@ final class ArticlesController extends Controller
 
     public function rdsAction(Request $request, string $id) : Response
     {
-        if (!$this->isGranted('FEATURE_RDS')) {
-            throw new NotFoundHttpException('Not allowed to see RDS companion article');
-        }
-
         $arguments = $this->defaultArticleArguments($request, $id);
 
         if (!isset($arguments['rdsArticle']['display'])) {
@@ -774,10 +770,6 @@ final class ArticlesController extends Controller
 
     public function rdsDownloadAction(Request $request, string $id) : Response
     {
-        if (!$this->isGranted('FEATURE_RDS')) {
-            throw new NotFoundHttpException('Not allowed to see RDS companion article');
-        }
-
         $arguments = $this->defaultArticleArguments($request, $id);
 
         if (!isset($arguments['rdsArticle']['download'])) {
@@ -904,7 +896,7 @@ final class ArticlesController extends Controller
                 }
 
                 $exampleRdsArticles = $this->getParameter('example_rds_articles');
-                if (isset($rdsArticle['display']) && $item->getVersion() === $latestVersion && $this->isGranted('FEATURE_RDS')) {
+                if (isset($rdsArticle['display']) && $item->getVersion() === $latestVersion) {
                     $infoBars[] = new InfoBar('See this research in an <a href="'.$this->get('router')->generate('article-rds', [$item]).'">executable code view</a>.', InfoBar::TYPE_WARNING);
                 } elseif (isset($exampleRdsArticles[$item->getId()])) {
                     $infoBars[] = new InfoBar('This research is available in a <a href="'.$exampleRdsArticles[$item->getId()].'">reproducible view</a>.', InfoBar::TYPE_WARNING);
@@ -967,7 +959,7 @@ final class ArticlesController extends Controller
 
                 $latestVersion = $history->getVersions()[count($history->getVersions()) - 1]->getVersion();
 
-                if (isset($rdsArticle['download']) && $item->getVersion() === $latestVersion && $this->isGranted('FEATURE_RDS')) {
+                if (isset($rdsArticle['download']) && $item->getVersion() === $latestVersion) {
                     $rdsDownload = $rdsArticle['download'];
                 }
 
@@ -999,7 +991,7 @@ final class ArticlesController extends Controller
                 $latestVersion = $history->getVersions()[count($history->getVersions()) - 1]->getVersion();
 
                 $otherLinks = [];
-                if (isset($rdsArticle['display']) && $item->getVersion() === $latestVersion && $this->isGranted('FEATURE_RDS')) {
+                if (isset($rdsArticle['display']) && $item->getVersion() === $latestVersion) {
                     $otherLinks[] = new Link(
                         'Executable code',
                         $this->get('router')->generate('article-rds', ['id' => $item->getId()])

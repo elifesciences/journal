@@ -25,7 +25,7 @@ final class StatusDateOverrideMiddleware
 
     public function __invoke(callable $handler) : callable
     {
-        if (!$this->authorizationChecker->isGranted('FEATURE_RDS') || empty($this->rdsArticles)) {
+        if (empty($this->rdsArticles)) {
             return $handler;
         }
 
