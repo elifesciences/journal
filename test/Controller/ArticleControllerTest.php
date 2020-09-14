@@ -1493,21 +1493,6 @@ final class ArticleControllerTest extends PageTestCase
 
     /**
      * @test
-     */
-    public function it_does_not_displays_rds_info_bar_when_it_has_associated_rds_but_the_feature_is_disabled()
-    {
-        $client = static::createClient();
-
-        $crawler = $client->request('GET', $this->getUrl('id-of-article-with-rds'));
-
-        $this->assertSame(200, $client->getResponse()->getStatusCode());
-        $this->assertEmpty($crawler->filter('.info-bar'));
-        $this->assertEmpty($crawler->filter('.article-download-links-list__link')->selectLink('Executable version'));
-        $this->assertNotContains('Executable code', $crawler->filter('.view-selector')->text());
-    }
-
-    /**
-     * @test
      * @backupGlobals enabled
      */
     public function it_does_not_display_rds_info_bar_when_it_has_no_associated_rds()
