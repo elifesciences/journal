@@ -42,7 +42,7 @@ final class ArticleTeaserConverter implements ViewModelConverter
         $formats = [];
 
         if ($object instanceof ArticleVoR) {
-            if (isset($this->rdsArticles[$object->getId()]['display']) && $this->authorizationChecker->isGranted('FEATURE_RDS')) {
+            if (isset($this->rdsArticles[$object->getId()]['display'])) {
                 $formats[] = 'Executable';
             } else {
                 $formats[] = 'HTML';
