@@ -34,7 +34,7 @@ final class ArticleRdsDownloadControllerTest extends WebTestCase
         $this->mockArticle('id-of-article-with-rds');
         $client->request('GET', '/articles/id-of-article-with-rds/executable/download');
 
-        $this->assertSame(302, $client->getResponse()->getStatusCode());
+        $this->assertSame(301, $client->getResponse()->getStatusCode());
         $this->assertStringStartsWith('http://localhost/download/aHR0cHM6Ly9yZXByby5lbGlmZXNjaWVuY2VzLm9yZy9hcmNoaXZlLnppcA--/elife-id-of-article-with-rds-v3-era.zip', $client->getResponse()->headers->get('Location'));
     }
 

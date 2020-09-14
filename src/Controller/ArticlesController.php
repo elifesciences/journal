@@ -789,7 +789,7 @@ final class ArticlesController extends Controller
                         ->wait()
                 )
             ),
-            Response::HTTP_FOUND
+            Response::HTTP_MOVED_PERMANENTLY
         );
     }
 
