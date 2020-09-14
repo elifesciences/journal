@@ -229,6 +229,7 @@ services:
         class: eLife\Journal\EventListener\AuthenticationErrorSubscriber
         arguments:
           - '@security.authentication_utils'
+          - '@router'
         tags:
           - name: kernel.event_subscriber
 

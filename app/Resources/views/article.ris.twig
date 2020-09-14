@@ -24,7 +24,7 @@ C1  - {{ item.citeAs }}
 DO  - {{ item.doi }}
 UR  - https://doi.org/{{ item.doi }}
 {% if item.abstract %}
-AB  - {% for paragraph in item.abstract.content %}{{ paragraph.text|html2ris }}{% if not loop.last %} {% endif %}{% endfor %}
+AB  - {% for abstractItem in item.abstract.content %}{{ abstractItem|item2ris }}{% if not loop.last %} {% endif %}{% endfor %}
 
 {% endif %}
 {% if item.keywords is defined and item.keywords|length %}
