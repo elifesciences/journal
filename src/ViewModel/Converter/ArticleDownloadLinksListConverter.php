@@ -58,7 +58,7 @@ final class ArticleDownloadLinksListConverter implements ViewModelConverter
             $downloads[] = new ViewModel\ArticleDownloadLink(
                 new ViewModel\Link(
                     'Executable version',
-                    $this->downloadLinkUriGenerator->generate(new DownloadLink($context['rds-download'], preg_replace('/^[^\.]+/', sprintf('elife-%s-v%d-era.zip', $object->getId(), $object->getVersion()), DownloadLink::fromUri($context['rds-download'])->getFilename()))),
+                    $this->urlGenerator->generate('article-rds-download', [$object], UrlGeneratorInterface::ABSOLUTE_URL),
                     false,
                     ['article-identifier' => $object->getDoi(), 'download-type' => 'rds-download']
                 ),

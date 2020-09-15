@@ -35,7 +35,7 @@ final class ArticleRdsDownloadControllerTest extends WebTestCase
         $client->request('GET', '/articles/id-of-article-with-rds/executable/download');
 
         $this->assertSame(301, $client->getResponse()->getStatusCode());
-        $this->assertSame('https://repro.elifesciences.org/archive', $client->getResponse()->headers->get('Location'));
+        $this->assertStringStartsWith('http://localhost/download/aHR0cHM6Ly9yZXByby5lbGlmZXNjaWVuY2VzLm9yZy9hcmNoaXZlLnppcA--/elife-id-of-article-with-rds-v3-era.zip', $client->getResponse()->headers->get('Location'));
     }
 
     private function mockArticle($articleId = '00001') : void
@@ -44,11 +44,11 @@ final class ArticleRdsDownloadControllerTest extends WebTestCase
             new Request(
                 'GET',
                 "http://api.elifesciences.org/articles/{$articleId}",
-                ['Accept' => 'application/vnd.elife.article-poa+json; version=2, application/vnd.elife.article-vor+json; version=3']
+                ['Accept' => 'application/vnd.elife.article-poa+json; version=3, application/vnd.elife.article-vor+json; version=4']
             ),
             new Response(
                 200,
-                ['Content-Type' => 'application/vnd.elife.article-vor+json; version=3'],
+                ['Content-Type' => 'application/vnd.elife.article-vor+json; version=4'],
                 json_encode([
                     'status' => 'vor',
                     'stage' => 'published',
