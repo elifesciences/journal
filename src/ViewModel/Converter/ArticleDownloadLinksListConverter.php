@@ -64,7 +64,7 @@ final class ArticleDownloadLinksListConverter implements ViewModelConverter
                 ),
                 new ViewModel\Link(
                     'What are executable versions?',
-                    $this->urlGenerator->generate('labs-post', ['id' => '7dbeb390'])
+                    $this->urlGenerator->generate('labs-post', ['id' => 'dc5acbde'])
                 )
             );
         }
