@@ -11,32 +11,6 @@ use test\eLife\Journal\WebTestCase;
  */
 final class ArticleRdsDownloadControllerTest extends WebTestCase
 {
-    /**
-     * @test
-     */
-    public function it_does_not_download_rds_article_if_the_feature_flag_is_enabled_but_the_article_has_no_rds()
-    {
-        $client = static::createClient();
-
-        $this->mockArticle('id-of-article-without-rds');
-        $client->request('GET', '/articles/id-of-article-without-rds/executable/download');
-
-        $this->assertSame(404, $client->getResponse()->getStatusCode());
-    }
-
-    /**
-     * @test
-     */
-    public function it_does_download_the_rds_article_if_the_feature_flag_is_enabled_and_the_article_has_rds()
-    {
-        $client = static::createClient();
-
-        $this->mockArticle('id-of-article-with-rds');
-        $client->request('GET', '/articles/id-of-article-with-rds/executable/download');
-
-        $this->assertSame(301, $client->getResponse()->getStatusCode());
-        $this->assertSame('https://repro.elifesciences.org/archive', $client->getResponse()->headers->get('Location'));
-    }
 
     private function mockArticle($articleId = '00001') : void
     {
