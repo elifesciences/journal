@@ -783,7 +783,7 @@ final class ArticlesController extends Controller
                     $arguments['rdsArticle']['download'],
                     $arguments['item']
                         ->then(Callback::method('getVersion'))
-                        ->then(function (int $version) use ($id): string {
+                        ->then(function (int $version) use ($id) {
                             return sprintf('elife-%s-v%d-era.zip', $id, $version);
                         })
                         ->wait()
