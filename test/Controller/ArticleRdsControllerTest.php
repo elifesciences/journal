@@ -11,6 +11,31 @@ use test\eLife\Journal\WebTestCase;
  */
 final class ArticleRdsControllerTest extends WebTestCase
 {
+    /**
+     * @test
+     */
+    public function it_does_not_show_rds_article_if_the_article_has_no_rds()
+    {
+        $client = static::createClient();
+
+        $this->mockArticle('id-of-article-without-rds');
+        $client->request('GET', '/articles/id-of-article-without-rds/executable');
+
+        $this->assertSame(404, $client->getResponse()->getStatusCode());
+    }
+
+    /**
+     * @test
+     */
+    public function it_does_show_the_rds_article_if_the_article_has_rds()
+    {
+        $client = static::createClient();
+
+        $this->mockArticle('id-of-article-with-rds');
+        $client->request('GET', '/articles/id-of-article-with-rds/executable');
+
+        $this->assertSame(200, $client->getResponse()->getStatusCode());
+    }
 
     /**
      * @test
