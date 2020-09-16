@@ -204,7 +204,7 @@ services:
         public: false
         arguments:
           - '@security.authorization_checker'
-          - '%rds_articles%'
+          - '%era_articles%'
         tags:
           - name: csa_guzzle.middleware
             alias: status_date_override
@@ -497,7 +497,7 @@ services:
           - '@elife.journal.view_model.converter'
           - '@router'
           - '@security.authorization_checker'
-          - '%rds_articles%'
+          - '%era_articles%'
         tags:
           - name: view_model.converter
 
