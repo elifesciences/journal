@@ -15,17 +15,17 @@ use function GuzzleHttp\Psr7\stream_for;
 final class StatusDateOverrideMiddleware
 {
     private $authorizationChecker;
-    private $rdsArticles;
+    private $eraArticles;
 
-    public function __construct(AuthorizationCheckerInterface $authorizationChecker, array $rdsArticles = [])
+    public function __construct(AuthorizationCheckerInterface $authorizationChecker, array $eraArticles = [])
     {
         $this->authorizationChecker = $authorizationChecker;
-        $this->rdsArticles = $rdsArticles;
+        $this->eraArticles = $eraArticles;
     }
 
     public function __invoke(callable $handler) : callable
     {
-        if (empty($this->rdsArticles)) {
+        if (empty($this->eraArticles)) {
             return $handler;
         }
 
@@ -104,8 +104,8 @@ final class StatusDateOverrideMiddleware
 
     private function updateItem(array $item) : array
     {
-        if (isset($item['statusDate']) && isset($this->rdsArticles[$item['id']])) {
-            $item['statusDate'] = $this->rdsArticles[$item['id']]['date'];
+        if (isset($item['statusDate']) && isset($this->eraArticles[$item['id']])) {
+            $item['statusDate'] = $this->eraArticles[$item['id']]['date'];
         }
 
         return $item;

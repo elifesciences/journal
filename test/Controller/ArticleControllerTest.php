@@ -1438,31 +1438,13 @@ final class ArticleControllerTest extends PageTestCase
 
     /**
      * @test
-     */
-    public function it_displays_example_rds_info_bar_when_it_has_an_example_rds()
-    {
-        $client = static::createClient();
-
-        $crawler = $client->request('GET', $this->getUrl('id-of-article-with-example-rds'));
-
-        $this->assertSame(200, $client->getResponse()->getStatusCode());
-        $this->assertContains(
-            'This research is available in a reproducible view.',
-            array_map('trim', $crawler->filter('.info-bar--warning')->extract(['_text']))
-        );
-        $this->assertEmpty($crawler->filter('.article-download-links-list__link')->selectLink('Executable version'));
-        $this->assertNotContains('Executable code', $crawler->filter('.view-selector')->text());
-    }
-
-    /**
-     * @test
      * @backupGlobals enabled
      */
-    public function it_displays_rds_info_bar_when_it_has_associated_rds()
+    public function it_displays_era_info_bar_when_it_has_associated_era()
     {
         $client = static::createClient();
 
-        $crawler = $client->request('GET', $this->getUrl('id-of-article-with-rds'));
+        $crawler = $client->request('GET', $this->getUrl('id-of-article-with-era'));
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertContains(
@@ -1471,7 +1453,7 @@ final class ArticleControllerTest extends PageTestCase
         );
         $this->assertNotEmpty($crawler->filter('.article-download-links-list__link')->selectLink('Executable version'));
         $this->assertNotEmpty($crawler->filter('.article-download-links-list__secondary_link')->selectLink('What are executable versions?'));
-        $this->assertContains('/id-of-article-with-rds/executable/download', $crawler->filter('.article-download-links-list__link')->selectLink('Executable version')->attr('href'));
+        $this->assertContains('/id-of-article-with-era/executable/download', $crawler->filter('.article-download-links-list__link')->selectLink('Executable version')->attr('href'));
         $this->assertContains('Executable code', $crawler->filter('.view-selector')->text());
     }
 
@@ -1479,35 +1461,16 @@ final class ArticleControllerTest extends PageTestCase
      * @test
      * @backupGlobals enabled
      */
-    public function it_does_not_displays_rds_info_bar_when_it_has_associated_rds_but_it_is_not_the_latest_version()
+    public function it_does_not_display_era_info_bar_when_it_has_associated_era_but_it_is_not_the_latest_version()
     {
         $client = static::createClient();
 
-        $crawler = $client->request('GET', $this->getPreviousVersionUrl('id-of-article-with-rds'));
+        $crawler = $client->request('GET', $this->getPreviousVersionUrl('id-of-article-with-era'));
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertCount(1, $crawler->filter('.info-bar'));
         $this->assertEmpty($crawler->filter('.article-download-links-list__link')->selectLink('Executable version'));
         $this->assertEmpty($crawler->filter('.view-selector'));
-    }
-
-    /**
-     * @test
-     * @backupGlobals enabled
-     */
-    public function it_does_not_display_rds_info_bar_when_it_has_no_associated_rds()
-    {
-        $client = static::createClient();
-
-        $crawler = $client->request('GET', $this->getUrl('00001'));
-
-        $this->assertSame(200, $client->getResponse()->getStatusCode());
-        $this->assertNotContains(
-            'reproducible view',
-            array_map('trim', $crawler->filter('.info-bar')->eq(0)->extract(['_text']))
-        );
-        $this->assertEmpty($crawler->filter('.article-download-links-list__link')->selectLink('Executable version'));
-        $this->assertNotContains('Executable code', $crawler->filter('.view-selector')->text());
     }
 
     /**
@@ -1524,6 +1487,25 @@ final class ArticleControllerTest extends PageTestCase
             '<a href="https://elifesciences.org/inside-elife/4f706531/special-issue-call-for-papers-in-aging-geroscience-and-longevity">Read the call for papers</a> for the eLife Special Issue on Aging, Geroscience and Longevity.',
             $crawler->filter('.info-bar--dismissible .info-bar__text')->html()
         );
+    }
+
+    /**
+     * @test
+     * @backupGlobals enabled
+     */
+    public function it_does_not_display_era_info_bar_when_it_has_no_associated_era()
+    {
+        $client = static::createClient();
+
+        $crawler = $client->request('GET', $this->getUrl('00001'));
+
+        $this->assertSame(200, $client->getResponse()->getStatusCode());
+        $this->assertNotContains(
+            'executable code view',
+            array_map('trim', $crawler->filter('.info-bar')->eq(0)->extract(['_text']))
+        );
+        $this->assertEmpty($crawler->filter('.article-download-links-list__link')->selectLink('Executable version'));
+        $this->assertNotContains('Executable code', $crawler->filter('.view-selector')->text());
     }
 
     /**

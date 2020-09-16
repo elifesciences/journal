@@ -9,17 +9,17 @@ use test\eLife\Journal\WebTestCase;
 /**
  * @backupGlobals enabled
  */
-final class ArticleRdsControllerTest extends WebTestCase
+final class ArticleEraControllerTest extends WebTestCase
 {
     /**
      * @test
      */
-    public function it_does_not_show_rds_article_if_the_article_has_no_rds()
+    public function it_does_not_show_era_article_if_the_article_has_no_era()
     {
         $client = static::createClient();
 
-        $this->mockArticle('id-of-article-without-rds');
-        $client->request('GET', '/articles/id-of-article-without-rds/executable');
+        $this->mockArticle('id-of-article-without-era');
+        $client->request('GET', '/articles/id-of-article-without-era/executable');
 
         $this->assertSame(404, $client->getResponse()->getStatusCode());
     }
@@ -27,12 +27,12 @@ final class ArticleRdsControllerTest extends WebTestCase
     /**
      * @test
      */
-    public function it_does_show_the_rds_article_if_the_article_has_rds()
+    public function it_does_show_the_era_article_if_the_article_has_rera()
     {
         $client = static::createClient();
 
-        $this->mockArticle('id-of-article-with-rds');
-        $client->request('GET', '/articles/id-of-article-with-rds/executable');
+        $this->mockArticle('id-of-article-with-era');
+        $client->request('GET', '/articles/id-of-article-with-era/executable');
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
     }
@@ -44,19 +44,19 @@ final class ArticleRdsControllerTest extends WebTestCase
     {
         $client = static::createClient();
 
-        $this->mockArticle('id-of-article-with-rds');
-        $crawler = $client->request('GET', '/articles/id-of-article-with-rds/executable?foo');
+        $this->mockArticle('id-of-article-with-era');
+        $crawler = $client->request('GET', '/articles/id-of-article-with-era/executable?foo');
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
 
         $this->assertSame('Article title | eLife', $crawler->filter('title')->text());
-        $this->assertSame('/articles/id-of-article-with-rds', $crawler->filter('link[rel="canonical"]')->attr('href'));
-        $this->assertSame('http://localhost/articles/id-of-article-with-rds', $crawler->filter('meta[property="og:url"]')->attr('content'));
+        $this->assertSame('/articles/id-of-article-with-era', $crawler->filter('link[rel="canonical"]')->attr('href'));
+        $this->assertSame('http://localhost/articles/id-of-article-with-era', $crawler->filter('meta[property="og:url"]')->attr('content'));
         $this->assertSame('Article title', $crawler->filter('meta[property="og:title"]')->attr('content'));
         $this->assertEmpty($crawler->filter('meta[property="og:type"]'));
         $this->assertSame('summary', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
         $this->assertEmpty($crawler->filter('meta[property="og:image"]'));
-        $this->assertSame('doi:10.7554/eLife.id-of-article-with-rds', $crawler->filter('meta[name="dc.identifier"]')->attr('content'));
+        $this->assertSame('doi:10.7554/eLife.id-of-article-with-era', $crawler->filter('meta[name="dc.identifier"]')->attr('content'));
         $this->assertEmpty($crawler->filter('meta[name="dc.relation.ispartof"]'));
         $this->assertSame('Article title', $crawler->filter('meta[name="dc.title"]')->attr('content'));
         $this->assertEmpty($crawler->filter('meta[name="dc.description"]'));

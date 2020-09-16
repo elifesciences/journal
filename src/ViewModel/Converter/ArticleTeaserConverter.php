@@ -18,14 +18,14 @@ final class ArticleTeaserConverter implements ViewModelConverter
     private $viewModelConverter;
     private $urlGenerator;
     private $authorizationChecker;
-    private $rdsArticles;
+    private $eraArticles;
 
-    public function __construct(ViewModelConverter $viewModelConverter, UrlGeneratorInterface $urlGenerator, AuthorizationCheckerInterface $authorizationChecker, array $rdsArticles)
+    public function __construct(ViewModelConverter $viewModelConverter, UrlGeneratorInterface $urlGenerator, AuthorizationCheckerInterface $authorizationChecker, array $eraArticles)
     {
         $this->viewModelConverter = $viewModelConverter;
         $this->urlGenerator = $urlGenerator;
         $this->authorizationChecker = $authorizationChecker;
-        $this->rdsArticles = $rdsArticles;
+        $this->eraArticles = $eraArticles;
     }
 
     /**
@@ -42,7 +42,7 @@ final class ArticleTeaserConverter implements ViewModelConverter
         $formats = [];
 
         if ($object instanceof ArticleVoR) {
-            if (isset($this->rdsArticles[$object->getId()]['display'])) {
+            if (isset($this->eraArticles[$object->getId()]['display'])) {
                 $formats[] = 'Executable';
             } else {
                 $formats[] = 'HTML';
