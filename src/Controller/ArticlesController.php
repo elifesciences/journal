@@ -512,7 +512,7 @@ final class ArticlesController extends Controller
                 return $parts;
             });
 
-        $arguments['viewSelector'] = $this->createViewSelector($arguments['item'], $arguments['hasFigures'], false, $arguments['history'], $arguments['body'], $arguments['rdsArticle']);
+        $arguments['viewSelector'] = $this->createViewSelector($arguments['item'], $arguments['hasFigures'], false, $arguments['history'], $arguments['body'], $arguments['eraArticle']);
 
         $arguments['body'] = all(['item' => $arguments['item'], 'body' => $arguments['body'], 'downloadLinks' => $arguments['downloadLinks']])
             ->then(function (array $parts) {
@@ -702,7 +702,7 @@ final class ArticlesController extends Controller
             })
             ->then(Callback::mustNotBeEmpty(new NotFoundHttpException('Article version does not contain any figures or data')));
 
-        $arguments['viewSelector'] = $this->createViewSelector($arguments['item'], promise_for(true), true, $arguments['history'], $arguments['body'], $arguments['rdsArticle']);
+        $arguments['viewSelector'] = $this->createViewSelector($arguments['item'], promise_for(true), true, $arguments['history'], $arguments['body'], $arguments['eraArticle']);
 
         $arguments['body'] = all(['body' => $arguments['body'], 'downloadLinks' => $arguments['downloadLinks']])
             ->then(function (array $parts) {
@@ -752,11 +752,11 @@ final class ArticlesController extends Controller
         return new Response(preg_replace('~\R~u', "\r\n", $this->get('templating')->render('::article.ris.twig', $arguments)), Response::HTTP_OK, ['Content-Type' => 'application/x-research-info-systems']);
     }
 
-    public function rdsAction(Request $request, string $id) : Response
+    public function eraAction(Request $request, string $id) : Response
     {
         $arguments = $this->defaultArticleArguments($request, $id);
 
-        if (!isset($arguments['rdsArticle']['display'])) {
+        if (!isset($arguments['eraArticle']['display'])) {
             throw new NotFoundHttpException('No RDS companion associated with this article');
         }
 
@@ -766,21 +766,21 @@ final class ArticlesController extends Controller
 
         $arguments['infoBars'][] = new InfoBar('This is an executable code view. <a href="'.$this->get('router')->generate('article', ['id' => $id]).'">See the original article</a>.', InfoBar::TYPE_WARNING);
 
-        return new Response($this->get('templating')->render('::article-rds.html.twig', $arguments));
+        return new Response($this->get('templating')->render('::article-era.html.twig', $arguments));
     }
 
-    public function rdsDownloadAction(Request $request, string $id) : Response
+    public function eraDownloadAction(Request $request, string $id) : Response
     {
         $arguments = $this->defaultArticleArguments($request, $id);
 
-        if (!isset($arguments['rdsArticle']['download'])) {
+        if (!isset($arguments['eraArticle']['download'])) {
             throw new NotFoundHttpException('No RDS companion associated with this article');
         }
 
         return new RedirectResponse(
             $this->get('elife.journal.helper.download_link_uri_generator')->generate(
                 new DownloadLink(
-                    $arguments['rdsArticle']['download'],
+                    $arguments['eraArticle']['download'],
                     $arguments['item']
                         ->then(Callback::method('getVersion'))
                         ->then(function (int $version) use ($id) {
@@ -819,7 +819,7 @@ final class ArticlesController extends Controller
         $arguments['title'] = $arguments['item']
             ->then(Callback::method('getFullTitle'));
 
-        $arguments['rdsArticle'] = $this->getParameter('rds_articles')[$id] ?? [];
+        $arguments['eraArticle'] = $this->getParameter('rds_articles')[$id] ?? [];
 
         return $arguments;
     }
@@ -860,7 +860,7 @@ final class ArticlesController extends Controller
         $arguments['contentHeader'] = $arguments['item']
             ->then($this->willConvertTo(ContentHeader::class));
 
-        $arguments['infoBars'] = all(['item' => $arguments['item'], 'history' => $arguments['history'], 'relatedArticles' => $arguments['relatedArticles'], 'rdsArticle' => $arguments['rdsArticle']])
+        $arguments['infoBars'] = all(['item' => $arguments['item'], 'history' => $arguments['history'], 'relatedArticles' => $arguments['relatedArticles'], 'eraArticle' => $arguments['eraArticle']])
             ->then(function (array $parts) {
                 /** @var ArticleVersion $item */
                 $item = $parts['item'];
@@ -868,8 +868,8 @@ final class ArticlesController extends Controller
                 $history = $parts['history'];
                 /** @var Sequence|Article[] $relatedArticles */
                 $relatedArticles = $parts['relatedArticles'];
-                /** @var array $rdsArticle */
-                $rdsArticle = $parts['rdsArticle'];
+                /** @var array $eraArticle */
+                $eraArticle = $parts['eraArticle'];
 
                 $infoBars = [];
 
@@ -906,11 +906,8 @@ final class ArticlesController extends Controller
                     }
                 }
 
-                $exampleRdsArticles = $this->getParameter('example_rds_articles');
-                if (isset($rdsArticle['display']) && $item->getVersion() === $latestVersion) {
-                    $infoBars[] = new InfoBar('See this research in an <a href="'.$this->get('router')->generate('article-rds', [$item]).'">executable code view</a>.', InfoBar::TYPE_WARNING);
-                } elseif (isset($exampleRdsArticles[$item->getId()])) {
-                    $infoBars[] = new InfoBar('This research is available in a <a href="'.$exampleRdsArticles[$item->getId()].'">reproducible view</a>.', InfoBar::TYPE_WARNING);
+                if (isset($eraArticle['display']) && $item->getVersion() === $latestVersion) {
+                    $infoBars[] = new InfoBar('See this research in an <a href="'.$this->get('router')->generate('article-era', [$item]).'">executable code view</a>.', InfoBar::TYPE_WARNING);
                 }
 
                 $dismissibleInfoBars = $this->getParameter('dismissible_info_bars');
@@ -959,31 +956,31 @@ final class ArticlesController extends Controller
                 return $metrics;
             });
 
-        $arguments['downloadLinks'] = all(['item' => $arguments['item'], 'history' => $arguments['history'], 'rdsArticle' => $arguments['rdsArticle']])
+        $arguments['downloadLinks'] = all(['item' => $arguments['item'], 'history' => $arguments['history'], 'eraArticle' => $arguments['eraArticle']])
             ->then(function (array $parts) {
                 /** @var ArticleVersion $item */
                 $item = $parts['item'];
                 /** @var ArticleHistory $history */
                 $history = $parts['history'];
-                /** @var array $rdsArticle */
-                $rdsArticle = $parts['rdsArticle'];
+                /** @var array $eraArticle */
+                $eraArticle = $parts['eraArticle'];
 
                 $latestVersion = $history->getVersions()[count($history->getVersions()) - 1]->getVersion();
 
-                if (isset($rdsArticle['download']) && $item->getVersion() === $latestVersion) {
-                    $rdsDownload = $rdsArticle['download'];
+                if (isset($eraArticle['download']) && $item->getVersion() === $latestVersion) {
+                    $eraDownload = $eraArticle['download'];
                 }
 
-                return $this->convertTo($item, ViewModel\ArticleDownloadLinksList::class, ['rds-download' => $rdsDownload ?? null]);
+                return $this->convertTo($item, ViewModel\ArticleDownloadLinksList::class, ['era-download' => $eraDownload ?? null]);
             });
 
         return $arguments;
     }
 
-    private function createViewSelector(PromiseInterface $item, PromiseInterface $hasFigures, bool $isFiguresPage, PromiseInterface $history, PromiseInterface $sections, array $rdsArticle) : PromiseInterface
+    private function createViewSelector(PromiseInterface $item, PromiseInterface $hasFigures, bool $isFiguresPage, PromiseInterface $history, PromiseInterface $sections, array $eraArticle) : PromiseInterface
     {
         return all(['item' => $item, 'hasFigures' => $hasFigures, 'history' => $history, 'sections' => $sections])
-            ->then(function (array $sections) use ($isFiguresPage, $rdsArticle) {
+            ->then(function (array $sections) use ($isFiguresPage, $eraArticle) {
                 $item = $sections['item'];
                 $hasFigures = $sections['hasFigures'];
                 $history = $sections['history'];
@@ -1002,10 +999,10 @@ final class ArticlesController extends Controller
                 $latestVersion = $history->getVersions()[count($history->getVersions()) - 1]->getVersion();
 
                 $otherLinks = [];
-                if (isset($rdsArticle['display']) && $item->getVersion() === $latestVersion) {
+                if (isset($eraArticle['display']) && $item->getVersion() === $latestVersion) {
                     $otherLinks[] = new Link(
                         'Executable code',
-                        $this->get('router')->generate('article-rds', ['id' => $item->getId()])
+                        $this->get('router')->generate('article-era', ['id' => $item->getId()])
                     );
                 }
 

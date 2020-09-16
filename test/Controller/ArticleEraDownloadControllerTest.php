@@ -9,17 +9,17 @@ use test\eLife\Journal\WebTestCase;
 /**
  * @backupGlobals enabled
  */
-final class ArticleRdsDownloadControllerTest extends WebTestCase
+final class ArticleEraDownloadControllerTest extends WebTestCase
 {
     /**
      * @test
      */
-    public function it_does_not_download_rds_article_if_the_article_has_no_rds()
+    public function it_does_not_download_era_article_if_the_article_has_no_era()
     {
         $client = static::createClient();
 
-        $this->mockArticle('id-of-article-without-rds');
-        $client->request('GET', '/articles/id-of-article-without-rds/executable/download');
+        $this->mockArticle('id-of-article-without-era');
+        $client->request('GET', '/articles/id-of-article-without-era/executable/download');
 
         $this->assertSame(404, $client->getResponse()->getStatusCode());
     }
@@ -27,15 +27,15 @@ final class ArticleRdsDownloadControllerTest extends WebTestCase
     /**
      * @test
      */
-    public function it_does_download_the_rds_article_if_the_article_has_rds()
+    public function it_does_download_the_era_article_if_the_article_has_era()
     {
         $client = static::createClient();
 
-        $this->mockArticle('id-of-article-with-rds');
-        $client->request('GET', '/articles/id-of-article-with-rds/executable/download');
+        $this->mockArticle('id-of-article-with-era');
+        $client->request('GET', '/articles/id-of-article-with-era/executable/download');
 
         $this->assertSame(301, $client->getResponse()->getStatusCode());
-        $this->assertStringStartsWith('http://localhost/download/aHR0cHM6Ly9yZXByby5lbGlmZXNjaWVuY2VzLm9yZy9hcmNoaXZlLnppcA--/elife-id-of-article-with-rds-v3-era.zip', $client->getResponse()->headers->get('Location'));
+        $this->assertStringStartsWith('http://localhost/download/aHR0cHM6Ly9yZXByby5lbGlmZXNjaWVuY2VzLm9yZy9hcmNoaXZlLnppcA--/elife-id-of-article-with-era-v3-era.zip', $client->getResponse()->headers->get('Location'));
     }
 
     private function mockArticle($articleId = '00001') : void
