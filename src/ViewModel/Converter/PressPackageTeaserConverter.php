@@ -36,7 +36,7 @@ final class PressPackageTeaserConverter implements ViewModelConverter
             null,
             TeaserFooter::forNonArticle(
                 Meta::withLink(
-                    new Link('Press pack', $this->urlGenerator->generate('press-packs')),
+                    new Link('Press Pack', $this->urlGenerator->generate('press-packs')),
                     $this->simpleDate($object, $context)
                 )
             )

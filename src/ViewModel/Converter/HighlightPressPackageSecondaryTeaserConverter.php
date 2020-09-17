@@ -39,7 +39,7 @@ final class HighlightPressPackageSecondaryTeaserConverter implements ViewModelCo
             $object->getThumbnail() ? $this->smallTeaserImage($object) : null,
             ViewModel\TeaserFooter::forNonArticle(
                 Meta::withLink(
-                    new ViewModel\Link('Press pack', $this->urlGenerator->generate('press-packs')),
+                    new ViewModel\Link('Press Pack', $this->urlGenerator->generate('press-packs')),
                     $this->simpleDate($press, $context)
                 )
             )
