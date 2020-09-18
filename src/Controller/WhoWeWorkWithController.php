@@ -40,6 +40,12 @@ final class WhoWeWorkWithController extends Controller
                 'uri' => 'https://www.crossref.org/',
             ],
             [
+                'name' => 'Niso',
+                'filename' => 'niso',
+                'type' => 'image/svg+xml',
+                'uri' => 'https://www.niso.org/',
+            ],
+            [
                 'name' => 'Open Access Scholarly Publishers Association',
                 'filename' => 'oaspa',
                 'type' => 'image/svg+xml',
@@ -115,12 +121,6 @@ final class WhoWeWorkWithController extends Controller
                 'uri' => 'https://hypothes.is/',
             ],
             [
-                'name' => 'JIRA',
-                'filename' => 'jira',
-                'type' => 'image/svg+xml',
-                'uri' => 'https://www.atlassian.com/software/jira',
-            ],
-            [
                 'name' => 'Loggly',
                 'filename' => 'loggly',
                 'type' => 'image/svg+xml',
@@ -134,7 +134,7 @@ final class WhoWeWorkWithController extends Controller
             ],
             [
                 'name' => 'New Relic',
-                'filename' => 'new-relic',
+                'filename' => 'new-relic-logo',
                 'type' => 'image/svg+xml',
                 'uri' => 'https://newrelic.com/',
             ],
@@ -160,6 +160,12 @@ final class WhoWeWorkWithController extends Controller
                 'uri' => 'https://www.clockss.org/',
             ],
             [
+                'name' => 'CNKI',
+                'filename' => 'cnki',
+                'type' => 'image/png',
+                'uri' => 'https://www.cnki.net/',
+            ],
+            [
                 'name' => 'Europe PubMed Central',
                 'filename' => 'europe-pmc',
                 'type' => 'image/png',
@@ -178,6 +184,12 @@ final class WhoWeWorkWithController extends Controller
                 'uri' => 'https://www.jisc.ac.uk/',
             ],
             [
+                'name' => 'Jisc publication router',
+                'filename' => 'jisc-pub-router',
+                'type' => 'image/svg+xml',
+                'uri' => 'https://pubrouter.jisc.ac.uk/',
+            ],
+            [
                 'name' => 'LOCKSS',
                 'filename' => 'lockss',
                 'type' => 'image/svg+xml',
@@ -194,6 +206,12 @@ final class WhoWeWorkWithController extends Controller
                 'filename' => 'paperity',
                 'type' => 'image/svg+xml',
                 'uri' => 'http://paperity.org/',
+            ],
+            [
+                'name' => 'PubMed',
+                'filename' => 'pmc-logo',
+                'type' => 'image/png',
+                'uri' => 'https://pubmed.ncbi.nlm.nih.gov/',
             ],
             [
                 'name' => 'PubMed Central',
@@ -247,16 +265,16 @@ final class WhoWeWorkWithController extends Controller
                 'uri' => 'http://jats4r.org/',
             ],
             [
+                'name' => 'Review Commons',
+                'filename' => 'review-commons',
+                'type' => 'image/svg+xml',
+                'uri' => 'https://www.reviewcommons.org/',
+            ],
+            [
                 'name' => 'Open Access Scholarly Publishers Association',
                 'filename' => 'oaspa',
                 'type' => 'image/svg+xml',
                 'uri' => 'https://oaspa.org/',
-            ],
-            [
-                'name' => 'Publons',
-                'filename' => 'publons',
-                'type' => 'image/svg+xml',
-                'uri' => 'https://publons.com/',
             ],
         ];
 
