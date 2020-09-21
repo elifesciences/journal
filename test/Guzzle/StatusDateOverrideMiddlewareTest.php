@@ -25,7 +25,7 @@ final class StatusDateOverrideMiddlewareTest extends KernelTestCase
     /**
      * @test
      */
-    public function it_does_nothing_if_there_are_no_rds_articles()
+    public function it_does_nothing_if_there_are_no_era_articles()
     {
         $middleware = new StatusDateOverrideMiddleware($this->alwaysGrantedAuthorizationChecker());
 

@@ -819,7 +819,7 @@ final class ArticlesController extends Controller
         $arguments['title'] = $arguments['item']
             ->then(Callback::method('getFullTitle'));
 
-        $arguments['eraArticle'] = $this->getParameter('rds_articles')[$id] ?? [];
+        $arguments['eraArticle'] = $this->getParameter('era_articles')[$id] ?? [];
 
         return $arguments;
     }

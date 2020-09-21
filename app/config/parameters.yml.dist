@@ -35,7 +35,7 @@ parameters:
       - from_id: from-subject
         to_id: to-subject
         to_name: To Subject Name
-    rds_articles:
+    era_articles:
         '26231':
             date: '2030-01-01T00:00:00Z'
             display: https://repro.elifesciences.org/example.html
