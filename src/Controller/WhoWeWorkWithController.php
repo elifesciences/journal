@@ -41,7 +41,7 @@ final class WhoWeWorkWithController extends Controller
             ],
             [
                 'name' => 'Niso',
-                'filename' => 'niso',
+                'filename' => 'niso--logo',
                 'type' => 'image/svg+xml',
                 'uri' => 'https://www.niso.org/',
             ],
@@ -266,7 +266,7 @@ final class WhoWeWorkWithController extends Controller
             ],
             [
                 'name' => 'Review Commons',
-                'filename' => 'review-commons',
+                'filename' => 'review-commons-logo',
                 'type' => 'image/svg+xml',
                 'uri' => 'https://www.reviewcommons.org/',
             ],
