@@ -41,7 +41,7 @@ final class WhoWeWorkWithController extends Controller
             ],
             [
                 'name' => 'Niso',
-                'filename' => 'niso--logo',
+                'filename' => 'niso-logo',
                 'type' => 'image/svg+xml',
                 'uri' => 'https://www.niso.org/',
             ],
