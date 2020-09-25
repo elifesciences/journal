@@ -107,7 +107,7 @@ gulp.task('images:banners', ['images:clean'], () => {
 gulp.task('images:social', ['images:clean'], () => {
     const sizes = {1200: 630, 600: 600};
 
-    return gulp.src('./assets/images/social/*.svg')
+    return gulp.src('./assets/images/social/*.png')
         .pipe(responsive({
             '*': [1, 2].reduce((acc, scale) => {
                 return Object.keys(sizes).reduce((acc, width) => {
@@ -116,17 +116,14 @@ gulp.task('images:social', ['images:clean'], () => {
                     acc.push({
                         width: width,
                         height: height,
-                        max: true,
                         rename: {
                             suffix: `-${width}x${height}@${scale}`,
-                            extname: '.png',
                         },
                         withoutEnlargement: false,
                     });
                     acc.push({
                         width: width,
                         height: height,
-                        max: true,
                         rename: {
                             suffix: `-${width}x${height}@${scale}`,
                             extname: '.webp',
