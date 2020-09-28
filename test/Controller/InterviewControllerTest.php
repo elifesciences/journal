@@ -155,7 +155,7 @@ final class InterviewControllerTest extends PageTestCase
         $this->assertSame('Interview impact statement', $crawler->filter('meta[property="og:description"]')->attr('content'));
         $this->assertSame('Interview impact statement', $crawler->filter('meta[name="description"]')->attr('content'));
         $this->assertSame('article', $crawler->filter('meta[property="og:type"]')->attr('content'));
-        $this->assertSame('summary', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
+        $this->assertSame('summary_large_image', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
         $this->assertEmpty($crawler->filter('meta[property="og:image"]'));
         $this->assertSame('interview/1', $crawler->filter('meta[name="dc.identifier"]')->attr('content'));
         $this->assertSame('elifesciences.org', $crawler->filter('meta[name="dc.relation.ispartof"]')->attr('content'));

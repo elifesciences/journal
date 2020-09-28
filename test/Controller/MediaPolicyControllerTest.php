@@ -44,7 +44,7 @@ final class MediaPolicyControllerTest extends PageTestCase
         $this->assertSame('http://localhost/media-policy', $crawler->filter('meta[property="og:url"]')->attr('content'));
         $this->assertSame('Media policy', $crawler->filter('meta[property="og:title"]')->attr('content'));
         $this->assertSame('eLife\'s media policy is designed to encourage high-quality, informed and widespread discussion of new research &mdash; before and after publication.', $crawler->filter('meta[name="description"]')->attr('content'));
-        $this->assertSame('summary', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
+        $this->assertSame('summary_large_image', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
         $this->assertEmpty($crawler->filter('meta[property="og:image"]'));
         $this->assertEmpty($crawler->filter('meta[name="dc.identifier"]'));
         $this->assertEmpty($crawler->filter('meta[name="dc.relation.ispartof"]'));

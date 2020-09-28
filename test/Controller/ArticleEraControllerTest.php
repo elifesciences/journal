@@ -54,7 +54,7 @@ final class ArticleEraControllerTest extends WebTestCase
         $this->assertSame('http://localhost/articles/id-of-article-with-era', $crawler->filter('meta[property="og:url"]')->attr('content'));
         $this->assertSame('Article title', $crawler->filter('meta[property="og:title"]')->attr('content'));
         $this->assertEmpty($crawler->filter('meta[property="og:type"]'));
-        $this->assertSame('summary', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
+        $this->assertSame('summary_large_image', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
         $this->assertEmpty($crawler->filter('meta[property="og:image"]'));
         $this->assertSame('doi:10.7554/eLife.id-of-article-with-era', $crawler->filter('meta[name="dc.identifier"]')->attr('content'));
         $this->assertEmpty($crawler->filter('meta[name="dc.relation.ispartof"]'));

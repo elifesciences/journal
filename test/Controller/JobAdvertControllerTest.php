@@ -43,7 +43,7 @@ final class JobAdvertControllerTest extends PageTestCase
         $this->assertSame('http://localhost/jobs/1/job-advert-title', $crawler->filter('meta[property="og:url"]')->attr('content'));
         $this->assertSame('Job advert title', $crawler->filter('meta[property="og:title"]')->attr('content'));
         $this->assertSame('article', $crawler->filter('meta[property="og:type"]')->attr('content'));
-        $this->assertSame('summary', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
+        $this->assertSame('summary_large_image', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
         $this->assertEmpty($crawler->filter('meta[property="og:image"]'));
         $this->assertSame('job-advert/1', $crawler->filter('meta[name="dc.identifier"]')->attr('content'));
         $this->assertSame('elifesciences.org', $crawler->filter('meta[name="dc.relation.ispartof"]')->attr('content'));

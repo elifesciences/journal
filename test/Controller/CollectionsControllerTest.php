@@ -39,7 +39,7 @@ final class CollectionsControllerTest extends PageTestCase
         $this->assertSame('Collections', $crawler->filter('meta[property="og:title"]')->attr('content'));
         $this->assertEmpty($crawler->filter('meta[property="og:description"]'));
         $this->assertEmpty($crawler->filter('meta[name="description"]'));
-        $this->assertSame('summary', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
+        $this->assertSame('summary_large_image', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
         $this->assertEmpty($crawler->filter('meta[property="og:image"]'));
         $this->assertEmpty($crawler->filter('meta[name="dc.identifier"]'));
         $this->assertEmpty($crawler->filter('meta[name="dc.relation.ispartof"]'));

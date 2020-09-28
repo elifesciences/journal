@@ -91,7 +91,7 @@ final class ArticleFiguresControllerTest extends PageTestCase
         $this->assertSame('http://localhost/articles/00001/figures', $crawler->filter('meta[property="og:url"]')->attr('content'));
         $this->assertSame('Figures and data in Article title', $crawler->filter('meta[property="og:title"]')->attr('content'));
         $this->assertSame('article', $crawler->filter('meta[property="og:type"]')->attr('content'));
-        $this->assertSame('summary', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
+        $this->assertSame('summary_large_image', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
         $this->assertEmpty($crawler->filter('meta[property="og:image"]'));
         $this->assertSame('doi:10.7554/eLife.00001', $crawler->filter('meta[name="dc.identifier"]')->attr('content'));
         $this->assertEmpty($crawler->filter('meta[name="dc.relation.ispartof"]'));
@@ -149,7 +149,7 @@ final class ArticleFiguresControllerTest extends PageTestCase
         $this->assertSame('http://localhost/articles/00001/figures', $crawler->filter('meta[property="og:url"]')->attr('content'));
         $this->assertSame('Figures and data in Article title', $crawler->filter('meta[property="og:title"]')->attr('content'));
         $this->assertSame('article', $crawler->filter('meta[property="og:type"]')->attr('content'));
-        $this->assertSame('summary', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
+        $this->assertSame('summary_large_image', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
         $this->assertEmpty($crawler->filter('meta[property="og:image"]'));
         $this->assertSame('doi:10.7554/eLife.00001', $crawler->filter('meta[name="dc.identifier"]')->attr('content'));
         $this->assertEmpty($crawler->filter('meta[name="dc.relation.ispartof"]'));

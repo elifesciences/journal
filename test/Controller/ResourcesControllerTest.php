@@ -48,7 +48,7 @@ final class ResourcesControllerTest extends PageTestCase
         $this->assertSame('Resources', $crawler->filter('meta[property="og:title"]')->attr('content'));
         $this->assertSame('A collection of resources, from posters, videos, images, presentations and more, to the brand behind eLife.', $crawler->filter('meta[property="og:description"]')->attr('content'));
         $this->assertSame('A collection of resources, from posters, videos, images, presentations and more, to the brand behind eLife.', $crawler->filter('meta[name="description"]')->attr('content'));
-        $this->assertSame('summary', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
+        $this->assertSame('summary_large_image', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
         $this->assertEmpty($crawler->filter('meta[property="og:image"]'));
         $this->assertEmpty($crawler->filter('meta[name="dc.identifier"]'));
         $this->assertEmpty($crawler->filter('meta[name="dc.relation.ispartof"]'));
