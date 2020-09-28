@@ -40,7 +40,6 @@ final class ArticleTypeControllerTest extends PageTestCase
         $this->assertSame('Research Articles published by eLife are full-length studies that present important breakthroughs across the life sciences and biomedicine. There is no maximum length and no limits on the number of display items.', $crawler->filter('meta[property="og:description"]')->attr('content'));
         $this->assertSame('Research Articles published by eLife are full-length studies that present important breakthroughs across the life sciences and biomedicine. There is no maximum length and no limits on the number of display items.', $crawler->filter('meta[name="description"]')->attr('content'));
         $this->assertSame('summary_large_image', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
-        $this->assertEmpty($crawler->filter('meta[property="og:image"]'));
         $this->assertEmpty($crawler->filter('meta[name="dc.identifier"]'));
         $this->assertEmpty($crawler->filter('meta[name="dc.relation.ispartof"]'));
         $this->assertEmpty($crawler->filter('meta[name="dc.title"]'));

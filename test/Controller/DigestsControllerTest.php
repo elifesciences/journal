@@ -40,7 +40,6 @@ final class DigestsControllerTest extends PageTestCase
         $this->assertSame('Cutting jargon and putting research in context, digests showcase some of the latest articles published in eLife.', $crawler->filter('meta[property="og:description"]')->attr('content'));
         $this->assertSame('Cutting jargon and putting research in context, digests showcase some of the latest articles published in eLife.', $crawler->filter('meta[name="description"]')->attr('content'));
         $this->assertSame('summary_large_image', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
-        $this->assertEmpty($crawler->filter('meta[property="og:image"]'));
         $this->assertEmpty($crawler->filter('meta[name="dc.identifier"]'));
         $this->assertEmpty($crawler->filter('meta[name="dc.relation.ispartof"]'));
         $this->assertEmpty($crawler->filter('meta[name="dc.title"]'));

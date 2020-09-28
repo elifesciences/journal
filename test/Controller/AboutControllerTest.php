@@ -35,7 +35,6 @@ final class AboutControllerTest extends PageTestCase
         $this->assertSame('eLife is an initiative from research funders to transform research communication through improvements to science publishing, technology and research culture.', $crawler->filter('meta[property="og:description"]')->attr('content'));
         $this->assertSame('eLife is an initiative from research funders to transform research communication through improvements to science publishing, technology and research culture.', $crawler->filter('meta[name="description"]')->attr('content'));
         $this->assertSame('summary_large_image', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
-        $this->assertEmpty($crawler->filter('meta[property="og:image"]'));
         $this->assertEmpty($crawler->filter('meta[name="dc.identifier"]'));
         $this->assertEmpty($crawler->filter('meta[name="dc.relation.ispartof"]'));
         $this->assertEmpty($crawler->filter('meta[name="dc.title"]'));

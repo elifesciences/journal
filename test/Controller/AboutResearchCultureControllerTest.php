@@ -35,7 +35,6 @@ final class AboutResearchCultureControllerTest extends PageTestCase
         $this->assertSame('eLife recognises that reforming research communication depends on improving research culture.', $crawler->filter('meta[property="og:description"]')->attr('content'));
         $this->assertSame('eLife recognises that reforming research communication depends on improving research culture.', $crawler->filter('meta[name="description"]')->attr('content'));
         $this->assertSame('summary_large_image', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
-        $this->assertEmpty($crawler->filter('meta[property="og:image"]'));
         $this->assertEmpty($crawler->filter('meta[name="dc.identifier"]'));
         $this->assertEmpty($crawler->filter('meta[name="dc.relation.ispartof"]'));
         $this->assertEmpty($crawler->filter('meta[name="dc.title"]'));

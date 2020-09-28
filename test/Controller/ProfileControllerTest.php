@@ -206,7 +206,6 @@ final class ProfileControllerTest extends PageTestCase
         $this->assertSame('http://localhost/profiles/1', $crawler->filter('meta[property="og:url"]')->attr('content'));
         $this->assertSame('Preferred Name', $crawler->filter('meta[property="og:title"]')->attr('content'));
         $this->assertSame('summary_large_image', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
-        $this->assertEmpty($crawler->filter('meta[property="og:image"]'));
         $this->assertEmpty($crawler->filter('meta[name="dc.identifier"]'));
         $this->assertEmpty($crawler->filter('meta[name="dc.relation.ispartof"]'));
         $this->assertEmpty($crawler->filter('meta[name="dc.title"]'));
