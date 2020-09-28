@@ -92,6 +92,9 @@ final class ArticleFiguresControllerTest extends PageTestCase
         $this->assertSame('Figures and data in Article title', $crawler->filter('meta[property="og:title"]')->attr('content'));
         $this->assertSame('article', $crawler->filter('meta[property="og:type"]')->attr('content'));
         $this->assertSame('summary_large_image', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
+        $this->assertSame('http://localhost/'.ltrim(self::$kernel->getContainer()->get('elife.assets.packages')->getUrl('assets/images/social/icon-1200x630@1.png'), '/'), $crawler->filter('meta[property="og:image"]')->attr('content'));
+        $this->assertSame('1200', $crawler->filter('meta[property="og:image:width"]')->attr('content'));
+        $this->assertSame('630', $crawler->filter('meta[property="og:image:height"]')->attr('content'));
         $this->assertSame('doi:10.7554/eLife.00001', $crawler->filter('meta[name="dc.identifier"]')->attr('content'));
         $this->assertEmpty($crawler->filter('meta[name="dc.relation.ispartof"]'));
         $this->assertSame('Article title', $crawler->filter('meta[name="dc.title"]')->attr('content'));
@@ -149,6 +152,9 @@ final class ArticleFiguresControllerTest extends PageTestCase
         $this->assertSame('Figures and data in Article title', $crawler->filter('meta[property="og:title"]')->attr('content'));
         $this->assertSame('article', $crawler->filter('meta[property="og:type"]')->attr('content'));
         $this->assertSame('summary_large_image', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
+        $this->assertSame('http://localhost/'.ltrim(self::$kernel->getContainer()->get('elife.assets.packages')->getUrl('assets/images/social/icon-1200x630@1.png'), '/'), $crawler->filter('meta[property="og:image"]')->attr('content'));
+        $this->assertSame('1200', $crawler->filter('meta[property="og:image:width"]')->attr('content'));
+        $this->assertSame('630', $crawler->filter('meta[property="og:image:height"]')->attr('content'));
         $this->assertSame('doi:10.7554/eLife.00001', $crawler->filter('meta[name="dc.identifier"]')->attr('content'));
         $this->assertEmpty($crawler->filter('meta[name="dc.relation.ispartof"]'));
         $this->assertSame('Article title', $crawler->filter('meta[name="dc.title"]')->attr('content'));

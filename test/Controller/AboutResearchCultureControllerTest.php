@@ -35,6 +35,9 @@ final class AboutResearchCultureControllerTest extends PageTestCase
         $this->assertSame('eLife recognises that reforming research communication depends on improving research culture.', $crawler->filter('meta[property="og:description"]')->attr('content'));
         $this->assertSame('eLife recognises that reforming research communication depends on improving research culture.', $crawler->filter('meta[name="description"]')->attr('content'));
         $this->assertSame('summary_large_image', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
+        $this->assertSame('http://localhost/'.ltrim(self::$kernel->getContainer()->get('elife.assets.packages')->getUrl('assets/images/social/icon-1200x630@1.png'), '/'), $crawler->filter('meta[property="og:image"]')->attr('content'));
+        $this->assertSame('1200', $crawler->filter('meta[property="og:image:width"]')->attr('content'));
+        $this->assertSame('630', $crawler->filter('meta[property="og:image:height"]')->attr('content'));
         $this->assertEmpty($crawler->filter('meta[name="dc.identifier"]'));
         $this->assertEmpty($crawler->filter('meta[name="dc.relation.ispartof"]'));
         $this->assertEmpty($crawler->filter('meta[name="dc.title"]'));
