@@ -44,10 +44,10 @@ final class AlertsControllerTest extends PageTestCase
         $this->assertSame('Alerts', $crawler->filter('meta[property="og:title"]')->attr('content'));
         $this->assertSame('Stay in touch with eLife efforts to support the community and open science as well as new research. Choose your feeds and preferred ways to connect below.', $crawler->filter('meta[property="og:description"]')->attr('content'));
         $this->assertSame('Stay in touch with eLife efforts to support the community and open science as well as new research. Choose your feeds and preferred ways to connect below.', $crawler->filter('meta[name="description"]')->attr('content'));
-        $this->assertSame('summary_large_image', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
-        $this->assertSame('http://localhost/'.ltrim(self::$kernel->getContainer()->get('elife.assets.packages')->getUrl('assets/images/social/icon-1200x630@1.png'), '/'), $crawler->filter('meta[property="og:image"]')->attr('content'));
-        $this->assertSame('1200', $crawler->filter('meta[property="og:image:width"]')->attr('content'));
-        $this->assertSame('630', $crawler->filter('meta[property="og:image:height"]')->attr('content'));
+        $this->assertSame('summary', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
+        $this->assertSame('http://localhost/'.ltrim(self::$kernel->getContainer()->get('elife.assets.packages')->getUrl('assets/images/social/icon-600x600@1.png'), '/'), $crawler->filter('meta[property="og:image"]')->attr('content'));
+        $this->assertSame('600', $crawler->filter('meta[property="og:image:width"]')->attr('content'));
+        $this->assertSame('600', $crawler->filter('meta[property="og:image:height"]')->attr('content'));
         $this->assertEmpty($crawler->filter('meta[name="dc.identifier"]'));
         $this->assertEmpty($crawler->filter('meta[name="dc.relation.ispartof"]'));
         $this->assertEmpty($crawler->filter('meta[name="dc.title"]'));

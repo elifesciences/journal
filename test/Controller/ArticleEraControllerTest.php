@@ -54,10 +54,10 @@ final class ArticleEraControllerTest extends WebTestCase
         $this->assertSame('http://localhost/articles/id-of-article-with-era', $crawler->filter('meta[property="og:url"]')->attr('content'));
         $this->assertSame('Article title', $crawler->filter('meta[property="og:title"]')->attr('content'));
         $this->assertEmpty($crawler->filter('meta[property="og:type"]'));
-        $this->assertSame('summary_large_image', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
-        $this->assertSame('http://localhost/'.ltrim(self::$kernel->getContainer()->get('elife.assets.packages')->getUrl('assets/images/social/icon-1200x630@1.png'), '/'), $crawler->filter('meta[property="og:image"]')->attr('content'));
-        $this->assertSame('1200', $crawler->filter('meta[property="og:image:width"]')->attr('content'));
-        $this->assertSame('630', $crawler->filter('meta[property="og:image:height"]')->attr('content'));
+        $this->assertSame('summary', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
+        $this->assertSame('http://localhost/'.ltrim(self::$kernel->getContainer()->get('elife.assets.packages')->getUrl('assets/images/social/icon-600x600@1.png'), '/'), $crawler->filter('meta[property="og:image"]')->attr('content'));
+        $this->assertSame('600', $crawler->filter('meta[property="og:image:width"]')->attr('content'));
+        $this->assertSame('600', $crawler->filter('meta[property="og:image:height"]')->attr('content'));
         $this->assertSame('doi:10.7554/eLife.id-of-article-with-era', $crawler->filter('meta[name="dc.identifier"]')->attr('content'));
         $this->assertEmpty($crawler->filter('meta[name="dc.relation.ispartof"]'));
         $this->assertSame('Article title', $crawler->filter('meta[name="dc.title"]')->attr('content'));
