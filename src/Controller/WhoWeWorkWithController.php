@@ -181,12 +181,6 @@ final class WhoWeWorkWithController extends Controller
                 'name' => 'Jisc',
                 'filename' => 'jisc',
                 'type' => 'image/svg+xml',
-                'uri' => 'https://www.jisc.ac.uk/',
-            ],
-            [
-                'name' => 'Jisc publication router',
-                'filename' => 'jisc-pub-router',
-                'type' => 'image/svg+xml',
                 'uri' => 'https://pubrouter.jisc.ac.uk/',
             ],
             [
