@@ -29,7 +29,8 @@ final class IiifOpenGraphExtension extends Twig_Extension
             list($height, $width) = $this->determineSizes($image->getHeight(), $image->getWidth());
         }
 
-        return "<meta property=\"og:image\" content=\"{$this->iiifUri($image, $width, $height)}\">
+        return "<meta name=\"twitter:image\" content=\"{$this->iiifUri($image, $width, $height)}\">
+            <meta property=\"og:image\" content=\"{$this->iiifUri($image, $width, $height)}\">
             <meta property=\"og:image:width\" content=\"{$width}\">
             <meta property=\"og:image:height\" content=\"{$height}\">";
     }
