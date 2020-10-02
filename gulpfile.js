@@ -104,6 +104,37 @@ gulp.task('images:banners', ['images:clean'], () => {
         .pipe(gulp.dest('./build/assets/images/banners'));
 });
 
+gulp.task('images:social', ['images:clean'], () => {
+    return gulp.src('./assets/images/social/*.png')
+        .pipe(responsive({
+            '*': [1, 2].reduce((acc, scale) => {
+                const width = 600 * scale;
+                const height = 600 * scale;
+
+                acc.push({
+                    width: width,
+                    height: height,
+                    rename: {
+                        suffix: `-${width}x${height}@${scale}`,
+                    },
+                    withoutEnlargement: false,
+                });
+                acc.push({
+                    width: width,
+                    height: height,
+                    rename: {
+                        suffix: `-${width}x${height}@${scale}`,
+                        extname: '.webp',
+                    },
+                    withoutEnlargement: false,
+                });
+
+                return acc;
+        }, []),
+        }))
+        .pipe(gulp.dest('./build/assets/images/social'));
+});
+
 gulp.task('images:logos', ['images:clean'], () => {
     return gulp.src('./assets/images/logos/*.{png,svg}')
         .pipe(responsive({
@@ -178,7 +209,7 @@ gulp.task('images:svgs', ['images:clean'], () => {
         .pipe(gulp.dest('./build/assets/images'));
 });
 
-gulp.task('images', ['images:banners', 'images:logos', 'images:investors', 'images:svgs'], () => {
+gulp.task('images', ['images:banners', 'images:logos', 'images:social', 'images:investors', 'images:svgs'], () => {
     return gulp.src('./build/assets/images/**/*')
         .pipe(imageMin([
             imageMinMozjpeg({
