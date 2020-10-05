@@ -196,12 +196,6 @@ final class WhoWeWorkWithController extends Controller
                 'uri' => 'http://paperity.org/',
             ],
             [
-                'name' => 'PubMed',
-                'filename' => 'pmc-logo',
-                'type' => 'image/png',
-                'uri' => 'https://pubmed.ncbi.nlm.nih.gov/',
-            ],
-            [
                 'name' => 'PubMed Central',
                 'filename' => 'pmc',
                 'type' => 'image/png',
