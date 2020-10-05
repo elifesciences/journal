@@ -160,12 +160,6 @@ final class WhoWeWorkWithController extends Controller
                 'uri' => 'https://www.clockss.org/',
             ],
             [
-                'name' => 'CNKI',
-                'filename' => 'cnki',
-                'type' => 'image/png',
-                'uri' => 'https://www.cnki.net/',
-            ],
-            [
                 'name' => 'Europe PubMed Central',
                 'filename' => 'europe-pmc',
                 'type' => 'image/png',
@@ -200,12 +194,6 @@ final class WhoWeWorkWithController extends Controller
                 'filename' => 'paperity',
                 'type' => 'image/svg+xml',
                 'uri' => 'http://paperity.org/',
-            ],
-            [
-                'name' => 'PubMed',
-                'filename' => 'pmc-logo',
-                'type' => 'image/png',
-                'uri' => 'https://pubmed.ncbi.nlm.nih.gov/',
             ],
             [
                 'name' => 'PubMed Central',
