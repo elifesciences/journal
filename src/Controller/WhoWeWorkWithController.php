@@ -40,6 +40,12 @@ final class WhoWeWorkWithController extends Controller
                 'uri' => 'https://www.crossref.org/',
             ],
             [
+                'name' => 'Niso',
+                'filename' => 'niso-logo',
+                'type' => 'image/svg+xml',
+                'uri' => 'https://www.niso.org/',
+            ],
+            [
                 'name' => 'Open Access Scholarly Publishers Association',
                 'filename' => 'oaspa',
                 'type' => 'image/svg+xml',
@@ -115,12 +121,6 @@ final class WhoWeWorkWithController extends Controller
                 'uri' => 'https://hypothes.is/',
             ],
             [
-                'name' => 'JIRA',
-                'filename' => 'jira',
-                'type' => 'image/svg+xml',
-                'uri' => 'https://www.atlassian.com/software/jira',
-            ],
-            [
                 'name' => 'Loggly',
                 'filename' => 'loggly',
                 'type' => 'image/svg+xml',
@@ -134,7 +134,7 @@ final class WhoWeWorkWithController extends Controller
             ],
             [
                 'name' => 'New Relic',
-                'filename' => 'new-relic',
+                'filename' => 'new-relic-logo',
                 'type' => 'image/svg+xml',
                 'uri' => 'https://newrelic.com/',
             ],
@@ -175,7 +175,7 @@ final class WhoWeWorkWithController extends Controller
                 'name' => 'Jisc',
                 'filename' => 'jisc',
                 'type' => 'image/svg+xml',
-                'uri' => 'https://www.jisc.ac.uk/',
+                'uri' => 'https://pubrouter.jisc.ac.uk/',
             ],
             [
                 'name' => 'LOCKSS',
@@ -247,16 +247,16 @@ final class WhoWeWorkWithController extends Controller
                 'uri' => 'http://jats4r.org/',
             ],
             [
+                'name' => 'Review Commons',
+                'filename' => 'review-commons-logo',
+                'type' => 'image/svg+xml',
+                'uri' => 'https://www.reviewcommons.org/',
+            ],
+            [
                 'name' => 'Open Access Scholarly Publishers Association',
                 'filename' => 'oaspa',
                 'type' => 'image/svg+xml',
                 'uri' => 'https://oaspa.org/',
-            ],
-            [
-                'name' => 'Publons',
-                'filename' => 'publons',
-                'type' => 'image/svg+xml',
-                'uri' => 'https://publons.com/',
             ],
         ];
 
