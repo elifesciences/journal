@@ -18,7 +18,7 @@
         "beberlei/assert": "^2.8",
         "bobthecow/mustache-bundle": "^1.2",
         "cocur/slugify": "^3.0",
-        "csa/guzzle-bundle": "^2.2",
+        "csa/guzzle-bundle": "^3.2",
         "cweagans/composer-patches": "^1.6",
         "elife/api-client": "^1.0@dev",
         "elife/api-sdk": "dev-master",
