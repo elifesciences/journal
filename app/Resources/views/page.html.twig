@@ -128,7 +128,7 @@
             <meta name="twitter:card" content="summary_large_image">
             {{ iiif_og_image(item.banner) }}
         {% elseif item is defined and item.thumbnail is defined and item.thumbnail %}
-            <meta name="twitter:card" content="summary">
+            <meta name="twitter:card" content="summary_large_image">
             {{ iiif_og_image(item.thumbnail) }}
         {% elseif contentHeader is defined and contentHeader.image is defined %}
             <meta name="twitter:card" content="summary_large_image">
