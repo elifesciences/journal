@@ -123,7 +123,7 @@
 
         {% if item is defined and item.socialImage is defined and item.socialImage %}
             <meta name="twitter:card" content="summary">
-            {{ iiif_og_image(item.thumbnail) }}
+            {{ iiif_og_image(item.socialImage) }}
         {% elseif item is defined and item.banner is defined and item.banner %}
             <meta name="twitter:card" content="summary_large_image">
             {{ iiif_og_image(item.banner) }}
