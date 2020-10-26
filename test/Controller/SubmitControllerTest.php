@@ -12,21 +12,12 @@ use function GuzzleHttp\Psr7\parse_query;
  */
 final class SubmitControllerTest extends WebTestCase
 {
-    /**
-     * @before
-     */
-    public function enableFeatureFlag()
-    {
-        $_ENV['FEATURE_XPUB'] = true;
-    }
 
     /**
      * @test
      */
     public function it_does_not_redirect_if_the_feature_flag_is_disabled()
     {
-        $_ENV['FEATURE_XPUB'] = false;
-
         $client = static::createClient();
 
         $client->request('GET', '/submit');
@@ -66,7 +57,7 @@ final class SubmitControllerTest extends WebTestCase
 
         $this->assertSameUri('http://submit.elifesciences.org/path', $location->withFragment(''));
 
-        $jwt = (array) JWT::decode($location->getFragment(), $this->getParameter('xpub_client_secret'), ['HS256']);
+        $jwt = (array) JWT::decode($location->getFragment(), $this->getParameter('submission_client_secret'), ['HS256']);
 
         $this->assertTrue($jwt['new-session']);
     }
@@ -74,7 +65,7 @@ final class SubmitControllerTest extends WebTestCase
     /**
      * @test
      */
-    public function it_redirects_you_to_xpub_with_a_jwt()
+    public function it_redirects_you_to_submission_site_with_a_jwt()
     {
         $client = static::createClient();
         $this->logIn($client);
@@ -87,7 +78,7 @@ final class SubmitControllerTest extends WebTestCase
 
         $this->assertSameUri('http://submit.elifesciences.org/path', $location->withFragment(''));
 
-        $jwt = (array) JWT::decode($location->getFragment(), $this->getParameter('xpub_client_secret'), ['HS256']);
+        $jwt = (array) JWT::decode($location->getFragment(), $this->getParameter('submission_client_secret'), ['HS256']);
 
         $this->assertFalse($jwt['new-session']);
     }
@@ -108,7 +99,7 @@ final class SubmitControllerTest extends WebTestCase
 
         $this->assertSameUri('http://foo.elifesciences.org/path?query=arg', $location->withFragment(''));
 
-        $jwt = (array) JWT::decode($location->getFragment(), $this->getParameter('xpub_client_secret'), ['HS256']);
+        $jwt = (array) JWT::decode($location->getFragment(), $this->getParameter('submission_client_secret'), ['HS256']);
 
         $this->assertFalse($jwt['new-session']);
     }
@@ -131,7 +122,7 @@ final class SubmitControllerTest extends WebTestCase
         $this->assertSameUri('http://foo.elifesciences.org/path?query=arg', $locationWithoutToken->withFragment(''));
         $query = parse_query($location->getQuery());
 
-        $jwt = (array) JWT::decode($query['token'] ?? '', $this->getParameter('xpub_client_secret'), ['HS256']);
+        $jwt = (array) JWT::decode($query['token'] ?? '', $this->getParameter('submission_client_secret'), ['HS256']);
 
         $this->assertFalse($jwt['new-session']);
     }

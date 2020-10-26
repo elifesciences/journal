@@ -5,7 +5,7 @@ namespace eLife\Journal\Security;
 use Firebase\JWT\JWT;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-final class XpubTokenGenerator
+final class SubmissionTokenGenerator
 {
     const TOKEN_TTL = 60;
 
