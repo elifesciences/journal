@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b5e34979880acb5ef2678d0345c8d706",
+    "content-hash": "614e5e5cf6c6bf23daf3d9e6a19d5a21",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -1116,6 +1116,7 @@
                 "reflection",
                 "static"
             ],
+            "abandoned": "roave/better-reflection",
             "time": "2020-03-27T11:06:43+00:00"
         },
         {
@@ -1287,16 +1288,16 @@
         },
         {
             "name": "elife/patterns",
-            "version": "dev-image-attribution-addition",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/patterns-php.git",
-                "reference": "0fd89c285ba53cb274369ecf070bac1e393e2051"
+                "reference": "8374a4cda65447e2eb31f37245b63d42ea378393"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/0fd89c285ba53cb274369ecf070bac1e393e2051",
-                "reference": "0fd89c285ba53cb274369ecf070bac1e393e2051",
+                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/8374a4cda65447e2eb31f37245b63d42ea378393",
+                "reference": "8374a4cda65447e2eb31f37245b63d42ea378393",
                 "shasum": ""
             },
             "require": {
@@ -1337,9 +1338,9 @@
             ],
             "description": "eLife patterns",
             "support": {
-                "source": "https://github.com/elifesciences/patterns-php/tree/image-attribution-addition"
+                "source": "https://github.com/elifesciences/patterns-php/tree/master"
             },
-            "time": "2020-11-02T20:58:17+00:00"
+            "time": "2020-11-03T16:20:44+00:00"
         },
         {
             "name": "fabpot/goutte",

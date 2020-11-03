@@ -5,6 +5,7 @@ namespace eLife\Journal\ViewModel\Converter;
 use eLife\ApiSdk\Model\Collection;
 use eLife\ApiSdk\Model\Cover;
 use eLife\ApiSdk\Model\Subject;
+use eLife\Journal\ViewModel\Factory\CarouselItemImageFactory;
 use eLife\Journal\ViewModel\Factory\ContentHeaderImageFactory;
 use eLife\Patterns\ViewModel;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -14,12 +15,12 @@ final class CoverCollectionCarouselItemConverter implements ViewModelConverter
     use CreatesDate;
 
     private $urlGenerator;
-    private $contentHeaderImageFactory;
+    private $carouselItemImageFactory;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator, ContentHeaderImageFactory $contentHeaderImageFactory)
+    public function __construct(UrlGeneratorInterface $urlGenerator, CarouselItemImageFactory $carouselItemImageFactory)
     {
         $this->urlGenerator = $urlGenerator;
-        $this->contentHeaderImageFactory = $contentHeaderImageFactory;
+        $this->carouselItemImageFactory = $carouselItemImageFactory;
     }
 
     /**
@@ -37,7 +38,7 @@ final class CoverCollectionCarouselItemConverter implements ViewModelConverter
             new ViewModel\Link($object->getTitle(), $this->urlGenerator->generate('collection', [$collection])),
             'Read collection',
             ViewModel\Meta::withLink(new ViewModel\Link('Collection', $this->urlGenerator->generate('collections')), $this->simpleDate($collection, $context)),
-            $this->contentHeaderImageFactory->pictureForImage($object->getBanner())
+            $this->carouselItemImageFactory->forImage($object->getBanner())
         );
     }
 
