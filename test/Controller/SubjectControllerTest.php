@@ -43,6 +43,9 @@ final class SubjectControllerTest extends PageTestCase
         $this->assertSame('https://www.example.com/iiif/ban%2Fner/full/full/0/default.jpg', $crawler->filter('meta[property="og:image"]')->attr('content'));
         $this->assertSame('1800', $crawler->filter('meta[property="og:image:width"]')->attr('content'));
         $this->assertSame('1600', $crawler->filter('meta[property="og:image:height"]')->attr('content'));
+        $this->assertSame('application/rss+xml', $crawler->filter('link[rel="alternate"]')->attr('type'));
+        $this->assertSame('eLife Sciences Subject recent articles', $crawler->filter('link[rel="alternate"]')->attr('title'));
+        $this->assertSame('/rss/subject/subject.xml', $crawler->filter('link[rel="alternate"]')->attr('href'));
         $this->assertEmpty($crawler->filter('meta[name="dc.identifier"]'));
         $this->assertEmpty($crawler->filter('meta[name="dc.relation.ispartof"]'));
         $this->assertEmpty($crawler->filter('meta[name="dc.title"]'));

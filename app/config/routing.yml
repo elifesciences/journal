@@ -365,6 +365,9 @@ rss-ahead:
 rss-recent:
     path: /rss/recent.xml
 
+rss-recent-by-subject:
+    path: /rss/subject/{id}.xml
+
 search:
     path: /search
     defaults:
