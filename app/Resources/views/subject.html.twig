@@ -2,6 +2,14 @@
 
 {% extends '::page.html.twig' %}
 
+{% block meta %}
+
+    {{ parent() }}
+
+    <link rel="alternate" type="application/rss+xml" title="eLife Sciences {{ title|striptags }} RSS feed" href="{{ path('rss-recent-by-subject') }}?subject={{ id }}" />
+
+{% endblock %}
+
 {% block body %}
 
     {{ render_pattern(contentHeader) }}
