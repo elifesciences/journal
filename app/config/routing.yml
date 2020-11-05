@@ -366,7 +366,7 @@ rss-recent:
     path: /rss/recent.xml
 
 rss-recent-by-subject:
-    path: /rss/recent-{id}.xml
+    path: /rss/subject/{id}.xml
 
 search:
     path: /search

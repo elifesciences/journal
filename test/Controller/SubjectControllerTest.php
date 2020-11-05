@@ -45,7 +45,7 @@ final class SubjectControllerTest extends PageTestCase
         $this->assertSame('1600', $crawler->filter('meta[property="og:image:height"]')->attr('content'));
         $this->assertSame('application/rss+xml', $crawler->filter('link[rel="alternate"]')->attr('type'));
         $this->assertSame('eLife Sciences Subject recent articles', $crawler->filter('link[rel="alternate"]')->attr('title'));
-        $this->assertSame('/rss/recent-subject.xml', $crawler->filter('link[rel="alternate"]')->attr('href'));
+        $this->assertSame('/rss/subject/subject.xml', $crawler->filter('link[rel="alternate"]')->attr('href'));
         $this->assertEmpty($crawler->filter('meta[name="dc.identifier"]'));
         $this->assertEmpty($crawler->filter('meta[name="dc.relation.ispartof"]'));
         $this->assertEmpty($crawler->filter('meta[name="dc.title"]'));
