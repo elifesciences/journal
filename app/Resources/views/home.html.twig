@@ -2,6 +2,14 @@
 
 {% extends '::page.html.twig' %}
 
+{% block meta %}
+
+    {{ parent() }}
+
+    <link rel="alternate" type="application/rss+xml" title="Read the latest life sciences research from eLife Sciences" href="{{ path('rss-recent') }}" />
+
+{% endblock %}
+
 {% block body %}
 
     {% if carousel %}
