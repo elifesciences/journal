@@ -6,7 +6,7 @@ use eLife\ApiSdk\Model\ArticleVersion;
 use eLife\ApiSdk\Model\Cover;
 use eLife\ApiSdk\Model\Model;
 use eLife\Journal\ViewModel\Converter\CoverArticleCarouselItemConverter;
-use eLife\Journal\ViewModel\Factory\ContentHeaderImageFactory;
+use eLife\Journal\ViewModel\Factory\CarouselItemImageFactory;
 use eLife\Journal\ViewModel\Factory\PictureBuilderFactory;
 use eLife\Patterns\ViewModel\CarouselItem;
 use Symfony\Component\Asset\Packages;
@@ -31,7 +31,7 @@ final class CoverArticleCarouselItemConverterTest extends ModelConverterTestCase
 
         $this->converter = new CoverArticleCarouselItemConverter(
             $urlGenerator,
-            new ContentHeaderImageFactory(new PictureBuilderFactory(), new Packages())
+            new CarouselItemImageFactory(new PictureBuilderFactory(), new Packages())
         );
     }
 

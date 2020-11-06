@@ -365,6 +365,15 @@ rss-ahead:
 rss-recent:
     path: /rss/recent.xml
 
+rss-recent-by-subject:
+    path: /rss/subject/{id}.xml
+
+rss-digests:
+    path: /rss/digests.xml
+
+rss-labs:
+    path: /rss/labs.xml
+
 search:
     path: /search
     defaults:

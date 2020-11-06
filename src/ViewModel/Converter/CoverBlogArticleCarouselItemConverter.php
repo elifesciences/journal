@@ -5,7 +5,7 @@ namespace eLife\Journal\ViewModel\Converter;
 use eLife\ApiSdk\Model\BlogArticle;
 use eLife\ApiSdk\Model\Cover;
 use eLife\ApiSdk\Model\Subject;
-use eLife\Journal\ViewModel\Factory\ContentHeaderImageFactory;
+use eLife\Journal\ViewModel\Factory\CarouselItemImageFactory;
 use eLife\Patterns\ViewModel;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -14,12 +14,12 @@ final class CoverBlogArticleCarouselItemConverter implements ViewModelConverter
     use CreatesDate;
 
     private $urlGenerator;
-    private $contentHeaderImageFactory;
+    private $carouselItemImageFactory;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator, ContentHeaderImageFactory $contentHeaderImageFactory)
+    public function __construct(UrlGeneratorInterface $urlGenerator, CarouselItemImageFactory $carouselItemImageFactory)
     {
         $this->urlGenerator = $urlGenerator;
-        $this->contentHeaderImageFactory = $contentHeaderImageFactory;
+        $this->carouselItemImageFactory = $carouselItemImageFactory;
     }
 
     /**
@@ -40,7 +40,7 @@ final class CoverBlogArticleCarouselItemConverter implements ViewModelConverter
                 new ViewModel\Link('Inside eLife', $this->urlGenerator->generate('inside-elife')),
                 $this->simpleDate($blogArticle, $context)
             ),
-            $this->contentHeaderImageFactory->pictureForImage($object->getBanner())
+            $this->carouselItemImageFactory->forImage($object->getBanner())
         );
     }
 
