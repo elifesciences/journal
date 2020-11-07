@@ -11,7 +11,8 @@ use function GuzzleHttp\Psr7\parse_query;
  * @backupGlobals enabled
  */
 final class SubmitControllerTest extends WebTestCase
-{/**
+{
+    /**
      * @test
      */
     public function it_requires_you_to_be_logged_in()
