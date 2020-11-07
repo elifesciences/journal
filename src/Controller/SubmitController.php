@@ -15,15 +15,13 @@ final class SubmitController extends Controller
     {
         $user = $this->get('security.token_storage')->getToken()->getUser();
 
-        // if a return url is specified, check that its from a trusted host
-        $returnUrl = $request->query->get('return_url', null);
-
+        // check that return url is from a trusted host
         $allowedRedirects = $this->getParameter('submit_url_redirects');
         $isAllowed = false;
-        $uri = new Uri($returnUrl);
+        $returnUri = new Uri($request->query->get('return_url'));
 
         foreach ($allowedRedirects as $allowed) {
-            if (preg_match('/'.$allowed.'/', $uri->getHost())) {
+            if (preg_match('/'.$allowed.'/', $returnUri->getHost())) {
                 $isAllowed = true;
                 break;
             }
@@ -45,15 +43,10 @@ final class SubmitController extends Controller
             return $this->get('kernel')->handle($subRequest, KernelInterface::SUB_REQUEST);
         }
 
-        $jwt = $this->get('elife.journal.security.submission.token_generator')->generate($user, $request->getSession()->remove('journal.submit') ?? false);
-
-        // return in query arg if specified
-        $tokenInQueryArg = $request->query->get('token_in_query', false);
-
-        if ($tokenInQueryArg) {
-            $redirectUrl = Uri::withQueryValue(new Uri($returnUrl), 'token', $jwt);
-        }
-
-        return new RedirectResponse($redirectUrl);
+        return new RedirectResponse(Uri::withQueryValue(
+            $returnUri,
+            'token',
+            $this->get('elife.journal.security.submission.token_generator')->generate($user, $request->getSession()->remove('journal.submit'))
+        ));
     }
 }
