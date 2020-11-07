@@ -12,7 +12,6 @@ use function GuzzleHttp\Psr7\parse_query;
  */
 final class SubmitControllerTest extends WebTestCase
 {
-
     /**
      * @test
      */
