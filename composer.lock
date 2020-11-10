@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "614e5e5cf6c6bf23daf3d9e6a19d5a21",
+    "content-hash": "d5b3665a92ac0cd2db37c51044daab31",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -1288,16 +1288,16 @@
         },
         {
             "name": "elife/patterns",
-            "version": "dev-master",
+            "version": "dev-speech-bubble-redesign-extended",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/patterns-php.git",
-                "reference": "8374a4cda65447e2eb31f37245b63d42ea378393"
+                "reference": "5b132519dead5ffb6471d45add506ec16cedd913"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/8374a4cda65447e2eb31f37245b63d42ea378393",
-                "reference": "8374a4cda65447e2eb31f37245b63d42ea378393",
+                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/5b132519dead5ffb6471d45add506ec16cedd913",
+                "reference": "5b132519dead5ffb6471d45add506ec16cedd913",
                 "shasum": ""
             },
             "require": {
@@ -1338,9 +1338,9 @@
             ],
             "description": "eLife patterns",
             "support": {
-                "source": "https://github.com/elifesciences/patterns-php/tree/master"
+                "source": "https://github.com/elifesciences/patterns-php/tree/speech-bubble-redesign-extended"
             },
-            "time": "2020-11-03T16:20:44+00:00"
+            "time": "2020-11-10T06:05:33+00:00"
         },
         {
             "name": "fabpot/goutte",
