@@ -46,7 +46,7 @@ final class SubmitController extends Controller
         return new RedirectResponse(Uri::withQueryValue(
             $returnUri,
             'token',
-            $this->get('elife.journal.security.submission.token_generator')->generate($user, $request->getSession()->remove('journal.submit'))
+            $this->get('elife.journal.security.submission.token_generator')->generate($user, $request->getSession()->remove('journal.submit') ?? false)
         ));
     }
 }
