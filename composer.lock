@@ -1292,12 +1292,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/patterns-php.git",
-                "reference": "d71c41ba28b4e2c902bbb72d0fbb4f214c69dd8e"
+                "reference": "a0c984b0566c7aedfdad51761cd70d14a354b913"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/d71c41ba28b4e2c902bbb72d0fbb4f214c69dd8e",
-                "reference": "d71c41ba28b4e2c902bbb72d0fbb4f214c69dd8e",
+                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/a0c984b0566c7aedfdad51761cd70d14a354b913",
+                "reference": "a0c984b0566c7aedfdad51761cd70d14a354b913",
                 "shasum": ""
             },
             "require": {
@@ -1340,7 +1340,7 @@
             "support": {
                 "source": "https://github.com/elifesciences/patterns-php/tree/speech-bubble-redesign-extended"
             },
-            "time": "2020-11-13T08:08:21+00:00"
+            "time": "2020-11-13T12:34:31+00:00"
         },
         {
             "name": "fabpot/goutte",
