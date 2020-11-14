@@ -34,17 +34,18 @@ final class SubmitControllerTest extends WebTestCase
         $response = $client->getResponse();
 
         $this->assertTrue($response->isRedirect());
-        $this->assertSameUri('http://localhost/submit', $response->headers->get('Location'));
+        $this->assertSameUri('http://localhost/submit?return_url=http%3A%2F%2Ffoo.elifesciences.org%2Fpath', $response->headers->get('Location'));
 
         $client->followRedirect();
         $response = $client->getResponse();
 
         $this->assertTrue($response->isRedirect());
         $location = new Uri($response->headers->get('Location'));
+        $token = parse_query($location->getQuery())['token'];
 
-        $this->assertSameUri('http://foo.elifesciences.org/path', $location->withFragment(''));
+        $this->assertSameUri('http://foo.elifesciences.org/path', $location->withQuery(''));
 
-        $jwt = (array) JWT::decode($location->getFragment(), $this->getParameter('submission_client_secret'), ['HS256']);
+        $jwt = (array) JWT::decode($token, $this->getParameter('submission_client_secret'), ['HS256']);
 
         $this->assertTrue($jwt['new-session']);
     }
@@ -62,10 +63,13 @@ final class SubmitControllerTest extends WebTestCase
 
         $this->assertTrue($response->isRedirect());
         $location = new Uri($response->headers->get('Location'));
+        $query = parse_query($location->getQuery());
+        $token = $query['token'];
+        unset($query['token']);
 
-        $this->assertSameUri('http://foo.elifesciences.org/path?query=arg', $location->withFragment(''));
+        $this->assertSameUri('http://foo.elifesciences.org/path?query=arg', $location->withQuery(http_build_query($query)));
 
-        $jwt = (array) JWT::decode($location->getFragment(), $this->getParameter('submission_client_secret'), ['HS256']);
+        $jwt = (array) JWT::decode($token, $this->getParameter('submission_client_secret'), ['HS256']);
 
         $this->assertFalse($jwt['new-session']);
     }
