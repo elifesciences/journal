@@ -19,7 +19,7 @@ final class SubmitControllerTest extends WebTestCase
     {
         $client = static::createClient();
 
-        $client->request('GET', '/submit');
+        $client->request('GET', '/submit?return_url='.urlencode('http://foo.elifesciences.org/path'));
         $response = $client->getResponse();
 
         $this->assertTrue($response->isRedirect());
@@ -42,32 +42,11 @@ final class SubmitControllerTest extends WebTestCase
         $this->assertTrue($response->isRedirect());
         $location = new Uri($response->headers->get('Location'));
 
-        $this->assertSameUri('http://submit.elifesciences.org/path', $location->withFragment(''));
+        $this->assertSameUri('http://foo.elifesciences.org/path', $location->withFragment(''));
 
         $jwt = (array) JWT::decode($location->getFragment(), $this->getParameter('submission_client_secret'), ['HS256']);
 
         $this->assertTrue($jwt['new-session']);
-    }
-
-    /**
-     * @test
-     */
-    public function it_redirects_you_to_submission_site_with_a_jwt()
-    {
-        $client = static::createClient();
-        $this->logIn($client);
-
-        $client->request('GET', '/submit');
-        $response = $client->getResponse();
-
-        $this->assertTrue($response->isRedirect());
-        $location = new Uri($response->headers->get('Location'));
-
-        $this->assertSameUri('http://submit.elifesciences.org/path', $location->withFragment(''));
-
-        $jwt = (array) JWT::decode($location->getFragment(), $this->getParameter('submission_client_secret'), ['HS256']);
-
-        $this->assertFalse($jwt['new-session']);
     }
 
     /**
@@ -87,29 +66,6 @@ final class SubmitControllerTest extends WebTestCase
         $this->assertSameUri('http://foo.elifesciences.org/path?query=arg', $location->withFragment(''));
 
         $jwt = (array) JWT::decode($location->getFragment(), $this->getParameter('submission_client_secret'), ['HS256']);
-
-        $this->assertFalse($jwt['new-session']);
-    }
-
-    /**
-     * @test
-     */
-    public function it_redirects_you_to_a_trusted_url_with_a_jwt_in_query_argument()
-    {
-        $client = static::createClient();
-        $this->logIn($client);
-
-        $client->request('GET', '/submit?return_url='.urlencode('http://foo.elifesciences.org/path?query=arg').'&token_in_query=true');
-        $response = $client->getResponse();
-
-        $this->assertTrue($response->isRedirect());
-        $location = new Uri($response->headers->get('Location'));
-        $locationWithoutToken = Uri::withoutQueryValue($location, 'token');
-
-        $this->assertSameUri('http://foo.elifesciences.org/path?query=arg', $locationWithoutToken->withFragment(''));
-        $query = parse_query($location->getQuery());
-
-        $jwt = (array) JWT::decode($query['token'] ?? '', $this->getParameter('submission_client_secret'), ['HS256']);
 
         $this->assertFalse($jwt['new-session']);
     }
