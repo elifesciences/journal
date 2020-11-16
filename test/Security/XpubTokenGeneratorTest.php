@@ -2,13 +2,13 @@
 
 namespace test\eLife\Journal\Security;
 
-use eLife\Journal\Security\SubmissionTokenGenerator;
+use eLife\Journal\Security\XpubTokenGenerator;
 use Firebase\JWT\JWT;
 use PHPUnit\Framework\TestCase;
 use Symfony\Bridge\PhpUnit\ClockMock;
 use Symfony\Component\Security\Core\User\User;
 
-final class SubmissionTokenGeneratorTest extends TestCase
+final class XpubTokenGeneratorTest extends TestCase
 {
     /**
      * @test
@@ -20,7 +20,7 @@ final class SubmissionTokenGeneratorTest extends TestCase
 
         ClockMock::withClockMock($now);
 
-        $tokenGenerator = new SubmissionTokenGenerator('client_id', 'client_secret');
+        $tokenGenerator = new XpubTokenGenerator('client_id', 'client_secret');
 
         $token = $tokenGenerator->generate(new User('username', 'password'), true);
 
