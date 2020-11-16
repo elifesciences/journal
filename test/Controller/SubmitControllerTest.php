@@ -13,35 +13,13 @@ use function GuzzleHttp\Psr7\parse_query;
 final class SubmitControllerTest extends WebTestCase
 {
     /**
-     * @before
-     */
-    public function enableFeatureFlag()
-    {
-        $_ENV['FEATURE_XPUB'] = true;
-    }
-
-    /**
-     * @test
-     */
-    public function it_does_not_redirect_if_the_feature_flag_is_disabled()
-    {
-        $_ENV['FEATURE_XPUB'] = false;
-
-        $client = static::createClient();
-
-        $client->request('GET', '/submit');
-
-        $this->assertSame(404, $client->getResponse()->getStatusCode());
-    }
-
-    /**
      * @test
      */
     public function it_requires_you_to_be_logged_in()
     {
         $client = static::createClient();
 
-        $client->request('GET', '/submit');
+        $client->request('GET', '/submit?return_url='.urlencode('http://foo.elifesciences.org/path'));
         $response = $client->getResponse();
 
         $this->assertTrue($response->isRedirect());
@@ -56,40 +34,20 @@ final class SubmitControllerTest extends WebTestCase
         $response = $client->getResponse();
 
         $this->assertTrue($response->isRedirect());
-        $this->assertSameUri('http://localhost/submit', $response->headers->get('Location'));
+        $this->assertSameUri('http://localhost/submit?return_url=http%3A%2F%2Ffoo.elifesciences.org%2Fpath', $response->headers->get('Location'));
 
         $client->followRedirect();
         $response = $client->getResponse();
 
         $this->assertTrue($response->isRedirect());
         $location = new Uri($response->headers->get('Location'));
+        $token = parse_query($location->getQuery())['token'];
 
-        $this->assertSameUri('http://submit.elifesciences.org/path', $location->withFragment(''));
+        $this->assertSameUri('http://foo.elifesciences.org/path', $location->withQuery(''));
 
-        $jwt = (array) JWT::decode($location->getFragment(), $this->getParameter('xpub_client_secret'), ['HS256']);
+        $jwt = (array) JWT::decode($token, $this->getParameter('submission_client_secret'), ['HS256']);
 
         $this->assertTrue($jwt['new-session']);
-    }
-
-    /**
-     * @test
-     */
-    public function it_redirects_you_to_xpub_with_a_jwt()
-    {
-        $client = static::createClient();
-        $this->logIn($client);
-
-        $client->request('GET', '/submit');
-        $response = $client->getResponse();
-
-        $this->assertTrue($response->isRedirect());
-        $location = new Uri($response->headers->get('Location'));
-
-        $this->assertSameUri('http://submit.elifesciences.org/path', $location->withFragment(''));
-
-        $jwt = (array) JWT::decode($location->getFragment(), $this->getParameter('xpub_client_secret'), ['HS256']);
-
-        $this->assertFalse($jwt['new-session']);
     }
 
     /**
@@ -105,33 +63,13 @@ final class SubmitControllerTest extends WebTestCase
 
         $this->assertTrue($response->isRedirect());
         $location = new Uri($response->headers->get('Location'));
-
-        $this->assertSameUri('http://foo.elifesciences.org/path?query=arg', $location->withFragment(''));
-
-        $jwt = (array) JWT::decode($location->getFragment(), $this->getParameter('xpub_client_secret'), ['HS256']);
-
-        $this->assertFalse($jwt['new-session']);
-    }
-
-    /**
-     * @test
-     */
-    public function it_redirects_you_to_a_trusted_url_with_a_jwt_in_query_argument()
-    {
-        $client = static::createClient();
-        $this->logIn($client);
-
-        $client->request('GET', '/submit?return_url='.urlencode('http://foo.elifesciences.org/path?query=arg').'&token_in_query=true');
-        $response = $client->getResponse();
-
-        $this->assertTrue($response->isRedirect());
-        $location = new Uri($response->headers->get('Location'));
-        $locationWithoutToken = Uri::withoutQueryValue($location, 'token');
-
-        $this->assertSameUri('http://foo.elifesciences.org/path?query=arg', $locationWithoutToken->withFragment(''));
         $query = parse_query($location->getQuery());
+        $token = $query['token'];
+        unset($query['token']);
 
-        $jwt = (array) JWT::decode($query['token'] ?? '', $this->getParameter('xpub_client_secret'), ['HS256']);
+        $this->assertSameUri('http://foo.elifesciences.org/path?query=arg', $location->withQuery(http_build_query($query)));
+
+        $jwt = (array) JWT::decode($token, $this->getParameter('submission_client_secret'), ['HS256']);
 
         $this->assertFalse($jwt['new-session']);
     }
