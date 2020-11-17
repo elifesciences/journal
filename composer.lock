@@ -1236,12 +1236,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/patterns-php.git",
-                "reference": "e8c2e1e4a46d44b1ceea9cd7e34579c244e6f6d2"
+                "reference": "c413c6a892b481e6050da4eb94d21fa67c3ef085"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/e8c2e1e4a46d44b1ceea9cd7e34579c244e6f6d2",
-                "reference": "e8c2e1e4a46d44b1ceea9cd7e34579c244e6f6d2",
+                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/c413c6a892b481e6050da4eb94d21fa67c3ef085",
+                "reference": "c413c6a892b481e6050da4eb94d21fa67c3ef085",
                 "shasum": ""
             },
             "require": {
@@ -1284,7 +1284,7 @@
             "support": {
                 "source": "https://github.com/elifesciences/patterns-php/tree/master"
             },
-            "time": "2020-11-13T21:44:55+00:00"
+            "time": "2020-11-17T11:02:27+00:00"
         },
         {
             "name": "fabpot/goutte",
@@ -3278,12 +3278,12 @@
             "version": "v1.1.3",
             "source": {
                 "type": "git",
-                "url": "https://github.com/whiteoctober/WhiteOctoberPagerfantaBundle.git",
+                "url": "https://github.com/sampart/WhiteOctoberPagerfantaBundle.git",
                 "reference": "0e60ca50a0af5d002321f2e02aaed86cd677213f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/whiteoctober/WhiteOctoberPagerfantaBundle/zipball/0e60ca50a0af5d002321f2e02aaed86cd677213f",
+                "url": "https://api.github.com/repos/sampart/WhiteOctoberPagerfantaBundle/zipball/0e60ca50a0af5d002321f2e02aaed86cd677213f",
                 "reference": "0e60ca50a0af5d002321f2e02aaed86cd677213f",
                 "shasum": ""
             },
