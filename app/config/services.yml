@@ -312,11 +312,11 @@ services:
           - '%hypothesis_client_id%'
           - '%hypothesis_client_secret%'
 
-    elife.journal.security.xpub.token_generator:
-        class: eLife\Journal\Security\XpubTokenGenerator
+    elife.journal.security.submission.token_generator:
+        class: eLife\Journal\Security\SubmissionTokenGenerator
         arguments:
-          - '%xpub_client_id%'
-          - '%xpub_client_secret%'
+          - '%submission_client_id%'
+          - '%submission_client_secret%'
 
     elife.journal.security.authenticator.elife:
         class: eLife\Journal\Security\Authenticator\ElifeAuthenticator
@@ -325,15 +325,6 @@ services:
           - '@oauth2.registry'
           - '@router'
           - '@security.http_utils'
-
-    elife.journal.security.voter.feature.xpub:
-        class: eLife\Journal\Security\Voter\FixedVoter
-        public: false
-        arguments:
-          - FEATURE_XPUB
-          - '%feature_xpub%'
-        tags:
-          - name: security.voter
 
     elife.journal.templating.promise_aware:
         class: eLife\Journal\Templating\PromiseAwareEngine
