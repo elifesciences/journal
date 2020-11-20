@@ -69,7 +69,7 @@
                     {% if item.copyright is defined and item.copyright %}
                         <meta name="dc.rights" content="
                             {%- if item.copyright.holder -%}© {{ item.publishedDate|date('Y', 'UTC') }} {{ item.copyright.holder }}. {% endif -%}
-                            {{- item.copyright.statement|striptags -}}
+                            {{- item.copyright.statement|striptags -}} 
                         ">
                     {% else %}
                         <meta name="dc.rights"
@@ -204,6 +204,10 @@
         })(window, document, 'script', 'gtmDataLayer', '{{ gtm_id|raw }}');
         {% endif %}
     </script>
+
+    {% if optimize_id %}
+        <script src="https://www.googleoptimize.com/optimize.js?id={{ optimize_id|raw }}"></script>
+    {% endif %}
 
 {% endblock %}
 
