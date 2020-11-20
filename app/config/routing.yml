@@ -161,7 +161,7 @@ article:
         id: '[a-z0-9-]+'
 
 article-version-figures:
-    path: /articles/{id}v{version}/figures
+    path: /articles/{id}v{version}/figures#figures-and-data
     defaults:
          _controller: AppBundle:Articles:figures
     requirements:
@@ -169,7 +169,7 @@ article-version-figures:
         version: '[1-9][0-9]*'
 
 article-figures:
-    path: /articles/{id}/figures
+    path: /articles/{id}/figures#figures-and-data
     defaults:
          _controller: AppBundle:Articles:figures
     requirements:
