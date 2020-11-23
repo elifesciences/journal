@@ -66,6 +66,9 @@ final class MagazineControllerTest extends PageTestCase
         $this->assertSame('http://localhost/'.ltrim(self::$kernel->getContainer()->get('elife.assets.packages')->getUrl('assets/images/banners/magazine-1114x336@1.jpg'), '/'), $crawler->filter('meta[property="og:image"]')->attr('content'));
         $this->assertSame('1114', $crawler->filter('meta[property="og:image:width"]')->attr('content'));
         $this->assertSame('336', $crawler->filter('meta[property="og:image:height"]')->attr('content'));
+        $this->assertSame('application/rss+xml', $crawler->filter('link[rel="alternate"]')->attr('type'));
+        $this->assertSame('Insights into science from eLife', $crawler->filter('link[rel="alternate"]')->attr('title'));
+        $this->assertSame('/rss/magazine.xml', $crawler->filter('link[rel="alternate"]')->attr('href'));
         $this->assertEmpty($crawler->filter('meta[name="dc.identifier"]'));
         $this->assertEmpty($crawler->filter('meta[name="dc.relation.ispartof"]'));
         $this->assertEmpty($crawler->filter('meta[name="dc.title"]'));
