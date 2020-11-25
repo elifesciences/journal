@@ -43,12 +43,14 @@ final class IiifExtension extends Twig_Extension
     {
         if ($width > $height) {
             $min = min($width, self::MAX_SIZE);
+
             return [
                 $min,
                 (int) ($min * ($height / $width)),
             ];
         } else {
             $min = min($height, self::MAX_SIZE);
+
             return [
                 (int) ($min * ($width / $height)),
                 $min,
