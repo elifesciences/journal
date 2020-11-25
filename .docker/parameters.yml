@@ -16,7 +16,7 @@ parameters:
         - .*\.elifesciences.org$
     crm_url: https://crm.elifesciences.org/crm/civicrm/
     gtm_id: ~
-    optimize_id: OPT-KJGKNCT
+    google_optimize_id: ~
     cookie_consent: false
     trusted_hosts:
       - localhost

@@ -205,8 +205,8 @@
         {% endif %}
     </script>
 
-    {% if optimize_id %}
-        <script src="https://www.googleoptimize.com/optimize.js?id={{ optimize_id|raw }}"></script>
+    {% if google_optimize_id %}
+        <script src="https://www.googleoptimize.com/optimize.js?id={{ google_optimize_id|raw }}"></script>
     {% endif %}
 
 {% endblock %}
