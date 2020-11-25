@@ -69,7 +69,7 @@
                     {% if item.copyright is defined and item.copyright %}
                         <meta name="dc.rights" content="
                             {%- if item.copyright.holder -%}© {{ item.publishedDate|date('Y', 'UTC') }} {{ item.copyright.holder }}. {% endif -%}
-                            {{- item.copyright.statement|striptags -}} 
+                            {{- item.copyright.statement|striptags -}}
                         ">
                     {% else %}
                         <meta name="dc.rights"
