@@ -2,6 +2,8 @@
 
 namespace eLife\Journal\Controller;
 
+use eLife\ApiSdk\Collection\Sequence;
+use eLife\ApiSdk\Model\Subject;
 use eLife\Patterns\ViewModel\ArticleSection;
 use eLife\Patterns\ViewModel\ContentHeader;
 use eLife\Patterns\ViewModel\Listing;
@@ -30,7 +32,8 @@ final class AlertsController extends Controller
             )),
             ArticleSection::basic('Science in plain language', 2, $this->render(
                 Listing::unordered([
-                    '<a href="https://medium.com/feed/@eLife">Subscribe to the RSS feed for eLife Digests</a> on Medium.com',
+                    'Subscribe to the RSS feed for <a href="'.$this->get('router')->generate('rss-digests').'">eLife Digests</a>',
+                    'Subscribe to the RSS feed for <a href="'.$this->get('router')->generate('rss-magazine').'">eall the latest content from the eLife magazine</a>',
                 ], 'bullet')
             )),
             ArticleSection::basic('Community-building', 2, $this->render(
@@ -41,6 +44,7 @@ final class AlertsController extends Controller
             ArticleSection::basic('eLife&apos;s Innovation Initiative and technology news', 2, $this->render(
                 Listing::unordered([
                     'For the latest in eLife Labs, innovation, and new tools, <a href="https://crm.elifesciences.org/crm/node/8">sign up for our technology and innovation newsletter</a>',
+                    'Subscribe to the RSS feed for <a href="'.$this->get('router')->generate('rss-labs').'">all the open source technology innovation news</a> from eLife Sciences',
                 ], 'bullet')
             )),
             ArticleSection::basic('The latest from eLife', 2, $this->render(
@@ -48,8 +52,23 @@ final class AlertsController extends Controller
                     'Sign up to receive our <a href="https://crm.elifesciences.org/crm/elife-news">bi-monthly newsletter</a> for recent developments at eLife, new products and collaborations and changes to editorial policy.</a>',
                 ], 'bullet')
             )),
-            new Paragraph('eLife is also on <a href="https://www.linkedin.com/company/elife-sciences-publications-ltd">LinkedIn</a> and <a href="https://www.youtube.com/channel/UCNEHLtAc_JPI84xW8V4XWyw">YouTube</a>.'),
         ];
+
+        $this->get('elife.api_sdk.subjects')
+            ->reverse()
+            ->slice(1, 100)
+            ->map(function (Subject $subject) {
+                return 'Subscribe to the RSS feed for <a href="'.$this->get('router')->generate('rss-recent-by-subject', [$subject]).'">'.$subject->getName().'</a>';
+            })
+            ->then(function (Sequence $links) use (&$arguments) {
+                $arguments['body'][] = ArticleSection::basic('eLife&apos;s Subject specific RSS feeds', 2, $this->render(
+                    Listing::unordered($links->toArray(), 'bullet')
+                ));
+            })
+            ->otherwise($this->softFailure('Failed to load subjects list'))
+            ->wait();
+
+        $arguments['body'][] = new Paragraph('eLife is also on <a href="https://www.linkedin.com/company/elife-sciences-publications-ltd">LinkedIn</a> and <a href="https://www.youtube.com/channel/UCNEHLtAc_JPI84xW8V4XWyw">YouTube</a>.');
 
         return new Response($this->get('templating')->render('::alerts.html.twig', $arguments));
     }

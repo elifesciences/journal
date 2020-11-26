@@ -367,6 +367,8 @@ rss-recent:
 
 rss-recent-by-subject:
     path: /rss/subject/{id}.xml
+    requirements:
+        id: '[a-z0-9-]+'
 
 rss-digests:
     path: /rss/digests.xml
