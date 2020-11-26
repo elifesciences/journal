@@ -376,6 +376,9 @@ rss-digests:
 rss-labs:
     path: /rss/labs.xml
 
+rss-magazine:
+    path: /rss/magazine.xml
+
 search:
     path: /search
     defaults:

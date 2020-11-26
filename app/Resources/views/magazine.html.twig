@@ -2,6 +2,14 @@
 
 {% extends '::page.html.twig' %}
 
+{% block meta %}
+
+    {{ parent() }}
+
+    <link rel="alternate" type="application/rss+xml" title="Insights into science from eLife" href="{{ path('rss-magazine') }}" />
+
+{% endblock %}
+
 {% block body %}
 
     {{ render_pattern(contentHeader) }}
