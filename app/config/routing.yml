@@ -164,6 +164,7 @@ article-version-figures:
     path: /articles/{id}v{version}/figures
     defaults:
          _controller: AppBundle:Articles:figures
+         _fragment: figures-and-data
     requirements:
         id: '[a-z0-9-]+'
         version: '[1-9][0-9]*'
@@ -172,6 +173,7 @@ article-figures:
     path: /articles/{id}/figures
     defaults:
          _controller: AppBundle:Articles:figures
+         _fragment: figures-and-data
     requirements:
         id: '[a-z0-9-]+'
 
