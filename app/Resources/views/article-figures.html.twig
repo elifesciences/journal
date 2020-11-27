@@ -24,11 +24,15 @@
 
             {% fragment_link_rewrite textPath %}
 
-            {% for part in body %}
+            <div id="figures-and-data">
 
-                {{ render_pattern(part) }}
+                {% for part in body %}
 
-            {% endfor %}
+                    {{ render_pattern(part) }}
+
+                {% endfor %}
+
+            </div>
 
             {% end_fragment_link_rewrite %}
 
