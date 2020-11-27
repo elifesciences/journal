@@ -33,7 +33,7 @@ final class AlertsController extends Controller
             ArticleSection::basic('Science in plain language', 2, $this->render(
                 Listing::unordered([
                     'Subscribe to the RSS feed for <a href="'.$this->get('router')->generate('rss-digests').'">eLife Digests</a>',
-                    'Subscribe to the RSS feed for <a href="'.$this->get('router')->generate('rss-magazine').'">eall the latest content from the eLife magazine</a>',
+                    'Subscribe to the RSS feed for <a href="'.$this->get('router')->generate('rss-magazine').'">all the latest content from the eLife magazine</a>',
                 ], 'bullet')
             )),
             ArticleSection::basic('Community-building', 2, $this->render(
