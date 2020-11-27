@@ -2,6 +2,9 @@
 
 namespace test\eLife\Journal\Controller;
 
+use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Psr7\Response;
+
 final class AlertsControllerTest extends PageTestCase
 {
     /**
@@ -11,6 +14,56 @@ final class AlertsControllerTest extends PageTestCase
     {
         $client = static::createClient();
 
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/subjects?page=1&per-page=100&order=asc',
+                ['Accept' => 'application/vnd.elife.subject-list+json; version=1']
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.subject-list+json; version=1'],
+                json_encode([
+                    'total' => 1,
+                    'items' => [
+                        [
+                            'id' => 'subject',
+                            'name' => 'Subject name',
+                            'impactStatement' => 'Subject impact statement.',
+                            'image' => [
+                                'banner' => [
+                                    'uri' => 'https://www.example.com/iiif/image',
+                                    'alt' => '',
+                                    'source' => [
+                                        'mediaType' => 'image/jpeg',
+                                        'uri' => 'https://www.example.com/image.jpg',
+                                        'filename' => 'image.jpg',
+                                    ],
+                                    'size' => [
+                                        'width' => 800,
+                                        'height' => 600,
+                                    ],
+                                ],
+                                'thumbnail' => [
+                                    'uri' => 'https://www.example.com/iiif/image',
+                                    'alt' => '',
+                                    'source' => [
+                                        'mediaType' => 'image/jpeg',
+                                        'uri' => 'https://www.example.com/image.jpg',
+                                        'filename' => 'image.jpg',
+                                    ],
+                                    'size' => [
+                                        'width' => 800,
+                                        'height' => 600,
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ])
+            )
+        );
+
         $crawler = $client->request('GET', '/alerts');
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
@@ -18,13 +71,14 @@ final class AlertsControllerTest extends PageTestCase
 
         $majorSections = $crawler->filter('h2.article-section__header_text');
 
-        $this->assertCount(5, $majorSections);
+        $this->assertCount(6, $majorSections);
 
         $this->assertSame('New Research', trim($majorSections->eq(0)->text()));
         $this->assertSame('Science in plain language', trim($majorSections->eq(1)->text()));
         $this->assertSame('Community-building', trim($majorSections->eq(2)->text()));
         $this->assertSame('eLife\'s Innovation Initiative and technology news', trim($majorSections->eq(3)->text()));
         $this->assertSame('The latest from eLife', trim($majorSections->eq(4)->text()));
+        $this->assertSame('eLife\'s Subject specific RSS feeds', trim($majorSections->eq(5)->text()));
     }
 
     /**
