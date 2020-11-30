@@ -29,8 +29,8 @@ parameters:
     hypothesis_authority: some-authority
     hypothesis_client_id: some-id
     hypothesis_client_secret: ThisIsASecret
-    submission_client_id: some-id
-    submission_client_secret: ThisIsASecret
+    xpub_client_id: some-id
+    xpub_client_secret: ThisIsASecret
     subject_rewrites: []
     era_articles:
         '30274':
@@ -48,6 +48,7 @@ parameters:
             article_ids:
               - '26231'
     cache_control: private, no-cache, no-store, must-revalidate
+    feature_xpub: true
     calls_to_action:
       - id: something-important
         path: ^(/$|/for-the-press)
