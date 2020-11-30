@@ -52,30 +52,6 @@ final class SubmitControllerTest extends WebTestCase
 
     /**
      * @test
-     */
-    public function it_redirects_you_to_a_trusted_url_with_a_jwt()
-    {
-        $client = static::createClient();
-        $this->logIn($client);
-
-        $client->request('GET', '/submit?return_url='.urlencode('http://foo.elifesciences.org/path?query=arg'));
-        $response = $client->getResponse();
-
-        $this->assertTrue($response->isRedirect());
-        $location = new Uri($response->headers->get('Location'));
-        $query = parse_query($location->getQuery());
-        $token = $query['token'];
-        unset($query['token']);
-
-        $this->assertSameUri('http://foo.elifesciences.org/path?query=arg', $location->withQuery(http_build_query($query)));
-
-        $jwt = (array) JWT::decode($token, $this->getParameter('submission_client_secret'), ['HS256']);
-
-        $this->assertFalse($jwt['new-session']);
-    }
-
-    /**
-     * @test
      * @dataProvider invalidDomainProvider
      */
     public function it_does_not_redirect_if_return_url_is_not_trusted_with_invalid_domain($domain)
