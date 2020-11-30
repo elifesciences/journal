@@ -123,18 +123,19 @@ final class AboutController extends Controller
             'eLife aims to improve the speed, visibility and usefulness of peer review.');
 
         $arguments['body'] = [
-            new Paragraph('eLife works to improve the process of peer review so that it more effectively conveys the assessment of expert reviewers to authors, readers and other interested parties. This ambition is reflected in the transparency of our current process, where anyone can read the peer review reports and editors\' assessment for all published eLife papers. In the future we envision a system in which the outputs of peer review are the primary way research is assessed, rather than journal title.'),
-            new Paragraph('The main features of the current eLife peer-review process are:'),
+            new Paragraph('eLife works to improve the process of peer review so that it more effectively conveys the assessment of expert reviewers to authors, readers and other interested parties. In the future we envision a system in which the outputs of peer review are the primary way research is assessed, rather than journal title.'),
+            new Paragraph('Our editorial process produces two outputs: i) public reviews designed to be posted alongside a preprint for the benefit of the community; ii) detailed feedback on the manuscript for the authors, including requests for revisions and suggestions for improvement. To learn more, please see “<a href="https://elifesciences.org/articles/64910">Peer Review: eLife implementing "Publish, then Review" model of publishing</a>”.'),
+            new Paragrach('Other features of the eLife peer-review process are:'),
             Listing::unordered([
                 'all decisions are made by editors who are active researchers in the life and biomedical sciences.',
                 'we do not artificially limit the number of articles we publish or have a set acceptance rate.',
-                'editors and reviewers discuss their reviews with each other before reaching a decision on a manuscript; extra experiments are only requested if they are essential and can be completed within about two months.',
-                'the decision letter sent to the author after peer review, and the authors\' response to this letter, are published with accepted manuscripts.',
+                'editors and reviewers discuss their reviews with each other before reaching a decision on a manuscript; extra experiments are only requested if they are essential and can be reasonably completed within about two months.',
+                'the public reviews, revision recommendations, and author responses are published with accepted manuscripts.',
             ], 'bullet'),
-            new Paragraph('The overall aim is to make peer review faster (by reducing rounds of revision and only requesting extra experiments when they are essential), fairer and more open. <a href="'.$this->get('router')->generate('article', ['id' => '00855']).'">eLife does not support the Impact Factor</a> and is a co-founder of the <a href="https://sfdora.org/">Declaration on Research Assessment (DORA)</a>. Regularly updated metrics relating to the eLife editorial process are available in our <a href="https://reviewer.elifesciences.org/author-guide/journal-metrics">Author Guide</a>.'),
+            new Paragraph('The overall aim is to make peer review faster, fairer and more open. <a href="https://elifesciences.org/articles/00855">eLife does not support the Impact Factor</a> and is a co-founder of the <a href="https://sfdora.org/">Declaration on Research Assessment (DORA)</a>. Regularly updated metrics relating to the eLife editorial process are available in our <a href="https://reviewer.elifesciences.org/author-guide/journal-metrics">Author Guide</a>.'),
             ArticleSection::basic('Related links', 2,
                 $this->render(Listing::unordered([
-                    '<a href="'.$this->get('router')->generate('inside-elife-article', ['id' => 'e9091cea']).'">Peer Review: New initiatives to enhance the value of eLife’s process</a> (Michael Eisen, eLife Editor-in-Chief, November 2019)',
+                    '<a href="'.$this->get('router')->generate('inside-elife-article', ['id' => 'e9091cea']).'">Peer Review: New initiatives to enhance the value of eLife’s process (Michael Eisen, eLife Editor-in-Chief, November 2019)',
                     '<a href="https://reviewer.elifesciences.org/author-guide/editorial-process">Author Guide</a>',
                     '<a href="https://www.youtube.com/watch?v=quCG17jZW-w">eLife: Changing the review process</a> (video, February 2014)',
                 ], 'bullet'))
