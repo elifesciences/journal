@@ -2,10 +2,7 @@
 
 namespace test\eLife\Journal\Controller;
 
-use Firebase\JWT\JWT;
-use GuzzleHttp\Psr7\Uri;
 use test\eLife\Journal\WebTestCase;
-use function GuzzleHttp\Psr7\parse_query;
 
 /**
  * @backupGlobals enabled
