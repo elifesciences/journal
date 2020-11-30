@@ -132,7 +132,7 @@ final class AboutController extends Controller
                 'editors and reviewers discuss their reviews with each other before reaching a decision on a manuscript; extra experiments are only requested if they are essential and can be reasonably completed within about two months.',
                 'the public reviews, revision recommendations, and author responses are published with accepted manuscripts.',
             ], 'bullet'),
-            new Paragraph('The overall aim is to make peer review faster, fairer and more open. <a href="https://elifesciences.org/articles/00855">eLife does not support the Impact Factor</a> and is a co-founder of the <a href="https://sfdora.org/">Declaration on Research Assessment (DORA)</a>. Regularly updated metrics relating to the eLife editorial process are available in our <a href="https://reviewer.elifesciences.org/author-guide/journal-metrics">Author Guide</a>.'),
+            new Paragraph('The overall aim is to make peer review faster, fairer and more open. <a href="'.$this->get('router')->generate('article', ['id' => '00855']).'">eLife does not support the Impact Factor</a> and is a co-founder of the <a href="https://sfdora.org/">Declaration on Research Assessment (DORA)</a>. Regularly updated metrics relating to the eLife editorial process are available in our <a href="https://reviewer.elifesciences.org/author-guide/journal-metrics">Author Guide</a>.'),
             ArticleSection::basic('Related links', 2,
                 $this->render(Listing::unordered([
                     '<a href="'.$this->get('router')->generate('inside-elife-article', ['id' => 'e9091cea']).'">Peer Review: New initiatives to enhance the value of eLife’s process (Michael Eisen, eLife Editor-in-Chief, November 2019)',
