@@ -53,6 +53,8 @@ final class SiteHeaderFactoryTest extends KernelTestCase
      */
     public function it_links_directly_to_the_submit_site_when_the_feature_flag_is_enabled_and_you_are_not_logged_in()
     {
+        $_ENV['FEATURE_XPUB'] = true;
+
         // Required to enable the authorization checker
         $tokenStorage = static::$kernel->getContainer()->get('security.token_storage');
         $tokenStorage->setToken(new AnonymousToken('secret', 'anon.'));
@@ -71,6 +73,8 @@ final class SiteHeaderFactoryTest extends KernelTestCase
      */
     public function it_links_to_the_submit_route_when_the_feature_flag_is_enabled_and_you_are_logged_in()
     {
+        $_ENV['FEATURE_XPUB'] = true;
+
         // Required to enable the authorization checker
         $tokenStorage = static::$kernel->getContainer()->get('security.token_storage');
         $tokenStorage->setToken(new RememberMeToken(new User('username', 'password'), 'key', 'secret'));
