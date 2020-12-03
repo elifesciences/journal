@@ -161,8 +161,8 @@ final class WhoWeWorkWithController extends Controller
             ],
             [
                 'name' => 'Europe PubMed Central',
-                'filename' => 'pubmed',
-                'type' => 'image/svg+xml',
+                'filename' => 'europe-pmc',
+                'type' => 'image/png',
                 'uri' => 'https://europepmc.org/',
             ],
             [
@@ -200,6 +200,12 @@ final class WhoWeWorkWithController extends Controller
                 'filename' => 'pmc',
                 'type' => 'image/svg+xml',
                 'uri' => 'https://www.ncbi.nlm.nih.gov/pmc/',
+            ],
+            [
+                'name' => 'PubMed',
+                'filename' => 'pubmed',
+                'type' => 'image/svg+xml',
+                'uri' => 'https://pubmed.ncbi.nlm.nih.gov/',
             ],
             [
                 'name' => 'SHARE',
