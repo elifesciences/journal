@@ -1,18 +1,11 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 171 60" width="171" height="60">
-	<style>
-		tspan { white-space:pre }
-		.shp0 { fill: none;stroke: #e0dfe0 } 
-		.txt1 { font-size: 22px;fill: #353535;font-weight: 700;font-family: "NotoSans-Bold", "Noto Sans" } 
-	</style>
-	<g id="Page-1">
-		<path id="Rectangle" class="shp0" d="M-39.5 -32.5L210.5 -32.5L210.5 124.5L-39.5 124.5L-39.5 -32.5Z" />
-		<g id="Jisc-Publication-Rou">
-			<text id="Jisc Publication " style="transform: matrix(1,0,0,1,2.237,22)" >
-				<tspan x="0" y="0" class="txt1">Jisc Publication </tspan>
-			</text>
-			<text id="Router " style="transform: matrix(1,0,0,1,47.929,54)" >
-				<tspan x="0" y="0" class="txt1">Router </tspan>
-			</text>
-		</g>
-	</g>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="171px" height="110px" viewBox="0 0 171 110" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>jisc</title>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="Rectangle" stroke="#E0DFE0" x="-39.5" y="-23.5" width="250" height="157"></rect>
+        <text id="Jisc-Publication-Rou" font-family="NotoSans-Bold, Noto Sans" font-size="22" font-weight="bold" line-spacing="32" fill="#353535">
+            <tspan x="2.23730469" y="31">Jisc Publication </tspan>
+            <tspan x="47.9291992" y="63">Router </tspan>
+        </text>
+    </g>
 </svg>
