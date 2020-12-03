@@ -174,7 +174,7 @@ final class WhoWeWorkWithController extends Controller
             [
                 'name' => 'Jisc',
                 'filename' => 'jisc',
-                'type' => 'image/png',
+                'type' => 'image/svg+xml',
                 'uri' => 'https://pubrouter.jisc.ac.uk/',
             ],
             [
