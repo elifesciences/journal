@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="171px" height="110px" viewBox="0 0 171 110" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>PubMed</title>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="Rectangle" stroke="#E0DFE0" x="-39.5" y="-23.5" width="250" height="157"></rect>
+        <text id="PubMed" font-family="NotoSans-Bold, Noto Sans" font-size="34" font-weight="bold" fill="#212121">
+            <tspan x="16.0639648" y="42">PubMed</tspan>
+        </text>
+    </g>
+</svg>
