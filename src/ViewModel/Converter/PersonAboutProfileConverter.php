@@ -51,7 +51,7 @@ final class PersonAboutProfileConverter implements ViewModelConverter
         }
 
         if ($object->getThumbnail()) {
-            $image = $this->viewModelConverter->convert($object->getThumbnail(), null, ['width' => 251, 'height' => 142]);
+            $image = $this->viewModelConverter->convert($object->getThumbnail(), null, ['width' => 400, 'height' => 224]);
         } else {
             $image = null;
         }
