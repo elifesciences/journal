@@ -198,8 +198,14 @@ final class WhoWeWorkWithController extends Controller
             [
                 'name' => 'PubMed Central',
                 'filename' => 'pmc',
-                'type' => 'image/png',
+                'type' => 'image/svg+xml',
                 'uri' => 'https://www.ncbi.nlm.nih.gov/pmc/',
+            ],
+            [
+                'name' => 'PubMed',
+                'filename' => 'pubmed',
+                'type' => 'image/svg+xml',
+                'uri' => 'https://pubmed.ncbi.nlm.nih.gov/',
             ],
             [
                 'name' => 'SHARE',
