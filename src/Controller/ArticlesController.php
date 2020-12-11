@@ -155,6 +155,8 @@ final class ArticlesController extends Controller
                             break;
                         }
                     }
+                } else {
+                    $related = true;
                 }
 
                 $item = $this->convertTo($relatedItem, ViewModel\Teaser::class, ['variant' => 'relatedItem', 'from' => $item->getType(), 'related' => $related ?? false]);
