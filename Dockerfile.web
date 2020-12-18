@@ -3,4 +3,5 @@ FROM elifesciences/journal:${image_tag} AS app
 FROM nginx:1.13.12-alpine
 
 COPY .docker/nginx-default.conf /etc/nginx/conf.d/default.conf
+COPY .docker/sitemap.xml /srv/journal/sitemap/
 COPY --from=app /srv/journal/web/ /srv/journal/web/
