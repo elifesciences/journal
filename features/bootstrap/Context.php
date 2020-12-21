@@ -76,7 +76,7 @@ abstract class Context extends RawMinkContext implements KernelAwareContext
      */
     final public function checkEmailsHandled()
     {
-        if (count($this->emails) > 1) {
+        if (count($this->emails) > 0) {
             throw new RuntimeException('('.count($this->emails).') email remains in the stack');
         }
     }
