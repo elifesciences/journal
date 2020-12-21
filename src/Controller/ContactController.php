@@ -31,7 +31,7 @@ final class ContactController extends Controller
             $this->get('session')
                 ->getFlashBag()
                 ->add(InfoBar::TYPE_SUCCESS,
-                    'Thanks '.$form->get('name')->getData().', we have received your question.');
+                    'Thank you for your question. We will respond as soon as we can.');
 
             $response = implode("\n\n", array_map(function (FormInterface $child) {
                 $label = ($child->getConfig()->getOption('label') ?? Humanizer::humanize($child->getName()));
@@ -40,14 +40,6 @@ final class ContactController extends Controller
             }, array_filter(iterator_to_array($form), function (FormInterface $child) {
                 return !in_array($child->getConfig()->getType()->getBlockPrefix(), ['submit']);
             })));
-
-            $message1 = (new Swift_Message())
-                ->setSubject('Question to eLife')
-                ->setFrom('do_not_reply@elifesciences.org')
-                ->setTo($form->get('email')->getData(), $form->get('name')->getData())
-                ->setBody('Thanks for your question. We will respond as soon as we can.
-
-eLife Sciences Publications, Ltd is a limited liability non-profit non-stock corporation incorporated in the State of Delaware, USA, with company number 5030732, and is registered in the UK with company number FC030576 and branch number BR015634 at the address Westbrook Centre, Milton Road, Cambridge CB4 1YG.');
 
             switch ($form->get('subject')->getData()) {
                 case 'Author query':
@@ -60,7 +52,7 @@ eLife Sciences Publications, Ltd is a limited liability non-profit non-stock cor
                     $emailAddress = 'site-feedback@elifesciences.org';
             }
 
-            $message2 = (new Swift_Message())
+            $message = (new Swift_Message())
                 ->setSubject('Question submitted: '.$form->get('subject')->getData())
                 ->setFrom('do_not_reply@elifesciences.org')
                 ->setTo($emailAddress)
@@ -68,8 +60,7 @@ eLife Sciences Publications, Ltd is a limited liability non-profit non-stock cor
 
 '.$response);
 
-            $this->get('mailer')->send($message1);
-            $this->get('mailer')->send($message2);
+            $this->get('mailer')->send($message);
         });
 
         $arguments['form'] = $this->get('elife.journal.view_model.converter')->convert($form->createView());
