@@ -53,7 +53,7 @@ final class ContactContext extends Context
     }
 
     /**
-     * @Then /^the completed form should be sent to (.+)$/
+     * @Then /^the completed form will be sent to (.+)$/
      */
     public function theCompletedFormShouldBeSent($emailAddress)
     {
