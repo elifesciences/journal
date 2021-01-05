@@ -17,7 +17,7 @@ trait CreatesAssetViewerInline
         $assetViewModel = $this->createCaptionedAsset($assetViewModel, $asset->getAsset(), $this->createDoi($asset));
 
         $additionalAssets = $asset->getSourceData()->map(function (AssetFile $sourceData) {
-          return $this->getViewModelConverter()->convert($sourceData);
+            return $this->getViewModelConverter()->convert($sourceData);
         })->toArray();
 
         if (!empty($context['parentId']) && !empty($context['ordinal'])) {
