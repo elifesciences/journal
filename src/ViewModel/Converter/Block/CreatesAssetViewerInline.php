@@ -25,7 +25,7 @@ trait CreatesAssetViewerInline
         }
 
         if (empty($context['complete']) && !empty($context['figuresUri'])) {
-            $seeAllLink = $context['figuresUri'].'#'.$asset->getAsset()->getId();
+            $seeAllLink = explode('#', $context['figuresUri'])[0].'#'.$asset->getAsset()->getId();
         } else {
             $seeAllLink = null;
         }
