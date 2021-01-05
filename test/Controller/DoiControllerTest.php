@@ -81,7 +81,7 @@ final class DoiControllerTest extends WebTestCase
         return $this->arrayProvider([
             '10.7554/eLife.00001.001' => '/articles/00001#abstract',
             '10.7554/eLife.00001.002' => '/articles/00001#image1',
-            '10.7554/eLife.00001.003' => '/articles/00001/figures#image1-sd1',
+            '10.7554/eLife.00001.003' => '/articles/00001#image1-sd1',
             '10.7554/eLife.00001.004' => '/articles/00001/figures#image1s1',
             '10.7554/eLife.00001.005' => '/articles/00001/figures#image1s1-sd1',
         ]);
