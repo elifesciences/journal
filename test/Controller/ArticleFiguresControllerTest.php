@@ -28,7 +28,7 @@ final class ArticleFiguresControllerTest extends PageTestCase
 
         $this->assertSame('4 figures, 1 video, 1 table, 2 data sets and 1 additional file', trim($crawler->filter('.message-bar')->text()));
 
-        $figureTypes = $crawler->filter('.grid-column #figures-and-data > section');
+        $figureTypes = $crawler->filter('.grid-column > section');
         $this->assertCount(6, $figureTypes);
 
         $this->assertSame('Figures', $figureTypes->eq(0)->filter('.article-section__header_text')->text());
@@ -87,8 +87,8 @@ final class ArticleFiguresControllerTest extends PageTestCase
         $this->assertSame(200, $client->getResponse()->getStatusCode());
 
         $this->assertSame('Figures and data in Article title | eLife', $crawler->filter('title')->text());
-        $this->assertSame('/articles/00001/figures#figures-and-data', $crawler->filter('link[rel="canonical"]')->attr('href'));
-        $this->assertSame('http://localhost/articles/00001/figures#figures-and-data', $crawler->filter('meta[property="og:url"]')->attr('content'));
+        $this->assertSame('/articles/00001/figures', $crawler->filter('link[rel="canonical"]')->attr('href'));
+        $this->assertSame('http://localhost/articles/00001/figures', $crawler->filter('meta[property="og:url"]')->attr('content'));
         $this->assertSame('Figures and data in Article title', $crawler->filter('meta[property="og:title"]')->attr('content'));
         $this->assertSame('article', $crawler->filter('meta[property="og:type"]')->attr('content'));
         $this->assertSame('summary', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
@@ -124,7 +124,7 @@ final class ArticleFiguresControllerTest extends PageTestCase
 
         $this->assertSame('1 additional file', trim($crawler->filter('.message-bar')->text()));
 
-        $figureTypes = $crawler->filter('.grid-column #figures-and-data > section');
+        $figureTypes = $crawler->filter('.grid-column > section');
         $this->assertCount(2, $figureTypes);
 
         $this->assertSame('Additional files', $figureTypes->eq(0)->filter('.article-section__header_text')->text());
@@ -148,8 +148,8 @@ final class ArticleFiguresControllerTest extends PageTestCase
         $this->assertSame(200, $client->getResponse()->getStatusCode());
 
         $this->assertSame('Figures and data in Article title | eLife', $crawler->filter('title')->text());
-        $this->assertSame('/articles/00001/figures#figures-and-data', $crawler->filter('link[rel="canonical"]')->attr('href'));
-        $this->assertSame('http://localhost/articles/00001/figures#figures-and-data', $crawler->filter('meta[property="og:url"]')->attr('content'));
+        $this->assertSame('/articles/00001/figures', $crawler->filter('link[rel="canonical"]')->attr('href'));
+        $this->assertSame('http://localhost/articles/00001/figures', $crawler->filter('meta[property="og:url"]')->attr('content'));
         $this->assertSame('Figures and data in Article title', $crawler->filter('meta[property="og:title"]')->attr('content'));
         $this->assertSame('article', $crawler->filter('meta[property="og:type"]')->attr('content'));
         $this->assertSame('summary', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
