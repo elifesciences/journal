@@ -16,20 +16,16 @@ trait CreatesAssetViewerInline
     {
         $assetViewModel = $this->createCaptionedAsset($assetViewModel, $asset->getAsset(), $this->createDoi($asset));
 
-        if (!empty($context['complete'])) {
-            $additionalAssets = $asset->getSourceData()->map(function (AssetFile $sourceData) {
-                return $this->getViewModelConverter()->convert($sourceData);
-            })->toArray();
-        } else {
-            $additionalAssets = [];
-        }
+        $additionalAssets = $asset->getSourceData()->map(function (AssetFile $sourceData) {
+            return $this->getViewModelConverter()->convert($sourceData);
+        })->toArray();
 
         if (!empty($context['parentId']) && !empty($context['ordinal'])) {
             return ViewModel\AssetViewerInline::supplement($asset->getAsset()->getId(), $context['ordinal'], $context['parentId'], $asset->getLabel(), $assetViewModel, $additionalAssets, $download, $open);
         }
 
         if (empty($context['complete']) && !empty($context['figuresUri'])) {
-            $seeAllLink = $context['figuresUri'].'#'.$asset->getAsset()->getId();
+            $seeAllLink = explode('#', $context['figuresUri'])[0].'#'.$asset->getAsset()->getId();
         } else {
             $seeAllLink = null;
         }
