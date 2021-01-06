@@ -2166,6 +2166,7 @@ final class ArticleControllerTest extends PageTestCase
 
         $this->assertSame('Body text', $body->eq(0)->text());
         $this->assertSame('Image 1 label with 1 supplement see all', trim($body->eq(1)->filter('.asset-viewer-inline__header_text')->text()));
+        $this->assertSame('/articles/00001/figures#image1', $body->eq(1)->filter('.asset-viewer-inline__header_link')->attr('href'));
 
         $appendix = $crawler->filter('.grid-column > section:nth-of-type(4)');
         $this->assertSame('Appendix 1', $appendix->filter('header > h2')->text());
