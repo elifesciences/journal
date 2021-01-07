@@ -1870,7 +1870,7 @@ final class ArticleControllerTest extends PageTestCase
                             'content' => [
                                 [
                                     'type' => 'paragraph',
-                                    'text' => 'Body text',
+                                    'text' => 'Body text <a href="#image1s1">Image 1 supplement 1</a>',
                                 ],
                                 [
                                     'type' => 'figure',
@@ -2164,7 +2164,8 @@ final class ArticleControllerTest extends PageTestCase
         $body = $crawler->filter('.grid-column > section:nth-of-type(3) > div')->children();
         $this->assertCount(2, $body);
 
-        $this->assertSame('Body text', $body->eq(0)->text());
+        $this->assertSame('Body text Image 1 supplement 1', $body->eq(0)->text());
+        $this->assertSame('/articles/00001/figures#image1s1', $body->eq(0)->filter('a')->attr('href'));
         $this->assertSame('Image 1 label with 1 supplement see all', trim($body->eq(1)->filter('.asset-viewer-inline__header_text')->text()));
         $this->assertSame('/articles/00001/figures#image1', $body->eq(1)->filter('.asset-viewer-inline__header_link')->attr('href'));
 
