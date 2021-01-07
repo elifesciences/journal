@@ -1009,7 +1009,7 @@ final class ArticlesController extends Controller
                 }
 
                 return new ViewSelector(
-                    $this->generatePath($history, $item->getVersion()),
+                    $this->generatePath($history, $item->getVersion(), null, 'figures-and-data'),
                     array_values(array_filter(array_map(function (ViewModel $viewModel) {
                         if ($viewModel instanceof ArticleSection) {
                             return new Link($viewModel['title'], '#'.$viewModel['id']);
