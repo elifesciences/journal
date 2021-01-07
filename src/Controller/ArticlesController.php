@@ -1017,7 +1017,7 @@ final class ArticlesController extends Controller
 
                         return null;
                     }, $sections))),
-                    $hasFigures ? $this->generatePath($history, $item->getVersion(), 'figures') : null,
+                    $hasFigures ? $this->generatePath($history, $item->getVersion(), 'figures', 'figures-and-data') : null,
                     $isFiguresPage,
                     $item instanceof ArticleVoR
                         ? rtrim($this->getParameter('side_by_side_view_url'), '/').'/'.$item->getId()

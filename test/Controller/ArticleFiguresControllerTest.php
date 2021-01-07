@@ -87,8 +87,8 @@ final class ArticleFiguresControllerTest extends PageTestCase
         $this->assertSame(200, $client->getResponse()->getStatusCode());
 
         $this->assertSame('Figures and data in Article title | eLife', $crawler->filter('title')->text());
-        $this->assertSame('/articles/00001/figures#figures-and-data', $crawler->filter('link[rel="canonical"]')->attr('href'));
-        $this->assertSame('http://localhost/articles/00001/figures#figures-and-data', $crawler->filter('meta[property="og:url"]')->attr('content'));
+        $this->assertSame('/articles/00001/figures', $crawler->filter('link[rel="canonical"]')->attr('href'));
+        $this->assertSame('http://localhost/articles/00001/figures', $crawler->filter('meta[property="og:url"]')->attr('content'));
         $this->assertSame('Figures and data in Article title', $crawler->filter('meta[property="og:title"]')->attr('content'));
         $this->assertSame('article', $crawler->filter('meta[property="og:type"]')->attr('content'));
         $this->assertSame('summary', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
@@ -148,8 +148,8 @@ final class ArticleFiguresControllerTest extends PageTestCase
         $this->assertSame(200, $client->getResponse()->getStatusCode());
 
         $this->assertSame('Figures and data in Article title | eLife', $crawler->filter('title')->text());
-        $this->assertSame('/articles/00001/figures#figures-and-data', $crawler->filter('link[rel="canonical"]')->attr('href'));
-        $this->assertSame('http://localhost/articles/00001/figures#figures-and-data', $crawler->filter('meta[property="og:url"]')->attr('content'));
+        $this->assertSame('/articles/00001/figures', $crawler->filter('link[rel="canonical"]')->attr('href'));
+        $this->assertSame('http://localhost/articles/00001/figures', $crawler->filter('meta[property="og:url"]')->attr('content'));
         $this->assertSame('Figures and data in Article title', $crawler->filter('meta[property="og:title"]')->attr('content'));
         $this->assertSame('article', $crawler->filter('meta[property="og:type"]')->attr('content'));
         $this->assertSame('summary', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
