@@ -2274,6 +2274,20 @@ final class ArticleControllerTest extends PageTestCase
 
         $this->assertSame(
             [
+                [
+                    'Article',
+                    '/articles/00001#content',
+                ],
+                [
+                    'Figures and data',
+                    '/articles/00001/figures#content',
+                ],
+            ],
+            $crawler->filter('.view-selector__link')->extract(['_text', 'href'])
+        );
+
+        $this->assertSame(
+            [
                 'Abstract',
                 'eLife digest',
                 'Body title',
