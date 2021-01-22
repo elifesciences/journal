@@ -16,13 +16,9 @@ trait CreatesAssetViewerInline
     {
         $assetViewModel = $this->createCaptionedAsset($assetViewModel, $asset->getAsset(), $this->createDoi($asset));
 
-        if (!empty($context['complete'])) {
-            $additionalAssets = $asset->getSourceData()->map(function (AssetFile $sourceData) {
-                return $this->getViewModelConverter()->convert($sourceData);
-            })->toArray();
-        } else {
-            $additionalAssets = [];
-        }
+        $additionalAssets = $asset->getSourceData()->map(function (AssetFile $sourceData) {
+            return $this->getViewModelConverter()->convert($sourceData);
+        })->toArray();
 
         if (!empty($context['parentId']) && !empty($context['ordinal'])) {
             return ViewModel\AssetViewerInline::supplement($asset->getAsset()->getId(), $context['ordinal'], $context['parentId'], $asset->getLabel(), $assetViewModel, $additionalAssets, $download, $open);
