@@ -229,6 +229,10 @@ final class PrivacyController extends Controller
 <th>Jul&nbsp;24,&nbsp;2019</th>
 <td>Added reference to information collected and used for research purposes about the group leader with principal responsibility for a submission.</td>
 </tr>
+<tr>
+<th>Jan&nbsp;22,&nbsp;2021</th>
+<td>Added reference to posting reviews to bioRxiv/medRxiv.</td>
+</tr>
 </tbody>
 </table>
 EOT
