@@ -217,6 +217,18 @@ final class WhoWeWorkWithController extends Controller
 
         $committees = [
             [
+                'name' => 'Alba',
+                'filename' => 'alba',
+                'type' => 'image/png',
+                'uri' => 'http://www.alba.network/declaration/',
+            ],
+            [
+                'name' => 'c4Disc',
+                'filename' => 'c4disc',
+                'type' => 'image/png',
+                'uri' => 'https://c4disc.org/',
+            ],
+            [
                 'name' => 'Crossref',
                 'filename' => 'crossref',
                 'type' => 'image/svg+xml',
@@ -253,16 +265,22 @@ final class WhoWeWorkWithController extends Controller
                 'uri' => 'http://jats4r.org/',
             ],
             [
+                'name' => 'Open Access Scholarly Publishers Association',
+                'filename' => 'oaspa',
+                'type' => 'image/svg+xml',
+                'uri' => 'https://oaspa.org/',
+            ],
+            [
                 'name' => 'Review Commons',
                 'filename' => 'review-commons-logo',
                 'type' => 'image/svg+xml',
                 'uri' => 'https://www.reviewcommons.org/',
             ],
             [
-                'name' => 'Open Access Scholarly Publishers Association',
-                'filename' => 'oaspa',
-                'type' => 'image/svg+xml',
-                'uri' => 'https://oaspa.org/',
+                'name' => 'Royal Society of Chemistry',
+                'filename' => 'rsc',
+                'type' => 'image/png',
+                'uri' => 'https://www.rsc.org/new-perspectives/talent/joint-commitment-for-action-inclusion-and-diversity-in-publishing/',
             ],
         ];
 
