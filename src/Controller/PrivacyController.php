@@ -107,7 +107,7 @@ final class PrivacyController extends Controller
                 ), 'authors-hold'),
                 ArticleSection::basic('Who do we share the data with, and why?', 3, $this->render(
                     new Paragraph('We share your data with editors and reviewers, and with organisations that help us deliver our services.'),
-                    new Paragraph('In addition, if your manuscript is published, then all the personal information normally associated with a published manuscript will be made public. In line with normal practice, we will also send this data, or make it available, to other publishing services, repositories and indexing services.'),
+                    new Paragraph('In addition, if your manuscript is published, then all the personal information normally associated with a published manuscript will be made public. In line with normal practice, we will also send this data, or make it available, to other publishing services, repositories and indexing services. Unless we have agreed with you otherwise, the public reviews will also be posted to bioRxiv or medRxiv.'),
                     new Paragraph('We share the data with the following classes of data processor:'),
                     Listing::unordered([
                         'our editors and reviewers;',
@@ -228,6 +228,10 @@ final class PrivacyController extends Controller
 <tr>
 <th>Jul&nbsp;24,&nbsp;2019</th>
 <td>Added reference to information collected and used for research purposes about the group leader with principal responsibility for a submission.</td>
+</tr>
+<tr>
+<th>Jan&nbsp;22,&nbsp;2021</th>
+<td>Added reference to posting reviews to bioRxiv/medRxiv.</td>
 </tr>
 </tbody>
 </table>
