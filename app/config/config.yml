@@ -4,6 +4,7 @@ imports:
   - resource: services.yml
 
 parameters:
+    api_url: https://boostings--search.elifesciences.org
     api_connect_timeout: 2
     api_timeout: 5
     api_connect_timeout_slow: 3
