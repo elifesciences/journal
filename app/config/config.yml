@@ -4,7 +4,7 @@ imports:
   - resource: services.yml
 
 parameters:
-    api_url: https://boostings--search.elifesciences.org
+    api_url_boostings: https://boostings--search.elifesciences.org
     api_connect_timeout: 2
     api_timeout: 5
     api_connect_timeout_slow: 3
@@ -27,6 +27,13 @@ csa_guzzle:
         elife_api:
             config:
                 base_uri: '%api_url%'
+                connect_timeout: '%api_connect_timeout%'
+                headers:
+                    Authorization: '%api_key%'
+                timeout: '%api_timeout%'
+        elife_api_boostings:
+            config:
+                base_uri: '%api_url_boostings%'
                 connect_timeout: '%api_connect_timeout%'
                 headers:
                     Authorization: '%api_key%'

@@ -8,6 +8,11 @@ services:
         arguments:
           - '@csa_guzzle.client.elife_api'
 
+    elife.api_client.client_boostings:
+        class: eLife\ApiClient\HttpClient\Guzzle6HttpClient
+        arguments:
+          - '@csa_guzzle.client.elife_api_boostings'
+
     elife.api_client.client.warning_checking:
         class: eLife\ApiClient\HttpClient\WarningCheckingHttpClient
         decorates: elife.api_client.client
@@ -27,6 +32,12 @@ services:
         public: false
         arguments:
           - '@elife.api_client.client'
+
+    elife.api_sdk_boostings:
+        class: eLife\ApiSdk\ApiSdk
+        public: false
+        arguments:
+          - '@elife.api_client.client_boostings'
 
     elife.api_sdk.serializer:
         class: Symfony\Component\Serializer\Serializer
@@ -118,7 +129,7 @@ services:
 
     elife.api_sdk.search:
         class: eLife\ApiSdk\Client\Search
-        factory: ['@elife.api_sdk', search]
+        factory: ['@elife.api_sdk_boostings', search]
 
     elife.api_sdk.subjects:
         class: eLife\ApiSdk\Client\Subjects
