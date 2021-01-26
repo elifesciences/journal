@@ -2,12 +2,6 @@ imports:
   - resource: config_dev.yml
   - resource: services_ci.yml
 
-csa_guzzle:
-    clients:
-        elife_api_boostings:
-            config:
-                base_uri: '%api_url%'
-
 parameters:
     api_url: http://api.elifesciences.org
     api_url_public: http://api.elifesciences.org

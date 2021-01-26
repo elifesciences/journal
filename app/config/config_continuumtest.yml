@@ -1,2 +1,10 @@
 imports:
   - resource: config_prod.yml
+
+csa_guzzle:
+    profiler:
+        enabled: true
+    clients:
+        elife_api_boostings:
+            config:
+                base_uri: https://boostings--search.elifesciences.org
