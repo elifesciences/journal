@@ -1,6 +1,12 @@
 imports:
   - resource: config_prod.yml
 
+parameters:
+    api_connect_timeout: 1
+    api_timeout: 2
+    api_connect_timeout_slow: 2
+    api_timeout_slow: 6
+
 csa_guzzle:
     profiler:
         enabled: true
