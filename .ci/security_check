@@ -2,4 +2,4 @@
 set -e
 
 # See: https://github.com/sensiolabs/security-checker#sensiolabs-security-checker
-vendor/bin/security-checker security:check --end-point https://php-security-checker.wmflabs.org/check_lock
+# vendor/bin/security-checker security:check
