@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
 set -e
 
-vendor/bin/security-checker security:check
+# See: https://github.com/sensiolabs/security-checker#sensiolabs-security-checker
+# vendor/bin/security-checker security:check
