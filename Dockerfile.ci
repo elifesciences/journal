@@ -1,6 +1,5 @@
 ARG image_tag=latest
 FROM pinterb/jq:0.0.16 AS jq
-FROM elifesciences/proofreader-php:0.2 AS proofreader
 FROM elifesciences/journal_composer_dev:${image_tag} AS composer
 FROM elifesciences/journal:${image_tag}
 
@@ -10,9 +9,6 @@ RUN mkdir -p build/ci var/fixtures && \
     chown --recursive www-data:www-data build/ci .php_cs.cache var/fixtures
 
 COPY --from=jq /usr/local/bin/jq /usr/bin/jq
-
-COPY --from=proofreader --chown=elife:elife /srv/proofreader-php /srv/proofreader-php
-RUN ln -s /srv/proofreader-php/bin/proofreader /srv/bin/proofreader
 
 COPY --from=composer /usr/bin/composer /usr/bin/composer
 

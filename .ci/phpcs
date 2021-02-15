@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+set -e
+
+vendor/bin/phpcs app/ bin/ src/ web/
+vendor/bin/phpcs features/ test/

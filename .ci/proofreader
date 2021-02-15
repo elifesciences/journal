@@ -1,5 +1,0 @@
-#!/usr/bin/env bash
-set -e
-
-proofreader --no-phpcpd app/ bin/ src/ web/
-proofreader --no-phpcpd features/ test/
