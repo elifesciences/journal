@@ -5,8 +5,7 @@ FROM elifesciences/journal:${image_tag}
 
 USER root
 RUN mkdir -p build/ci var/fixtures && \
-    touch .php_cs.cache && \
-    chown --recursive www-data:www-data build/ci .php_cs.cache var/fixtures
+    chown --recursive www-data:www-data build/ci var/fixtures
 
 COPY --from=jq /usr/local/bin/jq /usr/bin/jq
 
@@ -15,7 +14,7 @@ COPY --from=composer /usr/bin/composer /usr/bin/composer
 COPY --chown=elife:elife \
     behat.yml.dist \
     phpunit.xml.dist \
-    .php_cs \
+    phpcs.xml.dist \
     ./
 COPY --chown=elife:elife .ci/ .ci/
 COPY --chown=elife:elife assets/tests/ assets/tests/
