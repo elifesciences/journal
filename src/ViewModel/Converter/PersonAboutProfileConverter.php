@@ -46,6 +46,7 @@ final class PersonAboutProfileConverter implements ViewModelConverter
                 $object->getDetails()->getPreferredName(),
                 $role,
                 null,
+                false,
                 $extra ? $this->patternRenderer->render($extra) : null
             );
         }
@@ -66,6 +67,7 @@ final class PersonAboutProfileConverter implements ViewModelConverter
             $object->getDetails()->getPreferredName(),
             $role,
             $image,
+            true,
             $this->patternRenderer->render(...$profile)
         );
     }
