@@ -160,6 +160,12 @@ final class WhoWeWorkWithController extends Controller
                 'uri' => 'https://www.clockss.org/',
             ],
             [
+                'name' => 'CNKI',
+                'filename' => 'cnki',
+                'type' => 'image/png',
+                'uri' => 'https://www.cnki.net/',
+            ],
+            [
                 'name' => 'Europe PubMed Central',
                 'filename' => 'europe-pmc',
                 'type' => 'image/png',
