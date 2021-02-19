@@ -22,7 +22,7 @@ final class JournalReferenceConverter implements ViewModelConverter
             $journal .= ' <b>'.$object->getVolume().'</b>:';
             if ($object->getPages() instanceof ReferencePageRange) {
                 $journal .= $object->getPages()->getRange();
-            } else {
+            } elseif ($object->getPages()) {
                 $journal .= $object->getPages()->toString();
             }
         } elseif ($object->getPages()) {
@@ -38,15 +38,15 @@ final class JournalReferenceConverter implements ViewModelConverter
             $abstracts[] = new ViewModel\Link('PubMed', 'https://www.ncbi.nlm.nih.gov/pubmed/'.$object->getPmid());
         }
 
-        $query = [
+        $query = array_filter([
             'title' => strip_tags($object->getArticleTitle()),
             'author' => array_map(Callback::method('toString'), $object->getAuthors()),
             'publication_year' => $object->getDate()->getYear(),
             'journal' => $object->getJournal(),
             'volume' => $object->getVolume(),
-            'pages' => $object->getPages()->toString(),
+            'pages' => $object->getPages() ? $object->getPages()->toString() : null,
             'pmid' => $object->getPmid(),
-        ];
+        ]);
 
         $abstracts[] = new ViewModel\Link('Google Scholar', 'https://scholar.google.com/scholar_lookup?'.str_replace(['%5B0%5D=', '%5B1%5D='], '=', http_build_query($query)));
 
