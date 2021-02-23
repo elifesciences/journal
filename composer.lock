@@ -1294,12 +1294,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/patterns-php.git",
-                "reference": "21acfbb4fd465b86489ba6233672456483c3bd50"
+                "reference": "9eb16af009d5965b1a420937a5c605e62119c49a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/21acfbb4fd465b86489ba6233672456483c3bd50",
-                "reference": "21acfbb4fd465b86489ba6233672456483c3bd50",
+                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/9eb16af009d5965b1a420937a5c605e62119c49a",
+                "reference": "9eb16af009d5965b1a420937a5c605e62119c49a",
                 "shasum": ""
             },
             "require": {
@@ -1312,6 +1312,7 @@
                 "php-jsonpointer/php-jsonpointer": "^1.0",
                 "phpspec/prophecy": "^1.10",
                 "phpunit/phpunit": "^5.2",
+                "squizlabs/php_codesniffer": "^3.5",
                 "symfony/filesystem": "^3.0",
                 "symfony/finder": "^3.0",
                 "symfony/process": "^3.0",
@@ -1342,7 +1343,7 @@
             "support": {
                 "source": "https://github.com/elifesciences/patterns-php/tree/new-reference-styling-demo"
             },
-            "time": "2021-02-23T18:15:22+00:00"
+            "time": "2021-02-23T18:35:47+00:00"
         },
         {
             "name": "fabpot/goutte",
