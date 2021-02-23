@@ -38,10 +38,10 @@ final class DataReferenceConverter implements ViewModelConverter
         }
 
         if ($object->getDoi()) {
-            return ViewModel\Reference::withDoi($object->getTitle(), new ViewModel\Doi($object->getDoi()), $origin, $authors);
+            return ViewModel\Reference::withDoi($object->getTitle(), new ViewModel\Doi($object->getDoi()), $object->getId(), $origin, $authors);
         }
 
-        return ViewModel\Reference::withOutDoi(new ViewModel\Link($object->getTitle(), $object->getUri()), $origin, $authors);
+        return ViewModel\Reference::withOutDoi(new ViewModel\Link($object->getTitle(), $object->getUri()), $object->getId(), $origin, $authors);
     }
 
     public function supports($object, string $viewModel = null, array $context = []) : bool

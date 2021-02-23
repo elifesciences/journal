@@ -588,16 +588,16 @@ final class ArticlesController extends Controller
         $generateDataSets = $arguments['item']
             ->then(function (ArticleVersion $item) {
                 return $item->getGeneratedDataSets()
-                    ->map(function (DataSet $dataSet, int $id) {
-                        return new ViewModel\ReferenceListItem($dataSet->getId(), $id + 1, $this->convertTo($dataSet));
+                    ->map(function (DataSet $dataSet) {
+                        return $this->convertTo($dataSet);
                     });
             });
 
         $usedDataSets = $arguments['item']
             ->then(function (ArticleVersion $item) {
                 return $item->getUsedDataSets()
-                    ->map(function (DataSet $dataSet, int $id) {
-                        return new ViewModel\ReferenceListItem($dataSet->getId(), $id + 1, $this->convertTo($dataSet));
+                    ->map(function (DataSet $dataSet) {
+                        return $this->convertTo($dataSet);
                     });
             });
 
