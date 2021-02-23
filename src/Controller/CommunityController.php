@@ -56,7 +56,7 @@ final class CommunityController extends Controller
             'Community',
             $this->get('elife.journal.view_model.factory.content_header_image')->forLocalFile('community'),
             'The eLife community is working to help address some of the pressures on early-career scientists in a number of ways.
-Learn more about <a href="'.$this->get('router')->generate('about-research-culture').'">our work</a> and <a href="'.$this->get('router')->generate('about-people', ['type' => 'about-research-culture']).'">advisory group</a>, <a href="https://crm.elifesciences.org/crm/community-news">sign up for our monthly news</a>,
+Learn more about <a href="'.$this->get('router')->generate('about-research-culture').'">our work</a> and <a href="'.$this->get('router')->generate('about-people', ['type' => 'early-career']).'">advisory group</a>, <a href="https://crm.elifesciences.org/crm/community-news">sign up for our monthly news</a>,
 follow us on <a href="https://www.twitter.com/elifecommunity">Twitter</a>, and explore recent activities below.'
         );
 
