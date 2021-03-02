@@ -1236,16 +1236,16 @@
         },
         {
             "name": "elife/api-sdk",
-            "version": "dev-reference-journal-without-pages",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-sdk-php.git",
-                "reference": "71a12df4f0a09891030da1b417e3f568050f79dc"
+                "reference": "8c582e68c383c64e505fdbfaf282f4e0d1e8f036"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/71a12df4f0a09891030da1b417e3f568050f79dc",
-                "reference": "71a12df4f0a09891030da1b417e3f568050f79dc",
+                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/8c582e68c383c64e505fdbfaf282f4e0d1e8f036",
+                "reference": "8c582e68c383c64e505fdbfaf282f4e0d1e8f036",
                 "shasum": ""
             },
             "require": {
@@ -1286,7 +1286,7 @@
                 "MIT"
             ],
             "description": "eLife Sciences API SDK",
-            "time": "2021-03-01T13:52:55+00:00"
+            "time": "2021-03-02T18:09:19+00:00"
         },
         {
             "name": "elife/patterns",
