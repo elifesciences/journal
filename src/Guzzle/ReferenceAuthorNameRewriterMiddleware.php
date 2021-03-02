@@ -36,19 +36,29 @@ final class ReferenceAuthorNameRewriterMiddleware
     private function updateItem(array $item) : array
     {
         if (!empty($item['references'])) {
-            $item['references'] = array_map(function ($reference) {
-                if (!empty($reference['authors'])) {
-                    $reference['authors'] = array_map(function ($author) {
-                        if ('person' === $author['type']) {
-                            $author['name']['preferred'] = str_replace(',', '', $author['name']['index']);
-                        }
-                        return $author;
-                    }, $reference['authors']);
-                }
-                return $reference;
-            }, $item['references']);
+            $item['references'] = $this->updateReferences($item['references']);
+        }
+
+        if (!empty($item['dataSets'])) {
+            foreach ($item['dataSets'] as $group => $dataset) {
+                $item['dataSets'][$group] = $this->updateReferences($item['dataSets'][$group]);
+            }
         }
 
         return $item;
+    }
+
+    private function updateReferences(array $references) {
+        return array_map(function ($reference) {
+            if (!empty($reference['authors'])) {
+                $reference['authors'] = array_map(function ($author) {
+                    if ('person' === $author['type']) {
+                        $author['name']['preferred'] = str_replace(',', '', $author['name']['index']);
+                    }
+                    return $author;
+                }, $reference['authors']);
+            }
+            return $reference;
+        }, $references);
     }
 }
