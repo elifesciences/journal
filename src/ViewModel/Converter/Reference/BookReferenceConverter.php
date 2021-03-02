@@ -59,10 +59,10 @@ final class BookReferenceConverter implements ViewModelConverter
         }
 
         if ($object->getDoi()) {
-            return ViewModel\Reference::withDoi($title, new ViewModel\Doi($object->getDoi()), $origin, $authors, $abstracts);
+            return ViewModel\Reference::withDoi($title, new ViewModel\Doi($object->getDoi()), $object->getId(), $origin, $authors, $abstracts);
         }
 
-        return ViewModel\Reference::withOutDoi(new ViewModel\Link($title), $origin, $authors, $abstracts);
+        return ViewModel\Reference::withOutDoi(new ViewModel\Link($title), $object->getId(), $origin, $authors, $abstracts);
     }
 
     public function supports($object, string $viewModel = null, array $context = []) : bool

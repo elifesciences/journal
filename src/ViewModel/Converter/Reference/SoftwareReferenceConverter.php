@@ -22,7 +22,7 @@ final class SoftwareReferenceConverter implements ViewModelConverter
 
         $authors = [$this->createAuthors($object->getAuthors(), $object->authorsEtAl(), [$object->getDate()->format().$object->getDiscriminator()])];
 
-        return ViewModel\Reference::withOutDoi(new ViewModel\Link($title, $object->getUri()), [$object->getPublisher()->toString()], $authors);
+        return ViewModel\Reference::withOutDoi(new ViewModel\Link($title, $object->getUri()), $object->getId(), [$object->getPublisher()->toString()], $authors);
     }
 
     public function supports($object, string $viewModel = null, array $context = []) : bool
