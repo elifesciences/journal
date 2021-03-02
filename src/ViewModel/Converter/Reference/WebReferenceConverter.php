@@ -25,7 +25,7 @@ final class WebReferenceConverter implements ViewModelConverter
 
         $authors = [$this->createAuthors($object->getAuthors(), $object->authorsEtAl(), [$object->getDate()->format().$object->getDiscriminator()])];
 
-        return ViewModel\Reference::withOutDoi(new ViewModel\Link($object->getTitle(), $object->getUri()), $origin, $authors);
+        return ViewModel\Reference::withOutDoi(new ViewModel\Link($object->getTitle(), $object->getUri()), $object->getId(), $origin, $authors);
     }
 
     public function supports($object, string $viewModel = null, array $context = []) : bool

@@ -2176,8 +2176,6 @@ final class ArticleControllerTest extends PageTestCase
         $references = $crawler->filter('.grid-column > section:nth-of-type(5)');
         $this->assertSame('References',
             $references->filter('header > h2')->text());
-        $this->assertSame('1',
-            $references->filter('div > ol > li:nth-of-type(1) .reference-list__ordinal_number')->text());
         $this->assertSame('Journal article',
             $references->filter('div > ol > li:nth-of-type(1) .reference__title')->text());
         $this->assertSame('Decision letter', $crawler->filter('#decision-letter-id h2')->text());

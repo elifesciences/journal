@@ -30,7 +30,7 @@ final class PeriodicalReferenceConverter implements ViewModelConverter
 
         $authors = [$this->createAuthors($object->getAuthors(), $object->authorsEtAl(), [$object->getDate()->format().$object->getDiscriminator()])];
 
-        return ViewModel\Reference::withOutDoi(new ViewModel\Link($object->getArticleTitle(), $object->getUri()), [$periodical], $authors);
+        return ViewModel\Reference::withOutDoi(new ViewModel\Link($object->getArticleTitle(), $object->getUri()), $object->getId(), [$periodical], $authors);
     }
 
     public function supports($object, string $viewModel = null, array $context = []) : bool
