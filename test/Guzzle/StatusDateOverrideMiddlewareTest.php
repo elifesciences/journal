@@ -111,7 +111,7 @@ final class StatusDateOverrideMiddlewareTest extends KernelTestCase
                     $this->createArticleVoR('vor-with-rds-article', '2030-01-02T00:00:00Z'),
                 ],
             ],
-            'application/vnd.elife.article-poa+json; version=1' => [
+            'application/vnd.elife.article-poa+json; version=2' => [
                 $this->createArticlePoA('poa-with-rds-article'),
                 $this->createArticlePoA('poa-with-rds-article', '2030-01-01T00:00:00Z'),
             ],
@@ -119,11 +119,7 @@ final class StatusDateOverrideMiddlewareTest extends KernelTestCase
                 $this->createArticlePoA('poa-with-rds-article'),
                 $this->createArticlePoA('poa-with-rds-article', '2030-01-01T00:00:00Z'),
             ],
-            'application/vnd.elife.article-vor+json; version=1' => [
-                $this->createArticleVoR('vor-with-rds-article', null, false),
-                $this->createArticleVoR('vor-with-rds-article', '2030-01-02T00:00:00Z', false),
-            ],
-            'application/vnd.elife.article-vor+json; version=2' => [
+            'application/vnd.elife.article-vor+json; version=4' => [
                 $this->createArticleVoR('vor-with-rds-article', null, false),
                 $this->createArticleVoR('vor-with-rds-article', '2030-01-02T00:00:00Z', false),
             ],
