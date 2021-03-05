@@ -21,108 +21,188 @@ final class WhoWeWorkWithControllerTest extends PageTestCase
         $this->assertNotEmpty($crawler->filter('.list-heading:contains("Content availability and archiving") + .grid-listing > .grid-listing-item'));
         $this->assertNotEmpty($crawler->filter('.list-heading:contains("Committees and initiatives") + .grid-listing > .grid-listing-item'));
 
-        $companyUrl = $crawler->filter('.image-link__link');
-        $companyName = $crawler->filter('.image-link__img');
-
-        $this->assertCount(43, $companyUrl);
-        $this->assertCount(43, $companyName);
-
         $this->assertSame(
             [
-                'http://www.alpsp.org/',
-                'http://publicationethics.org/',
-                'https://www.crossref.org/',
-                'https://www.niso.org/',
-                'https://oaspa.org/',
-                'https://orcid.org/',
-                'https://aws.amazon.com/',
-                'https://browserstack.com/',
-                'https://digirati.com/',
-                'http://editorialoffice.co.uk/',
-                'https://www.ejournalpress.com/',
-                'http://www.exeterpremedia.com/',
-                'https://www.fastly.com/',
-                'https://github.com/',
-                'https://glencoesoftware.com/',
-                'https://hypothes.is/',
-                'https://www.loggly.com/',
-                'https://www.thenakedscientists.com/',
-                'https://newrelic.com/',
-                'https://publons.com/',
-                'https://slack.com/',
-                'https://www.clockss.org/',
-                'https://www.cnki.net/',
-                'https://europepmc.org/',
-                'http://gooa.las.ac.cn/',
-                'https://pubrouter.jisc.ac.uk/',
-                'https://www.lockss.org/',
-                'https://www.mendeley.com/',
-                'http://paperity.org/',
-                'https://www.ncbi.nlm.nih.gov/pmc/',
-                'https://pubmed.ncbi.nlm.nih.gov/',
-                'http://www.share-research.org/',
-                'http://www.alba.network/declaration/',
-                'https://c4disc.org/',
-                'https://www.crossref.org/',
-                'https://sfdora.org/',
-                'https://doaj.org/',
-                'https://www.force11.org/about/directors-and-advisors',
-                'https://i4oc.org/',
-                'http://jats4r.org/',
-                'https://oaspa.org/',
-                'https://www.reviewcommons.org/',
-                'https://www.rsc.org/new-perspectives/talent/joint-commitment-for-action-inclusion-and-diversity-in-publishing/',
+                [
+                    'http://www.alpsp.org/',
+                    'The Association of Learned & Professional Society Publishers',
+                ],
+                [
+                    'http://publicationethics.org/',
+                    'Committee on Publication Ethics',
+                ],
+                [
+                    'https://www.crossref.org/',
+                    'Crossref',
+                ],
+                [
+                    'https://www.niso.org/',
+                    'Niso',
+                ],
+                [
+                    'https://oaspa.org/',
+                    'Open Access Scholarly Publishers Association',
+                ],
+                [
+                    'https://orcid.org/',
+                    'ORCID',
+                ],
+                [
+                    'https://aws.amazon.com/',
+                    'Amazon Web Services',
+                ],
+                [
+                    'https://browserstack.com/',
+                    'Browserstack',
+                ],
+                [
+                    'https://digirati.com/',
+                    'Digirati',
+                ],
+                [
+                    'http://editorialoffice.co.uk/',
+                    'Editorial Office Ltd',
+                ],
+                [
+                    'https://www.ejournalpress.com/',
+                    'eJournalPress',
+                ],
+                [
+                    'http://www.exeterpremedia.com/',
+                    'Exeter Premedia Services',
+                ],
+                [
+                    'https://www.fastly.com/',
+                    'Fastly',
+                ],
+                [
+                    'https://github.com/',
+                    'GitHub',
+                ],
+                [
+                    'https://glencoesoftware.com/',
+                    'Glencoe Software',
+                ],
+                [
+                    'https://hypothes.is/',
+                    'Hypothesis',
+                ],
+                [
+                    'https://www.loggly.com/',
+                    'Loggly',
+                ],
+                [
+                    'https://www.thenakedscientists.com/',
+                    'The Naked Scientists',
+                ],
+                [
+                    'https://newrelic.com/',
+                    'New Relic',
+                ],
+                [
+                    'https://publons.com/',
+                    'Publons',
+                ],
+                [
+                    'https://slack.com/',
+                    'Slack',
+                ],
+                [
+                    'https://www.clockss.org/',
+                    'CLOCKSS',
+                ],
+                [
+                    'https://www.cnki.net/',
+                    'CNKI',
+                ],
+                [
+                    'https://europepmc.org/',
+                    'Europe PubMed Central',
+                ],
+                [
+                    'http://gooa.las.ac.cn/',
+                    'Go OA',
+                ],
+                [
+                    'https://pubrouter.jisc.ac.uk/',
+                    'Jisc',
+                ],
+                [
+                    'https://www.lockss.org/',
+                    'LOCKSS',
+                ],
+                [
+                    'https://www.mendeley.com/',
+                    'Mendeley',
+                ],
+                [
+                    'http://paperity.org/',
+                    'Paperity',
+                ],
+                [
+                    'https://www.ncbi.nlm.nih.gov/pmc/',
+                    'PubMed Central',
+                ],
+                [
+                    'https://pubmed.ncbi.nlm.nih.gov/',
+                    'PubMed',
+                ],
+                [
+                    'http://www.share-research.org/',
+                    'SHARE',
+                ],
+                [
+                    'http://www.alba.network/declaration/',
+                    'Alba',
+                ],
+                [
+                    'https://c4disc.org/',
+                    'c4Disc',
+                ],
+                [
+                    'https://www.crossref.org/',
+                    'Crossref',
+                ],
+                [
+                    'https://sfdora.org/',
+                    'Declaration on Research Assessment',
+                ],
+                [
+                    'https://doaj.org/',
+                    'Directory of Open Access Journals',
+                ],
+                [
+                    'https://www.force11.org/about/directors-and-advisors',
+                    'FORCE11',
+                ],
+                [
+                    'https://i4oc.org/',
+                    'Initiative for Open Citations',
+                ],
+                [
+                    'http://jats4r.org/',
+                    'JATS for Reuse',
+                ],
+                [
+                    'https://oaspa.org/',
+                    'Open Access Scholarly Publishers Association',
+                ],
+                [
+                    'https://www.reviewcommons.org/',
+                    'Review Commons',
+                ],
+                [
+                    'https://www.rsc.org/new-perspectives/talent/joint-commitment-for-action-inclusion-and-diversity-in-publishing/',
+                    'Royal Society of Chemistry',
+                ],
             ],
-            array_map('trim', $companyUrl->extract(['href']))
-        );
-
-        $this->assertSame(
-            [
-                'The Association of Learned & Professional Society Publishers',
-                'Committee on Publication Ethics',
-                'Crossref',
-                'Niso',
-                'Open Access Scholarly Publishers Association',
-                'ORCID',
-                'Amazon Web Services',
-                'Browserstack',
-                'Digirati',
-                'Editorial Office Ltd',
-                'eJournalPress',
-                'Exeter Premedia Services',
-                'Fastly',
-                'GitHub',
-                'Glencoe Software',
-                'Hypothesis',
-                'Loggly',
-                'The Naked Scientists',
-                'New Relic',
-                'Publons',
-                'Slack',
-                'CLOCKSS',
-                'CNKI',
-                'Europe PubMed Central',
-                'Go OA',
-                'Jisc',
-                'LOCKSS',
-                'Mendeley',
-                'Paperity',
-                'PubMed Central',
-                'PubMed',
-                'SHARE',
-                'Alba',
-                'c4Disc',
-                'Crossref',
-                'Declaration on Research Assessment',
-                'Directory of Open Access Journals',
-                'FORCE11',
-                'Initiative for Open Citations',
-                'JATS for Reuse',
-                'Open Access Scholarly Publishers Association',
-                'Review Commons',
-                'Royal Society of Chemistry',
-            ],
-            array_map('trim', $companyName->extract(['alt']))
+            $crawler->filter('.grid-listing-item--image-link')
+                ->each(function ($companyLink) {
+                    return [
+                        $companyLink->filter('.image-link__link')->attr('href'),
+                        $companyLink->filter('.image-link__img')->attr('alt'),
+                    ];
+                })
         );
     }
 
