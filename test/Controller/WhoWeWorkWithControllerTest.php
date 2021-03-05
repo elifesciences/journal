@@ -20,6 +20,190 @@ final class WhoWeWorkWithControllerTest extends PageTestCase
         $this->assertNotEmpty($crawler->filter('.list-heading:contains("Service providers") + .grid-listing > .grid-listing-item'));
         $this->assertNotEmpty($crawler->filter('.list-heading:contains("Content availability and archiving") + .grid-listing > .grid-listing-item'));
         $this->assertNotEmpty($crawler->filter('.list-heading:contains("Committees and initiatives") + .grid-listing > .grid-listing-item'));
+
+        $this->assertSame(
+            [
+                [
+                    'http://www.alpsp.org/',
+                    'The Association of Learned & Professional Society Publishers',
+                ],
+                [
+                    'http://publicationethics.org/',
+                    'Committee on Publication Ethics',
+                ],
+                [
+                    'https://www.crossref.org/',
+                    'Crossref',
+                ],
+                [
+                    'https://www.niso.org/',
+                    'Niso',
+                ],
+                [
+                    'https://oaspa.org/',
+                    'Open Access Scholarly Publishers Association',
+                ],
+                [
+                    'https://orcid.org/',
+                    'ORCID',
+                ],
+                [
+                    'https://aws.amazon.com/',
+                    'Amazon Web Services',
+                ],
+                [
+                    'https://browserstack.com/',
+                    'Browserstack',
+                ],
+                [
+                    'https://digirati.com/',
+                    'Digirati',
+                ],
+                [
+                    'http://editorialoffice.co.uk/',
+                    'Editorial Office Ltd',
+                ],
+                [
+                    'https://www.ejournalpress.com/',
+                    'eJournalPress',
+                ],
+                [
+                    'http://www.exeterpremedia.com/',
+                    'Exeter Premedia Services',
+                ],
+                [
+                    'https://www.fastly.com/',
+                    'Fastly',
+                ],
+                [
+                    'https://github.com/',
+                    'GitHub',
+                ],
+                [
+                    'https://glencoesoftware.com/',
+                    'Glencoe Software',
+                ],
+                [
+                    'https://hypothes.is/',
+                    'Hypothesis',
+                ],
+                [
+                    'https://www.loggly.com/',
+                    'Loggly',
+                ],
+                [
+                    'https://www.thenakedscientists.com/',
+                    'The Naked Scientists',
+                ],
+                [
+                    'https://newrelic.com/',
+                    'New Relic',
+                ],
+                [
+                    'https://publons.com/',
+                    'Publons',
+                ],
+                [
+                    'https://slack.com/',
+                    'Slack',
+                ],
+                [
+                    'https://www.clockss.org/',
+                    'CLOCKSS',
+                ],
+                [
+                    'https://www.cnki.net/',
+                    'CNKI',
+                ],
+                [
+                    'https://europepmc.org/',
+                    'Europe PubMed Central',
+                ],
+                [
+                    'http://gooa.las.ac.cn/',
+                    'Go OA',
+                ],
+                [
+                    'https://pubrouter.jisc.ac.uk/',
+                    'Jisc',
+                ],
+                [
+                    'https://www.lockss.org/',
+                    'LOCKSS',
+                ],
+                [
+                    'https://www.mendeley.com/',
+                    'Mendeley',
+                ],
+                [
+                    'http://paperity.org/',
+                    'Paperity',
+                ],
+                [
+                    'https://www.ncbi.nlm.nih.gov/pmc/',
+                    'PubMed Central',
+                ],
+                [
+                    'https://pubmed.ncbi.nlm.nih.gov/',
+                    'PubMed',
+                ],
+                [
+                    'http://www.share-research.org/',
+                    'SHARE',
+                ],
+                [
+                    'http://www.alba.network/declaration/',
+                    'Alba',
+                ],
+                [
+                    'https://c4disc.org/',
+                    'c4Disc',
+                ],
+                [
+                    'https://www.crossref.org/',
+                    'Crossref',
+                ],
+                [
+                    'https://sfdora.org/',
+                    'Declaration on Research Assessment',
+                ],
+                [
+                    'https://doaj.org/',
+                    'Directory of Open Access Journals',
+                ],
+                [
+                    'https://www.force11.org/about/directors-and-advisors',
+                    'FORCE11',
+                ],
+                [
+                    'https://i4oc.org/',
+                    'Initiative for Open Citations',
+                ],
+                [
+                    'http://jats4r.org/',
+                    'JATS for Reuse',
+                ],
+                [
+                    'https://oaspa.org/',
+                    'Open Access Scholarly Publishers Association',
+                ],
+                [
+                    'https://www.reviewcommons.org/',
+                    'Review Commons',
+                ],
+                [
+                    'https://www.rsc.org/new-perspectives/talent/joint-commitment-for-action-inclusion-and-diversity-in-publishing/',
+                    'Royal Society of Chemistry',
+                ],
+            ],
+            $crawler->filter('.grid-listing-item--image-link')
+                ->each(function ($companyLink) {
+                    return [
+                        $companyLink->filter('.image-link__link')->attr('href'),
+                        $companyLink->filter('.image-link__img')->attr('alt'),
+                    ];
+                })
+        );
     }
 
     /**
