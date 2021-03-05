@@ -22,12 +22,8 @@ final class ReferenceListConverter implements ViewModelConverter
     {
         return new ViewModel\ReferenceList(
             ...$object->getReferences()
-            ->map(function (Reference $reference, int $index) {
-                return new ViewModel\ReferenceListItem(
-                    $reference->getId(),
-                    $index + 1,
-                    $this->viewModelConverter->convert($reference)
-                );
+            ->map(function (Reference $reference) {
+                return $this->viewModelConverter->convert($reference);
             })
         );
     }
