@@ -69,7 +69,7 @@ final class ReferenceAuthorNameRewriterMiddlewareTest extends KernelTestCase
                             [
                                 'type' => 'person',
                                 'name' => [
-                                    'preferred' => 'Person One',
+                                    'preferred' => 'One Person',
                                     'index' => 'One, Person',
                                 ],
                             ],
@@ -86,14 +86,14 @@ final class ReferenceAuthorNameRewriterMiddlewareTest extends KernelTestCase
                             [
                                 'type' => 'person',
                                 'name' => [
-                                    'preferred' => 'Person One',
+                                    'preferred' => 'One Person',
                                     'index' => 'One, Person',
                                 ],
                             ],
                             [
                                 'type' => 'person',
                                 'name' => [
-                                    'preferred' => 'Person Two',
+                                    'preferred' => 'Two Person',
                                     'index' => 'Two, Person',
                                 ],
                             ],
@@ -167,7 +167,7 @@ final class ReferenceAuthorNameRewriterMiddlewareTest extends KernelTestCase
                                 [
                                     'type' => 'person',
                                     'name' => [
-                                        'preferred' => 'Foo Bar',
+                                        'preferred' => 'Bar Foo',
                                         'index' => 'Bar, Foo',
                                     ],
                                 ],
@@ -190,7 +190,7 @@ final class ReferenceAuthorNameRewriterMiddlewareTest extends KernelTestCase
                                 [
                                     'type' => 'person',
                                     'name' => [
-                                        'preferred' => 'Foo Bar',
+                                        'preferred' => 'Bar Foo',
                                         'index' => 'Bar, Foo',
                                     ],
                                 ],
