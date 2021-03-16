@@ -487,7 +487,7 @@ final class ArticleControllerTest extends PageTestCase
                                 [
                                     'type' => 'person',
                                     'name' => [
-                                        'preferred' => 'Person One',
+                                        'preferred' => 'One Person',
                                         'index' => 'One, Person',
                                     ],
                                 ],
@@ -1947,7 +1947,7 @@ final class ArticleControllerTest extends PageTestCase
                                 [
                                     'type' => 'person',
                                     'name' => [
-                                        'preferred' => 'Person One',
+                                        'preferred' => 'One Person',
                                         'index' => 'One, Person',
                                     ],
                                 ],
