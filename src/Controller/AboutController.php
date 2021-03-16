@@ -123,11 +123,14 @@ final class AboutController extends Controller
             'eLife aims to improve the speed, visibility and usefulness of peer review.');
 
         $arguments['body'] = [
-            new Paragraph('eLife works to improve the process of peer review so that it more effectively conveys the assessment of expert reviewers to authors, readers and other interested parties. In the future we envision a system in which the outputs of peer review are the primary way research is assessed, rather than journal title.'),
-            new Paragraph('Our editorial process produces two outputs: i) public reviews designed to be posted alongside a preprint for the benefit of the community; ii) detailed feedback on the manuscript for the authors, including requests for revisions and suggestions for improvement. To learn more, please see “<a href="'.$this->get('router')->generate('article', ['id' => '64910']).'">Peer Review: eLife implementing "Publish, then Review" model of publishing</a>”.'),
+            new Paragraph('eLife works to improve the process of peer review so that it more effectively conveys the assessment of expert reviewers to authors, readers and other interested parties. In the future we envision a system in which research is first published as a preprint and the outputs of peer review are the primary way research is assessed, rather than journal title.'),
+            new Paragraph('Our editorial process produces two outputs: i) an assessment by peers designed to be posted alongside a preprint for the benefit of the readers; ii) detailed feedback on the manuscript for the authors, including requests for revisions and suggestions for improvement.'),
+            new Paragraph('The assessment by peers includes an evaluation summary that captures the major conclusions of the review, and public reviews from each of the peer reviewers that outlines the strengths and weaknesses of the manuscript.'),
+            new Paragraph('The detailed feedback is intended to help authors to revise and improve their preprint: for revised preprints that are accepted by eLife, the detailed feedback is published as part of the paper, along with the author response to the feedback.'),
+            new Paragraph(' To learn more, please see “<a href="'.$this->get('router')->generate('article', ['id' => '64910']).'">Peer Review: eLife implementing "Publish, then Review" model of publishing</a>”.'),
             new Paragraph('Other features of the eLife peer-review process are:'),
             Listing::unordered([
-                'all decisions are made by editors who are active researchers in the life and biomedical sciences.',
+                'all decisions are made by editors who are active researchers in biology and medicine.',
                 'we do not artificially limit the number of articles we publish or have a set acceptance rate.',
                 'editors and reviewers discuss their reviews with each other before reaching a decision on a manuscript; extra experiments are only requested if they are essential and can be reasonably completed within about two months.',
                 'the public reviews, revision recommendations, and author responses are published with accepted manuscripts.',
