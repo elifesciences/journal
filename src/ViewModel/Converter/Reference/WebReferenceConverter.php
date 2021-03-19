@@ -8,7 +8,10 @@ use eLife\Patterns\ViewModel;
 
 final class WebReferenceConverter implements ViewModelConverter
 {
+    const LABEL = 'Website';
+
     use HasAuthors;
+    use HasLabel;
 
     /**
      * @param WebReference $object
@@ -25,7 +28,7 @@ final class WebReferenceConverter implements ViewModelConverter
 
         $authors = [$this->createAuthors($object->getAuthors(), $object->authorsEtAl(), [$object->getDate()->format().$object->getDiscriminator()])];
 
-        return ViewModel\Reference::withOutDoi(new ViewModel\Link($object->getTitle(), $object->getUri()), $object->getId(), $origin, $authors);
+        return ViewModel\Reference::withOutDoi(new ViewModel\Link($object->getTitle(), $object->getUri()), $object->getId(), $this->label(), $origin, $authors);
     }
 
     public function supports($object, string $viewModel = null, array $context = []) : bool

@@ -8,7 +8,10 @@ use eLife\Patterns\ViewModel;
 
 final class PatentReferenceConverter implements ViewModelConverter
 {
+    const LABEL = 'Patent';
+
     use HasAuthors;
+    use HasLabel;
 
     /**
      * @param PatentReference $object
@@ -29,7 +32,7 @@ final class PatentReferenceConverter implements ViewModelConverter
 
         $authors = [$this->createAuthors($object->getInventors(), $object->inventorsEtAl(), [$object->getDate()->format().$object->getDiscriminator()])];
 
-        return ViewModel\Reference::withOutDoi(new ViewModel\Link($title, $object->getUri()), $object->getId(), $origin, $authors);
+        return ViewModel\Reference::withOutDoi(new ViewModel\Link($title, $object->getUri()), $object->getId(), $this->label(), $origin, $authors);
     }
 
     public function supports($object, string $viewModel = null, array $context = []) : bool

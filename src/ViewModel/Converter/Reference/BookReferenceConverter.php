@@ -9,8 +9,11 @@ use eLife\Patterns\ViewModel;
 
 final class BookReferenceConverter implements ViewModelConverter
 {
+    const LABEL = 'Book';
+
     use HasAuthors;
     use HasPublisher;
+    use HasLabel;
 
     /**
      * @param BookReference $object
@@ -59,10 +62,10 @@ final class BookReferenceConverter implements ViewModelConverter
         }
 
         if ($object->getDoi()) {
-            return ViewModel\Reference::withDoi($title, new ViewModel\Doi($object->getDoi()), $object->getId(), $origin, $authors, $abstracts);
+            return ViewModel\Reference::withDoi($title, new ViewModel\Doi($object->getDoi()), $object->getId(), $this->label(), $origin, $authors, $abstracts);
         }
 
-        return ViewModel\Reference::withOutDoi(new ViewModel\Link($title), $object->getId(), $origin, $authors, $abstracts);
+        return ViewModel\Reference::withOutDoi(new ViewModel\Link($title), $object->getId(), $this->label(), $origin, $authors, $abstracts);
     }
 
     public function supports($object, string $viewModel = null, array $context = []) : bool
