@@ -2460,7 +2460,7 @@ final class ArticleControllerTest extends PageTestCase
             $references->filter('div > ol > li:nth-of-type(10) .reference__label')->text());
         $this->assertSame('Software reference',
             $references->filter('div > ol > li:nth-of-type(11) .reference__title')->text());
-        $this->assertSame('Report',
+        $this->assertSame('Software',
             $references->filter('div > ol > li:nth-of-type(11) .reference__label')->text());
         $this->assertSame('Thesis reference',
             $references->filter('div > ol > li:nth-of-type(12) .reference__title')->text());
