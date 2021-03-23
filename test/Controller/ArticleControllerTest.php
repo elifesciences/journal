@@ -1940,8 +1940,113 @@ final class ArticleControllerTest extends PageTestCase
                     ],
                     'references' => [
                         [
-                            'type' => 'journal',
+                            'type' => 'book',
                             'id' => 'bib1',
+                            'date' => '2000',
+                            'discriminator' => 'a',
+                            'authors' => [
+                                [
+                                    'type' => 'person',
+                                    'name' => [
+                                        'preferred' => 'One Person',
+                                        'index' => 'One, Person',
+                                    ],
+                                ],
+                            ],
+                            'bookTitle' => 'Book reference',
+                            'publisher' => [
+                                'name' => [
+                                    'A publisher',
+                                ],
+                            ],
+                        ],
+                        [
+                            'type' => 'book-chapter',
+                            'id' => 'bib2',
+                            'date' => '1818',
+                            'authors' => [
+                                [
+                                    'type' => 'person',
+                                    'name' => [
+                                        'preferred' => 'One Person',
+                                        'index' => 'One, Person',
+                                    ],
+                                ],
+                            ],
+                            'editors' => [
+                                [
+                                    'type' => 'person',
+                                    'name' => [
+                                        'preferred' => 'Two Person',
+                                        'index' => 'Two, Person',
+                                    ],
+                                ],
+                            ],
+                            'bookTitle' => 'Book',
+                            'chapterTitle' => 'Book chapter reference',
+                            'pages' => 'In press',
+                            'publisher' => [
+                                'name' => [
+                                    'A publisher',
+                                ],
+                            ],
+                        ],
+                        [
+                            'type' => 'clinical-trial',
+                            'id' => 'bib3',
+                            'date' => '2015',
+                            'authors' => [
+                                [
+                                    'type' => 'person',
+                                    'name' => [
+                                        'preferred' => 'One Person',
+                                        'index' => 'One, Person',
+                                    ],
+                                ],
+                            ],
+                            'authorsType' => 'authors',
+                            'title' => 'Clinical trial reference',
+                            'uri' => 'http://www.example.com/',
+                        ],
+                        [
+                            'type' => 'conference-proceeding',
+                            'id' => 'bib4',
+                            'date' => '2010',
+                            'authors' => [
+                                [
+                                    'type' => 'person',
+                                    'name' => [
+                                        'preferred' => 'One Person',
+                                        'index' => 'One, Person',
+                                    ],
+                                ],
+                            ],
+                            'articleTitle' => 'Conference proceeding reference',
+                            'conference' => [
+                                'name' => [
+                                    'A conference',
+                                ],
+                            ],
+                        ],
+                        [
+                            'type' => 'data',
+                            'id' => 'bib5',
+                            'date' => '2015',
+                            'authors' => [
+                                [
+                                    'type' => 'person',
+                                    'name' => [
+                                        'preferred' => 'One Person',
+                                        'index' => 'One, Person',
+                                    ],
+                                ],
+                            ],
+                            'title' => 'Data reference',
+                            'source' => 'A source',
+                        ],
+                        [
+                            'type' => 'journal',
+                            'id' => 'bib6',
                             'date' => '2013',
                             'authors' => [
                                 [
@@ -1952,9 +2057,147 @@ final class ArticleControllerTest extends PageTestCase
                                     ],
                                 ],
                             ],
-                            'articleTitle' => 'Journal article',
+                            'articleTitle' => 'Journal article reference',
                             'journal' => 'A journal',
+                        ],
+                        [
+                            'type' => 'patent',
+                            'id' => 'bib7',
+                            'date' => '2011',
+                            'inventors' => [
+                                [
+                                    'type' => 'person',
+                                    'name' => [
+                                        'preferred' => 'One Person',
+                                        'index' => 'One, Person',
+                                    ],
+                                ],
+                            ],
+                            'title' => 'Patent reference',
+                            'patentType' => 'United States patent',
+                            'country' => 'United States',
+                        ],
+                        [
+                            'type' => 'periodical',
+                            'id' => 'bib8',
+                            'date' => '2013-10-19',
+                            'authors' => [
+                                [
+                                    'type' => 'person',
+                                    'name' => [
+                                        'preferred' => 'One Person',
+                                        'index' => 'One, Person',
+                                    ],
+                                ],
+                            ],
+                            'articleTitle' => 'Periodical article reference',
+                            'periodical' => 'A periodical',
                             'pages' => 'In press',
+                        ],
+                        [
+                            'type' => 'preprint',
+                            'id' => 'bib9',
+                            'date' => '2013',
+                            'authors' => [
+                                [
+                                    'type' => 'person',
+                                    'name' => [
+                                        'preferred' => 'One Person',
+                                        'index' => 'One, Person',
+                                    ],
+                                ],
+                            ],
+                            'articleTitle' => 'Preprint reference',
+                            'source' => 'A repository',
+                            'uri' => 'http://www.example.com/',
+                        ],
+                        [
+                            'type' => 'report',
+                            'id' => 'bib10',
+                            'date' => '2016',
+                            'authors' => [
+                                [
+                                    'type' => 'person',
+                                    'name' => [
+                                        'preferred' => 'One Person',
+                                        'index' => 'One, Person',
+                                    ],
+                                ],
+                            ],
+                            'title' => 'Report reference',
+                            'publisher' => [
+                                'name' => [
+                                    'A publisher',
+                                ],
+                            ],
+                        ],
+                        [
+                            'type' => 'software',
+                            'id' => 'bib11',
+                            'date' => '2011',
+                            'authors' => [
+                                [
+                                    'type' => 'person',
+                                    'name' => [
+                                        'preferred' => 'One Person',
+                                        'index' => 'One, Person',
+                                    ],
+                                ],
+                            ],
+                            'title' => 'Software reference',
+                            'publisher' => [
+                                'name' => [
+                                    'A publisher',
+                                ],
+                            ],
+                        ],
+                        [
+                            'type' => 'thesis',
+                            'id' => 'bib12',
+                            'date' => '2006',
+                            'author' => [
+                                'name' => [
+                                    'preferred' => 'One Person',
+                                    'index' => 'One, Person',
+                                ],
+                            ],
+                            'title' => 'Thesis reference',
+                            'publisher' => [
+                                'name' => [
+                                    'A publisher',
+                                ],
+                            ],
+                        ],
+                        [
+                            'type' => 'web',
+                            'id' => 'bib13',
+                            'date' => '2014',
+                            'authors' => [
+                                [
+                                    'type' => 'person',
+                                    'name' => [
+                                        'preferred' => 'One Person',
+                                        'index' => 'One, Person',
+                                    ],
+                                ],
+                            ],
+                            'title' => 'Webpage reference',
+                            'uri' => 'http://www.example.com/',
+                        ],
+                        [
+                            'type' => 'unknown',
+                            'id' => 'bib14',
+                            'date' => '2014',
+                            'authors' => [
+                                [
+                                    'type' => 'person',
+                                    'name' => [
+                                        'preferred' => 'One Person',
+                                        'index' => 'One, Person',
+                                    ],
+                                ],
+                            ],
+                            'title' => 'Unknown reference',
                         ],
                     ],
                     'acknowledgements' => [
@@ -2176,8 +2419,60 @@ final class ArticleControllerTest extends PageTestCase
         $references = $crawler->filter('.grid-column > section:nth-of-type(5)');
         $this->assertSame('References',
             $references->filter('header > h2')->text());
-        $this->assertSame('Journal article',
+        $this->assertSame('Book reference',
             $references->filter('div > ol > li:nth-of-type(1) .reference__title')->text());
+        $this->assertSame('Book',
+            $references->filter('div > ol > li:nth-of-type(1) .reference__label')->text());
+        $this->assertSame('Book chapter reference',
+            $references->filter('div > ol > li:nth-of-type(2) .reference__title')->text());
+        $this->assertSame('Book',
+            $references->filter('div > ol > li:nth-of-type(2) .reference__label')->text());
+        $this->assertSame('Clinical trial reference',
+            $references->filter('div > ol > li:nth-of-type(3) .reference__title')->text());
+        $this->assertSame('Clinical Trial',
+            $references->filter('div > ol > li:nth-of-type(3) .reference__label')->text());
+        $this->assertSame('Conference proceeding reference',
+            $references->filter('div > ol > li:nth-of-type(4) .reference__title')->text());
+        $this->assertSame('Conference',
+            $references->filter('div > ol > li:nth-of-type(4) .reference__label')->text());
+        $this->assertSame('Data reference',
+            $references->filter('div > ol > li:nth-of-type(5) .reference__title')->text());
+        $this->assertSame('Data',
+            $references->filter('div > ol > li:nth-of-type(5) .reference__label')->text());
+        $this->assertSame('Journal article reference',
+            $references->filter('div > ol > li:nth-of-type(6) .reference__title')->text());
+        $this->assertEmpty($references->filter('div > ol > li:nth-of-type(6) .reference__label'));
+        $this->assertSame('Patent reference',
+            $references->filter('div > ol > li:nth-of-type(7) .reference__title')->text());
+        $this->assertSame('Patent',
+            $references->filter('div > ol > li:nth-of-type(7) .reference__label')->text());
+        $this->assertSame('Periodical article reference',
+            $references->filter('div > ol > li:nth-of-type(8) .reference__title')->text());
+        $this->assertSame('Periodical',
+            $references->filter('div > ol > li:nth-of-type(8) .reference__label')->text());
+        $this->assertSame('Preprint reference',
+            $references->filter('div > ol > li:nth-of-type(9) .reference__title')->text());
+        $this->assertSame('Preprint',
+            $references->filter('div > ol > li:nth-of-type(9) .reference__label')->text());
+        $this->assertSame('Report reference',
+            $references->filter('div > ol > li:nth-of-type(10) .reference__title')->text());
+        $this->assertSame('Report',
+            $references->filter('div > ol > li:nth-of-type(10) .reference__label')->text());
+        $this->assertSame('Software reference',
+            $references->filter('div > ol > li:nth-of-type(11) .reference__title')->text());
+        $this->assertSame('Software',
+            $references->filter('div > ol > li:nth-of-type(11) .reference__label')->text());
+        $this->assertSame('Thesis reference',
+            $references->filter('div > ol > li:nth-of-type(12) .reference__title')->text());
+        $this->assertSame('Thesis',
+            $references->filter('div > ol > li:nth-of-type(12) .reference__label')->text());
+        $this->assertSame('Webpage reference',
+            $references->filter('div > ol > li:nth-of-type(13) .reference__title')->text());
+        $this->assertSame('Website',
+            $references->filter('div > ol > li:nth-of-type(13) .reference__label')->text());
+        $this->assertSame('Unknown reference',
+            $references->filter('div > ol > li:nth-of-type(14) .reference__title')->text());
+        $this->assertEmpty($references->filter('div > ol > li:nth-of-type(14) .reference__label'));
         $this->assertSame('Decision letter', $crawler->filter('#decision-letter-id h2')->text());
         $this->assertSame('Decision letter',
             $crawler->filter('.grid-column > section:nth-of-type(6) > header > h2')->text());

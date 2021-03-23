@@ -8,7 +8,10 @@ use eLife\Patterns\ViewModel;
 
 final class DataReferenceConverter implements ViewModelConverter
 {
+    const LABEL = 'Data';
+
     use HasAuthors;
+    use HasLabel;
 
     /**
      * @param DataReference $object
@@ -38,10 +41,10 @@ final class DataReferenceConverter implements ViewModelConverter
         }
 
         if ($object->getDoi()) {
-            return ViewModel\Reference::withDoi($object->getTitle(), new ViewModel\Doi($object->getDoi()), $object->getId(), $origin, $authors);
+            return ViewModel\Reference::withDoi($object->getTitle(), new ViewModel\Doi($object->getDoi()), $object->getId(), $this->label(), $origin, $authors);
         }
 
-        return ViewModel\Reference::withOutDoi(new ViewModel\Link($object->getTitle(), $object->getUri()), $object->getId(), $origin, $authors);
+        return ViewModel\Reference::withOutDoi(new ViewModel\Link($object->getTitle(), $object->getUri()), $object->getId(), $this->label(), $origin, $authors);
     }
 
     public function supports($object, string $viewModel = null, array $context = []) : bool

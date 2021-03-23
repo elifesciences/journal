@@ -8,7 +8,10 @@ use eLife\Patterns\ViewModel;
 
 final class ClinicalTrialReferenceConverter implements ViewModelConverter
 {
+    const LABEL = 'Clinical Trial';
+
     use HasAuthors;
+    use HasLabel;
 
     /**
      * @param ClinicalTrialReference $object
@@ -17,7 +20,7 @@ final class ClinicalTrialReferenceConverter implements ViewModelConverter
     {
         $authors = [$this->createAuthors($object->getAuthors(), $object->authorsEtAl(), [$object->getAuthorsType(), $object->getDate()->format().$object->getDiscriminator()])];
 
-        return ViewModel\Reference::withOutDoi(new ViewModel\Link($object->getTitle(), $object->getUri()), $object->getId(), [], $authors);
+        return ViewModel\Reference::withOutDoi(new ViewModel\Link($object->getTitle(), $object->getUri()), $object->getId(), $this->label(), [], $authors);
     }
 
     public function supports($object, string $viewModel = null, array $context = []) : bool
