@@ -2421,6 +2421,7 @@ final class ArticleControllerTest extends PageTestCase
             $references->filter('header > h2')->text());
         $this->assertSame('Book reference',
             $references->filter('div > ol > li:nth-of-type(1) .reference__title')->text());
+        $this->assertEmpty($references->filter('div > ol > li:nth-of-type(1) .reference__label'));
         $this->assertSame('Book',
             $references->filter('div > ol > li:nth-of-type(1) .reference__label')->text());
         $this->assertSame('Book chapter reference',
