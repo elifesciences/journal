@@ -1982,8 +1982,8 @@ final class ArticleControllerTest extends PageTestCase
                                     ],
                                 ],
                             ],
-                            'bookTitle' => 'Book chapter reference',
-                            'chapterTitle' => 'chapter',
+                            'bookTitle' => 'Book',
+                            'chapterTitle' => 'Book chapter reference',
                             'pages' => 'In press',
                             'publisher' => [
                                 'name' => [
