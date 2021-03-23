@@ -2468,7 +2468,7 @@ final class ArticleControllerTest extends PageTestCase
             $references->filter('div > ol > li:nth-of-type(12) .reference__label')->text());
         $this->assertSame('Webpage reference',
             $references->filter('div > ol > li:nth-of-type(13) .reference__title')->text());
-        $this->assertSame('Webpage',
+        $this->assertSame('Website',
             $references->filter('div > ol > li:nth-of-type(13) .reference__label')->text());
         $this->assertSame('Unknown reference',
             $references->filter('div > ol > li:nth-of-type(14) .reference__title')->text());
