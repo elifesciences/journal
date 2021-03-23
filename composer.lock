@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "80c8ef8b3b2be81a0e266ea553e6998d",
+    "content-hash": "18758ee5aff7c68a1dd490f2dc0370c6",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -1290,16 +1290,16 @@
         },
         {
             "name": "elife/patterns",
-            "version": "dev-add-labels-to-references",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/patterns-php.git",
-                "reference": "51acff32891a71acd0e3d48e72d881d7a69a23ed"
+                "reference": "0b2f593568ec06abc4958cef10fdddad57f2ff68"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/51acff32891a71acd0e3d48e72d881d7a69a23ed",
-                "reference": "51acff32891a71acd0e3d48e72d881d7a69a23ed",
+                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/0b2f593568ec06abc4958cef10fdddad57f2ff68",
+                "reference": "0b2f593568ec06abc4958cef10fdddad57f2ff68",
                 "shasum": ""
             },
             "require": {
@@ -1341,9 +1341,9 @@
             ],
             "description": "eLife patterns",
             "support": {
-                "source": "https://github.com/elifesciences/patterns-php/tree/add-labels-to-references"
+                "source": "https://github.com/elifesciences/patterns-php/tree/master"
             },
-            "time": "2021-03-22T12:14:07+00:00"
+            "time": "2021-03-23T18:50:18+00:00"
         },
         {
             "name": "fabpot/goutte",
