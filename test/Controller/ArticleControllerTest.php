@@ -2441,6 +2441,7 @@ final class ArticleControllerTest extends PageTestCase
             $references->filter('div > ol > li:nth-of-type(5) .reference__label')->text());
         $this->assertSame('Journal article reference',
             $references->filter('div > ol > li:nth-of-type(6) .reference__title')->text());
+        $this->assertEmpty($references->filter('div > ol > li:nth-of-type(6) .reference__label'));
         $this->assertSame('Patent reference',
             $references->filter('div > ol > li:nth-of-type(7) .reference__title')->text());
         $this->assertSame('Patent',
@@ -2471,6 +2472,7 @@ final class ArticleControllerTest extends PageTestCase
             $references->filter('div > ol > li:nth-of-type(13) .reference__label')->text());
         $this->assertSame('Unknown reference',
             $references->filter('div > ol > li:nth-of-type(14) .reference__title')->text());
+        $this->assertEmpty($references->filter('div > ol > li:nth-of-type(14) .reference__label'));
         $this->assertSame('Decision letter', $crawler->filter('#decision-letter-id h2')->text());
         $this->assertSame('Decision letter',
             $crawler->filter('.grid-column > section:nth-of-type(6) > header > h2')->text());
