@@ -192,43 +192,6 @@ final class ArticlesController extends Controller
                     $hasFigures;
             });
 
-        $dataAvailability = (new PromiseSequence($arguments['item']
-            ->then(Callback::method('getDataAvailability'))))
-            ->map($this->willConvertTo());
-
-        $generateDataSets = $arguments['item']
-            ->then(function (ArticleVersion $item) {
-                return $item->getGeneratedDataSets()
-                    ->map(function (DataSet $dataSet) {
-                        return $this->convertTo($dataSet);
-                    });
-            })
-            ->then(Callback::emptyOr(function (Sequence $generatedDataSets) {
-                return [
-                    new ViewModel\MessageBar('The following data sets were generated'),
-                    new ViewModel\ReferenceList(...$generatedDataSets),
-                ];
-            }, []));
-
-        $usedDataSets = $arguments['item']
-            ->then(function (ArticleVersion $item) {
-                return $item->getUsedDataSets()
-                    ->map(function (DataSet $dataSet) {
-                        return $this->convertTo($dataSet);
-                    });
-            })
-            ->then(Callback::emptyOr(function (Sequence $usedDataSets) {
-                return [
-                    new ViewModel\MessageBar('The following previously published data sets were used'),
-                    new ViewModel\ReferenceList(...$usedDataSets),
-                ];
-            }, []));
-
-        $arguments['hasData'] = all(['availability' => $dataAvailability, 'generated' => $generateDataSets, 'used' => $usedDataSets])
-            ->then(function (array $data) {
-                return $data['availability']->append(...$data['generated'], ...$data['used']);
-            });
-
         $arguments['contextualData'] = all(['item' => $arguments['item'], 'metrics' => $arguments['contextualDataMetrics']])
             ->then(function (array $parts) {
                 /** @var ArticleVersion $item */
@@ -266,7 +229,7 @@ final class ArticlesController extends Controller
                 return $context;
             });
 
-        $arguments['body'] = all(['item' => $arguments['item'], 'history' => $arguments['history'], 'citations' => $arguments['citations'], 'downloads' => $arguments['downloads'], 'pageViews' => $arguments['pageViews'], 'data' => $arguments['hasData'], 'context' => $context])
+        $arguments['body'] = all(['item' => $arguments['item'], 'history' => $arguments['history'], 'citations' => $arguments['citations'], 'downloads' => $arguments['downloads'], 'pageViews' => $arguments['pageViews'], 'context' => $context])
             ->then(function (array $parts) use ($context) {
                 /** @var ArticleVersion $item */
                 $item = $parts['item'];
@@ -278,8 +241,6 @@ final class ArticlesController extends Controller
                 $downloads = $parts['downloads'];
                 /** @var int|null $pageViews */
                 $pageViews = $parts['pageViews'];
-                /** @var Sequence $data */
-                $data = $parts['data'];
                 /** @var array $context */
                 $context = $parts['context'];
 
@@ -345,9 +306,39 @@ final class ArticlesController extends Controller
                     })->toArray());
                 }
 
-                if ($data->notEmpty()) {
-                    $parts[] = ArticleSection::collapsible('data', 'Data availability', 2, $this->render(...$data), false, $first);
-                }
+                $dataAvailability = $item->getDataAvailability()
+                    ->map($this->willConvertTo());
+
+                $generateDataSets = $item->getGeneratedDataSets()
+                    ->map(function (DataSet $dataSet) {
+                        return $this->convertTo($dataSet);
+                    })
+                    ->then(Callback::emptyOr(function (Sequence $generatedDataSets) {
+                        return [
+                            new ViewModel\MessageBar('The following data sets were generated'),
+                            new ViewModel\ReferenceList(...$generatedDataSets),
+                        ];
+                    }, []));
+
+                $usedDataSets = $item->getUsedDataSets()
+                    ->map(function (DataSet $dataSet) {
+                        return $this->convertTo($dataSet);
+                    })
+                    ->then(Callback::emptyOr(function (Sequence $usedDataSets) {
+                        return [
+                            new ViewModel\MessageBar('The following previously published data sets were used'),
+                            new ViewModel\ReferenceList(...$usedDataSets),
+                        ];
+                    }, []));
+
+                all(['availability' => $dataAvailability, 'generated' => $generateDataSets, 'used' => $usedDataSets])
+                    ->then(function (array $data) use (&$parts) {
+                        /** @var Sequence $combined */
+                        $combinedData = $data['availability']->append(...$data['generated'], ...$data['used']);
+                        if ($combinedData->notEmpty()) {
+                            $parts[] = ArticleSection::collapsible('data', 'Data availability', 2, $this->render(...$combinedData), true);
+                        }
+                    });
 
                 if ($item instanceof ArticleVoR && $item->getReferences()->notEmpty()) {
                     $parts[] = ArticleSection::collapsible(
