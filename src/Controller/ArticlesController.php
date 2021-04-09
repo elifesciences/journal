@@ -306,6 +306,47 @@ final class ArticlesController extends Controller
                     })->toArray());
                 }
 
+                $dataAvailability = (new PromiseSequence($arguments['item']
+                    ->then(Callback::method('getDataAvailability'))))
+                    ->map($this->willConvertTo());
+
+                $generateDataSets = $arguments['item']
+                    ->then(function (ArticleVersion $item) {
+                        return $item->getGeneratedDataSets()
+                            ->map(function (DataSet $dataSet) {
+                                return $this->convertTo($dataSet);
+                            });
+                    });
+
+                $usedDataSets = $arguments['item']
+                    ->then(function (ArticleVersion $item) {
+                        return $item->getUsedDataSets()
+                            ->map(function (DataSet $dataSet) {
+                                return $this->convertTo($dataSet);
+                            });
+                    });
+
+                $generateDataSets = $generateDataSets
+                    ->then(Callback::emptyOr(function (Sequence $generatedDataSets) {
+                        return [
+                            new ViewModel\MessageBar('The following data sets were generated'),
+                            new ViewModel\ReferenceList(...$generatedDataSets),
+                        ];
+                    }, []));
+
+                $usedDataSets = $usedDataSets
+                    ->then(Callback::emptyOr(function (Sequence $usedDataSets) {
+                        return [
+                            new ViewModel\MessageBar('The following previously published data sets were used'),
+                            new ViewModel\ReferenceList(...$usedDataSets),
+                        ];
+                    }, []));
+
+                $data = all(['availability' => $dataAvailability, 'generated' => $generateDataSets, 'used' => $usedDataSets])
+                    ->then(function (array $data) {
+                        return $data['availability']->append(...$data['generated'], ...$data['used']);
+                    });
+
                 if ($item instanceof ArticleVoR && $item->getReferences()->notEmpty()) {
                     $parts[] = ArticleSection::collapsible(
                         'references',
