@@ -624,26 +624,6 @@ final class ArticlesController extends Controller
             })
             ->map($this->willConvertTo(null, ['complete' => true]));
 
-        $dataAvailability = (new PromiseSequence($arguments['item']
-            ->then(Callback::method('getDataAvailability'))))
-            ->map($this->willConvertTo());
-
-        $generateDataSets = $arguments['item']
-            ->then(function (ArticleVersion $item) {
-                return $item->getGeneratedDataSets()
-                    ->map(function (DataSet $dataSet) {
-                        return $this->convertTo($dataSet);
-                    });
-            });
-
-        $usedDataSets = $arguments['item']
-            ->then(function (ArticleVersion $item) {
-                return $item->getUsedDataSets()
-                    ->map(function (DataSet $dataSet) {
-                        return $this->convertTo($dataSet);
-                    });
-            });
-
         $additionalFiles = $arguments['item']
             ->then(function (ArticleVersion $item) {
                 return $item->getAdditionalFiles()->map($this->willConvertTo());
@@ -653,7 +633,6 @@ final class ArticlesController extends Controller
             'figures' => $figures,
             'videos' => $videos,
             'tables' => $tables,
-            'dataAvailability' => $dataAvailability,
             'generatedDataSets' => $generateDataSets,
             'usedDataSets' => $usedDataSets,
             'additionalFiles' => $additionalFiles,
@@ -686,32 +665,10 @@ final class ArticlesController extends Controller
                 return new ViewModel\AdditionalAssets(null, $files->toArray());
             }));
 
-        $generateDataSets = $generateDataSets
-            ->then(Callback::emptyOr(function (Sequence $generatedDataSets) {
-                return [
-                    new ViewModel\MessageBar('The following data sets were generated'),
-                    new ViewModel\ReferenceList(...$generatedDataSets),
-                ];
-            }, []));
-
-        $usedDataSets = $usedDataSets
-            ->then(Callback::emptyOr(function (Sequence $usedDataSets) {
-                return [
-                    new ViewModel\MessageBar('The following previously published data sets were used'),
-                    new ViewModel\ReferenceList(...$usedDataSets),
-                ];
-            }, []));
-
-        $data = all(['availability' => $dataAvailability, 'generated' => $generateDataSets, 'used' => $usedDataSets])
-            ->then(function (array $data) {
-                return $data['availability']->append(...$data['generated'], ...$data['used']);
-            });
-
         $arguments['body'] = all([
             'figures' => $figures,
             'videos' => $videos,
             'tables' => $tables,
-            'data' => $data,
             'additionalFiles' => $additionalFiles,
         ])
             ->then(function (array $all) {
@@ -731,11 +688,6 @@ final class ArticlesController extends Controller
 
                 if ($all['tables']->notEmpty()) {
                     $parts[] = ArticleSection::collapsible('tables', 'Tables', 2, $this->render(...$all['tables']), false, $first);
-                    $first = false;
-                }
-
-                if ($all['data']->notEmpty()) {
-                    $parts[] = ArticleSection::collapsible('data', 'Data availability', 2, $this->render(...$all['data']), false, $first);
                     $first = false;
                 }
 
