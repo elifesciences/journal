@@ -84,6 +84,8 @@ final class FooterFactory
                 new Link('Innovation', $this->urlGenerator->generate('labs')),
                 new Link('For the press', $this->urlGenerator->generate('press-packs')),
                 new Link('Resources', $this->urlGenerator->generate('resources')),
+                new Link('XML, Data and API',
+                    'http://developers.elifesciences.org'),
             ],
             new InvestorLogos(...array_map(function (array $item) {
                 return $this->pictureBuilderFactory
