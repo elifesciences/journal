@@ -77,7 +77,46 @@ final class ArticleControllerTest extends PageTestCase
                         'availability' => [
                             [
                                 'type' => 'paragraph',
-                                'text' => 'Data availability',
+                                'text' => 'Data availability statement',
+                            ],
+                        ],
+                        'generated' => [
+                            [
+                                'id' => 'dataro1',
+                                'authors' => [
+                                    [
+                                        'type' => 'person',
+                                        'name' => [
+                                            'preferred' => 'Foo Bar',
+                                            'index' => 'Bar, Foo',
+                                        ],
+                                    ],
+                                    [
+                                        'type' => 'group',
+                                        'name' => 'Baz',
+                                    ],
+                                ],
+                                'date' => '2013',
+                                'title' => 'Data set 1',
+                                'dataId' => 'DataSet1',
+                                'uri' => 'http://www.example.com/',
+                                'details' => 'Data set details.',
+                            ],
+                        ],
+                        'used' => [
+                            [
+                                'id' => 'dataro2',
+                                'authors' => [
+                                    [
+                                        'type' => 'person',
+                                        'name' => [
+                                            'preferred' => 'Foo Bar',
+                                            'index' => 'Bar, Foo',
+                                        ],
+                                    ],
+                                ],
+                                'date' => '2014',
+                                'title' => 'Data set 2',
                             ],
                         ],
                     ],
@@ -139,9 +178,15 @@ final class ArticleControllerTest extends PageTestCase
         );
 
         $crawler = $client->request('GET', '/articles/00001');
+
         $dataAvailability = $crawler->filter('.grid-column > section:nth-of-type(2)');
         $this->assertSame('Data availability',
             $dataAvailability->filter('header > h2')->text());
+
+        // Check text of data availability statement
+        // Check existence and text of generated datasets
+        // Check existence and text of used datasets
+
         $this->assertSame(200, $client->getResponse()->getStatusCode());
     }
 
