@@ -139,9 +139,9 @@ final class ArticleControllerTest extends PageTestCase
         );
 
         $crawler = $client->request('GET', '/articles/00001');
-        $dataAvailabilty = $crawler->filter('.grid-column > section:nth-of-type(1)');
-        $this->assertSame('Data Availability',
-            $dataAvailabilty->filter('header > h2')->text());
+        $dataAvailability = $crawler->filter('.grid-column > section:nth-of-type(2)');
+        $this->assertSame('Data availability',
+            $dataAvailability->filter('header > h2')->text());
         $this->assertSame(200, $client->getResponse()->getStatusCode());
     }
 
