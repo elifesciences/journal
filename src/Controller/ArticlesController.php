@@ -633,8 +633,6 @@ final class ArticlesController extends Controller
             'figures' => $figures,
             'videos' => $videos,
             'tables' => $tables,
-            'generatedDataSets' => $generateDataSets,
-            'usedDataSets' => $usedDataSets,
             'additionalFiles' => $additionalFiles,
         ])
             ->then(function (array $all) {
@@ -642,7 +640,6 @@ final class ArticlesController extends Controller
                     'figures' => $all['figures'],
                     'videos' => $all['videos'],
                     'tables' => $all['tables'],
-                    'data sets' => $all['generatedDataSets']->append(...$all['usedDataSets']),
                     'additional files' => $all['additionalFiles'],
                 ], Callback::method('notEmpty'));
             })
