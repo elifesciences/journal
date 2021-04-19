@@ -26,10 +26,10 @@ final class ArticleFiguresControllerTest extends PageTestCase
             preg_replace('!\s+!', ' ', $crawler->filter('.contextual-data__cite_wrapper')->text()));
         $this->assertContains('doi: 10.7554/eLife.00001', $crawler->filter('.contextual-data__cite_wrapper')->text());
 
-        $this->assertSame('4 figures, 1 video, 1 table, 2 data sets and 1 additional file', trim($crawler->filter('.message-bar')->text()));
+        $this->assertSame('4 figures, 1 video, 1 table and 1 additional file', trim($crawler->filter('.message-bar')->text()));
 
         $figureTypes = $crawler->filter('.grid-column > section');
-        $this->assertCount(6, $figureTypes);
+        $this->assertCount(5, $figureTypes);
 
         $this->assertSame('Figures', $figureTypes->eq(0)->filter('.article-section__header_text')->text());
         $figures = $figureTypes->eq(0)->filter('.asset-viewer-inline');
@@ -49,26 +49,17 @@ final class ArticleFiguresControllerTest extends PageTestCase
         $tables = $figureTypes->eq(2)->filter('.asset-viewer-inline');
         $this->assertSame('Table 1 label', trim($tables->eq(0)->filter('.asset-viewer-inline__header_text')->text()));
 
-        $this->assertSame('Data availability', $figureTypes->eq(3)->filter('.article-section__header_text')->text());
-        $data = $figureTypes->eq(3)->filter('.article-section__body')->children();
-        $this->assertSame('Data availability', trim($data->eq(0)->text()));
-        $this->assertSame('The following data sets were generated', trim($data->eq(1)->text()));
-        $this->assertSame('Data set 1', trim($data->eq(2)->filter('.reference__title')->text()));
-        $this->assertSame('The following previously published data sets were used', trim($data->eq(3)->text()));
-        $this->assertSame('Data set 2', trim($data->eq(4)->filter('.reference__title')->text()));
-
-        $this->assertSame('Additional files', $figureTypes->eq(4)->filter('.article-section__header_text')->text());
-        $additionalFiles = $figureTypes->eq(4)->filter('.caption-text__heading');
+        $this->assertSame('Additional files', $figureTypes->eq(3)->filter('.article-section__header_text')->text());
+        $additionalFiles = $figureTypes->eq(3)->filter('.caption-text__heading');
         $this->assertSame('Additional file 1 label', trim($additionalFiles->eq(0)->text()));
 
-        $this->assertSame('Download links', $figureTypes->eq(5)->filter('.article-section__header_text')->text());
+        $this->assertSame('Download links', $figureTypes->eq(4)->filter('.article-section__header_text')->text());
 
         $this->assertSame(
             [
                 'Figures',
                 'Videos',
                 'Tables',
-                'Data availability',
                 'Additional files',
             ],
             array_map('trim', $crawler->filter('.view-selector__jump_link_item')->extract('_text'))
@@ -324,7 +315,7 @@ final class ArticleFiguresControllerTest extends PageTestCase
     /**
      * @test
      */
-    public function it_displays_an_article_figures_page_for_a_vor_with_only_a_data_availability_statement()
+    public function it_does_not_display_an_article_figures_page_for_a_vor_with_only_a_data_availability_statement()
     {
         $client = static::createClient();
 
@@ -432,8 +423,7 @@ final class ArticleFiguresControllerTest extends PageTestCase
 
         $crawler = $client->request('GET', '/articles/00001/figures');
 
-        $this->assertSame(200, $client->getResponse()->getStatusCode());
-        $this->assertSame('There are no figures or additional files', trim($crawler->filter('.message-bar')->text()));
+        $this->assertSame(404, $client->getResponse()->getStatusCode());
     }
 
     protected function getUrl() : string

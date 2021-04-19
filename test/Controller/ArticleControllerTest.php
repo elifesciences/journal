@@ -1938,6 +1938,53 @@ final class ArticleControllerTest extends PageTestCase
                             ],
                         ],
                     ],
+                    'dataSets' => [
+                        'availability' => [
+                            [
+                                'type' => 'paragraph',
+                                'text' => 'Data availability statement',
+                            ],
+                        ],
+                        'generated' => [
+                            [
+                                'id' => 'dataro1',
+                                'authors' => [
+                                    [
+                                        'type' => 'person',
+                                        'name' => [
+                                            'preferred' => 'Foo Bar',
+                                            'index' => 'Bar, Foo',
+                                        ],
+                                    ],
+                                    [
+                                        'type' => 'group',
+                                        'name' => 'Baz',
+                                    ],
+                                ],
+                                'date' => '2013',
+                                'title' => 'Data set 1',
+                                'dataId' => 'DataSet1',
+                                'uri' => 'http://www.example.com/',
+                                'details' => 'Data set details.',
+                            ],
+                        ],
+                        'used' => [
+                            [
+                                'id' => 'dataro2',
+                                'authors' => [
+                                    [
+                                        'type' => 'person',
+                                        'name' => [
+                                            'preferred' => 'Foo Bar',
+                                            'index' => 'Bar, Foo',
+                                        ],
+                                    ],
+                                ],
+                                'date' => '2014',
+                                'title' => 'Data set 2',
+                            ],
+                        ],
+                    ],
                     'references' => [
                         [
                             'type' => 'book',
@@ -2416,7 +2463,16 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertSame('Appendix 1', $appendix->filter('header > h2')->text());
         $this->assertSame('Appendix title', $appendix->filter('div > section > header > h3')->text());
         $this->assertSame('Appendix text', $appendix->filter('div > p')->text());
-        $references = $crawler->filter('.grid-column > section:nth-of-type(5)');
+        $dataAvailability = $crawler->filter('.grid-column > section:nth-of-type(5)');
+        $this->assertSame('Data availability',
+            $dataAvailability->filter('header > h2')->text());
+        $data = $dataAvailability->filter('.article-section__body')->children();
+        $this->assertSame('Data availability statement', trim($data->eq(0)->text()));
+        $this->assertSame('The following data sets were generated', trim($data->eq(1)->text()));
+        $this->assertSame('Data set 1', trim($data->eq(2)->filter('.reference__title')->text()));
+        $this->assertSame('The following previously published data sets were used', trim($data->eq(3)->text()));
+        $this->assertSame('Data set 2', trim($data->eq(4)->filter('.reference__title')->text()));
+        $references = $crawler->filter('.grid-column > section:nth-of-type(6)');
         $this->assertSame('References',
             $references->filter('header > h2')->text());
         $this->assertSame('Book reference',
@@ -2475,27 +2531,27 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertEmpty($references->filter('div > ol > li:nth-of-type(14) .reference__label'));
         $this->assertSame('Decision letter', $crawler->filter('#decision-letter-id h2')->text());
         $this->assertSame('Decision letter',
-            $crawler->filter('.grid-column > section:nth-of-type(6) > header > h2')->text());
-        $this->assertCount(4, $crawler->filter('.grid-column > section:nth-of-type(6) > div .profile-snippet__name'));
+            $crawler->filter('.grid-column > section:nth-of-type(7) > header > h2')->text());
+        $this->assertCount(4, $crawler->filter('.grid-column > section:nth-of-type(7) > div .profile-snippet__name'));
         $this->assertSame('Reviewer 1',
-            $crawler->filter('.grid-column > section:nth-of-type(6) > div .profile-snippet__name')->eq(0)->text());
+            $crawler->filter('.grid-column > section:nth-of-type(7) > div .profile-snippet__name')->eq(0)->text());
         $this->assertSame('Reviewing Editor 1',
-            $crawler->filter('.grid-column > section:nth-of-type(6) > div .profile-snippet__name')->eq(1)->text());
+            $crawler->filter('.grid-column > section:nth-of-type(7) > div .profile-snippet__name')->eq(1)->text());
         $this->assertSame('Senior Editor 1',
-            $crawler->filter('.grid-column > section:nth-of-type(6) > div .profile-snippet__name')->eq(2)->text());
+            $crawler->filter('.grid-column > section:nth-of-type(7) > div .profile-snippet__name')->eq(2)->text());
         $this->assertSame('Reviewer 2',
-            $crawler->filter('.grid-column > section:nth-of-type(6) > div .profile-snippet__name')->eq(3)->text());
+            $crawler->filter('.grid-column > section:nth-of-type(7) > div .profile-snippet__name')->eq(3)->text());
         $this->assertSame('Decision letter description',
-            $crawler->filter('.grid-column > section:nth-of-type(6) > div .decision-letter-header__main_text > p')->text());
+            $crawler->filter('.grid-column > section:nth-of-type(7) > div .decision-letter-header__main_text > p')->text());
         $this->assertSame('Decision letter text',
-            $crawler->filter('.grid-column > section:nth-of-type(6) > div > p')->text());
+            $crawler->filter('.grid-column > section:nth-of-type(7) > div > p')->text());
         $this->assertSame('Author response', $crawler->filter('#author-response-id h2')->text());
         $this->assertSame('Author response',
-            $crawler->filter('.grid-column > section:nth-of-type(7) > header > h2')->text());
+            $crawler->filter('.grid-column > section:nth-of-type(8) > header > h2')->text());
         $this->assertSame('Author response text',
-            $crawler->filter('.grid-column > section:nth-of-type(7) > div > p')->text());
+            $crawler->filter('.grid-column > section:nth-of-type(8) > div > p')->text());
 
-        $articleInfo = $crawler->filter('.grid-column > section:nth-of-type(8)');
+        $articleInfo = $crawler->filter('.grid-column > section:nth-of-type(9)');
         $this->assertSame('Article and author information',
             $articleInfo->filter('header > h2')->text());
 
@@ -2504,7 +2560,7 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertSame('Foo Bar, Role', $authorDetails->eq(0)->filter('.author-details__name')->text());
         $this->assertSame('Baz', $authorDetails->eq(1)->filter('.author-details__name')->text());
 
-        $articleInfo = $crawler->filter('.grid-column > section:nth-of-type(8) > div > section');
+        $articleInfo = $crawler->filter('.grid-column > section:nth-of-type(9) > div > section');
 
         $funding = $articleInfo->eq(0);
         $this->assertSame('Funding', $funding->filter('header > h3')->text());
@@ -2559,9 +2615,9 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertContains('© 2012, Bar', $copyright->filter('div')->text());
         $this->assertContains('Copyright statement.', $copyright->filter('div')->text());
 
-        $this->assertSame('Download links', $crawler->filter('.grid-column > section:nth-of-type(9) .article-section__header_text')->text());
+        $this->assertSame('Download links', $crawler->filter('.grid-column > section:nth-of-type(10) .article-section__header_text')->text());
 
-        $this->assertSame('Categories and tags', $crawler->filter('.grid-column > section:nth-of-type(10) .article-meta__group_title')->text());
+        $this->assertSame('Categories and tags', $crawler->filter('.grid-column > section:nth-of-type(11) .article-meta__group_title')->text());
 
         $this->assertRegexp('|^https://.*/00001$|', $crawler->filter('.view-selector')->attr('data-side-by-side-link'));
 
@@ -2585,6 +2641,7 @@ final class ArticleControllerTest extends PageTestCase
                 'eLife digest',
                 'Body title',
                 'Appendix 1',
+                'Data availability',
                 'References',
                 'Decision letter',
                 'Author response',
@@ -2592,6 +2649,170 @@ final class ArticleControllerTest extends PageTestCase
             ],
             array_map('trim', $crawler->filter('.view-selector__jump_link_item')->extract('_text'))
         );
+    }
+
+    /**
+     * @test
+     */
+    public function it_may_have_a_data_availability_statement()
+    {
+        $client = static::createClient();
+
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/articles/00001',
+                ['Accept' => 'application/vnd.elife.article-poa+json; version=3, application/vnd.elife.article-vor+json; version=5']
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.article-vor+json; version=5'],
+                json_encode([
+                    'status' => 'vor',
+                    'stage' => 'published',
+                    'id' => '00001',
+                    'version' => 1,
+                    'type' => 'research-article',
+                    'doi' => '10.7554/eLife.00001',
+                    'title' => 'Article 1 title',
+                    'published' => '2010-01-01T00:00:00Z',
+                    'versionDate' => '2010-01-01T00:00:00Z',
+                    'statusDate' => '2010-01-01T00:00:00Z',
+                    'volume' => 1,
+                    'elocationId' => 'e00001',
+                    'copyright' => [
+                        'license' => 'CC-BY-4.0',
+                        'holder' => 'Bar',
+                        'statement' => 'Copyright statement.',
+                    ],
+                    'authorLine' => 'Foo Bar',
+                    'authors' => [
+                        [
+                            'type' => 'person',
+                            'name' => [
+                                'preferred' => 'Foo Bar',
+                                'index' => 'Bar, Foo',
+                            ],
+                        ],
+                    ],
+                    'dataSets' => [
+                        'availability' => [
+                            [
+                                'type' => 'paragraph',
+                                'text' => 'Data availability statement',
+                            ],
+                        ],
+                        'generated' => [
+                            [
+                                'id' => 'dataro1',
+                                'authors' => [
+                                    [
+                                        'type' => 'person',
+                                        'name' => [
+                                            'preferred' => 'Foo Bar',
+                                            'index' => 'Bar, Foo',
+                                        ],
+                                    ],
+                                    [
+                                        'type' => 'group',
+                                        'name' => 'Baz',
+                                    ],
+                                ],
+                                'date' => '2013',
+                                'title' => 'Data set 1',
+                                'dataId' => 'DataSet1',
+                                'uri' => 'http://www.example.com/',
+                                'details' => 'Data set details.',
+                            ],
+                        ],
+                        'used' => [
+                            [
+                                'id' => 'dataro2',
+                                'authors' => [
+                                    [
+                                        'type' => 'person',
+                                        'name' => [
+                                            'preferred' => 'Foo Bar',
+                                            'index' => 'Bar, Foo',
+                                        ],
+                                    ],
+                                ],
+                                'date' => '2014',
+                                'title' => 'Data set 2',
+                            ],
+                        ],
+                    ],
+                    'body' => [
+                        [
+                            'type' => 'section',
+                            'id' => 's-1',
+                            'title' => 'Introduction',
+                            'content' => [
+                                [
+                                    'type' => 'paragraph',
+                                    'text' => 'Fossil hominins were first recognized in the Dinaledi Chamber in the Rising Star cave system in October 2013. During a relatively short excavation, our team recovered an extensive collection of 1550 hominin specimens, representing nearly every element of the skeleton multiple times (Figure 1), including many complete elements and morphologically informative fragments, some in articulation, as well as smaller fragments many of which could be refit into more complete elements. The collection is a morphologically homogeneous sample that can be attributed to no previously-known hominin species. Here we describe this new species, <i>Homo naledi</i>. We have not defined <i>H. naledi</i> narrowly based on a single jaw or skull because the entire body of material has informed our understanding of its biology.',
+                                ],
+                            ],
+                        ],
+                    ],
+                ])
+            )
+        );
+
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/articles/00001/versions',
+                [
+                    'Accept' => [
+                        'application/vnd.elife.article-history+json; version=1',
+                    ],
+                ]
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.article-history+json; version=1'],
+                json_encode([
+                    'versions' => [
+                        [
+                            'status' => 'vor',
+                            'stage' => 'published',
+                            'id' => '00001',
+                            'version' => 1,
+                            'type' => 'research-article',
+                            'doi' => '10.7554/eLife.00001',
+                            'title' => 'Article 1 title',
+                            'published' => '2010-01-01T00:00:00Z',
+                            'versionDate' => '2010-01-01T00:00:00Z',
+                            'statusDate' => '2010-01-01T00:00:00Z',
+                            'volume' => 1,
+                            'elocationId' => 'e00001',
+                            'copyright' => [
+                                'license' => 'CC-BY-4.0',
+                                'holder' => 'Bar',
+                                'statement' => 'Copyright statement.',
+                            ],
+                            'authorLine' => 'Foo Bar',
+                        ],
+                    ],
+                ])
+            )
+        );
+
+        $crawler = $client->request('GET', '/articles/00001');
+
+        $dataAvailability = $crawler->filter('.grid-column > section:nth-of-type(2)');
+        $this->assertSame('Data availability',
+            $dataAvailability->filter('header > h2')->text());
+
+        $data = $dataAvailability->filter('.article-section__body')->children();
+        $this->assertSame('Data availability statement', trim($data->eq(0)->text()));
+        $this->assertSame('The following data sets were generated', trim($data->eq(1)->text()));
+        $this->assertSame('Data set 1', trim($data->eq(2)->filter('.reference__title')->text()));
+        $this->assertSame('The following previously published data sets were used', trim($data->eq(3)->text()));
+        $this->assertSame('Data set 2', trim($data->eq(4)->filter('.reference__title')->text()));
+
+        $this->assertSame(200, $client->getResponse()->getStatusCode());
     }
 
     /**
