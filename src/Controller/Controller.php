@@ -2,6 +2,7 @@
 
 namespace eLife\Journal\Controller;
 
+use DateTimeImmutable;
 use eLife\ApiClient\Exception\BadResponse;
 use eLife\ApiSdk\Model\Image;
 use eLife\Journal\Exception\EarlyResponse;
@@ -202,7 +203,8 @@ abstract class Controller implements ContainerAwareInterface
                     ),
                     $callToAction['text'],
                     ViewModel\Button::link($callToAction['button']['text'], $callToAction['button']['path']),
-                    $callToAction['needsJs'] ?? false
+                    $callToAction['needsJs'] ?? false,
+                    !empty($callToAction['dismissible']['cookieExpires']) ? new DateTimeImmutable($callToAction['dismissible']['cookieExpires']) : null
                 );
             },
             array_filter(
