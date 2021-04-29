@@ -208,7 +208,8 @@ abstract class Controller implements ContainerAwareInterface
                 );
             },
             array_filter(
-                $this->getParameter('calls_to_action'),
+                // Limit of one call to action until we resolve issues of multiple calls to action.
+                array_slice($this->getParameter('calls_to_action'), 0, 1),
                 function (array $callToAction) use ($request) : bool {
                     if (isset($callToAction['from']) && time() < $callToAction['from']) {
                         return false;
