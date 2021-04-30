@@ -27,7 +27,6 @@ parameters:
                   height: 600
         - id: cta2
           path: ^/some-non-existent-path$
-          from: 2000-01-01T00:00:00Z
           text: Call to action 2
           button:
               text: Button text
@@ -43,8 +42,25 @@ parameters:
                   width: 800
                   height: 600
         - id: cta3
-          from: 2100-01-01T00:00:00Z
+          from: 2000-01-01T00:00:00Z
+          path: ^/
           text: Call to action 3
+          button:
+              text: Button text
+              path: https://elifesciences.org
+          image:
+              alt: ''
+              uri: https://www.example.com/iiif/thumb%2Fnail
+              source:
+                  mediaType: image/jpg
+                  uri: https://www.example.com/image.jpg
+                  filename: image.jpg
+              size:
+                  width: 800
+                  height: 600
+        - id: cta4
+          from: 2100-01-01T00:00:00Z
+          text: Call to action 4
           button:
               text: Button text
               path: https://elifesciences.org
@@ -58,8 +74,8 @@ parameters:
               size:
                   width: 800
                   height: 600
-        - id: cta4
-          text: Call to action 4
+        - id: cta5
+          text: Call to action 5
           button:
               text: Button text
               path: https://elifesciences.org
