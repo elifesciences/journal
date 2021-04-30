@@ -207,9 +207,9 @@ abstract class Controller implements ContainerAwareInterface
                     !empty($callToAction['dismissible']['cookieExpires']) ? new DateTimeImmutable($callToAction['dismissible']['cookieExpires']) : null
                 );
             },
-            array_filter(
+            array_slice(array_filter(
                 // Limit of one call to action until we resolve issues of multiple calls to action.
-                array_slice($this->getParameter('calls_to_action'), 0, 1),
+                $this->getParameter('calls_to_action'),
                 function (array $callToAction) use ($request) : bool {
                     if (isset($callToAction['from']) && time() < $callToAction['from']) {
                         return false;
@@ -225,7 +225,7 @@ abstract class Controller implements ContainerAwareInterface
 
                     return true;
                 }
-            )
+            ), 0, 1)
         );
     }
 
