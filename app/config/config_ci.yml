@@ -9,7 +9,7 @@ parameters:
     cache_control: public, max-age=300, stale-while-revalidate=300, stale-if-error=86400
     calls_to_action:
         - id: cta1
-          from: 2000-01-01T00:00:00Z
+          from: 2100-01-01T00:00:00Z
           path: ^/
           text: Call to action 1
           button:
@@ -27,6 +27,7 @@ parameters:
                   height: 600
         - id: cta2
           path: ^/some-non-existent-path$
+          from: 2000-01-01T00:00:00Z
           text: Call to action 2
           button:
               text: Button text
