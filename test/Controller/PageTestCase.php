@@ -35,7 +35,7 @@ abstract class PageTestCase extends WebTestCase
 
         // Call to actions are limited to 1 until we resolve issues with display of multiple.
         $this->assertCount(1, $callsToAction);
-        $this->assertContains('Call to action 1', $callsToAction->eq(0)->text());
+        $this->assertContains('Call to action 3', $callsToAction->eq(0)->text());
     }
 
     /**
