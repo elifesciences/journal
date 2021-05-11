@@ -18,7 +18,7 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
     libgtk-3-0 \
     libnspr4 \
     libnss3 \
-    libx11-xcb1 \
+    libvips \
     libxcomposite1 \
     libxcursor1 \
     libxdamage1 \
