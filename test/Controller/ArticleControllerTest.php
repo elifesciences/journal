@@ -2801,6 +2801,16 @@ final class ArticleControllerTest extends PageTestCase
 
         $crawler = $client->request('GET', '/articles/00001');
 
+        $this->assertSame(
+            [
+                [
+                    'Article',
+                    '/articles/00001#content',
+                ],
+            ],
+            $crawler->filter('.view-selector__link')->extract(['_text', 'href'])
+        );
+
         $dataAvailability = $crawler->filter('.grid-column > section:nth-of-type(2)');
         $this->assertSame('Data availability',
             $dataAvailability->filter('header > h2')->text());
