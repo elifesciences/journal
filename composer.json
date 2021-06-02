@@ -22,7 +22,7 @@
         "cweagans/composer-patches": "^1.6",
         "elife/api-client": "^1.0@dev",
         "elife/api-sdk": "dev-master",
-        "elife/patterns": "dev-master",
+        "elife/patterns": "dev-test/mathjax-v3",
         "fabpot/goutte": "^3.2",
         "fig/link-util": "^1.0",
         "firebase/php-jwt": "^5.0",
