@@ -50,7 +50,7 @@ final class AboutController extends Controller
             new Paragraph('eLife is a non-profit organisation created by funders and led by researchers. Our mission is to accelerate discovery by operating a platform for research communication that encourages and recognises the most responsible behaviours.'),
             new Paragraph('We work across three major areas:'),
             Listing::ordered([
-                'Publishing – eLife aims to publish work of the highest standards and importance in all areas of biology and medicine, while exploring creative new ways to improve how research is assessed and published.',
+                'Publishing – eLife reviews selected preprints in all areas of biology and medicine, while exploring new ways to improve how research is assessed and published.',
                 'Technology – eLife invests in open-source technology innovation to modernise the infrastructure for science publishing and improve online tools for sharing, using and interacting with new results.',
                 'Research culture – eLife is committed to working with the worldwide research community to promote responsible behaviours in research.',
             ], 'number'),
