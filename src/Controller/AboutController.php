@@ -139,8 +139,8 @@ final class AboutController extends Controller
             new Paragraph('The overall aim is to make peer review faster, fairer and more open. <a href="'.$this->get('router')->generate('article', ['id' => '00855']).'">eLife does not support the Impact Factor</a> and is a co-founder of the <a href="https://sfdora.org/">Declaration on Research Assessment (DORA)</a>. Regularly updated metrics relating to the eLife editorial process are available in our <a href="https://reviewer.elifesciences.org/author-guide/journal-metrics">Author Guide</a>.'),
             ArticleSection::basic('Related links', 2,
                 $this->render(Listing::unordered([
-                    '<a href="'.$this->get('router')->generate('inside-elife-article', ['id' => '00f2f185']).'">New from eLife: Preprints and peer review</a>',
-                    '<a href="'.$this->get('router')->generate('inside-elife-article', ['id' => 'e5f8f1f7']).'">New from eLife: What we have learned about preprints</a>',
+                    '<a href="'.$this->get('router')->generate('inside-elife-article', ['id' => '00f2f185']).'">Preprints and peer review at eLife</a>',
+                    '<a href="'.$this->get('router')->generate('inside-elife-article', ['id' => 'e5f8f1f7']).'">What we have learned about preprints</a>',
                     '<a href="'.$this->get('router')->generate('article', ['id' => '64910']).'">Peer Review: eLife implementing "Publish, then Review" model of publishing</a>',
                 ], 'bullet'))
             ),
