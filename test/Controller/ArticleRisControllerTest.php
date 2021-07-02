@@ -319,7 +319,7 @@ EOT
                 'http://api.elifesciences.org/articles/00001/versions',
                 [
                     'Accept' => [
-                        'application/vnd.elife.article-history+json; version=1',
+                        'application/vnd.elife.article-history+json; version=2',
                     ],
                 ]
             ),

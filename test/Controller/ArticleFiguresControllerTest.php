@@ -186,7 +186,7 @@ final class ArticleFiguresControllerTest extends PageTestCase
                 'http://api.elifesciences.org/articles/00001/versions',
                 [
                     'Accept' => [
-                        'application/vnd.elife.article-history+json; version=1',
+                        'application/vnd.elife.article-history+json; version=2',
                     ],
                 ]
             ),
@@ -273,13 +273,13 @@ final class ArticleFiguresControllerTest extends PageTestCase
                 'http://api.elifesciences.org/articles/00001/versions',
                 [
                     'Accept' => [
-                        'application/vnd.elife.article-history+json; version=1',
+                        'application/vnd.elife.article-history+json; version=2',
                     ],
                 ]
             ),
             new Response(
                 200,
-                ['Content-Type' => 'application/vnd.elife.article-history+json; version=1'],
+                ['Content-Type' => 'application/vnd.elife.article-history+json; version=2'],
                 json_encode([
                     'versions' => [
                         [
@@ -387,13 +387,13 @@ final class ArticleFiguresControllerTest extends PageTestCase
                 'http://api.elifesciences.org/articles/00001/versions',
                 [
                     'Accept' => [
-                        'application/vnd.elife.article-history+json; version=1',
+                        'application/vnd.elife.article-history+json; version=2',
                     ],
                 ]
             ),
             new Response(
                 200,
-                ['Content-Type' => 'application/vnd.elife.article-history+json; version=1'],
+                ['Content-Type' => 'application/vnd.elife.article-history+json; version=2'],
                 json_encode([
                     'versions' => [
                         [
@@ -773,13 +773,13 @@ final class ArticleFiguresControllerTest extends PageTestCase
                 'http://api.elifesciences.org/articles/00001/versions',
                 [
                     'Accept' => [
-                        'application/vnd.elife.article-history+json; version=1',
+                        'application/vnd.elife.article-history+json; version=2',
                     ],
                 ]
             ),
             new Response(
                 200,
-                ['Content-Type' => 'application/vnd.elife.article-history+json; version=1'],
+                ['Content-Type' => 'application/vnd.elife.article-history+json; version=2'],
                 json_encode([
                     'versions' => [
                         [
@@ -869,13 +869,13 @@ final class ArticleFiguresControllerTest extends PageTestCase
                 'http://api.elifesciences.org/articles/00001/versions',
                 [
                     'Accept' => [
-                        'application/vnd.elife.article-history+json; version=1',
+                        'application/vnd.elife.article-history+json; version=2',
                     ],
                 ]
             ),
             new Response(
                 200,
-                ['Content-Type' => 'application/vnd.elife.article-history+json; version=1'],
+                ['Content-Type' => 'application/vnd.elife.article-history+json; version=2'],
                 json_encode([
                     'versions' => [
                         [
