@@ -10,6 +10,7 @@ use eLife\ApiSdk\Model\Appendix;
 use eLife\ApiSdk\Model\Article;
 use eLife\ApiSdk\Model\ArticleHistory;
 use eLife\ApiSdk\Model\ArticlePoA;
+use eLife\ApiSdk\Model\ArticlePreprint;
 use eLife\ApiSdk\Model\ArticleVersion;
 use eLife\ApiSdk\Model\ArticleVoR;
 use eLife\ApiSdk\Model\Author;
@@ -474,6 +475,12 @@ final class ArticlesController extends Controller
 
                 $publicationHistory = [];
 
+                $publicationHistory = array_merge($publicationHistory, $history->getVersions()
+                    ->filter(Callback::isInstanceOf(ArticlePreprint::class))
+                    ->map(function (ArticlePreprint $itemVersion) use ($history) {
+                        return sprintf('Preprint posted: <a href="%s">%s (view preprint)</a>', $itemVersion->getUri(), $itemVersion->getPublishedDate()->format('F j, Y'));
+                    })->toArray());
+
                 if ($history->getReceived()) {
                     $publicationHistory[] = 'Received: '.$history->getReceived()->format();
                 }
@@ -861,7 +868,11 @@ final class ArticlesController extends Controller
 
                 $infoBars = [];
 
-                $latest = $history->getVersions()[count($history->getVersions()) - 1];
+                $articleVersions = $history->getVersions()
+                    ->filter(Callback::isInstanceOf(ArticleVersion::class))
+                    ->toArray();
+
+                $latest = $articleVersions[count($articleVersions) - 1];
                 $latestVersion = $latest->getVersion();
 
                 if ($item->getVersion() < $latestVersion) {
@@ -953,7 +964,11 @@ final class ArticlesController extends Controller
                 /** @var array $eraArticle */
                 $eraArticle = $parts['eraArticle'];
 
-                $latestVersion = $history->getVersions()[count($history->getVersions()) - 1]->getVersion();
+                $articleVersions = $history->getVersions()
+                    ->filter(Callback::isInstanceOf(ArticleVersion::class))
+                    ->toArray();
+
+                $latestVersion = $articleVersions[count($articleVersions) - 1]->getVersion();
 
                 if (isset($eraArticle['download']) && $item->getVersion() === $latestVersion) {
                     $eraDownload = $eraArticle['download'];
@@ -984,7 +999,11 @@ final class ArticlesController extends Controller
                     $sections = [];
                 }
 
-                $latestVersion = $history->getVersions()[count($history->getVersions()) - 1]->getVersion();
+                $articleVersions = $history->getVersions()
+                    ->filter(Callback::isInstanceOf(ArticleVersion::class))
+                    ->toArray();
+
+                $latestVersion = $articleVersions[count($articleVersions) - 1]->getVersion();
 
                 $otherLinks = [];
                 if (isset($eraArticle['display']) && $item->getVersion() === $latestVersion) {
@@ -1048,7 +1067,11 @@ final class ArticlesController extends Controller
             $subRoute = "-{$subRoute}";
         }
 
-        $currentVersion = $history->getVersions()[count($history->getVersions()) - 1];
+        $articleVersions = $history->getVersions()
+            ->filter(Callback::isInstanceOf(ArticleVersion::class))
+            ->toArray();
+
+        $currentVersion = $articleVersions[count($articleVersions) - 1];
 
         if (null === $forVersion) {
             $forVersion = $currentVersion->getVersion();
