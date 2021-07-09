@@ -75,7 +75,7 @@ final class StatusDateOverrideMiddlewareTest extends KernelTestCase
     public function responseProvider() : Traversable
     {
         return $this->arrayProvider([
-            'application/vnd.elife.article-history+json; version=1' => [
+            'application/vnd.elife.article-history+json; version=2' => [
                 [
                     'versions' => [
                         $this->createArticleVoR('vor-with-rds-article'),
