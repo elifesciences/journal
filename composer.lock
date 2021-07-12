@@ -81,11 +81,6 @@
                 "php": ">=5.3.2"
             },
             "type": "symfony-bundle",
-            "extra": {
-                "patches_applied": {
-                    "Remove superfluous argument": "https://github.com/bobthecow/BobthecowMustacheBundle/pull/9.patch"
-                }
-            },
             "autoload": {
                 "psr-0": {
                     "Bobthecow\\Bundle\\MustacheBundle": ""
@@ -111,7 +106,12 @@
                 "symfony",
                 "templating"
             ],
-            "time": "2014-07-10T12:09:42+00:00"
+            "time": "2014-07-10T12:09:42+00:00",
+            "extra": {
+                "patches_applied": {
+                    "Remove superfluous argument": "https://github.com/bobthecow/BobthecowMustacheBundle/pull/9.patch"
+                }
+            }
         },
         {
             "name": "cocur/slugify",
@@ -151,11 +151,6 @@
                 "zendframework/zend-view": "~2.2"
             },
             "type": "library",
-            "extra": {
-                "patches_applied": {
-                    "strip_tags": "https://github.com/cocur/slugify/pull/201.patch"
-                }
-            },
             "autoload": {
                 "psr-4": {
                     "Cocur\\Slugify\\": "src"
@@ -181,7 +176,12 @@
                 "slug",
                 "slugify"
             ],
-            "time": "2018-01-22T09:00:48+00:00"
+            "time": "2018-01-22T09:00:48+00:00",
+            "extra": {
+                "patches_applied": {
+                    "strip_tags": "https://github.com/cocur/slugify/pull/201.patch"
+                }
+            }
         },
         {
             "name": "composer/ca-bundle",
@@ -236,6 +236,16 @@
                 "certificate",
                 "ssl",
                 "tls"
+            ],
+            "funding": [
+                {
+                    "url": "https://packagist.com",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/composer/composer",
+                    "type": "tidelift"
+                }
             ],
             "time": "2020-04-08T08:27:21+00:00"
         },
@@ -1780,12 +1790,6 @@
                 "shasum": ""
             },
             "type": "library",
-            "extra": {
-                "patches_applied": {
-                    "Add field label": "https://github.com/isometriks/IsometriksSpamBundle/pull/9.patch",
-                    "Use EmailType": "https://github.com/isometriks/IsometriksSpamBundle/pull/17.patch"
-                }
-            },
             "autoload": {
                 "psr-4": {
                     "Isometriks\\Bundle\\SpamBundle\\": ""
@@ -1809,42 +1813,49 @@
                 "spam",
                 "symfony3"
             ],
-            "time": "2016-09-23T18:48:09+00:00"
+            "time": "2016-09-23T18:48:09+00:00",
+            "extra": {
+                "patches_applied": {
+                    "Add field label": "https://github.com/isometriks/IsometriksSpamBundle/pull/9.patch",
+                    "Use EmailType": "https://github.com/isometriks/IsometriksSpamBundle/pull/17.patch"
+                }
+            }
         },
         {
             "name": "kevinrob/guzzle-cache-middleware",
-            "version": "v3.2.1",
+            "version": "v3.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Kevinrob/guzzle-cache-middleware.git",
-                "reference": "dda34401a68c54f06c9338a2cc30ae0aecd879a1"
+                "reference": "d40eb54f08362d01da598da1b0e7421e8c3a52f6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Kevinrob/guzzle-cache-middleware/zipball/dda34401a68c54f06c9338a2cc30ae0aecd879a1",
-                "reference": "dda34401a68c54f06c9338a2cc30ae0aecd879a1",
+                "url": "https://api.github.com/repos/Kevinrob/guzzle-cache-middleware/zipball/d40eb54f08362d01da598da1b0e7421e8c3a52f6",
+                "reference": "d40eb54f08362d01da598da1b0e7421e8c3a52f6",
                 "shasum": ""
             },
             "require": {
+                "guzzlehttp/guzzle": "^6.0 || ^7.0",
                 "php": ">=5.5.0"
             },
             "require-dev": {
                 "cache/array-adapter": "^0.4 || ^0.5 || ^1.0",
                 "cache/simple-cache-bridge": "^0.1 || ^1.0",
                 "doctrine/cache": "^1.0",
-                "guzzlehttp/guzzle": "^6.0",
                 "illuminate/cache": "^5.0",
                 "league/flysystem": "^1.0",
-                "phpunit/phpunit": "^4.0 || ^5.0",
-                "psr/cache": "^1.0"
+                "phpunit/phpunit": "^4.8.36 || ^5.0",
+                "psr/cache": "^1.0",
+                "symfony/phpunit-bridge": "^4.4 || ^5.0"
             },
             "suggest": {
-                "doctrine/cache": "This library have a lot of ready-to-use cache storage (to be use with Kevinrob\\GuzzleCache\\Storage\\DoctrineCacheStorage)",
-                "guzzlehttp/guzzle": "For using this library. It was created for Guzzle6. (but you can use it with any PSR-7 HTTP Client)",
-                "laravel/framework": "To be use with Kevinrob\\GuzzleCache\\Storage\\LaravelCacheStorage",
-                "league/flysystem": "To be use with Kevinrob\\GuzzleCache\\Storage\\FlysystemStorage",
-                "psr/cache": "To be use with Kevinrob\\GuzzleCache\\Storage\\Psr6CacheStorage",
-                "psr/simple-cache": "To be use with Kevinrob\\GuzzleCache\\Storage\\Psr16CacheStorage"
+                "doctrine/cache": "This library has a lot of ready-to-use cache storage (to be used with Kevinrob\\GuzzleCache\\Storage\\DoctrineCacheStorage).",
+                "guzzlehttp/guzzle": "For using this library. It was created for Guzzle6 (but you can use it with any PSR-7 HTTP client).",
+                "laravel/framework": "To be used with Kevinrob\\GuzzleCache\\Storage\\LaravelCacheStorage",
+                "league/flysystem": "To be used with Kevinrob\\GuzzleCache\\Storage\\FlysystemStorage",
+                "psr/cache": "To be used with Kevinrob\\GuzzleCache\\Storage\\Psr6CacheStorage",
+                "psr/simple-cache": "To be used with Kevinrob\\GuzzleCache\\Storage\\Psr16CacheStorage"
             },
             "type": "library",
             "autoload": {
@@ -1886,7 +1897,7 @@
                 "rfc7234",
                 "validation"
             ],
-            "time": "2018-01-10T13:55:22+00:00"
+            "time": "2021-07-02T15:53:35+00:00"
         },
         {
             "name": "knpuniversity/oauth2-client-bundle",
@@ -2310,6 +2321,12 @@
                 "pagination",
                 "paginator",
                 "paging"
+            ],
+            "funding": [
+                {
+                    "url": "https://github.com/mbabker",
+                    "type": "github"
+                }
             ],
             "time": "2017-03-20T13:46:15+00:00"
         },
@@ -4168,12 +4185,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-validator-php.git",
-                "reference": "0864db339c40bb77da11bb84b1e6394a2cd5e31b"
+                "reference": "b70d55f4b52adeefc83830f92fe571bbaa510461"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-validator-php/zipball/0864db339c40bb77da11bb84b1e6394a2cd5e31b",
-                "reference": "0864db339c40bb77da11bb84b1e6394a2cd5e31b",
+                "url": "https://api.github.com/repos/elifesciences/api-validator-php/zipball/b70d55f4b52adeefc83830f92fe571bbaa510461",
+                "reference": "b70d55f4b52adeefc83830f92fe571bbaa510461",
                 "shasum": ""
             },
             "require": {
@@ -4205,7 +4222,7 @@
                 "MIT"
             ],
             "description": "eLife Sciences API validator",
-            "time": "2021-02-16T11:06:30+00:00"
+            "time": "2021-03-09T20:14:39+00:00"
         },
         {
             "name": "instaclick/php-webdriver",
