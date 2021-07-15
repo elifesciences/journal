@@ -4,144 +4,144 @@ imports:
   - resource: services.yml
 
 parameters:
-  api_connect_timeout: 2
-  api_timeout: 5
-  api_connect_timeout_slow: 3
-  api_timeout_slow: 10
-  honeypot_field: email_address
-  mustache_stat_props: [size, mtime]
+    api_connect_timeout: 2
+    api_timeout: 5
+    api_connect_timeout_slow: 3
+    api_timeout_slow: 10
+    honeypot_field: email_address
+    mustache_stat_props: [size, mtime]
 
 bobthecow_mustache:
-  globals:
-    assetRewrite: '@elife.patterns.mustache.helpers.asset_rewrite'
-    assetsPath: 'assets/patterns'
-  loader_id: elife.journal.mustache.loader
-  partials_loader_id: elife.journal.mustache.loader
+    globals:
+        assetRewrite: '@elife.patterns.mustache.helpers.asset_rewrite'
+        assetsPath: 'assets/patterns'
+    loader_id: elife.journal.mustache.loader
+    partials_loader_id: elife.journal.mustache.loader
 
 cocur_slugify:
-  strip_tags: true
+    strip_tags: true
 
 csa_guzzle:
-  clients:
-    elife_api:
-      config:
-        base_uri: '%api_url%'
-        connect_timeout: '%api_connect_timeout%'
-        headers:
-          Authorization: '%api_key%'
-        timeout: '%api_timeout%'
-    elife_api_slow:
-      config:
-        base_uri: '%api_url%'
-        connect_timeout: '%api_connect_timeout_slow%'
-        headers:
-          Authorization: '%api_key%'
-        timeout: '%api_timeout_slow%'
-    elife_crm:
-      config:
-        base_uri: '%crm_url%'
-        connect_timeout: '%api_connect_timeout_slow%'
-        timeout: '%api_timeout_slow%'
-    oauth:
-      config:
-        connect_timeout: '%api_connect_timeout_slow%'
-        timeout: '%api_timeout_slow%'
-    streamer:
-      config:
-        connect_timeout: '%api_connect_timeout%'
-        stream: true
+    clients:
+        elife_api:
+            config:
+                base_uri: '%api_url%'
+                connect_timeout: '%api_connect_timeout%'
+                headers:
+                    Authorization: '%api_key%'
+                timeout: '%api_timeout%'
+        elife_api_slow:
+            config:
+                base_uri: '%api_url%'
+                connect_timeout: '%api_connect_timeout_slow%'
+                headers:
+                    Authorization: '%api_key%'
+                timeout: '%api_timeout_slow%'
+        elife_crm:
+            config:
+                base_uri: '%crm_url%'
+                connect_timeout: '%api_connect_timeout_slow%'
+                timeout: '%api_timeout_slow%'
+        oauth:
+            config:
+                connect_timeout: '%api_connect_timeout_slow%'
+                timeout: '%api_timeout_slow%'
+        streamer:
+            config:
+                connect_timeout: '%api_connect_timeout%'
+                stream: true
 
 framework:
-  assets:
-    json_manifest_path: '%kernel.project_dir%/build/rev-manifest.json'
-  cache:
-    default_redis_provider: '%redis_cache%'
-    pools:
-      cache.doi:
-        adapter: cache.app
-        default_lifetime: 31536000 # 1 year
-        public: true
-      cache.guzzle:
-        adapter: cache.app
-        clearer: ~
-        default_lifetime: 31536000 # 1 year
-        public: true
-  csrf_protection: ~
-  form: ~
-  router:
-    resource: '%kernel.project_dir%/app/config/routing.yml'
-  secret: '%secret%'
-  session:
-    cookie_lifetime: 2592000 # 30 days
-    name: '%session_name%'
-    save_path: '0;660;%kernel.project_dir%/var/sessions/%kernel.environment%'
-  templating:
-    engines:
-      - mustache
-      - twig
-  web_link: ~
+    assets:
+        json_manifest_path: '%kernel.project_dir%/build/rev-manifest.json'
+    cache:
+        default_redis_provider: '%redis_cache%'
+        pools:
+          cache.doi:
+              adapter: cache.app
+              default_lifetime: 31536000 # 1 year
+              public: true
+          cache.guzzle:
+              adapter: cache.app
+              clearer: ~
+              default_lifetime: 31536000 # 1 year
+              public: true
+    csrf_protection: ~
+    form: ~
+    router:
+        resource: '%kernel.project_dir%/app/config/routing.yml'
+    secret: '%secret%'
+    session:
+        cookie_lifetime: 2592000 # 30 days
+        name: '%session_name%'
+        save_path: '0;660;%kernel.project_dir%/var/sessions/%kernel.environment%'
+    templating:
+        engines:
+        - mustache
+        - twig
+    web_link: ~
 
 isometriks_spam:
-  honeypot:
-    field: '%honeypot_field%'
-    global: true
-    message: Please try submitting the form again.
+    honeypot:
+        field: '%honeypot_field%'
+        global: true
+        message: Please try submitting the form again.
 
 knpu_oauth2_client:
-  clients:
-    elife:
-      type: generic
-      provider_class: eLife\Journal\Security\OAuth2\ElifeProvider
-      client_id: '%oauth2_client_id%'
-      client_secret: '%oauth2_client_secret%'
-      redirect_route: log-in-check
-      provider_options:
-        api_url: '%api_url%'
-        api_url_public: '%api_url_public%'
+    clients:
+        elife:
+            type: generic
+            provider_class: eLife\Journal\Security\OAuth2\ElifeProvider
+            client_id: '%oauth2_client_id%'
+            client_secret: '%oauth2_client_secret%'
+            redirect_route: log-in-check
+            provider_options:
+                api_url: '%api_url%'
+                api_url_public: '%api_url_public%'
 
 monolog:
-  channels:
-    - api
-    - honeypot
+    channels:
+      - api
+      - honeypot
 
 nelmio_security:
-  clickjacking: # Deprecated by frame-ancestors
-    paths:
-      '^/.*': DENY
-  content_type:
-    nosniff: true
-  csp:
-    enforce:
-      frame-ancestors:
-        - none
-  referrer_policy:
-    enabled: true
-    policies:
-      - no-referrer-when-downgrade
-      - strict-origin-when-cross-origin
-  xss_protection:
-    enabled: true
-    mode_block: true
+    clickjacking: # Deprecated by frame-ancestors
+        paths:
+            '^/.*': DENY
+    content_type:
+        nosniff: true
+    csp:
+        enforce:
+            frame-ancestors:
+              - none
+    referrer_policy:
+        enabled: true
+        policies:
+          - no-referrer-when-downgrade
+          - strict-origin-when-cross-origin
+    xss_protection:
+        enabled: true
+        mode_block: true
 
 swiftmailer:
-  transport: '%mailer_transport%'
-  host: '%mailer_host%'
-  port: '%mailer_port%'
-  username: '%mailer_username%'
-  password: '%mailer_password%'
-  encryption: '%mailer_encryption%'
-  spool:
-    type: memory
+    transport: '%mailer_transport%'
+    host: '%mailer_host%'
+    port: '%mailer_port%'
+    username: '%mailer_username%'
+    password: '%mailer_password%'
+    encryption: '%mailer_encryption%'
+    spool:
+        type: memory
 
 twig:
-  debug: '%kernel.debug%'
-  exception_controller: AppBundle:Exception:show
-  globals:
-    gtm_id: '%gtm_id%'
-    google_optimize_id: '%google_optimize_id%'
-    hypothesis_api: '%hypothesis_api%'
-    hypothesis_authority: '%hypothesis_authority%'
-  paths:
-    '%kernel.project_dir%/build': 'build'
-    '%kernel.project_dir%/vendor/elife/patterns/resources': 'patterns'
-  strict_variables: '%kernel.debug%'
+    debug: '%kernel.debug%'
+    exception_controller: AppBundle:Exception:show
+    globals:
+        gtm_id: '%gtm_id%'
+        google_optimize_id: '%google_optimize_id%'
+        hypothesis_api: '%hypothesis_api%'
+        hypothesis_authority: '%hypothesis_authority%'
+    paths:
+        '%kernel.project_dir%/build': 'build'
+        '%kernel.project_dir%/vendor/elife/patterns/resources': 'patterns'
+    strict_variables: '%kernel.debug%'

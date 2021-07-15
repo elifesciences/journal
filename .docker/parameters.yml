@@ -1,68 +1,68 @@
 parameters:
-  api_key: public
-  side_by_side_view_url: https://lens.elifesciences.org/
-  secret: ThisTokenIsNotSoSecretChangeIt
-  session_name: journal
-  redis_cache: redis://redis/0
-  redis_sessions: redis://redis/1
-  mailer_transport: smtp
-  mailer_host: 127.0.0.1
-  mailer_port: ~
-  mailer_username: ~
-  mailer_password: ~
-  mailer_encryption: ~
-  submit_url: https://submit.elifesciences.org/
-  submit_url_redirects:
-    - .*\.elifesciences.org$
-  crm_url: https://crm.elifesciences.org/crm/civicrm/
-  gtm_id: ~
-  google_optimize_id: ~
-  trusted_hosts:
-    - localhost
-    - web
-  status_checks:
-    Articles: articles
-  oauth2_client_id: some-id
-  oauth2_client_secret: ThisIsASecret
-  hypothesis_api: https://hypothes.is/api/
-  hypothesis_authority: some-authority
-  hypothesis_client_id: some-id
-  hypothesis_client_secret: ThisIsASecret
-  xpub_client_id: some-id
-  xpub_client_secret: ThisIsASecret
-  subject_rewrites: []
-  era_articles:
-    '30274':
-      date: '2020-08-24T13:30:00Z'
-      display: https://elife.stencila.io/article-30274/
-      download: https://hub.stenci.la/api/projects/518/snapshots/15/archive
-    '52258':
-      date: '2020-08-24T13:30:00Z'
-      display: https://elife.stencila.io/article-52258/
-      download: https://hub.stenci.la/api/projects/583/snapshots/13/archive
-  dismissible_info_bars:
-    aging:
-      id: aging-special-issue
-      text: '<a href="https://elifesciences.org/inside-elife/4f706531/special-issue-call-for-papers-in-aging-geroscience-and-longevity">Read the call for papers</a> for the eLife Special Issue on Aging, Geroscience and Longevity.'
-      article_ids:
-        - '26231'
-  cache_control: private, no-cache, no-store, must-revalidate
-  feature_xpub: true
-  calls_to_action:
-    - id: something-important
-      path: ^(/$|/for-the-press)
-      text: Here's something important
-      button:
-        text: Sign up for eLife news
-        path: https://elifesciences.org/
-      image:
-        alt: ''
-        uri: https://iiif.elifesciences.org/lax/09560%%2Felife-09560-fig1-v1.tif
-        source:
-          mediaType: image/jpg
-          uri: https://iiif.elifesciences.org/lax/09560%%2Felife-09560-fig1-v1.tif/full/full/0/default.jpg
-          filename: elife-09560-fig1-v1.jpg
-        size:
-          width: 4194
-          height: 4714
-      needsJs: false
+    api_key: public
+    side_by_side_view_url: https://lens.elifesciences.org/
+    secret: ThisTokenIsNotSoSecretChangeIt
+    session_name: journal
+    redis_cache: redis://redis/0
+    redis_sessions: redis://redis/1
+    mailer_transport: smtp
+    mailer_host: 127.0.0.1
+    mailer_port: ~
+    mailer_username: ~
+    mailer_password: ~
+    mailer_encryption: ~
+    submit_url: https://submit.elifesciences.org/
+    submit_url_redirects:
+      - .*\.elifesciences.org$
+    crm_url: https://crm.elifesciences.org/crm/civicrm/
+    gtm_id: ~
+    google_optimize_id: ~
+    trusted_hosts:
+      - localhost
+      - web
+    status_checks:
+      Articles: articles
+    oauth2_client_id: some-id
+    oauth2_client_secret: ThisIsASecret
+    hypothesis_api: https://hypothes.is/api/
+    hypothesis_authority: some-authority
+    hypothesis_client_id: some-id
+    hypothesis_client_secret: ThisIsASecret
+    xpub_client_id: some-id
+    xpub_client_secret: ThisIsASecret
+    subject_rewrites: []
+    era_articles:
+        '30274':
+            date: '2020-08-24T13:30:00Z'
+            display: https://elife.stencila.io/article-30274/
+            download: https://hub.stenci.la/api/projects/518/snapshots/15/archive
+        '52258':
+            date: '2020-08-24T13:30:00Z'
+            display: https://elife.stencila.io/article-52258/
+            download: https://hub.stenci.la/api/projects/583/snapshots/13/archive
+    dismissible_info_bars:
+      aging:
+          id: aging-special-issue
+          text: '<a href="https://elifesciences.org/inside-elife/4f706531/special-issue-call-for-papers-in-aging-geroscience-and-longevity">Read the call for papers</a> for the eLife Special Issue on Aging, Geroscience and Longevity.'
+          article_ids:
+          - '26231'
+    cache_control: private, no-cache, no-store, must-revalidate
+    feature_xpub: true
+    calls_to_action:
+      - id: something-important
+        path: ^(/$|/for-the-press)
+        text: Here's something important
+        button:
+            text: Sign up for eLife news
+            path: https://elifesciences.org/
+        image:
+            alt: ''
+            uri: https://iiif.elifesciences.org/lax/09560%%2Felife-09560-fig1-v1.tif
+            source:
+                mediaType: image/jpg
+                uri: https://iiif.elifesciences.org/lax/09560%%2Felife-09560-fig1-v1.tif/full/full/0/default.jpg
+                filename: elife-09560-fig1-v1.jpg
+            size:
+                width: 4194
+                height: 4714
+        needsJs: false
