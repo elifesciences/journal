@@ -57,15 +57,15 @@ framework:
     cache:
         default_redis_provider: '%redis_cache%'
         pools:
-          cache.doi:
-              adapter: cache.app
-              default_lifetime: 31536000 # 1 year
-              public: true
-          cache.guzzle:
-              adapter: cache.app
-              clearer: ~
-              default_lifetime: 31536000 # 1 year
-              public: true
+            cache.doi:
+                adapter: cache.app
+                default_lifetime: 31536000 # 1 year
+                public: true
+            cache.guzzle:
+                adapter: cache.app
+                clearer: ~
+                default_lifetime: 31536000 # 1 year
+                public: true
     csrf_protection: ~
     form: ~
     router:
@@ -77,8 +77,8 @@ framework:
         save_path: '0;660;%kernel.project_dir%/var/sessions/%kernel.environment%'
     templating:
         engines:
-        - mustache
-        - twig
+          - mustache
+          - twig
     web_link: ~
 
 isometriks_spam:

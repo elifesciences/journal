@@ -13,7 +13,7 @@ parameters:
     mailer_encryption: ~
     submit_url: https://submit.elifesciences.org/
     submit_url_redirects:
-      - .*\.elifesciences.org$
+        - .*\.elifesciences.org$
     crm_url: https://crm.elifesciences.org/crm/civicrm/
     gtm_id: ~
     google_optimize_id: ~
@@ -21,7 +21,7 @@ parameters:
       - localhost
       - web
     status_checks:
-      Articles: articles
+        Articles: articles
     oauth2_client_id: some-id
     oauth2_client_secret: ThisIsASecret
     hypothesis_api: https://hypothes.is/api/
@@ -41,11 +41,11 @@ parameters:
             display: https://elife.stencila.io/article-52258/
             download: https://hub.stenci.la/api/projects/583/snapshots/13/archive
     dismissible_info_bars:
-      aging:
-          id: aging-special-issue
-          text: '<a href="https://elifesciences.org/inside-elife/4f706531/special-issue-call-for-papers-in-aging-geroscience-and-longevity">Read the call for papers</a> for the eLife Special Issue on Aging, Geroscience and Longevity.'
-          article_ids:
-          - '26231'
+          aging:
+              id: aging-special-issue
+              text: '<a href="https://elifesciences.org/inside-elife/4f706531/special-issue-call-for-papers-in-aging-geroscience-and-longevity">Read the call for papers</a> for the eLife Special Issue on Aging, Geroscience and Longevity.'
+              article_ids:
+                - '26231'
     cache_control: private, no-cache, no-store, must-revalidate
     feature_xpub: true
     calls_to_action:
