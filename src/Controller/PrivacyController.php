@@ -103,7 +103,7 @@ final class PrivacyController extends Controller
                     new Paragraph('For promoting our services to you we use email address and affiliation; information about manuscripts submitted, and whether they were accepted; preferences you have expressed about the type of information you wish to receive.'),
                     new Paragraph('For business analysis and planning purposes we use: author and funder details; decisions taken on manuscript and related processing dates; names of editors and reviewers who handled the manuscript.'),
                     new Paragraph('Author and manuscript personal information collected at submission stage includes: name, email address, affiliation, institutional role, ORCID iD, contributions and competing interests and funding information.'),
-                    new Paragraph('We also request, for research purposes, the group leader\'s country of residence, gender and the year in which they became an independent researcher.')
+                    new Paragraph('We also request, for research purposes, the submitting author\'s country of residence, gender, ethnicity, independent researcher status, and, if applicable, the year in which they became independent. This data is kept separate from the submission; it is never disclosed to editors or reviewers and does not influence peer review decisions. Aggregate data is used to monitor the equitability in our submission and review process.')
                 ), 'authors-hold'),
                 ArticleSection::basic('Who do we share the data with, and why?', 3, $this->render(
                     new Paragraph('We share your data with editors and reviewers, and with organisations that help us deliver our services.'),
@@ -232,6 +232,10 @@ final class PrivacyController extends Controller
 <tr>
 <th>Jan&nbsp;22,&nbsp;2021</th>
 <td>Added reference to posting reviews to bioRxiv/medRxiv.</td>
+</tr>
+<tr>
+<th>Jul&nbsp;20,&nbsp;2021</th>
+<td>Revised explanation of the data requested from authors for research purposes to reflect revisions to the process and the collection of ethnicity data.</td>
 </tr>
 </tbody>
 </table>
