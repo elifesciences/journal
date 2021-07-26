@@ -81,11 +81,6 @@
                 "php": ">=5.3.2"
             },
             "type": "symfony-bundle",
-            "extra": {
-                "patches_applied": {
-                    "Remove superfluous argument": "https://github.com/bobthecow/BobthecowMustacheBundle/pull/9.patch"
-                }
-            },
             "autoload": {
                 "psr-0": {
                     "Bobthecow\\Bundle\\MustacheBundle": ""
@@ -111,7 +106,12 @@
                 "symfony",
                 "templating"
             ],
-            "time": "2014-07-10T12:09:42+00:00"
+            "time": "2014-07-10T12:09:42+00:00",
+            "extra": {
+                "patches_applied": {
+                    "Remove superfluous argument": "https://github.com/bobthecow/BobthecowMustacheBundle/pull/9.patch"
+                }
+            }
         },
         {
             "name": "cocur/slugify",
@@ -151,11 +151,6 @@
                 "zendframework/zend-view": "~2.2"
             },
             "type": "library",
-            "extra": {
-                "patches_applied": {
-                    "strip_tags": "https://github.com/cocur/slugify/pull/201.patch"
-                }
-            },
             "autoload": {
                 "psr-4": {
                     "Cocur\\Slugify\\": "src"
@@ -181,7 +176,12 @@
                 "slug",
                 "slugify"
             ],
-            "time": "2018-01-22T09:00:48+00:00"
+            "time": "2018-01-22T09:00:48+00:00",
+            "extra": {
+                "patches_applied": {
+                    "strip_tags": "https://github.com/cocur/slugify/pull/201.patch"
+                }
+            }
         },
         {
             "name": "composer/ca-bundle",
@@ -236,6 +236,16 @@
                 "certificate",
                 "ssl",
                 "tls"
+            ],
+            "funding": [
+                {
+                    "url": "https://packagist.com",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/composer/composer",
+                    "type": "tidelift"
+                }
             ],
             "time": "2020-04-08T08:27:21+00:00"
         },
@@ -422,6 +432,7 @@
                 }
             ],
             "description": "A bundle integrating GuzzleHttp >= 4.0",
+            "abandoned": "symfony/http-client",
             "time": "2017-12-07T17:33:13+00:00"
         },
         {
@@ -1780,12 +1791,6 @@
                 "shasum": ""
             },
             "type": "library",
-            "extra": {
-                "patches_applied": {
-                    "Add field label": "https://github.com/isometriks/IsometriksSpamBundle/pull/9.patch",
-                    "Use EmailType": "https://github.com/isometriks/IsometriksSpamBundle/pull/17.patch"
-                }
-            },
             "autoload": {
                 "psr-4": {
                     "Isometriks\\Bundle\\SpamBundle\\": ""
@@ -1809,7 +1814,13 @@
                 "spam",
                 "symfony3"
             ],
-            "time": "2016-09-23T18:48:09+00:00"
+            "time": "2016-09-23T18:48:09+00:00",
+            "extra": {
+                "patches_applied": {
+                    "Add field label": "https://github.com/isometriks/IsometriksSpamBundle/pull/9.patch",
+                    "Use EmailType": "https://github.com/isometriks/IsometriksSpamBundle/pull/17.patch"
+                }
+            }
         },
         {
             "name": "kevinrob/guzzle-cache-middleware",
@@ -2310,6 +2321,12 @@
                 "pagination",
                 "paginator",
                 "paging"
+            ],
+            "funding": [
+                {
+                    "url": "https://github.com/mbabker",
+                    "type": "github"
+                }
             ],
             "time": "2017-03-20T13:46:15+00:00"
         },
@@ -4168,12 +4185,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-validator-php.git",
-                "reference": "0864db339c40bb77da11bb84b1e6394a2cd5e31b"
+                "reference": "b70d55f4b52adeefc83830f92fe571bbaa510461"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-validator-php/zipball/0864db339c40bb77da11bb84b1e6394a2cd5e31b",
-                "reference": "0864db339c40bb77da11bb84b1e6394a2cd5e31b",
+                "url": "https://api.github.com/repos/elifesciences/api-validator-php/zipball/b70d55f4b52adeefc83830f92fe571bbaa510461",
+                "reference": "b70d55f4b52adeefc83830f92fe571bbaa510461",
                 "shasum": ""
             },
             "require": {
@@ -4205,7 +4222,7 @@
                 "MIT"
             ],
             "description": "eLife Sciences API validator",
-            "time": "2021-02-16T11:06:30+00:00"
+            "time": "2021-03-09T20:14:39+00:00"
         },
         {
             "name": "instaclick/php-webdriver",
@@ -4307,16 +4324,16 @@
         },
         {
             "name": "justinrainbow/json-schema",
-            "version": "5.2.10",
+            "version": "5.2.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/justinrainbow/json-schema.git",
-                "reference": "2ba9c8c862ecd5510ed16c6340aa9f6eadb4f31b"
+                "reference": "2ab6744b7296ded80f8cc4f9509abbff393399aa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/justinrainbow/json-schema/zipball/2ba9c8c862ecd5510ed16c6340aa9f6eadb4f31b",
-                "reference": "2ba9c8c862ecd5510ed16c6340aa9f6eadb4f31b",
+                "url": "https://api.github.com/repos/justinrainbow/json-schema/zipball/2ab6744b7296ded80f8cc4f9509abbff393399aa",
+                "reference": "2ab6744b7296ded80f8cc4f9509abbff393399aa",
                 "shasum": ""
             },
             "require": {
@@ -4369,7 +4386,7 @@
                 "json",
                 "schema"
             ],
-            "time": "2020-05-27T16:41:55+00:00"
+            "time": "2021-07-22T09:24:00+00:00"
         },
         {
             "name": "liuggio/fastest",
@@ -5799,6 +5816,7 @@
             ],
             "description": "Provides a list of PHP built-in functions that operate on resources",
             "homepage": "https://www.github.com/sebastianbergmann/resource-operations",
+            "abandoned": true,
             "time": "2018-10-04T04:07:39+00:00"
         },
         {
