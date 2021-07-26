@@ -41,12 +41,7 @@ parameters:
             date: '2020-08-24T13:30:00Z'
             display: https://elife.stencila.io/article-52258/
             download: https://hub.stenci.la/api/projects/583/snapshots/13/archive
-    dismissible_info_bars:
-        aging:
-            id: aging-special-issue
-            text: '<a href="https://elifesciences.org/inside-elife/4f706531/special-issue-call-for-papers-in-aging-geroscience-and-longevity">Read the call for papers</a> for the eLife Special Issue on Aging, Geroscience and Longevity.'
-            article_ids:
-              - '26231'
+    dismissible_info_bars: {}
     cache_control: private, no-cache, no-store, must-revalidate
     feature_xpub: true
     calls_to_action:
