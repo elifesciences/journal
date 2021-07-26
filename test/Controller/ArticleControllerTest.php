@@ -2340,14 +2340,26 @@ final class ArticleControllerTest extends PageTestCase
                 200,
                 ['Content-Type' => 'application/vnd.elife.article-history+json; version=2'],
                 json_encode([
-                    'received' => '2006-12-30',
+                    'received' => '2006-12-29',
                     'accepted' => '2006-12-31',
                     'versions' => [
                         [
                             'status' => 'preprint',
                             'description' => 'This manuscript was published as a preprint at bioRxiv.',
-                            'uri' => 'https://doi.org/10.1101/2016.01.01',
-                            'date' => '2006-01-01T00:00:00Z',
+                            'uri' => 'https://doi.org/10.1101/2006.12.27',
+                            'date' => '2006-12-27T00:00:00Z',
+                        ],
+                        [
+                            'status' => 'preprint',
+                            'description' => 'This manuscript was published as a preprint at bioRxiv.',
+                            'uri' => 'https://doi.org/10.1101/2006.12.29',
+                            'date' => '2006-12-29T00:00:00Z',
+                        ],
+                        [
+                            'status' => 'preprint',
+                            'description' => 'This manuscript was published as a preprint at bioRxiv.',
+                            'uri' => 'https://doi.org/10.1101/2006.12.31',
+                            'date' => '2006-12-31T00:00:00Z',
                         ],
                         [
                             'status' => 'poa',
@@ -2609,13 +2621,15 @@ final class ArticleControllerTest extends PageTestCase
         $publicationHistory = $articleInfo->eq(6);
         $this->assertSame('Publication history', $publicationHistory->filter('header > h3')->text());
         $this->assertCount(7, $publicationHistory->filter('ol')->children());
-        $this->assertSame('Preprint posted: January 1, 2006 (view preprint)', $publicationHistory->filter('ol')->children()->eq(0)->text());
-        $this->assertSame('Received: December 30, 2006', $publicationHistory->filter('ol')->children()->eq(1)->text());
-        $this->assertSame('Accepted: December 31, 2006', $publicationHistory->filter('ol')->children()->eq(2)->text());
-        $this->assertSame('Accepted Manuscript published: January 1, 2007 (version 1)', $publicationHistory->filter('ol')->children()->eq(3)->text());
-        $this->assertSame('Accepted Manuscript updated: January 1, 2008 (version 2)', $publicationHistory->filter('ol')->children()->eq(4)->text());
-        $this->assertSame('Version of Record published: January 1, 2009 (version 3)', $publicationHistory->filter('ol')->children()->eq(5)->text());
-        $this->assertSame('Version of Record updated: January 1, 2010 (version 4)', $publicationHistory->filter('ol')->children()->eq(6)->text());
+        $this->assertSame('Preprint posted: December 27, 2006 (view preprint)', $publicationHistory->filter('ol')->children()->eq(0)->text());
+        $this->assertSame('Received: December 28, 2006', $publicationHistory->filter('ol')->children()->eq(1)->text());
+        $this->assertSame('Preprint posted: December 29, 2006 (view preprint)', $publicationHistory->filter('ol')->children()->eq(2)->text());
+        $this->assertSame('Accepted: December 30, 2006', $publicationHistory->filter('ol')->children()->eq(3)->text());
+        $this->assertSame('Preprint posted: December 31, 2006 (view preprint)', $publicationHistory->filter('ol')->children()->eq(4)->text());
+        $this->assertSame('Accepted Manuscript published: January 1, 2007 (version 1)', $publicationHistory->filter('ol')->children()->eq(5)->text());
+        $this->assertSame('Accepted Manuscript updated: January 1, 2008 (version 2)', $publicationHistory->filter('ol')->children()->eq(6)->text());
+        $this->assertSame('Version of Record published: January 1, 2009 (version 3)', $publicationHistory->filter('ol')->children()->eq(7)->text());
+        $this->assertSame('Version of Record updated: January 1, 2010 (version 4)', $publicationHistory->filter('ol')->children()->eq(8)->text());
 
         $copyright = $articleInfo->eq(7);
         $this->assertSame('Copyright', $copyright->filter('header > h3')->text());

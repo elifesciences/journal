@@ -2,6 +2,7 @@
 
 namespace eLife\Journal\Controller;
 
+use DateTime;
 use DateTimeImmutable;
 use eLife\ApiSdk\Collection\EmptySequence;
 use eLife\ApiSdk\Collection\PromiseSequence;
@@ -473,20 +474,44 @@ final class ArticlesController extends Controller
                     }
                 }
 
+                $received = $history->getReceived();
+                $accepted = $history->getAccepted();
                 $publicationHistory = [];
 
-                $publicationHistory = array_merge($publicationHistory, $history->getVersions()
+                /** @var ArticlePreprint[] $preprints */
+                $preprints = $history->getVersions()
                     ->filter(Callback::isInstanceOf(ArticlePreprint::class))
-                    ->map(function (ArticlePreprint $itemVersion) use ($history) {
-                        return sprintf('Preprint posted: <a href="%s">%s (view preprint)</a>', $itemVersion->getUri(), $itemVersion->getPublishedDate()->format('F j, Y'));
-                    })->toArray());
+                    ->toArray();
 
-                if ($history->getReceived()) {
-                    $publicationHistory[] = 'Received: '.$history->getReceived()->format();
+                if ($preprints) {
+                    foreach ($preprints as $preprint) {
+                        // Attempt to output $received if date is before the preprint date.
+                        if ($received && 1 === $preprint->getPublishedDate()->diff(new DateTime($received->toString()))->invert) {
+                            $publicationHistory[] = 'Received: '.$received->format();
+
+                            // Set $received to null as it has now been included in the publication history.
+                            $received = null;
+                        }
+                        // Attempt to output $accepted if date is before the preprint date.
+                        if ($accepted && 1 === $preprint->getPublishedDate()->diff(new DateTime($accepted->toString()))->invert) {
+                            $publicationHistory[] = 'Accepted: '.$accepted->format();
+
+                            // Set $accepted to null as it has now been included in the publication history.
+                            $accepted = null;
+                        }
+
+                        $publicationHistory[] = sprintf('Preprint posted: <a href="%s">%s (view preprint)</a>', $preprint->getUri(), $preprint->getPublishedDate()->format('F j, Y'));
+                    }
                 }
 
-                if ($history->getAccepted()) {
-                    $publicationHistory[] = 'Accepted: '.$history->getAccepted()->format();
+                // Output $received if it has not yet been output.
+                if ($received) {
+                    $publicationHistory[] = 'Received: '.$received->format();
+                }
+
+                // Output $accepted if it has not yet been output.
+                if ($accepted) {
+                    $publicationHistory[] = 'Accepted: '.$accepted->format();
                 }
 
                 $publicationHistory = array_merge($publicationHistory, $history->getVersions()
