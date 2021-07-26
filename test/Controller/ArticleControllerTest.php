@@ -2620,7 +2620,7 @@ final class ArticleControllerTest extends PageTestCase
 
         $publicationHistory = $articleInfo->eq(6);
         $this->assertSame('Publication history', $publicationHistory->filter('header > h3')->text());
-        $this->assertCount(7, $publicationHistory->filter('ol')->children());
+        $this->assertCount(9, $publicationHistory->filter('ol')->children());
         $this->assertSame('Preprint posted: December 27, 2006 (view preprint)', $publicationHistory->filter('ol')->children()->eq(0)->text());
         $this->assertSame('Received: December 28, 2006', $publicationHistory->filter('ol')->children()->eq(1)->text());
         $this->assertSame('Preprint posted: December 29, 2006 (view preprint)', $publicationHistory->filter('ol')->children()->eq(2)->text());
