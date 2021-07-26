@@ -2340,8 +2340,8 @@ final class ArticleControllerTest extends PageTestCase
                 200,
                 ['Content-Type' => 'application/vnd.elife.article-history+json; version=2'],
                 json_encode([
-                    'received' => '2006-12-29',
-                    'accepted' => '2006-12-31',
+                    'received' => '2006-12-28',
+                    'accepted' => '2006-12-30',
                     'versions' => [
                         [
                             'status' => 'preprint',
