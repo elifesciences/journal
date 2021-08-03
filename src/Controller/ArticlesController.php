@@ -2,6 +2,7 @@
 
 namespace eLife\Journal\Controller;
 
+use DateTime;
 use DateTimeImmutable;
 use eLife\ApiSdk\Collection\EmptySequence;
 use eLife\ApiSdk\Collection\PromiseSequence;
@@ -10,6 +11,7 @@ use eLife\ApiSdk\Model\Appendix;
 use eLife\ApiSdk\Model\Article;
 use eLife\ApiSdk\Model\ArticleHistory;
 use eLife\ApiSdk\Model\ArticlePoA;
+use eLife\ApiSdk\Model\ArticlePreprint;
 use eLife\ApiSdk\Model\ArticleVersion;
 use eLife\ApiSdk\Model\ArticleVoR;
 use eLife\ApiSdk\Model\Author;
@@ -472,14 +474,44 @@ final class ArticlesController extends Controller
                     }
                 }
 
+                $received = $history->getReceived();
+                $accepted = $history->getAccepted();
                 $publicationHistory = [];
 
-                if ($history->getReceived()) {
-                    $publicationHistory[] = 'Received: '.$history->getReceived()->format();
+                /** @var ArticlePreprint[] $preprints */
+                $preprints = $history->getVersions()
+                    ->filter(Callback::isInstanceOf(ArticlePreprint::class))
+                    ->toArray();
+
+                if ($preprints) {
+                    foreach ($preprints as $preprint) {
+                        // Attempt to output $received if date is before the preprint date.
+                        if ($received && 1 === $preprint->getPublishedDate()->diff(new DateTime($received->toString()))->invert) {
+                            $publicationHistory[] = 'Received: '.$received->format();
+
+                            // Set $received to null as it has now been included in the publication history.
+                            $received = null;
+                        }
+                        // Attempt to output $accepted if date is before the preprint date.
+                        if ($accepted && 1 === $preprint->getPublishedDate()->diff(new DateTime($accepted->toString()))->invert) {
+                            $publicationHistory[] = 'Accepted: '.$accepted->format();
+
+                            // Set $accepted to null as it has now been included in the publication history.
+                            $accepted = null;
+                        }
+
+                        $publicationHistory[] = sprintf('Preprint posted: <a href="%s">%s (view preprint)</a>', $preprint->getUri(), $preprint->getPublishedDate()->format('F j, Y'));
+                    }
                 }
 
-                if ($history->getAccepted()) {
-                    $publicationHistory[] = 'Accepted: '.$history->getAccepted()->format();
+                // Output $received if it has not yet been output.
+                if ($received) {
+                    $publicationHistory[] = 'Received: '.$received->format();
+                }
+
+                // Output $accepted if it has not yet been output.
+                if ($accepted) {
+                    $publicationHistory[] = 'Accepted: '.$accepted->format();
                 }
 
                 $publicationHistory = array_merge($publicationHistory, $history->getVersions()
@@ -861,7 +893,11 @@ final class ArticlesController extends Controller
 
                 $infoBars = [];
 
-                $latest = $history->getVersions()[count($history->getVersions()) - 1];
+                $articleVersions = $history->getVersions()
+                    ->filter(Callback::isInstanceOf(ArticleVersion::class))
+                    ->toArray();
+
+                $latest = $articleVersions[count($articleVersions) - 1];
                 $latestVersion = $latest->getVersion();
 
                 if ($item->getVersion() < $latestVersion) {
@@ -953,7 +989,11 @@ final class ArticlesController extends Controller
                 /** @var array $eraArticle */
                 $eraArticle = $parts['eraArticle'];
 
-                $latestVersion = $history->getVersions()[count($history->getVersions()) - 1]->getVersion();
+                $articleVersions = $history->getVersions()
+                    ->filter(Callback::isInstanceOf(ArticleVersion::class))
+                    ->toArray();
+
+                $latestVersion = $articleVersions[count($articleVersions) - 1]->getVersion();
 
                 if (isset($eraArticle['download']) && $item->getVersion() === $latestVersion) {
                     $eraDownload = $eraArticle['download'];
@@ -984,7 +1024,11 @@ final class ArticlesController extends Controller
                     $sections = [];
                 }
 
-                $latestVersion = $history->getVersions()[count($history->getVersions()) - 1]->getVersion();
+                $articleVersions = $history->getVersions()
+                    ->filter(Callback::isInstanceOf(ArticleVersion::class))
+                    ->toArray();
+
+                $latestVersion = $articleVersions[count($articleVersions) - 1]->getVersion();
 
                 $otherLinks = [];
                 if (isset($eraArticle['display']) && $item->getVersion() === $latestVersion) {
@@ -1048,7 +1092,11 @@ final class ArticlesController extends Controller
             $subRoute = "-{$subRoute}";
         }
 
-        $currentVersion = $history->getVersions()[count($history->getVersions()) - 1];
+        $articleVersions = $history->getVersions()
+            ->filter(Callback::isInstanceOf(ArticleVersion::class))
+            ->toArray();
+
+        $currentVersion = $articleVersions[count($articleVersions) - 1];
 
         if (null === $forVersion) {
             $forVersion = $currentVersion->getVersion();

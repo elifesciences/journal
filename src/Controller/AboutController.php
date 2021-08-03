@@ -50,7 +50,7 @@ final class AboutController extends Controller
             new Paragraph('eLife is a non-profit organisation created by funders and led by researchers. Our mission is to accelerate discovery by operating a platform for research communication that encourages and recognises the most responsible behaviours.'),
             new Paragraph('We work across three major areas:'),
             Listing::ordered([
-                'Publishing – eLife aims to publish work of the highest standards and importance in all areas of biology and medicine, while exploring creative new ways to improve how research is assessed and published.',
+                'Publishing – eLife reviews selected preprints in all areas of biology and medicine, while exploring new ways to improve how research is assessed and published.',
                 'Technology – eLife invests in open-source technology innovation to modernise the infrastructure for science publishing and improve online tools for sharing, using and interacting with new results.',
                 'Research culture – eLife is committed to working with the worldwide research community to promote responsible behaviours in research.',
             ], 'number'),
@@ -120,27 +120,28 @@ final class AboutController extends Controller
         $arguments['title'] = 'Peer review';
 
         $arguments['contentHeader'] = new ContentHeader($arguments['title'], null,
-            'eLife aims to improve the speed, visibility and usefulness of peer review.');
+            'eLife reviews selected preprints in all areas of biology and medicine.');
 
         $arguments['body'] = [
-            new Paragraph('eLife works to improve the process of peer review so that it more effectively conveys the assessment of expert reviewers to authors, readers and other interested parties. In the future we envision a system in which research is first published as a preprint and the outputs of peer review are the primary way research is assessed, rather than journal title.'),
-            new Paragraph('Our editorial process produces two outputs: i) an assessment by peers designed to be posted alongside a preprint for the benefit of the readers; ii) detailed feedback on the manuscript for the authors, including requests for revisions and suggestions for improvement.'),
-            new Paragraph('The assessment by peers includes an evaluation summary that captures the major conclusions of the review, and public reviews from each of the peer reviewers that outlines the strengths and weaknesses of the manuscript.'),
+            new Paragraph('eLife works to improve the process of peer review so that it more effectively conveys the assessment of expert reviewers to authors, readers and other interested parties. We are creating a system in which we only peer review articles that are available as preprints, and in which research is primarily assessed on the basis of reviews from peers and not on the title of the journal in which it was published.'),
+            new Paragraph('eLife\'s editorial process produces two outputs: i) public comments from the peer reviewers on the strengths and weaknesses of the work, and whether the authors’ claims and conclusions are justified by their data, that can be posted alongside the preprint for the benefit of readers, potential readers and others interested in the work; ii) detailed feedback on the manuscript for the authors, including requests for revisions and suggestions for improvement.'),
+            new Paragraph('The public comments include an evaluation summary that captures the major conclusions of the review process, and public reviews from each of the peer reviewers that outline the strengths and weaknesses of the manuscript.'),
             new Paragraph('The detailed feedback is intended to help authors to revise and improve their preprint: for revised preprints that are accepted by eLife, the detailed feedback is published as part of the paper, along with the author response to the feedback.'),
-            new Paragraph(' To learn more, please see “<a href="'.$this->get('router')->generate('article', ['id' => '64910']).'">Peer Review: eLife implementing "Publish, then Review" model of publishing</a>”.'),
-            new Paragraph('Other features of the eLife peer-review process are:'),
+            new Paragraph('We believe that this approach combines the immediacy and openness of a preprint with the scrutiny and curation of a peer-reviewed publication. The features of the eLife peer-review process are:'),
             Listing::unordered([
-                'all decisions are made by editors who are active researchers in biology and medicine.',
-                'we do not artificially limit the number of articles we publish or have a set acceptance rate.',
-                'editors and reviewers discuss their reviews with each other before reaching a decision on a manuscript; extra experiments are only requested if they are essential and can be reasonably completed within about two months.',
-                'the public reviews, revision recommendations, and author responses are published with accepted manuscripts.',
+                'we only review research papers that have been made available as preprints',
+                'all decisions are made by editors who are active researchers',
+                'we do not artificially limit the number of articles we publish or have a set acceptance rate',
+                'editors and reviewers discuss their reviews with each other before reaching a decision on a manuscript; extra experiments, analyses, or data collection are only requested if they are essential and can be reasonably completed within about two months (please also see, “<a href="'.$this->get('router')->generate('article', ['id' => '57162']).'">Publishing in the time of COVID-19</a>”)',
+                'our editorial process produces two outputs: i) public comments from the peer reviewers on the strengths and weaknesses of the work; ii) detailed feedback on the manuscript for the authors',
+                'accepted manuscripts published in eLife include the the decision letter from the editor to the authors, and the author responses to the decision letter',
             ], 'bullet'),
             new Paragraph('The overall aim is to make peer review faster, fairer and more open. <a href="'.$this->get('router')->generate('article', ['id' => '00855']).'">eLife does not support the Impact Factor</a> and is a co-founder of the <a href="https://sfdora.org/">Declaration on Research Assessment (DORA)</a>. Regularly updated metrics relating to the eLife editorial process are available in our <a href="https://reviewer.elifesciences.org/author-guide/journal-metrics">Author Guide</a>.'),
             ArticleSection::basic('Related links', 2,
                 $this->render(Listing::unordered([
-                    '<a href="'.$this->get('router')->generate('inside-elife-article', ['id' => 'e9091cea']).'">Peer Review: New initiatives to enhance the value of eLife’s process</a> (Michael Eisen, eLife Editor-in-Chief, November 2019)',
-                    '<a href="https://reviewer.elifesciences.org/author-guide/editorial-process">Author Guide</a>',
-                    '<a href="https://www.youtube.com/watch?v=quCG17jZW-w">eLife: Changing the review process</a> (video, February 2014)',
+                    '<a href="'.$this->get('router')->generate('inside-elife-article', ['id' => '00f2f185']).'">Preprints and peer review at eLife</a>',
+                    '<a href="'.$this->get('router')->generate('inside-elife-article', ['id' => 'e5f8f1f7']).'">What we have learned about preprints</a>',
+                    '<a href="'.$this->get('router')->generate('article', ['id' => '64910']).'">Peer Review: eLife implementing "Publish, then Review" model of publishing</a>',
                 ], 'bullet'))
             ),
         ];

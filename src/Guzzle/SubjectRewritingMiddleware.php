@@ -82,7 +82,7 @@ final class SubjectRewritingMiddleware
                         $data['total'] = $data['total'] - ($before - $after);
                         break;
 
-                    case 'application/vnd.elife.article-history+json; version=1':
+                    case 'application/vnd.elife.article-history+json; version=2':
                         $data['versions'] = $this->updateItems($data['versions']);
                         break;
 
