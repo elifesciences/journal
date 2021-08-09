@@ -19,6 +19,8 @@ parameters:
     crm_url: https://crm.elifesciences.org/crm/civicrm/
     gtm_id: ~
     google_optimize_id: ~
+    cb_id: ~
+    cookie_consent: true
     trusted_hosts:
       - .*\.?elifesciences.org$
     status_checks:
