@@ -137,7 +137,7 @@ twig:
     debug: '%kernel.debug%'
     exception_controller: AppBundle:Exception:show
     globals:
-        cookie_consent: '%cookie_consent%'
+        cb_id: '0a5c50d8-fcf9-47b1-8f4f-1eaadb13941b'
         gtm_id: '%gtm_id%'
         google_optimize_id: '%google_optimize_id%'
         hypothesis_api: '%hypothesis_api%'
