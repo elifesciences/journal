@@ -140,6 +140,7 @@ twig:
         cookie_consent: '%cookie_consent%'
         gtm_id: '%gtm_id%'
         google_optimize_id: '%google_optimize_id%'
+        cb_id: '%cb_id%'
         hypothesis_api: '%hypothesis_api%'
         hypothesis_authority: '%hypothesis_authority%'
     paths:

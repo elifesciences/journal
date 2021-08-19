@@ -1,6 +1,9 @@
 {% extends '::base.html.twig' %}
 
 {% block head %}
+    {% if cb_id %}
+        <script id="Cookiebot" src="https://consent.cookiebot.com/uc.js" data-cbid="{{ cb_id|raw }}" data-blockingmode="auto" type="text/javascript"></script>
+    {% endif %}
 
     <script>
         document.querySelector('html').classList.add('js');
@@ -212,6 +215,10 @@
 {% endblock %}
 
 {% block content %}
+    {% if cb_id %}
+        <script id="CookieDeclaration" src="https://consent.cookiebot.com/{{ cb_id|raw }}/cd.js" type="text/javascript" async></script>
+    {% endif %}
+
     {% if gtm_id %}
         <noscript>
             <iframe src="https://www.googletagmanager.com/ns.html?id={{ gtm_id|raw }}" height="0" width="0"

@@ -18,6 +18,7 @@ parameters:
     gtm_id: ~
     google_optimize_id: ~
     cookie_consent: false
+    cb_id: ~
     trusted_hosts:
       - localhost
       - web
