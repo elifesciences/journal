@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4a372cadea17ec4a2d1853a989741109",
+    "content-hash": "cf4076cbad34191497709c753b502ddc",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -422,6 +422,7 @@
                 }
             ],
             "description": "A bundle integrating GuzzleHttp >= 4.0",
+            "abandoned": "symfony/http-client",
             "time": "2017-12-07T17:33:13+00:00"
         },
         {
@@ -1359,16 +1360,16 @@
         },
         {
             "name": "elife/patterns",
-            "version": "dev-master",
+            "version": "dev-etoc-cta-signup-changes",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/patterns-php.git",
-                "reference": "44dc73320d3a8359b5d2a8c12dae69d4d50d97d9"
+                "reference": "c64ce10d1e5dc59c9edc0f9a099fcf4b3ee0ab3b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/44dc73320d3a8359b5d2a8c12dae69d4d50d97d9",
-                "reference": "44dc73320d3a8359b5d2a8c12dae69d4d50d97d9",
+                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/c64ce10d1e5dc59c9edc0f9a099fcf4b3ee0ab3b",
+                "reference": "c64ce10d1e5dc59c9edc0f9a099fcf4b3ee0ab3b",
                 "shasum": ""
             },
             "require": {
@@ -1410,9 +1411,9 @@
             ],
             "description": "eLife patterns",
             "support": {
-                "source": "https://github.com/elifesciences/patterns-php/tree/master"
+                "source": "https://github.com/elifesciences/patterns-php/tree/etoc-cta-signup-changes"
             },
-            "time": "2021-07-05T13:07:35+00:00"
+            "time": "2021-08-24T13:05:28+00:00"
         },
         {
             "name": "fabpot/goutte",
