@@ -238,12 +238,15 @@ abstract class Controller implements ContainerAwareInterface
         $this->ifFormSubmitted($request, $form, function () use ($form) {
             $goutte = $this->get('elife.journal.goutte');
 
-            $crawler = $goutte->request('GET', $this->getParameter('crm_url').'profile/create?reset=1&gid=18');
-            $button = $crawler->selectButton('Save');
+            $crawler = $goutte->request('GET', 'https://crm.elifesciences.org/crm/content-alerts');
+            $button = $crawler->selectButton('SUBSCRIBE');
 
-            $crawler = $goutte->submit($button->form(), ['email-3' => $form->get('email')->getData()]);
+            $crawler = $goutte->submit($button->form(), [
+                'submitted[civicrm_1_contact_1_fieldset_fieldset][civicrm_1_contact_1_email_email]' => $form->get('email')->getData(),
+                'submitted[civicrm_1_contact_1_fieldset_fieldset][civicrm_1_contact_1_other_group][53]' => true,
+            ]);
 
-            if ($crawler->filter('.messages:contains("Your subscription request has been submitted")')->count()) {
+            if ($crawler->filter('.webform-confirmation:contains("Thank you for subscribing!")')->count()) {
                 $this->get('session')
                     ->getFlashBag()
                     ->add(ViewModel\InfoBar::TYPE_SUCCESS, 'Almost finished! Click the link in the email we just sent you to confirm your subscription.');
@@ -252,6 +255,7 @@ abstract class Controller implements ContainerAwareInterface
                     ->getFlashBag()
                     ->add(ViewModel\InfoBar::TYPE_SUCCESS, 'You are already subscribed!');
             } else {
+                dump($crawler->html());
                 throw new UnexpectedValueException('Couldn\'t read CRM response');
             }
         });
