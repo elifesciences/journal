@@ -240,10 +240,24 @@ abstract class Controller implements ContainerAwareInterface
 
             $crawler = $goutte->request('GET', 'https://crm.elifesciences.org/crm/content-alerts');
             $button = $crawler->selectButton('SUBSCRIBE');
+            $buttonForm = $button->form();
 
-            $crawler = $goutte->submit($button->form(), [
+            // Checkbox: The latest scientific articles published by eLife (twice weekly)
+            $buttonForm['submitted[civicrm_1_contact_1_fieldset_fieldset][civicrm_1_contact_1_other_group][53]']->tick();
+            // Checkbox: Early-career researchers newsletter (monthly)
+            $buttonForm['submitted[civicrm_1_contact_1_fieldset_fieldset][civicrm_1_contact_1_other_group][317]']->tick();
+            // Checkbox: Technology and Innovation newsletter (every two months)
+            $buttonForm['submitted[civicrm_1_contact_1_fieldset_fieldset][civicrm_1_contact_1_other_group][435]']->tick();
+            // Checkbox: eLife newsletter (every two months)
+            $buttonForm['submitted[civicrm_1_contact_1_fieldset_fieldset][civicrm_1_contact_1_other_group][1032]']->tick();
+
+            $crawler = $goutte->submit($buttonForm, [
+                // Form field: First Name
+                'submitted[civicrm_1_contact_1_fieldset_fieldset][civicrm_1_contact_1_contact_first_name]' => 'Fname',
+                // Form field: Last Name
+                'submitted[civicrm_1_contact_1_fieldset_fieldset][civicrm_1_contact_1_contact_last_name]' => 'Lname',
+                // Form field: Email
                 'submitted[civicrm_1_contact_1_fieldset_fieldset][civicrm_1_contact_1_email_email]' => $form->get('email')->getData(),
-                'submitted[civicrm_1_contact_1_fieldset_fieldset][civicrm_1_contact_1_other_group][53]' => true,
             ]);
 
             if ($crawler->filter('.webform-confirmation:contains("Thank you for subscribing!")')->count()) {
@@ -255,7 +269,6 @@ abstract class Controller implements ContainerAwareInterface
                     ->getFlashBag()
                     ->add(ViewModel\InfoBar::TYPE_SUCCESS, 'You are already subscribed!');
             } else {
-                dump($crawler->html());
                 throw new UnexpectedValueException('Couldn\'t read CRM response');
             }
         });
