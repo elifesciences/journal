@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "cf4076cbad34191497709c753b502ddc",
+    "content-hash": "4a372cadea17ec4a2d1853a989741109",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -1360,16 +1360,16 @@
         },
         {
             "name": "elife/patterns",
-            "version": "dev-etoc-cta-signup-changes",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/patterns-php.git",
-                "reference": "c64ce10d1e5dc59c9edc0f9a099fcf4b3ee0ab3b"
+                "reference": "aa1552be758effb736f2bbb74060b986f395706a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/c64ce10d1e5dc59c9edc0f9a099fcf4b3ee0ab3b",
-                "reference": "c64ce10d1e5dc59c9edc0f9a099fcf4b3ee0ab3b",
+                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/aa1552be758effb736f2bbb74060b986f395706a",
+                "reference": "aa1552be758effb736f2bbb74060b986f395706a",
                 "shasum": ""
             },
             "require": {
@@ -1411,9 +1411,9 @@
             ],
             "description": "eLife patterns",
             "support": {
-                "source": "https://github.com/elifesciences/patterns-php/tree/etoc-cta-signup-changes"
+                "source": "https://github.com/elifesciences/patterns-php/tree/master"
             },
-            "time": "2021-08-24T13:05:28+00:00"
+            "time": "2021-08-25T09:36:48+00:00"
         },
         {
             "name": "fabpot/goutte",
