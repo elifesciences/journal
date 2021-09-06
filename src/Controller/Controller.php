@@ -231,31 +231,6 @@ abstract class Controller implements ContainerAwareInterface
 
     final protected function defaultPageArguments(Request $request, PromiseInterface $item = null) : array
     {
-        /** @var FormInterface $form */
-        $form = $this->get('form.factory')
-            ->create(EmailCtaType::class, null, ['action' => $request->getUri()]);
-
-        $this->ifFormSubmitted($request, $form, function () use ($form) {
-            $goutte = $this->get('elife.journal.goutte');
-
-            $crawler = $goutte->request('GET', $this->getParameter('crm_url').'profile/create?reset=1&gid=18');
-            $button = $crawler->selectButton('Save');
-
-            $crawler = $goutte->submit($button->form(), ['email-3' => $form->get('email')->getData()]);
-
-            if ($crawler->filter('.messages:contains("Your subscription request has been submitted")')->count()) {
-                $this->get('session')
-                    ->getFlashBag()
-                    ->add(ViewModel\InfoBar::TYPE_SUCCESS, 'Almost finished! Click the link in the email we just sent you to confirm your subscription.');
-            } elseif ($crawler->filter('.msg-text:contains("Your information has been saved")')->count()) {
-                $this->get('session')
-                    ->getFlashBag()
-                    ->add(ViewModel\InfoBar::TYPE_SUCCESS, 'You are already subscribed!');
-            } else {
-                throw new UnexpectedValueException('Couldn\'t read CRM response');
-            }
-        });
-
         if ($this->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             $user = $this->get('security.token_storage')->getToken()->getUser();
             $profile = $this->get('elife.api_sdk.profiles')->get($user->getUsername())
@@ -274,7 +249,12 @@ abstract class Controller implements ContainerAwareInterface
                 }),
             'infoBars' => [],
             'callsToAction' => $this->getCallsToAction($request),
-            'emailCta' => $this->get('elife.journal.view_model.converter')->convert($form->createView()),
+            'emailCta' => new ViewModel\EmailCta(
+                'Be the first to read new articles from eLife',
+                ViewModel\Button::link('Sign up for email alerts', 'https://crm.elifesciences.org/crm/content-alerts'),
+                $this->get('router')->generate('privacy'),
+                'Privacy notice'
+            ),
             'footer' => $this->get('elife.journal.view_model.factory.footer')->createFooter(),
             'user' => $user ?? null,
             'item' => $item,

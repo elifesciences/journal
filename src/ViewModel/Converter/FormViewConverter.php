@@ -65,32 +65,6 @@ final class FormViewConverter implements ViewModelConverter
 
                     $children = array_map([$this, 'convert'], $object->children);
 
-                    if ('email_cta' === $object->vars['full_name']) {
-                        return new ViewModel\EmailCta(
-                            'Be the first to read new articles from eLife',
-                            'Sign up for alerts',
-                            new ViewModel\CompactForm(
-                                $form,
-                                new ViewModel\Input(
-                                    $children['email']['label']['labelText'],
-                                    $children['email']['inputType'],
-                                    $children['email']['name'],
-                                    $children['email']['value'],
-                                    $children['email']['placeholder'],
-                                    $children['email']['autofocus']
-                                ),
-                                $children['submit']['text'],
-                                $children['email']['state'],
-                                $children['email']['messageGroup'],
-                                array_values(array_filter($children, function ($child) {
-                                    return $child instanceof ViewModel\HiddenField;
-                                })),
-                                $children[$this->honeypotField] ?? null
-                            ),
-                            $children['email']['formFieldInfoLink']
-                        );
-                    }
-
                     return new Form($form, $this->patternRenderer->render(...array_values($children)));
                 case 'hidden':
                     return new ViewModel\HiddenField($object->vars['full_name'], $object->vars['id'], $object->vars['value']);
