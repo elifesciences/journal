@@ -1,7 +1,6 @@
 imports:
   - resource: config_prod.yml
 
-
 csa_guzzle:
     clients:
         elife_api_slow:
