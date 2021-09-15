@@ -546,6 +546,15 @@ final class ArticleControllerTest extends PageTestCase
                         ],
                         'statement' => 'Funding statement',
                     ],
+                    'editorEvaluation' => [
+                        'doi' => '10.7554/eLife.09560.003',
+                        'content' => [
+                            [
+                                'type' => 'paragraph',
+                                'text' => 'Editor evaluation text',
+                            ],
+                        ],
+                    ],
                     'decisionLetter' => [
                         'doi' => '10.7554/eLife.09560.003',
                         'description' => [
@@ -2295,6 +2304,16 @@ final class ArticleControllerTest extends PageTestCase
                             ],
                         ],
                         'statement' => 'Funding statement',
+                    ],
+                    'editorEvaluation' => [
+                        'id' => 'editor-evaluation-letter-id',
+                        'doi' => '10.7554/eLife.09560.003',
+                        'content' => [
+                            [
+                                'type' => 'paragraph',
+                                'text' => 'Editor evaluation text',
+                            ],
+                        ],
                     ],
                     'decisionLetter' => [
                         'id' => 'decision-letter-id',

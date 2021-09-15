@@ -355,6 +355,18 @@ final class ArticlesController extends Controller
                     );
                 }
 
+                if ($item instanceof ArticleVoR && $item->getEditorEvaluation()) {
+                    $parts[] = ArticleSection::collapsible(
+                        $item->getEditorEvaluation()->getId() ?? 'editor-evaluation',
+                        'Editor evaluation',
+                        2,
+                        $this->render(...$this->convertContent($item->getEditorEvaluation(), 2, $context)),
+                        true,
+                        false,
+                        $item->getEditorEvaluation()->getDoi() ? new Doi($item->getEditorEvaluation()->getDoi()) : null
+                    );
+                }
+
                 if ($item instanceof ArticleVoR && $item->getDecisionLetter()) {
                     $parts[] = ArticleSection::collapsible(
                         $item->getDecisionLetter()->getId() ?? 'decision-letter',
