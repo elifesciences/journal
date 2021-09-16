@@ -2569,7 +2569,6 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertSame('Editor evaluation', $crawler->filter('#editor-evaluation-id h2')->text());
         $this->assertSame('Editor evaluation',
             $crawler->filter('.grid-column > section:nth-of-type(7) > header > h2')->text());
-        $crawler->filter('.grid-column > section:nth-of-type(7) > div .editor-evaluation-header__main_text > p')->text());
         $this->assertSame('Editor evaluation text',
             $crawler->filter('.grid-column > section:nth-of-type(7) > div > p')->text());
         $this->assertSame('Decision letter', $crawler->filter('#decision-letter-id h2')->text());
