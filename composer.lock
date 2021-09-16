@@ -1310,12 +1310,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-sdk-php.git",
-                "reference": "339debecf62aade35a24d4c187f3ae39eb9b7b4b"
+                "reference": "69ed26b18f29da9b9d96695b60a0e4fab55e22c3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/339debecf62aade35a24d4c187f3ae39eb9b7b4b",
-                "reference": "339debecf62aade35a24d4c187f3ae39eb9b7b4b",
+                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/69ed26b18f29da9b9d96695b60a0e4fab55e22c3",
+                "reference": "69ed26b18f29da9b9d96695b60a0e4fab55e22c3",
                 "shasum": ""
             },
             "require": {
@@ -1330,7 +1330,7 @@
             },
             "require-dev": {
                 "csa/guzzle-cache-middleware": "^1.0",
-                "elife/api": "^2.2",
+                "elife/api": "^2.3",
                 "elife/api-validator": "^1.0@dev",
                 "guzzlehttp/guzzle": "^6.0",
                 "justinrainbow/json-schema": "^3.0 || ^4.0 || ^5.0",
@@ -1356,7 +1356,7 @@
                 "MIT"
             ],
             "description": "eLife Sciences API SDK",
-            "time": "2021-09-15T13:58:35+00:00"
+            "time": "2021-09-16T10:40:59+00:00"
         },
         {
             "name": "elife/patterns",
@@ -5800,7 +5800,6 @@
             ],
             "description": "Provides a list of PHP built-in functions that operate on resources",
             "homepage": "https://www.github.com/sebastianbergmann/resource-operations",
-            "abandoned": true,
             "time": "2018-10-04T04:07:39+00:00"
         },
         {
