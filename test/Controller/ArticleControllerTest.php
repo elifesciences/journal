@@ -2314,6 +2314,7 @@ final class ArticleControllerTest extends PageTestCase
                                 'text' => 'Editor evaluation text',
                             ],
                         ],
+                        'uri' => 'https://editor-evaluation.com',
                     ],
                     'decisionLetter' => [
                         'id' => 'decision-letter-id',
