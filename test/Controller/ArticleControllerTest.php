@@ -2566,7 +2566,7 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertSame('Decision letter', $crawler->filter('#decision-letter-id h2')->text());
         $this->assertSame('Decision letter',
             $crawler->filter('.grid-column > section:nth-of-type(8) > header > h2')->text());
-        $this->assertCount(4, $crawler->filter('.grid-column > section:nth-of-type(7) > div .profile-snippet__name'));
+        $this->assertCount(4, $crawler->filter('.grid-column > section:nth-of-type(8) > div .profile-snippet__name'));
         $this->assertSame('Reviewer 1',
             $crawler->filter('.grid-column > section:nth-of-type(8) > div .profile-snippet__name')->eq(0)->text());
         $this->assertSame('Reviewing Editor 1',
