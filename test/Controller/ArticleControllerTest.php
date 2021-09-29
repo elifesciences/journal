@@ -2474,7 +2474,7 @@ final class ArticleControllerTest extends PageTestCase
             $crawler->filter('.grid-column > section:nth-of-type(2) > header > h2')->text());
         $this->assertSame('Editor\'s evaluation text',
             $crawler->filter('.grid-column > section:nth-of-type(2) > div > p')->text());
-        $this->assertSame('https://doi.org/10.7554/eLife.09560.sa01',
+        $this->assertSame('https://doi.org/10.7554/eLife.09560.sa0',
             $crawler->filter('.grid-column > section:nth-of-type(2) > div > .doi')->text());
         $this->assertSame('eLife digest',
             $crawler->filter('.grid-column > section:nth-of-type(3) > header > h2')->text());
