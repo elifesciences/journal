@@ -296,7 +296,9 @@ final class ArticlesController extends Controller
                         $item->getAbstract()->getDoi() ? new Doi($item->getAbstract()->getDoi()) : null
                     );
 
-                    $first = false;
+                    if ($item instanceof ArticlePoA || null === $item->getEditorEvaluation()) {
+                        $first = false;
+                    }
                 }
 
                 if ($item instanceof ArticleVoR && $item->getEditorEvaluation()) {
@@ -305,14 +307,14 @@ final class ArticlesController extends Controller
                     // $this->get('router')->generate("article{$subRoute}", [$currentVersion, '_fragment' => $fragment])
 
                     if ($item->getDecisionLetter()) {
-                        $relatedLinks['items'][] = new Link('Decision letter', $this->get('router')->generate('article', ['id' => $item->getId(), '_fragment' => 'decision-letter']));
+                        $relatedLinks[] = new Link('Decision letter', $this->get('router')->generate('article', ['id' => $item->getId(), '_fragment' => 'decision-letter']));
                     }
 
                     if ($item->getEditorEvaluationScietyUri()) {
-                        $relatedLinks['items'][] = new Link('Reviews on sciety', $item->getEditorEvaluationScietyUri());
+                        $relatedLinks[] = new Link('Reviews on sciety', $item->getEditorEvaluationScietyUri());
                     }
 
-                    $relatedLinks['items'][] = new Link('eLife\'s peer review process', $this->get('router')->generate('about-peer-review'));
+                    $relatedLinks[] = new Link('eLife\'s peer review process', $this->get('router')->generate('about-peer-review'));
 
                     $parts[] = ArticleSection::collapsible(
                         $item->getEditorEvaluation()->getId() ?? 'editor-evaluation',
@@ -321,10 +323,12 @@ final class ArticlesController extends Controller
                         $this->render(...$this->convertContent($item->getEditorEvaluation(), 2, $context)),
                         $relatedLinks,
                         ArticleSection::STYLE_HIGHLIGHTED,
-                        true,
+                        false,
                         false,
                         $item->getEditorEvaluation()->getDoi() ? new Doi($item->getEditorEvaluation()->getDoi()) : null
                     );
+
+                    $first = false;
                 }
 
                 if ($item instanceof ArticleVoR && $item->getDigest()) {
