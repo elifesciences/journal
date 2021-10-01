@@ -58,7 +58,7 @@
             "@type": "Conversation",
             "mainEntityOfPage": {
                 "@type": "WebPage",
-                "@id": "{{ url('podcast', {podcast: item.number}) }}"
+                "@id": "{{ url('article', {id: item.id}) }}"
             },
             "headline": {{ title|striptags|json_encode(constant('JSON_UNESCAPED_UNICODE'))|raw }},
             "image": [
