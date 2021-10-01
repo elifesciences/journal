@@ -2476,6 +2476,23 @@ final class ArticleControllerTest extends PageTestCase
             $crawler->filter('.grid-column > section:nth-of-type(2) > div > p')->text());
         $this->assertSame('https://doi.org/10.7554/eLife.09560.sa0',
             $crawler->filter('.grid-column > section:nth-of-type(2) > div > .doi')->text());
+        $this->assertSame(
+            [
+                [
+                    'Decision letter',
+                    '/articles/00001#decision-letter',
+                ],
+                [
+                    'Reviews on sciety',
+                    'https://editor-evaluation.com',
+                ],
+                [
+                    'eLife\'s peer review process',
+                    '/about/peer-review',
+                ],
+            ],
+            $crawler->filter('.grid-column > section:nth-of-type(2) > div .article-section__related_link')->extract(['_text', 'href'])
+        );
         $this->assertSame('eLife digest',
             $crawler->filter('.grid-column > section:nth-of-type(3) > header > h2')->text());
         $this->assertSame('Digest text',
