@@ -296,15 +296,13 @@ final class ArticlesController extends Controller
                         $item->getAbstract()->getDoi() ? new Doi($item->getAbstract()->getDoi()) : null
                     );
 
-                    if ($item instanceof ArticlePoA || null === $item->getEditorEvaluation()) {
-                        $first = false;
-                    }
+                    $first = false;
                 }
 
                 if ($item instanceof ArticleVoR && $item->getEditorEvaluation()) {
+                    // Editor's evaluation should feel connected to abstract and not be collapsible
+                    $first = true;
                     $relatedLinks = [];
-
-                    // $this->get('router')->generate("article{$subRoute}", [$currentVersion, '_fragment' => $fragment])
 
                     if ($item->getDecisionLetter()) {
                         $relatedLinks[] = new Link('Decision letter', $this->get('router')->generate('article', ['id' => $item->getId(), '_fragment' => 'decision-letter']));
@@ -324,7 +322,7 @@ final class ArticlesController extends Controller
                         $relatedLinks,
                         ArticleSection::STYLE_HIGHLIGHTED,
                         false,
-                        false,
+                        $first,
                         $item->getEditorEvaluation()->getDoi() ? new Doi($item->getEditorEvaluation()->getDoi()) : null
                     );
 
