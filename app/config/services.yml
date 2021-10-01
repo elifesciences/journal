@@ -194,6 +194,14 @@ services:
         arguments:
           - '@elife.journal.guzzle.cache.storage'
 
+    elife.journal.guzzle.editor_evaluation_mock:
+        class: eLife\Journal\Guzzle\EditorEvaluationMockMiddleware
+        public: false
+        tags:
+          - name: csa_guzzle.middleware
+            alias: editor_evaluation_mock
+            priority: 1498
+
     elife.journal.guzzle.stale_logging:
         class: eLife\Journal\Guzzle\StaleLoggingMiddleware
         public: false
