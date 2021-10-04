@@ -312,7 +312,7 @@ final class ArticlesController extends Controller
                         $relatedLinks[] = new Link('Reviews on sciety', $item->getEditorEvaluationScietyUri());
                     }
 
-                    $relatedLinks[] = new Link('eLife\'s peer review process', $this->get('router')->generate('about-peer-review'));
+                    $relatedLinks[] = new Link('eLife\'s review process', $this->get('router')->generate('about-peer-review'));
 
                     $parts[] = ArticleSection::collapsible(
                         $item->getEditorEvaluation()->getId() ?? 'editor-evaluation',

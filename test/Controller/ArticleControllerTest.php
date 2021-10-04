@@ -2487,7 +2487,7 @@ final class ArticleControllerTest extends PageTestCase
                     'https://editor-evaluation.com',
                 ],
                 [
-                    'eLife\'s peer review process',
+                    'eLife\'s review process',
                     '/about/peer-review',
                 ],
             ],
