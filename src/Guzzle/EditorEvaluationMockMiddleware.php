@@ -39,6 +39,7 @@ final class EditorEvaluationMockMiddleware
     {
         if ('09560' === $item['id']) {
             $item['editorEvaluation'] = [
+                'id' => 'SA0',
                 'doi' => '10.7554/eLife.09560.sa0',
                 'content' => [
                     [
