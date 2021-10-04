@@ -2483,7 +2483,7 @@ final class ArticleControllerTest extends PageTestCase
                     '/articles/00001#decision-letter-id',
                 ],
                 [
-                    'Reviews on sciety',
+                    'Reviews on Sciety',
                     'https://editor-evaluation.com',
                 ],
                 [
