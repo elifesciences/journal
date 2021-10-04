@@ -309,7 +309,7 @@ final class ArticlesController extends Controller
                     }
 
                     if ($item->getEditorEvaluationScietyUri()) {
-                        $relatedLinks[] = new Link('Reviews on sciety', $item->getEditorEvaluationScietyUri());
+                        $relatedLinks[] = new Link('Reviews on Sciety', $item->getEditorEvaluationScietyUri());
                     }
 
                     $relatedLinks[] = new Link('eLife\'s review process', $this->get('router')->generate('about-peer-review'));
