@@ -2480,7 +2480,7 @@ final class ArticleControllerTest extends PageTestCase
             [
                 [
                     'Decision letter',
-                    '/articles/00001#decision-letter',
+                    '/articles/00001#decision-letter-id',
                 ],
                 [
                     'Reviews on sciety',
