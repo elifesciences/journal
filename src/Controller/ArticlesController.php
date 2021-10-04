@@ -305,7 +305,7 @@ final class ArticlesController extends Controller
                     $relatedLinks = [];
 
                     if ($item->getDecisionLetter()) {
-                        $relatedLinks[] = new Link('Decision letter', $this->get('router')->generate('article', ['id' => $item->getId(), '_fragment' => 'decision-letter']));
+                        $relatedLinks[] = new Link('Decision letter', $this->get('router')->generate('article', ['id' => $item->getId(), '_fragment' => $item->getDecisionLetter()->getId() ?? 'decision-letter']));
                     }
 
                     if ($item->getEditorEvaluationScietyUri()) {
