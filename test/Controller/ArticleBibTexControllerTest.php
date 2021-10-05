@@ -25,7 +25,7 @@ final class ArticleBibTexControllerTest extends WebTestCase
             ),
             new Response(
                 200,
-                ['Content-Type' => 'application/vnd.elife.article-'.$status.'+json; version='.('vor' === $status ? '4' : '3')],
+                ['Content-Type' => 'application/vnd.elife.article-'.$status.'+json; version='.('vor' === $status ? '6' : '3')],
                 json_encode($json)
             )
         );
