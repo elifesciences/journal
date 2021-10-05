@@ -1861,7 +1861,7 @@ final class ArticleControllerTest extends PageTestCase
                                 'text' => 'Editor\'s evaluation text',
                             ],
                         ],
-                        'uri' => 'https://editor-evaluation.com',
+                        'scietyUri' => 'https://editor-evaluation.com',
                     ],
                     'digest' => [
                         'doi' => '10.7554/eLife.09560.002',
