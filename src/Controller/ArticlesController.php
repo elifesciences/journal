@@ -289,9 +289,41 @@ final class ArticlesController extends Controller
                         'Abstract',
                         2,
                         $this->render(...$this->convertContent($item->getAbstract(), 2, $context)),
+                        null,
+                        null,
                         false,
                         $first,
                         $item->getAbstract()->getDoi() ? new Doi($item->getAbstract()->getDoi()) : null
+                    );
+
+                    $first = false;
+                }
+
+                if ($item instanceof ArticleVoR && $item->getEditorEvaluation()) {
+                    // Editor's evaluation should feel connected to abstract and not be collapsible
+                    $first = true;
+                    $relatedLinks = [];
+
+                    if ($item->getDecisionLetter()) {
+                        $relatedLinks[] = new Link('Decision letter', $this->get('router')->generate('article', ['id' => $item->getId(), '_fragment' => $item->getDecisionLetter()->getId() ?? 'decision-letter']));
+                    }
+
+                    if ($item->getEditorEvaluationScietyUri()) {
+                        $relatedLinks[] = new Link('Reviews on Sciety', $item->getEditorEvaluationScietyUri());
+                    }
+
+                    $relatedLinks[] = new Link('eLife\'s review process', $this->get('router')->generate('about-peer-review'));
+
+                    $parts[] = ArticleSection::collapsible(
+                        $item->getEditorEvaluation()->getId() ?? 'editor-evaluation',
+                        'Editor\'s evaluation',
+                        2,
+                        $this->render(...$this->convertContent($item->getEditorEvaluation(), 2, $context)),
+                        $relatedLinks,
+                        ArticleSection::STYLE_HIGHLIGHTED,
+                        false,
+                        $first,
+                        $item->getEditorEvaluation()->getDoi() ? new Doi($item->getEditorEvaluation()->getDoi()) : null
                     );
 
                     $first = false;
@@ -303,6 +335,8 @@ final class ArticlesController extends Controller
                         'eLife digest',
                         2,
                         $this->render(...$this->convertContent($item->getDigest(), 2, $context)),
+                        null,
+                        null,
                         false,
                         $first,
                         $item->getDigest()->getDoi() ? new Doi($item->getDigest()->getDoi()) : null
@@ -320,6 +354,8 @@ final class ArticlesController extends Controller
                             $section->getTitle(),
                             2,
                             $this->render(...$this->convertContent($section, 2, $context)),
+                            null,
+                            null,
                             $isInitiallyClosed,
                             $first
                         );
@@ -337,12 +373,12 @@ final class ArticlesController extends Controller
                     $parts = array_merge($parts, $item->getAppendices()->map(function (Appendix $appendix) use ($context) {
                         return ArticleSection::collapsible($appendix->getId(), $appendix->getTitle(), 2,
                             $this->render(...$this->convertContent($appendix, 2, $context)),
-                            true, false, $appendix->getDoi() ? new Doi($appendix->getDoi()) : null);
+                            null, null, true, false, $appendix->getDoi() ? new Doi($appendix->getDoi()) : null);
                     })->toArray());
                 }
 
                 if ($data->notEmpty()) {
-                    $parts[] = ArticleSection::collapsible('data', 'Data availability', 2, $this->render(...$data), false, $first);
+                    $parts[] = ArticleSection::collapsible('data', 'Data availability', 2, $this->render(...$data), null, null, false, $first);
                 }
 
                 if ($item instanceof ArticleVoR && $item->getReferences()->notEmpty()) {
@@ -351,6 +387,8 @@ final class ArticlesController extends Controller
                         'References',
                         2,
                         $this->render($this->convertTo($item, ViewModel\ReferenceList::class)),
+                        null,
+                        null,
                         true
                     );
                 }
@@ -362,6 +400,8 @@ final class ArticlesController extends Controller
                         2,
                         $this->render($this->convertTo($item, ViewModel\DecisionLetterHeader::class)).
                         $this->render(...$this->convertContent($item->getDecisionLetter(), 2, $context)),
+                        null,
+                        null,
                         true,
                         false,
                         $item->getDecisionLetter()->getDoi() ? new Doi($item->getDecisionLetter()->getDoi()) : null
@@ -374,6 +414,8 @@ final class ArticlesController extends Controller
                         'Author response',
                         2,
                         $this->render(...$this->convertContent($item->getAuthorResponse(), 2, $context)),
+                        null,
+                        null,
                         true,
                         false,
                         $item->getAuthorResponse()->getDoi() ? new Doi($item->getAuthorResponse()->getDoi()) : null
@@ -547,6 +589,8 @@ final class ArticlesController extends Controller
                     'Article'.($item->getAuthors()->notEmpty() ? ' and author' : '').' information',
                     2,
                     $this->render(...$infoSections),
+                    null,
+                    null,
                     true
                 );
 
@@ -576,6 +620,8 @@ final class ArticlesController extends Controller
                         'Metrics',
                         2,
                         $this->render(new ViewModel\StatisticCollection(...$statistics), ...$statisticsExtra),
+                        null,
+                        null,
                         true
                     );
                 }
@@ -700,22 +746,22 @@ final class ArticlesController extends Controller
                 $first = true;
 
                 if ($all['figures']->notEmpty()) {
-                    $parts[] = ArticleSection::collapsible('figures', 'Figures', 2, $this->render(...$all['figures']), false, $first);
+                    $parts[] = ArticleSection::collapsible('figures', 'Figures', 2, $this->render(...$all['figures']), null, null, false, $first);
                     $first = false;
                 }
 
                 if ($all['videos']->notEmpty()) {
-                    $parts[] = ArticleSection::collapsible('videos', 'Videos', 2, $this->render(...$all['videos']), false, $first);
+                    $parts[] = ArticleSection::collapsible('videos', 'Videos', 2, $this->render(...$all['videos']), null, null, false, $first);
                     $first = false;
                 }
 
                 if ($all['tables']->notEmpty()) {
-                    $parts[] = ArticleSection::collapsible('tables', 'Tables', 2, $this->render(...$all['tables']), false, $first);
+                    $parts[] = ArticleSection::collapsible('tables', 'Tables', 2, $this->render(...$all['tables']), null, null, false, $first);
                     $first = false;
                 }
 
                 if (!empty($all['additionalFiles'])) {
-                    $parts[] = ArticleSection::collapsible('files', 'Additional files', 2, $this->render($all['additionalFiles']), false, $first);
+                    $parts[] = ArticleSection::collapsible('files', 'Additional files', 2, $this->render($all['additionalFiles']), null, null, false, $first);
                 }
 
                 return $parts;
