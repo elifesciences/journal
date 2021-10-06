@@ -3,6 +3,7 @@
 namespace eLife\Journal\Controller;
 
 use eLife\Journal\Form\Type\ContactType;
+use eLife\Journal\Form\Type\ContentAlertsType;
 use eLife\Journal\Helper\Humanizer;
 use eLife\Patterns\ViewModel\ContentHeader;
 use eLife\Patterns\ViewModel\InfoBar;
@@ -66,5 +67,33 @@ final class ContactController extends Controller
         $arguments['form'] = $this->get('elife.journal.view_model.converter')->convert($form->createView());
 
         return new Response($this->get('templating')->render('::contact.html.twig', $arguments));
+    }
+
+    public function contentAlertsAction(Request $request) : Response
+    {
+        $arguments = $this->defaultPageArguments($request);
+
+        $arguments['title'] = 'Subscribe to eLife\'s email alerts';
+
+        $arguments['contentHeader'] = new ContentHeader($arguments['title']);
+
+        /** @var Form $form */
+        $form = $this->get('form.factory')
+            ->create(ContentAlertsType::class, null, ['action' => $this->get('router')->generate('content-alerts')]);
+
+        $this->ifFormSubmitted($request, $form, function () use ($form) {
+            $this->get('session')
+                ->getFlashBag()
+                ->add(InfoBar::TYPE_SUCCESS,
+                    'Thank you for signing up to the content alerts.');
+        });
+
+        if (empty($this->get('session')->getFlashBag()->peek(InfoBar::TYPE_SUCCESS))) {
+            $arguments['form'] = $this->get('elife.journal.view_model.converter')->convert($form->createView());
+        } else {
+            $arguments['form'] = null;
+        }
+
+        return new Response($this->get('templating')->render('::content-alerts.html.twig', $arguments));
     }
 }

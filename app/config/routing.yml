@@ -198,6 +198,11 @@ contact:
     defaults:
          _controller: AppBundle:Contact:contact
 
+content-alerts:
+    path: /content-alerts
+    defaults:
+         _controller: AppBundle:Contact:contentAlerts
+
 digest:
     path: /digests/{id}/{slug}
     defaults:

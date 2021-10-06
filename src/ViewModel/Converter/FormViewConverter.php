@@ -35,17 +35,29 @@ final class FormViewConverter implements ViewModelConverter
         foreach (array_reverse($object->vars['block_prefixes']) as $prefix) {
             switch ($prefix) {
                 case 'choice':
-                    $options = array_map(function (ChoiceView $choice) use ($object) {
-                        return new ViewModel\SelectOption($choice->value, $choice->label, $choice->value === $object->vars['value']);
-                    }, $object->vars['choices']);
+                    if ($object->vars['multiple']) {
+                        $options = array_map(function (ChoiceView $choice) use ($object) {
+                            static $co = -1;
+                            $co++;
+                            return new ViewModel\CheckboxesOption($object->vars['id'].'_'.$co, $object->vars['full_name'].'[]', $choice->value, $choice->label, in_array($choice->value, $object->vars['data']));
+                        }, $object->vars['choices']);
 
-                    if (!empty($object->vars['placeholder'])) {
-                        array_unshift($options, new ViewModel\SelectOption('', $object->vars['placeholder']));
+                        return new ViewModel\Checkboxes($object->vars['id'], $options, new ViewModel\FormLabel($this->getLabel($object)),
+                            $object->vars['full_name'], $object->vars['required'], $object->vars['disabled'], $this->getState($object),
+                            $this->getMessageGroup($object));
+                    } else {
+                        $options = array_map(function (ChoiceView $choice) use ($object) {
+                            return new ViewModel\SelectOption($choice->value, $choice->label, $choice->value === $object->vars['value']);
+                        }, $object->vars['choices']);
+
+                        if (!empty($object->vars['placeholder'])) {
+                            array_unshift($options, new ViewModel\SelectOption('', $object->vars['placeholder']));
+                        }
+
+                        return new ViewModel\Select($object->vars['id'], $options, new ViewModel\FormLabel($this->getLabel($object)),
+                            $object->vars['full_name'], $object->vars['required'], $object->vars['disabled'], $this->getState($object),
+                            $this->getMessageGroup($object));
                     }
-
-                    return new ViewModel\Select($object->vars['id'], $options, new ViewModel\FormLabel($this->getLabel($object)),
-                        $object->vars['full_name'], $object->vars['required'], $object->vars['disabled'], $this->getState($object),
-                        $this->getMessageGroup($object));
                     break;
                 case 'email':
                     $field = ViewModel\TextField::emailInput(new ViewModel\FormLabel($this->getLabel($object)),
