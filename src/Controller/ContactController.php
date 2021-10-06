@@ -88,11 +88,9 @@ final class ContactController extends Controller
                     'Thank you for signing up to the content alerts.');
         });
 
-        if (empty($this->get('session')->getFlashBag()->peek(InfoBar::TYPE_SUCCESS))) {
-            $arguments['form'] = $this->get('elife.journal.view_model.converter')->convert($form->createView());
-        } else {
-            $arguments['form'] = null;
-        }
+        $arguments['form'] = empty($this->get('session')->getFlashBag()->peek(InfoBar::TYPE_SUCCESS)) ?
+            $this->get('elife.journal.view_model.converter')->convert($form->createView()) :
+            null;
 
         return new Response($this->get('templating')->render('::content-alerts.html.twig', $arguments));
     }
