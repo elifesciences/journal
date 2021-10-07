@@ -39,11 +39,11 @@ final class FormViewConverter implements ViewModelConverter
                         $options = array_map(function (ChoiceView $choice) use ($object) {
                             static $co = -1;
                             $co++;
-                            return new ViewModel\CheckboxesOption($object->vars['id'].'_'.$co, $object->vars['full_name'].'[]', $choice->value, $choice->label, in_array($choice->value, $object->vars['data']));
+                            return new ViewModel\CheckboxesOption($choice->value, $choice->label, $object->vars['id'].'_'.$co, in_array($choice->value, $object->vars['data']));
                         }, $object->vars['choices']);
 
                         return new ViewModel\Checkboxes($object->vars['id'], $options, new ViewModel\FormLabel($this->getLabel($object)),
-                            $object->vars['full_name'], $object->vars['required'], $object->vars['disabled'], $this->getState($object),
+                            $object->vars['full_name'].'[]', $object->vars['required'], $object->vars['disabled'], $this->getState($object),
                             $this->getMessageGroup($object));
                     } else {
                         $options = array_map(function (ChoiceView $choice) use ($object) {
