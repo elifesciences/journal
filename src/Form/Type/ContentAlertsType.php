@@ -44,12 +44,6 @@ final class ContentAlertsType extends AbstractType
             ->add('preferences', ChoiceType::class,
                 [
                     'label' => 'I would like to receive the following regular emails from eLife:',
-//                    'choices' => [
-//                        'The latest scientific articles published by eLife (twice weekly)' => 'latest_articles',
-//                        'Early-career researchers newsletter (monthly)' => 'early_career',
-//                        'Technology and Innovation newsletter (every two months)' => 'technology',
-//                        'eLife newsletter (every two months)' => 'elife_newsletter',
-//                    ],
                     'choices' => [
                         [
                             'The latest scientific articles published by eLife (twice weekly)' => 'latest_articles',
