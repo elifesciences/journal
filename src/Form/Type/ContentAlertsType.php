@@ -27,6 +27,7 @@ final class ContentAlertsType extends AbstractType
             )
             ->add('first_name', TextType::class,
                 [
+                    'label' => 'First name (optional)',
                     'attr' => [
                         'autofocus' => true,
                     ],
@@ -34,6 +35,7 @@ final class ContentAlertsType extends AbstractType
             )
             ->add('last_name', TextType::class,
                 [
+                    'label' => 'Last name (optional)',
                     'attr' => [
                         'autofocus' => true,
                     ],
@@ -52,11 +54,11 @@ final class ContentAlertsType extends AbstractType
                     'multiple' => true,
                     'required' => true,
                     'constraints' => [
-                        new NotBlank(['message' => 'Please make a choice.']),
+                        new NotBlank(['message' => 'Please select an email type to subscribe.']),
                     ],
                     'data' => ['latest_articles'],
                 ]
             )
-            ->add('submit', SubmitType::class);
+            ->add('subscribe', SubmitType::class);
     }
 }

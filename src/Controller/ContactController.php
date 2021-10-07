@@ -5,8 +5,11 @@ namespace eLife\Journal\Controller;
 use eLife\Journal\Form\Type\ContactType;
 use eLife\Journal\Form\Type\ContentAlertsType;
 use eLife\Journal\Helper\Humanizer;
+use eLife\Patterns\ViewModel\ArticleSection;
+use eLife\Patterns\ViewModel\Button;
 use eLife\Patterns\ViewModel\ContentHeader;
 use eLife\Patterns\ViewModel\InfoBar;
+use eLife\Patterns\ViewModel\Paragraph;
 use Swift_Message;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormInterface;
@@ -84,13 +87,24 @@ final class ContactController extends Controller
         $this->ifFormSubmitted($request, $form, function () use ($form) {
             $this->get('session')
                 ->getFlashBag()
-                ->add(InfoBar::TYPE_SUCCESS,
-                    'Thank you for signing up to the content alerts.');
+                ->add(InfoBar::TYPE_SUCCESS, "A confirmation email has been sent to <strong>{$form->get('email')->getData()}</strong>.");
         });
 
-        $arguments['form'] = empty($this->get('session')->getFlashBag()->peek(InfoBar::TYPE_SUCCESS)) ?
+        $successMessage = $this->get('session')->getFlashBag()->get(InfoBar::TYPE_SUCCESS);
+
+        $arguments['form'] = empty($successMessage) ?
             $this->get('elife.journal.view_model.converter')->convert($form->createView()) :
-            null;
+            ArticleSection::basic(
+                'Thank you for subscribing!',
+                2,
+                $this->render(
+                    ...array_map(function ($message) {
+                        return new Paragraph($message);
+                    }, $successMessage)
+                ).$this->render(
+                    Button::link('Back to Homepage', $this->get('router')->generate('home'))
+                )
+            );
 
         return new Response($this->get('templating')->render('::content-alerts.html.twig', $arguments));
     }
