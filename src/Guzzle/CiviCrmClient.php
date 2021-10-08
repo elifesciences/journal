@@ -31,7 +31,7 @@ final class CiviCrmClient
         $this->siteKey = $siteKey;
     }
 
-    public function subscribe(string $email, string $firstName, string $lastName, array $preferences)
+    public function subscribe(string $email, string $firstName, string $lastName, array $preferences) : PromiseInterface
     {
         return coroutine(function () use ($email, $firstName, $lastName, $preferences) {
             $contactId = (yield $this->client->sendAsync($this->prepareRequest('POST'), $this->options([
@@ -72,55 +72,7 @@ final class CiviCrmClient
         });
     }
 
-    public function getUserFromEmail(string $email) : PromiseInterface
-    {
-        return $this->client->sendAsync($this->prepareRequest('GET'), $this->options(
-            [
-                'query' => [
-                    'entity' => 'Contact',
-                    'action' => 'get',
-                    'json' => $this->prepareJsonOptions([
-                        'email' => $email,
-                    ]),
-                ],
-            ]
-        ))->then(function (Response $response) {
-            return $this->prepareResponse($response);
-        })->then(function ($data) {
-            return array_keys($data['values'] ?? []);
-        })->then(function ($users) {
-            return min($users);
-        });
-    }
-
-    public function getMsa() : PromiseInterface
-    {
-        return $this->client->sendAsync($this->prepareRequest('GET'), $this->options(
-            [
-                'query' => [
-                    'entity' => 'Tag',
-                    'action' => 'get',
-                    'json' => $this->prepareJsonOptions([
-                        'name' => [
-                            'LIKE' => 'Interest - %',
-                        ],
-                    ]),
-                ],
-            ]
-        ))->then(function (Response $response) {
-            return $this->prepareResponse($response);
-        })->then(function ($data) {
-            return array_map(function ($msa) {
-                return preg_replace('/^Interest \- (.+)/', '$1', $msa['name']);
-            }, $data['values'] ?? []);
-        })->then(function ($msa) {
-            sort($msa);
-
-            return $msa;
-        });
-    }
-
-    private function preferenceGroupIds(array $preferences)
+    private function preferenceGroupIds(array $preferences) : array
     {
         return array_map(function ($preference) {
             switch ($preference) {
@@ -155,7 +107,7 @@ final class CiviCrmClient
         return $options;
     }
 
-    private function prepareJsonOptions(array $options = [])
+    private function prepareJsonOptions(array $options = []) : string
     {
         return json_encode($options);
     }
@@ -165,7 +117,7 @@ final class CiviCrmClient
      * @return mixed
      * @throws CiviCrmResponseError
      */
-    private function prepareResponse(Response $response)
+    private function prepareResponse(Response $response) : array
     {
         $body = json_decode($response->getBody()->getContents(), true);
 
