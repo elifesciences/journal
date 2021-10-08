@@ -85,6 +85,15 @@ final class ContactController extends Controller
             ->create(ContentAlertsType::class, null, ['action' => $this->get('router')->generate('content-alerts')]);
 
         $this->ifFormSubmitted($request, $form, function () use ($form) {
+            $this->get('elife.api_client.client.crm_api')
+                ->subscribe(
+                    $form->get('email')->getData(),
+                    $form->get('first_name')->getData(),
+                    $form->get('last_name')->getData(),
+                    $form->get('preferences')->getData()
+                )
+                ->wait();
+
             $this->get('session')
                 ->getFlashBag()
                 ->add(InfoBar::TYPE_SUCCESS, "A confirmation email has been sent to <strong>{$form->get('email')->getData()}</strong>.");

@@ -2,6 +2,7 @@
 
 namespace eLife\Journal\Form\Type;
 
+use eLife\Journal\Guzzle\CiviCrmClient;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
@@ -46,13 +47,13 @@ final class ContentAlertsType extends AbstractType
                     'label' => 'I would like to receive the following regular emails from eLife:',
                     'choices' => [
                         [
-                            'The latest scientific articles published by eLife (twice weekly)' => 'latest_articles',
+                            'The latest scientific articles published by eLife (twice weekly)' => CiviCrmClient::LABEL_LATEST_ARTICLES,
                         ],
                         [
                             'Our other newsletters' => [
-                                'Early-career researchers newsletter (monthly)' => 'early_career',
-                                'Technology and Innovation newsletter (every two months)' => 'technology',
-                                'eLife newsletter (every two months)' => 'elife_newsletter',
+                                'Early-career researchers newsletter (monthly)' => CiviCrmClient::LABEL_EARLY_CAREER,
+                                'Technology and Innovation newsletter (every two months)' => CiviCrmClient::LABEL_TECHNOLOGY,
+                                'eLife newsletter (every two months)' => CiviCrmClient::LABEL_ELIFE_NEWSLETTER,
                             ],
                         ],
                     ],
