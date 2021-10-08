@@ -2,6 +2,7 @@
 
 namespace eLife\Journal\Guzzle;
 
+use eLife\Journal\Exception\CiviCrmResponseError;
 use GuzzleHttp\ClientInterface;
 use function GuzzleHttp\Promise\coroutine;
 use GuzzleHttp\Promise\PromiseInterface;
@@ -23,7 +24,7 @@ final class CiviCrmClient
     private $apiKey;
     private $siteKey;
 
-    public function __construct(ClientInterface $client, string $apiKey, string $siteKey)
+    public function __construct(ClientInterface $client, string $apiKey = null, string $siteKey = null)
     {
         $this->client = $client;
         $this->apiKey = $apiKey;
@@ -45,8 +46,9 @@ final class CiviCrmClient
                     ]),
                 ],
             ]))->then(function (Response $response) {
-                return json_decode($response->getBody()->getContents(), true);
+                return $this->prepareResponse($response);
             })->then(function ($data) {
+                //
                 return $data['id'];
             }));
 
@@ -60,7 +62,7 @@ final class CiviCrmClient
                     ]),
                 ],
             ]))->then(function (Response $response) {
-                return json_decode($response->getBody()->getContents(), true);
+                return $this->prepareResponse($response);
             })->then(function ($data) use ($contactId) {
                 return [
                     'contact_id' => $contactId,
@@ -83,7 +85,7 @@ final class CiviCrmClient
                 ],
             ]
         ))->then(function (Response $response) {
-            return json_decode($response->getBody()->getContents(), true);
+            return $this->prepareResponse($response);
         })->then(function ($data) {
             return array_keys($data['values'] ?? []);
         })->then(function ($users) {
@@ -106,7 +108,7 @@ final class CiviCrmClient
                 ],
             ]
         ))->then(function (Response $response) {
-            return json_decode($response->getBody()->getContents(), true);
+            return $this->prepareResponse($response);
         })->then(function ($data) {
             return array_map(function ($msa) {
                 return preg_replace('/^Interest \- (.+)/', '$1', $msa['name']);
@@ -148,7 +150,7 @@ final class CiviCrmClient
 
     private function options(array $options = []) : array
     {
-        $options['query'] = array_merge($options['query'] ?? [], ['api_key' => $this->apiKey, 'key' => $this->siteKey]);
+        $options['query'] = array_merge($options['query'] ?? [], array_filter(['api_key' => $this->apiKey, 'key' => $this->siteKey]));
 
         return $options;
     }
@@ -156,5 +158,21 @@ final class CiviCrmClient
     private function prepareJsonOptions(array $options = [])
     {
         return json_encode($options);
+    }
+
+    /**
+     * @param Response $response
+     * @return mixed
+     * @throws CiviCrmResponseError
+     */
+    private function prepareResponse(Response $response)
+    {
+        $body = json_decode($response->getBody()->getContents(), true);
+
+        if (!empty($body['is_error'])) {
+            throw new CiviCrmResponseError($body['error_message'], $response);
+        }
+
+        return $body;
     }
 }
