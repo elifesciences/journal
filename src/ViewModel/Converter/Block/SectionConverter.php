@@ -2,7 +2,6 @@
 
 namespace eLife\Journal\ViewModel\Converter\Block;
 
-use eLife\ApiSdk\Model\ArticleSection;
 use eLife\ApiSdk\Model\Bioprotocol;
 use eLife\ApiSdk\Model\Block;
 use eLife\Journal\Helper\CanConvertContent;
@@ -45,8 +44,6 @@ final class SectionConverter implements ViewModelConverter
             $level,
             $this->patternRenderer->render(...$this->convertContent($object, $level, $context)),
             $object->getId(),
-            null,
-            null,
             null,
             $context['isFirst'] ?? false,
             $headerLink ?? null

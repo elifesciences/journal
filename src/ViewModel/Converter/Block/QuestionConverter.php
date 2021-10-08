@@ -33,8 +33,6 @@ final class QuestionConverter implements ViewModelConverter
             }, $object->getAnswer())),
             null,
             null,
-            null,
-            null,
             $context['isFirst'] ?? false
         );
     }
