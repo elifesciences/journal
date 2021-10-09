@@ -48,7 +48,6 @@ final class CiviCrmClient
             ]))->then(function (Response $response) {
                 return $this->prepareResponse($response);
             })->then(function ($data) {
-                //
                 return $data['id'];
             }));
 
@@ -69,6 +68,25 @@ final class CiviCrmClient
                     'groups_added' => 0 === $data['is_error'],
                 ];
             });
+        });
+    }
+
+    public function getUserFromEmail(string $email) : PromiseInterface
+    {
+        return $this->client->sendAsync($this->prepareRequest('GET'), $this->options(
+            [
+                'query' => [
+                    'entity' => 'Contact',
+                    'action' => 'get',
+                    'json' => $this->prepareJsonOptions([
+                        'email' => $email,
+                    ]),
+                ],
+            ]
+        ))->then(function (Response $response) {
+            return $this->prepareResponse($response);
+        })->then(function ($data) {
+            return !empty($data['values']) ? $data['values'][min(array_keys($data['values'] ?? []))] : null;
         });
     }
 
