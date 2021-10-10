@@ -71,6 +71,41 @@ final class CiviCrmClient
         });
     }
 
+    public function alterPreferences(int $contactId, array $preferences) : PromiseInterface
+    {
+        return $this->client->sendAsync($this->prepareRequest('POST'), $this->options(
+            [
+                'query' => [
+                    'entity' => 'GroupContact',
+                    'action' => 'create',
+                    'json' => $this->prepareJsonOptions([
+                        'group_id' => $this->preferenceGroups(),
+                        'contact_id' => $contactId,
+                        'status' => 'Removed',
+                    ]),
+                ],
+            ]
+        ))->then(function (Response $response) {
+            return $this->prepareResponse($response);
+        })->then(function () use ($contactId, $preferences) {
+            return $this->client->sendAsync($this->prepareRequest('POST', $this->options(
+                [
+                    'query' => [
+                        'entity' => 'GroupContact',
+                        'action' => 'create',
+                        'json' => $this->prepareJsonOptions([
+                            'group_id' => $this->preferenceGroupIds($preferences),
+                            'contact_id' => $contactId,
+                            'status' => 'Added',
+                        ]),
+                    ],
+                ]
+            )));
+        })->then(function (Response $response) {
+            return $this->prepareResponse($response);
+        });
+    }
+
     public function getUserFromEmail(string $email) : PromiseInterface
     {
         return $this->client->sendAsync($this->prepareRequest('GET'), $this->options(
@@ -105,12 +140,17 @@ final class CiviCrmClient
                 default:
                     return null;
             }
-        }, array_intersect([
+        }, array_intersect($this->preferenceGroups(), $preferences));
+    }
+
+    private function preferenceGroups() : array
+    {
+        return [
             self::LABEL_LATEST_ARTICLES,
             self::LABEL_EARLY_CAREER,
             self::LABEL_TECHNOLOGY,
             self::LABEL_ELIFE_NEWSLETTER,
-        ], $preferences));
+        ];
     }
 
     private function prepareRequest(string $method, array $headers = []) : Request
