@@ -4,12 +4,11 @@ namespace eLife\Journal\Guzzle;
 
 use eLife\Journal\Exception\CiviCrmResponseError;
 use GuzzleHttp\ClientInterface;
-use function GuzzleHttp\Promise\promise_for;
 use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use function GuzzleHttp\Promise\all;
-use function GuzzleHttp\Promise\coroutine;
+use function GuzzleHttp\Promise\promise_for;
 
 final class CiviCrmClient
 {
@@ -39,25 +38,23 @@ final class CiviCrmClient
 
     public function subscribe(string $email, string $firstName, string $lastName, array $preferences) : PromiseInterface
     {
-        return coroutine(function () use ($email, $firstName, $lastName, $preferences) {
-            $contactId = (yield $this->client->sendAsync($this->prepareRequest('POST'), $this->options([
-                'query' => [
-                    'entity' => 'Contact',
-                    'action' => 'create',
-                    'json' => $this->prepareJsonOptions([
-                        'contact_type' => 'Individual',
-                        'email' => $email,
-                        'first_name' => $firstName,
-                        'last_name' => $lastName,
-                    ]),
-                ],
-            ]))->then(function (Response $response) {
-                return $this->prepareResponse($response);
-            })->then(function ($data) {
-                return $data['id'];
-            }));
-
-            yield $this->client->sendAsync($this->prepareRequest('POST'), $this->options([
+        return $this->client->sendAsync($this->prepareRequest('POST'), $this->options([
+            'query' => [
+                'entity' => 'Contact',
+                'action' => 'create',
+                'json' => $this->prepareJsonOptions([
+                    'contact_type' => 'Individual',
+                    'email' => $email,
+                    'first_name' => $firstName,
+                    'last_name' => $lastName,
+                ]),
+            ],
+        ]))->then(function (Response $response) {
+            return $this->prepareResponse($response);
+        })->then(function ($data) {
+            return $data['id'];
+        })->then(function ($contactId) use ($preferences) {
+            return $this->client->sendAsync($this->prepareRequest('POST'), $this->options([
                 'query' => [
                     'entity' => 'GroupContact',
                     'action' => 'create',
