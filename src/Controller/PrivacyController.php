@@ -78,7 +78,7 @@ final class PrivacyController extends Controller
                     new Paragraph('Since cookies are placed on your computer, it is impracticable for us to delete them at your request. Your browser software will allow you to delete cookies. The analytics information we hold is anonymised and aggregated, so it is not possible for us to delete the data relating to one individual.'),
                     new Paragraph('You may complain about our retention and processing of your personal data to the Information Commissioner’s Office, the supervisory authority for data protection issues in England and Wales.')
                 ), 'users-rights')
-            ), true),
+            ), null, null, true),
             ArticleSection::collapsible('authors', 'Authors', 2, $this->render(
                 new Paragraph('This section of the notice deals specifically with personal information held by eLife about the authors of manuscripts submitted for review. You should also refer to the <a href="#users">general website user section</a> of the notice, that relates to all users of our website, and not just those submitting manuscripts.'),
                 Listing::ordered([
@@ -142,7 +142,7 @@ final class PrivacyController extends Controller
                     new Paragraph('To exercise these rights please contact <a href="mailto:data@elifesciences.org">data@elifesciences.org</a>.'),
                     new Paragraph('You may complain about our retention and processing of your personal data to the Information Commissioner’s Office, the supervisory authority for data protection issues in England and Wales.')
                 ), 'authors-rights')
-            ), true),
+            ), null, null, true),
             ArticleSection::collapsible('editors', 'Editors and reviewers', 2, $this->render(
                 new Paragraph('This section of the notice deals specifically with personal information held by eLife about editors and reviewers  (editors include guest editors as well as members of the editorial board). You should also refer to the <a href="#users">general website user section</a> of the notice , that relates to all users of our website.'),
                 Listing::ordered([
@@ -198,7 +198,7 @@ final class PrivacyController extends Controller
                     new Paragraph('To exercise these rights please contact <a href="mailto:data@elifesciences.org">data@elifesciences.org</a>.'),
                     new Paragraph('You may complain about our retention and processing of your personal data to the Information Commissioner’s Office, the supervisory authority for data protection issues in England and Wales.')
                 ), 'editors-rights')
-            ), true),
+            ), null, null, true),
             ArticleSection::collapsible('changes', 'Privacy notice changes', 2, $this->render(
                 new Paragraph('Although most changes are likely to be minor, eLife may change its Privacy Notice from time to time, and at our sole discretion. We encourage visitors to check this page frequently for any changes to its Privacy Notice. First published March 30, 2012.'),
                 ArticleSection::basic('Change log', 3, $this->render(
@@ -243,7 +243,7 @@ EOT
                         ,
                     ])
                 ))
-            ), true),
+            ), null, null, true),
         ];
 
         return new Response($this->get('templating')->render('::privacy.html.twig', $arguments));
