@@ -47,7 +47,7 @@ abstract class PageTestCase extends WebTestCase
 
         $crawler = $client->request('GET', $this->getUrl());
 
-        $this->assertCount('/content-alerts' !== $this->getUrl() ? 1 : 0, $crawler->filter('.email-cta'));
+        $this->assertCount(1, $crawler->filter('.email-cta'));
     }
 
     /**
