@@ -4,10 +4,12 @@ namespace eLife\Journal\Guzzle;
 
 use eLife\Journal\Exception\CiviCrmResponseError;
 use GuzzleHttp\ClientInterface;
-use function GuzzleHttp\Promise\coroutine;
+use function GuzzleHttp\Promise\promise_for;
 use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use function GuzzleHttp\Promise\all;
+use function GuzzleHttp\Promise\coroutine;
 
 final class CiviCrmClient
 {
@@ -19,6 +21,10 @@ final class CiviCrmClient
     const GROUP_EARLY_CAREER = 'early_careers_news_317';
     const GROUP_TECHNOLOGY = 'technology_news_435';
     const GROUP_ELIFE_NEWSLETTER = 'eLife_bi_monthly_news_1032';
+    const GROUP_ID_LATEST_ARTICLES = 53;
+    const GROUP_ID_EARLY_CAREER = 317;
+    const GROUP_ID_TECHNOLOGY = 435;
+    const GROUP_ID_ELIFE_NEWSLETTER = 1032;
 
     private $client;
     private $apiKey;
@@ -73,42 +79,68 @@ final class CiviCrmClient
 
     public function alterPreferences(int $contactId, array $preferences) : PromiseInterface
     {
-        return $this->client->sendAsync($this->prepareRequest('POST'), $this->options(
-            [
-                'query' => [
-                    'entity' => 'GroupContact',
-                    'action' => 'create',
-                    'json' => $this->prepareJsonOptions([
-                        'group_id' => $this->preferenceGroups(),
-                        'contact_id' => $contactId,
-                        'status' => 'Removed',
-                    ]),
-                ],
-            ]
-        ))->then(function (Response $response) {
+        return $this->client->sendAsync($this->prepareRequest(), $this->options([
+            'query' => [
+                'entity' => 'Contact',
+                'action' => 'get',
+                'json' => $this->prepareJsonOptions([
+                    'id' => $contactId,
+                    'return' => 'group',
+                ]),
+            ],
+        ]))
+        ->then(function (Response $response) {
             return $this->prepareResponse($response);
-        })->then(function () use ($contactId, $preferences) {
-            return $this->client->sendAsync($this->prepareRequest('POST', $this->options(
-                [
+        })->then(function ($data) {
+            return !empty($data['id'] && $data['values']) ? $this->preferenceGroupIds(array_intersect($this->preferenceGroups(false), explode(',', $data['values'][$data['id']]['groups'])), false) : [];
+        })->then(function ($groups) use ($contactId, $preferences) {
+            $add = array_values(array_diff($this->preferenceGroupIds($preferences), $groups));
+            $remove = array_values(array_diff($groups, $this->preferenceGroupIds($preferences)));
+            $unchanged = array_diff($groups, $add, $remove);
+
+            return all([
+                'added' => !empty($add) ? $this->client->sendAsync($this->prepareRequest('POST'), $this->options([
                     'query' => [
                         'entity' => 'GroupContact',
                         'action' => 'create',
                         'json' => $this->prepareJsonOptions([
-                            'group_id' => $this->preferenceGroupIds($preferences),
-                            'contact_id' => $contactId,
                             'status' => 'Added',
+                            'group_id' => $add,
+                            'contact_id' => $contactId,
                         ]),
                     ],
-                ]
-            )));
-        })->then(function (Response $response) {
-            return $this->prepareResponse($response);
+                ]))
+                ->then(function (Response $response) {
+                    return $this->prepareResponse($response);
+                })
+                ->then(function () use ($add) {
+                    return $add;
+                }) : promise_for(null),
+                'removed' => !empty($remove) ? $this->client->sendAsync($this->prepareRequest('POST'), $this->options([
+                    'query' => [
+                        'entity' => 'GroupContact',
+                        'action' => 'create',
+                        'json' => $this->prepareJsonOptions([
+                            'status' => 'Removed',
+                            'group_id' => $remove,
+                            'contact_id' => $contactId,
+                        ]),
+                    ],
+                ]))
+                ->then(function (Response $response) {
+                    return $this->prepareResponse($response);
+                })
+                ->then(function () use ($remove) {
+                    return $remove;
+                }) : promise_for(null),
+                'unchanged' => promise_for($unchanged),
+            ]);
         });
     }
 
     public function getUserFromEmail(string $email) : PromiseInterface
     {
-        return $this->client->sendAsync($this->prepareRequest('GET'), $this->options(
+        return $this->client->sendAsync($this->prepareRequest(), $this->options(
             [
                 'query' => [
                     'entity' => 'Contact',
@@ -125,35 +157,45 @@ final class CiviCrmClient
         });
     }
 
-    private function preferenceGroupIds(array $preferences) : array
+    private function preferenceGroupIds(array $preferences, bool $label = true) : array
     {
         return array_map(function ($preference) {
             switch ($preference) {
                 case self::LABEL_LATEST_ARTICLES:
+                case self::GROUP_ID_LATEST_ARTICLES:
                     return self::GROUP_LATEST_ARTICLES;
                 case self::LABEL_EARLY_CAREER:
+                case self::GROUP_ID_EARLY_CAREER:
                     return self::GROUP_EARLY_CAREER;
                 case self::LABEL_TECHNOLOGY:
+                case self::GROUP_ID_TECHNOLOGY:
                     return self::GROUP_TECHNOLOGY;
                 case self::LABEL_ELIFE_NEWSLETTER:
+                case self::GROUP_ID_ELIFE_NEWSLETTER:
                     return self::GROUP_ELIFE_NEWSLETTER;
                 default:
                     return null;
             }
-        }, array_intersect($this->preferenceGroups(), $preferences));
+        }, array_intersect($this->preferenceGroups($label), $preferences));
     }
 
-    private function preferenceGroups() : array
+    private function preferenceGroups(bool $label = true) : array
     {
-        return [
+        return $label ? [
             self::LABEL_LATEST_ARTICLES,
             self::LABEL_EARLY_CAREER,
             self::LABEL_TECHNOLOGY,
             self::LABEL_ELIFE_NEWSLETTER,
+        ] :
+        [
+            self::GROUP_ID_LATEST_ARTICLES,
+            self::GROUP_ID_EARLY_CAREER,
+            self::GROUP_ID_TECHNOLOGY,
+            self::GROUP_ID_ELIFE_NEWSLETTER,
         ];
     }
 
-    private function prepareRequest(string $method, array $headers = []) : Request
+    private function prepareRequest(string $method = 'GET', array $headers = []) : Request
     {
         return new Request($method, '', $headers);
     }
