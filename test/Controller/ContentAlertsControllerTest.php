@@ -2,7 +2,7 @@
 
 namespace test\eLife\Journal\Controller;
 
-final class ContactAlertsControllerTest extends PageTestCase
+final class ContentAlertsControllerTest extends PageTestCase
 {
     /**
      * @test
@@ -56,12 +56,15 @@ final class ContactAlertsControllerTest extends PageTestCase
 
         $crawler = $client->request('GET', '/content-alerts');
 
-        $crawler = $client->submit($crawler->selectButton('Subscribe')->form());
+        $form = $crawler->selectButton('Subscribe')->form();
+        $form['content_alerts[preferences][0]']->untick();
+
+        $crawler = $client->submit($form);
 
         $this->assertCount(1, $crawler->filter('.info-bar'));
         $this->assertSame('There were problems submitting the form.', trim($crawler->filter('.info-bar')->text()));
         $this->assertSame(
-            ['Please provide your name.', 'Please select an email type to subscribe.'],
+            ['Please provide your email address.', 'Please select an email type to subscribe.'],
             array_map('trim', $crawler->filter('.form-item__message')->extract(['_text']))
         );
     }
@@ -75,9 +78,8 @@ final class ContactAlertsControllerTest extends PageTestCase
 
         $crawler = $client->request('GET', '/content-alerts');
 
-        $form = $crawler->selectButton('Submit')->form();
+        $form = $crawler->selectButton('Subscribe')->form();
         $form['content_alerts[email]'] = 'foo';
-        $form['content_alerts[preferences][]'] = ['latest_articles'];
 
         $crawler = $client->submit($form);
 
@@ -102,7 +104,26 @@ final class ContactAlertsControllerTest extends PageTestCase
 
         $form = $crawler->selectButton('Subscribe')->form();
 
-        $this->assertTrue($form->has('contact[_token]'));
+        $this->assertTrue($form->has('content_alerts[_token]'));
+    }
+
+    /**
+     * @test
+     */
+    public function it_has_a_honeypot()
+    {
+        $client = static::createClient();
+
+        $crawler = $client->request('GET', $this->getUrl());
+
+        $form = $crawler->selectButton('Subscribe')->form();
+        $form['content_alerts[email]'] = 'foo@example.com';
+
+        $form["content_alerts[{$this->getParameter('honeypot_field')}]"] = 'bar@example.com';
+        $crawler = $client->submit($form);
+
+        $this->assertCount(1, $crawler->filter('.info-bar'));
+        $this->assertSame('Please try submitting the form again.', trim($crawler->filter('.info-bar')->text()));
     }
 
     protected function getUrl() : string
