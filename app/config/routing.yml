@@ -201,7 +201,7 @@ contact:
 content-alerts:
     path: /content-alerts
     defaults:
-         _controller: AppBundle:Contact:contentAlerts
+         _controller: AppBundle:ContentAlerts:subscribe
 
 digest:
     path: /digests/{id}/{slug}

@@ -12,9 +12,9 @@ use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-final class ContactController extends Controller
+final class ContentAlertsController extends Controller
 {
-    public function contentAlertsAction(Request $request) : Response
+    public function subscribeAction(Request $request) : Response
     {
         $arguments = $this->defaultPageArguments($request);
 
