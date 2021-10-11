@@ -40,11 +40,11 @@ final class ArticleControllerTest extends PageTestCase
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001',
-                ['Accept' => 'application/vnd.elife.article-poa+json; version=3, application/vnd.elife.article-vor+json; version=5']
+                ['Accept' => 'application/vnd.elife.article-poa+json; version=3, application/vnd.elife.article-vor+json; version=6']
             ),
             new Response(
                 200,
-                ['Content-Type' => 'application/vnd.elife.article-vor+json; version=5'],
+                ['Content-Type' => 'application/vnd.elife.article-vor+json; version=6'],
                 json_encode([
                     'status' => 'vor',
                     'stage' => 'preview',
@@ -165,11 +165,11 @@ final class ArticleControllerTest extends PageTestCase
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001',
-                ['Accept' => 'application/vnd.elife.article-poa+json; version=3, application/vnd.elife.article-vor+json; version=5']
+                ['Accept' => 'application/vnd.elife.article-poa+json; version=3, application/vnd.elife.article-vor+json; version=6']
             ),
             new Response(
                 200,
-                ['Content-Type' => 'application/vnd.elife.article-vor+json; version=5'],
+                ['Content-Type' => 'application/vnd.elife.article-vor+json; version=6'],
                 json_encode([
                     'status' => 'vor',
                     'stage' => 'published',
@@ -316,11 +316,11 @@ final class ArticleControllerTest extends PageTestCase
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001',
-                ['Accept' => 'application/vnd.elife.article-poa+json; version=3, application/vnd.elife.article-vor+json; version=5']
+                ['Accept' => 'application/vnd.elife.article-poa+json; version=3, application/vnd.elife.article-vor+json; version=6']
             ),
             new Response(
                 200,
-                ['Content-Type' => 'application/vnd.elife.article-vor+json; version=5'],
+                ['Content-Type' => 'application/vnd.elife.article-vor+json; version=6'],
                 json_encode([
                     'status' => 'vor',
                     'stage' => 'published',
@@ -733,7 +733,7 @@ final class ArticleControllerTest extends PageTestCase
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001',
-                ['Accept' => 'application/vnd.elife.article-poa+json; version=3, application/vnd.elife.article-vor+json; version=5']
+                ['Accept' => 'application/vnd.elife.article-poa+json; version=3, application/vnd.elife.article-vor+json; version=6']
             ),
             new Response(
                 404,
@@ -783,11 +783,11 @@ final class ArticleControllerTest extends PageTestCase
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001',
-                ['Accept' => 'application/vnd.elife.article-poa+json; version=3, application/vnd.elife.article-vor+json; version=5']
+                ['Accept' => 'application/vnd.elife.article-poa+json; version=3, application/vnd.elife.article-vor+json; version=6']
             ),
             new Response(
                 200,
-                ['Content-Type' => 'application/vnd.elife.article-vor+json; version=5'],
+                ['Content-Type' => 'application/vnd.elife.article-vor+json; version=6'],
                 json_encode([
                     'status' => 'vor',
                     'stage' => 'published',
@@ -979,11 +979,11 @@ final class ArticleControllerTest extends PageTestCase
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001',
-                ['Accept' => 'application/vnd.elife.article-poa+json; version=3, application/vnd.elife.article-vor+json; version=5']
+                ['Accept' => 'application/vnd.elife.article-poa+json; version=3, application/vnd.elife.article-vor+json; version=6']
             ),
             new Response(
                 200,
-                ['Content-Type' => 'application/vnd.elife.article-vor+json; version=5'],
+                ['Content-Type' => 'application/vnd.elife.article-vor+json; version=6'],
                 json_encode([
                     'status' => 'vor',
                     'stage' => 'published',
@@ -1236,7 +1236,7 @@ final class ArticleControllerTest extends PageTestCase
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001',
-                ['Accept' => 'application/vnd.elife.article-poa+json; version=3, application/vnd.elife.article-vor+json; version=5']
+                ['Accept' => 'application/vnd.elife.article-poa+json; version=3, application/vnd.elife.article-vor+json; version=6']
             ),
             new Response(
                 200,
@@ -1378,7 +1378,7 @@ final class ArticleControllerTest extends PageTestCase
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001',
-                ['Accept' => 'application/vnd.elife.article-poa+json; version=3, application/vnd.elife.article-vor+json; version=5']
+                ['Accept' => 'application/vnd.elife.article-poa+json; version=3, application/vnd.elife.article-vor+json; version=6']
             ),
             new Response(
                 200,
@@ -1439,7 +1439,7 @@ final class ArticleControllerTest extends PageTestCase
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001/versions/1',
-                ['Accept' => 'application/vnd.elife.article-poa+json; version=3, application/vnd.elife.article-vor+json; version=5']
+                ['Accept' => 'application/vnd.elife.article-poa+json; version=3, application/vnd.elife.article-vor+json; version=6']
             ),
             new Response(
                 200,
@@ -1751,11 +1751,11 @@ final class ArticleControllerTest extends PageTestCase
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001',
-                ['Accept' => 'application/vnd.elife.article-poa+json; version=3, application/vnd.elife.article-vor+json; version=5']
+                ['Accept' => 'application/vnd.elife.article-poa+json; version=3, application/vnd.elife.article-vor+json; version=6']
             ),
             new Response(
                 200,
-                ['Content-Type' => 'application/vnd.elife.article-vor+json; version=5'],
+                ['Content-Type' => 'application/vnd.elife.article-vor+json; version=6'],
                 json_encode([
                     'status' => 'vor',
                     'stage' => 'published',
@@ -1852,6 +1852,16 @@ final class ArticleControllerTest extends PageTestCase
                                 'text' => 'Abstract text',
                             ],
                         ],
+                    ],
+                    'editorEvaluation' => [
+                        'doi' => '10.7554/eLife.09560.sa0',
+                        'content' => [
+                            [
+                                'type' => 'paragraph',
+                                'text' => 'Editor\'s evaluation text',
+                            ],
+                        ],
+                        'scietyUri' => 'https://editor-evaluation.com',
                     ],
                     'digest' => [
                         'doi' => '10.7554/eLife.09560.002',
@@ -2460,16 +2470,39 @@ final class ArticleControllerTest extends PageTestCase
             $crawler->filter('.grid-column > section:nth-of-type(1) > div > p')->text());
         $this->assertSame('https://doi.org/10.7554/eLife.09560.001',
             $crawler->filter('.grid-column > section:nth-of-type(1) > div > .doi')->text());
-        $this->assertSame('eLife digest',
+        $this->assertSame('Editor\'s evaluation',
             $crawler->filter('.grid-column > section:nth-of-type(2) > header > h2')->text());
-        $this->assertSame('Digest text',
+        $this->assertSame('Editor\'s evaluation text',
             $crawler->filter('.grid-column > section:nth-of-type(2) > div > p')->text());
-        $this->assertSame('https://doi.org/10.7554/eLife.09560.002',
+        $this->assertSame('https://doi.org/10.7554/eLife.09560.sa0',
             $crawler->filter('.grid-column > section:nth-of-type(2) > div > .doi')->text());
-        $this->assertSame('Body title',
+        $this->assertSame(
+            [
+                [
+                    'Decision letter',
+                    '/articles/00001#decision-letter-id',
+                ],
+                [
+                    'Reviews on Sciety',
+                    'https://editor-evaluation.com',
+                ],
+                [
+                    'eLife\'s review process',
+                    '/about/peer-review',
+                ],
+            ],
+            $crawler->filter('.grid-column > section:nth-of-type(2) > div .article-section__related_link')->extract(['_text', 'href'])
+        );
+        $this->assertSame('eLife digest',
             $crawler->filter('.grid-column > section:nth-of-type(3) > header > h2')->text());
+        $this->assertSame('Digest text',
+            $crawler->filter('.grid-column > section:nth-of-type(3) > div > p')->text());
+        $this->assertSame('https://doi.org/10.7554/eLife.09560.002',
+            $crawler->filter('.grid-column > section:nth-of-type(3) > div > .doi')->text());
+        $this->assertSame('Body title',
+            $crawler->filter('.grid-column > section:nth-of-type(4) > header > h2')->text());
 
-        $body = $crawler->filter('.grid-column > section:nth-of-type(3) > div')->children();
+        $body = $crawler->filter('.grid-column > section:nth-of-type(4) > div')->children();
         $this->assertCount(2, $body);
 
         $this->assertSame('Body text Image 1 supplement 1', $body->eq(0)->text());
@@ -2477,11 +2510,11 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertSame('Image 1 label with 1 supplement see all', trim($body->eq(1)->filter('.asset-viewer-inline__header_text')->text()));
         $this->assertSame('/articles/00001/figures#image1', $body->eq(1)->filter('.asset-viewer-inline__header_link')->attr('href'));
 
-        $appendix = $crawler->filter('.grid-column > section:nth-of-type(4)');
+        $appendix = $crawler->filter('.grid-column > section:nth-of-type(5)');
         $this->assertSame('Appendix 1', $appendix->filter('header > h2')->text());
         $this->assertSame('Appendix title', $appendix->filter('div > section > header > h3')->text());
         $this->assertSame('Appendix text', $appendix->filter('div > p')->text());
-        $dataAvailability = $crawler->filter('.grid-column > section:nth-of-type(5)');
+        $dataAvailability = $crawler->filter('.grid-column > section:nth-of-type(6)');
         $this->assertSame('Data availability',
             $dataAvailability->filter('header > h2')->text());
         $data = $dataAvailability->filter('.article-section__body')->children();
@@ -2490,7 +2523,7 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertSame('Data set 1', trim($data->eq(2)->filter('.reference__title')->text()));
         $this->assertSame('The following previously published data sets were used', trim($data->eq(3)->text()));
         $this->assertSame('Data set 2', trim($data->eq(4)->filter('.reference__title')->text()));
-        $references = $crawler->filter('.grid-column > section:nth-of-type(6)');
+        $references = $crawler->filter('.grid-column > section:nth-of-type(7)');
         $this->assertSame('References',
             $references->filter('header > h2')->text());
         $this->assertSame('Book reference',
@@ -2549,27 +2582,27 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertEmpty($references->filter('div > ol > li:nth-of-type(14) .reference__label'));
         $this->assertSame('Decision letter', $crawler->filter('#decision-letter-id h2')->text());
         $this->assertSame('Decision letter',
-            $crawler->filter('.grid-column > section:nth-of-type(7) > header > h2')->text());
-        $this->assertCount(4, $crawler->filter('.grid-column > section:nth-of-type(7) > div .profile-snippet__name'));
+            $crawler->filter('.grid-column > section:nth-of-type(8) > header > h2')->text());
+        $this->assertCount(4, $crawler->filter('.grid-column > section:nth-of-type(8) > div .profile-snippet__name'));
         $this->assertSame('Reviewer 1',
-            $crawler->filter('.grid-column > section:nth-of-type(7) > div .profile-snippet__name')->eq(0)->text());
+            $crawler->filter('.grid-column > section:nth-of-type(8) > div .profile-snippet__name')->eq(0)->text());
         $this->assertSame('Reviewing Editor 1',
-            $crawler->filter('.grid-column > section:nth-of-type(7) > div .profile-snippet__name')->eq(1)->text());
+            $crawler->filter('.grid-column > section:nth-of-type(8) > div .profile-snippet__name')->eq(1)->text());
         $this->assertSame('Senior Editor 1',
-            $crawler->filter('.grid-column > section:nth-of-type(7) > div .profile-snippet__name')->eq(2)->text());
+            $crawler->filter('.grid-column > section:nth-of-type(8) > div .profile-snippet__name')->eq(2)->text());
         $this->assertSame('Reviewer 2',
-            $crawler->filter('.grid-column > section:nth-of-type(7) > div .profile-snippet__name')->eq(3)->text());
+            $crawler->filter('.grid-column > section:nth-of-type(8) > div .profile-snippet__name')->eq(3)->text());
         $this->assertSame('Decision letter description',
-            $crawler->filter('.grid-column > section:nth-of-type(7) > div .decision-letter-header__main_text > p')->text());
+            $crawler->filter('.grid-column > section:nth-of-type(8) > div .decision-letter-header__main_text > p')->text());
         $this->assertSame('Decision letter text',
-            $crawler->filter('.grid-column > section:nth-of-type(7) > div > p')->text());
+            $crawler->filter('.grid-column > section:nth-of-type(8) > div > p')->text());
         $this->assertSame('Author response', $crawler->filter('#author-response-id h2')->text());
         $this->assertSame('Author response',
-            $crawler->filter('.grid-column > section:nth-of-type(8) > header > h2')->text());
+            $crawler->filter('.grid-column > section:nth-of-type(9) > header > h2')->text());
         $this->assertSame('Author response text',
-            $crawler->filter('.grid-column > section:nth-of-type(8) > div > p')->text());
+            $crawler->filter('.grid-column > section:nth-of-type(9) > div > p')->text());
 
-        $articleInfo = $crawler->filter('.grid-column > section:nth-of-type(9)');
+        $articleInfo = $crawler->filter('.grid-column > section:nth-of-type(10)');
         $this->assertSame('Article and author information',
             $articleInfo->filter('header > h2')->text());
 
@@ -2578,7 +2611,7 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertSame('Foo Bar, Role', $authorDetails->eq(0)->filter('.author-details__name')->text());
         $this->assertSame('Baz', $authorDetails->eq(1)->filter('.author-details__name')->text());
 
-        $articleInfo = $crawler->filter('.grid-column > section:nth-of-type(9) > div > section');
+        $articleInfo = $crawler->filter('.grid-column > section:nth-of-type(10) > div > section');
 
         $funding = $articleInfo->eq(0);
         $this->assertSame('Funding', $funding->filter('header > h3')->text());
@@ -2636,9 +2669,9 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertContains('© 2012, Bar', $copyright->filter('div')->text());
         $this->assertContains('Copyright statement.', $copyright->filter('div')->text());
 
-        $this->assertSame('Download links', $crawler->filter('.grid-column > section:nth-of-type(10) .article-section__header_text')->text());
+        $this->assertSame('Download links', $crawler->filter('.grid-column > section:nth-of-type(11) .article-section__header_text')->text());
 
-        $this->assertSame('Categories and tags', $crawler->filter('.grid-column > section:nth-of-type(11) .article-meta__group_title')->text());
+        $this->assertSame('Categories and tags', $crawler->filter('.grid-column > section:nth-of-type(12) .article-meta__group_title')->text());
 
         $this->assertRegexp('|^https://.*/00001$|', $crawler->filter('.view-selector')->attr('data-side-by-side-link'));
 
@@ -2659,6 +2692,7 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertSame(
             [
                 'Abstract',
+                'Editor\'s evaluation',
                 'eLife digest',
                 'Body title',
                 'Appendix 1',
@@ -2683,11 +2717,11 @@ final class ArticleControllerTest extends PageTestCase
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001',
-                ['Accept' => 'application/vnd.elife.article-poa+json; version=3, application/vnd.elife.article-vor+json; version=5']
+                ['Accept' => 'application/vnd.elife.article-poa+json; version=3, application/vnd.elife.article-vor+json; version=6']
             ),
             new Response(
                 200,
-                ['Content-Type' => 'application/vnd.elife.article-vor+json; version=5'],
+                ['Content-Type' => 'application/vnd.elife.article-vor+json; version=6'],
                 json_encode([
                     'status' => 'vor',
                     'stage' => 'published',
@@ -2857,7 +2891,7 @@ final class ArticleControllerTest extends PageTestCase
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001',
-                ['Accept' => 'application/vnd.elife.article-poa+json; version=3, application/vnd.elife.article-vor+json; version=5']
+                ['Accept' => 'application/vnd.elife.article-poa+json; version=3, application/vnd.elife.article-vor+json; version=6']
             ),
             new Response(
                 200,
@@ -3236,11 +3270,11 @@ final class ArticleControllerTest extends PageTestCase
             new Request(
                 'GET',
                 "http://api.elifesciences.org/articles/{$articleId}",
-                ['Accept' => 'application/vnd.elife.article-poa+json; version=3, application/vnd.elife.article-vor+json; version=5']
+                ['Accept' => 'application/vnd.elife.article-poa+json; version=3, application/vnd.elife.article-vor+json; version=6']
             ),
             new Response(
                 200,
-                ['Content-Type' => 'application/vnd.elife.article-vor+json; version=5'],
+                ['Content-Type' => 'application/vnd.elife.article-vor+json; version=6'],
                 json_encode([
                     'status' => 'vor',
                     'stage' => 'published',
@@ -3359,7 +3393,7 @@ final class ArticleControllerTest extends PageTestCase
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001/versions/1',
-                ['Accept' => 'application/vnd.elife.article-poa+json; version=3, application/vnd.elife.article-vor+json; version=5']
+                ['Accept' => 'application/vnd.elife.article-poa+json; version=3, application/vnd.elife.article-vor+json; version=6']
             ),
             new Response(
                 200,
@@ -3467,7 +3501,7 @@ final class ArticleControllerTest extends PageTestCase
             new Request(
                 'GET',
                 "http://api.elifesciences.org/articles/${articleId}",
-                ['Accept' => 'application/vnd.elife.article-poa+json; version=3, application/vnd.elife.article-vor+json; version=5']
+                ['Accept' => 'application/vnd.elife.article-poa+json; version=3, application/vnd.elife.article-vor+json; version=6']
             ),
             new Response(
                 200,
