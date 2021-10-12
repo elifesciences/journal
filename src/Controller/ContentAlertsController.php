@@ -27,17 +27,20 @@ final class ContentAlertsController extends Controller
             ->create(ContentAlertsType::class, null, ['action' => $this->get('router')->generate('content-alerts')]);
 
         $this->ifFormSubmitted($request, $form, function () use ($form) {
-            $successMessage = $this->get('elife.api_client.client.crm_api')
-                ->subscribe(
-                    $form->get('email')->getData(),
-                    $form->get('first_name')->getData(),
-                    $form->get('last_name')->getData(),
-                    $form->get('preferences')->getData()
-                )
-                ->then(function () use ($form) {
-                    return "A confirmation email has been sent to <strong>{$form->get('email')->getData()}</strong>.";
-                })
-                ->wait();
+            // @FIXME: reinstate the civi api call.
+//            $successMessage = $this->get('elife.api_client.client.crm_api')
+//                ->subscribe(
+//                    $form->get('email')->getData(),
+//                    $form->get('first_name')->getData(),
+//                    $form->get('last_name')->getData(),
+//                    $form->get('preferences')->getData()
+//                )
+//                ->then(function () use ($form) {
+//                    return "A confirmation email has been sent to <strong>{$form->get('email')->getData()}</strong>.";
+//                })
+//                ->wait();
+
+            $successMessage = "A confirmation email has been sent to <strong>{$form->get('email')->getData()}</strong>.";
 
             $this->get('session')
                 ->getFlashBag()
