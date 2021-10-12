@@ -42,11 +42,6 @@ csa_guzzle:
                 base_uri: '%crm_url%'
                 connect_timeout: '%api_connect_timeout_slow%'
                 timeout: '%api_timeout_slow%'
-        elife_crm_api:
-            config:
-                base_uri: '%crm_api_url%'
-                connect_timeout: '%api_connect_timeout_slow%'
-                timeout: '%api_timeout_slow%'
         oauth:
             config:
                 connect_timeout: '%api_connect_timeout_slow%'

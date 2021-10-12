@@ -16,9 +16,6 @@ parameters:
     submit_url: https://submit.elifesciences.org/
     submit_url_redirects:
         - .*\.elifesciences.org$
-    crm_url: https://crm.elifesciences.org/crm/civicrm/
-    crm_api_url: https://crm.elifesciences.org/crm/sites/all/modules/civicrm/extern/rest.php
-    crm_api_key: ~
     crm_api_site_key: ~
     gtm_id: ~
     google_optimize_id: ~
