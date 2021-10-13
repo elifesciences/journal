@@ -61,9 +61,6 @@
                 "@id": "{{ url('article', {id: item.id}) }}"
             },
             "headline": {{ title|striptags|json_encode(constant('JSON_UNESCAPED_UNICODE'))|raw }},
-            "image": [
-                "{{ iiif_uri(item.thumbnail) }}"
-            ],
             "datePublished": "{{ item.publishedDate|date('Y-m-d', 'UTC') }}",
             "publisher": {
                 "@type": "Organization",
