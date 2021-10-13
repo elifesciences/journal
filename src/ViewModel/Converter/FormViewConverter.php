@@ -39,7 +39,7 @@ final class FormViewConverter implements ViewModelConverter
                     if ($object->vars['multiple']) {
                         $options = [];
                         foreach ($object->vars['choices'] as $choice) {
-                            $prepareOption = $this->checkboxesChoice($choice, $object->vars['id'], $object->vars['data']);
+                            $prepareOption = $this->checkboxesChoice($choice, $object->vars['value']);
                             if ($prepareOption instanceof ViewModel\CheckboxesOption) {
                                 $options[] = $prepareOption;
                             } elseif (array_values($prepareOption)[0] instanceof ViewModel\CheckboxesOption) {
@@ -120,22 +120,14 @@ final class FormViewConverter implements ViewModelConverter
     /**
      * @param ChoiceView|ChoiceGroupView $choice
      */
-    private function checkboxesChoice($choice, string $idPrefix = null, array $data = []) {
-        static $co = -1;
+    private function checkboxesChoice($choice, array $data = []) {
         if ($choice instanceof ChoiceView) {
-            if (!is_null($idPrefix)) {
-                $co++;
-                $id = "{$idPrefix}_{$co}";
-            } else {
-                $id = null;
-            }
-
-            return new ViewModel\CheckboxesOption($choice->value, $choice->label, $id, in_array($choice->value, $data));
+            return new ViewModel\CheckboxesOption($choice->value, $choice->label, null, in_array($choice->value, $data));
         }
 
         if ($choice instanceof ChoiceGroupView) {
-            return array_map(function ($subChoice) use ($idPrefix, $data) {
-                return $this->checkboxesChoice($subChoice, $idPrefix, $data);
+            return array_map(function ($subChoice) use ($data) {
+                return $this->checkboxesChoice($subChoice, $data);
             }, $choice->choices);
         }
 

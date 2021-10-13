@@ -26,22 +26,6 @@ final class ContentAlertsType extends AbstractType
                     ],
                 ]
             )
-            ->add('first_name', TextType::class,
-                [
-                    'label' => 'First name (optional)',
-                    'attr' => [
-                        'autofocus' => true,
-                    ],
-                ]
-            )
-            ->add('last_name', TextType::class,
-                [
-                    'label' => 'Last name (optional)',
-                    'attr' => [
-                        'autofocus' => true,
-                    ],
-                ]
-            )
             ->add('preferences', ChoiceType::class,
                 [
                     'label' => 'I would like to receive the following regular emails from eLife:',
@@ -63,7 +47,9 @@ final class ContentAlertsType extends AbstractType
                     'constraints' => [
                         new NotBlank(['message' => 'Please select an email type to subscribe.']),
                     ],
-                    'data' => ['latest_articles'],
+                    'data' => [
+                        CiviCrmClient::LABEL_LATEST_ARTICLES,
+                    ],
                 ]
             )
             ->add('subscribe', SubmitType::class);

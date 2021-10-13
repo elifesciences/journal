@@ -36,24 +36,30 @@ final class CiviCrmClient
         $this->siteKey = $siteKey;
     }
 
-    public function subscribe(string $email, string $firstName, string $lastName, array $preferences) : PromiseInterface
+    public function subscribe(string $email, array $preferences = [], string $firstName = null, string $lastName = null) : PromiseInterface
     {
         return $this->client->sendAsync($this->prepareRequest('POST'), $this->options([
             'query' => [
                 'entity' => 'Contact',
                 'action' => 'create',
-                'json' => $this->prepareJsonOptions([
+                'json' => $this->prepareJsonOptions(array_filter([
                     'contact_type' => 'Individual',
                     'email' => $email,
                     'first_name' => $firstName,
                     'last_name' => $lastName,
-                ]),
+                ])),
             ],
         ]))->then(function (Response $response) {
             return $this->prepareResponse($response);
         })->then(function ($data) {
             return $data['id'];
         })->then(function ($contactId) use ($preferences) {
+            if (empty($preferences)) {
+                return [
+                    'contact_id' => $contactId,
+                ];
+            }
+
             return $this->client->sendAsync($this->prepareRequest('POST'), $this->options([
                 'query' => [
                     'entity' => 'GroupContact',
