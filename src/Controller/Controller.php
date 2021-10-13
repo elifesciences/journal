@@ -161,15 +161,19 @@ abstract class Controller implements ContainerAwareInterface
         return $response;
     }
 
-    final protected function ifFormSubmitted(Request $request, FormInterface $form, callable $onValid)
+    final protected function ifFormSubmitted(Request $request, FormInterface $form, callable $onValid, bool $earlyResponse = true)
     {
         $form->handleRequest($request);
 
         if ($form->isSubmitted()) {
             if ($form->isValid()) {
-                $onValid();
+                $return = $onValid();
 
-                throw new EarlyResponse(new RedirectResponse($request->getUri()));
+                if ($earlyResponse) {
+                    throw new EarlyResponse(new RedirectResponse($request->getUri()));
+                } else {
+                    return $return;
+                }
             }
 
             if (count($form->getErrors()) > 0) {

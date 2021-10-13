@@ -2,7 +2,6 @@
 
 namespace eLife\Journal\Controller;
 
-use eLife\Journal\Exception\FormSuccess;
 use eLife\Journal\Form\Type\ContentAlertsType;
 use eLife\Patterns\ViewModel\ArticleSection;
 use eLife\Patterns\ViewModel\Button;
@@ -26,31 +25,27 @@ final class ContentAlertsController extends Controller
         $form = $this->get('form.factory')
             ->create(ContentAlertsType::class, null, ['action' => $this->get('router')->generate('content-alerts')]);
 
-        try {
-            $this->ifFormSubmitted($request, $form, function () use ($form) {
-                $this->get('elife.api_client.client.crm_api')
-                    ->subscribe(
-                        $form->get('email')->getData(),
-                        $form->get('preferences')->getData()
-                    )
-                    ->then(function () use ($form) {
-                        throw new FormSuccess("A confirmation email has been sent to <strong>{$form->get('email')->getData()}</strong>.");
-                    })
-                    ->wait();
-            });
-        } catch (FormSuccess $success) {
-            $arguments['form'] = ArticleSection::basic(
+        $validSubmission = $this->ifFormSubmitted($request, $form, function () use ($form) {
+            return $this->get('elife.api_client.client.crm_api')
+                ->subscribe(
+                    $form->get('email')->getData(),
+                    $form->get('preferences')->getData()
+                )
+                ->then(function () use ($form) {
+                    return "A confirmation email has been sent to <strong>{$form->get('email')->getData()}</strong>.";
+                })
+                ->wait();
+        }, false);
+
+        $arguments['form'] = $validSubmission ?
+            ArticleSection::basic(
                 'Thank you for subscribing!',
                 2,
-                $this->render(new Paragraph($success->getMessage())).$this->render(
+                $this->render(new Paragraph($validSubmission)).$this->render(
                     Button::link('Back to Homepage', $this->get('router')->generate('home'))
                 )
-            );
-
-            return new Response($this->get('templating')->render('::content-alerts.html.twig', $arguments));
-        }
-
-        $arguments['form'] = $this->get('elife.journal.view_model.converter')->convert($form->createView());
+            ) :
+            $this->get('elife.journal.view_model.converter')->convert($form->createView());
 
         return new Response($this->get('templating')->render('::content-alerts.html.twig', $arguments));
     }
