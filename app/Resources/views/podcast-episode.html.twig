@@ -73,14 +73,6 @@
                     "url": "{{ absolute_url(asset('assets/patterns/img/patterns/organisms/elife-logo-full-2x.png')) }}"
                 }
             },
-            {% if item.keywords is defined and item.keywords|length %}
-                "keywords": [
-                    {% for keyword in item.keywords %}
-                        "{{ keyword|striptags }}"
-                        {% if not loop.last %},{% endif %}
-                    {% endfor %}
-                ],
-            {% endif %}
             {% if item.impactStatement|default(null) -%}
                 "description": {{ item.impactStatement|striptags|json_encode(constant('JSON_UNESCAPED_UNICODE'))|raw }},
             {% endif %}
