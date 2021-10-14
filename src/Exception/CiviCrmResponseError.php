@@ -2,10 +2,11 @@
 
 namespace eLife\Journal\Exception;
 
+use Exception;
 use Psr\Http\Message\ResponseInterface;
 use Throwable;
 
-class CiviCrmResponseError extends \Exception
+class CiviCrmResponseError extends Exception
 {
     private $response;
 

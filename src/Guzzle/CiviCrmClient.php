@@ -7,8 +7,6 @@ use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
-use function GuzzleHttp\Promise\all;
-use function GuzzleHttp\Promise\promise_for;
 
 final class CiviCrmClient
 {
@@ -36,18 +34,18 @@ final class CiviCrmClient
         $this->siteKey = $siteKey;
     }
 
-    public function subscribe(string $email, array $preferences = [], string $firstName = null, string $lastName = null) : PromiseInterface
+    public function subscribe(string $email, array $preferences, string $firstName = null, string $lastName = null) : PromiseInterface
     {
         return $this->client->sendAsync($this->prepareRequest('POST'), $this->options([
             'query' => [
                 'entity' => 'Contact',
                 'action' => 'create',
-                'json' => $this->prepareJsonOptions(array_filter([
+                'json' => array_filter([
                     'contact_type' => 'Individual',
                     'email' => $email,
                     'first_name' => $firstName,
                     'last_name' => $lastName,
-                ])),
+                ]),
             ],
         ]))->then(function (Response $response) {
             return $this->prepareResponse($response);
@@ -64,10 +62,10 @@ final class CiviCrmClient
                 'query' => [
                     'entity' => 'GroupContact',
                     'action' => 'create',
-                    'json' => $this->prepareJsonOptions([
+                    'json' => [
                         'group_id' => $this->preferenceGroupIds($preferences),
                         'contact_id' => $contactId,
-                    ]),
+                    ],
                 ],
             ]))->then(function (Response $response) {
                 return $this->prepareResponse($response);
@@ -125,14 +123,11 @@ final class CiviCrmClient
 
     private function options(array $options = []) : array
     {
-        $options['query'] = array_merge($options['query'] ?? [], array_filter(['api_key' => $this->apiKey, 'key' => $this->siteKey]));
+        $options['query'] = array_map(function ($param) {
+            return is_array($param) ? json_encode($param) : $param;
+        }, array_merge($options['query'] ?? [], array_filter(['api_key' => $this->apiKey, 'key' => $this->siteKey])));
 
         return $options;
-    }
-
-    private function prepareJsonOptions(array $options = []) : string
-    {
-        return json_encode($options);
     }
 
     /**

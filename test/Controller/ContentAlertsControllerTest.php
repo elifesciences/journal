@@ -94,6 +94,27 @@ final class ContentAlertsControllerTest extends PageTestCase
     /**
      * @test
      */
+    public function it_displays_confirmation_message()
+    {
+        $client = static::createClient();
+
+        $crawler = $client->request('GET', '/content-alerts');
+
+        $form = $crawler->selectButton('Subscribe')->form();
+        $form['content_alerts[email]'] = 'foo@bar.com';
+
+        $crawler = $client->submit($form);
+
+        $this->assertCount(0, $crawler->filter('.info-bar'));
+        $this->assertSame('Thank you for subscribing!', $crawler->filter('#thank-you h2')->text());
+        $this->assertSame('A confirmation email has been sent to foo@bar.com.', $crawler->filter('#thank-you p')->text());
+        $this->assertSame('Back to Homepage', $crawler->filter('#thank-you a')->text());
+        $this->assertSame('/', $crawler->filter('#thank-you a')->attr('href'));
+    }
+
+    /**
+     * @test
+     */
     public function it_has_a_csrf_token_if_you_are_logged_in()
     {
         $client = static::createClient();

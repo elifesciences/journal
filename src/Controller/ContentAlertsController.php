@@ -43,7 +43,8 @@ final class ContentAlertsController extends Controller
                 2,
                 $this->render(new Paragraph($validSubmission)).$this->render(
                     Button::link('Back to Homepage', $this->get('router')->generate('home'))
-                )
+                ),
+                'thank-you'
             ) :
             $this->get('elife.journal.view_model.converter')->convert($form->createView());
 
