@@ -7,6 +7,7 @@ use eLife\ApiSdk\Model\ArticleVoR;
 use eLife\ApiSdk\Model\AuthorEntry;
 use eLife\ApiSdk\Model\Collection;
 use eLife\ApiSdk\Model\Digest;
+use eLife\ApiSdk\Model\Event;
 use eLife\ApiSdk\Model\GroupAuthor;
 use eLife\ApiSdk\Model\HasImpactStatement;
 use eLife\ApiSdk\Model\HasPublishedDate;
@@ -73,6 +74,8 @@ final class JsonLdSchemaOrgExtension extends Twig_Extension
             'headline' => $this->getHeadline($object),
             'image' => $this->getImage($object),
             'datePublished' => $this->getDatePublished($object),
+            'startDate' => $this->getStartDate($object),
+            'endDate' => $this->getEndDate($object),
             'author' => $this->getAuthor($object),
             'publisher' => [
                 '@type' => 'Organization',
@@ -107,6 +110,8 @@ final class JsonLdSchemaOrgExtension extends Twig_Extension
                 return 'NewsArticle';
             case $object instanceof Collection:
                 return 'Collection';
+            case $object instanceof Event:
+                return 'Event';
             default:
                 return null;
         }
@@ -117,10 +122,13 @@ final class JsonLdSchemaOrgExtension extends Twig_Extension
         switch (true) {
             case $object instanceof ArticleVersion:
             case $object instanceof Digest:
-                $id = $this->urlGenerator->generate('article', ['id' => $object->getId()], UrlGeneratorInterface::ABSOLUTE_URL);
+                $id = $this->urlGenerator->generate('article', [$object], UrlGeneratorInterface::ABSOLUTE_URL);
                 break;
             case $object instanceof Collection:
-                $id = $this->urlGenerator->generate('collection', ['id' => $object->getId()], UrlGeneratorInterface::ABSOLUTE_URL);
+                $id = $this->urlGenerator->generate('collection', [$object], UrlGeneratorInterface::ABSOLUTE_URL);
+                break;
+            case $object instanceof Event:
+                $id = $this->urlGenerator->generate('event', [$object], UrlGeneratorInterface::ABSOLUTE_URL);
                 break;
             default:
                 $id = null;
@@ -143,6 +151,7 @@ final class JsonLdSchemaOrgExtension extends Twig_Extension
                 break;
             case $object instanceof Collection:
             case $object instanceof Digest:
+            case $object instanceof Event:
                 $title = $object->getTitle();
                 break;
             default:
@@ -168,8 +177,32 @@ final class JsonLdSchemaOrgExtension extends Twig_Extension
      */
     private function getDatePublished(Model $object)
     {
-        if ($object instanceof HasPublishedDate) {
+        if ($object instanceof HasPublishedDate && !$object instanceof Event) {
             return $object->getPublishedDate() ? $object->getPublishedDate()->format('Y-m-d') : null;
+        }
+
+        return null;
+    }
+
+    /**
+     * @return string|null
+     */
+    private function getStartDate(Model $object)
+    {
+        if ($object instanceof Event) {
+            return $object->getStarts() ? $object->getStarts()->format('Y-m-d\TH:i:s\Z') : null;
+        }
+
+        return null;
+    }
+
+    /**
+     * @return string|null
+     */
+    private function getEndDate(Model $object)
+    {
+        if ($object instanceof Event) {
+            return $object->getEnds() ? $object->getEnds()->format('Y-m-d\TH:i:s\Z') : null;
         }
 
         return null;

@@ -3,12 +3,14 @@
 namespace test\eLife\Journal\Twig;
 
 use DateTimeImmutable;
+use DateTimeZone;
 use eLife\ApiSdk\Collection\ArraySequence;
 use eLife\ApiSdk\Collection\EmptySequence;
 use eLife\ApiSdk\Model\ArticleVoR;
 use eLife\ApiSdk\Model\Collection;
 use eLife\ApiSdk\Model\Copyright;
 use eLife\ApiSdk\Model\Digest;
+use eLife\ApiSdk\Model\Event;
 use eLife\ApiSdk\Model\File;
 use eLife\ApiSdk\Model\GroupAuthor;
 use eLife\ApiSdk\Model\Image;
@@ -319,6 +321,56 @@ final class JsonLdSchemaOrgExtensionTest extends TestCase
                 'Subject 1 name',
             ],
             'description' => 'Collection impact statement',
+            'isPartOf' => [
+                '@type' => 'Periodical',
+                'name' => 'eLife',
+                'issn' => '2050-084X',
+            ],
+        ], $json);
+    }
+
+    /**
+     * @test
+     */
+    public function it_will_generate_json_ld_schema_from_event()
+    {
+        $this->urlGenerator->expects($this->once())->method('generate')->willReturn('https://journal/events/event-id');
+        $this->urlGenerator->expects($this->once())->method('getContext')->willReturn(new RequestContext(null, 'GET', 'journal', 'https'));
+        $this->packages->expects($this->once())->method('getUrl')->willReturn('/assets/patterns/img/patterns/organisms/elife-logo-symbol@2x.png');
+
+        $json = $this->extension->generateJson(new Event(
+            'event-id',
+            'Event title',
+            'Event impact statement',
+            new DateTimeImmutable('2008-09-30 01:23:45'),
+            null,
+            new DateTimeImmutable('2008-10-20 09:00:00'),
+            new DateTimeImmutable('2008-10-22 17:35:00'),
+            new DateTimeZone('Z'),
+            null,
+            promise_for(null),
+            new EmptySequence()
+        ), false);
+
+        $this->assertSame([
+            '@context' => 'https://schema.org',
+            '@type' => 'Event',
+            'mainEntityOfPage' => [
+                '@type' => 'WebPage',
+                '@id' => 'https://journal/events/event-id',
+            ],
+            'headline' => 'Event title',
+            'startDate' => '2008-10-20T09:00:00Z',
+            'endDate' => '2008-10-22T17:35:00Z',
+            'publisher' => [
+                '@type' => 'Organization',
+                'name' => 'eLife Sciences Publications, Ltd',
+                'logo' => [
+                    '@type' => 'ImageObject',
+                    'url' => 'https://journal/assets/patterns/img/patterns/organisms/elife-logo-symbol@2x.png',
+                ],
+            ],
+            'description' => 'Event impact statement',
             'isPartOf' => [
                 '@type' => 'Periodical',
                 'name' => 'eLife',
