@@ -27,7 +27,7 @@ final class CiviCrmClient
     private $apiKey;
     private $siteKey;
 
-    public function __construct(ClientInterface $client, string $apiKey = null, string $siteKey = null)
+    public function __construct(ClientInterface $client, string $apiKey, string $siteKey)
     {
         $this->client = $client;
         $this->apiKey = $apiKey;
