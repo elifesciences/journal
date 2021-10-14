@@ -10,9 +10,11 @@ use eLife\ApiSdk\Model\GroupAuthor;
 use eLife\ApiSdk\Model\HasImpactStatement;
 use eLife\ApiSdk\Model\HasPublishedDate;
 use eLife\ApiSdk\Model\HasSubjects;
+use eLife\ApiSdk\Model\HasThumbnail;
 use eLife\ApiSdk\Model\Model;
 use eLife\ApiSdk\Model\PersonAuthor;
 use eLife\ApiSdk\Model\Subject;
+use eLife\Journal\Helper\CreatesIiifUri;
 use Symfony\Component\Asset\Packages;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Twig_Extension;
@@ -20,8 +22,12 @@ use Twig_Function;
 
 final class JsonLdSchemaOrgExtension extends Twig_Extension
 {
+    const MAX_IMAGE_SIZE = 2000;
+
     private $urlGenerator;
     private $packages;
+
+    use CreatesIiifUri;
 
     public function __construct(UrlGeneratorInterface $urlGenerator, Packages $packages)
     {
@@ -64,6 +70,7 @@ final class JsonLdSchemaOrgExtension extends Twig_Extension
             '@type' => $this->getType($object),
             'mainEntityOfPage' => $this->getMainEntityOfPage($object),
             'headline' => $this->getHeadline($object),
+            'image' => $this->getImage($object),
             'datePublished' => $this->getDatePublished($object),
             'author' => $this->getAuthor($object),
             'publisher' => [
@@ -141,6 +148,17 @@ final class JsonLdSchemaOrgExtension extends Twig_Extension
     /**
      * @return string|null
      */
+    private function getImage(Model $object)
+    {
+        if ($object instanceof HasThumbnail && $thumbnail = $object->getThumbnail()) {
+            list($width, $height) = $this->determineSizes($thumbnail->getWidth(), $thumbnail->getHeight(), self::MAX_IMAGE_SIZE);
+            return $this->iiifUri($thumbnail, $width, $height);
+        }
+    }
+
+    /**
+     * @return string|null
+     */
     private function getDatePublished(Model $object)
     {
         if ($object instanceof HasPublishedDate) {
@@ -185,7 +203,7 @@ final class JsonLdSchemaOrgExtension extends Twig_Extension
             $context->getScheme(),
             '://',
             $context->getHost(),
-            '80' !== $port ? ':'.$port : '',
+            (80 !== $port && 'http' === $context->getScheme()) || (443 !== $port && 'http' === $context->getScheme()) ? ':'.$port : '',
             $context->getBaseUrl(),
             $this->packages->getUrl('assets/patterns/img/patterns/organisms/elife-logo-symbol@2x.png'),
         ]);
