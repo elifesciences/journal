@@ -105,7 +105,7 @@ final class ContentAlertsControllerTest extends PageTestCase
 
         $crawler = $client->submit($form);
 
-        $this->assertCount(0, $crawler->filter('.info-bar'));
+//        $this->assertEmpty($crawler->filter('.info-bar'));
         $this->assertSame('Thank you for subscribing!', $crawler->filter('#thank-you h2')->text());
         $this->assertSame('A confirmation email has been sent to foo@bar.com.', $crawler->filter('#thank-you p')->text());
         $this->assertSame('Back to Homepage', $crawler->filter('#thank-you a')->text());
