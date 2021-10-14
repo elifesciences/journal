@@ -382,6 +382,14 @@ services:
         tags:
           - name: twig.extension
 
+    elife.journal.twig.extension.json_ld_schema_org:
+        class: eLife\Journal\Twig\JsonLdSchemaOrgExtension
+        arguments:
+          - '@router'
+          - '@assets.packages'
+        tags:
+          - name: twig.extension
+
     elife.journal.twig.extension.model_name:
         class: eLife\Journal\Twig\ModelNameExtension
         tags:

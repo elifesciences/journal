@@ -316,68 +316,7 @@
 
     {%- endif %}
 
-    <script type="application/ld+json">
-        {
-            "@context": "https://schema.org",
-            "@type": "ScholarlyArticle",
-            "mainEntityOfPage": {
-                "@type": "WebPage",
-                "@id": "{{ url('article', {id: item.id}) }}"
-            },
-            "headline": {{ item.fullTitle|striptags|json_encode(constant('JSON_UNESCAPED_UNICODE'))|raw }},
-            "datePublished": "{{ item.publishedDate|date('Y-m-d', 'UTC') }}",
-            "author": [
-                {% for author in item.authors %}
-                    {% if author.orcid is defined %}
-                        {
-                            "@type": "Person",
-                            "name": "{{ author.preferredName }}"
-                        }
-                    {% elseif author.people is defined %}
-                        {
-                            "@type": "Organization",
-                            "name": "{{ author.toString() }}"
-                        }
-                    {% else %}
-                        "{{ author.toString() }}"
-                    {% endif %}
-                    {%- if not loop.last %}, {% endif -%}
-                {% endfor %}
-            ],
-            "publisher": {
-                "@type": "Organization",
-                "name": "eLife Sciences Publications, Ltd",
-                "logo": {
-                    "@type": "ImageObject",
-                    "url": "{{ absolute_url(asset('assets/patterns/img/patterns/organisms/elife-logo-full-2x.png')) }}"
-                }
-            },
-            {% if item.keywords is defined and item.keywords|length %}
-                "keywords": [
-                    {% for keyword in item.keywords %}
-                        "{{ keyword|striptags }}"
-                        {% if not loop.last %},{% endif %}
-                    {% endfor %}
-                ],
-            {% endif %}
-            {% if item.subjects|length %}
-                "about": [
-                    {% for subject in item.subjects %}
-                    "{{ subject.name|striptags }}"
-                    {% if not loop.last %},{% endif %}
-                    {% endfor %}
-                ],
-            {% endif %}
-            {% if item.impactStatement|default(null) -%}
-                "description": {{ item.impactStatement|striptags|json_encode(constant('JSON_UNESCAPED_UNICODE'))|raw }},
-            {% endif %}
-            "isPartOf": {
-                "@type": "Periodical",
-                "name": "eLife",
-                "issn": "2050-084X"
-            }
-        }
-    </script>
+    {{ json_ld_schema_org(item) }}
 
 {% endblock %}
 
