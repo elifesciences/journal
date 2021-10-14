@@ -79,8 +79,7 @@ final class JsonLdSchemaOrgExtension extends Twig_Extension
      */
     private function getType(Model $object)
     {
-        switch (true)
-        {
+        switch (true) {
             case $object instanceof ArticleVersion:
                 return 'ScholarlyArticle';
             case $object instanceof Digest:
@@ -92,8 +91,7 @@ final class JsonLdSchemaOrgExtension extends Twig_Extension
 
     private function getMainEntityOfPage(Model $object) : array
     {
-        switch (true)
-        {
+        switch (true) {
             case $object instanceof ArticleVersion:
             case $object instanceof Digest:
                 $id = $this->urlGenerator->generate('article', ['id' => $object->getId()], UrlGeneratorInterface::ABSOLUTE_URL);
@@ -113,8 +111,7 @@ final class JsonLdSchemaOrgExtension extends Twig_Extension
      */
     private function getHeadline(Model $object)
     {
-        switch (true)
-        {
+        switch (true) {
             case $object instanceof ArticleVersion:
                 $title = $object->getFullTitle();
                 break;
@@ -145,8 +142,7 @@ final class JsonLdSchemaOrgExtension extends Twig_Extension
      */
     private function getAuthor(Model $object)
     {
-        if ($object instanceof ArticleVersion)
-        {
+        if ($object instanceof ArticleVersion) {
             return array_map(function (AuthorEntry $author) {
                 if ($author instanceof PersonAuthor) {
                     return [
