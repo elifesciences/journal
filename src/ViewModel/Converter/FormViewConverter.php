@@ -49,9 +49,16 @@ final class FormViewConverter implements ViewModelConverter
                             }
                         }
 
-                        return new ViewModel\Checkboxes($object->vars['id'], $options, new ViewModel\FormLabel($this->getLabel($object)),
-                            $object->vars['full_name'].'[]', $object->vars['required'], $object->vars['disabled'], $this->getState($object),
-                            $this->getMessageGroup($object));
+                        return new ViewModel\Checkboxes(
+                            $object->vars['id'],
+                            $options,
+                            $object->vars['full_name'].'[]',
+                            $this->getLabel($object),
+                            $object->vars['required'],
+                            $object->vars['disabled'],
+                            $this->getState($object),
+                            $this->getMessageGroup($object)
+                        );
                     } else {
                         $options = array_map(function (ChoiceView $choice) use ($object) {
                             return new ViewModel\SelectOption($choice->value, $choice->label, $choice->value === $object->vars['value']);
