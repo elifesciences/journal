@@ -7,6 +7,7 @@ use DateTimeZone;
 use eLife\ApiSdk\Collection\ArraySequence;
 use eLife\ApiSdk\Collection\EmptySequence;
 use eLife\ApiSdk\Model\ArticleVoR;
+use eLife\ApiSdk\Model\BlogArticle;
 use eLife\ApiSdk\Model\Collection;
 use eLife\ApiSdk\Model\Copyright;
 use eLife\ApiSdk\Model\Digest;
@@ -41,6 +42,9 @@ final class JsonLdSchemaOrgExtensionTest extends TestCase
         $this->packages = $this->createMock(Packages::class);
 
         $this->extension = new JsonLdSchemaOrgExtension($this->urlGenerator, $this->packages);
+
+        $this->urlGenerator->expects($this->once())->method('getContext')->willReturn(new RequestContext(null, 'GET', 'journal', 'https'));
+        $this->packages->expects($this->once())->method('getUrl')->willReturn('/assets/patterns/img/patterns/organisms/elife-logo-symbol@2x.png');
     }
 
     /**
@@ -56,8 +60,6 @@ final class JsonLdSchemaOrgExtensionTest extends TestCase
      */
     public function it_must_receive_a_content_model()
     {
-        $this->urlGenerator->expects($this->once())->method('getContext')->willReturn(new RequestContext());
-
         $file = new File('image/jpeg', 'https://iiif.elifesciences.org/example.jpg/full/full/0/default.jpg', 'example.jpg');
         $this->extension->generate(new Digest(
             'id',
@@ -83,8 +85,6 @@ final class JsonLdSchemaOrgExtensionTest extends TestCase
     public function it_will_generate_json_ld_schema_from_digest()
     {
         $this->urlGenerator->expects($this->once())->method('generate')->willReturn('https://journal/articles/digest-id');
-        $this->urlGenerator->expects($this->once())->method('getContext')->willReturn(new RequestContext(null, 'GET', 'journal', 'https'));
-        $this->packages->expects($this->once())->method('getUrl')->willReturn('/assets/patterns/img/patterns/organisms/elife-logo-symbol@2x.png');
 
         $file = new File('image/jpeg', 'https://iiif.elifesciences.org/example.jpg/full/full/0/default.jpg', 'example.jpg');
         $thumbnail = $subjectBanner = $subjectThumbnail = new Image('', 'https://iiif.elifesciences.org/example.jpg', new EmptySequence(), $file, 1000, 500, 50, 50);
@@ -141,8 +141,6 @@ final class JsonLdSchemaOrgExtensionTest extends TestCase
     public function it_will_generate_json_ld_schema_from_article()
     {
         $this->urlGenerator->expects($this->once())->method('generate')->willReturn('https://journal/articles/article-id');
-        $this->urlGenerator->expects($this->once())->method('getContext')->willReturn(new RequestContext(null, 'GET', 'journal', 'https'));
-        $this->packages->expects($this->once())->method('getUrl')->willReturn('/assets/patterns/img/patterns/organisms/elife-logo-symbol@2x.png');
 
         $file = new File('image/jpeg', 'https://iiif.elifesciences.org/example.jpg/full/full/0/default.jpg', 'example.jpg');
         $thumbnail = $subjectBanner = $subjectThumbnail = new Image('', 'https://iiif.elifesciences.org/example.jpg', new EmptySequence(), $file, 1000, 500, 50, 50);
@@ -258,8 +256,6 @@ final class JsonLdSchemaOrgExtensionTest extends TestCase
     public function it_will_generate_json_ld_schema_from_collection()
     {
         $this->urlGenerator->expects($this->once())->method('generate')->willReturn('https://journal/collections/collection-id');
-        $this->urlGenerator->expects($this->once())->method('getContext')->willReturn(new RequestContext(null, 'GET', 'journal', 'https'));
-        $this->packages->expects($this->once())->method('getUrl')->willReturn('/assets/patterns/img/patterns/organisms/elife-logo-symbol@2x.png');
 
         $file = new File('image/jpeg', 'https://iiif.elifesciences.org/example.jpg/full/full/0/default.jpg', 'example.jpg');
         $banner = $thumbnail = $subjectBanner = $subjectThumbnail = new Image('', 'https://iiif.elifesciences.org/example.jpg', new EmptySequence(), $file, 1000, 500, 50, 50);
@@ -335,8 +331,6 @@ final class JsonLdSchemaOrgExtensionTest extends TestCase
     public function it_will_generate_json_ld_schema_from_event()
     {
         $this->urlGenerator->expects($this->once())->method('generate')->willReturn('https://journal/events/event-id');
-        $this->urlGenerator->expects($this->once())->method('getContext')->willReturn(new RequestContext(null, 'GET', 'journal', 'https'));
-        $this->packages->expects($this->once())->method('getUrl')->willReturn('/assets/patterns/img/patterns/organisms/elife-logo-symbol@2x.png');
 
         $json = $this->extension->generateJson(new Event(
             'event-id',
@@ -371,6 +365,59 @@ final class JsonLdSchemaOrgExtensionTest extends TestCase
                 ],
             ],
             'description' => 'Event impact statement',
+            'isPartOf' => [
+                '@type' => 'Periodical',
+                'name' => 'eLife',
+                'issn' => '2050-084X',
+            ],
+        ], $json);
+    }
+
+    /**
+     * @test
+     */
+    public function it_will_generate_json_ld_schema_from_blog_article()
+    {
+        $this->urlGenerator->expects($this->once())->method('generate')->willReturn('https://journal/blog-articles/blog-article-id');
+
+        $file = new File('image/jpeg', 'https://iiif.elifesciences.org/example.jpg/full/full/0/default.jpg', 'example.jpg');
+        $subjectBanner = $subjectThumbnail = new Image('', 'https://iiif.elifesciences.org/example.jpg', new EmptySequence(), $file, 1000, 500, 50, 50);
+
+        $json = $this->extension->generateJson(new BlogArticle(
+            'blog-article-id',
+            'Blog article title',
+            new DateTimeImmutable('2008-10-01 01:23:45'),
+            null,
+            'Blog article impact statement',
+            promise_for(null),
+            new EmptySequence(),
+            new ArraySequence([
+                new Subject('subject1', 'Subject 1 name', promise_for('Subject subject1 impact statement'),
+                    new EmptySequence(), promise_for($subjectBanner), promise_for($subjectThumbnail)),
+            ])
+        ), false);
+
+        $this->assertSame([
+            '@context' => 'https://schema.org',
+            '@type' => 'Blog',
+            'mainEntityOfPage' => [
+                '@type' => 'WebPage',
+                '@id' => 'https://journal/blog-articles/blog-article-id',
+            ],
+            'headline' => 'Blog article title',
+            'datePublished' => '2008-10-01',
+            'publisher' => [
+                '@type' => 'Organization',
+                'name' => 'eLife Sciences Publications, Ltd',
+                'logo' => [
+                    '@type' => 'ImageObject',
+                    'url' => 'https://journal/assets/patterns/img/patterns/organisms/elife-logo-symbol@2x.png',
+                ],
+            ],
+            'about' => [
+                'Subject 1 name',
+            ],
+            'description' => 'Blog article impact statement',
             'isPartOf' => [
                 '@type' => 'Periodical',
                 'name' => 'eLife',

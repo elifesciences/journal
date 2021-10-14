@@ -6,6 +6,14 @@
 
 {% block title %}{{ title|striptags }} | Inside eLife{% endblock %}
 
+{% block meta %}
+
+    {{ parent() }}
+
+    {{ json_ld_schema_org(item) }}
+
+{% endblock %}
+
 {% block body %}
 
     {{ render_pattern(contentHeader) }}
