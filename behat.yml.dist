@@ -59,6 +59,11 @@ default:
                 tags: '@contact'
             contexts:
               - ContactContext
+        content-alerts:
+            filters:
+                tags: '@etoc'
+            contexts:
+              - ContentAlertsContext
         digest:
             filters:
                 tags: '@digest'

@@ -1,7 +1,6 @@
 @contact
 Feature: Contact form
   Rules:
-  - When the form is filled in, the user is sent a thank you email
   - The completed form is sent to staff@elifesciences.org
 
   Scenario: User is thanked for completing the form
