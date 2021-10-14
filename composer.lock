@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "18dca9858234e0ef9a422292b7413a7c",
+    "content-hash": "4a372cadea17ec4a2d1853a989741109",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -1360,16 +1360,16 @@
         },
         {
             "name": "elife/patterns",
-            "version": "dev-checkboxes",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/patterns-php.git",
-                "reference": "24045c1fe0c0901629cec5e0e68d30819c230473"
+                "reference": "207a9a927ba4308a62cad3839419192376888198"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/24045c1fe0c0901629cec5e0e68d30819c230473",
-                "reference": "24045c1fe0c0901629cec5e0e68d30819c230473",
+                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/207a9a927ba4308a62cad3839419192376888198",
+                "reference": "207a9a927ba4308a62cad3839419192376888198",
                 "shasum": ""
             },
             "require": {
@@ -1411,9 +1411,9 @@
             ],
             "description": "eLife patterns",
             "support": {
-                "source": "https://github.com/elifesciences/patterns-php/tree/checkboxes"
+                "source": "https://github.com/elifesciences/patterns-php/tree/master"
             },
-            "time": "2021-10-14T11:24:36+00:00"
+            "time": "2021-10-14T12:50:16+00:00"
         },
         {
             "name": "fabpot/goutte",
