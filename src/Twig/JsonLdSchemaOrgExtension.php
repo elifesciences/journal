@@ -37,10 +37,27 @@ final class JsonLdSchemaOrgExtension extends Twig_Extension
                 [$this, 'generate'],
                 ['is_safe' => ['all']]
             ),
+            new Twig_Function(
+                'json_ld_schema_org_json',
+                [$this, 'generateJson'],
+                ['is_safe' => ['all']]
+            ),
         ];
     }
 
     public function generate(Model $object) : string
+    {
+        return implode(PHP_EOL, [
+            '<script type="application/ld+json">',
+            $this->generateJson($object),
+            '</script>',
+        ]);
+    }
+
+    /**
+     * @return array|string
+     */
+    public function generateJson(Model $object, $json = true)
     {
         $schema = array_filter([
             '@context' => 'https://schema.org',
@@ -67,11 +84,7 @@ final class JsonLdSchemaOrgExtension extends Twig_Extension
             ],
         ]);
 
-        return implode(PHP_EOL, [
-            '<script type="application/ld+json">',
-            json_encode($schema, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES),
-            '</script>',
-        ]);
+        return $json ? json_encode($schema, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) : $schema;
     }
 
     /**
