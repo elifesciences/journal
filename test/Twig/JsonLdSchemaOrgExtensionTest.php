@@ -6,12 +6,14 @@ use DateTimeImmutable;
 use eLife\ApiSdk\Collection\ArraySequence;
 use eLife\ApiSdk\Collection\EmptySequence;
 use eLife\ApiSdk\Model\ArticleVoR;
+use eLife\ApiSdk\Model\Collection;
 use eLife\ApiSdk\Model\Copyright;
 use eLife\ApiSdk\Model\Digest;
 use eLife\ApiSdk\Model\File;
 use eLife\ApiSdk\Model\GroupAuthor;
 use eLife\ApiSdk\Model\Image;
 use eLife\ApiSdk\Model\OnBehalfOfAuthor;
+use eLife\ApiSdk\Model\Person;
 use eLife\ApiSdk\Model\PersonAuthor;
 use eLife\ApiSdk\Model\PersonDetails;
 use eLife\ApiSdk\Model\Subject;
@@ -240,6 +242,83 @@ final class JsonLdSchemaOrgExtensionTest extends TestCase
                 'Subject 1 name',
             ],
             'description' => 'Article impact statement',
+            'isPartOf' => [
+                '@type' => 'Periodical',
+                'name' => 'eLife',
+                'issn' => '2050-084X',
+            ],
+        ], $json);
+    }
+
+    /**
+     * @test
+     */
+    public function it_will_generate_json_ld_schema_from_collection()
+    {
+        $this->urlGenerator->expects($this->once())->method('generate')->willReturn('https://journal/collections/collection-id');
+        $this->urlGenerator->expects($this->once())->method('getContext')->willReturn(new RequestContext(null, 'GET', 'journal', 'https'));
+        $this->packages->expects($this->once())->method('getUrl')->willReturn('/assets/patterns/img/patterns/organisms/elife-logo-symbol@2x.png');
+
+        $file = new File('image/jpeg', 'https://iiif.elifesciences.org/example.jpg/full/full/0/default.jpg', 'example.jpg');
+        $banner = $thumbnail = $subjectBanner = $subjectThumbnail = new Image('', 'https://iiif.elifesciences.org/example.jpg', new EmptySequence(), $file, 1000, 500, 50, 50);
+
+        $json = $this->extension->generateJson(new Collection(
+            'collection-id',
+            'Collection title',
+            'Collection impact statement',
+            new DateTimeImmutable('2008-09-29 01:23:45'),
+            null,
+            promise_for($banner),
+            $thumbnail,
+            promise_for(null),
+            new ArraySequence([
+                new Subject('subject1', 'Subject 1 name', promise_for('Subject subject1 impact statement'),
+                    new EmptySequence(), promise_for($subjectBanner), promise_for($subjectThumbnail)),
+            ]),
+            new Person(
+                'id',
+                new PersonDetails('preferred', 'index'),
+                promise_for(null),
+                promise_for(null),
+                'Type',
+                'Type label',
+                null,
+                new EmptySequence(),
+                promise_for(null),
+                new EmptySequence(),
+                promise_for(null),
+                new EmptySequence()
+            ),
+            false,
+            new EmptySequence(),
+            new EmptySequence(),
+            new EmptySequence(),
+            new EmptySequence(),
+            new EmptySequence()
+        ), false);
+
+        $this->assertSame([
+            '@context' => 'https://schema.org',
+            '@type' => 'Collection',
+            'mainEntityOfPage' => [
+                '@type' => 'WebPage',
+                '@id' => 'https://journal/collections/collection-id',
+            ],
+            'headline' => 'Collection title',
+            'image' => 'https://iiif.elifesciences.org/example.jpg/full/full/0/default.jpg',
+            'datePublished' => '2008-09-29',
+            'publisher' => [
+                '@type' => 'Organization',
+                'name' => 'eLife Sciences Publications, Ltd',
+                'logo' => [
+                    '@type' => 'ImageObject',
+                    'url' => 'https://journal/assets/patterns/img/patterns/organisms/elife-logo-symbol@2x.png',
+                ],
+            ],
+            'about' => [
+                'Subject 1 name',
+            ],
+            'description' => 'Collection impact statement',
             'isPartOf' => [
                 '@type' => 'Periodical',
                 'name' => 'eLife',

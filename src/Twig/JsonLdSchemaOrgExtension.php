@@ -5,6 +5,7 @@ namespace eLife\Journal\Twig;
 use eLife\ApiSdk\Model\ArticleVersion;
 use eLife\ApiSdk\Model\ArticleVoR;
 use eLife\ApiSdk\Model\AuthorEntry;
+use eLife\ApiSdk\Model\Collection;
 use eLife\ApiSdk\Model\Digest;
 use eLife\ApiSdk\Model\GroupAuthor;
 use eLife\ApiSdk\Model\HasImpactStatement;
@@ -104,6 +105,8 @@ final class JsonLdSchemaOrgExtension extends Twig_Extension
                 return 'ScholarlyArticle';
             case $object instanceof Digest:
                 return 'NewsArticle';
+            case $object instanceof Collection:
+                return 'Collection';
             default:
                 return null;
         }
@@ -115,6 +118,9 @@ final class JsonLdSchemaOrgExtension extends Twig_Extension
             case $object instanceof ArticleVersion:
             case $object instanceof Digest:
                 $id = $this->urlGenerator->generate('article', ['id' => $object->getId()], UrlGeneratorInterface::ABSOLUTE_URL);
+                break;
+            case $object instanceof Collection:
+                $id = $this->urlGenerator->generate('collection', ['id' => $object->getId()], UrlGeneratorInterface::ABSOLUTE_URL);
                 break;
             default:
                 $id = null;
@@ -135,6 +141,7 @@ final class JsonLdSchemaOrgExtension extends Twig_Extension
             case $object instanceof ArticleVersion:
                 $title = $object->getFullTitle();
                 break;
+            case $object instanceof Collection:
             case $object instanceof Digest:
                 $title = $object->getTitle();
                 break;
