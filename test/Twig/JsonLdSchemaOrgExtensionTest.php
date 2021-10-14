@@ -10,13 +10,13 @@ use eLife\ApiSdk\Model\File;
 use eLife\ApiSdk\Model\Image;
 use eLife\ApiSdk\Model\Subject;
 use eLife\Journal\Twig\JsonLdSchemaOrgExtension;
-use function GuzzleHttp\Promise\promise_for;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Asset\Packages;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RequestContext;
 use Twig_ExtensionInterface;
 use TypeError;
+use function GuzzleHttp\Promise\promise_for;
 
 final class JsonLdSchemaOrgExtensionTest extends TestCase
 {
@@ -41,7 +41,7 @@ final class JsonLdSchemaOrgExtensionTest extends TestCase
         $urlGenerator = $this->createMock(UrlGeneratorInterface::class);
         $packages = $this->createMock(Packages::class);
 
-        $urlGenerator->method('getContext')->willReturn(new RequestContext());
+        $urlGenerator->expects($this->once())->method('getContext')->willReturn(new RequestContext());
 
         $extension = new JsonLdSchemaOrgExtension($urlGenerator, $packages);
 
@@ -73,7 +73,8 @@ final class JsonLdSchemaOrgExtensionTest extends TestCase
         $urlGenerator = $this->createMock(UrlGeneratorInterface::class);
         $packages = $this->createMock(Packages::class);
 
-        $urlGenerator->method('getContext')->willReturn(new RequestContext(null, 'GET', 'journal', 'https'));
+        $urlGenerator->expects($this->once())->method('getContext')->willReturn(new RequestContext(null, 'GET', 'journal', 'https'));
+        $packages->expects($this->once())->method('getUrl')->willReturn('/assets/patterns/img/patterns/organisms/elife-logo-symbol@2x.png');
 
         $extension = new JsonLdSchemaOrgExtension($urlGenerator, $packages);
 
@@ -110,7 +111,7 @@ final class JsonLdSchemaOrgExtensionTest extends TestCase
                 'name' => 'eLife Sciences Publications, Ltd',
                 'logo' => [
                     '@type' => 'ImageObject',
-                    'url' => 'https://journal',
+                    'url' => 'https://journal/assets/patterns/img/patterns/organisms/elife-logo-symbol@2x.png',
                 ],
             ],
             'about' => [
