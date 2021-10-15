@@ -58,6 +58,25 @@ trait CreatesIiifUri
         return "$uri/$region/$size/0/default.$extension";
     }
 
+    final protected function determineSizes(int $width, int $height, int $maxSize = 2000) : array
+    {
+        if ($width > $height) {
+            $min = min($width, $maxSize);
+
+            return [
+                $min,
+                (int) ($min * ($height / $width)),
+            ];
+        } else {
+            $min = min($height, $maxSize);
+
+            return [
+                (int) ($min * ($width / $height)),
+                $min,
+            ];
+        }
+    }
+
     private function dimensionNeeded(int $originalOne, int $originalTwo, int $one = null, int $two = null) : bool
     {
         if ($one === $originalOne) {
