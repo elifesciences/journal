@@ -14,6 +14,7 @@ use eLife\ApiSdk\Model\HasImpactStatement;
 use eLife\ApiSdk\Model\HasPublishedDate;
 use eLife\ApiSdk\Model\HasSubjects;
 use eLife\ApiSdk\Model\HasThumbnail;
+use eLife\ApiSdk\Model\Interview;
 use eLife\ApiSdk\Model\JobAdvert;
 use eLife\ApiSdk\Model\Model;
 use eLife\ApiSdk\Model\PersonAuthor;
@@ -117,6 +118,8 @@ final class SchemaOrgMetadataExtension extends Twig_Extension
                 return 'Collection';
             case $object instanceof Event:
                 return 'Event';
+            case $object instanceof Interview:
+                return 'Conversation';
             case $object instanceof JobAdvert:
                 return 'JobPosting';
             default:
@@ -139,6 +142,9 @@ final class SchemaOrgMetadataExtension extends Twig_Extension
                 break;
             case $object instanceof Event:
                 $id = $this->urlGenerator->generate('event', [$object], UrlGeneratorInterface::ABSOLUTE_URL);
+                break;
+            case $object instanceof Interview:
+                $id = $this->urlGenerator->generate('interview', [$object], UrlGeneratorInterface::ABSOLUTE_URL);
                 break;
             case $object instanceof JobAdvert:
                 $id = $this->urlGenerator->generate('job-advert', [$object], UrlGeneratorInterface::ABSOLUTE_URL);
@@ -166,6 +172,7 @@ final class SchemaOrgMetadataExtension extends Twig_Extension
             case $object instanceof Collection:
             case $object instanceof Digest:
             case $object instanceof Event:
+            case $object instanceof Interview:
             case $object instanceof JobAdvert:
                 $title = $object->getTitle();
                 break;

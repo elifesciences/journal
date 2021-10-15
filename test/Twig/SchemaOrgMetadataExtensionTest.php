@@ -15,6 +15,8 @@ use eLife\ApiSdk\Model\Event;
 use eLife\ApiSdk\Model\File;
 use eLife\ApiSdk\Model\GroupAuthor;
 use eLife\ApiSdk\Model\Image;
+use eLife\ApiSdk\Model\Interview;
+use eLife\ApiSdk\Model\Interviewee;
 use eLife\ApiSdk\Model\JobAdvert;
 use eLife\ApiSdk\Model\OnBehalfOfAuthor;
 use eLife\ApiSdk\Model\Person;
@@ -480,6 +482,59 @@ final class SchemaOrgMetadataExtensionTest extends TestCase
                 ],
             ],
             'description' => 'Job advert impact statement',
+            'isPartOf' => [
+                '@type' => 'Periodical',
+                'name' => 'eLife',
+                'issn' => '2050-084X',
+            ],
+        ], $json);
+    }
+
+    /**
+     * @test
+     */
+    public function it_will_generate_metadata_from_interview()
+    {
+        $this->defaultExpectations();
+
+        $this->urlGenerator->expects($this->once())->method('generate')->willReturn('https://journal/interviews/interview-id');
+
+        $file = new File('image/jpeg', 'https://iiif.elifesciences.org/example.jpg/full/full/0/default.jpg', 'example.jpg');
+        $thumbnail = new Image('', 'https://iiif.elifesciences.org/example.jpg', new EmptySequence(), $file, 1000, 500, 50, 50);
+        $json = $this->extension->generateJson(new Interview(
+            'interview-id',
+            new Interviewee(
+                new PersonDetails('Interviewee name 1', 'Interviewee name 1, index'),
+                new EmptySequence()
+            ),
+            'Interview title',
+            new DateTimeImmutable('2008-10-30 01:23:45'),
+            null,
+            'Interview impact statement',
+            $thumbnail,
+            promise_for(null),
+            new EmptySequence()
+        ), false);
+
+        $this->assertSame([
+            '@context' => 'https://schema.org',
+            '@type' => 'Conversation',
+            'mainEntityOfPage' => [
+                '@type' => 'WebPage',
+                '@id' => 'https://journal/interviews/interview-id',
+            ],
+            'headline' => 'Interview title',
+            'image' => 'https://iiif.elifesciences.org/example.jpg/full/full/0/default.jpg',
+            'datePublished' => '2008-10-30',
+            'publisher' => [
+                '@type' => 'Organization',
+                'name' => 'eLife Sciences Publications, Ltd',
+                'logo' => [
+                    '@type' => 'ImageObject',
+                    'url' => 'https://journal/assets/patterns/img/patterns/organisms/elife-logo-symbol@2x.png',
+                ],
+            ],
+            'description' => 'Interview impact statement',
             'isPartOf' => [
                 '@type' => 'Periodical',
                 'name' => 'eLife',
