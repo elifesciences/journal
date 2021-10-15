@@ -20,7 +20,7 @@ use eLife\ApiSdk\Model\Person;
 use eLife\ApiSdk\Model\PersonAuthor;
 use eLife\ApiSdk\Model\PersonDetails;
 use eLife\ApiSdk\Model\Subject;
-use eLife\Journal\Twig\JsonLdSchemaOrgExtension;
+use eLife\Journal\Twig\SchemaOrgMetadataExtension;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Asset\Packages;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -29,11 +29,11 @@ use Twig_ExtensionInterface;
 use TypeError;
 use function GuzzleHttp\Promise\promise_for;
 
-final class JsonLdSchemaOrgExtensionTest extends TestCase
+final class SchemaOrgMetadataExtensionTest extends TestCase
 {
     private $urlGenerator;
     private $packages;
-    /** @var JsonLdSchemaOrgExtension */
+    /** @var SchemaOrgMetadataExtension */
     private $extension;
 
     public function setUp()
@@ -41,7 +41,7 @@ final class JsonLdSchemaOrgExtensionTest extends TestCase
         $this->urlGenerator = $this->createMock(UrlGeneratorInterface::class);
         $this->packages = $this->createMock(Packages::class);
 
-        $this->extension = new JsonLdSchemaOrgExtension($this->urlGenerator, $this->packages);
+        $this->extension = new SchemaOrgMetadataExtension($this->urlGenerator, $this->packages);
     }
 
     private function defaultExpectations()
@@ -63,7 +63,7 @@ final class JsonLdSchemaOrgExtensionTest extends TestCase
      */
     public function it_must_receive_a_content_model()
     {
-        $this->defaultExpectations();
+        $this->urlGenerator->expects($this->once())->method('getContext')->willReturn(new RequestContext());
 
         $file = new File('image/jpeg', 'https://iiif.elifesciences.org/example.jpg/full/full/0/default.jpg', 'example.jpg');
         $this->extension->generate(new Digest(
@@ -87,7 +87,7 @@ final class JsonLdSchemaOrgExtensionTest extends TestCase
     /**
      * @test
      */
-    public function it_will_generate_json_ld_schema_from_digest()
+    public function it_will_generate_metadata_from_digest()
     {
         $this->defaultExpectations();
 
@@ -145,7 +145,7 @@ final class JsonLdSchemaOrgExtensionTest extends TestCase
     /**
      * @test
      */
-    public function it_will_generate_json_ld_schema_from_article()
+    public function it_will_generate_metadata_from_article()
     {
         $this->defaultExpectations();
 
@@ -262,7 +262,7 @@ final class JsonLdSchemaOrgExtensionTest extends TestCase
     /**
      * @test
      */
-    public function it_will_generate_json_ld_schema_from_collection()
+    public function it_will_generate_metadata_from_collection()
     {
         $this->defaultExpectations();
 
@@ -339,7 +339,7 @@ final class JsonLdSchemaOrgExtensionTest extends TestCase
     /**
      * @test
      */
-    public function it_will_generate_json_ld_schema_from_event()
+    public function it_will_generate_metadata_from_event()
     {
         $this->defaultExpectations();
 
@@ -389,7 +389,7 @@ final class JsonLdSchemaOrgExtensionTest extends TestCase
     /**
      * @test
      */
-    public function it_will_generate_json_ld_schema_from_blog_article()
+    public function it_will_generate_metadata_from_blog_article()
     {
         $this->defaultExpectations();
 
