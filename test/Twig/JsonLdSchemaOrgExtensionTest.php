@@ -42,7 +42,10 @@ final class JsonLdSchemaOrgExtensionTest extends TestCase
         $this->packages = $this->createMock(Packages::class);
 
         $this->extension = new JsonLdSchemaOrgExtension($this->urlGenerator, $this->packages);
+    }
 
+    private function defaultExpectations()
+    {
         $this->urlGenerator->expects($this->once())->method('getContext')->willReturn(new RequestContext(null, 'GET', 'journal', 'https'));
         $this->packages->expects($this->once())->method('getUrl')->willReturn('/assets/patterns/img/patterns/organisms/elife-logo-symbol@2x.png');
     }
@@ -60,6 +63,8 @@ final class JsonLdSchemaOrgExtensionTest extends TestCase
      */
     public function it_must_receive_a_content_model()
     {
+        $this->defaultExpectations();
+
         $file = new File('image/jpeg', 'https://iiif.elifesciences.org/example.jpg/full/full/0/default.jpg', 'example.jpg');
         $this->extension->generate(new Digest(
             'id',
@@ -84,6 +89,8 @@ final class JsonLdSchemaOrgExtensionTest extends TestCase
      */
     public function it_will_generate_json_ld_schema_from_digest()
     {
+        $this->defaultExpectations();
+
         $this->urlGenerator->expects($this->once())->method('generate')->willReturn('https://journal/articles/digest-id');
 
         $file = new File('image/jpeg', 'https://iiif.elifesciences.org/example.jpg/full/full/0/default.jpg', 'example.jpg');
@@ -140,6 +147,8 @@ final class JsonLdSchemaOrgExtensionTest extends TestCase
      */
     public function it_will_generate_json_ld_schema_from_article()
     {
+        $this->defaultExpectations();
+
         $this->urlGenerator->expects($this->once())->method('generate')->willReturn('https://journal/articles/article-id');
 
         $file = new File('image/jpeg', 'https://iiif.elifesciences.org/example.jpg/full/full/0/default.jpg', 'example.jpg');
@@ -255,6 +264,8 @@ final class JsonLdSchemaOrgExtensionTest extends TestCase
      */
     public function it_will_generate_json_ld_schema_from_collection()
     {
+        $this->defaultExpectations();
+
         $this->urlGenerator->expects($this->once())->method('generate')->willReturn('https://journal/collections/collection-id');
 
         $file = new File('image/jpeg', 'https://iiif.elifesciences.org/example.jpg/full/full/0/default.jpg', 'example.jpg');
@@ -330,6 +341,8 @@ final class JsonLdSchemaOrgExtensionTest extends TestCase
      */
     public function it_will_generate_json_ld_schema_from_event()
     {
+        $this->defaultExpectations();
+
         $this->urlGenerator->expects($this->once())->method('generate')->willReturn('https://journal/events/event-id');
 
         $json = $this->extension->generateJson(new Event(
@@ -378,6 +391,8 @@ final class JsonLdSchemaOrgExtensionTest extends TestCase
      */
     public function it_will_generate_json_ld_schema_from_blog_article()
     {
+        $this->defaultExpectations();
+
         $this->urlGenerator->expects($this->once())->method('generate')->willReturn('https://journal/blog-articles/blog-article-id');
 
         $file = new File('image/jpeg', 'https://iiif.elifesciences.org/example.jpg/full/full/0/default.jpg', 'example.jpg');
