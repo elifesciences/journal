@@ -48,52 +48,6 @@
 
     {% endembed %}
 
-    <script type="application/ld+json">
-        {
-            "@context": "https://schema.org",
-            "@type": "NewsArticle",
-            "mainEntityOfPage": {
-                "@type": "WebPage",
-                "@id": "{{ url('article', {id: item.id}) }}"
-            },
-            "headline": {{ title|striptags|json_encode(constant('JSON_UNESCAPED_UNICODE'))|raw }},
-            "image": [
-                "{{ iiif_uri(item.thumbnail) }}"
-            ],
-            "datePublished": "{{ item.publishedDate|date('Y-m-d', 'UTC') }}",
-            "publisher": {
-                "@type": "Organization",
-                "name": "eLife Sciences Publications, Ltd",
-                "logo": {
-                    "@type": "ImageObject",
-                    "url": "{{ absolute_url(asset('assets/patterns/img/patterns/organisms/elife-logo-full-2x.png')) }}"
-                }
-            },
-            {% if item.keywords is defined and item.keywords|length %}
-                "keywords": [
-                    {% for keyword in item.keywords %}
-                        "{{ keyword|striptags }}"
-                        {% if not loop.last %},{% endif %}
-                    {% endfor %}
-                ],
-            {% endif %}
-            {% if item.subjects|length %}
-                "about": [
-                    {% for subject in item.subjects %}
-                    "{{ subject.name|striptags }}"
-                    {% if not loop.last %},{% endif %}
-                    {% endfor %}
-                ],
-            {% endif %}
-            {% if item.impactStatement|default(null) -%}
-                "description": {{ item.impactStatement|striptags|json_encode(constant('JSON_UNESCAPED_UNICODE'))|raw }},
-            {% endif %}
-            "isPartOf": {
-                "@type": "Periodical",
-                "name": "eLife",
-                "issn": "2050-084X"
-            }
-        }
-    </script>
+    {{ schema_org_metadata(item) }}
 
 {% endblock %}
