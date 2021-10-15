@@ -12,8 +12,6 @@
         <meta name="robots" content="noindex">
     {% endif %}
 
-    {{ json_ld_schema_org(item) }}
-
 {% endblock %}
 
 {% block body %}
@@ -47,5 +45,7 @@
         {% endblock %}
 
     {% endembed %}
+
+    {{ json_ld_schema_org(item) }}
 
 {% endblock %}
