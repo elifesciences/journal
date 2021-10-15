@@ -31,11 +31,30 @@ final class IiifExtension extends Twig_Extension
 
     public function createOpenGraphImage(Image $image) : string
     {
-        list($width, $height) = $this->determineSizes($image->getWidth(), $image->getHeight(), self::MAX_SIZE);
+        list($width, $height) = $this->determineSizes($image->getWidth(), $image->getHeight());
 
         return "<meta name=\"twitter:image\" content=\"{$this->iiifUri($image, $width, $height)}\">
             <meta property=\"og:image\" content=\"{$this->iiifUri($image, $width, $height)}\">
             <meta property=\"og:image:width\" content=\"{$width}\">
             <meta property=\"og:image:height\" content=\"{$height}\">";
+    }
+
+    private function determineSizes(int $width, int $height) : array
+    {
+        if ($width > $height) {
+            $min = min($width, self::MAX_SIZE);
+
+            return [
+                $min,
+                (int) ($min * ($height / $width)),
+            ];
+        } else {
+            $min = min($height, self::MAX_SIZE);
+
+            return [
+                (int) ($min * ($width / $height)),
+                $min,
+            ];
+        }
     }
 }
