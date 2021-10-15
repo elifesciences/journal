@@ -14,6 +14,7 @@ use eLife\ApiSdk\Model\HasImpactStatement;
 use eLife\ApiSdk\Model\HasPublishedDate;
 use eLife\ApiSdk\Model\HasSubjects;
 use eLife\ApiSdk\Model\HasThumbnail;
+use eLife\ApiSdk\Model\JobAdvert;
 use eLife\ApiSdk\Model\Model;
 use eLife\ApiSdk\Model\PersonAuthor;
 use eLife\ApiSdk\Model\Subject;
@@ -77,6 +78,7 @@ final class SchemaOrgMetadataExtension extends Twig_Extension
             'datePublished' => $this->getDatePublished($object),
             'startDate' => $this->getStartDate($object),
             'endDate' => $this->getEndDate($object),
+            'datePosted' => $this->getDatePosted($object),
             'author' => $this->getAuthor($object),
             'publisher' => [
                 '@type' => 'Organization',
@@ -115,6 +117,8 @@ final class SchemaOrgMetadataExtension extends Twig_Extension
                 return 'Collection';
             case $object instanceof Event:
                 return 'Event';
+            case $object instanceof JobAdvert:
+                return 'JobPosting';
             default:
                 return null;
         }
@@ -135,6 +139,9 @@ final class SchemaOrgMetadataExtension extends Twig_Extension
                 break;
             case $object instanceof Event:
                 $id = $this->urlGenerator->generate('event', [$object], UrlGeneratorInterface::ABSOLUTE_URL);
+                break;
+            case $object instanceof JobAdvert:
+                $id = $this->urlGenerator->generate('job-advert', [$object], UrlGeneratorInterface::ABSOLUTE_URL);
                 break;
             default:
                 $id = null;
@@ -159,6 +166,7 @@ final class SchemaOrgMetadataExtension extends Twig_Extension
             case $object instanceof Collection:
             case $object instanceof Digest:
             case $object instanceof Event:
+            case $object instanceof JobAdvert:
                 $title = $object->getTitle();
                 break;
             default:
@@ -184,7 +192,7 @@ final class SchemaOrgMetadataExtension extends Twig_Extension
      */
     private function getDatePublished(Model $object)
     {
-        if ($object instanceof HasPublishedDate && !$object instanceof Event) {
+        if ($object instanceof HasPublishedDate && !$object instanceof Event && !$object instanceof JobAdvert) {
             return $object->getPublishedDate() ? $object->getPublishedDate()->format('Y-m-d') : null;
         }
 
@@ -210,6 +218,18 @@ final class SchemaOrgMetadataExtension extends Twig_Extension
     {
         if ($object instanceof Event) {
             return $object->getEnds() ? $object->getEnds()->format('Y-m-d\TH:i:s\Z') : null;
+        }
+
+        return null;
+    }
+
+    /**
+     * @return string|null
+     */
+    private function getDatePosted(Model $object)
+    {
+        if ($object instanceof JobAdvert) {
+            return $object->getPublishedDate()->format('Y-m-d');
         }
 
         return null;
