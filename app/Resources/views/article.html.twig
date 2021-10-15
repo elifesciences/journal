@@ -316,8 +316,6 @@
 
     {%- endif %}
 
-    {{ json_ld_schema_org(item) }}
-
 {% endblock %}
 
 {% block body %}
@@ -341,5 +339,7 @@
         {% block article_body %}{% endblock %}
 
     </div>
+
+    {{ json_ld_schema_org(item) }}
 
 {% endblock %}
