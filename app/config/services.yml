@@ -382,14 +382,6 @@ services:
         tags:
           - name: twig.extension
 
-    elife.journal.twig.extension.schema_org_metadata:
-        class: eLife\Journal\Twig\SchemaOrgMetadataExtension
-        arguments:
-          - '@router'
-          - '@assets.packages'
-        tags:
-          - name: twig.extension
-
     elife.journal.twig.extension.model_name:
         class: eLife\Journal\Twig\ModelNameExtension
         tags:
