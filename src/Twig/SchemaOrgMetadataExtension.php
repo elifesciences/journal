@@ -20,7 +20,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Twig_Extension;
 use Twig_Function;
 
-final class JsonLdSchemaOrgExtension extends Twig_Extension
+final class SchemaOrgMetadataExtension extends Twig_Extension
 {
     const MAX_IMAGE_SIZE = 2000;
 
@@ -39,12 +39,12 @@ final class JsonLdSchemaOrgExtension extends Twig_Extension
     {
         return [
             new Twig_Function(
-                'json_ld_schema_org',
+                'schema_org_metadata',
                 [$this, 'generate'],
                 ['is_safe' => ['all']]
             ),
             new Twig_Function(
-                'json_ld_schema_org_json',
+                'schema_org_metadata_json',
                 [$this, 'generateJson'],
                 ['is_safe' => ['all']]
             ),

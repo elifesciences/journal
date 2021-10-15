@@ -15,7 +15,7 @@ use eLife\ApiSdk\Model\OnBehalfOfAuthor;
 use eLife\ApiSdk\Model\PersonAuthor;
 use eLife\ApiSdk\Model\PersonDetails;
 use eLife\ApiSdk\Model\Subject;
-use eLife\Journal\Twig\JsonLdSchemaOrgExtension;
+use eLife\Journal\Twig\SchemaOrgMetadataExtension;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Asset\Packages;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -24,11 +24,11 @@ use Twig_ExtensionInterface;
 use TypeError;
 use function GuzzleHttp\Promise\promise_for;
 
-final class JsonLdSchemaOrgExtensionTest extends TestCase
+final class SchemaOrgMetadataExtensionTest extends TestCase
 {
     private $urlGenerator;
     private $packages;
-    /** @var JsonLdSchemaOrgExtension */
+    /** @var SchemaOrgMetadataExtension */
     private $extension;
 
     public function setUp()
@@ -36,7 +36,7 @@ final class JsonLdSchemaOrgExtensionTest extends TestCase
         $this->urlGenerator = $this->createMock(UrlGeneratorInterface::class);
         $this->packages = $this->createMock(Packages::class);
 
-        $this->extension = new JsonLdSchemaOrgExtension($this->urlGenerator, $this->packages);
+        $this->extension = new SchemaOrgMetadataExtension($this->urlGenerator, $this->packages);
     }
 
     /**
@@ -76,7 +76,7 @@ final class JsonLdSchemaOrgExtensionTest extends TestCase
     /**
      * @test
      */
-    public function it_will_generate_json_ld_schema_from_digest()
+    public function it_will_generate_metadata_from_digest()
     {
         $this->urlGenerator->expects($this->once())->method('generate')->willReturn('https://journal/articles/digest-id');
         $this->urlGenerator->expects($this->once())->method('getContext')->willReturn(new RequestContext(null, 'GET', 'journal', 'https'));
@@ -134,7 +134,7 @@ final class JsonLdSchemaOrgExtensionTest extends TestCase
     /**
      * @test
      */
-    public function it_will_generate_json_ld_schema_from_article()
+    public function it_will_generate_metadata_from_article()
     {
         $this->urlGenerator->expects($this->once())->method('generate')->willReturn('https://journal/articles/article-id');
         $this->urlGenerator->expects($this->once())->method('getContext')->willReturn(new RequestContext(null, 'GET', 'journal', 'https'));

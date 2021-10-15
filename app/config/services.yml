@@ -382,8 +382,8 @@ services:
         tags:
           - name: twig.extension
 
-    elife.journal.twig.extension.json_ld_schema_org:
-        class: eLife\Journal\Twig\JsonLdSchemaOrgExtension
+    elife.journal.twig.extension.schema_org_metadata:
+        class: eLife\Journal\Twig\SchemaOrgMetadataExtension
         arguments:
           - '@router'
           - '@assets.packages'
