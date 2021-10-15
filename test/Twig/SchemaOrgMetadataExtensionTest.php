@@ -526,6 +526,12 @@ final class SchemaOrgMetadataExtensionTest extends TestCase
             'headline' => 'Interview title',
             'image' => 'https://iiif.elifesciences.org/example.jpg/full/full/0/default.jpg',
             'datePublished' => '2008-10-30',
+            'contributor' => [
+                [
+                    '@type' => 'Person',
+                    'name' => 'Interviewee name 1',
+                ],
+            ],
             'publisher' => [
                 '@type' => 'Organization',
                 'name' => 'eLife Sciences Publications, Ltd',

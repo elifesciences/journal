@@ -81,6 +81,7 @@ final class SchemaOrgMetadataExtension extends Twig_Extension
             'endDate' => $this->getEndDate($object),
             'datePosted' => $this->getDatePosted($object),
             'author' => $this->getAuthor($object),
+            'contributor' => $this->getContributor($object),
             'publisher' => [
                 '@type' => 'Organization',
                 'name' => 'eLife Sciences Publications, Ltd',
@@ -263,6 +264,23 @@ final class SchemaOrgMetadataExtension extends Twig_Extension
 
                 return $author->toString();
             }, $object->getAuthors()->toArray());
+        }
+
+        return null;
+    }
+
+    /**
+     * @return array|null
+     */
+    private function getContributor(Model $object)
+    {
+        if ($object instanceof Interview) {
+            return [
+                [
+                    '@type' => 'Person',
+                    'name' => $object->getInterviewee()->getPerson()->getPreferredName(),
+                ],
+            ];
         }
 
         return null;
