@@ -113,6 +113,7 @@ final class SchemaOrgMetadataExtension extends Twig_Extension
             case $object instanceof ArticleVersion:
                 return 'ScholarlyArticle';
             case $object instanceof BlogArticle:
+            case $object instanceof LabsPost:
                 return 'Blog';
             case $object instanceof Digest:
                 return 'NewsArticle';
@@ -124,8 +125,6 @@ final class SchemaOrgMetadataExtension extends Twig_Extension
                 return 'Conversation';
             case $object instanceof JobAdvert:
                 return 'JobPosting';
-            case $object instanceof LabsPost:
-                return 'Blog';
             default:
                 return null;
         }
