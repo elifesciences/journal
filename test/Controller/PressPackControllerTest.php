@@ -281,7 +281,7 @@ final class PressPackControllerTest extends PageTestCase
         $value = $script->text();
         $this->assertJson($value);
 
-        //$this->markTestIncomplete('This test fails if schema.org is broken!');
+        $this->markTestIncomplete('This test fails if schema.org is broken!');
 
         $graph = JsonLD::getDocument($value)->getGraph();
         $node = $graph->getNodes()[0];
