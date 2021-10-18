@@ -16,6 +16,7 @@ use eLife\ApiSdk\Model\HasSubjects;
 use eLife\ApiSdk\Model\HasThumbnail;
 use eLife\ApiSdk\Model\Interview;
 use eLife\ApiSdk\Model\JobAdvert;
+use eLife\ApiSdk\Model\LabsPost;
 use eLife\ApiSdk\Model\Model;
 use eLife\ApiSdk\Model\PersonAuthor;
 use eLife\ApiSdk\Model\Subject;
@@ -123,6 +124,8 @@ final class SchemaOrgMetadataExtension extends Twig_Extension
                 return 'Conversation';
             case $object instanceof JobAdvert:
                 return 'JobPosting';
+            case $object instanceof LabsPost:
+                return 'Blog';
             default:
                 return null;
         }
@@ -150,6 +153,9 @@ final class SchemaOrgMetadataExtension extends Twig_Extension
             case $object instanceof JobAdvert:
                 $id = $this->urlGenerator->generate('job-advert', [$object], UrlGeneratorInterface::ABSOLUTE_URL);
                 break;
+            case $object instanceof LabsPost:
+                $id = $this->urlGenerator->generate('labs-post', [$object], UrlGeneratorInterface::ABSOLUTE_URL);
+                break;
             default:
                 $id = null;
         }
@@ -175,6 +181,7 @@ final class SchemaOrgMetadataExtension extends Twig_Extension
             case $object instanceof Event:
             case $object instanceof Interview:
             case $object instanceof JobAdvert:
+            case $object instanceof LabsPost:
                 $title = $object->getTitle();
                 break;
             default:
@@ -200,7 +207,7 @@ final class SchemaOrgMetadataExtension extends Twig_Extension
      */
     private function getDatePublished(Model $object)
     {
-        if ($object instanceof HasPublishedDate && !$object instanceof Event && !$object instanceof JobAdvert) {
+        if ($object instanceof HasPublishedDate && !$object instanceof Event && !$object instanceof JobAdvert  && !$object instanceof LabsPost) {
             return $object->getPublishedDate() ? $object->getPublishedDate()->format('Y-m-d') : null;
         }
 

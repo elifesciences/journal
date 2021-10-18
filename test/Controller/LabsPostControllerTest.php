@@ -4,6 +4,10 @@ namespace test\eLife\Journal\Controller;
 
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use ML\JsonLD\JsonLD;
+use ML\JsonLD\RdfConstants;
+use ML\JsonLD\TypedValue;
+use PHPUnit\Util\Type;
 use test\eLife\Journal\Providers;
 
 final class LabsPostControllerTest extends PageTestCase
@@ -124,6 +128,32 @@ final class LabsPostControllerTest extends PageTestCase
         $client->request('GET', $url);
 
         $this->assertTrue($client->getResponse()->isRedirect($expectedUrl));
+    }
+
+    /**
+     * @test
+     */
+    public function it_has_schema_org_metadata()
+    {
+        $client = static::createClient();
+
+        $crawler = $client->request('GET', $this->getUrl());
+
+        $this->assertSame(200, $client->getResponse()->getStatusCode());
+
+        $script = $crawler->filter('script[type="application/ld+json"]');
+        $this->assertNotEmpty($script);
+
+        $value = $script->text();
+        $this->assertJson($value);
+
+        $this->markTestIncomplete('This test fails if schema.org is broken!');
+
+        $graph = JsonLD::getDocument($value)->getGraph();
+        $node = $graph->getNodes()[0];
+
+        $this->assertEquals('http://schema.org/Blog', $node->getType()->getId());
+        $this->assertEquals(new TypedValue('Labs post title', RdfConstants::XSD_STRING), $node->getProperty('http://schema.org/headline'));
     }
 
     /**
