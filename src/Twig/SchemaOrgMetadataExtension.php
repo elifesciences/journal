@@ -137,28 +137,28 @@ final class SchemaOrgMetadataExtension extends Twig_Extension
         switch (true) {
             case $object instanceof ArticleVersion:
             case $object instanceof Digest:
-                $id = $this->urlGenerator->generate('article', [$object], UrlGeneratorInterface::ABSOLUTE_URL);
+                $id = 'article';
                 break;
             case $object instanceof BlogArticle:
-                $id = $this->urlGenerator->generate('inside-elife-article', [$object], UrlGeneratorInterface::ABSOLUTE_URL);
+                $id = 'inside-elife-article';
                 break;
             case $object instanceof Collection:
-                $id = $this->urlGenerator->generate('collection', [$object], UrlGeneratorInterface::ABSOLUTE_URL);
+                $id = 'collection';
                 break;
             case $object instanceof Event:
-                $id = $this->urlGenerator->generate('event', [$object], UrlGeneratorInterface::ABSOLUTE_URL);
+                $id = 'event';
                 break;
             case $object instanceof Interview:
-                $id = $this->urlGenerator->generate('interview', [$object], UrlGeneratorInterface::ABSOLUTE_URL);
+                $id = 'interview';
                 break;
             case $object instanceof JobAdvert:
-                $id = $this->urlGenerator->generate('job-advert', [$object], UrlGeneratorInterface::ABSOLUTE_URL);
+                $id = 'job-advert';
                 break;
             case $object instanceof LabsPost:
-                $id = $this->urlGenerator->generate('labs-post', [$object], UrlGeneratorInterface::ABSOLUTE_URL);
+                $id = 'labs-post';
                 break;
             case $object instanceof PressPackage:
-                $id = $this->urlGenerator->generate('press-packs', [$object], UrlGeneratorInterface::ABSOLUTE_URL);
+                $id = 'press-packs';
                 break;
             default:
                 $id = null;
@@ -166,7 +166,7 @@ final class SchemaOrgMetadataExtension extends Twig_Extension
 
         return array_filter([
             '@type' => 'WebPage',
-            '@id' => $id,
+            '@id' => !is_null($id) ? $this->urlGenerator->generate($id, [$object], UrlGeneratorInterface::ABSOLUTE_URL) : $id,
         ]);
     }
 
