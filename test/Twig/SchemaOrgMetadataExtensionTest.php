@@ -510,7 +510,7 @@ final class SchemaOrgMetadataExtensionTest extends TestCase
             'press-pack-id',
             'Press package title',
             new DateTimeImmutable('2008-10-02'),
-            null, //updated
+            null,
             'Press pack impact statement',
             promise_for(null),
             new EmptySequence(),
