@@ -207,7 +207,7 @@ final class SchemaOrgMetadataExtension extends Twig_Extension
      */
     private function getDatePublished(Model $object)
     {
-        if ($object instanceof HasPublishedDate && !$object instanceof Event && !$object instanceof JobAdvert  && !$object instanceof LabsPost) {
+        if ($object instanceof HasPublishedDate && !$object instanceof Event && !$object instanceof JobAdvert) {
             return $object->getPublishedDate() ? $object->getPublishedDate()->format('Y-m-d') : null;
         }
 

@@ -153,7 +153,7 @@ final class LabsPostControllerTest extends PageTestCase
         $node = $graph->getNodes()[0];
 
         $this->assertEquals('http://schema.org/Blog', $node->getType()->getId());
-        $this->assertEquals(new TypedValue('Labs post title', RdfConstants::XSD_STRING), $node->getProperty('http://schema.org/headline'));
+        $this->assertEquals(new TypedValue('Post title', RdfConstants::XSD_STRING), $node->getProperty('http://schema.org/headline'));
     }
 
     /**
