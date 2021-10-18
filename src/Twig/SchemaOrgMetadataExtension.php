@@ -19,6 +19,7 @@ use eLife\ApiSdk\Model\JobAdvert;
 use eLife\ApiSdk\Model\LabsPost;
 use eLife\ApiSdk\Model\Model;
 use eLife\ApiSdk\Model\PersonAuthor;
+use eLife\ApiSdk\Model\PressPackage;
 use eLife\ApiSdk\Model\Subject;
 use eLife\Journal\Helper\CreatesIiifUri;
 use Symfony\Component\Asset\Packages;
@@ -114,6 +115,7 @@ final class SchemaOrgMetadataExtension extends Twig_Extension
                 return 'ScholarlyArticle';
             case $object instanceof BlogArticle:
             case $object instanceof LabsPost:
+            case $object instanceof PressPackage:
                 return 'Blog';
             case $object instanceof Digest:
                 return 'NewsArticle';
@@ -155,6 +157,9 @@ final class SchemaOrgMetadataExtension extends Twig_Extension
             case $object instanceof LabsPost:
                 $id = $this->urlGenerator->generate('labs-post', [$object], UrlGeneratorInterface::ABSOLUTE_URL);
                 break;
+            case $object instanceof PressPackage:
+                $id = $this->urlGenerator->generate('press-packs', [$object], UrlGeneratorInterface::ABSOLUTE_URL);
+                break;
             default:
                 $id = null;
         }
@@ -181,6 +186,7 @@ final class SchemaOrgMetadataExtension extends Twig_Extension
             case $object instanceof Interview:
             case $object instanceof JobAdvert:
             case $object instanceof LabsPost:
+            case $object instanceof PressPackage:
                 $title = $object->getTitle();
                 break;
             default:

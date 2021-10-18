@@ -23,6 +23,7 @@ use eLife\ApiSdk\Model\OnBehalfOfAuthor;
 use eLife\ApiSdk\Model\Person;
 use eLife\ApiSdk\Model\PersonAuthor;
 use eLife\ApiSdk\Model\PersonDetails;
+use eLife\ApiSdk\Model\PressPackage;
 use eLife\ApiSdk\Model\Subject;
 use eLife\Journal\Twig\SchemaOrgMetadataExtension;
 use PHPUnit\Framework\TestCase;
@@ -487,6 +488,56 @@ final class SchemaOrgMetadataExtensionTest extends TestCase
                 ],
             ],
             'description' => 'Labs post impact statement',
+            'isPartOf' => [
+                '@type' => 'Periodical',
+                'name' => 'eLife',
+                'issn' => '2050-084X',
+            ],
+        ], $json);
+    }
+
+    /**
+     * @test
+     */
+    public function it_will_generate_metadata_from_press_packs()
+    {
+        $this->defaultExpectations();
+
+        $this->urlGenerator->expects($this->once())->method('generate')->willReturn('https://journal/for-the-press/press-pack-id');
+
+
+        $json = $this->extension->generateJson(new PressPackage(
+            'press-pack-id',
+            'Press package title',
+            new DateTimeImmutable('2008-10-02'),
+            null, //updated
+            'Press pack impact statement',
+            promise_for(null),
+            new EmptySequence(),
+            new EmptySequence(),
+            new EmptySequence(),
+            new EmptySequence(),
+            new EmptySequence()
+        ), false);
+
+        $this->assertSame([
+            '@context' => 'https://schema.org',
+            '@type' => 'Blog',
+            'mainEntityOfPage' => [
+                '@type' => 'WebPage',
+                '@id' => 'https://journal/for-the-press/press-pack-id',
+            ],
+            'headline' => 'Press package title',
+            'datePublished' => '2008-10-02',
+            'publisher' => [
+                '@type' => 'Organization',
+                'name' => 'eLife Sciences Publications, Ltd',
+                'logo' => [
+                    '@type' => 'ImageObject',
+                    'url' => 'https://journal/assets/patterns/img/patterns/organisms/elife-logo-symbol@2x.png',
+                ],
+            ],
+            'description' => 'Press pack impact statement',
             'isPartOf' => [
                 '@type' => 'Periodical',
                 'name' => 'eLife',
