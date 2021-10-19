@@ -25,6 +25,7 @@ use eLife\ApiSdk\Model\PersonAuthor;
 use eLife\ApiSdk\Model\PersonDetails;
 use eLife\ApiSdk\Model\PodcastEpisode;
 use eLife\ApiSdk\Model\PodcastEpisodeChapter;
+use eLife\ApiSdk\Model\PodcastEpisodeSource;
 use eLife\ApiSdk\Model\PressPackage;
 use eLife\ApiSdk\Model\PromotionalCollection;
 use eLife\ApiSdk\Model\Subject;
@@ -678,7 +679,12 @@ final class SchemaOrgMetadataExtensionTest extends TestCase
     {
         $this->defaultExpectations();
 
-        $this->urlGenerator->expects($this->once())->method('generate')->willReturn('https://journal/podcast-episode/1');
+        $this->urlGenerator->expects($this->exactly(2))->method('generate')->will(
+            $this->onConsecutiveCalls(
+                'https://journal/podcast-episode/1',
+                'https://journal/podcast'
+            )
+        );
 
         $file = new File('image/jpeg', 'https://iiif.elifesciences.org/example.jpg/full/full/0/default.jpg', 'example.jpg');
         $thumbnail = new Image('', 'https://iiif.elifesciences.org/example.jpg', new EmptySequence(), $file, 1000, 500, 50, 50);
@@ -692,7 +698,9 @@ final class SchemaOrgMetadataExtensionTest extends TestCase
             promise_for(null),
             $thumbnail,
             promise_for(null),
-            [],
+            [
+                new PodcastEpisodeSource('audio/mpeg', 'https://www.example.com/episode.mp3'),
+            ],
             new ArraySequence(
                 [
                     new PodcastEpisodeChapter(
@@ -752,6 +760,15 @@ final class SchemaOrgMetadataExtensionTest extends TestCase
                 ],
             ],
             'description' => 'Podcast episode impact statement',
+            'associatedMedia' => [
+                '@type' => 'MediaObject',
+                'contentUrl' => 'https://www.example.com/episode.mp3',
+            ],
+            'partOfSeries' => [
+                '@type' => 'PodcastSeries',
+                'name' => 'eLife podcast',
+                'url' => 'https://journal/podcast',
+            ],
             'isPartOf' => [
                 '@type' => 'Periodical',
                 'name' => 'eLife',

@@ -104,6 +104,8 @@ final class SchemaOrgMetadataExtension extends Twig_Extension
             'keywords' => $this->getKeywords($object),
             'about' => $this->getAbout($object),
             'description' => $this->getDescription($object),
+            'associatedMedia' => $this->getAssociatedMedia($object),
+            'partOfSeries' => $this->getPartOfSeries($object),
             'isPartOf' => [
                 '@type' => 'Periodical',
                 'name' => 'eLife',
@@ -433,6 +435,37 @@ final class SchemaOrgMetadataExtension extends Twig_Extension
     {
         if ($object instanceof HasImpactStatement) {
             return strip_tags($object->getImpactStatement());
+        }
+        return null;
+    }
+
+    /**
+     * @return array|null
+     */
+    private function getAssociatedMedia(Model $object)
+    {
+        if ($object instanceof PodcastEpisode) {
+            if ($sources = $object->getSources()) {
+                return [
+                    '@type' => 'MediaObject',
+                    'contentUrl' => $sources[0]->getUri(),
+                ];
+            }
+        }
+        return null;
+    }
+
+    /**
+     * @return array|null
+     */
+    private function getPartOfSeries(Model $object)
+    {
+        if ($object instanceof PodcastEpisode) {
+            return [
+                '@type' => 'PodcastSeries',
+                'name' => 'eLife podcast',
+                'url' => $this->urlGenerator->generate('podcast'),
+            ];
         }
         return null;
     }
