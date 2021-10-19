@@ -141,7 +141,7 @@ final class JobAdvertControllerTest extends PageTestCase
         $node = $graph->getNodes()[0];
 
         $this->assertEquals('http://schema.org/JobPosting', $node->getType()->getId());
-        $this->assertEquals(new TypedValue('Job advert title', RdfConstants::XSD_STRING), $node->getProperty('http://schema.org/headline'));
+        $this->assertEquals(new TypedValue('Job advert title', RdfConstants::XSD_STRING), $node->getProperty('http://schema.org/name'));
     }
 
     /**

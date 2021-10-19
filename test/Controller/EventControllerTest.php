@@ -221,7 +221,7 @@ final class EventControllerTest extends PageTestCase
         $node = $graph->getNodes()[0];
 
         $this->assertEquals('http://schema.org/Event', $node->getType()->getId());
-        $this->assertEquals(new TypedValue('Event title', RdfConstants::XSD_STRING), $node->getProperty('http://schema.org/headline'));
+        $this->assertEquals(new TypedValue('Event title', RdfConstants::XSD_STRING), $node->getProperty('http://schema.org/name'));
     }
 
     /**
