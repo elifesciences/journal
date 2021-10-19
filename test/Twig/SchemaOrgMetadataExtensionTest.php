@@ -497,23 +497,10 @@ final class SchemaOrgMetadataExtensionTest extends TestCase
                 '@type' => 'WebPage',
                 '@id' => 'https://journal/events/event-id',
             ],
-            'headline' => 'Event title',
+            'name' => 'Event title',
             'startDate' => '2008-10-20T09:00:00Z',
             'endDate' => '2008-10-22T17:35:00Z',
-            'publisher' => [
-                '@type' => 'Organization',
-                'name' => 'eLife Sciences Publications, Ltd',
-                'logo' => [
-                    '@type' => 'ImageObject',
-                    'url' => 'https://journal/assets/patterns/img/patterns/organisms/elife-logo-symbol@2x.png',
-                ],
-            ],
             'description' => 'Event impact statement',
-            'isPartOf' => [
-                '@type' => 'Periodical',
-                'name' => 'eLife',
-                'issn' => '2050-084X',
-            ],
         ], $json);
     }
 
