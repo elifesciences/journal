@@ -20,6 +20,7 @@ use eLife\ApiSdk\Model\LabsPost;
 use eLife\ApiSdk\Model\Model;
 use eLife\ApiSdk\Model\PersonAuthor;
 use eLife\ApiSdk\Model\PressPackage;
+use eLife\ApiSdk\Model\PromotionalCollection;
 use eLife\ApiSdk\Model\Subject;
 use eLife\Journal\Helper\CreatesIiifUri;
 use Symfony\Component\Asset\Packages;
@@ -120,6 +121,7 @@ final class SchemaOrgMetadataExtension extends Twig_Extension
             case $object instanceof Digest:
                 return 'NewsArticle';
             case $object instanceof Collection:
+            case $object instanceof PromotionalCollection:
                 return 'Collection';
             case $object instanceof Event:
                 return 'Event';
@@ -160,6 +162,9 @@ final class SchemaOrgMetadataExtension extends Twig_Extension
             case $object instanceof PressPackage:
                 $id = 'press-packs';
                 break;
+            case $object instanceof PromotionalCollection:
+                $id = 'promotional-collection';
+                break;
             default:
                 $id = null;
         }
@@ -187,6 +192,7 @@ final class SchemaOrgMetadataExtension extends Twig_Extension
             case $object instanceof JobAdvert:
             case $object instanceof LabsPost:
             case $object instanceof PressPackage:
+            case $object instanceof PromotionalCollection:
                 $title = $object->getTitle();
                 break;
             default:
