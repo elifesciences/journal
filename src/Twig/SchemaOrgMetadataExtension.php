@@ -2,6 +2,8 @@
 
 namespace eLife\Journal\Twig;
 
+use DateInterval;
+use DateTimeImmutable;
 use eLife\ApiSdk\Model\ArticleVersion;
 use eLife\ApiSdk\Model\ArticleVoR;
 use eLife\ApiSdk\Model\AuthorEntry;
@@ -21,6 +23,7 @@ use eLife\ApiSdk\Model\Model;
 use eLife\ApiSdk\Model\Person;
 use eLife\ApiSdk\Model\PersonAuthor;
 use eLife\ApiSdk\Model\PodcastEpisode;
+use eLife\ApiSdk\Model\PodcastEpisodeChapter;
 use eLife\ApiSdk\Model\PressPackage;
 use eLife\ApiSdk\Model\PromotionalCollection;
 use eLife\ApiSdk\Model\Subject;
@@ -79,6 +82,8 @@ final class SchemaOrgMetadataExtension extends Twig_Extension
             '@context' => 'https://schema.org',
             '@type' => $this->getType($object),
             'mainEntityOfPage' => $this->getMainEntityOfPage($object),
+            'episodeNumber' => $this->getEpisodeNumber($object),
+            'duration' => $this->getDuration($object),
             'headline' => $this->getHeadline($object),
             'image' => $this->getImage($object),
             'datePublished' => $this->getDatePublished($object),
@@ -181,6 +186,54 @@ final class SchemaOrgMetadataExtension extends Twig_Extension
             '@type' => 'WebPage',
             '@id' => !is_null($id) ? $this->urlGenerator->generate($id, [$object], UrlGeneratorInterface::ABSOLUTE_URL) : $id,
         ]);
+    }
+
+    /**
+     * @return int|null
+     */
+    private function getEpisodeNumber(Model $object)
+    {
+        if ($object instanceof PodcastEpisode) {
+            return $object->getNumber();
+        }
+
+        return null;
+    }
+
+    /**
+     * @return string|null
+     */
+    private function getDuration(Model $object)
+    {
+        if ($object instanceof PodcastEpisode) {
+            $start = new DateTimeImmutable();
+            $end = $start->add(new DateInterval('PT'.(array_sum(
+                array_map(
+                    function (PodcastEpisodeChapter $chapter) {
+                        return $chapter->getTime();
+                    },
+                    $object->getChapters()->toArray()
+                )
+            ) ?? 0).'S'));
+
+            $duration = $start->diff($end);
+
+            $format = implode('', iterator_to_array((function ($time) {
+                foreach ($time as $unit => $length) {
+                    yield "${length}{$unit}";
+                }
+            })(array_filter([
+                'H' => $duration->h,
+                'M' => $duration->i,
+                'S' => $duration->s,
+            ]))));
+
+            if (!empty($format)) {
+                return 'PT'.$format;
+            }
+        }
+
+        return null;
     }
 
     /**

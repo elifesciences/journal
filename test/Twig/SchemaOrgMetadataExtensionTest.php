@@ -24,6 +24,7 @@ use eLife\ApiSdk\Model\Person;
 use eLife\ApiSdk\Model\PersonAuthor;
 use eLife\ApiSdk\Model\PersonDetails;
 use eLife\ApiSdk\Model\PodcastEpisode;
+use eLife\ApiSdk\Model\PodcastEpisodeChapter;
 use eLife\ApiSdk\Model\PressPackage;
 use eLife\ApiSdk\Model\PromotionalCollection;
 use eLife\ApiSdk\Model\Subject;
@@ -692,7 +693,42 @@ final class SchemaOrgMetadataExtensionTest extends TestCase
             $thumbnail,
             promise_for(null),
             [],
-            new EmptySequence()
+            new ArraySequence(
+                [
+                    new PodcastEpisodeChapter(
+                        1,
+                        'Chapter 1',
+                        null,
+                        400,
+                        null,
+                        new EmptySequence()
+                    ),
+                    new PodcastEpisodeChapter(
+                        2,
+                        'Chapter 2',
+                        null,
+                        350,
+                        null,
+                        new EmptySequence()
+                    ),
+                    new PodcastEpisodeChapter(
+                        3,
+                        'Chapter 4',
+                        null,
+                        250,
+                        null,
+                        new EmptySequence()
+                    ),
+                    new PodcastEpisodeChapter(
+                        4,
+                        'Chapter 5',
+                        null,
+                        3600,
+                        null,
+                        new EmptySequence()
+                    ),
+                ]
+            )
         ), false);
 
         $this->assertSame([
@@ -703,7 +739,7 @@ final class SchemaOrgMetadataExtensionTest extends TestCase
                 '@id' => 'https://journal/podcast-episode/1',
             ],
             'episodeNumber' => 1,
-            'duration' => 'P1000S',
+            'duration' => 'PT1H16M40S',
             'headline' => 'Podcast episode title',
             'image' => 'https://iiif.elifesciences.org/example.jpg/full/full/0/default.jpg',
             'datePublished' => '2008-10-09',
