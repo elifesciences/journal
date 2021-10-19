@@ -23,6 +23,7 @@ use eLife\ApiSdk\Model\OnBehalfOfAuthor;
 use eLife\ApiSdk\Model\Person;
 use eLife\ApiSdk\Model\PersonAuthor;
 use eLife\ApiSdk\Model\PersonDetails;
+use eLife\ApiSdk\Model\PodcastEpisode;
 use eLife\ApiSdk\Model\PressPackage;
 use eLife\ApiSdk\Model\PromotionalCollection;
 use eLife\ApiSdk\Model\Subject;
@@ -661,6 +662,60 @@ final class SchemaOrgMetadataExtensionTest extends TestCase
                 ],
             ],
             'description' => 'Press pack impact statement',
+            'isPartOf' => [
+                '@type' => 'Periodical',
+                'name' => 'eLife',
+                'issn' => '2050-084X',
+            ],
+        ], $json);
+    }
+
+    /**
+     * @test
+     */
+    public function it_will_generate_metadata_from_podcast_episode()
+    {
+        $this->defaultExpectations();
+
+        $this->urlGenerator->expects($this->once())->method('generate')->willReturn('https://journal/podcast-episode/1');
+
+        $file = new File('image/jpeg', 'https://iiif.elifesciences.org/example.jpg/full/full/0/default.jpg', 'example.jpg');
+        $thumbnail = new Image('', 'https://iiif.elifesciences.org/example.jpg', new EmptySequence(), $file, 1000, 500, 50, 50);
+
+        $json = $this->extension->generateJson(new PodcastEpisode(
+            1,
+            'Podcast episode title',
+            'Podcast episode impact statement',
+            new DateTimeImmutable('2008-10-09'),
+            null,
+            promise_for(null),
+            $thumbnail,
+            promise_for(null),
+            [],
+            new EmptySequence()
+        ), false);
+
+        $this->assertSame([
+            '@context' => 'https://schema.org',
+            '@type' => 'PodcastEpisode',
+            'mainEntityOfPage' => [
+                '@type' => 'WebPage',
+                '@id' => 'https://journal/podcast-episode/1',
+            ],
+            'episodeNumber' => 1,
+            'duration' => 'P1000S',
+            'headline' => 'Podcast episode title',
+            'image' => 'https://iiif.elifesciences.org/example.jpg/full/full/0/default.jpg',
+            'datePublished' => '2008-10-09',
+            'publisher' => [
+                '@type' => 'Organization',
+                'name' => 'eLife Sciences Publications, Ltd',
+                'logo' => [
+                    '@type' => 'ImageObject',
+                    'url' => 'https://journal/assets/patterns/img/patterns/organisms/elife-logo-symbol@2x.png',
+                ],
+            ],
+            'description' => 'Podcast episode impact statement',
             'isPartOf' => [
                 '@type' => 'Periodical',
                 'name' => 'eLife',

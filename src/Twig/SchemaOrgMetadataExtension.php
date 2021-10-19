@@ -20,6 +20,7 @@ use eLife\ApiSdk\Model\LabsPost;
 use eLife\ApiSdk\Model\Model;
 use eLife\ApiSdk\Model\Person;
 use eLife\ApiSdk\Model\PersonAuthor;
+use eLife\ApiSdk\Model\PodcastEpisode;
 use eLife\ApiSdk\Model\PressPackage;
 use eLife\ApiSdk\Model\PromotionalCollection;
 use eLife\ApiSdk\Model\Subject;
@@ -131,6 +132,8 @@ final class SchemaOrgMetadataExtension extends Twig_Extension
                 return 'Conversation';
             case $object instanceof JobAdvert:
                 return 'JobPosting';
+            case $object instanceof PodcastEpisode:
+                return 'PodcastEpisode';
             default:
                 return null;
         }
@@ -160,6 +163,9 @@ final class SchemaOrgMetadataExtension extends Twig_Extension
                 break;
             case $object instanceof LabsPost:
                 $id = 'labs-post';
+                break;
+            case $object instanceof PodcastEpisode:
+                $id = 'podcast-episode';
                 break;
             case $object instanceof PressPackage:
                 $id = 'press-packs';
@@ -194,6 +200,7 @@ final class SchemaOrgMetadataExtension extends Twig_Extension
             case $object instanceof JobAdvert:
             case $object instanceof LabsPost:
             case $object instanceof PressPackage:
+            case $object instanceof PodcastEpisode:
             case $object instanceof PromotionalCollection:
                 $title = $object->getTitle();
                 break;
