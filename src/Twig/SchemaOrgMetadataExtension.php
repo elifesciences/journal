@@ -85,6 +85,7 @@ final class SchemaOrgMetadataExtension extends Twig_Extension
             'episodeNumber' => $this->getEpisodeNumber($object),
             'duration' => $this->getDuration($object),
             'headline' => $this->getHeadline($object),
+            'name' => $this->getName($object),
             'image' => $this->getImage($object),
             'datePublished' => $this->getDatePublished($object),
             'startDate' => $this->getStartDate($object),
@@ -93,24 +94,13 @@ final class SchemaOrgMetadataExtension extends Twig_Extension
             'author' => $this->getAuthor($object),
             'contributor' => $this->getContributor($object),
             'editor' => $this->getEditor($object),
-            'publisher' => [
-                '@type' => 'Organization',
-                'name' => 'eLife Sciences Publications, Ltd',
-                'logo' => [
-                    '@type' => 'ImageObject',
-                    'url' => $this->getPublisherLogoUrl(),
-                ],
-            ],
+            'publisher' => $this->getPublisher($object),
             'keywords' => $this->getKeywords($object),
             'about' => $this->getAbout($object),
             'description' => $this->getDescription($object),
             'associatedMedia' => $this->getAssociatedMedia($object),
             'partOfSeries' => $this->getPartOfSeries($object),
-            'isPartOf' => [
-                '@type' => 'Periodical',
-                'name' => 'eLife',
-                'issn' => '2050-084X',
-            ],
+            'isPartOf' => $this->getIsPartOf($object),
         ]);
 
         return $json ? json_encode($schema, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) : $schema;
@@ -250,13 +240,28 @@ final class SchemaOrgMetadataExtension extends Twig_Extension
             case $object instanceof BlogArticle:
             case $object instanceof Collection:
             case $object instanceof Digest:
-            case $object instanceof Event:
             case $object instanceof Interview:
-            case $object instanceof JobAdvert:
             case $object instanceof LabsPost:
             case $object instanceof PressPackage:
             case $object instanceof PodcastEpisode:
             case $object instanceof PromotionalCollection:
+                $title = $object->getTitle();
+                break;
+            default:
+                $title = null;
+        }
+
+        return $title ? strip_tags($title) : $title;
+    }
+
+    /**
+     * @return string|null
+     */
+    private function getName(Model $object)
+    {
+        switch (true) {
+            case $object instanceof Event:
+            case $object instanceof JobAdvert:
                 $title = $object->getTitle();
                 break;
             default:
@@ -385,6 +390,25 @@ final class SchemaOrgMetadataExtension extends Twig_Extension
         return null;
     }
 
+    /**
+     * @return array|null
+     */
+    private function getPublisher(Model $object)
+    {
+        if (!$object instanceof Event && !$object instanceof JobAdvert) {
+            return [
+                '@type' => 'Organization',
+                'name' => 'eLife Sciences Publications, Ltd',
+                'logo' => [
+                    '@type' => 'ImageObject',
+                    'url' => $this->getPublisherLogoUrl(),
+                ],
+            ];
+        }
+
+        return null;
+    }
+
     private function getPublisherLogoUrl() : string
     {
         $context = $this->urlGenerator->getContext();
@@ -436,6 +460,7 @@ final class SchemaOrgMetadataExtension extends Twig_Extension
         if ($object instanceof HasImpactStatement) {
             return strip_tags($object->getImpactStatement());
         }
+
         return null;
     }
 
@@ -452,6 +477,7 @@ final class SchemaOrgMetadataExtension extends Twig_Extension
                 ];
             }
         }
+
         return null;
     }
 
@@ -467,6 +493,23 @@ final class SchemaOrgMetadataExtension extends Twig_Extension
                 'url' => $this->urlGenerator->generate('podcast'),
             ];
         }
+
+        return null;
+    }
+
+    /**
+     * @return array|null
+     */
+    private function getIsPartOf(Model $object)
+    {
+        if (!$object instanceof Event && !$object instanceof JobAdvert) {
+            return [
+                '@type' => 'Periodical',
+                'name' => 'eLife',
+                'issn' => '2050-084X',
+            ];
+        }
+
         return null;
     }
 }
