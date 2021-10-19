@@ -292,7 +292,7 @@ final class SchemaOrgMetadataExtensionTest extends TestCase
             ]),
             new Person(
                 'id',
-                new PersonDetails('preferred', 'index'),
+                new PersonDetails('Curator name 1', 'Curator name 1, index'),
                 promise_for(null),
                 promise_for(null),
                 'Type',
@@ -305,7 +305,36 @@ final class SchemaOrgMetadataExtensionTest extends TestCase
                 new EmptySequence()
             ),
             false,
-            new EmptySequence(),
+            new ArraySequence([
+                new Person(
+                    'id',
+                    new PersonDetails('Curator name 1', 'Curator name 1, index'),
+                    promise_for(null),
+                    promise_for(null),
+                    'Type',
+                    'Type label',
+                    null,
+                    new EmptySequence(),
+                    promise_for(null),
+                    new EmptySequence(),
+                    promise_for(null),
+                    new EmptySequence()
+                ),
+                new Person(
+                    'id',
+                    new PersonDetails('Curator name 2', 'Curator name 2, index'),
+                    promise_for(null),
+                    promise_for(null),
+                    'Type',
+                    'Type label',
+                    null,
+                    new EmptySequence(),
+                    promise_for(null),
+                    new EmptySequence(),
+                    promise_for(null),
+                    new EmptySequence()
+                ),
+            ]),
             new EmptySequence(),
             new EmptySequence(),
             new EmptySequence(),
@@ -322,6 +351,16 @@ final class SchemaOrgMetadataExtensionTest extends TestCase
             'headline' => 'Collection title',
             'image' => 'https://iiif.elifesciences.org/example.jpg/full/full/0/default.jpg',
             'datePublished' => '2008-09-29',
+            'editor' => [
+                [
+                    '@type' => 'Person',
+                    'name' => 'Curator name 1',
+                ],
+                [
+                    '@type' => 'Person',
+                    'name' => 'Curator name 2',
+                ],
+            ],
             'publisher' => [
                 '@type' => 'Organization',
                 'name' => 'eLife Sciences Publications, Ltd',
@@ -370,7 +409,7 @@ final class SchemaOrgMetadataExtensionTest extends TestCase
             new ArraySequence([
                 new Person(
                     'id',
-                    new PersonDetails('Editor 1', 'Editor 1, index'),
+                    new PersonDetails('Editor name 1', 'Editor name 1, index'),
                     promise_for(null),
                     promise_for(null),
                     'Type',
@@ -399,6 +438,12 @@ final class SchemaOrgMetadataExtensionTest extends TestCase
             'headline' => 'Highlight title',
             'image' => 'https://iiif.elifesciences.org/example.jpg/full/full/0/default.jpg',
             'datePublished' => '2008-09-29',
+            'editor' => [
+                [
+                    '@type' => 'Person',
+                    'name' => 'Editor name 1',
+                ],
+            ],
             'publisher' => [
                 '@type' => 'Organization',
                 'name' => 'eLife Sciences Publications, Ltd',

@@ -18,6 +18,7 @@ use eLife\ApiSdk\Model\Interview;
 use eLife\ApiSdk\Model\JobAdvert;
 use eLife\ApiSdk\Model\LabsPost;
 use eLife\ApiSdk\Model\Model;
+use eLife\ApiSdk\Model\Person;
 use eLife\ApiSdk\Model\PersonAuthor;
 use eLife\ApiSdk\Model\PressPackage;
 use eLife\ApiSdk\Model\PromotionalCollection;
@@ -85,6 +86,7 @@ final class SchemaOrgMetadataExtension extends Twig_Extension
             'datePosted' => $this->getDatePosted($object),
             'author' => $this->getAuthor($object),
             'contributor' => $this->getContributor($object),
+            'editor' => $this->getEditor($object),
             'publisher' => [
                 '@type' => 'Organization',
                 'name' => 'eLife Sciences Publications, Ltd',
@@ -299,6 +301,23 @@ final class SchemaOrgMetadataExtension extends Twig_Extension
                     'name' => $object->getInterviewee()->getPerson()->getPreferredName(),
                 ],
             ];
+        }
+
+        return null;
+    }
+
+    /**
+     * @return array|null
+     */
+    private function getEditor(Model $object)
+    {
+        if ($object instanceof PromotionalCollection) {
+            return array_map(function (Person $editor) {
+                return [
+                    '@type' => 'Person',
+                    'name' => $editor->getDetails()->getPreferredName(),
+                ];
+            }, $object->getEditors()->toArray());
         }
 
         return null;
