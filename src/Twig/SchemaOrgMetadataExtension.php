@@ -311,13 +311,13 @@ final class SchemaOrgMetadataExtension extends Twig_Extension
      */
     private function getEditor(Model $object)
     {
-        if ($object instanceof PromotionalCollection) {
+        if ($object instanceof Collection || $object instanceof PromotionalCollection) {
             return array_map(function (Person $editor) {
                 return [
                     '@type' => 'Person',
                     'name' => $editor->getDetails()->getPreferredName(),
                 ];
-            }, $object->getEditors()->toArray());
+            }, ($object instanceof Collection ? $object->getCurators() : $object->getEditors())->toArray());
         }
 
         return null;
