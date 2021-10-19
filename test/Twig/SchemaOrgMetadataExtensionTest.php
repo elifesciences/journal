@@ -472,8 +472,6 @@ final class SchemaOrgMetadataExtensionTest extends TestCase
      */
     public function it_will_generate_metadata_from_event()
     {
-        $this->defaultExpectations();
-
         $this->urlGenerator->expects($this->once())->method('generate')->willReturn('https://journal/events/event-id');
 
         $json = $this->extension->generateJson(new Event(
@@ -769,8 +767,6 @@ final class SchemaOrgMetadataExtensionTest extends TestCase
      */
     public function it_will_generate_metadata_from_job_advert()
     {
-        $this->defaultExpectations();
-
         $this->urlGenerator->expects($this->once())->method('generate')->willReturn('https://journal/jobs/job-advert-id');
 
         $json = $this->extension->generateJson(new JobAdvert(
@@ -791,22 +787,9 @@ final class SchemaOrgMetadataExtensionTest extends TestCase
                 '@type' => 'WebPage',
                 '@id' => 'https://journal/jobs/job-advert-id',
             ],
-            'headline' => 'Job advert title',
+            'name' => 'Job advert title',
             'datePosted' => '2008-10-30',
-            'publisher' => [
-                '@type' => 'Organization',
-                'name' => 'eLife Sciences Publications, Ltd',
-                'logo' => [
-                    '@type' => 'ImageObject',
-                    'url' => 'https://journal/assets/patterns/img/patterns/organisms/elife-logo-symbol@2x.png',
-                ],
-            ],
             'description' => 'Job advert impact statement',
-            'isPartOf' => [
-                '@type' => 'Periodical',
-                'name' => 'eLife',
-                'issn' => '2050-084X',
-            ],
         ], $json);
     }
 

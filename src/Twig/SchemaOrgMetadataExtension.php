@@ -241,7 +241,6 @@ final class SchemaOrgMetadataExtension extends Twig_Extension
             case $object instanceof Collection:
             case $object instanceof Digest:
             case $object instanceof Interview:
-            case $object instanceof JobAdvert:
             case $object instanceof LabsPost:
             case $object instanceof PressPackage:
             case $object instanceof PodcastEpisode:
@@ -262,6 +261,7 @@ final class SchemaOrgMetadataExtension extends Twig_Extension
     {
         switch (true) {
             case $object instanceof Event:
+            case $object instanceof JobAdvert:
                 $title = $object->getTitle();
                 break;
             default:
@@ -395,7 +395,7 @@ final class SchemaOrgMetadataExtension extends Twig_Extension
      */
     private function getPublisher(Model $object)
     {
-        if (!$object instanceof Event) {
+        if (!$object instanceof Event && !$object instanceof JobAdvert) {
             return [
                 '@type' => 'Organization',
                 'name' => 'eLife Sciences Publications, Ltd',
@@ -502,7 +502,7 @@ final class SchemaOrgMetadataExtension extends Twig_Extension
      */
     private function getIsPartOf(Model $object)
     {
-        if (!$object instanceof Event) {
+        if (!$object instanceof Event && !$object instanceof JobAdvert) {
             return [
                 '@type' => 'Periodical',
                 'name' => 'eLife',
