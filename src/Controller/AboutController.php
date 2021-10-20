@@ -266,7 +266,17 @@ final class AboutController extends Controller
             case 'ethics-committee':
                 $arguments['title'] = 'Ethics committee';
 
-                $arguments['lists'][] = $this->createAboutProfiles($people->forType('ethics-committee'), 'Ethics committee');
+                $allEthicsCommittee = $people->forType('ethics-committee');
+
+                $chair = $allEthicsCommittee->filter(function (Person $person) {
+                    return 'Chair' === $person->getTypeLabel();
+                });
+
+                $ethicsCommittee = $allEthicsCommittee->filter(function (Person $person) {
+                    return 'Chair' !== $person->getTypeLabel();
+                });
+                $arguments['lists'][] = $this->createAboutProfiles($chair, 'Chair');
+                $arguments['lists'][] = $this->createAboutProfiles($ethicsCommittee, 'Ethics committee');
 
                 $impactStatement = 'A new eLife Ethics Committee will advise and develop policy focused on establishing and maintaining the highest standards of research and publication practices across the scope of the journal.';
                 break;
