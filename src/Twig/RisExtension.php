@@ -4,16 +4,16 @@ namespace eLife\Journal\Twig;
 
 use eLife\ApiSdk\Model\Block\Paragraph;
 use eLife\ApiSdk\Model\Block\Section;
-use Twig_Extension;
-use Twig_Filter;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFilter;
 
-final class RisExtension extends Twig_Extension
+final class RisExtension extends AbstractExtension
 {
     public function getFilters()
     {
         return [
-            new Twig_Filter('html2ris', [$this, 'html2ris']),
-            new Twig_Filter('item2ris', [$this, 'item2ris']),
+            new TwigFilter('html2ris', [$this, 'html2ris']),
+            new TwigFilter('item2ris', [$this, 'item2ris']),
         ];
     }
 

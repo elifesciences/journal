@@ -2,15 +2,15 @@
 
 namespace eLife\Journal\Twig;
 
-use Twig_Extension;
-use Twig_Filter;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFilter;
 
-final class SingleLineExtension extends Twig_Extension
+final class SingleLineExtension extends AbstractExtension
 {
     public function getFilters()
     {
         return [
-            new Twig_Filter('single_line', [$this, 'singleLine']),
+            new TwigFilter('single_line', [$this, 'singleLine']),
         ];
     }
 
