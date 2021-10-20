@@ -4,9 +4,9 @@ namespace test\eLife\Journal\Twig;
 
 use eLife\Journal\Twig\SingleLineExtension;
 use PHPUnit\Framework\TestCase;
-use Twig_Environment;
-use Twig_ExtensionInterface;
-use Twig_Loader_Array;
+use Twig\Environment;
+use Twig\Extension\ExtensionInterface;
+use Twig\Loader\ArrayLoader;
 
 final class SingleLineExtensionTest extends TestCase
 {
@@ -17,7 +17,7 @@ final class SingleLineExtensionTest extends TestCase
     {
         $extension = new SingleLineExtension();
 
-        $this->assertInstanceOf(Twig_ExtensionInterface::class, $extension);
+        $this->assertInstanceOf(ExtensionInterface::class, $extension);
     }
 
     /**
@@ -26,8 +26,8 @@ final class SingleLineExtensionTest extends TestCase
      */
     public function it_turns_strings_into_a_single_line()
     {
-        $twigLoader = new Twig_Loader_Array(['foo' => '{{ string|single_line }}']);
-        $twig = new Twig_Environment($twigLoader);
+        $twigLoader = new ArrayLoader(['foo' => '{{ string|single_line }}']);
+        $twig = new Environment($twigLoader);
         $twig->addExtension(new SingleLineExtension());
 
         $this->assertSame('line one line two line three', $twig->render('foo', ['string' => "line one\nline two\n\nline three"]));

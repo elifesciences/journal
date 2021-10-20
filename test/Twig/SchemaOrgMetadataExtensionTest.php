@@ -20,7 +20,9 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\Asset\Packages;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RequestContext;
-use Twig_ExtensionInterface;
+use Twig\Environment;
+use Twig\Extension\ExtensionInterface;
+use Twig\Loader\ArrayLoader;
 use TypeError;
 use function GuzzleHttp\Promise\promise_for;
 
@@ -30,6 +32,8 @@ final class SchemaOrgMetadataExtensionTest extends TestCase
     private $packages;
     /** @var SchemaOrgMetadataExtension */
     private $extension;
+    /** @var Environment */
+    private $twig;
 
     public function setUp()
     {
@@ -37,6 +41,9 @@ final class SchemaOrgMetadataExtensionTest extends TestCase
         $this->packages = $this->createMock(Packages::class);
 
         $this->extension = new SchemaOrgMetadataExtension($this->urlGenerator, $this->packages);
+
+        $this->twig = new Environment(new ArrayLoader(['foo' => '{{ schema_org_metadata(item) }}']));
+        $this->twig->addExtension($this->extension);
     }
 
     /**
@@ -44,18 +51,19 @@ final class SchemaOrgMetadataExtensionTest extends TestCase
      */
     public function it_is_a_twig_extension()
     {
-        $this->assertInstanceOf(Twig_ExtensionInterface::class, $this->extension);
+        $this->assertInstanceOf(ExtensionInterface::class, $this->extension);
     }
 
     /**
      * @test
+     * @depends it_is_a_twig_extension
      */
     public function it_must_receive_a_content_model()
     {
         $this->urlGenerator->expects($this->once())->method('getContext')->willReturn(new RequestContext());
 
         $file = new File('image/jpeg', 'https://iiif.elifesciences.org/example.jpg/full/full/0/default.jpg', 'example.jpg');
-        $this->extension->generate(new Digest(
+        $this->twig->render('foo', ['item' => new Digest(
             'id',
             'Digest title',
             null,
@@ -67,14 +75,68 @@ final class SchemaOrgMetadataExtensionTest extends TestCase
             new EmptySequence(),
             new EmptySequence(),
             new EmptySequence()
-        ));
+        )]);
 
         $this->expectException(TypeError::class);
-        $this->extension->generate('not content model');
+        $this->twig->render('foo', ['item' => 'not content model']);
     }
 
     /**
      * @test
+     * @depends it_is_a_twig_extension
+     */
+    public function it_generates_schema_org_metadata()
+    {
+        $this->urlGenerator->expects($this->once())->method('generate')->willReturn('https://journal/articles/digest-id');
+        $this->urlGenerator->expects($this->once())->method('getContext')->willReturn(new RequestContext(null, 'GET', 'journal', 'https'));
+        $this->packages->expects($this->once())->method('getUrl')->willReturn('/assets/patterns/img/patterns/organisms/elife-logo-symbol@2x.png');
+
+        $file = new File('image/jpeg', 'https://iiif.elifesciences.org/example.jpg/full/full/0/default.jpg', 'example.jpg');
+
+        $this->assertSame(implode(PHP_EOL, [
+            '<script type="application/ld+json">',
+            '{',
+            '    "@context": "https://schema.org",',
+            '    "@type": "NewsArticle",',
+            '    "mainEntityOfPage": {',
+            '        "@type": "WebPage",',
+            '        "@id": "https://journal/articles/digest-id"',
+            '    },',
+            '    "headline": "Digest title",',
+            '    "image": "https://iiif.elifesciences.org/example.jpg/full/full/0/default.jpg",',
+            '    "publisher": {',
+            '        "@type": "Organization",',
+            '        "name": "eLife Sciences Publications, Ltd",',
+            '        "logo": {',
+            '            "@type": "ImageObject",',
+            '            "url": "https://journal/assets/patterns/img/patterns/organisms/elife-logo-symbol@2x.png"',
+            '        }',
+            '    },',
+            '    "isPartOf": {',
+            '        "@type": "Periodical",',
+            '        "name": "eLife",',
+            '        "issn": "2050-084X"',
+            '    }',
+            '}',
+            '</script>',
+        ]), $this->twig->render('foo', ['item' => new Digest(
+            'id',
+            'Digest title',
+            null,
+            'published',
+            null,
+            null,
+            new Image('', 'https://iiif.elifesciences.org/example.jpg', new EmptySequence(), $file, 1000, 500, 50, 50),
+            null,
+            new EmptySequence(),
+            new EmptySequence(),
+            new EmptySequence()
+        )]));
+    }
+
+    /**
+     * @test
+     * @depends it_is_a_twig_extension
      */
     public function it_will_generate_metadata_from_digest()
     {
@@ -84,7 +146,39 @@ final class SchemaOrgMetadataExtensionTest extends TestCase
 
         $file = new File('image/jpeg', 'https://iiif.elifesciences.org/example.jpg/full/full/0/default.jpg', 'example.jpg');
         $thumbnail = $subjectBanner = $subjectThumbnail = new Image('', 'https://iiif.elifesciences.org/example.jpg', new EmptySequence(), $file, 1000, 500, 50, 50);
-        $json = $this->extension->generateJson(new Digest(
+
+        $this->assertSame(implode(PHP_EOL, [
+            '<script type="application/ld+json">',
+            '{',
+            '    "@context": "https://schema.org",',
+            '    "@type": "NewsArticle",',
+            '    "mainEntityOfPage": {',
+            '        "@type": "WebPage",',
+            '        "@id": "https://journal/articles/digest-id"',
+            '    },',
+            '    "headline": "Digest title",',
+            '    "image": "https://iiif.elifesciences.org/example.jpg/full/full/0/default.jpg",',
+            '    "datePublished": "2008-09-27",',
+            '    "publisher": {',
+            '        "@type": "Organization",',
+            '        "name": "eLife Sciences Publications, Ltd",',
+            '        "logo": {',
+            '            "@type": "ImageObject",',
+            '            "url": "https://journal/assets/patterns/img/patterns/organisms/elife-logo-symbol@2x.png"',
+            '        }',
+            '    },',
+            '    "about": [',
+            '        "Subject 1 name"',
+            '    ],',
+            '    "description": "Impact statement",',
+            '    "isPartOf": {',
+            '        "@type": "Periodical",',
+            '        "name": "eLife",',
+            '        "issn": "2050-084X"',
+            '    }',
+            '}',
+            '</script>',
+        ]), $this->twig->render('foo', ['item' => new Digest(
             'digest-id',
             'Digest title',
             'Impact statement',
@@ -99,40 +193,12 @@ final class SchemaOrgMetadataExtensionTest extends TestCase
             ]),
             new EmptySequence(),
             new EmptySequence()
-        ), false);
-
-        $this->assertSame([
-            '@context' => 'https://schema.org',
-            '@type' => 'NewsArticle',
-            'mainEntityOfPage' => [
-                '@type' => 'WebPage',
-                '@id' => 'https://journal/articles/digest-id',
-            ],
-            'headline' => 'Digest title',
-            'image' => 'https://iiif.elifesciences.org/example.jpg/full/full/0/default.jpg',
-            'datePublished' => '2008-09-27',
-            'publisher' => [
-                '@type' => 'Organization',
-                'name' => 'eLife Sciences Publications, Ltd',
-                'logo' => [
-                    '@type' => 'ImageObject',
-                    'url' => 'https://journal/assets/patterns/img/patterns/organisms/elife-logo-symbol@2x.png',
-                ],
-            ],
-            'about' => [
-                'Subject 1 name',
-            ],
-            'description' => 'Impact statement',
-            'isPartOf' => [
-                '@type' => 'Periodical',
-                'name' => 'eLife',
-                'issn' => '2050-084X',
-            ],
-        ], $json);
+        )]));
     }
 
     /**
      * @test
+     * @depends it_is_a_twig_extension
      */
     public function it_will_generate_metadata_from_article()
     {
@@ -142,7 +208,58 @@ final class SchemaOrgMetadataExtensionTest extends TestCase
 
         $file = new File('image/jpeg', 'https://iiif.elifesciences.org/example.jpg/full/full/0/default.jpg', 'example.jpg');
         $thumbnail = $subjectBanner = $subjectThumbnail = new Image('', 'https://iiif.elifesciences.org/example.jpg', new EmptySequence(), $file, 1000, 500, 50, 50);
-        $json = $this->extension->generateJson(new ArticleVoR(
+
+        $this->assertSame(implode(PHP_EOL, [
+            '<script type="application/ld+json">',
+            '{',
+            '    "@context": "https://schema.org",',
+            '    "@type": "ScholarlyArticle",',
+            '    "mainEntityOfPage": {',
+            '        "@type": "WebPage",',
+            '        "@id": "https://journal/articles/article-id"',
+            '    },',
+            '    "headline": "Article title",',
+            '    "image": "https://iiif.elifesciences.org/example.jpg/full/full/0/default.jpg",',
+            '    "datePublished": "2008-09-28",',
+            '    "author": [',
+            '        {',
+            '            "@type": "Person",',
+            '            "name": "Author name 1"',
+            '        },',
+            '        {',
+            '            "@type": "Person",',
+            '            "name": "Author name 2"',
+            '        },',
+            '        {',
+            '            "@type": "Organization",',
+            '            "name": "Group author name 1"',
+            '        },',
+            '        "On behalf author name 1"',
+            '    ],',
+            '    "publisher": {',
+            '        "@type": "Organization",',
+            '        "name": "eLife Sciences Publications, Ltd",',
+            '        "logo": {',
+            '            "@type": "ImageObject",',
+            '            "url": "https://journal/assets/patterns/img/patterns/organisms/elife-logo-symbol@2x.png"',
+            '        }',
+            '    },',
+            '    "keywords": [',
+            '        "Keyword 1",',
+            '        "Keyword 2"',
+            '    ],',
+            '    "about": [',
+            '        "Subject 1 name"',
+            '    ],',
+            '    "description": "Article impact statement",',
+            '    "isPartOf": {',
+            '        "@type": "Periodical",',
+            '        "name": "eLife",',
+            '        "issn": "2050-084X"',
+            '    }',
+            '}',
+            '</script>',
+        ]), $this->twig->render('foo', ['item' => new ArticleVoR(
             'article-id',
             'published',
             1,
@@ -197,54 +314,6 @@ final class SchemaOrgMetadataExtensionTest extends TestCase
             promise_for(null),
             new EmptySequence(),
             promise_for(null)
-        ), false);
-
-        $this->assertSame([
-            '@context' => 'https://schema.org',
-            '@type' => 'ScholarlyArticle',
-            'mainEntityOfPage' => [
-                '@type' => 'WebPage',
-                '@id' => 'https://journal/articles/article-id',
-            ],
-            'headline' => 'Article title',
-            'image' => 'https://iiif.elifesciences.org/example.jpg/full/full/0/default.jpg',
-            'datePublished' => '2008-09-28',
-            'author' => [
-                [
-                    '@type' => 'Person',
-                    'name' => 'Author name 1',
-                ],
-                [
-                    '@type' => 'Person',
-                    'name' => 'Author name 2',
-                ],
-                [
-                    '@type' => 'Organization',
-                    'name' => 'Group author name 1',
-                ],
-                'On behalf author name 1',
-            ],
-            'publisher' => [
-                '@type' => 'Organization',
-                'name' => 'eLife Sciences Publications, Ltd',
-                'logo' => [
-                    '@type' => 'ImageObject',
-                    'url' => 'https://journal/assets/patterns/img/patterns/organisms/elife-logo-symbol@2x.png',
-                ],
-            ],
-            'keywords' => [
-                'Keyword 1',
-                'Keyword 2',
-            ],
-            'about' => [
-                'Subject 1 name',
-            ],
-            'description' => 'Article impact statement',
-            'isPartOf' => [
-                '@type' => 'Periodical',
-                'name' => 'eLife',
-                'issn' => '2050-084X',
-            ],
-        ], $json);
+        )]));
     }
 }
