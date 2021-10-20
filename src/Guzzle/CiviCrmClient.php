@@ -4,6 +4,7 @@ namespace eLife\Journal\Guzzle;
 
 use eLife\Journal\Exception\CiviCrmResponseError;
 use GuzzleHttp\ClientInterface;
+use function GuzzleHttp\Promise\all;
 use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
@@ -15,10 +16,6 @@ final class CiviCrmClient
     const LABEL_TECHNOLOGY = 'technology';
     const LABEL_ELIFE_NEWSLETTER = 'elife_newsletter';
     // Perhaps make the constants below configuration.
-    const GROUP_LATEST_ARTICLES = 'All_Content_53';
-    const GROUP_EARLY_CAREER = 'early_careers_news_317';
-    const GROUP_TECHNOLOGY = 'technology_news_435';
-    const GROUP_ELIFE_NEWSLETTER = 'eLife_bi_monthly_news_1032';
     const GROUP_ID_LATEST_ARTICLES = 53;
     const GROUP_ID_EARLY_CAREER = 317;
     const GROUP_ID_TECHNOLOGY = 435;
@@ -52,69 +49,58 @@ final class CiviCrmClient
             return $this->prepareResponse($response);
         })->then(function ($data) {
             return $data['id'];
-        })->then(function ($contactId) use ($preferences) {
-            if (empty($preferences)) {
-                return [
-                    'contact_id' => $contactId,
-                ];
+        })->then(function ($contactId) use ($email, $preferences) {
+            $subscribe = [];
+
+            foreach (self::preferenceGroupIds($preferences) as $groupId) {
+                $subscribe[$groupId] = $this->client->sendAsync($this->prepareRequest('POST'), $this->options([
+                    'query' => [
+                        'entity' => 'MailingEventSubscribe',
+                        'action' => 'create',
+                        'json' => [
+                            'email' => $email,
+                            'contact_id' => $contactId,
+                            'group_id' => $groupId,
+                        ],
+                    ],
+                ]))->then(function (Response $response) {
+                    return $this->prepareResponse($response);
+                })->then(function () {
+                    return true;
+                });
             }
 
-            return $this->client->sendAsync($this->prepareRequest('POST'), $this->options([
-                'query' => [
-                    'entity' => 'GroupContact',
-                    'action' => 'create',
-                    'json' => [
-                        'group_id' => $this->preferenceGroupIds($preferences),
-                        'contact_id' => $contactId,
-                    ],
-                ],
-            ]))->then(function (Response $response) {
-                return $this->prepareResponse($response);
-            })->then(function ($data) use ($contactId) {
+            return all($subscribe)->then(function ($parts) use ($contactId, $email) {
                 return [
                     'contact_id' => $contactId,
-                    'groups_added' => 0 === $data['is_error'],
+                    'email' => $email,
+                    'subscribe' => $parts,
                 ];
             });
         });
     }
 
-    private function preferenceGroupIds(array $preferences, bool $label = true) : array
+    public static function preferenceGroupIds(array $preferences) : array
     {
         return array_map(function ($preference) {
             switch ($preference) {
                 case self::LABEL_LATEST_ARTICLES:
-                case self::GROUP_ID_LATEST_ARTICLES:
-                    return self::GROUP_LATEST_ARTICLES;
+                    return self::GROUP_ID_LATEST_ARTICLES;
                 case self::LABEL_EARLY_CAREER:
-                case self::GROUP_ID_EARLY_CAREER:
-                    return self::GROUP_EARLY_CAREER;
+                    return self::GROUP_ID_EARLY_CAREER;
                 case self::LABEL_TECHNOLOGY:
-                case self::GROUP_ID_TECHNOLOGY:
-                    return self::GROUP_TECHNOLOGY;
+                    return self::GROUP_ID_TECHNOLOGY;
                 case self::LABEL_ELIFE_NEWSLETTER:
-                case self::GROUP_ID_ELIFE_NEWSLETTER:
-                    return self::GROUP_ELIFE_NEWSLETTER;
+                    return self::GROUP_ID_ELIFE_NEWSLETTER;
                 default:
                     return null;
             }
-        }, array_intersect($this->preferenceGroups($label), $preferences));
-    }
-
-    private function preferenceGroups(bool $label = true) : array
-    {
-        return $label ? [
+        }, array_intersect([
             self::LABEL_LATEST_ARTICLES,
             self::LABEL_EARLY_CAREER,
             self::LABEL_TECHNOLOGY,
             self::LABEL_ELIFE_NEWSLETTER,
-        ] :
-        [
-            self::GROUP_ID_LATEST_ARTICLES,
-            self::GROUP_ID_EARLY_CAREER,
-            self::GROUP_ID_TECHNOLOGY,
-            self::GROUP_ID_ELIFE_NEWSLETTER,
-        ];
+        ], $preferences));
     }
 
     private function prepareRequest(string $method = 'GET', array $headers = []) : Request
@@ -133,7 +119,7 @@ final class CiviCrmClient
 
     /**
      * @param Response $response
-     * @return mixed
+     * @return array
      * @throws CiviCrmResponseError
      */
     private function prepareResponse(Response $response) : array
