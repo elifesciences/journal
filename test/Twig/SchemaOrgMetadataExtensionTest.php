@@ -164,9 +164,6 @@ final class SchemaOrgMetadataExtensionTest extends TestCase
 
         $this->urlGenerator->expects($this->once())->method('generate')->willReturn('https://journal/articles/digest-id');
 
-        $file = new File('image/jpeg', 'https://iiif.elifesciences.org/example.jpg/full/full/0/default.jpg', 'example.jpg');
-        $thumbnail = $subjectBanner = $subjectThumbnail = new Image('', 'https://iiif.elifesciences.org/example.jpg', new EmptySequence(), $file, 1000, 500, 50, 50);
-
         $this->assertSame(implode(PHP_EOL, [
             '<script type="application/ld+json">',
             '{',
@@ -205,11 +202,11 @@ final class SchemaOrgMetadataExtensionTest extends TestCase
             'published',
             new DateTimeImmutable('2008-09-27 01:23:45'),
             null,
-            $thumbnail,
+            $this->defaultImage(),
             null,
             new ArraySequence([
                 new Subject('subject1', 'Subject 1 name', promise_for('Subject subject1 impact statement'),
-                    new EmptySequence(), promise_for($subjectBanner), promise_for($subjectThumbnail)),
+                    new EmptySequence(), promise_for($this->defaultImage()), promise_for($this->defaultImage())),
             ]),
             new EmptySequence(),
             new EmptySequence()
@@ -225,9 +222,6 @@ final class SchemaOrgMetadataExtensionTest extends TestCase
         $this->defaultExpectations();
 
         $this->urlGenerator->expects($this->once())->method('generate')->willReturn('https://journal/articles/article-id');
-
-        $file = new File('image/jpeg', 'https://iiif.elifesciences.org/example.jpg/full/full/0/default.jpg', 'example.jpg');
-        $thumbnail = $subjectBanner = $subjectThumbnail = new Image('', 'https://iiif.elifesciences.org/example.jpg', new EmptySequence(), $file, 1000, 500, 50, 50);
 
         $this->assertSame(implode(PHP_EOL, [
             '<script type="application/ld+json">',
@@ -293,14 +287,14 @@ final class SchemaOrgMetadataExtensionTest extends TestCase
             null,
             1,
             'eLocationId',
-            $thumbnail,
+            $this->defaultImage(),
             null,
             null,
             null,
             promise_for(null),
             new ArraySequence([
                 new Subject('subject1', 'Subject 1 name', promise_for('Subject subject1 impact statement'),
-                    new EmptySequence(), promise_for($subjectBanner), promise_for($subjectThumbnail)),
+                    new EmptySequence(), promise_for($this->defaultImage()), promise_for($this->defaultImage())),
             ]),
             [],
             null,
@@ -346,21 +340,59 @@ final class SchemaOrgMetadataExtensionTest extends TestCase
 
         $this->urlGenerator->expects($this->once())->method('generate')->willReturn('https://journal/collections/collection-id');
 
-        $file = new File('image/jpeg', 'https://iiif.elifesciences.org/example.jpg/full/full/0/default.jpg', 'example.jpg');
-        $banner = $thumbnail = $subjectBanner = $subjectThumbnail = new Image('', 'https://iiif.elifesciences.org/example.jpg', new EmptySequence(), $file, 1000, 500, 50, 50);
-
-        $json = $this->extension->generateJson(new Collection(
+        $this->assertSame(implode(PHP_EOL, [
+            '<script type="application/ld+json">',
+            '{',
+            '    "@context": "https://schema.org",',
+            '    "@type": "Collection",',
+            '    "mainEntityOfPage": {',
+            '        "@type": "WebPage",',
+            '        "@id": "https://journal/collections/collection-id"',
+            '    },',
+            '    "headline": "Collection title",',
+            '    "image": "https://iiif.elifesciences.org/example.jpg/full/full/0/default.jpg",',
+            '    "datePublished": "2008-09-29",',
+            '    "editor": [',
+            '        {',
+            '            "@type": "Person",',
+            '            "name": "Curator name 1"',
+            '        },',
+            '        {',
+            '            "@type": "Person",',
+            '            "name": "Curator name 2"',
+            '        }',
+            '    ],',
+            '    "publisher": {',
+            '        "@type": "Organization",',
+            '        "name": "eLife Sciences Publications, Ltd",',
+            '        "logo": {',
+            '            "@type": "ImageObject",',
+            '            "url": "https://journal/assets/patterns/img/patterns/organisms/elife-logo-symbol@2x.png"',
+            '        }',
+            '    },',
+            '    "about": [',
+            '        "Subject 1 name"',
+            '    ],',
+            '    "description": "Collection impact statement",',
+            '    "isPartOf": {',
+            '        "@type": "Periodical",',
+            '        "name": "eLife",',
+            '        "issn": "2050-084X"',
+            '    }',
+            '}',
+            '</script>',
+        ]), $this->twig->render('foo', ['item' => new Collection(
             'collection-id',
             'Collection title',
             'Collection impact statement',
             new DateTimeImmutable('2008-09-29 01:23:45'),
             null,
-            promise_for($banner),
-            $thumbnail,
+            promise_for($this->defaultImage()),
+            $this->defaultImage(),
             promise_for(null),
             new ArraySequence([
                 new Subject('subject1', 'Subject 1 name', promise_for('Subject subject1 impact statement'),
-                    new EmptySequence(), promise_for($subjectBanner), promise_for($subjectThumbnail)),
+                    new EmptySequence(), promise_for($this->defaultImage()), promise_for($this->defaultImage())),
             ]),
             new Person(
                 'id',
@@ -411,46 +443,7 @@ final class SchemaOrgMetadataExtensionTest extends TestCase
             new EmptySequence(),
             new EmptySequence(),
             new EmptySequence()
-        ), false);
-
-        $this->assertSame([
-            '@context' => 'https://schema.org',
-            '@type' => 'Collection',
-            'mainEntityOfPage' => [
-                '@type' => 'WebPage',
-                '@id' => 'https://journal/collections/collection-id',
-            ],
-            'headline' => 'Collection title',
-            'image' => 'https://iiif.elifesciences.org/example.jpg/full/full/0/default.jpg',
-            'datePublished' => '2008-09-29',
-            'editor' => [
-                [
-                    '@type' => 'Person',
-                    'name' => 'Curator name 1',
-                ],
-                [
-                    '@type' => 'Person',
-                    'name' => 'Curator name 2',
-                ],
-            ],
-            'publisher' => [
-                '@type' => 'Organization',
-                'name' => 'eLife Sciences Publications, Ltd',
-                'logo' => [
-                    '@type' => 'ImageObject',
-                    'url' => 'https://journal/assets/patterns/img/patterns/organisms/elife-logo-symbol@2x.png',
-                ],
-            ],
-            'about' => [
-                'Subject 1 name',
-            ],
-            'description' => 'Collection impact statement',
-            'isPartOf' => [
-                '@type' => 'Periodical',
-                'name' => 'eLife',
-                'issn' => '2050-084X',
-            ],
-        ], $json);
+        )]));
     }
 
     /**
@@ -462,21 +455,55 @@ final class SchemaOrgMetadataExtensionTest extends TestCase
 
         $this->urlGenerator->expects($this->once())->method('generate')->willReturn('https://journal/highlights/highlight-id');
 
-        $file = new File('image/jpeg', 'https://iiif.elifesciences.org/example.jpg/full/full/0/default.jpg', 'example.jpg');
-        $banner = $thumbnail = $subjectBanner = $subjectThumbnail = new Image('', 'https://iiif.elifesciences.org/example.jpg', new EmptySequence(), $file, 1000, 500, 50, 50);
-
-        $json = $this->extension->generateJson(new PromotionalCollection(
+        $this->assertSame(implode(PHP_EOL, [
+            '<script type="application/ld+json">',
+            '{',
+            '    "@context": "https://schema.org",',
+            '    "@type": "Collection",',
+            '    "mainEntityOfPage": {',
+            '        "@type": "WebPage",',
+            '        "@id": "https://journal/highlights/highlight-id"',
+            '    },',
+            '    "headline": "Highlight title",',
+            '    "image": "https://iiif.elifesciences.org/example.jpg/full/full/0/default.jpg",',
+            '    "datePublished": "2008-09-29",',
+            '    "editor": [',
+            '        {',
+            '            "@type": "Person",',
+            '            "name": "Editor name 1"',
+            '        }',
+            '    ],',
+            '    "publisher": {',
+            '        "@type": "Organization",',
+            '        "name": "eLife Sciences Publications, Ltd",',
+            '        "logo": {',
+            '            "@type": "ImageObject",',
+            '            "url": "https://journal/assets/patterns/img/patterns/organisms/elife-logo-symbol@2x.png"',
+            '        }',
+            '    },',
+            '    "about": [',
+            '        "Subject 1 name"',
+            '    ],',
+            '    "description": "Highlight impact statement",',
+            '    "isPartOf": {',
+            '        "@type": "Periodical",',
+            '        "name": "eLife",',
+            '        "issn": "2050-084X"',
+            '    }',
+            '}',
+            '</script>',
+        ]), $this->twig->render('foo', ['item' => new PromotionalCollection(
             'highlight-id',
             'Highlight title',
             'Highlight impact statement',
             new DateTimeImmutable('2008-09-29 01:23:45'),
             null,
-            promise_for($banner),
-            $thumbnail,
+            promise_for($this->defaultImage()),
+            $this->defaultImage(),
             promise_for(null),
             new ArraySequence([
                 new Subject('subject1', 'Subject 1 name', promise_for('Subject subject1 impact statement'),
-                    new EmptySequence(), promise_for($subjectBanner), promise_for($subjectThumbnail)),
+                    new EmptySequence(), promise_for($this->defaultImage()), promise_for($this->defaultImage())),
             ]),
             new ArraySequence([
                 new Person(
@@ -498,42 +525,7 @@ final class SchemaOrgMetadataExtensionTest extends TestCase
             new EmptySequence(),
             new EmptySequence(),
             new EmptySequence()
-        ), false);
-
-        $this->assertSame([
-            '@context' => 'https://schema.org',
-            '@type' => 'Collection',
-            'mainEntityOfPage' => [
-                '@type' => 'WebPage',
-                '@id' => 'https://journal/highlights/highlight-id',
-            ],
-            'headline' => 'Highlight title',
-            'image' => 'https://iiif.elifesciences.org/example.jpg/full/full/0/default.jpg',
-            'datePublished' => '2008-09-29',
-            'editor' => [
-                [
-                    '@type' => 'Person',
-                    'name' => 'Editor name 1',
-                ],
-            ],
-            'publisher' => [
-                '@type' => 'Organization',
-                'name' => 'eLife Sciences Publications, Ltd',
-                'logo' => [
-                    '@type' => 'ImageObject',
-                    'url' => 'https://journal/assets/patterns/img/patterns/organisms/elife-logo-symbol@2x.png',
-                ],
-            ],
-            'about' => [
-                'Subject 1 name',
-            ],
-            'description' => 'Highlight impact statement',
-            'isPartOf' => [
-                '@type' => 'Periodical',
-                'name' => 'eLife',
-                'issn' => '2050-084X',
-            ],
-        ], $json);
+        )]));
     }
 
     /**
@@ -543,7 +535,22 @@ final class SchemaOrgMetadataExtensionTest extends TestCase
     {
         $this->urlGenerator->expects($this->once())->method('generate')->willReturn('https://journal/events/event-id');
 
-        $json = $this->extension->generateJson(new Event(
+        $this->assertSame(implode(PHP_EOL, [
+            '<script type="application/ld+json">',
+            '{',
+            '    "@context": "https://schema.org",',
+            '    "@type": "Event",',
+            '    "mainEntityOfPage": {',
+            '        "@type": "WebPage",',
+            '        "@id": "https://journal/events/event-id"',
+            '    },',
+            '    "name": "Event title",',
+            '    "startDate": "2008-10-20T09:00:00Z",',
+            '    "endDate": "2008-10-22T17:35:00Z",',
+            '    "description": "Event impact statement"',
+            '}',
+            '</script>',
+        ]), $this->twig->render('foo', ['item' => new Event(
             'event-id',
             'Event title',
             'Event impact statement',
@@ -555,20 +562,7 @@ final class SchemaOrgMetadataExtensionTest extends TestCase
             null,
             promise_for(null),
             new EmptySequence()
-        ), false);
-
-        $this->assertSame([
-            '@context' => 'https://schema.org',
-            '@type' => 'Event',
-            'mainEntityOfPage' => [
-                '@type' => 'WebPage',
-                '@id' => 'https://journal/events/event-id',
-            ],
-            'name' => 'Event title',
-            'startDate' => '2008-10-20T09:00:00Z',
-            'endDate' => '2008-10-22T17:35:00Z',
-            'description' => 'Event impact statement',
-        ], $json);
+        )]));
     }
 
     /**
@@ -580,10 +574,37 @@ final class SchemaOrgMetadataExtensionTest extends TestCase
 
         $this->urlGenerator->expects($this->once())->method('generate')->willReturn('https://journal/blog-articles/blog-article-id');
 
-        $file = new File('image/jpeg', 'https://iiif.elifesciences.org/example.jpg/full/full/0/default.jpg', 'example.jpg');
-        $subjectBanner = $subjectThumbnail = new Image('', 'https://iiif.elifesciences.org/example.jpg', new EmptySequence(), $file, 1000, 500, 50, 50);
-
-        $json = $this->extension->generateJson(new BlogArticle(
+        $this->assertSame(implode(PHP_EOL, [
+            '<script type="application/ld+json">',
+            '{',
+            '    "@context": "https://schema.org",',
+            '    "@type": "Blog",',
+            '    "mainEntityOfPage": {',
+            '        "@type": "WebPage",',
+            '        "@id": "https://journal/blog-articles/blog-article-id"',
+            '    },',
+            '    "headline": "Blog article title",',
+            '    "datePublished": "2008-10-01",',
+            '    "publisher": {',
+            '        "@type": "Organization",',
+            '        "name": "eLife Sciences Publications, Ltd",',
+            '        "logo": {',
+            '            "@type": "ImageObject",',
+            '            "url": "https://journal/assets/patterns/img/patterns/organisms/elife-logo-symbol@2x.png"',
+            '        }',
+            '    },',
+            '    "about": [',
+            '        "Subject 1 name"',
+            '    ],',
+            '    "description": "Blog article impact statement",',
+            '    "isPartOf": {',
+            '        "@type": "Periodical",',
+            '        "name": "eLife",',
+            '        "issn": "2050-084X"',
+            '    }',
+            '}',
+            '</script>',
+        ]), $this->twig->render('foo', ['item' => new BlogArticle(
             'blog-article-id',
             'Blog article title',
             new DateTimeImmutable('2008-10-01 01:23:45'),
@@ -593,37 +614,9 @@ final class SchemaOrgMetadataExtensionTest extends TestCase
             new EmptySequence(),
             new ArraySequence([
                 new Subject('subject1', 'Subject 1 name', promise_for('Subject subject1 impact statement'),
-                    new EmptySequence(), promise_for($subjectBanner), promise_for($subjectThumbnail)),
+                    new EmptySequence(), promise_for($this->defaultImage()), promise_for($this->defaultImage())),
             ])
-        ), false);
-
-        $this->assertSame([
-            '@context' => 'https://schema.org',
-            '@type' => 'Blog',
-            'mainEntityOfPage' => [
-                '@type' => 'WebPage',
-                '@id' => 'https://journal/blog-articles/blog-article-id',
-            ],
-            'headline' => 'Blog article title',
-            'datePublished' => '2008-10-01',
-            'publisher' => [
-                '@type' => 'Organization',
-                'name' => 'eLife Sciences Publications, Ltd',
-                'logo' => [
-                    '@type' => 'ImageObject',
-                    'url' => 'https://journal/assets/patterns/img/patterns/organisms/elife-logo-symbol@2x.png',
-                ],
-            ],
-            'about' => [
-                'Subject 1 name',
-            ],
-            'description' => 'Blog article impact statement',
-            'isPartOf' => [
-                '@type' => 'Periodical',
-                'name' => 'eLife',
-                'issn' => '2050-084X',
-            ],
-        ], $json);
+        )]));
     }
 
     /**
@@ -635,45 +628,44 @@ final class SchemaOrgMetadataExtensionTest extends TestCase
 
         $this->urlGenerator->expects($this->once())->method('generate')->willReturn('https://journal/labs/labs-post-id');
 
-        $file = new File('image/jpeg', 'https://iiif.elifesciences.org/example.jpg/full/full/0/default.jpg', 'example.jpg');
-        $thumbnail = new Image('', 'https://iiif.elifesciences.org/example.jpg', new EmptySequence(), $file, 1000, 500, 50, 50);
-
-        $json = $this->extension->generateJson(new LabsPost(
+        $this->assertSame(implode(PHP_EOL, [
+            '<script type="application/ld+json">',
+            '{',
+            '    "@context": "https://schema.org",',
+            '    "@type": "Blog",',
+            '    "mainEntityOfPage": {',
+            '        "@type": "WebPage",',
+            '        "@id": "https://journal/labs/labs-post-id"',
+            '    },',
+            '    "headline": "Labs post title",',
+            '    "image": "https://iiif.elifesciences.org/example.jpg/full/full/0/default.jpg",',
+            '    "datePublished": "2008-10-02",',
+            '    "publisher": {',
+            '        "@type": "Organization",',
+            '        "name": "eLife Sciences Publications, Ltd",',
+            '        "logo": {',
+            '            "@type": "ImageObject",',
+            '            "url": "https://journal/assets/patterns/img/patterns/organisms/elife-logo-symbol@2x.png"',
+            '        }',
+            '    },',
+            '    "description": "Labs post impact statement",',
+            '    "isPartOf": {',
+            '        "@type": "Periodical",',
+            '        "name": "eLife",',
+            '        "issn": "2050-084X"',
+            '    }',
+            '}',
+            '</script>',
+        ]), $this->twig->render('foo', ['item' => new LabsPost(
             'labs-post-id',
             'Labs post title',
             new DateTimeImmutable('2008-10-02'),
             null,
             'Labs post impact statement',
-            $thumbnail,
+            $this->defaultImage(),
             promise_for(null),
             new EmptySequence()
-        ), false);
-
-        $this->assertSame([
-            '@context' => 'https://schema.org',
-            '@type' => 'Blog',
-            'mainEntityOfPage' => [
-                '@type' => 'WebPage',
-                '@id' => 'https://journal/labs/labs-post-id',
-            ],
-            'headline' => 'Labs post title',
-            'image' => 'https://iiif.elifesciences.org/example.jpg/full/full/0/default.jpg',
-            'datePublished' => '2008-10-02',
-            'publisher' => [
-                '@type' => 'Organization',
-                'name' => 'eLife Sciences Publications, Ltd',
-                'logo' => [
-                    '@type' => 'ImageObject',
-                    'url' => 'https://journal/assets/patterns/img/patterns/organisms/elife-logo-symbol@2x.png',
-                ],
-            ],
-            'description' => 'Labs post impact statement',
-            'isPartOf' => [
-                '@type' => 'Periodical',
-                'name' => 'eLife',
-                'issn' => '2050-084X',
-            ],
-        ], $json);
+        )]));
     }
 
     /**
@@ -685,8 +677,34 @@ final class SchemaOrgMetadataExtensionTest extends TestCase
 
         $this->urlGenerator->expects($this->once())->method('generate')->willReturn('https://journal/for-the-press/press-pack-id');
 
-
-        $json = $this->extension->generateJson(new PressPackage(
+        $this->assertSame(implode(PHP_EOL, [
+            '<script type="application/ld+json">',
+            '{',
+            '    "@context": "https://schema.org",',
+            '    "@type": "Blog",',
+            '    "mainEntityOfPage": {',
+            '        "@type": "WebPage",',
+            '        "@id": "https://journal/for-the-press/press-pack-id"',
+            '    },',
+            '    "headline": "Press package title",',
+            '    "datePublished": "2008-10-02",',
+            '    "publisher": {',
+            '        "@type": "Organization",',
+            '        "name": "eLife Sciences Publications, Ltd",',
+            '        "logo": {',
+            '            "@type": "ImageObject",',
+            '            "url": "https://journal/assets/patterns/img/patterns/organisms/elife-logo-symbol@2x.png"',
+            '        }',
+            '    },',
+            '    "description": "Press pack impact statement",',
+            '    "isPartOf": {',
+            '        "@type": "Periodical",',
+            '        "name": "eLife",',
+            '        "issn": "2050-084X"',
+            '    }',
+            '}',
+            '</script>',
+        ]), $this->twig->render('foo', ['item' => new PressPackage(
             'press-pack-id',
             'Press package title',
             new DateTimeImmutable('2008-10-02'),
@@ -698,32 +716,7 @@ final class SchemaOrgMetadataExtensionTest extends TestCase
             new EmptySequence(),
             new EmptySequence(),
             new EmptySequence()
-        ), false);
-
-        $this->assertSame([
-            '@context' => 'https://schema.org',
-            '@type' => 'Blog',
-            'mainEntityOfPage' => [
-                '@type' => 'WebPage',
-                '@id' => 'https://journal/for-the-press/press-pack-id',
-            ],
-            'headline' => 'Press package title',
-            'datePublished' => '2008-10-02',
-            'publisher' => [
-                '@type' => 'Organization',
-                'name' => 'eLife Sciences Publications, Ltd',
-                'logo' => [
-                    '@type' => 'ImageObject',
-                    'url' => 'https://journal/assets/patterns/img/patterns/organisms/elife-logo-symbol@2x.png',
-                ],
-            ],
-            'description' => 'Press pack impact statement',
-            'isPartOf' => [
-                '@type' => 'Periodical',
-                'name' => 'eLife',
-                'issn' => '2050-084X',
-            ],
-        ], $json);
+        )]));
     }
 
     /**
@@ -740,17 +733,53 @@ final class SchemaOrgMetadataExtensionTest extends TestCase
             )
         );
 
-        $file = new File('image/jpeg', 'https://iiif.elifesciences.org/example.jpg/full/full/0/default.jpg', 'example.jpg');
-        $thumbnail = new Image('', 'https://iiif.elifesciences.org/example.jpg', new EmptySequence(), $file, 1000, 500, 50, 50);
-
-        $json = $this->extension->generateJson(new PodcastEpisode(
+        $this->assertSame(implode(PHP_EOL, [
+            '<script type="application/ld+json">',
+            '{',
+            '    "@context": "https://schema.org",',
+            '    "@type": "PodcastEpisode",',
+            '    "mainEntityOfPage": {',
+            '        "@type": "WebPage",',
+            '        "@id": "https://journal/podcast-episode/1"',
+            '    },',
+            '    "episodeNumber": 1,',
+            '    "duration": "PT1H16M40S",',
+            '    "headline": "Podcast episode title",',
+            '    "image": "https://iiif.elifesciences.org/example.jpg/full/full/0/default.jpg",',
+            '    "datePublished": "2008-10-09",',
+            '    "publisher": {',
+            '        "@type": "Organization",',
+            '        "name": "eLife Sciences Publications, Ltd",',
+            '        "logo": {',
+            '            "@type": "ImageObject",',
+            '            "url": "https://journal/assets/patterns/img/patterns/organisms/elife-logo-symbol@2x.png"',
+            '        }',
+            '    },',
+            '    "description": "Podcast episode impact statement",',
+            '    "associatedMedia": {',
+            '        "@type": "MediaObject",',
+            '        "contentUrl": "https://www.example.com/episode.mp3"',
+            '    },',
+            '    "partOfSeries": {',
+            '        "@type": "PodcastSeries",',
+            '        "name": "eLife podcast",',
+            '        "url": "https://journal/podcast"',
+            '    },',
+            '    "isPartOf": {',
+            '        "@type": "Periodical",',
+            '        "name": "eLife",',
+            '        "issn": "2050-084X"',
+            '    }',
+            '}',
+            '</script>',
+        ]), $this->twig->render('foo', ['item' => new PodcastEpisode(
             1,
             'Podcast episode title',
             'Podcast episode impact statement',
             new DateTimeImmutable('2008-10-09'),
             null,
             promise_for(null),
-            $thumbnail,
+            $this->defaultImage(),
             promise_for(null),
             [
                 new PodcastEpisodeSource('audio/mpeg', 'https://www.example.com/episode.mp3'),
@@ -791,44 +820,7 @@ final class SchemaOrgMetadataExtensionTest extends TestCase
                     ),
                 ]
             )
-        ), false);
-
-        $this->assertSame([
-            '@context' => 'https://schema.org',
-            '@type' => 'PodcastEpisode',
-            'mainEntityOfPage' => [
-                '@type' => 'WebPage',
-                '@id' => 'https://journal/podcast-episode/1',
-            ],
-            'episodeNumber' => 1,
-            'duration' => 'PT1H16M40S',
-            'headline' => 'Podcast episode title',
-            'image' => 'https://iiif.elifesciences.org/example.jpg/full/full/0/default.jpg',
-            'datePublished' => '2008-10-09',
-            'publisher' => [
-                '@type' => 'Organization',
-                'name' => 'eLife Sciences Publications, Ltd',
-                'logo' => [
-                    '@type' => 'ImageObject',
-                    'url' => 'https://journal/assets/patterns/img/patterns/organisms/elife-logo-symbol@2x.png',
-                ],
-            ],
-            'description' => 'Podcast episode impact statement',
-            'associatedMedia' => [
-                '@type' => 'MediaObject',
-                'contentUrl' => 'https://www.example.com/episode.mp3',
-            ],
-            'partOfSeries' => [
-                '@type' => 'PodcastSeries',
-                'name' => 'eLife podcast',
-                'url' => 'https://journal/podcast',
-            ],
-            'isPartOf' => [
-                '@type' => 'Periodical',
-                'name' => 'eLife',
-                'issn' => '2050-084X',
-            ],
-        ], $json);
+        )]));
     }
 
     /**
@@ -838,7 +830,21 @@ final class SchemaOrgMetadataExtensionTest extends TestCase
     {
         $this->urlGenerator->expects($this->once())->method('generate')->willReturn('https://journal/jobs/job-advert-id');
 
-        $json = $this->extension->generateJson(new JobAdvert(
+        $this->assertSame(implode(PHP_EOL, [
+            '<script type="application/ld+json">',
+            '{',
+            '    "@context": "https://schema.org",',
+            '    "@type": "JobPosting",',
+            '    "mainEntityOfPage": {',
+            '        "@type": "WebPage",',
+            '        "@id": "https://journal/jobs/job-advert-id"',
+            '    },',
+            '    "name": "Job advert title",',
+            '    "datePosted": "2008-10-30",',
+            '    "description": "Job advert impact statement"',
+            '}',
+            '</script>',
+        ]), $this->twig->render('foo', ['item' => new JobAdvert(
             'job-advert-id',
             'Job advert title',
             'Job advert impact statement',
@@ -847,19 +853,7 @@ final class SchemaOrgMetadataExtensionTest extends TestCase
             new DateTimeImmutable('2008-11-30 01:23:45'),
             null,
             new EmptySequence()
-        ), false);
-
-        $this->assertSame([
-            '@context' => 'https://schema.org',
-            '@type' => 'JobPosting',
-            'mainEntityOfPage' => [
-                '@type' => 'WebPage',
-                '@id' => 'https://journal/jobs/job-advert-id',
-            ],
-            'name' => 'Job advert title',
-            'datePosted' => '2008-10-30',
-            'description' => 'Job advert impact statement',
-        ], $json);
+        )]));
     }
 
     /**
@@ -871,9 +865,41 @@ final class SchemaOrgMetadataExtensionTest extends TestCase
 
         $this->urlGenerator->expects($this->once())->method('generate')->willReturn('https://journal/interviews/interview-id');
 
-        $file = new File('image/jpeg', 'https://iiif.elifesciences.org/example.jpg/full/full/0/default.jpg', 'example.jpg');
-        $thumbnail = new Image('', 'https://iiif.elifesciences.org/example.jpg', new EmptySequence(), $file, 1000, 500, 50, 50);
-        $json = $this->extension->generateJson(new Interview(
+        $this->assertSame(implode(PHP_EOL, [
+            '<script type="application/ld+json">',
+            '{',
+            '    "@context": "https://schema.org",',
+            '    "@type": "Conversation",',
+            '    "mainEntityOfPage": {',
+            '        "@type": "WebPage",',
+            '        "@id": "https://journal/interviews/interview-id"',
+            '    },',
+            '    "headline": "Interview title",',
+            '    "image": "https://iiif.elifesciences.org/example.jpg/full/full/0/default.jpg",',
+            '    "datePublished": "2008-10-30",',
+            '    "contributor": [',
+            '        {',
+            '            "@type": "Person",',
+            '            "name": "Interviewee name 1"',
+            '        }',
+            '    ],',
+            '    "publisher": {',
+            '        "@type": "Organization",',
+            '        "name": "eLife Sciences Publications, Ltd",',
+            '        "logo": {',
+            '            "@type": "ImageObject",',
+            '            "url": "https://journal/assets/patterns/img/patterns/organisms/elife-logo-symbol@2x.png"',
+            '        }',
+            '    },',
+            '    "description": "Interview impact statement",',
+            '    "isPartOf": {',
+            '        "@type": "Periodical",',
+            '        "name": "eLife",',
+            '        "issn": "2050-084X"',
+            '    }',
+            '}',
+            '</script>',
+        ]), $this->twig->render('foo', ['item' => new Interview(
             'interview-id',
             new Interviewee(
                 new PersonDetails('Interviewee name 1', 'Interviewee name 1, index'),
@@ -883,41 +909,23 @@ final class SchemaOrgMetadataExtensionTest extends TestCase
             new DateTimeImmutable('2008-10-30 01:23:45'),
             null,
             'Interview impact statement',
-            $thumbnail,
+            $this->defaultImage(),
             promise_for(null),
             new EmptySequence()
-        ), false);
+        )]));
+    }
 
-        $this->assertSame([
-            '@context' => 'https://schema.org',
-            '@type' => 'Conversation',
-            'mainEntityOfPage' => [
-                '@type' => 'WebPage',
-                '@id' => 'https://journal/interviews/interview-id',
-            ],
-            'headline' => 'Interview title',
-            'image' => 'https://iiif.elifesciences.org/example.jpg/full/full/0/default.jpg',
-            'datePublished' => '2008-10-30',
-            'contributor' => [
-                [
-                    '@type' => 'Person',
-                    'name' => 'Interviewee name 1',
-                ],
-            ],
-            'publisher' => [
-                '@type' => 'Organization',
-                'name' => 'eLife Sciences Publications, Ltd',
-                'logo' => [
-                    '@type' => 'ImageObject',
-                    'url' => 'https://journal/assets/patterns/img/patterns/organisms/elife-logo-symbol@2x.png',
-                ],
-            ],
-            'description' => 'Interview impact statement',
-            'isPartOf' => [
-                '@type' => 'Periodical',
-                'name' => 'eLife',
-                'issn' => '2050-084X',
-            ],
-        ], $json);
+    private function defaultImage()
+    {
+        return new Image(
+            '',
+            'https://iiif.elifesciences.org/example.jpg',
+            new EmptySequence(),
+            new File('image/jpeg', 'https://iiif.elifesciences.org/example.jpg/full/full/0/default.jpg', 'example.jpg'),
+            1000,
+            500,
+            50,
+            50
+        );
     }
 }
