@@ -63,42 +63,32 @@ final class SchemaOrgMetadataExtension extends AbstractExtension
     {
         return implode(PHP_EOL, [
             '<script type="application/ld+json">',
-            $this->generateJson($object),
+            json_encode(array_filter([
+                '@context' => 'https://schema.org',
+                '@type' => $this->getType($object),
+                'mainEntityOfPage' => $this->getMainEntityOfPage($object),
+                'episodeNumber' => $this->getEpisodeNumber($object),
+                'duration' => $this->getDuration($object),
+                'headline' => $this->getHeadline($object),
+                'name' => $this->getName($object),
+                'image' => $this->getImage($object),
+                'datePublished' => $this->getDatePublished($object),
+                'startDate' => $this->getStartDate($object),
+                'endDate' => $this->getEndDate($object),
+                'datePosted' => $this->getDatePosted($object),
+                'author' => $this->getAuthor($object),
+                'contributor' => $this->getContributor($object),
+                'editor' => $this->getEditor($object),
+                'publisher' => $this->getPublisher($object),
+                'keywords' => $this->getKeywords($object),
+                'about' => $this->getAbout($object),
+                'description' => $this->getDescription($object),
+                'associatedMedia' => $this->getAssociatedMedia($object),
+                'partOfSeries' => $this->getPartOfSeries($object),
+                'isPartOf' => $this->getIsPartOf($object),
+            ]), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES),
             '</script>',
         ]);
-    }
-
-    /**
-     * @return array|string
-     */
-    private function generateJson(Model $object, $json = true)
-    {
-        $schema = array_filter([
-            '@context' => 'https://schema.org',
-            '@type' => $this->getType($object),
-            'mainEntityOfPage' => $this->getMainEntityOfPage($object),
-            'episodeNumber' => $this->getEpisodeNumber($object),
-            'duration' => $this->getDuration($object),
-            'headline' => $this->getHeadline($object),
-            'name' => $this->getName($object),
-            'image' => $this->getImage($object),
-            'datePublished' => $this->getDatePublished($object),
-            'startDate' => $this->getStartDate($object),
-            'endDate' => $this->getEndDate($object),
-            'datePosted' => $this->getDatePosted($object),
-            'author' => $this->getAuthor($object),
-            'contributor' => $this->getContributor($object),
-            'editor' => $this->getEditor($object),
-            'publisher' => $this->getPublisher($object),
-            'keywords' => $this->getKeywords($object),
-            'about' => $this->getAbout($object),
-            'description' => $this->getDescription($object),
-            'associatedMedia' => $this->getAssociatedMedia($object),
-            'partOfSeries' => $this->getPartOfSeries($object),
-            'isPartOf' => $this->getIsPartOf($object),
-        ]);
-
-        return $json ? json_encode($schema, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) : $schema;
     }
 
     /**
