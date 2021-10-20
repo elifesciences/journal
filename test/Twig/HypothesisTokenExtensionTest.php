@@ -6,9 +6,9 @@ use eLife\Journal\Security\HypothesisTokenGenerator;
 use eLife\Journal\Twig\HypothesisTokenExtension;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Security\Core\User\User;
-use Twig_Environment;
-use Twig_ExtensionInterface;
-use Twig_Loader_Array;
+use Twig\Environment;
+use Twig\Extension\ExtensionInterface;
+use Twig\Loader\ArrayLoader;
 
 final class HypothesisTokenExtensionTest extends TestCase
 {
@@ -19,7 +19,7 @@ final class HypothesisTokenExtensionTest extends TestCase
     {
         $extension = new HypothesisTokenExtension(new HypothesisTokenGenerator('authority', 'client_id', 'client_secret'));
 
-        $this->assertInstanceOf(Twig_ExtensionInterface::class, $extension);
+        $this->assertInstanceOf(ExtensionInterface::class, $extension);
     }
 
     /**
@@ -31,8 +31,8 @@ final class HypothesisTokenExtensionTest extends TestCase
     {
         $tokenGenerator = new HypothesisTokenGenerator('authority', 'client_id', 'client_secret');
 
-        $twigLoader = new Twig_Loader_Array(['foo' => '{{ hypothesis_token(user) }}']);
-        $twig = new Twig_Environment($twigLoader);
+        $twigLoader = new ArrayLoader(['foo' => '{{ hypothesis_token(user) }}']);
+        $twig = new Environment($twigLoader);
         $twig->addExtension(new HypothesisTokenExtension($tokenGenerator));
 
         $user = new User('username', 'password');

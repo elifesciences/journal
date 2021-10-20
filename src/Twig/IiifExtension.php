@@ -4,11 +4,10 @@ namespace eLife\Journal\Twig;
 
 use eLife\ApiSdk\Model\Image;
 use eLife\Journal\Helper\CreatesIiifUri;
-use Twig_Extension;
-use Twig_Function;
-use function min;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFunction;
 
-final class IiifExtension extends Twig_Extension
+final class IiifExtension extends AbstractExtension
 {
     const MAX_SIZE = 2000;
 
@@ -17,8 +16,8 @@ final class IiifExtension extends Twig_Extension
     public function getFunctions()
     {
         return [
-            new Twig_Function('iiif_uri', [$this, 'createImageUri'], ['is_safe' => ['html']]),
-            new Twig_Function('iiif_og_image', [$this, 'createOpenGraphImage'], ['is_safe' => ['html']]),
+            new TwigFunction('iiif_uri', [$this, 'createImageUri'], ['is_safe' => ['html']]),
+            new TwigFunction('iiif_og_image', [$this, 'createOpenGraphImage'], ['is_safe' => ['html']]),
         ];
     }
 

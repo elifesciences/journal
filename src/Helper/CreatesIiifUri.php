@@ -4,6 +4,7 @@ namespace eLife\Journal\Helper;
 
 use eLife\ApiSdk\Model\Image;
 use InvalidArgumentException;
+use function min;
 
 trait CreatesIiifUri
 {

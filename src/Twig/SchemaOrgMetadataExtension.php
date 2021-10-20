@@ -30,10 +30,10 @@ use eLife\ApiSdk\Model\Subject;
 use eLife\Journal\Helper\CreatesIiifUri;
 use Symfony\Component\Asset\Packages;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Twig_Extension;
-use Twig_Function;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFunction;
 
-final class SchemaOrgMetadataExtension extends Twig_Extension
+final class SchemaOrgMetadataExtension extends AbstractExtension
 {
     const MAX_IMAGE_SIZE = 2000;
 
@@ -51,14 +51,9 @@ final class SchemaOrgMetadataExtension extends Twig_Extension
     public function getFunctions()
     {
         return [
-            new Twig_Function(
+            new TwigFunction(
                 'schema_org_metadata',
                 [$this, 'generate'],
-                ['is_safe' => ['all']]
-            ),
-            new Twig_Function(
-                'schema_org_metadata_json',
-                [$this, 'generateJson'],
                 ['is_safe' => ['all']]
             ),
         ];
@@ -76,7 +71,7 @@ final class SchemaOrgMetadataExtension extends Twig_Extension
     /**
      * @return array|string
      */
-    public function generateJson(Model $object, $json = true)
+    private function generateJson(Model $object, $json = true)
     {
         $schema = array_filter([
             '@context' => 'https://schema.org',

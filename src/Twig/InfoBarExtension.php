@@ -4,10 +4,10 @@ namespace eLife\Journal\Twig;
 
 use eLife\Patterns\PatternRenderer;
 use eLife\Patterns\ViewModel\InfoBar;
-use Twig_Extension;
-use Twig_Function;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFunction;
 
-final class InfoBarExtension extends Twig_Extension
+final class InfoBarExtension extends AbstractExtension
 {
     private $renderer;
 
@@ -19,7 +19,7 @@ final class InfoBarExtension extends Twig_Extension
     public function getFunctions()
     {
         return [
-            new Twig_Function(
+            new TwigFunction(
                 'info_bar',
                 [$this, 'infoBar'],
                 ['is_safe' => ['html']]
