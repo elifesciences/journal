@@ -4,10 +4,10 @@ namespace test\eLife\Journal\Twig;
 
 use eLife\Journal\Twig\ModelNameExtension;
 use PHPUnit\Framework\TestCase;
-use Twig_Environment;
-use Twig_Error_Runtime;
-use Twig_ExtensionInterface;
-use Twig_Loader_Array;
+use Twig\Environment;
+use Twig\Error\RuntimeError;
+use Twig\Extension\ExtensionInterface;
+use Twig\Loader\ArrayLoader;
 
 final class ModelNameExtensionTest extends TestCase
 {
@@ -18,7 +18,7 @@ final class ModelNameExtensionTest extends TestCase
     {
         $extension = new ModelNameExtension();
 
-        $this->assertInstanceOf(Twig_ExtensionInterface::class, $extension);
+        $this->assertInstanceOf(ExtensionInterface::class, $extension);
     }
 
     /**
@@ -27,8 +27,8 @@ final class ModelNameExtensionTest extends TestCase
      */
     public function it_makes_model_names_readable()
     {
-        $twigLoader = new Twig_Loader_Array(['foo' => '{{ model_name("research-article") }}']);
-        $twig = new Twig_Environment($twigLoader);
+        $twigLoader = new ArrayLoader(['foo' => '{{ model_name("research-article") }}']);
+        $twig = new Environment($twigLoader);
         $twig->addExtension(new ModelNameExtension());
 
         $this->assertSame('Research Article', $twig->render('foo', []));
@@ -40,11 +40,11 @@ final class ModelNameExtensionTest extends TestCase
      */
     public function it_fails_on_invalid_model_names()
     {
-        $twigLoader = new Twig_Loader_Array(['foo' => '{{ model_name("foo") }}']);
-        $twig = new Twig_Environment($twigLoader);
+        $twigLoader = new ArrayLoader(['foo' => '{{ model_name("foo") }}']);
+        $twig = new Environment($twigLoader);
         $twig->addExtension(new ModelNameExtension());
 
-        $this->expectException(Twig_Error_Runtime::class);
+        $this->expectException(RuntimeError::class);
 
         $twig->render('foo', []);
     }

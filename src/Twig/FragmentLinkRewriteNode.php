@@ -2,22 +2,22 @@
 
 namespace eLife\Journal\Twig;
 
-use Twig_Compiler;
-use Twig_Node;
-use Twig_Node_Expression;
+use Twig\Compiler;
+use Twig\Node\Expression\AbstractExpression;
+use Twig\Node\Node;
 
-final class FragmentLinkRewriteNode extends Twig_Node
+final class FragmentLinkRewriteNode extends Node
 {
-    public function __construct(Twig_Node $body, Twig_Node $link, $lineno)
+    public function __construct(Node $body, Node $link, int $lineno, string $tag = 'fragment_link_rewrite')
     {
-        parent::__construct(['body' => $body, 'link' => $link], [], $lineno, 'fragment_link_rewrite');
+        parent::__construct(['body' => $body, 'link' => $link], [], $lineno, $tag);
     }
 
-    public function compile(Twig_Compiler $compiler)
+    public function compile(Compiler $compiler)
     {
         $compiler->addDebugInfo($this);
 
-        if (false === $this->getNode('link') instanceof Twig_Node_Expression) {
+        if (false === $this->getNode('link') instanceof AbstractExpression) {
             $compiler
                 ->write('ob_start();')
                 ->raw(PHP_EOL)

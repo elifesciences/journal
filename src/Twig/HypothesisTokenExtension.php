@@ -4,10 +4,10 @@ namespace eLife\Journal\Twig;
 
 use eLife\Journal\Security\HypothesisTokenGenerator;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Twig_Extension;
-use Twig_Function;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFunction;
 
-final class HypothesisTokenExtension extends Twig_Extension
+final class HypothesisTokenExtension extends AbstractExtension
 {
     private $tokenGenerator;
 
@@ -19,7 +19,7 @@ final class HypothesisTokenExtension extends Twig_Extension
     public function getFunctions()
     {
         return [
-            new Twig_Function(
+            new TwigFunction(
                 'hypothesis_token',
                 [$this, 'generateToken'],
                 ['is_safe' => ['html']]
