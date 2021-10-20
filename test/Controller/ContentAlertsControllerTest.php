@@ -146,6 +146,20 @@ final class ContentAlertsControllerTest extends PageTestCase
         $this->assertSame('Please try submitting the form again.', trim($crawler->filter('.info-bar')->text()));
     }
 
+    /**
+     * @test
+     */
+    public function it_has_the_sign_up_cta()
+    {
+        $client = static::createClient();
+
+        $crawler = $client->request('GET', $this->getUrl());
+
+        $emailCta = $crawler->filter('.email-cta');
+
+        $this->assertCount(0, $emailCta);
+    }
+
     protected function getUrl() : string
     {
         return '/content-alerts';
