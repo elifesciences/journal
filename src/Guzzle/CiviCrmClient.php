@@ -14,6 +14,7 @@ final class CiviCrmClient
     const LABEL_EARLY_CAREER = 'early_career';
     const LABEL_TECHNOLOGY = 'technology';
     const LABEL_ELIFE_NEWSLETTER = 'elife_newsletter';
+    // Perhaps make the constants below configuration.
     const GROUP_LATEST_ARTICLES = 'All_Content_53';
     const GROUP_EARLY_CAREER = 'early_careers_news_317';
     const GROUP_TECHNOLOGY = 'technology_news_435';
