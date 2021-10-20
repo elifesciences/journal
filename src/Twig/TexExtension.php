@@ -4,16 +4,16 @@ namespace eLife\Journal\Twig;
 
 use eLife\ApiSdk\Model\Block\Paragraph;
 use eLife\ApiSdk\Model\Block\Section;
-use Twig_Extension;
-use Twig_Filter;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFilter;
 
-final class TexExtension extends Twig_Extension
+final class TexExtension extends AbstractExtension
 {
     public function getFilters()
     {
         return [
-            new Twig_Filter('html2tex', [$this, 'html2tex']),
-            new Twig_Filter('item2tex', [$this, 'item2tex']),
+            new TwigFilter('html2tex', [$this, 'html2tex']),
+            new TwigFilter('item2tex', [$this, 'item2tex']),
         ];
     }
 

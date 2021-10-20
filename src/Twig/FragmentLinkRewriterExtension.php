@@ -3,9 +3,9 @@
 namespace eLife\Journal\Twig;
 
 use eLife\Journal\Helper\FragmentLinkRewriter;
-use Twig_Extension;
+use Twig\Extension\AbstractExtension;
 
-final class FragmentLinkRewriterExtension extends Twig_Extension
+final class FragmentLinkRewriterExtension extends AbstractExtension
 {
     private $rewriter;
 
