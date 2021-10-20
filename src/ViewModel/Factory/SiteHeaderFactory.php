@@ -127,7 +127,7 @@ final class SiteHeaderFactory
 
         $secondaryLinks = [
             NavLinkedItem::asLink(new Link('Newsletter', 'https://crm.elifesciences.org/crm/content-alerts')),
-            NavLinkedItem::asLink(new Link('Community', $this->urlGenerator->generate('community'))),
+            NavLinkedItem::asLink(new Link('About', $this->urlGenerator->generate('about'))),
             NavLinkedItem::asButton(
                 Button::link('Submit my research', $submitUrl ?? $this->submitUrl, Button::SIZE_EXTRA_SMALL, Button::STYLE_DEFAULT, true, false, 'submitResearchButton')
             ),
