@@ -2,6 +2,7 @@
 
 namespace eLife\Journal\Controller;
 
+use eLife\Journal\Exception\EarlyResponse;
 use eLife\Journal\Form\Type\ContentAlertsType;
 use eLife\Journal\Guzzle\CiviCrmClient;
 use eLife\Patterns\ViewModel\ArticleSection;
@@ -9,6 +10,7 @@ use eLife\Patterns\ViewModel\Button;
 use eLife\Patterns\ViewModel\ContentHeader;
 use eLife\Patterns\ViewModel\Paragraph;
 use Symfony\Component\Form\Form;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -79,13 +81,43 @@ final class ContentAlertsController extends Controller
 
         $data = $this->get('elife.api_client.client.crm_api')
             ->checkSubscription($this->get('router')->generate('content-alerts-update', ['id' => $id], UrlGeneratorInterface::ABSOLUTE_URL), true)
+            ->then(function ($check) {
+                if (!$check) {
+                    throw new EarlyResponse(new RedirectResponse($this->get('router')->generate('content-alerts')));
+                }
+
+                return $check;
+            })
             ->wait();
 
         /** @var Form $form */
         $form = $this->get('form.factory')
-            ->create(ContentAlertsType::class, $data, ['action' => $this->get('router')->generate('content-alerts')]);
+            ->create(ContentAlertsType::class, $data, ['action' => $this->get('router')->generate('content-alerts-update', ['id' => $id])]);
 
-        $arguments['form'] = $this->get('elife.journal.view_model.converter')->convert($form->createView());
+        $validSubmission = $this->ifFormSubmitted($request, $form, function () use ($form) {
+            return $this->get('elife.api_client.client.crm_api')
+                ->subscribe(
+                    $form->get('contact_id')->getData(),
+                    $form->get('preferences')->getData(),
+                    $form->get('first_name')->getData(),
+                    $form->get('last_name')->getData(),
+                    explode(',', $form->get('groups')->getData())
+                )
+                ->then(function () use ($form) {
+                    return ArticleSection::basic(
+                        'Thank you for updating your preferences!',
+                        2,
+                        $this->render(
+                            Button::link('Back to Homepage', $this->get('router')->generate('home'))
+                        ),
+                        'thank-you'
+                    );
+                })->wait();
+        }, false);
+
+        $arguments['form'] = $validSubmission instanceof ArticleSection ?
+            $validSubmission :
+            $this->get('elife.journal.view_model.converter')->convert($form->createView());
 
         return new Response($this->get('templating')->render('::content-alerts.html.twig', $arguments));
     }

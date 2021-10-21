@@ -7,6 +7,8 @@ use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use function GuzzleHttp\Promise\all;
+use function GuzzleHttp\Promise\promise_for;
 
 final class CiviCrmClient
 {
@@ -41,47 +43,66 @@ final class CiviCrmClient
         $this->siteKey = $siteKey;
     }
 
-    public function subscribe(string $email, array $preferences, string $firstName = null, string $lastName = null) : PromiseInterface
+    public function subscribe(string $identifier, array $preferences, string $firstName = null, string $lastName = null, array $preferencesBefore = []) : PromiseInterface
     {
         return $this->client->sendAsync($this->prepareRequest('POST'), $this->options([
             'query' => [
                 'entity' => 'Contact',
                 'action' => 'create',
-                'json' => array_filter([
+                'json' => [
                     'contact_type' => 'Individual',
-                    'email' => $email,
-                    'first_name' => $firstName,
-                    'last_name' => $lastName,
-                ]),
+                    !empty($preferencesBefore) ? 'contact_id' : 'email' => $identifier,
+                    'first_name' => $firstName ?? '',
+                    'last_name' => $lastName ?? '',
+                    self::FIELD_PREFERENCES_URL => '',
+                ],
             ],
         ]))->then(function (Response $response) {
             return $this->prepareResponse($response);
         })->then(function ($data) {
             return $data['id'];
-        })->then(function ($contactId) use ($preferences) {
-            if (empty($preferences)) {
-                return [
-                    'contact_id' => $contactId,
-                ];
-            }
+        })->then(function ($contactId) use ($preferences, $preferencesBefore) {
+            $add = array_values(array_diff($preferences, $preferencesBefore));
+            $remove = array_values(array_diff($preferencesBefore, $preferences));
+            $unchanged = array_diff($preferencesBefore, $add, $remove);
 
-            return $this->client->sendAsync($this->prepareRequest('POST'), $this->options([
-                'query' => [
-                    'entity' => 'GroupContact',
-                    'action' => 'create',
-                    'json' => [
-                        'group_id' => $this->preferenceGroups($preferences),
-                        'contact_id' => $contactId,
+            return all([
+                'added' => !empty($add) ? $this->client->sendAsync($this->prepareRequest('POST'), $this->options([
+                    'query' => [
+                        'entity' => 'GroupContact',
+                        'action' => 'create',
+                        'json' => [
+                            'status' => 'Added',
+                            'group_id' => $this->preferenceGroups($add, empty($preferencesBefore)),
+                            'contact_id' => $contactId,
+                        ],
                     ],
-                ],
-            ]))->then(function (Response $response) {
-                return $this->prepareResponse($response);
-            })->then(function ($data) use ($contactId) {
-                return [
-                    'contact_id' => $contactId,
-                    'groups_added' => 0 === $data['is_error'],
-                ];
-            });
+                ]))
+                ->then(function (Response $response) {
+                    return $this->prepareResponse($response);
+                })
+                ->then(function () use ($add) {
+                    return $add;
+                }) : [],
+                'removed' => !empty($remove) ? $this->client->sendAsync($this->prepareRequest('POST'), $this->options([
+                    'query' => [
+                        'entity' => 'GroupContact',
+                        'action' => 'create',
+                        'json' => [
+                            'status' => 'Removed',
+                            'group_id' => $this->preferenceGroups($remove, false),
+                            'contact_id' => $contactId,
+                        ],
+                    ],
+                ]))
+                ->then(function (Response $response) {
+                    return $this->prepareResponse($response);
+                })
+                ->then(function () use ($remove) {
+                    return $remove;
+                }) : [],
+                'unchanged' => promise_for($unchanged),
+            ]);
         });
     }
 
@@ -108,12 +129,15 @@ final class CiviCrmClient
                 $contactId = min(array_keys($values));
                 $contact = $values[$contactId];
 
+                $preferences = $this->preferenceGroupLabels(explode(',', $contact['groups']));
+
                 return [
                     'contact_id' => (int) $contact['contact_id'],
                     'email' => $contact['email'],
                     'first_name' => $contact['first_name'],
                     'last_name' => $contact['last_name'],
-                    'preferences' => $this->preferenceGroupLabels(explode(',', $contact['groups'])),
+                    'preferences' => $preferences,
+                    'groups' => implode(',', $preferences),
                 ];
             }
         });
@@ -149,13 +173,12 @@ final class CiviCrmClient
             })->then(function ($data) use ($contactId) {
                 return [
                     'contact_id' => $contactId,
-                    'groups_added' => 0 === $data['is_error'],
                 ];
             });
         });
     }
 
-    private function preferenceGroups(array $preferences) : array
+    private function preferenceGroups(array $preferences, $create = false) : array
     {
         $clean = array_map(function ($preference) {
             switch ($preference) {
@@ -177,7 +200,9 @@ final class CiviCrmClient
             self::LABEL_ELIFE_NEWSLETTER,
         ], $preferences));
 
-        array_push($clean, self::GROUP_JOURNAL_ETOC_SIGNUP);
+        if ($create) {
+            array_push($clean, self::GROUP_JOURNAL_ETOC_SIGNUP);
+        }
 
         return $clean;
     }
