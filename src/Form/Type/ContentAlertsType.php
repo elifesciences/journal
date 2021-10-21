@@ -46,9 +46,6 @@ final class ContentAlertsType extends AbstractType
                     'constraints' => [
                         new NotBlank(['message' => 'Please select an email type to subscribe.']),
                     ],
-                    'data' => [
-                        CiviCrmClient::LABEL_LATEST_ARTICLES,
-                    ],
                 ]
             )
             ->add('subscribe', SubmitType::class);
