@@ -4,10 +4,10 @@ namespace eLife\Journal\Twig;
 
 use eLife\ApiSdk\Model\Reference;
 use OutOfBoundsException;
-use Twig_Extension;
-use Twig_Function;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFunction;
 
-final class ReferenceTypeExtension extends Twig_Extension
+final class ReferenceTypeExtension extends AbstractExtension
 {
     private static $references = [
         Reference\BookChapterReference::class => 'book-chapter',
@@ -29,7 +29,7 @@ final class ReferenceTypeExtension extends Twig_Extension
     public function getFunctions()
     {
         return [
-            new Twig_Function(
+            new TwigFunction(
                 'reference_type',
                 [$this, 'getReferenceType']
             ),

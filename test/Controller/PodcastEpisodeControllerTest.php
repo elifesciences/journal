@@ -4,6 +4,9 @@ namespace test\eLife\Journal\Controller;
 
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use ML\JsonLD\JsonLD;
+use ML\JsonLD\RdfConstants;
+use ML\JsonLD\TypedValue;
 
 final class PodcastEpisodeControllerTest extends PageTestCase
 {
@@ -51,6 +54,32 @@ final class PodcastEpisodeControllerTest extends PageTestCase
         $this->assertEmpty($crawler->filter('meta[name="dc.description"]'));
         $this->assertSame('2010-01-01', $crawler->filter('meta[name="dc.date"]')->attr('content'));
         $this->assertSame('© 2010 eLife Sciences Publications Limited. This article is distributed under the terms of the Creative Commons Attribution License, which permits unrestricted use and redistribution provided that the original author and source are credited.', $crawler->filter('meta[name="dc.rights"]')->attr('content'));
+    }
+
+    /**
+     * @test
+     */
+    public function it_has_schema_org_metadata()
+    {
+        $client = static::createClient();
+
+        $crawler = $client->request('GET', $this->getUrl());
+
+        $this->assertSame(200, $client->getResponse()->getStatusCode());
+
+        $script = $crawler->filter('script[type="application/ld+json"]');
+        $this->assertNotEmpty($script);
+
+        $value = $script->text();
+        $this->assertJson($value);
+
+        $this->markTestIncomplete('This test fails if schema.org is broken!');
+
+        $graph = JsonLD::getDocument($value)->getGraph();
+        $node = $graph->getNodes()[0];
+
+        $this->assertEquals('http://schema.org/PodcastEpisode', $node->getType()->getId());
+        $this->assertEquals(new TypedValue('Episode title', RdfConstants::XSD_STRING), $node->getProperty('http://schema.org/headline'));
     }
 
     /**

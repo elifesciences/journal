@@ -3,15 +3,15 @@
 namespace eLife\Journal\Twig;
 
 use eLife\Journal\Helper\ModelName;
-use Twig_Extension;
-use Twig_Function;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFunction;
 
-final class ModelNameExtension extends Twig_Extension
+final class ModelNameExtension extends AbstractExtension
 {
     public function getFunctions()
     {
         return [
-            new Twig_Function(
+            new TwigFunction(
                 'model_name',
                 [$this, 'getModelName']
             ),
