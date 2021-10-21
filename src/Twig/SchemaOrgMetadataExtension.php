@@ -159,10 +159,10 @@ final class SchemaOrgMetadataExtension extends AbstractExtension
                 $id = null;
         }
 
-        return array_filter([
+        return !is_null($id) ? array_filter([
             '@type' => 'WebPage',
-            '@id' => !is_null($id) ? $this->urlGenerator->generate($id, [$object], UrlGeneratorInterface::ABSOLUTE_URL) : $id,
-        ]);
+            '@id' => $this->urlGenerator->generate($id, [$object], UrlGeneratorInterface::ABSOLUTE_URL),
+        ]) : $id;
     }
 
     /**
@@ -227,8 +227,8 @@ final class SchemaOrgMetadataExtension extends AbstractExtension
             case $object instanceof Digest:
             case $object instanceof Interview:
             case $object instanceof LabsPost:
-            case $object instanceof PressPackage:
             case $object instanceof PodcastEpisode:
+            case $object instanceof PressPackage:
             case $object instanceof PromotionalCollection:
                 $title = $object->getTitle();
                 break;
@@ -381,32 +381,27 @@ final class SchemaOrgMetadataExtension extends AbstractExtension
     private function getPublisher(Model $object)
     {
         if (!$object instanceof Event && !$object instanceof JobAdvert) {
+            $context = $this->urlGenerator->getContext();
+            $port = 'http' === $context->getScheme() ? $context->getHttpPort() : $context->getHttpsPort();
+
             return [
                 '@type' => 'Organization',
                 'name' => 'eLife Sciences Publications, Ltd',
                 'logo' => [
                     '@type' => 'ImageObject',
-                    'url' => $this->getPublisherLogoUrl(),
+                    'url' => implode('', [
+                        $context->getScheme(),
+                        '://',
+                        $context->getHost(),
+                        (80 !== $port && 'http' === $context->getScheme()) || (443 !== $port && 'http' === $context->getScheme()) ? ':'.$port : '',
+                        $context->getBaseUrl(),
+                        $this->packages->getUrl('assets/patterns/img/patterns/organisms/elife-logo-symbol@2x.png'),
+                    ]),
                 ],
             ];
         }
 
         return null;
-    }
-
-    private function getPublisherLogoUrl() : string
-    {
-        $context = $this->urlGenerator->getContext();
-        $port = 'http' === $context->getScheme() ? $context->getHttpPort() : $context->getHttpsPort();
-
-        return implode('', [
-            $context->getScheme(),
-            '://',
-            $context->getHost(),
-            (80 !== $port && 'http' === $context->getScheme()) || (443 !== $port && 'http' === $context->getScheme()) ? ':'.$port : '',
-            $context->getBaseUrl(),
-            $this->packages->getUrl('assets/patterns/img/patterns/organisms/elife-logo-symbol@2x.png'),
-        ]);
     }
 
     /**
