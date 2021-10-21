@@ -3,6 +3,7 @@
 namespace eLife\Journal\Controller;
 
 use eLife\Journal\Form\Type\ContentAlertsType;
+use eLife\Journal\Guzzle\CiviCrmClient;
 use eLife\Patterns\ViewModel\ArticleSection;
 use eLife\Patterns\ViewModel\Button;
 use eLife\Patterns\ViewModel\ContentHeader;
@@ -23,7 +24,7 @@ final class ContentAlertsController extends Controller
 
         /** @var Form $form */
         $form = $this->get('form.factory')
-            ->create(ContentAlertsType::class, null, ['action' => $this->get('router')->generate('content-alerts')]);
+            ->create(ContentAlertsType::class, ['preferences' => [CiviCrmClient::LABEL_LATEST_ARTICLES]], ['action' => $this->get('router')->generate('content-alerts')]);
 
         $validSubmission = $this->ifFormSubmitted($request, $form, function () use ($form) {
             return $this->get('elife.api_client.client.crm_api')
