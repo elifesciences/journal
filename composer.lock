@@ -3964,16 +3964,16 @@
         },
         {
             "name": "elife/api",
-            "version": "2.4.0",
+            "version": "2.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-raml.git",
-                "reference": "877f45947d8076bbe7c364d816b874c2625209c5"
+                "reference": "fbfd26f96e1f8d5bd80c4bf7314665fe5de5fa74"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-raml/zipball/877f45947d8076bbe7c364d816b874c2625209c5",
-                "reference": "877f45947d8076bbe7c364d816b874c2625209c5",
+                "url": "https://api.github.com/repos/elifesciences/api-raml/zipball/fbfd26f96e1f8d5bd80c4bf7314665fe5de5fa74",
+                "reference": "fbfd26f96e1f8d5bd80c4bf7314665fe5de5fa74",
                 "shasum": ""
             },
             "conflict": {
@@ -3985,7 +3985,7 @@
                 "MIT"
             ],
             "description": "eLife Sciences API specification",
-            "time": "2021-10-04T12:19:29+00:00"
+            "time": "2021-10-05T12:24:35+00:00"
         },
         {
             "name": "elife/api-validator",
@@ -5618,6 +5618,7 @@
             ],
             "description": "Provides a list of PHP built-in functions that operate on resources",
             "homepage": "https://www.github.com/sebastianbergmann/resource-operations",
+            "abandoned": true,
             "time": "2018-10-04T04:07:39+00:00"
         },
         {
