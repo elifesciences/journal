@@ -4,7 +4,6 @@ namespace eLife\Journal\Guzzle;
 
 use eLife\Journal\Exception\CiviCrmResponseError;
 use GuzzleHttp\ClientInterface;
-use function GuzzleHttp\Promise\all;
 use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
@@ -16,10 +15,12 @@ final class CiviCrmClient
     const LABEL_TECHNOLOGY = 'technology';
     const LABEL_ELIFE_NEWSLETTER = 'elife_newsletter';
     // Perhaps make the constants below configuration.
-    const GROUP_ID_LATEST_ARTICLES = 53;
-    const GROUP_ID_EARLY_CAREER = 317;
-    const GROUP_ID_TECHNOLOGY = 435;
-    const GROUP_ID_ELIFE_NEWSLETTER = 1032;
+    const GROUP_LATEST_ARTICLES = 'All_Content_53';
+    const GROUP_EARLY_CAREER = 'early_careers_news_317';
+    const GROUP_TECHNOLOGY = 'technology_news_435';
+    const GROUP_ELIFE_NEWSLETTER = 'eLife_bi_monthly_news_1032';
+    // Assign all users to below group so we can easily identify them.
+    const GROUP_JOURNAL_ETOC_SIGNUP = 'Journal_eToc_signup_1922';
 
     private $client;
     private $apiKey;
@@ -49,49 +50,45 @@ final class CiviCrmClient
             return $this->prepareResponse($response);
         })->then(function ($data) {
             return $data['id'];
-        })->then(function ($contactId) use ($email, $preferences) {
-            $subscribe = [];
-
-            foreach (self::preferenceGroupIds($preferences) as $groupId) {
-                $subscribe[$groupId] = $this->client->sendAsync($this->prepareRequest('POST'), $this->options([
-                    'query' => [
-                        'entity' => 'MailingEventSubscribe',
-                        'action' => 'create',
-                        'json' => [
-                            'email' => $email,
-                            'contact_id' => $contactId,
-                            'group_id' => $groupId,
-                        ],
-                    ],
-                ]))->then(function (Response $response) {
-                    return $this->prepareResponse($response);
-                })->then(function () {
-                    return true;
-                });
-            }
-
-            return all($subscribe)->then(function ($parts) use ($contactId, $email) {
+        })->then(function ($contactId) use ($preferences) {
+            if (empty($preferences)) {
                 return [
                     'contact_id' => $contactId,
-                    'email' => $email,
-                    'subscribe' => $parts,
+                ];
+            }
+
+            return $this->client->sendAsync($this->prepareRequest('POST'), $this->options([
+                'query' => [
+                    'entity' => 'GroupContact',
+                    'action' => 'create',
+                    'json' => [
+                        'group_id' => $this->preferenceGroupIds($preferences),
+                        'contact_id' => $contactId,
+                    ],
+                ],
+            ]))->then(function (Response $response) {
+                return $this->prepareResponse($response);
+            })->then(function ($data) use ($contactId) {
+                return [
+                    'contact_id' => $contactId,
+                    'groups_added' => 0 === $data['is_error'],
                 ];
             });
         });
     }
 
-    public static function preferenceGroupIds(array $preferences) : array
+    private function preferenceGroupIds(array $preferences) : array
     {
-        return array_map(function ($preference) {
+        $clean = array_map(function ($preference) {
             switch ($preference) {
                 case self::LABEL_LATEST_ARTICLES:
-                    return self::GROUP_ID_LATEST_ARTICLES;
+                    return self::GROUP_LATEST_ARTICLES;
                 case self::LABEL_EARLY_CAREER:
-                    return self::GROUP_ID_EARLY_CAREER;
+                    return self::GROUP_EARLY_CAREER;
                 case self::LABEL_TECHNOLOGY:
-                    return self::GROUP_ID_TECHNOLOGY;
+                    return self::GROUP_TECHNOLOGY;
                 case self::LABEL_ELIFE_NEWSLETTER:
-                    return self::GROUP_ID_ELIFE_NEWSLETTER;
+                    return self::GROUP_ELIFE_NEWSLETTER;
                 default:
                     return null;
             }
@@ -101,6 +98,10 @@ final class CiviCrmClient
             self::LABEL_TECHNOLOGY,
             self::LABEL_ELIFE_NEWSLETTER,
         ], $preferences));
+
+        array_push($clean, self::GROUP_JOURNAL_ETOC_SIGNUP);
+
+        return $clean;
     }
 
     private function prepareRequest(string $method = 'GET', array $headers = []) : Request
@@ -119,7 +120,7 @@ final class CiviCrmClient
 
     /**
      * @param Response $response
-     * @return array
+     * @return mixed
      * @throws CiviCrmResponseError
      */
     private function prepareResponse(Response $response) : array
