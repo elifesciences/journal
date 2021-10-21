@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "26069dcc655c5563cfd86c53d938ee18",
+    "content-hash": "4a372cadea17ec4a2d1853a989741109",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -1290,16 +1290,16 @@
         },
         {
             "name": "elife/patterns",
-            "version": "dev-navigation-changes",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/patterns-php.git",
-                "reference": "d0f4ec14e4e75566ef4f497e2e1e0355d07453c9"
+                "reference": "c37a48fad6245607b559f7b82af777ad2323ef12"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/d0f4ec14e4e75566ef4f497e2e1e0355d07453c9",
-                "reference": "d0f4ec14e4e75566ef4f497e2e1e0355d07453c9",
+                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/c37a48fad6245607b559f7b82af777ad2323ef12",
+                "reference": "c37a48fad6245607b559f7b82af777ad2323ef12",
                 "shasum": ""
             },
             "require": {
@@ -1341,9 +1341,9 @@
             ],
             "description": "eLife patterns",
             "support": {
-                "source": "https://github.com/elifesciences/patterns-php/tree/navigation-changes"
+                "source": "https://github.com/elifesciences/patterns-php/tree/master"
             },
-            "time": "2021-10-20T15:14:09+00:00"
+            "time": "2021-10-21T07:55:17+00:00"
         },
         {
             "name": "fabpot/goutte",
