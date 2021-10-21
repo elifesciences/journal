@@ -223,6 +223,7 @@ final class AboutController extends Controller
             ->prepend(new SelectOption('', 'Leadership team', '' === $type))
             ->append(new SelectOption('directors', 'Board of directors', 'directors' === $type))
             ->append(new SelectOption('early-career', 'Early-career advisory group', 'early-career' === $type))
+            ->append(new SelectOption('ethics-committee', 'Ethics committee', 'ethics-committee' === $type))
             ->append(new SelectOption('staff', 'Executive staff', 'staff' === $type));
 
         $people = $this->get('elife.api_sdk.people')->reverse();
@@ -261,6 +262,23 @@ final class AboutController extends Controller
                 $arguments['title'] = 'Early-career advisory group';
 
                 $arguments['lists'][] = $this->createAboutProfiles($people->forType('early-career'), 'Early-career advisory group');
+                break;
+            case 'ethics-committee':
+                $arguments['title'] = 'Ethics committee';
+
+                $allEthicsCommittee = $people->forType('ethics-committee');
+
+                $chair = $allEthicsCommittee->filter(function (Person $person) {
+                    return 'Chair' === $person->getTypeLabel();
+                });
+
+                $ethicsCommittee = $allEthicsCommittee->filter(function (Person $person) {
+                    return 'Chair' !== $person->getTypeLabel();
+                });
+                $arguments['lists'][] = $this->createAboutProfiles($chair, 'Chair');
+                $arguments['lists'][] = $this->createAboutProfiles($ethicsCommittee, 'Ethics committee');
+
+                $impactStatement = 'A new eLife Ethics Committee will advise and develop policy focused on establishing and maintaining the highest standards of research and publication practices across the scope of the journal.';
                 break;
             case 'staff':
                 $arguments['title'] = 'Executive staff';
