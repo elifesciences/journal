@@ -42,7 +42,7 @@ final class CiviCrmClient
         $this->siteKey = $siteKey;
     }
 
-    public function subscribe(string $identifier, array $preferences, string $preferencesUrl = null, string $firstName = null, string $lastName = null, array $preferencesBefore = []) : PromiseInterface
+    public function subscribe(string $identifier, array $preferences, string $preferencesUrl, string $firstName = null, string $lastName = null, array $preferencesBefore = []) : PromiseInterface
     {
         return $this->client->sendAsync($this->prepareRequest('POST'), $this->options([
             'query' => [
@@ -53,7 +53,8 @@ final class CiviCrmClient
                     !empty($preferencesBefore) ? 'contact_id' : 'email' => $identifier,
                     'first_name' => $firstName ?? '',
                     'last_name' => $lastName ?? '',
-                ] + array_filter([self::FIELD_PREFERENCES_URL => $preferencesUrl]),
+                    self::FIELD_PREFERENCES_URL => $preferencesUrl,
+                ],
             ],
         ]))->then(function (Response $response) {
             return $this->prepareResponse($response);

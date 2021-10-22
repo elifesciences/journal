@@ -32,6 +32,7 @@ final class CiviCrmClientTest extends TestCase
                     'last_name' => '',
                     'preferences' => [53,435],
                     'groups' => implode(',', [53,435]),
+                    'custom_131' => 'http://localhost/content-alerts/foo',
                 ],
             ]])),
             new Response(200, [], json_encode(['values' => []])),
@@ -46,6 +47,7 @@ final class CiviCrmClientTest extends TestCase
             'last_name' => '',
             'preferences' => ['latest_articles', 'technology'],
             'groups' => implode(',', ['latest_articles', 'technology']),
+            'preferences_url' => 'http://localhost/content-alerts/foo',
         ], $checkSuccess->wait());
 
         $this->assertCount(1, $container);
@@ -62,6 +64,7 @@ final class CiviCrmClientTest extends TestCase
                     'first_name',
                     'last_name',
                     'email',
+                    'custom_131',
                 ],
             ],
             'api_key' => 'api-key',
@@ -92,6 +95,7 @@ final class CiviCrmClientTest extends TestCase
                     'last_name' => '',
                     'preferences' => [53,435],
                     'groups' => implode(',', [53,435]),
+                    'custom_131' => 'http://localhost/content-alerts/foo',
                 ],
             ]])),
         ], $container);
@@ -105,6 +109,7 @@ final class CiviCrmClientTest extends TestCase
             'last_name' => '',
             'preferences' => ['latest_articles', 'technology'],
             'groups' => implode(',', ['latest_articles', 'technology']),
+            'preferences_url' => 'http://localhost/content-alerts/foo',
         ], $checkSuccess->wait());
 
         $this->assertCount(1, $container);
@@ -121,6 +126,7 @@ final class CiviCrmClientTest extends TestCase
                     'first_name',
                     'last_name',
                     'email',
+                    'custom_131',
                 ],
             ],
             'api_key' => 'api-key',
@@ -144,7 +150,7 @@ final class CiviCrmClientTest extends TestCase
                 new Response(200, [], json_encode(['is_error' => 0])),
         ], $container);
 
-        $subscribe = $client->subscribe('email@example.com', ['latest_articles']);
+        $subscribe = $client->subscribe('email@example.com', ['latest_articles'], 'http://localhost/content-alerts/foo');
 
         $this->assertEquals([
             'contact_id' => '12345',
@@ -168,7 +174,7 @@ final class CiviCrmClientTest extends TestCase
                 'email' => 'email@example.com',
                 'first_name' => '',
                 'last_name' => '',
-                'custom_131' => '',
+                'custom_131' => 'http://localhost/content-alerts/foo',
             ],
             'api_key' => 'api-key',
             'key' => 'site-key',
@@ -206,7 +212,7 @@ final class CiviCrmClientTest extends TestCase
             new Response(200, [], json_encode(['is_error' => 0])),
         ], $container);
 
-        $subscribe = $client->subscribe('12345', ['latest_articles', 'early_career'], 'New', 'Name', ['latest_articles', 'technology']);
+        $subscribe = $client->subscribe('12345', ['latest_articles', 'early_career'], 'http://localhost/content-alerts/foo', 'New', 'Name', ['latest_articles', 'technology']);
 
         $this->assertEquals([
             'contact_id' => '12345',
@@ -230,7 +236,7 @@ final class CiviCrmClientTest extends TestCase
                 'contact_id' => '12345',
                 'first_name' => 'New',
                 'last_name' => 'Name',
-                'custom_131' => '',
+                'custom_131' => 'http://localhost/content-alerts/foo',
             ],
             'api_key' => 'api-key',
             'key' => 'site-key',
@@ -283,31 +289,17 @@ final class CiviCrmClientTest extends TestCase
             new Response(200, [], json_encode(['is_error' => 0])),
         ], $container);
 
-        $trigger = $client->triggerPreferencesEmail(12345, 'http://localhost/content-alerts/foo');
+        $trigger = $client->triggerPreferencesEmail(12345);
 
         $this->assertSame([
             'contact_id' => 12345,
         ], $trigger->wait());
 
-        $this->assertCount(2, $container);
+        $this->assertCount(1, $container);
 
         /** @var Request $firstRequest */
         $firstRequest = $container[0]['request'];
         $this->assertEquals('POST', $firstRequest->getMethod());
-        $this->assertSame($this->prepareQuery([
-            'entity' => 'Contact',
-            'action' => 'create',
-            'json' => [
-                'id' => 12345,
-                'custom_131' => 'http://localhost/content-alerts/foo',
-            ],
-            'api_key' => 'api-key',
-            'key' => 'site-key',
-        ]), $firstRequest->getUri()->getQuery());
-
-        /** @var Request $secondRequest */
-        $secondRequest = $container[1]['request'];
-        $this->assertEquals('POST', $secondRequest->getMethod());
         $this->assertSame($this->prepareQuery([
             'entity' => 'GroupContact',
             'action' => 'create',
@@ -319,7 +311,7 @@ final class CiviCrmClientTest extends TestCase
             ],
             'api_key' => 'api-key',
             'key' => 'site-key',
-        ]), $secondRequest->getUri()->getQuery());
+        ]), $firstRequest->getUri()->getQuery());
     }
 
     /**
@@ -336,7 +328,7 @@ final class CiviCrmClientTest extends TestCase
         ], $container);
 
         try {
-            $client->subscribe('email@example.com', ['latest_articles'])->wait();
+            $client->subscribe('email@example.com', ['latest_articles'], 'http://localhost/content-alerts/foo')->wait();
             $this->fail('CiviCrmResponseError was not thrown');
         } catch (CiviCrmResponseError $e) {
             $this->assertSame('Error', $e->getMessage());
@@ -344,7 +336,7 @@ final class CiviCrmClientTest extends TestCase
         }
 
         try {
-            $client->subscribe('email@example.com', ['latest_articles', 'early_career'])->wait();
+            $client->subscribe('email@example.com', ['latest_articles', 'early_career'], 'http://localhost/content-alerts/foo')->wait();
             $this->fail('CiviCrmResponseError was not thrown');
         } catch (CiviCrmResponseError $e) {
             $this->assertSame('Error 2', $e->getMessage());

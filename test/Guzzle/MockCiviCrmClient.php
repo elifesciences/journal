@@ -8,18 +8,19 @@ use function GuzzleHttp\Promise\promise_for;
 
 final class MockCiviCrmClient
 {
-    public function subscribe(string $identifier, array $preferences, string $firstName = null, string $lastName = null, array $preferencesBefore = []) : PromiseInterface
+    public function subscribe(string $identifier, array $preferences, string $preferencesUrl, string $firstName = null, string $lastName = null, array $preferencesBefore = []) : PromiseInterface
     {
-        return promise_for(array_filter($this->subscribePresets(
+        return promise_for(array_filter($this->presetsSubscribe(
             $identifier,
             $preferences,
+            $preferencesUrl,
             $firstName,
             $lastName,
             $preferencesBefore
         )));
     }
 
-    private function subscribePresets(string $identifer, array $preferences, string $firstName = null, string $lastName = null, array $preferencesBefore = []) : array
+    private function presetsSubscribe(string $identifer, array $preferences, string $preferencesUrl, string $firstName = null, string $lastName = null, array $preferencesBefore = []) : array
     {
         $add = array_values(array_diff($preferences, $preferencesBefore));
         $remove = array_values(array_diff($preferencesBefore, $preferences));
@@ -42,16 +43,17 @@ final class MockCiviCrmClient
 
     public function checkSubscription(string $identifier, $isPreferencesId = false) : PromiseInterface
     {
-        return promise_for($this->checkSubscriptionPresets($identifier, $isPreferencesId));
+        return promise_for($this->presetsCheckSubscription($identifier, $isPreferencesId));
     }
 
     /**
      * @return array|null
      */
-    private function checkSubscriptionPresets(string $identifier, $isPreferencesId = false)
+    private function presetsCheckSubscription(string $identifier, $isPreferencesId = false)
     {
-        switch ($identifier) {
-            case 'http://localhost/content-alerts/green':
+        switch (true) {
+            case 'http://localhost/content-alerts/green' === $identifier && $isPreferencesId:
+            case 'green@example.com' === $identifier && !$isPreferencesId:
                 $preferences = [CiviCrmClient::LABEL_LATEST_ARTICLES];
                 return [
                     'contact_id' => 12345,
@@ -60,9 +62,25 @@ final class MockCiviCrmClient
                     'last_name' => 'Example',
                     'preferences' => $preferences,
                     'groups' => implode(',', $preferences),
+                    CiviCrmClient::FIELD_PREFERENCES_URL => 'http://localhost/content-alerts/green',
                 ];
             default:
                 return null;
+        }
+    }
+
+    public function triggerPreferencesEmail(int $contactId) : PromiseInterface
+    {
+        return promise_for($this->presetsTriggerPreferencesEmail($contactId));
+    }
+
+    private function presetsTriggerPreferencesEmail(int $contactId) : array
+    {
+        switch ($contactId) {
+            default:
+                return [
+                    'contact_id' => $contactId,
+                ];
         }
     }
 }
