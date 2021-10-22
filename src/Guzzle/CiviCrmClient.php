@@ -8,7 +8,6 @@ use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use function GuzzleHttp\Promise\all;
-use function GuzzleHttp\Promise\promise_for;
 
 final class CiviCrmClient
 {
