@@ -19,6 +19,122 @@ final class CiviCrmClientTest extends TestCase
     /**
      * @test
      */
+    public function it_will_check_for_existing_user()
+    {
+        $container = [];
+
+        $client = $this->prepareClient([
+            new Response(200, [], json_encode(['values' => [
+                [
+                    'contact_id' => 12345,
+                    'email' => 'foo@bar.com',
+                    'first_name' => '',
+                    'last_name' => '',
+                    'preferences' => [53,435],
+                    'groups' => implode(',', [53,435]),
+                ],
+            ]])),
+            new Response(200, [], json_encode(['values' => []])),
+        ], $container);
+
+        $checkSuccess = $client->checkSubscription('foo@bar.com');
+
+        $this->assertSame([
+            'contact_id' => 12345,
+            'email' => 'foo@bar.com',
+            'first_name' => '',
+            'last_name' => '',
+            'preferences' => ['latest_articles', 'technology'],
+            'groups' => implode(',', ['latest_articles', 'technology']),
+        ], $checkSuccess->wait());
+
+        $this->assertCount(1, $container);
+
+        /** @var Request $firstRequest */
+        $firstRequest = $container[0]['request'];
+        $this->assertSame($this->prepareQuery([
+            'entity' => 'Contact',
+            'action' => 'get',
+            'json' => [
+                'email' => 'foo@bar.com',
+                'return' => [
+                    'group',
+                    'first_name',
+                    'last_name',
+                    'email',
+                ],
+            ],
+            'api_key' => 'api-key',
+            'key' => 'site-key',
+        ]), $firstRequest->getUri()->getQuery());
+
+        /** @var Request $firstRequest */
+        $firstRequest = $container[0]['request'];
+        $this->assertEquals('GET', $firstRequest->getMethod());
+
+        $checkFail = $client->checkSubscription('http://localhost/content-alerts/foo', true);
+
+        $this->assertNull($checkFail->wait());
+    }
+    /**
+     * @test
+     */
+    public function it_will_check_for_existing_user_by_preferences_url()
+    {
+        $container = [];
+
+        $client = $this->prepareClient([
+            new Response(200, [], json_encode(['values' => [
+                [
+                    'contact_id' => 12345,
+                    'email' => 'foo@bar.com',
+                    'first_name' => '',
+                    'last_name' => '',
+                    'preferences' => [53,435],
+                    'groups' => implode(',', [53,435]),
+                ],
+            ]])),
+        ], $container);
+
+        $checkSuccess = $client->checkSubscription('http://localhost/content-alerts/foo', true);
+
+        $this->assertSame([
+            'contact_id' => 12345,
+            'email' => 'foo@bar.com',
+            'first_name' => '',
+            'last_name' => '',
+            'preferences' => ['latest_articles', 'technology'],
+            'groups' => implode(',', ['latest_articles', 'technology']),
+        ], $checkSuccess->wait());
+
+        $this->assertCount(1, $container);
+
+        /** @var Request $firstRequest */
+        $firstRequest = $container[0]['request'];
+        $this->assertSame($this->prepareQuery([
+            'entity' => 'Contact',
+            'action' => 'get',
+            'json' => [
+                'custom_131' => 'http://localhost/content-alerts/foo',
+                'return' => [
+                    'group',
+                    'first_name',
+                    'last_name',
+                    'email',
+                ],
+            ],
+            'api_key' => 'api-key',
+            'key' => 'site-key',
+        ]), $firstRequest->getUri()->getQuery());
+
+        /** @var Request $firstRequest */
+        $firstRequest = $container[0]['request'];
+        $this->assertEquals('GET', $firstRequest->getMethod());
+    }
+
+    /**
+     * @test
+     */
     public function it_will_subscribe_a_new_user()
     {
         $container = [];
@@ -153,6 +269,25 @@ final class CiviCrmClientTest extends TestCase
             'api_key' => 'api-key',
             'key' => 'site-key',
         ]), $thirdRequest->getUri()->getQuery());
+    }
+
+    /**
+     * @test
+     */
+    public function it_will_trigger_preferences_email()
+    {
+        $container = [];
+
+        $client = $this->prepareClient([
+            new Response(200, [], json_encode(['id' => '12345'])),
+            new Response(200, [], json_encode(['is_error' => 0])),
+        ], $container);
+
+        $trigger = $client->triggerPreferencesEmail(12345, 'http://localhost/content-alerts/foo');
+
+        $this->assertSame([
+            'contact_id' => 12345,
+        ], $trigger->wait());
     }
 
     /**

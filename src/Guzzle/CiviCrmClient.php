@@ -174,7 +174,7 @@ final class CiviCrmClient
                 ],
             ]))->then(function (Response $response) {
                 return $this->prepareResponse($response);
-            })->then(function ($data) use ($contactId) {
+            })->then(function () use ($contactId) {
                 return [
                     'contact_id' => $contactId,
                 ];
@@ -213,7 +213,7 @@ final class CiviCrmClient
 
     private function preferenceGroupLabels(array $groupIds) : array
     {
-        return array_map(function ($groupId) {
+        return array_values(array_map(function ($groupId) {
             switch ($groupId) {
                 case self::GROUP_ID_LATEST_ARTICLES:
                     return self::LABEL_LATEST_ARTICLES;
@@ -231,7 +231,7 @@ final class CiviCrmClient
             self::GROUP_ID_EARLY_CAREER,
             self::GROUP_ID_TECHNOLOGY,
             self::GROUP_ID_ELIFE_NEWSLETTER,
-        ], $groupIds));
+        ], $groupIds)));
     }
 
     private function prepareRequest(string $method = 'GET', array $headers = []) : Request
