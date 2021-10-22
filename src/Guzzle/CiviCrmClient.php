@@ -101,19 +101,24 @@ final class CiviCrmClient
                 ->then(function () use ($remove) {
                     return $remove;
                 }) : [],
-                'unchanged' => promise_for($unchanged),
-            ]);
+                'unchanged' => $unchanged,
+            ])->then(function ($groups) use ($contactId) {
+                return [
+                    'contact_id' => $contactId,
+                    'groups' => $groups,
+                ];
+            });
         });
     }
 
-    public function checkSubscription(string $id, $isPreferencesId = false) : PromiseInterface
+    public function checkSubscription(string $identifier, $isPreferencesId = false) : PromiseInterface
     {
         return $this->client->sendAsync($this->prepareRequest(), $this->options([
             'query' => [
                 'entity' => 'Contact',
                 'action' => 'get',
                 'json' => [
-                    $isPreferencesId ? self::FIELD_PREFERENCES_URL : 'email' => $id,
+                    $isPreferencesId ? self::FIELD_PREFERENCES_URL : 'email' => $identifier,
                     'return' => [
                         'group',
                         'first_name',
