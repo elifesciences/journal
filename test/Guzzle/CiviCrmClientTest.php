@@ -8,6 +8,8 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Middleware;
+use GuzzleHttp\Promise\FulfilledPromise;
+use function GuzzleHttp\Promise\promise_for;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
@@ -30,7 +32,11 @@ final class CiviCrmClientTest extends TestCase
 
         $this->assertEquals([
             'contact_id' => '12345',
-            'groups_added' => true,
+            'groups' => [
+                'added' => ['latest_articles'],
+                'removed' => [],
+                'unchanged' => [],
+            ],
         ], $subscribe->wait());
 
         $this->assertCount(2, $container);
@@ -44,6 +50,9 @@ final class CiviCrmClientTest extends TestCase
             'json' => [
                 'contact_type' => 'Individual',
                 'email' => 'email@example.com',
+                'first_name' => '',
+                'last_name' => '',
+                'custom_131' => '',
             ],
             'api_key' => 'api-key',
             'key' => 'site-key',
@@ -56,6 +65,7 @@ final class CiviCrmClientTest extends TestCase
             'entity' => 'GroupContact',
             'action' => 'create',
             'json' => [
+                'status' => 'Added',
                 'group_id' => [
                     'All_Content_53',
                     'Journal_eToc_signup_1922',
