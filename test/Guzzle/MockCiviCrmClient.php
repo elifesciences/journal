@@ -3,10 +3,11 @@
 namespace test\eLife\Journal\Guzzle;
 
 use eLife\Journal\Guzzle\CiviCrmClient;
+use eLife\Journal\Guzzle\CiviCrmClientInterface;
 use GuzzleHttp\Promise\PromiseInterface;
 use function GuzzleHttp\Promise\promise_for;
 
-final class MockCiviCrmClient
+final class MockCiviCrmClient implements CiviCrmClientInterface
 {
     public function subscribe(string $identifier, array $preferences, string $preferencesUrl, string $firstName = null, string $lastName = null, array $preferencesBefore = []) : PromiseInterface
     {

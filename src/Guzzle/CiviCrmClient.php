@@ -9,7 +9,7 @@ use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use function GuzzleHttp\Promise\all;
 
-final class CiviCrmClient
+final class CiviCrmClient implements CiviCrmClientInterface
 {
     const LABEL_LATEST_ARTICLES = 'latest_articles';
     const LABEL_EARLY_CAREER = 'early_career';
