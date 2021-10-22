@@ -37,11 +37,14 @@ final class ContentAlertsType extends AbstractType
                 ->add('contact_id', HiddenType::class)
                 ->add('groups', HiddenType::class)
                 ->add('first_name', TextType::class, [
+                    'label' => 'First name (optional)',
                     'attr' => [
                         'autofocus' => true,
                     ],
                 ])
-                ->add('last_name', TextType::class);
+                ->add('last_name', TextType::class, [
+                    'label' => 'Last name (optional)',
+                ]);
         }
 
         $builder
