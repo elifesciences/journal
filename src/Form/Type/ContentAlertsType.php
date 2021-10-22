@@ -17,23 +17,24 @@ final class ContentAlertsType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder
-            ->add('email', EmailType::class,
-                [
-                    'required' => true,
-                    'constraints' => [
-                        new NotBlank(['message' => 'Please provide your email address.']),
-                        new Email(['message' => 'Please provide a valid email address.']),
-                    ],
-                    'disabled' => !empty($options['data']['contact_id']),
-                    'attr' => [
-                        'autofocus' => empty($options['data']['contact_id']),
-                    ],
-                ]
-            );
-
-        if (!empty($options['data']['contact_id'])) {
+        if (empty($options['data']['contact_id'])) {
             $builder
+                ->add('email', EmailType::class,
+                    [
+                        'required' => true,
+                        'constraints' => [
+                            new NotBlank(['message' => 'Please provide your email address.']),
+                            new Email(['message' => 'Please provide a valid email address.']),
+                        ],
+                        'disabled' => !empty($options['data']['contact_id']),
+                        'attr' => [
+                            'autofocus' => empty($options['data']['contact_id']),
+                        ],
+                    ]
+                );
+        } else {
+            $builder
+                ->add('email', HiddenType::class)
                 ->add('contact_id', HiddenType::class)
                 ->add('groups', HiddenType::class)
                 ->add('first_name', TextType::class, [

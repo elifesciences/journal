@@ -46,7 +46,8 @@ final class ContentAlertsController extends Controller
                             return ArticleSection::basic(
                                 'Thank you for subscribing!',
                                 2,
-                                $this->render(new Paragraph("A confirmation email has been sent to <strong>{$form->get('email')->getData()}</strong>.")).$this->render(
+                                $this->render(
+                                    new Paragraph("A confirmation email has been sent to <strong>{$form->get('email')->getData()}</strong>."),
                                     Button::link('Back to Homepage', $this->get('router')->generate('home'))
                                 ),
                                 'thank-you'
@@ -56,9 +57,11 @@ final class ContentAlertsController extends Controller
                         ->triggerPreferencesEmail($check['contact_id'], $this->get('router')->generate('content-alerts-update', ['id' => uniqid($check['contact_id'])], UrlGeneratorInterface::ABSOLUTE_URL))
                         ->then(function () use ($form) {
                             return ArticleSection::basic(
-                                'Thank you for subscribing!',
+                                'You are already subscribed',
                                 2,
-                                $this->render(new Paragraph("A link to update your preferences has been sent to <strong>{$form->get('email')->getData()}</strong>.")).$this->render(
+                                $this->render(
+                                    new Paragraph("An email has been sent to <strong>{$form->get('email')->getData()}</strong>."),
+                                    new Paragraph('Please follow the link in your email to update your preferences.'),
                                     Button::link('Back to Homepage', $this->get('router')->generate('home'))
                                 ),
                                 'thank-you'
@@ -80,7 +83,7 @@ final class ContentAlertsController extends Controller
 
         $arguments['emailCta'] = null;
 
-        $arguments['title'] = 'Subscribe to eLife\'s email alerts';
+        $arguments['title'] = 'Your email preferences';
 
         $arguments['contentHeader'] = new ContentHeader($arguments['title']);
 
@@ -110,9 +113,10 @@ final class ContentAlertsController extends Controller
                 )
                 ->then(function () use ($form) {
                     return ArticleSection::basic(
-                        'Thank you for updating your preferences!',
+                        'Thank you',
                         2,
                         $this->render(
+                            new Paragraph("Email preferences for <strong>{$form->get('email')->getData()}</strong> have been updated."),
                             Button::link('Back to Homepage', $this->get('router')->generate('home'))
                         ),
                         'thank-you'
@@ -120,9 +124,12 @@ final class ContentAlertsController extends Controller
                 })->wait();
         }, false);
 
-        $arguments['form'] = $validSubmission instanceof ArticleSection ?
-            $validSubmission :
-            $this->get('elife.journal.view_model.converter')->convert($form->createView());
+        if ($validSubmission instanceof ArticleSection) {
+            $arguments['form'] = $validSubmission;
+        } else {
+            $arguments['formIntro'] = new Paragraph("Change which email alerts you receive from eLife. Emails will be sent to <strong>{$form->get('email')->getData()}</strong>.");
+            $arguments['form'] = $this->get('elife.journal.view_model.converter')->convert($form->createView());
+        }
 
         return new Response($this->get('templating')->render('::content-alerts.html.twig', $arguments));
     }

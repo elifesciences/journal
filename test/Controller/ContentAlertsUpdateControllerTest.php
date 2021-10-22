@@ -14,7 +14,7 @@ final class ContentAlertsUpdateControllerTest extends PageTestCase
         $crawler = $client->request('GET', $this->getUrl());
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
-        $this->assertSame('Subscribe to eLife\'s email alerts', $crawler->filter('main h1')->text());
+        $this->assertSame('Your email preferences', $crawler->filter('main h1')->text());
     }
 
     /**
@@ -28,10 +28,10 @@ final class ContentAlertsUpdateControllerTest extends PageTestCase
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
 
-        $this->assertSame('Subscribe to eLife\'s email alerts | eLife', $crawler->filter('title')->text());
+        $this->assertSame('Your email preferences | eLife', $crawler->filter('title')->text());
         $this->assertSame('/content-alerts/green', $crawler->filter('link[rel="canonical"]')->attr('href'));
         $this->assertSame('http://localhost/content-alerts/green', $crawler->filter('meta[property="og:url"]')->attr('content'));
-        $this->assertSame('Subscribe to eLife\'s email alerts', $crawler->filter('meta[property="og:title"]')->attr('content'));
+        $this->assertSame('Your email preferences', $crawler->filter('meta[property="og:title"]')->attr('content'));
         $this->assertEmpty($crawler->filter('meta[property="og:description"]'));
         $this->assertEmpty($crawler->filter('meta[name="description"]'));
         $this->assertSame('summary', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
@@ -50,15 +50,46 @@ final class ContentAlertsUpdateControllerTest extends PageTestCase
     /**
      * @test
      */
-    public function it_disables_the_email_field()
+    public function it_hides_the_email_field()
     {
         $client = static::createClient();
 
         $crawler = $client->request('GET', $this->getUrl());
 
-        $form = $crawler->selectButton('Subscribe')->form();
+        $email = $crawler->filter('input[name="content_alerts[email]"]');
 
-        $this->assertTrue($form['content_alerts[email]']->isDisabled());
+        $this->assertEquals('hidden', $email->attr('type'));
+        $this->assertEquals('green@example.com', $email->attr('value'));
+    }
+
+    /**
+     * @test
+     */
+    public function it_hides_the_contact_id_field()
+    {
+        $client = static::createClient();
+
+        $crawler = $client->request('GET', $this->getUrl());
+
+        $email = $crawler->filter('input[name="content_alerts[contact_id]"]');
+
+        $this->assertEquals('hidden', $email->attr('type'));
+        $this->assertEquals('12345', $email->attr('value'));
+    }
+
+    /**
+     * @test
+     */
+    public function it_hides_the_groups_before_changes_field()
+    {
+        $client = static::createClient();
+
+        $crawler = $client->request('GET', $this->getUrl());
+
+        $email = $crawler->filter('input[name="content_alerts[groups]"]');
+
+        $this->assertEquals('hidden', $email->attr('type'));
+        $this->assertEquals('latest_articles', $email->attr('value'));
     }
 
     /**
@@ -114,7 +145,8 @@ final class ContentAlertsUpdateControllerTest extends PageTestCase
 
         $crawler = $client->submit($form);
 
-        $this->assertSame('Thank you for updating your preferences!', $crawler->filter('#thank-you h2')->text());
+        $this->assertSame('Thank you', $crawler->filter('#thank-you h2')->text());
+        $this->assertSame('Email preferences for green@example.com have been updated.', $crawler->filter('#thank-you p')->text());
         $this->assertSame('Back to Homepage', $crawler->filter('#thank-you a')->text());
         $this->assertSame('/', $crawler->filter('#thank-you a')->attr('href'));
     }

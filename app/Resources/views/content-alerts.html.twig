@@ -10,6 +10,12 @@
 
         {% block main %}
 
+            {% if formIntro|default(null) %}
+
+                {{ render_pattern(formIntro) }}
+
+            {% endif %}
+
             {% if form %}
 
                 {{ render_pattern(form) }}
