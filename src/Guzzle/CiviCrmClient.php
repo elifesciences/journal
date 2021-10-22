@@ -208,7 +208,7 @@ final class CiviCrmClient
             array_push($clean, self::GROUP_JOURNAL_ETOC_SIGNUP);
         }
 
-        return $clean;
+        return array_values($clean);
     }
 
     private function preferenceGroupLabels(array $groupIds) : array
