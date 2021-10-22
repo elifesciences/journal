@@ -253,12 +253,12 @@ abstract class Controller implements ContainerAwareInterface
                 }),
             'infoBars' => [],
             'callsToAction' => $this->getCallsToAction($request),
-            'emailCta' => 'content-alerts' !== $request->get('_route') ? new ViewModel\EmailCta(
+            'emailCta' => new ViewModel\EmailCta(
                 'Be the first to read new articles from eLife',
                 ViewModel\Button::link('Sign up for email alerts', $this->get('router')->generate('content-alerts')),
                 $this->get('router')->generate('privacy'),
                 'Privacy notice'
-            ) : null,
+            ),
             'footer' => $this->get('elife.journal.view_model.factory.footer')->createFooter(),
             'user' => $user ?? null,
             'item' => $item,
