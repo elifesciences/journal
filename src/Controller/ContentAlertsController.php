@@ -20,6 +20,7 @@ final class ContentAlertsController extends Controller
     public function subscribeAction(Request $request) : Response
     {
         $arguments = $this->defaultPageArguments($request);
+        $arguments['emailCta'] = null;
 
         $arguments['title'] = 'Subscribe to eLife\'s email alerts';
 
@@ -74,6 +75,7 @@ final class ContentAlertsController extends Controller
     public function updateAction(Request $request, string $id) : Response
     {
         $arguments = $this->defaultPageArguments($request);
+        $arguments['emailCta'] = null;
 
         $arguments['title'] = 'Subscribe to eLife\'s email alerts';
 
