@@ -42,7 +42,7 @@ final class CiviCrmClient
         $this->siteKey = $siteKey;
     }
 
-    public function subscribe(string $identifier, array $preferences, string $firstName = null, string $lastName = null, array $preferencesBefore = []) : PromiseInterface
+    public function subscribe(string $identifier, array $preferences, string $preferencesUrl = null, string $firstName = null, string $lastName = null, array $preferencesBefore = []) : PromiseInterface
     {
         return $this->client->sendAsync($this->prepareRequest('POST'), $this->options([
             'query' => [
@@ -53,8 +53,7 @@ final class CiviCrmClient
                     !empty($preferencesBefore) ? 'contact_id' : 'email' => $identifier,
                     'first_name' => $firstName ?? '',
                     'last_name' => $lastName ?? '',
-                    self::FIELD_PREFERENCES_URL => '',
-                ],
+                ] + array_filter([self::FIELD_PREFERENCES_URL => $preferencesUrl]),
             ],
         ]))->then(function (Response $response) {
             return $this->prepareResponse($response);
@@ -123,6 +122,7 @@ final class CiviCrmClient
                         'first_name',
                         'last_name',
                         'email',
+                        self::FIELD_PREFERENCES_URL,
                     ],
                 ],
             ],
@@ -142,43 +142,31 @@ final class CiviCrmClient
                     'last_name' => $contact['last_name'],
                     'preferences' => $preferences,
                     'groups' => implode(',', $preferences),
+                    'preferences_url' => $contact[self::FIELD_PREFERENCES_URL],
                 ];
             }
         });
     }
 
-    public function triggerPreferencesEmail(int $contactId, string $preferencesUrl) : PromiseInterface
+    public function triggerPreferencesEmail(int $contactId) : PromiseInterface
     {
         return $this->client->sendAsync($this->prepareRequest('POST'), $this->options([
             'query' => [
-                'entity' => 'Contact',
+                'entity' => 'GroupContact',
                 'action' => 'create',
                 'json' => [
-                    'id' => $contactId,
-                    self::FIELD_PREFERENCES_URL => $preferencesUrl,
+                    'group_id' => [
+                        self::GROUP_JOURNAL_ETOC_PREFERENCES,
+                    ],
+                    'contact_id' => $contactId,
                 ],
             ],
         ]))->then(function (Response $response) {
             return $this->prepareResponse($response);
         })->then(function () use ($contactId) {
-            return $this->client->sendAsync($this->prepareRequest('POST'), $this->options([
-                'query' => [
-                    'entity' => 'GroupContact',
-                    'action' => 'create',
-                    'json' => [
-                        'group_id' => [
-                            self::GROUP_JOURNAL_ETOC_PREFERENCES,
-                        ],
-                        'contact_id' => $contactId,
-                    ],
-                ],
-            ]))->then(function (Response $response) {
-                return $this->prepareResponse($response);
-            })->then(function () use ($contactId) {
-                return [
-                    'contact_id' => $contactId,
-                ];
-            });
+            return [
+                'contact_id' => $contactId,
+            ];
         });
     }
 

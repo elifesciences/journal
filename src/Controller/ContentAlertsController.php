@@ -40,7 +40,8 @@ final class ContentAlertsController extends Controller
                         $this->get('elife.api_client.client.crm_api')
                         ->subscribe(
                             $form->get('email')->getData(),
-                            $form->get('preferences')->getData()
+                            $form->get('preferences')->getData(),
+                            $this->generatePreferencesUrl()
                         )
                         ->then(function () use ($form) {
                             return ArticleSection::basic(
@@ -54,7 +55,7 @@ final class ContentAlertsController extends Controller
                             );
                         }) :
                         $this->get('elife.api_client.client.crm_api')
-                        ->triggerPreferencesEmail($check['contact_id'], $this->get('router')->generate('content-alerts-update', ['id' => uniqid($check['contact_id'])], UrlGeneratorInterface::ABSOLUTE_URL))
+                        ->triggerPreferencesEmail($check['contact_id'])
                         ->then(function () use ($form) {
                             return ArticleSection::basic(
                                 'You are already subscribed',
@@ -88,7 +89,7 @@ final class ContentAlertsController extends Controller
         $arguments['contentHeader'] = new ContentHeader($arguments['title']);
 
         $data = $this->get('elife.api_client.client.crm_api')
-            ->checkSubscription($this->get('router')->generate('content-alerts-update', ['id' => $id], UrlGeneratorInterface::ABSOLUTE_URL), true)
+            ->checkSubscription($this->generatePreferencesUrl($id), true)
             ->then(function ($check) {
                 if (!$check) {
                     throw new EarlyResponse(new RedirectResponse($this->get('router')->generate('content-alerts')));
@@ -107,6 +108,7 @@ final class ContentAlertsController extends Controller
                 ->subscribe(
                     $form->get('contact_id')->getData(),
                     $form->get('preferences')->getData(),
+                    $this->generatePreferencesUrl(),
                     $form->get('first_name')->getData(),
                     $form->get('last_name')->getData(),
                     explode(',', $form->get('groups')->getData())
@@ -132,5 +134,10 @@ final class ContentAlertsController extends Controller
         }
 
         return new Response($this->get('templating')->render('::content-alerts.html.twig', $arguments));
+    }
+
+    private function generatePreferencesUrl(string $id = null) : string
+    {
+        return $this->get('router')->generate('content-alerts-update', ['id' => $id ?? uniqid()], UrlGeneratorInterface::ABSOLUTE_URL);
     }
 }
