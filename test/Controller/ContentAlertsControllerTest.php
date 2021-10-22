@@ -11,7 +11,7 @@ final class ContentAlertsControllerTest extends PageTestCase
     {
         $client = static::createClient();
 
-        $crawler = $client->request('GET', '/content-alerts');
+        $crawler = $client->request('GET', $this->getUrl());
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertSame('Subscribe to eLife\'s email alerts', $crawler->filter('main h1')->text());
@@ -54,7 +54,7 @@ final class ContentAlertsControllerTest extends PageTestCase
     {
         $client = static::createClient();
 
-        $crawler = $client->request('GET', '/content-alerts');
+        $crawler = $client->request('GET', $this->getUrl());
 
         $form = $crawler->selectButton('Subscribe')->form();
         $form['content_alerts[preferences][0]']->untick();
@@ -76,7 +76,7 @@ final class ContentAlertsControllerTest extends PageTestCase
     {
         $client = static::createClient();
 
-        $crawler = $client->request('GET', '/content-alerts');
+        $crawler = $client->request('GET', $this->getUrl());
 
         $form = $crawler->selectButton('Subscribe')->form();
         $form['content_alerts[email]'] = 'foo';
@@ -98,7 +98,7 @@ final class ContentAlertsControllerTest extends PageTestCase
     {
         $client = static::createClient();
 
-        $crawler = $client->request('GET', '/content-alerts');
+        $crawler = $client->request('GET', $this->getUrl());
 
         $form = $crawler->selectButton('Subscribe')->form();
         $form['content_alerts[email]'] = 'foo@bar.com';
@@ -120,7 +120,7 @@ final class ContentAlertsControllerTest extends PageTestCase
 
         $this->logIn($client);
 
-        $crawler = $client->request('GET', '/content-alerts');
+        $crawler = $client->request('GET', $this->getUrl());
 
         $form = $crawler->selectButton('Subscribe')->form();
 

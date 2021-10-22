@@ -22,6 +22,8 @@ final class ContentAlertsController extends Controller
         $arguments = $this->defaultPageArguments($request);
         $arguments['emailCta'] = null;
 
+        $arguments['emailCta'] = null;
+
         $arguments['title'] = 'Subscribe to eLife\'s email alerts';
 
         $arguments['contentHeader'] = new ContentHeader($arguments['title']);
