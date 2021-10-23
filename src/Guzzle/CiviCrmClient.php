@@ -42,6 +42,24 @@ final class CiviCrmClient implements CiviCrmClientInterface
         $this->siteKey = $siteKey;
     }
 
+    public function storePreferencesUrl(int $contactId, string $preferencesUrl)
+    {
+        return $this->client->sendAsync($this->prepareRequest('POST'), $this->options([
+            'query' => [
+                'entity' => 'Contact',
+                'action' => 'create',
+                'json' => [
+                    'contact_id' => $contactId,
+                    self::FIELD_PREFERENCES_URL => $preferencesUrl,
+                ],
+            ],
+        ]))->then(function (Response $response) {
+            return $this->prepareResponse($response);
+        })->then(function ($data) {
+            return ['contact_id' => $data['id']];
+        });
+    }
+
     public function subscribe(string $identifier, array $preferences, string $preferencesUrl, string $firstName = null, string $lastName = null, array $preferencesBefore = []) : PromiseInterface
     {
         return $this->client->sendAsync($this->prepareRequest('POST'), $this->options([

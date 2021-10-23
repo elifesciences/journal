@@ -84,4 +84,19 @@ final class MockCiviCrmClient implements CiviCrmClientInterface
                 ];
         }
     }
+
+    public function storePreferencesUrl(int $contactId, string $preferencesUrl) : PromiseInterface
+    {
+        return promise_for($this->presetsStorePreferencesUrl($contactId, $preferencesUrl));
+    }
+
+    public function presetsStorePreferencesUrl(int $contactId, string $preferencesUrl) : PromiseInterface
+    {
+        switch ($contactId) {
+            default:
+                return promise_for([
+                    'contact_id' => $contactId,
+                ]);
+        }
+    }
 }

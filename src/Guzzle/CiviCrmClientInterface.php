@@ -11,4 +11,6 @@ interface CiviCrmClientInterface
     public function checkSubscription(string $identifier, $isPreferencesId = false) : PromiseInterface;
 
     public function triggerPreferencesEmail(int $contactId) : PromiseInterface;
+
+    public function storePreferencesUrl(int $contactId, string $preferencesUrl) : PromiseInterface
 }

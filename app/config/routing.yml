@@ -203,6 +203,11 @@ content-alerts:
     defaults:
          _controller: AppBundle:ContentAlerts:subscribe
 
+content-alerts-update-request:
+    path: /content-alerts/update
+    defaults:
+         _controller: AppBundle:ContentAlerts:updateRequest
+
 content-alerts-update:
     path: /content-alerts/{id}
     defaults:

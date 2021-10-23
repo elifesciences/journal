@@ -72,6 +72,6 @@ final class ContentAlertsType extends AbstractType
                     ],
                 ]
             )
-            ->add('subscribe', SubmitType::class);
+            ->add(empty($options['data']['contact_id']) ? 'subscribe' : 'update', SubmitType::class);
     }
 }
