@@ -14,7 +14,7 @@ services:
           - '@csa_guzzle.client.elife_api_slow'
 
     elife.api_client.client.crm_api:
-        class: test\eLife\Journal\Guzzle\MockCiviCrmClient
+        class: eLife\Journal\Guzzle\MockCiviCrmClient
 
     elife.api_client.client.warning_checking:
         class: eLife\ApiClient\HttpClient\WarningCheckingHttpClient
