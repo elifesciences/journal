@@ -243,7 +243,7 @@ final class WhoWeWorkWithController extends Controller
             [
                 'name' => 'Declaration on Research Assessment',
                 'filename' => 'dora',
-                'type' => 'image/png',
+                'type' => 'image/svg+xml',
                 'uri' => 'https://sfdora.org/',
             ],
             [
