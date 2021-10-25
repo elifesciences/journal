@@ -94,7 +94,6 @@ final class ContentAlertsController extends Controller
             ->checkSubscription($this->generatePreferencesUrl($id), true)
             ->then(function ($check) {
                 if (!$check) {
-
                     $this->get('session')
                         ->getFlashBag()
                         ->add(InfoBar::TYPE_WARNING,
