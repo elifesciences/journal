@@ -166,7 +166,6 @@ final class ContentAlertsController extends Controller
                             ['contact_id' => $check['contact_id']];
                     }
                 })->then(function ($data) use ($form) {
-                    dump($data);
                     return !empty($data) ? $this->get('elife.api_client.client.crm_api')
                         ->triggerPreferencesEmail($data['contact_id'])
                         ->then(function () use ($form) {
