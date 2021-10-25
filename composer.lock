@@ -1294,12 +1294,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/patterns-php.git",
-                "reference": "043d5a37dd980393ddfaa393eef75beaf55b4043"
+                "reference": "f2263e949992a2c44ea2addbf4e05987177f196c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/043d5a37dd980393ddfaa393eef75beaf55b4043",
-                "reference": "043d5a37dd980393ddfaa393eef75beaf55b4043",
+                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/f2263e949992a2c44ea2addbf4e05987177f196c",
+                "reference": "f2263e949992a2c44ea2addbf4e05987177f196c",
                 "shasum": ""
             },
             "require": {
@@ -1343,7 +1343,7 @@
             "support": {
                 "source": "https://github.com/elifesciences/patterns-php/tree/master"
             },
-            "time": "2021-10-19T19:39:34+00:00"
+            "time": "2021-10-22T09:17:14+00:00"
         },
         {
             "name": "fabpot/goutte",
@@ -5618,7 +5618,6 @@
             ],
             "description": "Provides a list of PHP built-in functions that operate on resources",
             "homepage": "https://www.github.com/sebastianbergmann/resource-operations",
-            "abandoned": true,
             "time": "2018-10-04T04:07:39+00:00"
         },
         {
