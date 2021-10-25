@@ -12,5 +12,5 @@ interface CiviCrmClientInterface
 
     public function triggerPreferencesEmail(int $contactId) : PromiseInterface;
 
-    public function storePreferencesUrl(int $contactId, string $preferencesUrl) : PromiseInterface
+    public function storePreferencesUrl(int $contactId, string $preferencesUrl) : PromiseInterface;
 }
