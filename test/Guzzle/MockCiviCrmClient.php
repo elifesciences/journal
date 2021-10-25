@@ -52,8 +52,12 @@ final class MockCiviCrmClient implements CiviCrmClientInterface
      */
     private function presetsCheckSubscription(string $identifier, $isPreferencesId = false)
     {
+        if ($isPreferencesId) {
+            $identifier = parse_url($identifier)['path'];
+        }
+
         switch (true) {
-            case 'http://localhost/content-alerts/green' === $identifier && $isPreferencesId:
+            case '/content-alerts/green' === $identifier && $isPreferencesId:
             case 'green@example.com' === $identifier && !$isPreferencesId:
                 $preferences = [CiviCrmClient::LABEL_LATEST_ARTICLES];
                 return [
