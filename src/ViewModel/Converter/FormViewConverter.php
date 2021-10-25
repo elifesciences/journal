@@ -9,6 +9,7 @@ use eLife\Patterns\PatternRenderer;
 use eLife\Patterns\ViewModel;
 use eLife\Patterns\ViewModel\MessageGroup;
 use InvalidArgumentException;
+use Symfony\Component\Form\ChoiceList\View\ChoiceGroupView;
 use Symfony\Component\Form\ChoiceList\View\ChoiceView;
 use Symfony\Component\Form\FormView;
 use function array_filter;
@@ -35,17 +36,42 @@ final class FormViewConverter implements ViewModelConverter
         foreach (array_reverse($object->vars['block_prefixes']) as $prefix) {
             switch ($prefix) {
                 case 'choice':
-                    $options = array_map(function (ChoiceView $choice) use ($object) {
-                        return new ViewModel\SelectOption($choice->value, $choice->label, $choice->value === $object->vars['value']);
-                    }, $object->vars['choices']);
+                    if ($object->vars['multiple']) {
+                        $options = [];
+                        foreach ($object->vars['choices'] as $choice) {
+                            $prepareOption = $this->checkboxesChoice($choice, $object->vars['value']);
+                            if ($prepareOption instanceof ViewModel\CheckboxesOption) {
+                                $options[] = $prepareOption;
+                            } elseif (array_values($prepareOption)[0] instanceof ViewModel\CheckboxesOption) {
+                                $options = array_merge($options, $prepareOption);
+                            } else {
+                                $options[] = new ViewModel\CheckboxesGroup(array_values(array_values($prepareOption)[0]), array_keys($prepareOption)[0]);
+                            }
+                        }
 
-                    if (!empty($object->vars['placeholder'])) {
-                        array_unshift($options, new ViewModel\SelectOption('', $object->vars['placeholder']));
+                        return new ViewModel\Checkboxes(
+                            $object->vars['id'],
+                            $options,
+                            $object->vars['full_name'].'[]',
+                            $this->getLabel($object),
+                            $object->vars['required'],
+                            $object->vars['disabled'],
+                            $this->getState($object),
+                            $this->getMessageGroup($object)
+                        );
+                    } else {
+                        $options = array_map(function (ChoiceView $choice) use ($object) {
+                            return new ViewModel\SelectOption($choice->value, $choice->label, $choice->value === $object->vars['value']);
+                        }, $object->vars['choices']);
+
+                        if (!empty($object->vars['placeholder'])) {
+                            array_unshift($options, new ViewModel\SelectOption('', $object->vars['placeholder']));
+                        }
+
+                        return new ViewModel\Select($object->vars['id'], $options, new ViewModel\FormLabel($this->getLabel($object)),
+                            $object->vars['full_name'], $object->vars['required'], $object->vars['disabled'], $this->getState($object),
+                            $this->getMessageGroup($object));
                     }
-
-                    return new ViewModel\Select($object->vars['id'], $options, new ViewModel\FormLabel($this->getLabel($object)),
-                        $object->vars['full_name'], $object->vars['required'], $object->vars['disabled'], $this->getState($object),
-                        $this->getMessageGroup($object));
                     break;
                 case 'email':
                     $field = ViewModel\TextField::emailInput(new ViewModel\FormLabel($this->getLabel($object)),
@@ -96,6 +122,23 @@ final class FormViewConverter implements ViewModelConverter
         }
 
         throw new InvalidArgumentException('Unknown form type: '.implode(', ', $object->vars['block_prefixes']));
+    }
+
+    /**
+     * @param ChoiceView|ChoiceGroupView $choice
+     */
+    private function checkboxesChoice($choice, array $data = []) {
+        if ($choice instanceof ChoiceView) {
+            return new ViewModel\CheckboxesOption($choice->value, $choice->label, null, in_array($choice->value, $data));
+        }
+
+        if ($choice instanceof ChoiceGroupView) {
+            return array_map(function ($subChoice) use ($data) {
+                return $this->checkboxesChoice($subChoice, $data);
+            }, $choice->choices);
+        }
+
+        return null;
     }
 
     /**

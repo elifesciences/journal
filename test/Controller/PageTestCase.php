@@ -41,13 +41,15 @@ abstract class PageTestCase extends WebTestCase
     /**
      * @test
      */
-    final public function it_has_the_sign_up_form()
+    public function it_has_the_sign_up_cta()
     {
         $client = static::createClient();
 
         $crawler = $client->request('GET', $this->getUrl());
 
-        $this->assertCount(1, $crawler->filter('.email-cta'));
+        $emailCta = $crawler->filter('.email-cta');
+
+        $this->assertCount(1, $emailCta);
     }
 
     /**
