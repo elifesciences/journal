@@ -237,8 +237,8 @@ final class HomeControllerTest extends PageTestCase
         $this->assertSame('/', $crawler->filter('link[rel="canonical"]')->attr('href'));
         $this->assertSame('http://localhost/', $crawler->filter('meta[property="og:url"]')->attr('content'));
         $this->assertSame('Latest research', $crawler->filter('meta[property="og:title"]')->attr('content'));
-        $this->assertSame('eLife works to improve research communication through open science and open technology innovation', $crawler->filter('meta[property="og:description"]')->attr('content'));
-        $this->assertSame('eLife works to improve research communication through open science and open technology innovation', $crawler->filter('meta[name="description"]')->attr('content'));
+        $this->assertSame('evolution of publishing', $crawler->filter('meta[property="og:description"]')->attr('content'));
+        $this->assertSame('evolution of publishing', $crawler->filter('meta[name="description"]')->attr('content'));
         $this->assertSame('summary', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
         $this->assertSame('http://localhost/'.ltrim(self::$kernel->getContainer()->get('elife.assets.packages')->getUrl('assets/images/social/icon-600x600@1.png'), '/'), $crawler->filter('meta[name="twitter:image"]')->attr('content'));
         $this->assertSame('http://localhost/'.ltrim(self::$kernel->getContainer()->get('elife.assets.packages')->getUrl('assets/images/social/icon-600x600@1.png'), '/'), $crawler->filter('meta[property="og:image"]')->attr('content'));
