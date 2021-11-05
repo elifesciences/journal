@@ -25,7 +25,7 @@ final class AlertsController extends Controller
         $arguments['body'] = [
             ArticleSection::basic('New Research', 2, $this->render(
                 Listing::unordered([
-                    'Receive <a href="https://crm.elifesciences.org/crm/content-alerts">weekly updates of the latest published research</a>',
+                    'Receive <a href="'.$this->get('router')->generate('content-alerts').'">weekly updates of the latest published research</a>',
                     'To stay on top of new research available every day, subscribe to our RSS feeds for <a href="'.$this->get('router')->generate('rss-ahead').'">author PDFs</a> and <a href="'.$this->get('router')->generate('rss-recent').'">published articles</a>',
                     'See the highlights of recently published research and more on <a href="https://www.twitter.com/elife">Twitter</a> or <a href="https://www.facebook.com/elifesciences">Facebook</a>',
                 ], 'bullet')
