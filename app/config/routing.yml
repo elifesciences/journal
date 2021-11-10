@@ -203,10 +203,10 @@ content-alerts:
     defaults:
          _controller: AppBundle:ContentAlerts:subscribe
 
-content-alerts-update-request:
-    path: /content-alerts/update
+content-alerts-link-expired:
+    path: /content-alerts/link-expired
     defaults:
-         _controller: AppBundle:ContentAlerts:updateRequest
+         _controller: AppBundle:ContentAlerts:linkExpired
 
 content-alerts-update:
     path: /content-alerts/{id}

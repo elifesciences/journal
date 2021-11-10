@@ -8,6 +8,7 @@ use eLife\Journal\Form\Type\ContentAlertsUpdateRequestType;
 use eLife\Journal\Guzzle\CiviCrmClient;
 use eLife\Patterns\ViewModel\ArticleSection;
 use eLife\Patterns\ViewModel\Button;
+use eLife\Patterns\ViewModel\ButtonCollection;
 use eLife\Patterns\ViewModel\ContentHeader;
 use eLife\Patterns\ViewModel\InfoBar;
 use eLife\Patterns\ViewModel\Paragraph;
@@ -94,7 +95,7 @@ final class ContentAlertsController extends Controller
             ->checkSubscription($this->generatePreferencesUrl($id), true)
             ->then(function ($check) {
                 if (!$check) {
-                    throw new EarlyResponse(new RedirectResponse($this->get('router')->generate('content-alerts-update-request')));
+                    throw new EarlyResponse(new RedirectResponse($this->get('router')->generate('content-alerts-link-expired')));
                 }
 
                 return $check;
@@ -138,7 +139,7 @@ final class ContentAlertsController extends Controller
         return new Response($this->get('templating')->render('::content-alerts.html.twig', $arguments));
     }
 
-    public function updateRequestAction(Request $request) : Response
+    public function linkExpiredAction(Request $request) : Response
     {
         $arguments = $this->defaultPageArguments($request);
 
@@ -150,7 +151,7 @@ final class ContentAlertsController extends Controller
 
         /** @var Form $form */
         $form = $this->get('form.factory')
-            ->create(ContentAlertsUpdateRequestType::class, null, ['action' => $this->get('router')->generate('content-alerts-update-request')]);
+            ->create(ContentAlertsUpdateRequestType::class, null, ['action' => $this->get('router')->generate('content-alerts-link-expired')]);
 
         $validSubmission = $this->ifFormSubmitted($request, $form, function () use ($form) {
             return $this->get('elife.api_client.client.crm_api')
@@ -179,10 +180,12 @@ final class ContentAlertsController extends Controller
                             2,
                             $this->render(
                                 new Paragraph("<strong>{$form->get('email')->getData()}</strong> is not subscribed to email alerts. Please try entering your email address again if you made an error."),
-                                Button::link('Try again', $this->get('router')->generate('content-alerts-update-request')),
-                                Button::link('Back to Homepage', $this->get('router')->generate('home'))
+                                new ButtonCollection([
+                                    Button::link('Try again', $this->get('router')->generate('content-alerts-link-expired')),
+                                    Button::link('Back to Homepage', $this->get('router')->generate('home')),
+                                ])
                             ),
-                            'thank-you'
+                            'try-again'
                         );
                 })->wait();
         }, false);
