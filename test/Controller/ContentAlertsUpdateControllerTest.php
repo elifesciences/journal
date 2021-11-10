@@ -129,7 +129,7 @@ final class ContentAlertsUpdateControllerTest extends PageTestCase
         $response = $client->getResponse();
 
         $this->assertSame(302, $response->getStatusCode());
-        $this->assertSame('/content-alerts/update', $response->headers->get('Location'));
+        $this->assertSame('/content-alerts/link-expired', $response->headers->get('Location'));
     }
 
     /**
