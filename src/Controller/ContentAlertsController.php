@@ -94,10 +94,6 @@ final class ContentAlertsController extends Controller
             ->checkSubscription($this->generatePreferencesUrl($id), true)
             ->then(function ($check) {
                 if (!$check) {
-                    $this->get('session')
-                        ->getFlashBag()
-                        ->add(InfoBar::TYPE_WARNING,
-                            'The preferences link that you followed has expired.');
                     throw new EarlyResponse(new RedirectResponse($this->get('router')->generate('content-alerts-update-request')));
                 }
 
@@ -170,20 +166,21 @@ final class ContentAlertsController extends Controller
                         ->triggerPreferencesEmail($data['contact_id'])
                         ->then(function () use ($form) {
                             return ArticleSection::basic(
-                                'Nearly there',
+                                'Thank you',
                                 2,
                                 $this->render(
-                                    new Paragraph("An email has been sent to <strong>{$form->get('email')->getData()}</strong>."),
-                                    new Paragraph('Please follow the link in your email to update your preferences.'),
+                                    new Paragraph("An email has been sent to <strong>{$form->get('email')->getData()}</strong>. Please follow the link in the email to update your preferences."),
                                     Button::link('Back to Homepage', $this->get('router')->generate('home'))
                                 ),
                                 'thank-you'
                             );
                         }) : ArticleSection::basic(
-                            'Your email address is not recognised',
+                            'Something went wrong',
                             2,
                             $this->render(
-                                Button::link('Sign up for email alerts', $this->get('router')->generate('content-alerts'))
+                                new Paragraph("<strong>{$form->get('email')->getData()}</strong> is not subscribed to email alerts. Please try entering your email address again if you made an error."),
+                                Button::link('Try again', $this->get('router')->generate('content-alerts-update-request')),
+                                Button::link('Back to Homepage', $this->get('router')->generate('home'))
                             ),
                             'thank-you'
                         );
@@ -193,7 +190,14 @@ final class ContentAlertsController extends Controller
         if ($validSubmission instanceof ArticleSection) {
             $arguments['form'] = $validSubmission;
         } else {
-            $arguments['formIntro'] = new Paragraph("Please provide your email address and we will send you an email with a link to update your preferences.");
+            $arguments['formIntro'] = ArticleSection::basic(
+                'Your link has expired',
+                2,
+                $this->render(
+                    new Paragraph('Please provide your email address and we will send you an email with a link to update your preferences.')
+                ),
+                'link-expired'
+            );
             $arguments['form'] = $this->get('elife.journal.view_model.converter')->convert($form->createView());
         }
 
