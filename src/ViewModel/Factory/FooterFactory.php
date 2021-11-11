@@ -83,7 +83,7 @@ final class FooterFactory
                     $this->urlGenerator->generate('archive-year', ['year' => $year])),
                 new Link('For the press', $this->urlGenerator->generate('press-packs')),
                 new Link('Resources', $this->urlGenerator->generate('resources')),
-                new Link('XML, Data and API',
+                new Link('XML and Data',
                     'http://developers.elifesciences.org'),
             ],
             new InvestorLogos(...array_map(function (array $item) {
