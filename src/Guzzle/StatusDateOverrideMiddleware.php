@@ -61,6 +61,7 @@ final class StatusDateOverrideMiddleware
                         break;
 
                     case 'application/vnd.elife.collection+json; version=1':
+                    case 'application/vnd.elife.collection+json; version=2':
                         $data['content'] = $this->updateItems($data['content']);
                         $data['relatedContent'] = $this->updateItems($data['relatedContent'] ?? []);
                         break;
