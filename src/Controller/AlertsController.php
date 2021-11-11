@@ -38,7 +38,7 @@ final class AlertsController extends Controller
             )),
             ArticleSection::basic('Community-building', 2, $this->render(
                 Listing::unordered([
-                    '<a href="'.$this->get('router')->generate('content-alerts').'">Sign up to our monthly community newsletter</a> for details on upcoming webinars, travel grant deadlines, interviews, and other efforts to connect and support especially early-career researchers in life sciences and biomedicine',
+                    '<a href="'.$this->get('router')->generate('content-alerts').'">Sign up to our monthly early-career researchers community newsletter</a> for details on upcoming webinars, new programmes, interviews, and other efforts to support positive research culture in life sciences and biomedicine',
                 ], 'bullet')
             )),
             ArticleSection::basic('eLife&apos;s Innovation Initiative and technology news', 2, $this->render(
