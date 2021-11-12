@@ -533,7 +533,12 @@ final class SchemaOrgMetadataExtensionTest extends TestCase
      */
     public function it_will_generate_metadata_from_event()
     {
-        $this->urlGenerator->expects($this->once())->method('generate')->willReturn('https://journal/events/event-id');
+        $this->urlGenerator->expects($this->exactly(2))->method('generate')->will(
+            $this->onConsecutiveCalls(
+                'https://journal/events/event-id',
+                'https://journal'
+            )
+        );
 
         $this->assertSame(implode(PHP_EOL, [
             '<script type="application/ld+json">',
@@ -547,6 +552,10 @@ final class SchemaOrgMetadataExtensionTest extends TestCase
             '    "name": "Event title",',
             '    "startDate": "2008-10-20T09:00:00Z",',
             '    "endDate": "2008-10-22T17:35:00Z",',
+            '    "location": {',
+            '        "@type": "VirtualLocation",',
+            '        "url": "https://journal"',
+            '    },',
             '    "description": "Event impact statement"',
             '}',
             '</script>',
