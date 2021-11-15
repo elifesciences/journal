@@ -312,7 +312,7 @@ final class SchemaOrgMetadataExtension extends AbstractExtension
         if ($object instanceof Event) {
             return [
                 '@type' => 'VirtualLocation',
-                'url' => $this->urlGenerator->generate('home'),
+                'url' => $this->urlGenerator->generate('home', [], UrlGeneratorInterface::ABSOLUTE_URL),
             ];
         }
 
