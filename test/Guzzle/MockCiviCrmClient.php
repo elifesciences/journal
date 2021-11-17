@@ -17,7 +17,7 @@ final class MockCiviCrmClient implements CiviCrmClientInterface
             $preferencesUrl,
             $firstName,
             $lastName,
-            $preferencesBefore
+            $preferencesBefore ?? []
         )));
     }
 
