@@ -75,6 +75,7 @@ final class SchemaOrgMetadataExtension extends AbstractExtension
                 'datePublished' => $this->getDatePublished($object),
                 'startDate' => $this->getStartDate($object),
                 'endDate' => $this->getEndDate($object),
+                'location' => $this->getLocation($object),
                 'datePosted' => $this->getDatePosted($object),
                 'author' => $this->getAuthor($object),
                 'contributor' => $this->getContributor($object),
@@ -298,6 +299,21 @@ final class SchemaOrgMetadataExtension extends AbstractExtension
     {
         if ($object instanceof Event) {
             return $object->getEnds() ? $object->getEnds()->format('Y-m-d\TH:i:s\Z') : null;
+        }
+
+        return null;
+    }
+
+    /**
+     * @return array|null
+     */
+    private function getLocation(Model $object)
+    {
+        if ($object instanceof Event) {
+            return [
+                '@type' => 'VirtualLocation',
+                'url' => $this->urlGenerator->generate('home', [], UrlGeneratorInterface::ABSOLUTE_URL),
+            ];
         }
 
         return null;
