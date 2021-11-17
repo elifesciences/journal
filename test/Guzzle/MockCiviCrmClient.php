@@ -21,7 +21,7 @@ final class MockCiviCrmClient implements CiviCrmClientInterface
         )));
     }
 
-    private function presetsSubscribe(string $identifer, array $preferences, string $preferencesUrl, string $firstName = null, string $lastName = null, array $preferencesBefore = []) : array
+    private function presetsSubscribe(string $identifer, array $preferences, string $preferencesUrl, string $firstName = null, string $lastName = null, array $preferencesBefore = null) : array
     {
         $add = array_values(array_diff($preferences, $preferencesBefore));
         $remove = array_values(array_diff($preferencesBefore, $preferences));
