@@ -10,7 +10,6 @@ use eLife\Patterns\ViewModel\ArticleSection;
 use eLife\Patterns\ViewModel\Button;
 use eLife\Patterns\ViewModel\ButtonCollection;
 use eLife\Patterns\ViewModel\ContentHeader;
-use eLife\Patterns\ViewModel\InfoBar;
 use eLife\Patterns\ViewModel\Paragraph;
 use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -58,7 +57,7 @@ final class ContentAlertsController extends Controller
                             );
                         }) :
                         $this->get('elife.api_client.client.crm_api')
-                        ->triggerPreferencesEmail($check['contact_id'])
+                        ->triggerPreferencesEmail($check['contact_id'], empty($check['preferences_url']) ? $this->generatePreferencesUrl() : null)
                         ->then(function () use ($form) {
                             return ArticleSection::basic(
                                 'You are already subscribed',
@@ -114,7 +113,7 @@ final class ContentAlertsController extends Controller
                     $this->generatePreferencesUrl(),
                     $form->get('first_name')->getData(),
                     $form->get('last_name')->getData(),
-                    explode(',', $form->get('groups')->getData())
+                    $form->get('groups')->getData() ? explode(',', $form->get('groups')->getData()) : []
                 )
                 ->then(function () use ($form) {
                     return ArticleSection::basic(
@@ -157,14 +156,8 @@ final class ContentAlertsController extends Controller
             return $this->get('elife.api_client.client.crm_api')
                 ->checkSubscription($form->get('email')->getData())
                 ->then(function ($check) use ($form) {
-                    if (!empty($check)) {
-                        return empty($check['preferences_url']) ? $this->get('elife.api_client.client.crm_api')
-                            ->storePreferencesUrl($check['contact_id'], $this->generatePreferencesUrl()) :
-                            ['contact_id' => $check['contact_id']];
-                    }
-                })->then(function ($data) use ($form) {
-                    return !empty($data) ? $this->get('elife.api_client.client.crm_api')
-                        ->triggerPreferencesEmail($data['contact_id'])
+                    return !empty($check) ? $this->get('elife.api_client.client.crm_api')
+                        ->triggerPreferencesEmail($check['contact_id'], empty($check['preferences_url']) ? $this->generatePreferencesUrl() : null)
                         ->then(function () use ($form) {
                             return ArticleSection::basic(
                                 'Thank you',

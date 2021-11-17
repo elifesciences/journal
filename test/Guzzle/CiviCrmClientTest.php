@@ -285,7 +285,6 @@ final class CiviCrmClientTest extends TestCase
         $container = [];
 
         $client = $this->prepareClient([
-            new Response(200, [], json_encode(['id' => '12345'])),
             new Response(200, [], json_encode(['is_error' => 0])),
         ], $container);
 
@@ -312,6 +311,57 @@ final class CiviCrmClientTest extends TestCase
             'api_key' => 'api-key',
             'key' => 'site-key',
         ]), $firstRequest->getUri()->getQuery());
+    }
+
+    /**
+     * @test
+     */
+    public function it_will_trigger_preferences_email_setting_preferences_url()
+    {
+        $container = [];
+
+        $client = $this->prepareClient([
+            new Response(200, [], json_encode(['id' => 12345])),
+            new Response(200, [], json_encode(['is_error' => 0])),
+        ], $container);
+
+        $trigger = $client->triggerPreferencesEmail(12345, 'http://localhost/content-alerts/new-preferences-url');
+
+        $this->assertSame([
+            'contact_id' => 12345,
+        ], $trigger->wait());
+
+        $this->assertCount(2, $container);
+
+        /** @var Request $firstRequest */
+        $firstRequest = $container[0]['request'];
+        $this->assertEquals('POST', $firstRequest->getMethod());
+        $this->assertSame($this->prepareQuery([
+            'entity' => 'Contact',
+            'action' => 'create',
+            'json' => [
+                'contact_id' => 12345,
+                'custom_131' => 'http://localhost/content-alerts/new-preferences-url',
+            ],
+            'api_key' => 'api-key',
+            'key' => 'site-key',
+        ]), $firstRequest->getUri()->getQuery());
+
+        /** @var Request $secondRequest */
+        $secondRequest = $container[1]['request'];
+        $this->assertEquals('POST', $secondRequest->getMethod());
+        $this->assertSame($this->prepareQuery([
+            'entity' => 'GroupContact',
+            'action' => 'create',
+            'json' => [
+                'group_id' => [
+                    'Journal_eToc_preferences_1923',
+                ],
+                'contact_id' => 12345,
+            ],
+            'api_key' => 'api-key',
+            'key' => 'site-key',
+        ]), $secondRequest->getUri()->getQuery());
     }
 
     /**

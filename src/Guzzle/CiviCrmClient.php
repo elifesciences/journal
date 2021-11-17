@@ -42,7 +42,7 @@ final class CiviCrmClient implements CiviCrmClientInterface
         $this->siteKey = $siteKey;
     }
 
-    public function storePreferencesUrl(int $contactId, string $preferencesUrl) : PromiseInterface
+    private function storePreferencesUrl(int $contactId, string $preferencesUrl) : PromiseInterface
     {
         return $this->client->sendAsync($this->prepareRequest('POST'), $this->options([
             'query' => [
@@ -60,7 +60,7 @@ final class CiviCrmClient implements CiviCrmClientInterface
         });
     }
 
-    public function subscribe(string $identifier, array $preferences, string $preferencesUrl, string $firstName = null, string $lastName = null, array $preferencesBefore = []) : PromiseInterface
+    public function subscribe(string $identifier, array $preferences, string $preferencesUrl, string $firstName = null, string $lastName = null, array $preferencesBefore = null) : PromiseInterface
     {
         return $this->client->sendAsync($this->prepareRequest('POST'), $this->options([
             'query' => [
@@ -68,7 +68,7 @@ final class CiviCrmClient implements CiviCrmClientInterface
                 'action' => 'create',
                 'json' => [
                     'contact_type' => 'Individual',
-                    !empty($preferencesBefore) ? 'contact_id' : 'email' => $identifier,
+                    !is_null($preferencesBefore) ? 'contact_id' : 'email' => $identifier,
                     'first_name' => $firstName ?? '',
                     'last_name' => $lastName ?? '',
                     self::FIELD_PREFERENCES_URL => $preferencesUrl,
@@ -167,8 +167,15 @@ final class CiviCrmClient implements CiviCrmClientInterface
         });
     }
 
-    public function triggerPreferencesEmail(int $contactId) : PromiseInterface
+    public function triggerPreferencesEmail(int $contactId, string $preferencesUrl = null) : PromiseInterface
     {
+        if ($preferencesUrl) {
+            return self::storePreferencesUrl($contactId, $preferencesUrl)
+                ->then(function ($data) {
+                    return self::triggerPreferencesEmail($data['contact_id']);
+                });
+        }
+
         return $this->client->sendAsync($this->prepareRequest('POST'), $this->options([
             'query' => [
                 'entity' => 'GroupContact',

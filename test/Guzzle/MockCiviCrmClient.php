@@ -9,7 +9,7 @@ use function GuzzleHttp\Promise\promise_for;
 
 final class MockCiviCrmClient implements CiviCrmClientInterface
 {
-    public function subscribe(string $identifier, array $preferences, string $preferencesUrl, string $firstName = null, string $lastName = null, array $preferencesBefore = []) : PromiseInterface
+    public function subscribe(string $identifier, array $preferences, string $preferencesUrl, string $firstName = null, string $lastName = null, array $preferencesBefore = null) : PromiseInterface
     {
         return promise_for(array_filter($this->presetsSubscribe(
             $identifier,
@@ -74,7 +74,7 @@ final class MockCiviCrmClient implements CiviCrmClientInterface
         }
     }
 
-    public function triggerPreferencesEmail(int $contactId) : PromiseInterface
+    public function triggerPreferencesEmail(int $contactId, string $preferencesUrl = null) : PromiseInterface
     {
         return promise_for($this->presetsTriggerPreferencesEmail($contactId));
     }
@@ -86,21 +86,6 @@ final class MockCiviCrmClient implements CiviCrmClientInterface
                 return [
                     'contact_id' => $contactId,
                 ];
-        }
-    }
-
-    public function storePreferencesUrl(int $contactId, string $preferencesUrl) : PromiseInterface
-    {
-        return promise_for($this->presetsStorePreferencesUrl($contactId, $preferencesUrl));
-    }
-
-    public function presetsStorePreferencesUrl(int $contactId, string $preferencesUrl) : PromiseInterface
-    {
-        switch ($contactId) {
-            default:
-                return promise_for([
-                    'contact_id' => $contactId,
-                ]);
         }
     }
 }
