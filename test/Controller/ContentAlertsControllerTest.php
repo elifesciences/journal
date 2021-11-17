@@ -2,6 +2,8 @@
 
 namespace test\eLife\Journal\Controller;
 
+use Traversable;
+
 final class ContentAlertsControllerTest extends PageTestCase
 {
     /**
@@ -93,42 +95,30 @@ final class ContentAlertsControllerTest extends PageTestCase
 
     /**
      * @test
+     * @dataProvider contactProvider
      */
-    public function it_displays_confirmation_message()
+    public function it_displays_confirmation_message(string $email)
     {
         $client = static::createClient();
 
         $crawler = $client->request('GET', $this->getUrl());
 
         $form = $crawler->selectButton('Subscribe')->form();
-        $form['content_alerts[email]'] = 'foo@bar.com';
+        $form['content_alerts[email]'] = $email;
 
         $crawler = $client->submit($form);
 
         $this->assertSame('Thank you for subscribing!', $crawler->filter('#thank-you h2')->text());
-        $this->assertSame('A confirmation email has been sent to foo@bar.com.', $crawler->filter('#thank-you p')->text());
+        $this->assertSame("A confirmation email has been sent to {$email}.", $crawler->filter('#thank-you p')->text());
         $this->assertSame('Back to Homepage', $crawler->filter('#thank-you a')->text());
         $this->assertSame('/', $crawler->filter('#thank-you a')->attr('href'));
     }
 
-    /**
-     * @test
-     */
-    public function it_displays_confirmation_message_existing_contact_new_subscriber()
+    public function contactProvider() : Traversable
     {
-        $client = static::createClient();
-
-        $crawler = $client->request('GET', $this->getUrl());
-
-        $form = $crawler->selectButton('Subscribe')->form();
-        $form['content_alerts[email]'] = 'amber@example.com';
-
-        $crawler = $client->submit($form);
-
-        $this->assertSame('Thank you for subscribing!', $crawler->filter('#thank-you h2')->text());
-        $this->assertSame('A confirmation email has been sent to amber@example.com.', $crawler->filter('#thank-you p')->text());
-        $this->assertSame('Back to Homepage', $crawler->filter('#thank-you a')->text());
-        $this->assertSame('/', $crawler->filter('#thank-you a')->attr('href'));
+        yield 'no existing contact' => ['foo@bar.com'];
+        yield 'existing contact - new subscriber' => ['amber@example.com'];
+        yield 'existing contact - opt out' => ['red@example.com'];
     }
 
     /**

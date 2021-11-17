@@ -27,6 +27,7 @@ final class CiviCrmClientTest extends TestCase
             new Response(200, [], json_encode(['values' => [
                 [
                     'contact_id' => 12345,
+                    'is_opt_out' => '0',
                     'email' => 'foo@bar.com',
                     'first_name' => '',
                     'last_name' => '',
@@ -42,6 +43,7 @@ final class CiviCrmClientTest extends TestCase
 
         $this->assertSame([
             'contact_id' => 12345,
+            'opt_out' => false,
             'email' => 'foo@bar.com',
             'first_name' => '',
             'last_name' => '',
@@ -64,6 +66,7 @@ final class CiviCrmClientTest extends TestCase
                     'first_name',
                     'last_name',
                     'email',
+                    'is_opt_out',
                     'custom_131',
                 ],
             ],
@@ -90,6 +93,7 @@ final class CiviCrmClientTest extends TestCase
             new Response(200, [], json_encode(['values' => [
                 [
                     'contact_id' => 12345,
+                    'is_opt_out' => '0',
                     'email' => 'foo@bar.com',
                     'first_name' => '',
                     'last_name' => '',
@@ -104,6 +108,7 @@ final class CiviCrmClientTest extends TestCase
 
         $this->assertSame([
             'contact_id' => 12345,
+            'opt_out' => false,
             'email' => 'foo@bar.com',
             'first_name' => '',
             'last_name' => '',
@@ -126,6 +131,7 @@ final class CiviCrmClientTest extends TestCase
                     'first_name',
                     'last_name',
                     'email',
+                    'is_opt_out',
                     'custom_131',
                 ],
             ],
@@ -175,6 +181,7 @@ final class CiviCrmClientTest extends TestCase
                 'first_name' => '',
                 'last_name' => '',
                 'custom_131' => 'http://localhost/content-alerts/foo',
+                'is_opt_out' => 0,
             ],
             'api_key' => 'api-key',
             'key' => 'site-key',
@@ -237,6 +244,7 @@ final class CiviCrmClientTest extends TestCase
                 'first_name' => 'New',
                 'last_name' => 'Name',
                 'custom_131' => 'http://localhost/content-alerts/foo',
+                'is_opt_out' => 0,
             ],
             'api_key' => 'api-key',
             'key' => 'site-key',

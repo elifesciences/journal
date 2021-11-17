@@ -38,7 +38,7 @@ final class ContentAlertsController extends Controller
             return $this->get('elife.api_client.client.crm_api')
                 ->checkSubscription($form->get('email')->getData())
                 ->then(function ($check) use ($form) {
-                    return (empty($check) || empty($check['groups'])) ?
+                    return (empty($check) || $check['opt_out'] || empty($check['groups'])) ?
                         $this->get('elife.api_client.client.crm_api')
                             ->subscribe(
                                 empty($check) ? $form->get('email')->getData() : $check['contact_id'],
@@ -46,7 +46,7 @@ final class ContentAlertsController extends Controller
                                 $this->generatePreferencesUrl(),
                                 null,
                                 null,
-                                empty($check) ? null : []
+                                empty($check) ? null : $check['preferences']
                             )
                             ->then(function () use ($form) {
                                 return ArticleSection::basic(

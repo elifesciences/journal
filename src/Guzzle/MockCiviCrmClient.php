@@ -60,6 +60,7 @@ final class MockCiviCrmClient implements CiviCrmClientInterface
                 $preferences = [CiviCrmClient::LABEL_LATEST_ARTICLES];
                 return [
                     'contact_id' => 12345,
+                    'opt_out' => false,
                     'email' => 'green@example.com',
                     'first_name' => 'Green',
                     'last_name' => 'Example',
@@ -72,12 +73,26 @@ final class MockCiviCrmClient implements CiviCrmClientInterface
                 $preferences = [];
                 return [
                     'contact_id' => 23456,
+                    'opt_out' => false,
                     'email' => 'amber@example.com',
                     'first_name' => 'Amber',
                     'last_name' => 'Example',
                     'preferences' => $preferences,
                     'groups' => implode(',', $preferences),
                     CiviCrmClient::FIELD_PREFERENCES_URL => '',
+                ];
+            case '/content-alerts/red' === $identifier && $isPreferencesId:
+            case 'red@example.com' === $identifier && !$isPreferencesId:
+                $preferences = [CiviCrmClient::LABEL_LATEST_ARTICLES, CiviCrmClient::GROUP_EARLY_CAREER];
+                return [
+                    'contact_id' => 34567,
+                    'opt_out' => true,
+                    'email' => 'red@example.com',
+                    'first_name' => 'Red',
+                    'last_name' => 'Example',
+                    'preferences' => $preferences,
+                    'groups' => implode(',', $preferences),
+                    CiviCrmClient::FIELD_PREFERENCES_URL => 'http://localhost/content-alerts/red',
                 ];
             default:
                 return null;

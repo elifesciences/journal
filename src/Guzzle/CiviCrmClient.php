@@ -72,6 +72,8 @@ final class CiviCrmClient implements CiviCrmClientInterface
                     'first_name' => $firstName ?? '',
                     'last_name' => $lastName ?? '',
                     self::FIELD_PREFERENCES_URL => $preferencesUrl,
+                    // Interpret submission as confirmation of desire to receive bulk emails.
+                    'is_opt_out' => 0,
                 ],
             ],
         ]))->then(function (Response $response) {
@@ -141,6 +143,7 @@ final class CiviCrmClient implements CiviCrmClientInterface
                         'first_name',
                         'last_name',
                         'email',
+                        'is_opt_out',
                         self::FIELD_PREFERENCES_URL,
                     ],
                 ],
@@ -156,6 +159,7 @@ final class CiviCrmClient implements CiviCrmClientInterface
 
                 return [
                     'contact_id' => (int) $contact['contact_id'],
+                    'opt_out' => ('1' === $contact['is_opt_out']),
                     'email' => $contact['email'],
                     'first_name' => $contact['first_name'],
                     'last_name' => $contact['last_name'],
