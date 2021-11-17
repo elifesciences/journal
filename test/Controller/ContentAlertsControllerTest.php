@@ -114,6 +114,26 @@ final class ContentAlertsControllerTest extends PageTestCase
     /**
      * @test
      */
+    public function it_displays_confirmation_message_existing_contact_new_subscriber()
+    {
+        $client = static::createClient();
+
+        $crawler = $client->request('GET', $this->getUrl());
+
+        $form = $crawler->selectButton('Subscribe')->form();
+        $form['content_alerts[email]'] = 'amber@example.com';
+
+        $crawler = $client->submit($form);
+
+        $this->assertSame('Thank you for subscribing!', $crawler->filter('#thank-you h2')->text());
+        $this->assertSame('A confirmation email has been sent to amber@example.com.', $crawler->filter('#thank-you p')->text());
+        $this->assertSame('Back to Homepage', $crawler->filter('#thank-you a')->text());
+        $this->assertSame('/', $crawler->filter('#thank-you a')->attr('href'));
+    }
+
+    /**
+     * @test
+     */
     public function it_triggers_update_preferences_message()
     {
         $client = static::createClient();

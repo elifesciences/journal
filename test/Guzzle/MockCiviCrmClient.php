@@ -69,6 +69,18 @@ final class MockCiviCrmClient implements CiviCrmClientInterface
                     'groups' => implode(',', $preferences),
                     CiviCrmClient::FIELD_PREFERENCES_URL => 'http://localhost/content-alerts/green',
                 ];
+            case '/content-alerts/amber' === $identifier && $isPreferencesId:
+            case 'amber@example.com' === $identifier && !$isPreferencesId:
+                $preferences = [];
+                return [
+                    'contact_id' => 23456,
+                    'email' => 'amber@example.com',
+                    'first_name' => 'Amber',
+                    'last_name' => 'Example',
+                    'preferences' => $preferences,
+                    'groups' => implode(',', $preferences),
+                    CiviCrmClient::FIELD_PREFERENCES_URL => '',
+                ];
             default:
                 return null;
         }

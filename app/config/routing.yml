@@ -204,7 +204,7 @@ content-alerts:
          _controller: AppBundle:ContentAlerts:subscribe
 
 content-alerts-link-expired:
-    path: /content-alerts/link-expired
+    path: /content-alerts/expired
     defaults:
          _controller: AppBundle:ContentAlerts:linkExpired
 

@@ -38,38 +38,41 @@ final class ContentAlertsController extends Controller
             return $this->get('elife.api_client.client.crm_api')
                 ->checkSubscription($form->get('email')->getData())
                 ->then(function ($check) use ($form) {
-                    return empty($check) ?
+                    return (empty($check) || empty($check['groups'])) ?
                         $this->get('elife.api_client.client.crm_api')
-                        ->subscribe(
-                            $form->get('email')->getData(),
-                            $form->get('preferences')->getData(),
-                            $this->generatePreferencesUrl()
-                        )
-                        ->then(function () use ($form) {
-                            return ArticleSection::basic(
-                                'Thank you for subscribing!',
-                                2,
-                                $this->render(
-                                    new Paragraph("A confirmation email has been sent to <strong>{$form->get('email')->getData()}</strong>."),
-                                    Button::link('Back to Homepage', $this->get('router')->generate('home'))
-                                ),
-                                'thank-you'
-                            );
-                        }) :
+                            ->subscribe(
+                                empty($check) ? $form->get('email')->getData() : $check['contact_id'],
+                                $form->get('preferences')->getData(),
+                                $this->generatePreferencesUrl(),
+                                null,
+                                null,
+                                empty($check) ? null : []
+                            )
+                            ->then(function () use ($form) {
+                                return ArticleSection::basic(
+                                    'Thank you for subscribing!',
+                                    2,
+                                    $this->render(
+                                        new Paragraph("A confirmation email has been sent to <strong>{$form->get('email')->getData()}</strong>."),
+                                        Button::link('Back to Homepage', $this->get('router')->generate('home'))
+                                    ),
+                                    'thank-you'
+                                );
+                            }) :
                         $this->get('elife.api_client.client.crm_api')
-                        ->triggerPreferencesEmail($check['contact_id'], empty($check['preferences_url']) ? $this->generatePreferencesUrl() : null)
-                        ->then(function () use ($form) {
-                            return ArticleSection::basic(
-                                'You are already subscribed',
-                                2,
-                                $this->render(
-                                    new Paragraph("An email has been sent to <strong>{$form->get('email')->getData()}</strong>."),
-                                    new Paragraph('Please follow the link in your email to update your preferences.'),
-                                    Button::link('Back to Homepage', $this->get('router')->generate('home'))
-                                ),
-                                'thank-you'
-                            );
-                        });
+                            ->triggerPreferencesEmail($check['contact_id'], empty($check['preferences_url']) ? $this->generatePreferencesUrl() : null)
+                            ->then(function () use ($form) {
+                                return ArticleSection::basic(
+                                    'You are already subscribed',
+                                    2,
+                                    $this->render(
+                                        new Paragraph("An email has been sent to <strong>{$form->get('email')->getData()}</strong>."),
+                                        new Paragraph('Please follow the link in your email to update your preferences.'),
+                                        Button::link('Back to Homepage', $this->get('router')->generate('home'))
+                                    ),
+                                    'thank-you'
+                                );
+                            });
                 })->wait();
         }, false);
 
@@ -192,7 +195,7 @@ final class ContentAlertsController extends Controller
                 $this->render(
                     new Paragraph('Please provide your email address and we will send you an email with a link to update your preferences.')
                 ),
-                'link-expired'
+                'expired'
             );
             $arguments['form'] = $this->get('elife.journal.view_model.converter')->convert($form->createView());
         }
