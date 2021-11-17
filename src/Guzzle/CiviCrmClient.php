@@ -79,9 +79,9 @@ final class CiviCrmClient implements CiviCrmClientInterface
         })->then(function ($data) {
             return $data['id'];
         })->then(function ($contactId) use ($preferences, $preferencesBefore) {
-            $add = array_values(array_diff($preferences, $preferencesBefore));
-            $remove = array_values(array_diff($preferencesBefore, $preferences));
-            $unchanged = array_diff($preferencesBefore, $add, $remove);
+            $add = array_values(array_diff($preferences, $preferencesBefore ?? []));
+            $remove = array_values(array_diff($preferencesBefore ?? [], $preferences));
+            $unchanged = array_diff($preferencesBefore ?? [], $add, $remove);
 
             return all([
                 'added' => !empty($add) ? $this->client->sendAsync($this->prepareRequest('POST'), $this->options([
@@ -90,7 +90,7 @@ final class CiviCrmClient implements CiviCrmClientInterface
                         'action' => 'create',
                         'json' => [
                             'status' => 'Added',
-                            'group_id' => $this->preferenceGroups($add, empty($preferencesBefore)),
+                            'group_id' => $this->preferenceGroups($add, empty($preferencesBefore ?? [])),
                             'contact_id' => $contactId,
                         ],
                     ],
