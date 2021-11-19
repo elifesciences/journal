@@ -52,7 +52,7 @@ final class ContentAlertsType extends AbstractType
             ->add('preferences', ChoiceType::class,
                 [
                     'label' => 'I would like to receive the following regular emails from eLife:',
-                    'choices' => $this->preferencesVariant($options['data']['variant']),
+                    'choices' => $this->preferencesVariant($options['data']['variant'] ?? null),
                     'expanded' => true,
                     'multiple' => true,
                     'required' => true,
