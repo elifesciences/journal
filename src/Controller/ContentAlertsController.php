@@ -22,7 +22,6 @@ final class ContentAlertsController extends Controller
     public function subscribeAction(Request $request, string $variant = null) : Response
     {
         $arguments = $this->defaultPageArguments($request);
-        $arguments['emailCta'] = null;
 
         $arguments['emailCta'] = null;
 
@@ -38,7 +37,9 @@ final class ContentAlertsController extends Controller
             return $this->get('elife.api_client.client.crm_api')
                 ->checkSubscription($form->get('email')->getData())
                 ->then(function ($check) use ($form) {
+                    // Check if user not found, opted out or not member of relevant groups.
                     return (empty($check) || $check['opt_out'] || empty($check['groups'])) ?
+                        // Subscribe if true.
                         $this->get('elife.api_client.client.crm_api')
                             ->subscribe(
                                 empty($check) ? $form->get('email')->getData() : $check['contact_id'],
@@ -59,6 +60,7 @@ final class ContentAlertsController extends Controller
                                     'thank-you'
                                 );
                             }) :
+                        // Send preferences link if false.
                         $this->get('elife.api_client.client.crm_api')
                             ->triggerPreferencesEmail($check['contact_id'], empty($check['preferences_url']) ? $this->generatePreferencesUrl() : null)
                             ->then(function () use ($form) {
