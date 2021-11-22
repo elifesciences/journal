@@ -162,64 +162,6 @@ final class ContentAlertsController extends Controller
         return new Response($this->get('templating')->render('::content-alerts.html.twig', $arguments));
     }
 
-    public function updateAction(Request $request, string $id) : Response
-    {
-        $arguments = $this->defaultPageArguments($request);
-
-        $arguments['emailCta'] = null;
-
-        $arguments['title'] = 'Your email preferences';
-
-        $arguments['contentHeader'] = new ContentHeader($arguments['title']);
-
-        $data = $this->get('elife.api_client.client.crm_api')
-            ->checkSubscription($this->generatePreferencesUrl($id), true)
-            ->then(function ($check) {
-                if (!$check) {
-                    throw new EarlyResponse(new RedirectResponse($this->get('router')->generate('content-alerts-link-expired')));
-                }
-
-                return $check;
-            })
-            ->wait();
-
-        /** @var Form $form */
-        $form = $this->get('form.factory')
-            ->create(ContentAlertsType::class, $data, ['action' => $this->get('router')->generate('content-alerts-update', ['id' => $id])]);
-
-        $validSubmission = $this->ifFormSubmitted($request, $form, function () use ($form) {
-            return $this->get('elife.api_client.client.crm_api')
-                ->subscribe(
-                    $form->get('contact_id')->getData(),
-                    $form->get('preferences')->getData(),
-                    $this->generatePreferencesUrl(),
-                    $form->get('first_name')->getData(),
-                    $form->get('last_name')->getData(),
-                    $form->get('groups')->getData() ? explode(',', $form->get('groups')->getData()) : []
-                )
-                ->then(function () use ($form) {
-                    return ArticleSection::basic(
-                        'Thank you',
-                        2,
-                        $this->render(
-                            new Paragraph("Email preferences for <strong>{$form->get('email')->getData()}</strong> have been updated."),
-                            Button::link('Back to Homepage', $this->get('router')->generate('home'))
-                        ),
-                        'thank-you'
-                    );
-                })->wait();
-        }, false);
-
-        if ($validSubmission instanceof ArticleSection) {
-            $arguments['form'] = $validSubmission;
-        } else {
-            $arguments['formIntro'] = new Paragraph("Change which email alerts you receive from eLife. Emails will be sent to <strong>{$form->get('email')->getData()}</strong>.");
-            $arguments['form'] = $this->get('elife.journal.view_model.converter')->convert($form->createView());
-        }
-
-        return new Response($this->get('templating')->render('::content-alerts.html.twig', $arguments));
-    }
-
     public function linkExpiredAction(Request $request) : Response
     {
         $arguments = $this->defaultPageArguments($request);
