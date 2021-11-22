@@ -112,6 +112,83 @@ final class ContentAlertsController extends Controller
 
         $validSubmission = $this->ifFormSubmitted($request, $form, function () use ($form) {
             return $this->get('elife.api_client.client.crm_api')
+                ->checkSubscription($form->get('email')->getData())
+                ->then(function ($check) use ($form) {
+                    // Check if user not found, opted out or not member of relevant groups.
+                    return (empty($check) || $check['opt_out'] || empty($check['groups'])) ?
+                        // Subscribe if true.
+                        $this->get('elife.api_client.client.crm_api')
+                            ->subscribe(
+                                empty($check) ? $form->get('email')->getData() : $check['contact_id'],
+                                $form->get('preferences')->getData(),
+                                $this->generatePreferencesUrl(),
+                                null,
+                                null,
+                                empty($check) ? null : $check['preferences']
+                            )
+                            ->then(function () use ($form) {
+                                return ArticleSection::basic(
+                                    'Thank you for subscribing!',
+                                    2,
+                                    $this->render(
+                                        new Paragraph("A confirmation email has been sent to <strong>{$form->get('email')->getData()}</strong>."),
+                                        Button::link('Back to Homepage', $this->get('router')->generate('home'))
+                                    ),
+                                    'thank-you'
+                                );
+                            }) :
+                        // Send preferences link if false.
+                        $this->get('elife.api_client.client.crm_api')
+                            ->triggerPreferencesEmail($check['contact_id'], empty($check['preferences_url']) ? $this->generatePreferencesUrl() : null)
+                            ->then(function () use ($form) {
+                                return ArticleSection::basic(
+                                    'You are already subscribed',
+                                    2,
+                                    $this->render(
+                                        new Paragraph("An email has been sent to <strong>{$form->get('email')->getData()}</strong>."),
+                                        new Paragraph('Please follow the link in your email to update your preferences.'),
+                                        Button::link('Back to Homepage', $this->get('router')->generate('home'))
+                                    ),
+                                    'thank-you'
+                                );
+                            });
+                })->wait();
+        }, false);
+
+        $arguments['form'] = $validSubmission instanceof ArticleSection ?
+            $validSubmission :
+            $this->get('elife.journal.view_model.converter')->convert($form->createView());
+
+        return new Response($this->get('templating')->render('::content-alerts.html.twig', $arguments));
+    }
+
+    public function updateAction(Request $request, string $id) : Response
+    {
+        $arguments = $this->defaultPageArguments($request);
+
+        $arguments['emailCta'] = null;
+
+        $arguments['title'] = 'Your email preferences';
+
+        $arguments['contentHeader'] = new ContentHeader($arguments['title']);
+
+        $data = $this->get('elife.api_client.client.crm_api')
+            ->checkSubscription($this->generatePreferencesUrl($id), true)
+            ->then(function ($check) {
+                if (!$check) {
+                    throw new EarlyResponse(new RedirectResponse($this->get('router')->generate('content-alerts-link-expired')));
+                }
+
+                return $check;
+            })
+            ->wait();
+
+        /** @var Form $form */
+        $form = $this->get('form.factory')
+            ->create(ContentAlertsType::class, $data, ['action' => $this->get('router')->generate('content-alerts-update', ['id' => $id])]);
+
+        $validSubmission = $this->ifFormSubmitted($request, $form, function () use ($form) {
+            return $this->get('elife.api_client.client.crm_api')
                 ->subscribe(
                     $form->get('contact_id')->getData(),
                     $form->get('preferences')->getData(),
