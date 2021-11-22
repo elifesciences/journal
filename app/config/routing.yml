@@ -203,6 +203,18 @@ content-alerts:
     defaults:
          _controller: AppBundle:ContentAlerts:subscribe
 
+content-alerts-link-expired:
+    path: /content-alerts/expired
+    defaults:
+         _controller: AppBundle:ContentAlerts:linkExpired
+
+content-alerts-update:
+    path: /content-alerts/{id}
+    defaults:
+         _controller: AppBundle:ContentAlerts:update
+    requirements:
+        id: '[a-z0-9]+'
+
 digest:
     path: /digests/{id}/{slug}
     defaults:

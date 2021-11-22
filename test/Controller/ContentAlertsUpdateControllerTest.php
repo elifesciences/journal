@@ -2,21 +2,19 @@
 
 namespace test\eLife\Journal\Controller;
 
-use Traversable;
-
-final class ContentAlertsControllerTest extends PageTestCase
+final class ContentAlertsUpdateControllerTest extends PageTestCase
 {
     /**
      * @test
      */
-    public function it_displays_the_content_alerts_page()
+    public function it_displays_the_content_alerts_update_page()
     {
         $client = static::createClient();
 
         $crawler = $client->request('GET', $this->getUrl());
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
-        $this->assertSame('Subscribe to eLife\'s email alerts', $crawler->filter('main h1')->text());
+        $this->assertSame('Your email preferences', $crawler->filter('main h1')->text());
     }
 
     /**
@@ -30,10 +28,10 @@ final class ContentAlertsControllerTest extends PageTestCase
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
 
-        $this->assertSame('Subscribe to eLife\'s email alerts | eLife', $crawler->filter('title')->text());
-        $this->assertSame('/content-alerts', $crawler->filter('link[rel="canonical"]')->attr('href'));
-        $this->assertSame('http://localhost/content-alerts', $crawler->filter('meta[property="og:url"]')->attr('content'));
-        $this->assertSame('Subscribe to eLife\'s email alerts', $crawler->filter('meta[property="og:title"]')->attr('content'));
+        $this->assertSame('Your email preferences | eLife', $crawler->filter('title')->text());
+        $this->assertSame('/content-alerts/green', $crawler->filter('link[rel="canonical"]')->attr('href'));
+        $this->assertSame('http://localhost/content-alerts/green', $crawler->filter('meta[property="og:url"]')->attr('content'));
+        $this->assertSame('Your email preferences', $crawler->filter('meta[property="og:title"]')->attr('content'));
         $this->assertEmpty($crawler->filter('meta[property="og:description"]'));
         $this->assertEmpty($crawler->filter('meta[name="description"]'));
         $this->assertSame('summary', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
@@ -52,21 +50,69 @@ final class ContentAlertsControllerTest extends PageTestCase
     /**
      * @test
      */
-    public function it_requires_email_and_preferences_fields_to_be_completed()
+    public function it_hides_the_email_field()
     {
         $client = static::createClient();
 
         $crawler = $client->request('GET', $this->getUrl());
 
-        $form = $crawler->selectButton('Subscribe')->form();
+        $email = $crawler->filter('input[name="content_alerts[email]"]');
+
+        $this->assertEquals('hidden', $email->attr('type'));
+        $this->assertEquals('green@example.com', $email->attr('value'));
+    }
+
+    /**
+     * @test
+     */
+    public function it_hides_the_contact_id_field()
+    {
+        $client = static::createClient();
+
+        $crawler = $client->request('GET', $this->getUrl());
+
+        $email = $crawler->filter('input[name="content_alerts[contact_id]"]');
+
+        $this->assertEquals('hidden', $email->attr('type'));
+        $this->assertEquals('12345', $email->attr('value'));
+    }
+
+    /**
+     * @test
+     */
+    public function it_hides_the_groups_before_changes_field()
+    {
+        $client = static::createClient();
+
+        $crawler = $client->request('GET', $this->getUrl());
+
+        $email = $crawler->filter('input[name="content_alerts[groups]"]');
+
+        $this->assertEquals('hidden', $email->attr('type'));
+        $this->assertEquals('latest_articles', $email->attr('value'));
+    }
+
+    /**
+     * @test
+     */
+    public function it_requires_preferences_fields_to_be_completed()
+    {
+        $client = static::createClient();
+
+        $crawler = $client->request('GET', $this->getUrl());
+
+        $form = $crawler->selectButton('Update')->form();
         $form['content_alerts[preferences][0]']->untick();
+        $form['content_alerts[preferences][1]']->untick();
+        $form['content_alerts[preferences][2]']->untick();
+        $form['content_alerts[preferences][3]']->untick();
 
         $crawler = $client->submit($form);
 
         $this->assertCount(1, $crawler->filter('.info-bar'));
         $this->assertSame('There were problems submitting the form.', trim($crawler->filter('.info-bar')->text()));
         $this->assertSame(
-            ['Please provide your email address.', 'Please select an email type to subscribe.'],
+            ['Please select an email type to subscribe.'],
             array_map('trim', $crawler->filter('.form-item__message')->extract(['_text']))
         );
     }
@@ -74,69 +120,33 @@ final class ContentAlertsControllerTest extends PageTestCase
     /**
      * @test
      */
-    public function it_requires_a_valid_email()
+    public function it_redirects_if_invalid_identifier()
     {
         $client = static::createClient();
 
-        $crawler = $client->request('GET', $this->getUrl());
+        $client->request('GET', $this->getUrl('invalid'));
 
-        $form = $crawler->selectButton('Subscribe')->form();
-        $form['content_alerts[email]'] = 'foo';
+        $response = $client->getResponse();
 
-        $crawler = $client->submit($form);
-
-        $this->assertCount(1, $crawler->filter('.info-bar'));
-        $this->assertSame('There were problems submitting the form.', trim($crawler->filter('.info-bar')->text()));
-        $this->assertSame(
-            ['Please provide a valid email address.'],
-            array_map('trim', $crawler->filter('.form-item__message')->extract(['_text']))
-        );
-    }
-
-    /**
-     * @test
-     * @dataProvider contactProvider
-     */
-    public function it_displays_confirmation_message(string $email)
-    {
-        $client = static::createClient();
-
-        $crawler = $client->request('GET', $this->getUrl());
-
-        $form = $crawler->selectButton('Subscribe')->form();
-        $form['content_alerts[email]'] = $email;
-
-        $crawler = $client->submit($form);
-
-        $this->assertSame('Thank you for subscribing!', $crawler->filter('#thank-you h2')->text());
-        $this->assertSame("A confirmation email has been sent to {$email}.", $crawler->filter('#thank-you p')->text());
-        $this->assertSame('Back to Homepage', $crawler->filter('#thank-you a')->text());
-        $this->assertSame('/', $crawler->filter('#thank-you a')->attr('href'));
-    }
-
-    public function contactProvider() : Traversable
-    {
-        yield 'no existing contact' => ['foo@bar.com'];
-        yield 'existing contact - new subscriber' => ['amber@example.com'];
-        yield 'existing contact - opt out' => ['red@example.com'];
+        $this->assertSame(302, $response->getStatusCode());
+        $this->assertSame('/content-alerts/expired', $response->headers->get('Location'));
     }
 
     /**
      * @test
      */
-    public function it_triggers_update_preferences_message()
+    public function it_displays_confirmation_message()
     {
         $client = static::createClient();
 
         $crawler = $client->request('GET', $this->getUrl());
 
-        $form = $crawler->selectButton('Subscribe')->form();
-        $form['content_alerts[email]'] = 'green@example.com';
+        $form = $crawler->selectButton('Update')->form();
 
         $crawler = $client->submit($form);
 
-        $this->assertSame('You are already subscribed', $crawler->filter('#thank-you h2')->text());
-        $this->assertSame('An email has been sent to green@example.com.', $crawler->filter('#thank-you p')->text());
+        $this->assertSame('Thank you', $crawler->filter('#thank-you h2')->text());
+        $this->assertSame('Email preferences for green@example.com have been updated.', $crawler->filter('#thank-you p')->text());
         $this->assertSame('Back to Homepage', $crawler->filter('#thank-you a')->text());
         $this->assertSame('/', $crawler->filter('#thank-you a')->attr('href'));
     }
@@ -152,7 +162,7 @@ final class ContentAlertsControllerTest extends PageTestCase
 
         $crawler = $client->request('GET', $this->getUrl());
 
-        $form = $crawler->selectButton('Subscribe')->form();
+        $form = $crawler->selectButton('Update')->form();
 
         $this->assertTrue($form->has('content_alerts[_token]'));
     }
@@ -166,8 +176,7 @@ final class ContentAlertsControllerTest extends PageTestCase
 
         $crawler = $client->request('GET', $this->getUrl());
 
-        $form = $crawler->selectButton('Subscribe')->form();
-        $form['content_alerts[email]'] = 'foo@example.com';
+        $form = $crawler->selectButton('Update')->form();
 
         $form["content_alerts[{$this->getParameter('honeypot_field')}]"] = 'bar@example.com';
         $crawler = $client->submit($form);
@@ -190,8 +199,8 @@ final class ContentAlertsControllerTest extends PageTestCase
         $this->assertCount(0, $emailCta);
     }
 
-    protected function getUrl() : string
+    protected function getUrl(string $identifier = 'green') : string
     {
-        return '/content-alerts';
+        return '/content-alerts/'.$identifier;
     }
 }
