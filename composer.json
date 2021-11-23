@@ -64,6 +64,7 @@
         "namshi/cuzzle": "^2.0",
         "phpspec/prophecy": "^1.7",
         "phpunit/phpunit": "^7.1",
+        "rawr/cross-data-providers": "^2.3",
         "squizlabs/php_codesniffer": "^3.5",
         "symfony/phpunit-bridge": "^4.0"
     },
