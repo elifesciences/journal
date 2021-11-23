@@ -3,17 +3,19 @@
 namespace test\eLife\Journal\Controller;
 
 use Traversable;
+use TRegx\DataProvider\DataProviders;
 
 final class ContentAlertsControllerTest extends PageTestCase
 {
     /**
      * @test
+     * @dataProvider providerVariants
      */
-    public function it_displays_the_content_alerts_page()
+    public function it_displays_the_content_alerts_page(string $url)
     {
         $client = static::createClient();
 
-        $crawler = $client->request('GET', $this->getUrl());
+        $crawler = $client->request('GET', $url);
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertSame('Subscribe to eLife\'s email alerts', $crawler->filter('main h1')->text());
@@ -21,18 +23,19 @@ final class ContentAlertsControllerTest extends PageTestCase
 
     /**
      * @test
+     * @dataProvider providerVariants
      */
-    public function it_has_metadata()
+    public function it_has_metadata(string $url)
     {
         $client = static::createClient();
 
-        $crawler = $client->request('GET', $this->getUrl().'?foo');
+        $crawler = $client->request('GET', $url.'?foo');
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
 
         $this->assertSame('Subscribe to eLife\'s email alerts | eLife', $crawler->filter('title')->text());
-        $this->assertSame('/content-alerts', $crawler->filter('link[rel="canonical"]')->attr('href'));
-        $this->assertSame('http://localhost/content-alerts', $crawler->filter('meta[property="og:url"]')->attr('content'));
+        $this->assertSame($url, $crawler->filter('link[rel="canonical"]')->attr('href'));
+        $this->assertSame('http://localhost'.$url, $crawler->filter('meta[property="og:url"]')->attr('content'));
         $this->assertSame('Subscribe to eLife\'s email alerts', $crawler->filter('meta[property="og:title"]')->attr('content'));
         $this->assertEmpty($crawler->filter('meta[property="og:description"]'));
         $this->assertEmpty($crawler->filter('meta[name="description"]'));
@@ -51,12 +54,13 @@ final class ContentAlertsControllerTest extends PageTestCase
 
     /**
      * @test
+     * @dataProvider providerVariants
      */
-    public function it_requires_email_and_preferences_fields_to_be_completed()
+    public function it_requires_email_and_preferences_fields_to_be_completed(string $url)
     {
         $client = static::createClient();
 
-        $crawler = $client->request('GET', $this->getUrl());
+        $crawler = $client->request('GET', $url);
 
         $form = $crawler->selectButton('Subscribe')->form();
         $form['content_alerts[preferences][0]']->untick();
@@ -73,12 +77,13 @@ final class ContentAlertsControllerTest extends PageTestCase
 
     /**
      * @test
+     * @dataProvider providerVariants
      */
-    public function it_requires_a_valid_email()
+    public function it_requires_a_valid_email(string $url)
     {
         $client = static::createClient();
 
-        $crawler = $client->request('GET', $this->getUrl());
+        $crawler = $client->request('GET', $url);
 
         $form = $crawler->selectButton('Subscribe')->form();
         $form['content_alerts[email]'] = 'foo';
@@ -97,11 +102,11 @@ final class ContentAlertsControllerTest extends PageTestCase
      * @test
      * @dataProvider contactProvider
      */
-    public function it_displays_confirmation_message(string $email)
+    public function it_displays_confirmation_message(string $url, string $email)
     {
         $client = static::createClient();
 
-        $crawler = $client->request('GET', $this->getUrl());
+        $crawler = $client->request('GET', $url);
 
         $form = $crawler->selectButton('Subscribe')->form();
         $form['content_alerts[email]'] = $email;
@@ -114,21 +119,15 @@ final class ContentAlertsControllerTest extends PageTestCase
         $this->assertSame('/', $crawler->filter('#thank-you a')->attr('href'));
     }
 
-    public function contactProvider() : Traversable
-    {
-        yield 'no existing contact' => ['foo@bar.com'];
-        yield 'existing contact - new subscriber' => ['amber@example.com'];
-        yield 'existing contact - opt out' => ['red@example.com'];
-    }
-
     /**
      * @test
+     * @dataProvider providerVariants
      */
-    public function it_triggers_update_preferences_message()
+    public function it_triggers_update_preferences_message(string $url)
     {
         $client = static::createClient();
 
-        $crawler = $client->request('GET', $this->getUrl());
+        $crawler = $client->request('GET', $url);
 
         $form = $crawler->selectButton('Subscribe')->form();
         $form['content_alerts[email]'] = 'green@example.com';
@@ -143,14 +142,15 @@ final class ContentAlertsControllerTest extends PageTestCase
 
     /**
      * @test
+     * @dataProvider providerVariants
      */
-    public function it_has_a_csrf_token_if_you_are_logged_in()
+    public function it_has_a_csrf_token_if_you_are_logged_in(string $url)
     {
         $client = static::createClient();
 
         $this->logIn($client);
 
-        $crawler = $client->request('GET', $this->getUrl());
+        $crawler = $client->request('GET', $url);
 
         $form = $crawler->selectButton('Subscribe')->form();
 
@@ -159,12 +159,13 @@ final class ContentAlertsControllerTest extends PageTestCase
 
     /**
      * @test
+     * @dataProvider providerVariants
      */
-    public function it_has_a_honeypot()
+    public function it_has_a_honeypot(string $url)
     {
         $client = static::createClient();
 
-        $crawler = $client->request('GET', $this->getUrl());
+        $crawler = $client->request('GET', $url);
 
         $form = $crawler->selectButton('Subscribe')->form();
         $form['content_alerts[email]'] = 'foo@example.com';
@@ -190,8 +191,28 @@ final class ContentAlertsControllerTest extends PageTestCase
         $this->assertCount(0, $emailCta);
     }
 
-    protected function getUrl() : string
+    public function providerVariants() : Traversable
     {
-        return '/content-alerts';
+        yield 'default' => [$this->getUrl()];
+        yield 'early-career' => [$this->getUrl('early-career')];
+        yield 'technology' => [$this->getUrl('technology')];
+        yield 'elife-newsletter' => [$this->getUrl('elife-newsletter')];
+    }
+
+    public function contactProvider() : array
+    {
+        return DataProviders::cross(
+            iterator_to_array($this->providerVariants()),
+            [
+                'no existing contact' => ['foo@bar.com'],
+                'existing contact - new subscriber' => ['amber@example.com'],
+                'existing contact - opt out' => ['red@example.com'],
+            ]
+        );
+    }
+
+    protected function getUrl(string $variant = null) : string
+    {
+        return '/content-alerts'.($variant ? '/'.$variant : '');
     }
 }
