@@ -94,6 +94,42 @@ final class ContentAlertsControllerTest extends PageTestCase
      * @test
      * @dataProvider providerVariants
      */
+    public function it_can_display_variants_which_affect_preference_order(string $url, string $leadingPreference)
+    {
+        $client = static::createClient();
+
+        $crawler = $client->request('GET', $url);
+
+        $form = $crawler->selectButton('Subscribe')->form();
+        $this->assertSame($leadingPreference, $form['content_alerts[preferences][0]']->getValue());
+        $this->assertNull($form['content_alerts[preferences][1]']->getValue());
+        $this->assertNull($form['content_alerts[preferences][2]']->getValue());
+        $this->assertNull($form['content_alerts[preferences][3]']->getValue());
+
+        $ordered = [$leadingPreference];
+
+        foreach ($this->providerVariants() as $variant) {
+            if ($leadingPreference !== $variant[1]) {
+                $ordered[] = $variant[1];
+            }
+        }
+
+        $form['content_alerts[preferences][1]']->tick();
+        $form['content_alerts[preferences][2]']->tick();
+        $form['content_alerts[preferences][3]']->tick();
+
+        $this->assertSame($ordered, [
+            $form['content_alerts[preferences][0]']->getValue(),
+            $form['content_alerts[preferences][1]']->getValue(),
+            $form['content_alerts[preferences][2]']->getValue(),
+            $form['content_alerts[preferences][3]']->getValue(),
+        ]);
+    }
+
+    /**
+     * @test
+     * @dataProvider providerVariants
+     */
     public function it_requires_a_valid_email(string $url)
     {
         $client = static::createClient();
@@ -117,7 +153,7 @@ final class ContentAlertsControllerTest extends PageTestCase
      * @test
      * @dataProvider contactProvider
      */
-    public function it_displays_confirmation_message(string $url, string $email)
+    public function it_displays_confirmation_message(string $email, string $url)
     {
         $client = static::createClient();
 
@@ -208,21 +244,21 @@ final class ContentAlertsControllerTest extends PageTestCase
 
     public function providerVariants() : Traversable
     {
-        yield 'default' => [$this->getUrl()];
-        yield 'early-career' => [$this->getUrl('early-career')];
-        yield 'technology' => [$this->getUrl('technology')];
-        yield 'elife-newsletter' => [$this->getUrl('elife-newsletter')];
+        yield 'default' => [$this->getUrl(), 'latest_articles'];
+        yield 'early-career' => [$this->getUrl('early-career'), 'early_career'];
+        yield 'technology' => [$this->getUrl('technology'), 'technology'];
+        yield 'elife-newsletter' => [$this->getUrl('elife-newsletter'), 'elife_newsletter'];
     }
 
     public function contactProvider() : array
     {
         return DataProviders::cross(
-            iterator_to_array($this->providerVariants()),
             [
                 'no existing contact' => ['foo@bar.com'],
                 'existing contact - new subscriber' => ['amber@example.com'],
                 'existing contact - opt out' => ['red@example.com'],
-            ]
+            ],
+            iterator_to_array($this->providerVariants())
         );
     }
 
