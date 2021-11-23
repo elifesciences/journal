@@ -23,6 +23,21 @@ final class ContentAlertsControllerTest extends PageTestCase
 
     /**
      * @test
+     */
+    public function it_redirects_if_invalid_variant()
+    {
+        $client = static::createClient();
+
+        $client->request('GET', $this->getUrl('invalid'));
+
+        $response = $client->getResponse();
+
+        $this->assertSame(302, $response->getStatusCode());
+        $this->assertSame('/content-alerts/expired', $response->headers->get('Location'));
+    }
+
+    /**
+     * @test
      * @dataProvider providerVariants
      */
     public function it_has_metadata(string $url)
