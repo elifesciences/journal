@@ -52,18 +52,7 @@ final class ContentAlertsType extends AbstractType
             ->add('preferences', ChoiceType::class,
                 [
                     'label' => 'I would like to receive the following regular emails from eLife:',
-                    'choices' => [
-                        [
-                            'The latest scientific articles published by eLife (twice weekly)' => CiviCrmClient::LABEL_LATEST_ARTICLES,
-                        ],
-                        [
-                            'Our other newsletters' => [
-                                'Early-career researchers newsletter (monthly)' => CiviCrmClient::LABEL_EARLY_CAREER,
-                                'Technology and Innovation newsletter (every two months)' => CiviCrmClient::LABEL_TECHNOLOGY,
-                                'eLife newsletter (every two months)' => CiviCrmClient::LABEL_ELIFE_NEWSLETTER,
-                            ],
-                        ],
-                    ],
+                    'choices' => $this->preferencesVariant($options['data']['variant'] ?? null),
                     'expanded' => true,
                     'multiple' => true,
                     'required' => true,
@@ -73,5 +62,30 @@ final class ContentAlertsType extends AbstractType
                 ]
             )
             ->add(empty($options['data']['contact_id']) ? 'subscribe' : 'update', SubmitType::class);
+    }
+
+    private function preferencesVariant(string $variant = null) : array
+    {
+        $preferences = [
+            'default' => ['The latest scientific articles published by eLife (twice weekly)' => CiviCrmClient::LABEL_LATEST_ARTICLES],
+            'early-career' => ['Early-career researchers newsletter (monthly)' => CiviCrmClient::LABEL_EARLY_CAREER],
+            'technology' => ['Technology and Innovation newsletter (every two months)' => CiviCrmClient::LABEL_TECHNOLOGY],
+            'elife-newsletter' => ['eLife newsletter (every two months)' => CiviCrmClient::LABEL_ELIFE_NEWSLETTER],
+        ];
+        $main = [];
+        $other = [];
+
+        foreach ($preferences as $k => $preference) {
+            if (($variant ?? 'default') === $k) {
+                $main += $preference;
+            } else {
+                $other += $preference;
+            }
+        }
+
+        return [
+            $main,
+            ['Our other newsletters' => $other],
+        ];
     }
 }

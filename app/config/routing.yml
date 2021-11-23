@@ -203,6 +203,13 @@ content-alerts:
     defaults:
          _controller: AppBundle:ContentAlerts:subscribe
 
+content-alerts-variant:
+    path: /content-alerts/{variant}
+    defaults:
+         _controller: AppBundle:ContentAlerts:subscribe
+    requirements:
+        variant: '(early\-career|technology|elife\-newsletter)'
+
 content-alerts-link-expired:
     path: /content-alerts/expired
     defaults:

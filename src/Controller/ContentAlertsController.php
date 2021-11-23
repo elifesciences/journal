@@ -19,7 +19,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 final class ContentAlertsController extends Controller
 {
-    public function subscribeAction(Request $request) : Response
+    public function subscribeAction(Request $request, string $variant = null) : Response
     {
         $arguments = $this->defaultPageArguments($request);
 
@@ -31,7 +31,7 @@ final class ContentAlertsController extends Controller
 
         /** @var Form $form */
         $form = $this->get('form.factory')
-            ->create(ContentAlertsType::class, ['preferences' => [CiviCrmClient::LABEL_LATEST_ARTICLES]], ['action' => $this->get('router')->generate('content-alerts')]);
+            ->create(ContentAlertsType::class, ['preferences' => $this->defaultPreferences($variant), 'variant' => $variant], ['action' => $variant ? $this->get('router')->generate('content-alerts-variant', ['variant' => $variant]) : $this->get('router')->generate('content-alerts')]);
 
         $validSubmission = $this->ifFormSubmitted($request, $form, function () use ($form) {
             return $this->get('elife.api_client.client.crm_api')
@@ -203,6 +203,20 @@ final class ContentAlertsController extends Controller
         }
 
         return new Response($this->get('templating')->render('::content-alerts.html.twig', $arguments));
+    }
+
+    private function defaultPreferences(string $variant = null) : array
+    {
+        switch ($variant) {
+            case 'early-career':
+                return [CiviCrmClient::LABEL_EARLY_CAREER];
+            case 'technology':
+                return [CiviCrmClient::LABEL_TECHNOLOGY];
+            case 'elife-newsletter':
+                return [CiviCrmClient::LABEL_ELIFE_NEWSLETTER];
+            default:
+                return [CiviCrmClient::LABEL_LATEST_ARTICLES];
+        }
     }
 
     private function generatePreferencesUrl(string $id = null) : string
