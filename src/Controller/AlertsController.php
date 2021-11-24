@@ -38,18 +38,18 @@ final class AlertsController extends Controller
             )),
             ArticleSection::basic('Community-building', 2, $this->render(
                 Listing::unordered([
-                    '<a href="'.$this->get('router')->generate('content-alerts').'">Sign up to our monthly early-career researchers community newsletter</a> for details on upcoming webinars, new programmes, interviews, and other efforts to support positive research culture in life sciences and biomedicine',
+                    '<a href="'.$this->get('router')->generate('content-alerts-variant', ['variant' => 'early-career']).'">Sign up to our monthly early-career researchers community newsletter</a> for details on upcoming webinars, new programmes, interviews, and other efforts to support positive research culture in life sciences and biomedicine',
                 ], 'bullet')
             )),
             ArticleSection::basic('eLife&apos;s Innovation Initiative and technology news', 2, $this->render(
                 Listing::unordered([
-                    'For the latest in eLife Labs, innovation, and new tools, <a href="'.$this->get('router')->generate('content-alerts').'">sign up for our technology and innovation newsletter</a>',
+                    'For the latest in eLife Labs, innovation, and new tools, <a href="'.$this->get('router')->generate('content-alerts-variant', ['variant' => 'technology']).'">sign up for our technology and innovation newsletter</a>',
                     'Subscribe to the RSS feed for <a href="'.$this->get('router')->generate('rss-labs').'">all the open source technology innovation news</a> from eLife Sciences',
                 ], 'bullet')
             )),
             ArticleSection::basic('The latest from eLife', 2, $this->render(
                 Listing::unordered([
-                    'Sign up to receive our <a href="'.$this->get('router')->generate('content-alerts').'">bi-monthly newsletter</a> for recent developments at eLife, new products and collaborations and changes to editorial policy.</a>',
+                    'Sign up to receive our <a href="'.$this->get('router')->generate('content-alerts-variant', ['variant' => 'elife-newsletter']).'">bi-monthly newsletter</a> for recent developments at eLife, new products and collaborations and changes to editorial policy.</a>',
                 ], 'bullet')
             )),
         ];
