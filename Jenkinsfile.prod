@@ -21,7 +21,13 @@ elifePipeline {
             node('containers-jenkins-plugin') {
                 DockerImage.elifesciences(this, "journal", commit).pull().tag('latest').push()
             }
+            // ensure all nodes are registered
+            sh "${env.BUILDER_PATH}bldr 'deploy.load_balancer_register_all:journal--prod'"
+
+            // update buildvars in parallel, run highstate blue-green
             builderDeployRevision 'journal--prod', commit, 'blue-green'
+            
+            // run smoke tests in parallel
             builderSmokeTests 'journal--prod', '/srv/journal'
         }
     }
