@@ -14,6 +14,7 @@ use eLife\Journal\ViewModel\Converter\ViewModelConverter;
 use eLife\Patterns\ViewModel;
 use eLife\Patterns\ViewModel\ContentHeaderSimple;
 use eLife\Patterns\ViewModel\InfoBar;
+use eLife\Patterns\ViewModel\SiteHeader;
 use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Promise\RejectedPromise;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
@@ -260,6 +261,19 @@ abstract class Controller implements ContainerAwareInterface
                 'Privacy notice'
             ),
             'footer' => $this->get('elife.journal.view_model.factory.footer')->createFooter(),
+            'user' => $user ?? null,
+            'item' => $item,
+        ];
+    }
+
+    final protected function simplePageArguments(Request $request, PromiseInterface $item = null) : array
+    {
+        return [
+            'header' => null,
+            'infoBars' => [],
+            'callsToAction' => $this->getCallsToAction($request),
+            'emailCta' => null,
+            'footer' => null,
             'user' => $user ?? null,
             'item' => $item,
         ];
