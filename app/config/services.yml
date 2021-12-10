@@ -14,11 +14,7 @@ services:
           - '@csa_guzzle.client.elife_api_slow'
 
     elife.api_client.client.crm_api:
-        class: eLife\Journal\Guzzle\CiviCrmClient
-        arguments:
-          - '@csa_guzzle.client.elife_crm_api'
-          - '%crm_api_key%'
-          - '%crm_api_site_key%'
+        class: eLife\Journal\Guzzle\MockCiviCrmClient
 
     elife.api_client.client.warning_checking:
         class: eLife\ApiClient\HttpClient\WarningCheckingHttpClient

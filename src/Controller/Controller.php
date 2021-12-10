@@ -15,6 +15,7 @@ use eLife\Patterns\ViewModel;
 use eLife\Patterns\ViewModel\ContentHeaderSimple;
 use eLife\Patterns\ViewModel\InfoBar;
 use eLife\Patterns\ViewModel\SiteHeader;
+use eLife\Patterns\ViewModel\SiteHeaderLogo;
 use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Promise\RejectedPromise;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
@@ -269,7 +270,7 @@ abstract class Controller implements ContainerAwareInterface
     final protected function simplePageArguments(Request $request, PromiseInterface $item = null) : array
     {
         return [
-            'header' => null,
+            'header' => new SiteHeaderLogo($this->get('router')->generate('home')),
             'infoBars' => [],
             'callsToAction' => $this->getCallsToAction($request),
             'emailCta' => null,
