@@ -164,10 +164,10 @@ final class ContentAlertsControllerTest extends PageTestCase
 
         $crawler = $client->submit($form);
 
-        $this->assertSame('Thank you for subscribing!', $crawler->filter('#thank-you h2')->text());
-        $this->assertSame("A confirmation email has been sent to {$email}.", $crawler->filter('#thank-you p')->text());
-        $this->assertSame('Back to Homepage', $crawler->filter('#thank-you a')->text());
-        $this->assertSame('/', $crawler->filter('#thank-you a')->attr('href'));
+        $this->assertSame('Thank you for subscribing!', $crawler->filter('h1')->text());
+        $this->assertSame("A confirmation email has been sent to {$email}.", $crawler->filter('#content p')->text());
+        $this->assertSame('Back to Homepage', $crawler->filter('#content a')->text());
+        $this->assertSame('/', $crawler->filter('#content a')->attr('href'));
     }
 
     /**
@@ -185,10 +185,10 @@ final class ContentAlertsControllerTest extends PageTestCase
 
         $crawler = $client->submit($form);
 
-        $this->assertSame('You are already subscribed', $crawler->filter('#thank-you h2')->text());
-        $this->assertSame('An email has been sent to green@example.com.', $crawler->filter('#thank-you p')->text());
-        $this->assertSame('Back to Homepage', $crawler->filter('#thank-you a')->text());
-        $this->assertSame('/', $crawler->filter('#thank-you a')->attr('href'));
+        $this->assertSame('You are already subscribed', $crawler->filter('h1')->text());
+        $this->assertSame('An email has been sent to green@example.com.', $crawler->filter('#content p')->text());
+        $this->assertSame('Back to Homepage', $crawler->filter('#content a')->text());
+        $this->assertSame('/', $crawler->filter('#content a')->attr('href'));
     }
 
     /**

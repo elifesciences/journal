@@ -145,10 +145,10 @@ final class ContentAlertsUpdateControllerTest extends PageTestCase
 
         $crawler = $client->submit($form);
 
-        $this->assertSame('Thank you', $crawler->filter('#thank-you h2')->text());
-        $this->assertSame('Email preferences for green@example.com have been updated.', $crawler->filter('#thank-you p')->text());
-        $this->assertSame('Back to Homepage', $crawler->filter('#thank-you a')->text());
-        $this->assertSame('/', $crawler->filter('#thank-you a')->attr('href'));
+        $this->assertSame('Thank you', $crawler->filter('h1')->text());
+        $this->assertSame('Email preferences for green@example.com have been updated.', $crawler->filter('#content p')->text());
+        $this->assertSame('Back to Homepage', $crawler->filter('#content a')->text());
+        $this->assertSame('/', $crawler->filter('#content a')->attr('href'));
     }
 
     /**
