@@ -199,6 +199,34 @@ final class ContentAlertsUpdateControllerTest extends PageTestCase
         $this->assertCount(0, $emailCta);
     }
 
+    /**
+     * @test
+     */
+    public function it_has_the_header()
+    {
+        $client = static::createClient();
+
+        $crawler = $client->request('GET', $this->getUrl());
+
+        $header = $crawler->filter('header.site-header__logo_link');
+
+        $this->assertCount(1, $header);
+    }
+
+    /**
+     * @test
+     */
+    public function it_has_the_footer()
+    {
+        $client = static::createClient();
+
+        $crawler = $client->request('GET', $this->getUrl());
+
+        $footer = $crawler->filter('footer.site-footer');
+
+        $this->assertCount(0, $footer);
+    }
+
     protected function getUrl(string $identifier = 'green') : string
     {
         return '/content-alerts/'.$identifier;
