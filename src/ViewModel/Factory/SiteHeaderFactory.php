@@ -17,7 +17,7 @@ use eLife\Patterns\ViewModel\NavLinkedItem;
 use eLife\Patterns\ViewModel\Picture;
 use eLife\Patterns\ViewModel\SearchBox;
 use eLife\Patterns\ViewModel\SiteHeader;
-use eLife\Patterns\ViewModel\SiteHeaderLogo;
+use eLife\Patterns\ViewModel\SiteHeaderTitle;
 use eLife\Patterns\ViewModel\SiteHeaderNavBar;
 use eLife\Patterns\ViewModel\SubjectFilter;
 use Symfony\Component\Asset\Packages;
@@ -194,6 +194,6 @@ final class SiteHeaderFactory
             $searchBox = null;
         }
 
-        return new SiteHeader(new SiteHeaderLogo($this->urlGenerator->generate('home')), $primaryLinks, $secondaryLinks, $searchBox);
+        return new SiteHeader(new SiteHeaderTitle($this->urlGenerator->generate('home')), $primaryLinks, $secondaryLinks, $searchBox);
     }
 }

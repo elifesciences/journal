@@ -6,18 +6,12 @@ use DateTimeImmutable;
 use eLife\ApiClient\Exception\BadResponse;
 use eLife\ApiSdk\Model\Image;
 use eLife\Journal\Exception\EarlyResponse;
-use eLife\Journal\Form\Type\EmailCtaType;
 use eLife\Journal\Helper\CanCheckAuthorization;
 use eLife\Journal\Helper\CanConvertContent;
 use eLife\Journal\Helper\Paginator;
 use eLife\Journal\ViewModel\Converter\ViewModelConverter;
 use eLife\Patterns\ViewModel;
-use eLife\Patterns\ViewModel\ContentHeaderSimple;
-use eLife\Patterns\ViewModel\InfoBar;
-use eLife\Patterns\ViewModel\SiteHeader;
-use eLife\Patterns\ViewModel\SiteHeaderLogo;
 use GuzzleHttp\Promise\PromiseInterface;
-use GuzzleHttp\Promise\RejectedPromise;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Form\FormInterface;
@@ -27,7 +21,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
-use UnexpectedValueException;
 use function GuzzleHttp\Promise\all;
 use function GuzzleHttp\Promise\exception_for;
 use function GuzzleHttp\Promise\promise_for;
@@ -147,7 +140,7 @@ abstract class Controller implements ContainerAwareInterface
         } else {
             $arguments['contentHeader'] = $arguments['paginator']
                 ->then(function (Paginator $paginator) {
-                    return new ContentHeaderSimple(
+                    return new ViewModel\ContentHeaderSimple(
                         $paginator->getTitle(),
                         sprintf('Page %s of %s', number_format($paginator->getCurrentPage()), number_format(count($paginator)))
                     );
@@ -186,12 +179,12 @@ abstract class Controller implements ContainerAwareInterface
 
                     $this->get('session')
                         ->getFlashBag()
-                        ->add(InfoBar::TYPE_ATTENTION, $error->getMessage());
+                        ->add(ViewModel\InfoBar::TYPE_ATTENTION, $error->getMessage());
                 }
             } else {
                 $this->get('session')
                     ->getFlashBag()
-                    ->add(InfoBar::TYPE_ATTENTION, 'There were problems submitting the form.');
+                    ->add(ViewModel\InfoBar::TYPE_ATTENTION, 'There were problems submitting the form.');
             }
         }
     }
@@ -270,7 +263,7 @@ abstract class Controller implements ContainerAwareInterface
     final protected function simplePageArguments(Request $request, PromiseInterface $item = null) : array
     {
         return [
-            'header' => new SiteHeaderLogo($this->get('router')->generate('home')),
+            'header' => new ViewModel\SiteHeaderTitle($this->get('router')->generate('home'), true, true),
             'infoBars' => [],
             'callsToAction' => $this->getCallsToAction($request),
             'emailCta' => null,
