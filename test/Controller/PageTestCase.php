@@ -11,7 +11,7 @@ abstract class PageTestCase extends WebTestCase
     /**
      * @test
      */
-    public function it_has_the_header()
+    final public function it_has_the_header()
     {
         $client = static::createClient();
 

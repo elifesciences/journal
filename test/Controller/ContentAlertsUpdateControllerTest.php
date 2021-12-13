@@ -202,20 +202,6 @@ final class ContentAlertsUpdateControllerTest extends PageTestCase
     /**
      * @test
      */
-    public function it_has_the_header()
-    {
-        $client = static::createClient();
-
-        $crawler = $client->request('GET', $this->getUrl());
-
-        $header = $crawler->filter('header.site-header__logo_link');
-
-        $this->assertCount(1, $header);
-    }
-
-    /**
-     * @test
-     */
     public function it_has_the_footer()
     {
         $client = static::createClient();
