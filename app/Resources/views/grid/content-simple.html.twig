@@ -1,11 +1,11 @@
 {# Only the first content wrapper should use css .wrapper--content. #}
-<div class="wrapper{% if not isSubsequent ?? false %} wrapper--content{% endif %}" id="content">
+<div class="wrapper"{% if isMainContent ?? false %} id="content"{% endif %}>
 
     <div class="grid">
 
         {% set main = block('main') %}
 
-        <div class="content-container grid__item one-whole large--eight-twelfths push--large--two-twelfth x-large--six-twelfths push--x-large--three-twelfths grid-column">
+        <div class="content-container grid__item one-whole large--eight-twelfths push--large--two-twelfth x-large--six-twelfths push--x-large--three-twelfths{% if lastBlock ?? false %} grid-column{% endif %}">
 
             {{ main|raw }}
 
