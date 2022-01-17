@@ -8,4 +8,3 @@ final class ElifeNewsletter extends NewsLetter
     const GROUP = 'eLife_bi_monthly_news_1032';
     const GROUP_ID = 1032;
 }
-
