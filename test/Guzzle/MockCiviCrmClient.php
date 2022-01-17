@@ -2,7 +2,9 @@
 
 namespace test\eLife\Journal\Guzzle;
 
-use eLife\Journal\Guzzle\CiviCrmClient;
+use eLife\Journal\Etoc\EarlyCareer;
+use eLife\Journal\Etoc\LatestArticles;
+use eLife\Journal\Etoc\Subscription;
 use eLife\Journal\Guzzle\CiviCrmClientInterface;
 use GuzzleHttp\Promise\PromiseInterface;
 use function GuzzleHttp\Promise\promise_for;
@@ -48,7 +50,7 @@ final class MockCiviCrmClient implements CiviCrmClientInterface
     }
 
     /**
-     * @return array|null
+     * @return Subscription|null
      */
     private function presetsCheckSubscription(string $identifier, $isPreferencesId = false)
     {
@@ -59,43 +61,36 @@ final class MockCiviCrmClient implements CiviCrmClientInterface
         switch (true) {
             case '/content-alerts/green' === $identifier && $isPreferencesId:
             case 'green@example.com' === $identifier && !$isPreferencesId:
-                $preferences = [CiviCrmClient::LABEL_LATEST_ARTICLES];
-                return [
-                    'contact_id' => 12345,
-                    'opt_out' => false,
-                    'email' => 'green@example.com',
-                    'first_name' => 'Green',
-                    'last_name' => 'Example',
-                    'preferences' => $preferences,
-                    'groups' => implode(',', $preferences),
-                    CiviCrmClient::FIELD_PREFERENCES_URL => 'http://localhost/content-alerts/green',
-                ];
+                return new Subscription(
+                    12345,
+                    false,
+                    'green@example.com',
+                    'Green',
+                    'Example',
+                    [new LatestArticles()],
+                    'http://localhost/content-alerts/green'
+                );
             case '/content-alerts/amber' === $identifier && $isPreferencesId:
             case 'amber@example.com' === $identifier && !$isPreferencesId:
-                $preferences = [];
-                return [
-                    'contact_id' => 23456,
-                    'opt_out' => false,
-                    'email' => 'amber@example.com',
-                    'first_name' => 'Amber',
-                    'last_name' => 'Example',
-                    'preferences' => $preferences,
-                    'groups' => implode(',', $preferences),
-                    CiviCrmClient::FIELD_PREFERENCES_URL => '',
-                ];
+                return new Subscription(
+                    23456,
+                    false,
+                    'amber@example.com',
+                    'Amber',
+                    'Example',
+                    []
+                );
             case '/content-alerts/red' === $identifier && $isPreferencesId:
             case 'red@example.com' === $identifier && !$isPreferencesId:
-                $preferences = [CiviCrmClient::LABEL_LATEST_ARTICLES, CiviCrmClient::GROUP_EARLY_CAREER];
-                return [
-                    'contact_id' => 34567,
-                    'opt_out' => true,
-                    'email' => 'red@example.com',
-                    'first_name' => 'Red',
-                    'last_name' => 'Example',
-                    'preferences' => $preferences,
-                    'groups' => implode(',', $preferences),
-                    CiviCrmClient::FIELD_PREFERENCES_URL => 'http://localhost/content-alerts/red',
-                ];
+                return new Subscription(
+                    34567,
+                    true,
+                    'red@example.com',
+                    'Red',
+                    'Example',
+                    [new LatestArticles(), new EarlyCareer()],
+                    'http://localhost/content-alerts/red'
+                );
             default:
                 return null;
         }

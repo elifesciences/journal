@@ -2,6 +2,11 @@
 
 namespace eLife\Journal\Controller;
 
+use eLife\Journal\Etoc\EarlyCareer;
+use eLife\Journal\Etoc\ElifeNewsletter;
+use eLife\Journal\Etoc\LatestArticles;
+use eLife\Journal\Etoc\Subscription;
+use eLife\Journal\Etoc\Technology;
 use eLife\Journal\Exception\EarlyResponse;
 use eLife\Journal\Form\Type\ContentAlertsType;
 use eLife\Journal\Form\Type\ContentAlertsUpdateRequestType;
@@ -38,16 +43,16 @@ final class ContentAlertsController extends Controller
                 ->checkSubscription($form->get('email')->getData())
                 ->then(function ($check) use ($form) {
                     // Check if user not found, opted out or not member of relevant groups.
-                    return (empty($check) || $check['opt_out'] || empty($check['groups'])) ?
+                    return (!$check instanceof Subscription || $check->optOut() || empty($check->preferences())) ?
                         // Subscribe if true.
                         $this->get('elife.api_client.client.crm_api')
                             ->subscribe(
-                                empty($check) ? $form->get('email')->getData() : $check['contact_id'],
-                                $form->get('preferences')->getData(),
+                                $check instanceof Subscription ? $check->id() : $form->get('email')->getData(),
+                                Subscription::getNewsletters($form->get('preferences')->getData()),
                                 $this->generatePreferencesUrl(),
                                 null,
                                 null,
-                                empty($check) ? null : $check['preferences']
+                                $check instanceof Subscription ? $check->preferences() : null
                             )
                             ->then(function () use ($form) {
                                 return ArticleSection::basic(
@@ -62,8 +67,9 @@ final class ContentAlertsController extends Controller
                             }) :
                         // Send preferences link if false.
                         $this->get('elife.api_client.client.crm_api')
-                            ->triggerPreferencesEmail($check['contact_id'], empty($check['preferences_url']) ? $this->generatePreferencesUrl() : null)
-                            ->then(function () use ($form) {
+                            ->triggerPreferencesEmail($check->id(), empty($check->preferencesUrl()) ? $this->generatePreferencesUrl() : null)
+                            ->then(function () use ($form, $check) {
+                                dump($check);
                                 return ArticleSection::basic(
                                     'You are already subscribed',
                                     2,
@@ -98,7 +104,7 @@ final class ContentAlertsController extends Controller
         $data = $this->get('elife.api_client.client.crm_api')
             ->checkSubscription($this->generatePreferencesUrl($id), true)
             ->then(function ($check) {
-                if (!$check) {
+                if (!$check instanceof Subscription) {
                     throw new EarlyResponse(new RedirectResponse($this->get('router')->generate('content-alerts-link-expired')));
                 }
 
@@ -108,17 +114,17 @@ final class ContentAlertsController extends Controller
 
         /** @var Form $form */
         $form = $this->get('form.factory')
-            ->create(ContentAlertsType::class, $data, ['action' => $this->get('router')->generate('content-alerts-update', ['id' => $id])]);
+            ->create(ContentAlertsType::class, $data instanceof Subscription ? $data->data() : null, ['action' => $this->get('router')->generate('content-alerts-update', ['id' => $id])]);
 
         $validSubmission = $this->ifFormSubmitted($request, $form, function () use ($form) {
             return $this->get('elife.api_client.client.crm_api')
                 ->subscribe(
                     $form->get('contact_id')->getData(),
-                    $form->get('preferences')->getData(),
+                    Subscription::getNewsletters($form->get('preferences')->getData()),
                     $this->generatePreferencesUrl(),
                     $form->get('first_name')->getData(),
                     $form->get('last_name')->getData(),
-                    $form->get('groups')->getData() ? explode(',', $form->get('groups')->getData()) : []
+                    $form->get('groups')->getData() ? Subscription::getNewsletters(explode(',', $form->get('groups')->getData())) : []
                 )
                 ->then(function () use ($form) {
                     return ArticleSection::basic(
@@ -161,8 +167,8 @@ final class ContentAlertsController extends Controller
             return $this->get('elife.api_client.client.crm_api')
                 ->checkSubscription($form->get('email')->getData())
                 ->then(function ($check) use ($form) {
-                    return !empty($check) ? $this->get('elife.api_client.client.crm_api')
-                        ->triggerPreferencesEmail($check['contact_id'], empty($check['preferences_url']) ? $this->generatePreferencesUrl() : null)
+                    return $check instanceof Subscription ? $this->get('elife.api_client.client.crm_api')
+                        ->triggerPreferencesEmail($check->id(), empty($check->preferencesUrl()) ? $this->generatePreferencesUrl() : null)
                         ->then(function () use ($form) {
                             return ArticleSection::basic(
                                 'Thank you',
@@ -209,13 +215,13 @@ final class ContentAlertsController extends Controller
     {
         switch ($variant) {
             case 'early-career':
-                return [CiviCrmClient::LABEL_EARLY_CAREER];
+                return [EarlyCareer::LABEL];
             case 'technology':
-                return [CiviCrmClient::LABEL_TECHNOLOGY];
+                return [Technology::LABEL];
             case 'elife-newsletter':
-                return [CiviCrmClient::LABEL_ELIFE_NEWSLETTER];
+                return [ElifeNewsletter::LABEL];
             default:
-                return [CiviCrmClient::LABEL_LATEST_ARTICLES];
+                return [LatestArticles::LABEL];
         }
     }
 
