@@ -67,7 +67,7 @@ final class MockCiviCrmClient implements CiviCrmClientInterface
                     'green@example.com',
                     'Green',
                     'Example',
-                    [new LatestArticles()],
+                    [LatestArticles::GROUP_ID],
                     'http://localhost/content-alerts/green'
                 );
             case '/content-alerts/amber' === $identifier && $isPreferencesId:
@@ -88,7 +88,7 @@ final class MockCiviCrmClient implements CiviCrmClientInterface
                     'red@example.com',
                     'Red',
                     'Example',
-                    [new LatestArticles(), new EarlyCareer()],
+                    [LatestArticles::GROUP_ID, EarlyCareer::GROUP_ID],
                     'http://localhost/content-alerts/red'
                 );
             default:
