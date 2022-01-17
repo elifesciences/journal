@@ -57,9 +57,9 @@ final class Subscription
             ElifeNewsletter::GROUP_ID => new ElifeNewsletter(),
         ];
 
-        $this->preferences = array_map(function ($preference) use ($groups) {
+        $this->preferences = array_values(array_map(function ($preference) use ($groups) {
             return $groups[$preference];
-        }, array_intersect(array_keys($groups), $preferences));
+        }, array_intersect(array_keys($groups), $preferences)));
     }
 
     public function id() : int

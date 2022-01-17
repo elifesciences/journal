@@ -2,14 +2,16 @@
 
 namespace test\eLife\Journal\Guzzle;
 
+use eLife\Journal\Etoc\EarlyCareer;
+use eLife\Journal\Etoc\LatestArticles;
+use eLife\Journal\Etoc\Subscription;
+use eLife\Journal\Etoc\Technology;
 use eLife\Journal\Exception\CiviCrmResponseError;
 use eLife\Journal\Guzzle\CiviCrmClient;
 use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Middleware;
-use GuzzleHttp\Promise\FulfilledPromise;
-use function GuzzleHttp\Promise\promise_for;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
@@ -41,16 +43,15 @@ final class CiviCrmClientTest extends TestCase
 
         $checkSuccess = $client->checkSubscription('foo@bar.com');
 
-        $this->assertSame([
-            'contact_id' => 12345,
-            'opt_out' => false,
-            'email' => 'foo@bar.com',
-            'first_name' => '',
-            'last_name' => '',
-            'preferences' => ['latest_articles', 'technology'],
-            'groups' => implode(',', ['latest_articles', 'technology']),
-            'preferences_url' => 'http://localhost/content-alerts/foo',
-        ], $checkSuccess->wait());
+        $this->assertEquals(new Subscription(
+            12345,
+            false,
+            'foo@bar.com',
+            '',
+            '',
+            [LatestArticles::GROUP_ID, Technology::GROUP_ID],
+            'http://localhost/content-alerts/foo'
+        ), $checkSuccess->wait());
 
         $this->assertCount(1, $container);
 
@@ -106,16 +107,15 @@ final class CiviCrmClientTest extends TestCase
 
         $checkSuccess = $client->checkSubscription('http://localhost/content-alerts/foo', true);
 
-        $this->assertSame([
-            'contact_id' => 12345,
-            'opt_out' => false,
-            'email' => 'foo@bar.com',
-            'first_name' => '',
-            'last_name' => '',
-            'preferences' => ['latest_articles', 'technology'],
-            'groups' => implode(',', ['latest_articles', 'technology']),
-            'preferences_url' => 'http://localhost/content-alerts/foo',
-        ], $checkSuccess->wait());
+        $this->assertEquals(new Subscription(
+            12345,
+            false,
+            'foo@bar.com',
+            '',
+            '',
+            [LatestArticles::GROUP_ID, Technology::GROUP_ID],
+            'http://localhost/content-alerts/foo'
+        ), $checkSuccess->wait());
 
         $this->assertCount(1, $container);
 
@@ -156,7 +156,7 @@ final class CiviCrmClientTest extends TestCase
                 new Response(200, [], json_encode(['is_error' => 0])),
         ], $container);
 
-        $subscribe = $client->subscribe('email@example.com', ['latest_articles'], 'http://localhost/content-alerts/foo');
+        $subscribe = $client->subscribe('email@example.com', [new LatestArticles()], 'http://localhost/content-alerts/foo');
 
         $this->assertEquals([
             'contact_id' => '12345',
@@ -219,7 +219,7 @@ final class CiviCrmClientTest extends TestCase
             new Response(200, [], json_encode(['is_error' => 0])),
         ], $container);
 
-        $subscribe = $client->subscribe('12345', ['latest_articles', 'early_career'], 'http://localhost/content-alerts/foo', 'New', 'Name', ['latest_articles', 'technology']);
+        $subscribe = $client->subscribe('12345', [new LatestArticles(), new EarlyCareer()], 'http://localhost/content-alerts/foo', 'New', 'Name', [new LatestArticles(), new Technology()]);
 
         $this->assertEquals([
             'contact_id' => '12345',
@@ -386,7 +386,7 @@ final class CiviCrmClientTest extends TestCase
         ], $container);
 
         try {
-            $client->subscribe('email@example.com', ['latest_articles'], 'http://localhost/content-alerts/foo')->wait();
+            $client->subscribe('email@example.com', [new LatestArticles()], 'http://localhost/content-alerts/foo')->wait();
             $this->fail('CiviCrmResponseError was not thrown');
         } catch (CiviCrmResponseError $e) {
             $this->assertSame('Error', $e->getMessage());
@@ -394,7 +394,7 @@ final class CiviCrmClientTest extends TestCase
         }
 
         try {
-            $client->subscribe('email@example.com', ['latest_articles', 'early_career'], 'http://localhost/content-alerts/foo')->wait();
+            $client->subscribe('email@example.com', [new LatestArticles(), new EarlyCareer()], 'http://localhost/content-alerts/foo')->wait();
             $this->fail('CiviCrmResponseError was not thrown');
         } catch (CiviCrmResponseError $e) {
             $this->assertSame('Error 2', $e->getMessage());
