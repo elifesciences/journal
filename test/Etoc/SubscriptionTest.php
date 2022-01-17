@@ -4,6 +4,7 @@ namespace test\eLife\Journal\Etoc;
 
 use eLife\Journal\Etoc\EarlyCareer;
 use eLife\Journal\Etoc\LatestArticles;
+use eLife\Journal\Etoc\NewsLetter;
 use eLife\Journal\Etoc\Subscription;
 use PHPUnit\Framework\TestCase;
 
@@ -71,5 +72,7 @@ final class SubscriptionTest extends TestCase
         $subscription = new Subscription(1, false, '', '', '', [$unknown1, LatestArticles::GROUP_ID, $unknown2, EarlyCareer::GROUP_ID]);
 
         $this->assertCount(2, $subscription->preferences());
+        $this->assertInstanceOf(NewsLetter::class, $subscription->preferences()[0]);
+        $this->assertInstanceOf(NewsLetter::class, $subscription->preferences()[1]);
     }
 }
