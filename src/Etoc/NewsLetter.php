@@ -19,15 +19,7 @@ abstract class NewsLetter
         return static::GROUP_ID;
     }
 
-    /**
-     * @return string|null
-     */
-    public function unsubscribeUrl()
-    {
-        return $this->unsubscribeUrl;
-    }
-
-    public function __toString()
+    public function __toString() : string
     {
         return $this->label();
     }
