@@ -18,7 +18,7 @@ final class ContentAlertsControllerTest extends PageTestCase
         $crawler = $client->request('GET', $url);
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
-        $this->assertSame('Subscribe to eLife\'s email alerts', $crawler->filter('main h1')->text());
+        $this->assertSame('Subscribe to eLife\'s email alerts', $crawler->filter('h1')->text());
     }
 
     /**
@@ -82,8 +82,6 @@ final class ContentAlertsControllerTest extends PageTestCase
 
         $crawler = $client->submit($form);
 
-        $this->assertCount(1, $crawler->filter('.info-bar'));
-        $this->assertSame('There were problems submitting the form.', trim($crawler->filter('.info-bar')->text()));
         $this->assertSame(
             ['Please provide your email address.', 'Please select an email type to subscribe.'],
             array_map('trim', $crawler->filter('.form-item__message')->extract(['_text']))
@@ -141,8 +139,6 @@ final class ContentAlertsControllerTest extends PageTestCase
 
         $crawler = $client->submit($form);
 
-        $this->assertCount(1, $crawler->filter('.info-bar'));
-        $this->assertSame('There were problems submitting the form.', trim($crawler->filter('.info-bar')->text()));
         $this->assertSame(
             ['Please provide a valid email address.'],
             array_map('trim', $crawler->filter('.form-item__message')->extract(['_text']))

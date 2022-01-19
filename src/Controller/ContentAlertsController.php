@@ -63,7 +63,7 @@ final class ContentAlertsController extends Controller
                                 ];
                             });
                 })->wait();
-        }, false);
+        }, false, true);
 
         $arguments['contentHeader'] = new ContentHeaderSimple($arguments['title']);
 
@@ -112,7 +112,7 @@ final class ContentAlertsController extends Controller
                         Button::link('Back to Homepage', $this->get('router')->generate('home')),
                     ];
                 })->wait();
-        }, false);
+        }, false, true);
 
         $arguments['contentHeader'] = new ContentHeaderSimple($arguments['title']);
 
@@ -161,7 +161,7 @@ final class ContentAlertsController extends Controller
                         ];
                     }
                 })->wait();
-        }, false);
+        }, false, true);
 
         if ($validSubmission) {
             $arguments['form'] = $validSubmission;

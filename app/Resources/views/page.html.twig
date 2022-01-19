@@ -236,21 +236,17 @@
                 </div>
             {% endif %}
 
-            {% block info_bars %}
-
-                {% if (app.session and app.session.started) or app.request.hasPreviousSession %}
-                    {% for type, messages in app.session.flashbag.all %}
-                        {% for message in messages %}
-                            {{ info_bar(message, type) }}
-                        {% endfor %}
+            {% if (app.session and app.session.started) or app.request.hasPreviousSession %}
+                {% for type, messages in app.session.flashbag.all %}
+                    {% for message in messages %}
+                        {{ info_bar(message, type) }}
                     {% endfor %}
-                {% endif %}
-
-                {% for infoBar in infoBars %}
-                    {{ render_pattern(infoBar) }}
                 {% endfor %}
+            {% endif %}
 
-            {% endblock %}
+            {% for infoBar in infoBars %}
+                {{ render_pattern(infoBar) }}
+            {% endfor %}
 
             {% block pre_body %}{% endblock %}
 

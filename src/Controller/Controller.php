@@ -156,7 +156,7 @@ abstract class Controller implements ContainerAwareInterface
         return $response;
     }
 
-    final protected function ifFormSubmitted(Request $request, FormInterface $form, callable $onValid, bool $earlyResponse = true)
+    final protected function ifFormSubmitted(Request $request, FormInterface $form, callable $onValid, bool $earlyResponse = true, bool $honeypotOnly = false)
     {
         $form->handleRequest($request);
 
@@ -171,20 +171,36 @@ abstract class Controller implements ContainerAwareInterface
                 }
             }
 
-            if (count($form->getErrors()) > 0) {
-                foreach ($form->getErrors() as $error) {
-                    if ($error->getMessage() === $form->getConfig()->getOption('honeypot_message')) {
-                        $this->get('monolog.logger.honeypot')->info('Honeypot field filled in', ['extra' => ['request' => $request]]);
-                    }
+            $this->processFormErrors($request, $form, $honeypotOnly);
+        }
+    }
 
-                    $this->get('session')
-                        ->getFlashBag()
-                        ->add(ViewModel\InfoBar::TYPE_ATTENTION, $error->getMessage());
+    private function processFormErrors(Request $request, FormInterface $form, bool $honeypotOnly = false)
+    {
+        $statusMessages = [];
+        $honeypot = false;
+
+        if (count($form->getErrors()) > 0) {
+            foreach ($form->getErrors() as $error) {
+                if ($error->getMessage() === $form->getConfig()->getOption('honeypot_message')) {
+                    $this->get('monolog.logger.honeypot')->info('Honeypot field filled in', ['extra' => ['request' => $request]]);
+                    $honeypot = true;
                 }
-            } else {
+
+                if (!$honeypotOnly || $honeypot) {
+                    $statusMessages[ViewModel\InfoBar::TYPE_ATTENTION][] = $error->getMessage();
+                    $honeypot = false;
+                }
+            }
+        } elseif (!$honeypotOnly) {
+            $statusMessages[ViewModel\InfoBar::TYPE_ATTENTION][] = 'There were problems submitting the form.';
+        }
+
+        foreach ($statusMessages as $level => $messages) {
+            foreach ($messages as $message) {
                 $this->get('session')
                     ->getFlashBag()
-                    ->add(ViewModel\InfoBar::TYPE_ATTENTION, 'There were problems submitting the form.');
+                    ->add($level, $message);
             }
         }
     }
