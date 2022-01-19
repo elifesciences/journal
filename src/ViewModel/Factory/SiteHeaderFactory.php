@@ -19,6 +19,7 @@ use eLife\Patterns\ViewModel\SearchBox;
 use eLife\Patterns\ViewModel\SiteHeader;
 use eLife\Patterns\ViewModel\SiteHeaderTitle;
 use eLife\Patterns\ViewModel\SiteHeaderNavBar;
+use eLife\Patterns\ViewModel\SiteHeaderTitle;
 use eLife\Patterns\ViewModel\SubjectFilter;
 use Symfony\Component\Asset\Packages;
 use Symfony\Component\HttpFoundation\RequestStack;
