@@ -14,7 +14,7 @@ final class ContentAlertsUpdateControllerTest extends PageTestCase
         $crawler = $client->request('GET', $this->getUrl());
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
-        $this->assertSame('Your email preferences', $crawler->filter('main h1')->text());
+        $this->assertSame('Your email preferences', $crawler->filter('h1')->text());
     }
 
     /**
@@ -109,8 +109,6 @@ final class ContentAlertsUpdateControllerTest extends PageTestCase
 
         $crawler = $client->submit($form);
 
-        $this->assertCount(1, $crawler->filter('.info-bar'));
-        $this->assertSame('There were problems submitting the form.', trim($crawler->filter('.info-bar')->text()));
         $this->assertSame(
             ['Please select an email type to subscribe.'],
             array_map('trim', $crawler->filter('.form-item__message')->extract(['_text']))
@@ -145,10 +143,10 @@ final class ContentAlertsUpdateControllerTest extends PageTestCase
 
         $crawler = $client->submit($form);
 
-        $this->assertSame('Thank you', $crawler->filter('#thank-you h2')->text());
-        $this->assertSame('Email preferences for green@example.com have been updated.', $crawler->filter('#thank-you p')->text());
-        $this->assertSame('Back to Homepage', $crawler->filter('#thank-you a')->text());
-        $this->assertSame('/', $crawler->filter('#thank-you a')->attr('href'));
+        $this->assertSame('Thank you', $crawler->filter('h1')->text());
+        $this->assertSame('Email preferences for green@example.com have been updated.', $crawler->filter('#content p')->text());
+        $this->assertSame('Back to Homepage', $crawler->filter('#content a')->text());
+        $this->assertSame('/', $crawler->filter('#content a')->attr('href'));
     }
 
     /**
@@ -197,6 +195,20 @@ final class ContentAlertsUpdateControllerTest extends PageTestCase
         $emailCta = $crawler->filter('.email-cta');
 
         $this->assertCount(0, $emailCta);
+    }
+
+    /**
+     * @test
+     */
+    public function it_has_the_footer()
+    {
+        $client = static::createClient();
+
+        $crawler = $client->request('GET', $this->getUrl());
+
+        $footer = $crawler->filter('footer.site-footer');
+
+        $this->assertCount(0, $footer);
     }
 
     protected function getUrl(string $identifier = 'green') : string

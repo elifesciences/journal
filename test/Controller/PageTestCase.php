@@ -55,7 +55,7 @@ abstract class PageTestCase extends WebTestCase
     /**
      * @test
      */
-    final public function it_has_the_footer()
+    public function it_has_the_footer()
     {
         $client = static::createClient();
 

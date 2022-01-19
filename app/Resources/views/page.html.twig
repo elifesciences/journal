@@ -248,6 +248,8 @@
                 {{ render_pattern(infoBar) }}
             {% endfor %}
 
+            {% block pre_body %}{% endblock %}
+
             <main role="main" class="main" id="maincontent">
 
                 {% block body %}{% endblock %}

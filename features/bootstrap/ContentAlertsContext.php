@@ -29,6 +29,6 @@ final class ContentAlertsContext extends Context
     public function iShouldSeeAThankYouMessage()
     {
         $this->assertSession()
-            ->elementContains('css', '#thank-you h2', 'Thank you for subscribing!');
+            ->elementContains('css', 'h1', 'Thank you for subscribing!');
     }
 }
