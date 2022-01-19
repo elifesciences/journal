@@ -58,7 +58,7 @@ final class ContentAlertsController extends Controller
                         // Send preferences link if false.
                         $this->get('elife.api_client.client.crm_api')
                             ->triggerPreferencesEmail($check->id(), empty($check->preferencesUrl()) ? $this->generatePreferencesUrl() : null)
-                            ->then(function () use ($form) {
+                            ->then(function () use ($form, &$arguments) {
                                 $arguments['title'] = 'You are already subscribed';
                                 return [
                                     new Paragraph("An email has been sent to <strong>{$form->get('email')->getData()}</strong>."),
