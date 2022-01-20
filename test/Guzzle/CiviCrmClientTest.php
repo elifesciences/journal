@@ -463,7 +463,7 @@ final class CiviCrmClientTest extends TestCase
         ], $container);
 
         try {
-            $client->subscribe('email@example.com', [new LatestArticles()], 'http://localhost/content-alerts/foo')->wait();
+            $client->subscribe('email@example.com', [new LatestArticles()], 'http://localhost/content-alerts/foo', [])->wait();
             $this->fail('CiviCrmResponseError was not thrown');
         } catch (CiviCrmResponseError $e) {
             $this->assertSame('Error', $e->getMessage());
@@ -471,7 +471,7 @@ final class CiviCrmClientTest extends TestCase
         }
 
         try {
-            $client->subscribe('email@example.com', [new LatestArticles(), new EarlyCareer()], 'http://localhost/content-alerts/foo')->wait();
+            $client->subscribe('email@example.com', [new LatestArticles(), new EarlyCareer()], 'http://localhost/content-alerts/foo', [])->wait();
             $this->fail('CiviCrmResponseError was not thrown');
         } catch (CiviCrmResponseError $e) {
             $this->assertSame('Error 2', $e->getMessage());
