@@ -5,10 +5,12 @@ namespace eLife\Journal\Controller;
 use eLife\Journal\Etoc\EarlyCareer;
 use eLife\Journal\Etoc\ElifeNewsletter;
 use eLife\Journal\Etoc\LatestArticles;
+use eLife\Journal\Etoc\Newsletter;
 use eLife\Journal\Etoc\Subscription;
 use eLife\Journal\Etoc\Technology;
 use eLife\Journal\Exception\EarlyResponse;
 use eLife\Journal\Form\Type\ContentAlertsType;
+use eLife\Journal\Form\Type\ContentAlertsUnsubscribeType;
 use eLife\Journal\Form\Type\ContentAlertsUpdateRequestType;
 use eLife\Patterns\ViewModel\Button;
 use eLife\Patterns\ViewModel\ButtonCollection;
@@ -22,6 +24,61 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 final class ContentAlertsController extends Controller
 {
+    public function unsubscribeAction(Request $request, string $id, string $variant = null) : Response
+    {
+        $arguments = $this->simplePageArguments($request);
+
+        $newsletters = $this->defaultPreferences($variant);
+
+        /** @var Subscription $check */
+        $check = $this->get('elife.api_client.client.crm_api')
+            ->checkSubscription($this->generateUnsubscribeUrl($id, $variant), false, $newsletters[0])
+            ->wait();
+
+        $group = implode(', ', array_map(function (Newsletter $preference) { return $preference->description(); }, $newsletters));
+
+        $arguments['title'] = 'Unsubscribe from this mailing';
+
+        $arguments['formIntro'] = new Paragraph("You will no longer receive ${group}.");
+
+        /** @var Form $form */
+        $form = $this->get('form.factory')
+            ->create(
+                ContentAlertsUnsubscribeType::class,
+                [
+                    'groups' => implode(',', array_map(function (Newsletter $preference) { return $preference->group(); }, $this->defaultPreferences($variant))),
+                ] + $check->data(),
+                [
+                    'action' => $variant ? $this->get('router')->generate('content-alerts-unsubscribe-variant', ['id' => $id, 'variant' => $variant]) : $this->get('router')->generate('content-alerts-unsubscribe', ['id' => $id]),
+                ]
+            );
+
+        $validSubmission = $this->ifFormSubmitted($request, $form, function () use ($form, $group, &$arguments) {
+            return $this->get('elife.api_client.client.crm_api')
+                ->unsubscribe(
+                    $form->get('contact_id')->getData(),
+                    explode(',', $form->get('groups')->getData())
+                )
+                ->then(function () use ($group, &$arguments) {
+                    $arguments['title'] = 'Unsubscribed';
+                    return [
+                        new Paragraph("You are no longer subscribed to <strong>{$group}</strong>."),
+                        Button::link('Back to Homepage', $this->get('router')->generate('home')),
+                    ];
+                })->wait();
+        }, false, true);
+
+        $arguments['contentHeader'] = new ContentHeaderSimple($arguments['title']);
+
+        $arguments['form'] = $validSubmission ?? $this->get('elife.journal.view_model.converter')->convert($form->createView());
+
+        if ($validSubmission) {
+            unset($arguments['formIntro']);
+        }
+
+        return new Response($this->get('templating')->render('::content-alerts.html.twig', $arguments));
+    }
+
     public function subscribeAction(Request $request, string $variant = null) : Response
     {
         $arguments = $this->simplePageArguments($request);
@@ -30,7 +87,16 @@ final class ContentAlertsController extends Controller
 
         /** @var Form $form */
         $form = $this->get('form.factory')
-            ->create(ContentAlertsType::class, ['preferences' => $this->defaultPreferences($variant), 'variant' => $variant], ['action' => $variant ? $this->get('router')->generate('content-alerts-variant', ['variant' => $variant]) : $this->get('router')->generate('content-alerts')]);
+            ->create(
+                ContentAlertsType::class,
+                [
+                    'preferences' => array_map(function (Newsletter $preference) { return $preference->label(); }, $this->defaultPreferences($variant)),
+                    'variant' => $variant,
+                ],
+                [
+                    'action' => $variant ? $this->get('router')->generate('content-alerts-variant', ['variant' => $variant]) : $this->get('router')->generate('content-alerts'),
+                ]
+            );
 
         $validSubmission = $this->ifFormSubmitted($request, $form, function () use ($form, &$arguments) {
             return $this->get('elife.api_client.client.crm_api')
@@ -44,6 +110,7 @@ final class ContentAlertsController extends Controller
                                 $check instanceof Subscription ? $check->id() : $form->get('email')->getData(),
                                 Subscription::getNewsletters($form->get('preferences')->getData()),
                                 $this->generatePreferencesUrl(),
+                                $this->prepareSubscriptionNewsletters(),
                                 null,
                                 null,
                                 $check instanceof Subscription ? $check->preferences() : null
@@ -85,7 +152,7 @@ final class ContentAlertsController extends Controller
         $arguments['title'] = 'Your email preferences';
 
         $data = $this->get('elife.api_client.client.crm_api')
-            ->checkSubscription($this->generatePreferencesUrl($id), true)
+            ->checkSubscription($this->generatePreferencesUrl($id), false)
             ->then(function ($check) {
                 if (!$check instanceof Subscription) {
                     throw new EarlyResponse(new RedirectResponse($this->get('router')->generate('content-alerts-link-expired')));
@@ -105,6 +172,7 @@ final class ContentAlertsController extends Controller
                     $form->get('contact_id')->getData(),
                     Subscription::getNewsletters($form->get('preferences')->getData()),
                     $this->generatePreferencesUrl(),
+                    $this->prepareSubscriptionNewsletters(),
                     $form->get('first_name')->getData(),
                     $form->get('last_name')->getData(),
                     $form->get('groups')->getData() ? Subscription::getNewsletters(explode(',', $form->get('groups')->getData())) : []
@@ -180,22 +248,44 @@ final class ContentAlertsController extends Controller
         return new Response($this->get('templating')->render('::content-alerts.html.twig', $arguments));
     }
 
+    /**
+     * @param string|null $variant
+     * @return Newsletter[]
+     */
     private function defaultPreferences(string $variant = null) : array
     {
         switch ($variant) {
             case 'early-career':
-                return [EarlyCareer::LABEL];
+                return [new EarlyCareer()];
             case 'technology':
-                return [Technology::LABEL];
+                return [new Technology()];
             case 'elife-newsletter':
-                return [ElifeNewsletter::LABEL];
+                return [new ElifeNewsletter()];
             default:
-                return [LatestArticles::LABEL];
+                return [new LatestArticles()];
         }
     }
 
     private function generatePreferencesUrl(string $id = null) : string
     {
         return $this->get('router')->generate('content-alerts-update', ['id' => $id ?? uniqid()], UrlGeneratorInterface::ABSOLUTE_URL);
+    }
+
+    private function generateUnsubscribeUrl(string $id = null, string $variant = null) : string
+    {
+        return $this->get('router')->generate('content-alerts-unsubscribe'.($variant ? '-variant' : ''), ['id' => $id ?? uniqid(), 'variant' => $variant], UrlGeneratorInterface::ABSOLUTE_URL);
+    }
+
+    /**
+     * @return Newsletter[]
+     */
+    private function prepareSubscriptionNewsletters() : array
+    {
+        return [
+            new LatestArticles($this->generateUnsubscribeUrl()),
+            new EarlyCareer($this->generateUnsubscribeUrl(null, 'early-career')),
+            new Technology($this->generateUnsubscribeUrl(null, 'technology')),
+            new ElifeNewsletter($this->generateUnsubscribeUrl(null, 'elife-newsletter')),
+        ];
     }
 }

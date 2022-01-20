@@ -88,7 +88,7 @@ final class Subscription
     }
 
     /**
-     * @return NewsLetter[]
+     * @return Newsletter[]
      */
     public function preferences() : array
     {

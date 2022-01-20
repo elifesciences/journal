@@ -3,7 +3,9 @@
 namespace test\eLife\Journal\Guzzle;
 
 use eLife\Journal\Etoc\EarlyCareer;
+use eLife\Journal\Etoc\ElifeNewsletter;
 use eLife\Journal\Etoc\LatestArticles;
+use eLife\Journal\Etoc\Newsletter;
 use eLife\Journal\Etoc\Subscription;
 use eLife\Journal\Etoc\Technology;
 use eLife\Journal\Exception\CiviCrmResponseError;
@@ -15,6 +17,7 @@ use GuzzleHttp\Middleware;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
+use Traversable;
 
 final class CiviCrmClientTest extends TestCase
 {
@@ -79,10 +82,11 @@ final class CiviCrmClientTest extends TestCase
         $firstRequest = $container[0]['request'];
         $this->assertEquals('GET', $firstRequest->getMethod());
 
-        $checkFail = $client->checkSubscription('http://localhost/content-alerts/foo', true);
+        $checkFail = $client->checkSubscription('http://localhost/content-alerts/foo', false);
 
         $this->assertNull($checkFail->wait());
     }
+
     /**
      * @test
      */
@@ -105,7 +109,7 @@ final class CiviCrmClientTest extends TestCase
             ]])),
         ], $container);
 
-        $checkSuccess = $client->checkSubscription('http://localhost/content-alerts/foo', true);
+        $checkSuccess = $client->checkSubscription('http://localhost/content-alerts/foo', false);
 
         $this->assertEquals(new Subscription(
             12345,
@@ -146,6 +150,77 @@ final class CiviCrmClientTest extends TestCase
 
     /**
      * @test
+     * @dataProvider providerNewsletterUnsubscribe
+     */
+    public function it_will_check_for_existing_user_by_unsubscribe_url(?Newsletter $newsletter, string $expectedUnsubscribeField)
+    {
+        $container = [];
+
+        $client = $this->prepareClient([
+            new Response(200, [], json_encode(['values' => [
+                [
+                    'contact_id' => 12345,
+                    'is_opt_out' => '0',
+                    'email' => 'foo@bar.com',
+                    'first_name' => '',
+                    'last_name' => '',
+                    'preferences' => [53,435],
+                    'groups' => implode(',', [53,435]),
+                    'custom_131' => 'http://localhost/content-alerts/foo',
+                ],
+            ]])),
+        ], $container);
+
+        $checkSuccess = $client->checkSubscription('http://localhost/content-alerts/foo', false, $newsletter);
+
+        $this->assertEquals(new Subscription(
+            12345,
+            false,
+            'foo@bar.com',
+            '',
+            '',
+            [LatestArticles::GROUP_ID, Technology::GROUP_ID],
+            'http://localhost/content-alerts/foo'
+        ), $checkSuccess->wait());
+
+        $this->assertCount(1, $container);
+
+        /** @var Request $firstRequest */
+        $firstRequest = $container[0]['request'];
+        $this->assertSame($this->prepareQuery([
+            'entity' => 'Contact',
+            'action' => 'get',
+            'json' => [
+                $expectedUnsubscribeField => 'http://localhost/content-alerts/foo',
+                'return' => [
+                    'group',
+                    'first_name',
+                    'last_name',
+                    'email',
+                    'is_opt_out',
+                    'custom_131',
+                ],
+            ],
+            'api_key' => 'api-key',
+            'key' => 'site-key',
+        ]), $firstRequest->getUri()->getQuery());
+
+        /** @var Request $firstRequest */
+        $firstRequest = $container[0]['request'];
+        $this->assertEquals('GET', $firstRequest->getMethod());
+    }
+
+    public function providerNewsletterUnsubscribe() : Traversable
+    {
+        yield 'null' => [null, 'custom_131'];
+        yield 'default' => [new LatestArticles(), 'custom_132'];
+        yield 'early-career' => [new EarlyCareer(), 'custom_133'];
+        yield 'technology' => [new Technology(), 'custom_134'];
+        yield 'elife-newsletter' => [new ElifeNewsletter(), 'custom_135'];
+    }
+
+    /**
+     * @test
      */
     public function it_will_subscribe_a_new_user()
     {
@@ -156,7 +231,7 @@ final class CiviCrmClientTest extends TestCase
                 new Response(200, [], json_encode(['is_error' => 0])),
         ], $container);
 
-        $subscribe = $client->subscribe('email@example.com', [new LatestArticles()], 'http://localhost/content-alerts/foo');
+        $subscribe = $client->subscribe('email@example.com', [new LatestArticles()], 'http://localhost/content-alerts/foo', []);
 
         $this->assertEquals([
             'contact_id' => '12345',
@@ -214,12 +289,12 @@ final class CiviCrmClientTest extends TestCase
         $container = [];
 
         $client = $this->prepareClient([
-                new Response(200, [], json_encode(['id' => '12345'])),
-                new Response(200, [], json_encode(['is_error' => 0])),
+            new Response(200, [], json_encode(['id' => '12345'])),
+            new Response(200, [], json_encode(['is_error' => 0])),
             new Response(200, [], json_encode(['is_error' => 0])),
         ], $container);
 
-        $subscribe = $client->subscribe('12345', [new LatestArticles(), new EarlyCareer()], 'http://localhost/content-alerts/foo', 'New', 'Name', [new LatestArticles(), new Technology()]);
+        $subscribe = $client->subscribe('12345', [new LatestArticles(), new EarlyCareer()], 'http://localhost/content-alerts/foo', [new LatestArticles('http://localhost/content-alerts/unsubscribe/foo'), new Technology('http://localhost/content-alerts/unsubscribe/foo/technology')], 'New', 'Name', [new LatestArticles(), new Technology()]);
 
         $this->assertEquals([
             'contact_id' => '12345',
@@ -245,6 +320,8 @@ final class CiviCrmClientTest extends TestCase
                 'last_name' => 'Name',
                 'custom_131' => 'http://localhost/content-alerts/foo',
                 'is_opt_out' => 0,
+                'custom_132' => 'http://localhost/content-alerts/unsubscribe/foo',
+                'custom_134' => 'http://localhost/content-alerts/unsubscribe/foo/technology',
             ],
             'api_key' => 'api-key',
             'key' => 'site-key',

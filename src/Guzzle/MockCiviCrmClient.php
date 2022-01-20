@@ -4,25 +4,37 @@ namespace eLife\Journal\Guzzle;
 
 use eLife\Journal\Etoc\EarlyCareer;
 use eLife\Journal\Etoc\LatestArticles;
+use eLife\Journal\Etoc\Newsletter;
 use eLife\Journal\Etoc\Subscription;
 use GuzzleHttp\Promise\PromiseInterface;
 use function GuzzleHttp\Promise\promise_for;
 
 final class MockCiviCrmClient implements CiviCrmClientInterface
 {
-    public function subscribe(string $identifier, array $preferences, string $preferencesUrl, string $firstName = null, string $lastName = null, array $preferencesBefore = null) : PromiseInterface
+    public function unsubscribe(int $contactId, array $groups) : PromiseInterface
+    {
+        return promise_for($this->presetsUnsubscribe($contactId, $groups));
+    }
+
+    private function presetsUnsubscribe(int $contactId, array $groups) : array
+    {
+        return [];
+    }
+
+    public function subscribe(string $identifier, array $preferences, string $preferencesUrl, array $newsletters, string $firstName = null, string $lastName = null, array $preferencesBefore = null) : PromiseInterface
     {
         return promise_for(array_filter($this->presetsSubscribe(
             $identifier,
             $preferences,
             $preferencesUrl,
+            $newsletters,
             $firstName,
             $lastName,
             $preferencesBefore ?? []
         )));
     }
 
-    private function presetsSubscribe(string $identifer, array $preferences, string $preferencesUrl, string $firstName = null, string $lastName = null, array $preferencesBefore = null) : array
+    private function presetsSubscribe(string $identifer, array $preferences, string $preferencesUrl, array $newsletters, string $firstName = null, string $lastName = null, array $preferencesBefore = null) : array
     {
         $add = array_values(array_diff($preferences, $preferencesBefore));
         $remove = array_values(array_diff($preferencesBefore, $preferences));
@@ -43,23 +55,24 @@ final class MockCiviCrmClient implements CiviCrmClientInterface
         }
     }
 
-    public function checkSubscription(string $identifier, $isPreferencesId = false) : PromiseInterface
+    public function checkSubscription(string $identifier, bool $isEmail = true, Newsletter $newsletter = null) : PromiseInterface
     {
-        return promise_for($this->presetsCheckSubscription($identifier, $isPreferencesId));
+        return promise_for($this->presetsCheckSubscription($identifier, $isEmail));
     }
 
     /**
      * @return Subscription|null
      */
-    private function presetsCheckSubscription(string $identifier, $isPreferencesId = false)
+    private function presetsCheckSubscription(string $identifier, bool $isEmail = true, Newsletter $newsletter = null)
     {
-        if ($isPreferencesId) {
+        if (!$isEmail) {
             $identifier = parse_url($identifier)['path'];
         }
 
         switch (true) {
-            case '/content-alerts/green' === $identifier && $isPreferencesId:
-            case 'green@example.com' === $identifier && !$isPreferencesId:
+            case '/content-alerts/green' === $identifier && !$isEmail:
+            case '/content-alerts/unsubscribe/green' === $identifier && !$isEmail:
+            case 'green@example.com' === $identifier && $isEmail:
                 return new Subscription(
                     12345,
                     false,
@@ -69,8 +82,9 @@ final class MockCiviCrmClient implements CiviCrmClientInterface
                     [LatestArticles::GROUP_ID],
                     'http://localhost/content-alerts/green'
                 );
-            case '/content-alerts/amber' === $identifier && $isPreferencesId:
-            case 'amber@example.com' === $identifier && !$isPreferencesId:
+            case '/content-alerts/amber' === $identifier && !$isEmail:
+            case '/content-alerts/unsubscribe/amber' === $identifier && !$isEmail:
+            case 'amber@example.com' === $identifier && $isEmail:
                 return new Subscription(
                     23456,
                     false,
@@ -79,8 +93,9 @@ final class MockCiviCrmClient implements CiviCrmClientInterface
                     'Example',
                     []
                 );
-            case '/content-alerts/red' === $identifier && $isPreferencesId:
-            case 'red@example.com' === $identifier && !$isPreferencesId:
+            case '/content-alerts/red' === $identifier && !$isEmail:
+            case '/content-alerts/unsubscribe/red' === $identifier && !$isEmail:
+            case 'red@example.com' === $identifier && $isEmail:
                 return new Subscription(
                     34567,
                     true,
