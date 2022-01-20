@@ -35,7 +35,10 @@ final class ContentAlertsController extends Controller
             ->checkSubscription($this->generateUnsubscribeUrl($id, $variant), false, $newsletters[0])
             ->wait();
 
-        $group = implode(', ', array_map(function (Newsletter $preference) { return $preference->description(); }, $newsletters));
+        $group = implode(', ', array_map(function (Newsletter $preference)
+        {
+            return $preference->description();
+        }, $newsletters));
 
         $arguments['title'] = 'Unsubscribe from this mailing';
 
@@ -46,7 +49,9 @@ final class ContentAlertsController extends Controller
             ->create(
                 ContentAlertsUnsubscribeType::class,
                 [
-                    'groups' => implode(',', array_map(function (Newsletter $preference) { return $preference->group(); }, $this->defaultPreferences($variant))),
+                    'groups' => implode(',', array_map(function (Newsletter $preference) {
+                        return $preference->group();
+                    }, $this->defaultPreferences($variant))),
                 ] + $check->data(),
                 [
                     'action' => $variant ? $this->get('router')->generate('content-alerts-unsubscribe-variant', ['id' => $id, 'variant' => $variant]) : $this->get('router')->generate('content-alerts-unsubscribe', ['id' => $id]),
@@ -90,7 +95,9 @@ final class ContentAlertsController extends Controller
             ->create(
                 ContentAlertsType::class,
                 [
-                    'preferences' => array_map(function (Newsletter $preference) { return $preference->label(); }, $this->defaultPreferences($variant)),
+                    'preferences' => array_map(function (Newsletter $preference) {
+                        return $preference->label();
+                    }, $this->defaultPreferences($variant)),
                     'variant' => $variant,
                 ],
                 [
@@ -257,7 +264,7 @@ final class ContentAlertsController extends Controller
         switch ($variant) {
             case 'early-career':
                 return [new EarlyCareer()];
-            case 'technology':
+            case 'technology':ContentAlertsController
                 return [new Technology()];
             case 'elife-newsletter':
                 return [new ElifeNewsletter()];

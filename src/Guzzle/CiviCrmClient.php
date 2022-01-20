@@ -85,8 +85,12 @@ final class CiviCrmClient implements CiviCrmClientInterface
                     // Interpret submission as confirmation of desire to receive bulk emails.
                     'is_opt_out' => 0,
                 ] + array_combine(
-                        array_map(function (Newsletter $newsletter) { return $newsletter->unsubscribeField(); }, $newsletters),
-                        array_map(function (Newsletter $newsletter) { return $newsletter->unsubscribeUrl(); }, $newsletters)
+                        array_map(function (Newsletter $newsletter) {
+                            return $newsletter->unsubscribeField();
+                        }, $newsletters),
+                        array_map(function (Newsletter $newsletter) {
+                            return $newsletter->unsubscribeUrl();
+                        }, $newsletters)
                     ),
             ],
         ]))->then(function (Response $response) {
