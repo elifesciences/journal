@@ -172,7 +172,7 @@ final class ContentAlertsController extends Controller
                     $form->get('contact_id')->getData(),
                     Subscription::getNewsletters($form->get('preferences')->getData()),
                     $this->generatePreferencesUrl(),
-                    $this->prepareSubscriptionNewsletters(),
+                    [],
                     $form->get('first_name')->getData(),
                     $form->get('last_name')->getData(),
                     $form->get('groups')->getData() ? Subscription::getNewsletters(explode(',', $form->get('groups')->getData())) : []
@@ -271,9 +271,9 @@ final class ContentAlertsController extends Controller
         return $this->get('router')->generate('content-alerts-update', ['id' => $id ?? uniqid()], UrlGeneratorInterface::ABSOLUTE_URL);
     }
 
-    private function generateUnsubscribeUrl(string $id = null, string $variant = null) : string
+    private function generateUnsubscribeUrl(string $id, string $variant = null) : string
     {
-        return $this->get('router')->generate('content-alerts-unsubscribe'.($variant ? '-variant' : ''), ['id' => $id ?? uniqid(), 'variant' => $variant], UrlGeneratorInterface::ABSOLUTE_URL);
+        return $this->get('router')->generate('content-alerts-unsubscribe'.($variant ? '-variant' : ''), ['id' => $id, 'variant' => $variant], UrlGeneratorInterface::ABSOLUTE_URL);
     }
 
     /**
@@ -282,10 +282,10 @@ final class ContentAlertsController extends Controller
     private function prepareSubscriptionNewsletters() : array
     {
         return [
-            new LatestArticles($this->generateUnsubscribeUrl()),
-            new EarlyCareer($this->generateUnsubscribeUrl(null, 'early-career')),
-            new Technology($this->generateUnsubscribeUrl(null, 'technology')),
-            new ElifeNewsletter($this->generateUnsubscribeUrl(null, 'elife-newsletter')),
+            new LatestArticles($this->generateUnsubscribeUrl($id = uniqid())),
+            new EarlyCareer($this->generateUnsubscribeUrl($id, 'early-career')),
+            new Technology($this->generateUnsubscribeUrl($id, 'technology')),
+            new ElifeNewsletter($this->generateUnsubscribeUrl($id, 'elife-newsletter')),
         ];
     }
 }
