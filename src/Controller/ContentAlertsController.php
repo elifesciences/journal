@@ -264,7 +264,7 @@ final class ContentAlertsController extends Controller
         switch ($variant) {
             case 'early-career':
                 return [new EarlyCareer()];
-            case 'technology':ContentAlertsController
+            case 'technology':
                 return [new Technology()];
             case 'elife-newsletter':
                 return [new ElifeNewsletter()];
