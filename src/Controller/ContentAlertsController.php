@@ -42,7 +42,7 @@ final class ContentAlertsController extends Controller
 
         $arguments['title'] = 'Unsubscribe from this mailing';
 
-        $arguments['formIntro'] = new Paragraph("You will no longer receive ${group}.");
+        $arguments['formIntro'] = new Paragraph("You will no longer receive ${group} from eLife.");
 
         /** @var Form $form */
         $form = $this->get('form.factory')
