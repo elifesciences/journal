@@ -19,6 +19,8 @@ final class CiviCrmClient implements CiviCrmClientInterface
     const GROUP_JOURNAL_ETOC_PREFERENCES = 'Journal_eToc_preferences_1923';
     // Custom field to store user preferences link to be included in emails.
     const FIELD_PREFERENCES_URL = 'custom_131';
+    // Custom field to store unsubscribe link to be included in emails.
+    const FIELD_UNSUBSCRIBE_URL = 'custom_132';
 
     private $client;
     private $apiKey;
@@ -70,7 +72,7 @@ final class CiviCrmClient implements CiviCrmClientInterface
     /**
      * @param Newsletter[] $newsletters
      */
-    public function subscribe(string $identifier, array $preferences, string $preferencesUrl, array $newsletters, string $firstName = null, string $lastName = null, array $preferencesBefore = null) : PromiseInterface
+    public function subscribe(string $identifier, array $preferences, array $newsletters, string $preferencesUrl, string $unsubscribeUrl = null, string $firstName = null, string $lastName = null, array $preferencesBefore = null) : PromiseInterface
     {
         return $this->client->sendAsync($this->prepareRequest('POST'), $this->options([
             'query' => [
@@ -84,14 +86,7 @@ final class CiviCrmClient implements CiviCrmClientInterface
                     self::FIELD_PREFERENCES_URL => $preferencesUrl,
                     // Interpret submission as confirmation of desire to receive bulk emails.
                     'is_opt_out' => 0,
-                ] + array_combine(
-                        array_map(function (Newsletter $newsletter) {
-                            return $newsletter->unsubscribeField();
-                        }, $newsletters),
-                        array_map(function (Newsletter $newsletter) {
-                            return $newsletter->unsubscribeUrl();
-                        }, $newsletters)
-                    ),
+                ] + ($unsubscribeUrl ? [self::FIELD_UNSUBSCRIBE_URL => $unsubscribeUrl] : []),
             ],
         ]))->then(function (Response $response) {
             return $this->prepareResponse($response);
@@ -141,7 +136,7 @@ final class CiviCrmClient implements CiviCrmClientInterface
                 'entity' => 'Contact',
                 'action' => 'get',
                 'json' => [
-                    $isEmail ? 'email' : ($newsletter ? $newsletter->unsubscribeField() : self::FIELD_PREFERENCES_URL) => $identifier,
+                    $isEmail ? 'email' : ($newsletter ? self::FIELD_UNSUBSCRIBE_URL : self::FIELD_PREFERENCES_URL) => $identifier,
                     'return' => [
                         'group',
                         'first_name',

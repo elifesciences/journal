@@ -7,7 +7,7 @@ use GuzzleHttp\Promise\PromiseInterface;
 
 interface CiviCrmClientInterface
 {
-    public function subscribe(string $email, array $preferences, string $preferencesUrl, array $newsletters, string $firstName = null, string $lastName = null, array $preferencesBefore = null) : PromiseInterface;
+    public function subscribe(string $email, array $preferences, array $newsletters, string $preferencesUrl, string $unsubscribeUrl = null, string $firstName = null, string $lastName = null, array $preferencesBefore = null) : PromiseInterface;
 
     public function unsubscribe(int $contactId, array $groups) : PromiseInterface;
 

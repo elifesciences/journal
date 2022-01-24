@@ -8,5 +8,4 @@ final class Technology extends Newsletter
     const DESCRIPTION = 'Technology';
     const GROUP = 'technology_news_435';
     const GROUP_ID = 435;
-    const UNSUBSCRIBE_FIELD = 'custom_134';
 }

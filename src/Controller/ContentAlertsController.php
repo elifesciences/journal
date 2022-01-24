@@ -120,8 +120,9 @@ final class ContentAlertsController extends Controller
                             ->subscribe(
                                 $check instanceof Subscription ? $check->id() : $form->get('email')->getData(),
                                 Subscription::getNewsletters($form->get('preferences')->getData()),
-                                $this->generatePreferencesUrl(),
                                 $this->prepareSubscriptionNewsletters(),
+                                $this->generatePreferencesUrl(),
+                                $this->generateUnsubscribeUrl(),
                                 null,
                                 null,
                                 $check instanceof Subscription ? $check->preferences() : null
@@ -182,8 +183,9 @@ final class ContentAlertsController extends Controller
                 ->subscribe(
                     $form->get('contact_id')->getData(),
                     Subscription::getNewsletters($form->get('preferences')->getData()),
-                    $this->generatePreferencesUrl(),
                     [],
+                    $this->generatePreferencesUrl(),
+                    null,
                     $form->get('first_name')->getData(),
                     $form->get('last_name')->getData(),
                     $form->get('groups')->getData() ? Subscription::getNewsletters(explode(',', $form->get('groups')->getData())) : []
@@ -282,9 +284,9 @@ final class ContentAlertsController extends Controller
         return $this->get('router')->generate('content-alerts-update', ['id' => $id ?? uniqid()], UrlGeneratorInterface::ABSOLUTE_URL);
     }
 
-    private function generateUnsubscribeUrl(string $id, string $variant = null) : string
+    private function generateUnsubscribeUrl(string $id = null, string $variant = null) : string
     {
-        return $this->get('router')->generate('content-alerts-unsubscribe'.($variant ? '-variant' : ''), ['id' => $id, 'variant' => $variant], UrlGeneratorInterface::ABSOLUTE_URL);
+        return $this->get('router')->generate('content-alerts-unsubscribe'.($variant ? '-variant' : ''), ['id' => $id ?? uniqid(), 'variant' => $variant], UrlGeneratorInterface::ABSOLUTE_URL);
     }
 
     /**

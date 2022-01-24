@@ -22,20 +22,21 @@ final class MockCiviCrmClient implements CiviCrmClientInterface
         return [];
     }
 
-    public function subscribe(string $identifier, array $preferences, string $preferencesUrl, array $newsletters, string $firstName = null, string $lastName = null, array $preferencesBefore = null) : PromiseInterface
+    public function subscribe(string $identifier, array $preferences, array $newsletters, string $preferencesUrl, string $unsubscribeUrl = null, string $firstName = null, string $lastName = null, array $preferencesBefore = null) : PromiseInterface
     {
         return promise_for(array_filter($this->presetsSubscribe(
             $identifier,
             $preferences,
-            $preferencesUrl,
             $newsletters,
+            $preferencesUrl,
+            $unsubscribeUrl,
             $firstName,
             $lastName,
             $preferencesBefore ?? []
         )));
     }
 
-    private function presetsSubscribe(string $identifer, array $preferences, string $preferencesUrl, array $newsletters, string $firstName = null, string $lastName = null, array $preferencesBefore = null) : array
+    private function presetsSubscribe(string $identifer, array $preferences, array $newsletters, string $preferencesUrl, string $unsubscribeUrl = null, string $firstName = null, string $lastName = null, array $preferencesBefore = null) : array
     {
         $add = array_values(array_diff($preferences, $preferencesBefore));
         $remove = array_values(array_diff($preferencesBefore, $preferences));
