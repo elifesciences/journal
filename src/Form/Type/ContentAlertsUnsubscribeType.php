@@ -2,24 +2,20 @@
 
 namespace eLife\Journal\Form\Type;
 
-use eLife\Journal\Etoc\EarlyCareer;
-use eLife\Journal\Etoc\ElifeNewsletter;
-use eLife\Journal\Etoc\LatestArticles;
-use eLife\Journal\Etoc\Technology;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Validator\Constraints\Email;
-use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Form\FormInterface;
 
 final class ContentAlertsUnsubscribeType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        dump($options);
+
         $choices = [
             "I'm no longer interested",
             'They are not relevant to me',
@@ -39,6 +35,17 @@ final class ContentAlertsUnsubscribeType extends AbstractType
                     'multiple' => true,
                 ]
             )
+            ->add('reason_other', TextareaType::class, [
+                'label' => 'If other',
+            ])
             ->add('unsubscribe', SubmitType::class);
+    }
+
+    public static function addContactId(FormInterface $form, int $contactId)
+    {
+        $form
+            ->add('contact_id', HiddenType::class, ['data' => $contactId]);
+
+        return $form;
     }
 }

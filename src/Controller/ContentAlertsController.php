@@ -30,15 +30,10 @@ final class ContentAlertsController extends Controller
 
         $newsletters = $this->defaultPreferences($variant);
 
-        /** @var Subscription $check */
-        $check = $this->get('elife.api_client.client.crm_api')
-            ->checkSubscription($this->generateUnsubscribeUrl($id, $variant), false, $newsletters[0])
-            ->wait();
-
         $group = implode(', ', array_map(function (Newsletter $preference)
-        {
-            return $preference->description();
-        }, $newsletters));
+            {
+                return $preference->description();
+            }, $newsletters));
 
         $arguments['title'] = 'Unsubscribe from this mailing';
 
@@ -52,7 +47,7 @@ final class ContentAlertsController extends Controller
                     'groups' => implode(',', array_map(function (Newsletter $preference) {
                         return $preference->group();
                     }, $this->defaultPreferences($variant))),
-                ] + $check->data(),
+                ],
                 [
                     'action' => $variant ? $this->get('router')->generate('content-alerts-unsubscribe-variant', ['id' => $id, 'variant' => $variant]) : $this->get('router')->generate('content-alerts-unsubscribe', ['id' => $id]),
                 ]
@@ -74,6 +69,15 @@ final class ContentAlertsController extends Controller
         }, false, true);
 
         $arguments['contentHeader'] = new ContentHeaderSimple($arguments['title']);
+
+        if (!$validSubmission) {
+            /** @var Subscription $check */
+            $check = $this->get('elife.api_client.client.crm_api')
+                ->checkSubscription($this->generateUnsubscribeUrl($id), false, $newsletters[0])
+                ->wait();
+
+            $form = ContentAlertsUnsubscribeType::addContactId($form, $check->id());
+        }
 
         $arguments['form'] = $validSubmission ?? $this->get('elife.journal.view_model.converter')->convert($form->createView());
 
