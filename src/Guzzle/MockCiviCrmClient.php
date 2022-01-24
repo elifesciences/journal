@@ -72,9 +72,6 @@ final class MockCiviCrmClient implements CiviCrmClientInterface
         switch (true) {
             case '/content-alerts/green' === $identifier && !$isEmail:
             case '/content-alerts/unsubscribe/green' === $identifier && !$isEmail:
-            case '/content-alerts/unsubscribe/green/early-career' === $identifier && !$isEmail:
-            case '/content-alerts/unsubscribe/green/technology' === $identifier && !$isEmail:
-            case '/content-alerts/unsubscribe/green/elife-newsletter' === $identifier && !$isEmail:
             case 'green@example.com' === $identifier && $isEmail:
                 return new Subscription(
                     12345,
