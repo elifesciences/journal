@@ -2,5 +2,5 @@
 set -e
 
 export FASTEST_OUTPUT_DIR=build/ci/phpunit
-#rm -rf "$FASTEST_OUTPUT_DIR" && mkdir -p "$FASTEST_OUTPUT_DIR"
+rm -rf "$FASTEST_OUTPUT_DIR" && mkdir -p "$FASTEST_OUTPUT_DIR"
 #vendor/bin/fastest --no-interaction --process 4 --xml phpunit.xml.dist "JOURNAL_INSTANCE=phpunit{p} vendor/bin/phpunit --log-junit $FASTEST_OUTPUT_DIR/{n}.xml {};"
