@@ -134,7 +134,7 @@ final class AboutController extends Controller
                 'we do not artificially limit the number of articles we publish or have a set acceptance rate',
                 'editors and reviewers discuss their reviews with each other before reaching a decision on a manuscript; extra experiments, analyses, or data collection are only requested if they are essential and can be reasonably completed within about two months (please also see, “<a href="'.$this->get('router')->generate('article', ['id' => '57162']).'">Publishing in the time of COVID-19</a>”)',
                 'our editorial process produces two outputs: i) public comments from the peer reviewers on the strengths and weaknesses of the work; ii) detailed feedback on the manuscript for the authors',
-                'accepted manuscripts published in eLife include the the decision letter from the editor to the authors, and the author responses to the decision letter',
+                'accepted manuscripts published in eLife include the decision letter from the editor to the authors, and the author responses to the decision letter',
             ], 'bullet'),
             new Paragraph('The overall aim is to make peer review faster, fairer and more open. <a href="'.$this->get('router')->generate('article', ['id' => '00855']).'">eLife does not support the Impact Factor</a> and is a co-founder of the <a href="https://sfdora.org/">Declaration on Research Assessment (DORA)</a>. Regularly updated metrics relating to the eLife editorial process are available in our <a href="https://reviewer.elifesciences.org/author-guide/journal-metrics">Author Guide</a>.'),
             ArticleSection::basic('Related links', 2,
