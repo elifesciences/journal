@@ -31,10 +31,9 @@ final class ContentAlertsController extends Controller
 
         $newsletters = $this->defaultPreferences($variant);
 
-        $group = implode(', ', array_map(function (Newsletter $preference)
-            {
-                return $preference->description();
-            }, $newsletters));
+        $group = implode(', ', array_map(function (Newsletter $preference) {
+            return $preference->description();
+        }, $newsletters));
 
         $arguments['title'] = 'Unsubscribe from this mailing';
 
