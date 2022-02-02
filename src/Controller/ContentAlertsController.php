@@ -17,6 +17,7 @@ use eLife\Patterns\ViewModel\ButtonCollection;
 use eLife\Patterns\ViewModel\ContentHeaderSimple;
 use eLife\Patterns\ViewModel\Paragraph;
 use Symfony\Component\Form\Form;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -37,7 +38,7 @@ final class ContentAlertsController extends Controller
 
         $arguments['title'] = 'Unsubscribe from this mailing';
 
-        $arguments['formIntro'] = new Paragraph("You will no longer receive ${group} from eLife.");
+        $formIntro = "You will no longer receive ${group} from eLife.";
 
         /** @var Form $form */
         $form = $this->get('form.factory')
@@ -68,20 +69,47 @@ final class ContentAlertsController extends Controller
                 })->wait();
         }, false, true);
 
-        $arguments['contentHeader'] = new ContentHeaderSimple($arguments['title']);
-
         if (!$validSubmission) {
             /** @var Subscription $check */
             $check = $this->get('elife.api_client.client.crm_api')
                 ->checkSubscription($this->generateUnsubscribeUrl($id), false, $newsletters[0])
+                ->then(function ($check) use (&$arguments) {
+                    if (!$check instanceof Subscription || $check->optOut()) {
+                        $arguments['title'] = 'Something went wrong';
+                        return [
+                            new Paragraph('Your email address has not been recognised. As a result, your email subscriptions have not been changed. Please try again or <a href="'.$this->get('router')->generate('contact').'">contact us</a>.'),
+                            Button::link('Back to Homepage', $this->get('router')->generate('home')),
+                        ];
+                    }
+
+                    return $check;
+                })
                 ->wait();
 
-            $form = ContentAlertsUnsubscribeType::addContactId($form, $check->id());
+            if ($check instanceof Subscription) {
+                if ($check->preferencesUrl()) {
+                    $formIntro .= ' To change any other newsletter subscriptions, please <a href="'.$check->preferencesUrl().'">update your preferences</a>.';
+                }
+
+                $form = ContentAlertsUnsubscribeType::addContactId($form, $check->id());
+            } else {
+                $form = $check;
+            }
         }
 
-        $arguments['form'] = $validSubmission ?? $this->get('elife.journal.view_model.converter')->convert($form->createView());
+        $arguments['contentHeader'] = new ContentHeaderSimple($arguments['title']);
+
+        $arguments['formIntro'] = new Paragraph($formIntro);
 
         if ($validSubmission) {
+            $arguments['form'] = $validSubmission;
+        } elseif ($form instanceof FormInterface) {
+            $arguments['form'] = $this->get('elife.journal.view_model.converter')->convert($form->createView());
+        } else {
+            $arguments['form'] = $form;
+        }
+
+        if ($validSubmission || !$form instanceof FormInterface) {
             unset($arguments['formIntro']);
         }
 
