@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6529b93c7b51396394bff3b119517a01",
+    "content-hash": "ad1f3ebba96d73ba80786c24c23f7a39",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -1360,16 +1360,16 @@
         },
         {
             "name": "elife/patterns",
-            "version": "dev-master",
+            "version": "dev-clean-theme",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/patterns-php.git",
-                "reference": "2b347cce7e5d0d9e9379ac079017c6a290006bf1"
+                "reference": "ae6694feaa72d600ff1623611c366d497fa1d579"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/2b347cce7e5d0d9e9379ac079017c6a290006bf1",
-                "reference": "2b347cce7e5d0d9e9379ac079017c6a290006bf1",
+                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/ae6694feaa72d600ff1623611c366d497fa1d579",
+                "reference": "ae6694feaa72d600ff1623611c366d497fa1d579",
                 "shasum": ""
             },
             "require": {
@@ -1411,9 +1411,9 @@
             ],
             "description": "eLife patterns",
             "support": {
-                "source": "https://github.com/elifesciences/patterns-php/tree/master"
+                "source": "https://github.com/elifesciences/patterns-php/tree/clean-theme"
             },
-            "time": "2022-01-25T13:30:18+00:00"
+            "time": "2022-02-10T11:10:29+00:00"
         },
         {
             "name": "fabpot/goutte",
@@ -3208,6 +3208,7 @@
             ],
             "description": "Symfony SwiftmailerBundle",
             "homepage": "http://symfony.com",
+            "abandoned": "symfony/mailer",
             "time": "2019-11-07T21:01:35+00:00"
         },
         {
