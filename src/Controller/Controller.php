@@ -279,7 +279,7 @@ abstract class Controller implements ContainerAwareInterface
     final protected function simplePageArguments(Request $request, PromiseInterface $item = null) : array
     {
         return [
-            'header' => new ViewModel\SiteHeaderTitle($this->get('router')->generate('home'), true, true),
+            'header' => new ViewModel\SiteHeaderTitle($this->get('router')->generate('home'), true, true, true),
             'infoBars' => [],
             'callsToAction' => $this->getCallsToAction($request),
             'emailCta' => null,
