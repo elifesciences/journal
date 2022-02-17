@@ -1364,12 +1364,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/patterns-php.git",
-                "reference": "2334dcb83a08776ddae09a98c07b08b7d3d25ed0"
+                "reference": "6bbbe45da7a847d4b395070c972f0bac243fd65b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/2334dcb83a08776ddae09a98c07b08b7d3d25ed0",
-                "reference": "2334dcb83a08776ddae09a98c07b08b7d3d25ed0",
+                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/6bbbe45da7a847d4b395070c972f0bac243fd65b",
+                "reference": "6bbbe45da7a847d4b395070c972f0bac243fd65b",
                 "shasum": ""
             },
             "require": {
@@ -1413,7 +1413,7 @@
             "support": {
                 "source": "https://github.com/elifesciences/patterns-php/tree/clean-theme"
             },
-            "time": "2022-02-10T12:41:41+00:00"
+            "time": "2022-02-17T10:43:01+00:00"
         },
         {
             "name": "fabpot/goutte",
@@ -1731,12 +1731,12 @@
                 }
             },
             "autoload": {
-                "psr-4": {
-                    "GuzzleHttp\\Psr7\\": "src/"
-                },
                 "files": [
                     "src/functions_include.php"
-                ]
+                ],
+                "psr-4": {
+                    "GuzzleHttp\\Psr7\\": "src/"
+                }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
