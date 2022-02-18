@@ -12,6 +12,16 @@ use function GuzzleHttp\Promise\promise_for;
 
 final class MockCiviCrmClient implements CiviCrmClientInterface
 {
+    public function optout(int $contactId, array $reasons, string $reasonOther = null) : PromiseInterface
+    {
+        return promise_for($this->presetsOptout($contactId, $reasons, $reasonOther));
+    }
+
+    private function presetsOptout(int $contactId, array $reasons, string $reasonOther = null) : array
+    {
+        return [];
+    }
+
     public function unsubscribe(int $contactId, array $groups) : PromiseInterface
     {
         return promise_for($this->presetsUnsubscribe($contactId, $groups));
@@ -22,7 +32,7 @@ final class MockCiviCrmClient implements CiviCrmClientInterface
         return [];
     }
 
-    public function subscribe(string $identifier, array $preferences, array $newsletters, string $preferencesUrl, string $unsubscribeUrl = null, string $firstName = null, string $lastName = null, array $preferencesBefore = null) : PromiseInterface
+    public function subscribe(string $identifier, array $preferences, array $newsletters, string $preferencesUrl, string $unsubscribeUrl = null, string $optoutUrl = null, string $firstName = null, string $lastName = null, array $preferencesBefore = null) : PromiseInterface
     {
         return promise_for(array_filter($this->presetsSubscribe(
             $identifier,
@@ -30,13 +40,14 @@ final class MockCiviCrmClient implements CiviCrmClientInterface
             $newsletters,
             $preferencesUrl,
             $unsubscribeUrl,
+            $optoutUrl,
             $firstName,
             $lastName,
             $preferencesBefore ?? []
         )));
     }
 
-    private function presetsSubscribe(string $identifer, array $preferences, array $newsletters, string $preferencesUrl, string $unsubscribeUrl = null, string $firstName = null, string $lastName = null, array $preferencesBefore = null) : array
+    private function presetsSubscribe(string $identifer, array $preferences, array $newsletters, string $preferencesUrl, string $unsubscribeUrl = null, string $optoutUrl = null, string $firstName = null, string $lastName = null, array $preferencesBefore = null) : array
     {
         $add = array_values(array_diff($preferences, $preferencesBefore));
         $remove = array_values(array_diff($preferencesBefore, $preferences));
@@ -57,7 +68,7 @@ final class MockCiviCrmClient implements CiviCrmClientInterface
         }
     }
 
-    public function checkSubscription(string $identifier, bool $isEmail = true, Newsletter $newsletter = null) : PromiseInterface
+    public function checkSubscription(string $identifier, bool $isEmail = true, Newsletter $newsletter = null, string $field = null) : PromiseInterface
     {
         return promise_for($this->presetsCheckSubscription($identifier, $isEmail));
     }

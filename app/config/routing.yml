@@ -237,6 +237,13 @@ content-alerts-unsubscribe-variant:
         id: '[a-z0-9]+'
         variant: '(early\-career|technology|elife\-newsletter)'
 
+content-alerts-optout:
+    path: /content-alerts/optout/{id}
+    defaults:
+         _controller: AppBundle:ContentAlerts:optout
+    requirements:
+        id: '[a-z0-9]+'
+
 digest:
     path: /digests/{id}/{slug}
     defaults:

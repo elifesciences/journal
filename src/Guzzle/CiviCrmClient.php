@@ -21,6 +21,14 @@ final class CiviCrmClient implements CiviCrmClientInterface
     const FIELD_PREFERENCES_URL = 'custom_131';
     // Custom field to store unsubscribe link to be included in emails.
     const FIELD_UNSUBSCRIBE_URL = 'custom_132';
+    // Custom field to store opt-out link to be included in emails.
+    const FIELD_OPTOUT_URL = 'custom_136';
+    // Custom field to store opt-out date.
+    const FIELD_OPTOUT_DATE = 'custom_98';
+    // Custom field to store opt-out reason.
+    const FIELD_OPTOUT_REASON = 'custom_99';
+    // Custom field to store opt-out reason (other).
+    const FIELD_OPTOUT_REASON_OTHER = 'custom_101';
 
     private $client;
     private $apiKey;
@@ -51,7 +59,27 @@ final class CiviCrmClient implements CiviCrmClientInterface
         });
     }
 
-    public function unsubscribe(int $contactId, array $groups): PromiseInterface
+    public function optout(int $contactId, array $reasons = [], string $reasonOther = null) : PromiseInterface
+    {
+        return $this->client->sendAsync($this->prepareRequest('POST'), $this->options([
+            'query' => [
+                'entity' => 'Contact',
+                'action' => 'create',
+                'json' => [
+                    'contact_id' => $contactId,
+                    'is_opt_out' => 1,
+                    self::FIELD_OPTOUT_DATE => date('Y-m-d'),
+                    self::FIELD_OPTOUT_REASON => $reasons,
+                    self::FIELD_OPTOUT_REASON_OTHER => $reasonOther,
+                ],
+            ],
+        ]))
+        ->then(function (Response $response) {
+            return $this->prepareResponse($response);
+        });
+    }
+
+    public function unsubscribe(int $contactId, array $groups) : PromiseInterface
     {
         return $this->client->sendAsync($this->prepareRequest('POST'), $this->options([
             'query' => [
@@ -72,7 +100,7 @@ final class CiviCrmClient implements CiviCrmClientInterface
     /**
      * @param Newsletter[] $newsletters
      */
-    public function subscribe(string $identifier, array $preferences, array $newsletters, string $preferencesUrl, string $unsubscribeUrl = null, string $firstName = null, string $lastName = null, array $preferencesBefore = null) : PromiseInterface
+    public function subscribe(string $identifier, array $preferences, array $newsletters, string $preferencesUrl, string $unsubscribeUrl = null, string $optoutUrl = null, string $firstName = null, string $lastName = null, array $preferencesBefore = null) : PromiseInterface
     {
         return $this->client->sendAsync($this->prepareRequest('POST'), $this->options([
             'query' => [
@@ -86,7 +114,7 @@ final class CiviCrmClient implements CiviCrmClientInterface
                     self::FIELD_PREFERENCES_URL => $preferencesUrl,
                     // Interpret submission as confirmation of desire to receive bulk emails.
                     'is_opt_out' => 0,
-                ] + ($unsubscribeUrl ? [self::FIELD_UNSUBSCRIBE_URL => $unsubscribeUrl] : []),
+                ] + ($unsubscribeUrl ? [self::FIELD_UNSUBSCRIBE_URL => $unsubscribeUrl] : []) + ($optoutUrl ? [self::FIELD_OPTOUT_URL => $optoutUrl] : []),
             ],
         ]))->then(function (Response $response) {
             return $this->prepareResponse($response);
@@ -129,14 +157,14 @@ final class CiviCrmClient implements CiviCrmClientInterface
         });
     }
 
-    public function checkSubscription(string $identifier, bool $isEmail = true, Newsletter $newsletter = null) : PromiseInterface
+    public function checkSubscription(string $identifier, bool $isEmail = true, Newsletter $newsletter = null, string $field = null) : PromiseInterface
     {
         return $this->client->sendAsync($this->prepareRequest(), $this->options([
             'query' => [
                 'entity' => 'Contact',
                 'action' => 'get',
                 'json' => [
-                    $isEmail ? 'email' : ($newsletter ? self::FIELD_UNSUBSCRIBE_URL : self::FIELD_PREFERENCES_URL) => $identifier,
+                    $isEmail ? 'email' : ($newsletter ? self::FIELD_UNSUBSCRIBE_URL : ($field ?? self::FIELD_PREFERENCES_URL)) => $identifier,
                     'return' => [
                         'group',
                         'first_name',

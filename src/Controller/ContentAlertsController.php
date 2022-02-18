@@ -9,9 +9,11 @@ use eLife\Journal\Etoc\Newsletter;
 use eLife\Journal\Etoc\Subscription;
 use eLife\Journal\Etoc\Technology;
 use eLife\Journal\Exception\EarlyResponse;
+use eLife\Journal\Form\Type\ContentAlertsOptoutType;
 use eLife\Journal\Form\Type\ContentAlertsType;
 use eLife\Journal\Form\Type\ContentAlertsUnsubscribeType;
 use eLife\Journal\Form\Type\ContentAlertsUpdateRequestType;
+use eLife\Journal\Guzzle\CiviCrmClient;
 use eLife\Patterns\ViewModel\Button;
 use eLife\Patterns\ViewModel\ButtonCollection;
 use eLife\Patterns\ViewModel\ContentHeaderSimple;
@@ -25,6 +27,86 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 final class ContentAlertsController extends Controller
 {
+    public function optoutAction(Request $request, string $id) : Response
+    {
+        $arguments = $this->simplePageArguments($request);
+
+        $arguments['title'] = 'Opt-out of all newsletters';
+
+        $formIntro = 'You will no longer receive regular updates from eLife.';
+
+        /** @var Form $form */
+        $form = $this->get('form.factory')
+            ->create(
+                ContentAlertsOptoutType::class,
+                null,
+                [
+                    'action' => $this->get('router')->generate('content-alerts-optout', ['id' => $id]),
+                ]
+            );
+
+        $validSubmission = $this->ifFormSubmitted($request, $form, function () use ($form, &$arguments) {
+            return $this->get('elife.api_client.client.crm_api')
+                ->optout(
+                    $form->get('contact_id')->getData(),
+                    $form->get('reasons')->getData()
+                )
+                ->then(function () use (&$arguments) {
+                    $arguments['title'] = 'Opt-out complete';
+                    return [
+                        new Paragraph('You will no longer receive regular updates from eLife.'),
+                        Button::link('Back to Homepage', $this->get('router')->generate('home')),
+                    ];
+                })->wait();
+        }, false, true);
+
+        if (!$validSubmission) {
+            /** @var Subscription $check */
+            $check = $this->get('elife.api_client.client.crm_api')
+                ->checkSubscription($this->generateOptoutUrl($id), false, null, CiviCrmClient::FIELD_OPTOUT_URL)
+                ->then(function ($check) use (&$arguments) {
+                    if (!$check instanceof Subscription || $check->optOut()) {
+                        $arguments['title'] = 'Something went wrong';
+                        return [
+                            new Paragraph('Your email address has not been recognised. As a result, your email subscriptions have not been changed. Please try again or <a href="'.$this->get('router')->generate('contact').'">contact us</a>.'),
+                            Button::link('Back to Homepage', $this->get('router')->generate('home')),
+                        ];
+                    }
+
+                    return $check;
+                })
+                ->wait();
+
+            if ($check instanceof Subscription) {
+                if ($check->preferencesUrl()) {
+                    $formIntro .= ' If you prefer to choose the emails you receive, please <a href="'.$check->preferencesUrl().'">update your preferences</a>.';
+                }
+
+                $form = ContentAlertsOptoutType::addContactId($form, $check->id());
+            } else {
+                $form = $check;
+            }
+        }
+
+        $arguments['contentHeader'] = new ContentHeaderSimple($arguments['title']);
+
+        $arguments['formIntro'] = new Paragraph($formIntro);
+
+        if ($validSubmission) {
+            $arguments['form'] = $validSubmission;
+        } elseif ($form instanceof FormInterface) {
+            $arguments['form'] = $this->get('elife.journal.view_model.converter')->convert($form->createView());
+        } else {
+            $arguments['form'] = $form;
+        }
+
+        if ($validSubmission || !$form instanceof FormInterface) {
+            unset($arguments['formIntro']);
+        }
+
+        return new Response($this->get('templating')->render('::content-alerts.html.twig', $arguments));
+    }
+
     public function unsubscribeAction(Request $request, string $id, string $variant = null) : Response
     {
         $arguments = $this->simplePageArguments($request);
@@ -150,6 +232,7 @@ final class ContentAlertsController extends Controller
                                 $this->prepareSubscriptionNewsletters(),
                                 $this->generatePreferencesUrl(),
                                 $this->generateUnsubscribeUrl(),
+                                $this->generateOptoutUrl(),
                                 null,
                                 null,
                                 $check instanceof Subscription ? $check->preferences() : null
@@ -212,6 +295,7 @@ final class ContentAlertsController extends Controller
                     Subscription::getNewsletters($form->get('preferences')->getData()),
                     [],
                     $this->generatePreferencesUrl(),
+                    null,
                     null,
                     $form->get('first_name')->getData(),
                     $form->get('last_name')->getData(),
@@ -314,6 +398,11 @@ final class ContentAlertsController extends Controller
     private function generateUnsubscribeUrl(string $id = null, string $variant = null) : string
     {
         return $this->get('router')->generate('content-alerts-unsubscribe'.($variant ? '-variant' : ''), ['id' => $id ?? uniqid(), 'variant' => $variant], UrlGeneratorInterface::ABSOLUTE_URL);
+    }
+
+    private function generateOptoutUrl(string $id = null) : string
+    {
+        return $this->get('router')->generate('content-alerts-optout', ['id' => $id ?? uniqid()], UrlGeneratorInterface::ABSOLUTE_URL);
     }
 
     /**
