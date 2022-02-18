@@ -6,6 +6,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 
@@ -27,6 +28,14 @@ final class ContentAlertsOptoutType extends AbstractType
                     ],
                     'expanded' => true,
                     'multiple' => true,
+                ]
+            )
+            ->add('other', TextType::class,
+                [
+                    'attr' => [
+                        'isHiddenUntilChecked' => true,
+                        'checkboxId' => 'content_alerts_optout_reasons_5',
+                    ],
                 ]
             )
             ->add('optout', SubmitType::class);

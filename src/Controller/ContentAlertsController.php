@@ -49,7 +49,8 @@ final class ContentAlertsController extends Controller
             return $this->get('elife.api_client.client.crm_api')
                 ->optout(
                     $form->get('contact_id')->getData(),
-                    $form->get('reasons')->getData()
+                    $form->get('reasons')->getData(),
+                    $form->get('other')->getData()
                 )
                 ->then(function () use (&$arguments) {
                     $arguments['title'] = 'Opt-out complete';

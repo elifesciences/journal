@@ -101,7 +101,8 @@ final class FormViewConverter implements ViewModelConverter
                 case 'text':
                     return ViewModel\TextField::textInput(new ViewModel\FormLabel($this->getLabel($object)),
                         $object->vars['id'], $object->vars['full_name'], $object->vars['attr']['placeholder'] ?? null,
-                        $object->vars['required'], $object->vars['disabled'], $this->getAutofocus($object), $object->vars['value'],
+                        $object->vars['required'], $object->vars['disabled'], $object->vars['attr']['isHiddenUntilChecked'] ?? false,
+                        $object->vars['attr']['checkboxId'] ?? null, $this->getAutofocus($object), $object->vars['value'],
                         $this->getState($object), $this->getMessageGroup($object));
                 case 'textarea':
                     return new ViewModel\TextArea(new ViewModel\FormLabel($this->getLabel($object)),
