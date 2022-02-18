@@ -85,6 +85,7 @@ final class MockCiviCrmClient implements CiviCrmClientInterface
         switch (true) {
             case '/content-alerts/green' === $identifier && !$isEmail:
             case '/content-alerts/unsubscribe/green' === $identifier && !$isEmail:
+            case '/content-alerts/optout/green' === $identifier && !$isEmail:
             case 'green@example.com' === $identifier && $isEmail:
                 return new Subscription(
                     12345,
@@ -97,6 +98,7 @@ final class MockCiviCrmClient implements CiviCrmClientInterface
                 );
             case '/content-alerts/amber' === $identifier && !$isEmail:
             case '/content-alerts/unsubscribe/amber' === $identifier && !$isEmail:
+            case '/content-alerts/optout/amber' === $identifier && !$isEmail:
             case 'amber@example.com' === $identifier && $isEmail:
                 return new Subscription(
                     23456,
@@ -108,6 +110,7 @@ final class MockCiviCrmClient implements CiviCrmClientInterface
                 );
             case '/content-alerts/red' === $identifier && !$isEmail:
             case '/content-alerts/unsubscribe/red' === $identifier && !$isEmail:
+            case '/content-alerts/optout/red' === $identifier && !$isEmail:
             case 'red@example.com' === $identifier && $isEmail:
                 return new Subscription(
                     34567,
