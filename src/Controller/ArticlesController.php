@@ -923,9 +923,6 @@ final class ArticlesController extends Controller
                 return $this->generatePath($history, $version, 'xml');
             });
 
-        $arguments['contentHeader'] = $arguments['item']
-            ->then($this->willConvertTo(ContentHeader::class));
-
         $arguments['infoBars'] = all(['item' => $arguments['item'], 'history' => $arguments['history'], 'relatedArticles' => $arguments['relatedArticles'], 'eraArticle' => $arguments['eraArticle']])
             ->then(function (array $parts) {
                 /** @var ArticleVersion $item */
@@ -1024,6 +1021,11 @@ final class ArticlesController extends Controller
                 }
 
                 return $metrics;
+            });
+
+        $arguments['contentHeader'] = all(['item' => $arguments['item'], 'metrics' => $arguments['contextualDataMetrics']])
+            ->then(function (array $parts) {
+                return $this->convertTo($parts['item'], ContentHeader::class, ['metrics' => $parts['metrics']]);
             });
 
         $arguments['downloadLinks'] = all(['item' => $arguments['item'], 'history' => $arguments['history'], 'eraArticle' => $arguments['eraArticle']])

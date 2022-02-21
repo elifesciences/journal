@@ -64,11 +64,7 @@ final class ArticleContentHeaderConverter implements ViewModelConverter
             return $institutions;
         }, []))));
 
-        $meta = ViewModel\Meta::withLink(
-            new ViewModel\Link(
-                ModelName::singular($object->getType()),
-                $this->urlGenerator->generate('article-type', ['type' => $object->getType()])
-            ),
+        $meta = ViewModel\Meta::withDate(
             $this->simpleDate($object, ['date' => 'published'] + $context)
         );
 
@@ -77,6 +73,10 @@ final class ArticleContentHeaderConverter implements ViewModelConverter
             null,
             null,
             true,
+            new ViewModel\Breadcrumb([new ViewModel\Link(
+                ModelName::singular($object->getType()),
+                $this->urlGenerator->generate('article-type', ['type' => $object->getType()])
+            )]),
             $subjects,
             null,
             $authors,
@@ -86,8 +86,10 @@ final class ArticleContentHeaderConverter implements ViewModelConverter
                 strip_tags($object->getFullTitle()),
                 "https://doi.org/{$object->getDoi()}"
             ),
+            !empty($context['metrics']) ? ViewModel\ContextualData::withMetrics($context['metrics']) : null,
             null,
             $meta,
+            $object->getDoi() ? new ViewModel\Doi($object->getDoi()) : null,
             LicenceUri::forCode($object->getCopyright()->getLicense())
         );
     }

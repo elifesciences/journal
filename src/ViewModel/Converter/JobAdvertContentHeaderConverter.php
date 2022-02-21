@@ -30,6 +30,7 @@ final class JobAdvertContentHeaderConverter implements ViewModelConverter
             null,
             $object->getImpactStatement(),
             true,
+            null,
             [],
             null,
             [],
@@ -39,6 +40,7 @@ final class JobAdvertContentHeaderConverter implements ViewModelConverter
                 strip_tags($object->getTitle()),
                 $this->urlGenerator->generate('job-advert', [$object], UrlGeneratorInterface::ABSOLUTE_URL)
             ),
+            null,
             null,
             Meta::withLink(
                 new Link('eLife jobs', $this->urlGenerator->generate('job-adverts')),
