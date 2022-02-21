@@ -37,7 +37,7 @@ final class BlogArticleContentHeaderConverter implements ViewModelConverter
             ViewModel\Meta::withLink(
                 new Link('Inside eLife', $this->urlGenerator->generate('inside-elife')),
                 $this->simpleDate($object, ['date' => 'published'] + $context)
-            ), LicenceUri::default()
+            ), null, LicenceUri::default()
         );
     }
 
