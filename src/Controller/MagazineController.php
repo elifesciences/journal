@@ -90,6 +90,7 @@ final class MagazineController extends Controller
                     null,
                     null,
                     null,
+                    null,
                     $audioPlayer
                 );
             });
