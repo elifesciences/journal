@@ -120,7 +120,7 @@ final class ContentAlertsController extends Controller
 
         $arguments['title'] = 'Unsubscribe from this mailing';
 
-        $formIntro = "You will no longer receive ${group}.";
+        $formIntro = [new Paragraph("You will no longer receive ${group}.")];
 
         /** @var Form $form */
         $form = $this->get('form.factory')
@@ -170,7 +170,7 @@ final class ContentAlertsController extends Controller
 
             if ($check instanceof Subscription) {
                 if ($check->preferencesUrl()) {
-                    $formIntro .= ' To change any other newsletter subscriptions, please <a href="'.$check->preferencesUrl().'">update your preferences</a>.';
+                    $formIntro[] = new Paragraph('To change any other newsletter subscriptions, please <a href="'.$check->preferencesUrl().'">update your preferences</a>.');
                 }
 
                 $form = ContentAlertsUnsubscribeType::addContactId($form, $check->id());
@@ -181,7 +181,7 @@ final class ContentAlertsController extends Controller
 
         $arguments['contentHeader'] = new ContentHeaderSimple($arguments['title']);
 
-        $arguments['formIntro'] = new Paragraph($formIntro);
+        $arguments['formIntro'] = $formIntro;
 
         if ($validSubmission) {
             $arguments['form'] = $validSubmission;

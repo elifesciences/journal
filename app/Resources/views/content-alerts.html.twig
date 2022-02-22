@@ -37,7 +37,19 @@
 
             {% if formIntro|default(null) %}
 
-                {{ render_pattern(formIntro) }}
+                {% if formIntro is iterable %}
+
+                    {% for item in formIntro %}
+
+                        {{ render_pattern(item) }}
+
+                    {% endfor %}
+
+                {% else %}
+
+                    {{ render_pattern(formIntro) }}
+
+                {% endif %}
 
             {% endif %}
 
