@@ -38,7 +38,7 @@ final class ContentAlertsOptoutType extends AbstractType
                     ],
                 ]
             )
-            ->add('optout', SubmitType::class);
+            ->add('opt-out', SubmitType::class);
     }
 
     public static function addContactId(FormInterface $form, int $contactId) : FormInterface
