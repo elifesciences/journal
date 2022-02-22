@@ -214,9 +214,9 @@ final class CiviCrmClientTest extends TestCase
     {
         yield 'null' => [null, 'custom_131'];
         yield 'default' => [new LatestArticles(), 'custom_132'];
-        yield 'early-career' => [new EarlyCareer(), 'custom_133'];
-        yield 'technology' => [new Technology(), 'custom_134'];
-        yield 'elife-newsletter' => [new ElifeNewsletter(), 'custom_135'];
+        yield 'early-career' => [new EarlyCareer(), 'custom_132'];
+        yield 'technology' => [new Technology(), 'custom_132'];
+        yield 'elife-newsletter' => [new ElifeNewsletter(), 'custom_132'];
     }
 
     /**
@@ -294,7 +294,7 @@ final class CiviCrmClientTest extends TestCase
             new Response(200, [], json_encode(['is_error' => 0])),
         ], $container);
 
-        $subscribe = $client->subscribe('12345', [new LatestArticles(), new EarlyCareer()], [new LatestArticles('http://localhost/content-alerts/unsubscribe/foo'), new Technology('http://localhost/content-alerts/unsubscribe/foo/technology')], 'http://localhost/content-alerts/foo', null, 'New', 'Name', [new LatestArticles(), new Technology()]);
+        $subscribe = $client->subscribe('12345', [new LatestArticles(), new EarlyCareer()], [new LatestArticles('http://localhost/content-alerts/unsubscribe/foo'), new Technology('http://localhost/content-alerts/unsubscribe/foo/technology')], 'http://localhost/content-alerts/foo', null, null, 'New', 'Name', [new LatestArticles(), new Technology()]);
 
         $this->assertEquals([
             'contact_id' => '12345',
@@ -320,8 +320,6 @@ final class CiviCrmClientTest extends TestCase
                 'last_name' => 'Name',
                 'custom_131' => 'http://localhost/content-alerts/foo',
                 'is_opt_out' => 0,
-                'custom_132' => 'http://localhost/content-alerts/unsubscribe/foo',
-                'custom_134' => 'http://localhost/content-alerts/unsubscribe/foo/technology',
             ],
             'api_key' => 'api-key',
             'key' => 'site-key',
