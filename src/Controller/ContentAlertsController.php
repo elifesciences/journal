@@ -145,7 +145,7 @@ final class ContentAlertsController extends Controller
                 ->then(function () use ($group, &$arguments) {
                     $arguments['title'] = 'Unsubscribed';
                     return [
-                        new Paragraph("You are no longer subscribed to <strong>{$group}</strong>."),
+                        new Paragraph("You are no longer subscribed to {$group}."),
                         Button::link('Back to Homepage', $this->get('router')->generate('home')),
                     ];
                 })->wait();
