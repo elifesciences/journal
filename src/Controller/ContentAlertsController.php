@@ -59,9 +59,9 @@ final class ContentAlertsController extends Controller
                         Button::link('Back to Homepage', $this->get('router')->generate('home')),
                     ];
                 })->wait();
-        }, false, true);
+        }, false);
 
-        if (!$validSubmission) {
+        if (!$validSubmission && !$form->isSubmitted()) {
             /** @var Subscription $check */
             $check = $this->get('elife.api_client.client.crm_api')
                 ->checkSubscription($this->generateOptoutUrl($id), false, null, CiviCrmClient::FIELD_OPTOUT_URL)
@@ -149,9 +149,9 @@ final class ContentAlertsController extends Controller
                         Button::link('Back to Homepage', $this->get('router')->generate('home')),
                     ];
                 })->wait();
-        }, false, true);
+        }, false);
 
-        if (!$validSubmission) {
+        if (!$validSubmission && !$form->isSubmitted()) {
             /** @var Subscription $check */
             $check = $this->get('elife.api_client.client.crm_api')
                 ->checkSubscription($this->generateUnsubscribeUrl($id), false, $newsletters[0])
