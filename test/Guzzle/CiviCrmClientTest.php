@@ -150,9 +150,9 @@ final class CiviCrmClientTest extends TestCase
 
     /**
      * @test
-     * @dataProvider providerNewsletterUnsubscribe
+     * @dataProvider providerQueryFields
      */
-    public function it_will_check_for_existing_user_by_unsubscribe_url(?Newsletter $newsletter, string $expectedUnsubscribeField)
+    public function it_will_check_for_existing_user_by_url(?Newsletter $newsletter, string $expectedQueryField, string $otherField = null)
     {
         $container = [];
 
@@ -171,7 +171,7 @@ final class CiviCrmClientTest extends TestCase
             ]])),
         ], $container);
 
-        $checkSuccess = $client->checkSubscription('http://localhost/content-alerts/foo', false, $newsletter);
+        $checkSuccess = $client->checkSubscription('http://localhost/content-alerts/foo', false, $newsletter, $otherField);
 
         $this->assertEquals(new Subscription(
             12345,
@@ -191,7 +191,7 @@ final class CiviCrmClientTest extends TestCase
             'entity' => 'Contact',
             'action' => 'get',
             'json' => [
-                $expectedUnsubscribeField => 'http://localhost/content-alerts/foo',
+                $expectedQueryField => 'http://localhost/content-alerts/foo',
                 'return' => [
                     'group',
                     'first_name',
@@ -210,13 +210,14 @@ final class CiviCrmClientTest extends TestCase
         $this->assertEquals('GET', $firstRequest->getMethod());
     }
 
-    public function providerNewsletterUnsubscribe() : Traversable
+    public function providerQueryFields() : Traversable
     {
         yield 'null' => [null, 'custom_131'];
-        yield 'default' => [new LatestArticles(), 'custom_132'];
-        yield 'early-career' => [new EarlyCareer(), 'custom_132'];
-        yield 'technology' => [new Technology(), 'custom_132'];
-        yield 'elife-newsletter' => [new ElifeNewsletter(), 'custom_132'];
+        yield 'unsubscribe default' => [new LatestArticles(), 'custom_132'];
+        yield 'unsubscribe early-career' => [new EarlyCareer(), 'custom_132'];
+        yield 'unsubscribe technology' => [new Technology(), 'custom_132'];
+        yield 'unsubscribe elife-newsletter' => [new ElifeNewsletter(), 'custom_132'];
+        yield 'other field' => [null, 'other', 'other'];
     }
 
     /**
@@ -279,6 +280,78 @@ final class CiviCrmClientTest extends TestCase
             'api_key' => 'api-key',
             'key' => 'site-key',
         ]), $secondRequest->getUri()->getQuery());
+    }
+
+    /**
+     * @test
+     */
+    public function it_will_unsubscribe_an_existing_user()
+    {
+        $container = [];
+
+        $client = $this->prepareClient([
+            new Response(200, [], json_encode(['is_error' => 0])),
+        ], $container);
+
+        $unsubscribe = $client->unsubscribe('12345', ['early_careers_news_317']);
+
+        $this->assertEquals([
+            'is_error' => 0
+        ], $unsubscribe->wait());
+
+        $this->assertCount(1, $container);
+
+        /** @var Request $firstRequest */
+        $firstRequest = $container[0]['request'];
+        $this->assertEquals('POST', $firstRequest->getMethod());
+        $this->assertSame($this->prepareQuery([
+            'entity' => 'GroupContact',
+            'action' => 'create',
+            'json' => [
+                'status' => 'Removed',
+                'group_id' => ['early_careers_news_317'],
+                'contact_id' => '12345',
+            ],
+            'api_key' => 'api-key',
+            'key' => 'site-key',
+        ]), $firstRequest->getUri()->getQuery());
+    }
+
+    /**
+     * @test
+     */
+    public function it_will_optout_an_existing_user()
+    {
+        $container = [];
+
+        $client = $this->prepareClient([
+            new Response(200, [], json_encode(['is_error' => 0])),
+        ], $container);
+
+        $optout = $client->optout(12345, [1,2,3,5], 'reason');
+
+        $this->assertEquals([
+            'is_error' => 0
+        ], $optout->wait());
+
+        $this->assertCount(1, $container);
+
+        /** @var Request $firstRequest */
+        $firstRequest = $container[0]['request'];
+        $this->assertEquals('POST', $firstRequest->getMethod());
+        $this->assertSame($this->prepareQuery([
+            'entity' => 'Contact',
+            'action' => 'create',
+            'json' => [
+                'contact_id' => 12345,
+                'is_opt_out' => 1,
+                'custom_98' => date('Y-m-d'),
+                'custom_99' => [1,2,3,5],
+                'custom_101' => 'reason',
+            ],
+            'api_key' => 'api-key',
+            'key' => 'site-key',
+        ]), $firstRequest->getUri()->getQuery());
     }
 
     /**
