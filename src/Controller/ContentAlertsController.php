@@ -277,7 +277,7 @@ final class ContentAlertsController extends Controller
         $data = $this->get('elife.api_client.client.crm_api')
             ->checkSubscription($this->generatePreferencesUrl($id), false)
             ->then(function ($check) {
-                if (!$check instanceof Subscription) {
+                if (!$check instanceof Subscription || $check->optOut()) {
                     throw new EarlyResponse(new RedirectResponse($this->get('router')->generate('content-alerts-link-expired')));
                 }
 
@@ -337,7 +337,7 @@ final class ContentAlertsController extends Controller
             return $this->get('elife.api_client.client.crm_api')
                 ->checkSubscription($form->get('email')->getData())
                 ->then(function ($check) use ($form, &$arguments) {
-                    if ($check instanceof Subscription) {
+                    if ($check instanceof Subscription && !$check->optOut()) {
                         return $this->get('elife.api_client.client.crm_api')
                             ->triggerPreferencesEmail($check->id(), empty($check->preferencesUrl()) ? $this->generatePreferencesUrl() : null)
                             ->then(function () use ($form, &$arguments) {
