@@ -1,0 +1,15 @@
+<div class="wrapper"{% if isMainContent ?? false %} id="content"{% endif %}>
+
+    <div class="grid">
+
+        {% set main = block('main') %}
+
+        <div class="content-container grid__item content_alerts-container">
+
+            {{ main|raw }}
+
+        </div>
+
+    </div>
+
+</div>

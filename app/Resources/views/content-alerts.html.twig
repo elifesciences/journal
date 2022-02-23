@@ -1,24 +1,73 @@
+{% set siteHeader = header %}
+{% set header = false %}
+{% set clean = true %}
+
 {% extends '::page.html.twig' %}
+
+{% block pre_body %}
+
+    {% embed 'grid/content-simple.html.twig' %}
+
+        {% block main %}
+
+            {% if siteHeader %}
+
+                {{ render_pattern(siteHeader) }}
+
+            {% endif %}
+
+            {{ render_pattern(contentHeader) }}
+
+        {% endblock %}
+
+    {% endembed %}
+
+{% endblock %}
 
 {% block body %}
 
-    {{ render_pattern(contentHeader) }}
+    {% set isMainContent = true %}
+    {% set lastBlock = true %}
 
     {% include 'calls-to-action.html.twig' %}
 
-    {% embed 'grid/content.html.twig' %}
+    {% embed 'grid/content-simple.html.twig' %}
 
         {% block main %}
 
             {% if formIntro|default(null) %}
 
-                {{ render_pattern(formIntro) }}
+                {% if formIntro is iterable %}
+
+                    {% for item in formIntro %}
+
+                        {{ render_pattern(item) }}
+
+                    {% endfor %}
+
+                {% else %}
+
+                    {{ render_pattern(formIntro) }}
+
+                {% endif %}
 
             {% endif %}
 
             {% if form %}
 
-                {{ render_pattern(form) }}
+                {% if form is iterable %}
+
+                    {% for item in form %}
+
+                        {{ render_pattern(item) }}
+
+                    {% endfor %}
+
+                {% else %}
+
+                    {{ render_pattern(form) }}
+
+                {% endif %}
 
             {% endif %}
 

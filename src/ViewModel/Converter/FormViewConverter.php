@@ -39,7 +39,7 @@ final class FormViewConverter implements ViewModelConverter
                     if ($object->vars['multiple']) {
                         $options = [];
                         foreach ($object->vars['choices'] as $choice) {
-                            $prepareOption = $this->checkboxesChoice($choice, $object->vars['value']);
+                            $prepareOption = $this->checkboxesChoice($choice, $object->vars['value'], $object->vars['id']);
                             if ($prepareOption instanceof ViewModel\CheckboxesOption) {
                                 $options[] = $prepareOption;
                             } elseif (array_values($prepareOption)[0] instanceof ViewModel\CheckboxesOption) {
@@ -101,7 +101,8 @@ final class FormViewConverter implements ViewModelConverter
                 case 'text':
                     return ViewModel\TextField::textInput(new ViewModel\FormLabel($this->getLabel($object)),
                         $object->vars['id'], $object->vars['full_name'], $object->vars['attr']['placeholder'] ?? null,
-                        $object->vars['required'], $object->vars['disabled'], $this->getAutofocus($object), $object->vars['value'],
+                        $object->vars['required'], $object->vars['disabled'], $object->vars['attr']['isHiddenUntilChecked'] ?? false,
+                        $object->vars['attr']['checkboxId'] ?? null, $this->getAutofocus($object), $object->vars['value'],
                         $this->getState($object), $this->getMessageGroup($object));
                 case 'textarea':
                     return new ViewModel\TextArea(new ViewModel\FormLabel($this->getLabel($object)),
@@ -127,14 +128,14 @@ final class FormViewConverter implements ViewModelConverter
     /**
      * @param ChoiceView|ChoiceGroupView $choice
      */
-    private function checkboxesChoice($choice, array $data = []) {
+    private function checkboxesChoice($choice, array $data = [], $idPrefix = null) {
         if ($choice instanceof ChoiceView) {
-            return new ViewModel\CheckboxesOption($choice->value, $choice->label, null, in_array($choice->value, $data));
+            return new ViewModel\CheckboxesOption($choice->value, $choice->label, $idPrefix ? $idPrefix.'_'.$choice->value : null, in_array($choice->value, $data));
         }
 
         if ($choice instanceof ChoiceGroupView) {
-            return array_map(function ($subChoice) use ($data) {
-                return $this->checkboxesChoice($subChoice, $data);
+            return array_map(function ($subChoice) use ($data, $idPrefix) {
+                return $this->checkboxesChoice($subChoice, $data, $idPrefix);
             }, $choice->choices);
         }
 
