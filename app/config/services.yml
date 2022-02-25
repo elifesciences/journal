@@ -516,6 +516,15 @@ services:
         tags:
           - name: view_model.converter
 
+    elife.journal.view_model.converter.article.modal:
+        class: eLife\Journal\ViewModel\Converter\ArticleModalConverter
+        public: false
+        arguments:
+            - '@elife.journal.view_model.converter'
+            - '@elife.patterns.pattern_renderer'
+        tags:
+          - name: view_model.converter
+
     elife.journal.view_model.converter.article.read_more_item:
         class: eLife\Journal\ViewModel\Converter\ArticleReadMoreItemConverter
         public: false

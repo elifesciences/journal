@@ -322,6 +322,10 @@
 
     {{ render_pattern(contentHeader) }}
 
+    {% for modalWindow in modalWindows %}
+        {{ render_pattern(modalWindow) }}
+    {% endfor %}
+
     {% if contextualData %}
 
         <div class="wrapper">

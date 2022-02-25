@@ -923,6 +923,14 @@ final class ArticlesController extends Controller
                 return $this->generatePath($history, $version, 'xml');
             });
 
+        $arguments['modalWindows'] = $arguments['item']
+            ->then(function (ArticleVersion $item) {
+                return [
+                    $this->convertTo($item, ViewModel\ModalWindow::class),
+                    $this->convertTo($item, ViewModel\ModalWindow::class, ['type' => 'citation']),
+                ];
+            });
+
         $arguments['infoBars'] = all(['item' => $arguments['item'], 'history' => $arguments['history'], 'relatedArticles' => $arguments['relatedArticles'], 'eraArticle' => $arguments['eraArticle']])
             ->then(function (array $parts) {
                 /** @var ArticleVersion $item */
