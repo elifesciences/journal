@@ -2,7 +2,10 @@
 
 namespace eLife\Journal\Form\Type;
 
-use eLife\Journal\Guzzle\CiviCrmClient;
+use eLife\Journal\Etoc\EarlyCareer;
+use eLife\Journal\Etoc\ElifeNewsletter;
+use eLife\Journal\Etoc\LatestArticles;
+use eLife\Journal\Etoc\Technology;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
@@ -67,10 +70,10 @@ final class ContentAlertsType extends AbstractType
     private function preferencesVariant(string $variant = null) : array
     {
         $preferences = [
-            'default' => ['The latest scientific articles published by eLife (twice weekly)' => CiviCrmClient::LABEL_LATEST_ARTICLES],
-            'early-career' => ['Early-career researchers newsletter (monthly)' => CiviCrmClient::LABEL_EARLY_CAREER],
-            'technology' => ['Technology and Innovation newsletter (every two months)' => CiviCrmClient::LABEL_TECHNOLOGY],
-            'elife-newsletter' => ['eLife newsletter (every two months)' => CiviCrmClient::LABEL_ELIFE_NEWSLETTER],
+            'default' => ['The latest scientific articles published by eLife (twice weekly)' => LatestArticles::LABEL],
+            'early-career' => ['Early-career researchers newsletter (monthly)' => EarlyCareer::LABEL],
+            'technology' => ['Technology and Innovation newsletter (every two months)' => Technology::LABEL],
+            'elife-newsletter' => ['eLife newsletter (every two months)' => ElifeNewsletter::LABEL],
         ];
         $main = [];
         $other = [];

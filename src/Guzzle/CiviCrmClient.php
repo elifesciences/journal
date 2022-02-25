@@ -2,6 +2,8 @@
 
 namespace eLife\Journal\Guzzle;
 
+use eLife\Journal\Etoc\Newsletter;
+use eLife\Journal\Etoc\Subscription;
 use eLife\Journal\Exception\CiviCrmResponseError;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Promise\PromiseInterface;
@@ -11,25 +13,22 @@ use function GuzzleHttp\Promise\all;
 
 final class CiviCrmClient implements CiviCrmClientInterface
 {
-    const LABEL_LATEST_ARTICLES = 'latest_articles';
-    const LABEL_EARLY_CAREER = 'early_career';
-    const LABEL_TECHNOLOGY = 'technology';
-    const LABEL_ELIFE_NEWSLETTER = 'elife_newsletter';
-    // Perhaps make the constants below configuration.
-    const GROUP_LATEST_ARTICLES = 'All_Content_53';
-    const GROUP_EARLY_CAREER = 'early_careers_news_317';
-    const GROUP_TECHNOLOGY = 'technology_news_435';
-    const GROUP_ELIFE_NEWSLETTER = 'eLife_bi_monthly_news_1032';
-    const GROUP_ID_LATEST_ARTICLES = 53;
-    const GROUP_ID_EARLY_CAREER = 317;
-    const GROUP_ID_TECHNOLOGY = 435;
-    const GROUP_ID_ELIFE_NEWSLETTER = 1032;
     // Assign all users to below group so we can easily identify them.
     const GROUP_JOURNAL_ETOC_SIGNUP = 'Journal_eToc_signup_1922';
     // Add the contact to the below group to trigger email with user preferences link.
     const GROUP_JOURNAL_ETOC_PREFERENCES = 'Journal_eToc_preferences_1923';
     // Custom field to store user preferences link to be included in emails.
     const FIELD_PREFERENCES_URL = 'custom_131';
+    // Custom field to store unsubscribe link to be included in emails.
+    const FIELD_UNSUBSCRIBE_URL = 'custom_132';
+    // Custom field to store opt-out link to be included in emails.
+    const FIELD_OPTOUT_URL = 'custom_136';
+    // Custom field to store opt-out date.
+    const FIELD_OPTOUT_DATE = 'custom_98';
+    // Custom field to store opt-out reason.
+    const FIELD_OPTOUT_REASON = 'custom_99';
+    // Custom field to store opt-out reason (other).
+    const FIELD_OPTOUT_REASON_OTHER = 'custom_101';
 
     private $client;
     private $apiKey;
@@ -60,7 +59,48 @@ final class CiviCrmClient implements CiviCrmClientInterface
         });
     }
 
-    public function subscribe(string $identifier, array $preferences, string $preferencesUrl, string $firstName = null, string $lastName = null, array $preferencesBefore = null) : PromiseInterface
+    public function optout(int $contactId, array $reasons = [], string $reasonOther = null) : PromiseInterface
+    {
+        return $this->client->sendAsync($this->prepareRequest('POST'), $this->options([
+            'query' => [
+                'entity' => 'Contact',
+                'action' => 'create',
+                'json' => [
+                    'contact_id' => $contactId,
+                    'is_opt_out' => 1,
+                    self::FIELD_OPTOUT_DATE => date('Y-m-d'),
+                    self::FIELD_OPTOUT_REASON => $reasons,
+                    self::FIELD_OPTOUT_REASON_OTHER => $reasonOther,
+                ],
+            ],
+        ]))
+        ->then(function (Response $response) {
+            return $this->prepareResponse($response);
+        });
+    }
+
+    public function unsubscribe(int $contactId, array $groups) : PromiseInterface
+    {
+        return $this->client->sendAsync($this->prepareRequest('POST'), $this->options([
+            'query' => [
+                'entity' => 'GroupContact',
+                'action' => 'create',
+                'json' => [
+                    'status' => 'Removed',
+                    'group_id' => $groups,
+                    'contact_id' => (string) $contactId,
+                ],
+            ],
+        ]))
+        ->then(function (Response $response) {
+            return $this->prepareResponse($response);
+        });
+    }
+
+    /**
+     * @param Newsletter[] $newsletters
+     */
+    public function subscribe(string $identifier, array $preferences, array $newsletters, string $preferencesUrl, string $unsubscribeUrl = null, string $optoutUrl = null, string $firstName = null, string $lastName = null, array $preferencesBefore = null) : PromiseInterface
     {
         return $this->client->sendAsync($this->prepareRequest('POST'), $this->options([
             'query' => [
@@ -74,7 +114,7 @@ final class CiviCrmClient implements CiviCrmClientInterface
                     self::FIELD_PREFERENCES_URL => $preferencesUrl,
                     // Interpret submission as confirmation of desire to receive bulk emails.
                     'is_opt_out' => 0,
-                ],
+                ] + ($unsubscribeUrl ? [self::FIELD_UNSUBSCRIBE_URL => $unsubscribeUrl] : []) + ($optoutUrl ? [self::FIELD_OPTOUT_URL => $optoutUrl] : []),
             ],
         ]))->then(function (Response $response) {
             return $this->prepareResponse($response);
@@ -103,20 +143,7 @@ final class CiviCrmClient implements CiviCrmClientInterface
                 ->then(function () use ($add) {
                     return $add;
                 }) : [],
-                'removed' => !empty($remove) ? $this->client->sendAsync($this->prepareRequest('POST'), $this->options([
-                    'query' => [
-                        'entity' => 'GroupContact',
-                        'action' => 'create',
-                        'json' => [
-                            'status' => 'Removed',
-                            'group_id' => $this->preferenceGroups($remove, false),
-                            'contact_id' => $contactId,
-                        ],
-                    ],
-                ]))
-                ->then(function (Response $response) {
-                    return $this->prepareResponse($response);
-                })
+                'removed' => !empty($remove) ? $this->unsubscribe($contactId, $this->preferenceGroups($remove, false))
                 ->then(function () use ($remove) {
                     return $remove;
                 }) : [],
@@ -130,14 +157,14 @@ final class CiviCrmClient implements CiviCrmClientInterface
         });
     }
 
-    public function checkSubscription(string $identifier, $isPreferencesId = false) : PromiseInterface
+    public function checkSubscription(string $identifier, bool $isEmail = true, Newsletter $newsletter = null, string $field = null) : PromiseInterface
     {
         return $this->client->sendAsync($this->prepareRequest(), $this->options([
             'query' => [
                 'entity' => 'Contact',
                 'action' => 'get',
                 'json' => [
-                    $isPreferencesId ? self::FIELD_PREFERENCES_URL : 'email' => $identifier,
+                    $isEmail ? 'email' : ($newsletter ? self::FIELD_UNSUBSCRIBE_URL : ($field ?? self::FIELD_PREFERENCES_URL)) => $identifier,
                     'return' => [
                         'group',
                         'first_name',
@@ -155,18 +182,15 @@ final class CiviCrmClient implements CiviCrmClientInterface
                 $contactId = min(array_keys($values));
                 $contact = $values[$contactId];
 
-                $preferences = $this->preferenceGroupLabels(explode(',', $contact['groups']));
-
-                return [
-                    'contact_id' => (int) $contact['contact_id'],
-                    'opt_out' => ('1' === $contact['is_opt_out']),
-                    'email' => $contact['email'],
-                    'first_name' => $contact['first_name'],
-                    'last_name' => $contact['last_name'],
-                    'preferences' => $preferences,
-                    'groups' => implode(',', $preferences),
-                    'preferences_url' => $contact[self::FIELD_PREFERENCES_URL],
-                ];
+                return new Subscription(
+                    (int) $contact['contact_id'],
+                    ('1' === $contact['is_opt_out']),
+                    $contact['email'],
+                    $contact['first_name'],
+                    $contact['last_name'],
+                    explode(',', $contact['groups']),
+                    $contact[self::FIELD_PREFERENCES_URL]
+                );
             }
         });
     }
@@ -202,54 +226,15 @@ final class CiviCrmClient implements CiviCrmClientInterface
 
     private function preferenceGroups(array $preferences, $create = false) : array
     {
-        $clean = array_map(function ($preference) {
-            switch ($preference) {
-                case self::LABEL_LATEST_ARTICLES:
-                    return self::GROUP_LATEST_ARTICLES;
-                case self::LABEL_EARLY_CAREER:
-                    return self::GROUP_EARLY_CAREER;
-                case self::LABEL_TECHNOLOGY:
-                    return self::GROUP_TECHNOLOGY;
-                case self::LABEL_ELIFE_NEWSLETTER:
-                    return self::GROUP_ELIFE_NEWSLETTER;
-                default:
-                    return null;
-            }
-        }, array_intersect([
-            self::LABEL_LATEST_ARTICLES,
-            self::LABEL_EARLY_CAREER,
-            self::LABEL_TECHNOLOGY,
-            self::LABEL_ELIFE_NEWSLETTER,
-        ], $preferences));
+        $clean = array_map(function (Newsletter $newsletter) {
+            return $newsletter->group();
+        }, $preferences);
 
         if ($create) {
             array_push($clean, self::GROUP_JOURNAL_ETOC_SIGNUP);
         }
 
         return array_values($clean);
-    }
-
-    private function preferenceGroupLabels(array $groupIds) : array
-    {
-        return array_values(array_map(function ($groupId) {
-            switch ($groupId) {
-                case self::GROUP_ID_LATEST_ARTICLES:
-                    return self::LABEL_LATEST_ARTICLES;
-                case self::GROUP_ID_EARLY_CAREER:
-                    return self::LABEL_EARLY_CAREER;
-                case self::GROUP_ID_TECHNOLOGY:
-                    return self::LABEL_TECHNOLOGY;
-                case self::GROUP_ID_ELIFE_NEWSLETTER:
-                    return self::LABEL_ELIFE_NEWSLETTER;
-                default:
-                    return null;
-            }
-        }, array_intersect([
-            self::GROUP_ID_LATEST_ARTICLES,
-            self::GROUP_ID_EARLY_CAREER,
-            self::GROUP_ID_TECHNOLOGY,
-            self::GROUP_ID_ELIFE_NEWSLETTER,
-        ], $groupIds)));
     }
 
     private function prepareRequest(string $method = 'GET', array $headers = []) : Request

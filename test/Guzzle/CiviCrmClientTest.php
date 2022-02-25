@@ -2,17 +2,22 @@
 
 namespace test\eLife\Journal\Guzzle;
 
+use eLife\Journal\Etoc\EarlyCareer;
+use eLife\Journal\Etoc\ElifeNewsletter;
+use eLife\Journal\Etoc\LatestArticles;
+use eLife\Journal\Etoc\Newsletter;
+use eLife\Journal\Etoc\Subscription;
+use eLife\Journal\Etoc\Technology;
 use eLife\Journal\Exception\CiviCrmResponseError;
 use eLife\Journal\Guzzle\CiviCrmClient;
 use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Middleware;
-use GuzzleHttp\Promise\FulfilledPromise;
-use function GuzzleHttp\Promise\promise_for;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
+use Traversable;
 
 final class CiviCrmClientTest extends TestCase
 {
@@ -41,16 +46,15 @@ final class CiviCrmClientTest extends TestCase
 
         $checkSuccess = $client->checkSubscription('foo@bar.com');
 
-        $this->assertSame([
-            'contact_id' => 12345,
-            'opt_out' => false,
-            'email' => 'foo@bar.com',
-            'first_name' => '',
-            'last_name' => '',
-            'preferences' => ['latest_articles', 'technology'],
-            'groups' => implode(',', ['latest_articles', 'technology']),
-            'preferences_url' => 'http://localhost/content-alerts/foo',
-        ], $checkSuccess->wait());
+        $this->assertEquals(new Subscription(
+            12345,
+            false,
+            'foo@bar.com',
+            '',
+            '',
+            [LatestArticles::GROUP_ID, Technology::GROUP_ID],
+            'http://localhost/content-alerts/foo'
+        ), $checkSuccess->wait());
 
         $this->assertCount(1, $container);
 
@@ -78,10 +82,11 @@ final class CiviCrmClientTest extends TestCase
         $firstRequest = $container[0]['request'];
         $this->assertEquals('GET', $firstRequest->getMethod());
 
-        $checkFail = $client->checkSubscription('http://localhost/content-alerts/foo', true);
+        $checkFail = $client->checkSubscription('http://localhost/content-alerts/foo', false);
 
         $this->assertNull($checkFail->wait());
     }
+
     /**
      * @test
      */
@@ -104,18 +109,17 @@ final class CiviCrmClientTest extends TestCase
             ]])),
         ], $container);
 
-        $checkSuccess = $client->checkSubscription('http://localhost/content-alerts/foo', true);
+        $checkSuccess = $client->checkSubscription('http://localhost/content-alerts/foo', false);
 
-        $this->assertSame([
-            'contact_id' => 12345,
-            'opt_out' => false,
-            'email' => 'foo@bar.com',
-            'first_name' => '',
-            'last_name' => '',
-            'preferences' => ['latest_articles', 'technology'],
-            'groups' => implode(',', ['latest_articles', 'technology']),
-            'preferences_url' => 'http://localhost/content-alerts/foo',
-        ], $checkSuccess->wait());
+        $this->assertEquals(new Subscription(
+            12345,
+            false,
+            'foo@bar.com',
+            '',
+            '',
+            [LatestArticles::GROUP_ID, Technology::GROUP_ID],
+            'http://localhost/content-alerts/foo'
+        ), $checkSuccess->wait());
 
         $this->assertCount(1, $container);
 
@@ -146,6 +150,78 @@ final class CiviCrmClientTest extends TestCase
 
     /**
      * @test
+     * @dataProvider providerQueryFields
+     */
+    public function it_will_check_for_existing_user_by_url(?Newsletter $newsletter, string $expectedQueryField, string $otherField = null)
+    {
+        $container = [];
+
+        $client = $this->prepareClient([
+            new Response(200, [], json_encode(['values' => [
+                [
+                    'contact_id' => 12345,
+                    'is_opt_out' => '0',
+                    'email' => 'foo@bar.com',
+                    'first_name' => '',
+                    'last_name' => '',
+                    'preferences' => [53,435],
+                    'groups' => implode(',', [53,435]),
+                    'custom_131' => 'http://localhost/content-alerts/foo',
+                ],
+            ]])),
+        ], $container);
+
+        $checkSuccess = $client->checkSubscription('http://localhost/content-alerts/foo', false, $newsletter, $otherField);
+
+        $this->assertEquals(new Subscription(
+            12345,
+            false,
+            'foo@bar.com',
+            '',
+            '',
+            [LatestArticles::GROUP_ID, Technology::GROUP_ID],
+            'http://localhost/content-alerts/foo'
+        ), $checkSuccess->wait());
+
+        $this->assertCount(1, $container);
+
+        /** @var Request $firstRequest */
+        $firstRequest = $container[0]['request'];
+        $this->assertSame($this->prepareQuery([
+            'entity' => 'Contact',
+            'action' => 'get',
+            'json' => [
+                $expectedQueryField => 'http://localhost/content-alerts/foo',
+                'return' => [
+                    'group',
+                    'first_name',
+                    'last_name',
+                    'email',
+                    'is_opt_out',
+                    'custom_131',
+                ],
+            ],
+            'api_key' => 'api-key',
+            'key' => 'site-key',
+        ]), $firstRequest->getUri()->getQuery());
+
+        /** @var Request $firstRequest */
+        $firstRequest = $container[0]['request'];
+        $this->assertEquals('GET', $firstRequest->getMethod());
+    }
+
+    public function providerQueryFields() : Traversable
+    {
+        yield 'null' => [null, 'custom_131'];
+        yield 'unsubscribe default' => [new LatestArticles(), 'custom_132'];
+        yield 'unsubscribe early-career' => [new EarlyCareer(), 'custom_132'];
+        yield 'unsubscribe technology' => [new Technology(), 'custom_132'];
+        yield 'unsubscribe elife-newsletter' => [new ElifeNewsletter(), 'custom_132'];
+        yield 'other field' => [null, 'other', 'other'];
+    }
+
+    /**
+     * @test
      */
     public function it_will_subscribe_a_new_user()
     {
@@ -156,7 +232,7 @@ final class CiviCrmClientTest extends TestCase
                 new Response(200, [], json_encode(['is_error' => 0])),
         ], $container);
 
-        $subscribe = $client->subscribe('email@example.com', ['latest_articles'], 'http://localhost/content-alerts/foo');
+        $subscribe = $client->subscribe('email@example.com', [new LatestArticles()], [], 'http://localhost/content-alerts/foo');
 
         $this->assertEquals([
             'contact_id' => '12345',
@@ -209,17 +285,89 @@ final class CiviCrmClientTest extends TestCase
     /**
      * @test
      */
+    public function it_will_unsubscribe_an_existing_user()
+    {
+        $container = [];
+
+        $client = $this->prepareClient([
+            new Response(200, [], json_encode(['is_error' => 0])),
+        ], $container);
+
+        $unsubscribe = $client->unsubscribe('12345', ['early_careers_news_317']);
+
+        $this->assertEquals([
+            'is_error' => 0
+        ], $unsubscribe->wait());
+
+        $this->assertCount(1, $container);
+
+        /** @var Request $firstRequest */
+        $firstRequest = $container[0]['request'];
+        $this->assertEquals('POST', $firstRequest->getMethod());
+        $this->assertSame($this->prepareQuery([
+            'entity' => 'GroupContact',
+            'action' => 'create',
+            'json' => [
+                'status' => 'Removed',
+                'group_id' => ['early_careers_news_317'],
+                'contact_id' => '12345',
+            ],
+            'api_key' => 'api-key',
+            'key' => 'site-key',
+        ]), $firstRequest->getUri()->getQuery());
+    }
+
+    /**
+     * @test
+     */
+    public function it_will_optout_an_existing_user()
+    {
+        $container = [];
+
+        $client = $this->prepareClient([
+            new Response(200, [], json_encode(['is_error' => 0])),
+        ], $container);
+
+        $optout = $client->optout(12345, [1,2,3,5], 'reason');
+
+        $this->assertEquals([
+            'is_error' => 0
+        ], $optout->wait());
+
+        $this->assertCount(1, $container);
+
+        /** @var Request $firstRequest */
+        $firstRequest = $container[0]['request'];
+        $this->assertEquals('POST', $firstRequest->getMethod());
+        $this->assertSame($this->prepareQuery([
+            'entity' => 'Contact',
+            'action' => 'create',
+            'json' => [
+                'contact_id' => 12345,
+                'is_opt_out' => 1,
+                'custom_98' => date('Y-m-d'),
+                'custom_99' => [1,2,3,5],
+                'custom_101' => 'reason',
+            ],
+            'api_key' => 'api-key',
+            'key' => 'site-key',
+        ]), $firstRequest->getUri()->getQuery());
+    }
+
+    /**
+     * @test
+     */
     public function it_will_update_preferences_for_an_existing_user()
     {
         $container = [];
 
         $client = $this->prepareClient([
-                new Response(200, [], json_encode(['id' => '12345'])),
-                new Response(200, [], json_encode(['is_error' => 0])),
+            new Response(200, [], json_encode(['id' => '12345'])),
+            new Response(200, [], json_encode(['is_error' => 0])),
             new Response(200, [], json_encode(['is_error' => 0])),
         ], $container);
 
-        $subscribe = $client->subscribe('12345', ['latest_articles', 'early_career'], 'http://localhost/content-alerts/foo', 'New', 'Name', ['latest_articles', 'technology']);
+        $subscribe = $client->subscribe('12345', [new LatestArticles(), new EarlyCareer()], [new LatestArticles('http://localhost/content-alerts/unsubscribe/foo'), new Technology('http://localhost/content-alerts/unsubscribe/foo/technology')], 'http://localhost/content-alerts/foo', null, null, 'New', 'Name', [new LatestArticles(), new Technology()]);
 
         $this->assertEquals([
             'contact_id' => '12345',
@@ -386,7 +534,7 @@ final class CiviCrmClientTest extends TestCase
         ], $container);
 
         try {
-            $client->subscribe('email@example.com', ['latest_articles'], 'http://localhost/content-alerts/foo')->wait();
+            $client->subscribe('email@example.com', [new LatestArticles()], [], 'http://localhost/content-alerts/foo')->wait();
             $this->fail('CiviCrmResponseError was not thrown');
         } catch (CiviCrmResponseError $e) {
             $this->assertSame('Error', $e->getMessage());
@@ -394,7 +542,7 @@ final class CiviCrmClientTest extends TestCase
         }
 
         try {
-            $client->subscribe('email@example.com', ['latest_articles', 'early_career'], 'http://localhost/content-alerts/foo')->wait();
+            $client->subscribe('email@example.com', [new LatestArticles(), new EarlyCareer()], [], 'http://localhost/content-alerts/foo')->wait();
             $this->fail('CiviCrmResponseError was not thrown');
         } catch (CiviCrmResponseError $e) {
             $this->assertSame('Error 2', $e->getMessage());

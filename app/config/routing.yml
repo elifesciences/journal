@@ -222,6 +222,28 @@ content-alerts-update:
     requirements:
         id: '[a-z0-9]+'
 
+content-alerts-unsubscribe:
+    path: /content-alerts/unsubscribe/{id}
+    defaults:
+         _controller: AppBundle:ContentAlerts:unsubscribe
+    requirements:
+        id: '[a-z0-9]+'
+
+content-alerts-unsubscribe-variant:
+    path: /content-alerts/unsubscribe/{id}/{variant}
+    defaults:
+         _controller: AppBundle:ContentAlerts:unsubscribe
+    requirements:
+        id: '[a-z0-9]+'
+        variant: '(early\-career|technology|elife\-newsletter)'
+
+content-alerts-optout:
+    path: /content-alerts/optout/{id}
+    defaults:
+         _controller: AppBundle:ContentAlerts:optout
+    requirements:
+        id: '[a-z0-9]+'
+
 digest:
     path: /digests/{id}/{slug}
     defaults:

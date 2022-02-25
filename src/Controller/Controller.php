@@ -6,16 +6,12 @@ use DateTimeImmutable;
 use eLife\ApiClient\Exception\BadResponse;
 use eLife\ApiSdk\Model\Image;
 use eLife\Journal\Exception\EarlyResponse;
-use eLife\Journal\Form\Type\EmailCtaType;
 use eLife\Journal\Helper\CanCheckAuthorization;
 use eLife\Journal\Helper\CanConvertContent;
 use eLife\Journal\Helper\Paginator;
 use eLife\Journal\ViewModel\Converter\ViewModelConverter;
 use eLife\Patterns\ViewModel;
-use eLife\Patterns\ViewModel\ContentHeaderSimple;
-use eLife\Patterns\ViewModel\InfoBar;
 use GuzzleHttp\Promise\PromiseInterface;
-use GuzzleHttp\Promise\RejectedPromise;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Form\FormInterface;
@@ -25,7 +21,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
-use UnexpectedValueException;
 use function GuzzleHttp\Promise\all;
 use function GuzzleHttp\Promise\exception_for;
 use function GuzzleHttp\Promise\promise_for;
@@ -145,7 +140,7 @@ abstract class Controller implements ContainerAwareInterface
         } else {
             $arguments['contentHeader'] = $arguments['paginator']
                 ->then(function (Paginator $paginator) {
-                    return new ContentHeaderSimple(
+                    return new ViewModel\ContentHeaderSimple(
                         $paginator->getTitle(),
                         sprintf('Page %s of %s', number_format($paginator->getCurrentPage()), number_format(count($paginator)))
                     );
@@ -161,7 +156,7 @@ abstract class Controller implements ContainerAwareInterface
         return $response;
     }
 
-    final protected function ifFormSubmitted(Request $request, FormInterface $form, callable $onValid, bool $earlyResponse = true)
+    final protected function ifFormSubmitted(Request $request, FormInterface $form, callable $onValid, bool $earlyResponse = true, bool $honeypotOnly = false)
     {
         $form->handleRequest($request);
 
@@ -176,20 +171,36 @@ abstract class Controller implements ContainerAwareInterface
                 }
             }
 
-            if (count($form->getErrors()) > 0) {
-                foreach ($form->getErrors() as $error) {
-                    if ($error->getMessage() === $form->getConfig()->getOption('honeypot_message')) {
-                        $this->get('monolog.logger.honeypot')->info('Honeypot field filled in', ['extra' => ['request' => $request]]);
-                    }
+            $this->processFormErrors($request, $form, $honeypotOnly);
+        }
+    }
 
-                    $this->get('session')
-                        ->getFlashBag()
-                        ->add(InfoBar::TYPE_ATTENTION, $error->getMessage());
+    private function processFormErrors(Request $request, FormInterface $form, bool $honeypotOnly = false)
+    {
+        $statusMessages = [];
+        $honeypot = false;
+
+        if (count($form->getErrors()) > 0) {
+            foreach ($form->getErrors() as $error) {
+                if ($error->getMessage() === $form->getConfig()->getOption('honeypot_message')) {
+                    $this->get('monolog.logger.honeypot')->info('Honeypot field filled in', ['extra' => ['request' => $request]]);
+                    $honeypot = true;
                 }
-            } else {
+
+                if (!$honeypotOnly || $honeypot) {
+                    $statusMessages[ViewModel\InfoBar::TYPE_ATTENTION][] = $error->getMessage();
+                    $honeypot = false;
+                }
+            }
+        } elseif (!$honeypotOnly) {
+            $statusMessages[ViewModel\InfoBar::TYPE_ATTENTION][] = 'There were problems submitting the form.';
+        }
+
+        foreach ($statusMessages as $level => $messages) {
+            foreach ($messages as $message) {
                 $this->get('session')
                     ->getFlashBag()
-                    ->add(InfoBar::TYPE_ATTENTION, 'There were problems submitting the form.');
+                    ->add($level, $message);
             }
         }
     }
@@ -260,6 +271,19 @@ abstract class Controller implements ContainerAwareInterface
                 'Privacy notice'
             ),
             'footer' => $this->get('elife.journal.view_model.factory.footer')->createFooter(),
+            'user' => $user ?? null,
+            'item' => $item,
+        ];
+    }
+
+    final protected function simplePageArguments(Request $request, PromiseInterface $item = null) : array
+    {
+        return [
+            'header' => new ViewModel\SiteHeaderTitle($this->get('router')->generate('home'), true, true, true),
+            'infoBars' => [],
+            'callsToAction' => $this->getCallsToAction($request),
+            'emailCta' => null,
+            'footer' => null,
             'user' => $user ?? null,
             'item' => $item,
         ];
