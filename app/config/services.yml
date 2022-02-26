@@ -522,6 +522,7 @@ services:
         arguments:
             - '@elife.journal.view_model.converter'
             - '@elife.patterns.pattern_renderer'
+            - '@router'
         tags:
           - name: view_model.converter
 

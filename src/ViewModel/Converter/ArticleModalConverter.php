@@ -3,10 +3,11 @@
 namespace eLife\Journal\ViewModel\Converter;
 
 use eLife\ApiSdk\Model\ArticleVersion;
-use eLife\ApiSdk\Model\Reference\JournalReference;
 use eLife\Journal\Helper\CanConvert;
 use eLife\Patterns\PatternRenderer;
 use eLife\Patterns\ViewModel;
+use eLife\Patterns\ViewModel\Button;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 final class ArticleModalConverter implements ViewModelConverter
 {
@@ -14,11 +15,13 @@ final class ArticleModalConverter implements ViewModelConverter
 
     private $viewModelConverter;
     private $patternRenderer;
+    private $urlGenerator;
 
-    public function __construct(ViewModelConverter $viewModelConverter, PatternRenderer $patternRenderer)
+    public function __construct(ViewModelConverter $viewModelConverter, PatternRenderer $patternRenderer, UrlGeneratorInterface $urlGenerator)
     {
         $this->viewModelConverter = $viewModelConverter;
         $this->patternRenderer = $patternRenderer;
+        $this->urlGenerator = $urlGenerator;
     }
 
     /**
@@ -53,6 +56,11 @@ final class ArticleModalConverter implements ViewModelConverter
                     $object->getFullTitle(),
                     new ViewModel\Doi($object->getDoi())
                 ),
+                new ViewModel\ButtonCollection([
+                    Button::clipboard('Copy to clipboard', strip_tags($object->getFullTitle())),
+                    Button::link('Download BibTex', $this->urlGenerator->generate('article-bibtex', [$object]), Button::SIZE_MEDIUM, Button::STYLE_SECONDARY),
+                    Button::link('Download RIS', $this->urlGenerator->generate('article-ris', [$object]), Button::SIZE_MEDIUM, Button::STYLE_SECONDARY),
+                ]),
             ];
             return ViewModel\ModalWindow::create('Cite this article', $this->patternRenderer->render(...$body), null, 'modalContentCitations');
         }
