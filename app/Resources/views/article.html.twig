@@ -326,16 +326,6 @@
         {{ render_pattern(modalWindow) }}
     {% endfor %}
 
-    {% if contextualData %}
-
-        <div class="wrapper">
-
-            {{ render_pattern(contextualData) }}
-
-        </div>
-
-    {% endif %}
-
     {% include 'calls-to-action.html.twig' %}
 
     <div data-behaviour="DelegateBehaviour" data-delegate-behaviour="Popup" data-selector=".article-section:not(#abstract) a">
