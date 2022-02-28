@@ -53,7 +53,11 @@ final class ContentAlertsController extends Controller
                     $form->get('other')->getData()
                 )
                 ->then(function () use ($form, &$arguments) {
-                    $this->get('elife.journal.google_client.opt_out_unsubscribe_reason')->record($form->get('reasons')->getData(), $form->get('other')->getData(), true);
+                    $this->get('elife.journal.google_client.opt_out_unsubscribe_reason')->record(
+                        $form->get('reasons')->getData(),
+                        $form->get('other')->getData(),
+                        true
+                    );
                     $arguments['title'] = 'Opt-out complete';
                     return [
                         new Paragraph('You will no longer receive regular updates from eLife.'),
@@ -137,13 +141,19 @@ final class ContentAlertsController extends Controller
                 ]
             );
 
-        $validSubmission = $this->ifFormSubmitted($request, $form, function () use ($form, $group, &$arguments) {
+        $validSubmission = $this->ifFormSubmitted($request, $form, function () use ($form, $newsletters, $group, &$arguments) {
             return $this->get('elife.api_client.client.crm_api')
                 ->unsubscribe(
                     $form->get('contact_id')->getData(),
                     explode(',', $form->get('groups')->getData())
                 )
-                ->then(function () use ($group, &$arguments) {
+                ->then(function () use ($form, $newsletters, $group, &$arguments) {
+                    $this->get('elife.journal.google_client.opt_out_unsubscribe_reason')->record(
+                        $form->get('reasons')->getData(),
+                        $form->get('other')->getData(),
+                        false,
+                        $newsletters[0]
+                    );
                     $arguments['title'] = 'Unsubscribed';
                     return [
                         new Paragraph("You are no longer subscribed to {$group}."),
