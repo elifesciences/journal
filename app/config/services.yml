@@ -520,7 +520,6 @@ services:
         class: eLife\Journal\ViewModel\Converter\ArticleModalConverter
         public: false
         arguments:
-            - '@elife.journal.view_model.converter'
             - '@elife.patterns.pattern_renderer'
             - '@router'
         tags:

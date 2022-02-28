@@ -3,7 +3,6 @@
 namespace eLife\Journal\ViewModel\Converter;
 
 use eLife\ApiSdk\Model\ArticleVersion;
-use eLife\Journal\Helper\CanConvert;
 use eLife\Patterns\PatternRenderer;
 use eLife\Patterns\ViewModel;
 use eLife\Patterns\ViewModel\Button;
@@ -11,15 +10,11 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 final class ArticleModalConverter implements ViewModelConverter
 {
-    use CanConvert;
-
-    private $viewModelConverter;
     private $patternRenderer;
     private $urlGenerator;
 
-    public function __construct(ViewModelConverter $viewModelConverter, PatternRenderer $patternRenderer, UrlGeneratorInterface $urlGenerator)
+    public function __construct(PatternRenderer $patternRenderer, UrlGeneratorInterface $urlGenerator)
     {
-        $this->viewModelConverter = $viewModelConverter;
         $this->patternRenderer = $patternRenderer;
         $this->urlGenerator = $urlGenerator;
     }
@@ -69,10 +64,5 @@ final class ArticleModalConverter implements ViewModelConverter
     public function supports($object, string $viewModel = null, array $context = []) : bool
     {
         return $object instanceof ArticleVersion && ViewModel\ModalWindow::class === $viewModel && in_array($context['type'] ?? 'social', ['social', 'citation']);
-    }
-
-    protected function getViewModelConverter() : ViewModelConverter
-    {
-        return $this->viewModelConverter;
     }
 }
