@@ -52,7 +52,8 @@ final class ContentAlertsController extends Controller
                     $form->get('reasons')->getData(),
                     $form->get('other')->getData()
                 )
-                ->then(function () use (&$arguments) {
+                ->then(function () use ($form, &$arguments) {
+                    $this->get('elife.journal.google_client.opt_out_unsubscribe_reason')->record($form->get('reasons')->getData(), $form->get('other')->getData(), true);
                     $arguments['title'] = 'Opt-out complete';
                     return [
                         new Paragraph('You will no longer receive regular updates from eLife.'),
@@ -200,8 +201,6 @@ final class ContentAlertsController extends Controller
 
     public function subscribeAction(Request $request, string $variant = null) : Response
     {
-        $this->get('elife.journal.google_client.opt_out_unsubscribe_reason')->record([], '', false);
-
         $arguments = $this->simplePageArguments($request);
 
         $arguments['title'] = 'Subscribe to eLife\'s email alerts';
