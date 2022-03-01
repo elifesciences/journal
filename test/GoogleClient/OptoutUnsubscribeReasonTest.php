@@ -2,6 +2,7 @@
 
 namespace test\eLife\Journal\GoogleClient;
 
+use DateTimeImmutable;
 use eLife\Journal\Etoc\LatestArticles;
 use eLife\Journal\Etoc\Newsletter;
 use eLife\Journal\GoogleClient\OptoutUnsubscribeReason;
@@ -57,23 +58,24 @@ final class OptoutUnsubscribeReasonTest extends TestCase
         string $reasonOther,
         bool $optOut,
         Newsletter $newsletter = null,
+        DateTimeImmutable $datetime,
         array $expected
     )
     {
         $this->sheets->spreadsheets_values->expects($this->once())->method('append')->with(
             $this->sheetId,
-            'A1:H1',
+            'A1:I1',
             new Sheets\ValueRange([
                 'values' => [
                     $expected,
                 ],
             ]),
             [
-                'valueInputOption' => 'RAW',
+                'valueInputOption' => 'USER_ENTERED',
             ]
         )->willReturn($this->createMock(AppendValuesResponse::class));
         $this->client->expects($this->once())->method('fetchAccessTokenWithRefreshToken');
-        $this->optoutUnsubscribeReason->record($reasons, $reasonOther, $optOut, $newsletter);
+        $this->optoutUnsubscribeReason->record($reasons, $reasonOther, $optOut, $newsletter, $datetime);
     }
 
     public function recordProvider() : Traversable
@@ -83,7 +85,9 @@ final class OptoutUnsubscribeReasonTest extends TestCase
             'other',
             false,
             new LatestArticles(),
+            new DateTimeImmutable('2022-02-22T22:22:22'),
             [
+                '22/02/2022 22:22:22',
                 'latest_articles',
                 false,
                 true,
@@ -99,7 +103,9 @@ final class OptoutUnsubscribeReasonTest extends TestCase
             'other',
             true,
             null,
+            new DateTimeImmutable('2022-02-22T22:22:22'),
             [
+                '22/02/2022 22:22:22',
                 '',
                 true,
                 true,
