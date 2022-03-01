@@ -3,18 +3,8 @@ services:
     _defaults:
         public: true
 
-    elife.google_api.sheets:
-        class: Google\Service\Sheets
-        arguments:
-          - '%google_api_client.config%'
-
     elife.journal.google_client.opt_out_unsubscribe_reason:
-        class: eLife\Journal\GoogleClient\OptoutUnsubscribeReason
-        arguments:
-          - '@elife.google_api.sheets'
-          - '%google_api_client.optout_unsubscribe_spreadsheet_id%'
-          - '%google_api_client.refresh_token%'
-          - '@monolog.logger.api'
+        class: eLife\Journal\GoogleClient\MockOptoutUnsubscribeReason
 
     elife.api_client.client:
         class: eLife\ApiClient\HttpClient\Guzzle6HttpClient
@@ -27,11 +17,7 @@ services:
           - '@csa_guzzle.client.elife_api_slow'
 
     elife.api_client.client.crm_api:
-        class: eLife\Journal\Guzzle\CiviCrmClient
-        arguments:
-          - '@csa_guzzle.client.elife_crm_api'
-          - '%crm_api_key%'
-          - '%crm_api_site_key%'
+        class: eLife\Journal\Guzzle\MockCiviCrmClient
 
     elife.api_client.client.warning_checking:
         class: eLife\ApiClient\HttpClient\WarningCheckingHttpClient
