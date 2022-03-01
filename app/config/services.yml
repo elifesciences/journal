@@ -14,6 +14,7 @@ services:
           - '@elife.google_api.sheets'
           - '%google_api_client.optout_unsubscribe_spreadsheet_id%'
           - '%google_api_client.refresh_token%'
+          - '@monolog.logger.api'
 
     elife.api_client.client:
         class: eLife\ApiClient\HttpClient\Guzzle6HttpClient
