@@ -2,18 +2,18 @@
 
 namespace eLife\Journal\Controller;
 
-use eLife\Journal\Etoc\EarlyCareer;
-use eLife\Journal\Etoc\ElifeNewsletter;
-use eLife\Journal\Etoc\LatestArticles;
-use eLife\Journal\Etoc\Newsletter;
-use eLife\Journal\Etoc\Subscription;
-use eLife\Journal\Etoc\Technology;
+use eLife\CiviContacts\Etoc\EarlyCareer;
+use eLife\CiviContacts\Etoc\ElifeNewsletter;
+use eLife\CiviContacts\Etoc\LatestArticles;
+use eLife\CiviContacts\Etoc\Newsletter;
+use eLife\CiviContacts\Etoc\Subscription;
+use eLife\CiviContacts\Etoc\Technology;
+use eLife\CiviContacts\Guzzle\CiviCrmClient;
 use eLife\Journal\Exception\EarlyResponse;
 use eLife\Journal\Form\Type\ContentAlertsOptoutType;
 use eLife\Journal\Form\Type\ContentAlertsType;
 use eLife\Journal\Form\Type\ContentAlertsUnsubscribeType;
 use eLife\Journal\Form\Type\ContentAlertsUpdateRequestType;
-use eLife\Journal\Guzzle\CiviCrmClient;
 use eLife\Patterns\ViewModel\Button;
 use eLife\Patterns\ViewModel\ButtonCollection;
 use eLife\Patterns\ViewModel\ContentHeaderSimple;
@@ -71,7 +71,7 @@ final class ContentAlertsController extends Controller
             $check = $this->get('elife.api_client.client.crm_api')
                 ->checkSubscription($this->generateOptoutUrl($id), false, null, CiviCrmClient::FIELD_OPTOUT_URL)
                 ->then(function ($check) use (&$arguments) {
-                    if (!$check instanceof Subscription || $check->optOut()) {
+                    if (!$check instanceof Subscription || $check->getOptout()) {
                         $arguments['title'] = 'Something went wrong';
                         return [
                             new Paragraph('Your email address has not been recognised. As a result, your email subscriptions have not been changed. Please try again or <a href="'.$this->get('router')->generate('contact').'">contact us</a>.'),
@@ -84,11 +84,11 @@ final class ContentAlertsController extends Controller
                 ->wait();
 
             if ($check instanceof Subscription) {
-                if ($check->preferencesUrl()) {
-                    $formIntro .= ' If you prefer to choose the emails you receive, please <a href="'.$check->preferencesUrl().'">update your preferences</a>.';
+                if ($check->getPreferencesUrl()) {
+                    $formIntro .= ' If you prefer to choose the emails you receive, please <a href="'.$check->getPreferencesUrl().'">update your preferences</a>.';
                 }
 
-                $form = ContentAlertsOptoutType::addContactId($form, $check->id());
+                $form = ContentAlertsOptoutType::addContactId($form, $check->getId());
             } else {
                 $form = $check;
             }
@@ -167,7 +167,7 @@ final class ContentAlertsController extends Controller
             $check = $this->get('elife.api_client.client.crm_api')
                 ->checkSubscription($this->generateUnsubscribeUrl($id), false, $newsletters[0])
                 ->then(function ($check) use (&$arguments) {
-                    if (!$check instanceof Subscription || $check->optOut()) {
+                    if (!$check instanceof Subscription || $check->getOptout()) {
                         $arguments['title'] = 'Something went wrong';
                         return [
                             new Paragraph('Your email address has not been recognised. As a result, your email subscriptions have not been changed. Please try again or <a href="'.$this->get('router')->generate('contact').'">contact us</a>.'),
@@ -180,11 +180,11 @@ final class ContentAlertsController extends Controller
                 ->wait();
 
             if ($check instanceof Subscription) {
-                if ($check->preferencesUrl()) {
-                    $formIntro[] = new Paragraph('To change any other newsletter subscriptions, please <a href="'.$check->preferencesUrl().'">update your preferences</a>.');
+                if ($check->getPreferencesUrl()) {
+                    $formIntro[] = new Paragraph('To change any other newsletter subscriptions, please <a href="'.$check->getPreferencesUrl().'">update your preferences</a>.');
                 }
 
-                $form = ContentAlertsUnsubscribeType::addContactId($form, $check->id());
+                $form = ContentAlertsUnsubscribeType::addContactId($form, $check->getId());
             } else {
                 $form = $check;
             }
@@ -235,11 +235,11 @@ final class ContentAlertsController extends Controller
                 ->checkSubscription($form->get('email')->getData())
                 ->then(function ($check) use ($form, &$arguments) {
                     // Check if user not found, opted out or not member of relevant groups.
-                    return (!$check instanceof Subscription || $check->optOut() || empty($check->preferences())) ?
+                    return (!$check instanceof Subscription || $check->getOptout() || empty($check->getPreferences())) ?
                         // Subscribe if true.
                         $this->get('elife.api_client.client.crm_api')
                             ->subscribe(
-                                $check instanceof Subscription ? $check->id() : $form->get('email')->getData(),
+                                $check instanceof Subscription ? $check->getId() : $form->get('email')->getData(),
                                 Subscription::getNewsletters($form->get('preferences')->getData()),
                                 $this->prepareSubscriptionNewsletters(),
                                 $this->generatePreferencesUrl(),
@@ -247,7 +247,7 @@ final class ContentAlertsController extends Controller
                                 $this->generateOptoutUrl(),
                                 null,
                                 null,
-                                $check instanceof Subscription ? $check->preferences() : null
+                                $check instanceof Subscription ? $check->getPreferences() : null
                             )
                             ->then(function () use ($form, &$arguments) {
                                 $arguments['title'] = 'Thank you for subscribing!';
@@ -258,7 +258,7 @@ final class ContentAlertsController extends Controller
                             }) :
                         // Send preferences link if false.
                         $this->get('elife.api_client.client.crm_api')
-                            ->triggerPreferencesEmail($check->id(), empty($check->preferencesUrl()) ? $this->generatePreferencesUrl() : null)
+                            ->triggerPreferencesEmail($check->getId(), empty($check->getPreferencesUrl()) ? $this->generatePreferencesUrl() : null)
                             ->then(function () use ($form, &$arguments) {
                                 $arguments['title'] = 'You are already subscribed';
                                 return [
@@ -288,7 +288,7 @@ final class ContentAlertsController extends Controller
         $data = $this->get('elife.api_client.client.crm_api')
             ->checkSubscription($this->generatePreferencesUrl($id), false)
             ->then(function ($check) {
-                if (!$check instanceof Subscription || $check->optOut()) {
+                if (!$check instanceof Subscription || $check->getOptout()) {
                     throw new EarlyResponse(new RedirectResponse($this->get('router')->generate('content-alerts-link-expired')));
                 }
 
@@ -348,9 +348,9 @@ final class ContentAlertsController extends Controller
             return $this->get('elife.api_client.client.crm_api')
                 ->checkSubscription($form->get('email')->getData())
                 ->then(function ($check) use ($form, &$arguments) {
-                    if ($check instanceof Subscription && !$check->optOut()) {
+                    if ($check instanceof Subscription && !$check->getOptout()) {
                         return $this->get('elife.api_client.client.crm_api')
-                            ->triggerPreferencesEmail($check->id(), empty($check->preferencesUrl()) ? $this->generatePreferencesUrl() : null)
+                            ->triggerPreferencesEmail($check->getId(), empty($check->getPreferencesUrl()) ? $this->generatePreferencesUrl() : null)
                             ->then(function () use ($form, &$arguments) {
                                 $arguments['title'] = 'Thank you';
                                 return [
@@ -423,10 +423,10 @@ final class ContentAlertsController extends Controller
     private function prepareSubscriptionNewsletters() : array
     {
         return [
-            new LatestArticles($this->generateUnsubscribeUrl($id = uniqid())),
-            new EarlyCareer($this->generateUnsubscribeUrl($id, 'early-career')),
-            new Technology($this->generateUnsubscribeUrl($id, 'technology')),
-            new ElifeNewsletter($this->generateUnsubscribeUrl($id, 'elife-newsletter')),
+            new LatestArticles(),
+            new EarlyCareer(),
+            new Technology(),
+            new ElifeNewsletter(),
         ];
     }
 }

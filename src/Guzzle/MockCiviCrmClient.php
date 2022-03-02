@@ -2,18 +2,19 @@
 
 namespace eLife\Journal\Guzzle;
 
-use eLife\Journal\Etoc\EarlyCareer;
-use eLife\Journal\Etoc\LatestArticles;
-use eLife\Journal\Etoc\Newsletter;
-use eLife\Journal\Etoc\Subscription;
+use eLife\CiviContacts\Etoc\EarlyCareer;
+use eLife\CiviContacts\Etoc\LatestArticles;
+use eLife\CiviContacts\Etoc\Newsletter;
+use eLife\CiviContacts\Etoc\Subscription;
+use eLife\CiviContacts\Guzzle\CiviCrmClientInterface;
+use GuzzleHttp\Promise\Create;
 use GuzzleHttp\Promise\PromiseInterface;
-use function GuzzleHttp\Promise\promise_for;
 
 final class MockCiviCrmClient implements CiviCrmClientInterface
 {
     public function optout(int $contactId, array $reasons, string $reasonOther = null) : PromiseInterface
     {
-        return promise_for($this->presetsOptout($contactId, $reasons, $reasonOther));
+        return Create::promiseFor($this->presetsOptout($contactId, $reasons, $reasonOther));
     }
 
     private function presetsOptout(int $contactId, array $reasons, string $reasonOther = null) : array
@@ -23,7 +24,7 @@ final class MockCiviCrmClient implements CiviCrmClientInterface
 
     public function unsubscribe(int $contactId, array $groups) : PromiseInterface
     {
-        return promise_for($this->presetsUnsubscribe($contactId, $groups));
+        return Create::promiseFor($this->presetsUnsubscribe($contactId, $groups));
     }
 
     private function presetsUnsubscribe(int $contactId, array $groups) : array
@@ -33,7 +34,7 @@ final class MockCiviCrmClient implements CiviCrmClientInterface
 
     public function subscribe(string $identifier, array $preferences, array $newsletters, string $preferencesUrl, string $unsubscribeUrl = null, string $optoutUrl = null, string $firstName = null, string $lastName = null, array $preferencesBefore = null) : PromiseInterface
     {
-        return promise_for(array_filter($this->presetsSubscribe(
+        return Create::promiseFor(array_filter($this->presetsSubscribe(
             $identifier,
             $preferences,
             $newsletters,
@@ -69,7 +70,7 @@ final class MockCiviCrmClient implements CiviCrmClientInterface
 
     public function checkSubscription(string $identifier, bool $isEmail = true, Newsletter $newsletter = null, string $field = null) : PromiseInterface
     {
-        return promise_for($this->presetsCheckSubscription($identifier, $isEmail));
+        return Create::promiseFor($this->presetsCheckSubscription($identifier, $isEmail));
     }
 
     /**
@@ -127,7 +128,7 @@ final class MockCiviCrmClient implements CiviCrmClientInterface
 
     public function triggerPreferencesEmail(int $contactId, string $preferencesUrl = null) : PromiseInterface
     {
-        return promise_for($this->presetsTriggerPreferencesEmail($contactId));
+        return Create::promiseFor($this->presetsTriggerPreferencesEmail($contactId));
     }
 
     private function presetsTriggerPreferencesEmail(int $contactId) : array
@@ -138,5 +139,22 @@ final class MockCiviCrmClient implements CiviCrmClientInterface
                     'contact_id' => $contactId,
                 ];
         }
+    }
+
+    public function storeSubscriberUrls(Subscription $subscription) : PromiseInterface
+    {
+        return Create::promiseFor($this->presetsStoreSubscriberUrls($subscription));
+    }
+
+    private function presetsStoreSubscriberUrls(Subscription $subscription) : Subscription
+    {
+        return $subscription;
+    }
+
+    public function getAllSubscribers(int $total = 0, int $batchSize = 100, int $offset = 0) : array
+    {
+        return array_map(function ($i) {
+            return new Subscription($i);
+        }, range(1, $total));
     }
 }
