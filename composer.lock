@@ -1364,12 +1364,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/civi-contacts.git",
-                "reference": "8cc96dbd487e6f9f92bdda91bcb3bf693ca90e78"
+                "reference": "56d190d8671caa5305c27458f2c25743194d9118"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/civi-contacts/zipball/8cc96dbd487e6f9f92bdda91bcb3bf693ca90e78",
-                "reference": "8cc96dbd487e6f9f92bdda91bcb3bf693ca90e78",
+                "url": "https://api.github.com/repos/elifesciences/civi-contacts/zipball/56d190d8671caa5305c27458f2c25743194d9118",
+                "reference": "56d190d8671caa5305c27458f2c25743194d9118",
                 "shasum": ""
             },
             "require": {
@@ -1382,9 +1382,9 @@
                 "phpunit/phpunit": "^7.5",
                 "squizlabs/php_codesniffer": "^3.6"
             },
-            "bin": [
-                "civi-contacts"
-            ],
+            "suggest": {
+                "laravel-zero/framework": "Required to use the console (^5.8)."
+            },
             "type": "library",
             "autoload": {
                 "psr-4": {
@@ -1403,7 +1403,7 @@
                 "source": "https://github.com/elifesciences/civi-contacts/tree/dependency-for-journal",
                 "issues": "https://github.com/elifesciences/civi-contacts/issues"
             },
-            "time": "2022-03-02T15:47:55+00:00"
+            "time": "2022-03-02T19:22:32+00:00"
         },
         {
             "name": "elife/patterns",
