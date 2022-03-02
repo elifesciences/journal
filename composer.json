@@ -23,11 +23,12 @@
         "cweagans/composer-patches": "^1.6",
         "elife/api-client": "^1.0@dev",
         "elife/api-sdk": "dev-master",
+        "elife/civi-contacts": "dev-master",
         "elife/patterns": "dev-content-header-demo",
         "fabpot/goutte": "^3.2",
         "fig/link-util": "^1.0",
         "firebase/php-jwt": "^5.0",
-        "guzzlehttp/guzzle": "^6.3",
+        "guzzlehttp/guzzle": "^6.5",
         "guzzlehttp/promises": "^1.3",
         "guzzlehttp/psr7": "^1.4",
         "isometriks/spam-bundle": "^1.0",
@@ -104,7 +105,7 @@
     "repositories": [
         {
             "type": "vcs",
-            "url": "https://github.com/elifesciences/patterns-php"
+            "url": "https://github.com/elifesciences/civi-contacts"
         }
     ]
 }
