@@ -66,7 +66,7 @@ final class ContentAlertsController extends Controller
             $check = $this->get('elife.api_client.client.crm_api')
                 ->checkSubscription($this->generateOptoutUrl($id), false, null, CiviCrmClient::FIELD_OPTOUT_URL)
                 ->then(function ($check) use (&$arguments) {
-                    if (!$check instanceof Subscription || $check->optOut()) {
+                    if (!$check instanceof Subscription || $check->getOptout()) {
                         $arguments['title'] = 'Something went wrong';
                         return [
                             new Paragraph('Your email address has not been recognised. As a result, your email subscriptions have not been changed. Please try again or <a href="'.$this->get('router')->generate('contact').'">contact us</a>.'),
@@ -83,7 +83,7 @@ final class ContentAlertsController extends Controller
                     $formIntro .= ' If you prefer to choose the emails you receive, please <a href="'.$check->getPreferencesUrl().'">update your preferences</a>.';
                 }
 
-                $form = ContentAlertsOptoutType::addContactId($form, $check->id());
+                $form = ContentAlertsOptoutType::addContactId($form, $check->getId());
             } else {
                 $form = $check;
             }
@@ -228,7 +228,7 @@ final class ContentAlertsController extends Controller
                         // Subscribe if true.
                         $this->get('elife.api_client.client.crm_api')
                             ->subscribe(
-                                $check instanceof Subscription ? $check->id() : $form->get('email')->getData(),
+                                $check instanceof Subscription ? $check->getId() : $form->get('email')->getData(),
                                 Subscription::getNewsletters($form->get('preferences')->getData()),
                                 $this->prepareSubscriptionNewsletters(),
                                 $this->generatePreferencesUrl(),
@@ -339,7 +339,7 @@ final class ContentAlertsController extends Controller
                 ->then(function ($check) use ($form, &$arguments) {
                     if ($check instanceof Subscription && !$check->getOptout()) {
                         return $this->get('elife.api_client.client.crm_api')
-                            ->triggerPreferencesEmail($check->id(), empty($check->getPreferencesUrl()) ? $this->generatePreferencesUrl() : null)
+                            ->triggerPreferencesEmail($check->getId(), empty($check->getPreferencesUrl()) ? $this->generatePreferencesUrl() : null)
                             ->then(function () use ($form, &$arguments) {
                                 $arguments['title'] = 'Thank you';
                                 return [
