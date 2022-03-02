@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5c017e8e9f85ee626cdbf9ce711bd792",
+    "content-hash": "52c279bcc5a784f659e76baf5dec2baa",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -1360,16 +1360,16 @@
         },
         {
             "name": "elife/civi-contacts",
-            "version": "dev-dependency-for-journal",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/civi-contacts.git",
-                "reference": "56d190d8671caa5305c27458f2c25743194d9118"
+                "reference": "7001a45e278f51ae3c19c405828cd8f05c288113"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/civi-contacts/zipball/56d190d8671caa5305c27458f2c25743194d9118",
-                "reference": "56d190d8671caa5305c27458f2c25743194d9118",
+                "url": "https://api.github.com/repos/elifesciences/civi-contacts/zipball/7001a45e278f51ae3c19c405828cd8f05c288113",
+                "reference": "7001a45e278f51ae3c19c405828cd8f05c288113",
                 "shasum": ""
             },
             "require": {
@@ -1400,10 +1400,10 @@
                 "MIT"
             ],
             "support": {
-                "source": "https://github.com/elifesciences/civi-contacts/tree/dependency-for-journal",
+                "source": "https://github.com/elifesciences/civi-contacts/tree/develop",
                 "issues": "https://github.com/elifesciences/civi-contacts/issues"
             },
-            "time": "2022-03-02T19:22:32+00:00"
+            "time": "2022-03-02T20:21:55+00:00"
         },
         {
             "name": "elife/patterns",
