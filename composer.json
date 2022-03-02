@@ -105,10 +105,6 @@
     "repositories": [
         {
             "type": "vcs",
-            "url": "https://github.com/elifesciences/patterns-php"
-        },
-        {
-            "type": "vcs",
             "url": "https://github.com/elifesciences/civi-contacts"
         }
     ]
