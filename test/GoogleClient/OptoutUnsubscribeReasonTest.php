@@ -3,8 +3,8 @@
 namespace test\eLife\Journal\GoogleClient;
 
 use DateTimeImmutable;
-use eLife\Journal\Etoc\LatestArticles;
-use eLife\Journal\Etoc\Newsletter;
+use eLife\CiviContacts\Etoc\LatestArticles;
+use eLife\CiviContacts\Etoc\Newsletter;
 use eLife\Journal\GoogleClient\OptoutUnsubscribeReason;
 use Google\Client;
 use Google\Service\Sheets;

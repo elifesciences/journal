@@ -3,7 +3,7 @@
 namespace eLife\Journal\GoogleClient;
 
 use DateTimeImmutable;
-use eLife\Journal\Etoc\Newsletter;
+use eLife\CiviContacts\Etoc\Newsletter;
 use Google\Service\Sheets;
 use Google\Service\Sheets\AppendValuesResponse;
 use Psr\Log\LoggerInterface;
