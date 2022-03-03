@@ -166,8 +166,9 @@ final class ContentAlertsController extends Controller
             /** @var Subscription $check */
             $check = $this->get('elife.api_client.client.crm_api')
                 ->checkSubscription($this->generateUnsubscribeUrl($id), false, $newsletters[0])
-                ->then(function ($check) use (&$arguments) {
-                    if (!$check instanceof Subscription || $check->getOptout()) {
+                ->then(function ($check) use (&$arguments, $newsletters) {
+                    // If contact not found, have opted-out or has not subscribed to this newsletter then present "Something went wrong"
+                    if (!$check instanceof Subscription || $check->getOptout() || empty(array_intersect($check->getPreferences(), $newsletters))) {
                         $arguments['title'] = 'Something went wrong';
                         return [
                             new Paragraph('Your email address has not been recognised. As a result, your email subscriptions have not been changed. Please try again or <a href="'.$this->get('router')->generate('contact').'">contact us</a>.'),
