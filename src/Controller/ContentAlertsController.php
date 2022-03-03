@@ -53,11 +53,11 @@ final class ContentAlertsController extends Controller
                     $form->get('other')->getData()
                 )
                 ->then(function () use ($form, &$arguments) {
-                    $this->get('elife.journal.google_client.opt_out_unsubscribe_reason')->record(
-                        $form->get('reasons')->getData(),
-                        $form->get('other')->getData(),
-                        true
-                    );
+//                    $this->get('elife.journal.google_client.opt_out_unsubscribe_reason')->record(
+//                        $form->get('reasons')->getData(),
+//                        $form->get('other')->getData(),
+//                        true
+//                    );
                     $arguments['title'] = 'Opt-out complete';
                     return [
                         new Paragraph('You will no longer receive regular updates from eLife.'),
@@ -148,12 +148,12 @@ final class ContentAlertsController extends Controller
                     explode(',', $form->get('groups')->getData())
                 )
                 ->then(function () use ($form, $newsletters, $group, &$arguments) {
-                    $this->get('elife.journal.google_client.opt_out_unsubscribe_reason')->record(
-                        $form->get('reasons')->getData(),
-                        $form->get('other')->getData(),
-                        false,
-                        $newsletters[0]
-                    );
+//                    $this->get('elife.journal.google_client.opt_out_unsubscribe_reason')->record(
+//                        $form->get('reasons')->getData(),
+//                        $form->get('other')->getData(),
+//                        false,
+//                        $newsletters[0]
+//                    );
                     $arguments['title'] = 'Unsubscribed';
                     return [
                         new Paragraph("You are no longer subscribed to {$group}."),
