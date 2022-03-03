@@ -52,7 +52,12 @@ final class ContentAlertsController extends Controller
                     $form->get('reasons')->getData(),
                     $form->get('other')->getData()
                 )
-                ->then(function () use (&$arguments) {
+                ->then(function () use ($form, &$arguments) {
+                    $this->get('elife.journal.google_client.opt_out_unsubscribe_reason')->record(
+                        $form->get('reasons')->getData(),
+                        $form->get('other')->getData(),
+                        true
+                    );
                     $arguments['title'] = 'Opt-out complete';
                     return [
                         new Paragraph('You will no longer receive regular updates from eLife.'),
@@ -136,13 +141,19 @@ final class ContentAlertsController extends Controller
                 ]
             );
 
-        $validSubmission = $this->ifFormSubmitted($request, $form, function () use ($form, $group, &$arguments) {
+        $validSubmission = $this->ifFormSubmitted($request, $form, function () use ($form, $newsletters, $group, &$arguments) {
             return $this->get('elife.api_client.client.crm_api')
                 ->unsubscribe(
                     $form->get('contact_id')->getData(),
                     explode(',', $form->get('groups')->getData())
                 )
-                ->then(function () use ($group, &$arguments) {
+                ->then(function () use ($form, $newsletters, $group, &$arguments) {
+                    $this->get('elife.journal.google_client.opt_out_unsubscribe_reason')->record(
+                        $form->get('reasons')->getData(),
+                        $form->get('other')->getData(),
+                        false,
+                        $newsletters[0]
+                    );
                     $arguments['title'] = 'Unsubscribed';
                     return [
                         new Paragraph("You are no longer subscribed to {$group}."),
@@ -155,8 +166,9 @@ final class ContentAlertsController extends Controller
             /** @var Subscription $check */
             $check = $this->get('elife.api_client.client.crm_api')
                 ->checkSubscription($this->generateUnsubscribeUrl($id), false, $newsletters[0])
-                ->then(function ($check) use (&$arguments) {
-                    if (!$check instanceof Subscription || $check->getOptout()) {
+                ->then(function ($check) use (&$arguments, $newsletters) {
+                    // If contact not found, have opted-out or has not subscribed to this newsletter then present "Something went wrong"
+                    if (!$check instanceof Subscription || $check->getOptout() || empty(array_intersect($check->getPreferences(), $newsletters))) {
                         $arguments['title'] = 'Something went wrong';
                         return [
                             new Paragraph('Your email address has not been recognised. As a result, your email subscriptions have not been changed. Please try again or <a href="'.$this->get('router')->generate('contact').'">contact us</a>.'),

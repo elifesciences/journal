@@ -28,6 +28,11 @@ parameters:
         Articles: articles
     oauth2_client_id: some-id
     oauth2_client_secret: ThisIsASecret
+    google_api_client.config:
+        client_id: ~
+        client_secret: ~
+    google_api_client.refresh_token: ~
+    google_api_client.optout_unsubscribe_spreadsheet_id: ~
     hypothesis_api: https://hypothes.is/api/
     hypothesis_authority: some-authority
     hypothesis_client_id: some-id

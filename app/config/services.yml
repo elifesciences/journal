@@ -3,6 +3,19 @@ services:
     _defaults:
         public: true
 
+    elife.google_api.sheets:
+        class: Google\Service\Sheets
+        arguments:
+          - '%google_api_client.config%'
+
+    elife.journal.google_client.opt_out_unsubscribe_reason:
+        class: eLife\Journal\GoogleClient\OptoutUnsubscribeReason
+        arguments:
+          - '@elife.google_api.sheets'
+          - '%google_api_client.optout_unsubscribe_spreadsheet_id%'
+          - '%google_api_client.refresh_token%'
+          - '@monolog.logger.api'
+
     elife.api_client.client:
         class: eLife\ApiClient\HttpClient\Guzzle6HttpClient
         arguments:
