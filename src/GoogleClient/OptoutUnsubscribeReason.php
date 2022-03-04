@@ -2,12 +2,12 @@
 
 namespace eLife\Journal\GoogleClient;
 
+use Assert\Assertion;
 use DateTimeImmutable;
 use eLife\CiviContacts\Etoc\Newsletter;
 use Google\Service\Sheets;
 use Google\Service\Sheets\AppendValuesResponse;
 use Psr\Log\LoggerInterface;
-use Webmozart\Assert\Assert;
 
 final class OptoutUnsubscribeReason implements OptoutUnsubscribeReasonInterface
 {
@@ -26,7 +26,7 @@ final class OptoutUnsubscribeReason implements OptoutUnsubscribeReasonInterface
 
     public function record(array $reasons, $reasonOther, bool $optOut, Newsletter $newsletter = null, DateTimeImmutable $datetime = null) : AppendValuesResponse
     {
-        Assert::true($optOut || $newsletter instanceof Newsletter, 'Opt-out must be true or Newsletter provided.');
+        Assertion::true($optOut || $newsletter instanceof Newsletter, 'Opt-out must be true or Newsletter provided.');
 
         // Access token refresh.
         $this->sheets->getClient()->fetchAccessTokenWithRefreshToken($this->refreshToken);
