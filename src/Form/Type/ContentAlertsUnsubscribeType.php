@@ -14,7 +14,7 @@ final class ContentAlertsUnsubscribeType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder
+        $this->addReasonsForLeaving($builder)
             ->add('contact_id', HiddenType::class)
             ->add('groups', HiddenType::class)
             ->add('unsubscribe', SubmitType::class);
