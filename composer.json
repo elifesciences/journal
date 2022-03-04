@@ -15,7 +15,7 @@
     "require": {
         "php": "^7.1",
         "ext-hash": "*",
-        "beberlei/assert": "^2.2",
+        "beberlei/assert": "^2.8",
         "bobthecow/mustache-bundle": "^1.2",
         "cocur/slugify": "^3.0",
         "composer/package-versions-deprecated": "1.11.99.2",
