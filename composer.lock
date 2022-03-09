@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8e127a9bc739aea8e7529a423c25f5ea",
+    "content-hash": "a55b91cc51f018f8f12ef70c1a59b1f3",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -1391,18 +1391,10 @@
                     "eLife\\CiviContacts\\": "src/"
                 }
             },
-            "autoload-dev": {
-                "psr-4": {
-                    "tests\\eLife\\CiviContacts\\": "tests/"
-                }
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
-            "support": {
-                "source": "https://github.com/elifesciences/civi-contacts/tree/develop",
-                "issues": "https://github.com/elifesciences/civi-contacts/issues"
-            },
             "time": "2022-03-02T20:21:55+00:00"
         },
         {
@@ -1411,12 +1403,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/patterns-php.git",
-                "reference": "31ea99f80e3dc4808c272b8560fdef4ee4368892"
+                "reference": "8016fc83ea8e7a17ff513877b0dc303e4773b6fb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/31ea99f80e3dc4808c272b8560fdef4ee4368892",
-                "reference": "31ea99f80e3dc4808c272b8560fdef4ee4368892",
+                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/8016fc83ea8e7a17ff513877b0dc303e4773b6fb",
+                "reference": "8016fc83ea8e7a17ff513877b0dc303e4773b6fb",
                 "shasum": ""
             },
             "require": {
@@ -1448,19 +1440,12 @@
                     "eLife\\Patterns\\": "./src"
                 }
             },
-            "autoload-dev": {
-                "psr-4": {
-                    "tests\\eLife\\Patterns\\": "./tests/src"
-                }
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
             "description": "eLife patterns",
-            "support": {
-                "source": "https://github.com/elifesciences/patterns-php/tree/master"
-            },
-            "time": "2022-02-22T18:32:05+00:00"
+            "time": "2022-02-25T21:34:38+00:00"
         },
         {
             "name": "fabpot/goutte",
