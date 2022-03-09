@@ -131,7 +131,7 @@ final class MockCiviCrmClient implements CiviCrmClientInterface
         return Create::promiseFor($this->presetsTriggerPreferencesEmail($contactId, $preferencesUrl));
     }
 
-    private function presetsTriggerPreferencesEmail(int $contactId) : array
+    private function presetsTriggerPreferencesEmail(int $contactId, string $preferencesUrl = null) : array
     {
         switch ($contactId) {
             default:
