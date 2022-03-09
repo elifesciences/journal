@@ -147,6 +147,10 @@ final class ContentAlertsController extends Controller
                     $form->get('contact_id')->getData(),
                     explode(',', $form->get('groups')->getData())
                 )
+                ->then(function () use ($form) {
+                    return $this->get('elife.api_client.client.crm_api')
+                        ->triggerUnsubscribeEmail($form->get('contact_id')->getData());
+                })
                 ->then(function () use ($form, $newsletters, $group, &$arguments) {
                     $this->get('elife.journal.google_client.opt_out_unsubscribe_reason')->record(
                         $form->get('reasons')->getData(),

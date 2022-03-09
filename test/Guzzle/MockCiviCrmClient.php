@@ -128,10 +128,25 @@ final class MockCiviCrmClient implements CiviCrmClientInterface
 
     public function triggerPreferencesEmail(int $contactId, string $preferencesUrl = null) : PromiseInterface
     {
-        return Create::promiseFor($this->presetsTriggerPreferencesEmail($contactId));
+        return Create::promiseFor($this->presetsTriggerPreferencesEmail($contactId, $preferencesUrl));
     }
 
     private function presetsTriggerPreferencesEmail(int $contactId) : array
+    {
+        switch ($contactId) {
+            default:
+                return [
+                    'contact_id' => $contactId,
+                ];
+        }
+    }
+
+    public function triggerUnsubscribeEmail(int $contactId) : PromiseInterface
+    {
+        return Create::promiseFor($this->presetsTriggerUnsubscribeEmail($contactId));
+    }
+
+    private function presetsTriggerUnsubscribeEmail(int $contactId) : array
     {
         switch ($contactId) {
             default:
