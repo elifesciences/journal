@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8e127a9bc739aea8e7529a423c25f5ea",
+    "content-hash": "a55b91cc51f018f8f12ef70c1a59b1f3",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -1391,18 +1391,10 @@
                     "eLife\\CiviContacts\\": "src/"
                 }
             },
-            "autoload-dev": {
-                "psr-4": {
-                    "tests\\eLife\\CiviContacts\\": "tests/"
-                }
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
-            "support": {
-                "source": "https://github.com/elifesciences/civi-contacts/tree/develop",
-                "issues": "https://github.com/elifesciences/civi-contacts/issues"
-            },
             "time": "2022-03-02T20:21:55+00:00"
         },
         {
