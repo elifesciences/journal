@@ -69,6 +69,18 @@ final class ContentAlertsOptoutControllerTest extends PageTestCase
     /**
      * @test
      */
+    public function it_does_not_allow_you_to_optout_if_already()
+    {
+        $client = static::createClient();
+
+        $crawler = $client->request('GET', $this->getUrl('red'));
+
+        $this->assertSame('Something went wrong', $crawler->filter('h1')->text());
+    }
+
+    /**
+     * @test
+     */
     public function it_has_a_csrf_token_if_you_are_logged_in()
     {
         $client = static::createClient();

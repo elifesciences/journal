@@ -84,7 +84,7 @@ final class MockCiviCrmClient implements CiviCrmClientInterface
 
         switch (true) {
             case '/content-alerts/green' === $identifier && !$isEmail:
-            case '/content-alerts/unsubscribe/green' === $identifier && !$isEmail:
+            case strpos($identifier, '/content-alerts/unsubscribe/green') !== false && !$isEmail:
             case '/content-alerts/optout/green' === $identifier && !$isEmail:
             case 'green@example.com' === $identifier && $isEmail:
                 return new Subscription(
@@ -97,7 +97,7 @@ final class MockCiviCrmClient implements CiviCrmClientInterface
                     'http://localhost/content-alerts/green'
                 );
             case '/content-alerts/amber' === $identifier && !$isEmail:
-            case '/content-alerts/unsubscribe/amber' === $identifier && !$isEmail:
+            case strpos($identifier, '/content-alerts/unsubscribe/amber') !== false && !$isEmail:
             case '/content-alerts/optout/amber' === $identifier && !$isEmail:
             case 'amber@example.com' === $identifier && $isEmail:
                 return new Subscription(
@@ -109,7 +109,7 @@ final class MockCiviCrmClient implements CiviCrmClientInterface
                     []
                 );
             case '/content-alerts/red' === $identifier && !$isEmail:
-            case '/content-alerts/unsubscribe/red' === $identifier && !$isEmail:
+            case strpos($identifier, '/content-alerts/unsubscribe/red') !== false && !$isEmail:
             case '/content-alerts/optout/red' === $identifier && !$isEmail:
             case 'red@example.com' === $identifier && $isEmail:
                 return new Subscription(
@@ -128,10 +128,25 @@ final class MockCiviCrmClient implements CiviCrmClientInterface
 
     public function triggerPreferencesEmail(int $contactId, string $preferencesUrl = null) : PromiseInterface
     {
-        return Create::promiseFor($this->presetsTriggerPreferencesEmail($contactId));
+        return Create::promiseFor($this->presetsTriggerPreferencesEmail($contactId, $preferencesUrl));
     }
 
-    private function presetsTriggerPreferencesEmail(int $contactId) : array
+    private function presetsTriggerPreferencesEmail(int $contactId, string $preferencesUrl = null) : array
+    {
+        switch ($contactId) {
+            default:
+                return [
+                    'contact_id' => $contactId,
+                ];
+        }
+    }
+
+    public function triggerUnsubscribeEmail(int $contactId) : PromiseInterface
+    {
+        return Create::promiseFor($this->presetsTriggerUnsubscribeEmail($contactId));
+    }
+
+    private function presetsTriggerUnsubscribeEmail(int $contactId) : array
     {
         switch ($contactId) {
             default:

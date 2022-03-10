@@ -28,6 +28,7 @@
         "fabpot/goutte": "^3.2",
         "fig/link-util": "^1.0",
         "firebase/php-jwt": "^5.0",
+        "google/apiclient": "^2.12",
         "guzzlehttp/guzzle": "^6.5",
         "guzzlehttp/promises": "^1.3",
         "guzzlehttp/psr7": "^1.4",
@@ -86,6 +87,9 @@
     },
     "extra": {
         "composer-exit-on-patch-failure": true,
+        "google/apiclient-services": [
+            "Sheets"
+        ],
         "patches": {
             "bobthecow/mustache-bundle": {
                 "Remove superfluous argument": "https://github.com/bobthecow/BobthecowMustacheBundle/pull/9.patch"
@@ -101,11 +105,5 @@
                 "Fix WhatFailureGroupHandler::handleBatch when the handler has processors": "https://github.com/Seldaek/monolog/pull/1022.patch"
             }
         }
-    },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/elifesciences/civi-contacts"
-        }
-    ]
+    }
 }

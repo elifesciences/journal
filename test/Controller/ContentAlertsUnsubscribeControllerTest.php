@@ -69,6 +69,30 @@ final class ContentAlertsUnsubscribeControllerTest extends PageTestCase
     /**
      * @test
      */
+    public function it_does_not_allow_you_to_unsubscribe_if_already()
+    {
+        $client = static::createClient();
+
+        $crawler = $client->request('GET', $this->getUrl('green/early-career'));
+
+        $this->assertSame('Something went wrong', $crawler->filter('h1')->text());
+    }
+
+    /**
+     * @test
+     */
+    public function it_does_not_allow_you_to_unsubscribe_if_optout()
+    {
+        $client = static::createClient();
+
+        $crawler = $client->request('GET', $this->getUrl('red'));
+
+        $this->assertSame('Something went wrong', $crawler->filter('h1')->text());
+    }
+
+    /**
+     * @test
+     */
     public function it_has_a_csrf_token_if_you_are_logged_in()
     {
         $client = static::createClient();
