@@ -64,9 +64,11 @@ final class ArticleContentHeaderConverter implements ViewModelConverter
             return $institutions;
         }, []))));
 
-        $meta = ViewModel\Meta::withDate(
-            $this->simpleDate($object, ['date' => 'published'] + $context)
-        );
+        if ($date = $this->simpleDate($object, ['date' => 'published'] + $context)) {
+            $meta = ViewModel\Meta::withDate($date);
+        } else {
+            $meta = null;
+        }
 
         return new ViewModel\ContentHeader(
             $object->getFullTitle(),
