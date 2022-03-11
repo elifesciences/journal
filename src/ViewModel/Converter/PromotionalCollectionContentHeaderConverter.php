@@ -37,8 +37,7 @@ final class PromotionalCollectionContentHeaderConverter implements ViewModelConv
             ),
             null,
             null,
-            ViewModel\Meta::withText(
-                'Highlights',
+            ViewModel\Meta::withDate(
                 $this->simpleDate($object, ['date' => 'published'] + $context)
             )
         );
