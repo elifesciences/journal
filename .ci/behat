@@ -3,4 +3,4 @@ set -e
 
 export JARNAIZ_JUNIT_OUTPUTDIR=build/ci/behat
 rm -rf "$JARNAIZ_JUNIT_OUTPUTDIR" && mkdir -p "$JARNAIZ_JUNIT_OUTPUTDIR"
-vendor/bin/behat --list-scenarios --tags '@annual-report' | vendor/bin/fastest --no-interaction --process 8 "JARNAIZ_JUNIT_FILENAME={n}.xml JOURNAL_INSTANCE=behat{p} vendor/bin/behat --strict --format junit {};"
+vendor/bin/behat --list-scenarios --tags '~@podcast' | vendor/bin/fastest --no-interaction --process 8 "JARNAIZ_JUNIT_FILENAME={n}.xml JOURNAL_INSTANCE=behat{p} vendor/bin/behat --strict --format junit {};"

@@ -45,6 +45,7 @@ final class InterviewContentHeaderConverter implements ViewModelConverter
                 new ViewModel\Link('Interview', $this->urlGenerator->generate('interviews')),
                 $this->simpleDate($object, ['date' => 'published'] + $context)
             ),
+            null,
             LicenceUri::default()
         );
     }

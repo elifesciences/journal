@@ -27,16 +27,17 @@ final class DigestContentHeaderConverter implements ViewModelConverter
     {
         return new ViewModel\ContentHeader(
             $object->getTitle(),
-            null, $object->getImpactStatement(), true, [], null, [], [], null,
+            null, $object->getImpactStatement(), true, null, [], null, [], [], null,
             new ViewModel\SocialMediaSharers(
                 strip_tags($object->getTitle()),
                 $this->urlGenerator->generate('digest', [$object], UrlGeneratorInterface::ABSOLUTE_URL)
             ),
             null,
+            null,
             ViewModel\Meta::withLink(
                 new Link('Digest', $this->urlGenerator->generate('digests')),
                 $this->simpleDate($object, ['date' => 'published'] + $context)
-            ), LicenceUri::default()
+            ), null, LicenceUri::default()
         );
     }
 
