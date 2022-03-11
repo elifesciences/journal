@@ -19,10 +19,12 @@ final class ArticleControllerTest extends PageTestCase
 
         $crawler = $client->request('GET', $this->getUrl());
 
+        // @todo: Add test for breadcrumb including article title.
+
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertSame('Article title', $crawler->filter('.content-header__title')->text());
         $this->assertEmpty($crawler->filter('.content-header__institution_list'));
-        $this->assertSame('Research Article Jan 1, 2010', trim(preg_replace('!\s+!', ' ', $crawler->filter('.content-header .meta')->text())));
+        $this->assertSame('Jan 1, 2010', trim(preg_replace('!\s+!', ' ', $crawler->filter('.content-header .meta')->text())));
 
         $this->assertContains('Cite this article as: eLife 2010;1:e00001',
             preg_replace('!\s+!', ' ', $crawler->filter('.contextual-data__cite_wrapper')->text()));
@@ -1204,11 +1206,12 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertSame('Article title', $crawler->filter('.content-header__title')->text());
 
+        // @todo: Reintroduce test for comments.
+
         $this->assertSame(
             [
                 'Cited 1,234',
                 'Views 5,678',
-                'Annotations Open annotations. The current annotation count on this page is being calculated.',
             ],
             array_map(function (string $text) {
                 return trim(preg_replace('!\s+!', ' ', $text));
