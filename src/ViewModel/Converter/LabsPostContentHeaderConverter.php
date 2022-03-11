@@ -37,7 +37,7 @@ final class LabsPostContentHeaderConverter implements ViewModelConverter
             ViewModel\Meta::withLink(
                 new Link('Labs', $this->urlGenerator->generate('labs')),
                 $this->simpleDate($object, ['date' => 'published'] + $context)
-            ), LicenceUri::default()
+            ), null, LicenceUri::default()
         );
     }
 

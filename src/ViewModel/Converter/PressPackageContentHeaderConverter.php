@@ -42,7 +42,7 @@ final class PressPackageContentHeaderConverter implements ViewModelConverter
             Meta::withLink(
                 new Link('Press Pack', $this->urlGenerator->generate('press-packs')),
                 $this->simpleDate($object, ['date' => 'published'] + $context)
-            ), LicenceUri::default()
+            ), null, LicenceUri::default()
         );
     }
 
