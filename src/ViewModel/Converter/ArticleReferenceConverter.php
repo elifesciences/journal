@@ -16,11 +16,13 @@ final class ArticleReferenceConverter implements ViewModelConverter
      */
     public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
+        $origin = ['<i>eLife</i> <b>'.$object->getVolume().'</b>:'.$object->getElocationId()];
+
         $authors = $object->getAuthors()->notEmpty() ? [new ViewModel\ReferenceAuthorList($object->getAuthors()->map(function (AuthorEntry $author) {
             return ViewModel\Author::asText($author->toString());
         })->toArray(), $object->getPublishedDate()->format('Y'))] : [];
 
-        return ViewModel\Reference::withDoi($object->getFullTitle(), new ViewModel\Doi($object->getDoi()), null, null, [], $authors, []);
+        return ViewModel\Reference::withDoi($object->getFullTitle(), new ViewModel\Doi($object->getDoi()), null, null, $origin, $authors, []);
     }
 
     public function supports($object, string $viewModel = null, array $context = []) : bool
