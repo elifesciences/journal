@@ -548,6 +548,12 @@ services:
         tags:
           - name: view_model.converter
 
+    elife.journal.view_model.converter.article.reference:
+        class: eLife\Journal\ViewModel\Converter\ArticleReferenceConverter
+        public: false
+        tags:
+          - name: view_model.converter
+
     elife.journal.view_model.converter.article.teaser:
         class: eLife\Journal\ViewModel\Converter\ArticleTeaserConverter
         public: false
