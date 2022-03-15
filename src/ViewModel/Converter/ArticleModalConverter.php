@@ -3,6 +3,7 @@
 namespace eLife\Journal\ViewModel\Converter;
 
 use eLife\ApiSdk\Model\ArticleVersion;
+use eLife\ApiSdk\Model\Block\Paragraph;
 use eLife\Journal\Helper\CanConvertContent;
 use eLife\Patterns\PatternRenderer;
 use eLife\Patterns\ViewModel;
@@ -29,8 +30,7 @@ final class ArticleModalConverter implements ViewModelConverter
      */
     public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
-        var_dump('wtf');
-        if ('social' === ($context['type'] ?? 'social') && false) {
+        if ('social' === ($context['type'] ?? 'social')) {
             $body = [
                 ViewModel\TextField::textInput(
                     new ViewModel\FormLabel('Doi', true),
@@ -52,15 +52,24 @@ final class ArticleModalConverter implements ViewModelConverter
             ];
             return ViewModel\ModalWindow::small('Share this article', $this->patternRenderer->render(...$body), null, 'modalContentShare');
         } else {
+            $reference = $this->patternRenderer->render($this->convertTo($object, ViewModel\Reference::class));
+
+            $buttonCollection = [];
+
+            if ($context['clipboard'] ?? false) {
+                $buttonCollection[] = Button::clipboard('Copy to clipboard', $context['clipboard']);
+            }
+
             $body = [
-                $this->convertTo($object, ViewModel\Reference::class),
-                new ViewModel\ButtonCollection([
-                    Button::clipboard('Copy to clipboard', strip_tags($object->getFullTitle())),
-                    Button::link('Download BibTex', $this->urlGenerator->generate('article-bibtex', [$object]), Button::SIZE_MEDIUM, Button::STYLE_SECONDARY),
-                    Button::link('Download RIS', $this->urlGenerator->generate('article-ris', [$object]), Button::SIZE_MEDIUM, Button::STYLE_SECONDARY),
-                ]),
+                new ViewModel\ButtonCollection(
+                    array_merge(($context['clipboard'] ?? false) ? [Button::clipboard('Copy to clipboard', $context['clipboard'])] : [],
+                    [
+                        Button::link('Download BibTex', $this->urlGenerator->generate('article-bibtex', [$object]), Button::SIZE_MEDIUM, Button::STYLE_SECONDARY),
+                        Button::link('Download RIS', $this->urlGenerator->generate('article-ris', [$object]), Button::SIZE_MEDIUM, Button::STYLE_SECONDARY),
+                    ])
+                ),
             ];
-            return ViewModel\ModalWindow::create('Cite this article', $this->patternRenderer->render(...$body), null, 'modalContentCitations');
+            return ViewModel\ModalWindow::create('Cite this article', $reference.$this->patternRenderer->render(...$body), null, 'modalContentCitations');
         }
     }
 

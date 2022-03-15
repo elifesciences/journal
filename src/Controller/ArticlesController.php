@@ -927,7 +927,7 @@ final class ArticlesController extends Controller
             ->then(function (ArticleVersion $item) {
                 return [
                     $this->convertTo($item, ViewModel\ModalWindow::class),
-                    $this->convertTo($item, ViewModel\ModalWindow::class, ['type' => 'citation']),
+                    $this->convertTo($item, ViewModel\ModalWindow::class, ['type' => 'citation', 'clipboard' => $this->get('templating')->render('::article.cite.twig', ['item' => $item])]),
                 ];
             });
 
