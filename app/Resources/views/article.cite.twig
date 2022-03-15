@@ -1,6 +1,6 @@
 {% autoescape false %}
-{% for author in item.authors %}{% if author.preferredName is defined %}{% if not loop.first %}, {% endif %}{{ author.preferredName }}{% elseif author.indexName is defined %}{% if not loop.first %}, {% endif %}{{ author.indexName }}{% elseif author.name is defined %}{% if not loop.first %}, {% endif %}{{ author.name }}{% endif %}{% endfor %} ({{ item.publishedDate|date('Y', 'UTC') }})<br />
-{{ item.fullTitle }}<br />
-<i>eLife</i> <b>{{ item.volume }}</b>:{{ item.eLocationId }}<br />
+{% for author in item.authors %}{% if author.preferredName is defined %}{% if not loop.first %}, {% endif %}{{ author.preferredName }}{% elseif author.indexName is defined %}{% if not loop.first %}, {% endif %}{{ author.indexName }}{% elseif author.name is defined %}{% if not loop.first %}, {% endif %}{{ author.name }}{% endif %}{% endfor %} ({{ item.publishedDate|date('Y', 'UTC') }})
+{{ item.fullTitle|striptags }}
+eLife {{ item.volume }}:{{ item.eLocationId }}
 https://doi.org/{{ item.doi }}
 {% endautoescape %}
