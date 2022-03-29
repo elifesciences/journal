@@ -28,7 +28,7 @@ final class ArticleFiguresControllerTest extends PageTestCase
 
         $this->assertSame('4 figures, 1 video, 1 table and 1 additional file', trim($crawler->filter('.message-bar')->text()));
 
-        $figureTypes = $crawler->filter('.grid-column > section');
+        $figureTypes = $crawler->filter('.main-content-grid > section');
         $this->assertCount(5, $figureTypes);
 
         $this->assertSame('Figures', $figureTypes->eq(0)->filter('.article-section__header_text')->text());
@@ -115,7 +115,7 @@ final class ArticleFiguresControllerTest extends PageTestCase
 
         $this->assertSame('1 additional file', trim($crawler->filter('.message-bar')->text()));
 
-        $figureTypes = $crawler->filter('.grid-column > section');
+        $figureTypes = $crawler->filter('.main-content-grid > section');
         $this->assertCount(2, $figureTypes);
 
         $this->assertSame('Additional files', $figureTypes->eq(0)->filter('.article-section__header_text')->text());
