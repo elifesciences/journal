@@ -30,12 +30,12 @@
             },
             "type": "library",
             "autoload": {
-                "psr-4": {
-                    "Assert\\": "lib/Assert"
-                },
                 "files": [
                     "lib/Assert/functions.php"
-                ]
+                ],
+                "psr-4": {
+                    "Assert\\": "lib/Assert"
+                }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -81,11 +81,6 @@
                 "php": ">=5.3.2"
             },
             "type": "symfony-bundle",
-            "extra": {
-                "patches_applied": {
-                    "Remove superfluous argument": "https://github.com/bobthecow/BobthecowMustacheBundle/pull/9.patch"
-                }
-            },
             "autoload": {
                 "psr-0": {
                     "Bobthecow\\Bundle\\MustacheBundle": ""
@@ -111,7 +106,12 @@
                 "symfony",
                 "templating"
             ],
-            "time": "2014-07-10T12:09:42+00:00"
+            "time": "2014-07-10T12:09:42+00:00",
+            "extra": {
+                "patches_applied": {
+                    "Remove superfluous argument": "https://github.com/bobthecow/BobthecowMustacheBundle/pull/9.patch"
+                }
+            }
         },
         {
             "name": "cocur/slugify",
@@ -151,11 +151,6 @@
                 "zendframework/zend-view": "~2.2"
             },
             "type": "library",
-            "extra": {
-                "patches_applied": {
-                    "strip_tags": "https://github.com/cocur/slugify/pull/201.patch"
-                }
-            },
             "autoload": {
                 "psr-4": {
                     "Cocur\\Slugify\\": "src"
@@ -181,7 +176,12 @@
                 "slug",
                 "slugify"
             ],
-            "time": "2018-01-22T09:00:48+00:00"
+            "time": "2018-01-22T09:00:48+00:00",
+            "extra": {
+                "patches_applied": {
+                    "strip_tags": "https://github.com/cocur/slugify/pull/201.patch"
+                }
+            }
         },
         {
             "name": "composer/ca-bundle",
@@ -236,6 +236,16 @@
                 "certificate",
                 "ssl",
                 "tls"
+            ],
+            "funding": [
+                {
+                    "url": "https://packagist.com",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/composer/composer",
+                    "type": "tidelift"
+                }
             ],
             "time": "2020-04-08T08:27:21+00:00"
         },
@@ -1440,18 +1450,11 @@
                     "eLife\\Patterns\\": "./src"
                 }
             },
-            "autoload-dev": {
-                "psr-4": {
-                    "tests\\eLife\\Patterns\\": "./tests/src"
-                }
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
             "description": "eLife patterns",
-            "support": {
-                "source": "https://github.com/elifesciences/patterns-php/tree/master"
-            },
             "time": "2022-02-22T18:32:05+00:00"
         },
         {
@@ -1810,12 +1813,12 @@
                 }
             },
             "autoload": {
-                "psr-4": {
-                    "GuzzleHttp\\": "src/"
-                },
                 "files": [
                     "src/functions_include.php"
-                ]
+                ],
+                "psr-4": {
+                    "GuzzleHttp\\": "src/"
+                }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -1923,16 +1926,16 @@
         },
         {
             "name": "guzzlehttp/psr7",
-            "version": "1.8.3",
+            "version": "1.8.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/psr7.git",
-                "reference": "1afdd860a2566ed3c2b0b4a3de6e23434a79ec85"
+                "reference": "902db15a551a4a415e732b622282e21ce1b508b4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/psr7/zipball/1afdd860a2566ed3c2b0b4a3de6e23434a79ec85",
-                "reference": "1afdd860a2566ed3c2b0b4a3de6e23434a79ec85",
+                "url": "https://api.github.com/repos/guzzle/psr7/zipball/902db15a551a4a415e732b622282e21ce1b508b4",
+                "reference": "902db15a551a4a415e732b622282e21ce1b508b4",
                 "shasum": ""
             },
             "require": {
@@ -2025,7 +2028,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-10-05T13:56:00+00:00"
+            "time": "2022-03-20T13:44:44+00:00"
         },
         {
             "name": "isometriks/spam-bundle",
@@ -2042,12 +2045,6 @@
                 "shasum": ""
             },
             "type": "library",
-            "extra": {
-                "patches_applied": {
-                    "Add field label": "https://github.com/isometriks/IsometriksSpamBundle/pull/9.patch",
-                    "Use EmailType": "https://github.com/isometriks/IsometriksSpamBundle/pull/17.patch"
-                }
-            },
             "autoload": {
                 "psr-4": {
                     "Isometriks\\Bundle\\SpamBundle\\": ""
@@ -2071,7 +2068,13 @@
                 "spam",
                 "symfony3"
             ],
-            "time": "2016-09-23T18:48:09+00:00"
+            "time": "2016-09-23T18:48:09+00:00",
+            "extra": {
+                "patches_applied": {
+                    "Add field label": "https://github.com/isometriks/IsometriksSpamBundle/pull/9.patch",
+                    "Use EmailType": "https://github.com/isometriks/IsometriksSpamBundle/pull/17.patch"
+                }
+            }
         },
         {
             "name": "kevinrob/guzzle-cache-middleware",
@@ -2572,6 +2575,12 @@
                 "pagination",
                 "paginator",
                 "paging"
+            ],
+            "funding": [
+                {
+                    "url": "https://github.com/mbabker",
+                    "type": "github"
+                }
             ],
             "time": "2017-03-20T13:46:15+00:00"
         },
@@ -3291,12 +3300,12 @@
                 }
             },
             "autoload": {
-                "psr-4": {
-                    "Symfony\\Polyfill\\Iconv\\": ""
-                },
                 "files": [
                     "bootstrap.php"
-                ]
+                ],
+                "psr-4": {
+                    "Symfony\\Polyfill\\Iconv\\": ""
+                }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -3370,12 +3379,12 @@
                 }
             },
             "autoload": {
-                "psr-4": {
-                    "Symfony\\Polyfill\\Intl\\Idn\\": ""
-                },
                 "files": [
                     "bootstrap.php"
-                ]
+                ],
+                "psr-4": {
+                    "Symfony\\Polyfill\\Intl\\Idn\\": ""
+                }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -3452,12 +3461,12 @@
                 }
             },
             "autoload": {
-                "psr-4": {
-                    "Symfony\\Polyfill\\Intl\\Normalizer\\": ""
-                },
                 "files": [
                     "bootstrap.php"
                 ],
+                "psr-4": {
+                    "Symfony\\Polyfill\\Intl\\Normalizer\\": ""
+                },
                 "classmap": [
                     "Resources/stubs"
                 ]
@@ -3530,12 +3539,12 @@
                 }
             },
             "autoload": {
-                "psr-4": {
-                    "Symfony\\Polyfill\\Php72\\": ""
-                },
                 "files": [
                     "bootstrap.php"
-                ]
+                ],
+                "psr-4": {
+                    "Symfony\\Polyfill\\Php72\\": ""
+                }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -4599,12 +4608,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-validator-php.git",
-                "reference": "0864db339c40bb77da11bb84b1e6394a2cd5e31b"
+                "reference": "b70d55f4b52adeefc83830f92fe571bbaa510461"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-validator-php/zipball/0864db339c40bb77da11bb84b1e6394a2cd5e31b",
-                "reference": "0864db339c40bb77da11bb84b1e6394a2cd5e31b",
+                "url": "https://api.github.com/repos/elifesciences/api-validator-php/zipball/b70d55f4b52adeefc83830f92fe571bbaa510461",
+                "reference": "b70d55f4b52adeefc83830f92fe571bbaa510461",
                 "shasum": ""
             },
             "require": {
@@ -4636,7 +4645,7 @@
                 "MIT"
             ],
             "description": "eLife Sciences API validator",
-            "time": "2021-02-16T11:06:30+00:00"
+            "time": "2021-03-09T20:14:39+00:00"
         },
         {
             "name": "instaclick/php-webdriver",
@@ -4982,12 +4991,12 @@
             },
             "type": "library",
             "autoload": {
-                "psr-4": {
-                    "DeepCopy\\": "src/DeepCopy/"
-                },
                 "files": [
                     "src/DeepCopy/deep_copy.php"
-                ]
+                ],
+                "psr-4": {
+                    "DeepCopy\\": "src/DeepCopy/"
+                }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
