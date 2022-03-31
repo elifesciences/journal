@@ -26,7 +26,7 @@ final class ArticleControllerTest extends PageTestCase
 
         $this->assertContains('Cite this article as: eLife 2010;1:e00001',
             preg_replace('!\s+!', ' ', $crawler->filter('.contextual-data__cite_wrapper')->text()));
-        $this->assertContains('doi: 10.7554/eLife.00001', $crawler->filter('.contextual-data__cite_wrapper')->text());
+        $this->assertContains('doi: 10.7554/eLife.00001', $this->cleanWhiteSpace($crawler->filter('.contextual-data__cite_wrapper')->text()));
     }
 
     /**
@@ -2469,13 +2469,13 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertSame('Abstract text',
             $crawler->filter('.main-content-grid > section:nth-of-type(1) > div > p')->text());
         $this->assertSame('https://doi.org/10.7554/eLife.09560.001',
-            $crawler->filter('.main-content-grid > section:nth-of-type(1) > div > .doi')->text());
+            $this->cleanWhiteSpace($crawler->filter('.main-content-grid > section:nth-of-type(1) > div > .doi')->text()));
         $this->assertSame('Editor\'s evaluation',
             $crawler->filter('.main-content-grid > section:nth-of-type(2) > header > h2')->text());
         $this->assertSame('Editor\'s evaluation text',
             $crawler->filter('.main-content-grid > section:nth-of-type(2) > div > p')->text());
         $this->assertSame('https://doi.org/10.7554/eLife.09560.sa0',
-            $crawler->filter('.main-content-grid > section:nth-of-type(2) > div > .doi')->text());
+            $this->cleanWhiteSpace($crawler->filter('.main-content-grid > section:nth-of-type(2) > div > .doi')->text()));
         $this->assertSame(
             [
                 [
@@ -2498,7 +2498,7 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertSame('Digest text',
             $crawler->filter('.main-content-grid > section:nth-of-type(3) > div > p')->text());
         $this->assertSame('https://doi.org/10.7554/eLife.09560.002',
-            $crawler->filter('.main-content-grid > section:nth-of-type(3) > div > .doi')->text());
+            $this->cleanWhiteSpace($crawler->filter('.main-content-grid > section:nth-of-type(3) > div > .doi')->text()));
         $this->assertSame('Body title',
             $crawler->filter('.main-content-grid > section:nth-of-type(4) > header > h2')->text());
 

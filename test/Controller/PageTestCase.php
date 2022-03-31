@@ -108,6 +108,11 @@ abstract class PageTestCase extends WebTestCase
         return $client;
     }
 
+    protected function cleanWhiteSpace(string $string) : string
+    {
+        return preg_replace("/\s+/i", ' ', trim($string));
+    }
+
     abstract protected function getUrl() : string;
 
     protected static function onCreateClient(Client $client)
