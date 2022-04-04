@@ -70,20 +70,29 @@ final class ArticleDownloadLinksListConverter implements ViewModelConverter
         }
 
         if ($downloads) {
-            $groups[mixed_visibility_text('', 'Downloads', '(link to download the article as '.Humanizer::prettyList(...$types).')')] = $downloads;
+            $groups[] = new ViewModel\ArticleDownloadLinksGroup(
+                mixed_visibility_text('', 'Downloads', '(link to download the article as '.Humanizer::prettyList(...$types).')'),
+                $downloads
+            );
         }
 
         if ($object->getPublishedDate()) {
-            $groups[mixed_visibility_text('', 'Download citations', '(links to download the citations from this article in formats compatible with various reference manager tools)')] = [
-                new ViewModel\ArticleDownloadLink(new ViewModel\Link('BibTeX', $this->urlGenerator->generate('article-bibtex', [$object]))),
-                new ViewModel\ArticleDownloadLink(new ViewModel\Link('RIS', $this->urlGenerator->generate('article-ris', [$object]))),
-            ];
+            $groups[] = new ViewModel\ArticleDownloadLinksGroup(
+                mixed_visibility_text('', 'Download citations', '(links to download the citations from this article in formats compatible with various reference manager tools)'),
+                [
+                    new ViewModel\ArticleDownloadLink(new ViewModel\Link('BibTeX', $this->urlGenerator->generate('article-bibtex', [$object]))),
+                    new ViewModel\ArticleDownloadLink(new ViewModel\Link('RIS', $this->urlGenerator->generate('article-ris', [$object]))),
+                ]
+            );
         }
 
-        $groups[mixed_visibility_text('', 'Open citations', '(links to open the citations from this article in various online reference manager services)')] = [
-            new ViewModel\ArticleDownloadLink(new ViewModel\Link('Mendeley', 'https://www.mendeley.com/import?doi='.$object->getDoi())),
-            new ViewModel\ArticleDownloadLink(new ViewModel\Link('ReadCube', 'https://www.readcube.com/articles/'.$object->getDoi())),
-        ];
+        $groups[] = new ViewModel\ArticleDownloadLinksGroup(
+            mixed_visibility_text('', 'Open citations', '(links to open the citations from this article in various online reference manager services)'),
+            [
+                new ViewModel\ArticleDownloadLink(new ViewModel\Link('BibTeX', $this->urlGenerator->generate('article-bibtex', [$object]))),
+                new ViewModel\ArticleDownloadLink(new ViewModel\Link('RIS', $this->urlGenerator->generate('article-ris', [$object]))),
+            ]
+        );
 
         return new ViewModel\ArticleDownloadLinksList('downloads', 'A two-part list of links to download the article, or parts of the article, in various formats.', $groups);
     }
