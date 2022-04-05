@@ -508,6 +508,8 @@ services:
         class: eLife\Journal\ViewModel\Converter\ArticleDownloadLinksListConverter
         public: false
         arguments:
+          - '@elife.journal.view_model.converter'
+          - '@elife.patterns.pattern_renderer'
           - '@router'
           - '@elife.journal.helper.download_link_uri_generator'
         tags:

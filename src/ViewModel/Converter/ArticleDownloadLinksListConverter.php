@@ -4,20 +4,28 @@ namespace eLife\Journal\ViewModel\Converter;
 
 use eLife\ApiSdk\Model\ArticleVersion;
 use eLife\ApiSdk\Model\ArticleVoR;
+use eLife\Journal\Helper\CanConvertContent;
 use eLife\Journal\Helper\DownloadLink;
 use eLife\Journal\Helper\DownloadLinkUriGenerator;
 use eLife\Journal\Helper\Humanizer;
+use eLife\Patterns\PatternRenderer;
 use eLife\Patterns\ViewModel;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use function eLife\Patterns\mixed_visibility_text;
 
 final class ArticleDownloadLinksListConverter implements ViewModelConverter
 {
+    use CanConvertContent;
+
+    private $viewModelConverter;
+    private $patternRenderer;
     private $urlGenerator;
     private $downloadLinkUriGenerator;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator, DownloadLinkUriGenerator $downloadLinkUriGenerator)
+    public function __construct(ViewModelConverter $viewModelConverter, PatternRenderer $patternRenderer, UrlGeneratorInterface $urlGenerator, DownloadLinkUriGenerator $downloadLinkUriGenerator)
     {
+        $this->viewModelConverter = $viewModelConverter;
+        $this->patternRenderer = $patternRenderer;
         $this->urlGenerator = $urlGenerator;
         $this->downloadLinkUriGenerator = $downloadLinkUriGenerator;
     }
@@ -76,16 +84,6 @@ final class ArticleDownloadLinksListConverter implements ViewModelConverter
             );
         }
 
-        if ($object->getPublishedDate()) {
-            $groups[] = new ViewModel\ArticleDownloadLinksGroup(
-                mixed_visibility_text('', 'Download citations', '(links to download the citations from this article in formats compatible with various reference manager tools)'),
-                [
-                    new ViewModel\ArticleDownloadLink(new ViewModel\Link('BibTeX', $this->urlGenerator->generate('article-bibtex', [$object]))),
-                    new ViewModel\ArticleDownloadLink(new ViewModel\Link('RIS', $this->urlGenerator->generate('article-ris', [$object]))),
-                ]
-            );
-        }
-
         $groups[] = new ViewModel\ArticleDownloadLinksGroup(
             mixed_visibility_text('', 'Open citations', '(links to open the citations from this article in various online reference manager services)'),
             [
@@ -94,11 +92,27 @@ final class ArticleDownloadLinksListConverter implements ViewModelConverter
             ]
         );
 
+        if ($object->getPublishedDate()) {
+            $groups[] = new ViewModel\ArticleDownloadLinksGroup(
+                mixed_visibility_text('', 'Download citations', '(links to download the citations from this article in formats compatible with various reference manager tools)'),
+                [
+                    new ViewModel\ArticleDownloadLink(new ViewModel\Link('BibTeX', $this->urlGenerator->generate('article-bibtex', [$object]))),
+                    new ViewModel\ArticleDownloadLink(new ViewModel\Link('RIS', $this->urlGenerator->generate('article-ris', [$object]))),
+                ],
+                $this->patternRenderer->render($this->convertTo($object, ViewModel\Reference::class))
+            );
+        }
+
         return new ViewModel\ArticleDownloadLinksList('downloads', 'A two-part list of links to download the article, or parts of the article, in various formats.', $groups);
     }
 
     public function supports($object, string $viewModel = null, array $context = []) : bool
     {
         return $object instanceof ArticleVersion && ViewModel\ArticleDownloadLinksList::class === $viewModel;
+    }
+
+    protected function getViewModelConverter() : ViewModelConverter
+    {
+        return $this->viewModelConverter;
     }
 }
