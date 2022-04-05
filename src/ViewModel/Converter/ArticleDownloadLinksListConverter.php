@@ -89,8 +89,8 @@ final class ArticleDownloadLinksListConverter implements ViewModelConverter
         $groups[] = new ViewModel\ArticleDownloadLinksGroup(
             mixed_visibility_text('', 'Open citations', '(links to open the citations from this article in various online reference manager services)'),
             [
-                new ViewModel\ArticleDownloadLink(new ViewModel\Link('BibTeX', $this->urlGenerator->generate('article-bibtex', [$object]))),
-                new ViewModel\ArticleDownloadLink(new ViewModel\Link('RIS', $this->urlGenerator->generate('article-ris', [$object]))),
+                new ViewModel\ArticleDownloadLink(new ViewModel\Link('Mendeley', 'https://www.mendeley.com/import?doi='.$object->getDoi())),
+                new ViewModel\ArticleDownloadLink(new ViewModel\Link('ReadCube', 'https://www.readcube.com/articles/'.$object->getDoi())),
             ]
         );
 
