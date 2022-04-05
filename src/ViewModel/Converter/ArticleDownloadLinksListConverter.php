@@ -99,7 +99,9 @@ final class ArticleDownloadLinksListConverter implements ViewModelConverter
                     new ViewModel\ArticleDownloadLink(new ViewModel\Link('BibTeX', $this->urlGenerator->generate('article-bibtex', [$object]))),
                     new ViewModel\ArticleDownloadLink(new ViewModel\Link('RIS', $this->urlGenerator->generate('article-ris', [$object]))),
                 ],
-                $this->patternRenderer->render($this->convertTo($object, ViewModel\Reference::class))
+                $this->patternRenderer->render($this->convertTo($object, ViewModel\Reference::class)),
+                'cite-this-article',
+                true
             );
         }
 
