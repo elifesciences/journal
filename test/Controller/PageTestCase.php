@@ -3,6 +3,7 @@
 namespace test\eLife\Journal\Controller;
 
 use Symfony\Component\BrowserKit\Client;
+use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\HttpFoundation\Response;
 use test\eLife\Journal\WebTestCase;
 
@@ -109,6 +110,19 @@ abstract class PageTestCase extends WebTestCase
     }
 
     abstract protected function getUrl() : string;
+
+    protected function crawlerText(Crawler $crawler, $normalize = true) : string
+    {
+        $text = $crawler->text();
+
+        if ($normalize) {
+            // See: https://github.com/symfony/symfony/blob/6.1/src/Symfony/Component/DomCrawler/Crawler.php#L558
+            // Not introduced to Crawler::text until Symfony 4.4
+            $text = trim(preg_replace('/(?:\s{2,}+|[^\S ])/', ' ', $text));
+        }
+
+        return $text;
+    }
 
     protected static function onCreateClient(Client $client)
     {
