@@ -14,7 +14,7 @@ final class AboutControllerTest extends PageTestCase
         $crawler = $client->request('GET', $this->getUrl());
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
-        $this->assertSame('eLife: Accelerating discovery', $crawler->filter('.content-header__title')->text());
+        $this->assertSame('eLife: evolution of publishing', $crawler->filter('.content-header__title')->text());
     }
 
     /**

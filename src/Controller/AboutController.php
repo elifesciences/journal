@@ -43,18 +43,19 @@ final class AboutController extends Controller
 
         $arguments['title'] = 'About';
 
-        $arguments['contentHeader'] = new ContentHeader('eLife: Accelerating discovery', null,
-            'eLife is an initiative from research funders to transform research communication through improvements to science publishing, technology and research culture.');
+        $arguments['contentHeader'] = new ContentHeader('eLife: evolution of publishing', null,
+            'Independent, not-for-profit and supported by funders, eLife improves the way science is practised and shared.');
 
         $arguments['body'] = [
-            new Paragraph('eLife is a non-profit organisation created by funders and led by researchers. Our mission is to accelerate discovery by operating a platform for research communication that encourages and recognises the most responsible behaviours.'),
-            new Paragraph('We work across three major areas:'),
+            new Paragraph('eLife transforms research communication to create a future where a diverse, global community of scientists produces trusted and open results for the benefit of all.'),
+            new Paragraph('From the research we publish, to the tools we build, to the people we work with, we’ve earned a reputation for quality, integrity and the flexibility to bring about real change.'),
+            new Paragraph('We’re committed to a “publish, then review” model for publishing and plan to achieve this transition by:'),
             Listing::ordered([
-                'Publishing – eLife reviews selected preprints in all areas of biology and medicine, while exploring new ways to improve how research is assessed and published.',
-                'Technology – eLife invests in open-source technology innovation to modernise the infrastructure for science publishing and improve online tools for sharing, using and interacting with new results.',
-                'Research culture – eLife is committed to working with the worldwide research community to promote responsible behaviours in research.',
+                'Operating a journal for biology and medicine that maintains the highest standards, only reviews preprints and carries influence in the community',
+                'Building a <a href="https://sciety.org/">platform</a> to support the ‘publish, review, curate’ model that is open-source, readily adaptable and addresses community needs',
+                'Working with the community of scientists and content curators on new ways to improve the whole research communication process in the ‘publish, review, curate’ world',
             ], 'number'),
-            new Paragraph('eLife receives financial support and strategic guidance from the <a href="https://https://www.hhmi.org/">Howard Hughes Medical Institute</a>, the <a href="https://kaw.wallenberg.org/en">Knut and Alice Wallenberg Foundation</a>, the <a href="https://www.mpg.de/en">Max Planck Society</a> and <a href="https://wellcome.ac.uk/">Wellcome</a>. eLife Sciences Publications Ltd is publisher of the open-access eLife journal (ISSN 2050-084X).'),
+            new Paragraph('eLife is a non-profit organisation that receives financial support and strategic guidance from the <a href="https://https//www.hhmi.org/">Howard Hughes Medical Institute</a>, the <a href="https://kaw.wallenberg.org/en">Knut and Alice Wallenberg Foundation</a>, the <a href="https://www.mpg.de/en">Max Planck Society</a> and <a href="https://wellcome.ac.uk/">Wellcome</a>. eLife Sciences Publications Ltd is publisher of the open-access eLife journal (ISSN 2050-084X).'),
             ArticleSection::basic('Related links', 2,
                 $this->render(Listing::unordered([
                     '<a href="'.$this->get('router')->generate('inside-elife').'">Inside eLife</a>',
