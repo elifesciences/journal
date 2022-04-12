@@ -1,24 +1,43 @@
 {# Only the first content wrapper should use css .wrapper--content. #}
 <div class="wrapper{% if not isSubsequent ?? false %} wrapper--content{% endif %}" id="content">
 
-    {% set navigation = (block('navigation') ?? '')|trim %}
-    {% set main = block('main') %}
-    {% set secondary = (block('secondary') ?? '')|trim %}
+    <div class="grid">
 
-    <div class="content-header-grid">
+        {% set navigation = (block('navigation') ?? '')|trim %}
+        {% set main = block('main') %}
+        {% set secondary = (block('secondary') ?? '')|trim %}
 
         {% if navigation|length %}
 
-            {{ navigation|raw }}
+            <div class="grid__item one-whole x-large--two-twelfths">
+
+                {{ navigation|raw }}
+
+            </div>
 
         {% endif %}
 
-        <div class="main-content-grid">
+        <div class="content-container grid__item one-whole
+
+            {% if secondary|length %}
+                large--eight-twelfths x-large--seven-twelfths
+                {% if not navigation|length %}push--x-large--two-twelfths{% endif %}
+            {% else %}
+                large--ten-twelfths push--large--one-twelfth x-large--eight-twelfths
+                {% if navigation|length %}push--x-large--zero{% else %}push--x-large--two-twelfths{% endif %}
+            {% endif %}
+            grid-column">
+
             {{ main|raw }}
+
         </div>
 
         {% if secondary|length %}
-            <div class="secondary-column-grid">
+
+            <div class="grid__item one-whole
+
+                large--four-twelfths x-large--three-twelfths
+                {% if not navigation|length %}push--x-large--two-twelfths{% endif %} grid-secondary-column">
 
                 {{ secondary|raw }}
 
