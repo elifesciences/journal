@@ -1065,7 +1065,7 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertCount(0, $crawler->filter('.content-header__author_list_item'));
         $this->assertCount(0, $crawler->filter('.content-header__institution_list_item'));
 
-        $articleInfo = $crawler->filter('.main-content-grid > section:nth-of-type(2)');
+        $articleInfo = $crawler->filter('.grid-column > section:nth-of-type(2)');
         $this->assertSame('Article information', $articleInfo->filter('header > h2')->text());
     }
 
@@ -1109,7 +1109,7 @@ final class ArticleControllerTest extends PageTestCase
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
 
-        $sections = $crawler->filter('.main-content-grid > .article-section:first-child > .article-section__body > .article-section');
+        $sections = $crawler->filter('.grid-column > .article-section:first-child > .article-section__body > .article-section');
 
         $this->assertContains('Request a detailed protocol', $sections->eq(0)->filter('.article-section__header_link')->text());
         $this->assertEmpty($sections->eq(1)->filter('.article-section__header_link'));
@@ -1215,7 +1215,7 @@ final class ArticleControllerTest extends PageTestCase
             }, $crawler->filter('.contextual-data__item')->extract('_text'))
         );
 
-        $metrics = $crawler->filter('.main-content-grid > section:nth-of-type(3)');
+        $metrics = $crawler->filter('.grid-column > section:nth-of-type(3)');
         $this->assertSame('Metrics', $metrics->filter('header > h2')->text());
         $this->assertContains('5,678', $metrics->filter('.statistic:contains("Page views") .statistic__value')->text());
         $this->assertCount(1, $metrics->filter('[data-behaviour="Metrics"][data-type="article"][data-id="00001"][data-metric="page-views"]'));
@@ -1339,7 +1339,7 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertContains('Accepted manuscript, PDF only. Full online edition to follow.',
             array_map('trim', $crawler->filter('.info-bar')->extract(['_text'])));
         $this->assertEmpty($crawler->filter('.view-selector'));
-        $articleInfo = $crawler->filter('.main-content-grid > section:nth-of-type(1)');
+        $articleInfo = $crawler->filter('.grid-column > section:nth-of-type(1)');
         $this->assertSame('Article and author information',
             $articleInfo->filter('header > h2')->text());
 
@@ -1347,7 +1347,7 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertCount(1, $authorDetails);
         $this->assertSame('Author One', $authorDetails->eq(0)->filter('.author-details__name')->text());
 
-        $articleInfo = $crawler->filter('.main-content-grid > section:nth-of-type(1) > div > section');
+        $articleInfo = $crawler->filter('.grid-column > section:nth-of-type(1) > div > section');
 
         $reviewers = $articleInfo->eq(0);
         $this->assertSame('Reviewer', $reviewers->filter('header > h3')->text());
@@ -1362,9 +1362,9 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertContains('© 2012, Author One', $copyright->filter('div')->text());
         $this->assertContains('Copyright statement.', $copyright->filter('div')->text());
 
-        $this->assertSame('Download links', $crawler->filter('.main-content-grid > section:nth-of-type(2) .article-section__header_text')->text());
+        $this->assertSame('Download links', $crawler->filter('.grid-column > section:nth-of-type(2) .article-section__header_text')->text());
 
-        $this->assertSame('Categories and tags', $crawler->filter('.main-content-grid > section:nth-of-type(3) .article-meta__group_title')->text());
+        $this->assertSame('Categories and tags', $crawler->filter('.grid-column > section:nth-of-type(3) .article-meta__group_title')->text());
     }
 
     /**
@@ -2465,17 +2465,17 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertSame('Title prefix: Article title', $crawler->filter('.content-header__title')->text());
 
         $this->assertSame('Abstract',
-            $crawler->filter('.main-content-grid > section:nth-of-type(1) > header > h2')->text());
+            $crawler->filter('.grid-column > section:nth-of-type(1) > header > h2')->text());
         $this->assertSame('Abstract text',
-            $crawler->filter('.main-content-grid > section:nth-of-type(1) > div > p')->text());
+            $crawler->filter('.grid-column > section:nth-of-type(1) > div > p')->text());
         $this->assertSame('https://doi.org/10.7554/eLife.09560.001',
-            $this->crawlerText($crawler->filter('.main-content-grid > section:nth-of-type(1) > div > .doi')));
+            $this->crawlerText($crawler->filter('.grid-column > section:nth-of-type(1) > div > .doi')));
         $this->assertSame('Editor\'s evaluation',
-            $crawler->filter('.main-content-grid > section:nth-of-type(2) > header > h2')->text());
+            $crawler->filter('.grid-column > section:nth-of-type(2) > header > h2')->text());
         $this->assertSame('Editor\'s evaluation text',
-            $crawler->filter('.main-content-grid > section:nth-of-type(2) > div > p')->text());
+            $crawler->filter('.grid-column > section:nth-of-type(2) > div > p')->text());
         $this->assertSame('https://doi.org/10.7554/eLife.09560.sa0',
-            $this->crawlerText($crawler->filter('.main-content-grid > section:nth-of-type(2) > div > .doi')));
+            $this->crawlerText($crawler->filter('.grid-column > section:nth-of-type(2) > div > .doi')));
         $this->assertSame(
             [
                 [
@@ -2491,18 +2491,18 @@ final class ArticleControllerTest extends PageTestCase
                     '/about/peer-review',
                 ],
             ],
-            $crawler->filter('.main-content-grid > section:nth-of-type(2) > div .article-section__related_link')->extract(['_text', 'href'])
+            $crawler->filter('.grid-column > section:nth-of-type(2) > div .article-section__related_link')->extract(['_text', 'href'])
         );
         $this->assertSame('eLife digest',
-            $crawler->filter('.main-content-grid > section:nth-of-type(3) > header > h2')->text());
+            $crawler->filter('.grid-column > section:nth-of-type(3) > header > h2')->text());
         $this->assertSame('Digest text',
-            $crawler->filter('.main-content-grid > section:nth-of-type(3) > div > p')->text());
+            $crawler->filter('.grid-column > section:nth-of-type(3) > div > p')->text());
         $this->assertSame('https://doi.org/10.7554/eLife.09560.002',
-            $this->crawlerText($crawler->filter('.main-content-grid > section:nth-of-type(3) > div > .doi')));
+            $this->crawlerText($crawler->filter('.grid-column > section:nth-of-type(3) > div > .doi')));
         $this->assertSame('Body title',
-            $crawler->filter('.main-content-grid > section:nth-of-type(4) > header > h2')->text());
+            $crawler->filter('.grid-column > section:nth-of-type(4) > header > h2')->text());
 
-        $body = $crawler->filter('.main-content-grid > section:nth-of-type(4) > div')->children();
+        $body = $crawler->filter('.grid-column > section:nth-of-type(4) > div')->children();
         $this->assertCount(2, $body);
 
         $this->assertSame('Body text Image 1 supplement 1', $body->eq(0)->text());
@@ -2510,11 +2510,11 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertSame('Image 1 label with 1 supplement see all', trim($body->eq(1)->filter('.asset-viewer-inline__header_text')->text()));
         $this->assertSame('/articles/00001/figures#image1', $body->eq(1)->filter('.asset-viewer-inline__header_link')->attr('href'));
 
-        $appendix = $crawler->filter('.main-content-grid > section:nth-of-type(5)');
+        $appendix = $crawler->filter('.grid-column > section:nth-of-type(5)');
         $this->assertSame('Appendix 1', $appendix->filter('header > h2')->text());
         $this->assertSame('Appendix title', $appendix->filter('div > section > header > h3')->text());
         $this->assertSame('Appendix text', $appendix->filter('div > p')->text());
-        $dataAvailability = $crawler->filter('.main-content-grid > section:nth-of-type(6)');
+        $dataAvailability = $crawler->filter('.grid-column > section:nth-of-type(6)');
         $this->assertSame('Data availability',
             $dataAvailability->filter('header > h2')->text());
         $data = $dataAvailability->filter('.article-section__body')->children();
@@ -2523,7 +2523,7 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertSame('Data set 1', trim($data->eq(2)->filter('.reference__title')->text()));
         $this->assertSame('The following previously published data sets were used', trim($data->eq(3)->text()));
         $this->assertSame('Data set 2', trim($data->eq(4)->filter('.reference__title')->text()));
-        $references = $crawler->filter('.main-content-grid > section:nth-of-type(7)');
+        $references = $crawler->filter('.grid-column > section:nth-of-type(7)');
         $this->assertSame('References',
             $references->filter('header > h2')->text());
         $this->assertSame('Book reference',
@@ -2582,27 +2582,27 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertEmpty($references->filter('div > ol > li:nth-of-type(14) .reference__label'));
         $this->assertSame('Decision letter', $crawler->filter('#decision-letter-id h2')->text());
         $this->assertSame('Decision letter',
-            $crawler->filter('.main-content-grid > section:nth-of-type(8) > header > h2')->text());
-        $this->assertCount(4, $crawler->filter('.main-content-grid > section:nth-of-type(8) > div .profile-snippet__name'));
+            $crawler->filter('.grid-column > section:nth-of-type(8) > header > h2')->text());
+        $this->assertCount(4, $crawler->filter('.grid-column > section:nth-of-type(8) > div .profile-snippet__name'));
         $this->assertSame('Reviewer 1',
-            $crawler->filter('.main-content-grid > section:nth-of-type(8) > div .profile-snippet__name')->eq(0)->text());
+            $crawler->filter('.grid-column > section:nth-of-type(8) > div .profile-snippet__name')->eq(0)->text());
         $this->assertSame('Reviewing Editor 1',
-            $crawler->filter('.main-content-grid > section:nth-of-type(8) > div .profile-snippet__name')->eq(1)->text());
+            $crawler->filter('.grid-column > section:nth-of-type(8) > div .profile-snippet__name')->eq(1)->text());
         $this->assertSame('Senior Editor 1',
-            $crawler->filter('.main-content-grid > section:nth-of-type(8) > div .profile-snippet__name')->eq(2)->text());
+            $crawler->filter('.grid-column > section:nth-of-type(8) > div .profile-snippet__name')->eq(2)->text());
         $this->assertSame('Reviewer 2',
-            $crawler->filter('.main-content-grid > section:nth-of-type(8) > div .profile-snippet__name')->eq(3)->text());
+            $crawler->filter('.grid-column > section:nth-of-type(8) > div .profile-snippet__name')->eq(3)->text());
         $this->assertSame('Decision letter description',
-            $crawler->filter('.main-content-grid > section:nth-of-type(8) > div .decision-letter-header__main_text > p')->text());
+            $crawler->filter('.grid-column > section:nth-of-type(8) > div .decision-letter-header__main_text > p')->text());
         $this->assertSame('Decision letter text',
-            $crawler->filter('.main-content-grid > section:nth-of-type(8) > div > p')->text());
+            $crawler->filter('.grid-column > section:nth-of-type(8) > div > p')->text());
         $this->assertSame('Author response', $crawler->filter('#author-response-id h2')->text());
         $this->assertSame('Author response',
-            $crawler->filter('.main-content-grid > section:nth-of-type(9) > header > h2')->text());
+            $crawler->filter('.grid-column > section:nth-of-type(9) > header > h2')->text());
         $this->assertSame('Author response text',
-            $crawler->filter('.main-content-grid > section:nth-of-type(9) > div > p')->text());
+            $crawler->filter('.grid-column > section:nth-of-type(9) > div > p')->text());
 
-        $articleInfo = $crawler->filter('.main-content-grid > section:nth-of-type(10)');
+        $articleInfo = $crawler->filter('.grid-column > section:nth-of-type(10)');
         $this->assertSame('Article and author information',
             $articleInfo->filter('header > h2')->text());
 
@@ -2611,7 +2611,7 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertSame('Foo Bar, Role', $authorDetails->eq(0)->filter('.author-details__name')->text());
         $this->assertSame('Baz', $authorDetails->eq(1)->filter('.author-details__name')->text());
 
-        $articleInfo = $crawler->filter('.main-content-grid > section:nth-of-type(10) > div > section');
+        $articleInfo = $crawler->filter('.grid-column > section:nth-of-type(10) > div > section');
 
         $funding = $articleInfo->eq(0);
         $this->assertSame('Funding', $funding->filter('header > h3')->text());
@@ -2669,9 +2669,9 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertContains('© 2012, Bar', $copyright->filter('div')->text());
         $this->assertContains('Copyright statement.', $copyright->filter('div')->text());
 
-        $this->assertSame('Download links', $crawler->filter('.main-content-grid > section:nth-of-type(11) .article-section__header_text')->text());
+        $this->assertSame('Download links', $crawler->filter('.grid-column > section:nth-of-type(11) .article-section__header_text')->text());
 
-        $this->assertSame('Categories and tags', $crawler->filter('.main-content-grid > section:nth-of-type(12) .article-meta__group_title')->text());
+        $this->assertSame('Categories and tags', $crawler->filter('.grid-column > section:nth-of-type(12) .article-meta__group_title')->text());
 
         $this->assertRegexp('|^https://.*/00001$|', $crawler->filter('.view-selector')->attr('data-side-by-side-link'));
 
@@ -2866,7 +2866,7 @@ final class ArticleControllerTest extends PageTestCase
             $crawler->filter('.view-selector__link')->extract(['_text', 'href'])
         );
 
-        $dataAvailability = $crawler->filter('.main-content-grid > section:nth-of-type(2)');
+        $dataAvailability = $crawler->filter('.grid-column > section:nth-of-type(2)');
         $this->assertSame('Data availability',
             $dataAvailability->filter('header > h2')->text());
 
