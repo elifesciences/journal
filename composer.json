@@ -24,7 +24,7 @@
         "elife/api-client": "^1.0@dev",
         "elife/api-sdk": "dev-master",
         "elife/civi-contacts": "dev-master",
-        "elife/patterns": "dev-master",
+        "elife/patterns": "dev-pattern-library-node-test",
         "fabpot/goutte": "^3.2",
         "fig/link-util": "^1.0",
         "firebase/php-jwt": "^5.0",
@@ -83,7 +83,11 @@
         "platform": {
             "php": "7.1.33"
         },
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "cweagans/composer-patches": true,
+            "mindplay/composer-locator": true
+        }
     },
     "extra": {
         "composer-exit-on-patch-failure": true,
