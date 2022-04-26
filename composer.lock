@@ -1364,12 +1364,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/civi-contacts.git",
-                "reference": "329eff530097b9987cfc199d28fae44640197b0c"
+                "reference": "d0da75e0fed33a20f581f5a7c60da0988c0ac104"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/civi-contacts/zipball/329eff530097b9987cfc199d28fae44640197b0c",
-                "reference": "329eff530097b9987cfc199d28fae44640197b0c",
+                "url": "https://api.github.com/repos/elifesciences/civi-contacts/zipball/d0da75e0fed33a20f581f5a7c60da0988c0ac104",
+                "reference": "d0da75e0fed33a20f581f5a7c60da0988c0ac104",
                 "shasum": ""
             },
             "require": {
@@ -1395,7 +1395,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2022-04-25T08:55:55+00:00"
+            "time": "2022-04-26T18:42:53+00:00"
         },
         {
             "name": "elife/patterns",
