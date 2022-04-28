@@ -88,7 +88,7 @@ final class ArticleDownloadLinksListConverter implements ViewModelConverter
             mixed_visibility_text('', 'Open citations', '(links to open the citations from this article in various online reference manager services)'),
             [
                 new ViewModel\ArticleDownloadLink(new ViewModel\Link('Mendeley', 'https://www.mendeley.com/import?doi='.$object->getDoi())),
-                new ViewModel\ArticleDownloadLink(new ViewModel\Link('ReadCube', 'https://www.readcube.com/articles/'.$object->getDoi())),
+                new ViewModel\ArticleDownloadLink(new ViewModel\Link('ReadCube', 'https://www.readcube.com/articles/'.$object->getDoi()), null, 'https://ncbi.nlm.nih.gov/pmc/utils/idconv/v1.0/?ids='.$object->getDoi().'&format=json'),
             ]
         );
 
