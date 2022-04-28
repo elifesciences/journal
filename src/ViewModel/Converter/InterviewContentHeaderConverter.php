@@ -29,7 +29,6 @@ final class InterviewContentHeaderConverter implements ViewModelConverter
             null,
             $object->getImpactStatement(),
             true,
-            null,
             [],
             null,
             [],
@@ -40,12 +39,10 @@ final class InterviewContentHeaderConverter implements ViewModelConverter
                 $this->urlGenerator->generate('interview', [$object], UrlGeneratorInterface::ABSOLUTE_URL)
             ),
             null,
-            null,
             ViewModel\Meta::withLink(
                 new ViewModel\Link('Interview', $this->urlGenerator->generate('interviews')),
                 $this->simpleDate($object, ['date' => 'published'] + $context)
             ),
-            null,
             LicenceUri::default()
         );
     }

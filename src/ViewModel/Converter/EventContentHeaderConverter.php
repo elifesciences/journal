@@ -27,7 +27,6 @@ final class EventContentHeaderConverter implements ViewModelConverter
             null,
             $object->getImpactStatement(),
             true,
-            null,
             [],
             null,
             [],
@@ -38,9 +37,7 @@ final class EventContentHeaderConverter implements ViewModelConverter
                 $this->urlGenerator->generate('event', [$object], UrlGeneratorInterface::ABSOLUTE_URL)
             ),
             null,
-            null,
             ViewModel\Meta::withLink(new ViewModel\Link('Event', $this->urlGenerator->generate('events')), ViewModel\Date::simple($object->getStarts())),
-            null,
             LicenceUri::default()
         );
     }
