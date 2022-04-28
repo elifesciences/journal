@@ -1,0 +1,31 @@
+{# Only the first content wrapper should use css .wrapper--content. #}
+<div class="wrapper{% if not isSubsequent ?? false %} wrapper--content{% endif %}" id="content">
+
+    {% set navigation = (block('navigation') ?? '')|trim %}
+    {% set main = block('main') %}
+    {% set secondary = (block('secondary') ?? '')|trim %}
+
+    <div class="content-container-grid">
+
+        {% if navigation|length %}
+
+            {{ navigation|raw }}
+
+        {% endif %}
+
+        <div class="main-content-grid">
+            {{ main|raw }}
+        </div>
+
+        {% if secondary|length %}
+            <div class="secondary-column-grid">
+
+                {{ secondary|raw }}
+
+            </div>
+
+        {% endif %}
+
+    </div>
+
+</div>

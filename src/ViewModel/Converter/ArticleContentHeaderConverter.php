@@ -70,7 +70,7 @@ final class ArticleContentHeaderConverter implements ViewModelConverter
             $meta = null;
         }
 
-        return new ViewModel\ContentHeader(
+        return new ViewModel\ContentHeaderNew(
             $object->getFullTitle(),
             null,
             null,
@@ -98,6 +98,6 @@ final class ArticleContentHeaderConverter implements ViewModelConverter
 
     public function supports($object, string $viewModel = null, array $context = []) : bool
     {
-        return $object instanceof ArticleVersion && ViewModel\ContentHeader::class === $viewModel;
+        return $object instanceof ArticleVersion && ViewModel\ContentHeaderNew::class === $viewModel;
     }
 }
