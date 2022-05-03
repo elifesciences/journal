@@ -65,7 +65,7 @@ final class ArticleContentHeaderConverter implements ViewModelConverter
         }, []))));
 
         if ($date = $this->simpleDate($object, ['date' => 'published'] + $context)) {
-            $meta = ViewModel\Meta::withDate($date);
+            $meta = ViewModel\MetaNew::withDate($date);
         } else {
             $meta = null;
         }
