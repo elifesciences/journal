@@ -29,8 +29,7 @@ final class EventContentHeaderConverter implements ViewModelConverter
             true,
             [],
             null,
-            [],
-            [],
+            null,
             null,
             new ViewModel\SocialMediaSharers(
                 strip_tags($object->getTitle()),

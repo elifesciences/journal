@@ -32,7 +32,7 @@ final class PressPackageContentHeaderConverter implements ViewModelConverter
         })->toArray();
 
         return new ViewModel\ContentHeader($object->getTitle(), null, $object->getImpactStatement(), true,
-            $subjects, null, [], [], null,
+            $subjects, null, null, null,
             new ViewModel\SocialMediaSharers(
                 strip_tags($object->getTitle()),
                 $this->urlGenerator->generate('press-pack', [$object], UrlGeneratorInterface::ABSOLUTE_URL)
