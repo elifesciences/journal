@@ -85,7 +85,7 @@ final class ArticleContentHeaderConverter implements ViewModelConverter
             true,
             $subjects,
             null,
-            $authors ?? null,
+            $authors,
             '#downloads',
             new ViewModel\SocialMediaSharers(
                 strip_tags($object->getFullTitle()),
