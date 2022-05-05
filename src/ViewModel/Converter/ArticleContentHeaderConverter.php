@@ -64,6 +64,12 @@ final class ArticleContentHeaderConverter implements ViewModelConverter
             return $institutions;
         }, []))));
 
+        if (!empty($authors)) {
+            $authors = new ViewModel\Authors($authors, $institutions);
+        } else {
+            $authors = null;
+        }
+
         $meta = ViewModel\Meta::withLink(
             new ViewModel\Link(
                 ModelName::singular($object->getType()),
@@ -79,8 +85,7 @@ final class ArticleContentHeaderConverter implements ViewModelConverter
             true,
             $subjects,
             null,
-            $authors,
-            $institutions,
+            $authors ?? null,
             '#downloads',
             new ViewModel\SocialMediaSharers(
                 strip_tags($object->getFullTitle()),

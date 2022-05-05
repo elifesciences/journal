@@ -30,7 +30,7 @@ final class PromotionalCollectionContentHeaderConverter implements ViewModelConv
     {
         return new ViewModel\ContentHeader(
             $object->getTitle(),
-            $this->contentHeaderImageFactory->forImage($object->getBanner(), true), $object->getImpactStatement(), true, [], null, [], [], null,
+            $this->contentHeaderImageFactory->forImage($object->getBanner(), true), $object->getImpactStatement(), true, [], null, null, null,
             new ViewModel\SocialMediaSharers(
                 strip_tags($object->getTitle()),
                 $this->urlGenerator->generate('promotional-collection', [$object], UrlGeneratorInterface::ABSOLUTE_URL)

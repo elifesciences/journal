@@ -21,7 +21,7 @@ final class ArticleControllerTest extends PageTestCase
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertSame('Article title', $crawler->filter('.content-header__title')->text());
-        $this->assertEmpty($crawler->filter('.content-header__institution_list'));
+        $this->assertEmpty($crawler->filter('.institution_list'));
         $this->assertSame('Research Article Jan 1, 2010', trim(preg_replace('!\s+!', ' ', $crawler->filter('.content-header .meta')->text())));
 
         $this->assertContains('Cite this article as: eLife 2010;1:e00001',
@@ -118,7 +118,7 @@ final class ArticleControllerTest extends PageTestCase
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertSame('Article title', $crawler->filter('.content-header__title')->text());
-        $this->assertEmpty($crawler->filter('.content-header__institution_list'));
+        $this->assertEmpty($crawler->filter('.institution_list'));
 
         $this->assertCount(0, $crawler->filter('.contextual-data__cite_wrapper'));
     }
@@ -952,20 +952,20 @@ final class ArticleControllerTest extends PageTestCase
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertSame('Article title', $crawler->filter('.content-header__title')->text());
-        $this->assertCount(5, $crawler->filter('.content-header__author_list_item'));
-        $this->assertSame('Author One', trim($crawler->filter('.content-header__author_list_item')->eq(0)->text(), " \n,"));
-        $this->assertSame('Author Two', trim($crawler->filter('.content-header__author_list_item')->eq(1)->text(), " \n,"));
-        $this->assertSame('Author Three', trim($crawler->filter('.content-header__author_list_item')->eq(2)->text(), " \n,"));
-        $this->assertSame('Author Four', trim($crawler->filter('.content-header__author_list_item')->eq(3)->text(), " \n,"));
+        $this->assertCount(5, $crawler->filter('.author_list_item'));
+        $this->assertSame('Author One', trim($crawler->filter('.author_list_item')->eq(0)->text(), " \n,"));
+        $this->assertSame('Author Two', trim($crawler->filter('.author_list_item')->eq(1)->text(), " \n,"));
+        $this->assertSame('Author Three', trim($crawler->filter('.author_list_item')->eq(2)->text(), " \n,"));
+        $this->assertSame('Author Four', trim($crawler->filter('.author_list_item')->eq(3)->text(), " \n,"));
         $this->assertSame('on behalf of Institution Four',
-            trim($crawler->filter('.content-header__author_list_item')->eq(4)->text(), " \n,"));
-        $this->assertCount(3, $crawler->filter('.content-header__institution_list_item'));
+            trim($crawler->filter('.author_list_item')->eq(4)->text(), " \n,"));
+        $this->assertCount(3, $crawler->filter('.institution_list_item'));
         $this->assertSame('Institution One, Country One',
-            trim($crawler->filter('.content-header__institution_list_item')->eq(0)->text(), " \n;"));
+            trim($crawler->filter('.institution_list_item')->eq(0)->text(), " \n;"));
         $this->assertSame('Institution Two, Country Two',
-            trim($crawler->filter('.content-header__institution_list_item')->eq(1)->text(), " \n;"));
+            trim($crawler->filter('.institution_list_item')->eq(1)->text(), " \n;"));
         $this->assertSame('Institution Three',
-            trim($crawler->filter('.content-header__institution_list_item')->eq(2)->text(), " \n;"));
+            trim($crawler->filter('.institution_list_item')->eq(2)->text(), " \n;"));
     }
 
     /**
@@ -1062,8 +1062,8 @@ final class ArticleControllerTest extends PageTestCase
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertSame('Article title', $crawler->filter('.content-header__title')->text());
-        $this->assertCount(0, $crawler->filter('.content-header__author_list_item'));
-        $this->assertCount(0, $crawler->filter('.content-header__institution_list_item'));
+        $this->assertCount(0, $crawler->filter('.cauthor_list_item'));
+        $this->assertCount(0, $crawler->filter('.institution_list_item'));
 
         $articleInfo = $crawler->filter('.grid-column > section:nth-of-type(2)');
         $this->assertSame('Article information', $articleInfo->filter('header > h2')->text());

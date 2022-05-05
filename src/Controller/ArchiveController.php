@@ -87,8 +87,7 @@ final class ArchiveController extends Controller
             false,
             [],
             null,
-            [],
-            [],
+            null,
             null,
             null,
             new SelectNav(
