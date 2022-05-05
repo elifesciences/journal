@@ -64,6 +64,12 @@ final class ArticleContentHeaderConverter implements ViewModelConverter
             return $institutions;
         }, []))));
 
+        if (!empty($authors)) {
+            $authors = new ViewModel\Authors($authors, $institutions);
+        } else {
+            $authors = null;
+        }
+
         if ($date = $this->simpleDate($object, ['date' => 'published'] + $context)) {
             $meta = ViewModel\MetaNew::withDate($date);
         } else {
@@ -82,7 +88,6 @@ final class ArticleContentHeaderConverter implements ViewModelConverter
             $subjects,
             null,
             $authors,
-            $institutions,
             '#downloads',
             '#cite-this-article',
             new ViewModel\SocialMediaSharers(
