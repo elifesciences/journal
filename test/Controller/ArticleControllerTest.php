@@ -964,6 +964,8 @@ final class ArticleControllerTest extends PageTestCase
             trim($crawler->filter('.institution_list_item')->eq(1)->text(), " \n;"));
         $this->assertSame('Institution Three',
             trim($crawler->filter('.institution_list_item')->eq(2)->text(), " \n;"));
+
+        // @todo - write test to check position of authors and institutions for magazine articles
     }
 
     /**
