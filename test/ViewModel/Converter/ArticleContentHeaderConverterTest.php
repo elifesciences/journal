@@ -3,6 +3,7 @@
 namespace test\eLife\Journal\ViewModel\Converter;
 
 use eLife\Journal\ViewModel\Converter\ArticleContentHeaderConverter;
+use eLife\Journal\ViewModel\Converter\ViewModelConverter;
 use eLife\Patterns\ViewModel\ContentHeaderNew;
 
 final class ArticleContentHeaderConverterTest extends ModelConverterTestCase
@@ -15,6 +16,9 @@ final class ArticleContentHeaderConverterTest extends ModelConverterTestCase
      */
     public function setUpConverter()
     {
-        $this->converter = new ArticleContentHeaderConverter($this->stubUrlGenerator());
+        $this->converter = new ArticleContentHeaderConverter(
+            $this->createMock(ViewModelConverter::class),
+            $this->stubUrlGenerator()
+        );
     }
 }

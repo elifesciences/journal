@@ -495,6 +495,14 @@ services:
         tags:
           - name: view_model.converter
 
+    elife.journal.view_model.converter.article.authors:
+        class: eLife\Journal\ViewModel\Converter\ArticleAuthorsConverter
+        public: false
+        arguments:
+            - '@router'
+        tags:
+          - name: view_model.converter
+
     elife.journal.view_model.converter.article.decision_letter_header:
         class: eLife\Journal\ViewModel\Converter\ArticleDecisionLetterHeaderConverter
         public: false
@@ -519,6 +527,7 @@ services:
         class: eLife\Journal\ViewModel\Converter\ArticleContentHeaderConverter
         public: false
         arguments:
+          - '@elife.journal.view_model.converter'
           - '@router'
         tags:
           - name: view_model.converter
