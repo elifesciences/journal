@@ -281,10 +281,6 @@ final class ArticlesController extends Controller
 
                 $parts = [];
 
-                if (in_array($item->getType(), ['insight', 'editorial']) && $item->getAuthors()->notEmpty()) {
-                    $parts[] = $this->convertTo($item, ViewModel\Authors::class);
-                }
-
                 $first = true;
 
                 if ($item->getAbstract()) {
