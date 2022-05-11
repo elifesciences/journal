@@ -1206,8 +1206,8 @@ final class ArticleControllerTest extends PageTestCase
 
         $this->assertSame(
             [
-                'Cited 1,234',
-                'Views 5,678',
+                '5,678 views',
+                '1,234 citations',
             ],
             array_map(function (string $text) {
                 return trim(preg_replace('!\s+!', ' ', $text));

@@ -1021,11 +1021,11 @@ final class ArticlesController extends Controller
 
                 $metrics = [];
 
-                if (null !== $citations) {
-                    $metrics[] = sprintf('<a href="%s">Cited %s</a>', $this->generatePath($history, $item->getVersion(), null, 'metrics'), number_format($citations->getHighest()->getCitations()));
-                }
                 if (null !== $pageViews) {
-                    $metrics[] = sprintf('<a href="%s">Views %s</a>', $this->generatePath($history, $item->getVersion(), null, 'metrics'), number_format($pageViews));
+                    $metrics[] = sprintf('<a href="%s"><strong>%s</strong> views</a>', $this->generatePath($history, $item->getVersion(), null, 'metrics'), number_format($pageViews));
+                }
+                if (null !== $citations) {
+                    $metrics[] = sprintf('<a href="%s"><strong>%s</strong> citations</a>', $this->generatePath($history, $item->getVersion(), null, 'metrics'), number_format($citations->getHighest()->getCitations()));
                 }
 
                 return $metrics;
