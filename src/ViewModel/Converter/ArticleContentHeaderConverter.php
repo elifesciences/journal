@@ -56,7 +56,7 @@ final class ArticleContentHeaderConverter implements ViewModelConverter
             $authors,
             '#downloads',
             '#cite-this-article',
-            new ViewModel\SocialMediaSharers(
+            new ViewModel\SocialMediaSharersNew(
                 strip_tags($object->getFullTitle()),
                 "https://doi.org/{$object->getDoi()}"
             ),

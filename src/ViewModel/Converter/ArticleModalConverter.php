@@ -45,14 +45,13 @@ final class ArticleModalConverter implements ViewModelConverter
                     "https://doi.org/{$object->getDoi()}"
                 ),
                 ViewModel\Button::clipboard('Copy to clipboard', "https://doi.org/{$object->getDoi()}"),
-                new ViewModel\SocialMediaSharers(
+                new ViewModel\SocialMediaSharersNew(
                     strip_tags($object->getFullTitle()),
                     "https://doi.org/{$object->getDoi()}"
                 ),
             ];
 
-            // @todo - switch to use ModalWindow::small when you can work out why it's broken!
-            return ViewModel\ModalWindow::create('Share this article', $this->patternRenderer->render(...$body), null, 'modalContentShare');
+            return ViewModel\ModalWindow::small('Share this article', $this->patternRenderer->render(...$body), null, 'modalContentShare');
         } else {
             $reference = $this->patternRenderer->render($this->convertTo($object, ViewModel\Reference::class));
 
