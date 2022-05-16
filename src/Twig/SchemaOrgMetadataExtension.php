@@ -534,7 +534,6 @@ final class SchemaOrgMetadataExtension extends AbstractExtension
     private function getHiringOrganization(Model $object)
     {
         if ($object instanceof JobAdvert) {
-
             return [
                 '@type' => 'Organization',
                 'name' => 'eLife Sciences Publications, Ltd',
@@ -550,7 +549,6 @@ final class SchemaOrgMetadataExtension extends AbstractExtension
     private function getJobLocation(Model $object)
     {
         if ($object instanceof JobAdvert) {
-
             return [
                 '@type' => 'Place',
                 'address' => [
