@@ -3,6 +3,7 @@
 namespace eLife\Journal\ViewModel\Converter;
 
 use eLife\ApiSdk\Model\ArticleVersion;
+use eLife\ApiSdk\Model\Block\Paragraph;
 use eLife\ApiSdk\Model\Subject;
 use eLife\Journal\Helper\CanConvertContent;
 use eLife\Journal\Helper\LicenceUri;
@@ -32,11 +33,25 @@ final class ArticleContentHeaderConverter implements ViewModelConverter
     {
         $magazine = in_array($object->getType(), ['insight', 'editorial']);
 
+        $breadcrumb = ($magazine) ? [
+            new ViewModel\Link(
+                'Magazine',
+                $this->urlGenerator->generate('magazine')
+            ),
+        ] : [];
+
+        $breadcrumb[] = new ViewModel\Link(
+            ModelName::singular($object->getType()),
+            $this->urlGenerator->generate('article-type', ['type' => $object->getType()])
+        );
+
         $subjects = $object->getSubjects()->map(function (Subject $subject) {
             return new ViewModel\Link($subject->getName(), $this->urlGenerator->generate('subject', [$subject]));
         })->toArray();
 
-        $authors = ($magazine && $object->getAuthors()->notEmpty()) ? $this->convertTo($object, ViewModel\Authors::class) : null;
+        $authors = (!$magazine && $object->getAuthors()->notEmpty()) ? $this->convertTo($object, ViewModel\Authors::class) : null;
+
+        $impactStatement = ($magazine && $object->getAbstract()) ? implode(' ', $object->getAbstract()->getContent()->map(function (Paragraph $item) { return $item->getText(); })->toArray()) : null;
 
         if ($date = $this->simpleDate($object, ['date' => 'published'] + $context)) {
             $meta = ViewModel\MetaNew::withDate($date);
@@ -47,12 +62,9 @@ final class ArticleContentHeaderConverter implements ViewModelConverter
         return new ViewModel\ContentHeaderNew(
             $object->getFullTitle(),
             null,
-            null,
+            $impactStatement,
             true,
-            new ViewModel\Breadcrumb([new ViewModel\Link(
-                ModelName::singular($object->getType()),
-                $this->urlGenerator->generate('article-type', ['type' => $object->getType()])
-            )]),
+            new ViewModel\Breadcrumb($breadcrumb),
             $subjects,
             null,
             $authors,

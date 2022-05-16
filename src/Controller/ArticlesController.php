@@ -281,13 +281,15 @@ final class ArticlesController extends Controller
 
                 $parts = [];
 
-                if (in_array($item->getType(), ['insight', 'editorial']) && $item->getAuthors()->notEmpty()) {
+                $magazine = in_array($item->getType(), ['insight', 'editorial']);
+
+                if ($magazine && $item->getAuthors()->notEmpty()) {
                     $parts[] = $this->convertTo($item, ViewModel\Authors::class);
                 }
 
                 $first = true;
 
-                if ($item->getAbstract()) {
+                if (!$magazine && $item->getAbstract()) {
                     $parts[] = ArticleSection::collapsible(
                         'abstract',
                         'Abstract',
