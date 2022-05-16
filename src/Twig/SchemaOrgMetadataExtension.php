@@ -71,6 +71,7 @@ final class SchemaOrgMetadataExtension extends AbstractExtension
                 'duration' => $this->getDuration($object),
                 'headline' => $this->getHeadline($object),
                 'name' => $this->getName($object),
+                'title' => $this->getTitle($object),
                 'image' => $this->getImage($object),
                 'datePublished' => $this->getDatePublished($object),
                 'startDate' => $this->getStartDate($object),
@@ -87,6 +88,8 @@ final class SchemaOrgMetadataExtension extends AbstractExtension
                 'associatedMedia' => $this->getAssociatedMedia($object),
                 'partOfSeries' => $this->getPartOfSeries($object),
                 'isPartOf' => $this->getIsPartOf($object),
+                'hiringOrganization' => $this->getHiringOrganization($object),
+                'jobLocation' => $this->getJobLocation($object),
             ]), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES),
             '</script>',
         ]);
@@ -247,6 +250,22 @@ final class SchemaOrgMetadataExtension extends AbstractExtension
     {
         switch (true) {
             case $object instanceof Event:
+            case $object instanceof JobAdvert:
+                $title = $object->getTitle();
+                break;
+            default:
+                $title = null;
+        }
+
+        return $title ? strip_tags($title) : $title;
+    }
+
+    /**
+     * @return string|null
+     */
+    private function getTitle(Model $object)
+    {
+        switch (true) {
             case $object instanceof JobAdvert:
                 $title = $object->getTitle();
                 break;
@@ -503,6 +522,40 @@ final class SchemaOrgMetadataExtension extends AbstractExtension
                 '@type' => 'Periodical',
                 'name' => 'eLife',
                 'issn' => '2050-084X',
+            ];
+        }
+
+        return null;
+    }
+
+    /**
+     * @return array|null
+     */
+    private function getHiringOrganization(Model $object)
+    {
+        if ($object instanceof JobAdvert) {
+            return [
+                '@type' => 'Organization',
+                'name' => 'eLife Sciences Publications, Ltd',
+            ];
+        }
+
+        return null;
+    }
+
+    /**
+     * @return array|null
+     */
+    private function getJobLocation(Model $object)
+    {
+        if ($object instanceof JobAdvert) {
+            return [
+                '@type' => 'Place',
+                'address' => [
+                    '@type' => 'PostalAddress',
+                    'addressLocality' => 'Cambridge',
+                    'addressCountry' => 'UK',
+                ],
             ];
         }
 
