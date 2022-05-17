@@ -206,11 +206,6 @@ final class ArticlesController extends Controller
                 ];
             }, []));
 
-        $arguments['isMagazine'] = $arguments['item']
-            ->then(function (ArticleVersion $item) {
-                return in_array($item->getType(), ['insight', 'editorial']);
-            });
-
         $usedDataSets = $arguments['item']
             ->then(function (ArticleVersion $item) {
                 return $item->getUsedDataSets()
@@ -640,7 +635,7 @@ final class ArticlesController extends Controller
                 return $parts;
             });
 
-        $arguments['viewSelector'] = $this->createViewSelector($arguments['item'], $arguments['hasFigures'], false, $arguments['history'], $arguments['body'], $arguments['eraArticle']);
+        $arguments['viewSelector'] = $this->createViewSelector($arguments['item'], $arguments['isMagazine'], $arguments['hasFigures'], false, $arguments['history'], $arguments['body'], $arguments['eraArticle']);
 
         $arguments['body'] = all(['item' => $arguments['item'], 'body' => $arguments['body'], 'downloadLinks' => $arguments['downloadLinks']])
             ->then(function (array $parts) {
@@ -779,7 +774,7 @@ final class ArticlesController extends Controller
             })
             ->then(Callback::mustNotBeEmpty(new NotFoundHttpException('Article version does not contain any figures or data')));
 
-        $arguments['viewSelector'] = $this->createViewSelector($arguments['item'], promise_for(true), true, $arguments['history'], $arguments['body'], $arguments['eraArticle']);
+        $arguments['viewSelector'] = $this->createViewSelector($arguments['item'], $arguments['isMagazine'], promise_for(true), true, $arguments['history'], $arguments['body'], $arguments['eraArticle']);
 
         $arguments['body'] = all(['body' => $arguments['body'], 'downloadLinks' => $arguments['downloadLinks']])
             ->then(function (array $parts) {
@@ -904,6 +899,11 @@ final class ArticlesController extends Controller
     private function articlePageArguments(Request $request, string $id, int $version = null) : array
     {
         $arguments = $this->defaultArticleArguments($request, $id, $version);
+
+        $arguments['isMagazine'] = $arguments['item']
+            ->then(function (ArticleVersion $item) {
+                return in_array($item->getType(), ['insight', 'editorial']);
+            });
 
         $arguments['history'] = $this->get('elife.api_sdk.articles')
             ->getHistory($id)
@@ -1072,10 +1072,14 @@ final class ArticlesController extends Controller
         return $arguments;
     }
 
-    private function createViewSelector(PromiseInterface $item, PromiseInterface $hasFigures, bool $isFiguresPage, PromiseInterface $history, PromiseInterface $sections, array $eraArticle) : PromiseInterface
+    private function createViewSelector(PromiseInterface $item, PromiseInterface $isMagazine, PromiseInterface $hasFigures, bool $isFiguresPage, PromiseInterface $history, PromiseInterface $sections, array $eraArticle) : PromiseInterface
     {
-        return all(['item' => $item, 'hasFigures' => $hasFigures, 'history' => $history, 'sections' => $sections])
+        return all(['item' => $item, 'isMagazine' => $isMagazine, 'hasFigures' => $hasFigures, 'history' => $history, 'sections' => $sections])
             ->then(function (array $sections) use ($isFiguresPage, $eraArticle) {
+                if ($sections['isMagazine']) {
+                    return null;
+                }
+
                 $item = $sections['item'];
                 $hasFigures = $sections['hasFigures'];
                 $history = $sections['history'];
