@@ -51,7 +51,9 @@ final class ArticleContentHeaderConverter implements ViewModelConverter
 
         $authors = (!$magazine && $object->getAuthors()->notEmpty()) ? $this->convertTo($object, ViewModel\Authors::class) : null;
 
-        $impactStatement = ($magazine && $object->getAbstract()) ? implode(' ', $object->getAbstract()->getContent()->map(function (Paragraph $item) { return $item->getText(); })->toArray()) : null;
+        $impactStatement = ($magazine && $object->getAbstract()) ? implode(' ', $object->getAbstract()->getContent()->map(function (Paragraph $item) {
+            return $item->getText();
+        })->toArray()) : null;
 
         if ($date = $this->simpleDate($object, ['date' => 'published'] + $context)) {
             $meta = ViewModel\MetaNew::withDate($date);
