@@ -1,4 +1,4 @@
-@magazine @podcast
+@magazine
 Feature: Magazine podcast player
 
   Rules:
