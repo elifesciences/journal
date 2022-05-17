@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a55b91cc51f018f8f12ef70c1a59b1f3",
+    "content-hash": "472e060fe3eb549386c2963e5fd53c84",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -1399,16 +1399,16 @@
         },
         {
             "name": "elife/patterns",
-            "version": "dev-master",
+            "version": "dev-content-header-magazine-articles",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/patterns-php.git",
-                "reference": "b39e0169a7eef570d562db3c41629e05e555f5c1"
+                "reference": "e363797a89d9275af4fe7f410db4f75f7ae8da6a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/b39e0169a7eef570d562db3c41629e05e555f5c1",
-                "reference": "b39e0169a7eef570d562db3c41629e05e555f5c1",
+                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/e363797a89d9275af4fe7f410db4f75f7ae8da6a",
+                "reference": "e363797a89d9275af4fe7f410db4f75f7ae8da6a",
                 "shasum": ""
             },
             "require": {
@@ -1445,7 +1445,7 @@
                 "MIT"
             ],
             "description": "eLife patterns",
-            "time": "2022-05-17T14:31:05+00:00"
+            "time": "2022-05-17T18:38:01+00:00"
         },
         {
             "name": "fabpot/goutte",
