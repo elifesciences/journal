@@ -495,6 +495,14 @@ services:
         tags:
           - name: view_model.converter
 
+    elife.journal.view_model.converter.article.authors:
+        class: eLife\Journal\ViewModel\Converter\ArticleAuthorsConverter
+        public: false
+        arguments:
+            - '@router'
+        tags:
+          - name: view_model.converter
+
     elife.journal.view_model.converter.article.decision_letter_header:
         class: eLife\Journal\ViewModel\Converter\ArticleDecisionLetterHeaderConverter
         public: false
@@ -508,6 +516,8 @@ services:
         class: eLife\Journal\ViewModel\Converter\ArticleDownloadLinksListConverter
         public: false
         arguments:
+          - '@elife.journal.view_model.converter'
+          - '@elife.patterns.pattern_renderer'
           - '@router'
           - '@elife.journal.helper.download_link_uri_generator'
         tags:
@@ -517,6 +527,7 @@ services:
         class: eLife\Journal\ViewModel\Converter\ArticleContentHeaderConverter
         public: false
         arguments:
+          - '@elife.journal.view_model.converter'
           - '@router'
         tags:
           - name: view_model.converter
@@ -529,6 +540,16 @@ services:
         tags:
           - name: view_model.converter
 
+    elife.journal.view_model.converter.article.modal:
+        class: eLife\Journal\ViewModel\Converter\ArticleModalConverter
+        public: false
+        arguments:
+            - '@elife.journal.view_model.converter'
+            - '@elife.patterns.pattern_renderer'
+            - '@router'
+        tags:
+          - name: view_model.converter
+
     elife.journal.view_model.converter.article.read_more_item:
         class: eLife\Journal\ViewModel\Converter\ArticleReadMoreItemConverter
         public: false
@@ -536,6 +557,12 @@ services:
           - '@elife.journal.view_model.converter'
           - '@elife.patterns.pattern_renderer'
           - '@router'
+        tags:
+          - name: view_model.converter
+
+    elife.journal.view_model.converter.article.reference:
+        class: eLife\Journal\ViewModel\Converter\ArticleReferenceConverter
+        public: false
         tags:
           - name: view_model.converter
 

@@ -30,7 +30,7 @@ use eLife\Journal\Helper\HasPages;
 use eLife\Journal\Helper\Humanizer;
 use eLife\Patterns\ViewModel;
 use eLife\Patterns\ViewModel\ArticleSection;
-use eLife\Patterns\ViewModel\ContentHeader;
+use eLife\Patterns\ViewModel\ContentHeaderNew;
 use eLife\Patterns\ViewModel\ContextualData;
 use eLife\Patterns\ViewModel\Doi;
 use eLife\Patterns\ViewModel\InfoBar;
@@ -923,8 +923,13 @@ final class ArticlesController extends Controller
                 return $this->generatePath($history, $version, 'xml');
             });
 
-        $arguments['contentHeader'] = $arguments['item']
-            ->then($this->willConvertTo(ContentHeader::class));
+        $arguments['modalWindows'] = $arguments['item']
+            ->then(function (ArticleVersion $item) {
+                return [
+                    $this->convertTo($item, ViewModel\ModalWindow::class),
+                    $this->convertTo($item, ViewModel\ModalWindow::class, ['type' => 'citation', 'clipboard' => $this->get('templating')->render('::article.cite.twig', ['item' => $item])]),
+                ];
+            });
 
         $arguments['infoBars'] = all(['item' => $arguments['item'], 'history' => $arguments['history'], 'relatedArticles' => $arguments['relatedArticles'], 'eraArticle' => $arguments['eraArticle']])
             ->then(function (array $parts) {
@@ -1016,14 +1021,19 @@ final class ArticlesController extends Controller
 
                 $metrics = [];
 
-                if (null !== $citations) {
-                    $metrics[] = sprintf('<a href="%s">Cited %s</a>', $this->generatePath($history, $item->getVersion(), null, 'metrics'), number_format($citations->getHighest()->getCitations()));
-                }
                 if (null !== $pageViews) {
-                    $metrics[] = sprintf('<a href="%s">Views %s</a>', $this->generatePath($history, $item->getVersion(), null, 'metrics'), number_format($pageViews));
+                    $metrics[] = sprintf('<a href="%s"><strong>%s</strong> views</a>', $this->generatePath($history, $item->getVersion(), null, 'metrics'), number_format($pageViews));
+                }
+                if (null !== $citations) {
+                    $metrics[] = sprintf('<a href="%s"><strong>%s</strong> citations</a>', $this->generatePath($history, $item->getVersion(), null, 'metrics'), number_format($citations->getHighest()->getCitations()));
                 }
 
                 return $metrics;
+            });
+
+        $arguments['contentHeader'] = all(['item' => $arguments['item'], 'metrics' => $arguments['contextualDataMetrics']])
+            ->then(function (array $parts) {
+                return $this->convertTo($parts['item'], ContentHeaderNew::class, ['metrics' => $parts['metrics']]);
             });
 
         $arguments['downloadLinks'] = all(['item' => $arguments['item'], 'history' => $arguments['history'], 'eraArticle' => $arguments['eraArticle']])

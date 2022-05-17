@@ -22,13 +22,10 @@ final class ArticleFiguresControllerTest extends PageTestCase
         $this->assertEmpty($crawler->filter('.institution_list'));
 
         $this->assertEmpty($crawler->filter('.contextual-data__list'));
-        $this->assertContains('Cite this article as: eLife 2010;1:e00001',
-            preg_replace('!\s+!', ' ', $crawler->filter('.contextual-data__cite_wrapper')->text()));
-        $this->assertContains('doi: 10.7554/eLife.00001', $this->crawlerText($crawler->filter('.contextual-data__cite_wrapper')));
 
         $this->assertSame('4 figures, 1 video, 1 table and 1 additional file', trim($crawler->filter('.message-bar')->text()));
 
-        $figureTypes = $crawler->filter('.grid-column > section');
+        $figureTypes = $crawler->filter('.main-content-grid > section');
         $this->assertCount(5, $figureTypes);
 
         $this->assertSame('Figures', $figureTypes->eq(0)->filter('.article-section__header_text')->text());
@@ -109,13 +106,9 @@ final class ArticleFiguresControllerTest extends PageTestCase
         $this->assertSame('Foo Bar', trim($crawler->filter('.author_list')->text(), " \n,"));
         $this->assertEmpty($crawler->filter('.institution_list'));
 
-        $this->assertContains('Cite this article as: eLife 2010;1:e00001',
-            preg_replace('!\s+!', ' ', $crawler->filter('.contextual-data__cite_wrapper')->text()));
-        $this->assertContains('doi: 10.7554/eLife.00001', $this->crawlerText($crawler->filter('.contextual-data__cite_wrapper')));
-
         $this->assertSame('1 additional file', trim($crawler->filter('.message-bar')->text()));
 
-        $figureTypes = $crawler->filter('.grid-column > section');
+        $figureTypes = $crawler->filter('.main-content-grid > section');
         $this->assertCount(2, $figureTypes);
 
         $this->assertSame('Additional files', $figureTypes->eq(0)->filter('.article-section__header_text')->text());

@@ -322,15 +322,9 @@
 
     {{ render_pattern(contentHeader) }}
 
-    {% if contextualData %}
-
-        <div class="wrapper">
-
-            {{ render_pattern(contextualData) }}
-
-        </div>
-
-    {% endif %}
+    {% for modalWindow in modalWindows %}
+        {{ render_pattern(modalWindow) }}
+    {% endfor %}
 
     {% include 'calls-to-action.html.twig' %}
 
