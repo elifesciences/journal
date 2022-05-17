@@ -262,10 +262,12 @@ final class ArticlesController extends Controller
                 return $context;
             });
 
-        $arguments['body'] = all(['item' => $arguments['item'], 'history' => $arguments['history'], 'citations' => $arguments['citations'], 'downloads' => $arguments['downloads'], 'pageViews' => $arguments['pageViews'], 'data' => $arguments['hasData'], 'context' => $context])
+        $arguments['body'] = all(['item' => $arguments['item'], 'isMagazine' => $arguments['isMagazine'], 'history' => $arguments['history'], 'citations' => $arguments['citations'], 'downloads' => $arguments['downloads'], 'pageViews' => $arguments['pageViews'], 'data' => $arguments['hasData'], 'context' => $context])
             ->then(function (array $parts) use ($context) {
                 /** @var ArticleVersion $item */
                 $item = $parts['item'];
+                /** @var bool $isMagazine */
+                $isMagazine = $parts['isMagazine'];
                 /** @var ArticleHistory $history */
                 $history = $parts['history'];
                 /** @var CitationsMetric|null $citations */
@@ -281,15 +283,13 @@ final class ArticlesController extends Controller
 
                 $parts = [];
 
-                $magazine = in_array($item->getType(), ['insight', 'editorial']);
-
-                if ($magazine && $item->getAuthors()->notEmpty()) {
+                if ($isMagazine && $item->getAuthors()->notEmpty()) {
                     $parts[] = $this->convertTo($item, ViewModel\Authors::class);
                 }
 
                 $first = true;
 
-                if (!$magazine && $item->getAbstract()) {
+                if (!$isMagazine && $item->getAbstract()) {
                     $parts[] = ArticleSection::collapsible(
                         'abstract',
                         'Abstract',
@@ -1042,9 +1042,9 @@ final class ArticlesController extends Controller
                 return $metrics;
             });
 
-        $arguments['contentHeader'] = all(['item' => $arguments['item'], 'metrics' => $arguments['contextualDataMetrics']])
+        $arguments['contentHeader'] = all(['item' => $arguments['item'], 'isMagazine' => $arguments['isMagazine'], 'metrics' => $arguments['contextualDataMetrics']])
             ->then(function (array $parts) {
-                return $this->convertTo($parts['item'], ContentHeaderNew::class, ['metrics' => $parts['metrics']]);
+                return $this->convertTo($parts['item'], ContentHeaderNew::class, ['metrics' => $parts['metrics'], 'isMagazine' => $parts['isMagazine']]);
             });
 
         $arguments['downloadLinks'] = all(['item' => $arguments['item'], 'history' => $arguments['history'], 'eraArticle' => $arguments['eraArticle']])

@@ -31,9 +31,9 @@ final class ArticleContentHeaderConverter implements ViewModelConverter
      */
     public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
-        $magazine = in_array($object->getType(), ['insight', 'editorial']);
+        $isMagazine = $context['isMagazine'] ?? false;
 
-        $breadcrumb = ($magazine) ? [
+        $breadcrumb = ($isMagazine) ? [
             new ViewModel\Link(
                 'Magazine',
                 $this->urlGenerator->generate('magazine')
@@ -49,9 +49,9 @@ final class ArticleContentHeaderConverter implements ViewModelConverter
             return new ViewModel\Link($subject->getName(), $this->urlGenerator->generate('subject', [$subject]));
         })->toArray();
 
-        $authors = (!$magazine && $object->getAuthors()->notEmpty()) ? $this->convertTo($object, ViewModel\Authors::class) : null;
+        $authors = (!$isMagazine && $object->getAuthors()->notEmpty()) ? $this->convertTo($object, ViewModel\Authors::class) : null;
 
-        $impactStatement = ($magazine && $object->getAbstract()) ? implode(' ', $object->getAbstract()->getContent()->map(function (Paragraph $item) {
+        $impactStatement = ($isMagazine && $object->getAbstract()) ? implode(' ', $object->getAbstract()->getContent()->map(function (Paragraph $item) {
             return $item->getText();
         })->toArray()) : null;
 
