@@ -206,6 +206,11 @@ final class ArticlesController extends Controller
                 ];
             }, []));
 
+        $arguments['isMagazine'] = $arguments['item']
+            ->then(function (ArticleVersion $item) {
+                return in_array($item->getType(), ['insight', 'editorial']);
+            });
+
         $usedDataSets = $arguments['item']
             ->then(function (ArticleVersion $item) {
                 return $item->getUsedDataSets()
