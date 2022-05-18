@@ -465,27 +465,27 @@ final class ArticlesController extends Controller
                                 'bullet'
                             );
 
-                            return ArticleSection::basic($title, 4, $this->render($body));
+                            return ArticleSection::basic($this->render($body), $title, 4);
                         })->toArray();
 
                     $funding[] = new Paragraph($item->getFunding()->getStatement());
 
-                    $infoSections[] = ArticleSection::basic('Funding', 3, $this->render(...$funding));
+                    $infoSections[] = ArticleSection::basic($this->render(...$funding), 'Funding', 3);
                 }
 
                 if ($item instanceof ArticleVoR && $item->getAcknowledgements()->notEmpty()) {
                     $infoSections[] = ArticleSection::basic(
+                        $this->render(...$item->getAcknowledgements()->map($this->willConvertTo(null, ['level' => 3]))),
                         'Acknowledgements',
-                        3,
-                        $this->render(...$item->getAcknowledgements()->map($this->willConvertTo(null, ['level' => 3])))
+                        3
                     );
                 }
 
                 if ($item->getEthics()->notEmpty()) {
                     $infoSections[] = ArticleSection::basic(
+                        $this->render(...$item->getEthics()->map($this->willConvertTo(null, ['level' => 3]))),
                         'Ethics',
-                        3,
-                        $this->render(...$item->getEthics()->map($this->willConvertTo(null, ['level' => 3])))
+                        3
                     );
                 }
 
@@ -526,9 +526,9 @@ final class ArticlesController extends Controller
                         }
 
                         $infoSections[] = ArticleSection::basic(
+                            $this->render(Listing::ordered($reviewers)),
                             $role,
-                            3,
-                            $this->render(Listing::ordered($reviewers))
+                            3
                         );
                     }
                 }
@@ -586,11 +586,11 @@ final class ArticlesController extends Controller
                     })->toArray());
 
                 $infoSections[] = ArticleSection::basic(
-                    'Publication history',
-                    3,
                     $this->render(
                         Listing::ordered($publicationHistory, 'bullet')
-                    )
+                    ),
+                    'Publication history',
+                    3
                 );
 
                 $copyright = '<p>'.$item->getCopyright()->getStatement().'</p>';
@@ -599,7 +599,7 @@ final class ArticlesController extends Controller
                     $copyright = sprintf('<p>© %s, %s</p>', 2011 + $item->getVolume(), $item->getCopyright()->getHolder()).$copyright;
                 }
 
-                $infoSections[] = ArticleSection::basic('Copyright', 3, $copyright);
+                $infoSections[] = ArticleSection::basic($copyright, 'Copyright', 3);
 
                 $parts[] = ArticleSection::collapsible(
                     'info',
@@ -654,7 +654,7 @@ final class ArticlesController extends Controller
                 $body = $parts['body'];
                 $downloadLinks = $parts['downloadLinks'];
 
-                $body[] = ArticleSection::basic('Download links', 2, $this->render($downloadLinks));
+                $body[] = ArticleSection::basic($this->render($downloadLinks), 'Download links', 2);
 
                 $body[] = $this->convertTo($item, ViewModel\ArticleMeta::class);
 
@@ -792,7 +792,7 @@ final class ArticlesController extends Controller
                 $body = $parts['body'];
                 $downloadLinks = $parts['downloadLinks'];
 
-                $body[] = ArticleSection::basic('Download links', 2, $this->render($downloadLinks));
+                $body[] = ArticleSection::basic($this->render($downloadLinks), 'Download links', 2);
 
                 return $body;
             });
