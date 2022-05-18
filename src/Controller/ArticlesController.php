@@ -582,7 +582,7 @@ final class ArticlesController extends Controller
                     $copyright = sprintf('<p>© %s, %s</p>', 2011 + $item->getVolume(), $item->getCopyright()->getHolder()).$copyright;
                 }
 
-                $infoSections[] = ArticleSection::basic($copyright, 'Copyright', 3);
+                $infoSections[] = ArticleSection::basic(3, $copyright, 'Copyright');
 
                 $parts[] = ArticleSection::collapsible(
                     'info',
