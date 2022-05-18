@@ -448,7 +448,7 @@ final class ArticlesController extends Controller
                                 'bullet'
                             );
 
-                            return ArticleSection::basic($title, 4, $this->render($body));
+                            return ArticleSection::basic($this->render($body), $title, 4);
                         })->toArray();
 
                     $funding[] = new Paragraph($item->getFunding()->getStatement());
@@ -509,9 +509,9 @@ final class ArticlesController extends Controller
                         }
 
                         $infoSections[] = ArticleSection::basic(
+                            $this->render(Listing::ordered($reviewers)),
                             $role,
-                            3,
-                            $this->render(Listing::ordered($reviewers))
+                            3
                         );
                     }
                 }
@@ -569,11 +569,11 @@ final class ArticlesController extends Controller
                     })->toArray());
 
                 $infoSections[] = ArticleSection::basic(
-                    'Publication history',
-                    3,
                     $this->render(
                         Listing::ordered($publicationHistory, 'bullet')
-                    )
+                    ),
+                    'Publication history',
+                    3
                 );
 
                 $copyright = '<p>'.$item->getCopyright()->getStatement().'</p>';

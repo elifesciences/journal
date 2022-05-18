@@ -26,11 +26,11 @@ final class QuestionConverter implements ViewModelConverter
         $context['level'] = ($context['level'] ?? 1) + 1;
 
         return ViewModel\ArticleSection::basic(
-            $object->getQuestion(),
-            $context['level'],
             implode('', array_map(function (Block $block) use ($context) {
                 return $this->patternRenderer->render($this->viewModelConverter->convert($block, null, $context));
             }, $object->getAnswer())),
+            $object->getQuestion(),
+            $context['level'],
             null,
             null,
             null,

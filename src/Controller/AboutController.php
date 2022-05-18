@@ -97,9 +97,9 @@ final class AboutController extends Controller
                 }
 
                 return ArticleSection::basic(
+                    $this->render(...$body),
                     $subject->getName(),
                     2,
-                    $this->render(...$body),
                     $subject->getId()
                 );
             })
