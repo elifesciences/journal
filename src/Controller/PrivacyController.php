@@ -242,8 +242,8 @@ final class PrivacyController extends Controller
 EOT
                         ,
                     ])
-                ))
-            ), 'Change log', 3, null, null, true),
+                ), 'Change log', 3)
+            ), null, null, true),
         ];
 
         return new Response($this->get('templating')->render('::privacy.html.twig', $arguments));
