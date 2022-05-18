@@ -354,17 +354,28 @@ final class ArticlesController extends Controller
                 $isInitiallyClosed = false;
 
                 if ($item instanceof ArticleVoR) {
-                    $parts = array_merge($parts, $item->getContent()->map(function (Block\Section $section) use (&$first, &$isInitiallyClosed, $context) {
-                        $section = ArticleSection::collapsible(
-                            $section->getId(),
-                            $section->getTitle(),
-                            2,
-                            $this->render(...$this->convertContent($section, 2, $context)),
-                            null,
-                            null,
-                            $isInitiallyClosed,
-                            $first
-                        );
+                    $parts = array_merge($parts, $item->getContent()->map(function (Block\Section $section) use (&$first, &$isInitiallyClosed, $isMagazine, $context) {
+                        $section = ($isMagazine && $first) ?
+                            ArticleSection::basic(
+                                $this->render(...$this->convertContent($section, 2, $context)),
+                                null,
+                                null,
+                                $section->getId(),
+                                null,
+                                null,
+                                null,
+                                $first
+                            ) :
+                            ArticleSection::collapsible(
+                                $section->getId(),
+                                $section->getTitle(),
+                                2,
+                                $this->render(...$this->convertContent($section, 2, $context)),
+                                null,
+                                null,
+                                $isInitiallyClosed,
+                                $first
+                            );
 
                         $first = false;
                         $isInitiallyClosed = true;
