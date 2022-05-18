@@ -119,7 +119,7 @@ final class PrivacyController extends Controller
                     new Paragraph('If your manuscript is rejected, and if you ask us to, we may pass data to another journal to which you are submitting the manuscript.'),
                     new Paragraph('Some of these individuals and organisations are outside the European Economic Area (EEA).'),
                     new Paragraph('If eLife, or substantially all of its assets, were acquired, or in the unlikely event that eLife went out of business or entered bankruptcy, personal information might be one of the assets that was acquired by a third party. In that case, the personal information might be used by a third party in accordance with this notice.')
-                ), 'Who do we share the data with, and why?', 3,'authors-share'),
+                ), 'Who do we share the data with, and why?', 3, 'authors-share'),
                 ArticleSection::basic($this->render(
                     new Paragraph('We safeguard your data using appropriate administrative, physical and technical security measures.'),
                     new Paragraph('When we share your data with others, we have contractual arrangements with them that oblige them to safeguard the data, to use it only for the purposes we have requested, and not to disclose it to any other parties without our consent.'),
@@ -141,7 +141,7 @@ final class PrivacyController extends Controller
                     new Paragraph('You may also ask us to stop processing your data in certain specific circumstances: you contest the accuracy of the personal data and we are verifying the accuracy; the data has been unlawfully processed and you oppose erasure and request restriction instead; we no longer need the personal data, but you need us to keep it in order to establish, exercise or defend a legal claim; or you have objected to us processing your data and we are considering whether our legitimate grounds override yours.'),
                     new Paragraph('To exercise these rights please contact <a href="mailto:data@elifesciences.org">data@elifesciences.org</a>.'),
                     new Paragraph('You may complain about our retention and processing of your personal data to the Information Commissioner’s Office, the supervisory authority for data protection issues in England and Wales.')
-                ), 'Your rights', 3,'authors-rights')
+                ), 'Your rights', 3, 'authors-rights')
             ), null, null, true),
             ArticleSection::collapsible('editors', 'Editors and reviewers', 2, $this->render(
                 new Paragraph('This section of the notice deals specifically with personal information held by eLife about editors and reviewers  (editors include guest editors as well as members of the editorial board). You should also refer to the <a href="#users">general website user section</a> of the notice , that relates to all users of our website.'),
