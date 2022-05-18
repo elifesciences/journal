@@ -41,9 +41,9 @@ final class SectionConverter implements ViewModelConverter
         }
 
         return ViewModel\ArticleSection::basic(
+            $this->patternRenderer->render(...$this->convertContent($object, $level, $context)),
             $object->getTitle(),
             $level,
-            $this->patternRenderer->render(...$this->convertContent($object, $level, $context)),
             $object->getId(),
             null,
             null,

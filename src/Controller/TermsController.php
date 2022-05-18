@@ -20,7 +20,7 @@ final class TermsController extends Controller
         $arguments['contentHeader'] = new ContentHeader($arguments['title']);
 
         $arguments['body'] = [
-            ArticleSection::basic('Welcome and Consent to Terms', 2, $this->render(
+            ArticleSection::basic($this->render(
                 new Paragraph('eLife Sciences Publications, Ltd. ("eLife") is a 501(c)(3) nonprofit
                           initiative for the very best in science and science communication. In
                           furtherance of our mission, eLife operates websites, including the websites at
@@ -32,8 +32,8 @@ final class TermsController extends Controller
                           constitutes your acceptance of these Terms and Conditions. If you do not
                           accept these Terms and Conditions in full, you do not have permission to
                           access and use the eLife Sites and should cease doing so immediately.')
-            )),
-            ArticleSection::basic('Ownership', 2, $this->render(
+            ), 'Welcome and Consent to Terms', 2),
+            ArticleSection::basic($this->render(
                 new Paragraph('The eLife Sites, the software ("eLife Software"), application programming
                           interfaces ("eLife APIs"), content and trademarks used on or in connection
                           with the eLife Sites are owned by eLife or its licensors, and are subject to
@@ -42,8 +42,8 @@ final class TermsController extends Controller
                           license or right under any trademark, copyright or patent of eLife or any
                           other third party and all rights are reserved, except as explicitly stated in
                           these Terms and Conditions.')
-            )),
-            ArticleSection::basic('License to Use Journal Articles and Related Content', 2, $this->render(
+            ), 'Ownership', 2),
+            ArticleSection::basic($this->render(
                 new Paragraph('Unless otherwise indicated, the articles and journal content published by
                           eLife on the eLife Sites are licensed under a <a
                             href="https://creativecommons.org/licenses/by/4.0/">Creative Commons
@@ -51,8 +51,8 @@ final class TermsController extends Controller
                           are free to use, reproduce and distribute the articles and related content
                           (unless otherwise noted), for commercial and noncommercial purposes, subject
                           to citation of the original source in accordance with the CC-BY license.')
-            )),
-            ArticleSection::basic('Impermissible Uses', 2, $this->render(
+            ), 'License to Use Journal Articles and Related Content', 2),
+            ArticleSection::basic($this->render(
                 new Paragraph('You agree to use the eLife Sites only for lawful purposes, and in a manner
                               that does not infringe the rights of, or restrict or inhibit the use of the
                               eLife Sites by any third party. Such restriction or inhibition includes,
@@ -78,8 +78,8 @@ final class TermsController extends Controller
                                   in the use of the eLife Sites, violate any US laws or laws in your
                                   jurisdiction (including but not limited to copyright laws).',
                 ], 'bullet')
-            )),
-            ArticleSection::basic('Suspension of Use / Violation of these Terms and Conditions', 2, $this->render(
+            ), 'Impermissible Uses', 2),
+            ArticleSection::basic($this->render(
                 new Paragraph('eLife reserves the right to limit, suspend, or terminate your access and use
                               of the eLife Sites at any time without notice. eLife reserves the right to
                               investigate and prosecute violations of any of these Terms and Conditions to
@@ -90,8 +90,8 @@ final class TermsController extends Controller
                               You hereby agree that eLife may, in the exercise of eLife&apos;s sole discretion,
                               remove or delete any entries, information, materials or other content that
                               violates these Terms and Conditions or that is otherwise objectionable.')
-            )),
-            ArticleSection::basic('Disclaimer of Warranty', 2, $this->render(
+            ), 'Suspension of Use / Violation of these Terms and Conditions', 2),
+            ArticleSection::basic($this->render(
                 new Paragraph('The eLife Sites, including, without limitation, the eLife Software, the eLife
                               APIs and the content on the eLife Sites (e.g., the articles, information,
                               data, names, images, pictures, logos and icons), whether belonging to eLife or
@@ -110,8 +110,8 @@ final class TermsController extends Controller
                               free, that defects will be corrected, or that the eLife Sites or the server
                               that makes THEM available are free of viruses or bugs or represents the full
                               functionality, accuracy, AND reliability of the materials.')
-            )),
-            ArticleSection::basic('Limitation of Liability', 2, $this->render(
+            ), 'Disclaimer of Warranty', 2),
+            ArticleSection::basic($this->render(
                 new Paragraph('To the fullest extent permitted by law, in no event will the eLife Parties,
                               the software vendors, developers or other consultants working on the eLife
                               Sites be liable for any losses, damages, liabilities, costs or claims
@@ -125,8 +125,8 @@ final class TermsController extends Controller
                               indemnity payment). IN ALL CASES, THE ELIFE PARTIES, THE SOFTWARE VENDORS,
                               DEVELOPERS OR OTHER CONSULTANTS SHALL NOT BE LIABLE FOR ANY LOSS OR DAMAGE
                               THAT WAS NOT REASONABLY FORESEEABLE.')
-            )),
-            ArticleSection::basic('Indemnity', 2, $this->render(
+            ), 'Limitation of Liability', 2),
+            ArticleSection::basic($this->render(
                 new Paragraph('You are solely responsible for your actions in connection with the eLife
                               Sites and any internet costs incurred in accessing the sites. You agree to
                               indemnify and hold harmless, and at eLife&apos;s option defend, the eLife Parties,
@@ -148,8 +148,8 @@ final class TermsController extends Controller
                                   whatsoever nature, or rights similar thereto anywhere in the world,
                                   belonging to any other person, or any allegation of any of the foregoing.',
                 ], 'bullet')
-            )),
-            ArticleSection::basic('Interactive Features', 2, $this->render(
+            ), 'Indemnity', 2),
+            ArticleSection::basic($this->render(
                 new Paragraph('In the course of using the eLife Sites, you may provide eLife with feedback,
                               including but not limited to suggestions, observations, errors, problems, and
                               defects regarding the eLife Sites (collectively &quot;Feedback&quot;) as well as
@@ -161,13 +161,13 @@ final class TermsController extends Controller
                               generally and in particular the restrictions in Impermissible Uses above. In
                               addition, content provided by authors for submission shall be subject to the
                               Author Guide and Policies.')
-            )),
-            ArticleSection::basic('Infringement', 2, $this->render(
+            ), 'Interactive Features', 2),
+            ArticleSection::basic($this->render(
                 new Paragraph('If you believe that your work has been copied in a way that constitutes
                               copyright infringement or your intellectual property rights have otherwise
                               been violated, please notify <a href="mailto:info@elifesciences.org">info@elifesciences.org</a>.')
-            )),
-            ArticleSection::basic('Links to Other Websites and Resources', 2, $this->render(
+            ), 'Infringement', 2),
+            ArticleSection::basic($this->render(
                 new Paragraph('The eLife Sites may provide links to other websites or resources. Because
                               eLife has no control over such sites and resources, you acknowledge and agree
                               that eLife is not responsible for the availability of such external sites or
@@ -181,8 +181,8 @@ final class TermsController extends Controller
                               or alleged to be caused by or in connection with use of or reliance on any
                               content, goods, or services available on or through any such site or
                               resource.')
-            )),
-            ArticleSection::basic('Modifications to eLife Site and Terms and Conditions', 2, $this->render(
+            ), 'Links to Other Websites and Resources', 2),
+            ArticleSection::basic($this->render(
                 new Paragraph('eLife reserves the right to modify or discontinue, temporarily or
                               permanently, any of the eLife Sites (or any part thereof) with or without
                               notice at any time. eLife reserves the right to change these Terms and
@@ -191,8 +191,8 @@ final class TermsController extends Controller
                               changes. Your continued use of the eLife Sites after changes are posted
                               constitutes your acceptance of this agreement as modified by the posted
                               changes.')
-            )),
-            ArticleSection::basic('Additional Terms for Certain Features', 2, $this->render(
+            ), 'Modifications to eLife Site and Terms and Conditions', 2),
+            ArticleSection::basic($this->render(
                 new Paragraph('Certain parts of the eLife Sites may be subject to registration and
                               additional terms and conditions which will be made available for you to read
                               at the time of registration, for example, if you register to use certain
@@ -205,8 +205,8 @@ final class TermsController extends Controller
                               password. You are required to notify eLife immediately of any known or
                               suspected unauthorized use of your account or password and take reasonable
                               steps to stop such use.')
-            )),
-            ArticleSection::basic('General', 2, $this->render(
+            ), 'Additional Terms for Certain Features', 2),
+            ArticleSection::basic($this->render(
                 new Paragraph('Any forbearance or indulgence by eLife in enforcing any provision in these
                               Terms and Conditions shall not affect eLife&apos;s right of enforcement and any
                               waiver of any breach shall not operate as a waiver of any subsequent or
@@ -223,11 +223,11 @@ final class TermsController extends Controller
                               the courts of New York. If there is any conflict between these Terms and
                               Conditions and/or specific terms appearing elsewhere on the eLife Sites
                               relating to specific material then the latter shall prevail.')
-            )),
-            ArticleSection::basic('Questions and Comments', 2, $this->render(
+            ), 'General', 2),
+            ArticleSection::basic($this->render(
                 new Paragraph('If you have any questions or comments about these Terms and Conditions,
                               please contact <a href="mailto:info@elifesciences.org">info@elifesciences.org</a>')
-            )),
+            ), 'Questions and Comments', 2),
         ];
 
         return new Response($this->get('templating')->render('::terms.html.twig', $arguments));
