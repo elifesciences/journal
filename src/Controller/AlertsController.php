@@ -23,35 +23,35 @@ final class AlertsController extends Controller
             'Stay in touch with eLife efforts to support the community and open science as well as new research. Choose your feeds and preferred ways to connect below.');
 
         $arguments['body'] = [
-            ArticleSection::basic('New Research', 2, $this->render(
+            ArticleSection::basic($this->render(
                 Listing::unordered([
                     'Receive <a href="'.$this->get('router')->generate('content-alerts').'">weekly updates of the latest published research</a>',
                     'To stay on top of new research available every day, subscribe to our RSS feeds for <a href="'.$this->get('router')->generate('rss-ahead').'">author PDFs</a> and <a href="'.$this->get('router')->generate('rss-recent').'">published articles</a>',
                     'See the highlights of recently published research and more on <a href="https://www.twitter.com/elife">Twitter</a> or <a href="https://www.facebook.com/elifesciences">Facebook</a>',
                 ], 'bullet')
-            )),
-            ArticleSection::basic('Science in plain language', 2, $this->render(
+            ), 'New Research', 2),
+            ArticleSection::basic($this->render(
                 Listing::unordered([
                     'Subscribe to the RSS feed for <a href="'.$this->get('router')->generate('rss-digests').'">eLife Digests</a>',
                     'Subscribe to the RSS feed for <a href="'.$this->get('router')->generate('rss-magazine').'">all the latest content from the eLife magazine</a>',
                 ], 'bullet')
-            )),
-            ArticleSection::basic('Community-building', 2, $this->render(
+            ), 'Science in plain language', 2),
+            ArticleSection::basic($this->render(
                 Listing::unordered([
                     '<a href="'.$this->get('router')->generate('content-alerts-variant', ['variant' => 'early-career']).'">Sign up to our monthly early-career researchers community newsletter</a> for details on upcoming webinars, new programmes, interviews, and other efforts to support positive research culture in life sciences and biomedicine',
                 ], 'bullet')
-            )),
-            ArticleSection::basic('eLife&apos;s Innovation Initiative and technology news', 2, $this->render(
+            ), 'Community-building', 2),
+            ArticleSection::basic($this->render(
                 Listing::unordered([
                     'For the latest in eLife Labs, innovation, and new tools, <a href="'.$this->get('router')->generate('content-alerts-variant', ['variant' => 'technology']).'">sign up for our technology and innovation newsletter</a>',
                     'Subscribe to the RSS feed for <a href="'.$this->get('router')->generate('rss-labs').'">all the open source technology innovation news</a> from eLife Sciences',
                 ], 'bullet')
-            )),
-            ArticleSection::basic('The latest from eLife', 2, $this->render(
+            ), 'eLife&apos;s Innovation Initiative and technology news', 2),
+            ArticleSection::basic($this->render(
                 Listing::unordered([
                     'Sign up to receive our <a href="'.$this->get('router')->generate('content-alerts-variant', ['variant' => 'elife-newsletter']).'">bi-monthly newsletter</a> for recent developments at eLife, new products and collaborations and changes to editorial policy.</a>',
                 ], 'bullet')
-            )),
+            ), 'The latest from eLife', 2),
         ];
 
         $this->get('elife.api_sdk.subjects')
@@ -61,9 +61,9 @@ final class AlertsController extends Controller
                 return 'Subscribe to the RSS feed for <a href="'.$this->get('router')->generate('rss-recent-by-subject', [$subject]).'">'.$subject->getName().'</a>';
             })
             ->then(function (Sequence $links) use (&$arguments) {
-                $arguments['body'][] = ArticleSection::basic('eLife&apos;s Subject specific RSS feeds', 2, $this->render(
+                $arguments['body'][] = ArticleSection::basic($this->render(
                     Listing::unordered($links->toArray(), 'bullet')
-                ));
+                ), 'eLife&apos;s Subject specific RSS feeds', 2);
             })
             ->otherwise($this->softFailure('Failed to load subjects list'))
             ->wait();

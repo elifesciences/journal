@@ -453,22 +453,22 @@ final class ArticlesController extends Controller
 
                     $funding[] = new Paragraph($item->getFunding()->getStatement());
 
-                    $infoSections[] = ArticleSection::basic('Funding', 3, $this->render(...$funding));
+                    $infoSections[] = ArticleSection::basic($this->render(...$funding), 'Funding', 3);
                 }
 
                 if ($item instanceof ArticleVoR && $item->getAcknowledgements()->notEmpty()) {
                     $infoSections[] = ArticleSection::basic(
+                        $this->render(...$item->getAcknowledgements()->map($this->willConvertTo(null, ['level' => 3]))),
                         'Acknowledgements',
-                        3,
-                        $this->render(...$item->getAcknowledgements()->map($this->willConvertTo(null, ['level' => 3])))
+                        3
                     );
                 }
 
                 if ($item->getEthics()->notEmpty()) {
                     $infoSections[] = ArticleSection::basic(
+                        $this->render(...$item->getEthics()->map($this->willConvertTo(null, ['level' => 3]))),
                         'Ethics',
-                        3,
-                        $this->render(...$item->getEthics()->map($this->willConvertTo(null, ['level' => 3])))
+                        3
                     );
                 }
 
@@ -582,7 +582,7 @@ final class ArticlesController extends Controller
                     $copyright = sprintf('<p>© %s, %s</p>', 2011 + $item->getVolume(), $item->getCopyright()->getHolder()).$copyright;
                 }
 
-                $infoSections[] = ArticleSection::basic('Copyright', 3, $copyright);
+                $infoSections[] = ArticleSection::basic($copyright, 'Copyright', 3);
 
                 $parts[] = ArticleSection::collapsible(
                     'info',
@@ -637,7 +637,7 @@ final class ArticlesController extends Controller
                 $body = $parts['body'];
                 $downloadLinks = $parts['downloadLinks'];
 
-                $body[] = ArticleSection::basic('Download links', 2, $this->render($downloadLinks));
+                $body[] = ArticleSection::basic($this->render($downloadLinks), 'Download links', 2);
 
                 $body[] = $this->convertTo($item, ViewModel\ArticleMeta::class);
 
@@ -775,7 +775,7 @@ final class ArticlesController extends Controller
                 $body = $parts['body'];
                 $downloadLinks = $parts['downloadLinks'];
 
-                $body[] = ArticleSection::basic('Download links', 2, $this->render($downloadLinks));
+                $body[] = ArticleSection::basic($this->render($downloadLinks), 'Download links', 2);
 
                 return $body;
             });
