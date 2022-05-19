@@ -33,7 +33,7 @@ final class ArticleContentHeaderConverter implements ViewModelConverter
     {
         $isMagazine = $context['isMagazine'] ?? false;
 
-        $breadcrumb = ($isMagazine) ? [
+        $breadcrumb = ($isMagazine || 'feature' === $object->getType()) ? [
             new ViewModel\Link(
                 'Magazine',
                 $this->urlGenerator->generate('magazine')
