@@ -155,6 +155,24 @@ final class ArticleControllerTest extends PageTestCase
     /**
      * @test
      */
+    public function it_has_cite_this_article_links()
+    {
+        $client = static::createClient();
+
+        $crawler = $client->request('GET', $this->getUrl().'?foo');
+
+        $this->assertSame('Cite this article (links to download the citations from this article in formats compatible with various reference manager tools)', $crawler->filter('#cite-this-article')->text());
+        $citeThisArticleText = array_map('trim', explode("\n", $crawler->filter('.reference')->text()));
+        $this->assertContains('Article title', $citeThisArticleText);
+        $this->assertContains('eLife 1:e00001.', $citeThisArticleText);
+        $this->assertContains('https://doi.org/10.7554/eLife.00001', $citeThisArticleText);
+
+        $this->assertEmpty($crawler->filter('[data-download-type="pdf-figures"]'));
+    }
+
+    /**
+     * @test
+     */
     public function it_may_have_a_social_image()
     {
         $client = static::createClient();
