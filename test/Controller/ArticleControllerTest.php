@@ -2472,6 +2472,7 @@ final class ArticleControllerTest extends PageTestCase
         $crawler = $client->request('GET', '/articles/00001');
 
         $this->assertSame('Title prefix: Article title', $crawler->filter('.content-header__title')->text());
+        $this->assertEmpty($crawler->filter('.content-header__impact-statement'));
 
         $this->assertSame('Abstract',
             $crawler->filter('.main-content-grid > section:nth-of-type(1) > header > h2')->text());
@@ -3646,14 +3647,55 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertSame('Respiro-Fermentation: To breathe or not to breathe?', $crawler->filter('.content-header__title')->text());
         $this->assertSame('Listeria monocytogenes uses respiration to sustain a risky fermentative lifestyle during infection.', $crawler->filter('.content-header__impact-statement')->text());
 
+        $this->assertEmpty($crawler->filter('.view-selector'));
+
         $this->assertEmpty($crawler->filter('.content-header .author_list_item'));
-        $this->assertCount(2, $crawler->filter('.main-content-grid .author_list_item'));
+        $authors = $crawler->filter('.main-content-grid .author_list_item');
+        $this->assertCount(2, $authors);
+        $this->assertSame('Lauren C Radlinski', $authors->eq(0)->filter('a')->text());
+        $this->assertSame('Andreas J Bäumler', $authors->eq(1)->filter('a')->text());
 
         $this->assertEmpty($crawler->filter('.content-header .institution_list_item'));
-        $this->assertCount(1, $crawler->filter('.main-content-grid .institution_list_item'));
+        $institutions = $crawler->filter('.main-content-grid .institution_list_item');
+        $this->assertCount(1, $institutions);
+        $this->assertSame('Department of Medical Microbiology and Immunology, School of Medicine, University of California, Davis, United States;', $this->crawlerText($institutions->eq(0)));
 
         $this->assertNotContains('Abstract', $crawler->filter('.main-content-grid')->text());
         $this->assertNotContains('Main text', $crawler->filter('.main-content-grid')->text());
+
+        $sections = $crawler->filter('.main-content-grid > .article-section');
+        $this->assertCount(4, $sections);
+        $this->assertEmpty($sections->eq(0)->filter('h2'));
+        $this->assertSame('References', $sections->eq(1)->filter('h2')->text());
+        $this->assertSame('Article and author information', $sections->eq(2)->filter('h2')->text());
+
+        $downloadLinks = $sections->eq(3);
+        $this->assertSame('Download links', $downloadLinks->filter('h2')->text());
+        $downloadLinksGroup = $downloadLinks->filter('.article-download-links-list__group');
+        $this->assertCount(3, $downloadLinksGroup);
+
+        $pdfs = $downloadLinksGroup->eq(0);
+        $this->assertSame('Downloads (link to download the article as PDF)', $pdfs->filter('.article-download-links-list__heading')->text());
+        $pdfLinks = $pdfs->filter('.article-download-links-list__item');
+        $this->assertCount(1, $pdfLinks);
+        $this->assertSame('Article PDF', $this->crawlerText($pdfLinks->eq(0)));
+
+        $openCitations = $downloadLinksGroup->eq(1);
+        $this->assertSame('Open citations (links to open the citations from this article in various online reference manager services)', $openCitations->filter('.article-download-links-list__heading')->text());
+        $openCitationLinks = $openCitations->filter('.article-download-links-list__item');
+        $this->assertCount(2, $openCitationLinks);
+        $this->assertSame('Mendeley', $this->crawlerText($openCitationLinks->eq(0)));
+        $this->assertCount(1, $openCitationLinks->filter('[data-behaviour="CheckPMC"]'));
+
+        $citeThisArticle = $downloadLinksGroup->eq(2);
+        $this->assertSame('Cite this article (links to download the citations from this article in formats compatible with various reference manager tools)', $citeThisArticle->filter('.article-download-links-list__heading')->text());
+        $this->assertSame('Lauren C Radlinski Andreas J Bäumler (2022) Respiro-Fermentation: To breathe or not to breathe? eLife 11:e79593. https://doi.org/10.7554/eLife.79593', $this->crawlerText($citeThisArticle->filter('.reference')));
+        $citeThisArticleLinks = $citeThisArticle->filter('.article-download-links-list__item');
+        $this->assertCount(2, $citeThisArticleLinks);
+        $this->assertSame('BibTeX', $this->crawlerText($citeThisArticleLinks->eq(0)));
+        $this->assertSame('RIS', $this->crawlerText($citeThisArticleLinks->eq(1)));
+
+        $this->assertSame('Categories and tags', $crawler->filter('.main-content-grid > section')->eq(4)->filter('h4')->text());
     }
 
     /**
