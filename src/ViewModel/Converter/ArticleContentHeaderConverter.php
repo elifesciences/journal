@@ -4,6 +4,7 @@ namespace eLife\Journal\ViewModel\Converter;
 
 use eLife\ApiSdk\Model\ArticleVersion;
 use eLife\ApiSdk\Model\Block\Paragraph;
+use eLife\ApiSdk\Model\HasImpactStatement;
 use eLife\ApiSdk\Model\Subject;
 use eLife\Journal\Helper\CanConvertContent;
 use eLife\Journal\Helper\LicenceUri;
@@ -51,10 +52,7 @@ final class ArticleContentHeaderConverter implements ViewModelConverter
 
         $authors = (!$isMagazine && $object->getAuthors()->notEmpty()) ? $this->convertTo($object, ViewModel\Authors::class) : null;
 
-        // @todo - consider just using impactStatement for magazine articles, rather than abstract
-        $impactStatement = ($isMagazine && $object->getAbstract()) ? implode(' ', $object->getAbstract()->getContent()->map(function (Paragraph $item) {
-            return $item->getText();
-        })->toArray()) : null;
+        $impactStatement = ($isMagazine && $object instanceof HasImpactStatement) ? $object->getImpactStatement() : null;
 
         if ($date = $this->simpleDate($object, ['date' => 'published'] + $context)) {
             $meta = ViewModel\MetaNew::withDate($date);
