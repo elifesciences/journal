@@ -21,6 +21,16 @@ Installation
 
 Running the site locally
 ------------------------
+The first time running the journal, you may need to build some dependant images first.
+1. Build all dependant images first
+```
+docker-compose build npm
+docker-compose build composer
+docker-compose build assets_builder
+docker-compose build app
+```
+
+Then, you should be able to start and restart using these commands:
 
 1. `docker-compose down --volumes --remove-orphans && docker-compose up --build`
 2. Open `http://localhost:8080` in your browser.
@@ -32,7 +42,7 @@ When running the site locally via Docker, the parameters are supplied by `/.dock
 To change configuration that is supplied by an environment variable, pass in the environment variable at start up. For example, to change the API URL:
 `docker-compose down --volumes --remove-orphans && API_URL=https://prod--gateway.elifesciences.org docker-compose up --build`.
 
-See `/.env` for the list of environment variables that can be passed in this way.  
+See `/.env` for the list of environment variables that can be passed in this way.
 
 Regenerating critical CSS
 -------------------------
