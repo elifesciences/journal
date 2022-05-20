@@ -95,8 +95,8 @@ final class ArticleDownloadLinksListConverter implements ViewModelConverter
         $groups[] = new ViewModel\ArticleDownloadLinksGroup(
             mixed_visibility_text('', 'Cite this article', '(links to download the citations from this article in formats compatible with various reference manager tools)'),
             [
-                new ViewModel\ArticleDownloadLink(new ViewModel\Link('BibTeX', $this->urlGenerator->generate('article-bibtex', [$object]))),
-                new ViewModel\ArticleDownloadLink(new ViewModel\Link('RIS', $this->urlGenerator->generate('article-ris', [$object]))),
+                new ViewModel\ArticleDownloadLink(new ViewModel\Link('Download .BibTex', $this->urlGenerator->generate('article-bibtex', [$object]))),
+                new ViewModel\ArticleDownloadLink(new ViewModel\Link('Download .RIS', $this->urlGenerator->generate('article-ris', [$object]))),
             ],
             $this->patternRenderer->render($this->convertTo($object, ViewModel\Reference::class)),
             'cite-this-article',

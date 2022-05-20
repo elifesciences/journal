@@ -2706,8 +2706,8 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertSame('Foo Bar Baz (2007) Title prefix: Article title eLife 1:e00001. https://doi.org/10.7554/eLife.00001', $this->crawlerText($citeThisArticle->filter('.reference')));
         $citeThisArticleLinks = $citeThisArticle->filter('.article-download-links-list__item');
         $this->assertCount(2, $citeThisArticleLinks);
-        $this->assertSame('BibTeX', $this->crawlerText($citeThisArticleLinks->eq(0)));
-        $this->assertSame('RIS', $this->crawlerText($citeThisArticleLinks->eq(1)));
+        $this->assertSame('Download BibTex', $this->crawlerText($citeThisArticleLinks->eq(0)));
+        $this->assertSame('Download .RIS', $this->crawlerText($citeThisArticleLinks->eq(1)));
 
         $this->assertSame('Categories and tags', $crawler->filter('.main-content-grid > section:nth-of-type(12) .article-meta__group_title')->text());
 
@@ -3696,8 +3696,8 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertSame('Lauren C Radlinski Andreas J Bäumler (2022) Respiro-Fermentation: To breathe or not to breathe? eLife 11:e79593. https://doi.org/10.7554/eLife.79593', $this->crawlerText($citeThisArticle->filter('.reference')));
         $citeThisArticleLinks = $citeThisArticle->filter('.article-download-links-list__item');
         $this->assertCount(2, $citeThisArticleLinks);
-        $this->assertSame('BibTeX', $this->crawlerText($citeThisArticleLinks->eq(0)));
-        $this->assertSame('RIS', $this->crawlerText($citeThisArticleLinks->eq(1)));
+        $this->assertSame('Download BibTex', $this->crawlerText($citeThisArticleLinks->eq(0)));
+        $this->assertSame('Download .RIS', $this->crawlerText($citeThisArticleLinks->eq(1)));
 
         $this->assertSame('Categories and tags', $crawler->filter('.main-content-grid > section')->eq(4)->filter('h4')->text());
     }
