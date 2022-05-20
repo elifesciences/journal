@@ -1212,7 +1212,8 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertSame('Article title', $crawler->filter('.content-header__title')->text());
 
-        // @todo: Reintroduce test for comments.
+        $this->assertSame('Comment Open annotations (there are currently 0 annotations on this page).',
+            $this->crawlerText($crawler->filter('.content-header-grid__side .content-header-grid__side-popup-block__list li')->eq(2)));
 
         $this->assertSame(
             [
