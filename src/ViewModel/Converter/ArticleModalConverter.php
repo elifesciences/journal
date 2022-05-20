@@ -66,7 +66,7 @@ final class ArticleModalConverter implements ViewModelConverter
                 new ViewModel\ButtonCollection(
                     array_merge(($context['clipboard'] ?? false) ? [Button::clipboard('Copy to clipboard', $context['clipboard'])] : [],
                     [
-                        Button::link('Download BibTex', $this->urlGenerator->generate('article-bibtex', [$object]), Button::SIZE_MEDIUM, Button::STYLE_SECONDARY),
+                        Button::link('Download BibTeX', $this->urlGenerator->generate('article-bibtex', [$object]), Button::SIZE_MEDIUM, Button::STYLE_SECONDARY),
                         Button::link('Download .RIS', $this->urlGenerator->generate('article-ris', [$object]), Button::SIZE_MEDIUM, Button::STYLE_SECONDARY),
                     ])
                 ),
