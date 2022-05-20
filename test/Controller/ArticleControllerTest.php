@@ -127,6 +127,9 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertEmpty($crawler->filter('.institution_list'));
 
         $this->assertCount(0, $crawler->filter('.contextual-data__cite_wrapper'));
+
+        $this->assertSame('Article title eLife 1:e00001. https://doi.org/10.7554/eLife.00001', $this->crawlerText($crawler->filter('.article-download-links-list__group .reference')));
+
     }
 
     /**
