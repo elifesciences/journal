@@ -19,7 +19,15 @@ final class ArticleControllerTest extends PageTestCase
 
         $crawler = $client->request('GET', $this->getUrl());
 
-        // @todo: Add test for breadcrumb including article title.
+        $breadcrumb = $crawler->filter('.breadcrumb-item a');
+        $this->assertCount(1, $breadcrumb);
+        $this->assertEquals([
+            [
+                '/articles/research-article',
+                'Research Article',
+            ],
+        ], $breadcrumb->extract(['href', '_text']));
+
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertSame('Article title', $crawler->filter('.content-header__title')->text());
@@ -150,24 +158,6 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertSame('© 2010 Bar. Copyright statement.', $crawler->filter('meta[name="dc.rights"]')->attr('content'));
 
         $this->assertEmpty($crawler->filter('meta[name^="citation_"]'));
-    }
-
-    /**
-     * @test
-     */
-    public function it_has_cite_this_article_links()
-    {
-        $client = static::createClient();
-
-        $crawler = $client->request('GET', $this->getUrl().'?foo');
-
-        $this->assertSame('Cite this article (links to download the citations from this article in formats compatible with various reference manager tools)', $crawler->filter('#cite-this-article')->text());
-        $citeThisArticleText = array_map('trim', explode("\n", $crawler->filter('.reference')->text()));
-        $this->assertContains('Article title', $citeThisArticleText);
-        $this->assertContains('eLife 1:e00001.', $citeThisArticleText);
-        $this->assertContains('https://doi.org/10.7554/eLife.00001', $citeThisArticleText);
-
-        $this->assertEmpty($crawler->filter('[data-download-type="pdf-figures"]'));
     }
 
     /**
@@ -2686,7 +2676,31 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertContains('© 2012, Bar', $copyright->filter('div')->text());
         $this->assertContains('Copyright statement.', $copyright->filter('div')->text());
 
-        $this->assertSame('Download links', $crawler->filter('.main-content-grid > section:nth-of-type(11) .article-section__header_text')->text());
+        $downloadLinks = $crawler->filter('.main-content-grid > section:nth-of-type(11)');
+        $this->assertSame('Download links', $downloadLinks->filter('.article-section__header_text')->text());
+        $downloadLinksGroup = $downloadLinks->filter('.article-download-links-list__group');
+        $this->assertCount(3, $downloadLinksGroup);
+
+        $pdfs = $downloadLinksGroup->eq(0);
+        $this->assertSame('Downloads (link to download the article as PDF)', $pdfs->filter('.article-download-links-list__heading')->text());
+        $pdfLinks = $pdfs->filter('.article-download-links-list__item');
+        $this->assertCount(1, $pdfLinks);
+        $this->assertSame('Article PDF', $this->crawlerText($pdfLinks->eq(0)));
+
+        $openCitations = $downloadLinksGroup->eq(1);
+        $this->assertSame('Open citations (links to open the citations from this article in various online reference manager services)', $openCitations->filter('.article-download-links-list__heading')->text());
+        $openCitationLinks = $openCitations->filter('.article-download-links-list__item');
+        $this->assertCount(2, $openCitationLinks);
+        $this->assertSame('Mendeley', $this->crawlerText($openCitationLinks->eq(0)));
+        $this->assertCount(1, $openCitationLinks->filter('[data-behaviour="CheckPMC"]'));
+
+        $citeThisArticle = $downloadLinksGroup->eq(2);
+        $this->assertSame('Cite this article (links to download the citations from this article in formats compatible with various reference manager tools)', $citeThisArticle->filter('.article-download-links-list__heading')->text());
+        $this->assertSame('Foo Bar Baz (2007) Title prefix: Article title eLife 1:e00001. https://doi.org/10.7554/eLife.00001', $this->crawlerText($citeThisArticle->filter('.reference')));
+        $citeThisArticleLinks = $citeThisArticle->filter('.article-download-links-list__item');
+        $this->assertCount(2, $citeThisArticleLinks);
+        $this->assertSame('BibTeX', $this->crawlerText($citeThisArticleLinks->eq(0)));
+        $this->assertSame('RIS', $this->crawlerText($citeThisArticleLinks->eq(1)));
 
         $this->assertSame('Categories and tags', $crawler->filter('.main-content-grid > section:nth-of-type(12) .article-meta__group_title')->text());
 
