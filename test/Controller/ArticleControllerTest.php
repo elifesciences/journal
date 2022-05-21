@@ -2749,17 +2749,75 @@ final class ArticleControllerTest extends PageTestCase
             'insight' => [
                 '79593',
                 'insight',
-                'Insight',
+                'Listeria monocytogenes uses respiration to sustain a risky fermentative lifestyle during infection.',
+                [
+                    [
+                        'Magazine',
+                        '/magazine',
+                    ],
+                    [
+                        'Insight',
+                        '/articles/insight',
+                    ],
+                ],
+                [],
             ],
             'editorial' => [
                 '79594',
                 'editorial',
-                'Editorial',
+                'Listeria monocytogenes uses respiration to sustain a risky fermentative lifestyle during infection.',
+                [
+                    [
+                        'Magazine',
+                        '/magazine',
+                    ],
+                    [
+                        'Editorial',
+                        '/articles/editorial',
+                    ],
+                ],
+                [],
             ],
             'feature' => [
                 '79595',
                 'feature',
-                'Feature Article',
+                '',
+                [
+                    [
+                        'Magazine',
+                        '/magazine',
+                    ],
+                    [
+                        'Feature Article',
+                        '/articles/feature',
+                    ],
+                ],
+                [
+                    [
+                        'Article',
+                        '/articles/79595#content',
+                    ],
+                    [
+                        'Figures and data',
+                        '/articles/79595/figures#content',
+                    ],
+                    [
+                        'Abstract',
+                        '#abstract',
+                    ],
+                    [
+                        'Main text',
+                        '#s0',
+                    ],
+                    [
+                        'References',
+                        '#references',
+                    ],
+                    [
+                        'Article and author information',
+                        '#info',
+                    ],
+                ],
             ],
         ];
     }
@@ -2768,7 +2826,13 @@ final class ArticleControllerTest extends PageTestCase
      * @test
      * @dataProvider magazineArticlesProvider
      */
-    public function it_displays_magazine_content(string $id, string $type, string $typeLabel)
+    public function it_displays_magazine_content(
+        string $id,
+        string $type,
+        string $expectImpactStatement,
+        array $expectedBreadcrumb,
+        array $expectedViewSelectorItems
+    )
     {
         $client = static::createClient();
 
@@ -3658,64 +3722,21 @@ final class ArticleControllerTest extends PageTestCase
 
         $breadcrumb = $crawler->filter('.breadcrumb-item a');
         $this->assertCount(2, $breadcrumb);
-        $this->assertEquals([
-            [
-                'Magazine',
-                '/magazine',
-            ],
-            [
-                $typeLabel,
-                '/articles/'.$type,
-            ],
-        ], $breadcrumb->extract(['_text', 'href']));
+        $this->assertEquals($expectedBreadcrumb, $breadcrumb->extract(['_text', 'href']));
 
         $this->assertSame('Respiro-Fermentation: To breathe or not to breathe?', $crawler->filter('.content-header__title')->text());
-        $impactStatement = $crawler->filter('.content-header__impact-statement');
-        if ('feature' !== $type) {
-            // Abstract text appears as impact statement for insight and editorial articles.
-            $this->assertSame('Listeria monocytogenes uses respiration to sustain a risky fermentative lifestyle during infection.', $impactStatement->text());
+        if (empty($expectImpactStatement)) {
+            $this->assertEmpty($crawler->filter('.content-header__impact-statement'));
         } else {
-            // Impact statement is not present for feature articles.
-            $this->assertEmpty($impactStatement);
+            $this->assertSame($expectImpactStatement, $crawler->filter('.content-header__impact-statement')->text());
         }
 
-        if ('feature' !== $type) {
-            // View selector is not present for insight and editorial magazine articles.
-            $this->assertEmpty($crawler->filter('.view-selector'));
+        if (empty($expectedViewSelectorItems)) {
+            $this->assertEmpty($crawler->filter('.view-selector__list-item'));
         } else {
             $this->assertSame(
-                [
-                    [
-                        'Article',
-                        '/articles/'.$id.'#content',
-                    ],
-                    [
-                        'Figures and data',
-                        '/articles/'.$id.'/figures#content',
-                    ],
-                ],
-                $crawler->filter('.view-selector__link')->extract(['_text', 'href'])
-            );
-            $this->assertSame(
-                [
-                    [
-                        'Abstract',
-                        '#abstract',
-                    ],
-                    [
-                        'Main text',
-                        '#s0',
-                    ],
-                    [
-                        'References',
-                        '#references',
-                    ],
-                    [
-                        'Article and author information',
-                        '#info',
-                    ],
-                ],
-                $crawler->filter('.view-selector__jump_link')->extract(['_text', 'href'])
+                $expectedViewSelectorItems,
+                $crawler->filter('.view-selector__list-item a')->extract(['_text', 'href'])
             );
         }
 
