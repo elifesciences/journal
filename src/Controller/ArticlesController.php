@@ -1043,10 +1043,10 @@ final class ArticlesController extends Controller
 
                 $metrics = [];
 
-                if (null !== $pageViews) {
+                if (null !== $pageViews && $pageViews > 0) {
                     $metrics[] = sprintf('<a href="%s"><strong>%s</strong> views</a>', $this->generatePath($history, $item->getVersion(), null, 'metrics'), number_format($pageViews));
                 }
-                if (null !== $citations) {
+                if ($citations instanceof CitationsMetric && $citations->getHighest()->getCitations() > 0) {
                     $metrics[] = sprintf('<a href="%s"><strong>%s</strong> citations</a>', $this->generatePath($history, $item->getVersion(), null, 'metrics'), number_format($citations->getHighest()->getCitations()));
                 }
 
