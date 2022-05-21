@@ -23,10 +23,10 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertCount(1, $breadcrumb);
         $this->assertEquals([
             [
-                '/articles/research-article',
                 'Research Article',
+                '/articles/research-article',
             ],
-        ], $breadcrumb->extract(['href', '_text']));
+        ], $breadcrumb->extract(['_text', 'href']));
 
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
@@ -3660,14 +3660,14 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertCount(2, $breadcrumb);
         $this->assertEquals([
             [
-                '/magazine',
                 'Magazine',
+                '/magazine',
             ],
             [
-                '/articles/'.$type,
                 $typeLabel,
+                '/articles/'.$type,
             ],
-        ], $breadcrumb->extract(['href', '_text']));
+        ], $breadcrumb->extract(['_text', 'href']));
 
         $this->assertSame('Respiro-Fermentation: To breathe or not to breathe?', $crawler->filter('.content-header__title')->text());
         $impactStatement = $crawler->filter('.content-header__impact-statement');
@@ -3695,6 +3695,27 @@ final class ArticleControllerTest extends PageTestCase
                     ],
                 ],
                 $crawler->filter('.view-selector__link')->extract(['_text', 'href'])
+            );
+            $this->assertSame(
+                [
+                    [
+                        'Abstract',
+                        '#abstract',
+                    ],
+                    [
+                        'Main text',
+                        '#s0',
+                    ],
+                    [
+                        'References',
+                        '#references',
+                    ],
+                    [
+                        'Article and author information',
+                        '#info',
+                    ],
+                ],
+                $crawler->filter('.view-selector__jump_link')->extract(['_text', 'href'])
             );
         }
 
