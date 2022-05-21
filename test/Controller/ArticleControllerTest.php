@@ -3740,7 +3740,7 @@ final class ArticleControllerTest extends PageTestCase
             );
         }
 
-        if ('feature' !== $type) {
+        if (empty($expectedViewSelectorItems)) {
             // Authors appear in main-content-grid and not in content-header.
             $this->assertEmpty($crawler->filter('.content-header .author_list_item'));
             $this->assertEmpty($crawler->filter('.content-header .institution_list_item'));
@@ -3764,7 +3764,7 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertSame('Department of Medical Microbiology and Immunology, School of Medicine, University of California, Davis, United States;', $this->crawlerText($institutions->eq(0)));
 
         $sections = $crawler->filter('.main-content-grid > .article-section');
-        if ('feature' !== $type) {
+        if (empty($expectedViewSelectorItems)) {
             // Abstract does not appear in main-content-grid but populates the impact statement property.
             $this->assertNotContains('Abstract', $crawler->filter('.main-content-grid')->text());
             // The Main text heading does not appear for insights and editorials.
