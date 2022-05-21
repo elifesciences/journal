@@ -2743,17 +2743,39 @@ final class ArticleControllerTest extends PageTestCase
         );
     }
 
+    public function magazineArticlesProvider() : array
+    {
+        return [
+            'insight' => [
+                '79593',
+                'insight',
+                'Insight',
+            ],
+            'editorial' => [
+                '79594',
+                'editorial',
+                'Editorial',
+            ],
+            'feature' => [
+                '79595',
+                'feature',
+                'Feature Article',
+            ],
+        ];
+    }
+
     /**
      * @test
+     * @dataProvider magazineArticlesProvider
      */
-    public function it_displays_magazine_content()
+    public function it_displays_magazine_content(string $id, string $type, string $typeLabel)
     {
         $client = static::createClient();
 
         $this->mockApiResponse(
             new Request(
                 'GET',
-                'http://api.elifesciences.org/articles/79593',
+                'http://api.elifesciences.org/articles/'.$id,
                 ['Accept' => 'application/vnd.elife.article-poa+json; version=3, application/vnd.elife.article-vor+json; version=6']
             ),
             new Response(
@@ -2761,19 +2783,19 @@ final class ArticleControllerTest extends PageTestCase
                 ['Content-Type' => 'application/vnd.elife.article-vor+json; version=6'],
                 json_encode([
                     'status' => 'vor',
-                    'id' => '79593',
+                    'id' => $id,
                     'version' => 1,
-                    'type' => 'insight',
-                    'doi' => '10.7554/eLife.79593',
+                    'type' => $type,
+                    'doi' => '10.7554/eLife.'.$id,
                     'authorLine' => 'Lauren C Radlinski, Andreas J Bäumler',
                     'title' => 'To breathe or not to breathe?',
                     'titlePrefix' => 'Respiro-Fermentation',
                     'published' => '2022-05-20T00:00:00Z',
                     'versionDate' => '2022-05-20T00:00:00Z',
                     'volume' => 11,
-                    'elocationId' => 'e79593',
-                    'pdf' => 'https://cdn.elifesciences.org/articles/79593/elife-79593-v1.pdf',
-                    'xml' => 'https://cdn.elifesciences.org/articles/79593/elife-79593-v1.xml',
+                    'elocationId' => 'e'.$id,
+                    'pdf' => 'https://cdn.elifesciences.org/articles/'.$id.'/elife-'.$id.'-v1.pdf',
+                    'xml' => 'https://cdn.elifesciences.org/articles/'.$id.'/elife-'.$id.'-v1.xml',
                     'subjects' => [
                         [
                             'id' => 'biochemistry-chemical-biology',
@@ -2930,15 +2952,15 @@ final class ArticleControllerTest extends PageTestCase
                                             'id' => 'fig1',
                                             'image' => [
                                                 'alt' => '',
-                                                'uri' => 'https://iiif.elifesciences.org/lax:79593%2Felife-79593-fig1-v1.tif',
+                                                'uri' => 'https://iiif.elifesciences.org/lax:'.$id.'%2Felife-'.$id.'-fig1-v1.tif',
                                                 'size' => [
                                                     'width' => 2848,
                                                     'height' => 1207,
                                                 ],
                                                 'source' => [
                                                     'mediaType' => 'image/jpeg',
-                                                    'uri' => 'https://iiif.elifesciences.org/lax:79593%2Felife-79593-fig1-v1.tif/full/full/0/default.jpg',
-                                                    'filename' => 'elife-79593-fig1-v1.jpg',
+                                                    'uri' => 'https://iiif.elifesciences.org/lax:'.$id.'%2Felife-'.$id.'-fig1-v1.tif/full/full/0/default.jpg',
+                                                    'filename' => 'elife-'.$id.'-fig1-v1.jpg',
                                                 ],
                                             ],
                                             'label' => 'Figure 1',
@@ -3578,7 +3600,7 @@ final class ArticleControllerTest extends PageTestCase
         $this->mockApiResponse(
             new Request(
                 'GET',
-                'http://api.elifesciences.org/articles/79593/versions',
+                'http://api.elifesciences.org/articles/'.$id.'/versions',
                 [
                     'Accept' => [
                         'application/vnd.elife.article-history+json; version=2',
@@ -3594,18 +3616,18 @@ final class ArticleControllerTest extends PageTestCase
                     'versions' => [
                         [
                             'status' => 'vor',
-                            'id' => '79593',
+                            'id' => $id,
                             'version' => 1,
-                            'type' => 'insight',
-                            'doi' => '10.7554/eLife.79593',
+                            'type' => $type,
+                            'doi' => '10.7554/eLife.'.$id,
                             'authorLine' => 'Lauren C Radlinski, Andreas J Bäumler',
                             'title' => 'To breathe or not to breathe?',
                             'titlePrefix' => 'Respiro-Fermentation',
                             'published' => '2022-05-20T00:00:00Z',
                             'versionDate' => '2022-05-20T00:00:00Z',
                             'volume' => 11,
-                            'elocationId' => 'e79593',
-                            'pdf' => 'https://cdn.elifesciences.org/articles/79593/elife-79593-v1.pdf',
+                            'elocationId' => 'e'.$id,
+                            'pdf' => 'https://cdn.elifesciences.org/articles/'.$id.'/elife-'.$id.'-v1.pdf',
                             'subjects' => [
                                 [
                                     'id' => 'biochemistry-chemical-biology',
@@ -3630,7 +3652,7 @@ final class ArticleControllerTest extends PageTestCase
             )
         );
 
-        $crawler = $client->request('GET', '/articles/79593');
+        $crawler = $client->request('GET', '/articles/'.$id);
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
 
@@ -3642,37 +3664,88 @@ final class ArticleControllerTest extends PageTestCase
                 'Magazine',
             ],
             [
-                '/articles/insight',
-                'Insight',
+                '/articles/'.$type,
+                $typeLabel,
             ],
         ], $breadcrumb->extract(['href', '_text']));
 
         $this->assertSame('Respiro-Fermentation: To breathe or not to breathe?', $crawler->filter('.content-header__title')->text());
-        $this->assertSame('Listeria monocytogenes uses respiration to sustain a risky fermentative lifestyle during infection.', $crawler->filter('.content-header__impact-statement')->text());
+        $impactStatement = $crawler->filter('.content-header__impact-statement');
+        if ('feature' !== $type) {
+            // Abstract text appears as impact statement for insight and editorial articles.
+            $this->assertSame('Listeria monocytogenes uses respiration to sustain a risky fermentative lifestyle during infection.', $impactStatement->text());
+        } else {
+            // Impact statement is not present for feature articles.
+            $this->assertEmpty($impactStatement);
+        }
 
-        $this->assertEmpty($crawler->filter('.view-selector'));
+        if ('feature' !== $type) {
+            // View selector is not present for insight and editorial magazine articles.
+            $this->assertEmpty($crawler->filter('.view-selector'));
+        } else {
+            $this->assertSame(
+                [
+                    [
+                        'Article',
+                        '/articles/'.$id.'#content',
+                    ],
+                    [
+                        'Figures and data',
+                        '/articles/'.$id.'/figures#content',
+                    ],
+                ],
+                $crawler->filter('.view-selector__link')->extract(['_text', 'href'])
+            );
+        }
 
-        $this->assertEmpty($crawler->filter('.content-header .author_list_item'));
-        $authors = $crawler->filter('.main-content-grid .author_list_item');
+        if ('feature' !== $type) {
+            // Authors appear in main-content-grid and not in content-header.
+            $this->assertEmpty($crawler->filter('.content-header .author_list_item'));
+            $this->assertEmpty($crawler->filter('.content-header .institution_list_item'));
+
+            $authors = $crawler->filter('.main-content-grid .author_list_item');
+            $institutions = $crawler->filter('.main-content-grid .institution_list_item');
+        } else {
+            // Authors appear in content-header and not in main-content-grid.
+            $this->assertEmpty($crawler->filter('.main-content-grid .author_list_item'));
+            $this->assertEmpty($crawler->filter('.main-content-grid .institution_list_item'));
+
+            $authors = $crawler->filter('.content-header .author_list_item');
+            $institutions = $crawler->filter('.content-header .institution_list_item');
+        }
+
         $this->assertCount(2, $authors);
         $this->assertSame('Lauren C Radlinski', $authors->eq(0)->filter('a')->text());
         $this->assertSame('Andreas J Bäumler', $authors->eq(1)->filter('a')->text());
 
-        $this->assertEmpty($crawler->filter('.content-header .institution_list_item'));
-        $institutions = $crawler->filter('.main-content-grid .institution_list_item');
         $this->assertCount(1, $institutions);
         $this->assertSame('Department of Medical Microbiology and Immunology, School of Medicine, University of California, Davis, United States;', $this->crawlerText($institutions->eq(0)));
 
-        $this->assertNotContains('Abstract', $crawler->filter('.main-content-grid')->text());
-        $this->assertNotContains('Main text', $crawler->filter('.main-content-grid')->text());
-
         $sections = $crawler->filter('.main-content-grid > .article-section');
-        $this->assertCount(4, $sections);
-        $this->assertEmpty($sections->eq(0)->filter('h2'));
-        $this->assertSame('References', $sections->eq(1)->filter('h2')->text());
-        $this->assertSame('Article and author information', $sections->eq(2)->filter('h2')->text());
+        if ('feature' !== $type) {
+            // Abstract does not appear in main-content-grid but populates the impact statement property.
+            $this->assertNotContains('Abstract', $crawler->filter('.main-content-grid')->text());
+            // The Main text heading does not appear for insights and editorials.
+            $this->assertNotContains('Main text', $crawler->filter('.main-content-grid')->text());
+            $this->assertCount(4, $sections);
+            $this->assertEmpty($sections->eq(0)->filter('h2'));
+            $references = $sections->eq(1);
+            $articleAndAuthorInfo = $sections->eq(2);
+            $downloadLinks = $sections->eq(3);
+            $categoriesAndTags = $crawler->filter('.main-content-grid > section')->eq(4);
+        } else {
+            // Verify that Abstract and Main text sections and headings are present in main-content-grid for feature articles.
+            $this->assertSame('Abstract', $sections->eq(0)->filter('h2')->text());
+            $this->assertSame('Main text', $sections->eq(1)->filter('h2')->text());
+            $references = $sections->eq(2);
+            $articleAndAuthorInfo = $sections->eq(3);
+            $downloadLinks = $sections->eq(4);
+            $categoriesAndTags = $crawler->filter('.main-content-grid > section')->eq(5);
+        }
 
-        $downloadLinks = $sections->eq(3);
+        $this->assertSame('References', $references->filter('h2')->text());
+        $this->assertSame('Article and author information', $articleAndAuthorInfo->filter('h2')->text());
+
         $this->assertSame('Download links', $downloadLinks->filter('h2')->text());
         $downloadLinksGroup = $downloadLinks->filter('.article-download-links-list__group');
         $this->assertCount(3, $downloadLinksGroup);
@@ -3692,13 +3765,13 @@ final class ArticleControllerTest extends PageTestCase
 
         $citeThisArticle = $downloadLinksGroup->eq(2);
         $this->assertSame('Cite this article (links to download the citations from this article in formats compatible with various reference manager tools)', $citeThisArticle->filter('.article-download-links-list__heading')->text());
-        $this->assertSame('Lauren C Radlinski Andreas J Bäumler (2022) Respiro-Fermentation: To breathe or not to breathe? eLife 11:e79593. https://doi.org/10.7554/eLife.79593', $this->crawlerText($citeThisArticle->filter('.reference')));
+        $this->assertSame('Lauren C Radlinski Andreas J Bäumler (2022) Respiro-Fermentation: To breathe or not to breathe? eLife 11:e'.$id.'. https://doi.org/10.7554/eLife.'.$id, $this->crawlerText($citeThisArticle->filter('.reference')));
         $citeThisArticleLinks = $citeThisArticle->filter('.article-download-links-list__item');
         $this->assertCount(2, $citeThisArticleLinks);
         $this->assertSame('Download BibTeX', $this->crawlerText($citeThisArticleLinks->eq(0)));
         $this->assertSame('Download .RIS', $this->crawlerText($citeThisArticleLinks->eq(1)));
 
-        $this->assertSame('Categories and tags', $crawler->filter('.main-content-grid > section')->eq(4)->filter('h4')->text());
+        $this->assertSame('Categories and tags', $categoriesAndTags->filter('h4')->text());
     }
 
     /**
