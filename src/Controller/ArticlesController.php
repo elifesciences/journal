@@ -263,7 +263,7 @@ final class ArticlesController extends Controller
             });
 
         $arguments['body'] = all(['item' => $arguments['item'], 'isMagazine' => $arguments['isMagazine'], 'history' => $arguments['history'], 'citations' => $arguments['citations'], 'downloads' => $arguments['downloads'], 'pageViews' => $arguments['pageViews'], 'data' => $arguments['hasData'], 'context' => $context])
-            ->then(function (array $parts) use ($context) {
+            ->then(function (array $parts) {
                 /** @var ArticleVersion $item */
                 $item = $parts['item'];
                 /** @var bool $isMagazine */
