@@ -9,7 +9,7 @@ elifeUpdatePipeline(
         elifeWaitPackagist "elife/patterns", params.revision
         try {
             sh "docker-compose run --rm composer update elife/patterns --no-interaction"
-            // TODO: add check composer info matches params.revision
+            sh "docker-compose run --rm composer show elife/patterns | grep ${params.revision}"
         } finally {
             sh "docker-compose down -v"
         }
