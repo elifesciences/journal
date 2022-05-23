@@ -17,7 +17,7 @@ services:
                 node_version: ${NODE_VERSION}
         image: elifesciences/journal_npm:${IMAGE_TAG}
     redis:
-        image: redis:3.2.10-alpine
+        image: redis:6.2-alpine
     assets_builder:
         build:
             context: .
