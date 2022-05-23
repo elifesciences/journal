@@ -23,10 +23,10 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertCount(1, $breadcrumb);
         $this->assertEquals([
             [
-                '/articles/research-article',
                 'Research Article',
+                '/articles/research-article',
             ],
-        ], $breadcrumb->extract(['href', '_text']));
+        ], $breadcrumb->extract(['_text', 'href']));
 
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
@@ -127,6 +127,8 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertEmpty($crawler->filter('.institution_list'));
 
         $this->assertCount(0, $crawler->filter('.contextual-data__cite_wrapper'));
+
+        $this->assertSame('Article title eLife 1:e00001. https://doi.org/10.7554/eLife.00001', $this->crawlerText($crawler->filter('.article-download-links-list__group .reference')));
     }
 
     /**
@@ -958,20 +960,22 @@ final class ArticleControllerTest extends PageTestCase
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertSame('Article title', $crawler->filter('.content-header__title')->text());
-        $this->assertCount(5, $crawler->filter('.author_list_item'));
-        $this->assertSame('Author One', trim($crawler->filter('.author_list_item')->eq(0)->text(), " \n,"));
-        $this->assertSame('Author Two', trim($crawler->filter('.author_list_item')->eq(1)->text(), " \n,"));
-        $this->assertSame('Author Three', trim($crawler->filter('.author_list_item')->eq(2)->text(), " \n,"));
-        $this->assertSame('Author Four', trim($crawler->filter('.author_list_item')->eq(3)->text(), " \n,"));
+        $authors = $crawler->filter('.content-header .author_list_item');
+        $this->assertCount(5, $authors);
+        $this->assertSame('Author One', trim($authors->eq(0)->text(), " \n,"));
+        $this->assertSame('Author Two', trim($authors->eq(1)->text(), " \n,"));
+        $this->assertSame('Author Three', trim($authors->eq(2)->text(), " \n,"));
+        $this->assertSame('Author Four', trim($authors->eq(3)->text(), " \n,"));
         $this->assertSame('on behalf of Institution Four',
-            trim($crawler->filter('.author_list_item')->eq(4)->text(), " \n,"));
-        $this->assertCount(3, $crawler->filter('.institution_list_item'));
+            trim($authors->eq(4)->text(), " \n,"));
+        $institutions = $crawler->filter('.content-header .institution_list_item');
+        $this->assertCount(3, $institutions);
         $this->assertSame('Institution One, Country One',
-            trim($crawler->filter('.institution_list_item')->eq(0)->text(), " \n;"));
+            trim($institutions->eq(0)->text(), " \n;"));
         $this->assertSame('Institution Two, Country Two',
-            trim($crawler->filter('.institution_list_item')->eq(1)->text(), " \n;"));
+            trim($institutions->eq(1)->text(), " \n;"));
         $this->assertSame('Institution Three',
-            trim($crawler->filter('.institution_list_item')->eq(2)->text(), " \n;"));
+            trim($institutions->eq(2)->text(), " \n;"));
     }
 
     /**
@@ -1210,7 +1214,8 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertSame('Article title', $crawler->filter('.content-header__title')->text());
 
-        // @todo: Reintroduce test for comments.
+        $this->assertSame('Comment Open annotations (there are currently 0 annotations on this page).',
+            $this->crawlerText($crawler->filter('.content-header-grid__side .content-header-grid__side-popup-block__list li')->eq(2)));
 
         $this->assertSame(
             [
@@ -2619,6 +2624,7 @@ final class ArticleControllerTest extends PageTestCase
         $crawler = $client->request('GET', '/articles/00001');
 
         $this->assertSame('Title prefix: Article title', $crawler->filter('.content-header__title')->text());
+        $this->assertEmpty($crawler->filter('.content-header__impact-statement'));
 
         $this->assertSame('Abstract',
             $crawler->filter('.main-content-grid > section:nth-of-type(1) > header > h2')->text());
@@ -2848,8 +2854,8 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertSame('Foo Bar Baz (2007) Title prefix: Article title eLife 1:e00001. https://doi.org/10.7554/eLife.00001', $this->crawlerText($citeThisArticle->filter('.reference')));
         $citeThisArticleLinks = $citeThisArticle->filter('.article-download-links-list__item');
         $this->assertCount(2, $citeThisArticleLinks);
-        $this->assertSame('BibTeX', $this->crawlerText($citeThisArticleLinks->eq(0)));
-        $this->assertSame('RIS', $this->crawlerText($citeThisArticleLinks->eq(1)));
+        $this->assertSame('Download BibTeX', $this->crawlerText($citeThisArticleLinks->eq(0)));
+        $this->assertSame('Download .RIS', $this->crawlerText($citeThisArticleLinks->eq(1)));
 
         $this->assertSame('Categories and tags', $crawler->filter('.main-content-grid > section:nth-of-type(12) .article-meta__group_title')->text());
 
@@ -2884,6 +2890,1079 @@ final class ArticleControllerTest extends PageTestCase
             ],
             array_map('trim', $crawler->filter('.view-selector__jump_link_item')->extract('_text'))
         );
+    }
+
+    public function magazineArticlesProvider() : array
+    {
+        return [
+            'insight' => [
+                '79593',
+                'insight',
+                'Listeria monocytogenes uses respiration to sustain a risky fermentative lifestyle during infection.',
+                [
+                    [
+                        'Magazine',
+                        '/magazine',
+                    ],
+                    [
+                        'Insight',
+                        '/articles/insight',
+                    ],
+                ],
+                [],
+            ],
+            'editorial' => [
+                '79594',
+                'editorial',
+                'Listeria monocytogenes uses respiration to sustain a risky fermentative lifestyle during infection.',
+                [
+                    [
+                        'Magazine',
+                        '/magazine',
+                    ],
+                    [
+                        'Editorial',
+                        '/articles/editorial',
+                    ],
+                ],
+                [],
+            ],
+            'feature' => [
+                '79595',
+                'feature',
+                '',
+                [
+                    [
+                        'Magazine',
+                        '/magazine',
+                    ],
+                    [
+                        'Feature Article',
+                        '/articles/feature',
+                    ],
+                ],
+                [
+                    [
+                        'Article',
+                        '/articles/79595#content',
+                    ],
+                    [
+                        'Figures and data',
+                        '/articles/79595/figures#content',
+                    ],
+                    [
+                        'Abstract',
+                        '#abstract',
+                    ],
+                    [
+                        'Main text',
+                        '#s0',
+                    ],
+                    [
+                        'References',
+                        '#references',
+                    ],
+                    [
+                        'Article and author information',
+                        '#info',
+                    ],
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * @test
+     * @dataProvider magazineArticlesProvider
+     */
+    public function it_displays_magazine_content(
+        string $id,
+        string $type,
+        string $expectImpactStatement,
+        array $expectedBreadcrumb,
+        array $expectedViewSelectorItems
+    )
+    {
+        $client = static::createClient();
+
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/articles/'.$id,
+                ['Accept' => 'application/vnd.elife.article-poa+json; version=3, application/vnd.elife.article-vor+json; version=6']
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.article-vor+json; version=6'],
+                json_encode([
+                    'status' => 'vor',
+                    'id' => $id,
+                    'version' => 1,
+                    'type' => $type,
+                    'doi' => '10.7554/eLife.'.$id,
+                    'authorLine' => 'Lauren C Radlinski, Andreas J Bäumler',
+                    'title' => 'To breathe or not to breathe?',
+                    'titlePrefix' => 'Respiro-Fermentation',
+                    'published' => '2022-05-20T00:00:00Z',
+                    'versionDate' => '2022-05-20T00:00:00Z',
+                    'volume' => 11,
+                    'elocationId' => 'e'.$id,
+                    'pdf' => 'https://cdn.elifesciences.org/articles/'.$id.'/elife-'.$id.'-v1.pdf',
+                    'xml' => 'https://cdn.elifesciences.org/articles/'.$id.'/elife-'.$id.'-v1.xml',
+                    'subjects' => [
+                        [
+                            'id' => 'biochemistry-chemical-biology',
+                            'name' => 'Biochemistry and Chemical Biology',
+                        ],
+                        [
+                            'id' => 'microbiology-infectious-disease',
+                            'name' => 'Microbiology and Infectious Disease',
+                        ],
+                    ],
+                    'abstract' => [
+                        'content' => [
+                            [
+                                'text' => '<i>Listeria monocytogenes</i> uses respiration to sustain a risky fermentative lifestyle during infection.',
+                                'type' => 'paragraph',
+                            ],
+                        ],
+                    ],
+                    'copyright' => [
+                        'license' => 'CC-BY-4.0',
+                        'holder' => 'Radlinski and Bäumler',
+                        'statement' => 'This article is distributed under the terms of the <a href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution License</a>, which permits unrestricted use and redistribution provided that the original author and source are credited.',
+                    ],
+                    'authors' => [
+                        [
+                            'affiliations' => [
+                                [
+                                    'address' => [
+                                        'components' => [
+                                            'country' => 'United States',
+                                            'locality' => [
+                                                'Davis',
+                                            ],
+                                        ],
+                                        'formatted' => [
+                                            'Davis',
+                                            'United States',
+                                        ],
+                                    ],
+                                    'name' => [
+                                        'Department of Medical Microbiology and Immunology, School of Medicine, University of California, Davis',
+                                    ],
+                                ],
+                            ],
+                            'biography' => [
+                                [
+                                    'text' => '<b>Lauren C Radlinski</b> is in the Department of Medical Microbiology and Immunology, School of Medicine, University of California, Davis, Davis, United States',
+                                    'type' => 'paragraph',
+                                ],
+                            ],
+                            'competingInterests' => 'No competing interests declared',
+                            'name' => [
+                                'index' => 'Radlinski, Lauren C',
+                                'preferred' => 'Lauren C Radlinski',
+                            ],
+                            'type' => 'person',
+                        ],
+                        [
+                            'affiliations' => [
+                                [
+                                    'address' => [
+                                        'components' => [
+                                            'country' => 'United States',
+                                            'locality' => [
+                                                'Davis',
+                                            ],
+                                        ],
+                                        'formatted' => [
+                                            'Davis',
+                                            'United States',
+                                        ],
+                                    ],
+                                    'name' => [
+                                        'Department of Medical Microbiology and Immunology, School of Medicine, University of California, Davis',
+                                    ],
+                                ],
+                            ],
+                            'biography' => [
+                                [
+                                    'text' => '<b>Andreas J Bäumler</b> is in the Department of Medical Microbiology and Immunology, School of Medicine, University of California, Davis, Davis, United States',
+                                    'type' => 'paragraph',
+                                ],
+                            ],
+                            'competingInterests' => 'No competing interests declared',
+                            'emailAddresses' => [
+                                'ajbaumler@ucdavis.edu',
+                            ],
+                            'name' => [
+                                'index' => 'Bäumler, Andreas J',
+                                'preferred' => 'Andreas J Bäumler',
+                            ],
+                            'orcid' => '0000-0001-9152-7809',
+                            'type' => 'person',
+                        ],
+                    ],
+                    'impactStatement' => '<i>Listeria monocytogenes</i> uses respiration to sustain a risky fermentative lifestyle during infection.',
+                    'keywords' => [
+                        'bacterial pathogenesis',
+                        'cellular respiration',
+                        'microbial metabolism',
+                    ],
+                    'body' => [
+                        [
+                            'content' => [
+                                [
+                                    'text' => 'Bacteria are masters at tuning their metabolism to thrive in diverse environments, including during infection. Constant, life-or-death competition with host immune systems and other microorganisms rewards species that maximize the amount of energy they derive from limited resources.',
+                                    'type' => 'paragraph',
+                                ],
+                                [
+                                    'text' => 'Living organisms produce energy in the form of a small molecule called adenosine triphosphate (ATP). ATP is generated by breaking down, or oxidizing, high energy molecules such as sugars through a series of electron transfer reactions. These redox (reduction/oxidation) reactions require an intermediate electron carrier such as nicotine adenine dinucleotide (NADH) that must be re-oxidized (NAD<sup>+</sup>) in order for the cell to continue producing ATP by oxidizing high-energy electron donors.',
+                                    'type' => 'paragraph',
+                                ],
+                                [
+                                    'text' => 'During respiration, NAD<sup>+</sup> is regenerated when electrons are transferred to a terminal electron acceptor such as oxygen. In organisms that cannot respire, ATP is produced through a less energy-efficient process called fermentation. Fermenting organisms also oxidize high-energy electron donors to produce ATP: however their strategy for regenerating NAD<sup>+</sup> requires depositing electrons on an organic molecule such as pyruvate. Thus, fermenting organisms sacrifice potential ATP by producing waste products that are not fully oxidized.',
+                                    'type' => 'paragraph',
+                                ],
+                                [
+                                    'text' => '<i>Listeria monocytogenes</i> is an important foodborne pathogen with an unusual metabolic strategy that falls somewhere between respiration and fermentation. This bacterium carries the genes for two respiratory electron transport chains that can use either oxygen or an extracellular metabolite such as fumarate or iron as a terminal electron acceptor (<a href="#bib2">Corbett et al., 2017</a>; <a href="#bib3">Light et al., 2019</a>). However, unlike most respiring organisms, <i>L. monocytogenes</i> lacks the enzymes required to fully oxidize sugars and instead produces partially reduced fermentative end products including lactic and acetic acid (<a href="#bib9">Trivett and Meyer, 1971</a>). Despite this, respiration is absolutely essential for <i>L. monocytogenes</i> to cause disease (<a href="#bib2">Corbett et al., 2017</a>) – in fact, mutants that cannot respire are considered safe enough to be used in vaccine development (<a href="#bib7">Stritzker et al., 2004</a>).',
+                                    'type' => 'paragraph',
+                                ],
+                                [
+                                    'text' => 'Now, in eLife, Samuel Light (University of Chicago) and colleagues – including Rafael Rivera-Lugo and David Deng (both from the University of California at Berkeley) as joint first authors – report on why respiration is essential for an organism that gets its energy through fermentation (<a href="#bib5">Rivera-Lugo et al., 2022</a>).',
+                                    'type' => 'paragraph',
+                                ],
+                                [
+                                    'text' => 'By comparing the waste products <i>L. monocytogenes</i> generates in the presence or absence of oxygen (a terminal electron acceptor), Rivera-Lugo et al. observed that oxygen shifts the composition of <i>L. monocytogenes</i> fermentative end products from primarily lactic to exclusively acetic acid. Compared to lactic acid, acetic acid is a slightly more oxidized waste product, the production of which generates more ATP but insufficient NAD<sup>+</sup> to sustain itself. Thus, while acetic acid production generates more energy, it comes at the cost of redox balance, which could incur a potential reduction in cellular viability. Indeed, Rivera-Lugo et al. observed that genetically disrupting respiratory pathways inhibited <i>L. monocytogenes</i> growth within immune cells and prevented the bacterium from causing disease in mice.',
+                                    'type' => 'paragraph',
+                                ],
+                                [
+                                    'text' => 'Based on these results, Rivera-Lugo et al. surmised that <i>L. monocytogenes</i> relies on respiration either to re-oxidize the surplus NADH that results from acetic acid fermentation (and re-establish redox balance), or to generate proton motive force (PMF). PMF is generated when protons are pumped across the bacterial membrane during respiration. The energy stored in the resulting proton gradient can be used by the cell to power important cellular activities such as solute transport and motility.',
+                                    'type' => 'paragraph',
+                                ],
+                                [
+                                    'text' => 'Redox balance and PMF generation are difficult processes to separate as they involve the same cellular machinery. To determine which of the two is essential for the pathogenesis of <i>L. monocytogenes</i>, Rivera-Lugo et al. genetically modified the bacterium to express an unusual NADH oxidase (NOX) previously described in the bacterium <i>Lactococcus lactis</i> (<a href="#bib4">Neves et al., 2002</a>). NOX decouples the production of NAD<sup>+</sup> and PMF by transferring electrons from NADH directly to oxygen without pumping protons across the membrane (<a href="#bib8">Titov et al., 2016</a>). This tool allowed the team to separate these two processes by restoring NAD<sup>+</sup> regeneration, without increasing PMF. When Rivera-Lugo et al. expressed NOX in a <i>L. monocytogenes</i> mutant that cannot respire, NOX activity restored acetic acid production, intracellular growth, cell-to-cell spread, and pathogenesis of the bacterium. This result implies that the primary purpose for <i>L. monocytogenes</i> respiration during infection is NAD<sup>+</sup> regeneration, not PMF production.',
+                                    'type' => 'paragraph',
+                                ],
+                                [
+                                    'text' => 'While balancing redox may allow <i>L. monocytogenes</i> to produce more ATP through the fermentation of acetic acid, it does not explain why a respiration-deficient mutant cannot grow in a host. During infection, <i>L. monocytogenes</i> infects and replicates within host cells, then commandeers the cell’s own machinery to spread to neighboring cells. In line with previous observations (<a href="#bib1">Chen et al., 2017</a>), Rivera-Lugo et al. report that genetically inhibiting respiration causes <i>L. monocytogenes</i> to lyse – burst open and die – within host cells.',
+                                    'type' => 'paragraph',
+                                ],
+                                [
+                                    'text' => 'When a bacterium lyses inside a cell, it releases a number of molecules that initiate an antimicrobial response and significantly reduce the bacterium’s ability to cause disease (<a href="#bib6">Sauer et al., 2010</a>). Thus, the tendency for a respiration-deficient mutant to lyse within host cells may inadvertently trigger the host\'s immune response and lead to clearance of the pathogen from the host. Rivera-Lugo et al. showed that restoring NAD<sup>+</sup> regeneration with NOX stopped <i>L. monocytogenes</i> from lysing within infected cells and restored the bacterium’s ability to colonize a mouse. Together these findings imply that respiration-mediated redox balance is crucial for maintaining <i>L. monocytogenes</i> viability during infection (<a href="#fig1">Figure 1</a>).',
+                                    'type' => 'paragraph',
+                                ],
+                                [
+                                    'assets' => [
+                                        [
+                                            'caption' => [
+                                                [
+                                                    'text' => '(<b>A</b>) <i>L. monocytogenes</i> uses respiration to restore redox balance during growth through acetic acid fermentation by transferring electrons from NADH to an electron acceptor such as oxygen (O<sub>2</sub>). This regenerates NAD<sup>+</sup> to serve as an essential cofactor in the oxidative metabolic reactions that produce ATP. (<b>B</b>) Inhibiting respiration causes an imbalance between NAD<sup>+</sup> and NADH, leading to NADH accumulation and lysis of <i>L. monocytogenes</i> during intracellular growth. This leads to a loss of pathogenesis.',
+                                                    'type' => 'paragraph',
+                                                ],
+                                            ],
+                                            'id' => 'fig1',
+                                            'image' => [
+                                                'alt' => '',
+                                                'uri' => 'https://iiif.elifesciences.org/lax:'.$id.'%2Felife-'.$id.'-fig1-v1.tif',
+                                                'size' => [
+                                                    'width' => 2848,
+                                                    'height' => 1207,
+                                                ],
+                                                'source' => [
+                                                    'mediaType' => 'image/jpeg',
+                                                    'uri' => 'https://iiif.elifesciences.org/lax:'.$id.'%2Felife-'.$id.'-fig1-v1.tif/full/full/0/default.jpg',
+                                                    'filename' => 'elife-'.$id.'-fig1-v1.jpg',
+                                                ],
+                                            ],
+                                            'label' => 'Figure 1',
+                                            'title' => 'Effects of inhibiting respiration in <i>L. monocytogenes</i>.',
+                                            'type' => 'image',
+                                        ],
+                                    ],
+                                    'type' => 'figure',
+                                ],
+                                [
+                                    'text' => 'The findings of Rivera-Lugo et al. address a long-standing mystery as to why respiration is required for successful <i>L. monocytogenes</i> infection. One outstanding question is how the accumulation of NADH leads to lysis. Understanding the molecular mechanism behind this phenomenon, and determining whether inhibiting respiration externally (with a drug, for example) leads to lysis, could reveal new therapeutic approaches for targeting organisms that employ similar respiro-fermentative metabolic strategies during systemic infection.',
+                                    'type' => 'paragraph',
+                                ],
+                            ],
+                            'id' => 's0',
+                            'title' => 'Main text',
+                            'type' => 'section',
+                        ],
+                    ],
+                    'references' => [
+                        [
+                            'articleTitle' => 'A genetic screen reveals that synthesis of 1,4-dihydroxy-2-naphthoate (DHNA), but not full-length menaquinone, is required for <i>Listeria monocytogenes</i> cytosolic survival',
+                            'authors' => [
+                                [
+                                    'name' => [
+                                        'index' => 'Chen, GY',
+                                        'preferred' => 'Chen GY',
+                                    ],
+                                    'type' => 'person',
+                                ],
+                                [
+                                    'name' => [
+                                        'index' => 'McDougal, CE',
+                                        'preferred' => 'McDougal CE',
+                                    ],
+                                    'type' => 'person',
+                                ],
+                                [
+                                    'name' => [
+                                        'index' => 'D’Antonio, MA',
+                                        'preferred' => 'D’Antonio MA',
+                                    ],
+                                    'type' => 'person',
+                                ],
+                                [
+                                    'name' => [
+                                        'index' => 'Portman, JL',
+                                        'preferred' => 'Portman JL',
+                                    ],
+                                    'type' => 'person',
+                                ],
+                                [
+                                    'name' => [
+                                        'index' => 'Sauer, JD',
+                                        'preferred' => 'Sauer JD',
+                                    ],
+                                    'type' => 'person',
+                                ],
+                            ],
+                            'date' => '2017',
+                            'doi' => '10.1128/mBio.00119-17',
+                            'id' => 'bib1',
+                            'journal' => 'mBio',
+                            'pages' => 'e00119-17',
+                            'pmid' => 28325762,
+                            'type' => 'journal',
+                            'volume' => '8',
+                        ],
+                        [
+                            'articleTitle' => '<i>Listeria monocytogenes</i> has both cytochrome <i>bd</i>-type and cytochrome <i>aa</i><sub>3</sub>-type terminal oxidases, which allow growth at different oxygen levels, and both are important in infection',
+                            'authors' => [
+                                [
+                                    'name' => [
+                                        'index' => 'Corbett, D',
+                                        'preferred' => 'Corbett D',
+                                    ],
+                                    'type' => 'person',
+                                ],
+                                [
+                                    'name' => [
+                                        'index' => 'Goldrick, M',
+                                        'preferred' => 'Goldrick M',
+                                    ],
+                                    'type' => 'person',
+                                ],
+                                [
+                                    'name' => [
+                                        'index' => 'Fernandes, VE',
+                                        'preferred' => 'Fernandes VE',
+                                    ],
+                                    'type' => 'person',
+                                ],
+                                [
+                                    'name' => [
+                                        'index' => 'Davidge, K',
+                                        'preferred' => 'Davidge K',
+                                    ],
+                                    'type' => 'person',
+                                ],
+                                [
+                                    'name' => [
+                                        'index' => 'Poole, RK',
+                                        'preferred' => 'Poole RK',
+                                    ],
+                                    'type' => 'person',
+                                ],
+                                [
+                                    'name' => [
+                                        'index' => 'Andrew, PW',
+                                        'preferred' => 'Andrew PW',
+                                    ],
+                                    'type' => 'person',
+                                ],
+                                [
+                                    'name' => [
+                                        'index' => 'Cavet, J',
+                                        'preferred' => 'Cavet J',
+                                    ],
+                                    'type' => 'person',
+                                ],
+                                [
+                                    'name' => [
+                                        'index' => 'Roberts, IS',
+                                        'preferred' => 'Roberts IS',
+                                    ],
+                                    'type' => 'person',
+                                ],
+                            ],
+                            'date' => '2017',
+                            'doi' => '10.1128/IAI.00354-17',
+                            'id' => 'bib2',
+                            'journal' => 'Infection and Immunity',
+                            'pages' => 'e00354-17',
+                            'pmid' => 28808161,
+                            'type' => 'journal',
+                            'volume' => '85',
+                        ],
+                        [
+                            'articleTitle' => 'Extracellular electron transfer powers flavinylated extracellular reductases in Gram-positive bacteria',
+                            'authors' => [
+                                [
+                                    'name' => [
+                                        'index' => 'Light, SH',
+                                        'preferred' => 'Light SH',
+                                    ],
+                                    'type' => 'person',
+                                ],
+                                [
+                                    'name' => [
+                                        'index' => 'Méheust, R',
+                                        'preferred' => 'Méheust R',
+                                    ],
+                                    'type' => 'person',
+                                ],
+                                [
+                                    'name' => [
+                                        'index' => 'Ferrell, JL',
+                                        'preferred' => 'Ferrell JL',
+                                    ],
+                                    'type' => 'person',
+                                ],
+                                [
+                                    'name' => [
+                                        'index' => 'Cho, J',
+                                        'preferred' => 'Cho J',
+                                    ],
+                                    'type' => 'person',
+                                ],
+                                [
+                                    'name' => [
+                                        'index' => 'Deng, D',
+                                        'preferred' => 'Deng D',
+                                    ],
+                                    'type' => 'person',
+                                ],
+                                [
+                                    'name' => [
+                                        'index' => 'Agostoni, M',
+                                        'preferred' => 'Agostoni M',
+                                    ],
+                                    'type' => 'person',
+                                ],
+                                [
+                                    'name' => [
+                                        'index' => 'Iavarone, AT',
+                                        'preferred' => 'Iavarone AT',
+                                    ],
+                                    'type' => 'person',
+                                ],
+                                [
+                                    'name' => [
+                                        'index' => 'Banfield, JF',
+                                        'preferred' => 'Banfield JF',
+                                    ],
+                                    'type' => 'person',
+                                ],
+                                [
+                                    'name' => [
+                                        'index' => 'D’Orazio, SEF',
+                                        'preferred' => 'D’Orazio SEF',
+                                    ],
+                                    'type' => 'person',
+                                ],
+                                [
+                                    'name' => [
+                                        'index' => 'Portnoy, DA',
+                                        'preferred' => 'Portnoy DA',
+                                    ],
+                                    'type' => 'person',
+                                ],
+                            ],
+                            'date' => '2019',
+                            'doi' => '10.1073/pnas.1915678116',
+                            'id' => 'bib3',
+                            'journal' => 'PNAS',
+                            'pages' => [
+                                'first' => '26892',
+                                'last' => '26899',
+                                'range' => '26892–26899',
+                            ],
+                            'pmid' => 31818955,
+                            'type' => 'journal',
+                            'volume' => '116',
+                        ],
+                        [
+                            'articleTitle' => 'Is the glycolytic flux in <i>Lactococcus lactis</i> primarily controlled by the redox charge? Kinetics of NAD(+) and NADH pools determined in vivo by 13C NMR',
+                            'authors' => [
+                                [
+                                    'name' => [
+                                        'index' => 'Neves, AR',
+                                        'preferred' => 'Neves AR',
+                                    ],
+                                    'type' => 'person',
+                                ],
+                                [
+                                    'name' => [
+                                        'index' => 'Ventura, R',
+                                        'preferred' => 'Ventura R',
+                                    ],
+                                    'type' => 'person',
+                                ],
+                                [
+                                    'name' => [
+                                        'index' => 'Mansour, N',
+                                        'preferred' => 'Mansour N',
+                                    ],
+                                    'type' => 'person',
+                                ],
+                                [
+                                    'name' => [
+                                        'index' => 'Shearman, C',
+                                        'preferred' => 'Shearman C',
+                                    ],
+                                    'type' => 'person',
+                                ],
+                                [
+                                    'name' => [
+                                        'index' => 'Gasson, MJ',
+                                        'preferred' => 'Gasson MJ',
+                                    ],
+                                    'type' => 'person',
+                                ],
+                                [
+                                    'name' => [
+                                        'index' => 'Maycock, C',
+                                        'preferred' => 'Maycock C',
+                                    ],
+                                    'type' => 'person',
+                                ],
+                                [
+                                    'name' => [
+                                        'index' => 'Ramos, A',
+                                        'preferred' => 'Ramos A',
+                                    ],
+                                    'type' => 'person',
+                                ],
+                                [
+                                    'name' => [
+                                        'index' => 'Santos, H',
+                                        'preferred' => 'Santos H',
+                                    ],
+                                    'type' => 'person',
+                                ],
+                            ],
+                            'date' => '2002',
+                            'doi' => '10.1074/jbc.M202573200',
+                            'id' => 'bib4',
+                            'journal' => 'The Journal of Biological Chemistry',
+                            'pages' => [
+                                'first' => '28088',
+                                'last' => '28098',
+                                'range' => '28088–28098',
+                            ],
+                            'pmid' => 12011086,
+                            'type' => 'journal',
+                            'volume' => '277',
+                        ],
+                        [
+                            'articleTitle' => '<i>Listeria monocytogenes</i> requires cellular respiration for NAD<sup>+</sup> regeneration and pathogenesis',
+                            'authors' => [
+                                [
+                                    'name' => [
+                                        'index' => 'Rivera-Lugo, R',
+                                        'preferred' => 'Rivera-Lugo R',
+                                    ],
+                                    'type' => 'person',
+                                ],
+                                [
+                                    'name' => [
+                                        'index' => 'Deng, D',
+                                        'preferred' => 'Deng D',
+                                    ],
+                                    'type' => 'person',
+                                ],
+                                [
+                                    'name' => [
+                                        'index' => 'Anaya-Sanchez, A',
+                                        'preferred' => 'Anaya-Sanchez A',
+                                    ],
+                                    'type' => 'person',
+                                ],
+                                [
+                                    'name' => [
+                                        'index' => 'Tejedor-Sanz, S',
+                                        'preferred' => 'Tejedor-Sanz S',
+                                    ],
+                                    'type' => 'person',
+                                ],
+                                [
+                                    'name' => [
+                                        'index' => 'Tang, E',
+                                        'preferred' => 'Tang E',
+                                    ],
+                                    'type' => 'person',
+                                ],
+                                [
+                                    'name' => [
+                                        'index' => 'Reyes Ruiz, VM',
+                                        'preferred' => 'Reyes Ruiz VM',
+                                    ],
+                                    'type' => 'person',
+                                ],
+                                [
+                                    'name' => [
+                                        'index' => 'Smith, HB',
+                                        'preferred' => 'Smith HB',
+                                    ],
+                                    'type' => 'person',
+                                ],
+                                [
+                                    'name' => [
+                                        'index' => 'Titov, DV',
+                                        'preferred' => 'Titov DV',
+                                    ],
+                                    'type' => 'person',
+                                ],
+                                [
+                                    'name' => [
+                                        'index' => 'Sauer, JD',
+                                        'preferred' => 'Sauer JD',
+                                    ],
+                                    'type' => 'person',
+                                ],
+                                [
+                                    'name' => [
+                                        'index' => 'Skaar, EP',
+                                        'preferred' => 'Skaar EP',
+                                    ],
+                                    'type' => 'person',
+                                ],
+                                [
+                                    'name' => [
+                                        'index' => 'Ajo-Franklin, CM',
+                                        'preferred' => 'Ajo-Franklin CM',
+                                    ],
+                                    'type' => 'person',
+                                ],
+                                [
+                                    'name' => [
+                                        'index' => 'Portnoy, DA',
+                                        'preferred' => 'Portnoy DA',
+                                    ],
+                                    'type' => 'person',
+                                ],
+                                [
+                                    'name' => [
+                                        'index' => 'Light, SH',
+                                        'preferred' => 'Light SH',
+                                    ],
+                                    'type' => 'person',
+                                ],
+                            ],
+                            'date' => '2022',
+                            'doi' => '10.7554/eLife.75424',
+                            'id' => 'bib5',
+                            'journal' => 'eLife',
+                            'pages' => 'e75424',
+                            'type' => 'journal',
+                            'volume' => '11',
+                        ],
+                        [
+                            'articleTitle' => '<i>Listeria monocytogenes</i> triggers AIM2-mediated pyroptosis upon infrequent bacteriolysis in the macrophage cytosol',
+                            'authors' => [
+                                [
+                                    'name' => [
+                                        'index' => 'Sauer, J-D',
+                                        'preferred' => 'Sauer J-D',
+                                    ],
+                                    'type' => 'person',
+                                ],
+                                [
+                                    'name' => [
+                                        'index' => 'Witte, CE',
+                                        'preferred' => 'Witte CE',
+                                    ],
+                                    'type' => 'person',
+                                ],
+                                [
+                                    'name' => [
+                                        'index' => 'Zemansky, J',
+                                        'preferred' => 'Zemansky J',
+                                    ],
+                                    'type' => 'person',
+                                ],
+                                [
+                                    'name' => [
+                                        'index' => 'Hanson, B',
+                                        'preferred' => 'Hanson B',
+                                    ],
+                                    'type' => 'person',
+                                ],
+                                [
+                                    'name' => [
+                                        'index' => 'Lauer, P',
+                                        'preferred' => 'Lauer P',
+                                    ],
+                                    'type' => 'person',
+                                ],
+                                [
+                                    'name' => [
+                                        'index' => 'Portnoy, DA',
+                                        'preferred' => 'Portnoy DA',
+                                    ],
+                                    'type' => 'person',
+                                ],
+                            ],
+                            'date' => '2010',
+                            'doi' => '10.1016/j.chom.2010.04.004',
+                            'id' => 'bib6',
+                            'journal' => 'Cell Host & Microbe',
+                            'pages' => [
+                                'first' => '412',
+                                'last' => '419',
+                                'range' => '412–419',
+                            ],
+                            'pmid' => 20417169,
+                            'type' => 'journal',
+                            'volume' => '7',
+                        ],
+                        [
+                            'articleTitle' => 'Growth, virulence, and immunogenicity of <i>Listeria monocytogenes aro</i> mutants',
+                            'authors' => [
+                                [
+                                    'name' => [
+                                        'index' => 'Stritzker, J',
+                                        'preferred' => 'Stritzker J',
+                                    ],
+                                    'type' => 'person',
+                                ],
+                                [
+                                    'name' => [
+                                        'index' => 'Janda, J',
+                                        'preferred' => 'Janda J',
+                                    ],
+                                    'type' => 'person',
+                                ],
+                                [
+                                    'name' => [
+                                        'index' => 'Schoen, C',
+                                        'preferred' => 'Schoen C',
+                                    ],
+                                    'type' => 'person',
+                                ],
+                                [
+                                    'name' => [
+                                        'index' => 'Taupp, M',
+                                        'preferred' => 'Taupp M',
+                                    ],
+                                    'type' => 'person',
+                                ],
+                                [
+                                    'name' => [
+                                        'index' => 'Pilgrim, S',
+                                        'preferred' => 'Pilgrim S',
+                                    ],
+                                    'type' => 'person',
+                                ],
+                                [
+                                    'name' => [
+                                        'index' => 'Gentschev, I',
+                                        'preferred' => 'Gentschev I',
+                                    ],
+                                    'type' => 'person',
+                                ],
+                                [
+                                    'name' => [
+                                        'index' => 'Schreier, P',
+                                        'preferred' => 'Schreier P',
+                                    ],
+                                    'type' => 'person',
+                                ],
+                                [
+                                    'name' => [
+                                        'index' => 'Geginat, G',
+                                        'preferred' => 'Geginat G',
+                                    ],
+                                    'type' => 'person',
+                                ],
+                                [
+                                    'name' => [
+                                        'index' => 'Goebel, W',
+                                        'preferred' => 'Goebel W',
+                                    ],
+                                    'type' => 'person',
+                                ],
+                            ],
+                            'date' => '2004',
+                            'doi' => '10.1128/IAI.72.10.5622-5629.2004',
+                            'id' => 'bib7',
+                            'journal' => 'Infection and Immunity',
+                            'pages' => [
+                                'first' => '5622',
+                                'last' => '5629',
+                                'range' => '5622–5629',
+                            ],
+                            'pmid' => 15385459,
+                            'type' => 'journal',
+                            'volume' => '72',
+                        ],
+                        [
+                            'articleTitle' => 'Complementation of mitochondrial electron transport chain by manipulation of the NAD+/NADH ratio',
+                            'authors' => [
+                                [
+                                    'name' => [
+                                        'index' => 'Titov, DV',
+                                        'preferred' => 'Titov DV',
+                                    ],
+                                    'type' => 'person',
+                                ],
+                                [
+                                    'name' => [
+                                        'index' => 'Cracan, V',
+                                        'preferred' => 'Cracan V',
+                                    ],
+                                    'type' => 'person',
+                                ],
+                                [
+                                    'name' => [
+                                        'index' => 'Goodman, RP',
+                                        'preferred' => 'Goodman RP',
+                                    ],
+                                    'type' => 'person',
+                                ],
+                                [
+                                    'name' => [
+                                        'index' => 'Peng, J',
+                                        'preferred' => 'Peng J',
+                                    ],
+                                    'type' => 'person',
+                                ],
+                                [
+                                    'name' => [
+                                        'index' => 'Grabarek, Z',
+                                        'preferred' => 'Grabarek Z',
+                                    ],
+                                    'type' => 'person',
+                                ],
+                                [
+                                    'name' => [
+                                        'index' => 'Mootha, VK',
+                                        'preferred' => 'Mootha VK',
+                                    ],
+                                    'type' => 'person',
+                                ],
+                            ],
+                            'date' => '2016',
+                            'doi' => '10.1126/science.aad4017',
+                            'id' => 'bib8',
+                            'journal' => 'Science',
+                            'pages' => [
+                                'first' => '231',
+                                'last' => '235',
+                                'range' => '231–235',
+                            ],
+                            'pmid' => 27124460,
+                            'type' => 'journal',
+                            'volume' => '352',
+                        ],
+                        [
+                            'articleTitle' => 'Citrate cycle and related metabolism of <i>Listeria monocytogenes</i>',
+                            'authors' => [
+                                [
+                                    'name' => [
+                                        'index' => 'Trivett, TL',
+                                        'preferred' => 'Trivett TL',
+                                    ],
+                                    'type' => 'person',
+                                ],
+                                [
+                                    'name' => [
+                                        'index' => 'Meyer, EA',
+                                        'preferred' => 'Meyer EA',
+                                    ],
+                                    'type' => 'person',
+                                ],
+                            ],
+                            'date' => '1971',
+                            'doi' => '10.1128/jb.107.3.770-779.1971',
+                            'id' => 'bib9',
+                            'journal' => 'Journal of Bacteriology',
+                            'pages' => [
+                                'first' => '770',
+                                'last' => '779',
+                                'range' => '770–779',
+                            ],
+                            'pmid' => 4999414,
+                            'type' => 'journal',
+                            'volume' => '107',
+                        ],
+                    ],
+                    'stage' => 'published',
+                    'statusDate' => '2022-05-20T00:00:00Z',
+                ])
+            )
+        );
+
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/articles/'.$id.'/versions',
+                [
+                    'Accept' => [
+                        'application/vnd.elife.article-history+json; version=2',
+                    ],
+                ]
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.article-history+json; version=2'],
+                json_encode([
+                    'received' => '2022-05-20',
+                    'accepted' => '2022-05-20',
+                    'versions' => [
+                        [
+                            'status' => 'vor',
+                            'id' => $id,
+                            'version' => 1,
+                            'type' => $type,
+                            'doi' => '10.7554/eLife.'.$id,
+                            'authorLine' => 'Lauren C Radlinski, Andreas J Bäumler',
+                            'title' => 'To breathe or not to breathe?',
+                            'titlePrefix' => 'Respiro-Fermentation',
+                            'published' => '2022-05-20T00:00:00Z',
+                            'versionDate' => '2022-05-20T00:00:00Z',
+                            'volume' => 11,
+                            'elocationId' => 'e'.$id,
+                            'pdf' => 'https://cdn.elifesciences.org/articles/'.$id.'/elife-'.$id.'-v1.pdf',
+                            'subjects' => [
+                                [
+                                    'id' => 'biochemistry-chemical-biology',
+                                    'name' => 'Biochemistry and Chemical Biology',
+                                ],
+                                [
+                                    'id' => 'microbiology-infectious-disease',
+                                    'name' => 'Microbiology and Infectious Disease',
+                                ],
+                            ],
+                            'copyright' => [
+                                'license' => 'CC-BY-4.0',
+                                'holder' => 'Radlinski and Bäumler',
+                                'statement' => 'This article is distributed under the terms of the <a href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution License</a>, which permits unrestricted use and redistribution provided that the original author and source are credited.',
+                            ],
+                            'impactStatement' => '<i>Listeria monocytogenes</i> uses respiration to sustain a risky fermentative lifestyle during infection.',
+                            'stage' => 'published',
+                            'statusDate' => '2022-05-20T00:00:00Z',
+                        ],
+                    ],
+                ])
+            )
+        );
+
+        $crawler = $client->request('GET', '/articles/'.$id);
+
+        $this->assertSame(200, $client->getResponse()->getStatusCode());
+
+        $breadcrumb = $crawler->filter('.breadcrumb-item a');
+        $this->assertCount(2, $breadcrumb);
+        $this->assertEquals($expectedBreadcrumb, $breadcrumb->extract(['_text', 'href']));
+
+        $this->assertSame('Respiro-Fermentation: To breathe or not to breathe?', $crawler->filter('.content-header__title')->text());
+        if (empty($expectImpactStatement)) {
+            $this->assertEmpty($crawler->filter('.content-header__impact-statement'));
+        } else {
+            $this->assertSame($expectImpactStatement, $crawler->filter('.content-header__impact-statement')->text());
+        }
+
+        if (empty($expectedViewSelectorItems)) {
+            $this->assertEmpty($crawler->filter('.view-selector__list-item'));
+        } else {
+            $this->assertSame(
+                $expectedViewSelectorItems,
+                $crawler->filter('.view-selector__list-item a')->extract(['_text', 'href'])
+            );
+        }
+
+        if (empty($expectedViewSelectorItems)) {
+            // Authors appear in main-content-grid and not in content-header.
+            $this->assertEmpty($crawler->filter('.content-header .author_list_item'));
+            $this->assertEmpty($crawler->filter('.content-header .institution_list_item'));
+
+            $authors = $crawler->filter('.main-content-grid .author_list_item');
+            $institutions = $crawler->filter('.main-content-grid .institution_list_item');
+        } else {
+            // Authors appear in content-header and not in main-content-grid.
+            $this->assertEmpty($crawler->filter('.main-content-grid .author_list_item'));
+            $this->assertEmpty($crawler->filter('.main-content-grid .institution_list_item'));
+
+            $authors = $crawler->filter('.content-header .author_list_item');
+            $institutions = $crawler->filter('.content-header .institution_list_item');
+        }
+
+        $this->assertCount(2, $authors);
+        $this->assertSame('Lauren C Radlinski', $authors->eq(0)->filter('a')->text());
+        $this->assertSame('Andreas J Bäumler', $authors->eq(1)->filter('a')->text());
+
+        $this->assertCount(1, $institutions);
+        $this->assertSame('Department of Medical Microbiology and Immunology, School of Medicine, University of California, Davis, United States;', $this->crawlerText($institutions->eq(0)));
+
+        $sections = $crawler->filter('.main-content-grid > .article-section');
+        if (empty($expectedViewSelectorItems)) {
+            // Abstract does not appear in main-content-grid but populates the impact statement property.
+            $this->assertNotContains('Abstract', $crawler->filter('.main-content-grid')->text());
+            // The Main text heading does not appear for insights and editorials.
+            $this->assertNotContains('Main text', $crawler->filter('.main-content-grid')->text());
+            $this->assertCount(4, $sections);
+            $this->assertEmpty($sections->eq(0)->filter('h2'));
+            $references = $sections->eq(1);
+            $articleAndAuthorInfo = $sections->eq(2);
+            $downloadLinks = $sections->eq(3);
+            $categoriesAndTags = $crawler->filter('.main-content-grid > section')->eq(4);
+        } else {
+            // Verify that Abstract and Main text sections and headings are present in main-content-grid for feature articles.
+            $this->assertSame('Abstract', $sections->eq(0)->filter('h2')->text());
+            $this->assertSame('Main text', $sections->eq(1)->filter('h2')->text());
+            $references = $sections->eq(2);
+            $articleAndAuthorInfo = $sections->eq(3);
+            $downloadLinks = $sections->eq(4);
+            $categoriesAndTags = $crawler->filter('.main-content-grid > section')->eq(5);
+        }
+
+        $this->assertSame('References', $references->filter('h2')->text());
+        $this->assertSame('Article and author information', $articleAndAuthorInfo->filter('h2')->text());
+
+        $this->assertSame('Download links', $downloadLinks->filter('h2')->text());
+        $downloadLinksGroup = $downloadLinks->filter('.article-download-links-list__group');
+        $this->assertCount(3, $downloadLinksGroup);
+
+        $pdfs = $downloadLinksGroup->eq(0);
+        $this->assertSame('Downloads (link to download the article as PDF)', $pdfs->filter('.article-download-links-list__heading')->text());
+        $pdfLinks = $pdfs->filter('.article-download-links-list__item');
+        $this->assertCount(1, $pdfLinks);
+        $this->assertSame('Article PDF', $this->crawlerText($pdfLinks->eq(0)));
+
+        $openCitations = $downloadLinksGroup->eq(1);
+        $this->assertSame('Open citations (links to open the citations from this article in various online reference manager services)', $openCitations->filter('.article-download-links-list__heading')->text());
+        $openCitationLinks = $openCitations->filter('.article-download-links-list__item');
+        $this->assertCount(2, $openCitationLinks);
+        $this->assertSame('Mendeley', $this->crawlerText($openCitationLinks->eq(0)));
+        $this->assertCount(1, $openCitationLinks->filter('[data-behaviour="CheckPMC"]'));
+
+        $citeThisArticle = $downloadLinksGroup->eq(2);
+        $this->assertSame('Cite this article (links to download the citations from this article in formats compatible with various reference manager tools)', $citeThisArticle->filter('.article-download-links-list__heading')->text());
+        $this->assertSame('Lauren C Radlinski Andreas J Bäumler (2022) Respiro-Fermentation: To breathe or not to breathe? eLife 11:e'.$id.'. https://doi.org/10.7554/eLife.'.$id, $this->crawlerText($citeThisArticle->filter('.reference')));
+        $citeThisArticleLinks = $citeThisArticle->filter('.article-download-links-list__item');
+        $this->assertCount(2, $citeThisArticleLinks);
+        $this->assertSame('Download BibTeX', $this->crawlerText($citeThisArticleLinks->eq(0)));
+        $this->assertSame('Download .RIS', $this->crawlerText($citeThisArticleLinks->eq(1)));
+
+        $this->assertSame('Categories and tags', $categoriesAndTags->filter('h4')->text());
     }
 
     /**
