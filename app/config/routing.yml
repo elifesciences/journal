@@ -50,6 +50,11 @@ about-people:
          _controller: AppBundle:About:people
          type: ''
 
+about-publishing-with-elife:
+    path: /about/publishing-with-elife
+    defaults:
+         _controller: AppBundle:About:publishingWithElife
+
 alerts:
     path: /alerts
     defaults:

@@ -14,7 +14,7 @@ final class AboutControllerTest extends PageTestCase
         $crawler = $client->request('GET', $this->getUrl());
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
-        $this->assertSame('eLife: Accelerating discovery', $crawler->filter('.content-header__title')->text());
+        $this->assertSame('eLife: evolution of publishing', $crawler->filter('.content-header__title')->text());
     }
 
     /**
@@ -32,8 +32,8 @@ final class AboutControllerTest extends PageTestCase
         $this->assertSame('/about', $crawler->filter('link[rel="canonical"]')->attr('href'));
         $this->assertSame('http://localhost/about', $crawler->filter('meta[property="og:url"]')->attr('content'));
         $this->assertSame('About', $crawler->filter('meta[property="og:title"]')->attr('content'));
-        $this->assertSame('eLife is an initiative from research funders to transform research communication through improvements to science publishing, technology and research culture.', $crawler->filter('meta[property="og:description"]')->attr('content'));
-        $this->assertSame('eLife is an initiative from research funders to transform research communication through improvements to science publishing, technology and research culture.', $crawler->filter('meta[name="description"]')->attr('content'));
+        $this->assertSame('Independent, not-for-profit and supported by funders, eLife improves the way research is practised and shared.', $crawler->filter('meta[property="og:description"]')->attr('content'));
+        $this->assertSame('Independent, not-for-profit and supported by funders, eLife improves the way research is practised and shared.', $crawler->filter('meta[name="description"]')->attr('content'));
         $this->assertSame('summary', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
         $this->assertSame('http://localhost/'.ltrim(self::$kernel->getContainer()->get('elife.assets.packages')->getUrl('assets/images/social/icon-600x600@1.png'), '/'), $crawler->filter('meta[name="twitter:image"]')->attr('content'));
         $this->assertSame('http://localhost/'.ltrim(self::$kernel->getContainer()->get('elife.assets.packages')->getUrl('assets/images/social/icon-600x600@1.png'), '/'), $crawler->filter('meta[property="og:image"]')->attr('content'));

@@ -74,6 +74,51 @@ the way research is practised and shared.');
     {
         $arguments = $this->aboutPageArguments($request);
 
+        $arguments['title'] = 'Aims and scope';
+
+        $arguments['contentHeader'] = new ContentHeader($arguments['title'], null,
+            'eLife welcomes the submission of Research Articles, Short Reports, Tools and Resources articles, Research Advances, Scientific Correspondence and Review Articles in the subject areas below.');
+
+        $subjects = $this->get('elife.api_sdk.subjects')->reverse()->slice(0, 100);
+
+        $arguments['body'] = (new PromiseSequence($subjects))
+            ->map(function (Subject $subject) {
+                $body = $subject->getAimsAndScope()->map($this->willConvertTo(null, ['level' => 2]));
+
+                $editorsLink = $this->render(new SeeMoreLink(
+                    new Link('See editors', $this->get('router')->generate('about-people', ['type' => $subject->getId()])),
+                    true
+                ));
+
+                $lastItem = $body[$i = count($body) - 1];
+                if ($body[$i = count($body) - 1] instanceof Paragraph) {
+                    $body = $body->set($i, FlexibleViewModel::fromViewModel($lastItem)
+                        ->withProperty('text', "{$lastItem['text']} $editorsLink"));
+                } else {
+                    $body = $body->append(new Paragraph($editorsLink));
+                }
+
+                return ArticleSection::basic(
+                    $this->render(...$body),
+                    $subject->getName(),
+                    2,
+                    $subject->getId()
+                );
+            })
+            ->then(function (Sequence $sections) {
+                return $sections->prepend(
+                    new Paragraph('eLife is an open-access journal and complies with all major funding agency requirements for immediate online access to the published results of their research grants.'),
+                    new Paragraph('For further details, and requirements for each type of submission, please consult our <a href="https://reviewer.elifesciences.org/author-guide/types">Author Guide.</a>')
+                );
+            });
+
+        return new Response($this->get('templating')->render('::about.html.twig', $arguments));
+    }
+
+    public function publishingWithElifeAction(Request $request) : Response
+    {
+        $arguments = $this->aboutPageArguments($request);
+
         $arguments['title'] = 'Publishing with eLife';
 
         $arguments['contentHeader'] = new ContentHeader($arguments['title'], null,
@@ -107,20 +152,16 @@ the way research is practised and shared.');
             })
             ->then(function (Sequence $aimsAndScope) {
                 return [
+                    new Paragraph('eLife is an open-access journal, publishing high-quality research in all areas of the life sciences and medicine. It complies with all major funding agency requirements for immediate online access to the published results of their research grants.'),
+                    new Paragraph('For further details, and requirements for each type of submission, please consult our <a href="https://reviewer.elifesciences.org/author-guide/types">Author Guide.</a>'),
                     ArticleSection::basic(
                         $this->render(
-                            new Paragraph('eLife is an open-access journal, publishing high-quality research in all areas of the life sciences and medicine. It complies with all major funding agency requirements for immediate online access to the published results of their research grants.'),
-                            new Paragraph('For further details, and requirements for each type of submission, please consult our <a href="https://reviewer.elifesciences.org/author-guide/types">Author Guide.</a>'),
-                            ArticleSection::basic(
-                                $this->render(
-                                    ...$aimsAndScope->prepend(
-                                        new Paragraph('We welcome the submission of research in the following areas:')
-                                    )
-                                ),
-                                'Aims and Scope',
-                                2
+                            ...$aimsAndScope->prepend(
+                                new Paragraph('We welcome the submission of research in the following areas:')
                             )
-                        )
+                        ),
+                        'Aims and Scope',
+                        2
                     ),
                 ];
             });
@@ -367,7 +408,7 @@ the way research is practised and shared.');
 
         $menuItems = [
             'About eLife' => $this->get('router')->generate('about'),
-            'Publishing with eLife' => $this->get('router')->generate('about-aims-scope'),
+            'Publishing with eLife' => $this->get('router')->generate('about-publishing-with-elife'),
             'Editors and people' => $this->get('router')->generate('about-people'),
             'Peer review' => $this->get('router')->generate('about-peer-review'),
             'Technology' => $this->get('router')->generate('about-technology'),
