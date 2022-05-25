@@ -43,18 +43,20 @@ final class AboutController extends Controller
 
         $arguments['title'] = 'About';
 
-        $arguments['contentHeader'] = new ContentHeader('eLife: Accelerating discovery', null,
-            'eLife is an initiative from research funders to transform research communication through improvements to science publishing, technology and research culture.');
+        $arguments['contentHeader'] = new ContentHeader('eLife: evolution of publishing', null,
+            'Independent, not-for-profit and supported by funders, eLife improves
+the way research is practised and shared.');
 
         $arguments['body'] = [
-            new Paragraph('eLife is a non-profit organisation created by funders and led by researchers. Our mission is to accelerate discovery by operating a platform for research communication that encourages and recognises the most responsible behaviours.'),
-            new Paragraph('We work across three major areas:'),
-            Listing::ordered([
-                'Publishing – eLife reviews selected preprints in all areas of biology and medicine, while exploring new ways to improve how research is assessed and published.',
-                'Technology – eLife invests in open-source technology innovation to modernise the infrastructure for science publishing and improve online tools for sharing, using and interacting with new results.',
-                'Research culture – eLife is committed to working with the worldwide research community to promote responsible behaviours in research.',
-            ], 'number'),
-            new Paragraph('eLife receives financial support and strategic guidance from the <a href="https://https://www.hhmi.org/">Howard Hughes Medical Institute</a>, the <a href="https://kaw.wallenberg.org/en">Knut and Alice Wallenberg Foundation</a>, the <a href="https://www.mpg.de/en">Max Planck Society</a> and <a href="https://wellcome.ac.uk/">Wellcome</a>. eLife Sciences Publications Ltd is publisher of the open-access eLife journal (ISSN 2050-084X).'),
+            new Paragraph('eLife is committed to creating a future where a diverse, global community of researchers shares open results for the benefit of all.'),
+            new Paragraph('From the research we publish, to the tools we build, to the people we work with, we’ve earned a reputation for quality, integrity and the flexibility to bring about real change.'),
+            new Paragraph('We\'re committed to a "<a href"https://elifesciences.org/articles/64910">publish, review, curate</a>" model for publishing and plan to achieve this transition by:'),
+            Listing::unordered([
+                'Peer reviewing preprints in the life sciences and medicine',
+                'Building <a href="https://elifesciences.org/about/technology">technology</a> to support this model that is open-source, readily adaptable and addresses community needs',
+                'Working with scientists from around the world to improve research culture',
+            ], 'bullet'),
+            new Paragraph('eLife is a non-profit organisation that receives financial support and strategic guidance from the <a href="https://https://www.hhmi.org/">Howard Hughes Medical Institute</a>, the <a href="https://kaw.wallenberg.org/en">Knut and Alice Wallenberg Foundation</a>, the <a href="https://www.mpg.de/en">Max Planck Society</a> and <a href="https://wellcome.ac.uk/">Wellcome</a>. eLife Sciences Publications Ltd is publisher of the open-access eLife journal (ISSN 2050-084X).'),
             ArticleSection::basic(
                 $this->render(Listing::unordered([
                     '<a href="'.$this->get('router')->generate('inside-elife').'">Inside eLife</a>',
@@ -156,17 +158,17 @@ final class AboutController extends Controller
         $arguments['title'] = 'Technology';
 
         $arguments['contentHeader'] = new ContentHeader($arguments['title'], null,
-            'eLife’s open-source technology initiatives enhance the communication and use of research results online.');
+            ' eLife develops and invests in technology that enhances the sharing and use of research results online.');
 
         $arguments['body'] = [
-            new Paragraph('eLife invests heavily in software development, experience design, collaboration and outreach to help realise the full potential of the digital communication of new research. We support the development of open-source tools that can be used, adopted and extended by any interested party to help move towards an ecosystem that serves research as efficiently and as cost-effectively as possible.'),
-            new Paragraph('In parallel to our in-house software development efforts, the eLife Innovation Initiative is a separately funded effort aimed at providing funding, training and community support for creative individuals and teams within the academic and technology industries. The primary outputs of the Initiative are open solutions aimed at improving the discovery, sharing, consumption and evaluation of research.'),
-            new Paragraph('Through this Initiative, we’re always on the lookout for opportunities to engage with the best emerging talent and ideas at the interface of research and technology. You can find out more about some of these engagements on eLife Labs, or contact our Innovation Community Manager for more information (innovation@elifesciences.org).'),
+            new Paragraph('eLife invests in the development of platforms that support the display, review, and organisation, dissemination and curation of content. '),
+            new Paragraph('From considering how to publish preprint content in an enhanced form to developing a system that supports an end-to-end workflow for reviewing preprints, our technology efforts are fully aligned with eLife’s goal to transform research communication by transitioning to a publish, review, curate model of publishing.'),
+            new Paragraph('An important step towards this goal is the development of <a href="https://sciety.org/">Sciety</a>, an online application for public preprint evaluation. Built by the team at eLife, Sciety brings together the latest biomedical and life science preprints that are transparently evaluated and curated by communities of experts in one convenient place.'),
+            new Paragraph('All software developed at eLife is open source under the most permissible of licences and can be found in our GitHub organisations for <a href="https://github.com/elifesciences">eLife GitHib</a> and <a href="https://github.com/sciety">Sciety GitHub</a>.'),
             ArticleSection::basic(
                 $this->render(Listing::unordered([
-                    '<a href="https://libero.pub/">Libero: eLife’s open-source platform for academic publishing</a>',
-                    '<a href="'.$this->get('router')->generate('labs').'">eLife Labs</a>',
-                    '<a href="https://crm.elifesciences.org/crm/tech-news">Sign up for Technology and Innovation news from eLife</a>',
+                    '<a href="https://elifesciences.org/inside-elife/daf1b699/elife-latest-announcing-a-new-technology-direction">eLife Latest: Announcing a new technology direction</a>',
+                    '<a href="https://sciety.org">Sciety.org</a>',
                 ], 'bullet')), 'Related links', 2
             ),
         ];
@@ -184,8 +186,11 @@ final class AboutController extends Controller
             'eLife recognises that reforming research communication depends on improving research culture.');
 
         $arguments['body'] = [
-            new Paragraph('eLife seeks to encourage and recognise responsible behaviours in research, and to promote a research culture that supports collaboration, diversity and inclusion, and openness. We support preprints and open-science practices, and publish articles on different aspects of research culture on our <a href="'.$this->get('router')->generate('community').'">Community page</a>. eLife was a founder of the <a href="https://sfdora.org/">San Francisco Declaration on Research Assessment (DORA).</a>'),
-            new Paragraph('eLife invests in research culture in a variety of ways, many of which involve working closely with early-career researchers (ECRs). With the guidance of our <a href="'.$this->get('router')->generate('about-people', ['type' => 'early-career']).'"> Early-Career Advisory Group</a>, we have established standards for diversity and inclusion across eLife, created peer networks and the <a href="'.$this->get('router')->generate('inside-elife-article', ['id' => 'a946c355']).'">eLife Ambassadors program</a>, increased <a href="'.$this->get('router')->generate('inside-elife-article', ['id' => '31a5173b']).'">ECR involvement on our editorial board and reviewer pool</a>, awarded <a href="'.$this->get('router')->generate('inside-elife-article', ['id' => 'aff37cb5']).'">grants to early-career authors</a>, and showcased early-career talents and perspectives through <a href="'.$this->get('router')->generate('interviews').'">interviews</a>, <a href="'.$this->get('router')->generate('podcast').'">podcasts</a> and <a href="'.$this->get('router')->generate('collection', ['id' => '842f35d5']).'">webinars</a>.'),
+            new Paragraph('eLife has an ambitious agenda to reform how research is communicated and assessed, and works to promote a research culture that centres on openness, integrity, and equity, diversity and inclusion. Supported by our <a href="'.$this->get('router')->generate('for-the-press', ['id' => '99a91a3b']).'">Communities team</a>, we engage closely with researchers across biology and medicine to drive this change. Updates on many of these activities can be found on our <a href="https://elifesciences.org/community">Community page</a>.'),
+            new Paragraph('In parallel, eLife publishes <a href="'.$this->get('router')->generate('collection', ['id' => 'edf1261b']).'">articles on research culture</a> and <a href="https://elifesciences.org/collections/3a6a7db3">equity, diversity and inclusion</a>, and provides a platform for the research community to discuss relevant issues through <a href="'.$this->get('router')->generate('collections', ['id' => '1926c529']).'">personal stories</a>, <a href="'.$this->get('router')->generate('interviews').'">interviews</a>, <a href="'.$this->get('router')->generate('podcast').'">podcasts</a> and <a href="'.$this->get('router')->generate('collection', ['id' => '842f35d5']).'">webinars.</a>'),
+            new Paragraph('eLife is deeply committed to helping make research and publishing more equitable and inclusive, and we regularly <a href="https://elifesci.org/equity-diversity-inclusion">report on our actions in these areas</a>.'),
+            new Paragraph('With the guidance of our <a href="'.$this->get('router')->generate('about-people', ['type' => 'early-career']).'">Early-Career Advisory Group</a>, eLife has created peer networks through the <a href="https://elifesci.org/Ambassadors">eLife Community Ambassadors program</a>, <a href="https://elifesci.org/Ben-Barres-Spotlight-Awards">supported researchers</a> from underrepresented backgrounds and countries with limited funding, and <a href="https://reviewer.elifesciences.org/reviewer-guide/review-process#involvement-early-career-researchers-peer-review">increased the involvement of early-career researchers in peer review</a>.'),
+            new Paragraph('eLife was a founder ­– and continues to be a supporter – of the San Francisco Declaration on Research Assessment (DORA).'),
             ArticleSection::basic(
                 $this->render(Listing::unordered([
                     '<a href="'.$this->get('router')->generate('community').'">Community page</a>',
