@@ -3,6 +3,8 @@
 namespace eLife\Journal\ViewModel\Converter;
 
 use eLife\ApiSdk\Model\ArticleVersion;
+use eLife\ApiSdk\Model\Block\Paragraph;
+use eLife\ApiSdk\Model\HasImpactStatement;
 use eLife\ApiSdk\Model\Subject;
 use eLife\Journal\Helper\CanConvertContent;
 use eLife\Journal\Helper\LicenceUri;
@@ -30,11 +32,27 @@ final class ArticleContentHeaderConverter implements ViewModelConverter
      */
     public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
+        $isMagazine = $context['isMagazine'] ?? false;
+
+        $breadcrumb = ($isMagazine || 'feature' === $object->getType()) ? [
+            new ViewModel\Link(
+                'Magazine',
+                $this->urlGenerator->generate('magazine')
+            ),
+        ] : [];
+
+        $breadcrumb[] = new ViewModel\Link(
+            ModelName::singular($object->getType()),
+            $this->urlGenerator->generate('article-type', ['type' => $object->getType()])
+        );
+
         $subjects = $object->getSubjects()->map(function (Subject $subject) {
             return new ViewModel\Link($subject->getName(), $this->urlGenerator->generate('subject', [$subject]));
         })->toArray();
 
-        $authors = ($object->getAuthors()->notEmpty()) ? $this->convertTo($object, ViewModel\Authors::class) : null;
+        $authors = (!$isMagazine && $object->getAuthors()->notEmpty()) ? $this->convertTo($object, ViewModel\Authors::class) : null;
+
+        $impactStatement = ($isMagazine && $object instanceof HasImpactStatement) ? $object->getImpactStatement() : null;
 
         if ($date = $this->simpleDate($object, ['date' => 'published'] + $context)) {
             $meta = ViewModel\MetaNew::withDate($date);
@@ -45,12 +63,9 @@ final class ArticleContentHeaderConverter implements ViewModelConverter
         return new ViewModel\ContentHeaderNew(
             $object->getFullTitle(),
             null,
-            null,
+            $impactStatement,
             true,
-            new ViewModel\Breadcrumb([new ViewModel\Link(
-                ModelName::singular($object->getType()),
-                $this->urlGenerator->generate('article-type', ['type' => $object->getType()])
-            )]),
+            new ViewModel\Breadcrumb($breadcrumb),
             $subjects,
             null,
             $authors,

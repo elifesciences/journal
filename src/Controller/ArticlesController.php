@@ -262,10 +262,12 @@ final class ArticlesController extends Controller
                 return $context;
             });
 
-        $arguments['body'] = all(['item' => $arguments['item'], 'history' => $arguments['history'], 'citations' => $arguments['citations'], 'downloads' => $arguments['downloads'], 'pageViews' => $arguments['pageViews'], 'data' => $arguments['hasData'], 'context' => $context])
-            ->then(function (array $parts) use ($context) {
+        $arguments['body'] = all(['item' => $arguments['item'], 'isMagazine' => $arguments['isMagazine'], 'history' => $arguments['history'], 'citations' => $arguments['citations'], 'downloads' => $arguments['downloads'], 'pageViews' => $arguments['pageViews'], 'data' => $arguments['hasData'], 'context' => $context])
+            ->then(function (array $parts) {
                 /** @var ArticleVersion $item */
                 $item = $parts['item'];
+                /** @var bool $isMagazine */
+                $isMagazine = $parts['isMagazine'];
                 /** @var ArticleHistory $history */
                 $history = $parts['history'];
                 /** @var CitationsMetric|null $citations */
@@ -281,9 +283,13 @@ final class ArticlesController extends Controller
 
                 $parts = [];
 
+                if ($isMagazine && $item->getAuthors()->notEmpty()) {
+                    $parts[] = $this->convertTo($item, ViewModel\Authors::class);
+                }
+
                 $first = true;
 
-                if ($item->getAbstract()) {
+                if (!$isMagazine && $item->getAbstract()) {
                     $parts[] = ArticleSection::collapsible(
                         'abstract',
                         'Abstract',
@@ -348,17 +354,28 @@ final class ArticlesController extends Controller
                 $isInitiallyClosed = false;
 
                 if ($item instanceof ArticleVoR) {
-                    $parts = array_merge($parts, $item->getContent()->map(function (Block\Section $section) use (&$first, &$isInitiallyClosed, $context) {
-                        $section = ArticleSection::collapsible(
-                            $section->getId(),
-                            $section->getTitle(),
-                            2,
-                            $this->render(...$this->convertContent($section, 2, $context)),
-                            null,
-                            null,
-                            $isInitiallyClosed,
-                            $first
-                        );
+                    $parts = array_merge($parts, $item->getContent()->map(function (Block\Section $section) use (&$first, &$isInitiallyClosed, $isMagazine, $context) {
+                        $section = ($isMagazine && $first) ?
+                            ArticleSection::basic(
+                                $this->render(...$this->convertContent($section, 2, $context)),
+                                null,
+                                null,
+                                $section->getId(),
+                                null,
+                                null,
+                                null,
+                                $first
+                            ) :
+                            ArticleSection::collapsible(
+                                $section->getId(),
+                                $section->getTitle(),
+                                2,
+                                $this->render(...$this->convertContent($section, 2, $context)),
+                                null,
+                                null,
+                                $isInitiallyClosed,
+                                $first
+                            );
 
                         $first = false;
                         $isInitiallyClosed = true;
@@ -629,7 +646,7 @@ final class ArticlesController extends Controller
                 return $parts;
             });
 
-        $arguments['viewSelector'] = $this->createViewSelector($arguments['item'], $arguments['hasFigures'], false, $arguments['history'], $arguments['body'], $arguments['eraArticle']);
+        $arguments['viewSelector'] = $this->createViewSelector($arguments['item'], $arguments['isMagazine'], $arguments['hasFigures'], false, $arguments['history'], $arguments['body'], $arguments['eraArticle']);
 
         $arguments['body'] = all(['item' => $arguments['item'], 'body' => $arguments['body'], 'downloadLinks' => $arguments['downloadLinks']])
             ->then(function (array $parts) {
@@ -768,7 +785,7 @@ final class ArticlesController extends Controller
             })
             ->then(Callback::mustNotBeEmpty(new NotFoundHttpException('Article version does not contain any figures or data')));
 
-        $arguments['viewSelector'] = $this->createViewSelector($arguments['item'], promise_for(true), true, $arguments['history'], $arguments['body'], $arguments['eraArticle']);
+        $arguments['viewSelector'] = $this->createViewSelector($arguments['item'], $arguments['isMagazine'], promise_for(true), true, $arguments['history'], $arguments['body'], $arguments['eraArticle']);
 
         $arguments['body'] = all(['body' => $arguments['body'], 'downloadLinks' => $arguments['downloadLinks']])
             ->then(function (array $parts) {
@@ -893,6 +910,11 @@ final class ArticlesController extends Controller
     private function articlePageArguments(Request $request, string $id, int $version = null) : array
     {
         $arguments = $this->defaultArticleArguments($request, $id, $version);
+
+        $arguments['isMagazine'] = $arguments['item']
+            ->then(function (ArticleVersion $item) {
+                return in_array($item->getType(), ['insight', 'editorial']);
+            });
 
         $arguments['history'] = $this->get('elife.api_sdk.articles')
             ->getHistory($id)
@@ -1019,21 +1041,26 @@ final class ArticlesController extends Controller
                 /** @var int|null $pageViews */
                 $pageViews = $parts['pageViews'];
 
+                $metricLink = function (int $count, string $suffix) use ($history, $item) {
+                    // @todo - improve pattern-library or patterns-php so class doesn't need to be set here.
+                    return sprintf('<a href="%s"><span class="contextual-data__counter">%s</span> %s</a>', $this->generatePath($history, $item->getVersion(), null, 'metrics'), number_format($count), $suffix);
+                };
+
                 $metrics = [];
 
-                if (null !== $pageViews && $pageViews > 0) {
-                    $metrics[] = sprintf('<a href="%s"><strong>%s</strong> views</a>', $this->generatePath($history, $item->getVersion(), null, 'metrics'), number_format($pageViews));
-                }
-                if ($citations instanceof CitationsMetric && $citations->getHighest()->getCitations() > 0) {
-                    $metrics[] = sprintf('<a href="%s"><strong>%s</strong> citations</a>', $this->generatePath($history, $item->getVersion(), null, 'metrics'), number_format($citations->getHighest()->getCitations()));
-                }
+            if (null !== $pageViews && $pageViews > 0) {
+                $metrics[] = $metricLink($pageViews, 'views');
+            }
+            if ($citations instanceof CitationsMetric && $citations->getHighest()->getCitations() > 0) {
+                $metrics[] = $metricLink($citations->getHighest()->getCitations(), 'citations');
+            }
 
                 return $metrics;
             });
 
-        $arguments['contentHeader'] = all(['item' => $arguments['item'], 'metrics' => $arguments['contextualDataMetrics']])
+        $arguments['contentHeader'] = all(['item' => $arguments['item'], 'isMagazine' => $arguments['isMagazine'], 'metrics' => $arguments['contextualDataMetrics']])
             ->then(function (array $parts) {
-                return $this->convertTo($parts['item'], ContentHeaderNew::class, ['metrics' => $parts['metrics']]);
+                return $this->convertTo($parts['item'], ContentHeaderNew::class, ['metrics' => $parts['metrics'], 'isMagazine' => $parts['isMagazine']]);
             });
 
         $arguments['downloadLinks'] = all(['item' => $arguments['item'], 'history' => $arguments['history'], 'eraArticle' => $arguments['eraArticle']])
@@ -1061,10 +1088,14 @@ final class ArticlesController extends Controller
         return $arguments;
     }
 
-    private function createViewSelector(PromiseInterface $item, PromiseInterface $hasFigures, bool $isFiguresPage, PromiseInterface $history, PromiseInterface $sections, array $eraArticle) : PromiseInterface
+    private function createViewSelector(PromiseInterface $item, PromiseInterface $isMagazine, PromiseInterface $hasFigures, bool $isFiguresPage, PromiseInterface $history, PromiseInterface $sections, array $eraArticle) : PromiseInterface
     {
-        return all(['item' => $item, 'hasFigures' => $hasFigures, 'history' => $history, 'sections' => $sections])
+        return all(['item' => $item, 'isMagazine' => $isMagazine, 'hasFigures' => $hasFigures, 'history' => $history, 'sections' => $sections])
             ->then(function (array $sections) use ($isFiguresPage, $eraArticle) {
+                if ($sections['isMagazine']) {
+                    return null;
+                }
+
                 $item = $sections['item'];
                 $hasFigures = $sections['hasFigures'];
                 $history = $sections['history'];
