@@ -74,7 +74,7 @@ the way research is practised and shared.');
     {
         $arguments = $this->aboutPageArguments($request);
 
-        $arguments['title'] = 'Aims and scope';
+        $arguments['title'] = 'Publishing with eLife';
 
         $arguments['contentHeader'] = new ContentHeader($arguments['title'], null,
             'eLife welcomes the submission of Research Articles, Short Reports, Tools and Resources articles, Research Advances, Scientific Correspondence and Review Articles in the subject areas below.');
@@ -107,8 +107,9 @@ the way research is practised and shared.');
             })
             ->then(function (Sequence $sections) {
                 return $sections->prepend(
-                    new Paragraph('eLife is an open-access journal and complies with all major funding agency requirements for immediate online access to the published results of their research grants.'),
-                    new Paragraph('For further details, and requirements for each type of submission, please consult our <a href="https://reviewer.elifesciences.org/author-guide/types">Author Guide.</a>')
+                    new Paragraph('eLife is an open-access journal, publishing high-quality research in all areas of the life sciences and medicine. It complies with all major funding agency requirements for immediate online access to the published results of their research grants.'),
+                    new Paragraph('For further details, and requirements for each type of submission, please consult our <a href="https://reviewer.elifesciences.org/author-guide/types">Author Guide.</a>'),
+                    new Paragraph('We welcome the submission of research in the following areas:')
                 );
             });
 
@@ -354,7 +355,7 @@ the way research is practised and shared.');
 
         $menuItems = [
             'About eLife' => $this->get('router')->generate('about'),
-            'Aims and scope' => $this->get('router')->generate('about-aims-scope'),
+            'Publishing with eLife' => $this->get('router')->generate('about-aims-scope'),
             'Editors and people' => $this->get('router')->generate('about-people'),
             'Peer review' => $this->get('router')->generate('about-peer-review'),
             'Technology' => $this->get('router')->generate('about-technology'),
