@@ -101,16 +101,28 @@ the way research is practised and shared.');
                 return ArticleSection::basic(
                     $this->render(...$body),
                     $subject->getName(),
-                    2,
+                    3,
                     $subject->getId()
                 );
             })
-            ->then(function (Sequence $sections) {
-                return $sections->prepend(
-                    new Paragraph('eLife is an open-access journal, publishing high-quality research in all areas of the life sciences and medicine. It complies with all major funding agency requirements for immediate online access to the published results of their research grants.'),
-                    new Paragraph('For further details, and requirements for each type of submission, please consult our <a href="https://reviewer.elifesciences.org/author-guide/types">Author Guide.</a>'),
-                    new Paragraph('We welcome the submission of research in the following areas:')
-                );
+            ->then(function (Sequence $aimsAndScope) {
+                return [
+                    ArticleSection::basic(
+                        $this->render(
+                            new Paragraph('eLife is an open-access journal, publishing high-quality research in all areas of the life sciences and medicine. It complies with all major funding agency requirements for immediate online access to the published results of their research grants.'),
+                            new Paragraph('For further details, and requirements for each type of submission, please consult our <a href="https://reviewer.elifesciences.org/author-guide/types">Author Guide.</a>'),
+                            ArticleSection::basic(
+                                $this->render(
+                                    ...$aimsAndScope->prepend(
+                                        new Paragraph('We welcome the submission of research in the following areas:')
+                                    )
+                                ),
+                                'Aims and Scope',
+                                2
+                            )
+                        )
+                    ),
+                ];
             });
 
         return new Response($this->get('templating')->render('::about.html.twig', $arguments));
