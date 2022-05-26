@@ -221,7 +221,7 @@ final class AboutController extends Controller
             new Paragraph('All software developed at eLife is open source under the most permissible of licences and can be found in our GitHub organisations for <a href="https://github.com/elifesciences">eLife GitHib</a> and <a href="https://github.com/sciety">Sciety GitHub</a>.'),
             ArticleSection::basic(
                 $this->render(Listing::unordered([
-                    '<a href="'.$this->get('router')->generate('inside-elife', ['id' => 'daf1b699']).'">eLife Latest: Announcing a new technology direction</a>',
+                    '<a href="'.$this->get('router')->generate('inside-elife-article', ['id' => 'daf1b699']).'">eLife Latest: Announcing a new technology direction</a>',
                     '<a href="https://sciety.org">Sciety.org</a>',
                 ], 'bullet')), 'Related links', 2
             ),
