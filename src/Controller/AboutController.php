@@ -44,16 +44,15 @@ final class AboutController extends Controller
         $arguments['title'] = 'About';
 
         $arguments['contentHeader'] = new ContentHeader('eLife: evolution of publishing', null,
-            'Independent, not-for-profit and supported by funders, eLife improves
-the way research is practised and shared.');
+            'Independent, not-for-profit and supported by funders, eLife improves the way research is practised and shared.');
 
         $arguments['body'] = [
             new Paragraph('eLife is committed to creating a future where a diverse, global community of researchers shares open results for the benefit of all.'),
             new Paragraph('From the research we publish, to the tools we build, to the people we work with, we’ve earned a reputation for quality, integrity and the flexibility to bring about real change.'),
-            new Paragraph('We\'re committed to a "<a href"https://elifesciences.org/articles/64910">publish, review, curate</a>" model for publishing and plan to achieve this transition by:'),
+            new Paragraph('We\'re committed to a "<a href="'.$this->get('router')->generate('article', ['id' => '64910']).'">publish, review, curate</a>" model for publishing and plan to achieve this transition by:'),
             Listing::unordered([
                 'Peer reviewing preprints in the life sciences and medicine',
-                'Building <a href="https://elifesciences.org/about/technology">technology</a> to support this model that is open-source, readily adaptable and addresses community needs',
+                'Building <a href="'.$this->get('router')->generate('about-technology').'">technology</a> to support this model that is open-source, readily adaptable and addresses community needs',
                 'Working with scientists from around the world to improve research culture',
             ], 'bullet'),
             new Paragraph('eLife is a non-profit organisation that receives financial support and strategic guidance from the <a href="https://https://www.hhmi.org/">Howard Hughes Medical Institute</a>, the <a href="https://kaw.wallenberg.org/en">Knut and Alice Wallenberg Foundation</a>, the <a href="https://www.mpg.de/en">Max Planck Society</a> and <a href="https://wellcome.ac.uk/">Wellcome</a>. eLife Sciences Publications Ltd is publisher of the open-access eLife journal (ISSN 2050-084X).'),
@@ -222,7 +221,7 @@ the way research is practised and shared.');
             new Paragraph('All software developed at eLife is open source under the most permissible of licences and can be found in our GitHub organisations for <a href="https://github.com/elifesciences">eLife GitHib</a> and <a href="https://github.com/sciety">Sciety GitHub</a>.'),
             ArticleSection::basic(
                 $this->render(Listing::unordered([
-                    '<a href="https://elifesciences.org/inside-elife/daf1b699/elife-latest-announcing-a-new-technology-direction">eLife Latest: Announcing a new technology direction</a>',
+                    '<a href="'.$this->get('router')->generate('inside-elife', ['id' => 'daf1b699']).'">eLife Latest: Announcing a new technology direction</a>',
                     '<a href="https://sciety.org">Sciety.org</a>',
                 ], 'bullet')), 'Related links', 2
             ),
@@ -251,7 +250,7 @@ the way research is practised and shared.');
                     '<a href="'.$this->get('router')->generate('community').'">Community page</a>',
                     '<a href="https://ecrlife.org/">ecrLife</a>',
                     'Follow <a href="https://twitter.com/elifecommunity">eLife Community on Twitter</a>',
-                    'Sign up for our <a href="https://elifesciences.org/content-alerts/early-career">early-career researchers newsletter</a>',
+                    'Sign up for our <a href="'.$this->get('router')->generate('content-alerts-variant', ['variant' => 'early-career']).'">early-career researchers newsletter</a>',
                 ], 'bullet')), 'Related links', 2
             ),
         ];
