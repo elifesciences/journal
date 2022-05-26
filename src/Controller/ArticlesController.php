@@ -1041,14 +1041,19 @@ final class ArticlesController extends Controller
                 /** @var int|null $pageViews */
                 $pageViews = $parts['pageViews'];
 
+                $metricLink = function (int $count, string $suffix) use ($history, $item) {
+                    // @todo - improve pattern-library or patterns-php so class doesn't need to be set here.
+                    return sprintf('<a href="%s"><span class="contextual-data__counter">%s</span> %s</a>', $this->generatePath($history, $item->getVersion(), null, 'metrics'), number_format($count), $suffix);
+                };
+
                 $metrics = [];
 
-                if (null !== $pageViews && $pageViews > 0) {
-                    $metrics[] = sprintf('<a href="%s"><strong>%s</strong> views</a>', $this->generatePath($history, $item->getVersion(), null, 'metrics'), number_format($pageViews));
-                }
-                if ($citations instanceof CitationsMetric && $citations->getHighest()->getCitations() > 0) {
-                    $metrics[] = sprintf('<a href="%s"><strong>%s</strong> citations</a>', $this->generatePath($history, $item->getVersion(), null, 'metrics'), number_format($citations->getHighest()->getCitations()));
-                }
+            if (null !== $pageViews && $pageViews > 0) {
+                $metrics[] = $metricLink($pageViews, 'views');
+            }
+            if ($citations instanceof CitationsMetric && $citations->getHighest()->getCitations() > 0) {
+                $metrics[] = $metricLink($citations->getHighest()->getCitations(), 'citations');
+            }
 
                 return $metrics;
             });
