@@ -2,9 +2,9 @@
 
 namespace eLife\Journal\DependencyInjection;
 
+use Symfony\Component\DependencyInjection\ChildDefinition;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\DefinitionDecorator;
 
 final class RedisCachePass implements CompilerPassInterface
 {
@@ -14,7 +14,7 @@ final class RedisCachePass implements CompilerPassInterface
             return;
         }
 
-        $redis = new DefinitionDecorator('cache.adapter.redis');
+        $redis = new ChildDefinition('cache.adapter.redis');
         $redis->setPublic(true);
         $redis->addTag('cache.pool', []);
 
