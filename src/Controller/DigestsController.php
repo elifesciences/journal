@@ -79,6 +79,8 @@ final class DigestsController extends Controller
 
         $arguments = $this->defaultPageArguments($request, $arguments['item']);
 
+        $arguments['isMagazine'] = true;
+
         $arguments['title'] = $arguments['item']
             ->then(Callback::method('getTitle'));
 
@@ -90,18 +92,8 @@ final class DigestsController extends Controller
             ->otherwise($this->mightNotExist())
             ->otherwise($this->softFailure('Failed to load page views count'));
 
-        $arguments['contextualData'] = $arguments['pageViews']
-            ->then(Callback::emptyOr(function (int $pageViews) {
-                return ContextualData::withMetrics([sprintf('Views %s', number_format($pageViews))], null, null, SpeechBubble::forContextualData());
-            }, function () {
-                return ContextualData::annotationsOnly(SpeechBubble::forContextualData());
-            }));
-
         $arguments['blocks'] = $arguments['item']
-            ->then($this->willConvertContent())
-            ->then(function (Sequence $blocks) {
-                return $blocks->prepend(SpeechBubble::forArticleBody());
-            });
+            ->then($this->willConvertContent());
 
         $arguments['relatedContent'] = (new PromiseSequence($arguments['item']
             ->then(Callback::method('getRelatedContent'))))
