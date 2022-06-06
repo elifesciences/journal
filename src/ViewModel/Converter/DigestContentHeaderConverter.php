@@ -24,6 +24,12 @@ final class DigestContentHeaderConverter implements ViewModelConverter
      */
     public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
+        if ($date = $this->simpleDate($object, ['date' => 'published'] + $context)) {
+            $meta = ViewModel\MetaNew::withDate($date);
+        } else {
+            $meta = null;
+        }
+
         return new ViewModel\ContentHeaderNew(
             $object->getTitle(),
             null, $object->getImpactStatement(), true,
@@ -42,15 +48,9 @@ final class DigestContentHeaderConverter implements ViewModelConverter
                 strip_tags($object->getTitle()),
                 $this->urlGenerator->generate('digest', [$object], UrlGeneratorInterface::ABSOLUTE_URL)
             ),
-            null, null,
-            ViewModel\MetaNew::withDate(
-                $this->simpleDate(
-                    $object,
-                    [
-                        'date' => 'published',
-                    ] + $context
-                )
-            ),
+            !empty($context['metrics']) ? ViewModel\ContextualData::withMetrics($context['metrics']) : null,
+            null,
+            $meta,
             null,
             LicenceUri::default()
         );
@@ -58,6 +58,6 @@ final class DigestContentHeaderConverter implements ViewModelConverter
 
     public function supports($object, string $viewModel = null, array $context = []) : bool
     {
-        return $object instanceof Digest && ViewModel\ContentHeader::class === $viewModel;
+        return $object instanceof Digest && ViewModel\ContentHeaderNew::class === $viewModel;
     }
 }

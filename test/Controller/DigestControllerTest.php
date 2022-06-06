@@ -23,10 +23,23 @@ final class DigestControllerTest extends PageTestCase
         $crawler = $client->request('GET', $this->getUrl());
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
+
+        $breadcrumb = $crawler->filter('.breadcrumb-item a');
+        $this->assertCount(2, $breadcrumb);
+        $this->assertEquals([
+            [
+                'Magazine',
+                '/magazine',
+            ],
+            [
+                'Digest',
+                '/digests',
+            ],
+        ], $breadcrumb->extract(['_text', 'href']));
+
         $this->assertSame('Digest title', $crawler->filter('.content-header__title')->text());
-        $this->assertSame('Digest Jan 1, 2010', trim(preg_replace('!\s+!', ' ', $crawler->filter('.content-header .meta')
+        $this->assertSame('Jan 1, 2010', trim(preg_replace('!\s+!', ' ', $crawler->filter('.content-header .meta')
             ->text())));
-        $this->assertContains('Annotations', $crawler->filter('.contextual-data__list')->text());
         $this->assertContains('Digest text.', $crawler->filter('.wrapper--content')->text());
     }
 
@@ -68,10 +81,12 @@ final class DigestControllerTest extends PageTestCase
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertSame('Digest title', $crawler->filter('.content-header__title')->text());
 
+        $this->assertSame('Comment Open annotations (there are currently 0 annotations on this page).',
+            $this->crawlerText($crawler->filter('.content-header-grid__side .content-header-grid__side-popup-block__list li')->eq(0)));
+
         $this->assertSame(
             [
-                'Views 5,678',
-                'Annotations Open annotations. The current annotation count on this page is being calculated.',
+                '5,678 views',
             ],
             array_map(function (string $text) {
                 return trim(preg_replace('!\s+!', ' ', $text));
