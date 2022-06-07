@@ -786,20 +786,13 @@ final class ArticlesController extends Controller
             })
             ->then(Callback::mustNotBeEmpty(new NotFoundHttpException('Article version does not contain any figures or data')));
 
-        // $isMagazine = unwrap($arguments['isMagazine']);
-        $isMagazineRedirect = $arguments['isMagazine']->then(function ($isMagazine) {
-            if ($isMagazine) {
-                return new RedirectResponse(
-                    $this->get('router')->generate('article', ['id' => $id]),
-                    Response::HTTP_FOUND
-                );
-            }
-        });
-
-        if ($isMagazineRedirect) {
-
+        $arguments['isMagazine'] = $arguments['isMagazine']->wait();
+        if ($arguments['isMagazine']) {
+            return new RedirectResponse(
+                $this->get('router')->generate('article', ['id' => $id]),
+                Response::HTTP_FOUND
+            );
         }
-
 
         $arguments['viewSelector'] = $this->createViewSelector($arguments['item'], $arguments['isMagazine'], promise_for(true), true, $arguments['history'], $arguments['body'], $arguments['eraArticle']);
 
