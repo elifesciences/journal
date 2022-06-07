@@ -785,8 +785,8 @@ final class ArticlesController extends Controller
             })
             ->then(Callback::mustNotBeEmpty(new NotFoundHttpException('Article version does not contain any figures or data')));
 
-        $arguments['isMagazine'] = $arguments['isMagazine']->wait();
-        if ($arguments['isMagazine']) {
+        $isMagazine = $arguments['isMagazine']->wait();
+        if ($isMagazine) {
             return new RedirectResponse(
                 $this->get('router')->generate('article', ['id' => $id]),
                 Response::HTTP_FOUND
