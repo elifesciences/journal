@@ -24,6 +24,7 @@ use eLife\ApiSdk\Model\HasContent;
 use eLife\ApiSdk\Model\Identifier;
 use eLife\ApiSdk\Model\Model;
 use eLife\ApiSdk\Model\Reviewer;
+use eLife\Journal\Exception\EarlyResponse;
 use eLife\Journal\Helper\Callback;
 use eLife\Journal\Helper\DownloadLink;
 use eLife\Journal\Helper\HasPages;
@@ -785,13 +786,13 @@ final class ArticlesController extends Controller
             })
             ->then(Callback::mustNotBeEmpty(new NotFoundHttpException('Article version does not contain any figures or data')));
 
-        $isMagazine = $arguments['isMagazine']->wait();
-        if ($isMagazine) {
-            return new RedirectResponse(
-                $this->get('router')->generate('article', ['id' => $id]),
-                Response::HTTP_FOUND
-            );
-        }
+        $arguments['isMagazine']->then(function($isMagazine) use ($id) {
+            if ($isMagazine) {
+                throw new EarlyResponse(new RedirectResponse(
+                    $this->get('router')->generate('article', ['id' => $id])
+                ));
+            }
+        });
 
         $arguments['viewSelector'] = $this->createViewSelector($arguments['item'], $arguments['isMagazine'], promise_for(true), true, $arguments['history'], $arguments['body'], $arguments['eraArticle']);
 
