@@ -419,6 +419,151 @@ final class ArticleFiguresControllerTest extends PageTestCase
         $this->assertSame(404, $client->getResponse()->getStatusCode());
     }
 
+    /**
+     * @test
+     */
+    public function it_redirects_an_insight_or_editorial_article_with_figures_to_the_article_page()
+    {
+        $client = static::createClient();
+
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/articles/00002',
+                ['Accept' => 'application/vnd.elife.article-poa+json; version=3, application/vnd.elife.article-vor+json; version=6']
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.article-vor+json; version=6'],
+                json_encode([
+                    'status' => 'vor',
+                    'stage' => 'published',
+                    'id' => '00002',
+                    'version' => 1,
+                    'type' => 'insight',
+                    'doi' => '10.7554/eLife.00002',
+                    'title' => 'Insight 4 title',
+                    'published' => '2010-01-01T00:00:00Z',
+                    'versionDate' => '2010-01-01T00:00:00Z',
+                    'statusDate' => '2010-01-01T00:00:00Z',
+                    'volume' => 1,
+                    'elocationId' => 'e00002',
+                    'copyright' => [
+                        'license' => 'CC-BY-4.0',
+                        'holder' => 'Author One',
+                        'statement' => 'Copyright statement.',
+                    ],
+                    'abstract' => [
+                        'content' => [
+                            [
+                                'type' => 'section',
+                                'title' => 'Introduction',
+                                'content' => [
+                                    [
+                                        'type' => 'paragraph',
+                                        'text' => 'Abstract 00002.',
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                    'authorLine' => 'Foo Bar',
+                    'authors' => [
+                        [
+                            'type' => 'person',
+                            'name' => [
+                                'preferred' => 'Foo Bar',
+                                'index' => 'Bar, Foo',
+                            ],
+                        ],
+                    ],
+                    'body' => [
+                        [
+                            'type' => 'section',
+                            'id' => 's-1',
+                            'title' => 'Introduction',
+                            'content' => [
+                                [
+                                    'type' => 'figure',
+                                    'assets' => [
+                                        [
+                                            'type' => 'image',
+                                            'id' => 'image1',
+                                            'label' => 'Image 1 label',
+                                            'title' => 'Image 1 title',
+                                            'image' => [
+                                                'uri' => 'https://www.example.com/iiif/image',
+                                                'alt' => '',
+                                                'source' => [
+                                                    'mediaType' => 'image/jpeg',
+                                                    'uri' => 'https://www.example.com/image.jpg',
+                                                    'filename' => 'image.jpg',
+                                                ],
+                                                'size' => [
+                                                    'width' => 800,
+                                                    'height' => 600,
+                                                ],
+                                            ],
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ])
+            )
+        );
+
+
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/articles/00002/versions',
+                [
+                    'Accept' => [
+                        'application/vnd.elife.article-history+json; version=2',
+                    ],
+                ]
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.article-history+json; version=2'],
+                json_encode([
+                    'versions' => [
+                        [
+                            'status' => 'vor',
+                            'stage' => 'published',
+                            'id' => '00002',
+                            'version' => 1,
+                            'type' => 'insight',
+                            'doi' => '10.7554/eLife.00002',
+                            'title' => 'Insight 4 title',
+                            'published' => '2010-01-01T00:00:00Z',
+                            'versionDate' => '2010-01-01T00:00:00Z',
+                            'statusDate' => '2010-01-01T00:00:00Z',
+                            'volume' => 1,
+                            'elocationId' => 'e00002',
+                            'copyright' => [
+                                'license' => 'CC-BY-4.0',
+                                'holder' => 'Author One',
+                                'statement' => 'Copyright statement.',
+                            ],
+                            'authorLine' => 'Foo Bar',
+                        ],
+                    ],
+                ])
+            )
+        );
+
+        //expect a redirect when the page has figures. 404 without (as)
+        $client->request('GET', '/articles/00002/figures');
+        $this->assertSame(302, $client->getResponse()->getStatusCode());
+
+        $client->followRedirect();
+        $this->assertSame(200, $client->getResponse()->getStatusCode());
+        $this->assertSame('/articles/00002', $client->getRequest()->getPathInfo());
+    }
+
     protected function getUrl() : string
     {
         $this->mockApiResponse(

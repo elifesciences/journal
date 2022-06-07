@@ -47,6 +47,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use function GuzzleHttp\Promise\all;
 use function GuzzleHttp\Promise\promise_for;
+use function GuzzleHttp\Promise\unwrap;
 use function uksort;
 
 final class ArticlesController extends Controller
@@ -784,6 +785,21 @@ final class ArticlesController extends Controller
                 return $parts;
             })
             ->then(Callback::mustNotBeEmpty(new NotFoundHttpException('Article version does not contain any figures or data')));
+
+        // $isMagazine = unwrap($arguments['isMagazine']);
+        $isMagazineRedirect = $arguments['isMagazine']->then(function ($isMagazine) {
+            if ($isMagazine) {
+                return new RedirectResponse(
+                    $this->get('router')->generate('article', ['id' => $id]),
+                    Response::HTTP_FOUND
+                );
+            }
+        });
+
+        if ($isMagazineRedirect) {
+
+        }
+
 
         $arguments['viewSelector'] = $this->createViewSelector($arguments['item'], $arguments['isMagazine'], promise_for(true), true, $arguments['history'], $arguments['body'], $arguments['eraArticle']);
 
