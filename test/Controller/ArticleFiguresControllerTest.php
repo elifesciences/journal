@@ -514,46 +514,6 @@ final class ArticleFiguresControllerTest extends PageTestCase
             )
         );
 
-        $this->mockApiResponse(
-            new Request(
-                'GET',
-                'http://api.elifesciences.org/articles/00002/versions',
-                [
-                    'Accept' => [
-                        'application/vnd.elife.article-history+json; version=2',
-                    ],
-                ]
-            ),
-            new Response(
-                200,
-                ['Content-Type' => 'application/vnd.elife.article-history+json; version=2'],
-                json_encode([
-                    'versions' => [
-                        [
-                            'status' => 'vor',
-                            'stage' => 'published',
-                            'id' => '00002',
-                            'version' => 1,
-                            'type' => 'insight',
-                            'doi' => '10.7554/eLife.00002',
-                            'title' => 'Insight 4 title',
-                            'published' => '2010-01-01T00:00:00Z',
-                            'versionDate' => '2010-01-01T00:00:00Z',
-                            'statusDate' => '2010-01-01T00:00:00Z',
-                            'volume' => 1,
-                            'elocationId' => 'e00002',
-                            'copyright' => [
-                                'license' => 'CC-BY-4.0',
-                                'holder' => 'Author One',
-                                'statement' => 'Copyright statement.',
-                            ],
-                            'authorLine' => 'Foo Bar',
-                        ],
-                    ],
-                ])
-            )
-        );
-
         $client->followRedirects(false);
 
         // Expect a redirect when the page has figures. 404 without (as).
