@@ -792,7 +792,7 @@ final class ArticlesController extends Controller
                     $this->get('router')->generate('article', ['id' => $id])
                 ));
             }
-        });
+        })->wait();
 
         $arguments['viewSelector'] = $this->createViewSelector($arguments['item'], $arguments['isMagazine'], promise_for(true), true, $arguments['history'], $arguments['body'], $arguments['eraArticle']);
 

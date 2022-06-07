@@ -561,7 +561,7 @@ final class ArticleFiguresControllerTest extends PageTestCase
         $response = $client->getResponse();
 
         $this->assertTrue($response->isRedirect());
-        $this->assertSameUri('http://localhost/articles/00002', $response->headers->get('Location'));
+        $this->assertSameUri('/articles/00002', $response->headers->get('Location'));
     }
 
     protected function getUrl() : string
