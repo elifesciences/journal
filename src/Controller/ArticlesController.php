@@ -47,7 +47,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use function GuzzleHttp\Promise\all;
 use function GuzzleHttp\Promise\promise_for;
-use function GuzzleHttp\Promise\unwrap;
 use function uksort;
 
 final class ArticlesController extends Controller
