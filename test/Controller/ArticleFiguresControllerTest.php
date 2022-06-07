@@ -514,7 +514,6 @@ final class ArticleFiguresControllerTest extends PageTestCase
             )
         );
 
-
         $this->mockApiResponse(
             new Request(
                 'GET',
@@ -555,13 +554,14 @@ final class ArticleFiguresControllerTest extends PageTestCase
             )
         );
 
-        //expect a redirect when the page has figures. 404 without (as)
-        $client->request('GET', '/articles/00002/figures');
-        $this->assertSame(302, $client->getResponse()->getStatusCode());
+        $client->followRedirects(false);
 
-        $client->followRedirect();
-        $this->assertSame(200, $client->getResponse()->getStatusCode());
-        $this->assertSame('/articles/00002', $client->getRequest()->getPathInfo());
+        // Expect a redirect when the page has figures. 404 without (as).
+        $client->request('GET', '/articles/00002/figures');
+        $response = $client->getResponse();
+
+        $this->assertTrue($response->isRedirect());
+        $this->assertSameUri('http://localhost/articles/00002', $response->headers->get('Location'));
     }
 
     protected function getUrl() : string
