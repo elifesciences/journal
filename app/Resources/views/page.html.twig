@@ -215,6 +215,10 @@
 {% endblock %}
 
 {% block content %}
+    {% if cb_id %}
+        <script id="CookieDeclaration" src="https://consent.cookiebot.com/{{ cb_id|raw }}/cd.js" type="text/javascript" async></script>
+    {% endif %}
+
     {% if gtm_id %}
         <noscript>
             <iframe src="https://www.googletagmanager.com/ns.html?id={{ gtm_id|raw }}" height="0" width="0"
