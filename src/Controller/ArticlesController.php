@@ -753,12 +753,13 @@ final class ArticlesController extends Controller
             }));
 
         $arguments['body'] = all([
+            'isMagazine' => $arguments['isMagazine'],
             'figures' => $figures,
             'videos' => $videos,
             'tables' => $tables,
             'additionalFiles' => $additionalFiles,
         ])
-            ->then(function (array $all) {
+            ->then(function (array $all) use ($id) {
                 $parts = [];
 
                 $first = true;
@@ -782,17 +783,16 @@ final class ArticlesController extends Controller
                     $parts[] = ArticleSection::collapsible('files', 'Additional files', 2, $this->render($all['additionalFiles']), null, null, false, $first);
                 }
 
+                if ($all['isMagazine'] && !empty($parts)) {
+                    throw new EarlyResponse(new RedirectResponse(
+                        $this->get('router')->generate('article', ['id' => $id]),
+                        Response::HTTP_MOVED_PERMANENTLY
+                    ));
+                }
+
                 return $parts;
             })
             ->then(Callback::mustNotBeEmpty(new NotFoundHttpException('Article version does not contain any figures or data')));
-
-        $arguments['isMagazine']->then(function($isMagazine) use ($id) {
-            if ($isMagazine) {
-                throw new EarlyResponse(new RedirectResponse(
-                    $this->get('router')->generate('article', ['id' => $id])
-                ));
-            }
-        })->wait();
 
         $arguments['viewSelector'] = $this->createViewSelector($arguments['item'], $arguments['isMagazine'], promise_for(true), true, $arguments['history'], $arguments['body'], $arguments['eraArticle']);
 
