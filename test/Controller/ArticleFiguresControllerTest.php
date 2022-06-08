@@ -516,7 +516,8 @@ final class ArticleFiguresControllerTest extends PageTestCase
 
         $client->followRedirects(false);
 
-        // Expect a redirect when the page has figures. 404 without (as).
+        // Expect a redirect when the insight page has figures, 404 for insight pages without figures
+        // (See `::it_displays_a_404_if_the_article_has_no_figures()`).
         $client->request('GET', '/articles/00002/figures');
         $response = $client->getResponse();
 
