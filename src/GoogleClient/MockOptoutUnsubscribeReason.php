@@ -4,7 +4,6 @@ namespace eLife\Journal\GoogleClient;
 
 use DateTimeImmutable;
 use eLife\CiviContacts\Etoc\Newsletter;
-use eLife\Journal\GoogleClient\OptoutUnsubscribeReasonInterface;
 use Google\Service\Sheets;
 
 final class MockOptoutUnsubscribeReason implements OptoutUnsubscribeReasonInterface
