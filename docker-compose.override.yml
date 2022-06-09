@@ -19,6 +19,8 @@ services:
             - node_modules:/node_modules
             - ./gulpfile.js:/gulpfile.js
     app:
+        environment:
+            - APP_ENV=${APP_ENV}
         volumes:
             - ./:/srv/journal
             - ./.docker/php.ini:/usr/local/etc/php/conf.d/x-dev.ini

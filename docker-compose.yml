@@ -36,7 +36,6 @@ services:
                 image_tag: ${IMAGE_TAG}
                 php_version: ${PHP_VERSION}
         environment:
-            - APP_ENV=${APP_ENV}
             - SYMFONY__API_URL=${API_URL}
             - SYMFONY__API_URL_PUBLIC=${API_URL_PUBLIC}
             - SYMFONY__API_KEY=${API_KEY}
