@@ -42,8 +42,6 @@ When running the site locally via Docker, the parameters are supplied by `/.dock
 To change configuration that is supplied by an environment variable, pass in the environment variable at start up. For example, to change the API URL:
 `docker-compose down --volumes --remove-orphans && API_URL=https://prod--gateway.elifesciences.org docker-compose up --build`.
 
-See `/.env` for the list of environment variables that can be passed in this way.
-
 Regenerating critical CSS
 -------------------------
 
@@ -113,5 +111,5 @@ Unsubscribe/optout interface:
 - Visit http://localhost:8080/content-alerts/optout/green to show opt-out form
 - Visit http://localhost:8080/content-alerts/optout/red to trigger something went wrong scenario
 
-To work on the integration with CiviCRM you will have to set the environment variable `APP_ENV=prod`. And also adjust the values in `.docker/parameters.yml` for `crm_api_key` and `crm_api_site_key` to be the same as in production.
+To work on the integration with CiviCRM you will have to set the environment variable `APP_ENV=prod`. And also adjust the values in `.docker/parameters.yml` for `crm_api_key`, `crm_api_site_key`, `google_api_client.refresh_token` and `google_api_client.optout_unsubscribe_spreadsheet_id` to be the same as in production.
 
