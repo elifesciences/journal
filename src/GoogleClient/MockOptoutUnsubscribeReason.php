@@ -1,6 +1,6 @@
 <?php
 
-namespace test\eLife\Journal\GoogleClient;
+namespace eLife\Journal\GoogleClient;
 
 use DateTimeImmutable;
 use eLife\CiviContacts\Etoc\Newsletter;
