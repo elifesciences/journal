@@ -64,8 +64,5 @@ services:
             alias: mock
             priority: -1501
 
-    elife.api_client.client.crm_api:
-        class: test\eLife\Journal\Guzzle\MockCiviCrmClient
-
     elife.journal.google_client.opt_out_unsubscribe_reason:
         class: test\eLife\Journal\GoogleClient\MockOptoutUnsubscribeReason
