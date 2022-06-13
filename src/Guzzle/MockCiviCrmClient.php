@@ -1,6 +1,6 @@
 <?php
 
-namespace test\eLife\Journal\Guzzle;
+namespace eLife\Journal\Guzzle;
 
 use eLife\CiviContacts\Etoc\EarlyCareer;
 use eLife\CiviContacts\Etoc\LatestArticles;

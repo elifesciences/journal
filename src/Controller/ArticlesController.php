@@ -24,6 +24,7 @@ use eLife\ApiSdk\Model\HasContent;
 use eLife\ApiSdk\Model\Identifier;
 use eLife\ApiSdk\Model\Model;
 use eLife\ApiSdk\Model\Reviewer;
+use eLife\Journal\Exception\EarlyResponse;
 use eLife\Journal\Helper\Callback;
 use eLife\Journal\Helper\DownloadLink;
 use eLife\Journal\Helper\HasPages;
@@ -752,12 +753,13 @@ final class ArticlesController extends Controller
             }));
 
         $arguments['body'] = all([
+            'isMagazine' => $arguments['isMagazine'],
             'figures' => $figures,
             'videos' => $videos,
             'tables' => $tables,
             'additionalFiles' => $additionalFiles,
         ])
-            ->then(function (array $all) {
+            ->then(function (array $all) use ($id) {
                 $parts = [];
 
                 $first = true;
@@ -779,6 +781,13 @@ final class ArticlesController extends Controller
 
                 if (!empty($all['additionalFiles'])) {
                     $parts[] = ArticleSection::collapsible('files', 'Additional files', 2, $this->render($all['additionalFiles']), null, null, false, $first);
+                }
+
+                if ($all['isMagazine'] && !empty($parts)) {
+                    throw new EarlyResponse(new RedirectResponse(
+                        $this->get('router')->generate('article', ['id' => $id]),
+                        Response::HTTP_MOVED_PERMANENTLY
+                    ));
                 }
 
                 return $parts;

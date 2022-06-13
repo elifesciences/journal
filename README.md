@@ -42,8 +42,6 @@ When running the site locally via Docker, the parameters are supplied by `/.dock
 To change configuration that is supplied by an environment variable, pass in the environment variable at start up. For example, to change the API URL:
 `docker-compose down --volumes --remove-orphans && API_URL=https://prod--gateway.elifesciences.org docker-compose up --build`.
 
-See `/.env` for the list of environment variables that can be passed in this way.
-
 Regenerating critical CSS
 -------------------------
 
@@ -89,3 +87,29 @@ docker-compose -f docker-compose.yml -f docker-compose.ci.yml down -v
 SELENIUM_IMAGE_SUFFIX=-debug docker-compose -f docker-compose.yml -f docker-compose.ci.yml up --build
 docker-compose -f docker-compose.yml -f docker-compose.ci.yml run ci .ci/behat
 ```
+
+Working on Content Alerts
+-------------------------
+
+In all but the production environment the CiviCRM client is a mock. This allows the developer to demonstrate the various screens without needing to make changes to a working CiviCRM instance.
+
+Visit http://localhost:8080/content-alerts:
+- Use green@example.com to trigger existing subscription scenario
+- Use any other email to trigger subscription confirmation
+
+For user preference interface:
+- Visit http://localhost:8080/content-alerts/green to prepopulate form
+- Visit http://localhost:8080/content-alerts/red to trigger expired link
+
+Expired link interface:
+- Use green@example.com to trigger email sent scenario
+- Use red@example.com to trigger something went wrong scenario
+
+Unsubscribe/optout interface:
+- Visit http://localhost:8080/content-alerts/unsubscribe/green to show unsubscribe form
+- Visit http://localhost:8080/content-alerts/unsubscribe/red to trigger something went wrong scenario
+- Visit http://localhost:8080/content-alerts/optout/green to show opt-out form
+- Visit http://localhost:8080/content-alerts/optout/red to trigger something went wrong scenario
+
+To work on the integration with CiviCRM you will have to set the environment variable `APP_ENV=prod`. And also adjust the values in `.docker/parameters.yml` for `crm_api_key`, `crm_api_site_key`, `google_api_client.refresh_token` and `google_api_client.optout_unsubscribe_spreadsheet_id` to be the same as in production.
+
