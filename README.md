@@ -50,7 +50,15 @@ Regenerating critical CSS
 Running the tests
 -----------------
 
-`docker-compose run app vendor/bin/phpunit`
+To run all unit tests as in `ci`:
+
+`docker-compose -f docker-compose.yml -f docker-compose.ci.yml run ci .ci/phpunit`
+
+To apply a single test:
+
+```
+APP_ENV=ci docker-compose run app vendor/bin/phpunit --filter AboutControllerTest
+```
 
 Running Behat
 -------------
