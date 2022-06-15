@@ -2,6 +2,9 @@ version: '3'
 
 services:
     composer:
+        build:
+            args:
+                composer_dev_arg:
         volumes:
             - ./composer.json:/app/composer.json
             - ./composer.lock:/app/composer.lock
