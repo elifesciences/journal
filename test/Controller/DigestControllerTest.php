@@ -81,8 +81,8 @@ final class DigestControllerTest extends PageTestCase
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertSame('Digest title', $crawler->filter('.content-header__title')->text());
 
-        $this->assertSame('Comment Open annotations (there are currently 0 annotations on this page).',
-            $this->crawlerText($crawler->filter('.content-header__one-column-container ul li')->eq(0)));
+        $this->assertSame('Open annotations (there are currently 0 annotations on this page).',
+            $this->crawlerText($crawler->filter('.content-header__one-column-container .content-header-grid__side-popup-block__link')));
 
         $this->assertSame(
             [
