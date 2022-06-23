@@ -3,7 +3,6 @@
 namespace eLife\Journal\ViewModel\Converter;
 
 use eLife\ApiSdk\Model\ArticleVersion;
-use eLife\ApiSdk\Model\Block\Paragraph;
 use eLife\ApiSdk\Model\HasImpactStatement;
 use eLife\ApiSdk\Model\Subject;
 use eLife\Journal\Helper\CanConvertContent;
@@ -62,6 +61,7 @@ final class ArticleContentHeaderConverter implements ViewModelConverter
 
         return new ViewModel\ContentHeaderNew(
             $object->getFullTitle(),
+            null,
             null,
             $impactStatement,
             true,
