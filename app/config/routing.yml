@@ -141,7 +141,7 @@ article-type:
     defaults:
          _controller: AppBundle:ArticleTypes:list
     requirements:
-        type: '(correction|editorial|feature|insight|research-advance|research-article|research-communication|retraction|registered-report|replication-study|review-article|scientific-correspondence|short-report|tools-resources)'
+        type: '(reviewed-preprint|correction|editorial|feature|insight|research-advance|research-article|research-communication|retraction|registered-report|replication-study|review-article|scientific-correspondence|short-report|tools-resources)'
 
 article-version-xml:
     path: /articles/{id}v{version}.xml

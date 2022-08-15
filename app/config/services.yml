@@ -540,6 +540,17 @@ services:
         tags:
           - name: view_model.converter
 
+    elife.journal.view_model.converter.reviewed.preprint:
+        class: eLife\Journal\ViewModel\Converter\ReviewedPreprintConverter
+        public: false
+        arguments:
+          - '@elife.journal.view_model.converter'
+          - '@router'
+          - '@security.authorization_checker'
+          - '%era_articles%'
+        tags:
+          - name: view_model.converter
+
     elife.journal.view_model.converter.article.modal:
         class: eLife\Journal\ViewModel\Converter\ArticleModalConverter
         public: false
