@@ -37,7 +37,7 @@ final class ReviewedPreprintConverter implements ViewModelConverter
         $formats = ['HTML'];
 
         return ViewModel\Teaser::main(
-            $object->getFullTitle(),
+            $object->getTitle(),
             $this->urlGenerator->generate('article', [$object]),
             $object instanceof ArticleVoR ? $object->getImpactStatement() : null,
             $object->getAuthorLine(),
