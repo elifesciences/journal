@@ -7,8 +7,8 @@ use eLife\ApiSdk\Model\Subject;
 use eLife\Journal\Helper\Callback;
 use eLife\Journal\Helper\Paginator;
 use eLife\Journal\Pagerfanta\SequenceAdapter;
-use eLife\Patterns\ViewModel\Carousel;
-use eLife\Patterns\ViewModel\CarouselItem;
+use eLife\Patterns\ViewModel\HeroBanner;
+use eLife\Patterns\ViewModel\HeroBannerItem;
 use eLife\Patterns\ViewModel\LeadPara;
 use eLife\Patterns\ViewModel\LeadParas;
 use eLife\Patterns\ViewModel\Link;
@@ -70,13 +70,15 @@ final class HomeController extends Controller
 
     private function createFirstPage(array $arguments) : Response
     {
-        $arguments['carousel'] = $this->get('elife.api_sdk.covers')
+
+        $arguments['heroBanner'] = $this->get('elife.api_sdk.covers')
             ->getCurrent()
-            ->map($this->willConvertTo(CarouselItem::class))
-            ->then(Callback::emptyOr(function (Sequence $covers) {
-                return new Carousel($covers->toArray(), new ListHeading('Highlights', 'highlights'));
-            }))
-            ->otherwise($this->softFailure('Failed to load covers'));
+            ->slice(0, 1)
+            ->map($this->willConvertTo(HeroBannerItem::class))
+            ->then(function (Sequence $items) {
+                $item = $items[0];
+                return new HeroBanner($item);
+            });
 
         $arguments['leadParas'] = new LeadParas([new LeadPara('eLife works to improve research communication through open science and open technology innovation', 'strapline')]);
 

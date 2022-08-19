@@ -12,10 +12,10 @@
 
 {% block body %}
 
-    {% if carousel %}
-
-        {{ render_pattern(carousel) }}
-
+    {% if heroBanner %}
+        <div class="wrapper">
+            {{ render_pattern(heroBanner) }}
+        </div>
     {% endif %}
 
     <div class="wrapper">
