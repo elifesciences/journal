@@ -12,6 +12,12 @@
             "test\\eLife\\Journal\\": "test/"
         }
     },
+    "repositories": [
+        {
+            "type": "path",
+            "url": "../patterns-php"
+        }
+    ],
     "require": {
         "php": "^7.1",
         "ext-hash": "*",
@@ -24,7 +30,7 @@
         "elife/api-client": "^1.0@dev",
         "elife/api-sdk": "dev-master",
         "elife/civi-contacts": "dev-master",
-        "elife/patterns": "dev-master",
+        "elife/patterns": "dev-feature/hero-barnner",
         "fabpot/goutte": "^3.2",
         "fig/link-util": "^1.0",
         "firebase/php-jwt": "^5.0",
