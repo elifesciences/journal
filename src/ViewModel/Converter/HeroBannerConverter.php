@@ -11,7 +11,7 @@ use eLife\Patterns\ViewModel;
 use eLife\Patterns\ViewModel\Meta;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-final class HeroBannerItemConverter implements ViewModelConverter
+final class HeroBannerConverter implements ViewModelConverter
 {
     use CreatesDate;
 
@@ -31,12 +31,15 @@ final class HeroBannerItemConverter implements ViewModelConverter
         /** @var ArticleVersion $article */
         $article = $object->getItem();
 
-        return new ViewModel\HeroBannerItem(
+        return new ViewModel\HeroBanner(
             $article->getImpactStatement(),
             $article->getSubjects()->map(function (Subject $subject) {
                 return new ViewModel\Link($subject->getName(), $this->urlGenerator->generate('subject', [$subject]));
             })->toArray(),
-            new ViewModel\Link($article->getTitle()),
+            new ViewModel\Link(
+                $article->getTitle(),
+                $this->urlGenerator->generate('article', [$article])
+            ),
             $article->getAuthorLine(),
             Meta::withText(
                 ModelName::singular($article->getType()),
@@ -50,6 +53,6 @@ final class HeroBannerItemConverter implements ViewModelConverter
 
     public function supports($object, string $viewModel = null, array $context = []) : bool
     {
-        return $object instanceof Cover && $object->getItem() instanceof ArticleVersion;
+        return $object instanceof Cover && $viewModel instanceof ViewModel\HeroBanner;
     }
 }

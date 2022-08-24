@@ -3,12 +3,12 @@
 namespace eLife\Journal\Controller;
 
 use eLife\ApiSdk\Collection\Sequence;
+use eLife\ApiSdk\Model\Cover;
 use eLife\ApiSdk\Model\Subject;
 use eLife\Journal\Helper\Callback;
 use eLife\Journal\Helper\Paginator;
 use eLife\Journal\Pagerfanta\SequenceAdapter;
 use eLife\Patterns\ViewModel\HeroBanner;
-use eLife\Patterns\ViewModel\HeroBannerItem;
 use eLife\Patterns\ViewModel\LeadPara;
 use eLife\Patterns\ViewModel\LeadParas;
 use eLife\Patterns\ViewModel\Link;
@@ -74,10 +74,11 @@ final class HomeController extends Controller
         $arguments['heroBanner'] = $this->get('elife.api_sdk.covers')
             ->getCurrent()
             ->slice(0, 1)
-            ->map($this->willConvertTo(HeroBannerItem::class))
             ->then(function (Sequence $items) {
+                /** @var Cover $item */
                 $item = $items[0];
-                return new HeroBanner($item);
+
+                return $this->convertTo($item, HeroBanner::class);
             });
 
         $arguments['leadParas'] = new LeadParas([new LeadPara('eLife works to improve research communication through open science and open technology innovation', 'strapline')]);

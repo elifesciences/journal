@@ -1413,12 +1413,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/patterns-php.git",
-                "reference": "fe64662312bc51ab4f8d4708021474a7446e79a4"
+                "reference": "9ce2acbbfe1517011517a7f706e1645929619820"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/fe64662312bc51ab4f8d4708021474a7446e79a4",
-                "reference": "fe64662312bc51ab4f8d4708021474a7446e79a4",
+                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/9ce2acbbfe1517011517a7f706e1645929619820",
+                "reference": "9ce2acbbfe1517011517a7f706e1645929619820",
                 "shasum": ""
             },
             "require": {
