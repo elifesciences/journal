@@ -8,9 +8,11 @@ Dependencies
 
 * [Composer](https://getcomposer.org/)
 * [npm](https://www.npmjs.com/)
-* PHP 7
+* [PHP 7](https://www.php.net/)
+* [Docker](https://www.docker.com/)
+* [Docker-compose](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-comp
 
-Installation
+Manual Installation (may or may not work - better use docker)
 -------------
 
 1. Create `app/config/parameters.yml` from `app/config/parameters.yml.dist`
@@ -19,9 +21,9 @@ Installation
 4. `node_modules/.bin/gulp`
 5. `bin/console assets:install --symlink`
 
-Running the site locally
+Docker Intallation - Running the site locally
 ------------------------
-The first time running the journal, you may need to build some dependant images first.
+<!-- The first time running the journal, you may need to build some dependant images first.
 1. Build all dependant images first
 ```
 docker-compose build npm
@@ -32,7 +34,8 @@ docker-compose build app
 
 Then, you should be able to start and restart using these commands:
 
-1. `docker-compose down --volumes --remove-orphans && docker-compose up --build`
+1. `docker-compose down --volumes --remove-orphans && docker-compose up --build` -->
+1. Run `docker-compose up --build`
 2. Open `http://localhost:8080` in your browser.
 
 ### Changing configuration
