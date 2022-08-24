@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a55b91cc51f018f8f12ef70c1a59b1f3",
+    "content-hash": "09bf0677794504052096bca9045d4cb5",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -81,6 +81,11 @@
                 "php": ">=5.3.2"
             },
             "type": "symfony-bundle",
+            "extra": {
+                "patches_applied": {
+                    "Remove superfluous argument": "https://github.com/bobthecow/BobthecowMustacheBundle/pull/9.patch"
+                }
+            },
             "autoload": {
                 "psr-0": {
                     "Bobthecow\\Bundle\\MustacheBundle": ""
@@ -106,12 +111,7 @@
                 "symfony",
                 "templating"
             ],
-            "time": "2014-07-10T12:09:42+00:00",
-            "extra": {
-                "patches_applied": {
-                    "Remove superfluous argument": "https://github.com/bobthecow/BobthecowMustacheBundle/pull/9.patch"
-                }
-            }
+            "time": "2014-07-10T12:09:42+00:00"
         },
         {
             "name": "cocur/slugify",
@@ -151,6 +151,11 @@
                 "zendframework/zend-view": "~2.2"
             },
             "type": "library",
+            "extra": {
+                "patches_applied": {
+                    "strip_tags": "https://github.com/cocur/slugify/pull/201.patch"
+                }
+            },
             "autoload": {
                 "psr-4": {
                     "Cocur\\Slugify\\": "src"
@@ -176,12 +181,7 @@
                 "slug",
                 "slugify"
             ],
-            "time": "2018-01-22T09:00:48+00:00",
-            "extra": {
-                "patches_applied": {
-                    "strip_tags": "https://github.com/cocur/slugify/pull/201.patch"
-                }
-            }
+            "time": "2018-01-22T09:00:48+00:00"
         },
         {
             "name": "composer/ca-bundle",
@@ -1409,16 +1409,16 @@
         },
         {
             "name": "elife/patterns",
-            "version": "dev-master",
+            "version": "dev-line-break-issues",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/patterns-php.git",
-                "reference": "50cc4135b35179448ab92226faf15628b789661c"
+                "reference": "9a08a1e82e7b1020657f9dcfbf8f1b76d3757e59"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/50cc4135b35179448ab92226faf15628b789661c",
-                "reference": "50cc4135b35179448ab92226faf15628b789661c",
+                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/9a08a1e82e7b1020657f9dcfbf8f1b76d3757e59",
+                "reference": "9a08a1e82e7b1020657f9dcfbf8f1b76d3757e59",
                 "shasum": ""
             },
             "require": {
@@ -1455,7 +1455,7 @@
                 "MIT"
             ],
             "description": "eLife patterns",
-            "time": "2022-06-23T15:20:23+00:00"
+            "time": "2022-08-24T12:39:37+00:00"
         },
         {
             "name": "fabpot/goutte",
@@ -2089,6 +2089,12 @@
                 "shasum": ""
             },
             "type": "library",
+            "extra": {
+                "patches_applied": {
+                    "Add field label": "https://github.com/isometriks/IsometriksSpamBundle/pull/9.patch",
+                    "Use EmailType": "https://github.com/isometriks/IsometriksSpamBundle/pull/17.patch"
+                }
+            },
             "autoload": {
                 "psr-4": {
                     "Isometriks\\Bundle\\SpamBundle\\": ""
@@ -2112,13 +2118,7 @@
                 "spam",
                 "symfony3"
             ],
-            "time": "2016-09-23T18:48:09+00:00",
-            "extra": {
-                "patches_applied": {
-                    "Add field label": "https://github.com/isometriks/IsometriksSpamBundle/pull/9.patch",
-                    "Use EmailType": "https://github.com/isometriks/IsometriksSpamBundle/pull/17.patch"
-                }
-            }
+            "time": "2016-09-23T18:48:09+00:00"
         },
         {
             "name": "kevinrob/guzzle-cache-middleware",
