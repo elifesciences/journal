@@ -3,17 +3,22 @@
 namespace eLife\Journal\Controller;
 
 use eLife\ApiSdk\Collection\Sequence;
+use eLife\ApiSdk\Model\ArticleVersion;
 use eLife\ApiSdk\Model\Cover;
 use eLife\ApiSdk\Model\Subject;
 use eLife\Journal\Helper\Callback;
+use eLife\Journal\Helper\ModelName;
 use eLife\Journal\Helper\Paginator;
 use eLife\Journal\Pagerfanta\SequenceAdapter;
+use eLife\Journal\ViewModel\Factory\PictureBuilderFactory;
+use eLife\Patterns\ViewModel\Date;
 use eLife\Patterns\ViewModel\HeroBanner;
 use eLife\Patterns\ViewModel\LeadPara;
 use eLife\Patterns\ViewModel\LeadParas;
 use eLife\Patterns\ViewModel\Link;
 use eLife\Patterns\ViewModel\ListHeading;
 use eLife\Patterns\ViewModel\ListingTeasers;
+use eLife\Patterns\ViewModel\Meta;
 use eLife\Patterns\ViewModel\SectionListing;
 use eLife\Patterns\ViewModel\SectionListingLink;
 use eLife\Patterns\ViewModel\SeeMoreLink;
@@ -78,7 +83,27 @@ final class HomeController extends Controller
                 /** @var Cover $item */
                 $item = $items[0];
 
-                return $this->convertTo($item, HeroBanner::class);
+                /** @var ArticleVersion $article */
+                $article = $item->getItem();
+
+                return new HeroBanner(
+                    $article->getImpactStatement(),
+                    $article->getSubjects()->map(function (Subject $subject) {
+                        return new Link($subject->getName(), $this->get('router')->generate('subject', [$subject]));
+                    })->toArray(),
+                    new Link(
+                        $article->getTitle(),
+                        $this->get('router')->generate('article', [$article])
+                    ),
+                    $article->getAuthorLine(),
+                    Meta::withText(
+                        ModelName::singular($article->getType()),
+                        Date::simple($article->getPublishedDate())
+                    ),
+                    (new PictureBuilderFactory())->forImage(
+                        $item->getBanner(), $item->getBanner()->getWidth()
+                    )->build()
+                );
             });
 
         $arguments['leadParas'] = new LeadParas([new LeadPara('eLife works to improve research communication through open science and open technology innovation', 'strapline')]);
