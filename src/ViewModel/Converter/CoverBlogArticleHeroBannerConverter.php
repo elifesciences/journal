@@ -6,20 +6,19 @@ use eLife\ApiSdk\Model\BlogArticle;
 use eLife\ApiSdk\Model\Cover;
 use eLife\ApiSdk\Model\Subject;
 use eLife\Journal\ViewModel\Factory\CarouselItemImageFactory;
+use eLife\Journal\ViewModel\Factory\PictureBuilderFactory;
 use eLife\Patterns\ViewModel;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-final class CoverBlogArticleCarouselItemConverter implements ViewModelConverter
+final class CoverBlogArticleHeroBannerConverter implements ViewModelConverter
 {
     use CreatesDate;
 
     private $urlGenerator;
-    private $carouselItemImageFactory;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator, CarouselItemImageFactory $carouselItemImageFactory)
+    public function __construct(UrlGeneratorInterface $urlGenerator)
     {
         $this->urlGenerator = $urlGenerator;
-        $this->carouselItemImageFactory = $carouselItemImageFactory;
     }
 
     /**
@@ -30,7 +29,8 @@ final class CoverBlogArticleCarouselItemConverter implements ViewModelConverter
         /** @var BlogArticle $blogArticle */
         $blogArticle = $object->getItem();
 
-        return new ViewModel\CarouselItem(
+        return new ViewModel\HeroBanner(
+            $blogArticle->getImpactStatement(),
             $blogArticle->getSubjects()->map(function (Subject $subject) {
                 return new ViewModel\Link($subject->getName(), $this->urlGenerator->generate('subject', [$subject]));
             })->toArray(),
@@ -40,12 +40,14 @@ final class CoverBlogArticleCarouselItemConverter implements ViewModelConverter
                 new ViewModel\Link('Inside eLife', $this->urlGenerator->generate('inside-elife')),
                 $this->simpleDate($blogArticle, $context)
             ),
-            $this->carouselItemImageFactory->forImage($object->getBanner())
+            (new PictureBuilderFactory())->forImage(
+                $object->getBanner(), $object->getBanner()->getWidth()
+            )->build()
         );
     }
 
     public function supports($object, string $viewModel = null, array $context = []) : bool
     {
-        return $object instanceof Cover && ViewModel\CarouselItem::class === $viewModel && $object->getItem() instanceof BlogArticle;
+        return $object instanceof Cover && ViewModel\HeroBanner::class === $viewModel && $object->getItem() instanceof BlogArticle;
     }
 }

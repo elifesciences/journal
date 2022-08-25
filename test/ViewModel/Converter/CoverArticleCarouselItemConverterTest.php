@@ -5,7 +5,7 @@ namespace test\eLife\Journal\ViewModel\Converter;
 use eLife\ApiSdk\Model\ArticleVersion;
 use eLife\ApiSdk\Model\Cover;
 use eLife\ApiSdk\Model\Model;
-use eLife\Journal\ViewModel\Converter\CoverArticleCarouselItemConverter;
+use eLife\Journal\ViewModel\Converter\CoverArticleHeroBannerConverter;
 use eLife\Journal\ViewModel\Factory\CarouselItemImageFactory;
 use eLife\Journal\ViewModel\Factory\PictureBuilderFactory;
 use eLife\Patterns\ViewModel\CarouselItem;
@@ -29,7 +29,7 @@ final class CoverArticleCarouselItemConverterTest extends ModelConverterTestCase
             ->method('generate')
             ->will($this->returnValue('/'));
 
-        $this->converter = new CoverArticleCarouselItemConverter(
+        $this->converter = new CoverArticleHeroBannerConverter(
             $urlGenerator,
             new CarouselItemImageFactory(new PictureBuilderFactory(), new Packages())
         );

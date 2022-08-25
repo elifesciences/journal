@@ -12,12 +12,6 @@
             "test\\eLife\\Journal\\": "test/"
         }
     },
-    "repositories": [
-        {
-            "type": "path",
-            "url": "../patterns-php"
-        }
-    ],
     "require": {
         "php": "^7.1",
         "ext-hash": "*",

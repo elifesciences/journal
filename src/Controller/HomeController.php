@@ -81,29 +81,9 @@ final class HomeController extends Controller
             ->slice(0, 1)
             ->then(function (Sequence $items) {
                 /** @var Cover $item */
-                $item = $items[0];
+                $cover = $items[0];
 
-                /** @var ArticleVersion $article */
-                $article = $item->getItem();
-
-                return new HeroBanner(
-                    $article->getImpactStatement(),
-                    $article->getSubjects()->map(function (Subject $subject) {
-                        return new Link($subject->getName(), $this->get('router')->generate('subject', [$subject]));
-                    })->toArray(),
-                    new Link(
-                        $article->getTitle(),
-                        $this->get('router')->generate('article', [$article])
-                    ),
-                    $article->getAuthorLine(),
-                    Meta::withText(
-                        ModelName::singular($article->getType()),
-                        Date::simple($article->getPublishedDate())
-                    ),
-                    (new PictureBuilderFactory())->forImage(
-                        $item->getBanner(), $item->getBanner()->getWidth()
-                    )->build()
-                );
+                return $this->convertTo($cover, HeroBanner::class);
             });
 
         $arguments['leadParas'] = new LeadParas([new LeadPara('eLife works to improve research communication through open science and open technology innovation', 'strapline')]);

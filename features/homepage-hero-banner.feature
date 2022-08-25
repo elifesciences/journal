@@ -11,6 +11,7 @@ Feature: Homepage Hero banner
 
   @javascript
   Scenario: Cover can have a title and image different from the content they link to
-    Given There is an article called 'Object vision to hand action in macaque parietal, premotor, and motor cortices'
+    Given there is a collection called 'Tropical disease'
+    And there is a cover linking to the 'Tropical disease' collection
     When I go to the homepage
-    Then I should see the 'Object vision to hand action in macaque parietal, premotor, and motor cortices' cover in the hero banner
+    Then I should see the 'Tropical disease' cover in the hero banner

@@ -6,20 +6,19 @@ use eLife\ApiSdk\Model\Collection;
 use eLife\ApiSdk\Model\Cover;
 use eLife\ApiSdk\Model\Subject;
 use eLife\Journal\ViewModel\Factory\CarouselItemImageFactory;
+use eLife\Journal\ViewModel\Factory\PictureBuilderFactory;
 use eLife\Patterns\ViewModel;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-final class CoverCollectionCarouselItemConverter implements ViewModelConverter
+final class CoverCollectionHeroBannerConverter implements ViewModelConverter
 {
     use CreatesDate;
 
     private $urlGenerator;
-    private $carouselItemImageFactory;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator, CarouselItemImageFactory $carouselItemImageFactory)
+    public function __construct(UrlGeneratorInterface $urlGenerator)
     {
         $this->urlGenerator = $urlGenerator;
-        $this->carouselItemImageFactory = $carouselItemImageFactory;
     }
 
     /**
@@ -30,19 +29,22 @@ final class CoverCollectionCarouselItemConverter implements ViewModelConverter
         /** @var Collection $collection */
         $collection = $object->getItem();
 
-        return new ViewModel\CarouselItem(
+        return new ViewModel\HeroBanner(
+            $collection->getImpactStatement(),
             $collection->getSubjects()->map(function (Subject $subject) {
                 return new ViewModel\Link($subject->getName(), $this->urlGenerator->generate('subject', [$subject]));
             })->toArray(),
             new ViewModel\Link($object->getTitle(), $this->urlGenerator->generate('collection', [$collection])),
             'Read collection',
             ViewModel\Meta::withLink(new ViewModel\Link('Collection', $this->urlGenerator->generate('collections')), $this->simpleDate($collection, $context)),
-            $this->carouselItemImageFactory->forImage($object->getBanner())
+            (new PictureBuilderFactory())->forImage(
+                $object->getBanner(), $object->getBanner()->getWidth()
+            )->build()
         );
     }
 
     public function supports($object, string $viewModel = null, array $context = []) : bool
     {
-        return $object instanceof Cover && ViewModel\CarouselItem::class === $viewModel && $object->getItem() instanceof Collection;
+        return $object instanceof Cover && ViewModel\HeroBanner::class === $viewModel && $object->getItem() instanceof Collection;
     }
 }
