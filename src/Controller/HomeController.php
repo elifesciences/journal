@@ -78,13 +78,13 @@ final class HomeController extends Controller
 
         $arguments['heroBanner'] = $this->get('elife.api_sdk.covers')
             ->getCurrent()
-            ->slice(0, 1)
             ->then(function (Sequence $items) {
                 /** @var Cover $item */
                 $cover = $items[0];
 
                 return $this->convertTo($cover, HeroBanner::class);
-            });
+            })
+            ->otherwise($this->softFailure('Failed to load covers'));
 
         $arguments['leadParas'] = new LeadParas([new LeadPara('eLife works to improve research communication through open science and open technology innovation', 'strapline')]);
 
