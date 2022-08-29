@@ -689,10 +689,9 @@ final class HomepageContext extends Context
      */
     public function iShouldSeeTheCoverInTheHeroBanner($title)
     {
-        $this->assertSession()->elementContains(
+        $this->assertSession()->elementExists(
             'css',
-            '.hero-banner__title_link',
-            $title
+            '.hero-banner__title_link'
         );
     }
 }
