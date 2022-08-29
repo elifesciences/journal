@@ -36,14 +36,14 @@ final class CoverArticleHeroBannerConverter implements ViewModelConverter
                 return new ViewModel\Link($subject->getName(), $this->urlGenerator->generate('subject', [$subject]));
             })->toArray(),
             new ViewModel\Link($object->getTitle(), $this->urlGenerator->generate('inside-elife-article', [$article])),
-            'Read article',
             ViewModel\Meta::withLink(
                 new ViewModel\Link('Inside eLife', $this->urlGenerator->generate('inside-elife')),
                 $this->simpleDate($article, $context)
             ),
             (new PictureBuilderFactory())->forImage(
                 $object->getBanner(), $object->getBanner()->getWidth())
-            ->build()
+            ->build(),
+            $article->getAuthorLine()
         );
     }
 
