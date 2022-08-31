@@ -1354,16 +1354,16 @@
         },
         {
             "name": "elife/patterns",
-            "version": "dev-feature/hero-banner",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/patterns-php.git",
-                "reference": "fe64662312bc51ab4f8d4708021474a7446e79a4"
+                "reference": "50cc4135b35179448ab92226faf15628b789661c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/fe64662312bc51ab4f8d4708021474a7446e79a4",
-                "reference": "fe64662312bc51ab4f8d4708021474a7446e79a4",
+                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/50cc4135b35179448ab92226faf15628b789661c",
+                "reference": "50cc4135b35179448ab92226faf15628b789661c",
                 "shasum": ""
             },
             "require": {
