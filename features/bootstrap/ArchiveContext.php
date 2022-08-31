@@ -305,8 +305,7 @@ final class ArchiveContext extends Context
                         'interview' => $number,
                         'labs-post' => 0,
                         'podcast-episode' => 0,
-                             'reviewed-preprint' => 0,
-'reviewed-preprint' => 0,
+                        'reviewed-preprint' => 0,
                     ],
                 ])
             )
