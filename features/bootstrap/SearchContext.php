@@ -128,6 +128,7 @@ final class SearchContext extends Context
                         'interview' => 0,
                         'labs-post' => 0,
                         'podcast-episode' => 0,
+                             'reviewed-preprint' => 0,
                     ];
 
                     foreach (array_keys($typeFilters) as $type) {
@@ -155,11 +156,11 @@ final class SearchContext extends Context
                         new Request(
                             'GET',
                             sprintf($uri, $thisKeyword, 1, 1),
-                            ['Accept' => 'application/vnd.elife.search+json; version=1']
+                            ['Accept' => 'application/vnd.elife.search+json; version=2']
                         ),
                         new Response(
                             200,
-                            ['Content-Type' => 'application/vnd.elife.search+json; version=1'],
+                            ['Content-Type' => 'application/vnd.elife.search+json; version=2'],
                             json_encode([
                                 'total' => count($articlesWithKeywordAndSubjects),
                                 'items' => count($articlesWithKeywordAndSubjects) ? [$articlesWithKeywordAndSubjects[0]] : [],
@@ -180,11 +181,11 @@ final class SearchContext extends Context
                             new Request(
                                 'GET',
                                 sprintf($uri, $thisKeyword, $i + 1, $chunk),
-                                ['Accept' => 'application/vnd.elife.search+json; version=1']
+                                ['Accept' => 'application/vnd.elife.search+json; version=2']
                             ),
                             new Response(
                                 200,
-                                ['Content-Type' => 'application/vnd.elife.search+json; version=1'],
+                                ['Content-Type' => 'application/vnd.elife.search+json; version=2'],
                                 json_encode([
                                     'total' => count($articlesWithKeywordAndSubjects),
                                     'items' => $articleChunk,
