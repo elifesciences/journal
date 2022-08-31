@@ -36,18 +36,22 @@ final class ReviewedPreprintConverter implements ViewModelConverter
     {
         $formats = ['HTML'];
 
+        if ($object->getPdf() !== null) {
+            $formats[] = "PDF";
+        }
+
         return ViewModel\Teaser::main(
             $object->getTitle(),
             $this->urlGenerator->generate('article', [$object]),
             $object instanceof ArticleVoR ? $object->getImpactStatement() : null,
             $object->getAuthorLine(),
-            null,
-            null,
+            $this->createContextLabel($object),
+            $this->smallTeaserImage($object),
             ViewModel\TeaserFooter::forArticle(
                 ViewModel\Meta::withLink(
                     new ViewModel\Link(
-                        ModelName::singular($object->getType()),
-                        $this->urlGenerator->generate('article-type', ['type' => $object->getType()])
+                        ModelName::singular('reviewed-preprint'),
+                        $this->urlGenerator->generate('article-type', ['type' => 'reviewed-preprint'])
                     ),
                     $this->simpleDate($object, $context)
                 ),
