@@ -18,5 +18,4 @@ Feature: Contact form
     Examples:
       | Subject       | Recipient                       |
       | Author query  | editorial@elifesciences.org     |
-      | Press query   | press@elifesciences.org         |
       | Site feedback | site-feedback@elifesciences.org |
