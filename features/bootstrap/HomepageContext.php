@@ -58,7 +58,7 @@ final class HomepageContext extends Context
         $this->mockApiResponse(
             new Request(
                 'GET',
-                'http://api.elifesciences.org/search?for=&page=1&per-page=1&sort=date&order=desc&type[]=research-advance&type[]=research-article&type[]=research-communication&type[]=review-article&type[]=scientific-correspondence&type[]=short-report&type[]=tools-resources&type[]=replication-study&use-date=default',
+                'http://api.elifesciences.org/search?for=&page=1&per-page=1&sort=date&order=desc&type[]=reviewed-preprint&type[]=research-advance&type[]=research-article&type[]=research-communication&type[]=review-article&type[]=scientific-correspondence&type[]=short-report&type[]=tools-resources&type[]=replication-study&use-date=default',
                 ['Accept' => 'application/vnd.elife.search+json; version=2']
             ),
             new Response(
@@ -94,7 +94,7 @@ final class HomepageContext extends Context
                         'interview' => 0,
                         'labs-post' => 0,
                         'podcast-episode' => 0,
-                             'reviewed-preprint' => 0,
+                        'reviewed-preprint' => 0,
                     ],
                 ])
             )
@@ -106,7 +106,7 @@ final class HomepageContext extends Context
             $this->mockApiResponse(
                 new Request(
                     'GET',
-                    "http://api.elifesciences.org/search?for=&page=$page&per-page=$chunk&sort=date&order=desc&type[]=research-advance&type[]=research-article&type[]=research-communication&type[]=review-article&type[]=scientific-correspondence&type[]=short-report&type[]=tools-resources&type[]=replication-study&use-date=default",
+                    "http://api.elifesciences.org/search?for=&page=$page&per-page=$chunk&sort=date&order=desc&type[]=reviewed-preprint&type[]=research-advance&type[]=research-article&type[]=research-communication&type[]=review-article&type[]=scientific-correspondence&type[]=short-report&type[]=tools-resources&type[]=replication-study&use-date=default",
                     ['Accept' => 'application/vnd.elife.search+json; version=2']
                 ),
                 new Response(
@@ -142,7 +142,7 @@ final class HomepageContext extends Context
                             'interview' => 0,
                             'labs-post' => 0,
                             'podcast-episode' => 0,
-                             'reviewed-preprint' => 0,
+                            'reviewed-preprint' => 0,
                         ],
                     ])
                 )
@@ -233,6 +233,7 @@ final class HomepageContext extends Context
                             'interview' => 0,
                             'labs-post' => 0,
                             'podcast-episode' => $this->numberOfMagazineArticles,
+                            'reviewed-preprint' => 0,
                         ],
                     ])
                 )
@@ -442,7 +443,7 @@ final class HomepageContext extends Context
             $this->mockApiResponse(
                 new Request(
                     'GET',
-                    'http://api.elifesciences.org/search?for=&page=1&per-page=10&sort=date&order=desc&type[]=research-advance&type[]=research-article&type[]=research-communication&type[]=review-article&type[]=scientific-correspondence&type[]=short-report&type[]=tools-resources&type[]=replication-study&use-date=default',
+                    'http://api.elifesciences.org/search?for=&page=1&per-page=10&sort=date&order=desc&type[]=reviewed-prepeint&type[]=reviewed-preprint&type[]=research-advance&type[]=research-article&type[]=research-communication&type[]=review-article&type[]=scientific-correspondence&type[]=short-report&type[]=tools-resources&type[]=replication-study&use-date=default',
                     ['Accept' => 'application/vnd.elife.search+json; version=2']
                 ),
                 new Response(
@@ -472,7 +473,7 @@ final class HomepageContext extends Context
                             'interview' => 0,
                             'labs-post' => 0,
                             'podcast-episode' => 0,
-                             'reviewed-preprint' => 0,
+                            'reviewed-preprint' => 0,
                         ],
                     ])
                 )
@@ -588,7 +589,7 @@ final class HomepageContext extends Context
                         'interview' => 0,
                         'labs-post' => 0,
                         'podcast-episode' => 0,
-                             'reviewed-preprint' => 0,
+                        'reviewed-preprint' => 0,
                     ],
                 ])
             )

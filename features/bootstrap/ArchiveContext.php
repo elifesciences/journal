@@ -475,6 +475,7 @@ final class ArchiveContext extends Context
 
                             return $carry;
                         }, 0),
+                        'reviewed-preprint' => 0,
                     ],
                 ])
             )
@@ -528,6 +529,7 @@ final class ArchiveContext extends Context
 
                                 return $carry;
                             }, 0),
+                            'reviewed-preprint' => 0,
                         ],
                     ])
                 )
@@ -586,8 +588,7 @@ final class ArchiveContext extends Context
                             'interview' => 0,
                             'labs-post' => 0,
                             'podcast-episode' => 0,
-                             'reviewed-preprint' => 0,
-                             'reviewed-preprint' => 0,
+                            'reviewed-preprint' => 0,
                         ],
                     ])
                 )
