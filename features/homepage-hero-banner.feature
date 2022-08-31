@@ -9,7 +9,6 @@ Feature: Homepage Hero banner
   Background:
     Given 10 articles have been published
 
-  @javascript
   Scenario: Cover can have a title and image different from the content they link to
     Given there is a collection called 'Tropical disease'
     And there is a cover linking to the 'Tropical disease' collection

@@ -1333,12 +1333,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/patterns-php.git",
-                "reference": "a8f513193831787000873e7b908b528bcd73d7c8"
+                "reference": "c31c8f1383c91427be2ce88a9304d8dd81fc4dba"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/a8f513193831787000873e7b908b528bcd73d7c8",
-                "reference": "a8f513193831787000873e7b908b528bcd73d7c8",
+                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/c31c8f1383c91427be2ce88a9304d8dd81fc4dba",
+                "reference": "c31c8f1383c91427be2ce88a9304d8dd81fc4dba",
                 "shasum": ""
             },
             "require": {

@@ -30,7 +30,6 @@ final class CoverCollectionHeroBannerConverter implements ViewModelConverter
         $collection = $object->getItem();
 
         return new ViewModel\HeroBanner(
-            $collection->getImpactStatement(),
             $collection->getSubjects()->map(function (Subject $subject) {
                 return new ViewModel\Link($subject->getName(), $this->urlGenerator->generate('subject', [$subject]));
             })->toArray(),
@@ -38,7 +37,8 @@ final class CoverCollectionHeroBannerConverter implements ViewModelConverter
             ViewModel\Meta::withLink(new ViewModel\Link('Collection', $this->urlGenerator->generate('collections')), $this->simpleDate($collection, $context)),
             (new PictureBuilderFactory())->forImage(
                 $object->getBanner(), $object->getBanner()->getWidth()
-            )->build()
+            )->build(),
+            $collection->getImpactStatement()
         );
     }
 

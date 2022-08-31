@@ -31,7 +31,6 @@ final class CoverArticleHeroBannerConverter implements ViewModelConverter
         $article = $object->getItem();
 
         return new ViewModel\HeroBanner(
-            $article->getImpactStatement(),
             $article->getSubjects()->map(function (Subject $subject) {
                 return new ViewModel\Link($subject->getName(), $this->urlGenerator->generate('subject', [$subject]));
             })->toArray(),
@@ -43,6 +42,7 @@ final class CoverArticleHeroBannerConverter implements ViewModelConverter
             (new PictureBuilderFactory())->forImage(
                 $object->getBanner(), $object->getBanner()->getWidth())
             ->build(),
+            $article->getImpactStatement(),
             $article->getAuthorLine()
         );
     }
