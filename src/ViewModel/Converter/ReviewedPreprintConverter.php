@@ -44,12 +44,10 @@ final class ReviewedPreprintConverter implements ViewModelConverter
             null,
             null,
             ViewModel\TeaserFooter::forArticle(
-                ViewModel\Meta::withLink(
-                    new ViewModel\Link(
-                        ModelName::singular($object->getType()),
-                        $this->urlGenerator->generate('article-type', ['type' => $object->getType()])
-                    ),
-                    $this->simpleDate($object, $context)
+                ViewModel\Meta::withStatusDate(
+                    ModelName::singular($object->getType()),
+                    ViewModel\Date::simple($object->getPublishedDate()),
+                    $object->getStatusDate() ? ViewModel\Date::simple($object->getStatusDate(), $object->getStatusDate() != $object->getPublishedDate()) : null
                 ),
                 $formats
             )

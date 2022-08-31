@@ -25,7 +25,7 @@
         "elife/api-client": "dev-feature/reviewed-preprint",
         "elife/api-sdk": "dev-feature/reviewed-preprint",
         "elife/civi-contacts": "dev-master",
-        "elife/patterns": "dev-master",
+        "elife/patterns": "dev-Include_date_in_item_listed",
         "fabpot/goutte": "^3.2",
         "fig/link-util": "^1.0",
         "firebase/php-jwt": "^5.0",
@@ -83,7 +83,11 @@
         "platform": {
             "php": "7.1.33"
         },
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "cweagans/composer-patches": true,
+            "mindplay/composer-locator": true
+        }
     },
     "extra": {
         "composer-exit-on-patch-failure": true,
