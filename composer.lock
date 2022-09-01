@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4ef53fb14e3d1db4925c1bb7a59f0843",
+    "content-hash": "11c8862fdcfd7e08f3809ae06f3568b7",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -1391,7 +1391,7 @@
                 "MIT"
             ],
             "description": "eLife Sciences API SDK",
-            "time": "2022-09-01T07:29:38+00:00"
+            "time": "2022-08-31T09:31:12+00:00"
         },
         {
             "name": "elife/civi-contacts",
@@ -1480,7 +1480,7 @@
                 "MIT"
             ],
             "description": "eLife patterns",
-            "time": "2022-08-30T09:47:13+00:00"
+            "time": "2022-09-01T10:04:37+00:00"
         },
         {
             "name": "fabpot/goutte",
