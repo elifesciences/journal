@@ -42,7 +42,6 @@ final class ContactType extends AbstractType
                     'placeholder' => 'Choose a subject',
                     'choices' => array_combine($choices = [
                         'Author query',
-                        'Press query',
                         'Site feedback',
                     ], $choices),
                 ]
