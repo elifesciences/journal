@@ -1341,16 +1341,16 @@
         },
         {
             "name": "elife/api-sdk",
-            "version": "dev-feature/reviewed-preprint",
+            "version": "dev-staging",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-sdk-php.git",
-                "reference": "e62c8d0be0a865d7866aeaa12c0206531cc07338"
+                "reference": "52cdc8465d71524f6683c62ee61bcd54198811da"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/e62c8d0be0a865d7866aeaa12c0206531cc07338",
-                "reference": "e62c8d0be0a865d7866aeaa12c0206531cc07338",
+                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/52cdc8465d71524f6683c62ee61bcd54198811da",
+                "reference": "52cdc8465d71524f6683c62ee61bcd54198811da",
                 "shasum": ""
             },
             "require": {
@@ -1434,16 +1434,16 @@
         },
         {
             "name": "elife/patterns",
-            "version": "dev-master",
+            "version": "dev-staging",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/patterns-php.git",
-                "reference": "8d93982d827fc00361bf32534296620a82f063e3"
+                "reference": "f1f6c692066661a162977f6ba815daffb4e2337e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/8d93982d827fc00361bf32534296620a82f063e3",
-                "reference": "8d93982d827fc00361bf32534296620a82f063e3",
+                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/f1f6c692066661a162977f6ba815daffb4e2337e",
+                "reference": "f1f6c692066661a162977f6ba815daffb4e2337e",
                 "shasum": ""
             },
             "require": {
