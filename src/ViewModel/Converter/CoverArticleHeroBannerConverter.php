@@ -34,9 +34,12 @@ final class CoverArticleHeroBannerConverter implements ViewModelConverter
             $article->getSubjects()->map(function (Subject $subject) {
                 return new ViewModel\Link($subject->getName(), $this->urlGenerator->generate('subject', [$subject]));
             })->toArray(),
-            new ViewModel\Link($object->getTitle(), $this->urlGenerator->generate('inside-elife-article', [$article])),
+            new ViewModel\Link($object->getTitle(), $this->urlGenerator->generate('article', [$article])),
             ViewModel\Meta::withLink(
-                new ViewModel\Link('Inside eLife', $this->urlGenerator->generate('inside-elife')),
+                new ViewModel\Link(
+                    ModelName::singular($article->getType()),
+                    $this->urlGenerator->generate('article', [$article])
+                ),
                 $this->simpleDate($article, $context)
             ),
             (new PictureBuilderFactory())->forImage(
