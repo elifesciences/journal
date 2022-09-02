@@ -76,7 +76,6 @@ framework:
     router:
         resource: '%kernel.project_dir%/app/config/routing.yml'
     secret: '%secret%'
-    debug: true
     session:
         cookie_lifetime: 2592000 # 30 days
         name: '%session_name%'
