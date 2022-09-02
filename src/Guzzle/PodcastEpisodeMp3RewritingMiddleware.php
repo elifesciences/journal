@@ -81,8 +81,9 @@ final class PodcastEpisodeMp3RewritingMiddleware
             $item['sources'] = array_map(function ($source) {
                 if (isset($source['uri'])) {
                     $url = parse_url($source['uri'], PHP_URL_PATH);
-                    if ('mp3' === pathinfo(parse_url($url, PHP_URL_PATH), PATHINFO_EXTENSION)) {
-                        $source['uri'] = 'https://downloads.nakeddiscovery.com/downloads/active/'.basename($url);
+                    $filename = basename($url);
+                    if ('blank.mp3' !== $filename && 'mp3' === pathinfo(parse_url($url, PHP_URL_PATH), PATHINFO_EXTENSION)) {
+                        $source['uri'] = 'https://downloads.nakeddiscovery.com/downloads/active/'.$filename;
                     }
                 }
 

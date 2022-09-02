@@ -58,6 +58,10 @@ final class PodcastEpisodeMp3RewritingMiddlewareTest extends KernelTestCase
     public function responseProvider() : Traversable
     {
         return $this->arrayProvider([
+            'blank.mp3' => [
+                $this->createPodcastEpisode(1, 'http://web/tests/blank.mp3', false),
+                $this->createPodcastEpisode(1, 'http://web/tests/blank.mp3', false),
+            ],
             'application/vnd.elife.collection+json; version=2' => [
                 $this->createCollection(1),
                 $this->createCollection(1, 'https://downloads.nakeddiscovery.com/downloads/active/episode1.mp3'),
