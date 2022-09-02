@@ -58,12 +58,12 @@ final class HomepageContext extends Context
         $this->mockApiResponse(
             new Request(
                 'GET',
-                'http://api.elifesciences.org/search?for=&page=1&per-page=1&sort=date&order=desc&type[]=research-advance&type[]=research-article&type[]=research-communication&type[]=review-article&type[]=scientific-correspondence&type[]=short-report&type[]=tools-resources&type[]=replication-study&use-date=default',
-                ['Accept' => 'application/vnd.elife.search+json; version=1']
+                'http://api.elifesciences.org/search?for=&page=1&per-page=1&sort=date&order=desc&type[]=reviewed-preprint&type[]=research-advance&type[]=research-article&type[]=research-communication&type[]=review-article&type[]=scientific-correspondence&type[]=short-report&type[]=tools-resources&type[]=replication-study&use-date=default',
+                ['Accept' => 'application/vnd.elife.search+json; version=2']
             ),
             new Response(
                 200,
-                ['Content-Type' => 'application/vnd.elife.search+json; version=1'],
+                ['Content-Type' => 'application/vnd.elife.search+json; version=2'],
                 json_encode([
                     'total' => $number,
                     'items' => [$articles[0]],
@@ -94,6 +94,7 @@ final class HomepageContext extends Context
                         'interview' => 0,
                         'labs-post' => 0,
                         'podcast-episode' => 0,
+                        'reviewed-preprint' => 0,
                     ],
                 ])
             )
@@ -105,12 +106,12 @@ final class HomepageContext extends Context
             $this->mockApiResponse(
                 new Request(
                     'GET',
-                    "http://api.elifesciences.org/search?for=&page=$page&per-page=$chunk&sort=date&order=desc&type[]=research-advance&type[]=research-article&type[]=research-communication&type[]=review-article&type[]=scientific-correspondence&type[]=short-report&type[]=tools-resources&type[]=replication-study&use-date=default",
-                    ['Accept' => 'application/vnd.elife.search+json; version=1']
+                    "http://api.elifesciences.org/search?for=&page=$page&per-page=$chunk&sort=date&order=desc&type[]=reviewed-preprint&type[]=research-advance&type[]=research-article&type[]=research-communication&type[]=review-article&type[]=scientific-correspondence&type[]=short-report&type[]=tools-resources&type[]=replication-study&use-date=default",
+                    ['Accept' => 'application/vnd.elife.search+json; version=2']
                 ),
                 new Response(
                     200,
-                    ['Content-Type' => 'application/vnd.elife.search+json; version=1'],
+                    ['Content-Type' => 'application/vnd.elife.search+json; version=2'],
                     json_encode([
                         'total' => $number,
                         'items' => $articleChunk,
@@ -141,6 +142,7 @@ final class HomepageContext extends Context
                             'interview' => 0,
                             'labs-post' => 0,
                             'podcast-episode' => 0,
+                            'reviewed-preprint' => 0,
                         ],
                     ])
                 )
@@ -196,11 +198,11 @@ final class HomepageContext extends Context
                 new Request(
                     'GET',
                     "http://api.elifesciences.org/search?for=&page=$page&per-page=7&sort=date&order=desc&type[]=editorial&type[]=insight&type[]=feature&type[]=collection&type[]=interview&type[]=podcast-episode&use-date=default",
-                    ['Accept' => 'application/vnd.elife.search+json; version=1']
+                    ['Accept' => 'application/vnd.elife.search+json; version=2']
                 ),
                 new Response(
                     200,
-                    ['Content-Type' => 'application/vnd.elife.search+json; version=1'],
+                    ['Content-Type' => 'application/vnd.elife.search+json; version=2'],
                     json_encode([
                         'total' => $number,
                         'items' => $articleChunk,
@@ -231,6 +233,7 @@ final class HomepageContext extends Context
                             'interview' => 0,
                             'labs-post' => 0,
                             'podcast-episode' => $this->numberOfMagazineArticles,
+                            'reviewed-preprint' => 0,
                         ],
                     ])
                 )
@@ -246,6 +249,13 @@ final class HomepageContext extends Context
         // Do nothin.
     }
 
+    /**
+     * @Given /^There is an article called \'([^\']*)\'$/
+     */
+    public function thereIsAnArticleCalled($title)
+    {
+        // Do nothing
+    }
     /**
      * @Given /^there is a cover linking to the \'([^\']*)\' collection$/
      */
@@ -440,12 +450,12 @@ final class HomepageContext extends Context
             $this->mockApiResponse(
                 new Request(
                     'GET',
-                    'http://api.elifesciences.org/search?for=&page=1&per-page=10&sort=date&order=desc&type[]=research-advance&type[]=research-article&type[]=research-communication&type[]=review-article&type[]=scientific-correspondence&type[]=short-report&type[]=tools-resources&type[]=replication-study&use-date=default',
-                    ['Accept' => 'application/vnd.elife.search+json; version=1']
+                    'http://api.elifesciences.org/search?for=&page=1&per-page=10&sort=date&order=desc&type[]=reviewed-prepeint&type[]=reviewed-preprint&type[]=research-advance&type[]=research-article&type[]=research-communication&type[]=review-article&type[]=scientific-correspondence&type[]=short-report&type[]=tools-resources&type[]=replication-study&use-date=default',
+                    ['Accept' => 'application/vnd.elife.search+json; version=2']
                 ),
                 new Response(
                     200,
-                    ['Content-Type' => 'application/vnd.elife.search+json; version=1'],
+                    ['Content-Type' => 'application/vnd.elife.search+json; version=2'],
                     json_encode([
                         'total' => 0,
                         'items' => [],
@@ -470,6 +480,7 @@ final class HomepageContext extends Context
                             'interview' => 0,
                             'labs-post' => 0,
                             'podcast-episode' => 0,
+                            'reviewed-preprint' => 0,
                         ],
                     ])
                 )
@@ -556,11 +567,11 @@ final class HomepageContext extends Context
             new Request(
                 'GET',
                 'http://api.elifesciences.org/search?for=&page=1&per-page=10&sort=date&order=desc&type[]=research-advance&type[]=research-article&type[]=research-communication&type[]=review-article&type[]=scientific-correspondence&type[]=short-report&type[]=tools-resources&type[]=replication-study&use-date=default',
-                ['Accept' => 'application/vnd.elife.search+json; version=1']
+                ['Accept' => 'application/vnd.elife.search+json; version=2']
             ),
             new Response(
                 200,
-                ['Content-Type' => 'application/vnd.elife.search+json; version=1'],
+                ['Content-Type' => 'application/vnd.elife.search+json; version=2'],
                 json_encode([
                     'total' => 0,
                     'items' => [],
@@ -585,6 +596,7 @@ final class HomepageContext extends Context
                         'interview' => 0,
                         'labs-post' => 0,
                         'podcast-episode' => 0,
+                        'reviewed-preprint' => 0,
                     ],
                 ])
             )
@@ -640,31 +652,6 @@ final class HomepageContext extends Context
     }
 
     /**
-     * @Then /^I should see the \'([^\']*)\' cover in the carousel$/
-     */
-    public function iShouldSeeTheCoverInTheCarousel(string $name)
-    {
-        $this->spin(function () use ($name) {
-            $this->assertSession()->elementAttributeContains('css', '.carousel-item__title_link', 'href', $this->createId($name));
-        });
-    }
-
-    /**
-     * @Then /^I should see the title and image from the \'([^\']*)\' collection used in the \'([^\']*)\' cover$/
-     */
-    public function iShouldSeeTheTitleAndImageFromTheCollectionUsedInTheCover(string $collectionName, string $coverName)
-    {
-        $this->spin(function () {
-            $this->assertSession()->elementAttributeContains(
-                'css',
-                '.carousel-item__image',
-                'src',
-                'https://www.example.com/iiif/iden%2Ftifier/0,529,1800,543/1114,336/0/default.jpg'
-            );
-        });
-    }
-
-    /**
      * @Then /^I should see the custom title and image used in the \'([^\']*)\' cover$/
      */
     public function iShouldSeeTheCustomTitleAndImageUsedInTheCover($arg1)
@@ -700,5 +687,16 @@ final class HomepageContext extends Context
     private function createId(string $name) : string
     {
         return md5($name);
+    }
+
+    /**
+     * @Then I should see the :title cover in the hero banner
+     */
+    public function iShouldSeeTheCoverInTheHeroBanner($title)
+    {
+        $this->assertSession()->elementExists(
+            'css',
+            '.hero-banner__title_link'
+        );
     }
 }

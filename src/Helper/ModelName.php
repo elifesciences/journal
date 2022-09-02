@@ -103,6 +103,10 @@ final class ModelName
             'singular' => 'Highlight',
             'plural' => 'Highlights',
         ],
+        'reviewed-preprint' => [
+            'singular' => 'Reviewed Preprint',
+            'plural' => 'Reviewed Preprints',
+        ],
     ];
 
     private function __construct()

@@ -5,18 +5,15 @@ namespace test\eLife\Journal\ViewModel\Converter;
 use eLife\ApiSdk\Model\ArticleVersion;
 use eLife\ApiSdk\Model\Cover;
 use eLife\ApiSdk\Model\Model;
-use eLife\Journal\ViewModel\Converter\CoverArticleCarouselItemConverter;
-use eLife\Journal\ViewModel\Factory\CarouselItemImageFactory;
-use eLife\Journal\ViewModel\Factory\PictureBuilderFactory;
-use eLife\Patterns\ViewModel\CarouselItem;
-use Symfony\Component\Asset\Packages;
+use eLife\Journal\ViewModel\Converter\CoverArticleHeroBannerConverter;
+use eLife\Patterns\ViewModel\HeroBanner;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Traversable;
 
-final class CoverArticleCarouselItemConverterTest extends ModelConverterTestCase
+final class CoverArticleHeroBannerConverterTest extends ModelConverterTestCase
 {
     protected $models = ['cover'];
-    protected $viewModelClasses = [CarouselItem::class];
+    protected $viewModelClasses = [HeroBanner::class];
 
     /**
      * @before
@@ -29,9 +26,8 @@ final class CoverArticleCarouselItemConverterTest extends ModelConverterTestCase
             ->method('generate')
             ->will($this->returnValue('/'));
 
-        $this->converter = new CoverArticleCarouselItemConverter(
-            $urlGenerator,
-            new CarouselItemImageFactory(new PictureBuilderFactory(), new Packages())
+        $this->converter = new CoverArticleHeroBannerConverter(
+            $urlGenerator
         );
     }
 

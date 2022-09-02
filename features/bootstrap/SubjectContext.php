@@ -237,11 +237,11 @@ final class SubjectContext extends Context
             new Request(
                 'GET',
                 "http://api.elifesciences.org/search?for=&page=1&per-page=1&sort=date&order=desc&subject[]=$subjectId&type[]=research-article&type[]=research-communication&type[]=research-advance&type[]=review-article&type[]=scientific-correspondence&type[]=short-report&type[]=tools-resources&type[]=replication-study&type[]=editorial&type[]=insight&type[]=feature&type[]=collection&use-date=default",
-                ['Accept' => 'application/vnd.elife.search+json; version=1']
+                ['Accept' => 'application/vnd.elife.search+json; version=2']
             ),
             new Response(
                 200,
-                ['Content-Type' => 'application/vnd.elife.search+json; version=1'],
+                ['Content-Type' => 'application/vnd.elife.search+json; version=2'],
                 json_encode([
                     'total' => $number,
                     'items' => array_map(function (array $collection) {
@@ -278,6 +278,7 @@ final class SubjectContext extends Context
                         'interview' => 0,
                         'labs-post' => 0,
                         'podcast-episode' => 0,
+                        'reviewed-preprint' => 0,
                     ],
                 ])
             )
@@ -290,11 +291,11 @@ final class SubjectContext extends Context
                 new Request(
                     'GET',
                     "http://api.elifesciences.org/search?for=&page=$page&per-page=$chunk&sort=date&order=desc&subject[]=$subjectId&type[]=research-article&type[]=research-communication&type[]=research-advance&type[]=review-article&type[]=scientific-correspondence&type[]=short-report&type[]=tools-resources&type[]=replication-study&type[]=editorial&type[]=insight&type[]=feature&type[]=collection&use-date=default",
-                    ['Accept' => 'application/vnd.elife.search+json; version=1']
+                    ['Accept' => 'application/vnd.elife.search+json; version=2']
                 ),
                 new Response(
                     200,
-                    ['Content-Type' => 'application/vnd.elife.search+json; version=1'],
+                    ['Content-Type' => 'application/vnd.elife.search+json; version=2'],
                     json_encode([
                         'total' => $number,
                         'items' => array_map(function (array $collection) {
@@ -331,6 +332,7 @@ final class SubjectContext extends Context
                             'interview' => 0,
                             'labs-post' => 0,
                             'podcast-episode' => 0,
+                             'reviewed-preprint' => 0,
                         ],
                     ])
                 )
@@ -495,11 +497,11 @@ final class SubjectContext extends Context
                 new Request(
                     'GET',
                     "http://api.elifesciences.org/search?for=&page=1&per-page=10&sort=date&order=desc&subject[]=$subjectId&type[]=research-article&type[]=research-communication&type[]=research-advance&type[]=review-article&type[]=scientific-correspondence&type[]=short-report&type[]=tools-resources&type[]=replication-study&type[]=editorial&type[]=insight&type[]=feature&type[]=collection&use-date=default",
-                    ['Accept' => 'application/vnd.elife.search+json; version=1']
+                    ['Accept' => 'application/vnd.elife.search+json; version=2']
                 ),
                 new Response(
                     200,
-                    ['Content-Type' => 'application/vnd.elife.search+json; version=1'],
+                    ['Content-Type' => 'application/vnd.elife.search+json; version=2'],
                     json_encode([
                         'total' => 0,
                         'items' => [],
@@ -530,6 +532,7 @@ final class SubjectContext extends Context
                             'interview' => 0,
                             'labs-post' => 0,
                             'podcast-episode' => 0,
+                            'reviewed-preprint' => 0,
                         ],
                     ])
                 )
