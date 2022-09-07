@@ -40,13 +40,18 @@ final class ReviewedPreprintConverter implements ViewModelConverter
             $formats[] = "PDF";
         }
 
+        $image = null;
+        if ($object->getThumbnail() !== null) {
+            $image = $this->smallTeaserImage($object);
+        }
+
         return ViewModel\Teaser::main(
             $object->getTitle(),
             $this->urlGenerator->generate('article', [$object]),
             $object instanceof ArticleVoR ? $object->getImpactStatement() : null,
             $object->getAuthorLine(),
             $this->createContextLabel($object),
-            $this->smallTeaserImage($object),
+            $image,
             ViewModel\TeaserFooter::forArticle(
                 ViewModel\Meta::withLink(
                     new ViewModel\Link(
