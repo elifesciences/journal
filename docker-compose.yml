@@ -69,7 +69,7 @@ services:
                 image_tag: ${IMAGE_TAG}
                 node_version: ${NODE_VERSION}
         environment:
-            - CRITICAL_CSS_BASE_URL=http://web:80
+            - CRITICAL_CSS_BASE_URL=http://web:8080
         image: elifesciences/journal_critical_css:${IMAGE_TAG}
         depends_on:
             - npm
