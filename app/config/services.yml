@@ -151,6 +151,10 @@ services:
         class: eLife\ApiSdk\Client\Search
         factory: ['@elife.api_sdk', search]
 
+    elife.api_sdk.reviewed.preprint:
+        class: eLife\ApiSdk\Client\ReviewedPreprints
+        factory: ['@elife.api_sdk', reviewedPreprint]
+
     elife.api_sdk.search.slow:
         class: eLife\ApiSdk\Client\Search
         factory: ['@elife.api_sdk.slow', search]
@@ -537,6 +541,17 @@ services:
         public: false
         arguments:
           - '@router'
+        tags:
+          - name: view_model.converter
+
+    elife.journal.view_model.converter.reviewed.preprint:
+        class: eLife\Journal\ViewModel\Converter\ReviewedPreprintConverter
+        public: false
+        arguments:
+          - '@elife.journal.view_model.converter'
+          - '@router'
+          - '@security.authorization_checker'
+          - '%era_articles%'
         tags:
           - name: view_model.converter
 

@@ -39,11 +39,11 @@ final class SearchControllerTest extends PageTestCase
             new Request(
                 'GET',
                 'http://api.elifesciences.org/search?for=keyword&page=1&per-page=1&sort=relevance&order=desc&use-date=default',
-                ['Accept' => 'application/vnd.elife.search+json; version=1']
+                ['Accept' => 'application/vnd.elife.search+json; version=2']
             ),
             new Response(
                 200,
-                ['Content-Type' => 'application/vnd.elife.search+json; version=1'],
+                ['Content-Type' => 'application/vnd.elife.search+json; version=2'],
                 json_encode([
                     'total' => 0,
                     'items' => [],
@@ -74,6 +74,7 @@ final class SearchControllerTest extends PageTestCase
                         'interview' => 0,
                         'labs-post' => 0,
                         'podcast-episode' => 0,
+                             'reviewed-preprint' => 0,
                     ],
                 ])
             )
@@ -83,11 +84,11 @@ final class SearchControllerTest extends PageTestCase
             new Request(
                 'GET',
                 'http://api.elifesciences.org/search?for=keyword&page=1&per-page=10&sort=relevance&order=desc&use-date=default',
-                ['Accept' => 'application/vnd.elife.search+json; version=1']
+                ['Accept' => 'application/vnd.elife.search+json; version=2']
             ),
             new Response(
                 200,
-                ['Content-Type' => 'application/vnd.elife.search+json; version=1'],
+                ['Content-Type' => 'application/vnd.elife.search+json; version=2'],
                 json_encode([
                     'total' => 0,
                     'items' => [],
@@ -118,6 +119,7 @@ final class SearchControllerTest extends PageTestCase
                         'interview' => 0,
                         'labs-post' => 0,
                         'podcast-episode' => 0,
+                        'reviewed-preprint' => 0,
                     ],
                 ])
             )
@@ -142,11 +144,11 @@ final class SearchControllerTest extends PageTestCase
             new Request(
                 'GET',
                 'http://api.elifesciences.org/search?for=&page=1&per-page=1&sort=date&order=desc&use-date=default',
-                ['Accept' => 'application/vnd.elife.search+json; version=1']
+                ['Accept' => 'application/vnd.elife.search+json; version=2']
             ),
             new Response(
                 200,
-                ['Content-Type' => 'application/vnd.elife.search+json; version=1'],
+                ['Content-Type' => 'application/vnd.elife.search+json; version=2'],
                 json_encode([
                     'total' => 0,
                     'items' => [],
@@ -177,6 +179,7 @@ final class SearchControllerTest extends PageTestCase
                         'interview' => 0,
                         'labs-post' => 0,
                         'podcast-episode' => 0,
+                             'reviewed-preprint' => 0,
                     ],
                 ])
             )
@@ -186,11 +189,11 @@ final class SearchControllerTest extends PageTestCase
             new Request(
                 'GET',
                 'http://api.elifesciences.org/search?for=&page=1&per-page=10&sort=date&order=desc&use-date=default',
-                ['Accept' => 'application/vnd.elife.search+json; version=1']
+                ['Accept' => 'application/vnd.elife.search+json; version=2']
             ),
             new Response(
                 200,
-                ['Content-Type' => 'application/vnd.elife.search+json; version=1'],
+                ['Content-Type' => 'application/vnd.elife.search+json; version=2'],
                 json_encode([
                     'total' => 0,
                     'items' => [],
@@ -221,6 +224,7 @@ final class SearchControllerTest extends PageTestCase
                         'interview' => 0,
                         'labs-post' => 0,
                         'podcast-episode' => 0,
+                             'reviewed-preprint' => 0,
                     ],
                 ])
             )
@@ -235,11 +239,11 @@ final class SearchControllerTest extends PageTestCase
             new Request(
                 'GET',
                 'http://api.elifesciences.org/search?for=&page=1&per-page=1&sort=date&order=asc&use-date=default',
-                ['Accept' => 'application/vnd.elife.search+json; version=1']
+                ['Accept' => 'application/vnd.elife.search+json; version=2']
             ),
             new Response(
                 200,
-                ['Content-Type' => 'application/vnd.elife.search+json; version=1'],
+                ['Content-Type' => 'application/vnd.elife.search+json; version=2'],
                 json_encode([
                     'total' => 0,
                     'items' => [],
@@ -270,6 +274,7 @@ final class SearchControllerTest extends PageTestCase
                         'interview' => 0,
                         'labs-post' => 0,
                         'podcast-episode' => 0,
+                             'reviewed-preprint' => 0,
                     ],
                 ])
             )
@@ -279,11 +284,11 @@ final class SearchControllerTest extends PageTestCase
             new Request(
                 'GET',
                 'http://api.elifesciences.org/search?for=&page=1&per-page=10&sort=date&order=asc&use-date=default',
-                ['Accept' => 'application/vnd.elife.search+json; version=1']
+                ['Accept' => 'application/vnd.elife.search+json; version=2']
             ),
             new Response(
                 200,
-                ['Content-Type' => 'application/vnd.elife.search+json; version=1'],
+                ['Content-Type' => 'application/vnd.elife.search+json; version=2'],
                 json_encode([
                     'total' => 0,
                     'items' => [],
@@ -314,6 +319,7 @@ final class SearchControllerTest extends PageTestCase
                         'interview' => 0,
                         'labs-post' => 0,
                         'podcast-episode' => 0,
+                             'reviewed-preprint' => 0,
                     ],
                 ])
             )
@@ -361,11 +367,11 @@ final class SearchControllerTest extends PageTestCase
             new Request(
                 'GET',
                 'http://api.elifesciences.org/search?for=&page=1&per-page=1&sort=relevance&order=desc&use-date=default',
-                ['Accept' => 'application/vnd.elife.search+json; version=1']
+                ['Accept' => 'application/vnd.elife.search+json; version=2']
             ),
             new Response(
                 200,
-                ['Content-Type' => 'application/vnd.elife.search+json; version=1'],
+                ['Content-Type' => 'application/vnd.elife.search+json; version=2'],
                 json_encode([
                     'total' => 0,
                     'items' => [],
@@ -396,6 +402,7 @@ final class SearchControllerTest extends PageTestCase
                         'interview' => 0,
                         'labs-post' => 0,
                         'podcast-episode' => 0,
+                             'reviewed-preprint' => 0,
                     ],
                 ])
             )
@@ -405,11 +412,11 @@ final class SearchControllerTest extends PageTestCase
             new Request(
                 'GET',
                 'http://api.elifesciences.org/search?for=&page=1&per-page=10&sort=relevance&order=desc&use-date=default',
-                ['Accept' => 'application/vnd.elife.search+json; version=1']
+                ['Accept' => 'application/vnd.elife.search+json; version=2']
             ),
             new Response(
                 200,
-                ['Content-Type' => 'application/vnd.elife.search+json; version=1'],
+                ['Content-Type' => 'application/vnd.elife.search+json; version=2'],
                 json_encode([
                     'total' => 0,
                     'items' => [],
@@ -440,6 +447,7 @@ final class SearchControllerTest extends PageTestCase
                         'interview' => 0,
                         'labs-post' => 0,
                         'podcast-episode' => 0,
+                             'reviewed-preprint' => 0,
                     ],
                 ])
             )
