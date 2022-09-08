@@ -54,7 +54,7 @@ final class ReviewedPreprintConverter implements ViewModelConverter
             $image,
             ViewModel\TeaserFooter::forArticle(
                 ViewModel\Meta::withStatusDate(
-                    ModelName::singular($object->getType()),
+                    ModelName::singular('reviewed-preprint'),
                     ViewModel\Date::simple($object->getPublishedDate()),
                     $object->getStatusDate() ? ViewModel\Date::simple($object->getStatusDate(), $object->getStatusDate() != $object->getPublishedDate()) : null
                 ),
