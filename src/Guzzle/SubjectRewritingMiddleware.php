@@ -143,7 +143,7 @@ final class SubjectRewritingMiddleware
                         $data['relatedContent'] = $this->updateItems($data['relatedContent'] ?? []);
                         break;
 
-                    case 'application/vnd.elife.search+json; version=1':
+                    case 'application/vnd.elife.search+json; version=2':
                         $data['items'] = $this->updateItems($data['items']);
                         $data['subjects'] = $this->updateSearchSubjects($data['subjects'] ?? []);
                         break;
