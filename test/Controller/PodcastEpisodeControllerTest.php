@@ -21,7 +21,7 @@ final class PodcastEpisodeControllerTest extends PageTestCase
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertSame('Episode title', $crawler->filter('.content-header__title')->text());
-        $this->assertSame('Podcast', trim(preg_replace('!\s+!', ' ', $crawler->filter('.content-header .meta')->text())));
+        $this->assertSame('Peer reviewed', trim(preg_replace('!\s+!', ' ', $crawler->filter('.content-header .meta')->text())));
     }
 
     /**
