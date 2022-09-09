@@ -74,7 +74,7 @@ final class HomeController extends Controller
             ->getCurrent()
             ->map($this->willConvertTo(CarouselItem::class))
             ->then(Callback::emptyOr(function (Sequence $covers) {
-                return new Carousel($covers->toArray(), new ListHeading('Highlights', 'highlights'));
+                return new Carousel($covers->slice(0, 3)->toArray(), new ListHeading('Highlights', 'highlights'));
             }))
             ->otherwise($this->softFailure('Failed to load covers'));
 
