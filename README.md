@@ -10,16 +10,7 @@ Dependencies
 * [npm](https://www.npmjs.com/)
 * [PHP 7](https://www.php.net/)
 * [Docker](https://www.docker.com/)
-* [Docker-compose](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-comp
-
-Manual Installation (may or may not work - better use docker)
--------------
-
-1. Create `app/config/parameters.yml` from `app/config/parameters.yml.dist`
-2. `npm install`
-3. `composer install`
-4. `node_modules/.bin/gulp`
-5. `bin/console assets:install --symlink`
+* [Docker-compose](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-compose-on-ubuntu-20-04)
 
 Docker Intallation - Running the site locally
 ------------------------
@@ -44,6 +35,15 @@ When running the site locally via Docker, the parameters are supplied by `/.dock
 
 To change configuration that is supplied by an environment variable, pass in the environment variable at start up. For example, to change the API URL:
 `docker-compose down --volumes --remove-orphans && API_URL=https://prod--gateway.elifesciences.org docker-compose up --build`.
+
+Manual Installation (may or may not work - better use docker)
+-------------
+
+1. Create `app/config/parameters.yml` from `app/config/parameters.yml.dist`
+2. `npm install`
+3. `composer install`
+4. `node_modules/.bin/gulp`
+5. `bin/console assets:install --symlink`
 
 Regenerating critical CSS
 -------------------------
