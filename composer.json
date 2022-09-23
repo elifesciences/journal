@@ -25,7 +25,7 @@
         "elife/api-client": "dev-master",
         "elife/api-sdk": "dev-feature/reviewed-preprint",
         "elife/civi-contacts": "dev-master",
-        "elife/patterns": "dev-master",
+        "elife/patterns": "dev-update-msa-labels",
         "fabpot/goutte": "^3.2",
         "fig/link-util": "^1.0",
         "firebase/php-jwt": "^5.0",
