@@ -1240,12 +1240,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-sdk-php.git",
-                "reference": "2430f058628313e994bc250d74aaa1a2b9f63853"
+                "reference": "490d60823cc0f1ecfae1de65fec33c01952796dc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/2430f058628313e994bc250d74aaa1a2b9f63853",
-                "reference": "2430f058628313e994bc250d74aaa1a2b9f63853",
+                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/490d60823cc0f1ecfae1de65fec33c01952796dc",
+                "reference": "490d60823cc0f1ecfae1de65fec33c01952796dc",
                 "shasum": ""
             },
             "require": {
@@ -1260,7 +1260,7 @@
             },
             "require-dev": {
                 "csa/guzzle-cache-middleware": "^1.0",
-                "elife/api": "^2.3",
+                "elife/api": "^2.9",
                 "elife/api-validator": "^1.0@dev",
                 "guzzlehttp/guzzle": "^6.0",
                 "justinrainbow/json-schema": "^3.0 || ^4.0 || ^5.0",
@@ -1286,7 +1286,7 @@
                 "MIT"
             ],
             "description": "eLife Sciences API SDK",
-            "time": "2021-10-05T13:20:01+00:00"
+            "time": "2022-09-26T21:36:36+00:00"
         },
         {
             "name": "elife/civi-contacts",
@@ -1333,12 +1333,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/patterns-php.git",
-                "reference": "0cd87c9c50cdbd58defa337e206bb159b32477a4"
+                "reference": "55303caa44fa12e087c8783d1ae9fc7a54362c21"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/0cd87c9c50cdbd58defa337e206bb159b32477a4",
-                "reference": "0cd87c9c50cdbd58defa337e206bb159b32477a4",
+                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/55303caa44fa12e087c8783d1ae9fc7a54362c21",
+                "reference": "55303caa44fa12e087c8783d1ae9fc7a54362c21",
                 "shasum": ""
             },
             "require": {
@@ -1375,7 +1375,7 @@
                 "MIT"
             ],
             "description": "eLife patterns",
-            "time": "2022-09-12T14:45:50+00:00"
+            "time": "2022-09-26T14:49:57+00:00"
         },
         {
             "name": "fabpot/goutte",
@@ -4271,6 +4271,7 @@
                 "framework",
                 "symfony"
             ],
+            "abandoned": "friends-of-behat/symfony-extension",
             "time": "2018-04-20T15:48:23+00:00"
         },
         {
