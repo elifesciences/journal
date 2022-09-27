@@ -247,13 +247,6 @@ final class HomepageContext extends Context
     }
 
     /**
-     * @Given /^There is an article called \'([^\']*)\'$/
-     */
-    public function thereIsAnArticleCalled($title)
-    {
-        // Do nothing
-    }
-    /**
      * @Given /^there is a cover linking to the \'([^\']*)\' collection$/
      */
     public function thereIsACoverLinkingToTheCollection(string $collectionName)
@@ -677,6 +670,32 @@ final class HomepageContext extends Context
     {
         $this->assertSession()
             ->elementContains('css', '.info-bar--success', 'You are already subscribed!');
+    }
+
+
+    /**
+     * @Then /^I should see the \'([^\']*)\' cover in the carousel$/
+     */
+    public function iShouldSeeTheCoverInTheCarousel(string $name)
+    {
+        $this->spin(function () use ($name) {
+            $this->assertSession()->elementAttributeContains('css', '.carousel-item__title_link', 'href', $this->createId($name));
+        });
+    }
+
+    /**
+     * @Then /^I should see the title and image from the \'([^\']*)\' collection used in the \'([^\']*)\' cover$/
+     */
+    public function iShouldSeeTheTitleAndImageFromTheCollectionUsedInTheCover(string $collectionName, string $coverName)
+    {
+        $this->spin(function () {
+            $this->assertSession()->elementAttributeContains(
+                'css',
+                '.carousel-item__image',
+                'src',
+                'https://www.example.com/iiif/iden%2Ftifier/0,529,1800,543/1114,336/0/default.jpg'
+            );
+        });
     }
 
     private function createId(string $name) : string
