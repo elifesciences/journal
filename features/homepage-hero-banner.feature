@@ -10,7 +10,7 @@ Feature: Homepage Hero banner
     Given 10 articles have been published
 
   Scenario: Cover can have a title and image different from the content they link to
-    Given there is a collection called 'Tropical disease'
-    And there is a cover linking to the 'Tropical disease' collection
+    Given there are 4 covers
     When I go to the homepage with hero query parameter
-    Then I should see the 'Tropical disease' cover in the hero banner
+    Then I should see the 'Cover0' cover in the hero banner
+    Then I should see 3 highlights

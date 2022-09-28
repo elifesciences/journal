@@ -337,6 +337,98 @@ final class HomepageContext extends Context
         );
     }
 
+
+    /**
+     * @Given /^there are (\d+) covers$/
+     */
+    public function thereAreCovers($number)
+    {
+        $today = (new DateTimeImmutable())->setTime(0, 0, 0);
+        $items = [];
+        for ($i=0;$i<$number;$i++ ) {
+            $name = 'Cover'.$i;
+            $id = $this->createId($name);
+
+            $items[] = [
+                'title' => $name,
+                'image' => [
+                    'uri' => 'https://www.example.com/iiif/iden%2Ftifier',
+                    'alt' => '',
+                    'source' => [
+                        'mediaType' => 'image/png',
+                        'uri' => 'https://www.example.com/image.png',
+                        'filename' => 'image.png',
+                    ],
+                    'size' => [
+                        'width' => 1800,
+                        'height' => 1600,
+                    ],
+                ],
+                'item' => [
+                    'type' => 'collection',
+                    'id' => $id,
+                    'published' => $today->format(ApiSdk::DATE_FORMAT),
+                    'title' => $name,
+                    'selectedCurator' => [
+                        'id' => '1',
+                        'type' => [
+                            'id' => 'senior-editor',
+                            'label' => 'Senior editor',
+                        ],
+                        'name' => [
+                            'preferred' => 'Person 1',
+                            'index' => '1, Person',
+                        ],
+                    ],
+                    'image' => [
+                        'banner' => [
+                            'uri' => 'https://www.example.com/iiif/ban%2Fner',
+                            'alt' => '',
+                            'source' => [
+                                'mediaType' => 'image/jpeg',
+                                'uri' => 'https://www.example.com/banner.jpg',
+                                'filename' => 'banner.jpg',
+                            ],
+                            'size' => [
+                                'width' => 1800,
+                                'height' => 1600,
+                            ],
+                        ],
+                        'thumbnail' => [
+                            'uri' => 'https://www.example.com/iiif/thumb%2Fnail',
+                            'alt' => '',
+                            'source' => [
+                                'mediaType' => 'image/jpeg',
+                                'uri' => 'https://www.example.com/thumbnail.jpg',
+                                'filename' => 'thumbnail.jpg',
+                            ],
+                            'size' => [
+                                'width' => 800,
+                                'height' => 600,
+                            ],
+                        ],
+                    ],
+                ],
+            ];
+        }
+
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/covers/current',
+                ['Accept' => 'application/vnd.elife.cover-list+json; version=1']
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.cover-list+json; version=1'],
+                json_encode([
+                    'total' => 4,
+                    'items' => $items,
+                ])
+            )
+        );
+    }
+
     /**
      * @Given /^there is a cover linking to the \'([^\']*)\' collection with a custom title and image$/
      */
@@ -768,5 +860,13 @@ final class HomepageContext extends Context
             'css',
             '.hero-banner__title_link'
         );
+    }
+
+    /**
+     * @Then /^I should see (\d+) highlights$/
+     */
+    public function iShouldSeeHighlights($number)
+    {
+        $this->assertSession()->elementsCount('css', '.highlight-item', 3);
     }
 }

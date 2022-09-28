@@ -1354,16 +1354,16 @@
         },
         {
             "name": "elife/patterns",
-            "version": "dev-master",
+            "version": "dev-bug/highlights",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/patterns-php.git",
-                "reference": "55303caa44fa12e087c8783d1ae9fc7a54362c21"
+                "reference": "1c691f0e1833758255f04850f78ba5480984c2c1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/55303caa44fa12e087c8783d1ae9fc7a54362c21",
-                "reference": "55303caa44fa12e087c8783d1ae9fc7a54362c21",
+                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/1c691f0e1833758255f04850f78ba5480984c2c1",
+                "reference": "1c691f0e1833758255f04850f78ba5480984c2c1",
                 "shasum": ""
             },
             "require": {
