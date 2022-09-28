@@ -75,18 +75,18 @@ final class HomeController extends Controller
     private function createFirstPage(array $arguments) : Response
     {
         if ($arguments['isHero']) {
-            $arguments['heroBanner'] = $this->get('elife.api_sdk.covers')
-                ->getCurrent()
+            $covers =  $this->get('elife.api_sdk.covers')->getCurrent();
+            $arguments['heroBanner'] = $covers
                 ->then(function (Sequence $items) {
                     /** @var Cover $item */
                     $cover = $items[0];
 
                     return $this->convertTo($cover, HeroBanner::class);
                 })
-                ->otherwise($this->softFailure('Failed to load covers'));
+//                ->otherwise($this->softFailure('Failed to load covers'))
+            ;
 
-            $arguments['highlights'] = $this->get('elife.api_sdk.covers')
-                ->getCurrent()
+            $arguments['highlights'] = $covers
                 ->map($this->willConvertTo(HighlightItem::class))
                 ->then(Callback::emptyOr(function (Sequence $covers) {
                     return new Highlight($covers->slice(1, 4)->toArray(), new ListHeading('Highlights', 'highlights'));
