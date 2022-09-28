@@ -74,7 +74,6 @@ final class HomeController extends Controller
 
     private function createFirstPage(array $arguments) : Response
     {
-        dump($arguments);
         if ($arguments['isHero']) {
             $arguments['heroBanner'] = $this->get('elife.api_sdk.covers')
                 ->getCurrent()
