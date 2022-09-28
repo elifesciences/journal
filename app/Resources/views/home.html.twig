@@ -12,10 +12,24 @@
 
 {% block body %}
 
-    {% if carousel %}
+    {% if isHero %}
+        {% if heroBanner %}
+            <div class="wrapper">
+                {{ render_pattern(heroBanner) }}
+            </div>
+        {% endif %}
 
-        {{ render_pattern(carousel) }}
+        {% if highlights %}
+            <div class="wrapper">
+                {{ render_pattern(highlights) }}
+            </div>
+        {% endif %}
+    {% else %}
+        {% if carousel %}
 
+            {{ render_pattern(carousel) }}
+
+        {% endif %}
     {% endif %}
 
     <div class="wrapper">

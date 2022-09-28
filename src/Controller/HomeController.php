@@ -3,12 +3,16 @@
 namespace eLife\Journal\Controller;
 
 use eLife\ApiSdk\Collection\Sequence;
+use eLife\ApiSdk\Model\Cover;
 use eLife\ApiSdk\Model\Subject;
 use eLife\Journal\Helper\Callback;
 use eLife\Journal\Helper\Paginator;
 use eLife\Journal\Pagerfanta\SequenceAdapter;
 use eLife\Patterns\ViewModel\Carousel;
 use eLife\Patterns\ViewModel\CarouselItem;
+use eLife\Patterns\ViewModel\HeroBanner;
+use eLife\Patterns\ViewModel\Highlight;
+use eLife\Patterns\ViewModel\HighlightItem;
 use eLife\Patterns\ViewModel\LeadPara;
 use eLife\Patterns\ViewModel\LeadParas;
 use eLife\Patterns\ViewModel\Link;
@@ -70,13 +74,34 @@ final class HomeController extends Controller
 
     private function createFirstPage(array $arguments) : Response
     {
-        $arguments['carousel'] = $this->get('elife.api_sdk.covers')
-            ->getCurrent()
-            ->map($this->willConvertTo(CarouselItem::class))
-            ->then(Callback::emptyOr(function (Sequence $covers) {
-                return new Carousel($covers->slice(0, 3)->toArray(), new ListHeading('Highlights', 'highlights'));
-            }))
-            ->otherwise($this->softFailure('Failed to load covers'));
+        dump($arguments);
+        if ($arguments['isHero']) {
+            $arguments['heroBanner'] = $this->get('elife.api_sdk.covers')
+                ->getCurrent()
+                ->then(function (Sequence $items) {
+                    /** @var Cover $item */
+                    $cover = $items[0];
+
+                    return $this->convertTo($cover, HeroBanner::class);
+                })
+                ->otherwise($this->softFailure('Failed to load covers'));
+
+            $arguments['highlights'] = $this->get('elife.api_sdk.covers')
+                ->getCurrent()
+                ->map($this->willConvertTo(HighlightItem::class))
+                ->then(Callback::emptyOr(function (Sequence $covers) {
+                    return new Highlight($covers->slice(1, 4)->toArray(), new ListHeading('Highlights', 'highlights'));
+                }));
+
+        } else {
+            $arguments['carousel'] = $this->get('elife.api_sdk.covers')
+                ->getCurrent()
+                ->map($this->willConvertTo(CarouselItem::class))
+                ->then(Callback::emptyOr(function (Sequence $covers) {
+                    return new Carousel($covers->slice(0, 3)->toArray(), new ListHeading('Highlights', 'highlights'));
+                }))
+                ->otherwise($this->softFailure('Failed to load covers'));
+        }
 
         $arguments['leadParas'] = new LeadParas([new LeadPara('eLife works to improve research communication through open science and open technology innovation', 'strapline')]);
 
