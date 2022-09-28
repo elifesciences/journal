@@ -888,6 +888,22 @@ services:
         tags:
           - name: view_model.converter
 
+    elife.journal.view_model.converter.cover.article.highlight_item:
+        class: eLife\Journal\ViewModel\Converter\CoverArticleHighlightItemConverter
+        public: false
+        arguments:
+          - '@router'
+        tags:
+          - name: view_model.converter
+
+    elife.journal.view_model.converter.cover.article.hero_benner:
+        class: eLife\Journal\ViewModel\Converter\CoverArticleHeroBannerConverter
+        public: false
+        arguments:
+          - '@router'
+        tags:
+          - name: view_model.converter
+
     elife.journal.view_model.converter.cover.article.teaser.secondary:
         class: eLife\Journal\ViewModel\Converter\CoverArticleSecondaryTeaserConverter
         public: false
@@ -906,6 +922,22 @@ services:
         tags:
           - name: view_model.converter
 
+    elife.journal.view_model.converter.cover.blog_article.highlight_item:
+        class: eLife\Journal\ViewModel\Converter\CoverBlogArticleHighlightItemConverter
+        public: false
+        arguments:
+          - '@router'
+        tags:
+          - name: view_model.converter
+
+    elife.journal.view_model.converter.cover.blog_article.hero_banner:
+        class: eLife\Journal\ViewModel\Converter\CoverBlogArticleHeroBannerConverter
+        public: false
+        arguments:
+          - '@router'
+        tags:
+          - name: view_model.converter
+
     elife.journal.view_model.converter.cover.blog_article.teaser.secondary:
         class: eLife\Journal\ViewModel\Converter\CoverBlogArticleSecondaryTeaserConverter
         public: false
@@ -921,6 +953,22 @@ services:
         arguments:
           - '@router'
           - '@elife.journal.view_model.factory.carousel_item_image'
+        tags:
+          - name: view_model.converter
+
+    elife.journal.view_model.converter.cover.collection.highlight_item:
+        class: eLife\Journal\ViewModel\Converter\CoverCollectionHighlightItemConverter
+        public: false
+        arguments:
+          - '@router'
+        tags:
+          - name: view_model.converter
+
+    elife.journal.view_model.converter.cover.collection.hero_banner:
+        class: eLife\Journal\ViewModel\Converter\CoverCollectionHeroBannerConverter
+        public: false
+        arguments:
+          - '@router'
         tags:
           - name: view_model.converter
 
