@@ -324,7 +324,7 @@ final class SubjectRewritingMiddlewareTest extends KernelTestCase
                     ],
                 ],
             ],
-            'application/vnd.elife.search+json; version=1; with new subject' => [
+            'application/vnd.elife.search+json; version=2; with new subject' => [
                 [
                     'total' => 2,
                     'items' => [
@@ -356,6 +356,7 @@ final class SubjectRewritingMiddlewareTest extends KernelTestCase
                         'interview' => 0,
                         'labs-post' => 0,
                         'podcast-episode' => 0,
+                        'reviewed-preprint' => 0,
                     ],
                 ],
                 [
@@ -388,10 +389,11 @@ final class SubjectRewritingMiddlewareTest extends KernelTestCase
                         'interview' => 0,
                         'labs-post' => 0,
                         'podcast-episode' => 0,
+                        'reviewed-preprint' => 0,
                     ],
                 ],
             ],
-            'application/vnd.elife.search+json; version=1; without new subject' => [
+            'application/vnd.elife.search+json; version=2; without new subject' => [
                 [
                     'total' => 2,
                     'items' => [
@@ -422,6 +424,7 @@ final class SubjectRewritingMiddlewareTest extends KernelTestCase
                         'interview' => 0,
                         'labs-post' => 0,
                         'podcast-episode' => 0,
+                        'reviewed-preprint' => 0,
                     ],
                 ],
                 [
@@ -454,6 +457,7 @@ final class SubjectRewritingMiddlewareTest extends KernelTestCase
                         'interview' => 0,
                         'labs-post' => 0,
                         'podcast-episode' => 0,
+                        'reviewed-preprint' => 0,
                     ],
                 ],
             ],
