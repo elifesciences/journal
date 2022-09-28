@@ -69,7 +69,8 @@ final class ArticleTeaserConverter implements ViewModelConverter
                     $this->simpleDate($object, $context)
                 ),
                 $formats
-            )
+            ),
+            ['teaser--main']
         );
     }
 

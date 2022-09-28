@@ -61,7 +61,8 @@ final class ReviewedPreprintConverter implements ViewModelConverter
                     $this->simpleDate($object, $context)
                 ),
                 $formats
-            )
+            ),
+            ['teaser--main']
         );
     }
 
