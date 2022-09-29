@@ -285,6 +285,7 @@ final class SchemaOrgMetadataExtensionTest extends TestCase
             new DateTimeImmutable('2008-09-28 01:23:45'),
             null,
             null,
+            null,
             1,
             'eLocationId',
             $this->defaultImage(),

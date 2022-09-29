@@ -83,13 +83,12 @@ final class HomeController extends Controller
 
                     return $this->convertTo($cover, HeroBanner::class);
                 })
-//                ->otherwise($this->softFailure('Failed to load covers'))
-            ;
+                ->otherwise($this->softFailure('Failed to load covers'));
 
             $arguments['highlights'] = $covers
                 ->map($this->willConvertTo(HighlightItem::class))
                 ->then(Callback::emptyOr(function (Sequence $covers) {
-                    return new Highlight($covers->slice(1, 4)->toArray(), new ListHeading('Highlights', 'highlights'));
+                    return new Highlight($covers->slice(1)->toArray(), new ListHeading('Highlights', 'highlights'));
                 }));
         } else {
             $arguments['carousel'] = $this->get('elife.api_sdk.covers')
