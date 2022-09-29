@@ -345,7 +345,7 @@ final class HomepageContext extends Context
     {
         $today = (new DateTimeImmutable())->setTime(0, 0, 0);
         $items = [];
-        for ($i=0;$i<$number;$i++ ) {
+        for ($i=0; $i<$number; $i++ ) {
             $name = 'Cover'.$i;
             $id = $this->createId($name);
 
