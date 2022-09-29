@@ -91,7 +91,6 @@ final class HomeController extends Controller
                 ->then(Callback::emptyOr(function (Sequence $covers) {
                     return new Highlight($covers->slice(1, 4)->toArray(), new ListHeading('Highlights', 'highlights'));
                 }));
-
         } else {
             $arguments['carousel'] = $this->get('elife.api_sdk.covers')
                 ->getCurrent()
