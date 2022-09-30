@@ -273,7 +273,6 @@ abstract class Controller implements ContainerAwareInterface
             'footer' => $this->get('elife.journal.view_model.factory.footer')->createFooter(),
             'user' => $user ?? null,
             'item' => $item,
-            'isHero' => $request->query->has('hero'),
         ];
     }
 

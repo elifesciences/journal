@@ -66,30 +66,34 @@ final class HomeController extends Controller
             ->then($this->willConvertTo(ListingTeasers::class, ['heading' => 'Latest research', 'type' => 'articles']));
 
         if (1 === $page) {
-            return $this->createFirstPage($arguments);
+            return $this->createFirstPage($request, $arguments);
         }
 
         return $this->createSubsequentPage($request, $arguments);
     }
 
-    private function createFirstPage(array $arguments) : Response
+    private function createFirstPage(Request $request, array $arguments) : Response
     {
-        if ($arguments['isHero']) {
+        if ($request->query->has('hero')) {
             $covers =  $this->get('elife.api_sdk.covers')->getCurrent();
-            $arguments['heroBanner'] = $covers
-                ->then(function (Sequence $items) {
-                    /** @var Cover $item */
-                    $cover = $items[0];
 
-                    return $this->convertTo($cover, HeroBanner::class);
+            $heroHighlights = $covers->then(function (Sequence $items) {
+                    return $items->map(function(Cover $cover, int $i){
+                        return $this->convertTo($cover, 0 === $i ? HeroBanner::class : HighlightItem::class);
+                    });
                 })
-                ->otherwise($this->softFailure('Failed to load covers'));
+                ->otherwise($this->softFailure('Failed to load hero and highlights'));
 
-            $arguments['highlights'] = $covers
-                ->map($this->willConvertTo(HighlightItem::class))
-                ->then(Callback::emptyOr(function (Sequence $covers) {
-                    return new Highlight($covers->slice(1)->toArray(), new ListHeading('Highlights', 'highlights'));
-                }));
+            $arguments['heroBanner'] = $heroHighlights->then(Callback::emptyOr(function (Sequence $covers){
+                return $covers->filter(Callback::isInstanceOf(HeroBanner::class))->offsetGet(0);
+            }));
+
+            $arguments['highlights'] = $heroHighlights->then(function (Sequence $covers) {
+                return $covers->filter(Callback::isInstanceOf(HighlightItem::class));
+            })->then(Callback::emptyOr(function (Sequence $highlights){
+                return new Highlight($highlights->toArray(), new ListHeading('Highlights', 'highlights'));
+            }));
+
         } else {
             $arguments['carousel'] = $this->get('elife.api_sdk.covers')
                 ->getCurrent()
