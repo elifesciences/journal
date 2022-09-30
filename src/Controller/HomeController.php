@@ -74,7 +74,7 @@ final class HomeController extends Controller
 
     private function createFirstPage(Request $request, array $arguments) : Response
     {
-        if ($request->query->has('hero')) {
+        if ($request->query->has('hero') && $this->isGranted('FEATURE_HERO')) {
             $covers =  $this->get('elife.api_sdk.covers')->getCurrent();
 
             $heroHighlights = $covers->then(function (Sequence $items) {

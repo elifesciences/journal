@@ -92,6 +92,8 @@ parameters:
     crm_url: http://crm.elifesciences.org/crm/civicrm/
     feature_xpub: '%env(FEATURE_XPUB)%'
     env(FEATURE_XPUB): false
+    feature_HERO: '%env(FEATURE_HERO)%'
+    env(FEATURE_HERO): false
     oauth2_client_id: journal_client_id
     oauth2_client_secret: journal_client_secret
     session_name: MOCKSESSID
