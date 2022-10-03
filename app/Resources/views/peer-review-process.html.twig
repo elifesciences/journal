@@ -1,7 +1,33 @@
 {% extends '::page.html.twig' %}
 
+{% block head %}
+
+  {{ parent() }}
+
+  <style>
+
+    .peer-review-process-page .content-header__impact-statement,
+    .peer-review-process-page .content-header__impact-statement > p {
+      font-family: "Noto Sans",Arial,Helvetica,sans-serif;
+      font-size: calc((14 / 16) * 1rem);
+    }
+
+    .peer-review-process-page .content-header__impact-statement > p {
+      margin-top: 1rem;
+    }
+
+    .peer-review-process-content-header-link.peer-review-process-content-header-link.peer-review-process-content-header-link.peer-review-process-content-header-link.peer-review-process-content-header-link.peer-review-process-content-header-link.peer-review-process-content-header-link.peer-review-process-content-header-link.peer-review-process-content-header-link.peer-review-process-content-header-link {
+      font-weight: bold;
+      border-bottom-width: 0;
+      color: #167bc9;
+    }
+
+  </style>
+
+{% endblock %}
+
 {% block body %}
-
+<div class="peer-review-process-page">
   {{ render_pattern(contentHeader) }}
-
+</div>
 {% endblock %}
