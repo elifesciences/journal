@@ -575,57 +575,6 @@ final class HomepageContext extends Context
         $this->visitPath('/');
     }
 
-
-    /**
-     * @When /^I go to the homepage with hero query parameter$/
-     */
-    public function iGoToTheHomepageWithHeroQueryParameter()
-    {
-        if (null === $this->numberOfArticles) {
-            $this->mockApiResponse(
-                new Request(
-                    'GET',
-                    'http://api.elifesciences.org/search?for=&page=1&per-page=10&sort=date&order=desc&type[]=research-advance&type[]=research-article&type[]=research-communication&type[]=review-article&type[]=scientific-correspondence&type[]=short-report&type[]=tools-resources&type[]=replication-study&use-date=default',
-                    ['Accept' => 'application/vnd.elife.search+json; version=2']
-                ),
-                new Response(
-                    200,
-                    ['Content-Type' => 'application/vnd.elife.search+json; version=2'],
-                    json_encode([
-                        'total' => 0,
-                        'items' => [],
-                        'subjects' => [],
-                        'types' => [
-                            'correction' => 0,
-                            'editorial' => 0,
-                            'feature' => 0,
-                            'insight' => 0,
-                            'research-advance' => 0,
-                            'research-article' => 0,
-                            'research-communication' => 0,
-                            'retraction' => 0,
-                            'registered-report' => 0,
-                            'replication-study' => 0,
-                            'review-article' => 0,
-                            'scientific-correspondence' => 0,
-                            'short-report' => 0,
-                            'tools-resources' => 0,
-                            'blog-article' => 0,
-                            'collection' => 0,
-                            'interview' => 0,
-                            'labs-post' => 0,
-                            'podcast-episode' => 0,
-                            'reviewed-preprint' => 0,
-                        ],
-                    ])
-                )
-            );
-        }
-
-        $this->visitPath('/?hero');
-    }
-
-
     /**
      * @When /^I load more articles$/
      */
