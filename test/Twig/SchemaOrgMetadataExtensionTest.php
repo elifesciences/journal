@@ -298,6 +298,7 @@ final class SchemaOrgMetadataExtensionTest extends TestCase
                     new EmptySequence(), promise_for($this->defaultImage()), promise_for($this->defaultImage())),
             ]),
             [],
+            [],
             null,
             promise_for(null),
             promise_for(new Copyright('copyright licence', 'copyright statement')),
