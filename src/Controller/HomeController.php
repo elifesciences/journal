@@ -78,11 +78,10 @@ final class HomeController extends Controller
             $covers =  $this->get('elife.api_sdk.covers')->getCurrent();
 
             $heroHighlights = $covers->then(function (Sequence $items) {
-                    return $items->map(function(Cover $cover, int $i){
-                        return $this->convertTo($cover, 0 === $i ? HeroBanner::class : HighlightItem::class);
-                    });
-                })
-                ->otherwise($this->softFailure('Failed to load hero and highlights'));
+                return $items->map(function(Cover $cover, int $i){
+                    return $this->convertTo($cover, 0 === $i ? HeroBanner::class : HighlightItem::class);
+                });
+            })->otherwise($this->softFailure('Failed to load hero and highlights'));
 
             $arguments['heroBanner'] = $heroHighlights->then(Callback::emptyOr(function (Sequence $covers){
                 return $covers->filter(Callback::isInstanceOf(HeroBanner::class))->offsetGet(0);
@@ -93,7 +92,6 @@ final class HomeController extends Controller
             })->then(Callback::emptyOr(function (Sequence $highlights){
                 return new Highlight($highlights->toArray(), new ListHeading('Highlights', 'highlights'));
             }));
-
         } else {
             $arguments['carousel'] = $this->get('elife.api_sdk.covers')
                 ->getCurrent()
