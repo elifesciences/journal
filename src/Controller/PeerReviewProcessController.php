@@ -13,6 +13,10 @@ final class PeerReviewProcessController extends Controller {
       throw new NotFoundHttpException('Not allowed to see PRC comms');
     }
 
-    throw new NotFoundHttpException('Nope');
+    $arguments = $this->defaultPageArguments($request);
+
+    $arguments['title'] = 'Peer review process';
+
+    return new Response($this->get('templating')->render('::peer-review-process.html.twig', $arguments));
   }
 }
