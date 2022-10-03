@@ -10,7 +10,7 @@ parameters:
     api_timeout_slow: 10
     honeypot_field: email_address
     mustache_stat_props: [size, mtime]
-    feature_banana: false
+    feature_prc_comms: false
 
 bobthecow_mustache:
     globals:

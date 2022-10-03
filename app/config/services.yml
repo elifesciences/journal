@@ -370,12 +370,12 @@ services:
         tags:
           - name: security.voter
 
-    elife.journal.security.voter.feature.banana:
+    elife.journal.security.voter.feature.prc_comms:
         class: eLife\Journal\Security\Voter\FixedVoter
         public: false
         arguments:
-          - FEATURE_BANANA
-          - '%feature_banana%'
+          - FEATURE_PRC_COMMS
+          - '%feature_prc_comms%'
         tags:
           - name: security.voter
 
