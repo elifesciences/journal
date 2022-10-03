@@ -27,7 +27,19 @@
 {% endblock %}
 
 {% block body %}
-<div class="peer-review-process-page">
-  {{ render_pattern(contentHeader) }}
-</div>
+
+  <div class="peer-review-process-page">
+
+    {{ render_pattern(contentHeader) }}
+
+    {% embed 'grid/content.html.twig' %}
+
+      {% block main %}
+
+      {% endblock %}
+
+    {% endembed %}
+
+  </div>
+
 {% endblock %}
