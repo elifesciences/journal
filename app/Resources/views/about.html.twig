@@ -13,6 +13,20 @@
             font-family: "Noto Sans",Arial,Helvetica,sans-serif;
             font-size: calc((14 / 16) * 1rem);
             line-height: 1.7;
+            position: relative;
+        }
+
+        .prc-comms::before {
+            content: '';
+            width: calc((20 / 16) * 1em);
+            height: calc((20 / 16) * 1em);
+            display: block;
+            background-image: url('data:image/svg+xml;utf8,<svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><title>Information</title><path d="M10 0C4.5 0 0 4.5 0 10s4.5 10 10 10 10-4.5 10-10S15.5 0 10 0zm1 15H9V9h2v6zm0-8H9V5h2v2z" fill="%23177cc9" fill-rule="evenodd"/></svg>');
+            background-repeat: no-repeat;
+            background-size: contain;
+            position: absolute;
+            left: calc((20px + 0.5em));
+            top: calc(2em + 2px);
         }
     </style>
 {% endblock %}
