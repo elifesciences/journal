@@ -370,6 +370,15 @@ services:
         tags:
           - name: security.voter
 
+    elife.journal.security.voter.feature.banana:
+        class: eLife\Journal\Security\Voter\FixedVoter
+        public: false
+        arguments:
+          - FEATURE_BANANA
+          - '%feature_banana%'
+        tags:
+          - name: security.voter
+
     elife.journal.templating.promise_aware:
         class: eLife\Journal\Templating\PromiseAwareEngine
         decorates: templating

@@ -19,6 +19,9 @@
     {% embed 'grid/content.html.twig' %}
 
         {% block main %}
+            {% if is_granted('FEATURE_BANANA') %}
+                <div>some  text</div>
+            {% endif %}
 
             {% for part in body %}
 
