@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b573e2e8472c1d828dd2e3855666dd53",
+    "content-hash": "0932dd9bf2f687e578d442c7838de31f",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -1178,31 +1178,6 @@
             "time": "2020-02-13T22:36:52+00:00"
         },
         {
-            "name": "elife/api",
-            "version": "2.9.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/elifesciences/api-raml.git",
-                "reference": "c34f4c4a3d9b13b5760de5173137e6873c9e0a42"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-raml/zipball/c34f4c4a3d9b13b5760de5173137e6873c9e0a42",
-                "reference": "c34f4c4a3d9b13b5760de5173137e6873c9e0a42",
-                "shasum": ""
-            },
-            "conflict": {
-                "justinrainbow/json-schema": "<3.0.0"
-            },
-            "type": "library",
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "description": "eLife Sciences API specification",
-            "time": "2022-09-26T15:03:24+00:00"
-        },
-        {
             "name": "elife/api-client",
             "version": "dev-master",
             "source": {
@@ -1358,12 +1333,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/patterns-php.git",
-                "reference": "1c691f0e1833758255f04850f78ba5480984c2c1"
+                "reference": "3c76a40d1a91e0d45973adb7d40e5c65ef3bd03f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/1c691f0e1833758255f04850f78ba5480984c2c1",
-                "reference": "1c691f0e1833758255f04850f78ba5480984c2c1",
+                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/3c76a40d1a91e0d45973adb7d40e5c65ef3bd03f",
+                "reference": "3c76a40d1a91e0d45973adb7d40e5c65ef3bd03f",
                 "shasum": ""
             },
             "require": {
@@ -1400,7 +1375,7 @@
                 "MIT"
             ],
             "description": "eLife patterns",
-            "time": "2022-09-26T14:49:57+00:00"
+            "time": "2022-10-03T11:31:48+00:00"
         },
         {
             "name": "fabpot/goutte",
@@ -4399,6 +4374,31 @@
                 "instantiate"
             ],
             "time": "2020-05-29T17:27:14+00:00"
+        },
+        {
+            "name": "elife/api",
+            "version": "2.9.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/elifesciences/api-raml.git",
+                "reference": "c34f4c4a3d9b13b5760de5173137e6873c9e0a42"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/elifesciences/api-raml/zipball/c34f4c4a3d9b13b5760de5173137e6873c9e0a42",
+                "reference": "c34f4c4a3d9b13b5760de5173137e6873c9e0a42",
+                "shasum": ""
+            },
+            "conflict": {
+                "justinrainbow/json-schema": "<3.0.0"
+            },
+            "type": "library",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "eLife Sciences API specification",
+            "time": "2022-09-26T15:03:24+00:00"
         },
         {
             "name": "elife/api-validator",
