@@ -311,6 +311,7 @@ final class StatusDateOverrideMiddlewareTest extends KernelTestCase
             'published' => '2010-01-01T00:00:00Z',
             'versionDate' => '2010-01-01T00:00:00Z',
             'statusDate' => $newStatusDate ?? '2010-01-01T00:00:00Z',
+            'reviewedDate' => '2010-01-01T00:00:00Z',
             'volume' => 1,
             'elocationId' => 'e00001',
             'copyright' => [
