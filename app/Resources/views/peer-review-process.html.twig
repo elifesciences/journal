@@ -20,6 +20,13 @@
 
     --bar-size: var(--bar-size-narrow);
 
+    /* Used in calc() so need units, even when 0 */
+    --outer-bar-vertical-fudge-factor-narrow: 0px;
+    --outer-bar-vertical-fudge-factor-medium: -6px;
+    --outer-bar-vertical-fudge-factor-wide: -10px;
+
+    --outer-bar-vertical-fudge-factor: var(--outer-bar-vertical-fudge-factor-narrow);
+
     --inter-section-vertical-separation: calc(var(--bar-size) * 2);
     --intra-section-vertical-separation: calc(var(--bar-size));
 
@@ -28,12 +35,14 @@
   @media screen and (min-width: 730px) {
     :root {
       --bar-size: var(--bar-size-medium);
+      --outer-bar-vertical-fudge-factor: var(--outer-bar-vertical-fudge-factor-medium);
     }
   }
 
   @media screen and (min-width: 900px) {
     :root {
       --bar-size: var(--bar-size-wide);
+      --outer-bar-vertical-fudge-factor: var(--outer-bar-vertical-fudge-factor-wide);
     }
   }
 
@@ -77,9 +86,11 @@
       display: block;
       position: absolute;
       left: 0;
+      top: var(--outer-bar-vertical-fudge-factor);
       z-index: 1;
 
-      height: 100%;
+      --height: calc(100% + (var(--outer-bar-vertical-fudge-factor) * -1));
+      height: var(--height);
       width: var(--bar-size);
       border-radius: var(--bar-size);
     }
@@ -105,7 +116,7 @@
     .peer-review-process-page-process-outer-section::after {
       content: '';
       position: absolute;
-      top: 0;
+      top: var(--outer-bar-vertical-fudge-factor);
       left: 0;
       z-index: 2;
       width: var(--bar-size);
