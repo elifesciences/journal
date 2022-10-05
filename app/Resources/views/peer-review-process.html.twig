@@ -6,7 +6,27 @@
 
   <style>
 
-    /* Content header */
+  :root {
+    --bar-width-narrow: 24px;
+    --bar-width-medium: 36px;
+    --bar-width-wide: 48px;
+
+    --bar-width: var(--bar-width-narrow);
+  }
+
+  @media screen and (min-width: 730px) {
+    :root {
+      --bar-width: var(--bar-width-medium);
+    }
+  }
+
+  @media screen and (min-width: 900px) {
+    :root {
+      --bar-width: var(--bar-width-wide);
+    }
+  }
+
+  /* Content header */
 
     .peer-review-process-page .content-header__impact-statement,
     .peer-review-process-page .content-header__impact-statement > p {
@@ -35,7 +55,7 @@
 
     /* create space and a positioning context to place pseudo elements for the outer vertical bars & circles */
     .peer-review-process-page-process-outer-section {
-      padding-left: calc((48 / 16) * 1rem);
+      padding-left: calc(var(--bar-width) * 2);
       position: relative;
     }
 
@@ -48,8 +68,8 @@
       z-index: 1;
 
       height: 100%;
-      width: 24px;
-      border-radius: 20px;
+      width: var(--bar-width);
+      border-radius: var(--bar-width);
     }
 
     /* Outer bar colours vary depending on their order on the page */
@@ -76,8 +96,8 @@
       top: 0;
       left: 0;
       z-index: 2;
-      width: 24px;
-      height: 24px;
+      width: var(--bar-width);
+      height: var(--bar-width);
 
       border-radius: 50%;
 
@@ -105,7 +125,7 @@
 
     /* Inner funky bars */
     .peer-review-process-page-process-inner-section {
-      padding-left: 48px;
+      padding-left: calc(var(--bar-width) * 2);
       position: relative;
     }
 
@@ -117,8 +137,8 @@
       z-index: 1;
 
       height: 100%;
-      width: 24px;
-      border-radius: 20px;
+      width: var(--bar-width);
+      border-radius: var(--bar-width);
 
     }
 
@@ -149,12 +169,12 @@
       position: absolute;
 
       /* overlay the inner bar */
-      left: -48px;
+      left: calc(var(--bar-width) * -2);
       z-index: 3;
 
       height: 100%;
-      width: 24px;
-      border-radius: 20px;
+      width: var(--bar-width);
+      border-radius: var(--bar-width);
     }
 
     .peer-review-process-page-process-outer-section:nth-of-type(1) .peer-review-process-page-process-inner-section-final-part::before {
