@@ -14,6 +14,7 @@
     --bar-size: var(--bar-size-narrow);
 
     --inter-section-vertical-separation: calc(var(--bar-size) * 2);
+    --intra-section-vertical-separation: calc(var(--bar-size));
 
   }
 
@@ -131,6 +132,11 @@
     .peer-review-process-page-process-inner-section {
       padding-left: calc(var(--bar-size) * 2);
       position: relative;
+      margin-top: var(--intra-section-vertical-separation);
+    }
+
+    .peer-review-process-page-process-inner-section p {
+      margin-bottom: var(--intra-section-vertical-separation);
     }
 
     .peer-review-process-page-process-inner-section::before {
