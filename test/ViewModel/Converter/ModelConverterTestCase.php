@@ -123,20 +123,17 @@ abstract class ModelConverterTestCase extends TestCase
                     $list = true;
                     break;
                 case 'annual-report':
+                case 'article-poa':
+                case 'article-vor':
                 case 'blog-article':
                 case 'collection':
                 case 'event':
                 case 'interview':
                 case 'labs-post':
-                case 'search':
                     $version = 2;
                     break;
-                case 'article-poa':
                 case 'press-package':
                     $version = 3;
-                    break;
-                case 'article-vor':
-                    $version = 6;
                     break;
             }
 
