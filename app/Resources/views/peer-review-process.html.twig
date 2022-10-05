@@ -138,6 +138,33 @@
       background-color: #2792d3;
     }
 
+    /* Restricts the height of the inner bar lower colour (when > 1 part in an inner section) */
+    .peer-review-process-page-process-inner-section-final-part {
+      position: relative;
+    }
+
+    .peer-review-process-page-process-inner-section-final-part::before {
+      content: '';
+      display: block;
+      position: absolute;
+
+      /* overlay the inner bar */
+      left: -48px;
+      z-index: 3;
+
+      height: 100%;
+      width: 24px;
+      border-radius: 20px;
+    }
+
+    .peer-review-process-page-process-outer-section:nth-of-type(1) .peer-review-process-page-process-inner-section-final-part::before {
+      background-color: #173e83;
+    }
+
+    .peer-review-process-page-process-outer-section:nth-of-type(2) .peer-review-process-page-process-inner-section-final-part::before {
+      background-color: #71b819;
+    }
+
   }
 
   </style>
@@ -167,8 +194,10 @@
             <h3>Triage</h3>
             <p>An initial decision on whether or not to send for peer review is made by eLife’s Editors. The decision is based only on relevance to eLife’s aims and scope. eLife does not make selective publication decisions based on perceived importance or impact. </p>
 
+            <div class="peer-review-process-page-process-inner-section-final-part">
             <h3>Sending for peer review</h3>
             <p>In some cases eLife’s Editors may decide not to send the research for peer review. This could be a result of a lack of evidence to support the claims made in the research, or if submissions do not fit within eLife’s aims and scope. </p>
+            </div>
           </div>
         </section>
 
@@ -182,8 +211,10 @@
             <h3>Consultation</h3>
             <p>Reviewers are invited to read each other’s reviews of the research and to comment during a consultation. Editors oversee the consultation to resolve any conflict or disagreement, or to decide when authors or the public should be made aware of differing but fair viewpoints.</p>
 
-            <h3>Assessment</h3>
-            <p>After consultation with reviewers, eLife’s Editors produce an assessment that summarises the importance and rigor of the preprints, for the benefit of readers on eLife. The eLife assessment is published with the preprint, along with the full peer reviews as a “Reviewed Preprint”. More information on how we make the assessments fair and consistent can be found in the details for authors and reviewers.</p>
+            <div class="peer-review-process-page-process-inner-section-final-part">
+              <h3>Assessment</h3>
+              <p>After consultation with reviewers, eLife’s Editors produce an assessment that summarises the importance and rigor of the preprints, for the benefit of readers on eLife. The eLife assessment is published with the preprint, along with the full peer reviews as a “Reviewed Preprint”. More information on how we make the assessments fair and consistent can be found in the details for authors and reviewers.</p>
+            </div>
           </div>
         </section>
 
