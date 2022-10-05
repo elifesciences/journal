@@ -7,19 +7,23 @@
   <style>
 
   :root {
-    --dark-blue: #173e83;
+
+    /* Colours */
     --light-blue: #2792d3;
+    --dark-blue: #173e83;
     --light-green: #71b819;
-    --light-pink: #d61e64;
     --dark-green: #326b2b;
+    --light-pink: #d61e64;
     --dark-pink: #861352;
 
+    /* Width of the coloured bars at various viewport widths. Also used in lengths that are coupled to the bar size */
     --bar-size-narrow: 24px;
     --bar-size-medium: 36px;
     --bar-size-wide: 48px;
 
     --bar-size: var(--bar-size-narrow);
 
+    /* Used to vertically roughly align the centre of the outer bar circle with the centre line of the heading text */
     /* Used in calc() so need units, even when 0 */
     --outer-bar-vertical-fudge-factor-narrow: 0px;
     --outer-bar-vertical-fudge-factor-medium: -6px;
@@ -27,11 +31,14 @@
 
     --outer-bar-vertical-fudge-factor: var(--outer-bar-vertical-fudge-factor-narrow);
 
+    /* Spacing between outer sections */
     --inter-section-vertical-separation: calc(var(--bar-size) * 2);
-    --intra-section-vertical-separation: calc(var(--bar-size));
 
+    /* Spacing between outer and inner sections, and between inner sections */
+    --intra-section-vertical-separation: calc(var(--bar-size));
   }
 
+  /* 730px */
   @media screen and (min-width: 45.625em) {
     :root {
       --bar-size: var(--bar-size-medium);
@@ -39,6 +46,7 @@
     }
   }
 
+  /* 900 px */
   @media screen and (min-width: 56.25em) {
     :root {
       --bar-size: var(--bar-size-wide);
@@ -65,6 +73,7 @@
       color: #167bc9;
     }
 
+    /* constrain content header to be roughly no wider than the main content above 1200px viewport width */
     @media screen and (min-width: 75em) {
       .peer-review-process-page .content-header__body,
       .peer-review-process-page .content-header.wrapper::after {
@@ -84,8 +93,8 @@
 
     /* create space and a positioning context to place pseudo elements for the outer vertical bars & circles */
     .peer-review-process-page-process-outer-section {
-      padding-left: calc(var(--bar-size) * 2);
       position: relative;
+      padding-left: calc(var(--bar-size) * 2);
       margin-bottom: var(--inter-section-vertical-separation);
     }
 
@@ -98,8 +107,7 @@
       top: var(--outer-bar-vertical-fudge-factor);
       z-index: 1;
 
-      --height: calc(100% + (var(--outer-bar-vertical-fudge-factor) * -1));
-      height: var(--height);
+      height: calc(100% + (var(--outer-bar-vertical-fudge-factor) * -1));
       width: var(--bar-size);
       border-radius: var(--bar-size);
     }
@@ -132,8 +140,6 @@
       height: var(--bar-size);
 
       border-radius: 50%;
-
-      background-color: transparent;
     }
 
     /* Outer circle colours vary depending on their order on the page */
@@ -153,19 +159,24 @@
       background-color: var(--dark-blue);
     }
 
+  /*  at 480px we're wide enough to display the inner bar */
   @media screen and (min-width: 30em) {
-
-    /* Inner funky bars */
-    .peer-review-process-page-process-inner-section {
-      padding-left: calc(var(--bar-size) * 2);
-      position: relative;
-      margin-top: var(--intra-section-vertical-separation);
-    }
 
     .peer-review-process-page-process-inner-section-part {
       margin-bottom: var(--intra-section-vertical-separation);
     }
 
+    /* Inner funky bars */
+
+    /* create space and a positioning context to place pseudo elements for the inner vertical bars & colours */
+    .peer-review-process-page-process-inner-section {
+      position: relative;
+      padding-left: calc(var(--bar-size) * 2);
+      /* top rather than bottom so as to provide separation above the first inner section of each outer section. (Breaks usual approach of always applying bottom margin to manage vertical whitespace.) */
+      margin-top: var(--intra-section-vertical-separation);
+    }
+
+    /* All inner bars */
     .peer-review-process-page-process-inner-section::before {
       content: '';
       display: block;
@@ -176,9 +187,9 @@
       height: 100%;
       width: var(--bar-size);
       border-radius: var(--bar-size);
-
     }
 
+    /*  Main colours of the inner bars vary depending on their order on the page */
     .peer-review-process-page-process-outer-section:nth-of-type(1) .peer-review-process-page-process-inner-section::before {
       background-color: var(--light-blue);
     }
@@ -195,11 +206,12 @@
       background-color: var(--dark-blue);
     }
 
-    /* Restricts the height of the inner bar lower colour (when > 1 part in an inner section) */
+    /* Prevent the height of the inner bar lower colour (when > 1 part in an inner section) from overflowing*/
     .peer-review-process-page-process-inner-section-part--final {
       position: relative;
     }
 
+    /* Second colour inner bar area. Applied by the final part within an inner section, it overlays the main color on the inner bar */
     .peer-review-process-page-process-inner-section-part--final::before {
       content: '';
       display: block;
@@ -214,10 +226,12 @@
       border-radius: var(--bar-size);
     }
 
+    /* If we only have one part to an inner section, the second colour of the inner bar is used to describe a circle at the top of the inner bar */
     .peer-review-process-page-process-inner-section-part--final:only-child::before {
       height: var(--bar-size);
     }
 
+    /*  Second colours of the inner bars vary depending on the order on their outer sections on the page */
     .peer-review-process-page-process-outer-section:nth-of-type(1) .peer-review-process-page-process-inner-section-part--final::before {
       background-color: var(--dark-blue);
     }
@@ -249,6 +263,17 @@
     {% embed 'grid/content.html.twig' %}
 
       {% block main %}
+        {#  To make the bars layout correctly with the correct styles:     #}
+        {#  Each main section is .peer-review-process-page-process-outer-section      #}
+        {#  Each main section contains one .peer-review-process-page-process-outer-section-heading and one or more paragraph cild elements      #}
+        {#  Each main section contains one inner section that contains all parts of that inner section  #}
+        {#  Each inner section is .peer-review-process-page-process-inner-section    #}
+        {#  Each inner section contains at least one inner section part   #}
+        {#  Each inner section part is .peer-review-process-page-process-inner-section-part   #}
+        {#  The final inner section part is additionally .peer-review-process-page-process-inner-section-part--final     #}
+
+        {# This page only caters for four outer sections, as that's all we have at the moment, and may never have more. If more are added it shouldn't be that tricky to extend the CSS to cater for them. #}
+
         <section class="peer-review-process-page-process-outer-section">
 
           <h2 class="peer-review-process-page-process-outer-section-heading">Submission</h2>
