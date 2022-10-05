@@ -18,6 +18,7 @@
       margin-top: 1rem;
     }
 
+    /* Expedient yet horrible way of overriding specificity introduced somewhere out of scope without using !important */
     .peer-review-process-content-header-link.peer-review-process-content-header-link.peer-review-process-content-header-link.peer-review-process-content-header-link.peer-review-process-content-header-link.peer-review-process-content-header-link.peer-review-process-content-header-link.peer-review-process-content-header-link.peer-review-process-content-header-link.peer-review-process-content-header-link {
       font-weight: bold;
       border-bottom-width: 0;
@@ -25,16 +26,20 @@
     }
 
     /* Funky bars */
+
+    /* We need the bars to stop at the top of the heading */
     .peer-review-process-page-process-section-heading {
       padding-top: 0;
       margin-top: calc((21 / 16) * 1rem);
     }
 
+    /* create space and a positioning context to place pseudo elements for the outer vertical bars & circles */
     .peer-review-process-page-process-section {
       padding-left: calc((48 / 16) * 1rem);
       position: relative;
     }
 
+    /* All outer vertical bars */
     .peer-review-process-page-process-section::before {
       content: '';
       display: block;
@@ -47,6 +52,7 @@
       border-radius: 20px;
     }
 
+    /* Outer bar colours vary depending on their order on the page */
     .peer-review-process-page-process-section:nth-of-type(1)::before {
       background-color: #173e83;
     }
@@ -63,6 +69,7 @@
       background-color: #2792d3;
     }
 
+    /* All outer section circles */
     .peer-review-process-page-process-section::after {
       content: '';
       position: absolute;
@@ -77,6 +84,7 @@
       background-color: transparent;
     }
 
+    /* Outer circle colours vary depending on their order on the page */
     .peer-review-process-page-process-section:nth-of-type(1)::after {
       background-color: #2792d3;
     }
