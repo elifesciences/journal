@@ -233,6 +233,7 @@ final class HomepageContext extends Context
                             'interview' => 0,
                             'labs-post' => 0,
                             'podcast-episode' => $this->numberOfMagazineArticles,
+                            'reviewed-preprint' => 0,
                         ],
                     ])
                 )
