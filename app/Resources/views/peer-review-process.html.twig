@@ -6,6 +6,8 @@
 
   <style>
 
+    /* Content header */
+
     .peer-review-process-page .content-header__impact-statement,
     .peer-review-process-page .content-header__impact-statement > p {
       font-family: "Noto Sans",Arial,Helvetica,sans-serif;
@@ -22,6 +24,46 @@
       color: #167bc9;
     }
 
+    /* Funky bars */
+    .peer-review-process-page-process-section-heading {
+      padding-top: 0;
+      margin-top: calc((21 / 16) * 1rem);
+    }
+
+    .peer-review-process-page-process-section {
+      padding-left: calc((48 / 16) * 1rem);
+      position: relative;
+    }
+
+    .peer-review-process-page-process-section::before {
+      content: '';
+      display: block;
+      position: absolute;
+      left: 0;
+      z-index: 1;
+
+      height: 100%;
+      width: 24px;
+      border-radius: 20px;
+    }
+
+    .peer-review-process-page-process-section:nth-of-type(1)::before {
+      background-color: #173e83;
+    }
+
+    .peer-review-process-page-process-section:nth-of-type(2)::before {
+      background-color: #71b819;
+    }
+
+    .peer-review-process-page-process-section:nth-of-type(3)::before {
+      background-color: #d61e64;
+    }
+
+    .peer-review-process-page-process-section:nth-of-type(4)::before {
+      background-color: #2792d3;
+    }
+
+
   </style>
 
 {% endblock %}
@@ -35,9 +77,9 @@
     {% embed 'grid/content.html.twig' %}
 
       {% block main %}
-        <section>
+        <section class="peer-review-process-page-process-section">
 
-          <h2>Submission</h2>
+          <h2 class="peer-review-process-page-process-section-heading">Submission</h2>
 
           <p>Submission to eLife is easy. We ask that you first post your research as a preprint, or we can post one on your behalf. We then ask a few details and take the rest of the data and content we need from your preprint. Preprinting first ensures your research is made public faster, and makes submission faster.</p>
             <p>Read more in our author guide.</p>
@@ -52,9 +94,9 @@
           <p>In some cases eLife’s Editors may decide not to send the research for peer review. This could be a result of a lack of evidence to support the claims made in the research, or if submissions do not fit within eLife’s aims and scope. </p>
         </section>
 
-        <section>
+        <section class="peer-review-process-page-process-section">
 
-          <h2>Peer Review</h2>
+          <h2 class="peer-review-process-page-process-section-heading">Peer Review</h2>
 
           <p>Preprints accepted at the triage stage are sent for peer review. Reviewers are invited to provide an assessment of the preprint without regard to suitability for publication or what might previously have been considered “an eLife paper”. Once reviews are submitted, a consultation session is opened, and Editors work to reach consensus with reviewers.</p>
 
@@ -65,9 +107,9 @@
           <p>After consultation with reviewers, eLife’s Editors produce an assessment that summarises the importance and rigor of the preprints, for the benefit of readers on eLife. The eLife assessment is published with the preprint, along with the full peer reviews as a “Reviewed Preprint”. More information on how we make the assessments fair and consistent can be found in the details for authors and reviewers.</p>
         </section>
 
-        <section>
+        <section class="peer-review-process-page-process-section">
 
-          <h2>Reviewed Preprints</h2>
+          <h2 class="peer-review-process-page-process-section-heading">Reviewed Preprints</h2>
 
           <p>After peer review, authors are given some time to comment or respond on the peer reviews and assessment. Soon afterwards, their preprint, the peer reviews and the assessment are published on eLife as a “Reviewed Preprint”. This is a new stage of the process that aims to share the research and results of peer review faster, for the benefit of the scientific community.</p>
 
@@ -77,9 +119,9 @@
           <p>Authors are free to update their preprint when they are ready, but it is not a requirement before publication. Our peer review process makes recommendations to authors if there is room for improvement, and eLife’s Editors commit to updating their assessment when a new version is posted, and will send for re-review if deemed necessary. Once authors have had the opportunity to comment or respond to the updated assessment and reviews, the Reviewed Preprint is updated.</p>
         </section>
 
-        <section>
+        <section class="peer-review-process-page-process-section">
 
-          <h2>Version of Record</h2>
+          <h2 class="peer-review-process-page-process-section-heading">Version of Record</h2>
 
           <p>When Authors are satisfied that the process is complete, they can request that the current reviewed preprint become the version of record. This involves submission of high resolution figure files and some additional data to prepare the full and final version for publication. Authors will also have the opportunity to proof their PDF version with the help of our Production team.</p>
 
