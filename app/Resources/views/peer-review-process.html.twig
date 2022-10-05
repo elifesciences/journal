@@ -12,6 +12,9 @@
     --bar-size-wide: 48px;
 
     --bar-size: var(--bar-size-narrow);
+
+    --inter-section-vertical-separation: calc(var(--bar-size) * 2);
+
   }
 
   @media screen and (min-width: 730px) {
@@ -57,6 +60,7 @@
     .peer-review-process-page-process-outer-section {
       padding-left: calc(var(--bar-size) * 2);
       position: relative;
+      margin-bottom: var(--inter-section-vertical-separation);
     }
 
     /* All outer vertical bars */
