@@ -135,7 +135,7 @@
       margin-top: var(--intra-section-vertical-separation);
     }
 
-    .peer-review-process-page-process-inner-section p {
+    .peer-review-process-page-process-inner-section-part {
       margin-bottom: var(--intra-section-vertical-separation);
     }
 
@@ -169,11 +169,11 @@
     }
 
     /* Restricts the height of the inner bar lower colour (when > 1 part in an inner section) */
-    .peer-review-process-page-process-inner-section-final-part {
+    .peer-review-process-page-process-inner-section-part--final {
       position: relative;
     }
 
-    .peer-review-process-page-process-inner-section-final-part::before {
+    .peer-review-process-page-process-inner-section-part--final::before {
       content: '';
       display: block;
       position: absolute;
@@ -187,11 +187,11 @@
       border-radius: var(--bar-size);
     }
 
-    .peer-review-process-page-process-outer-section:nth-of-type(1) .peer-review-process-page-process-inner-section-final-part::before {
+    .peer-review-process-page-process-outer-section:nth-of-type(1) .peer-review-process-page-process-inner-section-part--final::before {
       background-color: #173e83;
     }
 
-    .peer-review-process-page-process-outer-section:nth-of-type(2) .peer-review-process-page-process-inner-section-final-part::before {
+    .peer-review-process-page-process-outer-section:nth-of-type(2) .peer-review-process-page-process-inner-section-part--final::before {
       background-color: #71b819;
     }
 
@@ -218,13 +218,17 @@
             <p>Read more in our author guide.</p>
 
           <div class="peer-review-process-page-process-inner-section">
-            <h3>Posting a preprint</h3>
-            <p>At submission we’ll ask for the DOI (a link) to your preprint. If you haven’t yet posted your research as a preprint you will be required to before your research is sent for peer review. We can post a preprint on your behalf if you need help, but this can be done after Triage.</p>
+            <div class="peer-review-process-page-process-inner-section-part">
+              <h3>Posting a preprint</h3>
+              <p>At submission we’ll ask for the DOI (a link) to your preprint. If you haven’t yet posted your research as a preprint you will be required to before your research is sent for peer review. We can post a preprint on your behalf if you need help, but this can be done after Triage.</p>
+            </div>
 
-            <h3>Triage</h3>
-            <p>An initial decision on whether or not to send for peer review is made by eLife’s Editors. The decision is based only on relevance to eLife’s aims and scope. eLife does not make selective publication decisions based on perceived importance or impact. </p>
+            <div class="peer-review-process-page-process-inner-section-part">
+              <h3>Triage</h3>
+              <p>An initial decision on whether or not to send for peer review is made by eLife’s Editors. The decision is based only on relevance to eLife’s aims and scope. eLife does not make selective publication decisions based on perceived importance or impact. </p>
+            </div>
 
-            <div class="peer-review-process-page-process-inner-section-final-part">
+            <div class="peer-review-process-page-process-inner-section-part peer-review-process-page-process-inner-section-part--final">
             <h3>Sending for peer review</h3>
             <p>In some cases eLife’s Editors may decide not to send the research for peer review. This could be a result of a lack of evidence to support the claims made in the research, or if submissions do not fit within eLife’s aims and scope. </p>
             </div>
@@ -238,10 +242,12 @@
           <p>Preprints accepted at the triage stage are sent for peer review. Reviewers are invited to provide an assessment of the preprint without regard to suitability for publication or what might previously have been considered “an eLife paper”. Once reviews are submitted, a consultation session is opened, and Editors work to reach consensus with reviewers.</p>
 
           <div class="peer-review-process-page-process-inner-section">
-            <h3>Consultation</h3>
-            <p>Reviewers are invited to read each other’s reviews of the research and to comment during a consultation. Editors oversee the consultation to resolve any conflict or disagreement, or to decide when authors or the public should be made aware of differing but fair viewpoints.</p>
+            <div class="peer-review-process-page-process-inner-section-part">
+              <h3>Consultation</h3>
+              <p>Reviewers are invited to read each other’s reviews of the research and to comment during a consultation. Editors oversee the consultation to resolve any conflict or disagreement, or to decide when authors or the public should be made aware of differing but fair viewpoints.</p>
+            </div>
 
-            <div class="peer-review-process-page-process-inner-section-final-part">
+            <div class="peer-review-process-page-process-inner-section-part peer-review-process-page-process-inner-section-part--final">
               <h3>Assessment</h3>
               <p>After consultation with reviewers, eLife’s Editors produce an assessment that summarises the importance and rigor of the preprints, for the benefit of readers on eLife. The eLife assessment is published with the preprint, along with the full peer reviews as a “Reviewed Preprint”. More information on how we make the assessments fair and consistent can be found in the details for authors and reviewers.</p>
             </div>
@@ -257,8 +263,10 @@
           <p>Reviewed Preprints are listed on our homepage and major subject area pages, and can be found using our on-site search, Google Scholar, PubMed etc. much like full published papers.</p>
 
           <div class="peer-review-process-page-process-inner-section">
-            <h3>Updates after peer review</h3>
-            <p>Authors are free to update their preprint when they are ready, but it is not a requirement before publication. Our peer review process makes recommendations to authors if there is room for improvement, and eLife’s Editors commit to updating their assessment when a new version is posted, and will send for re-review if deemed necessary. Once authors have had the opportunity to comment or respond to the updated assessment and reviews, the Reviewed Preprint is updated.</p>
+            <div class="peer-review-process-page-process-inner-section-part peer-review-process-page-process-inner-section-part--final">
+              <h3>Updates after peer review</h3>
+              <p>Authors are free to update their preprint when they are ready, but it is not a requirement before publication. Our peer review process makes recommendations to authors if there is room for improvement, and eLife’s Editors commit to updating their assessment when a new version is posted, and will send for re-review if deemed necessary. Once authors have had the opportunity to comment or respond to the updated assessment and reviews, the Reviewed Preprint is updated.</p>
+            </div>
           </div>
         </section>
 
@@ -271,10 +279,12 @@
           <p>The version of record will replace the Reviewed Preprint as the latest version of the authors’ work on eLife, and will retain the same DOI and ID, which will direct anybody visiting previous versions to the new version of record. </p>
 
           <div class="peer-review-process-page-process-inner-section">
-            <h3>Publishing at another journal</h3>
-            <p>If authors do not choose to submit a version of record with eLife, they are free to submit their research for publication at other journals. If our systems recognise that a new version of the Reviewed Preprint is published elsewhere, the version hosted by eLife will remain, and clear links to the new version will be added to ensure readers are aware that the work has since been published at another journal.</p>
+            <div class="peer-review-process-page-process-inner-section-part peer-review-process-page-process-inner-section-part--final">
+              <h3>Publishing at another journal</h3>
+              <p>If authors do not choose to submit a version of record with eLife, they are free to submit their research for publication at other journals. If our systems recognise that a new version of the Reviewed Preprint is published elsewhere, the version hosted by eLife will remain, and clear links to the new version will be added to ensure readers are aware that the work has since been published at another journal.</p>
 
-            <p>To learn more about how the new process will work, and how it changes the role of authors and reviewers, read the Inside eLife post with details for authors and reviewers, or see our FAQ.</p>
+              <p>To learn more about how the new process will work, and how it changes the role of authors and reviewers, read the Inside eLife post with details for authors and reviewers, or see our FAQ.</p>
+            </div>
           </div>
         </section>
 
