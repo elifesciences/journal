@@ -7,6 +7,13 @@
   <style>
 
   :root {
+    --dark-blue: #173e83;
+    --light-blue: #2792d3;
+    --light-green: #71b819;
+    --light-pink: #d61e64;
+    --dark-green: #326b2b;
+    --dark-pink: #861352;
+
     --bar-size-narrow: 24px;
     --bar-size-medium: 36px;
     --bar-size-wide: 48px;
@@ -79,19 +86,19 @@
 
     /* Outer bar colours vary depending on their order on the page */
     .peer-review-process-page-process-outer-section:nth-of-type(1)::before {
-      background-color: #173e83;
+      background-color: var(--dark-blue);
     }
 
     .peer-review-process-page-process-outer-section:nth-of-type(2)::before {
-      background-color: #71b819;
+      background-color: var(--light-green);
     }
 
     .peer-review-process-page-process-outer-section:nth-of-type(3)::before {
-      background-color: #d61e64;
+      background-color: var(--light-pink);
     }
 
     .peer-review-process-page-process-outer-section:nth-of-type(4)::before {
-      background-color: #2792d3;
+      background-color: var(--light-blue);
     }
 
     /* All outer section circles */
@@ -111,19 +118,19 @@
 
     /* Outer circle colours vary depending on their order on the page */
     .peer-review-process-page-process-outer-section:nth-of-type(1)::after {
-      background-color: #2792d3;
+      background-color: var(--light-blue);
     }
 
     .peer-review-process-page-process-outer-section:nth-of-type(2)::after {
-      background-color: #326b2b;
+      background-color: var(--dark-green);
     }
 
     .peer-review-process-page-process-outer-section:nth-of-type(3)::after {
-      background-color: #861352;
+      background-color: var(--dark-pink);
     }
 
     .peer-review-process-page-process-outer-section:nth-of-type(4)::after {
-      background-color: #183d83;
+      background-color: var(--dark-blue);
     }
 
   @media screen and (min-width: 480px) {
@@ -153,19 +160,19 @@
     }
 
     .peer-review-process-page-process-outer-section:nth-of-type(1) .peer-review-process-page-process-inner-section::before {
-      background-color: #2792d3;
+      background-color: var(--light-blue);
     }
 
     .peer-review-process-page-process-outer-section:nth-of-type(2) .peer-review-process-page-process-inner-section::before {
-      background-color: #326b2b;
+      background-color: var(--dark-green);
     }
 
     .peer-review-process-page-process-outer-section:nth-of-type(3) .peer-review-process-page-process-inner-section::before {
-      background-color: #d61e64;
+      background-color: var(--light-pink);
     }
 
     .peer-review-process-page-process-outer-section:nth-of-type(4) .peer-review-process-page-process-inner-section::before {
-      background-color: #2792d3;
+      background-color: var(--light-blue);
     }
 
     /* Restricts the height of the inner bar lower colour (when > 1 part in an inner section) */
@@ -188,11 +195,11 @@
     }
 
     .peer-review-process-page-process-outer-section:nth-of-type(1) .peer-review-process-page-process-inner-section-part--final::before {
-      background-color: #173e83;
+      background-color: var(--dark-blue);
     }
 
     .peer-review-process-page-process-outer-section:nth-of-type(2) .peer-review-process-page-process-inner-section-part--final::before {
-      background-color: #71b819;
+      background-color: var(--light-green);
     }
 
   }
