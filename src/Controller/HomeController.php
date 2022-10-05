@@ -75,13 +75,12 @@ final class HomeController extends Controller
     private function createFirstPage(Request $request, array $arguments) : Response
     {
         if ($request->query->has('hero') && $this->isGranted('FEATURE_HERO')) {
-            $covers =  $this->get('elife.api_sdk.covers')->getCurrent();
-
-            $heroHighlights = $covers->then(function (Sequence $items) {
-                return $items->map(function(Cover $cover, int $i){
-                    return $this->convertTo($cover, 0 === $i ? HeroBanner::class : HighlightItem::class);
-                });
-            })->otherwise($this->softFailure('Failed to load hero and highlights'));
+            $heroHighlights = $this->get('elife.api_sdk.covers')
+                ->then(function (Sequence $items) {
+                    return $items->map(function(Cover $cover, int $i){
+                        return $this->convertTo($cover, 0 === $i ? HeroBanner::class : HighlightItem::class);
+                    });
+                })->otherwise($this->softFailure('Failed to load hero and highlights'));
 
             $arguments['heroBanner'] = $heroHighlights->then(Callback::emptyOr(function (Sequence $covers){
                 return $covers->filter(Callback::isInstanceOf(HeroBanner::class))->offsetGet(0);
