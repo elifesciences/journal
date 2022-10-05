@@ -7,22 +7,22 @@
   <style>
 
   :root {
-    --bar-width-narrow: 24px;
-    --bar-width-medium: 36px;
-    --bar-width-wide: 48px;
+    --bar-size-narrow: 24px;
+    --bar-size-medium: 36px;
+    --bar-size-wide: 48px;
 
-    --bar-width: var(--bar-width-narrow);
+    --bar-size: var(--bar-size-narrow);
   }
 
   @media screen and (min-width: 730px) {
     :root {
-      --bar-width: var(--bar-width-medium);
+      --bar-size: var(--bar-size-medium);
     }
   }
 
   @media screen and (min-width: 900px) {
     :root {
-      --bar-width: var(--bar-width-wide);
+      --bar-size: var(--bar-size-wide);
     }
   }
 
@@ -55,7 +55,7 @@
 
     /* create space and a positioning context to place pseudo elements for the outer vertical bars & circles */
     .peer-review-process-page-process-outer-section {
-      padding-left: calc(var(--bar-width) * 2);
+      padding-left: calc(var(--bar-size) * 2);
       position: relative;
     }
 
@@ -68,8 +68,8 @@
       z-index: 1;
 
       height: 100%;
-      width: var(--bar-width);
-      border-radius: var(--bar-width);
+      width: var(--bar-size);
+      border-radius: var(--bar-size);
     }
 
     /* Outer bar colours vary depending on their order on the page */
@@ -96,8 +96,8 @@
       top: 0;
       left: 0;
       z-index: 2;
-      width: var(--bar-width);
-      height: var(--bar-width);
+      width: var(--bar-size);
+      height: var(--bar-size);
 
       border-radius: 50%;
 
@@ -125,7 +125,7 @@
 
     /* Inner funky bars */
     .peer-review-process-page-process-inner-section {
-      padding-left: calc(var(--bar-width) * 2);
+      padding-left: calc(var(--bar-size) * 2);
       position: relative;
     }
 
@@ -137,8 +137,8 @@
       z-index: 1;
 
       height: 100%;
-      width: var(--bar-width);
-      border-radius: var(--bar-width);
+      width: var(--bar-size);
+      border-radius: var(--bar-size);
 
     }
 
@@ -169,12 +169,12 @@
       position: absolute;
 
       /* overlay the inner bar */
-      left: calc(var(--bar-width) * -2);
+      left: calc(var(--bar-size) * -2);
       z-index: 3;
 
       height: 100%;
-      width: var(--bar-width);
-      border-radius: var(--bar-width);
+      width: var(--bar-size);
+      border-radius: var(--bar-size);
     }
 
     .peer-review-process-page-process-outer-section:nth-of-type(1) .peer-review-process-page-process-inner-section-final-part::before {
