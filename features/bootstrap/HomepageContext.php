@@ -39,13 +39,13 @@ final class HomepageContext extends Context
                 'id' => "$i",
                 'version' => 1,
                 'type' => 'research-article',
-                'doi' => '10.7554/eLife.' . $i,
-                'title' => 'Article ' . $i . ' title',
+                'doi' => '10.7554/eLife.'.$i,
+                'title' => 'Article '.$i.' title',
                 'published' => $today->format(ApiSdk::DATE_FORMAT),
                 'versionDate' => $today->format(ApiSdk::DATE_FORMAT),
                 'statusDate' => $today->format(ApiSdk::DATE_FORMAT),
                 'volume' => 5,
-                'elocationId' => 'e' . $i,
+                'elocationId' => 'e'.$i,
                 'copyright' => [
                     'license' => 'CC-BY-4.0',
                     'holder' => 'Author et al.',
@@ -94,7 +94,6 @@ final class HomepageContext extends Context
                         'interview' => 0,
                         'labs-post' => 0,
                         'podcast-episode' => 0,
-                        'reviewed-preprint' => 0,
                     ],
                 ])
             )
@@ -142,7 +141,6 @@ final class HomepageContext extends Context
                             'interview' => 0,
                             'labs-post' => 0,
                             'podcast-episode' => 0,
-                            'reviewed-preprint' => 0,
                         ],
                     ])
                 )
@@ -165,7 +163,7 @@ final class HomepageContext extends Context
             $articles[] = [
                 'type' => 'podcast-episode',
                 'number' => $i,
-                'title' => 'Podcast episode ' . $i . ' title',
+                'title' => 'Podcast episode '.$i.' title',
                 'published' => $today->format(ApiSdk::DATE_FORMAT),
                 'image' => [
                     'thumbnail' => [
@@ -233,7 +231,6 @@ final class HomepageContext extends Context
                             'interview' => 0,
                             'labs-post' => 0,
                             'podcast-episode' => $this->numberOfMagazineArticles,
-                            'reviewed-preprint' => 0,
                         ],
                     ])
                 )
@@ -332,98 +329,6 @@ final class HomepageContext extends Context
                             ],
                         ],
                     ],
-                ])
-            )
-        );
-    }
-
-
-    /**
-     * @Given /^there are (\d+) covers$/
-     */
-    public function thereAreCovers($number)
-    {
-        $today = (new DateTimeImmutable())->setTime(0, 0, 0);
-        $items = [];
-        for ($i=0; $i<$number; $i++ ) {
-            $name = 'Cover'.$i;
-            $id = $this->createId($name);
-
-            $items[] = [
-                'title' => $name,
-                'image' => [
-                    'uri' => 'https://www.example.com/iiif/iden%2Ftifier',
-                    'alt' => '',
-                    'source' => [
-                        'mediaType' => 'image/png',
-                        'uri' => 'https://www.example.com/image.png',
-                        'filename' => 'image.png',
-                    ],
-                    'size' => [
-                        'width' => 1800,
-                        'height' => 1600,
-                    ],
-                ],
-                'item' => [
-                    'type' => 'collection',
-                    'id' => $id,
-                    'published' => $today->format(ApiSdk::DATE_FORMAT),
-                    'title' => $name,
-                    'selectedCurator' => [
-                        'id' => '1',
-                        'type' => [
-                            'id' => 'senior-editor',
-                            'label' => 'Senior editor',
-                        ],
-                        'name' => [
-                            'preferred' => 'Person 1',
-                            'index' => '1, Person',
-                        ],
-                    ],
-                    'image' => [
-                        'banner' => [
-                            'uri' => 'https://www.example.com/iiif/ban%2Fner',
-                            'alt' => '',
-                            'source' => [
-                                'mediaType' => 'image/jpeg',
-                                'uri' => 'https://www.example.com/banner.jpg',
-                                'filename' => 'banner.jpg',
-                            ],
-                            'size' => [
-                                'width' => 1800,
-                                'height' => 1600,
-                            ],
-                        ],
-                        'thumbnail' => [
-                            'uri' => 'https://www.example.com/iiif/thumb%2Fnail',
-                            'alt' => '',
-                            'source' => [
-                                'mediaType' => 'image/jpeg',
-                                'uri' => 'https://www.example.com/thumbnail.jpg',
-                                'filename' => 'thumbnail.jpg',
-                            ],
-                            'size' => [
-                                'width' => 800,
-                                'height' => 600,
-                            ],
-                        ],
-                    ],
-                ],
-            ];
-        }
-
-        $this->mockApiResponse(
-            new Request(
-                'GET',
-                'http://api.elifesciences.org/covers/current',
-                ['Accept' => 'application/vnd.elife.cover-list+json; version=1']
-            ),
-            new Response(
-                200,
-                ['Content-Type' => 'application/vnd.elife.cover-list+json; version=1'],
-                json_encode([
-                    'total' => 4,
-                    'items' => $items,
                 ])
             )
         );
@@ -565,7 +470,6 @@ final class HomepageContext extends Context
                             'interview' => 0,
                             'labs-post' => 0,
                             'podcast-episode' => 0,
-                            'reviewed-preprint' => 0,
                         ],
                     ])
                 )
@@ -681,7 +585,6 @@ final class HomepageContext extends Context
                         'interview' => 0,
                         'labs-post' => 0,
                         'podcast-episode' => 0,
-                        'reviewed-preprint' => 0,
                     ],
                 ])
             )
@@ -704,8 +607,8 @@ final class HomepageContext extends Context
 
                 $this->assertSession()->elementContains(
                     'css',
-                    '.list-heading:contains("Latest research") + .listing-list > .listing-list__item:nth-child(' . $nthChild . ')',
-                    'Article ' . str_pad($expectedNumber, 5, '0', STR_PAD_LEFT) . ' title'
+                    '.list-heading:contains("Latest research") + .listing-list > .listing-list__item:nth-child('.$nthChild.')',
+                    'Article '.str_pad($expectedNumber, 5, '0', STR_PAD_LEFT).' title'
                 );
             }
         });
@@ -724,16 +627,41 @@ final class HomepageContext extends Context
 
             $this->assertSession()->elementContains(
                 'css',
-                '.list-heading:contains("Magazine") + .listing-list > .listing-list__item:nth-child(' . $nthChild . ')',
-                'Podcast episode ' . $expectedNumber . ' title'
+                '.list-heading:contains("Magazine") + .listing-list > .listing-list__item:nth-child('.$nthChild.')',
+                'Podcast episode '.$expectedNumber.' title'
             );
         }
 
         $this->assertSession()->elementContains(
             'css',
-            '.list-heading:contains("Magazine") + .listing-list > .listing-list__item:nth-child(' . ($number + 1) . ')',
+            '.list-heading:contains("Magazine") + .listing-list > .listing-list__item:nth-child('.($number + 1).')',
             'See more Magazine articles'
         );
+    }
+
+    /**
+     * @Then /^I should see the \'([^\']*)\' cover in the carousel$/
+     */
+    public function iShouldSeeTheCoverInTheCarousel(string $name)
+    {
+        $this->spin(function () use ($name) {
+            $this->assertSession()->elementAttributeContains('css', '.carousel-item__title_link', 'href', $this->createId($name));
+        });
+    }
+
+    /**
+     * @Then /^I should see the title and image from the \'([^\']*)\' collection used in the \'([^\']*)\' cover$/
+     */
+    public function iShouldSeeTheTitleAndImageFromTheCollectionUsedInTheCover(string $collectionName, string $coverName)
+    {
+        $this->spin(function () {
+            $this->assertSession()->elementAttributeContains(
+                'css',
+                '.carousel-item__image',
+                'src',
+                'https://www.example.com/iiif/iden%2Ftifier/0,529,1800,543/1114,336/0/default.jpg'
+            );
+        });
     }
 
     /**
@@ -769,53 +697,8 @@ final class HomepageContext extends Context
             ->elementContains('css', '.info-bar--success', 'You are already subscribed!');
     }
 
-
-    /**
-     * @Then /^I should see the \'([^\']*)\' cover in the carousel$/
-     */
-    public function iShouldSeeTheCoverInTheCarousel(string $name)
-    {
-        $this->spin(function () use ($name) {
-            $this->assertSession()->elementAttributeContains('css', '.carousel-item__title_link', 'href', $this->createId($name));
-        });
-    }
-
-    /**
-     * @Then /^I should see the title and image from the \'([^\']*)\' collection used in the \'([^\']*)\' cover$/
-     */
-    public function iShouldSeeTheTitleAndImageFromTheCollectionUsedInTheCover(string $collectionName, string $coverName)
-    {
-        $this->spin(function () {
-            $this->assertSession()->elementAttributeContains(
-                'css',
-                '.carousel-item__image',
-                'src',
-                'https://www.example.com/iiif/iden%2Ftifier/0,529,1800,543/1114,336/0/default.jpg'
-            );
-        });
-    }
-
-    private function createId(string $name): string
+    private function createId(string $name) : string
     {
         return md5($name);
-    }
-
-    /**
-     * @Then I should see the :title cover in the hero banner
-     */
-    public function iShouldSeeTheCoverInTheHeroBanner($title)
-    {
-        $this->assertSession()->elementExists(
-            'css',
-            '.hero-banner__title_link'
-        );
-    }
-
-    /**
-     * @Then /^I should see (\d+) highlights$/
-     */
-    public function iShouldSeeHighlights($number)
-    {
-        $this->assertSession()->elementsCount('css', '.highlight-item', 3);
     }
 }
