@@ -5,13 +5,8 @@ namespace test\eLife\Journal\ViewModel\Converter;
 use eLife\ApiSdk\Model\Collection;
 use eLife\ApiSdk\Model\Cover;
 use eLife\ApiSdk\Model\Model;
-use eLife\Journal\ViewModel\Converter\CoverCollectionCarouselItemConverter;
 use eLife\Journal\ViewModel\Converter\CoverCollectionHighlightItemConverter;
-use eLife\Journal\ViewModel\Factory\CarouselItemImageFactory;
-use eLife\Journal\ViewModel\Factory\PictureBuilderFactory;
-use eLife\Patterns\ViewModel\CarouselItem;
 use eLife\Patterns\ViewModel\HighlightItem;
-use Symfony\Component\Asset\Packages;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Traversable;
 

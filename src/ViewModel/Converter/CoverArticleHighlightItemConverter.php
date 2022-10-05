@@ -3,10 +3,10 @@
 namespace eLife\Journal\ViewModel\Converter;
 
 use eLife\ApiSdk\Model\ArticleVersion;
+use eLife\ApiSdk\Model\ArticleVoR;
 use eLife\ApiSdk\Model\Cover;
 use eLife\ApiSdk\Model\Subject;
 use eLife\Journal\Helper\ModelName;
-use eLife\Journal\ViewModel\Factory\CarouselItemImageFactory;
 use eLife\Journal\ViewModel\Factory\PictureBuilderFactory;
 use eLife\Patterns\ViewModel;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -16,7 +16,6 @@ final class CoverArticleHighlightItemConverter implements ViewModelConverter
     use CreatesDate;
 
     private $urlGenerator;
-    private $carouselItemImageFactory;
 
     public function __construct(UrlGeneratorInterface $urlGenerator)
     {
@@ -49,7 +48,7 @@ final class CoverArticleHighlightItemConverter implements ViewModelConverter
             (new PictureBuilderFactory())->forImage(
                 $object->getBanner(), $object->getBanner()->getWidth()
             )->build(),
-            $article->getImpactStatement(),
+            $article instanceof ArticleVoR ? $article->getImpactStatement() : null,
             $article->getAuthorLine()
         );
     }
