@@ -76,6 +76,7 @@ final class HomeController extends Controller
     {
         if ($request->query->has('hero') && $this->isGranted('FEATURE_HERO')) {
             $heroHighlights = $this->get('elife.api_sdk.covers')
+                ->getCurrent()
                 ->then(function (Sequence $items) {
                     return $items->map(function(Cover $cover, int $i){
                         return $this->convertTo($cover, 0 === $i ? HeroBanner::class : HighlightItem::class);
