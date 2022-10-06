@@ -233,7 +233,7 @@ final class StatusDateOverrideMiddlewareTest extends KernelTestCase
                     ],
                 ],
             ],
-            'application/vnd.elife.search+json; version=1;' => [
+            'application/vnd.elife.search+json; version=2;' => [
                 [
                     'total' => 2,
                     'items' => [
@@ -261,6 +261,7 @@ final class StatusDateOverrideMiddlewareTest extends KernelTestCase
                         'interview' => 0,
                         'labs-post' => 0,
                         'podcast-episode' => 0,
+                        'reviewed-preprint' => 0,
                     ],
                 ],
                 [
@@ -290,6 +291,7 @@ final class StatusDateOverrideMiddlewareTest extends KernelTestCase
                         'interview' => 0,
                         'labs-post' => 0,
                         'podcast-episode' => 0,
+                        'reviewed-preprint' => 0,
                     ],
                 ],
             ],
@@ -309,6 +311,7 @@ final class StatusDateOverrideMiddlewareTest extends KernelTestCase
             'published' => '2010-01-01T00:00:00Z',
             'versionDate' => '2010-01-01T00:00:00Z',
             'statusDate' => $newStatusDate ?? '2010-01-01T00:00:00Z',
+            'reviewedDate' => '2010-01-01T00:00:00Z',
             'volume' => 1,
             'elocationId' => 'e00001',
             'copyright' => [
