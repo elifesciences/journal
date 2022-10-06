@@ -184,7 +184,7 @@ final class AuthenticationTest extends WebTestCase
 
         $this->assertTrue($client->getResponse()->isRedirect('http://localhost/'));
 
-        $crawler = $client->followRedirect();
+        $client->followRedirect();
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertEmpty($client->getCookieJar()->all());
@@ -204,7 +204,7 @@ final class AuthenticationTest extends WebTestCase
 
         $this->readyHomePage();
 
-        $crawler = $client->request('GET', '/');
+        $client->request('GET', '/');
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertEmpty($client->getCookieJar()->all());
@@ -239,9 +239,6 @@ final class AuthenticationTest extends WebTestCase
         );
 
         $crawler = $client->request('GET', '/about');
-
-        $crawler = $client->click($crawler->filter('a:contains("Josiah Carberry")')->link());
-        $crawler = $client->click($crawler->filter('a:contains("Log out")')->link());
 
         $this->assertEquals('http://localhost/', $crawler->getUri());
         $this->assertEmpty($client->getCookieJar()->all());
