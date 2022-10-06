@@ -15,15 +15,9 @@
     {% if heroBanner is defined and heroBanner %}
 
         <div class="wrapper">
+
             {{ render_pattern(heroBanner) }}
-        </div>
 
-    {% endif %}
-
-    {% if highlights is defined and highlights %}
-
-        <div class="wrapper">
-            {{ render_pattern(highlights) }}
         </div>
 
     {% endif %}
@@ -34,11 +28,15 @@
 
     {% endif %}
 
-    <div class="wrapper">
+    {% if leadParas is defined and leadParas %}
 
-        {{ render_pattern(leadParas) }}
+        <div class="wrapper">
 
-    </div>
+            {{ render_pattern(leadParas) }}
+
+        </div>
+
+    {% endif %}
 
     {% include 'calls-to-action.html.twig' %}
 
@@ -47,6 +45,16 @@
         <div class="wrapper">
 
             {{ render_pattern(subjectsLink) }}
+
+        </div>
+
+    {% endif %}
+
+    {% if highlights is defined and highlights %}
+
+        <div class="wrapper">
+
+            {{ render_pattern(highlights) }}
 
         </div>
 
