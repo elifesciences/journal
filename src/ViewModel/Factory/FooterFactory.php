@@ -61,7 +61,7 @@ final class FooterFactory
 
         return new Footer(
             new MainMenu(
-                new SiteHeaderTitle('/home/page/path'),
+                new SiteHeaderTitle($this->urlGenerator->generate('home')),
                 [
                     (new Link('Home', $this->urlGenerator->generate('home')))->hiddenWide(),
                     (new Link('Magazine', $this->urlGenerator->generate('magazine')))->hiddenWide(),
