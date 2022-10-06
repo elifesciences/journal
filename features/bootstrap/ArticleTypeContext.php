@@ -47,11 +47,11 @@ final class ArticleTypeContext extends Context
             new Request(
                 'GET',
                 'http://api.elifesciences.org/search?for=&page=1&per-page=1&sort=date&order=desc&type[]=research-article&use-date=default',
-                ['Accept' => 'application/vnd.elife.search+json; version=1']
+                ['Accept' => 'application/vnd.elife.search+json; version=2']
             ),
             new Response(
                 200,
-                ['Content-Type' => 'application/vnd.elife.search+json; version=1'],
+                ['Content-Type' => 'application/vnd.elife.search+json; version=2'],
                 json_encode([
                     'total' => $number,
                     'items' => [$articles[0]],
@@ -82,6 +82,7 @@ final class ArticleTypeContext extends Context
                         'interview' => 0,
                         'labs-post' => 0,
                         'podcast-episode' => 0,
+                        'reviewed-preprint' => 0,
                     ],
                 ])
             )
@@ -94,11 +95,11 @@ final class ArticleTypeContext extends Context
                 new Request(
                     'GET',
                     "http://api.elifesciences.org/search?for=&page=$page&per-page=$chunk&sort=date&order=desc&type[]=research-article&use-date=default",
-                    ['Accept' => 'application/vnd.elife.search+json; version=1']
+                    ['Accept' => 'application/vnd.elife.search+json; version=2']
                 ),
                 new Response(
                     200,
-                    ['Content-Type' => 'application/vnd.elife.search+json; version=1'],
+                    ['Content-Type' => 'application/vnd.elife.search+json; version=2'],
                     json_encode([
                         'total' => $number,
                         'items' => $articleChunk,
@@ -129,6 +130,7 @@ final class ArticleTypeContext extends Context
                             'interview' => 0,
                             'labs-post' => 0,
                             'podcast-episode' => 0,
+                            'reviewed-preprint' => 0,
                         ],
                     ])
                 )

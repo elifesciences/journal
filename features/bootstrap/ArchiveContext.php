@@ -154,11 +154,11 @@ final class ArchiveContext extends Context
             new Request(
                 'GET',
                 "http://api.elifesciences.org/search?for=&page=1&per-page=1&sort=date&order=desc&type[]=research-advance&type[]=research-article&type[]=research-communication&type[]=review-article&type[]=scientific-correspondence&type[]=short-report&type[]=tools-resources&type[]=replication-study&use-date=published&start-date=$startDate&end-date=$endDate",
-                ['Accept' => 'application/vnd.elife.search+json; version=1']
+                ['Accept' => 'application/vnd.elife.search+json; version=2']
             ),
             new Response(
                 200,
-                ['Content-Type' => 'application/vnd.elife.search+json; version=1'],
+                ['Content-Type' => 'application/vnd.elife.search+json; version=2'],
                 json_encode([
                     'total' => $number,
                     'items' => [$articles[0]],
@@ -189,6 +189,7 @@ final class ArchiveContext extends Context
                         'interview' => 0,
                         'labs-post' => 0,
                         'podcast-episode' => 0,
+                        'reviewed-preprint' => 0,
                     ],
                 ])
             )
@@ -201,11 +202,11 @@ final class ArchiveContext extends Context
                 new Request(
                     'GET',
                     "http://api.elifesciences.org/search?for=&page=$page&per-page=100&sort=date&order=desc&type[]=research-advance&type[]=research-article&type[]=research-communication&type[]=review-article&type[]=scientific-correspondence&type[]=short-report&type[]=tools-resources&type[]=replication-study&use-date=published&start-date=$startDate&end-date=$endDate",
-                    ['Accept' => 'application/vnd.elife.search+json; version=1']
+                    ['Accept' => 'application/vnd.elife.search+json; version=2']
                 ),
                 new Response(
                     200,
-                    ['Content-Type' => 'application/vnd.elife.search+json; version=1'],
+                    ['Content-Type' => 'application/vnd.elife.search+json; version=2'],
                     json_encode([
                         'total' => $number,
                         'items' => $articleChunk,
@@ -236,6 +237,7 @@ final class ArchiveContext extends Context
                             'interview' => 0,
                             'labs-post' => 0,
                             'podcast-episode' => 0,
+                            'reviewed-preprint' => 0,
                         ],
                     ])
                 )
@@ -274,11 +276,11 @@ final class ArchiveContext extends Context
             new Request(
                 'GET',
                 "http://api.elifesciences.org/search?for=&page=1&per-page=1&sort=date&order=desc&type[]=editorial&type[]=insight&type[]=feature&type[]=collection&type[]=interview&type[]=podcast-episode&use-date=published&start-date=$startDate&end-date=$endDate",
-                ['Accept' => 'application/vnd.elife.search+json; version=1']
+                ['Accept' => 'application/vnd.elife.search+json; version=2']
             ),
             new Response(
                 200,
-                ['Content-Type' => 'application/vnd.elife.search+json; version=1'],
+                ['Content-Type' => 'application/vnd.elife.search+json; version=2'],
                 json_encode([
                     'total' => $number,
                     'items' => [$articles[0]],
@@ -303,6 +305,7 @@ final class ArchiveContext extends Context
                         'interview' => $number,
                         'labs-post' => 0,
                         'podcast-episode' => 0,
+                        'reviewed-preprint' => 0,
                     ],
                 ])
             )
@@ -315,11 +318,11 @@ final class ArchiveContext extends Context
                 new Request(
                     'GET',
                     "http://api.elifesciences.org/search?for=&page=$page&per-page=100&sort=date&order=desc&type[]=editorial&type[]=insight&type[]=feature&type[]=collection&type[]=interview&type[]=podcast-episode&use-date=published&start-date=$startDate&end-date=$endDate",
-                    ['Accept' => 'application/vnd.elife.search+json; version=1']
+                    ['Accept' => 'application/vnd.elife.search+json; version=2']
                 ),
                 new Response(
                     200,
-                    ['Content-Type' => 'application/vnd.elife.search+json; version=1'],
+                    ['Content-Type' => 'application/vnd.elife.search+json; version=2'],
                     json_encode([
                         'total' => $number,
                         'items' => $articleChunk,
@@ -344,6 +347,7 @@ final class ArchiveContext extends Context
                             'interview' => $number,
                             'labs-post' => 0,
                             'podcast-episode' => 0,
+                            'reviewed-preprint' => 0,
                         ],
                     ])
                 )
@@ -429,11 +433,11 @@ final class ArchiveContext extends Context
             new Request(
                 'GET',
                 'http://api.elifesciences.org/search?for=&page=1&per-page=1&sort=date&order=desc&type[]=editorial&type[]=insight&type[]=feature&type[]=collection&type[]=interview&type[]=podcast-episode&use-date=published&start-date=2016-03-01&end-date=2016-03-31',
-                ['Accept' => 'application/vnd.elife.search+json; version=1']
+                ['Accept' => 'application/vnd.elife.search+json; version=2']
             ),
             new Response(
                 200,
-                ['Content-Type' => 'application/vnd.elife.search+json; version=1'],
+                ['Content-Type' => 'application/vnd.elife.search+json; version=2'],
                 json_encode([
                     'total' => count($articles),
                     'items' => [$articles[0]],
@@ -470,6 +474,7 @@ final class ArchiveContext extends Context
 
                             return $carry;
                         }, 0),
+                        'reviewed-preprint' => 0,
                     ],
                 ])
             )
@@ -482,11 +487,11 @@ final class ArchiveContext extends Context
                 new Request(
                     'GET',
                     "http://api.elifesciences.org/search?for=&page=$page&per-page=100&sort=date&order=desc&type[]=editorial&type[]=insight&type[]=feature&type[]=collection&type[]=interview&type[]=podcast-episode&use-date=published&start-date=2016-03-01&end-date=2016-03-31",
-                    ['Accept' => 'application/vnd.elife.search+json; version=1']
+                    ['Accept' => 'application/vnd.elife.search+json; version=2']
                 ),
                 new Response(
                     200,
-                    ['Content-Type' => 'application/vnd.elife.search+json; version=1'],
+                    ['Content-Type' => 'application/vnd.elife.search+json; version=2'],
                     json_encode([
                         'total' => count($articles),
                         'items' => $articleChunk,
@@ -523,6 +528,7 @@ final class ArchiveContext extends Context
 
                                 return $carry;
                             }, 0),
+                            'reviewed-preprint' => 0,
                         ],
                     ])
                 )
@@ -552,11 +558,11 @@ final class ArchiveContext extends Context
                 new Request(
                     'GET',
                     "http://api.elifesciences.org/search?for=&page=1&per-page=1&sort=date&order=desc&type[]=research-advance&type[]=research-article&type[]=research-communication&type[]=review-article&type[]=scientific-correspondence&type[]=short-report&type[]=tools-resources&type[]=replication-study&use-date=published&start-date=$startDate&end-date=$endDate",
-                    ['Accept' => 'application/vnd.elife.search+json; version=1']
+                    ['Accept' => 'application/vnd.elife.search+json; version=2']
                 ),
                 new Response(
                     200,
-                    ['Content-Type' => 'application/vnd.elife.search+json; version=1'],
+                    ['Content-Type' => 'application/vnd.elife.search+json; version=2'],
                     json_encode([
                         'total' => 0,
                         'items' => [],
@@ -581,6 +587,7 @@ final class ArchiveContext extends Context
                             'interview' => 0,
                             'labs-post' => 0,
                             'podcast-episode' => 0,
+                            'reviewed-preprint' => 0,
                         ],
                     ])
                 )

@@ -312,11 +312,11 @@ final class AuthenticationTest extends WebTestCase
             new Request(
                 'GET',
                 'http://api.elifesciences.org/search?for=&page=1&per-page=10&sort=date&order=desc&type[]=research-advance&type[]=research-article&type[]=research-communication&type[]=review-article&type[]=scientific-correspondence&type[]=short-report&type[]=tools-resources&type[]=replication-study&use-date=default',
-                ['Accept' => 'application/vnd.elife.search+json; version=1']
+                ['Accept' => 'application/vnd.elife.search+json; version=2']
             ),
             new Response(
                 200,
-                ['Content-Type' => 'application/vnd.elife.search+json; version=1'],
+                ['Content-Type' => 'application/vnd.elife.search+json; version=2'],
                 json_encode([
                     'total' => 0,
                     'items' => [],
@@ -347,6 +347,7 @@ final class AuthenticationTest extends WebTestCase
                         'interview' => 0,
                         'labs-post' => 0,
                         'podcast-episode' => 0,
+                        'reviewed-preprint' => 0,
                     ],
                 ])
             )
