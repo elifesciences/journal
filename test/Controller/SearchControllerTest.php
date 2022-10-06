@@ -74,7 +74,7 @@ final class SearchControllerTest extends PageTestCase
                         'interview' => 0,
                         'labs-post' => 0,
                         'podcast-episode' => 0,
-                             'reviewed-preprint' => 0,
+                        'reviewed-preprint' => 0,
                     ],
                 ])
             )
@@ -179,7 +179,7 @@ final class SearchControllerTest extends PageTestCase
                         'interview' => 0,
                         'labs-post' => 0,
                         'podcast-episode' => 0,
-                             'reviewed-preprint' => 0,
+                        'reviewed-preprint' => 0,
                     ],
                 ])
             )
@@ -224,7 +224,7 @@ final class SearchControllerTest extends PageTestCase
                         'interview' => 0,
                         'labs-post' => 0,
                         'podcast-episode' => 0,
-                             'reviewed-preprint' => 0,
+                        'reviewed-preprint' => 0,
                     ],
                 ])
             )
@@ -274,7 +274,7 @@ final class SearchControllerTest extends PageTestCase
                         'interview' => 0,
                         'labs-post' => 0,
                         'podcast-episode' => 0,
-                             'reviewed-preprint' => 0,
+                        'reviewed-preprint' => 0,
                     ],
                 ])
             )
@@ -319,7 +319,7 @@ final class SearchControllerTest extends PageTestCase
                         'interview' => 0,
                         'labs-post' => 0,
                         'podcast-episode' => 0,
-                             'reviewed-preprint' => 0,
+                        'reviewed-preprint' => 0,
                     ],
                 ])
             )
@@ -402,7 +402,7 @@ final class SearchControllerTest extends PageTestCase
                         'interview' => 0,
                         'labs-post' => 0,
                         'podcast-episode' => 0,
-                             'reviewed-preprint' => 0,
+                        'reviewed-preprint' => 0,
                     ],
                 ])
             )
@@ -447,7 +447,7 @@ final class SearchControllerTest extends PageTestCase
                         'interview' => 0,
                         'labs-post' => 0,
                         'podcast-episode' => 0,
-                             'reviewed-preprint' => 0,
+                        'reviewed-preprint' => 0,
                     ],
                 ])
             )

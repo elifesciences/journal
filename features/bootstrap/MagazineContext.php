@@ -70,7 +70,7 @@ final class MagazineContext extends Context
                         'interview' => $this->numberOfArticles,
                         'labs-post' => 0,
                         'podcast-episode' => 0,
-                             'reviewed-preprint' => 0,
+                        'reviewed-preprint' => 0,
                     ],
                 ])
             )
@@ -112,7 +112,7 @@ final class MagazineContext extends Context
                             'interview' => $this->numberOfArticles,
                             'labs-post' => 0,
                             'podcast-episode' => 0,
-                             'reviewed-preprint' => 0,
+                            'reviewed-preprint' => 0,
                         ],
                     ])
                 )
@@ -689,7 +689,7 @@ final class MagazineContext extends Context
                             'interview' => 0,
                             'labs-post' => 0,
                             'podcast-episode' => 0,
-                             'reviewed-preprint' => 0,
+                            'reviewed-preprint' => 0,
                         ],
                     ])
                 )

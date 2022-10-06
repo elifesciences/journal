@@ -1,5 +1,8 @@
 imports:
   - resource: config_prod.yml
 
+parameters:
+    feature_hero: true
+
 swiftmailer:
     disable_delivery: true
