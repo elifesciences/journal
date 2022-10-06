@@ -65,8 +65,8 @@ final class FooterFactory
                 [
                     (new Link('Home', $this->urlGenerator->generate('home')))->hiddenWide(),
                     (new Link('Magazine', $this->urlGenerator->generate('magazine')))->hiddenWide(),
-                    new Link('Community', $this->urlGenerator->generate('community')),
-                    new Link('About', $this->urlGenerator->generate('about')),
+                    (new Link('Community', $this->urlGenerator->generate('community')))->hiddenWide(),
+                    (new Link('About', $this->urlGenerator->generate('about')))->hiddenWide(),
                     new Link('Research categories', $this->urlGenerator->generate('subjects')),
                     (new Link('Inside eLife', $this->urlGenerator->generate('inside-elife')))->endOfGroup(),
                     (new Link('Search', $this->urlGenerator->generate('search')))->hiddenWide(),
