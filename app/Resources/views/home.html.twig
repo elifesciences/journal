@@ -12,7 +12,23 @@
 
 {% block body %}
 
-    {% if carousel %}
+    {% if heroBanner is defined and heroBanner %}
+
+        <div class="wrapper">
+            {{ render_pattern(heroBanner) }}
+        </div>
+
+    {% endif %}
+
+    {% if highlights is defined and highlights %}
+
+        <div class="wrapper">
+            {{ render_pattern(highlights) }}
+        </div>
+
+    {% endif %}
+
+    {% if carousel is defined and carousel %}
 
         {{ render_pattern(carousel) }}
 

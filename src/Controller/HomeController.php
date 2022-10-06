@@ -3,12 +3,16 @@
 namespace eLife\Journal\Controller;
 
 use eLife\ApiSdk\Collection\Sequence;
+use eLife\ApiSdk\Model\Cover;
 use eLife\ApiSdk\Model\Subject;
 use eLife\Journal\Helper\Callback;
 use eLife\Journal\Helper\Paginator;
 use eLife\Journal\Pagerfanta\SequenceAdapter;
 use eLife\Patterns\ViewModel\Carousel;
 use eLife\Patterns\ViewModel\CarouselItem;
+use eLife\Patterns\ViewModel\HeroBanner;
+use eLife\Patterns\ViewModel\Highlight;
+use eLife\Patterns\ViewModel\HighlightItem;
 use eLife\Patterns\ViewModel\LeadPara;
 use eLife\Patterns\ViewModel\LeadParas;
 use eLife\Patterns\ViewModel\Link;
@@ -62,21 +66,41 @@ final class HomeController extends Controller
             ->then($this->willConvertTo(ListingTeasers::class, ['heading' => 'Latest research', 'type' => 'articles']));
 
         if (1 === $page) {
-            return $this->createFirstPage($arguments);
+            return $this->createFirstPage($request, $arguments);
         }
 
         return $this->createSubsequentPage($request, $arguments);
     }
 
-    private function createFirstPage(array $arguments) : Response
+    private function createFirstPage(Request $request, array $arguments) : Response
     {
-        $arguments['carousel'] = $this->get('elife.api_sdk.covers')
-            ->getCurrent()
-            ->map($this->willConvertTo(CarouselItem::class))
-            ->then(Callback::emptyOr(function (Sequence $covers) {
-                return new Carousel($covers->slice(0, 3)->toArray(), new ListHeading('Highlights', 'highlights'));
-            }))
-            ->otherwise($this->softFailure('Failed to load covers'));
+        if ($request->query->has('hero') && $this->isGranted('FEATURE_HERO')) {
+            $heroHighlights = $this->get('elife.api_sdk.covers')
+                ->getCurrent()
+                ->then(function (Sequence $items) {
+                    return $items->map(function(Cover $cover, int $i){
+                        return $this->convertTo($cover, 0 === $i ? HeroBanner::class : HighlightItem::class);
+                    });
+                })->otherwise($this->softFailure('Failed to load hero and highlights'));
+
+            $arguments['heroBanner'] = $heroHighlights->then(Callback::emptyOr(function (Sequence $covers){
+                return $covers->filter(Callback::isInstanceOf(HeroBanner::class))->offsetGet(0);
+            }));
+
+            $arguments['highlights'] = $heroHighlights->then(function (Sequence $covers) {
+                return $covers->filter(Callback::isInstanceOf(HighlightItem::class));
+            })->then(Callback::emptyOr(function (Sequence $highlights){
+                return new Highlight($highlights->toArray(), new ListHeading('Highlights', 'highlights'));
+            }));
+        } else {
+            $arguments['carousel'] = $this->get('elife.api_sdk.covers')
+                ->getCurrent()
+                ->map($this->willConvertTo(CarouselItem::class))
+                ->then(Callback::emptyOr(function (Sequence $covers) {
+                    return new Carousel($covers->slice(0, 3)->toArray(), new ListHeading('Highlights', 'highlights'));
+                }))
+                ->otherwise($this->softFailure('Failed to load covers'));
+        }
 
         $arguments['leadParas'] = new LeadParas([new LeadPara('eLife works to improve research communication through open science and open technology innovation', 'strapline')]);
 
