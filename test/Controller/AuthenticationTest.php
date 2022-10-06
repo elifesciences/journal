@@ -210,40 +210,6 @@ final class AuthenticationTest extends WebTestCase
         $this->assertEmpty($client->getCookieJar()->all());
     }
 
-    /**
-     * @test
-     */
-    public function it_lets_you_log_out_and_redirects_you_to_the_homepage()
-    {
-        $client = static::createClient();
-
-        $client->followRedirects();
-
-        $this->logIn($client);
-
-        $this->readyHomePage();
-        $this->mockApiResponse(
-            new Request(
-                'GET',
-                'http://api.elifesciences.org/annotations?by=jcarberry&page=1&per-page=10&order=desc&use-date=updated&access=restricted',
-                ['Accept' => 'application/vnd.elife.annotation-list+json; version=1']
-            ),
-            new Response(
-                200,
-                ['Content-Type' => 'application/vnd.elife.annotation-list+json; version=1'],
-                json_encode([
-                    'total' => 0,
-                    'items' => [],
-                ])
-            )
-        );
-
-        $crawler = $client->request('GET', '/about');
-
-        $this->assertEquals('http://localhost/', $crawler->getUri());
-        $this->assertEmpty($client->getCookieJar()->all());
-    }
-
     private function readyHomePage()
     {
         $this->mockApiResponse(
