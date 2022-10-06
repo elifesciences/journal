@@ -100,9 +100,9 @@ final class HomeController extends Controller
                     return new Carousel($covers->slice(0, 3)->toArray(), new ListHeading('Highlights', 'highlights'));
                 }))
                 ->otherwise($this->softFailure('Failed to load covers'));
-        }
 
-        $arguments['leadParas'] = new LeadParas([new LeadPara('eLife works to improve research communication through open science and open technology innovation', 'strapline')]);
+            $arguments['leadParas'] = new LeadParas([new LeadPara('eLife works to improve research communication through open science and open technology innovation', 'strapline')]);
+        }
 
         $arguments['subjectsLink'] = new SectionListingLink('All research categories', 'subjects');
 
