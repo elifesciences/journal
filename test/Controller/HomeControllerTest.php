@@ -240,7 +240,7 @@ final class HomeControllerTest extends PageTestCase
                 200,
                 ['Content-Type' => 'application/vnd.elife.search+json; version=2'],
                 json_encode([
-                    'total' => 2,
+                    'total' => 1,
                     'items' => [
                         [
                             "id" => "19560",

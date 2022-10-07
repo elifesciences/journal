@@ -48,7 +48,7 @@ final class ReviewedPreprintSecondaryTeaserConverter implements ViewModelConvert
 
     public function supports($object, string $viewModel = null, array $context = []) : bool
     {
-        return $object instanceof ReviewedPreprint;
+        return $object instanceof ReviewedPreprint && 'secondary' === ($context['variant'] ?? null);
     }
 
     protected function getViewModelConverter() : ViewModelConverter
