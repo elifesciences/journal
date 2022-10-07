@@ -147,13 +147,13 @@ services:
         class: eLife\ApiSdk\Client\PromotionalCollections
         factory: ['@elife.api_sdk', promotionalCollections]
 
+    elife.api_sdk.reviewed-preprints:
+        class: eLife\ApiSdk\Client\ReviewedPreprints
+        factory: ['@elife.api_sdk', reviewedPreprints]
+
     elife.api_sdk.search:
         class: eLife\ApiSdk\Client\Search
         factory: ['@elife.api_sdk', search]
-
-    elife.api_sdk.reviewed.preprint:
-        class: eLife\ApiSdk\Client\ReviewedPreprints
-        factory: ['@elife.api_sdk', reviewedPreprint]
 
     elife.api_sdk.search.slow:
         class: eLife\ApiSdk\Client\Search

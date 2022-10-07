@@ -44,7 +44,7 @@ final class ReviewedPreprintTeaserConverter implements ViewModelConverter
                 ViewModel\Meta::withLink(
                     new ViewModel\Link(
                         ModelName::singular('reviewed-preprint'),
-                        $this->urlGenerator->generate('article-type', ['type' => 'reviewed-preprint'])
+                        $this->urlGenerator->generate('reviewed-preprints')
                     ),
                     $this->simpleDate($object, $context)
                 ),
