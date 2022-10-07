@@ -243,47 +243,47 @@ final class HomeControllerTest extends PageTestCase
                     'total' => 1,
                     'items' => [
                         [
-                            "id" => "19560",
-                            "type" => "reviewed-preprint",
-                            "doi" => "10.7554/eLife.19560",
-                            "status" => "reviewed",
-                            "authorLine" => "Lee R Berger et al.",
-                            "title" => "reviewed preprint title",
-                            "indexContent" => 'reviewed preprint index content',
-                            "titlePrefix" => "Title prefix",
-                            "stage" => "published",
-                            "published" => "2022-08-01T00:00:00Z",
-                            "reviewedDate" => "2022-08-01T00:00:00Z",
-                            "statusDate" => "2022-08-01T00:00:00Z",
-                            "volume" => 4,
-                            "elocationId" => "e19560",
-                            "pdf" => "https://elifesciences.org/content/4/e19560.pdf",
-                            "subjects" => [
+                            'id' => '19560',
+                            'type' => 'reviewed-preprint',
+                            'doi' => '10.7554/eLife.19560',
+                            'status' => 'reviewed',
+                            'authorLine' => 'Lee R Berger et al.',
+                            'title' => 'reviewed preprint title',
+                            'indexContent' => 'reviewed preprint index content',
+                            'titlePrefix' => 'Title prefix',
+                            'stage' => 'published',
+                            'published' => '2022-08-01T00:00:00Z',
+                            'reviewedDate' => '2022-08-01T00:00:00Z',
+                            'statusDate' => '2022-08-01T00:00:00Z',
+                            'volume' => 4,
+                            'elocationId' => 'e19560',
+                            'pdf' => 'https://elifesciences.org/content/4/e19560.pdf',
+                            'subjects' => [
                                 [
-                                    "id" => "genomics-evolutionary-biology",
-                                    "name" => "Genomics and Evolutionary Biology",
-                                ]
+                                    'id' => 'genomics-evolutionary-biology',
+                                    'name' => 'Genomics and Evolutionary Biology',
+                                ],
                             ],
-                            "curationLabels" => [
-                                "Ground-breaking",
-                                "Convincing"
+                            'curationLabels' => [
+                                'Ground-breaking',
+                                'Convincing',
                             ],
-                            "image" => [
-                                "thumbnail" => [
-                                    "uri" => "https://iiif.elifesciences.org/lax/19560%2Felife-19560-fig1-v1.tif",
-                                    "alt" => "",
-                                    "source" => [
-                                        "mediaType" => "image/jpeg",
-                                        "uri" => "https://iiif.elifesciences.org/lax/19560%2Felife-19560-fig1-v1.tif/full/full/0/default.jpg",
-                                        "filename" => "an-image.jpg"
+                            'image' => [
+                                'thumbnail' => [
+                                    'uri' => 'https://iiif.elifesciences.org/lax/19560%2Felife-19560-fig1-v1.tif',
+                                    'alt' => '',
+                                    'source' => [
+                                        'mediaType' => 'image/jpeg',
+                                        'uri' => 'https://iiif.elifesciences.org/lax/19560%2Felife-19560-fig1-v1.tif/full/full/0/default.jpg',
+                                        'filename' => 'an-image.jpg',
                                     ],
-                                    "size" => [
-                                        "width" => 4194,
-                                        "height" => 4714
+                                    'size' => [
+                                        'width' => 4194,
+                                        'height' => 4714,
                                     ],
-                                    "focalPoint" => [
-                                        "x" => 25,
-                                        "y" => 75
+                                    'focalPoint' => [
+                                        'x' => 25,
+                                        'y' => 75,
                                     ],
                                 ],
                             ],
