@@ -284,9 +284,9 @@ final class HomeControllerTest extends PageTestCase
                                     "focalPoint" => [
                                         "x" => 25,
                                         "y" => 75
-                                    ]
-                                ]
-                            ]
+                                    ],
+                                ],
+                            ],
                         ],
                     ],
                     'subjects' => [

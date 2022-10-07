@@ -35,7 +35,7 @@ final class ReviewedPreprintTeaserConverter implements ViewModelConverter
 
         return ViewModel\Teaser::main(
             $object->getTitle(),
-            $this->urlGenerator->generate('article', [$object]),
+            $this->urlGenerator->generate('reviewed-preprint', ['id' => $object->getId()]),
             null,
             $object->getAuthorLine(),
             $this->createContextLabel($object),
@@ -44,8 +44,7 @@ final class ReviewedPreprintTeaserConverter implements ViewModelConverter
                 ViewModel\Meta::withLink(
                     new ViewModel\Link(
                         ModelName::singular('reviewed-preprint'),
-                        // @todo - this needs to be replaced with reviewed-preprint path.
-                        '#'
+                        $this->urlGenerator->generate('article-type', ['type' => 'reviewed-preprint'])
                     ),
                     $this->simpleDate($object, $context)
                 ),

@@ -368,6 +368,14 @@ labs-post:
     requirements:
         id: '[a-z0-9-]+'
 
+# reviewed-preprints will be linked to EPP system
+reviewed-preprint:
+    path: /reviewed-preprint/{id}
+    defaults:
+         _controller: AppBundle:Status:ping
+    requirements:
+        id: '[a-z0-9-]+'
+
 podcast:
     path: /podcast
     defaults:
