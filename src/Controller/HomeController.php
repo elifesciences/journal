@@ -46,6 +46,8 @@ final class HomeController extends Controller
 
         $arguments['title'] = 'Latest research';
 
+        $arguments['description'] = 'eLife works to improve research communication through open science and open technology innovation';
+
         $arguments['paginator'] = $latestResearch
             ->then(function (Pagerfanta $pagerfanta) use ($request) {
                 return new Paginator(
@@ -98,8 +100,6 @@ final class HomeController extends Controller
                     return new Carousel($covers->slice(0, 3)->toArray(), new ListHeading('Highlights', 'highlights'));
                 }))
                 ->otherwise($this->softFailure('Failed to load covers'));
-
-            $arguments['description'] = 'eLife works to improve research communication through open science and open technology innovation';
         }
 
         $arguments['subjectsLink'] = new SectionListingLink('All research categories', 'subjects');
