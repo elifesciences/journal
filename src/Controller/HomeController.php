@@ -13,8 +13,6 @@ use eLife\Patterns\ViewModel\CarouselItem;
 use eLife\Patterns\ViewModel\HeroBanner;
 use eLife\Patterns\ViewModel\Highlight;
 use eLife\Patterns\ViewModel\HighlightItem;
-use eLife\Patterns\ViewModel\LeadPara;
-use eLife\Patterns\ViewModel\LeadParas;
 use eLife\Patterns\ViewModel\Link;
 use eLife\Patterns\ViewModel\ListHeading;
 use eLife\Patterns\ViewModel\ListingTeasers;
@@ -100,8 +98,6 @@ final class HomeController extends Controller
                     return new Carousel($covers->slice(0, 3)->toArray(), new ListHeading('Highlights', 'highlights'));
                 }))
                 ->otherwise($this->softFailure('Failed to load covers'));
-
-            $arguments['leadParas'] = new LeadParas([new LeadPara('eLife works to improve research communication through open science and open technology innovation', 'strapline')]);
         }
 
         $arguments['subjectsLink'] = new SectionListingLink('All research categories', 'subjects');
@@ -113,7 +109,7 @@ final class HomeController extends Controller
                 return new Link($subject->getName(), $this->get('router')->generate('subject', [$subject]));
             })
             ->then(function (Sequence $links) {
-                return new SectionListing('subjects', $links->toArray(), new ListHeading('Research categories'), false, 'strapline');
+                return new SectionListing('subjects', $links->toArray(), new ListHeading('Research categories'), false);
             })
             ->otherwise($this->softFailure('Failed to load subjects list'));
 
