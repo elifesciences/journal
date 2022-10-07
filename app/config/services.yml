@@ -553,17 +553,6 @@ services:
         tags:
           - name: view_model.converter
 
-    elife.journal.view_model.converter.reviewed.preprint:
-        class: eLife\Journal\ViewModel\Converter\ReviewedPreprintConverter
-        public: false
-        arguments:
-          - '@elife.journal.view_model.converter'
-          - '@router'
-          - '@security.authorization_checker'
-          - '%era_articles%'
-        tags:
-          - name: view_model.converter
-
     elife.journal.view_model.converter.article.modal:
         class: eLife\Journal\ViewModel\Converter\ArticleModalConverter
         public: false
@@ -1492,6 +1481,24 @@ services:
         public: false
         arguments:
           - '@elife.journal.view_model.converter'
+        tags:
+          - name: view_model.converter
+
+    elife.journal.view_model.converter.reviewed_preprint.teaser:
+        class: eLife\Journal\ViewModel\Converter\ReviewedPreprintTeaserConverter
+        public: false
+        arguments:
+          - '@elife.journal.view_model.converter'
+          - '@router'
+        tags:
+          - name: view_model.converter
+
+    elife.journal.view_model.converter.reviewed_preprint.teaser.secondary:
+        class: eLife\Journal\ViewModel\Converter\ReviewedPreprintSecondaryTeaserConverter
+        public: false
+        arguments:
+          - '@elife.journal.view_model.converter'
+          - '@router'
         tags:
           - name: view_model.converter
 

@@ -2,15 +2,12 @@
 
 namespace eLife\Journal\ViewModel\Converter;
 
-use eLife\ApiSdk\Model\ArticleVersion;
-use eLife\ApiSdk\Model\ArticleVoR;
 use eLife\ApiSdk\Model\ReviewedPreprint;
 use eLife\Journal\Helper\ModelName;
 use eLife\Patterns\ViewModel;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
-final class ReviewedPreprintConverter implements ViewModelConverter
+final class ReviewedPreprintSecondaryTeaserConverter implements ViewModelConverter
 {
     use CreatesContextLabel;
     use CreatesDate;
@@ -18,15 +15,11 @@ final class ReviewedPreprintConverter implements ViewModelConverter
 
     private $viewModelConverter;
     private $urlGenerator;
-    private $authorizationChecker;
-    private $eraArticles;
 
-    public function __construct(ViewModelConverter $viewModelConverter, UrlGeneratorInterface $urlGenerator, AuthorizationCheckerInterface $authorizationChecker, array $eraArticles)
+    public function __construct(ViewModelConverter $viewModelConverter, UrlGeneratorInterface $urlGenerator)
     {
         $this->viewModelConverter = $viewModelConverter;
         $this->urlGenerator = $urlGenerator;
-        $this->authorizationChecker = $authorizationChecker;
-        $this->eraArticles = $eraArticles;
     }
 
     /**
@@ -34,33 +27,21 @@ final class ReviewedPreprintConverter implements ViewModelConverter
      */
     public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
-        $formats = ['HTML'];
-
-        if ($object->getPdf() !== null) {
-            $formats[] = "PDF";
-        }
-
-        $image = null;
-        if ($object->getThumbnail() !== null) {
-            $image = $this->smallTeaserImage($object);
-        }
-
-        return ViewModel\Teaser::main(
+        return ViewModel\Teaser::secondary(
             $object->getTitle(),
             $this->urlGenerator->generate('article', [$object]),
-            $object instanceof ArticleVoR ? $object->getImpactStatement() : null,
             $object->getAuthorLine(),
             $this->createContextLabel($object),
-            $image,
-            ViewModel\TeaserFooter::forArticle(
+            $object->getThumbnail() ? $this->smallTeaserImage($object) : null,
+            ViewModel\TeaserFooter::forNonArticle(
                 ViewModel\Meta::withLink(
                     new ViewModel\Link(
                         ModelName::singular('reviewed-preprint'),
-                        $this->urlGenerator->generate('article-type', ['type' => 'reviewed-preprint'])
+                        // @todo - this needs to be replaced with reviewed-preprint path.
+                        '#'
                     ),
                     $this->simpleDate($object, $context)
-                ),
-                $formats
+                )
             )
         );
     }
