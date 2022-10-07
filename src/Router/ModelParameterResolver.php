@@ -51,7 +51,7 @@ final class ModelParameterResolver implements ParameterResolver
         } elseif ($model instanceof Model\Subject) {
             $new = ['id' => $model->getId()];
         } elseif ($model instanceof Model\ReviewedPreprint) {
-            $new = ['id' => $model->getId(), 'slug' => $this->slugify->slugify($model->getTitle())];
+            $new = ['id' => $model->getId()];
         } else {
             throw new InvalidArgumentException('Unexpected '.get_class($model));
         }
