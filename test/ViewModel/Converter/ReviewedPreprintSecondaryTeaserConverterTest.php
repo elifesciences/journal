@@ -10,13 +10,13 @@ final class ReviewedPreprintSecondaryTeaserConverterTest extends ModelConverterT
 {
     protected $models = ['reviewed-preprint'];
     protected $viewModelClasses = [ViewModel\Teaser::class];
+    protected $context = ['variant' => 'secondary'];
 
     /**
      * @before
      */
     public function setUpConverter()
     {
-        $this->context['variant'] = 'secondary';
         $this->converter = new ReviewedPreprintSecondaryTeaserConverter(
             $viewModelConverter = $this->createMock(ViewModelConverter::class),
             $this->stubUrlGenerator()

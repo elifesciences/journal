@@ -141,7 +141,7 @@ article-type:
     defaults:
          _controller: AppBundle:ArticleTypes:list
     requirements:
-        type: '(reviewed-preprint|correction|editorial|feature|insight|research-advance|research-article|research-communication|retraction|registered-report|replication-study|review-article|scientific-correspondence|short-report|tools-resources)'
+        type: '(correction|editorial|feature|insight|research-advance|research-article|research-communication|retraction|registered-report|replication-study|review-article|scientific-correspondence|short-report|tools-resources)'
 
 article-version-xml:
     path: /articles/{id}v{version}.xml
@@ -368,14 +368,6 @@ labs-post:
     requirements:
         id: '[a-z0-9-]+'
 
-# reviewed-preprints will be linked to EPP system
-reviewed-preprint:
-    path: /reviewed-preprint/{id}
-    defaults:
-         _controller: AppBundle:Status:ping
-    requirements:
-        id: '[a-z0-9-]+'
-
 podcast:
     path: /podcast
     defaults:
@@ -422,6 +414,14 @@ resources:
     path: /resources
     defaults:
          _controller: AppBundle:Resources:resources
+
+reviewed-preprint:
+    path: /reviewed-preprints/{id}
+    defaults:
+        # reviewed-preprints will be linked to EPP system, directing to ping controller
+         _controller: AppBundle:Status:ping
+    requirements:
+        id: '[a-z0-9-]+'
 
 rss-ahead:
     path: /rss/ahead.xml
