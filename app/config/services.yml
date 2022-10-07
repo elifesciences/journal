@@ -379,6 +379,15 @@ services:
         tags:
           - name: security.voter
 
+    elife.journal.security.voter.feature.prc_comms:
+        class: eLife\Journal\Security\Voter\FixedVoter
+        public: false
+        arguments:
+          - FEATURE_PRC_COMMS
+          - '%feature_prc_comms%'
+        tags:
+          - name: security.voter
+
     elife.journal.templating.promise_aware:
         class: eLife\Journal\Templating\PromiseAwareEngine
         decorates: templating

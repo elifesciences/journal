@@ -1,0 +1,361 @@
+{% extends '::page.html.twig' %}
+
+{% block head %}
+
+  {{ parent() }}
+
+  <style>
+
+  :root {
+
+    /* Colours */
+    --light-blue: #2792d3;
+    --dark-blue: #173e83;
+    --light-green: #71b819;
+    --dark-green: #326b2b;
+    --light-pink: #d61e64;
+    --dark-pink: #861352;
+
+    /* Width of the coloured bars at various viewport widths. Also used in lengths that are coupled to the bar size */
+    --bar-size-narrow: 24px;
+    --bar-size-medium: 36px;
+    --bar-size-wide: 48px;
+
+    --bar-size: var(--bar-size-narrow);
+
+    /* Used to vertically roughly align the centre of the outer bar circle with the centre line of the heading text */
+    /* Used in calc() so need units, even when 0 */
+    --outer-bar-vertical-fudge-factor-narrow: 0px;
+    --outer-bar-vertical-fudge-factor-medium: -6px;
+    --outer-bar-vertical-fudge-factor-wide: -10px;
+
+    --outer-bar-vertical-fudge-factor: var(--outer-bar-vertical-fudge-factor-narrow);
+
+    /* Spacing between outer sections */
+    --inter-section-vertical-separation: calc(var(--bar-size) * 2);
+
+    /* Spacing between outer and inner sections, and between inner sections */
+    --intra-section-vertical-separation: calc(var(--bar-size));
+  }
+
+  /* 730px */
+  @media screen and (min-width: 45.625em) {
+    :root {
+      --bar-size: var(--bar-size-medium);
+      --outer-bar-vertical-fudge-factor: var(--outer-bar-vertical-fudge-factor-medium);
+    }
+  }
+
+  /* 900 px */
+  @media screen and (min-width: 56.25em) {
+    :root {
+      --bar-size: var(--bar-size-wide);
+      --outer-bar-vertical-fudge-factor: var(--outer-bar-vertical-fudge-factor-wide);
+    }
+  }
+
+  /* Content header */
+
+    .peer-review-process-page .content-header__impact-statement,
+    .peer-review-process-page .content-header__impact-statement > p {
+      font-family: "Noto Sans",Arial,Helvetica,sans-serif;
+      font-size: calc((14 / 16) * 1rem);
+    }
+
+    .peer-review-process-page .content-header__impact-statement > p {
+      margin-top: 1rem;
+    }
+
+    /* Expedient yet horrible way of overriding specificity introduced somewhere out of scope without using !important */
+    .peer-review-process-content-header-link.peer-review-process-content-header-link.peer-review-process-content-header-link.peer-review-process-content-header-link.peer-review-process-content-header-link.peer-review-process-content-header-link.peer-review-process-content-header-link.peer-review-process-content-header-link.peer-review-process-content-header-link.peer-review-process-content-header-link {
+      font-weight: bold;
+      border-bottom-width: 0;
+      color: #167bc9;
+    }
+
+    /* constrain content header to be roughly no wider than the main content above 1200px viewport width */
+    @media screen and (min-width: 75em) {
+      .peer-review-process-page .content-header__body,
+      .peer-review-process-page .content-header.wrapper::after {
+        max-width: 66%;
+        margin-left: auto;
+        margin-right: auto;
+      }
+    }
+
+    /* Outer funky bars */
+
+    /* Move space above heading from padding to margin as we need the bars to stop at the top of the heading */
+    .peer-review-process-page-process-outer-section-heading {
+      padding-top: 0;
+      margin-top: calc((21 / 16) * 1rem);
+    }
+
+    /* create space and a positioning context to place pseudo elements for the outer vertical bars & circles */
+    .peer-review-process-page-process-outer-section {
+      position: relative;
+      padding-left: calc(var(--bar-size) * 2);
+      margin-bottom: var(--inter-section-vertical-separation);
+    }
+
+    /* All outer vertical bars */
+    .peer-review-process-page-process-outer-section::before {
+      content: '';
+      display: block;
+      position: absolute;
+      left: 0;
+      top: var(--outer-bar-vertical-fudge-factor);
+      z-index: 1;
+
+      height: calc(100% + (var(--outer-bar-vertical-fudge-factor) * -1));
+      width: var(--bar-size);
+      border-radius: var(--bar-size);
+    }
+
+    /* Outer bar colours vary depending on their order on the page */
+    .peer-review-process-page-process-outer-section:nth-of-type(1)::before {
+      background-color: var(--dark-blue);
+    }
+
+    .peer-review-process-page-process-outer-section:nth-of-type(2)::before {
+      background-color: var(--light-green);
+    }
+
+    .peer-review-process-page-process-outer-section:nth-of-type(3)::before {
+      background-color: var(--light-pink);
+    }
+
+    .peer-review-process-page-process-outer-section:nth-of-type(4)::before {
+      background-color: var(--light-blue);
+    }
+
+    /* All outer section circles */
+    .peer-review-process-page-process-outer-section::after {
+      content: '';
+      position: absolute;
+      top: var(--outer-bar-vertical-fudge-factor);
+      left: 0;
+      z-index: 2;
+      width: var(--bar-size);
+      height: var(--bar-size);
+
+      border-radius: 50%;
+    }
+
+    /* Outer circle colours vary depending on their order on the page */
+    .peer-review-process-page-process-outer-section:nth-of-type(1)::after {
+      background-color: var(--light-blue);
+    }
+
+    .peer-review-process-page-process-outer-section:nth-of-type(2)::after {
+      background-color: var(--dark-green);
+    }
+
+    .peer-review-process-page-process-outer-section:nth-of-type(3)::after {
+      background-color: var(--dark-pink);
+    }
+
+    .peer-review-process-page-process-outer-section:nth-of-type(4)::after {
+      background-color: var(--dark-blue);
+    }
+
+  /*  at 480px we're wide enough to display the inner bar */
+  @media screen and (min-width: 30em) {
+
+    .peer-review-process-page-process-inner-section-part {
+      margin-bottom: var(--intra-section-vertical-separation);
+    }
+
+    /* Inner funky bars */
+
+    /* create space and a positioning context to place pseudo elements for the inner vertical bars & colours */
+    .peer-review-process-page-process-inner-section {
+      position: relative;
+      padding-left: calc(var(--bar-size) * 2);
+      /* top rather than bottom so as to provide separation above the first inner section of each outer section. (Breaks usual approach of always applying bottom margin to manage vertical whitespace.) */
+      margin-top: var(--intra-section-vertical-separation);
+    }
+
+    /* All inner bars */
+    .peer-review-process-page-process-inner-section::before {
+      content: '';
+      display: block;
+      position: absolute;
+      left: 0;
+      z-index: 1;
+
+      height: 100%;
+      width: var(--bar-size);
+      border-radius: var(--bar-size);
+    }
+
+    /*  Main colours of the inner bars vary depending on their order on the page */
+    .peer-review-process-page-process-outer-section:nth-of-type(1) .peer-review-process-page-process-inner-section::before {
+      background-color: var(--light-blue);
+    }
+
+    .peer-review-process-page-process-outer-section:nth-of-type(2) .peer-review-process-page-process-inner-section::before {
+      background-color: var(--dark-green);
+    }
+
+    .peer-review-process-page-process-outer-section:nth-of-type(3) .peer-review-process-page-process-inner-section::before {
+      background-color: var(--dark-pink);
+    }
+
+    .peer-review-process-page-process-outer-section:nth-of-type(4) .peer-review-process-page-process-inner-section::before {
+      background-color: var(--dark-blue);
+    }
+
+    /* Prevent the height of the inner bar lower colour (when > 1 part in an inner section) from overflowing*/
+    .peer-review-process-page-process-inner-section-part--final {
+      position: relative;
+    }
+
+    /* Second colour inner bar area. Applied by the final part within an inner section, it overlays the main color on the inner bar */
+    .peer-review-process-page-process-inner-section-part--final::before {
+      content: '';
+      display: block;
+      position: absolute;
+
+      /* overlay the inner bar */
+      left: calc(var(--bar-size) * -2);
+      z-index: 3;
+
+      height: 100%;
+      width: var(--bar-size);
+      border-radius: var(--bar-size);
+    }
+
+    /* If we only have one part to an inner section, the second colour of the inner bar is used to describe a circle at the top of the inner bar */
+    .peer-review-process-page-process-inner-section-part--final:only-child::before {
+      height: var(--bar-size);
+    }
+
+    /*  Second colours of the inner bars vary depending on the order on their outer sections on the page */
+    .peer-review-process-page-process-outer-section:nth-of-type(1) .peer-review-process-page-process-inner-section-part--final::before {
+      background-color: var(--dark-blue);
+    }
+
+    .peer-review-process-page-process-outer-section:nth-of-type(2) .peer-review-process-page-process-inner-section-part--final::before {
+      background-color: var(--light-green);
+    }
+
+    .peer-review-process-page-process-outer-section:nth-of-type(3) .peer-review-process-page-process-inner-section-part--final::before {
+      background-color: var(--light-pink);
+    }
+
+    .peer-review-process-page-process-outer-section:nth-of-type(4) .peer-review-process-page-process-inner-section-part--final::before {
+      background-color: var(--light-blue);
+    }
+
+  }
+
+  </style>
+
+{% endblock %}
+
+{% block body %}
+
+  <div class="peer-review-process-page">
+
+    {{ render_pattern(contentHeader) }}
+
+    {% embed 'grid/content.html.twig' %}
+
+      {% block main %}
+        {#  To make the bars layout correctly with the correct styles:     #}
+        {#  Each main section is .peer-review-process-page-process-outer-section      #}
+        {#  Each main section contains one .peer-review-process-page-process-outer-section-heading and one or more paragraph cild elements      #}
+        {#  Each main section contains one inner section that contains all parts of that inner section  #}
+        {#  Each inner section is .peer-review-process-page-process-inner-section    #}
+        {#  Each inner section contains at least one inner section part   #}
+        {#  Each inner section part is .peer-review-process-page-process-inner-section-part   #}
+        {#  The final inner section part is additionally .peer-review-process-page-process-inner-section-part--final     #}
+
+        {# This page only caters for four outer sections, as that's all we have at the moment, and may never have more. If more are added it shouldn't be that tricky to extend the CSS to cater for them. #}
+
+        <section class="peer-review-process-page-process-outer-section">
+
+          <h2 class="peer-review-process-page-process-outer-section-heading">Submission</h2>
+
+          <p>Submission to eLife is easy. We ask that you first post your research as a preprint, or we can post one on your behalf. We then ask a few details and take the rest of the data and content we need from your preprint. Preprinting first ensures your research is made public faster, and makes submission faster.</p>
+            <p>Read more in our author guide.</p>
+
+          <div class="peer-review-process-page-process-inner-section">
+            <div class="peer-review-process-page-process-inner-section-part">
+              <h3>Posting a preprint</h3>
+              <p>At submission we’ll ask for the DOI (a link) to your preprint. If you haven’t yet posted your research as a preprint you will be required to before your research is sent for peer review. We can post a preprint on your behalf if you need help, but this can be done after Triage.</p>
+            </div>
+
+            <div class="peer-review-process-page-process-inner-section-part">
+              <h3>Triage</h3>
+              <p>An initial decision on whether or not to send for peer review is made by eLife’s Editors. The decision is based only on relevance to eLife’s aims and scope. eLife does not make selective publication decisions based on perceived importance or impact. </p>
+            </div>
+
+            <div class="peer-review-process-page-process-inner-section-part peer-review-process-page-process-inner-section-part--final">
+            <h3>Sending for peer review</h3>
+            <p>In some cases eLife’s Editors may decide not to send the research for peer review. This could be a result of a lack of evidence to support the claims made in the research, or if submissions do not fit within eLife’s aims and scope. </p>
+            </div>
+          </div>
+        </section>
+
+        <section class="peer-review-process-page-process-outer-section">
+
+          <h2 class="peer-review-process-page-process-outer-section-heading">Peer Review</h2>
+
+          <p>Preprints accepted at the triage stage are sent for peer review. Reviewers are invited to provide an assessment of the preprint without regard to suitability for publication or what might previously have been considered “an eLife paper”. Once reviews are submitted, a consultation session is opened, and Editors work to reach consensus with reviewers.</p>
+
+          <div class="peer-review-process-page-process-inner-section">
+            <div class="peer-review-process-page-process-inner-section-part">
+              <h3>Consultation</h3>
+              <p>Reviewers are invited to read each other’s reviews of the research and to comment during a consultation. Editors oversee the consultation to resolve any conflict or disagreement, or to decide when authors or the public should be made aware of differing but fair viewpoints.</p>
+            </div>
+
+            <div class="peer-review-process-page-process-inner-section-part peer-review-process-page-process-inner-section-part--final">
+              <h3>Assessment</h3>
+              <p>After consultation with reviewers, eLife’s Editors produce an assessment that summarises the importance and rigor of the preprints, for the benefit of readers on eLife. The eLife assessment is published with the preprint, along with the full peer reviews as a “Reviewed Preprint”. More information on how we make the assessments fair and consistent can be found in the details for authors and reviewers.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="peer-review-process-page-process-outer-section">
+
+          <h2 class="peer-review-process-page-process-outer-section-heading">Reviewed Preprints</h2>
+
+          <p>After peer review, authors are given some time to comment or respond on the peer reviews and assessment. Soon afterwards, their preprint, the peer reviews and the assessment are published on eLife as a “Reviewed Preprint”. This is a new stage of the process that aims to share the research and results of peer review faster, for the benefit of the scientific community.</p>
+
+          <p>Reviewed Preprints are listed on our homepage and major subject area pages, and can be found using our on-site search, Google Scholar, PubMed etc. much like full published papers.</p>
+
+          <div class="peer-review-process-page-process-inner-section">
+            <div class="peer-review-process-page-process-inner-section-part peer-review-process-page-process-inner-section-part--final">
+              <h3>Updates after peer review</h3>
+              <p>Authors are free to update their preprint when they are ready, but it is not a requirement before publication. Our peer review process makes recommendations to authors if there is room for improvement, and eLife’s Editors commit to updating their assessment when a new version is posted, and will send for re-review if deemed necessary. Once authors have had the opportunity to comment or respond to the updated assessment and reviews, the Reviewed Preprint is updated.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="peer-review-process-page-process-outer-section">
+
+          <h2 class="peer-review-process-page-process-outer-section-heading">Version of Record</h2>
+
+          <p>When Authors are satisfied that the process is complete, they can request that the current reviewed preprint become the version of record. This involves submission of high resolution figure files and some additional data to prepare the full and final version for publication. Authors will also have the opportunity to proof their PDF version with the help of our Production team.</p>
+
+          <p>The version of record will replace the Reviewed Preprint as the latest version of the authors’ work on eLife, and will retain the same DOI and ID, which will direct anybody visiting previous versions to the new version of record. </p>
+
+          <div class="peer-review-process-page-process-inner-section">
+            <div class="peer-review-process-page-process-inner-section-part peer-review-process-page-process-inner-section-part--final">
+              <h3>Publishing at another journal</h3>
+              <p>If authors do not choose to submit a version of record with eLife, they are free to submit their research for publication at other journals. If our systems recognise that a new version of the Reviewed Preprint is published elsewhere, the version hosted by eLife will remain, and clear links to the new version will be added to ensure readers are aware that the work has since been published at another journal.</p>
+            </div>
+          </div>
+        </section>
+
+        <p>To learn more about how the new process will work, and how it changes the role of authors and reviewers, read the Inside eLife post with details for authors and reviewers, or see our FAQ.</p>
+
+      {% endblock %}
+
+    {% endembed %}
+
+  </div>
+
+{% endblock %}
