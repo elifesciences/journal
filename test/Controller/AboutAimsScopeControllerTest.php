@@ -125,10 +125,10 @@ final class AboutAimsScopeControllerTest extends PageTestCase
         $this->assertSame(200, $client->getResponse()->getStatusCode());
 
         $this->assertCount(2, $crawler->filter('.article-section'));
-        $this->assertSame('Subject 1', trim($crawler->filter('.article-section:nth-child(3) .article-section__header')->text()));
-        $this->assertSame("Paragraph 1.\nParagraph 2. See editors", trim($crawler->filter('.article-section:nth-child(3) .article-section__body')->text()));
-        $this->assertSame('Subject 2', trim($crawler->filter('.article-section:nth-child(4) .article-section__header')->text()));
-        $this->assertSame('See editors', trim($crawler->filter('.article-section:nth-child(4) .article-section__body')->text()));
+        $this->assertSame('Subject 1', trim($crawler->filter('section:nth-of-type(1) .article-section__header')->text()));
+        $this->assertSame("Paragraph 1.\nParagraph 2. See editors", trim($crawler->filter('section:nth-of-type(1) .article-section__body')->text()));
+        $this->assertSame('Subject 2', trim($crawler->filter('section:nth-of-type(2) .article-section__header')->text()));
+        $this->assertSame('See editors', trim($crawler->filter('section:nth-of-type(2) .article-section__body')->text()));
     }
 
     /**

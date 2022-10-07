@@ -9,18 +9,14 @@ use eLife\ApiSdk\Model\Subject;
 use eLife\Patterns\ViewModel\Button;
 use eLife\Patterns\ViewModel\CompactForm;
 use eLife\Patterns\ViewModel\Form;
-use eLife\Patterns\ViewModel\Image;
 use eLife\Patterns\ViewModel\Input;
 use eLife\Patterns\ViewModel\Link;
-use eLife\Patterns\ViewModel\LoginControl;
 use eLife\Patterns\ViewModel\NavLinkedItem;
-use eLife\Patterns\ViewModel\Picture;
 use eLife\Patterns\ViewModel\SearchBox;
 use eLife\Patterns\ViewModel\SiteHeader;
 use eLife\Patterns\ViewModel\SiteHeaderNavBar;
 use eLife\Patterns\ViewModel\SiteHeaderTitle;
 use eLife\Patterns\ViewModel\SubjectFilter;
-use Symfony\Component\Asset\Packages;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
@@ -30,96 +26,29 @@ use function eLife\Patterns\mixed_visibility_text;
 final class SiteHeaderFactory
 {
     private $urlGenerator;
-    private $packages;
     private $requestStack;
     private $authorizationChecker;
     private $submitUrl;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator, Packages $packages, RequestStack $requestStack, AuthorizationCheckerInterface $authorizationChecker, string $submitUrl)
+    public function __construct(UrlGeneratorInterface $urlGenerator, RequestStack $requestStack, AuthorizationCheckerInterface $authorizationChecker, string $submitUrl)
     {
         $this->urlGenerator = $urlGenerator;
-        $this->packages = $packages;
         $this->requestStack = $requestStack;
         $this->authorizationChecker = $authorizationChecker;
         $this->submitUrl = $submitUrl;
     }
 
-    public function createSiteHeader(Model $item = null, Profile $profile = null) : SiteHeader
+    public function createSiteHeader(Model $item = null) : SiteHeader
     {
-        if ($this->requestStack->getCurrentRequest() && 'search' !== $this->requestStack->getCurrentRequest()->get('_route')) {
-            $searchItem = NavLinkedItem::asIcon(new Link('Search the eLife site', $this->urlGenerator->generate('search')),
-                new Picture(
-                    [
-                        [
-                            'srcset' => $this->packages->getUrl('assets/patterns/img/patterns/molecules/nav-primary-search-ic.svg'),
-                            'type' => 'image/svg+xml',
-                        ],
-                    ],
-                    new Image(
-                        $this->packages->getUrl('assets/patterns/img/patterns/molecules/nav-primary-search-ic_1x.png'),
-                        [
-                            2 => $this->packages->getUrl('assets/patterns/img/patterns/molecules/nav-primary-search-ic_2x.png'),
-                            1 => $this->packages->getUrl('assets/patterns/img/patterns/molecules/nav-primary-search-ic_1x.png'),
-                        ],
-                        ''
-                    )
-                ),
-                false,
-                true,
-                'search'
-            );
-        } else {
-            $searchItem = NavLinkedItem::asIcon(new Link('Search'),
-                new Picture(
-                    [
-                        [
-                            'srcset' => $this->packages->getUrl('assets/patterns/img/patterns/molecules/nav-primary-search-disabled-ic.svg'),
-                            'type' => 'image/svg+xml',
-                        ],
-                    ],
-                    new Image(
-                        $this->packages->getUrl('assets/patterns/img/patterns/molecules/nav-primary-search-disabled-ic_1x.png'),
-                        [
-                            2 => $this->packages->getUrl('assets/patterns/img/patterns/molecules/nav-primary-search-disabled-ic_2x.png'),
-                            1 => $this->packages->getUrl('assets/patterns/img/patterns/molecules/nav-primary-search-disabled-ic_1x.png'),
-                        ],
-                        'Search icon'
-                    )
-                ),
-                false,
-                true,
-                'search'
-            );
-        }
-
         $primaryLinks = SiteHeaderNavBar::primary([
-            NavLinkedItem::asIcon(
+            NavLinkedItem::asLink(
                 new Link('Menu', '#mainMenu'),
-                new Picture(
-                    [
-                        [
-                            'srcset' => $this->packages->getUrl('assets/patterns/img/patterns/molecules/nav-primary-menu-ic.svg'),
-                            'type' => 'image/svg+xml',
-                        ],
-                    ],
-                    new Image(
-                        $this->packages->getUrl('assets/patterns/img/patterns/molecules/nav-primary-menu-ic_1x.png'),
-                        [
-                            2 => $this->packages->getUrl('assets/patterns/img/patterns/molecules/nav-primary-menu-ic_2x.png'),
-                            1 => $this->packages->getUrl('assets/patterns/img/patterns/molecules/nav-primary-menu-ic_1x.png'),
-                        ],
-                        ''
-                    )
-                ),
-                false,
-                false,
-                'menu'
+                false
             ),
             NavLinkedItem::asLink(new Link('Home', $this->urlGenerator->generate('home'))),
             NavLinkedItem::asLink(new Link('Magazine', $this->urlGenerator->generate('magazine'))),
             NavLinkedItem::asLink(new Link('Community', $this->urlGenerator->generate('community'))),
-            NavLinkedItem::asLink(new Link('Innovation', $this->urlGenerator->generate('labs'))),
-            $searchItem,
+            NavLinkedItem::asLink(new Link('About', $this->urlGenerator->generate('about')))
         ]);
 
         if ($this->authorizationChecker->isGranted('FEATURE_XPUB') && $this->authorizationChecker->isGranted(AuthenticatedVoter::IS_AUTHENTICATED_REMEMBERED)) {
@@ -127,49 +56,12 @@ final class SiteHeaderFactory
         }
 
         $secondaryLinks = [
-            NavLinkedItem::asLink(new Link('Newsletter', $this->urlGenerator->generate('content-alerts'))),
-            NavLinkedItem::asLink(new Link('About', $this->urlGenerator->generate('about'))),
+            NavLinkedItem::asLink(new Link('Search', $this->urlGenerator->generate('search')), true),
+            NavLinkedItem::asLink(new Link('Alerts', $this->urlGenerator->generate('alerts'))),
             NavLinkedItem::asButton(
-                Button::link('Submit my research', $submitUrl ?? $this->submitUrl, Button::SIZE_EXTRA_SMALL, Button::STYLE_DEFAULT, true, false, 'submitResearchButton')
+                Button::link('Submit your research', $submitUrl ?? $this->submitUrl, Button::SIZE_EXTRA_SMALL, Button::STYLE_DEFAULT, true, false, 'submitResearchButton')
             ),
         ];
-
-        if ($this->authorizationChecker->isGranted(AuthenticatedVoter::IS_AUTHENTICATED_REMEMBERED) && $profile) {
-            $secondaryLinks[] = NavLinkedItem::asLoginControl(
-                LoginControl::loggedIn(
-                    $this->urlGenerator->generate('profile', ['id' => $profile->getId()]),
-                    $profile->getDetails()->getPreferredName(),
-                    new Picture(
-                        [
-                            [
-                                'srcset' => $this->packages->getUrl('assets/patterns/img/icons/profile.svg'),
-                                'type' => 'image/svg+xml',
-                            ],
-                        ],
-                        new Image(
-                            $this->packages->getUrl('assets/patterns/img/icons/profile.png'),
-                            [
-                                2 => $this->packages->getUrl('assets/patterns/img/icons/profile@2x.png'),
-                                1 => $this->packages->getUrl('assets/patterns/img/icons/profile.png'),
-                            ],
-                            'Profile icon'
-                        )
-                    ),
-                    'View my profile',
-                    [
-                        'Manage my ORCID' => 'https://orcid.org/my-orcid',
-                        'Log out' => $this->urlGenerator->generate('log-out'),
-                    ]
-                )
-            );
-        } else {
-            $secondaryLinks[] = NavLinkedItem::asLoginControl(
-                LoginControl::notLoggedIn(
-                    mixed_visibility_text('', 'Log in/Register', '(via ORCID - An ORCID is a persistent digital identifier for researchers)'),
-                    $this->urlGenerator->generate('log-in')
-                )
-            );
-        }
 
         $secondaryLinks = SiteHeaderNavBar::secondary($secondaryLinks);
 

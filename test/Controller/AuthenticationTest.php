@@ -15,59 +15,6 @@ final class AuthenticationTest extends WebTestCase
 {
     /**
      * @test
-     */
-    public function it_lets_you_log_in()
-    {
-        $client = static::createClient();
-
-        $client->followRedirects(false);
-
-        $this->readyHomePage();
-
-        $crawler = $client->request('GET', '/');
-
-        $client->click($crawler->filter('a:contains("Log in/Register (via ORCID - An ORCID is a persistent digital identifier for researchers)")')->link());
-
-        $response = $client->getResponse();
-
-        $this->assertTrue($response->isRedirect());
-
-        $location = Uri::withoutQueryValue(new Uri($response->headers->get('Location')), 'state');
-        $this->assertSameUri('http://api.elifesciences.org/oauth2/authorize?response_type=code&client_id=journal_client_id&redirect_uri=http%3A%2F%2Flocalhost%2Flog-in%2Fcheck', $location);
-
-        $state = parse_query((new Uri($response->headers->get('Location')))->getQuery())['state'];
-
-        $client->followRedirects();
-
-        $this->readyToken();
-
-        $this->mockApiResponse(
-            new Request(
-                'GET',
-                'http://api.elifesciences.org/profiles/jcarberry',
-                ['Accept' => 'application/vnd.elife.profile+json; version=1']
-            ),
-            new Response(
-                200,
-                ['Content-Type' => 'application/vnd.elife.profile+json; version=1'],
-                json_encode([
-                    'id' => 'jcarberry',
-                    'name' => [
-                        'preferred' => 'Josiah Carberry',
-                        'index' => 'Carberry, Josiah',
-                    ],
-                    'orcid' => '0000-0002-1825-0097',
-                ])
-            )
-        );
-
-        $crawler = $client->request('GET', "/log-in/check?code=foo&state=$state");
-
-        $this->assertContains('Josiah Carberry', $crawler->filter('.login-control')->text());
-    }
-
-    /**
-     * @test
      * @dataProvider refererProvider
      */
     public function it_uses_the_referer_header_for_redirecting_after_logging_in(string $referer, string $expectedRedirect)
@@ -144,9 +91,6 @@ final class AuthenticationTest extends WebTestCase
         );
 
         $crawler = $client->request('GET', "/log-in/check?code=foo&state=$state");
-
-        $this->assertNotContains('Log out', $crawler->text());
-        $this->assertContains('Log in/Register (via ORCID - An ORCID is a persistent digital identifier for researchers)', $crawler->text());
 
         $this->assertCount(1, $crawler->filter('.info-bar'));
         $this->assertSame('Failed to log in, please try again.', trim($crawler->filter('.info-bar')->text()));
@@ -240,10 +184,9 @@ final class AuthenticationTest extends WebTestCase
 
         $this->assertTrue($client->getResponse()->isRedirect('http://localhost/'));
 
-        $crawler = $client->followRedirect();
+        $client->followRedirect();
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
-        $this->assertCount(1, $crawler->filter('a:contains("Log in/Register (via ORCID - An ORCID is a persistent digital identifier for researchers)")'));
         $this->assertEmpty($client->getCookieJar()->all());
     }
 
@@ -261,48 +204,9 @@ final class AuthenticationTest extends WebTestCase
 
         $this->readyHomePage();
 
-        $crawler = $client->request('GET', '/');
+        $client->request('GET', '/');
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
-        $this->assertCount(1, $crawler->filter('a:contains("Log in/Register (via ORCID - An ORCID is a persistent digital identifier for researchers)")'));
-        $this->assertEmpty($client->getCookieJar()->all());
-    }
-
-    /**
-     * @test
-     */
-    public function it_lets_you_log_out_and_redirects_you_to_the_homepage()
-    {
-        $client = static::createClient();
-
-        $client->followRedirects();
-
-        $this->logIn($client);
-
-        $this->readyHomePage();
-        $this->mockApiResponse(
-            new Request(
-                'GET',
-                'http://api.elifesciences.org/annotations?by=jcarberry&page=1&per-page=10&order=desc&use-date=updated&access=restricted',
-                ['Accept' => 'application/vnd.elife.annotation-list+json; version=1']
-            ),
-            new Response(
-                200,
-                ['Content-Type' => 'application/vnd.elife.annotation-list+json; version=1'],
-                json_encode([
-                    'total' => 0,
-                    'items' => [],
-                ])
-            )
-        );
-
-        $crawler = $client->request('GET', '/about');
-
-        $crawler = $client->click($crawler->filter('a:contains("Josiah Carberry")')->link());
-        $crawler = $client->click($crawler->filter('a:contains("Log out")')->link());
-
-        $this->assertEquals('http://localhost/', $crawler->getUri());
-        $this->assertCount(1, $crawler->filter('a:contains("Log in/Register (via ORCID - An ORCID is a persistent digital identifier for researchers)")'));
         $this->assertEmpty($client->getCookieJar()->all());
     }
 
