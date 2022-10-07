@@ -1,0 +1,19 @@
+{% extends '::page.html.twig' %}
+
+{% block body %}
+
+    {{ render_pattern(contentHeader) }}
+
+    {% include 'calls-to-action.html.twig' %}
+
+    {% embed 'grid/listing-one-column.html.twig' %}
+
+        {% block listing %}
+
+            {{ render_pattern(listing) }}
+
+        {% endblock %}
+
+    {% endembed %}
+
+{% endblock %}

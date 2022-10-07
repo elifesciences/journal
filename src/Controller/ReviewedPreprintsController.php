@@ -48,7 +48,7 @@ final class ReviewedPreprintsController extends Controller
             });
 
         $arguments['listing'] = $arguments['paginator']
-            ->then($this->willConvertTo(ListingTeasers::class, ['type' => 'reviewed-preprints']));
+            ->then($this->willConvertTo(ListingTeasers::class, ['heading' => 'Latest '.ModelName::plural('reviewed-preprint')]));
 
         if (1 === $page) {
             return $this->createFirstPage($arguments);
@@ -61,6 +61,6 @@ final class ReviewedPreprintsController extends Controller
     {
         $arguments['contentHeader'] = new ContentHeader($arguments['title']);
 
-        return new Response($this->get('templating')->render('::article-type.html.twig', $arguments));
+        return new Response($this->get('templating')->render('::reviewed-preprints.html.twig', $arguments));
     }
 }
