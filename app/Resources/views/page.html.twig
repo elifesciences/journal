@@ -116,8 +116,6 @@
             {% set description = item.impactStatement %}
         {% elseif contentHeader is defined and contentHeader.impactStatement is defined %}
             {% set description = contentHeader.impactStatement %}
-        {% elseif leadParas is defined and leadParas %}
-            {% set description = render_pattern(leadParas) %}
         {% endif %}
         {% if description is defined %}
             <meta property="og:description" content="{{ description|striptags|single_line|trim }}">
