@@ -487,7 +487,6 @@ services:
         class: eLife\Journal\ViewModel\Factory\SiteHeaderFactory
         arguments:
           - '@router'
-          - '@assets.packages'
           - '@request_stack'
           - '@security.authorization_checker'
           - '%submit_url%'
