@@ -2,11 +2,11 @@
 
 namespace test\eLife\Journal\ViewModel\Converter;
 
-use eLife\Journal\ViewModel\Converter\ReviewedPreprintSecondaryTeaserConverter;
+use eLife\Journal\ViewModel\Converter\ReviewedPreprintTeaserConverter;
 use eLife\Journal\ViewModel\Converter\ViewModelConverter;
 use eLife\Patterns\ViewModel;
 
-final class ReviewedPreprintSecondaryTeaserConverterTest extends ModelConverterTestCase
+final class ReviewedPreprintTeaserConverterTest extends ModelConverterTestCase
 {
     protected $models = ['reviewed-preprint'];
     protected $viewModelClasses = [ViewModel\Teaser::class];
@@ -16,8 +16,7 @@ final class ReviewedPreprintSecondaryTeaserConverterTest extends ModelConverterT
      */
     public function setUpConverter()
     {
-        $this->context['variant'] = 'secondary';
-        $this->converter = new ReviewedPreprintSecondaryTeaserConverter(
+        $this->converter = new ReviewedPreprintTeaserConverter(
             $viewModelConverter = $this->createMock(ViewModelConverter::class),
             $this->stubUrlGenerator()
         );
