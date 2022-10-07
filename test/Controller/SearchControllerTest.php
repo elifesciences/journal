@@ -338,7 +338,7 @@ final class SearchControllerTest extends PageTestCase
     {
         $client = static::createClient();
 
-        $crawler = $client->request('GET', $this->getUrl() . '?foo');
+        $crawler = $client->request('GET', $this->getUrl().'?foo');
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
 
@@ -516,7 +516,7 @@ final class SearchControllerTest extends PageTestCase
         $this->assertSame('Reviewed Preprint Aug 1, 2022', trim(preg_replace('/\s+/S', ' ', $listing->eq(0)->filter('.teaser__footer .meta')->text())));
     }
 
-    protected function getUrl(): string
+    protected function getUrl() : string
     {
         $this->mockApiResponse(
             new Request(

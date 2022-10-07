@@ -340,7 +340,7 @@ final class HomeControllerTest extends PageTestCase
     {
         $client = static::createClient();
 
-        $crawler = $client->request('GET', $this->getUrl() . '?foo');
+        $crawler = $client->request('GET', $this->getUrl().'?foo');
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
 
@@ -351,8 +351,8 @@ final class HomeControllerTest extends PageTestCase
         $this->assertSame('eLife works to improve research communication through open science and open technology innovation', $crawler->filter('meta[property="og:description"]')->attr('content'));
         $this->assertSame('eLife works to improve research communication through open science and open technology innovation', $crawler->filter('meta[name="description"]')->attr('content'));
         $this->assertSame('summary', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
-        $this->assertSame('http://localhost/' . ltrim(self::$kernel->getContainer()->get('elife.assets.packages')->getUrl('assets/images/social/icon-600x600@1.png'), '/'), $crawler->filter('meta[name="twitter:image"]')->attr('content'));
-        $this->assertSame('http://localhost/' . ltrim(self::$kernel->getContainer()->get('elife.assets.packages')->getUrl('assets/images/social/icon-600x600@1.png'), '/'), $crawler->filter('meta[property="og:image"]')->attr('content'));
+        $this->assertSame('http://localhost/'.ltrim(self::$kernel->getContainer()->get('elife.assets.packages')->getUrl('assets/images/social/icon-600x600@1.png'), '/'), $crawler->filter('meta[name="twitter:image"]')->attr('content'));
+        $this->assertSame('http://localhost/'.ltrim(self::$kernel->getContainer()->get('elife.assets.packages')->getUrl('assets/images/social/icon-600x600@1.png'), '/'), $crawler->filter('meta[property="og:image"]')->attr('content'));
         $this->assertSame('600', $crawler->filter('meta[property="og:image:width"]')->attr('content'));
         $this->assertSame('600', $crawler->filter('meta[property="og:image:height"]')->attr('content'));
         $this->assertSame('application/rss+xml', $crawler->filter('link[rel="alternate"]')->attr('type'));
@@ -373,7 +373,7 @@ final class HomeControllerTest extends PageTestCase
     {
         $client = static::createClient();
 
-        $crawler = $client->request('GET', $this->getUrl() . '?foo');
+        $crawler = $client->request('GET', $this->getUrl().'?foo');
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
 
@@ -484,11 +484,11 @@ final class HomeControllerTest extends PageTestCase
     public function invalidPageProvider(): Traversable
     {
         foreach (['-1', '0', 'foo'] as $page) {
-            yield 'page ' . $page => [$page];
+            yield 'page '.$page => [$page];
         }
 
         foreach (['2'] as $page) {
-            yield 'page ' . $page => [
+            yield 'page '.$page => [
                 $page,
                 function () use ($page) {
                     $this->mockApiResponse(
@@ -665,7 +665,7 @@ final class HomeControllerTest extends PageTestCase
         $this->assertSame(['New Subject'], array_map('trim', $crawler->filter('.section-listing__list_item')->extract('_text')));
     }
 
-    protected function getUrl(): string
+    protected function getUrl() : string
     {
         $this->mockApiResponse(
             new Request(
