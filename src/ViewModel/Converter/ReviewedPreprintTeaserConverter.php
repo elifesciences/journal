@@ -56,7 +56,7 @@ final class ReviewedPreprintTeaserConverter implements ViewModelConverter
 
     public function supports($object, string $viewModel = null, array $context = []) : bool
     {
-        return $object instanceof ReviewedPreprint;
+        return $object instanceof ReviewedPreprint && ViewModel\Teaser::class === $viewModel && empty($context['variant']);
     }
 
     protected function getViewModelConverter() : ViewModelConverter
