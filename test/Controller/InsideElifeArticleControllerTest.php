@@ -65,12 +65,26 @@ final class InsideElifeArticleControllerTest extends PageTestCase
         $crawler = $client->request('GET', $this->getUrl());
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
+
+        $breadcrumb = $crawler->filter('.breadcrumb-item a');
+        $this->assertCount(1, $breadcrumb);
+        $this->assertEquals([
+            [
+                'Inside eLife',
+                '/inside-elife',
+            ],
+        ], $breadcrumb->extract(['_text', 'href']));
+
         $this->assertSame('Blog article title', $crawler->filter('.content-header__title')->text());
+        $this->assertSame('Jan 1, 2010', trim(preg_replace('!\s+!', ' ', $crawler->filter('.content-header .meta')
+            ->text())));
+
+        $this->assertSame('Open annotations (there are currently 0 annotations on this page).',
+        $this->crawlerText($crawler->filter('.content-header__one-column-container .content-header-grid__side-popup-block__link')));
 
         $this->assertSame(
             [
                 'Views 5,678',
-                'Annotations Open annotations. The current annotation count on this page is being calculated.',
             ],
             array_map(function (string $text) {
                 return trim(preg_replace('!\s+!', ' ', $text));
