@@ -126,7 +126,7 @@ final class HomeControllerTest extends PageTestCase
         $this->mockApiResponse(
             new Request(
                 'GET',
-                'http://api.elifesciences.org/search?for=&page=1&per-page=10&sort=date&order=desc&type[]=research-advance&type[]=research-article&type[]=research-communication&type[]=review-article&type[]=scientific-correspondence&type[]=short-report&type[]=tools-resources&type[]=replication-study&use-date=default',
+                'http://api.elifesciences.org/search?for=&page=1&per-page=10&sort=date&order=desc&type[]=reviewed-preprint&type[]=research-advance&type[]=research-article&type[]=research-communication&type[]=review-article&type[]=scientific-correspondence&type[]=short-report&type[]=tools-resources&type[]=replication-study&use-date=default',
                 ['Accept' => 'application/vnd.elife.search+json; version=2']
             ),
             new Response(
@@ -226,6 +226,116 @@ final class HomeControllerTest extends PageTestCase
     /**
      * @test
      */
+    public function it_displays_reviewed_preprint_on_homepage_listing()
+    {
+        $client = static::createClient();
+
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/search?for=&page=1&per-page=10&sort=date&order=desc&type[]=reviewed-preprint&type[]=research-advance&type[]=research-article&type[]=research-communication&type[]=review-article&type[]=scientific-correspondence&type[]=short-report&type[]=tools-resources&type[]=replication-study&use-date=default',
+                ['Accept' => 'application/vnd.elife.search+json; version=2']
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.search+json; version=2'],
+                json_encode([
+                    'total' => 1,
+                    'items' => [
+                        [
+                            'id' => '19560',
+                            'type' => 'reviewed-preprint',
+                            'doi' => '10.7554/eLife.19560',
+                            'status' => 'reviewed',
+                            'authorLine' => 'Lee R Berger et al.',
+                            'title' => 'reviewed preprint title',
+                            'indexContent' => 'reviewed preprint index content',
+                            'titlePrefix' => 'Title prefix',
+                            'stage' => 'published',
+                            'published' => '2022-08-01T00:00:00Z',
+                            'reviewedDate' => '2022-08-01T00:00:00Z',
+                            'statusDate' => '2022-08-01T00:00:00Z',
+                            'volume' => 4,
+                            'elocationId' => 'e19560',
+                            'pdf' => 'https://elifesciences.org/content/4/e19560.pdf',
+                            'subjects' => [
+                                [
+                                    'id' => 'genomics-evolutionary-biology',
+                                    'name' => 'Genomics and Evolutionary Biology',
+                                ],
+                            ],
+                            'curationLabels' => [
+                                'Ground-breaking',
+                                'Convincing',
+                            ],
+                            'image' => [
+                                'thumbnail' => [
+                                    'uri' => 'https://iiif.elifesciences.org/lax/19560%2Felife-19560-fig1-v1.tif',
+                                    'alt' => '',
+                                    'source' => [
+                                        'mediaType' => 'image/jpeg',
+                                        'uri' => 'https://iiif.elifesciences.org/lax/19560%2Felife-19560-fig1-v1.tif/full/full/0/default.jpg',
+                                        'filename' => 'an-image.jpg',
+                                    ],
+                                    'size' => [
+                                        'width' => 4194,
+                                        'height' => 4714,
+                                    ],
+                                    'focalPoint' => [
+                                        'x' => 25,
+                                        'y' => 75,
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                    'subjects' => [
+                        [
+                            'id' => 'subject',
+                            'name' => 'Some subject',
+                            'results' => 0,
+                        ],
+                    ],
+                    'types' => [
+                        'correction' => 0,
+                        'editorial' => 0,
+                        'feature' => 0,
+                        'insight' => 0,
+                        'research-advance' => 0,
+                        'research-article' => 0,
+                        'research-communication' => 0,
+                        'retraction' => 0,
+                        'registered-report' => 0,
+                        'replication-study' => 0,
+                        'review-article' => 0,
+                        'scientific-correspondence' => 0,
+                        'short-report' => 0,
+                        'tools-resources' => 0,
+                        'blog-article' => 0,
+                        'collection' => 0,
+                        'interview' => 0,
+                        'labs-post' => 0,
+                        'podcast-episode' => 0,
+                        'reviewed-preprint' => 1,
+                    ],
+                ])
+            )
+        );
+
+        $crawler = $client->request('GET', '/');
+
+        $this->assertSame(200, $client->getResponse()->getStatusCode());
+
+        $teasers = $crawler->filter('.list-heading:contains("Latest research") + ol > li');
+        $this->assertCount(1, $teasers);
+
+        $this->assertSame('reviewed preprint title', trim($teasers->eq(0)->filter('.teaser__header_text')->text()));
+        $this->assertSame('Reviewed Preprint Aug 1, 2022', trim(preg_replace('/\s+/S', ' ', $teasers->eq(0)->filter('.teaser__footer .meta')->text())));
+    }
+
+    /**
+     * @test
+     */
     public function it_has_metadata()
     {
         $client = static::createClient();
@@ -281,7 +391,7 @@ final class HomeControllerTest extends PageTestCase
         $this->mockApiResponse(
             new Request(
                 'GET',
-                'http://api.elifesciences.org/search?for=&page=1&per-page=10&sort=date&order=desc&type[]=research-advance&type[]=research-article&type[]=research-communication&type[]=review-article&type[]=scientific-correspondence&type[]=short-report&type[]=tools-resources&type[]=replication-study&use-date=default',
+                'http://api.elifesciences.org/search?for=&page=1&per-page=10&sort=date&order=desc&type[]=reviewed-preprint&type[]=research-advance&type[]=research-article&type[]=research-communication&type[]=review-article&type[]=scientific-correspondence&type[]=short-report&type[]=tools-resources&type[]=replication-study&use-date=default',
                 ['Accept' => 'application/vnd.elife.search+json; version=2']
             ),
             new Response(
@@ -366,12 +476,12 @@ final class HomeControllerTest extends PageTestCase
             $callable();
         }
 
-        $client->request('GET', '/?page='.$page);
+        $client->request('GET', '/?page=' . $page);
 
         $this->assertSame(404, $client->getResponse()->getStatusCode());
     }
 
-    public function invalidPageProvider() : Traversable
+    public function invalidPageProvider(): Traversable
     {
         foreach (['-1', '0', 'foo'] as $page) {
             yield 'page '.$page => [$page];
@@ -384,7 +494,7 @@ final class HomeControllerTest extends PageTestCase
                     $this->mockApiResponse(
                         new Request(
                             'GET',
-                            'http://api.elifesciences.org/search?for=&page=1&per-page=1&sort=date&order=desc&type[]=research-advance&type[]=research-article&type[]=research-communication&type[]=review-article&type[]=scientific-correspondence&type[]=short-report&type[]=tools-resources&type[]=replication-study&use-date=default',
+                            'http://api.elifesciences.org/search?for=&page=1&per-page=1&sort=date&order=desc&type[]=reviewed-preprint&type[]=research-advance&type[]=research-article&type[]=research-communication&type[]=review-article&type[]=scientific-correspondence&type[]=short-report&type[]=tools-resources&type[]=replication-study&use-date=default',
                             ['Accept' => 'application/vnd.elife.search+json; version=2']
                         ),
                         new Response(
@@ -560,7 +670,7 @@ final class HomeControllerTest extends PageTestCase
         $this->mockApiResponse(
             new Request(
                 'GET',
-                'http://api.elifesciences.org/search?for=&page=1&per-page=10&sort=date&order=desc&type[]=research-advance&type[]=research-article&type[]=research-communication&type[]=review-article&type[]=scientific-correspondence&type[]=short-report&type[]=tools-resources&type[]=replication-study&use-date=default',
+                'http://api.elifesciences.org/search?for=&page=1&per-page=10&sort=date&order=desc&type[]=reviewed-preprint&type[]=research-advance&type[]=research-article&type[]=research-communication&type[]=review-article&type[]=scientific-correspondence&type[]=short-report&type[]=tools-resources&type[]=replication-study&use-date=default',
                 ['Accept' => 'application/vnd.elife.search+json; version=2']
             ),
             new Response(

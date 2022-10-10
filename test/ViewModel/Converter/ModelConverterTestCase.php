@@ -36,6 +36,7 @@ abstract class ModelConverterTestCase extends TestCase
         'press-package' => Model\PressPackage::class,
         'profile' => Model\Profile::class,
         'promotional-collection' => Model\PromotionalCollection::class,
+        'reviewed-preprint' => Model\ReviewedPreprint::class,
         'subject' => Model\Subject::class,
     ];
 

@@ -415,6 +415,16 @@ resources:
     defaults:
          _controller: AppBundle:Resources:resources
 
+reviewed-preprint:
+    path: /reviewed-preprints/{id}
+    requirements:
+        id: '[a-z0-9-]+'
+
+reviewed-preprints:
+    path: /reviewed-preprints
+    defaults:
+         _controller: AppBundle:ReviewedPreprints:list
+
 rss-ahead:
     path: /rss/ahead.xml
 
