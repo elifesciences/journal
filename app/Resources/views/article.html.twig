@@ -418,9 +418,9 @@
 {% block body %}
 
     {% if is_granted('FEATURE_PRC_COMMS') %}
-        <div class="wrapper wrapper-article-prc-message">
+        <div class="wrapper wrapper-article-prc-message" id="wrapperArticlePrcMessage">
             <div class="content-container-grid">
-                <p class="article-prc-message"><span class="article-prc-message-text"> 2023, eLife will stop rejecting or accepting research after peer review. Instead, every preprint sent for review will be published. </span><a href="#" class="article-prc-message__link">About the new process.</a> <button aria-label="dismiss this message" class="article-prc-message-dismiss-button">
+                <p class="article-prc-message"><span class="article-prc-message-text"> 2023, eLife will stop rejecting or accepting research after peer review. Instead, every preprint sent for review will be published. </span><a href="#" class="article-prc-message__link">About the new process.</a> <button aria-label="dismiss this message" class="article-prc-message-dismiss-button" id="articlePrcMessageDismissButton">
                         <svg width="14px" height="14px" viewBox="0 0 14 14" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <title>Close</title>
                             <g id="desktop" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -437,6 +437,50 @@
                         </svg></button></p>
             </div>
         </div>
+
+        <script>
+            (function(window) {
+
+                const doc = window.document;
+
+                const getArticlePrcMessageDismissedCookie = function() {
+                    let found = '';
+                    doc.cookie.split('; ').forEach(function(cookie) {
+                        if (cookie.indexOf('articlePrcMessageDismissed') === 0) {
+                            const re = new RegExp(`articlePrcMessageDismissed=([^;]*)`);
+                            const cookieMatch = cookie.match(re)[1];
+                            found = decodeURIComponent(cookieMatch);
+                        }
+                    });
+                    return found;
+                }
+
+                const setArticlePrcMessageDismissedCookie = function() {
+                    doc.cookie = `articlePrcMessageDismissed=true; expires=Mon, 9 October 2023 11:00:00 UTC}; path=/; Secure=true`;
+                }
+
+                const hideArticlePrcMessage = function() {
+                    doc.getElementById('wrapperArticlePrcMessage').classList.add('hidden');
+                }
+
+                const dismiss = function() {
+                    hideArticlePrcMessage();
+                    setArticlePrcMessageDismissedCookie();
+                }
+
+                const wireUpDismissButton = function() {
+                    doc.getElementById('articlePrcMessageDismissButton').addEventListener('click', dismiss);
+                }
+
+                if (!!getArticlePrcMessageDismissedCookie()) {
+                    hideArticlePrcMessage();
+                } else {
+                    wireUpDismissButton();
+                }
+
+            }(window));
+        </script>
+
     {% endif %}
     {{ render_pattern(contentHeader) }}
 
