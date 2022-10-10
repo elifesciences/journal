@@ -35,7 +35,7 @@ final class HomeController extends Controller
         $arguments = $this->defaultPageArguments($request);
 
         $latestResearch = promise_for($this->get('elife.api_sdk.search')
-            ->forType('research-advance', 'research-article', 'research-communication', 'review-article', 'scientific-correspondence', 'short-report', 'tools-resources', 'replication-study')
+            ->forType('reviewed-preprint', 'research-advance', 'research-article', 'research-communication', 'review-article', 'scientific-correspondence', 'short-report', 'tools-resources', 'replication-study')
             ->sortBy('date'))
             ->then(function (Sequence $sequence) use ($page, $perPage) {
                 $pagerfanta = new Pagerfanta(new SequenceAdapter($sequence, $this->willConvertTo(Teaser::class)));
