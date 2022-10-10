@@ -333,6 +333,11 @@
                 grid-column: 1 / -1;
             }
 
+            /* Allow room for the dismiss button */
+            .js .article-prc-message {
+                padding-right: calc((52 / 14) * 1em);
+            }
+
             .article-prc-message::before {
                 content: '';
                 display: block;
@@ -359,6 +364,22 @@
                 color: #0769b0;
                 text-decoration: underline;
                 text-underline-offset: 3px;
+            }
+
+            .article-prc-message-dismiss-button {
+                display: none;
+            }
+
+            .js .article-prc-message-dismiss-button {
+                display: block;
+                background-color: transparent;
+                border-width: 0;
+                line-height: 1;
+                padding: 5px;
+
+                position: absolute;
+                top: calc((12 / 14) * 1em);
+                right: calc((20 / 14) * 1em);
             }
 
             .wrapper.wrapper-article-prc-message {
@@ -395,7 +416,21 @@
     {% if is_granted('FEATURE_PRC_COMMS') %}
         <div class="wrapper wrapper-article-prc-message">
             <div class="content-container-grid">
-                <p class="article-prc-message">In 2023, eLife will stop rejecting or accepting research after peer review. Instead, every preprint sent for review will be published. <a href="#" class="article-prc-message__link">About the process.</a></p>
+                <p class="article-prc-message">In 2023, eLife will stop rejecting or accepting research after peer review. Instead, every preprint sent for review will be published. <a href="#" class="article-prc-message__link">About the process.</a> <button aria-label="dismiss this message" class="article-prc-message-dismiss-button">
+                        <svg width="14px" height="14px" viewBox="0 0 14 14" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                            <title>Close</title>
+                            <g id="desktop" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                <g id="Desktop-HD---menus" transform="translate(-238.000000, -30.000000)" fill="#212121">
+                                    <g id="menu" transform="translate(-2.000000, -2.000000)">
+                                        <g id="close">
+                                            <g transform="translate(240.000000, 32.000000)" id="Shape">
+                                                <polygon points="14 1.4 12.6 0 7 5.6 1.4 0 0 1.4 5.6 7 0 12.6 1.4 14 7 8.4 12.6 14 14 12.6 8.4 7"></polygon>
+                                            </g>
+                                        </g>
+                                    </g>
+                                </g>
+                            </g>
+                        </svg></button></p>
             </div>
         </div>
     {% endif %}
