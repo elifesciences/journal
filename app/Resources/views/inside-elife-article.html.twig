@@ -1,6 +1,8 @@
 {% set criticalCss = 'post' %}
 
 {% set hypothesis = true %}
+{% set hypothesis = true %}
+{% set customWrapperClass = 'content--narrow-column' %}
 
 {% extends '::page.html.twig' %}
 
@@ -8,21 +10,18 @@
 
 {% block body %}
 
+    <style>
+        #content {
+            padding-top: 48px;
+            padding-top: 3rem;
+        }
+    </style>
+
     {{ render_pattern(contentHeader) }}
-
-    {% if contextualData %}
-
-        <div class="wrapper">
-
-            {{ render_pattern(contextualData) }}
-
-        </div>
-
-    {% endif %}
 
     {% include 'calls-to-action.html.twig' %}
 
-    {% embed 'grid/content.html.twig' %}
+    {% embed 'grid/content-new.html.twig' %}
 
         {% block main %}
 
