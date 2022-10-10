@@ -352,6 +352,10 @@
                 top: 1em;
             }
 
+            .article-prc-message-text {
+                margin-right: 2px;
+            }
+
             .article-prc-message__link:link.article-prc-message__link:link.article-prc-message__link:link.article-prc-message__link:link.article-prc-message__link:link,
             .article-prc-message__link:visited.article-prc-message__link:visited.article-prc-message__link:visited.article-prc-message__link:visited.article-prc-message__link:visited {
                 color: #087acc;
@@ -416,7 +420,7 @@
     {% if is_granted('FEATURE_PRC_COMMS') %}
         <div class="wrapper wrapper-article-prc-message">
             <div class="content-container-grid">
-                <p class="article-prc-message">In 2023, eLife will stop rejecting or accepting research after peer review. Instead, every preprint sent for review will be published. <a href="#" class="article-prc-message__link">About the process.</a> <button aria-label="dismiss this message" class="article-prc-message-dismiss-button">
+                <p class="article-prc-message"><span class="article-prc-message-text"> 2023, eLife will stop rejecting or accepting research after peer review. Instead, every preprint sent for review will be published. </span><a href="#" class="article-prc-message__link">About the new process.</a> <button aria-label="dismiss this message" class="article-prc-message-dismiss-button">
                         <svg width="14px" height="14px" viewBox="0 0 14 14" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <title>Close</title>
                             <g id="desktop" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
