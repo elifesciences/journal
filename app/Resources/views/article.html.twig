@@ -324,8 +324,25 @@
                 line-height: 1.7;
 
                 background-color: #f5f7fa;
-                padding-top: calc((12 / 16) * 1rem);
-                padding-bottom: calc((12 / 16) * 1rem);
+                padding-top: calc((12 / 14) * 1em);
+                padding-bottom: calc((12 / 14) * 1em);
+                padding-left: calc(1rem /* space before icon*/ + calc((20 / 14) * 1em) /* width of icon */ + ((12 / 14) * 1em) /* space after icon */);
+
+                position: relative;
+            }
+
+            .article-prc-message::before {
+                content: '';
+                display: block;
+                width: calc((20 / 14) * 1em);
+                height: calc((20 / 14) * 1em);
+                background-image: url('data:image/svg+xml;utf8,<svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><title>Information</title><path d="M10 0C4.5 0 0 4.5 0 10s4.5 10 10 10 10-4.5 10-10S15.5 0 10 0zm1 15H9V9h2v6zm0-8H9V5h2v2z" fill="%23177cc9" fill-rule="evenodd"/></svg>');
+                background-repeat: no-repeat;
+                background-size: contain;
+
+                position: absolute;
+                left: 1rem;
+                top: 1em;
             }
         </style>
     {% endif %}
