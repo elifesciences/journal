@@ -316,12 +316,22 @@
 
     {%- endif %}
 
+    {% if is_granted('FEATURE_PRC_COMMS') %}
+        <style>
+            .article-prc-message {
+                font-family: "Noto Sans",Arial,Helvetica,sans-serif;
+                font-size: calc((14 / 16) * 1rem);
+                line-height: 1.7;
+            }
+        </style>
+    {% endif %}
+
 {% endblock %}
 
 {% block body %}
 
     {% if is_granted('FEATURE_PRC_COMMS') %}
-        <p>In 2023, eLife will stop rejecting or accepting research after peer review. Instead, every preprint sent for review will be published. About the process.</p>
+        <p class="article-prc-message">In 2023, eLife will stop rejecting or accepting research after peer review. Instead, every preprint sent for review will be published. About the process.</p>
     {% endif %}
     {{ render_pattern(contentHeader) }}
 
