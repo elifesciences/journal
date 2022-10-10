@@ -330,7 +330,12 @@
 
                 position: relative;
 
-                grid-column: 1 / -1;
+            }
+
+            @supports (display: grid) {
+                .article-prc-message {
+                    grid-column: 1 / -1;
+                }
             }
 
             /* Allow room for the dismiss button */
@@ -398,15 +403,17 @@
                 }
             }
 
-            @media screen and (min-width: 56.25em /* 900px */) {
-                .article-prc-message {
-                    grid-column: 2 / 12;
+            @supports (display: grid) {
+                @media screen and (min-width: 56.25em /* 900px */) {
+                    .article-prc-message {
+                        grid-column: 2 / 12;
+                    }
                 }
-            }
 
-            @media screen and (min-width: 75em /* 1200px */) {
-                .article-prc-message {
-                    grid-column: 1 / -1;
+                @media screen and (min-width: 75em /* 1200px */) {
+                    .article-prc-message {
+                        grid-column: 1 / -1;
+                    }
                 }
             }
 
