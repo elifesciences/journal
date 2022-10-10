@@ -321,7 +321,7 @@
             .article-prc-message {
                 font-family: "Noto Sans",Arial,Helvetica,sans-serif;
                 font-size: calc((14 / 16) * 1rem);
-                line-height: 1.7;
+                line-height: 1.7; /* 24px give or take browser rounding */
 
                 background-color: #f5f7fa;
                 padding-top: calc((12 / 14) * 1em);
@@ -345,6 +345,20 @@
                 position: absolute;
                 left: 1rem;
                 top: 1em;
+            }
+
+            .article-prc-message__link:link.article-prc-message__link:link.article-prc-message__link:link.article-prc-message__link:link.article-prc-message__link:link,
+            .article-prc-message__link:visited.article-prc-message__link:visited.article-prc-message__link:visited.article-prc-message__link:visited.article-prc-message__link:visited {
+                color: #087acc;
+                border-width: 0;
+                font-weight: bold;
+            }
+
+            .article-prc-message__link:hover.article-prc-message__link:hover.article-prc-message__link:hover.article-prc-message__link:hover.article-prc-message__link:hover,
+            .article-prc-message__link:active.article-prc-message__link:active.article-prc-message__link:active.article-prc-message__link:active.article-prc-message__link:active {
+                color: #0769b0;
+                text-decoration: underline;
+                text-underline-offset: 3px;
             }
 
             .wrapper.wrapper-article-prc-message {
@@ -381,7 +395,7 @@
     {% if is_granted('FEATURE_PRC_COMMS') %}
         <div class="wrapper wrapper-article-prc-message">
             <div class="content-container-grid">
-                <p class="article-prc-message">In 2023, eLife will stop rejecting or accepting research after peer review. Instead, every preprint sent for review will be published. About the process.</p>
+                <p class="article-prc-message">In 2023, eLife will stop rejecting or accepting research after peer review. Instead, every preprint sent for review will be published. <a href="#" class="article-prc-message__link">About the process.</a></p>
             </div>
         </div>
     {% endif %}
