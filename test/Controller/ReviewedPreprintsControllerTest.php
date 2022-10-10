@@ -80,7 +80,7 @@ final class ReviewedPreprintsControllerTest extends PageTestCase
                     $this->mockApiResponse(
                         new Request(
                             'GET',
-                            'http://api.elifesciences.org/reviewed-preprints?page=1&per-page=10&order=desc',
+                            'http://api.elifesciences.org/reviewed-preprints?page=1&per-page=1&order=desc',
                             ['Accept' => 'application/vnd.elife.reviewed-preprint-list+json; version=1']
                         ),
                         new Response(
