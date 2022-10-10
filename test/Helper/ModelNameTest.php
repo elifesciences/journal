@@ -57,6 +57,7 @@ final class ModelNameTest extends TestCase
             'podcast-episode' => ['Podcast', 'Podcasts'],
             'press-package' => ['Press Pack', 'Press Packs'],
             'promotional-collection' => ['Highlight', 'Highlights'],
+            'reviewed-preprint' => ['Reviewed Preprint', 'Reviewed Preprints'],
         ]);
     }
 
