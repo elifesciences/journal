@@ -329,6 +329,8 @@
                 padding-left: calc(1rem /* space before icon*/ + calc((20 / 14) * 1em) /* width of icon */ + ((12 / 14) * 1em) /* space after icon */);
 
                 position: relative;
+
+                grid-column: 1 / -1;
             }
 
             .article-prc-message::before {
@@ -344,6 +346,31 @@
                 left: 1rem;
                 top: 1em;
             }
+
+            .wrapper.wrapper-article-prc-message {
+                padding-left: 0;
+                padding-right: 0;
+            }
+
+            @media screen and (min-width: 30em /* 480px */) {
+                .wrapper.wrapper-article-prc-message {
+                    padding-left: 3rem;
+                    padding-right: 3rem;
+                }
+            }
+
+            @media screen and (min-width: 56.25em /* 900px */) {
+                .article-prc-message {
+                    grid-column: 2 / 12;
+                }
+            }
+
+            @media screen and (min-width: 75em /* 1200px */) {
+                .article-prc-message {
+                    grid-column: 1 / -1;
+                }
+            }
+
         </style>
     {% endif %}
 
@@ -352,7 +379,11 @@
 {% block body %}
 
     {% if is_granted('FEATURE_PRC_COMMS') %}
-        <p class="article-prc-message">In 2023, eLife will stop rejecting or accepting research after peer review. Instead, every preprint sent for review will be published. About the process.</p>
+        <div class="wrapper wrapper-article-prc-message">
+            <div class="content-container-grid">
+                <p class="article-prc-message">In 2023, eLife will stop rejecting or accepting research after peer review. Instead, every preprint sent for review will be published. About the process.</p>
+            </div>
+        </div>
     {% endif %}
     {{ render_pattern(contentHeader) }}
 
