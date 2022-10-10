@@ -320,6 +320,9 @@
 
 {% block body %}
 
+    {% if is_granted('FEATURE_PRC_COMMS') %}
+        <p>In 2023, eLife will stop rejecting or accepting research after peer review. Instead, every preprint sent for review will be published. About the process.</p>
+    {% endif %}
     {{ render_pattern(contentHeader) }}
 
     {% for modalWindow in modalWindows %}
