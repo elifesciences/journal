@@ -43,8 +43,8 @@ final class CoverArticleHeroBannerConverter implements ViewModelConverter
                 $this->simpleDate($article, $context)
             ),
             (new PictureBuilderFactory())->forImage(
-                $object->getBanner(), $object->getBanner()->getWidth())
-                ->build(),
+                $object->getBanner(), 464, 269
+            )->build(),
             $article instanceof ArticleVoR ? $article->getImpactStatement() : null,
             $article->getAuthorLine()
         );
