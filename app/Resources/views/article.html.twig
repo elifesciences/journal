@@ -316,10 +316,179 @@
 
     {%- endif %}
 
+    {% if is_granted('FEATURE_PRC_COMMS') %}
+        <style>
+            .article-prc-message {
+                font-family: "Noto Sans",Arial,Helvetica,sans-serif;
+                font-size: calc((14 / 16) * 1rem);
+                line-height: 1.7; /* 24px give or take browser rounding */
+
+                background-color: #f5f7fa;
+                padding-top: calc((12 / 14) * 1em);
+                padding-bottom: calc((12 / 14) * 1em);
+                padding-left: calc(1rem /* space before icon*/ + calc((20 / 14) * 1em) /* width of icon */ + ((12 / 14) * 1em) /* space after icon */);
+
+                position: relative;
+
+            }
+
+            @supports (display: grid) {
+                .article-prc-message {
+                    grid-column: 1 / -1;
+                }
+            }
+
+            /* Allow room for the dismiss button */
+            .js .article-prc-message {
+                padding-right: calc((52 / 14) * 1em);
+            }
+
+            .article-prc-message::before {
+                content: '';
+                display: block;
+                width: calc((20 / 14) * 1em);
+                height: calc((20 / 14) * 1em);
+                background-image: url('data:image/svg+xml;utf8,<svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><title>Information</title><path d="M10 0C4.5 0 0 4.5 0 10s4.5 10 10 10 10-4.5 10-10S15.5 0 10 0zm1 15H9V9h2v6zm0-8H9V5h2v2z" fill="%23177cc9" fill-rule="evenodd"/></svg>');
+                background-repeat: no-repeat;
+                background-size: contain;
+
+                position: absolute;
+                left: 1rem;
+                top: 1em;
+            }
+
+            .article-prc-message-text {
+                margin-right: 2px;
+            }
+
+            .article-prc-message__link:link.article-prc-message__link:link.article-prc-message__link:link.article-prc-message__link:link.article-prc-message__link:link,
+            .article-prc-message__link:visited.article-prc-message__link:visited.article-prc-message__link:visited.article-prc-message__link:visited.article-prc-message__link:visited {
+                color: #087acc;
+                border-width: 0;
+                font-weight: bold;
+            }
+
+            .article-prc-message__link:hover.article-prc-message__link:hover.article-prc-message__link:hover.article-prc-message__link:hover.article-prc-message__link:hover,
+            .article-prc-message__link:active.article-prc-message__link:active.article-prc-message__link:active.article-prc-message__link:active.article-prc-message__link:active {
+                color: #0769b0;
+                text-decoration: underline;
+                text-underline-offset: 3px;
+            }
+
+            .article-prc-message-dismiss-button {
+                display: none;
+            }
+
+            .js .article-prc-message-dismiss-button {
+                display: block;
+                background-color: transparent;
+                border-width: 0;
+                line-height: 1;
+                padding: 5px;
+
+                position: absolute;
+                top: calc((12 / 14) * 1em);
+                right: calc((20 / 14) * 1em);
+            }
+
+            .wrapper.wrapper-article-prc-message {
+                padding-left: 0;
+                padding-right: 0;
+            }
+
+            @media screen and (min-width: 30em /* 480px */) {
+                .wrapper.wrapper-article-prc-message {
+                    padding-left: 3rem;
+                    padding-right: 3rem;
+                }
+            }
+
+            @supports (display: grid) {
+                @media screen and (min-width: 56.25em /* 900px */) {
+                    .article-prc-message {
+                        grid-column: 2 / 12;
+                    }
+                }
+
+                @media screen and (min-width: 75em /* 1200px */) {
+                    .article-prc-message {
+                        grid-column: 1 / -1;
+                    }
+                }
+            }
+
+        </style>
+    {% endif %}
+
 {% endblock %}
 
 {% block body %}
 
+    {% if is_granted('FEATURE_PRC_COMMS') %}
+        <div class="wrapper wrapper-article-prc-message" id="wrapperArticlePrcMessage">
+            <div class="content-container-grid">
+                <p class="article-prc-message"><span class="article-prc-message-text"> 2023, eLife will stop rejecting or accepting research after peer review. Instead, every preprint sent for review will be published. </span><a href="#" class="article-prc-message__link">About the new process.</a> <button aria-label="dismiss this message" class="article-prc-message-dismiss-button" id="articlePrcMessageDismissButton">
+                        <svg width="14px" height="14px" viewBox="0 0 14 14" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                            <title>Close</title>
+                            <g id="desktop" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                <g id="Desktop-HD---menus" transform="translate(-238.000000, -30.000000)" fill="#212121">
+                                    <g id="menu" transform="translate(-2.000000, -2.000000)">
+                                        <g id="close">
+                                            <g transform="translate(240.000000, 32.000000)" id="Shape">
+                                                <polygon points="14 1.4 12.6 0 7 5.6 1.4 0 0 1.4 5.6 7 0 12.6 1.4 14 7 8.4 12.6 14 14 12.6 8.4 7"></polygon>
+                                            </g>
+                                        </g>
+                                    </g>
+                                </g>
+                            </g>
+                        </svg></button></p>
+            </div>
+        </div>
+
+        <script>
+            (function(window) {
+
+                const doc = window.document;
+
+                const getArticlePrcMessageDismissedCookie = function() {
+                    let found = '';
+                    doc.cookie.split('; ').forEach(function(cookie) {
+                        if (cookie.indexOf('articlePrcMessageDismissed') === 0) {
+                            const re = new RegExp(`articlePrcMessageDismissed=([^;]*)`);
+                            const cookieMatch = cookie.match(re)[1];
+                            found = decodeURIComponent(cookieMatch);
+                        }
+                    });
+                    return found;
+                }
+
+                const setArticlePrcMessageDismissedCookie = function() {
+                    doc.cookie = `articlePrcMessageDismissed=true; expires=Mon, 9 October 2023 11:00:00 UTC}; path=/; Secure=true`;
+                }
+
+                const hideArticlePrcMessage = function() {
+                    doc.getElementById('wrapperArticlePrcMessage').classList.add('hidden');
+                }
+
+                const dismiss = function() {
+                    hideArticlePrcMessage();
+                    setArticlePrcMessageDismissedCookie();
+                }
+
+                const wireUpDismissButton = function() {
+                    doc.getElementById('articlePrcMessageDismissButton').addEventListener('click', dismiss);
+                }
+
+                if (!!getArticlePrcMessageDismissedCookie()) {
+                    hideArticlePrcMessage();
+                } else {
+                    wireUpDismissButton();
+                }
+
+            }(window));
+        </script>
+
+    {% endif %}
     {{ render_pattern(contentHeader) }}
 
     {% for modalWindow in modalWindows %}
