@@ -35,7 +35,7 @@ final class CoverBlogArticleHighlightItemConverter implements ViewModelConverter
             new ViewModel\Link($object->getTitle(), $this->urlGenerator->generate('inside-elife-article', [$blogArticle])),
             ViewModel\Meta::withLink(new ViewModel\Link('Inside eLife', $this->urlGenerator->generate('inside-elife')), $this->simpleDate($blogArticle, $context)),
             (new PictureBuilderFactory())->forImage(
-                $object->getBanner(), $object->getBanner()->getWidth()
+                $object->getBanner(), 339, 190
             )->build(),
             $blogArticle->getImpactStatement()
         );

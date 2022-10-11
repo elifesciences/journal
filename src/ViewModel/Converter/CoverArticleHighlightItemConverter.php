@@ -46,7 +46,7 @@ final class CoverArticleHighlightItemConverter implements ViewModelConverter
                 $this->simpleDate($article, $context)
             ),
             (new PictureBuilderFactory())->forImage(
-                $object->getBanner(), $object->getBanner()->getWidth()
+                $object->getBanner(), 339, 190
             )->build(),
             $article instanceof ArticleVoR ? $article->getImpactStatement() : null,
             $article->getAuthorLine()

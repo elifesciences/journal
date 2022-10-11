@@ -35,7 +35,7 @@ final class CoverCollectionHighlightItemConverter implements ViewModelConverter
             new ViewModel\Link($object->getTitle(), $this->urlGenerator->generate('collection', [$collection])),
             ViewModel\Meta::withLink(new ViewModel\Link('Collection', $this->urlGenerator->generate('collections')), $this->simpleDate($collection, $context)),
             (new PictureBuilderFactory())->forImage(
-                $object->getBanner(), $object->getBanner()->getWidth()
+                $object->getBanner(), 339, 190
             )->build(),
             $collection->getImpactStatement()
         );
