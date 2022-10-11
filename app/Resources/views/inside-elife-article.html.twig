@@ -15,6 +15,22 @@
             padding-top: 48px;
             padding-top: 3rem;
         }
+
+        @supports (display: grid) {
+            @media screen and (min-width: 56.25em /* 900px */) {
+                #content .main-content-grid {
+                    grid-column: 2 / 12;
+                }
+            }
+
+            @media screen and (min-width: 75em /* 1200px */) {
+                #content .main-content-grid {
+                    margin-right: -24px;
+                    margin-right: -1.5rem;
+                    grid-column: 3 / 11;
+                }
+            }
+        }
     </style>
 
     {{ render_pattern(contentHeader) }}
