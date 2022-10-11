@@ -35,7 +35,7 @@ final class CoverCollectionHeroBannerConverter implements ViewModelConverter
             new ViewModel\Link($object->getTitle(), $this->urlGenerator->generate('collection', [$collection])),
             ViewModel\Meta::withLink(new ViewModel\Link('Collection', $this->urlGenerator->generate('collections')), $this->simpleDate($collection, $context)),
             (new PictureBuilderFactory())->forImage(
-                $object->getBanner(), 464, 269
+                $object->getBanner(), 633, 367
             )->build(),
             $collection->getImpactStatement()
         );
