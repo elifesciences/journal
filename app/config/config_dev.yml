@@ -4,7 +4,6 @@ imports:
 
 parameters:
     feature_hero: true
-    feature_prc_comms: true
 
 csa_guzzle:
     profiler:
