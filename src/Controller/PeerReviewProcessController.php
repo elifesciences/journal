@@ -11,10 +11,6 @@ final class PeerReviewProcessController extends Controller
 {
     public function peerReviewProcessAction(Request $request): Response
     {
-        if (!$this->isGranted('FEATURE_PRC_COMMS')) {
-            throw new NotFoundHttpException('Not allowed to see PRC comms');
-        }
-
         $arguments = $this->defaultPageArguments($request);
 
         $arguments['title'] = 'eLife’s peer review process';
