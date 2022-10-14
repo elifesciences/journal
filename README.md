@@ -8,20 +8,13 @@ Dependencies
 
 * [Composer](https://getcomposer.org/)
 * [npm](https://www.npmjs.com/)
-* PHP 7
+* [PHP 7](https://www.php.net/)
+* [Docker](https://www.docker.com/)
+* [Docker-compose](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-compose-on-ubuntu-20-04)
 
-Installation
--------------
-
-1. Create `app/config/parameters.yml` from `app/config/parameters.yml.dist`
-2. `npm install`
-3. `composer install`
-4. `node_modules/.bin/gulp`
-5. `bin/console assets:install --symlink`
-
-Running the site locally
+Docker Intallation - Running the site locally
 ------------------------
-The first time running the journal, you may need to build some dependant images first.
+<!-- The first time running the journal, you may need to build some dependant images first.
 1. Build all dependant images first
 ```
 docker-compose build npm
@@ -29,11 +22,11 @@ docker-compose build composer
 docker-compose build assets_builder
 docker-compose build app
 ```
-
 Then, you should be able to start and restart using these commands:
-
-1. `docker-compose down --volumes --remove-orphans && docker-compose up --build`
-2. Open `http://localhost:8080` in your browser.
+1. `docker-compose down --volumes --remove-orphans && docker-compose up --build` -->
+1. Run `composer install` to generate vendor files locally
+2. Run `docker-compose up --build`
+3. Open `http://localhost:8080` in your browser.
 
 ### Changing configuration
 
@@ -41,6 +34,15 @@ When running the site locally via Docker, the parameters are supplied by `/.dock
 
 To change configuration that is supplied by an environment variable, pass in the environment variable at start up. For example, to change the API URL:
 `docker-compose down --volumes --remove-orphans && API_URL=https://prod--gateway.elifesciences.org docker-compose up --build`.
+
+Manual Installation (may or may not work - better use docker)
+-------------
+
+1. Create `app/config/parameters.yml` from `app/config/parameters.yml.dist`
+2. `npm install`
+3. `composer install`
+4. `node_modules/.bin/gulp`
+5. `bin/console assets:install --symlink`
 
 Regenerating critical CSS
 -------------------------
@@ -120,4 +122,3 @@ Unsubscribe/optout interface:
 - Visit http://localhost:8080/content-alerts/optout/red to trigger something went wrong scenario
 
 To work on the integration with CiviCRM you will have to set the environment variable `APP_ENV=prod`. And also adjust the values in `.docker/parameters.yml` for `crm_api_key`, `crm_api_site_key`, `google_api_client.refresh_token` and `google_api_client.optout_unsubscribe_spreadsheet_id` to be the same as in production.
-
