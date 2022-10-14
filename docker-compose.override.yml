@@ -8,7 +8,12 @@ services:
         volumes:
             - ./composer.json:/app/composer.json
             - ./composer.lock:/app/composer.lock
-            - vendor:/app/vendor
+            - type: volume
+              source: vendor
+              target: /app/vendor
+            - type: bind
+              source: ./vendor
+              target: /app/vendor
     npm:
         volumes:
             - ./npm-shrinkwrap.json:/npm-shrinkwrap.json
@@ -30,7 +35,12 @@ services:
             - /srv/journal/var
             - build:/srv/journal/build
             - critical_css:/srv/journal/build/critical-css
-            - vendor:/srv/journal/vendor
+            - type: volume
+              source: vendor
+              target: /srv/journal/vendor
+            - type: bind
+              source: ./vendor
+              target: /srv/journal/vendor
     web:
         volumes:
             - assets:/srv/journal/web
