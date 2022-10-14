@@ -666,7 +666,7 @@ final class HomepageContext extends Context
                 'css',
                 '.hero-banner__image',
                 'src',
-                'https://www.example.com/iiif/iden%2Ftifier/0,376,1800,1044/633,367/0/default.jpg'
+                'https://www.example.com/iiif/iden%2Ftifier/0,278,1800,1044/633,367/0/default.jpg'
             );
         });
     }
