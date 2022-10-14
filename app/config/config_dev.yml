@@ -4,6 +4,7 @@ imports:
 
 parameters:
     feature_prc_comms: true
+    feature_reviewed_preprints: true
 
 csa_guzzle:
     profiler:

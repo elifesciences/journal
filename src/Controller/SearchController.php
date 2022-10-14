@@ -53,6 +53,7 @@ final class SearchController extends Controller
         'scientific-correspondence',
         'short-report',
         'tools-resources',
+        // @todo - once feature_reviewed_preprints is enabled add 'reviewed-preprint' here.
     ];
 
     public function queryAction(Request $request) : Response
@@ -76,6 +77,10 @@ final class SearchController extends Controller
         }
         if (in_array('research', $arguments['query']['types'])) {
             $apiTypes = array_merge($apiTypes, self::$researchTypes);
+        }
+
+        if (!$this->isGranted('FEATURE_REVIEWED_PREPRINTS') && empty($apiTypes)) {
+            $apiTypes = array_merge(self::$magazineTypes, self::$researchTypes);
         }
 
         $search = $this->get('elife.api_sdk.search.slow')
