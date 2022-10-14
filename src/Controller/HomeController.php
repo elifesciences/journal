@@ -66,13 +66,13 @@ final class HomeController extends Controller
             ->then($this->willConvertTo(ListingTeasers::class, ['heading' => 'Latest research', 'type' => 'articles']));
 
         if (1 === $page) {
-            return $this->createFirstPage($request, $arguments);
+            return $this->createFirstPage($arguments);
         }
 
         return $this->createSubsequentPage($request, $arguments);
     }
 
-    private function createFirstPage(Request $request, array $arguments) : Response
+    private function createFirstPage(array $arguments) : Response
     {
         if ($this->isGranted('FEATURE_HERO')) {
             $heroHighlights = $this->get('elife.api_sdk.covers')
