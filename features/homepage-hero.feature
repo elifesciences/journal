@@ -9,7 +9,6 @@ Feature: Homepage hero and highlights
   Background:
     Given 10 articles have been published
 
-  @javascript
   Scenario: Covers use details from the content that they link to by default
     Given there is a collection called 'Tropical disease'
     And there is a cover linking to the 'Tropical disease' collection
@@ -17,7 +16,6 @@ Feature: Homepage hero and highlights
     Then I should see the 'Tropical disease' cover in the hero banner
     And I should see the title and image from the 'Tropical disease' collection used in the 'Tropical disease' cover
 
-  @javascript
   Scenario: Cover can have a title and image different from the content they link to
     Given there is a collection called 'Tropical disease'
     And there is a cover linking to the 'Tropical disease' collection with a custom title and image
