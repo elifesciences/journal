@@ -507,7 +507,6 @@ final class SearchControllerTest extends PageTestCase
             )
         );
 
-        $this->markTestSkipped('This test can be reintroduced once we have removed the FEATURE_REVIEWED_PREPRINTS flag');
         $crawler = $client->request('GET', '/search?for=Reviewed preprint&page=1&per-page=10&sort=relevance&order=desc&use-date=default');
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $listing = $crawler->filter('ol.listing-list > li');
