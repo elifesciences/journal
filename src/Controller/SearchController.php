@@ -53,11 +53,14 @@ final class SearchController extends Controller
         'scientific-correspondence',
         'short-report',
         'tools-resources',
-        // @todo - once feature_reviewed_preprints is enabled add 'reviewed-preprint' here.
+        'reviewed-preprint',
     ];
 
     public function queryAction(Request $request) : Response
     {
+        if ($this->isGranted('FEATURE_REVIEWED_PREPRINTS') === false) {
+            unset(self::$researchTypes['reviewed-preprint']);
+        }
         $page = (int) $request->query->get('page', 1);
         $perPage = 10;
 
