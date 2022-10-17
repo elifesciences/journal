@@ -2,7 +2,6 @@ imports:
   - resource: config_prod.yml
 
 parameters:
-    feature_hero: true
     feature_prc_comms: true
 
 swiftmailer:

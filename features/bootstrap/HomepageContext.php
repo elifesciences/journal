@@ -644,13 +644,15 @@ final class HomepageContext extends Context
         );
     }
 
+
+
     /**
-     * @Then /^I should see the \'([^\']*)\' cover in the carousel$/
+     * @Then /^I should see the \'([^\']*)\' cover in the hero banner/
      */
-    public function iShouldSeeTheCoverInTheCarousel(string $name)
+    public function iShouldSeeTheCoverInTheHeroBanner(string $name)
     {
         $this->spin(function () use ($name) {
-            $this->assertSession()->elementAttributeContains('css', '.carousel-item__title_link', 'href', $this->createId($name));
+            $this->assertSession()->elementAttributeContains('css', '.hero-banner__title_link', 'href', $this->createId($name));
         });
     }
 
@@ -662,9 +664,9 @@ final class HomepageContext extends Context
         $this->spin(function () {
             $this->assertSession()->elementAttributeContains(
                 'css',
-                '.carousel-item__image',
+                '.hero-banner__image',
                 'src',
-                'https://www.example.com/iiif/iden%2Ftifier/0,529,1800,543/1114,336/0/default.jpg'
+                'https://www.example.com/iiif/iden%2Ftifier/0,278,1800,1044/633,367/0/default.jpg'
             );
         });
     }
@@ -677,9 +679,9 @@ final class HomepageContext extends Context
         $this->spin(function () {
             $this->assertSession()->elementAttributeContains(
                 'css',
-                '.carousel-item__image',
+                '.hero-banner__image',
                 'src',
-                'https://www.example.com/iiif/iden%2Ftifier/0,529,1800,543/1114,336/0/default.png'
+                'https://www.example.com/iiif/iden%2Ftifier/0,278,1800,1044/633,367/0/default.png'
             );
         });
     }

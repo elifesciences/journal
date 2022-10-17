@@ -5,9 +5,9 @@ Feature: Monthly archive
   - Each year has a monthly archive
   - Months are ordered from January to December
   - The current month is not included
-  - Each month has the 4 most viewed items that have appeared in the homepage carousel
-  - Each month uses the image from the most viewed item that has appeared in the homepage carousel
-  - It doesn't matter when the cover has appeared in the homepage carousel
+  - Each month has the 4 most viewed items that have appeared in the homepage hero or highlights
+  - Each month uses the image from the most viewed item that has appeared in the homepage hero or highlights
+  - It doesn't matter when the cover has appeared in the homepage hero or highlights
 
   Background:
     Given today is 26 April 2016
@@ -19,7 +19,7 @@ Feature: Monthly archive
       | February 2016 |
       | March 2016    |
 
-  Scenario: Each month shows up to 4 most viewed items that have appeared in the carousel
+  Scenario: Each month shows up to 4 most viewed items that have appeared in the homepage hero or highlights
     Given there are articles with covers:
       | Article   | Cover text      | Page views | Published     |
       | Article 1 | Article 1       | 100        | 14 March 2016 |
