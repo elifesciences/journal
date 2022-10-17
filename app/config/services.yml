@@ -392,6 +392,15 @@ services:
         tags:
           - name: security.voter
 
+    elife.journal.security.voter.feature.reviewed_preprints:
+        class: eLife\Journal\Security\Voter\FixedVoter
+        public: false
+        arguments:
+          - FEATURE_REVIEWED_PREPRINTS
+          - '%feature_reviewed_preprints%'
+        tags:
+          - name: security.voter
+
     elife.journal.templating.promise_aware:
         class: eLife\Journal\Templating\PromiseAwareEngine
         decorates: templating
