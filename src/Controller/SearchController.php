@@ -30,37 +30,8 @@ use function GuzzleHttp\Promise\promise_for;
 
 final class SearchController extends Controller
 {
-    private static $magazineTypes = [
-        'blog-article',
-        'collection',
-        'editorial',
-        'feature',
-        'insight',
-        'interview',
-        'labs-post',
-        'podcast-episode',
-    ];
-
-    private static $researchTypes = [
-        'correction',
-        'registered-report',
-        'replication-study',
-        'research-advance',
-        'research-article',
-        'research-communication',
-        'retraction',
-        'review-article',
-        'scientific-correspondence',
-        'short-report',
-        'tools-resources',
-        'reviewed-preprint',
-    ];
-
     public function queryAction(Request $request) : Response
     {
-        if ($this->isGranted('FEATURE_REVIEWED_PREPRINTS') === false) {
-            unset(self::$researchTypes['reviewed-preprint']);
-        }
         $page = (int) $request->query->get('page', 1);
         $perPage = 10;
 
@@ -76,14 +47,14 @@ final class SearchController extends Controller
 
         $apiTypes = [];
         if (in_array('magazine', $arguments['query']['types'])) {
-            $apiTypes = array_merge($apiTypes, self::$magazineTypes);
+            $apiTypes = array_merge($apiTypes, $this->magazineTypes());
         }
         if (in_array('research', $arguments['query']['types'])) {
-            $apiTypes = array_merge($apiTypes, self::$researchTypes);
+            $apiTypes = array_merge($apiTypes, $this->researchTypes());
         }
 
         if (!$this->isGranted('FEATURE_REVIEWED_PREPRINTS') && empty($apiTypes)) {
-            $apiTypes = array_merge(self::$magazineTypes, self::$researchTypes);
+            $apiTypes = array_merge($this->magazineTypes(), $this->researchTypes());
         }
 
         $search = $this->get('elife.api_sdk.search.slow')
@@ -190,8 +161,8 @@ final class SearchController extends Controller
                 $filterGroups[] = new FilterGroup(
                     'Type',
                     [
-                        new Filter(in_array('magazine', $arguments['query']['types']), 'Magazine', $this->countForTypes(self::$magazineTypes, $allTypes), 'types[]', 'magazine'),
-                        new Filter(in_array('research', $arguments['query']['types']), 'Research', $this->countForTypes(self::$researchTypes, $allTypes), 'types[]', 'research'),
+                        new Filter(in_array('magazine', $arguments['query']['types']), 'Magazine', $this->countForTypes($this->magazineTypes(), $allTypes), 'types[]', 'magazine'),
+                        new Filter(in_array('research', $arguments['query']['types']), 'Research', $this->countForTypes($this->researchTypes(), $allTypes), 'types[]', 'research'),
                     ]
                 );
 
@@ -223,5 +194,42 @@ final class SearchController extends Controller
         return array_sum(array_filter(iterator_to_array($allTypes), function (int $count, string $key) use ($types) {
             return in_array($key, $types);
         }, ARRAY_FILTER_USE_BOTH));
+    }
+
+    private function magazineTypes()
+    {
+        return [
+            'blog-article',
+            'collection',
+            'editorial',
+            'feature',
+            'insight',
+            'interview',
+            'labs-post',
+            'podcast-episode',
+        ];
+    }
+
+    private function researchTypes()
+    {
+        $types = [
+            'correction',
+            'registered-report',
+            'replication-study',
+            'research-advance',
+            'research-article',
+            'research-communication',
+            'retraction',
+            'review-article',
+            'scientific-correspondence',
+            'short-report',
+            'tools-resources',
+        ];
+
+        if ($this->isGranted('FEATURE_REVIEWED_PREPRINTS')) {
+            $types[] = 'reviewed-preprint';
+        }
+
+        return $types;
     }
 }
