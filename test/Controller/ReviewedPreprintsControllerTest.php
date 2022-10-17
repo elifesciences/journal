@@ -147,9 +147,9 @@ final class ReviewedPreprintsControllerTest extends PageTestCase
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
 
-        $this->assertCount(2, $crawler->filter('.list-heading:contains("Latest Reviewed Preprints") + .listing-list > .listing-list__item'));
-        $this->assertContains('Homo naledi, a new species of the genus Homo from the Dinaledi Chamber, South Africa', $crawler->filter('.list-heading:contains("Latest Reviewed Preprints") + .listing-list > .listing-list__item:nth-child(1)')->text());
-        $this->assertContains('An example of a Reviewed preprint', $crawler->filter('.list-heading:contains("Latest Reviewed Preprints") + .listing-list > .listing-list__item:nth-child(2)')->text());
+        $this->assertCount(2, $crawler->filter('.list-heading:contains("Latest") + .listing-list > .listing-list__item'));
+        $this->assertContains('Homo naledi, a new species of the genus Homo from the Dinaledi Chamber, South Africa', $crawler->filter('.list-heading:contains("Latest") + .listing-list > .listing-list__item:nth-child(1)')->text());
+        $this->assertContains('An example of a Reviewed preprint', $crawler->filter('.list-heading:contains("Latest") + .listing-list > .listing-list__item:nth-child(2)')->text());
     }
 
     /**

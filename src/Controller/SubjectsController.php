@@ -77,9 +77,28 @@ final class SubjectsController extends Controller
 
         $arguments['id'] = $id;
 
+        $searchTypes = [
+            'research-article',
+            'research-advance',
+            'research-communication',
+            'review-article',
+            'scientific-correspondence',
+            'short-report',
+            'tools-resources',
+            'replication-study',
+            'editorial',
+            'insight',
+            'feature',
+            'collection',
+        ];
+
+        if ($this->isGranted('FEATURE_REVIEWED_PREPRINTS')) {
+            array_unshift($searchTypes, 'reviewed-preprint');
+        }
+
         $latestArticles = promise_for($this->get('elife.api_sdk.search')
             ->forSubject($id)
-            ->forType('reviewed-preprint', 'research-article', 'research-advance', 'research-communication', 'review-article', 'scientific-correspondence', 'short-report', 'tools-resources', 'replication-study', 'editorial', 'insight', 'feature', 'collection')
+            ->forType(...$searchTypes)
             ->sortBy('date'))
             ->then(function (Sequence $sequence) use ($page, $perPage) {
                 $pagerfanta = new Pagerfanta(new SequenceAdapter($sequence, $this->willConvertTo(Teaser::class)));

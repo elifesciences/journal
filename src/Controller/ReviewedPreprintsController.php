@@ -48,7 +48,7 @@ final class ReviewedPreprintsController extends Controller
             });
 
         $arguments['listing'] = $arguments['paginator']
-            ->then($this->willConvertTo(ListingTeasers::class, ['type' => 'reviewed preprints', 'heading' => 'Latest '.ModelName::plural('reviewed-preprint')]));
+            ->then($this->willConvertTo(ListingTeasers::class, ['type' => 'reviewed preprints']));
 
         if (1 === $page) {
             return $this->createFirstPage($arguments);
