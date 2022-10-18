@@ -133,8 +133,38 @@ final class HomeControllerTest extends PageTestCase
                 200,
                 ['Content-Type' => 'application/vnd.elife.search+json; version=2'],
                 json_encode([
-                    'total' => 2,
+                    'total' => 4,
                     'items' => [
+                        [
+                            'status' => 'reviewed',
+                            'stage' => 'published',
+                            'id' => '4',
+                            'type' => 'reviewed-preprint',
+                            'doi' => '10.7554/eLife.4',
+                            'title' => 'Reviewed preprint 4 title',
+                            'published' => '2014-01-01T00:00:00Z',
+                            'versionDate' => '2014-01-01T00:00:00Z',
+                            'reviewedDate' => '2014-01-01T00:00:00Z',
+                            'statusDate' => '2014-01-01T00:00:00Z',
+                            'volume' => 1,
+                            'elocationId' => 'e4',
+                            'authorLine' => 'Foo Bar',
+                        ],
+                        [
+                            'status' => 'reviewed',
+                            'stage' => 'published',
+                            'id' => '3',
+                            'type' => 'reviewed-preprint',
+                            'doi' => '10.7554/eLife.3',
+                            'title' => 'Reviewed preprint 3 title',
+                            'published' => '2012-01-01T00:00:00Z',
+                            'versionDate' => '2013-01-01T00:00:00Z',
+                            'reviewedDate' => '2012-07-01T00:00:00Z',
+                            'statusDate' => '2013-01-01T00:00:00Z',
+                            'volume' => 1,
+                            'elocationId' => 'e3',
+                            'authorLine' => 'Foo Bar',
+                        ],
                         [
                             'status' => 'vor',
                             'stage' => 'published',
@@ -214,13 +244,19 @@ final class HomeControllerTest extends PageTestCase
         $this->assertSame(200, $client->getResponse()->getStatusCode());
 
         $teasers = $crawler->filter('.list-heading:contains("Latest research") + ol > li');
-        $this->assertCount(2, $teasers);
+        $this->assertCount(4, $teasers);
 
-        $this->assertSame('Article 2 title', trim($teasers->eq(0)->filter('.teaser__header_text')->text()));
-        $this->assertSame('Research Article Updated Jan 1, 2013', trim(preg_replace('/\s+/S', ' ', $teasers->eq(0)->filter('.teaser__footer .meta')->text())));
+        $this->assertSame('Reviewed preprint 4 title', trim($teasers->eq(0)->filter('.teaser__header_text')->text()));
+        $this->assertSame('Reviewed Preprint Jan 1, 2014', trim(preg_replace('/\s+/S', ' ', $teasers->eq(0)->filter('.teaser__footer .meta')->text())));
 
-        $this->assertSame('Article 1 title', trim($teasers->eq(1)->filter('.teaser__header_text')->text()));
-        $this->assertSame('Research Article Jan 1, 2012', trim(preg_replace('/\s+/S', ' ', $teasers->eq(1)->filter('.teaser__footer .meta')->text())));
+        $this->assertSame('Reviewed preprint 3 title', trim($teasers->eq(1)->filter('.teaser__header_text')->text()));
+        $this->assertSame('Reviewed Preprint Updated Jan 1, 2013', trim(preg_replace('/\s+/S', ' ', $teasers->eq(1)->filter('.teaser__footer .meta')->text())));
+
+        $this->assertSame('Article 2 title', trim($teasers->eq(2)->filter('.teaser__header_text')->text()));
+        $this->assertSame('Research Article Updated Jan 1, 2013', trim(preg_replace('/\s+/S', ' ', $teasers->eq(2)->filter('.teaser__footer .meta')->text())));
+
+        $this->assertSame('Article 1 title', trim($teasers->eq(3)->filter('.teaser__header_text')->text()));
+        $this->assertSame('Research Article Jan 1, 2012', trim(preg_replace('/\s+/S', ' ', $teasers->eq(3)->filter('.teaser__footer .meta')->text())));
     }
 
     /**
