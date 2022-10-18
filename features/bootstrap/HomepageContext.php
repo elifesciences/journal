@@ -679,7 +679,7 @@ final class HomepageContext extends Context
         $this->spin(function () {
             $this->assertSession()->elementAttributeContains(
                 'css',
-                'hero-banner__picture-wrapper img',
+                '.hero-banner__picture-wrapper img',
                 'src',
                 'https://www.example.com/iiif/iden%2Ftifier/0,278,1800,1044/633,367/0/default.png'
             );
