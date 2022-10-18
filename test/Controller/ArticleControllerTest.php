@@ -1720,18 +1720,19 @@ final class ArticleControllerTest extends PageTestCase
         $crawler = $client->request('GET', '/articles/00001');
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
-        $this->assertCount(1, $crawler->filter('.info-bar'));
+        $this->assertCount(1, $crawler->filter('.info-bar--info'));
         $this->assertContains('Accepted manuscript, PDF only. Full online edition to follow.',
-            array_map('trim', $crawler->filter('.info-bar')->extract(['_text'])));
+            array_map('trim', $crawler->filter('.info-bar--info')->extract(['_text'])));
 
         $crawler = $client->request('GET', '/articles/00001v1');
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
-        $this->assertCount(2, $crawler->filter('.info-bar'));
+        $this->assertCount(1, $crawler->filter('.info-bar--info'));
+        $this->assertCount(1, $crawler->filter('.info-bar--multiple-versions'));
         $this->assertContains('Accepted manuscript, PDF only. Full online edition to follow.',
-            array_map('trim', $crawler->filter('.info-bar')->extract(['_text'])));
+            array_map('trim', $crawler->filter('.info-bar--info')->extract(['_text'])));
         $this->assertContains('Read the most recent version of this article.',
-            array_map('trim', $crawler->filter('.info-bar')->extract(['_text'])));
+            array_map('trim', $crawler->filter('.info-bar--multiple-versions')->extract(['_text'])));
     }
 
     /**
@@ -1744,10 +1745,10 @@ final class ArticleControllerTest extends PageTestCase
         $crawler = $client->request('GET', $this->getPreviousVersionUrl());
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
-        $this->assertCount(1, $crawler->filter('.info-bar'));
+        $this->assertCount(0, $crawler->filter('.info-bar--info'));
         $this->assertNotContains(
             'Accepted manuscript, PDF only. Full online edition to follow.',
-            array_map('trim', $crawler->filter('.info-bar')->eq(0)->extract(['_text']))
+            array_map('trim', $crawler->filter('.info-bar--info')->eq(0)->extract(['_text']))
         );
     }
 
@@ -1783,7 +1784,7 @@ final class ArticleControllerTest extends PageTestCase
         $crawler = $client->request('GET', $this->getPreviousVersionUrl('id-of-article-with-era'));
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
-        $this->assertCount(1, $crawler->filter('.info-bar'));
+        $this->assertCount(0, $crawler->filter('.info-bar--info'));
         $this->assertEmpty($crawler->filter('.article-download-links-list__link')->selectLink('Executable version'));
         $this->assertEmpty($crawler->filter('.view-selector'));
     }
@@ -1800,7 +1801,7 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertEquals(
             '<a href="https://elifesciences.org/inside-elife/4f706531/special-issue-call-for-papers-in-aging-geroscience-and-longevity">Read the call for papers</a> for the eLife Special Issue on Aging, Geroscience and Longevity.',
-            $crawler->filter('.info-bar--dismissible .info-bar__text')->html()
+            $crawler->filter('.info-bar--dismissible .info-bar__text')->eq(1)->html()
         );
     }
 
@@ -1834,10 +1835,10 @@ final class ArticleControllerTest extends PageTestCase
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
 
-        $this->assertEquals(1, $crawler->filter('.info-bar')->count());
+        $this->assertEquals(2, $crawler->filter('.info-bar')->count());
         $this->assertEquals(
             [],
-            array_map('trim', $crawler->filter('.info-bar--dismissible')->extract(['_text']))
+            array_map('trim', $crawler->filter('.info-bar--dismissible')->eq(1)->extract(['_text']))
         );
     }
 
@@ -4503,8 +4504,8 @@ final class ArticleControllerTest extends PageTestCase
         $crawler = $client->request('GET', '/articles/00001');
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
-        $this->assertSame('This article has been corrected. Read the correction notice.', trim($crawler->filter('.info-bar')->eq(1)->text()));
-        $this->assertSame('This article has been retracted. Read the retraction notice.', trim($crawler->filter('.info-bar')->eq(2)->text()));
+        $this->assertSame('This article has been corrected. Read the correction notice.', trim($crawler->filter('.info-bar--correction')->text()));
+        $this->assertSame('This article has been retracted. Read the retraction notice.', trim($crawler->filter('.info-bar--attention')->text()));
         $this->assertContains('Insight 1 title', $crawler->filter('.teaser--related')->text());
 
         $furtherReading = $crawler->filter('.listing-list-heading:contains("Further reading") + .listing-list > .listing-list__item');
