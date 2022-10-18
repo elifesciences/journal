@@ -976,8 +976,12 @@ final class ArticlesController extends Controller
                 $infoBars = [];
 
                 if ($this->isGranted('FEATURE_PRC_COMMS')) {
+                    $infoBarText = sprintf(
+                        'eLife\'s peer-review process is changing. From early next year, we will no longer make accept/reject decisions after peer review. <a href="%s" class="">About the new process.</a>',
+                        $this->get('router')->generate('inside-elife-article', ['id' => '54d63486'])
+                    );
                     $infoBars[] = new InfoBar(
-                        '2023, eLife will stop rejecting or accepting research after peer review. Instead, every preprint sent for review will be published. <a href="#" class="">About the new process.</a>',
+                        $infoBarText,
                         InfoBar::TYPE_DISMISSIBLE,
                         'article-prc-dismissible',
                         new DateTimeImmutable(self::DISMISSIBLE_INFO_BAR_COOKIE_DURATION)
