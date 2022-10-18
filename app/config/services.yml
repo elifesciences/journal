@@ -467,12 +467,6 @@ services:
     elife.journal.view_model.factory.picture_builder:
         class: eLife\Journal\ViewModel\Factory\PictureBuilderFactory
 
-    elife.journal.view_model.factory.carousel_item_image:
-        class: eLife\Journal\ViewModel\Factory\CarouselItemImageFactory
-        arguments:
-          - '@elife.journal.view_model.factory.picture_builder'
-          - '@assets.packages'
-
     elife.journal.view_model.factory.content_header_image:
         class: eLife\Journal\ViewModel\Factory\ContentHeaderImageFactory
         arguments:
@@ -900,15 +894,6 @@ services:
         tags:
           - name: view_model.converter
 
-    elife.journal.view_model.converter.cover.article.carousel_item:
-        class: eLife\Journal\ViewModel\Converter\CoverArticleCarouselItemConverter
-        public: false
-        arguments:
-          - '@router'
-          - '@elife.journal.view_model.factory.carousel_item_image'
-        tags:
-          - name: view_model.converter
-
     elife.journal.view_model.converter.cover.article.highlight_item:
         class: eLife\Journal\ViewModel\Converter\CoverArticleHighlightItemConverter
         public: false
@@ -934,15 +919,6 @@ services:
         tags:
           - name: view_model.converter
 
-    elife.journal.view_model.converter.cover.blog_article.carousel_item:
-        class: eLife\Journal\ViewModel\Converter\CoverBlogArticleCarouselItemConverter
-        public: false
-        arguments:
-          - '@router'
-          - '@elife.journal.view_model.factory.carousel_item_image'
-        tags:
-          - name: view_model.converter
-
     elife.journal.view_model.converter.cover.blog_article.highlight_item:
         class: eLife\Journal\ViewModel\Converter\CoverBlogArticleHighlightItemConverter
         public: false
@@ -965,15 +941,6 @@ services:
         arguments:
           - '@elife.journal.view_model.converter'
           - '@router'
-        tags:
-          - name: view_model.converter
-
-    elife.journal.view_model.converter.cover.collection.carousel_item:
-        class: eLife\Journal\ViewModel\Converter\CoverCollectionCarouselItemConverter
-        public: false
-        arguments:
-          - '@router'
-          - '@elife.journal.view_model.factory.carousel_item_image'
         tags:
           - name: view_model.converter
 
