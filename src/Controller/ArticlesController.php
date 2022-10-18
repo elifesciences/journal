@@ -975,6 +975,15 @@ final class ArticlesController extends Controller
 
                 $infoBars = [];
 
+                if ($this->isGranted('FEATURE_PRC_COMMS')) {
+                    $infoBars[] = new InfoBar(
+                        '2023, eLife will stop rejecting or accepting research after peer review. Instead, every preprint sent for review will be published. <a href="#" class="">About the new process.</a>',
+                        InfoBar::TYPE_DISMISSIBLE,
+                        'article-prc-dismissible',
+                        new DateTimeImmutable(self::DISMISSIBLE_INFO_BAR_COOKIE_DURATION)
+                    );
+                }
+
                 $articleVersions = $history->getVersions()
                     ->filter(Callback::isInstanceOf(ArticleVersion::class))
                     ->toArray();
