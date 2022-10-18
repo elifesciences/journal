@@ -92,6 +92,7 @@ final class SubjectRewritingMiddleware
                     case 'application/vnd.elife.community-list+json; version=1':
                     case 'application/vnd.elife.press-package-list+json; version=1':
                     case 'application/vnd.elife.recommendations+json; version=1':
+                    case 'application/vnd.elife.reviewed-preprint-list+json; version=1':
                         $data['items'] = $this->updateItems($data['items']);
                         break;
 
@@ -104,6 +105,7 @@ final class SubjectRewritingMiddleware
                     case 'application/vnd.elife.article-vor+json; version=5':
                     case 'application/vnd.elife.article-vor+json; version=6':
                     case 'application/vnd.elife.blog-article+json; version=2':
+                    case 'application/vnd.elife.reviewed-preprint+json; version=1':
                         $data = $this->updateItem($data);
                         break;
 
