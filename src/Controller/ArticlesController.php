@@ -962,8 +962,8 @@ final class ArticlesController extends Controller
                 ];
             });
 
-        $arguments['infoBars'] = all(['item' => $arguments['item'], 'history' => $arguments['history'], 'relatedArticles' => $arguments['relatedArticles'], 'eraArticle' => $arguments['eraArticle']])
-            ->then(function (array $parts) {
+        $arguments['infoBars'] = all(['item' => $arguments['item'], 'history' => $arguments['history'], 'relatedArticles' => $arguments['relatedArticles'], 'eraArticle' => $arguments['eraArticle'], 'isMagazine' => $arguments['isMagazine']])
+            ->then(function (array $parts) use ($arguments){
                 /** @var ArticleVersion $item */
                 $item = $parts['item'];
                 /** @var ArticleHistory $history */
@@ -972,10 +972,10 @@ final class ArticlesController extends Controller
                 $relatedArticles = $parts['relatedArticles'];
                 /** @var array $eraArticle */
                 $eraArticle = $parts['eraArticle'];
-
+                /** @var bool $isMagazine */
+                $isMagazine = $parts['isMagazine'];
                 $infoBars = [];
-
-                if ($this->isGranted('FEATURE_PRC_COMMS')) {
+                if ($this->isGranted('FEATURE_PRC_COMMS') && false === $isMagazine) {
                     $infoBarText = sprintf(
                         'eLife\'s peer-review process is changing. From early next year, we will no longer make accept/reject decisions after peer review. <a href="%s" class="">About the new process.</a>',
                         $this->get('router')->generate('inside-elife-article', ['id' => '54d63486'])
