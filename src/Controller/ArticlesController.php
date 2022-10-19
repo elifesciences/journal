@@ -963,7 +963,7 @@ final class ArticlesController extends Controller
             });
 
         $arguments['infoBars'] = all(['item' => $arguments['item'], 'history' => $arguments['history'], 'relatedArticles' => $arguments['relatedArticles'], 'eraArticle' => $arguments['eraArticle'], 'isMagazine' => $arguments['isMagazine']])
-            ->then(function (array $parts) use ($arguments){
+            ->then(function (array $parts) {
                 /** @var ArticleVersion $item */
                 $item = $parts['item'];
                 /** @var ArticleHistory $history */
@@ -974,6 +974,7 @@ final class ArticlesController extends Controller
                 $eraArticle = $parts['eraArticle'];
                 /** @var bool $isMagazine */
                 $isMagazine = $parts['isMagazine'];
+
                 $infoBars = [];
                 if ($this->isGranted('FEATURE_PRC_COMMS') && false === $isMagazine) {
                     $infoBarText = sprintf(
