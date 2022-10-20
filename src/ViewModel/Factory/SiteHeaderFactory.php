@@ -57,7 +57,7 @@ final class SiteHeaderFactory
 
         $secondaryLinks = [
             NavLinkedItem::asLink(new Link('Search', $this->urlGenerator->generate('search')), true),
-            NavLinkedItem::asLink(new Link('Alerts', $this->urlGenerator->generate('alerts'))),
+            NavLinkedItem::asLink(new Link('Alerts', $this->urlGenerator->generate('content-alerts'))),
             NavLinkedItem::asButton(
                 Button::link('Submit your research', $submitUrl ?? $this->submitUrl, Button::SIZE_EXTRA_SMALL, Button::STYLE_DEFAULT, true, false, 'submitResearchButton')
             ),

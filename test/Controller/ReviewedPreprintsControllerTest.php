@@ -35,7 +35,7 @@ final class ReviewedPreprintsControllerTest extends PageTestCase
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertSame('Reviewed Preprints', $crawler->filter('.content-header__title')->text());
-        $this->assertContains('No reviewed preprints available.', $crawler->filter('main')->text());
+        $this->assertContains('No items available.', $crawler->filter('main')->text());
     }
 
     /**
@@ -147,9 +147,9 @@ final class ReviewedPreprintsControllerTest extends PageTestCase
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
 
-        $this->assertCount(2, $crawler->filter('.list-heading:contains("Latest Reviewed Preprints") + .listing-list > .listing-list__item'));
-        $this->assertContains('Homo naledi, a new species of the genus Homo from the Dinaledi Chamber, South Africa', $crawler->filter('.list-heading:contains("Latest Reviewed Preprints") + .listing-list > .listing-list__item:nth-child(1)')->text());
-        $this->assertContains('An example of a Reviewed preprint', $crawler->filter('.list-heading:contains("Latest Reviewed Preprints") + .listing-list > .listing-list__item:nth-child(2)')->text());
+        $this->assertCount(2, $crawler->filter('.list-heading:contains("Latest") + .listing-list > .listing-list__item'));
+        $this->assertContains('Homo naledi, a new species of the genus Homo from the Dinaledi Chamber, South Africa', $crawler->filter('.list-heading:contains("Latest") + .listing-list > .listing-list__item:nth-child(1)')->text());
+        $this->assertContains('An example of a Reviewed preprint', $crawler->filter('.list-heading:contains("Latest") + .listing-list > .listing-list__item:nth-child(2)')->text());
     }
 
     /**
@@ -168,6 +168,8 @@ final class ReviewedPreprintsControllerTest extends PageTestCase
         $this->assertSame('http://localhost/reviewed-preprints', $crawler->filter('meta[property="og:url"]')->attr('content'));
         $this->assertSame('Reviewed Preprints', $crawler->filter('meta[property="og:title"]')->attr('content'));
         $this->assertSame('summary', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
+        $this->assertSame('Preprints that have been invited for review by eLife are published as Reviewed Preprints and include an eLife assessment, public reviews and a response from the authors (if available).', $crawler->filter('meta[property="og:description"]')->attr('content'));
+        $this->assertSame('Preprints that have been invited for review by eLife are published as Reviewed Preprints and include an eLife assessment, public reviews and a response from the authors (if available).', $crawler->filter('meta[name="description"]')->attr('content'));
         $this->assertSame('http://localhost/'.ltrim(self::$kernel->getContainer()->get('elife.assets.packages')->getUrl('assets/images/social/icon-600x600@1.png'), '/'), $crawler->filter('meta[name="twitter:image"]')->attr('content'));
         $this->assertSame('http://localhost/'.ltrim(self::$kernel->getContainer()->get('elife.assets.packages')->getUrl('assets/images/social/icon-600x600@1.png'), '/'), $crawler->filter('meta[property="og:image"]')->attr('content'));
         $this->assertSame('600', $crawler->filter('meta[property="og:image:width"]')->attr('content'));

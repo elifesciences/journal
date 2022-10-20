@@ -1,8 +1,5 @@
 imports:
   - resource: config_prod.yml
 
-parameters:
-    feature_prc_comms: true
-
 swiftmailer:
     disable_delivery: true
