@@ -30,6 +30,7 @@ final class SearchContext extends Context
         'scientific-correspondence',
         'short-report',
         'tools-resources',
+        'reviewed-preprint',
     ];
 
     private $query = [
