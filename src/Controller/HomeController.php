@@ -8,8 +8,6 @@ use eLife\ApiSdk\Model\Subject;
 use eLife\Journal\Helper\Callback;
 use eLife\Journal\Helper\Paginator;
 use eLife\Journal\Pagerfanta\SequenceAdapter;
-use eLife\Patterns\ViewModel\Carousel;
-use eLife\Patterns\ViewModel\CarouselItem;
 use eLife\Patterns\ViewModel\HeroBanner;
 use eLife\Patterns\ViewModel\Highlight;
 use eLife\Patterns\ViewModel\HighlightItem;
@@ -107,14 +105,6 @@ final class HomeController extends Controller
             })->then(Callback::emptyOr(function (Sequence $highlights) {
                 return new Highlight($highlights->toArray(), new ListHeading('Highlights', 'highlights'));
             }))->otherwise($this->softFailure('Failed to load hero and highlights'));
-        } else {
-            $arguments['carousel'] = $this->get('elife.api_sdk.covers')
-                ->getCurrent()
-                ->map($this->willConvertTo(CarouselItem::class))
-                ->then(Callback::emptyOr(function (Sequence $covers) {
-                    return new Carousel($covers->slice(0, 3)->toArray(), new ListHeading('Highlights', 'highlights'));
-                }))
-                ->otherwise($this->softFailure('Failed to load covers'));
         }
 
         $arguments['subjectsLink'] = new SectionListingLink('All research categories', 'subjects');
