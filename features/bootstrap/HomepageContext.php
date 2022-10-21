@@ -644,8 +644,6 @@ final class HomepageContext extends Context
         );
     }
 
-
-
     /**
      * @Then /^I should see the \'([^\']*)\' cover in the hero banner/
      */

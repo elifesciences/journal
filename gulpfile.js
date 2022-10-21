@@ -359,11 +359,7 @@ const criticalCssConfig = (function () {
 
             home: global.concat(
                 listing,
-                listingMenu,
-                /.*\.carousel.*/,
-                '.carousel__control--toggler',
-                '.carousel__items',
-                /\.carousel__item.*/
+                listingMenu
             ),
 
             landing: global.concat(landing),
