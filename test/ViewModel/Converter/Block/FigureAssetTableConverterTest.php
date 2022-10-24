@@ -8,9 +8,6 @@ use eLife\Journal\ViewModel\Converter\Block\FigureAssetTableConverter;
 use eLife\Journal\ViewModel\Converter\ViewModelConverter;
 use eLife\Patterns\PatternRenderer;
 use eLife\Patterns\ViewModel;
-use eLife\Patterns\ViewModel\AdditionalAsset;
-use eLife\Patterns\ViewModel\CaptionText;
-use eLife\Patterns\ViewModel\DownloadLink;
 use eLife\Patterns\ViewModel\Link;
 use Traversable;
 
