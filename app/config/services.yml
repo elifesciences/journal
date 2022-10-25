@@ -426,6 +426,11 @@ services:
         tags:
           - name: twig.extension
 
+    elife.journal.twig.extension.iframe_embed:
+        class: eLife\Journal\Twig\IframeEmbedExtension
+        tags:
+          - name: twig.extension
+
     elife.journal.twig.extension.info_bar:
         class: eLife\Journal\Twig\InfoBarExtension
         arguments:
