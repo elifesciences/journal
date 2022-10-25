@@ -6,6 +6,8 @@
 
         <div class="grid__item one-whole{% if not fullWidth ?? false %} x-large--eight-twelfths push--x-large--two-twelfths{% endif %} grid-column">
 
+            {% include 'infobar-announcement.html.twig' %}
+
             {{ listing|raw }}
 
         </div>

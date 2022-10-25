@@ -15,11 +15,7 @@
 
         <div class="main-content-grid">
 
-            {% for infoBar in infoBars %}
-                {% if infoBar.type == 'announcement' %}
-                    {{ render_pattern(infoBar) }}
-                {% endif %}
-            {% endfor %}
+            {% include 'infobar-announcement.html.twig' %}
 
             {{ main|raw }}
 
