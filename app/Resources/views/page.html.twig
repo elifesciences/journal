@@ -244,7 +244,7 @@
 
             {# Ensure dismissible infoBars appear after other types. #}
             {% for infoBar in infoBars %}
-                {% if infoBar.type != 'dismissible' %}
+                {% if (infoBar.type != 'dismissible') and (infoBar.type != 'announcement') %}
                     {{ render_pattern(infoBar) }}
                 {% endif %}
             {% endfor %}

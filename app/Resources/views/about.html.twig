@@ -24,7 +24,11 @@
 
         {% block main %}
             {% if is_granted('FEATURE_PRC_COMMS') %}
-                {{ render_pattern(infoBar) }}
+                {% for infoBar in infoBars %}
+                    {% if infoBar.type == 'announcement' %}
+                        {{ render_pattern(infoBar) }}
+                    {% endif %}
+                {% endfor %}
             {% endif %}
 
             {% for part in body %}

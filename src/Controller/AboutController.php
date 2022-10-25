@@ -404,7 +404,7 @@ final class AboutController extends Controller
     private function aboutPageArguments(Request $request) : array
     {
         $arguments = $this->defaultPageArguments($request);
-        $arguments['infoBar'] = new InfoBar('eLife\'s peer-review process is changing. From January 2023, eLife will no longer make accept/reject decisions after peer review. Instead, every preprint sent for peer review will be published on the eLife website as a “Reviewed Preprint” that includes an eLife assessment, public reviews, and a response from the authors (if available). When writing the eLife assessment, the editors and reviewers will use a common vocabulary to summarize the significance of the findings and the strength of the evidence reported in the preprint. <a href="'.$this->get('router')->generate('inside-elife-article', ['id' => '54d63486']).'">Read about the new process</a>.', InfoBar::TYPE_ANNOUNCEMENT);
+        $arguments['infoBars'][] = new InfoBar('eLife\'s peer-review process is changing. From January 2023, eLife will no longer make accept/reject decisions after peer review. Instead, every preprint sent for peer review will be published on the eLife website as a “Reviewed Preprint” that includes an eLife assessment, public reviews, and a response from the authors (if available). When writing the eLife assessment, the editors and reviewers will use a common vocabulary to summarize the significance of the findings and the strength of the evidence reported in the preprint. <a href="'.$this->get('router')->generate('inside-elife-article', ['id' => '54d63486']).'">Read about the new process</a>.', InfoBar::TYPE_ANNOUNCEMENT);
 
         $arguments['menuLink'] = new SectionListingLink('All sections', 'sections');
 
