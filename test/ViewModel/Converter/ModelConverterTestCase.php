@@ -3,10 +3,10 @@
 namespace test\eLife\Journal\ViewModel\Converter;
 
 use ComposerLocator;
-use eLife\ApiSdk\Collection;
 use eLife\ApiSdk\Model;
 use eLife\Journal\ViewModel\Converter\ViewModelConverter;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
@@ -61,6 +61,7 @@ abstract class ModelConverterTestCase extends TestCase
      */
     final public function it_converts_a_model($model, string $viewModelClass)
     {
+        $this->assertInstanceOf(Model\Model::class, $model, $viewModelClass);
         $this->assertTrue(
             $this->converter->supports($model, $viewModelClass, $this->context),
             'Converter does not support turning '.get_class($model).' into '.$viewModelClass
@@ -78,13 +79,16 @@ abstract class ModelConverterTestCase extends TestCase
         foreach ($this->findSamples() as $sample) {
             $model = $sample[0];
             $class = $sample[1];
+            if ($model) {
+                $model = $this->serializer->denormalize($model, $class);
 
-            $model = $this->serializer->denormalize($model, $class);
-
-            foreach ($this->modelHook($model) as $model) {
-                foreach ($this->viewModelClasses as $viewModelClass) {
-                    yield [$model, $viewModelClass];
+                foreach ($this->modelHook($model) as $model) {
+                    foreach ($this->viewModelClasses as $viewModelClass) {
+                        yield [$model, $viewModelClass];
+                    }
                 }
+            } else {
+                yield [$model, $class];
             }
         }
     }
@@ -136,7 +140,11 @@ abstract class ModelConverterTestCase extends TestCase
                     break;
             }
 
-            $samples = Finder::create()->files()->in(ComposerLocator::getPath('elife/api')."/dist/samples/{$model}/v{$version}");
+            $folder = ComposerLocator::getPath('elife/api')."/dist/samples/{$model}/v{$version}";
+            $samples = (new Filesystem)->exists($folder) ? Finder::create()->files()->in($folder) : [];
+            if (empty($samples)) {
+                yield [null, 'Folder does not exist: '.$folder];
+            }
 
             foreach ($samples as $sample) {
                 $name = "{$model}/v{$version}/{$sample->getBasename()}";
