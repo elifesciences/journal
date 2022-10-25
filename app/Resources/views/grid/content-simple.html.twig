@@ -6,6 +6,12 @@
 
         <div class="content-container grid__item content_alerts-container">
 
+            {% for infoBar in infoBars %}
+                {% if infoBar.type == 'announcement' %}
+                    {{ render_pattern(infoBar) }}
+                {% endif %}
+            {% endfor %}
+
             {{ main|raw }}
 
         </div>
