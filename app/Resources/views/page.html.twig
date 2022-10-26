@@ -242,8 +242,17 @@
                 {% endfor %}
             {% endif %}
 
+            {# Ensure dismissible infoBars appear after other types and announcement infoBars do not appear here. #}
             {% for infoBar in infoBars %}
-                {{ render_pattern(infoBar) }}
+                {% if infoBar.type not in ['dismissible', 'announcement'] %}
+                    {{ render_pattern(infoBar) }}
+                {% endif %}
+            {% endfor %}
+
+            {% for infoBar in infoBars %}
+                {% if infoBar.type == 'dismissible' %}
+                    {{ render_pattern(infoBar) }}
+                {% endif %}
             {% endfor %}
 
             {% block pre_body %}{% endblock %}

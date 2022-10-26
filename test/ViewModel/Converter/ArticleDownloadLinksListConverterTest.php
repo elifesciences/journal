@@ -12,10 +12,7 @@ use Symfony\Component\HttpKernel\UriSigner;
 final class ArticleDownloadLinksListConverterTest extends ModelConverterTestCase
 {
     protected $models = ['article-poa', 'article-vor'];
-    protected $viewModelClasses = [
-        ViewModel\ArticleDownloadLinksList::class,
-        ViewModel\Reference::class,
-    ];
+    protected $viewModelClasses = [ViewModel\ArticleDownloadLinksList::class];
 
     /**
      * @before

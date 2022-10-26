@@ -3,6 +3,7 @@ Feature: Subject page latest articles
 
   Rules:
   - The following types of content with the MSA are included:
+    - Reviewed preprint
     - Research article
     - Research advance
     - Research exchange

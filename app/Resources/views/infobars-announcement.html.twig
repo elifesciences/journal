@@ -1,0 +1,5 @@
+{% for infoBar in infoBars %}
+    {% if infoBar.type == 'announcement' %}
+        {{ render_pattern(infoBar) }}
+    {% endif %}
+{% endfor %}

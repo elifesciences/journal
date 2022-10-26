@@ -15,7 +15,7 @@ final class PeerReviewProcessController extends Controller
 
         $arguments['title'] = 'eLife’s peer review process';
 
-        $arguments['contentHeader'] = new ContentHeader($arguments['title'], null, '<p>eLife is changing its editorial process to emphasize public reviews and assessments of preprints by eliminating accept/reject decisions after peer review.</p><p>To learn more about why eLife’s process is changing, <a href="#" class="peer-review-process-content-header-link">read the Editorial</a>.</p>');
+        $arguments['contentHeader'] = new ContentHeader($arguments['title'], null, '<p>eLife is changing its editorial process to emphasize public reviews and assessments of preprints by eliminating accept/reject decisions after peer review.</p><p>To learn more about why eLife’s process is changing, <a href="'.$this->get('router')->generate('article', ['id' => '83889']).'" class="peer-review-process-content-header-link">read the Editorial</a>.</p>');
 
         return new Response($this->get('templating')->render('::peer-review-process.html.twig', $arguments));
     }

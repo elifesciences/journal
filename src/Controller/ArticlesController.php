@@ -962,7 +962,7 @@ final class ArticlesController extends Controller
                 ];
             });
 
-        $arguments['infoBars'] = all(['item' => $arguments['item'], 'history' => $arguments['history'], 'relatedArticles' => $arguments['relatedArticles'], 'eraArticle' => $arguments['eraArticle']])
+        $arguments['infoBars'] = all(['item' => $arguments['item'], 'history' => $arguments['history'], 'relatedArticles' => $arguments['relatedArticles'], 'eraArticle' => $arguments['eraArticle'], 'isMagazine' => $arguments['isMagazine']])
             ->then(function (array $parts) {
                 /** @var ArticleVersion $item */
                 $item = $parts['item'];
@@ -972,16 +972,24 @@ final class ArticlesController extends Controller
                 $relatedArticles = $parts['relatedArticles'];
                 /** @var array $eraArticle */
                 $eraArticle = $parts['eraArticle'];
+                /** @var bool $isMagazine */
+                $isMagazine = $parts['isMagazine'];
 
                 $infoBars = [];
-
                 if ($this->isGranted('FEATURE_PRC_COMMS')) {
-                    $infoBars[] = new InfoBar(
-                        '2023, eLife will stop rejecting or accepting research after peer review. Instead, every preprint sent for review will be published. <a href="#" class="">About the new process.</a>',
-                        InfoBar::TYPE_DISMISSIBLE,
-                        'article-prc-dismissible',
-                        new DateTimeImmutable(self::DISMISSIBLE_INFO_BAR_COOKIE_DURATION)
-                    );
+                    // keep this condition after removing feature-flag because we don't need to show info-bar in Editorial and Insights
+                    if (false === $isMagazine) {
+                        $infoBarText = sprintf(
+                            'eLife\'s peer-review process is changing. From early next year, we will no longer make accept/reject decisions after peer review. <a href="%s" class="">About the new process.</a>',
+                            $this->get('router')->generate('inside-elife-article', ['id' => '54d63486'])
+                        );
+                        $infoBars[] = new InfoBar(
+                            $infoBarText,
+                            InfoBar::TYPE_DISMISSIBLE,
+                            'article-prc-dismissible',
+                            new DateTimeImmutable(self::DISMISSIBLE_INFO_BAR_COOKIE_DURATION)
+                        );
+                    }
                 }
 
                 $articleVersions = $history->getVersions()

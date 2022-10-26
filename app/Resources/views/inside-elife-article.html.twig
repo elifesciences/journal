@@ -42,7 +42,7 @@
         {% block main %}
 
             {% for block in blocks %}
-                {{ render_pattern(block) }}
+                {{ render_pattern(block)|iframe_embed }}
             {% endfor %}
 
         {% endblock %}

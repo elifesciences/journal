@@ -48,7 +48,7 @@ final class ReviewedPreprintsController extends Controller
             });
 
         $arguments['listing'] = $arguments['paginator']
-            ->then($this->willConvertTo(ListingTeasers::class, ['type' => 'reviewed preprints']));
+            ->then($this->willConvertTo(ListingTeasers::class));
 
         if (1 === $page) {
             return $this->createFirstPage($arguments);
@@ -59,7 +59,11 @@ final class ReviewedPreprintsController extends Controller
 
     private function createFirstPage(array $arguments) : Response
     {
-        $arguments['contentHeader'] = new ContentHeader($arguments['title']);
+        $arguments['contentHeader'] = new ContentHeader(
+            $arguments['title'],
+            null,
+            'Preprints that have been invited for review by eLife are published as Reviewed Preprints and include an eLife assessment, public reviews and a response from the authors (if available).'
+            );
 
         return new Response($this->get('templating')->render('::reviewed-preprints.html.twig', $arguments));
     }
