@@ -2,8 +2,11 @@
 
 namespace test\eLife\Journal\ViewModel\Converter;
 
+use eLife\ApiSdk\Model\ArticleVersion;
+use eLife\ApiSdk\Model\Model;
 use eLife\Journal\ViewModel\Converter\ArticleAuthorsConverter;
 use eLife\Patterns\ViewModel\Authors;
+use Traversable;
 
 final class ArticleAuthorsConverterTest extends ModelConverterTestCase
 {
@@ -18,5 +21,15 @@ final class ArticleAuthorsConverterTest extends ModelConverterTestCase
         $this->converter = new ArticleAuthorsConverter(
             $this->stubUrlGenerator()
         );
+    }
+
+    /**
+     * @param ArticleVersion $model
+     */
+    protected function modelHook(Model $model) : Traversable
+    {
+        if ($model->getAuthors()->notEmpty()) {
+            yield $model;
+        }
     }
 }
