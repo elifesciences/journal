@@ -12,21 +12,15 @@ Dependencies
 * [Docker](https://www.docker.com/)
 * [Docker-compose](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-compose-on-ubuntu-20-04)
 
-Docker Intallation - Running the site locally
-------------------------
-<!-- The first time running the journal, you may need to build some dependant images first.
-1. Build all dependant images first
-```
-docker-compose build npm
-docker-compose build composer
-docker-compose build assets_builder
-docker-compose build app
-```
-Then, you should be able to start and restart using these commands:
-1. `docker-compose down --volumes --remove-orphans && docker-compose up --build` -->
+Docker Installation - Running the site locally
+----------------------------------------------
+
 1. Run `composer install` to generate vendor files locally
 2. Run `docker-compose up --build`
 3. Open `http://localhost:8080` in your browser.
+
+To start/restart the containers use these commands:
+`docker-compose down --volumes --remove-orphans && docker-compose up --build`
 
 Important : Creating `composer.lock` on local and permanent updates to composer files in general should only be done from the container, be aware that if this is done from local can generate additional errors. To avoid any errors running `composer update` in the container is safer than running it in the local dev env. 
 
@@ -38,7 +32,7 @@ To change configuration that is supplied by an environment variable, pass in the
 `docker-compose down --volumes --remove-orphans && API_URL=https://prod--gateway.elifesciences.org docker-compose up --build`.
 
 Manual Installation (may or may not work - better use docker)
--------------
+-------------------------------------------------------------
 
 1. Create `app/config/parameters.yml` from `app/config/parameters.yml.dist`
 2. `npm install`
