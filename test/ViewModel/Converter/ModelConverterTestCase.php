@@ -113,19 +113,13 @@ abstract class ModelConverterTestCase extends TestCase
                     $list = true;
                     $version = 3;
                     break;
+                case 'external-article':
                 case 'podcast-episode-chapter':
                     $model = 'recommendations';
                     $type = true;
                     $list = true;
                     break;
-                case 'external-article':
-                    $model = 'recommendations';
-                    $type = true;
-                    $list = true;
-                    break;
                 case 'annual-report':
-                case 'article-poa':
-                case 'article-vor':
                 case 'blog-article':
                 case 'collection':
                 case 'event':
@@ -133,8 +127,12 @@ abstract class ModelConverterTestCase extends TestCase
                 case 'labs-post':
                     $version = 2;
                     break;
+                case 'article-poa':
                 case 'press-package':
                     $version = 3;
+                    break;
+                case 'article-vor':
+                    $version = 6;
                     break;
             }
 
