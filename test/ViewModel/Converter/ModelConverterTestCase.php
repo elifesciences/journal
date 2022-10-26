@@ -61,7 +61,7 @@ abstract class ModelConverterTestCase extends TestCase
      */
     final public function it_converts_a_model($model, string $viewModelClass)
     {
-        $this->assertNotNull($model, $viewModelClass);
+        $this->assertInstanceOf(Model\Model::class, $model, $viewModelClass);
         $this->assertTrue(
             $this->converter->supports($model, $viewModelClass, $this->context),
             'Converter does not support turning '.get_class($model).' into '.$viewModelClass
