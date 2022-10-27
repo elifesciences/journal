@@ -2,7 +2,7 @@
 Tips and Tricks for Windows users
 ---------------------------------
 
-When using Windows to bypass the main errors we recomand to follow the next :
+When using Windows to bypass the main errors we recommend to follow the next :
 
 1. Make sure you use Windows Linux Subsystem (WSL).
 
