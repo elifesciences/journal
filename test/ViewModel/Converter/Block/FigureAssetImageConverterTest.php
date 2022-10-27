@@ -2,6 +2,7 @@
 
 namespace test\eLife\Journal\ViewModel\Converter\Block;
 
+use eLife\ApiSdk\Model\AssetFile;
 use eLife\ApiSdk\Model\Block;
 use eLife\Journal\Helper\Callback;
 use eLife\Journal\Helper\DownloadLinkUriGenerator;
@@ -32,10 +33,16 @@ final class FigureAssetImageConverterTest extends BlockConverterTestCase
         $viewModelConverter
             ->expects($this->any())
             ->method('convert')
-            ->will($this->returnValue(new ViewModel\Picture(
-                [],
-                new ViewModel\Image('/image.jpg')
-            )));
+            ->will($this->returnCallback(function ($input) {
+                if ($input instanceof AssetFile) {
+                    return ViewModel\AdditionalAsset::withoutDoi('id', ViewModel\CaptionText::withHeading('heading'), null, 'http://google.com/');
+                }
+
+                return new ViewModel\Picture(
+                    [],
+                    new ViewModel\Image('/image.jpg')
+                );
+            }));
     }
 
     protected function explodeBlock(Block $block) : Traversable

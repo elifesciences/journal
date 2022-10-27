@@ -166,6 +166,22 @@ final class AboutPublishingWithElifeControllerTest extends PageTestCase
         $this->assertEmpty($crawler->filter('meta[name="dc.rights"]'));
     }
 
+    /**
+     * @test
+     */
+    public function it_displays_announcement_info_bar()
+    {
+        $client = static::createClient();
+
+        $crawler = $client->request('GET', $this->getUrl());
+
+        $this->assertSame(200, $client->getResponse()->getStatusCode());
+        $this->assertEquals(
+            'eLife\'s peer-review process is changing. From January 2023, eLife will no longer make accept/reject decisions after peer review. Instead, every preprint sent for peer review will be published on the eLife website as a “Reviewed Preprint” that includes an eLife assessment, public reviews, and a response from the authors (if available). When writing the eLife assessment, the editors and reviewers will use a common vocabulary to summarize the significance of the findings and the strength of the evidence reported in the preprint. <a href="/inside-elife/54d63486">Read about the new process</a>.',
+            $crawler->filter('.content-container .info-bar--announcement .info-bar__text')->html()
+        );
+    }
+
     protected function getUrl() : string
     {
         $this->mockApiResponse(

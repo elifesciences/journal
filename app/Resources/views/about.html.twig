@@ -4,40 +4,6 @@
 
 {% block title %}{{ title }}{% if title != 'About' %} | About{% endif %}{% endblock %}
 
-{% block head %}
-    {{ parent() }}
-    <style>
-        .prc-comms {
-            background-color: #f5f7fa;
-            padding: 2em 2em 2em 4em;
-            font-family: "Noto Sans",Arial,Helvetica,sans-serif;
-            font-size: calc((14 / 16) * 1rem);
-            line-height: 1.7;
-            position: relative;
-        }
-
-        .prc-comms::before {
-            content: '';
-            width: calc((20 / 16) * 1em);
-            height: calc((20 / 16) * 1em);
-            display: block;
-            background-image: url('data:image/svg+xml;utf8,<svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><title>Information</title><path d="M10 0C4.5 0 0 4.5 0 10s4.5 10 10 10 10-4.5 10-10S15.5 0 10 0zm1 15H9V9h2v6zm0-8H9V5h2v2z" fill="%23177cc9" fill-rule="evenodd"/></svg>');
-            background-repeat: no-repeat;
-            background-size: contain;
-            position: absolute;
-            left: calc((20px + 0.5em));
-            top: calc(2em + 2px);
-        }
-
-        /* Expedient yet horrible way of overriding specificity introduced somewhere out of scope without using !important */
-        .prc-comms-link.prc-comms-link.prc-comms-link.prc-comms-link.prc-comms-link.prc-comms-link.prc-comms-link.prc-comms-link.prc-comms-link.prc-comms-link {
-            font-weight: bold;
-            border-bottom-width: 0;
-            color: #167bc9;
-        }
-    </style>
-{% endblock %}
-
 {% block body %}
 
     {{ render_pattern(contentHeader) }}
@@ -53,10 +19,6 @@
     {% embed 'grid/content.html.twig' %}
 
         {% block main %}
-            {% if is_granted('FEATURE_PRC_COMMS') %}
-                <p class="prc-comms">eLife's peer-review process is changing. From January 2023, eLife will no longer make accept/reject decisions after peer review. Instead, every preprint sent for peer review will be published on the eLife website as a “Reviewed Preprint” that includes an eLife assessment, public reviews, and a response from the authors (if available). When writing the eLife assessment, the editors and reviewers will use a common vocabulary to summarize the significance of the findings and the strength of the evidence reported in the preprint.
-                    <a href="{{ path('inside-elife-article', {id: '54d63486'}) }}" class="prc-comms-link">Read about the new process</a>.</p>
-            {% endif %}
 
             {% for part in body %}
 

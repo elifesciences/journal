@@ -14,7 +14,11 @@
         {% endif %}
 
         <div class="main-content-grid">
+
+            {% include 'infobars-announcement.html.twig' %}
+
             {{ main|raw }}
+
         </div>
 
         {% if secondary|length %}

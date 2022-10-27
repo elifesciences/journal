@@ -184,6 +184,19 @@ final class AboutPeopleControllerTest extends PageTestCase
         $this->assertEmpty($crawler->filter('meta[name="dc.rights"]'));
     }
 
+    /**
+     * @test
+     */
+    public function it_does_not_display_announcement_info_bar()
+    {
+        $client = static::createClient();
+
+        $crawler = $client->request('GET', $this->getUrl());
+
+        $this->assertSame(200, $client->getResponse()->getStatusCode());
+        $this->assertEmpty($crawler->filter('.content-container .info-bar--announcement .info-bar__text'));
+    }
+
     protected function getUrl() : string
     {
         $this->mockPeopleApi(['leadership', 'senior-editor']);
