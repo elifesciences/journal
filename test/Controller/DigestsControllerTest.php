@@ -40,10 +40,10 @@ final class DigestsControllerTest extends PageTestCase
         $this->assertSame('Cutting jargon and putting research in context, digests showcase some of the latest articles published in eLife.', $crawler->filter('meta[property="og:description"]')->attr('content'));
         $this->assertSame('Cutting jargon and putting research in context, digests showcase some of the latest articles published in eLife.', $crawler->filter('meta[name="description"]')->attr('content'));
         $this->assertSame('summary', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
-        $this->assertSame('http://localhost/'.ltrim(self::$kernel->getContainer()->get('elife.assets.packages')->getUrl('assets/images/social/icon-600x600@1.png'), '/'), $crawler->filter('meta[name="twitter:image"]')->attr('content'));
-        $this->assertSame('http://localhost/'.ltrim(self::$kernel->getContainer()->get('elife.assets.packages')->getUrl('assets/images/social/icon-600x600@1.png'), '/'), $crawler->filter('meta[property="og:image"]')->attr('content'));
-        $this->assertSame('600', $crawler->filter('meta[property="og:image:width"]')->attr('content'));
-        $this->assertSame('600', $crawler->filter('meta[property="og:image:height"]')->attr('content'));
+        $this->assertSame('http://localhost/'.ltrim(self::$kernel->getContainer()->get('elife.assets.packages')->getUrl('assets/images/social/icon-280x200@1.c5b562b1.png'), '/'), $crawler->filter('meta[name="twitter:image"]')->attr('content'));
+        $this->assertSame('http://localhost/'.ltrim(self::$kernel->getContainer()->get('elife.assets.packages')->getUrl('assets/images/social/icon-280x200@1.c5b562b1.png'), '/'), $crawler->filter('meta[property="og:image"]')->attr('content'));
+        $this->assertSame('280', $crawler->filter('meta[property="og:image:width"]')->attr('content'));
+        $this->assertSame('200', $crawler->filter('meta[property="og:image:height"]')->attr('content'));
         $this->assertSame('application/rss+xml', $crawler->filter('link[rel="alternate"]')->attr('type'));
         $this->assertSame('eLife Sciences Digests', $crawler->filter('link[rel="alternate"]')->attr('title'));
         $this->assertSame('/rss/digests.xml', $crawler->filter('link[rel="alternate"]')->attr('href'));

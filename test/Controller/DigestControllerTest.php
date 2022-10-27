@@ -132,7 +132,7 @@ final class DigestControllerTest extends PageTestCase
         $this->assertSame('summary_large_image', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
         $this->assertSame('https://www.example.com/iiif/thumb%2Fnail/full/full/0/default.jpg', $crawler->filter('meta[property="og:image"]')->attr('content'));
         $this->assertSame('800', $crawler->filter('meta[property="og:image:width"]')->attr('content'));
-        $this->assertSame('600', $crawler->filter('meta[property="og:image:height"]')->attr('content'));
+        $this->assertSame('200', $crawler->filter('meta[property="og:image:height"]')->attr('content'));
         $this->assertSame('digest/1', $crawler->filter('meta[name="dc.identifier"]')->attr('content'));
         $this->assertSame('elifesciences.org', $crawler->filter('meta[name="dc.relation.ispartof"]')->attr('content'));
         $this->assertSame('Digest title', $crawler->filter('meta[name="dc.title"]')->attr('content'));
