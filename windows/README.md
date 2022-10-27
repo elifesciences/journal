@@ -18,7 +18,7 @@ When using Windows to bypass the main errors we recomand to follow the next :
      
      How to install : [Step 1](https://getcomposer.org/download/) & [Step 2](https://serverpilot.io/docs/how-to-downgrade-to-composer-version-1/)
  
- 3. After you cloned the repo unitll you start running the commands from the [readme](https://github.com/elifesciences/journal/blob/develop/README.md) make sure that you use the correct line endings for the unit and behat tests.
+ 3. After you cloned the repo unitll you start running the commands from the [readme](https://github.com/elifesciences/journal/blob/develop/README.md) make sure that you use the correct line endings for the unit (.ci/phpunit) and behat (.ci/behat) scrits that runstests.
  
     * [Explanation](https://stackoverflow.com/a/71209401)
     * [Easy fix](https://stackoverflow.com/a/71731542)
