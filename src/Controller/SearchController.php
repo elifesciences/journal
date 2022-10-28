@@ -53,10 +53,6 @@ final class SearchController extends Controller
             $apiTypes = array_merge($apiTypes, $this->researchTypes());
         }
 
-        if (!$this->isGranted('FEATURE_REVIEWED_PREPRINTS') && empty($apiTypes)) {
-            $apiTypes = array_merge($this->magazineTypes(), $this->researchTypes());
-        }
-
         $search = $this->get('elife.api_sdk.search.slow')
             ->forQuery($arguments['query']['for'])
             ->forSubject(...$arguments['query']['subjects'])
@@ -224,11 +220,8 @@ final class SearchController extends Controller
             'scientific-correspondence',
             'short-report',
             'tools-resources',
+            'reviewed-preprint',
         ];
-
-        if ($this->isGranted('FEATURE_REVIEWED_PREPRINTS')) {
-            $types[] = 'reviewed-preprint';
-        }
 
         return $types;
     }

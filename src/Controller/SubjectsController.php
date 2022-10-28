@@ -90,11 +90,8 @@ final class SubjectsController extends Controller
             'insight',
             'feature',
             'collection',
+            'reviewed-preprint',
         ];
-
-        if ($this->isGranted('FEATURE_REVIEWED_PREPRINTS')) {
-            array_unshift($searchTypes, 'reviewed-preprint');
-        }
 
         $latestArticles = promise_for($this->get('elife.api_sdk.search')
             ->forSubject($id)
