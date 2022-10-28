@@ -12,7 +12,7 @@ Dependencies
 * [Docker](https://www.docker.com/)
 * [Docker-compose](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-compose-on-ubuntu-20-04)
 
-Windows - [tips and tricks](https://github.com/elifesciences/journal/blob/docker-changes/windows/README.md)
+Windows - [tips and tricks](/windows/README.md)
 
 Docker Installation - Running the site locally
 ----------------------------------------------
