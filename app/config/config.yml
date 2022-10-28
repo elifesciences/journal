@@ -11,8 +11,6 @@ parameters:
     honeypot_field: email_address
     mustache_stat_props: [size, mtime]
     feature_hero: true
-    feature_reviewed_preprints: true
-    feature_prc_comms: true
 
 bobthecow_mustache:
     globals:

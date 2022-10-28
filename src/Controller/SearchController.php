@@ -53,7 +53,8 @@ final class SearchController extends Controller
             $apiTypes = array_merge($apiTypes, $this->researchTypes());
         }
 
-        if (!$this->isGranted('FEATURE_REVIEWED_PREPRINTS') && empty($apiTypes)) {
+        // !!!! We should discuss is this change right or not? !!!!!!!!!!
+        if (empty($apiTypes)) {
             $apiTypes = array_merge($this->magazineTypes(), $this->researchTypes());
         }
 
@@ -224,11 +225,8 @@ final class SearchController extends Controller
             'scientific-correspondence',
             'short-report',
             'tools-resources',
+            'reviewed-preprint',
         ];
-
-        if ($this->isGranted('FEATURE_REVIEWED_PREPRINTS')) {
-            $types[] = 'reviewed-preprint';
-        }
 
         return $types;
     }

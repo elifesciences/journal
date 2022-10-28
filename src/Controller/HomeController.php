@@ -33,6 +33,7 @@ final class HomeController extends Controller
         $arguments = $this->defaultPageArguments($request);
 
         $searchTypes = [
+            'reviewed-preprint',
             'research-advance',
             'research-article',
             'research-communication',
@@ -42,10 +43,6 @@ final class HomeController extends Controller
             'tools-resources',
             'replication-study',
         ];
-
-        if ($this->isGranted('FEATURE_REVIEWED_PREPRINTS')) {
-            array_unshift($searchTypes, 'reviewed-preprint');
-        }
 
         $latestResearch = promise_for($this->get('elife.api_sdk.search')
             ->forType(...$searchTypes)
