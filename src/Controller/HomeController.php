@@ -33,6 +33,7 @@ final class HomeController extends Controller
         $arguments = $this->defaultPageArguments($request);
 
         $searchTypes = [
+            'reviewed-preprint',
             'research-advance',
             'research-article',
             'research-communication',
@@ -42,10 +43,6 @@ final class HomeController extends Controller
             'tools-resources',
             'replication-study',
         ];
-
-        if ($this->isGranted('FEATURE_REVIEWED_PREPRINTS')) {
-            array_unshift($searchTypes, 'reviewed-preprint');
-        }
 
         $latestResearch = promise_for($this->get('elife.api_sdk.search')
             ->forType(...$searchTypes)
@@ -87,25 +84,23 @@ final class HomeController extends Controller
 
     private function createFirstPage(array $arguments) : Response
     {
-        if ($this->isGranted('FEATURE_HERO')) {
-            $heroHighlights = $this->get('elife.api_sdk.covers')
-                ->getCurrent()
-                ->then(function (Sequence $items) {
-                    return $items->map(function(Cover $cover, int $i) {
-                        return $this->convertTo($cover, 0 === $i ? HeroBanner::class : HighlightItem::class);
-                    });
-                })->otherwise($this->softFailure('Failed to load hero and highlights'));
+        $heroHighlights = $this->get('elife.api_sdk.covers')
+            ->getCurrent()
+            ->then(function (Sequence $items) {
+                return $items->map(function(Cover $cover, int $i) {
+                    return $this->convertTo($cover, 0 === $i ? HeroBanner::class : HighlightItem::class);
+                });
+            })->otherwise($this->softFailure('Failed to load hero and highlights'));
 
-            $arguments['heroBanner'] = $heroHighlights->then(Callback::emptyOr(function (Sequence $covers) {
-                return $covers->filter(Callback::isInstanceOf(HeroBanner::class))->offsetGet(0);
-            }))->otherwise($this->softFailure('Failed to load hero and highlights'));
+        $arguments['heroBanner'] = $heroHighlights->then(Callback::emptyOr(function (Sequence $covers) {
+            return $covers->filter(Callback::isInstanceOf(HeroBanner::class))->offsetGet(0);
+        }))->otherwise($this->softFailure('Failed to load hero and highlights'));
 
-            $arguments['highlights'] = $heroHighlights->then(function (Sequence $covers) {
-                return $covers->filter(Callback::isInstanceOf(HighlightItem::class));
-            })->then(Callback::emptyOr(function (Sequence $highlights) {
-                return new Highlight($highlights->toArray(), new ListHeading('Highlights', 'highlights'));
-            }))->otherwise($this->softFailure('Failed to load hero and highlights'));
-        }
+        $arguments['highlights'] = $heroHighlights->then(function (Sequence $covers) {
+            return $covers->filter(Callback::isInstanceOf(HighlightItem::class));
+        })->then(Callback::emptyOr(function (Sequence $highlights) {
+            return new Highlight($highlights->toArray(), new ListHeading('Highlights', 'highlights'));
+        }))->otherwise($this->softFailure('Failed to load hero and highlights'));
 
         $arguments['subjectsLink'] = new SectionListingLink('All research categories', 'subjects');
 

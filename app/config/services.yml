@@ -374,33 +374,6 @@ services:
         tags:
           - name: security.voter
 
-    elife.journal.security.voter.feature.hero:
-        class: eLife\Journal\Security\Voter\FixedVoter
-        public: false
-        arguments:
-          - FEATURE_HERO
-          - '%feature_hero%'
-        tags:
-          - name: security.voter
-
-    elife.journal.security.voter.feature.prc_comms:
-        class: eLife\Journal\Security\Voter\FixedVoter
-        public: false
-        arguments:
-          - FEATURE_PRC_COMMS
-          - '%feature_prc_comms%'
-        tags:
-          - name: security.voter
-
-    elife.journal.security.voter.feature.reviewed_preprints:
-        class: eLife\Journal\Security\Voter\FixedVoter
-        public: false
-        arguments:
-          - FEATURE_REVIEWED_PREPRINTS
-          - '%feature_reviewed_preprints%'
-        tags:
-          - name: security.voter
-
     elife.journal.templating.promise_aware:
         class: eLife\Journal\Templating\PromiseAwareEngine
         decorates: templating

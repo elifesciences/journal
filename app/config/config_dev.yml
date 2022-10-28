@@ -2,9 +2,6 @@ imports:
   - resource: config.yml
   - resource: services_dev.yml
 
-parameters:
-    feature_prc_comms: true
-
 csa_guzzle:
     profiler:
         enabled: true
