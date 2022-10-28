@@ -207,8 +207,8 @@ final class ArticleControllerTest extends PageTestCase
                                 'filename' => 'social.jpg',
                             ],
                             'size' => [
-                                'width' => 600,
-                                'height' => 600,
+                                'width' => 280,
+                                'height' => 200,
                             ],
                         ],
                     ],
