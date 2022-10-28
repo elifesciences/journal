@@ -374,15 +374,6 @@ services:
         tags:
           - name: security.voter
 
-    elife.journal.security.voter.feature.hero:
-        class: eLife\Journal\Security\Voter\FixedVoter
-        public: false
-        arguments:
-          - FEATURE_HERO
-          - '%feature_hero%'
-        tags:
-          - name: security.voter
-
     elife.journal.templating.promise_aware:
         class: eLife\Journal\Templating\PromiseAwareEngine
         decorates: templating
