@@ -53,7 +53,6 @@ final class SearchController extends Controller
             $apiTypes = array_merge($apiTypes, $this->researchTypes());
         }
 
-        // !!!! We should discuss is this change right or not? !!!!!!!!!!
         if (empty($apiTypes)) {
             $apiTypes = array_merge($this->magazineTypes(), $this->researchTypes());
         }
