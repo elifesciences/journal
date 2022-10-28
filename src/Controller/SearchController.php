@@ -53,10 +53,6 @@ final class SearchController extends Controller
             $apiTypes = array_merge($apiTypes, $this->researchTypes());
         }
 
-        if (empty($apiTypes)) {
-            $apiTypes = array_merge($this->magazineTypes(), $this->researchTypes());
-        }
-
         $search = $this->get('elife.api_sdk.search.slow')
             ->forQuery($arguments['query']['for'])
             ->forSubject(...$arguments['query']['subjects'])
