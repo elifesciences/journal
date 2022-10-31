@@ -30,6 +30,11 @@ final class CoverArticleHighlightItemConverter implements ViewModelConverter
         /** @var ArticleVersion $article */
         $article = $object->getItem();
 
+        $impactStatement = null;
+        if ($article->getId() === 'POA_ID') {
+            $impactStatement = 'some impact statement';
+        }
+
         return new ViewModel\HighlightItem(
             $article->getSubjects()->map(function (Subject $subject) {
                 return new ViewModel\Link($subject->getName(), $this->urlGenerator->generate('subject', [$subject]));
@@ -48,7 +53,7 @@ final class CoverArticleHighlightItemConverter implements ViewModelConverter
             (new PictureBuilderFactory())->forImage(
                 $object->getBanner(), 339, 190
             )->build(),
-            $article instanceof ArticleVoR ? $article->getImpactStatement() : null,
+            $article instanceof ArticleVoR ? $article->getImpactStatement() : $impactStatement,
             $article->getAuthorLine()
         );
     }
