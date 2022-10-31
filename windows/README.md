@@ -13,7 +13,7 @@ When using Windows to bypass the main errors we recommend to follow the next :
     * [Guide to use WSL](https://adamtheautomator.com/windows-subsystem-for-linux/)
     * [Guide to use Git Bash](https://www.geeksforgeeks.org/working-on-git-bash/)
 
-3. Use the recommanded versions for PHP + extensions and Composer :
+3. Use the recommended versions for PHP + extensions and Composer :
 
    * `PHP 7.3.33-7+ubuntu22.04.1+deb.sury.org+2 (cli) (built: Sep 29 2022 22:23:16) ( NTS )`
      
