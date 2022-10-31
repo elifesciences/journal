@@ -1,10 +1,9 @@
-
 Tips and Tricks for Windows users
 ---------------------------------
 
 When using Windows to bypass the main errors we recommend to follow the next :
 
-1. Before you cloned the repo, unitl you start running the commands from the [readme](/README.md), make sure that you configure git to use the correct line endings.
+1. Before you cloned the repo, until you start running the commands from the [readme](/README.md), make sure that you configure git to use the correct line endings.
  
     * [Explanation](https://stackoverflow.com/a/71209401) / [More detailed](https://stackoverflow.com/q/10418975)
     * Easy fix : `git config --global core.autocrlf input`
@@ -14,7 +13,7 @@ When using Windows to bypass the main errors we recommend to follow the next :
     * [Guide to use WSL](https://adamtheautomator.com/windows-subsystem-for-linux/)
     * [Guide to use Git Bash](https://www.geeksforgeeks.org/working-on-git-bash/)
 
-3. Use the recomanded versions for PHP + exensions and Composer :
+3. Use the recommanded versions for PHP + extensions and Composer :
 
    * `PHP 7.3.33-7+ubuntu22.04.1+deb.sury.org+2 (cli) (built: Sep 29 2022 22:23:16) ( NTS )`
      
