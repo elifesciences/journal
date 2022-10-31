@@ -24,7 +24,7 @@ Docker Installation - Running the site locally
 To start/restart the containers use these commands:
 `docker-compose down --volumes --remove-orphans && docker-compose up --build`
 
-Important : Creating `composer.lock` on local and permanent updates to composer files in general should only be done from the container, be aware that if this is done from local can generate additional errors. To avoid any errors running `composer update` in the container is safer than running it in the local dev env. 
+Important : Creating `composer.lock` on local and permanent updates to composer files in general should only be done from the container, be aware that if this is done from local can generate additional errors. To avoid any errors running `composer update` in the container is safer than running it in the local dev env. ( ex: `docker-compose run composer update elife/patterns` )
 
 ### Changing configuration
 
