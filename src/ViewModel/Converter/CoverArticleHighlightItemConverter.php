@@ -32,7 +32,7 @@ final class CoverArticleHighlightItemConverter implements ViewModelConverter
 
         $defaultImpactStatement = null;
         if ($article->getId() === '70671') {
-            $defaultImpactStatement = 'Experiments on freely moving mice have shed light on the brainstem circuits that control breathing';
+            $defaultImpactStatement = 'Experiments on freely moving mice have shed light on the brainstem circuits that control breathing.';
         }
 
         return new ViewModel\HighlightItem(
