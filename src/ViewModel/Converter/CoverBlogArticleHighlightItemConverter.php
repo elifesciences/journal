@@ -37,7 +37,7 @@ final class CoverBlogArticleHighlightItemConverter implements ViewModelConverter
             (new PictureBuilderFactory())->forImage(
                 $object->getBanner(), 339, 190
             )->build(),
-            $blogArticle->getImpactStatement()
+            $object->getImpactStatement()
         );
     }
 
