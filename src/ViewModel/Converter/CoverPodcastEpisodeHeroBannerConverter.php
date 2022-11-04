@@ -2,17 +2,14 @@
 
 namespace eLife\Journal\ViewModel\Converter;
 
-use eLife\ApiSdk\Model\ArticleVersion;
-use eLife\ApiSdk\Model\ArticleVoR;
 use eLife\ApiSdk\Model\Cover;
 use eLife\ApiSdk\Model\PodcastEpisode;
-use eLife\ApiSdk\Model\Subject;
 use eLife\Journal\Helper\ModelName;
 use eLife\Journal\ViewModel\Factory\PictureBuilderFactory;
 use eLife\Patterns\ViewModel;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-final class CoverPodcastHeroBannerConverter implements ViewModelConverter
+final class CoverPodcastEpisodeHeroBannerConverter implements ViewModelConverter
 {
     use CreatesDate;
 
