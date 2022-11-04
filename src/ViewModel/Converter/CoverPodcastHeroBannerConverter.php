@@ -51,6 +51,6 @@ final class CoverPodcastHeroBannerConverter implements ViewModelConverter
 
     public function supports($object, string $viewModel = null, array $context = []) : bool
     {
-        return $object instanceof Cover && ViewModel\HeroBanner::class === $viewModel && $object->getItem() instanceof ArticleVersion;
+        return $object instanceof Cover && ViewModel\HeroBanner::class === $viewModel && $object->getItem() instanceof PodcastEpisode;
     }
 }
