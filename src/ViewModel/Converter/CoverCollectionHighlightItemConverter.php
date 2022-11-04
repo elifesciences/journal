@@ -37,7 +37,7 @@ final class CoverCollectionHighlightItemConverter implements ViewModelConverter
             (new PictureBuilderFactory())->forImage(
                 $object->getBanner(), 339, 190
             )->build(),
-            $collection->getImpactStatement()
+            $object->getImpactStatement()
         );
     }
 

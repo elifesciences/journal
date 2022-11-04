@@ -45,7 +45,7 @@ final class CoverArticleHeroBannerConverter implements ViewModelConverter
             (new PictureBuilderFactory())->forImage(
                 $object->getBanner(), 633, 367
             )->build(),
-            $article instanceof ArticleVoR ? $article->getImpactStatement() : null,
+            $object->getImpactStatement(),
             $article->getAuthorLine()
         );
     }
