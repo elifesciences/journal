@@ -37,7 +37,7 @@ final class CoverCollectionHeroBannerConverter implements ViewModelConverter
             (new PictureBuilderFactory())->forImage(
                 $object->getBanner(), 633, 367
             )->build(),
-            $collection->getImpactStatement()
+            $object->getImpactStatement()
         );
     }
 
