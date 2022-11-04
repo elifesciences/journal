@@ -104,7 +104,7 @@ final class DigestControllerTest extends PageTestCase
         $crawler = $client->request('GET', $this->getUrl());
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
-        $this->assertSame('Related to', $crawler->filter('.teaser--related .teaser__context_label')->text());
+        $this->assertSame('Related to', $crawler->filter('.teaser--related .teaser__context_label_item')->text());
         $this->assertSame('Article 12345', trim(preg_replace('!\s+!', ' ', $crawler->filter('.teaser--related .teaser__header_text')
             ->text())));
     }

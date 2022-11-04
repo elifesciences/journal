@@ -1,8 +1,7 @@
 {% set criticalCss = 'post' %}
 
 {% set hypothesis = true %}
-{% set hypothesis = true %}
-{% set customWrapperClass = 'content--narrow-column' %}
+{% set customWrapperClass = 'content--one-column' %}
 
 {% extends '::page.html.twig' %}
 
@@ -11,27 +10,6 @@
 {% block body %}
 
     <style>
-        #content {
-            padding-top: 48px;
-            padding-top: 3rem;
-        }
-
-        @supports (display: grid) {
-            @media screen and (min-width: 56.25em /* 900px */) {
-                #content .main-content-grid {
-                    grid-column: 2 / 12;
-                }
-            }
-
-            @media screen and (min-width: 75em /* 1200px */) {
-                #content .main-content-grid {
-                    margin-right: -24px;
-                    margin-right: -1.5rem;
-                    grid-column: 3 / 11;
-                }
-            }
-        }
-
         /* This is needed for inside-elife/9bc3981f */
         .iframe-embed {
             margin: 24px 0;
