@@ -897,6 +897,22 @@ services:
         tags:
           - name: view_model.converter
 
+    elife.journal.view_model.converter.cover.podcast_episode.hero_benner:
+        class: eLife\Journal\ViewModel\Converter\CoverPodcastEpisodeHeroBannerConverter
+        public: false
+        arguments:
+          - '@router'
+        tags:
+          - name: view_model.converter
+
+    elife.journal.view_model.converter.cover.interview.hero_benner:
+        class: eLife\Journal\ViewModel\Converter\CoverInterviewHeroBannerConverter
+        public: false
+        arguments:
+          - '@router'
+        tags:
+          - name: view_model.converter
+
     elife.journal.view_model.converter.cover.article.teaser.secondary:
         class: eLife\Journal\ViewModel\Converter\CoverArticleSecondaryTeaserConverter
         public: false
