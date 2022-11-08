@@ -930,6 +930,14 @@ services:
         tags:
           - name: view_model.converter
 
+    elife.journal.view_model.converter.cover.interview.highlight_item:
+        class: eLife\Journal\ViewModel\Converter\CoverInterviewHighlightItemConverter
+        public: false
+        arguments:
+          - '@router'
+        tags:
+          - name: view_model.converter
+
     elife.journal.view_model.converter.cover.blog_article.hero_banner:
         class: eLife\Journal\ViewModel\Converter\CoverBlogArticleHeroBannerConverter
         public: false
