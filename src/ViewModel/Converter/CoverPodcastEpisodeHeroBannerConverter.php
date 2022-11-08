@@ -29,7 +29,7 @@ final class CoverPodcastEpisodeHeroBannerConverter implements ViewModelConverter
         $podcast = $object->getItem();
 
         return new ViewModel\HeroBanner(
-            null,
+            [],
             new ViewModel\Link($object->getTitle(), $this->urlGenerator->generate('podcast-episode', [$podcast])),
             ViewModel\Meta::withLink(
                 new ViewModel\Link(

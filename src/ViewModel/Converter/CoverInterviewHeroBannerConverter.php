@@ -29,7 +29,7 @@ final class CoverInterviewHeroBannerConverter implements ViewModelConverter
         $interview = $object->getItem();
 
         return new ViewModel\HeroBanner(
-            null,
+            [],
             new ViewModel\Link($object->getTitle(), $this->urlGenerator->generate('interview', [$interview])),
             ViewModel\Meta::withLink(
                 new ViewModel\Link(
