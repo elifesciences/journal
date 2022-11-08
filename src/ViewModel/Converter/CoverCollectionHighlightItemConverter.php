@@ -5,6 +5,7 @@ namespace eLife\Journal\ViewModel\Converter;
 use eLife\ApiSdk\Model\Collection;
 use eLife\ApiSdk\Model\Cover;
 use eLife\ApiSdk\Model\Subject;
+use eLife\Journal\Helper\ModelName;
 use eLife\Journal\ViewModel\Factory\PictureBuilderFactory;
 use eLife\Patterns\ViewModel;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -33,7 +34,10 @@ final class CoverCollectionHighlightItemConverter implements ViewModelConverter
                 return new ViewModel\Link($subject->getName(), $this->urlGenerator->generate('subject', [$subject]));
             })->toArray(),
             new ViewModel\Link($object->getTitle(), $this->urlGenerator->generate('collection', [$collection])),
-            ViewModel\Meta::withLink(new ViewModel\Link('Collection', $this->urlGenerator->generate('collections')), $this->simpleDate($collection, $context)),
+            ViewModel\Meta::withLink(new ViewModel\Link(
+                ModelName::plural('collection'),
+                $this->urlGenerator->generate('collections')), $this->simpleDate($collection, $context)
+            ),
             (new PictureBuilderFactory())->forImage(
                 $object->getBanner(), 339, 190
             )->build(),

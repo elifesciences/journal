@@ -2,10 +2,9 @@
 
 namespace eLife\Journal\ViewModel\Converter;
 
-use eLife\ApiSdk\Model\Collection;
 use eLife\ApiSdk\Model\Cover;
 use eLife\ApiSdk\Model\PodcastEpisode;
-use eLife\ApiSdk\Model\Subject;
+use eLife\Journal\Helper\ModelName;
 use eLife\Journal\ViewModel\Factory\PictureBuilderFactory;
 use eLife\Patterns\ViewModel;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -32,8 +31,10 @@ final class CoverPodcastEpisodeHighlightItemConverter implements ViewModelConver
         return new ViewModel\HighlightItem(
             [],
             new ViewModel\Link($object->getTitle(), $this->urlGenerator->generate('collection', [$podcastEpisode])),
-            ViewModel\Meta::withLink(new ViewModel\Link('podcast-episode',
-                $this->urlGenerator->generate('podcast-episode')), $this->simpleDate($podcastEpisode, $context)),
+            ViewModel\Meta::withLink(new ViewModel\Link(
+                ModelName::plural('podcast-episode'),
+                $this->urlGenerator->generate('podcast-episode')), $this->simpleDate($podcastEpisode, $context)
+            ),
             (new PictureBuilderFactory())->forImage(
                 $object->getBanner(), 339, 190
             )->build(),

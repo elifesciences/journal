@@ -6,6 +6,7 @@ use eLife\ApiSdk\Model\Collection;
 use eLife\ApiSdk\Model\Cover;
 use eLife\ApiSdk\Model\Interview;
 use eLife\ApiSdk\Model\Subject;
+use eLife\Journal\Helper\ModelName;
 use eLife\Journal\ViewModel\Factory\PictureBuilderFactory;
 use eLife\Patterns\ViewModel;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -32,8 +33,11 @@ final class CoverInterviewHighlightItemConverter implements ViewModelConverter
         return new ViewModel\HighlightItem(
             [],
             new ViewModel\Link($object->getTitle(), $this->urlGenerator->generate('interview', [$interview])),
-            ViewModel\Meta::withLink(new ViewModel\Link('Interview',
-                $this->urlGenerator->generate('interviews')), $this->simpleDate($interview, $context)),
+            ViewModel\Meta::withLink(
+                new ViewModel\Link(ModelName::plural('interview'),
+                $this->urlGenerator->generate('interviews')),
+                $this->simpleDate($interview, $context)
+            ),
             (new PictureBuilderFactory())->forImage(
                 $object->getBanner(), 339, 190
             )->build(),
