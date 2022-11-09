@@ -32,7 +32,7 @@ final class CoverInterviewHighlightItemConverter implements ViewModelConverter
             [],
             new ViewModel\Link($object->getTitle(), $this->urlGenerator->generate('interview', [$interview])),
             ViewModel\Meta::withLink(
-                new ViewModel\Link(ModelName::plural('interview'),
+                new ViewModel\Link(ModelName::singular('interview'),
                 $this->urlGenerator->generate('interviews')),
                 $this->simpleDate($interview, $context)
             ),

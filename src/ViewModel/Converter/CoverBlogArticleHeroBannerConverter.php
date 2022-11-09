@@ -5,6 +5,7 @@ namespace eLife\Journal\ViewModel\Converter;
 use eLife\ApiSdk\Model\BlogArticle;
 use eLife\ApiSdk\Model\Cover;
 use eLife\ApiSdk\Model\Subject;
+use eLife\Journal\Helper\ModelName;
 use eLife\Journal\ViewModel\Factory\PictureBuilderFactory;
 use eLife\Patterns\ViewModel;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -34,7 +35,10 @@ final class CoverBlogArticleHeroBannerConverter implements ViewModelConverter
             })->toArray(),
             new ViewModel\Link($object->getTitle(), $this->urlGenerator->generate('inside-elife-article', [$blogArticle])),
             ViewModel\Meta::withLink(
-                new ViewModel\Link('Inside eLife', $this->urlGenerator->generate('inside-elife')),
+                new ViewModel\Link(
+                    ModelName::singular('blog-article'),
+                    $this->urlGenerator->generate('inside-elife')
+                ),
                 $this->simpleDate($blogArticle, $context)
             ),
             (new PictureBuilderFactory())->forImage(

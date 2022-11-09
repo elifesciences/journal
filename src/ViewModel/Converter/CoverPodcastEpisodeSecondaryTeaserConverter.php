@@ -2,13 +2,13 @@
 
 namespace eLife\Journal\ViewModel\Converter;
 
-use eLife\ApiSdk\Model\Collection;
 use eLife\ApiSdk\Model\Cover;
+use eLife\ApiSdk\Model\PodcastEpisode;
 use eLife\Journal\Helper\ModelName;
 use eLife\Patterns\ViewModel;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-final class CoverCollectionSecondaryTeaserConverter implements ViewModelConverter
+final class CoverPodcastEpisodeSecondaryTeaserConverter implements ViewModelConverter
 {
     use CreatesContextLabel;
     use CreatesDate;
@@ -27,26 +27,21 @@ final class CoverCollectionSecondaryTeaserConverter implements ViewModelConverte
      */
     public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
-        /** @var Collection $collection */
-        $collection = $object->getItem();
-
-        $curatedBy = 'Edited by '.$collection->getSelectedCurator()->getDetails()->getPreferredName();
-        if ($collection->selectedCuratorEtAl()) {
-            $curatedBy .= ' et al.';
-        }
+        /** @var PodcastEpisode $podcastEpisode */
+        $podcastEpisode = $object->getItem();
 
         return ViewModel\Teaser::secondary(
             $object->getTitle(),
-            $this->urlGenerator->generate('collection', [$collection]),
-            $curatedBy,
-            $this->createContextLabel($collection),
+            $this->urlGenerator->generate('interview', [$podcastEpisode]),
+            null,
+            $this->createContextLabel($podcastEpisode),
             ViewModel\TeaserImage::small(
                 $this->viewModelConverter->convert($object->getBanner(), null, ['width' => 72, 'height' => 72])
             ),
             ViewModel\TeaserFooter::forNonArticle(
                 ViewModel\Meta::withLink(new ViewModel\Link(
-                    ModelName::singular('collection'),
-                    $this->urlGenerator->generate('collections')), $this->simpleDate($collection, $context)
+                    ModelName::singular('podcast-episode'),
+                    $this->urlGenerator->generate('podcast-episodes')), $this->simpleDate($podcastEpisode, $context)
                 )
             )
         );
@@ -54,6 +49,6 @@ final class CoverCollectionSecondaryTeaserConverter implements ViewModelConverte
 
     public function supports($object, string $viewModel = null, array $context = []) : bool
     {
-        return $object instanceof Cover && ViewModel\Teaser::class === $viewModel && 'secondary' === ($context['variant'] ?? null) && $object->getItem() instanceof Collection;
+        return $object instanceof Cover && ViewModel\Teaser::class === $viewModel && 'secondary' === ($context['variant'] ?? null) && $object->getItem() instanceof PodcastEpisode;
     }
 }

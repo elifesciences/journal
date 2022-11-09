@@ -30,9 +30,9 @@ final class CoverPodcastEpisodeHighlightItemConverter implements ViewModelConver
 
         return new ViewModel\HighlightItem(
             [],
-            new ViewModel\Link($object->getTitle(), $this->urlGenerator->generate('collection', [$podcastEpisode])),
+            new ViewModel\Link($object->getTitle(), $this->urlGenerator->generate('podcast-episode', [$podcastEpisode])),
             ViewModel\Meta::withLink(new ViewModel\Link(
-                ModelName::plural('podcast-episode'),
+                ModelName::singular('podcast-episode'),
                 $this->urlGenerator->generate('podcast-episode')), $this->simpleDate($podcastEpisode, $context)
             ),
             (new PictureBuilderFactory())->forImage(

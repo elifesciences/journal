@@ -33,7 +33,7 @@ final class CoverInterviewHeroBannerConverter implements ViewModelConverter
             new ViewModel\Link($object->getTitle(), $this->urlGenerator->generate('interview', [$interview])),
             ViewModel\Meta::withLink(
                 new ViewModel\Link(
-                    ModelName::plural('interview'),
+                    ModelName::singular('interview'),
                     $this->urlGenerator->generate('interviews')
                 ),
                 $this->simpleDate($interview, $context)
@@ -41,8 +41,7 @@ final class CoverInterviewHeroBannerConverter implements ViewModelConverter
             (new PictureBuilderFactory())->forImage(
                 $object->getBanner(), 633, 367
             )->build(),
-            $object->getImpactStatement(),
-            null
+            $object->getImpactStatement()
         );
     }
 

@@ -25,24 +25,23 @@ final class CoverPodcastEpisodeHeroBannerConverter implements ViewModelConverter
      */
     public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
-        /** @var PodcastEpisode $podcast */
-        $podcast = $object->getItem();
+        /** @var PodcastEpisode $podcastEpisode */
+        $podcastEpisode = $object->getItem();
 
         return new ViewModel\HeroBanner(
             [],
-            new ViewModel\Link($object->getTitle(), $this->urlGenerator->generate('podcast-episode', [$podcast])),
+            new ViewModel\Link($object->getTitle(), $this->urlGenerator->generate('podcast-episode', [$podcastEpisode])),
             ViewModel\Meta::withLink(
                 new ViewModel\Link(
-                    ModelName::plural('podcast-episode'),
-                    $this->urlGenerator->generate('podcast-episode', [$podcast])
+                    ModelName::singular('podcast-episode'),
+                    $this->urlGenerator->generate('podcast-episode', [$podcastEpisode])
                 ),
-                $this->simpleDate($podcast, $context)
+                $this->simpleDate($podcastEpisode, $context)
             ),
             (new PictureBuilderFactory())->forImage(
                 $object->getBanner(), 633, 367
             )->build(),
-            $object->getImpactStatement(),
-            null
+            $object->getImpactStatement()
         );
     }
 
