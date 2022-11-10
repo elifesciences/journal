@@ -30,11 +30,6 @@ final class CoverArticleHighlightItemConverter implements ViewModelConverter
         /** @var ArticleVersion $article */
         $article = $object->getItem();
 
-        $defaultImpactStatement = null;
-        if ($article->getId() === '70671') {
-            $defaultImpactStatement = 'Experiments on freely moving mice have shed light on the brainstem circuits that control breathing.';
-        }
-
         return new ViewModel\HighlightItem(
             $article->getSubjects()->map(function (Subject $subject) {
                 return new ViewModel\Link($subject->getName(), $this->urlGenerator->generate('subject', [$subject]));
@@ -53,7 +48,7 @@ final class CoverArticleHighlightItemConverter implements ViewModelConverter
             (new PictureBuilderFactory())->forImage(
                 $object->getBanner(), 339, 190
             )->build(),
-            $article instanceof ArticleVoR ? $article->getImpactStatement() : $defaultImpactStatement,
+            $object->getImpactStatement(),
             $article->getAuthorLine()
         );
     }
