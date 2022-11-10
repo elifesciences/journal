@@ -889,7 +889,7 @@ services:
         tags:
           - name: view_model.converter
 
-    elife.journal.view_model.converter.cover.article.hero_benner:
+    elife.journal.view_model.converter.cover.article.hero_banner:
         class: eLife\Journal\ViewModel\Converter\CoverArticleHeroBannerConverter
         public: false
         arguments:
@@ -897,7 +897,7 @@ services:
         tags:
           - name: view_model.converter
 
-    elife.journal.view_model.converter.cover.podcast_episode.hero_benner:
+    elife.journal.view_model.converter.cover.podcast_episode.hero_banner:
         class: eLife\Journal\ViewModel\Converter\CoverPodcastEpisodeHeroBannerConverter
         public: false
         arguments:
@@ -905,7 +905,7 @@ services:
         tags:
           - name: view_model.converter
 
-    elife.journal.view_model.converter.cover.interview.hero_benner:
+    elife.journal.view_model.converter.cover.interview.hero_banner:
         class: eLife\Journal\ViewModel\Converter\CoverInterviewHeroBannerConverter
         public: false
         arguments:
