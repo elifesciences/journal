@@ -6,7 +6,7 @@ use eLife\ApiSdk\Model\HasBanner;
 use eLife\Journal\ViewModel\Factory\PictureBuilderFactory;
 use eLife\Patterns\ViewModel\Picture;
 
-trait CreateHighlightPicture
+trait CreatesHighlightPicture
 {
     private function createHighlightPicture(HasBanner $banner): Picture
     {

@@ -12,6 +12,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 final class CoverPodcastEpisodeHighlightItemConverter implements ViewModelConverter
 {
     use CreatesDate;
+    use CreatesHighlightPicture;
 
     private $urlGenerator;
 
@@ -35,9 +36,7 @@ final class CoverPodcastEpisodeHighlightItemConverter implements ViewModelConver
                 ModelName::singular('podcast-episode'),
                 $this->urlGenerator->generate('podcast')), $this->simpleDate($podcastEpisode, $context)
             ),
-            (new PictureBuilderFactory())->forImage(
-                $object->getBanner(), 339, 190
-            )->build(),
+            $this->createHighlightPicture($object),
             $object->getImpactStatement()
         );
     }

@@ -13,7 +13,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 final class CoverCollectionHighlightItemConverter implements ViewModelConverter
 {
     use CreatesDate;
-    use CreateHighlightPicture;
+    use CreatesHighlightPicture;
 
     private $urlGenerator;
 
@@ -39,9 +39,7 @@ final class CoverCollectionHighlightItemConverter implements ViewModelConverter
                 ModelName::singular('collection'),
                 $this->urlGenerator->generate('collections')), $this->simpleDate($collection, $context)
             ),
-            (new PictureBuilderFactory())->forImage(
-                $object->getBanner(), 339, 190
-            )->build(),
+            $this->createHighlightPicture($object),
             $object->getImpactStatement()
         );
     }

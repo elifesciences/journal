@@ -12,6 +12,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 final class CoverPodcastEpisodeHeroBannerConverter implements ViewModelConverter
 {
     use CreatesDate;
+    use CreatesHeroBannerPicture;
 
     private $urlGenerator;
 
@@ -38,9 +39,7 @@ final class CoverPodcastEpisodeHeroBannerConverter implements ViewModelConverter
                 ),
                 $this->simpleDate($podcastEpisode, $context)
             ),
-            (new PictureBuilderFactory())->forImage(
-                $object->getBanner(), 633, 367
-            )->build(),
+            $this->createHeroBannerPicture($object),
             $object->getImpactStatement()
         );
     }
