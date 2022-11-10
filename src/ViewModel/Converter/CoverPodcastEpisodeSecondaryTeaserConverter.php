@@ -41,7 +41,7 @@ final class CoverPodcastEpisodeSecondaryTeaserConverter implements ViewModelConv
             ViewModel\TeaserFooter::forNonArticle(
                 ViewModel\Meta::withLink(new ViewModel\Link(
                     ModelName::singular('podcast-episode'),
-                    $this->urlGenerator->generate('podcast-episodes')), $this->simpleDate($podcastEpisode, $context)
+                    $this->urlGenerator->generate('podcast')), $this->simpleDate($podcastEpisode, $context)
                 )
             )
         );

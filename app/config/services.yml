@@ -963,6 +963,24 @@ services:
         tags:
           - name: view_model.converter
 
+    elife.journal.view_model.converter.cover.interview.teaser.secondary:
+        class: eLife\Journal\ViewModel\Converter\CoverInterviewSecondaryTeaserConverter
+        public: false
+        arguments:
+          - '@elife.journal.view_model.converter'
+          - '@router'
+        tags:
+          - name: view_model.converter
+
+    elife.journal.view_model.converter.cover.podcast_episode.teaser.secondary:
+        class: eLife\Journal\ViewModel\Converter\CoverPodcastEpisodeSecondaryTeaserConverter
+        public: false
+        arguments:
+          - '@elife.journal.view_model.converter'
+          - '@router'
+        tags:
+          - name: view_model.converter
+
     elife.journal.view_model.converter.cover.collection.highlight_item:
         class: eLife\Journal\ViewModel\Converter\CoverCollectionHighlightItemConverter
         public: false

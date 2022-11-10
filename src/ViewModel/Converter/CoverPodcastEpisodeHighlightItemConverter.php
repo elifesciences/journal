@@ -33,7 +33,7 @@ final class CoverPodcastEpisodeHighlightItemConverter implements ViewModelConver
             new ViewModel\Link($object->getTitle(), $this->urlGenerator->generate('podcast-episode', [$podcastEpisode])),
             ViewModel\Meta::withLink(new ViewModel\Link(
                 ModelName::singular('podcast-episode'),
-                $this->urlGenerator->generate('podcast-episode')), $this->simpleDate($podcastEpisode, $context)
+                $this->urlGenerator->generate('podcast')), $this->simpleDate($podcastEpisode, $context)
             ),
             (new PictureBuilderFactory())->forImage(
                 $object->getBanner(), 339, 190

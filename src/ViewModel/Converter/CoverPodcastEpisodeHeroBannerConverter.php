@@ -34,7 +34,7 @@ final class CoverPodcastEpisodeHeroBannerConverter implements ViewModelConverter
             ViewModel\Meta::withLink(
                 new ViewModel\Link(
                     ModelName::singular('podcast-episode'),
-                    $this->urlGenerator->generate('podcast-episode', [$podcastEpisode])
+                    $this->urlGenerator->generate('podcast')
                 ),
                 $this->simpleDate($podcastEpisode, $context)
             ),
