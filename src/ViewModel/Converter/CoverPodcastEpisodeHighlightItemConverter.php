@@ -2,15 +2,14 @@
 
 namespace eLife\Journal\ViewModel\Converter;
 
-use eLife\ApiSdk\Model\Collection;
 use eLife\ApiSdk\Model\Cover;
-use eLife\ApiSdk\Model\Subject;
+use eLife\ApiSdk\Model\PodcastEpisode;
 use eLife\Journal\Helper\ModelName;
 use eLife\Journal\ViewModel\Factory\PictureBuilderFactory;
 use eLife\Patterns\ViewModel;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-final class CoverCollectionHighlightItemConverter implements ViewModelConverter
+final class CoverPodcastEpisodeHighlightItemConverter implements ViewModelConverter
 {
     use CreatesDate;
 
@@ -26,17 +25,15 @@ final class CoverCollectionHighlightItemConverter implements ViewModelConverter
      */
     public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
-        /** @var Collection $collection */
-        $collection = $object->getItem();
+        /** @var PodcastEpisode $podcastEpisode */
+        $podcastEpisode = $object->getItem();
 
         return new ViewModel\HighlightItem(
-            $collection->getSubjects()->map(function (Subject $subject) {
-                return new ViewModel\Link($subject->getName(), $this->urlGenerator->generate('subject', [$subject]));
-            })->toArray(),
-            new ViewModel\Link($object->getTitle(), $this->urlGenerator->generate('collection', [$collection])),
+            [],
+            new ViewModel\Link($object->getTitle(), $this->urlGenerator->generate('podcast-episode', [$podcastEpisode])),
             ViewModel\Meta::withLink(new ViewModel\Link(
-                ModelName::singular('collection'),
-                $this->urlGenerator->generate('collections')), $this->simpleDate($collection, $context)
+                ModelName::singular('podcast-episode'),
+                $this->urlGenerator->generate('podcast')), $this->simpleDate($podcastEpisode, $context)
             ),
             (new PictureBuilderFactory())->forImage(
                 $object->getBanner(), 339, 190
@@ -47,6 +44,6 @@ final class CoverCollectionHighlightItemConverter implements ViewModelConverter
 
     public function supports($object, string $viewModel = null, array $context = []) : bool
     {
-        return $object instanceof Cover && ViewModel\HighlightItem::class === $viewModel && $object->getItem() instanceof Collection;
+        return $object instanceof Cover && ViewModel\HighlightItem::class === $viewModel && $object->getItem() instanceof PodcastEpisode;
     }
 }

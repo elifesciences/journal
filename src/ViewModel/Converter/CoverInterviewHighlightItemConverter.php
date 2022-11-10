@@ -2,15 +2,14 @@
 
 namespace eLife\Journal\ViewModel\Converter;
 
-use eLife\ApiSdk\Model\BlogArticle;
 use eLife\ApiSdk\Model\Cover;
-use eLife\ApiSdk\Model\Subject;
+use eLife\ApiSdk\Model\Interview;
 use eLife\Journal\Helper\ModelName;
 use eLife\Journal\ViewModel\Factory\PictureBuilderFactory;
 use eLife\Patterns\ViewModel;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-final class CoverBlogArticleHighlightItemConverter implements ViewModelConverter
+final class CoverInterviewHighlightItemConverter implements ViewModelConverter
 {
     use CreatesDate;
 
@@ -26,20 +25,16 @@ final class CoverBlogArticleHighlightItemConverter implements ViewModelConverter
      */
     public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
-        /** @var BlogArticle $blogArticle */
-        $blogArticle = $object->getItem();
+        /** @var Interview $interview */
+        $interview = $object->getItem();
 
         return new ViewModel\HighlightItem(
-            $blogArticle->getSubjects()->map(function (Subject $subject) {
-                return new ViewModel\Link($subject->getName(), $this->urlGenerator->generate('subject', [$subject]));
-            })->toArray(),
-            new ViewModel\Link($object->getTitle(), $this->urlGenerator->generate('inside-elife-article', [$blogArticle])),
+            [],
+            new ViewModel\Link($object->getTitle(), $this->urlGenerator->generate('interview', [$interview])),
             ViewModel\Meta::withLink(
-                new ViewModel\Link(
-                    ModelName::singular('blog-article'),
-                    $this->urlGenerator->generate('inside-elife')
-                ),
-                $this->simpleDate($blogArticle, $context)
+                new ViewModel\Link(ModelName::singular('interview'),
+                $this->urlGenerator->generate('interviews')),
+                $this->simpleDate($interview, $context)
             ),
             (new PictureBuilderFactory())->forImage(
                 $object->getBanner(), 339, 190
@@ -50,6 +45,6 @@ final class CoverBlogArticleHighlightItemConverter implements ViewModelConverter
 
     public function supports($object, string $viewModel = null, array $context = []) : bool
     {
-        return $object instanceof Cover && ViewModel\HighlightItem::class === $viewModel && $object->getItem() instanceof BlogArticle;
+        return $object instanceof Cover && ViewModel\HighlightItem::class === $viewModel && $object->getItem() instanceof Interview;
     }
 }
