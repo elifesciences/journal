@@ -38,7 +38,7 @@ final class CoverInterviewHeroBannerConverter implements ViewModelConverter
                 ),
                 $this->simpleDate($interview, $context)
             ),
-            $this->createHeroBannerPicture($object),
+            $this->heroBannerCoverPicture($object),
             $object->getImpactStatement()
         );
     }

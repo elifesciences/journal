@@ -41,7 +41,7 @@ final class CoverBlogArticleHeroBannerConverter implements ViewModelConverter
                 ),
                 $this->simpleDate($blogArticle, $context)
             ),
-            $this->createHeroBannerPicture($object),
+            $this->heroBannerCoverPicture($object),
             $object->getImpactStatement()
         );
     }

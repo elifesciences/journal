@@ -38,7 +38,7 @@ final class CoverCollectionHeroBannerConverter implements ViewModelConverter
                 ModelName::singular('collection'),
                 $this->urlGenerator->generate('collections')), $this->simpleDate($collection, $context)
             ),
-            $this->createHeroBannerPicture($object),
+            $this->heroBannerCoverPicture($object),
             $object->getImpactStatement()
         );
     }

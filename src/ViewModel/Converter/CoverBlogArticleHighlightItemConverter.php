@@ -41,7 +41,7 @@ final class CoverBlogArticleHighlightItemConverter implements ViewModelConverter
                 ),
                 $this->simpleDate($blogArticle, $context)
             ),
-            $this->createHighlightPicture($object),
+            $this->highlightItemCoverPicture($object),
             $object->getImpactStatement()
         );
     }

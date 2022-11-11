@@ -44,7 +44,7 @@ final class CoverArticleHighlightItemConverter implements ViewModelConverter
                 ),
                 $this->simpleDate($article, $context)
             ),
-            $this->createHighlightPicture($object),
+            $this->highlightItemCoverPicture($object),
             $object->getImpactStatement(),
             $article->getAuthorLine()
         );

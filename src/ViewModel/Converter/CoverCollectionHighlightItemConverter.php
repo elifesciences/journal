@@ -38,7 +38,7 @@ final class CoverCollectionHighlightItemConverter implements ViewModelConverter
                 ModelName::singular('collection'),
                 $this->urlGenerator->generate('collections')), $this->simpleDate($collection, $context)
             ),
-            $this->createHighlightPicture($object),
+            $this->highlightItemCoverPicture($object),
             $object->getImpactStatement()
         );
     }

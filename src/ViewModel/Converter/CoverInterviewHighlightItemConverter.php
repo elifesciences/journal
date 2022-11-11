@@ -36,7 +36,7 @@ final class CoverInterviewHighlightItemConverter implements ViewModelConverter
                 $this->urlGenerator->generate('interviews')),
                 $this->simpleDate($interview, $context)
             ),
-            $this->createHighlightPicture($object),
+            $this->highlightItemCoverPicture($object),
             $object->getImpactStatement()
         );
     }

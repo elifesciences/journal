@@ -8,17 +8,20 @@ use eLife\Patterns\ViewModel\Picture;
 
 trait CreatesCoverPicture
 {
-    private function createHighlightPicture(HasBanner $object): Picture
+    final private function coverHighlightItemPicture(HasBanner $object): Picture
     {
-        return (new PictureBuilderFactory())->forImage(
-            $object->getBanner(), 339, 190
-        )->build();
+        return $this->coverPicture($object, 339, 190);
     }
 
-    private function createHeroBannerPicture(HasBanner $object): Picture
+    final private function coverHeroBannerPicture(HasBanner $object): Picture
+    {
+        return $this->coverPicture($object, 633, 367);
+    }
+    
+    final private function coverPicture(HasBanner $object, int $defaultWidth, int $defaultHeight = null): Picture
     {
         return (new PictureBuilderFactory())->forImage(
-            $object->getBanner(), 633, 367
+            $object->getBanner(), $defaultWidth, $defaultHeight
         )->build();
     }
 }

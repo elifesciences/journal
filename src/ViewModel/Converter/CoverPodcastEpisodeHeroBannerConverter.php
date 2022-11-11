@@ -38,7 +38,7 @@ final class CoverPodcastEpisodeHeroBannerConverter implements ViewModelConverter
                 ),
                 $this->simpleDate($podcastEpisode, $context)
             ),
-            $this->createHeroBannerPicture($object),
+            $this->heroBannerCoverPicture($object),
             $object->getImpactStatement()
         );
     }

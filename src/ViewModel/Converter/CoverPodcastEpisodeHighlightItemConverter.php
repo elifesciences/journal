@@ -35,7 +35,7 @@ final class CoverPodcastEpisodeHighlightItemConverter implements ViewModelConver
                 ModelName::singular('podcast-episode'),
                 $this->urlGenerator->generate('podcast')), $this->simpleDate($podcastEpisode, $context)
             ),
-            $this->createHighlightPicture($object),
+            $this->highlightItemCoverPicture($object),
             $object->getImpactStatement()
         );
     }
