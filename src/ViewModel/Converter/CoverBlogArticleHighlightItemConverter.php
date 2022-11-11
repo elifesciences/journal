@@ -6,14 +6,13 @@ use eLife\ApiSdk\Model\BlogArticle;
 use eLife\ApiSdk\Model\Cover;
 use eLife\ApiSdk\Model\Subject;
 use eLife\Journal\Helper\ModelName;
-use eLife\Journal\ViewModel\Factory\PictureBuilderFactory;
 use eLife\Patterns\ViewModel;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 final class CoverBlogArticleHighlightItemConverter implements ViewModelConverter
 {
     use CreatesDate;
-    use CreatesHighlightPicture;
+    use CreatesCoverPicture;
 
     private $urlGenerator;
 
