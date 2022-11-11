@@ -1149,7 +1149,7 @@ final class ArticlesController extends Controller
                 }
 
                 return new ViewSelector(
-                    $this->generatePath($history, $item->getVersion(), null, 'content'),
+                    new Link('Article', $this->generatePath($history, $item->getVersion(), null, 'content')),
                     array_values(array_filter(array_map(function (ViewModel $viewModel) {
                         if ($viewModel instanceof ArticleSection) {
                             return new Link($viewModel['title'], '#'.$viewModel['id']);
@@ -1157,7 +1157,7 @@ final class ArticlesController extends Controller
 
                         return null;
                     }, $sections))),
-                    $hasFigures ? $this->generatePath($history, $item->getVersion(), 'figures', 'content') : null,
+                    $hasFigures ? new Link('Figures and data', $this->generatePath($history, $item->getVersion(), 'figures', 'content')) : null,
                     $isFiguresPage,
                     $item instanceof ArticleVoR
                         ? rtrim($this->getParameter('side_by_side_view_url'), '/').'/'.$item->getId()
