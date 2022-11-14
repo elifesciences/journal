@@ -6,13 +6,13 @@ use eLife\ApiSdk\Model\BlogArticle;
 use eLife\ApiSdk\Model\Cover;
 use eLife\ApiSdk\Model\Subject;
 use eLife\Journal\Helper\ModelName;
-use eLife\Journal\ViewModel\Factory\PictureBuilderFactory;
 use eLife\Patterns\ViewModel;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 final class CoverBlogArticleHeroBannerConverter implements ViewModelConverter
 {
     use CreatesDate;
+    use CreatesCoverPicture;
 
     private $urlGenerator;
 
@@ -41,9 +41,7 @@ final class CoverBlogArticleHeroBannerConverter implements ViewModelConverter
                 ),
                 $this->simpleDate($blogArticle, $context)
             ),
-            (new PictureBuilderFactory())->forImage(
-                $object->getBanner(), 633, 367
-            )->build(),
+            $this->heroBannerCoverPicture($object),
             $object->getImpactStatement()
         );
     }

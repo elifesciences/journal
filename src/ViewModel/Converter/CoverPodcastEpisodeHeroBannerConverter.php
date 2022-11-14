@@ -5,13 +5,13 @@ namespace eLife\Journal\ViewModel\Converter;
 use eLife\ApiSdk\Model\Cover;
 use eLife\ApiSdk\Model\PodcastEpisode;
 use eLife\Journal\Helper\ModelName;
-use eLife\Journal\ViewModel\Factory\PictureBuilderFactory;
 use eLife\Patterns\ViewModel;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 final class CoverPodcastEpisodeHeroBannerConverter implements ViewModelConverter
 {
     use CreatesDate;
+    use CreatesCoverPicture;
 
     private $urlGenerator;
 
@@ -38,9 +38,7 @@ final class CoverPodcastEpisodeHeroBannerConverter implements ViewModelConverter
                 ),
                 $this->simpleDate($podcastEpisode, $context)
             ),
-            (new PictureBuilderFactory())->forImage(
-                $object->getBanner(), 633, 367
-            )->build(),
+            $this->heroBannerCoverPicture($object),
             $object->getImpactStatement()
         );
     }

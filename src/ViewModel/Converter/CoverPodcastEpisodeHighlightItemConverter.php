@@ -5,13 +5,13 @@ namespace eLife\Journal\ViewModel\Converter;
 use eLife\ApiSdk\Model\Cover;
 use eLife\ApiSdk\Model\PodcastEpisode;
 use eLife\Journal\Helper\ModelName;
-use eLife\Journal\ViewModel\Factory\PictureBuilderFactory;
 use eLife\Patterns\ViewModel;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 final class CoverPodcastEpisodeHighlightItemConverter implements ViewModelConverter
 {
     use CreatesDate;
+    use CreatesCoverPicture;
 
     private $urlGenerator;
 
@@ -35,9 +35,7 @@ final class CoverPodcastEpisodeHighlightItemConverter implements ViewModelConver
                 ModelName::singular('podcast-episode'),
                 $this->urlGenerator->generate('podcast')), $this->simpleDate($podcastEpisode, $context)
             ),
-            (new PictureBuilderFactory())->forImage(
-                $object->getBanner(), 339, 190
-            )->build(),
+            $this->highlightItemCoverPicture($object),
             $object->getImpactStatement()
         );
     }

@@ -5,13 +5,13 @@ namespace eLife\Journal\ViewModel\Converter;
 use eLife\ApiSdk\Model\Cover;
 use eLife\ApiSdk\Model\Interview;
 use eLife\Journal\Helper\ModelName;
-use eLife\Journal\ViewModel\Factory\PictureBuilderFactory;
 use eLife\Patterns\ViewModel;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 final class CoverInterviewHighlightItemConverter implements ViewModelConverter
 {
     use CreatesDate;
+    use CreatesCoverPicture;
 
     private $urlGenerator;
 
@@ -36,9 +36,7 @@ final class CoverInterviewHighlightItemConverter implements ViewModelConverter
                 $this->urlGenerator->generate('interviews')),
                 $this->simpleDate($interview, $context)
             ),
-            (new PictureBuilderFactory())->forImage(
-                $object->getBanner(), 339, 190
-            )->build(),
+            $this->highlightItemCoverPicture($object),
             $object->getImpactStatement()
         );
     }
