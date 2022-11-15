@@ -705,7 +705,7 @@ final class HomeControllerTest extends PageTestCase
      * @test
      * @dataProvider coversProvider
      */
-    public function it_displays_different_types_in_hero_banner($cover, $title, $impactStatement)
+    public function it_displays_different_types_in_hero_banner($cover, $expectedTitle, $expectedImpactStatement)
     {
         $client = static::createClient();
 
@@ -727,77 +727,55 @@ final class HomeControllerTest extends PageTestCase
         );
 
         $crawler = $client->request('GET', $this->getUrl());
-        $this->assertSame($title, trim($crawler->filter('.hero-banner__title_link')->text()));
-        $this->assertSame($impactStatement, trim($crawler->filter('.hero-banner__summary')->text()));
+        $this->assertSame($expectedTitle, trim($crawler->filter('.hero-banner__title_link')->text()));
+        $this->assertSame($expectedImpactStatement, trim($crawler->filter('.hero-banner__summary')->text()));
 
-        /// OR
-        $this->assertSame(trim(strip_tags($cover['title'])), trim($crawler->filter('.hero-banner__title_link')->text()));
+
     }
 
     public function coversProvider(): array
     {
         return [
-            [
-                'research article' => [
-                    "title" => "<i>Homo naledi</i>",
-                    "impactStatement" => "A new species of the genus <i>Homo</i> from the Dinaledi Chamber, South Africa",
-                    "image" => [
-                        "uri" => "https://iiif.elifesciences.org/lax/09560%2Felife-09560-fig1-v1.tif",
-                        "alt" => "",
-                        "source" => [
-                            "mediaType" => "image/jpeg",
-                            "uri" => "https://iiif.elifesciences.org/lax/09560%2Felife-09560-fig1-v1.tif/full/full/0/default.jpg",
-                            "filename" => "an-image.jpg"
+            'research article' => [
+                [
+                    'title' => '<i>Homo naledi</i>',
+                    'impactStatement' => 'A new species of the genus <i>Homo</i> from the Dinaledi Chamber, South Africa',
+                    'image' => [
+                        'uri' => 'https://iiif.elifesciences.org/lax/09560%2Felife-09560-fig1-v1.tif',
+                        'alt' => '',
+                        'source' => [
+                            'mediaType' => 'image/jpeg',
+                            'uri' => 'https://iiif.elifesciences.org/lax/09560%2Felife-09560-fig1-v1.tif/full/full/0/default.jpg',
+                            'filename' => 'an-image.jpg',
                         ],
-                        "size" => [
-                            "width" => 4194,
-                            "height" => 4714
+                        'size' => [
+                            'width' => 4194,
+                            'height' => 4714,
                         ]
                     ],
-                    "item" => [
-                        "status" => "vor",
-                        "id" => "09560",
-                        "version" => 1,
-                        "type" => "research-article",
-                        "doi" => "10.7554/eLife.09560",
-                        "authorLine" => "Lee R Berger et al.",
-                        "title" => "<i>Homo naledi</i>, a new species of the genus <i>Homo</i> from the Dinaledi Chamber, South Africa",
-                        "stage" => "published",
-                        "published" => "2015-09-10T00:00:00Z",
-                        "statusDate" => "2015-09-10T00:00:00Z",
-                        "volume" => 4,
-                        "elocationId" => "e09560",
-                        "pdf" => "https://elifesciences.org/content/4/e09560.pdf",
-                        "subjects" => [
+                    'item' => [
+                        'status' => 'vor',
+                        'id' => '09560',
+                        'version' => 1,
+                        'type' => 'research-article',
+                        'doi' => '10.7554/eLife.09560',
+                        'title' => '<i>Homo naledi</i>, a new species of the genus <i>Homo</i> from the Dinaledi Chamber, South Africa',
+                        'stage' => 'published',
+                        'published' => '2015-09-10T00:00:00Z',
+                        'statusDate' => '2015-09-10T00:00:00Z',
+                        'volume' => 4,
+                        'elocationId' => 'e09560',
+                        'subjects' => [
                             [
-                                "id" => "genomics-evolutionary-biology",
-                                "name" => "Genomics and Evolutionary Biology"
-                            ]
+                                'id' => 'genomics-evolutionary-biology',
+                                'name' => 'Genomics and Evolutionary Biology',
+                            ],
                         ],
-                        "impactStatement" => "A new hominin species has been unearthed in the Dinaledi Chamber of the Rising Star cave system in the largest assemblage of a single species of hominins yet discovered in Africa.",
-                        "image" => [
-                            "thumbnail" => [
-                                "uri" => "https://iiif.elifesciences.org/lax/09560%2Felife-09560-fig1-v1.tif",
-                                "alt" => "",
-                                "source" => [
-                                    "mediaType" => "image/jpeg",
-                                    "uri" => "https://iiif.elifesciences.org/lax/09560%2Felife-09560-fig1-v1.tif/full/full/0/default.jpg",
-                                    "filename" => "an-image.jpg"
-                                ],
-                                "size" => [
-                                    "width" => 4194,
-                                    "height" => 4714
-                                ],
-                                "focalPoint" => [
-                                    "x" => 25,
-                                    "y" => 75
-                                ]
-                            ]
-                        ]
                     ],
                 ],
-                'Homo naledi', 'A new species of the genus Homo from the Dinaledi Chamber, South Africa'
-            ]
+                'Homo naledi',
+                'A new species of the genus Homo from the Dinaledi Chamber, South Africa',
+            ],
         ];
     }
 
