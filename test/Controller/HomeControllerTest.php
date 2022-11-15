@@ -701,6 +701,102 @@ final class HomeControllerTest extends PageTestCase
         $this->assertSame(['New Subject'], array_map('trim', $crawler->filter('.section-listing__list_item')->extract('_text')));
     }
 
+    /**
+     * @test
+     * @dataProvider coversProvider
+     */
+    public function it_displays_different_types_in_hero_banner($cover)
+    {
+        $client = static::createClient();
+
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/covers/current',
+                ['Accept' => 'application/vnd.elife.cover-list+json; version=1']
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.cover-list+json; version=1'],
+                json_encode([
+                        'total' => 1,
+                        'items' => [$cover]
+                    ]
+                )
+            )
+        );
+
+        $crawler = $client->request('GET', $this->getUrl());
+        $this->assertSame('Homo naledi', trim($crawler->filter('.hero-banner__title_link')->text()));
+        $this->assertSame('A new species of the genus Homo from the Dinaledi Chamber, South Africa', trim($crawler->filter('.hero-banner__summary')->text()));
+    }
+
+    public function coversProvider(): array
+    {
+        return [
+            [
+                'research article' => [
+                    "title" => "<i>Homo naledi</i>",
+                    "impactStatement" => "A new species of the genus <i>Homo</i> from the Dinaledi Chamber, South Africa",
+                    "image" => [
+                        "uri" => "https://iiif.elifesciences.org/lax/09560%2Felife-09560-fig1-v1.tif",
+                        "alt" => "",
+                        "source" => [
+                            "mediaType" => "image/jpeg",
+                            "uri" => "https://iiif.elifesciences.org/lax/09560%2Felife-09560-fig1-v1.tif/full/full/0/default.jpg",
+                            "filename" => "an-image.jpg"
+                        ],
+                        "size" => [
+                            "width" => 4194,
+                            "height" => 4714
+                        ]
+                    ],
+                    "item" => [
+                        "status" => "vor",
+                        "id" => "09560",
+                        "version" => 1,
+                        "type" => "research-article",
+                        "doi" => "10.7554/eLife.09560",
+                        "authorLine" => "Lee R Berger et al.",
+                        "title" => "<i>Homo naledi</i>, a new species of the genus <i>Homo</i> from the Dinaledi Chamber, South Africa",
+                        "stage" => "published",
+                        "published" => "2015-09-10T00:00:00Z",
+                        "statusDate" => "2015-09-10T00:00:00Z",
+                        "volume" => 4,
+                        "elocationId" => "e09560",
+                        "pdf" => "https://elifesciences.org/content/4/e09560.pdf",
+                        "subjects" => [
+                            [
+                                "id" => "genomics-evolutionary-biology",
+                                "name" => "Genomics and Evolutionary Biology"
+                            ]
+                        ],
+                        "impactStatement" => "A new hominin species has been unearthed in the Dinaledi Chamber of the Rising Star cave system in the largest assemblage of a single species of hominins yet discovered in Africa.",
+                        "image" => [
+                            "thumbnail" => [
+                                "uri" => "https://iiif.elifesciences.org/lax/09560%2Felife-09560-fig1-v1.tif",
+                                "alt" => "",
+                                "source" => [
+                                    "mediaType" => "image/jpeg",
+                                    "uri" => "https://iiif.elifesciences.org/lax/09560%2Felife-09560-fig1-v1.tif/full/full/0/default.jpg",
+                                    "filename" => "an-image.jpg"
+                                ],
+                                "size" => [
+                                    "width" => 4194,
+                                    "height" => 4714
+                                ],
+                                "focalPoint" => [
+                                    "x" => 25,
+                                    "y" => 75
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        ];
+    }
+
     protected function getUrl() : string
     {
         $this->mockApiResponse(
