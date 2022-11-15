@@ -705,7 +705,7 @@ final class HomeControllerTest extends PageTestCase
      * @test
      * @dataProvider coversProvider
      */
-    public function it_displays_different_types_in_hero_banner($cover)
+    public function it_displays_different_types_in_hero_banner($cover, $title, $impactStatement)
     {
         $client = static::createClient();
 
@@ -727,8 +727,11 @@ final class HomeControllerTest extends PageTestCase
         );
 
         $crawler = $client->request('GET', $this->getUrl());
-        $this->assertSame('Homo naledi', trim($crawler->filter('.hero-banner__title_link')->text()));
-        $this->assertSame('A new species of the genus Homo from the Dinaledi Chamber, South Africa', trim($crawler->filter('.hero-banner__summary')->text()));
+        $this->assertSame($title, trim($crawler->filter('.hero-banner__title_link')->text()));
+        $this->assertSame($impactStatement, trim($crawler->filter('.hero-banner__summary')->text()));
+
+        /// OR
+        $this->assertSame(trim(strip_tags($cover['title'])), trim($crawler->filter('.hero-banner__title_link')->text()));
     }
 
     public function coversProvider(): array
@@ -791,8 +794,9 @@ final class HomeControllerTest extends PageTestCase
                                 ]
                             ]
                         ]
-                    ]
-                ]
+                    ],
+                ],
+                'Homo naledi', 'A new species of the genus Homo from the Dinaledi Chamber, South Africa'
             ]
         ];
     }
