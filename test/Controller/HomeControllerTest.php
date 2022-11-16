@@ -729,53 +729,160 @@ final class HomeControllerTest extends PageTestCase
         $crawler = $client->request('GET', $this->getUrl());
         $this->assertSame($expectedTitle, trim($crawler->filter('.hero-banner__title_link')->text()));
         $this->assertSame($expectedImpactStatement, trim($crawler->filter('.hero-banner__summary')->text()));
-
-
     }
 
     public function coversProvider(): array
     {
         return [
-            'research article' => [
-                [
-                    'title' => '<i>Homo naledi</i>',
-                    'impactStatement' => 'A new species of the genus <i>Homo</i> from the Dinaledi Chamber, South Africa',
+            'research-article' => [
+                $this->prepareCover('research-article'),
+                'research-article title',
+                'research-article impact statement',
+            ],
+            'research-article-poa' => [
+                $this->prepareCover('research-article-poa'),
+                'research-article-poa title',
+                'research-article-poa impact statement',
+            ],
+            'blog-article' => [
+                $this->prepareCover('blog-article'),
+                'blog-article title',
+                'blog-article impact statement',
+            ],
+            'interview' => [
+                $this->prepareCover('interview'),
+                'interview title',
+                'interview impact statement',
+            ],
+            'podcast-episode' => [
+                $this->prepareCover('podcast-episode'),
+                'podcast-episode title',
+                'podcast-episode impact statement',
+            ],
+        ];
+    }
+
+    private function prepareCover(string $type) : array
+    {
+        switch ($type) {
+            case 'podcast-episode':
+                $item = [
+                    'type' => 'podcast-episode',
+                    'number' => 30,
+                    'title' => 'podcast-episode title',
+                    'published' => '2016-07-01T08:30:15Z',
                     'image' => [
-                        'uri' => 'https://iiif.elifesciences.org/lax/09560%2Felife-09560-fig1-v1.tif',
-                        'alt' => '',
-                        'source' => [
-                            'mediaType' => 'image/jpeg',
-                            'uri' => 'https://iiif.elifesciences.org/lax/09560%2Felife-09560-fig1-v1.tif/full/full/0/default.jpg',
-                            'filename' => 'an-image.jpg',
-                        ],
-                        'size' => [
-                            'width' => 4194,
-                            'height' => 4714,
-                        ]
-                    ],
-                    'item' => [
-                        'status' => 'vor',
-                        'id' => '09560',
-                        'version' => 1,
-                        'type' => 'research-article',
-                        'doi' => '10.7554/eLife.09560',
-                        'title' => '<i>Homo naledi</i>, a new species of the genus <i>Homo</i> from the Dinaledi Chamber, South Africa',
-                        'stage' => 'published',
-                        'published' => '2015-09-10T00:00:00Z',
-                        'statusDate' => '2015-09-10T00:00:00Z',
-                        'volume' => 4,
-                        'elocationId' => 'e09560',
-                        'subjects' => [
-                            [
-                                'id' => 'genomics-evolutionary-biology',
-                                'name' => 'Genomics and Evolutionary Biology',
+                        'thumbnail' => [
+                            'uri' => 'https://iiif.elifesciences.org/lax/09560%2Felife-09560-fig1-v1.tif',
+                            'alt' => '',
+                            'source' => [
+                                'mediaType' => 'image/jpeg',
+                                'uri' => 'https://iiif.elifesciences.org/lax/09560%2Felife-09560-fig1-v1.tif/full/full/0/default.jpg',
+                                'filename' => 'an-image.jpg',
+                            ],
+                            'size' => [
+                                'width' => 4194,
+                                'height' => 4714,
                             ],
                         ],
                     ],
+                    'sources' => [
+                        [
+                            'mediaType' => 'audio/mpeg',
+                            'uri' => 'https://nakeddiscovery.com/scripts/mp3s/audio/eLife_Podcast_16.06.mp3',
+                        ],
+                    ],
+                ];
+                break;
+            case 'interview':
+                $item = [
+                    'type' => 'interview',
+                    'id' => '2',
+                    'interviewee' => [
+                        'name' => [
+                            'preferred' => 'Alicia Rosello',
+                            'index' => 'Rosello, Alicia',
+                        ],
+                    ],
+                    'title' => 'interview title',
+                    'published' => '2015-09-10T00:00:00Z',
+
+                ];
+                break;
+            case 'blog-article':
+                $item = [
+                    'id' => '1',
+                    'type' => 'blog-article',
+                    'title' => 'blog-article title',
+                    'published' => '2015-09-10T00:00:00Z',
+                    'subjects' => [
+                        [
+                            'id' => 'genomics-evolutionary-biology',
+                            'name' => 'Genomics and Evolutionary Biology',
+                        ],
+                    ],
+                ];
+                break;
+            case 'research-article-poa':
+                $item = [
+                    'status' => 'poa',
+                    'id' => '09561',
+                    'version' => 1,
+                    'type' => 'research-article',
+                    'doi' => '10.7554/eLife.09561',
+                    'title' => 'research-article title',
+                    'stage' => 'published',
+                    'published' => '2015-09-10T00:00:00Z',
+                    'statusDate' => '2015-09-10T00:00:00Z',
+                    'volume' => 4,
+                    'elocationId' => 'e09561',
+                    'subjects' => [
+                        [
+                            'id' => 'cancer-biology',
+                            'name' => 'Cancer Biology',
+                        ],
+                    ],
+                ];
+                break;
+            default:
+                $item = [
+                    'status' => 'vor',
+                    'id' => '09560',
+                    'version' => 1,
+                    'type' => 'research-article',
+                    'doi' => '10.7554/eLife.09560',
+                    'title' => 'research-article title',
+                    'stage' => 'published',
+                    'published' => '2015-09-10T00:00:00Z',
+                    'statusDate' => '2015-09-10T00:00:00Z',
+                    'volume' => 4,
+                    'elocationId' => 'e09560',
+                    'subjects' => [
+                        [
+                            'id' => 'genomics-evolutionary-biology',
+                            'name' => 'Genomics and Evolutionary Biology',
+                        ],
+                    ],
+                ];
+        }
+
+        return [
+            'title' => $type.' title',
+            'impactStatement' => $type.' impact statement',
+            'image' => [
+                'uri' => 'https://iiif.elifesciences.org/lax/09560%2Felife-09560-fig1-v1.tif',
+                'alt' => '',
+                'source' => [
+                    'mediaType' => 'image/jpeg',
+                    'uri' => 'https://iiif.elifesciences.org/lax/09560%2Felife-09560-fig1-v1.tif/full/full/0/default.jpg',
+                    'filename' => 'an-image.jpg',
                 ],
-                'Homo naledi',
-                'A new species of the genus Homo from the Dinaledi Chamber, South Africa',
+                'size' => [
+                    'width' => 4194,
+                    'height' => 4714,
+                ]
             ],
+            'item' => $item,
         ];
     }
 
