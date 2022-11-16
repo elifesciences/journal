@@ -705,6 +705,44 @@ final class HomeControllerTest extends PageTestCase
      * @test
      * @dataProvider coversProvider
      */
+    public function it_displays_different_types_in_highlight_item($cover, $expectedTitle, $expectedImpactStatement)
+    {
+        $client = static::createClient();
+
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/covers/current',
+                ['Accept' => 'application/vnd.elife.cover-list+json; version=1']
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.cover-list+json; version=1'],
+                json_encode([
+                        'total' => 4,
+                        'items' => [
+                            $this->prepareCover('research-article', 1),
+                            $cover,
+                            $this->prepareCover('podcast-episode', 2),
+                            $this->prepareCover('interview', 3),
+                        ]
+                    ]
+                )
+            )
+        );
+
+        $crawler = $client->request('GET', $this->getUrl());
+        $this->assertEquals(3, $crawler->filter('.highlight-item')->count());
+        $this->assertSame($expectedTitle, trim($crawler->filter('.highlight__items')->eq(0)
+            ->filter('.highlight-item__title_link')->text()));
+        $this->assertSame($expectedImpactStatement, trim($crawler->filter('.highlight__items')->eq(0)
+            ->filter('.highlight-item .highlight-item__body p')->text()));
+    }
+
+    /**
+     * @test
+     * @dataProvider coversProvider
+     */
     public function it_displays_different_types_in_hero_banner($cover, $expectedTitle, $expectedImpactStatement)
     {
         $client = static::createClient();
@@ -762,14 +800,14 @@ final class HomeControllerTest extends PageTestCase
         ];
     }
 
-    private function prepareCover(string $type) : array
+    private function prepareCover(string $type, $titleSuffix = null) : array
     {
         switch ($type) {
             case 'podcast-episode':
                 $item = [
                     'type' => 'podcast-episode',
                     'number' => 30,
-                    'title' => 'podcast-episode title',
+                    'title' => 'podcast-episode title'.$titleSuffix,
                     'published' => '2016-07-01T08:30:15Z',
                     'image' => [
                         'thumbnail' => [
@@ -804,7 +842,7 @@ final class HomeControllerTest extends PageTestCase
                             'index' => 'Rosello, Alicia',
                         ],
                     ],
-                    'title' => 'interview title',
+                    'title' => 'interview title'.$titleSuffix,
                     'published' => '2015-09-10T00:00:00Z',
 
                 ];
@@ -813,7 +851,7 @@ final class HomeControllerTest extends PageTestCase
                 $item = [
                     'id' => '1',
                     'type' => 'blog-article',
-                    'title' => 'blog-article title',
+                    'title' => 'blog-article title'.$titleSuffix,
                     'published' => '2015-09-10T00:00:00Z',
                     'subjects' => [
                         [
@@ -830,7 +868,7 @@ final class HomeControllerTest extends PageTestCase
                     'version' => 1,
                     'type' => 'research-article',
                     'doi' => '10.7554/eLife.09561',
-                    'title' => 'research-article title',
+                    'title' => 'research-article title'.$titleSuffix,
                     'stage' => 'published',
                     'published' => '2015-09-10T00:00:00Z',
                     'statusDate' => '2015-09-10T00:00:00Z',
@@ -851,7 +889,7 @@ final class HomeControllerTest extends PageTestCase
                     'version' => 1,
                     'type' => 'research-article',
                     'doi' => '10.7554/eLife.09560',
-                    'title' => 'research-article title',
+                    'title' => 'research-article title'.$titleSuffix,
                     'stage' => 'published',
                     'published' => '2015-09-10T00:00:00Z',
                     'statusDate' => '2015-09-10T00:00:00Z',
@@ -867,7 +905,7 @@ final class HomeControllerTest extends PageTestCase
         }
 
         return [
-            'title' => $type.' title',
+            'title' => $type.' title'.$titleSuffix,
             'impactStatement' => $type.' impact statement',
             'image' => [
                 'uri' => 'https://iiif.elifesciences.org/lax/09560%2Felife-09560-fig1-v1.tif',
