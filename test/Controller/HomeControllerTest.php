@@ -806,6 +806,12 @@ final class HomeControllerTest extends PageTestCase
                 $this->prepareCover('research-article-poa'),
                 'research-article-poa title',
                 'research-article-poa impact statement',
+                [
+                    [
+                        'id' => 'cancer-biology',
+                        'name' => 'Cancer Biology',
+                    ],
+                ],
             ],
             'blog-article' => [
                 $this->prepareCover('blog-article'),
