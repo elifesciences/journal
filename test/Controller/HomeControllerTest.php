@@ -701,6 +701,312 @@ final class HomeControllerTest extends PageTestCase
         $this->assertSame(['New Subject'], array_map('trim', $crawler->filter('.section-listing__list_item')->extract('_text')));
     }
 
+    /**
+     * @test
+     * @dataProvider coversProvider
+     */
+    public function it_displays_different_types_in_highlight_item(
+        array $cover,
+        string $expectedTitle,
+        string $expectedImpactStatement,
+        string $expectedMetaType,
+        string $expectedDate,
+        string $expectedAuthorLine = null
+    )
+    {
+        $client = static::createClient();
+
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/covers/current',
+                ['Accept' => 'application/vnd.elife.cover-list+json; version=1']
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.cover-list+json; version=1'],
+                json_encode([
+                        'total' => 4,
+                        'items' => [
+                            $this->prepareCover('research-article', 1),
+                            $cover,
+                            $this->prepareCover('podcast-episode', 2),
+                            $this->prepareCover('interview', 3),
+                        ]
+                    ]
+                )
+            )
+        );
+
+        $crawler = $client->request('GET', $this->getUrl());
+        $this->assertEquals(3, $crawler->filter('.highlight-item')->count());
+        $highlightItem = $crawler->filter('.highlight__items')->eq(0);
+        $this->assertSame($expectedTitle, trim($highlightItem
+            ->filter('.highlight-item__title_link')->text()));
+        $this->assertSame($expectedImpactStatement, trim($crawler->filter('.highlight__items')->eq(0)
+            ->filter('.highlight-item .highlight-item__body p')->text()));
+
+        if ($expectedAuthorLine) {
+            $this->assertSame($expectedAuthorLine, trim($highlightItem->filter('.author-line')->text()));
+        } else {
+            $this->assertCount(0, $highlightItem->filter('.author-line'));
+        }
+        $this->assertSame($expectedMetaType, trim($highlightItem->filter('.meta__type')->text()));
+        $this->assertSame($expectedDate, trim($highlightItem->filter('.date')->text()));
+    }
+
+    /**
+     * @test
+     * @dataProvider coversProvider
+     */
+    public function it_displays_different_types_in_hero_banner(
+        array $cover,
+        string $expectedTitle,
+        string $expectedImpactStatement,
+        string $expectedMetaType,
+        string $expectedDate,
+        string $expectedAuthorLine = null,
+        array $expectedSubjects = []
+    )
+    {
+        $client = static::createClient();
+
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/covers/current',
+                ['Accept' => 'application/vnd.elife.cover-list+json; version=1']
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.cover-list+json; version=1'],
+                json_encode([
+                        'total' => 4,
+                        'items' => [
+                            $cover,
+                            $this->prepareCover('research-article', 1),
+                            $this->prepareCover('podcast-episode', 2),
+                            $this->prepareCover('interview', 3),
+                        ]
+                    ]
+                )
+            )
+        );
+
+        $crawler = $client->request('GET', $this->getUrl());
+        $heroDetails = $crawler->filter('.hero-banner__details');
+        $this->assertSame($expectedTitle, trim($heroDetails->filter('.hero-banner__title_link')->text()));
+        $this->assertSame($expectedImpactStatement, trim($heroDetails->filter('.hero-banner__summary')->text()));
+        if ($expectedAuthorLine) {
+            $this->assertSame($expectedAuthorLine, trim($heroDetails->filter('.author-line')->text()));
+        } else {
+            $this->assertCount(0, $heroDetails->filter('.author-line'));
+        }
+        $this->assertSame($expectedMetaType, trim($heroDetails->filter('.meta__type')->text()));
+        $this->assertSame($expectedDate, trim($heroDetails->filter('.date')->text()));
+
+        if (!empty($expectedSubjects)) {
+            $subjectLinks = $heroDetails->filter('.hero-banner__subject_link');
+            $this->assertCount(count($expectedSubjects), $subjectLinks);
+
+            $co = 0;
+            foreach ($expectedSubjects as $url => $name) {
+                $link = $subjectLinks->eq($co++);
+                $this->assertSame($url, $link->attr('href'));
+                $this->assertSame($name, trim($link->text()));
+            }
+        } else {
+            $this->assertCount(0, $heroDetails->filter('.hero-banner__subject_link'));
+        }
+    }
+
+    public function coversProvider(): array
+    {
+        return [
+            'research-article' => [
+                $this->prepareCover('research-article'),
+                'research-article title',
+                'research-article impact statement',
+                'Research Article',
+                'Updated Sep 11, 2015',
+                'Nicholas P Lesner, Xun Wang ... Prashant Mishra',
+                [
+                    '/subjects/genomics-evolutionary-biology' => 'Genomics and Evolutionary Biology',
+                    '/subjects/genetics-genomics' => 'Genetics and Genomics',
+                ],
+            ],
+            'research-article-poa' => [
+                $this->prepareCover('research-article-poa'),
+                'research-article-poa title',
+                'research-article-poa impact statement',
+                'Research Article',
+                'Sep 10, 2015',
+                null,
+                [
+                    '/subjects/cancer-biology' => 'Cancer Biology',
+                ],
+            ],
+            'blog-article' => [
+                $this->prepareCover('blog-article'),
+                'blog-article title',
+                'blog-article impact statement',
+                'Inside eLife',
+                'Sep 12, 2015',
+                null,
+                [
+                    '/subjects/genomics-evolutionary-biology' => 'Genomics and Evolutionary Biology',
+                ],
+            ],
+            'interview' => [
+                $this->prepareCover('interview'),
+                'interview title',
+                'interview impact statement',
+                'Interview',
+                'Sep 13, 2015',
+            ],
+            'podcast-episode' => [
+                $this->prepareCover('podcast-episode'),
+                'podcast-episode title',
+                'podcast-episode impact statement',
+                'Podcast',
+                'Jul 1, 2016',
+            ],
+        ];
+    }
+
+    private function prepareCover(string $type, $titleSuffix = null) : array
+    {
+        switch ($type) {
+            case 'podcast-episode':
+                $item = [
+                    'type' => 'podcast-episode',
+                    'number' => 30,
+                    'title' => 'podcast-episode title',
+                    'published' => '2016-07-01T08:30:15Z',
+                    'image' => [
+                        'thumbnail' => [
+                            'uri' => 'https://iiif.elifesciences.org/lax/09560%2Felife-09560-fig1-v1.tif',
+                            'alt' => '',
+                            'source' => [
+                                'mediaType' => 'image/jpeg',
+                                'uri' => 'https://iiif.elifesciences.org/lax/09560%2Felife-09560-fig1-v1.tif/full/full/0/default.jpg',
+                                'filename' => 'an-image.jpg',
+                            ],
+                            'size' => [
+                                'width' => 4194,
+                                'height' => 4714,
+                            ],
+                        ],
+                    ],
+                    'sources' => [
+                        [
+                            'mediaType' => 'audio/mpeg',
+                            'uri' => 'https://nakeddiscovery.com/scripts/mp3s/audio/eLife_Podcast_16.06.mp3',
+                        ],
+                    ],
+                ];
+                break;
+            case 'interview':
+                $item = [
+                    'type' => 'interview',
+                    'id' => '2',
+                    'interviewee' => [
+                        'name' => [
+                            'preferred' => 'Alicia Rosello',
+                            'index' => 'Rosello, Alicia',
+                        ],
+                    ],
+                    'title' => 'interview title',
+                    'published' => '2015-09-13T00:00:00Z',
+
+                ];
+                break;
+            case 'blog-article':
+                $item = [
+                    'id' => '1',
+                    'type' => 'blog-article',
+                    'title' => 'blog-article title',
+                    'published' => '2015-09-12T00:00:00Z',
+                    'subjects' => [
+                        [
+                            'id' => 'genomics-evolutionary-biology',
+                            'name' => 'Genomics and Evolutionary Biology',
+                        ],
+                    ],
+                ];
+                break;
+            case 'research-article-poa':
+                $item = [
+                    'status' => 'poa',
+                    'id' => '09561',
+                    'version' => 1,
+                    'type' => 'research-article',
+                    'doi' => '10.7554/eLife.09561',
+                    'title' => 'research-article title',
+                    'stage' => 'published',
+                    'published' => '2015-09-10T00:00:00Z',
+                    'statusDate' => '2015-09-10T00:00:00Z',
+                    'volume' => 4,
+                    'elocationId' => 'e09561',
+                    'subjects' => [
+                        [
+                            'id' => 'cancer-biology',
+                            'name' => 'Cancer Biology',
+                        ],
+                    ],
+                ];
+                break;
+            default:
+                $item = [
+                    'status' => 'vor',
+                    'id' => '09560',
+                    'version' => 1,
+                    'type' => 'research-article',
+                    'doi' => '10.7554/eLife.09560',
+                    'title' => 'research-article title',
+                    'authorLine' => 'Nicholas P Lesner, Xun Wang ... Prashant Mishra',
+                    'stage' => 'published',
+                    'published' => '2015-09-10T00:00:00Z',
+                    'statusDate' => '2015-09-11T00:00:00Z',
+                    'volume' => 4,
+                    'elocationId' => 'e09560',
+                    'subjects' => [
+                        [
+                            'id' => 'genomics-evolutionary-biology',
+                            'name' => 'Genomics and Evolutionary Biology',
+                        ],
+                        [
+                            'id' => 'genetics-genomics',
+                            'name' => 'Genetics and Genomics',
+                        ],
+                    ],
+                ];
+        }
+
+        if ($titleSuffix) {
+            $item['title'] .= $titleSuffix;
+        }
+
+        return [
+            'title' => $type.' title'.$titleSuffix,
+            'impactStatement' => $type.' impact statement',
+            'image' => [
+                'uri' => 'https://iiif.elifesciences.org/lax/09560%2Felife-09560-fig1-v1.tif',
+                'alt' => '',
+                'source' => [
+                    'mediaType' => 'image/jpeg',
+                    'uri' => 'https://iiif.elifesciences.org/lax/09560%2Felife-09560-fig1-v1.tif/full/full/0/default.jpg',
+                    'filename' => 'an-image.jpg',
+                ],
+                'size' => [
+                    'width' => 4194,
+                    'height' => 4714,
+                ]
+            ],
+            'item' => $item,
+        ];
+    }
+
     protected function getUrl() : string
     {
         $this->mockApiResponse(
