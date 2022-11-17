@@ -743,7 +743,7 @@ final class HomeControllerTest extends PageTestCase
      * @test
      * @dataProvider coversProvider
      */
-    public function it_displays_different_types_in_hero_banner($cover, $expectedTitle, $expectedImpactStatement)
+    public function it_displays_different_types_in_hero_banner($cover, $expectedTitle, $expectedImpactStatement, $expectedSubjects = [])
     {
         $client = static::createClient();
 
@@ -757,8 +757,13 @@ final class HomeControllerTest extends PageTestCase
                 200,
                 ['Content-Type' => 'application/vnd.elife.cover-list+json; version=1'],
                 json_encode([
-                        'total' => 1,
-                        'items' => [$cover]
+                        'total' => 4,
+                        'items' => [
+                            $cover,
+                            $this->prepareCover('research-article', 1),
+                            $this->prepareCover('podcast-episode', 2),
+                            $this->prepareCover('interview', 3),
+                        ]
                     ]
                 )
             )
@@ -767,6 +772,16 @@ final class HomeControllerTest extends PageTestCase
         $crawler = $client->request('GET', $this->getUrl());
         $this->assertSame($expectedTitle, trim($crawler->filter('.hero-banner__title_link')->text()));
         $this->assertSame($expectedImpactStatement, trim($crawler->filter('.hero-banner__summary')->text()));
+
+        if (!empty($expectedSubjects)) {
+            $subjectLinks = $crawler->filter('.hero-banner__subject_link');
+            $this->assertCount(count($expectedSubjects), $subjectLinks);
+
+            foreach ($expectedSubjects as $i => $expectedSubject) {
+                $this->assertSame('/subjects/'.$expectedSubject['id'], $subjectLinks->eq($i)->attr('href'));
+                $this->assertSame($expectedSubject['name'], trim($subjectLinks->eq($i)->text()));
+            }
+        }
     }
 
     public function coversProvider(): array
@@ -776,6 +791,16 @@ final class HomeControllerTest extends PageTestCase
                 $this->prepareCover('research-article'),
                 'research-article title',
                 'research-article impact statement',
+                [
+                    [
+                        'id' => 'genomics-evolutionary-biology',
+                        'name' => 'Genomics and Evolutionary Biology',
+                    ],
+                    [
+                        'id' => 'genetics-genomics',
+                        'name' => 'Genetics and Genomics',
+                    ],
+                ],
             ],
             'research-article-poa' => [
                 $this->prepareCover('research-article-poa'),
@@ -786,6 +811,12 @@ final class HomeControllerTest extends PageTestCase
                 $this->prepareCover('blog-article'),
                 'blog-article title',
                 'blog-article impact statement',
+                [
+                    [
+                        'id' => 'genomics-evolutionary-biology',
+                        'name' => 'Genomics and Evolutionary Biology',
+                    ],
+                ],
             ],
             'interview' => [
                 $this->prepareCover('interview'),
@@ -807,7 +838,7 @@ final class HomeControllerTest extends PageTestCase
                 $item = [
                     'type' => 'podcast-episode',
                     'number' => 30,
-                    'title' => 'podcast-episode title'.$titleSuffix,
+                    'title' => 'podcast-episode title',
                     'published' => '2016-07-01T08:30:15Z',
                     'image' => [
                         'thumbnail' => [
@@ -842,7 +873,7 @@ final class HomeControllerTest extends PageTestCase
                             'index' => 'Rosello, Alicia',
                         ],
                     ],
-                    'title' => 'interview title'.$titleSuffix,
+                    'title' => 'interview title',
                     'published' => '2015-09-10T00:00:00Z',
 
                 ];
@@ -851,7 +882,7 @@ final class HomeControllerTest extends PageTestCase
                 $item = [
                     'id' => '1',
                     'type' => 'blog-article',
-                    'title' => 'blog-article title'.$titleSuffix,
+                    'title' => 'blog-article title',
                     'published' => '2015-09-10T00:00:00Z',
                     'subjects' => [
                         [
@@ -868,7 +899,7 @@ final class HomeControllerTest extends PageTestCase
                     'version' => 1,
                     'type' => 'research-article',
                     'doi' => '10.7554/eLife.09561',
-                    'title' => 'research-article title'.$titleSuffix,
+                    'title' => 'research-article title',
                     'stage' => 'published',
                     'published' => '2015-09-10T00:00:00Z',
                     'statusDate' => '2015-09-10T00:00:00Z',
@@ -889,7 +920,7 @@ final class HomeControllerTest extends PageTestCase
                     'version' => 1,
                     'type' => 'research-article',
                     'doi' => '10.7554/eLife.09560',
-                    'title' => 'research-article title'.$titleSuffix,
+                    'title' => 'research-article title',
                     'stage' => 'published',
                     'published' => '2015-09-10T00:00:00Z',
                     'statusDate' => '2015-09-10T00:00:00Z',
@@ -900,8 +931,16 @@ final class HomeControllerTest extends PageTestCase
                             'id' => 'genomics-evolutionary-biology',
                             'name' => 'Genomics and Evolutionary Biology',
                         ],
+                        [
+                            'id' => 'genetics-genomics',
+                            'name' => 'Genetics and Genomics',
+                        ],
                     ],
                 ];
+        }
+
+        if ($titleSuffix) {
+            $item['title'] .= $titleSuffix;
         }
 
         return [
