@@ -705,7 +705,14 @@ final class HomeControllerTest extends PageTestCase
      * @test
      * @dataProvider coversProvider
      */
-    public function it_displays_different_types_in_highlight_item($cover, $expectedTitle, $expectedImpactStatement)
+    public function it_displays_different_types_in_highlight_item(
+        array $cover,
+        string $expectedTitle,
+        string $expectedImpactStatement,
+        string $expectedMetaType,
+        string $expectedDate,
+        string $expectedAuthorLine = null
+    )
     {
         $client = static::createClient();
 
@@ -733,17 +740,34 @@ final class HomeControllerTest extends PageTestCase
 
         $crawler = $client->request('GET', $this->getUrl());
         $this->assertEquals(3, $crawler->filter('.highlight-item')->count());
-        $this->assertSame($expectedTitle, trim($crawler->filter('.highlight__items')->eq(0)
+        $highlightItem = $crawler->filter('.highlight__items')->eq(0);
+        $this->assertSame($expectedTitle, trim($highlightItem
             ->filter('.highlight-item__title_link')->text()));
         $this->assertSame($expectedImpactStatement, trim($crawler->filter('.highlight__items')->eq(0)
             ->filter('.highlight-item .highlight-item__body p')->text()));
+
+        if ($expectedAuthorLine) {
+            $this->assertSame($expectedAuthorLine, trim($highlightItem->filter('.author-line')->text()));
+        } else {
+            $this->assertCount(0, $highlightItem->filter('.author-line'));
+        }
+        $this->assertSame($expectedMetaType, trim($highlightItem->filter('.meta__type')->text()));
+        $this->assertSame($expectedDate, trim($highlightItem->filter('.date')->text()));
     }
 
     /**
      * @test
      * @dataProvider coversProvider
      */
-    public function it_displays_different_types_in_hero_banner($cover, $expectedTitle, $expectedImpactStatement, $expectedSubjects = [])
+    public function it_displays_different_types_in_hero_banner(
+        array $cover,
+        string $expectedTitle,
+        string $expectedImpactStatement,
+        string $expectedMetaType,
+        string $expectedDate,
+        string $expectedAuthorLine = null,
+        array $expectedSubjects = []
+    )
     {
         $client = static::createClient();
 
@@ -770,17 +794,29 @@ final class HomeControllerTest extends PageTestCase
         );
 
         $crawler = $client->request('GET', $this->getUrl());
-        $this->assertSame($expectedTitle, trim($crawler->filter('.hero-banner__title_link')->text()));
-        $this->assertSame($expectedImpactStatement, trim($crawler->filter('.hero-banner__summary')->text()));
+        $heroDetails = $crawler->filter('.hero-banner__details');
+        $this->assertSame($expectedTitle, trim($heroDetails->filter('.hero-banner__title_link')->text()));
+        $this->assertSame($expectedImpactStatement, trim($heroDetails->filter('.hero-banner__summary')->text()));
+        if ($expectedAuthorLine) {
+            $this->assertSame($expectedAuthorLine, trim($heroDetails->filter('.author-line')->text()));
+        } else {
+            $this->assertCount(0, $heroDetails->filter('.author-line'));
+        }
+        $this->assertSame($expectedMetaType, trim($heroDetails->filter('.meta__type')->text()));
+        $this->assertSame($expectedDate, trim($heroDetails->filter('.date')->text()));
 
         if (!empty($expectedSubjects)) {
-            $subjectLinks = $crawler->filter('.hero-banner__subject_link');
+            $subjectLinks = $heroDetails->filter('.hero-banner__subject_link');
             $this->assertCount(count($expectedSubjects), $subjectLinks);
 
-            foreach ($expectedSubjects as $i => $expectedSubject) {
-                $this->assertSame('/subjects/'.$expectedSubject['id'], $subjectLinks->eq($i)->attr('href'));
-                $this->assertSame($expectedSubject['name'], trim($subjectLinks->eq($i)->text()));
+            $co = 0;
+            foreach ($expectedSubjects as $url => $name) {
+                $link = $subjectLinks->eq($co++);
+                $this->assertSame($url, $link->attr('href'));
+                $this->assertSame($name, trim($link->text()));
             }
+        } else {
+            $this->assertCount(0, $heroDetails->filter('.hero-banner__subject_link'));
         }
     }
 
@@ -791,48 +827,49 @@ final class HomeControllerTest extends PageTestCase
                 $this->prepareCover('research-article'),
                 'research-article title',
                 'research-article impact statement',
+                'Research Article',
+                'Updated Sep 11, 2015',
+                'Nicholas P Lesner, Xun Wang ... Prashant Mishra',
                 [
-                    [
-                        'id' => 'genomics-evolutionary-biology',
-                        'name' => 'Genomics and Evolutionary Biology',
-                    ],
-                    [
-                        'id' => 'genetics-genomics',
-                        'name' => 'Genetics and Genomics',
-                    ],
+                    '/subjects/genomics-evolutionary-biology' => 'Genomics and Evolutionary Biology',
+                    '/subjects/genetics-genomics' => 'Genetics and Genomics',
                 ],
             ],
             'research-article-poa' => [
                 $this->prepareCover('research-article-poa'),
                 'research-article-poa title',
                 'research-article-poa impact statement',
+                'Research Article',
+                'Sep 10, 2015',
+                null,
                 [
-                    [
-                        'id' => 'cancer-biology',
-                        'name' => 'Cancer Biology',
-                    ],
+                    '/subjects/cancer-biology' => 'Cancer Biology',
                 ],
             ],
             'blog-article' => [
                 $this->prepareCover('blog-article'),
                 'blog-article title',
                 'blog-article impact statement',
+                'Inside eLife',
+                'Sep 12, 2015',
+                null,
                 [
-                    [
-                        'id' => 'genomics-evolutionary-biology',
-                        'name' => 'Genomics and Evolutionary Biology',
-                    ],
+                    '/subjects/genomics-evolutionary-biology' => 'Genomics and Evolutionary Biology',
                 ],
             ],
             'interview' => [
                 $this->prepareCover('interview'),
                 'interview title',
                 'interview impact statement',
+                'Interview',
+                'Sep 13, 2015',
             ],
             'podcast-episode' => [
                 $this->prepareCover('podcast-episode'),
                 'podcast-episode title',
                 'podcast-episode impact statement',
+                'Podcast',
+                'Jul 1, 2016',
             ],
         ];
     }
@@ -880,7 +917,7 @@ final class HomeControllerTest extends PageTestCase
                         ],
                     ],
                     'title' => 'interview title',
-                    'published' => '2015-09-10T00:00:00Z',
+                    'published' => '2015-09-13T00:00:00Z',
 
                 ];
                 break;
@@ -889,7 +926,7 @@ final class HomeControllerTest extends PageTestCase
                     'id' => '1',
                     'type' => 'blog-article',
                     'title' => 'blog-article title',
-                    'published' => '2015-09-10T00:00:00Z',
+                    'published' => '2015-09-12T00:00:00Z',
                     'subjects' => [
                         [
                             'id' => 'genomics-evolutionary-biology',
@@ -927,9 +964,10 @@ final class HomeControllerTest extends PageTestCase
                     'type' => 'research-article',
                     'doi' => '10.7554/eLife.09560',
                     'title' => 'research-article title',
+                    'authorLine' => 'Nicholas P Lesner, Xun Wang ... Prashant Mishra',
                     'stage' => 'published',
                     'published' => '2015-09-10T00:00:00Z',
-                    'statusDate' => '2015-09-10T00:00:00Z',
+                    'statusDate' => '2015-09-11T00:00:00Z',
                     'volume' => 4,
                     'elocationId' => 'e09560',
                     'subjects' => [
