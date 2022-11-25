@@ -33,7 +33,7 @@ final class PersonAboutProfileConverter implements ViewModelConverter
             'Competing interests statement' => $object->getCompetingInterests(),
         ]);
 
-        $extra = $extra ? new ViewModel\DefinitionList($extra, 'inline') : null;
+        $extra = $extra ? ViewModel\DefinitionList::inline($extra) : null;
 
         if ($object->getAffiliations()->notEmpty()) {
             $role = implode('<br>', $object->getAffiliations()->map(Callback::method('toString'))->toArray());
