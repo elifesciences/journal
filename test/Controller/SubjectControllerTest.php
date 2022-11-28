@@ -56,6 +56,31 @@ final class SubjectControllerTest extends PageTestCase
 
     /**
      * @test
+     */
+    public function it_has_a_view_selector_for_smaller_devices()
+    {
+        $client = static::createClient();
+
+        $crawler = $client->request('GET', $this->getUrl().'?foo');
+
+        $this->assertSame(200, $client->getResponse()->getStatusCode());
+
+        $tabSelector = $crawler->filter('.button--switch-selector .view-selector__link');
+        $this->assertCount(1, $tabSelector);
+        $this->assertEquals([
+            [
+                'Latest articles',
+                '#primaryListing',
+            ],
+            [
+                'Highlights',
+                '#secondaryListing',
+            ],
+        ], $tabSelector->extract(['_text', 'href']));
+    }
+
+    /**
+     * @test
      * @dataProvider invalidPageProvider
      */
     public function it_displays_a_404_when_not_on_a_valid_page($page, callable $callable = null)

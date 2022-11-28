@@ -405,6 +405,31 @@ final class HomeControllerTest extends PageTestCase
     /**
      * @test
      */
+    public function it_has_a_view_selector_for_smaller_devices()
+    {
+        $client = static::createClient();
+
+        $crawler = $client->request('GET', $this->getUrl().'?foo');
+
+        $this->assertSame(200, $client->getResponse()->getStatusCode());
+
+        $tabSelector = $crawler->filter('.button--switch-selector .view-selector__link');
+        $this->assertCount(1, $tabSelector);
+        $this->assertEquals([
+            [
+                'Latest research',
+                '#primaryListing',
+            ],
+            [
+                'Magazine',
+                '#secondaryListing',
+            ],
+        ], $tabSelector->extract(['_text', 'href']));
+    }
+
+    /**
+     * @test
+     */
     public function it_configures_javascript_libraries_through_a_script_element()
     {
         $client = static::createClient();
