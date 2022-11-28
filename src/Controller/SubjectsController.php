@@ -23,6 +23,7 @@ use eLife\Patterns\ViewModel\ListingTeasers;
 use eLife\Patterns\ViewModel\ProfileSnippet;
 use eLife\Patterns\ViewModel\SeeMoreLink;
 use eLife\Patterns\ViewModel\Teaser;
+use eLife\Patterns\ViewModel\ViewSelector;
 use Pagerfanta\Pagerfanta;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -172,6 +173,14 @@ final class SubjectsController extends Controller
                 );
             }))
             ->otherwise($this->softFailure("Failed to load senior editors for {$arguments['id']}"));
+
+        $arguments['viewSelector'] = new ViewSelector(
+            new Link('Latest articles', '#primaryListing'),
+            [],
+            new Link('Highlights', '#secondaryListing'),
+            false,
+            true
+        );
 
         return new Response($this->get('templating')->render('::subject.html.twig', $arguments));
     }
