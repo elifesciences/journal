@@ -1,36 +1,33 @@
 version: '3'
 
 services:
-    composer:
+    assets:
         build:
             args:
                 composer_dev_arg:
         volumes:
-            - ./composer.json:/app/composer.json
-            - ./composer.lock:/app/composer.lock
+            - ./composer.json:/srv/journal/composer.json
+            - ./composer.lock:/srv/journal/composer.lock
             - type: volume
               source: vendor
-              target: /app/vendor
+              target: /srv/journal/vendor
             - type: bind
               source: ./vendor
-              target: /app/vendor
-    npm:
-        volumes:
+              target: /srv/journal/vendor
             - ./npm-shrinkwrap.json:/npm-shrinkwrap.json
             - ./package.json:/package.json
-            - node_modules:/node_modules
-    assets_builder:
-        volumes:
             - ./assets/images:/assets/images
             - assets:/web
             - build:/build
             - node_modules:/node_modules
             - ./gulpfile.js:/gulpfile.js
+            - critical_css:/build/critical-css
+
     app:
         environment:
             - APP_ENV=${APP_ENV}
         volumes:
-            - ./:/srv/journal
+            # - /
             - ./.docker/php.ini:/usr/local/etc/php/conf.d/x-dev.ini
             - /srv/journal/var
             - build:/srv/journal/build
@@ -44,10 +41,6 @@ services:
     web:
         volumes:
             - assets:/srv/journal/web
-    critical_css:
-        volumes:
-            - critical_css:/build/critical-css
-            - node_modules:/node_modules
 
 volumes:
     assets:

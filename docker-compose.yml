@@ -1,34 +1,25 @@
 version: '3'
 
 services:
-    composer:
+    api_dummy:
+        image: elifesciences/api-dummy:${DEPENDENCIES_API_DUMMY}
+        ports:
+        - '${JOURNAL_API_DUMMY_PORT}:8080'
+    assets:
         build:
             context: .
-            dockerfile: Dockerfile.composer
+            dockerfile: Dockerfile.assets
             args:
                 composer_dev_arg: ${COMPOSER_DEV_ARG}
-        image: elifesciences/journal_composer:${IMAGE_TAG}
-        command: /bin/bash
-    npm:
-        build:
-            context: .
-            dockerfile: Dockerfile.npm
-            args:
                 node_version: ${NODE_VERSION}
-        image: elifesciences/journal_npm:${IMAGE_TAG}
+                image_tag: ${IMAGE_TAG}
+        command: /bin/bash
+        environment:
+            - CRITICAL_CSS_BASE_URL=http://web:8080
+        volumes:
+          - shared_volume:/srv/journal/
     redis:
         image: redis:6.2-alpine
-    assets_builder:
-        build:
-            context: .
-            dockerfile: Dockerfile.assets_builder
-            args:
-                image_tag: ${IMAGE_TAG}
-                node_version: ${NODE_VERSION}
-        image: elifesciences/journal_assets_builder:${IMAGE_TAG}
-        depends_on:
-            - composer
-            - npm
     app:
         build:
             context: .
@@ -41,10 +32,9 @@ services:
             - SYMFONY__API_KEY=${API_KEY}
         image: elifesciences/journal:${IMAGE_TAG}
         volumes:
-            - ./.docker/parameters.yml:/srv/journal/app/config/parameters.yml
+            - shared_volume:/srv/journal/
         depends_on:
-            - assets_builder
-            - composer
+            - assets
             - redis
     web:
         build:
@@ -57,21 +47,7 @@ services:
             - '${JOURNAL_PORT}:80'
         depends_on:
             - app
-    api_dummy:
-        image: elifesciences/api-dummy:${DEPENDENCIES_API_DUMMY}
-        ports:
-        - '${JOURNAL_API_DUMMY_PORT}:8080'
-    critical_css:
-        build:
-            context: .
-            dockerfile: Dockerfile.critical_css
-            args:
-                image_tag: ${IMAGE_TAG}
-                node_version: ${NODE_VERSION}
-        environment:
-            - CRITICAL_CSS_BASE_URL=http://web:8080
-        image: elifesciences/journal_critical_css:${IMAGE_TAG}
-        depends_on:
-            - npm
-            - web
-            - api_dummy
+
+
+volumes:
+    shared_volume:

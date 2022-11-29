@@ -1,18 +1,15 @@
 version: '3'
 
 services:
-    composer:
-        build:
-            args:
-                composer_dev_arg: --no-dev
-    composer-dev:
+    assets:
         build:
             context: .
-            dockerfile: Dockerfile.composer
+            dockerfile: Dockerfile.assets
             args:
                 composer_dev_arg:
-        image: elifesciences/journal_composer_dev:${IMAGE_TAG}
         command: /bin/bash
+        volumes:
+          - shared_volume:/srv/journal/
     selenium:
         image: selenium/standalone-chrome${SELENIUM_IMAGE_SUFFIX}:2.53.1
         ports:
@@ -20,6 +17,7 @@ services:
             - "5900:5900" # VNC connection for debug images
         volumes:
             - /dev/shm:/dev/shm
+            - shared_volume:/srv/journal/
     ci:
         build:
             context: .
@@ -31,20 +29,24 @@ services:
             - ./.docker/php.ini:/usr/local/etc/php/conf.d/x-dev.ini
             - ./.docker/parameters.yml:/srv/journal/app/config/parameters.yml
             - fixtures:/srv/journal/var/fixtures
+            - shared_volume:/srv/journal/
         environment:
             - APP_ENV=ci
         depends_on:
-            - composer-dev
+            - assets
             - app
             - selenium
     app:
         volumes:
             - fixtures:/srv/journal/var/fixtures
+            - shared_volume:/srv/journal/
         environment:
             - APP_ENV=ci
     web:
         volumes:
             - ./assets/tests:/srv/journal/web/tests
+            - shared_volume:/srv/journal/
 
 volumes:
+    shared_volume:
     fixtures:
