@@ -405,6 +405,104 @@ final class HomeControllerTest extends PageTestCase
     /**
      * @test
      */
+    public function it_has_a_view_selector_when_secondary_column_introduced()
+    {
+        $client = static::createClient();
+
+        $crawler = $client->request('GET', $this->getUrl().'?foo');
+
+        $this->assertSame(200, $client->getResponse()->getStatusCode());
+
+        $tabSelector = $crawler->filter('.button--switch-selector .view-selector__link');
+        $this->assertCount(0, $tabSelector);
+
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/search?for=&page=1&per-page=7&sort=date&order=desc&type[]=editorial&type[]=insight&type[]=feature&type[]=collection&type[]=interview&type[]=podcast-episode&use-date=default',
+                ['Accept' => 'application/vnd.elife.search+json; version=2']
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.search+json; version=2'],
+                json_encode([
+                    'total' => 0,
+                    'items' => [
+                        [
+                            'status' => 'vor',
+                            'stage' => 'published',
+                            'id' => '7',
+                            'version' => 1,
+                            'type' => 'feature',
+                            'doi' => '10.7554/eLife.2',
+                            'title' => 'Article 2 title',
+                            'published' => '2012-01-01T00:00:00Z',
+                            'versionDate' => '2013-01-01T00:00:00Z',
+                            'statusDate' => '2013-01-01T00:00:00Z',
+                            'volume' => 1,
+                            'elocationId' => 'e2',
+                            'copyright' => [
+                                'license' => 'CC-BY-4.0',
+                                'holder' => 'Author et al.',
+                                'statement' => 'Creative Commons Attribution License.',
+                            ],
+                            'authorLine' => 'Foo Bar',
+                        ],
+                    ],
+                    'subjects' => [
+                        [
+                            'id' => 'subject',
+                            'name' => 'Some subject',
+                            'results' => 0,
+                        ],
+                    ],
+                    'types' => [
+                        'correction' => 0,
+                        'editorial' => 0,
+                        'feature' => 1,
+                        'insight' => 0,
+                        'research-advance' => 0,
+                        'research-article' => 0,
+                        'research-communication' => 0,
+                        'retraction' => 0,
+                        'registered-report' => 0,
+                        'replication-study' => 0,
+                        'review-article' => 0,
+                        'scientific-correspondence' => 0,
+                        'short-report' => 0,
+                        'tools-resources' => 0,
+                        'blog-article' => 0,
+                        'collection' => 0,
+                        'interview' => 0,
+                        'labs-post' => 0,
+                        'podcast-episode' => 0,
+                        'reviewed-preprint' => 0,
+                    ],
+                ])
+            )
+        );
+
+        $crawler = $client->request('GET', $this->getUrl().'?foo');
+
+        $this->assertSame(200, $client->getResponse()->getStatusCode());
+
+        $tabSelector = $crawler->filter('.button--switch-selector .view-selector__link');
+        $this->assertCount(2, $tabSelector);
+        $this->assertEquals([
+            [
+                'Latest research',
+                '#primaryListing',
+            ],
+            [
+                'Magazine',
+                '#secondaryListing',
+            ],
+        ], $tabSelector->extract(['_text', 'href']));
+    }
+
+    /**
+     * @test
+     */
     public function it_configures_javascript_libraries_through_a_script_element()
     {
         $client = static::createClient();

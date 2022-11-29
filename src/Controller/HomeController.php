@@ -18,6 +18,7 @@ use eLife\Patterns\ViewModel\SectionListing;
 use eLife\Patterns\ViewModel\SectionListingLink;
 use eLife\Patterns\ViewModel\SeeMoreLink;
 use eLife\Patterns\ViewModel\Teaser;
+use eLife\Patterns\ViewModel\ViewSelector;
 use Pagerfanta\Pagerfanta;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -136,6 +137,14 @@ final class HomeController extends Controller
                 );
             }))
             ->otherwise($this->softFailure('Failed to load Magazine list'));
+
+        $arguments['viewSelector'] = new ViewSelector(
+            new Link('Latest research', '#primaryListing'),
+            [],
+            new Link('Magazine', '#secondaryListing'),
+            false,
+            true
+        );
 
         return new Response($this->get('templating')->render('::home.html.twig', $arguments));
     }
