@@ -57,7 +57,7 @@ final class SubjectControllerTest extends PageTestCase
     /**
      * @test
      */
-    public function it_has_a_view_selector_for_smaller_devices()
+    public function it_has_a_view_selector_when_secondary_column_introduced()
     {
         $client = static::createClient();
 
