@@ -105,7 +105,6 @@ final class ContentAlertsUpdateControllerTest extends PageTestCase
         $form['content_alerts[preferences][0]']->untick();
         $form['content_alerts[preferences][1]']->untick();
         $form['content_alerts[preferences][2]']->untick();
-        $form['content_alerts[preferences][3]']->untick();
 
         $crawler = $client->submit($form);
 
