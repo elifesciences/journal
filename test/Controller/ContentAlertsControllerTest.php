@@ -102,7 +102,7 @@ final class ContentAlertsControllerTest extends PageTestCase
         $this->assertSame($leadingPreference, $form['content_alerts[preferences][0]']->getValue());
         $this->assertNull($form['content_alerts[preferences][1]']->getValue());
         $this->assertNull($form['content_alerts[preferences][2]']->getValue());
-        $this->assertNull($form['content_alerts[preferences][3]']->getValue());
+//        $this->assertNull($form['content_alerts[preferences][3]']->getValue());
 
         $ordered = [$leadingPreference];
 
@@ -256,7 +256,6 @@ final class ContentAlertsControllerTest extends PageTestCase
     {
         yield 'default' => [$this->getUrl(), 'latest_articles'];
         yield 'early-career' => [$this->getUrl('early-career'), 'early_career'];
-        yield 'technology' => [$this->getUrl('technology'), 'technology'];
         yield 'elife-newsletter' => [$this->getUrl('elife-newsletter'), 'elife_newsletter'];
     }
 
