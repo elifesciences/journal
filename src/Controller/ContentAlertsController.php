@@ -7,7 +7,6 @@ use eLife\CiviContacts\Etoc\ElifeNewsletter;
 use eLife\CiviContacts\Etoc\LatestArticles;
 use eLife\CiviContacts\Etoc\Newsletter;
 use eLife\CiviContacts\Etoc\Subscription;
-use eLife\CiviContacts\Etoc\Technology;
 use eLife\CiviContacts\Guzzle\CiviCrmClient;
 use eLife\Journal\Exception\EarlyResponse;
 use eLife\Journal\Form\Type\ContentAlertsOptoutType;
@@ -398,8 +397,6 @@ final class ContentAlertsController extends Controller
         switch ($variant) {
             case 'early-career':
                 return [new EarlyCareer()];
-            case 'technology':
-                return [new Technology()];
             case 'elife-newsletter':
                 return [new ElifeNewsletter()];
             default:
@@ -430,7 +427,6 @@ final class ContentAlertsController extends Controller
         return [
             new LatestArticles(),
             new EarlyCareer(),
-            new Technology(),
             new ElifeNewsletter(),
         ];
     }

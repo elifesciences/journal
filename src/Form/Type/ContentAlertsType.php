@@ -5,7 +5,6 @@ namespace eLife\Journal\Form\Type;
 use eLife\CiviContacts\Etoc\EarlyCareer;
 use eLife\CiviContacts\Etoc\ElifeNewsletter;
 use eLife\CiviContacts\Etoc\LatestArticles;
-use eLife\CiviContacts\Etoc\Technology;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
