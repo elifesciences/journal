@@ -56,6 +56,80 @@ final class SubjectControllerTest extends PageTestCase
 
     /**
      * @test
+     */
+    public function it_has_a_view_selector_when_secondary_column_introduced()
+    {
+        $client = static::createClient();
+
+        $crawler = $client->request('GET', $this->getUrl().'?foo');
+
+        $this->assertSame(200, $client->getResponse()->getStatusCode());
+
+        $tabSelector = $crawler->filter('.button--switch-selector .view-selector__link');
+        $this->assertCount(0, $tabSelector);
+
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/highlights/subject?page=1&per-page=3&order=desc',
+                ['Accept' => 'application/vnd.elife.highlight-list+json; version=3']
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.highlight-list+json; version=3'],
+                json_encode([
+                    'total' => 1,
+                    'items' => [
+                        [
+                            'title' => 'Article highlight',
+                            'item' => [
+                                'status' => 'vor',
+                                'stage' => 'preview',
+                                'id' => '00001',
+                                'version' => 1,
+                                'type' => 'research-article',
+                                'doi' => '10.7554/eLife.00001',
+                                'title' => 'Article',
+                                'volume' => 1,
+                                'elocationId' => 'e00001',
+                                'copyright' => [
+                                    'license' => 'CC-BY-4.0',
+                                    'holder' => 'Bar',
+                                    'statement' => 'Copyright statement.',
+                                ],
+                                'subjects' => [
+                                    [
+                                        'id' => 'subject',
+                                        'name' => 'Subject',
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ])
+            )
+        );
+
+        $crawler = $client->request('GET', $this->getUrl().'?bar');
+
+        $this->assertSame(200, $client->getResponse()->getStatusCode());
+
+        $tabSelector = $crawler->filter('.button--switch-selector .view-selector__link');
+        $this->assertCount(2, $tabSelector);
+        $this->assertEquals([
+            [
+                'Latest articles',
+                '#primaryListing',
+            ],
+            [
+                'Highlights',
+                '#secondaryListing',
+            ],
+        ], $tabSelector->extract(['_text', 'href']));
+    }
+
+    /**
+     * @test
      * @dataProvider invalidPageProvider
      */
     public function it_displays_a_404_when_not_on_a_valid_page($page, callable $callable = null)

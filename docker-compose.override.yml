@@ -6,9 +6,11 @@ services:
             args:
                 composer_dev_arg:
         volumes:
-            - ./composer.json:/srv/journal/composer.json
-            - ./composer.lock:/srv/journal/composer.lock
-            - ./vendor:/srv/journal/vendor
+            - ./composer.json:/app/composer.json
+            - ./composer.lock:/app/composer.lock
+            - ./vendor:/app/vendor
+    npm:
+        volumes:
             - ./npm-shrinkwrap.json:/npm-shrinkwrap.json
             - ./package.json:/package.json
             - ./assets/images:/assets/images

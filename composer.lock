@@ -1294,12 +1294,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/civi-contacts.git",
-                "reference": "d0da75e0fed33a20f581f5a7c60da0988c0ac104"
+                "reference": "a52405c42823b344bc1f003c72d755128b841bee"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/civi-contacts/zipball/d0da75e0fed33a20f581f5a7c60da0988c0ac104",
-                "reference": "d0da75e0fed33a20f581f5a7c60da0988c0ac104",
+                "url": "https://api.github.com/repos/elifesciences/civi-contacts/zipball/a52405c42823b344bc1f003c72d755128b841bee",
+                "reference": "a52405c42823b344bc1f003c72d755128b841bee",
                 "shasum": ""
             },
             "require": {
@@ -1325,7 +1325,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2022-04-26T18:42:53+00:00"
+            "time": "2023-01-10T09:17:45+00:00"
         },
         {
             "name": "elife/patterns",
@@ -1333,12 +1333,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/patterns-php.git",
-                "reference": "d217379eb9313407527484178190e6514f7bbad4"
+                "reference": "60ccd344b9047968e16efaaffcb8e4827c1cba0f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/d217379eb9313407527484178190e6514f7bbad4",
-                "reference": "d217379eb9313407527484178190e6514f7bbad4",
+                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/60ccd344b9047968e16efaaffcb8e4827c1cba0f",
+                "reference": "60ccd344b9047968e16efaaffcb8e4827c1cba0f",
                 "shasum": ""
             },
             "require": {
@@ -1375,7 +1375,7 @@
                 "MIT"
             ],
             "description": "eLife patterns",
-            "time": "2022-11-22T12:32:36+00:00"
+            "time": "2022-12-01T11:00:09+00:00"
         },
         {
             "name": "fabpot/goutte",
@@ -6334,5 +6334,6 @@
     "platform-dev": [],
     "platform-overrides": {
         "php": "7.1.33"
-    }
+    },
+    "plugin-api-version": "1.1.0"
 }

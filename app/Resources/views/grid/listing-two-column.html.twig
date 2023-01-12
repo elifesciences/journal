@@ -5,7 +5,13 @@
         {% set main = block('main') %}
         {% set secondary = (block('secondary') ?? '')|trim %}
 
-        <div class="grid__item one-whole x-large--eight-twelfths grid-column">
+        {% if viewSelector is defined and viewSelector and secondary|length %}
+
+            {{ render_pattern(viewSelector) }}
+
+        {% endif %}
+
+        <div class="grid__item one-whole x-large--eight-twelfths grid-column" id="primaryListing">
 
             {% include 'infobars-announcement.html.twig' %}
 
@@ -15,7 +21,7 @@
 
         {% if secondary|length %}
 
-            <div class="grid__item one-whole x-large--four-twelfths grid-secondary-column">
+            <div class="grid__item one-whole x-large--four-twelfths grid-secondary-column" id="secondaryListing">
 
                 {{ secondary|raw }}
 

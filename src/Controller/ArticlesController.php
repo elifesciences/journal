@@ -1159,6 +1159,7 @@ final class ArticlesController extends Controller
                     }, $sections))),
                     $hasFigures ? new Link('Figures and data', $this->generatePath($history, $item->getVersion(), 'figures', 'content')) : null,
                     $isFiguresPage,
+                    false,
                     $item instanceof ArticleVoR
                         ? rtrim($this->getParameter('side_by_side_view_url'), '/').'/'.$item->getId()
                         : null,
