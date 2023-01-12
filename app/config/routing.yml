@@ -213,7 +213,7 @@ content-alerts-variant:
     defaults:
          _controller: AppBundle:ContentAlerts:subscribe
     requirements:
-        variant: '(early\-career|technology|elife\-newsletter)'
+        variant: '(early\-career|elife\-newsletter)'
 
 content-alerts-link-expired:
     path: /content-alerts/expired
@@ -240,7 +240,7 @@ content-alerts-unsubscribe-variant:
          _controller: AppBundle:ContentAlerts:unsubscribe
     requirements:
         id: '[a-z0-9]+'
-        variant: '(early\-career|technology|elife\-newsletter)'
+        variant: '(early\-career|elife\-newsletter)'
 
 content-alerts-optout:
     path: /content-alerts/optout/{id}
