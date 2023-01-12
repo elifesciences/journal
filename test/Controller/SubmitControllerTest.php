@@ -23,20 +23,6 @@ final class SubmitControllerTest extends WebTestCase
     /**
      * @test
      */
-    public function it_does_not_redirect_if_the_feature_flag_is_disabled()
-    {
-        $_ENV['FEATURE_XPUB'] = false;
-
-        $client = static::createClient();
-
-        $client->request('GET', '/submit');
-
-        $this->assertSame(404, $client->getResponse()->getStatusCode());
-    }
-
-    /**
-     * @test
-     */
     public function it_requires_you_to_be_logged_in()
     {
         $client = static::createClient();
