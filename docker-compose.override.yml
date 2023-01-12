@@ -1,4 +1,4 @@
-version: '3'
+version: '3.4'
 
 services:
     assets:
@@ -8,12 +8,7 @@ services:
         volumes:
             - ./composer.json:/srv/journal/composer.json
             - ./composer.lock:/srv/journal/composer.lock
-            - type: volume
-              source: vendor
-              target: /srv/journal/vendor
-            - type: bind
-              source: ./vendor
-              target: /srv/journal/vendor
+            - ./vendor:/srv/journal/vendor
             - ./npm-shrinkwrap.json:/npm-shrinkwrap.json
             - ./package.json:/package.json
             - ./assets/images:/assets/images
@@ -27,24 +22,21 @@ services:
         environment:
             - APP_ENV=${APP_ENV}
         volumes:
-            # - /
             - ./.docker/php.ini:/usr/local/etc/php/conf.d/x-dev.ini
             - /srv/journal/var
             - build:/srv/journal/build
             - critical_css:/srv/journal/build/critical-css
-            - type: volume
-              source: vendor
-              target: /srv/journal/vendor
-            - type: bind
-              source: ./vendor
-              target: /srv/journal/vendor
+            - ./vendor:/srv/journal/vendor
     web:
         volumes:
             - assets:/srv/journal/web
+    critical_css:
+        volumes:
+            - critical_css:/build/critical-css
+            - node_modules:/node_modules
 
 volumes:
     assets:
     build:
     critical_css:
     node_modules:
-    vendor:

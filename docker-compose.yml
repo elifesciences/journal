@@ -1,53 +1,70 @@
-version: '3'
+version: '3.4'
 
 services:
-    api_dummy:
-        image: elifesciences/api-dummy:${DEPENDENCIES_API_DUMMY}
-        ports:
-        - '${JOURNAL_API_DUMMY_PORT}:8080'
+    composer:
+        build:
+            context: .
+            dockerfile: Dockerfile
+            target: composer
+            args:
+                node_version: ${NODE_VERSION}
+                composer_dev_arg: ${COMPOSER_DEV_ARG}
+        command: /bin/bash
     assets:
         build:
             context: .
-            dockerfile: Dockerfile.assets
+            dockerfile: Dockerfile
+            target: assets
             args:
                 composer_dev_arg: ${COMPOSER_DEV_ARG}
                 node_version: ${NODE_VERSION}
-                image_tag: ${IMAGE_TAG}
         command: /bin/bash
-        environment:
-            - CRITICAL_CSS_BASE_URL=http://web:8080
-        volumes:
-          - shared_volume:/srv/journal/
     redis:
         image: redis:6.2-alpine
     app:
         build:
             context: .
+            dockerfile: Dockerfile
+            target: app
             args:
-                image_tag: ${IMAGE_TAG}
+                node_version: ${NODE_VERSION}
                 php_version: ${PHP_VERSION}
         environment:
             - SYMFONY__API_URL=${API_URL}
             - SYMFONY__API_URL_PUBLIC=${API_URL_PUBLIC}
             - SYMFONY__API_KEY=${API_KEY}
-        image: elifesciences/journal:${IMAGE_TAG}
         volumes:
-            - shared_volume:/srv/journal/
+            - ./.docker/parameters.yml:/srv/journal/app/config/parameters.yml
         depends_on:
             - assets
             - redis
     web:
         build:
             context: .
-            dockerfile: Dockerfile.web
+            dockerfile: Dockerfile
+            target: web
             args:
-                image_tag: ${IMAGE_TAG}
-        image: elifesciences/journal_web:${IMAGE_TAG}
+                node_version: ${NODE_VERSION}
+                php_version: ${PHP_VERSION}
         ports:
             - '${JOURNAL_PORT}:80'
         depends_on:
             - app
-
-
-volumes:
-    shared_volume:
+    api_dummy:
+        image: elifesciences/api-dummy:${DEPENDENCIES_API_DUMMY}
+        ports:
+        - '${JOURNAL_API_DUMMY_PORT}:8080'
+    critical_css:
+        build:
+            context: .
+            dockerfile: Dockerfile
+            target: critical_css
+            args:
+                node_version: ${NODE_VERSION}
+                php_version: ${PHP_VERSION}
+        environment:
+            - CRITICAL_CSS_BASE_URL=http://web:8080
+        depends_on:
+            - assets
+            - web
+            - api_dummy

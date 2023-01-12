@@ -53,7 +53,7 @@ elifePipeline {
                 def tagName = branchName.replaceAll("/", "_")
                 image.tag(tagName).push()
             }
-            
+
             elifeMainlineOnly {
                 image.push()
             }
