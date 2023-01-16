@@ -7,19 +7,8 @@ use GuzzleHttp\Psr7\Uri;
 use test\eLife\Journal\WebTestCase;
 use function GuzzleHttp\Psr7\parse_query;
 
-/**
- * @backupGlobals enabled
- */
 final class SubmitControllerTest extends WebTestCase
 {
-    /**
-     * @before
-     */
-    public function enableFeatureFlag()
-    {
-        $_ENV['FEATURE_XPUB'] = true;
-    }
-
     /**
      * @test
      */

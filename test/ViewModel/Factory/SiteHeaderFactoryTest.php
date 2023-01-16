@@ -37,24 +37,8 @@ final class SiteHeaderFactoryTest extends KernelTestCase
     /**
      * @test
      */
-    public function it_links_directly_to_the_submit_site_when_the_feature_flag_is_disabled()
+    public function it_links_directly_to_the_submit_site_when_you_are_not_logged_in()
     {
-        $siteHeader = $this->siteHeaderFactory->createSiteHeader();
-
-        $this->assertSame(
-            'http://submit.elifesciences.org/path',
-            $siteHeader['secondaryLinks']['linkedItems'][2]['button']['path']
-        );
-    }
-
-    /**
-     * @test
-     * @backupGlobals enabled
-     */
-    public function it_links_directly_to_the_submit_site_when_the_feature_flag_is_enabled_and_you_are_not_logged_in()
-    {
-        $_ENV['FEATURE_XPUB'] = true;
-
         // Required to enable the authorization checker
         $tokenStorage = static::$kernel->getContainer()->get('security.token_storage');
         $tokenStorage->setToken(new AnonymousToken('secret', 'anon.'));
@@ -69,12 +53,9 @@ final class SiteHeaderFactoryTest extends KernelTestCase
 
     /**
      * @test
-     * @backupGlobals enabled
      */
-    public function it_links_to_the_submit_route_when_the_feature_flag_is_enabled_and_you_are_logged_in()
+    public function it_links_to_the_submit_route_when_you_are_logged_in()
     {
-        $_ENV['FEATURE_XPUB'] = true;
-
         // Required to enable the authorization checker
         $tokenStorage = static::$kernel->getContainer()->get('security.token_storage');
         $tokenStorage->setToken(new RememberMeToken(new User('username', 'password'), 'key', 'secret'));
