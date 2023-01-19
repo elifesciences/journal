@@ -90,6 +90,8 @@ parameters:
                   width: 800
                   height: 600
     crm_url: http://crm.elifesciences.org/crm/civicrm/
+    feature_xpub: '%env(FEATURE_XPUB)%'
+    env(FEATURE_XPUB): false
     oauth2_client_id: journal_client_id
     oauth2_client_secret: journal_client_secret
     session_name: MOCKSESSID
