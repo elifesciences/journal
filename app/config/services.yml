@@ -365,6 +365,15 @@ services:
           - '@router'
           - '@security.http_utils'
 
+    elife.journal.security.voter.feature.xpub:
+        class: eLife\Journal\Security\Voter\FixedVoter
+        public: false
+        arguments:
+          - FEATURE_XPUB
+          - '%feature_xpub%'
+        tags:
+          - name: security.voter
+
     elife.journal.templating.promise_aware:
         class: eLife\Journal\Templating\PromiseAwareEngine
         decorates: templating
