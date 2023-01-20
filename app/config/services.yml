@@ -645,6 +645,15 @@ services:
         tags:
           - name: view_model.converter
 
+    elife.journal.view_model.converter.content_aside:
+        class: eLife\Journal\ViewModel\Converter\ContentAsideConverter
+        public: false
+        arguments:
+          - '@elife.journal.view_model.converter'
+          - '@router'
+        tags:
+          - name: view_model.converter
+
     elife.journal.view_model.converter.block.excerpt:
         class: eLife\Journal\ViewModel\Converter\Block\ExcerptConverter
         public: false

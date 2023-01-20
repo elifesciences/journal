@@ -31,6 +31,7 @@ use eLife\Journal\Helper\HasPages;
 use eLife\Journal\Helper\Humanizer;
 use eLife\Patterns\ViewModel;
 use eLife\Patterns\ViewModel\ArticleSection;
+use eLife\Patterns\ViewModel\ContentAside;
 use eLife\Patterns\ViewModel\ContentHeaderNew;
 use eLife\Patterns\ViewModel\ContextualData;
 use eLife\Patterns\ViewModel\Doi;
@@ -1084,6 +1085,25 @@ final class ArticlesController extends Controller
         $arguments['contentHeader'] = all(['item' => $arguments['item'], 'isMagazine' => $arguments['isMagazine'], 'metrics' => $arguments['contextualDataMetrics']])
             ->then(function (array $parts) {
                 return $this->convertTo($parts['item'], ContentHeaderNew::class, ['metrics' => $parts['metrics'], 'isMagazine' => $parts['isMagazine']]);
+            });
+
+        $arguments['contentAside'] = all([
+            'item' => $arguments['item'],
+            'isMagazine' => $arguments['isMagazine'],
+            'metrics' => $arguments['contextualDataMetrics'],
+            'history' => $arguments['history']
+        ])
+            ->then(function (array $parts) {
+
+                $history = $parts['history'];
+                $articleVersions = $history->getVersions()
+                    ->filter(Callback::isInstanceOf(ArticleVersion::class))
+                    ->toArray();
+                return $this->convertTo(
+                    $parts['item'],
+                ContentAside::class,
+                ['metrics' => $parts['metrics'], 'isMagazine' => $parts['isMagazine'], 'history' => $articleVersions]
+                );
             });
 
         $arguments['downloadLinks'] = all(['item' => $arguments['item'], 'history' => $arguments['history'], 'eraArticle' => $arguments['eraArticle']])

@@ -320,8 +320,13 @@
 
 {% block body %}
 
-    {{ render_pattern(contentHeader) }}
+    <div class="wrapper wrapper--content-with-header-and-aside">
+        {{ render_pattern(contentHeader) }}
 
+        {% if contentAside %}
+                    {{ render_pattern(contentAside) }}
+        {% endif %}
+    </div>
     {% for modalWindow in modalWindows %}
         {{ render_pattern(modalWindow) }}
     {% endfor %}

@@ -79,7 +79,9 @@ final class ArticleContentHeaderConverter implements ViewModelConverter
             null,
             $meta,
             $object->getDoi() ? new ViewModel\Doi($object->getDoi()) : null,
-            LicenceUri::forCode($object->getCopyright()->getLicense())
+            LicenceUri::forCode($object->getCopyright()->getLicense()),
+            null,
+            $isMagazine === false
         );
     }
 
