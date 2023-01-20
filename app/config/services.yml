@@ -651,6 +651,7 @@ services:
         arguments:
           - '@elife.journal.view_model.converter'
           - '@router'
+          - '@elife.journal.helper.download_link_uri_generator'
         tags:
           - name: view_model.converter
 

@@ -61,6 +61,7 @@ final class ArticleContentHeaderConverter implements ViewModelConverter
 
         return new ViewModel\ContentHeaderNew(
             $object->getFullTitle(),
+            $isMagazine === false,
             null,
             null,
             $impactStatement,
@@ -80,8 +81,7 @@ final class ArticleContentHeaderConverter implements ViewModelConverter
             $meta,
             $object->getDoi() ? new ViewModel\Doi($object->getDoi()) : null,
             LicenceUri::forCode($object->getCopyright()->getLicense()),
-            null,
-            $isMagazine === false
+            null
         );
     }
 
