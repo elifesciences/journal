@@ -978,7 +978,7 @@ final class ArticlesController extends Controller
                 $infoBars = [];
                 if (false === $isMagazine) {
                     $infoBarText = sprintf(
-                        'eLife\'s peer-review process is changing. From early next year, we will no longer make accept/reject decisions after peer review. <a href="%s" class="">About the new process.</a>',
+                        'eLife\'s peer-review process is changing. In the new process, we will no longer make accept/reject decisions after peer review. <a href="%s">Find out more.</a>',
                         $this->get('router')->generate('inside-elife-article', ['id' => '54d63486'])
                     );
                     $infoBars[] = new InfoBar(
