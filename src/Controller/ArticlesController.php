@@ -1086,7 +1086,7 @@ final class ArticlesController extends Controller
             ->then(function (array $parts) {
                 return $this->convertTo($parts['item'], ContentHeaderNew::class, ['metrics' => $parts['metrics'], 'isMagazine' => $parts['isMagazine']]);
             });
-dump($arguments['contextualDataMetrics']->wait());
+
         $arguments['contentAside'] = all([
             'item' => $arguments['item'],
             'isMagazine' => $arguments['isMagazine'],
