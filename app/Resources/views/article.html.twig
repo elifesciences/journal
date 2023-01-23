@@ -338,15 +338,16 @@
         {% if not contentAside %}
         <div data-behaviour="DelegateBehaviour" data-delegate-behaviour="Popup" data-selector=".article-section:not(#abstract) a">
         {% endif %}
-
-
+    
             {% block article_body %}{% endblock %}
 
-        </div>
+        {% if not contentAside %}
+            </div>
+        {% endif %}
 
-    {% if contentAside %}
-        </div>
-    {% endif %}
+        {% if contentAside %}
+            </div>
+        {% endif %}
 
     {{ schema_org_metadata(item) }}
 
