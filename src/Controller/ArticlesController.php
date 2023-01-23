@@ -1095,6 +1095,10 @@ final class ArticlesController extends Controller
         ])
             ->then(function (array $parts) {
 
+                if ($parts['isMagazine']) {
+                    return false;
+                }
+
                 /** @var ArticleHistory $history */
                 $history = $parts['history'];
 
@@ -1161,7 +1165,7 @@ final class ArticlesController extends Controller
                     'timeline' => $publicationHistory]
                 );
             });
-
+dump($arguments['contentAside']->wait());
         $arguments['downloadLinks'] = all(['item' => $arguments['item'], 'history' => $arguments['history'], 'eraArticle' => $arguments['eraArticle']])
             ->then(function (array $parts) {
                 /** @var ArticleVersion $item */

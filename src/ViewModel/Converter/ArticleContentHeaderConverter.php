@@ -61,7 +61,7 @@ final class ArticleContentHeaderConverter implements ViewModelConverter
 
         return new ViewModel\ContentHeaderNew(
             $object->getFullTitle(),
-            $isMagazine === false,
+            !$isMagazine,
             null,
             null,
             $impactStatement,

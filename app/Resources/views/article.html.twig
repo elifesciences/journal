@@ -320,23 +320,33 @@
 
 {% block body %}
 
-    <div class="wrapper wrapper--content-with-header-and-aside">
+    {% if contentAside %}
+        <div class="wrapper wrapper--content-with-header-and-aside">
+    {% endif %}
         {{ render_pattern(contentHeader) }}
 
         {% if contentAside %}
             {{ render_pattern(contentAside) }}
         {% endif %}
-    {% for modalWindow in modalWindows %}
-        {{ render_pattern(modalWindow) }}
-    {% endfor %}
 
-    {% include 'calls-to-action.html.twig' %}
+        {% for modalWindow in modalWindows %}
+            {{ render_pattern(modalWindow) }}
+        {% endfor %}
 
+        {% include 'calls-to-action.html.twig' %}
 
-        {% block article_body %}{% endblock %}
+        {% if not contentAside %}
         <div data-behaviour="DelegateBehaviour" data-delegate-behaviour="Popup" data-selector=".article-section:not(#abstract) a">
+        {% endif %}
 
-    </div>
+
+            {% block article_body %}{% endblock %}
+
+        </div>
+
+    {% if contentAside %}
+        </div>
+    {% endif %}
 
     {{ schema_org_metadata(item) }}
 
