@@ -52,7 +52,7 @@ final class ArticleModalConverter implements ViewModelConverter
             ];
 
             // @todo - switch to use ModalWindow::small when you can work out why it's broken!
-            return ViewModel\ModalWindow::create('Share this article', $this->patternRenderer->render(...$body), null, 'modalContentShare');
+            return ViewModel\ModalWindow::create('Share this article', $this->patternRenderer->render(...$body), null, 'button-action-share');
         } else {
             $reference = $this->patternRenderer->render($this->convertTo($object, ViewModel\Reference::class));
 
@@ -71,7 +71,9 @@ final class ArticleModalConverter implements ViewModelConverter
                     ])
                 ),
             ];
-            return ViewModel\ModalWindow::create('Cite this article', $reference.$this->patternRenderer->render(...$body), null, 'modalContentCitations');
+
+            $triggerId = 'citation' === $context['type'] ? 'button-action-citation' : 'modalContentCitations';
+            return ViewModel\ModalWindow::create('Cite this article', $reference.$this->patternRenderer->render(...$body), null, $triggerId);
         }
     }
 
