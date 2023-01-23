@@ -350,7 +350,7 @@
             </div>
         {% endif %}
 
-    {% if contentAside and listing %}
+    {% if contentAside and (listing is defined and listing) %}
 
         {{ render_pattern(listing) }}
 

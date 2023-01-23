@@ -58,9 +58,10 @@
 
     {% endembed %}
 
-    {% if not contentAside and listing %}
-
-        {{ render_pattern(listing) }}
+    {% if not contentAside  %}
+        {% if listing is defined and listing%}
+            {{ render_pattern(listing) }}
+        {% endif %}
 
     {% endif %}
 
