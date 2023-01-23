@@ -323,6 +323,7 @@
     {% if contentAside %}
         <div class="wrapper wrapper--content-with-header-and-aside">
     {% endif %}
+
         {{ render_pattern(contentHeader) }}
 
         {% if contentAside %}
@@ -348,6 +349,12 @@
         {% if contentAside %}
             </div>
         {% endif %}
+
+    {% if contentAside and listing %}
+
+        {{ render_pattern(listing) }}
+
+    {% endif %}
 
     {{ schema_org_metadata(item) }}
 

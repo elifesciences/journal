@@ -44,7 +44,7 @@
 
         {% block secondary %}
 
-            {% if relatedItem %}
+            {% if not contentAside and relatedItem %}
 
                 <div class="grid-secondary-column__item grid-secondary-column__item--wide-only">
 
@@ -58,7 +58,7 @@
 
     {% endembed %}
 
-    {% if listing %}
+    {% if not contentAside and listing %}
 
         {{ render_pattern(listing) }}
 
