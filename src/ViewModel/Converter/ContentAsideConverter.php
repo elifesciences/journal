@@ -54,7 +54,7 @@ final class ContentAsideConverter implements ViewModelConverter
                 Button::action('Comment<span aria-hidden=\'true\'><span data-visible-annotation-count></span> </span><span class=\'visuallyhidden\'>Open annotations (there are currently <span data-hypothesis-annotation-count>0</span> annotations on this page). </span>', '#', true, null, Button::ACTION_VARIANT_COMMENT),
             ], true),
             $contextualData ?? null,
-            ViewModel\DefinitionList::timeline($context['timeline'])
+            !empty($context['timeline']) ? ViewModel\DefinitionList::timeline($context['timeline']) : null
         );
     }
 
