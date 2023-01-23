@@ -1215,7 +1215,7 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertSame('Article title', $crawler->filter('.content-header__title')->text());
 
         $this->assertSame('Comment Open annotations (there are currently 0 annotations on this page).',
-            $this->crawlerText($crawler->filter('.side-section .side-section-wrapper__list li')->eq(2)));
+            $this->crawlerText($crawler->filter('.content-aside .button-collection .button-collection__item')->eq(3)));
 
         $this->assertSame(
             [
