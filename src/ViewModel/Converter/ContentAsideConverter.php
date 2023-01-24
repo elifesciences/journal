@@ -44,11 +44,11 @@ final class ContentAsideConverter implements ViewModelConverter
 
         $articleUri = $this->urlGenerator->generate('article', [$object], UrlGeneratorInterface::ABSOLUTE_URL);
         return new ViewModel\ContentAside(
-            new ViewModel\ContentAsideStatus('Research article',
-                'The author(s) have declared this to be the current/final version.',
-            new ViewModel\Link(' About eLife\'s process', '#')),
+            new ViewModel\ContentAsideStatus('Version of Record',
+                'Accepted for publication after peer review and revision.',
+            new ViewModel\Link(' About eLife\'s process', $this->urlGenerator->generate('inside-elife-article', ['id' => '54d63486']))),
             new ViewModel\ButtonCollection([
-                Button::action('Download', '#', true, 'button-action-download', Button::ACTION_VARIANT_DOWNLOAD),
+                Button::action('Download', '#downloads', true, 'button-action-download', Button::ACTION_VARIANT_DOWNLOAD),
                 Button::action('Cite', '#cite', true, 'button-action-citation', Button::ACTION_VARIANT_CITATION),
                 Button::action('Share', '#share', true, 'button-action-share', Button::ACTION_VARIANT_SHARE),
                 Button::action('Comment<span aria-hidden=\'true\'><span data-visible-annotation-count></span> </span><span class=\'visuallyhidden\'>Open annotations (there are currently <span data-hypothesis-annotation-count>0</span> annotations on this page). </span>', '#', true, null, Button::ACTION_VARIANT_COMMENT),

@@ -1128,7 +1128,7 @@ final class ArticlesController extends Controller
                             $accepted = null;
                         }
 
-                        $publicationHistory['Preprint posted'] = sprintf('Preprint posted: <a href="%s">%s (view preprint)</a>', $preprint->getUri(), $preprint->getPublishedDate()->format('F j, Y'));
+                        $publicationHistory['Preprint posted'] = sprintf('<a href="%s">%s (view preprint)</a>', $preprint->getUri(), $preprint->getPublishedDate()->format('F j, Y'));
                     }
                 }
 
