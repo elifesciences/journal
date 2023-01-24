@@ -1091,7 +1091,8 @@ final class ArticlesController extends Controller
             'item' => $arguments['item'],
             'isMagazine' => $arguments['isMagazine'],
             'metrics' => $arguments['contextualDataMetrics'],
-            'history' => $arguments['history']
+            'history' => $arguments['history'],
+            'relatedArticles' => $arguments['relatedArticles']
         ])
             ->then(function (array $parts) {
 
@@ -1160,9 +1161,12 @@ final class ArticlesController extends Controller
                 }
 
                 return $this->convertTo($parts['item'],
-                ContentAside::class,
-                ['metrics' => $parts['metrics'], 'isMagazine' => $parts['isMagazine'],
-                    'timeline' => $publicationHistory]
+                ContentAside::class, [
+                        'metrics' => $parts['metrics'],
+                        'isMagazine' => $parts['isMagazine'],
+                        'timeline' => $publicationHistory,
+                        'relatedArticles' => $parts['relatedArticles']
+                    ]
                 );
             });
 
