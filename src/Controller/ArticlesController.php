@@ -64,119 +64,6 @@ final class ArticlesController extends Controller
 
         $arguments = $this->articlePageArguments($request, $id, $version);
 
-        /** @var Sequence $recommendations */
-        $recommendations = new PromiseSequence($arguments['item']
-            ->then(function (ArticleVersion $item) {
-                if (in_array($item->getType(), ['correction', 'retraction'])) {
-                    return new EmptySequence();
-                }
-
-                return $this->get('elife.api_sdk.recommendations')->list($item->getIdentifier())->slice(0, 100)
-                    ->otherwise($this->mightNotExist())
-                    ->otherwise($this->softFailure('Failed to load recommendations', new EmptySequence()));
-            }));
-
-        $arguments['furtherReading'] = $recommendations
-            ->filter(function (Model $model) use ($arguments) {
-                // Remove corrections and retractions for this article.
-                if ($model instanceof ArticleVersion && in_array($model->getType(), ['correction', 'retraction'])) {
-                    foreach ($arguments['relatedArticles'] as $relatedArticle) {
-                        if ($relatedArticle->getId() === $model->getId()) {
-                            return false;
-                        }
-                    }
-                }
-
-                return true;
-            });
-
-        $arguments['relatedItem'] = $arguments['furtherReading']->then(Callback::method('offsetGet', 0));
-
-        $arguments['contentAside'] = all([
-            'item' => $arguments['item'],
-            'isMagazine' => $arguments['isMagazine'],
-            'metrics' => $arguments['contextualDataMetrics'],
-            'history' => $arguments['history'],
-            'relatedItem' => $arguments['relatedItem'],
-        ])
-            ->then(function (array $parts) {
-
-                if ($parts['isMagazine']) {
-                    return false;
-                }
-
-                /** @var ArticleHistory $history */
-                $history = $parts['history'];
-
-                $received = $history->getReceived();
-                $accepted = $history->getAccepted();
-                $publicationHistory = [];
-
-                /** @var ArticlePreprint[] $preprints */
-                $preprints = $history->getVersions()
-                    ->filter(Callback::isInstanceOf(ArticlePreprint::class))
-                    ->toArray();
-
-                if ($preprints) {
-                    foreach ($preprints as $preprint) {
-                        // Attempt to output $received if date is before the preprint date.
-                        if ($received && 1 === $preprint->getPublishedDate()->diff(new DateTime($received->toString()))->invert) {
-                            $publicationHistory['Received'] = $received->format();
-
-                            // Set $received to null as it has now been included in the publication history.
-                            $received = null;
-                        }
-                        // Attempt to output $accepted if date is before the preprint date.
-                        if ($accepted && 1 === $preprint->getPublishedDate()->diff(new DateTime($accepted->toString()))->invert) {
-                            $publicationHistory['Accepted'] = $accepted->format();
-
-                            // Set $accepted to null as it has now been included in the publication history.
-                            $accepted = null;
-                        }
-
-                        $publicationHistory['Preprint posted'] = sprintf('%s <a href="%s">View preprint</a>',
-                            $preprint->getPublishedDate() ? $preprint->getPublishedDate()->format('F j, Y') : '',
-                            $preprint->getUri());
-                    }
-                }
-
-                $versions = $history->getVersions()
-                    ->filter(Callback::isInstanceOf(ArticleVoR::class))
-                    ->map(function(ArticleVoR  $itemVersion, int $number) use ($history) {
-                        $index = 'Version of record '.(0 === $number ? 'published' : 'updated');
-                        $b[$index] = sprintf('%s <a href="%s">Go to version</a>',
-                            $itemVersion->getVersionDate() ? $itemVersion->getVersionDate()->format('F j, Y') : '',
-                            $this->generatePath($history, $itemVersion->getVersion()), $itemVersion->getVersionDate() ? $itemVersion->getVersionDate()->format('F j, Y') : '', $itemVersion->getVersion());
-                        return $b;
-                    })->toArray();
-
-
-                foreach ($versions as $version) {
-                    foreach ($version as $k => $v) {
-                        $publicationHistory[$k] = $v;
-                    }
-                }
-
-                // Output $received if it has not yet been output.
-                if ($received) {
-                    $publicationHistory['Received'] = $received->format();
-                }
-
-                // Output $accepted if it has not yet been output.
-                if ($accepted) {
-                    $publicationHistory['Accepted'] = $accepted->format();
-                }
-
-                return $this->convertTo($parts['item'],
-                    ContentAside::class, [
-                        'metrics' => $parts['metrics'],
-                        'isMagazine' => $parts['isMagazine'],
-                        'timeline' => $publicationHistory,
-                        'relatedItem' => $parts['relatedItem']
-                    ]
-                );
-            });
-
         $furtherReading = $this->pagerfantaPromise(
             $arguments['furtherReading'],
             $page,
@@ -1193,6 +1080,121 @@ final class ArticlesController extends Controller
 
                 return $this->convertTo($item, ViewModel\ArticleDownloadLinksList::class, ['era-download' => $eraDownload ?? null]);
             });
+
+        /** @var Sequence $recommendations */
+        $recommendations = new PromiseSequence($arguments['item']
+            ->then(function (ArticleVersion $item) {
+                if (in_array($item->getType(), ['correction', 'retraction'])) {
+                    return new EmptySequence();
+                }
+
+                return $this->get('elife.api_sdk.recommendations')->list($item->getIdentifier())->slice(0, 100)
+                    ->otherwise($this->mightNotExist())
+                    ->otherwise($this->softFailure('Failed to load recommendations', new EmptySequence()));
+            }));
+
+        $arguments['furtherReading'] = $recommendations
+            ->filter(function (Model $model) use ($arguments) {
+                // Remove corrections and retractions for this article.
+                if ($model instanceof ArticleVersion && in_array($model->getType(), ['correction', 'retraction'])) {
+                    foreach ($arguments['relatedArticles'] as $relatedArticle) {
+                        if ($relatedArticle->getId() === $model->getId()) {
+                            return false;
+                        }
+                    }
+                }
+
+                return true;
+            });
+
+        $arguments['relatedItem'] = $arguments['furtherReading']->then(Callback::method('offsetGet', 0));
+
+
+        $arguments['contentAside'] = all([
+            'item' => $arguments['item'],
+            'isMagazine' => $arguments['isMagazine'],
+            'metrics' => $arguments['contextualDataMetrics'],
+            'history' => $arguments['history'],
+            'relatedItem' => $arguments['relatedItem'],
+        ])
+            ->then(function (array $parts) {
+
+                if ($parts['isMagazine']) {
+                    return false;
+                }
+
+                /** @var ArticleHistory $history */
+                $history = $parts['history'];
+
+                $received = $history->getReceived();
+                $accepted = $history->getAccepted();
+                $publicationHistory = [];
+
+                /** @var ArticlePreprint[] $preprints */
+                $preprints = $history->getVersions()
+                    ->filter(Callback::isInstanceOf(ArticlePreprint::class))
+                    ->toArray();
+
+                if ($preprints) {
+                    foreach ($preprints as $preprint) {
+                        // Attempt to output $received if date is before the preprint date.
+                        if ($received && 1 === $preprint->getPublishedDate()->diff(new DateTime($received->toString()))->invert) {
+                            $publicationHistory['Received'] = $received->format();
+
+                            // Set $received to null as it has now been included in the publication history.
+                            $received = null;
+                        }
+                        // Attempt to output $accepted if date is before the preprint date.
+                        if ($accepted && 1 === $preprint->getPublishedDate()->diff(new DateTime($accepted->toString()))->invert) {
+                            $publicationHistory['Accepted'] = $accepted->format();
+
+                            // Set $accepted to null as it has now been included in the publication history.
+                            $accepted = null;
+                        }
+
+                        $publicationHistory['Preprint posted'] = sprintf('%s <a href="%s">View preprint</a>',
+                            $preprint->getPublishedDate() ? $preprint->getPublishedDate()->format('F j, Y') : '',
+                            $preprint->getUri());
+                    }
+                }
+
+                $versions = $history->getVersions()
+                    ->filter(Callback::isInstanceOf(ArticleVoR::class))
+                    ->map(function(ArticleVoR  $itemVersion, int $number) use ($history) {
+                        $index = 'Version of record '.(0 === $number ? 'published' : 'updated');
+                        $b[$index] = sprintf('%s <a href="%s">Go to version</a>',
+                            $itemVersion->getVersionDate() ? $itemVersion->getVersionDate()->format('F j, Y') : '',
+                            $this->generatePath($history, $itemVersion->getVersion()), $itemVersion->getVersionDate() ? $itemVersion->getVersionDate()->format('F j, Y') : '', $itemVersion->getVersion());
+                        return $b;
+                    })->toArray();
+
+
+                foreach ($versions as $version) {
+                    foreach ($version as $k => $v) {
+                        $publicationHistory[$k] = $v;
+                    }
+                }
+
+                // Output $received if it has not yet been output.
+                if ($received) {
+                    $publicationHistory['Received'] = $received->format();
+                }
+
+                // Output $accepted if it has not yet been output.
+                if ($accepted) {
+                    $publicationHistory['Accepted'] = $accepted->format();
+                }
+
+                return $this->convertTo($parts['item'],
+                    ContentAside::class, [
+                        'metrics' => $parts['metrics'],
+                        'isMagazine' => $parts['isMagazine'],
+                        'timeline' => $publicationHistory,
+                        'relatedItem' => $parts['relatedItem']
+                    ]
+                );
+            });
+
 
         return $arguments;
     }
