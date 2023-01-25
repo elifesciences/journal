@@ -2,15 +2,19 @@
 
 namespace eLife\Journal\ViewModel\Converter;
 
+use eLife\ApiSdk\Collection\Sequence;
+use eLife\ApiSdk\Model\Article;
 use eLife\ApiSdk\Model\ArticleVersion;
 use eLife\Journal\Helper\CanConvertContent;
 use eLife\Journal\Helper\DownloadLinkUriGenerator;
 use eLife\Patterns\ViewModel;
 use eLife\Patterns\ViewModel\Button;
 use eLife\Patterns\ViewModel\ContextualData;
+use eLife\Patterns\ViewModel\Link;
 use eLife\Patterns\ViewModel\ListingTeasers;
 use eLife\Patterns\ViewModel\Teaser;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use function GuzzleHttp\Promise\all;
 
 final class ContentAsideConverter implements ViewModelConverter
 {
@@ -36,14 +40,14 @@ final class ContentAsideConverter implements ViewModelConverter
         if (!empty($context['metrics'])) {
             $contextualData = ContextualData::withMetrics($context['metrics']);
         }
-        $relatedArticles = null;
-        if ($context['relatedArticles']->count()) {
-            $relatedArticles = ListingTeasers::basic(
-                $context['relatedArticles']->map($this->willConvertTo(Teaser::class, [
-                    'variant' => 'relatedItem',
-                    'from' => 'aside',
-                    'related' => true,
-                ]))->toArray());
+
+        $relatedItem = null;
+        if (!empty($context['relatedItem'])) {
+            $item = $this->convertTo($context['relatedItem'], Teaser::class, [
+                'variant' => 'relatedItem',
+                'from' => $object->getType(),
+            ]);
+            $relatedItem = ListingTeasers::basic([$item]);
         }
 
 
@@ -59,7 +63,7 @@ final class ContentAsideConverter implements ViewModelConverter
             ], true),
             $contextualData ?? null,
             !empty($context['timeline']) ? ViewModel\DefinitionList::timeline($context['timeline']) : null,
-            $relatedArticles
+            $relatedItem
         );
     }
 
