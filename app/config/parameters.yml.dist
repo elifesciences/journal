@@ -46,6 +46,7 @@ parameters:
             download: https://repro.elifesciences.org/example.dar
     dismissible_info_bars: {}
     cache_control: public, max-age=300, stale-while-revalidate=300, stale-if-error=86400
+    feature_xpub: true
     calls_to_action:
       - id: something-important
         from: 2018-01-01T00:00:00Z

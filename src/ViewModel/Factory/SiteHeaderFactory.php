@@ -51,7 +51,7 @@ final class SiteHeaderFactory
             NavLinkedItem::asLink(new Link('About', $this->urlGenerator->generate('about')))
         ]);
 
-        if ($this->authorizationChecker->isGranted(AuthenticatedVoter::IS_AUTHENTICATED_REMEMBERED)) {
+        if ($this->authorizationChecker->isGranted('FEATURE_XPUB') && $this->authorizationChecker->isGranted(AuthenticatedVoter::IS_AUTHENTICATED_REMEMBERED)) {
             $submitUrl = $this->urlGenerator->generate('submit');
         }
 

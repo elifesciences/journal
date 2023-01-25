@@ -7,8 +7,33 @@ use GuzzleHttp\Psr7\Uri;
 use test\eLife\Journal\WebTestCase;
 use function GuzzleHttp\Psr7\parse_query;
 
+/**
+ * @backupGlobals enabled
+ */
 final class SubmitControllerTest extends WebTestCase
 {
+    /**
+     * @before
+     */
+    public function enableFeatureFlag()
+    {
+        $_ENV['FEATURE_XPUB'] = true;
+    }
+
+    /**
+     * @test
+     */
+    public function it_does_not_redirect_if_the_feature_flag_is_disabled()
+    {
+        $_ENV['FEATURE_XPUB'] = false;
+
+        $client = static::createClient();
+
+        $client->request('GET', '/submit');
+
+        $this->assertSame(404, $client->getResponse()->getStatusCode());
+    }
+
     /**
      * @test
      */

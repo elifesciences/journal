@@ -14,6 +14,10 @@ final class SubmitController extends Controller
 {
     public function redirectAction(Request $request) : Response
     {
+        if (!$this->isGranted('FEATURE_XPUB')) {
+            throw new NotFoundHttpException('Not allowed to see xPub');
+        }
+
         $user = $this->get('security.token_storage')->getToken()->getUser();
 
         // if a return url is specified, check that its from a trusted host
