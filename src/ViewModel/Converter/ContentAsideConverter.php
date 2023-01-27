@@ -34,7 +34,7 @@ final class ContentAsideConverter implements ViewModelConverter
         return new ViewModel\ContentAside(
             new ViewModel\ContentAsideStatus('Version of Record',
                 'Accepted for publication after peer review and revision.',
-            new ViewModel\Link(' About eLife\'s process', $this->urlGenerator->generate('inside-elife-article', ['id' => '54d63486']))),
+            new ViewModel\Link('About eLife\'s process', $this->urlGenerator->generate('inside-elife-article', ['id' => '54d63486']))),
             new ViewModel\ButtonCollection([
                 Button::action('Download', '#downloads', true, 'button-action-download', Button::ACTION_VARIANT_DOWNLOAD),
                 Button::action('Cite', '#citations', true, 'button-action-citation', Button::ACTION_VARIANT_CITATION),
