@@ -172,91 +172,6 @@ final class ArticlesController extends Controller
                 return $item;
             });
 
-        $arguments['contentAside'] = all([
-            'item' => $arguments['item'],
-            'isMagazine' => $arguments['isMagazine'],
-            'metrics' => $arguments['contextualDataMetrics'],
-            'history' => $arguments['history'],
-            'relatedItem' => $arguments['relatedItem'],
-        ])
-            ->then(function (array $parts) {
-
-                if ($parts['isMagazine']) {
-                    return false;
-                }
-
-                /** @var ArticleHistory $history */
-                $history = $parts['history'];
-
-                $received = $history->getReceived();
-                $accepted = $history->getAccepted();
-                $publicationHistory = [];
-
-                /** @var ArticlePreprint[] $preprints */
-                $preprints = $history->getVersions()
-                    ->filter(Callback::isInstanceOf(ArticlePreprint::class))
-                    ->toArray();
-
-                if ($preprints) {
-                    foreach ($preprints as $preprint) {
-                        // Attempt to output $received if date is before the preprint date.
-                        if ($received && 1 === $preprint->getPublishedDate()->diff(new DateTime($received->toString()))->invert) {
-                            $publicationHistory['Received'] = $received->format();
-
-                            // Set $received to null as it has now been included in the publication history.
-                            $received = null;
-                        }
-                        // Attempt to output $accepted if date is before the preprint date.
-                        if ($accepted && 1 === $preprint->getPublishedDate()->diff(new DateTime($accepted->toString()))->invert) {
-                            $publicationHistory['Accepted'] = $accepted->format();
-
-                            // Set $accepted to null as it has now been included in the publication history.
-                            $accepted = null;
-                        }
-
-                        $publicationHistory['Preprint posted'] = sprintf('%s <a href="%s">View preprint</a>',
-                            $preprint->getPublishedDate() ? $preprint->getPublishedDate()->format('F j, Y') : '',
-                            $preprint->getUri());
-                    }
-                }
-
-                $versions = $history->getVersions()
-                    ->filter(Callback::isInstanceOf(ArticleVoR::class))
-                    ->map(function(ArticleVoR  $itemVersion, int $number) use ($history) {
-                        $index = 'Version of record '.(0 === $number ? 'published' : 'updated');
-                        $b[$index] = sprintf('%s <a href="%s">Go to version</a>',
-                            $itemVersion->getVersionDate() ? $itemVersion->getVersionDate()->format('F j, Y') : '',
-                            $this->generatePath($history, $itemVersion->getVersion()), $itemVersion->getVersionDate() ? $itemVersion->getVersionDate()->format('F j, Y') : '', $itemVersion->getVersion());
-                        return $b;
-                    })->toArray();
-
-
-                foreach ($versions as $version) {
-                    foreach ($version as $k => $v) {
-                        $publicationHistory[$k] = $v;
-                    }
-                }
-
-                // Output $received if it has not yet been output.
-                if ($received) {
-                    $publicationHistory['Received'] = $received->format();
-                }
-
-                // Output $accepted if it has not yet been output.
-                if ($accepted) {
-                    $publicationHistory['Accepted'] = $accepted->format();
-                }
-
-                return $this->convertTo($parts['item'],
-                    ContentAside::class, [
-                        'metrics' => $parts['metrics'],
-                        'isMagazine' => $parts['isMagazine'],
-                        'timeline' => $publicationHistory,
-                        'relatedItem' => $parts['relatedItem']
-                    ]
-                );
-            });
-
         $arguments['downloads'] = $this->get('elife.api_sdk.metrics')
             ->totalDownloads(Identifier::article($id))
             ->otherwise($this->mightNotExist())
@@ -735,6 +650,8 @@ final class ArticlesController extends Controller
 
         $arguments['viewSelector'] = $this->createViewSelector($arguments['item'], $arguments['isMagazine'], $arguments['hasFigures'], false, $arguments['history'], $arguments['body'], $arguments['eraArticle']);
 
+        $arguments['contentAside'] = $this->createContentAside($arguments['item'], $arguments['isMagazine'], $arguments['contextualDataMetrics'], $arguments['history'], $arguments['relatedItem']);
+
         $arguments['body'] = all(['item' => $arguments['item'], 'body' => $arguments['body'], 'downloadLinks' => $arguments['downloadLinks']])
             ->then(function (array $parts) {
                 $item = $parts['item'];
@@ -881,6 +798,8 @@ final class ArticlesController extends Controller
             ->then(Callback::mustNotBeEmpty(new NotFoundHttpException('Article version does not contain any figures or data')));
 
         $arguments['viewSelector'] = $this->createViewSelector($arguments['item'], $arguments['isMagazine'], promise_for(true), true, $arguments['history'], $arguments['body'], $arguments['eraArticle']);
+
+        $arguments['contentAside'] = $this->createContentAside($arguments['item'], $arguments['isMagazine'], $arguments['contextualDataMetrics'], $arguments['history'], null);
 
         $arguments['body'] = all(['body' => $arguments['body'], 'downloadLinks' => $arguments['downloadLinks']])
             ->then(function (array $parts) {
@@ -1250,6 +1169,94 @@ final class ArticlesController extends Controller
                         ? rtrim($this->getParameter('side_by_side_view_url'), '/').'/'.$item->getId()
                         : null,
                     $otherLinks
+                );
+            });
+    }
+
+    private function createContentAside(PromiseInterface $item, PromiseInterface $isMagazine, PromiseInterface $contextualDataMetrics, PromiseInterface $history, $relatedItem): PromiseInterface
+    {
+        return all([
+            'item' => $item,
+            'isMagazine' => $isMagazine,
+            'metrics' => $contextualDataMetrics,
+            'history' => $history,
+            'relatedItem' => $relatedItem,
+        ])
+            ->then(function (array $parts) {
+
+                if ($parts['isMagazine']) {
+                    return false;
+                }
+
+                /** @var ArticleHistory $history */
+                $history = $parts['history'];
+
+                $received = $history->getReceived();
+                $accepted = $history->getAccepted();
+                $publicationHistory = [];
+
+                /** @var ArticlePreprint[] $preprints */
+                $preprints = $history->getVersions()
+                    ->filter(Callback::isInstanceOf(ArticlePreprint::class))
+                    ->toArray();
+
+                if ($preprints) {
+                    foreach ($preprints as $preprint) {
+                        // Attempt to output $received if date is before the preprint date.
+                        if ($received && 1 === $preprint->getPublishedDate()->diff(new DateTime($received->toString()))->invert) {
+                            $publicationHistory['Received'] = $received->format();
+
+                            // Set $received to null as it has now been included in the publication history.
+                            $received = null;
+                        }
+                        // Attempt to output $accepted if date is before the preprint date.
+                        if ($accepted && 1 === $preprint->getPublishedDate()->diff(new DateTime($accepted->toString()))->invert) {
+                            $publicationHistory['Accepted'] = $accepted->format();
+
+                            // Set $accepted to null as it has now been included in the publication history.
+                            $accepted = null;
+                        }
+
+                        $publicationHistory['Preprint posted'] = sprintf('%s <a href="%s">View preprint</a>',
+                            $preprint->getPublishedDate() ? $preprint->getPublishedDate()->format('F j, Y') : '',
+                            $preprint->getUri());
+                    }
+                }
+
+                $versions = $history->getVersions()
+                    ->filter(Callback::isInstanceOf(ArticleVoR::class))
+                    ->map(function(ArticleVoR  $itemVersion, int $number) use ($history) {
+                        $index = 'Version of record '.(0 === $number ? 'published' : 'updated');
+                        $b[$index] = sprintf('%s <a href="%s">Go to version</a>',
+                            $itemVersion->getVersionDate() ? $itemVersion->getVersionDate()->format('F j, Y') : '',
+                            $this->generatePath($history, $itemVersion->getVersion()), $itemVersion->getVersionDate() ? $itemVersion->getVersionDate()->format('F j, Y') : '', $itemVersion->getVersion());
+                        return $b;
+                    })->toArray();
+
+
+                foreach ($versions as $version) {
+                    foreach ($version as $k => $v) {
+                        $publicationHistory[$k] = $v;
+                    }
+                }
+
+                // Output $received if it has not yet been output.
+                if ($received) {
+                    $publicationHistory['Received'] = $received->format();
+                }
+
+                // Output $accepted if it has not yet been output.
+                if ($accepted) {
+                    $publicationHistory['Accepted'] = $accepted->format();
+                }
+
+                return $this->convertTo($parts['item'],
+                    ContentAside::class, [
+                        'metrics' => $parts['metrics'],
+                        'isMagazine' => $parts['isMagazine'],
+                        'timeline' => $publicationHistory,
+                        'relatedItem' => $parts['relatedItem']
+                    ]
                 );
             });
     }
