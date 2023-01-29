@@ -32,7 +32,7 @@ final class DigestContentHeaderConverter implements ViewModelConverter
 
         return new ViewModel\ContentHeaderNew(
             $object->getTitle(),
-            true, null, $object->getImpactStatement(), true,
+            false, true, null, $object->getImpactStatement(), true,
             new ViewModel\Breadcrumb([
                 new ViewModel\Link(
                     'Magazine',

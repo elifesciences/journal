@@ -61,6 +61,7 @@ final class ArticleContentHeaderConverter implements ViewModelConverter
 
         return new ViewModel\ContentHeaderNew(
             $object->getFullTitle(),
+            false,
             null,
             null,
             $impactStatement,
