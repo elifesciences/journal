@@ -1801,7 +1801,7 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertEquals(
             '<a href="https://elifesciences.org/inside-elife/4f706531/special-issue-call-for-papers-in-aging-geroscience-and-longevity">Read the call for papers</a> for the eLife Special Issue on Aging, Geroscience and Longevity.',
-            $crawler->filter('.info-bar--dismissible .info-bar__text')->eq(1)->html()
+            $crawler->filter('.info-bar--dismissible .info-bar__text')->eq(0)->html()
         );
     }
 
