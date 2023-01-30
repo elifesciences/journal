@@ -47,7 +47,7 @@ final class SiteHeaderFactory
             NavLinkedItem::asLink(new Link('Search', $this->urlGenerator->generate('search')), true),
             NavLinkedItem::asLink(new Link('Alerts', $this->urlGenerator->generate('content-alerts'))),
             NavLinkedItem::asButton(
-                Button::link('Submit your research', $this->urlGenerator->generate('submit-yor-research'), Button::SIZE_EXTRA_SMALL, Button::STYLE_DEFAULT, true, false, 'submitResearchButton')
+                Button::link('Submit your research', $this->urlGenerator->generate('submit-your-research'), Button::SIZE_EXTRA_SMALL, Button::STYLE_DEFAULT, true, false, 'submitResearchButton')
             ),
         ];
 
