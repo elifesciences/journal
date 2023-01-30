@@ -107,7 +107,7 @@ parameters:
             date: '2030-01-01T00:00:00Z'
             display: https://repro.elifesciences.org/example.html
             download: https://repro.elifesciences.org/archive.zip
-    submit_url: http://elifesciences.org/submit-your-research
+    submit_url: http://submit.elifesciences.org/path
 
 framework:
     profiler:
