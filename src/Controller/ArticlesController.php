@@ -976,18 +976,6 @@ final class ArticlesController extends Controller
                 $isMagazine = $parts['isMagazine'];
 
                 $infoBars = [];
-                if (false === $isMagazine) {
-                    $infoBarText = sprintf(
-                        'eLife\'s peer-review process is changing. In the new process, we will no longer make accept/reject decisions after peer review. <a href="%s">Find out more.</a>',
-                        $this->get('router')->generate('inside-elife-article', ['id' => '54d63486'])
-                    );
-                    $infoBars[] = new InfoBar(
-                        $infoBarText,
-                        InfoBar::TYPE_DISMISSIBLE,
-                        'article-prc-dismissible',
-                        new DateTimeImmutable(self::DISMISSIBLE_INFO_BAR_COOKIE_DURATION)
-                    );
-                }
 
                 $articleVersions = $history->getVersions()
                     ->filter(Callback::isInstanceOf(ArticleVersion::class))
