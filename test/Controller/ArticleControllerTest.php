@@ -1835,7 +1835,7 @@ final class ArticleControllerTest extends PageTestCase
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
 
-        $this->assertEquals(2, $crawler->filter('.info-bar')->count());
+        $this->assertEquals(1, $crawler->filter('.info-bar')->count());
         $this->assertEquals(
             [],
             array_map('trim', $crawler->filter('.info-bar--dismissible')->eq(1)->extract(['_text']))
