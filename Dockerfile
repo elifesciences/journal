@@ -38,7 +38,6 @@ RUN composer --no-interaction dump-autoload ${composer_dev_arg} --classmap-autho
 
 # Assets-builder
 
-FROM composer
 FROM npm AS assets
 
 RUN apt-get update && apt-get install --no-install-recommends -y \
@@ -55,8 +54,6 @@ RUN node_modules/.bin/gulp assets
 
 # Dockerfile
 
-FROM assets
-FROM composer
 FROM elifesciences/php_7.1_fpm:${php_version} as app
 
 ENV PROJECT_FOLDER=/srv/journal/
@@ -84,6 +81,9 @@ COPY --chown=elife:elife src/ src/
 USER www-data
 
 HEALTHCHECK --interval=5s CMD HTTP_HOST=localhost assert_fpm /ping 'pong'
+
+FROM app as app_tests
+COPY --chown=elife:elife test/ test/
 
 # Critical_css
 
@@ -134,8 +134,6 @@ CMD node_modules/.bin/gulp critical-css:generate && ./check_critical_css.sh
 
 # CI
 
-FROM jq
-FROM composer
 FROM app as ci
 
 USER root
@@ -162,7 +160,6 @@ USER www-data
 
 # Web
 
-FROM app
 FROM nginx:1.13.12-alpine as web
 
 COPY .docker/nginx-default.conf /etc/nginx/conf.d/default.conf

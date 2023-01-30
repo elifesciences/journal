@@ -38,8 +38,21 @@ services:
         depends_on:
             - composer-dev
             - app
+            - app_t
             - selenium
     app:
+        volumes:
+            - fixtures:/srv/journal/var/fixtures
+        environment:
+            - APP_ENV=ci
+    app_t:
+        build:
+            context: .
+            dockerfile: Dockerfile
+            target: app_tests
+            args:
+                node_version: ${NODE_VERSION}
+                php_version: ${PHP_VERSION}
         volumes:
             - fixtures:/srv/journal/var/fixtures
         environment:
