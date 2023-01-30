@@ -1791,22 +1791,6 @@ final class ArticleControllerTest extends PageTestCase
 
     /**
      * @test
-     */
-    public function it_displays_dismissible_info_bars_when_it_has_been_selected()
-    {
-        $client = static::createClient();
-
-        $crawler = $client->request('GET', $this->getUrl('26231'));
-
-        $this->assertSame(200, $client->getResponse()->getStatusCode());
-        $this->assertEquals(
-            '<a href="https://elifesciences.org/inside-elife/4f706531/special-issue-call-for-papers-in-aging-geroscience-and-longevity">Read the call for papers</a> for the eLife Special Issue on Aging, Geroscience and Longevity.',
-            $crawler->filter('.info-bar--dismissible .info-bar__text')->eq(1)->html()
-        );
-    }
-
-    /**
-     * @test
      * @backupGlobals enabled
      */
     public function it_does_not_display_era_info_bar_when_it_has_no_associated_era()
