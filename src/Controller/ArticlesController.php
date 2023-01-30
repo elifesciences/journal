@@ -439,7 +439,11 @@ final class ArticlesController extends Controller
 
                 if ($item instanceof ArticleVoR && $item->getPublicReviews()->notEmpty()) {
                     $reviews = $item->getPublicReviews()->map(function (PublicReview $publicReview, $i) use ($context) {
-                        return ArticleSection::basic($this->render(...$this->convertContent($publicReview, 2, $context)),$publicReview->getTitle(),2);
+                        return ArticleSection::basic(
+                            $this->render(...$this->convertContent($publicReview, 2, $context)),
+                            $publicReview->getTitle(),
+                            2
+                        );
                     })->toArray();
 
                     if ($item->getRecommendationsForAuthors()) {
