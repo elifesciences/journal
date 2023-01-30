@@ -4,7 +4,6 @@ namespace eLife\Journal\ViewModel\Factory;
 
 use eLife\ApiSdk\Model\HasSubjects;
 use eLife\ApiSdk\Model\Model;
-use eLife\ApiSdk\Model\Profile;
 use eLife\ApiSdk\Model\Subject;
 use eLife\Patterns\ViewModel\Button;
 use eLife\Patterns\ViewModel\CompactForm;
@@ -19,23 +18,16 @@ use eLife\Patterns\ViewModel\SiteHeaderTitle;
 use eLife\Patterns\ViewModel\SubjectFilter;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
-use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
-use function eLife\Patterns\mixed_visibility_text;
 
 final class SiteHeaderFactory
 {
     private $urlGenerator;
     private $requestStack;
-    private $authorizationChecker;
-    private $submitUrl;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator, RequestStack $requestStack, AuthorizationCheckerInterface $authorizationChecker, string $submitUrl)
+    public function __construct(UrlGeneratorInterface $urlGenerator, RequestStack $requestStack)
     {
         $this->urlGenerator = $urlGenerator;
         $this->requestStack = $requestStack;
-        $this->authorizationChecker = $authorizationChecker;
-        $this->submitUrl = $submitUrl;
     }
 
     public function createSiteHeader(Model $item = null) : SiteHeader
@@ -51,15 +43,11 @@ final class SiteHeaderFactory
             NavLinkedItem::asLink(new Link('About', $this->urlGenerator->generate('about')))
         ]);
 
-        if ($this->authorizationChecker->isGranted('FEATURE_XPUB') && $this->authorizationChecker->isGranted(AuthenticatedVoter::IS_AUTHENTICATED_REMEMBERED)) {
-            $submitUrl = $this->urlGenerator->generate('submit');
-        }
-
         $secondaryLinks = [
             NavLinkedItem::asLink(new Link('Search', $this->urlGenerator->generate('search')), true),
             NavLinkedItem::asLink(new Link('Alerts', $this->urlGenerator->generate('content-alerts'))),
             NavLinkedItem::asButton(
-                Button::link('Submit your research', $submitUrl ?? $this->submitUrl, Button::SIZE_EXTRA_SMALL, Button::STYLE_DEFAULT, true, false, 'submitResearchButton')
+                Button::link('Submit your research', $this->urlGenerator->generate('submit-yor-research'), Button::SIZE_EXTRA_SMALL, Button::STYLE_DEFAULT, true, false, 'submitResearchButton')
             ),
         ];
 
