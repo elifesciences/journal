@@ -23,6 +23,7 @@ use eLife\ApiSdk\Model\FundingAward;
 use eLife\ApiSdk\Model\HasContent;
 use eLife\ApiSdk\Model\Identifier;
 use eLife\ApiSdk\Model\Model;
+use eLife\ApiSdk\Model\PublicReview;
 use eLife\ApiSdk\Model\Reviewer;
 use eLife\Journal\Exception\EarlyResponse;
 use eLife\Journal\Helper\Callback;
@@ -306,6 +307,31 @@ final class ArticlesController extends Controller
                     $first = false;
                 }
 
+                if ($item instanceof ArticleVoR && $item->getElifeAssessment()) {
+                    $first = true;
+                    $relatedLinks = [];
+
+                    if ($item->getElifeAssessmentScietyUri()) {
+                        $relatedLinks[] = new Link('Reviews on Sciety', $item->getElifeAssessmentScietyUri());
+                    }
+
+                    $relatedLinks[] = new Link('eLife\'s review process', $this->get('router')->generate('about-peer-review'));
+
+                    $parts[] = ArticleSection::collapsible(
+                        'elife-assessment',
+                        $item->getElifeAssessmentTitle(),
+                        2,
+                        $this->render(...$this->convertContent($item->getElifeAssessment(), 2, $context)),
+                        $relatedLinks,
+                        ArticleSection::STYLE_HIGHLIGHTED,
+                        false,
+                        $first,
+                        $item->getElifeAssessment()->getDoi() ? new Doi($item->getElifeAssessment()->getDoi()) : null
+                    );
+
+                    $first = false;
+                }
+
                 if ($item instanceof ArticleVoR && $item->getEditorEvaluation()) {
                     // Editor's evaluation should feel connected to abstract and not be collapsible
                     $first = true;
@@ -408,6 +434,27 @@ final class ArticlesController extends Controller
                         null,
                         null,
                         true
+                    );
+                }
+
+                if ($item instanceof ArticleVoR && $item->getPublicReviews()->notEmpty()) {
+                    $reviews = $item->getPublicReviews()->map(function (PublicReview $publicReview, $i) use ($context) {
+                        return ArticleSection::basic($this->render(...$this->convertContent($publicReview, 2, $context)),$publicReview->getTitle(),2);
+                    })->toArray();
+
+                    if ($item->getRecommendationsForAuthors()) {
+                        $reviews[] = ArticleSection::basic(
+                            $this->render(...$this->convertContent($item->getRecommendationsForAuthors(), 2, $context)),
+                            $item->getRecommendationsForAuthorsTitle(),
+                            2
+                        );
+                    }
+
+                    $parts[] = ArticleSection::collapsible(
+                        'publicReview',
+                        'Public Reviews',
+                        2,
+                        $this->render(...($reviews))
                     );
                 }
 
