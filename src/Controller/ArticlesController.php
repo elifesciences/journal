@@ -1190,8 +1190,6 @@ final class ArticlesController extends Controller
                     ->map(function(ArticleVoR $itemVersion, int $number) use ($history, $item) {
                         $b['term'] = 'Version of record ' . (0 === $number ? 'published' : 'updated');
                         $versionLink = $this->generatePath($history, $itemVersion->getVersion());
-                        dump($item->getVersionDate());
-                        dump($itemVersion->getVersionDate());
                         $descriptorsLink = $itemVersion->getVersionDate() == $item->getVersionDate() ? '(This version)' : '<a href="' . $versionLink . '">(Go to version)</a>';
                         $b['descriptors'][] = sprintf('%s %s',
                             $itemVersion->getVersionDate() ? $itemVersion->getVersionDate()->format('F j, Y') : '',
@@ -1225,7 +1223,7 @@ final class ArticlesController extends Controller
 
                 if ($preprints) {
                     foreach (array_reverse($preprints) as $preprint) {
-                        $descriptorsLink = ($preprint->getUri() === $_SERVER['REQUEST_URI'] ? '(This version)' : '<a href="' . $preprint->getUri() . '">(Go to version)</a>');
+                        $descriptorsLink = ($item->getVersionDate() == $preprint->getPublishedDate() ? '(This version)' : '<a href="' . $preprint->getUri() . '">(Go to version)</a>');
                         $publicationHistory[] = [
                             'term' => 'Preprint posted',
                             'descriptors' => [
