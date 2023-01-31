@@ -17,7 +17,6 @@ use eLife\Patterns\ViewModel\Button;
 use eLife\Patterns\ViewModel\ContentHeader;
 use eLife\Patterns\ViewModel\FlexibleViewModel;
 use eLife\Patterns\ViewModel\FormLabel;
-use eLife\Patterns\ViewModel\InfoBar;
 use eLife\Patterns\ViewModel\Link;
 use eLife\Patterns\ViewModel\ListHeading;
 use eLife\Patterns\ViewModel\Listing;
