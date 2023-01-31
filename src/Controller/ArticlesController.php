@@ -1183,66 +1183,54 @@ final class ArticlesController extends Controller
                 $accepted = $history->getAccepted();
                 $publicationHistory = [];
 
+                $publicationHistory = array_merge($publicationHistory, array_reverse($history->getVersions()
+                    ->filter(Callback::isInstanceOf(ArticleVoR::class))
+                    ->map(function(ArticleVoR $itemVersion, int $number) use ($history) {
+                        $b['term'] = 'Version of record ' . (0 === $number ? 'published' : 'updated');
+                        $versionLink = $this->generatePath($history, $itemVersion->getVersion());
+                        $descriptorsLink = ($versionLink === $_SERVER['REQUEST_URI'] ? '(This version)' : '<a href="' . $versionLink . '">Go to version</a>');
+                        $b['descriptors'][] = sprintf('%s %s',
+                            $itemVersion->getVersionDate() ? $itemVersion->getVersionDate()->format('F j, Y') : '',
+                            $descriptorsLink);
+                        return $b;
+                    })->toArray()));
+
+                $publicationHistory = array_merge($publicationHistory, array_reverse($history->getVersions()
+                    ->filter(Callback::isInstanceOf(ArticlePoA::class))
+                    ->map(function (ArticlePoA $itemVersion, int $number) use ($history) {
+                        $b['term'] = 'Accepted Manuscript ' . (0 === $number ? 'published' : 'updated');
+                        $versionLink = $this->generatePath($history, $itemVersion->getVersion());
+                        $descriptorsLink = ($versionLink === $_SERVER['REQUEST_URI'] ? '(This version)' : '<a href="' . $versionLink . '">Go to version</a>');
+                        $b['descriptors'][] = sprintf('%s %s',
+                            $itemVersion->getVersionDate() ? $itemVersion->getVersionDate()->format('F j, Y') : '',
+                            $descriptorsLink);
+                        return $b;
+                    })->toArray()));
+
                 /** @var ArticlePreprint[] $preprints */
                 $preprints = $history->getVersions()
                     ->filter(Callback::isInstanceOf(ArticlePreprint::class))
                     ->toArray();
-
-                if ($preprints) {
-                    foreach ($preprints as $preprint) {
-                        // Attempt to output $received if date is before the preprint date.
-                        if ($received && 1 === $preprint->getPublishedDate()->diff(new DateTime($received->toString()))->invert) {
-                            $publicationHistory[] = [
-                                'term' => 'Received',
-                                'descriptors' => [$received->format()]
-                            ];
-                            // Set $received to null as it has now been included in the publication history.
-                            $received = null;
-                        }
-                        // Attempt to output $accepted if date is before the preprint date.
-                        if ($accepted && 1 === $preprint->getPublishedDate()->diff(new DateTime($accepted->toString()))->invert) {
-                            $publicationHistory[] = [
-                                'term' => 'Accepted',
-                                'descriptors' => [$accepted->format()]
-                            ];
-
-                            // Set $accepted to null as it has now been included in the publication history.
-                            $accepted = null;
-                        }
-                        $publicationHistory[] = [
-                            'term' => 'Preprint posted',
-                            'descriptors' => [
-                                sprintf('%s <a href="%s">View preprint</a>',
-                                $preprint->getPublishedDate() ? $preprint->getPublishedDate()->format('F j, Y') : '',
-                                $preprint->getUri())
-                            ]
-                        ];
-                    }
-                }
-
-                $publicationHistory = array_merge($publicationHistory, $history->getVersions()
-                    ->filter(Callback::isInstanceOf(ArticleVoR::class))
-                    ->map(function(ArticleVoR $itemVersion, int $number) use ($history) {
-                        $b['term'] = 'Version of record ' . (0 === $number ? 'published' : 'updated');
-                        $b['descriptors'][] = sprintf('%s <a href="%s">Go to version</a>',
-                            $itemVersion->getVersionDate() ? $itemVersion->getVersionDate()->format('F j, Y') : '',
-                            $this->generatePath($history, $itemVersion->getVersion()));
-                        return $b;
-                    })->toArray());
-
-                $publicationHistory = array_merge($publicationHistory, $history->getVersions()
-                    ->filter(Callback::isInstanceOf(ArticlePoA::class))
-                    ->map(function (ArticlePoA $itemVersion, int $number) use ($history) {
-                        $b['term'] = 'Accepted Manuscript ' . (0 === $number ? 'published' : 'updated');
-                        $b['descriptors'][] = sprintf('%s <a href="%s">Go to version</a>', $itemVersion->getVersionDate() ? $itemVersion->getVersionDate()->format('F j, Y') : '', $this->generatePath($history, $itemVersion->getVersion()));
-                        return $b;
-                    })->toArray());
 
                 // Output $accepted if it has not yet been output.
                 if ($accepted) {
                     $acceptedVersion['term'] = 'Accepted';
                     $acceptedVersion['descriptors'][] = $accepted->format();
                     $publicationHistory[] = $acceptedVersion;
+                }
+
+                if ($preprints) {
+                    foreach (array_reverse($preprints) as $preprint) {
+                        $descriptorsLink = ($preprint->getUri() === $_SERVER['REQUEST_URI'] ? '(This version)' : '<a href="' . $preprint->getUri() . '">Go to version</a>');
+                        $publicationHistory[] = [
+                            'term' => 'Preprint posted',
+                            'descriptors' => [
+                                sprintf('%s %s',
+                                    $preprint->getPublishedDate() ? $preprint->getPublishedDate()->format('F j, Y') : '',
+                                    $descriptorsLink)
+                            ]
+                        ];
+                    }
                 }
 
                 // Output $received if it has not yet been output.
