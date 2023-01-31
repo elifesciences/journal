@@ -467,6 +467,11 @@ submit:
     defaults:
         _controller: AppBundle:Submit:redirect
 
+submit-your-research:
+    path: /submit-your-research
+    defaults:
+        _controller: AppBundle:Submit:submit
+
 terms:
     path: /terms
     defaults:
