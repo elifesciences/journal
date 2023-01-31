@@ -1252,7 +1252,7 @@ final class ArticlesController extends Controller
                     $receivedVersion['descriptors'][] = $received->format();
                     $publicationHistory[] = $receivedVersion;
                 }
-dump($publicationHistory);
+
                 return $this->convertTo($parts['item'],
                     ContentAside::class, [
                         'metrics' => $parts['metrics'],
