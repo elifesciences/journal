@@ -1192,26 +1192,36 @@ final class ArticlesController extends Controller
                     foreach ($preprints as $preprint) {
                         // Attempt to output $received if date is before the preprint date.
                         if ($received && 1 === $preprint->getPublishedDate()->diff(new DateTime($received->toString()))->invert) {
-                            $publicationHistory['Received'] = $received->format();
-
+                            $publicationHistory[] = [
+                                'term' => 'Received',
+                                'descriptors' => [$received->format()]
+                            ];
                             // Set $received to null as it has now been included in the publication history.
                             $received = null;
                         }
                         // Attempt to output $accepted if date is before the preprint date.
                         if ($accepted && 1 === $preprint->getPublishedDate()->diff(new DateTime($accepted->toString()))->invert) {
-                            $publicationHistory['Accepted'] = $accepted->format();
+                            $publicationHistory[] = [
+                                'term' => 'Accepted',
+                                'descriptors' => [$accepted->format()]
+                            ];
 
                             // Set $accepted to null as it has now been included in the publication history.
                             $accepted = null;
                         }
-
-                        $publicationHistory['Preprint posted'] = sprintf('%s <a href="%s">View preprint</a>',
-                            $preprint->getPublishedDate() ? $preprint->getPublishedDate()->format('F j, Y') : '',
-                            $preprint->getUri());
+                        $publicationHistory[] = [
+                            'term' => 'Preprint posted',
+                            'descriptors' => [
+                                sprintf('%s <a href="%s">View preprint</a>',
+                                $preprint->getPublishedDate() ? $preprint->getPublishedDate()->format('F j, Y') : '',
+                                $preprint->getUri())
+                            ]
+                        ];
                     }
                 }
+                dump($publicationHistory);
 
-                $publicationHistory = $history->getVersions()
+                $publicationHistory = array_merge($publicationHistory, $history->getVersions()
                     ->filter(Callback::isInstanceOf(ArticleVoR::class))
                     ->map(function(ArticleVoR $itemVersion, int $number) use ($history) {
                         $b['term'] = 'Version of record ' . (0 === $number ? 'published' : 'updated');
@@ -1219,7 +1229,7 @@ final class ArticlesController extends Controller
                             $itemVersion->getVersionDate() ? $itemVersion->getVersionDate()->format('F j, Y') : '',
                             $this->generatePath($history, $itemVersion->getVersion()));
                         return $b;
-                    })->toArray();
+                    })->toArray());
 
                 $publicationHistory = array_merge($publicationHistory, $history->getVersions()
                     ->filter(Callback::isInstanceOf(ArticlePoA::class))
@@ -1242,7 +1252,7 @@ final class ArticlesController extends Controller
                     $receivedVersion['descriptors'][] = $received->format();
                     $publicationHistory[] = $receivedVersion;
                 }
-
+dump($publicationHistory);
                 return $this->convertTo($parts['item'],
                     ContentAside::class, [
                         'metrics' => $parts['metrics'],
