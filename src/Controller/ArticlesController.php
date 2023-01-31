@@ -1223,31 +1223,36 @@ final class ArticlesController extends Controller
                     }
                 }
 
-                $versions = $history->getVersions()
+                $publicationHistory = $history->getVersions()
                     ->filter(Callback::isInstanceOf(ArticleVoR::class))
-                    ->map(function(ArticleVoR  $itemVersion, int $number) use ($history) {
-                        $index = 'Version of record '.(0 === $number ? 'published' : 'updated');
-                        $b[$index] = sprintf('%s <a href="%s">Go to version</a>',
+                    ->map(function(ArticleVoR $itemVersion, int $number) use ($history) {
+                        $b['term'] = 'Version of record ' . (0 === $number ? 'published' : 'updated');
+                        $b['descriptors'][] = sprintf('%s <a href="%s">Go to version</a>',
                             $itemVersion->getVersionDate() ? $itemVersion->getVersionDate()->format('F j, Y') : '',
-                            $this->generatePath($history, $itemVersion->getVersion()), $itemVersion->getVersionDate() ? $itemVersion->getVersionDate()->format('F j, Y') : '', $itemVersion->getVersion());
+                            $this->generatePath($history, $itemVersion->getVersion()));
                         return $b;
                     })->toArray();
 
+                $publicationHistory = array_merge($publicationHistory, $history->getVersions()
+                    ->filter(Callback::isInstanceOf(ArticlePoA::class))
+                    ->map(function (ArticlePoA $itemVersion, int $number) use ($history) {
+                        $b['term'] = 'Accepted Manuscript ' . (0 === $number ? 'published' : 'updated');
+                        $b['descriptors'][] = sprintf('%s <a href="%s">Go to version</a>', $itemVersion->getVersionDate() ? $itemVersion->getVersionDate()->format('F j, Y') : '', $this->generatePath($history, $itemVersion->getVersion()));
+                        return $b;
+                    })->toArray());
 
-                foreach ($versions as $version) {
-                    foreach ($version as $k => $v) {
-                        $publicationHistory[$k] = $v;
-                    }
+                // Output $accepted if it has not yet been output.
+                if ($accepted) {
+                    $acceptedVersion['term'] = 'Accepted';
+                    $acceptedVersion['descriptors'][] = $accepted->format();
+                    $publicationHistory[] = $acceptedVersion;
                 }
 
                 // Output $received if it has not yet been output.
                 if ($received) {
-                    $publicationHistory['Received'] = $received->format();
-                }
-
-                // Output $accepted if it has not yet been output.
-                if ($accepted) {
-                    $publicationHistory['Accepted'] = $accepted->format();
+                    $receivedVersion['term'] = 'Received';
+                    $receivedVersion['descriptors'][] = $received->format();
+                    $publicationHistory[] = $receivedVersion;
                 }
 
                 return $this->convertTo($parts['item'],
