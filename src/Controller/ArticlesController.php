@@ -1219,7 +1219,6 @@ final class ArticlesController extends Controller
                         ];
                     }
                 }
-                dump($publicationHistory);
 
                 $publicationHistory = array_merge($publicationHistory, $history->getVersions()
                     ->filter(Callback::isInstanceOf(ArticleVoR::class))
