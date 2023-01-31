@@ -4,9 +4,6 @@ namespace test\eLife\Journal\ViewModel\Factory;
 
 use eLife\Journal\ViewModel\Factory\SiteHeaderFactory;
 use eLife\Patterns\ViewModel\SiteHeader;
-use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
-use Symfony\Component\Security\Core\Authentication\Token\RememberMeToken;
-use Symfony\Component\Security\Core\User\User;
 use test\eLife\Journal\KernelTestCase;
 
 final class SiteHeaderFactoryTest extends KernelTestCase
@@ -37,50 +34,13 @@ final class SiteHeaderFactoryTest extends KernelTestCase
     /**
      * @test
      */
-    public function it_links_directly_to_the_submit_site_when_the_feature_flag_is_disabled()
+    public function it_links_directly_to_the_submit_site()
     {
         $siteHeader = $this->siteHeaderFactory->createSiteHeader();
 
         $this->assertSame(
-            'http://submit.elifesciences.org/path',
+            '/submit-your-research',
             $siteHeader['secondaryLinks']['linkedItems'][2]['button']['path']
         );
-    }
-
-    /**
-     * @test
-     * @backupGlobals enabled
-     */
-    public function it_links_directly_to_the_submit_site_when_the_feature_flag_is_enabled_and_you_are_not_logged_in()
-    {
-        $_ENV['FEATURE_XPUB'] = true;
-
-        // Required to enable the authorization checker
-        $tokenStorage = static::$kernel->getContainer()->get('security.token_storage');
-        $tokenStorage->setToken(new AnonymousToken('secret', 'anon.'));
-
-        $siteHeader = $this->siteHeaderFactory->createSiteHeader();
-
-        $this->assertSame(
-            'http://submit.elifesciences.org/path',
-            $siteHeader['secondaryLinks']['linkedItems'][2]['button']['path']
-        );
-    }
-
-    /**
-     * @test
-     * @backupGlobals enabled
-     */
-    public function it_links_to_the_submit_route_when_the_feature_flag_is_enabled_and_you_are_logged_in()
-    {
-        $_ENV['FEATURE_XPUB'] = true;
-
-        // Required to enable the authorization checker
-        $tokenStorage = static::$kernel->getContainer()->get('security.token_storage');
-        $tokenStorage->setToken(new RememberMeToken(new User('username', 'password'), 'key', 'secret'));
-
-        $siteHeader = $this->siteHeaderFactory->createSiteHeader();
-
-        $this->assertSame('/submit', $siteHeader['secondaryLinks']['linkedItems'][2]['button']['path']);
     }
 }

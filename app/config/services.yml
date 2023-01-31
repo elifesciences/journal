@@ -473,8 +473,6 @@ services:
         arguments:
           - '@router'
           - '@request_stack'
-          - '@security.authorization_checker'
-          - '%submit_url%'
 
     elife.journal.view_model.converter:
         class: eLife\Journal\ViewModel\Converter\ViewModelConverterRegistry
