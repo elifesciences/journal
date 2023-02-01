@@ -1171,16 +1171,16 @@ final class ArticlesController extends Controller
             'relatedItem' => $relatedItem,
         ])
             ->then(function (array $parts) {
+                /** @var ArticleVersion $item */
+                $item = $parts['item'];
 
-                if ($parts['isMagazine']) {
+                if ($parts['isMagazine'] || 'feature' === $item->getType()) {
                     return false;
                 }
 
                 /** @var ArticleHistory $history */
                 $history = $parts['history'];
 
-                /** @var ArticleVersion $item */
-                $item = $parts['item'];
                 $received = $history->getReceived();
                 $accepted = $history->getAccepted();
                 $publicationHistory = [];
