@@ -1366,7 +1366,11 @@
                 "MIT"
             ],
             "description": "eLife Sciences API SDK",
-            "time": "2023-02-03T13:48:32+00:00"
+<<<<<<<<< Temporary merge branch 1
+            "time": "2023-01-29T10:47:35+00:00"
+=========
+            "time": "2022-12-01T15:20:39+00:00"
+>>>>>>>>> Temporary merge branch 2
         },
         {
             "name": "elife/civi-contacts",
