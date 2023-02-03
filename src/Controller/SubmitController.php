@@ -2,6 +2,7 @@
 
 namespace eLife\Journal\Controller;
 
+use eLife\Patterns\ViewModel\ContentHeader;
 use GuzzleHttp\Psr7\Uri;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -68,5 +69,17 @@ final class SubmitController extends Controller
         }
 
         return new RedirectResponse($redirectUrl);
+    }
+
+    public function submitAction(Request  $request) : Response
+    {
+        $arguments = $this->defaultPageArguments($request);
+        $arguments['title'] = 'Submit your research';
+        $arguments['contentHeader'] = new ContentHeader(
+            'Submit your research',
+            null,
+            'Submit your research'
+        );
+        return new Response($this->get('templating')->render('::submit-your-research.html.twig', $arguments));
     }
 }
