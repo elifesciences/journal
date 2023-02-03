@@ -1321,11 +1321,12 @@
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-sdk-php.git",
                 "reference": "6c1e2cc63fdd10562bb14eca1862ea43b7d77264"
+                "reference": "e84569cbddac0fa1297ebd183a744e285d91b800"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/6c1e2cc63fdd10562bb14eca1862ea43b7d77264",
-                "reference": "6c1e2cc63fdd10562bb14eca1862ea43b7d77264",
+                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/e84569cbddac0fa1297ebd183a744e285d91b800",
+                "reference": "e84569cbddac0fa1297ebd183a744e285d91b800",
                 "shasum": ""
             },
             "require": {
