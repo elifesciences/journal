@@ -10,10 +10,13 @@ use eLife\ApiSdk\Model\ArticleVersion;
 use eLife\ApiSdk\Model\BlogArticle;
 use eLife\ApiSdk\Model\Collection;
 use eLife\ApiSdk\Model\Cover;
+use eLife\ApiSdk\Model\Event;
 use eLife\ApiSdk\Model\Interview;
 use eLife\ApiSdk\Model\LabsPost;
 use eLife\ApiSdk\Model\Model;
 use eLife\ApiSdk\Model\PodcastEpisode;
+use eLife\ApiSdk\Model\PressPackage;
+use eLife\ApiSdk\Model\ReviewedPreprint;
 use eLife\Journal\Helper\Callback;
 use eLife\Journal\Helper\CreatesIiifUri;
 use eLife\Journal\ViewModel\EmptyListing;
@@ -120,12 +123,18 @@ final class ArchiveController extends Controller
                                 return new Link($cover->getTitle(), $this->get('router')->generate('inside-elife-article', [$item]));
                             } elseif ($item instanceof Collection) {
                                 return new Link($cover->getTitle(), $this->get('router')->generate('collection', [$item]));
+                            } elseif ($item instanceof Event) {
+                                return new Link($cover->getTitle(), $this->get('router')->generate('event', [$item]));
                             } elseif ($item instanceof Interview) {
                                 return new Link($cover->getTitle(), $this->get('router')->generate('interview', [$item]));
                             } elseif ($item instanceof LabsPost) {
                                 return new Link($cover->getTitle(), $this->get('router')->generate('labs-post', [$item]));
                             } elseif ($item instanceof PodcastEpisode) {
                                 return new Link($cover->getTitle(), $this->get('router')->generate('podcast-episode', [$item]));
+                            } elseif ($item instanceof PressPackage) {
+                                return new Link($cover->getTitle(), $this->get('router')->generate('press-pack', [$item]));
+                            } elseif ($item instanceof ReviewedPreprint) {
+                                return new Link($cover->getTitle(), $this->get('router')->generate('reviewed-preprint', [$item]));
                             }
 
                             throw new UnexpectedValueException('Unexpected type '.get_class($item));
