@@ -2,7 +2,9 @@
 
 namespace eLife\Journal\ViewModel\Converter;
 
+use eLife\ApiSdk\Model\ArticlePoA;
 use eLife\ApiSdk\Model\ArticleVersion;
+use eLife\ApiSdk\Model\ArticleVoR;
 use eLife\Journal\Helper\CanConvertContent;
 use eLife\Journal\Helper\DownloadLinkUriGenerator;
 use eLife\Patterns\ViewModel;
@@ -30,11 +32,9 @@ final class ContentAsideConverter implements ViewModelConverter
      */
     public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
-
+        $status = $this->getStatus($object);
         return new ViewModel\ContentAside(
-            new ViewModel\ContentAsideStatus('Version of Record',
-                'Accepted for publication after peer review and revision.',
-            new ViewModel\Link('About eLife\'s process', $this->urlGenerator->generate('inside-elife-article', ['id' => '54d63486']))),
+            $status,
             new ViewModel\ButtonCollection([
                 Button::action('Download', '#downloads', true, 'button-action-download', Button::ACTION_VARIANT_DOWNLOAD),
                 Button::action('Cite', '#citations', true, 'button-action-citation', Button::ACTION_VARIANT_CITATION),
@@ -42,8 +42,8 @@ final class ContentAsideConverter implements ViewModelConverter
                 Button::action('Comment<span aria-hidden=\'true\'><span data-visible-annotation-count></span> </span><span class=\'visuallyhidden\'>Open annotations (there are currently <span data-hypothesis-annotation-count>0</span> annotations on this page). </span>', '#comment', true, null, Button::ACTION_VARIANT_COMMENT),
             ], true),
             !empty($context['metrics']) ? ViewModel\ContextualData::withMetrics($context['metrics']) : null,
-            !empty($context['timeline']) ? ViewModel\DefinitionList::timeline($context['timeline']) : null,
-            $context['relatedItem'] ?? null
+            (!empty($context['timeline']) && $status !== null) ? ViewModel\DefinitionList::timeline($context['timeline']) : null,
+            ($context['relatedItem'] && $status !== null) ? $context['relatedItem'] : null
         );
     }
 
@@ -55,5 +55,43 @@ final class ContentAsideConverter implements ViewModelConverter
     protected function getViewModelConverter() : ViewModelConverter
     {
         return $this->viewModelConverter;
+    }
+
+    private function getStatus(ArticleVersion $article)
+    {
+        if (in_array($article->getType(), [
+            'correction', 'retraction', 'registered-report', 'replication-study', 'research-communication'
+        ])) {
+             return null;
+        }
+        if ($article instanceof  ArticleVoR && in_array($article->getType(), [
+            'research-article',
+            'short-report',
+            'tools-resources',
+            'research-advance',
+        ])) {
+            $title = 'Version of Record';
+            $text = 'Accepted for publication after peer review and revision.';
+        }
+
+        if ($article instanceof  ArticlePoA && in_array($article->getType(), [
+                'research-article',
+                'short-report',
+                'tools-resources',
+                'research-advance',
+            ])) {
+            $title = 'Author Accepted Manuscript';
+            $text = 'PDF only version. The full online version will follow soon.';
+        }
+
+        // todo: for VoR PRC, add logic to api-sdk
+        if ($article instanceof ArticleVoR && $article->isReviewedPreprint()) {
+            $title = 'Version of Record';
+            $text = 'The authors declare this version of their article to be the Version of Record';
+        }
+        return new ViewModel\ContentAsideStatus(
+            $title,
+            $text,
+            new ViewModel\Link('About eLife\'s process', $this->urlGenerator->generate('inside-elife-article', ['id' => '54d63486'])));
     }
 }
