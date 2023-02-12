@@ -1240,12 +1240,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-sdk-php.git",
-                "reference": "94116620f357bd414c514a42ddca4c4bf6483afc"
+                "reference": "cc9628cccb2753136dde51507ce5ab6f92f736e2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/94116620f357bd414c514a42ddca4c4bf6483afc",
-                "reference": "94116620f357bd414c514a42ddca4c4bf6483afc",
+                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/cc9628cccb2753136dde51507ce5ab6f92f736e2",
+                "reference": "cc9628cccb2753136dde51507ce5ab6f92f736e2",
                 "shasum": ""
             },
             "require": {
@@ -1286,7 +1286,7 @@
                 "MIT"
             ],
             "description": "eLife Sciences API SDK",
-            "time": "2023-01-29T02:42:59+00:00"
+            "time": "2023-02-06T11:46:51+00:00"
         },
         {
             "name": "elife/civi-contacts",
