@@ -64,15 +64,9 @@ final class ContentAsideConverter implements ViewModelConverter
         ])) {
              return null;
         }
-        if ($article instanceof  ArticleVoR && in_array($article->getType(), [
-            'research-article',
-            'short-report',
-            'tools-resources',
-            'research-advance',
-        ])) {
-            $title = 'Version of Record';
-            $text = 'Accepted for publication after peer review and revision.';
-        }
+
+        $title = 'Version of Record';
+        $text = 'Accepted for publication after peer review and revision.';
 
         if ($article instanceof  ArticlePoA && in_array($article->getType(), [
                 'research-article',
@@ -84,7 +78,6 @@ final class ContentAsideConverter implements ViewModelConverter
             $text = 'PDF only version. The full online version will follow soon.';
         }
 
-        // todo: for VoR PRC, add logic to api-sdk
         if ($article instanceof ArticleVoR && $article->isReviewedPreprint()) {
             $title = 'Version of Record';
             $text = 'The authors declare this version of their article to be the Version of Record';
