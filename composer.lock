@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8aadcaf4cf4d6ecc0d065443ada9bdac",
+    "content-hash": "9abb1cc846f645ff41733e846cb3ba76",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -1236,16 +1236,16 @@
         },
         {
             "name": "elife/api-sdk",
-            "version": "dev-vor-prc-check",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-sdk-php.git",
-                "reference": "3babdbafb917ef0bde0f09eb54caa31108a6e4e7"
+                "reference": "ec3f98179a832fdc4a219c952f5f496cde9b9eb7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/3babdbafb917ef0bde0f09eb54caa31108a6e4e7",
-                "reference": "3babdbafb917ef0bde0f09eb54caa31108a6e4e7",
+                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/ec3f98179a832fdc4a219c952f5f496cde9b9eb7",
+                "reference": "ec3f98179a832fdc4a219c952f5f496cde9b9eb7",
                 "shasum": ""
             },
             "require": {
@@ -1286,7 +1286,7 @@
                 "MIT"
             ],
             "description": "eLife Sciences API SDK",
-            "time": "2023-02-10T11:36:31+00:00"
+            "time": "2023-02-16T17:44:22+00:00"
         },
         {
             "name": "elife/civi-contacts",
@@ -1329,16 +1329,16 @@
         },
         {
             "name": "elife/patterns",
-            "version": "dev-content-aside",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/patterns-php.git",
-                "reference": "a5ce43eea5e85258718e51c013fc89f63d4d6c87"
+                "reference": "1b210db707702b4506c9e8691db4068610e6546c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/a5ce43eea5e85258718e51c013fc89f63d4d6c87",
-                "reference": "a5ce43eea5e85258718e51c013fc89f63d4d6c87",
+                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/1b210db707702b4506c9e8691db4068610e6546c",
+                "reference": "1b210db707702b4506c9e8691db4068610e6546c",
                 "shasum": ""
             },
             "require": {
@@ -1375,7 +1375,7 @@
                 "MIT"
             ],
             "description": "eLife patterns",
-            "time": "2023-02-10T11:09:46+00:00"
+            "time": "2023-02-16T17:17:38+00:00"
         },
         {
             "name": "fabpot/goutte",
