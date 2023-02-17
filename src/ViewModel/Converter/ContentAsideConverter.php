@@ -6,7 +6,6 @@ use eLife\ApiSdk\Model\ArticlePoA;
 use eLife\ApiSdk\Model\ArticleVersion;
 use eLife\ApiSdk\Model\ArticleVoR;
 use eLife\Journal\Helper\CanConvertContent;
-use eLife\Journal\Helper\DownloadLinkUriGenerator;
 use eLife\Patterns\ViewModel;
 use eLife\Patterns\ViewModel\Button;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -18,13 +17,11 @@ final class ContentAsideConverter implements ViewModelConverter
 
     private $viewModelConverter;
     private $urlGenerator;
-    private $downloadLinksUrlGenerator;
 
-    public function __construct(ViewModelConverter $viewModelConverter, UrlGeneratorInterface $urlGenerator, DownloadLinkUriGenerator $downloadLinkUriGenerator)
+    public function __construct(ViewModelConverter $viewModelConverter, UrlGeneratorInterface $urlGenerator)
     {
         $this->viewModelConverter = $viewModelConverter;
         $this->urlGenerator = $urlGenerator;
-        $this->downloadLinksUrlGenerator = $downloadLinkUriGenerator;
     }
 
     /**
@@ -43,7 +40,7 @@ final class ContentAsideConverter implements ViewModelConverter
             ], true),
             !empty($context['metrics']) ? ViewModel\ContextualData::withMetrics($context['metrics']) : null,
             (!empty($context['timeline']) && $status !== null) ? ViewModel\DefinitionList::timeline($context['timeline']) : null,
-            ($context['relatedItem'] && $status !== null) ? $context['relatedItem'] : null
+            $context['relatedItem'] ?? null
         );
     }
 
@@ -57,34 +54,38 @@ final class ContentAsideConverter implements ViewModelConverter
         return $this->viewModelConverter;
     }
 
-    private function getStatus(ArticleVersion $article)
+    private function getStatus(ArticleVersion $article) : ?ViewModel\ContentAsideStatus
     {
         if (in_array($article->getType(), [
-            'correction', 'retraction', 'registered-report', 'replication-study', 'research-communication'
+            'correction',
+            'retraction',
+            'registered-report',
+            'replication-study',
+            'research-communication',
         ])) {
              return null;
         }
 
-        $title = 'Version of Record';
-        $text = 'Accepted for publication after peer review and revision.';
+        $title = ($article instanceof ArticleVoR) ? 'Version of Record' : 'Author Accepted Manuscript';
 
-        if ($article instanceof  ArticlePoA && in_array($article->getType(), [
-                'research-article',
-                'short-report',
-                'tools-resources',
-                'research-advance',
-            ])) {
-            $title = 'Author Accepted Manuscript';
-            $text = 'PDF only version. The full online version will follow soon.';
+        switch (true) {
+            case $article instanceof ArticlePoA:
+                $text = 'PDF only version. The full online version will follow soon.';
+                break;
+            case $article instanceof ArticleVoR && $article->isReviewedPreprint():
+                $text = 'The authors declare this version of their article to be the Version of Record';
+                break;
+            default:
+                $text = 'Accepted for publication after peer review and revision.';
         }
 
-        if ($article instanceof ArticleVoR && $article->isReviewedPreprint()) {
-            $title = 'Version of Record';
-            $text = 'The authors declare this version of their article to be the Version of Record';
-        }
         return new ViewModel\ContentAsideStatus(
             $title,
             $text,
-            new ViewModel\Link('About eLife\'s process', $this->urlGenerator->generate('inside-elife-article', ['id' => '54d63486'])));
+            new ViewModel\Link(
+                'About eLife\'s process',
+                $this->urlGenerator->generate('inside-elife-article', ['id' => '54d63486'])
+            )
+        );
     }
 }
