@@ -46,7 +46,9 @@ final class ContentAsideConverter implements ViewModelConverter
 
     public function supports($object, string $viewModel = null, array $context = []) : bool
     {
-        return $object instanceof ArticleVersion && ViewModel\ContentAside::class === $viewModel;
+        return $object instanceof ArticleVersion &&
+            !in_array($object->getType(), ['insight', 'editorial', 'feature']) &&
+            ViewModel\ContentAside::class === $viewModel;
     }
 
     protected function getViewModelConverter() : ViewModelConverter
