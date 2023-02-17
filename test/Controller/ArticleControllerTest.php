@@ -4120,7 +4120,7 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertSame('Comment Open annotations (there are currently 0 annotations on this page).',
             $this->crawlerText($crawler->filter('.content-aside .button-collection .button-collection__item')->eq(3)));
         $this->assertCount(2, $crawler->filter('.content-aside .definition-list--timeline')->children());
-        $this->assertSame('Version of record published', $crawler->filter('.content-aside .definition-list--timeline')->children()->eq(0)->text());
+        $this->assertSame('Version of Record published', $crawler->filter('.content-aside .definition-list--timeline')->children()->eq(0)->text());
         $this->assertSame('January 1, 2010 (This version)', $crawler->filter('.content-aside .definition-list--timeline')->children()->eq(1)->text());
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
