@@ -1,5 +1,5 @@
 {# Only the first content wrapper should use css .wrapper--content. #}
-<div class="wrapper{% if not isSubsequent ?? false %} wrapper--content{% endif %}{% if customWrapperClass ?? false %} {{ customWrapperClass|raw }}{% endif %}" id="content">
+<div{% if sectionAnchorPopup ?? false %} data-behaviour="DelegateBehaviour" data-delegate-behaviour="Popup" data-selector=".article-section:not(#abstract) a"{% endif %} class="wrapper{% if not isSubsequent ?? false %} wrapper--content{% endif %}{% if customWrapperClass ?? false %} {{ customWrapperClass|raw }}{% endif %}" id="content">
 
     {% set navigation = (block('navigation') ?? '')|trim %}
     {% set main = block('main') %}

@@ -36,9 +36,9 @@ final class ContentAsideConverter implements ViewModelConverter
         return new ViewModel\ContentAside(
             $status,
             new ViewModel\ButtonCollection([
-                Button::action('Download', '#downloads', true, 'button-action-download', Button::ACTION_VARIANT_DOWNLOAD),
-                Button::action('Cite', '#citations', true, 'button-action-citation', Button::ACTION_VARIANT_CITATION),
-                Button::action('Share', '#share', true, 'button-action-share', Button::ACTION_VARIANT_SHARE),
+                Button::action('Download', '#downloads', true, null, Button::ACTION_VARIANT_DOWNLOAD),
+                Button::action('Cite', '#citations', true, 'modalContentCitations', Button::ACTION_VARIANT_CITATION),
+                Button::action('Share', '#share', true, 'modalContentShare', Button::ACTION_VARIANT_SHARE),
                 Button::action('Comment<span aria-hidden=\'true\'><span data-visible-annotation-count></span> </span><span class=\'visuallyhidden\'>Open annotations (there are currently <span data-hypothesis-annotation-count>0</span> annotations on this page). </span>', '#comment', true, null, Button::ACTION_VARIANT_COMMENT),
             ], true),
             !empty($context['metrics']) ? ViewModel\ContextualData::withMetrics($context['metrics']) : null,

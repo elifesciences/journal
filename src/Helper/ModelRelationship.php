@@ -7,7 +7,6 @@ final class ModelRelationship
     private static $defaultRelated = 'Related to';
     private static $defaultUnrelated = 'Of interest';
     private static $fromRelationship = [
-        'aside' => 'Related digest',
         'registered-report' => [
             'to' => [
                 'external-article',

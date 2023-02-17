@@ -4,7 +4,7 @@
 
 {% block article_body %}
 
-    {% embed 'grid/content-new.html.twig' %}
+    {% embed 'grid/content-new.html.twig' with {sectionAnchorPopup: true} %}
 
         {% block navigation %}
 
@@ -58,10 +58,9 @@
 
     {% endembed %}
 
-    {% if not contentAside  %}
-        {% if listing is defined and listing%}
-            {{ render_pattern(listing) }}
-        {% endif %}
+    {% if not contentAside and listing %}
+
+        {{ render_pattern(listing) }}
 
     {% endif %}
 

@@ -337,20 +337,20 @@
         {% include 'calls-to-action.html.twig' %}
 
         {% if not contentAside %}
-        <div data-behaviour="DelegateBehaviour" data-delegate-behaviour="Popup" data-selector=".article-section:not(#abstract) a">
+            <div>
         {% endif %}
-    
+
             {% block article_body %}{% endblock %}
 
         {% if not contentAside %}
             </div>
         {% endif %}
 
-        {% if contentAside %}
-            </div>
-        {% endif %}
+    {% if contentAside %}
+        </div>
+    {% endif %}
 
-    {% if contentAside and (listing is defined and listing) %}
+    {% if contentAside and listing is defined and listing %}
 
         {{ render_pattern(listing) }}
 

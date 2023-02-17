@@ -264,6 +264,8 @@ final class ArticlesController extends Controller
                 return $context;
             });
 
+        $arguments = $this->contentAsideArguments($arguments);
+
         $arguments['body'] = all(['item' => $arguments['item'], 'isMagazine' => $arguments['isMagazine'], 'history' => $arguments['history'], 'citations' => $arguments['citations'], 'downloads' => $arguments['downloads'], 'pageViews' => $arguments['pageViews'], 'data' => $arguments['hasData'], 'context' => $context])
             ->then(function (array $parts) {
                 /** @var ArticleVersion $item */
@@ -650,8 +652,6 @@ final class ArticlesController extends Controller
 
         $arguments['viewSelector'] = $this->createViewSelector($arguments['item'], $arguments['isMagazine'], $arguments['hasFigures'], false, $arguments['history'], $arguments['body'], $arguments['eraArticle']);
 
-        $arguments['contentAside'] = $this->createContentAside($arguments['item'], $arguments['isMagazine'], $arguments['contextualDataMetrics'], $arguments['history'], $arguments['relatedItem']);
-
         $arguments['body'] = all(['item' => $arguments['item'], 'body' => $arguments['body'], 'downloadLinks' => $arguments['downloadLinks']])
             ->then(function (array $parts) {
                 $item = $parts['item'];
@@ -799,7 +799,7 @@ final class ArticlesController extends Controller
 
         $arguments['viewSelector'] = $this->createViewSelector($arguments['item'], $arguments['isMagazine'], promise_for(true), true, $arguments['history'], $arguments['body'], $arguments['eraArticle']);
 
-        $arguments['contentAside'] = $this->createContentAside($arguments['item'], $arguments['isMagazine'], $arguments['contextualDataMetrics'], $arguments['history'], null);
+        $arguments = $this->contentAsideArguments($arguments);
 
         $arguments['body'] = all(['body' => $arguments['body'], 'downloadLinks' => $arguments['downloadLinks']])
             ->then(function (array $parts) {
@@ -1161,14 +1161,14 @@ final class ArticlesController extends Controller
             });
     }
 
-    private function createContentAside(PromiseInterface $item, PromiseInterface $isMagazine, PromiseInterface $contextualDataMetrics, PromiseInterface $history, $relatedItem): PromiseInterface
+    private function contentAsideArguments(array $arguments) : array
     {
-        return all([
-            'item' => $item,
-            'isMagazine' => $isMagazine,
-            'metrics' => $contextualDataMetrics,
-            'history' => $history,
-            'relatedItem' => $relatedItem,
+        $arguments['contentAside'] = all([
+            'item' => $arguments['item'],
+            'isMagazine' => $arguments['isMagazine'],
+            'metrics' => $arguments['contextualDataMetrics'],
+            'history' => $arguments['history'],
+            'relatedItem' => $arguments['relatedItem'] ?? promise_for(null),
         ])
             ->then(function (array $parts) {
                 /** @var ArticleVersion $item */
@@ -1185,72 +1185,101 @@ final class ArticlesController extends Controller
                 $accepted = $history->getAccepted();
                 $publicationHistory = [];
 
-                $publicationHistory = array_merge($publicationHistory, array_reverse($history->getVersions()
+                $articleVersions = $history->getVersions()
+                    ->filter(Callback::isInstanceOf(ArticleVersion::class))
+                    ->sort(function (ArticleVersion $a, ArticleVersion $b) {
+                        return $a->getVersion() <=> $b->getVersion();
+                    });
+
+                $prepareDefinition = function (ArticleVersion $articleVersion, bool $first) use ($history, $item) {
+                    return [
+                        'term' => sprintf(
+                            '%s %s',
+                            $articleVersion instanceof ArticleVoR ? 'Version of Record' : 'Accepted Manuscript',
+                            $first ? 'published' : 'updated'
+                        ),
+                        'descriptors' => [
+                            sprintf(
+                                '%s %s',
+                                $articleVersion->getVersionDate() ?
+                                    $articleVersion->getVersionDate()->format('F j, Y') :
+                                    '',
+                                $articleVersion->getVersion() === $item->getVersion() ?
+                                    '(This version)' :
+                                    sprintf(
+                                        '<a href="%s">(Go to version)</a>',
+                                        $this->generatePath($history, $articleVersion->getVersion())
+                                    )
+                            ),
+                        ],
+                    ];
+                };
+
+                $publicationHistory = array_merge($publicationHistory, $articleVersions
                     ->filter(Callback::isInstanceOf(ArticleVoR::class))
-                    ->map(function(ArticleVoR $itemVersion, int $number) use ($history, $item) {
-                        $b['term'] = 'Version of record ' . (0 === $number ? 'published' : 'updated');
-                        $versionLink = $this->generatePath($history, $itemVersion->getVersion());
-                        $descriptorsLink = $itemVersion->getVersionDate() == $item->getVersionDate() ? '(This version)' : '<a href="' . $versionLink . '">(Go to version)</a>';
-                        $b['descriptors'][] = sprintf('%s %s',
-                            $itemVersion->getVersionDate() ? $itemVersion->getVersionDate()->format('F j, Y') : '',
-                            $descriptorsLink);
-                        return $b;
-                    })->toArray()));
+                    ->map(function(ArticleVoR $itemVersion, int $number) use ($prepareDefinition) {
+                        return $prepareDefinition($itemVersion, 0 === $number);
+                    })->reverse()->toArray());
 
-                $publicationHistory = array_merge($publicationHistory, array_reverse($history->getVersions()
+                $publicationHistory = array_merge($publicationHistory, $articleVersions
                     ->filter(Callback::isInstanceOf(ArticlePoA::class))
-                    ->map(function (ArticlePoA $itemVersion, int $number) use ($history, $item) {
-                        $b['term'] = 'Accepted Manuscript ' . (0 === $number ? 'published' : 'updated');
-                        $versionLink = $this->generatePath($history, $itemVersion->getVersion());
-                        $descriptorsLink = $itemVersion->getVersionDate() == $item->getVersionDate() ? '(This version)' : '<a href="' . $versionLink . '">(Go to version)</a>';
-                        $b['descriptors'][] = sprintf('%s %s',
-                            $itemVersion->getVersionDate() ? $itemVersion->getVersionDate()->format('F j, Y') : '',
-                            $descriptorsLink);
-                        return $b;
-                    })->toArray()));
-
-                /** @var ArticlePreprint[] $preprints */
-                $preprints = $history->getVersions()
-                    ->filter(Callback::isInstanceOf(ArticlePreprint::class))
-                    ->toArray();
+                    ->map(function(ArticlePoA $itemVersion, int $number) use ($prepareDefinition) {
+                        return $prepareDefinition($itemVersion, 0 === $number);
+                    })->reverse()->toArray());
 
                 // Output $accepted if it has not yet been output.
                 if ($accepted) {
-                    $acceptedVersion['term'] = 'Accepted';
-                    $acceptedVersion['descriptors'][] = $accepted->format();
-                    $publicationHistory[] = $acceptedVersion;
+                    $publicationHistory[] = [
+                        'term' => 'Accepted',
+                        [
+                            $accepted->format(),
+                        ],
+                    ];
                 }
 
-                if ($preprints) {
-                    foreach (array_reverse($preprints) as $preprint) {
-                        $descriptorsLink = ($item->getVersionDate() == $preprint->getPublishedDate() ? '(This version)' : '<a href="' . $preprint->getUri() . '">(Go to version)</a>');
-                        $publicationHistory[] = [
+                $publicationHistory = array_merge($publicationHistory, $history->getVersions()
+                    ->filter(Callback::isInstanceOf(ArticlePreprint::class))
+                    ->sort(function (ArticlePreprint $a, ArticlePreprint $b) {
+                        return $b->getPublishedDate() <=> $a->getPublishedDate();
+                    })
+                    ->map(function (ArticlePreprint $preprint) {
+                        return [
                             'term' => 'Preprint posted',
                             'descriptors' => [
-                                sprintf('%s %s',
-                                    $preprint->getPublishedDate() ? $preprint->getPublishedDate()->format('F j, Y') : '',
-                                    $descriptorsLink)
+                                sprintf(
+                                    '%s %s',
+                                    $preprint->getPublishedDate() ?
+                                        $preprint->getPublishedDate()->format('F j, Y') :
+                                        '',
+                                    sprintf(
+                                        '<a href="%s">(Go to version)</a>',
+                                        $preprint->getUri()
+                                    )
+                                )
                             ]
                         ];
-                    }
-                }
+                    })->toArray());
 
                 // Output $received if it has not yet been output.
                 if ($received) {
-                    $receivedVersion['term'] = 'Received';
-                    $receivedVersion['descriptors'][] = $received->format();
-                    $publicationHistory[] = $receivedVersion;
+                    $publicationHistory[] = [
+                        'term' => 'Received',
+                        [
+                            $received->format(),
+                        ],
+                    ];
                 }
 
                 return $this->convertTo($parts['item'],
                     ContentAside::class, [
                         'metrics' => $parts['metrics'],
-                        'isMagazine' => $parts['isMagazine'],
                         'timeline' => $publicationHistory,
                         'relatedItem' => $parts['relatedItem']
                     ]
                 );
             });
+
+        return $arguments;
     }
 
     private function findFigures(PromiseInterface $item) : PromiseSequence
