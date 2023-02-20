@@ -1181,12 +1181,11 @@ final class ArticlesController extends Controller
                 /** @var ArticleHistory $history */
                 $history = $parts['history'];
 
-                $received = $history->getReceived();
-                $accepted = $history->getAccepted();
                 $publicationHistory = [];
-                if ($received) {
+                if ($received = $history->getReceived()) {
                     $publicationHistory[] = [
-                        'index' => strtotime($received),
+                        // index added to allow us to sort.
+                        'index' => strtotime($received->toString()),
                         'term' => 'Received',
                         'descriptors' => [
                             $received->format(),
@@ -1194,9 +1193,10 @@ final class ArticlesController extends Controller
                     ];
                 }
 
-                if ($accepted) {
+                if ($accepted = $history->getAccepted()) {
                     $publicationHistory[] = [
-                        'index' => strtotime($accepted),
+                        // index added to allow us to sort.
+                        'index' => strtotime($accepted->toString()),
                         'term' => 'Accepted',
                         'descriptors' => [
                             $accepted->format(),
@@ -1212,7 +1212,8 @@ final class ArticlesController extends Controller
 
                 $prepareDefinition = function (ArticleVersion $articleVersion, bool $first) use ($history, $item) {
                     return [
-                        'index' => $articleVersion->getVersionDate()->getTimeStamp(),
+                        // index added to allow us to sort.
+                        'index' => $articleVersion->getVersionDate() ? $articleVersion->getVersionDate()->getTimeStamp() : 0,
                         'term' => sprintf(
                             '%s %s',
                             $articleVersion instanceof ArticleVoR ? 'Version of Record' : 'Accepted Manuscript',
@@ -1254,6 +1255,7 @@ final class ArticlesController extends Controller
                     })
                     ->map(function (ArticlePreprint $preprint) {
                         return [
+                            // index added to allow us to sort.
                             'index' => $preprint->getPublishedDate()->getTimeStamp(),
                             'term' => 'Preprint posted',
                             'descriptors' => [
@@ -1269,6 +1271,7 @@ final class ArticlesController extends Controller
                         ];
                     })->toArray());
 
+                // Sort by index value.
                 usort($publicationHistory, function($first, $second) {
                     return $first['index'] < $second['index'];
                 });
@@ -1276,7 +1279,11 @@ final class ArticlesController extends Controller
                 return $this->convertTo($parts['item'],
                     ContentAside::class, [
                         'metrics' => $parts['metrics'],
-                        'timeline' => $publicationHistory,
+                        'timeline' => array_map(function ($item) {
+                            // Remove index from item.
+                            unset($item['index']);
+                            return $item;
+                        }, $publicationHistory),
                         'relatedItem' => $parts['relatedItem']
                     ]
                 );

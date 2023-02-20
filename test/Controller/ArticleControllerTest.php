@@ -4041,14 +4041,14 @@ final class ArticleControllerTest extends PageTestCase
                 200,
                 ['Content-Type' => 'application/vnd.elife.article-history+json; version=2'],
                 json_encode([
-                    'received' => '2009-12-30',
-                    'accepted' => '2009-12-31',
+                    'received' => '2009-12-29',
+                    'accepted' => '2009-12-30',
                     'versions' => [
                         [
                             'status' => 'preprint',
                             'description' => 'Description of preprint',
                             'uri' => 'http://example.preprint.com',
-                            'date' => '2009-12-29T00:00:00Z',
+                            'date' => '2009-12-28T00:00:00Z',
                         ],
                         [
                             'status' => 'poa',
@@ -4116,11 +4116,11 @@ final class ArticleControllerTest extends PageTestCase
              'Accepted Manuscript published',
              'December 31, 2009 (Go to version)',
              'Accepted',
-             'December 31, 2009',
-             'Received',
              'December 30, 2009',
+             'Received',
+             'December 29, 2009',
              'Preprint posted',
-             'December 29, 2009 (Go to version)',
+             'December 28, 2009 (Go to version)',
         ] as $k => $expectedTimeline) {
             $this->assertSame(
                 $expectedTimeline,
