@@ -3986,11 +3986,11 @@ final class ArticleControllerTest extends PageTestCase
                     'status' => 'vor',
                     'stage' => 'published',
                     'id' => '00001',
-                    'version' => 1,
+                    'version' => 2,
                     'type' => 'research-article',
                     'doi' => '10.7554/eLife.00001',
                     'title' => 'Article 1 title',
-                    'published' => '2010-01-01T00:00:00Z',
+                    'published' => '2009-12-31T00:00:00Z',
                     'versionDate' => '2010-01-01T00:00:00Z',
                     'statusDate' => '2010-01-01T00:00:00Z',
                     'volume' => 1,
@@ -4008,45 +4008,6 @@ final class ArticleControllerTest extends PageTestCase
                                 'preferred' => 'Foo Bar',
                                 'index' => 'Bar, Foo',
                             ],
-                        ],
-                    ],
-                    'contentAside' => [
-                        "status" => [
-                            "title" => "Research article",
-                            "description" => "The author(s) have declared this to be the current/final version.",
-                            "link" => [
-                                "name" => "About eLife's process",
-                                "url" => "#"
-                            ]
-                        ],
-                        "actionButtons" => [
-                            "inline" => true,
-                            "buttons" => [
-                                [
-                                    "text" => "Download",
-                                    "classes" => "button--default button--action icon icon-download",
-                                    "path" => "#download",
-                                    "id" => "button-action-download"
-                                ],
-                                [
-                                    "text" => "Cite",
-                                    "classes" => "button--default button--action icon icon-citation",
-                                    "path" => "#citation",
-                                    "id" => "button-action-citation"
-                                ],
-                                [
-                                    "text" => "Share",
-                                    "classes" => "button--default button--action icon icon-share",
-                                    "path" => "#share",
-                                    "id" => "button-action-share"
-                                ],
-                                [
-                                    "text" => "Comment<span aria-hidden='true'><span data-visible-annotation-count></span> </span><span class='visuallyhidden'>Open annotations (there are currently <span data-hypothesis-annotation-count>0</span> annotations on this page). </span>",
-                                    "classes" => "button--default button--action icon icon-comment",
-                                    "path" => "#comment",
-                                    "isHypothesisTrigger" => true
-                                ]
-                            ]
                         ],
                     ],
                     'body' => [
@@ -4080,16 +4041,44 @@ final class ArticleControllerTest extends PageTestCase
                 200,
                 ['Content-Type' => 'application/vnd.elife.article-history+json; version=2'],
                 json_encode([
+                    'received' => '2009-12-30',
+                    'accepted' => '2009-12-31',
                     'versions' => [
                         [
-                            'status' => 'vor',
+                            'status' => 'preprint',
+                            'description' => 'Description of preprint',
+                            'uri' => 'http://example.preprint.com',
+                            'date' => '2009-12-29T00:00:00Z',
+                        ],
+                        [
+                            'status' => 'poa',
                             'stage' => 'published',
                             'id' => '00001',
                             'version' => 1,
                             'type' => 'research-article',
                             'doi' => '10.7554/eLife.00001',
                             'title' => 'Article 1 title',
-                            'published' => '2010-01-01T00:00:00Z',
+                            'published' => '2009-12-31T00:00:00Z',
+                            'versionDate' => '2009-12-31T00:00:00Z',
+                            'statusDate' => '2009-12-31T00:00:00Z',
+                            'volume' => 1,
+                            'elocationId' => 'e00001',
+                            'copyright' => [
+                                'license' => 'CC-BY-4.0',
+                                'holder' => 'Bar',
+                                'statement' => 'Copyright statement.',
+                            ],
+                            'authorLine' => 'Foo Bar',
+                        ],
+                        [
+                            'status' => 'vor',
+                            'stage' => 'published',
+                            'id' => '00001',
+                            'version' => 2,
+                            'type' => 'research-article',
+                            'doi' => '10.7554/eLife.00001',
+                            'title' => 'Article 1 title',
+                            'published' => '2009-12-31T00:00:00Z',
                             'versionDate' => '2010-01-01T00:00:00Z',
                             'statusDate' => '2010-01-01T00:00:00Z',
                             'volume' => 1,
@@ -4119,9 +4108,17 @@ final class ArticleControllerTest extends PageTestCase
             $this->crawlerText($crawler->filter('.content-aside .button-collection .button-collection__item')->eq(2)));
         $this->assertSame('Comment Open annotations (there are currently 0 annotations on this page).',
             $this->crawlerText($crawler->filter('.content-aside .button-collection .button-collection__item')->eq(3)));
-        $this->assertCount(2, $crawler->filter('.content-aside .definition-list--timeline')->children());
+        $this->assertCount(10, $crawler->filter('.content-aside .definition-list--timeline')->children());
         $this->assertSame('Version of Record published', $crawler->filter('.content-aside .definition-list--timeline')->children()->eq(0)->text());
         $this->assertSame('January 1, 2010 (This version)', $crawler->filter('.content-aside .definition-list--timeline')->children()->eq(1)->text());
+        $this->assertSame('Accepted Manuscript published', $crawler->filter('.content-aside .definition-list--timeline')->children()->eq(2)->text());
+        $this->assertSame('December 31, 2009 (Go to version)', $crawler->filter('.content-aside .definition-list--timeline')->children()->eq(3)->text());
+        $this->assertSame('Accepted', $crawler->filter('.content-aside .definition-list--timeline')->children()->eq(4)->text());
+        $this->assertSame('December 31, 2009', $crawler->filter('.content-aside .definition-list--timeline')->children()->eq(5)->text());
+        $this->assertSame('Preprint posted', $crawler->filter('.content-aside .definition-list--timeline')->children()->eq(6)->text());
+        $this->assertSame('December 29, 2009 (Go to version)', $crawler->filter('.content-aside .definition-list--timeline')->children()->eq(7)->text());
+        $this->assertSame('Received', $crawler->filter('.content-aside .definition-list--timeline')->children()->eq(8)->text());
+        $this->assertSame('December 30, 2009', $crawler->filter('.content-aside .definition-list--timeline')->children()->eq(9)->text());   
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
     }
