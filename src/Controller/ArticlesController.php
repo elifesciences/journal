@@ -1184,6 +1184,25 @@ final class ArticlesController extends Controller
                 $received = $history->getReceived();
                 $accepted = $history->getAccepted();
                 $publicationHistory = [];
+                if ($received) {
+                    $publicationHistory[] = [
+                        'index' => strtotime($received),
+                        'term' => 'Received',
+                        'descriptors' => [
+                            $received->format(),
+                        ],
+                    ];
+                }
+
+                if ($accepted) {
+                    $publicationHistory[] = [
+                        'index' => strtotime($accepted),
+                        'term' => 'Accepted',
+                        'descriptors' => [
+                            $accepted->format(),
+                        ],
+                    ];
+                }
 
                 $articleVersions = $history->getVersions()
                     ->filter(Callback::isInstanceOf(ArticleVersion::class))
@@ -1193,6 +1212,7 @@ final class ArticlesController extends Controller
 
                 $prepareDefinition = function (ArticleVersion $articleVersion, bool $first) use ($history, $item) {
                     return [
+                        'index' => $articleVersion->getVersionDate()->getTimeStamp(),
                         'term' => sprintf(
                             '%s %s',
                             $articleVersion instanceof ArticleVoR ? 'Version of Record' : 'Accepted Manuscript',
@@ -1227,16 +1247,6 @@ final class ArticlesController extends Controller
                         return $prepareDefinition($itemVersion, 0 === $number);
                     })->reverse()->toArray());
 
-                // Output $accepted if it has not yet been output.
-                if ($accepted) {
-                    $publicationHistory[] = [
-                        'term' => 'Accepted',
-                        'descriptors' => [
-                            $accepted->format(),
-                        ],
-                    ];
-                }
-
                 $publicationHistory = array_merge($publicationHistory, $history->getVersions()
                     ->filter(Callback::isInstanceOf(ArticlePreprint::class))
                     ->sort(function (ArticlePreprint $a, ArticlePreprint $b) {
@@ -1244,13 +1254,12 @@ final class ArticlesController extends Controller
                     })
                     ->map(function (ArticlePreprint $preprint) {
                         return [
+                            'index' => $preprint->getPublishedDate()->getTimeStamp(),
                             'term' => 'Preprint posted',
                             'descriptors' => [
                                 sprintf(
                                     '%s %s',
-                                    $preprint->getPublishedDate() ?
-                                        $preprint->getPublishedDate()->format('F j, Y') :
-                                        '',
+                                    $preprint->getPublishedDate()->format('F j, Y'),
                                     sprintf(
                                         '<a href="%s">(Go to version)</a>',
                                         $preprint->getUri()
@@ -1260,15 +1269,9 @@ final class ArticlesController extends Controller
                         ];
                     })->toArray());
 
-                // Output $received if it has not yet been output.
-                if ($received) {
-                    $publicationHistory[] = [
-                        'term' => 'Received',
-                        'descriptors' => [
-                            $received->format(),
-                        ],
-                    ];
-                }
+                usort($publicationHistory, function($first, $second) {
+                    return $first['index'] < $second['index'];
+                });
 
                 return $this->convertTo($parts['item'],
                     ContentAside::class, [
