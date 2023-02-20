@@ -1231,7 +1231,7 @@ final class ArticlesController extends Controller
                 if ($accepted) {
                     $publicationHistory[] = [
                         'term' => 'Accepted',
-                        [
+                        'descriptors' => [
                             $accepted->format(),
                         ],
                     ];
@@ -1264,7 +1264,7 @@ final class ArticlesController extends Controller
                 if ($received) {
                     $publicationHistory[] = [
                         'term' => 'Received',
-                        [
+                        'descriptors' => [
                             $received->format(),
                         ],
                     ];
