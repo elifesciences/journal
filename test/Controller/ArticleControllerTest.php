@@ -4118,7 +4118,7 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertSame('Preprint posted', $crawler->filter('.content-aside .definition-list--timeline')->children()->eq(6)->text());
         $this->assertSame('December 29, 2009 (Go to version)', $crawler->filter('.content-aside .definition-list--timeline')->children()->eq(7)->text());
         $this->assertSame('Received', $crawler->filter('.content-aside .definition-list--timeline')->children()->eq(8)->text());
-        $this->assertSame('December 30, 2009', $crawler->filter('.content-aside .definition-list--timeline')->children()->eq(9)->text());   
+        $this->assertSame('December 30, 2009', $crawler->filter('.content-aside .definition-list--timeline')->children()->eq(9)->text());
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
     }
