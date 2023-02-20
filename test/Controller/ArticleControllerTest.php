@@ -4109,16 +4109,24 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertSame('Comment Open annotations (there are currently 0 annotations on this page).',
             $this->crawlerText($crawler->filter('.content-aside .button-collection .button-collection__item')->eq(3)));
         $this->assertCount(10, $crawler->filter('.content-aside .definition-list--timeline')->children());
-        $this->assertSame('Version of Record published', $crawler->filter('.content-aside .definition-list--timeline')->children()->eq(0)->text());
-        $this->assertSame('January 1, 2010 (This version)', $crawler->filter('.content-aside .definition-list--timeline')->children()->eq(1)->text());
-        $this->assertSame('Accepted Manuscript published', $crawler->filter('.content-aside .definition-list--timeline')->children()->eq(2)->text());
-        $this->assertSame('December 31, 2009 (Go to version)', $crawler->filter('.content-aside .definition-list--timeline')->children()->eq(3)->text());
-        $this->assertSame('Accepted', $crawler->filter('.content-aside .definition-list--timeline')->children()->eq(4)->text());
-        $this->assertSame('December 31, 2009', $crawler->filter('.content-aside .definition-list--timeline')->children()->eq(5)->text());
-        $this->assertSame('Preprint posted', $crawler->filter('.content-aside .definition-list--timeline')->children()->eq(6)->text());
-        $this->assertSame('December 29, 2009 (Go to version)', $crawler->filter('.content-aside .definition-list--timeline')->children()->eq(7)->text());
-        $this->assertSame('Received', $crawler->filter('.content-aside .definition-list--timeline')->children()->eq(8)->text());
-        $this->assertSame('December 30, 2009', $crawler->filter('.content-aside .definition-list--timeline')->children()->eq(9)->text());
+
+        foreach ([
+             'Version of Record published',
+             'January 1, 2010 (This version)',
+             'Accepted Manuscript published',
+             'December 31, 2009 (Go to version)',
+             'Accepted',
+             'December 31, 2009',
+             'Received',
+             'December 30, 2009',
+             'Preprint posted',
+             'December 29, 2009 (Go to version)',
+        ] as $k => $expectedTimeline) {
+            $this->assertSame(
+                $expectedTimeline,
+                $crawler->filter('.content-aside .definition-list--timeline')->children()->eq($k)->text()
+            );
+        }
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
     }
