@@ -7,6 +7,7 @@ use GuzzleHttp\Psr7\Response;
 use ML\JsonLD\JsonLD;
 use ML\JsonLD\RdfConstants;
 use ML\JsonLD\TypedValue;
+use Traversable;
 
 final class ArticleControllerTest extends PageTestCase
 {
@@ -3966,10 +3967,33 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertSame('Categories and tags', $categoriesAndTags->filter('h4')->text());
     }
 
+    public function contentAsideProvider() : Traversable
+    {
+        yield 'with content-aside' => [
+            'research-article',
+            true,
+        ];
+
+        foreach ([
+            'editorial',
+            'feature',
+            'insight',
+        ] as $type) {
+            yield 'without content-aside '.$type => [
+                $type,
+                false,
+            ];
+        }
+    }
+
     /**
      * @test
+     * @dataProvider contentAsideProvider
      */
-    public function it_may_have_content_aside()
+    public function it_may_have_content_aside(
+        string $type,
+        bool $hasContentAside
+    )
     {
         $client = static::createClient();
 
@@ -3987,7 +4011,7 @@ final class ArticleControllerTest extends PageTestCase
                     'stage' => 'published',
                     'id' => '00001',
                     'version' => 2,
-                    'type' => 'research-article',
+                    'type' => $type,
                     'doi' => '10.7554/eLife.00001',
                     'title' => 'Article 1 title',
                     'published' => '2009-12-31T00:00:00Z',
@@ -4055,7 +4079,7 @@ final class ArticleControllerTest extends PageTestCase
                             'stage' => 'published',
                             'id' => '00001',
                             'version' => 1,
-                            'type' => 'research-article',
+                            'type' => $type,
                             'doi' => '10.7554/eLife.00001',
                             'title' => 'Article 1 title',
                             'published' => '2009-12-31T00:00:00Z',
@@ -4075,7 +4099,7 @@ final class ArticleControllerTest extends PageTestCase
                             'stage' => 'published',
                             'id' => '00001',
                             'version' => 2,
-                            'type' => 'research-article',
+                            'type' => $type,
                             'doi' => '10.7554/eLife.00001',
                             'title' => 'Article 1 title',
                             'published' => '2009-12-31T00:00:00Z',
@@ -4096,39 +4120,216 @@ final class ArticleControllerTest extends PageTestCase
         );
 
         $crawler = $client->request('GET', '/articles/00001');
+        $this->assertSame(200, $client->getResponse()->getStatusCode());
 
-        $this->assertSame('Version of Record', $crawler->filter('.content-aside .status-title')->text());
-        $this->assertSame('Accepted for publication after peer review and revision.', $crawler->filter('.content-aside .status-description')->text());
-        $this->assertSame('About eLife\'s process', $crawler->filter('.content-aside .status-link')->text());
-        $this->assertSame('Download',
-            $this->crawlerText($crawler->filter('.content-aside .button-collection .button-collection__item')->eq(0)));
-        $this->assertSame('Cite',
-            $this->crawlerText($crawler->filter('.content-aside .button-collection .button-collection__item')->eq(1)));
-        $this->assertSame('Share',
-            $this->crawlerText($crawler->filter('.content-aside .button-collection .button-collection__item')->eq(2)));
-        $this->assertSame('Comment Open annotations (there are currently 0 annotations on this page).',
-            $this->crawlerText($crawler->filter('.content-aside .button-collection .button-collection__item')->eq(3)));
-        $this->assertCount(10, $crawler->filter('.content-aside .definition-list--timeline')->children());
+        if ($hasContentAside) {
+            $this->assertSame('Version of Record', $crawler->filter('.content-aside .status-title')->text());
+            $this->assertSame('Accepted for publication after peer review and revision.', $crawler->filter('.content-aside .status-description')->text());
+            $this->assertSame('About eLife\'s process', $crawler->filter('.content-aside .status-link')->text());
+            $this->assertSame('Download',
+                $this->crawlerText($crawler->filter('.content-aside .button-collection .button-collection__item')->eq(0)));
+            $this->assertSame('Cite',
+                $this->crawlerText($crawler->filter('.content-aside .button-collection .button-collection__item')->eq(1)));
+            $this->assertSame('Share',
+                $this->crawlerText($crawler->filter('.content-aside .button-collection .button-collection__item')->eq(2)));
+            $this->assertSame('Comment Open annotations (there are currently 0 annotations on this page).',
+                $this->crawlerText($crawler->filter('.content-aside .button-collection .button-collection__item')->eq(3)));
+            $this->assertCount(10, $crawler->filter('.content-aside .definition-list--timeline')->children());
+
+            foreach ([
+                         'Version of Record published',
+                         'January 1, 2010 (This version)',
+                         'Accepted Manuscript published',
+                         'December 31, 2009 (Go to version)',
+                         'Accepted',
+                         'December 30, 2009',
+                         'Received',
+                         'December 29, 2009',
+                         'Preprint posted',
+                         'December 28, 2009 (Go to version)',
+                     ] as $k => $expectedTimeline) {
+                $this->assertSame(
+                    $expectedTimeline,
+                    $crawler->filter('.content-aside .definition-list--timeline')->children()->eq($k)->text()
+                );
+            }
+        } else {
+            $this->assertCount(0, $crawler->filter('.content-aside'));
+        }
+    }
+
+    public function contentAsideStatusProvider() : Traversable
+    {
+        yield 'poa' => [
+            'research-article',
+            'poa',
+            'e',
+            'Author Accepted Manuscript',
+            'PDF only version. The full online version will follow soon.',
+        ];
+        
+        foreach ([
+            'research-article',
+            'research-advance',
+            'review-article',
+            'scientific-correspondence',
+            'short-report',
+            'tools-resources',
+        ] as $type) {
+            yield 'vor '.$type => [
+                $type,
+                'vor',
+                'e',
+                'Version of Record',
+                'Accepted for publication after peer review and revision.',
+            ];
+        }
+        
+        yield 'vor prc' => [
+            'research-article',
+            'vor',
+            'RP',
+            'Version of Record',
+            'The authors declare this version of their article to be the Version of Record.',
+        ];
 
         foreach ([
-             'Version of Record published',
-             'January 1, 2010 (This version)',
-             'Accepted Manuscript published',
-             'December 31, 2009 (Go to version)',
-             'Accepted',
-             'December 30, 2009',
-             'Received',
-             'December 29, 2009',
-             'Preprint posted',
-             'December 28, 2009 (Go to version)',
-        ] as $k => $expectedTimeline) {
-            $this->assertSame(
-                $expectedTimeline,
-                $crawler->filter('.content-aside .definition-list--timeline')->children()->eq($k)->text()
-            );
+            'correction',
+            'retraction',
+            'registered-report',
+            'replication-study',
+            'research-communication',
+        ] as $type) {
+            yield 'no status '.$type => [
+                $type,
+                'vor',
+                'e',
+                null,
+                null,
+            ];
         }
+    }
 
+    /**
+     * @test
+     * @dataProvider contentAsideStatusProvider
+     */
+    public function it_may_have_a_content_aside_status(
+        string $type,
+        string $status = 'vor',
+        string $elocationIdPrefix = 'e',
+        string $expectedTitle = null,
+        string $expectedDescription = null
+    )
+    {
+        $client = static::createClient();
+
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/articles/00001',
+                ['Accept' => 'application/vnd.elife.article-poa+json; version=3, application/vnd.elife.article-vor+json; version=7']
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.article-'.$status.'+json; version='.('poa' === $status ? 3 : 7)],
+                json_encode([
+                    'status' => $status,
+                    'stage' => 'published',
+                    'id' => '00001',
+                    'version' => 1,
+                    'type' => $type,
+                    'doi' => '10.7554/eLife.00001',
+                    'title' => 'Article 1 title',
+                    'published' => '2009-12-31T00:00:00Z',
+                    'versionDate' => '2010-01-01T00:00:00Z',
+                    'statusDate' => '2010-01-01T00:00:00Z',
+                    'volume' => 1,
+                    'elocationId' => $elocationIdPrefix.'00001',
+                    'copyright' => [
+                        'license' => 'CC-BY-4.0',
+                        'holder' => 'Bar',
+                        'statement' => 'Copyright statement.',
+                    ],
+                    'authorLine' => 'Foo Bar',
+                    'authors' => [
+                        [
+                            'type' => 'person',
+                            'name' => [
+                                'preferred' => 'Foo Bar',
+                                'index' => 'Bar, Foo',
+                            ],
+                        ],
+                    ],
+                    'body' => [
+                        [
+                            'type' => 'section',
+                            'id' => 's-1',
+                            'title' => 'Introduction',
+                            'content' => [
+                                [
+                                    'type' => 'paragraph',
+                                    'text' => 'Fossil hominins were first recognized in the Dinaledi Chamber in the Rising Star cave system in October 2013. During a relatively short excavation, our team recovered an extensive collection of 1550 hominin specimens, representing nearly every element of the skeleton multiple times (Figure 1), including many complete elements and morphologically informative fragments, some in articulation, as well as smaller fragments many of which could be refit into more complete elements. The collection is a morphologically homogeneous sample that can be attributed to no previously-known hominin species. Here we describe this new species, <i>Homo naledi</i>. We have not defined <i>H. naledi</i> narrowly based on a single jaw or skull because the entire body of material has informed our understanding of its biology.',
+                                ],
+                            ],
+                        ],
+                    ],
+                ])
+            )
+        );
+
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/articles/00001/versions',
+                [
+                    'Accept' => [
+                        'application/vnd.elife.article-history+json; version=2',
+                    ],
+                ]
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.article-history+json; version=2'],
+                json_encode([
+                    'versions' => [
+                        [
+                            'status' => $status,
+                            'stage' => 'published',
+                            'id' => '00001',
+                            'version' => 1,
+                            'type' => $type,
+                            'doi' => '10.7554/eLife.00001',
+                            'title' => 'Article 1 title',
+                            'published' => '2009-12-31T00:00:00Z',
+                            'versionDate' => '2010-01-01T00:00:00Z',
+                            'statusDate' => '2010-01-01T00:00:00Z',
+                            'volume' => 1,
+                            'elocationId' => $elocationIdPrefix.'00001',
+                            'copyright' => [
+                                'license' => 'CC-BY-4.0',
+                                'holder' => 'Bar',
+                                'statement' => 'Copyright statement.',
+                            ],
+                            'authorLine' => 'Foo Bar',
+                        ],
+                    ],
+                ])
+            )
+        );
+
+        $crawler = $client->request('GET', '/articles/00001');
         $this->assertSame(200, $client->getResponse()->getStatusCode());
+
+        if (null === $expectedTitle) {
+            $this->assertCount(0, $crawler->filter('.content-aside .status-title'));
+            $this->assertCount(0, $crawler->filter('.content-aside .status-description'));
+            $this->assertCount(0, $crawler->filter('.content-aside .definition-list--timeline'));
+        } else {
+            $this->assertSame($expectedTitle, $crawler->filter('.content-aside .status-title')->text());
+            $this->assertSame($expectedDescription, $crawler->filter('.content-aside .status-description')->text());
+            $this->assertGreaterThan(0, $crawler->filter('.content-aside .definition-list--timeline')->count());
+        }
     }
 
     /**
