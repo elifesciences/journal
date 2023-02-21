@@ -4,7 +4,7 @@
 
 {% block article_body %}
 
-    {% embed 'grid/content-new.html.twig' %}
+    {% embed 'grid/content-new.html.twig' with {sectionAnchorPopup: true} %}
 
         {% block navigation %}
 
@@ -44,7 +44,7 @@
 
         {% block secondary %}
 
-            {% if relatedItem %}
+            {% if not contentAside and relatedItem %}
 
                 <div class="grid-secondary-column__item grid-secondary-column__item--wide-only">
 
@@ -58,7 +58,7 @@
 
     {% endembed %}
 
-    {% if listing %}
+    {% if not contentAside and listing %}
 
         {{ render_pattern(listing) }}
 
