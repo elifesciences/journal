@@ -441,9 +441,9 @@ final class ArticlesController extends Controller
                 }
 
                 if ($item instanceof ArticleVoR && $item->getPublicReviews()->notEmpty()) {
-                    $reviews = $item->getPublicReviews()->map(function (PublicReview $publicReview, $i) use ($context) {
+                    $reviews = $item->getPublicReviews()->map(function (PublicReview $publicReview) use ($context) {
                         return ArticleSection::basic(
-                            $this->render(...$this->convertContent($publicReview, 4, $context)),
+                            $this->render(...$this->convertContent($publicReview, 3, $context)),
                             $publicReview->getTitle(),
                             3
                         );
@@ -451,7 +451,7 @@ final class ArticlesController extends Controller
 
                     if ($item->getRecommendationsForAuthors()) {
                         $reviews[] = ArticleSection::basic(
-                            $this->render(...$this->convertContent($item->getRecommendationsForAuthors(), 4, $context)),
+                            $this->render(...$this->convertContent($item->getRecommendationsForAuthors(), 3, $context)),
                             $item->getRecommendationsForAuthorsTitle(),
                             3
                         );
@@ -461,7 +461,7 @@ final class ArticlesController extends Controller
                         'peer-review',
                         'Peer review',
                         2,
-                        $this->render(...($reviews))
+                        $this->render(...$reviews)
                     );
                 }
 
