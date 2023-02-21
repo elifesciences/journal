@@ -4692,7 +4692,7 @@ final class ArticleControllerTest extends PageTestCase
     /**
      * @test
      */
-    public function it_displays_vor_v7_article()
+    public function it_displays_vor_prc_article()
     {
         $client = static::createClient();
 
@@ -4717,7 +4717,7 @@ final class ArticleControllerTest extends PageTestCase
                     'versionDate' => '2010-01-01T00:00:00Z',
                     'statusDate' => '2010-01-01T00:00:00Z',
                     'volume' => 1,
-                    'elocationId' => 'e00001',
+                    'elocationId' => 'RP00001',
                     'copyright' => [
                         'license' => 'CC-BY-4.0',
                         'holder' => 'Bar',
@@ -4746,102 +4746,102 @@ final class ArticleControllerTest extends PageTestCase
                             ],
                         ],
                     ],
-                    "authorResponse" => [
-                        "content" => [
+                    'authorResponse' => [
+                        'content' => [
                             [
-                                "text" => "<i>1) The reviewers are surprised to not see an in-depth comparison of</i> H. naledi <i>to</i> H. floresiensis<i>, especially where combinations of small teeth and small brains are concerned. It should be easy, e.g., to add the published</i> H. floresiensis <i>measurements to</i> <a href=\"#fig7\"><i>Figure 7</i></a><i>. The authors allude to material attributed to</i> ‘Homo gautengensis’ <i>and perhaps a short discussion or reiteration of their views about the validity of that species is needed</i>.",
-                                "type" => "paragraph",
+                                'text' => '<i>1) The reviewers are surprised to not see an in-depth comparison of</i> H. naledi <i>to</i> H. floresiensis<i>, especially where combinations of small teeth and small brains are concerned. It should be easy, e.g., to add the published</i> H. floresiensis <i>measurements to</i> <a href="#fig7"><i>Figure 7</i></a><i>. The authors allude to material attributed to</i> ‘Homo gautengensis’ <i>and perhaps a short discussion or reiteration of their views about the validity of that species is needed</i>.',
+                                'type' => 'paragraph',
                             ],
                         ],
-                        "doi" => "10.7554/eLife.09562.031",
-                        "id" => "SA2",
+                        'doi' => '10.7554/eLife.09562.031',
+                        'id' => 'SA2',
                     ],
-                    "elifeAssessment" => [
-                        "title" => "eLife assessment",
-                        "id" => "sa0",
-                        "doi" => "10.7554/eLife.09562.sa00",
-                        "content" => [
+                    'elifeAssessment' => [
+                        'title' => 'eLife assessment',
+                        'id' => 'sa0',
+                        'doi' => '10.7554/eLife.09562.sa00',
+                        'content' => [
                             [
-                                "type" => "paragraph",
-                                "text" => "Collagen is a major component of extracellular matrix. The authors have identified a high-affinity inhibitory collagen receptor LAIR-1 and a soluble decoy receptor LAIR-2 (with even higher binding affinity to collagen), which can be therapeutically targeted to block tumor progression. Dr Meyaard and colleagues have also generated a dimeric LAIR-2 human IgG1 Fc fusion protein NC410 for therapeutic use. With humanized mouse models engrafted with functional human immune systems (PBMC), they have explored the anti-cancer efficacy of NC410 and revealed its impact on modulating immune responses. Furthermore, they extended this study to identify biomarkers of predictive value for NC410-based anti-cancer therapy."
+                                'type' => 'paragraph',
+                                'text' => 'Collagen is a major component of extracellular matrix. The authors have identified a high-affinity inhibitory collagen receptor LAIR-1 and a soluble decoy receptor LAIR-2 (with even higher binding affinity to collagen), which can be therapeutically targeted to block tumor progression. Dr Meyaard and colleagues have also generated a dimeric LAIR-2 human IgG1 Fc fusion protein NC410 for therapeutic use. With humanized mouse models engrafted with functional human immune systems (PBMC), they have explored the anti-cancer efficacy of NC410 and revealed its impact on modulating immune responses. Furthermore, they extended this study to identify biomarkers of predictive value for NC410-based anti-cancer therapy.'
                             ],
                         ],
-                        "scietyUri" => "https://sciety.org/articles/activity/10.1101/2020.11.21.391326"
+                        'scietyUri' => 'https://sciety.org/articles/activity/10.1101/2020.11.21.391326'
                     ],
-                    "publicReviews" => [
+                    'publicReviews' => [
                         [
-                                "title" => "Reviewer #1 (public review)",
-                                "id" => "SA21",
-                                "doi" => "10.7554/eLife.09562.230",
-                                "content" => [
+                                'title' => 'Reviewer #1 (public review)',
+                                'id' => 'SA21',
+                                'doi' => '10.7554/eLife.09562.230',
+                                'content' => [
                                     [
-                                        "type" => "paragraph",
-                                        "text" => "Thank you for submitting your work entitled “A new species of the genus <i>Homo</i> from the Dinaledi Chamber, South Africa” for peer review at <i>eLife</i>.",
+                                        'type' => 'paragraph',
+                                        'text' => 'Thank you for submitting your work entitled “A new species of the genus <i>Homo</i> from the Dinaledi Chamber, South Africa” for peer review at <i>eLife</i>.',
                                     ],
                                     [
-                                        "type" => "box",
-                                        "title" => "Box 2",
-                                        "content" => [
+                                        'type' => 'box',
+                                        'title' => 'Box 2',
+                                        'content' => [
                                             [
-                                                "type" => "paragraph",
-                                                "text" => "Your submission has been favorably evaluated by Ian Baldwin (Senior editor), two guest Reviewing editors (Johannes Krause and Nicholas Conard), and two peer reviewers. One of the two peer reviewers, Chris Stringer, has agreed to share his identity, and Johannes Krause has drafted this decision to help you prepare a revised submission.",
+                                                'type' => 'paragraph',
+                                                'text' => 'Your submission has been favorably evaluated by Ian Baldwin (Senior editor), two guest Reviewing editors (Johannes Krause and Nicholas Conard), and two peer reviewers. One of the two peer reviewers, Chris Stringer, has agreed to share his identity, and Johannes Krause has drafted this decision to help you prepare a revised submission.',
                                             ],
                                         ],
                                     ],
                                     [
-                                        "type" => "paragraph",
-                                        "text" => "The authors describe a large collection of recently discovered hominin fossils from the Dinaledi Chamber in the Rising Star cave system in South Africa. Based on their initial assessment they argue that the fossil remains derive from a single homogenous hominin group and present a new taxon that they call <i>Homo naledi</i>.",
+                                        'type' => 'paragraph',
+                                        'text' => 'The authors describe a large collection of recently discovered hominin fossils from the Dinaledi Chamber in the Rising Star cave system in South Africa. Based on their initial assessment they argue that the fossil remains derive from a single homogenous hominin group and present a new taxon that they call <i>Homo naledi</i>.',
                                     ],
                                 ],
                             ],
                             [
-                                "title" => "Reviewer #2 (public review)",
-                                "id" => "SA22",
-                                "doi" => "10.7554/eLife.09562.330",
-                                "content" => [
+                                'title' => 'Reviewer #2 (public review)',
+                                'id' => 'SA22',
+                                'doi' => '10.7554/eLife.09562.330',
+                                'content' => [
                                     [
-                                        "type" => "paragraph",
-                                        "text" => "Thank you for submitting your work entitled “A new species of the genus <i>Homo</i> from the Dinaledi Chamber, South Africa” for peer review at <i>eLife</i>."
+                                        'type' => 'paragraph',
+                                        'text' => 'Thank you for submitting your work entitled “A new species of the genus <i>Homo</i> from the Dinaledi Chamber, South Africa” for peer review at <i>eLife</i>.'
                                     ],
                                     [
-                                        "type" => "box",
-                                        "title" => "Box 2",
-                                        "content" => [
+                                        'type' => 'box',
+                                        'title' => 'Box 2',
+                                        'content' => [
                                             [
-                                                "type" => "paragraph",
-                                                "text" => "Your submission has been favorably evaluated by Ian Baldwin (Senior editor), two guest Reviewing editors (Johannes Krause and Nicholas Conard), and two peer reviewers. One of the two peer reviewers, Chris Stringer, has agreed to share his identity, and Johannes Krause has drafted this decision to help you prepare a revised submission."
+                                                'type' => 'paragraph',
+                                                'text' => 'Your submission has been favorably evaluated by Ian Baldwin (Senior editor), two guest Reviewing editors (Johannes Krause and Nicholas Conard), and two peer reviewers. One of the two peer reviewers, Chris Stringer, has agreed to share his identity, and Johannes Krause has drafted this decision to help you prepare a revised submission.'
                                             ],
                                         ],
                                     ],
                                     [
-                                        "type" => "paragraph",
-                                        "text" => "The authors describe a large collection of recently discovered hominin fossils from the Dinaledi Chamber in the Rising Star cave system in South Africa. Based on their initial assessment they argue that the fossil remains derive from a single homogenous hominin group and present a new taxon that they call <i>Homo naledi</i>."
+                                        'type' => 'paragraph',
+                                        'text' => 'The authors describe a large collection of recently discovered hominin fossils from the Dinaledi Chamber in the Rising Star cave system in South Africa. Based on their initial assessment they argue that the fossil remains derive from a single homogenous hominin group and present a new taxon that they call <i>Homo naledi</i>.'
                                     ],
                                 ],
                             ],
                         ],
-                        "recommendationsForAuthors" => [
-                            "title" => "Recommendations for authors",
-                            "id" => "SA11",
-                            "doi" => "10.7554/eLife.09562.130",
-                            "content" => [
+                        'recommendationsForAuthors' => [
+                            'title' => 'Recommendations for authors',
+                            'id' => 'SA11',
+                            'doi' => '10.7554/eLife.09562.130',
+                            'content' => [
                                 [
-                                    "type" => "paragraph",
-                                    "text" => "Thank you for submitting your work entitled “A new species of the genus <i>Homo</i> from the Dinaledi Chamber, South Africa” for peer review at <i>eLife</i>."
+                                    'type' => 'paragraph',
+                                    'text' => 'Thank you for submitting your work entitled “A new species of the genus <i>Homo</i> from the Dinaledi Chamber, South Africa” for peer review at <i>eLife</i>.'
                                 ],
                                 [
-                                    "type" => "box",
-                                    "title" => "Box 2",
-                                    "content" => [
+                                    'type' => 'box',
+                                    'title' => 'Box 2',
+                                    'content' => [
                                         [
-                                            "type" => "paragraph",
-                                            "text" => "Your submission has been favorably evaluated by Ian Baldwin (Senior editor), two guest Reviewing editors (Johannes Krause and Nicholas Conard), and two peer reviewers. One of the two peer reviewers, Chris Stringer, has agreed to share his identity, and Johannes Krause has drafted this decision to help you prepare a revised submission."
+                                            'type' => 'paragraph',
+                                            'text' => 'Your submission has been favorably evaluated by Ian Baldwin (Senior editor), two guest Reviewing editors (Johannes Krause and Nicholas Conard), and two peer reviewers. One of the two peer reviewers, Chris Stringer, has agreed to share his identity, and Johannes Krause has drafted this decision to help you prepare a revised submission.'
                                         ],
                                     ],
                                 ],
                                 [
-                                    "type" => "paragraph",
-                                    "text" => "The authors describe a large collection of recently discovered hominin fossils from the Dinaledi Chamber in the Rising Star cave system in South Africa. Based on their initial assessment they argue that the fossil remains derive from a single homogenous hominin group and present a new taxon that they call <i>Homo naledi</i>."
+                                    'type' => 'paragraph',
+                                    'text' => 'The authors describe a large collection of recently discovered hominin fossils from the Dinaledi Chamber in the Rising Star cave system in South Africa. Based on their initial assessment they argue that the fossil remains derive from a single homogenous hominin group and present a new taxon that they call <i>Homo naledi</i>.'
                                 ],
                             ],
                         ],
@@ -4876,7 +4876,7 @@ final class ArticleControllerTest extends PageTestCase
                             'versionDate' => '2010-01-01T00:00:00Z',
                             'statusDate' => '2010-01-01T00:00:00Z',
                             'volume' => 1,
-                            'elocationId' => 'e00001',
+                            'elocationId' => 'RP00001',
                             'copyright' => [
                                 'license' => 'CC-BY-4.0',
                                 'holder' => 'Bar',
@@ -4893,11 +4893,15 @@ final class ArticleControllerTest extends PageTestCase
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertSame('eLife assessment', trim($crawler->filter('.view-selector__list-item')->eq(2)->text()));
-        $this->assertSame('Public Reviews', trim($crawler->filter('.view-selector__list-item')->eq(4)->text()));
-        $this->assertSame(1, $crawler->filter('section#elife-assessment')->count());
-        $this->assertSame(1, $crawler->filter('section#publicReview')->count());
-//        $this->assertSame('Public Reviews', $crawler->filter('.main-content-grid .article-section__header_text')->eq(1)->text());
+        $this->assertSame('Peer review', trim($crawler->filter('.view-selector__list-item')->eq(4)->text()));
+        $this->assertSame('eLife assessment',
+            $crawler->filter('.main-content-grid > section:nth-of-type(1) > header > h2')->text());
+        $this->assertSame('Peer review',
+            $crawler->filter('.main-content-grid > section:nth-of-type(3) > header > h2')->text());
+        $this->assertSame('Recommendations for authors',
+            $crawler->filter('.main-content-grid > section:nth-of-type(3) > div > section:nth-of-type(3) > header > h3')->text());
     }
+
     protected function getUrl($articleId = '00001') : string
     {
         $this->mockApiResponse(

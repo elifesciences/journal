@@ -443,23 +443,23 @@ final class ArticlesController extends Controller
                 if ($item instanceof ArticleVoR && $item->getPublicReviews()->notEmpty()) {
                     $reviews = $item->getPublicReviews()->map(function (PublicReview $publicReview, $i) use ($context) {
                         return ArticleSection::basic(
-                            $this->render(...$this->convertContent($publicReview, 2, $context)),
+                            $this->render(...$this->convertContent($publicReview, 4, $context)),
                             $publicReview->getTitle(),
-                            2
+                            3
                         );
                     })->toArray();
 
                     if ($item->getRecommendationsForAuthors()) {
                         $reviews[] = ArticleSection::basic(
-                            $this->render(...$this->convertContent($item->getRecommendationsForAuthors(), 2, $context)),
+                            $this->render(...$this->convertContent($item->getRecommendationsForAuthors(), 4, $context)),
                             $item->getRecommendationsForAuthorsTitle(),
-                            2
+                            3
                         );
                     }
 
                     $parts[] = ArticleSection::collapsible(
-                        'publicReview',
-                        'Public Reviews',
+                        'peer-review',
+                        'Peer review',
                         2,
                         $this->render(...($reviews))
                     );
