@@ -33,7 +33,9 @@ final class ArticleContentHeaderConverter implements ViewModelConverter
     {
         $isMagazine = $context['isMagazine'] ?? false;
 
-        $breadcrumb = ($isMagazine || 'feature' === $object->getType()) ? [
+        $isMagazineOrFeature = ($isMagazine || 'feature' === $object->getType());
+
+        $breadcrumb = $isMagazineOrFeature ? [
             new ViewModel\Link(
                 'Magazine',
                 $this->urlGenerator->generate('magazine')
@@ -61,7 +63,7 @@ final class ArticleContentHeaderConverter implements ViewModelConverter
 
         return new ViewModel\ContentHeaderNew(
             $object->getFullTitle(),
-            false,
+            !$isMagazineOrFeature,
             null,
             null,
             $impactStatement,

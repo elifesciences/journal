@@ -32,6 +32,7 @@ use eLife\Journal\Helper\HasPages;
 use eLife\Journal\Helper\Humanizer;
 use eLife\Patterns\ViewModel;
 use eLife\Patterns\ViewModel\ArticleSection;
+use eLife\Patterns\ViewModel\ContentAside;
 use eLife\Patterns\ViewModel\ContentHeaderNew;
 use eLife\Patterns\ViewModel\ContextualData;
 use eLife\Patterns\ViewModel\Doi;
@@ -263,6 +264,8 @@ final class ArticlesController extends Controller
 
                 return $context;
             });
+
+        $arguments = $this->contentAsideArguments($arguments);
 
         $arguments['body'] = all(['item' => $arguments['item'], 'isMagazine' => $arguments['isMagazine'], 'history' => $arguments['history'], 'citations' => $arguments['citations'], 'downloads' => $arguments['downloads'], 'pageViews' => $arguments['pageViews'], 'data' => $arguments['hasData'], 'context' => $context])
             ->then(function (array $parts) {
@@ -847,6 +850,8 @@ final class ArticlesController extends Controller
 
         $arguments['viewSelector'] = $this->createViewSelector($arguments['item'], $arguments['isMagazine'], promise_for(true), true, $arguments['history'], $arguments['body'], $arguments['eraArticle']);
 
+        $arguments = $this->contentAsideArguments($arguments);
+
         $arguments['body'] = all(['body' => $arguments['body'], 'downloadLinks' => $arguments['downloadLinks']])
             ->then(function (array $parts) {
                 $body = $parts['body'];
@@ -1205,6 +1210,137 @@ final class ArticlesController extends Controller
                     $otherLinks
                 );
             });
+    }
+
+    private function contentAsideArguments(array $arguments) : array
+    {
+        $arguments['contentAside'] = all([
+            'item' => $arguments['item'],
+            'isMagazine' => $arguments['isMagazine'],
+            'metrics' => $arguments['contextualDataMetrics'],
+            'history' => $arguments['history'],
+            'relatedItem' => $arguments['relatedItem'] ?? promise_for(null),
+        ])
+            ->then(function (array $parts) {
+                /** @var ArticleVersion $item */
+                $item = $parts['item'];
+
+                if ($parts['isMagazine'] || 'feature' === $item->getType()) {
+                    return false;
+                }
+
+                /** @var ArticleHistory $history */
+                $history = $parts['history'];
+
+                $publicationHistory = [];
+                if ($received = $history->getReceived()) {
+                    $publicationHistory[] = [
+                        // index added to allow us to sort.
+                        'index' => strtotime($received->toString()),
+                        'term' => 'Received',
+                        'descriptors' => [
+                            $received->format(),
+                        ],
+                    ];
+                }
+
+                if ($accepted = $history->getAccepted()) {
+                    $publicationHistory[] = [
+                        // index added to allow us to sort.
+                        'index' => strtotime($accepted->toString()),
+                        'term' => 'Accepted',
+                        'descriptors' => [
+                            $accepted->format(),
+                        ],
+                    ];
+                }
+
+                $articleVersions = $history->getVersions()
+                    ->filter(Callback::isInstanceOf(ArticleVersion::class))
+                    ->sort(function (ArticleVersion $a, ArticleVersion $b) {
+                        return $a->getVersion() <=> $b->getVersion();
+                    });
+
+                $prepareDefinition = function (ArticleVersion $articleVersion, bool $first) use ($history, $item) {
+                    return [
+                        // index added to allow us to sort.
+                        'index' => $articleVersion->getVersionDate() ? $articleVersion->getVersionDate()->getTimeStamp() : 0,
+                        'term' => sprintf(
+                            '%s %s',
+                            $articleVersion instanceof ArticleVoR ? 'Version of Record' : 'Accepted Manuscript',
+                            $first ? 'published' : 'updated'
+                        ),
+                        'descriptors' => [
+                            sprintf(
+                                '%s %s',
+                                $articleVersion->getVersionDate() ?
+                                    $articleVersion->getVersionDate()->format('F j, Y') :
+                                    '',
+                                $articleVersion->getVersion() === $item->getVersion() ?
+                                    '(This version)' :
+                                    sprintf(
+                                        '<a href="%s">(Go to version)</a>',
+                                        $this->generatePath($history, $articleVersion->getVersion())
+                                    )
+                            ),
+                        ],
+                    ];
+                };
+
+                $publicationHistory = array_merge($publicationHistory, $articleVersions
+                    ->filter(Callback::isInstanceOf(ArticleVoR::class))
+                    ->map(function(ArticleVoR $itemVersion, int $number) use ($prepareDefinition) {
+                        return $prepareDefinition($itemVersion, 0 === $number);
+                    })->reverse()->toArray());
+
+                $publicationHistory = array_merge($publicationHistory, $articleVersions
+                    ->filter(Callback::isInstanceOf(ArticlePoA::class))
+                    ->map(function(ArticlePoA $itemVersion, int $number) use ($prepareDefinition) {
+                        return $prepareDefinition($itemVersion, 0 === $number);
+                    })->reverse()->toArray());
+
+                $publicationHistory = array_merge($publicationHistory, $history->getVersions()
+                    ->filter(Callback::isInstanceOf(ArticlePreprint::class))
+                    ->sort(function (ArticlePreprint $a, ArticlePreprint $b) {
+                        return $b->getPublishedDate() <=> $a->getPublishedDate();
+                    })
+                    ->map(function (ArticlePreprint $preprint) {
+                        return [
+                            // index added to allow us to sort.
+                            'index' => $preprint->getPublishedDate()->getTimeStamp(),
+                            'term' => 'Preprint posted',
+                            'descriptors' => [
+                                sprintf(
+                                    '%s %s',
+                                    $preprint->getPublishedDate()->format('F j, Y'),
+                                    sprintf(
+                                        '<a href="%s">(Go to version)</a>',
+                                        $preprint->getUri()
+                                    )
+                                )
+                            ]
+                        ];
+                    })->toArray());
+
+                // Sort by index value.
+                usort($publicationHistory, function($first, $second) {
+                    return $first['index'] < $second['index'];
+                });
+
+                return $this->convertTo($parts['item'],
+                    ContentAside::class, [
+                        'metrics' => $parts['metrics'],
+                        'timeline' => array_map(function ($item) {
+                            // Remove index from item.
+                            unset($item['index']);
+                            return $item;
+                        }, $publicationHistory),
+                        'relatedItem' => $parts['relatedItem']
+                    ]
+                );
+            });
+
+        return $arguments;
     }
 
     private function findFigures(PromiseInterface $item) : PromiseSequence

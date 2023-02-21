@@ -1215,7 +1215,7 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertSame('Article title', $crawler->filter('.content-header__title')->text());
 
         $this->assertSame('Comment Open annotations (there are currently 0 annotations on this page).',
-            $this->crawlerText($crawler->filter('.side-section .side-section-wrapper__list li')->eq(2)));
+            $this->crawlerText($crawler->filter('.content-aside .button-collection .button-collection__item')->eq(3)));
 
         $this->assertSame(
             [
@@ -3966,6 +3966,170 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertSame('Categories and tags', $categoriesAndTags->filter('h4')->text());
     }
 
+    /**
+     * @test
+     */
+    public function it_may_have_content_aside()
+    {
+        $client = static::createClient();
+
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/articles/00001',
+                ['Accept' => 'application/vnd.elife.article-poa+json; version=3, application/vnd.elife.article-vor+json; version=6']
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.article-vor+json; version=6'],
+                json_encode([
+                    'status' => 'vor',
+                    'stage' => 'published',
+                    'id' => '00001',
+                    'version' => 2,
+                    'type' => 'research-article',
+                    'doi' => '10.7554/eLife.00001',
+                    'title' => 'Article 1 title',
+                    'published' => '2009-12-31T00:00:00Z',
+                    'versionDate' => '2010-01-01T00:00:00Z',
+                    'statusDate' => '2010-01-01T00:00:00Z',
+                    'volume' => 1,
+                    'elocationId' => 'e00001',
+                    'copyright' => [
+                        'license' => 'CC-BY-4.0',
+                        'holder' => 'Bar',
+                        'statement' => 'Copyright statement.',
+                    ],
+                    'authorLine' => 'Foo Bar',
+                    'authors' => [
+                        [
+                            'type' => 'person',
+                            'name' => [
+                                'preferred' => 'Foo Bar',
+                                'index' => 'Bar, Foo',
+                            ],
+                        ],
+                    ],
+                    'body' => [
+                        [
+                            'type' => 'section',
+                            'id' => 's-1',
+                            'title' => 'Introduction',
+                            'content' => [
+                                [
+                                    'type' => 'paragraph',
+                                    'text' => 'Fossil hominins were first recognized in the Dinaledi Chamber in the Rising Star cave system in October 2013. During a relatively short excavation, our team recovered an extensive collection of 1550 hominin specimens, representing nearly every element of the skeleton multiple times (Figure 1), including many complete elements and morphologically informative fragments, some in articulation, as well as smaller fragments many of which could be refit into more complete elements. The collection is a morphologically homogeneous sample that can be attributed to no previously-known hominin species. Here we describe this new species, <i>Homo naledi</i>. We have not defined <i>H. naledi</i> narrowly based on a single jaw or skull because the entire body of material has informed our understanding of its biology.',
+                                ],
+                            ],
+                        ],
+                    ],
+                ])
+            )
+        );
+
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/articles/00001/versions',
+                [
+                    'Accept' => [
+                        'application/vnd.elife.article-history+json; version=2',
+                    ],
+                ]
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.article-history+json; version=2'],
+                json_encode([
+                    'received' => '2009-12-29',
+                    'accepted' => '2009-12-30',
+                    'versions' => [
+                        [
+                            'status' => 'preprint',
+                            'description' => 'Description of preprint',
+                            'uri' => 'http://example.preprint.com',
+                            'date' => '2009-12-28T00:00:00Z',
+                        ],
+                        [
+                            'status' => 'poa',
+                            'stage' => 'published',
+                            'id' => '00001',
+                            'version' => 1,
+                            'type' => 'research-article',
+                            'doi' => '10.7554/eLife.00001',
+                            'title' => 'Article 1 title',
+                            'published' => '2009-12-31T00:00:00Z',
+                            'versionDate' => '2009-12-31T00:00:00Z',
+                            'statusDate' => '2009-12-31T00:00:00Z',
+                            'volume' => 1,
+                            'elocationId' => 'e00001',
+                            'copyright' => [
+                                'license' => 'CC-BY-4.0',
+                                'holder' => 'Bar',
+                                'statement' => 'Copyright statement.',
+                            ],
+                            'authorLine' => 'Foo Bar',
+                        ],
+                        [
+                            'status' => 'vor',
+                            'stage' => 'published',
+                            'id' => '00001',
+                            'version' => 2,
+                            'type' => 'research-article',
+                            'doi' => '10.7554/eLife.00001',
+                            'title' => 'Article 1 title',
+                            'published' => '2009-12-31T00:00:00Z',
+                            'versionDate' => '2010-01-01T00:00:00Z',
+                            'statusDate' => '2010-01-01T00:00:00Z',
+                            'volume' => 1,
+                            'elocationId' => 'e00001',
+                            'copyright' => [
+                                'license' => 'CC-BY-4.0',
+                                'holder' => 'Bar',
+                                'statement' => 'Copyright statement.',
+                            ],
+                            'authorLine' => 'Foo Bar',
+                        ],
+                    ],
+                ])
+            )
+        );
+
+        $crawler = $client->request('GET', '/articles/00001');
+
+        $this->assertSame('Version of Record', $crawler->filter('.content-aside .status-title')->text());
+        $this->assertSame('Accepted for publication after peer review and revision.', $crawler->filter('.content-aside .status-description')->text());
+        $this->assertSame('About eLife\'s process', $crawler->filter('.content-aside .status-link')->text());
+        $this->assertSame('Download',
+            $this->crawlerText($crawler->filter('.content-aside .button-collection .button-collection__item')->eq(0)));
+        $this->assertSame('Cite',
+            $this->crawlerText($crawler->filter('.content-aside .button-collection .button-collection__item')->eq(1)));
+        $this->assertSame('Share',
+            $this->crawlerText($crawler->filter('.content-aside .button-collection .button-collection__item')->eq(2)));
+        $this->assertSame('Comment Open annotations (there are currently 0 annotations on this page).',
+            $this->crawlerText($crawler->filter('.content-aside .button-collection .button-collection__item')->eq(3)));
+        $this->assertCount(10, $crawler->filter('.content-aside .definition-list--timeline')->children());
+
+        foreach ([
+             'Version of Record published',
+             'January 1, 2010 (This version)',
+             'Accepted Manuscript published',
+             'December 31, 2009 (Go to version)',
+             'Accepted',
+             'December 30, 2009',
+             'Received',
+             'December 29, 2009',
+             'Preprint posted',
+             'December 28, 2009 (Go to version)',
+        ] as $k => $expectedTimeline) {
+            $this->assertSame(
+                $expectedTimeline,
+                $crawler->filter('.content-aside .definition-list--timeline')->children()->eq($k)->text()
+            );
+        }
+
+        $this->assertSame(200, $client->getResponse()->getStatusCode());
+    }
     /**
      * @test
      */
