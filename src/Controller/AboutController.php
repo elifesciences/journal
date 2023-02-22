@@ -377,7 +377,16 @@ final class AboutController extends Controller
             ->then(function (array $parts) {
                 $impactStatement = $parts['impactStatement'] ?? 'eLife’s editors, early-career advisors, governing board, and executive staff work in concert to realise our mission.';
 
-                return new ContentHeader($parts['title'], null, $impactStatement, false, null,
+                return new ContentHeader($parts['title'], null, $impactStatement, false,
+                    new Breadcrumb([
+                        new Link(
+                            'About',
+                            $this->get('router')->generate('about')
+                        ),
+                        new Link(
+                            'Editors and people'
+                        ),
+                    ]),
                     [], null, null, null, null,
                     new SelectNav(
                         $this->get('router')->generate('about-people'),
