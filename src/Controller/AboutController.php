@@ -13,6 +13,7 @@ use eLife\Journal\Helper\Callback;
 use eLife\Patterns\ViewModel\AboutProfile;
 use eLife\Patterns\ViewModel\AboutProfiles;
 use eLife\Patterns\ViewModel\ArticleSection;
+use eLife\Patterns\ViewModel\Breadcrumb;
 use eLife\Patterns\ViewModel\Button;
 use eLife\Patterns\ViewModel\ContentHeader;
 use eLife\Patterns\ViewModel\FlexibleViewModel;
@@ -376,8 +377,8 @@ final class AboutController extends Controller
             ->then(function (array $parts) {
                 $impactStatement = $parts['impactStatement'] ?? 'eLife’s editors, early-career advisors, governing board, and executive staff work in concert to realise our mission.';
 
-                return new ContentHeader($parts['title'], null, $impactStatement,
-                    false, [], null, null, null, null,
+                return new ContentHeader($parts['title'], null, $impactStatement, false, null,
+                    [], null, null, null, null,
                     new SelectNav(
                         $this->get('router')->generate('about-people'),
                         new Select('type', $parts['types']->toArray(), new FormLabel('Type', true), 'type'),
