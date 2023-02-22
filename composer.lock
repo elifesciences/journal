@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9abb1cc846f645ff41733e846cb3ba76",
+    "content-hash": "3475da983281b98f991c3db0e3961726",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -1240,12 +1240,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-sdk-php.git",
-                "reference": "ec3f98179a832fdc4a219c952f5f496cde9b9eb7"
+                "reference": "ef0202c58b966dc8c945febe7c1d8564dfa26959"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/ec3f98179a832fdc4a219c952f5f496cde9b9eb7",
-                "reference": "ec3f98179a832fdc4a219c952f5f496cde9b9eb7",
+                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/ef0202c58b966dc8c945febe7c1d8564dfa26959",
+                "reference": "ef0202c58b966dc8c945febe7c1d8564dfa26959",
                 "shasum": ""
             },
             "require": {
@@ -1286,7 +1286,7 @@
                 "MIT"
             ],
             "description": "eLife Sciences API SDK",
-            "time": "2023-02-16T17:44:22+00:00"
+            "time": "2023-02-21T16:25:06+00:00"
         },
         {
             "name": "elife/civi-contacts",

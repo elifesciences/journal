@@ -103,6 +103,7 @@ final class SubjectRewritingMiddleware
                     case 'application/vnd.elife.article-poa+json; version=2':
                     case 'application/vnd.elife.article-poa+json; version=3':
                     case 'application/vnd.elife.article-vor+json; version=6':
+                    case 'application/vnd.elife.article-vor+json; version=7':
                     case 'application/vnd.elife.blog-article+json; version=2':
                     case 'application/vnd.elife.reviewed-preprint+json; version=1':
                         $data = $this->updateItem($data);

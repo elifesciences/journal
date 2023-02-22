@@ -75,7 +75,7 @@ final class ContentAsideConverter implements ViewModelConverter
                 $text = 'PDF only version. The full online version will follow soon.';
                 break;
             case $article instanceof ArticleVoR && $article->isReviewedPreprint():
-                $text = 'The authors declare this version of their article to be the Version of Record';
+                $text = 'The authors declare this version of their article to be the Version of Record.';
                 break;
             default:
                 $text = 'Accepted for publication after peer review and revision.';
