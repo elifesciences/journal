@@ -17,6 +17,26 @@ final class AboutPeopleControllerTest extends PageTestCase
         $crawler = $client->request('GET', $this->getUrl());
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
+
+        $breadcrumbLinks = $crawler->filter('.breadcrumb-item a');
+        $this->assertCount(1, $breadcrumbLinks);
+        $this->assertEquals([
+            [
+                '/about',
+            ],
+        ], $breadcrumbLinks->extract(['href']));
+
+        $breadcrumbItems = $crawler->filter('.breadcrumb-item');
+        $this->assertCount(1, $breadcrumbItems);
+        $this->assertEquals([
+            [
+                'About',
+            ],
+            [
+                'Editors and people',
+            ],
+        ], $breadcrumbItems->extract(['_text']));
+
         $this->assertSame('Leadership team', $crawler->filter('.content-header__title')->text());
     }
 
