@@ -63,10 +63,7 @@ final class JobAdvertsController extends Controller
 
     private function createFirstPage(array $arguments) : Response
     {
-        $arguments['contentHeader'] = new ContentHeader(
-            $arguments['title'],
-            null
-        );
+        $arguments['contentHeader'] = new ContentHeader($arguments['title']);
 
         return new Response($this->get('templating')->render('::job-adverts.html.twig', $arguments));
     }
