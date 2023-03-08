@@ -43,12 +43,6 @@ final class AlertsController extends Controller
             ), 'Community-building', 2),
             ArticleSection::basic($this->render(
                 Listing::unordered([
-                    'For the latest in eLife Labs, innovation, and new tools, <a href="'.$this->get('router')->generate('content-alerts-variant', ['variant' => 'technology']).'">sign up for our technology and innovation newsletter</a>',
-                    'Subscribe to the RSS feed for <a href="'.$this->get('router')->generate('rss-labs').'">all the open source technology innovation news</a> from eLife Sciences',
-                ], 'bullet')
-            ), 'eLife&apos;s Innovation Initiative and technology news', 2),
-            ArticleSection::basic($this->render(
-                Listing::unordered([
                     'Sign up to receive our <a href="'.$this->get('router')->generate('content-alerts-variant', ['variant' => 'elife-newsletter']).'">bi-monthly newsletter</a> for recent developments at eLife, new products and collaborations and changes to editorial policy.</a>',
                 ], 'bullet')
             ), 'The latest from eLife', 2),

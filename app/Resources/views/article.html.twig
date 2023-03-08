@@ -320,19 +320,41 @@
 
 {% block body %}
 
-    {{ render_pattern(contentHeader) }}
+    {% if contentAside %}
+        <div class="wrapper wrapper--content-with-header-and-aside">
+    {% endif %}
 
-    {% for modalWindow in modalWindows %}
-        {{ render_pattern(modalWindow) }}
-    {% endfor %}
+        {{ render_pattern(contentHeader) }}
 
-    {% include 'calls-to-action.html.twig' %}
+        {% if contentAside %}
+            {{ render_pattern(contentAside) }}
+        {% endif %}
 
-    <div data-behaviour="DelegateBehaviour" data-delegate-behaviour="Popup" data-selector=".article-section:not(#abstract) a">
+        {% for modalWindow in modalWindows %}
+            {{ render_pattern(modalWindow) }}
+        {% endfor %}
 
-        {% block article_body %}{% endblock %}
+        {% include 'calls-to-action.html.twig' %}
 
-    </div>
+        {% if not contentAside %}
+            <div>
+        {% endif %}
+
+            {% block article_body %}{% endblock %}
+
+        {% if not contentAside %}
+            </div>
+        {% endif %}
+
+    {% if contentAside %}
+        </div>
+    {% endif %}
+
+    {% if contentAside and listing is defined and listing %}
+
+        {{ render_pattern(listing) }}
+
+    {% endif %}
 
     {{ schema_org_metadata(item) }}
 

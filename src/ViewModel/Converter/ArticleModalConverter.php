@@ -56,12 +56,6 @@ final class ArticleModalConverter implements ViewModelConverter
         } else {
             $reference = $this->patternRenderer->render($this->convertTo($object, ViewModel\Reference::class));
 
-            $buttonCollection = [];
-
-            if ($context['clipboard'] ?? false) {
-                $buttonCollection[] = Button::clipboard('Copy to clipboard', $context['clipboard']);
-            }
-
             $body = [
                 new ViewModel\ButtonCollection(
                     array_merge(($context['clipboard'] ?? false) ? [Button::clipboard('Copy to clipboard', $context['clipboard'])] : [],
@@ -71,6 +65,7 @@ final class ArticleModalConverter implements ViewModelConverter
                     ])
                 ),
             ];
+
             return ViewModel\ModalWindow::create('Cite this article', $reference.$this->patternRenderer->render(...$body), null, 'modalContentCitations');
         }
     }

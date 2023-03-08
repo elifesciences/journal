@@ -79,6 +79,7 @@ final class MagazineController extends Controller
                     $this->get('elife.journal.view_model.factory.content_header_image')->forLocalFile('magazine', true),
                     'Highlighting the latest research and giving a voice to scientists',
                     false,
+                    null,
                     [],
                     null,
                     null,

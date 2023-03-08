@@ -30,6 +30,7 @@ final class JobAdvertContentHeaderConverter implements ViewModelConverter
             null,
             $object->getImpactStatement(),
             true,
+            null,
             [],
             null,
             null,

@@ -73,7 +73,7 @@ final class FooterFactory
                     (new Link('Subscribe to alerts', $this->urlGenerator->generate('content-alerts')))->hiddenWide(
                     )->endOfGroup(),
                     (new Link(
-                        'Submit your research', 'https://reviewer.elifesciences.org/login'
+                        'Submit your research', 'https://elifesciences.org/submit-your-research'
                     ))->hiddenWide(),
                     new Link('Author guide',
                         'https://reviewer.elifesciences.org/author-guide/editorial-process'),

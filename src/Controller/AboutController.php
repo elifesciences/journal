@@ -13,11 +13,11 @@ use eLife\Journal\Helper\Callback;
 use eLife\Patterns\ViewModel\AboutProfile;
 use eLife\Patterns\ViewModel\AboutProfiles;
 use eLife\Patterns\ViewModel\ArticleSection;
+use eLife\Patterns\ViewModel\Breadcrumb;
 use eLife\Patterns\ViewModel\Button;
 use eLife\Patterns\ViewModel\ContentHeader;
 use eLife\Patterns\ViewModel\FlexibleViewModel;
 use eLife\Patterns\ViewModel\FormLabel;
-use eLife\Patterns\ViewModel\InfoBar;
 use eLife\Patterns\ViewModel\Link;
 use eLife\Patterns\ViewModel\ListHeading;
 use eLife\Patterns\ViewModel\Listing;
@@ -377,8 +377,17 @@ final class AboutController extends Controller
             ->then(function (array $parts) {
                 $impactStatement = $parts['impactStatement'] ?? 'eLife’s editors, early-career advisors, governing board, and executive staff work in concert to realise our mission.';
 
-                return new ContentHeader($parts['title'], null, $impactStatement,
-                    false, [], null, null, null, null,
+                return new ContentHeader($parts['title'], null, $impactStatement, false,
+                    new Breadcrumb([
+                        new Link(
+                            'About',
+                            $this->get('router')->generate('about')
+                        ),
+                        new Link(
+                            'Editors and people'
+                        ),
+                    ]),
+                    [], null, null, null, null,
                     new SelectNav(
                         $this->get('router')->generate('about-people'),
                         new Select('type', $parts['types']->toArray(), new FormLabel('Type', true), 'type'),
@@ -423,10 +432,6 @@ final class AboutController extends Controller
         }, array_keys($menuItems), array_values($menuItems));
 
         $arguments['menu'] = new SectionListing('sections', $menuItems, new ListHeading('About sections'), true);
-
-        if ($this->get('router')->generate('about-people') !== $currentPath) {
-            $arguments['infoBars'][] = new InfoBar('eLife\'s peer-review process is changing. From January 2023, eLife will no longer make accept/reject decisions after peer review. Instead, every preprint sent for peer review will be published on the eLife website as a “Reviewed Preprint” that includes an eLife assessment, public reviews, and a response from the authors (if available). When writing the eLife assessment, the editors and reviewers will use a common vocabulary to summarize the significance of the findings and the strength of the evidence reported in the preprint. <a href="'.$this->get('router')->generate('inside-elife-article', ['id' => '54d63486']).'">Read about the new process</a>.', InfoBar::TYPE_ANNOUNCEMENT);
-        }
 
         return $arguments;
     }

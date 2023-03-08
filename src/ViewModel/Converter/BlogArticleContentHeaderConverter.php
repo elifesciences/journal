@@ -32,6 +32,7 @@ final class BlogArticleContentHeaderConverter implements ViewModelConverter
 
         return new ViewModel\ContentHeaderNew(
             $object->getTitle(),
+            false,
             true, null, $object->getImpactStatement(), true,
             new ViewModel\Breadcrumb([
                 new ViewModel\Link(
