@@ -83,7 +83,11 @@
         "platform": {
             "php": "7.1.33"
         },
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "cweagans/composer-patches": true,
+            "mindplay/composer-locator": true
+        }
     },
     "extra": {
         "composer-exit-on-patch-failure": true,
