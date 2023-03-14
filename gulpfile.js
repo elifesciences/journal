@@ -345,7 +345,12 @@ const criticalCssConfig = (function () {
                 '.content-container-grid',
                 '.content-header-grid__main',
                 '.content-aside',
-                '.main-content-grid'
+                '.main-content-grid',
+                'highlight',
+                'highlight-item',
+                'highlight__items',
+                'hero-banner',
+                'hero-banner__picture-wrapper'
             ),
 
             about: global.concat(
