@@ -453,10 +453,6 @@
                 }
             ],
             "description": "Provides a way to patch Composer packages.",
-            "support": {
-                "issues": "https://github.com/cweagans/composer-patches/issues",
-                "source": "https://github.com/cweagans/composer-patches/tree/1.7.2"
-            },
             "time": "2022-01-25T19:21:20+00:00"
         },
         {
@@ -1337,12 +1333,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/patterns-php.git",
-                "reference": "c87a4c656daf8dba507f8ea6848acad5e33ad704"
+                "reference": "06a1015a0c21a031ed156afd5eaa5ad89a35a928"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/c87a4c656daf8dba507f8ea6848acad5e33ad704",
-                "reference": "c87a4c656daf8dba507f8ea6848acad5e33ad704",
+                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/06a1015a0c21a031ed156afd5eaa5ad89a35a928",
+                "reference": "06a1015a0c21a031ed156afd5eaa5ad89a35a928",
                 "shasum": ""
             },
             "require": {
@@ -1379,7 +1375,7 @@
                 "MIT"
             ],
             "description": "eLife patterns",
-            "time": "2023-03-01T11:01:54+00:00"
+            "time": "2023-03-10T13:36:39+00:00"
         },
         {
             "name": "fabpot/goutte",
@@ -1796,24 +1792,6 @@
                 "rest",
                 "web service"
             ],
-            "support": {
-                "issues": "https://github.com/guzzle/guzzle/issues",
-                "source": "https://github.com/guzzle/guzzle/tree/6.5.8"
-            },
-            "funding": [
-                {
-                    "url": "https://github.com/GrahamCampbell",
-                    "type": "github"
-                },
-                {
-                    "url": "https://github.com/Nyholm",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/guzzlehttp/guzzle",
-                    "type": "tidelift"
-                }
-            ],
             "time": "2022-06-20T22:16:07+00:00"
         },
         {
@@ -1971,24 +1949,6 @@
                 "stream",
                 "uri",
                 "url"
-            ],
-            "support": {
-                "issues": "https://github.com/guzzle/psr7/issues",
-                "source": "https://github.com/guzzle/psr7/tree/1.9.0"
-            },
-            "funding": [
-                {
-                    "url": "https://github.com/GrahamCampbell",
-                    "type": "github"
-                },
-                {
-                    "url": "https://github.com/Nyholm",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/guzzlehttp/psr7",
-                    "type": "tidelift"
-                }
             ],
             "time": "2022-06-20T21:43:03+00:00"
         },
@@ -2275,10 +2235,6 @@
                 "MIT"
             ],
             "description": "Locates Composer package root folders by package name",
-            "support": {
-                "issues": "https://github.com/mindplay-dk/composer-locator/issues",
-                "source": "https://github.com/mindplay-dk/composer-locator/tree/2.1.4"
-            },
             "time": "2020-12-23T10:58:04+00:00"
         },
         {
@@ -2604,11 +2560,6 @@
                 "hex2bin",
                 "rfc4648"
             ],
-            "support": {
-                "email": "info@paragonie.com",
-                "issues": "https://github.com/paragonie/constant_time_encoding/issues",
-                "source": "https://github.com/paragonie/constant_time_encoding"
-            },
             "time": "2022-06-14T06:56:20+00:00"
         },
         {
@@ -2700,24 +2651,6 @@
                 "twofish",
                 "x.509",
                 "x509"
-            ],
-            "support": {
-                "issues": "https://github.com/phpseclib/phpseclib/issues",
-                "source": "https://github.com/phpseclib/phpseclib/tree/3.0.19"
-            },
-            "funding": [
-                {
-                    "url": "https://github.com/terrafrost",
-                    "type": "github"
-                },
-                {
-                    "url": "https://www.patreon.com/phpseclib",
-                    "type": "patreon"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/phpseclib/phpseclib",
-                    "type": "tidelift"
-                }
             ],
             "time": "2023-03-05T17:13:09+00:00"
         },
@@ -3779,20 +3712,6 @@
             "homepage": "https://twig.symfony.com",
             "keywords": [
                 "templating"
-            ],
-            "support": {
-                "issues": "https://github.com/twigphp/Twig/issues",
-                "source": "https://github.com/twigphp/Twig/tree/v2.15.3"
-            },
-            "funding": [
-                {
-                    "url": "https://github.com/fabpot",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/twig/twig",
-                    "type": "tidelift"
-                }
             ],
             "time": "2022-09-28T08:40:08+00:00"
         },
@@ -6414,6 +6333,5 @@
     "platform-dev": [],
     "platform-overrides": {
         "php": "7.1.33"
-    },
-    "plugin-api-version": "2.3.0"
+    }
 }
