@@ -346,11 +346,11 @@ const criticalCssConfig = (function () {
                 '.content-header-grid__main',
                 '.content-aside',
                 '.main-content-grid',
-                'highlight',
-                'highlight-item',
-                'highlight__items',
-                'hero-banner',
-                'hero-banner__picture-wrapper'
+                '.highlight',
+                '.highlight-item',
+                '.highlight__items',
+                '.hero-banner',
+                '.hero-banner__picture-wrapper'
             ),
 
             about: global.concat(
