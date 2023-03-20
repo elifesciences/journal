@@ -81,13 +81,18 @@ final class ContentAsideConverter implements ViewModelConverter
                 $text = 'Accepted for publication after peer review and revision.';
         }
 
+        $link = null;
+        if ($article instanceof ArticleVoR && $article->isReviewedPreprint()) {
+            $link = new ViewModel\Link(
+                'About eLife\'s process',
+                $this->urlGenerator->generate('inside-elife-article', ['id' => '54d63486'])
+            );
+        }
+
         return new ViewModel\ContentAsideStatus(
             $title,
             $text,
-            new ViewModel\Link(
-                'About eLife\'s process',
-                $this->urlGenerator->generate('inside-elife-article', ['id' => '54d63486'])
-            )
+            $link
         );
     }
 }
