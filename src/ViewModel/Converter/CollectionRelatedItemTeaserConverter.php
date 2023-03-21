@@ -35,17 +35,8 @@ final class CollectionRelatedItemTeaserConverter implements ViewModelConverter
             $object->getTitle(),
             $this->urlGenerator->generate('collection', [$object]),
             $curatedBy,
-            new ViewModel\ContextLabel(new ViewModel\Link(ModelRelationship::get($context['from'], 'collection', $context['related'] ?? false))),
-            $this->bigTeaserImage($object),
-            ViewModel\TeaserFooter::forNonArticle(
-                ViewModel\Meta::withLink(
-                    new ViewModel\Link(
-                        'Collection',
-                        $this->urlGenerator->generate('collections')
-                    )/*,
-                    $this->simpleDate($object, $context)*/
-                )
-            )
+            new ViewModel\ContextLabel(new ViewModel\Link(ModelRelationship::get($context['from'], 'collection', $context['related'] ?? false), 'saeed')),
+            $this->bigTeaserImage($object)
         );
     }
 

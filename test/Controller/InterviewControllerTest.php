@@ -136,7 +136,7 @@ final class InterviewControllerTest extends PageTestCase
         $crawler = $client->request('GET', $this->getUrl());
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
-        $this->assertSame('Part of collection', $crawler->filter('.teaser--related .teaser__context_label_item')->text());
+        $this->assertSame('Part of Collection', $crawler->filter('.teaser--related .teaser__context_label_item')->text());
         $this->assertSame('Collection title', trim(preg_replace('!\s+!', ' ', $crawler->filter('.teaser--related .teaser__header_text')->text())));
     }
 

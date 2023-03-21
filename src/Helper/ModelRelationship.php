@@ -28,7 +28,7 @@ final class ModelRelationship
     ];
 
     private static $toRelationship = [
-        'collection' => 'Part of collection',
+        'collection' => 'Part of Collection',
         'podcast-episode-chapter' => 'Discussed in',
         'research-advance' => [
             'from' => [
