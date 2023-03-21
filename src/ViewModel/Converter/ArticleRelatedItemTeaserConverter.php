@@ -32,7 +32,7 @@ final class ArticleRelatedItemTeaserConverter implements ViewModelConverter
     public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
         if ($object instanceof ArticleVoR && $object->getThumbnail()) {
-            $image = $this->smallTeaserImage($object);
+            $image = $this->bigTeaserImage($object);
         } else {
             $image = null;
         }
