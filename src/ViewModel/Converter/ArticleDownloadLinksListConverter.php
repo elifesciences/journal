@@ -47,6 +47,7 @@ final class ArticleDownloadLinksListConverter implements ViewModelConverter
             $downloads[] = new ViewModel\ArticleDownloadLink(new ViewModel\Link(
                 'Article PDF',
                 $this->downloadLinkUriGenerator->generate(DownloadLink::fromUri($object->getPdf().'?'.DownloadLink::QUERY_PARAMETER_CANONICAL_URI.'='.$articleUri)),
+                null,
                 false,
                 ['article-identifier' => $object->getDoi(), 'download-type' => 'pdf-article']
             ));
@@ -55,6 +56,7 @@ final class ArticleDownloadLinksListConverter implements ViewModelConverter
                 $downloads[] = new ViewModel\ArticleDownloadLink(new ViewModel\Link(
                     'Figures PDF',
                     $this->downloadLinkUriGenerator->generate(DownloadLink::fromUri($object->getFiguresPdf())),
+                    null,
                     false,
                     ['article-identifier' => $object->getDoi(), 'download-type' => 'pdf-figures']
                 ));
@@ -67,6 +69,7 @@ final class ArticleDownloadLinksListConverter implements ViewModelConverter
                 new ViewModel\Link(
                     'Executable version',
                     $this->urlGenerator->generate('article-era-download', [$object], UrlGeneratorInterface::ABSOLUTE_URL),
+                    null,
                     false,
                     ['article-identifier' => $object->getDoi(), 'download-type' => 'era-download']
                 ),
