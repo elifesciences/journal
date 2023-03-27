@@ -428,7 +428,7 @@ final class AboutController extends Controller
         $currentPath = $this->get('router')->generate($request->attributes->get('_route'), $request->attributes->get('_route_params'));
 
         $menuItems = array_map(function (string $text, string $path) use ($currentPath) {
-            return new Link($text, $path, $path === $currentPath);
+            return new Link($text, $path, null, $path === $currentPath);
         }, array_keys($menuItems), array_values($menuItems));
 
         $arguments['menu'] = new SectionListing('sections', $menuItems, new ListHeading('About sections'), true);
