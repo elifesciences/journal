@@ -4125,7 +4125,6 @@ final class ArticleControllerTest extends PageTestCase
         if ($hasContentAside) {
             $this->assertSame('Version of Record', $crawler->filter('.content-aside .status-title')->text());
             $this->assertSame('Accepted for publication after peer review and revision.', $crawler->filter('.content-aside .status-description')->text());
-            $this->assertSame('About eLife\'s process', $crawler->filter('.content-aside .status-link')->text());
             $this->assertSame('Download',
                 $this->crawlerText($crawler->filter('.content-aside .button-collection .button-collection__item')->eq(0)));
             $this->assertSame('Cite',
@@ -4329,6 +4328,13 @@ final class ArticleControllerTest extends PageTestCase
             $this->assertSame($expectedTitle, $crawler->filter('.content-aside .status-title')->text());
             $this->assertSame($expectedDescription, $crawler->filter('.content-aside .status-description')->text());
             $this->assertGreaterThan(0, $crawler->filter('.content-aside .definition-list--timeline')->count());
+        }
+
+        // status link only appears on new VORs
+        if ('RP' === $elocationIdPrefix) {
+            $this->assertSame('About eLife\'s process', $crawler->filter('.content-aside .status-link')->text());
+        } else {
+            $this->assertSame(0, $crawler->filter('.content-aside .status-link')->count());
         }
     }
 

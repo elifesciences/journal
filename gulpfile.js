@@ -341,7 +341,16 @@ const criticalCssConfig = (function () {
                 '.push--large--one-twelfth',
                 '.push--x-large--two-twelfths',
                 '.push--x-large--zero',
-                '.see-more-link'
+                '.see-more-link',
+                '.content-container-grid',
+                '.content-header-grid__main',
+                '.content-aside',
+                '.main-content-grid',
+                '.highlight',
+                '.highlight-item',
+                '.highlight__items',
+                '.hero-banner',
+                '.hero-banner__picture-wrapper'
             ),
 
             about: global.concat(
