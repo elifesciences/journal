@@ -5109,6 +5109,9 @@ final class ArticleControllerTest extends PageTestCase
             $crawler->filter('.main-content-grid > section:nth-of-type(3) > div > section:nth-of-type(3) > header > h3')->text());
     }
 
+    /**
+     * @test
+     */
     public function public_review_has_doi()
     {
         $client = static::createClient();
@@ -5309,9 +5312,7 @@ final class ArticleControllerTest extends PageTestCase
         $crawler = $client->request('GET', '/articles/00001');
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
-
-        $this->assertSame('Peer review',
-            $crawler->filter('.main-content-grid > section:nth-of-type(3) > header > h2')->text());
+        $this->assertSame(2, $crawler->filter('#peer-review .article-section__body a.doi__link')->count());
     }
 
     protected function getUrl($articleId = '00001') : string
