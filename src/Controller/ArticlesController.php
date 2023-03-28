@@ -314,11 +314,7 @@ final class ArticlesController extends Controller
                     $first = true;
                     $relatedLinks = [];
 
-                    if ($item->getElifeAssessmentScietyUri()) {
-                        $relatedLinks[] = new Link('Reviews on Sciety', $item->getElifeAssessmentScietyUri());
-                    }
-
-                    $relatedLinks[] = new Link('eLife\'s review process', $this->get('router')->generate('about-peer-review'));
+                    $relatedLinks[] = new Link('About eLife assessments', $this->get('router')->generate('about-peer-review'));
 
                     $parts[] = ArticleSection::collapsible(
                         'elife-assessment',
