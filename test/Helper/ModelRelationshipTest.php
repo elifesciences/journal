@@ -31,8 +31,8 @@ final class ModelRelationshipTest extends TestCase
         yield ['research-advance', 'correction', false, 'Of interest'];
         yield ['research-advance', 'correction', true, 'Related to'];
 
-        yield ['research-article', 'collection', true, 'Part of'];
-        yield ['correction', 'collection', true, 'Part of'];
+        yield ['research-article', 'collection', true, 'Part of Collection'];
+        yield ['correction', 'collection', true, 'Part of Collection'];
         yield ['research-article', 'collection', false, 'Of interest'];
 
         yield ['research-article', 'podcast-episode-chapter', true, 'Discussed in'];

@@ -441,7 +441,9 @@ final class ArticlesController extends Controller
                         return ArticleSection::basic(
                             $this->render(...$this->convertContent($publicReview, 3, $context)),
                             $publicReview->getTitle(),
-                            3
+                            3,
+                            $publicReview->getId(),
+                            $publicReview->getDoi() ? new Doi($publicReview->getDoi()) : null
                         );
                     })->toArray();
 
