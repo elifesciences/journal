@@ -451,7 +451,9 @@ final class ArticlesController extends Controller
                         $reviews[] = ArticleSection::basic(
                             $this->render(...$this->convertContent($item->getRecommendationsForAuthors(), 3, $context)),
                             $item->getRecommendationsForAuthorsTitle(),
-                            3
+                            3,
+                            $item->getRecommendationsForAuthors()->getId(),
+                            $item->getRecommendationsForAuthors()->getDoi() ? new Doi($item->getRecommendationsForAuthors()->getDoi()) : null
                         );
                     }
 
