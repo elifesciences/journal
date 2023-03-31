@@ -47,7 +47,8 @@ final class DigestContentHeaderConverter implements ViewModelConverter
             new ViewModel\SocialMediaSharersNew(
                 strip_tags($object->getTitle()),
                 $this->urlGenerator->generate('digest', [$object], UrlGeneratorInterface::ABSOLUTE_URL),
-                false
+                false,
+                true
             ),
             !empty($context['metrics']) ? ViewModel\ContextualData::withMetrics($context['metrics']) : null,
             null,
