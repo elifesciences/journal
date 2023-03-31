@@ -22,7 +22,7 @@ elifePipeline {
 
             dockerComposeSmokeTests(commit, [
                 'services': [
-                    'app': './smoke_tests.sh',
+                    'app_t': './smoke_tests.sh',
                 ],
                 'blackbox': [
                     './smoke_tests.sh localhost 8080',
@@ -53,7 +53,7 @@ elifePipeline {
                 def tagName = branchName.replaceAll("/", "_")
                 image.tag(tagName).push()
             }
-            
+
             elifeMainlineOnly {
                 image.push()
             }

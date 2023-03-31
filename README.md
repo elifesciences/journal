@@ -40,9 +40,17 @@ When using Windows to bypass the main errors we recommend to follow the next :
 Docker Installation - Running the site locally
 ----------------------------------------------
 
-1. Run `composer install` to generate vendor files locally
-2. Run `docker-compose up --build`
-3. Open `http://localhost:8080` in your browser.
+<details>
+<summary>In order to sync vendor files with local</summary>
+ 1. Add `./` between `-` and `vendor` in docker-compose.override.yml at lines 11 and 28
+<br>
+ 2. Erase `vendor` volume from docker-compose.override.yml
+<br>
+ 3. Run `composer install` to generate vendor files locally
+</details>
+
+1. Run `docker-compose up --build`
+2. Open `http://localhost:8080` in your browser.
 
 To start/restart the containers use these commands:
 `docker-compose down --volumes --remove-orphans && docker-compose up --build`
