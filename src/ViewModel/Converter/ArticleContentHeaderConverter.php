@@ -76,7 +76,9 @@ final class ArticleContentHeaderConverter implements ViewModelConverter
             '#cite-this-article',
             new ViewModel\SocialMediaSharersNew(
                 strip_tags($object->getFullTitle()),
-                "https://doi.org/{$object->getDoi()}"
+                "https://doi.org/{$object->getDoi()}",
+                true,
+                true
             ),
             !empty($context['metrics']) ? ViewModel\ContextualData::withMetrics($context['metrics']) : null,
             null,
