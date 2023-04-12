@@ -18,8 +18,6 @@ use eLife\Patterns\ViewModel\ContentHeader;
 use eLife\Patterns\ViewModel\FormLabel;
 use eLife\Patterns\ViewModel\Link;
 use eLife\Patterns\ViewModel\ListHeading;
-use eLife\Patterns\ViewModel\SectionListing;
-use eLife\Patterns\ViewModel\SectionListingLink;
 use eLife\Patterns\ViewModel\Select;
 use eLife\Patterns\ViewModel\SelectNav;
 use eLife\Patterns\ViewModel\SelectOption;
@@ -186,27 +184,6 @@ final class AboutController extends Controller
 
     private function aboutPageArguments(Request $request) : array
     {
-        $arguments = $this->defaultPageArguments($request);
-
-        $arguments['menuLink'] = new SectionListingLink('All sections', 'sections');
-
-        $menuItems = [
-            'About eLife' => $this->get('router')->generate('about'),
-            'Publishing with eLife' => $this->get('router')->generate('about-publishing-with-elife'),
-            'Editors and people' => $this->get('router')->generate('about-people'),
-            'Peer review' => $this->get('router')->generate('about-peer-review'),
-            'Technology' => $this->get('router')->generate('about-technology'),
-            'Research Culture' => $this->get('router')->generate('about-research-culture'),
-        ];
-
-        $currentPath = $this->get('router')->generate($request->attributes->get('_route'), $request->attributes->get('_route_params'));
-
-        $menuItems = array_map(function (string $text, string $path) use ($currentPath) {
-            return new Link($text, $path, null, $path === $currentPath);
-        }, array_keys($menuItems), array_values($menuItems));
-
-        $arguments['menu'] = new SectionListing('sections', $menuItems, new ListHeading('About sections'), true);
-
-        return $arguments;
+        return $this->defaultPageArguments($request);
     }
 }
