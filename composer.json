@@ -13,7 +13,7 @@
         }
     },
     "require": {
-        "php": "^7.1",
+        "php": "^7.3",
         "ext-hash": "*",
         "beberlei/assert": "^2.8",
         "bobthecow/mustache-bundle": "^1.2",
@@ -81,7 +81,7 @@
     },
     "config": {
         "platform": {
-            "php": "7.1.33"
+            "php": "7.3"
         },
         "sort-packages": true,
         "allow-plugins": {
