@@ -5228,6 +5228,46 @@ final class ArticleControllerTest extends PageTestCase
                 'February 15, 2023 (Go to version)',
             ],
         ];
+        yield 'revised preprints and preprint disordered' => [
+            [
+                [
+                    'status' => 'preprint',
+                    'description' => 'This manuscript was published as a reviewed preprint.',
+                    'uri' => 'https://doi.org/10.7554/eLife.00001.1',
+                    'date' => '2023-02-16T00:00:00Z',
+                ],
+                [
+                    'status' => 'preprint',
+                    'description' => 'This manuscript was published as a preprint.',
+                    'uri' => 'https://doi.org/10.1101/2021.11.09.467796',
+                    'date' => '2023-02-15T00:00:00Z',
+                ],
+                [
+                    'status' => 'preprint',
+                    'description' => 'The reviewed preprint was revised.',
+                    'uri' => 'https://doi.org/10.7554/eLife.00001.3',
+                    'date' => '2023-02-18T00:00:00Z',
+                ],
+                [
+                    'status' => 'preprint',
+                    'description' => 'The reviewed preprint was revised.',
+                    'uri' => 'https://doi.org/10.7554/eLife.00001.2',
+                    'date' => '2023-02-17T00:00:00Z',
+                ],
+            ],
+            [
+                'Version of Record published',
+                'May 3, 2023 (This version)',
+                'Reviewed preprint version 3',
+                'February 18, 2023 (Go to version)',
+                'Reviewed preprint version 2',
+                'February 17, 2023 (Go to version)',
+                'Reviewed preprint version 1',
+                'February 16, 2023 (Go to version)',
+                'Preprint posted',
+                'February 15, 2023 (Go to version)',
+            ],
+        ];
     }
 
     /**
