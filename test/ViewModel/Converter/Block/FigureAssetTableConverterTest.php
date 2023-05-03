@@ -32,7 +32,7 @@ final class FigureAssetTableConverterTest extends BlockConverterTestCase
             ->will($this->returnValue(ViewModel\AdditionalAsset::withoutDoi(
                 'id',
                 ViewModel\CaptionText::withHeading('Without doi'),
-                ViewModel\DownloadLink::fromLink(new Link('Download link', 'http://google.com/download'), 'File name'),
+                new ViewModel\DownloadLink(new Link('Download link', 'http://google.com/download'), 'File name'),
                 'http://google.com/'
             )));
 
