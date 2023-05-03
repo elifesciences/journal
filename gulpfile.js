@@ -108,8 +108,8 @@ gulp.task('images:social', ['images:clean'], () => {
     return gulp.src('./assets/images/social/*.png')
         .pipe(responsive({
             '*': [1, 2].reduce((acc, scale) => {
-                const width = 600 * scale;
-                const height = 600 * scale;
+                const width = 280 * scale;
+                const height = 200 * scale;
 
                 acc.push({
                     width: width,

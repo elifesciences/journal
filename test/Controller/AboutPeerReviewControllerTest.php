@@ -35,10 +35,10 @@ final class AboutPeerReviewControllerTest extends PageTestCase
         $this->assertSame('eLife\'s review process combines the immediacy and openness of preprints with the scrutiny of peer review by experts.', $crawler->filter('meta[property="og:description"]')->attr('content'));
         $this->assertSame('eLife\'s review process combines the immediacy and openness of preprints with the scrutiny of peer review by experts.', $crawler->filter('meta[name="description"]')->attr('content'));
         $this->assertSame('summary', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
-        $this->assertSame('http://localhost/'.ltrim(self::$kernel->getContainer()->get('elife.assets.packages')->getUrl('assets/images/social/icon-600x600@1.png'), '/'), $crawler->filter('meta[name="twitter:image"]')->attr('content'));
-        $this->assertSame('http://localhost/'.ltrim(self::$kernel->getContainer()->get('elife.assets.packages')->getUrl('assets/images/social/icon-600x600@1.png'), '/'), $crawler->filter('meta[property="og:image"]')->attr('content'));
-        $this->assertSame('600', $crawler->filter('meta[property="og:image:width"]')->attr('content'));
-        $this->assertSame('600', $crawler->filter('meta[property="og:image:height"]')->attr('content'));
+        $this->assertSame('http://localhost/'.ltrim(self::$kernel->getContainer()->get('elife.assets.packages')->getUrl('assets/images/social/icon-280x200@1.c5b562b1.png'), '/'), $crawler->filter('meta[name="twitter:image"]')->attr('content'));
+        $this->assertSame('http://localhost/'.ltrim(self::$kernel->getContainer()->get('elife.assets.packages')->getUrl('assets/images/social/icon-280x200@1.c5b562b1.png'), '/'), $crawler->filter('meta[property="og:image"]')->attr('content'));
+        $this->assertSame('280', $crawler->filter('meta[property="og:image:width"]')->attr('content'));
+        $this->assertSame('200', $crawler->filter('meta[property="og:image:height"]')->attr('content'));
         $this->assertEmpty($crawler->filter('meta[name="dc.identifier"]'));
         $this->assertEmpty($crawler->filter('meta[name="dc.relation.ispartof"]'));
         $this->assertEmpty($crawler->filter('meta[name="dc.title"]'));
