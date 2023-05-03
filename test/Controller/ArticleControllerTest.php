@@ -5123,7 +5123,121 @@ final class ArticleControllerTest extends PageTestCase
             $crawler->filter('.main-content-grid > section:nth-of-type(3) > div > section:nth-of-type(3) > header > h3')->text());
     }
 
-    public function it_displays_versions_in_timeline_for_revised_preprint()
+    public function prcVorHistoryProvider()
+    {
+        yield 'none' => [
+            [],
+            [
+                'Version of Record published',
+                'May 3, 2023 (This version)',
+            ],
+        ];
+        yield 'preprint only' => [
+            [
+                [
+                    'status' => 'preprint',
+                    'description' => 'This manuscript was published as a preprint.',
+                    'uri' => 'https://doi.org/10.1101/2021.11.09.467796',
+                    'date' => '2023-02-15T00:00:00Z',
+                ],
+            ],
+            [
+                'Version of Record published',
+                'May 3, 2023 (This version)',
+                'Preprint posted',
+                'February 15, 2023 (Go to version)',
+            ],
+        ];
+        yield 'reviewed preprint only' => [
+            [
+                [
+                    'status' => 'preprint',
+                    'description' => 'This manuscript was published as a reviewed preprint.',
+                    'uri' => 'https://doi.org/10.7554/eLife.00001.1',
+                    'date' => '2023-02-16T00:00:00Z',
+                ],
+            ],
+            [
+                'Version of Record published',
+                'May 3, 2023 (This version)',
+                'Reviewed preprint posted',
+                'February 16, 2023 (Go to version)',
+            ],
+        ];
+        yield 'revised preprint' => [
+            [
+                [
+                    'status' => 'preprint',
+                    'description' => 'This manuscript was published as a reviewed preprint.',
+                    'uri' => 'https://doi.org/10.7554/eLife.00001.1',
+                    'date' => '2023-02-16T00:00:00Z',
+                ],
+                [
+                    'status' => 'preprint',
+                    'description' => 'The reviewed preprint was revised.',
+                    'uri' => 'https://doi.org/10.7554/eLife.00001.2',
+                    'date' => '2023-02-17T00:00:00Z',
+                ],
+            ],
+            [
+                'Version of Record published',
+                'May 3, 2023 (This version)',
+                'Reviewed preprint version 2',
+                'February 17, 2023 (Go to version)',
+                'Reviewed preprint version 1',
+                'February 16, 2023 (Go to version)',
+            ],
+        ];
+        yield 'revised preprints and preprint' => [
+            [
+                [
+                    'status' => 'preprint',
+                    'description' => 'This manuscript was published as a preprint.',
+                    'uri' => 'https://doi.org/10.1101/2021.11.09.467796',
+                    'date' => '2023-02-15T00:00:00Z',
+                ],
+                [
+                    'status' => 'preprint',
+                    'description' => 'This manuscript was published as a reviewed preprint.',
+                    'uri' => 'https://doi.org/10.7554/eLife.00001.1',
+                    'date' => '2023-02-16T00:00:00Z',
+                ],
+                [
+                    'status' => 'preprint',
+                    'description' => 'The reviewed preprint was revised.',
+                    'uri' => 'https://doi.org/10.7554/eLife.00001.2',
+                    'date' => '2023-02-17T00:00:00Z',
+                ],
+                [
+                    'status' => 'preprint',
+                    'description' => 'The reviewed preprint was revised.',
+                    'uri' => 'https://doi.org/10.7554/eLife.00001.3',
+                    'date' => '2023-02-18T00:00:00Z',
+                ],
+            ],
+            [
+                'Version of Record published',
+                'May 3, 2023 (This version)',
+                'Reviewed preprint version 3',
+                'February 18, 2023 (Go to version)',
+                'Reviewed preprint version 2',
+                'February 17, 2023 (Go to version)',
+                'Reviewed preprint version 1',
+                'February 16, 2023 (Go to version)',
+                'Preprint posted',
+                'February 15, 2023 (Go to version)',
+            ],
+        ];
+    }
+
+    /**
+     * @test
+     * @dataProvider prcVorHistoryProvider
+     */
+    public function it_displays_versions_in_timeline_for_prc_vor(
+        array $preprints,
+        array $expectedTimeline
+    )
     {
         $client = static::createClient();
 
@@ -5144,9 +5258,9 @@ final class ArticleControllerTest extends PageTestCase
                     'type' => 'research-article',
                     'doi' => '10.7554/eLife.00001',
                     'title' => 'Article 1 title',
-                    'published' => '2010-01-01T00:00:00Z',
-                    'versionDate' => '2010-01-01T00:00:00Z',
-                    'statusDate' => '2010-01-01T00:00:00Z',
+                    'published' => '2023-05-03T00:00:00Z',
+                    'versionDate' => '2023-05-03T00:00:00Z',
+                    'statusDate' => '2023-05-03T00:00:00Z',
                     'volume' => 1,
                     'elocationId' => 'RP00001',
                     'copyright' => [
@@ -5194,10 +5308,10 @@ final class ArticleControllerTest extends PageTestCase
                         'content' => [
                             [
                                 'type' => 'paragraph',
-                                'text' => 'Collagen is a major component of extracellular matrix. The authors have identified a high-affinity inhibitory collagen receptor LAIR-1 and a soluble decoy receptor LAIR-2 (with even higher binding affinity to collagen), which can be therapeutically targeted to block tumor progression. Dr Meyaard and colleagues have also generated a dimeric LAIR-2 human IgG1 Fc fusion protein NC410 for therapeutic use. With humanized mouse models engrafted with functional human immune systems (PBMC), they have explored the anti-cancer efficacy of NC410 and revealed its impact on modulating immune responses. Furthermore, they extended this study to identify biomarkers of predictive value for NC410-based anti-cancer therapy.'
+                                'text' => 'Collagen is a major component of extracellular matrix. The authors have identified a high-affinity inhibitory collagen receptor LAIR-1 and a soluble decoy receptor LAIR-2 (with even higher binding affinity to collagen), which can be therapeutically targeted to block tumor progression. Dr Meyaard and colleagues have also generated a dimeric LAIR-2 human IgG1 Fc fusion protein NC410 for therapeutic use. With humanized mouse models engrafted with functional human immune systems (PBMC), they have explored the anti-cancer efficacy of NC410 and revealed its impact on modulating immune responses. Furthermore, they extended this study to identify biomarkers of predictive value for NC410-based anti-cancer therapy.',
                             ],
                         ],
-                        'scietyUri' => 'https://sciety.org/articles/activity/10.1101/2020.11.21.391326'
+                        'scietyUri' => 'https://sciety.org/articles/activity/10.1101/2020.11.21.391326',
                     ],
                     'publicReviews' => [
                         [
@@ -5232,7 +5346,7 @@ final class ArticleControllerTest extends PageTestCase
                             'content' => [
                                 [
                                     'type' => 'paragraph',
-                                    'text' => 'Thank you for submitting your work entitled “A new species of the genus <i>Homo</i> from the Dinaledi Chamber, South Africa” for peer review at <i>eLife</i>.'
+                                    'text' => 'Thank you for submitting your work entitled “A new species of the genus <i>Homo</i> from the Dinaledi Chamber, South Africa” for peer review at <i>eLife</i>.',
                                 ],
                                 [
                                     'type' => 'box',
@@ -5240,13 +5354,13 @@ final class ArticleControllerTest extends PageTestCase
                                     'content' => [
                                         [
                                             'type' => 'paragraph',
-                                            'text' => 'Your submission has been favorably evaluated by Ian Baldwin (Senior editor), two guest Reviewing editors (Johannes Krause and Nicholas Conard), and two peer reviewers. One of the two peer reviewers, Chris Stringer, has agreed to share his identity, and Johannes Krause has drafted this decision to help you prepare a revised submission.'
+                                            'text' => 'Your submission has been favorably evaluated by Ian Baldwin (Senior editor), two guest Reviewing editors (Johannes Krause and Nicholas Conard), and two peer reviewers. One of the two peer reviewers, Chris Stringer, has agreed to share his identity, and Johannes Krause has drafted this decision to help you prepare a revised submission.',
                                         ],
                                     ],
                                 ],
                                 [
                                     'type' => 'paragraph',
-                                    'text' => 'The authors describe a large collection of recently discovered hominin fossils from the Dinaledi Chamber in the Rising Star cave system in South Africa. Based on their initial assessment they argue that the fossil remains derive from a single homogenous hominin group and present a new taxon that they call <i>Homo naledi</i>.'
+                                    'text' => 'The authors describe a large collection of recently discovered hominin fossils from the Dinaledi Chamber in the Rising Star cave system in South Africa. Based on their initial assessment they argue that the fossil remains derive from a single homogenous hominin group and present a new taxon that they call <i>Homo naledi</i>.',
                                 ],
                             ],
                         ],
@@ -5258,7 +5372,7 @@ final class ArticleControllerTest extends PageTestCase
                         'content' => [
                             [
                                 'type' => 'paragraph',
-                                'text' => 'Thank you for submitting your work entitled “A new species of the genus <i>Homo</i> from the Dinaledi Chamber, South Africa” for peer review at <i>eLife</i>.'
+                                'text' => 'Thank you for submitting your work entitled “A new species of the genus <i>Homo</i> from the Dinaledi Chamber, South Africa” for peer review at <i>eLife</i>.',
                             ],
                             [
                                 'type' => 'box',
@@ -5266,13 +5380,13 @@ final class ArticleControllerTest extends PageTestCase
                                 'content' => [
                                     [
                                         'type' => 'paragraph',
-                                        'text' => 'Your submission has been favorably evaluated by Ian Baldwin (Senior editor), two guest Reviewing editors (Johannes Krause and Nicholas Conard), and two peer reviewers. One of the two peer reviewers, Chris Stringer, has agreed to share his identity, and Johannes Krause has drafted this decision to help you prepare a revised submission.'
+                                        'text' => 'Your submission has been favorably evaluated by Ian Baldwin (Senior editor), two guest Reviewing editors (Johannes Krause and Nicholas Conard), and two peer reviewers. One of the two peer reviewers, Chris Stringer, has agreed to share his identity, and Johannes Krause has drafted this decision to help you prepare a revised submission.',
                                     ],
                                 ],
                             ],
                             [
                                 'type' => 'paragraph',
-                                'text' => 'The authors describe a large collection of recently discovered hominin fossils from the Dinaledi Chamber in the Rising Star cave system in South Africa. Based on their initial assessment they argue that the fossil remains derive from a single homogenous hominin group and present a new taxon that they call <i>Homo naledi</i>.'
+                                'text' => 'The authors describe a large collection of recently discovered hominin fossils from the Dinaledi Chamber in the Rising Star cave system in South Africa. Based on their initial assessment they argue that the fossil remains derive from a single homogenous hominin group and present a new taxon that they call <i>Homo naledi</i>.',
                             ],
                         ],
                     ],
@@ -5294,57 +5408,43 @@ final class ArticleControllerTest extends PageTestCase
                 200,
                 ['Content-Type' => 'application/vnd.elife.article-history+json; version=2'],
                 json_encode([
-                    'versions' => [
+                    'versions' => array_merge(
+                        $preprints,
                         [
-                            "status" => "preprint",
-                            "description" => "This manuscript was published as a preprint.",
-                            "uri" => "https://doi.org/10.1101/2021.11.09.467796",
-                            "date" => "2023-02-15T00:00:00Z"
-                        ],
-                        [
-                            "status" => "preprint",
-                            "description" => "This manuscript was published as a reviewed preprint.",
-                            "uri" => "https://doi.org/10.7554/eLife.00001.1",
-                            "date" => "2023-04-15T00:00:00Z"
-                        ],
-                        [
-                            "status" => "preprint",
-                            "description" => "The reviewed preprint was revised.",
-                            "uri" => "https://doi.org/10.7554/eLife.00001.2",
-                            "date" => "2023-09-10T00:00:00Z"
-                        ],
-                        [
-                            "status" => "preprint",
-                            "description" => "The reviewed preprint was revised.",
-                            "uri" => "https://doi.org/10.7554/eLife.00001.3",
-                            "date" => "2023-11-10T00:00:00Z"
-                        ],
-                        [
-                            'status' => 'vor',
-                            'stage' => 'published',
-                            'id' => '00001',
-                            'version' => 1,
-                            'type' => 'research-article',
-                            'doi' => '10.7554/eLife.00001',
-                            'title' => 'Article 1 title',
-                            'published' => '2010-01-01T00:00:00Z',
-                            'versionDate' => '2010-01-01T00:00:00Z',
-                            'statusDate' => '2010-01-01T00:00:00Z',
-                            'volume' => 1,
-                            'elocationId' => 'RP00001',
-                            'copyright' => [
-                                'license' => 'CC-BY-4.0',
-                                'holder' => 'Bar',
-                                'statement' => 'Copyright statement.',
-                            ],
-                            'authorLine' => 'Foo Bar',
-                        ],
-                    ],
+                            [
+                                'status' => 'vor',
+                                'stage' => 'published',
+                                'id' => '00001',
+                                'version' => 1,
+                                'type' => 'research-article',
+                                'doi' => '10.7554/eLife.00001',
+                                'title' => 'Article 1 title',
+                                'published' => '2023-05-03T00:00:00Z',
+                                'versionDate' => '2023-05-03T00:00:00Z',
+                                'statusDate' => '2023-05-03T00:00:00Z',
+                                'volume' => 1,
+                                'elocationId' => 'RP00001',
+                                'copyright' => [
+                                    'license' => 'CC-BY-4.0',
+                                    'holder' => 'Bar',
+                                    'statement' => 'Copyright statement.',
+                                ],
+                                'authorLine' => 'Foo Bar',
+                            ]
+                        ]
+                    ),
                 ])
             )
         );
 
         $crawler = $client->request('GET', '/articles/00001');
+        $this->assertCount(count($expectedTimeline), $crawler->filter('.content-aside .definition-list--timeline')->children());
+        foreach ($expectedTimeline as $k => $expectedTimelineItem) {
+            $this->assertSame(
+                $expectedTimelineItem,
+                $crawler->filter('.content-aside .definition-list--timeline')->children()->eq($k)->text()
+            );
+        }
     }
 
     protected function getUrl($articleId = '00001') : string
