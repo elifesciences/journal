@@ -4,6 +4,9 @@ FROM elifesciences/journal_composer:${image_tag} AS composer
 FROM elifesciences/journal_npm:${image_tag} as npm
 FROM node:${node_version}
 
+# This is a temporary solution while we migrate to a more recent version of nodejs
+RUN echo "deb http://archive.debian.org/debian stretch main" > /etc/apt/sources.list
+
 RUN apt-get update && apt-get install --no-install-recommends -y \
     libvips \
     && rm -rf /var/lib/apt/lists/*
