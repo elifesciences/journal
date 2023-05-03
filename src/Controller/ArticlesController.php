@@ -1298,13 +1298,35 @@ final class ArticlesController extends Controller
                     ->map(function(ArticlePoA $itemVersion, int $number) use ($prepareDefinition) {
                         return $prepareDefinition($itemVersion, 0 === $number);
                     })->reverse()->toArray());
-
+                $count =  $history->getVersions()->filter(Callback::isInstanceOf(ArticlePreprint::class))->count();
                 $publicationHistory = array_merge($publicationHistory, $history->getVersions()
                     ->filter(Callback::isInstanceOf(ArticlePreprint::class))
                     ->sort(function (ArticlePreprint $a, ArticlePreprint $b) {
                         return $b->getPublishedDate() <=> $a->getPublishedDate();
                     })
-                    ->map(function (ArticlePreprint $preprint) {
+                    ->map(function (ArticlePreprint $preprint, $i) use ($count) {
+                        if (strpos($preprint->getDescription(), 'reviewed preprint') !== false) {
+                            $term = sprintf('Reviewed preprint version %s', ($count - 1) - $i);
+                            if (2 === $count) {
+                                $term = 'Reviewed preprint posted';
+                            }
+
+                            return [
+                                'index' => $preprint->getPublishedDate()->getTimestamp(),
+                                'term' => $term,
+                                'descriptors' => [
+                                    sprintf(
+                                        '%s %s',
+                                        $preprint->getPublishedDate()->format('F j, Y'),
+                                        sprintf(
+                                            '<a href="%s">(Go to version)</a>',
+                                            $preprint->getUri()
+                                        )
+                                    )
+                                ]
+                            ];
+                        }
+
                         return [
                             // index added to allow us to sort.
                             'index' => $preprint->getPublishedDate()->getTimeStamp(),
