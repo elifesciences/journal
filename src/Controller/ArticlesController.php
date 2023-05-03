@@ -1333,7 +1333,9 @@ final class ArticlesController extends Controller
 
                 $rpCount = $history->getVersions()
                     ->filter(Callback::isInstanceOf(ArticlePreprint::class))
-                    ->filter(function (ArticlePreprint $preprint) { return strpos($preprint->getDescription(), 'reviewed preprint') !== false; })
+                    ->filter(function (ArticlePreprint $preprint) {
+                        return strpos($preprint->getDescription(), 'reviewed preprint') !== false;
+                    })
                     ->count();
 
                 // If reviewed preprint count is greater than 1 we want to alter the $item['term'].
