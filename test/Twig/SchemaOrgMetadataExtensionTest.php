@@ -223,12 +223,12 @@ final class SchemaOrgMetadataExtensionTest extends TestCase
     {
         $this->defaultExpectations(true);
 
-        $jsonString = preg_replace('/(^<script[^>]*>|<\/script>$)/', '', $this->twig->render('foo', ['item' => $item]));
+        $json = preg_replace('/(^<script[^>]*>|<\/script>$)/', '', $this->twig->render('foo', ['item' => $item]));
 
-        $this->assertJson($jsonString);
+        $this->assertJson($json);
 
         if ($callable) {
-            $callable(json_decode($jsonString, true));
+            $callable($json);
         }
     }
 
@@ -265,7 +265,25 @@ final class SchemaOrgMetadataExtensionTest extends TestCase
                 ])
             ),
             function ($json) {
-                $this->assertSame('Headline does not support tags', $json['headline']);
+                $this->assertContains('"headline": "Headline does not support tags",', $json);
+            },
+        ];
+        yield 'quotes in title' => [
+            new BlogArticle(
+                'blog-article-id',
+                'title might have "quotes"',
+                new DateTimeImmutable('2008-10-01 01:23:45'),
+                null,
+                'Blog article impact statement',
+                promise_for(null),
+                new EmptySequence(),
+                new ArraySequence([
+                    new Subject('subject1', 'Subject 1 name', promise_for('Subject subject1 impact statement'),
+                        new EmptySequence(), promise_for($this->defaultImage()), promise_for($this->defaultImage())),
+                ])
+            ),
+            function ($json) {
+                $this->assertContains('"headline": "title might have \"quotes\"",', $json);
             },
         ];
     }
