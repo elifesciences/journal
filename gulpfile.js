@@ -279,7 +279,7 @@ gulp.task('critical-css:generate', gulp.series('critical-css:clean', (callback) 
                 html: html,
                 src: uri,
                 include: criticalCssConfig.getInclusions(name),
-                pathPrefix: `${criticalCssConfig.assetPathPrefix}/level-to-be-raised-from-by-actual-path-double-dot/`,
+                // pathPrefix: `${criticalCssConfig.assetPathPrefix}/level-to-be-raised-from-by-actual-path-double-dot/`,
                 minify: true,
                 dimensions: criticalCssConfig.dimensions,
                 timeout: 90000
