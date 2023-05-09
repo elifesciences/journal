@@ -21,7 +21,6 @@ try {
     // Do nothing.
 }
 
-gulp.task('default', ['assets']);
 
 gulp.task('favicons:clean', () => {
     return del(['./build/assets/favicons/**/*']);
@@ -430,3 +429,5 @@ const criticalCssConfig = (function () {
     };
 
 }());
+
+// gulp.task('default', gulp.series(['assets']));

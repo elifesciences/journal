@@ -1,16 +1,12 @@
 ARG node_version
-FROM node:${node_version} as npm
-
-# This is a temporary solution while we migrate to a more recent version of nodejs
-RUN echo "deb http://archive.debian.org/debian stretch main" > /etc/apt/sources.list
+FROM node:16.17.0-bullseye as npm
 
 RUN apt-get update && apt-get install --no-install-recommends -y \
     nasm \
     libvips-dev \
     && rm -rf /var/lib/apt/lists/*
+WORKDIR /usr/app
 
-COPY npm-shrinkwrap.json \
-    package.json \
-    ./
+COPY package.json /usr/app/package.json
 
 RUN npm install

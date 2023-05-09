@@ -1,18 +1,18 @@
 {
     "private": true,
     "dependencies": {
-        "async": "^2.6",
-        "critical": "^1.1",
-        "del": "^3.0",
-        "gulp": "^3.9",
-        "gulp-favicons": "^2.2",
-        "gulp-imagemin": "^4.0",
-        "gulp-responsive": "^2.8",
-        "gulp-rev-all": "^0.9",
-        "imagemin-mozjpeg": "^6.0",
-        "imagemin-optipng": "^5.2",
-        "imagemin-svgo": "^6.0",
-        "merge-stream": "^1.0.1",
-        "request": "^2.83"
+        "async": "^3.2.4",
+        "critical": "^3.1.0",
+        "del": "^5.1.0",
+        "gulp": "^4.0.2",
+        "gulp-favicons": "^3.0.0",
+        "gulp-imagemin": "^7.1.0",
+        "gulp-responsive": "github:AidanMontare/gulp-responsive",
+        "gulp-rev-all": "^3.0.0",
+        "imagemin-mozjpeg": "^9.0.0",
+        "imagemin-optipng": "^7.1.0",
+        "imagemin-svgo": "^9.0.0",
+        "merge-stream": "^2.0.0",
+        "request": "^2.88.2"
     }
 }
