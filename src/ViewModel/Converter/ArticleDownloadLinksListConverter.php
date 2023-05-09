@@ -44,34 +44,44 @@ final class ArticleDownloadLinksListConverter implements ViewModelConverter
 
         if ($object->getPdf()) {
             $types[] = 'PDF';
-            $downloads[] = new ViewModel\ArticleDownloadLink(new ViewModel\Link(
-                'Article PDF',
-                $this->downloadLinkUriGenerator->generate(DownloadLink::fromUri($object->getPdf().'?'.DownloadLink::QUERY_PARAMETER_CANONICAL_URI.'='.$articleUri)),
-                null,
-                false,
-                ['article-identifier' => $object->getDoi(), 'download-type' => 'pdf-article']
-            ));
+            $downloads[] = new ViewModel\ArticleDownloadLink(
+                new ViewModel\PrimaryLink(
+                    new ViewModel\Link(
+                        'Article PDF',
+                        $this->downloadLinkUriGenerator->generate(DownloadLink::fromUri($object->getPdf().'?'.DownloadLink::QUERY_PARAMETER_CANONICAL_URI.'='.$articleUri)),
+                        null,
+                        false,
+                        ['article-identifier' => $object->getDoi(), 'download-type' => 'pdf-article']
+                    )
+                )
+            );
 
             if ($object instanceof ArticleVor && $object->getFiguresPdf()) {
-                $downloads[] = new ViewModel\ArticleDownloadLink(new ViewModel\Link(
-                    'Figures PDF',
-                    $this->downloadLinkUriGenerator->generate(DownloadLink::fromUri($object->getFiguresPdf())),
-                    null,
-                    false,
-                    ['article-identifier' => $object->getDoi(), 'download-type' => 'pdf-figures']
-                ));
+                $downloads[] = new ViewModel\ArticleDownloadLink(
+                    new ViewModel\PrimaryLink(
+                        new ViewModel\Link(
+                            'Figures PDF',
+                            $this->downloadLinkUriGenerator->generate(DownloadLink::fromUri($object->getFiguresPdf())),
+                            null,
+                            false,
+                            ['article-identifier' => $object->getDoi(), 'download-type' => 'pdf-figures']
+                        )
+                    )
+                );
             }
         }
 
         if (!empty($context['era-download'])) {
             $types[] = 'Executable version';
             $downloads[] = new ViewModel\ArticleDownloadLink(
-                new ViewModel\Link(
-                    'Executable version',
-                    $this->urlGenerator->generate('article-era-download', [$object], UrlGeneratorInterface::ABSOLUTE_URL),
-                    null,
-                    false,
-                    ['article-identifier' => $object->getDoi(), 'download-type' => 'era-download']
+                new ViewModel\PrimaryLink(
+                    new ViewModel\Link(
+                        'Executable version',
+                        $this->urlGenerator->generate('article-era-download', [$object], UrlGeneratorInterface::ABSOLUTE_URL),
+                        null,
+                        false,
+                        ['article-identifier' => $object->getDoi(), 'download-type' => 'era-download']
+                    )
                 ),
                 new ViewModel\Link(
                     'What are executable versions?',
@@ -90,16 +100,22 @@ final class ArticleDownloadLinksListConverter implements ViewModelConverter
         $groups[] = new ViewModel\ArticleDownloadLinksGroup(
             mixed_visibility_text('', 'Open citations', '(links to open the citations from this article in various online reference manager services)'),
             [
-                new ViewModel\ArticleDownloadLink(new ViewModel\Link('Mendeley', 'https://www.mendeley.com/import?doi='.$object->getDoi())),
-                new ViewModel\ArticleDownloadLink(new ViewModel\Link('ReadCube', 'https://www.readcube.com/articles/'.$object->getDoi()), null, 'https://ncbi.nlm.nih.gov/pmc/utils/idconv/v1.0/?ids='.$object->getDoi().'&format=json'),
+                new ViewModel\ArticleDownloadLink(new ViewModel\PrimaryLink(new ViewModel\Link('Mendeley', 'https://www.mendeley.com/import?doi='.$object->getDoi()))),
+                new ViewModel\ArticleDownloadLink(
+                    new ViewModel\PrimaryLink(
+                        new ViewModel\Link('ReadCube', 'https://www.readcube.com/articles/'.$object->getDoi()),
+                        'https://ncbi.nlm.nih.gov/pmc/utils/idconv/v1.0/?ids='.$object->getDoi().'&format=json'
+                    ),
+                    null
+                )
             ]
         );
 
         $groups[] = new ViewModel\ArticleDownloadLinksGroup(
             mixed_visibility_text('', 'Cite this article', '(links to download the citations from this article in formats compatible with various reference manager tools)'),
             [
-                new ViewModel\ArticleDownloadLink(new ViewModel\Link('Download BibTeX', $this->urlGenerator->generate('article-bibtex', [$object]))),
-                new ViewModel\ArticleDownloadLink(new ViewModel\Link('Download .RIS', $this->urlGenerator->generate('article-ris', [$object]))),
+                new ViewModel\ArticleDownloadLink(new ViewModel\PrimaryLink(new ViewModel\Link('Download BibTeX', $this->urlGenerator->generate('article-bibtex', [$object])))),
+                new ViewModel\ArticleDownloadLink(new ViewModel\PrimaryLink(new ViewModel\Link('Download .RIS', $this->urlGenerator->generate('article-ris', [$object])))),
             ],
             $this->patternRenderer->render($this->convertTo($object, ViewModel\Reference::class)),
             'cite-this-article',
