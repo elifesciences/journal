@@ -26,7 +26,7 @@ gulp.task('favicons:clean', () => {
     return del(['./build/assets/favicons/**/*']);
 });
 
-gulp.task('favicons:build', ['favicons:clean'], () => {
+gulp.task('favicons:build', gulp.series('favicons:clean'), () => {
     return gulp.src('./assets/images/favicon.svg')
         .pipe(favicons({
             appName: 'eLife',
@@ -54,12 +54,12 @@ gulp.task('favicons:build', ['favicons:clean'], () => {
         .pipe(gulp.dest('./build/assets/favicons'));
 });
 
-gulp.task('favicons:svg', ['favicons:clean'], () => {
+gulp.task('favicons:svg', gulp.series('favicons:clean'), () => {
     return gulp.src('./assets/images/favicon.svg')
         .pipe(gulp.dest('./build/assets/favicons'));
 });
 
-gulp.task('favicons', ['favicons:build', 'favicons:svg'], () => {
+gulp.task('favicons', gulp.series('favicons:build', 'favicons:svg'), () => {
     return gulp.src('./build/assets/favicons/favicon.ico')
         .pipe(gulp.dest('./web'));
 });
@@ -68,7 +68,7 @@ gulp.task('images:clean', () => {
     return del(['./build/assets/images/**/*']);
 });
 
-gulp.task('images:banners', ['images:clean'], () => {
+gulp.task('images:banners', gulp.series('images:clean'), () => {
     const sizes = {1114: 336, 1023: 336, 899: 288, 729: 264, 450: 264};
 
     return gulp.src('./assets/images/banners/*.jpg')
@@ -103,7 +103,7 @@ gulp.task('images:banners', ['images:clean'], () => {
         .pipe(gulp.dest('./build/assets/images/banners'));
 });
 
-gulp.task('images:social', ['images:clean'], () => {
+gulp.task('images:social', gulp.series('images:clean'), () => {
     return gulp.src('./assets/images/social/*.png')
         .pipe(responsive({
             '*': [1, 2].reduce((acc, scale) => {
@@ -134,7 +134,7 @@ gulp.task('images:social', ['images:clean'], () => {
         .pipe(gulp.dest('./build/assets/images/social'));
 });
 
-gulp.task('images:logos', ['images:clean'], () => {
+gulp.task('images:logos', gulp.series('images:clean'), () => {
     return gulp.src('./assets/images/logos/*.{png,svg}')
         .pipe(responsive({
             '*': [1, 2].reduce((acc, scale) => {
@@ -168,7 +168,7 @@ gulp.task('images:logos', ['images:clean'], () => {
         .pipe(gulp.dest('./build/assets/images/logos'));
 });
 
-gulp.task('images:investors', ['images:clean'], () => {
+gulp.task('images:investors', gulp.series('images:clean'), () => {
     return gulp.src('./assets/images/investors/*.{png,svg}')
         .pipe(responsive({
             '*': [1, 2].reduce((acc, scale) => {
@@ -203,12 +203,12 @@ gulp.task('images:investors', ['images:clean'], () => {
         .pipe(gulp.dest('./build/assets/images/investors'));
 });
 
-gulp.task('images:svgs', ['images:clean'], () => {
+gulp.task('images:svgs', gulp.series('images:clean'), () => {
     return gulp.src('./assets/images/*/*.svg')
         .pipe(gulp.dest('./build/assets/images'));
 });
 
-gulp.task('images', ['images:banners', 'images:logos', 'images:social', 'images:investors', 'images:svgs'], () => {
+gulp.task('images', gulp.series('images:banners', 'images:logos', 'images:social', 'images:investors', 'images:svgs'), () => {
     return gulp.src('./build/assets/images/**/*')
         .pipe(imageMin([
             imageMinMozjpeg({
@@ -227,7 +227,7 @@ gulp.task('patterns:clean', () => {
     return del(['./build/assets/patterns/**/*']);
 });
 
-gulp.task('patterns', ['patterns:clean'], () => {
+gulp.task('patterns', gulp.series('patterns:clean'), () => {
     return gulp.src([
         './vendor/elife/patterns/resources/assets/**/*',
         '!./vendor/elife/patterns/resources/assets/js/elife-loader.js',
@@ -240,7 +240,7 @@ gulp.task('assets:clean', () => {
     return del(['./web/assets/**/*']);
 });
 
-gulp.task('assets', ['assets:clean', 'favicons', 'images', 'patterns'], () => {
+gulp.task('assets', gulp.series('assets:clean', 'favicons', 'images', 'patterns'), () => {
     return gulp.src('./build/assets/**/*.*', {base: "./build", follow: true})
         .pipe(rev.revision({
             includeFilesInManifest: ['.css', '.jpg', '.js', '.json', '.ico', '.png', '.svg', '.webp', '.woff', '.woff2'],
@@ -255,7 +255,7 @@ gulp.task('critical-css:clean', () => {
     return del([criticalCssConfig.baseFilePath + '/**/*']);
 });
 
-gulp.task('critical-css:generate', ['critical-css:clean'], (callback) => {
+gulp.task('critical-css:generate', gulp.series('critical-css:clean'), (callback) => {
 
     eachOfLimit(criticalCssPageTypes, 1, (path, name, callback) => {
         const uri = criticalCssConfig.baseUrl + path;
