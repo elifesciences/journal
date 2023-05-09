@@ -282,7 +282,7 @@ gulp.task('critical-css:generate', gulp.series('critical-css:clean', (callback) 
                 // pathPrefix: `${criticalCssConfig.assetPathPrefix}/level-to-be-raised-from-by-actual-path-double-dot/`,
                 minify: true,
                 dimensions: criticalCssConfig.dimensions,
-                timeout: 90000
+                // timeout: 90000
             }, callback)
         });
     }, callback);
