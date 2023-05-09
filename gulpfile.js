@@ -273,7 +273,9 @@ gulp.task('critical-css:generate', gulp.series('critical-css:clean', (callback) 
             critical.generate({
                 inline: false,
                 base: `${criticalCssConfig.baseFilePath}`,
-                dest: `${name}.css`,
+                target: {
+                    css: `${name}.css`,
+                },
                 html: html,
                 src: uri,
                 include: criticalCssConfig.getInclusions(name),
