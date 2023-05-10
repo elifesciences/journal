@@ -429,4 +429,4 @@ const criticalCssConfig = (function () {
 
 }());
 
-gulp.task('default', 'assets');
+gulp.task('default', gulp.series('assets'));
