@@ -2,7 +2,6 @@
 
 const critical = require('critical');
 const del = require('del');
-const eachOfLimit = require('async/eachOfLimit');
 const favicons = require('gulp-favicons');
 const gulp = require('gulp');
 const imageMin = require('gulp-imagemin');
@@ -146,7 +145,6 @@ gulp.task('images:logos', () => {
                 acc.push({
                     width: width,
                     height: height,
-                    // max: true,true
                     rename: {
                         suffix: `@${scale}x`,
                         extname: '.png',
@@ -156,7 +154,6 @@ gulp.task('images:logos', () => {
                 acc.push({
                     width: width,
                     height: height,
-                    // max: true,
                     rename: {
                         suffix: `@${scale}x`,
                         extname: '.webp',
@@ -181,7 +178,6 @@ gulp.task('images:investors', () => {
                 acc.push({
                     width: width,
                     height: height,
-                    // max: true,
                     rename: {
                         suffix: `@${scale}x`,
                         extname: '.png',
@@ -191,7 +187,6 @@ gulp.task('images:investors', () => {
                 acc.push({
                     width: width,
                     height: height,
-                    // max: true,
                     quality: 65,
                     rename: {
                         suffix: `@${scale}x`,
@@ -259,8 +254,7 @@ gulp.task('critical-css:clean', () => {
 });
 
 gulp.task('critical-css:generate', gulp.series('critical-css:clean', async (callback) => {
-    //
-    // eachOfLimit(criticalCssPageTypes, 1, (path, name, callback) => {
+
     for (let key in criticalCssPageTypes) {
         let path = criticalCssPageTypes[key];
         let name = key;
@@ -286,7 +280,6 @@ gulp.task('critical-css:generate', gulp.series('critical-css:clean', async (call
                 console.log(error);
             })
     }
-    // });
 }));
 
 const criticalCssConfig = (function () {
@@ -436,4 +429,4 @@ const criticalCssConfig = (function () {
 
 }());
 
-// gulp.task('default', gulp.series(['assets']));
+gulp.task('default', 'assets');

@@ -1,5 +1,5 @@
 ARG node_version
-FROM node:16.17.0-bullseye as npm
+FROM node:${node_version} as npm
 
 RUN apt-get update && apt-get install --no-install-recommends -y \
     nasm \
