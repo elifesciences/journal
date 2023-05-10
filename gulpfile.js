@@ -11,7 +11,7 @@ const imageMinOptipng = require('imagemin-optipng');
 const imageMinSvgo = require('imagemin-svgo');
 const merge = require('merge-stream');
 const responsive = require('gulp-responsive');
-const request = require('request');
+const axios = require('axios');
 const rev = require('gulp-rev-all');
 let criticalCssPageTypes = {};
 try {
@@ -258,34 +258,35 @@ gulp.task('critical-css:clean', () => {
     return del([criticalCssConfig.baseFilePath + '/**/*']);
 });
 
-gulp.task('critical-css:generate', gulp.series('critical-css:clean', (callback) => {
-
-    eachOfLimit(criticalCssPageTypes, 1, (path, name, callback) => {
+gulp.task('critical-css:generate', gulp.series('critical-css:clean', async (callback) => {
+    //
+    // eachOfLimit(criticalCssPageTypes, 1, (path, name, callback) => {
+    for (let key in criticalCssPageTypes) {
+        let path = criticalCssPageTypes[key];
+        let name = key;
+        console.log(path, name);
         const uri = criticalCssConfig.baseUrl + path;
-
-        request(uri, (error, response, html) => {
-            if (error) {
-                return callback(error);
-            } else if (response.statusCode < 200 || response.statusCode >= 300) {
-                return callback(new Error(`Request ${uri} failed with status code ${response.statusCode}`));
-            }
-
-            critical.generate({
-                inline: false,
-                base: `${criticalCssConfig.baseFilePath}`,
-                target: {
-                    css: `${name}.css`,
-                },
-                html: html,
-                src: uri,
-                include: criticalCssConfig.getInclusions(name),
-                // pathPrefix: `${criticalCssConfig.assetPathPrefix}/level-to-be-raised-from-by-actual-path-double-dot/`,
-                minify: true,
-                dimensions: criticalCssConfig.dimensions,
-                // timeout: 90000
-            }, callback)
-        });
-    }, callback);
+        axios.get(uri)
+            .then(response => {
+                critical.generate({
+                    inline: false,
+                    base: `${criticalCssConfig.baseFilePath}`,
+                    dest: `${name}.css`,
+                    html: response.data,
+                    src: uri,
+                    include: criticalCssConfig.getInclusions(name),
+                    pathPrefix: `${criticalCssConfig.assetPathPrefix}/level-to-be-raised-from-by-actual-path-double-dot/`,
+                    minify: true,
+                    dimensions: criticalCssConfig.dimensions,
+                    timeout: 90000
+                }, callback)
+            })
+            .catch(function (error) {
+                // handle error
+                console.log(error);
+            })
+    }
+    // });
 }));
 
 const criticalCssConfig = (function () {
