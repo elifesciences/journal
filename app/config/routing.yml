@@ -21,39 +21,17 @@ home:
 
 about:
     path: /about
-    defaults:
-         _controller: AppBundle:About:about
 
-about-aims-scope:
-    path: /about/aims-scope
-    defaults:
-         _controller: AppBundle:About:aimsScope
-
-about-research-culture:
-    path: /about/research-culture
-    defaults:
-         _controller: AppBundle:About:researchCulture
-
-about-technology:
-    path: /about/technology
-    defaults:
-         _controller: AppBundle:About:technology
-
-about-peer-review:
-    path: /about/peer-review
-    defaults:
-         _controller: AppBundle:About:peerReview
+about-pubpub:
+    path: /about/{type}
+    requirements:
+      type: '(aims-scope|research-culture|technology|peer-review|publishing-with-elife)'
 
 about-people:
     path: /about/people/{type}
     defaults:
          _controller: AppBundle:About:people
          type: ''
-
-about-publishing-with-elife:
-    path: /about/publishing-with-elife
-    defaults:
-         _controller: AppBundle:About:publishingWithElife
 
 alerts:
     path: /alerts
