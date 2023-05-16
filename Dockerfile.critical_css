@@ -37,7 +37,7 @@ COPY --from=jq /usr/local/bin/jq /usr/bin/jq
 
 RUN mkdir -p build/critical-css
 
-COPY --from=npm /node_modules/ node_modules/
+COPY --from=npm /app/node_modules/ node_modules/
 
 COPY check_critical_css.sh \
     critical-css.json \

@@ -5,9 +5,9 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
     nasm \
     libvips-dev \
     && rm -rf /var/lib/apt/lists/*
-WORKDIR /
+WORKDIR /app
 
 COPY npm-shrinkwrap.json \
     package.json \
-    /
+    /app/
 RUN npm install
