@@ -62,9 +62,6 @@ gulp.task('favicons', gulp.series('favicons:clean','favicons:build', 'favicons:s
         .pipe(gulp.dest('./web'));
 }));
 
-// clean -> build -> svg
-
-
 gulp.task('images:clean', () => {
     return del(['./build/assets/images/**/*']);
 });
@@ -258,7 +255,6 @@ gulp.task('critical-css:generate', gulp.series('critical-css:clean', async (call
     for (let key in criticalCssPageTypes) {
         let path = criticalCssPageTypes[key];
         let name = key;
-        console.log(path, name);
         const uri = criticalCssConfig.baseUrl + path;
         axios.get(uri)
             .then(response => {
@@ -269,7 +265,7 @@ gulp.task('critical-css:generate', gulp.series('critical-css:clean', async (call
                     html: response.data,
                     src: uri,
                     include: criticalCssConfig.getInclusions(name),
-                    pathPrefix: `${criticalCssConfig.assetPathPrefix}/level-to-be-raised-from-by-actual-path-double-dot/`,
+                    pathPrefix: `${criticalCssConfig.assetPathPrefix}/level-to-be-raised-from/by-actual-path-double-dot/`,
                     minify: true,
                     dimensions: criticalCssConfig.dimensions,
                     timeout: 90000

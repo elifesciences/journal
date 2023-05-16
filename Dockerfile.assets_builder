@@ -8,7 +8,7 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
     libvips \
     && rm -rf /var/lib/apt/lists/*
 
-COPY --from=npm /usr/app/node_modules/ node_modules/
+COPY --from=npm /node_modules/ node_modules/
 
 COPY assets/images/ assets/images/
 COPY gulpfile.js ./
