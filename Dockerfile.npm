@@ -9,5 +9,5 @@ WORKDIR /
 
 COPY npm-shrinkwrap.json \
     package.json \
-    /usr/app/
+    /
 RUN npm install
