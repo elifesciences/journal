@@ -43,7 +43,7 @@ final class MediaPolicyControllerTest extends PageTestCase
         $this->assertSame('/media-policy', $crawler->filter('link[rel="canonical"]')->attr('href'));
         $this->assertSame('http://localhost/media-policy', $crawler->filter('meta[property="og:url"]')->attr('content'));
         $this->assertSame('Media policy', $crawler->filter('meta[property="og:title"]')->attr('content'));
-        $this->assertSame('eLife\'s media policy is designed to encourage high-quality, informed and widespread discussion of new research &mdash; before and after publication.', $crawler->filter('meta[name="description"]')->attr('content'));
+        $this->assertSame('eLife\'s media policy is designed to encourage high-quality, informed and widespread discussion of research that we peer-review and publish.', $crawler->filter('meta[name="description"]')->attr('content'));
         $this->assertSame('summary', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
         $this->assertSame('http://localhost/'.ltrim(self::$kernel->getContainer()->get('elife.assets.packages')->getUrl('assets/images/social/icon-600x600@1.png'), '/'), $crawler->filter('meta[name="twitter:image"]')->attr('content'));
         $this->assertSame('http://localhost/'.ltrim(self::$kernel->getContainer()->get('elife.assets.packages')->getUrl('assets/images/social/icon-600x600@1.png'), '/'), $crawler->filter('meta[property="og:image"]')->attr('content'));
