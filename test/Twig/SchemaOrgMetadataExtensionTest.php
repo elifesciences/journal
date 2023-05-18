@@ -19,6 +19,7 @@ use eLife\ApiSdk\Model\Interview;
 use eLife\ApiSdk\Model\Interviewee;
 use eLife\ApiSdk\Model\JobAdvert;
 use eLife\ApiSdk\Model\LabsPost;
+use eLife\ApiSdk\Model\Model;
 use eLife\ApiSdk\Model\OnBehalfOfAuthor;
 use eLife\ApiSdk\Model\Person;
 use eLife\ApiSdk\Model\PersonAuthor;
@@ -34,6 +35,7 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\Asset\Packages;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RequestContext;
+use Traversable;
 use Twig\Environment;
 use Twig\Extension\ExtensionInterface;
 use Twig\Loader\ArrayLoader;
@@ -60,10 +62,10 @@ final class SchemaOrgMetadataExtensionTest extends TestCase
         $this->twig->addExtension($this->extension);
     }
 
-    private function defaultExpectations()
+    private function defaultExpectations(bool $many = false)
     {
-        $this->urlGenerator->expects($this->once())->method('getContext')->willReturn(new RequestContext(null, 'GET', 'journal', 'https'));
-        $this->packages->expects($this->once())->method('getUrl')->willReturn('/assets/patterns/img/patterns/organisms/elife-logo-symbol@2x.png');
+        $this->urlGenerator->expects($many ? $this->any() : $this->once())->method('getContext')->willReturn(new RequestContext(null, 'GET', 'journal', 'https'));
+        $this->packages->expects($many ? $this->any() : $this->once())->method('getUrl')->willReturn('/assets/patterns/img/patterns/organisms/elife-logo-symbol@2x.png');
     }
 
     /**
@@ -211,6 +213,79 @@ final class SchemaOrgMetadataExtensionTest extends TestCase
             new EmptySequence(),
             new EmptySequence()
         )]));
+    }
+
+    /**
+     * @test
+     * @dataProvider validateJsonProvider
+     */
+    public function it_will_generate_valid_json(Model $item, callable $callable = null)
+    {
+        $this->defaultExpectations(true);
+
+        $json = preg_replace('/(^<script[^>]*>|<\/script>$)/', '', $this->twig->render('foo', ['item' => $item]));
+
+        $this->assertJson($json);
+
+        if ($callable) {
+            $callable($json);
+        }
+    }
+
+    public function validateJsonProvider() : Traversable
+    {
+        yield 'blog-article' => [
+            new BlogArticle(
+                'blog-article-id',
+                'Blog article title',
+                new DateTimeImmutable('2008-10-01 01:23:45'),
+                null,
+                'Blog article impact statement',
+                promise_for(null),
+                new EmptySequence(),
+                new ArraySequence([
+                    new Subject('subject1', 'Subject 1 name', promise_for('Subject subject1 impact statement'),
+                        new EmptySequence(), promise_for($this->defaultImage()), promise_for($this->defaultImage())),
+                ])
+            ),
+            null,
+        ];
+        yield 'hypothesis highlight' => [
+            new BlogArticle(
+                'blog-article-id',
+                '<hypothesis-highlight class="hypothesis-highlight other-content">Headline does not support tags</hypothesis-highlight>',
+                new DateTimeImmutable('2008-10-01 01:23:45'),
+                null,
+                'Blog article impact statement',
+                promise_for(null),
+                new EmptySequence(),
+                new ArraySequence([
+                    new Subject('subject1', 'Subject 1 name', promise_for('Subject subject1 impact statement'),
+                        new EmptySequence(), promise_for($this->defaultImage()), promise_for($this->defaultImage())),
+                ])
+            ),
+            function ($json) {
+                $this->assertContains('"headline": "Headline does not support tags",', $json);
+            },
+        ];
+        yield 'quotes in title' => [
+            new BlogArticle(
+                'blog-article-id',
+                'title might have "quotes"',
+                new DateTimeImmutable('2008-10-01 01:23:45'),
+                null,
+                'Blog article impact statement',
+                promise_for(null),
+                new EmptySequence(),
+                new ArraySequence([
+                    new Subject('subject1', 'Subject 1 name', promise_for('Subject subject1 impact statement'),
+                        new EmptySequence(), promise_for($this->defaultImage()), promise_for($this->defaultImage())),
+                ])
+            ),
+            function ($json) {
+                $this->assertContains('"headline": "title might have \"quotes\"",', $json);
+            },
+        ];
     }
 
     /**
