@@ -44,7 +44,6 @@ use eLife\Patterns\ViewModel\Paragraph;
 use eLife\Patterns\ViewModel\ReadMoreItem;
 use eLife\Patterns\ViewModel\SpeechBubble;
 use eLife\Patterns\ViewModel\TabbedNavigation;
-use eLife\Patterns\ViewModel\TabbedNavigationLink;
 use GuzzleHttp\Promise\PromiseInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -1168,18 +1167,18 @@ final class ArticlesController extends Controller
                 $otherLinks = [];
                 $hasPeerReview = false;
 
-                $otherLinks[] = TabbedNavigationLink::fromLink(
+                $otherLinks[] = ViewModel\TabbedNavigationLink::fromLink(
                                     new Link('Article', $this->generatePath($history, $item->getVersion(), null, 'content'))
                                 ); 
                 
                 if ($hasFigures) {
-                    $otherLinks[] = TabbedNavigationLink::fromLink(
+                    $otherLinks[] = ViewModel\TabbedNavigationLink::fromLink(
                                         $hasFigures ? new Link('Figures and data', $this->generatePath($history, $item->getVersion(), 'figures', 'content')) : null
                                     );
                 }
                 
                 if ($hasPeerReview) {
-                    $otherLinks[] = TabbedNavigationLink::fromLink(
+                    $otherLinks[] = ViewModel\TabbedNavigationLink::fromLink(
                                         new Link('Peer Review', $this->generatePath($history, $item->getVersion(), null, 'content'))
                                     );
                 }
