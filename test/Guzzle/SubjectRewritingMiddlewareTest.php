@@ -286,7 +286,7 @@ final class SubjectRewritingMiddlewareTest extends KernelTestCase
                 $this->createPodcastEpisode(false, false),
                 $this->createPodcastEpisode(true, false),
             ],
-            'application/vnd.elife.press-package+json; version=3' => [
+            'application/vnd.elife.press-package+json; version=4' => [
                 $this->createPressPackage(false, false),
                 $this->createPressPackage(true, false),
             ],
