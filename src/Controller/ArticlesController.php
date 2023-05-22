@@ -44,6 +44,7 @@ use eLife\Patterns\ViewModel\Paragraph;
 use eLife\Patterns\ViewModel\ReadMoreItem;
 use eLife\Patterns\ViewModel\SpeechBubble;
 use eLife\Patterns\ViewModel\TabbedNavigation;
+use eLife\Patterns\ViewModel\TabbedNavigationLink;
 use GuzzleHttp\Promise\PromiseInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
