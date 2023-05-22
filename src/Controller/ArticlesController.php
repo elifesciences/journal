@@ -851,7 +851,7 @@ final class ArticlesController extends Controller
             })
             ->then(Callback::mustNotBeEmpty(new NotFoundHttpException('Article version does not contain any figures or data')));
 
-        $arguments['tabbedNavigation'] = $this->createTabbedNavigation($arguments['item'], $arguments['isMagazine'], $arguments['hasFigures'], false, $arguments['history'], $arguments['body'], $arguments['eraArticle']);
+        $arguments['tabbedNavigation'] = $this->createTabbedNavigation($arguments['item'], $arguments['isMagazine'], promise_for(true), true, $arguments['history'], $arguments['body'], $arguments['eraArticle']);
 
         $arguments['jumpMenu'] = $this->createJumpMenu($arguments['item'], $arguments['isMagazine'], promise_for(true), true, $arguments['history'], $arguments['body'], $arguments['eraArticle']);
 
@@ -1164,23 +1164,28 @@ final class ArticlesController extends Controller
     {
         return all(['item' => $item, 'isMagazine' => $isMagazine, 'hasFigures' => $hasFigures, 'history' => $history, 'sections' => $sections])
             ->then(function (array $sections) use ($isFiguresPage, $eraArticle) {
+                $history = $sections['history'];
+                $item = $sections['item'];
+                $hasFigures = $sections['hasFigures'];
                 $otherLinks = [];
                 $hasPeerReview = false;
 
                 $otherLinks[] = ViewModel\TabbedNavigationLink::fromLink(
-                                    new Link('Article', $this->generatePath($history, $item->getVersion(), null, 'content'))
-                                ); 
+                                    new Link('Full text', $this->generatePath($history, $item->getVersion(), null, 'content')),
+                                    !$isFiguresPage ? " tabbed-navigation__tab-label--active" : null
+                                );
                 
                 if ($hasFigures) {
                     $otherLinks[] = ViewModel\TabbedNavigationLink::fromLink(
-                                        $hasFigures ? new Link('Figures and data', $this->generatePath($history, $item->getVersion(), 'figures', 'content')) : null
-                                    );
-                }
-                
+                                    new Link('Figures and data', $this->generatePath($history, $item->getVersion(), 'figures', 'content')),
+                                    $isFiguresPage ? " tabbed-navigation__tab-label--active" : null
+                                );
+            }
+
                 if ($hasPeerReview) {
                     $otherLinks[] = ViewModel\TabbedNavigationLink::fromLink(
                                         new Link('Peer Review', $this->generatePath($history, $item->getVersion(), null, 'content'))
-                                    );
+                                );
                 }
 
                 return new TabbedNavigation($otherLinks);
@@ -1225,7 +1230,13 @@ final class ArticlesController extends Controller
                 }
 
                 return new JumpMenu(
-                    $otherLinks
+                    array_merge($otherLinks, array_values(array_filter(array_map(function (ViewModel $viewModel) {
+                        if ($viewModel instanceof ArticleSection) {
+                            return new Link($viewModel['title'], '#'.$viewModel['id']);
+                        }
+                
+                        return null;
+                    }, $sections))))
                 );
             });
     }
