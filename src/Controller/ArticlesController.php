@@ -1261,78 +1261,98 @@ final class ArticlesController extends Controller
                         return $a->getVersion() <=> $b->getVersion();
                     });
 
-                $prepareDefinition = function (ArticleVersion $articleVersion, bool $first) use ($history, $item) {
+                $prepareDefinition = function (int $index, string $term, string $descriptor) {
                     return [
                         // index added to allow us to sort.
-                        'index' => $articleVersion->getVersionDate() ? $articleVersion->getVersionDate()->getTimeStamp() : 0,
-                        'term' => sprintf(
-                            '%s %s',
-                            $articleVersion instanceof ArticleVoR ? 'Version of Record' : 'Accepted Manuscript',
-                            $first ? 'published' : 'updated'
-                        ),
+                        'index' => $index,
+                        'term' => $term,
                         'descriptors' => [
-                            sprintf(
-                                '%s %s',
-                                $articleVersion->getVersionDate() ?
-                                    $articleVersion->getVersionDate()->format('F j, Y') :
-                                    '',
-                                $articleVersion->getVersion() === $item->getVersion() ?
-                                    '(This version)' :
-                                    sprintf(
-                                        '<a href="%s">(Go to version)</a>',
-                                        $this->generatePath($history, $articleVersion->getVersion())
-                                    )
-                            ),
+                            $descriptor,
                         ],
                     ];
                 };
 
+                $prepareDefinitionArticleVersion = function (ArticleVersion $articleVersion, bool $first) use ($prepareDefinition, $history, $item) {
+                    return $prepareDefinition(
+                        $articleVersion->getVersionDate() ? $articleVersion->getVersionDate()->getTimeStamp() : 0,
+                        sprintf(
+                            '%s %s',
+                            $articleVersion instanceof ArticleVoR ? 'Version of Record' : 'Accepted Manuscript',
+                            $first ? 'published' : 'updated'
+                        ),
+                        sprintf(
+                            '%s %s',
+                            $articleVersion->getVersionDate() ?
+                                $articleVersion->getVersionDate()->format('F j, Y') :
+                                '',
+                            $articleVersion->getVersion() === $item->getVersion() ?
+                                '(This version)' :
+                                sprintf(
+                                    '<a href="%s">(Go to version)</a>',
+                                    $this->generatePath($history, $articleVersion->getVersion())
+                                )
+                        )
+                    );
+                };
+
                 $publicationHistory = array_merge($publicationHistory, $articleVersions
                     ->filter(Callback::isInstanceOf(ArticleVoR::class))
-                    ->map(function(ArticleVoR $itemVersion, int $number) use ($prepareDefinition) {
-                        return $prepareDefinition($itemVersion, 0 === $number);
+                    ->map(function(ArticleVoR $itemVersion, int $number) use ($prepareDefinitionArticleVersion) {
+                        return $prepareDefinitionArticleVersion($itemVersion, 0 === $number);
                     })->reverse()->toArray());
 
                 $publicationHistory = array_merge($publicationHistory, $articleVersions
                     ->filter(Callback::isInstanceOf(ArticlePoA::class))
-                    ->map(function(ArticlePoA $itemVersion, int $number) use ($prepareDefinition) {
-                        return $prepareDefinition($itemVersion, 0 === $number);
+                    ->map(function(ArticlePoA $itemVersion, int $number) use ($prepareDefinitionArticleVersion) {
+                        return $prepareDefinitionArticleVersion($itemVersion, 0 === $number);
                     })->reverse()->toArray());
-
                 $publicationHistory = array_merge($publicationHistory, $history->getVersions()
                     ->filter(Callback::isInstanceOf(ArticlePreprint::class))
-                    ->sort(function (ArticlePreprint $a, ArticlePreprint $b) {
-                        return $b->getPublishedDate() <=> $a->getPublishedDate();
-                    })
-                    ->map(function (ArticlePreprint $preprint) {
-                        return [
-                            // index added to allow us to sort.
-                            'index' => $preprint->getPublishedDate()->getTimeStamp(),
-                            'term' => 'Preprint posted',
-                            'descriptors' => [
+                    ->map(function(ArticlePreprint $preprint) use ($prepareDefinition) {
+                        return $prepareDefinition(
+                            $preprint->getPublishedDate()->getTimeStamp(),
+                            sprintf(
+                                '%s posted',
+                                strpos($preprint->getDescription(), 'reviewed preprint') === false ? 'Preprint' : 'Reviewed preprint'
+                            ),
+                            sprintf(
+                                '%s %s',
+                                $preprint->getPublishedDate()->format('F j, Y'),
                                 sprintf(
-                                    '%s %s',
-                                    $preprint->getPublishedDate()->format('F j, Y'),
-                                    sprintf(
-                                        '<a href="%s">(Go to version)</a>',
-                                        $preprint->getUri()
-                                    )
+                                    '<a href="%s">(Go to version)</a>',
+                                    $preprint->getUri()
                                 )
-                            ]
-                        ];
-                    })->toArray());
+                            )
+                        );
+                    })->reverse()->toArray());
 
                 // Sort by index value.
                 usort($publicationHistory, function($first, $second) {
                     return $first['index'] < $second['index'];
                 });
 
+                $rpCount = $history->getVersions()
+                    ->filter(Callback::isInstanceOf(ArticlePreprint::class))
+                    ->filter(function (ArticlePreprint $preprint) {
+                        return strpos($preprint->getDescription(), 'reviewed preprint') !== false;
+                    })
+                    ->count();
+
+                // If reviewed preprint count is greater than 1 we want to alter the $item['term'].
+                $rpCount = $rpCount > 1 ? $rpCount : 0;
+
                 return $this->convertTo($parts['item'],
                     ContentAside::class, [
                         'metrics' => $parts['metrics'],
-                        'timeline' => array_map(function ($item) {
+                        'timeline' => array_map(function ($item) use (&$rpCount) {
                             // Remove index from item.
                             unset($item['index']);
+
+                            if ('Reviewed preprint posted' === $item['term'] && $rpCount > 0) {
+                                $item['term'] = sprintf('Reviewed preprint version %d', $rpCount);
+                                $rpCount--;
+                            }
+
                             return $item;
                         }, $publicationHistory),
                         'relatedItem' => $parts['relatedItem']
