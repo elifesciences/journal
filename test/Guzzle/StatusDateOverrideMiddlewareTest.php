@@ -199,7 +199,7 @@ final class StatusDateOverrideMiddlewareTest extends KernelTestCase
                 $this->createPodcastEpisode('vor-with-rds-article', null, false),
                 $this->createPodcastEpisode('vor-with-rds-article', '2030-01-02T00:00:00Z', false),
             ],
-            'application/vnd.elife.press-package+json; version=3' => [
+            'application/vnd.elife.press-package+json; version=4' => [
                 $this->createPressPackage('vor-with-rds-article', null, false),
                 $this->createPressPackage('vor-with-rds-article', '2030-01-02T00:00:00Z', false),
             ],
