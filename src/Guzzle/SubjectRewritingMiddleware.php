@@ -140,7 +140,7 @@ final class SubjectRewritingMiddleware
                         $data = $this->updatePerson($data);
                         break;
 
-                    case 'application/vnd.elife.press-package+json; version=3':
+                    case 'application/vnd.elife.press-package+json; version=4':
                         $data = $this->updateItem($data);
                         $data['relatedContent'] = $this->updateItems($data['relatedContent'] ?? []);
                         break;

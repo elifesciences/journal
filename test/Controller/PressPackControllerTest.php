@@ -92,11 +92,11 @@ final class PressPackControllerTest extends PageTestCase
             new Request(
                 'GET',
                 'http://api.elifesciences.org/press-packages/1',
-                ['Accept' => 'application/vnd.elife.press-package+json; version=3']
+                ['Accept' => 'application/vnd.elife.press-package+json; version=4']
             ),
             new Response(
                 200,
-                ['Content-Type' => 'application/vnd.elife.press-package+json; version=3'],
+                ['Content-Type' => 'application/vnd.elife.press-package+json; version=4'],
                 json_encode([
                     'id' => '1',
                     'title' => 'Press package title',
@@ -173,11 +173,11 @@ final class PressPackControllerTest extends PageTestCase
             new Request(
                 'GET',
                 'http://api.elifesciences.org/press-packages/1',
-                ['Accept' => 'application/vnd.elife.press-package+json; version=3']
+                ['Accept' => 'application/vnd.elife.press-package+json; version=4']
             ),
             new Response(
                 200,
-                ['Content-Type' => 'application/vnd.elife.press-package+json; version=3'],
+                ['Content-Type' => 'application/vnd.elife.press-package+json; version=4'],
                 json_encode([
                     'id' => '1',
                     'title' => 'Press package title',
@@ -189,6 +189,19 @@ final class PressPackControllerTest extends PageTestCase
                         ],
                     ],
                     'relatedContent' => [
+                        [
+                            'type' => 'reviewed-preprint',
+                            'id' => '00002',
+                            'doi' => '10.1101/2023.03.08.531698',
+                            'status' => 'reviewed',
+                            'authorLine' => 'Author line',
+                            'title' => 'Reviewed preprint title',
+                            'published' => '2010-01-02T00:00:00Z',
+                            'reviewedDate' => '2010-01-02T00:00:00Z',
+                            'versionDate' => '2010-01-02T00:00:00Z',
+                            'statusDate' => '2010-01-02T00:00:00Z',
+                            'stage' => 'published',
+                        ],
                         [
                             'status' => 'vor',
                             'stage' => 'published',
@@ -211,7 +224,9 @@ final class PressPackControllerTest extends PageTestCase
         $crawler = $client->request('GET', '/for-the-press/1/press-package-title');
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
-        $this->assertContains('Article title', $crawler->filter('.teaser--secondary ')->text());
+        $secondaryText = $crawler->filter('.grid-secondary-column__item')->text();
+        $this->assertContains('Article title', $secondaryText);
+        $this->assertContains('Reviewed preprint title', $secondaryText);
     }
 
     /**
@@ -302,7 +317,7 @@ final class PressPackControllerTest extends PageTestCase
                 'GET',
                 'http://api.elifesciences.org/press-packages/1',
                 [
-                    'Accept' => 'application/vnd.elife.press-package+json; version=3',
+                    'Accept' => 'application/vnd.elife.press-package+json; version=4',
                 ]
             ),
             new Response(
@@ -327,11 +342,11 @@ final class PressPackControllerTest extends PageTestCase
             new Request(
                 'GET',
                 'http://api.elifesciences.org/press-packages/1',
-                ['Accept' => 'application/vnd.elife.press-package+json; version=3']
+                ['Accept' => 'application/vnd.elife.press-package+json; version=4']
             ),
             new Response(
                 200,
-                ['Content-Type' => 'application/vnd.elife.press-package+json; version=3'],
+                ['Content-Type' => 'application/vnd.elife.press-package+json; version=4'],
                 json_encode([
                     'id' => '1',
                     'title' => 'Press package title',
