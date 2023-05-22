@@ -36,13 +36,14 @@ use eLife\Patterns\ViewModel\ContentAside;
 use eLife\Patterns\ViewModel\ContentHeaderNew;
 use eLife\Patterns\ViewModel\ContextualData;
 use eLife\Patterns\ViewModel\Doi;
+use eLife\Patterns\ViewModel\JumpMenu;
 use eLife\Patterns\ViewModel\InfoBar;
 use eLife\Patterns\ViewModel\Link;
 use eLife\Patterns\ViewModel\Listing;
 use eLife\Patterns\ViewModel\Paragraph;
 use eLife\Patterns\ViewModel\ReadMoreItem;
 use eLife\Patterns\ViewModel\SpeechBubble;
-use eLife\Patterns\ViewModel\ViewSelector;
+use eLife\Patterns\ViewModel\TabbedNavigation;
 use GuzzleHttp\Promise\PromiseInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -701,8 +702,10 @@ final class ArticlesController extends Controller
                 return $parts;
             });
 
-        $arguments['viewSelector'] = $this->createViewSelector($arguments['item'], $arguments['isMagazine'], $arguments['hasFigures'], false, $arguments['history'], $arguments['body'], $arguments['eraArticle']);
-
+        $arguments['tabbedNavigation'] = $this->createTabbedNavigation($arguments['item'], $arguments['isMagazine'], $arguments['hasFigures'], false, $arguments['history'], $arguments['body'], $arguments['eraArticle']);
+        
+        $arguments['jumpMenu'] = $this->createJumpMenu($arguments['item'], $arguments['isMagazine'], $arguments['hasFigures'], false, $arguments['history'], $arguments['body'], $arguments['eraArticle']);
+        
         $arguments['body'] = all(['item' => $arguments['item'], 'body' => $arguments['body'], 'downloadLinks' => $arguments['downloadLinks']])
             ->then(function (array $parts) {
                 $item = $parts['item'];
@@ -848,7 +851,9 @@ final class ArticlesController extends Controller
             })
             ->then(Callback::mustNotBeEmpty(new NotFoundHttpException('Article version does not contain any figures or data')));
 
-        $arguments['viewSelector'] = $this->createViewSelector($arguments['item'], $arguments['isMagazine'], promise_for(true), true, $arguments['history'], $arguments['body'], $arguments['eraArticle']);
+        $arguments['tabbedNavigation'] = $this->createTabbedNavigation($arguments['item'], $arguments['isMagazine'], $arguments['hasFigures'], false, $arguments['history'], $arguments['body'], $arguments['eraArticle']);
+
+        $arguments['jumpMenu'] = $this->createJumpMenu($arguments['item'], $arguments['isMagazine'], promise_for(true), true, $arguments['history'], $arguments['body'], $arguments['eraArticle']);
 
         $arguments = $this->contentAsideArguments($arguments);
 
@@ -1155,7 +1160,34 @@ final class ArticlesController extends Controller
         return $arguments;
     }
 
-    private function createViewSelector(PromiseInterface $item, PromiseInterface $isMagazine, PromiseInterface $hasFigures, bool $isFiguresPage, PromiseInterface $history, PromiseInterface $sections, array $eraArticle) : PromiseInterface
+    private function createTabbedNavigation(PromiseInterface $item, PromiseInterface $isMagazine, PromiseInterface $hasFigures, bool $isFiguresPage, PromiseInterface $history, PromiseInterface $sections, array $eraArticle) : PromiseInterface
+    {
+        return all(['item' => $item, 'isMagazine' => $isMagazine, 'hasFigures' => $hasFigures, 'history' => $history, 'sections' => $sections])
+            ->then(function (array $sections) use ($isFiguresPage, $eraArticle) {
+                $otherLinks = [];
+                $hasPeerReview = false;
+
+                $otherLinks[] = TabbedNavigationLink::fromLink(
+                                    new Link('Article', $this->generatePath($history, $item->getVersion(), null, 'content'))
+                                ); 
+                
+                if ($hasFigures) {
+                    $otherLinks[] = TabbedNavigationLink::fromLink(
+                                        $hasFigures ? new Link('Figures and data', $this->generatePath($history, $item->getVersion(), 'figures', 'content')) : null
+                                    );
+                }
+                
+                if ($hasPeerReview) {
+                    $otherLinks[] = TabbedNavigationLink::fromLink(
+                                        new Link('Peer Review', $this->generatePath($history, $item->getVersion(), null, 'content'))
+                                    );
+                }
+
+                return new TabbedNavigation($otherLinks);
+            });
+    }
+
+    private function createJumpMenu(PromiseInterface $item, PromiseInterface $isMagazine, PromiseInterface $hasFigures, bool $isFiguresPage, PromiseInterface $history, PromiseInterface $sections, array $eraArticle) : PromiseInterface
     {
         return all(['item' => $item, 'isMagazine' => $isMagazine, 'hasFigures' => $hasFigures, 'history' => $history, 'sections' => $sections])
             ->then(function (array $sections) use ($isFiguresPage, $eraArticle) {
@@ -1192,21 +1224,7 @@ final class ArticlesController extends Controller
                     );
                 }
 
-                return new ViewSelector(
-                    new Link('Article', $this->generatePath($history, $item->getVersion(), null, 'content')),
-                    array_values(array_filter(array_map(function (ViewModel $viewModel) {
-                        if ($viewModel instanceof ArticleSection) {
-                            return new Link($viewModel['title'], '#'.$viewModel['id']);
-                        }
-
-                        return null;
-                    }, $sections))),
-                    $hasFigures ? new Link('Figures and data', $this->generatePath($history, $item->getVersion(), 'figures', 'content')) : null,
-                    $isFiguresPage,
-                    false,
-                    $item instanceof ArticleVoR
-                        ? rtrim($this->getParameter('side_by_side_view_url'), '/').'/'.$item->getId()
-                        : null,
+                return new JumpMenu(
                     $otherLinks
                 );
             });

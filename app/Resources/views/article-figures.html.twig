@@ -10,9 +10,19 @@
 
         {% block navigation %}
 
-            {% if viewSelector %}
+            {% if tabbedNavigation %}
 
-                {{ render_pattern(viewSelector) }}
+                {{ render_pattern(tabbedNavigation) }}
+
+            {% endif %}
+
+        {% endblock %}
+
+        {% block navigation %}
+
+            {% if jumpMenu %}
+
+                {{ render_pattern(jumpMenu) }}
 
             {% endif %}
 
