@@ -1182,6 +1182,18 @@ final class ArticlesController extends Controller
                                 );
                 }
 
+                $articleVersions = $history->getVersions()
+                    ->filter(Callback::isInstanceOf(ArticleVersion::class))
+                    ->toArray();
+
+                $latestVersion = $articleVersions[count($articleVersions) - 1]->getVersion();
+                if (isset($eraArticle['display']) && $item->getVersion() === $latestVersion) {
+                    $otherLinks[] = ViewModel\TabbedNavigationLink::fromLink(new Link(
+                        'Executable code',
+                        $this->get('router')->generate('article-era', ['id' => $item->getId()])
+                    ));
+                }
+
                 if ($hasPeerReview) {
                     $otherLinks[] = ViewModel\TabbedNavigationLink::fromLink(
                                         new Link('Peer Review', $this->generatePath($history, $item->getVersion(), null, 'content'))
@@ -1215,19 +1227,7 @@ final class ArticlesController extends Controller
                     $sections = [];
                 }
 
-                $articleVersions = $history->getVersions()
-                    ->filter(Callback::isInstanceOf(ArticleVersion::class))
-                    ->toArray();
-
-                $latestVersion = $articleVersions[count($articleVersions) - 1]->getVersion();
-
                 $otherLinks = [];
-                if (isset($eraArticle['display']) && $item->getVersion() === $latestVersion) {
-                    $otherLinks[] = new Link(
-                        'Executable code',
-                        $this->get('router')->generate('article-era', ['id' => $item->getId()])
-                    );
-                }
 
                 return new JumpMenu(
                     array_merge($otherLinks, array_values(array_filter(array_map(function (ViewModel $viewModel) {

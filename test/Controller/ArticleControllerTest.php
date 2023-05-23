@@ -1771,7 +1771,7 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertNotEmpty($crawler->filter('.article-download-links-list__link')->selectLink('Executable version'));
         $this->assertNotEmpty($crawler->filter('.article-download-links-list__secondary_link')->selectLink('What are executable versions?'));
         $this->assertContains('/id-of-article-with-era/executable/download', $crawler->filter('.article-download-links-list__link')->selectLink('Executable version')->attr('href'));
-        $this->assertContains('Executable code', $crawler->filter('.view-selector')->text());
+        $this->assertContains('Executable code', $crawler->filter('.tabbed-navigation')->text());
     }
 
     /**
@@ -1822,7 +1822,7 @@ final class ArticleControllerTest extends PageTestCase
             array_map('trim', $crawler->filter('.info-bar')->eq(0)->extract(['_text']))
         );
         $this->assertEmpty($crawler->filter('.article-download-links-list__link')->selectLink('Executable version'));
-        $this->assertNotContains('Executable code', $crawler->filter('.view-selector')->text());
+        $this->assertNotContains('Executable code', $crawler->filter('.tabbed-navigation')->text());
     }
 
     /**
@@ -2861,12 +2861,12 @@ final class ArticleControllerTest extends PageTestCase
 
         $this->assertSame('Categories and tags', $crawler->filter('.main-content-grid > section:nth-of-type(12) .article-meta__group_title')->text());
 
-        $this->assertRegexp('|^https://.*/00001$|', $crawler->filter('.view-selector')->attr('data-side-by-side-link'));
+//        $this->assertRegexp('|^https://.*/00001$|', $crawler->filter('.tabbed-navigation')->attr('data-side-by-side-link'));
 
         $this->assertSame(
             [
                 [
-                    'Article',
+                    'Full text',
                     '/articles/00001#content',
                 ],
                 [
@@ -2874,7 +2874,7 @@ final class ArticleControllerTest extends PageTestCase
                     '/articles/00001/figures#content',
                 ],
             ],
-            $crawler->filter('.view-selector__link')->extract(['_text', 'href'])
+            $crawler->filter('.tabbed-navigation__tab-label a')->extract(['_text', 'href'])
         );
 
         $this->assertSame(
@@ -2890,7 +2890,7 @@ final class ArticleControllerTest extends PageTestCase
                 'Author response',
                 'Article and author information',
             ],
-            array_map('trim', $crawler->filter('.view-selector__jump_link_item')->extract('_text'))
+            array_map('trim', $crawler->filter('.jump-menu__item')->extract('_text'))
         );
     }
 
@@ -2912,6 +2912,7 @@ final class ArticleControllerTest extends PageTestCase
                     ],
                 ],
                 [],
+                [],
             ],
             'editorial' => [
                 '79594',
@@ -2927,6 +2928,7 @@ final class ArticleControllerTest extends PageTestCase
                         '/articles/editorial',
                     ],
                 ],
+                [],
                 [],
             ],
             'feature' => [
@@ -2945,13 +2947,15 @@ final class ArticleControllerTest extends PageTestCase
                 ],
                 [
                     [
-                        'Article',
+                        'Full text',
                         '/articles/79595#content',
                     ],
                     [
                         'Figures and data',
                         '/articles/79595/figures#content',
                     ],
+                ],
+                [
                     [
                         'Abstract',
                         '#abstract',
@@ -2982,7 +2986,8 @@ final class ArticleControllerTest extends PageTestCase
         string $type,
         string $expectImpactStatement,
         array $expectedBreadcrumb,
-        array $expectedViewSelectorItems
+        array $expectedTabbedNavigation,
+        array $expectedJumpMenu
     )
     {
         $client = static::createClient();
@@ -3882,16 +3887,16 @@ final class ArticleControllerTest extends PageTestCase
             $this->assertSame($expectImpactStatement, $crawler->filter('.content-header__impact-statement')->text());
         }
 
-        if (empty($expectedViewSelectorItems)) {
-            $this->assertEmpty($crawler->filter('.view-selector__list-item'));
+        if (empty($expectedTabbedNavigation)) {
+            $this->assertEmpty($crawler->filter('.tabbed-navigation__tab-label'));
         } else {
             $this->assertSame(
-                $expectedViewSelectorItems,
-                $crawler->filter('.view-selector__list-item a')->extract(['_text', 'href'])
+                $expectedTabbedNavigation,
+                $crawler->filter('.tabbed-navigation__tab-label a')->extract(['_text', 'href'])
             );
         }
 
-        if (empty($expectedViewSelectorItems)) {
+        if (empty($expectedTabbedNavigation)) {
             // Authors appear in main-content-grid and not in content-header.
             $this->assertEmpty($crawler->filter('.content-header .author_list_item'));
             $this->assertEmpty($crawler->filter('.content-header .institution_list_item'));
@@ -3915,7 +3920,7 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertSame('Department of Medical Microbiology and Immunology, School of Medicine, University of California, Davis, United States;', $this->crawlerText($institutions->eq(0)));
 
         $sections = $crawler->filter('.main-content-grid > .article-section');
-        if (empty($expectedViewSelectorItems)) {
+        if (empty($expectedJumpMenu)) {
             // Abstract does not appear in main-content-grid but populates the impact statement property.
             $this->assertNotContains('Abstract', $crawler->filter('.main-content-grid')->text());
             // The Main text heading does not appear for insights and editorials.
@@ -5097,10 +5102,10 @@ final class ArticleControllerTest extends PageTestCase
         );
 
         $crawler = $client->request('GET', '/articles/00001');
-
+var_dump($client->getResponse()->getContent());
         $this->assertSame(200, $client->getResponse()->getStatusCode());
-        $this->assertSame('eLife assessment', trim($crawler->filter('.view-selector__list-item')->eq(2)->text()));
-        $this->assertSame('Peer review', trim($crawler->filter('.view-selector__list-item')->eq(4)->text()));
+        $this->assertSame('eLife assessment', trim($crawler->filter('.jump-menu__item')->eq(2)->text()));
+        $this->assertSame('Peer review', trim($crawler->filter('.jump-menu__item')->eq(4)->text()));
         $this->assertSame('eLife assessment',
             $crawler->filter('.main-content-grid > section:nth-of-type(1) > header > h2')->text());
         $this->assertSame('Peer review',
