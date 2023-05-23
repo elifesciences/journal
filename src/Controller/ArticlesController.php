@@ -1180,7 +1180,7 @@ final class ArticlesController extends Controller
                                     new Link('Figures and data', $this->generatePath($history, $item->getVersion(), 'figures', 'content')),
                                     $isFiguresPage ? " tabbed-navigation__tab-label--active" : null
                                 );
-            }
+                }
 
                 if ($hasPeerReview) {
                     $otherLinks[] = ViewModel\TabbedNavigationLink::fromLink(
