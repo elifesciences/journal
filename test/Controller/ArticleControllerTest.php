@@ -5102,7 +5102,7 @@ final class ArticleControllerTest extends PageTestCase
         );
 
         $crawler = $client->request('GET', '/articles/00001');
-var_dump($client->getResponse()->getContent());
+
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertSame('eLife assessment', trim($crawler->filter('.jump-menu__item')->eq(2)->text()));
         $this->assertSame('Peer review', trim($crawler->filter('.jump-menu__item')->eq(4)->text()));
