@@ -4496,11 +4496,11 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertSame(
             [
                 [
-                    'Article',
+                    'Full text',
                     '/articles/00001#content',
                 ],
             ],
-            $crawler->filter('.view-selector__link')->extract(['_text', 'href'])
+            $crawler->filter('.tabbed-navigation__tab-label a')->extract(['_text', 'href'])
         );
 
         $dataAvailability = $crawler->filter('.main-content-grid > section:nth-of-type(2)');
@@ -5104,8 +5104,8 @@ final class ArticleControllerTest extends PageTestCase
         $crawler = $client->request('GET', '/articles/00001');
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
-        $this->assertSame('eLife assessment', trim($crawler->filter('.jump-menu__item')->eq(2)->text()));
-        $this->assertSame('Peer review', trim($crawler->filter('.jump-menu__item')->eq(4)->text()));
+        $this->assertSame('eLife assessment', trim($crawler->filter('.jump-menu__item')->eq(0)->text()));
+        $this->assertSame('Peer review', trim($crawler->filter('.jump-menu__item')->eq(2)->text()));
         $this->assertSame('eLife assessment',
             $crawler->filter('.main-content-grid > section:nth-of-type(1) > header > h2')->text());
         $this->assertSame('Peer review',
