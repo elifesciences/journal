@@ -1164,6 +1164,11 @@ final class ArticlesController extends Controller
     {
         return all(['item' => $item, 'isMagazine' => $isMagazine, 'hasFigures' => $hasFigures, 'history' => $history, 'sections' => $sections])
             ->then(function (array $sections) use ($isFiguresPage, $eraArticle) {
+
+                if ($sections['isMagazine']) {
+                    return null;
+                }
+
                 $history = $sections['history'];
                 $item = $sections['item'];
                 $hasFigures = $sections['hasFigures'];
