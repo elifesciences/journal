@@ -1333,12 +1333,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/patterns-php.git",
-                "reference": "853f55e3b3057139654e2dbdec615d935fe23f58"
+                "reference": "897f2758d0f8ae1d996b80e5dbf36bbd881a7d56"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/853f55e3b3057139654e2dbdec615d935fe23f58",
-                "reference": "853f55e3b3057139654e2dbdec615d935fe23f58",
+                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/897f2758d0f8ae1d996b80e5dbf36bbd881a7d56",
+                "reference": "897f2758d0f8ae1d996b80e5dbf36bbd881a7d56",
                 "shasum": ""
             },
             "require": {
@@ -1375,10 +1375,7 @@
                 "MIT"
             ],
             "description": "eLife patterns",
-            "support": {
-                "source": "https://github.com/elifesciences/patterns-php/tree/feature/tabbed-navigation"
-            },
-            "time": "2023-05-23T11:48:57+00:00"
+            "time": "2023-05-25T08:31:28+00:00"
         },
         {
             "name": "fabpot/goutte",
@@ -1796,20 +1793,6 @@
                 "rest",
                 "web service"
             ],
-            "funding": [
-                {
-                    "url": "https://github.com/GrahamCampbell",
-                    "type": "github"
-                },
-                {
-                    "url": "https://github.com/Nyholm",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/guzzlehttp/guzzle",
-                    "type": "tidelift"
-                }
-            ],
             "time": "2022-06-20T22:16:07+00:00"
         },
         {
@@ -1967,20 +1950,6 @@
                 "stream",
                 "uri",
                 "url"
-            ],
-            "funding": [
-                {
-                    "url": "https://github.com/GrahamCampbell",
-                    "type": "github"
-                },
-                {
-                    "url": "https://github.com/Nyholm",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/guzzlehttp/psr7",
-                    "type": "tidelift"
-                }
             ],
             "time": "2022-06-20T21:43:03+00:00"
         },
@@ -2683,20 +2652,6 @@
                 "twofish",
                 "x.509",
                 "x509"
-            ],
-            "funding": [
-                {
-                    "url": "https://github.com/terrafrost",
-                    "type": "github"
-                },
-                {
-                    "url": "https://www.patreon.com/phpseclib",
-                    "type": "patreon"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/phpseclib/phpseclib",
-                    "type": "tidelift"
-                }
             ],
             "time": "2023-03-05T17:13:09+00:00"
         },
@@ -3758,16 +3713,6 @@
             "homepage": "https://twig.symfony.com",
             "keywords": [
                 "templating"
-            ],
-            "funding": [
-                {
-                    "url": "https://github.com/fabpot",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/twig/twig",
-                    "type": "tidelift"
-                }
             ],
             "time": "2022-09-28T08:40:08+00:00"
         },
