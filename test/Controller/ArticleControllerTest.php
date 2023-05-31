@@ -4067,6 +4067,7 @@ final class ArticleControllerTest extends PageTestCase
                 json_encode([
                     'received' => '2009-12-29',
                     'accepted' => '2009-12-30',
+                    'sentForReview' => '2009-12-30',
                     'versions' => [
                         [
                             'status' => 'preprint',
@@ -4133,7 +4134,7 @@ final class ArticleControllerTest extends PageTestCase
                 $this->crawlerText($crawler->filter('.content-aside .button-collection .button-collection__item')->eq(2)));
             $this->assertSame('Comment Open annotations (there are currently 0 annotations on this page).',
                 $this->crawlerText($crawler->filter('.content-aside .button-collection .button-collection__item')->eq(3)));
-            $this->assertCount(10, $crawler->filter('.content-aside .definition-list--timeline')->children());
+            $this->assertCount(12, $crawler->filter('.content-aside .definition-list--timeline')->children());
 
             foreach ([
                          'Version of Record published',
@@ -4141,6 +4142,8 @@ final class ArticleControllerTest extends PageTestCase
                          'Accepted Manuscript published',
                          'December 31, 2009 (Go to version)',
                          'Accepted',
+                         'December 30, 2009',
+                         'Sent for review',
                          'December 30, 2009',
                          'Received',
                          'December 29, 2009',
@@ -5070,6 +5073,9 @@ final class ArticleControllerTest extends PageTestCase
                 200,
                 ['Content-Type' => 'application/vnd.elife.article-history+json; version=2'],
                 json_encode([
+                    'received' => '2023-12-10',
+                    'accepted' => '2023-12-10',
+                    'sentForReview' => '2023-03-15',
                     'versions' => [
                         [
                             'status' => 'vor',
@@ -5095,7 +5101,6 @@ final class ArticleControllerTest extends PageTestCase
                 ])
             )
         );
-
         $crawler = $client->request('GET', '/articles/00001');
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
@@ -5107,6 +5112,8 @@ final class ArticleControllerTest extends PageTestCase
             $crawler->filter('.main-content-grid > section:nth-of-type(3) > header > h2')->text());
         $publicReviews = $crawler->filter('.main-content-grid > section:nth-of-type(3) > .article-section__body > section');
         $this->assertCount(3, $publicReviews);
+
+
 
         foreach ([
             'https://doi.org/10.7554/eLife.09562.230',
