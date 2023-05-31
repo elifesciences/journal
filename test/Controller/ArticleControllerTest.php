@@ -4143,7 +4143,7 @@ final class ArticleControllerTest extends PageTestCase
                          'December 31, 2009 (Go to version)',
                          'Accepted',
                          'December 30, 2009',
-                         'Sent for review',
+                         'Sent for peer review',
                          'December 30, 2009',
                          'Received',
                          'December 29, 2009',

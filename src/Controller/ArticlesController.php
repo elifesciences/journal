@@ -618,7 +618,7 @@ final class ArticlesController extends Controller
 
                         // Attempt to output $accepted if date is before the preprint date.
                         if ($sentForReview && 1 === $preprint->getPublishedDate()->diff(new DateTime($sentForReview->toString()))->invert) {
-                            $publicationHistory[] = 'Sent for review: '.$sentForReview->format();
+                            $publicationHistory[] = 'Sent for peer review: '.$sentForReview->format();
 
                             // Set $sentForReview to null as it has now been included in the publication history.
                             $sentForReview = null;
@@ -639,7 +639,7 @@ final class ArticlesController extends Controller
                 }
 
                 if ($sentForReview) {
-                    $publicationHistory[] = 'Sent for review: '.$sentForReview->format();
+                    $publicationHistory[] = 'Sent for peer review: '.$sentForReview->format();
                 }
 
                 $publicationHistory = array_merge($publicationHistory, $history->getVersions()
@@ -1273,7 +1273,7 @@ final class ArticlesController extends Controller
                     $publicationHistory[] = [
                         // index added to allow us to sort.
                         'index' => strtotime($sentForReview->toString()),
-                        'term' => 'Sent for review',
+                        'term' => 'Sent for peer review',
                         'descriptors' => [
                             $sentForReview->format(),
                         ],
