@@ -616,7 +616,7 @@ final class ArticlesController extends Controller
                             $accepted = null;
                         }
 
-                        // Attempt to output $accepted if date is before the preprint date.
+                        // Attempt to output $sentForReview if date is before the preprint date.
                         if ($sentForReview && 1 === $preprint->getPublishedDate()->diff(new DateTime($sentForReview->toString()))->invert) {
                             $publicationHistory[] = 'Sent for peer review: '.$sentForReview->format();
 
@@ -638,6 +638,7 @@ final class ArticlesController extends Controller
                     $publicationHistory[] = 'Accepted: '.$accepted->format();
                 }
 
+                // Output $sentForReview if it has not yet been output.
                 if ($sentForReview) {
                     $publicationHistory[] = 'Sent for peer review: '.$sentForReview->format();
                 }

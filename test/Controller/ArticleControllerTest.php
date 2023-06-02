@@ -4065,9 +4065,9 @@ final class ArticleControllerTest extends PageTestCase
                 200,
                 ['Content-Type' => 'application/vnd.elife.article-history+json; version=2'],
                 json_encode([
-                    'received' => '2009-12-29',
-                    'accepted' => '2009-12-30',
-                    'sentForReview' => '2009-12-30',
+                    'received' => '2009-12-30',
+                    'accepted' => '2009-12-31',
+                    'sentForReview' => '2009-12-29',
                     'versions' => [
                         [
                             'status' => 'preprint',
@@ -4083,9 +4083,9 @@ final class ArticleControllerTest extends PageTestCase
                             'type' => $type,
                             'doi' => '10.7554/eLife.00001',
                             'title' => 'Article 1 title',
-                            'published' => '2009-12-31T00:00:00Z',
-                            'versionDate' => '2009-12-31T00:00:00Z',
-                            'statusDate' => '2009-12-31T00:00:00Z',
+                            'published' => '2010-01-01T00:00:00Z',
+                            'versionDate' => '2010-01-01T00:00:00Z',
+                            'statusDate' => '2010-01-01T00:00:00Z',
                             'volume' => 1,
                             'elocationId' => 'e00001',
                             'copyright' => [
@@ -4103,9 +4103,9 @@ final class ArticleControllerTest extends PageTestCase
                             'type' => $type,
                             'doi' => '10.7554/eLife.00001',
                             'title' => 'Article 1 title',
-                            'published' => '2009-12-31T00:00:00Z',
-                            'versionDate' => '2010-01-01T00:00:00Z',
-                            'statusDate' => '2010-01-01T00:00:00Z',
+                            'published' => '2010-01-01T00:00:00Z',
+                            'versionDate' => '2010-01-02T00:00:00Z',
+                            'statusDate' => '2010-01-02T00:00:00Z',
                             'volume' => 1,
                             'elocationId' => 'e00001',
                             'copyright' => [
@@ -4138,14 +4138,14 @@ final class ArticleControllerTest extends PageTestCase
 
             foreach ([
                          'Version of Record published',
-                         'January 1, 2010 (This version)',
+                         'January 2, 2010 (This version)',
                          'Accepted Manuscript published',
-                         'December 31, 2009 (Go to version)',
+                         'January 1, 2010 (Go to version)',
                          'Accepted',
+                         'December 31, 2009',
+                         'Received',
                          'December 30, 2009',
                          'Sent for peer review',
-                         'December 30, 2009',
-                         'Received',
                          'December 29, 2009',
                          'Preprint posted',
                          'December 28, 2009 (Go to version)',
