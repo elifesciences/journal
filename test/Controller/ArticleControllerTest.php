@@ -5101,6 +5101,7 @@ final class ArticleControllerTest extends PageTestCase
                 ])
             )
         );
+
         $crawler = $client->request('GET', '/articles/00001');
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
@@ -5112,8 +5113,6 @@ final class ArticleControllerTest extends PageTestCase
             $crawler->filter('.main-content-grid > section:nth-of-type(3) > header > h2')->text());
         $publicReviews = $crawler->filter('.main-content-grid > section:nth-of-type(3) > .article-section__body > section');
         $this->assertCount(3, $publicReviews);
-
-
 
         foreach ([
             'https://doi.org/10.7554/eLife.09562.230',
