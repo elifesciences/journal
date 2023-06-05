@@ -2871,6 +2871,10 @@ final class ArticleControllerTest extends PageTestCase
                     'Figures and data',
                     '/articles/00001/figures#content',
                 ],
+                [
+                    'Side by side',
+                    'https://lens.elifesciences.org/00001',
+                ],
             ],
             $crawler->filter('.tabbed-navigation__tab-label a')->extract(['_text', 'href'])
         );
@@ -2951,6 +2955,10 @@ final class ArticleControllerTest extends PageTestCase
                     [
                         'Figures and data',
                         '/articles/79595/figures#content',
+                    ],
+                    [
+                        'Side by side',
+                        'https://lens.elifesciences.org/79595',
                     ],
                 ],
                 [
@@ -4499,6 +4507,10 @@ final class ArticleControllerTest extends PageTestCase
                 [
                     'Full text',
                     '/articles/00001#content',
+                ],
+                [
+                    'Full text',
+                    'https://lens.elifesciences.org/00001',
                 ],
             ],
             $crawler->filter('.tabbed-navigation__tab-label a')->extract(['_text', 'href'])
