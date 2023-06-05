@@ -4509,7 +4509,7 @@ final class ArticleControllerTest extends PageTestCase
                     '/articles/00001#content',
                 ],
                 [
-                    'Full text',
+                    'Side by side',
                     'https://lens.elifesciences.org/00001',
                 ],
             ],
