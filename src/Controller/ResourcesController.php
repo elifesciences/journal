@@ -48,7 +48,12 @@ final class ResourcesController extends Controller
                         '<a href="'.$this->generateDownloadLink('https://cdn.elifesciences.org/style-guide-images/elife-full-color-horizontal-2020.png').'">Download .png with transparent background</a>',
                         '<a href="'.$this->generateDownloadLink('https://cdn.elifesciences.org/style-guide-images/elife-full-color-horizontal-2020.svg').'">Download .svg for web</a>',
                     ], 'bullet')
-                ), 'Full-colour horizontal', 3)
+                ), 'Full-colour horizontal', 3),
+                ArticleSection::basic($this->render(
+                    Listing::unordered([
+                        '<a href="'.$this->generateDownloadLink('https://cdn.elifesciences.org/Downloads/eLife-logo-guide.pdf').'">Download .pdf for logo guide</a>',
+                    ], 'bullet')
+                ), 'Logo guide', 3)
             ), 'The eLife logo', 2),
         ];
 
