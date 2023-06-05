@@ -2861,7 +2861,7 @@ final class ArticleControllerTest extends PageTestCase
 
         $this->assertSame('Categories and tags', $crawler->filter('.main-content-grid > section:nth-of-type(12) .article-meta__group_title')->text());
 
-//        $this->assertRegexp('|^https://.*/00001$|', $crawler->filter('.tabbed-navigation')->attr('data-side-by-side-link'));
+        $this->assertRegexp('|^https://.*/00001$|', $crawler->filter('.tabbed-navigation')->attr('data-side-by-side-link'));
 
         $this->assertSame(
             [
