@@ -1223,7 +1223,7 @@ final class ArticlesController extends Controller
                 if ($item instanceof ArticleVoR) {
                     $sideBySideUrl = rtrim($this->getParameter('side_by_side_view_url'), '/').'/'.$item->getId();
                     $otherLinks[] = ViewModel\TabbedNavigationLink::fromLink(
-                        new Link('Side by side', $sideBySideUrl)
+                        new Link('Side by side', $sideBySideUrl), null, true
                     );
                 }
 
