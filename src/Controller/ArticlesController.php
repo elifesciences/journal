@@ -591,6 +591,8 @@ final class ArticlesController extends Controller
 
                 $received = $history->getReceived();
                 $accepted = $history->getAccepted();
+                $sentForReview = $history->getSentForReview();
+
                 $publicationHistory = [];
 
                 /** @var ArticlePreprint[] $preprints */
@@ -615,6 +617,14 @@ final class ArticlesController extends Controller
                             $accepted = null;
                         }
 
+                        // Attempt to output $sentForReview if date is before the preprint date.
+                        if ($sentForReview && 1 === $preprint->getPublishedDate()->diff(new DateTime($sentForReview->toString()))->invert) {
+                            $publicationHistory[] = 'Sent for peer review: '.$sentForReview->format();
+
+                            // Set $sentForReview to null as it has now been included in the publication history.
+                            $sentForReview = null;
+                        }
+
                         $publicationHistory[] = sprintf('Preprint posted: <a href="%s">%s (view preprint)</a>', $preprint->getUri(), $preprint->getPublishedDate()->format('F j, Y'));
                     }
                 }
@@ -627,6 +637,11 @@ final class ArticlesController extends Controller
                 // Output $accepted if it has not yet been output.
                 if ($accepted) {
                     $publicationHistory[] = 'Accepted: '.$accepted->format();
+                }
+
+                // Output $sentForReview if it has not yet been output.
+                if ($sentForReview) {
+                    $publicationHistory[] = 'Sent for peer review: '.$sentForReview->format();
                 }
 
                 $publicationHistory = array_merge($publicationHistory, $history->getVersions()
@@ -1285,6 +1300,17 @@ final class ArticlesController extends Controller
                         'term' => 'Accepted',
                         'descriptors' => [
                             $accepted->format(),
+                        ],
+                    ];
+                }
+
+                if ($sentForReview = $history->getSentForReview()) {
+                    $publicationHistory[] = [
+                        // index added to allow us to sort.
+                        'index' => strtotime($sentForReview->toString()),
+                        'term' => 'Sent for peer review',
+                        'descriptors' => [
+                            $sentForReview->format(),
                         ],
                     ];
                 }

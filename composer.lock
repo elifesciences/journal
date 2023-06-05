@@ -1270,6 +1270,7 @@
                 "psr/http-message": "^1.0",
                 "squizlabs/php_codesniffer": "^3.5"
             },
+            "default-branch": true,
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -1286,6 +1287,10 @@
                 "MIT"
             ],
             "description": "eLife Sciences API SDK",
+            "support": {
+                "issues": "https://github.com/elifesciences/api-sdk-php/issues",
+                "source": "https://github.com/elifesciences/api-sdk-php/tree/master"
+            },
             "time": "2023-05-22T15:56:31+00:00"
         },
         {
@@ -1361,6 +1366,7 @@
             "suggest": {
                 "twig/twig": "^2.0, to use PatternExtension"
             },
+            "default-branch": true,
             "type": "library",
             "autoload": {
                 "files": [
@@ -1433,7 +1439,6 @@
             "keywords": [
                 "scraper"
             ],
-            "abandoned": "symfony/browser-kit",
             "time": "2017-11-19T08:45:40+00:00"
         },
         {
@@ -4432,16 +4437,16 @@
         },
         {
             "name": "elife/api",
-            "version": "2.20.0",
+            "version": "2.21.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-raml.git",
-                "reference": "94c782ddbedb9eafa3055b00e45496933dd1688f"
+                "reference": "dc41f529a0408242a97dc79bec4035e13a9ceaa5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-raml/zipball/94c782ddbedb9eafa3055b00e45496933dd1688f",
-                "reference": "94c782ddbedb9eafa3055b00e45496933dd1688f",
+                "url": "https://api.github.com/repos/elifesciences/api-raml/zipball/dc41f529a0408242a97dc79bec4035e13a9ceaa5",
+                "reference": "dc41f529a0408242a97dc79bec4035e13a9ceaa5",
                 "shasum": ""
             },
             "conflict": {
@@ -4453,7 +4458,11 @@
                 "MIT"
             ],
             "description": "eLife Sciences API specification",
-            "time": "2023-05-19T16:24:41+00:00"
+            "support": {
+                "issues": "https://github.com/elifesciences/api-raml/issues",
+                "source": "https://github.com/elifesciences/api-raml/tree/2.21.0"
+            },
+            "time": "2023-05-24T08:11:39+00:00"
         },
         {
             "name": "elife/api-validator",
@@ -6390,5 +6399,5 @@
     "platform-overrides": {
         "php": "7.1.33"
     },
-    "plugin-api-version": "1.1.0"
+    "plugin-api-version": "2.3.0"
 }
