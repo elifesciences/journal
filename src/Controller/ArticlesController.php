@@ -1187,17 +1187,17 @@ final class ArticlesController extends Controller
                 $history = $sections['history'];
                 $item = $sections['item'];
                 $hasFigures = $sections['hasFigures'];
-                $otherLinks = [];
+                $links = [];
                 $hasPeerReview = false;
 
-                $otherLinks[] = ViewModel\TabbedNavigationLink::fromLink(
+                $links[] = ViewModel\TabbedNavigationLink::fromLink(
                                     new Link('Full text', $this->generatePath($history, $item->getVersion(), null, 'content')),
                                     !$isFiguresPage ? " tabbed-navigation__tab-label--active" : null
                                 );
                 
                 if ($hasFigures) {
-                    $otherLinks[] = ViewModel\TabbedNavigationLink::fromLink(
-                                    new Link('Figures and data', $this->generatePath($history, $item->getVersion(), 'figures', 'content')),
+                    $links[] = ViewModel\TabbedNavigationLink::fromLink(
+                                    new Link('Figures<span class="tabbed-navigation__tab-label--long"> and data</span>', $this->generatePath($history, $item->getVersion(), 'figures', 'content')),
                                     $isFiguresPage ? " tabbed-navigation__tab-label--active" : null
                                 );
                 }
@@ -1208,26 +1208,26 @@ final class ArticlesController extends Controller
 
                 $latestVersion = $articleVersions[count($articleVersions) - 1]->getVersion();
                 if (isset($eraArticle['display']) && $item->getVersion() === $latestVersion) {
-                    $otherLinks[] = ViewModel\TabbedNavigationLink::fromLink(new Link(
+                    $links[] = ViewModel\TabbedNavigationLink::fromLink(new Link(
                         'Executable code',
                         $this->get('router')->generate('article-era', ['id' => $item->getId()])
                     ));
                 }
 
                 if ($hasPeerReview) {
-                    $otherLinks[] = ViewModel\TabbedNavigationLink::fromLink(
+                    $links[] = ViewModel\TabbedNavigationLink::fromLink(
                                         new Link('Peer Review', $this->generatePath($history, $item->getVersion(), null, 'content'))
                                 );
                 }
 
                 if ($item instanceof ArticleVoR) {
                     $sideBySideUrl = rtrim($this->getParameter('side_by_side_view_url'), '/').'/'.$item->getId();
-                    $otherLinks[] = ViewModel\TabbedNavigationLink::fromLink(
+                    $links[] = ViewModel\TabbedNavigationLink::fromLink(
                         new Link('Side by side', $sideBySideUrl), null, true
                     );
                 }
 
-                return new TabbedNavigation($otherLinks);
+                return new TabbedNavigation($links);
             });
     }
 
@@ -1239,9 +1239,7 @@ final class ArticlesController extends Controller
                     return null;
                 }
 
-                $item = $sections['item'];
                 $hasFigures = $sections['hasFigures'];
-                $history = $sections['history'];
                 $sections = $sections['sections'];
 
                 $sections = array_filter($sections, Callback::isInstanceOf(ArticleSection::class));
@@ -1254,10 +1252,10 @@ final class ArticlesController extends Controller
                     $sections = [];
                 }
 
-                $otherLinks = [];
+                 $links = [];
 
                 return new JumpMenu(
-                    array_merge($otherLinks, array_values(array_filter(array_map(function (ViewModel $viewModel) {
+                    array_merge($links, array_values(array_filter(array_map(function (ViewModel $viewModel) {
                         if ($viewModel instanceof ArticleSection) {
                             return new Link($viewModel['title'], '#'.$viewModel['id']);
                         }
