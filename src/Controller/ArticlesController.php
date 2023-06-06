@@ -1197,7 +1197,7 @@ final class ArticlesController extends Controller
                 
                 if ($hasFigures) {
                     $links[] = ViewModel\TabbedNavigationLink::fromLink(
-                                    new Link('Figures and data', $this->generatePath($history, $item->getVersion(), 'figures', 'content')),
+                                    new Link('Figures<span class="tabbed-navigation__tab-label--long"> and data</span>', $this->generatePath($history, $item->getVersion(), 'figures', 'content')),
                                     $isFiguresPage ? " tabbed-navigation__tab-label--active" : null
                                 );
                 }
