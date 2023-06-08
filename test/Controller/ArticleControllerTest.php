@@ -2947,21 +2947,16 @@ final class ArticleControllerTest extends PageTestCase
                         '/articles/feature',
                     ],
                 ],
+                [],
                 [
                     [
-                        'Full text',
+                        'Article',
                         '/articles/79595#content',
                     ],
                     [
                         'Figures and data',
                         '/articles/79595/figures#content',
                     ],
-                    [
-                        'Side by side',
-                        'https://lens.elifesciences.org/79595',
-                    ],
-                ],
-                [
                     [
                         'Abstract',
                         '#abstract',
