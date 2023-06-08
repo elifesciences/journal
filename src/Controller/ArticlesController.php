@@ -44,6 +44,7 @@ use eLife\Patterns\ViewModel\Paragraph;
 use eLife\Patterns\ViewModel\ReadMoreItem;
 use eLife\Patterns\ViewModel\SpeechBubble;
 use eLife\Patterns\ViewModel\TabbedNavigation;
+use eLife\Patterns\ViewModel\ViewSelector;
 use GuzzleHttp\Promise\PromiseInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -717,6 +718,8 @@ final class ArticlesController extends Controller
                 return $parts;
             });
 
+        $arguments['viewSelector'] = $this->createViewSelector($arguments['item'], $arguments['isMagazine'], $arguments['hasFigures'], false, $arguments['history'], $arguments['body'], $arguments['eraArticle']);
+
         $arguments['tabbedNavigation'] = $this->createTabbedNavigation($arguments['item'], $arguments['isMagazine'], $arguments['hasFigures'], false, $arguments['history'], $arguments['body'], $arguments['eraArticle']);
         
         $arguments['jumpMenu'] = $this->createJumpMenu($arguments['item'], $arguments['isMagazine'], $arguments['hasFigures'], false, $arguments['history'], $arguments['body'], $arguments['eraArticle']);
@@ -1180,16 +1183,15 @@ final class ArticlesController extends Controller
         return all(['item' => $item, 'isMagazine' => $isMagazine, 'hasFigures' => $hasFigures, 'history' => $history, 'sections' => $sections])
             ->then(function (array $sections) use ($isFiguresPage, $eraArticle) {
 
-                if ($sections['isMagazine']) {
-                    return null;
-                }
-
                 $history = $sections['history'];
                 $item = $sections['item'];
                 $hasFigures = $sections['hasFigures'];
                 $links = [];
                 $hasPeerReview = false;
 
+                if ($sections['isMagazine'] || 'feature' === $item->getType()) {
+                    return false;
+                }
                 $links[] = ViewModel\TabbedNavigationLink::fromLink(
                                     new Link('Full text', $this->generatePath($history, $item->getVersion(), null, 'content')),
                                     !$isFiguresPage ? " tabbed-navigation__tab-label--active" : null
@@ -1235,13 +1237,15 @@ final class ArticlesController extends Controller
     {
         return all(['item' => $item, 'isMagazine' => $isMagazine, 'hasFigures' => $hasFigures, 'history' => $history, 'sections' => $sections])
             ->then(function (array $sections) use ($isFiguresPage, $eraArticle) {
-                if ($sections['isMagazine']) {
-                    return null;
-                }
 
                 $hasFigures = $sections['hasFigures'];
-                $sections = $sections['sections'];
+                $item = $sections['item'];
 
+                if ($sections['isMagazine']  || 'feature' === $item->getType()) {
+                    return false;
+                }
+
+                $sections = $sections['sections'];
                 $sections = array_filter($sections, Callback::isInstanceOf(ArticleSection::class));
 
                 if (count($sections) < 2) {
@@ -1265,6 +1269,66 @@ final class ArticlesController extends Controller
                 );
             });
     }
+
+    private function createViewSelector(PromiseInterface $item, PromiseInterface $isMagazine, PromiseInterface $hasFigures, bool $isFiguresPage, PromiseInterface $history, PromiseInterface $sections, array $eraArticle) : PromiseInterface
+    {
+        return all(['item' => $item, 'isMagazine' => $isMagazine, 'hasFigures' => $hasFigures, 'history' => $history, 'sections' => $sections])
+            ->then(function (array $sections) use ($isFiguresPage, $eraArticle) {
+
+                $item = $sections['item'];
+                $hasFigures = $sections['hasFigures'];
+                $history = $sections['history'];
+                $sections = $sections['sections'];
+
+                // show view selector only on  Feature Articles
+                if ('feature' !== $item->getType()) {
+                    return null;
+                }
+
+                $sections = array_filter($sections, Callback::isInstanceOf(ArticleSection::class));
+
+                if (count($sections) < 2) {
+                    if (!$hasFigures) {
+                        return null;
+                    }
+
+                    $sections = [];
+                }
+
+                $articleVersions = $history->getVersions()
+                    ->filter(Callback::isInstanceOf(ArticleVersion::class))
+                    ->toArray();
+
+                $latestVersion = $articleVersions[count($articleVersions) - 1]->getVersion();
+
+                $otherLinks = [];
+                if (isset($eraArticle['display']) && $item->getVersion() === $latestVersion) {
+                    $otherLinks[] = new Link(
+                        'Executable code',
+                        $this->get('router')->generate('article-era', ['id' => $item->getId()])
+                    );
+                }
+
+                return new ViewSelector(
+                    new Link('Article', $this->generatePath($history, $item->getVersion(), null, 'content')),
+                    array_values(array_filter(array_map(function (ViewModel $viewModel) {
+                        if ($viewModel instanceof ArticleSection) {
+                            return new Link($viewModel['title'], '#'.$viewModel['id']);
+                        }
+
+                        return null;
+                    }, $sections))),
+                    $hasFigures ? new Link('Figures and data', $this->generatePath($history, $item->getVersion(), 'figures', 'content')) : null,
+                    $isFiguresPage,
+                    false,
+                    $item instanceof ArticleVoR
+                        ? rtrim($this->getParameter('side_by_side_view_url'), '/').'/'.$item->getId()
+                        : null,
+                    $otherLinks
+                );
+            });
+    }
+
 
     private function contentAsideArguments(array $arguments) : array
     {

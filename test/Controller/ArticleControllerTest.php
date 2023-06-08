@@ -2914,7 +2914,6 @@ final class ArticleControllerTest extends PageTestCase
                     ],
                 ],
                 [],
-                [],
             ],
             'editorial' => [
                 '79594',
@@ -2930,7 +2929,6 @@ final class ArticleControllerTest extends PageTestCase
                         '/articles/editorial',
                     ],
                 ],
-                [],
                 [],
             ],
             'feature' => [
@@ -2949,19 +2947,13 @@ final class ArticleControllerTest extends PageTestCase
                 ],
                 [
                     [
-                        'Full text',
+                        'Article',
                         '/articles/79595#content',
                     ],
                     [
                         'Figures and data',
                         '/articles/79595/figures#content',
                     ],
-                    [
-                        'Side by side',
-                        'https://lens.elifesciences.org/79595',
-                    ],
-                ],
-                [
                     [
                         'Abstract',
                         '#abstract',
@@ -2992,8 +2984,7 @@ final class ArticleControllerTest extends PageTestCase
         string $type,
         string $expectImpactStatement,
         array $expectedBreadcrumb,
-        array $expectedTabbedNavigation,
-        array $expectedJumpMenu
+        array $expectedViewSelectorItems
     )
     {
         $client = static::createClient();
@@ -3893,16 +3884,16 @@ final class ArticleControllerTest extends PageTestCase
             $this->assertSame($expectImpactStatement, $crawler->filter('.content-header__impact-statement')->text());
         }
 
-        if (empty($expectedTabbedNavigation)) {
-            $this->assertEmpty($crawler->filter('.tabbed-navigation__tab-label'));
+        if (empty($expectedViewSelectorItems)) {
+            $this->assertEmpty($crawler->filter('.view-selector__list-item'));
         } else {
             $this->assertSame(
-                $expectedTabbedNavigation,
-                $crawler->filter('.tabbed-navigation__tab-label a')->extract(['_text', 'href'])
+                $expectedViewSelectorItems,
+                $crawler->filter('.view-selector__list-item a')->extract(['_text', 'href'])
             );
         }
 
-        if (empty($expectedTabbedNavigation)) {
+        if (empty($expectedViewSelectorItems)) {
             // Authors appear in main-content-grid and not in content-header.
             $this->assertEmpty($crawler->filter('.content-header .author_list_item'));
             $this->assertEmpty($crawler->filter('.content-header .institution_list_item'));
@@ -3926,7 +3917,7 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertSame('Department of Medical Microbiology and Immunology, School of Medicine, University of California, Davis, United States;', $this->crawlerText($institutions->eq(0)));
 
         $sections = $crawler->filter('.main-content-grid > .article-section');
-        if (empty($expectedJumpMenu)) {
+        if (empty($expectedViewSelectorItems)) {
             // Abstract does not appear in main-content-grid but populates the impact statement property.
             $this->assertNotContains('Abstract', $crawler->filter('.main-content-grid')->text());
             // The Main text heading does not appear for insights and editorials.
