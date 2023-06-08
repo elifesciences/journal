@@ -1180,8 +1180,8 @@ final class ArticlesController extends Controller
         return all(['item' => $item, 'isMagazine' => $isMagazine, 'hasFigures' => $hasFigures, 'history' => $history, 'sections' => $sections])
             ->then(function (array $sections) use ($isFiguresPage, $eraArticle) {
 
-                if ($sections['isMagazine']) {
-                    return null;
+                if ($sections['isMagazine'] || 'feature' === $item->getType()) {
+                    return false;
                 }
 
                 $history = $sections['history'];
@@ -1235,8 +1235,9 @@ final class ArticlesController extends Controller
     {
         return all(['item' => $item, 'isMagazine' => $isMagazine, 'hasFigures' => $hasFigures, 'history' => $history, 'sections' => $sections])
             ->then(function (array $sections) use ($isFiguresPage, $eraArticle) {
-                if ($sections['isMagazine']) {
-                    return null;
+
+                if ($sections['isMagazine']  || 'feature' === $item->getType()) {
+                    return false;
                 }
 
                 $hasFigures = $sections['hasFigures'];
