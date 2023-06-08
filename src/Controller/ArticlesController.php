@@ -1274,14 +1274,16 @@ final class ArticlesController extends Controller
     {
         return all(['item' => $item, 'isMagazine' => $isMagazine, 'hasFigures' => $hasFigures, 'history' => $history, 'sections' => $sections])
             ->then(function (array $sections) use ($isFiguresPage, $eraArticle) {
-                if ($sections['isMagazine']) {
-                    return null;
-                }
 
                 $item = $sections['item'];
                 $hasFigures = $sections['hasFigures'];
                 $history = $sections['history'];
                 $sections = $sections['sections'];
+
+                // show view selector only on  Feature Articles
+                if ('feature' !== $item->getType()) {
+                    return null;
+                }
 
                 $sections = array_filter($sections, Callback::isInstanceOf(ArticleSection::class));
 
