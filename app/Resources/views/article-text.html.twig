@@ -7,7 +7,13 @@
     {% embed 'grid/content-new.html.twig' with {sectionAnchorPopup: true} %}
 
         {% block navigation %}
-        
+
+            {% if viewSelector %}
+
+                {{ render_pattern(viewSelector) }}
+
+            {% endif %}
+
             {% if tabbedNavigation %}
 
                 {{ render_pattern(tabbedNavigation) }}

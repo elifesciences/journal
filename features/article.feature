@@ -11,4 +11,4 @@ Feature: Article page
     Then the "Abstract" section should be open
     And the "eLife digest" section should be open
     And the "Introduction" section should be open
-#    But the "Results" section should be closed
+    But the "Results" section should be closed
