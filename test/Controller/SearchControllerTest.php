@@ -134,6 +134,24 @@ final class SearchControllerTest extends PageTestCase
     /**
      * @test
      */
+    public function it_sanitises_the_search_query()
+    {
+        $client = static::createClient();
+
+        $crawler = $client->request('GET', $this->getUrl('  some  key-words   ', 'some key words'));
+
+        $this->assertCount(0, $crawler->filter('.site-header .search-box'));
+
+        $form = $crawler->filter('main')->selectButton('Search')->form();
+
+        $this->assertSame('some key words', $form['for']->getValue());
+
+        $this->assertSame(200, $client->getResponse()->getStatusCode());
+    }
+
+    /**
+     * @test
+     */
     public function it_can_be_ordered_by_date()
     {
         $client = static::createClient();
@@ -516,12 +534,12 @@ final class SearchControllerTest extends PageTestCase
         $this->assertSame('Reviewed Preprint Aug 1, 2022', trim(preg_replace('/\s+/S', ' ', $listing->eq(0)->filter('.teaser__footer .meta')->text())));
     }
 
-    protected function getUrl() : string
+    protected function getUrl($for = '', $expectedQuery = null) : string
     {
         $this->mockApiResponse(
             new Request(
                 'GET',
-                'http://api.elifesciences.org/search?for=&page=1&per-page=1&sort=relevance&order=desc&use-date=default',
+                'http://api.elifesciences.org/search?for='.($expectedQuery ?? $for).'&page=1&per-page=1&sort=relevance&order=desc&use-date=default',
                 ['Accept' => 'application/vnd.elife.search+json; version=2']
             ),
             new Response(
@@ -566,7 +584,7 @@ final class SearchControllerTest extends PageTestCase
         $this->mockApiResponse(
             new Request(
                 'GET',
-                'http://api.elifesciences.org/search?for=&page=1&per-page=10&sort=relevance&order=desc&use-date=default',
+                'http://api.elifesciences.org/search?for='.($expectedQuery ?? $for).'&page=1&per-page=10&sort=relevance&order=desc&use-date=default',
                 ['Accept' => 'application/vnd.elife.search+json; version=2']
             ),
             new Response(
@@ -608,6 +626,6 @@ final class SearchControllerTest extends PageTestCase
             )
         );
 
-        return '/search';
+        return '/search'.($for ? '?for='.$for : '');
     }
 }
