@@ -35,7 +35,7 @@ final class SearchController extends Controller
         $page = (int) $request->query->get('page', 1);
         $perPage = 10;
         // Sanitise the 'for' query parameter.
-        $for = preg_replace(['/^\s+/', '/\s+$/', '/[\s]+/'], ['', '', ' '], $request->query->get('for'));
+        $for = preg_replace(['/^\s+/', '/\s+$/', '/[\-\s]+/'], ['', '', ' '], $request->query->get('for'));
 
         $arguments = $this->defaultPageArguments($request);
 
@@ -56,7 +56,7 @@ final class SearchController extends Controller
         }
 
         $search = $this->get('elife.api_sdk.search.slow')
-            ->forQuery(preg_replace('/[\-]+/', ' ', $arguments['query']['for']))
+            ->forQuery($arguments['query']['for'])
             ->forSubject(...$arguments['query']['subjects'])
             ->forType(...$apiTypes)
             ->sortBy($arguments['query']['sort']);

@@ -144,7 +144,7 @@ final class SearchControllerTest extends PageTestCase
 
         $form = $crawler->filter('main')->selectButton('Search')->form();
 
-        $this->assertSame('some key-words', $form['for']->getValue());
+        $this->assertSame('some key words', $form['for']->getValue());
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
     }
