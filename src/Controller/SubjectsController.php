@@ -41,7 +41,11 @@ final class SubjectsController extends Controller
 
         $arguments['title'] = 'Research categories';
 
-        $arguments['contentHeader'] = new ContentHeaderSimple('Browse our research categories');
+        $arguments['contentHeader'] = new ContentHeaderSimple('Journal',
+            'The latest articles and peer reviewed preprints in Life Sciences and Medicine. <br />
+            Browse our research categories or subscribe to email alerts.
+'
+        );
 
         $arguments['subjects'] = $this->get('elife.api_sdk.subjects')
             ->reverse()
