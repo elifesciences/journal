@@ -1771,7 +1771,7 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertNotEmpty($crawler->filter('.article-download-links-list__link')->selectLink('Executable version'));
         $this->assertNotEmpty($crawler->filter('.article-download-links-list__secondary_link')->selectLink('What are executable versions?'));
         $this->assertContains('/id-of-article-with-era/executable/download', $crawler->filter('.article-download-links-list__link')->selectLink('Executable version')->attr('href'));
-        $this->assertContains('Executable code', $crawler->filter('.view-selector')->text());
+        $this->assertContains('Executable code', $crawler->filter('.tabbed-navigation')->text());
     }
 
     /**
@@ -1822,7 +1822,7 @@ final class ArticleControllerTest extends PageTestCase
             array_map('trim', $crawler->filter('.info-bar')->eq(0)->extract(['_text']))
         );
         $this->assertEmpty($crawler->filter('.article-download-links-list__link')->selectLink('Executable version'));
-        $this->assertNotContains('Executable code', $crawler->filter('.view-selector')->text());
+        $this->assertNotContains('Executable code', $crawler->filter('.tabbed-navigation')->text());
     }
 
     /**
@@ -2861,20 +2861,22 @@ final class ArticleControllerTest extends PageTestCase
 
         $this->assertSame('Categories and tags', $crawler->filter('.main-content-grid > section:nth-of-type(12) .article-meta__group_title')->text());
 
-        $this->assertRegexp('|^https://.*/00001$|', $crawler->filter('.view-selector')->attr('data-side-by-side-link'));
-
         $this->assertSame(
             [
                 [
-                    'Article',
+                    'Full text',
                     '/articles/00001#content',
                 ],
                 [
                     'Figures and data',
                     '/articles/00001/figures#content',
                 ],
+                [
+                    'Side by side',
+                    'https://lens.elifesciences.org/00001',
+                ],
             ],
-            $crawler->filter('.view-selector__link')->extract(['_text', 'href'])
+            $crawler->filter('.tabbed-navigation__tab-label a')->extract(['_text', 'href'])
         );
 
         $this->assertSame(
@@ -2890,7 +2892,7 @@ final class ArticleControllerTest extends PageTestCase
                 'Author response',
                 'Article and author information',
             ],
-            array_map('trim', $crawler->filter('.view-selector__jump_link_item')->extract('_text'))
+            array_map('trim', $crawler->filter('.jump-menu__item')->extract('_text'))
         );
     }
 
@@ -4494,11 +4496,15 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertSame(
             [
                 [
-                    'Article',
+                    'Full text',
                     '/articles/00001#content',
                 ],
+                [
+                    'Side by side',
+                    'https://lens.elifesciences.org/00001',
+                ],
             ],
-            $crawler->filter('.view-selector__link')->extract(['_text', 'href'])
+            $crawler->filter('.tabbed-navigation__tab-label a')->extract(['_text', 'href'])
         );
 
         $dataAvailability = $crawler->filter('.main-content-grid > section:nth-of-type(2)');
@@ -5105,8 +5111,8 @@ final class ArticleControllerTest extends PageTestCase
         $crawler = $client->request('GET', '/articles/00001');
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
-        $this->assertSame('eLife assessment', trim($crawler->filter('.view-selector__list-item')->eq(2)->text()));
-        $this->assertSame('Peer review', trim($crawler->filter('.view-selector__list-item')->eq(4)->text()));
+        $this->assertSame('eLife assessment', trim($crawler->filter('.jump-menu__item')->eq(0)->text()));
+        $this->assertSame('Peer review', trim($crawler->filter('.jump-menu__item')->eq(2)->text()));
         $this->assertSame('eLife assessment',
             $crawler->filter('.main-content-grid > section:nth-of-type(1) > header > h2')->text());
         $this->assertSame('Peer review',
