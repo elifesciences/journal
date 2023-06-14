@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "367dcb988902ac407b6832e264fb5ce9",
+    "content-hash": "6c3aacb9019318ca3117a0392d1bb93d",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -1329,16 +1329,16 @@
         },
         {
             "name": "elife/patterns",
-            "version": "dev-feature/tabbed-navigation",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/patterns-php.git",
-                "reference": "4e3ff4348c6301a75f621d9a19369a03f10254cf"
+                "reference": "d02e6fb71310eff9d0e4ff769530ba4dc1f22b0d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/4e3ff4348c6301a75f621d9a19369a03f10254cf",
-                "reference": "4e3ff4348c6301a75f621d9a19369a03f10254cf",
+                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/d02e6fb71310eff9d0e4ff769530ba4dc1f22b0d",
+                "reference": "d02e6fb71310eff9d0e4ff769530ba4dc1f22b0d",
                 "shasum": ""
             },
             "require": {
@@ -1361,6 +1361,7 @@
             "suggest": {
                 "twig/twig": "^2.0, to use PatternExtension"
             },
+            "default-branch": true,
             "type": "library",
             "autoload": {
                 "files": [
@@ -1375,7 +1376,10 @@
                 "MIT"
             ],
             "description": "eLife patterns",
-            "time": "2023-06-07T07:46:55+00:00"
+            "support": {
+                "source": "https://github.com/elifesciences/patterns-php/tree/master"
+            },
+            "time": "2023-06-14T10:10:11+00:00"
         },
         {
             "name": "fabpot/goutte",
@@ -6335,5 +6339,5 @@
     "platform-overrides": {
         "php": "7.1.33"
     },
-    "plugin-api-version": "1.1.0"
+    "plugin-api-version": "2.3.0"
 }
