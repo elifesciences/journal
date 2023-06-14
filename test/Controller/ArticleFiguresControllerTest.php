@@ -59,7 +59,7 @@ final class ArticleFiguresControllerTest extends PageTestCase
                 'Tables',
                 'Additional files',
             ],
-            array_map('trim', $crawler->filter('.view-selector__jump_link_item')->extract('_text'))
+            array_map('trim', $crawler->filter('.jump-menu__item')->extract('_text'))
         );
     }
 

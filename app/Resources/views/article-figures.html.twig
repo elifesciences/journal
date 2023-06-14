@@ -9,10 +9,16 @@
     {% embed 'grid/content-new.html.twig' %}
 
         {% block navigation %}
+        
+            {% if tabbedNavigation %}
 
-            {% if viewSelector %}
+                {{ render_pattern(tabbedNavigation) }}
 
-                {{ render_pattern(viewSelector) }}
+            {% endif %}
+
+            {% if jumpMenu %}
+
+                {{ render_pattern(jumpMenu) }}
 
             {% endif %}
 

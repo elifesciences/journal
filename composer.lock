@@ -1270,7 +1270,6 @@
                 "psr/http-message": "^1.0",
                 "squizlabs/php_codesniffer": "^3.5"
             },
-            "default-branch": true,
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -1287,10 +1286,6 @@
                 "MIT"
             ],
             "description": "eLife Sciences API SDK",
-            "support": {
-                "issues": "https://github.com/elifesciences/api-sdk-php/issues",
-                "source": "https://github.com/elifesciences/api-sdk-php/tree/master"
-            },
             "time": "2023-05-22T15:56:31+00:00"
         },
         {
@@ -1338,12 +1333,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/patterns-php.git",
-                "reference": "646034fa112fd61957ba24f52d2b0408cf0e0f43"
+                "reference": "d02e6fb71310eff9d0e4ff769530ba4dc1f22b0d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/646034fa112fd61957ba24f52d2b0408cf0e0f43",
-                "reference": "646034fa112fd61957ba24f52d2b0408cf0e0f43",
+                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/d02e6fb71310eff9d0e4ff769530ba4dc1f22b0d",
+                "reference": "d02e6fb71310eff9d0e4ff769530ba4dc1f22b0d",
                 "shasum": ""
             },
             "require": {
@@ -1366,7 +1361,6 @@
             "suggest": {
                 "twig/twig": "^2.0, to use PatternExtension"
             },
-            "default-branch": true,
             "type": "library",
             "autoload": {
                 "files": [
@@ -1381,10 +1375,7 @@
                 "MIT"
             ],
             "description": "eLife patterns",
-            "support": {
-                "source": "https://github.com/elifesciences/patterns-php/tree/master"
-            },
-            "time": "2023-03-31T15:00:46+00:00"
+            "time": "2023-06-08T14:37:25+00:00"
         },
         {
             "name": "fabpot/goutte",
@@ -1439,6 +1430,7 @@
             "keywords": [
                 "scraper"
             ],
+            "abandoned": "symfony/browser-kit",
             "time": "2017-11-19T08:45:40+00:00"
         },
         {
@@ -1801,20 +1793,6 @@
                 "rest",
                 "web service"
             ],
-            "funding": [
-                {
-                    "url": "https://github.com/GrahamCampbell",
-                    "type": "github"
-                },
-                {
-                    "url": "https://github.com/Nyholm",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/guzzlehttp/guzzle",
-                    "type": "tidelift"
-                }
-            ],
             "time": "2022-06-20T22:16:07+00:00"
         },
         {
@@ -1972,20 +1950,6 @@
                 "stream",
                 "uri",
                 "url"
-            ],
-            "funding": [
-                {
-                    "url": "https://github.com/GrahamCampbell",
-                    "type": "github"
-                },
-                {
-                    "url": "https://github.com/Nyholm",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/guzzlehttp/psr7",
-                    "type": "tidelift"
-                }
             ],
             "time": "2022-06-20T21:43:03+00:00"
         },
@@ -2688,20 +2652,6 @@
                 "twofish",
                 "x.509",
                 "x509"
-            ],
-            "funding": [
-                {
-                    "url": "https://github.com/terrafrost",
-                    "type": "github"
-                },
-                {
-                    "url": "https://www.patreon.com/phpseclib",
-                    "type": "patreon"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/phpseclib/phpseclib",
-                    "type": "tidelift"
-                }
             ],
             "time": "2023-03-05T17:13:09+00:00"
         },
@@ -3764,16 +3714,6 @@
             "keywords": [
                 "templating"
             ],
-            "funding": [
-                {
-                    "url": "https://github.com/fabpot",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/twig/twig",
-                    "type": "tidelift"
-                }
-            ],
             "time": "2022-09-28T08:40:08+00:00"
         },
         {
@@ -4458,10 +4398,6 @@
                 "MIT"
             ],
             "description": "eLife Sciences API specification",
-            "support": {
-                "issues": "https://github.com/elifesciences/api-raml/issues",
-                "source": "https://github.com/elifesciences/api-raml/tree/2.21.0"
-            },
             "time": "2023-05-24T08:11:39+00:00"
         },
         {
