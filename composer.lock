@@ -1337,12 +1337,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/patterns-php.git",
-                "reference": "cdb8848747ca75a13862cc14f0722c5111fab910"
+                "reference": "a67a6cf3f51e80f98e26802b140525d9ed23433b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/cdb8848747ca75a13862cc14f0722c5111fab910",
-                "reference": "cdb8848747ca75a13862cc14f0722c5111fab910",
+                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/a67a6cf3f51e80f98e26802b140525d9ed23433b",
+                "reference": "a67a6cf3f51e80f98e26802b140525d9ed23433b",
                 "shasum": ""
             },
             "require": {
@@ -1365,7 +1365,6 @@
             "suggest": {
                 "twig/twig": "^2.0, to use PatternExtension"
             },
-            "default-branch": true,
             "type": "library",
             "autoload": {
                 "files": [
@@ -1383,7 +1382,7 @@
             "support": {
                 "source": "https://github.com/elifesciences/patterns-php/tree/msa-pages"
             },
-            "time": "2023-06-13T11:36:23+00:00"
+            "time": "2023-06-19T08:33:49+00:00"
         },
         {
             "name": "fabpot/goutte",
@@ -6366,5 +6365,6 @@
     "platform-dev": [],
     "platform-overrides": {
         "php": "7.1.33"
-    }
+    },
+    "plugin-api-version": "2.3.0"
 }
