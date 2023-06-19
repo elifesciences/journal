@@ -4,8 +4,10 @@
 
 {% block body %}
 
-    {{ render_pattern(contentHeader) }}
-
+    <div class="header-wrapper wrapper">
+        {{ render_pattern(contentHeader) }}
+    </div>
+    
     {% include 'calls-to-action.html.twig' %}
 
     {% embed 'grid/listing-one-column.html.twig' with {fullWidth: true} %}
