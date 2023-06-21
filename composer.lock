@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "041ef720c0ea12506e952e28b7f11a7b",
+    "content-hash": "6c3aacb9019318ca3117a0392d1bb93d",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -1290,16 +1290,16 @@
         },
         {
             "name": "elife/civi-contacts",
-            "version": "dev-early-career",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/civi-contacts.git",
-                "reference": "f8cce3a4a572fc5ef02feddedf4a41566aba604f"
+                "reference": "565b798c0ea9113fee5ee7fde177cfc4c951b469"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/civi-contacts/zipball/f8cce3a4a572fc5ef02feddedf4a41566aba604f",
-                "reference": "f8cce3a4a572fc5ef02feddedf4a41566aba604f",
+                "url": "https://api.github.com/repos/elifesciences/civi-contacts/zipball/565b798c0ea9113fee5ee7fde177cfc4c951b469",
+                "reference": "565b798c0ea9113fee5ee7fde177cfc4c951b469",
                 "shasum": ""
             },
             "require": {
@@ -1315,6 +1315,7 @@
             "suggest": {
                 "laravel-zero/framework": "Required to use the console (^5.8)."
             },
+            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
@@ -1327,9 +1328,9 @@
             ],
             "support": {
                 "issues": "https://github.com/elifesciences/civi-contacts/issues",
-                "source": "https://github.com/elifesciences/civi-contacts/tree/early-career"
+                "source": "https://github.com/elifesciences/civi-contacts/tree/master"
             },
-            "time": "2023-06-13T10:32:42+00:00"
+            "time": "2023-06-20T13:45:45+00:00"
         },
         {
             "name": "elife/patterns",
@@ -6338,5 +6339,6 @@
     "platform-dev": [],
     "platform-overrides": {
         "php": "7.1.33"
-    }
+    },
+    "plugin-api-version": "2.3.0"
 }
