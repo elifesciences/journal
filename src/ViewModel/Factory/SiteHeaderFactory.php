@@ -38,7 +38,6 @@ final class SiteHeaderFactory
                 false
             ),
             NavLinkedItem::asLink(new Link('Home', $this->urlGenerator->generate('home'))),
-            NavLinkedItem::asLink(new Link('Journal', $this->urlGenerator->generate('subjects'))),
             NavLinkedItem::asLink(new Link('Magazine', $this->urlGenerator->generate('magazine'))),
             NavLinkedItem::asLink(new Link('Community', $this->urlGenerator->generate('community'))),
             NavLinkedItem::asLink(new Link('About', $this->urlGenerator->generate('about')))

@@ -17,7 +17,7 @@ final class SubjectsControllerTest extends PageTestCase
         $crawler = $client->request('GET', $this->getUrl());
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
-        $this->assertSame('Journal', $crawler->filter('.content-header-simple__title')->text());
+        $this->assertSame('Browse our research categories', $crawler->filter('.content-header-simple__title')->text());
         $this->assertContains('No subjects available.', $crawler->filter('main')->text());
     }
 
