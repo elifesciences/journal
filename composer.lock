@@ -1315,7 +1315,6 @@
             "suggest": {
                 "laravel-zero/framework": "Required to use the console (^5.8)."
             },
-            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
@@ -1326,10 +1325,6 @@
             "license": [
                 "MIT"
             ],
-            "support": {
-                "issues": "https://github.com/elifesciences/civi-contacts/issues",
-                "source": "https://github.com/elifesciences/civi-contacts/tree/master"
-            },
             "time": "2023-06-20T13:45:45+00:00"
         },
         {
@@ -1338,12 +1333,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/patterns-php.git",
-                "reference": "cbd1039059db80195a0326943b1b70bc6e37408b"
+                "reference": "382312a30df33d7efb4af20b24b47bbda284fa00"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/cbd1039059db80195a0326943b1b70bc6e37408b",
-                "reference": "cbd1039059db80195a0326943b1b70bc6e37408b",
+                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/382312a30df33d7efb4af20b24b47bbda284fa00",
+                "reference": "382312a30df33d7efb4af20b24b47bbda284fa00",
                 "shasum": ""
             },
             "require": {
@@ -1380,7 +1375,7 @@
                 "MIT"
             ],
             "description": "eLife patterns",
-            "time": "2023-06-15T10:44:29+00:00"
+            "time": "2023-06-23T12:18:46+00:00"
         },
         {
             "name": "fabpot/goutte",
@@ -6339,6 +6334,5 @@
     "platform-dev": [],
     "platform-overrides": {
         "php": "7.1.33"
-    },
-    "plugin-api-version": "2.3.0"
+    }
 }
