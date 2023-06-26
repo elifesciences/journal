@@ -37,7 +37,6 @@ final class ArticleRelatedItemTeaserConverter implements ViewModelConverter
             $image = null;
         }
 
-        $context['updatedText'] = false;
         return Teaser::relatedItem(
             $object->getFullTitle(),
             $this->urlGenerator->generate('article', [$object]),
