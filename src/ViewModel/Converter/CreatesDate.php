@@ -17,7 +17,10 @@ trait CreatesDate
     {
         if ('published' !== ($context['date'] ?? 'default')) {
             if ($model instanceof ArticleVersion || $model instanceof ReviewedPreprint) {
-                return $model->getStatusDate() ? ViewModel\Date::simple($model->getStatusDate(), $model->getStatusDate() != $model->getPublishedDate()) : null;
+                return $model->getStatusDate() ? ViewModel\Date::simple(
+                    $model->getStatusDate(),
+                    ($context['updatedText'] ?? true) ??
+                    $model->getStatusDate() !== $model->getPublishedDate()) : null;
             } elseif ($model instanceof Collection) {
                 return ViewModel\Date::simple($model->getUpdatedDate() ?? $model->getPublishedDate(), !empty($model->getUpdatedDate()));
             }
