@@ -41,7 +41,7 @@ final class SubjectsController extends Controller
 
         $arguments['title'] = 'Research categories';
 
-        $arguments['contentHeader'] = new ContentHeaderSimple('Browse our research categories',
+        $arguments['contentHeader'] = new ContentHeaderSimple('Research Categories',
             'The latest articles and peer reviewed preprints in Life Sciences and Medicine. <br />
             Browse our research categories or <a href="'.$this->get('router')->generate('content-alerts').'">subscribe to email alerts</a>.'
         );
