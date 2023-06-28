@@ -1286,10 +1286,6 @@
                 "MIT"
             ],
             "description": "eLife Sciences API SDK",
-            "support": {
-                "issues": "https://github.com/elifesciences/api-sdk-php/issues",
-                "source": "https://github.com/elifesciences/api-sdk-php/tree/master"
-            },
             "time": "2023-05-22T15:56:31+00:00"
         },
         {
@@ -1298,12 +1294,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/civi-contacts.git",
-                "reference": "a52405c42823b344bc1f003c72d755128b841bee"
+                "reference": "565b798c0ea9113fee5ee7fde177cfc4c951b469"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/civi-contacts/zipball/a52405c42823b344bc1f003c72d755128b841bee",
-                "reference": "a52405c42823b344bc1f003c72d755128b841bee",
+                "url": "https://api.github.com/repos/elifesciences/civi-contacts/zipball/565b798c0ea9113fee5ee7fde177cfc4c951b469",
+                "reference": "565b798c0ea9113fee5ee7fde177cfc4c951b469",
                 "shasum": ""
             },
             "require": {
@@ -1329,7 +1325,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2023-01-10T09:17:45+00:00"
+            "time": "2023-06-20T13:45:45+00:00"
         },
         {
             "name": "elife/patterns",
@@ -2660,20 +2656,6 @@
                 "x.509",
                 "x509"
             ],
-            "funding": [
-                {
-                    "url": "https://github.com/terrafrost",
-                    "type": "github"
-                },
-                {
-                    "url": "https://www.patreon.com/phpseclib",
-                    "type": "patreon"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/phpseclib/phpseclib",
-                    "type": "tidelift"
-                }
-            ],
             "time": "2023-03-05T17:13:09+00:00"
         },
         {
@@ -3734,16 +3716,6 @@
             "homepage": "https://twig.symfony.com",
             "keywords": [
                 "templating"
-            ],
-            "funding": [
-                {
-                    "url": "https://github.com/fabpot",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/twig/twig",
-                    "type": "tidelift"
-                }
             ],
             "time": "2022-09-28T08:40:08+00:00"
         },
@@ -6365,6 +6337,5 @@
     "platform-dev": [],
     "platform-overrides": {
         "php": "7.1.33"
-    },
-    "plugin-api-version": "2.3.0"
+    }
 }
