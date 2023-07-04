@@ -89,7 +89,7 @@ final class ArchiveMonthControllerTest extends PageTestCase
         $this->mockApiResponse(
             new Request(
                 'GET',
-                'http://api.elifesciences.org/search?for=&page=1&per-page=1&sort=date&order=desc&type[]=research-advance&type[]=research-article&type[]=research-communication&type[]=review-article&type[]=scientific-correspondence&type[]=short-report&type[]=tools-resources&type[]=replication-study&use-date=published&start-date=2015-12-01&end-date=2015-12-31',
+                'http://api.elifesciences.org/search?for=&page=1&per-page=1&sort=date&order=desc&type[]=research-advance&type[]=research-article&type[]=research-communication&type[]=review-article&type[]=scientific-correspondence&type[]=short-report&type[]=tools-resources&type[]=replication-study&type[]=reviewed-preprint&use-date=published&start-date=2015-12-01&end-date=2015-12-31',
                 ['Accept' => 'application/vnd.elife.search+json; version=2']
             ),
             new Response(
