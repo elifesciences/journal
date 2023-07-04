@@ -1771,7 +1771,7 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertNotEmpty($crawler->filter('.article-download-links-list__link')->selectLink('Executable version'));
         $this->assertNotEmpty($crawler->filter('.article-download-links-list__secondary_link')->selectLink('What are executable versions?'));
         $this->assertContains('/id-of-article-with-era/executable/download', $crawler->filter('.article-download-links-list__link')->selectLink('Executable version')->attr('href'));
-        $this->assertContains('Executable code', $crawler->filter('.view-selector')->text());
+        $this->assertContains('Executable code', $crawler->filter('.tabbed-navigation')->text());
     }
 
     /**
@@ -1822,7 +1822,7 @@ final class ArticleControllerTest extends PageTestCase
             array_map('trim', $crawler->filter('.info-bar')->eq(0)->extract(['_text']))
         );
         $this->assertEmpty($crawler->filter('.article-download-links-list__link')->selectLink('Executable version'));
-        $this->assertNotContains('Executable code', $crawler->filter('.view-selector')->text());
+        $this->assertNotContains('Executable code', $crawler->filter('.tabbed-navigation')->text());
     }
 
     /**
@@ -2861,20 +2861,22 @@ final class ArticleControllerTest extends PageTestCase
 
         $this->assertSame('Categories and tags', $crawler->filter('.main-content-grid > section:nth-of-type(12) .article-meta__group_title')->text());
 
-        $this->assertRegexp('|^https://.*/00001$|', $crawler->filter('.view-selector')->attr('data-side-by-side-link'));
-
         $this->assertSame(
             [
                 [
-                    'Article',
+                    'Full text',
                     '/articles/00001#content',
                 ],
                 [
                     'Figures and data',
                     '/articles/00001/figures#content',
                 ],
+                [
+                    'Side by side',
+                    'https://lens.elifesciences.org/00001',
+                ],
             ],
-            $crawler->filter('.view-selector__link')->extract(['_text', 'href'])
+            $crawler->filter('.tabbed-navigation__tab-label a')->extract(['_text', 'href'])
         );
 
         $this->assertSame(
@@ -2890,7 +2892,7 @@ final class ArticleControllerTest extends PageTestCase
                 'Author response',
                 'Article and author information',
             ],
-            array_map('trim', $crawler->filter('.view-selector__jump_link_item')->extract('_text'))
+            array_map('trim', $crawler->filter('.jump-menu__item')->extract('_text'))
         );
     }
 
@@ -4065,8 +4067,9 @@ final class ArticleControllerTest extends PageTestCase
                 200,
                 ['Content-Type' => 'application/vnd.elife.article-history+json; version=2'],
                 json_encode([
-                    'received' => '2009-12-29',
-                    'accepted' => '2009-12-30',
+                    'received' => '2009-12-30',
+                    'accepted' => '2009-12-31',
+                    'sentForReview' => '2009-12-29',
                     'versions' => [
                         [
                             'status' => 'preprint',
@@ -4082,9 +4085,9 @@ final class ArticleControllerTest extends PageTestCase
                             'type' => $type,
                             'doi' => '10.7554/eLife.00001',
                             'title' => 'Article 1 title',
-                            'published' => '2009-12-31T00:00:00Z',
-                            'versionDate' => '2009-12-31T00:00:00Z',
-                            'statusDate' => '2009-12-31T00:00:00Z',
+                            'published' => '2010-01-01T00:00:00Z',
+                            'versionDate' => '2010-01-01T00:00:00Z',
+                            'statusDate' => '2010-01-01T00:00:00Z',
                             'volume' => 1,
                             'elocationId' => 'e00001',
                             'copyright' => [
@@ -4102,9 +4105,9 @@ final class ArticleControllerTest extends PageTestCase
                             'type' => $type,
                             'doi' => '10.7554/eLife.00001',
                             'title' => 'Article 1 title',
-                            'published' => '2009-12-31T00:00:00Z',
-                            'versionDate' => '2010-01-01T00:00:00Z',
-                            'statusDate' => '2010-01-01T00:00:00Z',
+                            'published' => '2010-01-01T00:00:00Z',
+                            'versionDate' => '2010-01-02T00:00:00Z',
+                            'statusDate' => '2010-01-02T00:00:00Z',
                             'volume' => 1,
                             'elocationId' => 'e00001',
                             'copyright' => [
@@ -4133,16 +4136,18 @@ final class ArticleControllerTest extends PageTestCase
                 $this->crawlerText($crawler->filter('.content-aside .button-collection .button-collection__item')->eq(2)));
             $this->assertSame('Comment Open annotations (there are currently 0 annotations on this page).',
                 $this->crawlerText($crawler->filter('.content-aside .button-collection .button-collection__item')->eq(3)));
-            $this->assertCount(10, $crawler->filter('.content-aside .definition-list--timeline')->children());
+            $this->assertCount(12, $crawler->filter('.content-aside .definition-list--timeline')->children());
 
             foreach ([
                          'Version of Record published',
-                         'January 1, 2010 (This version)',
+                         'January 2, 2010 (This version)',
                          'Accepted Manuscript published',
-                         'December 31, 2009 (Go to version)',
+                         'January 1, 2010 (Go to version)',
                          'Accepted',
-                         'December 30, 2009',
+                         'December 31, 2009',
                          'Received',
+                         'December 30, 2009',
+                         'Sent for peer review',
                          'December 29, 2009',
                          'Preprint posted',
                          'December 28, 2009 (Go to version)',
@@ -4491,11 +4496,15 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertSame(
             [
                 [
-                    'Article',
+                    'Full text',
                     '/articles/00001#content',
                 ],
+                [
+                    'Side by side',
+                    'https://lens.elifesciences.org/00001',
+                ],
             ],
-            $crawler->filter('.view-selector__link')->extract(['_text', 'href'])
+            $crawler->filter('.tabbed-navigation__tab-label a')->extract(['_text', 'href'])
         );
 
         $dataAvailability = $crawler->filter('.main-content-grid > section:nth-of-type(2)');
@@ -5070,6 +5079,9 @@ final class ArticleControllerTest extends PageTestCase
                 200,
                 ['Content-Type' => 'application/vnd.elife.article-history+json; version=2'],
                 json_encode([
+                    'received' => '2023-12-10',
+                    'accepted' => '2023-12-10',
+                    'sentForReview' => '2023-03-15',
                     'versions' => [
                         [
                             'status' => 'vor',
@@ -5099,8 +5111,8 @@ final class ArticleControllerTest extends PageTestCase
         $crawler = $client->request('GET', '/articles/00001');
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
-        $this->assertSame('eLife assessment', trim($crawler->filter('.view-selector__list-item')->eq(2)->text()));
-        $this->assertSame('Peer review', trim($crawler->filter('.view-selector__list-item')->eq(4)->text()));
+        $this->assertSame('eLife assessment', trim($crawler->filter('.jump-menu__item')->eq(0)->text()));
+        $this->assertSame('Peer review', trim($crawler->filter('.jump-menu__item')->eq(2)->text()));
         $this->assertSame('eLife assessment',
             $crawler->filter('.main-content-grid > section:nth-of-type(1) > header > h2')->text());
         $this->assertSame('Peer review',
@@ -5121,6 +5133,370 @@ final class ArticleControllerTest extends PageTestCase
 
         $this->assertSame('Recommendations for authors',
             $crawler->filter('.main-content-grid > section:nth-of-type(3) > div > section:nth-of-type(3) > header > h3')->text());
+    }
+
+    public function prcVorHistoryProvider()
+    {
+        yield 'none' => [
+            [],
+            [
+                'Version of Record published',
+                'May 3, 2023 (This version)',
+            ],
+        ];
+        yield 'preprint only' => [
+            [
+                [
+                    'status' => 'preprint',
+                    'description' => 'This manuscript was published as a preprint.',
+                    'uri' => 'https://doi.org/10.1101/2021.11.09.467796',
+                    'date' => '2023-02-15T00:00:00Z',
+                ],
+            ],
+            [
+                'Version of Record published',
+                'May 3, 2023 (This version)',
+                'Preprint posted',
+                'February 15, 2023 (Go to version)',
+            ],
+        ];
+        yield 'reviewed preprint only' => [
+            [
+                [
+                    'status' => 'preprint',
+                    'description' => 'This manuscript was published as a reviewed preprint.',
+                    'uri' => 'https://doi.org/10.7554/eLife.00001.1',
+                    'date' => '2023-02-16T00:00:00Z',
+                ],
+            ],
+            [
+                'Version of Record published',
+                'May 3, 2023 (This version)',
+                'Reviewed preprint posted',
+                'February 16, 2023 (Go to version)',
+            ],
+        ];
+        yield 'revised preprint' => [
+            [
+                [
+                    'status' => 'preprint',
+                    'description' => 'This manuscript was published as a reviewed preprint.',
+                    'uri' => 'https://doi.org/10.7554/eLife.00001.1',
+                    'date' => '2023-02-16T00:00:00Z',
+                ],
+                [
+                    'status' => 'preprint',
+                    'description' => 'The reviewed preprint was revised.',
+                    'uri' => 'https://doi.org/10.7554/eLife.00001.2',
+                    'date' => '2023-02-17T00:00:00Z',
+                ],
+            ],
+            [
+                'Version of Record published',
+                'May 3, 2023 (This version)',
+                'Reviewed preprint version 2',
+                'February 17, 2023 (Go to version)',
+                'Reviewed preprint version 1',
+                'February 16, 2023 (Go to version)',
+            ],
+        ];
+        yield 'revised preprints and preprint' => [
+            [
+                [
+                    'status' => 'preprint',
+                    'description' => 'This manuscript was published as a preprint.',
+                    'uri' => 'https://doi.org/10.1101/2021.11.09.467796',
+                    'date' => '2023-02-15T00:00:00Z',
+                ],
+                [
+                    'status' => 'preprint',
+                    'description' => 'This manuscript was published as a reviewed preprint.',
+                    'uri' => 'https://doi.org/10.7554/eLife.00001.1',
+                    'date' => '2023-02-16T00:00:00Z',
+                ],
+                [
+                    'status' => 'preprint',
+                    'description' => 'The reviewed preprint was revised.',
+                    'uri' => 'https://doi.org/10.7554/eLife.00001.2',
+                    'date' => '2023-02-17T00:00:00Z',
+                ],
+                [
+                    'status' => 'preprint',
+                    'description' => 'The reviewed preprint was revised.',
+                    'uri' => 'https://doi.org/10.7554/eLife.00001.3',
+                    'date' => '2023-02-18T00:00:00Z',
+                ],
+            ],
+            [
+                'Version of Record published',
+                'May 3, 2023 (This version)',
+                'Reviewed preprint version 3',
+                'February 18, 2023 (Go to version)',
+                'Reviewed preprint version 2',
+                'February 17, 2023 (Go to version)',
+                'Reviewed preprint version 1',
+                'February 16, 2023 (Go to version)',
+                'Preprint posted',
+                'February 15, 2023 (Go to version)',
+            ],
+        ];
+        yield 'revised preprints and preprint disordered' => [
+            [
+                [
+                    'status' => 'preprint',
+                    'description' => 'This manuscript was published as a reviewed preprint.',
+                    'uri' => 'https://doi.org/10.7554/eLife.00001.1',
+                    'date' => '2023-02-16T00:00:00Z',
+                ],
+                [
+                    'status' => 'preprint',
+                    'description' => 'This manuscript was published as a preprint.',
+                    'uri' => 'https://doi.org/10.1101/2021.11.09.467796',
+                    'date' => '2023-02-15T00:00:00Z',
+                ],
+                [
+                    'status' => 'preprint',
+                    'description' => 'The reviewed preprint was revised.',
+                    'uri' => 'https://doi.org/10.7554/eLife.00001.3',
+                    'date' => '2023-02-18T00:00:00Z',
+                ],
+                [
+                    'status' => 'preprint',
+                    'description' => 'The reviewed preprint was revised.',
+                    'uri' => 'https://doi.org/10.7554/eLife.00001.2',
+                    'date' => '2023-02-17T00:00:00Z',
+                ],
+            ],
+            [
+                'Version of Record published',
+                'May 3, 2023 (This version)',
+                'Reviewed preprint version 3',
+                'February 18, 2023 (Go to version)',
+                'Reviewed preprint version 2',
+                'February 17, 2023 (Go to version)',
+                'Reviewed preprint version 1',
+                'February 16, 2023 (Go to version)',
+                'Preprint posted',
+                'February 15, 2023 (Go to version)',
+            ],
+        ];
+    }
+
+    /**
+     * @test
+     * @dataProvider prcVorHistoryProvider
+     */
+    public function it_displays_versions_in_timeline_for_prc_vor(
+        array $preprints,
+        array $expectedTimeline
+    )
+    {
+        $client = static::createClient();
+
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/articles/00001',
+                ['Accept' => 'application/vnd.elife.article-poa+json; version=3, application/vnd.elife.article-vor+json; version=7']
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.article-vor+json; version=7'],
+                json_encode([
+                    'status' => 'vor',
+                    'stage' => 'published',
+                    'id' => '00001',
+                    'version' => 1,
+                    'type' => 'research-article',
+                    'doi' => '10.7554/eLife.00001',
+                    'title' => 'Article 1 title',
+                    'published' => '2023-05-03T00:00:00Z',
+                    'versionDate' => '2023-05-03T00:00:00Z',
+                    'statusDate' => '2023-05-03T00:00:00Z',
+                    'volume' => 1,
+                    'elocationId' => 'RP00001',
+                    'copyright' => [
+                        'license' => 'CC-BY-4.0',
+                        'holder' => 'Bar',
+                        'statement' => 'Copyright statement.',
+                    ],
+                    'authorLine' => 'Foo Bar',
+                    'authors' => [
+                        [
+                            'type' => 'person',
+                            'name' => [
+                                'preferred' => 'Foo Bar',
+                                'index' => 'Bar, Foo',
+                            ],
+                        ],
+                    ],
+                    'body' => [
+                        [
+                            'type' => 'section',
+                            'id' => 's-1',
+                            'title' => 'Introduction',
+                            'content' => [
+                                [
+                                    'type' => 'paragraph',
+                                    'text' => 'Fossil hominins were first recognized in the Dinaledi Chamber in the Rising Star cave system in October 2013. During a relatively short excavation, our team recovered an extensive collection of 1550 hominin specimens, representing nearly every element of the skeleton multiple times (Figure 1), including many complete elements and morphologically informative fragments, some in articulation, as well as smaller fragments many of which could be refit into more complete elements. The collection is a morphologically homogeneous sample that can be attributed to no previously-known hominin species. Here we describe this new species, <i>Homo naledi</i>. We have not defined <i>H. naledi</i> narrowly based on a single jaw or skull because the entire body of material has informed our understanding of its biology.',
+                                ],
+                            ],
+                        ],
+                    ],
+                    'authorResponse' => [
+                        'content' => [
+                            [
+                                'text' => '<i>1) The reviewers are surprised to not see an in-depth comparison of</i> H. naledi <i>to</i> H. floresiensis<i>, especially where combinations of small teeth and small brains are concerned. It should be easy, e.g., to add the published</i> H. floresiensis <i>measurements to</i> <a href="#fig7"><i>Figure 7</i></a><i>. The authors allude to material attributed to</i> ‘Homo gautengensis’ <i>and perhaps a short discussion or reiteration of their views about the validity of that species is needed</i>.',
+                                'type' => 'paragraph',
+                            ],
+                        ],
+                        'doi' => '10.7554/eLife.09562.031',
+                        'id' => 'SA2',
+                    ],
+                    'elifeAssessment' => [
+                        'title' => 'eLife assessment',
+                        'id' => 'sa0',
+                        'doi' => '10.7554/eLife.09562.sa00',
+                        'content' => [
+                            [
+                                'type' => 'paragraph',
+                                'text' => 'Collagen is a major component of extracellular matrix. The authors have identified a high-affinity inhibitory collagen receptor LAIR-1 and a soluble decoy receptor LAIR-2 (with even higher binding affinity to collagen), which can be therapeutically targeted to block tumor progression. Dr Meyaard and colleagues have also generated a dimeric LAIR-2 human IgG1 Fc fusion protein NC410 for therapeutic use. With humanized mouse models engrafted with functional human immune systems (PBMC), they have explored the anti-cancer efficacy of NC410 and revealed its impact on modulating immune responses. Furthermore, they extended this study to identify biomarkers of predictive value for NC410-based anti-cancer therapy.',
+                            ],
+                        ],
+                        'scietyUri' => 'https://sciety.org/articles/activity/10.1101/2020.11.21.391326',
+                    ],
+                    'publicReviews' => [
+                        [
+                            'title' => 'Reviewer #1 (public review)',
+                            'id' => 'SA21',
+                            'doi' => '10.7554/eLife.09562.230',
+                            'content' => [
+                                [
+                                    'type' => 'paragraph',
+                                    'text' => 'Thank you for submitting your work entitled “A new species of the genus <i>Homo</i> from the Dinaledi Chamber, South Africa” for peer review at <i>eLife</i>.',
+                                ],
+                                [
+                                    'type' => 'box',
+                                    'title' => 'Box 2',
+                                    'content' => [
+                                        [
+                                            'type' => 'paragraph',
+                                            'text' => 'Your submission has been favorably evaluated by Ian Baldwin (Senior editor), two guest Reviewing editors (Johannes Krause and Nicholas Conard), and two peer reviewers. One of the two peer reviewers, Chris Stringer, has agreed to share his identity, and Johannes Krause has drafted this decision to help you prepare a revised submission.',
+                                        ],
+                                    ],
+                                ],
+                                [
+                                    'type' => 'paragraph',
+                                    'text' => 'The authors describe a large collection of recently discovered hominin fossils from the Dinaledi Chamber in the Rising Star cave system in South Africa. Based on their initial assessment they argue that the fossil remains derive from a single homogenous hominin group and present a new taxon that they call <i>Homo naledi</i>.',
+                                ],
+                            ],
+                        ],
+                        [
+                            'title' => 'Reviewer #2 (public review)',
+                            'id' => 'SA22',
+                            'doi' => '10.7554/eLife.09562.330',
+                            'content' => [
+                                [
+                                    'type' => 'paragraph',
+                                    'text' => 'Thank you for submitting your work entitled “A new species of the genus <i>Homo</i> from the Dinaledi Chamber, South Africa” for peer review at <i>eLife</i>.',
+                                ],
+                                [
+                                    'type' => 'box',
+                                    'title' => 'Box 2',
+                                    'content' => [
+                                        [
+                                            'type' => 'paragraph',
+                                            'text' => 'Your submission has been favorably evaluated by Ian Baldwin (Senior editor), two guest Reviewing editors (Johannes Krause and Nicholas Conard), and two peer reviewers. One of the two peer reviewers, Chris Stringer, has agreed to share his identity, and Johannes Krause has drafted this decision to help you prepare a revised submission.',
+                                        ],
+                                    ],
+                                ],
+                                [
+                                    'type' => 'paragraph',
+                                    'text' => 'The authors describe a large collection of recently discovered hominin fossils from the Dinaledi Chamber in the Rising Star cave system in South Africa. Based on their initial assessment they argue that the fossil remains derive from a single homogenous hominin group and present a new taxon that they call <i>Homo naledi</i>.',
+                                ],
+                            ],
+                        ],
+                    ],
+                    'recommendationsForAuthors' => [
+                        'title' => 'Recommendations for authors',
+                        'id' => 'SA11',
+                        'doi' => '10.7554/eLife.09562.130',
+                        'content' => [
+                            [
+                                'type' => 'paragraph',
+                                'text' => 'Thank you for submitting your work entitled “A new species of the genus <i>Homo</i> from the Dinaledi Chamber, South Africa” for peer review at <i>eLife</i>.',
+                            ],
+                            [
+                                'type' => 'box',
+                                'title' => 'Box 2',
+                                'content' => [
+                                    [
+                                        'type' => 'paragraph',
+                                        'text' => 'Your submission has been favorably evaluated by Ian Baldwin (Senior editor), two guest Reviewing editors (Johannes Krause and Nicholas Conard), and two peer reviewers. One of the two peer reviewers, Chris Stringer, has agreed to share his identity, and Johannes Krause has drafted this decision to help you prepare a revised submission.',
+                                    ],
+                                ],
+                            ],
+                            [
+                                'type' => 'paragraph',
+                                'text' => 'The authors describe a large collection of recently discovered hominin fossils from the Dinaledi Chamber in the Rising Star cave system in South Africa. Based on their initial assessment they argue that the fossil remains derive from a single homogenous hominin group and present a new taxon that they call <i>Homo naledi</i>.',
+                            ],
+                        ],
+                    ],
+                ])
+            )
+        );
+
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/articles/00001/versions',
+                [
+                    'Accept' => [
+                        'application/vnd.elife.article-history+json; version=2',
+                    ],
+                ]
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.article-history+json; version=2'],
+                json_encode([
+                    'versions' => array_merge(
+                        $preprints,
+                        [
+                            [
+                                'status' => 'vor',
+                                'stage' => 'published',
+                                'id' => '00001',
+                                'version' => 1,
+                                'type' => 'research-article',
+                                'doi' => '10.7554/eLife.00001',
+                                'title' => 'Article 1 title',
+                                'published' => '2023-05-03T00:00:00Z',
+                                'versionDate' => '2023-05-03T00:00:00Z',
+                                'statusDate' => '2023-05-03T00:00:00Z',
+                                'volume' => 1,
+                                'elocationId' => 'RP00001',
+                                'copyright' => [
+                                    'license' => 'CC-BY-4.0',
+                                    'holder' => 'Bar',
+                                    'statement' => 'Copyright statement.',
+                                ],
+                                'authorLine' => 'Foo Bar',
+                            ]
+                        ]
+                    ),
+                ])
+            )
+        );
+
+        $crawler = $client->request('GET', '/articles/00001');
+        $this->assertCount(count($expectedTimeline), $crawler->filter('.content-aside .definition-list--timeline')->children());
+        foreach ($expectedTimeline as $k => $expectedTimelineItem) {
+            $this->assertSame(
+                $expectedTimelineItem,
+                $crawler->filter('.content-aside .definition-list--timeline')->children()->eq($k)->text()
+            );
+        }
     }
 
     protected function getUrl($articleId = '00001') : string

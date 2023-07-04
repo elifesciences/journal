@@ -36,12 +36,14 @@ use eLife\Patterns\ViewModel\ContentAside;
 use eLife\Patterns\ViewModel\ContentHeaderNew;
 use eLife\Patterns\ViewModel\ContextualData;
 use eLife\Patterns\ViewModel\Doi;
+use eLife\Patterns\ViewModel\JumpMenu;
 use eLife\Patterns\ViewModel\InfoBar;
 use eLife\Patterns\ViewModel\Link;
 use eLife\Patterns\ViewModel\Listing;
 use eLife\Patterns\ViewModel\Paragraph;
 use eLife\Patterns\ViewModel\ReadMoreItem;
 use eLife\Patterns\ViewModel\SpeechBubble;
+use eLife\Patterns\ViewModel\TabbedNavigation;
 use eLife\Patterns\ViewModel\ViewSelector;
 use GuzzleHttp\Promise\PromiseInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -164,7 +166,7 @@ final class ArticlesController extends Controller
                     $related = true;
                 }
 
-                $item = $this->convertTo($relatedItem, ViewModel\Teaser::class, ['variant' => 'relatedItem', 'from' => $item->getType(), 'related' => $related ?? false]);
+                $item = $this->convertTo($relatedItem, ViewModel\Teaser::class, ['variant' => 'relatedItem', 'from' => $item->getType(), 'related' => $related ?? false, 'updatedText' => false]);
 
                 if ($listing) {
                     return ViewModel\ListingTeasers::withSeeMore([$item], new ViewModel\SeeMoreLink(new Link('Further reading', '#listing')));
@@ -314,7 +316,7 @@ final class ArticlesController extends Controller
                     $first = true;
                     $relatedLinks = [];
 
-                    $relatedLinks[] = new Link('About eLife assessments', $this->get('router')->generate('about-peer-review'));
+                    $relatedLinks[] = new Link('About eLife assessments', $this->get('router')->generate('about-pubpub', ['type'=> 'peer-review']));
 
                     $parts[] = ArticleSection::collapsible(
                         'elife-assessment',
@@ -344,7 +346,7 @@ final class ArticlesController extends Controller
                         $relatedLinks[] = new Link('Reviews on Sciety', $item->getEditorEvaluationScietyUri());
                     }
 
-                    $relatedLinks[] = new Link('eLife\'s review process', $this->get('router')->generate('about-peer-review'));
+                    $relatedLinks[] = new Link('eLife\'s review process', $this->get('router')->generate('about-pubpub', ['type'=> 'peer-review']));
 
                     $parts[] = ArticleSection::collapsible(
                         $item->getEditorEvaluation()->getId() ?? 'editor-evaluation',
@@ -590,6 +592,8 @@ final class ArticlesController extends Controller
 
                 $received = $history->getReceived();
                 $accepted = $history->getAccepted();
+                $sentForReview = $history->getSentForReview();
+
                 $publicationHistory = [];
 
                 /** @var ArticlePreprint[] $preprints */
@@ -614,6 +618,14 @@ final class ArticlesController extends Controller
                             $accepted = null;
                         }
 
+                        // Attempt to output $sentForReview if date is before the preprint date.
+                        if ($sentForReview && 1 === $preprint->getPublishedDate()->diff(new DateTime($sentForReview->toString()))->invert) {
+                            $publicationHistory[] = 'Sent for peer review: '.$sentForReview->format();
+
+                            // Set $sentForReview to null as it has now been included in the publication history.
+                            $sentForReview = null;
+                        }
+
                         $publicationHistory[] = sprintf('Preprint posted: <a href="%s">%s (view preprint)</a>', $preprint->getUri(), $preprint->getPublishedDate()->format('F j, Y'));
                     }
                 }
@@ -626,6 +638,11 @@ final class ArticlesController extends Controller
                 // Output $accepted if it has not yet been output.
                 if ($accepted) {
                     $publicationHistory[] = 'Accepted: '.$accepted->format();
+                }
+
+                // Output $sentForReview if it has not yet been output.
+                if ($sentForReview) {
+                    $publicationHistory[] = 'Sent for peer review: '.$sentForReview->format();
                 }
 
                 $publicationHistory = array_merge($publicationHistory, $history->getVersions()
@@ -703,6 +720,10 @@ final class ArticlesController extends Controller
 
         $arguments['viewSelector'] = $this->createViewSelector($arguments['item'], $arguments['isMagazine'], $arguments['hasFigures'], false, $arguments['history'], $arguments['body'], $arguments['eraArticle']);
 
+        $arguments['tabbedNavigation'] = $this->createTabbedNavigation($arguments['item'], $arguments['isMagazine'], $arguments['hasFigures'], false, $arguments['history'], $arguments['body'], $arguments['eraArticle']);
+        
+        $arguments['jumpMenu'] = $this->createJumpMenu($arguments['item'], $arguments['isMagazine'], $arguments['hasFigures'], false, $arguments['history'], $arguments['body'], $arguments['eraArticle']);
+        
         $arguments['body'] = all(['item' => $arguments['item'], 'body' => $arguments['body'], 'downloadLinks' => $arguments['downloadLinks']])
             ->then(function (array $parts) {
                 $item = $parts['item'];
@@ -848,7 +869,9 @@ final class ArticlesController extends Controller
             })
             ->then(Callback::mustNotBeEmpty(new NotFoundHttpException('Article version does not contain any figures or data')));
 
-        $arguments['viewSelector'] = $this->createViewSelector($arguments['item'], $arguments['isMagazine'], promise_for(true), true, $arguments['history'], $arguments['body'], $arguments['eraArticle']);
+        $arguments['tabbedNavigation'] = $this->createTabbedNavigation($arguments['item'], $arguments['isMagazine'], promise_for(true), true, $arguments['history'], $arguments['body'], $arguments['eraArticle']);
+
+        $arguments['jumpMenu'] = $this->createJumpMenu($arguments['item'], $arguments['isMagazine'], promise_for(true), true, $arguments['history'], $arguments['body'], $arguments['eraArticle']);
 
         $arguments = $this->contentAsideArguments($arguments);
 
@@ -1155,18 +1178,112 @@ final class ArticlesController extends Controller
         return $arguments;
     }
 
+    private function createTabbedNavigation(PromiseInterface $item, PromiseInterface $isMagazine, PromiseInterface $hasFigures, bool $isFiguresPage, PromiseInterface $history, PromiseInterface $sections, array $eraArticle) : PromiseInterface
+    {
+        return all(['item' => $item, 'isMagazine' => $isMagazine, 'hasFigures' => $hasFigures, 'history' => $history, 'sections' => $sections])
+            ->then(function (array $sections) use ($isFiguresPage, $eraArticle) {
+
+                $history = $sections['history'];
+                $item = $sections['item'];
+                $hasFigures = $sections['hasFigures'];
+                $links = [];
+                $hasPeerReview = false;
+
+                if ($sections['isMagazine'] || 'feature' === $item->getType()) {
+                    return false;
+                }
+                $links[] = ViewModel\TabbedNavigationLink::fromLink(
+                                    new Link('Full text', $this->generatePath($history, $item->getVersion(), null, 'content')),
+                                    !$isFiguresPage ? " tabbed-navigation__tab-label--active" : null
+                                );
+                
+                if ($hasFigures) {
+                    $links[] = ViewModel\TabbedNavigationLink::fromLink(
+                                    new Link('Figures<span class="tabbed-navigation__tab-label--long"> and data</span>', $this->generatePath($history, $item->getVersion(), 'figures', 'content')),
+                                    $isFiguresPage ? " tabbed-navigation__tab-label--active" : null
+                                );
+                }
+
+                $articleVersions = $history->getVersions()
+                    ->filter(Callback::isInstanceOf(ArticleVersion::class))
+                    ->toArray();
+
+                $latestVersion = $articleVersions[count($articleVersions) - 1]->getVersion();
+                if (isset($eraArticle['display']) && $item->getVersion() === $latestVersion) {
+                    $links[] = ViewModel\TabbedNavigationLink::fromLink(new Link(
+                        'Executable code',
+                        $this->get('router')->generate('article-era', ['id' => $item->getId()])
+                    ));
+                }
+
+                if ($hasPeerReview) {
+                    $links[] = ViewModel\TabbedNavigationLink::fromLink(
+                                        new Link('Peer Review', $this->generatePath($history, $item->getVersion(), null, 'content'))
+                                );
+                }
+
+                if ($item instanceof ArticleVoR) {
+                    $sideBySideUrl = rtrim($this->getParameter('side_by_side_view_url'), '/').'/'.$item->getId();
+                    $links[] = ViewModel\TabbedNavigationLink::fromLink(
+                        new Link('Side by side', $sideBySideUrl), null, true
+                    );
+                }
+
+                return new TabbedNavigation($links);
+            });
+    }
+
+    private function createJumpMenu(PromiseInterface $item, PromiseInterface $isMagazine, PromiseInterface $hasFigures, bool $isFiguresPage, PromiseInterface $history, PromiseInterface $sections, array $eraArticle) : PromiseInterface
+    {
+        return all(['item' => $item, 'isMagazine' => $isMagazine, 'hasFigures' => $hasFigures, 'history' => $history, 'sections' => $sections])
+            ->then(function (array $sections) use ($isFiguresPage, $eraArticle) {
+
+                $hasFigures = $sections['hasFigures'];
+                $item = $sections['item'];
+
+                if ($sections['isMagazine']  || 'feature' === $item->getType()) {
+                    return false;
+                }
+
+                $sections = $sections['sections'];
+                $sections = array_filter($sections, Callback::isInstanceOf(ArticleSection::class));
+
+                if (count($sections) < 2) {
+                    if (!$hasFigures) {
+                        return null;
+                    }
+
+                    $sections = [];
+                }
+
+                 $links = [];
+
+                return new JumpMenu(
+                    array_merge($links, array_values(array_filter(array_map(function (ViewModel $viewModel) {
+                        if ($viewModel instanceof ArticleSection) {
+                            return new Link($viewModel['title'], '#'.$viewModel['id']);
+                        }
+                
+                        return null;
+                    }, $sections))))
+                );
+            });
+    }
+
     private function createViewSelector(PromiseInterface $item, PromiseInterface $isMagazine, PromiseInterface $hasFigures, bool $isFiguresPage, PromiseInterface $history, PromiseInterface $sections, array $eraArticle) : PromiseInterface
     {
         return all(['item' => $item, 'isMagazine' => $isMagazine, 'hasFigures' => $hasFigures, 'history' => $history, 'sections' => $sections])
             ->then(function (array $sections) use ($isFiguresPage, $eraArticle) {
-                if ($sections['isMagazine']) {
-                    return null;
-                }
 
                 $item = $sections['item'];
                 $hasFigures = $sections['hasFigures'];
                 $history = $sections['history'];
                 $sections = $sections['sections'];
+
+                // show view selector only on  Feature Articles
+                if ('feature' !== $item->getType()) {
+                    return null;
+                }
 
                 $sections = array_filter($sections, Callback::isInstanceOf(ArticleSection::class));
 
@@ -1212,6 +1329,7 @@ final class ArticlesController extends Controller
             });
     }
 
+
     private function contentAsideArguments(array $arguments) : array
     {
         $arguments['contentAside'] = all([
@@ -1255,84 +1373,115 @@ final class ArticlesController extends Controller
                     ];
                 }
 
+                if ($sentForReview = $history->getSentForReview()) {
+                    $publicationHistory[] = [
+                        // index added to allow us to sort.
+                        'index' => strtotime($sentForReview->toString()),
+                        'term' => 'Sent for peer review',
+                        'descriptors' => [
+                            $sentForReview->format(),
+                        ],
+                    ];
+                }
+
                 $articleVersions = $history->getVersions()
                     ->filter(Callback::isInstanceOf(ArticleVersion::class))
                     ->sort(function (ArticleVersion $a, ArticleVersion $b) {
                         return $a->getVersion() <=> $b->getVersion();
                     });
 
-                $prepareDefinition = function (ArticleVersion $articleVersion, bool $first) use ($history, $item) {
+                $prepareDefinition = function (int $index, string $term, string $descriptor) {
                     return [
                         // index added to allow us to sort.
-                        'index' => $articleVersion->getVersionDate() ? $articleVersion->getVersionDate()->getTimeStamp() : 0,
-                        'term' => sprintf(
-                            '%s %s',
-                            $articleVersion instanceof ArticleVoR ? 'Version of Record' : 'Accepted Manuscript',
-                            $first ? 'published' : 'updated'
-                        ),
+                        'index' => $index,
+                        'term' => $term,
                         'descriptors' => [
-                            sprintf(
-                                '%s %s',
-                                $articleVersion->getVersionDate() ?
-                                    $articleVersion->getVersionDate()->format('F j, Y') :
-                                    '',
-                                $articleVersion->getVersion() === $item->getVersion() ?
-                                    '(This version)' :
-                                    sprintf(
-                                        '<a href="%s">(Go to version)</a>',
-                                        $this->generatePath($history, $articleVersion->getVersion())
-                                    )
-                            ),
+                            $descriptor,
                         ],
                     ];
                 };
 
+                $prepareDefinitionArticleVersion = function (ArticleVersion $articleVersion, bool $first) use ($prepareDefinition, $history, $item) {
+                    return $prepareDefinition(
+                        $articleVersion->getVersionDate() ? $articleVersion->getVersionDate()->getTimeStamp() : 0,
+                        sprintf(
+                            '%s %s',
+                            $articleVersion instanceof ArticleVoR ? 'Version of Record' : 'Accepted Manuscript',
+                            $first ? 'published' : 'updated'
+                        ),
+                        sprintf(
+                            '%s %s',
+                            $articleVersion->getVersionDate() ?
+                                $articleVersion->getVersionDate()->format('F j, Y') :
+                                '',
+                            $articleVersion->getVersion() === $item->getVersion() ?
+                                '(This version)' :
+                                sprintf(
+                                    '<a href="%s">(Go to version)</a>',
+                                    $this->generatePath($history, $articleVersion->getVersion())
+                                )
+                        )
+                    );
+                };
+
                 $publicationHistory = array_merge($publicationHistory, $articleVersions
                     ->filter(Callback::isInstanceOf(ArticleVoR::class))
-                    ->map(function(ArticleVoR $itemVersion, int $number) use ($prepareDefinition) {
-                        return $prepareDefinition($itemVersion, 0 === $number);
+                    ->map(function(ArticleVoR $itemVersion, int $number) use ($prepareDefinitionArticleVersion) {
+                        return $prepareDefinitionArticleVersion($itemVersion, 0 === $number);
                     })->reverse()->toArray());
 
                 $publicationHistory = array_merge($publicationHistory, $articleVersions
                     ->filter(Callback::isInstanceOf(ArticlePoA::class))
-                    ->map(function(ArticlePoA $itemVersion, int $number) use ($prepareDefinition) {
-                        return $prepareDefinition($itemVersion, 0 === $number);
+                    ->map(function(ArticlePoA $itemVersion, int $number) use ($prepareDefinitionArticleVersion) {
+                        return $prepareDefinitionArticleVersion($itemVersion, 0 === $number);
                     })->reverse()->toArray());
-
                 $publicationHistory = array_merge($publicationHistory, $history->getVersions()
                     ->filter(Callback::isInstanceOf(ArticlePreprint::class))
-                    ->sort(function (ArticlePreprint $a, ArticlePreprint $b) {
-                        return $b->getPublishedDate() <=> $a->getPublishedDate();
-                    })
-                    ->map(function (ArticlePreprint $preprint) {
-                        return [
-                            // index added to allow us to sort.
-                            'index' => $preprint->getPublishedDate()->getTimeStamp(),
-                            'term' => 'Preprint posted',
-                            'descriptors' => [
+                    ->map(function(ArticlePreprint $preprint) use ($prepareDefinition) {
+                        return $prepareDefinition(
+                            $preprint->getPublishedDate()->getTimeStamp(),
+                            sprintf(
+                                '%s posted',
+                                strpos($preprint->getDescription(), 'reviewed preprint') === false ? 'Preprint' : 'Reviewed preprint'
+                            ),
+                            sprintf(
+                                '%s %s',
+                                $preprint->getPublishedDate()->format('F j, Y'),
                                 sprintf(
-                                    '%s %s',
-                                    $preprint->getPublishedDate()->format('F j, Y'),
-                                    sprintf(
-                                        '<a href="%s">(Go to version)</a>',
-                                        $preprint->getUri()
-                                    )
+                                    '<a href="%s">(Go to version)</a>',
+                                    $preprint->getUri()
                                 )
-                            ]
-                        ];
-                    })->toArray());
+                            )
+                        );
+                    })->reverse()->toArray());
 
                 // Sort by index value.
                 usort($publicationHistory, function($first, $second) {
                     return $first['index'] < $second['index'];
                 });
 
+                $rpCount = $history->getVersions()
+                    ->filter(Callback::isInstanceOf(ArticlePreprint::class))
+                    ->filter(function (ArticlePreprint $preprint) {
+                        return strpos($preprint->getDescription(), 'reviewed preprint') !== false;
+                    })
+                    ->count();
+
+                // If reviewed preprint count is greater than 1 we want to alter the $item['term'].
+                $rpCount = $rpCount > 1 ? $rpCount : 0;
+
                 return $this->convertTo($parts['item'],
                     ContentAside::class, [
                         'metrics' => $parts['metrics'],
-                        'timeline' => array_map(function ($item) {
+                        'timeline' => array_map(function ($item) use (&$rpCount) {
                             // Remove index from item.
                             unset($item['index']);
+
+                            if ('Reviewed preprint posted' === $item['term'] && $rpCount > 0) {
+                                $item['term'] = sprintf('Reviewed preprint version %d', $rpCount);
+                                $rpCount--;
+                            }
+
                             return $item;
                         }, $publicationHistory),
                         'relatedItem' => $parts['relatedItem']

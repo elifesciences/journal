@@ -2,7 +2,6 @@ ARG image_tag=latest
 ARG node_version
 FROM pinterb/jq:0.0.16 AS jq
 FROM elifesciences/journal_npm:${image_tag} as npm
-
 FROM node:${node_version}
 
 # From list at https://developers.google.com/web/tools/puppeteer/troubleshooting#chrome_headless_doesnt_launch
@@ -38,7 +37,7 @@ COPY --from=jq /usr/local/bin/jq /usr/bin/jq
 
 RUN mkdir -p build/critical-css
 
-COPY --from=npm /node_modules/ node_modules/
+COPY --from=npm /app/node_modules/ node_modules/
 
 COPY check_critical_css.sh \
     critical-css.json \
