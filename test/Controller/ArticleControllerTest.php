@@ -1515,7 +1515,7 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertSame('Reviewer', $reviewers->filter('header > h3')->text());
 
         $publicationHistory = $articleInfo->eq(1);
-        $this->assertSame('Publication history', $publicationHistory->filter('header > h3')->text());
+        $this->assertSame('Version history', $publicationHistory->filter('header > h3')->text());
         $this->assertCount(1, $publicationHistory->filter('ol')->children());
         $this->assertSame('Accepted Manuscript published: January 1, 2010 (version 1)', $publicationHistory->filter('ol')->children()->eq(0)->text());
 
@@ -2816,7 +2816,7 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertSame('Reviewer 2', $reviewerDetails->eq(1)->text());
 
         $publicationHistory = $articleInfo->eq(6);
-        $this->assertSame('Publication history', $publicationHistory->filter('header > h3')->text());
+        $this->assertSame('Version history', $publicationHistory->filter('header > h3')->text());
         $this->assertCount(9, $publicationHistory->filter('ol')->children());
         $this->assertSame('Preprint posted: December 27, 2006 (view preprint)', $publicationHistory->filter('ol')->children()->eq(0)->text());
         $this->assertSame('Received: December 28, 2006', $publicationHistory->filter('ol')->children()->eq(1)->text());
