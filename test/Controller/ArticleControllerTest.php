@@ -3967,6 +3967,10 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertSame('Download .RIS', $this->crawlerText($citeThisArticleLinks->eq(1)));
 
         $this->assertSame('Categories and tags', $categoriesAndTags->filter('h4')->text());
+
+        $articleInfo = $sections->filter('#info');
+        $publicationHistory = $articleInfo->filter('section.article-section')->eq(1);
+        $this->assertSame('Publication history', $publicationHistory->filter('.article-section__header_text')->text());
     }
 
     public function contentAsideProvider() : Traversable
