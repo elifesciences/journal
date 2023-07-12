@@ -2,7 +2,7 @@
 <div{% if sectionAnchorPopup ?? false %} data-behaviour="DelegateBehaviour" data-delegate-behaviour="Popup" data-selector=".article-section:not(#abstract) a"{% endif %} class="wrapper{% if not isSubsequent ?? false %} wrapper--content{% endif %}{% if customWrapperClass ?? false %} {{ customWrapperClass|raw }}{% endif %}" id="content">
 
     {% set navigation = (block('navigation') ?? '')|trim %}
-    {% set social = block('social') %}
+    {% set social = (block('social') ?? '')|trim %}
     {% set main = block('main') %}
     {% set secondary = (block('secondary') ?? '')|trim %}
 
