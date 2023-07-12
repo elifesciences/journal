@@ -1137,6 +1137,14 @@ services:
         tags:
           - name: view_model.converter
 
+    elife.journal.view_model.converter.digest.social_media_sharers:
+        class: eLife\Journal\ViewModel\Converter\DigestSocialMediaSharersConverter
+        public: false
+        arguments:
+          - '@router'
+        tags:
+          - name: view_model.converter
+
     elife.journal.view_model.converter.event.header:
         class: eLife\Journal\ViewModel\Converter\EventContentHeaderConverter
         public: false

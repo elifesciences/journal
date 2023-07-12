@@ -1333,12 +1333,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/patterns-php.git",
-                "reference": "e686ebf333212b33c98d71c64fed5cbcc0ab691f"
+                "reference": "6f88988d9f4551871cb26e1983e7e5f01bff4fdb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/e686ebf333212b33c98d71c64fed5cbcc0ab691f",
-                "reference": "e686ebf333212b33c98d71c64fed5cbcc0ab691f",
+                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/6f88988d9f4551871cb26e1983e7e5f01bff4fdb",
+                "reference": "6f88988d9f4551871cb26e1983e7e5f01bff4fdb",
                 "shasum": ""
             },
             "require": {
@@ -1361,7 +1361,6 @@
             "suggest": {
                 "twig/twig": "^2.0, to use PatternExtension"
             },
-            "default-branch": true,
             "type": "library",
             "autoload": {
                 "files": [
@@ -1376,10 +1375,7 @@
                 "MIT"
             ],
             "description": "eLife patterns",
-            "support": {
-                "source": "https://github.com/elifesciences/patterns-php/tree/master"
-            },
-            "time": "2023-06-28T09:37:54+00:00"
+            "time": "2023-07-06T08:23:33+00:00"
         },
         {
             "name": "fabpot/goutte",
@@ -6339,5 +6335,5 @@
     "platform-overrides": {
         "php": "7.1.33"
     },
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "1.1.0"
 }

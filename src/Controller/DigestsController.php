@@ -4,14 +4,17 @@ namespace eLife\Journal\Controller;
 
 use eLife\ApiSdk\Collection\PromiseSequence;
 use eLife\ApiSdk\Collection\Sequence;
+use eLife\ApiSdk\Model\Image;
 use eLife\ApiSdk\Model\Identifier;
 use eLife\Journal\Helper\Callback;
 use eLife\Journal\Helper\Paginator;
 use eLife\Journal\Pagerfanta\SequenceAdapter;
+use eLife\Patterns\ViewModel\CaptionedAsset;
 use eLife\Patterns\ViewModel\ContentHeader;
 use eLife\Patterns\ViewModel\ContentHeaderNew;
 use eLife\Patterns\ViewModel\GridListing;
 use eLife\Patterns\ViewModel\ListingTeasers;
+use eLife\Patterns\ViewModel\SocialMediaSharersNew;
 use eLife\Patterns\ViewModel\Teaser;
 use function GuzzleHttp\Promise\all;
 use Pagerfanta\Pagerfanta;
@@ -81,6 +84,8 @@ final class DigestsController extends Controller
 
         $arguments['isMagazine'] = true;
 
+        $arguments['hasTwoColumns'] = true;
+
         $arguments['title'] = $arguments['item']
             ->then(Callback::method('getTitle'));
 
@@ -118,6 +123,31 @@ final class DigestsController extends Controller
                 return ListingTeasers::basic($collections->toArray());
             });
 
+        $arguments['socialImage'] = false;
+
+        $arguments['blocks'] = all(['blocks' => $arguments['blocks']])
+            ->then(function($parts) {
+                $arguments['captionAsset'] = $parts['blocks']->filter(Callback::isInstanceOf(CaptionedAsset::class));
+                return $arguments['blocks'] = $parts['blocks']->filter(function($image) {
+                    return !($image instanceof CaptionedAsset);
+                });
+            });
+        
+        // $arguments['image'] = all(['blocks' => $arguments['blocks']])
+        //     ->then(function($parts) {
+        //         return $parts['blocks']->filter(Callback::isInstanceOf(CaptionedAsset::class));
+        //     });
+
+        // $arguments['socialImage'] = all(['image' => $arguments['image']])
+        //     ->then(function (array $parts) {
+        //         return $this->convertTo($parts['image'], Image::class, ['width' => 617]);
+        //     });
+        
+        $arguments['socialMediaSharersLinks'] = all(['item' => $arguments['item']])
+            ->then(function (array $parts) {
+                return $this->convertTo($parts['item'], SocialMediaSharersNew::class);
+            });
+        
         return new Response($this->get('templating')->render('::digest.html.twig', $arguments));
     }
 }

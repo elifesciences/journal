@@ -15,6 +15,24 @@
 
     {% embed 'grid/content-new.html.twig' %}
 
+        {% block social %}
+
+            {% if socialMediaSharersLinks %}
+
+                {% if socialImage %}
+
+                    <div class="captioned-asset--wrapper">
+                        {{ render_pattern(socialImage) }}
+                    </div>
+                    
+                {% endif %}
+
+                {{ render_pattern(socialMediaSharersLinks) }}
+
+            {% endif %}
+
+        {% endblock %}
+
         {% block main %}
 
             {% for block in blocks %}
