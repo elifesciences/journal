@@ -657,11 +657,12 @@ final class ArticlesController extends Controller
                         return sprintf('Version of Record %s: <a href="%s">%s (version %s)</a>', 0 === $number ? 'published' : 'updated', $this->generatePath($history, $itemVersion->getVersion()), $itemVersion->getVersionDate() ? $itemVersion->getVersionDate()->format('F j, Y') : '', $itemVersion->getVersion());
                     })->toArray());
 
+                $publicationHistoryTitle = ($isMagazine || 'feature' === $item->getType()) ? 'Publication history' : 'Version history';
                 $infoSections[] = ArticleSection::basic(
                     $this->render(
                         Listing::ordered($publicationHistory, 'bullet')
                     ),
-                    'Publication history',
+                    $publicationHistoryTitle,
                     3
                 );
 
