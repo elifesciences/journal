@@ -123,25 +123,17 @@ final class DigestsController extends Controller
                 return ListingTeasers::basic($collections->toArray());
             });
 
-        $arguments['socialImage'] = false;
+        $arguments['socialImage'] = all(['blocks' => $arguments['blocks']])
+            ->then(function($parts) {
+                return $parts['blocks']->filter(Callback::isInstanceOf(CaptionedAsset::class))->offsetGet(0);
+            });
 
         $arguments['blocks'] = all(['blocks' => $arguments['blocks']])
             ->then(function($parts) {
-                $arguments['captionAsset'] = $parts['blocks']->filter(Callback::isInstanceOf(CaptionedAsset::class));
-                return $arguments['blocks'] = $parts['blocks']->filter(function($image) {
+                return $parts['blocks']->filter(function($image) {
                     return !($image instanceof CaptionedAsset);
                 });
             });
-        
-        // $arguments['image'] = all(['blocks' => $arguments['blocks']])
-        //     ->then(function($parts) {
-        //         return $parts['blocks']->filter(Callback::isInstanceOf(CaptionedAsset::class));
-        //     });
-
-        // $arguments['socialImage'] = all(['image' => $arguments['image']])
-        //     ->then(function (array $parts) {
-        //         return $this->convertTo($parts['image'], Image::class, ['width' => 617]);
-        //     });
         
         $arguments['socialMediaSharersLinks'] = all(['item' => $arguments['item']])
             ->then(function (array $parts) {
