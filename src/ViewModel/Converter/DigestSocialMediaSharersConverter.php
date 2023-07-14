@@ -26,6 +26,7 @@ final class DigestSocialMediaSharersConverter implements ViewModelConverter
             strip_tags($object->getTitle()),
             $this->urlGenerator->generate('digest', [$object], UrlGeneratorInterface::ABSOLUTE_URL),
             false,
+            true,
             true
         );
     }
