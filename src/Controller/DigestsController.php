@@ -84,7 +84,7 @@ final class DigestsController extends Controller
 
         $arguments['isMagazine'] = true;
 
-        $arguments['hasTwoColumns'] = true;
+        $arguments['hasSocialMedia'] = true;
 
         $arguments['title'] = $arguments['item']
             ->then(Callback::method('getTitle'));
