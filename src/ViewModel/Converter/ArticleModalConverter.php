@@ -50,7 +50,7 @@ final class ArticleModalConverter implements ViewModelConverter
                 ViewModel\Button::clipboard('Copy to clipboard', "https://doi.org/{$doi}"),
                 new ViewModel\SocialMediaSharersNew(
                     strip_tags($object->getFullTitle()),
-                    "https://doi.org/{$object->getDoi()}",
+                    "https://doi.org/{$doi}",
                     true,
                     true
                 ),
