@@ -1,7 +1,7 @@
 {% autoescape false %}
 {% for author in item.authors %}{% if author.preferredName is defined %}{% if not loop.first %}, {% endif %}{{ author.preferredName }}{% elseif author.indexName is defined %}{% if not loop.first %}, {% endif %}{{ author.indexName }}{% elseif author.name is defined %}{% if not loop.first %}, {% endif %}{{ author.name }}{% endif %}{% endfor %} ({{ item.publishedDate|date('Y', 'UTC') }}) {{ item.fullTitle|striptags }} eLife {{ item.volume }}:{{ item.eLocationId }}
 
-    {% if item.doiVersion %}
+    {% if item.doiVersion is defined %}
         https://doi.org/{{ item.doiVersion }}
     {% else %}
         https://doi.org/{{ item.doi }}
