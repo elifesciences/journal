@@ -3,6 +3,7 @@
 namespace eLife\Journal\ViewModel\Converter;
 
 use eLife\ApiSdk\Model\ArticleVersion;
+use eLife\ApiSdk\Model\ArticleVoR;
 use eLife\ApiSdk\Model\AuthorEntry;
 use eLife\Journal\ViewModel\Converter\Reference\HasAuthors;
 use eLife\Patterns\ViewModel;
@@ -21,8 +22,8 @@ final class ArticleReferenceConverter implements ViewModelConverter
         $authors = $object->getAuthors()->notEmpty() ? [new ViewModel\ReferenceAuthorList($object->getAuthors()->map(function (AuthorEntry $author) {
             return ViewModel\Author::asText($author->toString());
         })->toArray(), '('.($object->getPublishedDate() ? $object->getPublishedDate()->format('Y') : '').')')] : [];
-
-        return ViewModel\Reference::withDoi($object->getFullTitle(), new ViewModel\Doi($object->getDoi(), true), null, null, $origin, $authors, []);
+        $doi = ($object instanceof ArticleVoR) ? ($object->getDoiVersion() ?? $object->getDoi()): $object->getDoi();
+        return ViewModel\Reference::withDoi($object->getFullTitle(), new ViewModel\Doi($doi, true), null, null, $origin, $authors, []);
     }
 
     public function supports($object, string $viewModel = null, array $context = []) : bool

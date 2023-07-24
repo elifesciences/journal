@@ -3,6 +3,7 @@
 namespace eLife\Journal\ViewModel\Converter;
 
 use eLife\ApiSdk\Model\ArticleVersion;
+use eLife\ApiSdk\Model\ArticleVoR;
 use eLife\ApiSdk\Model\Block\Paragraph;
 use eLife\Journal\Helper\CanConvertContent;
 use eLife\Patterns\PatternRenderer;
@@ -31,6 +32,8 @@ final class ArticleModalConverter implements ViewModelConverter
     public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
         if ('social' === ($context['type'] ?? 'social')) {
+            $doi = ($object instanceof ArticleVoR) ? ($object->getDoiVersion() ?? $object->getDoi()): $object->getDoi();
+
             $body = [
                 ViewModel\TextField::textInput(
                     new ViewModel\FormLabel('Doi', true),
@@ -42,9 +45,9 @@ final class ArticleModalConverter implements ViewModelConverter
                     null,
                     null,
                     null,
-                    "https://doi.org/{$object->getDoi()}"
+                    "https://doi.org/{$doi}"
                 ),
-                ViewModel\Button::clipboard('Copy to clipboard', "https://doi.org/{$object->getDoi()}"),
+                ViewModel\Button::clipboard('Copy to clipboard', "https://doi.org/{$doi}"),
                 new ViewModel\SocialMediaSharersNew(
                     strip_tags($object->getFullTitle()),
                     "https://doi.org/{$object->getDoi()}",
