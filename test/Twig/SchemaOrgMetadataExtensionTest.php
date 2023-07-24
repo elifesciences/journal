@@ -356,6 +356,7 @@ final class SchemaOrgMetadataExtensionTest extends TestCase
             'doi',
             null,
             null,
+            null,
             'Article title',
             new DateTimeImmutable('2008-09-28 01:23:45'),
             null,
