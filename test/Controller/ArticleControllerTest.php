@@ -5351,7 +5351,6 @@ final class ArticleControllerTest extends PageTestCase
         $citeThisArticle = $downloadLinksGroup->eq(2);
         $this->assertSame('Foo Bar Baz (2007) Title prefix: Article title eLife 1:e00001. https://doi.org/10.7554/eLife.00001.1', $this->crawlerText($citeThisArticle->filter('.reference')));
         $this->assertSame('https://doi.org/10.7554/eLife.00001.1', $crawler->filter('.content-header__footer .doi')->text());
-
     }
 
     public function prcVorHistoryProvider()
