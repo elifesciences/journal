@@ -5142,7 +5142,7 @@ final class ArticleControllerTest extends PageTestCase
     /**
      * @test
      */
-    public function it_displays_doi_version_for_vor_prc_article()
+    public function it_displays_doi_version_for_vor_article()
     {
         $client = static::createClient();
 
@@ -5247,6 +5247,7 @@ final class ArticleControllerTest extends PageTestCase
         $crawler = $client->request('GET', '/articles/00001');
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
+        $this->assertSame('https://doi.org/10.7554/eLife.00001.1', $crawler->filter('#modal-share-doi')->attr('value'));
         $this->assertSame('Foo Bar (2010) Article 1 title eLife 1:RP00001. https://doi.org/10.7554/eLife.00001.1', $this->crawlerText($crawler->filter('.modal .reference')));
         $this->assertSame('https://doi.org/10.7554/eLife.00001', trim($crawler->filter('.content-header__footer .doi')->text()));
     }
