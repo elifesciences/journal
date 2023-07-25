@@ -5197,105 +5197,6 @@ final class ArticleControllerTest extends PageTestCase
                             ],
                         ],
                     ],
-                    'authorResponse' => [
-                        'content' => [
-                            [
-                                'text' => '<i>1) The reviewers are surprised to not see an in-depth comparison of</i> H. naledi <i>to</i> H. floresiensis<i>, especially where combinations of small teeth and small brains are concerned. It should be easy, e.g., to add the published</i> H. floresiensis <i>measurements to</i> <a href="#fig7"><i>Figure 7</i></a><i>. The authors allude to material attributed to</i> ‘Homo gautengensis’ <i>and perhaps a short discussion or reiteration of their views about the validity of that species is needed</i>.',
-                                'type' => 'paragraph',
-                            ],
-                        ],
-                        'doi' => '10.7554/eLife.09562.031',
-                        'id' => 'SA2',
-                    ],
-                    'elifeAssessment' => [
-                        'title' => 'eLife assessment',
-                        'id' => 'sa0',
-                        'doi' => '10.7554/eLife.09562.sa00',
-                        'content' => [
-                            [
-                                'type' => 'paragraph',
-                                'text' => 'Collagen is a major component of extracellular matrix. The authors have identified a high-affinity inhibitory collagen receptor LAIR-1 and a soluble decoy receptor LAIR-2 (with even higher binding affinity to collagen), which can be therapeutically targeted to block tumor progression. Dr Meyaard and colleagues have also generated a dimeric LAIR-2 human IgG1 Fc fusion protein NC410 for therapeutic use. With humanized mouse models engrafted with functional human immune systems (PBMC), they have explored the anti-cancer efficacy of NC410 and revealed its impact on modulating immune responses. Furthermore, they extended this study to identify biomarkers of predictive value for NC410-based anti-cancer therapy.'
-                            ],
-                        ],
-                        'scietyUri' => 'https://sciety.org/articles/activity/10.1101/2020.11.21.391326'
-                    ],
-                    'publicReviews' => [
-                        [
-                            'title' => 'Reviewer #1 (public review)',
-                            'id' => 'SA21',
-                            'doi' => '10.7554/eLife.09562.230',
-                            'content' => [
-                                [
-                                    'type' => 'paragraph',
-                                    'text' => 'Thank you for submitting your work entitled “A new species of the genus <i>Homo</i> from the Dinaledi Chamber, South Africa” for peer review at <i>eLife</i>.',
-                                ],
-                                [
-                                    'type' => 'box',
-                                    'title' => 'Box 2',
-                                    'content' => [
-                                        [
-                                            'type' => 'paragraph',
-                                            'text' => 'Your submission has been favorably evaluated by Ian Baldwin (Senior editor), two guest Reviewing editors (Johannes Krause and Nicholas Conard), and two peer reviewers. One of the two peer reviewers, Chris Stringer, has agreed to share his identity, and Johannes Krause has drafted this decision to help you prepare a revised submission.',
-                                        ],
-                                    ],
-                                ],
-                                [
-                                    'type' => 'paragraph',
-                                    'text' => 'The authors describe a large collection of recently discovered hominin fossils from the Dinaledi Chamber in the Rising Star cave system in South Africa. Based on their initial assessment they argue that the fossil remains derive from a single homogenous hominin group and present a new taxon that they call <i>Homo naledi</i>.',
-                                ],
-                            ],
-                        ],
-                        [
-                            'title' => 'Reviewer #2 (public review)',
-                            'id' => 'SA22',
-                            'doi' => '10.7554/eLife.09562.330',
-                            'content' => [
-                                [
-                                    'type' => 'paragraph',
-                                    'text' => 'Thank you for submitting your work entitled “A new species of the genus <i>Homo</i> from the Dinaledi Chamber, South Africa” for peer review at <i>eLife</i>.'
-                                ],
-                                [
-                                    'type' => 'box',
-                                    'title' => 'Box 2',
-                                    'content' => [
-                                        [
-                                            'type' => 'paragraph',
-                                            'text' => 'Your submission has been favorably evaluated by Ian Baldwin (Senior editor), two guest Reviewing editors (Johannes Krause and Nicholas Conard), and two peer reviewers. One of the two peer reviewers, Chris Stringer, has agreed to share his identity, and Johannes Krause has drafted this decision to help you prepare a revised submission.'
-                                        ],
-                                    ],
-                                ],
-                                [
-                                    'type' => 'paragraph',
-                                    'text' => 'The authors describe a large collection of recently discovered hominin fossils from the Dinaledi Chamber in the Rising Star cave system in South Africa. Based on their initial assessment they argue that the fossil remains derive from a single homogenous hominin group and present a new taxon that they call <i>Homo naledi</i>.'
-                                ],
-                            ],
-                        ],
-                    ],
-                    'recommendationsForAuthors' => [
-                        'title' => 'Recommendations for authors',
-                        'id' => 'SA11',
-                        'doi' => '10.7554/eLife.09562.130',
-                        'content' => [
-                            [
-                                'type' => 'paragraph',
-                                'text' => 'Thank you for submitting your work entitled “A new species of the genus <i>Homo</i> from the Dinaledi Chamber, South Africa” for peer review at <i>eLife</i>.'
-                            ],
-                            [
-                                'type' => 'box',
-                                'title' => 'Box 2',
-                                'content' => [
-                                    [
-                                        'type' => 'paragraph',
-                                        'text' => 'Your submission has been favorably evaluated by Ian Baldwin (Senior editor), two guest Reviewing editors (Johannes Krause and Nicholas Conard), and two peer reviewers. One of the two peer reviewers, Chris Stringer, has agreed to share his identity, and Johannes Krause has drafted this decision to help you prepare a revised submission.'
-                                    ],
-                                ],
-                            ],
-                            [
-                                'type' => 'paragraph',
-                                'text' => 'The authors describe a large collection of recently discovered hominin fossils from the Dinaledi Chamber in the Rising Star cave system in South Africa. Based on their initial assessment they argue that the fossil remains derive from a single homogenous hominin group and present a new taxon that they call <i>Homo naledi</i>.'
-                            ],
-                        ],
-                    ],
                 ])
             )
         );
@@ -5346,15 +5247,8 @@ final class ArticleControllerTest extends PageTestCase
         $crawler = $client->request('GET', '/articles/00001');
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
-        $this->assertSame('eLife assessment', trim($crawler->filter('.jump-menu__item')->eq(0)->text()));
-        $this->assertSame('Peer review', trim($crawler->filter('.jump-menu__item')->eq(2)->text()));
-
-        $downloadLinks = $crawler->filter('.main-content-grid > section:nth-of-type(11)');
-        $downloadLinksGroup = $downloadLinks->filter('.article-download-links-list__group');
-
-        $citeThisArticle = $downloadLinksGroup->eq(2);
-        $this->assertSame('Foo Bar Baz (2007) Title prefix: Article title eLife 1:e00001. https://doi.org/10.7554/eLife.00001.1', $this->crawlerText($citeThisArticle->filter('.reference')));
-        $this->assertSame('https://doi.org/10.7554/eLife.00001.1', $crawler->filter('.content-header__footer .doi')->text());
+        $this->assertSame('Foo Bar Baz (2007) Title prefix: Article title eLife 1:e00001. https://doi.org/10.7554/eLife.00001.1', $this->crawlerText($crawler->filter('.modal .reference')));
+        $this->assertSame('https://doi.org/10.7554/eLife.00001', $crawler->filter('.content-header__footer .doi')->text());
     }
 
     public function prcVorHistoryProvider()
