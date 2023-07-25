@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9c98cf27cf99d112918537e3fdd06fc2",
+    "content-hash": "a1914b94ab3beebff25a4e37e9e6c5a8",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -1236,16 +1236,16 @@
         },
         {
             "name": "elife/api-sdk",
-            "version": "dev-version-doi",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-sdk-php.git",
-                "reference": "9f094aff9e56bb001a76f3ad9380b5cac05c794d"
+                "reference": "7abe71dfbd09d0751c472cf49b48c8db206aedce"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/9f094aff9e56bb001a76f3ad9380b5cac05c794d",
-                "reference": "9f094aff9e56bb001a76f3ad9380b5cac05c794d",
+                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/7abe71dfbd09d0751c472cf49b48c8db206aedce",
+                "reference": "7abe71dfbd09d0751c472cf49b48c8db206aedce",
                 "shasum": ""
             },
             "require": {
@@ -1270,6 +1270,7 @@
                 "psr/http-message": "^1.0",
                 "squizlabs/php_codesniffer": "^3.5"
             },
+            "default-branch": true,
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -1288,9 +1289,9 @@
             "description": "eLife Sciences API SDK",
             "support": {
                 "issues": "https://github.com/elifesciences/api-sdk-php/issues",
-                "source": "https://github.com/elifesciences/api-sdk-php/tree/version-doi"
+                "source": "https://github.com/elifesciences/api-sdk-php/tree/master"
             },
-            "time": "2023-07-20T12:16:53+00:00"
+            "time": "2023-07-24T12:17:00+00:00"
         },
         {
             "name": "elife/civi-contacts",
