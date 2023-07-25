@@ -842,6 +842,14 @@ services:
         tags:
           - name: view_model.converter
 
+    elife.journal.view_model.converter.blog_article.social_media_sharers:
+        class: eLife\Journal\ViewModel\Converter\BlogArticleSocialMediaSharersConverter
+        public: false
+        arguments:
+          - '@router'
+        tags:
+          - name: view_model.converter
+
     elife.journal.view_model.converter.collection.header:
         class: eLife\Journal\ViewModel\Converter\CollectionContentHeaderConverter
         public: false
