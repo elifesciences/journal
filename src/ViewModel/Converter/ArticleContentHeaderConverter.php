@@ -7,6 +7,7 @@ use eLife\ApiSdk\Model\ArticleVoR;
 use eLife\ApiSdk\Model\HasImpactStatement;
 use eLife\ApiSdk\Model\Subject;
 use eLife\Journal\Helper\CanConvertContent;
+use eLife\Journal\Helper\DoiVersion;
 use eLife\Journal\Helper\LicenceUri;
 use eLife\Journal\Helper\ModelName;
 use eLife\Patterns\ViewModel;
@@ -62,7 +63,7 @@ final class ArticleContentHeaderConverter implements ViewModelConverter
             $meta = null;
         }
 
-        $doi = ($object instanceof ArticleVoR) ? ($object->getDoiVersion() ?? $object->getDoi()): $object->getDoi();
+        $doi = (string) new DoiVersion($object);
 
         return new ViewModel\ContentHeaderNew(
             $object->getFullTitle(),

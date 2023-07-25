@@ -6,6 +6,7 @@ use eLife\ApiSdk\Model\ArticleVersion;
 use eLife\ApiSdk\Model\ArticleVoR;
 use eLife\ApiSdk\Model\Block\Paragraph;
 use eLife\Journal\Helper\CanConvertContent;
+use eLife\Journal\Helper\DoiVersion;
 use eLife\Patterns\PatternRenderer;
 use eLife\Patterns\ViewModel;
 use eLife\Patterns\ViewModel\Button;
@@ -32,7 +33,7 @@ final class ArticleModalConverter implements ViewModelConverter
     public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
         if ('social' === ($context['type'] ?? 'social')) {
-            $doi = ($object instanceof ArticleVoR) ? ($object->getDoiVersion() ?? $object->getDoi()): $object->getDoi();
+            $doi = (string) new DoiVersion($object);
 
             $body = [
                 ViewModel\TextField::textInput(
