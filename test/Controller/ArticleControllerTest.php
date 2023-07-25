@@ -5138,6 +5138,10 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertSame('Recommendations for authors',
             $crawler->filter('.main-content-grid > section:nth-of-type(3) > div > section:nth-of-type(3) > header > h3')->text());
     }
+
+    /**
+     * @test
+     */
     public function it_displays_doi_version_for_vor_prc_article()
     {
         $client = static::createClient();
