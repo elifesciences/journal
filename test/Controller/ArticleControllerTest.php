@@ -5247,7 +5247,7 @@ final class ArticleControllerTest extends PageTestCase
         $crawler = $client->request('GET', '/articles/00001');
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
-        $this->assertSame('Foo Bar Baz (2007) Title prefix: Article title eLife 1:e00001. https://doi.org/10.7554/eLife.00001.1', $this->crawlerText($crawler->filter('.modal .reference')));
+        $this->assertSame('Foo Bar (2010) Article 1 title eLife 1:RP00001. https://doi.org/10.7554/eLife.00001.1', $this->crawlerText($crawler->filter('.modal .reference')));
         $this->assertSame('https://doi.org/10.7554/eLife.00001', $crawler->filter('.content-header__footer .doi')->text());
     }
 
