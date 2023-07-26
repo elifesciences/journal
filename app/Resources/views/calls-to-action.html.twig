@@ -2,15 +2,19 @@
 
     <div class="wrapper">
         {% if socialMediaSharersLinks %}
-            <div class="grid">
-        {% endif %}
 
-        {% for callToAction in callsToAction %}
-            {{ render_pattern(callToAction) }}
-        {% endfor %}
-            
-        {% if socialMediaSharersLinks %}
+            <div class="grid">
+                {% for callToAction in callsToAction %}
+                    {{ render_pattern(callToAction) }}
+                {% endfor %}
             </div>
+            
+        {% else %}
+
+            {% for callToAction in callsToAction %}
+                {{ render_pattern(callToAction) }}
+            {% endfor %}
+
         {% endif %}
 
     </div>
