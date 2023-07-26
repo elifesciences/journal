@@ -1,7 +1,9 @@
 {% if callsToAction|default([]) %}
 
-    {% for callToAction in callsToAction %}
-        {{ render_pattern(callToAction) }}
-    {% endfor %}
+    <div class="wrapper">
+        {% for callToAction in callsToAction %}
+            {{ render_pattern(callToAction) }}
+        {% endfor %}
+    </div>
 
 {% endif %}
