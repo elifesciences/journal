@@ -13,8 +13,10 @@ use eLife\Patterns\ViewModel\ContextualData;
 use eLife\Patterns\ViewModel\Listing;
 use eLife\Patterns\ViewModel\ListingTeasers;
 use eLife\Patterns\ViewModel\Paragraph;
+use eLife\Patterns\ViewModel\SocialMediaSharersNew;
 use eLife\Patterns\ViewModel\SpeechBubble;
 use eLife\Patterns\ViewModel\Teaser;
+use function GuzzleHttp\Promise\all;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -79,6 +81,8 @@ final class PressPacksController extends Controller
 
         $arguments = $this->defaultPageArguments($request, $item);
 
+        $arguments['hasSocialMedia'] = true;
+
         $arguments['title'] = $arguments['item']
             ->then(Callback::method('getTitle'));
 
@@ -118,6 +122,11 @@ final class PressPacksController extends Controller
             ->then(Callback::methodEmptyOr('getRelatedContent', function (PressPackage $package) {
                 return ListingTeasers::basic($package->getRelatedContent()->map($this->willConvertTo(Teaser::class, ['variant' => 'secondary']))->toArray());
             }));
+        
+        $arguments['socialMediaSharersLinks'] = all(['item' => $arguments['item']])
+            ->then(function (array $parts) {
+                return $this->convertTo($parts['item'], SocialMediaSharersNew::class);
+            });
 
         return new Response($this->get('templating')->render('::press-pack.html.twig', $arguments));
     }

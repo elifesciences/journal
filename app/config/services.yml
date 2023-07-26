@@ -1486,6 +1486,14 @@ services:
         tags:
           - name: view_model.converter
 
+    elife.journal.view_model.converter.press_package.social_media_sharers:
+        class: eLife\Journal\ViewModel\Converter\PressPackageSocialMediaSharersConverter
+        public: false
+        arguments:
+          - '@router'
+        tags:
+          - name: view_model.converter
+
     elife.journal.view_model.converter.press_package.teaser:
         class: eLife\Journal\ViewModel\Converter\PressPackageTeaserConverter
         public: false

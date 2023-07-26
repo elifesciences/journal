@@ -4,6 +4,7 @@
     <div class="grid">
 
         {% set navigation = (block('navigation') ?? '')|trim %}
+        {% set social = (block('social') ?? '')|trim %}
         {% set main = block('main') %}
         {% set secondary = (block('secondary') ?? '')|trim %}
 
@@ -17,33 +18,59 @@
 
         {% endif %}
 
-        <div class="content-container grid__item one-whole
+        {% if social|length %}
 
-            {% if secondary|length %}
-                large--eight-twelfths x-large--seven-twelfths
-                {% if not navigation|length %}push--x-large--two-twelfths{% endif %}
-            {% else %}
-                large--ten-twelfths push--large--one-twelfth x-large--eight-twelfths
-                {% if navigation|length %}push--x-large--zero{% else %}push--x-large--two-twelfths{% endif %}
-            {% endif %}
-            grid-column">
+            {{ social|raw }}
 
-            {% include 'infobars-announcement.html.twig' %}
+            <div class="main-content-grid content-container">
 
-            {{ main|raw }}
+                {% include 'infobars-announcement.html.twig' %}
 
-        </div>
-
-        {% if secondary|length %}
-
-            <div class="grid__item one-whole
-
-                large--four-twelfths x-large--three-twelfths
-                {% if not navigation|length %}push--x-large--two-twelfths{% endif %} grid-secondary-column">
-
-                {{ secondary|raw }}
+                {{ main|raw }}
 
             </div>
+
+            {% if secondary|length %}
+
+                <div class="secondary-column-grid">
+
+                    {{ secondary|raw }}
+
+                </div>
+
+            {% endif %}
+
+        {% else %}
+
+            <div class="content-container grid__item one-whole
+                
+                {% if secondary|length %}
+                    large--eight-twelfths x-large--seven-twelfths
+                    {% if not navigation|length %}push--x-large--two-twelfths{% endif %}
+                {% else %}
+                    large--ten-twelfths push--large--one-twelfth x-large--eight-twelfths
+                    {% if navigation|length %}push--x-large--zero{% else %}push--x-large--two-twelfths{% endif %}
+                {% endif %}
+                grid-column">
+
+                {% include 'infobars-announcement.html.twig' %}
+
+                {{ main|raw }}
+
+            </div>
+
+            {% if secondary|length %}
+
+                <div class="grid__item one-whole
+
+                    large--four-twelfths x-large--three-twelfths
+                    {% if not navigation|length %}push--x-large--two-twelfths{% endif %} grid-secondary-column">
+
+                    {{ secondary|raw }}
+
+                </div>
+
+            {% endif %}
 
         {% endif %}
 

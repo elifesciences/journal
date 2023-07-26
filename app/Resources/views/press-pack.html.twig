@@ -13,8 +13,12 @@
     {% if contextualData %}
 
         <div class="wrapper">
+            
+            <div class="grid">
 
-            {{ render_pattern(contextualData) }}
+                {{ render_pattern(contextualData) }}
+
+            </div>
 
         </div>
 
@@ -23,6 +27,16 @@
     {% include 'calls-to-action.html.twig' %}
 
     {% embed 'grid/content.html.twig' %}
+
+        {% block social %}
+
+            {% if socialMediaSharersLinks %}
+                
+                {{ render_pattern(socialMediaSharersLinks) }}
+
+            {% endif %}
+
+        {% endblock %}
 
         {% block main %}
 
