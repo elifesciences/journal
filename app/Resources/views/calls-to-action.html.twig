@@ -2,7 +2,7 @@
 
     <div class="wrapper">
 
-        {% if socialMediaSharersLinks %}
+        {% if socialMediaSharersLinks is defined and socialMediaSharersLinks %}
 
             <div class="grid">
                 {% for callToAction in callsToAction %}
