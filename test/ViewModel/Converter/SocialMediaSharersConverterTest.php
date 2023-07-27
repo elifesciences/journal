@@ -7,9 +7,10 @@ use eLife\Patterns\ViewModel\SocialMediaSharersNew;
 
 final class SocialMediaSharersConverterTest extends ModelConverterTestCase
 {
-    protected $models = ['inside-elife-article', 'press-pack', 'digest'];
+    protected $models = ['blog-article', 'press-package', 'digest'];
     protected $viewModelClasses = [SocialMediaSharersNew::class];
-
+    protected $context = ['pageType' => 'press-pack'];
+    
     /**
      * @before
      */
