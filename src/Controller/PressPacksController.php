@@ -125,7 +125,9 @@ final class PressPacksController extends Controller
         
         $arguments['socialMediaSharersLinks'] = all(['item' => $arguments['item']])
             ->then(function (array $parts) {
-                return $this->convertTo($parts['item'], SocialMediaSharersNew::class);
+                $context['pageType'] = 'press-pack';
+
+                return $this->convertTo($parts['item'], SocialMediaSharersNew::class, $context);
             });
 
         return new Response($this->get('templating')->render('::press-pack.html.twig', $arguments));

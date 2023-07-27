@@ -842,14 +842,6 @@ services:
         tags:
           - name: view_model.converter
 
-    elife.journal.view_model.converter.blog_article.social_media_sharers:
-        class: eLife\Journal\ViewModel\Converter\BlogArticleSocialMediaSharersConverter
-        public: false
-        arguments:
-          - '@router'
-        tags:
-          - name: view_model.converter
-
     elife.journal.view_model.converter.collection.header:
         class: eLife\Journal\ViewModel\Converter\CollectionContentHeaderConverter
         public: false
@@ -1141,14 +1133,6 @@ services:
         public: false
         arguments:
           - '@elife.journal.view_model.converter'
-          - '@router'
-        tags:
-          - name: view_model.converter
-
-    elife.journal.view_model.converter.digest.social_media_sharers:
-        class: eLife\Journal\ViewModel\Converter\DigestSocialMediaSharersConverter
-        public: false
-        arguments:
           - '@router'
         tags:
           - name: view_model.converter
@@ -1486,14 +1470,6 @@ services:
         tags:
           - name: view_model.converter
 
-    elife.journal.view_model.converter.press_package.social_media_sharers:
-        class: eLife\Journal\ViewModel\Converter\PressPackageSocialMediaSharersConverter
-        public: false
-        arguments:
-          - '@router'
-        tags:
-          - name: view_model.converter
-
     elife.journal.view_model.converter.press_package.teaser:
         class: eLife\Journal\ViewModel\Converter\PressPackageTeaserConverter
         public: false
@@ -1635,6 +1611,14 @@ services:
         public: false
         arguments:
           - '@elife.journal.view_model.converter'
+        tags:
+          - name: view_model.converter
+    
+    elife.journal.view_model.converter.social_media_sharers:
+        class: eLife\Journal\ViewModel\Converter\SocialMediaSharersConverter
+        public: false
+        arguments:
+          - '@router'
         tags:
           - name: view_model.converter
 
