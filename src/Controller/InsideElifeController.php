@@ -112,7 +112,7 @@ final class InsideElifeController extends Controller
         
         $arguments['socialMediaSharersLinks'] = all(['item' =>  $arguments['item']])
             ->then(function (array $parts) {
-                $context['pageType'] = 'inside-elife-article';
+                $context['variant'] = 'inside-elife-article';
 
                 return $this->convertTo($parts['item'], SocialMediaSharersNew::class, $context);
             });

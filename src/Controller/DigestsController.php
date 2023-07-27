@@ -137,7 +137,7 @@ final class DigestsController extends Controller
         
         $arguments['socialMediaSharersLinks'] = all(['item' => $arguments['item']])
             ->then(function (array $parts) {
-                $context['pageType'] = 'digest';
+                $context['variant'] = 'digest';
 
                 return $this->convertTo($parts['item'], SocialMediaSharersNew::class, $context);
             });

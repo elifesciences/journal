@@ -125,7 +125,7 @@ final class PressPacksController extends Controller
         
         $arguments['socialMediaSharersLinks'] = all(['item' => $arguments['item']])
             ->then(function (array $parts) {
-                $context['pageType'] = 'press-pack';
+                $context['variant'] = 'press-pack';
 
                 return $this->convertTo($parts['item'], SocialMediaSharersNew::class, $context);
             });

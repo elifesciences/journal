@@ -19,7 +19,7 @@ final class SocialMediaSharersConverter implements ViewModelConverter
     {
         return new ViewModel\SocialMediaSharersNew(
             strip_tags($object->getTitle()),
-            $this->urlGenerator->generate($context['pageType'], [$object], UrlGeneratorInterface::ABSOLUTE_URL),
+            $this->urlGenerator->generate($context['variant'], [$object], UrlGeneratorInterface::ABSOLUTE_URL),
             false,
             true,
             true
@@ -28,6 +28,6 @@ final class SocialMediaSharersConverter implements ViewModelConverter
 
     public function supports($object, string $viewModel = null, array $context = []) : bool
     {
-        return ViewModel\SocialMediaSharersNew::class === $viewModel && in_array($context['pageType'], ['inside-elife-article', 'press-pack', 'digest']);
+        return ViewModel\SocialMediaSharersNew::class === $viewModel && in_array($context['variant'], ['inside-elife-article', 'press-pack', 'digest']);
     }
 }
