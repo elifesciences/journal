@@ -666,6 +666,11 @@ final class ArticlesController extends Controller
                     3
                 );
 
+                $infoSections[] = ArticleSection::basic(
+                    sprintf('You can cite all versions by using the DOI %s. This DOI represents all versions, and will always resolve to the latest one.', $this->render(new Doi($item->getDoi()))),
+                    'Cite all versions', 3
+                );
+
                 $copyright = '<p>'.$item->getCopyright()->getStatement().'</p>';
 
                 if ($item->getCopyright()->getHolder()) {

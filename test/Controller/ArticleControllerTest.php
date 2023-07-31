@@ -2828,7 +2828,12 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertSame('Version of Record published: January 1, 2009 (version 3)', $publicationHistory->filter('ol')->children()->eq(7)->text());
         $this->assertSame('Version of Record updated: January 1, 2010 (version 4)', $publicationHistory->filter('ol')->children()->eq(8)->text());
 
-        $copyright = $articleInfo->eq(7);
+        $citeAll = $articleInfo->eq(7);
+        $this->assertSame('Cite all versions', $citeAll->filter('.article-section__header_text')->text());
+        $this->assertSame('You can cite all versions by using the DOI https://doi.org/10.7554/eLife.00001 . This DOI represents all versions, and will always resolve to the latest one.',
+            $this->crawlerText($citeAll->filter('.article-section__body')));
+
+        $copyright = $articleInfo->eq(8);
         $this->assertSame('Copyright', $copyright->filter('header > h3')->text());
         $this->assertContains('© 2012, Bar', $copyright->filter('div')->text());
         $this->assertContains('Copyright statement.', $copyright->filter('div')->text());
