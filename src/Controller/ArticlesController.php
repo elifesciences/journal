@@ -667,7 +667,7 @@ final class ArticlesController extends Controller
                 );
 
                 $infoSections[] = ArticleSection::basic(
-                    sprintf('You can cite all versions by using the DOI %s. This DOI represents all versions, and will always resolve to the latest one.', $this->render(new Doi($item->getDoi()))),
+                    sprintf('<p>You can cite all versions by using the DOI %s. This DOI represents all versions, and will always resolve to the latest one.</p>', $this->render(new Doi($item->getDoi()))),
                     'Cite all versions', 3
                 );
 
