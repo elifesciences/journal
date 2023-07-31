@@ -666,7 +666,7 @@ final class ArticlesController extends Controller
                     3
                 );
 
-                if ($item->isReviewedPreprint()) {
+                if ($item instanceof ArticleVoR && $item->isReviewedPreprint()) {
                     $infoSections[] = ArticleSection::basic(
                         sprintf('<p>You can cite all versions by using the DOI  <a href="https://doi.org/%s">https://doi.org/%s</a>. This DOI represents all versions, and will always resolve to the latest one.</p>', $item->getDoi(), $item->getDoi()),
                         'Cite all versions', 3
