@@ -1519,7 +1519,7 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertCount(1, $publicationHistory->filter('ol')->children());
         $this->assertSame('Accepted Manuscript published: January 1, 2010 (version 1)', $publicationHistory->filter('ol')->children()->eq(0)->text());
 
-        $copyright = $articleInfo->eq(2);
+        $copyright = $articleInfo->eq(3);
         $this->assertSame('Copyright', $copyright->filter('header > h3')->text());
         $this->assertContains('© 2012, Author One', $copyright->filter('div')->text());
         $this->assertContains('Copyright statement.', $copyright->filter('div')->text());
