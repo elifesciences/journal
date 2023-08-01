@@ -5140,7 +5140,7 @@ final class ArticleControllerTest extends PageTestCase
         $articleInfo = $crawler->filter('.article-section__body section');
         $citeAll = $articleInfo->eq(7);
         $this->assertSame('Cite all versions', $citeAll->filter('.article-section__header_text')->text());
-        $this->assertSame('You can cite all versions by using the DOI https://doi.org/10.7554/eLife.00001. This DOI represents all versions, and will always resolve to the latest one.',
+        $this->assertSame('You can cite all versions using the DOI https://doi.org/10.7554/eLife.00001. This DOI represents all versions, and will always resolve to the latest one.',
             $this->crawlerText($citeAll->filter('.article-section__body')));
     }
 
