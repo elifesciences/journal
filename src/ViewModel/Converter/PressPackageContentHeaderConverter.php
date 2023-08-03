@@ -3,13 +3,10 @@
 namespace eLife\Journal\ViewModel\Converter;
 
 use eLife\ApiSdk\Model\PressPackage;
-use eLife\ApiSdk\Model\Subject;
 use eLife\Journal\Helper\LicenceUri;
+use eLife\Journal\Helper\ModelName;
 use eLife\Patterns\ViewModel;
-use eLife\Patterns\ViewModel\Link;
-use eLife\Patterns\ViewModel\Meta;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use function strip_tags;
 
 final class PressPackageContentHeaderConverter implements ViewModelConverter
 {
@@ -27,21 +24,32 @@ final class PressPackageContentHeaderConverter implements ViewModelConverter
      */
     public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
-        $subjects = $object->getSubjects()->map(function (Subject $subject) {
-            return new ViewModel\Link($subject->getName(), $this->urlGenerator->generate('subject', [$subject]));
-        })->toArray();
+        if ($date = $this->simpleDate($object, ['date' => 'published'] + $context)) {
+            $meta = ViewModel\MetaNew::withDate($date);
+        } else {
+            $meta = null;
+        }
 
-        return new ViewModel\ContentHeader($object->getTitle(), null, $object->getImpactStatement(), true,
-            null, $subjects, null, null, null, null, null,
-            Meta::withLink(
-                new Link('Press Pack', $this->urlGenerator->generate('press-packs')),
-                $this->simpleDate($object, ['date' => 'published'] + $context)
-            ), LicenceUri::default()
+        return new ViewModel\ContentHeaderNew(
+            $object->getTitle(),
+            false, true, null, $object->getImpactStatement(), true,
+            new ViewModel\Breadcrumb([
+                new ViewModel\Link(
+                    ModelName::singular('press-package'),
+                    $this->urlGenerator->generate('press-packs')
+                ),
+            ]),
+            [], null, null, null, null, null,
+            !empty($context['metrics']) ? ViewModel\ContextualData::withMetrics($context['metrics']) : null,
+            null,
+            $meta,
+            null,
+            LicenceUri::default()
         );
     }
 
     public function supports($object, string $viewModel = null, array $context = []) : bool
     {
-        return $object instanceof PressPackage && ViewModel\ContentHeader::class === $viewModel;
+        return $object instanceof PressPackage && ViewModel\ContentHeaderNew::class === $viewModel;
     }
 }

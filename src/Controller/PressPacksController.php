@@ -8,7 +8,7 @@ use eLife\Journal\Helper\Callback;
 use eLife\Journal\Helper\DownloadLink;
 use eLife\Journal\Helper\HasPages;
 use eLife\Patterns\ViewModel\ArticleSection;
-use eLife\Patterns\ViewModel\ContentHeader;
+use eLife\Patterns\ViewModel\ContentHeaderNew;
 use eLife\Patterns\ViewModel\ContextualData;
 use eLife\Patterns\ViewModel\Listing;
 use eLife\Patterns\ViewModel\ListingTeasers;
@@ -86,9 +86,6 @@ final class PressPacksController extends Controller
         $arguments['title'] = $arguments['item']
             ->then(Callback::method('getTitle'));
 
-        $arguments['contentHeader'] = $arguments['item']
-            ->then($this->willConvertTo(ContentHeader::class));
-
         $arguments['pageViews'] = $this->get('elife.api_sdk.metrics')
             ->totalPageViews(Identifier::pressPackage($id))
             ->otherwise($this->mightNotExist())
@@ -100,6 +97,24 @@ final class PressPacksController extends Controller
             }, function () {
                 return ContextualData::annotationsOnly(SpeechBubble::forContextualData());
             }));
+
+        $arguments['contextualDataMetrics'] = all(['pageViews' => $arguments['pageViews']])
+            ->then(function (array $parts) {
+                /** @var int|null $pageViews */
+                $pageViews = $parts['pageViews'];
+                $metrics = [];
+
+                if (null !== $pageViews && $pageViews > 0) {
+                    $metrics[] = sprintf('<span class="contextual-data__counter">%s</span> %s', number_format($pageViews), 'views');
+                }
+
+                return $metrics;
+            });
+
+        $arguments['contentHeader'] = all(['item' => $arguments['item'], 'metrics' => $arguments['contextualDataMetrics']])
+            ->then(function (array $parts) {
+                return $this->convertTo($parts['item'], ContentHeaderNew::class, ['metrics' => $parts['metrics']]);
+            });
 
         $arguments['blocks'] = $arguments['item']
             ->then(function (PressPackage $package) {
