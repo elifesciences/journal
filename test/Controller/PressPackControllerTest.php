@@ -24,7 +24,7 @@ final class PressPackControllerTest extends PageTestCase
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertSame('Press package title', $crawler->filter('.content-header__title')->text());
-        $this->assertSame('Press Pack Jan 1, 2010', trim(preg_replace('!\s+!', ' ', $crawler->filter('.content-header .meta')->text())));
+        $this->assertSame('Jan 1, 2010', trim(preg_replace('!\s+!', ' ', $crawler->filter('.content-header .meta')->text())));
         $this->assertContains('Annotations', $crawler->filter('.contextual-data__list')->text());
         $this->assertContains('Press package text.', $crawler->filter('.wrapper--content')->text());
         $this->assertCount(0, $crawler->filter('.teaser--secondary'));
@@ -70,10 +70,12 @@ final class PressPackControllerTest extends PageTestCase
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertSame('Press package title', $crawler->filter('.content-header__title')->text());
 
+        $this->assertSame('Open annotations (there are currently 0 annotations on this page).',
+        $this->crawlerText($crawler->filter('.content-container-grid .side-section-wrapper__link')));
+
         $this->assertSame(
             [
                 '5,678 views',
-                'Annotations Open annotations. The current annotation count on this page is being calculated.',
             ],
             array_map(function (string $text) {
                 return trim(preg_replace('!\s+!', ' ', $text));
