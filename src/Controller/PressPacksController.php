@@ -8,6 +8,7 @@ use eLife\Journal\Helper\Callback;
 use eLife\Journal\Helper\DownloadLink;
 use eLife\Journal\Helper\HasPages;
 use eLife\Patterns\ViewModel\ArticleSection;
+use eLife\Patterns\ViewModel\ContentHeader;
 use eLife\Patterns\ViewModel\ContentHeaderNew;
 use eLife\Patterns\ViewModel\ContextualData;
 use eLife\Patterns\ViewModel\Listing;
@@ -90,13 +91,6 @@ final class PressPacksController extends Controller
             ->totalPageViews(Identifier::pressPackage($id))
             ->otherwise($this->mightNotExist())
             ->otherwise($this->softFailure('Failed to load page views count'));
-
-        $arguments['contextualData'] = $arguments['pageViews']
-            ->then(Callback::emptyOr(function (int $pageViews) {
-                return ContextualData::withMetrics([sprintf('Views %s', number_format($pageViews))], null, null, SpeechBubble::forContextualData());
-            }, function () {
-                return ContextualData::annotationsOnly(SpeechBubble::forContextualData());
-            }));
 
         $arguments['contextualDataMetrics'] = all(['pageViews' => $arguments['pageViews']])
             ->then(function (array $parts) {

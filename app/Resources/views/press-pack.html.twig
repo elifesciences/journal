@@ -10,20 +10,6 @@
 
     {{ render_pattern(contentHeader) }}
 
-    {% if contextualData %}
-
-        <div class="wrapper">
-            
-            <div class="grid">
-
-                {{ render_pattern(contextualData) }}
-
-            </div>
-
-        </div>
-
-    {% endif %}
-
     {% include 'calls-to-action.html.twig' %}
 
     {% embed 'grid/content.html.twig' %}

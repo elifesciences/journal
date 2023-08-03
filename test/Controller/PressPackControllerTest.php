@@ -72,7 +72,7 @@ final class PressPackControllerTest extends PageTestCase
 
         $this->assertSame(
             [
-                'Views 5,678',
+                '5,678 views',
                 'Annotations Open annotations. The current annotation count on this page is being calculated.',
             ],
             array_map(function (string $text) {
