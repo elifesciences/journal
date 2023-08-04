@@ -27,7 +27,7 @@ final class PressPackControllerTest extends PageTestCase
         $this->assertCount(1, $breadcrumb);
         $this->assertEquals([
             [
-                'Press pack',
+                'Press Pack',
                 '/for-the-press',
             ],
         ], $breadcrumb->extract(['_text', 'href']));
