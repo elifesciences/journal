@@ -3,6 +3,7 @@
 namespace eLife\Journal\ViewModel\Converter;
 
 use eLife\ApiSdk\Model\PressPackage;
+use eLife\ApiSdk\Model\Subject;
 use eLife\Journal\Helper\LicenceUri;
 use eLife\Journal\Helper\ModelName;
 use eLife\Patterns\ViewModel;
@@ -30,6 +31,10 @@ final class PressPackageContentHeaderConverter implements ViewModelConverter
             $meta = null;
         }
 
+        $subjects = $object->getSubjects()->map(function (Subject $subject) {
+            return new ViewModel\Link($subject->getName(), $this->urlGenerator->generate('subject', [$subject]));
+        })->toArray();
+
         return new ViewModel\ContentHeaderNew(
             $object->getTitle(),
             false, true, null, $object->getImpactStatement(), true,
@@ -39,7 +44,8 @@ final class PressPackageContentHeaderConverter implements ViewModelConverter
                     $this->urlGenerator->generate('press-packs')
                 ),
             ]),
-            [], null, null, null, null, null,
+            $subjects,
+            null, null, null, null, null,
             !empty($context['metrics']) ? ViewModel\ContextualData::withMetrics($context['metrics']) : null,
             null,
             $meta,
