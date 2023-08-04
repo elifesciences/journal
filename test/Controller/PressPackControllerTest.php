@@ -79,7 +79,7 @@ final class PressPackControllerTest extends PageTestCase
         $this->assertSame('Press package title', $crawler->filter('.content-header__title')->text());
 
         $this->assertSame('Open annotations (there are currently 0 annotations on this page).',
-        $this->crawlerText($crawler->filter('.content-container-grid .side-section-wrapper__link')));
+        $this->crawlerText($crawler->filter('.wrapper--content .side-section-wrapper__link')));
 
         $this->assertSame(
             [
