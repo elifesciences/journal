@@ -25,10 +25,9 @@ final class PressPackageContentHeaderConverter implements ViewModelConverter
      */
     public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
+        $meta = null;
         if ($date = $this->simpleDate($object, ['date' => 'published'] + $context)) {
             $meta = ViewModel\MetaNew::withDate($date);
-        } else {
-            $meta = null;
         }
 
         $subjects = $object->getSubjects()->map(function (Subject $subject) {
