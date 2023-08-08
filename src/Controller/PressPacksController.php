@@ -10,7 +10,6 @@ use eLife\Journal\Helper\HasPages;
 use eLife\Patterns\ViewModel\ArticleSection;
 use eLife\Patterns\ViewModel\ContentHeader;
 use eLife\Patterns\ViewModel\ContentHeaderNew;
-use eLife\Patterns\ViewModel\ContextualData;
 use eLife\Patterns\ViewModel\Listing;
 use eLife\Patterns\ViewModel\ListingTeasers;
 use eLife\Patterns\ViewModel\Paragraph;
