@@ -137,7 +137,9 @@ final class DigestsController extends Controller
         
         $arguments['socialMediaSharersLinks'] = all(['item' => $arguments['item']])
             ->then(function (array $parts) {
-                return $this->convertTo($parts['item'], SocialMediaSharersNew::class);
+                $context['variant'] = 'digest';
+
+                return $this->convertTo($parts['item'], SocialMediaSharersNew::class, $context);
             });
         
         return new Response($this->get('templating')->render('::digest.html.twig', $arguments));

@@ -6,7 +6,6 @@ use eLife\ApiSdk\Model\Digest;
 use eLife\Journal\Helper\LicenceUri;
 use eLife\Patterns\ViewModel;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use function strip_tags;
 
 final class DigestContentHeaderConverter implements ViewModelConverter
 {

@@ -9,12 +9,14 @@ use eLife\Journal\Helper\DownloadLink;
 use eLife\Journal\Helper\HasPages;
 use eLife\Patterns\ViewModel\ArticleSection;
 use eLife\Patterns\ViewModel\ContentHeader;
-use eLife\Patterns\ViewModel\ContextualData;
+use eLife\Patterns\ViewModel\ContentHeaderNew;
 use eLife\Patterns\ViewModel\Listing;
 use eLife\Patterns\ViewModel\ListingTeasers;
 use eLife\Patterns\ViewModel\Paragraph;
+use eLife\Patterns\ViewModel\SocialMediaSharersNew;
 use eLife\Patterns\ViewModel\SpeechBubble;
 use eLife\Patterns\ViewModel\Teaser;
+use function GuzzleHttp\Promise\all;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -79,23 +81,33 @@ final class PressPacksController extends Controller
 
         $arguments = $this->defaultPageArguments($request, $item);
 
+        $arguments['hasSocialMedia'] = true;
+
         $arguments['title'] = $arguments['item']
             ->then(Callback::method('getTitle'));
-
-        $arguments['contentHeader'] = $arguments['item']
-            ->then($this->willConvertTo(ContentHeader::class));
 
         $arguments['pageViews'] = $this->get('elife.api_sdk.metrics')
             ->totalPageViews(Identifier::pressPackage($id))
             ->otherwise($this->mightNotExist())
             ->otherwise($this->softFailure('Failed to load page views count'));
 
-        $arguments['contextualData'] = $arguments['pageViews']
-            ->then(Callback::emptyOr(function (int $pageViews) {
-                return ContextualData::withMetrics([sprintf('Views %s', number_format($pageViews))], null, null, SpeechBubble::forContextualData());
-            }, function () {
-                return ContextualData::annotationsOnly(SpeechBubble::forContextualData());
-            }));
+        $arguments['contextualDataMetrics'] = all(['pageViews' => $arguments['pageViews']])
+            ->then(function (array $parts) {
+                /** @var int|null $pageViews */
+                $pageViews = $parts['pageViews'];
+                $metrics = [];
+
+                if (null !== $pageViews && $pageViews > 0) {
+                    $metrics[] = sprintf('<span class="contextual-data__counter">%s</span> %s', number_format($pageViews), 'views');
+                }
+
+                return $metrics;
+            });
+
+        $arguments['contentHeader'] = all(['item' => $arguments['item'], 'metrics' => $arguments['contextualDataMetrics']])
+            ->then(function (array $parts) {
+                return $this->convertTo($parts['item'], ContentHeaderNew::class, ['metrics' => $parts['metrics']]);
+            });
 
         $arguments['blocks'] = $arguments['item']
             ->then(function (PressPackage $package) {
@@ -118,6 +130,13 @@ final class PressPacksController extends Controller
             ->then(Callback::methodEmptyOr('getRelatedContent', function (PressPackage $package) {
                 return ListingTeasers::basic($package->getRelatedContent()->map($this->willConvertTo(Teaser::class, ['variant' => 'secondary']))->toArray());
             }));
+        
+        $arguments['socialMediaSharersLinks'] = all(['item' => $arguments['item']])
+            ->then(function (array $parts) {
+                $context['variant'] = 'press-pack';
+
+                return $this->convertTo($parts['item'], SocialMediaSharersNew::class, $context);
+            });
 
         return new Response($this->get('templating')->render('::press-pack.html.twig', $arguments));
     }

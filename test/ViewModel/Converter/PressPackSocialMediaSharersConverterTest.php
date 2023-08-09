@@ -5,11 +5,11 @@ namespace test\eLife\Journal\ViewModel\Converter;
 use eLife\Journal\ViewModel\Converter\SocialMediaSharersConverter;
 use eLife\Patterns\ViewModel\SocialMediaSharersNew;
 
-final class DigestSocialMediaSharersConverterTest extends ModelConverterTestCase
+final class PressPackSocialMediaSharersConverterTest extends ModelConverterTestCase
 {
-    protected $models = ['digest'];
+    protected $models = ['press-package'];
     protected $viewModelClasses = [SocialMediaSharersNew::class];
-    protected $context = ['variant' => 'digest'];
+    protected $context = ['variant' => 'press-pack'];
     
     /**
      * @before

@@ -112,7 +112,9 @@ final class InsideElifeController extends Controller
         
         $arguments['socialMediaSharersLinks'] = all(['item' =>  $arguments['item']])
             ->then(function (array $parts) {
-                return $this->convertTo($parts['item'], SocialMediaSharersNew::class);
+                $context['variant'] = 'inside-elife-article';
+
+                return $this->convertTo($parts['item'], SocialMediaSharersNew::class, $context);
             });
 
         return new Response($this->get('templating')->render('::inside-elife-article.html.twig', $arguments));
