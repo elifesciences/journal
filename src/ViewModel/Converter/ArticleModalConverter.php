@@ -34,6 +34,7 @@ final class ArticleModalConverter implements ViewModelConverter
     {
         if ('social' === ($context['type'] ?? 'social')) {
             $doi = (string) new DoiVersion($object);
+            $title = "In @eLife: " . strip_tags($object->getFullTitle());
 
             $body = [
                 ViewModel\TextField::textInput(
@@ -50,7 +51,7 @@ final class ArticleModalConverter implements ViewModelConverter
                 ),
                 ViewModel\Button::clipboard('Copy to clipboard', "https://doi.org/{$doi}"),
                 new ViewModel\SocialMediaSharersNew(
-                    strip_tags($object->getFullTitle()),
+                    $title,
                     "https://doi.org/{$doi}",
                     true,
                     true
