@@ -79,9 +79,7 @@ final class PressPacksController extends Controller
             ->otherwise($this->mightNotExist())
             ->then($this->checkSlug($request, Callback::method('getTitle')));
 
-        $arguments = $this->defaultPageArguments($request, $item);
-
-        $arguments['hasSocialMedia'] = true;
+        $arguments = $this->defaultPageArguments($request, $item, true, 'press-pack');
 
         $arguments['title'] = $arguments['item']
             ->then(Callback::method('getTitle'));
@@ -130,13 +128,6 @@ final class PressPacksController extends Controller
             ->then(Callback::methodEmptyOr('getRelatedContent', function (PressPackage $package) {
                 return ListingTeasers::basic($package->getRelatedContent()->map($this->willConvertTo(Teaser::class, ['variant' => 'secondary']))->toArray());
             }));
-        
-        $arguments['socialMediaSharersLinks'] = all(['item' => $arguments['item']])
-            ->then(function (array $parts) {
-                $context['variant'] = 'press-pack';
-
-                return $this->convertTo($parts['item'], SocialMediaSharersNew::class, $context);
-            });
 
         return new Response($this->get('templating')->render('::press-pack.html.twig', $arguments));
     }

@@ -76,9 +76,7 @@ final class InsideElifeController extends Controller
             ->otherwise($this->mightNotExist())
             ->then($this->checkSlug($request, Callback::method('getTitle')));
 
-        $arguments = $this->defaultPageArguments($request, $arguments['item']);
-        
-        $arguments['hasSocialMedia'] = true;
+        $arguments = $this->defaultPageArguments($request, $arguments['item'], true, 'inside-elife-article');
 
         $arguments['title'] = $arguments['item']
             ->then(Callback::method('getTitle'));
@@ -110,13 +108,6 @@ final class InsideElifeController extends Controller
         $arguments['blocks'] = $arguments['item']
             ->then($this->willConvertContent());
         
-        $arguments['socialMediaSharersLinks'] = all(['item' =>  $arguments['item']])
-            ->then(function (array $parts) {
-                $context['variant'] = 'inside-elife-article';
-
-                return $this->convertTo($parts['item'], SocialMediaSharersNew::class, $context);
-            });
-
         return new Response($this->get('templating')->render('::inside-elife-article.html.twig', $arguments));
     }
 }

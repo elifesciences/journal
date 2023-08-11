@@ -80,11 +80,9 @@ final class DigestsController extends Controller
             ->otherwise($this->mightNotExist())
             ->then($this->checkSlug($request, Callback::method('getTitle')));
 
-        $arguments = $this->defaultPageArguments($request, $arguments['item']);
+        $arguments = $this->defaultPageArguments($request, $arguments['item'], true, 'digest');
 
         $arguments['isMagazine'] = true;
-
-        $arguments['hasSocialMedia'] = true;
 
         $arguments['title'] = $arguments['item']
             ->then(Callback::method('getTitle'));
@@ -134,14 +132,7 @@ final class DigestsController extends Controller
                     return !($image instanceof CaptionedAsset);
                 });
             });
-        
-        $arguments['socialMediaSharersLinks'] = all(['item' => $arguments['item']])
-            ->then(function (array $parts) {
-                $context['variant'] = 'digest';
-
-                return $this->convertTo($parts['item'], SocialMediaSharersNew::class, $context);
-            });
-        
+            
         return new Response($this->get('templating')->render('::digest.html.twig', $arguments));
     }
 }

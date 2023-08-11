@@ -82,9 +82,7 @@ final class InterviewsController extends Controller
                 return $interview->getInterviewee()->getPerson()->getPreferredName();
             }));
 
-        $arguments = $this->defaultPageArguments($request, $arguments['item']);
-
-        $arguments['hasSocialMedia'] = true;
+        $arguments = $this->defaultPageArguments($request, $arguments['item'], true, 'interview');
 
         $arguments['title'] = $arguments['item']
             ->then(Callback::method('getTitle'));
@@ -110,13 +108,6 @@ final class InterviewsController extends Controller
         $arguments['contentHeader'] = all(['item' => $arguments['item'], 'metrics' => $arguments['contextualDataMetrics']])
             ->then(function (array $parts) {
                 return $this->convertTo($parts['item'], ContentHeaderNew::class, ['metrics' => $parts['metrics']]);
-            });
-
-        $arguments['socialMediaSharersLinks'] = all(['item' => $arguments['item']])
-            ->then(function (array $parts) {
-                $context['variant'] = 'interview';
-
-                return $this->convertTo($parts['item'], SocialMediaSharersNew::class, $context);
             });
 
         $arguments['blocks'] = $arguments['item']
