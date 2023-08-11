@@ -13,7 +13,6 @@ use eLife\Patterns\ViewModel\ContentHeaderNew;
 use eLife\Patterns\ViewModel\Listing;
 use eLife\Patterns\ViewModel\ListingTeasers;
 use eLife\Patterns\ViewModel\Paragraph;
-use eLife\Patterns\ViewModel\SocialMediaSharersNew;
 use eLife\Patterns\ViewModel\SpeechBubble;
 use eLife\Patterns\ViewModel\Teaser;
 use function GuzzleHttp\Promise\all;

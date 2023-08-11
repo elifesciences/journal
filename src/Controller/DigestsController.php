@@ -14,7 +14,6 @@ use eLife\Patterns\ViewModel\ContentHeader;
 use eLife\Patterns\ViewModel\ContentHeaderNew;
 use eLife\Patterns\ViewModel\GridListing;
 use eLife\Patterns\ViewModel\ListingTeasers;
-use eLife\Patterns\ViewModel\SocialMediaSharersNew;
 use eLife\Patterns\ViewModel\Teaser;
 use function GuzzleHttp\Promise\all;
 use Pagerfanta\Pagerfanta;
