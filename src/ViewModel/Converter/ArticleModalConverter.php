@@ -53,6 +53,8 @@ final class ArticleModalConverter implements ViewModelConverter
                     strip_tags($object->getFullTitle()),
                     "https://doi.org/{$doi}",
                     true,
+                    true,
+                    false,
                     true
                 ),
             ];
