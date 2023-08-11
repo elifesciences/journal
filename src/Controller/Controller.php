@@ -244,7 +244,18 @@ abstract class Controller implements ContainerAwareInterface
         );
     }
 
-    final protected function defaultPageArguments(Request $request, PromiseInterface $item = null, bool $hasSocialMediaSharers = false, string $contextVariant = null) : array
+    final protected function getSocialMediaSharersLinks(PromiseInterface $item = null, string $contextVariant = null) : PromiseInterface
+    {
+        $socialMediaSharersLinks = all(['item' => $item])
+            ->then(function (array $parts) use ($contextVariant) {
+                $context['variant'] = $contextVariant;
+                return $this->convertTo($parts['item'], ViewModel\SocialMediaSharersNew::class, $context);
+            });
+
+        return $socialMediaSharersLinks;
+    }
+
+    final protected function defaultPageArguments(Request $request, PromiseInterface $item = null) : array
     {
         if ($this->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             $user = $this->get('security.token_storage')->getToken()->getUser();
@@ -255,15 +266,6 @@ abstract class Controller implements ContainerAwareInterface
 
                     throw new EarlyResponse(new RedirectResponse($this->get('router')->generate('log-out', [], UrlGeneratorInterface::ABSOLUTE_URL)));
                 });
-        }
-
-        if ($hasSocialMediaSharers) {
-            $hasSocialMedia = true;
-            $socialMediaSharersLinks = all(['item' => $item])
-            ->then(function (array $parts) use ($contextVariant) {
-                $context['variant'] = $contextVariant;
-                return $this->convertTo($parts['item'], ViewModel\SocialMediaSharersNew::class, $context);
-            });
         }
 
         return [
@@ -282,8 +284,6 @@ abstract class Controller implements ContainerAwareInterface
             'footer' => $this->get('elife.journal.view_model.factory.footer')->createFooter(),
             'user' => $user ?? null,
             'item' => $item,
-            'hasSocialMedia' => $hasSocialMedia ?? false,
-            'socialMediaSharersLinks' => $socialMediaSharersLinks ?? null,
         ];
     }
 

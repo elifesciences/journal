@@ -79,7 +79,11 @@ final class DigestsController extends Controller
             ->otherwise($this->mightNotExist())
             ->then($this->checkSlug($request, Callback::method('getTitle')));
 
-        $arguments = $this->defaultPageArguments($request, $arguments['item'], true, 'digest');
+        $arguments = $this->defaultPageArguments($request, $arguments['item']);
+        
+        $arguments['hasSocialMedia'] = true;
+        
+        $arguments['socialMediaSharersLinks'] = $this->getSocialMediaSharersLinks($arguments['item'], 'digest');
 
         $arguments['isMagazine'] = true;
 

@@ -81,8 +81,12 @@ final class InterviewsController extends Controller
                 return $interview->getInterviewee()->getPerson()->getPreferredName();
             }));
 
-        $arguments = $this->defaultPageArguments($request, $arguments['item'], true, 'interview');
-
+        $arguments = $this->defaultPageArguments($request, $arguments['item']);
+        
+        $arguments['hasSocialMedia'] = true;
+        
+        $arguments['socialMediaSharersLinks'] = $this->getSocialMediaSharersLinks($arguments['item'], 'interview');
+        
         $arguments['title'] = $arguments['item']
             ->then(Callback::method('getTitle'));
 

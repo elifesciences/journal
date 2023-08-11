@@ -75,7 +75,11 @@ final class InsideElifeController extends Controller
             ->otherwise($this->mightNotExist())
             ->then($this->checkSlug($request, Callback::method('getTitle')));
 
-        $arguments = $this->defaultPageArguments($request, $arguments['item'], true, 'inside-elife-article');
+        $arguments = $this->defaultPageArguments($request, $arguments['item']);
+        
+        $arguments['hasSocialMedia'] = true;
+        
+        $arguments['socialMediaSharersLinks'] = $this->getSocialMediaSharersLinks($arguments['item'], 'inside-elife-article');
 
         $arguments['title'] = $arguments['item']
             ->then(Callback::method('getTitle'));

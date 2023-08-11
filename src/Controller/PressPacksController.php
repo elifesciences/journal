@@ -78,8 +78,12 @@ final class PressPacksController extends Controller
             ->otherwise($this->mightNotExist())
             ->then($this->checkSlug($request, Callback::method('getTitle')));
 
-        $arguments = $this->defaultPageArguments($request, $item, true, 'press-pack');
-
+        $arguments = $this->defaultPageArguments($request, $item);
+        
+        $arguments['hasSocialMedia'] = true;
+        
+        $arguments['socialMediaSharersLinks'] = $this->getSocialMediaSharersLinks($arguments['item'], 'press-pack');
+        
         $arguments['title'] = $arguments['item']
             ->then(Callback::method('getTitle'));
 
