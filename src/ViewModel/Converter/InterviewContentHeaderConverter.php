@@ -4,9 +4,9 @@ namespace eLife\Journal\ViewModel\Converter;
 
 use eLife\ApiSdk\Model\Interview;
 use eLife\Journal\Helper\LicenceUri;
+use eLife\Journal\Helper\ModelName;
 use eLife\Patterns\ViewModel;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use function strip_tags;
 
 final class InterviewContentHeaderConverter implements ViewModelConverter
 {
@@ -24,31 +24,31 @@ final class InterviewContentHeaderConverter implements ViewModelConverter
      */
     public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
-        return new ViewModel\ContentHeader(
+        $meta = null;
+        if ($date = $this->simpleDate($object, ['date' => 'published'] + $context)) {
+            $meta = ViewModel\MetaNew::withDate($date);
+        }
+
+        return new ViewModel\ContentHeaderNew(
             $object->getTitle(),
+            false, true, null, $object->getImpactStatement(), true,
+            new ViewModel\Breadcrumb([
+                new ViewModel\Link(
+                    ModelName::singular('interview'),
+                    $this->urlGenerator->generate('interviews')
+                )
+            ]),
+            [], null, null, null, null, null,
+            !empty($context['metrics']) ? ViewModel\ContextualData::withMetrics($context['metrics']) : null,
             null,
-            $object->getImpactStatement(),
-            true,
+            $meta,
             null,
-            [],
-            null,
-            null,
-            null,
-            new ViewModel\SocialMediaSharers(
-                strip_tags($object->getTitle()),
-                $this->urlGenerator->generate('interview', [$object], UrlGeneratorInterface::ABSOLUTE_URL)
-            ),
-            null,
-            ViewModel\Meta::withLink(
-                new ViewModel\Link('Interview', $this->urlGenerator->generate('interviews')),
-                $this->simpleDate($object, ['date' => 'published'] + $context)
-            ),
             LicenceUri::default()
         );
     }
 
     public function supports($object, string $viewModel = null, array $context = []) : bool
     {
-        return $object instanceof Interview && ViewModel\ContentHeader::class === $viewModel;
+        return $object instanceof Interview && ViewModel\ContentHeaderNew::class === $viewModel;
     }
 }
