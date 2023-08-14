@@ -244,15 +244,29 @@ abstract class Controller implements ContainerAwareInterface
         );
     }
 
-    final protected function getSocialMediaSharersLinks(PromiseInterface $item = null, string $contextVariant = null) : PromiseInterface
-    {
-        $socialMediaSharersLinks = all(['item' => $item])
-            ->then(function (array $parts) use ($contextVariant) {
-                $context['variant'] = $contextVariant;
-                return $this->convertTo($parts['item'], ViewModel\SocialMediaSharersNew::class, $context);
-            });
+    final protected function magazinePageArguments($arguments, $type) {
+        return [
+            'hasSocialMedia' => true,
+            'socialMediaSharersLinks' => all(['item' => $arguments['item']])
+                ->then(function (array $parts) use ($type) {
+                    $context['variant'] = $type;
+                    return $this->convertTo($parts['item'], ViewModel\SocialMediaSharersNew::class, $context);
+                }),
+            'contextualDataMetrics' => all(['pageViews' => $arguments['pageViews']])
+                ->then(function (array $parts) {
+                    /** @var int|null $pageViews */
+                    $pageViews = $parts['pageViews'];
 
-        return $socialMediaSharersLinks;
+                    $metrics = [];
+
+                    if (null !== $pageViews && $pageViews > 0) {
+                        $metrics[] = sprintf('<span class="contextual-data__counter">%s</span> %s', number_format($pageViews), 'views');
+                    }
+
+                    return $metrics;
+                })
+
+        ];
     }
 
     final protected function defaultPageArguments(Request $request, PromiseInterface $item = null) : array

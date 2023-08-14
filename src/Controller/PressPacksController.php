@@ -79,11 +79,7 @@ final class PressPacksController extends Controller
             ->then($this->checkSlug($request, Callback::method('getTitle')));
 
         $arguments = $this->defaultPageArguments($request, $item);
-        
-        $arguments['hasSocialMedia'] = true;
-        
-        $arguments['socialMediaSharersLinks'] = $this->getSocialMediaSharersLinks($arguments['item'], 'press-pack');
-        
+
         $arguments['title'] = $arguments['item']
             ->then(Callback::method('getTitle'));
 
@@ -92,18 +88,7 @@ final class PressPacksController extends Controller
             ->otherwise($this->mightNotExist())
             ->otherwise($this->softFailure('Failed to load page views count'));
 
-        $arguments['contextualDataMetrics'] = all(['pageViews' => $arguments['pageViews']])
-            ->then(function (array $parts) {
-                /** @var int|null $pageViews */
-                $pageViews = $parts['pageViews'];
-                $metrics = [];
-
-                if (null !== $pageViews && $pageViews > 0) {
-                    $metrics[] = sprintf('<span class="contextual-data__counter">%s</span> %s', number_format($pageViews), 'views');
-                }
-
-                return $metrics;
-            });
+        $arguments = array_merge($arguments, $this->magazinePageArguments($arguments, 'inside-elife-article'));
 
         $arguments['contentHeader'] = all(['item' => $arguments['item'], 'metrics' => $arguments['contextualDataMetrics']])
             ->then(function (array $parts) {

@@ -82,11 +82,7 @@ final class InterviewsController extends Controller
             }));
 
         $arguments = $this->defaultPageArguments($request, $arguments['item']);
-        
-        $arguments['hasSocialMedia'] = true;
-        
-        $arguments['socialMediaSharersLinks'] = $this->getSocialMediaSharersLinks($arguments['item'], 'interview');
-        
+
         $arguments['title'] = $arguments['item']
             ->then(Callback::method('getTitle'));
 
@@ -95,19 +91,8 @@ final class InterviewsController extends Controller
             ->otherwise($this->mightNotExist())
             ->otherwise($this->softFailure('Failed to load page views count'));
 
-        $arguments['contextualDataMetrics'] = all(['pageViews' => $arguments['pageViews']])
-            ->then(function (array $parts) {
-                /** @var int|null $pageViews */
-                $pageViews = $parts['pageViews'];
-                $metrics = [];
+        $arguments = array_merge($arguments, $this->magazinePageArguments($arguments, 'interview'));
 
-                if (null !== $pageViews && $pageViews > 0) {
-                    $metrics[] = sprintf('<span class="contextual-data__counter">%s</span> %s', number_format($pageViews), 'views');
-                }
-
-                return $metrics;
-            });
-        
         $arguments['contentHeader'] = all(['item' => $arguments['item'], 'metrics' => $arguments['contextualDataMetrics']])
             ->then(function (array $parts) {
                 return $this->convertTo($parts['item'], ContentHeaderNew::class, ['metrics' => $parts['metrics']]);
