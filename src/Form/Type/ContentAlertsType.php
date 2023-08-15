@@ -70,7 +70,7 @@ final class ContentAlertsType extends AbstractType
     {
         $preferences = [
             'default' => ['The latest scientific articles published by eLife (twice weekly)' => LatestArticles::LABEL],
-            'early-career' => ['Early-career researchers newsletter (monthly)' => EarlyCareer::LABEL],
+            'early-career' => ['eLife community newsletter (monthly)' => EarlyCareer::LABEL],
             'elife-newsletter' => ['eLife newsletter (every two months)' => ElifeNewsletter::LABEL],
         ];
         $main = [];
