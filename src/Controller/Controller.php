@@ -264,7 +264,7 @@ abstract class Controller implements ContainerAwareInterface
                     }
 
                     return $metrics;
-            }) : null
+                }) : null
 
         ];
     }
