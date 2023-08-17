@@ -22,6 +22,16 @@
 
     {% embed 'grid/content.html.twig' %}
 
+        {% block social %}
+
+            {% if socialMediaSharersLinks %}
+
+                {{ render_pattern(socialMediaSharersLinks) }}
+
+            {% endif %}
+
+        {% endblock %}
+
         {% block main %}
 
             {% for block in blocks %}

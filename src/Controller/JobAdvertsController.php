@@ -80,6 +80,8 @@ final class JobAdvertsController extends Controller
         $arguments['title'] = $arguments['item']
             ->then(Callback::method('getTitle'));
 
+        $arguments = array_merge($arguments, $this->magazinePageArguments($arguments, 'job-advert'));
+
         $arguments['contentHeader'] = $arguments['item']
             ->then($this->willConvertTo(ContentHeader::class));
 

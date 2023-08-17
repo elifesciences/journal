@@ -252,7 +252,7 @@ abstract class Controller implements ContainerAwareInterface
                     $context['variant'] = $type;
                     return $this->convertTo($parts['item'], ViewModel\SocialMediaSharersNew::class, $context);
                 }),
-            'contextualDataMetrics' => all(['pageViews' => $arguments['pageViews']])
+            'contextualDataMetrics' => isset($arguments['pageViews']) ? all(['pageViews' => $arguments['pageViews']])
                 ->then(function (array $parts) {
                     /** @var int|null $pageViews */
                     $pageViews = $parts['pageViews'];
@@ -264,7 +264,7 @@ abstract class Controller implements ContainerAwareInterface
                     }
 
                     return $metrics;
-                })
+            }) : null
 
         ];
     }
