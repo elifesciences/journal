@@ -3,11 +3,10 @@
 namespace eLife\Journal\ViewModel\Converter;
 
 use eLife\ApiSdk\Model\JobAdvert;
+use eLife\Journal\Helper\LicenceUri;
+use eLife\Journal\Helper\ModelName;
 use eLife\Patterns\ViewModel;
-use eLife\Patterns\ViewModel\Link;
-use eLife\Patterns\ViewModel\Meta;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use function strip_tags;
 
 final class JobAdvertContentHeaderConverter implements ViewModelConverter
 {
@@ -25,22 +24,26 @@ final class JobAdvertContentHeaderConverter implements ViewModelConverter
      */
     public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
+        $meta = null;
+        if ($date = $this->simpleDate($object, ['date' => 'published'] + $context)) {
+            $meta = ViewModel\MetaNew::withDate($date);
+        }
+
         return new ViewModel\ContentHeaderNew(
             $object->getTitle(),
+            false, true, null, $object->getImpactStatement(), true,
+            new ViewModel\Breadcrumb([
+                new ViewModel\Link(
+                    ModelName::singular('job-advert'),
+                    $this->urlGenerator->generate('job-adverts')
+                ),
+            ]),
+            [], null, null, null, null, null,
+            !empty($context['metrics']) ? ViewModel\ContextualData::withMetrics($context['metrics']) : null,
             null,
-            $object->getImpactStatement(),
-            true,
+            $meta,
             null,
-            [],
-            null,
-            null,
-            null,
-            null,
-            null,
-            Meta::withLink(
-                new Link('eLife jobs', $this->urlGenerator->generate('job-adverts')),
-                $this->simpleDate($object, ['date' => 'published'] + $context)
-            )
+            LicenceUri::default()
         );
     }
 

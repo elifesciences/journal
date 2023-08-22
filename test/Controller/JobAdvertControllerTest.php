@@ -26,8 +26,60 @@ final class JobAdvertControllerTest extends PageTestCase
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertSame('Job advert title', $crawler->filter('.content-header__title')->text());
+        $this->assertSame('Jan 1, 2010', trim(preg_replace('!\s+!', ' ', $crawler->filter('.content-header .meta')->text())));
         $this->assertContains('Closing date for applications is '.date('F j, Y', strtotime('+1 day')).'.', $crawler->filter('main')->text());
         $this->assertContains('Job advert text.', $crawler->filter('main')->text());
+    }
+
+    /**
+     * @test
+     */
+    public function it_displays_metrics()
+    {
+        $client = static::createClient();
+
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/metrics/job-advert/1/page-views?by=month&page=1&per-page=20&order=desc',
+                ['Accept' => 'application/vnd.elife.metric-time-period+json; version=1']
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.metric-time-period+json; version=1'],
+                json_encode([
+                    'totalPeriods' => 2,
+                    'totalValue' => 5678,
+                    'periods' => [
+                        [
+                            'period' => '2016-01-01',
+                            'value' => 2839,
+                        ],
+                        [
+                            'period' => '2016-01-02',
+                            'value' => 2839,
+                        ],
+                    ],
+                ])
+            )
+        );
+
+        $crawler = $client->request('GET', $this->getUrl());
+
+        $this->assertSame(200, $client->getResponse()->getStatusCode());
+        $this->assertSame('Job advert  title', $crawler->filter('.content-header__title')->text());
+
+        $this->assertSame('Open annotations (there are currently 0 annotations on this page).',
+        $this->crawlerText($crawler->filter('.wrapper--content .side-section-wrapper__link')));
+
+        $this->assertSame(
+            [
+                '5,678 views',
+            ],
+            array_map(function (string $text) {
+                return trim(preg_replace('!\s+!', ' ', $text));
+            }, $crawler->filter('.contextual-data__item')->extract('_text'))
+        );
     }
 
     /**
