@@ -25,7 +25,7 @@ final class JobAdvertContentHeaderConverter implements ViewModelConverter
      */
     public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
-        return new ViewModel\ContentHeader(
+        return new ViewModel\ContentHeaderNew(
             $object->getTitle(),
             null,
             $object->getImpactStatement(),
@@ -46,6 +46,6 @@ final class JobAdvertContentHeaderConverter implements ViewModelConverter
 
     public function supports($object, string $viewModel = null, array $context = []) : bool
     {
-        return $object instanceof JobAdvert && ViewModel\ContentHeader::class === $viewModel;
+        return $object instanceof JobAdvert && ViewModel\ContentHeaderNew::class === $viewModel;
     }
 }
