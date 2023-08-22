@@ -9,13 +9,12 @@ use eLife\Journal\Helper\DownloadLink;
 use eLife\Journal\Helper\HasPages;
 use eLife\Patterns\ViewModel\ArticleSection;
 use eLife\Patterns\ViewModel\ContentHeader;
-use eLife\Patterns\ViewModel\ContentHeaderNew;
+use eLife\Patterns\ViewModel\ContextualData;
 use eLife\Patterns\ViewModel\Listing;
 use eLife\Patterns\ViewModel\ListingTeasers;
 use eLife\Patterns\ViewModel\Paragraph;
 use eLife\Patterns\ViewModel\SpeechBubble;
 use eLife\Patterns\ViewModel\Teaser;
-use function GuzzleHttp\Promise\all;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -83,17 +82,20 @@ final class PressPacksController extends Controller
         $arguments['title'] = $arguments['item']
             ->then(Callback::method('getTitle'));
 
+        $arguments['contentHeader'] = $arguments['item']
+            ->then($this->willConvertTo(ContentHeader::class));
+
         $arguments['pageViews'] = $this->get('elife.api_sdk.metrics')
             ->totalPageViews(Identifier::pressPackage($id))
             ->otherwise($this->mightNotExist())
             ->otherwise($this->softFailure('Failed to load page views count'));
 
-        $arguments = array_merge($arguments, $this->magazinePageArguments($arguments, 'inside-elife-article'));
-
-        $arguments['contentHeader'] = all(['item' => $arguments['item'], 'metrics' => $arguments['contextualDataMetrics']])
-            ->then(function (array $parts) {
-                return $this->convertTo($parts['item'], ContentHeaderNew::class, ['metrics' => $parts['metrics']]);
-            });
+        $arguments['contextualData'] = $arguments['pageViews']
+            ->then(Callback::emptyOr(function (int $pageViews) {
+                return ContextualData::withMetrics([sprintf('Views %s', number_format($pageViews))], null, null, SpeechBubble::forContextualData());
+            }, function () {
+                return ContextualData::annotationsOnly(SpeechBubble::forContextualData());
+            }));
 
         $arguments['blocks'] = $arguments['item']
             ->then(function (PressPackage $package) {
