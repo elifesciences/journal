@@ -4,12 +4,14 @@ namespace eLife\Journal\ViewModel\Converter;
 
 use eLife\ApiSdk\Model\Event;
 use eLife\Journal\Helper\LicenceUri;
+use eLife\Journal\Helper\ModelName;
 use eLife\Patterns\ViewModel;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use function strip_tags;
 
 final class EventContentHeaderConverter implements ViewModelConverter
 {
+    use CreatesDate;
+
     private $urlGenerator;
 
     public function __construct(UrlGeneratorInterface $urlGenerator)
@@ -22,28 +24,32 @@ final class EventContentHeaderConverter implements ViewModelConverter
      */
     public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
-        return new ViewModel\ContentHeader(
+        $meta = null;
+        if ($date = $this->simpleDate($object, ['date' => 'published'] + $context)) {
+            $meta = ViewModel\MetaNew::withDate($date);
+        }
+
+        return new ViewModel\ContentHeaderNew(
             $object->getTitle(),
-            null,
-            $object->getImpactStatement(),
-            true,
-            null,
+            false, true, null, $object->getImpactStatement(), true,
+            new ViewModel\Breadcrumb([
+                new ViewModel\Link(
+                    ModelName::singular('event'),
+                    $this->urlGenerator->generate('events')
+                ),
+            ]),
             [],
+            null, null, null, null, null,
+            !empty($context['metrics']) ? ViewModel\ContextualData::withMetrics($context['metrics']) : null,
             null,
+            $meta,
             null,
-            null,
-            new ViewModel\SocialMediaSharers(
-                strip_tags($object->getTitle()),
-                $this->urlGenerator->generate('event', [$object], UrlGeneratorInterface::ABSOLUTE_URL)
-            ),
-            null,
-            ViewModel\Meta::withLink(new ViewModel\Link('Event', $this->urlGenerator->generate('events')), ViewModel\Date::simple($object->getStarts())),
             LicenceUri::default()
         );
     }
 
     public function supports($object, string $viewModel = null, array $context = []) : bool
     {
-        return $object instanceof Event && ViewModel\ContentHeader::class === $viewModel;
+        return $object instanceof Event && ViewModel\ContentHeaderNew::class === $viewModel;
     }
 }
