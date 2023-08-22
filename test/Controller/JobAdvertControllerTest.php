@@ -67,7 +67,7 @@ final class JobAdvertControllerTest extends PageTestCase
         $crawler = $client->request('GET', $this->getUrl());
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
-        $this->assertSame('Job advert  title', $crawler->filter('.content-header__title')->text());
+        $this->assertSame('Job advert title', $crawler->filter('.content-header__title')->text());
 
         $this->assertSame('Open annotations (there are currently 0 annotations on this page).',
         $this->crawlerText($crawler->filter('.wrapper--content .side-section-wrapper__link')));
