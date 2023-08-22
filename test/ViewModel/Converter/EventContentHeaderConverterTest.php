@@ -4,12 +4,12 @@ namespace test\eLife\Journal\ViewModel\Converter;
 
 use eLife\ApiSdk\Model\Event;
 use eLife\Journal\ViewModel\Converter\EventContentHeaderConverter;
-use eLife\Patterns\ViewModel\ContentHeader;
+use eLife\Patterns\ViewModel\ContentHeaderNew;
 
 final class EventContentHeaderConverterTest extends ModelConverterTestCase
 {
     protected $models = ['event'];
-    protected $viewModelClasses = [ContentHeader::class];
+    protected $viewModelClasses = [ContentHeaderNew::class];
 
     /**
      * @before
