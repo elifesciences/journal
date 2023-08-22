@@ -84,9 +84,9 @@ final class JobAdvertsController extends Controller
 
         $arguments = array_merge($arguments, $this->magazinePageArguments($arguments, 'job-advert'));
 
-        $arguments['contentHeader'] = all(['item' => $arguments['item'], 'metrics' => $arguments['contextualDataMetrics']])
+        $arguments['contentHeader'] = all(['item' => $arguments['item']])
             ->then(function (array $parts) {
-                return $this->convertTo($parts['item'], ContentHeaderNew::class, ['metrics' => $parts['metrics']]);
+                return $this->convertTo($parts['item'], ContentHeaderNew::class);
             });
 
         $arguments['blocks'] = $arguments['item']
