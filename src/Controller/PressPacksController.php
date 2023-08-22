@@ -88,7 +88,7 @@ final class PressPacksController extends Controller
             ->otherwise($this->mightNotExist())
             ->otherwise($this->softFailure('Failed to load page views count'));
 
-        $arguments = array_merge($arguments, $this->magazinePageArguments($arguments, 'inside-elife-article'));
+        $arguments = array_merge($arguments, $this->magazinePageArguments($arguments, 'press-pack'));
 
         $arguments['contentHeader'] = all(['item' => $arguments['item'], 'metrics' => $arguments['contextualDataMetrics']])
             ->then(function (array $parts) {
