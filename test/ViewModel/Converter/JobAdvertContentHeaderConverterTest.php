@@ -3,12 +3,12 @@
 namespace test\eLife\Journal\ViewModel\Converter;
 
 use eLife\Journal\ViewModel\Converter\JobAdvertContentHeaderConverter;
-use eLife\Patterns\ViewModel\ContentHeader;
+use eLife\Patterns\ViewModel\ContentHeaderNew;
 
 final class JobAdvertContentHeaderConverterTest extends ModelConverterTestCase
 {
     protected $models = ['job-advert'];
-    protected $viewModelClasses = [ContentHeader::class];
+    protected $viewModelClasses = [ContentHeaderNew::class];
 
     /**
      * @before
