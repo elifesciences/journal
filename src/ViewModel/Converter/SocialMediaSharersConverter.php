@@ -28,6 +28,6 @@ final class SocialMediaSharersConverter implements ViewModelConverter
 
     public function supports($object, string $viewModel = null, array $context = []) : bool
     {
-        return ViewModel\SocialMediaSharersNew::class === $viewModel && in_array($context['variant'], ['inside-elife-article', 'press-pack', 'digest', 'interview', 'event']);
+        return ViewModel\SocialMediaSharersNew::class === $viewModel && in_array($context['variant'], ['inside-elife-article', 'press-pack', 'digest', 'interview', 'job-advert', 'event']);
     }
 }

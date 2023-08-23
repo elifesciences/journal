@@ -9,12 +9,14 @@ use eLife\Journal\Helper\Callback;
 use eLife\Journal\Helper\Paginator;
 use eLife\Journal\Pagerfanta\SequenceAdapter;
 use eLife\Patterns\ViewModel\ContentHeader;
+use eLife\Patterns\ViewModel\ContentHeaderNew;
 use eLife\Patterns\ViewModel\ListingTeasers;
 use eLife\Patterns\ViewModel\Paragraph;
 use eLife\Patterns\ViewModel\Teaser;
 use Pagerfanta\Pagerfanta;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use function GuzzleHttp\Promise\all;
 use function GuzzleHttp\Promise\promise_for;
 
 final class JobAdvertsController extends Controller
@@ -80,8 +82,12 @@ final class JobAdvertsController extends Controller
         $arguments['title'] = $arguments['item']
             ->then(Callback::method('getTitle'));
 
-        $arguments['contentHeader'] = $arguments['item']
-            ->then($this->willConvertTo(ContentHeader::class));
+        $arguments = array_merge($arguments, $this->magazinePageArguments($arguments, 'job-advert'));
+
+        $arguments['contentHeader'] = all(['item' => $arguments['item']])
+            ->then(function (array $parts) {
+                return $this->convertTo($parts['item'], ContentHeaderNew::class);
+            });
 
         $arguments['blocks'] = $arguments['item']
             ->then(function (JobAdvert $jobAdvert) {
