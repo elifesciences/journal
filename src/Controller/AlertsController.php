@@ -38,7 +38,7 @@ final class AlertsController extends Controller
             ), 'Science in plain language', 2),
             ArticleSection::basic($this->render(
                 Listing::unordered([
-                    '<a href="'.$this->get('router')->generate('content-alerts-variant', ['variant' => 'early-career']).'">Sign up to our monthly early-career researchers community newsletter</a> for details on upcoming webinars, new programmes, interviews, and other efforts to support positive research culture in life sciences and biomedicine',
+                    '<a href="'.$this->get('router')->generate('content-alerts-variant', ['variant' => 'early-career']).'">Sign up to our monthly eLife community newsletter</a> for details on upcoming webinars, new programmes, interviews, and other efforts to support positive research culture in life sciences and biomedicine',
                 ], 'bullet')
             ), 'Community-building', 2),
             ArticleSection::basic($this->render(

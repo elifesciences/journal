@@ -24,8 +24,7 @@ final class InterviewControllerTest extends PageTestCase
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertSame('Interview title', $crawler->filter('.content-header__title')->text());
-        $this->assertSame('Interview Jan 1, 2010', trim(preg_replace('!\s+!', ' ', $crawler->filter('.content-header .meta')->text())));
-        $this->assertContains('Annotations', $crawler->filter('.contextual-data__list')->text());
+        $this->assertSame('Jan 1, 2010', trim(preg_replace('!\s+!', ' ', $crawler->filter('.content-header .meta')->text())));
         $this->assertContains('Question?', $crawler->filter('.wrapper--content')->text());
     }
 
@@ -67,10 +66,12 @@ final class InterviewControllerTest extends PageTestCase
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertSame('Interview title', $crawler->filter('.content-header__title')->text());
 
+        $this->assertSame('Open annotations (there are currently 0 annotations on this page).',
+        $this->crawlerText($crawler->filter('.wrapper--content .side-section-wrapper__link')));
+
         $this->assertSame(
             [
-                'Views 5,678',
-                'Annotations Open annotations. The current annotation count on this page is being calculated.',
+                '5,678 views',
             ],
             array_map(function (string $text) {
                 return trim(preg_replace('!\s+!', ' ', $text));

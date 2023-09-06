@@ -10,19 +10,19 @@
 
     {{ render_pattern(contentHeader) }}
 
+    {% if contextualData %}
+
+        <div class="wrapper">
+
+            {{ render_pattern(contextualData) }}
+
+        </div>
+
+    {% endif %}
+
     {% include 'calls-to-action.html.twig' %}
 
     {% embed 'grid/content.html.twig' %}
-
-        {% block social %}
-
-            {% if socialMediaSharersLinks %}
-                
-                {{ render_pattern(socialMediaSharersLinks) }}
-
-            {% endif %}
-
-        {% endblock %}
 
         {% block main %}
 

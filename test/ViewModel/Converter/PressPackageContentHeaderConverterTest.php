@@ -3,12 +3,12 @@
 namespace test\eLife\Journal\ViewModel\Converter;
 
 use eLife\Journal\ViewModel\Converter\PressPackageContentHeaderConverter;
-use eLife\Patterns\ViewModel\ContentHeaderNew;
+use eLife\Patterns\ViewModel\ContentHeader;
 
 final class PressPackageContentHeaderConverterTest extends ModelConverterTestCase
 {
     protected $models = ['press-package'];
-    protected $viewModelClasses = [ContentHeaderNew::class];
+    protected $viewModelClasses = [ContentHeader::class];
 
     /**
      * @before

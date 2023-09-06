@@ -10,7 +10,6 @@ use eLife\Journal\Pagerfanta\SequenceAdapter;
 use eLife\Patterns\ViewModel\ContentHeader;
 use eLife\Patterns\ViewModel\ContentHeaderNew;
 use eLife\Patterns\ViewModel\ListingTeasers;
-use eLife\Patterns\ViewModel\SocialMediaSharersNew;
 use eLife\Patterns\ViewModel\SpeechBubble;
 use eLife\Patterns\ViewModel\Teaser;
 use function GuzzleHttp\Promise\all;
@@ -78,8 +77,6 @@ final class InsideElifeController extends Controller
 
         $arguments = $this->defaultPageArguments($request, $arguments['item']);
         
-        $arguments['hasSocialMedia'] = true;
-
         $arguments['title'] = $arguments['item']
             ->then(Callback::method('getTitle'));
 
@@ -88,19 +85,8 @@ final class InsideElifeController extends Controller
             ->otherwise($this->mightNotExist())
             ->otherwise($this->softFailure('Failed to load page views count'));
 
-        $arguments['contextualDataMetrics'] = all(['pageViews' => $arguments['pageViews']])
-            ->then(function (array $parts) {
-                /** @var int|null $pageViews */
-                $pageViews = $parts['pageViews'];
 
-                $metrics = [];
-
-                if (null !== $pageViews && $pageViews > 0) {
-                    $metrics[] = sprintf('<span class="contextual-data__counter">%s</span> %s', number_format($pageViews), 'views');
-                }
-
-                return $metrics;
-            });
+        $arguments = array_merge($arguments, $this->magazinePageArguments($arguments, 'inside-elife-article'));
 
         $arguments['contentHeader'] = all(['item' => $arguments['item'], 'metrics' => $arguments['contextualDataMetrics']])
             ->then(function (array $parts) {
@@ -110,13 +96,6 @@ final class InsideElifeController extends Controller
         $arguments['blocks'] = $arguments['item']
             ->then($this->willConvertContent());
         
-        $arguments['socialMediaSharersLinks'] = all(['item' =>  $arguments['item']])
-            ->then(function (array $parts) {
-                $context['variant'] = 'inside-elife-article';
-
-                return $this->convertTo($parts['item'], SocialMediaSharersNew::class, $context);
-            });
-
         return new Response($this->get('templating')->render('::inside-elife-article.html.twig', $arguments));
     }
 }

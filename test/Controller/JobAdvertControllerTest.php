@@ -26,6 +26,7 @@ final class JobAdvertControllerTest extends PageTestCase
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertSame('Job advert title', $crawler->filter('.content-header__title')->text());
+        $this->assertSame('Jan 1, 2010', trim(preg_replace('!\s+!', ' ', $crawler->filter('.content-header .meta')->text())));
         $this->assertContains('Closing date for applications is '.date('F j, Y', strtotime('+1 day')).'.', $crawler->filter('main')->text());
         $this->assertContains('Job advert text.', $crawler->filter('main')->text());
     }

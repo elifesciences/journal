@@ -14,7 +14,6 @@ use eLife\Patterns\ViewModel\ContentHeader;
 use eLife\Patterns\ViewModel\ContentHeaderNew;
 use eLife\Patterns\ViewModel\GridListing;
 use eLife\Patterns\ViewModel\ListingTeasers;
-use eLife\Patterns\ViewModel\SocialMediaSharersNew;
 use eLife\Patterns\ViewModel\Teaser;
 use function GuzzleHttp\Promise\all;
 use Pagerfanta\Pagerfanta;
@@ -81,10 +80,8 @@ final class DigestsController extends Controller
             ->then($this->checkSlug($request, Callback::method('getTitle')));
 
         $arguments = $this->defaultPageArguments($request, $arguments['item']);
-
+        
         $arguments['isMagazine'] = true;
-
-        $arguments['hasSocialMedia'] = true;
 
         $arguments['title'] = $arguments['item']
             ->then(Callback::method('getTitle'));
@@ -94,19 +91,7 @@ final class DigestsController extends Controller
             ->otherwise($this->mightNotExist())
             ->otherwise($this->softFailure('Failed to load page views count'));
 
-        $arguments['contextualDataMetrics'] = all(['pageViews' => $arguments['pageViews']])
-            ->then(function (array $parts) {
-                /** @var int|null $pageViews */
-                $pageViews = $parts['pageViews'];
-
-                $metrics = [];
-
-                if (null !== $pageViews && $pageViews > 0) {
-                    $metrics[] = sprintf('<span class="contextual-data__counter">%s</span> %s', number_format($pageViews), 'views');
-                }
-
-                return $metrics;
-            });
+        $arguments = array_merge($arguments, $this->magazinePageArguments($arguments, 'digest'));
 
         $arguments['contentHeader'] = all(['item' => $arguments['item'], 'metrics' => $arguments['contextualDataMetrics']])
             ->then(function (array $parts) {
@@ -134,14 +119,7 @@ final class DigestsController extends Controller
                     return !($image instanceof CaptionedAsset);
                 });
             });
-        
-        $arguments['socialMediaSharersLinks'] = all(['item' => $arguments['item']])
-            ->then(function (array $parts) {
-                $context['variant'] = 'digest';
-
-                return $this->convertTo($parts['item'], SocialMediaSharersNew::class, $context);
-            });
-        
+            
         return new Response($this->get('templating')->render('::digest.html.twig', $arguments));
     }
 }
