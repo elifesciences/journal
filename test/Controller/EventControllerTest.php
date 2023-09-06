@@ -26,7 +26,7 @@ final class EventControllerTest extends PageTestCase
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertSame('Event title', $crawler->filter('.content-header__title')->text());
-        $this->assertSame('Jan 1, 2010', trim(preg_replace('!\s+!', ' ', $crawler->filter('.content-header .meta')->text())));
+        $this->assertSame('Sep 6, 2023', trim(preg_replace('!\s+!', ' ', $crawler->filter('.content-header .meta')->text())));
         $this->assertContains('Event text.', $crawler->filter('main')->text());
     }
 
@@ -273,8 +273,8 @@ final class EventControllerTest extends PageTestCase
                     'id' => '1',
                     'title' => 'Event title',
                     'published' => '2010-01-01T00:00:00Z',
-                    'starts' => (new DateTimeImmutable('+1 day'))->format(ApiSdk::DATE_FORMAT),
-                    'ends' => (new DateTimeImmutable('+2 days'))->format(ApiSdk::DATE_FORMAT),
+                    'starts' => '2023-09-06T00:00:00Z',
+                    'ends' => (new DateTimeImmutable('+1 days'))->format(ApiSdk::DATE_FORMAT),
                     'content' => [
                         [
                             'type' => 'paragraph',
