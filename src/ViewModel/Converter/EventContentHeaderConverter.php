@@ -10,8 +10,6 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 final class EventContentHeaderConverter implements ViewModelConverter
 {
-    use CreatesDate;
-
     private $urlGenerator;
 
     public function __construct(UrlGeneratorInterface $urlGenerator)
@@ -24,10 +22,7 @@ final class EventContentHeaderConverter implements ViewModelConverter
      */
     public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
-        $meta = null;
-        if ($date = $this->simpleDate($object, ['date' => 'published'] + $context)) {
-            $meta = ViewModel\MetaNew::withDate($date);
-        }
+        $meta = ViewModel\MetaNew::withDate(ViewModel\Date::simple($object->getStarts()));
 
         return new ViewModel\ContentHeaderNew(
             $object->getTitle(),
