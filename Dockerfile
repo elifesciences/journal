@@ -9,7 +9,8 @@ ENV PHP_ENTRYPOINT=web/app.php
 WORKDIR ${PROJECT_FOLDER}
 
 USER root
-RUN pecl install redis && \
+# lsh@2023-09-18: redis pinned to 5.x line as 6.0 requires php>=7.2
+RUN pecl install redis-5.3.7 && \
     docker-php-ext-enable redis && \
     rm -rf /tmp/pear/
 RUN mkdir -p build var && \
