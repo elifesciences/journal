@@ -133,12 +133,6 @@ final class WhoWeWorkWithController extends Controller
                 'uri' => 'https://www.thenakedscientists.com/',
             ],
             [
-                'name' => 'New Relic',
-                'filename' => 'new-relic-logo',
-                'type' => 'image/svg+xml',
-                'uri' => 'https://newrelic.com/',
-            ],
-            [
                 'name' => 'Publons',
                 'filename' => 'publons',
                 'type' => 'image/svg+xml',

@@ -14,9 +14,6 @@ elifePipeline {
 
     stage 'Deploy to prod', {
         lock('journal--prod') {
-            if (!params.force) {
-                elifeNewRelicEnsureApdex(29775807)
-            }
             elifeDeploySlackNotification 'journal', 'prod'
             node('containers-jenkins-plugin') {
                 DockerImage.elifesciences(this, "journal", commit).pull().tag('latest').push()

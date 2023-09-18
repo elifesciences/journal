@@ -36,7 +36,6 @@ monolog:
             members:
                 - text
                 - json
-                - newrelic
         text:
             type: stream
             path: '%kernel.logs_dir%/%kernel.environment%.txt.log'
@@ -47,9 +46,6 @@ monolog:
             path: '%kernel.logs_dir%/%kernel.environment%.json.log'
             level: debug
             formatter: monolog.formatter.json
-        newrelic:
-            type: newrelic
-            level: error
 
 nelmio_security:
     csp:
