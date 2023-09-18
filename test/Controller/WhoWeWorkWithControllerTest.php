@@ -96,10 +96,6 @@ final class WhoWeWorkWithControllerTest extends PageTestCase
                     'The Naked Scientists',
                 ],
                 [
-                    'https://newrelic.com/',
-                    'New Relic',
-                ],
-                [
                     'https://publons.com/',
                     'Publons',
                 ],
