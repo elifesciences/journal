@@ -409,6 +409,113 @@ final class CollectionControllerTest extends PageTestCase
     /**
      * @test
      */
+    public function it_displays_reviewed_preprints()
+    {
+        $client = static::createClient();
+        $url = '/collections/1/collection-title';
+
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/collections/1',
+                ['Accept' => 'application/vnd.elife.collection+json; version=3']
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.collection+json; version=3'],
+                json_encode([
+                    'id' => '1',
+                    'title' => 'Collection title',
+                    'published' => '2010-01-01T00:00:00Z',
+                    'updated' => '2011-01-01T00:00:00Z',
+                    'image' => [
+                        'banner' => [
+                            'uri' => 'https://www.example.com/iiif/ban%2Fner',
+                            'alt' => '',
+                            'source' => [
+                                'mediaType' => 'image/jpeg',
+                                'uri' => 'https://www.example.com/banner.jpg',
+                                'filename' => 'image.jpg',
+                            ],
+                            'size' => [
+                                'width' => 3872,
+                                'height' => 2581,
+                            ],
+                        ],
+                        'thumbnail' => [
+                            'uri' => 'https://www.example.com/iiif/image',
+                            'alt' => '',
+                            'source' => [
+                                'mediaType' => 'image/jpeg',
+                                'uri' => 'https://www.example.com/image.jpg',
+                                'filename' => 'image.jpg',
+                            ],
+                            'size' => [
+                                'width' => 800,
+                                'height' => 600,
+                            ],
+                        ],
+                    ],
+                    'impactStatement' => 'Collection impact statement',
+                    'selectedCurator' => [
+                        'id' => 'person',
+                        'type' => [
+                            'id' => 'senior-editor',
+                            'label' => 'Senior editor',
+                        ],
+                        'name' => [
+                            'preferred' => 'Person',
+                            'index' => 'Person',
+                        ],
+                    ],
+                    'curators' => [
+                        [
+                            'id' => 'person',
+                            'type' => [
+                                'id' => 'senior-editor',
+                                'label' => 'Senior editor',
+                            ],
+                            'name' => [
+                                'preferred' => 'Person',
+                                'index' => 'Person',
+                            ],
+                        ],
+                    ],
+                    'content' => [
+                        [
+                            "type" => "reviewed-preprint",
+                            "id" => "19560",
+                            "doi" => "10.7554/eLife.19560",
+                            "status" => "reviewed",
+                            "authorLine" => "Lee R Berger, John Hawks ... Scott A Williams",
+                            "title" => "Collection with reviewed-preprint",
+                            "indexContent" => "<i>Homo naledi</i>, a new species of the genus <i>Homo</i> from the Dinaledi Chamber, South Africa",
+                            "titlePrefix" => "Title prefix",
+                            "stage" => "published",
+                            "published" => "2022-08-01T00:00:00Z",
+                            "reviewedDate" => "2022-08-01T00:00:00Z",
+                            "versionDate" => "2022-08-05T00:00:00Z",
+                            "statusDate" => "2022-08-01T00:00:00Z",
+                            "volume" => 4,
+                            "elocationId" => "e19560",
+                        ],
+                    ],
+                ])
+            )
+        );
+
+
+        $crawler = $client->request('GET', $url);
+
+        $this->assertSame(200, $client->getResponse()->getStatusCode());
+
+        $this->assertSame('Collection title', $crawler->filter('.content-header__title')->text());
+        $this->assertSame('Collection with reviewed-preprint', trim($crawler->filter('#maincontent #primaryListing .teaser__header_text')->text()));
+    }
+
+    /**
+     * @test
+     */
     public function it_has_metadata()
     {
         $client = static::createClient();
