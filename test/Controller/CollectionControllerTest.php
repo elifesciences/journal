@@ -90,11 +90,11 @@ final class CollectionControllerTest extends PageTestCase
             new Request(
                 'GET',
                 'http://api.elifesciences.org/collections/1',
-                ['Accept' => 'application/vnd.elife.collection+json; version=2']
+                ['Accept' => 'application/vnd.elife.collection+json; version=3']
             ),
             new Response(
                 200,
-                ['Content-Type' => 'application/vnd.elife.collection+json; version=2'],
+                ['Content-Type' => 'application/vnd.elife.collection+json; version=3'],
                 json_encode([
                     'id' => '1',
                     'title' => 'Collection title',
@@ -212,11 +212,11 @@ final class CollectionControllerTest extends PageTestCase
             new Request(
                 'GET',
                 'http://api.elifesciences.org/collections/1',
-                ['Accept' => 'application/vnd.elife.collection+json; version=2']
+                ['Accept' => 'application/vnd.elife.collection+json; version=3']
             ),
             new Response(
                 200,
-                ['Content-Type' => 'application/vnd.elife.collection+json; version=2'],
+                ['Content-Type' => 'application/vnd.elife.collection+json; version=3'],
                 json_encode([
                     'id' => '1',
                     'title' => 'Collection title',
@@ -314,11 +314,11 @@ final class CollectionControllerTest extends PageTestCase
             new Request(
                 'GET',
                 'http://api.elifesciences.org/collections/1',
-                ['Accept' => 'application/vnd.elife.collection+json; version=2']
+                ['Accept' => 'application/vnd.elife.collection+json; version=3']
             ),
             new Response(
                 200,
-                ['Content-Type' => 'application/vnd.elife.collection+json; version=2'],
+                ['Content-Type' => 'application/vnd.elife.collection+json; version=3'],
                 json_encode([
                     'id' => '1',
                     'title' => 'Collection title',
@@ -602,7 +602,7 @@ final class CollectionControllerTest extends PageTestCase
                 'GET',
                 'http://api.elifesciences.org/collections/1',
                 [
-                    'Accept' => 'application/vnd.elife.collection+json; version=2',
+                    'Accept' => 'application/vnd.elife.collection+json; version=3',
                 ]
             ),
             new Response(
@@ -627,11 +627,11 @@ final class CollectionControllerTest extends PageTestCase
             new Request(
                 'GET',
                 'http://api.elifesciences.org/collections/1',
-                ['Accept' => 'application/vnd.elife.collection+json; version=2']
+                ['Accept' => 'application/vnd.elife.collection+json; version=3']
             ),
             new Response(
                 200,
-                ['Content-Type' => 'application/vnd.elife.collection+json; version=2'],
+                ['Content-Type' => 'application/vnd.elife.collection+json; version=3'],
                 json_encode([
                     'id' => '1',
                     'title' => 'Collection title',
