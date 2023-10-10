@@ -139,11 +139,11 @@ final class CollectionContext extends Context
                     new Request(
                         'GET',
                         'http://api.elifesciences.org/collections/'.$collection['id'],
-                        ['Accept' => 'application/vnd.elife.collection+json; version=1']
+                        ['Accept' => 'application/vnd.elife.collection+json; version=3']
                     ),
                     new Response(
                         200,
-                        ['Content-Type' => 'application/vnd.elife.collection+json; version=1'],
+                        ['Content-Type' => 'application/vnd.elife.collection+json; version=3'],
                         json_encode($collection)
                     )
                 );

@@ -119,7 +119,7 @@ final class StatusDateOverrideMiddlewareTest extends KernelTestCase
                 $this->createArticleVoR('vor-with-rds-article', null, false),
                 $this->createArticleVoR('vor-with-rds-article', '2030-01-02T00:00:00Z', false),
             ],
-            'application/vnd.elife.collection+json; version=2' => [
+            'application/vnd.elife.collection+json; version=3' => [
                 $this->createCollection('vor-with-rds-article', null, false),
                 $this->createCollection('vor-with-rds-article', '2030-01-02T00:00:00Z', false),
             ],
