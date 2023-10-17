@@ -96,7 +96,7 @@ final class SubjectRewritingMiddleware
                         $data['items'] = $this->updateItems($data['items']);
                         break;
 
-                    case 'application/vnd.elife.article-related+json; version=1':
+                    case 'application/vnd.elife.article-related+json; version=2':
                         $data = $this->updateItems($data);
                         break;
 

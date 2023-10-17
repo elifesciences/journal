@@ -4619,13 +4619,13 @@ final class ArticleControllerTest extends PageTestCase
                 'http://api.elifesciences.org/articles/00001/related',
                 [
                     'Accept' => [
-                        'application/vnd.elife.article-related+json; version=1',
+                        'application/vnd.elife.article-related+json; version=2',
                     ],
                 ]
             ),
             new Response(
                 200,
-                ['Content-Type' => 'application/vnd.elife.article-related+json; version=1'],
+                ['Content-Type' => 'application/vnd.elife.article-related+json; version=2'],
                 json_encode([
                     [
                         'status' => 'vor',
@@ -4706,6 +4706,26 @@ final class ArticleControllerTest extends PageTestCase
                             'statement' => 'Copyright statement.',
                         ],
                         'authorLine' => 'Author One et al.',
+                    ],
+                    [
+                        "id" => "80494",
+                        "doi" => "10.1101/2022.06.24.497502",
+                        "pdf" => "https://www.biorxiv.org/content/10.1101/2022.06.24.497502v1.full.pdf",
+                        "status" => "reviewed",
+                        "authorLine" => "Tianze Xu, Jing Cai ... Kuanyu Li",
+                        "title" => "Aging-related iron deposit prevents the benefits of HRT from late postmenopausal atherosclerosis",
+                        "stage" => "published",
+                        "type" => "reviewed-preprint",
+                        "published" => "2022-10-20T03:00:00Z",
+                        "reviewedDate" => "2022-10-20T03:00:00Z",
+                        "versionDate" => "2022-10-20T03:00:00Z",
+                        "statusDate" => "2022-10-20T03:00:00Z",
+                        "subjects" => [
+                            [
+                                "id" => "cell-biology",
+                                "name" => "Cell Biology",
+                            ],
+                        ],
                     ],
                 ])
             )
