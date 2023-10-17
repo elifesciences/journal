@@ -24,6 +24,7 @@ use eLife\ApiSdk\Model\HasContent;
 use eLife\ApiSdk\Model\Identifier;
 use eLife\ApiSdk\Model\Model;
 use eLife\ApiSdk\Model\PublicReview;
+use eLife\ApiSdk\Model\ReviewedPreprint;
 use eLife\ApiSdk\Model\Reviewer;
 use eLife\Journal\Exception\EarlyResponse;
 use eLife\Journal\Helper\Callback;
@@ -1090,6 +1091,9 @@ final class ArticlesController extends Controller
                     }
 
                     foreach ($relatedArticles as $relatedArticle) {
+                        if ($relatedArticle instanceof ReviewedPreprint) {
+                            continue;
+                        }
                         switch ($relatedArticle->getType()) {
                             case 'correction':
                                 $infoBars[] = new InfoBar('This article has been corrected. Read the <a href="'.$this->get('router')->generate('article', [$relatedArticle]).'">correction notice</a>.', InfoBar::TYPE_CORRECTION);
