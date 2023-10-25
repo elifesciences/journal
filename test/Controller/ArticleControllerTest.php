@@ -4737,13 +4737,13 @@ final class ArticleControllerTest extends PageTestCase
                 'http://api.elifesciences.org/recommendations/article/00001?page=1&per-page=100&order=desc',
                 [
                     'Accept' => [
-                        'application/vnd.elife.recommendations+json; version=2',
+                        'application/vnd.elife.recommendations+json; version=3',
                     ],
                 ]
             ),
             new Response(
                 200,
-                ['Content-Type' => 'application/vnd.elife.recommendations+json; version=2'],
+                ['Content-Type' => 'application/vnd.elife.recommendations+json; version=3'],
                 json_encode([
                     'total' => 7,
                     'items' => [

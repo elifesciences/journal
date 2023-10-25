@@ -217,7 +217,7 @@ final class StatusDateOverrideMiddlewareTest extends KernelTestCase
                     ],
                 ],
             ],
-            'application/vnd.elife.recommendations+json; version=2' => [
+            'application/vnd.elife.recommendations+json; version=3' => [
                 [
                     'total' => 2,
                     'items' => [
