@@ -1240,12 +1240,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-sdk-php.git",
-                "reference": "c1fa27acc0562c9a6a826a946147969bf8c3785d"
+                "reference": "3747c6d7e6cf763f3cd84800d853c07db84287ea"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/c1fa27acc0562c9a6a826a946147969bf8c3785d",
-                "reference": "c1fa27acc0562c9a6a826a946147969bf8c3785d",
+                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/3747c6d7e6cf763f3cd84800d853c07db84287ea",
+                "reference": "3747c6d7e6cf763f3cd84800d853c07db84287ea",
                 "shasum": ""
             },
             "require": {
@@ -1260,7 +1260,7 @@
             },
             "require-dev": {
                 "csa/guzzle-cache-middleware": "^1.0",
-                "elife/api": "^2.25",
+                "elife/api": "^2.26",
                 "elife/api-validator": "^1.0@dev",
                 "guzzlehttp/guzzle": "^6.0",
                 "justinrainbow/json-schema": "^3.0 || ^4.0 || ^5.0",
@@ -1290,7 +1290,7 @@
                 "issues": "https://github.com/elifesciences/api-sdk-php/issues",
                 "source": "https://github.com/elifesciences/api-sdk-php/tree/rp-related"
             },
-            "time": "2023-10-13T12:05:45+00:00"
+            "time": "2023-10-24T07:46:34+00:00"
         },
         {
             "name": "elife/civi-contacts",
