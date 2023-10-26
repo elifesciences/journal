@@ -57,7 +57,8 @@ final class AboutController extends Controller
             ->append(new SelectOption('directors', 'Board of directors', 'directors' === $type))
             ->append(new SelectOption('early-career', 'Early-career advisory group', 'early-career' === $type))
             ->append(new SelectOption('ethics-committee', 'Ethics committee', 'ethics-committee' === $type))
-            ->append(new SelectOption('staff', 'Executive staff', 'staff' === $type));
+            // SA 26/10/23: remove staff page from about pages
+            // ->append(new SelectOption('staff', 'Executive staff', 'staff' === $type));
 
         $people = $this->get('elife.api_sdk.people')->reverse();
 
@@ -113,11 +114,12 @@ final class AboutController extends Controller
 
                 $impactStatement = 'A new eLife Ethics Committee will advise and develop policy focused on establishing and maintaining the highest standards of research and publication practices across the scope of the journal.';
                 break;
-            case 'staff':
-                $arguments['title'] = 'Executive staff';
+            // SA 26/10/23: remove staff page from about pages
+            // case 'staff':
+            //     $arguments['title'] = 'Executive staff';
 
-                $arguments['lists'][] = $this->createAboutProfiles($people->forType('executive'), 'Executive staff');
-                break;
+            //     $arguments['lists'][] = $this->createAboutProfiles($people->forType('executive'), 'Executive staff');
+            //     break;
             default:
                 $arguments['subject'] = $subjects->get($type)->otherwise($this->mightNotExist())
                     ->then(function (Subject $subject) use ($type) {
