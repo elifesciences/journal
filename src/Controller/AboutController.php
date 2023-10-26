@@ -117,7 +117,7 @@ final class AboutController extends Controller
             // SA 26/10/23: remove staff page from about pages
             // case 'staff':
             //     $arguments['title'] = 'Executive staff';
-
+            //
             //     $arguments['lists'][] = $this->createAboutProfiles($people->forType('executive'), 'Executive staff');
             //     break;
             default:
