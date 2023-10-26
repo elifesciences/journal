@@ -56,7 +56,7 @@ final class AboutController extends Controller
             ->prepend(new SelectOption('', 'Leadership team', '' === $type))
             ->append(new SelectOption('directors', 'Board of directors', 'directors' === $type))
             ->append(new SelectOption('early-career', 'Early-career advisory group', 'early-career' === $type))
-            ->append(new SelectOption('ethics-committee', 'Ethics committee', 'ethics-committee' === $type))
+            ->append(new SelectOption('ethics-committee', 'Ethics committee', 'ethics-committee' === $type));
             // SA 26/10/23: remove staff page from about pages
             // ->append(new SelectOption('staff', 'Executive staff', 'staff' === $type));
 
