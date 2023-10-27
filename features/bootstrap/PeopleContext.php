@@ -534,7 +534,7 @@ final class PeopleContext extends Context
 
         $this->assertSession()->elementContains(
             'css',
-            '.list-heading:contains("co-Editor-in-Chief") + .about-profiles > .about-profiles__item:nth-child(1)',
+            '.list-heading:contains("Editor-in-Chief") + .about-profiles > .about-profiles__item:nth-child(1)',
             $name
         );
     }

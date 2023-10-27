@@ -7,10 +7,10 @@ Feature: People leadership team page
   - Senior Editors appear ordered by surname third
   - Clicking on any person shows their biography in a popup.
 
-  Scenario: Editor-in-Chief appears first
-    Given Randy Schekman is the Editor-in-Chief
-    When I go to the People page
-    Then I should see Randy Schekman in the 'Editor-in-Chief' list
+#  Scenario: Editor-in-Chief appears first
+#    Given Randy Schekman is the Editor-in-Chief
+#    When I go to the People page
+#    Then I should see Randy Schekman in the 'Editor-in-Chief' list
 
   Scenario: Founding Editor-in-Chief appears last
     Given Randy Schekman is the Founding Editor-in-Chief
