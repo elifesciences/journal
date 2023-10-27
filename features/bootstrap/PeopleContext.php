@@ -130,7 +130,7 @@ final class PeopleContext extends Context
             'id' => $id,
             'type' => [
                 'id' => 'leadership',
-                'label' => 'Editor-in-Chief',
+                'label' => 'co-Editor-in-Chief',
             ],
             'name' => [
                 'preferred' => $name,
@@ -530,11 +530,11 @@ final class PeopleContext extends Context
      */
     public function iShouldSeeInTheEditorInChiefList(string $name)
     {
-        $this->assertSession()->elementsCount('css', '.list-heading:contains("Editor-in-Chief") + .about-profiles > .about-profiles__item', 1);
+        $this->assertSession()->elementsCount('css', '.list-heading:contains("co-Editor-in-Chief") + .about-profiles > .about-profiles__item', 1);
 
         $this->assertSession()->elementContains(
             'css',
-            '.list-heading:contains("Editor-in-Chief") + .about-profiles > .about-profiles__item:nth-child(1)',
+            '.list-heading:contains("co-Editor-in-Chief") + .about-profiles > .about-profiles__item:nth-child(1)',
             $name
         );
     }
