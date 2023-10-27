@@ -71,7 +71,7 @@ final class AboutController extends Controller
                 $leadership = $people->forType('leadership');
 
                 $editorInChief = $leadership->filter(function (Person $person) {
-                    return 'co-Editor-in-Chief' === $person->getTypeLabel();
+                    return 'Editor-in-Chief' === $person->getTypeLabel();
                 });
                 $foundingEditorInChief = $people->get(self::FOUNDING_EDITOR_IN_CHIEF_ID)
                     ->then(function (Person $person) {
@@ -79,7 +79,7 @@ final class AboutController extends Controller
                     })
                     ->otherwise($this->softFailure('Failed to load the Founding Editor-in-Chief', new EmptySequence()));
                 $deputyEditors = $leadership->filter(function (Person $person) {
-                    return 'co-Editor-in-Chief' !== $person->getTypeLabel();
+                    return 'Editor-in-Chief' !== $person->getTypeLabel();
                 });
 
                 $arguments['lists'][] = $this->createAboutProfiles($editorInChief, 'co-Editor-in-Chief');
