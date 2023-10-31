@@ -4932,6 +4932,238 @@ final class ArticleControllerTest extends PageTestCase
     /**
      * @test
      */
+    public function it_displays_reviewed_preprint_in_recommendations()
+    {
+        $client = static::createClient();
+
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/articles/00001',
+                ['Accept' => 'application/vnd.elife.article-poa+json; version=3, application/vnd.elife.article-vor+json; version=7']
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.article-vor+json; version=7'],
+                json_encode([
+                    'status' => 'vor',
+                    'stage' => 'published',
+                    'id' => '00001',
+                    'version' => 1,
+                    'type' => 'research-article',
+                    'doi' => '10.7554/eLife.00001',
+                    'doiVersion' => '10.7554/eLife.00001.1',
+                    'title' => 'Article 1 title',
+                    'published' => '2010-01-01T00:00:00Z',
+                    'versionDate' => '2010-01-01T00:00:00Z',
+                    'statusDate' => '2010-01-01T00:00:00Z',
+                    'volume' => 1,
+                    'elocationId' => 'RP00001',
+                    'copyright' => [
+                        'license' => 'CC-BY-4.0',
+                        'holder' => 'Bar',
+                        'statement' => 'Copyright statement.',
+                    ],
+                    'authorLine' => 'Foo Bar',
+                    'authors' => [
+                        [
+                            'type' => 'person',
+                            'name' => [
+                                'preferred' => 'Foo Bar',
+                                'index' => 'Bar, Foo',
+                            ],
+                        ],
+                    ],
+                    'body' => [
+                        [
+                            'type' => 'section',
+                            'id' => 's-1',
+                            'title' => 'Introduction',
+                            'content' => [
+                                [
+                                    'type' => 'paragraph',
+                                    'text' => 'Fossil hominins were first recognized in the Dinaledi Chamber in the Rising Star cave system in October 2013. During a relatively short excavation, our team recovered an extensive collection of 1550 hominin specimens, representing nearly every element of the skeleton multiple times (Figure 1), including many complete elements and morphologically informative fragments, some in articulation, as well as smaller fragments many of which could be refit into more complete elements. The collection is a morphologically homogeneous sample that can be attributed to no previously-known hominin species. Here we describe this new species, <i>Homo naledi</i>. We have not defined <i>H. naledi</i> narrowly based on a single jaw or skull because the entire body of material has informed our understanding of its biology.',
+                                ],
+                            ],
+                        ],
+                    ],
+                ])
+            )
+        );
+
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/articles/00001/versions',
+                [
+                    'Accept' => [
+                        'application/vnd.elife.article-history+json; version=2',
+                    ],
+                ]
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.article-history+json; version=2'],
+                json_encode([
+                    'versions' => [
+                        [
+                            'status' => 'vor',
+                            'stage' => 'published',
+                            'id' => '00001',
+                            'version' => 1,
+                            'type' => 'research-article',
+                            'doi' => '10.7554/eLife.00001',
+                            'title' => 'Article title',
+                            'published' => '2010-01-01T00:00:00Z',
+                            'versionDate' => '2010-01-01T00:00:00Z',
+                            'statusDate' => '2010-01-01T00:00:00Z',
+                            'volume' => 1,
+                            'elocationId' => 'e00001',
+                            'copyright' => [
+                                'license' => 'CC-BY-4.0',
+                                'holder' => 'Author One',
+                                'statement' => 'Copyright statement.',
+                            ],
+                            'authorLine' => 'Author One et al.',
+                        ],
+                    ],
+                ])
+            )
+        );
+
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/articles/00001/related',
+                [
+                    'Accept' => [
+                        'application/vnd.elife.article-related+json; version=2',
+                    ],
+                ]
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.article-related+json; version=2'],
+                json_encode([
+                    [
+                        "id" => "80494",
+                        "doi" => "10.1101/2022.06.24.497502",
+                        "pdf" => "https://www.biorxiv.org/content/10.1101/2022.06.24.497502v1.full.pdf",
+                        "status" => "reviewed",
+                        "authorLine" => "Tianze Xu, Jing Cai ... Kuanyu Li",
+                        "title" => "reviewed-preprint 1",
+                        "stage" => "published",
+                        "type" => "reviewed-preprint",
+                        "published" => "2022-10-20T03:00:00Z",
+                        "reviewedDate" => "2022-10-20T03:00:00Z",
+                        "versionDate" => "2022-10-20T03:00:00Z",
+                        "statusDate" => "2022-10-20T03:00:00Z",
+                        "subjects" => [
+                            [
+                                "id" => "cell-biology",
+                                "name" => "Cell Biology"
+                            ]
+                        ]
+                    ],
+                    [
+                        "id" => "80495",
+                        "doi" => "10.1101/2022.06.24.80495",
+                        "pdf" => "https://www.biorxiv.org/content/10.1101/2022.06.24.497502v1.full.pdf",
+                        "status" => "reviewed",
+                        "authorLine" => "Tianze Xu, Jing Cai ... Kuanyu Li",
+                        "title" => "reviewed preprint 2",
+                        "stage" => "published",
+                        "type" => "reviewed-preprint",
+                        "published" => "2022-10-20T03:00:00Z",
+                        "reviewedDate" => "2022-10-20T03:00:00Z",
+                        "versionDate" => "2022-10-20T03:00:00Z",
+                        "statusDate" => "2022-10-20T03:00:00Z",
+                        "subjects" => [
+                            [
+                                "id" => "cell-biology",
+                                "name" => "Cell Biology"
+                            ]
+                        ]
+                    ],
+                ])
+            )
+        );
+
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/recommendations/article/00001?page=1&per-page=100&order=desc',
+                [
+                    'Accept' => [
+                        'application/vnd.elife.recommendations+json; version=3',
+                    ],
+                ]
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.recommendations+json; version=3'],
+                json_encode([
+                    'total' => 3,
+                    'items' => [
+                        [
+                            "id" => "80494",
+                            "doi" => "10.1101/2022.06.24.497502",
+                            "pdf" => "https://www.biorxiv.org/content/10.1101/2022.06.24.497502v1.full.pdf",
+                            "status" => "reviewed",
+                            "authorLine" => "Tianze Xu, Jing Cai ... Kuanyu Li",
+                            "title" => "reviewed-preprint 1",
+                            "stage" => "published",
+                            "type" => "reviewed-preprint",
+                            "published" => "2022-10-20T03:00:00Z",
+                            "reviewedDate" => "2022-10-20T03:00:00Z",
+                            "versionDate" => "2022-10-20T03:00:00Z",
+                            "statusDate" => "2022-10-20T03:00:00Z",
+                            "subjects" => [
+                                [
+                                    "id" => "cell-biology",
+                                    "name" => "Cell Biology"
+                                ]
+                            ]
+                        ],
+                        [
+                            "id" => "80495",
+                            "doi" => "10.1101/2022.06.24.80495",
+                            "pdf" => "https://www.biorxiv.org/content/10.1101/2022.06.24.497502v1.full.pdf",
+                            "status" => "reviewed",
+                            "authorLine" => "Tianze Xu, Jing Cai ... Kuanyu Li",
+                            "title" => "reviewed preprint 2",
+                            "stage" => "published",
+                            "type" => "reviewed-preprint",
+                            "published" => "2022-10-20T03:00:00Z",
+                            "reviewedDate" => "2022-10-20T03:00:00Z",
+                            "versionDate" => "2022-10-20T03:00:00Z",
+                            "statusDate" => "2022-10-20T03:00:00Z",
+                            "subjects" => [
+                                [
+                                    "id" => "cell-biology",
+                                    "name" => "Cell Biology"
+                                ]
+                            ]
+                        ],
+                    ],
+                ])
+            )
+        );
+
+        $crawler = $client->request('GET', '/articles/00001');
+
+        $this->assertSame(200, $client->getResponse()->getStatusCode());
+        $this->assertContains('reviewed-preprint 1', $crawler->filter('.teaser--related .teaser__header_text')->text());
+
+        $furtherReading = $crawler->filter('.listing-list-heading:contains("Further reading") + .listing-list > .listing-list__item');
+        $this->assertCount(2, $furtherReading);
+        $this->assertCount(1, $crawler->filter('.listing-list__item--related'));
+        $this->assertContains('reviewed preprint 2', $furtherReading->filter('.content-header__title_link')->eq(1)->text());
+    }
+
+    /**
+     * @test
+     */
     public function it_displays_vor_prc_article()
     {
         $client = static::createClient();
