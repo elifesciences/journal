@@ -560,7 +560,7 @@ services:
         tags:
           - name: view_model.converter
 
-    elife.journal.view_model.converter.reviwed_preprint.read_more_item:
+    elife.journal.view_model.converter.reviewed_preprint.read_more_item:
         class: eLife\Journal\ViewModel\Converter\ReviewedPreprintReadMoreItemConverter
         public: false
         arguments:
