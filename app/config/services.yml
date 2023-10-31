@@ -1175,6 +1175,15 @@ services:
         tags:
           - name: view_model.converter
 
+    elife.journal.view_model.converter.reviewed_preprint.teaser.related_item:
+        class: eLife\Journal\ViewModel\Converter\ReviewedPreprintRelatedItemTeaserConverter
+        public: false
+        arguments:
+          - '@elife.journal.view_model.converter'
+          - '@router'
+        tags:
+          - name: view_model.converter
+
     elife.journal.view_model.converter.form_view:
         class: eLife\Journal\ViewModel\Converter\FormViewConverter
         public: false
