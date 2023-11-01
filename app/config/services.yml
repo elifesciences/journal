@@ -560,6 +560,16 @@ services:
         tags:
           - name: view_model.converter
 
+    elife.journal.view_model.converter.reviewed_preprint.read_more_item:
+        class: eLife\Journal\ViewModel\Converter\ReviewedPreprintReadMoreItemConverter
+        public: false
+        arguments:
+          - '@elife.journal.view_model.converter'
+          - '@elife.patterns.pattern_renderer'
+          - '@router'
+        tags:
+          - name: view_model.converter
+
     elife.journal.view_model.converter.article.reference:
         class: eLife\Journal\ViewModel\Converter\ArticleReferenceConverter
         public: false
@@ -1162,6 +1172,15 @@ services:
     elife.journal.view_model.converter.external_article.teaser.related_item:
         class: eLife\Journal\ViewModel\Converter\ExternalArticleRelatedItemTeaserConverter
         public: false
+        tags:
+          - name: view_model.converter
+
+    elife.journal.view_model.converter.reviewed_preprint.teaser.related_item:
+        class: eLife\Journal\ViewModel\Converter\ReviewedPreprintRelatedItemTeaserConverter
+        public: false
+        arguments:
+          - '@elife.journal.view_model.converter'
+          - '@router'
         tags:
           - name: view_model.converter
 

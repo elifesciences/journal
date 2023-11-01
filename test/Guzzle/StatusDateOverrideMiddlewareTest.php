@@ -101,7 +101,7 @@ final class StatusDateOverrideMiddlewareTest extends KernelTestCase
                     ],
                 ],
             ],
-            'application/vnd.elife.article-related+json; version=1' => [
+            'application/vnd.elife.article-related+json; version=2' => [
                 [
                     $this->createArticlePoA('poa-with-rds-article'),
                     $this->createArticleVoR('vor-with-rds-article'),
@@ -217,7 +217,7 @@ final class StatusDateOverrideMiddlewareTest extends KernelTestCase
                     ],
                 ],
             ],
-            'application/vnd.elife.recommendations+json; version=2' => [
+            'application/vnd.elife.recommendations+json; version=3' => [
                 [
                     'total' => 2,
                     'items' => [

@@ -24,6 +24,7 @@ use eLife\ApiSdk\Model\HasContent;
 use eLife\ApiSdk\Model\Identifier;
 use eLife\ApiSdk\Model\Model;
 use eLife\ApiSdk\Model\PublicReview;
+use eLife\ApiSdk\Model\ReviewedPreprint;
 use eLife\ApiSdk\Model\Reviewer;
 use eLife\Journal\Exception\EarlyResponse;
 use eLife\Journal\Helper\Callback;
@@ -729,9 +730,9 @@ final class ArticlesController extends Controller
         $arguments['viewSelector'] = $this->createViewSelector($arguments['item'], $arguments['isMagazine'], $arguments['hasFigures'], false, $arguments['history'], $arguments['body'], $arguments['eraArticle']);
 
         $arguments['tabbedNavigation'] = $this->createTabbedNavigation($arguments['item'], $arguments['isMagazine'], $arguments['hasFigures'], false, $arguments['history'], $arguments['body'], $arguments['eraArticle']);
-        
+
         $arguments['jumpMenu'] = $this->createJumpMenu($arguments['item'], $arguments['isMagazine'], $arguments['hasFigures'], false, $arguments['history'], $arguments['body'], $arguments['eraArticle']);
-        
+
         $arguments['body'] = all(['item' => $arguments['item'], 'body' => $arguments['body'], 'downloadLinks' => $arguments['downloadLinks']])
             ->then(function (array $parts) {
                 $item = $parts['item'];
@@ -1080,7 +1081,7 @@ final class ArticlesController extends Controller
                 }
 
                 if (count($relatedArticles) > 0) {
-                    switch ($type = $item->getType()) {
+                    switch ($item->getType()) {
                         case 'correction':
                             $infoBars[] = new InfoBar('This is a correction notice. Read the <a href="'.$this->get('router')->generate('article', [$relatedArticles[0]]).'">corrected article</a>.', InfoBar::TYPE_CORRECTION);
                             break;
@@ -1090,6 +1091,9 @@ final class ArticlesController extends Controller
                     }
 
                     foreach ($relatedArticles as $relatedArticle) {
+                        if (!($relatedArticle instanceof ArticleVersion)) {
+                            continue;
+                        }
                         switch ($relatedArticle->getType()) {
                             case 'correction':
                                 $infoBars[] = new InfoBar('This article has been corrected. Read the <a href="'.$this->get('router')->generate('article', [$relatedArticle]).'">correction notice</a>.', InfoBar::TYPE_CORRECTION);
@@ -1204,7 +1208,7 @@ final class ArticlesController extends Controller
                                     new Link('Full text', $this->generatePath($history, $item->getVersion(), null, 'content')),
                                     !$isFiguresPage ? " tabbed-navigation__tab-label--active" : null
                                 );
-                
+
                 if ($hasFigures) {
                     $links[] = ViewModel\TabbedNavigationLink::fromLink(
                                     new Link('Figures<span class="tabbed-navigation__tab-label--long"> and data</span>', $this->generatePath($history, $item->getVersion(), 'figures', 'content')),
@@ -1271,7 +1275,7 @@ final class ArticlesController extends Controller
                         if ($viewModel instanceof ArticleSection) {
                             return new Link($viewModel['title'], '#'.$viewModel['id']);
                         }
-                
+
                         return null;
                     }, $sections))))
                 );
