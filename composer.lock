@@ -1270,7 +1270,6 @@
                 "psr/http-message": "^1.0",
                 "squizlabs/php_codesniffer": "^3.5"
             },
-            "default-branch": true,
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -1287,10 +1286,6 @@
                 "MIT"
             ],
             "description": "eLife Sciences API SDK",
-            "support": {
-                "issues": "https://github.com/elifesciences/api-sdk-php/issues",
-                "source": "https://github.com/elifesciences/api-sdk-php/tree/master"
-            },
             "time": "2023-10-31T10:14:10+00:00"
         },
         {
@@ -1338,12 +1333,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/patterns-php.git",
-                "reference": "c87cd2f40be27ad4ff59577d38a9162889725aa8"
+                "reference": "60d5deec9a052c2afb8090d8cde116a4f94f1a89"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/c87cd2f40be27ad4ff59577d38a9162889725aa8",
-                "reference": "c87cd2f40be27ad4ff59577d38a9162889725aa8",
+                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/60d5deec9a052c2afb8090d8cde116a4f94f1a89",
+                "reference": "60d5deec9a052c2afb8090d8cde116a4f94f1a89",
                 "shasum": ""
             },
             "require": {
@@ -1380,7 +1375,7 @@
                 "MIT"
             ],
             "description": "eLife patterns",
-            "time": "2023-10-12T09:49:26+00:00"
+            "time": "2023-11-16T10:57:53+00:00"
         },
         {
             "name": "fabpot/goutte",
@@ -4403,10 +4398,6 @@
                 "MIT"
             ],
             "description": "eLife Sciences API specification",
-            "support": {
-                "issues": "https://github.com/elifesciences/api-raml/issues",
-                "source": "https://github.com/elifesciences/api-raml/tree/2.26.0"
-            },
             "time": "2023-10-23T09:39:02+00:00"
         },
         {
@@ -6344,6 +6335,5 @@
     "platform-dev": [],
     "platform-overrides": {
         "php": "7.1.33"
-    },
-    "plugin-api-version": "2.3.0"
+    }
 }
