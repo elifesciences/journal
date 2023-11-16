@@ -54,11 +54,6 @@ default:
                 tags: '@community'
             contexts:
               - CommunityContext
-        contact:
-            filters:
-                tags: '@contact'
-            contexts:
-              - ContactContext
         content-alerts:
             filters:
                 tags: '@etoc'
