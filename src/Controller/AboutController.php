@@ -96,7 +96,7 @@ final class AboutController extends Controller
 
                 $arguments['lists'][] = $this->createAboutProfiles($people->forType('early-career'), 'Early-career advisory group');
                 break;
-                // SA 26/10/23: remove staff page from about pages
+            // SA 26/10/23: remove staff page from about pages
             // case 'staff':
             //     $arguments['title'] = 'Executive staff';
             //
