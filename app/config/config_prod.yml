@@ -6,6 +6,8 @@ parameters:
     api_timeout: 1
     api_connect_timeout_slow: 1
     api_timeout_slow: 3
+    api_connect_timeout_very_slow: 3
+    api_timeout_very_slow: 10
     mustache_stat_props: ~
 
 framework:
