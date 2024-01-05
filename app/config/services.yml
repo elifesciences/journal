@@ -149,7 +149,7 @@ services:
 
     elife.api_sdk.reviewed-preprints:
         class: eLife\ApiSdk\Client\ReviewedPreprints
-        factory: ['@elife.api_sdk', reviewedPreprints]
+        factory: ['@elife.api_sdk.slow', reviewedPreprints]
 
     elife.api_sdk.search:
         class: eLife\ApiSdk\Client\Search
@@ -1632,7 +1632,7 @@ services:
           - '@elife.journal.view_model.converter'
         tags:
           - name: view_model.converter
-    
+
     elife.journal.view_model.converter.social_media_sharers:
         class: eLife\Journal\ViewModel\Converter\SocialMediaSharersConverter
         public: false
