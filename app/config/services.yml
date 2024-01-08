@@ -26,11 +26,6 @@ services:
         arguments:
           - '@csa_guzzle.client.elife_api_slow'
 
-    elife.api_client.client.very_slow:
-      class: eLife\ApiClient\HttpClient\Guzzle6HttpClient
-      arguments:
-        - '@csa_guzzle.client.elife_api_very_slow'
-
     elife.api_client.client.crm_api:
         class: eLife\CiviContacts\Guzzle\CiviCrmClient
         arguments:
@@ -63,12 +58,6 @@ services:
         public: false
         arguments:
           - '@elife.api_client.client.slow'
-
-    elife.api_sdk.very_slow:
-      class: eLife\ApiSdk\ApiSdk
-      public: false
-      arguments:
-        - '@elife.api_client.client.very_slow'
 
     elife.api_sdk.serializer:
         class: Symfony\Component\Serializer\Serializer
@@ -160,7 +149,7 @@ services:
 
     elife.api_sdk.reviewed-preprints:
         class: eLife\ApiSdk\Client\ReviewedPreprints
-        factory: ['@elife.api_sdk.very_slow', reviewedPreprints]
+        factory: ['@elife.api_sdk.slow', reviewedPreprints]
 
     elife.api_sdk.search:
         class: eLife\ApiSdk\Client\Search

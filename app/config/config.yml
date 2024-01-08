@@ -8,8 +8,6 @@ parameters:
     api_timeout: 5
     api_connect_timeout_slow: 3
     api_timeout_slow: 10
-    api_connect_timeout_very_slow: 5
-    api_timeout_very_slow: 15
     honeypot_field: email_address
     mustache_stat_props: [size, mtime]
 
@@ -39,13 +37,6 @@ csa_guzzle:
                 headers:
                     Authorization: '%api_key%'
                 timeout: '%api_timeout_slow%'
-        elife_api_very_slow:
-          config:
-            base_uri: '%api_url%'
-            connect_timeout: '%api_connect_timeout_very_slow%'
-            headers:
-              Authorization: '%api_key%'
-            timeout: '%api_timeout_very_slow%'
         elife_crm:
             config:
                 base_uri: '%crm_url%'
