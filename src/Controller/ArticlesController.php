@@ -749,7 +749,7 @@ final class ArticlesController extends Controller
                     true
                 );
                 $body[] =  ArticleSection::basic($this->render(...$share), 'Share this article', 3,
-                    'share', null, null, null, false, null, null, 'article-download-links-list__group--js-exclude');
+                    'share', null, null, null, false, null, null, 'article-section__sharers');
 
                 $body[] = $this->convertTo($item, ViewModel\ArticleMeta::class);
 
