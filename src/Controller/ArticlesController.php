@@ -741,6 +741,16 @@ final class ArticlesController extends Controller
 
                 $body[] = ArticleSection::basic($this->render($downloadLinks), 'Download links', 2);
 
+                $share[] = new Doi($item->getDoi());
+                $share[] = new ViewModel\SocialMediaSharersNew(
+                    strip_tags($item->getFullTitle()),
+                    "https://doi.org/{$item->getDoi()}",
+                    true,
+                    true
+                );
+                $body[] =  ArticleSection::basic($this->render(...$share), 'Share this article', 3,
+                    'share', null, null, null, false, null, null, 'article-download-links-list__group--js-exclude');
+
                 $body[] = $this->convertTo($item, ViewModel\ArticleMeta::class);
 
                 return $body;
