@@ -1526,7 +1526,7 @@ final class ArticleControllerTest extends PageTestCase
 
         $this->assertSame('Download links', $crawler->filter('.main-content-grid > section:nth-of-type(2) .article-section__header_text')->text());
 
-        $this->assertSame('Categories and tags', $crawler->filter('.main-content-grid > section:nth-of-type(3) .article-meta__group_title')->text());
+        $this->assertSame('Categories and tags', $crawler->filter('.main-content-grid > section:nth-of-type(4) .article-meta__group_title')->text());
     }
 
     /**
@@ -2859,7 +2859,7 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertSame('Download BibTeX', $this->crawlerText($citeThisArticleLinks->eq(0)));
         $this->assertSame('Download .RIS', $this->crawlerText($citeThisArticleLinks->eq(1)));
 
-        $this->assertSame('Categories and tags', $crawler->filter('.main-content-grid > section:nth-of-type(12) .article-meta__group_title')->text());
+        $this->assertSame('Categories and tags', $crawler->filter('.main-content-grid > section:nth-of-type(13) .article-meta__group_title')->text());
 
         $this->assertSame(
             [
