@@ -724,6 +724,18 @@ final class ArticlesController extends Controller
                     );
                 }
 
+                if (!$isMagazine) {
+                    $share[] = new Doi($item->getDoi());
+                    $share[] = new ViewModel\SocialMediaSharersNew(
+                        strip_tags($item->getFullTitle()),
+                        "https://doi.org/{$item->getDoi()}",
+                        true,
+                        true
+                    );
+                    $parts[] =  ArticleSection::basic($this->render(...$share), 'Share this article', 3,
+                        'share', null, null, null, false, null, null, 'article-section__sharers');
+                }
+
                 return $parts;
             });
 
@@ -740,16 +752,6 @@ final class ArticlesController extends Controller
                 $downloadLinks = $parts['downloadLinks'];
 
                 $body[] = ArticleSection::basic($this->render($downloadLinks), 'Download links', 2);
-
-                $share[] = new Doi($item->getDoi());
-                $share[] = new ViewModel\SocialMediaSharersNew(
-                    strip_tags($item->getFullTitle()),
-                    "https://doi.org/{$item->getDoi()}",
-                    true,
-                    true
-                );
-                $body[] =  ArticleSection::basic($this->render(...$share), 'Share this article', 3,
-                    'share', null, null, null, false, null, null, 'article-section__sharers');
 
                 $body[] = $this->convertTo($item, ViewModel\ArticleMeta::class);
 
