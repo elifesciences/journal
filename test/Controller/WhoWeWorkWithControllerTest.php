@@ -176,7 +176,7 @@ final class WhoWeWorkWithControllerTest extends PageTestCase
                     'Initiative for Open Citations',
                 ],
                 [
-                    'http://jats4r.org/',
+                    'https://jats4r.niso.org/',
                     'JATS for Reuse',
                 ],
                 [
