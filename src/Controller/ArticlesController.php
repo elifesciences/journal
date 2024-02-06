@@ -724,18 +724,6 @@ final class ArticlesController extends Controller
                     );
                 }
 
-                if (!$isMagazine) {
-                    $share[] = new Doi($item->getDoi());
-                    $share[] = new ViewModel\SocialMediaSharersNew(
-                        strip_tags($item->getFullTitle()),
-                        "https://doi.org/{$item->getDoi()}",
-                        true,
-                        true
-                    );
-                    $parts[] =  ArticleSection::basic($this->render(...$share), 'Share this article', 3,
-                        'share', null, null, null, false, null, null, 'article-section__sharers');
-                }
-
                 return $parts;
             });
 
@@ -745,13 +733,28 @@ final class ArticlesController extends Controller
 
         $arguments['jumpMenu'] = $this->createJumpMenu($arguments['item'], $arguments['isMagazine'], $arguments['hasFigures'], false, $arguments['history'], $arguments['body'], $arguments['eraArticle']);
 
-        $arguments['body'] = all(['item' => $arguments['item'], 'body' => $arguments['body'], 'downloadLinks' => $arguments['downloadLinks']])
+        $arguments['body'] = all(['item' => $arguments['item'], 'body' => $arguments['body'], 'downloadLinks' => $arguments['downloadLinks'], 'isMagazine' => $arguments['isMagazine']])
             ->then(function (array $parts) {
                 $item = $parts['item'];
                 $body = $parts['body'];
                 $downloadLinks = $parts['downloadLinks'];
+                $isMagazine = $parts['isMagazine'];
 
                 $body[] = ArticleSection::basic($this->render($downloadLinks), 'Download links', 2);
+
+
+                if (!$isMagazine && 'feature' !== $item->getType()) {
+                    $share[] = new Doi($item->getDoi());
+                    $share[] = new ViewModel\SocialMediaSharersNew(
+                        strip_tags($item->getFullTitle()),
+                        "https://doi.org/{$item->getDoi()}",
+                        true,
+                        true
+                    );
+                    $body[] =  ArticleSection::basic($this->render(...$share), 'Share this article', 3,
+                        'share', null, null, null, false, null, null, 'article-section__sharers');
+                }
+
 
                 $body[] = $this->convertTo($item, ViewModel\ArticleMeta::class);
 

@@ -3922,7 +3922,7 @@ final class ArticleControllerTest extends PageTestCase
             $this->assertNotContains('Abstract', $crawler->filter('.main-content-grid')->text());
             // The Main text heading does not appear for insights and editorials.
             $this->assertNotContains('Main text', $crawler->filter('.main-content-grid')->text());
-            $this->assertCount(5, $sections);
+            $this->assertCount(4, $sections);
             $this->assertEmpty($sections->eq(0)->filter('h2'));
             $references = $sections->eq(1);
             $articleAndAuthorInfo = $sections->eq(2);
