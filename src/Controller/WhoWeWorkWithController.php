@@ -262,7 +262,7 @@ final class WhoWeWorkWithController extends Controller
                 'name' => 'JATS for Reuse',
                 'filename' => 'jats4r',
                 'type' => 'image/png',
-                'uri' => 'http://jats4r.org/',
+                'uri' => 'https://jats4r.niso.org/',
             ],
             [
                 'name' => 'Open Access Scholarly Publishers Association',
