@@ -3970,7 +3970,7 @@ final class ArticleControllerTest extends PageTestCase
 
         $articleInfo = $sections->filter('#info');
         $publicationHistory = $articleInfo->filter('section.article-section')->eq(1);
-        $this->assertSame('Publication history', $publicationHistory    ->filter('.article-section__header_text')->text());
+        $this->assertSame('Publication history', $publicationHistory->filter('.article-section__header_text')->text());
     }
 
     public function contentAsideProvider() : Traversable
