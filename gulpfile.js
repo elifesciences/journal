@@ -289,8 +289,6 @@ const criticalCssConfig = (function () {
             '.hidden',
             '.wrapper.wrapper--content',
             /\.contextual-data.*/,
-            /\.login-control.*/,
-            /\.speech-bubble.*/,
         ];
         const highlights = [/.*\.highlights.*$/];
         const listing = [
@@ -301,7 +299,6 @@ const criticalCssConfig = (function () {
             '.section-listing-wrapper .list-heading',
             '.section-listing__list_item',
             /.*\.section-listing.*/,
-            '.js .to-top-link',
         ];
 
         const landing = listing.concat(
@@ -311,9 +308,10 @@ const criticalCssConfig = (function () {
 
         return {
             article: global.concat(
-                /\.content-header__item_toggle--.*$/,
                 /\.info-bar((--|__).+)?$/,
                 /\.view-selector.*/,
+                /\.jump-menu__wrapper.*/,
+                /\.tabbed-navigation.*/,
                 'h2',
                 '.article-section__header_text',
                 '.article-section--first .article-section__header:first-child h2',
@@ -344,13 +342,13 @@ const criticalCssConfig = (function () {
                 '.highlight-item',
                 '.highlight__items',
                 '.hero-banner',
-                '.hero-banner__picture-wrapper'
+                '.hero-banner__picture-wrapper',
+                '.tabbed-navigation'
             ),
 
             about: global.concat(
                 landing,
                 /.*\.section-listing.*$/,
-                /.*.to-top-link$/
             ),
 
             "archive-month": global.concat(
