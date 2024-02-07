@@ -309,7 +309,6 @@ const criticalCssConfig = (function () {
         return {
             article: global.concat(
                 /\.info-bar((--|__).+)?$/,
-                /\.view-selector.*/,
                 /\.jump-menu__wrapper.*/,
                 /\.tabbed-navigation.*/,
                 'h2',
@@ -343,7 +342,6 @@ const criticalCssConfig = (function () {
                 '.highlight__items',
                 '.hero-banner',
                 '.hero-banner__picture-wrapper',
-                '.tabbed-navigation'
             ),
 
             about: global.concat(
