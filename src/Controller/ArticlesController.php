@@ -514,6 +514,14 @@ final class ArticlesController extends Controller
 
                             if ($award->getAwardId()) {
                                 $title .= ' ('.$award->getAwardId().')';
+                                $headerLink = null;
+                                $headerLinkDoi = "https://doi.org/{$award->getAwardId()}";
+                                if (strpos($title, 'Wellcome Trust') !== false) {
+                                    $headerLink = new ViewModel\Link(
+                                        $headerLinkDoi,
+                                        $headerLinkDoi
+                                    );
+                                }
                             }
 
                             $body = Listing::unordered(
@@ -523,7 +531,7 @@ final class ArticlesController extends Controller
                                 'bullet'
                             );
 
-                            return ArticleSection::basic($this->render($body), $title, 4);
+                            return ArticleSection::basic($this->render($body), $title, 4, null, null, null, null, false, $headerLink);
                         })->toArray();
 
                     $funding[] = new Paragraph($item->getFunding()->getStatement());
