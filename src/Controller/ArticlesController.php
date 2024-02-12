@@ -511,17 +511,15 @@ final class ArticlesController extends Controller
                     $funding = $item->getFunding()->getAwards()
                         ->map(function (FundingAward $award) {
                             $title = $award->getSource()->getPlace()->toString();
+                            $headerLink = null;
 
                             if ($award->getAwardId()) {
                                 $title .= ' ('.$award->getAwardId().')';
-                                $headerLink = null;
                                 $headerLinkDoi = "https://doi.org/{$award->getAwardId()}";
-                                if (strpos($title, 'Wellcome Trust') !== false) {
-                                    $headerLink = new ViewModel\Link(
-                                        $headerLinkDoi,
-                                        $headerLinkDoi
-                                    );
-                                }
+                                $headerLink = new ViewModel\Link(
+                                    $headerLinkDoi,
+                                    $headerLinkDoi
+                                );
                             }
 
                             $body = Listing::unordered(
