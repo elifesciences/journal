@@ -729,7 +729,7 @@ final class ArticlesController extends Controller
 
         $arguments['viewSelector'] = $this->createViewSelector($arguments['item'], $arguments['isMagazine'], $arguments['hasFigures'], false, $arguments['history'], $arguments['body'], $arguments['eraArticle']);
 
-        $arguments['tabbedNavigation'] = $this->createTabbedNavigation($arguments['item'], $arguments['isMagazine'], $arguments['hasFigures'], false, $arguments['history'], $arguments['body'], $arguments['eraArticle']);
+        $arguments['tabbedNavigation'] = $this->createTabbedNavigation($arguments['item'], $arguments['isMagazine'], $arguments['hasFigures'], 'fullText', $arguments['history'], $arguments['body'], $arguments['eraArticle']);
 
         $arguments['jumpMenu'] = $this->createJumpMenu($arguments['item'], $arguments['isMagazine'], $arguments['hasFigures'], false, $arguments['history'], $arguments['body'], $arguments['eraArticle']);
 
@@ -893,7 +893,7 @@ final class ArticlesController extends Controller
             })
             ->then(Callback::mustNotBeEmpty(new NotFoundHttpException('Article version does not contain any figures or data')));
 
-        $arguments['tabbedNavigation'] = $this->createTabbedNavigation($arguments['item'], $arguments['isMagazine'], promise_for(true), true, $arguments['history'], $arguments['body'], $arguments['eraArticle']);
+        $arguments['tabbedNavigation'] = $this->createTabbedNavigation($arguments['item'], $arguments['isMagazine'], promise_for(true), 'figures', $arguments['history'], $arguments['body'], $arguments['eraArticle']);
 
         $arguments['jumpMenu'] = $this->createJumpMenu($arguments['item'], $arguments['isMagazine'], promise_for(true), true, $arguments['history'], $arguments['body'], $arguments['eraArticle']);
 
@@ -910,6 +910,152 @@ final class ArticlesController extends Controller
             });
 
         return new Response($this->get('templating')->render('::article-figures.html.twig', $arguments));
+    }
+
+    public function peerReviewsAction(Request $request, string $id, int $version = null) : Response
+    {
+        $arguments = $this->articlePageArguments($request, $id, $version);
+
+        $arguments['title'] = $arguments['title']
+            ->then(function (string $title) {
+                return 'Peer review in '.$title;
+            });
+
+        $arguments['contextualData'] = all(['item' => $arguments['item'], 'metrics' => $arguments['contextualDataMetrics']])
+            ->then(function (array $parts) {
+                /** @var ArticleVersion $item */
+                $item = $parts['item'];
+                /** @var array $metrics */
+                $metrics = $parts['metrics'];
+
+                if (!$item->getCiteAs()) {
+                    if (empty($metrics)) {
+                        return null;
+                    }
+
+                    return ContextualData::withMetrics($metrics);
+                }
+
+                return ContextualData::withCitation($item->getCiteAs(), new Doi($item->getDoi()), $metrics);
+            });
+
+        $allFigures = $this->findFigures($arguments['item']);
+
+        $figures = $allFigures
+            ->filter(function (Block\Figure $figure) {
+                return $figure->getAssets()[0]->getAsset() instanceof Block\Image;
+            })
+            ->map($this->willConvertTo(null, ['complete' => true]));
+
+        $videos = $allFigures
+            ->filter(function (Block\Figure $figure) {
+                return $figure->getAssets()[0]->getAsset() instanceof Block\Video;
+            })
+            ->map($this->willConvertTo(null, ['complete' => true]));
+
+        $tables = $allFigures
+            ->filter(function (Block\Figure $figure) {
+                return $figure->getAssets()[0]->getAsset() instanceof Block\Table;
+            })
+            ->map($this->willConvertTo(null, ['complete' => true]));
+
+        $additionalFiles = $arguments['item']
+            ->then(function (ArticleVersion $item) {
+                return $item->getAdditionalFiles()->map($this->willConvertTo());
+            });
+
+        $arguments['messageBar'] = all([
+            'figures' => $figures,
+            'videos' => $videos,
+            'tables' => $tables,
+            'additionalFiles' => $additionalFiles,
+        ])
+            ->then(function (array $all) {
+                return array_filter([
+                    'figures' => $all['figures'],
+                    'videos' => $all['videos'],
+                    'tables' => $all['tables'],
+                    'additional files' => $all['additionalFiles'],
+                ], Callback::method('notEmpty'));
+            })
+            ->then(function (array $all) {
+                if (empty($all)) {
+                    return new ViewModel\MessageBar('There are no figures or additional files');
+                }
+
+                return new ViewModel\MessageBar(Humanizer::prettyList(...array_map(function (string $text, Sequence $items) {
+                    if (1 === count($items)) {
+                        $text = substr($text, 0, strlen($text) - 1);
+                    }
+
+                    return sprintf('<b>%s</b> %s', number_format(count($items)), $text);
+                }, array_keys($all), array_values($all))));
+            });
+
+        $additionalFiles = $additionalFiles
+            ->then(Callback::emptyOr(function (Sequence $files) {
+                return new ViewModel\AdditionalAssets(null, $files->toArray());
+            }));
+
+        $arguments['body'] = all([
+            'isMagazine' => $arguments['isMagazine'],
+            'figures' => $figures,
+            'videos' => $videos,
+            'tables' => $tables,
+            'additionalFiles' => $additionalFiles,
+        ])
+            ->then(function (array $all) use ($id) {
+                $parts = [];
+
+                $first = true;
+
+                if ($all['figures']->notEmpty()) {
+                    $parts[] = ArticleSection::collapsible('figures', 'Figures', 2, $this->render(...$all['figures']), null, null, false, $first);
+                    $first = false;
+                }
+
+                if ($all['videos']->notEmpty()) {
+                    $parts[] = ArticleSection::collapsible('videos', 'Videos', 2, $this->render(...$all['videos']), null, null, false, $first);
+                    $first = false;
+                }
+
+                if ($all['tables']->notEmpty()) {
+                    $parts[] = ArticleSection::collapsible('tables', 'Tables', 2, $this->render(...$all['tables']), null, null, false, $first);
+                    $first = false;
+                }
+
+                if (!empty($all['additionalFiles'])) {
+                    $parts[] = ArticleSection::collapsible('files', 'Additional files', 2, $this->render($all['additionalFiles']), null, null, false, $first);
+                }
+
+                if ($all['isMagazine'] && !empty($parts)) {
+                    throw new EarlyResponse(new RedirectResponse(
+                        $this->get('router')->generate('article', ['id' => $id]),
+                        Response::HTTP_MOVED_PERMANENTLY
+                    ));
+                }
+
+                return $parts;
+            })
+            ->then(Callback::mustNotBeEmpty(new NotFoundHttpException('Article version does not contain any figures or data')));
+
+        $arguments['tabbedNavigation'] = $this->createTabbedNavigation($arguments['item'], $arguments['isMagazine'], promise_for(true), 'peerReviews', $arguments['history'], $arguments['body'], $arguments['eraArticle']);
+
+        $arguments['jumpMenu'] = $this->createJumpMenu($arguments['item'], $arguments['isMagazine'], promise_for(true), true, $arguments['history'], $arguments['body'], $arguments['eraArticle']);
+
+        $arguments = $this->contentAsideArguments($arguments);
+
+        $arguments['body'] = all(['body' => $arguments['body'], 'downloadLinks' => $arguments['downloadLinks']])
+            ->then(function (array $parts) {
+                $body = $parts['body'];
+                $downloadLinks = $parts['downloadLinks'];
+
+                $body[] = ArticleSection::basic($this->render($downloadLinks), 'Download links', 2);
+
+                return $body;
+            });
+
+        return new Response($this->get('templating')->render('::article-peer-reviews.html.twig', $arguments));
     }
 
     public function bibTexAction(Request $request, string $id) : Response
@@ -1205,29 +1351,29 @@ final class ArticlesController extends Controller
         return $arguments;
     }
 
-    private function createTabbedNavigation(PromiseInterface $item, PromiseInterface $isMagazine, PromiseInterface $hasFigures, bool $isFiguresPage, PromiseInterface $history, PromiseInterface $sections, array $eraArticle) : PromiseInterface
+    private function createTabbedNavigation(PromiseInterface $item, PromiseInterface $isMagazine, PromiseInterface $hasFigures, string $pageType, PromiseInterface $history, PromiseInterface $sections, array $eraArticle) : PromiseInterface
     {
         return all(['item' => $item, 'isMagazine' => $isMagazine, 'hasFigures' => $hasFigures, 'history' => $history, 'sections' => $sections])
-            ->then(function (array $sections) use ($isFiguresPage, $eraArticle) {
+            ->then(function (array $sections) use ($pageType, $eraArticle) {
 
                 $history = $sections['history'];
                 $item = $sections['item'];
                 $hasFigures = $sections['hasFigures'];
                 $links = [];
-                $hasPeerReview = false;
+                $hasPeerReview = true;
 
                 if ($sections['isMagazine'] || 'feature' === $item->getType()) {
                     return false;
                 }
                 $links[] = ViewModel\TabbedNavigationLink::fromLink(
                                     new Link('Full text', $this->generatePath($history, $item->getVersion(), null, 'content')),
-                                    !$isFiguresPage ? " tabbed-navigation__tab-label--active" : null
+                                    $pageType === 'fullText' ? " tabbed-navigation__tab-label--active" : null
                                 );
 
                 if ($hasFigures) {
                     $links[] = ViewModel\TabbedNavigationLink::fromLink(
                                     new Link('Figures<span class="tabbed-navigation__tab-label--long"> and data</span>', $this->generatePath($history, $item->getVersion(), 'figures', 'content')),
-                                    $isFiguresPage ? " tabbed-navigation__tab-label--active" : null
+                                    $pageType === 'figures' ? " tabbed-navigation__tab-label--active" : null
                                 );
                 }
 
@@ -1245,7 +1391,8 @@ final class ArticlesController extends Controller
 
                 if ($hasPeerReview) {
                     $links[] = ViewModel\TabbedNavigationLink::fromLink(
-                                        new Link('Peer Review', $this->generatePath($history, $item->getVersion(), null, 'content'))
+                                        new Link('Peer Review', $this->generatePath($history, $item->getVersion(), 'peer-reviews', 'content')),
+                                        $pageType === 'peerReviews' ? " tabbed-navigation__tab-label--active" : null
                                 );
                 }
 
