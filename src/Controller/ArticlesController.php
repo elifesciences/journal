@@ -194,6 +194,22 @@ final class ArticlesController extends Controller
                     $hasFigures;
             });
 
+        $arguments['hasPeerReview'] = all(['item' => $arguments['item']])
+            ->then(function (array $parts) {
+                $item = $parts['item'];
+
+                return
+                    $item->getPublicReviews()->notEmpty()
+                    ||
+                    $item->getRecommendationsForAuthors()
+                    ||
+                    $item->getDecisionLetter()
+                    ||
+                    $item->getReviewers()->notEmpty()
+                    ||
+                    $item->getAuthorResponse();
+            });
+
         $dataAvailability = (new PromiseSequence($arguments['item']
             ->then(Callback::method('getDataAvailability'))))
             ->map($this->willConvertTo());
@@ -627,7 +643,7 @@ final class ArticlesController extends Controller
 
         $arguments['viewSelector'] = $this->createViewSelector($arguments['item'], $arguments['isMagazine'], $arguments['hasFigures'], false, $arguments['history'], $arguments['body'], $arguments['eraArticle']);
 
-        $arguments['tabbedNavigation'] = $this->createTabbedNavigation($arguments['item'], $arguments['isMagazine'], $arguments['hasFigures'], 'fullText', $arguments['history'], $arguments['body'], $arguments['eraArticle']);
+        $arguments['tabbedNavigation'] = $this->createTabbedNavigation($arguments['item'], $arguments['isMagazine'], $arguments['hasFigures'], 'fullText', $arguments['history'], $arguments['body'], $arguments['eraArticle'], $arguments['hasPeerReview']);
 
         $arguments['jumpMenu'] = $this->createJumpMenu($arguments['item'], $arguments['isMagazine'], $arguments['hasFigures'], false, $arguments['history'], $arguments['body'], $arguments['eraArticle']);
 
@@ -749,6 +765,22 @@ final class ArticlesController extends Controller
                 return new ViewModel\AdditionalAssets(null, $files->toArray());
             }));
 
+        $arguments['hasPeerReview'] = all(['item' => $arguments['item']])
+            ->then(function (array $parts) {
+                $item = $parts['item'];
+
+                return
+                    $item->getPublicReviews()->notEmpty()
+                    ||
+                    $item->getRecommendationsForAuthors()
+                    ||
+                    $item->getDecisionLetter()
+                    ||
+                    $item->getReviewers()->notEmpty()
+                    ||
+                    $item->getAuthorResponse();
+            });
+
         $arguments['body'] = all([
             'isMagazine' => $arguments['isMagazine'],
             'figures' => $figures,
@@ -791,7 +823,7 @@ final class ArticlesController extends Controller
             })
             ->then(Callback::mustNotBeEmpty(new NotFoundHttpException('Article version does not contain any figures or data')));
 
-        $arguments['tabbedNavigation'] = $this->createTabbedNavigation($arguments['item'], $arguments['isMagazine'], promise_for(true), 'figures', $arguments['history'], $arguments['body'], $arguments['eraArticle']);
+        $arguments['tabbedNavigation'] = $this->createTabbedNavigation($arguments['item'], $arguments['isMagazine'], promise_for(true), 'figures', $arguments['history'], $arguments['body'], $arguments['eraArticle'], $arguments['hasPeerReview']);
 
         $arguments['jumpMenu'] = $this->createJumpMenu($arguments['item'], $arguments['isMagazine'], promise_for(true), true, $arguments['history'], $arguments['body'], $arguments['eraArticle']);
 
@@ -845,16 +877,27 @@ final class ArticlesController extends Controller
             ->otherwise($this->softFailure('Failed to load bioprotocols', []));
 
         $context = all(['item' => $arguments['item'], 'history' => $arguments['history'], 'hasFigures' => $figures, 'bioprotocols' => $bioprotocols])
-                ->then(function (array $parts) {
-                    $context = [];
-                    if ($parts['hasFigures']) {
-                        $context['figuresUri'] = $this->generatePath($parts['history'], $parts['item']->getVersion(), 'figures');
-                    }
+            ->then(function (array $parts) {
+                $context = [];
+                if ($parts['hasFigures']) {
+                    $context['figuresUri'] = $this->generatePath($parts['history'], $parts['item']->getVersion(), 'figures');
+                }
 
-                    $context['bioprotocols'] = $parts['bioprotocols'];
+                $context['bioprotocols'] = $parts['bioprotocols'];
 
-                    return $context;
-                });
+                return $context;
+            });
+
+        $arguments['hasFigures'] = all(['item' => $arguments['item'], 'hasFigures' => $figures])
+            ->then(function (array $parts) {
+                $item = $parts['item'];
+                $hasFigures = $parts['hasFigures'];
+
+                return
+                    $item->getAdditionalFiles()->notEmpty()
+                    ||
+                    $hasFigures;
+            });
 
         $arguments['body'] = all(['item' => $arguments['item'], 'isMagazine' => $arguments['isMagazine'], 'context' => $context])
             ->then(function (array $parts) {
@@ -997,7 +1040,7 @@ final class ArticlesController extends Controller
             })
             ->then(Callback::mustNotBeEmpty(new NotFoundHttpException('Article version does not contain any figures or data')));
 
-        $arguments['tabbedNavigation'] = $this->createTabbedNavigation($arguments['item'], $arguments['isMagazine'], promise_for(true), 'peerReviews', $arguments['history'], $arguments['body'], $arguments['eraArticle']);
+        $arguments['tabbedNavigation'] = $this->createTabbedNavigation($arguments['item'], $arguments['isMagazine'], $arguments['hasFigures'], 'peerReviews', $arguments['history'], $arguments['body'], $arguments['eraArticle'], promise_for(true));
 
         $arguments['jumpMenu'] = $this->createJumpMenu($arguments['item'], $arguments['isMagazine'], promise_for(true), true, $arguments['history'], $arguments['body'], $arguments['eraArticle']);
 
@@ -1325,16 +1368,16 @@ final class ArticlesController extends Controller
         return $arguments;
     }
 
-    private function createTabbedNavigation(PromiseInterface $item, PromiseInterface $isMagazine, PromiseInterface $hasFigures, string $pageType, PromiseInterface $history, PromiseInterface $sections, array $eraArticle) : PromiseInterface
+    private function createTabbedNavigation(PromiseInterface $item, PromiseInterface $isMagazine, PromiseInterface $hasFigures, string $pageType, PromiseInterface $history, PromiseInterface $sections, array $eraArticle, PromiseInterface $hasPeerReview) : PromiseInterface
     {
-        return all(['item' => $item, 'isMagazine' => $isMagazine, 'hasFigures' => $hasFigures, 'history' => $history, 'sections' => $sections])
+        return all(['item' => $item, 'isMagazine' => $isMagazine, 'hasFigures' => $hasFigures, 'history' => $history, 'sections' => $sections, 'hasPeerReview' => $hasPeerReview])
             ->then(function (array $sections) use ($pageType, $eraArticle) {
 
                 $history = $sections['history'];
                 $item = $sections['item'];
                 $hasFigures = $sections['hasFigures'];
+                $hasPeerReview = $sections['hasPeerReview'];
                 $links = [];
-                $hasPeerReview = true;
 
                 if ($sections['isMagazine'] || 'feature' === $item->getType()) {
                     return false;
