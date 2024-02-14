@@ -468,35 +468,6 @@ final class ArticlesController extends Controller
                     );
                 }
 
-                if ($item instanceof ArticleVoR && $item->getDecisionLetter()) {
-                    $parts[] = ArticleSection::collapsible(
-                        $item->getDecisionLetter()->getId() ?? 'decision-letter',
-                        'Decision letter',
-                        2,
-                        $this->render($this->convertTo($item, ViewModel\DecisionLetterHeader::class)).
-                        $this->render(...$this->convertContent($item->getDecisionLetter(), 2, $context)),
-                        null,
-                        null,
-                        true,
-                        false,
-                        $item->getDecisionLetter()->getDoi() ? new Doi($item->getDecisionLetter()->getDoi()) : null
-                    );
-                }
-
-                if ($item instanceof ArticleVoR && $item->getAuthorResponse()) {
-                    $parts[] = ArticleSection::collapsible(
-                        $item->getAuthorResponse()->getId() ?? 'author-response',
-                        'Author response',
-                        2,
-                        $this->render(...$this->convertContent($item->getAuthorResponse(), 2, $context)),
-                        null,
-                        null,
-                        true,
-                        false,
-                        $item->getAuthorResponse()->getDoi() ? new Doi($item->getAuthorResponse()->getDoi()) : null
-                    );
-                }
-
                 $infoSections = [];
 
                 $realAuthors = $item->getAuthors()->filter(Callback::isInstanceOf(Author::class));
@@ -545,50 +516,6 @@ final class ArticlesController extends Controller
                         'Ethics',
                         3
                     );
-                }
-
-                if ($item->getReviewers()->notEmpty()) {
-                    $roles = $item->getReviewers()
-                        ->reduce(function (array $roles, Reviewer $reviewer) {
-                            $entry = $reviewer->getPreferredName();
-
-                            foreach ($reviewer->getAffiliations() as $affiliation) {
-                                $entry .= ", {$affiliation->toString()}";
-                            }
-
-                            $roles[$reviewer->getRole()][] = $entry;
-
-                            return $roles;
-                        }, []);
-
-                    uksort($roles, function (string $a, string $b) : int {
-                        if (false !== stripos($a, 'Senior')) {
-                            return -1;
-                        }
-                        if (false !== stripos($b, 'Senior')) {
-                            return 1;
-                        }
-                        if (false !== stripos($a, 'Editor')) {
-                            return -1;
-                        }
-                        if (false !== stripos($b, 'Editor')) {
-                            return 1;
-                        }
-
-                        return 0;
-                    });
-
-                    foreach ($roles as $role => $reviewers) {
-                        if (count($reviewers) > 1) {
-                            $role = "${role}s";
-                        }
-
-                        $infoSections[] = ArticleSection::basic(
-                            $this->render(Listing::ordered($reviewers)),
-                            $role,
-                            3
-                        );
-                    }
                 }
 
                 $received = $history->getReceived();
@@ -939,100 +866,126 @@ final class ArticlesController extends Controller
                 return ContextualData::withCitation($item->getCiteAs(), new Doi($item->getDoi()), $metrics);
             });
 
-        $allFigures = $this->findFigures($arguments['item']);
+        $figures = $this->findFigures($arguments['item'])->then(Callback::method('notEmpty'));
 
-        $figures = $allFigures
-            ->filter(function (Block\Figure $figure) {
-                return $figure->getAssets()[0]->getAsset() instanceof Block\Image;
-            })
-            ->map($this->willConvertTo(null, ['complete' => true]));
+        $bioprotocols = $this->get('elife.api_sdk.bioprotocols')
+            ->list(Identifier::article($id))
+            ->otherwise($this->mightNotExist())
+            ->otherwise($this->softFailure('Failed to load bioprotocols', []));
 
-        $videos = $allFigures
-            ->filter(function (Block\Figure $figure) {
-                return $figure->getAssets()[0]->getAsset() instanceof Block\Video;
-            })
-            ->map($this->willConvertTo(null, ['complete' => true]));
-
-        $tables = $allFigures
-            ->filter(function (Block\Figure $figure) {
-                return $figure->getAssets()[0]->getAsset() instanceof Block\Table;
-            })
-            ->map($this->willConvertTo(null, ['complete' => true]));
-
-        $additionalFiles = $arguments['item']
-            ->then(function (ArticleVersion $item) {
-                return $item->getAdditionalFiles()->map($this->willConvertTo());
-            });
-
-        $arguments['messageBar'] = all([
-            'figures' => $figures,
-            'videos' => $videos,
-            'tables' => $tables,
-            'additionalFiles' => $additionalFiles,
-        ])
-            ->then(function (array $all) {
-                return array_filter([
-                    'figures' => $all['figures'],
-                    'videos' => $all['videos'],
-                    'tables' => $all['tables'],
-                    'additional files' => $all['additionalFiles'],
-                ], Callback::method('notEmpty'));
-            })
-            ->then(function (array $all) {
-                if (empty($all)) {
-                    return new ViewModel\MessageBar('There are no figures or additional files');
-                }
-
-                return new ViewModel\MessageBar(Humanizer::prettyList(...array_map(function (string $text, Sequence $items) {
-                    if (1 === count($items)) {
-                        $text = substr($text, 0, strlen($text) - 1);
+        $context = all(['item' => $arguments['item'], 'history' => $arguments['history'], 'hasFigures' => $figures, 'bioprotocols' => $bioprotocols])
+                ->then(function (array $parts) {
+                    $context = [];
+                    if ($parts['hasFigures']) {
+                        $context['figuresUri'] = $this->generatePath($parts['history'], $parts['item']->getVersion(), 'figures');
                     }
 
-                    return sprintf('<b>%s</b> %s', number_format(count($items)), $text);
-                }, array_keys($all), array_values($all))));
-            });
+                    $context['bioprotocols'] = $parts['bioprotocols'];
 
-        $additionalFiles = $additionalFiles
-            ->then(Callback::emptyOr(function (Sequence $files) {
-                return new ViewModel\AdditionalAssets(null, $files->toArray());
-            }));
+                    return $context;
+                });
 
-        $arguments['body'] = all([
-            'isMagazine' => $arguments['isMagazine'],
-            'figures' => $figures,
-            'videos' => $videos,
-            'tables' => $tables,
-            'additionalFiles' => $additionalFiles,
-        ])
-            ->then(function (array $all) use ($id) {
+        $arguments['body'] = all(['item' => $arguments['item'], 'isMagazine' => $arguments['isMagazine'], 'context' => $context])
+            ->then(function (array $parts) {
+                /** @var ArticleVersion $item */
+                $item = $parts['item'];
+                /** @var bool $isMagazine */
+                $isMagazine = $parts['isMagazine'];
+                /** @var array $context */
+                $context = $parts['context'];
+
                 $parts = [];
 
                 $first = true;
 
-                if ($all['figures']->notEmpty()) {
-                    $parts[] = ArticleSection::collapsible('figures', 'Figures', 2, $this->render(...$all['figures']), null, null, false, $first);
+                if ($item instanceof ArticleVoR && $item->getDecisionLetter()) {
+                    $parts[] = ArticleSection::collapsible(
+                        $item->getDecisionLetter()->getId() ?? 'decision-letter',
+                        'Decision letter',
+                        2,
+                        $this->render($this->convertTo($item, ViewModel\DecisionLetterHeader::class)).
+                        $this->render(...$this->convertContent($item->getDecisionLetter(), 2, $context)),
+                        null,
+                        null,
+                        true,
+                        $first,
+                        $item->getDecisionLetter()->getDoi() ? new Doi($item->getDecisionLetter()->getDoi()) : null
+                    );
+
                     $first = false;
                 }
 
-                if ($all['videos']->notEmpty()) {
-                    $parts[] = ArticleSection::collapsible('videos', 'Videos', 2, $this->render(...$all['videos']), null, null, false, $first);
+                if ($item instanceof ArticleVoR && $item->getAuthorResponse()) {
+                    $parts[] = ArticleSection::collapsible(
+                        $item->getAuthorResponse()->getId() ?? 'author-response',
+                        'Author response',
+                        2,
+                        $this->render(...$this->convertContent($item->getAuthorResponse(), 2, $context)),
+                        null,
+                        null,
+                        true,
+                        $first,
+                        $item->getAuthorResponse()->getDoi() ? new Doi($item->getAuthorResponse()->getDoi()) : null
+                    );
+
                     $first = false;
                 }
 
-                if ($all['tables']->notEmpty()) {
-                    $parts[] = ArticleSection::collapsible('tables', 'Tables', 2, $this->render(...$all['tables']), null, null, false, $first);
+                if ($item->getReviewers()->notEmpty()) {
+                    $roles = $item->getReviewers()
+                        ->reduce(function (array $roles, Reviewer $reviewer) {
+                            $entry = $reviewer->getPreferredName();
+
+                            foreach ($reviewer->getAffiliations() as $affiliation) {
+                                $entry .= ", {$affiliation->toString()}";
+                            }
+
+                            $roles[$reviewer->getRole()][] = $entry;
+
+                            return $roles;
+                        }, []);
+
+                    uksort($roles, function (string $a, string $b) : int {
+                        if (false !== stripos($a, 'Senior')) {
+                            return -1;
+                        }
+                        if (false !== stripos($b, 'Senior')) {
+                            return 1;
+                        }
+                        if (false !== stripos($a, 'Editor')) {
+                            return -1;
+                        }
+                        if (false !== stripos($b, 'Editor')) {
+                            return 1;
+                        }
+
+                        return 0;
+                    });
+
+                    foreach ($roles as $role => $reviewers) {
+                        if (count($reviewers) > 1) {
+                            $role = "${role}s";
+                        }
+
+                        $infoSections[] = ArticleSection::basic(
+                            $this->render(Listing::ordered($reviewers)),
+                            $role,
+                            3
+                        );
+                    }
+
+                    $parts[] = ArticleSection::collapsible(
+                        'editors',
+                        'Editors',
+                        2,
+                        $this->render(...$infoSections),
+                        null,
+                        null,
+                        true,
+                        $first
+                    );
+
                     $first = false;
-                }
-
-                if (!empty($all['additionalFiles'])) {
-                    $parts[] = ArticleSection::collapsible('files', 'Additional files', 2, $this->render($all['additionalFiles']), null, null, false, $first);
-                }
-
-                if ($all['isMagazine'] && !empty($parts)) {
-                    throw new EarlyResponse(new RedirectResponse(
-                        $this->get('router')->generate('article', ['id' => $id]),
-                        Response::HTTP_MOVED_PERMANENTLY
-                    ));
                 }
 
                 return $parts;
@@ -1045,12 +998,28 @@ final class ArticlesController extends Controller
 
         $arguments = $this->contentAsideArguments($arguments);
 
-        $arguments['body'] = all(['body' => $arguments['body'], 'downloadLinks' => $arguments['downloadLinks']])
+        $arguments['body'] = all(['item' => $arguments['item'], 'body' => $arguments['body'], 'downloadLinks' => $arguments['downloadLinks'], 'isMagazine' => $arguments['isMagazine']])
             ->then(function (array $parts) {
+                $item = $parts['item'];
                 $body = $parts['body'];
                 $downloadLinks = $parts['downloadLinks'];
+                $isMagazine = $parts['isMagazine'];
 
                 $body[] = ArticleSection::basic($this->render($downloadLinks), 'Download links', 2);
+
+
+                if (!$isMagazine && 'feature' !== $item->getType()) {
+                    $share[] = new Doi($item->getDoi());
+                    $share[] = new ViewModel\SocialMediaSharersNew(
+                        strip_tags($item->getFullTitle()),
+                        "https://doi.org/{$item->getDoi()}",
+                        true,
+                        true
+                    );
+
+                    $body[] =  ArticleSection::basic($this->render(...$share), 'Share this article', 3,
+                        'share', null, null, null, false, null, null, 'article-section__sharers');
+                }
 
                 return $body;
             });
