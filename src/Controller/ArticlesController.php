@@ -439,35 +439,6 @@ final class ArticlesController extends Controller
                     );
                 }
 
-                if ($item instanceof ArticleVoR && $item->getPublicReviews()->notEmpty()) {
-                    $reviews = $item->getPublicReviews()->map(function (PublicReview $publicReview) use ($context) {
-                        return ArticleSection::basic(
-                            $this->render(...$this->convertContent($publicReview, 3, $context)),
-                            $publicReview->getTitle(),
-                            3,
-                            $publicReview->getId(),
-                            $publicReview->getDoi() ? new Doi($publicReview->getDoi()) : null
-                        );
-                    })->toArray();
-
-                    if ($item->getRecommendationsForAuthors()) {
-                        $reviews[] = ArticleSection::basic(
-                            $this->render(...$this->convertContent($item->getRecommendationsForAuthors(), 3, $context)),
-                            $item->getRecommendationsForAuthorsTitle(),
-                            3,
-                            $item->getRecommendationsForAuthors()->getId(),
-                            $item->getRecommendationsForAuthors()->getDoi() ? new Doi($item->getRecommendationsForAuthors()->getDoi()) : null
-                        );
-                    }
-
-                    $parts[] = ArticleSection::collapsible(
-                        'peer-review',
-                        'Peer review',
-                        2,
-                        $this->render(...$reviews)
-                    );
-                }
-
                 $infoSections = [];
 
                 $realAuthors = $item->getAuthors()->filter(Callback::isInstanceOf(Author::class));
@@ -898,6 +869,40 @@ final class ArticlesController extends Controller
 
                 $first = true;
 
+                if ($item instanceof ArticleVoR && $item->getPublicReviews()->notEmpty()) {
+                    $parts = $item->getPublicReviews()->map(function (PublicReview $publicReview, $index) use ($context) {
+                        $publicReviewSection = ArticleSection::collapsible(
+                            $publicReview->getId(),
+                            $publicReview->getTitle(),
+                            2,
+                            $this->render(...$this->convertContent($publicReview, 3, $context)),
+                            null,
+                            null,
+                            false,
+                            $index === 0,
+                            $publicReview->getDoi() ? new Doi($publicReview->getDoi()) : null
+                        );
+
+                        return $publicReviewSection;
+                    })->toArray();
+
+                    if ($item->getRecommendationsForAuthors()) {
+                        $parts[] = ArticleSection::collapsible(
+                            $item->getRecommendationsForAuthors()->getId(),
+                            $item->getRecommendationsForAuthorsTitle(),
+                            2,
+                            $this->render(...$this->convertContent($item->getRecommendationsForAuthors(), 3, $context)),
+                            null,
+                            null,
+                            false,
+                            false,
+                            $item->getRecommendationsForAuthors()->getDoi() ? new Doi($item->getRecommendationsForAuthors()->getDoi()) : null
+                        );
+                    }
+
+                    $first = false;
+                }
+
                 if ($item instanceof ArticleVoR && $item->getDecisionLetter()) {
                     $parts[] = ArticleSection::collapsible(
                         $item->getDecisionLetter()->getId() ?? 'decision-letter',
@@ -910,22 +915,6 @@ final class ArticlesController extends Controller
                         true,
                         $first,
                         $item->getDecisionLetter()->getDoi() ? new Doi($item->getDecisionLetter()->getDoi()) : null
-                    );
-
-                    $first = false;
-                }
-
-                if ($item instanceof ArticleVoR && $item->getAuthorResponse()) {
-                    $parts[] = ArticleSection::collapsible(
-                        $item->getAuthorResponse()->getId() ?? 'author-response',
-                        'Author response',
-                        2,
-                        $this->render(...$this->convertContent($item->getAuthorResponse(), 2, $context)),
-                        null,
-                        null,
-                        true,
-                        $first,
-                        $item->getAuthorResponse()->getDoi() ? new Doi($item->getAuthorResponse()->getDoi()) : null
                     );
 
                     $first = false;
@@ -983,6 +972,22 @@ final class ArticlesController extends Controller
                         null,
                         true,
                         $first
+                    );
+
+                    $first = false;
+                }
+
+                if ($item instanceof ArticleVoR && $item->getAuthorResponse()) {
+                    $parts[] = ArticleSection::collapsible(
+                        $item->getAuthorResponse()->getId() ?? 'author-response',
+                        'Author response',
+                        2,
+                        $this->render(...$this->convertContent($item->getAuthorResponse(), 2, $context)),
+                        null,
+                        null,
+                        true,
+                        $first,
+                        $item->getAuthorResponse()->getDoi() ? new Doi($item->getAuthorResponse()->getDoi()) : null
                     );
 
                     $first = false;
