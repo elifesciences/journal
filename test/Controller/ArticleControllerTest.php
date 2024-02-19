@@ -1514,12 +1514,12 @@ final class ArticleControllerTest extends PageTestCase
         // $reviewers = $articleInfo->eq(0);
         // $this->assertSame('Reviewer', $reviewers->filter('header > h3')->text());
 
-        $publicationHistory = $articleInfo->eq(1);
+        $publicationHistory = $articleInfo->eq(0);
         $this->assertSame('Version history', $publicationHistory->filter('header > h3')->text());
         $this->assertCount(1, $publicationHistory->filter('ol')->children());
         $this->assertSame('Accepted Manuscript published: January 1, 2010 (version 1)', $publicationHistory->filter('ol')->children()->eq(0)->text());
 
-        $copyright = $articleInfo->eq(2);
+        $copyright = $articleInfo->eq(1);
         $this->assertSame('Copyright', $copyright->filter('header > h3')->text());
         $this->assertContains('© 2012, Author One', $copyright->filter('div')->text());
         $this->assertContains('Copyright statement.', $copyright->filter('div')->text());
