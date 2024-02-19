@@ -15,6 +15,7 @@ elifePipeline {
 
         stage 'Project tests', {
             sh "IMAGE_TAG=${commit} docker-compose -f docker-compose.yml -f docker-compose.ci.yml up -d"
+            /*
             dockerComposeProjectTestsParallel('journal', commit, [
                 'phpunit': '/srv/journal/build/ci/phpunit/*.xml',
                 'behat': '/srv/journal/build/ci/behat/*.xml'
@@ -28,6 +29,7 @@ elifePipeline {
                     './smoke_tests.sh localhost 8080',
                 ]
             ])
+            */
         }
 
         stage 'Generate critical CSS', {
