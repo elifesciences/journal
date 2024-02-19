@@ -5394,7 +5394,7 @@ final class ArticleControllerTest extends PageTestCase
         // $this->assertSame('Recommendations for authors',
         //     $crawler->filter('.main-content-grid > section:nth-of-type(3) > div > section:nth-of-type(3) > header > h3')->text());
         $articleInfo = $crawler->filter('.article-section__body section');
-        $citeAll = $articleInfo->eq(3);
+        $citeAll = $articleInfo->eq(5);
         $this->assertSame('Cite all versions', $citeAll->filter('.article-section__header_text')->text());
         $this->assertSame('You can cite all versions using the DOI https://doi.org/10.7554/eLife.00001. This DOI represents all versions, and will always resolve to the latest one.',
             $this->crawlerText($citeAll->filter('.article-section__body')));

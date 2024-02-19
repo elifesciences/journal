@@ -1414,7 +1414,7 @@ final class ArticlesController extends Controller
 
                 if ($hasPeerReview) {
                     $links[] = ViewModel\TabbedNavigationLink::fromLink(
-                                        new Link('Peer Review', $this->generatePath($history, $item->getVersion(), 'peer-reviews', 'content')),
+                                        new Link('Peer review', $this->generatePath($history, $item->getVersion(), 'peer-reviews', 'content')),
                                         $pageType === 'peerReviews' ? " tabbed-navigation__tab-label--active" : null
                                 );
                 }
