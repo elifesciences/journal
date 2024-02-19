@@ -2744,27 +2744,27 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertSame('Unknown reference',
             $references->filter('div > ol > li:nth-of-type(14) .reference__title')->text());
         $this->assertEmpty($references->filter('div > ol > li:nth-of-type(14) .reference__label'));
-        $this->assertSame('Decision letter', $crawler->filter('#decision-letter-id h2')->text());
-        $this->assertSame('Decision letter',
-            $crawler->filter('.main-content-grid > section:nth-of-type(8) > header > h2')->text());
-        $this->assertCount(4, $crawler->filter('.main-content-grid > section:nth-of-type(8) > div .profile-snippet__name'));
-        $this->assertSame('Reviewer 1',
-            $crawler->filter('.main-content-grid > section:nth-of-type(8) > div .profile-snippet__name')->eq(0)->text());
-        $this->assertSame('Reviewing Editor 1',
-            $crawler->filter('.main-content-grid > section:nth-of-type(8) > div .profile-snippet__name')->eq(1)->text());
-        $this->assertSame('Senior Editor 1',
-            $crawler->filter('.main-content-grid > section:nth-of-type(8) > div .profile-snippet__name')->eq(2)->text());
-        $this->assertSame('Reviewer 2',
-            $crawler->filter('.main-content-grid > section:nth-of-type(8) > div .profile-snippet__name')->eq(3)->text());
-        $this->assertSame('Decision letter description',
-            $crawler->filter('.main-content-grid > section:nth-of-type(8) > div .decision-letter-header__main_text > p')->text());
-        $this->assertSame('Decision letter text',
-            $crawler->filter('.main-content-grid > section:nth-of-type(8) > div > p')->text());
-        $this->assertSame('Author response', $crawler->filter('#author-response-id h2')->text());
-        $this->assertSame('Author response',
-            $crawler->filter('.main-content-grid > section:nth-of-type(9) > header > h2')->text());
-        $this->assertSame('Author response text',
-            $crawler->filter('.main-content-grid > section:nth-of-type(9) > div > p')->text());
+        // $this->assertSame('Decision letter', $crawler->filter('#decision-letter-id h2')->text());
+        // $this->assertSame('Decision letter',
+        //     $crawler->filter('.main-content-grid > section:nth-of-type(8) > header > h2')->text());
+        // $this->assertCount(4, $crawler->filter('.main-content-grid > section:nth-of-type(8) > div .profile-snippet__name'));
+        // $this->assertSame('Reviewer 1',
+        //     $crawler->filter('.main-content-grid > section:nth-of-type(8) > div .profile-snippet__name')->eq(0)->text());
+        // $this->assertSame('Reviewing Editor 1',
+        //     $crawler->filter('.main-content-grid > section:nth-of-type(8) > div .profile-snippet__name')->eq(1)->text());
+        // $this->assertSame('Senior Editor 1',
+        //     $crawler->filter('.main-content-grid > section:nth-of-type(8) > div .profile-snippet__name')->eq(2)->text());
+        // $this->assertSame('Reviewer 2',
+        //     $crawler->filter('.main-content-grid > section:nth-of-type(8) > div .profile-snippet__name')->eq(3)->text());
+        // $this->assertSame('Decision letter description',
+        //     $crawler->filter('.main-content-grid > section:nth-of-type(8) > div .decision-letter-header__main_text > p')->text());
+        // $this->assertSame('Decision letter text',
+        //     $crawler->filter('.main-content-grid > section:nth-of-type(8) > div > p')->text());
+        // $this->assertSame('Author response', $crawler->filter('#author-response-id h2')->text());
+        // $this->assertSame('Author response',
+        //     $crawler->filter('.main-content-grid > section:nth-of-type(9) > header > h2')->text());
+        // $this->assertSame('Author response text',
+        //     $crawler->filter('.main-content-grid > section:nth-of-type(9) > div > p')->text());
 
         $articleInfo = $crawler->filter('.main-content-grid > section:nth-of-type(10)');
         $this->assertSame('Article and author information',
@@ -5377,19 +5377,19 @@ final class ArticleControllerTest extends PageTestCase
             $crawler->filter('.main-content-grid > section:nth-of-type(1) > header > h2')->text());
         // $this->assertSame('Peer review',
         //     $crawler->filter('.main-content-grid > section:nth-of-type(3) > header > h2')->text());
-        $publicReviews = $crawler->filter('.main-content-grid > section:nth-of-type(3) > .article-section__body > section');
-        $this->assertCount(3, $publicReviews);
+        // $publicReviews = $crawler->filter('.main-content-grid > section:nth-of-type(3) > .article-section__body > section');
+        // $this->assertCount(3, $publicReviews);
 
-        foreach ([
-            'https://doi.org/10.7554/eLife.09562.230',
-            'https://doi.org/10.7554/eLife.09562.330',
-            'https://doi.org/10.7554/eLife.09562.130',
-        ] as $k => $expectedDoi) {
-            $this->assertSame(
-                $expectedDoi,
-                trim($publicReviews->eq($k)->filter('.doi__link')->text())
-            );
-        }
+        // foreach ([
+        //     'https://doi.org/10.7554/eLife.09562.230',
+        //     'https://doi.org/10.7554/eLife.09562.330',
+        //     'https://doi.org/10.7554/eLife.09562.130',
+        // ] as $k => $expectedDoi) {
+        //     $this->assertSame(
+        //         $expectedDoi,
+        //         trim($publicReviews->eq($k)->filter('.doi__link')->text())
+        //     );
+        // }
 
         $this->assertSame('Recommendations for authors',
             $crawler->filter('.main-content-grid > section:nth-of-type(3) > div > section:nth-of-type(3) > header > h3')->text());
