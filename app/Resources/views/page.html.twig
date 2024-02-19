@@ -2,7 +2,7 @@
 
 {% block head %}
     {% if cb_id %}
-        <script id="Cookiebot" src="https://consent.cookiebot.com/uc.js" data-cbid="{{ cb_id|raw }}" type="text/javascript" data-blockingmode="auto"></script>
+        <script id="Cookiebot" src="https://consent.cookiebot.com/uc.js" data-cbid="{{ cb_id|raw }}" type="text/javascript"></script>
     {% endif %}
 
     <script>
@@ -174,7 +174,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
     <![endif]-->
 
-    <script type="text/javascript" data-cookieconsent="statistics,marketing">
+    <script type="text/plain" data-cookieconsent="statistics,marketing">
         {% if gtm_id %}
         window.gtmDataLayer = window.gtmDataLayer || [];
 
@@ -207,19 +207,12 @@
     </script>
 
     {% if google_optimize_id %}
-        <script type="text/javascript" data-cookieconsent="statistics" src="https://www.googleoptimize.com/optimize.js?id={{ google_optimize_id|raw }}"></script>
+        <script type="text/plain" data-cookieconsent="statistics" src="https://www.googleoptimize.com/optimize.js?id={{ google_optimize_id|raw }}"></script>
     {% endif %}
 
 {% endblock %}
 
 {% block content %}
-    {% if gtm_id %}
-        <noscript>
-            <iframe src="https://www.googletagmanager.com/ns.html?id={{ gtm_id|raw }}" height="0" width="0"
-                    style="display:none; visibility:hidden"></iframe>
-        </noscript>
-    {% endif %}
-
     <div class="global-wrapper{% if isMagazine ?? false %} page--magazine{% endif %}{% if hasSocialMedia ?? false %} social-media-page--wrapper{% endif %}{% if clean ?? false %} clean{% endif %}" data-behaviour="FragmentHandler Math{% if hypothesis ?? false %} HypothesisLoader{% endif %}"
         {% if item is defined and item is not null %}
             data-item-type="{% if item.type is defined %}{{ item.type }}{% else %}{{ item.identifier.type }}{% endif %}"
@@ -277,7 +270,7 @@
 
     <script id="CookieDeclaration" src="https://consent.cookiebot.com/{{ cb_id|raw }}/cd.js" type="text/javascript" async></script>
 
-    <script type="text/javascript" data-cookieconsent="statistics">
+    <script type="text/plain" data-cookieconsent="statistics">
         window.elifeConfig = window.elifeConfig || {};
 
         window.elifeConfig.scriptPaths = [
