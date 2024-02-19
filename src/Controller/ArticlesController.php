@@ -772,7 +772,9 @@ final class ArticlesController extends Controller
                 $item = $parts['item'];
 
                 return
-                    $item->getPublicReviews()->notEmpty()
+                    $item instanceof ArticleVoR
+                    &&
+                    ($item->getPublicReviews()->notEmpty()
                     ||
                     $item->getRecommendationsForAuthors()
                     ||
@@ -780,7 +782,7 @@ final class ArticlesController extends Controller
                     ||
                     $item->getReviewers()->notEmpty()
                     ||
-                    $item->getAuthorResponse();
+                    $item->getAuthorResponse());
             });
 
         $arguments['body'] = all([
