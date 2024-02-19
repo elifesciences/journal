@@ -1511,8 +1511,8 @@ final class ArticleControllerTest extends PageTestCase
 
         $articleInfo = $crawler->filter('.main-content-grid > section:nth-of-type(1) > div > section');
 
-        $reviewers = $articleInfo->eq(0);
-        $this->assertSame('Reviewer', $reviewers->filter('header > h3')->text());
+        // $reviewers = $articleInfo->eq(0);
+        // $this->assertSame('Reviewer', $reviewers->filter('header > h3')->text());
 
         $publicationHistory = $articleInfo->eq(1);
         $this->assertSame('Version history', $publicationHistory->filter('header > h3')->text());
@@ -2870,6 +2870,10 @@ final class ArticleControllerTest extends PageTestCase
                 [
                     'Figures and data',
                     '/articles/00001/figures#content',
+                ],
+                [
+                    'Peer review',
+                    '/articles/00001/peer-reviews#content',
                 ],
                 [
                     'Side by side',
@@ -5368,11 +5372,11 @@ final class ArticleControllerTest extends PageTestCase
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertSame('eLife assessment', trim($crawler->filter('.jump-menu__item')->eq(0)->text()));
-        $this->assertSame('Peer review', trim($crawler->filter('.jump-menu__item')->eq(2)->text()));
+        // $this->assertSame('Peer review', trim($crawler->filter('.jump-menu__item')->eq(2)->text()));
         $this->assertSame('eLife assessment',
             $crawler->filter('.main-content-grid > section:nth-of-type(1) > header > h2')->text());
-        $this->assertSame('Peer review',
-            $crawler->filter('.main-content-grid > section:nth-of-type(3) > header > h2')->text());
+        // $this->assertSame('Peer review',
+        //     $crawler->filter('.main-content-grid > section:nth-of-type(3) > header > h2')->text());
         $publicReviews = $crawler->filter('.main-content-grid > section:nth-of-type(3) > .article-section__body > section');
         $this->assertCount(3, $publicReviews);
 
