@@ -916,57 +916,6 @@ final class ArticlesController extends Controller
 
                 $first = true;
 
-                if ($item instanceof ArticleVoR && $item->getPublicReviews()->notEmpty()) {
-                    $parts = $item->getPublicReviews()->map(function (PublicReview $publicReview, $index) use ($context) {
-                        $publicReviewSection = ArticleSection::collapsible(
-                            $publicReview->getId(),
-                            $publicReview->getTitle(),
-                            2,
-                            $this->render(...$this->convertContent($publicReview, 3, $context)),
-                            null,
-                            null,
-                            false,
-                            $index === 0,
-                            $publicReview->getDoi() ? new Doi($publicReview->getDoi()) : null
-                        );
-
-                        return $publicReviewSection;
-                    })->toArray();
-
-                    if ($item->getRecommendationsForAuthors()) {
-                        $parts[] = ArticleSection::collapsible(
-                            $item->getRecommendationsForAuthors()->getId(),
-                            $item->getRecommendationsForAuthorsTitle(),
-                            2,
-                            $this->render(...$this->convertContent($item->getRecommendationsForAuthors(), 3, $context)),
-                            null,
-                            null,
-                            false,
-                            false,
-                            $item->getRecommendationsForAuthors()->getDoi() ? new Doi($item->getRecommendationsForAuthors()->getDoi()) : null
-                        );
-                    }
-
-                    $first = false;
-                }
-
-                if ($item instanceof ArticleVoR && $item->getDecisionLetter()) {
-                    $parts[] = ArticleSection::collapsible(
-                        $item->getDecisionLetter()->getId() ?? 'decision-letter',
-                        'Decision letter',
-                        2,
-                        $this->render($this->convertTo($item, ViewModel\DecisionLetterHeader::class)).
-                        $this->render(...$this->convertContent($item->getDecisionLetter(), 2, $context)),
-                        null,
-                        null,
-                        true,
-                        $first,
-                        $item->getDecisionLetter()->getDoi() ? new Doi($item->getDecisionLetter()->getDoi()) : null
-                    );
-
-                    $first = false;
-                }
-
                 if ($item->getReviewers()->notEmpty()) {
                     $roles = $item->getReviewers()
                         ->reduce(function (array $roles, Reviewer $reviewer) {
@@ -1019,6 +968,59 @@ final class ArticlesController extends Controller
                         null,
                         true,
                         $first
+                    );
+
+                    $first = false;
+                }
+
+                if ($item instanceof ArticleVoR && $item->getPublicReviews()->notEmpty()) {
+                    $publicReviews = $item->getPublicReviews()->map(function (PublicReview $publicReview, $index) use ($context, $first) {
+                        $publicReviewSection = ArticleSection::collapsible(
+                            $publicReview->getId(),
+                            $publicReview->getTitle(),
+                            2,
+                            $this->render(...$this->convertContent($publicReview, 3, $context)),
+                            null,
+                            null,
+                            false,
+                            $first && $index === 0,
+                            $publicReview->getDoi() ? new Doi($publicReview->getDoi()) : null
+                        );
+
+                        return $publicReviewSection;
+                    })->toArray();
+
+                    $parts = array_merge($parts, $publicReviews);
+
+                    if ($item->getRecommendationsForAuthors()) {
+                        $parts[] = ArticleSection::collapsible(
+                            $item->getRecommendationsForAuthors()->getId(),
+                            $item->getRecommendationsForAuthorsTitle(),
+                            2,
+                            $this->render(...$this->convertContent($item->getRecommendationsForAuthors(), 3, $context)),
+                            null,
+                            null,
+                            false,
+                            false,
+                            $item->getRecommendationsForAuthors()->getDoi() ? new Doi($item->getRecommendationsForAuthors()->getDoi()) : null
+                        );
+                    }
+
+                    $first = false;
+                }
+
+                if ($item instanceof ArticleVoR && $item->getDecisionLetter()) {
+                    $parts[] = ArticleSection::collapsible(
+                        $item->getDecisionLetter()->getId() ?? 'decision-letter',
+                        'Decision letter',
+                        2,
+                        $this->render($this->convertTo($item, ViewModel\DecisionLetterHeader::class)).
+                        $this->render(...$this->convertContent($item->getDecisionLetter(), 2, $context)),
+                        null,
+                        null,
+                        true,
+                        $first,
+                        $item->getDecisionLetter()->getDoi() ? new Doi($item->getDecisionLetter()->getDoi()) : null
                     );
 
                     $first = false;
