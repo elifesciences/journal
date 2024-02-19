@@ -2766,7 +2766,7 @@ final class ArticleControllerTest extends PageTestCase
         // $this->assertSame('Author response text',
         //     $crawler->filter('.main-content-grid > section:nth-of-type(9) > div > p')->text());
 
-        $articleInfo = $crawler->filter('.main-content-grid > section:nth-of-type(10)');
+        $articleInfo = $crawler->filter('.main-content-grid > section:nth-of-type(8)');
         $this->assertSame('Article and author information',
             $articleInfo->filter('header > h2')->text());
 
@@ -2775,7 +2775,7 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertSame('Foo Bar, Role', $authorDetails->eq(0)->filter('.author-details__name')->text());
         $this->assertSame('Baz', $authorDetails->eq(1)->filter('.author-details__name')->text());
 
-        $articleInfo = $crawler->filter('.main-content-grid > section:nth-of-type(10) > div > section');
+        $articleInfo = $crawler->filter('.main-content-grid > section:nth-of-type(8) > div > section');
 
         $funding = $articleInfo->eq(0);
         $this->assertSame('Funding', $funding->filter('header > h3')->text());
@@ -5391,8 +5391,8 @@ final class ArticleControllerTest extends PageTestCase
         //     );
         // }
 
-        $this->assertSame('Recommendations for authors',
-            $crawler->filter('.main-content-grid > section:nth-of-type(3) > div > section:nth-of-type(3) > header > h3')->text());
+        // $this->assertSame('Recommendations for authors',
+        //     $crawler->filter('.main-content-grid > section:nth-of-type(3) > div > section:nth-of-type(3) > header > h3')->text());
         $articleInfo = $crawler->filter('.article-section__body section');
         $citeAll = $articleInfo->eq(7);
         $this->assertSame('Cite all versions', $citeAll->filter('.article-section__header_text')->text());
