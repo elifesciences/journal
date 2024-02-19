@@ -274,44 +274,47 @@
         </div>
 
     </div>
-        <script type="text/javascript" data-cookieconsent="statistics">
-            window.elifeConfig = window.elifeConfig || {};
 
-            window.elifeConfig.scriptPaths = [
-                '{{ preload(asset('assets/patterns/js/main.js'), {as: 'script', nopush: true}) }}'
-            ];
+    <script id="CookieDeclaration" src="https://consent.cookiebot.com/{{ cb_id|raw }}/cd.js" type="text/javascript" async></script>
 
-            {% if hypothesis ?? false %}
-            window.elifeConfig.hypothesis = {
-              usernameUrl: '{{ absolute_url(path('profile', {id: 'placeholder'})|replace({'placeholder': ''})) }}',
-              services: [{
-                apiUrl: '{{ hypothesis_api }}',
-                authority: '{{ hypothesis_authority }}',
-                grantToken: {% if app.user %}'{{ hypothesis_token(app.user) }}'{% else %}null{% endif %}
-                  {%- if not app.user %},
-                onLoginRequest: function () {
-                  window.location.assign('{{ path('log-in') }}');
-                },
-                onSignupRequest: function () {
-                  window.location.assign('{{ path('log-in') }}');
-                }
-                  {%- else %},
-                onLogoutRequest: function () {
-                  window.location.assign('{{ path('log-out') }}');
-                },
-                onProfileRequest: function () {
-                  window.location.assign('{{ path('profile', {id: app.user.username}) }}');
-                }
-                  {%- endif %}
-              }]
-            };
-            {% endif %}
+    <script type="text/javascript" data-cookieconsent="statistics">
+        window.elifeConfig = window.elifeConfig || {};
 
-            window.elifeConfig.domain = '{{ app.request.host|split('.')|slice(-2)|join('.') }}';
+        window.elifeConfig.scriptPaths = [
+            '{{ preload(asset('assets/patterns/js/main.js'), {as: 'script', nopush: true}) }}'
+        ];
 
-            {% include '@patterns/assets/js/elife-loader.js' %}
+        {% if hypothesis ?? false %}
+        window.elifeConfig.hypothesis = {
+          usernameUrl: '{{ absolute_url(path('profile', {id: 'placeholder'})|replace({'placeholder': ''})) }}',
+          services: [{
+            apiUrl: '{{ hypothesis_api }}',
+            authority: '{{ hypothesis_authority }}',
+            grantToken: {% if app.user %}'{{ hypothesis_token(app.user) }}'{% else %}null{% endif %}
+              {%- if not app.user %},
+            onLoginRequest: function () {
+              window.location.assign('{{ path('log-in') }}');
+            },
+            onSignupRequest: function () {
+              window.location.assign('{{ path('log-in') }}');
+            }
+              {%- else %},
+            onLogoutRequest: function () {
+              window.location.assign('{{ path('log-out') }}');
+            },
+            onProfileRequest: function () {
+              window.location.assign('{{ path('profile', {id: app.user.username}) }}');
+            }
+              {%- endif %}
+          }]
+        };
+        {% endif %}
 
-        </script>
+        window.elifeConfig.domain = '{{ app.request.host|split('.')|slice(-2)|join('.') }}';
+
+        {% include '@patterns/assets/js/elife-loader.js' %}
+
+    </script>
 
     <link href="{{ preload(asset('assets/patterns/css/all.css'), {as: 'style', nopush: true}) }}" rel="stylesheet">
 
