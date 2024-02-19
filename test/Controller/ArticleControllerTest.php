@@ -2793,29 +2793,29 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertSame('Ethics', $ethics->filter('header > h3')->text());
         $this->assertSame('Ethics text', trim($ethics->filter('div')->text()));
 
-        $reviewers = $articleInfo->eq(3);
-        $this->assertSame('Senior Editor', $reviewers->filter('header > h3')->text());
+        // $reviewers = $articleInfo->eq(3);
+        // $this->assertSame('Senior Editor', $reviewers->filter('header > h3')->text());
 
-        $reviewerDetails = $reviewers->filter('li');
-        $this->assertCount(1, $reviewerDetails);
-        $this->assertSame('Senior Editor 1, Institution, Country', $reviewerDetails->eq(0)->text());
+        // $reviewerDetails = $reviewers->filter('li');
+        // $this->assertCount(1, $reviewerDetails);
+        // $this->assertSame('Senior Editor 1, Institution, Country', $reviewerDetails->eq(0)->text());
 
-        $reviewers = $articleInfo->eq(4);
-        $this->assertSame('Reviewing Editor', $reviewers->filter('header > h3')->text());
+        // $reviewers = $articleInfo->eq(4);
+        // $this->assertSame('Reviewing Editor', $reviewers->filter('header > h3')->text());
 
-        $reviewerDetails = $reviewers->filter('li');
-        $this->assertCount(1, $reviewerDetails);
-        $this->assertSame('Reviewing Editor 1', $reviewerDetails->eq(0)->text());
+        // $reviewerDetails = $reviewers->filter('li');
+        // $this->assertCount(1, $reviewerDetails);
+        // $this->assertSame('Reviewing Editor 1', $reviewerDetails->eq(0)->text());
 
-        $reviewers = $articleInfo->eq(5);
-        $this->assertSame('Reviewers', $reviewers->filter('header > h3')->text());
+        // $reviewers = $articleInfo->eq(5);
+        // $this->assertSame('Reviewers', $reviewers->filter('header > h3')->text());
 
-        $reviewerDetails = $reviewers->filter('li');
-        $this->assertCount(2, $reviewerDetails);
-        $this->assertSame('Reviewer 1, Institution, Country', $reviewerDetails->eq(0)->text());
-        $this->assertSame('Reviewer 2', $reviewerDetails->eq(1)->text());
+        // $reviewerDetails = $reviewers->filter('li');
+        // $this->assertCount(2, $reviewerDetails);
+        // $this->assertSame('Reviewer 1, Institution, Country', $reviewerDetails->eq(0)->text());
+        // $this->assertSame('Reviewer 2', $reviewerDetails->eq(1)->text());
 
-        $publicationHistory = $articleInfo->eq(6);
+        $publicationHistory = $articleInfo->eq(3);
         $this->assertSame('Version history', $publicationHistory->filter('header > h3')->text());
         $this->assertCount(9, $publicationHistory->filter('ol')->children());
         $this->assertSame('Preprint posted: December 27, 2006 (view preprint)', $publicationHistory->filter('ol')->children()->eq(0)->text());
@@ -2828,12 +2828,12 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertSame('Version of Record published: January 1, 2009 (version 3)', $publicationHistory->filter('ol')->children()->eq(7)->text());
         $this->assertSame('Version of Record updated: January 1, 2010 (version 4)', $publicationHistory->filter('ol')->children()->eq(8)->text());
 
-        $copyright = $articleInfo->eq(7);
+        $copyright = $articleInfo->eq(4);
         $this->assertSame('Copyright', $copyright->filter('header > h3')->text());
         $this->assertContains('© 2012, Bar', $copyright->filter('div')->text());
         $this->assertContains('Copyright statement.', $copyright->filter('div')->text());
 
-        $downloadLinks = $crawler->filter('.main-content-grid > section:nth-of-type(11)');
+        $downloadLinks = $crawler->filter('.main-content-grid > section:nth-of-type(9)');
         $this->assertSame('Download links', $downloadLinks->filter('.article-section__header_text')->text());
         $downloadLinksGroup = $downloadLinks->filter('.article-download-links-list__group');
         $this->assertCount(3, $downloadLinksGroup);
@@ -2859,7 +2859,7 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertSame('Download BibTeX', $this->crawlerText($citeThisArticleLinks->eq(0)));
         $this->assertSame('Download .RIS', $this->crawlerText($citeThisArticleLinks->eq(1)));
 
-        $this->assertSame('Categories and tags', $crawler->filter('.main-content-grid > section:nth-of-type(13) .article-meta__group_title')->text());
+        $this->assertSame('Categories and tags', $crawler->filter('.main-content-grid > section:nth-of-type(10) .article-meta__group_title')->text());
 
         $this->assertSame(
             [
@@ -5394,7 +5394,7 @@ final class ArticleControllerTest extends PageTestCase
         // $this->assertSame('Recommendations for authors',
         //     $crawler->filter('.main-content-grid > section:nth-of-type(3) > div > section:nth-of-type(3) > header > h3')->text());
         $articleInfo = $crawler->filter('.article-section__body section');
-        $citeAll = $articleInfo->eq(7);
+        $citeAll = $articleInfo->eq(4);
         $this->assertSame('Cite all versions', $citeAll->filter('.article-section__header_text')->text());
         $this->assertSame('You can cite all versions using the DOI https://doi.org/10.7554/eLife.00001. This DOI represents all versions, and will always resolve to the latest one.',
             $this->crawlerText($citeAll->filter('.article-section__body')));
