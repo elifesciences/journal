@@ -35,11 +35,13 @@ final class ArticlePeerReviewControllerTest extends PageTestCase
             $crawler->filter('.main-content-grid > section:nth-of-type(3) header > h2')->text());
          $this->assertSame('Decision letter',
             $crawler->filter('.main-content-grid > section:nth-of-type(4) header > h2')->text());
-       $this->assertSame('Author response',
+
+
+         $this->assertSame('Author response',
             $crawler->filter('.main-content-grid > section:nth-of-type(5) header > h2')->text());
 
          $this->assertSame('Author response text',
-             $crawler->filter('.main-content-grid > section:nth-of-type(9) > div > p')->text());
+             $crawler->filter('.main-content-grid > section:nth-of-type(5) > div > p')->text());
 
 
 //
