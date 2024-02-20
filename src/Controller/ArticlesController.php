@@ -927,7 +927,7 @@ final class ArticlesController extends Controller
                     $publicReviews = $item->getPublicReviews()->map(function (PublicReview $publicReview, $index) use ($context, $first) {
                         $publicReviewSection = ArticleSection::collapsible(
                             $publicReview->getId(),
-                            $publicReview->getTitle(),
+                            'Reviewer #' .($index + 1),
                             2,
                             $this->render(...$this->convertContent($publicReview, 3, $context)),
                             null,
