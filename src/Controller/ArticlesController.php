@@ -1403,16 +1403,21 @@ final class ArticlesController extends Controller
                     $sections = [];
                 }
 
-                 $links = [];
-
                 return new JumpMenu(
-                    array_merge($links, array_values(array_filter(array_map(function (ViewModel $viewModel) {
+                    array_map(function (ViewModel $viewModel, $i) {
                         if ($viewModel instanceof ArticleSection) {
+                            if (strpos($viewModel['title'], 'Reviewer') !== false ) {
+                                if ($i === 0) {
+                                    $i += 1;
+                                }
+                                return new Link('Reviewer #'.$i, '#'.$viewModel['id']);
+                            }
+
                             return new Link($viewModel['title'], '#'.$viewModel['id']);
                         }
 
                         return null;
-                    }, $sections))))
+                    }, $sections, array_keys($sections))
                 );
             });
     }

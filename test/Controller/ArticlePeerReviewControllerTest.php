@@ -29,9 +29,9 @@ final class ArticlePeerReviewControllerTest extends PageTestCase
         $this->assertSame('Editors', $editors->filter('h2.article-section__header_text')->text());
         $this->assertSame('Senior Editor', $editors->filter('header > h3')->text());
 
-        $this->assertSame('Reviewer #1 (public review)',
+        $this->assertSame('Reviewer #1',
             $crawler->filter('.main-content-grid > section:nth-of-type(2) header > h2')->text());
-        $this->assertSame('Reviewer #2 (public review)',
+        $this->assertSame('Reviewer #2',
             $crawler->filter('.main-content-grid > section:nth-of-type(3) header > h2')->text());
          $this->assertSame('Decision letter',
             $crawler->filter('.main-content-grid > section:nth-of-type(4) header > h2')->text());
@@ -42,7 +42,6 @@ final class ArticlePeerReviewControllerTest extends PageTestCase
 
          $this->assertSame('Author response text',
              $crawler->filter('.main-content-grid > section:nth-of-type(5) > div > p')->text());
-
 
 //
 //         $this->assertSame('Reviewer 1',
