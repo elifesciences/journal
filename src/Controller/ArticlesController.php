@@ -183,34 +183,9 @@ final class ArticlesController extends Controller
 
         $figures = $this->findFigures($arguments['item'])->then(Callback::method('notEmpty'));
 
-        $arguments['hasFigures'] = all(['item' => $arguments['item'], 'hasFigures' => $figures])
-            ->then(function (array $parts) {
-                $item = $parts['item'];
-                $hasFigures = $parts['hasFigures'];
+        $arguments['hasFigures'] = $this->checkHasFigures($arguments['item'], $figures);
 
-                return
-                    $item->getAdditionalFiles()->notEmpty()
-                    ||
-                    $hasFigures;
-            });
-
-        $arguments['hasPeerReview'] = all(['item' => $arguments['item']])
-            ->then(function (array $parts) {
-                $item = $parts['item'];
-
-                return
-                    $item instanceof ArticleVoR
-                    &&
-                    ($item->getPublicReviews()->notEmpty()
-                    ||
-                    $item->getRecommendationsForAuthors()
-                    ||
-                    $item->getDecisionLetter()
-                    ||
-                    $item->getReviewers()->notEmpty()
-                    ||
-                    $item->getAuthorResponse());
-            });
+        $arguments['hasPeerReview'] = $this->checkHasPeerReview($arguments['item']);
 
         $dataAvailability = (new PromiseSequence($arguments['item']
             ->then(Callback::method('getDataAvailability'))))
@@ -767,23 +742,7 @@ final class ArticlesController extends Controller
                 return new ViewModel\AdditionalAssets(null, $files->toArray());
             }));
 
-        $arguments['hasPeerReview'] = all(['item' => $arguments['item']])
-            ->then(function (array $parts) {
-                $item = $parts['item'];
-
-                return
-                    $item instanceof ArticleVoR
-                    &&
-                    ($item->getPublicReviews()->notEmpty()
-                    ||
-                    $item->getRecommendationsForAuthors()
-                    ||
-                    $item->getDecisionLetter()
-                    ||
-                    $item->getReviewers()->notEmpty()
-                    ||
-                    $item->getAuthorResponse());
-            });
+        $arguments['hasPeerReview'] = $this->checkHasPeerReview($arguments['item']);
 
         $arguments['body'] = all([
             'isMagazine' => $arguments['isMagazine'],
@@ -892,16 +851,7 @@ final class ArticlesController extends Controller
                 return $context;
             });
 
-        $arguments['hasFigures'] = all(['item' => $arguments['item'], 'hasFigures' => $figures])
-            ->then(function (array $parts) {
-                $item = $parts['item'];
-                $hasFigures = $parts['hasFigures'];
-
-                return
-                    $item->getAdditionalFiles()->notEmpty()
-                    ||
-                    $hasFigures;
-            });
+        $arguments['hasFigures'] = $this->checkHasFigures($arguments['item'], $figures);
 
         $arguments['body'] = all(['item' => $arguments['item'], 'isMagazine' => $arguments['isMagazine'], 'context' => $context])
             ->then(function (array $parts) {
@@ -1739,5 +1689,31 @@ final class ArticlesController extends Controller
         }
 
         return $this->get('router')->generate("article-version{$subRoute}", [$currentVersion, 'version' => $forVersion, '_fragment' => $fragment]);
+    }
+
+    private function checkHasFigures($item, $figures) {
+        return all(['item' => $item, 'hasFigures' => $figures])
+            ->then(function (array $parts) {
+                $item = $parts['item'];
+                $hasFigures = $parts['hasFigures'];
+
+                return $item->getAdditionalFiles()->notEmpty() || $hasFigures;
+            });
+    }
+
+    private function checkHasPeerReview($item) {
+        return all(['item' => $item])
+            ->then(function (array $parts) {
+                $item = $parts['item'];
+
+                return $item instanceof ArticleVoR
+                    && (
+                        $item->getPublicReviews()->notEmpty()
+                        || $item->getRecommendationsForAuthors()
+                        || $item->getDecisionLetter()
+                        || $item->getReviewers()->notEmpty()
+                        || $item->getAuthorResponse()
+                    );
+            });
     }
 }
