@@ -552,5 +552,4 @@ final class ArticlePeerReviewControllerTest extends PageTestCase
 
         return '/articles/00001/peer-reviews';
     }
-
 }
