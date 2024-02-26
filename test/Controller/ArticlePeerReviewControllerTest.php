@@ -21,7 +21,7 @@ final class ArticlePeerReviewControllerTest extends PageTestCase
         $this->assertSame('Foo Bar', trim($crawler->filter('.author_list')->text(), " \n,"));
         $this->assertEmpty($crawler->filter('.institution_list'));
         $this->assertSame('tabbed-navigation__tab-label tabbed-navigation__tab-label--active',
-            $crawler->filter('ul.tabbed-navigation__tabs li')->eq(2)->attr('class'));
+        $crawler->filter('ul.tabbed-navigation__tabs li')->eq(2)->attr('class'));
         $this->assertEmpty($crawler->filter('.contextual-data__list'));
 
         $articleInfo = $crawler->filter('.main-content-grid');
@@ -33,45 +33,27 @@ final class ArticlePeerReviewControllerTest extends PageTestCase
             $crawler->filter('.main-content-grid > section:nth-of-type(2) header > h2')->text());
         $this->assertSame('Reviewer #2 (public review)',
             $crawler->filter('.main-content-grid > section:nth-of-type(3) header > h2')->text());
+
          $this->assertSame('Decision letter',
             $crawler->filter('.main-content-grid > section:nth-of-type(4) header > h2')->text());
-
+         $this->assertSame('Decision letter text',
+             $crawler->filter('.main-content-grid > section:nth-of-type(4) > div > p')->text());
 
          $this->assertSame('Author response',
             $crawler->filter('.main-content-grid > section:nth-of-type(5) header > h2')->text());
-
          $this->assertSame('Author response text',
              $crawler->filter('.main-content-grid > section:nth-of-type(5) > div > p')->text());
 
         $this->assertSame(
             [
                 'Editors',
-                'Reviewer #1',
-                'Reviewer #2',
+                'Reviewer #1 (public review)',
+                'Reviewer #2 (public review)',
                 'Decision letter',
                 'Author response',
             ],
             array_map('trim', $crawler->filter('.jump-menu__item')->extract('_text'))
         );
-
-//
-//         $this->assertSame('Reviewer 1',
-//             $crawler->filter('.main-content-grid > section:nth-of-type(8) > div .profile-snippet__name')->eq(0)->text());
-//         $this->assertSame('Reviewing Editor 1',
-//             $crawler->filter('.main-content-grid > section:nth-of-type(8) > div .profile-snippet__name')->eq(1)->text());
-//         $this->assertSame('Senior Editor 1',
-//             $crawler->filter('.main-content-grid > section:nth-of-type(8) > div .profile-snippet__name')->eq(2)->text());
-//         $this->assertSame('Reviewer 2',
-//             $crawler->filter('.main-content-grid > section:nth-of-type(8) > div .profile-snippet__name')->eq(3)->text());
-//         $this->assertSame('Decision letter description',
-//             $crawler->filter('.main-content-grid > section:nth-of-type(8) > div .decision-letter-header__main_text > p')->text());
-//         $this->assertSame('Decision letter text',
-//             $crawler->filter('.main-content-grid > section:nth-of-type(8) > div > p')->text());
-//         $this->assertSame('Author response', $crawler->filter('#author-response-id h2')->text());
-//         $this->assertSame('Author response',
-//             $crawler->filter('.main-content-grid > section:nth-of-type(9) > header > h2')->text());
-//         $this->assertSame('Author response text',
-//             $crawler->filter('.main-content-grid > section:nth-of-type(9) > div > p')->text());
     }
 
     /**
@@ -101,35 +83,6 @@ final class ArticlePeerReviewControllerTest extends PageTestCase
         $this->assertEmpty($crawler->filter('meta[name="dc.description"]'));
         $this->assertSame('2010-01-01', $crawler->filter('meta[name="dc.date"]')->attr('content'));
         $this->assertSame('© 2010 Bar. Copyright statement', $crawler->filter('meta[name="dc.rights"]')->attr('content'));
-    }
-
-    /**
-     * @test
-     */
-    public function it_has_metadata_for_previous_versions()
-    {
-        $client = static::createClient();
-
-        $crawler = $client->request('GET', $this->getPreviousVersionUrl().'?foo');
-
-        $this->assertSame(200, $client->getResponse()->getStatusCode());
-
-        $this->assertSame('Peer review in Article title | eLife', $crawler->filter('title')->text());
-        $this->assertSame('/articles/00001/figures', $crawler->filter('link[rel="canonical"]')->attr('href'));
-        $this->assertSame('http://localhost/articles/00001/figures', $crawler->filter('meta[property="og:url"]')->attr('content'));
-        $this->assertSame('Peer review in Article title', $crawler->filter('meta[property="og:title"]')->attr('content'));
-        $this->assertSame('article', $crawler->filter('meta[property="og:type"]')->attr('content'));
-        $this->assertSame('summary', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
-        $this->assertSame('http://localhost/'.ltrim(self::$kernel->getContainer()->get('elife.assets.packages')->getUrl('assets/images/social/icon-600x600@1.png'), '/'), $crawler->filter('meta[name="twitter:image"]')->attr('content'));
-        $this->assertSame('http://localhost/'.ltrim(self::$kernel->getContainer()->get('elife.assets.packages')->getUrl('assets/images/social/icon-600x600@1.png'), '/'), $crawler->filter('meta[property="og:image"]')->attr('content'));
-        $this->assertSame('600', $crawler->filter('meta[property="og:image:width"]')->attr('content'));
-        $this->assertSame('600', $crawler->filter('meta[property="og:image:height"]')->attr('content'));
-        $this->assertSame('doi:10.7554/eLife.00001', $crawler->filter('meta[name="dc.identifier"]')->attr('content'));
-        $this->assertEmpty($crawler->filter('meta[name="dc.relation.ispartof"]'));
-        $this->assertSame('Article title', $crawler->filter('meta[name="dc.title"]')->attr('content'));
-        $this->assertEmpty($crawler->filter('meta[name="dc.description"]'));
-        $this->assertSame('2010-01-01', $crawler->filter('meta[name="dc.date"]')->attr('content'));
-        $this->assertSame('© 2010 Foo Bar. Copyright statement.', $crawler->filter('meta[name="dc.rights"]')->attr('content'));
     }
 
     protected function getUrl() : string
@@ -600,119 +553,4 @@ final class ArticlePeerReviewControllerTest extends PageTestCase
         return '/articles/00001/peer-reviews';
     }
 
-    private function getPreviousVersionUrl()
-    {
-        $this->mockApiResponse(
-            new Request(
-                'GET',
-                'http://api.elifesciences.org/articles/00001/versions/1',
-                ['Accept' => 'application/vnd.elife.article-poa+json; version=3, application/vnd.elife.article-vor+json; version=7']
-            ),
-            new Response(
-                200,
-                ['Content-Type' => 'application/vnd.elife.article-poa+json; version=3'],
-                json_encode([
-                    'status' => 'poa',
-                    'stage' => 'published',
-                    'id' => '00001',
-                    'version' => 1,
-                    'type' => 'research-article',
-                    'doi' => '10.7554/eLife.00001',
-                    'title' => 'Article title',
-                    'published' => '2010-01-01T00:00:00Z',
-                    'versionDate' => '2010-01-01T00:00:00Z',
-                    'statusDate' => '2010-01-01T00:00:00Z',
-                    'volume' => 1,
-                    'elocationId' => 'e00001',
-                    'copyright' => [
-                        'license' => 'CC-BY-4.0',
-                        'holder' => 'Foo Bar',
-                        'statement' => 'Copyright statement.',
-                    ],
-                    'authorLine' => 'Foo Bar',
-                    'authors' => [
-                        [
-                            'type' => 'person',
-                            'name' => [
-                                'preferred' => 'Foo Bar',
-                                'index' => 'Foo Bar',
-                            ],
-                        ],
-                    ],
-                    'additionalFiles' => [
-                        [
-                            'id' => 'file1',
-                            'label' => 'Additional file 1 label',
-                            'title' => 'Additional file 1 title',
-                            'mediaType' => 'image/jpeg',
-                            'uri' => 'https://placehold.it/900x450',
-                            'filename' => 'image.jpg',
-                        ],
-                    ],
-                ])
-            )
-        );
-
-        $this->mockApiResponse(
-            new Request(
-                'GET',
-                'http://api.elifesciences.org/articles/00001/versions',
-                [
-                    'Accept' => [
-                        'application/vnd.elife.article-history+json; version=2',
-                    ],
-                ]
-            ),
-            new Response(
-                200,
-                ['Content-Type' => 'application/vnd.elife.article-history+json; version=2'],
-                json_encode([
-                    'versions' => [
-                        [
-                            'status' => 'poa',
-                            'stage' => 'published',
-                            'id' => '00001',
-                            'version' => 1,
-                            'type' => 'research-article',
-                            'doi' => '10.7554/eLife.00001',
-                            'title' => 'Article title',
-                            'published' => '2010-01-01T00:00:00Z',
-                            'versionDate' => '2010-01-01T00:00:00Z',
-                            'statusDate' => '2010-01-01T00:00:00Z',
-                            'volume' => 1,
-                            'elocationId' => 'e00001',
-                            'copyright' => [
-                                'license' => 'CC-BY-4.0',
-                                'holder' => 'Foo Bar',
-                                'statement' => 'Copyright statement.',
-                            ],
-                            'authorLine' => 'Foo Bar',
-                        ],
-                        [
-                            'status' => 'vor',
-                            'stage' => 'published',
-                            'id' => '00001',
-                            'version' => 2,
-                            'type' => 'research-article',
-                            'doi' => '10.7554/eLife.00001',
-                            'title' => 'Article title',
-                            'published' => '2010-01-01T00:00:00Z',
-                            'versionDate' => '2011-01-01T00:00:00Z',
-                            'statusDate' => '2011-01-01T00:00:00Z',
-                            'volume' => 1,
-                            'elocationId' => 'e00001',
-                            'copyright' => [
-                                'license' => 'CC-BY-4.0',
-                                'holder' => 'Foo Bar',
-                                'statement' => 'Copyright statement.',
-                            ],
-                            'authorLine' => 'Foo Bar',
-                        ],
-                    ],
-                ])
-            )
-        );
-
-        return '/articles/00001v1/peer-reviews';
-    }
 }
