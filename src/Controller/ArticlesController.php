@@ -1406,13 +1406,6 @@ final class ArticlesController extends Controller
                 return new JumpMenu(
                     array_map(function (ViewModel $viewModel, $i) {
                         if ($viewModel instanceof ArticleSection) {
-                            if (strpos($viewModel['title'], 'Reviewer') !== false ) {
-                                if ($i === 0) {
-                                    $i += 1;
-                                }
-                                return new Link('Reviewer #'.$i, '#'.$viewModel['id']);
-                            }
-
                             return new Link($viewModel['title'], '#'.$viewModel['id']);
                         }
 
