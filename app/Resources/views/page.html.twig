@@ -312,10 +312,6 @@
         };
         {% endif %}
 
-        window.elifeConfig.domain = '{{ app.request.host|split('.')|slice(-2)|join('.') }}';
-
-        {% include '@patterns/assets/js/elife-loader.js' %}
-
     </script>
 
     <link href="{{ preload(asset('assets/patterns/css/all.css'), {as: 'style', nopush: true}) }}" rel="stylesheet">
