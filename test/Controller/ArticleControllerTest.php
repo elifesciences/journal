@@ -1511,9 +1511,6 @@ final class ArticleControllerTest extends PageTestCase
 
         $articleInfo = $crawler->filter('.main-content-grid > section:nth-of-type(1) > div > section');
 
-        // $reviewers = $articleInfo->eq(0);
-        // $this->assertSame('Reviewer', $reviewers->filter('header > h3')->text());
-
         $publicationHistory = $articleInfo->eq(0);
         $this->assertSame('Version history', $publicationHistory->filter('header > h3')->text());
         $this->assertCount(1, $publicationHistory->filter('ol')->children());
@@ -2892,8 +2889,6 @@ final class ArticleControllerTest extends PageTestCase
                 'Appendix 1',
                 'Data availability',
                 'References',
-                // 'Decision letter',
-                // 'Author response',
                 'Article and author information',
             ],
             array_map('trim', $crawler->filter('.jump-menu__item')->extract('_text'))

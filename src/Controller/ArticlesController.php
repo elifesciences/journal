@@ -482,6 +482,52 @@ final class ArticlesController extends Controller
                     );
                 }
 
+                if ($item->getReviewers()->notEmpty() &&
+                    (!$item instanceof ArticleVoR) ||
+                        ($item instanceof ArticleVoR && $item->getDecisionLetter())) {
+                    $roles = $item->getReviewers()
+                        ->reduce(function (array $roles, Reviewer $reviewer) {
+                            $entry = $reviewer->getPreferredName();
+
+                            foreach ($reviewer->getAffiliations() as $affiliation) {
+                                $entry .= ", {$affiliation->toString()}";
+                            }
+
+                            $roles[$reviewer->getRole()][] = $entry;
+
+                            return $roles;
+                        }, []);
+
+                    uksort($roles, function (string $a, string $b) : int {
+                        if (false !== stripos($a, 'Senior')) {
+                            return -1;
+                        }
+                        if (false !== stripos($b, 'Senior')) {
+                            return 1;
+                        }
+                        if (false !== stripos($a, 'Editor')) {
+                            return -1;
+                        }
+                        if (false !== stripos($b, 'Editor')) {
+                            return 1;
+                        }
+
+                        return 0;
+                    });
+
+                    foreach ($roles as $role => $reviewers) {
+                        if (count($reviewers) > 2) {
+                            $role = "${role}s";
+                        }
+
+                        $infoSections[] = ArticleSection::basic(
+                            $this->render(Listing::ordered($reviewers)),
+                            $role,
+                            3
+                        );
+                    }
+                }
+
                 $received = $history->getReceived();
                 $accepted = $history->getAccepted();
                 $sentForReview = $history->getSentForReview();
@@ -866,16 +912,16 @@ final class ArticlesController extends Controller
 
                 $first = true;
 
-                if ($item->getReviewers()->notEmpty()) {
+                if ($item->getReviewers()->notEmpty() && $item instanceof ArticleVoR && !$item->getDecisionLetter()) {
                     $roles = $item->getReviewers()
                         ->reduce(function (array $roles, Reviewer $reviewer) {
                             $entry = $reviewer->getPreferredName();
 
-                            foreach ($reviewer->getAffiliations() as $affiliation) {
-                                $entry .= ", {$affiliation->toString()}";
-                            }
-
                             $roles[$reviewer->getRole()][] = $entry;
+
+                            foreach ($reviewer->getAffiliations() as $affiliation) {
+                                $roles[$reviewer->getRole()][] = $affiliation->toString();
+                            }
 
                             return $roles;
                         }, []);
@@ -898,14 +944,13 @@ final class ArticlesController extends Controller
                     });
 
                     foreach ($roles as $role => $reviewers) {
-                        if (count($reviewers) > 1) {
+                        if (count($reviewers) > 2) {
                             $role = "${role}s";
                         }
 
                         $infoSections[] = ArticleSection::basic(
                             $this->render(Listing::ordered($reviewers)),
-                            $role,
-                            3
+                            $role, null, null, null, null, 'editor', false, null, null, null, true
                         );
                     }
 
