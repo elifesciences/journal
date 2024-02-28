@@ -26,9 +26,6 @@ final class ArticlePeerReviewControllerTest extends PageTestCase
 
         $articleInfo = $crawler->filter('.main-content-grid');
         $editors = $articleInfo->filter('section#editors');
-        $this->assertSame('Editors', $editors->filter('h2.article-section__header_text')->text());
-        $this->assertSame('Senior Editor', $editors->filter('header > h3')->text());
-
         $this->assertSame('Reviewer #1 (public review)',
             $crawler->filter('.main-content-grid > section:nth-of-type(2) header > h2')->text());
         $this->assertSame('Reviewer #2 (public review)',

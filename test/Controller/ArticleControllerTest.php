@@ -1509,7 +1509,7 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertCount(1, $authorDetails);
         $this->assertSame('Author One', $authorDetails->eq(0)->filter('.author-details__name')->text());
 
-        $articleInfo = $crawler->filter('.main-content-grid > section:nth-of-type(1) > div > section');
+        $articleInfo = $crawler->filter('.main-content-grid > section:nth-of-type(2) > div > section');
 
         $publicationHistory = $articleInfo->eq(0);
         $this->assertSame('Version history', $publicationHistory->filter('header > h3')->text());
