@@ -268,12 +268,23 @@
 
     </div>
 
-    <script type="text/plain" data-cookieconsent="statistics">
+    <!-- 'safe' javascript that doesn't violate GDPR -->
+    <script type="text/javascript">
         window.elifeConfig = window.elifeConfig || {};
 
         window.elifeConfig.scriptPaths = [
             '{{ preload(asset('assets/patterns/js/main.js'), {as: 'script', nopush: true}) }}'
         ];
+
+        window.elifeConfig.domain = '{{ app.request.host|split('.')|slice(-2)|join('.') }}';
+
+        {% include '@patterns/assets/js/elife-loader.js' %}
+
+    </script>
+
+    <script type="text/plain" data-cookieconsent="statistics">
+
+        window.elifeConfig.Elife.initialiseUnsafeComponentList()
 
         {% if hypothesis ?? false %}
         window.elifeConfig.hypothesis = {
