@@ -185,7 +185,7 @@ final class ArticlesController extends Controller
 
         $arguments['hasFigures'] = $this->checkHasFigures($arguments['item'], $figures);
 
-        $arguments['hasPeerReview'] = $this->checkHasPeerReview($arguments['item']);
+        $arguments['hasPeerReview'] = $this->hasPeerReview($arguments['item']);
 
         $dataAvailability = (new PromiseSequence($arguments['item']
             ->then(Callback::method('getDataAvailability'))))
@@ -432,6 +432,24 @@ final class ArticlesController extends Controller
                     );
                 }
 
+                // display decision letter in the main page for new vor models
+                if ($item instanceof ArticleVoR && $item->isReviewedPreprint() && $item->getDecisionLetter()) {
+                    $parts[] = ArticleSection::collapsible(
+                        $item->getDecisionLetter()->getId() ?? 'decision-letter',
+                        'Decision letter',
+                        2,
+                        $this->render($this->convertTo($item, ViewModel\DecisionLetterHeader::class)).
+                        $this->render(...$this->convertContent($item->getDecisionLetter(), 2, $context)),
+                        null,
+                        null,
+                        true,
+                        $first,
+                        $item->getDecisionLetter()->getDoi() ? new Doi($item->getDecisionLetter()->getDoi()) : null
+                    );
+
+                    $first = false;
+                }
+
                 $infoSections = [];
 
                 $realAuthors = $item->getAuthors()->filter(Callback::isInstanceOf(Author::class));
@@ -480,52 +498,6 @@ final class ArticlesController extends Controller
                         'Ethics',
                         3
                     );
-                }
-
-                if ($item->getReviewers()->notEmpty() &&
-                    (!$item instanceof ArticleVoR) ||
-                        ($item instanceof ArticleVoR && $item->getDecisionLetter())) {
-                    $roles = $item->getReviewers()
-                        ->reduce(function (array $roles, Reviewer $reviewer) {
-                            $entry = $reviewer->getPreferredName();
-
-                            foreach ($reviewer->getAffiliations() as $affiliation) {
-                                $entry .= ", {$affiliation->toString()}";
-                            }
-
-                            $roles[$reviewer->getRole()][] = $entry;
-
-                            return $roles;
-                        }, []);
-
-                    uksort($roles, function (string $a, string $b) : int {
-                        if (false !== stripos($a, 'Senior')) {
-                            return -1;
-                        }
-                        if (false !== stripos($b, 'Senior')) {
-                            return 1;
-                        }
-                        if (false !== stripos($a, 'Editor')) {
-                            return -1;
-                        }
-                        if (false !== stripos($b, 'Editor')) {
-                            return 1;
-                        }
-
-                        return 0;
-                    });
-
-                    foreach ($roles as $role => $reviewers) {
-                        if (count($reviewers) > 2) {
-                            $role = "${role}s";
-                        }
-
-                        $infoSections[] = ArticleSection::basic(
-                            $this->render(Listing::ordered($reviewers)),
-                            $role,
-                            3
-                        );
-                    }
                 }
 
                 $received = $history->getReceived();
@@ -788,7 +760,7 @@ final class ArticlesController extends Controller
                 return new ViewModel\AdditionalAssets(null, $files->toArray());
             }));
 
-        $arguments['hasPeerReview'] = $this->checkHasPeerReview($arguments['item']);
+        $arguments['hasPeerReview'] = $this->hasPeerReview($arguments['item']);
 
         $arguments['body'] = all([
             'isMagazine' => $arguments['isMagazine'],
@@ -912,7 +884,7 @@ final class ArticlesController extends Controller
 
                 $first = true;
 
-                if ($item->getReviewers()->notEmpty() && $item instanceof ArticleVoR && !$item->getDecisionLetter()) {
+                if ($item instanceof ArticleVor && $item->isReviewedPreprint()) {
                     $roles = $item->getReviewers()
                         ->reduce(function (array $roles, Reviewer $reviewer) {
                             $entry = $reviewer->getPreferredName();
@@ -968,6 +940,24 @@ final class ArticlesController extends Controller
                     $first = false;
                 }
 
+
+                if ($item instanceof ArticleVoR && !$item->isReviewedPreprint() && $item->getDecisionLetter()) {
+                    $parts[] = ArticleSection::collapsible(
+                        $item->getDecisionLetter()->getId() ?? 'decision-letter',
+                        'Decision letter',
+                        2,
+                        $this->render($this->convertTo($item, ViewModel\DecisionLetterHeader::class)).
+                        $this->render(...$this->convertContent($item->getDecisionLetter(), 2, $context)),
+                        null,
+                        null,
+                        true,
+                        $first,
+                        $item->getDecisionLetter()->getDoi() ? new Doi($item->getDecisionLetter()->getDoi()) : null
+                    );
+
+                    $first = false;
+                }
+
                 if ($item instanceof ArticleVoR && $item->getPublicReviews()->notEmpty()) {
                     $publicReviews = $item->getPublicReviews()->map(function (PublicReview $publicReview, $index) use ($context, $first) {
                         $publicReviewSection = ArticleSection::collapsible(
@@ -1004,23 +994,6 @@ final class ArticlesController extends Controller
                     $first = false;
                 }
 
-                if ($item instanceof ArticleVoR && $item->getDecisionLetter()) {
-                    $parts[] = ArticleSection::collapsible(
-                        $item->getDecisionLetter()->getId() ?? 'decision-letter',
-                        'Decision letter',
-                        2,
-                        $this->render($this->convertTo($item, ViewModel\DecisionLetterHeader::class)).
-                        $this->render(...$this->convertContent($item->getDecisionLetter(), 2, $context)),
-                        null,
-                        null,
-                        true,
-                        $first,
-                        $item->getDecisionLetter()->getDoi() ? new Doi($item->getDecisionLetter()->getDoi()) : null
-                    );
-
-                    $first = false;
-                }
-
                 if ($item instanceof ArticleVoR && $item->getAuthorResponse()) {
                     $parts[] = ArticleSection::collapsible(
                         $item->getAuthorResponse()->getId() ?? 'author-response',
@@ -1033,8 +1006,6 @@ final class ArticlesController extends Controller
                         $first,
                         $item->getAuthorResponse()->getDoi() ? new Doi($item->getAuthorResponse()->getDoi()) : null
                     );
-
-                    $first = false;
                 }
 
                 return $parts;
@@ -1744,19 +1715,14 @@ final class ArticlesController extends Controller
             });
     }
 
-    private function checkHasPeerReview($item) {
+    private function hasPeerReview($item) {
         return all(['item' => $item])
             ->then(function (array $parts) {
                 $item = $parts['item'];
 
-                return $item instanceof ArticleVoR
-                    && (
-                        $item->getPublicReviews()->notEmpty()
-                        || $item->getRecommendationsForAuthors()
-                        || $item->getDecisionLetter()
-                        || $item->getReviewers()->notEmpty()
-                        || $item->getAuthorResponse()
-                    );
+                return ($item instanceof ArticleVoR && $item->getPublicReviews()->notEmpty()) ||
+                    ($item instanceof ArticleVor && $item->getDecisionLetter())
+                    ;
             });
     }
 }
