@@ -492,6 +492,52 @@ final class ArticlesController extends Controller
                     );
                 }
 
+                if ($item->getReviewers()->notEmpty() &&
+                    (!$item instanceof ArticleVoR) ||
+                        ($item instanceof ArticleVoR && $item->getDecisionLetter())) {
+                    $roles = $item->getReviewers()
+                        ->reduce(function (array $roles, Reviewer $reviewer) {
+                            $entry = $reviewer->getPreferredName();
+
+                            foreach ($reviewer->getAffiliations() as $affiliation) {
+                                $entry .= ", {$affiliation->toString()}";
+                            }
+
+                            $roles[$reviewer->getRole()][] = $entry;
+
+                            return $roles;
+                        }, []);
+
+                    uksort($roles, function (string $a, string $b) : int {
+                        if (false !== stripos($a, 'Senior')) {
+                            return -1;
+                        }
+                        if (false !== stripos($b, 'Senior')) {
+                            return 1;
+                        }
+                        if (false !== stripos($a, 'Editor')) {
+                            return -1;
+                        }
+                        if (false !== stripos($b, 'Editor')) {
+                            return 1;
+                        }
+
+                        return 0;
+                    });
+
+                    foreach ($roles as $role => $reviewers) {
+                        if (count($reviewers) > 2) {
+                            $role = "${role}s";
+                        }
+
+                        $infoSections[] = ArticleSection::basic(
+                            $this->render(Listing::ordered($reviewers)),
+                            $role,
+                            3
+                        );
+                    }
+                }
+
                 if ($item->getEthics()->notEmpty()) {
                     $infoSections[] = ArticleSection::basic(
                         $this->render(...$item->getEthics()->map($this->willConvertTo(null, ['level' => 3]))),
