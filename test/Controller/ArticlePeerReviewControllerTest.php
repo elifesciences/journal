@@ -68,7 +68,6 @@ final class ArticlePeerReviewControllerTest extends PageTestCase
             ],
             array_map('trim', $crawler->filter('.jump-menu__item')->extract('_text'))
         );
-
     }
 
     /**

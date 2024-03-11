@@ -1511,15 +1511,12 @@ final class ArticleControllerTest extends PageTestCase
 
         $articleInfo = $crawler->filter('.main-content-grid > section:nth-of-type(1) > div > section');
 
-        $reviewers = $articleInfo->eq(0);
-        $this->assertSame('Reviewer', $reviewers->filter('header > h3')->text());
-
-        $publicationHistory = $articleInfo->eq(1);
+        $publicationHistory = $articleInfo->eq(0);
         $this->assertSame('Version history', $publicationHistory->filter('header > h3')->text());
         $this->assertCount(1, $publicationHistory->filter('ol')->children());
         $this->assertSame('Accepted Manuscript published: January 1, 2010 (version 1)', $publicationHistory->filter('ol')->children()->eq(0)->text());
 
-        $copyright = $articleInfo->eq(2);
+        $copyright = $articleInfo->eq(1);
         $this->assertSame('Copyright', $copyright->filter('header > h3')->text());
         $this->assertContains('© 2012, Author One', $copyright->filter('div')->text());
         $this->assertContains('Copyright statement.', $copyright->filter('div')->text());
@@ -2745,7 +2742,7 @@ final class ArticleControllerTest extends PageTestCase
             $references->filter('div > ol > li:nth-of-type(14) .reference__title')->text());
         $this->assertEmpty($references->filter('div > ol > li:nth-of-type(14) .reference__label'));
 
-        $articleInfo = $crawler->filter('.main-content-grid > section:nth-of-type(8)');
+        $articleInfo = $crawler->filter('.main-content-grid #info');
         $this->assertSame('Article and author information',
             $articleInfo->filter('header > h2')->text());
 
@@ -2754,7 +2751,7 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertSame('Foo Bar, Role', $authorDetails->eq(0)->filter('.author-details__name')->text());
         $this->assertSame('Baz', $authorDetails->eq(1)->filter('.author-details__name')->text());
 
-        $articleInfo = $crawler->filter('.main-content-grid > section:nth-of-type(8) > div > section');
+        $articleInfo = $crawler->filter('.main-content-grid #info > div > section');
 
         $funding = $articleInfo->eq(0);
         $this->assertSame('Funding', $funding->filter('header > h3')->text());
@@ -2772,10 +2769,7 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertSame('Ethics', $ethics->filter('header > h3')->text());
         $this->assertSame('Ethics text', trim($ethics->filter('div')->text()));
 
-        $publicationHistory = $articleInfo->eq(4);
-        $this->assertSame('Reviewing Editor', $publicationHistory->filter('header > h3')->text());
-
-        $publicationHistory = $articleInfo->eq(6);
+        $publicationHistory = $articleInfo->eq(3);
         $this->assertSame('Version history', $publicationHistory->filter('header > h3')->text());
         $this->assertCount(9, $publicationHistory->filter('ol')->children());
         $this->assertSame('Preprint posted: December 27, 2006 (view preprint)', $publicationHistory->filter('ol')->children()->eq(0)->text());
@@ -2788,7 +2782,7 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertSame('Version of Record published: January 1, 2009 (version 3)', $publicationHistory->filter('ol')->children()->eq(7)->text());
         $this->assertSame('Version of Record updated: January 1, 2010 (version 4)', $publicationHistory->filter('ol')->children()->eq(8)->text());
 
-        $copyright = $articleInfo->eq(7);
+        $copyright = $articleInfo->eq(4);
         $this->assertSame('Copyright', $copyright->filter('header > h3')->text());
         $this->assertContains('© 2012, Bar', $copyright->filter('div')->text());
         $this->assertContains('Copyright statement.', $copyright->filter('div')->text());
