@@ -2772,10 +2772,7 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertSame('Ethics', $ethics->filter('header > h3')->text());
         $this->assertSame('Ethics text', trim($ethics->filter('div')->text()));
 
-        $editor = $articleInfo->eq(4);
-        $this->assertSame('Reviewing Editor', $editor->filter('header > h3')->text());
-
-        $publicationHistory = $articleInfo->eq(6);
+        $publicationHistory = $articleInfo->eq(3);
         $this->assertSame('Version history', $publicationHistory->filter('header > h3')->text());
         $this->assertCount(9, $publicationHistory->filter('ol')->children());
         $this->assertSame('Preprint posted: December 27, 2006 (view preprint)', $publicationHistory->filter('ol')->children()->eq(0)->text());
@@ -2788,7 +2785,7 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertSame('Version of Record published: January 1, 2009 (version 3)', $publicationHistory->filter('ol')->children()->eq(7)->text());
         $this->assertSame('Version of Record updated: January 1, 2010 (version 4)', $publicationHistory->filter('ol')->children()->eq(8)->text());
 
-        $copyright = $articleInfo->eq(7);
+        $copyright = $articleInfo->eq(4);
         $this->assertSame('Copyright', $copyright->filter('header > h3')->text());
         $this->assertContains('© 2012, Bar', $copyright->filter('div')->text());
         $this->assertContains('Copyright statement.', $copyright->filter('div')->text());

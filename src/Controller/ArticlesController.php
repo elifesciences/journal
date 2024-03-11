@@ -492,9 +492,7 @@ final class ArticlesController extends Controller
                     );
                 }
 
-                if ($item->getReviewers()->notEmpty() &&
-                    (!$item instanceof ArticleVoR) ||
-                        ($item instanceof ArticleVoR && $item->getDecisionLetter())) {
+                if (!$item->getReviewers()->isEmpty() && !$this->hasPeerReview($item)->wait()) {
                     $roles = $item->getReviewers()
                         ->reduce(function (array $roles, Reviewer $reviewer) {
                             $entry = $reviewer->getPreferredName();
