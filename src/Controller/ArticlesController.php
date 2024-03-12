@@ -448,6 +448,19 @@ final class ArticlesController extends Controller
 
                     $first = false;
                 }
+                if ($item->getType() === 'feature' && $item->getAuthorResponse()) {
+                    $parts[] = ArticleSection::collapsible(
+                        $item->getAuthorResponse()->getId() ?? 'author-response',
+                        'Author response',
+                        2,
+                        $this->render(...$this->convertContent($item->getAuthorResponse(), 2, $context)),
+                        null,
+                        null,
+                        true,
+                        $first,
+                        $item->getAuthorResponse()->getDoi() ? new Doi($item->getAuthorResponse()->getDoi()) : null
+                    );
+                }
 
                 $infoSections = [];
 
@@ -1764,8 +1777,9 @@ final class ArticlesController extends Controller
                 $item = $parts['item'];
 
                 return ($item instanceof ArticleVoR && $item->getPublicReviews()->notEmpty()) ||
-                    ($item instanceof ArticleVor && $item->getDecisionLetter())
-                    ;
+                    ($item instanceof ArticleVor && $item->getDecisionLetter()) ||
+                    ($item instanceof ArticleVor && $item->getAuthorResponse())
+                ;
             });
     }
 }
