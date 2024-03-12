@@ -2790,7 +2790,7 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertContains('© 2012, Bar', $copyright->filter('div')->text());
         $this->assertContains('Copyright statement.', $copyright->filter('div')->text());
 
-        $downloadLinks = $crawler->filter('.main-content-grid > section:nth-of-type(10)');
+        $downloadLinks = $crawler->filter('.main-content-grid > section:nth-of-type(9)');
         $this->assertSame('Download links', $downloadLinks->filter('.article-section__header_text')->text());
         $downloadLinksGroup = $downloadLinks->filter('.article-download-links-list__group');
         $this->assertCount(3, $downloadLinksGroup);
@@ -2849,7 +2849,6 @@ final class ArticleControllerTest extends PageTestCase
                 'Appendix 1',
                 'Data availability',
                 'References',
-                'Decision letter',
                 'Article and author information',
             ],
             array_map('trim', $crawler->filter('.jump-menu__item')->extract('_text'))
