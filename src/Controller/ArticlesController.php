@@ -432,8 +432,7 @@ final class ArticlesController extends Controller
                     );
                 }
 
-                // display decision letter in the main page for new vor models
-                if ($item instanceof ArticleVoR && $item->isReviewedPreprint() && $item->getDecisionLetter()) {
+                if ($item instanceof ArticleVoR && $item->getDecisionLetter()) {
                     $parts[] = ArticleSection::collapsible(
                         $item->getDecisionLetter()->getId() ?? 'decision-letter',
                         'Decision letter',
