@@ -1,0 +1,43 @@
+{% extends '::article.html.twig' %}
+
+{% block canonical %}
+    {{ path('article-peer-reviews', {id: item.id}) }}
+{% endblock %}
+
+{% block article_body %}
+
+    {% embed 'grid/content-new.html.twig' %}
+
+        {% block navigation %}
+
+            {% if tabbedNavigation %}
+
+                {{ render_pattern(tabbedNavigation) }}
+
+            {% endif %}
+
+            {% if jumpMenu %}
+
+                {{ render_pattern(jumpMenu) }}
+
+            {% endif %}
+
+        {% endblock %}
+
+        {% block main %}
+
+            {% fragment_link_rewrite textPath %}
+
+            {% for part in body %}
+
+                {{ render_pattern(part) }}
+
+            {% endfor %}
+
+            {% end_fragment_link_rewrite %}
+
+        {% endblock %}
+
+    {% endembed %}
+
+{% endblock %}

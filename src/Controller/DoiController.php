@@ -32,7 +32,7 @@ final class DoiController extends Controller
         $cachedRedirect = $this->get('cache.doi')->getItem($key);
 
         if (!$cachedRedirect->isHit()) {
-            foreach (['article', 'article-figures'] as $route) {
+            foreach (['article', 'article-figures', 'article-peer-reviews'] as $route) {
                 try {
                     $redirect = $this->findDoi($doi, $route);
                 } catch (OutOfBoundsException $e) {

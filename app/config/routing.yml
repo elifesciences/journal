@@ -158,6 +158,21 @@ article-figures:
     requirements:
         id: '[a-z0-9-]+'
 
+article-version-peer-reviews:
+    path: /articles/{id}v{version}/peer-reviews
+    defaults:
+         _controller: AppBundle:Articles:peerReviews
+    requirements:
+        id: '[a-z0-9-]+'
+        version: '[1-9][0-9]*'
+
+article-peer-reviews:
+    path: /articles/{id}/peer-reviews
+    defaults:
+         _controller: AppBundle:Articles:peerReviews
+    requirements:
+        id: '[a-z0-9-]+'
+
 collection:
     path: /collections/{id}/{slug}
     defaults:
