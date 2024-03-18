@@ -183,16 +183,9 @@ final class ArticlesController extends Controller
 
         $figures = $this->findFigures($arguments['item'])->then(Callback::method('notEmpty'));
 
-        $arguments['hasFigures'] = all(['item' => $arguments['item'], 'hasFigures' => $figures])
-            ->then(function (array $parts) {
-                $item = $parts['item'];
-                $hasFigures = $parts['hasFigures'];
+        $arguments['hasFigures'] = $this->checkHasFigures($arguments['item'], $figures);
 
-                return
-                    $item->getAdditionalFiles()->notEmpty()
-                    ||
-                    $hasFigures;
-            });
+        $arguments['hasPeerReview'] = $this->hasPeerReview($arguments['item']);
 
         $dataAvailability = (new PromiseSequence($arguments['item']
             ->then(Callback::method('getDataAvailability'))))
@@ -439,36 +432,7 @@ final class ArticlesController extends Controller
                     );
                 }
 
-                if ($item instanceof ArticleVoR && $item->getPublicReviews()->notEmpty()) {
-                    $reviews = $item->getPublicReviews()->map(function (PublicReview $publicReview) use ($context) {
-                        return ArticleSection::basic(
-                            $this->render(...$this->convertContent($publicReview, 3, $context)),
-                            $publicReview->getTitle(),
-                            3,
-                            $publicReview->getId(),
-                            $publicReview->getDoi() ? new Doi($publicReview->getDoi()) : null
-                        );
-                    })->toArray();
-
-                    if ($item->getRecommendationsForAuthors()) {
-                        $reviews[] = ArticleSection::basic(
-                            $this->render(...$this->convertContent($item->getRecommendationsForAuthors(), 3, $context)),
-                            $item->getRecommendationsForAuthorsTitle(),
-                            3,
-                            $item->getRecommendationsForAuthors()->getId(),
-                            $item->getRecommendationsForAuthors()->getDoi() ? new Doi($item->getRecommendationsForAuthors()->getDoi()) : null
-                        );
-                    }
-
-                    $parts[] = ArticleSection::collapsible(
-                        'peer-review',
-                        'Peer review',
-                        2,
-                        $this->render(...$reviews)
-                    );
-                }
-
-                if ($item instanceof ArticleVoR && $item->getDecisionLetter()) {
+                if ($item->getType() === 'feature' && $item->getDecisionLetter()) {
                     $parts[] = ArticleSection::collapsible(
                         $item->getDecisionLetter()->getId() ?? 'decision-letter',
                         'Decision letter',
@@ -478,12 +442,14 @@ final class ArticlesController extends Controller
                         null,
                         null,
                         true,
-                        false,
+                        $first,
                         $item->getDecisionLetter()->getDoi() ? new Doi($item->getDecisionLetter()->getDoi()) : null
                     );
+
+                    $first = false;
                 }
 
-                if ($item instanceof ArticleVoR && $item->getAuthorResponse()) {
+                if ($item->getType() === 'feature' && $item->getAuthorResponse()) {
                     $parts[] = ArticleSection::collapsible(
                         $item->getAuthorResponse()->getId() ?? 'author-response',
                         'Author response',
@@ -492,7 +458,7 @@ final class ArticlesController extends Controller
                         null,
                         null,
                         true,
-                        false,
+                        $first,
                         $item->getAuthorResponse()->getDoi() ? new Doi($item->getAuthorResponse()->getDoi()) : null
                     );
                 }
@@ -545,15 +511,7 @@ final class ArticlesController extends Controller
                     );
                 }
 
-                if ($item->getEthics()->notEmpty()) {
-                    $infoSections[] = ArticleSection::basic(
-                        $this->render(...$item->getEthics()->map($this->willConvertTo(null, ['level' => 3]))),
-                        'Ethics',
-                        3
-                    );
-                }
-
-                if ($item->getReviewers()->notEmpty()) {
+                if (!$item->getReviewers()->isEmpty() && !$this->hasPeerReview($item)->wait()) {
                     $roles = $item->getReviewers()
                         ->reduce(function (array $roles, Reviewer $reviewer) {
                             $entry = $reviewer->getPreferredName();
@@ -585,7 +543,7 @@ final class ArticlesController extends Controller
                     });
 
                     foreach ($roles as $role => $reviewers) {
-                        if (count($reviewers) > 1) {
+                        if (count($reviewers) > 2) {
                             $role = "${role}s";
                         }
 
@@ -595,6 +553,14 @@ final class ArticlesController extends Controller
                             3
                         );
                     }
+                }
+
+                if ($item->getEthics()->notEmpty()) {
+                    $infoSections[] = ArticleSection::basic(
+                        $this->render(...$item->getEthics()->map($this->willConvertTo(null, ['level' => 3]))),
+                        'Ethics',
+                        3
+                    );
                 }
 
                 $received = $history->getReceived();
@@ -735,7 +701,7 @@ final class ArticlesController extends Controller
 
         $arguments['viewSelector'] = $this->createViewSelector($arguments['item'], $arguments['isMagazine'], $arguments['hasFigures'], false, $arguments['history'], $arguments['body'], $arguments['eraArticle']);
 
-        $arguments['tabbedNavigation'] = $this->createTabbedNavigation($arguments['item'], $arguments['isMagazine'], $arguments['hasFigures'], false, $arguments['history'], $arguments['body'], $arguments['eraArticle']);
+        $arguments['tabbedNavigation'] = $this->createTabbedNavigation($arguments['item'], $arguments['isMagazine'], $arguments['hasFigures'], 'fullText', $arguments['history'], $arguments['body'], $arguments['eraArticle'], $arguments['hasPeerReview']);
 
         $arguments['jumpMenu'] = $this->createJumpMenu($arguments['item'], $arguments['isMagazine'], $arguments['hasFigures'], false, $arguments['history'], $arguments['body'], $arguments['eraArticle']);
 
@@ -857,6 +823,8 @@ final class ArticlesController extends Controller
                 return new ViewModel\AdditionalAssets(null, $files->toArray());
             }));
 
+        $arguments['hasPeerReview'] = $this->hasPeerReview($arguments['item']);
+
         $arguments['body'] = all([
             'isMagazine' => $arguments['isMagazine'],
             'figures' => $figures,
@@ -899,7 +867,7 @@ final class ArticlesController extends Controller
             })
             ->then(Callback::mustNotBeEmpty(new NotFoundHttpException('Article version does not contain any figures or data')));
 
-        $arguments['tabbedNavigation'] = $this->createTabbedNavigation($arguments['item'], $arguments['isMagazine'], promise_for(true), true, $arguments['history'], $arguments['body'], $arguments['eraArticle']);
+        $arguments['tabbedNavigation'] = $this->createTabbedNavigation($arguments['item'], $arguments['isMagazine'], promise_for(true), 'figures', $arguments['history'], $arguments['body'], $arguments['eraArticle'], $arguments['hasPeerReview']);
 
         $arguments['jumpMenu'] = $this->createJumpMenu($arguments['item'], $arguments['isMagazine'], promise_for(true), true, $arguments['history'], $arguments['body'], $arguments['eraArticle']);
 
@@ -916,6 +884,230 @@ final class ArticlesController extends Controller
             });
 
         return new Response($this->get('templating')->render('::article-figures.html.twig', $arguments));
+    }
+
+    public function peerReviewsAction(Request $request, string $id, int $version = null) : Response
+    {
+        $arguments = $this->articlePageArguments($request, $id, $version);
+
+        $arguments['title'] = $arguments['title']
+            ->then(function (string $title) {
+                return 'Peer review in '.$title;
+            });
+
+        $arguments['contextualData'] = all(['item' => $arguments['item'], 'metrics' => $arguments['contextualDataMetrics']])
+            ->then(function (array $parts) {
+                /** @var ArticleVersion $item */
+                $item = $parts['item'];
+                /** @var array $metrics */
+                $metrics = $parts['metrics'];
+
+                if (!$item->getCiteAs()) {
+                    if (empty($metrics)) {
+                        return null;
+                    }
+
+                    return ContextualData::withMetrics($metrics);
+                }
+
+                return ContextualData::withCitation($item->getCiteAs(), new Doi($item->getDoi()), $metrics);
+            });
+
+        $figures = $this->findFigures($arguments['item'])->then(Callback::method('notEmpty'));
+
+        $bioprotocols = $this->get('elife.api_sdk.bioprotocols')
+            ->list(Identifier::article($id))
+            ->otherwise($this->mightNotExist())
+            ->otherwise($this->softFailure('Failed to load bioprotocols', []));
+
+        $context = all(['item' => $arguments['item'], 'history' => $arguments['history'], 'hasFigures' => $figures, 'bioprotocols' => $bioprotocols])
+            ->then(function (array $parts) {
+                $context = [];
+                if ($parts['hasFigures']) {
+                    $context['figuresUri'] = $this->generatePath($parts['history'], $parts['item']->getVersion(), 'figures');
+                }
+
+                $context['bioprotocols'] = $parts['bioprotocols'];
+
+                return $context;
+            });
+
+        $arguments['hasFigures'] = $this->checkHasFigures($arguments['item'], $figures);
+
+        $arguments['body'] = all(['item' => $arguments['item'], 'isMagazine' => $arguments['isMagazine'], 'context' => $context])
+            ->then(function (array $parts) {
+                /** @var ArticleVersion $item */
+                $item = $parts['item'];
+                /** @var bool $isMagazine */
+                $isMagazine = $parts['isMagazine'];
+                /** @var array $context */
+                $context = $parts['context'];
+
+                $parts = [];
+
+                $first = true;
+
+                if ($item instanceof ArticleVor && $item->isReviewedPreprint()) {
+                    $roles = $item->getReviewers()
+                        ->reduce(function (array $roles, Reviewer $reviewer) {
+                            $entry = $reviewer->getPreferredName();
+
+                            $roles[$reviewer->getRole()][] = $entry;
+
+                            foreach ($reviewer->getAffiliations() as $affiliation) {
+                                $roles[$reviewer->getRole()][] = $affiliation->toString();
+                            }
+
+                            return $roles;
+                        }, []);
+
+                    uksort($roles, function (string $a, string $b) : int {
+                        if (false !== stripos($a, 'Senior')) {
+                            return -1;
+                        }
+                        if (false !== stripos($b, 'Senior')) {
+                            return 1;
+                        }
+                        if (false !== stripos($a, 'Editor')) {
+                            return -1;
+                        }
+                        if (false !== stripos($b, 'Editor')) {
+                            return 1;
+                        }
+
+                        return 0;
+                    });
+
+                    foreach ($roles as $role => $reviewers) {
+                        if (count($reviewers) > 2) {
+                            $role = "${role}s";
+                        }
+
+                        $infoSections[] = ArticleSection::basic(
+                            $this->render(Listing::ordered($reviewers)),
+                            $role, null, null, null, null, 'editor', false, null, null, null, true
+                        );
+                    }
+
+                    $parts[] = ArticleSection::collapsible(
+                        'editors',
+                        'Editors',
+                        2,
+                        $this->render(...$infoSections),
+                        null,
+                        null,
+                        true,
+                        $first
+                    );
+
+                    $first = false;
+                }
+
+
+                if ($item instanceof ArticleVoR && !$item->isReviewedPreprint() && $item->getDecisionLetter()) {
+                    $parts[] = ArticleSection::collapsible(
+                        $item->getDecisionLetter()->getId() ?? 'decision-letter',
+                        'Decision letter',
+                        2,
+                        $this->render($this->convertTo($item, ViewModel\DecisionLetterHeader::class)).
+                        $this->render(...$this->convertContent($item->getDecisionLetter(), 2, $context)),
+                        null,
+                        null,
+                        true,
+                        $first,
+                        $item->getDecisionLetter()->getDoi() ? new Doi($item->getDecisionLetter()->getDoi()) : null
+                    );
+
+                    $first = false;
+                }
+
+                if ($item instanceof ArticleVoR && $item->getPublicReviews()->notEmpty()) {
+                    $publicReviews = $item->getPublicReviews()->map(function (PublicReview $publicReview, $index) use ($context, $first) {
+                        $publicReviewSection = ArticleSection::collapsible(
+                            $publicReview->getId(),
+                            $publicReview->getTitle(),
+                            2,
+                            $this->render(...$this->convertContent($publicReview, 3, $context)),
+                            null,
+                            null,
+                            false,
+                            $first && $index === 0,
+                            $publicReview->getDoi() ? new Doi($publicReview->getDoi()) : null
+                        );
+
+                        return $publicReviewSection;
+                    })->toArray();
+
+                    $parts = array_merge($parts, $publicReviews);
+
+                    if ($item->getRecommendationsForAuthors()) {
+                        $parts[] = ArticleSection::collapsible(
+                            $item->getRecommendationsForAuthors()->getId(),
+                            $item->getRecommendationsForAuthorsTitle(),
+                            2,
+                            $this->render(...$this->convertContent($item->getRecommendationsForAuthors(), 3, $context)),
+                            null,
+                            null,
+                            false,
+                            false,
+                            $item->getRecommendationsForAuthors()->getDoi() ? new Doi($item->getRecommendationsForAuthors()->getDoi()) : null
+                        );
+                    }
+
+                    $first = false;
+                }
+
+                if ($item instanceof ArticleVoR && $item->getAuthorResponse()) {
+                    $parts[] = ArticleSection::collapsible(
+                        $item->getAuthorResponse()->getId() ?? 'author-response',
+                        'Author response',
+                        2,
+                        $this->render(...$this->convertContent($item->getAuthorResponse(), 2, $context)),
+                        null,
+                        null,
+                        true,
+                        $first,
+                        $item->getAuthorResponse()->getDoi() ? new Doi($item->getAuthorResponse()->getDoi()) : null
+                    );
+                }
+
+                return $parts;
+            })
+            ->then(Callback::mustNotBeEmpty(new NotFoundHttpException('Article version does not contain any figures or data')));
+
+        $arguments['tabbedNavigation'] = $this->createTabbedNavigation($arguments['item'], $arguments['isMagazine'], $arguments['hasFigures'], 'peerReviews', $arguments['history'], $arguments['body'], $arguments['eraArticle'], promise_for(true));
+
+        $arguments['jumpMenu'] = $this->createJumpMenu($arguments['item'], $arguments['isMagazine'], promise_for(true), true, $arguments['history'], $arguments['body'], $arguments['eraArticle']);
+
+        $arguments = $this->contentAsideArguments($arguments);
+
+        $arguments['body'] = all(['item' => $arguments['item'], 'body' => $arguments['body'], 'downloadLinks' => $arguments['downloadLinks'], 'isMagazine' => $arguments['isMagazine']])
+            ->then(function (array $parts) {
+                $item = $parts['item'];
+                $body = $parts['body'];
+                $downloadLinks = $parts['downloadLinks'];
+                $isMagazine = $parts['isMagazine'];
+
+                $body[] = ArticleSection::basic($this->render($downloadLinks), 'Download links', 2);
+
+
+                if (!$isMagazine && 'feature' !== $item->getType()) {
+                    $share[] = new Doi($item->getDoi());
+                    $share[] = new ViewModel\SocialMediaSharersNew(
+                        strip_tags($item->getFullTitle()),
+                        "https://doi.org/{$item->getDoi()}",
+                        true,
+                        true
+                    );
+
+                    $body[] =  ArticleSection::basic($this->render(...$share), 'Share this article', 3,
+                        'share', null, null, null, false, null, null, 'article-section__sharers');
+                }
+
+                return $body;
+            });
+
+        return new Response($this->get('templating')->render('::article-peer-reviews.html.twig', $arguments));
     }
 
     public function bibTexAction(Request $request, string $id) : Response
@@ -1211,29 +1403,29 @@ final class ArticlesController extends Controller
         return $arguments;
     }
 
-    private function createTabbedNavigation(PromiseInterface $item, PromiseInterface $isMagazine, PromiseInterface $hasFigures, bool $isFiguresPage, PromiseInterface $history, PromiseInterface $sections, array $eraArticle) : PromiseInterface
+    private function createTabbedNavigation(PromiseInterface $item, PromiseInterface $isMagazine, PromiseInterface $hasFigures, string $pageType, PromiseInterface $history, PromiseInterface $sections, array $eraArticle, PromiseInterface $hasPeerReview) : PromiseInterface
     {
-        return all(['item' => $item, 'isMagazine' => $isMagazine, 'hasFigures' => $hasFigures, 'history' => $history, 'sections' => $sections])
-            ->then(function (array $sections) use ($isFiguresPage, $eraArticle) {
+        return all(['item' => $item, 'isMagazine' => $isMagazine, 'hasFigures' => $hasFigures, 'history' => $history, 'sections' => $sections, 'hasPeerReview' => $hasPeerReview])
+            ->then(function (array $sections) use ($pageType, $eraArticle) {
 
                 $history = $sections['history'];
                 $item = $sections['item'];
                 $hasFigures = $sections['hasFigures'];
+                $hasPeerReview = $sections['hasPeerReview'];
                 $links = [];
-                $hasPeerReview = false;
 
                 if ($sections['isMagazine'] || 'feature' === $item->getType()) {
                     return false;
                 }
                 $links[] = ViewModel\TabbedNavigationLink::fromLink(
                                     new Link('Full text', $this->generatePath($history, $item->getVersion(), null, 'content')),
-                                    !$isFiguresPage ? " tabbed-navigation__tab-label--active" : null
+                                    $pageType === 'fullText' ? " tabbed-navigation__tab-label--active" : null
                                 );
 
                 if ($hasFigures) {
                     $links[] = ViewModel\TabbedNavigationLink::fromLink(
                                     new Link('Figures<span class="tabbed-navigation__tab-label--long"> and data</span>', $this->generatePath($history, $item->getVersion(), 'figures', 'content')),
-                                    $isFiguresPage ? " tabbed-navigation__tab-label--active" : null
+                                    $pageType === 'figures' ? " tabbed-navigation__tab-label--active" : null
                                 );
                 }
 
@@ -1251,7 +1443,8 @@ final class ArticlesController extends Controller
 
                 if ($hasPeerReview) {
                     $links[] = ViewModel\TabbedNavigationLink::fromLink(
-                                        new Link('Peer Review', $this->generatePath($history, $item->getVersion(), null, 'content'))
+                                        new Link('Peer review', $this->generatePath($history, $item->getVersion(), 'peer-reviews', 'content')),
+                                        $pageType === 'peerReviews' ? " tabbed-navigation__tab-label--active" : null
                                 );
                 }
 
@@ -1289,16 +1482,14 @@ final class ArticlesController extends Controller
                     $sections = [];
                 }
 
-                 $links = [];
-
                 return new JumpMenu(
-                    array_merge($links, array_values(array_filter(array_map(function (ViewModel $viewModel) {
+                    array_map(function (ViewModel $viewModel, $i) {
                         if ($viewModel instanceof ArticleSection) {
                             return new Link($viewModel['title'], '#'.$viewModel['id']);
                         }
 
                         return null;
-                    }, $sections))))
+                    }, $sections, array_keys($sections))
                 );
             });
     }
@@ -1575,5 +1766,27 @@ final class ArticlesController extends Controller
         }
 
         return $this->get('router')->generate("article-version{$subRoute}", [$currentVersion, 'version' => $forVersion, '_fragment' => $fragment]);
+    }
+
+    private function checkHasFigures($item, $figures) {
+        return all(['item' => $item, 'hasFigures' => $figures])
+            ->then(function (array $parts) {
+                $item = $parts['item'];
+                $hasFigures = $parts['hasFigures'];
+
+                return $item->getAdditionalFiles()->notEmpty() || $hasFigures;
+            });
+    }
+
+    private function hasPeerReview($item) {
+        return all(['item' => $item])
+            ->then(function (array $parts) {
+                $item = $parts['item'];
+
+                return ($item instanceof ArticleVoR && $item->getPublicReviews()->notEmpty()) ||
+                    ($item instanceof ArticleVor && $item->getDecisionLetter()) ||
+                    ($item instanceof ArticleVor && $item->getAuthorResponse())
+                ;
+            });
     }
 }
