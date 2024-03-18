@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ca17abcccd61cc9b2098fdc91be402d4",
+    "content-hash": "b00f7f926d51ce1b5ba1fed5081a4252",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -1236,16 +1236,16 @@
         },
         {
             "name": "elife/api-sdk",
-            "version": "dev-master",
+            "version": "dev-award-doi",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-sdk-php.git",
-                "reference": "1db737e00960ee624528ed1ee105d61894922fec"
+                "reference": "ebcb803e9e73ba9bab70f671a9205c62e3216f93"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/1db737e00960ee624528ed1ee105d61894922fec",
-                "reference": "1db737e00960ee624528ed1ee105d61894922fec",
+                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/ebcb803e9e73ba9bab70f671a9205c62e3216f93",
+                "reference": "ebcb803e9e73ba9bab70f671a9205c62e3216f93",
                 "shasum": ""
             },
             "require": {
@@ -1260,7 +1260,7 @@
             },
             "require-dev": {
                 "csa/guzzle-cache-middleware": "^1.0",
-                "elife/api": "^2.26",
+                "elife/api": "^2.28",
                 "elife/api-validator": "^1.0@dev",
                 "guzzlehttp/guzzle": "^6.0",
                 "justinrainbow/json-schema": "^3.0 || ^4.0 || ^5.0",
@@ -1286,7 +1286,11 @@
                 "MIT"
             ],
             "description": "eLife Sciences API SDK",
-            "time": "2023-10-31T10:14:10+00:00"
+            "support": {
+                "issues": "https://github.com/elifesciences/api-sdk-php/issues",
+                "source": "https://github.com/elifesciences/api-sdk-php/tree/award-doi"
+            },
+            "time": "2024-03-18T11:23:47+00:00"
         },
         {
             "name": "elife/civi-contacts",
@@ -4381,16 +4385,16 @@
         },
         {
             "name": "elife/api",
-            "version": "2.26.0",
+            "version": "2.28.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-raml.git",
-                "reference": "8e2ffb573b2c3d2e173c38cd8b9625cf2d5740ad"
+                "reference": "f964675978ffbfac2ed3d87ab37cda12604f366d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-raml/zipball/8e2ffb573b2c3d2e173c38cd8b9625cf2d5740ad",
-                "reference": "8e2ffb573b2c3d2e173c38cd8b9625cf2d5740ad",
+                "url": "https://api.github.com/repos/elifesciences/api-raml/zipball/f964675978ffbfac2ed3d87ab37cda12604f366d",
+                "reference": "f964675978ffbfac2ed3d87ab37cda12604f366d",
                 "shasum": ""
             },
             "conflict": {
@@ -4402,7 +4406,11 @@
                 "MIT"
             ],
             "description": "eLife Sciences API specification",
-            "time": "2023-10-23T09:39:02+00:00"
+            "support": {
+                "issues": "https://github.com/elifesciences/api-raml/issues",
+                "source": "https://github.com/elifesciences/api-raml/tree/2.28.0"
+            },
+            "time": "2024-03-15T03:53:11+00:00"
         },
         {
             "name": "elife/api-validator",
