@@ -481,7 +481,10 @@ final class ArticlesController extends Controller
 
                             if ($award->getAwardId()) {
                                 $title .= ' ('.$award->getAwardId().')';
-                                $headerLinkDoi = "https://doi.org/{$award->getAwardId()}";
+                            }
+
+                            if ($award->getAwardDoi()) {
+                                $headerLinkDoi = "https://doi.org/{$award->getAwardDoi()}";
                                 $headerLink = new ViewModel\Link(
                                     $headerLinkDoi,
                                     $headerLinkDoi
