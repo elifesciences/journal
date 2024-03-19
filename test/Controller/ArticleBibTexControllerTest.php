@@ -21,11 +21,11 @@ final class ArticleBibTexControllerTest extends WebTestCase
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001',
-                ['Accept' => 'application/vnd.elife.article-poa+json; version=3, application/vnd.elife.article-vor+json; version=7']
+                ['Accept' => 'application/vnd.elife.article-poa+json; version=4, application/vnd.elife.article-vor+json; version=8']
             ),
             new Response(
                 200,
-                ['Content-Type' => 'application/vnd.elife.article-'.$status.'+json; version='.('vor' === $status ? '7' : '3')],
+                ['Content-Type' => 'application/vnd.elife.article-'.$status.'+json; version='.('vor' === $status ? '8' : '4')],
                 json_encode($json)
             )
         );
@@ -302,7 +302,7 @@ EOT
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001',
-                ['Accept' => 'application/vnd.elife.article-poa+json; version=3, application/vnd.elife.article-vor+json; version=7']
+                ['Accept' => 'application/vnd.elife.article-poa+json; version=4, application/vnd.elife.article-vor+json; version=8']
             ),
             new Response(
                 404,
@@ -352,11 +352,11 @@ EOT
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001',
-                ['Accept' => 'application/vnd.elife.article-poa+json; version=3, application/vnd.elife.article-vor+json; version=7']
+                ['Accept' => 'application/vnd.elife.article-poa+json; version=4, application/vnd.elife.article-vor+json; version=8']
             ),
             new Response(
                 200,
-                ['Content-Type' => 'application/vnd.elife.article-poa+json; version=3'],
+                ['Content-Type' => 'application/vnd.elife.article-poa+json; version=4'],
                 json_encode([
                     'status' => 'poa',
                     'id' => '00001',
