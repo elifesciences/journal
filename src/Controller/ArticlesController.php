@@ -479,16 +479,14 @@ final class ArticlesController extends Controller
                             $title = $award->getSource()->getPlace()->toString();
                             $headerLink = null;
 
-                            if ($award->getAwardId()) {
-                                $title .= ' ('.$award->getAwardId().')';
-                            }
-
                             if ($award->getAwardDoi()) {
                                 $headerLinkDoi = "https://doi.org/{$award->getAwardDoi()}";
                                 $headerLink = new ViewModel\Link(
                                     $headerLinkDoi,
                                     $headerLinkDoi
                                 );
+                            } else if ($award->getAwardId()) {
+                                $title .= ' ('.$award->getAwardId().')';
                             }
 
                             $body = Listing::unordered(
