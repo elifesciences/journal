@@ -76,7 +76,8 @@ final class PrivacyController extends Controller
                     new Paragraph('You may also ask us to stop processing your data in certain specific circumstances: you contest the accuracy of the personal data and we are verifying the accuracy; the data has been unlawfully processed and you oppose erasure and request restriction instead; we no longer need the personal data, but you need us to keep it in order to establish, exercise or defend a legal claim; or you have objected to us processing your data and we are considering whether our legitimate grounds override yours.'),
                     new Paragraph('To exercise these rights please contact <a href="mailto:data@elifesciences.org">data@elifesciences.org</a>.'),
                     new Paragraph('Since cookies are placed on your computer, it is impracticable for us to delete them at your request. Your browser software will allow you to delete cookies. The analytics information we hold is anonymised and aggregated, so it is not possible for us to delete the data relating to one individual.'),
-                    new Paragraph('You may complain about our retention and processing of your personal data to the Information Commissioner’s Office, the supervisory authority for data protection issues in England and Wales.')
+                    new Paragraph('You may complain about our retention and processing of your personal data to the Information Commissioner’s Office, the supervisory authority for data protection issues in England and Wales.'),
+                    new Paragraph('<script id="CookieDeclaration" src="https://consent.cookiebot.com/0a5c50d8-fcf9-47b1-8f4f-1eaadb13941b/cd.js" type="text/javascript" async></script>')
                 ), 'Your rights', 3, 'users-rights')
             ), null, null, true),
             ArticleSection::collapsible('authors', 'Authors', 2, $this->render(
