@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b00f7f926d51ce1b5ba1fed5081a4252",
+    "content-hash": "47b5f776193a4fd13bb5e64fe5cb19d8",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -1286,11 +1286,7 @@
                 "MIT"
             ],
             "description": "eLife Sciences API SDK",
-            "support": {
-                "issues": "https://github.com/elifesciences/api-sdk-php/issues",
-                "source": "https://github.com/elifesciences/api-sdk-php/tree/award-doi"
-            },
-            "time": "2024-03-18T11:23:47+00:00"
+            "time": "2023-10-31T10:14:10+00:00"
         },
         {
             "name": "elife/civi-contacts",
@@ -1333,16 +1329,16 @@
         },
         {
             "name": "elife/patterns",
-            "version": "dev-article-peer-review-page",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/patterns-php.git",
-                "reference": "26ba90ed660049c293473d9693bfc9154dca9f29"
+                "reference": "3bc06f750226210bdb8cb7c4612cb4022b69c194"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/26ba90ed660049c293473d9693bfc9154dca9f29",
-                "reference": "26ba90ed660049c293473d9693bfc9154dca9f29",
+                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/3bc06f750226210bdb8cb7c4612cb4022b69c194",
+                "reference": "3bc06f750226210bdb8cb7c4612cb4022b69c194",
                 "shasum": ""
             },
             "require": {
@@ -1365,6 +1361,7 @@
             "suggest": {
                 "twig/twig": "^2.0, to use PatternExtension"
             },
+            "default-branch": true,
             "type": "library",
             "autoload": {
                 "files": [
@@ -1380,9 +1377,9 @@
             ],
             "description": "eLife patterns",
             "support": {
-                "source": "https://github.com/elifesciences/patterns-php/tree/article-peer-review-page"
+                "source": "https://github.com/elifesciences/patterns-php/tree/master"
             },
-            "time": "2024-02-28T11:38:59+00:00"
+            "time": "2024-03-22T11:03:19+00:00"
         },
         {
             "name": "fabpot/goutte",
@@ -4406,11 +4403,7 @@
                 "MIT"
             ],
             "description": "eLife Sciences API specification",
-            "support": {
-                "issues": "https://github.com/elifesciences/api-raml/issues",
-                "source": "https://github.com/elifesciences/api-raml/tree/2.28.0"
-            },
-            "time": "2024-03-15T03:53:11+00:00"
+            "time": "2023-10-23T09:39:02+00:00"
         },
         {
             "name": "elife/api-validator",
