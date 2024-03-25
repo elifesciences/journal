@@ -158,15 +158,15 @@ final class SubjectRewritingMiddlewareTest extends KernelTestCase
                     $this->createArticleVoR(true),
                 ],
             ],
-            'application/vnd.elife.article-poa+json; version=2' => [
-                $this->createArticlePoA(false, false),
-                $this->createArticlePoA(true, false),
-            ],
             'application/vnd.elife.article-poa+json; version=3' => [
                 $this->createArticlePoA(false, false),
                 $this->createArticlePoA(true, false),
             ],
-            'application/vnd.elife.article-vor+json; version=6' => [
+            'application/vnd.elife.article-poa+json; version=4' => [
+                $this->createArticlePoA(false, false),
+                $this->createArticlePoA(true, false),
+            ],
+            'application/vnd.elife.article-vor+json; version=7' => [
                 $this->createArticleVoR(false, false),
                 $this->createArticleVoR(true, false),
             ],

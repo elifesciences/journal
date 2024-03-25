@@ -217,11 +217,11 @@ final class SearchContext extends Context
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001',
-                ['Accept' => 'application/vnd.elife.article-poa+json; version=3, application/vnd.elife.article-vor+json; version=7']
+                ['Accept' => 'application/vnd.elife.article-poa+json; version=4, application/vnd.elife.article-vor+json; version=8']
             ),
             new Response(
                 200,
-                ['Content-Type' => 'application/vnd.elife.article-poa+json; version=3'],
+                ['Content-Type' => 'application/vnd.elife.article-poa+json; version=4'],
                 json_encode([
                     'status' => 'poa',
                     'stage' => 'published',
