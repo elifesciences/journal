@@ -477,8 +477,15 @@ final class ArticlesController extends Controller
                     $funding = $item->getFunding()->getAwards()
                         ->map(function (FundingAward $award) {
                             $title = $award->getSource()->getPlace()->toString();
+                            $headerLink = null;
 
-                            if ($award->getAwardId()) {
+                            if ($award->getAwardDoi()) {
+                                $headerLinkDoi = "https://doi.org/{$award->getAwardDoi()}";
+                                $headerLink = new ViewModel\Link(
+                                    $headerLinkDoi,
+                                    $headerLinkDoi
+                                );
+                            } else if ($award->getAwardId()) {
                                 $title .= ' ('.$award->getAwardId().')';
                             }
 
@@ -489,7 +496,7 @@ final class ArticlesController extends Controller
                                 'bullet'
                             );
 
-                            return ArticleSection::basic($this->render($body), $title, 4);
+                            return ArticleSection::basic($this->render($body), $title, 4, null, null, null, null, false, $headerLink);
                         })->toArray();
 
                     $funding[] = new Paragraph($item->getFunding()->getStatement());
