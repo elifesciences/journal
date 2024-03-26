@@ -1382,7 +1382,7 @@
             ],
             "description": "eLife patterns",
             "support": {
-                "source": "https://github.com/elifesciences/patterns-php/tree/latest-changes"
+                "source": "https://github.com/elifesciences/patterns-php/tree/master"
             },
             "time": "2024-03-25T12:04:32+00:00"
         },
