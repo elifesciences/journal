@@ -209,13 +209,6 @@
 {% endblock %}
 
 {% block content %}
-    {% if gtm_id %}
-        <noscript>
-            <iframe src="https://www.googletagmanager.com/ns.html?id={{ gtm_id|raw }}" height="0" width="0"
-                    style="display:none; visibility:hidden"></iframe>
-        </noscript>
-    {% endif %}
-
     <div class="global-wrapper{% if isMagazine ?? false %} page--magazine{% endif %}{% if hasSocialMedia ?? false %} social-media-page--wrapper{% endif %}{% if clean ?? false %} clean{% endif %}" data-behaviour="FragmentHandler Math{% if hypothesis ?? false %} HypothesisLoader{% endif %}"
         {% if item is defined and item is not null %}
             data-item-type="{% if item.type is defined %}{{ item.type }}{% else %}{{ item.identifier.type }}{% endif %}"
@@ -270,44 +263,52 @@
         </div>
 
     </div>
-        <script>
-            window.elifeConfig = window.elifeConfig || {};
 
-            window.elifeConfig.scriptPaths = [
-                '{{ preload(asset('assets/patterns/js/main.js'), {as: 'script', nopush: true}) }}'
-            ];
+    <!-- 'safe' javascript doesn't require visitor consent -->
+    <script type="text/javascript">
+        window.elifeConfig = window.elifeConfig || {};
 
-            {% if hypothesis ?? false %}
-            window.elifeConfig.hypothesis = {
-              usernameUrl: '{{ absolute_url(path('profile', {id: 'placeholder'})|replace({'placeholder': ''})) }}',
-              services: [{
-                apiUrl: '{{ hypothesis_api }}',
-                authority: '{{ hypothesis_authority }}',
-                grantToken: {% if app.user %}'{{ hypothesis_token(app.user) }}'{% else %}null{% endif %}
-                  {%- if not app.user %},
-                onLoginRequest: function () {
-                  window.location.assign('{{ path('log-in') }}');
-                },
-                onSignupRequest: function () {
-                  window.location.assign('{{ path('log-in') }}');
-                }
-                  {%- else %},
-                onLogoutRequest: function () {
-                  window.location.assign('{{ path('log-out') }}');
-                },
-                onProfileRequest: function () {
-                  window.location.assign('{{ path('profile', {id: app.user.username}) }}');
-                }
-                  {%- endif %}
-              }]
-            };
-            {% endif %}
+        window.elifeConfig.scriptPaths = [
+            '{{ preload(asset('assets/patterns/js/main.js'), {as: 'script', nopush: true}) }}'
+        ];
 
-            window.elifeConfig.domain = '{{ app.request.host|split('.')|slice(-2)|join('.') }}';
+        window.elifeConfig.domain = '{{ app.request.host|split('.')|slice(-2)|join('.') }}';
 
-            {% include '@patterns/assets/js/elife-loader.js' %}
+        {% include '@patterns/assets/js/elife-loader.js' %}
 
-        </script>
+    </script>
+
+    <script type="text/plain" data-cookieconsent="statistics">
+
+        window.Elife.initialiseUnsafeComponentList()
+
+        {% if hypothesis ?? false %}
+        window.elifeConfig.hypothesis = {
+          usernameUrl: '{{ absolute_url(path('profile', {id: 'placeholder'})|replace({'placeholder': ''})) }}',
+          services: [{
+            apiUrl: '{{ hypothesis_api }}',
+            authority: '{{ hypothesis_authority }}',
+            grantToken: {% if app.user %}'{{ hypothesis_token(app.user) }}'{% else %}null{% endif %}
+              {%- if not app.user %},
+            onLoginRequest: function () {
+              window.location.assign('{{ path('log-in') }}');
+            },
+            onSignupRequest: function () {
+              window.location.assign('{{ path('log-in') }}');
+            }
+              {%- else %},
+            onLogoutRequest: function () {
+              window.location.assign('{{ path('log-out') }}');
+            },
+            onProfileRequest: function () {
+              window.location.assign('{{ path('profile', {id: app.user.username}) }}');
+            }
+              {%- endif %}
+          }]
+        };
+        {% endif %}
+
+    </script>
 
     <link href="{{ preload(asset('assets/patterns/css/all.css'), {as: 'style', nopush: true}) }}" rel="stylesheet">
 

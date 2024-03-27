@@ -512,7 +512,7 @@ final class HomeControllerTest extends PageTestCase
         $this->assertSame(200, $client->getResponse()->getStatusCode());
 
         $scriptTag = $crawler->filter('script')->last()->text();
-        $this->assertContains('window.elifeConfig.domain = \'localhost\';', $scriptTag);
+        $this->assertContains('window.Elife.initialiseUnsafeComponentList', $scriptTag);
     }
 
     /**
