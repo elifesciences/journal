@@ -79,6 +79,9 @@ final class PrivacyController extends Controller
                     new Paragraph('You may complain about our retention and processing of your personal data to the Information Commissioner’s Office, the supervisory authority for data protection issues in England and Wales.')
                 ), 'Your rights', 3, 'users-rights')
             ), null, null, true),
+            ArticleSection::basic($this->render(
+                    new Paragraph('<script id="CookieDeclaration" src="https://consent.cookiebot.com/0a5c50d8-fcf9-47b1-8f4f-1eaadb13941b/cd.js" type="text/javascript" async></script>')
+                ), 'Managing cookies', 3, 'managing-cookies'),
             ArticleSection::collapsible('authors', 'Authors', 2, $this->render(
                 new Paragraph('This section of the notice deals specifically with personal information held by eLife about the authors of manuscripts submitted for review. You should also refer to the <a href="#users">general website user section</a> of the notice, that relates to all users of our website, and not just those submitting manuscripts.'),
                 Listing::ordered([
