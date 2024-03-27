@@ -132,7 +132,7 @@ abstract class ModelConverterTestCase extends TestCase
                     $version = 3;
                     break;
                 case 'article-vor':
-                    $version = 6;
+                    $version = 7;
                     break;
             }
 
