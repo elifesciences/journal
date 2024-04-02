@@ -1183,12 +1183,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-client-php.git",
-                "reference": "42c424ea570a1d8c9eed977dd565cad84464de6f"
+                "reference": "1b1989a8b1b8d86ba8b7cda8dd9d0fd40f979bb7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-client-php/zipball/42c424ea570a1d8c9eed977dd565cad84464de6f",
-                "reference": "42c424ea570a1d8c9eed977dd565cad84464de6f",
+                "url": "https://api.github.com/repos/elifesciences/api-client-php/zipball/1b1989a8b1b8d86ba8b7cda8dd9d0fd40f979bb7",
+                "reference": "1b1989a8b1b8d86ba8b7cda8dd9d0fd40f979bb7",
                 "shasum": ""
             },
             "require": {
@@ -1232,7 +1232,7 @@
                 "MIT"
             ],
             "description": "eLife Sciences API client",
-            "time": "2022-08-18T18:50:00+00:00"
+            "time": "2024-02-06T13:58:35+00:00"
         },
         {
             "name": "elife/api-sdk",
@@ -1270,7 +1270,6 @@
                 "psr/http-message": "^1.0",
                 "squizlabs/php_codesniffer": "^3.5"
             },
-            "default-branch": true,
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -1287,10 +1286,6 @@
                 "MIT"
             ],
             "description": "eLife Sciences API SDK",
-            "support": {
-                "issues": "https://github.com/elifesciences/api-sdk-php/issues",
-                "source": "https://github.com/elifesciences/api-sdk-php/tree/master"
-            },
             "time": "2024-03-25T14:03:43+00:00"
         },
         {
@@ -1338,12 +1333,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/patterns-php.git",
-                "reference": "85d707ea5e408b388e4453ac6fb484db81f7999d"
+                "reference": "8dc97823bcb1f196cb44ac6f8d69374dd0f0af54"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/85d707ea5e408b388e4453ac6fb484db81f7999d",
-                "reference": "85d707ea5e408b388e4453ac6fb484db81f7999d",
+                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/8dc97823bcb1f196cb44ac6f8d69374dd0f0af54",
+                "reference": "8dc97823bcb1f196cb44ac6f8d69374dd0f0af54",
                 "shasum": ""
             },
             "require": {
@@ -1366,7 +1361,6 @@
             "suggest": {
                 "twig/twig": "^2.0, to use PatternExtension"
             },
-            "default-branch": true,
             "type": "library",
             "autoload": {
                 "files": [
@@ -1381,10 +1375,7 @@
                 "MIT"
             ],
             "description": "eLife patterns",
-            "support": {
-                "source": "https://github.com/elifesciences/patterns-php/tree/master"
-            },
-            "time": "2024-03-25T12:04:32+00:00"
+            "time": "2024-04-02T16:03:35+00:00"
         },
         {
             "name": "fabpot/goutte",
@@ -4408,7 +4399,7 @@
                 "MIT"
             ],
             "description": "eLife Sciences API specification",
-            "time": "2023-10-23T09:39:02+00:00"
+            "time": "2024-03-15T03:53:11+00:00"
         },
         {
             "name": "elife/api-validator",
@@ -6345,6 +6336,5 @@
     "platform-dev": [],
     "platform-overrides": {
         "php": "7.1.33"
-    },
-    "plugin-api-version": "2.6.0"
+    }
 }
