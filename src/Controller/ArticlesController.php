@@ -1346,7 +1346,12 @@ final class ArticlesController extends Controller
             ->otherwise($this->mightNotExist())
             ->otherwise($this->softFailure('Failed to load page views count'));
 
-        $arguments['contextualDataMetrics'] = all(['item' => $arguments['item'], 'history' => $arguments['history'], 'citations' => $arguments['citations'], 'pageViews' => $arguments['pageViews']])
+        $arguments['downloads'] = $this->get('elife.api_sdk.metrics')
+            ->totalDownloads(Identifier::article($id))
+            ->otherwise($this->mightNotExist())
+            ->otherwise($this->softFailure('Failed to load downloads count'));
+
+        $arguments['contextualDataMetrics'] = all(['item' => $arguments['item'], 'history' => $arguments['history'], 'citations' => $arguments['citations'], 'pageViews' => $arguments['pageViews'], 'downloads'=> $arguments['downloads']])
             ->then(function (array $parts) {
                 /** @var ArticleVersion $item */
                 $item = $parts['item'];
@@ -1356,6 +1361,8 @@ final class ArticlesController extends Controller
                 $citations = $parts['citations'];
                 /** @var int|null $pageViews */
                 $pageViews = $parts['pageViews'];
+                /** @var int|null $downloads */
+                $downloads = $parts['downloads'];
 
                 $metricLink = function (int $count, string $suffix) use ($history, $item) {
                     // @todo - improve pattern-library or patterns-php so class doesn't need to be set here.
@@ -1366,6 +1373,9 @@ final class ArticlesController extends Controller
 
             if (null !== $pageViews && $pageViews > 0) {
                 $metrics[] = $metricLink($pageViews, 'views');
+            }
+            if (null !== $downloads && $downloads > 0) {
+                $metrics[] = $metricLink($downloads, 'downloads');
             }
             if ($citations instanceof CitationsMetric && $citations->getHighest()->getCitations() > 0) {
                 $metrics[] = $metricLink($citations->getHighest()->getCitations(), 'citations');

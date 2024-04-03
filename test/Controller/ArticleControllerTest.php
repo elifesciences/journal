@@ -1221,6 +1221,7 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertSame(
             [
                 '5,678 views',
+                '9,012 downloads',
                 '1,234 citations',
             ],
             array_map(function (string $text) {
