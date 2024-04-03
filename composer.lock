@@ -1344,7 +1344,6 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/809aaf5f560c2a287844c14e9f98b287fb78344f",
                 "reference": "809aaf5f560c2a287844c14e9f98b287fb78344f",
-
                 "shasum": ""
             },
             "require": {
