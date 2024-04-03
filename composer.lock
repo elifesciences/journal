@@ -1361,6 +1361,7 @@
             "suggest": {
                 "twig/twig": "^2.0, to use PatternExtension"
             },
+            "default-branch": true,
             "type": "library",
             "autoload": {
                 "files": [
@@ -1375,6 +1376,9 @@
                 "MIT"
             ],
             "description": "eLife patterns",
+            "support": {
+                "source": "https://github.com/elifesciences/patterns-php/tree/master"
+            },
             "time": "2024-04-02T16:03:35+00:00"
         },
         {
@@ -6336,5 +6340,6 @@
     "platform-dev": [],
     "platform-overrides": {
         "php": "7.1.33"
-    }
+    },
+    "plugin-api-version": "2.6.0"
 }
