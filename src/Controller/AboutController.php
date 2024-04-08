@@ -53,11 +53,10 @@ final class AboutController extends Controller
             });
 
         $types = $types
-            ->prepend(new SelectOption('', 'Leadership team', '' === $type))
+            ->prepend(new SelectOption('', 'Editorial leadership team', '' === $type))
+            ->append(new SelectOption('staff', 'Executive staff', 'staff' === $type))
             ->append(new SelectOption('directors', 'Board of directors', 'directors' === $type))
             ->append(new SelectOption('early-career', 'Early-career advisory group', 'early-career' === $type));
-            // SA 26/10/23: remove staff page from about pages
-            // ->append(new SelectOption('staff', 'Executive staff', 'staff' === $type));
 
         $people = $this->get('elife.api_sdk.people')->reverse();
 
@@ -96,12 +95,11 @@ final class AboutController extends Controller
 
                 $arguments['lists'][] = $this->createAboutProfiles($people->forType('early-career'), 'Early-career advisory group');
                 break;
-            // SA 26/10/23: remove staff page from about pages
-            // case 'staff':
-            //     $arguments['title'] = 'Executive staff';
-            //
-            //     $arguments['lists'][] = $this->createAboutProfiles($people->forType('executive'), 'Executive staff');
-            //     break;
+            case 'staff':
+                $arguments['title'] = 'Executive staff';
+
+                $arguments['lists'][] = $this->createAboutProfiles($people->forType('executive'), 'Executive staff');
+                break;
             default:
                 $arguments['subject'] = $subjects->get($type)->otherwise($this->mightNotExist())
                     ->then(function (Subject $subject) use ($type) {
