@@ -53,8 +53,8 @@ final class AboutController extends Controller
             });
 
         $types = $types
+            ->prepend(new SelectOption('staff', 'Executive staff', 'staff' === $type))
             ->prepend(new SelectOption('', 'Editorial leadership team', '' === $type))
-            ->append(new SelectOption('staff', 'Executive staff', 'staff' === $type))
             ->append(new SelectOption('directors', 'Board of directors', 'directors' === $type))
             ->append(new SelectOption('early-career', 'Early-career advisory group', 'early-career' === $type));
 
