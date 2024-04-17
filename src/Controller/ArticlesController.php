@@ -672,16 +672,16 @@ final class ArticlesController extends Controller
                 if ($pageViews && $downloads) {
                     $text = 'Views and downloads';
                     $text .= $commonText;
-                    $statistics[] = ViewModel\Statistic::fromNumber('Page views', $pageViews);
-                    $statistics[] = ViewModel\Statistic::fromNumber('Downloads', $downloads, $text);
+                    $statistics[] = ViewModel\Statistic::fromNumber('views', $pageViews);
+                    $statistics[] = ViewModel\Statistic::fromNumber('downloads', $downloads, $text);
                 } elseif ($pageViews) {
                     $text = 'Views';
                     $text .= $commonText;
-                    $statistics[] = ViewModel\Statistic::fromNumber('Page views', $pageViews, $text);
+                    $statistics[] = ViewModel\Statistic::fromNumber('views', $pageViews, $text);
                 } elseif ($downloads) {
                     $text = 'Downloads';
                     $text .= $commonText;
-                    $statistics[] = ViewModel\Statistic::fromNumber('Downloads', $downloads, $text);
+                    $statistics[] = ViewModel\Statistic::fromNumber('downloads', $downloads, $text);
                 }
 
                 if ($citations) {
@@ -691,7 +691,7 @@ final class ArticlesController extends Controller
                     }
                     $citationContent = rtrim($citationContent, ', '). '.';
 
-                    $statistics[] = ViewModel\Statistic::fromNumber('Citations', $citations->getHighest()->getCitations(), $citationContent);
+                    $statistics[] = ViewModel\Statistic::fromNumber('citations', $citations->getHighest()->getCitations(), $citationContent);
                 }
 
                 if (!empty($statistics)) {
