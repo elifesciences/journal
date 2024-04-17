@@ -1234,7 +1234,7 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertContains('5,678', $metrics->filter('.statistic-collection__item:contains("views") .statistic__counter')->text());
         $this->assertContains('9,012', $metrics->filter('.statistic-collection__item:contains("downloads") .statistic__counter')->text());
         $this->assertContains('1,234', $metrics->filter('.statistic-collection__item:contains("citations") .statistic__counter')->text());
-        $this->assertContains('Views and downloads and citations are aggregated across all versions of this paper published by eLife.', $metrics->text());
+        $this->assertContains('Views, downloads and citations are aggregated across all versions of this paper published by eLife.', $metrics->text());
     }
 
     public function contextualDataMetricsProvider() : array

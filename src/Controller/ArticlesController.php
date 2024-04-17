@@ -678,7 +678,10 @@ final class ArticlesController extends Controller
 
                 if ($citations) {
                     $statistics[] = ViewModel\Statistic::fromNumber('citations', $citations->getHighest()->getCitations());
-                    $statisticsExtra[] = new Paragraph('Views and downloads and citations are aggregated across all versions of this paper published by eLife. ');
+                }
+
+                if ($pageViews || $downloads || $citations) {
+                    $statisticsExtra[] = new Paragraph('Views, downloads and citations are aggregated across all versions of this paper published by eLife.');
                 }
 
                 if (!empty($statistics)) {
