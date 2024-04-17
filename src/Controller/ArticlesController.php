@@ -670,7 +670,7 @@ final class ArticlesController extends Controller
                 $text = '';
                 $commonText = ' are accumulated for all versions if this paper published by eLife.';
                 if ($pageViews && $downloads) {
-                    $text = 'Views and downloads.';
+                    $text = 'Views and downloads';
                     $text .= $commonText;
                     $statistics[] = ViewModel\Statistic::fromNumber('Page views', $pageViews);
                     $statistics[] = ViewModel\Statistic::fromNumber('Downloads', $downloads, $text);
@@ -689,7 +689,7 @@ final class ArticlesController extends Controller
                     foreach ($citations as $citation) {
                         $paragraphContent .= sprintf('<a href="%s">%s</a>', $citation->getUri(), $citation->getService()) . ', ';
                     }
-                    $paragraphContent = rtrim($paragraphContent, ', ');
+                    $paragraphContent = rtrim($paragraphContent, ', '). '.';
 
                     $statistics[] = ViewModel\Statistic::fromNumber('Citations', $citations->getHighest()->getCitations(), $paragraphContent);
                 }
