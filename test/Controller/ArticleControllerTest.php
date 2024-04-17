@@ -1231,9 +1231,9 @@ final class ArticleControllerTest extends PageTestCase
 
         $metrics = $crawler->filter('.main-content-grid > section:nth-of-type(3)');
         $this->assertSame('Metrics', $metrics->filter('header > h2')->text());
-        $this->assertContains('5,678', $metrics->filter('.statistic-collection__item:contains("views") .statistic__counter')->text());
-        $this->assertContains('9,012', $metrics->filter('.statistic-collection__item:contains("downloads") .statistic__counter')->text());
-        $this->assertContains('1,234', $metrics->filter('.statistic-collection__item:contains("citations") .statistic__counter')->text());
+        $this->assertContains('5,678', $metrics->filter('.statistic:contains("views") .statistic__value')->text());
+        $this->assertContains('9,012', $metrics->filter('.statistic:contains("downloads") .statistic__value')->text());
+        $this->assertContains('1,234', $metrics->filter('.statistic:contains("citations") .statistic__value')->text());
         $this->assertContains('Views, downloads and citations are aggregated across all versions of this paper published by eLife.', $metrics->text());
     }
 
