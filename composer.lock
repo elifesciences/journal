@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "cc6b3eb8581ce24b68d16d11a9db35f5",
+    "content-hash": "e9930931c819977d29e7165d104f8a4e",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -1334,16 +1334,16 @@
         },
         {
             "name": "elife/patterns",
-            "version": "dev-master",
+            "version": "dev-bar-chart-restore",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/patterns-php.git",
-                "reference": "42d0e8c78f3c383dc2180e1cfb11654ed9cc1fc6"
+                "reference": "bfcdbf84606bdaf94e6f33795f7133a866ff77a9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/42d0e8c78f3c383dc2180e1cfb11654ed9cc1fc6",
-                "reference": "42d0e8c78f3c383dc2180e1cfb11654ed9cc1fc6",
+                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/bfcdbf84606bdaf94e6f33795f7133a866ff77a9",
+                "reference": "bfcdbf84606bdaf94e6f33795f7133a866ff77a9",
                 "shasum": ""
             },
             "require": {
@@ -1366,7 +1366,6 @@
             "suggest": {
                 "twig/twig": "^2.0, to use PatternExtension"
             },
-            "default-branch": true,
             "type": "library",
             "autoload": {
                 "files": [
@@ -1382,9 +1381,9 @@
             ],
             "description": "eLife patterns",
             "support": {
-                "source": "https://github.com/elifesciences/patterns-php/tree/master"
+                "source": "https://github.com/elifesciences/patterns-php/tree/bar-chart-restore"
             },
-            "time": "2024-04-29T10:20:21+00:00"
+            "time": "2024-05-07T10:14:57+00:00"
         },
         {
             "name": "fabpot/goutte",
