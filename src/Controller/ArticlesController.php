@@ -322,7 +322,8 @@ final class ArticlesController extends Controller
                         ArticleSection::STYLE_HIGHLIGHTED,
                         false,
                         $first,
-                        $item->getElifeAssessment()->getDoi() ? new Doi($item->getElifeAssessment()->getDoi()) : null
+                        $item->getElifeAssessment()->getDoi() ? new Doi($item->getElifeAssessment()->getDoi()) : null,
+                        ArticleSection::RELATED_LINKS_SEPARATOR_CIRCLE
                     );
 
                     $first = false;
