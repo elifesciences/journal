@@ -310,7 +310,8 @@ final class ArticlesController extends Controller
                     $first = true;
                     $relatedLinks = [];
 
-                    $relatedLinks[] = new Link('About eLife assessments', $this->get('router')->generate('about-pubpub', ['type'=> 'peer-review']));
+                    $relatedLinks[] = new Link('Read the peer reviews', $this->generatePath($history, $item->getVersion(), 'peer-reviews', 'content'));
+                    $relatedLinks[] = new Link('About eLife assessments', $this->get('router')->generate('inside-elife-article', ['id'=> 'db24dd46']));
 
                     $parts[] = ArticleSection::collapsible(
                         'elife-assessment',
@@ -321,7 +322,8 @@ final class ArticlesController extends Controller
                         ArticleSection::STYLE_HIGHLIGHTED,
                         false,
                         $first,
-                        $item->getElifeAssessment()->getDoi() ? new Doi($item->getElifeAssessment()->getDoi()) : null
+                        $item->getElifeAssessment()->getDoi() ? new Doi($item->getElifeAssessment()->getDoi()) : null,
+                        ArticleSection::RELATED_LINKS_SEPARATOR_CIRCLE
                     );
 
                     $first = false;
