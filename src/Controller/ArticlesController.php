@@ -311,7 +311,7 @@ final class ArticlesController extends Controller
                     $relatedLinks = [];
 
                     $relatedLinks[] = new Link('Read the peer reviews', $this->generatePath($history, $item->getVersion(), 'peer-reviews', 'content'));
-                    $relatedLinks[] = new Link('About eLife assessments', $this->get('router')->generate('about-pubpub', ['type'=> 'peer-review']));
+                    $relatedLinks[] = new Link('About eLife assessments', $this->get('router')->generate('inside-elife-article', ['id'=> 'db24dd46']));
 
                     $parts[] = ArticleSection::collapsible(
                         'elife-assessment',
