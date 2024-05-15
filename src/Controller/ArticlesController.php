@@ -310,6 +310,7 @@ final class ArticlesController extends Controller
                     $first = true;
                     $relatedLinks = [];
 
+                    $relatedLinks[] = new Link('Read the peer reviews', $this->generatePath($history, $item->getVersion(), 'peer-reviews', 'content'));
                     $relatedLinks[] = new Link('About eLife assessments', $this->get('router')->generate('about-pubpub', ['type'=> 'peer-review']));
 
                     $parts[] = ArticleSection::collapsible(
