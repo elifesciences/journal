@@ -669,13 +669,16 @@ final class ArticlesController extends Controller
 
                 $statistics = [];
                 $statisticsExtra = [];
+                $statisticsDescription = [];
 
                 if ($pageViews) {
                     $statistics[] = ViewModel\Statistic::fromNumber('views', $pageViews);
+                    $statisticsExtra[] = new ViewModel\BarChart($item->getId(), 'article', 'page-views', rtrim($this->getParameter('api_url_public'), '/'), 'page-views', 'month');
                 }
 
                 if ($downloads) {
                     $statistics[] = ViewModel\Statistic::fromNumber('downloads', $downloads);
+                    $statisticsExtra[] = new ViewModel\BarChart($item->getId(), 'article', 'downloads', rtrim($this->getParameter('api_url_public'), '/'), 'downloads', 'month');
                 }
 
                 if ($citations) {
@@ -683,13 +686,13 @@ final class ArticlesController extends Controller
                 }
 
                 if (!empty($statistics)) {
-                    $statisticsExtra[] = new Paragraph('Views, downloads and citations are aggregated across all versions of this paper published by eLife.');
+                    $statisticsDescription[] = new Paragraph('Views, downloads and citations are aggregated across all versions of this paper published by eLife.');
 
                     $parts[] = ArticleSection::collapsible(
                         'metrics',
                         'Metrics',
                         2,
-                        $this->render(new ViewModel\StatisticCollection(...$statistics), ...$statisticsExtra),
+                        $this->render(new ViewModel\StatisticCollection(...$statistics), ...$statisticsDescription, ...$statisticsExtra),
                         null,
                         null,
                         true
