@@ -1244,8 +1244,8 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/07371e7140152441327bb2bca98480824694c3b0",
-                "reference": "07371e7140152441327bb2bca98480824694c3b0",
+                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/35e87eca1e1d1ce99e4ccac680fb96589d15972c",
+                "reference": "35e87eca1e1d1ce99e4ccac680fb96589d15972c",
                 "shasum": ""
             },
             "require": {
