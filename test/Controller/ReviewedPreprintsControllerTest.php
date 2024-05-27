@@ -195,7 +195,6 @@ final class ReviewedPreprintsControllerTest extends PageTestCase
         }
 
         $client->request('GET', '/reviewed-preprints?page='.$page);
-        file_put_contents('aa'.$page, $client->getResponse()->getContent());
 
         $this->assertSame(404, $client->getResponse()->getStatusCode());
     }
