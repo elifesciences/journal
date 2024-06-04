@@ -1627,7 +1627,7 @@ final class ArticlesController extends Controller
                         return $a->getVersion() <=> $b->getVersion();
                     });
 
-                $prepareDefinition = function (int $index, string $term, string $descriptor) {
+                $prepareDefinition = function (int $index, string $term, string $descriptor, string $color = null) {
                     return [
                         // index added to allow us to sort.
                         'index' => $index,
@@ -1635,29 +1635,32 @@ final class ArticlesController extends Controller
                         'descriptors' => [
                             $descriptor,
                         ],
+                        'color' => $color
                     ];
                 };
 
                 $prepareDefinitionArticleVersion = function (ArticleVersion $articleVersion, bool $first) use ($prepareDefinition, $history, $item) {
+                    dump($articleVersion->getVersion());
                     return $prepareDefinition(
                         $articleVersion->getVersionDate() ? $articleVersion->getVersionDate()->getTimeStamp() : 0,
                         sprintf(
-                            '%s %s',
-                            $articleVersion instanceof ArticleVoR ? 'Version of Record' : 'Accepted Manuscript',
-                            $first ? 'published' : 'updated'
+                            '%s',
+                            $articleVersion instanceof ArticleVoR ? 'Version of Record' : 'Accepted Manuscript'
                         ),
                         sprintf(
                             '%s %s',
-                            $articleVersion->getVersionDate() ?
-                                $articleVersion->getVersionDate()->format('F j, Y') :
-                                '',
-                            $articleVersion->getVersion() === $item->getVersion() ?
-                                '(This version)' :
+                            $articleVersion->getVersion() !== $item->getVersion() ?
                                 sprintf(
-                                    '<a href="%s">(Go to version)</a>',
+                                    '<span class="version">%s</span>',
                                     $this->generatePath($history, $articleVersion->getVersion())
-                                )
-                        )
+                                ) : '',
+                            $articleVersion->getVersionDate() ?
+                                sprintf(
+                                    '<time>%s</time>',
+                                    $articleVersion->getVersionDate()->format('F j, Y')
+                                ) : ''
+                            ),
+                        $first ? 'vor': ''
                     );
                 };
 
@@ -1675,18 +1678,21 @@ final class ArticlesController extends Controller
                 $publicationHistory = array_merge($publicationHistory, $history->getVersions()
                     ->filter(Callback::isInstanceOf(ArticlePreprint::class))
                     ->map(function(ArticlePreprint $preprint) use ($prepareDefinition) {
+                        dump($preprint);
                         return $prepareDefinition(
                             $preprint->getPublishedDate()->getTimeStamp(),
                             sprintf(
-                                '%s posted',
+                                '%s',
                                 strpos($preprint->getDescription(), 'reviewed preprint') === false ? 'Preprint' : 'Reviewed preprint'
                             ),
                             sprintf(
                                 '%s %s',
-                                $preprint->getPublishedDate()->format('F j, Y'),
                                 sprintf(
-                                    '<a href="%s">(Go to version)</a>',
-                                    $preprint->getUri()
+                                    strpos($preprint->getDescription(), 'reviewed preprint') === true ?  '<span class="version">v</span>' : ''
+                                ),
+                                sprintf(
+                                    '<time>%s</time>',
+                                    $preprint->getPublishedDate()->format('F j, Y')
                                 )
                             )
                         );
@@ -1696,6 +1702,8 @@ final class ArticlesController extends Controller
                 usort($publicationHistory, function($first, $second) {
                     return $first['index'] < $second['index'];
                 });
+
+                dump($articleVersions);
 
                 $rpCount = $history->getVersions()
                     ->filter(Callback::isInstanceOf(ArticlePreprint::class))
@@ -1711,11 +1719,14 @@ final class ArticlesController extends Controller
                     ContentAside::class, [
                         'metrics' => $parts['metrics'],
                         'timeline' => array_map(function ($item) use (&$rpCount) {
+                            dump($item['descriptors']);
                             // Remove index from item.
                             unset($item['index']);
 
-                            if ('Reviewed preprint posted' === $item['term'] && $rpCount > 0) {
-                                $item['term'] = sprintf('Reviewed preprint version %d', $rpCount);
+                            if ('Reviewed preprint' === $item['term'] && $rpCount > 0) {
+                                // $item['term'] = sprintf('Reviewed preprint version %d', $rpCount);
+                                // $item['descriptors'] = sprintf('<span class="version">v%d</span>', $rpCount);
+                                array_unshift($item['descriptors'], sprintf('<span class="version">v%d</span>', $rpCount));
                                 $rpCount--;
                             }
 
