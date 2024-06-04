@@ -1589,34 +1589,51 @@ final class ArticlesController extends Controller
 
                 $publicationHistory = [];
                 if ($received = $history->getReceived()) {
+                    $receivedDate = new DateTimeImmutable($received->format());
                     $publicationHistory[] = [
                         // index added to allow us to sort.
                         'index' => strtotime($received->toString()),
                         'term' => 'Received',
                         'descriptors' => [
-                            $received->format(),
+                            sprintf(
+                                '<time datetime="%s">%s</time>',
+                                $receivedDate->format('Y-m-d'),
+                                $receivedDate->format('F j, Y')
+                            )
                         ],
                     ];
                 }
 
                 if ($accepted = $history->getAccepted()) {
+                    $acceptedDate = new DateTimeImmutable($accepted->format());
+
                     $publicationHistory[] = [
                         // index added to allow us to sort.
                         'index' => strtotime($accepted->toString()),
                         'term' => 'Accepted',
                         'descriptors' => [
-                            $accepted->format(),
+                            sprintf(
+                                '<time datetime="%s">%s</time>',
+                                $acceptedDate->format('Y-m-d'),
+                                $acceptedDate->format('F j, Y')
+                            )
                         ],
                     ];
                 }
 
                 if ($sentForReview = $history->getSentForReview()) {
+                    $sentForReviewDate = new DateTimeImmutable($sentForReview->format());
+
                     $publicationHistory[] = [
                         // index added to allow us to sort.
                         'index' => strtotime($sentForReview->toString()),
                         'term' => 'Sent for peer review',
                         'descriptors' => [
-                            $sentForReview->format(),
+                            sprintf(
+                                '<time datetime="%s">%s</time>',
+                                $sentForReviewDate->format('Y-m-d'),
+                                $sentForReviewDate->format('F j, Y')
+                            )
                         ],
                     ];
                 }
@@ -1640,7 +1657,6 @@ final class ArticlesController extends Controller
                 };
 
                 $prepareDefinitionArticleVersion = function (ArticleVersion $articleVersion, bool $first) use ($prepareDefinition, $history, $item) {
-                    dump($articleVersion->getVersion());
                     return $prepareDefinition(
                         $articleVersion->getVersionDate() ? $articleVersion->getVersionDate()->getTimeStamp() : 0,
                         sprintf(
@@ -1648,7 +1664,7 @@ final class ArticlesController extends Controller
                             $articleVersion instanceof ArticleVoR ? 'Version of Record' : 'Accepted Manuscript'
                         ),
                         sprintf(
-                            '%s %s',
+                            '%s %s %s',
                             $articleVersion->getVersion() !== $item->getVersion() ?
                                 sprintf(
                                     '<span class="version">%s</span>',
@@ -1656,8 +1672,13 @@ final class ArticlesController extends Controller
                                 ) : '',
                             $articleVersion->getVersionDate() ?
                                 sprintf(
-                                    '<time>%s</time>',
+                                    '<time datetime="%s">%s</time>',
+                                    $articleVersion->getVersionDate()->format('Y-m-d'),
                                     $articleVersion->getVersionDate()->format('F j, Y')
+                                ) : '',
+                            $first ?
+                                sprintf(
+                                    '<a href="#">Read the peer reviews</a>'
                                 ) : ''
                             ),
                         $first ? 'vor': ''
@@ -1678,7 +1699,6 @@ final class ArticlesController extends Controller
                 $publicationHistory = array_merge($publicationHistory, $history->getVersions()
                     ->filter(Callback::isInstanceOf(ArticlePreprint::class))
                     ->map(function(ArticlePreprint $preprint) use ($prepareDefinition) {
-                        dump($preprint);
                         return $prepareDefinition(
                             $preprint->getPublishedDate()->getTimeStamp(),
                             sprintf(
@@ -1691,7 +1711,8 @@ final class ArticlesController extends Controller
                                     strpos($preprint->getDescription(), 'reviewed preprint') === true ?  '<span class="version">v</span>' : ''
                                 ),
                                 sprintf(
-                                    '<time>%s</time>',
+                                    '<time datetime="%s">%s</time>',
+                                    $preprint->getPublishedDate()->format('Y-m-d'),
                                     $preprint->getPublishedDate()->format('F j, Y')
                                 )
                             )
@@ -1702,8 +1723,6 @@ final class ArticlesController extends Controller
                 usort($publicationHistory, function($first, $second) {
                     return $first['index'] < $second['index'];
                 });
-
-                dump($articleVersions);
 
                 $rpCount = $history->getVersions()
                     ->filter(Callback::isInstanceOf(ArticlePreprint::class))
@@ -1719,14 +1738,12 @@ final class ArticlesController extends Controller
                     ContentAside::class, [
                         'metrics' => $parts['metrics'],
                         'timeline' => array_map(function ($item) use (&$rpCount) {
-                            dump($item['descriptors']);
                             // Remove index from item.
                             unset($item['index']);
 
                             if ('Reviewed preprint' === $item['term'] && $rpCount > 0) {
-                                // $item['term'] = sprintf('Reviewed preprint version %d', $rpCount);
-                                // $item['descriptors'] = sprintf('<span class="version">v%d</span>', $rpCount);
-                                array_unshift($item['descriptors'], sprintf('<span class="version">v%d</span>', $rpCount));
+                                $version = sprintf('<span class="version">v%d</span>', $rpCount);
+                                $item['descriptors'][0] = $version . ' ' . $item['descriptors'][0];
                                 $rpCount--;
                             }
 
