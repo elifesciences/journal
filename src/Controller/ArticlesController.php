@@ -1664,24 +1664,24 @@ final class ArticlesController extends Controller
                             $articleVersion instanceof ArticleVoR ? 'Version of Record' : 'Accepted Manuscript'
                         ),
                         sprintf(
-                            '%s %s %s',
-                            $articleVersion->getVersion() !== $item->getVersion() ?
-                                sprintf(
-                                    '<span class="version">v%s</span>',
-                                    $articleVersion->getVersion()
-                                ) : '',
+                            '%s %s',
+                            // $articleVersion->getVersion() !== $item->getVersion() ?
+                            //     sprintf(
+                            //         '<span class="version">v%s</span>',
+                            //         $articleVersion->getVersion()
+                            //     ) : '',
                             $articleVersion->getVersionDate() ?
                                 sprintf(
                                     '<time datetime="%s">%s</time>',
                                     $articleVersion->getVersionDate()->format('Y-m-d'),
                                     $articleVersion->getVersionDate()->format('F j, Y')
                                 ) : '',
-                            $first ?
+                            $articleVersion->getVersion() === $item->getVersion() ?
                                 sprintf(
                                     '<a href="#">Read the peer reviews</a>'
                                 ) : ''
                             ),
-                        $first ? 'vor': ''
+                        $articleVersion->getVersion() === $item->getVersion() ? 'vor': ''
                     );
                 };
 

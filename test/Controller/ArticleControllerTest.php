@@ -4106,9 +4106,9 @@ final class ArticleControllerTest extends PageTestCase
 
             foreach ([
                          'Version of Record',
-                         ' January 2, 2010Read the peer reviews',
+                         'January 2, 2010Read the peer reviews',
                          'Accepted Manuscript',
-                         'v1 January 1, 2010Read the peer reviews',
+                         'January 1, 2010',
                          'Accepted',
                          'December 31, 2009',
                          'Received',
