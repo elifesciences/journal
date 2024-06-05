@@ -5812,7 +5812,7 @@ final class ArticleControllerTest extends PageTestCase
         foreach ($expectedTimeline as $k => $expectedTimelineItem) {
             $this->assertSame(
                 $expectedTimelineItem,
-                $crawler->filter('.content-aside .definition-list--timeline')->children()->eq($k)->text()
+                trim($crawler->filter('.content-aside .definition-list--timeline')->children()->eq($k)->text())
             );
         }
     }
