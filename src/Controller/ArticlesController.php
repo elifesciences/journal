@@ -1665,11 +1665,6 @@ final class ArticlesController extends Controller
                         ),
                         sprintf(
                             '%s %s',
-                            // $articleVersion->getVersion() !== $item->getVersion() ?
-                            //     sprintf(
-                            //         '<span class="version">v%s</span>',
-                            //         $articleVersion->getVersion()
-                            //     ) : '',
                             $articleVersion->getVersionDate() ?
                                 sprintf(
                                     '<time datetime="%s">%s</time>',
