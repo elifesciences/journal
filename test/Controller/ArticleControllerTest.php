@@ -4105,18 +4105,18 @@ final class ArticleControllerTest extends PageTestCase
             $this->assertCount(12, $crawler->filter('.content-aside .definition-list--timeline')->children());
 
             foreach ([
-                         'Version of Record published',
-                         'January 2, 2010 (This version)',
-                         'Accepted Manuscript published',
-                         'January 1, 2010 (Go to version)',
+                         'Version of Record',
+                         ' January 2, 2010Read the peer reviews',
+                         'Accepted Manuscript',
+                         'v1 January 1, 2010Read the peer reviews',
                          'Accepted',
                          'December 31, 2009',
                          'Received',
                          'December 30, 2009',
                          'Sent for peer review',
                          'December 29, 2009',
-                         'Preprint posted',
-                         'December 28, 2009 (Go to version)',
+                         'Preprint',
+                         ' December 28, 2009',
                      ] as $k => $expectedTimeline) {
                 $this->assertSame(
                     $expectedTimeline,
@@ -5458,8 +5458,8 @@ final class ArticleControllerTest extends PageTestCase
         yield 'none' => [
             [],
             [
-                'Version of Record published',
-                'May 3, 2023 (This version)',
+                'Version of Record',
+                ' May 3, 2023Read the peer reviews',
             ],
         ];
         yield 'preprint only' => [
@@ -5472,10 +5472,10 @@ final class ArticleControllerTest extends PageTestCase
                 ],
             ],
             [
-                'Version of Record published',
-                'May 3, 2023 (This version)',
-                'Preprint posted',
-                'February 15, 2023 (Go to version)',
+                'Version of Record',
+                ' May 3, 2023Read the peer reviews',
+                'Preprint',
+                ' February 15, 2023',
             ],
         ];
         yield 'reviewed preprint only' => [
@@ -5488,10 +5488,10 @@ final class ArticleControllerTest extends PageTestCase
                 ],
             ],
             [
-                'Version of Record published',
-                'May 3, 2023 (This version)',
-                'Reviewed preprint posted',
-                'February 16, 2023 (Go to version)',
+                'Version of Record',
+                ' May 3, 2023Read the peer reviews',
+                'Reviewed preprint',
+                ' February 16, 2023',
             ],
         ];
         yield 'revised preprint' => [
@@ -5510,12 +5510,12 @@ final class ArticleControllerTest extends PageTestCase
                 ],
             ],
             [
-                'Version of Record published',
-                'May 3, 2023 (This version)',
-                'Reviewed preprint version 2',
-                'February 17, 2023 (Go to version)',
-                'Reviewed preprint version 1',
-                'February 16, 2023 (Go to version)',
+                'Version of Record',
+                ' May 3, 2023Read the peer reviews',
+                'v2Reviewed preprint',
+                'February 17, 2023',
+                'v1Reviewed preprint',
+                'February 16, 2023',
             ],
         ];
         yield 'revised preprints and preprint' => [
@@ -5546,16 +5546,16 @@ final class ArticleControllerTest extends PageTestCase
                 ],
             ],
             [
-                'Version of Record published',
-                'May 3, 2023 (This version)',
-                'Reviewed preprint version 3',
-                'February 18, 2023 (Go to version)',
-                'Reviewed preprint version 2',
-                'February 17, 2023 (Go to version)',
-                'Reviewed preprint version 1',
-                'February 16, 2023 (Go to version)',
-                'Preprint posted',
-                'February 15, 2023 (Go to version)',
+                'Version of Record',
+                ' May 3, 2023Read the peer reviews',
+                'v3Reviewed preprint',
+                'February 18, 2023',
+                'v2Reviewed preprint',
+                'February 17, 2023',
+                'v1Reviewed preprint',
+                'February 16, 2023',
+                'Preprint',
+                'February 15, 2023',
             ],
         ];
         yield 'revised preprints and preprint disordered' => [
@@ -5586,16 +5586,16 @@ final class ArticleControllerTest extends PageTestCase
                 ],
             ],
             [
-                'Version of Record published',
-                'May 3, 2023 (This version)',
-                'Reviewed preprint version 3',
-                'February 18, 2023 (Go to version)',
-                'Reviewed preprint version 2',
-                'February 17, 2023 (Go to version)',
-                'Reviewed preprint version 1',
-                'February 16, 2023 (Go to version)',
-                'Preprint posted',
-                'February 15, 2023 (Go to version)',
+                'Version of Record',
+                ' May 3, 2023Read the peer reviews',
+                'v3Reviewed preprint',
+                'February 18, 2023',
+                'v2vvvReviewed preprint',
+                'February 17, 2023',
+                'v1Reviewed preprint',
+                'February 16, 2023',
+                'Preprint',
+                'February 15, 2023',
             ],
         ];
     }

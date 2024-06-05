@@ -1667,8 +1667,8 @@ final class ArticlesController extends Controller
                             '%s %s %s',
                             $articleVersion->getVersion() !== $item->getVersion() ?
                                 sprintf(
-                                    '<span class="version">%s</span>',
-                                    $this->generatePath($history, $articleVersion->getVersion())
+                                    '<span class="version">v%s</span>',
+                                    $articleVersion->getVersion()
                                 ) : '',
                             $articleVersion->getVersionDate() ?
                                 sprintf(
