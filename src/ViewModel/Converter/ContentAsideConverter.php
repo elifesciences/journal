@@ -29,9 +29,8 @@ final class ContentAsideConverter implements ViewModelConverter
      */
     public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
-        $status = $this->getStatus($object);
         return new ViewModel\ContentAside(
-            $status,
+            null,
             new ViewModel\ButtonCollection([
                 Button::action('Download', '#downloads', true, 'button-action-download', Button::ACTION_VARIANT_DOWNLOAD),
                 Button::action('Cite', '#cite-this-article', true, 'modalContentCitations', Button::ACTION_VARIANT_CITATION),
@@ -54,45 +53,5 @@ final class ContentAsideConverter implements ViewModelConverter
     protected function getViewModelConverter() : ViewModelConverter
     {
         return $this->viewModelConverter;
-    }
-
-    private function getStatus(ArticleVersion $article) : ?ViewModel\ContentAsideStatus
-    {
-        if (in_array($article->getType(), [
-            'correction',
-            'retraction',
-            'registered-report',
-            'replication-study',
-            'research-communication',
-        ])) {
-             return null;
-        }
-
-        $title = ($article instanceof ArticleVoR) ? 'Version of Record' : 'Author Accepted Manuscript';
-
-        switch (true) {
-            case $article instanceof ArticlePoA:
-                $text = 'PDF only version. The full online version will follow soon.';
-                break;
-            case $article instanceof ArticleVoR && $article->isReviewedPreprint():
-                $text = 'The authors declare this version of their article to be the Version of Record.';
-                break;
-            default:
-                $text = 'Accepted for publication after peer review and revision.';
-        }
-
-        $link = null;
-        if ($article instanceof ArticleVoR && $article->isReviewedPreprint()) {
-            $link = new ViewModel\Link(
-                'About eLife\'s process',
-                $this->urlGenerator->generate('inside-elife-article', ['id' => '54d63486'])
-            );
-        }
-
-        return new ViewModel\ContentAsideStatus(
-            $title,
-            $text,
-            $link
-        );
     }
 }
