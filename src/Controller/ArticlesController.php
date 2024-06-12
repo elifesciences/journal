@@ -1625,7 +1625,8 @@ final class ArticlesController extends Controller
                                 ) : '',
                             $isLastVersionVor ?
                                 sprintf(
-                                    '<a href="#">Read the peer reviews</a>'
+                                    '<a href="%s">Read the peer reviews</a>',
+                                    $this->generatePath($history, $item->getVersion(), 'peer-reviews', 'content')
                                 ) : ''
                             ),
                         $isLastVersionVor ? 'vor': ''
@@ -1651,17 +1652,14 @@ final class ArticlesController extends Controller
                     ->map(function(ArticlePreprint $preprint) use ($prepareDefinition) {
                         return $prepareDefinition(
                             $preprint->getPublishedDate()->getTimeStamp(),
-                            'Reviewed preprint',
                             sprintf(
-                                '%s %s',
-                                sprintf(
-                                    strpos($preprint->getDescription(), 'reviewed preprint') === true ?  '<span class="version">v</span>' : ''
-                                ),
-                                sprintf(
-                                    '<time datetime="%s">%s</time>',
-                                    $preprint->getPublishedDate()->format('Y-m-d'),
-                                    $preprint->getPublishedDate()->format('F j, Y')
-                                )
+                                '<a href="%s">Reviewed preprint</a>',
+                                $preprint->getUri()
+                            ),
+                            sprintf(
+                                '<time datetime="%s">%s</time>',
+                                $preprint->getPublishedDate()->format('Y-m-d'),
+                                $preprint->getPublishedDate()->format('F j, Y')
                             )
                         );
                     })->reverse()->toArray());
@@ -1688,7 +1686,7 @@ final class ArticlesController extends Controller
                             // Remove index from item.
                             unset($item['index']);
 
-                            if ('Reviewed preprint' === $item['term'] && $rpCount > 0) {
+                            if (strpos($item['term'], 'Reviewed preprint') !== false && $rpCount > 0) {
                                 $version = sprintf('<span class="version">v%d</span>', $rpCount);
                                 $item['descriptors'][0] = $version . ' ' . $item['descriptors'][0];
                                 $rpCount--;
