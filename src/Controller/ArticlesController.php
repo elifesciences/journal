@@ -1608,7 +1608,7 @@ final class ArticlesController extends Controller
                 };
 
                 $prepareDefinitionArticleVersion = function (ArticleVersion $articleVersion, bool $first) use ($prepareDefinition, $history, $item) {
-                    $isLastVersionVor = $articleVersion->getVersion() === $item->getVersion() && $articleVersion instanceof ArticleVoR && $articleVersion->isReviewedPreprint();
+                    $isLastVor = $articleVersion->getVersion() === $item->getVersion() && $articleVersion instanceof ArticleVoR && $articleVersion->isReviewedPreprint();
                     $versionLabel = $articleVersion instanceof ArticleVoR ? 'Version of Record' : 'Accepted Manuscript';
                     return $prepareDefinition(
                         $articleVersion->getVersionDate() ? $articleVersion->getVersionDate()->getTimeStamp() : 0,
@@ -1626,13 +1626,13 @@ final class ArticlesController extends Controller
                                     $articleVersion->getVersionDate()->format('Y-m-d'),
                                     $articleVersion->getVersionDate()->format('F j, Y')
                                 ) : '',
-                            $isLastVersionVor ?
+                            $isLastVor ?
                                 sprintf(
                                     '<a href="%s">Read the peer reviews</a>',
                                     $this->generatePath($history, $item->getVersion(), 'peer-reviews', 'content')
                                 ) : ''
                             ),
-                        $isLastVersionVor ? 'vor': ''
+                        $isLastVor ? 'vor': ''
                     );
                 };
 
