@@ -1609,11 +1609,14 @@ final class ArticlesController extends Controller
 
                 $prepareDefinitionArticleVersion = function (ArticleVersion $articleVersion, bool $first) use ($prepareDefinition, $history, $item) {
                     $isLastVersionVor = $articleVersion->getVersion() === $item->getVersion() && $articleVersion instanceof ArticleVoR && $articleVersion->isReviewedPreprint();
+                    $versionLabel = $articleVersion instanceof ArticleVoR ? 'Version of Record' : 'Accepted Manuscript';
                     return $prepareDefinition(
                         $articleVersion->getVersionDate() ? $articleVersion->getVersionDate()->getTimeStamp() : 0,
                         sprintf(
                             '%s',
-                            $articleVersion instanceof ArticleVoR ? 'Version of Record' : 'Accepted Manuscript'
+                                $articleVersion->getVersion() === $item->getVersion() ?
+                                    $versionLabel
+                                    : sprintf('<a href="%s">%s</a>', $this->generatePath($history, $articleVersion->getVersion()), $versionLabel)
                         ),
                         sprintf(
                             '%s %s',
