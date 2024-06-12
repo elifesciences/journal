@@ -1588,55 +1588,6 @@ final class ArticlesController extends Controller
                 $history = $parts['history'];
 
                 $publicationHistory = [];
-                if ($received = $history->getReceived()) {
-                    $receivedDate = new DateTimeImmutable($received->format());
-                    $publicationHistory[] = [
-                        // index added to allow us to sort.
-                        'index' => strtotime($received->toString()),
-                        'term' => 'Received',
-                        'descriptors' => [
-                            sprintf(
-                                '<time datetime="%s">%s</time>',
-                                $receivedDate->format('Y-m-d'),
-                                $receivedDate->format('F j, Y')
-                            )
-                        ],
-                    ];
-                }
-
-                if ($accepted = $history->getAccepted()) {
-                    $acceptedDate = new DateTimeImmutable($accepted->format());
-
-                    $publicationHistory[] = [
-                        // index added to allow us to sort.
-                        'index' => strtotime($accepted->toString()),
-                        'term' => 'Accepted',
-                        'descriptors' => [
-                            sprintf(
-                                '<time datetime="%s">%s</time>',
-                                $acceptedDate->format('Y-m-d'),
-                                $acceptedDate->format('F j, Y')
-                            )
-                        ],
-                    ];
-                }
-
-                if ($sentForReview = $history->getSentForReview()) {
-                    $sentForReviewDate = new DateTimeImmutable($sentForReview->format());
-
-                    $publicationHistory[] = [
-                        // index added to allow us to sort.
-                        'index' => strtotime($sentForReview->toString()),
-                        'term' => 'Sent for peer review',
-                        'descriptors' => [
-                            sprintf(
-                                '<time datetime="%s">%s</time>',
-                                $sentForReviewDate->format('Y-m-d'),
-                                $sentForReviewDate->format('F j, Y')
-                            )
-                        ],
-                    ];
-                }
 
                 $articleVersions = $history->getVersions()
                     ->filter(Callback::isInstanceOf(ArticleVersion::class))
@@ -1657,7 +1608,7 @@ final class ArticlesController extends Controller
                 };
 
                 $prepareDefinitionArticleVersion = function (ArticleVersion $articleVersion, bool $first) use ($prepareDefinition, $history, $item) {
-                    $isLastVersionVor = $articleVersion->getVersion() === $item->getVersion() && $articleVersion instanceof ArticleVoR;
+                    $isLastVersionVor = $articleVersion->getVersion() === $item->getVersion() && $articleVersion instanceof ArticleVoR && $articleVersion->isReviewedPreprint();
                     return $prepareDefinition(
                         $articleVersion->getVersionDate() ? $articleVersion->getVersionDate()->getTimeStamp() : 0,
                         sprintf(
@@ -1694,13 +1645,13 @@ final class ArticlesController extends Controller
                     })->reverse()->toArray());
                 $publicationHistory = array_merge($publicationHistory, $history->getVersions()
                     ->filter(Callback::isInstanceOf(ArticlePreprint::class))
+                    ->filter(function($preprint) {
+                        return strpos($preprint->getDescription(), 'reviewed preprint') !== false;
+                    })
                     ->map(function(ArticlePreprint $preprint) use ($prepareDefinition) {
                         return $prepareDefinition(
                             $preprint->getPublishedDate()->getTimeStamp(),
-                            sprintf(
-                                '%s',
-                                strpos($preprint->getDescription(), 'reviewed preprint') === false ? 'Preprint' : 'Reviewed preprint'
-                            ),
+                            'Reviewed preprint',
                             sprintf(
                                 '%s %s',
                                 sprintf(

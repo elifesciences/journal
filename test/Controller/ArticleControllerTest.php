@@ -4100,21 +4100,13 @@ final class ArticleControllerTest extends PageTestCase
                 $this->crawlerText($crawler->filter('.content-aside .button-collection .button-collection__item')->eq(2)));
             $this->assertSame('Comment Open annotations (there are currently 0 annotations on this page).',
                 $this->crawlerText($crawler->filter('.content-aside .button-collection .button-collection__item')->eq(3)));
-            $this->assertCount(12, $crawler->filter('.content-aside .definition-list--timeline')->children());
+            $this->assertCount(4, $crawler->filter('.content-aside .definition-list--timeline')->children());
 
             foreach ([
                          'Version of Record',
-                         'January 2, 2010Read the peer reviews',
+                         'January 2, 2010',
                          'Accepted Manuscript',
                          'January 1, 2010',
-                         'Accepted',
-                         'December 31, 2009',
-                         'Received',
-                         'December 30, 2009',
-                         'Sent for peer review',
-                         'December 29, 2009',
-                         'Preprint',
-                         ' December 28, 2009',
                      ] as $k => $expectedTimeline) {
                 $this->assertSame(
                     $expectedTimeline,
@@ -5291,8 +5283,6 @@ final class ArticleControllerTest extends PageTestCase
             [
                 'Version of Record',
                 'May 3, 2023Read the peer reviews',
-                'Preprint',
-                'February 15, 2023',
             ],
         ];
         yield 'reviewed preprint only' => [
@@ -5371,8 +5361,6 @@ final class ArticleControllerTest extends PageTestCase
                 'v2  February 17, 2023',
                 'Reviewed preprint',
                 'v1  February 16, 2023',
-                'Preprint',
-                'February 15, 2023',
             ],
         ];
         yield 'revised preprints and preprint disordered' => [
@@ -5411,8 +5399,6 @@ final class ArticleControllerTest extends PageTestCase
                 'v2  February 17, 2023',
                 'Reviewed preprint',
                 'v1  February 16, 2023',
-                'Preprint',
-                'February 15, 2023',
             ],
         ];
     }
