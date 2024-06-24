@@ -1240,12 +1240,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-sdk-php.git",
-                "reference": "35e87eca1e1d1ce99e4ccac680fb96589d15972c"
+                "reference": "07371e7140152441327bb2bca98480824694c3b0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/35e87eca1e1d1ce99e4ccac680fb96589d15972c",
-                "reference": "35e87eca1e1d1ce99e4ccac680fb96589d15972c",
+                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/07371e7140152441327bb2bca98480824694c3b0",
+                "reference": "07371e7140152441327bb2bca98480824694c3b0",
                 "shasum": ""
             },
             "require": {
@@ -1270,7 +1270,6 @@
                 "psr/http-message": "^1.0",
                 "squizlabs/php_codesniffer": "^3.5"
             },
-            "default-branch": true,
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -1287,11 +1286,7 @@
                 "MIT"
             ],
             "description": "eLife Sciences API SDK",
-            "support": {
-                "issues": "https://github.com/elifesciences/api-sdk-php/issues",
-                "source": "https://github.com/elifesciences/api-sdk-php/tree/master"
-            },
-            "time": "2024-03-25T14:03:43+00:00"
+            "time": "2024-04-12T01:47:08+00:00"
         },
         {
             "name": "elife/civi-contacts",
@@ -1299,12 +1294,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/civi-contacts.git",
-                "reference": "565b798c0ea9113fee5ee7fde177cfc4c951b469"
+                "reference": "c20fa23d4c0cf7cdac67bc19ecae0c7c2d3e65f1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/civi-contacts/zipball/565b798c0ea9113fee5ee7fde177cfc4c951b469",
-                "reference": "565b798c0ea9113fee5ee7fde177cfc4c951b469",
+                "url": "https://api.github.com/repos/elifesciences/civi-contacts/zipball/c20fa23d4c0cf7cdac67bc19ecae0c7c2d3e65f1",
+                "reference": "c20fa23d4c0cf7cdac67bc19ecae0c7c2d3e65f1",
                 "shasum": ""
             },
             "require": {
@@ -1330,7 +1325,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2023-06-20T13:45:45+00:00"
+            "time": "2024-04-12T01:07:21+00:00"
         },
         {
             "name": "elife/patterns",
@@ -1338,12 +1333,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/patterns-php.git",
-                "reference": "956df81656b0e1e130e0e29a050a893b940d6b53"
+                "reference": "09ee44d5c0c240f2363eeff73122d0db4c3f3ad9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/956df81656b0e1e130e0e29a050a893b940d6b53",
-                "reference": "956df81656b0e1e130e0e29a050a893b940d6b53",
+                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/09ee44d5c0c240f2363eeff73122d0db4c3f3ad9",
+                "reference": "09ee44d5c0c240f2363eeff73122d0db4c3f3ad9",
                 "shasum": ""
             },
             "require": {
@@ -1366,7 +1361,6 @@
             "suggest": {
                 "twig/twig": "^2.0, to use PatternExtension"
             },
-            "default-branch": true,
             "type": "library",
             "autoload": {
                 "files": [
@@ -1381,10 +1375,7 @@
                 "MIT"
             ],
             "description": "eLife patterns",
-            "support": {
-                "source": "https://github.com/elifesciences/patterns-php/tree/master"
-            },
-            "time": "2024-06-19T07:05:13+00:00"
+            "time": "2024-06-24T08:24:03+00:00"
         },
         {
             "name": "fabpot/goutte",
@@ -2245,6 +2236,7 @@
                 "MIT"
             ],
             "description": "Locates Composer package root folders by package name",
+            "abandoned": "composer-runtime-api",
             "time": "2020-12-23T10:58:04+00:00"
         },
         {
@@ -4408,7 +4400,7 @@
                 "MIT"
             ],
             "description": "eLife Sciences API specification",
-            "time": "2023-10-23T09:39:02+00:00"
+            "time": "2024-03-15T03:53:11+00:00"
         },
         {
             "name": "elife/api-validator",
@@ -4416,12 +4408,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-validator-php.git",
-                "reference": "b70d55f4b52adeefc83830f92fe571bbaa510461"
+                "reference": "dcb4f15e08e70a4acfd8ec26f3a07e7175196b34"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-validator-php/zipball/b70d55f4b52adeefc83830f92fe571bbaa510461",
-                "reference": "b70d55f4b52adeefc83830f92fe571bbaa510461",
+                "url": "https://api.github.com/repos/elifesciences/api-validator-php/zipball/dcb4f15e08e70a4acfd8ec26f3a07e7175196b34",
+                "reference": "dcb4f15e08e70a4acfd8ec26f3a07e7175196b34",
                 "shasum": ""
             },
             "require": {
@@ -4453,7 +4445,7 @@
                 "MIT"
             ],
             "description": "eLife Sciences API validator",
-            "time": "2021-03-09T20:14:39+00:00"
+            "time": "2024-04-12T01:07:21+00:00"
         },
         {
             "name": "instaclick/php-webdriver",
@@ -4558,12 +4550,12 @@
             "version": "5.2.10",
             "source": {
                 "type": "git",
-                "url": "https://github.com/justinrainbow/json-schema.git",
+                "url": "https://github.com/jsonrainbow/json-schema.git",
                 "reference": "2ba9c8c862ecd5510ed16c6340aa9f6eadb4f31b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/justinrainbow/json-schema/zipball/2ba9c8c862ecd5510ed16c6340aa9f6eadb4f31b",
+                "url": "https://api.github.com/repos/jsonrainbow/json-schema/zipball/2ba9c8c862ecd5510ed16c6340aa9f6eadb4f31b",
                 "reference": "2ba9c8c862ecd5510ed16c6340aa9f6eadb4f31b",
                 "shasum": ""
             },
@@ -6345,6 +6337,5 @@
     "platform-dev": [],
     "platform-overrides": {
         "php": "7.1.33"
-    },
-    "plugin-api-version": "2.6.0"
+    }
 }
