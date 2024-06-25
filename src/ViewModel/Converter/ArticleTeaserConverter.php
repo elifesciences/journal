@@ -3,6 +3,7 @@
 namespace eLife\Journal\ViewModel\Converter;
 
 use eLife\ApiSdk\Model\ArticleVersion;
+use eLife\ApiSdk\Model\ArticlePoA;
 use eLife\ApiSdk\Model\ArticleVoR;
 use eLife\Journal\Helper\ModelName;
 use eLife\Patterns\ViewModel;
@@ -39,19 +40,9 @@ final class ArticleTeaserConverter implements ViewModelConverter
             $image = null;
         }
 
-        $formats = [];
-
-        if ($object instanceof ArticleVoR) {
-            if (isset($this->eraArticles[$object->getId()]['display'])) {
-                $formats[] = 'Executable';
-            } else {
-                $formats[] = 'HTML';
-            }
-        }
-
-        if (null !== $object->getPdf()) {
-            $formats[] = 'PDF';
-        }
+        $statusInfo = $this->getStatusInfo($object);
+        $status = $statusInfo['status'];
+        $statusColor = $statusInfo['statusColor'];
 
         return ViewModel\Teaser::main(
             $object->getFullTitle(),
@@ -66,9 +57,10 @@ final class ArticleTeaserConverter implements ViewModelConverter
                         ModelName::singular($object->getType()),
                         $this->urlGenerator->generate('article-type', ['type' => $object->getType()])
                     ),
-                    $this->simpleDate($object, $context)
-                ),
-                $formats
+                    $this->simpleDate($object, $context),
+                    $status,
+                    $statusColor
+                )
             )
         );
     }
@@ -81,5 +73,32 @@ final class ArticleTeaserConverter implements ViewModelConverter
     protected function getViewModelConverter() : ViewModelConverter
     {
         return $this->viewModelConverter;
+    }
+
+    private function getStatusInfo(ArticleVersion $article) : array
+    {
+        if (in_array($article->getType(), [
+            'correction',
+            'retraction',
+            'registered-report',
+            'replication-study',
+            'research-communication',
+        ])) {
+             return ['status' => null, 'statusColor' => null];
+        }
+
+        $status = null;
+        $statusColor = null;
+
+        if ($article instanceof ArticlePoA) {
+            $status = 'Accepted Manuscript';
+        } else if ($article instanceof ArticleVoR && $article->isReviewedPreprint()) {
+            $status = 'Version of Record';
+            $statusColor = 'vor';
+        } else {
+            $status = 'Version of Record';
+        }
+
+        return ['status' => $status, 'statusColor' => $statusColor];
     }
 }

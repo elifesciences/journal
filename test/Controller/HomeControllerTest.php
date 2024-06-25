@@ -253,10 +253,10 @@ final class HomeControllerTest extends PageTestCase
         $this->assertSame('Reviewed Preprint Updated Jan 1, 2013', trim(preg_replace('/\s+/S', ' ', $teasers->eq(1)->filter('.teaser__footer .meta')->text())));
 
         $this->assertSame('Article 2 title', trim($teasers->eq(2)->filter('.teaser__header_text')->text()));
-        $this->assertSame('Research Article Updated Jan 1, 2013', trim(preg_replace('/\s+/S', ' ', $teasers->eq(2)->filter('.teaser__footer .meta')->text())));
+        $this->assertSame('Version of Record Research Article Updated Jan 1, 2013', trim(preg_replace('/\s+/S', ' ', $teasers->eq(2)->filter('.teaser__footer .meta')->text())));
 
         $this->assertSame('Article 1 title', trim($teasers->eq(3)->filter('.teaser__header_text')->text()));
-        $this->assertSame('Research Article Jan 1, 2012', trim(preg_replace('/\s+/S', ' ', $teasers->eq(3)->filter('.teaser__footer .meta')->text())));
+        $this->assertSame('Accepted Manuscript Research Article Jan 1, 2012', trim(preg_replace('/\s+/S', ' ', $teasers->eq(3)->filter('.teaser__footer .meta')->text())));
     }
 
     /**
