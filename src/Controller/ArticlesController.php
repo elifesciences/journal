@@ -959,8 +959,7 @@ final class ArticlesController extends Controller
                                 new ProcessBlock($this->render($peerReviewText), 'vor', new Link('Read more about eLife\'s peer review process.', $this->get('router')->generate('peer-review-process')))
                             )
                         );
-                    }
-                    else {
+                    } else {
                         $peerReview[] = new Paragraph('This article was accepted for publication as part of eLife\'s original publishing model.');
                     }
 
