@@ -954,7 +954,7 @@ final class ArticlesController extends Controller
                 if ($item instanceof ArticleVor) {
                     $processBlockText = new Paragraph('This article was accepted for publication as part of eLife\'s original publishing model.');
 
-                    if($item->isReviewedPreprint()) {
+                    if ($item->isReviewedPreprint()) {
                         $processBlockText = new Paragraph('<strong>Version of Record: </strong>This is the final version of the article.');
                     }
 
