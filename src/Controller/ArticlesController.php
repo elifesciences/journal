@@ -952,23 +952,23 @@ final class ArticlesController extends Controller
                 $first = true;
 
                 if ($item instanceof ArticleVor) {
-                    $processBlockText = new Paragraph('This article was accepted for publication as part of eLife\'s original publishing model.');
-
                     if ($item->isReviewedPreprint()) {
-                        $processBlockText = new Paragraph('<strong>Version of Record: </strong>This is the final version of the article.');
+                        $peerReviewText = new Paragraph('<strong>Version of Record: </strong>This is the final version of the article.');
+                        $peerReview[] = ArticleSection::basic(
+                            $this->render(
+                                new ProcessBlock($this->render($peerReviewText), 'vor', new Link('Read more about eLife\'s peer review process.', $this->get('router')->generate('peer-review-process')))
+                            )
+                        );
                     }
-
-                    $processBlock[] = ArticleSection::basic(
-                        $this->render(
-                            new ProcessBlock($this->render($processBlockText), 'vor', new Link('Read more about eLife\'s peer review process.', $this->get('router')->generate('peer-review-process')))
-                        )
-                    );
+                    else {
+                        $peerReview[] = new Paragraph('This article was accepted for publication as part of eLife\'s original publishing model.');
+                    }
 
                     $parts[] = ArticleSection::collapsible(
                         'peer-review-process',
                         'Peer review process',
                         2,
-                        $this->render(...$processBlock),
+                        $this->render(...$peerReview),
                         null,
                         null,
                         true,
