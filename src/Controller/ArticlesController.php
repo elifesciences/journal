@@ -956,7 +956,14 @@ final class ArticlesController extends Controller
                         $peerReviewText = new Paragraph('<strong>Version of Record: </strong>This is the final version of the article.');
                         $peerReview[] = ArticleSection::basic(
                             $this->render(
-                                new ProcessBlock($this->render($peerReviewText), 'vor', new Link('Read more about eLife\'s peer review process.', $this->get('router')->generate('peer-review-process')))
+                                new ProcessBlock(
+                                    $this->render($peerReviewText),
+                                    'vor',
+                                    new Link(
+                                        'Read more about eLife\'s peer review process.',
+                                        $this->get('router')->generate('peer-review-process')
+                                    )
+                                )
                             )
                         );
                     } else {
