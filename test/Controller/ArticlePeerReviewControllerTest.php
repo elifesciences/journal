@@ -26,26 +26,33 @@ final class ArticlePeerReviewControllerTest extends PageTestCase
 
         $articleInfo = $crawler->filter('.main-content-grid');
 
+        $this->assertSame('Peer review process', $crawler->filter('.main-content-grid > section:nth-of-type(1) header > h2')->text());
+        $this->assertSame('Version of Record: This is the final version of the article.',
+            $crawler->filter('.main-content-grid > section:nth-of-type(1) > div p')->text());
+        $this->assertSame('Read more about eLife\'s peer review process.',
+            $crawler->filter('.main-content-grid > section:nth-of-type(1) > div a')->text());
+
         $editors = $articleInfo->filter('section#editors');
-        $this->assertSame('Editors', $crawler->filter('.main-content-grid > section:nth-of-type(1) header > h2')->text());
+        $this->assertSame('Editors', $crawler->filter('.main-content-grid > section:nth-of-type(2) header > h2')->text());
         $this->assertSame('Senior Editor', trim($editors->filter('section:nth-of-type(1) header')->text()));
 
         $this->assertSame('Reviewer #1 (public review)',
-            $crawler->filter('.main-content-grid > section:nth-of-type(2) header > h2')->text());
-        $this->assertSame('https://doi.org/10.7554/eLife.09562.230',
-            trim($crawler->filter('.main-content-grid > section:nth-of-type(2) .article-section__body .doi')->text()));
-        $this->assertSame('Reviewer #2 (public review)',
             $crawler->filter('.main-content-grid > section:nth-of-type(3) header > h2')->text());
-        $this->assertSame('https://doi.org/10.7554/eLife.09562.330',
+        $this->assertSame('https://doi.org/10.7554/eLife.09562.230',
             trim($crawler->filter('.main-content-grid > section:nth-of-type(3) .article-section__body .doi')->text()));
+        $this->assertSame('Reviewer #2 (public review)',
+            $crawler->filter('.main-content-grid > section:nth-of-type(4) header > h2')->text());
+        $this->assertSame('https://doi.org/10.7554/eLife.09562.330',
+            trim($crawler->filter('.main-content-grid > section:nth-of-type(4) .article-section__body .doi')->text()));
 
         $this->assertSame('Author response',
-            $crawler->filter('.main-content-grid > section:nth-of-type(4) header > h2')->text());
+            $crawler->filter('.main-content-grid > section:nth-of-type(5) header > h2')->text());
         $this->assertSame('Author response text',
-             $crawler->filter('.main-content-grid > section:nth-of-type(4) > div > p')->text());
+             $crawler->filter('.main-content-grid > section:nth-of-type(5) > div > p')->text());
 
         $this->assertSame(
             [
+                'Peer review process',
                 'Editors',
                 'Reviewer #1 (public review)',
                 'Reviewer #2 (public review)',
@@ -55,18 +62,26 @@ final class ArticlePeerReviewControllerTest extends PageTestCase
         );
     }
 
-
-    public function it_displays_decision_letter_in_peer_review_page_for_old_vor()
+    /**
+     * @test
+     */
+    public function it_displays_peer_review_process_and_decision_letter_in_peer_review_page_for_old_vor()
     {
         $client = static::createClient();
 
         $crawler = $client->request('GET', $this->getOldVorUrl());
         $articleInfo = $crawler->filter('.main-content-grid');
         $this->assertSame(200, $client->getResponse()->getStatusCode());
-        $editors = $articleInfo->filter('section#editors');
-        $this->assertSame('Decision letter', $editors->filter('h2.article-section__header_text')->text());
+
+        $this->assertSame('Peer review process', $crawler->filter('.main-content-grid > section:nth-of-type(1) header > h2')->text());
+        $this->assertSame('This article was accepted for publication as part of eLife\'s original publishing model.',
+            $crawler->filter('.main-content-grid > section:nth-of-type(1) > div > p')->text());
+
+        $this->assertSame('Decision letter',
+            $crawler->filter('.main-content-grid > section:nth-of-type(2) header > h2')->text());
         $this->assertSame(
             [
+                'Peer review process',
                 'Decision letter',
                 'Author response',
             ],
