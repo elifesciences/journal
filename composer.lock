@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "06fa79cf985fbfcf0872389a4ba59831",
+    "content-hash": "f5c0bf8157adbe69d9b9fba1046bd183",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -1329,16 +1329,16 @@
         },
         {
             "name": "elife/patterns",
-            "version": "dev-timeline-vor-highlight",
+            "version": "dev-timeline-active-highlight",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/patterns-php.git",
-                "reference": "e4bb77d2fb098963e97b9e7a8576c184b3d2730d"
+                "reference": "cbdec78b93f95950f6abbdd5e46e49ed41aca31f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/e4bb77d2fb098963e97b9e7a8576c184b3d2730d",
-                "reference": "e4bb77d2fb098963e97b9e7a8576c184b3d2730d",
+                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/cbdec78b93f95950f6abbdd5e46e49ed41aca31f",
+                "reference": "cbdec78b93f95950f6abbdd5e46e49ed41aca31f",
                 "shasum": ""
             },
             "require": {
@@ -1376,9 +1376,9 @@
             ],
             "description": "eLife patterns",
             "support": {
-                "source": "https://github.com/elifesciences/patterns-php/tree/timeline-vor-highlight"
+                "source": "https://github.com/elifesciences/patterns-php/tree/timeline-active-highlight"
             },
-            "time": "2024-07-03T09:07:37+00:00"
+            "time": "2024-07-03T10:09:05+00:00"
         },
         {
             "name": "fabpot/goutte",
