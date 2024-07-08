@@ -42,6 +42,7 @@ use eLife\Patterns\ViewModel\InfoBar;
 use eLife\Patterns\ViewModel\Link;
 use eLife\Patterns\ViewModel\Listing;
 use eLife\Patterns\ViewModel\Paragraph;
+use eLife\Patterns\ViewModel\ProcessBlock;
 use eLife\Patterns\ViewModel\ReadMoreItem;
 use eLife\Patterns\ViewModel\SpeechBubble;
 use eLife\Patterns\ViewModel\TabbedNavigation;
@@ -950,6 +951,39 @@ final class ArticlesController extends Controller
 
                 $first = true;
 
+                if ($item instanceof ArticleVor) {
+                    if ($item->isReviewedPreprint()) {
+                        $peerReviewText = new Paragraph('<strong>Version of Record: </strong>This is the final version of the article.');
+                        $peerReview[] = ArticleSection::basic(
+                            $this->render(
+                                new ProcessBlock(
+                                    $this->render($peerReviewText),
+                                    'vor',
+                                    new Link(
+                                        'Read more about eLife\'s peer review process.',
+                                        $this->get('router')->generate('peer-review-process')
+                                    )
+                                )
+                            )
+                        );
+                    } else {
+                        $peerReview[] = new Paragraph('This article was accepted for publication as part of eLife\'s original publishing model.');
+                    }
+
+                    $parts[] = ArticleSection::collapsible(
+                        'peer-review-process',
+                        'Peer review process',
+                        2,
+                        $this->render(...$peerReview),
+                        null,
+                        null,
+                        true,
+                        $first
+                    );
+
+                    $first = false;
+                }
+
                 if ($item instanceof ArticleVor && $item->isReviewedPreprint()) {
                     $roles = $item->getReviewers()
                         ->reduce(function (array $roles, Reviewer $reviewer) {
@@ -1774,10 +1808,10 @@ final class ArticlesController extends Controller
             ->then(function (array $parts) {
                 $item = $parts['item'];
 
-                return ($item instanceof ArticleVoR && $item->getPublicReviews()->notEmpty()) ||
-                    ($item instanceof ArticleVor && $item->getDecisionLetter()) ||
-                    ($item instanceof ArticleVor && $item->getAuthorResponse())
-                ;
+                return $item instanceof ArticleVoR &&
+                        ($item->getPublicReviews()->notEmpty() ||
+                        $item->getDecisionLetter() ||
+                        $item->getAuthorResponse());
             });
     }
 }
