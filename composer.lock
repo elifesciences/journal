@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f5c0bf8157adbe69d9b9fba1046bd183",
+    "content-hash": "cc6b3eb8581ce24b68d16d11a9db35f5",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -1329,16 +1329,16 @@
         },
         {
             "name": "elife/patterns",
-            "version": "dev-timeline-active-highlight",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/patterns-php.git",
-                "reference": "ab0efbc4cb1b5ded8b4ab92bad73dac3783c2fd2"
+                "reference": "e604a805656367b7684ec286880e9a3be939db24"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/ab0efbc4cb1b5ded8b4ab92bad73dac3783c2fd2",
-                "reference": "ab0efbc4cb1b5ded8b4ab92bad73dac3783c2fd2",
+                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/e604a805656367b7684ec286880e9a3be939db24",
+                "reference": "e604a805656367b7684ec286880e9a3be939db24",
                 "shasum": ""
             },
             "require": {
@@ -1361,6 +1361,7 @@
             "suggest": {
                 "twig/twig": "^2.0, to use PatternExtension"
             },
+            "default-branch": true,
             "type": "library",
             "autoload": {
                 "files": [
@@ -1376,9 +1377,9 @@
             ],
             "description": "eLife patterns",
             "support": {
-                "source": "https://github.com/elifesciences/patterns-php/tree/timeline-active-highlight"
+                "source": "https://github.com/elifesciences/patterns-php/tree/master"
             },
-            "time": "2024-07-08T08:05:40+00:00"
+            "time": "2024-07-09T07:05:08+00:00"
         },
         {
             "name": "fabpot/goutte",
@@ -6340,5 +6341,6 @@
     "platform-dev": [],
     "platform-overrides": {
         "php": "7.1.33"
-    }
+    },
+    "plugin-api-version": "2.6.0"
 }
