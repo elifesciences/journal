@@ -1629,7 +1629,7 @@ final class ArticlesController extends Controller
                         return $a->getVersion() <=> $b->getVersion();
                     });
 
-                $prepareDefinition = function (int $index, string $term, string $descriptor, string $color = null) {
+                $prepareDefinition = function (int $index, string $term, string $descriptor, string $color = null, bool $isActive = false) {
                     return [
                         // index added to allow us to sort.
                         'index' => $index,
@@ -1637,7 +1637,8 @@ final class ArticlesController extends Controller
                         'descriptors' => [
                             $descriptor,
                         ],
-                        'color' => $color
+                        'color' => $color,
+                        'isActive' => $isActive
                     ];
                 };
 
@@ -1666,7 +1667,8 @@ final class ArticlesController extends Controller
                                     $this->generatePath($history, $item->getVersion(), 'peer-reviews', 'content')
                                 ) : ''
                             ),
-                        $isLastVor ? 'vor': ''
+                        $isLastVor ? 'vor': '',
+                        $articleVersion->getVersion() === $item->getVersion()
                     );
                 };
 
