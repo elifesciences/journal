@@ -77,6 +77,14 @@ final class ArticlePeerReviewControllerTest extends PageTestCase
         $this->assertSame('This article was accepted for publication as part of eLife\'s original publishing model.',
             $crawler->filter('.main-content-grid > section:nth-of-type(1) > div > p')->text());
 
+        $history = $articleInfo->eq(0);
+        $this->assertSame('History', $history->filter('header > h3')->text());
+        $this->assertCount(1, $history->filter('ol')->children());
+        $this->assertSame('Version of Record published: January 1, 2010 (version 1)', $history->filter('ol')->children()->eq(0)->text());
+
+        $related = $crawler->filter('.main-content-grid > section:nth-of-type(1) > div > .article-section__related');
+        $this->assertSame('Go to the preprint', $related->filter('li > a')->text());
+
         $this->assertSame('Decision letter',
             $crawler->filter('.main-content-grid > section:nth-of-type(2) header > h2')->text());
         $this->assertSame(
@@ -1000,5 +1008,137 @@ final class ArticlePeerReviewControllerTest extends PageTestCase
         );
 
         return '/articles/00001/peer-reviews';
+    }
+
+    /**
+     * @test
+     */
+    public function it_displays_a_poa()
+    {
+        $client = static::createClient();
+
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/articles/00001',
+                ['Accept' => 'application/vnd.elife.article-poa+json; version=4, application/vnd.elife.article-vor+json; version=8']
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.article-poa+json; version=4'],
+                json_encode([
+                    'status' => 'poa',
+                    'stage' => 'published',
+                    'id' => '00001',
+                    'version' => 1,
+                    'type' => 'research-article',
+                    'doi' => '10.7554/eLife.00001',
+                    'title' => 'Article title',
+                    'published' => '2010-01-01T00:00:00Z',
+                    'versionDate' => '2010-01-01T00:00:00Z',
+                    'statusDate' => '2010-01-01T00:00:00Z',
+                    'volume' => 1,
+                    'elocationId' => 'e00001',
+                    'copyright' => [
+                        'license' => 'CC-BY-4.0',
+                        'holder' => 'Author One',
+                        'statement' => 'Copyright statement.',
+                    ],
+                    'authorLine' => 'Author One et al.',
+                    'authors' => [
+                        [
+                            'type' => 'person',
+                            'name' => [
+                                'preferred' => 'Author One',
+                                'index' => 'Author One',
+                            ],
+                        ],
+                    ],
+                    'reviewers' => [
+                        [
+                            'name' => [
+                                'preferred' => 'Reviewer 1',
+                                'index' => 'Reviewer 1',
+                            ],
+                            'role' => 'Reviewer',
+                            'affiliations' => [
+                                [
+                                    'name' => ['Institution'],
+                                    'address' => [
+                                        'formatted' => ['Country'],
+                                        'components' => [
+                                            'country' => 'Country',
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ])
+            )
+        );
+
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/articles/00001/versions',
+                [
+                    'Accept' => [
+                        'application/vnd.elife.article-history+json; version=2',
+                    ],
+                ]
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.article-history+json; version=2'],
+                json_encode([
+                    'versions' => [
+                        [
+                            'status' => 'poa',
+                            'stage' => 'published',
+                            'id' => '00001',
+                            'version' => 1,
+                            'type' => 'research-article',
+                            'doi' => '10.7554/eLife.00001',
+                            'title' => 'Article title',
+                            'published' => '2010-01-01T00:00:00Z',
+                            'versionDate' => '2010-01-01T00:00:00Z',
+                            'statusDate' => '2010-01-01T00:00:00Z',
+                            'volume' => 1,
+                            'elocationId' => 'e00001',
+                            'copyright' => [
+                                'license' => 'CC-BY-4.0',
+                                'holder' => 'Author One',
+                                'statement' => 'Copyright statement.',
+                            ],
+                            'authorLine' => 'Author One et al.',
+                        ],
+                    ],
+                ])
+            )
+        );
+
+        $crawler = $client->request('GET', '/articles/00001/peer-reviews');
+
+        $this->assertSame(200, $client->getResponse()->getStatusCode());
+        $this->assertContains('Accepted manuscript, PDF only. Full online edition to follow.',
+            array_map('trim', $crawler->filter('.info-bar')->extract(['_text'])));
+        $this->assertEmpty($crawler->filter('.view-selector'));
+        $articleInfo = $crawler->filter('.main-content-grid > section:nth-of-type(1)');
+        $this->assertSame('Peer review process',
+            $articleInfo->filter('header > h2')->text());
+
+        $this->assertSame('This article was accepted for publication via eLife\'s original publishing model. eLife publishes the authors\' accepted manuscript as a PDF only version before the full Version of Record is ready for publication. Peer reviews are published along with the Version of Record.',
+            $crawler->filter('.main-content-grid > section:nth-of-type(1) > div > p')->text());
+
+        $articleInfo = $crawler->filter('.main-content-grid > section:nth-of-type(1) > div > section');
+
+        $history = $articleInfo->eq(0);
+        $this->assertSame('History', $history->filter('header > h3')->text());
+        $this->assertCount(1, $history->filter('ol')->children());
+        $this->assertSame('Accepted Manuscript published: January 1, 2010 (version 1)', $history->filter('ol')->children()->eq(0)->text());
+
+        $related = $crawler->filter('.main-content-grid > section:nth-of-type(1) > div > .article-section__related');
+        $this->assertSame('Go to the preprint', $related->filter('li > a')->text());
     }
 }
