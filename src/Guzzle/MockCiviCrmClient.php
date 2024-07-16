@@ -3,6 +3,7 @@
 namespace eLife\Journal\Guzzle;
 
 use eLife\CiviContacts\Etoc\EarlyCareer;
+use eLife\CiviContacts\Etoc\ElifeNewsletter;
 use eLife\CiviContacts\Etoc\LatestArticles;
 use eLife\CiviContacts\Etoc\Newsletter;
 use eLife\CiviContacts\Etoc\Subscription;
@@ -93,7 +94,7 @@ final class MockCiviCrmClient implements CiviCrmClientInterface
                     'green@example.com',
                     'Green',
                     'Example',
-                    [LatestArticles::GROUP_ID],
+                    [LatestArticles::GROUP_ID, ElifeNewsletter::GROUP_ID],
                     'http://localhost/content-alerts/green'
                 );
             case '/content-alerts/amber' === $identifier && !$isEmail:
@@ -106,7 +107,7 @@ final class MockCiviCrmClient implements CiviCrmClientInterface
                     'amber@example.com',
                     'Amber',
                     'Example',
-                    []
+                    [EarlyCareer::GROUP_ID]
                 );
             case '/content-alerts/red' === $identifier && !$isEmail:
             case strpos($identifier, '/content-alerts/unsubscribe/red') !== false && !$isEmail:
