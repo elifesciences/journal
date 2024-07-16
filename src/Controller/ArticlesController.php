@@ -1804,7 +1804,7 @@ final class ArticlesController extends Controller
                     $sentForReview = null;
                 }
 
-                $publicationHistory[] = sprintf('<strong>Preprint posted: </strong><time datetime="%s"><a href="%s">%s (view preprint)</a></time>', $preprint->getPublishedDate()->format('Y-m-d'), $preprint->getUri(), $preprint->getPublishedDate()->format('F j, Y'));
+                $publicationHistory[] = sprintf('<strong>Preprint posted: </strong><time datetime="%s">%s</time>', $preprint->getPublishedDate()->format('Y-m-d'), $preprint->getPublishedDate()->format('F j, Y'));
             }
         }
 
@@ -1826,13 +1826,13 @@ final class ArticlesController extends Controller
         $publicationHistory = array_merge($publicationHistory, $history->getVersions()
             ->filter(Callback::isInstanceOf(ArticlePoA::class))
             ->map(function (ArticlePoA $itemVersion, int $number) use ($history) {
-                return sprintf('<strong>Accepted Manuscript %s: </strong><time datetime="%s"><a href="%s">%s (version %s)</a></time>', 0 === $number ? 'published' : 'updated', $itemVersion->getVersionDate() ? $itemVersion->getVersionDate()->format('Y-m-d') : '', $this->generatePath($history, $itemVersion->getVersion()), $itemVersion->getVersionDate() ? $itemVersion->getVersionDate()->format('F j, Y') : '', $itemVersion->getVersion());
+                return sprintf('<strong>Accepted Manuscript %s: </strong><time datetime="%s">%s</time>', 0 === $number ? 'published' : 'updated', $itemVersion->getVersionDate() ? $itemVersion->getVersionDate()->format('Y-m-d') : '', $itemVersion->getVersionDate() ? $itemVersion->getVersionDate()->format('F j, Y') : '');
             })->toArray());
 
         $publicationHistory = array_merge($publicationHistory, $history->getVersions()
             ->filter(Callback::isInstanceOf(ArticleVoR::class))
             ->map(function (ArticleVoR $itemVersion, int $number) use ($history) {
-                return sprintf('<strong>Version of Record %s: </strong><time datetime="%s"><a href="%s">%s (version %s)</a></time>', 0 === $number ? 'published' : 'updated', $itemVersion->getVersionDate() ? $itemVersion->getVersionDate()->format('Y-m-d') : '', $this->generatePath($history, $itemVersion->getVersion()), $itemVersion->getVersionDate() ? $itemVersion->getVersionDate()->format('F j, Y') : '', $itemVersion->getVersion());
+                return sprintf('<strong>Version of Record %s: </strong><time datetime="%s">%s</time>', 0 === $number ? 'published' : 'updated', $itemVersion->getVersionDate() ? $itemVersion->getVersionDate()->format('Y-m-d') : '', $itemVersion->getVersionDate() ? $itemVersion->getVersionDate()->format('F j, Y') : '');
             })->toArray());
 
         return array_reverse($publicationHistory);
