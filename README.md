@@ -143,3 +143,5 @@ Unsubscribe/optout interface:
 - Visit http://localhost:8080/content-alerts/optout/red to trigger something went wrong scenario
 
 To work on the integration with CiviCRM you will have to set the environment variable `APP_ENV=prod`. And also adjust the values in `.docker/parameters.yml` for `crm_api_key`, `crm_api_site_key`, `google_api_client.refresh_token` and `google_api_client.optout_unsubscribe_spreadsheet_id` to be the same as in production.
+
+DEMO FOR DIGITAL LITMUS
