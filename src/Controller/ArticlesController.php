@@ -930,9 +930,11 @@ final class ArticlesController extends Controller
                     2,
                     $this->render(...$peerReview),
                     $relatedLinks ? $relatedLinks : null,
-                    null,
+                    'peer-review',
                     true,
-                    true
+                    true,
+                    null,
+                    ArticleSection::RELATED_LINKS_SEPARATOR_CIRCLE
                 );
 
                 if ($item instanceof ArticleVoR && $item->isReviewedPreprint()) {
