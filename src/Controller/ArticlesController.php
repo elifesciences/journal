@@ -1467,7 +1467,7 @@ final class ArticlesController extends Controller
                 $sections = $sections['sections'];
                 $sections = array_filter($sections, Callback::isInstanceOf(ArticleSection::class));
 
-                if (count($sections) < 2) {
+                if (count($sections) < 1) {
                     if (!$hasFigures) {
                         return null;
                     }
