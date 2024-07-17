@@ -1785,14 +1785,14 @@ final class ArticlesController extends Controller
             foreach ($preprints as $preprint) {
                 // Attempt to output $received if date is before the preprint date.
                 if ($received && 1 === $preprint->getPublishedDate()->diff(new DateTime($received->toString()))->invert) {
-                    $publicationHistory[] = sprintf('<strong>Received: </strong><time datetime="%s">%s</time>', $received->format('Y-m-d'), $received->format());
+                    $publicationHistory[] = sprintf('<strong>Received</strong> <time datetime="%s">%s</time>', $received->format('Y-m-d'), $received->format());
 
                     // Set $received to null as it has now been included in the publication history.
                     $received = null;
                 }
                 // Attempt to output $accepted if date is before the preprint date.
                 if ($accepted && 1 === $preprint->getPublishedDate()->diff(new DateTime($accepted->toString()))->invert) {
-                    $publicationHistory[] = sprintf('<strong>Accepted: </strong><time datetime="%s">%s</time>', $accepted->format('Y-m-d'), $accepted->format());
+                    $publicationHistory[] = sprintf('<strong>Accepted</strong> <time datetime="%s">%s</time>', $accepted->format('Y-m-d'), $accepted->format());
 
                     // Set $accepted to null as it has now been included in the publication history.
                     $accepted = null;
@@ -1800,41 +1800,41 @@ final class ArticlesController extends Controller
 
                 // Attempt to output $sentForReview if date is before the preprint date.
                 if ($sentForReview && 1 === $preprint->getPublishedDate()->diff(new DateTime($sentForReview->toString()))->invert) {
-                    $publicationHistory[] = sprintf('<strong>Sent for peer review: </strong><time datetime="%s">%s</time>', $sentForReview->format('Y-m-d'), $sentForReview->format());
+                    $publicationHistory[] = sprintf('<strong>Sent for peer review</strong> <time datetime="%s">%s</time>', $sentForReview->format('Y-m-d'), $sentForReview->format());
 
                     // Set $sentForReview to null as it has now been included in the publication history.
                     $sentForReview = null;
                 }
 
-                $publicationHistory[] = sprintf('<strong>Preprint posted: </strong><time datetime="%s">%s</time>', $preprint->getPublishedDate()->format('Y-m-d'), $preprint->getPublishedDate()->format('F j, Y'));
+                $publicationHistory[] = sprintf('<strong>Preprint posted</strong> <time datetime="%s">%s</time>', $preprint->getPublishedDate()->format('Y-m-d'), $preprint->getPublishedDate()->format('F j, Y'));
             }
         }
 
         // Output $received if it has not yet been output.
         if ($received) {
-            $publicationHistory[] = sprintf('<strong>Received: </strong><time datetime="%s">%s</time>', $received->format('Y-m-d'), $received->format());
+            $publicationHistory[] = sprintf('<strong>Received</strong> <time datetime="%s">%s</time>', $received->format('Y-m-d'), $received->format());
         }
 
         // Output $accepted if it has not yet been output.
         if ($accepted) {
-            $publicationHistory[] = sprintf('<strong>Accepted: </strong><time datetime="%s">%s</time>', $accepted->format('Y-m-d'), $accepted->format());
+            $publicationHistory[] = sprintf('<strong>Accepted</strong> <time datetime="%s">%s</time>', $accepted->format('Y-m-d'), $accepted->format());
         }
 
         // Output $sentForReview if it has not yet been output.
         if ($sentForReview) {
-            $publicationHistory[] = sprintf('<strong>Sent for peer review: </strong><time datetime="%s">%s</time>', $sentForReview->format('Y-m-d'), $sentForReview->format());
+            $publicationHistory[] = sprintf('<strong>Sent for peer review</strong> <time datetime="%s">%s</time>', $sentForReview->format('Y-m-d'), $sentForReview->format());
         }
 
         $publicationHistory = array_merge($publicationHistory, $history->getVersions()
             ->filter(Callback::isInstanceOf(ArticlePoA::class))
             ->map(function (ArticlePoA $itemVersion, int $number) use ($history) {
-                return sprintf('<strong>Accepted Manuscript %s: </strong><time datetime="%s">%s</time>', 0 === $number ? 'published' : 'updated', $itemVersion->getVersionDate() ? $itemVersion->getVersionDate()->format('Y-m-d') : '', $itemVersion->getVersionDate() ? $itemVersion->getVersionDate()->format('F j, Y') : '');
+                return sprintf('<strong>Accepted Manuscript %s</strong> <time datetime="%s">%s</time>', 0 === $number ? 'published' : 'updated', $itemVersion->getVersionDate() ? $itemVersion->getVersionDate()->format('Y-m-d') : '', $itemVersion->getVersionDate() ? $itemVersion->getVersionDate()->format('F j, Y') : '');
             })->toArray());
 
         $publicationHistory = array_merge($publicationHistory, $history->getVersions()
             ->filter(Callback::isInstanceOf(ArticleVoR::class))
             ->map(function (ArticleVoR $itemVersion, int $number) use ($history) {
-                return sprintf('<strong>Version of Record %s: </strong><time datetime="%s">%s</time>', 0 === $number ? 'published' : 'updated', $itemVersion->getVersionDate() ? $itemVersion->getVersionDate()->format('Y-m-d') : '', $itemVersion->getVersionDate() ? $itemVersion->getVersionDate()->format('F j, Y') : '');
+                return sprintf('<strong>Version of Record %s</strong> <time datetime="%s">%s</time>', 0 === $number ? 'published' : 'updated', $itemVersion->getVersionDate() ? $itemVersion->getVersionDate()->format('Y-m-d') : '', $itemVersion->getVersionDate() ? $itemVersion->getVersionDate()->format('F j, Y') : '');
             })->toArray());
 
         return array_reverse($publicationHistory);
