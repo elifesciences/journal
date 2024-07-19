@@ -68,7 +68,12 @@ final class ContentAlertsController extends Controller
         if (!$validSubmission && !$form->isSubmitted()) {
             /** @var Subscription $check */
             $check = $this->get('elife.api_client.client.crm_api')
-                ->checkSubscription($this->generateOptoutUrl($id), false, null, CiviCrmClient::FIELD_OPTOUT_URL)
+                ->checkSubscription(
+                    $this->generateOptoutUrl($id),
+                    false,
+                    null,
+                    $this->get('elife.api_client.client.crm_api')::FIELD_OPTOUT_URL
+                )
                 ->then(function ($check) use (&$arguments) {
                     if (!$check instanceof Subscription || $check->getOptout()) {
                         $arguments['title'] = 'Something went wrong';

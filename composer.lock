@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "cc6b3eb8581ce24b68d16d11a9db35f5",
+    "content-hash": "32e5640fda6041a0b25f4798c83b3911",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -1290,16 +1290,16 @@
         },
         {
             "name": "elife/civi-contacts",
-            "version": "dev-master",
+            "version": "dev-hubspot-client",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/civi-contacts.git",
-                "reference": "c20fa23d4c0cf7cdac67bc19ecae0c7c2d3e65f1"
+                "reference": "1709b7874f488b8f8efb096b2d1fdd3d7daad7c1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/civi-contacts/zipball/c20fa23d4c0cf7cdac67bc19ecae0c7c2d3e65f1",
-                "reference": "c20fa23d4c0cf7cdac67bc19ecae0c7c2d3e65f1",
+                "url": "https://api.github.com/repos/elifesciences/civi-contacts/zipball/1709b7874f488b8f8efb096b2d1fdd3d7daad7c1",
+                "reference": "1709b7874f488b8f8efb096b2d1fdd3d7daad7c1",
                 "shasum": ""
             },
             "require": {
@@ -1325,7 +1325,11 @@
             "license": [
                 "MIT"
             ],
-            "time": "2024-04-12T01:07:21+00:00"
+            "support": {
+                "issues": "https://github.com/elifesciences/civi-contacts/issues",
+                "source": "https://github.com/elifesciences/civi-contacts/tree/hubspot-client"
+            },
+            "time": "2024-07-19T16:06:09+00:00"
         },
         {
             "name": "elife/patterns",
@@ -6337,5 +6341,6 @@
     "platform-dev": [],
     "platform-overrides": {
         "php": "7.1.33"
-    }
+    },
+    "plugin-api-version": "2.6.0"
 }

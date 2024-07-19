@@ -1,7 +1,10 @@
 services:
 
     elife.api_client.client.crm_api:
-        class: eLife\Journal\Guzzle\MockCiviCrmClient
+        class: eLife\CiviContacts\Guzzle\HubspotClient
+        arguments:
+          - '@csa_guzzle.client.elife_crm_api'
+          - '%crm_api_key%'
 
     elife.journal.google_client.opt_out_unsubscribe_reason:
         class: eLife\Journal\GoogleClient\MockOptoutUnsubscribeReason
