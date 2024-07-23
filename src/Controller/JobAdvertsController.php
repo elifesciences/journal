@@ -54,7 +54,7 @@ final class JobAdvertsController extends Controller
             });
 
         $arguments['listing'] = $arguments['paginator']
-            ->then($this->willConvertTo(ListingTeasers::class, ['heading' => 'Latest', 'type' => 'job-adverts', 'emptyText' => 'No vacancies at present. Feel free to send your CV to <a href="mailto:hr@elifesciences.org">hr@elifesciences.org</a>.']));
+            ->then($this->willConvertTo(ListingTeasers::class, ['heading' => 'Latest', 'type' => 'job-adverts', 'emptyText' => '<a href="https://elifesciences.org/about/eic-job-description">Editor in Chief</a></br><a href="https://elifesciences.org/about/board-member-job-description">Board of Directors</a>']));
 
         if (1 === $page) {
             return $this->createFirstPage($arguments);
