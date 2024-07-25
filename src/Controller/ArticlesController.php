@@ -186,7 +186,7 @@ final class ArticlesController extends Controller
 
         $arguments['hasFigures'] = $this->checkHasFigures($arguments['item'], $figures);
 
-        $arguments['hasPeerReview'] = $this->hasPeerReview($arguments['item'], $arguments['history']);
+        $arguments['hasPeerReview'] = $this->hasPeerReview($arguments['item']);
 
         $dataAvailability = (new PromiseSequence($arguments['item']
             ->then(Callback::method('getDataAvailability'))))
@@ -515,7 +515,7 @@ final class ArticlesController extends Controller
                     );
                 }
 
-                if (!$item->getReviewers()->isEmpty() && !$this->hasPeerReview($item, $history)->wait()) {
+                if (!$item->getReviewers()->isEmpty() && !$this->hasPeerReview($item)->wait()) {
                     $roles = $item->getReviewers()
                         ->reduce(function (array $roles, Reviewer $reviewer) {
                             $entry = $reviewer->getPreferredName();
@@ -567,17 +567,81 @@ final class ArticlesController extends Controller
                     );
                 }
 
-                if ($item instanceof ArticleVoR && $item->isReviewedPreprint()) {
-                    $publicationHistory = $this->generatePublicationHistory($history);
-                    $publicationHistoryTitle = ($isMagazine || 'feature' === $item->getType()) ? 'Publication history' : 'Version history';
-                    $infoSections[] = ArticleSection::basic(
-                        $this->render(
-                            Listing::ordered($publicationHistory, 'line')
-                        ),
-                        $publicationHistoryTitle,
-                        3
-                    );
+                $received = $history->getReceived();
+                $accepted = $history->getAccepted();
+                $sentForReview = $history->getSentForReview();
+
+                $publicationHistory = [];
+
+                /** @var ArticlePreprint[] $preprints */
+                $preprints = $history->getVersions()
+                    ->filter(Callback::isInstanceOf(ArticlePreprint::class))
+                    ->toArray();
+
+                if ($preprints) {
+                    foreach ($preprints as $preprint) {
+                        // Attempt to output $received if date is before the preprint date.
+                        if ($received && 1 === $preprint->getPublishedDate()->diff(new DateTime($received->toString()))->invert) {
+                            $publicationHistory[] = 'Received: '.$received->format();
+
+                            // Set $received to null as it has now been included in the publication history.
+                            $received = null;
+                        }
+                        // Attempt to output $accepted if date is before the preprint date.
+                        if ($accepted && 1 === $preprint->getPublishedDate()->diff(new DateTime($accepted->toString()))->invert) {
+                            $publicationHistory[] = 'Accepted: '.$accepted->format();
+
+                            // Set $accepted to null as it has now been included in the publication history.
+                            $accepted = null;
+                        }
+
+                        // Attempt to output $sentForReview if date is before the preprint date.
+                        if ($sentForReview && 1 === $preprint->getPublishedDate()->diff(new DateTime($sentForReview->toString()))->invert) {
+                            $publicationHistory[] = 'Sent for peer review: '.$sentForReview->format();
+
+                            // Set $sentForReview to null as it has now been included in the publication history.
+                            $sentForReview = null;
+                        }
+
+                        $publicationHistory[] = sprintf('Preprint posted: <a href="%s">%s (view preprint)</a>', $preprint->getUri(), $preprint->getPublishedDate()->format('F j, Y'));
+                    }
                 }
+
+                // Output $received if it has not yet been output.
+                if ($received) {
+                    $publicationHistory[] = 'Received: '.$received->format();
+                }
+
+                // Output $accepted if it has not yet been output.
+                if ($accepted) {
+                    $publicationHistory[] = 'Accepted: '.$accepted->format();
+                }
+
+                // Output $sentForReview if it has not yet been output.
+                if ($sentForReview) {
+                    $publicationHistory[] = 'Sent for peer review: '.$sentForReview->format();
+                }
+
+                $publicationHistory = array_merge($publicationHistory, $history->getVersions()
+                    ->filter(Callback::isInstanceOf(ArticlePoA::class))
+                    ->map(function (ArticlePoA $itemVersion, int $number) use ($history) {
+                        return sprintf('Accepted Manuscript %s: <a href="%s">%s (version %s)</a>', 0 === $number ? 'published' : 'updated', $this->generatePath($history, $itemVersion->getVersion()), $itemVersion->getVersionDate() ? $itemVersion->getVersionDate()->format('F j, Y') : '', $itemVersion->getVersion());
+                    })->toArray());
+
+                $publicationHistory = array_merge($publicationHistory, $history->getVersions()
+                    ->filter(Callback::isInstanceOf(ArticleVoR::class))
+                    ->map(function (ArticleVoR $itemVersion, int $number) use ($history) {
+                        return sprintf('Version of Record %s: <a href="%s">%s (version %s)</a>', 0 === $number ? 'published' : 'updated', $this->generatePath($history, $itemVersion->getVersion()), $itemVersion->getVersionDate() ? $itemVersion->getVersionDate()->format('F j, Y') : '', $itemVersion->getVersion());
+                    })->toArray());
+
+                $publicationHistoryTitle = ($isMagazine || 'feature' === $item->getType()) ? 'Publication history' : 'Version history';
+                $infoSections[] = ArticleSection::basic(
+                    $this->render(
+                        Listing::ordered($publicationHistory, 'bullet')
+                    ),
+                    $publicationHistoryTitle,
+                    3
+                );
 
                 if ($item instanceof ArticleVoR && $item->isReviewedPreprint()) {
                     $infoSections[] = ArticleSection::basic(
@@ -763,7 +827,7 @@ final class ArticlesController extends Controller
                 return new ViewModel\AdditionalAssets(null, $files->toArray());
             }));
 
-        $arguments['hasPeerReview'] = $this->hasPeerReview($arguments['item'], $arguments['history']);
+        $arguments['hasPeerReview'] = $this->hasPeerReview($arguments['item']);
 
         $arguments['body'] = all([
             'isMagazine' => $arguments['isMagazine'],
@@ -874,7 +938,7 @@ final class ArticlesController extends Controller
 
         $arguments['hasFigures'] = $this->checkHasFigures($arguments['item'], $figures);
 
-        $arguments['body'] = all(['item' => $arguments['item'], 'isMagazine' => $arguments['isMagazine'], 'context' => $context, 'history' => $arguments['history']])
+        $arguments['body'] = all(['item' => $arguments['item'], 'isMagazine' => $arguments['isMagazine'], 'context' => $context])
             ->then(function (array $parts) {
                 /** @var ArticleVersion $item */
                 $item = $parts['item'];
@@ -882,62 +946,45 @@ final class ArticlesController extends Controller
                 $isMagazine = $parts['isMagazine'];
                 /** @var array $context */
                 $context = $parts['context'];
-                /** @var ArticleHistory $history */
-                $history = $parts['history'];
-                /** @var array $parts */
-                $parts = [];
-                /** @var array $relatedLinks */
-                $relatedLinks = [];
 
-                if ($item instanceof ArticleVoR && $item->isReviewedPreprint()) {
-                    $peerReviewText = new Paragraph('<strong>Version of Record: </strong>This is the final version of the article.');
-                    $peerReview[] = ArticleSection::basic(
-                        $this->render(
-                            new ProcessBlock(
-                                $this->render($peerReviewText),
-                                'vor',
-                                new Link(
-                                    'Read more about eLife\'s peer review process.',
-                                    $this->get('router')->generate('peer-review-process')
+                $parts = [];
+
+                $first = true;
+
+                if ($item instanceof ArticleVor) {
+                    if ($item->isReviewedPreprint()) {
+                        $peerReviewText = new Paragraph('<strong>Version of Record: </strong>This is the final version of the article.');
+                        $peerReview[] = ArticleSection::basic(
+                            $this->render(
+                                new ProcessBlock(
+                                    $this->render($peerReviewText),
+                                    'vor',
+                                    new Link(
+                                        'Read more about eLife\'s peer review process.',
+                                        $this->get('router')->generate('peer-review-process')
+                                    )
                                 )
                             )
-                        )
-                    );
-                } else if ($item instanceof ArticleVoR && !$item->isReviewedPreprint()) {
-                    $peerReview[] = new Paragraph('This article was accepted for publication as part of eLife\'s original publishing model.');
-                } else if ($item instanceof ArticlePoA) {
-                    $peerReview[] = new Paragraph('This article was accepted for publication via eLife\'s original publishing model. eLife publishes the authors\' accepted manuscript as a PDF only version before the full Version of Record is ready for publication. Peer reviews are published along with the Version of Record.');
-                }
+                        );
+                    } else {
+                        $peerReview[] = new Paragraph('This article was accepted for publication as part of eLife\'s original publishing model.');
+                    }
 
-                if ($item instanceof ArticleVoR && !$item->isReviewedPreprint() || $item instanceof ArticlePoA) {
-                    $publicationHistory = $this->generatePublicationHistory($history);
-                    $publicationHistoryTitle = 'History';
-
-                    $peerReview[] = ArticleSection::basic(
-                        $this->render(
-                            Listing::ordered($publicationHistory, 'line')
-                        ),
-                        $publicationHistoryTitle,
-                        3
+                    $parts[] = ArticleSection::collapsible(
+                        'peer-review-process',
+                        'Peer review process',
+                        2,
+                        $this->render(...$peerReview),
+                        null,
+                        null,
+                        true,
+                        $first
                     );
 
-                    $relatedLinks[] = new Link('Go to the preprint', $this->get('router')->generate('reviewed-preprints'));
+                    $first = false;
                 }
 
-                $parts[] = ArticleSection::collapsible(
-                    'peer-review-process',
-                    'Peer review process',
-                    2,
-                    $this->render(...$peerReview),
-                    $relatedLinks ? $relatedLinks : null,
-                    ArticleSection::STYLE_PEER_REVIEW,
-                    true,
-                    true,
-                    null,
-                    $relatedLinks ? ArticleSection::RELATED_LINKS_SEPARATOR_CIRCLE : null
-                );
-
-                if ($item instanceof ArticleVoR && $item->isReviewedPreprint()) {
+                if ($item instanceof ArticleVor && $item->isReviewedPreprint()) {
                     $roles = $item->getReviewers()
                         ->reduce(function (array $roles, Reviewer $reviewer) {
                             $entry = $reviewer->getPreferredName();
@@ -986,8 +1033,11 @@ final class ArticlesController extends Controller
                         $this->render(...$infoSections),
                         null,
                         null,
-                        true
+                        true,
+                        $first
                     );
+
+                    $first = false;
                 }
 
 
@@ -1001,13 +1051,15 @@ final class ArticlesController extends Controller
                         null,
                         null,
                         true,
-                        false,
+                        $first,
                         $item->getDecisionLetter()->getDoi() ? new Doi($item->getDecisionLetter()->getDoi()) : null
                     );
+
+                    $first = false;
                 }
 
                 if ($item instanceof ArticleVoR && $item->getPublicReviews()->notEmpty()) {
-                    $publicReviews = $item->getPublicReviews()->map(function (PublicReview $publicReview, $index) use ($context) {
+                    $publicReviews = $item->getPublicReviews()->map(function (PublicReview $publicReview, $index) use ($context, $first) {
                         $publicReviewSection = ArticleSection::collapsible(
                             $publicReview->getId(),
                             $publicReview->getTitle(),
@@ -1016,7 +1068,7 @@ final class ArticlesController extends Controller
                             null,
                             null,
                             false,
-                            false,
+                            $first && $index === 0,
                             $publicReview->getDoi() ? new Doi($publicReview->getDoi()) : null
                         );
 
@@ -1038,6 +1090,8 @@ final class ArticlesController extends Controller
                             $item->getRecommendationsForAuthors()->getDoi() ? new Doi($item->getRecommendationsForAuthors()->getDoi()) : null
                         );
                     }
+
+                    $first = false;
                 }
 
                 if ($item instanceof ArticleVoR && $item->getAuthorResponse()) {
@@ -1049,7 +1103,7 @@ final class ArticlesController extends Controller
                         null,
                         null,
                         true,
-                        false,
+                        $first,
                         $item->getAuthorResponse()->getDoi() ? new Doi($item->getAuthorResponse()->getDoi()) : null
                     );
                 }
@@ -1467,7 +1521,7 @@ final class ArticlesController extends Controller
                 $sections = $sections['sections'];
                 $sections = array_filter($sections, Callback::isInstanceOf(ArticleSection::class));
 
-                if (count($sections) < 1) {
+                if (count($sections) < 2) {
                     if (!$hasFigures) {
                         return null;
                     }
@@ -1749,94 +1803,15 @@ final class ArticlesController extends Controller
             });
     }
 
-    private function hasPeerReview($item, $history) {
-        return all(['item' => $item, 'history' => $history])
+    private function hasPeerReview($item) {
+        return all(['item' => $item])
             ->then(function (array $parts) {
                 $item = $parts['item'];
-                $history = $parts['history'];
-                $combinedHistory = $history->getVersions()
-                    ->filter(function ($version) {
-                        return $version instanceof ArticleVoR || $version instanceof ArticlePoA;
-                    })
-                    ->toArray();
 
-                return ($item instanceof ArticleVoR &&
+                return $item instanceof ArticleVoR &&
                         ($item->getPublicReviews()->notEmpty() ||
                         $item->getDecisionLetter() ||
-                        $item->getAuthorResponse() ||
-                        !$item->isReviewedPreprint() && $combinedHistory) ||
-                        ($item instanceof ArticlePoA && $combinedHistory));
+                        $item->getAuthorResponse());
             });
-    }
-
-    private function generatePublicationHistory($history) {
-        $received = $history->getReceived();
-        $accepted = $history->getAccepted();
-        $sentForReview = $history->getSentForReview();
-
-        $publicationHistory = [];
-
-        /** @var ArticlePreprint[] $preprints */
-        $preprints = $history->getVersions()
-            ->filter(Callback::isInstanceOf(ArticlePreprint::class))
-            ->toArray();
-
-        if ($preprints) {
-            foreach ($preprints as $preprint) {
-                // Attempt to output $received if date is before the preprint date.
-                if ($received && 1 === $preprint->getPublishedDate()->diff(new DateTime($received->toString()))->invert) {
-                    $publicationHistory[] = sprintf('<strong>Received</strong> <time datetime="%s">%s</time>', $received->format('Y-m-d'), $received->format());
-
-                    // Set $received to null as it has now been included in the publication history.
-                    $received = null;
-                }
-                // Attempt to output $accepted if date is before the preprint date.
-                if ($accepted && 1 === $preprint->getPublishedDate()->diff(new DateTime($accepted->toString()))->invert) {
-                    $publicationHistory[] = sprintf('<strong>Accepted</strong> <time datetime="%s">%s</time>', $accepted->format('Y-m-d'), $accepted->format());
-
-                    // Set $accepted to null as it has now been included in the publication history.
-                    $accepted = null;
-                }
-
-                // Attempt to output $sentForReview if date is before the preprint date.
-                if ($sentForReview && 1 === $preprint->getPublishedDate()->diff(new DateTime($sentForReview->toString()))->invert) {
-                    $publicationHistory[] = sprintf('<strong>Sent for peer review</strong> <time datetime="%s">%s</time>', $sentForReview->format('Y-m-d'), $sentForReview->format());
-
-                    // Set $sentForReview to null as it has now been included in the publication history.
-                    $sentForReview = null;
-                }
-
-                $publicationHistory[] = sprintf('<strong>Preprint posted</strong> <time datetime="%s">%s</time>', $preprint->getPublishedDate()->format('Y-m-d'), $preprint->getPublishedDate()->format('F j, Y'));
-            }
-        }
-
-        // Output $received if it has not yet been output.
-        if ($received) {
-            $publicationHistory[] = sprintf('<strong>Received</strong> <time datetime="%s">%s</time>', $received->format('Y-m-d'), $received->format());
-        }
-
-        // Output $accepted if it has not yet been output.
-        if ($accepted) {
-            $publicationHistory[] = sprintf('<strong>Accepted</strong> <time datetime="%s">%s</time>', $accepted->format('Y-m-d'), $accepted->format());
-        }
-
-        // Output $sentForReview if it has not yet been output.
-        if ($sentForReview) {
-            $publicationHistory[] = sprintf('<strong>Sent for peer review</strong> <time datetime="%s">%s</time>', $sentForReview->format('Y-m-d'), $sentForReview->format());
-        }
-
-        $publicationHistory = array_merge($publicationHistory, $history->getVersions()
-            ->filter(Callback::isInstanceOf(ArticlePoA::class))
-            ->map(function (ArticlePoA $itemVersion, int $number) use ($history) {
-                return sprintf('<strong>Accepted Manuscript %s</strong> <time datetime="%s">%s</time>', 0 === $number ? 'published' : 'updated', $itemVersion->getVersionDate() ? $itemVersion->getVersionDate()->format('Y-m-d') : '', $itemVersion->getVersionDate() ? $itemVersion->getVersionDate()->format('F j, Y') : '');
-            })->toArray());
-
-        $publicationHistory = array_merge($publicationHistory, $history->getVersions()
-            ->filter(Callback::isInstanceOf(ArticleVoR::class))
-            ->map(function (ArticleVoR $itemVersion, int $number) use ($history) {
-                return sprintf('<strong>Version of Record %s</strong> <time datetime="%s">%s</time>', 0 === $number ? 'published' : 'updated', $itemVersion->getVersionDate() ? $itemVersion->getVersionDate()->format('Y-m-d') : '', $itemVersion->getVersionDate() ? $itemVersion->getVersionDate()->format('F j, Y') : '');
-            })->toArray());
-
-        return array_reverse($publicationHistory);
     }
 }
