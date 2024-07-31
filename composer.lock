@@ -1376,9 +1376,6 @@
                 "MIT"
             ],
             "description": "eLife patterns",
-            "support": {
-                "source": "https://github.com/elifesciences/patterns-php/tree/master"
-            },
             "time": "2024-07-30T13:12:31+00:00"
         },
         {
