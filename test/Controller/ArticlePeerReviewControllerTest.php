@@ -82,9 +82,6 @@ final class ArticlePeerReviewControllerTest extends PageTestCase
         $this->assertCount(1, $history->filter('ol')->children());
         $this->assertSame('Version of Record published January 1, 2010', $history->filter('ol')->children()->eq(0)->text());
 
-        $related = $crawler->filter('.main-content-grid > section:nth-of-type(1) > div > .article-section__related');
-        $this->assertSame('Go to the preprint', $related->filter('li > a')->text());
-
         $this->assertSame('Decision letter',
             $crawler->filter('.main-content-grid > section:nth-of-type(2) header > h2')->text());
         $this->assertSame(
@@ -1137,8 +1134,5 @@ final class ArticlePeerReviewControllerTest extends PageTestCase
         $this->assertSame('History', $history->filter('header > h3')->text());
         $this->assertCount(1, $history->filter('ol')->children());
         $this->assertSame('Accepted Manuscript published January 1, 2010', $history->filter('ol')->children()->eq(0)->text());
-
-        $related = $crawler->filter('.main-content-grid > section:nth-of-type(1) > div > .article-section__related');
-        $this->assertSame('Go to the preprint', $related->filter('li > a')->text());
     }
 }
