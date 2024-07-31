@@ -921,7 +921,14 @@ final class ArticlesController extends Controller
                         3
                     );
 
-                    $relatedLinks[] = new Link('Go to the preprint', $this->get('router')->generate('reviewed-preprints'));
+                    $preprints = $history->getVersions()
+                        ->filter(Callback::isInstanceOf(ArticlePreprint::class))
+                        ->toArray();
+
+                    if (isset($preprints[0])) {
+                        $uri = $preprints[0]->getUri();
+                        $relatedLinks[] = new Link('Go to the preprint', $uri);
+                    }
                 }
 
                 $parts[] = ArticleSection::collapsible(
