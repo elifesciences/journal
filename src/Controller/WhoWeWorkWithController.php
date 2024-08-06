@@ -160,6 +160,12 @@ final class WhoWeWorkWithController extends Controller
                 'uri' => 'https://www.cnki.net/',
             ],
             [
+                'name' => 'DOAJ Seal',
+                'filename' => 'doaj-seal',
+                'type' => 'image/png',
+                'uri' => 'https://doaj.org/apply/seal/',
+            ],
+            [
                 'name' => 'Europe PubMed Central',
                 'filename' => 'europe-pmc',
                 'type' => 'image/png',
