@@ -136,12 +136,12 @@ gulp.task('images:logos', () => {
     return gulp.src('./assets/images/logos/*.{png,svg}')
         .pipe(responsive({
             '*': [1, 2].reduce((acc, scale) => {
-                const width = 180 * scale;
-                const height = 60 * scale;
+                const maxWidth = 180 * scale;
+                const maxHeight = 60 * scale;
 
                 acc.push({
-                    width: width,
-                    height: height,
+                    maxWidth: maxWidth,
+                    maxHeight: maxHeight,
                     rename: {
                         suffix: `@${scale}x`,
                         extname: '.png',
@@ -149,8 +149,8 @@ gulp.task('images:logos', () => {
                     withoutEnlargement: false,
                 });
                 acc.push({
-                    width: width,
-                    height: height,
+                    maxWidth: maxWidth,
+                    maxHeight: maxHeight,
                     rename: {
                         suffix: `@${scale}x`,
                         extname: '.webp',
