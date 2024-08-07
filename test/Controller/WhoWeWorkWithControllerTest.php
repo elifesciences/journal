@@ -68,7 +68,7 @@ final class WhoWeWorkWithControllerTest extends PageTestCase
                     'eJournalPress',
                 ],
                 [
-                    'http://www.exeterpremedia.com/',
+                    'https://www.kriyadocs.com/',
                     'Exeter Premedia Services',
                 ],
                 [
@@ -110,6 +110,10 @@ final class WhoWeWorkWithControllerTest extends PageTestCase
                 [
                     'https://www.cnki.net/',
                     'CNKI',
+                ],
+                [
+                    'https://doaj.org/apply/seal/',
+                    'DOAJ Seal',
                 ],
                 [
                     'https://europepmc.org/',
