@@ -163,7 +163,7 @@ final class WhoWeWorkWithController extends Controller
                 'name' => 'DOAJ Seal',
                 'filename' => 'doaj-seal',
                 'type' => 'image/svg+xml',
-                'uri' => 'https://doaj.org/apply/seal/',
+                'uri' => 'https://doaj.org/toc/2050-084X/',
             ],
             [
                 'name' => 'Europe PubMed Central',
