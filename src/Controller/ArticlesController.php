@@ -186,7 +186,7 @@ final class ArticlesController extends Controller
 
         $arguments['hasFigures'] = $this->checkHasFigures($arguments['item'], $figures);
 
-        $arguments['hasPeerReview'] = $this->hasPeerReview($arguments['item'], $arguments['history']);
+        $arguments['hasPeerReview'] = $this->hasPeerReview($arguments['item'], $arguments['isMagazine'], $arguments['history']);
 
         $dataAvailability = (new PromiseSequence($arguments['item']
             ->then(Callback::method('getDataAvailability'))))
@@ -515,7 +515,7 @@ final class ArticlesController extends Controller
                     );
                 }
 
-                if (!$item->getReviewers()->isEmpty() && !$this->hasPeerReview($item, $history)->wait()) {
+                if (!$item->getReviewers()->isEmpty() && !$this->hasPeerReview($item, $isMagazine, $history)->wait()) {
                     $roles = $item->getReviewers()
                         ->reduce(function (array $roles, Reviewer $reviewer) {
                             $entry = $reviewer->getPreferredName();
@@ -567,7 +567,11 @@ final class ArticlesController extends Controller
                     );
                 }
 
-                if ($item instanceof ArticleVoR && $item->isReviewedPreprint()) {
+                if ($item instanceof ArticleVoR && (
+                        $item->isReviewedPreprint() ||
+                        in_array($item->getType(), ['feature', 'correction', 'retraction']) ||
+                        $isMagazine)
+                    ) {
                     $publicationHistory = $this->generatePublicationHistoryForNewVor($history);
                     $publicationHistoryTitle = ($isMagazine || 'feature' === $item->getType()) ? 'Publication history' : 'Version history';
                     $infoSections[] = ArticleSection::basic(
@@ -763,7 +767,7 @@ final class ArticlesController extends Controller
                 return new ViewModel\AdditionalAssets(null, $files->toArray());
             }));
 
-        $arguments['hasPeerReview'] = $this->hasPeerReview($arguments['item'], $arguments['history']);
+        $arguments['hasPeerReview'] = $this->hasPeerReview($arguments['item'], $arguments['isMagazine'], $arguments['history']);
 
         $arguments['body'] = all([
             'isMagazine' => $arguments['isMagazine'],
@@ -1756,10 +1760,11 @@ final class ArticlesController extends Controller
             });
     }
 
-    private function hasPeerReview($item, $history) {
-        return all(['item' => $item, 'history' => $history])
+    private function hasPeerReview($item, $isMagazine, $history) {
+        return all(['item' => $item, 'isMagazine' => $isMagazine, 'history' => $history])
             ->then(function (array $parts) {
                 $item = $parts['item'];
+                $isMagazine = $parts['isMagazine'];
                 $history = $parts['history'];
                 $combinedHistory = $history->getVersions()
                     ->filter(function ($version) {
@@ -1771,7 +1776,11 @@ final class ArticlesController extends Controller
                         ($item->getPublicReviews()->notEmpty() ||
                         $item->getDecisionLetter() ||
                         $item->getAuthorResponse() ||
-                        !$item->isReviewedPreprint() && $combinedHistory) ||
+                        (!$item->isReviewedPreprint() &&
+                            !$isMagazine &&
+                            !in_array($item->getType(), ['feature', 'correction', 'retraction']) &&
+                            $combinedHistory
+                        )) ||
                         ($item instanceof ArticlePoA && $combinedHistory));
             });
     }
