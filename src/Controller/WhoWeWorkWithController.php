@@ -162,7 +162,7 @@ final class WhoWeWorkWithController extends Controller
             [
                 'name' => 'DOAJ Seal',
                 'filename' => 'doaj-seal',
-                'type' => 'image/png',
+                'type' => 'image/svg+xml',
                 'uri' => 'https://doaj.org/apply/seal/',
             ],
             [
