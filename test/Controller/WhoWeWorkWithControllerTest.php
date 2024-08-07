@@ -112,7 +112,7 @@ final class WhoWeWorkWithControllerTest extends PageTestCase
                     'CNKI',
                 ],
                 [
-                    'https://doaj.org/toc/2050-084X/',
+                    'https://doaj.org/toc/2050-084X',
                     'DOAJ Seal',
                 ],
                 [
