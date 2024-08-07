@@ -94,7 +94,7 @@ final class WhoWeWorkWithController extends Controller
                 'name' => 'Exeter Premedia Services',
                 'filename' => 'exeter',
                 'type' => 'image/png',
-                'uri' => 'http://www.exeterpremedia.com/',
+                'uri' => 'https://www.kriyadocs.com/',
             ],
             [
                 'name' => 'Fastly',
