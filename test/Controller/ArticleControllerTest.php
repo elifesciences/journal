@@ -1511,16 +1511,7 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertSame('Author One', $authorDetails->eq(0)->filter('.author-details__name')->text());
 
         $articleInfo = $crawler->filter('.main-content-grid > section:nth-of-type(1) > div > section');
-
-        $reviewers = $articleInfo->eq(0);
-        $this->assertSame('Reviewer', $reviewers->filter('header > h3')->text());
-
-        $publicationHistory = $articleInfo->eq(1);
-        $this->assertSame('Version history', $publicationHistory->filter('header > h3')->text());
-        $this->assertCount(1, $publicationHistory->filter('ol')->children());
-        $this->assertSame('Accepted Manuscript published: January 1, 2010 (version 1)', $publicationHistory->filter('ol')->children()->eq(0)->text());
-
-        $copyright = $articleInfo->eq(2);
+        $copyright = $articleInfo->eq(0);
         $this->assertSame('Copyright', $copyright->filter('header > h3')->text());
         $this->assertContains('© 2012, Author One', $copyright->filter('div')->text());
         $this->assertContains('Copyright statement.', $copyright->filter('div')->text());
@@ -2775,20 +2766,7 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertSame('Ethics', $ethics->filter('header > h3')->text());
         $this->assertSame('Ethics text', trim($ethics->filter('div')->text()));
 
-        $publicationHistory = $articleInfo->eq(3);
-        $this->assertSame('Version history', $publicationHistory->filter('header > h3')->text());
-        $this->assertCount(9, $publicationHistory->filter('ol')->children());
-        $this->assertSame('Preprint posted: December 27, 2006 (view preprint)', $publicationHistory->filter('ol')->children()->eq(0)->text());
-        $this->assertSame('Received: December 28, 2006', $publicationHistory->filter('ol')->children()->eq(1)->text());
-        $this->assertSame('Preprint posted: December 29, 2006 (view preprint)', $publicationHistory->filter('ol')->children()->eq(2)->text());
-        $this->assertSame('Accepted: December 30, 2006', $publicationHistory->filter('ol')->children()->eq(3)->text());
-        $this->assertSame('Preprint posted: December 31, 2006 (view preprint)', $publicationHistory->filter('ol')->children()->eq(4)->text());
-        $this->assertSame('Accepted Manuscript published: January 1, 2007 (version 1)', $publicationHistory->filter('ol')->children()->eq(5)->text());
-        $this->assertSame('Accepted Manuscript updated: January 1, 2008 (version 2)', $publicationHistory->filter('ol')->children()->eq(6)->text());
-        $this->assertSame('Version of Record published: January 1, 2009 (version 3)', $publicationHistory->filter('ol')->children()->eq(7)->text());
-        $this->assertSame('Version of Record updated: January 1, 2010 (version 4)', $publicationHistory->filter('ol')->children()->eq(8)->text());
-
-        $copyright = $articleInfo->eq(4);
+        $copyright = $articleInfo->eq(3);
         $this->assertSame('Copyright', $copyright->filter('header > h3')->text());
         $this->assertContains('© 2012, Bar', $copyright->filter('div')->text());
         $this->assertContains('Copyright statement.', $copyright->filter('div')->text());
@@ -3929,10 +3907,6 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertSame('Download .RIS', $this->crawlerText($citeThisArticleLinks->eq(1)));
 
         $this->assertSame('Categories and tags', $categoriesAndTags->filter('h4')->text());
-
-        $articleInfo = $sections->filter('#info');
-        $publicationHistory = $articleInfo->filter('section.article-section')->eq(1);
-        $this->assertSame('Publication history', $publicationHistory->filter('.article-section__header_text')->text());
     }
 
     public function contentAsideProvider() : Traversable
@@ -4273,6 +4247,10 @@ final class ArticleControllerTest extends PageTestCase
                 [
                     'Full text',
                     '/articles/00001#content',
+                ],
+                [
+                    'Peer review',
+                    '/articles/00001/peer-reviews#content',
                 ],
                 [
                     'Side by side',
