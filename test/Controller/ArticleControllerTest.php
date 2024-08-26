@@ -1721,11 +1721,10 @@ final class ArticleControllerTest extends PageTestCase
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertCount(1, $crawler->filter('.info-bar--info'));
-        $this->assertCount(1, $crawler->filter('.info-bar--multiple-versions'));
         $this->assertContains('Accepted manuscript, PDF only. Full online edition to follow.',
             array_map('trim', $crawler->filter('.info-bar--info')->extract(['_text'])));
-        $this->assertContains('Read the most recent version of this article.',
-            array_map('trim', $crawler->filter('.info-bar--multiple-versions')->extract(['_text'])));
+        $this->assertContains('A newer version is available.', $crawler->filter('.previous-version-warning')->text());
+        $this->assertContains('Read the latest version.', $crawler->filter('.previous-version-warning')->text());
     }
 
     /**
@@ -1845,7 +1844,8 @@ final class ArticleControllerTest extends PageTestCase
         $crawler = $client->request('GET', $this->getPreviousVersionUrl());
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
-        $this->assertContains('Read the most recent version of this article.', array_map('trim', $crawler->filter('.info-bar')->extract(['_text'])));
+        $this->assertContains('A newer version is available.', $crawler->filter('.previous-version-warning')->text());
+        $this->assertContains('Read the latest version.', $crawler->filter('.previous-version-warning')->text());
     }
 
     /**
