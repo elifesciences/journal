@@ -1375,9 +1375,6 @@
                 "MIT"
             ],
             "description": "eLife patterns",
-            "support": {
-                "source": "https://github.com/elifesciences/patterns-php/tree/previous-version-warning"
-            },
             "time": "2024-09-03T09:46:55+00:00"
         },
         {
