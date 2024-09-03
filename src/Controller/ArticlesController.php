@@ -1665,31 +1665,37 @@ final class ArticlesController extends Controller
                     return $first['index'] < $second['index'];
                 });
 
-                $rpCount = $history->getVersions()
-                    ->filter(Callback::isInstanceOf(ArticlePreprint::class))
-                    ->filter(function (ArticlePreprint $preprint) {
-                        return strpos($preprint->getDescription(), 'reviewed preprint') !== false;
-                    })
-                    ->count();
+                $timeline = [];
 
-                // If reviewed preprint count is greater than 1 we want to alter the $item['term'].
-                $rpCount = $rpCount > 1 ? $rpCount : 0;
+                if (!in_array($item->getType(), ['correction', 'retraction'])) {
+                    $rpCount = $history->getVersions()
+                        ->filter(Callback::isInstanceOf(ArticlePreprint::class))
+                        ->filter(function (ArticlePreprint $preprint) {
+                            return strpos($preprint->getDescription(), 'reviewed preprint') !== false;
+                        })
+                        ->count();
+
+                    // If reviewed preprint count is greater than 1 we want to alter the $item['term'].
+                    $rpCount = $rpCount > 1 ? $rpCount : 0;
+
+                    $timeline = array_map(function ($item) use (&$rpCount) {
+                        // Remove index from item.
+                        unset($item['index']);
+
+                        if (strpos($item['term'], 'Reviewed preprint') !== false && $rpCount > 0) {
+                            $version = sprintf('<span class="version">v%d</span>', $rpCount);
+                            $item['descriptors'][0] = $version . ' ' . $item['descriptors'][0];
+                            $rpCount--;
+                        }
+
+                        return $item;
+                    }, $publicationHistory);
+                }
 
                 return $this->convertTo($parts['item'],
                     ContentAside::class, [
                         'metrics' => $parts['metrics'],
-                        'timeline' => array_map(function ($item) use (&$rpCount) {
-                            // Remove index from item.
-                            unset($item['index']);
-
-                            if (strpos($item['term'], 'Reviewed preprint') !== false && $rpCount > 0) {
-                                $version = sprintf('<span class="version">v%d</span>', $rpCount);
-                                $item['descriptors'][0] = $version . ' ' . $item['descriptors'][0];
-                                $rpCount--;
-                            }
-
-                            return $item;
-                        }, $publicationHistory),
+                        'timeline' => $timeline,
                         'relatedItem' => $parts['relatedItem']
                     ]
                 );

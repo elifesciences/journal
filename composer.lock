@@ -1379,9 +1379,6 @@
                 "MIT"
             ],
             "description": "eLife patterns",
-            "support": {
-                "source": "https://github.com/elifesciences/patterns-php/tree/homepage-listing-changes"
-            },
             "time": "2024-09-03T09:48:28+00:00"
         },
         {
