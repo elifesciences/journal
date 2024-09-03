@@ -53,7 +53,7 @@ elifePipeline {
                 def tagName = branchName.replaceAll("/", "_")
                 image.tag(tagName).push()
             }
-            
+
             elifeMainlineOnly {
                 image.push()
             }
@@ -61,18 +61,6 @@ elifePipeline {
     }
 
     elifeMainlineOnly {
-        stage 'End2end tests', {
-            elifeSpectrum(
-                deploy: [
-                    stackname: 'journal--end2end',
-                    revision: commit,
-                    folder: '/srv/journal',
-                    concurrency: 'blue-green'
-                ],
-                marker: 'journal'
-            )
-        }
-
         stage 'Deploy on demo, continuumtest, continuumtestpreview', {
             def deployments = [
                 demo: {
