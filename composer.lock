@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "63e200ac8c3eec1a127611923efd777c",
+    "content-hash": "1595f2c271d5099ec16677607f3729e5",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -1236,16 +1236,16 @@
         },
         {
             "name": "elife/api-sdk",
-            "version": "dev-master",
+            "version": "dev-reviewed-preprint-version",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-sdk-php.git",
-                "reference": "07371e7140152441327bb2bca98480824694c3b0"
+                "reference": "43f3d0b864a9eb78d5dedb8e555bc384bf9265e8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/07371e7140152441327bb2bca98480824694c3b0",
-                "reference": "07371e7140152441327bb2bca98480824694c3b0",
+                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/43f3d0b864a9eb78d5dedb8e555bc384bf9265e8",
+                "reference": "43f3d0b864a9eb78d5dedb8e555bc384bf9265e8",
                 "shasum": ""
             },
             "require": {
@@ -1260,7 +1260,7 @@
             },
             "require-dev": {
                 "csa/guzzle-cache-middleware": "^1.0",
-                "elife/api": "^2.28",
+                "elife/api": "^2.30",
                 "elife/api-validator": "^1.0@dev",
                 "guzzlehttp/guzzle": "^6.0",
                 "justinrainbow/json-schema": "^3.0 || ^4.0 || ^5.0",
@@ -1286,7 +1286,11 @@
                 "MIT"
             ],
             "description": "eLife Sciences API SDK",
-            "time": "2024-04-12T01:47:08+00:00"
+            "support": {
+                "issues": "https://github.com/elifesciences/api-sdk-php/issues",
+                "source": "https://github.com/elifesciences/api-sdk-php/tree/reviewed-preprint-version"
+            },
+            "time": "2024-09-03T08:20:12+00:00"
         },
         {
             "name": "elife/civi-contacts",
