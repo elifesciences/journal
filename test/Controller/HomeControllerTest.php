@@ -133,8 +133,24 @@ final class HomeControllerTest extends PageTestCase
                 200,
                 ['Content-Type' => 'application/vnd.elife.search+json; version=2'],
                 json_encode([
-                    'total' => 4,
+                    'total' => 5,
                     'items' => [
+                        [
+                            'status' => 'reviewed',
+                            'stage' => 'published',
+                            'id' => '5',
+                            'type' => 'reviewed-preprint',
+                            'doi' => '10.7554/eLife.5',
+                            'title' => 'Reviewed preprint 5 title',
+                            'published' => '2014-01-01T00:00:00Z',
+                            'versionDate' => '2014-01-01T00:00:00Z',
+                            'reviewedDate' => '2014-01-01T00:00:00Z',
+                            'statusDate' => '2014-01-01T00:00:00Z',
+                            'volume' => 1,
+                            'elocationId' => 'e5',
+                            'authorLine' => 'Foo Bar',
+                            'version' => 1,
+                        ],
                         [
                             'status' => 'reviewed',
                             'stage' => 'published',
@@ -142,13 +158,14 @@ final class HomeControllerTest extends PageTestCase
                             'type' => 'reviewed-preprint',
                             'doi' => '10.7554/eLife.4',
                             'title' => 'Reviewed preprint 4 title',
-                            'published' => '2014-01-01T00:00:00Z',
-                            'versionDate' => '2014-01-01T00:00:00Z',
-                            'reviewedDate' => '2014-01-01T00:00:00Z',
-                            'statusDate' => '2014-01-01T00:00:00Z',
+                            'published' => '2012-01-01T00:00:00Z',
+                            'versionDate' => '2013-01-01T00:00:00Z',
+                            'reviewedDate' => '2012-07-01T00:00:00Z',
+                            'statusDate' => '2013-01-01T00:00:00Z',
                             'volume' => 1,
                             'elocationId' => 'e4',
                             'authorLine' => 'Foo Bar',
+                            'version' => 3,
                         ],
                         [
                             'status' => 'reviewed',
@@ -157,10 +174,10 @@ final class HomeControllerTest extends PageTestCase
                             'type' => 'reviewed-preprint',
                             'doi' => '10.7554/eLife.3',
                             'title' => 'Reviewed preprint 3 title',
-                            'published' => '2012-01-01T00:00:00Z',
-                            'versionDate' => '2013-01-01T00:00:00Z',
-                            'reviewedDate' => '2012-07-01T00:00:00Z',
-                            'statusDate' => '2013-01-01T00:00:00Z',
+                            'published' => '2011-01-01T00:00:00Z',
+                            'versionDate' => '2011-01-01T00:00:00Z',
+                            'reviewedDate' => '2011-07-01T00:00:00Z',
+                            'statusDate' => '2011-01-01T00:00:00Z',
                             'volume' => 1,
                             'elocationId' => 'e3',
                             'authorLine' => 'Foo Bar',
@@ -244,19 +261,22 @@ final class HomeControllerTest extends PageTestCase
         $this->assertSame(200, $client->getResponse()->getStatusCode());
 
         $teasers = $crawler->filter('.list-heading:contains("Latest research") + ol > li');
-        $this->assertCount(4, $teasers);
+        $this->assertCount(5, $teasers);
 
-        $this->assertSame('Reviewed preprint 4 title', trim($teasers->eq(0)->filter('.teaser__header_text')->text()));
-        $this->assertSame('Reviewed Preprint Jan 1, 2014', trim(preg_replace('/\s+/S', ' ', $teasers->eq(0)->filter('.teaser__footer .meta')->text())));
+        $this->assertSame('Reviewed preprint 5 title', trim($teasers->eq(0)->filter('.teaser__header_text')->text()));
+        $this->assertSame('Not yet revised Reviewed Preprint v1 Jan 1, 2014', trim(preg_replace('/\s+/S', ' ', $teasers->eq(0)->filter('.teaser__footer .meta')->text())));
 
-        $this->assertSame('Reviewed preprint 3 title', trim($teasers->eq(1)->filter('.teaser__header_text')->text()));
-        $this->assertSame('Reviewed Preprint Updated Jan 1, 2013', trim(preg_replace('/\s+/S', ' ', $teasers->eq(1)->filter('.teaser__footer .meta')->text())));
+        $this->assertSame('Reviewed preprint 4 title', trim($teasers->eq(1)->filter('.teaser__header_text')->text()));
+        $this->assertSame('Revised Reviewed Preprint v3 Updated Jan 1, 2013', trim(preg_replace('/\s+/S', ' ', $teasers->eq(1)->filter('.teaser__footer .meta')->text())));
 
-        $this->assertSame('Article 2 title', trim($teasers->eq(2)->filter('.teaser__header_text')->text()));
-        $this->assertSame('Version of Record Research Article Updated Jan 1, 2013', trim(preg_replace('/\s+/S', ' ', $teasers->eq(2)->filter('.teaser__footer .meta')->text())));
+        $this->assertSame('Reviewed preprint 3 title', trim($teasers->eq(2)->filter('.teaser__header_text')->text()));
+        $this->assertSame('Reviewed Preprint Jan 1, 2011', trim(preg_replace('/\s+/S', ' ', $teasers->eq(2)->filter('.teaser__footer .meta')->text())));
 
-        $this->assertSame('Article 1 title', trim($teasers->eq(3)->filter('.teaser__header_text')->text()));
-        $this->assertSame('Accepted Manuscript Research Article Jan 1, 2012', trim(preg_replace('/\s+/S', ' ', $teasers->eq(3)->filter('.teaser__footer .meta')->text())));
+        $this->assertSame('Article 2 title', trim($teasers->eq(3)->filter('.teaser__header_text')->text()));
+        $this->assertSame('Version of Record Research Article Updated Jan 1, 2013', trim(preg_replace('/\s+/S', ' ', $teasers->eq(3)->filter('.teaser__footer .meta')->text())));
+
+        $this->assertSame('Article 1 title', trim($teasers->eq(4)->filter('.teaser__header_text')->text()));
+        $this->assertSame('Accepted Manuscript Research Article Jan 1, 2012', trim(preg_replace('/\s+/S', ' ', $teasers->eq(4)->filter('.teaser__footer .meta')->text())));
     }
 
     /**
