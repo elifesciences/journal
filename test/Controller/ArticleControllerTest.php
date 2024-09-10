@@ -4494,7 +4494,7 @@ final class ArticleControllerTest extends PageTestCase
                 200,
                 ['Content-Type' => 'application/vnd.elife.recommendations+json; version=3'],
                 json_encode([
-                    'total' => 7,
+                    'total' => 8,
                     'items' => [
                         [
                             'status' => 'vor',
@@ -4634,6 +4634,25 @@ final class ArticleControllerTest extends PageTestCase
                                 'holder' => 'Author One',
                                 'statement' => 'Copyright statement.',
                             ],
+                            [
+                                'status' => 'vor',
+                                'stage' => 'published',
+                                'id' => '00008',
+                                'version' => 1,
+                                'type' => 'expression-concern',
+                                'doi' => '10.7554/eLife.00008',
+                                'title' => 'Expression of concern title',
+                                'published' => '2010-01-01T00:00:00Z',
+                                'versionDate' => '2010-01-01T00:00:00Z',
+                                'statusDate' => '2010-01-01T00:00:00Z',
+                                'volume' => 1,
+                                'elocationId' => 'e00008',
+                                'copyright' => [
+                                    'license' => 'CC-BY-4.0',
+                                    'holder' => 'Author One',
+                                    'statement' => 'Copyright statement.',
+                                ],
+                            ],
                             'abstract' => [
                                 'content' => [
                                     [
@@ -4659,7 +4678,8 @@ final class ArticleControllerTest extends PageTestCase
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertSame('This article has been corrected. Read the correction notice.', trim($crawler->filter('.info-bar--correction')->text()));
-        $this->assertSame('This article has been retracted. Read the retraction notice.', trim($crawler->filter('.info-bar--attention')->text()));
+        $this->assertSame('This article has been retracted. Read the retraction notice.', trim($crawler->filter('.info-bar--attention')->eq(0)->text()));
+        $this->assertSame('Concern(s) have been raised about this article. Read the expression of concern.', trim($crawler->filter('.info-bar--attention')->eq(1)->text()));
         $this->assertContains('Insight 1 title', $crawler->filter('.teaser--related')->text());
 
         $furtherReading = $crawler->filter('.listing-list-heading:contains("Further reading") + .listing-list > .listing-list__item');
