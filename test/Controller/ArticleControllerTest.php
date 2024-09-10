@@ -4457,6 +4457,26 @@ final class ArticleControllerTest extends PageTestCase
                         'authorLine' => 'Author One et al.',
                     ],
                     [
+                        'status' => 'vor',
+                        'stage' => 'published',
+                        'id' => '00006',
+                        'version' => 1,
+                        'type' => 'expression-concern',
+                        'doi' => '10.7554/eLife.00006',
+                        'title' => 'Expression of concern title',
+                        'published' => '2010-01-01T00:00:00Z',
+                        'versionDate' => '2010-01-01T00:00:00Z',
+                        'statusDate' => '2010-01-01T00:00:00Z',
+                        'volume' => 1,
+                        'elocationId' => 'e00006',
+                        'copyright' => [
+                            'license' => 'CC-BY-4.0',
+                            'holder' => 'Author One',
+                            'statement' => 'Copyright statement.',
+                        ],
+                        'authorLine' => 'Author One et al.',
+                    ],
+                    [
                         "id" => "80494",
                         "doi" => "10.1101/2022.06.24.497502",
                         "pdf" => "https://www.biorxiv.org/content/10.1101/2022.06.24.497502v1.full.pdf",
@@ -4652,6 +4672,7 @@ final class ArticleControllerTest extends PageTestCase
                                     'holder' => 'Author One',
                                     'statement' => 'Copyright statement.',
                                 ],
+                                'authorLine' => 'Author One et al.',
                             ],
                             'abstract' => [
                                 'content' => [
@@ -4678,6 +4699,7 @@ final class ArticleControllerTest extends PageTestCase
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertSame('This article has been corrected. Read the correction notice.', trim($crawler->filter('.info-bar--correction')->text()));
+        $this->assertCount(2, $crawler->filter('.info-bar--attention'));
         $this->assertSame('This article has been retracted. Read the retraction notice.', trim($crawler->filter('.info-bar--attention')->eq(0)->text()));
         $this->assertSame('Concern(s) have been raised about this article. Read the expression of concern.', trim($crawler->filter('.info-bar--attention')->eq(1)->text()));
         $this->assertContains('Insight 1 title', $crawler->filter('.teaser--related')->text());

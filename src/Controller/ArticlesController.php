@@ -1674,7 +1674,7 @@ final class ArticlesController extends Controller
 
                 $timeline = [];
 
-                if (!in_array($item->getType(), ['correction', 'retraction', 'expression-concern'])) {
+                if (!in_array($item->getType(), ['correction', 'expression-concern', 'retraction'])) {
                     $rpCount = $history->getVersions()
                         ->filter(Callback::isInstanceOf(ArticlePreprint::class))
                         ->filter(function (ArticlePreprint $preprint) {
