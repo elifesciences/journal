@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "cc6b3eb8581ce24b68d16d11a9db35f5",
+    "content-hash": "b09263a4ab026d46a3a2a980db879d46",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -1236,16 +1236,16 @@
         },
         {
             "name": "elife/api-sdk",
-            "version": "dev-master",
+            "version": "dev-expression-concern",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-sdk-php.git",
-                "reference": "07371e7140152441327bb2bca98480824694c3b0"
+                "reference": "ab5045864c25f789fea91364bb98124fc397d54a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/07371e7140152441327bb2bca98480824694c3b0",
-                "reference": "07371e7140152441327bb2bca98480824694c3b0",
+                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/ab5045864c25f789fea91364bb98124fc397d54a",
+                "reference": "ab5045864c25f789fea91364bb98124fc397d54a",
                 "shasum": ""
             },
             "require": {
@@ -1260,7 +1260,7 @@
             },
             "require-dev": {
                 "csa/guzzle-cache-middleware": "^1.0",
-                "elife/api": "^2.28",
+                "elife/api": "^2.30",
                 "elife/api-validator": "^1.0@dev",
                 "guzzlehttp/guzzle": "^6.0",
                 "justinrainbow/json-schema": "^3.0 || ^4.0 || ^5.0",
@@ -1286,7 +1286,11 @@
                 "MIT"
             ],
             "description": "eLife Sciences API SDK",
-            "time": "2024-04-12T01:47:08+00:00"
+            "support": {
+                "issues": "https://github.com/elifesciences/api-sdk-php/issues",
+                "source": "https://github.com/elifesciences/api-sdk-php/tree/expression-concern"
+            },
+            "time": "2024-09-04T09:35:38+00:00"
         },
         {
             "name": "elife/civi-contacts",
@@ -4429,6 +4433,7 @@
                 "phpunit/phpunit": "^5.2",
                 "squizlabs/php_codesniffer": "^3.5"
             },
+            "default-branch": true,
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -4445,6 +4450,10 @@
                 "MIT"
             ],
             "description": "eLife Sciences API validator",
+            "support": {
+                "issues": "https://github.com/elifesciences/api-validator-php/issues",
+                "source": "https://github.com/elifesciences/api-validator-php/tree/master"
+            },
             "time": "2024-04-12T01:07:21+00:00"
         },
         {
@@ -6337,5 +6346,6 @@
     "platform-dev": [],
     "platform-overrides": {
         "php": "7.1.33"
-    }
+    },
+    "plugin-api-version": "2.6.0"
 }
