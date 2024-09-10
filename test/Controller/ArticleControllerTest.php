@@ -4659,8 +4659,7 @@ final class ArticleControllerTest extends PageTestCase
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertSame('This article has been corrected. Read the correction notice.', trim($crawler->filter('.info-bar--correction')->text()));
-        $this->assertSame('This article has been retracted. Read the retraction notice.', trim($crawler->filter('.info-bar--attention')->eq(0)->text()));
-        // $this->assertSame('Concern(s) have been raised about this article. Read the expression of concern.', trim($crawler->filter('.info-bar--attention')->eq(1)->text()));
+        $this->assertSame('This article has been retracted. Read the retraction notice.', trim($crawler->filter('.info-bar--attention')->text()));
         $this->assertContains('Insight 1 title', $crawler->filter('.teaser--related')->text());
 
         $furtherReading = $crawler->filter('.listing-list-heading:contains("Further reading") + .listing-list > .listing-list__item');
