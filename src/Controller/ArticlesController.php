@@ -1304,8 +1304,7 @@ final class ArticlesController extends Controller
                         if (!($relatedArticle instanceof ArticleVersion)) {
                             continue;
                         }
-                        dump($item->getType());
-                        dump([$relatedArticle]);
+
                         switch ($relatedArticle->getType()) {
                             case 'correction':
                                 $infoBars[] = new InfoBar('This article has been corrected. Read the <a href="'.$this->get('router')->generate('article', [$relatedArticle]).'">correction notice</a>.', InfoBar::TYPE_CORRECTION);
