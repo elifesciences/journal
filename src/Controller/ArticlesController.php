@@ -1701,7 +1701,8 @@ final class ArticlesController extends Controller
                             'A newer version is available.',
                             new ViewModel\Link(
                                 'Read the latest version',
-                                $this->generatePath($history)
+                                $this->generatePath($history),
+                                'Read the latest version of this article'
                             )
                         ) : null
                     ]
