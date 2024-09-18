@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "63e200ac8c3eec1a127611923efd777c",
+    "content-hash": "2d3830bc276a105be4412d6cb648f571",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -4387,16 +4387,16 @@
         },
         {
             "name": "elife/api",
-            "version": "2.28.0",
+            "version": "2.30.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-raml.git",
-                "reference": "f964675978ffbfac2ed3d87ab37cda12604f366d"
+                "reference": "952cbe319d3ed651e1e2e74d6f917d54202d1de9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-raml/zipball/f964675978ffbfac2ed3d87ab37cda12604f366d",
-                "reference": "f964675978ffbfac2ed3d87ab37cda12604f366d",
+                "url": "https://api.github.com/repos/elifesciences/api-raml/zipball/952cbe319d3ed651e1e2e74d6f917d54202d1de9",
+                "reference": "952cbe319d3ed651e1e2e74d6f917d54202d1de9",
                 "shasum": ""
             },
             "conflict": {
@@ -4408,7 +4408,11 @@
                 "MIT"
             ],
             "description": "eLife Sciences API specification",
-            "time": "2024-03-15T03:53:11+00:00"
+            "support": {
+                "issues": "https://github.com/elifesciences/api-raml/issues",
+                "source": "https://github.com/elifesciences/api-raml/tree/2.30.0"
+            },
+            "time": "2024-08-28T10:05:55+00:00"
         },
         {
             "name": "elife/api-validator",
