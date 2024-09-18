@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "90ebdc91f42657a910b748a524bb7764",
+    "content-hash": "cc6b3eb8581ce24b68d16d11a9db35f5",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -1329,16 +1329,16 @@
         },
         {
             "name": "elife/patterns",
-            "version": "dev-previous-version-warning",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/patterns-php.git",
-                "reference": "aa307f737d61a59042bb13ca34a6a2c7421e3953"
+                "reference": "54925197ca6be4bf9c0ba6664a7e5af68f513ccf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/aa307f737d61a59042bb13ca34a6a2c7421e3953",
-                "reference": "aa307f737d61a59042bb13ca34a6a2c7421e3953",
+                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/54925197ca6be4bf9c0ba6664a7e5af68f513ccf",
+                "reference": "54925197ca6be4bf9c0ba6664a7e5af68f513ccf",
                 "shasum": ""
             },
             "require": {
@@ -1361,6 +1361,7 @@
             "suggest": {
                 "twig/twig": "^2.0, to use PatternExtension"
             },
+            "default-branch": true,
             "type": "library",
             "autoload": {
                 "files": [
@@ -1375,10 +1376,7 @@
                 "MIT"
             ],
             "description": "eLife patterns",
-            "support": {
-                "source": "https://github.com/elifesciences/patterns-php/tree/previous-version-warning"
-            },
-            "time": "2024-09-17T13:40:46+00:00"
+            "time": "2024-09-18T10:13:40+00:00"
         },
         {
             "name": "fabpot/goutte",
@@ -6340,6 +6338,5 @@
     "platform-dev": [],
     "platform-overrides": {
         "php": "7.1.33"
-    },
-    "plugin-api-version": "2.6.0"
+    }
 }
