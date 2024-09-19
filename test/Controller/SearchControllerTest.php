@@ -38,7 +38,7 @@ final class SearchControllerTest extends PageTestCase
         $this->mockApiResponse(
             new Request(
                 'GET',
-                'http://api.elifesciences.org/search?for=keyword&page=1&per-page=1&sort=relevance&order=desc&use-date=default',
+                'https://search.prod.elifesciences.org/search?for=keyword&page=1&per-page=1&sort=relevance&order=desc&use-date=default',
                 ['Accept' => 'application/vnd.elife.search+json; version=2']
             ),
             new Response(
@@ -83,7 +83,7 @@ final class SearchControllerTest extends PageTestCase
         $this->mockApiResponse(
             new Request(
                 'GET',
-                'http://api.elifesciences.org/search?for=keyword&page=1&per-page=10&sort=relevance&order=desc&use-date=default',
+                'https://search.prod.elifesciences.org/search?for=keyword&page=1&per-page=10&sort=relevance&order=desc&use-date=default',
                 ['Accept' => 'application/vnd.elife.search+json; version=2']
             ),
             new Response(
@@ -161,7 +161,7 @@ final class SearchControllerTest extends PageTestCase
         $this->mockApiResponse(
             new Request(
                 'GET',
-                'http://api.elifesciences.org/search?for=&page=1&per-page=1&sort=date&order=desc&use-date=default',
+                'https://search.prod.elifesciences.org/search?for=&page=1&per-page=1&sort=date&order=desc&use-date=default',
                 ['Accept' => 'application/vnd.elife.search+json; version=2']
             ),
             new Response(
@@ -206,7 +206,7 @@ final class SearchControllerTest extends PageTestCase
         $this->mockApiResponse(
             new Request(
                 'GET',
-                'http://api.elifesciences.org/search?for=&page=1&per-page=10&sort=date&order=desc&use-date=default',
+                'https://search.prod.elifesciences.org/search?for=&page=1&per-page=10&sort=date&order=desc&use-date=default',
                 ['Accept' => 'application/vnd.elife.search+json; version=2']
             ),
             new Response(
@@ -256,7 +256,7 @@ final class SearchControllerTest extends PageTestCase
         $this->mockApiResponse(
             new Request(
                 'GET',
-                'http://api.elifesciences.org/search?for=&page=1&per-page=1&sort=date&order=asc&use-date=default',
+                'https://search.prod.elifesciences.org/search?for=&page=1&per-page=1&sort=date&order=asc&use-date=default',
                 ['Accept' => 'application/vnd.elife.search+json; version=2']
             ),
             new Response(
@@ -301,7 +301,7 @@ final class SearchControllerTest extends PageTestCase
         $this->mockApiResponse(
             new Request(
                 'GET',
-                'http://api.elifesciences.org/search?for=&page=1&per-page=10&sort=date&order=asc&type[]=blog-article&type[]=collection&type[]=editorial&type[]=feature&type[]=insight&type[]=interview&type[]=labs-post&type[]=podcast-episode&type[]=correction&type[]=registered-report&type[]=replication-study&type[]=research-advance&type[]=research-article&type[]=research-communication&type[]=retraction&type[]=review-article&type[]=scientific-correspondence&type[]=short-report&type[]=tools-resources&use-date=default',
+                'https://search.prod.elifesciences.org/search?for=&page=1&per-page=10&sort=date&order=asc&type[]=blog-article&type[]=collection&type[]=editorial&type[]=feature&type[]=insight&type[]=interview&type[]=labs-post&type[]=podcast-episode&type[]=correction&type[]=registered-report&type[]=replication-study&type[]=research-advance&type[]=research-article&type[]=research-communication&type[]=retraction&type[]=review-article&type[]=scientific-correspondence&type[]=short-report&type[]=tools-resources&use-date=default',
                 ['Accept' => 'application/vnd.elife.search+json; version=2']
             ),
             new Response(
@@ -439,7 +439,7 @@ final class SearchControllerTest extends PageTestCase
         $this->mockApiResponse(
             new Request(
                 'GET',
-                'http://api.elifesciences.org/search?for=Reviewed preprint&page=1&per-page=1&sort=relevance&order=desc&use-date=default',
+                'https://search.prod.elifesciences.org/search?for=Reviewed preprint&page=1&per-page=1&sort=relevance&order=desc&use-date=default',
                 ['Accept' => 'application/vnd.elife.search+json; version=2']
             ),
             new Response(
@@ -483,7 +483,7 @@ final class SearchControllerTest extends PageTestCase
         $this->mockApiResponse(
             new Request(
                 'GET',
-                'http://api.elifesciences.org/search?for=Reviewed preprint&page=1&per-page=10&sort=relevance&order=desc&use-date=default',
+                'https://search.prod.elifesciences.org/search?for=Reviewed preprint&page=1&per-page=10&sort=relevance&order=desc&use-date=default',
                 ['Accept' => 'application/vnd.elife.search+json; version=2']
             ),
             new Response(
@@ -539,7 +539,7 @@ final class SearchControllerTest extends PageTestCase
         $this->mockApiResponse(
             new Request(
                 'GET',
-                'http://api.elifesciences.org/search?for='.($expectedQuery ?? $for).'&page=1&per-page=1&sort=relevance&order=desc&use-date=default',
+                'https://search.prod.elifesciences.org/search?for='.($expectedQuery ?? $for).'&page=1&per-page=1&sort=relevance&order=desc&use-date=default',
                 ['Accept' => 'application/vnd.elife.search+json; version=2']
             ),
             new Response(
@@ -584,7 +584,7 @@ final class SearchControllerTest extends PageTestCase
         $this->mockApiResponse(
             new Request(
                 'GET',
-                'http://api.elifesciences.org/search?for='.($expectedQuery ?? $for).'&page=1&per-page=10&sort=relevance&order=desc&use-date=default',
+                'https://search.prod.elifesciences.org/search?for='.($expectedQuery ?? $for).'&page=1&per-page=10&sort=relevance&order=desc&use-date=default',
                 ['Accept' => 'application/vnd.elife.search+json; version=2']
             ),
             new Response(
