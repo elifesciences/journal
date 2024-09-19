@@ -26,12 +26,17 @@ use GuzzleHttp\Promise\PromiseInterface;
 use Pagerfanta\Pagerfanta;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use function GuzzleHttp\Promise\promise_for;
 
 final class SearchController extends Controller
 {
     public function queryAction(Request $request) : Response
     {
+        if (strpos($request->getUri(), 'https://elifesciences.org/search') === 0) {
+            throw new HttpException(Response::HTTP_SERVICE_UNAVAILABLE, 'Search is undergoing maintenance');
+        }
+
         $page = (int) $request->query->get('page', 1);
         $perPage = 10;
         // Sanitise the 'for' query parameter.
