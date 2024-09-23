@@ -37,7 +37,7 @@ services:
                 php_version: ${PHP_VERSION}
         environment:
             - SYMFONY__API_URL=${API_URL}
-            - SYMFONY__API_URL_SEARCH_PAGE=${API_URL_SEARCH_PAGE}
+            - SYMFONY__API_URL_SEARCH_PAGE=${API_URL_SEARCH_PAGE:-${API_URL}}
             - SYMFONY__API_URL_PUBLIC=${API_URL_PUBLIC}
             - SYMFONY__API_KEY=${API_KEY}
         image: elifesciences/journal:${IMAGE_TAG}
