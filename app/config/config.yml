@@ -30,9 +30,9 @@ csa_guzzle:
                 headers:
                     Authorization: '%api_key%'
                 timeout: '%api_timeout%'
-        elife_api_slow:
+        elife_api_search_page:
             config:
-                base_uri: 'https://search.prod.elifesciences.org'
+                base_uri: '%api_url_search_page%'
                 connect_timeout: '%api_connect_timeout_slow%'
                 headers:
                     Authorization: '%api_key%'
