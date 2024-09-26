@@ -35,7 +35,7 @@ final class ModelNameTest extends TestCase
         return $this->arrayProvider([
             'correction' => ['Correction', 'Corrections'],
             'editorial' => ['Editorial', 'Editorials'],
-            'expression-concern' => ['Expression of concern', 'Expressions of concern'],
+            'expression-concern' => ['Expression of Concern', 'Expressions of Concern'],
             'feature' => ['Feature Article', 'Feature Articles'],
             'insight' => ['Insight', 'Insights'],
             'research-advance' => ['Research Advance', 'Research Advances'],

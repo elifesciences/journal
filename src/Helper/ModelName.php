@@ -16,8 +16,8 @@ final class ModelName
             'plural' => 'Editorials',
         ],
         'expression-concern' => [
-            'singular' => 'Expression of concern',
-            'plural' => 'Expressions of concern',
+            'singular' => 'Expression of Concern',
+            'plural' => 'Expressions of Concern',
         ],
         'feature' => [
             'singular' => 'Feature Article',
