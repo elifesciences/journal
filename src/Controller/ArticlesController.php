@@ -492,12 +492,12 @@ final class ArticlesController extends Controller
                                 $title .= ' ('.$award->getAwardId().')';
                             }
 
-                            $body = $award->getRecipients()->notEmpty() ? Listing::unordered(
+                            $body = Listing::unordered(
                                 $award->getRecipients()
                                     ->map(Callback::method('toString'))
                                     ->toArray(),
                                 'bullet'
-                            ) : new ViewModel\Paragraph('&nbsp;');
+                            );
 
                             return ArticleSection::basic($this->render($body), $title, 4, null, null, null, null, false, $headerLink);
                         })->toArray();

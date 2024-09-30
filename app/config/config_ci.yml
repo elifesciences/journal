@@ -4,7 +4,6 @@ imports:
 
 parameters:
     api_url: http://api.elifesciences.org
-    api_url_search_page: http://api.elifesciences.org
     api_url_public: http://api.elifesciences.org
     api_mock: '%kernel.project_dir%/var/fixtures/instance_%kernel.instance%'
     cache_control: public, max-age=300, stale-while-revalidate=300, stale-if-error=86400
