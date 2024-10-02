@@ -552,14 +552,6 @@ final class ArticleControllerTest extends PageTestCase
                                     ],
                                 ],
                             ],
-                            [
-                                'id' => 'award3',
-                                'source' => [
-                                    'name' => [
-                                        'Other funding source',
-                                    ],
-                                ],
-                            ],
                         ],
                         'statement' => 'Funding statement',
                     ],
@@ -2467,14 +2459,6 @@ final class ArticleControllerTest extends PageTestCase
                                     ],
                                 ],
                             ],
-                            [
-                                'id' => 'award3',
-                                'source' => [
-                                    'name' => [
-                                        'Other funding source',
-                                    ],
-                                ],
-                            ],
                         ],
                         'statement' => 'Funding statement',
                     ],
@@ -2772,8 +2756,7 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertSame('Foo Bar', trim($funding->filter('.article-section__body .article-section__body')->eq(0)->text()));
         $this->assertSame('Other funding source', $funding->filter('.article-section__body .article-section__header_text')->eq(1)->text());
         $this->assertSame('Baz', trim($funding->filter('.article-section__body .article-section__body')->eq(1)->text()));
-        $this->assertSame(' ', $funding->filter('p')->eq(0)->text());
-        $this->assertSame('Funding statement', $funding->filter('p')->eq(1)->text());
+        $this->assertSame('Funding statement', $funding->filter('p')->text());
 
         $acknowledgements = $articleInfo->eq(1);
         $this->assertSame('Acknowledgements', $acknowledgements->filter('header > h3')->text());
@@ -4474,42 +4457,22 @@ final class ArticleControllerTest extends PageTestCase
                         'authorLine' => 'Author One et al.',
                     ],
                     [
-                        'status' => 'vor',
-                        'stage' => 'published',
-                        'id' => '00006',
-                        'version' => 1,
-                        'type' => 'expression-concern',
-                        'doi' => '10.7554/eLife.00006',
-                        'title' => 'Expression of concern title',
-                        'published' => '2010-01-01T00:00:00Z',
-                        'versionDate' => '2010-01-01T00:00:00Z',
-                        'statusDate' => '2010-01-01T00:00:00Z',
-                        'volume' => 1,
-                        'elocationId' => 'e00006',
-                        'copyright' => [
-                            'license' => 'CC-BY-4.0',
-                            'holder' => 'Author One',
-                            'statement' => 'Copyright statement.',
-                        ],
-                        'authorLine' => 'Author One et al.',
-                    ],
-                    [
-                        'id' => '80494',
-                        'doi' => '10.1101/2022.06.24.497502',
-                        'pdf' => 'https://www.biorxiv.org/content/10.1101/2022.06.24.497502v1.full.pdf',
-                        'status' => 'reviewed',
-                        'authorLine' => 'Tianze Xu, Jing Cai ... Kuanyu Li',
-                        'title' => 'Aging-related iron deposit prevents the benefits of HRT from late postmenopausal atherosclerosis',
-                        'stage' => 'published',
-                        'type' => 'reviewed-preprint',
-                        'published' => '2022-10-20T03:00:00Z',
-                        'reviewedDate' => '2022-10-20T03:00:00Z',
-                        'versionDate' => '2022-10-20T03:00:00Z',
-                        'statusDate' => '2022-10-20T03:00:00Z',
-                        'subjects' => [
+                        "id" => "80494",
+                        "doi" => "10.1101/2022.06.24.497502",
+                        "pdf" => "https://www.biorxiv.org/content/10.1101/2022.06.24.497502v1.full.pdf",
+                        "status" => "reviewed",
+                        "authorLine" => "Tianze Xu, Jing Cai ... Kuanyu Li",
+                        "title" => "Aging-related iron deposit prevents the benefits of HRT from late postmenopausal atherosclerosis",
+                        "stage" => "published",
+                        "type" => "reviewed-preprint",
+                        "published" => "2022-10-20T03:00:00Z",
+                        "reviewedDate" => "2022-10-20T03:00:00Z",
+                        "versionDate" => "2022-10-20T03:00:00Z",
+                        "statusDate" => "2022-10-20T03:00:00Z",
+                        "subjects" => [
                             [
-                                'id' => 'cell-biology',
-                                'name' => 'Cell Biology',
+                                "id" => "cell-biology",
+                                "name" => "Cell Biology",
                             ],
                         ],
                     ],
@@ -4531,7 +4494,7 @@ final class ArticleControllerTest extends PageTestCase
                 200,
                 ['Content-Type' => 'application/vnd.elife.recommendations+json; version=3'],
                 json_encode([
-                    'total' => 8,
+                    'total' => 7,
                     'items' => [
                         [
                             'status' => 'vor',
@@ -4618,9 +4581,29 @@ final class ArticleControllerTest extends PageTestCase
                             'stage' => 'published',
                             'id' => '00006',
                             'version' => 1,
-                            'type' => 'expression-concern',
+                            'type' => 'research-article',
                             'doi' => '10.7554/eLife.00006',
-                            'title' => 'Expression of concern title',
+                            'title' => 'Another article title',
+                            'published' => '2010-01-01T00:00:00Z',
+                            'versionDate' => '2010-01-01T00:00:00Z',
+                            'statusDate' => '2010-01-01T00:00:00Z',
+                            'volume' => 1,
+                            'elocationId' => 'e00006',
+                            'copyright' => [
+                                'license' => 'CC-BY-4.0',
+                                'holder' => 'Author One',
+                                'statement' => 'Copyright statement.',
+                            ],
+                            'authorLine' => 'Author One et al.',
+                        ],
+                        [
+                            'status' => 'vor',
+                            'stage' => 'published',
+                            'id' => '00006',
+                            'version' => 1,
+                            'type' => 'insight',
+                            'doi' => '10.7554/eLife.00006',
+                            'title' => 'Insight 3 title',
                             'published' => '2010-01-01T00:00:00Z',
                             'versionDate' => '2010-01-01T00:00:00Z',
                             'statusDate' => '2010-01-01T00:00:00Z',
@@ -4640,7 +4623,7 @@ final class ArticleControllerTest extends PageTestCase
                             'version' => 1,
                             'type' => 'insight',
                             'doi' => '10.7554/eLife.00007',
-                            'title' => 'Insight 3 title',
+                            'title' => 'Insight 4 title',
                             'published' => '2010-01-01T00:00:00Z',
                             'versionDate' => '2010-01-01T00:00:00Z',
                             'statusDate' => '2010-01-01T00:00:00Z',
@@ -4651,45 +4634,19 @@ final class ArticleControllerTest extends PageTestCase
                                 'holder' => 'Author One',
                                 'statement' => 'Copyright statement.',
                             ],
-                            'authorLine' => 'Author One et al.',
-                        ],
-                        [
-                            'status' => 'vor',
-                            'stage' => 'published',
-                            'id' => '00008',
-                            'version' => 1,
-                            'type' => 'insight',
-                            'doi' => '10.7554/eLife.00008',
-                            'title' => 'Insight 4 title',
-                            'published' => '2010-01-01T00:00:00Z',
-                            'versionDate' => '2010-01-01T00:00:00Z',
-                            'statusDate' => '2010-01-01T00:00:00Z',
-                            'volume' => 1,
-                            'elocationId' => 'e00008',
-                            'copyright' => [
-                                'license' => 'CC-BY-4.0',
-                                'holder' => 'Author One',
-                                'statement' => 'Copyright statement.',
-                            ],
-                            'authorLine' => 'Author One et al.',
-                        ],
-                        [
-                            'status' => 'vor',
-                            'stage' => 'published',
-                            'id' => '00009',
-                            'version' => 1,
-                            'type' => 'expression-concern',
-                            'doi' => '10.7554/eLife.00009',
-                            'title' => 'Expression of concern title',
-                            'published' => '2010-01-01T00:00:00Z',
-                            'versionDate' => '2010-01-01T00:00:00Z',
-                            'statusDate' => '2010-01-01T00:00:00Z',
-                            'volume' => 1,
-                            'elocationId' => 'e00009',
-                            'copyright' => [
-                                'license' => 'CC-BY-4.0',
-                                'holder' => 'Author One',
-                                'statement' => 'Copyright statement.',
+                            'abstract' => [
+                                'content' => [
+                                    [
+                                        'type' => 'section',
+                                        'title' => 'Introduction',
+                                        'content' => [
+                                            [
+                                                'type' => 'paragraph',
+                                                'text' => 'Abstract 00007.',
+                                            ],
+                                        ],
+                                    ],
+                                ],
                             ],
                             'authorLine' => 'Author One et al.',
                         ],
@@ -4702,9 +4659,7 @@ final class ArticleControllerTest extends PageTestCase
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertSame('This article has been corrected. Read the correction notice.', trim($crawler->filter('.info-bar--correction')->text()));
-        $this->assertCount(2, $crawler->filter('.info-bar--attention'));
-        $this->assertSame('This article has been retracted. Read the retraction notice.', trim($crawler->filter('.info-bar--attention')->eq(0)->text()));
-        $this->assertSame('Concern(s) have been raised about this article. Read the expression of concern.', trim($crawler->filter('.info-bar--attention')->eq(1)->text()));
+        $this->assertSame('This article has been retracted. Read the retraction notice.', trim($crawler->filter('.info-bar--attention')->text()));
         $this->assertContains('Insight 1 title', $crawler->filter('.teaser--related')->text());
 
         $furtherReading = $crawler->filter('.listing-list-heading:contains("Further reading") + .listing-list > .listing-list__item');
@@ -4712,15 +4667,15 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertCount(1, $crawler->filter('.listing-list__item--related'));
         $this->assertContains('Insight 1 title', $furtherReading->eq(0)->text());
         $this->assertContains('Insight 2 title', $furtherReading->eq(1)->text());
-        $this->assertContains('Insight 3 title', $furtherReading->eq(2)->text());
+        $this->assertContains('Another article title', $furtherReading->eq(2)->text());
 
         $crawler = $client->click($crawler->selectLink('Load more')->link());
 
         $furtherReading = $crawler->filter('.listing-list__item');
         $this->assertCount(2, $furtherReading);
         $this->assertCount(0, $crawler->filter('.listing-list__item--related'));
-        $this->assertContains('Insight 4 title', $furtherReading->eq(0)->text());
-        $this->assertContains('Expression of concern title', $furtherReading->eq(1)->text());
+        $this->assertContains('Insight 3 title', $furtherReading->eq(0)->text());
+        $this->assertContains('Insight 4 title', $furtherReading->eq(1)->text());
     }
 
     /**
@@ -4840,42 +4795,42 @@ final class ArticleControllerTest extends PageTestCase
                 ['Content-Type' => 'application/vnd.elife.article-related+json; version=2'],
                 json_encode([
                     [
-                        'id' => '80494',
-                        'doi' => '10.1101/2022.06.24.497502',
-                        'pdf' => 'https://www.biorxiv.org/content/10.1101/2022.06.24.497502v1.full.pdf',
-                        'status' => 'reviewed',
-                        'authorLine' => 'Tianze Xu, Jing Cai ... Kuanyu Li',
-                        'title' => 'reviewed-preprint 1',
-                        'stage' => 'published',
-                        'type' => 'reviewed-preprint',
-                        'published' => '2022-10-20T03:00:00Z',
-                        'reviewedDate' => '2022-10-20T03:00:00Z',
-                        'versionDate' => '2022-10-20T03:00:00Z',
-                        'statusDate' => '2022-10-20T03:00:00Z',
-                        'subjects' => [
+                        "id" => "80494",
+                        "doi" => "10.1101/2022.06.24.497502",
+                        "pdf" => "https://www.biorxiv.org/content/10.1101/2022.06.24.497502v1.full.pdf",
+                        "status" => "reviewed",
+                        "authorLine" => "Tianze Xu, Jing Cai ... Kuanyu Li",
+                        "title" => "reviewed-preprint 1",
+                        "stage" => "published",
+                        "type" => "reviewed-preprint",
+                        "published" => "2022-10-20T03:00:00Z",
+                        "reviewedDate" => "2022-10-20T03:00:00Z",
+                        "versionDate" => "2022-10-20T03:00:00Z",
+                        "statusDate" => "2022-10-20T03:00:00Z",
+                        "subjects" => [
                             [
-                                'id' => 'cell-biology',
-                                'name' => 'Cell Biology'
+                                "id" => "cell-biology",
+                                "name" => "Cell Biology"
                             ]
                         ]
                     ],
                     [
-                        'id' => '80495',
-                        'doi' => '10.1101/2022.06.24.80495',
-                        'pdf' => 'https://www.biorxiv.org/content/10.1101/2022.06.24.497502v1.full.pdf',
-                        'status' => 'reviewed',
-                        'authorLine' => 'Tianze Xu, Jing Cai ... Kuanyu Li',
-                        'title' => 'reviewed preprint 2',
-                        'stage' => 'published',
-                        'type' => 'reviewed-preprint',
-                        'published' => '2022-10-20T03:00:00Z',
-                        'reviewedDate' => '2022-10-20T03:00:00Z',
-                        'versionDate' => '2022-10-20T03:00:00Z',
-                        'statusDate' => '2022-10-20T03:00:00Z',
-                        'subjects' => [
+                        "id" => "80495",
+                        "doi" => "10.1101/2022.06.24.80495",
+                        "pdf" => "https://www.biorxiv.org/content/10.1101/2022.06.24.497502v1.full.pdf",
+                        "status" => "reviewed",
+                        "authorLine" => "Tianze Xu, Jing Cai ... Kuanyu Li",
+                        "title" => "reviewed preprint 2",
+                        "stage" => "published",
+                        "type" => "reviewed-preprint",
+                        "published" => "2022-10-20T03:00:00Z",
+                        "reviewedDate" => "2022-10-20T03:00:00Z",
+                        "versionDate" => "2022-10-20T03:00:00Z",
+                        "statusDate" => "2022-10-20T03:00:00Z",
+                        "subjects" => [
                             [
-                                'id' => 'cell-biology',
-                                'name' => 'Cell Biology'
+                                "id" => "cell-biology",
+                                "name" => "Cell Biology"
                             ]
                         ]
                     ],
@@ -4900,42 +4855,42 @@ final class ArticleControllerTest extends PageTestCase
                     'total' => 3,
                     'items' => [
                         [
-                            'id' => '80494',
-                            'doi' => '10.1101/2022.06.24.497502',
-                            'pdf' => 'https://www.biorxiv.org/content/10.1101/2022.06.24.497502v1.full.pdf',
-                            'status' => 'reviewed',
-                            'authorLine' => 'Tianze Xu, Jing Cai ... Kuanyu Li',
-                            'title' => 'reviewed-preprint 1',
-                            'stage' => 'published',
-                            'type' => 'reviewed-preprint',
-                            'published' => '2022-10-20T03:00:00Z',
-                            'reviewedDate' => '2022-10-20T03:00:00Z',
-                            'versionDate' => '2022-10-20T03:00:00Z',
-                            'statusDate' => '2022-10-20T03:00:00Z',
-                            'subjects' => [
+                            "id" => "80494",
+                            "doi" => "10.1101/2022.06.24.497502",
+                            "pdf" => "https://www.biorxiv.org/content/10.1101/2022.06.24.497502v1.full.pdf",
+                            "status" => "reviewed",
+                            "authorLine" => "Tianze Xu, Jing Cai ... Kuanyu Li",
+                            "title" => "reviewed-preprint 1",
+                            "stage" => "published",
+                            "type" => "reviewed-preprint",
+                            "published" => "2022-10-20T03:00:00Z",
+                            "reviewedDate" => "2022-10-20T03:00:00Z",
+                            "versionDate" => "2022-10-20T03:00:00Z",
+                            "statusDate" => "2022-10-20T03:00:00Z",
+                            "subjects" => [
                                 [
-                                    'id' => 'cell-biology',
-                                    'name' => 'Cell Biology'
+                                    "id" => "cell-biology",
+                                    "name" => "Cell Biology"
                                 ]
                             ]
                         ],
                         [
-                            'id' => '80495',
-                            'doi' => '10.1101/2022.06.24.80495',
-                            'pdf' => 'https://www.biorxiv.org/content/10.1101/2022.06.24.497502v1.full.pdf',
-                            'status' => 'reviewed',
-                            'authorLine' => 'Tianze Xu, Jing Cai ... Kuanyu Li',
-                            'title' => 'reviewed preprint 2',
-                            'stage' => 'published',
-                            'type' => 'reviewed-preprint',
-                            'published' => '2022-10-20T03:00:00Z',
-                            'reviewedDate' => '2022-10-20T03:00:00Z',
-                            'versionDate' => '2022-10-20T03:00:00Z',
-                            'statusDate' => '2022-10-20T03:00:00Z',
-                            'subjects' => [
+                            "id" => "80495",
+                            "doi" => "10.1101/2022.06.24.80495",
+                            "pdf" => "https://www.biorxiv.org/content/10.1101/2022.06.24.497502v1.full.pdf",
+                            "status" => "reviewed",
+                            "authorLine" => "Tianze Xu, Jing Cai ... Kuanyu Li",
+                            "title" => "reviewed preprint 2",
+                            "stage" => "published",
+                            "type" => "reviewed-preprint",
+                            "published" => "2022-10-20T03:00:00Z",
+                            "reviewedDate" => "2022-10-20T03:00:00Z",
+                            "versionDate" => "2022-10-20T03:00:00Z",
+                            "statusDate" => "2022-10-20T03:00:00Z",
+                            "subjects" => [
                                 [
-                                    'id' => 'cell-biology',
-                                    'name' => 'Cell Biology'
+                                    "id" => "cell-biology",
+                                    "name" => "Cell Biology"
                                 ]
                             ]
                         ],
