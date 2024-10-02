@@ -72,7 +72,7 @@ final class ArticlesController extends Controller
         /** @var Sequence $recommendations */
         $recommendations = new PromiseSequence($arguments['item']
             ->then(function (ArticleVersion $item) {
-                if (in_array($item->getType(), ['correction', 'retraction'])) {
+                if (in_array($item->getType(), ['correction', 'expression-concern', 'retraction'])) {
                     return new EmptySequence();
                 }
 
@@ -83,8 +83,8 @@ final class ArticlesController extends Controller
 
         $arguments['furtherReading'] = $recommendations
             ->filter(function (Model $model) use ($arguments) {
-                // Remove corrections and retractions for this article.
-                if ($model instanceof ArticleVersion && in_array($model->getType(), ['correction', 'retraction'])) {
+                // Remove corrections, expressions of concern and retractions for this article.
+                if ($model instanceof ArticleVersion && in_array($model->getType(), ['correction', 'expression-concern', 'retraction'])) {
                     foreach ($arguments['relatedArticles'] as $relatedArticle) {
                         if ($relatedArticle->getId() === $model->getId()) {
                             return false;
@@ -121,7 +121,7 @@ final class ArticlesController extends Controller
 
         $arguments['paginator'] = all(['paginator' => $arguments['paginator'], 'item' => $arguments['item']])
             ->then(function (array $parts) {
-                if (in_array($parts['item']->getType(), ['correction', 'retraction'])) {
+                if (in_array($parts['item']->getType(), ['correction', 'expression-concern', 'retraction'])) {
                     return null;
                 }
 
@@ -571,7 +571,7 @@ final class ArticlesController extends Controller
 
                 if ($item instanceof ArticleVoR && (
                         $item->isReviewedPreprint() ||
-                        in_array($item->getType(), ['feature', 'correction', 'retraction']) ||
+                        in_array($item->getType(), ['feature', 'correction', 'expression-concern', 'retraction']) ||
                         $isMagazine)
                     ) {
                     $publicationHistory = $this->generatePublicationHistoryForNewVor($history);
@@ -1294,6 +1294,9 @@ final class ArticlesController extends Controller
                         case 'correction':
                             $infoBars[] = new InfoBar('This is a correction notice. Read the <a href="'.$this->get('router')->generate('article', [$relatedArticles[0]]).'">corrected article</a>.', InfoBar::TYPE_CORRECTION);
                             break;
+                        case 'expression-concern':
+                            $infoBars[] = new InfoBar('This is an expression of concern. Read the <a href="'.$this->get('router')->generate('article', [$relatedArticles[0]]).'">related article</a>.', InfoBar::TYPE_ATTENTION);
+                            break;
                         case 'retraction':
                             $infoBars[] = new InfoBar('This is a retraction notice. Read the <a href="'.$this->get('router')->generate('article', [$relatedArticles[0]]).'">retracted article</a>.', InfoBar::TYPE_ATTENTION);
                             break;
@@ -1303,9 +1306,13 @@ final class ArticlesController extends Controller
                         if (!($relatedArticle instanceof ArticleVersion)) {
                             continue;
                         }
+
                         switch ($relatedArticle->getType()) {
                             case 'correction':
                                 $infoBars[] = new InfoBar('This article has been corrected. Read the <a href="'.$this->get('router')->generate('article', [$relatedArticle]).'">correction notice</a>.', InfoBar::TYPE_CORRECTION);
+                                break;
+                            case 'expression-concern':
+                                $infoBars[] = new InfoBar('Concern(s) have been raised about this article. Read the <a href="'.$this->get('router')->generate('article', [$relatedArticle]).'">expression of concern</a>.', InfoBar::TYPE_ATTENTION);
                                 break;
                             case 'retraction':
                                 $infoBars[] = new InfoBar('This article has been retracted. Read the <a href="'.$this->get('router')->generate('article', [$relatedArticle]).'">retraction notice</a>.', InfoBar::TYPE_ATTENTION);
@@ -1669,7 +1676,7 @@ final class ArticlesController extends Controller
 
                 $timeline = [];
 
-                if (!in_array($item->getType(), ['correction', 'retraction'])) {
+                if (!in_array($item->getType(), ['correction', 'expression-concern', 'retraction'])) {
                     $rpCount = $history->getVersions()
                         ->filter(Callback::isInstanceOf(ArticlePreprint::class))
                         ->filter(function (ArticlePreprint $preprint) {
@@ -1786,7 +1793,7 @@ final class ArticlesController extends Controller
                         $item->getAuthorResponse() ||
                         (!$item->isReviewedPreprint() &&
                             !$isMagazine &&
-                            !in_array($item->getType(), ['feature', 'correction', 'retraction']) &&
+                            !in_array($item->getType(), ['feature', 'correction', 'expression-concern', 'retraction']) &&
                             $combinedHistory
                         )) ||
                         ($item instanceof ArticlePoA && $combinedHistory));

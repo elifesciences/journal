@@ -102,6 +102,7 @@ final class ArchiveMonthControllerTest extends PageTestCase
                     'types' => [
                         'correction' => 0,
                         'editorial' => 0,
+                        'expression-concern' => 0,
                         'feature' => 0,
                         'insight' => 0,
                         'research-advance' => 0,
