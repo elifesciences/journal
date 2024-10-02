@@ -1281,10 +1281,6 @@ final class ArticlesController extends Controller
                 $latest = $articleVersions[count($articleVersions) - 1];
                 $latestVersion = $latest->getVersion();
 
-                if ($item->getVersion() < $latestVersion) {
-                    $infoBars[] = new InfoBar('Read the <a href="'.$this->generatePath($history).'">most recent version of this article</a>.', InfoBar::TYPE_MULTIPLE_VERSIONS);
-                }
-
                 if ($latest instanceof ArticlePoA) {
                     $infoBars[] = new InfoBar('Accepted manuscript, PDF only. Full online edition to follow.');
                 }
@@ -1701,11 +1697,23 @@ final class ArticlesController extends Controller
                     }, $publicationHistory);
                 }
 
+                $latest = $articleVersions[count($articleVersions) - 1];
+                $latestVersion = $latest->getVersion();
+                $isNewerVersionAvailable = $item->getVersion() < $latestVersion;
+
                 return $this->convertTo($parts['item'],
                     ContentAside::class, [
                         'metrics' => $parts['metrics'],
                         'timeline' => $timeline,
-                        'relatedItem' => $parts['relatedItem']
+                        'relatedItem' => $parts['relatedItem'],
+                        'previousVersion' => $isNewerVersionAvailable ? new ViewModel\PreviousVersionWarning(
+                            'A newer version is available.',
+                            new ViewModel\Link(
+                                'Read the latest version',
+                                $this->generatePath($history),
+                                'Read the latest version of this article'
+                            )
+                        ) : null
                     ]
                 );
             });
