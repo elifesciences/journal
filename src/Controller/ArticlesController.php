@@ -492,10 +492,12 @@ final class ArticlesController extends Controller
                                 $title .= ' ('.$award->getAwardId().')';
                             }
 
+                            $recipients = $award->getRecipients()->notEmpty() ? $award->getRecipients()
+                                ->map(Callback::method('toString'))
+                                ->toArray() : ['No recipients declared.'];
+
                             $body = Listing::unordered(
-                                $award->getRecipients()
-                                    ->map(Callback::method('toString'))
-                                    ->toArray(),
+                                $recipients,
                                 'bullet'
                             );
 

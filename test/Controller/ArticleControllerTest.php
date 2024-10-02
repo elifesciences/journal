@@ -552,6 +552,14 @@ final class ArticleControllerTest extends PageTestCase
                                     ],
                                 ],
                             ],
+                            [
+                                'id' => 'award3',
+                                'source' => [
+                                    'name' => [
+                                        'Other funding source',
+                                    ],
+                                ],
+                            ],
                         ],
                         'statement' => 'Funding statement',
                     ],
@@ -2456,6 +2464,14 @@ final class ArticleControllerTest extends PageTestCase
                                     [
                                         'type' => 'group',
                                         'name' => 'Baz',
+                                    ],
+                                ],
+                            ],
+                            [
+                                'id' => 'award3',
+                                'source' => [
+                                    'name' => [
+                                        'Other funding source',
                                     ],
                                 ],
                             ],
