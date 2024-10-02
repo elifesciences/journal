@@ -212,7 +212,6 @@ final class SearchController extends Controller
     {
         $types = [
             'correction',
-            'expression-concern',
             'registered-report',
             'replication-study',
             'research-advance',

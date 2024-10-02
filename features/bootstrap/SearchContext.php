@@ -20,7 +20,6 @@ final class SearchContext extends Context
 
     private static $researchTypes = [
         'correction',
-        'expression-concern',
         'registered-report',
         'replication-study',
         'research-advance',
@@ -113,7 +112,6 @@ final class SearchContext extends Context
                     $typeFilters = [
                         'correction' => 0,
                         'editorial' => 0,
-                        'expression-concern' => 0,
                         'feature' => 0,
                         'insight' => 0,
                         'research-advance' => 0,
