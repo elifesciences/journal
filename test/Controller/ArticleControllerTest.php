@@ -2772,8 +2772,7 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertSame('Foo Bar', trim($funding->filter('.article-section__body .article-section__body')->eq(0)->text()));
         $this->assertSame('Other funding source', $funding->filter('.article-section__body .article-section__header_text')->eq(1)->text());
         $this->assertSame('Baz', trim($funding->filter('.article-section__body .article-section__body')->eq(1)->text()));
-        $this->assertSame(' ', $funding->filter('p')->eq(0)->text());
-        $this->assertSame('Funding statement', $funding->filter('p')->eq(1)->text());
+        $this->assertSame('Funding statement', $funding->filter('p')->text());
 
         $acknowledgements = $articleInfo->eq(1);
         $this->assertSame('Acknowledgements', $acknowledgements->filter('header > h3')->text());
