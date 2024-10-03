@@ -55,7 +55,7 @@ final class SearchController extends Controller
             $apiTypes = array_merge($apiTypes, $this->researchTypes());
         }
 
-        $search = $this->get('elife.api_sdk.search.slow')
+        $search = $this->get('elife.api_sdk.search.page')
             ->forQuery(preg_replace('/[\-]+/', ' ', $arguments['query']['for']))
             ->forSubject(...$arguments['query']['subjects'])
             ->forType(...$apiTypes)
@@ -212,6 +212,7 @@ final class SearchController extends Controller
     {
         $types = [
             'correction',
+            'expression-concern',
             'registered-report',
             'replication-study',
             'research-advance',
