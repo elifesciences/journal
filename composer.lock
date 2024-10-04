@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "dfcbe23319d1e823dc81ce7e1e7ffdb0",
+    "content-hash": "a5d50837b80dd8f3fe9277f46e9f353c",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -1338,12 +1338,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/patterns-php.git",
-                "reference": "cc38748f1b1de64103940d7c1aa7404c59950214"
+                "reference": "af1c0e67efe4e0ccc973c250968f83d451d93c98"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/cc38748f1b1de64103940d7c1aa7404c59950214",
-                "reference": "cc38748f1b1de64103940d7c1aa7404c59950214",
+                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/af1c0e67efe4e0ccc973c250968f83d451d93c98",
+                "reference": "af1c0e67efe4e0ccc973c250968f83d451d93c98",
                 "shasum": ""
             },
             "require": {
@@ -1383,7 +1383,7 @@
             "support": {
                 "source": "https://github.com/elifesciences/patterns-php/tree/elife-assessment-updates"
             },
-            "time": "2024-09-18T10:36:12+00:00"
+            "time": "2024-10-04T11:22:36+00:00"
         },
         {
             "name": "fabpot/goutte",
