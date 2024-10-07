@@ -311,7 +311,7 @@ final class ArticlesController extends Controller
 
                 if ($item instanceof ArticleVoR && $item->getElifeAssessment()) {
                     $first = true;
-                    $summary = 'During the peer-review process the editor and reviewers write an eLife Assessment that summarises the significance of the findings reported in the article (on a scale ranging from landmark to useful) and the strength of the evidence (on a scale ranging from exceptional to inadequate). <a href="'.$this->get('router')->generate('inside-elife-article', ['id' => 'db24dd46']).'">Learn more about eLife assessments</a>';
+                    $summary = 'During the peer-review process the editor and reviewers write an eLife Assessment that summarises the significance of the findings reported in the article (on a scale ranging from landmark to useful) and the strength of the evidence (on a scale ranging from exceptional to inadequate). <a href="http://elifesciences.org/about/elife-assessments">Learn more about eLife assessments</a>';
                     $significanceTerms = [['term' => 'Landmark'], ['term' => 'Fundamental'], ['term' => 'Important'], ['term' => 'Valuable'], ['term' => 'Useful']];
                     $strengthTerms = [['term' => 'Exceptional'], ['term' => 'Compelling'], ['term' => 'Convincing'], ['term' => 'Solid'], ['term' => 'Incomplete'], ['term' => 'Inadequate']];
                     $content = $item->getElifeAssessment()->getContent();
