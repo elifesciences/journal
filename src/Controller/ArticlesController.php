@@ -2021,7 +2021,7 @@ final class ArticlesController extends Controller
                 $term['isHighlighted'] = true;
 
                 if (isset($termDescriptions[$termWord])) {
-                    $formattedDescription[$termWord] = sprintf("<b>%s</b>: %s", ucfirst($termWord), $termDescriptions[$termWord]);
+                    $formattedDescription[$termWord] = sprintf("<p><b>%s</b>: %s</p>", ucfirst($termWord), $termDescriptions[$termWord]);
                 }
             }
 
