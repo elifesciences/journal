@@ -203,7 +203,11 @@ gulp.task('images:svgs', () => {
         .pipe(gulp.dest('./build/assets/images'));
 });
 
-gulp.task('images', gulp.series('images:clean', 'images:banners', 'images:social', 'images:investors', 'images:svgs', 'images:logos', () => {
+gulp.task('images:banners:skipped', () => {
+    return Promise.resolve('');
+});
+
+gulp.task('images', gulp.series('images:clean', 'images:banners:skipped', 'images:social', 'images:investors', 'images:svgs', 'images:logos', () => {
     return gulp.src('./build/assets/images/**/*')
         .pipe(imageMin([
             imageMinMozjpeg({
