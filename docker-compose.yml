@@ -2,7 +2,6 @@ version: '3'
 
 services:
     composer:
-        platform: linux/amd64
         build:
             context: .
             dockerfile: Dockerfile.composer
@@ -11,7 +10,6 @@ services:
         image: elifesciences/journal_composer:${IMAGE_TAG}
         command: /bin/bash
     npm:
-        platform: linux/amd64
         build:
             context: .
             dockerfile: Dockerfile.npm
@@ -21,7 +19,6 @@ services:
     redis:
         image: redis:6.2-alpine
     assets_builder:
-        platform: linux/amd64
         build:
             context: .
             dockerfile: Dockerfile.assets_builder
@@ -33,7 +30,6 @@ services:
             - composer
             - npm
     app:
-        platform: linux/amd64
         build:
             context: .
             args:
@@ -52,7 +48,6 @@ services:
             - composer
             - redis
     web:
-        platform: linux/amd64
         build:
             context: .
             dockerfile: Dockerfile.web
@@ -68,7 +63,6 @@ services:
         ports:
         - '${JOURNAL_API_DUMMY_PORT}:8080'
     critical_css:
-        platform: linux/amd64
         build:
             context: .
             dockerfile: Dockerfile.critical_css
