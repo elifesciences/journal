@@ -20,6 +20,12 @@
 
             {% endif %}
 
+            {% if assessmentBlock %}
+
+                {{ render_pattern(assessmentBlock) }}
+
+            {% endif %}
+
             {% if jumpMenu %}
 
                 {{ render_pattern(jumpMenu) }}
