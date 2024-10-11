@@ -19,8 +19,8 @@ test:
 
 feature-test:
 	docker-compose -f docker-compose.yml -f docker-compose.ci.yml up --build --detach
-	docker-compose -f docker-compose.yml -f docker-compose.ci.yml run ci .ci/behat
-	docker-compose -f docker-compose.yml -f docker-compose.ci.yml down -v
+	docker-compose -f docker-compose.yml -f docker-compose.ci.yml run --rm ci .ci/behat
+	docker-compose -f docker-compose.yml -f docker-compose.ci.yml down --volumes
 
 lint: vendor
 	.ci/phpcs
