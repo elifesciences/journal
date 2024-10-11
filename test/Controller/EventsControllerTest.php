@@ -20,7 +20,7 @@ final class EventsControllerTest extends PageTestCase
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertSame('eLife events', $crawler->filter('.content-header__title')->text());
         $this->assertContains(
-            'There are currently no pending events. Please call back soon.',
+            'There are currently no pending events. In the meantime, you can find clips and recordings from past events covering a wide range of topics on our YouTube.',
             $crawler->filter('main')->text()
         );
     }
