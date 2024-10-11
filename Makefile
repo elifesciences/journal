@@ -11,9 +11,6 @@ vendor:
 dev: build vendor
 	${DOCKER_COMPOSE} up 
 
-stop:
-	$(DOCKER_COMPOSE) down
-
 clean:
 	$(DOCKER_COMPOSE) down --volumes --remove-orphans
 
