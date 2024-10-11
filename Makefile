@@ -2,9 +2,9 @@ ifeq (${TARGET},)
 TARGET := dev
 endif
 
-DOCKER_COMPOSE = docker compose
+DOCKER_COMPOSE = docker-compose
 
-.PHONY: build dev stop clean test
+.PHONY: build dev stop clean test feature-test
 
 build:
 	$(DOCKER_COMPOSE) build
@@ -20,3 +20,8 @@ clean:
 
 test:
 	APP_ENV=ci $(DOCKER_COMPOSE) run app vendor/bin/phpunit
+
+feature-test:
+	docker-compose -f docker-compose.yml -f docker-compose.ci.yml up --build --detach
+	docker-compose -f docker-compose.yml -f docker-compose.ci.yml run ci .ci/behat
+
