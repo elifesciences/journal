@@ -4,7 +4,7 @@ endif
 
 DOCKER_COMPOSE = docker-compose
 
-.PHONY: build dev stop clean test feature-test
+.PHONY: build dev stop clean test feature-test lint check
 
 vendor:
 	composer install
@@ -30,3 +30,5 @@ feature-test:
 
 lint: vendor
 	.ci/phpcs
+
+check: test lint
