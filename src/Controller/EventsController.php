@@ -57,7 +57,7 @@ final class EventsController extends Controller
             });
 
         $arguments['listing'] = $arguments['paginator']
-            ->then($this->willConvertTo(ListingTeasers::class, ['heading' => 'Upcoming events', 'type' => 'events', 'emptyText' => 'There are currently no pending events. Please call back soon.']));
+            ->then($this->willConvertTo(ListingTeasers::class, ['heading' => 'Upcoming events', 'type' => 'events', 'emptyText' => 'There are currently no pending events. In the meantime, you can find clips and recordings from past events covering a wide range of topics on <a href="https://www.youtube.com/@eLife-sciences">our YouTube</a>.']));
 
         if (1 === $page) {
             return $this->createFirstPage($arguments);
