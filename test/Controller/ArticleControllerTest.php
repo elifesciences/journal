@@ -5160,9 +5160,8 @@ final class ArticleControllerTest extends PageTestCase
         $crawler = $client->request('GET', '/articles/00001');
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
-        $this->assertSame('eLife assessment', trim($crawler->filter('.jump-menu__item')->eq(0)->text()));
         $this->assertSame('eLife assessment',
-            $crawler->filter('.main-content-grid > section:nth-of-type(1) > header > h2')->text());
+            $crawler->filter('.content-container-block > section > header > h2')->text());
 
         $articleInfo = $crawler->filter('.article-section__body section');
         $citeAll = $articleInfo->eq(1);

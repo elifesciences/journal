@@ -309,40 +309,6 @@ final class ArticlesController extends Controller
                     $first = false;
                 }
 
-                if ($item instanceof ArticleVoR && $item->getElifeAssessment()) {
-                    $first = true;
-                    $summary = 'During the peer-review process the editor and reviewers write an eLife Assessment that summarises the significance of the findings reported in the article (on a scale ranging from landmark to useful) and the strength of the evidence (on a scale ranging from exceptional to inadequate). <a href="https://elifesciences.org/about/elife-assessments">Learn more about eLife Assessments</a>';
-                    $significanceTerms = [['term' => 'Landmark'], ['term' => 'Fundamental'], ['term' => 'Important'], ['term' => 'Valuable'], ['term' => 'Useful']];
-                    $strengthTerms = [['term' => 'Exceptional'], ['term' => 'Compelling'], ['term' => 'Convincing'], ['term' => 'Solid'], ['term' => 'Incomplete'], ['term' => 'Inadequate']];
-                    $content = $item->getElifeAssessment()->getContent();
-                    $resultSignificance = $this->highlightAndFormatTerms($content, $significanceTerms);
-                    $resultStrength = $this->highlightAndFormatTerms($content, $strengthTerms);
-                    $significanceAriaLable = 'eLife assessments use a common vocabulary to describe significance. The term chosen for this paper is:';
-                    $strengthAriaLable = 'eLife assessments use a common vocabulary to describe strength of evidence. The term or terms chosen for this paper is:';
-                    $significance = !empty($resultSignificance['formattedDescription']) ? new Term('Significance of the findings:', implode("\n", $resultSignificance['formattedDescription']), $resultSignificance['highlightedTerm'], $significanceAriaLable) : null;
-                    $strength = !empty($resultStrength['formattedDescription']) ? new Term('Strength of evidence:', implode("\n", $resultStrength['formattedDescription']), $resultStrength['highlightedTerm'], $strengthAriaLable) : null;
-
-                    $parts[] = ArticleSection::collapsible(
-                        'elife-assessment',
-                        $item->getElifeAssessmentTitle(),
-                        2,
-                        $this->render(...$this->convertContent($item->getElifeAssessment(), 2, $context)),
-                        null,
-                        ArticleSection::STYLE_HIGHLIGHTED,
-                        false,
-                        $first,
-                        $item->getElifeAssessment()->getDoi() ? new Doi($item->getElifeAssessment()->getDoi()) : null,
-                        null,
-                        new Assessment(
-                            $significance,
-                            $strength,
-                            $summary
-                        )
-                    );
-
-                    $first = false;
-                }
-
                 if ($item instanceof ArticleVoR && $item->getEditorEvaluation()) {
                     // Editor's evaluation should feel connected to abstract and not be collapsible
                     $first = true;
@@ -661,6 +627,46 @@ final class ArticlesController extends Controller
         $arguments['viewSelector'] = $this->createViewSelector($arguments['item'], $arguments['isMagazine'], $arguments['hasFigures'], false, $arguments['history'], $arguments['body'], $arguments['eraArticle']);
 
         $arguments['tabbedNavigation'] = $this->createTabbedNavigation($arguments['item'], $arguments['isMagazine'], $arguments['hasFigures'], 'fullText', $arguments['history'], $arguments['body'], $arguments['eraArticle'], $arguments['hasPeerReview']);
+
+        $arguments['assessmentBlock'] = all(['item' => $arguments['item'], 'context' => $context])
+            ->then(function (array $parts) {
+                /** @var ArticleVersion $item */
+                $item = $parts['item'];
+                /** @var array $context */
+                $context = $parts['context'];
+                if ($item instanceof ArticleVoR && $item->getElifeAssessment()) {
+                    $summary = 'During the peer-review process the editor and reviewers write an eLife Assessment that summarises the significance of the findings reported in the article (on a scale ranging from landmark to useful) and the strength of the evidence (on a scale ranging from exceptional to inadequate). <a href="https://elifesciences.org/about/elife-assessments">Learn more about eLife Assessments</a>';
+                    $significanceTerms = [['term' => 'Landmark'], ['term' => 'Fundamental'], ['term' => 'Important'], ['term' => 'Valuable'], ['term' => 'Useful']];
+                    $strengthTerms = [['term' => 'Exceptional'], ['term' => 'Compelling'], ['term' => 'Convincing'], ['term' => 'Solid'], ['term' => 'Incomplete'], ['term' => 'Inadequate']];
+                    $content = $item->getElifeAssessment()->getContent();
+                    $resultSignificance = $this->highlightAndFormatTerms($content, $significanceTerms);
+                    $resultStrength = $this->highlightAndFormatTerms($content, $strengthTerms);
+                    $significanceAriaLable = 'eLife assessments use a common vocabulary to describe significance. The term chosen for this paper is:';
+                    $strengthAriaLable = 'eLife assessments use a common vocabulary to describe strength of evidence. The term or terms chosen for this paper is:';
+                    $significance = !empty($resultSignificance['formattedDescription']) ? new Term('Significance of the findings:', implode(PHP_EOL, $resultSignificance['formattedDescription']), $resultSignificance['highlightedTerm'], $significanceAriaLable) : null;
+                    $strength = !empty($resultStrength['formattedDescription']) ? new Term('Strength of evidence:', implode(PHP_EOL, $resultStrength['formattedDescription']), $resultStrength['highlightedTerm'], $strengthAriaLable) : null;
+
+                    return ArticleSection::basic(
+                        $this->render(...$this->convertContent($item->getElifeAssessment(), 2, $context)),
+                        $item->getElifeAssessmentTitle(),
+                        2,
+                        'elife-assessment',
+                        $item->getElifeAssessment()->getDoi() ? new Doi($item->getElifeAssessment()->getDoi()) : null,
+                        null,
+                        ArticleSection::STYLE_HIGHLIGHTED,
+                        false,
+                        null,
+                        null,
+                        null,
+                        null,
+                        new Assessment(
+                            $significance,
+                            $strength,
+                            $summary
+                        )
+                    );
+                }
+            });
 
         $arguments['jumpMenu'] = $this->createJumpMenu($arguments['item'], $arguments['isMagazine'], $arguments['hasFigures'], false, $arguments['history'], $arguments['body'], $arguments['eraArticle']);
 
