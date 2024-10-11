@@ -8,7 +8,7 @@ build:
 vendor:
 	composer install
 
-dev: build
+dev: build vendor
 	${DOCKER_COMPOSE} up 
 
 stop:
