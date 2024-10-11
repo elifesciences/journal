@@ -1,16 +1,12 @@
-ifeq (${TARGET},)
-TARGET := dev
-endif
-
 DOCKER_COMPOSE = docker-compose
 
 .PHONY: build dev stop clean test feature-test lint check
 
-vendor:
-	composer install
-
 build:
 	$(DOCKER_COMPOSE) build
+
+vendor:
+	composer install
 
 dev: build
 	${DOCKER_COMPOSE} up 
