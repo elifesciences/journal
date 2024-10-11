@@ -4,7 +4,7 @@ endif
 
 DOCKER_COMPOSE = docker compose
 
-.PHONY: build dev stop clean
+.PHONY: build dev stop clean test
 
 build:
 	$(DOCKER_COMPOSE) build
@@ -18,3 +18,5 @@ stop:
 clean:
 	$(DOCKER_COMPOSE) down --volumes --remove-orphans
 
+test:
+	APP_ENV=ci $(DOCKER_COMPOSE) run app vendor/bin/phpunit
