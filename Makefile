@@ -15,7 +15,7 @@ clean:
 	$(DOCKER_COMPOSE) down --volumes --remove-orphans
 
 test:
-	APP_ENV=ci $(DOCKER_COMPOSE) run app vendor/bin/phpunit
+	APP_ENV=ci $(DOCKER_COMPOSE) run --rm app vendor/bin/phpunit
 
 feature-test:
 	docker-compose -f docker-compose.yml -f docker-compose.ci.yml up --build --detach
