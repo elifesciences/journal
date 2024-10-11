@@ -101,6 +101,10 @@ gulp.task('images:banners', () => {
         .pipe(gulp.dest('./build/assets/images/banners'));
 });
 
+gulp.task('images:banners:skipped', () => {
+    return Promise.resolve('');
+});
+
 gulp.task('images:social', () => {
     return gulp.src('./assets/images/social/*.png')
         .pipe(responsive({
@@ -203,7 +207,9 @@ gulp.task('images:svgs', () => {
         .pipe(gulp.dest('./build/assets/images'));
 });
 
-gulp.task('images', gulp.series('images:clean', 'images:banners', 'images:social', 'images:investors', 'images:svgs', 'images:logos', () => {
+const imageBannersTaskName = process.env.SKIP_IMAGE_BANNERS === 'yes' ? 'images:banners:skipped' : 'images:banners';
+
+gulp.task('images', gulp.series('images:clean', imageBannersTaskName, 'images:social', 'images:investors', 'images:svgs', 'images:logos', () => {
     return gulp.src('./build/assets/images/**/*')
         .pipe(imageMin([
             imageMinMozjpeg({

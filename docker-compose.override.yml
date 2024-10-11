@@ -2,6 +2,7 @@ version: '3'
 
 services:
     composer:
+        platform: linux/amd64
         build:
             args:
                 composer_dev_arg:
@@ -10,11 +11,13 @@ services:
             - ./composer.lock:/app/composer.lock
             - ./vendor:/app/vendor
     npm:
+        platform: linux/amd64
         volumes:
             - ./npm-shrinkwrap.json:/npm-shrinkwrap.json
             - ./package.json:/package.json
             - node_modules:/node_modules
     assets_builder:
+        platform: linux/amd64
         volumes:
             - ./assets/images:/assets/images
             - assets:/web
@@ -22,6 +25,7 @@ services:
             - node_modules:/node_modules
             - ./gulpfile.js:/gulpfile.js
     app:
+        platform: linux/amd64
         environment:
             - APP_ENV=${APP_ENV}
         volumes:
@@ -32,9 +36,11 @@ services:
             - critical_css:/srv/journal/build/critical-css
             - ./vendor:/srv/journal/vendor
     web:
+        platform: linux/amd64
         volumes:
             - assets:/srv/journal/web
     critical_css:
+        platform: linux/amd64
         volumes:
             - critical_css:/build/critical-css
             - node_modules:/node_modules

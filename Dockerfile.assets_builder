@@ -14,4 +14,6 @@ COPY assets/images/ assets/images/
 COPY gulpfile.js ./
 COPY --from=composer /app/vendor/elife/patterns/resources/assets/ vendor/elife/patterns/resources/assets/
 
+ARG skip_image_banners
+ENV SKIP_IMAGE_BANNERS=${skip_image_banners}
 RUN node_modules/.bin/gulp assets
