@@ -6,6 +6,9 @@ DOCKER_COMPOSE = docker-compose
 
 .PHONY: build dev stop clean test feature-test
 
+vendor:
+	composer install
+
 build:
 	$(DOCKER_COMPOSE) build
 
@@ -25,3 +28,5 @@ feature-test:
 	docker-compose -f docker-compose.yml -f docker-compose.ci.yml up --build --detach
 	docker-compose -f docker-compose.yml -f docker-compose.ci.yml run ci .ci/behat
 
+lint: vendor
+	.ci/phpcs
