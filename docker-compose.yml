@@ -25,7 +25,6 @@ services:
             args:
                 image_tag: ${IMAGE_TAG}
                 node_version: ${NODE_VERSION}
-                skip_image_banners: ${SKIP_IMAGE_BANNERS:-no}
         image: elifesciences/journal_assets_builder:${IMAGE_TAG}
         depends_on:
             - composer

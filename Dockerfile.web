@@ -1,5 +1,5 @@
 ARG image_tag=latest
-FROM elifesciences/journal:${image_tag} AS app
+FROM --platform="linux/amd64" elifesciences/journal:${image_tag} AS app
 FROM nginx:1.25.1-alpine
 
 COPY .docker/nginx-default.conf /etc/nginx/conf.d/default.conf
