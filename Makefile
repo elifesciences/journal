@@ -12,6 +12,9 @@ vendor:
 dev: build vendor
 	${DOCKER_COMPOSE} up 
 
+exploratory-test-from-prod: build vendor
+	API_URL=https://prod--gateway.elifesciences.org ${DOCKER_COMPOSE} up
+
 clean:
 	$(DOCKER_COMPOSE) down --volumes --remove-orphans
 
