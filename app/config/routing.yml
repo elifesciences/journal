@@ -384,7 +384,7 @@ media-policy:
          _controller: AppBundle:MediaPolicy:mediaPolicy
 
 peer-review-process:
-    path: /peer-review-process
+    path: /about/peer-review
     defaults:
         _controller: AppBundle:PeerReviewProcess:peerReviewProcess
 
