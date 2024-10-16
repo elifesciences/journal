@@ -1,4 +1,5 @@
 DOCKER_COMPOSE = docker-compose
+TEST = Test
 
 .PHONY: build dev stop clean test feature-test lint check
 
@@ -11,11 +12,14 @@ vendor:
 dev: build vendor
 	${DOCKER_COMPOSE} up 
 
+exploratory-test-from-prod: build vendor
+	API_URL=https://prod--gateway.elifesciences.org ${DOCKER_COMPOSE} up
+
 clean:
 	$(DOCKER_COMPOSE) down --volumes --remove-orphans
 
 test:
-	APP_ENV=ci $(DOCKER_COMPOSE) run --rm app vendor/bin/phpunit
+	APP_ENV=ci $(DOCKER_COMPOSE) run --rm app vendor/bin/phpunit --filter $(TEST)
 	APP_ENV=ci $(DOCKER_COMPOSE) down --volumes
 
 feature-test:
