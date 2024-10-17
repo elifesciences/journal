@@ -15,6 +15,9 @@ dev: build vendor
 exploratory-test-from-prod: build vendor
 	API_URL=https://prod--gateway.elifesciences.org ${DOCKER_COMPOSE} up
 
+stop:
+	$(DOCKER_COMPOSE) down
+
 clean:
 	$(DOCKER_COMPOSE) down --volumes --remove-orphans
 
