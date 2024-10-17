@@ -923,7 +923,7 @@ final class ArticlesController extends Controller
                                 'vor',
                                 new Link(
                                     'Read more about eLife\'s peer review process.',
-                                    $this->get('router')->generate('peer-review-process')
+                                    $this->get('router')->generate('about-pubpub', ['type' => 'peer-review'])
                                 )
                             )
                         )

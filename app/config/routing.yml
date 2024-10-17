@@ -383,11 +383,6 @@ media-policy:
     defaults:
          _controller: AppBundle:MediaPolicy:mediaPolicy
 
-peer-review-process:
-    path: /peer-review-process
-    defaults:
-        _controller: AppBundle:PeerReviewProcess:peerReviewProcess
-
 profile:
     path: /profiles/{id}
     defaults:
