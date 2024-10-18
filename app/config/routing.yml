@@ -411,6 +411,8 @@ reviewed-preprint:
     path: /reviewed-preprints/{id}
     requirements:
         id: '[a-z0-9-]+'
+    defaults:
+        _controller: AppBundle:LocalPageStub:localPageStub
 
 reviewed-preprints:
     path: /reviewed-preprints
