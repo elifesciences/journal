@@ -21,6 +21,8 @@ home:
 
 about:
     path: /about
+    defaults:
+        _controller: AppBundle:LocalPageStub:localPageStub
 
 about-pubpub:
     path: /about/{type}
