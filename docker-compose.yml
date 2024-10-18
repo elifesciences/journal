@@ -62,6 +62,7 @@ services:
         image: elifesciences/api-dummy:${DEPENDENCIES_API_DUMMY}
         ports:
         - '${JOURNAL_API_DUMMY_PORT}:8080'
+        stop_grace_period: 1s
     critical_css:
         build:
             context: .
