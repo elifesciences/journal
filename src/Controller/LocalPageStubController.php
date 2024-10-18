@@ -22,8 +22,10 @@ final class LocalPageStubController extends Controller
         $arguments['contentHeader'] = new ContentHeader($arguments['title'], null,
             'Local page stub.');
 
-        $arguments['body'] = new Paragraph('eLife is also on <a href="https://www.linkedin.com/company/elife-sciences-publications-ltd">LinkedIn</a> and <a href="https://www.youtube.com/channel/UCNEHLtAc_JPI84xW8V4XWyw">YouTube</a>.');
+        $arguments['body'] = [];
 
-        return new Response($this->get('templating')->render('::alerts.html.twig', $arguments));
+        $arguments['body'][] = new Paragraph('This is a page forwarded to other projects in production, it cannot be displayed in local development.');
+
+        return new Response($this->get('templating')->render('::local-page-stub.html.twig', $arguments));
     }
 }
