@@ -8,7 +8,7 @@ timeout="30"
 
 timeout --foreground "$timeout" bash << EOT
     while true; do
-        curl -o /dev/null -s -w "%{http_code}\n" --fail "${critical_css_healthy_test_url}" && exit 0
+        curl -o /dev/null -s -w "Received HTTP status code %{http_code}\n" --fail "${critical_css_healthy_test_url}" && exit 0
         sleep 1
     done
 EOT
