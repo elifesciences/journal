@@ -19,8 +19,7 @@ final class LocalPageStubController extends Controller
 
         $arguments['title'] = 'Local Page Stub';
 
-        $arguments['contentHeader'] = new ContentHeader($arguments['title'], null,
-            'Local page stub.');
+        $arguments['contentHeader'] = new ContentHeader($arguments['title']);
 
         $arguments['body'] = [];
 
