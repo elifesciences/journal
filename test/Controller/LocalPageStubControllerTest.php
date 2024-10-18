@@ -4,8 +4,9 @@ namespace test\eLife\Journal\Controller;
 
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use test\eLife\Journal\WebTestCase;
 
-final class LocalPageStubControllerTest extends PageTestCase
+final class LocalPageStubControllerTest extends WebTestCase
 {
     /**
      * @test
@@ -26,10 +27,5 @@ final class LocalPageStubControllerTest extends PageTestCase
         return [
             'stubbed about page' => ['/about'],
         ];
-    }
-
-    protected function getUrl() : string
-    {
-        return '/about';
     }
 }
