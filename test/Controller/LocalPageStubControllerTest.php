@@ -25,7 +25,13 @@ final class LocalPageStubControllerTest extends WebTestCase
     public function stubbedPathsProvider() : array
     {
         return [
-            'stubbed about page' => ['/about'],
+            ['/about'],
+            ['/about/aims-scope'],
+            ['/about/peer-review'],
+            ['/about/publishing-with-elife'],
+            ['/about/research-culture'],
+            ['/about/technology'],
+            ['/reviewed-preprints/1234'],
         ];
     }
 }
