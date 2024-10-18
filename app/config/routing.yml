@@ -28,6 +28,8 @@ about-pubpub:
     path: /about/{type}
     requirements:
       type: '(aims-scope|research-culture|technology|peer-review|publishing-with-elife)'
+    defaults:
+        _controller: AppBundle:LocalPageStub:localPageStub
 
 about-people:
     path: /about/people/{type}
