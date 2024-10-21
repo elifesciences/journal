@@ -21,11 +21,15 @@ home:
 
 about:
     path: /about
+    defaults:
+        _controller: AppBundle:LocalPageStub:localPageStub
 
 about-pubpub:
     path: /about/{type}
     requirements:
       type: '(aims-scope|research-culture|technology|peer-review|publishing-with-elife)'
+    defaults:
+        _controller: AppBundle:LocalPageStub:localPageStub
 
 about-people:
     path: /about/people/{type}
@@ -119,7 +123,7 @@ article-type:
     defaults:
          _controller: AppBundle:ArticleTypes:list
     requirements:
-        type: '(correction|editorial|feature|insight|research-advance|research-article|research-communication|retraction|registered-report|replication-study|review-article|scientific-correspondence|short-report|tools-resources)'
+        type: '(correction|editorial|expression-concern|feature|insight|research-advance|research-article|research-communication|retraction|registered-report|replication-study|review-article|scientific-correspondence|short-report|tools-resources)'
 
 article-version-xml:
     path: /articles/{id}v{version}.xml
@@ -383,11 +387,6 @@ media-policy:
     defaults:
          _controller: AppBundle:MediaPolicy:mediaPolicy
 
-peer-review-process:
-    path: /peer-review-process
-    defaults:
-        _controller: AppBundle:PeerReviewProcess:peerReviewProcess
-
 profile:
     path: /profiles/{id}
     defaults:
@@ -412,6 +411,8 @@ reviewed-preprint:
     path: /reviewed-preprints/{id}
     requirements:
         id: '[a-z0-9-]+'
+    defaults:
+        _controller: AppBundle:LocalPageStub:localPageStub
 
 reviewed-preprints:
     path: /reviewed-preprints

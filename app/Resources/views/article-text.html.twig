@@ -20,6 +20,12 @@
 
             {% endif %}
 
+            {% if assessmentBlock %}
+                <div class="content-container-block">
+                    {{ render_pattern(assessmentBlock) }}
+                </div>
+            {% endif %}
+
             {% if jumpMenu %}
 
                 {{ render_pattern(jumpMenu) }}

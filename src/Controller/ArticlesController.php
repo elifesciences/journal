@@ -32,6 +32,7 @@ use eLife\Journal\Helper\DownloadLink;
 use eLife\Journal\Helper\HasPages;
 use eLife\Journal\Helper\Humanizer;
 use eLife\Patterns\ViewModel;
+use eLife\Patterns\ViewModel\Assessment;
 use eLife\Patterns\ViewModel\ArticleSection;
 use eLife\Patterns\ViewModel\ContentAside;
 use eLife\Patterns\ViewModel\ContentHeaderNew;
@@ -46,6 +47,7 @@ use eLife\Patterns\ViewModel\ProcessBlock;
 use eLife\Patterns\ViewModel\ReadMoreItem;
 use eLife\Patterns\ViewModel\SpeechBubble;
 use eLife\Patterns\ViewModel\TabbedNavigation;
+use eLife\Patterns\ViewModel\Term;
 use eLife\Patterns\ViewModel\ViewSelector;
 use GuzzleHttp\Promise\PromiseInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -72,7 +74,7 @@ final class ArticlesController extends Controller
         /** @var Sequence $recommendations */
         $recommendations = new PromiseSequence($arguments['item']
             ->then(function (ArticleVersion $item) {
-                if (in_array($item->getType(), ['correction', 'retraction'])) {
+                if (in_array($item->getType(), ['correction', 'expression-concern', 'retraction'])) {
                     return new EmptySequence();
                 }
 
@@ -83,8 +85,8 @@ final class ArticlesController extends Controller
 
         $arguments['furtherReading'] = $recommendations
             ->filter(function (Model $model) use ($arguments) {
-                // Remove corrections and retractions for this article.
-                if ($model instanceof ArticleVersion && in_array($model->getType(), ['correction', 'retraction'])) {
+                // Remove corrections, expressions of concern and retractions for this article.
+                if ($model instanceof ArticleVersion && in_array($model->getType(), ['correction', 'expression-concern', 'retraction'])) {
                     foreach ($arguments['relatedArticles'] as $relatedArticle) {
                         if ($relatedArticle->getId() === $model->getId()) {
                             return false;
@@ -121,7 +123,7 @@ final class ArticlesController extends Controller
 
         $arguments['paginator'] = all(['paginator' => $arguments['paginator'], 'item' => $arguments['item']])
             ->then(function (array $parts) {
-                if (in_array($parts['item']->getType(), ['correction', 'retraction'])) {
+                if (in_array($parts['item']->getType(), ['correction', 'expression-concern', 'retraction'])) {
                     return null;
                 }
 
@@ -307,29 +309,6 @@ final class ArticlesController extends Controller
                     $first = false;
                 }
 
-                if ($item instanceof ArticleVoR && $item->getElifeAssessment()) {
-                    $first = true;
-                    $relatedLinks = [];
-
-                    $relatedLinks[] = new Link('Read the peer reviews', $this->generatePath($history, $item->getVersion(), 'peer-reviews', 'content'));
-                    $relatedLinks[] = new Link('About eLife assessments', $this->get('router')->generate('inside-elife-article', ['id'=> 'db24dd46']));
-
-                    $parts[] = ArticleSection::collapsible(
-                        'elife-assessment',
-                        $item->getElifeAssessmentTitle(),
-                        2,
-                        $this->render(...$this->convertContent($item->getElifeAssessment(), 2, $context)),
-                        $relatedLinks,
-                        ArticleSection::STYLE_HIGHLIGHTED,
-                        false,
-                        $first,
-                        $item->getElifeAssessment()->getDoi() ? new Doi($item->getElifeAssessment()->getDoi()) : null,
-                        ArticleSection::RELATED_LINKS_SEPARATOR_CIRCLE
-                    );
-
-                    $first = false;
-                }
-
                 if ($item instanceof ArticleVoR && $item->getEditorEvaluation()) {
                     // Editor's evaluation should feel connected to abstract and not be collapsible
                     $first = true;
@@ -492,10 +471,12 @@ final class ArticlesController extends Controller
                                 $title .= ' ('.$award->getAwardId().')';
                             }
 
+                            $recipients = $award->getRecipients()->notEmpty() ? $award->getRecipients()
+                                ->map(Callback::method('toString'))
+                                ->toArray() : ['No recipients declared.'];
+
                             $body = Listing::unordered(
-                                $award->getRecipients()
-                                    ->map(Callback::method('toString'))
-                                    ->toArray(),
+                                $recipients,
                                 'bullet'
                             );
 
@@ -569,7 +550,7 @@ final class ArticlesController extends Controller
 
                 if ($item instanceof ArticleVoR && (
                         $item->isReviewedPreprint() ||
-                        in_array($item->getType(), ['feature', 'correction', 'retraction']) ||
+                        in_array($item->getType(), ['feature', 'correction', 'expression-concern', 'retraction']) ||
                         $isMagazine)
                     ) {
                     $publicationHistory = $this->generatePublicationHistoryForNewVor($history);
@@ -646,6 +627,46 @@ final class ArticlesController extends Controller
         $arguments['viewSelector'] = $this->createViewSelector($arguments['item'], $arguments['isMagazine'], $arguments['hasFigures'], false, $arguments['history'], $arguments['body'], $arguments['eraArticle']);
 
         $arguments['tabbedNavigation'] = $this->createTabbedNavigation($arguments['item'], $arguments['isMagazine'], $arguments['hasFigures'], 'fullText', $arguments['history'], $arguments['body'], $arguments['eraArticle'], $arguments['hasPeerReview']);
+
+        $arguments['assessmentBlock'] = all(['item' => $arguments['item'], 'context' => $context])
+            ->then(function (array $parts) {
+                /** @var ArticleVersion $item */
+                $item = $parts['item'];
+                /** @var array $context */
+                $context = $parts['context'];
+                if ($item instanceof ArticleVoR && $item->getElifeAssessment()) {
+                    $summary = 'During the peer-review process the editor and reviewers write an eLife Assessment that summarises the significance of the findings reported in the article (on a scale ranging from landmark to useful) and the strength of the evidence (on a scale ranging from exceptional to inadequate). <a href="https://elifesciences.org/about/elife-assessments">Learn more about eLife Assessments</a>';
+                    $significanceTerms = [['term' => 'Landmark'], ['term' => 'Fundamental'], ['term' => 'Important'], ['term' => 'Valuable'], ['term' => 'Useful']];
+                    $strengthTerms = [['term' => 'Exceptional'], ['term' => 'Compelling'], ['term' => 'Convincing'], ['term' => 'Solid'], ['term' => 'Incomplete'], ['term' => 'Inadequate']];
+                    $content = $item->getElifeAssessment()->getContent();
+                    $resultSignificance = $this->highlightAndFormatTerms($content, $significanceTerms);
+                    $resultStrength = $this->highlightAndFormatTerms($content, $strengthTerms);
+                    $significanceAriaLable = 'eLife assessments use a common vocabulary to describe significance. The term chosen for this paper is:';
+                    $strengthAriaLable = 'eLife assessments use a common vocabulary to describe strength of evidence. The term or terms chosen for this paper is:';
+                    $significance = !empty($resultSignificance['formattedDescription']) ? new Term('Significance of the findings:', implode(PHP_EOL, $resultSignificance['formattedDescription']), $resultSignificance['highlightedTerm'], $significanceAriaLable) : null;
+                    $strength = !empty($resultStrength['formattedDescription']) ? new Term('Strength of evidence:', implode(PHP_EOL, $resultStrength['formattedDescription']), $resultStrength['highlightedTerm'], $strengthAriaLable) : null;
+
+                    return ArticleSection::basic(
+                        $this->render(...$this->convertContent($item->getElifeAssessment(), 2, $context)),
+                        $item->getElifeAssessmentTitle(),
+                        2,
+                        'elife-assessment',
+                        $item->getElifeAssessment()->getDoi() ? new Doi($item->getElifeAssessment()->getDoi()) : null,
+                        null,
+                        ArticleSection::STYLE_HIGHLIGHTED,
+                        false,
+                        null,
+                        null,
+                        null,
+                        null,
+                        new Assessment(
+                            $significance,
+                            $strength,
+                            $summary
+                        )
+                    );
+                }
+            });
 
         $arguments['jumpMenu'] = $this->createJumpMenu($arguments['item'], $arguments['isMagazine'], $arguments['hasFigures'], false, $arguments['history'], $arguments['body'], $arguments['eraArticle']);
 
@@ -902,7 +923,7 @@ final class ArticlesController extends Controller
                                 'vor',
                                 new Link(
                                     'Read more about eLife\'s peer review process.',
-                                    $this->get('router')->generate('peer-review-process')
+                                    $this->get('router')->generate('about-pubpub', ['type' => 'peer-review'])
                                 )
                             )
                         )
@@ -1292,6 +1313,9 @@ final class ArticlesController extends Controller
                         case 'correction':
                             $infoBars[] = new InfoBar('This is a correction notice. Read the <a href="'.$this->get('router')->generate('article', [$relatedArticles[0]]).'">corrected article</a>.', InfoBar::TYPE_CORRECTION);
                             break;
+                        case 'expression-concern':
+                            $infoBars[] = new InfoBar('This is an expression of concern. Read the <a href="'.$this->get('router')->generate('article', [$relatedArticles[0]]).'">related article</a>.', InfoBar::TYPE_ATTENTION);
+                            break;
                         case 'retraction':
                             $infoBars[] = new InfoBar('This is a retraction notice. Read the <a href="'.$this->get('router')->generate('article', [$relatedArticles[0]]).'">retracted article</a>.', InfoBar::TYPE_ATTENTION);
                             break;
@@ -1301,9 +1325,13 @@ final class ArticlesController extends Controller
                         if (!($relatedArticle instanceof ArticleVersion)) {
                             continue;
                         }
+
                         switch ($relatedArticle->getType()) {
                             case 'correction':
                                 $infoBars[] = new InfoBar('This article has been corrected. Read the <a href="'.$this->get('router')->generate('article', [$relatedArticle]).'">correction notice</a>.', InfoBar::TYPE_CORRECTION);
+                                break;
+                            case 'expression-concern':
+                                $infoBars[] = new InfoBar('Concern(s) have been raised about this article. Read the <a href="'.$this->get('router')->generate('article', [$relatedArticle]).'">expression of concern</a>.', InfoBar::TYPE_ATTENTION);
                                 break;
                             case 'retraction':
                                 $infoBars[] = new InfoBar('This article has been retracted. Read the <a href="'.$this->get('router')->generate('article', [$relatedArticle]).'">retraction notice</a>.', InfoBar::TYPE_ATTENTION);
@@ -1667,7 +1695,7 @@ final class ArticlesController extends Controller
 
                 $timeline = [];
 
-                if (!in_array($item->getType(), ['correction', 'retraction'])) {
+                if (!in_array($item->getType(), ['correction', 'expression-concern', 'retraction'])) {
                     $rpCount = $history->getVersions()
                         ->filter(Callback::isInstanceOf(ArticlePreprint::class))
                         ->filter(function (ArticlePreprint $preprint) {
@@ -1784,7 +1812,7 @@ final class ArticlesController extends Controller
                         $item->getAuthorResponse() ||
                         (!$item->isReviewedPreprint() &&
                             !$isMagazine &&
-                            !in_array($item->getType(), ['feature', 'correction', 'retraction']) &&
+                            !in_array($item->getType(), ['feature', 'correction', 'expression-concern', 'retraction']) &&
                             $combinedHistory
                         )) ||
                         ($item instanceof ArticlePoA && $combinedHistory));
@@ -1960,5 +1988,55 @@ final class ArticlesController extends Controller
             })->toArray());
 
         return $publicationHistory;
+    }
+
+    private function highlightAndFormatTerms($content, array $terms): array {
+        $formattedDescription = [];
+        $highlightedWords = [];
+
+        foreach ($content as $contentItem) {
+            if (method_exists($contentItem, 'getText')) {
+                $text = $contentItem->getText();
+
+                preg_match_all('/<b>(.*?)<\/b>/', $text, $matches);
+
+                if (!empty($matches[1])) {
+                    $highlightedWords = array_merge($highlightedWords, $matches[1]);
+                }
+            }
+        }
+
+        $highlightedTerm = array_map(function ($term) use ($highlightedWords, &$formattedDescription) {
+            $termDescriptions = [
+                'landmark' => 'Findings with profound implications that are expected to have widespread influence',
+                'fundamental' => 'Findings that substantially advance our understanding of major research questions',
+                'important' => 'Findings that have theoretical or practical implications beyond a single subfield',
+                'valuable' => 'Findings that have theoretical or practical implications for a subfield',
+                'useful' => 'Findings that have focused importance and scope',
+                'exceptional' => 'Exemplary use of existing approaches that establish new standards for a field',
+                'compelling' => 'Evidence that features methods, data and analyses more rigorous than the current state-of-the-art',
+                'convincing' => 'Appropriate and validated methodology in line with current state-of-the-art',
+                'solid' => 'Methods, data and analyses broadly support the claims with only minor weaknesses',
+                'incomplete' => 'Main claims are only partially supported',
+                'inadequate' => 'Methods, data and analyses do not support the primary claims',
+            ];
+
+            $termWord = strtolower($term['term']);
+
+            if (in_array($termWord, $highlightedWords)) {
+                $term['isHighlighted'] = true;
+
+                if (isset($termDescriptions[$termWord])) {
+                    $formattedDescription[$termWord] = sprintf("<p><b>%s</b>: %s</p>", ucfirst($termWord), $termDescriptions[$termWord]);
+                }
+            }
+
+            return $term;
+        }, $terms);
+
+        return [
+            'highlightedTerm' => $highlightedTerm,
+            'formattedDescription' => $formattedDescription
+        ];
     }
 }

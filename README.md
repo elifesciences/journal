@@ -80,7 +80,7 @@ To run all unit tests as in `ci`:
 To run a single test:
 
 ```
-APP_ENV=ci docker-compose run app vendor/bin/phpunit --filter AboutControllerTest
+make test TEST=AuthenticationTest
 ```
 
 Running Behat

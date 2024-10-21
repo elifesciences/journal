@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2d3830bc276a105be4412d6cb648f571",
+    "content-hash": "dfcbe23319d1e823dc81ce7e1e7ffdb0",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -1240,12 +1240,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-sdk-php.git",
-                "reference": "abdcda69f7def8978e7236c1c54e9f55c12401bd"
+                "reference": "70e89dd533e0b221b490dee037fc4acf4a4239bb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/abdcda69f7def8978e7236c1c54e9f55c12401bd",
-                "reference": "abdcda69f7def8978e7236c1c54e9f55c12401bd",
+                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/70e89dd533e0b221b490dee037fc4acf4a4239bb",
+                "reference": "70e89dd533e0b221b490dee037fc4acf4a4239bb",
                 "shasum": ""
             },
             "require": {
@@ -1291,7 +1291,7 @@
                 "issues": "https://github.com/elifesciences/api-sdk-php/issues",
                 "source": "https://github.com/elifesciences/api-sdk-php/tree/master"
             },
-            "time": "2024-09-04T07:40:55+00:00"
+            "time": "2024-10-01T16:16:36+00:00"
         },
         {
             "name": "elife/civi-contacts",
@@ -1338,12 +1338,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/patterns-php.git",
-                "reference": "0500140e08baff4a61c499528044706f425a7360"
+                "reference": "0bedcf5669b8fdac9838be3b3f6bc9f168a37fe1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/0500140e08baff4a61c499528044706f425a7360",
-                "reference": "0500140e08baff4a61c499528044706f425a7360",
+                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/0bedcf5669b8fdac9838be3b3f6bc9f168a37fe1",
+                "reference": "0bedcf5669b8fdac9838be3b3f6bc9f168a37fe1",
                 "shasum": ""
             },
             "require": {
@@ -1366,6 +1366,7 @@
             "suggest": {
                 "twig/twig": "^2.0, to use PatternExtension"
             },
+            "default-branch": true,
             "type": "library",
             "autoload": {
                 "files": [
@@ -1381,9 +1382,9 @@
             ],
             "description": "eLife patterns",
             "support": {
-                "source": "https://github.com/elifesciences/patterns-php/tree/homepage-listing-changes"
+                "source": "https://github.com/elifesciences/patterns-php/tree/master"
             },
-            "time": "2024-09-18T10:34:47+00:00"
+            "time": "2024-10-10T12:07:47+00:00"
         },
         {
             "name": "fabpot/goutte",
@@ -4408,10 +4409,6 @@
                 "MIT"
             ],
             "description": "eLife Sciences API specification",
-            "support": {
-                "issues": "https://github.com/elifesciences/api-raml/issues",
-                "source": "https://github.com/elifesciences/api-raml/tree/2.30.0"
-            },
             "time": "2024-08-28T10:05:55+00:00"
         },
         {
@@ -4441,6 +4438,7 @@
                 "phpunit/phpunit": "^5.2",
                 "squizlabs/php_codesniffer": "^3.5"
             },
+            "default-branch": true,
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -4457,6 +4455,10 @@
                 "MIT"
             ],
             "description": "eLife Sciences API validator",
+            "support": {
+                "issues": "https://github.com/elifesciences/api-validator-php/issues",
+                "source": "https://github.com/elifesciences/api-validator-php/tree/master"
+            },
             "time": "2024-04-12T01:07:21+00:00"
         },
         {

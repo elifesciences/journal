@@ -1,0 +1,23 @@
+{% extends '::page.html.twig' %}
+
+{% block body %}
+
+    {{ render_pattern(contentHeader) }}
+
+    {% include 'calls-to-action.html.twig' %}
+
+    {% embed 'grid/content.html.twig' %}
+
+        {% block main %}
+
+            {% for part in body %}
+
+                {{ render_pattern(part) }}
+
+            {% endfor %}
+
+        {% endblock %}
+
+    {% endembed %}
+
+{% endblock %}
