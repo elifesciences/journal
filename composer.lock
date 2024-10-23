@@ -1270,7 +1270,6 @@
                 "psr/http-message": "^1.0",
                 "squizlabs/php_codesniffer": "^3.5"
             },
-            "default-branch": true,
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -1338,12 +1337,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/patterns-php.git",
-                "reference": "0500140e08baff4a61c499528044706f425a7360"
+                "reference": "a8d43f410ea2dc2426b341e813c2168da6f8f493"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/0500140e08baff4a61c499528044706f425a7360",
-                "reference": "0500140e08baff4a61c499528044706f425a7360",
+                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/a8d43f410ea2dc2426b341e813c2168da6f8f493",
+                "reference": "a8d43f410ea2dc2426b341e813c2168da6f8f493",
                 "shasum": ""
             },
             "require": {
@@ -1380,10 +1379,7 @@
                 "MIT"
             ],
             "description": "eLife patterns",
-            "support": {
-                "source": "https://github.com/elifesciences/patterns-php/tree/homepage-listing-changes"
-            },
-            "time": "2024-09-18T10:34:47+00:00"
+            "time": "2024-10-23T10:26:09+00:00"
         },
         {
             "name": "fabpot/goutte",
@@ -4437,7 +4433,6 @@
                 "phpunit/phpunit": "^5.2",
                 "squizlabs/php_codesniffer": "^3.5"
             },
-            "default-branch": true,
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -6351,5 +6346,5 @@
     "platform-overrides": {
         "php": "7.1.33"
     },
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "1.1.0"
 }
