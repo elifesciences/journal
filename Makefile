@@ -22,7 +22,7 @@ clean:
 	$(DOCKER_COMPOSE) down --volumes --remove-orphans
 
 test:
-	APP_ENV=ci $(DOCKER_COMPOSE) run --rm app vendor/bin/phpunit --filter $(TEST)
+	APP_ENV=ci $(DOCKER_COMPOSE) run --rm app vendor/bin/phpunit --filter $(TEST) $(OPTIONS)
 	APP_ENV=ci $(DOCKER_COMPOSE) down --volumes
 
 feature-test:
