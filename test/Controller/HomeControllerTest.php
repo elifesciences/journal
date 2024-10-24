@@ -139,29 +139,6 @@ final class HomeControllerTest extends PageTestCase
     public function it_displays_the_correct_article_status_and_article_type_and_article_date_in_the_latest_research_listing()
     {
         $client = static::createClient();
-
-        $arbitraryArticleMetadata2 = [
-            'status' => 'reviewed',
-            'stage' => 'published',
-            'id' => '4',
-            'doi' => '10.7554/eLife.4',
-            'volume' => 1,
-            'elocationId' => 'e4',
-            'authorLine' => 'Foo Bar',
-            'versionDate' => '2012-06-06T00:00:00Z',
-            'reviewedDate' => '2012-06-06T00:00:00Z',
-        ];
-        $arbitraryArticleMetadata3 = [
-            'status' => 'reviewed',
-            'stage' => 'published',
-            'id' => '3',
-            'doi' => '10.7554/eLife.3',
-            'versionDate' => '2011-01-01T00:00:00Z',
-            'reviewedDate' => '2011-07-01T00:00:00Z',
-            'volume' => 1,
-            'elocationId' => 'e3',
-            'authorLine' => 'Foo Bar',
-        ];
         $arbitraryArticleMetadata4 = [
             'stage' => 'published',
             'id' => '2',
@@ -209,25 +186,19 @@ final class HomeControllerTest extends PageTestCase
                             'version' => 1,
                             'title' => 'Reviewed preprint 5 title',
                         ]),
-                        array_merge(
-                            [
-                                'type' => 'reviewed-preprint',
-                                'published' => '2012-01-01T00:00:00Z',
-                                'statusDate' => '2013-01-01T00:00:00Z',
-                                'version' => 3,
-                                'title' => 'Reviewed preprint 4 title',
-                            ],
-                            $arbitraryArticleMetadata2
-                        ),
-                        array_merge(
-                            [
-                                'type' => 'reviewed-preprint',
-                                'published' => '2011-01-01T00:00:00Z',
-                                'statusDate' => '2011-01-01T00:00:00Z',
-                                'title' => 'Reviewed preprint 3 title',
-                            ],
-                            $arbitraryArticleMetadata3
-                        ),
+                        $this->arbitraryReviewedPreprintSnippet([
+                            'type' => 'reviewed-preprint',
+                            'published' => '2012-01-01T00:00:00Z',
+                            'statusDate' => '2013-01-01T00:00:00Z',
+                            'version' => 3,
+                            'title' => 'Reviewed preprint 4 title',
+                        ]),
+                        $this->arbitraryReviewedPreprintSnippet([
+                            'type' => 'reviewed-preprint',
+                            'published' => '2011-01-01T00:00:00Z',
+                            'statusDate' => '2011-01-01T00:00:00Z',
+                            'title' => 'Reviewed preprint 3 title',
+                        ]),
                         array_merge(
                             [
                                 'type' => 'research-article',
