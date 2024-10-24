@@ -125,6 +125,7 @@ final class HomeControllerTest extends PageTestCase
 
         $arbitraryArticleMetadata = [
             'status' => 'reviewed',
+            'stage' => 'published',
             'id' => '51',
             'doi' => '10.7554/eLife.5',
             'reviewedDate' => '2015-05-05T00:00:00Z',
@@ -132,6 +133,17 @@ final class HomeControllerTest extends PageTestCase
             'volume' => 1,
             'elocationId' => 'e5',
             'authorLine' => 'Foo Bar',
+        ];
+        $arbitraryArticleMetadata2 = [
+            'status' => 'reviewed',
+            'stage' => 'published',
+            'id' => '4',
+            'doi' => '10.7554/eLife.4',
+            'volume' => 1,
+            'elocationId' => 'e4',
+            'authorLine' => 'Foo Bar',
+            'versionDate' => '2012-06-06T00:00:00Z',
+            'reviewedDate' => '2012-06-06T00:00:00Z',
         ];
         $this->mockApiResponse(
             new Request(
@@ -147,7 +159,6 @@ final class HomeControllerTest extends PageTestCase
                     'items' => [
                         array_merge(
                             [
-                                'stage' => 'published',
                                 'type' => 'reviewed-preprint',
                                 'published' => '2014-01-01T00:00:00Z',
                                 'statusDate' => '2014-01-01T00:00:00Z',
@@ -156,23 +167,16 @@ final class HomeControllerTest extends PageTestCase
                             ],
                             $arbitraryArticleMetadata
                         ),
-                        [
-                            'stage' => 'published',
-                            'type' => 'reviewed-preprint',
-                            'published' => '2012-01-01T00:00:00Z',
-                            'statusDate' => '2013-01-01T00:00:00Z',
-                            'version' => 3,
-                            'title' => 'Reviewed preprint 4 title',
-
-                            'status' => 'reviewed',
-                            'id' => '4',
-                            'doi' => '10.7554/eLife.4',
-                            'volume' => 1,
-                            'elocationId' => 'e4',
-                            'authorLine' => 'Foo Bar',
-                            'versionDate' => '2012-06-06T00:00:00Z',
-                            'reviewedDate' => '2012-06-06T00:00:00Z',
-                        ],
+                        array_merge(
+                            [
+                                'type' => 'reviewed-preprint',
+                                'published' => '2012-01-01T00:00:00Z',
+                                'statusDate' => '2013-01-01T00:00:00Z',
+                                'version' => 3,
+                                'title' => 'Reviewed preprint 4 title',
+                            ],
+                            $arbitraryArticleMetadata2
+                        ),
                         [
                             'status' => 'reviewed',
                             'stage' => 'published',
