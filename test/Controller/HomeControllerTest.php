@@ -170,6 +170,20 @@ final class HomeControllerTest extends PageTestCase
             ],
             'authorLine' => 'Foo Bar',
         ];
+        $arbitraryArticleMetadata5 = [
+            'stage' => 'published',
+            'id' => '1',
+            'doi' => '10.7554/eLife.1',
+            'versionDate' => '2012-01-01T00:00:00Z',
+            'volume' => 1,
+            'elocationId' => 'e1',
+            'copyright' => [
+                'license' => 'CC-BY-4.0',
+                'holder' => 'Author et al.',
+                'statement' => 'Creative Commons Attribution License.',
+            ],
+            'authorLine' => 'Foo Bar',
+        ];
         $this->mockApiResponse(
             new Request(
                 'GET',
@@ -222,26 +236,17 @@ final class HomeControllerTest extends PageTestCase
                             ],
                             $arbitraryArticleMetadata4
                         ),
-                        [
-                            'status' => 'poa',
-                            'stage' => 'published',
-                            'id' => '1',
-                            'version' => 1,
-                            'type' => 'research-article',
-                            'doi' => '10.7554/eLife.1',
-                            'title' => 'Article 1 title',
-                            'published' => '2012-01-01T00:00:00Z',
-                            'versionDate' => '2012-01-01T00:00:00Z',
-                            'statusDate' => '2012-01-01T00:00:00Z',
-                            'volume' => 1,
-                            'elocationId' => 'e1',
-                            'copyright' => [
-                                'license' => 'CC-BY-4.0',
-                                'holder' => 'Author et al.',
-                                'statement' => 'Creative Commons Attribution License.',
+                        array_merge(
+                            [
+                                'type' => 'research-article',
+                                'status' => 'poa',
+                                'published' => '2012-01-01T00:00:00Z',
+                                'statusDate' => '2012-01-01T00:00:00Z',
+                                'title' => 'Article 1 title',
+                                'version' => 1,      
                             ],
-                            'authorLine' => 'Foo Bar',
-                        ],
+                            $arbitraryArticleMetadata5
+                        ),
                     ],
                     'subjects' => [
                         [
