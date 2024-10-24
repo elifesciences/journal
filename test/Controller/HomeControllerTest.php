@@ -119,7 +119,7 @@ final class HomeControllerTest extends PageTestCase
     /**
      * @test
      */
-    public function it_displays_the_correct_dates_in_the_latest_research_list()
+    public function it_displays_the_correct_article_status_and_article_type_and_article_date_in_the_latest_research_listing()
     {
         $client = static::createClient();
 
