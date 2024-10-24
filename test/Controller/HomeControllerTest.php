@@ -138,18 +138,19 @@ final class HomeControllerTest extends PageTestCase
                         [
                             'status' => 'reviewed',
                             'stage' => 'published',
-                            'id' => '5',
                             'type' => 'reviewed-preprint',
-                            'doi' => '10.7554/eLife.5',
-                            'title' => 'Reviewed preprint 5 title',
                             'published' => '2014-01-01T00:00:00Z',
                             'versionDate' => '2014-01-01T00:00:00Z',
                             'reviewedDate' => '2014-01-01T00:00:00Z',
                             'statusDate' => '2014-01-01T00:00:00Z',
+                            'version' => 1,
+
+                            'id' => '5',
+                            'doi' => '10.7554/eLife.5',
+                            'title' => 'Reviewed preprint 5 title',
                             'volume' => 1,
                             'elocationId' => 'e5',
                             'authorLine' => 'Foo Bar',
-                            'version' => 1,
                         ],
                         [
                             'status' => 'reviewed',
