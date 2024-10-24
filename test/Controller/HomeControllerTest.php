@@ -116,13 +116,8 @@ final class HomeControllerTest extends PageTestCase
         $this->assertContains('Podcast episode highlight', $crawler->filter('.list-heading:contains("New from eLife") + .listing-list > .listing-list__item:nth-child(2)')->text());
     }
 
-    /**
-     * @test
-     */
-    public function it_displays_the_correct_article_status_and_article_type_and_article_date_in_the_latest_research_listing()
+    private function arbitraryReviewedPreprintSnippet($relevantProperties)
     {
-        $client = static::createClient();
-
         $arbitraryArticleMetadata = [
             'status' => 'reviewed',
             'stage' => 'published',
@@ -134,6 +129,17 @@ final class HomeControllerTest extends PageTestCase
             'elocationId' => 'e5',
             'authorLine' => 'Foo Bar',
         ];
+
+        return array_merge($arbitraryArticleMetadata, $relevantProperties);
+    }
+
+    /**
+     * @test
+     */
+    public function it_displays_the_correct_article_status_and_article_type_and_article_date_in_the_latest_research_listing()
+    {
+        $client = static::createClient();
+
         $arbitraryArticleMetadata2 = [
             'status' => 'reviewed',
             'stage' => 'published',
@@ -196,16 +202,13 @@ final class HomeControllerTest extends PageTestCase
                 json_encode([
                     'total' => 5,
                     'items' => [
-                        array_merge(
-                            [
-                                'type' => 'reviewed-preprint',
-                                'published' => '2014-01-01T00:00:00Z',
-                                'statusDate' => '2014-01-01T00:00:00Z',
-                                'version' => 1,
-                                'title' => 'Reviewed preprint 5 title',
-                            ],
-                            $arbitraryArticleMetadata
-                        ),
+                        $this->arbitraryReviewedPreprintSnippet([
+                            'type' => 'reviewed-preprint',
+                            'published' => '2014-01-01T00:00:00Z',
+                            'statusDate' => '2014-01-01T00:00:00Z',
+                            'version' => 1,
+                            'title' => 'Reviewed preprint 5 title',
+                        ]),
                         array_merge(
                             [
                                 'type' => 'reviewed-preprint',
