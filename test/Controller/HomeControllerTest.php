@@ -145,6 +145,31 @@ final class HomeControllerTest extends PageTestCase
             'versionDate' => '2012-06-06T00:00:00Z',
             'reviewedDate' => '2012-06-06T00:00:00Z',
         ];
+        $arbitraryArticleMetadata3 = [
+            'status' => 'reviewed',
+            'stage' => 'published',
+            'id' => '3',
+            'doi' => '10.7554/eLife.3',
+            'versionDate' => '2011-01-01T00:00:00Z',
+            'reviewedDate' => '2011-07-01T00:00:00Z',
+            'volume' => 1,
+            'elocationId' => 'e3',
+            'authorLine' => 'Foo Bar',
+        ];
+        $arbitraryArticleMetadata4 = [
+            'stage' => 'published',
+            'id' => '2',
+            'doi' => '10.7554/eLife.2',
+            'versionDate' => '2014-01-01T00:00:00Z',
+            'volume' => 1,
+            'elocationId' => 'e2',
+            'copyright' => [
+                'license' => 'CC-BY-4.0',
+                'holder' => 'Author et al.',
+                'statement' => 'Creative Commons Attribution License.',
+            ],
+            'authorLine' => 'Foo Bar',
+        ];
         $this->mockApiResponse(
             new Request(
                 'GET',
@@ -177,41 +202,26 @@ final class HomeControllerTest extends PageTestCase
                             ],
                             $arbitraryArticleMetadata2
                         ),
-                        [
-                            'status' => 'reviewed',
-                            'stage' => 'published',
-                            'id' => '3',
-                            'type' => 'reviewed-preprint',
-                            'doi' => '10.7554/eLife.3',
-                            'title' => 'Reviewed preprint 3 title',
-                            'published' => '2011-01-01T00:00:00Z',
-                            'versionDate' => '2011-01-01T00:00:00Z',
-                            'reviewedDate' => '2011-07-01T00:00:00Z',
-                            'statusDate' => '2011-01-01T00:00:00Z',
-                            'volume' => 1,
-                            'elocationId' => 'e3',
-                            'authorLine' => 'Foo Bar',
-                        ],
-                        [
-                            'status' => 'vor',
-                            'stage' => 'published',
-                            'id' => '2',
-                            'version' => 2,
-                            'type' => 'research-article',
-                            'doi' => '10.7554/eLife.2',
-                            'title' => 'Article 2 title',
-                            'published' => '2012-01-01T00:00:00Z',
-                            'versionDate' => '2013-01-01T00:00:00Z',
-                            'statusDate' => '2013-01-01T00:00:00Z',
-                            'volume' => 1,
-                            'elocationId' => 'e2',
-                            'copyright' => [
-                                'license' => 'CC-BY-4.0',
-                                'holder' => 'Author et al.',
-                                'statement' => 'Creative Commons Attribution License.',
+                        array_merge(
+                            [
+                                'type' => 'reviewed-preprint',
+                                'published' => '2011-01-01T00:00:00Z',
+                                'statusDate' => '2011-01-01T00:00:00Z',
+                                'title' => 'Reviewed preprint 3 title',
                             ],
-                            'authorLine' => 'Foo Bar',
-                        ],
+                            $arbitraryArticleMetadata3
+                        ),
+                        array_merge(
+                            [
+                                'type' => 'research-article',
+                                'status' => 'vor',
+                                'published' => '2012-01-01T00:00:00Z',
+                                'statusDate' => '2013-01-01T00:00:00Z',
+                                'title' => 'Article 2 title',
+                                'version' => 2,
+                            ],
+                            $arbitraryArticleMetadata4
+                        ),
                         [
                             'status' => 'poa',
                             'stage' => 'published',
