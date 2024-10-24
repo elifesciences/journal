@@ -123,6 +123,16 @@ final class HomeControllerTest extends PageTestCase
     {
         $client = static::createClient();
 
+        $arbitraryArticleMetadata = [
+            'id' => '51',
+            'doi' => '10.7554/eLife.5',
+            'title' => 'Reviewed preprint 5 title',
+            'reviewedDate' => '2015-05-05T00:00:00Z',
+            'versionDate' => '2016-06-06T00:00:00Z',
+            'volume' => 1,
+            'elocationId' => 'e5',
+            'authorLine' => 'Foo Bar',
+        ];
         $this->mockApiResponse(
             new Request(
                 'GET',
@@ -135,23 +145,17 @@ final class HomeControllerTest extends PageTestCase
                 json_encode([
                     'total' => 5,
                     'items' => [
-                        [
-                            'status' => 'reviewed',
-                            'stage' => 'published',
-                            'type' => 'reviewed-preprint',
-                            'published' => '2014-01-01T00:00:00Z',
-                            'statusDate' => '2014-01-01T00:00:00Z',
-                            'version' => 1,
-
-                            'id' => '5',
-                            'doi' => '10.7554/eLife.5',
-                            'title' => 'Reviewed preprint 5 title',
-                            'reviewedDate' => '2015-05-05T00:00:00Z',
-                            'versionDate' => '2016-06-06T00:00:00Z',
-                            'volume' => 1,
-                            'elocationId' => 'e5',
-                            'authorLine' => 'Foo Bar',
-                        ],
+                        array_merge(
+                            [
+                                'status' => 'reviewed',
+                                'stage' => 'published',
+                                'type' => 'reviewed-preprint',
+                                'published' => '2014-01-01T00:00:00Z',
+                                'statusDate' => '2014-01-01T00:00:00Z',
+                                'version' => 1,
+                            ],
+                            $arbitraryArticleMetadata
+                        ),
                         [
                             'status' => 'reviewed',
                             'stage' => 'published',
