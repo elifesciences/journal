@@ -246,7 +246,7 @@ final class HomeControllerTest extends PageTestCase
                                 'published' => '2012-01-01T00:00:00Z',
                                 'statusDate' => '2012-01-01T00:00:00Z',
                                 'title' => 'Article 1 title',
-                                'version' => 1,      
+                                'version' => 1,
                             ],
                             $arbitraryArticleMetadata5
                         ),
