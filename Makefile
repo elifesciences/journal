@@ -1,7 +1,11 @@
 DOCKER_COMPOSE = docker-compose
 TEST = Test
+PATTERNS = master
 
-.PHONY: build dev stop clean test feature-test lint check
+.PHONY: build dev stop clean test feature-test lint check update-patterns
+
+update-patterns:
+	composer require elife/patterns:dev-$(PATTERNS)
 
 build:
 	$(DOCKER_COMPOSE) build
@@ -22,7 +26,7 @@ clean:
 	$(DOCKER_COMPOSE) down --volumes --remove-orphans
 
 test:
-	APP_ENV=ci $(DOCKER_COMPOSE) run --rm app vendor/bin/phpunit --filter $(TEST)
+	APP_ENV=ci $(DOCKER_COMPOSE) run --rm app vendor/bin/phpunit --filter $(TEST) $(OPTIONS)
 	APP_ENV=ci $(DOCKER_COMPOSE) down --volumes
 
 feature-test:

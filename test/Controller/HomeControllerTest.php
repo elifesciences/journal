@@ -116,13 +116,57 @@ final class HomeControllerTest extends PageTestCase
         $this->assertContains('Podcast episode highlight', $crawler->filter('.list-heading:contains("New from eLife") + .listing-list > .listing-list__item:nth-child(2)')->text());
     }
 
+    private function arbitraryReviewedPreprintSnippet($relevantProperties)
+    {
+        $arbitraryArticleMetadata = [
+            'status' => 'reviewed',
+            'stage' => 'published',
+            'id' => '51',
+            'doi' => '10.7554/eLife.5',
+            'reviewedDate' => '2015-05-05T00:00:00Z',
+            'versionDate' => '2016-06-06T00:00:00Z',
+            'volume' => 1,
+            'elocationId' => 'e5',
+            'authorLine' => 'Foo Bar',
+        ];
+
+        return array_merge($arbitraryArticleMetadata, $relevantProperties);
+    }
+
     /**
      * @test
      */
-    public function it_displays_the_correct_dates_in_the_latest_research_list()
+    public function it_displays_the_correct_article_status_and_article_type_and_article_date_in_the_latest_research_listing()
     {
         $client = static::createClient();
-
+        $arbitraryArticleMetadata4 = [
+            'stage' => 'published',
+            'id' => '2',
+            'doi' => '10.7554/eLife.2',
+            'versionDate' => '2014-01-01T00:00:00Z',
+            'volume' => 1,
+            'elocationId' => 'e2',
+            'copyright' => [
+                'license' => 'CC-BY-4.0',
+                'holder' => 'Author et al.',
+                'statement' => 'Creative Commons Attribution License.',
+            ],
+            'authorLine' => 'Foo Bar',
+        ];
+        $arbitraryArticleMetadata5 = [
+            'stage' => 'published',
+            'id' => '1',
+            'doi' => '10.7554/eLife.1',
+            'versionDate' => '2012-01-01T00:00:00Z',
+            'volume' => 1,
+            'elocationId' => 'e1',
+            'copyright' => [
+                'license' => 'CC-BY-4.0',
+                'holder' => 'Author et al.',
+                'statement' => 'Creative Commons Attribution License.',
+            ],
+            'authorLine' => 'Foo Bar',
+        ];
         $this->mockApiResponse(
             new Request(
                 'GET',
@@ -133,78 +177,50 @@ final class HomeControllerTest extends PageTestCase
                 200,
                 ['Content-Type' => 'application/vnd.elife.search+json; version=2'],
                 json_encode([
-                    'total' => 4,
+                    'total' => 5,
                     'items' => [
-                        [
-                            'status' => 'reviewed',
-                            'stage' => 'published',
-                            'id' => '4',
+                        $this->arbitraryReviewedPreprintSnippet([
                             'type' => 'reviewed-preprint',
-                            'doi' => '10.7554/eLife.4',
-                            'title' => 'Reviewed preprint 4 title',
                             'published' => '2014-01-01T00:00:00Z',
-                            'versionDate' => '2014-01-01T00:00:00Z',
-                            'reviewedDate' => '2014-01-01T00:00:00Z',
                             'statusDate' => '2014-01-01T00:00:00Z',
-                            'volume' => 1,
-                            'elocationId' => 'e4',
-                            'authorLine' => 'Foo Bar',
-                        ],
-                        [
-                            'status' => 'reviewed',
-                            'stage' => 'published',
-                            'id' => '3',
-                            'type' => 'reviewed-preprint',
-                            'doi' => '10.7554/eLife.3',
-                            'title' => 'Reviewed preprint 3 title',
-                            'published' => '2012-01-01T00:00:00Z',
-                            'versionDate' => '2013-01-01T00:00:00Z',
-                            'reviewedDate' => '2012-07-01T00:00:00Z',
-                            'statusDate' => '2013-01-01T00:00:00Z',
-                            'volume' => 1,
-                            'elocationId' => 'e3',
-                            'authorLine' => 'Foo Bar',
-                        ],
-                        [
-                            'status' => 'vor',
-                            'stage' => 'published',
-                            'id' => '2',
-                            'version' => 2,
-                            'type' => 'research-article',
-                            'doi' => '10.7554/eLife.2',
-                            'title' => 'Article 2 title',
-                            'published' => '2012-01-01T00:00:00Z',
-                            'versionDate' => '2013-01-01T00:00:00Z',
-                            'statusDate' => '2013-01-01T00:00:00Z',
-                            'volume' => 1,
-                            'elocationId' => 'e2',
-                            'copyright' => [
-                                'license' => 'CC-BY-4.0',
-                                'holder' => 'Author et al.',
-                                'statement' => 'Creative Commons Attribution License.',
-                            ],
-                            'authorLine' => 'Foo Bar',
-                        ],
-                        [
-                            'status' => 'poa',
-                            'stage' => 'published',
-                            'id' => '1',
                             'version' => 1,
-                            'type' => 'research-article',
-                            'doi' => '10.7554/eLife.1',
-                            'title' => 'Article 1 title',
+                            'title' => 'Reviewed preprint 5 title',
+                        ]),
+                        $this->arbitraryReviewedPreprintSnippet([
+                            'type' => 'reviewed-preprint',
                             'published' => '2012-01-01T00:00:00Z',
-                            'versionDate' => '2012-01-01T00:00:00Z',
-                            'statusDate' => '2012-01-01T00:00:00Z',
-                            'volume' => 1,
-                            'elocationId' => 'e1',
-                            'copyright' => [
-                                'license' => 'CC-BY-4.0',
-                                'holder' => 'Author et al.',
-                                'statement' => 'Creative Commons Attribution License.',
+                            'statusDate' => '2013-01-01T00:00:00Z',
+                            'version' => 3,
+                            'title' => 'Reviewed preprint 4 title',
+                        ]),
+                        $this->arbitraryReviewedPreprintSnippet([
+                            'type' => 'reviewed-preprint',
+                            'published' => '2011-01-01T00:00:00Z',
+                            'statusDate' => '2011-01-01T00:00:00Z',
+                            'title' => 'Reviewed preprint 3 title',
+                        ]),
+                        array_merge(
+                            [
+                                'type' => 'research-article',
+                                'status' => 'vor',
+                                'published' => '2012-01-01T00:00:00Z',
+                                'statusDate' => '2013-01-01T00:00:00Z',
+                                'title' => 'Article 2 title',
+                                'version' => 2,
                             ],
-                            'authorLine' => 'Foo Bar',
-                        ],
+                            $arbitraryArticleMetadata4
+                        ),
+                        array_merge(
+                            [
+                                'type' => 'research-article',
+                                'status' => 'poa',
+                                'published' => '2012-01-01T00:00:00Z',
+                                'statusDate' => '2012-01-01T00:00:00Z',
+                                'title' => 'Article 1 title',
+                                'version' => 1,
+                            ],
+                            $arbitraryArticleMetadata5
+                        ),
                     ],
                     'subjects' => [
                         [
@@ -245,19 +261,22 @@ final class HomeControllerTest extends PageTestCase
         $this->assertSame(200, $client->getResponse()->getStatusCode());
 
         $teasers = $crawler->filter('.list-heading:contains("Latest research") + ol > li');
-        $this->assertCount(4, $teasers);
+        $this->assertCount(5, $teasers);
 
-        $this->assertSame('Reviewed preprint 4 title', trim($teasers->eq(0)->filter('.teaser__header_text')->text()));
-        $this->assertSame('Reviewed Preprint Jan 1, 2014', trim(preg_replace('/\s+/S', ' ', $teasers->eq(0)->filter('.teaser__footer .meta')->text())));
+        $this->assertSame('Reviewed preprint 5 title', trim($teasers->eq(0)->filter('.teaser__header_text')->text()));
+        $this->assertSame('Not yet revised Reviewed Preprint v1 Jan 1, 2014', trim(preg_replace('/\s+/S', ' ', $teasers->eq(0)->filter('.teaser__footer .meta')->text())));
 
-        $this->assertSame('Reviewed preprint 3 title', trim($teasers->eq(1)->filter('.teaser__header_text')->text()));
-        $this->assertSame('Reviewed Preprint Updated Jan 1, 2013', trim(preg_replace('/\s+/S', ' ', $teasers->eq(1)->filter('.teaser__footer .meta')->text())));
+        $this->assertSame('Reviewed preprint 4 title', trim($teasers->eq(1)->filter('.teaser__header_text')->text()));
+        $this->assertSame('Revised Reviewed Preprint v3 Updated Jan 1, 2013', trim(preg_replace('/\s+/S', ' ', $teasers->eq(1)->filter('.teaser__footer .meta')->text())));
 
-        $this->assertSame('Article 2 title', trim($teasers->eq(2)->filter('.teaser__header_text')->text()));
-        $this->assertSame('Research Article Updated Jan 1, 2013', trim(preg_replace('/\s+/S', ' ', $teasers->eq(2)->filter('.teaser__footer .meta')->text())));
+        $this->assertSame('Reviewed preprint 3 title', trim($teasers->eq(2)->filter('.teaser__header_text')->text()));
+        $this->assertSame('Reviewed Preprint Jan 1, 2011', trim(preg_replace('/\s+/S', ' ', $teasers->eq(2)->filter('.teaser__footer .meta')->text())));
 
-        $this->assertSame('Article 1 title', trim($teasers->eq(3)->filter('.teaser__header_text')->text()));
-        $this->assertSame('Research Article Jan 1, 2012', trim(preg_replace('/\s+/S', ' ', $teasers->eq(3)->filter('.teaser__footer .meta')->text())));
+        $this->assertSame('Article 2 title', trim($teasers->eq(3)->filter('.teaser__header_text')->text()));
+        $this->assertSame('Version of Record Research Article Updated Jan 1, 2013', trim(preg_replace('/\s+/S', ' ', $teasers->eq(3)->filter('.teaser__footer .meta')->text())));
+
+        $this->assertSame('Article 1 title', trim($teasers->eq(4)->filter('.teaser__header_text')->text()));
+        $this->assertSame('Accepted Manuscript Research Article Jan 1, 2012', trim(preg_replace('/\s+/S', ' ', $teasers->eq(4)->filter('.teaser__footer .meta')->text())));
     }
 
     /**
