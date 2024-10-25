@@ -250,6 +250,7 @@ final class HomeControllerTest extends PageTestCase
         $this->assertCount(5, $teasers);
 
         $this->assertSame('First version of a reviewed preprint that has not yet been revised', trim($teasers->eq(0)->filter('.teaser__header_text')->text()));
+        $this->assertSame(1, $teasers->eq(0)->filter('.meta__status-circle.meta__status-circle-not-revised')->count());
         $this->assertSame('Not yet revised Reviewed Preprint v1 Jan 1, 2014', trim(preg_replace('/\s+/S', ' ', $teasers->eq(0)->filter('.teaser__footer .meta')->text())));
 
         $this->assertSame('Third version of a reviewed preprint', trim($teasers->eq(1)->filter('.teaser__header_text')->text()));
