@@ -40,30 +40,18 @@ When using Windows to bypass the main errors we recommend to follow the next :
 Docker Installation - Running the site locally
 ----------------------------------------------
 
-1. Run `composer install` to generate vendor files locally
-2. Run `docker-compose up --build`
-3. Open `http://localhost:8080` in your browser.
+1. Run either:
+  - `make dev` to start a local server, displaying dummy data.
+  - `make exploratory-test-from-prod` to start a local server, displaying production data.
+2. Open `http://localhost:8080` in your browser.
 
-To start/restart the containers use these commands:
-`docker-compose down --volumes --remove-orphans && docker-compose up --build`
+To stop the containers, press Ctrl+C or run `make stop` in another terminal.
+
+To remove all cached state and artifacts from your local copy, run `make clean`.
 
 Important : Creating `composer.lock` on local and permanent updates to composer files in general should only be done from the container, be aware that if this is done from local can generate additional errors. To avoid any errors running `composer update` in the container is safer than running it in the local dev env. ( ex: `docker-compose run composer update elife/patterns` )
 
-### Changing configuration
-
 When running the site locally via Docker, the parameters are supplied by `/.docker/parameters.yaml`.
-
-To change configuration that is supplied by an environment variable, pass in the environment variable at start up. For example, to change the API URL:
-`docker-compose down --volumes --remove-orphans && API_URL=https://prod--gateway.elifesciences.org docker-compose up --build`.
-
-Manual Installation (may or may not work - better use docker)
--------------------------------------------------------------
-
-1. Create `app/config/parameters.yml` from `app/config/parameters.yml.dist`
-2. `npm install`
-3. `composer install`
-4. `node_modules/.bin/gulp`
-5. `bin/console assets:install --symlink`
 
 Regenerating critical CSS
 -------------------------
