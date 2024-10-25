@@ -31,7 +31,11 @@ test:
 
 feature-test:
 	docker-compose -f docker-compose.yml -f docker-compose.ci.yml up --build --detach
+ifdef FEATURE
+	docker-compose -f docker-compose.yml -f docker-compose.ci.yml run --rm ci vendor/bin/behat $(FEATURE)
+else
 	docker-compose -f docker-compose.yml -f docker-compose.ci.yml run --rm ci .ci/behat
+endif
 	docker-compose -f docker-compose.yml -f docker-compose.ci.yml down --volumes
 
 lint: vendor

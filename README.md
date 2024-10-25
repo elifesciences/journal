@@ -84,6 +84,12 @@ To run all feature tests:
 make feature-test
 ```
 
+To run only one feature test:
+
+```
+make feature-test FEATURE=features/podcast-episode.feature
+```
+
 Linting PHP code
 ----------------
 
