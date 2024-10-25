@@ -133,6 +133,26 @@ final class HomeControllerTest extends PageTestCase
         return array_merge($arbitraryArticleMetadata, $relevantProperties);
     }
 
+    private function arbitraryResearchArticleSnippet($relevantProperties)
+    {
+        $arbitraryArticleMetadata = [
+            'stage' => 'published',
+            'id' => '2',
+            'doi' => '10.7554/eLife.2',
+            'versionDate' => '2014-01-01T00:00:00Z',
+            'volume' => 1,
+            'elocationId' => 'e2',
+            'copyright' => [
+                'license' => 'CC-BY-4.0',
+                'holder' => 'Author et al.',
+                'statement' => 'Creative Commons Attribution License.',
+            ],
+            'authorLine' => 'Foo Bar',
+        ];
+
+        return array_merge($arbitraryArticleMetadata, $relevantProperties);
+    }
+
     /**
      * @test
      */
@@ -199,28 +219,22 @@ final class HomeControllerTest extends PageTestCase
                             'statusDate' => '2011-01-01T00:00:00Z',
                             'title' => 'Reviewed preprint 3 title',
                         ]),
-                        array_merge(
-                            [
-                                'type' => 'research-article',
-                                'status' => 'vor',
-                                'published' => '2012-01-01T00:00:00Z',
-                                'statusDate' => '2013-01-01T00:00:00Z',
-                                'title' => 'Article 2 title',
-                                'version' => 2,
-                            ],
-                            $arbitraryArticleMetadata4
-                        ),
-                        array_merge(
-                            [
-                                'type' => 'research-article',
-                                'status' => 'poa',
-                                'published' => '2012-01-01T00:00:00Z',
-                                'statusDate' => '2012-01-01T00:00:00Z',
-                                'title' => 'Article 1 title',
-                                'version' => 1,
-                            ],
-                            $arbitraryArticleMetadata5
-                        ),
+                        $this->arbitraryResearchArticleSnippet([
+                            'type' => 'research-article',
+                            'status' => 'vor',
+                            'published' => '2012-01-01T00:00:00Z',
+                            'statusDate' => '2013-01-01T00:00:00Z',
+                            'title' => 'Article 2 title',
+                            'version' => 2,
+                        ]),
+                        $this->arbitraryResearchArticleSnippet([
+                            'type' => 'research-article',
+                            'status' => 'poa',
+                            'published' => '2012-01-01T00:00:00Z',
+                            'statusDate' => '2012-01-01T00:00:00Z',
+                            'title' => 'Article 1 title',
+                            'version' => 1,
+                        ]),
                     ],
                     'subjects' => [
                         [
