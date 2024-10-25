@@ -27,11 +27,21 @@ final class ReviewedPreprintTeaserConverter implements ViewModelConverter
      */
     public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
-        $formats = ['HTML'];
-
-        if ($object->getPdf()) {
-            $formats[] = 'PDF';
-        }
+        $meta = $object->getVersion()
+            ? ViewModel\Meta::withLink(
+                new ViewModel\Link(
+                    ModelName::singular('reviewed-preprint') . ' v' . $object->getVersion()
+                ),
+                $this->simpleDate($object, $context),
+                $object->getVersion() === 1 ? 'Not yet revised' : 'Revised',
+                $object->getVersion() === 1 ? 'not-revised' : 'revised'
+            )
+            : ViewModel\Meta::withLink(
+                new ViewModel\Link(
+                    ModelName::singular('reviewed-preprint')
+                ),
+                $this->simpleDate($object, $context)
+            );
 
         return ViewModel\Teaser::main(
             $object->getTitle(),
@@ -41,14 +51,7 @@ final class ReviewedPreprintTeaserConverter implements ViewModelConverter
             $this->createContextLabel($object),
             $object->getThumbnail() ? $this->smallTeaserImage($object) : null,
             ViewModel\TeaserFooter::forArticle(
-                ViewModel\Meta::withLink(
-                    new ViewModel\Link(
-                        ModelName::singular('reviewed-preprint'),
-                        $this->urlGenerator->generate('reviewed-preprints')
-                    ),
-                    $this->simpleDate($object, $context)
-                ),
-                $formats
+                $meta
             )
         );
     }
