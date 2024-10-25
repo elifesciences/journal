@@ -84,6 +84,15 @@ To run all feature tests:
 make feature-test
 ```
 
+Linting PHP code
+----------------
+
+To check for any linting issues, run:
+
+```
+make lint
+```
+
 Reproduce a ci failure
 ----------------------
 
