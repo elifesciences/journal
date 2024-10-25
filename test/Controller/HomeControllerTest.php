@@ -141,7 +141,6 @@ final class HomeControllerTest extends PageTestCase
             'doi' => '10.7554/eLife.2',
             'versionDate' => '2014-01-01T00:00:00Z',
             'volume' => 1,
-            'elocationId' => 'e2',
             'copyright' => [
                 'license' => 'CC-BY-4.0',
                 'holder' => 'Author et al.',
@@ -169,7 +168,7 @@ final class HomeControllerTest extends PageTestCase
                 200,
                 ['Content-Type' => 'application/vnd.elife.search+json; version=2'],
                 json_encode([
-                    'total' => 5,
+                    'total' => 6,
                     'items' => [
                         $this->arbitraryReviewedPreprintSnippet([
                             'type' => 'reviewed-preprint',
@@ -196,16 +195,27 @@ final class HomeControllerTest extends PageTestCase
                             'status' => 'vor',
                             'published' => '2012-01-01T00:00:00Z',
                             'statusDate' => '2013-01-01T00:00:00Z',
-                            'title' => 'A VOR research article',
+                            'title' => 'A VOR research article that was a reviewed preprint',
                             'version' => 2,
+                            'elocationId' => 'RP2',
+                        ]),
+                        $this->arbitraryResearchArticleSnippet([
+                            'type' => 'research-article',
+                            'status' => 'vor',
+                            'published' => '1999-01-01T00:00:00Z',
+                            'statusDate' => '2000-01-01T00:00:00Z',
+                            'title' => 'A VOR research article from the old model',
+                            'version' => 2,
+                            'elocationId' => 'e2',
                         ]),
                         $this->arbitraryResearchArticleSnippet([
                             'type' => 'research-article',
                             'status' => 'poa',
                             'published' => '2012-01-01T00:00:00Z',
                             'statusDate' => '2012-01-01T00:00:00Z',
-                            'title' => 'A POA research article',
+                            'title' => 'A POA research article from the old model',
                             'version' => 1,
+                            'elocationId' => 'e2',
                         ]),
                     ],
                     'subjects' => [
@@ -247,7 +257,7 @@ final class HomeControllerTest extends PageTestCase
         $this->assertSame(200, $client->getResponse()->getStatusCode());
 
         $teasers = $crawler->filter('.list-heading:contains("Latest research") + ol > li');
-        $this->assertCount(5, $teasers);
+        $this->assertCount(6, $teasers);
 
         $this->assertSame('First version of a reviewed preprint that has not yet been revised', trim($teasers->eq(0)->filter('.teaser__header_text')->text()));
         $this->assertSame(1, $teasers->eq(0)->filter('.meta__status-circle.meta__status-circle-not-revised')->count());
@@ -261,11 +271,14 @@ final class HomeControllerTest extends PageTestCase
         $this->assertSame(0, $teasers->eq(2)->filter('.meta__status-circle')->count());
         $this->assertSame('Reviewed Preprint Jan 1, 2011', trim(preg_replace('/\s+/S', ' ', $teasers->eq(2)->filter('.teaser__footer .meta')->text())));
 
-        $this->assertSame('A VOR research article', trim($teasers->eq(3)->filter('.teaser__header_text')->text()));
+        $this->assertSame('A VOR research article that was a reviewed preprint', trim($teasers->eq(3)->filter('.teaser__header_text')->text()));
         $this->assertSame('Version of Record Research Article Updated Jan 1, 2013', trim(preg_replace('/\s+/S', ' ', $teasers->eq(3)->filter('.teaser__footer .meta')->text())));
+    
+        $this->assertSame('A VOR research article from the old model', trim($teasers->eq(4)->filter('.teaser__header_text')->text()));
+        $this->assertSame('Version of Record Research Article Updated Jan 1, 2000', trim(preg_replace('/\s+/S', ' ', $teasers->eq(4)->filter('.teaser__footer .meta')->text())));
 
-        $this->assertSame('A POA research article', trim($teasers->eq(4)->filter('.teaser__header_text')->text()));
-        $this->assertSame('Accepted Manuscript Research Article Jan 1, 2012', trim(preg_replace('/\s+/S', ' ', $teasers->eq(4)->filter('.teaser__footer .meta')->text())));
+        $this->assertSame('A POA research article from the old model', trim($teasers->eq(5)->filter('.teaser__header_text')->text()));
+        $this->assertSame('Accepted Manuscript Research Article Jan 1, 2012', trim(preg_replace('/\s+/S', ' ', $teasers->eq(5)->filter('.teaser__footer .meta')->text())));
     }
 
     /**
