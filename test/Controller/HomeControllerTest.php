@@ -254,9 +254,11 @@ final class HomeControllerTest extends PageTestCase
         $this->assertSame('Not yet revised Reviewed Preprint v1 Jan 1, 2014', trim(preg_replace('/\s+/S', ' ', $teasers->eq(0)->filter('.teaser__footer .meta')->text())));
 
         $this->assertSame('Third version of a reviewed preprint', trim($teasers->eq(1)->filter('.teaser__header_text')->text()));
+        $this->assertSame(1, $teasers->eq(1)->filter('.meta__status-circle.meta__status-circle-revised')->count());
         $this->assertSame('Revised Reviewed Preprint v3 Updated Jan 1, 2013', trim(preg_replace('/\s+/S', ' ', $teasers->eq(1)->filter('.teaser__footer .meta')->text())));
 
         $this->assertSame('Unknown version of a reviewed preprint', trim($teasers->eq(2)->filter('.teaser__header_text')->text()));
+        $this->assertSame(0, $teasers->eq(2)->filter('.meta__status-circle')->count());
         $this->assertSame('Reviewed Preprint Jan 1, 2011', trim(preg_replace('/\s+/S', ' ', $teasers->eq(2)->filter('.teaser__footer .meta')->text())));
 
         $this->assertSame('A VOR research article', trim($teasers->eq(3)->filter('.teaser__header_text')->text()));
