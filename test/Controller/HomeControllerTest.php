@@ -159,34 +159,6 @@ final class HomeControllerTest extends PageTestCase
     public function it_displays_the_correct_article_status_and_article_type_and_article_date_in_the_latest_research_listing()
     {
         $client = static::createClient();
-        $arbitraryArticleMetadata4 = [
-            'stage' => 'published',
-            'id' => '2',
-            'doi' => '10.7554/eLife.2',
-            'versionDate' => '2014-01-01T00:00:00Z',
-            'volume' => 1,
-            'elocationId' => 'e2',
-            'copyright' => [
-                'license' => 'CC-BY-4.0',
-                'holder' => 'Author et al.',
-                'statement' => 'Creative Commons Attribution License.',
-            ],
-            'authorLine' => 'Foo Bar',
-        ];
-        $arbitraryArticleMetadata5 = [
-            'stage' => 'published',
-            'id' => '1',
-            'doi' => '10.7554/eLife.1',
-            'versionDate' => '2012-01-01T00:00:00Z',
-            'volume' => 1,
-            'elocationId' => 'e1',
-            'copyright' => [
-                'license' => 'CC-BY-4.0',
-                'holder' => 'Author et al.',
-                'statement' => 'Creative Commons Attribution License.',
-            ],
-            'authorLine' => 'Foo Bar',
-        ];
         $this->mockApiResponse(
             new Request(
                 'GET',
