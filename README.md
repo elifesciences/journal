@@ -58,7 +58,7 @@ Using a feature branch of the `patterns-php` library
 
 In order to test visible changes that come from `patterns-php` when running `journal` locally, run:
 
-`make update-patterns PATTERNS=[branch-name-from-patterns-php]` 
+`make update-patterns BRANCH=[branch-name-from-patterns-php]` 
 
 Running fast tests
 -----------------
