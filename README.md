@@ -53,6 +53,13 @@ Important : Creating `composer.lock` on local and permanent updates to composer 
 
 When running the site locally via Docker, the parameters are supplied by `/.docker/parameters.yaml`.
 
+Using a feature branch of the `patterns-php` library
+----------------------------------------------------
+
+In order to test visible changes that come from `patterns-php` when running `journal` locally, run:
+
+`make update-patterns PATTERNS=[branch-name-from-patterns-php]` 
+
 Regenerating critical CSS
 -------------------------
 
