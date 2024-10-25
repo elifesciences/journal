@@ -72,7 +72,7 @@ make test
 To run a single test:
 
 ```
-make test TEST=AuthenticationTest
+make test TEST=test/Controller/AuthenticationTest.php
 ```
 
 Running slow feature tests

@@ -1,5 +1,5 @@
 DOCKER_COMPOSE = docker-compose
-TEST = Test
+TEST = test/
 BRANCH = master
 
 .PHONY: build dev stop clean test feature-test lint check update-patterns
@@ -26,7 +26,7 @@ clean:
 	$(DOCKER_COMPOSE) down --volumes --remove-orphans
 
 test:
-	APP_ENV=ci $(DOCKER_COMPOSE) run --rm app vendor/bin/phpunit --filter $(TEST) $(OPTIONS)
+	APP_ENV=ci $(DOCKER_COMPOSE) run --rm app vendor/bin/phpunit $(TEST) $(OPTIONS)
 	APP_ENV=ci $(DOCKER_COMPOSE) down --volumes
 
 feature-test:
