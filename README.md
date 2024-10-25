@@ -37,7 +37,7 @@ When using Windows to bypass the main errors we recommend to follow the next :
       How to install : [Step 1](https://getcomposer.org/download/)
 </details>
 
-Docker Installation - Running the site locally
+Running the site locally
 ----------------------------------------------
 
 1. Run either:
@@ -60,17 +60,14 @@ In order to test visible changes that come from `patterns-php` when running `jou
 
 `make update-patterns PATTERNS=[branch-name-from-patterns-php]` 
 
-Regenerating critical CSS
--------------------------
-
-`docker-compose run critical_css`
-
-Running the tests
+Running fast tests
 -----------------
 
-To run all unit tests as in `ci`:
+To run all tests:
 
-`docker-compose -f docker-compose.yml -f docker-compose.ci.yml run ci .ci/phpunit`
+```
+make test
+```
 
 To run a single test:
 
@@ -78,31 +75,13 @@ To run a single test:
 make test TEST=AuthenticationTest
 ```
 
-Running Behat
+Running slow feature tests
 -------------
 
-Behat needs the `ci` image to run, so it needs to build an additional image and use the ci configuration:
+To run all feature tests:
 
 ```
-docker-compose -f docker-compose.yml -f docker-compose.ci.yml up --build --detach
-```
-
-To run all scenarios:
-
-```
-docker-compose -f docker-compose.yml -f docker-compose.ci.yml run ci .ci/behat
-```
-
-To run a single scenario:
-
-```
-docker-compose -f docker-compose.yml -f docker-compose.ci.yml run ci vendor/bin/behat features/article.feature
-```
-
-If you have made changes to the code and want to re-run a test then you will need to rebuild your docker containers:
-
-```
-docker-compose -f docker-compose.yml -f docker-compose.ci.yml down && docker-compose -f docker-compose.yml -f docker-compose.ci.yml up --build --detach
+make feature-test
 ```
 
 Reproduce a ci failure
