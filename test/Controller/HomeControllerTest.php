@@ -204,27 +204,27 @@ final class HomeControllerTest extends PageTestCase
                             'published' => '2014-01-01T00:00:00Z',
                             'statusDate' => '2014-01-01T00:00:00Z',
                             'version' => 1,
-                            'title' => 'Reviewed preprint 5 title',
+                            'title' => 'First version of a reviewed preprint that has not yet been revised',
                         ]),
                         $this->arbitraryReviewedPreprintSnippet([
                             'type' => 'reviewed-preprint',
                             'published' => '2012-01-01T00:00:00Z',
                             'statusDate' => '2013-01-01T00:00:00Z',
                             'version' => 3,
-                            'title' => 'Reviewed preprint 4 title',
+                            'title' => 'Third version of a reviewed preprint',
                         ]),
                         $this->arbitraryReviewedPreprintSnippet([
                             'type' => 'reviewed-preprint',
                             'published' => '2011-01-01T00:00:00Z',
                             'statusDate' => '2011-01-01T00:00:00Z',
-                            'title' => 'Reviewed preprint 3 title',
+                            'title' => 'Unknown version of a reviewed preprint',
                         ]),
                         $this->arbitraryResearchArticleSnippet([
                             'type' => 'research-article',
                             'status' => 'vor',
                             'published' => '2012-01-01T00:00:00Z',
                             'statusDate' => '2013-01-01T00:00:00Z',
-                            'title' => 'Article 2 title',
+                            'title' => 'A VOR research article',
                             'version' => 2,
                         ]),
                         $this->arbitraryResearchArticleSnippet([
@@ -232,7 +232,7 @@ final class HomeControllerTest extends PageTestCase
                             'status' => 'poa',
                             'published' => '2012-01-01T00:00:00Z',
                             'statusDate' => '2012-01-01T00:00:00Z',
-                            'title' => 'Article 1 title',
+                            'title' => 'A POA research article',
                             'version' => 1,
                         ]),
                     ],
@@ -277,19 +277,19 @@ final class HomeControllerTest extends PageTestCase
         $teasers = $crawler->filter('.list-heading:contains("Latest research") + ol > li');
         $this->assertCount(5, $teasers);
 
-        $this->assertSame('Reviewed preprint 5 title', trim($teasers->eq(0)->filter('.teaser__header_text')->text()));
+        $this->assertSame('First version of a reviewed preprint that has not yet been revised', trim($teasers->eq(0)->filter('.teaser__header_text')->text()));
         $this->assertSame('Not yet revised Reviewed Preprint v1 Jan 1, 2014', trim(preg_replace('/\s+/S', ' ', $teasers->eq(0)->filter('.teaser__footer .meta')->text())));
 
-        $this->assertSame('Reviewed preprint 4 title', trim($teasers->eq(1)->filter('.teaser__header_text')->text()));
+        $this->assertSame('Third version of a reviewed preprint', trim($teasers->eq(1)->filter('.teaser__header_text')->text()));
         $this->assertSame('Revised Reviewed Preprint v3 Updated Jan 1, 2013', trim(preg_replace('/\s+/S', ' ', $teasers->eq(1)->filter('.teaser__footer .meta')->text())));
 
-        $this->assertSame('Reviewed preprint 3 title', trim($teasers->eq(2)->filter('.teaser__header_text')->text()));
+        $this->assertSame('Unknown version of a reviewed preprint', trim($teasers->eq(2)->filter('.teaser__header_text')->text()));
         $this->assertSame('Reviewed Preprint Jan 1, 2011', trim(preg_replace('/\s+/S', ' ', $teasers->eq(2)->filter('.teaser__footer .meta')->text())));
 
-        $this->assertSame('Article 2 title', trim($teasers->eq(3)->filter('.teaser__header_text')->text()));
+        $this->assertSame('A VOR research article', trim($teasers->eq(3)->filter('.teaser__header_text')->text()));
         $this->assertSame('Version of Record Research Article Updated Jan 1, 2013', trim(preg_replace('/\s+/S', ' ', $teasers->eq(3)->filter('.teaser__footer .meta')->text())));
 
-        $this->assertSame('Article 1 title', trim($teasers->eq(4)->filter('.teaser__header_text')->text()));
+        $this->assertSame('A POA research article', trim($teasers->eq(4)->filter('.teaser__header_text')->text()));
         $this->assertSame('Accepted Manuscript Research Article Jan 1, 2012', trim(preg_replace('/\s+/S', ' ', $teasers->eq(4)->filter('.teaser__footer .meta')->text())));
     }
 
