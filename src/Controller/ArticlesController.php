@@ -635,7 +635,9 @@ final class ArticlesController extends Controller
                 /** @var array $context */
                 $context = $parts['context'];
                 if ($item instanceof ArticleVoR && $item->getElifeAssessment()) {
-                    return $this->buildAssessmentBlock($item, $context);
+                    $elifeAssessment = $item->getElifeAssessment();
+                    $elifeAssessmentTitle = $item->getElifeAssessmentTitle();
+                    return $this->buildAssessmentBlock($elifeAssessment, $elifeAssessmentTitle, $context);
                 }
             });
 
@@ -1961,11 +1963,11 @@ final class ArticlesController extends Controller
         return $publicationHistory;
     }
 
-    private function buildAssessmentBlock(ArticleVoR $item, array $context): ArticleSection {
+    private function buildAssessmentBlock(\eLife\ApiSdk\Model\ArticleSection $elifeAssessment, ?string $elifeAssessmentTitle, array $context): ArticleSection {
         $summary = 'During the peer-review process the editor and reviewers write an eLife Assessment that summarises the significance of the findings reported in the article (on a scale ranging from landmark to useful) and the strength of the evidence (on a scale ranging from exceptional to inadequate). <a href="https://elifesciences.org/about/elife-assessments">Learn more about eLife Assessments</a>';
         $significanceTerms = [['term' => 'Landmark'], ['term' => 'Fundamental'], ['term' => 'Important'], ['term' => 'Valuable'], ['term' => 'Useful']];
         $strengthTerms = [['term' => 'Exceptional'], ['term' => 'Compelling'], ['term' => 'Convincing'], ['term' => 'Solid'], ['term' => 'Incomplete'], ['term' => 'Inadequate']];
-        $content = $item->getElifeAssessment()->getContent();
+        $content = $elifeAssessment->getContent();
         $resultSignificance = $this->highlightAndFormatTerms($content, $significanceTerms);
         $resultStrength = $this->highlightAndFormatTerms($content, $strengthTerms);
         $significanceAriaLable = 'eLife assessments use a common vocabulary to describe significance. The term chosen for this paper is:';
@@ -1974,11 +1976,11 @@ final class ArticlesController extends Controller
         $strength = !empty($resultStrength['formattedDescription']) ? new Term('Strength of evidence:', implode(PHP_EOL, $resultStrength['formattedDescription']), $resultStrength['highlightedTerm'], $strengthAriaLable) : null;
 
         return ArticleSection::basic(
-            $this->render(...$this->convertContent($item->getElifeAssessment(), 2, $context)),
-            $item->getElifeAssessmentTitle(),
+            $this->render(...$this->convertContent($elifeAssessment, 2, $context)),
+            $elifeAssessmentTitle,
             2,
             'elife-assessment',
-            $item->getElifeAssessment()->getDoi() ? new Doi($item->getElifeAssessment()->getDoi()) : null,
+            $elifeAssessment->getDoi() ? new Doi($elifeAssessment->getDoi()) : null,
             null,
             ArticleSection::STYLE_HIGHLIGHTED,
             false,
