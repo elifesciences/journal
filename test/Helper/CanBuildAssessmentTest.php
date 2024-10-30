@@ -22,7 +22,15 @@ class CanBuildAssessmentTest extends TestCase
         $id = 'sa0';
         $elifeAssessment = new ArticleSection($content, $doi, $id);
         $result = $controller->buildAssessmentViewModel($elifeAssessment);
+
         $this->assertInstanceOf('eLife\Patterns\ViewModel\Term', $result['significance']);
+        $this->assertContains('<b>Valuable</b>', $result['significance']['termDescription']);
+        $this->assertEquals('Valuable', $result['significance']['terms'][3]['term']);
+        $this->assertTrue($result['significance']['terms'][3]['isHighlighted']);
+
         $this->assertInstanceOf('eLife\Patterns\ViewModel\Term', $result['strength']);
+        $this->assertContains('<b>Solid</b>', $result['strength']['termDescription']);
+        $this->assertEquals('Solid', $result['strength']['terms'][3]['term']);
+        $this->assertTrue($result['strength']['terms'][3]['isHighlighted']);
     }
 }
