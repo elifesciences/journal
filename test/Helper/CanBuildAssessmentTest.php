@@ -22,6 +22,7 @@ class CanBuildAssessmentTest extends TestCase
         $id = 'sa0';
         $elifeAssessment = new ArticleSection($content, $doi, $id);
         $result = $controller->buildAssessmentViewModel($elifeAssessment);
-        $this->markTestIncomplete();
+        $this->assertInstanceOf('eLife\Patterns\ViewModel\Term', $result['significance']);
+        $this->assertInstanceOf('eLife\Patterns\ViewModel\Term', $result['strength']);
     }
 }
