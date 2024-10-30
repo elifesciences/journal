@@ -2,11 +2,12 @@
 
 namespace test\eLife\Journal\Helper;
 
-use eLife\ApiSdk\Collection\EmptySequence;
+use eLife\ApiSdk\Collection\ArraySequence;
 use eLife\ApiSdk\Model\ArticleSection;
+use eLife\ApiSdk\Model\Block\Paragraph;
 use eLife\Journal\Helper\CanBuildAssessment;
 use PHPUnit\Framework\TestCase;
- 
+
 class CanBuildAssessmentTest extends TestCase
 {
     public function testReturnStateAnonymous(): void
@@ -14,8 +15,12 @@ class CanBuildAssessmentTest extends TestCase
         $controller = new class {
             use CanBuildAssessment;
         };
-        $content = new EmptySequence();
-        $elifeAssessment = new ArticleSection($content);
+        $content = new ArraySequence([
+            new Paragraph("This <b>valuable</b> paper compares blood gene signature responses between small cohorts of individuals with mild and severe COVID-19. The authors provide <b>solid</b> evidence for distinct transcriptional profiles during early COVID-19 infections that may be predictive of severity, within the limitations of studying human patients displaying heterogeneity in infection timelines and limited cohort size.")
+        ]);
+        $doi = '10.7554/eLife.94242.3.sa0';
+        $id = 'sa0';
+        $elifeAssessment = new ArticleSection($content, $doi, $id);
         $result = $controller->buildAssessmentViewModel($elifeAssessment);
         $this->markTestIncomplete();
     }
