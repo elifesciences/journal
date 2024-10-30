@@ -2,32 +2,13 @@
 
 namespace eLife\Journal\Helper;
 
-use eLife\Patterns\ViewModel\ArticleSection;
+use eLife\ApiSdk\Model\ArticleSection;
 use eLife\Patterns\ViewModel\Assessment;
-use eLife\Patterns\ViewModel\Doi;
 use eLife\Patterns\ViewModel\Term;
 
 trait CanBuildAssessment
 {
-    final public function buildAssessmentBlock(\eLife\ApiSdk\Model\ArticleSection $elifeAssessment, ?string $elifeAssessmentTitle, array $context): ArticleSection {
-        return ArticleSection::basic(
-            $this->render(...$this->convertContent($elifeAssessment, 2, $context)),
-            $elifeAssessmentTitle,
-            2,
-            'elife-assessment',
-            $elifeAssessment->getDoi() ? new Doi($elifeAssessment->getDoi()) : null,
-            null,
-            ArticleSection::STYLE_HIGHLIGHTED,
-            false,
-            null,
-            null,
-            null,
-            null,
-            $this->buildAssessmentViewModel($elifeAssessment)
-        );
-    }
-
-    final public function buildAssessmentViewModel(\eLife\ApiSdk\Model\ArticleSection $elifeAssessment): Assessment {
+    final public function buildAssessmentViewModel(ArticleSection $elifeAssessment): Assessment {
         $summary = 'During the peer-review process the editor and reviewers write an eLife Assessment that summarises the significance of the findings reported in the article (on a scale ranging from landmark to useful) and the strength of the evidence (on a scale ranging from exceptional to inadequate). <a href="https://elifesciences.org/about/elife-assessments">Learn more about eLife Assessments</a>';
         $significanceTerms = [['term' => 'Landmark'], ['term' => 'Fundamental'], ['term' => 'Important'], ['term' => 'Valuable'], ['term' => 'Useful']];
         $strengthTerms = [['term' => 'Exceptional'], ['term' => 'Compelling'], ['term' => 'Convincing'], ['term' => 'Solid'], ['term' => 'Incomplete'], ['term' => 'Inadequate']];

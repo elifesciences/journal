@@ -16,9 +16,7 @@ class CanBuildAssessmentTest extends TestCase
         };
         $content = new EmptySequence();
         $elifeAssessment = new ArticleSection($content);
-        $elifeAssessmentTitle = 'eLife assessment title';
-        $context = [];
+        $result = $controller->buildAssessmentViewModel($elifeAssessment);
         $this->markTestIncomplete();
-        $result = $controller->buildAssessmentBlock($elifeAssessment, $elifeAssessmentTitle, $context);
     }
 }

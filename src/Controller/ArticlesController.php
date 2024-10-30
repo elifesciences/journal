@@ -639,7 +639,21 @@ final class ArticlesController extends Controller
                 if ($item instanceof ArticleVoR && $item->getElifeAssessment()) {
                     $elifeAssessment = $item->getElifeAssessment();
                     $elifeAssessmentTitle = $item->getElifeAssessmentTitle();
-                    return $this->buildAssessmentBlock($elifeAssessment, $elifeAssessmentTitle, $context);
+                    return ArticleSection::basic(
+                        $this->render(...$this->convertContent($elifeAssessment, 2, $context)),
+                        $elifeAssessmentTitle,
+                        2,
+                        'elife-assessment',
+                        $elifeAssessment->getDoi() ? new Doi($elifeAssessment->getDoi()) : null,
+                        null,
+                        ArticleSection::STYLE_HIGHLIGHTED,
+                        false,
+                        null,
+                        null,
+                        null,
+                        null,
+                        $this->buildAssessmentViewModel($elifeAssessment)
+                    );
                 }
             });
 
