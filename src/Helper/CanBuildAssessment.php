@@ -28,21 +28,10 @@ trait CanBuildAssessment
         );
     }
 
-    private function highlightAndFormatTerms(Sequence $content, array $terms): array {
+    private function highlightAndFormatTerms(Sequence $content, array $terms): array
+    {
         $formattedDescription = [];
-        $highlightedWords = [];
-
-        foreach ($content as $contentItem) {
-            if (method_exists($contentItem, 'getText')) {
-                $text = $contentItem->getText();
-
-                preg_match_all('/<b>(.*?)<\/b>/', $text, $matches);
-
-                if (!empty($matches[1])) {
-                    $highlightedWords = array_merge($highlightedWords, $matches[1]);
-                }
-            }
-        }
+        $highlightedWords = $this->extractHighlightedWords($content);
 
         $highlightedTerm = array_map(function ($term) use ($highlightedWords, &$formattedDescription) {
             $termDescriptions = [
@@ -76,5 +65,24 @@ trait CanBuildAssessment
             'highlightedTerm' => $highlightedTerm,
             'formattedDescription' => $formattedDescription
         ];
+    }
+
+    private function extractHighlightedWords(Sequence $content): array
+    {
+        $highlightedWords = [];
+
+        foreach ($content as $contentItem) {
+            if (method_exists($contentItem, 'getText')) {
+                $text = $contentItem->getText();
+
+                preg_match_all('/<b>(.*?)<\/b>/', $text, $matches);
+
+                if (!empty($matches[1])) {
+                    $highlightedWords = array_merge($highlightedWords, $matches[1]);
+                }
+            }
+        }
+
+        return $highlightedWords;
     }
 }
