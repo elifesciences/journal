@@ -30,6 +30,18 @@ class CanBuildAssessmentTest extends TestCase
         $this->assertTrue($result['strength']['terms'][3]['isHighlighted']);
     }
 
+    /**
+     * @test
+     */
+    public function it_tbd(): void
+    {
+        $assessmentText = "This <b>important</b> manuscript shows that axonal transport of Wnd is required for its normal degradation by the Hiw ubiquitin ligase pathway. In Hiw mutants, the Wnd protein accumulates in nerve terminals. In the absence of axonal transport, Wnd levels also rise and lead to excessive JNK signaling, disrupting neuronal function. These are interesting findings supported by <b>convincing</b> data. However, how Rab11 is involved in Golgi processing or axonal transport of Wnd is not resolved as it is clear that Rab11 is not travelling with Wnd to the axon.";
+        
+        $result = $this->getTestResult($assessmentText);
+
+        $this->markTestIncomplete('Missing assertions');
+    }
+
     private function getTestResult(string $contentText)
     {
         $controller = new class {
