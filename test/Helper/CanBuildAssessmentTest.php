@@ -51,6 +51,20 @@ class CanBuildAssessmentTest extends TestCase
         $this->assertHasStrength('Solid', $result);
     }
 
+    /**
+     * @test
+     */
+    public function it_highlights_a_statement_with_a_term_variation_for_convincing_strength(): void
+    {
+        $assessmentText = "This manuscript reports <b>important</b> in vitro biochemical and in planta experiments to study the receptor activation mechanism of plant membrane receptor kinase complexes through the non-catalytic function of an active protein kinase. Several lines of evidence <b>convincingly</b> show that one such receptor kinase with pseudokinase-like function, the immune receptor EFR achieves an active conformation following phosphorylation by a co-receptor kinase, and then in turn activates the co-receptor kinase allosterically to enable it to phosphorylate down-stream signaling components. This manuscript will be of interest to scientists focusing on cell signalling and allosteric regulation.";
+
+        $result = $this->getTestResult($assessmentText);
+
+        $this->assertHasSignificance('Important', $result);
+        $this->markTestSkipped();
+        $this->assertHasStrength('Convincing', $result);
+    }
+
     private function getTestResult(string $contentText)
     {
         $controller = new class {
