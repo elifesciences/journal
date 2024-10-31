@@ -37,10 +37,7 @@ class CanBuildAssessmentTest extends TestCase
         
         $result = $this->getTestResult($assessmentText);
 
-        $this->assertInstanceOf('eLife\Patterns\ViewModel\Term', $result['significance']);
-        $this->assertContains('<b>Important</b>', $result['significance']['termDescription']);
-        $this->assertEquals('Important', $result['significance']['terms'][2]['term']);
-        $this->assertTrue($result['significance']['terms'][2]['isHighlighted']);
+        $this->assertHasSignificance('Important', $result);
 
         $this->assertInstanceOf('eLife\Patterns\ViewModel\Term', $result['strength']);
         $this->assertContains('<b>Convincing</b>', $result['strength']['termDescription']);
