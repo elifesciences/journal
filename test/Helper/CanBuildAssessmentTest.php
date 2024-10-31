@@ -37,6 +37,20 @@ class CanBuildAssessmentTest extends TestCase
         $this->assertHasStrength('Convincing', $result);
     }
 
+    /**
+     * @test
+     */
+    public function it_highlights_a_statement_with_multiple_strength_terms(): void
+    {
+        $assessmentText = "This study elucidates the role of a specific hemocyte subpopulation in oxidative damage response by establishing connections between DNA damage response and the JNK-JAK/STAT axis to regulate energy metabolism. The identification of this distinct hemocyte subpopulation through single-cell RNA sequencing analysis and the finding of hemocytes that respond to oxidative stress are <b>important</b>. The method for single-cell RNA sequencing and related analyses are <b>convincing</b> and experiments linking oxidative stress to DNA damage and energy expenditure are <b>solid</b>. The finding of stress-responsive immune cells capable of influencing whole-body metabolism adds insights for cell biologists and developmental biologists in the fields of immunology and metabolism.";
+
+        $result = $this->getTestResult($assessmentText);
+
+        $this->assertHasSignificance('Important', $result);
+        $this->assertHasStrength('Convincing', $result);
+        $this->assertHasStrength('Solid', $result);
+    }
+
     private function getTestResult(string $contentText)
     {
         $controller = new class {
