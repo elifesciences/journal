@@ -10,7 +10,10 @@ use PHPUnit\Framework\TestCase;
 
 class CanBuildAssessmentTest extends TestCase
 {
-    public function testReturnStateAnonymous(): void
+    /**
+     * @test
+     */
+    public function it_highlights_a_statement_with_valuable_significance_and_with_solid_strength(): void
     {
         $assessmentText = "This <b>valuable</b> paper compares blood gene signature responses between small cohorts of individuals with mild and severe COVID-19. The authors provide <b>solid</b> evidence for distinct transcriptional profiles during early COVID-19 infections that may be predictive of severity, within the limitations of studying human patients displaying heterogeneity in infection timelines and limited cohort size.";
         
