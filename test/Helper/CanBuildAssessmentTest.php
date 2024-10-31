@@ -21,11 +21,7 @@ class CanBuildAssessmentTest extends TestCase
         $result = $this->getTestResult($assessmentText);
 
         $this->assertHasSignificance('Valuable', $result);
-
-        $this->assertInstanceOf('eLife\Patterns\ViewModel\Term', $result['strength']);
-        $this->assertContains('<b>Solid</b>', $result['strength']['termDescription']);
-        $this->assertEquals('Solid', $result['strength']['terms'][3]['term']);
-        $this->assertTrue($result['strength']['terms'][3]['isHighlighted']);
+        $this->assertHasStrength('Solid', $result);
     }
 
     /**
@@ -38,11 +34,7 @@ class CanBuildAssessmentTest extends TestCase
         $result = $this->getTestResult($assessmentText);
 
         $this->assertHasSignificance('Important', $result);
-
-        $this->assertInstanceOf('eLife\Patterns\ViewModel\Term', $result['strength']);
-        $this->assertContains('<b>Convincing</b>', $result['strength']['termDescription']);
-        $this->assertEquals('Convincing', $result['strength']['terms'][2]['term']);
-        $this->assertTrue($result['strength']['terms'][2]['isHighlighted']);
+        $this->assertHasStrength('Convincing', $result);
     }
 
     private function getTestResult(string $contentText)
@@ -65,5 +57,13 @@ class CanBuildAssessmentTest extends TestCase
         $this->assertContains("<b>{$term}</b>", $result['significance']['termDescription']);
         $highlightedTerm = ['term' => $term, 'isHighlighted' => true];
         $this->assertContains($highlightedTerm, $result['significance']['terms']);
+    }
+
+    private function assertHasStrength(string $term, Assessment $result)
+    {
+        $this->assertInstanceOf('eLife\Patterns\ViewModel\Term', $result['strength']);
+        $this->assertContains("<b>{$term}</b>", $result['strength']['termDescription']);
+        $highlightedTerm = ['term' => $term, 'isHighlighted' => true];
+        $this->assertContains($highlightedTerm, $result['strength']['terms']);
     }
 }
