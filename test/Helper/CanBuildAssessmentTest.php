@@ -66,7 +66,7 @@ class CanBuildAssessmentTest extends TestCase
     {
         $this->assertInstanceOf('eLife\Patterns\ViewModel\Term', $result['significance']);
         $this->assertContains("<b>{$term}</b>", $result['significance']['termDescription']);
-        $this->assertEquals($term, $result['significance']['terms'][3]['term']);
-        $this->assertTrue($result['significance']['terms'][3]['isHighlighted']);
+        $highlightedTerm = ['term' => $term, 'isHighlighted' => true];
+        $this->assertContains($highlightedTerm, $result['significance']['terms']);
     }
 }
