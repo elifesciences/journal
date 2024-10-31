@@ -2,6 +2,7 @@
 
 namespace eLife\Journal\Helper;
 
+use eLife\ApiSdk\Collection\Sequence;
 use eLife\ApiSdk\Model\ArticleSection;
 use eLife\Patterns\ViewModel\Assessment;
 use eLife\Patterns\ViewModel\Term;
@@ -27,7 +28,7 @@ trait CanBuildAssessment
         );
     }
 
-    private function highlightAndFormatTerms($content, array $terms): array {
+    private function highlightAndFormatTerms(Sequence $content, array $terms): array {
         $formattedDescription = [];
         $highlightedWords = [];
 
