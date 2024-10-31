@@ -28,12 +28,25 @@ trait CanBuildAssessment
         );
     }
 
-    private function highlightAndFormatTerms(Sequence $content, array $terms): array
+    private function highlightFoundTerms(array $highlightedWords, array $availableTerms)
+    {
+        return array_map(function ($term) use ($highlightedWords) {
+            $termWord = strtolower($term['term']);
+
+            if (in_array($termWord, $highlightedWords)) {
+                $term['isHighlighted'] = true;
+            }
+
+            return $term;
+        }, $availableTerms);
+    }
+
+    private function highlightAndFormatTerms(Sequence $content, array $availableTerms): array
     {
         $formattedDescription = [];
         $highlightedWords = $this->extractHighlightedWords($content);
 
-        $highlightedTerm = array_map(function ($term) use ($highlightedWords, &$formattedDescription) {
+        array_map(function ($term) use ($highlightedWords, &$formattedDescription) {
             $termDescriptions = [
                 'landmark' => 'Findings with profound implications that are expected to have widespread influence',
                 'fundamental' => 'Findings that substantially advance our understanding of major research questions',
@@ -59,10 +72,10 @@ trait CanBuildAssessment
             }
 
             return $term;
-        }, $terms);
+        }, $availableTerms);
 
         return [
-            'highlightedTerm' => $highlightedTerm,
+            'highlightedTerm' => $this->highlightFoundTerms($highlightedWords, $availableTerms),
             'formattedDescription' => $formattedDescription
         ];
     }
