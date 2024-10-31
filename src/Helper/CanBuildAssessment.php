@@ -41,10 +41,9 @@ trait CanBuildAssessment
         }, $availableTerms);
     }
 
-    private function highlightAndFormatTerms(Sequence $content, array $availableTerms): array
+    private function formatTermDescriptions($highlightedWords, $availableTerms)
     {
         $formattedDescription = [];
-        $highlightedWords = $this->extractHighlightedWords($content);
 
         array_map(function ($term) use ($highlightedWords, &$formattedDescription) {
             $termDescriptions = [
@@ -64,19 +63,23 @@ trait CanBuildAssessment
             $termWord = strtolower($term['term']);
 
             if (in_array($termWord, $highlightedWords)) {
-                $term['isHighlighted'] = true;
-
                 if (isset($termDescriptions[$termWord])) {
                     $formattedDescription[$termWord] = sprintf("<p><b>%s</b>: %s</p>", ucfirst($termWord), $termDescriptions[$termWord]);
                 }
             }
 
-            return $term;
         }, $availableTerms);
+
+        return $formattedDescription;
+    }
+
+    private function highlightAndFormatTerms(Sequence $content, array $availableTerms): array
+    {
+        $highlightedWords = $this->extractHighlightedWords($content);
 
         return [
             'highlightedTerm' => $this->highlightFoundTerms($highlightedWords, $availableTerms),
-            'formattedDescription' => $formattedDescription
+            'formattedDescription' => $this->formatTermDescriptions($highlightedWords, $availableTerms),
         ];
     }
 
