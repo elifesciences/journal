@@ -6,6 +6,7 @@ use eLife\ApiSdk\Collection\ArraySequence;
 use eLife\ApiSdk\Model\ArticleSection;
 use eLife\ApiSdk\Model\Block\Paragraph;
 use eLife\Journal\Helper\CanBuildAssessment;
+use eLife\Patterns\ViewModel\Assessment;
 use PHPUnit\Framework\TestCase;
 
 class CanBuildAssessmentTest extends TestCase
@@ -19,10 +20,7 @@ class CanBuildAssessmentTest extends TestCase
         
         $result = $this->getTestResult($assessmentText);
 
-        $this->assertInstanceOf('eLife\Patterns\ViewModel\Term', $result['significance']);
-        $this->assertContains('<b>Valuable</b>', $result['significance']['termDescription']);
-        $this->assertEquals('Valuable', $result['significance']['terms'][3]['term']);
-        $this->assertTrue($result['significance']['terms'][3]['isHighlighted']);
+        $this->assertHasSignificance('Valuable', $result);
 
         $this->assertInstanceOf('eLife\Patterns\ViewModel\Term', $result['strength']);
         $this->assertContains('<b>Solid</b>', $result['strength']['termDescription']);
@@ -62,5 +60,13 @@ class CanBuildAssessmentTest extends TestCase
         $id = 'sa0';
         $elifeAssessment = new ArticleSection($content, $doi, $id);
         return $controller->buildAssessmentViewModel($elifeAssessment);
+    }
+
+    private function assertHasSignificance(string $term, Assessment $result)
+    {
+        $this->assertInstanceOf('eLife\Patterns\ViewModel\Term', $result['significance']);
+        $this->assertContains("<b>{$term}</b>", $result['significance']['termDescription']);
+        $this->assertEquals($term, $result['significance']['terms'][3]['term']);
+        $this->assertTrue($result['significance']['terms'][3]['isHighlighted']);
     }
 }
