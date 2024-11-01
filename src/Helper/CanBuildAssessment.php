@@ -59,7 +59,7 @@ trait CanBuildAssessment
             'inadequate' => 'Methods, data and analyses do not support the primary claims',
         ];
 
-        $matchingTerms = array_filter($availableTerms, function (string $term) use ($highlightedWords, $termDescriptions) {
+        $matchingTerms = array_filter($availableTerms, function (array $term) use ($highlightedWords, $termDescriptions) {
             $termWord = strtolower($term['term']);
 
             if (in_array($termWord, $highlightedWords)) {
