@@ -45,10 +45,11 @@ trait CanBuildAssessment
     private function highlightAndFormatTerms(Sequence $content, array $availableTerms): array
     {
         $highlightedWords = $this->extractHighlightedWords($content);
+        $matchingNormalisedTerms = $this->normaliseTerms($highlightedWords);
 
         return [
-            'highlightedTerm' => $this->highlightFoundTerms($highlightedWords, $availableTerms),
-            'formattedDescription' => $this->formatTermDescriptions($highlightedWords, $availableTerms),
+            'highlightedTerm' => $this->highlightFoundTerms($matchingNormalisedTerms, $availableTerms),
+            'formattedDescription' => $this->formatTermDescriptions($matchingNormalisedTerms, $availableTerms),
         ];
     }
 
@@ -69,6 +70,11 @@ trait CanBuildAssessment
         }
 
         return $highlightedWords;
+    }
+
+    private function normaliseTerms(array $words): array
+    {
+        return $words;
     }
 
     private function highlightFoundTerms(array $highlightedWords, array $availableTerms)
