@@ -18,8 +18,22 @@ trait CanBuildAssessment
         $resultStrength = $this->highlightAndFormatTerms($content, $strengthTerms);
         $significanceAriaLable = 'eLife assessments use a common vocabulary to describe significance. The term chosen for this paper is:';
         $strengthAriaLable = 'eLife assessments use a common vocabulary to describe strength of evidence. The term or terms chosen for this paper is:';
-        $significance = !empty($resultSignificance['formattedDescription']) ? new Term('Significance of the findings:', implode(PHP_EOL, $resultSignificance['formattedDescription']), $resultSignificance['highlightedTerm'], $significanceAriaLable) : null;
-        $strength = !empty($resultStrength['formattedDescription']) ? new Term('Strength of evidence:', implode(PHP_EOL, $resultStrength['formattedDescription']), $resultStrength['highlightedTerm'], $strengthAriaLable) : null;
+        $significance = !empty($resultSignificance['formattedDescription'])
+            ? new Term(
+                'Significance of the findings:',
+                implode(PHP_EOL, $resultSignificance['formattedDescription']),
+                $resultSignificance['highlightedTerm'],
+                $significanceAriaLable
+            )
+            : null;
+        $strength = !empty($resultStrength['formattedDescription'])
+            ? new Term(
+                'Strength of evidence:',
+                implode(PHP_EOL, $resultStrength['formattedDescription']),
+                $resultStrength['highlightedTerm'],
+                $strengthAriaLable
+            )
+            : null;
 
         return new Assessment(
             $significance,
@@ -70,7 +84,7 @@ trait CanBuildAssessment
         }, $availableTerms);
     }
 
-    private function formatTermDescriptions($highlightedWords, $availableTerms)
+    private function formatTermDescriptions($highlightedWords, $availableTerms): array
     {
         $formattedDescription = [];
 
