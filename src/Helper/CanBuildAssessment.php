@@ -45,21 +45,21 @@ trait CanBuildAssessment
     {
         $formattedDescription = [];
 
-        array_map(function ($term) use ($highlightedWords, &$formattedDescription) {
-            $termDescriptions = [
-                'landmark' => 'Findings with profound implications that are expected to have widespread influence',
-                'fundamental' => 'Findings that substantially advance our understanding of major research questions',
-                'important' => 'Findings that have theoretical or practical implications beyond a single subfield',
-                'valuable' => 'Findings that have theoretical or practical implications for a subfield',
-                'useful' => 'Findings that have focused importance and scope',
-                'exceptional' => 'Exemplary use of existing approaches that establish new standards for a field',
-                'compelling' => 'Evidence that features methods, data and analyses more rigorous than the current state-of-the-art',
-                'convincing' => 'Appropriate and validated methodology in line with current state-of-the-art',
-                'solid' => 'Methods, data and analyses broadly support the claims with only minor weaknesses',
-                'incomplete' => 'Main claims are only partially supported',
-                'inadequate' => 'Methods, data and analyses do not support the primary claims',
-            ];
+        $termDescriptions = [
+            'landmark' => 'Findings with profound implications that are expected to have widespread influence',
+            'fundamental' => 'Findings that substantially advance our understanding of major research questions',
+            'important' => 'Findings that have theoretical or practical implications beyond a single subfield',
+            'valuable' => 'Findings that have theoretical or practical implications for a subfield',
+            'useful' => 'Findings that have focused importance and scope',
+            'exceptional' => 'Exemplary use of existing approaches that establish new standards for a field',
+            'compelling' => 'Evidence that features methods, data and analyses more rigorous than the current state-of-the-art',
+            'convincing' => 'Appropriate and validated methodology in line with current state-of-the-art',
+            'solid' => 'Methods, data and analyses broadly support the claims with only minor weaknesses',
+            'incomplete' => 'Main claims are only partially supported',
+            'inadequate' => 'Methods, data and analyses do not support the primary claims',
+        ];
 
+        array_map(function ($term) use ($highlightedWords, $termDescriptions, &$formattedDescription) {
             $termWord = strtolower($term['term']);
 
             if (in_array($termWord, $highlightedWords)) {
