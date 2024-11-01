@@ -113,9 +113,12 @@ trait CanBuildAssessment
             return false;
         });
 
-        array_map(function ($term) use ($termDescriptions, &$formattedDescription) {
-            $termWord = strtolower($term['term']);
-            $formattedDescription[] = sprintf("<p><b>%s</b>: %s</p>", $term['term'], $termDescriptions[$termWord]);
+        $formattedDescription = array_map(function ($term) use ($termDescriptions) {
+            return sprintf(
+                "<p><b>%s</b>: %s</p>",
+                $term['term'],
+                $termDescriptions[strtolower($term['term'])]
+            );
         }, $matchingTerms);
 
         return $formattedDescription;
