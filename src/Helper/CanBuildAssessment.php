@@ -87,7 +87,8 @@ trait CanBuildAssessment
     }
 
     private function findMatchingTerms(array $words): array
-        {
+    {
+        $availableTerms = array_keys(self::$termDescriptions);
         $matchingTerms = [];
         $variationToTerm = [
             'convincingly' => 'convincing',
@@ -98,7 +99,7 @@ trait CanBuildAssessment
         foreach ($words as $word) {
             if (array_key_exists($word, $variationToTerm)) {
                 $matchingTerms[] = $variationToTerm[$word];
-            } else {
+            } elseif (in_array($word, $availableTerms)) {
                 $matchingTerms[] = $word;
             }
         }
