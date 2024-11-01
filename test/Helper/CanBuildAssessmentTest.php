@@ -27,15 +27,33 @@ class CanBuildAssessmentTest extends TestCase
     /**
      * @test
      */
+    public function it_does_not_highlight_terms_that_are_not_mentioned_in_the_statement(): void
+    {
+        $assessmentText = "This <b>valuable</b> paper compares blood gene signature responses between small cohorts of individuals with mild and severe COVID-19. The authors provide <b>solid</b> evidence for distinct transcriptional profiles during early COVID-19 infections that may be predictive of severity, within the limitations of studying human patients displaying heterogeneity in infection timelines and limited cohort size.";
+
+        $result = $this->getTestResult($assessmentText);
+
+        $notHighlightedTerms = array_filter($result['significance']['terms'], function (array $term) {
+            return $term['term'] !== 'Valuable';
+        });
+        foreach ($notHighlightedTerms as $each) {
+            $this->assertArrayNotHasKey('isHighlighted', $each);
+        }
+        $this->markTestIncomplete('Needs to assert on strength too');
+    }
+
+    /**
+     * @test
+     */
     public function it_does_not_highlight_a_statement_that_does_not_contain_at_least_one_emboldened_term(): void
     {
         $assessmentText = "This valuable paper compares blood gene signature responses between small cohorts of individuals with mild and severe COVID-19. The authors provide solid evidence for distinct transcriptional profiles during early COVID-19 infections that may be predictive of severity, within the limitations of studying human patients displaying heterogeneity in infection timelines and limited cohort size.";
-        
+
         $result = $this->getTestResult($assessmentText);
 
         $this->assertNull($result['significance']);
         $this->assertNull($result['strength']);
-    } 
+    }
 
     /**
      * @test
