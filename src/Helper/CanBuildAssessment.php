@@ -16,14 +16,14 @@ trait CanBuildAssessment
         $content = $elifeAssessment->getContent();
         $resultSignificance = $this->highlightAndFormatTerms($content, $significanceTerms);
         $resultStrength = $this->highlightAndFormatTerms($content, $strengthTerms);
-        $significanceAriaLable = 'eLife assessments use a common vocabulary to describe significance. The term chosen for this paper is:';
-        $strengthAriaLable = 'eLife assessments use a common vocabulary to describe strength of evidence. The term or terms chosen for this paper is:';
+        $significanceAriaLabel = 'eLife assessments use a common vocabulary to describe significance. The term chosen for this paper is:';
+        $strengthAriaLabel = 'eLife assessments use a common vocabulary to describe strength of evidence. The term or terms chosen for this paper is:';
         $significance = !empty($resultSignificance['formattedDescription'])
             ? new Term(
                 'Significance of the findings:',
                 implode(PHP_EOL, $resultSignificance['formattedDescription']),
                 $resultSignificance['highlightedTerm'],
-                $significanceAriaLable
+                $significanceAriaLabel
             )
             : null;
         $strength = !empty($resultStrength['formattedDescription'])
@@ -31,7 +31,7 @@ trait CanBuildAssessment
                 'Strength of evidence:',
                 implode(PHP_EOL, $resultStrength['formattedDescription']),
                 $resultStrength['highlightedTerm'],
-                $strengthAriaLable
+                $strengthAriaLabel
             )
             : null;
 
@@ -87,8 +87,6 @@ trait CanBuildAssessment
 
     private function formatTermDescriptions($highlightedWords, $availableTerms): array
     {
-        $formattedDescription = [];
-
         $termDescriptions = [
             'landmark' => 'Findings with profound implications that are expected to have widespread influence',
             'fundamental' => 'Findings that substantially advance our understanding of major research questions',
