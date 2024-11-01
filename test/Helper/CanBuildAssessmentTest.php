@@ -50,6 +50,19 @@ class CanBuildAssessmentTest extends TestCase
     /**
      * @test
      */
+    public function it_highlights_a_statement_with_a_significance_term_but_no_strength_term(): void
+    {
+        $assessmentText = "This <b>valuable</b> paper...";
+
+        $result = $this->getTestResult($assessmentText);
+
+        $this->assertHasSignificance('Valuable', $result);
+        $this->assertNull($result['strength']);
+    }
+
+    /**
+     * @test
+     */
     public function it_does_not_highlight_a_statement_that_does_not_contain_at_least_one_emboldened_term(): void
     {
         $assessmentText = "This valuable paper compares blood gene signature responses between small cohorts of individuals with mild and severe COVID-19. The authors provide solid evidence for distinct transcriptional profiles during early COVID-19 infections that may be predictive of severity, within the limitations of studying human patients displaying heterogeneity in infection timelines and limited cohort size.";
