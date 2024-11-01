@@ -66,10 +66,9 @@ class CanBuildAssessmentTest extends TestCase
     public function it_highlights_a_statement_with_valuable_significance_in_uppercase(): void
     {
         $assessmentText = "<b>Valuable</b> paper that compares ...";
-        
+
         $result = $this->getTestResult($assessmentText);
 
-        $this->markTestSkipped();
         $this->assertHasSignificance('Valuable', $result);
     }
 

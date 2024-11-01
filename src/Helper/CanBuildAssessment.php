@@ -97,10 +97,11 @@ trait CanBuildAssessment
         ];
 
         foreach ($words as $word) {
-            if (array_key_exists($word, $variationToTerm)) {
-                $matchingTerms[] = $variationToTerm[$word];
-            } elseif (in_array($word, $availableTerms)) {
-                $matchingTerms[] = $word;
+            $normalisedWord = strtolower($word);
+            if (array_key_exists($normalisedWord, $variationToTerm)) {
+                $matchingTerms[] = $variationToTerm[$normalisedWord];
+            } elseif (in_array($normalisedWord, $availableTerms)) {
+                $matchingTerms[] = $normalisedWord;
             }
         }
         return $matchingTerms;
