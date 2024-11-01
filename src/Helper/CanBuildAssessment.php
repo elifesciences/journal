@@ -74,6 +74,9 @@ trait CanBuildAssessment
 
     private function normaliseTerms(array $words): array
     {
+        if (in_array('convincingly', $words)) {
+            $words[] = 'convincing';
+        }
         return $words;
     }
 
