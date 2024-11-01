@@ -40,6 +40,19 @@ class CanBuildAssessmentTest extends TestCase
     /**
      * @test
      */
+    public function it_does_not_highlight_a_statement_with_a_bold_word_that_is_not_a_term(): void
+    {
+        $assessmentText = "<b>Exactly</b> one paper that compares ...";
+
+        $result = $this->getTestResult($assessmentText);
+
+        $this->assertNull($result['significance']);
+        $this->assertNull($result['strength']);
+    }
+
+    /**
+     * @test
+     */
     public function it_highlights_a_statement_with_important_significance_and_with_convincing_strength(): void
     {
         $assessmentText = "This <b>important</b> manuscript shows that axonal transport of Wnd is required for its normal degradation by the Hiw ubiquitin ligase pathway. In Hiw mutants, the Wnd protein accumulates in nerve terminals. In the absence of axonal transport, Wnd levels also rise and lead to excessive JNK signaling, disrupting neuronal function. These are interesting findings supported by <b>convincing</b> data. However, how Rab11 is involved in Golgi processing or axonal transport of Wnd is not resolved as it is clear that Rab11 is not travelling with Wnd to the axon.";
