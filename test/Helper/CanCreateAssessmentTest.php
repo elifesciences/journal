@@ -9,7 +9,7 @@ use eLife\Journal\Helper\CanCreateAssessment;
 use eLife\Patterns\ViewModel\Assessment;
 use PHPUnit\Framework\TestCase;
 
-class CanBuildAssessmentTest extends TestCase
+class CanCreateAssessmentTest extends TestCase
 {
     /**
      * @test
