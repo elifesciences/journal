@@ -67,7 +67,6 @@ trait CanBuildAssessment
                     $formattedDescription[$termWord] = sprintf("<p><b>%s</b>: %s</p>", ucfirst($termWord), $termDescriptions[$termWord]);
                 }
             }
-
         }, $availableTerms);
 
         return $formattedDescription;
