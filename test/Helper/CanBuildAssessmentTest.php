@@ -33,13 +33,18 @@ class CanBuildAssessmentTest extends TestCase
 
         $result = $this->getTestResult($assessmentText);
 
-        $notHighlightedTerms = array_filter($result['significance']['terms'], function (array $term) {
+        $notHighlightedSignificanceTerms = array_filter($result['significance']['terms'], function (array $term) {
             return $term['term'] !== 'Valuable';
         });
-        foreach ($notHighlightedTerms as $each) {
+        foreach ($notHighlightedSignificanceTerms as $each) {
             $this->assertArrayNotHasKey('isHighlighted', $each);
         }
-        $this->markTestIncomplete('Needs to assert on strength too');
+        $notHighlightedStrengthTerms = array_filter($result['strength']['terms'], function (array $term) {
+            return $term['term'] !== 'Solid';
+        });
+        foreach ($notHighlightedStrengthTerms as $each) {
+            $this->assertArrayNotHasKey('isHighlighted', $each);
+        }
     }
 
     /**
