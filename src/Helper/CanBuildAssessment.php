@@ -28,6 +28,35 @@ trait CanBuildAssessment
         );
     }
 
+    private function highlightAndFormatTerms(Sequence $content, array $availableTerms): array
+    {
+        $highlightedWords = $this->extractHighlightedWords($content);
+
+        return [
+            'highlightedTerm' => $this->highlightFoundTerms($highlightedWords, $availableTerms),
+            'formattedDescription' => $this->formatTermDescriptions($highlightedWords, $availableTerms),
+        ];
+    }
+
+    private function extractHighlightedWords(Sequence $content): array
+    {
+        $highlightedWords = [];
+
+        foreach ($content as $contentItem) {
+            if (method_exists($contentItem, 'getText')) {
+                $text = $contentItem->getText();
+
+                preg_match_all('/<b>(.*?)<\/b>/', $text, $matches);
+
+                if (!empty($matches[1])) {
+                    $highlightedWords = array_merge($highlightedWords, $matches[1]);
+                }
+            }
+        }
+
+        return $highlightedWords;
+    }
+
     private function highlightFoundTerms(array $highlightedWords, array $availableTerms)
     {
         return array_map(function ($term) use ($highlightedWords) {
@@ -76,34 +105,5 @@ trait CanBuildAssessment
         }, $matchingTerms);
 
         return $formattedDescription;
-    }
-
-    private function highlightAndFormatTerms(Sequence $content, array $availableTerms): array
-    {
-        $highlightedWords = $this->extractHighlightedWords($content);
-
-        return [
-            'highlightedTerm' => $this->highlightFoundTerms($highlightedWords, $availableTerms),
-            'formattedDescription' => $this->formatTermDescriptions($highlightedWords, $availableTerms),
-        ];
-    }
-
-    private function extractHighlightedWords(Sequence $content): array
-    {
-        $highlightedWords = [];
-
-        foreach ($content as $contentItem) {
-            if (method_exists($contentItem, 'getText')) {
-                $text = $contentItem->getText();
-
-                preg_match_all('/<b>(.*?)<\/b>/', $text, $matches);
-
-                if (!empty($matches[1])) {
-                    $highlightedWords = array_merge($highlightedWords, $matches[1]);
-                }
-            }
-        }
-
-        return $highlightedWords;
     }
 }
