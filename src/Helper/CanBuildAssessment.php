@@ -59,11 +59,11 @@ trait CanBuildAssessment
     private function highlightAndFormatTerms(Sequence $content, array $availableTerms): array
     {
         $highlightedWords = $this->extractHighlightedWords($content);
-        $matchingNormalisedTerms = $this->normaliseTerms($highlightedWords);
+        $matchingTerms = $this->findMatchingTerms($highlightedWords);
 
         return [
-            'highlightedTerm' => $this->highlightFoundTerms($matchingNormalisedTerms, $availableTerms),
-            'formattedDescription' => $this->formatTermDescriptions($matchingNormalisedTerms, $availableTerms),
+            'highlightedTerm' => $this->highlightFoundTerms($matchingTerms, $availableTerms),
+            'formattedDescription' => $this->formatTermDescriptions($matchingTerms, $availableTerms),
         ];
     }
 
@@ -86,20 +86,23 @@ trait CanBuildAssessment
         return $highlightedWords;
     }
 
-    private function normaliseTerms(array $words): array
-    {
-        $variations = [
+    private function findMatchingTerms(array $words): array
+        {
+        $matchingTerms = [];
+        $variationToTerm = [
             'convincingly' => 'convincing',
             'inadequately' => 'inadequate',
             'incompletely' => 'incomplete',
         ];
 
-        foreach ($variations as $variation => $normalisedTerm) {
-            if (in_array($variation, $words)) {
-                $words[] = $normalisedTerm;
+        foreach ($words as $word) {
+            if (array_key_exists($word, $variationToTerm)) {
+                $matchingTerms[] = $variationToTerm[$word];
+            } else {
+                $matchingTerms[] = $word;
             }
         }
-        return $words;
+        return $matchingTerms;
     }
 
     private function highlightFoundTerms(array $highlightedWords, array $availableTerms)
