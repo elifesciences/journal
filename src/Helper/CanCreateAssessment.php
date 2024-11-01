@@ -58,8 +58,8 @@ trait CanCreateAssessment
 
     private function highlightAndFormatTerms(Sequence $content, array $availableTerms): array
     {
-        $highlightedWords = $this->extractHighlightedWords($content);
-        $matchingTerms = $this->findMatchingTerms($highlightedWords);
+        $emboldenedWords = $this->extractEmboldenedWords($content);
+        $matchingTerms = $this->findMatchingTerms($emboldenedWords);
 
         return [
             'highlightedTerm' => $this->highlightFoundTerms($matchingTerms, $availableTerms),
@@ -67,9 +67,9 @@ trait CanCreateAssessment
         ];
     }
 
-    private function extractHighlightedWords(Sequence $content): array
+    private function extractEmboldenedWords(Sequence $content): array
     {
-        $highlightedWords = [];
+        $emboldenedWords = [];
 
         foreach ($content as $contentItem) {
             if (method_exists($contentItem, 'getText')) {
@@ -78,12 +78,12 @@ trait CanCreateAssessment
                 preg_match_all('/<b>(.*?)<\/b>/', $text, $matches);
 
                 if (!empty($matches[1])) {
-                    $highlightedWords = array_merge($highlightedWords, $matches[1]);
+                    $emboldenedWords = array_merge($emboldenedWords, $matches[1]);
                 }
             }
         }
 
-        return $highlightedWords;
+        return $emboldenedWords;
     }
 
     private function findMatchingTerms(array $words): array
@@ -107,13 +107,13 @@ trait CanCreateAssessment
         return $matchingTerms;
     }
 
-    private function highlightFoundTerms(array $highlightedWords, array $availableTerms)
+    private function highlightFoundTerms(array $foundTerms, array $availableTerms)
     {
-        return array_map(function (string $term) use ($highlightedWords) {
+        return array_map(function (string $term) use ($foundTerms) {
             $termWord = strtolower($term);
             $termViewModel = ['term' => $term];
 
-            if (in_array($termWord, $highlightedWords)) {
+            if (in_array($termWord, $foundTerms)) {
                 $termViewModel['isHighlighted'] = true;
             }
 
@@ -121,12 +121,12 @@ trait CanCreateAssessment
         }, $availableTerms);
     }
 
-    private function formatTermDescriptions($highlightedWords, $availableTerms): array
+    private function formatTermDescriptions($matchingTerms, $availableTerms): array
     {
-        $matchingTerms = array_filter($availableTerms, function (string $term) use ($highlightedWords) {
+        $matchingTerms = array_filter($availableTerms, function (string $term) use ($matchingTerms) {
             $termWord = strtolower($term);
 
-            if (in_array($termWord, $highlightedWords)) {
+            if (in_array($termWord, $matchingTerms)) {
                 if (isset(self::$termDescriptions[$termWord])) {
                     return true;
                 }
