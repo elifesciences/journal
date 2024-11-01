@@ -5,7 +5,7 @@ namespace test\eLife\Journal\Helper;
 use eLife\ApiSdk\Collection\ArraySequence;
 use eLife\ApiSdk\Model\ArticleSection;
 use eLife\ApiSdk\Model\Block\Paragraph;
-use eLife\Journal\Helper\CanBuildAssessment;
+use eLife\Journal\Helper\CanCreateAssessment;
 use eLife\Patterns\ViewModel\Assessment;
 use PHPUnit\Framework\TestCase;
 
@@ -167,7 +167,7 @@ class CanBuildAssessmentTest extends TestCase
     private function getTestResult(string $contentText)
     {
         $controller = new class {
-            use CanBuildAssessment;
+            use CanCreateAssessment;
         };
         $content = new ArraySequence([
             new Paragraph($contentText)
@@ -175,7 +175,7 @@ class CanBuildAssessmentTest extends TestCase
         $doi = '10.7554/eLife.94242.3.sa0';
         $id = 'sa0';
         $elifeAssessment = new ArticleSection($content, $doi, $id);
-        return $controller->buildAssessmentViewModel($elifeAssessment);
+        return $controller->createAssessment($elifeAssessment);
     }
 
     private function assertHasSignificance(string $term, Assessment $result)

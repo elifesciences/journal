@@ -27,7 +27,7 @@ use eLife\ApiSdk\Model\PublicReview;
 use eLife\ApiSdk\Model\ReviewedPreprint;
 use eLife\ApiSdk\Model\Reviewer;
 use eLife\Journal\Exception\EarlyResponse;
-use eLife\Journal\Helper\CanBuildAssessment;
+use eLife\Journal\Helper\CanCreateAssessment;
 use eLife\Journal\Helper\Callback;
 use eLife\Journal\Helper\DownloadLink;
 use eLife\Journal\Helper\HasPages;
@@ -64,7 +64,7 @@ final class ArticlesController extends Controller
     const DISMISSIBLE_INFO_BAR_COOKIE_DURATION = '+365 days';
 
     use HasPages;
-    use CanBuildAssessment;
+    use CanCreateAssessment;
 
     public function textAction(Request $request, string $id, int $version = null) : Response
     {
@@ -652,7 +652,7 @@ final class ArticlesController extends Controller
                         null,
                         null,
                         null,
-                        $this->buildAssessmentViewModel($elifeAssessment)
+                        $this->createAssessment($elifeAssessment)
                     );
                 }
             });
