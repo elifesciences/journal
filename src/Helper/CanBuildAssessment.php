@@ -9,6 +9,20 @@ use eLife\Patterns\ViewModel\Term;
 
 trait CanBuildAssessment
 {
+    private static $termDescriptions = [
+        'landmark' => 'Findings with profound implications that are expected to have widespread influence',
+        'fundamental' => 'Findings that substantially advance our understanding of major research questions',
+        'important' => 'Findings that have theoretical or practical implications beyond a single subfield',
+        'valuable' => 'Findings that have theoretical or practical implications for a subfield',
+        'useful' => 'Findings that have focused importance and scope',
+        'exceptional' => 'Exemplary use of existing approaches that establish new standards for a field',
+        'compelling' => 'Evidence that features methods, data and analyses more rigorous than the current state-of-the-art',
+        'convincing' => 'Appropriate and validated methodology in line with current state-of-the-art',
+        'solid' => 'Methods, data and analyses broadly support the claims with only minor weaknesses',
+        'incomplete' => 'Main claims are only partially supported',
+        'inadequate' => 'Methods, data and analyses do not support the primary claims',
+    ];
+
     final public function buildAssessmentViewModel(ArticleSection $elifeAssessment): Assessment {
         $summary = 'During the peer-review process the editor and reviewers write an eLife Assessment that summarises the significance of the findings reported in the article (on a scale ranging from landmark to useful) and the strength of the evidence (on a scale ranging from exceptional to inadequate). <a href="https://elifesciences.org/about/elife-assessments">Learn more about eLife Assessments</a>';
         $significanceTerms = ['Landmark', 'Fundamental', 'Important', 'Valuable', 'Useful'];
@@ -104,36 +118,22 @@ trait CanBuildAssessment
 
     private function formatTermDescriptions($highlightedWords, $availableTerms): array
     {
-        $termDescriptions = [
-            'landmark' => 'Findings with profound implications that are expected to have widespread influence',
-            'fundamental' => 'Findings that substantially advance our understanding of major research questions',
-            'important' => 'Findings that have theoretical or practical implications beyond a single subfield',
-            'valuable' => 'Findings that have theoretical or practical implications for a subfield',
-            'useful' => 'Findings that have focused importance and scope',
-            'exceptional' => 'Exemplary use of existing approaches that establish new standards for a field',
-            'compelling' => 'Evidence that features methods, data and analyses more rigorous than the current state-of-the-art',
-            'convincing' => 'Appropriate and validated methodology in line with current state-of-the-art',
-            'solid' => 'Methods, data and analyses broadly support the claims with only minor weaknesses',
-            'incomplete' => 'Main claims are only partially supported',
-            'inadequate' => 'Methods, data and analyses do not support the primary claims',
-        ];
-
-        $matchingTerms = array_filter($availableTerms, function (string $term) use ($highlightedWords, $termDescriptions) {
+        $matchingTerms = array_filter($availableTerms, function (string $term) use ($highlightedWords) {
             $termWord = strtolower($term);
 
             if (in_array($termWord, $highlightedWords)) {
-                if (isset($termDescriptions[$termWord])) {
+                if (isset(self::$termDescriptions[$termWord])) {
                     return true;
                 }
             }
             return false;
         });
 
-        $formattedDescription = array_map(function (string $term) use ($termDescriptions) {
+        $formattedDescription = array_map(function (string $term) {
             return sprintf(
                 "<p><b>%s</b>: %s</p>",
                 $term,
-                $termDescriptions[strtolower($term)]
+                self::$termDescriptions[strtolower($term)]
             );
         }, $matchingTerms);
 
