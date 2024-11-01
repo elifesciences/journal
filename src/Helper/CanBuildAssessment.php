@@ -77,6 +77,9 @@ trait CanBuildAssessment
         if (in_array('convincingly', $words)) {
             $words[] = 'convincing';
         }
+        if (in_array('inadequately', $words)) {
+            $words[] = 'inadequate';
+        }
         return $words;
     }
 

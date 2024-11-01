@@ -136,7 +136,6 @@ class CanBuildAssessmentTest extends TestCase
         $result = $this->getTestResult($assessmentText);
 
         $this->assertHasSignificance('Important', $result);
-        $this->markTestSkipped();
         $this->assertHasStrength('Inadequate', $result);
     }
 
