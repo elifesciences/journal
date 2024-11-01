@@ -59,15 +59,21 @@ trait CanBuildAssessment
             'inadequate' => 'Methods, data and analyses do not support the primary claims',
         ];
 
-        array_map(function ($term) use ($highlightedWords, $termDescriptions, &$formattedDescription) {
+        $matchingTerms = array_filter($availableTerms, function (string $term) use ($highlightedWords, $termDescriptions) {
             $termWord = strtolower($term['term']);
 
             if (in_array($termWord, $highlightedWords)) {
                 if (isset($termDescriptions[$termWord])) {
-                    $formattedDescription[$termWord] = sprintf("<p><b>%s</b>: %s</p>", ucfirst($termWord), $termDescriptions[$termWord]);
+                    return true;
                 }
             }
-        }, $availableTerms);
+            return false;
+        });
+
+        array_map(function ($term) use ($termDescriptions, &$formattedDescription) {
+            $termWord = strtolower($term['term']);
+            $formattedDescription[$termWord] = sprintf("<p><b>%s</b>: %s</p>", $term['term'], $termDescriptions[$termWord]);
+        }, $matchingTerms);
 
         return $formattedDescription;
     }
