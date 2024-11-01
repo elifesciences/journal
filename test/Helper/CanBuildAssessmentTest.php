@@ -139,6 +139,19 @@ class CanBuildAssessmentTest extends TestCase
         $this->assertHasStrength('Inadequate', $result);
     }
 
+    /**
+     * @test
+     */
+    public function it_highlights_a_statement_with_a_term_variation_for_incomplete_strength(): void
+    {
+        $assessmentText = "This study uses C. elegans, a poikilothermic (\"cold-blooded\") animal, to investigate the interesting question of how cells and organisms adapt to prolonged exposure to cold temperature. The study employed ribosome profiling and RNAseq analyses and provides a <b>useful</b> inventory of genes changed in cold adapted nematodes. However, the overall conclusions that 1) translation is ongoing at a low rate and 2) IRE mediated transcriptional changes play a significant role in cold adaptation are <b>incompletely</b> supported by the evidence provided. The authors are encouraged to conduct additional bioinformatic analyses and rewrite the manuscript to more accurately reflect the evidence provided.";
+
+        $result = $this->getTestResult($assessmentText);
+
+        $this->assertHasSignificance('Useful', $result);
+        $this->assertHasStrength('Incomplete', $result);
+    }
+
     private function getTestResult(string $contentText)
     {
         $controller = new class {

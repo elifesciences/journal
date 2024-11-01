@@ -80,6 +80,9 @@ trait CanBuildAssessment
         if (in_array('inadequately', $words)) {
             $words[] = 'inadequate';
         }
+        if (in_array('incompletely', $words)) {
+            $words[] = 'incomplete';
+        }
         return $words;
     }
 
