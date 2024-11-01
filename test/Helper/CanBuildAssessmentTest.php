@@ -126,6 +126,20 @@ class CanBuildAssessmentTest extends TestCase
         $this->assertHasStrength('Convincing', $result);
     }
 
+    /**
+     * @test
+     */
+    public function it_highlights_a_statement_with_a_term_variation_for_inadequate_strength(): void
+    {
+        $assessmentText = "The authors show MRI relaxation time changes that are claimed to originate from cell membrane potential changes. This would be very <b>important</b> if true because it may provide a mechanism whereby membrane potential changes could be inferred noninvasively. However, the membrane potential manipulations applied here will induce cell swelling, and cell swelling has been previously shown to affect relaxation time. Therefore, the claim that the relaxation time changes observed in this manuscript are due to cell membrane potential changes is <b>inadequately</b> supported.";
+
+        $result = $this->getTestResult($assessmentText);
+
+        $this->assertHasSignificance('Important', $result);
+        $this->markTestSkipped();
+        $this->assertHasStrength('Inadequate', $result);
+    }
+
     private function getTestResult(string $contentText)
     {
         $controller = new class {
