@@ -34,16 +34,16 @@
                 <array>
                     <element key="time-sensitive">
                         <array>
-                            <element>
+                            <element key="0">
                                 <string>eLife\Journal\Controller</string>
                             </element>
-                            <element>
+                            <element key="0">
                                 <string>eLife\Journal\Security</string>
                             </element>
-                            <element>
+                            <element key="0">
                                 <string>eLife\Journal\Security\Voter</string>
                             </element>
-                            <element>
+                            <element key="0">
                                 <string>eLife\Journal\ViewModel\Factory</string>
                             </element>
                         </array>
