@@ -115,7 +115,7 @@ trait CanBuildAssessment
 
         array_map(function ($term) use ($termDescriptions, &$formattedDescription) {
             $termWord = strtolower($term['term']);
-            $formattedDescription[$termWord] = sprintf("<p><b>%s</b>: %s</p>", $term['term'], $termDescriptions[$termWord]);
+            $formattedDescription[] = sprintf("<p><b>%s</b>: %s</p>", $term['term'], $termDescriptions[$termWord]);
         }, $matchingTerms);
 
         return $formattedDescription;
