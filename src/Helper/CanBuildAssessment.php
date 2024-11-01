@@ -11,8 +11,8 @@ trait CanBuildAssessment
 {
     final public function buildAssessmentViewModel(ArticleSection $elifeAssessment): Assessment {
         $summary = 'During the peer-review process the editor and reviewers write an eLife Assessment that summarises the significance of the findings reported in the article (on a scale ranging from landmark to useful) and the strength of the evidence (on a scale ranging from exceptional to inadequate). <a href="https://elifesciences.org/about/elife-assessments">Learn more about eLife Assessments</a>';
-        $significanceTerms = [['term' => 'Landmark'], ['term' => 'Fundamental'], ['term' => 'Important'], ['term' => 'Valuable'], ['term' => 'Useful']];
-        $strengthTerms = [['term' => 'Exceptional'], ['term' => 'Compelling'], ['term' => 'Convincing'], ['term' => 'Solid'], ['term' => 'Incomplete'], ['term' => 'Inadequate']];
+        $significanceTerms = ['Landmark', 'Fundamental', 'Important', 'Valuable', 'Useful'];
+        $strengthTerms = ['Exceptional', 'Compelling', 'Convincing', 'Solid', 'Incomplete', 'Inadequate'];
         $content = $elifeAssessment->getContent();
         $resultSignificance = $this->highlightAndFormatTerms($content, $significanceTerms);
         $resultStrength = $this->highlightAndFormatTerms($content, $strengthTerms);
@@ -73,14 +73,15 @@ trait CanBuildAssessment
 
     private function highlightFoundTerms(array $highlightedWords, array $availableTerms)
     {
-        return array_map(function ($term) use ($highlightedWords) {
-            $termWord = strtolower($term['term']);
+        return array_map(function (string $term) use ($highlightedWords) {
+            $termWord = strtolower($term);
+            $termViewModel = ['term' => $term];
 
             if (in_array($termWord, $highlightedWords)) {
-                $term['isHighlighted'] = true;
+                $termViewModel['isHighlighted'] = true;
             }
 
-            return $term;
+            return $termViewModel;
         }, $availableTerms);
     }
 
@@ -102,8 +103,8 @@ trait CanBuildAssessment
             'inadequate' => 'Methods, data and analyses do not support the primary claims',
         ];
 
-        $matchingTerms = array_filter($availableTerms, function (array $term) use ($highlightedWords, $termDescriptions) {
-            $termWord = strtolower($term['term']);
+        $matchingTerms = array_filter($availableTerms, function (string $term) use ($highlightedWords, $termDescriptions) {
+            $termWord = strtolower($term);
 
             if (in_array($termWord, $highlightedWords)) {
                 if (isset($termDescriptions[$termWord])) {
@@ -113,11 +114,11 @@ trait CanBuildAssessment
             return false;
         });
 
-        $formattedDescription = array_map(function ($term) use ($termDescriptions) {
+        $formattedDescription = array_map(function (string $term) use ($termDescriptions) {
             return sprintf(
                 "<p><b>%s</b>: %s</p>",
-                $term['term'],
-                $termDescriptions[strtolower($term['term'])]
+                $term,
+                $termDescriptions[strtolower($term)]
             );
         }, $matchingTerms);
 
