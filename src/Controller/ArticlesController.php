@@ -1666,7 +1666,7 @@ final class ArticlesController extends Controller
                         return $prepareDefinition(
                             $preprint->getPublishedDate()->getTimeStamp(),
                             sprintf(
-                                '<a href="%s">Reviewed preprint</a>',
+                                '<a href="%s">Reviewed Preprint</a>',
                                 $preprint->getUri()
                             ),
                             sprintf(
@@ -1699,7 +1699,7 @@ final class ArticlesController extends Controller
                         // Remove index from item.
                         unset($item['index']);
 
-                        if (strpos($item['term'], 'Reviewed preprint') !== false && $rpCount > 0) {
+                        if (strpos($item['term'], 'Reviewed Preprint') !== false && $rpCount > 0) {
                             $version = sprintf('<span class="version">v%d</span>', $rpCount);
                             $item['descriptors'][0] = $version . ' ' . $item['descriptors'][0];
                             $rpCount--;
