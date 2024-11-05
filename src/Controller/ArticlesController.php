@@ -1666,7 +1666,7 @@ final class ArticlesController extends Controller
                         return $prepareDefinition(
                             $preprint->getPublishedDate()->getTimeStamp(),
                             sprintf(
-                                '<a href="%s">Reviewed Preprint</a>',
+                                '<a href="%s">Reviewed preprint</a>',
                                 $preprint->getUri()
                             ),
                             sprintf(

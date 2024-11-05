@@ -5318,7 +5318,7 @@ final class ArticleControllerTest extends PageTestCase
             [
                 'Version of Record',
                 'May 3, 2023Read the peer reviews',
-                'Reviewed Preprint',
+                'Reviewed preprint',
                 'February 16, 2023',
             ],
         ];
@@ -5340,9 +5340,9 @@ final class ArticleControllerTest extends PageTestCase
             [
                 'Version of Record',
                 'May 3, 2023Read the peer reviews',
-                'Reviewed Preprint',
+                'Reviewed preprint',
                 'v2 February 17, 2023',
-                'Reviewed Preprint',
+                'Reviewed preprint',
                 'v1 February 16, 2023',
             ],
         ];
@@ -5376,11 +5376,11 @@ final class ArticleControllerTest extends PageTestCase
             [
                 'Version of Record',
                 'May 3, 2023Read the peer reviews',
-                'Reviewed Preprint',
+                'Reviewed preprint',
                 'v3 February 18, 2023',
-                'Reviewed Preprint',
+                'Reviewed preprint',
                 'v2 February 17, 2023',
-                'Reviewed Preprint',
+                'Reviewed preprint',
                 'v1 February 16, 2023',
             ],
         ];
@@ -5414,11 +5414,11 @@ final class ArticleControllerTest extends PageTestCase
             [
                 'Version of Record',
                 'May 3, 2023Read the peer reviews',
-                'Reviewed Preprint',
+                'Reviewed preprint',
                 'v3 February 18, 2023',
-                'Reviewed Preprint',
+                'Reviewed preprint',
                 'v2 February 17, 2023',
-                'Reviewed Preprint',
+                'Reviewed preprint',
                 'v1 February 16, 2023',
             ],
         ];
