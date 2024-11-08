@@ -1,0 +1,27 @@
+name: Pull Request Preview Environment
+
+on:
+  pull_request:
+    types: [labeled, unlabeled, synchronize, opened, reopened]
+
+jobs:
+  build-preview-image:
+    runs-on: ubuntu-latest
+    if: ${{ contains(github.event.pull_request.labels.*.name, 'preview-prod-gateway') || contains(github.event.pull_request.labels.*.name, 'preview-api-dummy') }}
+    env:
+      CONTAINER_REPO: ghcr.io/elifesciences/journal
+      CONTAINER_TAG: preview-${{ github.event.number }}-${{ github.event.pull_request.head.sha }}-${{ steps.date.outputs.date }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Login to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build container image
+        run: |
+          docker compose -f 'docker-compose.yml' -f 'docker-compose.ci.yml' build
+          docker image tag elifesciences/journal:develop ${CONTAINER_REPO}:${CONTAINER_TAG}
+      - name: Push container image
+        run: docker push ${CONTAINER_REPO}:${CONTAINER_TAG}
