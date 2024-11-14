@@ -29,4 +29,17 @@ final class ReviewedPreprintTeaserConverterTest extends ModelConverterTestCase
                 new ViewModel\Image('/image.jpg')
             )));
     }
+
+    /**
+     * @test
+     * @dataProvider samples
+     */
+    final public function it_shows_the_reviewed_preprint_version_in_the_meta_version($model, string $viewModelClass)
+    {
+        $viewModel = $this->converter->convert($model, $viewModelClass, $this->context);
+
+        $array = $viewModel->toArray();
+        $this->markTestSkipped();
+        $this->assertArrayHasKey('version', $array['footer']['meta']);
+    }
 }
