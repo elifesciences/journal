@@ -45,7 +45,7 @@ jobs:
     if: github.ref == 'refs/heads/master'
     env:
       CONTAINER_REPO: ghcr.io/elifesciences/journal
-      CONTAINER_TAG: preview-${{ github.event.number }}-${{ github.event.pull_request.head.sha }}-${{ needs.generate-date.outputs.date }}
+      CONTAINER_TAG: ${{ github.head_ref || github.ref_name }}-${{ github.sha }}-${{ needs.generate-date.outputs.date }}
     steps:
       - uses: actions/checkout@v4
       - name: Login to GHCR
