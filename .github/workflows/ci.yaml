@@ -42,7 +42,7 @@ jobs:
   build-and-push:
     runs-on: ubuntu-latest
     needs: [generate-date, tests]
-    if: github.ref == 'refs/heads/master'
+    # if: github.ref == 'refs/heads/master'
     env:
       CONTAINER_REPO: ghcr.io/elifesciences/journal
       CONTAINER_TAG: ${{ github.head_ref || github.ref_name }}-${{ github.sha }}-${{ needs.generate-date.outputs.date }}
@@ -56,7 +56,17 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Build container image
         run: |
-          docker compose -f 'docker-compose.yml' -f 'docker-compose.ci.yml' build
+          # Build all images
+          docker compose -f docker-compose.yml -f docker-compose.ci.yml build
+
+          # Build critical CSS
+          docker compose -f docker-compose.yml -f docker-compose.ci.yml run --name=journal_critical_css critical_css
+          docker cp journal_critical_css:build/critical-css/. build/critical-css/
+
+          # Rebuild app now we have new CSS
+          docker-compose -f docker-compose.yml -f docker-compose.ci.yml build app
+
+          # Retag and push
           docker image tag elifesciences/journal:develop ${CONTAINER_REPO}:${CONTAINER_TAG}
       - name: Push container image
         run: docker push ${CONTAINER_REPO}:${CONTAINER_TAG}
