@@ -64,7 +64,7 @@ jobs:
           docker cp journal_critical_css:build/critical-css/. build/critical-css/
 
           # Rebuild app now we have new CSS
-          docker-compose -f docker-compose.yml -f docker-compose.ci.yml build app
+          docker compose -f docker-compose.yml -f docker-compose.ci.yml build app
 
           # Retag and push
           docker image tag elifesciences/journal:develop ${CONTAINER_REPO}:${CONTAINER_TAG}
