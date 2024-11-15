@@ -67,7 +67,6 @@ final class ReviewedPreprintTeaserConverterTest extends ModelConverterTestCase
         $viewModel = $this->converter->convert($model, $viewModelClass, $this->context);
 
         $array = $viewModel->toArray();
-        $this->markTestSkipped();
         $this->assertArrayHasKey('version', $array['footer']['meta']);
     }
 
@@ -80,7 +79,6 @@ final class ReviewedPreprintTeaserConverterTest extends ModelConverterTestCase
         $viewModel = $this->converter->convert($model, $viewModelClass, $this->context);
 
         $array = $viewModel->toArray();
-        $this->markTestSkipped();
         $this->assertFalse($array['footer']['meta']['url']);
         $this->assertArrayNotHasKey('text', $array['footer']['meta']);
     }
