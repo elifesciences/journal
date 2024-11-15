@@ -42,6 +42,7 @@ final class ReviewedPreprintTeaserConverterTest extends ModelConverterTestCase
         $this->assertArrayHasKey('articleStatus', $array['footer']['meta']);
         $this->assertContains($array['footer']['meta']['articleStatus'], [ViewModel\Meta::STATUS_NOT_REVISED, ViewModel\Meta::STATUS_REVISED]);
         $this->assertArrayHasKey('articleStatusColorClass', $array['footer']['meta']);
+        $this->assertContains($array['footer']['meta']['articleStatusColorClass'], [ViewModel\Meta::COLOR_NOT_REVISED, ViewModel\Meta::COLOR_REVISED]);
     }
 
     /**

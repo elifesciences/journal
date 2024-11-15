@@ -34,7 +34,7 @@ final class ReviewedPreprintTeaserConverter implements ViewModelConverter
                 ),
                 $this->simpleDate($object, $context),
                 $object->getVersion() === 1 ? ViewModel\Meta::STATUS_NOT_REVISED : ViewModel\Meta::STATUS_REVISED,
-                $object->getVersion() === 1 ? 'not-revised' : 'revised'
+                $object->getVersion() === 1 ? ViewModel\Meta::COLOR_NOT_REVISED : ViewModel\Meta::COLOR_REVISED
             )
             : ViewModel\Meta::withLink(
                 new ViewModel\Link(
