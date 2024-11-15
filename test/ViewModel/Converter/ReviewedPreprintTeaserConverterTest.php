@@ -49,6 +49,19 @@ final class ReviewedPreprintTeaserConverterTest extends ModelConverterTestCase
      * @test
      * @dataProvider samples
      */
+    final public function it_shows_the_reviewed_preprint_date($model, string $viewModelClass)
+    {
+        $viewModel = $this->converter->convert($model, $viewModelClass, $this->context);
+
+        $array = $viewModel->toArray();
+        $this->markTestIncomplete('The date is not mandatory in the schema so we cannot assert consistently on samples.');
+        $this->assertArrayHasKey('date', $array['footer']['meta']);
+    }
+
+    /**
+     * @test
+     * @dataProvider samples
+     */
     final public function it_shows_the_reviewed_preprint_version_in_the_meta_version($model, string $viewModelClass)
     {
         $viewModel = $this->converter->convert($model, $viewModelClass, $this->context);
