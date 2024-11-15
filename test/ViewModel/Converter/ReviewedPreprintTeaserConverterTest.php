@@ -70,4 +70,18 @@ final class ReviewedPreprintTeaserConverterTest extends ModelConverterTestCase
         $this->markTestSkipped();
         $this->assertArrayHasKey('version', $array['footer']['meta']);
     }
+
+    /**
+     * @test
+     * @dataProvider samples
+     */
+    final public function it_does_not_show_any_url_or_text($model, string $viewModelClass)
+    {
+        $viewModel = $this->converter->convert($model, $viewModelClass, $this->context);
+
+        $array = $viewModel->toArray();
+        $this->markTestSkipped();
+        $this->assertFalse($array['footer']['meta']['url']);
+        $this->assertArrayNotHasKey('text', $array['footer']['meta']);
+    }
 }
