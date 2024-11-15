@@ -9,6 +9,10 @@ elifePipeline {
     node('containers-jenkins-plugin') {
         stage 'Build images', {
             checkout scm
+            commit = elifeGitRevision()
+            commitShort = elifeGitRevision().substring(0, 8)
+            branch = sh(script: 'git rev-parse --abbrev-ref HEAD', returnStdout: true).trim()
+            timestamp = sh(script: 'date --utc +%Y%m%d.%H%M', returnStdout: true).trim()
             sh "find build/critical-css -name '*.css' -type f -delete"
             dockerComposeBuild commit
         }
@@ -47,6 +51,8 @@ elifePipeline {
 
         stage 'Push app image', {
             image = DockerImage.elifesciences(this, "journal", commit)
+
+            image.tag("${branch}-${commitShort}-${timestamp}").push()
 
             elifePullRequestOnly {
                 def branchName = env.CHANGE_BRANCH
