@@ -2,15 +2,15 @@
 
 namespace eLife\Journal\Guzzle;
 
-use eLife\ApiClient\ApiClient\ArticlesClient;
-use eLife\ApiClient\ApiClient\CollectionsClient;
-use eLife\ApiClient\ApiClient\CommunityClient;
-use eLife\ApiClient\ApiClient\CoversClient;
-use eLife\ApiClient\ApiClient\HighlightsClient;
-use eLife\ApiClient\ApiClient\PodcastClient;
-use eLife\ApiClient\ApiClient\PressPackagesClient;
-use eLife\ApiClient\ApiClient\RecommendationsClient;
-use eLife\ApiClient\ApiClient\SearchClient;
+use eLife\ApiSdk\ApiClient\ArticlesClient;
+use eLife\ApiSdk\ApiClient\CollectionsClient;
+use eLife\ApiSdk\ApiClient\CommunityClient;
+use eLife\ApiSdk\ApiClient\CoversClient;
+use eLife\ApiSdk\ApiClient\HighlightsClient;
+use eLife\ApiSdk\ApiClient\PodcastClient;
+use eLife\ApiSdk\ApiClient\PressPackagesClient;
+use eLife\ApiSdk\ApiClient\RecommendationsClient;
+use eLife\ApiSdk\ApiClient\SearchClient;
 use eLife\ApiClient\MediaType;
 use eLife\ApiSdk\Client\Articles;
 use eLife\ApiSdk\Client\Collections;
