@@ -1,7 +1,7 @@
 ARG image_tag=latest
 FROM pinterb/jq:0.0.16 AS jq
 FROM elifesciences/journal_composer_dev:${image_tag} AS composer
-FROM elifesciences/journal:${image_tag}
+FROM --platform="linux/amd64" elifesciences/journal:${image_tag}
 
 USER root
 RUN mkdir -p build/ci var/fixtures && \
