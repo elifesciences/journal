@@ -33,7 +33,7 @@ final class ReviewedPreprintTeaserConverter implements ViewModelConverter
                     ModelName::singular('reviewed-preprint') . ' v' . $object->getVersion()
                 ),
                 $this->simpleDate($object, $context),
-                $object->getVersion() === 1 ? 'Not yet revised' : 'Revised',
+                $object->getVersion() === 1 ? ViewModel\Meta::STATUS_NOT_REVISED : ViewModel\Meta::STATUS_REVISED,
                 $object->getVersion() === 1 ? 'not-revised' : 'revised'
             )
             : ViewModel\Meta::withLink(
