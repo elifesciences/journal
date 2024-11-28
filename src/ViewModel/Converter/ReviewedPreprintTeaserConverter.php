@@ -28,13 +28,11 @@ final class ReviewedPreprintTeaserConverter implements ViewModelConverter
     public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
         $meta = $object->getVersion()
-            ? ViewModel\Meta::withLink(
-                new ViewModel\Link(
-                    ModelName::singular('reviewed-preprint') . ' v' . $object->getVersion()
-                ),
+            ? ViewModel\Meta::withVersion(
+                ModelName::singular('reviewed-preprint') . ' v' . $object->getVersion(),
                 $this->simpleDate($object, $context),
-                $object->getVersion() === 1 ? 'Not yet revised' : 'Revised',
-                $object->getVersion() === 1 ? 'not-revised' : 'revised'
+                $object->getVersion() === 1 ? ViewModel\Meta::STATUS_NOT_REVISED : ViewModel\Meta::STATUS_REVISED,
+                $object->getVersion() === 1 ? ViewModel\Meta::COLOR_NOT_REVISED : ViewModel\Meta::COLOR_REVISED
             )
             : ViewModel\Meta::withLink(
                 new ViewModel\Link(

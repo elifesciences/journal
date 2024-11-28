@@ -7,7 +7,7 @@ BRANCH = master
 update-patterns:
 	composer require elife/patterns:dev-$(BRANCH)
 
-build:
+build: vendor
 	$(DOCKER_COMPOSE) build
 
 vendor:
@@ -24,8 +24,9 @@ stop:
 
 clean:
 	$(DOCKER_COMPOSE) down --volumes --remove-orphans
+	rm -rf vendor
 
-test:
+test: vendor
 	APP_ENV=ci $(DOCKER_COMPOSE) run --rm app vendor/bin/phpunit $(TEST) $(OPTIONS)
 	APP_ENV=ci $(DOCKER_COMPOSE) down --volumes
 

@@ -180,7 +180,7 @@ class CanCreateAssessmentTest extends TestCase
 
     private function assertHasSignificance(string $term, Assessment $result)
     {
-        $this->assertInstanceOf('eLife\Patterns\ViewModel\Term', $result['significance']);
+        $this->assertInstanceOf('eLife\Patterns\ViewModel\ArticleAssessmentTerms', $result['significance']);
         $this->assertContains("<b>{$term}</b>", $result['significance']['termDescription']);
         $highlightedTerm = ['term' => $term, 'isHighlighted' => true];
         $this->assertContains($highlightedTerm, $result['significance']['terms']);
@@ -188,7 +188,7 @@ class CanCreateAssessmentTest extends TestCase
 
     private function assertHasStrength(string $term, Assessment $result)
     {
-        $this->assertInstanceOf('eLife\Patterns\ViewModel\Term', $result['strength']);
+        $this->assertInstanceOf('eLife\Patterns\ViewModel\ArticleAssessmentTerms', $result['strength']);
         $this->assertContains("<b>{$term}</b>", $result['strength']['termDescription']);
         $highlightedTerm = ['term' => $term, 'isHighlighted' => true];
         $this->assertContains($highlightedTerm, $result['strength']['terms']);
