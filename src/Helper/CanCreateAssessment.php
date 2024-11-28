@@ -110,17 +110,14 @@ trait CanCreateAssessment
 
     private function highlightFoundTerms(array $foundTerms, array $availableTerms)
     {
-        return array_map(function (string $term) use ($foundTerms) {
-            $termWord = strtolower($term);
-            $termViewModel = ['term' => $term];
-
-            if (in_array($termWord, $foundTerms)) {
-                $termViewModel['isHighlighted'] = true;
-                return new Term($termViewModel['term'], $termViewModel['isHighlighted']);
-            }
-
-            return new Term($termViewModel['term']);
-        }, $availableTerms);
+        return array_map(
+            function (string $term) use ($foundTerms) {
+                $termWord = strtolower($term);
+                $isHighlighted = in_array($termWord, $foundTerms);
+                return new Term($term, $isHighlighted);
+            }, 
+            $availableTerms
+        );
     }
 
     private function formatTermDescriptions($matchingTerms, $availableTerms): array
