@@ -115,7 +115,7 @@ trait CanCreateAssessment
                 $termWord = strtolower($term);
                 $isHighlighted = in_array($termWord, $foundTerms);
                 return new Term($term, $isHighlighted);
-            }, 
+            },
             $availableTerms
         );
     }
