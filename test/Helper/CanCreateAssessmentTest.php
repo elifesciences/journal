@@ -7,6 +7,7 @@ use eLife\ApiSdk\Model\ArticleSection;
 use eLife\ApiSdk\Model\Block\Paragraph;
 use eLife\Journal\Helper\CanCreateAssessment;
 use eLife\Patterns\ViewModel\Assessment;
+use eLife\Patterns\ViewModel\Term;
 use PHPUnit\Framework\TestCase;
 
 class CanCreateAssessmentTest extends TestCase
@@ -46,17 +47,17 @@ class CanCreateAssessmentTest extends TestCase
 
         $result = $this->getTestResult($assessmentText);
 
-        $notHighlightedSignificanceTerms = array_filter($result['significance']['terms'], function (array $term) {
+        $notHighlightedSignificanceTerms = array_filter($result['significance']['terms'], function (Term $term) {
             return $term['term'] !== 'Valuable';
         });
         foreach ($notHighlightedSignificanceTerms as $each) {
-            $this->assertArrayNotHasKey('isHighlighted', $each);
+            $this->assertFalse($each['isHighlighted']);
         }
-        $notHighlightedStrengthTerms = array_filter($result['strength']['terms'], function (array $term) {
+        $notHighlightedStrengthTerms = array_filter($result['strength']['terms'], function (Term $term) {
             return $term['term'] !== 'Solid';
         });
         foreach ($notHighlightedStrengthTerms as $each) {
-            $this->assertArrayNotHasKey('isHighlighted', $each);
+            $this->assertFalse($each['isHighlighted']);
         }
     }
 
@@ -182,15 +183,15 @@ class CanCreateAssessmentTest extends TestCase
     {
         $this->assertInstanceOf('eLife\Patterns\ViewModel\ArticleAssessmentTerms', $result['significance']);
         $this->assertContains("<b>{$term}</b>", $result['significance']['termDescription']);
-        $highlightedTerm = ['term' => $term, 'isHighlighted' => true];
-        $this->assertContains($highlightedTerm, $result['significance']['terms']);
+        $highlightedTerm = new Term($term, true);
+        $this->assertContains($highlightedTerm, $result['significance']['terms'], '', false, false);
     }
 
     private function assertHasStrength(string $term, Assessment $result)
     {
         $this->assertInstanceOf('eLife\Patterns\ViewModel\ArticleAssessmentTerms', $result['strength']);
         $this->assertContains("<b>{$term}</b>", $result['strength']['termDescription']);
-        $highlightedTerm = ['term' => $term, 'isHighlighted' => true];
-        $this->assertContains($highlightedTerm, $result['strength']['terms']);
+        $highlightedTerm = new Term($term, true);
+        $this->assertContains($highlightedTerm, $result['strength']['terms'], '', false, false);
     }
 }
