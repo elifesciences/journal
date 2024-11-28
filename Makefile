@@ -2,7 +2,7 @@ DOCKER_COMPOSE = docker-compose
 TEST = test/
 BRANCH = master
 
-.PHONY: build dev stop clean test feature-test lint check update-patterns
+.PHONY: build dev prod stop clean test feature-test lint check update-patterns
 
 update-patterns:
 	composer require elife/patterns:dev-$(BRANCH)
@@ -16,7 +16,7 @@ vendor:
 dev: build vendor
 	$(DOCKER_COMPOSE) up
 
-exploratory-test-from-prod: build vendor
+prod: build vendor
 	API_URL=https://prod--gateway.elifesciences.org $(DOCKER_COMPOSE) up
 
 stop:

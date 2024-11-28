@@ -42,7 +42,7 @@ Running the site locally
 
 1. Run either:
   - `make dev` to start a local server, displaying dummy data.
-  - `make exploratory-test-from-prod` to start a local server, displaying production data.
+  - `make prod` to start a local server, displaying production data.
 2. Open `http://localhost:8080` in your browser.
 
 To stop the containers, press Ctrl+C or run `make stop` in another terminal.
