@@ -116,9 +116,10 @@ trait CanCreateAssessment
 
             if (in_array($termWord, $foundTerms)) {
                 $termViewModel['isHighlighted'] = true;
+                return new Term($termViewModel['term'], $termViewModel['isHighlighted']);
             }
 
-            return $termViewModel;
+            return new Term($termViewModel['term']);
         }, $availableTerms);
     }
 
