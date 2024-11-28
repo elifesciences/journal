@@ -4,6 +4,7 @@ namespace eLife\Journal\Helper;
 
 use eLife\ApiSdk\Collection\Sequence;
 use eLife\ApiSdk\Model\ArticleSection;
+use eLife\Patterns\ViewModel\ArticleAssessmentTerms;
 use eLife\Patterns\ViewModel\Assessment;
 use eLife\Patterns\ViewModel\Term;
 
@@ -33,7 +34,7 @@ trait CanCreateAssessment
         $significanceAriaLabel = 'eLife assessments use a common vocabulary to describe significance. The term chosen for this paper is:';
         $strengthAriaLabel = 'eLife assessments use a common vocabulary to describe strength of evidence. The term or terms chosen for this paper is:';
         $significance = !empty($resultSignificance['formattedDescription'])
-            ? new Term(
+            ? new ArticleAssessmentTerms(
                 'Significance of the findings:',
                 implode(PHP_EOL, $resultSignificance['formattedDescription']),
                 $resultSignificance['highlightedTerm'],
@@ -41,7 +42,7 @@ trait CanCreateAssessment
             )
             : null;
         $strength = !empty($resultStrength['formattedDescription'])
-            ? new Term(
+            ? new ArticleAssessmentTerms(
                 'Strength of evidence:',
                 implode(PHP_EOL, $resultStrength['formattedDescription']),
                 $resultStrength['highlightedTerm'],
