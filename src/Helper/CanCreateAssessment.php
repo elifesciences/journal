@@ -111,10 +111,10 @@ trait CanCreateAssessment
     private function highlightFoundTerms(array $foundTerms, array $availableTerms)
     {
         return array_map(
-            function (string $term) use ($foundTerms) {
-                $termWord = strtolower($term);
+            function (string $termValue) use ($foundTerms) {
+                $termWord = strtolower($termValue);
                 $isHighlighted = in_array($termWord, $foundTerms);
-                return new Term($term, $isHighlighted);
+                return new Term($termValue, $isHighlighted);
             },
             $availableTerms
         );

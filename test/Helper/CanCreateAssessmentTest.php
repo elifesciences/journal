@@ -48,13 +48,13 @@ class CanCreateAssessmentTest extends TestCase
         $result = $this->getTestResult($assessmentText);
 
         $notHighlightedSignificanceTerms = array_filter($result['significance']['terms'], function (Term $term) {
-            return $term['term'] !== 'Valuable';
+            return $term['value'] !== 'Valuable';
         });
         foreach ($notHighlightedSignificanceTerms as $each) {
             $this->assertFalse($each['isHighlighted']);
         }
         $notHighlightedStrengthTerms = array_filter($result['strength']['terms'], function (Term $term) {
-            return $term['term'] !== 'Solid';
+            return $term['value'] !== 'Solid';
         });
         foreach ($notHighlightedStrengthTerms as $each) {
             $this->assertFalse($each['isHighlighted']);
