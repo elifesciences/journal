@@ -67,14 +67,8 @@ elifePipeline {
     }
 
     elifeMainlineOnly {
-        stage 'Deploy on demo, continuumtest, continuumtestpreview', {
+        stage 'Deploy on continuumtest, continuumtestpreview', {
             def deployments = [
-                demo: {
-                    lock('journal--demo') {
-                        builderDeployRevision 'journal--demo', commit
-                        builderSmokeTests 'journal--demo', '/srv/journal'
-                    }
-                },
                 continuumtest: {
                     lock('journal--continuumtest') {
                         builderDeployRevision 'journal--continuumtest', commit
