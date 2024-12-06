@@ -52,7 +52,7 @@ final class ReviewedPreprintTeaserConverter implements ViewModelConverter
             $object->getThumbnail() ? $this->smallTeaserImage($object) : null,
             ViewModel\TeaserFooter::forArticle(
                 $meta
-                // $object->getElifeAssessment() ? $this->buildTeaserTerms($object->getElifeAssessment()) : null
+//                 $object->getElifeAssessment() ? $this->buildTeaserTerms($object->getElifeAssessment()) : null
             )
         );
     }
@@ -71,14 +71,14 @@ final class ReviewedPreprintTeaserConverter implements ViewModelConverter
     {
         $significance = array_map(
             function ($significanceValue) {
-                return new ViewModel\Term($significanceValue);
+                return new ViewModel\Term(ucfirst($significanceValue));
             },
             $elifeAssessment->getSignificance() ?? []
         );
 
         $strength = array_map(
             function ($strengthValue) {
-                return new ViewModel\Term($strengthValue);
+                return new ViewModel\Term(ucfirst($strengthValue));
             },
             $elifeAssessment->getStrength() ?? []
         );
