@@ -10,19 +10,20 @@ class TeaserTermsBuilder
 {
     public function build(ElifeAssessment $elifeAssessment)
     {
+        $significance = $this->buildTerms($elifeAssessment->getSignificance());
+        $strength = $this->buildTerms($elifeAssessment->getStrength());
+        return new TeaserTerms(array_merge($significance, $strength));
+    }
+
+    private function buildTerms($terms)
+    {
         $buildTermWithCorrectCasing = function (string $termValue) {
             return new ViewModel\Term(ucfirst($termValue));
         };
 
-        $significance = array_map(
+        return array_map(
             $buildTermWithCorrectCasing,
-            $elifeAssessment->getSignificance() ?? []
+            $terms ?? []
         );
-
-        $strength = array_map(
-            $buildTermWithCorrectCasing,
-            $elifeAssessment->getStrength() ?? []
-        );
-        return new TeaserTerms(array_merge($significance, $strength));
     }
 }
