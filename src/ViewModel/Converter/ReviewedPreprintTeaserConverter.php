@@ -51,8 +51,8 @@ final class ReviewedPreprintTeaserConverter implements ViewModelConverter
             $this->createContextLabel($object),
             $object->getThumbnail() ? $this->smallTeaserImage($object) : null,
             ViewModel\TeaserFooter::forArticle(
-                $meta
-                // $object->getElifeAssessment() ? $this->buildTeaserTerms($object->getElifeAssessment()) : null
+                $meta,
+                $object->getElifeAssessment() ? $this->buildTeaserTerms($object->getElifeAssessment()) : null
             )
         );
     }
