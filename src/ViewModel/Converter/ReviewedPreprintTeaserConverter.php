@@ -43,6 +43,7 @@ final class ReviewedPreprintTeaserConverter implements ViewModelConverter
                 $this->simpleDate($object, $context)
             );
 
+        $teaserTermsBuilder = new TeaserTermsBuilder();
         return ViewModel\Teaser::main(
             $object->getTitle(),
             $this->urlGenerator->generate('reviewed-preprint', ['id' => $object->getId()]),
@@ -52,7 +53,7 @@ final class ReviewedPreprintTeaserConverter implements ViewModelConverter
             $object->getThumbnail() ? $this->smallTeaserImage($object) : null,
             ViewModel\TeaserFooter::forArticle(
                 $meta,
-                $object->getElifeAssessment() ? $this->buildTeaserTerms($object->getElifeAssessment()) : null
+                $object->getElifeAssessment() ? $teaserTermsBuilder->build($object->getElifeAssessment()) : null
             )
         );
     }
@@ -65,23 +66,5 @@ final class ReviewedPreprintTeaserConverter implements ViewModelConverter
     protected function getViewModelConverter() : ViewModelConverter
     {
         return $this->viewModelConverter;
-    }
-
-    private function buildTeaserTerms(ElifeAssessment $elifeAssessment)
-    {
-        $significance = array_map(
-            function ($significanceValue) {
-                return new ViewModel\Term(ucfirst($significanceValue));
-            },
-            $elifeAssessment->getSignificance() ?? []
-        );
-
-        $strength = array_map(
-            function ($strengthValue) {
-                return new ViewModel\Term(ucfirst($strengthValue));
-            },
-            $elifeAssessment->getStrength() ?? []
-        );
-        return new TeaserTerms(array_merge($significance, $strength));
     }
 }
