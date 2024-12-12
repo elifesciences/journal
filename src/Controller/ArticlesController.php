@@ -634,8 +634,8 @@ final class ArticlesController extends Controller
                 $item = $parts['item'];
                 /** @var array $context */
                 $context = $parts['context'];
-                if ($item instanceof ArticleVoR && $item->getElifeAssessment()) {
-                    $elifeAssessment = $item->getElifeAssessment();
+                if ($item instanceof ArticleVoR && $item->getElifeAssessmentArticleSection()) {
+                    $elifeAssessment = $item->getElifeAssessmentArticleSection();
                     $elifeAssessmentTitle = $item->getElifeAssessmentTitle();
                     return ArticleSection::basic(
                         $this->render(...$this->convertContent($elifeAssessment, 2, $context)),
