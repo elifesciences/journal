@@ -59,7 +59,7 @@ services:
         depends_on:
             - app
     api_dummy:
-        image: elifesciences/api-dummy:${DEPENDENCIES_API_DUMMY}
+        image: ghcr.io/elifesciences/api-dummy:${DEPENDENCIES_API_DUMMY}
         ports:
         - '${JOURNAL_API_DUMMY_PORT}:8080'
         stop_grace_period: 1s
