@@ -12,7 +12,11 @@ class TeaserTermsBuilder
     {
         $significance = $this->buildTerms($elifeAssessment->getSignificance());
         $strength = $this->buildTerms($elifeAssessment->getStrength());
-        return new TeaserTerms(array_merge($significance, $strength));
+        $arrayOfTerms = array_merge($significance, $strength);
+        if (count($arrayOfTerms) === 0) {
+            return null;
+        }
+        return new TeaserTerms($arrayOfTerms);
     }
 
     private function buildTerms($terms)

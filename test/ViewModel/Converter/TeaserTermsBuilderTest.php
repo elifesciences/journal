@@ -35,7 +35,6 @@ final class TeaserTermsBuilderTest extends TestCase
         $builder = new TeaserTermsBuilder();
 
         $elifeAssessment = new ElifeAssessment([], null);
-        $this->markTestSkipped('tries to build a TeaserTerms object that is empty, which is invalid');
         $result = $builder->build($elifeAssessment);
 
         $this->assertNull($result);
