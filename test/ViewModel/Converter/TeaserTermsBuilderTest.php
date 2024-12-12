@@ -16,11 +16,11 @@ final class TeaserTermsBuilderTest extends TestCase
     /**
      * @test
      */
-    final public function it_builds_significance_terms_when_there_are_significance_terms()
+    final public function it_builds_significance_terms_when_there_are_significance_terms_and_no_strength_terms_are_available()
     {
         $builder = new TeaserTermsBuilder();
 
-        $elifeAssessment = new ElifeAssessment(['Landmark'], null);
+        $elifeAssessment = new ElifeAssessment(['landmark'], null);
         $result = $builder->build($elifeAssessment);
 
         $expected = new TeaserTerms([new Term('Landmark')]);
@@ -30,7 +30,7 @@ final class TeaserTermsBuilderTest extends TestCase
     /**
      * @test
      */
-    final public function it_does_not_build_significance_terms_when_none_are_available()
+    final public function it_does_not_build_significance_terms_when_there_are_none_in_the_assessment_and_no_strength_terms_are_available()
     {
         $builder = new TeaserTermsBuilder();
 
@@ -43,23 +43,21 @@ final class TeaserTermsBuilderTest extends TestCase
     /**
      * @test
      */
-    final public function it_builds_strength_terms_when_there_are_strength_terms()
+    final public function it_builds_strength_terms_when_there_are_strength_terms_and_no_significance_terms_are_available()
     {
-        $this->markTestIncomplete('incomplete');
+        $builder = new TeaserTermsBuilder();
+
+        $elifeAssessment = new ElifeAssessment(null, ['convincing']);
+        $result = $builder->build($elifeAssessment);
+
+        $expected = new TeaserTerms([new Term('Convincing')]);
+        $this->assertEquals($expected, $result);
     }
 
     /**
      * @test
      */
-    final public function it_does_not_build_strength_terms_when_none_are_available()
-    {
-        $this->markTestIncomplete('incomplete');
-    }
-
-    /**
-     * @test
-     */
-    final public function it_capitalises_the_first_letter_of_the_term()
+    final public function it_builds_terms_using_both_strength_and_significance_terms()
     {
         $this->markTestIncomplete('incomplete');
     }
