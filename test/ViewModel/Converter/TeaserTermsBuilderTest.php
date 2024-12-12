@@ -32,7 +32,13 @@ final class TeaserTermsBuilderTest extends TestCase
      */
     final public function it_does_not_build_significance_terms_when_none_are_available()
     {
-        $this->markTestIncomplete('incomplete');
+        $builder = new TeaserTermsBuilder();
+
+        $elifeAssessment = new ElifeAssessment([], null);
+        $this->markTestSkipped('tries to build a TeaserTerms object that is empty, which is invalid');
+        $result = $builder->build($elifeAssessment);
+
+        $this->assertNull($result);
     }
 
     /**
