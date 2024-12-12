@@ -57,8 +57,14 @@ final class TeaserTermsBuilderTest extends TestCase
     /**
      * @test
      */
-    final public function it_builds_terms_using_both_strength_and_significance_terms()
+    final public function it_builds_terms_using_both_significance_and_strength_terms_in_that_order()
     {
-        $this->markTestIncomplete('incomplete');
+        $builder = new TeaserTermsBuilder();
+
+        $elifeAssessment = new ElifeAssessment(['landmark'], ['solid']);
+        $result = $builder->build($elifeAssessment);
+
+        $expected = new TeaserTerms([new Term('Landmark'), new Term('Solid')]);
+        $this->assertEquals($expected, $result);
     }
 }
