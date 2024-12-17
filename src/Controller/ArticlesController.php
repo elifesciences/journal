@@ -431,7 +431,7 @@ final class ArticlesController extends Controller
                     $first = false;
                 }
 
-                if ($item->getType() === 'feature'&& $item instanceof ArticleVoR && $item->getAuthorResponse()) {
+                if ($item->getType() === 'feature' && $item instanceof ArticleVoR && $item->getAuthorResponse()) {
                     $parts[] = ArticleSection::collapsible(
                         $item->getAuthorResponse()->getId() ?? 'author-response',
                         'Author response',
