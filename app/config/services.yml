@@ -26,13 +26,6 @@ services:
         arguments:
           - '@csa_guzzle.client.elife_api_search_page'
 
-    elife.api_client.client.crm_api:
-        class: eLife\CiviContacts\Guzzle\CiviCrmClient
-        arguments:
-          - '@csa_guzzle.client.elife_crm_api'
-          - '%crm_api_key%'
-          - '%crm_api_site_key%'
-
     elife.api_client.client.warning_checking:
         class: eLife\ApiClient\HttpClient\WarningCheckingHttpClient
         decorates: elife.api_client.client
