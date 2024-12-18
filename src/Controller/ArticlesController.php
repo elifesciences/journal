@@ -414,7 +414,7 @@ final class ArticlesController extends Controller
                     );
                 }
 
-                if ($item->getType() === 'feature' && $item->getDecisionLetter()) {
+                if ($item->getType() === 'feature' && $item instanceof ArticleVoR && $item->getDecisionLetter()) {
                     $parts[] = ArticleSection::collapsible(
                         $item->getDecisionLetter()->getId() ?? 'decision-letter',
                         'Decision letter',
@@ -431,7 +431,7 @@ final class ArticlesController extends Controller
                     $first = false;
                 }
 
-                if ($item->getType() === 'feature' && $item->getAuthorResponse()) {
+                if ($item->getType() === 'feature' && $item instanceof ArticleVoR && $item->getAuthorResponse()) {
                     $parts[] = ArticleSection::collapsible(
                         $item->getAuthorResponse()->getId() ?? 'author-response',
                         'Author response',
