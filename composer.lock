@@ -1277,12 +1277,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-sdk-php.git",
-                "reference": "77c2e13e39a9db4af7b20b538a92bb870805c089"
+                "reference": "23e15c0eb88f9e9137dc41e9c99920669b851e87"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/77c2e13e39a9db4af7b20b538a92bb870805c089",
-                "reference": "77c2e13e39a9db4af7b20b538a92bb870805c089",
+                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/23e15c0eb88f9e9137dc41e9c99920669b851e87",
+                "reference": "23e15c0eb88f9e9137dc41e9c99920669b851e87",
                 "shasum": ""
             },
             "require": {
@@ -1331,7 +1331,7 @@
                 "issues": "https://github.com/elifesciences/api-sdk-php/issues",
                 "source": "https://github.com/elifesciences/api-sdk-php/tree/master"
             },
-            "time": "2024-12-12T15:19:39+00:00"
+            "time": "2024-12-17T08:11:51+00:00"
         },
         {
             "name": "elife/civi-contacts",
