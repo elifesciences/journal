@@ -7,6 +7,9 @@ BRANCH = master
 update-patterns:
 	composer require elife/patterns:dev-$(BRANCH)
 
+update-api-sdk:
+	composer require elife/api-sdk:dev-master
+
 build: vendor
 	$(DOCKER_COMPOSE) build
 
