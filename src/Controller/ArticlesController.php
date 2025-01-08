@@ -27,7 +27,7 @@ use eLife\ApiSdk\Model\PublicReview;
 use eLife\ApiSdk\Model\ReviewedPreprint;
 use eLife\ApiSdk\Model\Reviewer;
 use eLife\Journal\Exception\EarlyResponse;
-use eLife\Journal\Helper\CanCreateAssessment;
+use eLife\Journal\ViewModel\Converter\CanCreateAssessment;
 use eLife\Journal\Helper\Callback;
 use eLife\Journal\Helper\DownloadLink;
 use eLife\Journal\Helper\HasPages;

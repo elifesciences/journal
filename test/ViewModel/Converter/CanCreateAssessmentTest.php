@@ -1,11 +1,11 @@
 <?php
 
-namespace test\eLife\Journal\Helper;
+namespace test\eLife\Journal\ViewModel\Converter;
 
 use eLife\ApiSdk\Collection\ArraySequence;
 use eLife\ApiSdk\Model\ArticleSection;
 use eLife\ApiSdk\Model\Block\Paragraph;
-use eLife\Journal\Helper\CanCreateAssessment;
+use eLife\Journal\ViewModel\Converter\CanCreateAssessment;
 use eLife\Patterns\ViewModel\Assessment;
 use eLife\Patterns\ViewModel\Term;
 use PHPUnit\Framework\TestCase;

@@ -1,6 +1,6 @@
 <?php
 
-namespace eLife\Journal\Helper;
+namespace eLife\Journal\ViewModel\Converter;
 
 use eLife\ApiSdk\Collection\Sequence;
 use eLife\ApiSdk\Model\ArticleSection;
