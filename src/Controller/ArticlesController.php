@@ -650,7 +650,7 @@ final class ArticlesController extends Controller
                         null,
                         null,
                         null,
-                        $assessmentBuilder->createAssessment($elifeAssessment)
+                        $assessmentBuilder->build($elifeAssessment)
                     );
                 }
             });

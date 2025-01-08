@@ -174,7 +174,7 @@ class AssessmentBuilderTest extends TestCase
         $doi = '10.7554/eLife.94242.3.sa0';
         $id = 'sa0';
         $elifeAssessment = new ArticleSection($content, $doi, $id);
-        return $assessmentBuilder->createAssessment($elifeAssessment);
+        return $assessmentBuilder->build($elifeAssessment);
     }
 
     private function assertHasSignificance(string $term, Assessment $result)
