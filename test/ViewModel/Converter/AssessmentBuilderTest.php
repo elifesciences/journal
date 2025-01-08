@@ -167,16 +167,14 @@ class AssessmentBuilderTest extends TestCase
 
     private function getTestResult(string $contentText)
     {
-        $controller = new class {
-            use AssessmentBuilder;
-        };
+        $assessmentBuilder = new AssessmentBuilder();
         $content = new ArraySequence([
             new Paragraph($contentText)
         ]);
         $doi = '10.7554/eLife.94242.3.sa0';
         $id = 'sa0';
         $elifeAssessment = new ArticleSection($content, $doi, $id);
-        return $controller->createAssessment($elifeAssessment);
+        return $assessmentBuilder->createAssessment($elifeAssessment);
     }
 
     private function assertHasSignificance(string $term, Assessment $result)

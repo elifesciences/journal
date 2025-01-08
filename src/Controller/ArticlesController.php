@@ -62,7 +62,6 @@ final class ArticlesController extends Controller
     const DISMISSIBLE_INFO_BAR_COOKIE_DURATION = '+365 days';
 
     use HasPages;
-    use AssessmentBuilder;
 
     public function textAction(Request $request, string $id, int $version = null) : Response
     {
@@ -637,6 +636,7 @@ final class ArticlesController extends Controller
                 if ($item instanceof ArticleVoR && $item->getElifeAssessmentArticleSection()) {
                     $elifeAssessment = $item->getElifeAssessmentArticleSection();
                     $elifeAssessmentTitle = $item->getElifeAssessmentTitle();
+                    $assessmentBuilder = new AssessmentBuilder();
                     return ArticleSection::basic(
                         $this->render(...$this->convertContent($elifeAssessment, 2, $context)),
                         $elifeAssessmentTitle,
@@ -650,7 +650,7 @@ final class ArticlesController extends Controller
                         null,
                         null,
                         null,
-                        $this->createAssessment($elifeAssessment)
+                        $assessmentBuilder->createAssessment($elifeAssessment)
                     );
                 }
             });
