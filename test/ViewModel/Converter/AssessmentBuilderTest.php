@@ -5,12 +5,12 @@ namespace test\eLife\Journal\ViewModel\Converter;
 use eLife\ApiSdk\Collection\ArraySequence;
 use eLife\ApiSdk\Model\ArticleSection;
 use eLife\ApiSdk\Model\Block\Paragraph;
-use eLife\Journal\ViewModel\Converter\CanCreateAssessment;
+use eLife\Journal\ViewModel\Converter\AssessmentBuilder;
 use eLife\Patterns\ViewModel\Assessment;
 use eLife\Patterns\ViewModel\Term;
 use PHPUnit\Framework\TestCase;
 
-class CanCreateAssessmentTest extends TestCase
+class AssessmentBuilderTest extends TestCase
 {
     /**
      * @test
@@ -168,7 +168,7 @@ class CanCreateAssessmentTest extends TestCase
     private function getTestResult(string $contentText)
     {
         $controller = new class {
-            use CanCreateAssessment;
+            use AssessmentBuilder;
         };
         $content = new ArraySequence([
             new Paragraph($contentText)

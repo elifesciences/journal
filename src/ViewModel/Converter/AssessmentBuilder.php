@@ -8,7 +8,7 @@ use eLife\Patterns\ViewModel\ArticleAssessmentTerms;
 use eLife\Patterns\ViewModel\Assessment;
 use eLife\Patterns\ViewModel\Term;
 
-trait CanCreateAssessment
+trait AssessmentBuilder
 {
     private static $termDescriptions = [
         'landmark' => 'Findings with profound implications that are expected to have widespread influence',
