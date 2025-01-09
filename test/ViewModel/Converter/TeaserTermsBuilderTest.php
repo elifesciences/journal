@@ -15,6 +15,8 @@ final class TeaserTermsBuilderTest extends TestCase
      */
     private $builder;
 
+    private $elifeAssessmentTitle = 'Lorem ipsum';
+
      /**
      * @before
      */
@@ -28,7 +30,7 @@ final class TeaserTermsBuilderTest extends TestCase
      */
     final public function it_builds_significance_terms_when_there_are_significance_terms_and_no_strength_terms_are_available()
     {
-        $elifeAssessment = new ElifeAssessment(['landmark'], null);
+        $elifeAssessment = new ElifeAssessment($this->elifeAssessmentTitle, ['landmark'], null);
         $result = $this->builder->build($elifeAssessment);
 
         $expected = new TeaserTerms([new Term('Landmark')]);
@@ -40,7 +42,7 @@ final class TeaserTermsBuilderTest extends TestCase
      */
     final public function it_does_not_build_significance_terms_when_there_are_none_in_the_assessment_and_no_strength_terms_are_available()
     {
-        $elifeAssessment = new ElifeAssessment([], null);
+        $elifeAssessment = new ElifeAssessment($this->elifeAssessmentTitle, [], null);
         $result = $this->builder->build($elifeAssessment);
 
         $this->assertNull($result);
@@ -51,7 +53,7 @@ final class TeaserTermsBuilderTest extends TestCase
      */
     final public function it_builds_strength_terms_when_there_are_strength_terms_and_no_significance_terms_are_available()
     {
-        $elifeAssessment = new ElifeAssessment(null, ['convincing']);
+        $elifeAssessment = new ElifeAssessment($this->elifeAssessmentTitle, null, ['convincing']);
         $result = $this->builder->build($elifeAssessment);
 
         $expected = new TeaserTerms([new Term('Convincing')]);
@@ -63,7 +65,7 @@ final class TeaserTermsBuilderTest extends TestCase
      */
     final public function it_builds_terms_using_both_significance_and_strength_terms_in_that_order()
     {
-        $elifeAssessment = new ElifeAssessment(['landmark'], ['solid']);
+        $elifeAssessment = new ElifeAssessment($this->elifeAssessmentTitle, ['landmark'], ['solid']);
         $result = $this->builder->build($elifeAssessment);
 
         $expected = new TeaserTerms([new Term('Landmark'), new Term('Solid')]);
