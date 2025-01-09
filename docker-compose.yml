@@ -60,6 +60,7 @@ services:
             - app
     api_dummy:
         image: ghcr.io/elifesciences/api-dummy:${DEPENDENCIES_API_DUMMY}
+        platform: linux/amd64
         ports:
         - '${JOURNAL_API_DUMMY_PORT}:8080'
         stop_grace_period: 1s
