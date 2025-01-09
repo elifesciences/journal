@@ -633,16 +633,16 @@ final class ArticlesController extends Controller
                 $item = $parts['item'];
                 /** @var array $context */
                 $context = $parts['context'];
-                if ($item instanceof ArticleVoR && $item->getElifeAssessmentArticleSection()) {
-                    $elifeAssessment = $item->getElifeAssessmentArticleSection();
+                if ($item instanceof ArticleVoR && $item->getElifeAssessment()) {
+                    $elifeAssessmentArticlesSection = $item->getElifeAssessmentArticleSection();
                     $elifeAssessmentTitle = $item->getElifeAssessmentTitle();
                     $assessmentBuilder = new AssessmentBuilder();
                     return ArticleSection::basic(
-                        $this->render(...$this->convertContent($elifeAssessment, 2, $context)),
+                        $this->render(...$this->convertContent($elifeAssessmentArticlesSection, 2, $context)),
                         $elifeAssessmentTitle,
                         2,
                         'elife-assessment',
-                        $elifeAssessment->getDoi() ? new Doi($elifeAssessment->getDoi()) : null,
+                        $elifeAssessmentArticlesSection->getDoi() ? new Doi($elifeAssessmentArticlesSection->getDoi()) : null,
                         null,
                         ArticleSection::STYLE_HIGHLIGHTED,
                         false,
@@ -650,7 +650,7 @@ final class ArticlesController extends Controller
                         null,
                         null,
                         null,
-                        $assessmentBuilder->build($elifeAssessment)
+                        $assessmentBuilder->build($elifeAssessmentArticlesSection)
                     );
                 }
             });
