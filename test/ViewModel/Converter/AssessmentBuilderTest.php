@@ -1,15 +1,16 @@
 <?php
 
-namespace test\eLife\Journal\Helper;
+namespace test\eLife\Journal\ViewModel\Converter;
 
 use eLife\ApiSdk\Collection\ArraySequence;
 use eLife\ApiSdk\Model\ArticleSection;
 use eLife\ApiSdk\Model\Block\Paragraph;
-use eLife\Journal\Helper\CanCreateAssessment;
+use eLife\Journal\ViewModel\Converter\AssessmentBuilder;
 use eLife\Patterns\ViewModel\Assessment;
+use eLife\Patterns\ViewModel\Term;
 use PHPUnit\Framework\TestCase;
 
-class CanCreateAssessmentTest extends TestCase
+class AssessmentBuilderTest extends TestCase
 {
     /**
      * @test
@@ -46,17 +47,17 @@ class CanCreateAssessmentTest extends TestCase
 
         $result = $this->getTestResult($assessmentText);
 
-        $notHighlightedSignificanceTerms = array_filter($result['significance']['terms'], function (array $term) {
-            return $term['term'] !== 'Valuable';
+        $notHighlightedSignificanceTerms = array_filter($result['significance']['terms'], function (Term $term) {
+            return $term['value'] !== 'Valuable';
         });
         foreach ($notHighlightedSignificanceTerms as $each) {
-            $this->assertArrayNotHasKey('isHighlighted', $each);
+            $this->assertFalse($each['isHighlighted']);
         }
-        $notHighlightedStrengthTerms = array_filter($result['strength']['terms'], function (array $term) {
-            return $term['term'] !== 'Solid';
+        $notHighlightedStrengthTerms = array_filter($result['strength']['terms'], function (Term $term) {
+            return $term['value'] !== 'Solid';
         });
         foreach ($notHighlightedStrengthTerms as $each) {
-            $this->assertArrayNotHasKey('isHighlighted', $each);
+            $this->assertFalse($each['isHighlighted']);
         }
     }
 
@@ -166,31 +167,29 @@ class CanCreateAssessmentTest extends TestCase
 
     private function getTestResult(string $contentText)
     {
-        $controller = new class {
-            use CanCreateAssessment;
-        };
+        $assessmentBuilder = new AssessmentBuilder();
         $content = new ArraySequence([
             new Paragraph($contentText)
         ]);
         $doi = '10.7554/eLife.94242.3.sa0';
         $id = 'sa0';
         $elifeAssessment = new ArticleSection($content, $doi, $id);
-        return $controller->createAssessment($elifeAssessment);
+        return $assessmentBuilder->build($elifeAssessment);
     }
 
     private function assertHasSignificance(string $term, Assessment $result)
     {
-        $this->assertInstanceOf('eLife\Patterns\ViewModel\Term', $result['significance']);
+        $this->assertInstanceOf('eLife\Patterns\ViewModel\ArticleAssessmentTerms', $result['significance']);
         $this->assertContains("<b>{$term}</b>", $result['significance']['termDescription']);
-        $highlightedTerm = ['term' => $term, 'isHighlighted' => true];
-        $this->assertContains($highlightedTerm, $result['significance']['terms']);
+        $highlightedTerm = new Term($term, true);
+        $this->assertContains($highlightedTerm, $result['significance']['terms'], '', false, false);
     }
 
     private function assertHasStrength(string $term, Assessment $result)
     {
-        $this->assertInstanceOf('eLife\Patterns\ViewModel\Term', $result['strength']);
+        $this->assertInstanceOf('eLife\Patterns\ViewModel\ArticleAssessmentTerms', $result['strength']);
         $this->assertContains("<b>{$term}</b>", $result['strength']['termDescription']);
-        $highlightedTerm = ['term' => $term, 'isHighlighted' => true];
-        $this->assertContains($highlightedTerm, $result['strength']['terms']);
+        $highlightedTerm = new Term($term, true);
+        $this->assertContains($highlightedTerm, $result['strength']['terms'], '', false, false);
     }
 }

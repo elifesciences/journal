@@ -1,13 +1,14 @@
 <?php
 
-namespace eLife\Journal\Helper;
+namespace eLife\Journal\ViewModel\Converter;
 
 use eLife\ApiSdk\Collection\Sequence;
 use eLife\ApiSdk\Model\ArticleSection;
+use eLife\Patterns\ViewModel\ArticleAssessmentTerms;
 use eLife\Patterns\ViewModel\Assessment;
 use eLife\Patterns\ViewModel\Term;
 
-trait CanCreateAssessment
+class AssessmentBuilder
 {
     private static $termDescriptions = [
         'landmark' => 'Findings with profound implications that are expected to have widespread influence',
@@ -23,7 +24,7 @@ trait CanCreateAssessment
         'inadequate' => 'Methods, data and analyses do not support the primary claims',
     ];
 
-    final public function createAssessment(ArticleSection $elifeAssessment): Assessment {
+    final public function build(ArticleSection $elifeAssessment): Assessment {
         $summary = 'During the peer-review process the editor and reviewers write an eLife Assessment that summarises the significance of the findings reported in the article (on a scale ranging from landmark to useful) and the strength of the evidence (on a scale ranging from exceptional to inadequate). <a href="https://elifesciences.org/about/elife-assessments">Learn more about eLife Assessments</a>';
         $significanceTerms = ['Landmark', 'Fundamental', 'Important', 'Valuable', 'Useful'];
         $strengthTerms = ['Exceptional', 'Compelling', 'Convincing', 'Solid', 'Incomplete', 'Inadequate'];
@@ -33,7 +34,7 @@ trait CanCreateAssessment
         $significanceAriaLabel = 'eLife assessments use a common vocabulary to describe significance. The term chosen for this paper is:';
         $strengthAriaLabel = 'eLife assessments use a common vocabulary to describe strength of evidence. The term or terms chosen for this paper is:';
         $significance = !empty($resultSignificance['formattedDescription'])
-            ? new Term(
+            ? new ArticleAssessmentTerms(
                 'Significance of the findings:',
                 implode(PHP_EOL, $resultSignificance['formattedDescription']),
                 $resultSignificance['highlightedTerm'],
@@ -41,7 +42,7 @@ trait CanCreateAssessment
             )
             : null;
         $strength = !empty($resultStrength['formattedDescription'])
-            ? new Term(
+            ? new ArticleAssessmentTerms(
                 'Strength of evidence:',
                 implode(PHP_EOL, $resultStrength['formattedDescription']),
                 $resultStrength['highlightedTerm'],
@@ -109,16 +110,14 @@ trait CanCreateAssessment
 
     private function highlightFoundTerms(array $foundTerms, array $availableTerms)
     {
-        return array_map(function (string $term) use ($foundTerms) {
-            $termWord = strtolower($term);
-            $termViewModel = ['term' => $term];
-
-            if (in_array($termWord, $foundTerms)) {
-                $termViewModel['isHighlighted'] = true;
-            }
-
-            return $termViewModel;
-        }, $availableTerms);
+        return array_map(
+            function (string $termValue) use ($foundTerms) {
+                $termWord = strtolower($termValue);
+                $isHighlighted = in_array($termWord, $foundTerms);
+                return new Term($termValue, $isHighlighted);
+            },
+            $availableTerms
+        );
     }
 
     private function formatTermDescriptions($matchingTerms, $availableTerms): array

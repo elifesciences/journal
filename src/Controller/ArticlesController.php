@@ -27,13 +27,12 @@ use eLife\ApiSdk\Model\PublicReview;
 use eLife\ApiSdk\Model\ReviewedPreprint;
 use eLife\ApiSdk\Model\Reviewer;
 use eLife\Journal\Exception\EarlyResponse;
-use eLife\Journal\Helper\CanCreateAssessment;
+use eLife\Journal\ViewModel\Converter\AssessmentBuilder;
 use eLife\Journal\Helper\Callback;
 use eLife\Journal\Helper\DownloadLink;
 use eLife\Journal\Helper\HasPages;
 use eLife\Journal\Helper\Humanizer;
 use eLife\Patterns\ViewModel;
-use eLife\Patterns\ViewModel\Assessment;
 use eLife\Patterns\ViewModel\ArticleSection;
 use eLife\Patterns\ViewModel\ContentAside;
 use eLife\Patterns\ViewModel\ContentHeaderNew;
@@ -48,7 +47,6 @@ use eLife\Patterns\ViewModel\ProcessBlock;
 use eLife\Patterns\ViewModel\ReadMoreItem;
 use eLife\Patterns\ViewModel\SpeechBubble;
 use eLife\Patterns\ViewModel\TabbedNavigation;
-use eLife\Patterns\ViewModel\Term;
 use eLife\Patterns\ViewModel\ViewSelector;
 use GuzzleHttp\Promise\PromiseInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -64,7 +62,6 @@ final class ArticlesController extends Controller
     const DISMISSIBLE_INFO_BAR_COOKIE_DURATION = '+365 days';
 
     use HasPages;
-    use CanCreateAssessment;
 
     public function textAction(Request $request, string $id, int $version = null) : Response
     {
@@ -416,7 +413,7 @@ final class ArticlesController extends Controller
                     );
                 }
 
-                if ($item->getType() === 'feature' && $item->getDecisionLetter()) {
+                if ($item->getType() === 'feature' && $item instanceof ArticleVoR && $item->getDecisionLetter()) {
                     $parts[] = ArticleSection::collapsible(
                         $item->getDecisionLetter()->getId() ?? 'decision-letter',
                         'Decision letter',
@@ -433,7 +430,7 @@ final class ArticlesController extends Controller
                     $first = false;
                 }
 
-                if ($item->getType() === 'feature' && $item->getAuthorResponse()) {
+                if ($item->getType() === 'feature' && $item instanceof ArticleVoR && $item->getAuthorResponse()) {
                     $parts[] = ArticleSection::collapsible(
                         $item->getAuthorResponse()->getId() ?? 'author-response',
                         'Author response',
@@ -636,9 +633,10 @@ final class ArticlesController extends Controller
                 $item = $parts['item'];
                 /** @var array $context */
                 $context = $parts['context'];
-                if ($item instanceof ArticleVoR && $item->getElifeAssessment()) {
-                    $elifeAssessment = $item->getElifeAssessment();
+                if ($item instanceof ArticleVoR && $item->getElifeAssessmentArticleSection()) {
+                    $elifeAssessment = $item->getElifeAssessmentArticleSection();
                     $elifeAssessmentTitle = $item->getElifeAssessmentTitle();
+                    $assessmentBuilder = new AssessmentBuilder();
                     return ArticleSection::basic(
                         $this->render(...$this->convertContent($elifeAssessment, 2, $context)),
                         $elifeAssessmentTitle,
@@ -652,7 +650,7 @@ final class ArticlesController extends Controller
                         null,
                         null,
                         null,
-                        $this->createAssessment($elifeAssessment)
+                        $assessmentBuilder->build($elifeAssessment)
                     );
                 }
             });

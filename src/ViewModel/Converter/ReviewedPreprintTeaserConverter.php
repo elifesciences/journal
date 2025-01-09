@@ -2,9 +2,11 @@
 
 namespace eLife\Journal\ViewModel\Converter;
 
+use eLife\ApiSdk\Model\ElifeAssessment;
 use eLife\ApiSdk\Model\ReviewedPreprint;
 use eLife\Journal\Helper\ModelName;
 use eLife\Patterns\ViewModel;
+use eLife\Patterns\ViewModel\TeaserTerms;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 final class ReviewedPreprintTeaserConverter implements ViewModelConverter
@@ -28,13 +30,11 @@ final class ReviewedPreprintTeaserConverter implements ViewModelConverter
     public function convert($object, string $viewModel = null, array $context = []) : ViewModel
     {
         $meta = $object->getVersion()
-            ? ViewModel\Meta::withLink(
-                new ViewModel\Link(
-                    ModelName::singular('reviewed-preprint') . ' v' . $object->getVersion()
-                ),
+            ? ViewModel\Meta::withVersion(
+                ModelName::singular('reviewed-preprint') . ' v' . $object->getVersion(),
                 $this->simpleDate($object, $context),
-                $object->getVersion() === 1 ? 'Not yet revised' : 'Revised',
-                $object->getVersion() === 1 ? 'not-revised' : 'revised'
+                $object->getVersion() === 1 ? ViewModel\Meta::STATUS_NOT_REVISED : ViewModel\Meta::STATUS_REVISED,
+                $object->getVersion() === 1 ? ViewModel\Meta::COLOR_NOT_REVISED : ViewModel\Meta::COLOR_REVISED
             )
             : ViewModel\Meta::withLink(
                 new ViewModel\Link(
@@ -43,6 +43,7 @@ final class ReviewedPreprintTeaserConverter implements ViewModelConverter
                 $this->simpleDate($object, $context)
             );
 
+        $teaserTermsBuilder = new TeaserTermsBuilder();
         return ViewModel\Teaser::main(
             $object->getTitle(),
             $this->urlGenerator->generate('reviewed-preprint', ['id' => $object->getId()]),
@@ -51,7 +52,8 @@ final class ReviewedPreprintTeaserConverter implements ViewModelConverter
             $this->createContextLabel($object),
             $object->getThumbnail() ? $this->smallTeaserImage($object) : null,
             ViewModel\TeaserFooter::forArticle(
-                $meta
+                $meta,
+                $object->getElifeAssessment() ? $teaserTermsBuilder->build($object->getElifeAssessment()) : null
             )
         );
     }

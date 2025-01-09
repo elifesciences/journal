@@ -11,7 +11,7 @@
     <php>
         <ini name="error_reporting" value="-1"/>
         <env name="APP_ENV" value="ci"/>
-        <env name="SYMFONY_DEPRECATIONS_HELPER" value="weak_vendors"/>
+        <env name="SYMFONY_DEPRECATIONS_HELPER" value="max[self]=0"/>
         <!-- Make sure that we handle all dates as UTC even if the system's timezone is not UTC -->
         <ini name="date.timezone" value="America/Los_Angeles"/>
     </php>

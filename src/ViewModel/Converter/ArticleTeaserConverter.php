@@ -44,6 +44,7 @@ final class ArticleTeaserConverter implements ViewModelConverter
         $status = $statusInfo['status'];
         $statusColor = $statusInfo['statusColor'];
 
+        $teaserTermsBuilder = new TeaserTermsBuilder();
         return ViewModel\Teaser::main(
             $object->getFullTitle(),
             $this->urlGenerator->generate('article', [$object]),
@@ -60,7 +61,8 @@ final class ArticleTeaserConverter implements ViewModelConverter
                     $this->simpleDate($object, $context),
                     $status,
                     $statusColor
-                )
+                ),
+                $object->getElifeAssessment() ? $teaserTermsBuilder->build($object->getElifeAssessment()) : null
             )
         );
     }

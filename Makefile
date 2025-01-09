@@ -2,12 +2,15 @@ DOCKER_COMPOSE = docker-compose
 TEST = test/
 BRANCH = master
 
-.PHONY: build dev stop clean test feature-test lint check update-patterns
+.PHONY: build dev prod stop clean test feature-test lint check update-patterns
 
 update-patterns:
 	composer require elife/patterns:dev-$(BRANCH)
 
-build:
+update-api-sdk:
+	composer require elife/api-sdk:dev-master
+
+build: vendor
 	$(DOCKER_COMPOSE) build
 
 vendor:
@@ -16,7 +19,7 @@ vendor:
 dev: build vendor
 	$(DOCKER_COMPOSE) up
 
-exploratory-test-from-prod: build vendor
+prod: build vendor
 	API_URL=https://prod--gateway.elifesciences.org $(DOCKER_COMPOSE) up
 
 stop:
@@ -24,8 +27,9 @@ stop:
 
 clean:
 	$(DOCKER_COMPOSE) down --volumes --remove-orphans
+	rm -rf vendor
 
-test:
+test: vendor
 	APP_ENV=ci $(DOCKER_COMPOSE) run --rm app vendor/bin/phpunit $(TEST) $(OPTIONS)
 	APP_ENV=ci $(DOCKER_COMPOSE) down --volumes
 
