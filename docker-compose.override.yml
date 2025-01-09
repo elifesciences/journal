@@ -34,6 +34,8 @@ services:
     web:
         volumes:
             - assets:/srv/journal/web
+    api_dummy:
+        platform: linux/amd64
     critical_css:
         volumes:
             - critical_css:/build/critical-css
