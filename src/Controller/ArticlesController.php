@@ -635,7 +635,7 @@ final class ArticlesController extends Controller
                 $context = $parts['context'];
                 if ($item instanceof ArticleVoR && $item->getElifeAssessment()) {
                     $elifeAssessment = $item->getElifeAssessment();
-                    $elifeAssessmentArticlesSection = $item->getElifeAssessmentArticleSection();
+                    $elifeAssessmentArticlesSection = $elifeAssessment->getArticleSection();
                     $assessmentBuilder = new AssessmentBuilder();
                     return ArticleSection::basic(
                         $this->render(...$this->convertContent($elifeAssessmentArticlesSection, 2, $context)),
