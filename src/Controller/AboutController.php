@@ -80,7 +80,7 @@ final class AboutController extends Controller
                     return 'Editor-in-Chief' !== $person->getTypeLabel();
                 });
 
-                $arguments['lists'][] = $this->createAboutProfiles($editorInChief, 'co-Editors-in-Chief');
+                $arguments['lists'][] = $this->createAboutProfiles($editorInChief, 'Editor-in-Chief');
                 $arguments['lists'][] = $this->createAboutProfiles($deputyEditors, 'Deputy editors');
                 $arguments['lists'][] = $this->createAboutProfiles($people->forType('senior-editor'), 'Senior editors');
                 $arguments['lists'][] = $this->createAboutProfiles($foundingEditorInChief->wait(), 'Founding Editor-in-Chief');

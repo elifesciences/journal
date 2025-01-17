@@ -530,11 +530,11 @@ final class PeopleContext extends Context
      */
     public function iShouldSeeInTheEditorInChiefList(string $name)
     {
-        $this->assertSession()->elementsCount('css', '.list-heading:contains("co-Editors-in-Chief") + .about-profiles > .about-profiles__item', 1);
+        $this->assertSession()->elementsCount('css', '.list-heading:contains("Editor-in-Chief") + .about-profiles > .about-profiles__item', 1);
 
         $this->assertSession()->elementContains(
             'css',
-            '.list-heading:contains("co-Editors-in-Chief") + .about-profiles > .about-profiles__item:nth-child(1)',
+            '.list-heading:contains("Editor-in-Chief") + .about-profiles > .about-profiles__item:nth-child(1)',
             $name
         );
     }
