@@ -63,7 +63,7 @@ final class AlertsController extends Controller
             ->otherwise($this->softFailure('Failed to load subjects list'))
             ->wait();
 
-        $arguments['body'][] = new Paragraph('eLife is also on <a href="https://www.linkedin.com/company/elife-sciences-publications-ltd">LinkedIn</a> and <a href="https://www.youtube.com/channel/UCNEHLtAc_JPI84xW8V4XWyw">YouTube</a>.');
+        $arguments['body'][] = new Paragraph('eLife is also on <a href="https://www.youtube.com/channel/UCNEHLtAc_JPI84xW8V4XWyw">YouTube</a>.');
 
         return new Response($this->get('templating')->render('::alerts.html.twig', $arguments));
     }
