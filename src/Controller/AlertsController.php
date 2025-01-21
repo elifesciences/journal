@@ -27,7 +27,7 @@ final class AlertsController extends Controller
                 Listing::unordered([
                     'Receive <a href="'.$this->get('router')->generate('content-alerts').'">weekly updates of the latest published research</a>',
                     'To stay on top of new research available every day, subscribe to our RSS feeds for <a href="'.$this->get('router')->generate('rss-ahead').'">author PDFs</a> and <a href="'.$this->get('router')->generate('rss-recent').'">published articles</a>',
-                    'See the highlights of recently published research and more on <a href="https://www.twitter.com/elife">Twitter</a>, <a href="https://bsky.app/profile/elife.bsky.social">Bluesky</a>, <a href="https://www.linkedin.com/company/2541446">LinkedIn</a>, <a href="https://www.facebook.com/elifesciences">Facebook</a>, <a href="https://fediscience.org/@eLife">Mastodon</a>, <a href="https://www.threads.net/@elifesciences">Threads</a> and <a href="https://www.instagram.com/elifesciences/">Instagram</a>.',
+                    'See the highlights of recently published research and more on <a href="https://www.twitter.com/elife">X (formerly Twitter) </a>, <a href="https://bsky.app/profile/elife.bsky.social">Bluesky</a>, <a href="https://www.linkedin.com/company/2541446">LinkedIn</a>, <a href="https://www.facebook.com/elifesciences">Facebook</a>, <a href="https://fediscience.org/@eLife">Mastodon</a>, <a href="https://www.threads.net/@elifesciences">Threads</a> and <a href="https://www.instagram.com/elifesciences/">Instagram</a>.',
                 ], 'bullet')
             ), 'New Research', 2),
             ArticleSection::basic($this->render(
