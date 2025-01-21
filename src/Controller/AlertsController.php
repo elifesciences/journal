@@ -32,6 +32,7 @@ final class AlertsController extends Controller
             ), 'New Research', 2),
             ArticleSection::basic($this->render(
                 Listing::unordered([
+                    'Sign up to receive the eLife Magazine Highlights, a fortnightly newsletter featuring some of the <a href="https://connect.elifesciences.org/magazine-highlights">latest content published in our magazine</a>."',
                     'Subscribe to the RSS feed for <a href="'.$this->get('router')->generate('rss-digests').'">eLife Digests</a>',
                     'Subscribe to the RSS feed for <a href="'.$this->get('router')->generate('rss-magazine').'">all the latest content from the eLife magazine</a>',
                 ], 'bullet')
