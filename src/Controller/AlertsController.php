@@ -35,7 +35,7 @@ final class AlertsController extends Controller
                     'Subscribe to the RSS feed for <a href="'.$this->get('router')->generate('rss-digests').'">eLife Digests</a>',
                     'Subscribe to the RSS feed for <a href="'.$this->get('router')->generate('rss-magazine').'">all the latest content from the eLife magazine</a>',
                 ], 'bullet')
-            ), 'Science in plain language', 2),
+            ), 'eLife Magazine', 2),
             ArticleSection::basic($this->render(
                 Listing::unordered([
                     '<a href="'.$this->get('router')->generate('content-alerts-variant', ['variant' => 'early-career']).'">Sign up to our monthly eLife community newsletter</a> for details on upcoming webinars, new programmes, interviews, and other efforts to support positive research culture in life sciences and biomedicine',
