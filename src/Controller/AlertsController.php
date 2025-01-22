@@ -34,12 +34,12 @@ final class AlertsController extends Controller
                 Listing::unordered([
                     'Sign up to receive the <a href="https://connect.elifesciences.org/magazine-highlights">eLife Magazine Highlights</a>, a fortnightly newsletter featuring some of the latest content published in our magazine',
                     'Subscribe to the RSS feed for <a href="'.$this->get('router')->generate('rss-digests').'">eLife Digests</a>',
-                    'Subscribe to the RSS feed for <a href="'.$this->get('router')->generate('rss-magazine').'">all the latest content from the eLife magazine</a>',
+                    'Subscribe to the RSS feed for <a href="'.$this->get('router')->generate('rss-magazine').'">all the latest content from the eLife Magazine</a>',
                 ], 'bullet')
             ), 'eLife Magazine', 2),
             ArticleSection::basic($this->render(
                 Listing::unordered([
-                    '<a href="'.$this->get('router')->generate('content-alerts-variant', ['variant' => 'early-career']).'">Sign up to our monthly eLife community newsletter</a> for details on upcoming webinars, new programmes, interviews, and other efforts to support positive research culture in life sciences and biomedicine',
+                    '<a href="'.$this->get('router')->generate('content-alerts-variant', ['variant' => 'early-career']).'">Sign up to our monthly eLife Community newsletter</a> for details on upcoming webinars, new programmes, interviews, and other efforts to support positive research culture in life sciences and biomedicine',
                 ], 'bullet')
             ), 'Community-building', 2),
             ArticleSection::basic($this->render(
