@@ -18,8 +18,6 @@
 
         {% block main %}
 
-            {{ render_pattern(sortControl) }}
-
             {{ render_pattern(messageBar) }}
 
             {% if listing %}
@@ -35,9 +33,6 @@
             <div class="grid-secondary-column__item">
 
                 <form method="get" action="{{ path('browse') }}" novalidate>
-
-                    <input type="hidden" name="sort" value="{{ query.sort }}">
-                    <input type="hidden" name="order" value="{{ query.order }}">
 
                     {{ render_pattern(filterPanel) }}
 
