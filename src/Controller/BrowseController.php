@@ -4,18 +4,14 @@ namespace eLife\Journal\Controller;
 
 use eLife\ApiSdk\Client\Search;
 use eLife\ApiSdk\Collection\Sequence;
-use eLife\ApiSdk\Model\SearchTypes;
 use eLife\Journal\Helper\Callback;
 use eLife\Journal\Helper\Paginator;
 use eLife\Journal\Pagerfanta\SequenceAdapter;
 use eLife\Patterns\ViewModel\Button;
-use eLife\Patterns\ViewModel\CompactForm;
+use eLife\Patterns\ViewModel\ContentHeader;
 use eLife\Patterns\ViewModel\Filter;
 use eLife\Patterns\ViewModel\FilterGroup;
 use eLife\Patterns\ViewModel\FilterPanel;
-use eLife\Patterns\ViewModel\Form;
-use eLife\Patterns\ViewModel\Input;
-use eLife\Patterns\ViewModel\Link;
 use eLife\Patterns\ViewModel\ListingTeasers;
 use eLife\Patterns\ViewModel\MessageBar;
 use eLife\Patterns\ViewModel\Teaser;
@@ -40,6 +36,7 @@ final class BrowseController extends Controller
 
         $search = $this->get('elife.api_sdk.search.page')
             ->forSubject(...$arguments['query']['subjects'])
+            ->forType(...$this->researchTypes())
             ->sortBy('date');
 
         $search = promise_for($search);
@@ -52,7 +49,7 @@ final class BrowseController extends Controller
                 return $pagerfanta;
             });
 
-        $arguments['title'] = 'Search';
+        $arguments['title'] = 'Browse the latest research';
 
         $arguments['paginator'] = $pagerfanta
             ->then(function (Pagerfanta $pagerfanta) use ($request, $query) {
@@ -81,6 +78,10 @@ final class BrowseController extends Controller
 
     private function createFirstPage(PromiseInterface $search, array $arguments) : Response
     {
+        $arguments['contentHeader'] = new ContentHeader(
+            $arguments['title']
+        );
+
         $arguments['messageBar'] = $arguments['paginator']
             ->then(function (Paginator $paginator) {
                 if (1 === $paginator->getTotal()) {
@@ -93,8 +94,6 @@ final class BrowseController extends Controller
         $arguments['filterPanel'] = $search
             ->then(function (Search $search) use ($arguments) {
                 $filterGroups = [];
-
-                $allTypes = $search->types();
 
                 if (count($search->subjects())) {
                     $subjectFilters = [];
@@ -119,40 +118,11 @@ final class BrowseController extends Controller
         return new Response($this->get('templating')->render('::browse.html.twig', $arguments));
     }
 
-    private function countForTypes(array $types, SearchTypes $allTypes) : int
-    {
-        return array_sum(array_filter(iterator_to_array($allTypes), function (int $count, string $key) use ($types) {
-            return in_array($key, $types);
-        }, ARRAY_FILTER_USE_BOTH));
-    }
-
-    private function magazineTypes()
-    {
-        return [
-            'blog-article',
-            'collection',
-            'editorial',
-            'feature',
-            'insight',
-            'interview',
-            'labs-post',
-            'podcast-episode',
-        ];
-    }
-
     private function researchTypes()
     {
         $types = [
-            'correction',
-            'expression-concern',
-            'registered-report',
-            'replication-study',
             'research-advance',
             'research-article',
-            'research-communication',
-            'retraction',
-            'review-article',
-            'scientific-correspondence',
             'short-report',
             'tools-resources',
             'reviewed-preprint',
