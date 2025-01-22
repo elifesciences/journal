@@ -27,12 +27,12 @@ final class AlertsController extends Controller
                 Listing::unordered([
                     'Receive <a href="'.$this->get('router')->generate('content-alerts').'">weekly updates of the latest published research</a>',
                     'To stay on top of new research available every day, subscribe to our RSS feeds for <a href="'.$this->get('router')->generate('rss-ahead').'">author PDFs</a> and <a href="'.$this->get('router')->generate('rss-recent').'">published articles</a>',
-                    'See the highlights of recently published research and more on <a href="https://www.twitter.com/elife">X (formerly Twitter) </a>, <a href="https://bsky.app/profile/elife.bsky.social">Bluesky</a>, <a href="https://www.linkedin.com/company/2541446">LinkedIn</a>, <a href="https://www.facebook.com/elifesciences">Facebook</a>, <a href="https://fediscience.org/@eLife">Mastodon</a>, <a href="https://www.threads.net/@elifesciences">Threads</a> and <a href="https://www.instagram.com/elifesciences/">Instagram</a>.',
+                    'See the highlights of recently published research and more on <a href="https://www.twitter.com/elife">X (formerly Twitter) </a>, <a href="https://bsky.app/profile/elife.bsky.social">Bluesky</a>, <a href="https://www.linkedin.com/company/2541446">LinkedIn</a>, <a href="https://www.facebook.com/elifesciences">Facebook</a>, <a href="https://fediscience.org/@eLife">Mastodon</a>, <a href="https://www.threads.net/@elifesciences">Threads</a> and <a href="https://www.instagram.com/elifesciences/">Instagram</a>',
                 ], 'bullet')
             ), 'New Research', 2),
             ArticleSection::basic($this->render(
                 Listing::unordered([
-                    'Sign up to receive the eLife Magazine Highlights, a fortnightly newsletter featuring some of the <a href="https://connect.elifesciences.org/magazine-highlights">latest content published in our magazine</a>."',
+                    'Sign up to receive the <a href="https://connect.elifesciences.org/magazine-highlights">eLife Magazine Highlights</a>, a fortnightly newsletter featuring some of the latest content published in our magazine',
                     'Subscribe to the RSS feed for <a href="'.$this->get('router')->generate('rss-digests').'">eLife Digests</a>',
                     'Subscribe to the RSS feed for <a href="'.$this->get('router')->generate('rss-magazine').'">all the latest content from the eLife magazine</a>',
                 ], 'bullet')
@@ -44,7 +44,7 @@ final class AlertsController extends Controller
             ), 'Community-building', 2),
             ArticleSection::basic($this->render(
                 Listing::unordered([
-                    'Sign up to receive our <a href="'.$this->get('router')->generate('content-alerts-variant', ['variant' => 'elife-newsletter']).'">bi-monthly newsletter</a> for recent developments at eLife, new products and collaborations and changes to editorial policy.</a>',
+                    'Sign up to receive our <a href="'.$this->get('router')->generate('content-alerts-variant', ['variant' => 'elife-newsletter']).'">bi-monthly newsletter</a> for recent developments at eLife, new products and collaborations and changes to editorial policy</a>',
                 ], 'bullet')
             ), 'The latest from eLife', 2),
         ];
