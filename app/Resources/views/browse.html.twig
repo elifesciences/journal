@@ -1,0 +1,59 @@
+{% set criticalCss = 'listing' %}
+
+{% extends '::page.html.twig' %}
+
+{% block meta %}
+
+    {{ parent() }}
+
+    <meta name="robots" content="noindex">
+
+{% endblock %}
+
+{% block body %}
+
+    <div class="wrapper">
+
+        {{ render_pattern(searchBox) }}
+
+    </div>
+
+    {% include 'calls-to-action.html.twig' %}
+
+    {% embed 'grid/listing-two-column.html.twig' %}
+
+        {% block main %}
+
+            {{ render_pattern(sortControl) }}
+
+            {{ render_pattern(messageBar) }}
+
+            {% if listing %}
+
+                {{ render_pattern(listing) }}
+
+            {% endif %}
+
+        {% endblock %}
+
+        {% block secondary %}
+
+            <div class="grid-secondary-column__item">
+
+                <form method="get" action="{{ path('browse') }}" novalidate>
+
+                    <input type="hidden" name="for" value="{{ query.for }}">
+                    <input type="hidden" name="sort" value="{{ query.sort }}">
+                    <input type="hidden" name="order" value="{{ query.order }}">
+
+                    {{ render_pattern(filterPanel) }}
+
+                </form>
+
+            </div>
+
+        {% endblock %}
+
+    {% endembed %}
+
+{% endblock %}

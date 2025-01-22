@@ -185,7 +185,7 @@ final class BrowseController extends Controller
                 );
             });
 
-        return new Response($this->get('templating')->render('::search.html.twig', $arguments));
+        return new Response($this->get('templating')->render('::browse.html.twig', $arguments));
     }
 
     private function countForTypes(array $types, SearchTypes $allTypes) : int
