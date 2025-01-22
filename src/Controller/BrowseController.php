@@ -18,7 +18,6 @@ use eLife\Patterns\ViewModel\Input;
 use eLife\Patterns\ViewModel\Link;
 use eLife\Patterns\ViewModel\ListingTeasers;
 use eLife\Patterns\ViewModel\MessageBar;
-use eLife\Patterns\ViewModel\SearchBox;
 use eLife\Patterns\ViewModel\SortControl;
 use eLife\Patterns\ViewModel\SortControlOption;
 use eLife\Patterns\ViewModel\Teaser;
@@ -34,13 +33,10 @@ final class BrowseController extends Controller
     {
         $page = (int) $request->query->get('page', 1);
         $perPage = 10;
-        // Sanitise the 'for' query parameter.
-        $for = preg_replace(['/^\s+/', '/\s+$/', '/[\s]+/'], ['', '', ' '], $request->query->get('for'));
 
         $arguments = $this->defaultPageArguments($request);
 
         $arguments['query'] = $query = [
-            'for' => $for,
             'subjects' => $request->query->get('subjects', []),
             'types' => $request->query->get('types', []),
             'sort' => $request->query->get('sort', 'relevance'),
@@ -56,7 +52,6 @@ final class BrowseController extends Controller
         }
 
         $search = $this->get('elife.api_sdk.search.page')
-            ->forQuery(preg_replace('/[\-]+/', ' ', $arguments['query']['for']))
             ->forSubject(...$arguments['query']['subjects'])
             ->forType(...$apiTypes)
             ->sortBy($arguments['query']['sort']);
@@ -76,14 +71,6 @@ final class BrowseController extends Controller
             });
 
         $arguments['title'] = 'Search';
-
-        $arguments['searchBox'] = new SearchBox(
-            new CompactForm(
-                new Form($this->get('router')->generate('browse'), 'search', 'GET'),
-                new Input('Search by keyword or author', 'search', 'for', $arguments['query']['for'], 'Search by keyword or author'),
-                'Search'
-            )
-        );
 
         $arguments['paginator'] = $pagerfanta
             ->then(function (Pagerfanta $pagerfanta) use ($request, $query) {
