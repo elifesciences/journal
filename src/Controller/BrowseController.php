@@ -38,22 +38,12 @@ final class BrowseController extends Controller
 
         $arguments['query'] = $query = [
             'subjects' => $request->query->get('subjects', []),
-            'types' => $request->query->get('types', []),
             'sort' => $request->query->get('sort', 'relevance'),
             'order' => $request->query->get('order', SortControlOption::DESC),
         ];
 
-        $apiTypes = [];
-        if (in_array('magazine', $arguments['query']['types'])) {
-            $apiTypes = array_merge($apiTypes, $this->magazineTypes());
-        }
-        if (in_array('research', $arguments['query']['types'])) {
-            $apiTypes = array_merge($apiTypes, $this->researchTypes());
-        }
-
         $search = $this->get('elife.api_sdk.search.page')
             ->forSubject(...$arguments['query']['subjects'])
-            ->forType(...$apiTypes)
             ->sortBy($arguments['query']['sort']);
 
         if (SortControlOption::ASC === $arguments['query']['order']) {
@@ -143,14 +133,6 @@ final class BrowseController extends Controller
                 $filterGroups = [];
 
                 $allTypes = $search->types();
-
-                $filterGroups[] = new FilterGroup(
-                    'Type',
-                    [
-                        new Filter(in_array('magazine', $arguments['query']['types']), 'Magazine', $this->countForTypes($this->magazineTypes(), $allTypes), 'types[]', 'magazine'),
-                        new Filter(in_array('research', $arguments['query']['types']), 'Research', $this->countForTypes($this->researchTypes(), $allTypes), 'types[]', 'research'),
-                    ]
-                );
 
                 if (count($search->subjects())) {
                     $subjectFilters = [];
