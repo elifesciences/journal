@@ -46,7 +46,7 @@ final class BrowseController extends Controller
             'subjects' => $request->query->get('subjects', []),
         ];
 
-        $search = $this->get('elife.api_sdk.browse.page')
+        $browse = $this->get('elife.api_sdk.browse.page')
             ->forSubject(...$arguments['query']['subjects'])
             ->forType(...$this->researchTypes())
             ->prc(!$arguments['query']['include-original'])
@@ -54,9 +54,9 @@ final class BrowseController extends Controller
             ->strength('all' !== $strength ? $strength : null)
             ->sortBy('date');
 
-        $search = promise_for($search);
+        $browse = promise_for($browse);
 
-        $pagerfanta = $search
+        $pagerfanta = $browse
             ->then(function (Sequence $sequence) use ($page, $perPage) {
                 $pagerfanta = new Pagerfanta(new SequenceAdapter($sequence, $this->willConvertTo(Teaser::class)));
                 $pagerfanta->setMaxPerPage($perPage)->setCurrentPage($page);
@@ -67,9 +67,9 @@ final class BrowseController extends Controller
         $arguments['title'] = 'Browse the latest research';
 
         $arguments['paginator'] = $pagerfanta
-            ->then(function (Pagerfanta $pagerfanta) use ($request, $query) {
+            ->then(function (Pagerfanta $pagerfanta) use ($arguments, $request, $query) {
                 return new Paginator(
-                    'Browse the search results',
+                    $arguments['title'],
                     $pagerfanta,
                     function (int $page = null) use ($request, $query) {
                         $routeParams = $query + $request->attributes->get('_route_params');
@@ -84,14 +84,14 @@ final class BrowseController extends Controller
             ->then(Callback::methodEmptyOr('getTotal', $this->willConvertTo(ListingTeasers::class, ['heading' => ''])));
 
         if (1 === $page) {
-            return $this->createFirstPage($search, $arguments);
+            return $this->createFirstPage($browse, $arguments);
         }
 
         return $this->createSubsequentPage($request, $arguments);
     }
 
 
-    private function createFirstPage(PromiseInterface $search, array $arguments) : Response
+    private function createFirstPage(PromiseInterface $browse, array $arguments) : Response
     {
         $arguments['contentHeader'] = new ContentHeader(
             $arguments['title']
@@ -112,8 +112,8 @@ final class BrowseController extends Controller
             ),
         ]);
 
-        $arguments['filterPanel'] = $search
-            ->then(function (Search $search) use ($arguments) {
+        $arguments['filterPanel'] = $browse
+            ->then(function (Search $browse) use ($arguments) {
                 $significances = array_merge(
                     [
                         new Filter(false, 'Show all', null, null, 'all'),
@@ -171,9 +171,9 @@ final class BrowseController extends Controller
                     ]),
                 ];
 
-                if (count($search->subjects())) {
+                if (count($browse->subjects())) {
                     $subjectFilters = [];
-                    foreach ($search->subjects() as $subject => $results) {
+                    foreach ($browse->subjects() as $subject => $results) {
                         $subjectFilters[] = new Filter(in_array($subject->getId(), $arguments['query']['subjects']), $subject->getName(), null, 'subjects[]', $subject->getId());
                     }
 
@@ -196,14 +196,12 @@ final class BrowseController extends Controller
 
     private function researchTypes()
     {
-        $types = [
+        return [
             'research-advance',
             'research-article',
             'short-report',
             'tools-resources',
             'reviewed-preprint',
         ];
-
-        return $types;
     }
 }
