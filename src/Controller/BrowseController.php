@@ -12,8 +12,11 @@ use eLife\Patterns\ViewModel\ContentHeader;
 use eLife\Patterns\ViewModel\Filter;
 use eLife\Patterns\ViewModel\FilterGroup;
 use eLife\Patterns\ViewModel\FilterPanel;
+use eLife\Patterns\ViewModel\Link;
 use eLife\Patterns\ViewModel\ListingTeasers;
 use eLife\Patterns\ViewModel\MessageBar;
+use eLife\Patterns\ViewModel\SortControl;
+use eLife\Patterns\ViewModel\SortControlOption;
 use eLife\Patterns\ViewModel\Teaser;
 use GuzzleHttp\Promise\PromiseInterface;
 use Pagerfanta\Pagerfanta;
@@ -97,11 +100,17 @@ final class BrowseController extends Controller
         $arguments['messageBar'] = $arguments['paginator']
             ->then(function (Paginator $paginator) {
                 if (1 === $paginator->getTotal()) {
-                    return new MessageBar('1 result found');
+                    return new MessageBar('1 article found');
                 }
 
-                return new MessageBar('<b>'.number_format($paginator->getTotal()).'</b> results found');
+                return new MessageBar('<b>Showing '.number_format($paginator->getTotal()).' '.(1 === $paginator->getTotal() ? 'article' : 'articles').'</b>');
             });
+
+        $arguments['sortControl'] = new SortControl([
+            new SortControlOption(
+                new Link('Sorted by Publication date', $this->get('router')->generate('browse', $arguments['query']))
+            ),
+        ]);
 
         $arguments['filterPanel'] = $search
             ->then(function (Search $search) use ($arguments) {
