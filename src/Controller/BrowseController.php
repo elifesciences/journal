@@ -43,7 +43,7 @@ final class BrowseController extends Controller
             'subjects' => $request->query->get('subjects', []),
         ];
 
-        $search = $this->get('elife.api_sdk.search.page')
+        $search = $this->get('elife.api_sdk.browse.page')
             ->forSubject(...$arguments['query']['subjects'])
             ->forType(...$this->researchTypes())
             ->prc(!$arguments['query']['include-original'])
