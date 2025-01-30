@@ -111,60 +111,57 @@ final class BrowseController extends Controller
                 new Link('Sorted by Publication date', $this->get('router')->generate('browse', $arguments['query']))
             ),
         ]);
+        
+        $prepareTermsFilter = function (array $terms, string $current = null) {
+            return array_merge(
+                [
+                    new Filter(false, 'Show all', null, null, 'all'),
+                ],
+                array_map(
+                    function ($t) use ($current) {
+                        return new Filter($current === $t, $t, null, null, $t);
+                    },
+                    $terms
+                )
+            );
+        };
 
         $arguments['filterPanel'] = $browse
-            ->then(function (Search $browse) use ($arguments) {
-                $significances = array_merge(
-                    [
-                        new Filter(false, 'Show all', null, null, 'all'),
-                    ],
-                    array_map(
-                        function ($i) use ($arguments) {
-                            return new Filter($arguments['query']['significance'] === $i, $i, null, null, $i);
-                        },
-                        [
-                            'landmark',
-                            'fundamental',
-                            'important',
-                            'valuable',
-                            'useful',
-                        ]
-                    )
-                );
-                $strengths = array_merge(
-                    [
-                        new Filter(false, 'Show all', null, null, 'all'),
-                    ],
-                    array_map(
-                        function ($i) use ($arguments) {
-                            return new Filter($arguments['query']['strength'] === $i, $i, null, null, $i);
-                        },
-                        [
-                            'exceptional',
-                            'compelling',
-                            'convincing',
-                            'solid',
-                            'incomplete',
-                            'inadequate',
-                        ]
-                    )
-                );
-                
+            ->then(function (Search $browse) use ($arguments, $prepareTermsFilter) {
                 $filterGroups = [
                     new FilterGroup(
                         'Significance (minimum)',
-                        $significances,
+                        $prepareTermsFilter(
+                            [
+                                'landmark',
+                                'fundamental',
+                                'important',
+                                'valuable',
+                                'useful',
+                            ],
+                            $arguments['query']['significance']
+                        ),
                         'significance'
                     ),
                     new FilterGroup(
                         'Strength (minimum)',
-                        $strengths,
+                        $prepareTermsFilter(
+                            [
+                                'exceptional',
+                                'compelling',
+                                'convincing',
+                                'solid',
+                                'incomplete',
+                                'inadequate',
+                            ],
+                            $arguments['query']['strength']
+                        ),
                         'strength'
                     ),
                     new FilterGroup(null, [
                         new Filter(
                             $arguments['query']['include-original'],
-                            'Include papers accepted via eLife\'s original publishing model',
+                            'Include papers accepted via eLife’s original publishing model',
                             null,
                             'include-original'
                         ),
