@@ -29,13 +29,16 @@ final class BrowseController extends Controller
         $perPage = 10;
 
         $arguments = $this->defaultPageArguments($request);
+        
+        $significance = $request->query->get('significance');
+        $strength = $request->query->get('strength');
 
         $arguments['query'] = $query = [
-            'significance' => $request->query->get('significance'),
-            'strength' => $request->query->get('strength'),
+            'significance' => $significance,
+            'strength' => $strength,
             'include-original' => $request->query->getBoolean(
                 'include-original',
-                (is_null($request->query->get('significance')))
+                (is_null($significance) && is_null($strength))
             ),
             'subjects' => $request->query->get('subjects', []),
         ];
@@ -43,6 +46,9 @@ final class BrowseController extends Controller
         $search = $this->get('elife.api_sdk.search.page')
             ->forSubject(...$arguments['query']['subjects'])
             ->forType(...$this->researchTypes())
+            ->prc(!$arguments['query']['include-original'])
+            ->significance('all' !== $significance ? $significance : null)
+            ->strength('all' !== $strength ? $strength : null)
             ->sortBy('date');
 
         $search = promise_for($search);
