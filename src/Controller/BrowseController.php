@@ -31,6 +31,12 @@ final class BrowseController extends Controller
         $arguments = $this->defaultPageArguments($request);
 
         $arguments['query'] = $query = [
+            'significance' => $request->query->get('significance'),
+            'strength' => $request->query->get('strength'),
+            'include-original' => $request->query->getBoolean(
+                'include-original',
+                (is_null($request->query->get('significance')))
+            ),
             'subjects' => $request->query->get('subjects', []),
         ];
 
@@ -93,12 +99,67 @@ final class BrowseController extends Controller
 
         $arguments['filterPanel'] = $search
             ->then(function (Search $search) use ($arguments) {
-                $filterGroups = [];
+                $significances = array_merge(
+                    [
+                        new Filter(false, 'Show all', null, null, 'all'),
+                    ],
+                    array_map(
+                        function ($i) use ($arguments) {
+                            return new Filter($arguments['query']['significance'] === $i, $i, null, null, $i);
+                        },
+                        [
+                            'landmark',
+                            'fundamental',
+                            'important',
+                            'valuable',
+                            'useful',
+                        ]
+                    )
+                );
+                $strengths = array_merge(
+                    [
+                        new Filter(false, 'Show all', null, null, 'all'),
+                    ],
+                    array_map(
+                        function ($i) use ($arguments) {
+                            return new Filter($arguments['query']['strength'] === $i, $i, null, null, $i);
+                        },
+                        [
+                            'exceptional',
+                            'compelling',
+                            'convincing',
+                            'solid',
+                            'incomplete',
+                            'inadequate',
+                        ]
+                    )
+                );
+                
+                $filterGroups = [
+                    new FilterGroup(
+                        'Significance (minimum)',
+                        $significances,
+                        'significance'
+                    ),
+                    new FilterGroup(
+                        'Strength (minimum)',
+                        $strengths,
+                        'strength'
+                    ),
+                    new FilterGroup(null, [
+                        new Filter(
+                            $arguments['query']['include-original'],
+                            'Include papers accepted via eLife\'s original publishing model',
+                            null,
+                            'include-original'
+                        ),
+                    ]),
+                ];
 
                 if (count($search->subjects())) {
                     $subjectFilters = [];
                     foreach ($search->subjects() as $subject => $results) {
-                        $subjectFilters[] = new Filter(in_array($subject->getId(), $arguments['query']['subjects']), $subject->getName(), $results, 'subjects[]', $subject->getId());
+                        $subjectFilters[] = new Filter(in_array($subject->getId(), $arguments['query']['subjects']), $subject->getName(), null, 'subjects[]', $subject->getId());
                     }
 
                     usort($subjectFilters, function (Filter $a, Filter $b) {
