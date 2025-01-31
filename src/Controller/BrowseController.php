@@ -39,10 +39,7 @@ final class BrowseController extends Controller
         $arguments['query'] = $query = [
             'significance' => $significance,
             'strength' => $strength,
-            'include-original' => $request->query->getBoolean(
-                'include-original',
-                (is_null($significance) && is_null($strength))
-            ),
+            'include-original' => $request->query->getBoolean('include-original'),
             'subjects' => $request->query->get('subjects', []),
         ];
 
