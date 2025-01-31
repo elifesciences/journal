@@ -20,7 +20,7 @@ dev: build vendor
 	$(DOCKER_COMPOSE) up
 
 prod: build vendor
-	API_URL=https://prod--gateway.elifesciences.org API_URL_SEARCH_PAGE=https://prod--gateway.elifesciences.org $(DOCKER_COMPOSE) up
+	API_URL=https://prod--gateway.elifesciences.org $(DOCKER_COMPOSE) up
 
 stop:
 	$(DOCKER_COMPOSE) down
