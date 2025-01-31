@@ -47,11 +47,11 @@ final class BrowseController extends Controller
         ];
 
         $browse = $this->get('elife.api_sdk.browse.page')
-            ->forSubject(...$arguments['query']['subjects'])
+            ->forSubject(...$query['subjects'])
             ->forType(...$this->researchTypes())
-            ->prc(!$arguments['query']['include-original'])
-            ->significance('all' !== $significance ? $significance : null)
-            ->strength('all' !== $strength ? $strength : null)
+            ->prc(!$query['include-original'])
+            ->significance(in_array($significance, $this->significanceTerms()) ? $significance : null)
+            ->strength(in_array($strength, $this->strengthTerms()) ? $strength : null)
             ->sortBy('date');
 
         $browse = promise_for($browse);
@@ -132,13 +132,7 @@ final class BrowseController extends Controller
                     new FilterGroup(
                         'Significance (minimum)',
                         $prepareTermsFilter(
-                            [
-                                'landmark',
-                                'fundamental',
-                                'important',
-                                'valuable',
-                                'useful',
-                            ],
+                            $this->significanceTerms(),
                             $arguments['query']['significance']
                         ),
                         'significance'
@@ -146,14 +140,7 @@ final class BrowseController extends Controller
                     new FilterGroup(
                         'Strength (minimum)',
                         $prepareTermsFilter(
-                            [
-                                'exceptional',
-                                'compelling',
-                                'convincing',
-                                'solid',
-                                'incomplete',
-                                'inadequate',
-                            ],
+                            $this->strengthTerms(),
                             $arguments['query']['strength']
                         ),
                         'strength'
@@ -199,6 +186,29 @@ final class BrowseController extends Controller
             'short-report',
             'tools-resources',
             'reviewed-preprint',
+        ];
+    }
+    
+    private function significanceTerms()
+    {
+        return [
+            'landmark',
+            'fundamental',
+            'important',
+            'valuable',
+            'useful',
+        ];
+    }
+    
+    private function strengthTerms()
+    {
+        return [
+            'exceptional',
+            'compelling',
+            'convincing',
+            'solid',
+            'incomplete',
+            'inadequate',
         ];
     }
 }
