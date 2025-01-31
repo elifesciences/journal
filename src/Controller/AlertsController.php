@@ -39,7 +39,7 @@ final class AlertsController extends Controller
             ), 'eLife Magazine', 2),
             ArticleSection::basic($this->render(
                 Listing::unordered([
-                    '<a href="'.$this->get('router')->generate('content-alerts-variant', ['variant' => 'early-career']).'">Sign up to our monthly eLife Community newsletter</a> for details on upcoming webinars, new programmes, interviews, and other efforts to support positive research culture in life sciences and biomedicine',
+                    'Sign up to our monthly <a href="'.$this->get('router')->generate('content-alerts-variant', ['variant' => 'early-career']).'">eLife Community newsletter</a> for details on upcoming webinars, new programmes, interviews, and other efforts to support positive research culture in life sciences and biomedicine',
                 ], 'bullet')
             ), 'Community-building', 2),
             ArticleSection::basic($this->render(
