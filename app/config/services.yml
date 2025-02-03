@@ -26,6 +26,11 @@ services:
         arguments:
           - '@csa_guzzle.client.elife_api_search_page'
 
+    elife.api_client.client.browse_page:
+        class: eLife\ApiClient\HttpClient\Guzzle6HttpClient
+        arguments:
+          - '@csa_guzzle.client.elife_api_browse_page'
+
     elife.api_client.client.crm_api:
         class: eLife\CiviContacts\Guzzle\CiviCrmClient
         arguments:
@@ -58,6 +63,12 @@ services:
         public: false
         arguments:
           - '@elife.api_client.client.search_page'
+
+    elife.api_sdk.browse_page:
+        class: eLife\ApiSdk\ApiSdk
+        public: false
+        arguments:
+          - '@elife.api_client.client.browse_page'
 
     elife.api_sdk.serializer:
         class: Symfony\Component\Serializer\Serializer
@@ -158,6 +169,10 @@ services:
     elife.api_sdk.search.page:
         class: eLife\ApiSdk\Client\Search
         factory: ['@elife.api_sdk.search_page', search]
+
+    elife.api_sdk.browse.page:
+        class: eLife\ApiSdk\Client\Search
+        factory: ['@elife.api_sdk.browse_page', search]
 
     elife.api_sdk.subjects:
         class: eLife\ApiSdk\Client\Subjects

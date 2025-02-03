@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "268f224ecab094326d6044947f11d848",
+    "content-hash": "4cce301a16d0b18b806a551a57981876",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -1273,16 +1273,16 @@
         },
         {
             "name": "elife/api-sdk",
-            "version": "dev-master",
+            "version": "dev-filter-by-term",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-sdk-php.git",
-                "reference": "cb9bd20aa11387c27335c66ef937aae933b1f31c"
+                "reference": "318b1f2971d0d5d7b3f25ada595369e477dda575"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/cb9bd20aa11387c27335c66ef937aae933b1f31c",
-                "reference": "cb9bd20aa11387c27335c66ef937aae933b1f31c",
+                "url": "https://api.github.com/repos/elifesciences/api-sdk-php/zipball/318b1f2971d0d5d7b3f25ada595369e477dda575",
+                "reference": "318b1f2971d0d5d7b3f25ada595369e477dda575",
                 "shasum": ""
             },
             "require": {
@@ -1298,7 +1298,7 @@
             },
             "require-dev": {
                 "csa/guzzle-cache-middleware": "^1.0",
-                "elife/api": "2.30.0",
+                "elife/api": "2.31.3",
                 "elife/api-validator": "^1.0",
                 "guzzlehttp/guzzle": "^6.0",
                 "justinrainbow/json-schema": "^3.0 || ^4.0 || ^5.0",
@@ -1310,7 +1310,6 @@
                 "psr/http-message": "^1.0",
                 "squizlabs/php_codesniffer": "^3.5"
             },
-            "default-branch": true,
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -1329,9 +1328,9 @@
             "description": "eLife Sciences API SDK",
             "support": {
                 "issues": "https://github.com/elifesciences/api-sdk-php/issues",
-                "source": "https://github.com/elifesciences/api-sdk-php/tree/master"
+                "source": "https://github.com/elifesciences/api-sdk-php/tree/filter-by-term"
             },
-            "time": "2025-01-10T11:50:41+00:00"
+            "time": "2025-01-30T18:16:06+00:00"
         },
         {
             "name": "elife/civi-contacts",
