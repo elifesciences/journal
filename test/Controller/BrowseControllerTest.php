@@ -303,6 +303,6 @@ final class BrowseControllerTest extends PageTestCase
             )
         );
 
-        return '/browse'.($for ? '?for='.$for : '');
+        return '/browse';
     }
 }
