@@ -31,7 +31,6 @@ final class BrowseControllerTest extends PageTestCase
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
 
-        $this->markTestSkipped('Valid but currently failing');
         $this->assertSame('Browse the latest research | eLife', $crawler->filter('title')->text());
         $this->markTestSkipped('All assertions past this need to be evaluated');
         $this->assertSame('/search?for=&sort=relevance&order=descending', $crawler->filter('link[rel="canonical"]')->attr('href'));
