@@ -33,8 +33,8 @@ final class BrowseControllerTest extends PageTestCase
 
         $this->assertSame('Browse the latest research | eLife', $crawler->filter('title')->text());
         $this->assertSame('/browse', $crawler->filter('link[rel="canonical"]')->attr('href'));
+        $this->assertSame('http://localhost/browse', $crawler->filter('meta[property="og:url"]')->attr('content'));
         $this->markTestSkipped('All assertions past this need to be evaluated');
-        $this->assertSame('http://localhost/search', $crawler->filter('meta[property="og:url"]')->attr('content'));
         $this->assertSame('Search', $crawler->filter('meta[property="og:title"]')->attr('content'));
         $this->assertEmpty($crawler->filter('meta[property="og:description"]'));
         $this->assertEmpty($crawler->filter('meta[name="description"]'));
