@@ -77,14 +77,6 @@ final class BrowseController extends Controller
 
         $arguments['title'] = 'Browse the latest research';
 
-        $arguments['searchBox'] = new SearchBox(
-            new CompactForm(
-                new Form($this->get('router')->generate('search'), 'search', 'GET'),
-                new Input('Search by keyword or author', 'search', 'for', $arguments['query']['for'], 'Search by keyword or author'),
-                'Search'
-            )
-        );
-
         $arguments['paginator'] = $pagerfanta
             ->then(function (Pagerfanta $pagerfanta) use ($request, $query) {
                 return new Paginator(
