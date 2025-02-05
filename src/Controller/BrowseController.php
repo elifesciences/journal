@@ -106,16 +106,6 @@ final class BrowseController extends Controller
             ->then(function (Search $search) use ($arguments) {
                 $filterGroups = [];
 
-                $allTypes = $search->types();
-
-                $filterGroups[] = new FilterGroup(
-                    'Type',
-                    [
-                        new Filter(in_array('magazine', $arguments['query']['types']), 'Magazine', $this->countForTypes($this->magazineTypes(), $allTypes), 'types[]', 'magazine'),
-                        new Filter(in_array('research', $arguments['query']['types']), 'Research', $this->countForTypes($this->researchTypes(), $allTypes), 'types[]', 'research'),
-                    ]
-                );
-
                 if (count($search->subjects())) {
                     $subjectFilters = [];
                     foreach ($search->subjects() as $subject => $results) {
