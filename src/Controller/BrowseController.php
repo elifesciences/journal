@@ -34,8 +34,6 @@ final class BrowseController extends Controller
     {
         $page = (int) $request->query->get('page', 1);
         $perPage = 10;
-        // Sanitise the 'for' query parameter.
-        $for = preg_replace(['/^\s+/', '/\s+$/', '/[\s]+/'], ['', '', ' '], $request->query->get('for'));
 
         $arguments = $this->defaultPageArguments($request);
 
@@ -43,7 +41,6 @@ final class BrowseController extends Controller
             'subjects' => $request->query->get('subjects', []),
             'types' => $request->query->get('types', []),
             'sort' => $request->query->get('sort', 'relevance'),
-            'order' => $request->query->get('order', SortControlOption::DESC),
         ];
 
         $apiTypes = [];
@@ -58,10 +55,6 @@ final class BrowseController extends Controller
             ->forSubject(...$arguments['query']['subjects'])
             ->forType(...$apiTypes)
             ->sortBy($arguments['query']['sort']);
-
-        if (SortControlOption::ASC === $arguments['query']['order']) {
-            $search = $search->reverse();
-        }
 
         $search = promise_for($search);
 
@@ -109,36 +102,6 @@ final class BrowseController extends Controller
 
                 return new MessageBar('<b>'.number_format($paginator->getTotal()).'</b> results found');
             });
-
-        $currentOrder = SortControlOption::ASC === $arguments['query']['order'] ? SortControlOption::ASC : SortControlOption::DESC;
-        $inverseOrder = SortControlOption::ASC === $arguments['query']['order'] ? SortControlOption::DESC : SortControlOption::ASC;
-
-        $relevanceQuery = array_merge(
-            $arguments['query'],
-            [
-                'sort' => 'relevance',
-                'order' => 'relevance' === $arguments['query']['sort'] ? $inverseOrder : SortControlOption::DESC,
-            ]
-        );
-
-        $dateQuery = array_merge(
-            $arguments['query'],
-            [
-                'sort' => 'date',
-                'order' => 'date' === $arguments['query']['sort'] ? $inverseOrder : SortControlOption::DESC,
-            ]
-        );
-
-        $arguments['sortControl'] = new SortControl([
-            new SortControlOption(
-                new Link('Relevance', $this->get('router')->generate('search', $relevanceQuery)),
-                'relevance' === $arguments['query']['sort'] ? $currentOrder : null
-            ),
-            new SortControlOption(
-                new Link('Date', $this->get('router')->generate('search', $dateQuery)),
-                'date' === $arguments['query']['sort'] ? $currentOrder : null
-            ),
-        ]);
 
         $arguments['filterPanel'] = $search
             ->then(function (Search $search) use ($arguments) {

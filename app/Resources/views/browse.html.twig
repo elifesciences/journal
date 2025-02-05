@@ -35,7 +35,6 @@
                 <form method="get" action="{{ path('search') }}" novalidate>
 
                     <input type="hidden" name="sort" value="{{ query.sort }}">
-                    <input type="hidden" name="order" value="{{ query.order }}">
 
                     {{ render_pattern(filterPanel) }}
 
