@@ -199,7 +199,7 @@ final class BrowseControllerTest extends PageTestCase
             )
         );
 
-        $crawler = $client->request('GET', '/search?page=1&per-page=10&use-date=default');
+        $crawler = $client->request('GET', '/search?page=1&per-page=10');
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $listing = $crawler->filter('ol.listing-list > li');
 
