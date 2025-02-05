@@ -1,5 +1,8 @@
 parameters:
-    api_key: public
+    api_url: "%env(API_URL)%"
+    api_url_search_page: "%env(API_URL_SEARCH_PAGE)%"
+    api_url_public: "%env(API_URL_PUBLIC)%"
+    api_key: "%env(API_KEY)%"
     side_by_side_view_url: https://lens.elifesciences.org/
     secret: ThisTokenIsNotSoSecretChangeIt
     session_name: journal
