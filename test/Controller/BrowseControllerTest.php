@@ -34,7 +34,7 @@ final class BrowseControllerTest extends PageTestCase
         $this->assertSame('Browse the latest research | eLife', $crawler->filter('title')->text());
         $this->assertSame('/browse', $crawler->filter('link[rel="canonical"]')->attr('href'));
         $this->markTestSkipped('All assertions past this need to be evaluated');
-        $this->assertSame('http://localhost/search?for=&sort=relevance&order=descending', $crawler->filter('meta[property="og:url"]')->attr('content'));
+        $this->assertSame('http://localhost/search', $crawler->filter('meta[property="og:url"]')->attr('content'));
         $this->assertSame('Search', $crawler->filter('meta[property="og:title"]')->attr('content'));
         $this->assertEmpty($crawler->filter('meta[property="og:description"]'));
         $this->assertEmpty($crawler->filter('meta[name="description"]'));
@@ -111,7 +111,7 @@ final class BrowseControllerTest extends PageTestCase
         $this->mockApiResponse(
             new Request(
                 'GET',
-                'http://api.elifesciences.org/search?for=Reviewed preprint&page=1&per-page=1&sort=relevance&order=desc&use-date=default',
+                'http://api.elifesciences.org/search?for=Reviewed preprint&page=1&per-page=1&sort=date&order=desc&use-date=default',
                 ['Accept' => 'application/vnd.elife.search+json; version=2']
             ),
             new Response(
@@ -156,7 +156,7 @@ final class BrowseControllerTest extends PageTestCase
         $this->mockApiResponse(
             new Request(
                 'GET',
-                'http://api.elifesciences.org/search?for=Reviewed preprint&page=1&per-page=10&sort=relevance&order=desc&use-date=default',
+                'http://api.elifesciences.org/search?for=Reviewed preprint&page=1&per-page=10&sort=date&order=desc&use-date=default',
                 ['Accept' => 'application/vnd.elife.search+json; version=2']
             ),
             new Response(
@@ -199,7 +199,7 @@ final class BrowseControllerTest extends PageTestCase
             )
         );
 
-        $crawler = $client->request('GET', '/search?for=Reviewed preprint&page=1&per-page=10&sort=relevance&order=desc&use-date=default');
+        $crawler = $client->request('GET', '/search?page=1&per-page=10&use-date=default');
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $listing = $crawler->filter('ol.listing-list > li');
 
@@ -213,7 +213,7 @@ final class BrowseControllerTest extends PageTestCase
         $this->mockApiResponse(
             new Request(
                 'GET',
-                'http://api.elifesciences.org/search?for='.($expectedQuery ?? $for).'&page=1&per-page=1&sort=relevance&order=desc&use-date=default',
+                'http://api.elifesciences.org/search?for='.($expectedQuery ?? $for).'&page=1&per-page=1&sort=date&order=desc&use-date=default',
                 ['Accept' => 'application/vnd.elife.search+json; version=2']
             ),
             new Response(
@@ -259,7 +259,7 @@ final class BrowseControllerTest extends PageTestCase
         $this->mockApiResponse(
             new Request(
                 'GET',
-                'http://api.elifesciences.org/search?for='.($expectedQuery ?? $for).'&page=1&per-page=10&sort=relevance&order=desc&use-date=default',
+                'http://api.elifesciences.org/search?for='.($expectedQuery ?? $for).'&page=1&per-page=10&sort=date&order=desc&use-date=default',
                 ['Accept' => 'application/vnd.elife.search+json; version=2']
             ),
             new Response(
