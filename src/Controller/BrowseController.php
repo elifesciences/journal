@@ -40,7 +40,6 @@ final class BrowseController extends Controller
         $arguments = $this->defaultPageArguments($request);
 
         $arguments['query'] = $query = [
-            'for' => $for,
             'subjects' => $request->query->get('subjects', []),
             'types' => $request->query->get('types', []),
             'sort' => $request->query->get('sort', 'relevance'),
@@ -56,7 +55,6 @@ final class BrowseController extends Controller
         }
 
         $search = $this->get('elife.api_sdk.search.page')
-            ->forQuery(preg_replace('/[\-]+/', ' ', $arguments['query']['for']))
             ->forSubject(...$arguments['query']['subjects'])
             ->forType(...$apiTypes)
             ->sortBy($arguments['query']['sort']);
