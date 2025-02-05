@@ -40,7 +40,6 @@ final class BrowseController extends Controller
         $arguments['query'] = $query = [
             'subjects' => $request->query->get('subjects', []),
             'types' => $request->query->get('types', []),
-            'sort' => $request->query->get('sort', 'relevance'),
         ];
 
         $apiTypes = [];
@@ -54,7 +53,7 @@ final class BrowseController extends Controller
         $search = $this->get('elife.api_sdk.search.page')
             ->forSubject(...$arguments['query']['subjects'])
             ->forType(...$apiTypes)
-            ->sortBy($arguments['query']['sort']);
+            ->sortBy('relevance');
 
         $search = promise_for($search);
 
