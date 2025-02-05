@@ -55,7 +55,7 @@ final class BrowseControllerTest extends PageTestCase
      */
     public function it_shows_reviewed_preprints_on_results()
     {
-        $this->markTestSkipped();
+        //$this->markTestSkipped();
         $client = static::createClient();
 
         $items = [
@@ -110,7 +110,7 @@ final class BrowseControllerTest extends PageTestCase
         $this->mockApiResponse(
             new Request(
                 'GET',
-                'http://api.elifesciences.org/search?for=Reviewed preprint&page=1&per-page=1&sort=date&order=desc&use-date=default',
+                'http://api.elifesciences.org/search?for=&page=1&per-page=1&sort=date&order=desc&use-date=default',
                 ['Accept' => 'application/vnd.elife.search+json; version=2']
             ),
             new Response(
@@ -155,7 +155,7 @@ final class BrowseControllerTest extends PageTestCase
         $this->mockApiResponse(
             new Request(
                 'GET',
-                'http://api.elifesciences.org/search?for=Reviewed preprint&page=1&per-page=10&sort=date&order=desc&use-date=default',
+                'http://api.elifesciences.org/search?for=&page=1&per-page=10&sort=date&order=desc&use-date=default',
                 ['Accept' => 'application/vnd.elife.search+json; version=2']
             ),
             new Response(
@@ -198,7 +198,7 @@ final class BrowseControllerTest extends PageTestCase
             )
         );
 
-        $crawler = $client->request('GET', '/search?page=1&per-page=10');
+        $crawler = $client->request('GET', '/browse?page=1&per-page=10');
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $listing = $crawler->filter('ol.listing-list > li');
 
