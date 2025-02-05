@@ -94,7 +94,7 @@ final class BrowseController extends Controller
                         $routeParams = $query + $request->attributes->get('_route_params');
                         $routeParams['page'] = $page;
 
-                        return $this->get('router')->generate('search', $routeParams);
+                        return $this->get('router')->generate('browse', $routeParams);
                     }
                 );
             });
