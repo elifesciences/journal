@@ -206,12 +206,12 @@ final class BrowseControllerTest extends PageTestCase
         $this->assertSame('Reviewed Preprint Aug 1, 2022', trim(preg_replace('/\s+/S', ' ', $listing->eq(0)->filter('.teaser__footer .meta')->text())));
     }
 
-    protected function getUrl($for = '', $expectedQuery = null) : string
+    protected function getUrl() : string
     {
         $this->mockApiResponse(
             new Request(
                 'GET',
-                'http://api.elifesciences.org/search?for='.($expectedQuery ?? $for).'&page=1&per-page=1&sort=date&order=desc&use-date=default',
+                'http://api.elifesciences.org/search?for=&page=1&per-page=1&sort=date&order=desc&use-date=default',
                 ['Accept' => 'application/vnd.elife.search+json; version=2']
             ),
             new Response(
@@ -257,7 +257,7 @@ final class BrowseControllerTest extends PageTestCase
         $this->mockApiResponse(
             new Request(
                 'GET',
-                'http://api.elifesciences.org/search?for='.($expectedQuery ?? $for).'&page=1&per-page=10&sort=date&order=desc&use-date=default',
+                'http://api.elifesciences.org/search?for=&page=1&per-page=10&sort=date&order=desc&use-date=default',
                 ['Accept' => 'application/vnd.elife.search+json; version=2']
             ),
             new Response(
