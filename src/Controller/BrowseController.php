@@ -42,13 +42,9 @@ final class BrowseController extends Controller
             'types' => $request->query->get('types', []),
         ];
 
-        $apiTypes = [];
-        if (in_array('magazine', $arguments['query']['types'])) {
-            $apiTypes = array_merge($apiTypes, $this->magazineTypes());
-        }
-        if (in_array('research', $arguments['query']['types'])) {
-            $apiTypes = array_merge($apiTypes, $this->researchTypes());
-        }
+  
+        $apiTypes = $this->researchTypes();
+
 
         $search = $this->get('elife.api_sdk.search.page')
             ->forSubject(...$arguments['query']['subjects'])
