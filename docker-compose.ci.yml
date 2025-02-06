@@ -33,6 +33,10 @@ services:
             - fixtures:/srv/journal/var/fixtures
         environment:
             - APP_ENV=ci
+            - API_URL=${API_URL}
+            - API_URL_SEARCH_PAGE=${API_URL_SEARCH_PAGE:-${API_URL}}
+            - API_URL_PUBLIC=${API_URL_PUBLIC}
+            - API_KEY=${API_KEY}
         depends_on:
             - composer-dev
             - app
