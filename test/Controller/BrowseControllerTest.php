@@ -55,7 +55,6 @@ final class BrowseControllerTest extends PageTestCase
      */
     public function it_shows_reviewed_preprints_on_results()
     {
-        //$this->markTestSkipped();
         $client = static::createClient();
 
         $items = [
