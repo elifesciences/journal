@@ -4,23 +4,15 @@ namespace eLife\Journal\Controller;
 
 use eLife\ApiSdk\Client\Search;
 use eLife\ApiSdk\Collection\Sequence;
-use eLife\ApiSdk\Model\SearchTypes;
 use eLife\Journal\Helper\Callback;
 use eLife\Journal\Helper\Paginator;
 use eLife\Journal\Pagerfanta\SequenceAdapter;
 use eLife\Patterns\ViewModel\Button;
-use eLife\Patterns\ViewModel\CompactForm;
 use eLife\Patterns\ViewModel\Filter;
 use eLife\Patterns\ViewModel\FilterGroup;
 use eLife\Patterns\ViewModel\FilterPanel;
-use eLife\Patterns\ViewModel\Form;
-use eLife\Patterns\ViewModel\Input;
-use eLife\Patterns\ViewModel\Link;
 use eLife\Patterns\ViewModel\ListingTeasers;
 use eLife\Patterns\ViewModel\MessageBar;
-use eLife\Patterns\ViewModel\SearchBox;
-use eLife\Patterns\ViewModel\SortControl;
-use eLife\Patterns\ViewModel\SortControlOption;
 use eLife\Patterns\ViewModel\Teaser;
 use GuzzleHttp\Promise\PromiseInterface;
 use Pagerfanta\Pagerfanta;
@@ -123,27 +115,6 @@ final class BrowseController extends Controller
             });
 
         return new Response($this->get('templating')->render('::browse.html.twig', $arguments));
-    }
-
-    private function countForTypes(array $types, SearchTypes $allTypes) : int
-    {
-        return array_sum(array_filter(iterator_to_array($allTypes), function (int $count, string $key) use ($types) {
-            return in_array($key, $types);
-        }, ARRAY_FILTER_USE_BOTH));
-    }
-
-    private function magazineTypes()
-    {
-        return [
-            'blog-article',
-            'collection',
-            'editorial',
-            'feature',
-            'insight',
-            'interview',
-            'labs-post',
-            'podcast-episode',
-        ];
     }
 
     private function researchTypes()
