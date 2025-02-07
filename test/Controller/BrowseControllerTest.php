@@ -106,7 +106,6 @@ final class BrowseControllerTest extends PageTestCase
             ],
         ];
 
-        $browsePageTypeQueryParameters = 'type[]=correction&type[]=expression-concern&type[]=registered-report&type[]=replication-study&type[]=research-advance&type[]=research-article&type[]=research-communication&type[]=retraction&type[]=review-article&type[]=scientific-correspondence&type[]=short-report&type[]=tools-resources&type[]=reviewed-preprint';
         $this->mockApiResponse(
             new Request(
                 'GET',
