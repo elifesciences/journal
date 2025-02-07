@@ -43,5 +43,3 @@ endif
 
 lint: vendor
 	.ci/phpcs
-
-check: test lint
