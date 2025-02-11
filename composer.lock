@@ -4461,16 +4461,16 @@
         },
         {
             "name": "elife/api",
-            "version": "2.31.1",
+            "version": "2.32.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-raml.git",
-                "reference": "85eddddf6887b1f0663722614b992f9bb9f4d57c"
+                "reference": "dfc3fc1f57db62143aa80b72cb86264eed776f16"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-raml/zipball/85eddddf6887b1f0663722614b992f9bb9f4d57c",
-                "reference": "85eddddf6887b1f0663722614b992f9bb9f4d57c",
+                "url": "https://api.github.com/repos/elifesciences/api-raml/zipball/dfc3fc1f57db62143aa80b72cb86264eed776f16",
+                "reference": "dfc3fc1f57db62143aa80b72cb86264eed776f16",
                 "shasum": ""
             },
             "conflict": {
@@ -4484,9 +4484,9 @@
             "description": "eLife Sciences API specification",
             "support": {
                 "issues": "https://github.com/elifesciences/api-raml/issues",
-                "source": "https://github.com/elifesciences/api-raml/tree/2.31.1"
+                "source": "https://github.com/elifesciences/api-raml/tree/2.32.0"
             },
-            "time": "2024-11-14T15:25:32+00:00"
+            "time": "2025-02-03T14:27:58+00:00"
         },
         {
             "name": "elife/api-validator",
