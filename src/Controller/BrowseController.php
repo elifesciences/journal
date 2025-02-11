@@ -46,9 +46,8 @@ final class BrowseController extends Controller
         $browse = $this->get('elife.api_sdk.browse.page')
             ->forSubject(...$query['subjects'])
             ->forType(...$this->researchTypes())
-            ->prc(!$query['include-original'])
-            ->significance(in_array($significance, $this->significanceTerms()) ? $significance : null)
-            ->strength(in_array($strength, $this->strengthTerms()) ? $strength : null)
+            ->forElifeAssessmentSignificance(...$this->significanceTermQuery($significance, $query['include-original']))
+            ->forElifeAssessmentStrength(...$this->strengthTermQuery($strength, $query['include-original']))
             ->sortBy('date');
 
         $browse = promise_for($browse);
@@ -184,6 +183,41 @@ final class BrowseController extends Controller
             'tools-resources',
             'reviewed-preprint',
         ];
+    }
+    
+    private function termQuery(array $possibleTerms, string $term = null, $includeOriginal)
+    {
+        $terms = [];
+        
+        if ((is_null($term) || !in_array($term, $possibleTerms)) && !$includeOriginal) {
+            $terms = $possibleTerms;
+            $terms[] = 'not-assigned';
+        }
+        
+        if (!is_null($term)) {
+            foreach ($possibleTerms as $t) {
+                $terms[] = $t;
+                if ($t === $term) {
+                    break;
+                }
+            }
+
+            if ($includeOriginal) {
+                $terms[] = 'not-applicable';
+            }
+        }
+        
+        return $terms;
+    }
+
+    private function significanceTermQuery(string $term = null, bool $includeOriginal)
+    {
+        return $this->termQuery($this->significanceTerms(), $term, $includeOriginal);
+    }
+
+    private function strengthTermQuery(string $term = null, bool $includeOriginal)
+    {
+        return $this->termQuery($this->strengthTerms(), $term, $includeOriginal);
     }
     
     private function significanceTerms()
