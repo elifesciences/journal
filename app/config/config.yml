@@ -37,6 +37,13 @@ csa_guzzle:
                 headers:
                     Authorization: '%api_key%'
                 timeout: '%api_timeout_slow%'
+        elife_api_browse_page:
+            config:
+                base_uri: 'https://search.filter-by-term.elifesciences.org/search'
+                connect_timeout: '%api_connect_timeout_slow%'
+                headers:
+                    Authorization: '%api_key%'
+                timeout: '%api_timeout_slow%'
         elife_crm:
             config:
                 base_uri: '%crm_url%'

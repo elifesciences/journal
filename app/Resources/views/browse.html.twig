@@ -11,6 +11,8 @@
 {% endblock %}
 
 {% block body %}
+    
+    {{ render_pattern(contentHeader) }}
 
     {% include 'calls-to-action.html.twig' %}
 
@@ -19,6 +21,8 @@
         {% block main %}
 
             {{ render_pattern(messageBar) }}
+
+            {{ render_pattern(sortControl) }}
 
             {% if listing %}
 
