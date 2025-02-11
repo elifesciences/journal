@@ -32,8 +32,8 @@ final class BrowseControllerTest extends PageTestCase
         $this->assertSame(200, $client->getResponse()->getStatusCode());
 
         $this->assertSame('Browse the latest research | eLife', $crawler->filter('title')->text());
-        $this->assertSame('/browse?include-original=0', $crawler->filter('link[rel="canonical"]')->attr('href'));
-        $this->assertSame('http://localhost/browse?include-original=0', $crawler->filter('meta[property="og:url"]')->attr('content'));
+        $this->assertSame('/browse-demo?include-original=0', $crawler->filter('link[rel="canonical"]')->attr('href'));
+        $this->assertSame('http://localhost/browse-demo?include-original=0', $crawler->filter('meta[property="og:url"]')->attr('content'));
         $this->assertSame('Browse the latest research', $crawler->filter('meta[property="og:title"]')->attr('content'));
         $this->assertEmpty($crawler->filter('meta[property="og:description"]'));
         $this->assertEmpty($crawler->filter('meta[name="description"]'));
@@ -198,7 +198,7 @@ final class BrowseControllerTest extends PageTestCase
             )
         );
 
-        $crawler = $client->request('GET', '/browse?page=1&per-page=10');
+        $crawler = $client->request('GET', '/browse-demo?page=1&per-page=10');
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $listing = $crawler->filter('ol.listing-list > li');
 
@@ -301,6 +301,6 @@ final class BrowseControllerTest extends PageTestCase
             )
         );
 
-        return '/browse';
+        return '/browse-demo';
     }
 }
