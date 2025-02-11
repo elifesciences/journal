@@ -69,10 +69,21 @@ To run all tests:
 make test
 ```
 
+To run a test file:
+
+```
+make test OPTIONS="--filter BrowseControllerTest"
+```
+
 To run a single test:
 
 ```
-make test TEST=test/Controller/AuthenticationTest.php
+make test OPTIONS="--filter BrowseControllerTest::it_shows_reviewed_preprints_on_results"
+```
+
+To see the list of tests that have been run:
+```
+make test OPTIONS="--filter BrowseControllerTest --testdox"
 ```
 
 Running slow feature tests

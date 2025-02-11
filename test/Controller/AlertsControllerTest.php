@@ -74,7 +74,7 @@ final class AlertsControllerTest extends PageTestCase
         $this->assertCount(5, $majorSections);
 
         $this->assertSame('New Research', trim($majorSections->eq(0)->text()));
-        $this->assertSame('Science in plain language', trim($majorSections->eq(1)->text()));
+        $this->assertSame('eLife Magazine', trim($majorSections->eq(1)->text()));
         $this->assertSame('Community-building', trim($majorSections->eq(2)->text()));
         $this->assertSame('The latest from eLife', trim($majorSections->eq(3)->text()));
         $this->assertSame('eLife\'s Subject specific RSS feeds', trim($majorSections->eq(4)->text()));

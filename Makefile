@@ -31,7 +31,6 @@ clean:
 
 test: vendor
 	APP_ENV=ci $(DOCKER_COMPOSE) run --rm app vendor/bin/phpunit $(TEST) $(OPTIONS)
-	APP_ENV=ci $(DOCKER_COMPOSE) down --volumes
 
 feature-test:
 	docker-compose -f docker-compose.yml -f docker-compose.ci.yml up --build --detach
@@ -44,5 +43,3 @@ endif
 
 lint: vendor
 	.ci/phpcs
-
-check: test lint

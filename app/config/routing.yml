@@ -445,9 +445,9 @@ search:
          _controller: AppBundle:Search:query
 
 browse:
-    path: /browse-demo
+    path: /browse
     defaults:
-        _controller: AppBundle:Browse:query
+         _controller: AppBundle:Browse:query
 
 subject:
     path: /subjects/{id}
