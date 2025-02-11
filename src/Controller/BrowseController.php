@@ -194,7 +194,7 @@ final class BrowseController extends Controller
             $terms[] = 'not-assigned';
         }
         
-        if (!is_null($term)) {
+        if (!is_null($term) && in_array($term, $possibleTerms)) {
             foreach ($possibleTerms as $t) {
                 $terms[] = $t;
                 if ($t === $term) {
