@@ -94,6 +94,11 @@ final class BrowseController extends Controller
             ->then(function (Search $search) use ($arguments) {
                 $filterGroups = [];
 
+                $significanceFilters = [];
+                $significanceFilters[] = new Filter(false, 'Show all');
+
+                $filterGroups[] = new FilterGroup('Significance (minimum)', $significanceFilters, 'minimumSignificance');
+
                 if (count($search->subjects())) {
                     $subjectFilters = [];
                     foreach ($search->subjects() as $subject => $results) {
