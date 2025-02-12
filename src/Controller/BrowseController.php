@@ -142,4 +142,15 @@ final class BrowseController extends Controller
 
         return $types;
     }
+
+    private function significanceTerms()
+    {
+        return [
+            'landmark',
+            'fundamental',
+            'important',
+            'valuable',
+            'useful',
+        ];
+    }
 }
