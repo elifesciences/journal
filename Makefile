@@ -2,7 +2,7 @@ DOCKER_COMPOSE = docker-compose
 TEST = test/
 BRANCH = master
 
-.PHONY: build dev prod stop clean test feature-test lint check update-patterns
+.PHONY: build dev prod stop clean test feature-test lint lint-fix check update-patterns
 
 update-patterns:
 	composer require elife/patterns:dev-$(BRANCH)
@@ -43,3 +43,6 @@ endif
 
 lint: vendor
 	.ci/phpcs
+
+lint-fix: vendor
+	vendor/bin/phpcbf --standard=phpcs.xml.dist --warning-severity=0 -p app/ bin/ src/ web/ features/ test/
