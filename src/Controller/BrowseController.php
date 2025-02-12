@@ -98,7 +98,7 @@ final class BrowseController extends Controller
                 $significanceFilters[] = new Filter(false, 'Show all');
                 $significanceTerms = $this->significanceTerms();
                 foreach ($significanceTerms as $term) {
-                    $significanceFilters[] = new Filter(false, $term);
+                    $significanceFilters[] = new Filter(false, ucfirst($term), null, null, $term);
                 }
 
                 $filterGroups[] = new FilterGroup('Significance (minimum)', $significanceFilters, 'minimumSignificance');
