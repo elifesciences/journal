@@ -9,6 +9,5 @@ class ElifeAssessmentTermsFilter
      */
     public static function fromMinimumSignificance(string $minimumSignificance = null)
     {
-
     }
 }
