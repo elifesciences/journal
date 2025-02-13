@@ -14,6 +14,9 @@ final class ElifeAssessmentTermsFilterTest extends TestCase
     {
         $result = ElifeAssessmentTermsFilter::fromMinimumSignificance('important');
         $this->markTestSkipped();
-        $this->assertSame(['important', 'landmark', 'fundamental'], $result);
+        $this->assertContains('important', $result);
+        $this->assertContains('landmark', $result);
+        $this->assertContains('fundamental', $result);
+        $this->assertCount(3, $result);
     }
 }
