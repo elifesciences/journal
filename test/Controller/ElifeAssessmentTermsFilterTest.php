@@ -11,8 +11,20 @@ final class ElifeAssessmentTermsFilterTest extends TestCase
     public function significanceProvider() : Traversable
     {
         yield 'important' => [
-            'important',
             ['important', 'fundamental', 'landmark'],
+            'important',
+        ];
+        yield 'valuable' => [
+            ['important', 'fundamental', 'landmark', 'valuable'],
+            'valuable',
+        ];
+        yield 'noMinimumSignificance' => [
+            ['important', 'fundamental', 'landmark', 'useful', 'valuable'],
+            null,
+        ];
+        yield 'emptyMinimumSignificance' => [
+            ['important', 'fundamental', 'landmark', 'useful', 'valuable'],
+            '',
         ];
     }
 
@@ -20,36 +32,9 @@ final class ElifeAssessmentTermsFilterTest extends TestCase
      * @test
      * @dataProvider significanceProvider
      */
-    public function it_translates_a_minimum_significance_to_the_correct_set_of_filters(string $input, array $expected)
+    public function it_translates_a_minimum_significance_to_the_correct_set_of_filters(array $expected, string $input = null)
     {
         $result = ElifeAssessmentTermsFilter::fromMinimumSignificance($input);
         $this->assertEqualsCanonicalizing($expected, $result);
-    }
-
-    /**
-     * @test
-     */
-    public function it_translates_a_minimum_significance_of_valuable_to_a_set_of_filters()
-    {
-        $result = ElifeAssessmentTermsFilter::fromMinimumSignificance('valuable');
-        $this->assertEqualsCanonicalizing(['important', 'fundamental', 'landmark', 'valuable'], $result);
-    }
-
-    /**
-     * @test
-     */
-    public function it_translates_no_minimum_significance_to_a_complete_set_of_filters()
-    {
-        $result = ElifeAssessmentTermsFilter::fromMinimumSignificance();
-        $this->assertEqualsCanonicalizing(['important', 'fundamental', 'landmark', 'useful', 'valuable'], $result);
-    }
-
-    /**
-     * @test
-     */
-    public function it_translates_empty_minimum_significance_to_a_complete_set_of_filters()
-    {
-        $result = ElifeAssessmentTermsFilter::fromMinimumSignificance('');
-        $this->assertEqualsCanonicalizing(['important', 'fundamental', 'landmark', 'useful', 'valuable'], $result);
     }
 }
