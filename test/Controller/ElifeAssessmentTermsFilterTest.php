@@ -22,6 +22,19 @@ final class ElifeAssessmentTermsFilterTest extends TestCase
     /**
      * @test
      */
+    public function it_translates_a_minimum_significance_of_valuable_to_a_set_of_filters()
+    {
+        $result = ElifeAssessmentTermsFilter::fromMinimumSignificance('valuable');
+        $this->assertContains('valuable', $result);
+        $this->assertContains('important', $result);
+        $this->assertContains('landmark', $result);
+        $this->assertContains('fundamental', $result);
+        $this->assertCount(4, $result);
+    }
+
+    /**
+     * @test
+     */
     public function it_translates_no_minimum_significance_to_a_complete_set_of_filters()
     {
         $result = ElifeAssessmentTermsFilter::fromMinimumSignificance();
