@@ -4,16 +4,26 @@ namespace test\eLife\Journal\Controller;
 
 use eLife\Journal\Controller\ElifeAssessmentTermsFilter;
 use PHPUnit\Framework\TestCase;
+use Traversable;
 
 final class ElifeAssessmentTermsFilterTest extends TestCase
 {
+    public function significanceProvider() : Traversable
+    {
+        yield 'important' => [
+            'important',
+            ['important', 'fundamental', 'landmark'],
+        ];
+    }
+
     /**
      * @test
+     * @dataProvider significanceProvider
      */
-    public function it_translates_a_minimum_significance_of_important_to_a_set_of_filters()
+    public function it_translates_a_minimum_significance_to_the_correct_set_of_filters(string $input, array $expected)
     {
-        $result = ElifeAssessmentTermsFilter::fromMinimumSignificance('important');
-        $this->assertEqualsCanonicalizing(['important', 'fundamental', 'landmark'], $result);
+        $result = ElifeAssessmentTermsFilter::fromMinimumSignificance($input);
+        $this->assertEqualsCanonicalizing($expected, $result);
     }
 
     /**
