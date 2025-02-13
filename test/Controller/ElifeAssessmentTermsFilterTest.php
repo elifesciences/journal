@@ -38,6 +38,10 @@ final class ElifeAssessmentTermsFilterTest extends TestCase
             ['important', 'fundamental', 'landmark', 'useful', 'valuable'],
             '',
         ];
+        yield 'notASignificanceTerm' => [
+            ['important', 'fundamental', 'landmark', 'useful', 'valuable'],
+            'notASignificanceTerm',
+        ];
     }
 
     /**
