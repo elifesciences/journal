@@ -10,6 +10,14 @@ final class ElifeAssessmentTermsFilterTest extends TestCase
 {
     public function significanceProvider() : Traversable
     {
+        yield 'landmark' => [
+            ['landmark'],
+            'landmark',
+        ];
+        yield 'fundamental' => [
+            ['landmark', 'fundamental'],
+            'fundamental',
+        ];
         yield 'important' => [
             ['important', 'fundamental', 'landmark'],
             'important',
@@ -17,6 +25,10 @@ final class ElifeAssessmentTermsFilterTest extends TestCase
         yield 'valuable' => [
             ['important', 'fundamental', 'landmark', 'valuable'],
             'valuable',
+        ];
+        yield 'useful' => [
+            ['important', 'fundamental', 'landmark', 'valuable', 'useful'],
+            'useful',
         ];
         yield 'noMinimumSignificance' => [
             ['important', 'fundamental', 'landmark', 'useful', 'valuable'],
