@@ -7,6 +7,7 @@ use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\Query;
 use GuzzleHttp\Psr7\Uri;
 use Psr\Http\Message\UriInterface;
+use function GuzzleHttp\Psr7\parse_query;
 
 final class BrowseControllerTest extends PageTestCase
 {
@@ -258,6 +259,8 @@ final class BrowseControllerTest extends PageTestCase
         );
 
         $uri = $this->createUri([
+            'scheme' => 'http',
+            'host' => 'api.elifesciences.org',
             'path' => 'search',
             'query' => [
                 'for' => '',
@@ -270,10 +273,14 @@ final class BrowseControllerTest extends PageTestCase
             ],
         ]);
 
+        if (!isset(parse_query($uri->getQuery())['for'])) {
+            $uri = $uri->withQuery('for=&'.$uri->getQuery());
+        }
+
         $this->mockApiResponse(
             new Request(
                 'GET',
-                'http://api.elifesciences.org/search?for=&page=1&per-page=10&sort=date&order=desc&type[]=correction&type[]=expression-concern&type[]=registered-report&type[]=replication-study&type[]=research-advance&type[]=research-article&type[]=research-communication&type[]=retraction&type[]=review-article&type[]=scientific-correspondence&type[]=short-report&type[]=tools-resources&type[]=reviewed-preprint&use-date=default',
+                $uri,
                 ['Accept' => 'application/vnd.elife.search+json; version=2']
             ),
             new Response(
