@@ -11,6 +11,8 @@ use function GuzzleHttp\Psr7\parse_query;
 
 final class BrowseControllerTest extends PageTestCase
 {
+    private $researchTypes = ['correction', 'expression-concern', 'registered-report', 'replication-study', 'research-advance', 'research-article', 'research-communication', 'retraction', 'review-article', 'scientific-correspondence', 'short-report', 'tools-resources', 'reviewed-preprint'];
+
     /**
      * @test
      */
@@ -158,7 +160,7 @@ final class BrowseControllerTest extends PageTestCase
         $this->mockApiResponse(
             new Request(
                 'GET',
-                'http://api.elifesciences.org/search?for=&page=1&per-page=10&sort=date&order=desc&type[]=correction&type[]=expression-concern&type[]=registered-report&type[]=replication-study&type[]=research-advance&type[]=research-article&type[]=research-communication&type[]=retraction&type[]=review-article&type[]=scientific-correspondence&type[]=short-report&type[]=tools-resources&type[]=reviewed-preprint&use-date=default',
+                $this->buildUrlRequestForTenItems(),
                 ['Accept' => 'application/vnd.elife.search+json; version=2']
             ),
             new Response(
@@ -212,15 +214,13 @@ final class BrowseControllerTest extends PageTestCase
 
     protected function getUrl() : string
     {
-        $researchTypes = ['correction', 'expression-concern', 'registered-report', 'replication-study', 'research-advance', 'research-article', 'research-communication', 'retraction', 'review-article', 'scientific-correspondence', 'short-report', 'tools-resources', 'reviewed-preprint'];
-
         $urlRequestOneItem = $this->createSearchApiUrl([
             'for' => '',
             'page' => '1',
             'per-page' => '1',
             'sort' => 'date',
             'order' => 'desc',
-            'type[]' => $researchTypes,
+            'type[]' => $this->researchTypes,
             'use-date' => 'default',
         ]);
 
@@ -270,20 +270,10 @@ final class BrowseControllerTest extends PageTestCase
             )
         );
 
-        $urlRequestTenItems = $this->createSearchApiUrl([
-            'for' => '',
-            'page' => '1',
-            'per-page' => '10',
-            'sort' => 'date',
-            'order' => 'desc',
-            'type[]' => $researchTypes,
-            'use-date' => 'default',
-        ]);
-
         $this->mockApiResponse(
             new Request(
                 'GET',
-                $urlRequestTenItems,
+                $this->buildUrlRequestForTenItems(),
                 ['Accept' => 'application/vnd.elife.search+json; version=2']
             ),
             new Response(
@@ -327,6 +317,19 @@ final class BrowseControllerTest extends PageTestCase
         );
 
         return '/browse';
+    }
+
+    private function buildUrlRequestForTenItems()
+    {
+        return $this->createSearchApiUrl([
+            'for' => '',
+            'page' => '1',
+            'per-page' => '10',
+            'sort' => 'date',
+            'order' => 'desc',
+            'type[]' => $this->researchTypes,
+            'use-date' => 'default',
+        ]);
     }
 
     private function createSearchApiUrl(array $query) : UriInterface
