@@ -317,6 +317,7 @@ final class BrowseControllerTest extends PageTestCase
             'per-page' => '1',
             'sort' => 'date',
             'order' => 'desc',
+            'elifeAssessmentSignificance[]' => ['important', 'fundamental', 'landmark', 'useful', 'valuable', 'not-assigned'],
             'type[]' => $this->researchTypes,
             'use-date' => 'default',
         ]);
@@ -330,6 +331,7 @@ final class BrowseControllerTest extends PageTestCase
             'per-page' => '10',
             'sort' => 'date',
             'order' => 'desc',
+            'elifeAssessmentSignificance[]' => ['important', 'fundamental', 'landmark', 'useful', 'valuable', 'not-assigned'],
             'type[]' => $this->researchTypes,
             'use-date' => 'default',
         ]);
