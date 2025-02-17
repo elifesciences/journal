@@ -113,7 +113,7 @@ final class BrowseControllerTest extends PageTestCase
         ];
 
         $this->mockApiResponse(
-            $this->buildUrlRequestForOneItem(),
+            $this->buildSearchApiRequestForOneItem(),
             new Response(
                 200,
                 ['Content-Type' => 'application/vnd.elife.search+json; version=2'],
@@ -154,7 +154,7 @@ final class BrowseControllerTest extends PageTestCase
             )
         );
         $this->mockApiResponse(
-            $this->buildUrlRequestForTenItems(),
+            $this->buildSearchApiRequestForTenItems(),
             new Response(
                 200,
                 ['Content-Type' => 'application/vnd.elife.search+json; version=2'],
@@ -207,7 +207,7 @@ final class BrowseControllerTest extends PageTestCase
     protected function getUrl() : string
     {
         $this->mockApiResponse(
-            $this->buildUrlRequestForOneItem(),
+            $this->buildSearchApiRequestForOneItem(),
             new Response(
                 200,
                 ['Content-Type' => 'application/vnd.elife.search+json; version=2'],
@@ -249,7 +249,7 @@ final class BrowseControllerTest extends PageTestCase
         );
 
         $this->mockApiResponse(
-            $this->buildUrlRequestForTenItems(),
+            $this->buildSearchApiRequestForTenItems(),
             new Response(
                 200,
                 ['Content-Type' => 'application/vnd.elife.search+json; version=2'],
@@ -293,9 +293,9 @@ final class BrowseControllerTest extends PageTestCase
         return '/browse';
     }
 
-    private function buildUrlRequestForOneItem()
+    private function buildSearchApiRequestForOneItem()
     {
-        return $this->createSearchApiUrl([
+        return $this->buildApiRequest([
             'for' => '',
             'page' => '1',
             'per-page' => '1',
@@ -307,9 +307,9 @@ final class BrowseControllerTest extends PageTestCase
         ]);
     }
 
-    private function buildUrlRequestForTenItems()
+    private function buildSearchApiRequestForTenItems()
     {
-        return $this->createSearchApiUrl([
+        return $this->buildApiRequest([
             'for' => '',
             'page' => '1',
             'per-page' => '10',
@@ -321,7 +321,7 @@ final class BrowseControllerTest extends PageTestCase
         ]);
     }
 
-    private function createSearchApiUrl(array $query)
+    private function buildApiRequest(array $query)
     {
         $parts = [
             'scheme' => 'http',
