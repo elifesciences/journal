@@ -258,7 +258,7 @@ final class BrowseControllerTest extends PageTestCase
             )
         );
 
-        $uri = $this->createUri([
+        $uri = $this->createSearchApiUrl([
             'scheme' => 'http',
             'host' => 'api.elifesciences.org',
             'path' => 'search',
@@ -272,10 +272,6 @@ final class BrowseControllerTest extends PageTestCase
                 'use-date' => 'default',
             ],
         ]);
-
-        if (!isset(parse_query($uri->getQuery())['for'])) {
-            $uri = $uri->withQuery('for=&'.$uri->getQuery());
-        }
 
         $this->mockApiResponse(
             new Request(
@@ -326,12 +322,18 @@ final class BrowseControllerTest extends PageTestCase
         return '/browse';
     }
 
-    private function createUri(array $parts) : UriInterface
+    private function createSearchApiUrl(array $parts) : UriInterface
     {
         if (!empty($parts['query'])) {
             $parts['query'] = Query::build(array_filter($parts['query']), false);
         }
 
-        return Uri::fromParts($parts);
+        $uri = Uri::fromParts($parts);
+
+        if (!isset(parse_query($uri->getQuery())['for'])) {
+            $uri = $uri->withQuery('for=&'.$uri->getQuery());
+        }
+
+        return $uri;
     }
 }
