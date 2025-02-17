@@ -345,6 +345,5 @@ final class BrowseControllerTest extends PageTestCase
             $uri,
             ['Accept' => 'application/vnd.elife.search+json; version=2']
         );
-
     }
 }
