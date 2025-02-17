@@ -212,10 +212,27 @@ final class BrowseControllerTest extends PageTestCase
 
     protected function getUrl() : string
     {
+        $researchTypes = ['correction', 'expression-concern', 'registered-report', 'replication-study', 'research-advance', 'research-article', 'research-communication', 'retraction', 'review-article', 'scientific-correspondence', 'short-report', 'tools-resources', 'reviewed-preprint'];
+
+        $urlRequestOneItem = $this->createSearchApiUrl([
+            'scheme' => 'http',
+            'host' => 'api.elifesciences.org',
+            'path' => 'search',
+            'query' => [
+                'for' => '',
+                'page' => '1',
+                'per-page' => '1',
+                'sort' => 'date',
+                'order' => 'desc',
+                'type[]' => $researchTypes,
+                'use-date' => 'default',
+            ],
+        ]);
+
         $this->mockApiResponse(
             new Request(
                 'GET',
-                'http://api.elifesciences.org/search?for=&page=1&per-page=1&sort=date&order=desc&type[]=correction&type[]=expression-concern&type[]=registered-report&type[]=replication-study&type[]=research-advance&type[]=research-article&type[]=research-communication&type[]=retraction&type[]=review-article&type[]=scientific-correspondence&type[]=short-report&type[]=tools-resources&type[]=reviewed-preprint&use-date=default',
+                $urlRequestOneItem,
                 ['Accept' => 'application/vnd.elife.search+json; version=2']
             ),
             new Response(
@@ -258,7 +275,7 @@ final class BrowseControllerTest extends PageTestCase
             )
         );
 
-        $uri = $this->createSearchApiUrl([
+        $urlRequestTenItems = $this->createSearchApiUrl([
             'scheme' => 'http',
             'host' => 'api.elifesciences.org',
             'path' => 'search',
@@ -268,7 +285,7 @@ final class BrowseControllerTest extends PageTestCase
                 'per-page' => '10',
                 'sort' => 'date',
                 'order' => 'desc',
-                'type[]' => ['correction', 'expression-concern', 'registered-report', 'replication-study', 'research-advance', 'research-article', 'research-communication', 'retraction', 'review-article', 'scientific-correspondence', 'short-report', 'tools-resources', 'reviewed-preprint'],
+                'type[]' => $researchTypes,
                 'use-date' => 'default',
             ],
         ]);
@@ -276,7 +293,7 @@ final class BrowseControllerTest extends PageTestCase
         $this->mockApiResponse(
             new Request(
                 'GET',
-                $uri,
+                $urlRequestTenItems,
                 ['Accept' => 'application/vnd.elife.search+json; version=2']
             ),
             new Response(
