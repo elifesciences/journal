@@ -4,6 +4,9 @@ namespace test\eLife\Journal\Controller;
 
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use GuzzleHttp\Psr7\Query;
+use GuzzleHttp\Psr7\Uri;
+use Psr\Http\Message\UriInterface;
 
 final class BrowseControllerTest extends PageTestCase
 {
@@ -254,6 +257,19 @@ final class BrowseControllerTest extends PageTestCase
             )
         );
 
+        $uri = $this->createUri([
+            'path' => 'search',
+            'query' => [
+                'for' => '',
+                'page' => '1',
+                'per-page' => '10',
+                'sort' => 'date',
+                'order' => 'desc',
+                'type[]' => ['correction', 'expression-concern', 'registered-report', 'replication-study', 'research-advance', 'research-article', 'research-communication', 'retraction', 'review-article', 'scientific-correspondence', 'short-report', 'tools-resources', 'reviewed-preprint'],
+                'use-date' => 'default',
+            ],
+        ]);
+
         $this->mockApiResponse(
             new Request(
                 'GET',
@@ -301,5 +317,14 @@ final class BrowseControllerTest extends PageTestCase
         );
 
         return '/browse';
+    }
+
+    private function createUri(array $parts) : UriInterface
+    {
+        if (!empty($parts['query'])) {
+            $parts['query'] = Query::build(array_filter($parts['query']), false);
+        }
+
+        return Uri::fromParts($parts);
     }
 }
