@@ -113,11 +113,7 @@ final class BrowseControllerTest extends PageTestCase
         ];
 
         $this->mockApiResponse(
-            new Request(
-                'GET',
-                $this->buildUrlRequestForOneItem(),
-                ['Accept' => 'application/vnd.elife.search+json; version=2']
-            ),
+            $this->buildUrlRequestForOneItem(),
             new Response(
                 200,
                 ['Content-Type' => 'application/vnd.elife.search+json; version=2'],
@@ -158,11 +154,7 @@ final class BrowseControllerTest extends PageTestCase
             )
         );
         $this->mockApiResponse(
-            new Request(
-                'GET',
-                $this->buildUrlRequestForTenItems(),
-                ['Accept' => 'application/vnd.elife.search+json; version=2']
-            ),
+            $this->buildUrlRequestForTenItems(),
             new Response(
                 200,
                 ['Content-Type' => 'application/vnd.elife.search+json; version=2'],
@@ -215,11 +207,7 @@ final class BrowseControllerTest extends PageTestCase
     protected function getUrl() : string
     {
         $this->mockApiResponse(
-            new Request(
-                'GET',
-                $this->buildUrlRequestForOneItem(),
-                ['Accept' => 'application/vnd.elife.search+json; version=2']
-            ),
+            $this->buildUrlRequestForOneItem(),
             new Response(
                 200,
                 ['Content-Type' => 'application/vnd.elife.search+json; version=2'],
@@ -261,11 +249,7 @@ final class BrowseControllerTest extends PageTestCase
         );
 
         $this->mockApiResponse(
-            new Request(
-                'GET',
-                $this->buildUrlRequestForTenItems(),
-                ['Accept' => 'application/vnd.elife.search+json; version=2']
-            ),
+            $this->buildUrlRequestForTenItems(),
             new Response(
                 200,
                 ['Content-Type' => 'application/vnd.elife.search+json; version=2'],
@@ -337,7 +321,7 @@ final class BrowseControllerTest extends PageTestCase
         ]);
     }
 
-    private function createSearchApiUrl(array $query) : UriInterface
+    private function createSearchApiUrl(array $query)
     {
         $parts = [
             'scheme' => 'http',
@@ -356,6 +340,11 @@ final class BrowseControllerTest extends PageTestCase
             $uri = $uri->withQuery('for=&'.$uri->getQuery());
         }
 
-        return $uri;
+        return new Request(
+            'GET',
+            $uri,
+            ['Accept' => 'application/vnd.elife.search+json; version=2']
+        );
+
     }
 }
