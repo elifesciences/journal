@@ -215,18 +215,13 @@ final class BrowseControllerTest extends PageTestCase
         $researchTypes = ['correction', 'expression-concern', 'registered-report', 'replication-study', 'research-advance', 'research-article', 'research-communication', 'retraction', 'review-article', 'scientific-correspondence', 'short-report', 'tools-resources', 'reviewed-preprint'];
 
         $urlRequestOneItem = $this->createSearchApiUrl([
-            'scheme' => 'http',
-            'host' => 'api.elifesciences.org',
-            'path' => 'search',
-            'query' => [
-                'for' => '',
-                'page' => '1',
-                'per-page' => '1',
-                'sort' => 'date',
-                'order' => 'desc',
-                'type[]' => $researchTypes,
-                'use-date' => 'default',
-            ],
+            'for' => '',
+            'page' => '1',
+            'per-page' => '1',
+            'sort' => 'date',
+            'order' => 'desc',
+            'type[]' => $researchTypes,
+            'use-date' => 'default',
         ]);
 
         $this->mockApiResponse(
@@ -276,18 +271,13 @@ final class BrowseControllerTest extends PageTestCase
         );
 
         $urlRequestTenItems = $this->createSearchApiUrl([
-            'scheme' => 'http',
-            'host' => 'api.elifesciences.org',
-            'path' => 'search',
-            'query' => [
-                'for' => '',
-                'page' => '1',
-                'per-page' => '10',
-                'sort' => 'date',
-                'order' => 'desc',
-                'type[]' => $researchTypes,
-                'use-date' => 'default',
-            ],
+            'for' => '',
+            'page' => '1',
+            'per-page' => '10',
+            'sort' => 'date',
+            'order' => 'desc',
+            'type[]' => $researchTypes,
+            'use-date' => 'default',
         ]);
 
         $this->mockApiResponse(
@@ -339,8 +329,15 @@ final class BrowseControllerTest extends PageTestCase
         return '/browse';
     }
 
-    private function createSearchApiUrl(array $parts) : UriInterface
+    private function createSearchApiUrl(array $query) : UriInterface
     {
+        $parts = [
+            'scheme' => 'http',
+            'host' => 'api.elifesciences.org',
+            'path' => 'search',
+            'query' => $query,
+        ];
+    
         if (!empty($parts['query'])) {
             $parts['query'] = Query::build(array_filter($parts['query']), false);
         }
