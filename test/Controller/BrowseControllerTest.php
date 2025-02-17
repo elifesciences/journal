@@ -204,6 +204,13 @@ final class BrowseControllerTest extends PageTestCase
         $this->assertSame('Reviewed Preprint Aug 1, 2022', trim(preg_replace('/\s+/S', ' ', $listing->eq(0)->filter('.teaser__footer .meta')->text())));
     }
 
+    /**
+     * @test
+     */
+    public function it_displays_correct_results_when_minimum_elife_significance_is_selected() {
+        $this->markTestIncomplete();
+    }
+
     protected function getUrl() : string
     {
         $this->mockApiResponse(
