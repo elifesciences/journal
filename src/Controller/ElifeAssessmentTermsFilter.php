@@ -10,6 +10,7 @@ class ElifeAssessmentTermsFilter
         'important',
         'valuable',
         'useful',
+        'not-assigned',
     ];
 
     /**

@@ -30,16 +30,16 @@ final class ElifeAssessmentTermsFilterTest extends TestCase
             ['important', 'fundamental', 'landmark', 'valuable', 'useful'],
             'useful',
         ];
-        // yield 'noMinimumSignificance' => [
-        //     ['important', 'fundamental', 'landmark', 'useful', 'valuable', 'not-assigned'],
-        //     null,
-        // ];
-        // yield 'emptyMinimumSignificance' => [
-        //     ['important', 'fundamental', 'landmark', 'useful', 'valuable', 'not-assigned'],
-        //     '',
-        // ];
+        yield 'noMinimumSignificance' => [
+            ['important', 'fundamental', 'landmark', 'useful', 'valuable', 'not-assigned'],
+            null,
+        ];
+        yield 'emptyMinimumSignificance' => [
+            ['important', 'fundamental', 'landmark', 'useful', 'valuable', 'not-assigned'],
+            '',
+        ];
         yield 'notASignificanceTerm' => [
-            ['important', 'fundamental', 'landmark', 'useful', 'valuable'],
+            ['important', 'fundamental', 'landmark', 'useful', 'valuable', 'not-assigned'],
             'notASignificanceTerm',
         ];
     }
