@@ -22,7 +22,7 @@ final class BrowseControllerTest extends PageTestCase
 
         $crawler = $client->request('GET', $this->getUrl());
 
-        $this->assertStatusCodeIs200($client, $crawler);        
+        $this->assertStatusCodeIs200($client, $crawler);
         $this->assertSame('0 results found', trim($crawler->filter('.message-bar')->text()));
     }
 
