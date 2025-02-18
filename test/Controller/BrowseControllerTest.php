@@ -6,8 +6,8 @@ use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\Query;
 use GuzzleHttp\Psr7\Uri;
-use Psr\Http\Message\UriInterface;
-use function GuzzleHttp\Psr7\parse_query;
+use Symfony\Bundle\FrameworkBundle\Client;
+use Symfony\Component\DomCrawler\Crawler;
 
 final class BrowseControllerTest extends PageTestCase
 {
@@ -22,9 +22,14 @@ final class BrowseControllerTest extends PageTestCase
 
         $crawler = $client->request('GET', $this->getUrl());
 
+        $this->assertStatusCodeIs200($client, $crawler);        
+        $this->assertSame('0 results found', trim($crawler->filter('.message-bar')->text()));
+    }
+
+    private function assertStatusCodeIs200(Client $client, Crawler $crawler)
+    {
         $errorMessage = $crawler->filter('title')->text();
         $this->assertSame(200, $client->getResponse()->getStatusCode(), $errorMessage);
-        $this->assertSame('0 results found', trim($crawler->filter('.message-bar')->text()));
     }
 
     /**
