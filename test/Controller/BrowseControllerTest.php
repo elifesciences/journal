@@ -22,7 +22,8 @@ final class BrowseControllerTest extends PageTestCase
 
         $crawler = $client->request('GET', $this->getUrl());
 
-        $this->assertSame(200, $client->getResponse()->getStatusCode());
+        $errorMessage = $crawler->filter('title')->text();
+        $this->assertSame(200, $client->getResponse()->getStatusCode(), $errorMessage);
         $this->assertSame('0 results found', trim($crawler->filter('.message-bar')->text()));
     }
 
