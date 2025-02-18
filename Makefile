@@ -13,8 +13,9 @@ update-api-sdk:
 build: vendor
 	$(DOCKER_COMPOSE) build
 
-vendor:
+vendor: composer.json composer.lock
 	composer install
+	@touch vendor
 
 dev: build vendor
 	$(DOCKER_COMPOSE) up
