@@ -208,6 +208,11 @@ final class BrowseControllerTest extends PageTestCase
      * @test
      */
     public function it_displays_correct_results_when_minimum_elife_significance_is_selected() {
+        $client = static::createClient();
+
+        $client->request('GET', $this->getUrl());
+
+        $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->markTestIncomplete();
     }
 
