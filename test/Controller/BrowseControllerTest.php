@@ -207,14 +207,16 @@ final class BrowseControllerTest extends PageTestCase
     /**
      * @test
      */
-    public function it_displays_correct_results_when_minimum_elife_significance_is_selected() {
+    public function it_displays_the_requested_minimum_significance_in_the_filter_dropdown_when_minimum_elife_significance_is_selected() {
         $client = static::createClient();
         $this->setUpApiMocksForMinimumSignificanceQuery();
 
-        $client->request('GET', '/browse?minimumSignificance=landmark');
+        $crawler = $client->request('GET', '/browse?minimumSignificance=landmark');
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
-        $this->markTestIncomplete();
+
+        $selectedMinimumSignificanceDropdownValue = $crawler->filter('select[name=minimumSignificance]>option[selected]')->attr('value');
+        $this->assertSame($selectedMinimumSignificanceDropdownValue, 'landmark');
     }
 
     protected function setUpApiMocksForMinimumSignificanceQuery()
