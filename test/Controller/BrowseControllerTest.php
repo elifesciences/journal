@@ -431,7 +431,7 @@ final class BrowseControllerTest extends PageTestCase
 
         $uri = Uri::fromParts($parts);
 
-        if (!isset(parse_query($uri->getQuery())['for'])) {
+        if (!isset(Query::parse($uri->getQuery())['for'])) {
             $uri = $uri->withQuery('for=&'.$uri->getQuery());
         }
 
