@@ -209,14 +209,15 @@ final class BrowseControllerTest extends PageTestCase
      */
     public function it_displays_correct_results_when_minimum_elife_significance_is_selected() {
         $client = static::createClient();
+        $this->setUpApiMocksForMinimumSignificanceQuery();
 
-        $client->request('GET', $this->getUrlWithMinimumSignificance());
+        $client->request('GET', '/browse?minimumSignificance=landmark');
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->markTestIncomplete();
     }
 
-    protected function getUrlWithMinimumSignificance() : string
+    protected function setUpApiMocksForMinimumSignificanceQuery()
     {
         $this->mockApiResponse(
             $this->buildSearchApiRequestForOneItemWithLandmarkSignificance(),
@@ -301,8 +302,6 @@ final class BrowseControllerTest extends PageTestCase
                 ])
             )
         );
-
-        return '/browse?minimumSignificance=landmark';
     }
 
     protected function getUrl() : string
