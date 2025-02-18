@@ -210,10 +210,99 @@ final class BrowseControllerTest extends PageTestCase
     public function it_displays_correct_results_when_minimum_elife_significance_is_selected() {
         $client = static::createClient();
 
-        $client->request('GET', $this->getUrl());
+        $client->request('GET', $this->getUrlWithMinimumSignificance());
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->markTestIncomplete();
+    }
+
+    protected function getUrlWithMinimumSignificance() : string
+    {
+        $this->mockApiResponse(
+            $this->buildSearchApiRequestForOneItemWithLandmarkSignificance(),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.search+json; version=2'],
+                json_encode([
+                    'total' => 0,
+                    'items' => [],
+                    'subjects' => [
+                        [
+                            'id' => 'subject',
+                            'name' => 'Some subject',
+                            'results' => 0,
+                        ],
+                    ],
+                    'types' => [
+                        'correction' => 0,
+                        'editorial' => 0,
+                        'expression-concern' => 0,
+                        'feature' => 0,
+                        'insight' => 0,
+                        'research-advance' => 0,
+                        'research-article' => 0,
+                        'research-communication' => 0,
+                        'retraction' => 0,
+                        'registered-report' => 0,
+                        'replication-study' => 0,
+                        'review-article' => 0,
+                        'scientific-correspondence' => 0,
+                        'short-report' => 0,
+                        'tools-resources' => 0,
+                        'blog-article' => 0,
+                        'collection' => 0,
+                        'interview' => 0,
+                        'labs-post' => 0,
+                        'podcast-episode' => 0,
+                        'reviewed-preprint' => 0,
+                    ],
+                ])
+            )
+        );
+
+        $this->mockApiResponse(
+            $this->buildSearchApiRequestForTenItemsWithLandmarkSignificance(),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.search+json; version=2'],
+                json_encode([
+                    'total' => 0,
+                    'items' => [],
+                    'subjects' => [
+                        [
+                            'id' => 'subject',
+                            'name' => 'Some subject',
+                            'results' => 0,
+                        ],
+                    ],
+                    'types' => [
+                        'correction' => 0,
+                        'editorial' => 0,
+                        'expression-concern' => 0,
+                        'feature' => 0,
+                        'insight' => 0,
+                        'research-advance' => 0,
+                        'research-article' => 0,
+                        'research-communication' => 0,
+                        'retraction' => 0,
+                        'registered-report' => 0,
+                        'replication-study' => 0,
+                        'review-article' => 0,
+                        'scientific-correspondence' => 0,
+                        'short-report' => 0,
+                        'tools-resources' => 0,
+                        'blog-article' => 0,
+                        'collection' => 0,
+                        'interview' => 0,
+                        'labs-post' => 0,
+                        'podcast-episode' => 0,
+                        'reviewed-preprint' => 0,
+                    ],
+                ])
+            )
+        );
+
+        return '/browse?minimumSignificance=landmark';
     }
 
     protected function getUrl() : string
@@ -319,6 +408,20 @@ final class BrowseControllerTest extends PageTestCase
         ]);
     }
 
+    private function buildSearchApiRequestForOneItemWithLandmarkSignificance()
+    {
+        return $this->buildApiRequest([
+            'for' => '',
+            'page' => '1',
+            'per-page' => '1',
+            'sort' => 'date',
+            'order' => 'desc',
+            'elifeAssessmentSignificance[]' => ['landmark'],
+            'type[]' => $this->researchTypes,
+            'use-date' => 'default',
+        ]);
+    }
+
     private function buildSearchApiRequestForTenItems()
     {
         return $this->buildApiRequest([
@@ -328,6 +431,20 @@ final class BrowseControllerTest extends PageTestCase
             'sort' => 'date',
             'order' => 'desc',
             'elifeAssessmentSignificance[]' => ['important', 'fundamental', 'landmark', 'useful', 'valuable', 'not-assigned'],
+            'type[]' => $this->researchTypes,
+            'use-date' => 'default',
+        ]);
+    }
+
+    private function buildSearchApiRequestForTenItemsWithLandmarkSignificance()
+    {
+        return $this->buildApiRequest([
+            'for' => '',
+            'page' => '1',
+            'per-page' => '10',
+            'sort' => 'date',
+            'order' => 'desc',
+            'elifeAssessmentSignificance[]' => ['landmark'],
             'type[]' => $this->researchTypes,
             'use-date' => 'default',
         ]);
