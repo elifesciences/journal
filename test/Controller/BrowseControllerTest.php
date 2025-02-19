@@ -26,12 +26,6 @@ final class BrowseControllerTest extends PageTestCase
         $this->assertSame('0 results found', trim($crawler->filter('.message-bar')->text()));
     }
 
-    private function assertStatusCodeIs200(Client $client, Crawler $crawler)
-    {
-        $errorMessage = $crawler->filter('title')->text();
-        $this->assertSame(200, $client->getResponse()->getStatusCode(), $errorMessage);
-    }
-
     /**
      * @test
      */
@@ -41,7 +35,7 @@ final class BrowseControllerTest extends PageTestCase
 
         $crawler = $client->request('GET', $this->getUrl().'?foo');
 
-        $this->assertSame(200, $client->getResponse()->getStatusCode());
+        $this->assertStatusCodeIs200($client, $crawler);
 
         $this->assertSame('Browse the latest research | eLife', $crawler->filter('title')->text());
         $this->assertSame('/browse', $crawler->filter('link[rel="canonical"]')->attr('href'));
@@ -202,7 +196,7 @@ final class BrowseControllerTest extends PageTestCase
         );
 
         $crawler = $client->request('GET', '/browse');
-        $this->assertSame(200, $client->getResponse()->getStatusCode());
+        $this->assertStatusCodeIs200($client, $crawler);
         $listing = $crawler->filter('ol.listing-list > li');
 
         $this->assertCount(1, $listing);
@@ -219,7 +213,7 @@ final class BrowseControllerTest extends PageTestCase
 
         $crawler = $client->request('GET', '/browse?minimumSignificance=landmark');
 
-        $this->assertSame(200, $client->getResponse()->getStatusCode());
+        $this->assertStatusCodeIs200($client, $crawler);
 
         $selectedMinimumSignificanceDropdownValue = $crawler->filter('select[name=minimumSignificance]>option[selected]')->attr('value');
         $this->assertSame($selectedMinimumSignificanceDropdownValue, 'landmark');
@@ -446,5 +440,11 @@ final class BrowseControllerTest extends PageTestCase
             $uri,
             ['Accept' => 'application/vnd.elife.search+json; version=2']
         );
+    }
+
+    private function assertStatusCodeIs200(Client $client, Crawler $crawler)
+    {
+        $errorMessage = $crawler->filter('title')->text();
+        $this->assertSame(200, $client->getResponse()->getStatusCode(), $errorMessage);
     }
 }
