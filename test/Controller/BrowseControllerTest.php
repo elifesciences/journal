@@ -22,7 +22,7 @@ final class BrowseControllerTest extends PageTestCase
 
         $crawler = $client->request('GET', $this->getUrl());
 
-        $this->assertStatusCodeIs200($client, $crawler);
+        $this->assertStatusCodeIs200($client);
         $this->assertSame('0 results found', trim($crawler->filter('.message-bar')->text()));
     }
 
@@ -35,7 +35,7 @@ final class BrowseControllerTest extends PageTestCase
 
         $crawler = $client->request('GET', $this->getUrl().'?foo');
 
-        $this->assertStatusCodeIs200($client, $crawler);
+        $this->assertStatusCodeIs200($client);
 
         $this->assertSame('Browse the latest research | eLife', $crawler->filter('title')->text());
         $this->assertSame('/browse', $crawler->filter('link[rel="canonical"]')->attr('href'));
@@ -196,7 +196,7 @@ final class BrowseControllerTest extends PageTestCase
         );
 
         $crawler = $client->request('GET', '/browse');
-        $this->assertStatusCodeIs200($client, $crawler);
+        $this->assertStatusCodeIs200($client);
         $listing = $crawler->filter('ol.listing-list > li');
 
         $this->assertCount(1, $listing);
@@ -213,7 +213,7 @@ final class BrowseControllerTest extends PageTestCase
 
         $crawler = $client->request('GET', '/browse?minimumSignificance=landmark');
 
-        $this->assertStatusCodeIs200($client, $crawler);
+        $this->assertStatusCodeIs200($client);
 
         $selectedMinimumSignificanceDropdownValue = $crawler->filter('select[name=minimumSignificance]>option[selected]')->attr('value');
         $this->assertSame($selectedMinimumSignificanceDropdownValue, 'landmark');
@@ -442,8 +442,9 @@ final class BrowseControllerTest extends PageTestCase
         );
     }
 
-    private function assertStatusCodeIs200(Client $client, Crawler $crawler)
+    private function assertStatusCodeIs200(Client $client)
     {
+        $crawler = $client->getCrawler();
         $errorMessage = $crawler->filter('title')->text();
         $this->assertSame(200, $client->getResponse()->getStatusCode(), $errorMessage);
     }
