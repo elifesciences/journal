@@ -47,3 +47,5 @@ lint: vendor
 
 lint-fix: vendor
 	vendor/bin/phpcbf --standard=phpcs.xml.dist --warning-severity=0 -p app/ bin/ src/ web/ features/ test/
+
+check: test lint
