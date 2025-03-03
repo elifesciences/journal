@@ -105,6 +105,7 @@ final class BrowseController extends Controller
                 }
 
                 $filterGroups[] = new FilterGroup('Significance (minimum)', $significanceFilters, 'minimumSignificance');
+                $filterGroups[] = new FilterGroup('Strength (minimum)', $significanceFilters, 'minimumSignificance');
 
                 if (count($search->subjects())) {
                     $subjectFilters = [];
