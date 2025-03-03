@@ -219,6 +219,26 @@ final class BrowseControllerTest extends PageTestCase
         $this->assertSame($selectedMinimumSignificanceDropdownValue, 'landmark');
     }
 
+    /**
+     * @test
+     */
+    public function it_displays_the_requested_minimum_strength_in_the_filter_dropdown_when_minimum_elife_strength_is_selected() {
+        $client = static::createClient();
+        $this->setUpApiMocksForMinimumStrengthQuery();
+
+        $this->markTestSkipped();
+        $crawler = $client->request('GET', '/browse?minimumStrength=solid');
+
+        $this->assertStatusCodeIs200($client);
+
+        $selectedMinimumStrengthDropdownValue = $crawler->filter('select[name=minimumStrength]>option[selected]')->attr('value');
+        $this->assertSame($selectedMinimumStrengthDropdownValue, 'solid');
+    }
+
+    protected function setUpApiMocksForMinimumStrengthQuery()
+    {
+    }
+
     protected function setUpApiMocksForMinimumSignificanceQuery()
     {
         $emptyResponse = new Response(
