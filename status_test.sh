@@ -4,6 +4,7 @@
 hostname="${1:-$(hostname)}"
 port="${2:-80}"
 
+echo "curl -v --location "$hostname:$port/status" | grep check__name"
 checks=$(curl -v --location "$hostname:$port/status" | grep check__name)
 echo "$checks"
 good_checks=$(echo "$checks" | grep -o ✔ | wc -l)
