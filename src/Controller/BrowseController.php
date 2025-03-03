@@ -104,8 +104,10 @@ final class BrowseController extends Controller
                     $significanceFilters[] = new Filter($isSelected, ucfirst($term), null, null, $term);
                 }
 
+                $strengthFilters = [];
+
                 $filterGroups[] = new FilterGroup('Significance (minimum)', $significanceFilters, 'minimumSignificance');
-                $filterGroups[] = new FilterGroup('Strength (minimum)', $significanceFilters, 'minimumSignificance');
+                $filterGroups[] = new FilterGroup('Strength (minimum)', $strengthFilters, 'minimumStrength');
 
                 if (count($search->subjects())) {
                     $subjectFilters = [];
