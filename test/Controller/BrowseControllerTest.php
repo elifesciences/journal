@@ -239,6 +239,15 @@ final class BrowseControllerTest extends PageTestCase
 
     protected function setUpApiMocksForMinimumStrengthQuery()
     {
+        $this->mockApiResponse(
+            $this->buildSearchApiRequestForOneItemWithSolidStrength(),
+            $this->getEmptyResponse()
+        );
+
+        $this->mockApiResponse(
+            $this->buildSearchApiRequestForTenItemsWithSolidStrength(),
+            $this->getEmptyResponse()
+        );
     }
 
     protected function setUpApiMocksForMinimumSignificanceQuery()
@@ -353,6 +362,7 @@ final class BrowseControllerTest extends PageTestCase
             'sort' => 'date',
             'order' => 'desc',
             'elifeAssessmentSignificance[]' => ['important', 'fundamental', 'landmark', 'useful', 'valuable', 'not-assigned'],
+            //'elifeAssessmentStrength[]' => ['exceptional', 'compelling', 'solid', 'incomplete', 'inadequate'],
             'type[]' => $this->researchTypes,
             'use-date' => 'default',
         ]);
@@ -372,6 +382,20 @@ final class BrowseControllerTest extends PageTestCase
         ]);
     }
 
+    private function buildSearchApiRequestForOneItemWithSolidStrength()
+    {
+        return $this->buildApiRequest([
+            'for' => '',
+            'page' => '1',
+            'per-page' => '1',
+            'sort' => 'date',
+            'order' => 'desc',
+            'elifeAssessmentStrength[]' => ['solid'],
+            'type[]' => $this->researchTypes,
+            'use-date' => 'default',
+        ]);
+    }
+
     private function buildSearchApiRequestForTenItems()
     {
         return $this->buildApiRequest([
@@ -381,6 +405,7 @@ final class BrowseControllerTest extends PageTestCase
             'sort' => 'date',
             'order' => 'desc',
             'elifeAssessmentSignificance[]' => ['important', 'fundamental', 'landmark', 'useful', 'valuable', 'not-assigned'],
+            //'elifeAssessmentStrength[]' => ['exceptional', 'compelling', 'solid', 'incomplete', 'inadequate'],
             'type[]' => $this->researchTypes,
             'use-date' => 'default',
         ]);
@@ -395,6 +420,20 @@ final class BrowseControllerTest extends PageTestCase
             'sort' => 'date',
             'order' => 'desc',
             'elifeAssessmentSignificance[]' => ['landmark'],
+            'type[]' => $this->researchTypes,
+            'use-date' => 'default',
+        ]);
+    }
+
+    private function buildSearchApiRequestForTenItemsWithSolidStrength()
+    {
+        return $this->buildApiRequest([
+            'for' => '',
+            'page' => '1',
+            'per-page' => '10',
+            'sort' => 'date',
+            'order' => 'desc',
+            'elifeAssessmentStrength[]' => ['solid'],
             'type[]' => $this->researchTypes,
             'use-date' => 'default',
         ]);
