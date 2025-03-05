@@ -22,30 +22,23 @@ class ElifeAssessmentTermsFilter
         'inadequate',
     ];
 
-    /**
-     * @return array
-     */
-    public static function fromMinimumSignificance(string $minimumSignificance = null)
+    public static function fromMinimumSignificance(string $minimumSignificance = null): array
     {
-        $results = [];
-
-        foreach (self::$significanceTerms as $term) {
-            $results[] = $term;
-            if ($term === $minimumSignificance) {
-                break;
-            }
-        }
-
-        return $results;
+        return self::fromMinimumTerm($minimumSignificance, self::$significanceTerms);
     }
 
     public static function fromMinimumStrength(string $minimumStrength = null): array
     {
+        return self::fromMinimumTerm($minimumStrength, self::$strengthTerms);
+    }
+
+    private static function fromMinimumTerm(string $minimumTerm = null, array $availableTerms): array
+    {
         $results = [];
 
-        foreach (self::$strengthTerms as $term) {
+        foreach ($availableTerms as $term) {
             $results[] = $term;
-            if ($term === $minimumStrength) {
+            if ($term === $minimumTerm) {
                 break;
             }
         }
