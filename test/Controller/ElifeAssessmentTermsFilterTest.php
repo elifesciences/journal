@@ -44,7 +44,14 @@ final class ElifeAssessmentTermsFilterTest extends TestCase
         ];
     }
 
-    /**
+    public function strengthProvider() : Traversable
+    {
+        yield 'exceptional' => [
+            ['exceptional'],
+            'exceptional',
+        ];
+    }
+        /**
      * @test
      * @dataProvider significanceProvider
      */
@@ -54,10 +61,14 @@ final class ElifeAssessmentTermsFilterTest extends TestCase
         $this->assertEqualsCanonicalizing($expected, $result);
     }
 
+    /**
+     * @test
+     * @dataProvider strengthProvider
+     */
     public function it_translates_a_minimum_strength_to_the_correct_set_of_filters(array $expected, string $input = null)
     {
-        $this->markTestIncomplete();
         $result = ElifeAssessmentTermsFilter::fromMinimumStrength($input);
+        $this->markTestSkipped();
         $this->assertEqualsCanonicalizing($expected, $result);
     }
 }
