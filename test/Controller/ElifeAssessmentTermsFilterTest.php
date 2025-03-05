@@ -54,6 +54,30 @@ final class ElifeAssessmentTermsFilterTest extends TestCase
            ['exceptional', 'compelling'],
            'compelling',
         ];
+        yield 'convincing' => [
+           ['exceptional', 'compelling', 'convincing'],
+           'convincing',
+        ];
+        yield 'solid' => [
+           ['exceptional', 'compelling', 'convincing', 'solid'],
+           'solid',
+        ];
+        yield 'incomplete' => [
+            ['exceptional', 'compelling', 'convincing', 'solid', 'incomplete'],
+            'incomplete',
+        ];
+        yield 'inadequate' => [
+            ['exceptional', 'compelling', 'convincing', 'solid', 'incomplete', 'inadequate'],
+            'inadequate',
+        ];
+        yield 'emptyMinimumStrength' => [
+            ['exceptional', 'compelling', 'convincing', 'solid', 'incomplete', 'inadequate'],
+            '',
+        ];
+        yield 'notAStrengthTerm' => [
+            ['exceptional', 'compelling', 'convincing', 'solid', 'incomplete', 'inadequate'],
+            'notAStrengthTerm',
+        ];
     }
         /**
      * @test
