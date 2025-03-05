@@ -105,10 +105,7 @@ final class BrowseController extends Controller
                     $significanceFilters[] = new Filter($isSelected, ucfirst($term), null, null, $term);
                 }
 
-                $strengthFilters = [];
-                $strengthFilters[] = new Filter(false, 'Show all');
-                $strengthTerms = $this->strengthTerms();
-                $strengthFilters = array_merge($strengthFilters, $this->buildTermFilters($strengthTerms, $arguments['query']['minimumStrength']));
+                $strengthFilters = $this->buildTermFilters($this->strengthTerms(), $arguments['query']['minimumStrength']);
                 $filterGroups[] = new FilterGroup('Significance (minimum)', $significanceFilters, 'minimumSignificance');
                 $filterGroups[] = new FilterGroup('Strength (minimum)', $strengthFilters, 'minimumStrength');
 
@@ -138,6 +135,7 @@ final class BrowseController extends Controller
     private function buildTermFilters(array $terms, string $queryStringParameterName = null): array
     {
         $filters = [];
+        $filters[] = new Filter(false, 'Show all');
         foreach ($terms as $term) {
             $isSelected = $queryStringParameterName === $term;
             $filters[] = new Filter($isSelected, ucfirst($term), null, null, $term);
