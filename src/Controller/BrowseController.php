@@ -97,16 +97,10 @@ final class BrowseController extends Controller
             ->then(function (Search $search) use ($arguments) {
                 $filterGroups = [];
 
-                $significanceFilters = [];
-                $significanceFilters[] = new Filter(false, 'Show all');
-                $significanceTerms = $this->significanceTerms();
-                foreach ($significanceTerms as $term) {
-                    $isSelected = $arguments['query']['minimumSignificance'] === $term;
-                    $significanceFilters[] = new Filter($isSelected, ucfirst($term), null, null, $term);
-                }
+                $significanceFilters = $this->buildTermFilters($this->significanceTerms(), $arguments['query']['minimumSignificance']);
+                $filterGroups[] = new FilterGroup('Significance (minimum)', $significanceFilters, 'minimumSignificance');
 
                 $strengthFilters = $this->buildTermFilters($this->strengthTerms(), $arguments['query']['minimumStrength']);
-                $filterGroups[] = new FilterGroup('Significance (minimum)', $significanceFilters, 'minimumSignificance');
                 $filterGroups[] = new FilterGroup('Strength (minimum)', $strengthFilters, 'minimumStrength');
 
                 if (count($search->subjects())) {
