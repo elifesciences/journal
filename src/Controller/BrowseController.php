@@ -108,11 +108,7 @@ final class BrowseController extends Controller
                 $strengthFilters = [];
                 $strengthFilters[] = new Filter(false, 'Show all');
                 $strengthTerms = $this->strengthTerms();
-                foreach ($strengthTerms as $term) {
-                    $isSelected = $arguments['query']['minimumStrength'] === $term;
-                    $strengthFilters[] = new Filter($isSelected, ucfirst($term), null, null, $term);
-                }
-
+                $strengthFilters = array_merge($strengthFilters, $this->buildTermFilters($strengthTerms, $arguments['query']['minimumStrength']));
                 $filterGroups[] = new FilterGroup('Significance (minimum)', $significanceFilters, 'minimumSignificance');
                 $filterGroups[] = new FilterGroup('Strength (minimum)', $strengthFilters, 'minimumStrength');
 
@@ -137,6 +133,16 @@ final class BrowseController extends Controller
             });
 
         return new Response($this->get('templating')->render('::browse.html.twig', $arguments));
+    }
+
+    private function buildTermFilters(array $terms, string $queryStringParameterName = null): array
+    {
+        $filters = [];
+        foreach ($terms as $term) {
+            $isSelected = $queryStringParameterName === $term;
+            $filters[] = new Filter($isSelected, ucfirst($term), null, null, $term);
+        }
+        return $filters;
     }
 
     private function researchTypes()
