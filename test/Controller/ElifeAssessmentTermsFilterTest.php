@@ -50,10 +50,10 @@ final class ElifeAssessmentTermsFilterTest extends TestCase
             ['exceptional'],
             'exceptional',
         ];
-//        yield 'compelling' => [
-//            ['exceptional', 'compelling'],
-//            'compelling',
-//        ];
+        yield 'compelling' => [
+           ['exceptional', 'compelling'],
+           'compelling',
+        ];
     }
         /**
      * @test

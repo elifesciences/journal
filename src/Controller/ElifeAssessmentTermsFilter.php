@@ -13,6 +13,15 @@ class ElifeAssessmentTermsFilter
         'not-assigned',
     ];
 
+    private static $strengthTerms = [
+        'exceptional',
+        'compelling',
+        'convincing',
+        'solid',
+        'incomplete',
+        'inadequate',
+    ];
+
     /**
      * @return array
      */
@@ -32,6 +41,15 @@ class ElifeAssessmentTermsFilter
 
     public static function fromMinimumStrength(string $minimumStrength = null): array
     {
-        return ['exceptional'];
+        $results = [];
+
+        foreach (self::$strengthTerms as $term) {
+            $results[] = $term;
+            if ($term === $minimumStrength) {
+                break;
+            }
+        }
+
+        return $results;
     }
 }
