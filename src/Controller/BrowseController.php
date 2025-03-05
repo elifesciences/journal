@@ -33,6 +33,7 @@ final class BrowseController extends Controller
             'subjects' => $request->query->get('subjects', []),
             'types' => $request->query->get('types', []),
             'minimumSignificance' => $request->query->get('minimumSignificance'),
+            'minimumStrength' => $request->query->get('minimumStrength'),
         ];
 
   
@@ -105,6 +106,12 @@ final class BrowseController extends Controller
                 }
 
                 $strengthFilters = [];
+                $strengthFilters[] = new Filter(false, 'Show all');
+                $strengthTerms = $this->strengthTerms();
+                foreach ($strengthTerms as $term) {
+                    $isSelected = $arguments['query']['minimumStrength'] === $term;
+                    $strengthFilters[] = new Filter($isSelected, ucfirst($term), null, null, $term);
+                }
 
                 $filterGroups[] = new FilterGroup('Significance (minimum)', $significanceFilters, 'minimumSignificance');
                 $filterGroups[] = new FilterGroup('Strength (minimum)', $strengthFilters, 'minimumStrength');
@@ -161,6 +168,18 @@ final class BrowseController extends Controller
             'important',
             'valuable',
             'useful',
+        ];
+    }
+
+    private function strengthTerms()
+    {
+        return [
+            'exceptional',
+            'compelling',
+            'convincing',
+            'solid',
+            'incomplete',
+            'inadequate',
         ];
     }
 }
