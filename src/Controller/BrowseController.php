@@ -43,6 +43,7 @@ final class BrowseController extends Controller
         $search = $this->get('elife.api_sdk.search.page')
             ->forSubject(...$arguments['query']['subjects'])
             ->forElifeAssessmentSignificance(...ElifeAssessmentTermsFilter::fromMinimumSignificance($arguments['query']['minimumSignificance']))
+//            ->forElifeAssessmentStrength(...ElifeAssessmentTermsFilter::fromMinimumStrength($arguments['query']['minimumStrength']))
             ->forType(...$apiTypes)
             ->sortBy('date');
 
