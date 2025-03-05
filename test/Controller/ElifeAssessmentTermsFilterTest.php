@@ -53,4 +53,11 @@ final class ElifeAssessmentTermsFilterTest extends TestCase
         $result = ElifeAssessmentTermsFilter::fromMinimumSignificance($input);
         $this->assertEqualsCanonicalizing($expected, $result);
     }
+
+    public function it_translates_a_minimum_strength_to_the_correct_set_of_filters(array $expected, string $input = null)
+    {
+        $this->markTestIncomplete();
+        $result = ElifeAssessmentTermsFilter::fromMinimumStrength($input);
+        $this->assertEqualsCanonicalizing($expected, $result);
+    }
 }

@@ -29,4 +29,10 @@ class ElifeAssessmentTermsFilter
 
         return $results;
     }
+
+    public static function fromMinimumStrength(string $minimumStrength = null): array
+    {
+        return [];
+    }
+
 }
