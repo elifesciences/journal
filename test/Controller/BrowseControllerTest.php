@@ -228,7 +228,6 @@ final class BrowseControllerTest extends PageTestCase
         $client = static::createClient();
         $this->setUpApiMocksForMinimumStrengthQuery();
 
-        $this->markTestSkipped();
         $crawler = $client->request('GET', '/browse?minimumStrength=solid');
 
         $this->assertStatusCodeIs200($client);
@@ -391,7 +390,8 @@ final class BrowseControllerTest extends PageTestCase
             'per-page' => '1',
             'sort' => 'date',
             'order' => 'desc',
-            'elifeAssessmentStrength[]' => ['solid'],
+            'elifeAssessmentSignificance[]' => ['important', 'fundamental', 'landmark', 'useful', 'valuable', 'not-assigned'],
+            'elifeAssessmentStrength[]' => ['exceptional', 'compelling', 'convincing', 'solid'],
             'type[]' => $this->researchTypes,
             'use-date' => 'default',
         ]);
@@ -434,7 +434,8 @@ final class BrowseControllerTest extends PageTestCase
             'per-page' => '10',
             'sort' => 'date',
             'order' => 'desc',
-            'elifeAssessmentStrength[]' => ['solid'],
+            'elifeAssessmentSignificance[]' => ['important', 'fundamental', 'landmark', 'useful', 'valuable', 'not-assigned'],
+            'elifeAssessmentStrength[]' => ['exceptional', 'compelling', 'convincing', 'solid'],
             'type[]' => $this->researchTypes,
             'use-date' => 'default',
         ]);
