@@ -362,7 +362,7 @@ final class BrowseControllerTest extends PageTestCase
             'sort' => 'date',
             'order' => 'desc',
             'elifeAssessmentSignificance[]' => ['important', 'fundamental', 'landmark', 'useful', 'valuable', 'not-assigned'],
-            //'elifeAssessmentStrength[]' => ['exceptional', 'compelling', 'solid', 'incomplete', 'inadequate'],
+            'elifeAssessmentStrength[]' => ['exceptional', 'compelling', 'convincing', 'solid', 'incomplete', 'inadequate'],
             'type[]' => $this->researchTypes,
             'use-date' => 'default',
         ]);
@@ -377,6 +377,7 @@ final class BrowseControllerTest extends PageTestCase
             'sort' => 'date',
             'order' => 'desc',
             'elifeAssessmentSignificance[]' => ['landmark'],
+            'elifeAssessmentStrength[]' => ['exceptional', 'compelling', 'convincing', 'solid', 'incomplete', 'inadequate'],
             'type[]' => $this->researchTypes,
             'use-date' => 'default',
         ]);
@@ -405,7 +406,7 @@ final class BrowseControllerTest extends PageTestCase
             'sort' => 'date',
             'order' => 'desc',
             'elifeAssessmentSignificance[]' => ['important', 'fundamental', 'landmark', 'useful', 'valuable', 'not-assigned'],
-            //'elifeAssessmentStrength[]' => ['exceptional', 'compelling', 'solid', 'incomplete', 'inadequate'],
+            'elifeAssessmentStrength[]' => ['exceptional', 'compelling', 'convincing', 'solid', 'incomplete', 'inadequate'],
             'type[]' => $this->researchTypes,
             'use-date' => 'default',
         ]);
