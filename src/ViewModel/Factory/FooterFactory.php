@@ -64,6 +64,7 @@ final class FooterFactory
                 new SiteHeaderTitle($this->urlGenerator->generate('home')),
                 [
                     (new Link('Home', $this->urlGenerator->generate('home')))->hiddenWide(),
+                    (new Link('Browse', $this->urlGenerator->generate('browse')))->hiddenWide(),
                     (new Link('Magazine', $this->urlGenerator->generate('magazine')))->hiddenWide(),
                     (new Link('Community', $this->urlGenerator->generate('community')))->hiddenWide(),
                     (new Link('About', $this->urlGenerator->generate('about')))->hiddenWide(),
