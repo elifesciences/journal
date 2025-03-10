@@ -26,6 +26,7 @@ final class BrowseControllerTest extends PageTestCase
 
         $this->assertStatusCodeIs200($client);
         $this->assertSame('0 results found', trim($crawler->filter('.message-bar')->text()));
+        $this->assertSame('Browse the latest research', $crawler->filter('main h1')->text());
     }
 
     /**
