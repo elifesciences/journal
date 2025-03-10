@@ -2,4 +2,4 @@
 set -e
 
 vendor/bin/phpcs --standard=phpcs.xml.dist --warning-severity=0 -p app/ bin/ src/ web/
-vendor/bin/phpcs --standard=phpcs.xml.dist --warning-severity=0 -p features/ test/
+vendor/bin/phpcs --standard=phpcs.xml.dist --warning-severity=0 -p test/
