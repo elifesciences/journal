@@ -20,7 +20,6 @@ COPY --chown=elife:elife .ci/ .ci/
 COPY --chown=elife:elife assets/tests/ assets/tests/
 COPY --chown=elife:elife composer.json composer.lock ./
 COPY --from=composer --chown=elife:elife /app/vendor/ vendor/
-COPY --chown=elife:elife features/ features/
 COPY --chown=elife:elife test/ test/
 
 USER www-data
