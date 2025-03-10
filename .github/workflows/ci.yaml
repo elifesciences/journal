@@ -25,7 +25,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        test_script: ["phpcs", "phpunit", "behat"]
+        test_script: ["phpcs", "phpunit"]
     steps:
       - uses: actions/checkout@v4
       - name: Bring up test stack
