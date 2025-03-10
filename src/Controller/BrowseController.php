@@ -8,6 +8,7 @@ use eLife\Journal\Helper\Callback;
 use eLife\Journal\Helper\Paginator;
 use eLife\Journal\Pagerfanta\SequenceAdapter;
 use eLife\Patterns\ViewModel\Button;
+use eLife\Patterns\ViewModel\ContentHeaderSimple;
 use eLife\Patterns\ViewModel\Filter;
 use eLife\Patterns\ViewModel\FilterGroup;
 use eLife\Patterns\ViewModel\FilterPanel;
@@ -59,10 +60,12 @@ final class BrowseController extends Controller
 
         $arguments['title'] = 'Browse the latest research';
 
+        $arguments['contentHeader'] = new ContentHeaderSimple($arguments['title']);
+
         $arguments['paginator'] = $pagerfanta
-            ->then(function (Pagerfanta $pagerfanta) use ($request, $query) {
+            ->then(function (Pagerfanta $pagerfanta) use ($request, $query, $arguments) {
                 return new Paginator(
-                    'Browse the search results',
+                    $arguments['title'],
                     $pagerfanta,
                     function (int $page = null) use ($request, $query) {
                         $routeParams = $query + $request->attributes->get('_route_params');
