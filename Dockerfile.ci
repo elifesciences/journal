@@ -12,7 +12,6 @@ COPY --from=jq /usr/local/bin/jq /usr/bin/jq
 COPY --from=composer /usr/bin/composer /usr/bin/composer
 
 COPY --chown=elife:elife \
-    behat.yml.dist \
     phpunit.xml.dist \
     phpcs.xml.dist \
     ./
