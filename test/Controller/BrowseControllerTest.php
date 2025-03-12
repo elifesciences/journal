@@ -237,6 +237,14 @@ final class BrowseControllerTest extends PageTestCase
         $this->assertSame($selectedMinimumStrengthDropdownValue, 'solid');
     }
 
+    /**
+     * @test
+     */
+    public function it_includes_original_model_papers_when_the_previous_page_was_not_filtered()
+    {
+        $this->markTestIncomplete();
+    }
+
     protected function setUpApiMocksForMinimumStrengthQuery()
     {
         $this->mockApiResponse(
