@@ -107,6 +107,8 @@ final class BrowseController extends Controller
                 $strengthFilters = $this->buildTermFilters($this->strengthTerms(), $arguments['query']['minimumStrength']);
                 $filterGroups[] = new FilterGroup('Strength (minimum)', $strengthFilters, 'minimumStrength');
 
+//                $filterGroups[] = new FilterGroup(null, [new Filter(true, 'Include papers accepted via eLife\'s original publishing model')]);
+
                 if (count($search->subjects())) {
                     $subjectFilters = [];
                     foreach ($search->subjects() as $subject => $results) {
