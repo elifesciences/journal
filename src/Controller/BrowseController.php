@@ -132,6 +132,11 @@ final class BrowseController extends Controller
         return new Response($this->get('templating')->render('::browse.html.twig', $arguments));
     }
 
+    public function decideWhetherToIncludeOldModelPapers(array $query): bool
+    {
+        return true;
+    }
+
     private function buildTermFilters(array $terms, string $queryStringParameterName = null): array
     {
         $filters = [];
