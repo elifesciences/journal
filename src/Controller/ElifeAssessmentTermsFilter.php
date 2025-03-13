@@ -31,9 +31,13 @@ class ElifeAssessmentTermsFilter
         return $requiredSignificanceTerms;
     }
 
-    public static function fromMinimumStrength(string $minimumStrength = null): array
+    public static function fromMinimumStrength(string $minimumStrength = null, string $includeOriginalModelPapers = ''): array
     {
-        return self::fromMinimumTerm($minimumStrength, self::$strengthTerms);
+        $requiredStrengthTerms = self::fromMinimumTerm($minimumStrength, self::$strengthTerms);
+        if ($includeOriginalModelPapers) {
+            $requiredStrengthTerms[] = 'not-applicable';
+        }
+        return $requiredStrengthTerms;
     }
 
     private static function fromMinimumTerm(string $minimumTerm = null, array $availableTerms): array

@@ -79,11 +79,11 @@ final class ElifeAssessmentTermsFilterTest extends TestCase
             ['exceptional', 'compelling', 'convincing', 'solid', 'incomplete', 'inadequate'],
             '',
         ];
-//        yield 'emptyMinimumStrengthAndInclusionOfOriginalModelPapers' => [
-//            ['exceptional', 'compelling', 'convincing', 'solid', 'incomplete', 'inadequate', 'not-applicable'],
-//            '',
-//            'yes',
-//        ];
+        yield 'emptyMinimumStrengthAndInclusionOfOriginalModelPapers' => [
+           ['exceptional', 'compelling', 'convincing', 'solid', 'incomplete', 'inadequate', 'not-applicable'],
+           '',
+           'yes',
+        ];
         yield 'notAStrengthTerm' => [
             ['exceptional', 'compelling', 'convincing', 'solid', 'incomplete', 'inadequate'],
             'notAStrengthTerm',
@@ -103,9 +103,9 @@ final class ElifeAssessmentTermsFilterTest extends TestCase
      * @test
      * @dataProvider strengthProvider
      */
-    public function it_translates_a_minimum_strength_to_the_correct_set_of_filters(array $expected, string $input = null)
+    public function it_translates_a_minimum_strength_to_the_correct_set_of_filters(array $expected, string $input = null, string $includeOriginalModelPapers = '')
     {
-        $result = ElifeAssessmentTermsFilter::fromMinimumStrength($input);
+        $result = ElifeAssessmentTermsFilter::fromMinimumStrength($input, $includeOriginalModelPapers);
         $this->assertEqualsCanonicalizing($expected, $result);
     }
 }
