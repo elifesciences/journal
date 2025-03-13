@@ -32,6 +32,18 @@ final class BrowseControllerTest extends PageTestCase
     /**
      * @test
      */
+    public function it_does_not_display_the_original_model_filter()
+    {
+        $client = static::createClient();
+
+        $crawler = $client->request('GET', $this->getUrl());
+
+        $this->assertNotContains('original publishing model', $crawler->filter('html')->text());
+    }
+
+    /**
+     * @test
+     */
     public function it_has_metadata()
     {
         $client = static::createClient();
