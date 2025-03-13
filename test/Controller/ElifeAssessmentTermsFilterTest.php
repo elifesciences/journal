@@ -26,6 +26,11 @@ final class ElifeAssessmentTermsFilterTest extends TestCase
             ['important', 'fundamental', 'landmark', 'valuable'],
             'valuable',
         ];
+        yield 'valuableAndInclusionOfOriginalModelPapers' => [
+            ['important', 'fundamental', 'landmark', 'valuable', 'not-applicable'],
+            'valuable',
+            'yes',
+        ];
         yield 'useful' => [
             ['important', 'fundamental', 'landmark', 'valuable', 'useful'],
             'useful',
@@ -62,6 +67,11 @@ final class ElifeAssessmentTermsFilterTest extends TestCase
         yield 'convincing' => [
            ['exceptional', 'compelling', 'convincing'],
            'convincing',
+        ];
+        yield 'convincingAndInclusionOfOriginalModelPapers' => [
+            ['exceptional', 'compelling', 'convincing', 'not-applicable'],
+            'convincing',
+            'yes',
         ];
         yield 'solid' => [
            ['exceptional', 'compelling', 'convincing', 'solid'],
