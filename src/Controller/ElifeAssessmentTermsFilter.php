@@ -24,7 +24,7 @@ class ElifeAssessmentTermsFilter
 
     public static function decideWhetherToIncludeOldModelPapers(array $query): bool
     {
-        if (!isset($query['includeOriginalModelPapers'])) {
+        if (self::checkIfTheTermsRelatedQueryIsEmpty($query)) {
             return true;
         }
         if ($query['includeOriginalModelPapers'] !== 'yes') {
@@ -41,6 +41,14 @@ class ElifeAssessmentTermsFilter
     public static function fromMinimumStrength(string $minimumStrength = null, string $includeOriginalModelPapers = ''): array
     {
         return self::fromMinimumTerm($minimumStrength, self::$strengthTerms, $includeOriginalModelPapers);
+    }
+
+    private static function checkIfTheTermsRelatedQueryIsEmpty($query)
+    {
+        if (!isset($query['includeOriginalModelPapers']) && !isset($query['minimumSignificance']) && !isset($query['minimumStrength'])) {
+            return true;
+        }
+        return false;
     }
 
     private static function fromMinimumTerm(string $minimumTerm = null, array $availableTerms, string $includeOriginalModelPapers): array

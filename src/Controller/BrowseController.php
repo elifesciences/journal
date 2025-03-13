@@ -108,7 +108,18 @@ final class BrowseController extends Controller
                 $strengthFilters = $this->buildTermFilters($this->strengthTerms(), $arguments['query']['minimumStrength']);
                 $filterGroups[] = new FilterGroup('Strength (minimum)', $strengthFilters, 'minimumStrength');
 
-//                $filterGroups[] = new FilterGroup(null, [new Filter(true, 'Include papers accepted via eLife\'s original publishing model', null, 'includeOriginalModelPapers')]);
+//                $filterGroups[] = new FilterGroup(
+//                    null,
+//                    [
+//                        new Filter(
+//                            ElifeAssessmentTermsFilter::decideWhetherToIncludeOldModelPapers($arguments['query']),
+//                            'Include papers accepted via eLife\'s original publishing model',
+//                            null,
+//                            'includeOriginalModelPapers',
+//                            'yes'
+//                        )
+//                    ]
+//                );
 
                 if (count($search->subjects())) {
                     $subjectFilters = [];
