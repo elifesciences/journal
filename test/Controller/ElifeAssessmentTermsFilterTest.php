@@ -122,9 +122,20 @@ final class ElifeAssessmentTermsFilterTest extends TestCase
     /**
      * @test
      */
-    public function it_decides_whether_to_include_old_model_papers()
+    public function it_includes_old_model_papers_when_the_query_string_contains_nothing()
     {
         $query = [];
+        $this->assertTrue(ElifeAssessmentTermsFilter::decideWhetherToIncludeOldModelPapers($query));
+    }
+
+    /**
+     * @test
+     */
+    public function it_includes_old_model_papers_when_the_query_string_contains_include_original_papers_with_the_yes_value()
+    {
+        $query = [
+            'includeOriginalModelPapers' => 'yes',
+        ];
         $this->assertTrue(ElifeAssessmentTermsFilter::decideWhetherToIncludeOldModelPapers($query));
     }
 }

@@ -35,6 +35,7 @@ final class BrowseController extends Controller
             'types' => $request->query->get('types', []),
             'minimumSignificance' => $request->query->get('minimumSignificance'),
             'minimumStrength' => $request->query->get('minimumStrength'),
+            'includeOriginalModelPapers' => $request->query->get('includeOriginalModelPapers'),
         ];
 
   
