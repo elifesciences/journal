@@ -38,11 +38,11 @@ final class ElifeAssessmentTermsFilterTest extends TestCase
             ['important', 'fundamental', 'landmark', 'useful', 'valuable', 'not-assigned'],
             '',
         ];
-//        yield 'emptyMinimumSignificanceAndInclusionOfOriginalModelPapers' => [
-//            ['important', 'fundamental', 'landmark', 'useful', 'valuable', 'not-assigned', 'not-applicable'],
-//            '',
-//            true,
-//        ];
+    //    yield 'emptyMinimumSignificanceAndInclusionOfOriginalModelPapers' => [
+    //        ['important', 'fundamental', 'landmark', 'useful', 'valuable', 'not-assigned', 'not-applicable'],
+    //        '',
+    //        'yes',
+    //    ];
         yield 'notASignificanceTerm' => [
             ['important', 'fundamental', 'landmark', 'useful', 'valuable', 'not-assigned'],
             'notASignificanceTerm',
@@ -88,9 +88,9 @@ final class ElifeAssessmentTermsFilterTest extends TestCase
      * @test
      * @dataProvider significanceProvider
      */
-    public function it_translates_a_minimum_significance_to_the_correct_set_of_filters(array $expected, string $input = null, bool $includeOriginalModelPapers = false)
+    public function it_translates_a_minimum_significance_to_the_correct_set_of_filters(array $expected, string $input = null, string $includeOriginalModelPapers = '')
     {
-        $result = ElifeAssessmentTermsFilter::fromMinimumSignificance($input);
+        $result = ElifeAssessmentTermsFilter::fromMinimumSignificance($input, $includeOriginalModelPapers);
         $this->assertEqualsCanonicalizing($expected, $result);
     }
 

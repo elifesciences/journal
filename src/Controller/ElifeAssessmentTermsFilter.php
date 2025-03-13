@@ -22,7 +22,7 @@ class ElifeAssessmentTermsFilter
         'inadequate',
     ];
 
-    public static function fromMinimumSignificance(string $minimumSignificance = null): array
+    public static function fromMinimumSignificance(string $minimumSignificance = null, string $includeOriginalModelPapers = ''): array
     {
         return self::fromMinimumTerm($minimumSignificance, self::$significanceTerms);
     }
