@@ -24,7 +24,11 @@ class ElifeAssessmentTermsFilter
 
     public static function fromMinimumSignificance(string $minimumSignificance = null, string $includeOriginalModelPapers = ''): array
     {
-        return self::fromMinimumTerm($minimumSignificance, self::$significanceTerms);
+        $requiredSignificanceTerms = self::fromMinimumTerm($minimumSignificance, self::$significanceTerms);
+        if ($includeOriginalModelPapers) {
+            $requiredSignificanceTerms[] = 'not-applicable';
+        }
+        return $requiredSignificanceTerms;
     }
 
     public static function fromMinimumStrength(string $minimumStrength = null): array
