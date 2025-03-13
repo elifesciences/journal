@@ -24,6 +24,12 @@ class ElifeAssessmentTermsFilter
 
     public static function decideWhetherToIncludeOldModelPapers(array $query): bool
     {
+        if (!isset($query['includeOriginalModelPapers'])) {
+            return true;
+        }
+        if ($query['includeOriginalModelPapers'] !== 'yes') {
+            return false;
+        }
         return true;
     }
 

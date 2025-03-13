@@ -143,7 +143,7 @@ final class ElifeAssessmentTermsFilterTest extends TestCase
      */
     public function it_does_not_include_old_model_papers_when_the_query_string_contains_include_original_papers_with_any_value_that_is_not_yes()
     {
-        $this->markTestSkipped();
+        //$this->markTestSkipped();
         $query = [
             'includeOriginalModelPapers' => '',
         ];
