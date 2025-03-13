@@ -22,6 +22,11 @@ class ElifeAssessmentTermsFilter
         'inadequate',
     ];
 
+    public static function decideWhetherToIncludeOldModelPapers(array $query): bool
+    {
+        return true;
+    }
+
     public static function fromMinimumSignificance(string $minimumSignificance = null, string $includeOriginalModelPapers = ''): array
     {
         return self::fromMinimumTerm($minimumSignificance, self::$significanceTerms, $includeOriginalModelPapers);
