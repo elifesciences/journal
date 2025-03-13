@@ -118,4 +118,13 @@ final class ElifeAssessmentTermsFilterTest extends TestCase
         $result = ElifeAssessmentTermsFilter::fromMinimumStrength($input, $includeOriginalModelPapers);
         $this->assertEqualsCanonicalizing($expected, $result);
     }
+
+    /**
+     * @test
+     */
+    public function it_decides_whether_to_include_old_model_papers()
+    {
+        $query = [];
+        $this->assertTrue(ElifeAssessmentTermsFilter::decideWhetherToIncludeOldModelPapers($query));
+    }
 }
