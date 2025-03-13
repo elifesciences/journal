@@ -161,4 +161,16 @@ final class ElifeAssessmentTermsFilterTest extends TestCase
         ];
         $this->assertFalse(ElifeAssessmentTermsFilter::decideWhetherToIncludeOldModelPapers($query));
     }
+
+    /**
+     * @test
+     */
+    public function it_includes_old_model_papers_when_the_query_string_contains_minimum_strength_and_include_original_papers_with_the_yes_value()
+    {
+        $query = [
+            'minimumStrength' => 'convincing',
+            'includeOriginalModelPapers' => 'yes',
+        ];
+        $this->assertTrue(ElifeAssessmentTermsFilter::decideWhetherToIncludeOldModelPapers($query));
+    }
 }
