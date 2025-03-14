@@ -124,7 +124,13 @@ final class ElifeAssessmentTermsFilterTest extends TestCase
      */
     public function it_includes_old_model_papers_when_the_query_string_contains_nothing()
     {
-        $query = [];
+        $query = [
+            'subjects' => [],
+            'types' => [],
+            'minimumSignificance' => null,
+            'minimumStrength' => null,
+            'includeOriginalModelPapers' => null,
+        ];
         $this->assertTrue(ElifeAssessmentTermsFilter::decideWhetherToIncludeOldModelPapers($query));
     }
 
