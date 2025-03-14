@@ -124,13 +124,7 @@ final class ElifeAssessmentTermsFilterTest extends TestCase
      */
     public function it_includes_old_model_papers_when_the_query_string_contains_nothing()
     {
-        $query = [
-            'subjects' => [],
-            'types' => [],
-            'minimumSignificance' => null,
-            'minimumStrength' => null,
-            'includeOriginalModelPapers' => null,
-        ];
+        $query = $this->getEmptyQueryStringParameters();
         $this->assertTrue(ElifeAssessmentTermsFilter::decideWhetherToIncludeOldModelPapers($query));
     }
 
@@ -178,5 +172,16 @@ final class ElifeAssessmentTermsFilterTest extends TestCase
             'includeOriginalModelPapers' => 'yes',
         ];
         $this->assertTrue(ElifeAssessmentTermsFilter::decideWhetherToIncludeOldModelPapers($query));
+    }
+
+    private function getEmptyQueryStringParameters(): array
+    {
+        return [
+            'subjects' => [],
+            'types' => [],
+            'minimumSignificance' => null,
+            'minimumStrength' => null,
+            'includeOriginalModelPapers' => null,
+        ];
     }
 }
