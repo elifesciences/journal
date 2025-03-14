@@ -42,10 +42,14 @@ final class BrowseController extends Controller
         $apiTypes = $this->researchTypes();
 
 
+        // Replace calls to forElifeAssessmentSignificance and forElifeAssessmentStrength with their commented out versions
+        // to get the desired behaviour once the search service has been updated
         $search = $this->get('elife.api_sdk.search.page')
             ->forSubject(...$arguments['query']['subjects'])
-            ->forElifeAssessmentSignificance(...ElifeAssessmentTermsFilter::fromMinimumSignificance($arguments['query']['minimumSignificance']))
-            ->forElifeAssessmentStrength(...ElifeAssessmentTermsFilter::fromMinimumStrength($arguments['query']['minimumStrength']))
+            // ->forElifeAssessmentSignificance(...ElifeAssessmentTermsFilter::fromMinimumSignificance($arguments['query']['minimumSignificance'], $arguments['query']))
+            // ->forElifeAssessmentStrength(...ElifeAssessmentTermsFilter::fromMinimumStrength($arguments['query']['minimumStrength'], $arguments['query']))
+            ->forElifeAssessmentSignificance(...ElifeAssessmentTermsFilter::fromMinimumSignificance($arguments['query']['minimumSignificance'], ['includeOriginalModelPapers' => 'no']))
+            ->forElifeAssessmentStrength(...ElifeAssessmentTermsFilter::fromMinimumStrength($arguments['query']['minimumStrength'], ['includeOriginalModelPapers' => 'no']))
             ->forType(...$apiTypes)
             ->sortBy('date');
 
@@ -108,18 +112,18 @@ final class BrowseController extends Controller
                 $strengthFilters = $this->buildTermFilters($this->strengthTerms(), $arguments['query']['minimumStrength']);
                 $filterGroups[] = new FilterGroup('Strength (minimum)', $strengthFilters, 'minimumStrength');
 
-//                $filterGroups[] = new FilterGroup(
-//                    null,
-//                    [
-//                        new Filter(
-//                            ElifeAssessmentTermsFilter::decideWhetherToIncludeOldModelPapers($arguments['query']),
-//                            'Include papers accepted via eLife\'s original publishing model',
-//                            null,
-//                            'includeOriginalModelPapers',
-//                            'yes'
-//                        )
-//                    ]
-//                );
+            //    $filterGroups[] = new FilterGroup(
+            //        null,
+            //        [
+            //            new Filter(
+            //                ElifeAssessmentTermsFilter::decideWhetherToIncludeOldModelPapers($arguments['query']),
+            //                'Include papers accepted via eLife\'s original publishing model',
+            //                null,
+            //                'includeOriginalModelPapers',
+            //                'yes'
+            //            )
+            //        ]
+            //    );
 
                 if (count($search->subjects())) {
                     $subjectFilters = [];

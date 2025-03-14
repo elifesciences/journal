@@ -33,14 +33,14 @@ class ElifeAssessmentTermsFilter
         return true;
     }
 
-    public static function fromMinimumSignificance(string $minimumSignificance = null, string $includeOriginalModelPapers = ''): array
+    public static function fromMinimumSignificance(string $minimumSignificance = null, array $query): array
     {
-        return self::fromMinimumTerm($minimumSignificance, self::$significanceTerms, $includeOriginalModelPapers);
+        return self::fromMinimumTerm($minimumSignificance, self::$significanceTerms, self::decideWhetherToIncludeOldModelPapers($query));
     }
 
-    public static function fromMinimumStrength(string $minimumStrength = null, string $includeOriginalModelPapers = ''): array
+    public static function fromMinimumStrength(string $minimumStrength = null, array $query): array
     {
-        return self::fromMinimumTerm($minimumStrength, self::$strengthTerms, $includeOriginalModelPapers);
+        return self::fromMinimumTerm($minimumStrength, self::$strengthTerms, self::decideWhetherToIncludeOldModelPapers($query));
     }
 
     private static function checkIfTheTermsRelatedQueryIsEmpty($query)
@@ -51,7 +51,7 @@ class ElifeAssessmentTermsFilter
         return false;
     }
 
-    private static function fromMinimumTerm(string $minimumTerm = null, array $availableTerms, string $includeOriginalModelPapers): array
+    private static function fromMinimumTerm(string $minimumTerm = null, array $availableTerms, bool $includeOriginalModelPapers): array
     {
         $results = [];
 
