@@ -204,7 +204,7 @@ final class HomeControllerTest extends PageTestCase
                             'status' => 'vor',
                             'published' => '1999-01-01T00:00:00Z',
                             'statusDate' => '2000-01-01T00:00:00Z',
-                            'title' => 'A VOR research article from the old model',
+                            'title' => 'A VOR research article from the original model',
                             'version' => 2,
                             'elocationId' => 'e2',
                         ]),
@@ -213,7 +213,7 @@ final class HomeControllerTest extends PageTestCase
                             'status' => 'poa',
                             'published' => '2012-01-01T00:00:00Z',
                             'statusDate' => '2012-01-01T00:00:00Z',
-                            'title' => 'A POA research article from the old model',
+                            'title' => 'A POA research article from the original model',
                             'version' => 1,
                             'elocationId' => 'e2',
                         ]),
@@ -275,11 +275,11 @@ final class HomeControllerTest extends PageTestCase
         $this->assertSame(1, $teasers->eq(3)->filter('.meta__status-circle.meta__status-circle-vor')->count());
         $this->assertSame('Version of Record Research Article Updated Jan 1, 2013', trim(preg_replace('/\s+/S', ' ', $teasers->eq(3)->filter('.teaser__footer .meta')->text())));
     
-        $this->assertSame('A VOR research article from the old model', trim($teasers->eq(4)->filter('.teaser__header_text')->text()));
+        $this->assertSame('A VOR research article from the original model', trim($teasers->eq(4)->filter('.teaser__header_text')->text()));
         $this->assertSame(0, $teasers->eq(4)->filter('.meta__status-circle')->count());
         $this->assertSame('Version of Record Research Article Updated Jan 1, 2000', trim(preg_replace('/\s+/S', ' ', $teasers->eq(4)->filter('.teaser__footer .meta')->text())));
 
-        $this->assertSame('A POA research article from the old model', trim($teasers->eq(5)->filter('.teaser__header_text')->text()));
+        $this->assertSame('A POA research article from the original model', trim($teasers->eq(5)->filter('.teaser__header_text')->text()));
         $this->assertSame(0, $teasers->eq(5)->filter('.meta__status-circle')->count());
         $this->assertSame('Accepted Manuscript Research Article Jan 1, 2012', trim(preg_replace('/\s+/S', ' ', $teasers->eq(5)->filter('.teaser__footer .meta')->text())));
     }
