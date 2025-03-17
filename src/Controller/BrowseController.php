@@ -112,7 +112,7 @@ final class BrowseController extends Controller
                     null,
                     [
                         new Filter(
-                            ElifeAssessmentTermsFilter::decideWhetherToIncludeOldModelPapers($arguments['query']),
+                            ElifeAssessmentTermsFilter::decideWhetherToIncludeOriginalModelPapers($arguments['query']),
                             'Include papers accepted via eLife\'s original publishing model',
                             null,
                             'includeOriginalModelPapers',

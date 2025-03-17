@@ -125,46 +125,46 @@ final class ElifeAssessmentTermsFilterTest extends TestCase
     /**
      * @test
      */
-    public function it_includes_old_model_papers_when_the_query_string_contains_nothing()
+    public function it_includes_original_model_papers_when_the_query_string_contains_nothing()
     {
         $query = $this->overrideDefaultQueryStringWith([]);
-        $this->assertTrue(ElifeAssessmentTermsFilter::decideWhetherToIncludeOldModelPapers($query));
+        $this->assertTrue(ElifeAssessmentTermsFilter::decideWhetherToIncludeOriginalModelPapers($query));
     }
 
     /**
      * @test
      */
-    public function it_includes_old_model_papers_when_the_query_string_contains_include_original_papers_with_the_yes_value()
+    public function it_includes_original_model_papers_when_the_query_string_contains_include_original_papers_with_the_yes_value()
     {
         $query = $this->overrideDefaultQueryStringWith(['includeOriginalModelPapers' => 'yes']);
-        $this->assertTrue(ElifeAssessmentTermsFilter::decideWhetherToIncludeOldModelPapers($query));
+        $this->assertTrue(ElifeAssessmentTermsFilter::decideWhetherToIncludeOriginalModelPapers($query));
     }
 
     /**
      * @test
      */
-    public function it_does_not_include_old_model_papers_when_the_query_string_contains_include_original_papers_with_any_value_that_is_not_yes()
+    public function it_does_not_include_original_model_papers_when_the_query_string_contains_include_original_papers_with_any_value_that_is_not_yes()
     {
         $query = $this->overrideDefaultQueryStringWith(['includeOriginalModelPapers' => 'not yes']);
-        $this->assertFalse(ElifeAssessmentTermsFilter::decideWhetherToIncludeOldModelPapers($query));
+        $this->assertFalse(ElifeAssessmentTermsFilter::decideWhetherToIncludeOriginalModelPapers($query));
     }
 
     /**
      * @test
      */
-    public function it_does_not_include_old_model_papers_when_the_query_string_contains_minimum_significance_and_include_original_papers_with_any_value_that_is_not_yes()
+    public function it_does_not_include_original_model_papers_when_the_query_string_contains_minimum_significance_and_include_original_papers_with_any_value_that_is_not_yes()
     {
         $query = $this->overrideDefaultQueryStringWith(['minimumSignificance' => 'valuable', 'includeOriginalModelPapers' => 'not yes']);
-        $this->assertFalse(ElifeAssessmentTermsFilter::decideWhetherToIncludeOldModelPapers($query));
+        $this->assertFalse(ElifeAssessmentTermsFilter::decideWhetherToIncludeOriginalModelPapers($query));
     }
 
     /**
      * @test
      */
-    public function it_includes_old_model_papers_when_the_query_string_contains_minimum_strength_and_include_original_papers_with_the_yes_value()
+    public function it_includes_original_model_papers_when_the_query_string_contains_minimum_strength_and_include_original_papers_with_the_yes_value()
     {
         $query = $this->overrideDefaultQueryStringWith(['minimumStrength' => 'convincing', 'includeOriginalModelPapers' => 'yes']);
-        $this->assertTrue(ElifeAssessmentTermsFilter::decideWhetherToIncludeOldModelPapers($query));
+        $this->assertTrue(ElifeAssessmentTermsFilter::decideWhetherToIncludeOriginalModelPapers($query));
     }
 
     private function overrideDefaultQueryStringWith(array $specifiedParameters = []): array

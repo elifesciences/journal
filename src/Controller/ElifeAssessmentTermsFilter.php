@@ -22,7 +22,7 @@ class ElifeAssessmentTermsFilter
         'inadequate',
     ];
 
-    public static function decideWhetherToIncludeOldModelPapers(array $query): bool
+    public static function decideWhetherToIncludeOriginalModelPapers(array $query): bool
     {
         if (self::checkIfTheTermsRelatedQueryIsEmpty($query)) {
             return true;
@@ -35,12 +35,12 @@ class ElifeAssessmentTermsFilter
 
     public static function fromMinimumSignificance(string $minimumSignificance = null, array $query): array
     {
-        return self::fromMinimumTerm($minimumSignificance, self::$significanceTerms, self::decideWhetherToIncludeOldModelPapers($query));
+        return self::fromMinimumTerm($minimumSignificance, self::$significanceTerms, self::decideWhetherToIncludeOriginalModelPapers($query));
     }
 
     public static function fromMinimumStrength(string $minimumStrength = null, array $query): array
     {
-        return self::fromMinimumTerm($minimumStrength, self::$strengthTerms, self::decideWhetherToIncludeOldModelPapers($query));
+        return self::fromMinimumTerm($minimumStrength, self::$strengthTerms, self::decideWhetherToIncludeOriginalModelPapers($query));
     }
 
     private static function checkIfTheTermsRelatedQueryIsEmpty($query)
