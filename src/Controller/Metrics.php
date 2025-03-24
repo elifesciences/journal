@@ -18,16 +18,16 @@ class Metrics
     )
     {
         $totalStatistics = [];
-        $barChartsForTotals = [];
+        $barCharts = [];
 
         if ($totalPageViews) {
             $totalStatistics[] = ViewModel\Statistic::fromNumber('views', $totalPageViews);
-            $barChartsForTotals[] = new ViewModel\BarChart($itemId, 'article', 'page-views', $apiEndPoint, 'page-views', 'month');
+            $barCharts[] = new ViewModel\BarChart($itemId, 'article', 'page-views', $apiEndPoint, 'page-views', 'month');
         }
 
         if ($totalDownloads) {
             $totalStatistics[] = ViewModel\Statistic::fromNumber('downloads', $totalDownloads);
-            $barChartsForTotals[] = new ViewModel\BarChart($itemId, 'article', 'downloads', $apiEndPoint, 'downloads', 'month');
+            $barCharts[] = new ViewModel\BarChart($itemId, 'article', 'downloads', $apiEndPoint, 'downloads', 'month');
         }
 
         if ($totalCitations) {
@@ -36,6 +36,16 @@ class Metrics
 
         $totalStatisticsDescription = new Paragraph('Views, downloads and citations are aggregated across all versions of this paper published by eLife.');
 
-        return array_merge([new ViewModel\StatisticCollection(...$totalStatistics)], [$totalStatisticsDescription], $barChartsForTotals);
+        $metricParts = [];
+        $metricParts[] = new ViewModel\StatisticCollection(...$totalStatistics);
+        $metricParts[] = $totalStatisticsDescription;
+
+        // if (false) {
+        //     $barCharts = [];
+        //     $metricParts[] = new ViewModel\StatisticCollection(...$totalStatistics);
+        //     $metricParts[] = new Paragraph('Views, downloads and citations for the Version of Record. (Charts show only views and downloads for the version of record).');
+        // }
+
+        return array_merge($metricParts, $barCharts);
     }
 };
