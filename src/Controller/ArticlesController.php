@@ -612,11 +612,14 @@ final class ArticlesController extends Controller
 
                     $statisticsDescription[] = new Paragraph('Views, downloads and citations are aggregated across all versions of this paper published by eLife.');
 
+                    $metrics = array_merge([new ViewModel\StatisticCollection(...$statistics)], $statisticsDescription, $statisticsExtra);
+
+
                     $parts[] = ArticleSection::collapsible(
                         'metrics',
                         'Metrics',
                         2,
-                        $this->render(new ViewModel\StatisticCollection(...$statistics), ...$statisticsDescription, ...$statisticsExtra),
+                        $this->render(...$metrics),
                         null,
                         null,
                         true
