@@ -606,7 +606,7 @@ final class ArticlesController extends Controller
                     $statistics[] = ViewModel\Statistic::fromNumber('citations', $citations->getHighest()->getCitations());
                 }
 
-                if (!empty($statistics)) {
+                if ($pageViews || $downloads || $citations) {
                     $statisticsDescription[] = new Paragraph('Views, downloads and citations are aggregated across all versions of this paper published by eLife.');
 
                     $parts[] = ArticleSection::collapsible(
