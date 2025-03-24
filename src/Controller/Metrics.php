@@ -14,7 +14,10 @@ class Metrics
         string $itemId,
         int $totalPageViews = null,
         int $totalDownloads = null,
-        CitationsMetric $totalCitations = null
+        CitationsMetric $totalCitations = null,
+        int $vorPageViews = null,
+        int $vorDownloads = null,
+        CitationsMetric $vorCitations = null
     )
     {
         $totalStatistics = [];
@@ -41,8 +44,23 @@ class Metrics
         $metricParts[] = $totalStatisticsDescription;
 
         // if (false) {
+        //     $vorStatistics = [];
         //     $barCharts = [];
-        //     $metricParts[] = new ViewModel\StatisticCollection(...$totalStatistics);
+        //     if ($vorPageViews) {
+        //         $vorStatistics[] = ViewModel\Statistic::fromNumber('views', $vorPageViews);
+        //         $barCharts[] = new ViewModel\BarChart($itemId, 'article', 'page-views', $apiEndPoint, 'page-views', 'month');
+        //     }
+
+        //     if ($vorDownloads) {
+        //         $vorStatistics[] = ViewModel\Statistic::fromNumber('downloads', $vorDownloads);
+        //         $barCharts[] = new ViewModel\BarChart($itemId, 'article', 'downloads', $apiEndPoint, 'downloads', 'month');
+        //     }
+
+        //     if ($vorCitations) {
+        //         $vorStatistics[] = ViewModel\Statistic::fromNumber('citations', $vorCitations->getHighest()->getCitations());
+        //     }
+
+        //     $metricParts[] = new ViewModel\StatisticCollection(...$vorStatistics);
         //     $metricParts[] = new Paragraph('Views, downloads and citations for the Version of Record. (Charts show only views and downloads for the version of record).');
         // }
 
