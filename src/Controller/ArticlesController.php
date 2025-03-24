@@ -591,29 +591,7 @@ final class ArticlesController extends Controller
                 if ($pageViews || $downloads || $citations) {
                     $itemId = $item->getId();
                     $apiEndPoint = rtrim($this->getParameter('api_url_public'), '/');
-
-                    $statistics = [];
-                    $statisticsExtra = [];
-                    $statisticsDescription = [];
-
-                    if ($pageViews) {
-                        $statistics[] = ViewModel\Statistic::fromNumber('views', $pageViews);
-                        $statisticsExtra[] = new ViewModel\BarChart($itemId, 'article', 'page-views', $apiEndPoint, 'page-views', 'month');
-                    }
-
-                    if ($downloads) {
-                        $statistics[] = ViewModel\Statistic::fromNumber('downloads', $downloads);
-                        $statisticsExtra[] = new ViewModel\BarChart($itemId, 'article', 'downloads', $apiEndPoint, 'downloads', 'month');
-                    }
-
-                    if ($citations) {
-                        $statistics[] = ViewModel\Statistic::fromNumber('citations', $citations->getHighest()->getCitations());
-                    }
-
-                    $statisticsDescription[] = new Paragraph('Views, downloads and citations are aggregated across all versions of this paper published by eLife.');
-
-                    $metrics = array_merge([new ViewModel\StatisticCollection(...$statistics)], $statisticsDescription, $statisticsExtra);
-
+                    $metrics = Metrics::build($apiEndPoint, $itemId, $pageViews, $downloads, $citations);
 
                     $parts[] = ArticleSection::collapsible(
                         'metrics',
