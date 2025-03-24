@@ -588,25 +588,28 @@ final class ArticlesController extends Controller
                     true
                 );
 
-                $statistics = [];
-                $statisticsExtra = [];
-                $statisticsDescription = [];
-
-                if ($pageViews) {
-                    $statistics[] = ViewModel\Statistic::fromNumber('views', $pageViews);
-                    $statisticsExtra[] = new ViewModel\BarChart($item->getId(), 'article', 'page-views', rtrim($this->getParameter('api_url_public'), '/'), 'page-views', 'month');
-                }
-
-                if ($downloads) {
-                    $statistics[] = ViewModel\Statistic::fromNumber('downloads', $downloads);
-                    $statisticsExtra[] = new ViewModel\BarChart($item->getId(), 'article', 'downloads', rtrim($this->getParameter('api_url_public'), '/'), 'downloads', 'month');
-                }
-
-                if ($citations) {
-                    $statistics[] = ViewModel\Statistic::fromNumber('citations', $citations->getHighest()->getCitations());
-                }
-
                 if ($pageViews || $downloads || $citations) {
+                    $itemId = $item->getId();
+                    $apiEndPoint = rtrim($this->getParameter('api_url_public'), '/');
+
+                    $statistics = [];
+                    $statisticsExtra = [];
+                    $statisticsDescription = [];
+
+                    if ($pageViews) {
+                        $statistics[] = ViewModel\Statistic::fromNumber('views', $pageViews);
+                        $statisticsExtra[] = new ViewModel\BarChart($itemId, 'article', 'page-views', $apiEndPoint, 'page-views', 'month');
+                    }
+
+                    if ($downloads) {
+                        $statistics[] = ViewModel\Statistic::fromNumber('downloads', $downloads);
+                        $statisticsExtra[] = new ViewModel\BarChart($itemId, 'article', 'downloads', $apiEndPoint, 'downloads', 'month');
+                    }
+
+                    if ($citations) {
+                        $statistics[] = ViewModel\Statistic::fromNumber('citations', $citations->getHighest()->getCitations());
+                    }
+
                     $statisticsDescription[] = new Paragraph('Views, downloads and citations are aggregated across all versions of this paper published by eLife.');
 
                     $parts[] = ArticleSection::collapsible(
