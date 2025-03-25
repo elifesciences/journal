@@ -74,7 +74,7 @@
     },
     "config": {
         "platform": {
-            "php": "7.1.33"
+            "php": "7.2"
         },
         "sort-packages": true,
         "allow-plugins": {
@@ -90,16 +90,6 @@
         "patches": {
             "bobthecow/mustache-bundle": {
                 "Remove superfluous argument": "https://github.com/bobthecow/BobthecowMustacheBundle/pull/9.patch"
-            },
-            "cocur/slugify": {
-                "strip_tags": "https://github.com/cocur/slugify/pull/201.patch"
-            },
-            "isometriks/spam-bundle": {
-                "Add field label": "https://github.com/isometriks/IsometriksSpamBundle/pull/9.patch",
-                "Use EmailType": "https://github.com/isometriks/IsometriksSpamBundle/pull/17.patch"
-            },
-            "monolog/monolog": {
-                "Fix WhatFailureGroupHandler::handleBatch when the handler has processors": "https://github.com/Seldaek/monolog/pull/1022.patch"
             }
         }
     }
