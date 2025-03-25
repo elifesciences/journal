@@ -265,7 +265,7 @@ final class ArticlesController extends Controller
 
         $arguments = $this->contentAsideArguments($arguments);
 
-        $arguments['body'] = all(['item' => $arguments['item'], 'isMagazine' => $arguments['isMagazine'], 'history' => $arguments['history'], 'citations' => $arguments['citations'], 'downloads' => $arguments['downloads'], 'pageViews' => $arguments['pageViews'], 'data' => $arguments['hasData'], 'context' => $context])
+        $arguments['body'] = all(['item' => $arguments['item'], 'isMagazine' => $arguments['isMagazine'], 'history' => $arguments['history'], 'citations' => $arguments['citations'], 'versionCitations' => $arguments['versionCitations'], 'downloads' => $arguments['downloads'], 'pageViews' => $arguments['pageViews'], 'data' => $arguments['hasData'], 'context' => $context])
             ->then(function (array $parts) {
                 /** @var ArticleVersion $item */
                 $item = $parts['item'];
@@ -275,6 +275,8 @@ final class ArticlesController extends Controller
                 $history = $parts['history'];
                 /** @var CitationsMetric|null $citations */
                 $citations = $parts['citations'];
+                ///** @var CitationsMetric|null $citations */
+                $versionCitations = $parts['versionCitations'];
                 /** @var int|null $downloads */
                 $downloads = $parts['downloads'];
                 /** @var int|null $pageViews */
@@ -591,7 +593,7 @@ final class ArticlesController extends Controller
                 if ($pageViews || $downloads || $citations) {
                     $itemId = $item->getId();
                     $apiEndPoint = rtrim($this->getParameter('api_url_public'), '/');
-                    $metrics = Metrics::build($apiEndPoint, $itemId, $pageViews, $downloads, $citations);
+                    $metrics = Metrics::build($apiEndPoint, $itemId, $pageViews, $downloads, $citations, null, null, $versionCitations);
 
                     $parts[] = ArticleSection::collapsible(
                         'metrics',
@@ -1333,6 +1335,11 @@ final class ArticlesController extends Controller
             ->otherwise($this->mightNotExist())
             ->otherwise($this->softFailure('Failed to load citations count'));
 
+        $arguments['versionCitations'] = $this->get('elife.api_sdk.metrics')
+            ->versionCitations(Identifier::article($id), 3)
+            ->otherwise($this->mightNotExist())
+            ->otherwise($this->softFailure('Failed to load citations count'));
+
         $arguments['pageViews'] = $this->get('elife.api_sdk.metrics')
             ->totalPageViews(Identifier::article($id))
             ->otherwise($this->mightNotExist())
@@ -1343,7 +1350,7 @@ final class ArticlesController extends Controller
             ->otherwise($this->mightNotExist())
             ->otherwise($this->softFailure('Failed to load downloads count'));
 
-        $arguments['contextualDataMetrics'] = all(['item' => $arguments['item'], 'history' => $arguments['history'], 'citations' => $arguments['citations'], 'pageViews' => $arguments['pageViews'], 'downloads'=> $arguments['downloads']])
+        $arguments['contextualDataMetrics'] = all(['item' => $arguments['item'], 'history' => $arguments['history'], 'citations' => $arguments['citations'], 'versionCitations' => $arguments['versionCitations'], 'pageViews' => $arguments['pageViews'], 'downloads'=> $arguments['downloads']])
             ->then(function (array $parts) {
                 /** @var ArticleVersion $item */
                 $item = $parts['item'];
@@ -1351,6 +1358,8 @@ final class ArticlesController extends Controller
                 $history = $parts['history'];
                 /** @var CitationsMetric|null $citations */
                 $citations = $parts['citations'];
+               // /** @var CitationsMetric|null $citations */
+                $versionCitations = $parts['versionCitations'];
                 /** @var int|null $pageViews */
                 $pageViews = $parts['pageViews'];
                 /** @var int|null $downloads */
