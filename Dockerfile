@@ -2,7 +2,7 @@ ARG image_tag=latest
 ARG php_version
 FROM elifesciences/journal_assets_builder:${image_tag} AS assets
 FROM elifesciences/journal_composer:${image_tag} AS composer
-FROM elifesciences/php_7.2_fpm:${php_version}
+FROM ghcr.io/elifesciences/php:7.2-fpm
 
 ENV PROJECT_FOLDER=/srv/journal
 ENV PHP_ENTRYPOINT=web/app.php
