@@ -62,9 +62,11 @@ final class ArticlesController extends Controller
     const DISMISSIBLE_INFO_BAR_COOKIE_DURATION = '+365 days';
 
     use HasPages;
+    private $pageRequest;
 
     public function textAction(Request $request, string $id, int $version = null) : Response
     {
+        $this->pageRequest = $request;
         $page = (int) $request->query->get('page', 1);
         $perPage = 3;
 
@@ -591,7 +593,7 @@ final class ArticlesController extends Controller
                 if ($pageViews || $downloads || $citations) {
                     $itemId = $item->getId();
                     $apiEndPoint = rtrim($this->getParameter('api_url_public'), '/');
-                    $metrics = Metrics::build($apiEndPoint, $itemId, $pageViews, $downloads, $citations);
+                    $metrics = Metrics::build($this->pageRequest, $apiEndPoint, $itemId, $pageViews, $downloads, $citations);
 
                     $parts[] = ArticleSection::collapsible(
                         'metrics',

@@ -5,11 +5,13 @@ namespace eLife\Journal\Controller;
 use eLife\ApiSdk\Model\CitationsMetric;
 use eLife\Patterns\ViewModel;
 use eLife\Patterns\ViewModel\Paragraph;
+use Symfony\Component\HttpFoundation\Request;
 
 class Metrics
 {
 
     public static function build(
+        Request $request,
         string $apiEndPoint,
         string $itemId,
         int $totalPageViews = null,
@@ -43,26 +45,25 @@ class Metrics
         $metricParts[] = new ViewModel\StatisticCollection(...$totalStatistics);
         $metricParts[] = $totalStatisticsDescription;
 
-        // if (false) {
-        //     $vorStatistics = [];
-        //     $barCharts = [];
-        //     if ($vorPageViews) {
-        //         $vorStatistics[] = ViewModel\Statistic::fromNumber('views', $vorPageViews);
-        //         $barCharts[] = new ViewModel\BarChart($itemId, 'article', 'page-views', $apiEndPoint, 'page-views', 'month');
-        //     }
+        if ($request->query->get('showVorMetrics') === 'true') {
+            $vorStatistics = [];
+            $barCharts = [];
+            if ($vorPageViews) {
+                $vorStatistics[] = ViewModel\Statistic::fromNumber('views', $vorPageViews);
+                $barCharts[] = new ViewModel\BarChart($itemId, 'article', 'page-views', $apiEndPoint, 'page-views', 'month');
+            }
 
-        //     if ($vorDownloads) {
-        //         $vorStatistics[] = ViewModel\Statistic::fromNumber('downloads', $vorDownloads);
-        //         $barCharts[] = new ViewModel\BarChart($itemId, 'article', 'downloads', $apiEndPoint, 'downloads', 'month');
-        //     }
+            if ($vorDownloads) {
+                $vorStatistics[] = ViewModel\Statistic::fromNumber('downloads', $vorDownloads);
+                $barCharts[] = new ViewModel\BarChart($itemId, 'article', 'downloads', $apiEndPoint, 'downloads', 'month');
+            }
 
-        //     if ($vorCitations) {
-        //         $vorStatistics[] = ViewModel\Statistic::fromNumber('citations', $vorCitations->getHighest()->getCitations());
-        //     }
-
-        //     $metricParts[] = new ViewModel\StatisticCollection(...$vorStatistics);
-        //     $metricParts[] = new Paragraph('Views, downloads and citations for the Version of Record. (Charts show only views and downloads for the version of record).');
-        // }
+            if ($vorCitations) {
+                $vorStatistics[] = ViewModel\Statistic::fromNumber('citations', $vorCitations->getHighest()->getCitations());
+                $metricParts[] = new ViewModel\StatisticCollection(...$vorStatistics);
+                $metricParts[] = new Paragraph('Views, downloads and citations for the Version of Record. (Charts show only views and downloads for the version of record).');
+            }
+        }
 
         return array_merge($metricParts, $barCharts);
     }
