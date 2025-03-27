@@ -1873,6 +1873,16 @@ final class ArticlesController extends Controller
         return array_reverse($publicationHistory);
     }
 
+    private function countReviewedPreprintsInPublicationHistory(ArticleHistory $history): int
+    {
+        return $history->getVersions()
+                ->filter(Callback::isInstanceOf(ArticlePreprint::class))
+                ->filter(function (ArticlePreprint $preprint) {
+                    return strpos($preprint->getDescription(), 'reviewed preprint') !== false;
+                })
+                ->count();
+    }
+
     private function generatePublicationHistoryForNewVor($history) {
         $received = $history->getReceived();
         $accepted = $history->getAccepted();
@@ -1886,12 +1896,7 @@ final class ArticlesController extends Controller
             ->toArray();
 
         if ($preprints) {
-            $rpCount = $history->getVersions()
-                ->filter(Callback::isInstanceOf(ArticlePreprint::class))
-                ->filter(function (ArticlePreprint $preprint) {
-                    return strpos($preprint->getDescription(), 'reviewed preprint') !== false;
-                })
-                ->count();
+            $rpCount = $this->countReviewedPreprintsInPublicationHistory($history);
 
             $counter = 0;
 
