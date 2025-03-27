@@ -17,8 +17,6 @@ class Metrics
         int $totalPageViews = null,
         int $totalDownloads = null,
         CitationsMetric $totalCitations = null,
-        int $vorPageViews = null,
-        int $vorDownloads = null,
         CitationsMetric $vorCitations = null
     )
     {
