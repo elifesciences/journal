@@ -17,7 +17,7 @@ class Metrics
         int $totalPageViews = null,
         int $totalDownloads = null,
         CitationsMetric $totalCitations = null,
-        CitationsMetric $vorCitations = null
+        array $vorCitations = null
     )
     {
         $totalStatistics = [];
@@ -46,7 +46,8 @@ class Metrics
         if ($request->query->get('showVorMetrics') === 'true') {
             $vorStatistics = [];
             if ($vorCitations) {
-                $vorStatistics[] = ViewModel\Statistic::fromNumber('citations', $vorCitations->getHighest()->getCitations());
+                $vorCitationsNumber = $vorCitations['3'];
+                $vorStatistics[] = ViewModel\Statistic::fromNumber('citations', $vorCitationsNumber->getHighest()->getCitations());
                 $metricParts[] = new ViewModel\StatisticCollection(...$vorStatistics);
                 $metricParts[] = new Paragraph('Citations for the Version of Record.');
             }
