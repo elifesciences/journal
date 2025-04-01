@@ -288,6 +288,8 @@ final class ArticlesController extends Controller
                 /** @var array $context */
                 $context = $parts['context'];
 
+                $citationsForAllVersions = [ '1' => $versionCitations, '2' => $versionCitations, '3' => $versionCitations];
+
                 $parts = [];
 
                 if ($isMagazine && $item->getAuthors()->notEmpty()) {
@@ -591,11 +593,10 @@ final class ArticlesController extends Controller
                     null,
                     true
                 );
-
                 if ($pageViews || $downloads || $citations) {
                     $itemId = $item->getId();
                     $apiEndPoint = rtrim($this->getParameter('api_url_public'), '/');
-                    $metrics = Metrics::build($this->pageRequest, $apiEndPoint, $itemId, $pageViews, $downloads, $citations, [ '1' => $versionCitations, '2' => $versionCitations, '3' => $versionCitations]);
+                    $metrics = Metrics::build($this->pageRequest, $apiEndPoint, $itemId, $pageViews, $downloads, $citations, $citationsForAllVersions);
 
                     $parts[] = ArticleSection::collapsible(
                         'metrics',
