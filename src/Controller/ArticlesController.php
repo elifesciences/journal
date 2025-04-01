@@ -595,7 +595,7 @@ final class ArticlesController extends Controller
                 if ($pageViews || $downloads || $citations) {
                     $itemId = $item->getId();
                     $apiEndPoint = rtrim($this->getParameter('api_url_public'), '/');
-                    $metrics = Metrics::build($this->pageRequest, $apiEndPoint, $itemId, $pageViews, $downloads, $citations, [ '3' => $versionCitations]);
+                    $metrics = Metrics::build($this->pageRequest, $apiEndPoint, $itemId, $pageViews, $downloads, $citations, [ '1' => $versionCitations, '2' => $versionCitations, '3' => $versionCitations]);
 
                     $parts[] = ArticleSection::collapsible(
                         'metrics',
