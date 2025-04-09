@@ -63,17 +63,6 @@ final class RelatedItemsOverrideMiddleware
                     ]
                 ];
 
-                $responseItems = array_map(function ($item) {
-                    return $item['id'];
-                }, array_filter((isset($data['items'])) ? $data['items'] : $data, function ($item) {
-                    return $item['type'] === 'reviewed-preprint' ||
-                        (isset($item['status']) && $item['status'] === 'vor');
-                }));
-                
-                if (in_array($relatedItem['id'], $responseItems)) {
-                    return $response;
-                }
-
                 if (isset($data['total']) && isset($data['items']) && is_array($data['items'])) {
                     $items = array_merge([$relatedItem], $data['items']);
                     $data['items'] = array_slice($items, 0, $data['total']);
