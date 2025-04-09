@@ -249,13 +249,6 @@ services:
             alias: status_date_override
             priority: 1499
 
-    elife.journal.guzzle.related_items_override:
-        class: eLife\Journal\Guzzle\RelatedItemsOverrideMiddleware
-        public: false
-        tags:
-          - name: csa_guzzle.middleware
-            alias: related_items_override
-
     elife.journal.helper.fragment_link_rewriter:
         class: eLife\Journal\Helper\FragmentLinkRewriter
         public: false
