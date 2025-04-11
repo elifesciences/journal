@@ -78,10 +78,12 @@ final class ArticlesController extends Controller
                 if (in_array($item->getType(), ['correction', 'expression-concern', 'retraction'])) {
                     return new EmptySequence();
                 }
-
+                
                 return $this->get('elife.api_sdk.recommendations')->list($item->getIdentifier())->slice(0, 100)
                     ->otherwise($this->mightNotExist())
-                    ->otherwise($this->softFailure('Failed to load recommendations', new EmptySequence()));
+                    ->otherwise($this->softFailure('Failed to load recommendations',
+                    $item->getId() === '100254' ? new EmptySequence() : new EmptySequence()
+                    ));
             }));
 
         $arguments['furtherReading'] = $recommendations
