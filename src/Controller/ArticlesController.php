@@ -82,7 +82,7 @@ final class ArticlesController extends Controller
                 return $this->get('elife.api_sdk.recommendations')->list($item->getIdentifier())->slice(0, 100)
                     ->otherwise($this->mightNotExist())
                     ->otherwise($this->softFailure('Failed to load recommendations',
-                    $item->getId() === '100254' ? new EmptySequence() : new EmptySequence()
+                    $item->getId() === '100254' ? HardcodedRecommendationsFor100254::build() : new EmptySequence()
                     ));
             }));
 
