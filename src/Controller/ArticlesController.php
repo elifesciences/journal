@@ -269,7 +269,7 @@ final class ArticlesController extends Controller
 
         $arguments = $this->contentAsideArguments($arguments);
 
-        $arguments['body'] = all(['item' => $arguments['item'], 'isMagazine' => $arguments['isMagazine'], 'history' => $arguments['history'], 'citations' => $arguments['citations'],'version1Citations' => $arguments['citationsForVersion1'],'version2Citations' => $arguments['citationsForVersion2'],  'version3Citations' => $arguments['citationsForVersion3'], 'downloads' => $arguments['downloads'], 'pageViews' => $arguments['pageViews'], 'data' => $arguments['hasData'], 'context' => $context])
+        $arguments['body'] = all(['item' => $arguments['item'], 'isMagazine' => $arguments['isMagazine'], 'history' => $arguments['history'], 'citations' => $arguments['citations'],'version1Citations' => $arguments['citationsForAllVersions'][0],'version2Citations' => $arguments['citationsForAllVersions'][1],  'version3Citations' => $arguments['citationsForAllVersions'][2], 'downloads' => $arguments['downloads'], 'pageViews' => $arguments['pageViews'], 'data' => $arguments['hasData'], 'context' => $context])
             ->then(function (array $parts) {
                 /** @var ArticleVersion $item */
                 $item = $parts['item'];
@@ -1344,20 +1344,20 @@ final class ArticlesController extends Controller
             ->otherwise($this->mightNotExist())
             ->otherwise($this->softFailure('Failed to load citations count'));
 
-        $arguments['citationsForVersion1'] = $this->get('elife.api_sdk.metrics')
-            ->versionCitations(Identifier::article($id), 1)
-            ->otherwise($this->mightNotExist())
-            ->otherwise($this->softFailure('Failed to load version citations count'));
-
-        $arguments['citationsForVersion2'] = $this->get('elife.api_sdk.metrics')
-            ->versionCitations(Identifier::article($id), 2)
-            ->otherwise($this->mightNotExist())
-            ->otherwise($this->softFailure('Failed to load version citations count'));
-
-        $arguments['citationsForVersion3'] = $this->get('elife.api_sdk.metrics')
-            ->versionCitations(Identifier::article($id), 3)
-            ->otherwise($this->mightNotExist())
-            ->otherwise($this->softFailure('Failed to load version citations count'));
+        $arguments['citationsForAllVersions'] = [
+            $this->get('elife.api_sdk.metrics')
+                ->versionCitations(Identifier::article($id), 1)
+                ->otherwise($this->mightNotExist())
+                ->otherwise($this->softFailure('Failed to load version citations count')),
+            $this->get('elife.api_sdk.metrics')
+                ->versionCitations(Identifier::article($id), 2)
+                ->otherwise($this->mightNotExist())
+                ->otherwise($this->softFailure('Failed to load version citations count')),
+            $this->get('elife.api_sdk.metrics')
+                ->versionCitations(Identifier::article($id), 3)
+                ->otherwise($this->mightNotExist())
+                ->otherwise($this->softFailure('Failed to load version citations count'))
+        ];
 
         $arguments['pageViews'] = $this->get('elife.api_sdk.metrics')
             ->totalPageViews(Identifier::article($id))
