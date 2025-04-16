@@ -46,8 +46,10 @@ class Metrics
         if ($request->query->get('showVorMetrics') === 'true') {
             if ($vorCitations) {
                 foreach ($vorCitations as $versionNumber => $citations) {
-                    $vorStatistics = ViewModel\Statistic::fromNumber('Citations for version '.$versionNumber, $citations->getHighest()->getCitations());
-                    $metricParts[] = new ViewModel\StatisticCollection($vorStatistics);
+                    if ($citations) {
+                        $vorStatistics = ViewModel\Statistic::fromNumber('Citations for version '.$versionNumber, $citations->getHighest()->getCitations());
+                        $metricParts[] = new ViewModel\StatisticCollection($vorStatistics);
+                    }
                 }
             }
         }
