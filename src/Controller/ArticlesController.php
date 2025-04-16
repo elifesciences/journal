@@ -269,7 +269,7 @@ final class ArticlesController extends Controller
 
         $arguments = $this->contentAsideArguments($arguments);
 
-        $arguments['body'] = all(['item' => $arguments['item'], 'isMagazine' => $arguments['isMagazine'], 'history' => $arguments['history'], 'citations' => $arguments['citations'], 'versionCitations' => $arguments['versionCitations'], 'downloads' => $arguments['downloads'], 'pageViews' => $arguments['pageViews'], 'data' => $arguments['hasData'], 'context' => $context])
+        $arguments['body'] = all(['item' => $arguments['item'], 'isMagazine' => $arguments['isMagazine'], 'history' => $arguments['history'], 'citations' => $arguments['citations'],'version1Citations' => $arguments['citationsForVersion1'],'version2Citations' => $arguments['citationsForVersion2'],  'version3Citations' => $arguments['citationsForVersion3'], 'downloads' => $arguments['downloads'], 'pageViews' => $arguments['pageViews'], 'data' => $arguments['hasData'], 'context' => $context])
             ->then(function (array $parts) {
                 /** @var ArticleVersion $item */
                 $item = $parts['item'];
@@ -279,8 +279,12 @@ final class ArticlesController extends Controller
                 $history = $parts['history'];
                 /** @var CitationsMetric|null $citations */
                 $citations = $parts['citations'];
-                /** @var CitationsMetric|null $versionCitations */
-                $versionCitations = $parts['versionCitations'];
+                /** @var CitationsMetric|null $version1Citations */
+                $version1Citations = $parts['version1Citations'];
+                /** @var CitationsMetric|null $version2Citations */
+                $version2Citations = $parts['version2Citations'];
+                /** @var CitationsMetric|null $version3Citations */
+                $version3Citations = $parts['version3Citations'];
                 /** @var int|null $downloads */
                 $downloads = $parts['downloads'];
                 /** @var int|null $pageViews */
@@ -290,7 +294,7 @@ final class ArticlesController extends Controller
                 /** @var array $context */
                 $context = $parts['context'];
 
-                $citationsForAllVersions = [ '1' => $versionCitations, '2' => $versionCitations, '3' => $versionCitations];
+                $citationsForAllVersions = [ '1' => $version1Citations, '2' => $version2Citations, '3' => $version3Citations];
 
                 $parts = [];
 
@@ -1340,7 +1344,17 @@ final class ArticlesController extends Controller
             ->otherwise($this->mightNotExist())
             ->otherwise($this->softFailure('Failed to load citations count'));
 
-        $arguments['versionCitations'] = $this->get('elife.api_sdk.metrics')
+        $arguments['citationsForVersion1'] = $this->get('elife.api_sdk.metrics')
+            ->versionCitations(Identifier::article($id), 1)
+            ->otherwise($this->mightNotExist())
+            ->otherwise($this->softFailure('Failed to load version citations count'));
+
+        $arguments['citationsForVersion2'] = $this->get('elife.api_sdk.metrics')
+            ->versionCitations(Identifier::article($id), 2)
+            ->otherwise($this->mightNotExist())
+            ->otherwise($this->softFailure('Failed to load version citations count'));
+
+        $arguments['citationsForVersion3'] = $this->get('elife.api_sdk.metrics')
             ->versionCitations(Identifier::article($id), 3)
             ->otherwise($this->mightNotExist())
             ->otherwise($this->softFailure('Failed to load version citations count'));
