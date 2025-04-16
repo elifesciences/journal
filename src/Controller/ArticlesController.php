@@ -1344,20 +1344,7 @@ final class ArticlesController extends Controller
             ->otherwise($this->mightNotExist())
             ->otherwise($this->softFailure('Failed to load citations count'));
 
-        $arguments['citationsForAllVersions'] = [
-            $this->get('elife.api_sdk.metrics')
-                ->versionCitations(Identifier::article($id), 1)
-                ->otherwise($this->mightNotExist())
-                ->otherwise($this->softFailure('Failed to load version citations count')),
-            $this->get('elife.api_sdk.metrics')
-                ->versionCitations(Identifier::article($id), 2)
-                ->otherwise($this->mightNotExist())
-                ->otherwise($this->softFailure('Failed to load version citations count')),
-            $this->get('elife.api_sdk.metrics')
-                ->versionCitations(Identifier::article($id), 3)
-                ->otherwise($this->mightNotExist())
-                ->otherwise($this->softFailure('Failed to load version citations count'))
-        ];
+        $arguments['citationsForAllVersions'] = $this->buildCitationsForAllVersions($id);
 
         $arguments['pageViews'] = $this->get('elife.api_sdk.metrics')
             ->totalPageViews(Identifier::article($id))
@@ -1990,5 +1977,23 @@ final class ArticlesController extends Controller
             })->toArray());
 
         return $publicationHistory;
+    }
+
+    private function buildCitationsForAllVersions(string $id)
+    {
+        return [
+            $this->get('elife.api_sdk.metrics')
+                ->versionCitations(Identifier::article($id), 1)
+                ->otherwise($this->mightNotExist())
+                ->otherwise($this->softFailure('Failed to load version citations count')),
+            $this->get('elife.api_sdk.metrics')
+                ->versionCitations(Identifier::article($id), 2)
+                ->otherwise($this->mightNotExist())
+                ->otherwise($this->softFailure('Failed to load version citations count')),
+            $this->get('elife.api_sdk.metrics')
+                ->versionCitations(Identifier::article($id), 3)
+                ->otherwise($this->mightNotExist())
+                ->otherwise($this->softFailure('Failed to load version citations count'))
+        ];
     }
 }
