@@ -269,7 +269,7 @@ final class ArticlesController extends Controller
 
         $arguments = $this->contentAsideArguments($arguments);
 
-        $arguments['body'] = all(['item' => $arguments['item'], 'isMagazine' => $arguments['isMagazine'], 'history' => $arguments['history'], 'citations' => $arguments['citations'],'version1Citations' => $arguments['citationsForAllVersions'][0],'version2Citations' => $arguments['citationsForAllVersions'][1],  'version3Citations' => $arguments['citationsForAllVersions'][2], 'downloads' => $arguments['downloads'], 'pageViews' => $arguments['pageViews'], 'data' => $arguments['hasData'], 'context' => $context])
+        $arguments['body'] = all(['item' => $arguments['item'], 'isMagazine' => $arguments['isMagazine'], 'history' => $arguments['history'], 'citations' => $arguments['citations'], 'allVersionCitations' => $arguments['citationsForAllVersions'], 'downloads' => $arguments['downloads'], 'pageViews' => $arguments['pageViews'], 'data' => $arguments['hasData'], 'context' => $context])
             ->then(function (array $parts) {
                 /** @var ArticleVersion $item */
                 $item = $parts['item'];
@@ -279,12 +279,8 @@ final class ArticlesController extends Controller
                 $history = $parts['history'];
                 /** @var CitationsMetric|null $citations */
                 $citations = $parts['citations'];
-                /** @var CitationsMetric|null $version1Citations */
-                $version1Citations = $parts['version1Citations'];
-                /** @var CitationsMetric|null $version2Citations */
-                $version2Citations = $parts['version2Citations'];
-                /** @var CitationsMetric|null $version3Citations */
-                $version3Citations = $parts['version3Citations'];
+                /** @var array|null $citations */
+                $citationsForAllVersions = $parts['allVersionCitations'];
                 /** @var int|null $downloads */
                 $downloads = $parts['downloads'];
                 /** @var int|null $pageViews */
@@ -293,8 +289,6 @@ final class ArticlesController extends Controller
                 $data = $parts['data'];
                 /** @var array $context */
                 $context = $parts['context'];
-
-                $citationsForAllVersions = [ '1' => $version1Citations, '2' => $version2Citations, '3' => $version3Citations];
 
                 $parts = [];
 
@@ -599,11 +593,9 @@ final class ArticlesController extends Controller
                     null,
                     true
                 );
-                if ($pageViews || $downloads || $citations) {
-                    $itemId = $item->getId();
-                    $apiEndPoint = rtrim($this->getParameter('api_url_public'), '/');
-                    $metrics = Metrics::build($this->pageRequest, $apiEndPoint, $itemId, $pageViews, $downloads, $citations, $citationsForAllVersions);
 
+                if ($pageViews || $downloads || $citations) {
+                    $metrics = $this->buildMetrics($citationsForAllVersions, $item, $pageViews, $downloads, $citations)->wait();
                     $parts[] = ArticleSection::collapsible(
                         'metrics',
                         'Metrics',
@@ -1989,5 +1981,27 @@ final class ArticlesController extends Controller
                 ->otherwise($this->softFailure('Failed to load version citations count'));
         }
         return $citationMetricsPromises;
+    }
+
+    private function buildMetrics(
+        array $promisesOfCitationsForAllVersions,
+        ArticleVersion $item,
+        /** @var int|null $pageViews */
+        $pageViews,
+        /** @var int|null $downloads */
+        $downloads,
+        /** @var CitationsMetric|null $citations */
+        $citations
+        )
+    {
+        $citationsForAllVersions = all($promisesOfCitationsForAllVersions)
+            ->then(function (array $citationsByVersion) use ($item, $pageViews, $downloads, $citations){
+                $citationsForAllVersions = [ '1' => $citationsByVersion[0], '2' => $citationsByVersion[1], '3' => $citationsByVersion[2]];
+                $itemId = $item->getId();
+                $apiEndPoint = rtrim($this->getParameter('api_url_public'), '/');
+                return Metrics::build($this->pageRequest, $apiEndPoint, $itemId, $pageViews, $downloads, $citations, $citationsForAllVersions);
+            });
+
+        return $citationsForAllVersions;
     }
 }
