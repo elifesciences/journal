@@ -1336,7 +1336,16 @@ final class ArticlesController extends Controller
             ->otherwise($this->mightNotExist())
             ->otherwise($this->softFailure('Failed to load citations count'));
 
-        $arguments['citationsForAllVersions'] = $this->buildCitationsForAllVersions($id, 3);
+        $history = all(['history' => $arguments['history']])->then(function(array $parts) {
+            return $parts['history'];
+        })->wait();
+
+        // Assuming the version count for an article is the number of reviewed preprints + 1 for the VoR.
+        // This will be inacurate for any article with more than one VoR.
+        $arguments['citationsForAllVersions'] = $this->buildCitationsForAllVersions(
+            $id,
+            $this->countReviewedPreprintsInPublicationHistory($history) + 1
+        );
 
         $arguments['pageViews'] = $this->get('elife.api_sdk.metrics')
             ->totalPageViews(Identifier::article($id))
