@@ -49,8 +49,11 @@ class Metrics
                 foreach ($vorCitations as $i => $citations) {
                     if ($citations) {
                         $versionNumber = $i + 1;
-                        $vorStatistics = ViewModel\Statistic::fromNumber('Citations for version '.$versionNumber, $citations->getHighest()->getCitations());
-                        $metricParts[] = new ViewModel\StatisticCollection($vorStatistics);
+                        $highestCountOfCitationsForAVersion = $citations->getHighest()->getCitations();
+                        if ($highestCountOfCitationsForAVersion > 0) {
+                            $vorStatistics = ViewModel\Statistic::fromNumber('Citations for version '.$versionNumber, $highestCountOfCitationsForAVersion);
+                            $metricParts[] = new ViewModel\StatisticCollection($vorStatistics);
+                        }
                     }
                 }
             }
