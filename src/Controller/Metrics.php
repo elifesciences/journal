@@ -45,7 +45,6 @@ class Metrics
 
         if ($request->query->get('showVorMetrics') === 'true') {
             if ($vorCitations) {
-                dump($vorCitations);
                 foreach ($vorCitations as $i => $citations) {
                     if ($citations) {
                         $versionNumber = $i + 1;
