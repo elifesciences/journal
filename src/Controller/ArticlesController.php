@@ -1996,7 +1996,10 @@ final class ArticlesController extends Controller
     {
         $citationsForAllVersions = all($promisesOfCitationsForAllVersions)
             ->then(function (array $citationsByVersion) use ($item, $pageViews, $downloads, $citations){
-                $citationsForAllVersions = [ '1' => $citationsByVersion[0], '2' => $citationsByVersion[1], '3' => $citationsByVersion[2]];
+                $citationsForAllVersions = [];
+                for ($i = 0; $i < sizeof($citationsByVersion); $i += 1) {
+                    $citationsForAllVersions[] = $citationsByVersion[$i];
+                }
                 $itemId = $item->getId();
                 $apiEndPoint = rtrim($this->getParameter('api_url_public'), '/');
                 return Metrics::build($this->pageRequest, $apiEndPoint, $itemId, $pageViews, $downloads, $citations, $citationsForAllVersions);
