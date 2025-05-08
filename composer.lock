@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f28f918f8852d414d4b87eb7ed6523f1",
+    "content-hash": "4e018f07a119b7e0d69b312bfcf22a99",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -4005,16 +4005,16 @@
         },
         {
             "name": "elife/api-validator",
-            "version": "dev-master",
+            "version": "v1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/api-validator-php.git",
-                "reference": "dcb4f15e08e70a4acfd8ec26f3a07e7175196b34"
+                "reference": "62e51f1911f9544ffcac5d38958dbaef4325047a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/api-validator-php/zipball/dcb4f15e08e70a4acfd8ec26f3a07e7175196b34",
-                "reference": "dcb4f15e08e70a4acfd8ec26f3a07e7175196b34",
+                "url": "https://api.github.com/repos/elifesciences/api-validator-php/zipball/62e51f1911f9544ffcac5d38958dbaef4325047a",
+                "reference": "62e51f1911f9544ffcac5d38958dbaef4325047a",
                 "shasum": ""
             },
             "require": {
@@ -4048,9 +4048,9 @@
             "description": "eLife Sciences API validator",
             "support": {
                 "issues": "https://github.com/elifesciences/api-validator-php/issues",
-                "source": "https://github.com/elifesciences/api-validator-php/tree/master"
+                "source": "https://github.com/elifesciences/api-validator-php/tree/v1.0.0"
             },
-            "time": "2024-04-12T01:07:21+00:00"
+            "time": "2024-10-18T07:21:27+00:00"
         },
         {
             "name": "justinrainbow/json-schema",
@@ -5832,8 +5832,7 @@
         "elife/api-client": 20,
         "elife/api-sdk": 20,
         "elife/civi-contacts": 20,
-        "elife/patterns": 20,
-        "elife/api-validator": 20
+        "elife/patterns": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

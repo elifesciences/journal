@@ -1,0 +1,70 @@
+From f2cb0ddf421560b448d37109b38d02f5d7907324 Mon Sep 17 00:00:00 2001
+From: Chris Wilkinson <c.wilkinson@elifesciences.org>
+Date: Wed, 5 Jul 2017 16:23:28 +0100
+Subject: [PATCH] Add field label
+
+---
+ DependencyInjection/Configuration.php                  | 2 ++
+ DependencyInjection/IsometriksSpamExtension.php        | 1 +
+ Form/Extension/Spam/Type/FormTypeHoneypotExtension.php | 2 +-
+ README.md                                              | 2 ++
+ 4 files changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/DependencyInjection/Configuration.php b/DependencyInjection/Configuration.php
+index 98b4c64..89aa344 100644
+--- a/DependencyInjection/Configuration.php
++++ b/DependencyInjection/Configuration.php
+@@ -40,6 +40,8 @@ public function getConfigTreeBuilder()
+                         ->booleanNode('use_class')->defaultFalse()->end()
+                         ->scalarNode('hide_class')->defaultValue('hidden')->end()
+                         ->booleanNode('global')->defaultFalse()->end()
++                        ->scalarNode('label')
++                            ->defaultValue('Please leave this field empty')->end()
+                         ->scalarNode('message')
+                             ->defaultValue('Form fields are invalid')->end()
+                     ->end()
+diff --git a/DependencyInjection/IsometriksSpamExtension.php b/DependencyInjection/IsometriksSpamExtension.php
+index b2ad811..05b73ce 100644
+--- a/DependencyInjection/IsometriksSpamExtension.php
++++ b/DependencyInjection/IsometriksSpamExtension.php
+@@ -57,6 +57,7 @@ private function processHoneypotConfig(array $config, ContainerBuilder $containe
+             'field' => $config['field'],
+             'use_class' => $config['use_class'],
+             'hide_class' => $config['hide_class'],
++            'label' => $config['label'],
+             'global' => $config['global'],
+             'message' => $config['message'],
+         ));
+diff --git a/Form/Extension/Spam/Type/FormTypeHoneypotExtension.php b/Form/Extension/Spam/Type/FormTypeHoneypotExtension.php
+index 378eab1..d60c21f 100644
+--- a/Form/Extension/Spam/Type/FormTypeHoneypotExtension.php
++++ b/Form/Extension/Spam/Type/FormTypeHoneypotExtension.php
+@@ -53,7 +53,7 @@ public function finishView(FormView $view, FormInterface $form, array $options)
+ 
+             $formOptions = array(
+                 'mapped' => false,
+-                'label' => false,
++                'label' => $this->defaults['label'],
+                 'required' => false,
+             );
+ 
+diff --git a/README.md b/README.md
+index e318022..3363c2d 100644
+--- a/README.md
++++ b/README.md
+@@ -97,6 +97,7 @@ isometriks_spam:
+         hide_class: hidden
+         global: false
+         message: Form fields are invalid
++        label: Please leave this field empty
+ ```
+ 
+ Usage:
+@@ -108,6 +109,7 @@ $this->createForm(MyType::class, null, array(
+     'honeypot_use_class' => false,
+     'honeypot_hide_class' => 'hidden',
+     'honeypot_message' => 'Form field are invalid',
++    'label' => 'Please leave this field empty',
+ ));
+ ```
+ 

@@ -1,0 +1,66 @@
+From 9b04c300136a2e490231cdecb9ee5b53182ab66f Mon Sep 17 00:00:00 2001
+From: Chris Wilkinson <c.wilkinson@elifesciences.org>
+Date: Wed, 12 Jul 2017 07:45:50 +0100
+Subject: [PATCH] Fix WhatFailureGroupHandler::handleBatch when the handler has
+ processors
+
+---
+ .../Handler/WhatFailureGroupHandler.php       | 10 ++++++++
+ .../Handler/WhatFailureGroupHandlerTest.php   | 23 +++++++++++++++++++
+ 2 files changed, 33 insertions(+)
+
+diff --git a/src/Monolog/Handler/WhatFailureGroupHandler.php b/src/Monolog/Handler/WhatFailureGroupHandler.php
+index 2732ba3d6..6bc4671c7 100644
+--- a/src/Monolog/Handler/WhatFailureGroupHandler.php
++++ b/src/Monolog/Handler/WhatFailureGroupHandler.php
+@@ -48,6 +48,16 @@ public function handle(array $record)
+      */
+     public function handleBatch(array $records)
+     {
++        if ($this->processors) {
++            $processed = array();
++            foreach ($records as $record) {
++                foreach ($this->processors as $processor) {
++                    $processed[] = call_user_func($processor, $record);
++                }
++            }
++            $records = $processed;
++        }
++
+         foreach ($this->handlers as $handler) {
+             try {
+                 $handler->handleBatch($records);
+diff --git a/tests/Monolog/Handler/WhatFailureGroupHandlerTest.php b/tests/Monolog/Handler/WhatFailureGroupHandlerTest.php
+index 8d37a1fcc..0594a232b 100644
+--- a/tests/Monolog/Handler/WhatFailureGroupHandlerTest.php
++++ b/tests/Monolog/Handler/WhatFailureGroupHandlerTest.php
+@@ -87,6 +87,29 @@ public function testHandleUsesProcessors()
+         $this->assertTrue($records[0]['extra']['foo']);
+     }
+ 
++    /**
++     * @covers Monolog\Handler\WhatFailureGroupHandler::handleBatch
++     */
++    public function testHandleBatchUsesProcessors()
++    {
++        $testHandlers = array(new TestHandler(), new TestHandler());
++        $handler = new WhatFailureGroupHandler($testHandlers);
++        $handler->pushProcessor(function ($record) {
++            $record['extra']['foo'] = true;
++
++            return $record;
++        });
++        $handler->handleBatch(array($this->getRecord(Logger::DEBUG), $this->getRecord(Logger::INFO)));
++        foreach ($testHandlers as $test) {
++            $this->assertTrue($test->hasDebugRecords());
++            $this->assertTrue($test->hasInfoRecords());
++            $this->assertTrue(count($test->getRecords()) === 2);
++            $records = $test->getRecords();
++            $this->assertTrue($records[0]['extra']['foo']);
++            $this->assertTrue($records[1]['extra']['foo']);
++        }
++    }
++
+     /**
+      * @covers Monolog\Handler\WhatFailureGroupHandler::handle
+      */

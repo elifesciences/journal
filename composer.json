@@ -52,7 +52,7 @@
     },
     "require-dev": {
         "elife/api": "^2.31",
-        "elife/api-validator": "^1.0@dev",
+        "elife/api-validator": "^1.0",
         "justinrainbow/json-schema": "^5.2",
         "liuggio/fastest": "^1.6",
         "ml/json-ld": "^1.1",
@@ -89,17 +89,17 @@
         ],
         "patches": {
             "bobthecow/mustache-bundle": {
-                "Remove superfluous argument": "https://github.com/bobthecow/BobthecowMustacheBundle/pull/9.patch"
+                "Remove superfluous argument": "patches/bobthecow/BobthecowMustacheBundle/pull/9/remove-superflous-argument.patch.txt"
             },
             "cocur/slugify": {
-                "strip_tags": "https://github.com/cocur/slugify/pull/201.patch"
+                "strip_tags": "patches/cocur/slugify/pull/201/strip-tags.patch.txt"
             },
             "isometriks/spam-bundle": {
-                "Add field label": "https://github.com/isometriks/IsometriksSpamBundle/pull/9.patch",
-                "Use EmailType": "https://github.com/isometriks/IsometriksSpamBundle/pull/17.patch"
+                "Add field label": "patches/isometriks/IsometriksSpamBundle/pull/9/add-field-label.patch.txt",
+                "Use EmailType": "patches/isometriks/IsometriksSpamBundle/pull/17/use-emailtype.patch.txt"
             },
             "monolog/monolog": {
-                "Fix WhatFailureGroupHandler::handleBatch when the handler has processors": "https://github.com/Seldaek/monolog/pull/1022.patch"
+                "Fix WhatFailureGroupHandler::handleBatch when the handler has processors": "patches/Seldaek/monolog/pull/1022/fix-whatfailuregrouphandler-handlebatch-when-handler-has-processors.patch.txt"
             }
         }
     }
