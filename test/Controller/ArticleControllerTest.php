@@ -4293,6 +4293,329 @@ final class ArticleControllerTest extends PageTestCase
     /**
      * @test
      */
+    public function it_displays_recommendations_no_further_reading()
+    {
+        $client = static::createClient();
+
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/articles/00001',
+                ['Accept' => 'application/vnd.elife.article-poa+json; version=4, application/vnd.elife.article-vor+json; version=8']
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.article-poa+json; version=4'],
+                json_encode([
+                    'status' => 'poa',
+                    'stage' => 'published',
+                    'id' => '00001',
+                    'version' => 1,
+                    'type' => 'research-article',
+                    'doi' => '10.7554/eLife.00001',
+                    'title' => 'Article title',
+                    'published' => '2010-01-01T00:00:00Z',
+                    'versionDate' => '2010-01-01T00:00:00Z',
+                    'statusDate' => '2010-01-01T00:00:00Z',
+                    'volume' => 1,
+                    'elocationId' => 'e00001',
+                    'copyright' => [
+                        'license' => 'CC-BY-4.0',
+                        'holder' => 'Author One',
+                        'statement' => 'Copyright statement.',
+                    ],
+                    'authorLine' => 'Author One et al.',
+                    'authors' => [
+                        [
+                            'type' => 'person',
+                            'name' => [
+                                'preferred' => 'Author One',
+                                'index' => 'Author One',
+                            ],
+                        ],
+                    ],
+                ])
+            )
+        );
+
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/articles/00001/versions',
+                [
+                    'Accept' => [
+                        'application/vnd.elife.article-history+json; version=2',
+                    ],
+                ]
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.article-history+json; version=2'],
+                json_encode([
+                    'versions' => [
+                        [
+                            'status' => 'poa',
+                            'stage' => 'published',
+                            'id' => '00001',
+                            'version' => 1,
+                            'type' => 'research-article',
+                            'doi' => '10.7554/eLife.00001',
+                            'title' => 'Article title',
+                            'published' => '2010-01-01T00:00:00Z',
+                            'versionDate' => '2010-01-01T00:00:00Z',
+                            'statusDate' => '2010-01-01T00:00:00Z',
+                            'volume' => 1,
+                            'elocationId' => 'e00001',
+                            'copyright' => [
+                                'license' => 'CC-BY-4.0',
+                                'holder' => 'Author One',
+                                'statement' => 'Copyright statement.',
+                            ],
+                            'authorLine' => 'Author One et al.',
+                        ],
+                    ],
+                ])
+            )
+        );
+
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/articles/00001/related',
+                [
+                    'Accept' => [
+                        'application/vnd.elife.article-related+json; version=2',
+                    ],
+                ]
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.article-related+json; version=2'],
+                json_encode([
+                    [
+                        'status' => 'vor',
+                        'stage' => 'published',
+                        'id' => '00002',
+                        'version' => 1,
+                        'type' => 'correction',
+                        'doi' => '10.7554/eLife.00002',
+                        'title' => 'Correction title',
+                        'published' => '2010-01-01T00:00:00Z',
+                        'versionDate' => '2010-01-01T00:00:00Z',
+                        'statusDate' => '2010-01-01T00:00:00Z',
+                        'volume' => 1,
+                        'elocationId' => 'e00002',
+                        'copyright' => [
+                            'license' => 'CC-BY-4.0',
+                            'holder' => 'Author One',
+                            'statement' => 'Copyright statement.',
+                        ],
+                        'authorLine' => 'Author One et al.',
+                    ],
+                    [
+                        'status' => 'vor',
+                        'stage' => 'published',
+                        'id' => '00003',
+                        'version' => 1,
+                        'type' => 'retraction',
+                        'doi' => '10.7554/eLife.00003',
+                        'title' => 'Retraction title',
+                        'published' => '2010-01-01T00:00:00Z',
+                        'versionDate' => '2010-01-01T00:00:00Z',
+                        'statusDate' => '2010-01-01T00:00:00Z',
+                        'volume' => 1,
+                        'elocationId' => 'e00003',
+                        'copyright' => [
+                            'license' => 'CC-BY-4.0',
+                            'holder' => 'Author One',
+                            'statement' => 'Copyright statement.',
+                        ],
+                        'authorLine' => 'Author One et al.',
+                    ],
+                    [
+                        'status' => 'vor',
+                        'stage' => 'published',
+                        'id' => '00004',
+                        'version' => 1,
+                        'type' => 'insight',
+                        'doi' => '10.7554/eLife.00004',
+                        'title' => 'Insight 1 title',
+                        'published' => '2010-01-01T00:00:00Z',
+                        'versionDate' => '2010-01-01T00:00:00Z',
+                        'statusDate' => '2010-01-01T00:00:00Z',
+                        'volume' => 1,
+                        'elocationId' => 'e00004',
+                        'copyright' => [
+                            'license' => 'CC-BY-4.0',
+                            'holder' => 'Author One',
+                            'statement' => 'Copyright statement.',
+                        ],
+                        'authorLine' => 'Author One et al.',
+                    ],
+                    [
+                        'status' => 'vor',
+                        'stage' => 'published',
+                        'id' => '00005',
+                        'version' => 1,
+                        'type' => 'insight',
+                        'doi' => '10.7554/eLife.00005',
+                        'title' => 'Insight 2 title',
+                        'published' => '2010-01-01T00:00:00Z',
+                        'versionDate' => '2010-01-01T00:00:00Z',
+                        'statusDate' => '2010-01-01T00:00:00Z',
+                        'volume' => 1,
+                        'elocationId' => 'e00005',
+                        'copyright' => [
+                            'license' => 'CC-BY-4.0',
+                            'holder' => 'Author One',
+                            'statement' => 'Copyright statement.',
+                        ],
+                        'authorLine' => 'Author One et al.',
+                    ],
+                    [
+                        'status' => 'vor',
+                        'stage' => 'published',
+                        'id' => '00006',
+                        'version' => 1,
+                        'type' => 'expression-concern',
+                        'doi' => '10.7554/eLife.00006',
+                        'title' => 'Expression of concern title',
+                        'published' => '2010-01-01T00:00:00Z',
+                        'versionDate' => '2010-01-01T00:00:00Z',
+                        'statusDate' => '2010-01-01T00:00:00Z',
+                        'volume' => 1,
+                        'elocationId' => 'e00006',
+                        'copyright' => [
+                            'license' => 'CC-BY-4.0',
+                            'holder' => 'Author One',
+                            'statement' => 'Copyright statement.',
+                        ],
+                        'authorLine' => 'Author One et al.',
+                    ],
+                    [
+                        'id' => '80494',
+                        'doi' => '10.1101/2022.06.24.497502',
+                        'pdf' => 'https://www.biorxiv.org/content/10.1101/2022.06.24.497502v1.full.pdf',
+                        'status' => 'reviewed',
+                        'authorLine' => 'Tianze Xu, Jing Cai ... Kuanyu Li',
+                        'title' => 'Aging-related iron deposit prevents the benefits of HRT from late postmenopausal atherosclerosis',
+                        'stage' => 'published',
+                        'type' => 'reviewed-preprint',
+                        'published' => '2022-10-20T03:00:00Z',
+                        'reviewedDate' => '2022-10-20T03:00:00Z',
+                        'versionDate' => '2022-10-20T03:00:00Z',
+                        'statusDate' => '2022-10-20T03:00:00Z',
+                        'subjects' => [
+                            [
+                                'id' => 'cell-biology',
+                                'name' => 'Cell Biology',
+                            ],
+                        ],
+                    ],
+                ])
+            )
+        );
+
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/recommendations/article/00001?page=1&per-page=100&order=desc',
+                [
+                    'Accept' => [
+                        'application/vnd.elife.recommendations+json; version=3',
+                    ],
+                ]
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.recommendations+json; version=3'],
+                json_encode([
+                    'total' => 1,
+                    'items' => [
+                        [
+                            'status' => 'vor',
+                            'stage' => 'published',
+                            'id' => '00002',
+                            'version' => 1,
+                            'type' => 'correction',
+                            'doi' => '10.7554/eLife.00002',
+                            'title' => 'Correction title',
+                            'published' => '2010-01-01T00:00:00Z',
+                            'versionDate' => '2010-01-01T00:00:00Z',
+                            'statusDate' => '2010-01-01T00:00:00Z',
+                            'volume' => 1,
+                            'elocationId' => 'e00002',
+                            'copyright' => [
+                                'license' => 'CC-BY-4.0',
+                                'holder' => 'Author One',
+                                'statement' => 'Copyright statement.',
+                            ],
+                            'authorLine' => 'Author One et al.',
+                        ],
+                        [
+                            'status' => 'vor',
+                            'stage' => 'published',
+                            'id' => '00003',
+                            'version' => 1,
+                            'type' => 'retraction',
+                            'doi' => '10.7554/eLife.00003',
+                            'title' => 'Retraction title',
+                            'published' => '2010-01-01T00:00:00Z',
+                            'versionDate' => '2010-01-01T00:00:00Z',
+                            'statusDate' => '2010-01-01T00:00:00Z',
+                            'volume' => 1,
+                            'elocationId' => 'e00003',
+                            'copyright' => [
+                                'license' => 'CC-BY-4.0',
+                                'holder' => 'Author One',
+                                'statement' => 'Copyright statement.',
+                            ],
+                            'authorLine' => 'Author One et al.',
+                        ],
+                        [
+                            'status' => 'vor',
+                            'stage' => 'published',
+                            'id' => '00004',
+                            'version' => 1,
+                            'type' => 'insight',
+                            'doi' => '10.7554/eLife.00004',
+                            'title' => 'Insight 1 title',
+                            'published' => '2010-01-01T00:00:00Z',
+                            'versionDate' => '2010-01-01T00:00:00Z',
+                            'statusDate' => '2010-01-01T00:00:00Z',
+                            'volume' => 1,
+                            'elocationId' => 'e00004',
+                            'copyright' => [
+                                'license' => 'CC-BY-4.0',
+                                'holder' => 'Author One',
+                                'statement' => 'Copyright statement.',
+                            ],
+                            'authorLine' => 'Author One et al.',
+                        ],
+                    ],
+                ])
+            )
+        );
+
+        $crawler = $client->request('GET', '/articles/00001');
+
+        $this->assertSame(200, $client->getResponse()->getStatusCode());
+        $this->assertSame('This article has been corrected. Read the correction notice.', trim($crawler->filter('.info-bar--correction')->text()));
+        $this->assertCount(2, $crawler->filter('.info-bar--attention'));
+        $this->assertSame('This article has been retracted. Read the retraction notice.', trim($crawler->filter('.info-bar--attention')->eq(0)->text()));
+        $this->assertSame('Concern(s) have been raised about this article. Read the expression of concern.', trim($crawler->filter('.info-bar--attention')->eq(1)->text()));
+        $this->assertContains('Insight 1 title', $crawler->filter('.teaser--related')->text());
+        $this->assertEmpty($crawler->filter('.article__related-item')->selectLink('Further reading'));
+
+        $furtherReading = $crawler->filter('.listing-list-heading:contains("Further reading") + .listing-list > .listing-list__item');
+        $this->assertCount(1, $furtherReading);
+        $this->assertCount(1, $crawler->filter('.listing-list__item--related'));
+        $this->assertContains('Insight 1 title', $furtherReading->eq(0)->text());
+    }
+
+    /**
+     * @test
+     */
     public function it_displays_recommendations()
     {
         $client = static::createClient();
@@ -4705,6 +5028,7 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertSame('This article has been retracted. Read the retraction notice.', trim($crawler->filter('.info-bar--attention')->eq(0)->text()));
         $this->assertSame('Concern(s) have been raised about this article. Read the expression of concern.', trim($crawler->filter('.info-bar--attention')->eq(1)->text()));
         $this->assertContains('Insight 1 title', $crawler->filter('.teaser--related')->text());
+        $this->assertNotEmpty($crawler->filter('.article__related-item')->selectLink('Further reading'));
 
         $furtherReading = $crawler->filter('.listing-list-heading:contains("Further reading") + .listing-list > .listing-list__item');
         $this->assertCount(3, $furtherReading);

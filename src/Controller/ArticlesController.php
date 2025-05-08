@@ -147,7 +147,7 @@ final class ArticlesController extends Controller
 
     private function createFirstPage(Request $request, string $id, array $arguments) : Response
     {
-        $arguments['relatedItem'] = all(['relatedItem' => $arguments['relatedItem'], 'item' => $arguments['item'], 'listing' => $arguments['listing'], 'relatedArticles' => $arguments['relatedArticles']])
+        $arguments['relatedItem'] = all(['relatedItem' => $arguments['relatedItem'], 'item' => $arguments['item'], 'listing' => $arguments['listing'], 'relatedArticles' => $arguments['relatedArticles'], 'furtherReading' => $arguments['furtherReading']])
             ->then(function (array $parts) {
                 /** @var Article|null $relatedItem */
                 $relatedItem = $parts['relatedItem'];
@@ -157,6 +157,8 @@ final class ArticlesController extends Controller
                 $listing = $parts['listing'];
                 /** @var Sequence|Article[] $relatedArticles */
                 $relatedArticles = $parts['relatedArticles'];
+                /** @var Sequence|Article[] $furtherReading */
+                $furtherReading = $parts['furtherReading'];
 
                 if (empty($relatedItem)) {
                     return null;
@@ -176,7 +178,9 @@ final class ArticlesController extends Controller
                 $item = $this->convertTo($relatedItem, ViewModel\Teaser::class, ['variant' => 'relatedItem', 'from' => $item->getType(), 'related' => $related ?? false, 'updatedText' => false]);
 
                 if ($listing) {
-                    return ViewModel\ListingTeasers::withSeeMore([$item], new ViewModel\SeeMoreLink(new Link('Further reading', '#listing')));
+                    return ($furtherReading->count() > 1) ?
+                        ViewModel\ListingTeasers::withSeeMore([$item], new ViewModel\SeeMoreLink(new Link('Further reading', '#listing'))) :
+                        ViewModel\ListingTeasers::basic([$item]);
                 }
 
                 return $item;
