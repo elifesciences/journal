@@ -52,7 +52,7 @@
     },
     "require-dev": {
         "elife/api": "^2.31",
-        "elife/api-validator": "^1.0@dev",
+        "elife/api-validator": "^1.0",
         "justinrainbow/json-schema": "^5.2",
         "liuggio/fastest": "^1.6",
         "ml/json-ld": "^1.1",
