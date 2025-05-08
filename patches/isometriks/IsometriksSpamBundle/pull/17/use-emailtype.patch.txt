@@ -1,0 +1,32 @@
+From fa94c9c8068eb09a466a3f446c9f6b6a781870b4 Mon Sep 17 00:00:00 2001
+From: Chris Wilkinson <c.wilkinson@elifesciences.org>
+Date: Thu, 29 Aug 2019 09:33:58 +0100
+Subject: [PATCH] Use EmailType
+
+---
+ Form/Extension/Spam/Type/FormTypeHoneypotExtension.php | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/Form/Extension/Spam/Type/FormTypeHoneypotExtension.php b/Form/Extension/Spam/Type/FormTypeHoneypotExtension.php
+index d905586..23596d8 100644
+--- a/Form/Extension/Spam/Type/FormTypeHoneypotExtension.php
++++ b/Form/Extension/Spam/Type/FormTypeHoneypotExtension.php
+@@ -4,8 +4,8 @@
+ 
+ use Isometriks\Bundle\SpamBundle\Form\Extension\Spam\EventListener\HoneypotValidationListener;
+ use Symfony\Component\Form\AbstractTypeExtension;
++use Symfony\Component\Form\Extension\Core\Type\EmailType;
+ use Symfony\Component\Form\Extension\Core\Type\FormType;
+-use Symfony\Component\Form\Extension\Core\Type\TextType;
+ use Symfony\Component\Form\FormBuilderInterface;
+ use Symfony\Component\Form\FormInterface;
+ use Symfony\Component\Form\FormView;
+@@ -68,7 +68,7 @@ public function finishView(FormView $view, FormInterface $form, array $options)
+             }
+ 
+             $factory = $form->getConfig()->getAttribute('honeypot_factory');
+-            $honeypotForm = $factory->createNamed($options['honeypot_field'], TextType::class, null, $formOptions);
++            $honeypotForm = $factory->createNamed($options['honeypot_field'], EmailType::class, null, $formOptions);
+ 
+             $view->children[$options['honeypot_field']] = $honeypotForm->createView($view);
+         }

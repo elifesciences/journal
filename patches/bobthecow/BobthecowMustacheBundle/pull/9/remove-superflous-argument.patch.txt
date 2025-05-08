@@ -1,0 +1,21 @@
+From caa6f9d733061030daa5b2748ca76f2f36a1da0e Mon Sep 17 00:00:00 2001
+From: Chris Wilkinson <c.wilkinson@elifesciences.org>
+Date: Thu, 9 Jun 2016 08:49:38 +0100
+Subject: [PATCH] Remove superfluous argument
+
+---
+ Resources/config/mustache.xml | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/Resources/config/mustache.xml b/Resources/config/mustache.xml
+index b42bef6..42b7adf 100644
+--- a/Resources/config/mustache.xml
++++ b/Resources/config/mustache.xml
+@@ -31,7 +31,6 @@
+         <service id="templating.engine.mustache" class="%templating.engine.mustache.class%" public="false">
+             <argument type="service" id="mustache" />
+             <argument type="service" id="templating.name_parser" />
+-            <argument type="service" id="templating.globals" />
+         </service>
+ 
+         <service id="assetic.mustache_formula_loader" class="%assetic.mustache_formula_loader.class%" public="false">

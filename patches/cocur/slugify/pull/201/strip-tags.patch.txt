@@ -1,0 +1,104 @@
+From 5b76799a48830df2ec70ec5c59b2cd8221743e55 Mon Sep 17 00:00:00 2001
+From: Chris Wilkinson <c.wilkinson@elifesciences.org>
+Date: Wed, 21 Mar 2018 09:10:18 +0000
+Subject: [PATCH] Add strip_tags option
+
+---
+ src/Bridge/Symfony/CocurSlugifyExtension.php |  2 +-
+ src/Bridge/Symfony/Configuration.php         |  1 +
+ src/Slugify.php                              |  5 +++++
+ tests/Bridge/Symfony/ConfigurationTest.php   | 10 ++++++++++
+ tests/SlugifyTest.php                        |  4 ++++
+ 5 files changed, 21 insertions(+), 1 deletion(-)
+
+diff --git a/src/Bridge/Symfony/CocurSlugifyExtension.php b/src/Bridge/Symfony/CocurSlugifyExtension.php
+index b891d023..05accaf1 100644
+--- a/src/Bridge/Symfony/CocurSlugifyExtension.php
++++ b/src/Bridge/Symfony/CocurSlugifyExtension.php
+@@ -44,7 +44,7 @@ public function load(array $configs, ContainerBuilder $container)
+         }
+ 
+         // Extract slugify arguments from config
+-        $slugifyArguments = array_intersect_key($config, array_flip(['lowercase', 'separator', 'regexp', 'rulesets']));
++        $slugifyArguments = array_intersect_key($config, array_flip(['lowercase', 'trim', 'strip_tags', 'separator', 'regexp', 'rulesets']));
+ 
+         $container->setDefinition('cocur_slugify', new Definition('Cocur\Slugify\Slugify', [$slugifyArguments]));
+         $container
+diff --git a/src/Bridge/Symfony/Configuration.php b/src/Bridge/Symfony/Configuration.php
+index d2f30d14..d51342bb 100644
+--- a/src/Bridge/Symfony/Configuration.php
++++ b/src/Bridge/Symfony/Configuration.php
+@@ -28,6 +28,7 @@ public function getConfigTreeBuilder()
+             ->children()
+                 ->booleanNode('lowercase')->end()
+                 ->booleanNode('trim')->end()
++                ->booleanNode('strip_tags')->end()
+                 ->scalarNode('separator')->end()
+                 ->scalarNode('regexp')->end()
+                 ->arrayNode('rulesets')->prototype('scalar')->end()
+diff --git a/src/Slugify.php b/src/Slugify.php
+index 9e059d67..bdeb54d1 100644
+--- a/src/Slugify.php
++++ b/src/Slugify.php
+@@ -46,6 +46,7 @@ class Slugify implements SlugifyInterface
+         'separator' => '-',
+         'lowercase' => true,
+         'trim' => true,
++        'strip_tags' => false,
+         'rulesets'  => [
+             'default',
+             // Languages are preferred if they appear later, list is ordered by number of
+@@ -111,6 +112,10 @@ public function slugify($string, $options = null)
+             $rules = $this->rules;
+         }
+ 
++        $string = ($options['strip_tags'])
++            ? strip_tags($string)
++            : $string;
++
+         $string = strtr($string, $rules);
+         unset($rules);
+ 
+diff --git a/tests/Bridge/Symfony/ConfigurationTest.php b/tests/Bridge/Symfony/ConfigurationTest.php
+index d7bc1945..1ebde250 100644
+--- a/tests/Bridge/Symfony/ConfigurationTest.php
++++ b/tests/Bridge/Symfony/ConfigurationTest.php
+@@ -21,6 +21,7 @@ public function testAll()
+         $configs = [
+             [
+                 'lowercase' => true,
++                'strip_tags' => false,
+                 'separator' => '_',
+                 'regexp' => 'abcd',
+                 'rulesets' => ['burmese', 'hindi']
+@@ -39,6 +40,15 @@ public function testLowercaseOnlyAcceptsBoolean()
+         $this->process($configs);
+     }
+ 
++    /**
++     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidTypeException
++     */
++    public function testStripTagsOnlyAcceptsBoolean()
++    {
++        $configs = [['strip_tags' => 'abc']];
++        $this->process($configs);
++    }
++
+     /**
+      * Processes an array of configurations and returns a compiled version.
+      *
+diff --git a/tests/SlugifyTest.php b/tests/SlugifyTest.php
+index 69dbe8ae..2938a8eb 100644
+--- a/tests/SlugifyTest.php
++++ b/tests/SlugifyTest.php
+@@ -211,6 +211,10 @@ public function slugifyOptionsArray()
+ 
+         $this->assertEquals('file-name', $this->slugify->slugify('file name '));
+         $this->assertEquals('file-name-', $this->slugify->slugify('file name ', ['trim' => false]));
++
++        $this->assertEquals('file-name', $this->slugify->slugify('<file name'));
++        $this->assertEquals('p-file-p-foo-a-href-bar-name-a', $this->slugify->slugify('<p>file</p><!-- foo --> <a href="#bar">name</a>'));
++        $this->assertEquals('file-name', $this->slugify->slugify('<p>file</p><!-- foo --> <a href="#bar">name</a>', ['strip_tags' => true]));
+     }
+ 
+     /**
