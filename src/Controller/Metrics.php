@@ -44,6 +44,7 @@ class Metrics
         $metricParts[] = $totalStatisticsDescription;
 
         if ($request->query->get('showVorMetrics') === 'true') {
+            $metricParts[] = new Paragraph('Total citations '.$totalCitations->getHighest()->getCitations());
             if ($vorCitations) {
                 foreach ($vorCitations as $i => $citations) {
                     if ($citations) {
