@@ -2015,7 +2015,7 @@ final class ArticlesController extends Controller
                 }
                 $itemId = $item->getId();
                 $apiEndPoint = rtrim($this->getParameter('api_url_public'), '/');
-                return Metrics::build($this->pageRequest, $apiEndPoint, $itemId, $pageViews, $downloads, $citations, $citationsForAllVersions);
+                return Metrics::build($this->pageRequest, $apiEndPoint, $itemId, $pageViews, $downloads, $citations, $citationsForAllVersions, $item);
             });
 
         return $citationsForAllVersions;

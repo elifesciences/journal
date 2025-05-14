@@ -2,6 +2,7 @@
 
 namespace eLife\Journal\Controller;
 
+use eLife\ApiSdk\Model\ArticleVersion;
 use eLife\ApiSdk\Model\CitationsMetric;
 use eLife\Patterns\ViewModel;
 use eLife\Patterns\ViewModel\ListHeading;
@@ -18,7 +19,8 @@ class Metrics
         int $totalPageViews = null,
         int $totalDownloads = null,
         CitationsMetric $totalCitations = null,
-        array $vorCitations = null
+        array $vorCitations = null,
+        ArticleVersion $item
     )
     {
         $totalStatistics = [];
@@ -49,7 +51,7 @@ class Metrics
 
         if ($request->query->get('showVorMetrics') === 'true') {
             $metricParts[] = new ListHeading('Citations by DOI');
-            $metricParts[] = new Paragraph('Umbrella DOI:');
+            $metricParts[] = new Paragraph('Umbrella DOI: https://doi.org/'.$item->getDoi());
             $metricParts[] = new Paragraph($numberOfCitationsForUmbrellaDoi.' citations');
             if ($vorCitations) {
                 foreach ($vorCitations as $i => $citations) {
