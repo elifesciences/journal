@@ -51,7 +51,8 @@ class Metrics
 
         if ($request->query->get('showVorMetrics') === 'true') {
             $metricParts[] = new ListHeading('Citations by DOI');
-            $metricParts[] = new Paragraph('Umbrella DOI: https://doi.org/'.$item->getDoi());
+            // $metricParts[] = new Paragraph('Umbrella DOI: https://doi.org/'.$item->getDoi());
+            $metricParts[] = new Paragraph('Umbrella DOI: '.self::constructDoiLink($item->getDoi()));
             $metricParts[] = new Paragraph($numberOfCitationsForUmbrellaDoi.' citations');
             if ($vorCitations) {
                 foreach ($vorCitations as $i => $citations) {
@@ -80,5 +81,11 @@ class Metrics
             }
         }
         return $sumOfAllVersionSpecificCitations;
+    }
+
+    private static function constructDoiLink(string $doi)
+    {
+        $url = 'https://doi.org/'.$doi;
+        return '<a href="'.$url.'">'.$url.'</a>';
     }
 };
