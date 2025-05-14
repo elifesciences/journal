@@ -4,6 +4,7 @@ namespace eLife\Journal\Controller;
 
 use eLife\ApiSdk\Model\CitationsMetric;
 use eLife\Patterns\ViewModel;
+use eLife\Patterns\ViewModel\ListHeading;
 use eLife\Patterns\ViewModel\Paragraph;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -47,7 +48,7 @@ class Metrics
         $metricParts[] = $totalStatisticsDescription;
 
         if ($request->query->get('showVorMetrics') === 'true') {
-            $metricParts[] = new Paragraph('Citations by DOI');
+            $metricParts[] = new ListHeading('Citations by DOI');
             $metricParts[] = new Paragraph('Umbrella DOI:');
             $metricParts[] = new Paragraph($numberOfCitationsForUmbrellaDoi.' citations');
             if ($vorCitations) {
