@@ -23,7 +23,7 @@ class Metrics
         $totalStatistics = [];
         $barCharts = [];
         $numberOfTotalCitations = $totalCitations->getHighest()->getCitations();
-
+        $numberOfCitationsForVersions = self::calculateCitationsForVersions();
         if ($totalPageViews) {
             $totalStatistics[] = ViewModel\Statistic::fromNumber('views', $totalPageViews);
             $barCharts[] = new ViewModel\BarChart($itemId, 'article', 'page-views', $apiEndPoint, 'page-views', 'month');
@@ -63,5 +63,9 @@ class Metrics
         }
 
         return array_merge($metricParts, $barCharts);
+    }
+    private static function calculateCitationsForVersions()
+    {
+        return 0;
     }
 };
