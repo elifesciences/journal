@@ -48,7 +48,7 @@ class Metrics
 
         if ($request->query->get('showVorMetrics') === 'true') {
             $metricParts[] = new Paragraph('Citations by DOI');
-            $metricParts[] = new Paragraph('Parent article DOI:');
+            $metricParts[] = new Paragraph('Umbrella DOI:');
             $metricParts[] = new Paragraph($numberOfCitationsForUmbrellaDoi.' citations');
             if ($vorCitations) {
                 foreach ($vorCitations as $i => $citations) {
