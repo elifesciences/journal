@@ -51,16 +51,17 @@ class Metrics
 
         if ($request->query->get('showVorMetrics') === 'true') {
             $metricParts[] = new ListHeading('Citations by DOI');
-            // $metricParts[] = new Paragraph('Umbrella DOI: https://doi.org/'.$item->getDoi());
             $metricParts[] = new Paragraph('Umbrella DOI: '.self::constructDoiLink($item->getDoi()));
             $metricParts[] = new Paragraph($numberOfCitationsForUmbrellaDoi.' citations');
+            dump($vorCitations);
             if ($vorCitations) {
                 foreach ($vorCitations as $i => $citations) {
                     if ($citations) {
                         $versionNumber = $i + 1;
                         $highestCountOfCitationsForAVersion = $citations->getHighest()->getCitations();
+                        $versionUri = $citations->getHighest()->getUri();
                         if ($highestCountOfCitationsForAVersion > 0) {
-                            $vorStatistics = ViewModel\Statistic::fromNumber('Citations for version '.$versionNumber, $highestCountOfCitationsForAVersion);
+                            $vorStatistics = ViewModel\Statistic::fromNumber('Citations for version '.$versionNumber.' '.$versionUri, $highestCountOfCitationsForAVersion);
                             $metricParts[] = new ViewModel\StatisticCollection($vorStatistics);
                         }
                     }
