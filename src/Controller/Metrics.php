@@ -24,6 +24,7 @@ class Metrics
         $barCharts = [];
         $numberOfTotalCitations = $totalCitations->getHighest()->getCitations();
         $numberOfCitationsForVersions = self::calculateCitationsForVersions($vorCitations);
+        $numberOfCitationsForUmbrellaDoi = $numberOfTotalCitations - $numberOfCitationsForVersions;
 
         if ($totalPageViews) {
             $totalStatistics[] = ViewModel\Statistic::fromNumber('views', $totalPageViews);
@@ -48,7 +49,7 @@ class Metrics
         if ($request->query->get('showVorMetrics') === 'true') {
             $metricParts[] = new Paragraph('Citations by DOI');
             $metricParts[] = new Paragraph('Parent article DOI:');
-            $metricParts[] = new Paragraph($numberOfTotalCitations.' citations');
+            $metricParts[] = new Paragraph($numberOfCitationsForUmbrellaDoi.' citations');
             if ($vorCitations) {
                 foreach ($vorCitations as $i => $citations) {
                     if ($citations) {
