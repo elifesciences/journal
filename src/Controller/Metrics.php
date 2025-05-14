@@ -23,7 +23,8 @@ class Metrics
         $totalStatistics = [];
         $barCharts = [];
         $numberOfTotalCitations = $totalCitations->getHighest()->getCitations();
-        $numberOfCitationsForVersions = self::calculateCitationsForVersions();
+        $numberOfCitationsForVersions = self::calculateCitationsForVersions($vorCitations);
+
         if ($totalPageViews) {
             $totalStatistics[] = ViewModel\Statistic::fromNumber('views', $totalPageViews);
             $barCharts[] = new ViewModel\BarChart($itemId, 'article', 'page-views', $apiEndPoint, 'page-views', 'month');
@@ -64,8 +65,16 @@ class Metrics
 
         return array_merge($metricParts, $barCharts);
     }
-    private static function calculateCitationsForVersions()
+    private static function calculateCitationsForVersions(array $vorCitations)
     {
-        return 0;
+        $sumOfAllVersionSpecificCitations = 0;
+        if ($vorCitations) {
+            foreach ($vorCitations as $i => $citations) {
+                if ($citations) {
+                    $sumOfAllVersionSpecificCitations += $citations->getHighest()->getCitations();
+                }
+            }
+        }
+        return $sumOfAllVersionSpecificCitations;
     }
 };
