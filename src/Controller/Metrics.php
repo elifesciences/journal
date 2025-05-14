@@ -22,6 +22,7 @@ class Metrics
     {
         $totalStatistics = [];
         $barCharts = [];
+        $numberOfTotalCitations = $totalCitations->getHighest()->getCitations();
 
         if ($totalPageViews) {
             $totalStatistics[] = ViewModel\Statistic::fromNumber('views', $totalPageViews);
@@ -34,7 +35,7 @@ class Metrics
         }
 
         if ($totalCitations) {
-            $totalStatistics[] = ViewModel\Statistic::fromNumber('citations', $totalCitations->getHighest()->getCitations());
+            $totalStatistics[] = ViewModel\Statistic::fromNumber('citations', $numberOfTotalCitations);
         }
 
         $totalStatisticsDescription = new Paragraph('Views, downloads and citations are aggregated across all versions of this paper published by eLife.');
@@ -45,8 +46,8 @@ class Metrics
 
         if ($request->query->get('showVorMetrics') === 'true') {
             $metricParts[] = new Paragraph('Citations by DOI');
-            $metricParts[] = new Paragraph($totalCitations->getHighest()->getCitations().' citations');
             $metricParts[] = new Paragraph('Parent article DOI:');
+            $metricParts[] = new Paragraph($numberOfTotalCitations.' citations');
             if ($vorCitations) {
                 foreach ($vorCitations as $i => $citations) {
                     if ($citations) {
