@@ -102,9 +102,9 @@ class Metrics
         return '<a href="'.$uri.'">'.$uri.'</a>';
     }
 
-    private static function constructLabel(int $versionNumber, string $versionUri): string
+    private static function constructLabel(int $versionNumber, string $versionUri, bool $isLatestVersion = false): string
     {
-        $versionLabel = 'Reviewed Preprint V';
+        $versionLabel = $isLatestVersion ? 'Version of Record ' : 'Reviewed Preprint V';
         return 'citations for '.$versionLabel.$versionNumber.' '.self::constructDoiLinkFromUri($versionUri);
     }
 };
