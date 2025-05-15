@@ -52,7 +52,7 @@ class Metrics
         if ($request->query->get('showVorMetrics') === 'true') {
             $metricParts[] = new ListHeading('Citations by DOI');
             $umbrellaDoiStatistic = ViewModel\Statistic::fromNumber(
-                self::pluralise('citation', true).' for umbrella DOI '.self::constructDoiLink($item->getDoi()),
+                self::pluralise('citation', $numberOfCitationsForUmbrellaDoi !== 1).' for umbrella DOI '.self::constructDoiLink($item->getDoi()),
                 $numberOfCitationsForUmbrellaDoi,
                 'true'
             );
