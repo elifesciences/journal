@@ -61,11 +61,12 @@ class Metrics
                 foreach ($vorCitations as $i => $citations) {
                     if ($citations) {
                         $versionNumber = $i + 1;
+                        $isLatestVersion = $versionNumber === sizeof($vorCitations);
                         $highestCountOfCitationsForAVersion = $citations->getHighest()->getCitations();
                         $versionUri = $citations->getHighest()->getUri();
                         if ($highestCountOfCitationsForAVersion > 0) {
                             $vorStatistics = ViewModel\Statistic::fromNumber(
-                                self::constructLabel($versionNumber, $versionUri),
+                                self::constructLabel($versionNumber, $versionUri, $isLatestVersion),
                                 $highestCountOfCitationsForAVersion,
                                 'true'
                             );
