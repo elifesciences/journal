@@ -65,7 +65,7 @@ class Metrics
                         $versionUri = $citations->getHighest()->getUri();
                         if ($highestCountOfCitationsForAVersion > 0) {
                             $vorStatistics = ViewModel\Statistic::fromNumber(
-                                'citations for version '.$versionNumber.' '.self::constructDoiLinkFromUri($versionUri),
+                                self::constructLabel($versionNumber, $versionUri),
                                 $highestCountOfCitationsForAVersion,
                                 'true'
                             );
@@ -100,5 +100,11 @@ class Metrics
     private static function constructDoiLinkFromUri(string $uri)
     {
         return '<a href="'.$uri.'">'.$uri.'</a>';
+    }
+
+    private static function constructLabel(int $versionNumber, string $versionUri): string
+    {
+        $versionLabel = 'Reviewed Preprint V';
+        return 'citations for '.$versionLabel.$versionNumber.' '.self::constructDoiLinkFromUri($versionUri);
     }
 };
