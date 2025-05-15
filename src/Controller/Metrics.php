@@ -61,7 +61,11 @@ class Metrics
                         $highestCountOfCitationsForAVersion = $citations->getHighest()->getCitations();
                         $versionUri = $citations->getHighest()->getUri();
                         if ($highestCountOfCitationsForAVersion > 0) {
-                            $vorStatistics = ViewModel\Statistic::fromNumber('Citations for version '.$versionNumber.' '.$versionUri, $highestCountOfCitationsForAVersion);
+                            $vorStatistics = ViewModel\Statistic::fromNumber(
+                                'Citations for version '.$versionNumber.' '.self::constructDoiLinkFromUri($versionUri),
+                                $highestCountOfCitationsForAVersion,
+                                'true'
+                            );
                             $metricParts[] = new ViewModel\StatisticCollection($vorStatistics);
                         }
                     }
@@ -88,5 +92,10 @@ class Metrics
     {
         $url = 'https://doi.org/'.$doi;
         return '<a href="'.$url.'">'.$url.'</a>';
+    }
+
+    private static function constructDoiLinkFromUri(string $uri)
+    {
+        return '<a href="'.$uri.'">'.$uri.'</a>';
     }
 };
