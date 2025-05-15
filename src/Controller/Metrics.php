@@ -52,7 +52,7 @@ class Metrics
         if ($request->query->get('showVorMetrics') === 'true') {
             $metricParts[] = new ListHeading('Citations by DOI');
             $umbrellaDoiStatistic = ViewModel\Statistic::fromNumber(
-                'citations for umbrella DOI '.self::constructDoiLink($item->getDoi()),
+                self::pluralise('citation', true).' for umbrella DOI '.self::constructDoiLink($item->getDoi()),
                 $numberOfCitationsForUmbrellaDoi,
                 'true'
             );
@@ -108,5 +108,10 @@ class Metrics
         $versionLabel = $isLatestVersion ? 'Version of Record ' : 'Reviewed Preprint V'.$versionNumber;
         $citationLabel = $isSingular ? 'citation' : 'citations';
         return $citationLabel.' for '.$versionLabel.' '.self::constructDoiLinkFromUri($versionUri);
+    }
+
+    private static function pluralise(string $word, bool $pluralise)
+    {
+        return $pluralise ? $word.'s' : $word;
     }
 };
