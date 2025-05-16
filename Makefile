@@ -29,6 +29,7 @@ stop:
 clean:
 	$(DOCKER_COMPOSE) down --volumes --remove-orphans
 	rm -rf vendor
+	@echo "If you are still not seeing what you expect after cleaning, you may need to run 'docker system prune'"
 
 test: vendor
 	APP_ENV=ci $(DOCKER_COMPOSE) run --rm app vendor/bin/phpunit $(TEST) $(OPTIONS)
