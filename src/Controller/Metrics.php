@@ -57,8 +57,7 @@ class Metrics
             foreach ($vorCitations as $i => $citations) {
                 if ($citations && $citations->getHighest()->getCitations() > 0) {
                     $versionNumber = $i + 1;
-                    $vorStatistics = self::constructVorStatistic($vorCitations, $citations, $versionNumber);
-                    $metricParts[] = new ViewModel\StatisticCollection($vorStatistics);
+                    $metricParts[] = self::constructVorStatisticCollection($vorCitations, $citations, $versionNumber);
                 }
             }
         }
@@ -78,16 +77,16 @@ class Metrics
         ));
     }
 
-    private static function constructVorStatistic(array $vorCitations, CitationsMetric $citations, int $versionNumber)
+    private static function constructVorStatisticCollection(array $vorCitations, CitationsMetric $citations, int $versionNumber)
     {
         $highestCountOfCitationsForAVersion = $citations->getHighest()->getCitations();
         $isLatestVersion = $versionNumber === sizeof($vorCitations);
         $versionUri = $citations->getHighest()->getUri();
-        return ViewModel\Statistic::fromNumber(
+        return new ViewModel\StatisticCollection(ViewModel\Statistic::fromNumber(
             self::constructLabel($versionNumber, $versionUri, $isLatestVersion, $highestCountOfCitationsForAVersion > 1),
             $highestCountOfCitationsForAVersion,
             'true'
-        );
+        ));
     }
 
     private static function calculateCitationsForVersions(array $vorCitations): int
