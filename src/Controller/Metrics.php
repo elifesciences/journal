@@ -67,7 +67,7 @@ class Metrics
                         $versionUri = $citations->getHighest()->getUri();
                         if ($highestCountOfCitationsForAVersion > 0) {
                             $vorStatistics = ViewModel\Statistic::fromNumber(
-                                self::constructLabel($versionNumber, $versionUri, $isLatestVersion, $highestCountOfCitationsForAVersion === 1),
+                                self::constructLabel($versionNumber, $versionUri, $isLatestVersion, $highestCountOfCitationsForAVersion > 1),
                                 $highestCountOfCitationsForAVersion,
                                 'true'
                             );
@@ -107,11 +107,10 @@ class Metrics
         return '<a href="'.$uri.'">'.$uri.'</a>';
     }
 
-    private static function constructLabel(int $versionNumber, string $versionUri, bool $isLatestVersion = false, bool $isSingular = false): string
+    private static function constructLabel(int $versionNumber, string $versionUri, bool $isLatestVersion = false, bool $isPlural = false): string
     {
-        $versionLabel = $isLatestVersion ? 'Version of Record ' : 'Reviewed Preprint V'.$versionNumber;
-        $citationLabel = $isSingular ? 'citation' : 'citations';
-        return $citationLabel.' for '.$versionLabel.' '.self::constructDoiLinkFromUri($versionUri);
+        $versionLabel = $isLatestVersion ? 'Version of Record ' : 'Reviewed Preprint v'.$versionNumber;
+        return self::pluralise('citation', $isPlural).' for '.$versionLabel.' '.self::constructDoiLinkFromUri($versionUri);
     }
 
     private static function pluralise(string $word, bool $pluralise)
