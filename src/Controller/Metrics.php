@@ -50,10 +50,9 @@ class Metrics
         $metricParts[] = $totalStatisticsDescription;
 
         if ($numberOfCitationsForUmbrellaDoi > 0) {
-            $metricParts[] = new ViewModel\StatisticCollection(
-                self::constructUmbrellaDoiStatistic($numberOfCitationsForUmbrellaDoi, $item->getDoi())
-            );
+            $metricParts[] = self::constructUmbrellaDoiStatisticCollection($numberOfCitationsForUmbrellaDoi, $item->getDoi());
         }
+
         if ($vorCitations) {
             foreach ($vorCitations as $i => $citations) {
                 if ($citations && $citations->getHighest()->getCitations() > 0) {
@@ -77,13 +76,13 @@ class Metrics
         return array_merge($metricParts, $barCharts);
     }
 
-    private static function constructUmbrellaDoiStatistic(int $numberOfCitationsForUmbrellaDoi, string $doi)
+    private static function constructUmbrellaDoiStatisticCollection(int $numberOfCitationsForUmbrellaDoi, string $doi)
     {
-        return ViewModel\Statistic::fromNumber(
+        return new ViewModel\StatisticCollection(ViewModel\Statistic::fromNumber(
             self::pluralise('citation', $numberOfCitationsForUmbrellaDoi !== 1).' for umbrella DOI '.self::constructDoiLink($doi),
             $numberOfCitationsForUmbrellaDoi,
             'true'
-        );
+        ));
     }
 
     private static function calculateCitationsForVersions(array $vorCitations): int
