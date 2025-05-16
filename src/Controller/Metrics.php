@@ -40,7 +40,7 @@ class Metrics
         }
 
         if ($totalCitations) {
-            $totalStatistics[] = ViewModel\Statistic::fromNumber(self::pluralise('citation', $numberOfTotalCitations > 1), $numberOfTotalCitations);
+            $totalStatistics[] = ViewModel\Statistic::fromNumber(self::pluralise('citation', $numberOfTotalCitations !== 1), $numberOfTotalCitations);
         }
 
         $totalStatisticsDescription = new Paragraph('Views, downloads and citations are aggregated across all versions of this paper published by eLife.');
