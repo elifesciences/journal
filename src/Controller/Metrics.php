@@ -103,13 +103,13 @@ class Metrics
         return $sumOfAllVersionSpecificCitations;
     }
 
-    private static function constructDoiLink(string $doi)
+    private static function constructDoiLink(string $doi): string
     {
         $url = 'https://doi.org/'.$doi;
         return '<a href="'.$url.'">'.$url.'</a>';
     }
 
-    private static function constructDoiLinkFromUri(string $uri)
+    private static function constructDoiLinkFromUri(string $uri): string
     {
         return '<a href="'.$uri.'">'.$uri.'</a>';
     }
@@ -120,7 +120,7 @@ class Metrics
         return self::pluralise('citation', $isPlural).' for '.$versionLabel.' '.self::constructDoiLinkFromUri($versionUri);
     }
 
-    private static function pluralise(string $word, bool $pluralise)
+    private static function pluralise(string $word, bool $pluralise): string
     {
         return $pluralise ? $word.'s' : $word;
     }
