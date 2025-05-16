@@ -51,12 +51,9 @@ class Metrics
 
         if ($request->query->get('showVorMetrics') === 'true') {
             if ($numberOfCitationsForUmbrellaDoi > 0) {
-                $umbrellaDoiStatistic = ViewModel\Statistic::fromNumber(
-                    self::pluralise('citation', $numberOfCitationsForUmbrellaDoi !== 1).' for umbrella DOI '.self::constructDoiLink($item->getDoi()),
-                    $numberOfCitationsForUmbrellaDoi,
-                    'true'
+                $metricParts[] = new ViewModel\StatisticCollection(
+                    self::constructUmbrellaDoiStatistic($numberOfCitationsForUmbrellaDoi, $item->getDoi())
                 );
-                $metricParts[] = new ViewModel\StatisticCollection($umbrellaDoiStatistic);
             }
             if ($vorCitations) {
                 foreach ($vorCitations as $i => $citations) {
@@ -83,6 +80,16 @@ class Metrics
 
         return array_merge($metricParts, $barCharts);
     }
+
+    private static function constructUmbrellaDoiStatistic(int $numberOfCitationsForUmbrellaDoi, string $doi)
+    {
+        return ViewModel\Statistic::fromNumber(
+            self::pluralise('citation', $numberOfCitationsForUmbrellaDoi !== 1).' for umbrella DOI '.self::constructDoiLink($doi),
+            $numberOfCitationsForUmbrellaDoi,
+            'true'
+        );
+    }
+
     private static function calculateCitationsForVersions(array $vorCitations): int
     {
         $sumOfAllVersionSpecificCitations = 0;
