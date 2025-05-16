@@ -46,26 +46,27 @@ class Metrics
         $totalStatisticsDescription = new Paragraph('Views, downloads and citations are aggregated across all versions of this paper published by eLife.');
 
         $metricParts = [];
+        $metricPartsVors = [];
         $metricParts[] = new ViewModel\StatisticCollection(...$totalStatistics);
         $metricParts[] = $totalStatisticsDescription;
 
         if ($numberOfCitationsForUmbrellaDoi > 0) {
-            $metricParts[] = self::constructUmbrellaDoiStatisticCollection($numberOfCitationsForUmbrellaDoi, $item->getDoi());
+            $metricPartsVors[] = self::constructUmbrellaDoiStatisticCollection($numberOfCitationsForUmbrellaDoi, $item->getDoi());
         }
 
         if ($vorCitations) {
             foreach ($vorCitations as $i => $citations) {
                 if ($citations && $citations->getHighest()->getCitations() > 0) {
                     $versionNumber = $i + 1;
-                    $metricParts[] = self::constructVorStatisticCollection($vorCitations, $citations, $versionNumber);
+                    $metricPartsVors[] = self::constructVorStatisticCollection($vorCitations, $citations, $versionNumber);
                 }
             }
         }
-        if (sizeof($metricParts) > 2) {
-            array_splice($metricParts, 0, 2, [$metricParts[0], $metricParts[1], new ListHeading('Citations by DOI')]);
+        if (sizeof($metricPartsVors) > 0) {
+            array_unshift($metricPartsVors, new ListHeading('Citations by DOI'));
         }
 
-        return array_merge($metricParts, $barCharts);
+        return array_merge($metricParts, $metricPartsVors, $barCharts);
     }
 
     private static function constructUmbrellaDoiStatisticCollection(int $numberOfCitationsForUmbrellaDoi, string $doi)
