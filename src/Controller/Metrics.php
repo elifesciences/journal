@@ -83,7 +83,7 @@ class Metrics
 
         return array_merge($metricParts, $barCharts);
     }
-    private static function calculateCitationsForVersions(array $vorCitations)
+    private static function calculateCitationsForVersions(array $vorCitations): int
     {
         $sumOfAllVersionSpecificCitations = 0;
         if ($vorCitations) {
