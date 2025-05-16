@@ -50,13 +50,14 @@ class Metrics
         $metricParts[] = $totalStatisticsDescription;
 
         if ($request->query->get('showVorMetrics') === 'true') {
-            $metricParts[] = new ListHeading('Citations by DOI');
-            $umbrellaDoiStatistic = ViewModel\Statistic::fromNumber(
-                self::pluralise('citation', $numberOfCitationsForUmbrellaDoi !== 1).' for umbrella DOI '.self::constructDoiLink($item->getDoi()),
-                $numberOfCitationsForUmbrellaDoi,
-                'true'
-            );
-            $metricParts[] = new ViewModel\StatisticCollection($umbrellaDoiStatistic);
+            if ($numberOfCitationsForUmbrellaDoi > 0) {
+                $umbrellaDoiStatistic = ViewModel\Statistic::fromNumber(
+                    self::pluralise('citation', $numberOfCitationsForUmbrellaDoi !== 1).' for umbrella DOI '.self::constructDoiLink($item->getDoi()),
+                    $numberOfCitationsForUmbrellaDoi,
+                    'true'
+                );
+                $metricParts[] = new ViewModel\StatisticCollection($umbrellaDoiStatistic);
+            }
             if ($vorCitations) {
                 foreach ($vorCitations as $i => $citations) {
                     if ($citations) {
@@ -75,6 +76,9 @@ class Metrics
                     }
                 }
             }
+        }
+        if (sizeof($metricParts) > 2) {
+            array_splice($metricParts, 0, 2, [$metricParts[0], $metricParts[1], new ListHeading('Citations by DOI')]);
         }
 
         return array_merge($metricParts, $barCharts);
