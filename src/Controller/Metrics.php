@@ -49,27 +49,25 @@ class Metrics
         $metricParts[] = new ViewModel\StatisticCollection(...$totalStatistics);
         $metricParts[] = $totalStatisticsDescription;
 
-        if ($request->query->get('showVorMetrics') === 'true') {
-            if ($numberOfCitationsForUmbrellaDoi > 0) {
-                $metricParts[] = new ViewModel\StatisticCollection(
-                    self::constructUmbrellaDoiStatistic($numberOfCitationsForUmbrellaDoi, $item->getDoi())
-                );
-            }
-            if ($vorCitations) {
-                foreach ($vorCitations as $i => $citations) {
-                    if ($citations) {
-                        $versionNumber = $i + 1;
-                        $isLatestVersion = $versionNumber === sizeof($vorCitations);
-                        $highestCountOfCitationsForAVersion = $citations->getHighest()->getCitations();
-                        $versionUri = $citations->getHighest()->getUri();
-                        if ($highestCountOfCitationsForAVersion > 0) {
-                            $vorStatistics = ViewModel\Statistic::fromNumber(
-                                self::constructLabel($versionNumber, $versionUri, $isLatestVersion, $highestCountOfCitationsForAVersion > 1),
-                                $highestCountOfCitationsForAVersion,
-                                'true'
-                            );
-                            $metricParts[] = new ViewModel\StatisticCollection($vorStatistics);
-                        }
+        if ($numberOfCitationsForUmbrellaDoi > 0) {
+            $metricParts[] = new ViewModel\StatisticCollection(
+                self::constructUmbrellaDoiStatistic($numberOfCitationsForUmbrellaDoi, $item->getDoi())
+            );
+        }
+        if ($vorCitations) {
+            foreach ($vorCitations as $i => $citations) {
+                if ($citations) {
+                    $versionNumber = $i + 1;
+                    $isLatestVersion = $versionNumber === sizeof($vorCitations);
+                    $highestCountOfCitationsForAVersion = $citations->getHighest()->getCitations();
+                    $versionUri = $citations->getHighest()->getUri();
+                    if ($highestCountOfCitationsForAVersion > 0) {
+                        $vorStatistics = ViewModel\Statistic::fromNumber(
+                            self::constructLabel($versionNumber, $versionUri, $isLatestVersion, $highestCountOfCitationsForAVersion > 1),
+                            $highestCountOfCitationsForAVersion,
+                            'true'
+                        );
+                        $metricParts[] = new ViewModel\StatisticCollection($vorStatistics);
                     }
                 }
             }
