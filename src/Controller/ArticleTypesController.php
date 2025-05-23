@@ -69,7 +69,7 @@ final class ArticleTypesController extends Controller
     {
         static $impactStatements = [
             'editorial' => 'Editorials are written by eLife editors or staff.',
-            'feature' => 'eLife Feature Articles allow authors to discuss research culture, science policy and funding, careers in science and a variety of other topics related to science and research. Feature Articles can also report original findings in <a href="/collections/8d233d47/meta-research-a-collection-of-articles">meta-research</a>.',
+            'feature' => 'eLife Feature Articles allow authors to discuss research culture, science policy and funding, careers in science and a variety of other topics related to science and research.',
             'insight' => 'Insight articles are related to original research papers in eLife and explain why the results reported in the paper are significant in a given field of research. Insight articles are commissioned by eLife staff.',
             'research-advance' => 'A Research Advance is a short article that allows either the authors of an eLife paper or other researchers to publish new results that build on the original research paper in an important way.',
             'research-article' => 'Research Articles published by eLife are full-length studies that present important breakthroughs across the life sciences and biomedicine. There is no maximum length and no limits on the number of display items.',
