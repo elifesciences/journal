@@ -601,6 +601,7 @@ final class ArticlesController extends Controller
 
                 $altmetrics = [];
                 if (!is_null($this->pageRequest->get('displayAltmetrics'))) {
+                    $altmetrics = [new ViewModel\Altmetric('10.7554/eLife.09560')];
                 }
 
                 $standardMetrics = [];
