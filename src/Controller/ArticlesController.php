@@ -600,13 +600,16 @@ final class ArticlesController extends Controller
                 );
 
                 $altmetrics = [];
-
                 if (!is_null($this->pageRequest->get('displayAltmetrics'))) {
                 }
 
+                $standardMetrics = [];
                 if ($pageViews || $downloads || $citations) {
                     $standardMetrics = $this->buildMetrics($citationsForAllVersions, $item, $pageViews, $downloads, $citations)->wait();
-                    $metrics = array_merge($standardMetrics, $altmetrics);
+                }
+
+                $metrics = array_merge($standardMetrics, $altmetrics);
+                if (sizeof($metrics) > 0) {
                     $parts[] = ArticleSection::collapsible(
                         'metrics',
                         'Metrics',
