@@ -19,7 +19,7 @@ class Metrics
         CitationsMetric $totalCitations = null,
         array $vorCitations = null,
         ArticleVersion $item,
-        array $altmetric
+        bool $isFeatureFlagSet
     )
     {
         $totalStatistics = [];
@@ -69,6 +69,11 @@ class Metrics
         }
         if (sizeof($metricPartsVors) > 0) {
             array_unshift($metricPartsVors, new ListHeading('Citations by DOI'));
+        }
+
+        $altmetric = [];
+        if ($isFeatureFlagSet) {
+            $altmetric = [new ViewModel\Altmetric($item->getDoi())];
         }
 
         return array_merge($metricParts, $metricPartsVors, $altmetric, $barCharts);

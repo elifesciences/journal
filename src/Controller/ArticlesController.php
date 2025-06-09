@@ -599,13 +599,13 @@ final class ArticlesController extends Controller
                     true
                 );
 
-                $altmetrics = [];
+                $isFeatureFlagSet = false;
                 if (!is_null($this->pageRequest->get('displayAltmetrics'))) {
-                    $altmetrics = [new ViewModel\Altmetric($item->getDoi())];
+                    $isFeatureFlagSet = true;
                 }
 
-                if ($pageViews || $downloads || $citations || sizeof($altmetrics) > 0) {
-                    $metrics = $this->buildMetrics($citationsForAllVersions, $item, $pageViews, $downloads, $citations, $altmetrics)->wait();
+                if ($pageViews || $downloads || $citations || $isFeatureFlagSet) {
+                    $metrics = $this->buildMetrics($citationsForAllVersions, $item, $pageViews, $downloads, $citations, $isFeatureFlagSet)->wait();
                     $parts[] = ArticleSection::collapsible(
                         'metrics',
                         'Metrics',
@@ -2011,12 +2011,12 @@ final class ArticlesController extends Controller
         $downloads,
         /** @var CitationsMetric|null $citations */
         $citations,
-        /** @var array $altmetrics */
-        $altmetrics
+        /** @var bool $isFeatureFlagSet */
+        $isFeatureFlagSet
         )
     {
         $citationsForAllVersions = all($promisesOfCitationsForAllVersions)
-            ->then(function (array $citationsByVersion) use ($item, $pageViews, $downloads, $citations, $altmetrics){
+            ->then(function (array $citationsByVersion) use ($item, $pageViews, $downloads, $citations, $isFeatureFlagSet){
                 $citationsForAllVersions = [];
                 for ($i = 0; $i < sizeof($citationsByVersion); $i += 1) {
                     $citationsForAllVersions[] = $citationsByVersion[$i];
@@ -2031,7 +2031,7 @@ final class ArticlesController extends Controller
                     $citations,
                     $citationsForAllVersions,
                     $item,
-                    $altmetrics
+                    $isFeatureFlagSet
                 );
             });
 
