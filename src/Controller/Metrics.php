@@ -7,13 +7,11 @@ use eLife\ApiSdk\Model\CitationsMetric;
 use eLife\Patterns\ViewModel;
 use eLife\Patterns\ViewModel\ListHeading;
 use eLife\Patterns\ViewModel\Paragraph;
-use Symfony\Component\HttpFoundation\Request;
 
 class Metrics
 {
 
     public static function build(
-        Request $request,
         string $apiEndPoint,
         string $itemId,
         int $totalPageViews = null,
