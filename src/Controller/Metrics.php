@@ -25,32 +25,30 @@ class Metrics
         $totalStatistics = [];
         $barCharts = [];
 
-        if ($totalPageViews || $totalDownloads || $totalCitations) {
-            if ($totalCitations) {
-                $numberOfTotalCitations = $totalCitations->getHighest()->getCitations();
-                $numberOfCitationsForVersions = self::calculateCitationsForVersions($vorCitations);
-                $numberOfCitationsForUmbrellaDoi = $numberOfTotalCitations - $numberOfCitationsForVersions;
-                if ($numberOfCitationsForUmbrellaDoi > 0) {
-                    $metricPartsVors[] = self::constructUmbrellaDoiStatisticCollection($numberOfCitationsForUmbrellaDoi, $item->getDoi());
-                }
+        if ($totalCitations) {
+            $numberOfTotalCitations = $totalCitations->getHighest()->getCitations();
+            $numberOfCitationsForVersions = self::calculateCitationsForVersions($vorCitations);
+            $numberOfCitationsForUmbrellaDoi = $numberOfTotalCitations - $numberOfCitationsForVersions;
+            if ($numberOfCitationsForUmbrellaDoi > 0) {
+                $metricPartsVors[] = self::constructUmbrellaDoiStatisticCollection($numberOfCitationsForUmbrellaDoi, $item->getDoi());
             }
-
-            if ($totalPageViews) {
-                $totalStatistics[] = ViewModel\Statistic::fromNumber('views', $totalPageViews);
-                $barCharts[] = new ViewModel\BarChart($itemId, 'article', 'page-views', $apiEndPoint, 'page-views', 'month');
-            }
-
-            if ($totalDownloads) {
-                $totalStatistics[] = ViewModel\Statistic::fromNumber('downloads', $totalDownloads);
-                $barCharts[] = new ViewModel\BarChart($itemId, 'article', 'downloads', $apiEndPoint, 'downloads', 'month');
-            }
-
-            if ($totalCitations) {
-                $totalStatistics[] = ViewModel\Statistic::fromNumber(self::pluralise('citation', $numberOfTotalCitations !== 1), $numberOfTotalCitations);
-            }
-
-            $totalStatisticsDescription = new Paragraph('Views, downloads and citations are aggregated across all versions of this paper published by eLife.');
         }
+
+        if ($totalPageViews) {
+            $totalStatistics[] = ViewModel\Statistic::fromNumber('views', $totalPageViews);
+            $barCharts[] = new ViewModel\BarChart($itemId, 'article', 'page-views', $apiEndPoint, 'page-views', 'month');
+        }
+
+        if ($totalDownloads) {
+            $totalStatistics[] = ViewModel\Statistic::fromNumber('downloads', $totalDownloads);
+            $barCharts[] = new ViewModel\BarChart($itemId, 'article', 'downloads', $apiEndPoint, 'downloads', 'month');
+        }
+
+        if ($totalCitations) {
+            $totalStatistics[] = ViewModel\Statistic::fromNumber(self::pluralise('citation', $numberOfTotalCitations !== 1), $numberOfTotalCitations);
+        }
+
+        $totalStatisticsDescription = new Paragraph('Views, downloads and citations are aggregated across all versions of this paper published by eLife.');
 
         $metricParts = [];
         $metricPartsVors = [];
