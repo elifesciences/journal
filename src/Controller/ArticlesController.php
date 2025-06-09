@@ -147,6 +147,7 @@ final class ArticlesController extends Controller
 
     private function createFirstPage(Request $request, string $id, array $arguments) : Response
     {
+        $this->pageRequest = $request;
         $arguments['relatedItem'] = all(['relatedItem' => $arguments['relatedItem'], 'item' => $arguments['item'], 'listing' => $arguments['listing'], 'relatedArticles' => $arguments['relatedArticles'], 'furtherReading' => $arguments['furtherReading']])
             ->then(function (array $parts) {
                 /** @var Article|null $relatedItem */
@@ -597,6 +598,10 @@ final class ArticlesController extends Controller
                     null,
                     true
                 );
+
+                if (!is_null($this->pageRequest->get('displayAltmetrics'))) {
+                    $altmetric = [];
+                }
 
                 if ($pageViews || $downloads || $citations) {
                     $metrics = $this->buildMetrics($citationsForAllVersions, $item, $pageViews, $downloads, $citations)->wait();
