@@ -599,12 +599,14 @@ final class ArticlesController extends Controller
                     true
                 );
 
+                $altmetrics = [];
+
                 if (!is_null($this->pageRequest->get('displayAltmetrics'))) {
-                    $altmetric = [];
                 }
 
                 if ($pageViews || $downloads || $citations) {
-                    $metrics = $this->buildMetrics($citationsForAllVersions, $item, $pageViews, $downloads, $citations)->wait();
+                    $standardMetrics = $this->buildMetrics($citationsForAllVersions, $item, $pageViews, $downloads, $citations)->wait();
+                    $metrics = array_merge($standardMetrics, $altmetrics);
                     $parts[] = ArticleSection::collapsible(
                         'metrics',
                         'Metrics',
