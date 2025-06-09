@@ -604,13 +604,8 @@ final class ArticlesController extends Controller
                     $altmetrics = [new ViewModel\Altmetric($item->getDoi())];
                 }
 
-                $standardMetrics = [];
-                if ($pageViews || $downloads || $citations) {
-                    $standardMetrics = $this->buildMetrics($citationsForAllVersions, $item, $pageViews, $downloads, $citations)->wait();
-                }
-
-                $metrics = array_merge($standardMetrics, $altmetrics);
-                if (sizeof($metrics) > 0) {
+                if ($pageViews || $downloads || $citations || sizeof($altmetrics) > 0) {
+                    $metrics = $this->buildMetrics($citationsForAllVersions, $item, $pageViews, $downloads, $citations, $altmetrics)->wait();
                     $parts[] = ArticleSection::collapsible(
                         'metrics',
                         'Metrics',
@@ -2015,18 +2010,29 @@ final class ArticlesController extends Controller
         /** @var int|null $downloads */
         $downloads,
         /** @var CitationsMetric|null $citations */
-        $citations
+        $citations,
+        /** @var array $altmetrics */
+        $altmetrics
         )
     {
         $citationsForAllVersions = all($promisesOfCitationsForAllVersions)
-            ->then(function (array $citationsByVersion) use ($item, $pageViews, $downloads, $citations){
+            ->then(function (array $citationsByVersion) use ($item, $pageViews, $downloads, $citations, $altmetrics){
                 $citationsForAllVersions = [];
                 for ($i = 0; $i < sizeof($citationsByVersion); $i += 1) {
                     $citationsForAllVersions[] = $citationsByVersion[$i];
                 }
                 $itemId = $item->getId();
                 $apiEndPoint = rtrim($this->getParameter('api_url_public'), '/');
-                return Metrics::build($apiEndPoint, $itemId, $pageViews, $downloads, $citations, $citationsForAllVersions, $item);
+                return Metrics::build(
+                    $apiEndPoint,
+                    $itemId,
+                    $pageViews,
+                    $downloads,
+                    $citations,
+                    $citationsForAllVersions,
+                    $item,
+                    $altmetrics
+                );
             });
 
         return $citationsForAllVersions;
