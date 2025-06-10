@@ -14,12 +14,12 @@ class Metrics
     public static function build(
         string $apiEndPoint,
         string $itemId,
+        ArticleVersion $item,
+        bool $isFeatureFlagSet,
         int $totalPageViews = null,
         int $totalDownloads = null,
         CitationsMetric $totalCitations = null,
-        array $vorCitations = null,
-        ArticleVersion $item,
-        bool $isFeatureFlagSet
+        array $vorCitations = null
     )
     {
         $totalStatistics = [];

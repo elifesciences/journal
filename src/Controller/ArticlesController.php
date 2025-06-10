@@ -2026,12 +2026,12 @@ final class ArticlesController extends Controller
                 return Metrics::build(
                     $apiEndPoint,
                     $itemId,
+                    $item,
+                    $isFeatureFlagSet,
                     $pageViews,
                     $downloads,
                     $citations,
-                    $citationsForAllVersions,
-                    $item,
-                    $isFeatureFlagSet
+                    $citationsForAllVersions
                 );
             });
 
