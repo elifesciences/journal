@@ -71,7 +71,7 @@ class Metrics
 
         $altmetric = [];
         if ($isFeatureFlagSet) {
-            $altmetric = [new ViewModel\Altmetric($item->getDoi())];
+            $altmetric = [new ViewModel\Altmetric($item->getDoi(), 'medium-donut', true)];
         }
 
         return array_merge($metricParts, $metricPartsVors, $altmetric, $barCharts);
