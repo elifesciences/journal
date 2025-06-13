@@ -1721,7 +1721,11 @@ final class ArticlesController extends Controller
                     'relatedItem' => $parts['relatedItem']
                 ];
 
-                $isFeatureFlagSetForAsideComponent = !is_null($this->pageRequest->get('displayAltmetrics'));
+                $isFeatureFlagSetForAsideComponent = false;
+
+                if (!is_null($this->pageRequest)) {
+                    $isFeatureFlagSetForAsideComponent = !is_null($this->pageRequest->get('displayAltmetrics'));
+                }
 
                 return $this->convertTo(
                     $parts['item'],
