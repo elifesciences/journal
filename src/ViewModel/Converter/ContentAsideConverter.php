@@ -39,7 +39,9 @@ final class ContentAsideConverter implements ViewModelConverter
             ], true),
             !empty($context['metrics']) ? ViewModel\ContextualData::withMetrics($context['metrics']) : null,
             !empty($context['timeline']) ? ViewModel\DefinitionList::timeline($context['timeline'], null, 'Version history') : null,
-            $context['relatedItem'] ?? null
+            $context['relatedItem'] ?? null,
+            null,
+            $context['altmetric'] ?? null
         );
     }
 
