@@ -1715,12 +1715,16 @@ final class ArticlesController extends Controller
                     }, $publicationHistory);
                 }
 
-                return $this->convertTo($parts['item'],
-                    ContentAside::class, [
-                        'metrics' => $parts['metrics'],
-                        'timeline' => $timeline,
-                        'relatedItem' => $parts['relatedItem']
-                    ]
+                $contentAsideItems = [
+                    'metrics' => $parts['metrics'],
+                    'timeline' => $timeline,
+                    'relatedItem' => $parts['relatedItem']
+                ];
+
+                return $this->convertTo(
+                    $parts['item'],
+                    ContentAside::class,
+                    $contentAsideItems
                 );
             });
 
