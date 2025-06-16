@@ -604,7 +604,7 @@ final class ArticlesController extends Controller
                     $isFeatureFlagSet = true;
                 }
 
-                if ($pageViews || $downloads || $citations || $isFeatureFlagSet) {
+                if ($pageViews || $downloads || $citations) {
                     $metrics = $this->buildMetrics($citationsForAllVersions, $item, $pageViews, $downloads, $citations, $isFeatureFlagSet)->wait();
                     $parts[] = ArticleSection::collapsible(
                         'metrics',
@@ -1729,9 +1729,7 @@ final class ArticlesController extends Controller
                     $isFeatureFlagSetForAsideComponent = !is_null($this->pageRequest->get('displayAltmetrics'));
                 }
 
-                if ($isFeatureFlagSetForAsideComponent) {
-                    $contentAsideItems = array_merge($contentAsideItems, ['altmetric' => $altmetricBadge]);
-                }
+                $contentAsideItems = array_merge($contentAsideItems, ['altmetric' => $altmetricBadge]);
 
                 return $this->convertTo(
                     $parts['item'],

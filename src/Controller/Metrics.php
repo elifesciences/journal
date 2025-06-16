@@ -69,10 +69,8 @@ class Metrics
             array_unshift($metricPartsVors, new ListHeading('Citations by DOI'));
         }
 
-        $altmetric = [];
-        if ($isFeatureFlagSet) {
-            $altmetric = [new ViewModel\Altmetric($item->getDoi(), 'medium-donut', true)];
-        }
+        $altmetric = [new ViewModel\Altmetric($item->getDoi(), 'medium-donut', true)];
+
 
         return array_merge($metricParts, $metricPartsVors, $altmetric, $barCharts);
     }
