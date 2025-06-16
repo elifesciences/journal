@@ -15,7 +15,6 @@ class Metrics
         string $apiEndPoint,
         string $itemId,
         ArticleVersion $item,
-        bool $isFeatureFlagSet,
         int $totalPageViews = null,
         int $totalDownloads = null,
         CitationsMetric $totalCitations = null,

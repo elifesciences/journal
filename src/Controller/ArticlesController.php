@@ -599,13 +599,8 @@ final class ArticlesController extends Controller
                     true
                 );
 
-                $isFeatureFlagSet = false;
-                if (!is_null($this->pageRequest->get('displayAltmetrics'))) {
-                    $isFeatureFlagSet = true;
-                }
-
                 if ($pageViews || $downloads || $citations) {
-                    $metrics = $this->buildMetrics($citationsForAllVersions, $item, $pageViews, $downloads, $citations, $isFeatureFlagSet)->wait();
+                    $metrics = $this->buildMetrics($citationsForAllVersions, $item, $pageViews, $downloads, $citations)->wait();
                     $parts[] = ArticleSection::collapsible(
                         'metrics',
                         'Metrics',
@@ -2024,13 +2019,11 @@ final class ArticlesController extends Controller
         /** @var int|null $downloads */
         $downloads,
         /** @var CitationsMetric|null $citations */
-        $citations,
-        /** @var bool $isFeatureFlagSet */
-        $isFeatureFlagSet
+        $citations
         )
     {
         $citationsForAllVersions = all($promisesOfCitationsForAllVersions)
-            ->then(function (array $citationsByVersion) use ($item, $pageViews, $downloads, $citations, $isFeatureFlagSet){
+            ->then(function (array $citationsByVersion) use ($item, $pageViews, $downloads, $citations){
                 $citationsForAllVersions = [];
                 for ($i = 0; $i < sizeof($citationsByVersion); $i += 1) {
                     $citationsForAllVersions[] = $citationsByVersion[$i];
@@ -2041,7 +2034,6 @@ final class ArticlesController extends Controller
                     $apiEndPoint,
                     $itemId,
                     $item,
-                    $isFeatureFlagSet,
                     $pageViews,
                     $downloads,
                     $citations,
