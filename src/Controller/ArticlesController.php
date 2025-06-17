@@ -1718,12 +1718,6 @@ final class ArticlesController extends Controller
 
                 $altmetricBadge = new ViewModel\Altmetric($item->getDoi(), 'donut', false);
 
-                $isFeatureFlagSetForAsideComponent = false;
-
-                if (!is_null($this->pageRequest)) {
-                    $isFeatureFlagSetForAsideComponent = !is_null($this->pageRequest->get('displayAltmetrics'));
-                }
-
                 $contentAsideItems = array_merge($contentAsideItems, ['altmetric' => $altmetricBadge]);
 
                 return $this->convertTo(
