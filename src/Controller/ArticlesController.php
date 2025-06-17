@@ -1263,7 +1263,7 @@ final class ArticlesController extends Controller
                 $item = $parts['item'];
                 /** @var ArticleHistory $history */
                 $history = $parts['history'];
-                /** @var Sequence|Article[] $relatedArticles */
+                /** @var Sequence|(Article|ReviewedPreprint)[] $relatedArticles */
                 $relatedArticles = $parts['relatedArticles'];
                 /** @var array $eraArticle */
                 $eraArticle = $parts['eraArticle'];
