@@ -78,7 +78,7 @@ final class ArticlesController extends Controller
                 if (in_array($item->getType(), ['correction', 'expression-concern', 'retraction'])) {
                     return new EmptySequence();
                 }
-                
+
                 return $this->get('elife.api_sdk.recommendations')->list($item->getIdentifier())->slice(0, 100)
                     ->otherwise($this->mightNotExist())
                     ->otherwise($this->softFailure('Failed to load recommendations',
@@ -1296,7 +1296,7 @@ final class ArticlesController extends Controller
                             $infoBars[] = new InfoBar('This is an expression of concern. Read the <a href="'.$this->get('router')->generate('article', [$relatedArticles[0]]).'">related article</a>.', InfoBar::TYPE_ATTENTION);
                             break;
                         case 'retraction':
-                            $infoBars[] = new InfoBar('This is a retraction notice. Read the <a href="'.$this->generateRetractedUrl($relatedArticles[0]).'">retracted article</a>.', InfoBar::TYPE_ATTENTION);
+                            $infoBars[] = new InfoBar('This is a retraction notice. Read the <a href="'.$this->generateArticleOrReviewedPreprintUrl($relatedArticles[0]).'">retracted article</a>.', InfoBar::TYPE_ATTENTION);
                             break;
                     }
 
@@ -1759,7 +1759,7 @@ final class ArticlesController extends Controller
         }));
     }
 
-    private function generateRetractedUrl($article)
+    private function generateArticleOrReviewedPreprintUrl($article)
     {
         if ($article instanceof ReviewedPreprint) {
             return $this->get('router')->generate('reviewed-preprint', [$article]);
