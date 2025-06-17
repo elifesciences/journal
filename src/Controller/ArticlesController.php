@@ -1296,7 +1296,7 @@ final class ArticlesController extends Controller
                             $infoBars[] = new InfoBar('This is an expression of concern. Read the <a href="'.$this->get('router')->generate('article', [$relatedArticles[0]]).'">related article</a>.', InfoBar::TYPE_ATTENTION);
                             break;
                         case 'retraction':
-                            $infoBars[] = new InfoBar('This is a retraction notice. Read the <a href="'.$this->generateArticleUrl([$relatedArticles[0]]).'">retracted article</a>.', InfoBar::TYPE_ATTENTION);
+                            $infoBars[] = new InfoBar('This is a retraction notice. Read the <a href="'.$this->generateRetractedUrl($relatedArticles[0]).'">retracted article</a>.', InfoBar::TYPE_ATTENTION);
                             break;
                     }
 
@@ -1759,9 +1759,12 @@ final class ArticlesController extends Controller
         }));
     }
 
-    private function generateArticleUrl($article)
+    private function generateRetractedUrl($article)
     {
-        return $this->get('router')->generate('article', $article);
+        if ($article instanceof ReviewedPreprint) {
+            return $this->get('router')->generate('reviewed-preprint', [$article]);
+        }
+        return $this->get('router')->generate('article', [$article]);
     }
 
     private function generatePath(ArticleHistory $history, int $forVersion = null, string $subRoute = null, string $fragment = null) : string
