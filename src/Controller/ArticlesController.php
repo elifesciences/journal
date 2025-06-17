@@ -1290,10 +1290,10 @@ final class ArticlesController extends Controller
                 if (count($relatedArticles) > 0) {
                     switch ($item->getType()) {
                         case 'correction':
-                            $infoBars[] = new InfoBar('This is a correction notice. Read the <a href="'.$this->get('router')->generate('article', [$relatedArticles[0]]).'">corrected article</a>.', InfoBar::TYPE_CORRECTION);
+                            $infoBars[] = new InfoBar('This is a correction notice. Read the <a href="'.$this->generateArticleOrReviewedPreprintUrl($relatedArticles[0]).'">corrected article</a>.', InfoBar::TYPE_CORRECTION);
                             break;
                         case 'expression-concern':
-                            $infoBars[] = new InfoBar('This is an expression of concern. Read the <a href="'.$this->get('router')->generate('article', [$relatedArticles[0]]).'">related article</a>.', InfoBar::TYPE_ATTENTION);
+                            $infoBars[] = new InfoBar('This is an expression of concern. Read the <a href="'.$this->generateArticleOrReviewedPreprintUrl($relatedArticles[0]).'">related article</a>.', InfoBar::TYPE_ATTENTION);
                             break;
                         case 'retraction':
                             $infoBars[] = new InfoBar('This is a retraction notice. Read the <a href="'.$this->generateArticleOrReviewedPreprintUrl($relatedArticles[0]).'">retracted article</a>.', InfoBar::TYPE_ATTENTION);
