@@ -21,7 +21,7 @@ dev: build vendor
 	$(DOCKER_COMPOSE) up
 
 prod: build vendor
-	API_URL=https://prod--gateway.elifesciences.org $(DOCKER_COMPOSE) up
+	API_URL=https://api.prod.elifesciences.org $(DOCKER_COMPOSE) up
 
 stop:
 	$(DOCKER_COMPOSE) down
