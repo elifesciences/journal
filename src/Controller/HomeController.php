@@ -76,8 +76,6 @@ final class HomeController extends Controller
         $arguments['listing'] = $arguments['paginator']
             ->then($this->willConvertTo(ListingTeasers::class, ['heading' => 'Latest research', 'type' => 'articles']));
 
-//        var_dump($arguments['listing']->wait());
-
         if (1 === $page) {
             return $this->createFirstPage($arguments);
         }

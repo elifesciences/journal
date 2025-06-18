@@ -23,6 +23,8 @@ class Metrics
     {
         $totalStatistics = [];
         $barCharts = [];
+        $metricPartsVors = [];
+        $metricParts = [];
 
         if ($totalCitations) {
             $numberOfTotalCitations = $totalCitations->getHighest()->getCitations();
@@ -49,8 +51,6 @@ class Metrics
 
         $totalStatisticsDescription = new Paragraph('Views, downloads and citations are aggregated across all versions of this paper published by eLife.');
 
-        $metricParts = [];
-        $metricPartsVors = [];
         if (sizeof($totalStatistics) > 0) {
             $metricParts[] = new ViewModel\StatisticCollection(...$totalStatistics);
             $metricParts[] = $totalStatisticsDescription;
