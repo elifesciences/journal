@@ -803,7 +803,6 @@ final class HomeControllerTest extends PageTestCase
         );
 
         $crawler = $client->request('GET', $this->getUrl());
-        $this->markTestSkipped('This is a failing test');
         $this->assertEquals(3, $crawler->filter('.highlight-item')->count());
     }
 

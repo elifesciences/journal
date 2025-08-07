@@ -88,7 +88,7 @@ final class HomeController extends Controller
         $heroHighlights = $this->get('elife.api_sdk.covers')
             ->getCurrent()
             ->then(function (Sequence $items) {
-                return $items->map(function(Cover $cover, int $i) {
+                return $items->slice(0, 4)->map(function(Cover $cover, int $i) {
                     return $this->convertTo($cover, 0 === $i ? HeroBanner::class : HighlightItem::class);
                 });
             })->otherwise($this->softFailure('Failed to load hero and highlights'));
