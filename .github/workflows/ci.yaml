@@ -28,6 +28,10 @@ jobs:
         test_script: ["phpcs", "phpunit"]
     steps:
       - uses: actions/checkout@v4
+      - name: Set up Docker Compose
+        uses: docker/setup-compose-action@v1
+        with:
+          version: v2.29.7
       - name: Bring up test stack
         run: docker compose -f docker-compose.yml -f docker-compose.ci.yml up -d
       - name: Debug bring up test stack
