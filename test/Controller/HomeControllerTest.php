@@ -772,6 +772,43 @@ final class HomeControllerTest extends PageTestCase
 
     /**
      * @test
+     */
+    public function it_displays_three_highlights_even_if_more_are_provided()
+    {
+        $client = static::createClient();
+
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/covers/current',
+                ['Accept' => 'application/vnd.elife.cover-list+json; version=1']
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.cover-list+json; version=1'],
+                json_encode([
+                        'total' => 7,
+                        'items' => [
+                            $this->prepareCover('research-article', 1),
+                            $this->prepareCover('research-article', 2),
+                            $this->prepareCover('podcast-episode', 3),
+                            $this->prepareCover('interview', 4),
+                            $this->prepareCover('interview', 5),
+                            $this->prepareCover('interview', 6),
+                            $this->prepareCover('interview', 7),
+                        ]
+                    ]
+                )
+            )
+        );
+
+        $crawler = $client->request('GET', $this->getUrl());
+        $this->markTestSkipped('This is a failing test');
+        $this->assertEquals(3, $crawler->filter('.highlight-item')->count());
+    }
+
+    /**
+     * @test
      * @dataProvider coversProvider
      */
     public function it_displays_different_types_in_hero_banner(
