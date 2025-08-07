@@ -4,7 +4,7 @@ FROM node:${node_version} as npm
 RUN apt-get update && apt-get install --no-install-recommends -y \
     nasm \
     libvips-dev \
-    && wget http://ftp.de.debian.org/debian/pool/main/p/phantomjs/phantomjs_2.1.1+dfsg-2_$(dpkg --print-architecture).deb \
+    && wget http://archive.debian.org/debian/pool/main/p/phantomjs/phantomjs_2.1.1+dfsg-2_$(dpkg --print-architecture).deb \
     && apt-get install -y ./phantomjs_2.1.1+dfsg-2_$(dpkg --print-architecture).deb \
     && rm ./phantomjs_2.1.1+dfsg-2_$(dpkg --print-architecture).deb \
     && rm -rf /var/lib/apt/lists/*
