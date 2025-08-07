@@ -27,7 +27,7 @@ stop:
 	$(DOCKER_COMPOSE) down
 
 clean:
-	$(DOCKER_COMPOSE) down --volumes --remove-orphans
+	$(DOCKER_COMPOSE) down --volumes --remove-orphans --rmi all
 	rm -rf vendor
 	@echo "If you are still not seeing what you expect after cleaning, you may need to run 'docker system prune'"
 
