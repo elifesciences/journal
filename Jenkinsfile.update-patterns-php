@@ -5,16 +5,6 @@ def wrapper = { body ->
 }
 
 elifeUpdatePipeline(
-    { commit ->
-        elifeWaitPackagist "elife/patterns", params.revision
-        try {
-            sh "docker-compose run --rm composer update elife/patterns --no-interaction"
-            sh "docker-compose run --rm composer show elife/patterns | grep ${params.revision}"
-        } finally {
-            sh "docker-compose down -v"
-        }
-        sh "git add composer.lock"
-    },
     {
         def pullRequestReference = ~/ \(#\d+\)/
         return "Updated elife/patterns to ${params.revision.substring(0, 7)}: ${params.message - pullRequestReference}"
