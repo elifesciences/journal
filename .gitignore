@@ -4,7 +4,6 @@
 /build/*
 !/build/.gitkeep
 !/build/critical-css/.gitkeep
-/composer-switch-patterns-php.*
 /node_modules/
 /phpunit.xml
 /var/*
