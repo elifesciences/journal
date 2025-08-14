@@ -149,5 +149,5 @@ twig:
         hypothesis_authority: '%hypothesis_authority%'
     paths:
         '%kernel.project_dir%/build': 'build'
-        '%kernel.project_dir%/vendor/elife/patterns/resources': 'patterns'
+        '%kernel.project_dir%/src/elife/patterns/resources': 'patterns'
     strict_variables: '%kernel.debug%'
