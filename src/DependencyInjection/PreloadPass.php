@@ -13,7 +13,7 @@ final class PreloadPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container)
     {
-        $file = ComposerLocator::getPath('elife/patterns').'/resources/assets/preload.json';
+        $file = '/srv/journal/src/patterns/resources/assets/preload.json';
 
         $container->addResource(new FileResource($file));
         $preloads = json_decode(file_get_contents($file), true);
