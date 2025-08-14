@@ -225,7 +225,7 @@
         <div class="global-inner">
 
             {% if header %}
-                <div class="wrapper wrapper--site-header">
+                <div class="wrapper{% if isHomePage ?? false %} wrapper--home-page{% endif %} wrapper--site-header">
                     {{ render_pattern(header) }}
                 </div>
             {% endif %}
