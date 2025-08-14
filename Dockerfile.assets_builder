@@ -12,6 +12,5 @@ COPY --from=npm /app/node_modules/ node_modules/
 
 COPY assets/images/ assets/images/
 COPY gulpfile.js ./
-COPY --from=composer /app/vendor/elife/patterns/resources/assets/ vendor/elife/patterns/resources/assets/
 
 RUN node_modules/.bin/gulp assets
