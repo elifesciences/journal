@@ -216,7 +216,7 @@
         </noscript>
     {% endif %}
 
-    <div class="global-wrapper{% if isMagazine ?? false %} page--magazine{% endif %}{% if hasSocialMedia ?? false %} social-media-page--wrapper{% endif %}{% if clean ?? false %} clean{% endif %}" data-behaviour="FragmentHandler Math{% if hypothesis ?? false %} HypothesisLoader{% endif %}"
+    <div class="global-wrapper{% if isHomePage ?? false %} global-wrapper--home-page{% endif %}{% if isMagazine ?? false %} page--magazine{% endif %}{% if hasSocialMedia ?? false %} social-media-page--wrapper{% endif %}{% if clean ?? false %} clean{% endif %}" data-behaviour="FragmentHandler Math{% if hypothesis ?? false %} HypothesisLoader{% endif %}"
         {% if item is defined and item is not null %}
             data-item-type="{% if item.type is defined %}{{ item.type }}{% else %}{{ item.identifier.type }}{% endif %}"
         {% endif %}
@@ -225,7 +225,7 @@
         <div class="global-inner">
 
             {% if header %}
-                <div class="wrapper{% if isHomePage ?? false %} wrapper--home-page{% endif %} wrapper--site-header">
+                <div class="wrapper wrapper--site-header">
                     {{ render_pattern(header) }}
                 </div>
             {% endif %}
