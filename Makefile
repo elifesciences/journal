@@ -2,10 +2,7 @@ DOCKER_COMPOSE = docker-compose
 TEST = test/
 BRANCH = master
 
-.PHONY: build dev prod stop clean test feature-test lint lint-fix check update-patterns
-
-update-patterns:
-	composer require elife/patterns:dev-$(BRANCH)
+.PHONY: build dev prod stop clean test feature-test lint lint-fix check
 
 update-api-sdk:
 	composer require elife/api-sdk:dev-master
