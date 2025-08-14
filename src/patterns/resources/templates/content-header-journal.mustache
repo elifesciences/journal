@@ -1,0 +1,138 @@
+<header
+  class="content-header content-header-journal wrapper{{#isMagazine}} page--magazine{{/isMagazine}}{{#header.possible}} content-header--header{{/header.possible}}{{#socialMediaSharers}} content-header--has-social-media-sharers{{/socialMediaSharers}}{{#hasAside}} content-header__has-aside{{/hasAside}}"
+  data-behaviour="ContentHeader">
+
+  <div class="content-container-grid{{#isOneColumn}} content-header__one-column{{/isOneColumn}}">
+    <div class="content-header-grid-top">
+
+      {{#breadcrumb}}
+        {{> resources/templates/breadcrumb}}
+      {{/breadcrumb}}
+
+      {{#header}}
+
+        {{#hasSubjects}}
+          <ol class="content-header__subject_list">
+            {{#subjects}}
+              <li class="content-header__subject_list_item">
+                <a href="{{url}}" class="content-header__subject_link">{{{name}}}</a>
+              </li>
+            {{/subjects}}
+          </ol>
+        {{/hasSubjects}}
+      {{/header}}
+    </div>
+    <div class="content-header-grid__main">
+
+      <div class="content-header__body">
+        <h1 class="content-header__title {{#titleLength}}content-header__title--{{titleLength}}{{/titleLength}}{{^titleLength}}content-header__title--medium{{/titleLength}}">{{{title}}}</h1>
+
+        {{#impactStatement}}
+          <div class="content-header__impact-statement">{{{impactStatement}}}</div>
+        {{/impactStatement}}
+
+      </div>
+
+      {{#authors}}
+        {{> resources/templates/authors}}
+      {{/authors}}
+
+      <div class="content-header__footer">
+
+        {{#isOneColumn}}
+          <div class="content-header__footer-column-left">
+          {{#contextualData}}
+            {{> resources/templates/contextual-data }}
+          {{/contextualData}}
+        {{/isOneColumn}}
+
+        {{#meta}}
+          <div class="content-header__meta">
+            {{> resources/templates/meta-journal}}
+          </div>
+        {{/meta}}
+
+        {{#doi}}
+          {{> resources/templates/doi}}
+        {{/doi}}
+
+      {{#licence}}
+        <ul class="content-header__icons">
+          <li>
+            <a href="https://en.wikipedia.org/wiki/Open_access"
+                class="content-header__icon content-header__icon--oa">
+                  <span class="visuallyhidden">Open access</span>
+            </a>
+          </li>
+          <li>
+            <a href="#copyright" class="content-header__icon content-header__icon--cc">
+              <span class="visuallyhidden">Copyright information</span>
+            </a>
+          </li>
+        </ul>
+      {{/licence}}
+      {{#isOneColumn}}
+        </div>
+      {{/isOneColumn}}
+
+      {{#isOneColumn}}
+        {{#socialMediaSharers}}
+          <div class="content-header__one-column-container">
+            <div data-hypothesis-trigger>
+              <span class="side-section-wrapper__link" data-behaviour="HypothesisTrigger"><span class="svg-background-image comment"></span><span class="visuallyhidden">Open annotations (there are currently <span data-hypothesis-annotation-count>0</span> annotations on this page). </span></span>
+            </div>
+            {{> resources/templates/social-media-sharers-journal}}
+          </div>
+        {{/socialMediaSharers}}
+      {{/isOneColumn}}
+
+      </div>
+    </div>
+    {{^hasAside}}
+      {{^isOneColumn}}
+        <div class="side-section">
+
+          <div class="side-section-wrapper">
+            <ul class="side-section-wrapper__list">
+              {{#download}}
+                <li>
+                    <a href="{{download}}" class="side-section-wrapper__download_link side-section-wrapper__link">
+                      <span class="svg-background-image download"></span>Download
+                    </a>
+                </li>
+              {{/download}}
+              {{#cite}}
+                <li>
+                  <a href="{{cite}}" id="modalContentCitations" class="side-section-wrapper__link">
+                    <span class="svg-background-image cite"></span>Cite</a>
+                </li>
+              {{/cite}}
+              <li data-hypothesis-trigger>
+                <span class="side-section-wrapper__link" data-behaviour="HypothesisTrigger"><span class="svg-background-image comment"></span>Comment<span aria-hidden="true"><span data-visible-annotation-count></span> </span><span class="visuallyhidden">Open annotations (there are currently <span data-hypothesis-annotation-count>0</span> annotations on this page). </span></span>
+              </li>
+              <li class="side-section-wrapper__share-listing">
+                <a href="" id="modalContentShare" class="side-section-wrapper__link">
+                <span class="svg-background-image share"></span>Share</a>
+              </li>
+            </ul>
+
+            <div class="side-section-wrapper__inner-block">
+              {{#socialMediaSharers}}
+                {{> resources/templates/social-media-sharers-journal}}
+              {{/socialMediaSharers}}
+
+              {{#contextualData}}
+                {{> resources/templates/contextual-data }}
+              {{/contextualData}}
+            </div>
+          </div>
+
+        </div>
+      {{/isOneColumn}}
+    {{/hasAside}}
+    
+    <div class="divider"></div>
+
+  </div>
+
+</header>

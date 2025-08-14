@@ -1,0 +1,12 @@
+<ul class="breadcrumbs">
+  {{#items}}
+    <li class="breadcrumb-item">
+      {{#url}}
+        <a href="{{url}}" class="breadcrumb-item__link">{{{name}}}</a>
+      {{/url}}
+      {{^url}}
+        <span class="breadcrumb-item__text">{{{name}}}</span>
+      {{/url}}
+    </li>
+  {{/items}}
+</ul>

@@ -1,0 +1,22 @@
+<div class="main-menu wrapper" id="mainMenu" data-behaviour="MainMenu" tabindex="0">
+  <div class="main-menu__title-container">
+    {{#title}}
+      {{> resources/templates/site-header-title }}
+    {{/title}}
+  </div>
+  <nav class="main-menu__container" role="navigation">
+    {{#listHeading}}
+      {{> resources/templates/list-heading}}
+    {{/listHeading}}
+    {{#links}}
+      <ul class="main-menu__list">
+        {{#items}}
+        <li class="main-menu__list_item{{#classes}} {{classes}}{{/classes}}">
+          <a href="{{url}}" class="main-menu__list_link">{{name}}</a>
+        </li>
+        {{/items}}
+      </ul>
+    {{/links}}
+    {{> resources/templates/to-top-link}}
+  </nav>
+</div>

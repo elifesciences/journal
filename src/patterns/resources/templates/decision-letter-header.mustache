@@ -1,0 +1,12 @@
+<div class="decision-letter-header">
+  {{#hasProfiles}}
+    <ol class="listing-list">
+      {{#profiles}}
+        <li class="listing-list__item">
+          {{> resources/templates/profile-snippet }}
+        </li>
+      {{/profiles}}
+    </ol>
+  {{/hasProfiles}}
+  <div class="decision-letter-header__main_text">{{{mainText}}}</div>
+</div>

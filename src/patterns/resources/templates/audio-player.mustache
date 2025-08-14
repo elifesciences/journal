@@ -1,0 +1,14 @@
+<div class="audio-player" data-behaviour="AudioPlayer"{{#metadata}}
+  data-metadata="{{{metadata}}}"
+{{/metadata}} >
+  <div class="audio-player__container">
+    <div class="audio-player__header">{{#url}}<a href="{{url}}" class="audio-player__header-link">{{/url}}{{{title}}}{{#url}}</a>{{/url}}</div>
+    <audio class="audio-player__player" controls preload="metadata">
+
+      {{#sources}}
+        {{> resources/templates/media-source}}
+      {{/sources}}
+
+    </audio>
+  </div>
+</div>

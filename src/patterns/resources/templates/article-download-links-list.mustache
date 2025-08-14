@@ -1,0 +1,45 @@
+<div data-behaviour="ArticleDownloadLinksList" id="{{id}}" aria-labelledby="{{id}}-label">
+  <div class="visuallyhidden"><span id="{{id}}-label">{{{description}}}</span>{{! Consider skip link here for AT }}</div>
+
+  {{#groups}}
+    <div class="article-download-links-list__group{{#jsHideGroup}} article-download-links-list__group--js-exclude{{/jsHideGroup}}">
+      <h3 class="article-download-links-list__heading"{{#id}} id="{{id}}"{{/id}}>{{{title}}}</h3>
+
+      {{#intro}}
+        <div class="article-download-links-list__intro">{{{intro}}}</div>
+      {{/intro}}
+
+      <ul class="article-download-list">
+        {{#items}}
+            <li class="article-download-links-list__item">
+
+              {{#secondary}}
+                <dl>
+                  <dt>
+              {{/secondary}}
+
+              {{#primary}}
+                {{#checkPMC}}
+                  <span data-behaviour="CheckPMC" data-check-available="{{checkPMC}}" data-display-on-available="<a href='{{url}}' class='article-download-links-list__link'{{#attributes}} data-{{key}}{{#value}}='{{value}}'{{/value}}{{/attributes}}>{{{name}}}</a>"></span>
+                {{/checkPMC}}
+                {{^checkPMC}}
+                  <a href="{{link.url}}"
+                  class="article-download-links-list__link"
+                  {{#attributes}}data-{{key}}{{#value}}="{{value}}"{{/value}}{{/attributes}}
+                  >{{{link.name}}}</a>
+                {{/checkPMC}}
+              {{/primary}}
+
+              {{#secondary}}
+                  </dt>
+                  <dd><a href="{{url}}" class="article-download-links-list__secondary_link">{{{name}}}</a></dd>
+                </dl>
+              {{/secondary}}
+
+            </li>
+        {{/items}}
+      </ul>
+    </div>
+  {{/groups}}
+
+</div>

@@ -1,0 +1,14 @@
+<source src="{{src}}" type='{{mediaType.forMachine}}' class="media-source"/>
+
+<div>
+
+  {{#fallback}}
+    <a href="{{src}}" class="media-source__fallback_link{{#classes}} {{classes}}{{/classes}}"
+    {{#isExternal}} rel="external noopener noreferrer" target="_blank"{{/isExternal}}>{{#content}}{{{content}}}{{/content}} ({{mediaType.forHuman}})</a>
+  {{/fallback}}
+
+  {{^fallback}}
+    <a class="media-source__fallback_link" href="{{src}}">Download as {{mediaType.forHuman}}</a>
+  {{/fallback}}
+
+</div>

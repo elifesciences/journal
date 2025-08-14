@@ -1,0 +1,26 @@
+<div class="table">
+
+  {{#tables}}
+
+    <div class="table__table">
+
+      {{{.}}}
+
+    </div>
+
+  {{/tables}}
+
+  {{#hasFootnotes}}
+
+    <ol class="list">
+      {{#footnotes}}
+        <li class="table-footnote" {{#footnoteId}} id="{{footnoteId}}"{{/footnoteId}}>
+          {{#footnoteLabel}}<div class="table-footnote__label">{{footnoteLabel}}</div>{{/footnoteLabel}}
+          <div class="table-footnote__text">{{{text}}}</div>
+        </li>
+      {{/footnotes}}
+    </ol>
+
+  {{/hasFootnotes}}
+
+</div>

@@ -1,0 +1,28 @@
+<div class="inline-profile">
+
+  {{#image}}
+    <picture class="inline-profile__picture">
+
+      {{#sources}}
+        <source srcset="{{srcset}}"
+          {{#type}}type="{{type}}" {{/type}}
+          {{#media}}media="{{media}}" {{/media}}>
+      {{/sources}}
+
+      {{#fallback}}
+        <img {{#srcset}}srcset="{{srcset}}"{{/srcset}}
+             src="{{defaultPath}}"
+             class="inline-profile__image"
+             alt="{{altText}}">
+      {{/fallback}}
+
+    </picture>
+  {{/image}}
+
+  <div class="inline-profile__text">
+
+    {{{text}}}
+
+  </div>
+
+</div>

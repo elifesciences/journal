@@ -1,0 +1,32 @@
+<header class="content-header-profile">
+
+  <h1 class="content-header-profile__display_name">{{{displayName}}}</h1>
+
+  {{#details}}
+  <div class="content-header-profile__details">
+
+    <ul class="content-header-profile__affiliations">
+      {{#affiliations}}<li class="content-header-profile__affiliation">{{{.}}}</li>{{/affiliations}}
+    </ul>
+
+    {{#emailAddress}}
+    <div class="content-header-profile__email">{{emailAddress}}</div>
+    {{/emailAddress}}
+
+    {{#orcid}}
+      <div class="content-header-profile__orcid">{{>resources/templates/orcid}}</div>
+    {{/orcid}}
+
+  </div>
+  {{/details}}
+
+  <nav class="content-header-profile__nav">
+    <ul class="content-header-profile__links">
+      {{#secondaryLinks}}
+        <li><a href="{{url}}"{{#ariaLabel}} aria-label="{{ariaLabel}}"{{/ariaLabel}} class="content-header-profile__link" >{{name}}</a></li>
+      {{/secondaryLinks}}
+      <li><a href="{{logoutLink.url}}"{{#logoutLink.ariaLabel}} aria-label="{{logoutLink.ariaLabel}}"{{/logoutLink.ariaLabel}} class="content-header-profile__link content-header-profile__link--logout" >{{logoutLink.name}}</a></li>
+    </ul>
+  </nav>
+
+</header>

@@ -1,0 +1,14 @@
+<div class="modal modal-nojs{{#smallDeviceOnly}} small-device{{/smallDeviceOnly}}" data-behaviour="Modal"{{#triggerId}} data-trigger-id="{{triggerId}}"{{/triggerId}}>
+  {{^triggerId}}
+    <a href="" class="modal-click">Open modal window</a>
+  {{/triggerId}}
+  <div class="modal-container">
+      <div class="modal-content">
+        <h6>{{{title}}}</h6>
+        <a href="" class="modal-content__button modal-content__close-button">{{closeBtnText}}</a>
+        <div class="modal-content__body">
+          {{{body}}}
+        </div>
+      </div>
+  </div>
+</div>

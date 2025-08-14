@@ -1,0 +1,28 @@
+<div class="authors" data-behaviour="Authors">
+  <ol class="author_list" aria-label="Authors of this article">
+    {{#list}}{{!
+      }}<li class="author_list_item">{{!
+        }}<span class="author">{{#url}}<a href="{{url}}" data-behaviour="Popup" class="author_link">{{/url}}{{name}}{{#url}}</a>{{/url}}{{#isCorresponding}}<span class="author_suffix">&nbsp;{{!
+          }}<picture>
+            <source srcset="{{#assetRewrite}}{{assetsPath}}/img/icons/corresponding-author.svg{{/assetRewrite}}" type="image/svg+xml">
+            <img src="{{#assetRewrite}}{{assetsPath}}/img/icons/corresponding-author@1x.png{{/assetRewrite}}"
+                srcset="{{#assetRewrite}}{{assetsPath}}/img/icons/corresponding-author@2x.png{{/assetRewrite}} 2x, {{#assetRewrite}}{{assetsPath}}/img/icons/corresponding-author@1x.png{{/assetRewrite}} 1x"
+                alt="Is a corresponding author" class="author_icon">
+        </picture></span>{{/isCorresponding}}{{!
+        }}</span>{{!
+      }}</li>{{!
+    }}{{/list}}
+  </ol>
+
+  {{#institutions}}
+    <ol class="institution_list" aria-label="Author institutions">
+      {{#institutions.list}}
+        <li class="institution_list_item">
+          <span class="institution">{{{name}}}{{!
+        }}<span class="institution_separator" aria-hidden="true">;</span>
+          </span>
+        </li>
+      {{/institutions.list}}
+    </ol>
+  {{/institutions}}
+</div>

@@ -1,0 +1,27 @@
+<div class="profile-snippet">
+  <div class="profile-snippet__container clearfix">
+    {{#image}}
+      <picture class="profile-snippet__picture">
+        {{#sources}}
+          <source srcset="{{srcset}}"
+                  {{#type}}type="{{type}}"{{/type}}
+            {{#media}}media="{{media}}"{{/media}}>
+        {{/sources}}
+        {{#fallback}}
+          <img src="{{defaultPath}}"
+               {{#srcset}}srcset="{{srcset}}"{{/srcset}}
+               alt="{{altText}}"
+          >
+        {{/fallback}}
+      </picture>
+    {{/image}}
+
+    <div class="profile-snippet__name">{{name}}</div>
+    <div class="profile-snippet__title">{{title}}</div>
+    {{#contactDetails}}
+    <div class="profile-snippet__contact_details">
+      {{{contactDetails}}}
+    </div>
+    {{/contactDetails}}
+  </div>
+</div>

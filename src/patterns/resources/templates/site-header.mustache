@@ -1,0 +1,22 @@
+<header class="site-header clearfix" data-behaviour="SiteHeader" id="siteHeader">
+  {{#title}}
+    {{> resources/templates/site-header-title }}
+  {{/title}}
+  <div class="site-header__navigation" role="navigation" aria-label="Main navigation">
+    <div class="site-header__navigation__item">
+      {{#primaryLinks}}
+        {{> resources/templates/site-header-nav-bar }}
+      {{/primaryLinks}}
+    </div>
+
+    {{#secondaryLinks}}
+      {{> resources/templates/site-header-nav-bar }}
+    {{/secondaryLinks}}
+
+  </div>
+
+  {{#searchBox}}
+    {{> resources/templates/search-box}}
+  {{/searchBox}}
+
+</header>

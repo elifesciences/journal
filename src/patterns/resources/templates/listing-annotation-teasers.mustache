@@ -1,0 +1,16 @@
+<div>
+  {{#heading}}
+    {{>resources/templates/list-heading}}
+  {{/heading}}
+
+  <ol class="listing-list" {{#id}} id="{{id}}"{{/id}}>
+    {{#items}}{{!
+      }}<li class="listing-list__item">{{> resources/templates/annotation-teaser }}</li>
+    {{/items}}{{!
+  }}</ol>
+
+
+  {{#pagination}}
+    {{> resources/templates/pager}}
+  {{/pagination}}
+</div>

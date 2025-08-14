@@ -1,0 +1,35 @@
+<form class="compact-form{{#state}} compact-form--{{state}}{{/state}}" id="{{formId}}" action="{{formAction}}" method="{{formMethod}}" novalidate>
+  <fieldset class="compact-form__container">
+    <label>
+      <span class="visuallyhidden">{{label}}</span>
+      <input type="{{inputType}}" name="{{inputName}}" value="{{inputValue}}" placeholder="{{inputPlaceholder}}"
+        {{#inputAutofocus}} autofocus{{/inputAutofocus}}
+         class="compact-form__input"
+        {{#messageGroup}} aria-describedby="{{id}}"{{#errorText}} aria-invalid="true"{{/errorText}}{{/messageGroup}}
+      >
+    </label>
+
+    {{#messageGroup}}
+      <div id="{{id}}">
+
+        {{#infoText}}
+          <div class="compact-form__message compact-form__message--info">{{{.}}}</div>
+        {{/infoText}}
+
+        {{#errorText}}
+          <div class="compact-form__message compact-form__message--invalid">{{{.}}}</div>
+        {{/errorText}}
+
+      </div>
+    {{/messageGroup}}
+
+    {{#hiddenFields}}
+      {{> resources/templates/hidden-field }}
+    {{/hiddenFields}}
+    {{#honeypot}}
+      {{> resources/templates/honeypot }}
+    {{/honeypot}}
+    <button type="reset" name="reset" class="compact-form__reset"><span class="visuallyhidden">Reset form</span></button>
+    <button type="submit" class="compact-form__submit"><span class="visuallyhidden">{{ctaText}}</span></button>
+  </fieldset>
+</form>

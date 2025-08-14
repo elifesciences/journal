@@ -1,0 +1,14 @@
+<video controls="controls"{{#posterFrame}} poster="{{posterFrame}}"{{/posterFrame}} preload="metadata"{{#autoplay}} autoplay muted{{/autoplay}}{{#loop}} loop{{/loop}}>
+
+  {{#posterFrame}}
+    {{! Simple fallback image: if client doesn't support <video>, it's unlikely to support responsive images. }}
+    <img src="{{posterFrame}}" alt="posterframe for video" />
+  {{/posterFrame}}
+
+  <p>This video cannot be played in place because your browser does support HTML5 video. You may still download the video for offline viewing.</p>
+
+  {{#sources}}
+    {{> resources/templates/media-source}}
+  {{/sources}}
+
+</video>

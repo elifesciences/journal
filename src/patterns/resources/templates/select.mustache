@@ -1,0 +1,36 @@
+<div class="form-item{{#state}} form-item--{{state}}{{/state}}">
+
+  {{#label}}
+    <label for="{{id}}"
+           class="form-item__label{{#isVisuallyHidden}} visuallyhidden{{/isVisuallyHidden}}">
+      {{labelText}}
+    </label>
+  {{/label}}
+  <select class="select{{#state}} select--{{state}}{{/state}}"
+    {{#id}} id="{{id}}"{{/id}}
+    {{#name}} name="{{name}}"{{/name}}
+    {{#autofocus}} autofocus{{/autofocus}}
+    {{#required}} required="required"{{/required}}
+    {{#disabled}} disabled="disabled"{{/disabled}}
+    {{#messageGroup}} aria-describedby="{{id}}"{{#errorText}} aria-invalid="true"{{/errorText}}{{/messageGroup}}
+  >
+
+    {{#options}}
+      <option value="{{value}}" {{#selected}}selected{{/selected}}>{{displayValue}}</option>
+    {{/options}}
+  </select>
+
+  {{#messageGroup}}
+    <div id="{{id}}">
+
+      {{#infoText}}
+        <div class="form-item__message form-item__message--info">{{{.}}}</div>
+      {{/infoText}}
+
+      {{#errorText}}
+        <div class="form-item__message form-item__message--invalid">{{{.}}}</div>
+      {{/errorText}}
+
+    </div>
+  {{/messageGroup}}
+</div>

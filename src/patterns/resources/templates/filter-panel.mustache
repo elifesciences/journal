@@ -1,0 +1,14 @@
+
+<section class="filter-panel" data-behaviour="FilterPanel">
+
+  <h3 class="filter-panel__title visuallyhidden">{{{title}}}</h3>
+
+  {{#filterGroups}}
+  {{> resources/templates/filter-group }}
+  {{/filterGroups}}
+
+  {{#button}}
+  {{> resources/templates/button}}
+  {{/button}}
+
+</section>

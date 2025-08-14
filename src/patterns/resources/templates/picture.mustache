@@ -1,0 +1,27 @@
+{{#fallback}}
+  <picture{{#pictureClasses}} class="{{pictureClasses}}"{{/pictureClasses}}>
+
+  {{! include more than one item in sources if image load to be controlled by the optional media statement. }}
+
+
+  {{#sources}}
+    <source srcset="{{srcset}}"
+            {{#type}}type="{{type}}" {{/type}}
+            {{#media}}media="{{media}}" {{/media}}>
+  {{/sources}}
+
+
+  {{#fallback}}
+
+    <img {{#srcset}}srcset="{{srcset}}"{{/srcset}}
+       src="{{defaultPath}}"
+       {{#sizes}}sizes="{{sizes}}"{{/sizes}}
+       {{#classes}}class="{{classes}}"{{/classes}}
+       alt="{{altText}}" />
+
+  {{/fallback}}
+
+  </picture>
+{{/fallback}}
+
+

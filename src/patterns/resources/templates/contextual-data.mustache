@@ -1,0 +1,26 @@
+<div class="contextual-data">
+
+  {{#metricsData}}
+    <ul class="contextual-data__list" aria-label="The following contains the number of views, citations and annotations in this article">
+
+      {{#data}}
+        <li class="contextual-data__item">{{{text}}}</li>
+      {{/data}}
+
+      {{#annotationCount}}
+        <li class="contextual-data__item" data-hypothesis-trigger><span class="contextual-data__item__hypothesis_opener">Annotations</span> {{> resources/templates/speech-bubble}}</li>
+      {{/annotationCount}}
+
+    </ul>
+  {{/metricsData}}
+
+  {{#citation}}
+  <div class="contextual-data__cite_wrapper">
+    <span class="contextual-data__cite"><span class="contextual-data__cite_label">Cite <span class="visuallyhidden"> this article</span>  as:</span> {{citeAs}}</span>
+    {{#doi}}
+      {{> resources/templates/doi }}
+    {{/doi}}
+  </div>
+  {{/citation}}
+
+</div>

@@ -1,0 +1,45 @@
+<div class="about-profile clearfix" data-popup-self="true" data-popup-wrapper="true">
+
+  {{#image}}
+    <picture class="about-profile__picture">
+      {{#sources}}
+        <source srcset="{{srcset}}"
+          {{#type}}type="{{type}}"{{/type}}
+          {{#media}}media="{{media}}"{{/media}}>
+      {{/sources}}
+      {{#fallback}}
+        <img src="{{defaultPath}}"
+          {{#srcset}}srcset="{{srcset}}"{{/srcset}}
+          alt="{{altText}}"
+          class="about-profile__image"
+        >
+      {{/fallback}}
+    </picture>
+  {{/image}}
+
+  {{#hasPlaceholderImage}}
+    {{^image}}
+      <picture class="about-profile__picture"><img src="{{#assetRewrite}}{{assetsPath}}/img/patterns/molecules/profile-image-placeholder.svg{{/assetRewrite}}" alt="" class="about-profile__image"></picture>
+    {{/image}}
+  {{/hasPlaceholderImage}}
+
+  <h4 class="about-profile__name">{{{name}}}</h4>
+
+  {{#role}}
+    <p class="about-profile__role">{{{.}}}</p>
+  {{/role}}
+
+  {{#profile}}
+
+
+    <div class="about-profile__profile " {{^compact}}data-behaviour="ToggleableCaption" data-selector=".about-profile__profile-body" data-threshold-width="730{{! Matches $bkpt-site--medium }}"{{/compact}}>
+
+      <div class="about-profile__profile-body">
+      {{{.}}}
+      </div>
+
+    </div>
+
+  {{/profile}}
+
+</div>

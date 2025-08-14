@@ -1,0 +1,14 @@
+{{!-- This pattern must only be used by the Statistic Collection pattern and must not be used in a stand alone context --}}
+<dl class="statistic">
+  <dd class="statistic__value">
+    {{value}}
+  </dd>
+  <dt class="statistic__label">
+      {{#shouldNotEscapeTerm}}
+          {{{label}}}
+      {{/shouldNotEscapeTerm}}
+      {{^shouldNotEscapeTerm}}
+          {{label}}
+      {{/shouldNotEscapeTerm}}
+  </dt>
+</dl>

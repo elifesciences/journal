@@ -1,0 +1,41 @@
+<div class="call-to-action-wrapper{{#needsJs}} call-to-action-wrapper--needs-js{{/needsJs}}"
+      id="{{id}}"
+
+      {{#needsJs}}
+        data-behaviour="CallToAction"
+      {{/needsJs}}
+
+      {{#dismissible}}
+        data-cookie-name-root="callToAction_"
+        {{#cookieExpires}} data-cookie-expires="{{cookieExpires}}"{{/cookieExpires}}
+      {{/dismissible}}>
+
+  <div class="call-to-action">
+
+    {{#image}}
+      <picture class="call-to-action__image">
+        {{#sources}}
+          <source srcset="{{srcset}}"
+                  {{#type}}type="{{type}}"{{/type}}
+            {{#media}}media="{{media}}"{{/media}}>
+        {{/sources}}
+        {{#fallback}}
+          <img src="{{defaultPath}}"
+               {{#srcset}}srcset="{{srcset}}"{{/srcset}}
+               alt="{{altText}}"
+          >
+        {{/fallback}}
+      </picture>
+    {{/image}}
+
+    <div class="call-to-action__text">{{{text}}}</div>
+
+    <div class="call-to-action__button_wrapper">
+        {{#button}}
+          {{>resources/templates/button}}
+        {{/button}}
+    </div>
+
+  </div>
+
+</div>

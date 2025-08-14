@@ -1,0 +1,78 @@
+<figure class="captioned-asset{{#inline}} captioned-asset--inline{{/inline}}">
+
+  {{#picture}}
+    {{#open}}
+    <a href="{{uri}}" class="captioned-asset__link" target="_blank" rel="noopener noreferrer">
+    {{/open}}
+    <picture class="captioned-asset__picture">
+      {{#sources}}
+        <source srcset="{{srcset}}"
+            {{#type}}type="{{type}}"{{/type}}
+            {{#media}}media="{{media}}"{{/media}}>
+      {{/sources}}
+      {{#fallback}}
+        <img src="{{defaultPath}}"
+             {{#srcset}}srcset="{{srcset}}"{{/srcset}}
+             alt="{{altText}}"
+             class="captioned-asset__image"
+        >
+      {{/fallback}}
+    </picture>
+    {{#open}}
+    </a>
+    {{/open}}
+  {{/picture}}
+
+  {{#image}}
+    {{#open}}
+    <a href="{{uri}}" class="captioned-asset__link" target="_blank" rel="noopener noreferrer">
+    {{/open}}
+    <img src="{{defaultPath}}"
+         alt="{{altText}}"{{#srcset}}
+         srcset="{{srcset}}"{{/srcset}}
+      class="captioned-asset__image{{#classes}} {{classes}}{{/classes}}" />
+    {{#open}}
+    </a>
+    {{/open}}
+  {{/image}}
+
+  {{#video}}
+    {{> resources/templates/video}}
+  {{/video}}
+
+  {{#iframe}}
+    {{> resources/templates/iframe }}
+  {{/iframe}}
+
+  {{#tweet}}
+    {{> resources/templates/tweet }}
+  {{/tweet}}
+
+  {{#captionText}}
+    <figcaption class="captioned-asset__caption">
+
+      {{> resources/templates/caption-text}}
+
+      {{#doi}}
+        {{> resources/templates/doi}}
+      {{/doi}}
+
+    </figcaption>
+
+  {{/captionText}}
+
+  {{^captionText}}
+
+    {{#doi}}
+      <figcaption class="captioned-asset__caption">
+        {{> resources/templates/doi}}
+      </figcaption>
+    {{/doi}}
+
+  {{/captionText}}
+
+  {{#table}}
+    {{> resources/templates/table }}
+  {{/table}}
+
+</figure>

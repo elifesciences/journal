@@ -1,0 +1,15 @@
+<li class="{{classes}}">
+
+  {{#button.classes}}
+    {{#button}}
+      {{> resources/templates/button }}
+    {{/button}}
+  {{/button.classes}}
+
+  {{^button.classes}}
+    {{#path}}<a href="{{path}}"{{#rel}} rel="{{rel}}"{{/rel}}>{{/path}}
+      {{{text}}}
+    {{#path}}</a>{{/path}}
+  {{/button.classes}}
+
+</li>

@@ -1,0 +1,9 @@
+
+<div class="sort-control" role="toolbar" aria-label="sorting options">
+  <div class="sort-control__title visuallyhidden">Sort by:</div>
+  <ul class="sort-control__options">
+    {{#options}}
+    <li class="sort-control__option"><a href="{{link.url}}" class="sort-control__link{{#sorting}} sort-control__link--{{sorting}}{{/sorting}}">{{link.name}}</a></li>
+    {{/options}}
+  </ul>
+</div>

@@ -1,0 +1,11 @@
+<li class="listing-list__item {{#isRelated}}listing-list__item--related{{/isRelated}}">
+  <div class="listing-list__divider"></div>
+  {{#item}}
+    {{> resources/templates/content-header-read-more }}
+  {{/item}}
+  {{#content}}
+    <div class="listing-list__content">
+      {{{ content }}}
+    </div>
+  {{/content}}
+</li>

@@ -1,0 +1,17 @@
+<section class="box"{{#id}} id="{{id}}"{{/id}}>
+
+  {{#label}}
+    <header class="box__label">{{{label}}}</header>
+  {{/label}}
+
+  <h{{headingLevel}}>{{{title}}}</h{{headingLevel}}>
+
+  {{#content}}
+    {{{content}}}
+  {{/content}}
+
+  {{#doi}}
+    {{> resources/templates/doi}}
+  {{/doi}}
+
+</section>

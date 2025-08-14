@@ -1,0 +1,18 @@
+<section class="email-cta">
+
+  <div class="email-cta__container">
+
+      <header class="email-cta__header">
+        <h2 class="email-cta__header_text">{{{ headerText }}}</h2>
+      </header>
+
+      {{#button}}
+        {{> resources/templates/button }}
+      {{/button}}
+
+      <div class="email-cta__privacy">
+        <a class="email-cta__privacy_link" href="{{privacyUrl}}">{{privacyLabel}}</a>
+      </div>
+  </div>
+
+</section>

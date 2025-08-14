@@ -1,0 +1,23 @@
+{{! To be valid HTML, this pattern must be included as a partial within a <dl> }}
+<dt class="additional-asset__text" id="{{assetId}}">
+  {{#captionText}}
+    {{> resources/templates/caption-text}}
+  {{/captionText}}
+</dt>
+
+<dd class="additional-asset__access">
+
+  {{#doi}}
+    {{> resources/templates/doi}}
+  {{/doi}}
+
+  {{^doi}}
+    <a class="additional-asset__link" href="{{nonDoiLink}}">{{{nonDoiLink}}}</a>
+  {{/doi}}
+
+  {{#downloadLink}}
+    <div>
+      <a class="additional-asset__link additional-asset__link--download" href="{{link.url}}"{{#fileName}} download="{{fileName}}"{{/fileName}}>{{{link.name}}}</a>
+    </div>
+  {{/downloadLink}}
+</dd>

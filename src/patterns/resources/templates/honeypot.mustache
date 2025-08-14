@@ -1,0 +1,15 @@
+<div class="form-item visuallyhidden" aria-hidden="true">
+
+  {{#label}}
+    <label for="{{id}}" class="form-item__label">{{labelText}}</label>
+  {{/label}}
+  <input
+      type="{{inputType}}"
+      class="text-field text-field--{{inputType}}"
+    {{#id}} id="{{id}}"{{/id}}
+    {{#name}} name="{{name}}"{{/name}}
+    {{#value}} value="{{value}}"{{/value}}
+      tabindex="-1"
+  />
+
+</div>

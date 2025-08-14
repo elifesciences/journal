@@ -1,0 +1,21 @@
+<div class="error-wrapper">
+
+  <div class="error">
+
+    <picture>
+        <source srcset="{{#assetRewrite}}{{assetsPath}}/img/errors/5xx.svg{{/assetRewrite}}" type="image/svg+xml">
+        <img srcset="{{#assetRewrite}}{{assetsPath}}/img/errors/5xx-2x.png{{/assetRewrite}} 314w" src="{{#assetRewrite}}{{assetsPath}}/img/errors/5xx.png{{/assetRewrite}}" sizes="157px"
+             alt="" class="error__icon">
+    </picture>
+
+    <h1 class="error__title">Kabooooooom!</h1>
+
+    <p>Something has gone seriously wrong.<br>We&#x2019;ve logged the problem and will look into it.</p>
+
+    {{#button}}
+        {{> resources/templates/button }}
+    {{/button}}
+
+  </div>
+
+</div>

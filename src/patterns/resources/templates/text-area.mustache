@@ -1,0 +1,39 @@
+<div class="form-item{{#state}} form-item--{{state}}{{/state}}">
+
+  {{#label}}
+    <label
+        for="{{id}}"
+        class="form-item__label{{#isVisuallyHidden}} visuallyhidden{{/isVisuallyHidden}}">
+      {{labelText}}
+    </label>
+  {{/label}}
+  <textarea
+      type="{{inputType}}"
+      class="text-field text-field--textarea{{#state}} text-field--{{state}}{{/state}}"
+    {{#id}} id="{{id}}"{{/id}}
+      name="{{name}}"
+    {{#autofocus}} autofocus{{/autofocus}}
+    {{#cols}} cols="{{cols}}"{{/cols}}
+    {{#rows}} rows="{{rows}}"{{/rows}}
+    {{#disabled}} disabled="disabled"{{/disabled}}
+    {{#required}} required="required"{{/required}}
+    {{#form}} form="{{form}}"{{/form}}
+    {{#placeholder}} placeholder="{{placeholder}}"{{/placeholder}}
+    {{#messageGroup}} aria-describedby="{{id}}"{{#errorText}} aria-invalid="true"{{/errorText}}{{/messageGroup}}
+  >{{#value}}{{value}}{{/value}}</textarea>
+
+  {{#messageGroup}}
+    <div id="{{id}}">
+
+      {{#infoText}}
+        <div class="form-item__message form-item__message--info">{{{.}}}</div>
+      {{/infoText}}
+
+      {{#errorText}}
+        <div class="form-item__message form-item__message--invalid">{{{.}}}</div>
+      {{/errorText}}
+
+    </div>
+  {{/messageGroup}}
+
+</div>

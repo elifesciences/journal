@@ -1,0 +1,21 @@
+<div class="error-wrapper">
+
+  <div class="error">
+
+    <picture>
+        <source srcset="{{#assetRewrite}}{{assetsPath}}/img/errors/503.svg{{/assetRewrite}}" type="image/svg+xml">
+        <img srcset="{{#assetRewrite}}{{assetsPath}}/img/errors/503-2x.png{{/assetRewrite}} 314w" src="{{#assetRewrite}}{{assetsPath}}/img/errors/503.png{{/assetRewrite}}" sizes="157px"
+             alt="" class="error__icon">
+    </picture>
+
+    <h1 class="error__title">Back soon</h1>
+
+    <p>We&#x2019;re carrying out planned maintenance on this page.</p>
+
+    {{#button}}
+        {{> resources/templates/button }}
+    {{/button}}
+
+  </div>
+
+</div>

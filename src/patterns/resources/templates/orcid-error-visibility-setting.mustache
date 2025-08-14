@@ -1,0 +1,50 @@
+<div class="error-wrapper">
+
+  <div class="error">
+
+    <picture>
+        <source srcset="{{#assetRewrite}}{{assetsPath}}/img/icons/ORCID-padlock.svg{{/assetRewrite}}" type="image/svg+xml">
+        <img srcset="{{#assetRewrite}}{{assetsPath}}/img/icons/ORCID-padlock-2x.png{{/assetRewrite}} 314w" src="{{#assetRewrite}}{{assetsPath}}/img/icons/ORCID-padlock.png{{/assetRewrite}}" sizes="157px"
+             alt="" class="error__icon">
+    </picture>
+
+    <h1 class="error__title">Your ORCID iD settings prevented log in</h1>
+
+    <p>Please update the visibility settings of the name associated with your ORCID iD before trying again.</p>
+    <div class="error__orcid-container">
+      <div class="error__orcid">
+        <h3>Step 1: Open your name's visibility settings on your ORCID iD page</h3>
+        <div class="error__orcid-left">
+          <p>Go to <a href="https://orcid.org/my-orcid">orcid.org/my-orcid</a> to change the visibility settings of your name by using the pencil icon.</p>
+          <p>It should be in the top left corner of your ORCID iD page, next to your name.</p>
+        </div>
+        <div class="error__orcid-right">
+          <img src="{{#assetRewrite}}{{assetsPath}}/img/errors/orcid-error-step1.jpg{{/assetRewrite}}" alt="Change the visibility settings of your name by using the pencil icon." class="error__orcid-image" />
+        </div>
+      </div>
+
+      <div class="error__orcid">
+        <h3>Step 2: Change the visibility setting</h3>
+        <div class="error__orcid-left">
+          <p>Change the visibility setting to "everyone" or "trusted parties" and save your changes. Locking your name will not allow you to log in to eLife.</p>
+          <p>You may be asked to authorise eLife as a trusted party when you try to log in again. <a href="https://support.orcid.org/hc/en-us/articles/360006894494-Visibility-preference">Learn more about ORCID visibility settings</a>.</p>
+        </div>
+        <div class="error__orcid-right">
+          <img src="{{#assetRewrite}}{{assetsPath}}/img/errors/orcid-error-step2.jpg{{/assetRewrite}}" alt="Change the visibility setting to everyone or trusted parties and save your changes." class="error__orcid-image" />
+        </div>
+      </div>
+
+      <div class="error__orcid">
+        <h3>Step 3: Return to eLife and log in again</h3>
+        <div class="error__orcid-left">
+          <p>Return to elifesciences.org and attempt to log in again. If you are still unable to log in please <a href="{{contactUri}}">contact us</a>.</p>
+        </div>
+        <div class="error__orcid-right">
+          <img src="{{#assetRewrite}}{{assetsPath}}/img/errors/orcid-error-step3.jpg{{/assetRewrite}}" alt="Attempt to log in again." class="error__orcid-image" />
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>

@@ -1,0 +1,13 @@
+{{#heading}}
+  {{>resources/templates/list-heading}}
+{{/heading}}
+
+<ol class="about-profiles {{#compact}}about-profiles--compact{{/compact}}"{{^compact}} data-behaviour="AboutProfiles DelegateBehaviour" data-delegate-behaviour="Popup" data-selector=".about-profile" data-delegate-behaviour-class="about-profile--popup"{{/compact}}>
+
+  {{#items}}
+    <li class="about-profiles__item">
+      {{> resources/templates/about-profile }}
+    </li>
+  {{/items}}
+
+</ol>

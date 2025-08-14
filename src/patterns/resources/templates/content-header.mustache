@@ -1,0 +1,162 @@
+{{#image}}
+<div class="content-header-image-wrapper{{^image.creditOverlay}}{{^image.credit}} content-header-image-wrapper--no-credit{{/image.credit}}{{/image.creditOverlay}}">
+{{/image}}
+  <header
+    class="content-header {{#image}}content-header--image content-header--header{{/image}} {{^image}}wrapper {{#header.possible}}content-header--header{{/header.possible}}{{/image}} {{#socialMediaSharers}}content-header--has-social-media-sharers{{/socialMediaSharers}} {{#header.hasProfile}}content-header--has-profile{{/header.hasProfile}} clearfix"
+    data-behaviour="ContentHeader">
+
+  {{#image}}
+    <picture class="content-header__picture"{{#credit}} aria-labelledby="{{elementId}}"{{/credit}}>
+      {{#sources}}
+        <source srcset="{{srcset}}"
+                {{#type}}type="{{type}}"{{/type}}
+          {{#media}}media="{{media}}"{{/media}}>
+      {{/sources}}
+      {{#fallback}}
+        <img src="{{defaultPath}}"
+             {{#srcset}}srcset="{{srcset}}"{{/srcset}}
+             alt="{{altText}}"
+             class="content-header__image"
+        >
+      {{/fallback}}
+    </picture>
+  {{/image}}
+
+  {{#breadcrumb}}
+    <div class="content-header__top">
+      {{> resources/templates/breadcrumb}}
+    </div>
+  {{/breadcrumb}}
+
+  {{#header}}
+    {{#hasProfile}}
+      <div class="content-header__profile_wrapper">
+        {{#profile.url}}
+        <a class="content-header__profile{{#profile.image}} content-header__profile--has-image{{/profile.image}}"
+           href="{{profile.url}}">
+        {{/profile.url}}
+        {{^profile.url}}
+        <span class="content-header__profile{{#profile.image}} content-header__profile--has-image{{/profile.image}}">
+        {{/profile.url}}
+        {{#profile.image}}
+          <picture>
+            {{#sources}}
+              <source srcset="{{srcset}}"
+                      {{#type}}type="{{type}}"{{/type}}
+                {{#media}}media="{{media}}"{{/media}}>
+            {{/sources}}
+            {{#fallback}}
+              <img src="{{defaultPath}}"
+                   {{#srcset}}srcset="{{srcset}}"{{/srcset}}
+                   alt="{{altText}}"
+                   class="content-header__profile_image">
+            {{/fallback}}
+          </picture>
+        {{/profile.image}}
+        <dl>
+          <dt class="content-header__profile_label">Edited by</dt>
+          <dd class="content-header__profile_data">{{profile.name}}</dd>
+        </dl>
+        {{^profile.url}}
+          </span>
+        {{/profile.url}}
+        {{#profile.url}}
+        </a>
+        {{/profile.url}}
+      </div>
+    {{/hasProfile}}
+
+    <span class="content-header__component-assets">
+
+      {{#hasSubjects}}
+        <ol class="content-header__subject_list">
+          {{#subjects}}
+            <li class="content-header__subject_list_item">
+              <a href="{{url}}" class="content-header__subject_link">{{{name}}}</a>
+            </li>
+          {{/subjects}}
+        </ol>
+      {{/hasSubjects}}
+    {{/header}}
+
+    {{#licence}}
+        <ul class="content-header__icons">
+          <li><a href="https://en.wikipedia.org/wiki/Open_access"
+                class="content-header__icon content-header__icon--oa"><span
+              class="visuallyhidden">Open access</span></a></li>
+          <li><a href="{{licence}}"
+                class="content-header__icon content-header__icon--cc"><span
+              class="visuallyhidden">Copyright information</span></a></li>
+        </ul>
+    {{/licence}}
+
+    {{#download}}
+      <a href="{{download}}" class="side-section-wrapper__download_link">
+        <picture>
+          {{#image}}
+            <source srcset="{{#assetRewrite}}{{assetsPath}}/img/icons/download-full-reverse.svg{{/assetRewrite}}" type="image/svg+xml" media="(min-width: 45.625em)">
+            <source srcset="{{#assetRewrite}}{{assetsPath}}/img/icons/download-full-reverse-2x.png{{/assetRewrite}}" type="image/png" media="(min-width: 45.625em)">
+            <source srcset="{{#assetRewrite}}{{assetsPath}}/img/icons/download-reverse.svg{{/assetRewrite}}" type="image/svg+xml">
+            <img src="{{#assetRewrite}}{{assetsPath}}/img/icons/download-full-reverse-1x.png{{/assetRewrite}}" class="content-header__download_icon" alt="Download icon">
+          {{/image}}
+          {{^image}}
+            <source srcset="{{#assetRewrite}}{{assetsPath}}/img/icons/download-full.svg{{/assetRewrite}}" type="image/svg+xml" media="(min-width: 45.625em)">
+            <source srcset="{{#assetRewrite}}{{assetsPath}}/img/icons/download-full-2x.png{{/assetRewrite}}" type="image/png" media="(min-width: 45.625em)">
+            <source srcset="{{#assetRewrite}}{{assetsPath}}/img/icons/download.svg{{/assetRewrite}}" type="image/svg+xml">
+            <img src="{{#assetRewrite}}{{assetsPath}}/img/icons/download-full-1x.png{{/assetRewrite}}" class="content-header__download_icon" alt="Download icon">
+          {{/image}}
+        </picture>
+      </a>
+    {{/download}}
+  </span>
+
+  <div class="content-header__body">
+    <h1 class="content-header__title {{#titleLength}}content-header__title--{{titleLength}}{{/titleLength}}{{^titleLength}}content-header__title--medium{{/titleLength}}">{{{title}}}</h1>
+
+    {{#impactStatement}}
+      <div class="content-header__impact-statement">{{{impactStatement}}}</div>
+    {{/impactStatement}}
+
+    {{#socialMediaSharers}}
+      {{> resources/templates/social-media-sharers}}
+    {{/socialMediaSharers}}
+
+  </div>
+
+  {{#authors}}
+    {{> resources/templates/authors}}
+  {{/authors}}
+
+  {{#selectNav}}
+    <div class="content-header__cta">
+      {{> resources/templates/select-nav}}
+    </div>
+  {{/selectNav}}
+
+  {{#meta}}
+    <div class="content-header__meta">
+      {{> resources/templates/meta}}
+    </div>
+  {{/meta}}
+
+{{#image.creditOverlay}}
+  {{#image.credit}}
+      <div class="content-header__image-credit content-header__image-credit--overlay" id="{{elementId}}">{{{text}}}</div>
+  {{/image.credit}}
+{{/image.creditOverlay}}
+
+</header>
+
+{{#audioPlayer}}
+  {{> resources/templates/audio-player}}
+{{/audioPlayer}}
+
+{{^image.creditOverlay}}
+  {{#image.credit}}
+      <div class="wrapper"><div class="content-header__image-credit" id="{{elementId}}">{{{text}}}</div></div>
+  {{/image.credit}}
+{{/image.creditOverlay}}
+
+{{#image}}
+  </div>
+{{/image}}

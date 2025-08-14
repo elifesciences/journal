@@ -1,0 +1,19 @@
+{{#heading}}
+  {{> resources/templates/list-heading}}
+{{/heading}}
+
+<ol class="listing-list">
+
+  {{#items}}
+      <li class="listing-list__item">
+        {{> resources/templates/profile-snippet }}
+      </li>
+  {{/items}}
+
+  {{#seeMoreLink}}
+    <li class="listing-list__item">
+      {{> resources/templates/see-more-link}}
+    </li>
+  {{/seeMoreLink}}
+
+</ol>

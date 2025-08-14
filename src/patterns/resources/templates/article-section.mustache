@@ -1,0 +1,54 @@
+<section
+    class="article-section{{#classes}} {{classes}}{{/classes}} {{#isFirst}}article-section--first{{/isFirst}}"
+  {{#id}} id="{{id}}"{{/id}}
+  {{#hasBehaviour}}data-behaviour="ArticleSection"{{/hasBehaviour}}
+  {{#isInitiallyClosed}}data-initial-state="closed"{{/isInitiallyClosed}}
+>
+
+  {{#title}}
+    <header class="article-section__header">
+      {{^hasEditorTitle}}<h{{headingLevel}} class="article-section__header_text">{{{title}}}</h{{headingLevel}}>{{/hasEditorTitle}}
+      {{#hasEditorTitle}}<div class="article-section__header_text">{{{title}}}</div>{{/hasEditorTitle}}
+      {{#headerLink}}
+        <a href="{{url}}" class="article-section__header_link">{{name}}</a>
+      {{/headerLink}}
+    </header>
+  {{/title}}
+
+  <div class="article-section__body">
+    {{^showCharts}}
+      {{{body}}}
+    {{/showCharts}}
+
+    {{#showCharts}}
+      {{>resources/templates/statistic-collection}}
+    {{/showCharts}}
+
+    {{#altmetric}}
+      {{> resources/templates/altmetric}}
+    {{/altmetric}}
+
+    {{#chart}}
+      {{>resources/templates/bar-chart}}
+    {{/chart}}
+
+    {{#doi}}
+      {{> resources/templates/doi}}
+    {{/doi}}
+
+    {{#assessment}}
+      {{> resources/templates/assessment}}
+    {{/assessment}}
+
+    {{#relatedLinks.0}}
+      <ul class="article-section__related{{#relatedLinksSeparator}} article-section__separator-{{relatedLinksSeparator}}{{/relatedLinksSeparator}}">
+        {{#relatedLinks}}
+        <li class="article-section__related_item">
+          <a href="{{url}}" class="article-section__related_link">{{name}}</a>
+        </li>
+        {{/relatedLinks}}
+      </ul>
+    {{/relatedLinks.0}}
+  </div>
+
+</section>

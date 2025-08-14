@@ -1,0 +1,10 @@
+{{! isTruncated should only be true when doi is included as a partial within the contextual-data pattern }}
+<span class="doi{{#variant}} doi--{{variant}}{{/variant}}">{{#isTruncated}}doi: {{/isTruncated}}
+  {{^doiWithoutLink}}
+    <a href="https://doi.org/{{doi}}" class="doi__link">
+  {{/doiWithoutLink}}
+  {{^isTruncated}}https://doi.org/{{/isTruncated}}{{doi}}
+  {{^doiWithoutLink}}
+    </a>
+  {{/doiWithoutLink}}
+</span>

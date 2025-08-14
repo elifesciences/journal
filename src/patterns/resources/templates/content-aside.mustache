@@ -1,0 +1,54 @@
+<aside class="content-aside" data-behaviour="ContentAside">
+  {{#status}}
+    <div class="status-wrapper">
+      <h5 class="status-title{{#titleLength}} status-title__{{titleLength}}{{/titleLength}}">{{title}}</h5>
+
+      {{#description}}
+        <div class="status-description">{{description}}</div>
+      {{/description}}
+
+      {{#link}}
+        <a href="{{url}}"{{#ariaLabel}} aria-label="{{ariaLabel}}"{{/ariaLabel}} class="status-link">{{name}}</a>
+      {{/link}}
+    </div>
+  {{/status}}
+
+  {{#previousVersion}}
+    {{>resources/templates/previous-version-warning}}
+  {{/previousVersion}}
+
+  <div class="content-aside__column-wrapper">
+
+    {{#timeline}}
+      <div class="content-aside__first-column">
+        <div class="content-aside__definition-list">
+          {{>resources/templates/definition-list}}
+        </div>
+      </div>
+    {{/timeline}}
+
+    <div class="content-aside__second-column">
+
+      {{#actionButtons}}
+        {{>resources/templates/button-collection}}
+      {{/actionButtons}}
+
+      {{#metrics}}
+        {{>resources/templates/contextual-data}}
+      {{/metrics}}
+
+      <div class="divider"></div>
+
+      {{#altmetric}}
+        {{>resources/templates/altmetric}}
+      {{/altmetric}}
+
+      {{#related}}
+        <div class="article__related-item grid-secondary-column__item--extended-wide-only">
+          {{> resources/templates/listing-teasers }}
+        </div>
+      {{/related}}{{!
+    }}
+    </div>
+  </div>
+</aside>

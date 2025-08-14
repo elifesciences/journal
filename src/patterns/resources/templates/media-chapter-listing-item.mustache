@@ -1,0 +1,26 @@
+<article class="media-chapter-listing-item"{{#startTime}} data-start-time="{{startTime.forMachine}}" data-chapter-number="{{chapterNumber}}" data-behaviour="MediaChapterListingItem"{{/startTime}}>
+
+{{#startTime}}
+  <span class="media-chapter-listing-item__time">{{{forHuman}}}</span>
+{{/startTime}}
+
+  <header>
+   <div class="h4 media-chapter-listing-item__header_text">{{{title}}}</div>
+  </header>
+
+  {{#content}}
+    <div class="media-chapter-listing-item__body">{{{content}}}</div>
+  {{/content}}
+
+  {{#hasContentSources}}
+    <footer class="media-chapter-listing-item__footer">
+      <header class="visuallyhidden">This chapter is based on the following content</header>
+    <ul class="media-chapter-listing-item__source_list">
+    {{#contentSources}}
+      <li class="media-chapter-listing-item__source_list_item">{{#contentType}}<a href="{{url}}" class="media-chapter-listing-item__source_list_item_link">{{name}}</a> {{/contentType}}{{{text}}}</li>
+      {{/contentSources}}
+    </ul>
+    </footer>
+  {{/hasContentSources}}
+
+</article>

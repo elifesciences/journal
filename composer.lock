@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4e018f07a119b7e0d69b312bfcf22a99",
+    "content-hash": "185b0cd4a4a2e28a645e4d7a3501cb2e",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -1371,60 +1371,6 @@
                 "MIT"
             ],
             "time": "2024-04-12T01:07:21+00:00"
-        },
-        {
-            "name": "elife/patterns",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/elifesciences/patterns-php.git",
-                "reference": "418fd719eabb9f1bd160bca4f66a55596b9a6cd1"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/418fd719eabb9f1bd160bca4f66a55596b9a6cd1",
-                "reference": "418fd719eabb9f1bd160bca4f66a55596b9a6cd1",
-                "shasum": ""
-            },
-            "require": {
-                "beberlei/assert": "^2.0",
-                "mustache/mustache": "^2.5",
-                "php": "^7.1 || ^8.0"
-            },
-            "require-dev": {
-                "justinrainbow/json-schema": "^5.1",
-                "php-jsonpointer/php-jsonpointer": "^1.0",
-                "phpspec/prophecy": "^1.10",
-                "phpunit/phpunit": "^5.2",
-                "squizlabs/php_codesniffer": "^3.5",
-                "symfony/filesystem": "^3.0",
-                "symfony/finder": "^3.0",
-                "symfony/process": "^3.0",
-                "symfony/yaml": "^3.1",
-                "twig/twig": "^2.10"
-            },
-            "suggest": {
-                "twig/twig": "^2.0, to use PatternExtension"
-            },
-            "default-branch": true,
-            "type": "library",
-            "autoload": {
-                "files": [
-                    "src/functions.php"
-                ],
-                "psr-4": {
-                    "eLife\\Patterns\\": "./src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "description": "eLife patterns",
-            "support": {
-                "source": "https://github.com/elifesciences/patterns-php/tree/master"
-            },
-            "time": "2025-08-14T14:25:02+00:00"
         },
         {
             "name": "fabpot/goutte",
@@ -5831,8 +5777,7 @@
     "stability-flags": {
         "elife/api-client": 20,
         "elife/api-sdk": 20,
-        "elife/civi-contacts": 20,
-        "elife/patterns": 20
+        "elife/civi-contacts": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
@@ -5844,5 +5789,5 @@
     "platform-overrides": {
         "php": "7.1.33"
     },
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.2.0"
 }

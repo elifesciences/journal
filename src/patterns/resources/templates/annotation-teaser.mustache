@@ -1,0 +1,34 @@
+<article class="annotation-teaser" data-behaviour="AnnotationTeaser" data-in-context-uri="{{inContextUri}}"{{#isReply}} data-is-reply="{{isReply}}"{{/isReply}}>
+
+  {{#document}}
+    <div class="annotation-teaser__document">
+      {{{.}}}
+    </div>
+  {{/document}}
+
+  {{#highlight}}
+    <blockquote class="annotation-teaser__highlight">
+      {{{.}}}
+    </blockquote>
+  {{/highlight}}
+
+  {{#content}}
+    <div class="annotation-teaser__content">
+      {{{.}}}
+    </div>
+    {{#isReply}}
+      <div class="annotation-teaser__reply">
+        This is a reply.
+      </div>
+    {{/isReply}}
+  {{/content}}
+
+    <footer class="annotation-teaser__footer">
+
+      {{#meta}}
+        {{> resources/templates/meta}}
+      {{/meta}}
+
+    </footer>
+
+</article>

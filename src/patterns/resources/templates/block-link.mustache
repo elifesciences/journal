@@ -1,0 +1,31 @@
+<div class="block-link{{#isGridListing}} block-link--grid-listing{{/isGridListing}}{{#image}} block-link--image{{/image}}">
+
+  {{#image}}
+    <div class="block-link__picture_wrapper">
+      <picture class="block-link__picture">
+        {{#sources}}
+          <source srcset="{{srcset}}"
+                  {{#type}}type="{{type}}"{{/type}}
+            {{#media}}media="{{media}}"{{/media}}>
+        {{/sources}}
+        {{#fallback}}
+          <img src="{{defaultPath}}"
+               {{#srcset}}srcset="{{srcset}}"{{/srcset}}
+               alt="{{altText}}"
+               class="block-link__image"
+          >
+        {{/fallback}}
+      </picture>
+    </div>
+  {{/image}}
+
+  <a href="{{link.url}}"
+     class="block-link__link">
+
+    <div class="block-link__inner">
+      {{{link.name}}}
+    </div>
+
+  </a>
+
+</div>

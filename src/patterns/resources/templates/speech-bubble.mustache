@@ -1,0 +1,6 @@
+<button class="speech-bubble{{#hasPlaceholder}} speech-bubble--has-placeholder{{/hasPlaceholder}}{{#isSmall}} speech-bubble--small {{/isSmall}}{{#isWrapped}} speech-bubble--wrapped {{/isWrapped}}"
+        data-behaviour="SpeechBubble{{#behaviour}} {{behaviour}}{{/behaviour}}"
+aria-live="polite">
+  {{#isWrapped}}{{#prefix}}<span class="speech-bubble--wrapped__prefix">{{{prefix}}}</span>{{/prefix}}{{/isWrapped}}
+  <span class="speech-bubble__inner">{{#isWrapped}}{{^prefix}}{{{prefix}}} {{/prefix}}{{/isWrapped}}{{{text}}}</span>
+</button>

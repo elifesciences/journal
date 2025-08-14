@@ -1,0 +1,13 @@
+<section class="section-listing-wrapper" id="{{id}}">
+  {{#listHeading}}
+    {{> resources/templates/list-heading}}
+  {{/listHeading}}
+  <ol class="section-listing {{#singleLine}}section-listing--single-line{{/singleLine}}">
+    {{#sections}}
+      <li class="section-listing__list_item {{#isCurrent}}section-listing__list_item--current{{/isCurrent}}">
+        <a href="{{{url}}}" class="section-listing__list_link">{{{name}}}</a>
+      </li>
+    {{/sections}}
+  </ol>
+  {{> resources/templates/to-top-link}}
+</section>

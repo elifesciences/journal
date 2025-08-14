@@ -1,0 +1,12 @@
+{{#isHypothesisTrigger}}
+<div data-hypothesis-trigger>
+{{/isHypothesisTrigger}}
+  {{#type}}
+    <button class="button {{classes}}" type="{{type}}"{{#id}} id="{{id}}"{{/id}}{{#name}} name="{{name}}"{{/name}}{{#clipboardText}} data-behaviour="ButtonClipboard" data-clipboard="{{clipboardText}}"{{/clipboardText}}{{#isHypothesisTrigger}} data-behaviour="HypothesisTrigger"{{/isHypothesisTrigger}}{{#ariaLabel}} aria-label="{{ariaLabel}}"{{/ariaLabel}}>{{{text}}}</button>
+  {{/type}}
+  {{^type}}
+    <a href="{{path}}" class="button {{classes}}"{{#id}} id="{{id}}"{{/id}}{{#clipboardText}} data-behaviour="ButtonClipboard" data-clipboard="{{clipboardText}}"{{/clipboardText}}{{#isHypothesisTrigger}} data-behaviour="HypothesisTrigger"{{/isHypothesisTrigger}}{{#ariaLabel}} aria-label="{{ariaLabel}}"{{/ariaLabel}}>{{{text}}}</a>
+  {{/type}}
+{{#isHypothesisTrigger}}
+</div>
+{{/isHypothesisTrigger}}

@@ -1,0 +1,100 @@
+<div class="teaser{{#rootClasses}} {{rootClasses}}{{/rootClasses}}{{^rootClasses}} teaser--main{{/rootClasses}}{{^secondaryInfo}} teaser--no-secondary-info{{/secondaryInfo}}">
+
+  {{! These are usually links to major subject areas, see teaser-main-article, but could be unlinked
+      text expressing a relationship, e.g. 'Built upon by' in teaser-secondary-related-item}}
+  {{#contextLabel}}
+    <ol class="teaser__context_label_list" aria-label="These research categories are for the following article">
+      {{#list}}
+        <li class="teaser__context_label_item">{{#url}}<a href="{{url}}" {{#carouselItem}}tabindex="-1" {{/carouselItem}}class="teaser__context_label_link">{{/url}}{{{name}}}{{#url}}</a>{{/url}}</li>
+      {{/list}}
+    </ol>
+  {{/contextLabel}}
+
+  <header class="teaser__header">
+    {{! For schema: url is dependent on image }}
+    {{! Image is either:
+          - teaser__picture--prominent: full width, above non-article teasers
+          - teaser__picture--big: full width when viewport narrow, maxing out at 250px wide and floating right as viewport widens
+          - teaser__picture--small: 70px square image, floating right.
+        }}
+    {{#image}}
+      <a href="{{{url}}}" class="teaser__picture--link" tabindex="-1">
+        <picture class="teaser__picture teaser__picture--{{type}}">
+          {{#sources}}
+            <source srcset="{{srcset}}"
+                    {{#type}}type="{{type}}"{{/type}}
+              {{#media}}media="{{media}}"{{/media}}>
+          {{/sources}}
+          {{#fallback}}
+            <img src="{{defaultPath}}"
+                 {{#srcset}}srcset="{{srcset}}"{{/srcset}}
+                 alt="{{altText}}"
+            >
+          {{/fallback}}
+        </picture>
+      </a>
+    {{/image}}
+
+    {{! Used for the date in an event teaser only. Treatment very like teaser__picture--small.
+        Different enough from the date in the meta section, that it gets its own block. }}
+    {{#eventDate}}
+      {{! For schema: url is dependent on date }}
+      {{#url}}
+        <a href="{{url}}">{{>resources/templates/date}}</a>
+      {{/url}}
+      {{^url}}
+        <div>{{>resources/templates/date}}</div>
+      {{/url}}
+    {{/eventDate}}
+
+    <h4 class="teaser__header_text">
+      {{! Occasionally the title isn't linked, for example in the chapter listing item teaser. }}
+      {{! For schema: url is dependent on title }}
+      {{#url}}
+        <a href="{{{url}}}" {{#num}}data-slide="{{num}}" {{/num}}{{#ariaLabel}}aria-label="{{ariaLabel}}" {{/ariaLabel}}{{#carouselItem}}tabindex="-1" {{/carouselItem}}class="teaser__header_text_link">{{{title}}}</a>
+      {{/url}}
+      {{^url}}
+        {{{title}}}
+      {{/url}}
+    </h4>
+
+    {{! secondaryInfo may be a source, an author, something else. Not anticipated to be a list,
+        because authors are represented as first author et al.}}
+    {{#secondaryInfo}}
+    <div class="teaser__secondary_info">
+      {{{secondaryInfo}}}
+    </div>
+    {{/secondaryInfo}}
+
+  </header>
+
+  {{! content could be the impact statement, for example. It could also contain a list.}}
+  {{#content}}
+  <div class="teaser__body">
+    {{{content}}}
+  </div>
+  {{/content}}
+
+  {{! Several things may appear in the footer:
+      - meta: standard pattern for article type, or arbitrary text with or without a date
+      - formats: HTML and/or PDF. Used for research content
+      - download icon/link: used to download, found in grid style podcast
+   }}
+  {{#footer}}
+  <footer class="teaser__footer">
+
+    {{#meta}}
+      {{> resources/templates/meta}}
+    {{/meta}}
+
+    {{#terms}}
+      <ul class="teaser__terms" aria-label="This article has been assessed by eLife as: ">
+        {{#items}}
+        <li>{{>resources/templates/term}}</li>
+        {{/items}}
+      </ul>
+    {{/terms}}
+
+  </footer>
+  {{/footer}}
+</div>

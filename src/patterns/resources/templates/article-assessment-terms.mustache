@@ -1,0 +1,9 @@
+<section class="article-assessment-terms">
+  <div class="article-assessment-terms__title">{{title}}</div>
+  <div class="article-assessment-terms__description" aria-label="{{termDescriptionAriaLabel}}">{{{termDescription}}}</div>
+  <ul class="article-assessment-terms__list" aria-label="The following is a list terms editors can choose from">
+    {{#terms}}
+      <li>{{>resources/templates/term}}</li>
+    {{/terms}}
+  </ul>
+</section>

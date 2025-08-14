@@ -1,0 +1,54 @@
+<div class="hero-banner" role="banner">
+    {{#image}}
+    <a href="{{url}}" class="hero-banner__picture-wrapper">
+      <picture>
+        {{#sources}}
+        <source srcset="{{srcset}}"
+                {{#type}} type="{{type}}" {{/type}}
+                {{#media}} media="{{media}}" {{/media}}>
+        {{/sources}}
+        {{#fallback}}
+        <img src="{{defaultPath}}"
+             {{#srcset}} srcset="{{srcset}}" {{/srcset}}
+             alt="{{altText}}" />
+        {{/fallback}}
+      </picture>
+    </a>
+    {{/image}}
+    <section class="hero-banner__details">
+        {{#subjects}}
+        <ol class="hero-banner__subject_list">
+            {{#subjects.list}}
+            <li class="hero-banner__subject_list_item">
+                <a href="{{url}}" class="hero-banner__subject_link">
+                    <span class="hero-banner__subject">{{{name}}}</span>
+                </a>
+            </li>
+            {{/subjects.list}}
+        </ol>
+        {{/subjects}}
+        {{#title}}
+        <h1 class="hero-banner__title {{#titleLength}}hero-banner__title--{{titleLength}}{{/titleLength}}{{^titleLength}}hero-banner__title--medium{{/titleLength}}">
+            <a href="{{url}}" class="hero-banner__title_link">{{{title}}}</a>
+        </h1>
+        {{/title}}
+
+        {{#summary}}
+        <div class="hero-banner__summary">
+            {{{summary}}}
+        </div>
+        {{/summary}}
+
+        {{#authors}}
+        <div class="author-line">
+            {{{authors}}}
+        </div>
+        {{/authors}}
+
+        {{#meta}}
+        <div class="hero-banner__meta">
+            {{> resources/templates/meta}}
+        </div>
+        {{/meta}}
+    </section>
+</div>

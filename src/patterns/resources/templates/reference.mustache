@@ -1,0 +1,74 @@
+<div class="reference"{{#bibId}} data-popup-label="See in references" data-popup-contents="{{bibId}}" id="{{bibId}}"{{/bibId}}>
+  {{#label}}
+    <div class="reference__label">{{label}}</div>
+  {{/label}}
+  {{#hasAuthors}}
+    {{#authorLists}}
+    <ol class="reference__authors_list">
+      {{#authors}}
+        <li class="reference__author">
+          {{#url}}<a href="{{url}}" class="reference__authors_link">{{/url}}{{{name}}}{{#url}}</a>{{/url}}{{!
+        }}</li>
+      {{/authors}}
+    </ol>
+    <span class="reference__authors_list_suffix">{{suffix}}</span>
+    {{/authorLists}}
+  {{/hasAuthors}}
+
+  {{#doi}}
+
+    {{^doiWithoutLink}}
+      <a href="https://doi.org/{{{doi}}}" class="reference__title">{{{title}}}</a>
+    {{/doiWithoutLink}}
+
+    {{#doiWithoutLink}}
+      <div class="reference__title">{{{title}}}</div>
+    {{/doiWithoutLink}}
+
+  {{/doi}}
+
+  {{^doi}}
+
+    {{#titleLink}}
+      <a href="{{titleLink}}" class="reference__title">{{{title}}}</a>
+    {{/titleLink}}
+
+    {{^titleLink}}
+      <div class="reference__title">{{{title}}}</div>
+    {{/titleLink}}
+
+  {{/doi}}
+
+  {{#origin}}
+    <div class="reference__origin">{{{origin}}}</div>
+  {{/origin}}
+
+  <div class="doi__reference-spacing"></div>
+
+  {{#doi}}
+    {{> resources/templates/doi}}
+  {{/doi}}
+
+  {{^doi}}
+
+    {{#titleLink}}
+      <div class="reference__link-outer">
+        <a href="{{titleLink}}" class="reference__link">{{{titleLink}}}</a>
+      </div>
+    {{/titleLink}}
+
+  {{/doi}}
+
+  {{#hasAbstracts}}
+    <ul class="reference__abstracts">
+  {{/hasAbstracts}}
+  {{#abstracts}}
+    <li class="reference__abstract">
+      <a href="{{url}}" class="reference__abstract_link">{{{name}}}</a>
+    </li>
+  {{/abstracts}}
+
+  {{#hasAbstracts}}
+    </ul>
+  {{/hasAbstracts}}
+</div>

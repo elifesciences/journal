@@ -1,0 +1,47 @@
+
+<div class="login-control"
+
+  {{#isLoggedIn}}
+
+     data-link-field-roots="{{linkFieldRoots}}"
+     {{{linkFieldData}}}
+     data-default-uri="{{defaultUri}}"
+     data-display-name="{{displayName}}"
+
+     {{#subsidiaryText}}
+       data-subsidiary-text="{{subsidiaryText}}"
+     {{/subsidiaryText}}
+
+     data-icon="
+
+       {{#icon}}
+         &lt;picture class='login-control__icon'&gt;
+           {{#sources}}
+             &lt;source srcset='{{srcset}}'
+                        {{#type}}type='{{type}}'{{/type}}
+                        {{#media}}media='{{media}}'{{/media}}&gt;
+           {{/sources}}
+           {{#fallback}}
+            &lt;img src='{{defaultPath}}'
+                 {{#srcset}}srcset='{{srcset}}'{{/srcset}}
+                 alt='{{altText}}'
+            &gt;
+          {{/fallback}}
+        &lt;/picture&gt;
+      {{/icon}}"
+
+  {{/isLoggedIn}}
+
+     data-behaviour="LoginControl">
+
+  {{#isLoggedIn}}
+    <a href="{{defaultUri}}" class="login-control__non_js_control_link">{{{displayName}}}</a>
+  {{/isLoggedIn}}
+
+  {{^isLoggedIn}}
+    {{#button}}
+      {{> resources/templates/button}}
+    {{/button}}
+  {{/isLoggedIn}}
+
+</div>

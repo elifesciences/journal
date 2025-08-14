@@ -1,0 +1,46 @@
+{{#highlights}}
+<div class="highlights">
+{{/highlights}}
+
+  {{#heading}}
+    {{>resources/templates/list-heading}}
+  {{/heading}}
+
+  {{#highlights}}
+  <div class="highlights__content" data-behaviour="Highlights" role="region" aria-labelledby="{{headingId}}">
+  <div class="highlights__list">
+  {{/highlights}}
+
+  <ol class="listing-list {{#highlights}}listing-list--highlights{{/highlights}}"{{#id}} id="{{id}}"{{/id}}>
+    {{#items}}{{!
+      }}<li class="listing-list__item">{{> resources/templates/teaser }}</li>{{/items}}{{#seeMoreLink}}{{!
+   }}<li class="listing-list__item">{{> resources/templates/see-more-link}}</li>{{/seeMoreLink}}{{!
+  }}</ol>
+
+  {{#highlights}}
+  </div>
+    <p class="highlights__controls">
+      <span class="visuallyhidden">Highlights controls:</span>
+      <button class="highlights__control highlights__control--prev">
+        <picture>
+          <source srcset="{{#assetRewrite}}{{assetsPath}}/img/patterns/molecules/chevron-left-ic.svg{{/assetRewrite}}" type="image/svg+xml">
+          <img src="{{#assetRewrite}}{{assetsPath}}/img/patterns/molecules/chevron-left-ic_1x.png{{/assetRewrite}}" srcset="{{#assetRewrite}}{{assetsPath}}/img/patterns/molecules/chevron-left-ic_2x.png{{/assetRewrite}} 48w, {{#assetRewrite}}{{assetsPath}}/img/patterns/molecules/chevron-left-ic_1x.png{{/assetRewrite}} 24w" alt="Previous">
+        </picture>
+      </button>
+      <button class="highlights__control highlights__control--next">
+        <picture>
+          <source srcset="{{#assetRewrite}}{{assetsPath}}/img/patterns/molecules/chevron-right-ic.svg{{/assetRewrite}}" type="image/svg+xml">
+          <img src="{{#assetRewrite}}{{assetsPath}}/img/patterns/molecules/chevron-right-ic_1x.png{{/assetRewrite}}" srcset="{{#assetRewrite}}{{assetsPath}}/img/patterns/molecules/chevron-right-ic_2x.png{{/assetRewrite}} 48w, {{#assetRewrite}}{{assetsPath}}/img/patterns/molecules/chevron-right-ic_1x.png{{/assetRewrite}} 24w" alt="Next">
+        </picture>
+      </button>
+    </p>
+  </div>
+  {{/highlights}}
+
+  {{#pagination}}
+    {{> resources/templates/pager}}
+  {{/pagination}}
+
+{{#highlights}}
+</div>
+{{/highlights}}

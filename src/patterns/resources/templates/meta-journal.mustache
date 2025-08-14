@@ -1,0 +1,17 @@
+{{! This pattern is not used in any listing in journal. It is only used in the header of various article templates. It is populated by the `MetaNew` view model.
+}}<div class="meta">
+
+  {{#url}}
+    <a class="meta__type" href="{{url}}" {{#carouselItem}}tabindex="-1"{{/carouselItem}}>{{{text}}}</a>
+  {{/url}}
+
+  {{#date}}
+    {{>resources/templates/date}}
+  {{/date}}
+
+  {{^url}}
+    {{#text}}
+    <span class="meta__type">{{{text}}}</span>
+    {{/text}}
+  {{/url}}
+</div>

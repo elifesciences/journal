@@ -1,0 +1,11 @@
+<div class="additional-assets">
+  {{! We can't know what heading level this should be at (on the article page, at least), so picking the lowest in the hope that it has fewest side effects. }}
+  {{#heading}}<h6 class="additional-assets__heading">{{{heading}}}</h6>{{/heading}}
+
+  <dl class="additional-assets__list">
+    {{#assets}}
+      {{> resources/templates/additional-asset}}
+    {{/assets}}
+  </dl>
+
+</div>

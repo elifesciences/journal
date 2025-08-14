@@ -1,0 +1,41 @@
+{{! Added author-details__section-- BEM variants for use with js behaviour, will delete if too fine-grained. }}
+<div class="author-details" data-popup-contents="{{authorId}}" id="{{authorId}}">
+
+  <h4 class="author-details__name">{{{name}}}</h4>
+
+  {{#details}}
+    <section class="author-details__section">
+      {{#heading}}
+        <h5 class="author-details__heading">{{heading}}</h5>
+      {{/heading}}
+      {{#value}}
+        <span class="author-details__text">{{{value}}}</span>
+      {{/value}}
+      {{^value}}
+        <ol class="author-details__list list list--bullet">
+          {{#values}}
+            <li class="author-details__text">{{{.}}}</li>
+          {{/values}}
+        </ol>
+      {{/value}}
+    </section>
+  {{/details}}
+
+  {{#orcid}}
+  <section class="author-details__section">
+    {{>resources/templates/orcid}}
+  </section>
+  {{/orcid}}
+
+  {{#groups}}
+    {{#groupName}}<h5 class="author-details__secondary-name">{{{groupName}}}</h5>{{/groupName}}
+
+    <ol class="list list--bullet">
+      {{#items}}
+        <li>{{{.}}}</li>
+      {{/items}}
+    </ol>
+  {{/groups}}
+
+</div>
+

@@ -1,0 +1,23 @@
+
+<fieldset class="filter-group">
+  {{#selectFilterName}}
+    <label class="filter-group__item_label">
+      {{{filterTitle}}}
+      <select name="{{selectFilterName}}" class="filter-group__select">
+        {{#filters}}
+          <option value="{{#value}}{{value}}{{/value}}"{{#isChecked}} selected{{/isChecked}}>{{label}}</option>
+        {{/filters}}
+      </select>
+    </label>
+  {{/selectFilterName}}
+  {{^selectFilterName}}
+    {{#filterTitle}}<legend class="filter-group__title">{{{filterTitle}}}</legend>{{/filterTitle}}
+    <ul class="filter-group__filters" aria-labelledby="filter-group__title">
+      {{#filters}}
+        <li class="filter-group__filter_item">
+          <label class="filter-group__item_label"><input type="checkbox" class="filter-group__checkbox" name="{{name}}" value="{{#value}}{{value}}{{/value}}{{^value}}1{{/value}}" {{#isChecked}}checked{{/isChecked}}>{{label}}{{#results}} ({{results}}<span class="visuallyhidden"> results</span>){{/results}}</label>
+        </li>
+      {{/filters}}
+    </ul>
+  {{/selectFilterName}}
+</fieldset>

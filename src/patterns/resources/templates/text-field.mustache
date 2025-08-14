@@ -1,0 +1,44 @@
+<div class="form-item{{#state}} form-item--{{state}}{{/state}}"{{#isHiddenUntilChecked}} data-behaviour="HiddenUntilChecked"{{#checkboxId}} data-checkbox-id="{{checkboxId}}"{{/checkboxId}}{{/isHiddenUntilChecked}}>
+
+  <div class="form-item__label_container">
+    {{#label}}
+      <label
+          for="{{id}}"
+          class="form-item__label{{#isVisuallyHidden}} visuallyhidden{{/isVisuallyHidden}}">
+        {{labelText}}
+      </label>
+    {{/label}}
+
+    {{#formFieldInfoLink}}
+      {{> resources/templates/form-field-info-link}}
+    {{/formFieldInfoLink}}
+  </div>
+
+  <input
+      type="{{inputType}}"
+      class="text-field text-field--{{inputType}}{{#state}} text-field--{{state}}{{/state}}"
+    {{#id}} id="{{id}}"{{/id}}
+    {{#name}} name="{{name}}"{{/name}}
+    {{#autofocus}} autofocus{{/autofocus}}
+    {{#value}} value="{{value}}"{{/value}}
+    {{#required}} required="required"{{/required}}
+    {{#disabled}} disabled="disabled"{{/disabled}}
+    {{#placeholder}} placeholder="{{placeholder}}"{{/placeholder}}
+    {{#messageGroup}} aria-describedby="{{id}}"{{#errorText}} aria-invalid="true"{{/errorText}}{{/messageGroup}}
+  >
+
+  {{#messageGroup}}
+  <div id="{{id}}">
+
+    {{#infoText}}
+      <div class="form-item__message form-item__message--info">{{{.}}}</div>
+    {{/infoText}}
+
+    {{#errorText}}
+      <div class="form-item__message form-item__message--invalid">{{{.}}}</div>
+    {{/errorText}}
+
+  </div>
+  {{/messageGroup}}
+
+</div>

@@ -1,0 +1,24 @@
+
+<section class="article-meta">
+
+  <div class="article-meta__container">
+
+    {{#groups}}
+
+    <section class="article-meta__group">
+      <h4 class="article-meta__group_title">{{{title}}}</h4>
+      <ul class="article-meta__link_list">
+        {{#items}}
+          <li class="article-meta__link_list_item">
+            {{#url}}<a href="{{url}}" class="article-meta__link">{{{name}}}</a>{{/url}}{{!
+            }}{{^url}}{{{name}}}{{/url}}{{!
+          }}</li>
+        {{/items}}
+      </ul>
+    </section>
+
+    {{/groups}}
+
+  </div>
+
+</section>

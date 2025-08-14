@@ -1,0 +1,10 @@
+<article class="tweet" data-behaviour="Twitter">
+  <blockquote class="tweet__content twitter-tweet"{{#hideConversation}} data-conversation="none"{{/hideConversation}}{{#hideCards}} data-cards="hidden"{{/hideCards}}>
+    <p class="paragraph">{{{ text }}}</p>
+    <div class="tweet__by" aria-label="Tweeted by">{{accountLabel}} (@{{accountId}})</div>
+    <div class="tweet__context">
+      {{#date}}{{> resources/templates/date }}{{/date}}
+      <a class="tweet__link" href="{{url}}">See tweet</a>
+    </div>
+  </blockquote>
+</article>

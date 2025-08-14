@@ -1,0 +1,44 @@
+<div
+    id="{{id}}"
+    class="asset-viewer-inline asset-viewer-inline--{{variant}} {{#classes}}{{classes}}{{/classes}}"
+    data-variant="{{variant}}"
+    data-behaviour="{{^isSupplement}}AssetNavigation{{/isSupplement}} AssetViewer ToggleableCaption"
+    data-selector=".caption-text__body"
+  {{#isSupplement}}
+    data-parent-asset-id="{{parentId}}"
+    data-supplement-ordinal="{{supplementOrdinal}}"
+  {{/isSupplement}}
+    data-asset-viewer-group="{{^isSupplement}}{{id}}{{/isSupplement}}{{#isSupplement}}{{parentId}}{{/isSupplement}}"
+    {{#open}}
+    data-asset-viewer-uri="{{uri}}"
+    data-asset-viewer-width="{{width}}"
+    data-asset-viewer-height="{{height}}"
+    {{/open}}
+>
+
+  <div class="asset-viewer-inline__header_panel">
+      <div class="asset-viewer-inline__header_text">
+        <span class="asset-viewer-inline__header_text__prominent">{{label}}</span>{{#supplementCount}} with {{supplementCount}} supplement{{#hasMultipleSupplements}}s{{/hasMultipleSupplements}} {{#seeAllLink}}<a href="{{seeAllLink}}" class="asset-viewer-inline__header_link">see all</a>{{/seeAllLink}}{{/supplementCount}}
+      </div>
+
+
+        <div class="asset-viewer-inline__figure_access">
+        {{#download}}
+          <a href="{{download.link}}" class="asset-viewer-inline__download_all_link" download="{{download.filename}}"><span class="visuallyhidden">Download asset</span></a>
+        {{/download}}
+        {{#open}}
+          <a href="{{uri}}" class="asset-viewer-inline__open_link" target="_blank" rel="noopener noreferrer"><span class="visuallyhidden">Open asset</span></a>
+        {{/open}}
+        </div>
+
+  </div>
+
+  {{#captionedAsset}}
+      {{> resources/templates/captioned-asset }}
+  {{/captionedAsset}}
+
+  {{#additionalAssets}}
+    {{> resources/templates/additional-assets}}
+  {{/additionalAssets}}
+
+</div>

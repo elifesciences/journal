@@ -1,0 +1,32 @@
+<div class="wrapper-alternative">
+  {{#siteHeaderTitle}}
+    {{> resources/templates/site-header-title }}
+  {{/siteHeaderTitle}}
+  <h1 class="personalised-cover__header-text">{{{title}}}</h1>
+  <div class="personalised-cover-outer">
+    <div class="personalised-cover-text">
+      {{#text}}
+        {{> resources/templates/paragraph }}
+      {{/text}}
+    </div>
+    <div class="personalised-cover-thumbnail">
+      {{#picture}}
+        {{> resources/templates/picture}}
+      {{/picture}}
+    </div>
+    <div data-behaviour="PersonalisedCoverDownload" class="personalised-cover-buttons">
+      {{#a4ListHeading}}
+        {{> resources/templates/list-heading }}
+      {{/a4ListHeading}}
+      {{#a4ButtonCollection}}
+        {{> resources/templates/button-collection }}
+      {{/a4ButtonCollection}}
+      {{#letterListHeading}}
+        {{> resources/templates/list-heading }}
+      {{/letterListHeading}}
+      {{#letterButtonCollection}}
+        {{> resources/templates/button-collection }}
+      {{/letterButtonCollection}}
+    </div>
+  </div>
+</div>

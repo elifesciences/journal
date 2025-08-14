@@ -1,0 +1,16 @@
+<div class="archive-nav-link">
+
+  {{#blockLink}}
+    {{> resources/templates/block-link}}
+  {{/blockLink}}
+
+  {{#label}}
+  <dl class="archive-nav-link__list">
+    <dt class="archive-nav-link__sub_links_list_heading">{{{label}}}</dt>
+    {{#links}}
+      <dd class="archive-nav-link__sub_links_list_item"><a class="archive-nav-link__sub_link" href="{{url}}">{{{name}}}</a></dd>
+    {{/links}}
+  </dl>
+  {{/label}}
+
+</div>

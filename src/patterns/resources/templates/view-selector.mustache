@@ -1,0 +1,29 @@
+<div class="view-selector{{#secondaryUrl}} view-selector--has-secondary{{/secondaryUrl}}{{#isTabSelector}} button--switch-selector{{/isTabSelector}}" data-behaviour="ViewSelector"{{#sideBySideUrl}} data-side-by-side-link="{{sideBySideUrl}}"{{/sideBySideUrl}}>
+  <ul class="view-selector__list">
+    <li class="view-selector__list-item view-selector__list-item--primary{{^secondaryIsActive}} view-selector__list-item--active{{/secondaryIsActive}}">
+      <a href="{{primaryUrl}}" class="view-selector__link view-selector__link--primary">{{primaryLabel}}</a>
+    </li>
+    {{#secondaryUrl}}
+      <li class="view-selector__list-item view-selector__list-item--secondary{{#secondaryIsActive}} view-selector__list-item--active{{/secondaryIsActive}}">
+          <a href="{{secondaryUrl}}" class="view-selector__link view-selector__link--secondary">{{secondaryLabel}}</a>
+      </li>
+    {{/secondaryUrl}}
+
+    {{#otherLinks}}
+      <li class="view-selector__list-item">
+        <a href="{{url}}" class="view-selector__link"><span>{{{name}}}</span></a>
+      </li>
+    {{/otherLinks}}
+
+    {{#jumpLinks}}
+      <li class="view-selector__list-item view-selector__divider"></li>
+
+      {{#links}}
+        <li class="view-selector__jump_link_item view-selector__list-item">
+          <a href="{{url}}" class="view-selector__jump_link">{{{name}}}</a>
+        </li>
+      {{/links}}
+    {{/jumpLinks}}
+
+  </ul>
+</div>

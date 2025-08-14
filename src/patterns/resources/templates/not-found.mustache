@@ -1,0 +1,21 @@
+<div class="error-wrapper">
+
+  <div class="error">
+
+    <picture>
+       <source srcset="{{#assetRewrite}}{{assetsPath}}/img/errors/404.svg{{/assetRewrite}}" type="image/svg+xml">
+       <img srcset="{{#assetRewrite}}{{assetsPath}}/img/errors/404-2x.png{{/assetRewrite}} 266w" src="{{#assetRewrite}}{{assetsPath}}/img/errors/404.png{{/assetRewrite}}" sizes="133px"
+            alt="" class="error__icon">
+    </picture>
+
+    <h1 class="error__title">Oops!</h1>
+
+    <p>The page you were looking for is not found.</p>
+
+    {{#button}}
+        {{> resources/templates/button }}
+    {{/button}}
+
+  </div>
+
+</div>

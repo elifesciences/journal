@@ -1,0 +1,60 @@
+<div class="form-item{{#state}} form-item--{{state}}{{/state}}">
+
+  {{#title}}
+    <div class="form-item__title">{{title}}</div>
+  {{/title}}
+
+  <div class="checkboxes{{#state}} checkboxes--{{state}}{{/state}}"{{#id}} id="{{id}}"{{/id}}>
+    <ul class="checkboxes__list">
+      {{#checkboxes}}
+        <li class="checkboxes__list_item">
+          {{^children}}
+            <label class="checkboxes__item_label">
+              <input type="checkbox" name="{{name}}" value="{{value}}"
+                {{#id}} id="{{id}}"{{/id}}
+                {{#checked}} checked{{/checked}}
+                {{#required}} required="required"{{/required}}
+                {{#disabled}} disabled="disabled"{{/disabled}}
+                {{#messageGroup}} aria-describedby="{{id}}"{{#errorText}} aria-invalid="true"{{/errorText}}{{/messageGroup}}
+              />
+              <span class="checkbox__item">{{label}}</span>
+            </label>
+          {{/children}}
+          {{#children.0}}
+            {{#groupTitle}}<div class="form-item__sub_title">{{groupTitle}}</div>{{/groupTitle}}
+            <ul class="checkboxes__children_list">
+              {{#children}}
+                <li class="checkboxes__children_list_item">
+                  <label class="checkboxes__item_label">
+                    <input type="checkbox" name="{{name}}" value="{{value}}"
+                      {{#id}} id="{{id}}"{{/id}}
+                      {{#checked}} checked{{/checked}}
+                      {{#required}} required="required"{{/required}}
+                      {{#disabled}} disabled="disabled"{{/disabled}}
+                      {{#messageGroup}} aria-describedby="{{id}}"{{#errorText}} aria-invalid="true"{{/errorText}}{{/messageGroup}}
+                    />
+                    <span class="checkbox__item">{{label}}</span>
+                  </label>
+                </li>
+              {{/children}}
+            </ul>
+          {{/children.0}}
+        </li>
+      {{/checkboxes}}
+    </ul>
+  </div>
+
+  {{#messageGroup}}
+    <div id="{{id}}">
+
+      {{#infoText}}
+        <div class="form-item__message form-item__message--info">{{{.}}}</div>
+      {{/infoText}}
+
+      {{#errorText}}
+        <div class="form-item__message form-item__message--invalid">{{{.}}}</div>
+      {{/errorText}}
+
+    </div>
+  {{/messageGroup}}
+</div>

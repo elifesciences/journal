@@ -1,0 +1,27 @@
+<header class="content-header content-header--read-more clearfix {{#hasSubjects}}content-header--header{{/hasSubjects}}">
+
+  {{#hasSubjects}}
+    <ol class="content-header__subject_list">
+      {{#subjects}}
+        <li class="content-header__subject_list_item">{{{name}}}</li>
+      {{/subjects}}
+    </ol>
+  {{/hasSubjects}}
+
+  <div class="content-header__body">
+    <h1 class="content-header__title {{#longTitle}}content-header__title--long{{/longTitle}}">
+      <a href="{{url}}" class="content-header__title_link">{{{title}}}</a>
+    </h1>
+  </div>
+
+  {{#authorLine}}
+    <div class="authors authors--line">{{{authorLine}}}</div>
+  {{/authorLine}}
+
+  {{#meta}}
+    <div class="content-header__meta">
+      {{> resources/templates/meta}}
+    </div>
+  {{/meta}}
+
+</header>

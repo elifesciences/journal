@@ -1,0 +1,18 @@
+{{#isWrapped}}
+  <header class="site-header clearfix" id="siteHeader">
+{{/isWrapped}}
+  <div class="site-header__title{{#borderVariant}}-border{{/borderVariant}} clearfix" role="banner">
+    <div class="site-header__skip_to_content">
+      <a href="#maincontent" class="site-header__skip_to_content__link button button--default">Skip to Content</a>
+    </div>
+    <a href="{{homePagePath}}" class="site-header__logo_link">
+      <picture class="site-header__logo_link_image">
+        <source srcset="{{#assetRewrite}}{{assetsPath}}/img/patterns/organisms/elife-logo-xs.svg{{/assetRewrite}}" type="image/svg+xml">
+        <img src="{{#assetRewrite}}{{assetsPath}}/img/patterns/organisms/elife-logo-xs@1x.png{{/assetRewrite}}" alt="eLife logo" class="site-header__logo_link"/>
+      </picture>
+      <span class="visuallyhidden" >eLife home page</span>
+    </a>
+  </div>
+{{#isWrapped}}
+  </header>
+{{/isWrapped}}

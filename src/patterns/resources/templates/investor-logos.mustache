@@ -1,0 +1,24 @@
+<ol class="investor-logos" role="list" aria-label="eLife is funded by these organisations">
+  {{#logos}}
+    <li class="investor-logos__item" role="listitem">
+
+      <div class="investor-logos__container">
+        <picture class="investor-logos__picture">
+          {{#sources}}
+            <source srcset="{{srcset}}"
+                    {{#type}}type="{{type}}"{{/type}}
+              {{#media}}media="{{media}}"{{/media}}>
+          {{/sources}}
+          {{#fallback}}
+            <img src="{{defaultPath}}"
+                 {{#srcset}}srcset="{{srcset}}"{{/srcset}}
+                 alt="{{altText}}"
+                 class="investor-logos__img"
+            >
+          {{/fallback}}
+        </picture>
+      </div>
+
+    </li>
+  {{/logos}}
+</ol>

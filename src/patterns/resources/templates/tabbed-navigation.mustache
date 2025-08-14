@@ -1,0 +1,9 @@
+<nav class="tabbed-navigation" data-behaviour="TabbedNavigation">
+  <ul class="tabbed-navigation__tabs">
+    {{#items}}
+      <li class="tabbed-navigation__tab-label{{classes}}"{{#isSideBySide}} data-side-by-side-link="{{url}}"{{/isSideBySide}}>
+        <a href="{{url}}">{{{name}}}</a>
+      </li>
+    {{/items}}
+  </ul>
+</nav>

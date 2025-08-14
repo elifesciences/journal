@@ -1,0 +1,19 @@
+<dl class="definition-list{{#variant}} definition-list--{{variant}}{{/variant}}"{{#label}} aria-label="{{label}}"{{/label}}>
+  {{#items}}{{!
+    }}{{#color}}{{#isActive}}{{!
+      }}<dt class="definition-list--{{color}} definition-list--active">{{!
+    }}{{/isActive}}{{/color}}{{!
+    }}{{#color}}{{^isActive}}{{!
+      }}<dt class="definition-list--{{color}}">{{!
+    }}{{/isActive}}{{/color}}{{!
+    }}{{^color}}{{#isActive}}{{!
+      }}<dt class="definition-list--active">{{!
+    }}{{/isActive}}{{/color}}{{!
+    }}{{^color}}{{^isActive}}{{!
+      }}<dt>{{!
+    }}{{/isActive}}{{/color}}{{{term}}}</dt>{{!
+    }}{{#descriptors}}{{!
+      }}<dd>{{{.}}}</dd>{{!
+    }}{{/descriptors}}
+  {{/items}}
+</dl>

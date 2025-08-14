@@ -1,0 +1,19 @@
+{{#isOrdered}}
+
+    <ol class="list{{#prefix}} list--{{prefix}}{{/prefix}}{{#classes}} {{classes}}{{/classes}}">
+        {{#items}}
+            <li>{{{.}}}</li>
+        {{/items}}
+    </ol>
+
+{{/isOrdered}}
+
+{{^isOrdered}}
+
+    <ul class="list{{#prefix}} list--{{prefix}}{{/prefix}}{{#classes}} {{classes}}{{/classes}}">
+        {{#items}}
+            <li>{{{.}}}</li>
+        {{/items}}
+    </ul>
+
+{{/isOrdered}}

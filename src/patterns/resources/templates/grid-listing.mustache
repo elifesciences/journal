@@ -1,0 +1,34 @@
+{{#heading}}{{> resources/templates/list-heading}}{{/heading}}
+<ol class="grid-listing{{#classes}} {{classes}}{{/classes}}"{{#id}} id="{{id}}"{{/id}}>
+  {{#blockLinks}}
+    <li class="grid-listing-item grid-listing-item--block-link">
+      {{> resources/templates/block-link}}
+    </li>
+  {{/blockLinks}}
+
+  {{#archiveNavLinks}}
+    <li class="grid-listing-item">
+      {{> resources/templates/archive-nav-link}}
+    </li>
+  {{/archiveNavLinks}}
+
+  {{#imageLinks}}
+    <li class="grid-listing-item grid-listing-item--image-link">
+      {{> resources/templates/image-link}}
+    </li>
+  {{/imageLinks}}
+
+  {{#teasers}}
+    <li class="grid-listing-item">
+      {{! grid style teasers only: labs or podcast }}
+      {{> resources/templates/teaser}}
+    </li>
+  {{/teasers}}
+
+</ol>
+
+{{#pagination}}
+  <div class="grid-listing__pagination">
+      {{> resources/templates/pager}}
+  </div>
+{{/pagination}}

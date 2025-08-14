@@ -1,0 +1,39 @@
+<div class="wrapper listing-read-more{{#allRelated}} listing-read-more--all-related{{/allRelated}}">
+
+  <div class="grid">
+
+    <div class="content-container grid__item
+              one-whole
+              large--ten-twelfths
+              push--large--one-twelfth
+              x-large--eight-twelfths
+              push--x-large--two-twelfths
+              grid-column">
+
+      {{#heading}}
+        <div class="listing-list-heading">
+          {{> resources/templates/list-heading}}
+        </div>
+      {{/heading}}
+
+      <ol class="listing-list listing-list--read-more"{{#id}} id="{{id}}"{{/id}}>
+        {{#items}}
+          {{> resources/templates/read-more-item }}
+        {{/items}}
+
+        {{#seeMoreLink}}
+          <li class="listing-list__item">
+            {{> resources/templates/see-more-link}}
+          </li>
+        {{/seeMoreLink}}
+      </ol>
+
+      {{#pagination}}
+        {{> resources/templates/pager}}
+      {{/pagination}}
+
+    </div>
+
+  </div>
+
+</div>

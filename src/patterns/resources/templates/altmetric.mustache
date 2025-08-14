@@ -1,0 +1,14 @@
+<div class='{{#showBadgeDetails}}altmetric-container-with-details{{/showBadgeDetails}}
+            {{^showBadgeDetails}} altmetric-container-without-details{{/showBadgeDetails}}'>
+    <script src='https://d1bxh8uas1mnw7.cloudfront.net/assets/embed.js'></script>
+    <div class='altmetric-embed'
+    data-hide-less-than="1" 
+    data-badge-type='{{donutSize}}' 
+    {{#showBadgeDetails}} data-badge-details='right' {{/showBadgeDetails}}
+    data-doi={{doi}}></div>
+    {{^showBadgeDetails}}
+    <p class="altmetric-text--small">Altmetric provides a collated score for online attention across various platforms and media.<br/>
+    <a href="#metrics" class='altmetric-link--small'>See more details</a>
+    </p>
+    {{/showBadgeDetails}}
+</div>

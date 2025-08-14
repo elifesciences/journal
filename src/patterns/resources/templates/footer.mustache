@@ -1,0 +1,49 @@
+{{#mainMenu}}
+  {{> resources/templates/main-menu }}
+{{/mainMenu}}
+
+{{> resources/templates/investor-logos }}
+
+<footer class="site-footer">
+
+  <div class="site-footer__container">
+
+    <div class="grid-cell">
+
+      <nav class="footer-navigation">
+        <ul class="footer-navigation__list">
+          {{#footerMenuLinks}}
+          <li class="footer-navigation__list_item">
+            <a href="{{url}}" class="footer-navigation__list_link">{{name}}</a>
+          </li>
+          {{/footerMenuLinks}}
+        </ul>
+      </nav>
+
+      {{> resources/templates/social-footer-links }}
+
+    </div>
+
+    <div class="grid-cell">
+
+      <div class="site-smallprint">
+        <small>eLife is a non-profit organisation inspired by research funders and led by scientists. Our mission is to help scientists accelerate discovery by operating a platform for research communication that encourages and recognises the most responsible behaviours in science.</small>
+        <small>eLife Sciences Publications, Ltd is a limited liability non-profit non-stock corporation incorporated in the State of Delaware, USA, with company number 5030732, and is registered in the UK with company number FC030576 and branch number BR015634 at the address:</small>
+
+        <address>
+          eLife Sciences Publications, Ltd<br>
+          95 Regent Street<br>
+          Cambridge CB2 1AW<br>
+          UK
+        </address>
+      </div>
+
+      <div class="site-smallprint">
+        <small>© <time>{{year}}</time> eLife Sciences Publications Ltd. Subject to a <a href="https://creativecommons.org/licenses/by/4.0/" rel="license" class="site-smallprint__copyright_link">Creative Commons Attribution license</a>, except where otherwise noted. ISSN:&nbsp;2050-084X</small>
+      </div>
+
+    </div>
+
+  </div>
+
+</footer>
