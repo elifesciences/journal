@@ -33,6 +33,8 @@ final class HomeController extends Controller
 
         $arguments = $this->defaultPageArguments($request);
 
+        $arguments['showNewHomePage'] = $request->query->has('show-new-home-page');
+
         $searchTypes = [
             'reviewed-preprint',
             'research-advance',

@@ -13,7 +13,7 @@
 
 {% block body %}
 
-    <div class="banner-and-subjects-wrapper">
+    <div{% if showNewHomePage ?? false %} class="banner-and-subjects-wrapper"{% endif %}>
 
         {% if heroBanner is defined and heroBanner %}
 
