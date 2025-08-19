@@ -12,27 +12,32 @@
 {% endblock %}
 
 {% block body %}
-    {% if heroBanner is defined and heroBanner %}
 
-        <div class="wrapper">
+    <div class="banner-and-subjects-wrapper">
 
-            {{ render_pattern(heroBanner) }}
+        {% if heroBanner is defined and heroBanner %}
 
-        </div>
+            <div class="wrapper">
 
-    {% endif %}
+                {{ render_pattern(heroBanner) }}
 
-    {% include 'calls-to-action.html.twig' %}
+            </div>
 
-    {% if subjects %}
+        {% endif %}
 
-        <div class="wrapper">
+        {% include 'calls-to-action.html.twig' %}
 
-            {{ render_pattern(subjectsLink) }}
+        {% if subjects %}
 
-        </div>
+            <div class="wrapper">
 
-    {% endif %}
+                {{ render_pattern(subjectsLink) }}
+
+            </div>
+
+        {% endif %}
+
+    </div>
 
     {% if highlights is defined and highlights %}
 
