@@ -11,7 +11,7 @@ final class HomeControllerTest extends PageTestCase
     /**
      * @test
      */
-    public function it_does_not_display_new_homepage()
+    public function it_does_not_display_new_homepage_by_default()
     {
         $client = static::createClient();
 
@@ -19,6 +19,19 @@ final class HomeControllerTest extends PageTestCase
 
         $this->assertSame(0, $crawler->filter('.banner-and-subjects-wrapper')->count());
         $this->assertSame(0, $crawler->filter('[data-home-banner]')->count());
+    }
+
+    /**
+     * @test
+     */
+    public function it_does_display_new_homepage_with_feature_flag()
+    {
+        $client = static::createClient();
+
+        $crawler = $client->request('GET', $this->getUrl().'?show-new-home-page');
+
+        $this->assertSame(1, $crawler->filter('.banner-and-subjects-wrapper')->count());
+        $this->assertSame(1, $crawler->filter('[data-home-banner]')->count());
     }
 
     /**
