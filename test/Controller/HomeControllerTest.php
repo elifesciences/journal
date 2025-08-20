@@ -11,6 +11,19 @@ final class HomeControllerTest extends PageTestCase
     /**
      * @test
      */
+    public function it_does_not_display_new_homepage()
+    {
+        $client = static::createClient();
+
+        $crawler = $client->request('GET', $this->getUrl());
+
+        $this->assertSame(0, $crawler->filter('.banner-and-subjects-wrapper')->count());
+        $this->assertSame(0, $crawler->filter('[data-home-banner]')->count());
+    }
+
+    /**
+     * @test
+     */
     public function it_displays_the_homepage()
     {
         $client = static::createClient();

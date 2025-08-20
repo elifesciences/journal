@@ -11,6 +11,7 @@ use eLife\Journal\Pagerfanta\SequenceAdapter;
 use eLife\Patterns\ViewModel\HeroBanner;
 use eLife\Patterns\ViewModel\Highlight;
 use eLife\Patterns\ViewModel\HighlightItem;
+use eLife\Patterns\ViewModel\HomeBanner;
 use eLife\Patterns\ViewModel\Link;
 use eLife\Patterns\ViewModel\ListHeading;
 use eLife\Patterns\ViewModel\ListingTeasers;
@@ -34,6 +35,8 @@ final class HomeController extends Controller
         $arguments = $this->defaultPageArguments($request);
 
         $arguments['showNewHomePage'] = $request->query->has('show-new-home-page');
+
+        $arguments['homeBanner'] = new HomeBanner();
 
         $searchTypes = [
             'reviewed-preprint',
