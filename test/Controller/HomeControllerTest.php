@@ -14,11 +14,31 @@ final class HomeControllerTest extends PageTestCase
     public function it_does_not_display_new_homepage_by_default()
     {
         $client = static::createClient();
+        
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/covers/current',
+                ['Accept' => 'application/vnd.elife.cover-list+json; version=1']
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.cover-list+json; version=1'],
+                json_encode([
+                        'total' => 1,
+                        'items' => [
+                            $this->prepareCover('research-article', 1),
+                        ]
+                    ]
+                )
+            )
+        );
 
         $crawler = $client->request('GET', $this->getUrl());
 
         $this->assertSame(0, $crawler->filter('.banner-and-subjects-wrapper')->count());
         $this->assertSame(0, $crawler->filter('[data-home-banner]')->count());
+        $this->assertSame(1, $crawler->filter('.hero-banner__details')->count());
     }
 
     /**
@@ -27,11 +47,32 @@ final class HomeControllerTest extends PageTestCase
     public function it_does_display_new_homepage_with_feature_flag()
     {
         $client = static::createClient();
+        
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/covers/current',
+                ['Accept' => 'application/vnd.elife.cover-list+json; version=1']
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.cover-list+json; version=1'],
+                json_encode([
+                        'total' => 1,
+                        'items' => [
+                            $this->prepareCover('research-article', 1),
+                        ]
+                    ]
+                )
+            )
+        );
 
         $crawler = $client->request('GET', $this->getUrl().'?show-new-home-page');
 
         $this->assertSame(1, $crawler->filter('.banner-and-subjects-wrapper')->count());
         $this->assertSame(1, $crawler->filter('[data-home-banner]')->count());
+        $this->markTestIncomplete();
+        $this->assertSame(0, $crawler->filter('.hero-banner__details')->count());
     }
 
     /**
