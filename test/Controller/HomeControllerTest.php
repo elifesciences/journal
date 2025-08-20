@@ -71,7 +71,6 @@ final class HomeControllerTest extends PageTestCase
 
         $this->assertSame(1, $crawler->filter('.banner-and-subjects-wrapper')->count());
         $this->assertSame(1, $crawler->filter('[data-home-banner]')->count());
-        $this->markTestIncomplete();
         $this->assertSame(0, $crawler->filter('.hero-banner__details')->count());
     }
 

@@ -19,14 +19,16 @@
     <div{% if showNewHomePage %} class="banner-and-subjects-wrapper"{% endif %}>
 
         {% if showNewHomePage and homeBanner is defined and homeBanner %}
+
             <div class="wrapper" data-home-banner>
 
                 {{ render_pattern(homeBanner) }}
 
             </div>
+
         {% endif %}
 
-        {% if heroBanner is defined and heroBanner %}
+        {% if not showNewHomePage and heroBanner is defined and heroBanner %}
 
             <div class="wrapper">
 
