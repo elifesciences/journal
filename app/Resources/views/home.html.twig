@@ -1,5 +1,8 @@
 {% set criticalCss = 'home' %}
 {% set isHomePage = true %}
+{% if showNewHomePage is not defined %}
+    {% set showNewHomePage = false %}
+{% endif %}
 
 {% extends '::page.html.twig' %}
 
@@ -13,7 +16,7 @@
 
 {% block body %}
 
-    <div{% if showNewHomePage ?? false %} class="banner-and-subjects-wrapper"{% endif %}>
+    <div{% if showNewHomePage %} class="banner-and-subjects-wrapper"{% endif %}>
 
         {% if heroBanner is defined and heroBanner %}
 
