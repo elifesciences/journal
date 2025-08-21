@@ -225,9 +225,7 @@
         <div class="global-inner">
 
             {% if header %}
-                <div class="wrapper wrapper--site-header">
-                    {{ render_pattern(header) }}
-                </div>
+                {{ render_pattern(header) }}
             {% endif %}
 
             {% if (app.session and app.session.started) or app.request.hasPreviousSession %}
