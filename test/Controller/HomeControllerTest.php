@@ -4,6 +4,7 @@ namespace test\eLife\Journal\Controller;
 
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use Symfony\Component\DomCrawler\Crawler;
 use Traversable;
 
 final class HomeControllerTest extends PageTestCase
@@ -13,28 +14,7 @@ final class HomeControllerTest extends PageTestCase
      */
     public function it_does_not_display_new_homepage_by_default()
     {
-        $client = static::createClient();
-        
-        $this->mockApiResponse(
-            new Request(
-                'GET',
-                'http://api.elifesciences.org/covers/current',
-                ['Accept' => 'application/vnd.elife.cover-list+json; version=1']
-            ),
-            new Response(
-                200,
-                ['Content-Type' => 'application/vnd.elife.cover-list+json; version=1'],
-                json_encode([
-                        'total' => 1,
-                        'items' => [
-                            $this->prepareCover('research-article', 1),
-                        ]
-                    ]
-                )
-            )
-        );
-
-        $crawler = $client->request('GET', $this->getUrl());
+        $crawler = $this->getUrlWithOneCover();
 
         $this->assertSame(0, $crawler->filter('.banner-and-subjects-wrapper')->count());
         $this->assertSame(0, $crawler->filter('[data-home-banner]')->count());
@@ -46,28 +26,7 @@ final class HomeControllerTest extends PageTestCase
      */
     public function it_does_display_new_homepage_with_feature_flag()
     {
-        $client = static::createClient();
-        
-        $this->mockApiResponse(
-            new Request(
-                'GET',
-                'http://api.elifesciences.org/covers/current',
-                ['Accept' => 'application/vnd.elife.cover-list+json; version=1']
-            ),
-            new Response(
-                200,
-                ['Content-Type' => 'application/vnd.elife.cover-list+json; version=1'],
-                json_encode([
-                        'total' => 1,
-                        'items' => [
-                            $this->prepareCover('research-article', 1),
-                        ]
-                    ]
-                )
-            )
-        );
-
-        $crawler = $client->request('GET', $this->getUrl().'?show-new-home-page');
+        $crawler = $this->getUrlWithOneCover('?show-new-home-page');
 
         $this->assertSame(1, $crawler->filter('.banner-and-subjects-wrapper')->count());
         $this->assertSame(1, $crawler->filter('[data-home-banner]')->count());
@@ -989,6 +948,35 @@ final class HomeControllerTest extends PageTestCase
                 'Jul 1, 2016',
             ],
         ];
+    }
+
+    /**
+     * @return Crawler|null
+     */
+    private function getUrlWithOneCover(string $query = '')
+    {
+        $client = static::createClient();
+                
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/covers/current',
+                ['Accept' => 'application/vnd.elife.cover-list+json; version=1']
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.cover-list+json; version=1'],
+                json_encode([
+                        'total' => 1,
+                        'items' => [
+                            $this->prepareCover('research-article', 1),
+                        ]
+                    ]
+                )
+            )
+        );
+        
+        return $client->request('GET', $this->getUrl().$query);
     }
 
     private function prepareCover(string $type, $titleSuffix = null) : array
