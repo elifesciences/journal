@@ -4,7 +4,8 @@
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "eLife\\Journal\\": "src/"
+            "eLife\\Journal\\": "src/",
+            "eLife\\Patterns\\": "src/patterns/src"
         }
     },
     "autoload-dev": {
