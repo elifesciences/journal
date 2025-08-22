@@ -14,11 +14,12 @@ final class HomeControllerTest extends PageTestCase
      */
     public function it_does_not_display_new_homepage_by_default()
     {
-        $crawler = $this->getUrlWithOneCover();
+        $crawler = $this->getUrlWithCovers();
 
         $this->assertSame(0, $crawler->filter('.banner-and-subjects-wrapper')->count());
         $this->assertSame(0, $crawler->filter('[data-home-banner]')->count());
         $this->assertSame(1, $crawler->filter('.hero-banner__details')->count());
+        $this->assertEquals(3, $crawler->filter('.highlight-item')->count());
     }
 
     /**
@@ -26,11 +27,13 @@ final class HomeControllerTest extends PageTestCase
      */
     public function it_does_display_new_homepage_with_feature_flag()
     {
-        $crawler = $this->getUrlWithOneCover('?show-new-home-page');
+        $crawler = $this->getUrlWithCovers('?show-new-home-page');
 
         $this->assertSame(1, $crawler->filter('.banner-and-subjects-wrapper')->count());
         $this->assertSame(1, $crawler->filter('[data-home-banner]')->count());
         $this->assertSame(0, $crawler->filter('.hero-banner__details')->count());
+        $this->markTestIncomplete();
+        $this->assertEquals(6, $crawler->filter('.highlight-item')->count());
     }
 
     /**
@@ -953,10 +956,10 @@ final class HomeControllerTest extends PageTestCase
     /**
      * @return Crawler|null
      */
-    private function getUrlWithOneCover(string $query = '')
+    private function getUrlWithCovers(string $query = '')
     {
         $client = static::createClient();
-                
+
         $this->mockApiResponse(
             new Request(
                 'GET',
@@ -967,15 +970,20 @@ final class HomeControllerTest extends PageTestCase
                 200,
                 ['Content-Type' => 'application/vnd.elife.cover-list+json; version=1'],
                 json_encode([
-                        'total' => 1,
+                        'total' => 6,
                         'items' => [
                             $this->prepareCover('research-article', 1),
-                        ]
+                            $this->prepareCover('research-article', 2),
+                            $this->prepareCover('research-article', 3),
+                            $this->prepareCover('research-article', 4),
+                            $this->prepareCover('research-article', 5),
+                            $this->prepareCover('research-article', 6),
+                        ],
                     ]
                 )
             )
         );
-        
+
         return $client->request('GET', $this->getUrl().$query);
     }
 
