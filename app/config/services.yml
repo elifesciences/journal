@@ -1673,7 +1673,7 @@ services:
         class: Mustache_Loader_ProductionFilesystemLoader
         public: false
         arguments:
-          - '@=composer_locate("elife/patterns")'
+          - '@=service("kernel").getProjectDir()~"/src/patterns"'
           - stat_props: '%mustache_stat_props%'
 
     monolog.processor.http_message:
