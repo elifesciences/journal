@@ -3,6 +3,9 @@
 {% if showNewHomePage is not defined %}
     {% set showNewHomePage = false %}
 {% endif %}
+{% if showNewHomePage %}
+    {% set mainClass = 'main--with-new-designs-borders' %}
+{% endif %}
 
 {% extends '::page.html.twig' %}
 

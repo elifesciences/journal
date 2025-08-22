@@ -16,6 +16,7 @@ final class HomeControllerTest extends PageTestCase
     {
         $crawler = $this->getUrlWithCovers();
 
+        $this->assertSame(0, $crawler->filter('.main--with-new-designs-borders')->count());
         $this->assertSame(0, $crawler->filter('.banner-and-subjects-wrapper')->count());
         $this->assertSame(0, $crawler->filter('[data-home-banner]')->count());
         $this->assertSame(1, $crawler->filter('.hero-banner__details')->count());
@@ -29,6 +30,7 @@ final class HomeControllerTest extends PageTestCase
     {
         $crawler = $this->getUrlWithCovers('?show-new-home-page');
 
+        $this->assertSame(1, $crawler->filter('.main--with-new-designs-borders')->count());
         $this->assertSame(1, $crawler->filter('.banner-and-subjects-wrapper')->count());
         $this->assertSame(1, $crawler->filter('[data-home-banner]')->count());
         $this->assertSame(0, $crawler->filter('.hero-banner__details')->count());

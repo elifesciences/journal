@@ -251,7 +251,7 @@
 
             {% block pre_body %}{% endblock %}
 
-            <main role="main" class="main" id="maincontent">
+            <main role="main" class="main{% if mainClass ?? false %} {{ mainClass }}{% endif %}" id="maincontent">
 
                 {% block body %}{% endblock %}
 
