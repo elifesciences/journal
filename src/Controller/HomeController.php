@@ -36,8 +36,6 @@ final class HomeController extends Controller
 
         $arguments['showNewHomePage'] = $request->query->has('show-new-home-page');
 
-        $arguments['homeBanner'] = new HomeBanner();
-
         $searchTypes = [
             'reviewed-preprint',
             'research-advance',
@@ -90,12 +88,23 @@ final class HomeController extends Controller
 
     private function createFirstPage(array $arguments) : Response
     {
+        $showNewHomePage = $arguments['showNewHomePage'] ?? false;
+
+        if ($showNewHomePage) {
+            $arguments['homeBanner'] = new HomeBanner();
+        }
+
         $heroHighlights = $this->get('elife.api_sdk.covers')
             ->getCurrent()
-            ->then(function (Sequence $items) {
-                return $items->slice(0, 4)->map(function(Cover $cover, int $i) {
-                    return $this->convertTo($cover, 0 === $i ? HeroBanner::class : HighlightItem::class);
-                });
+            ->then(function (Sequence $items) use ($showNewHomePage) {
+                return $items
+                    ->slice(0, $showNewHomePage ? 6 : 4)
+                    ->map(function(Cover $cover, int $i) use ($showNewHomePage) {
+                        return $this->convertTo(
+                            $cover,
+                            !$showNewHomePage && 0 === $i ? HeroBanner::class : HighlightItem::class
+                        );
+                    });
             })->otherwise($this->softFailure('Failed to load hero and highlights'));
 
         $arguments['heroBanner'] = $heroHighlights->then(Callback::emptyOr(function (Sequence $covers) {
