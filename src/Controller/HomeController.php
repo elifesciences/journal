@@ -8,6 +8,7 @@ use eLife\ApiSdk\Model\Subject;
 use eLife\Journal\Helper\Callback;
 use eLife\Journal\Helper\Paginator;
 use eLife\Journal\Pagerfanta\SequenceAdapter;
+use eLife\Patterns\ViewModel\Button;
 use eLife\Patterns\ViewModel\HeroBanner;
 use eLife\Patterns\ViewModel\Highlight;
 use eLife\Patterns\ViewModel\HighlightItem;
@@ -91,7 +92,10 @@ final class HomeController extends Controller
         $showNewHomePage = $arguments['showNewHomePage'] ?? false;
 
         if ($showNewHomePage) {
-            $arguments['homeBanner'] = new HomeBanner();
+            $arguments['homeBanner'] = new HomeBanner(
+                Button::homeBanner('Browse the latest research', '/browse'),
+                Button::homeBanner('Learn more about eLife', '/about')
+            );
         }
 
         $heroHighlights = $this->get('elife.api_sdk.covers')
