@@ -94,7 +94,7 @@ final class HomeController extends Controller
         if ($showNewHomePage) {
             $arguments['homeBanner'] = new HomeBanner(
                 Button::homeBanner('Browse the latest research', '/browse'),
-                Button::homeBanner('Learn more about eLife', '/about')
+                Button::homeBanner('Learn more about eLife', '/about', 'medium', 'secondary')
             );
         }
 
