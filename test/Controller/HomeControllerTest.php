@@ -14,14 +14,14 @@ final class HomeControllerTest extends PageTestCase
      */
     public function it_does_not_display_new_homepage_by_default()
     {
-        $crawler = $this->getUrlWithCovers();
+        $crawler = $this->getUrlWithSubjectsAndCovers();
 
         $this->assertSame(0, $crawler->filter('.main--with-new-designs-borders')->count());
         $this->assertSame(0, $crawler->filter('.banner-and-subjects-wrapper')->count());
         $this->assertSame(0, $crawler->filter('[data-home-banner]')->count());
         $this->assertSame(1, $crawler->filter('.hero-banner__details')->count());
-        $this->assertEquals(3, $crawler->filter('.highlight-item')->count());
         $this->assertSame(0, $crawler->filter('.wrapper--subjects')->count());
+        $this->assertEquals(3, $crawler->filter('.highlight-item')->count());
     }
 
     /**
@@ -29,15 +29,14 @@ final class HomeControllerTest extends PageTestCase
      */
     public function it_does_display_new_homepage_with_feature_flag()
     {
-        $crawler = $this->getUrlWithCovers('?show-new-home-page');
+        $crawler = $this->getUrlWithSubjectsAndCovers('?show-new-home-page');
 
         $this->assertSame(1, $crawler->filter('.main--with-new-designs-borders')->count());
         $this->assertSame(1, $crawler->filter('.banner-and-subjects-wrapper')->count());
         $this->assertSame(1, $crawler->filter('[data-home-banner]')->count());
         $this->assertSame(0, $crawler->filter('.hero-banner__details')->count());
-        $this->assertEquals(6, $crawler->filter('.highlight-item')->count());
-        $this->markTestIncomplete('not implemented');
         $this->assertSame(1, $crawler->filter('.wrapper--subjects')->count());
+        $this->assertEquals(6, $crawler->filter('.highlight-item')->count());
     }
 
     /**
@@ -610,39 +609,7 @@ final class HomeControllerTest extends PageTestCase
                 json_encode([
                     'total' => 1,
                     'items' => [
-                        [
-                            'id' => 'subject',
-                            'name' => 'Subject name',
-                            'impactStatement' => 'Subject impact statement.',
-                            'image' => [
-                                'banner' => [
-                                    'uri' => 'https://www.example.com/iiif/image',
-                                    'alt' => '',
-                                    'source' => [
-                                        'mediaType' => 'image/jpeg',
-                                        'uri' => 'https://www.example.com/image.jpg',
-                                        'filename' => 'image.jpg',
-                                    ],
-                                    'size' => [
-                                        'width' => 800,
-                                        'height' => 600,
-                                    ],
-                                ],
-                                'thumbnail' => [
-                                    'uri' => 'https://www.example.com/iiif/image',
-                                    'alt' => '',
-                                    'source' => [
-                                        'mediaType' => 'image/jpeg',
-                                        'uri' => 'https://www.example.com/image.jpg',
-                                        'filename' => 'image.jpg',
-                                    ],
-                                    'size' => [
-                                        'width' => 800,
-                                        'height' => 600,
-                                    ],
-                                ],
-                            ],
-                        ],
+                        $this->prepareSubject(),
                     ],
                 ])
             )
@@ -960,9 +927,32 @@ final class HomeControllerTest extends PageTestCase
     /**
      * @return Crawler|null
      */
-    private function getUrlWithCovers(string $query = '')
+    private function getUrlWithSubjectsAndCovers(string $query = '')
     {
         $client = static::createClient();
+        
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/subjects?page=1&per-page=100&order=asc',
+                ['Accept' => 'application/vnd.elife.subject-list+json; version=1']
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.subject-list+json; version=1'],
+                json_encode([
+                    'total' => 6,
+                    'items' => [
+                        $this->prepareSubject(1),
+                        $this->prepareSubject(2),
+                        $this->prepareSubject(3),
+                        $this->prepareSubject(4),
+                        $this->prepareSubject(5),
+                        $this->prepareSubject(6),
+                    ],
+                ])
+            )
+        );
 
         $this->mockApiResponse(
             new Request(
@@ -989,6 +979,43 @@ final class HomeControllerTest extends PageTestCase
         );
 
         return $client->request('GET', $this->getUrl().$query);
+    }
+
+    private function prepareSubject($titleSuffix = null) : array
+    {
+        return [
+            'id' => 'subject'.$titleSuffix,
+            'name' => 'Subject name'.$titleSuffix,
+            'impactStatement' => 'Subject impact statement.',
+            'image' => [
+                'banner' => [
+                    'uri' => 'https://www.example.com/iiif/image',
+                    'alt' => '',
+                    'source' => [
+                        'mediaType' => 'image/jpeg',
+                        'uri' => 'https://www.example.com/image.jpg',
+                        'filename' => 'image.jpg',
+                    ],
+                    'size' => [
+                        'width' => 800,
+                        'height' => 600,
+                    ],
+                ],
+                'thumbnail' => [
+                    'uri' => 'https://www.example.com/iiif/image',
+                    'alt' => '',
+                    'source' => [
+                        'mediaType' => 'image/jpeg',
+                        'uri' => 'https://www.example.com/image.jpg',
+                        'filename' => 'image.jpg',
+                    ],
+                    'size' => [
+                        'width' => 800,
+                        'height' => 600,
+                    ],
+                ],
+            ],
+        ];
     }
 
     private function prepareCover(string $type, $titleSuffix = null) : array
