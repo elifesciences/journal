@@ -21,6 +21,7 @@ final class HomeControllerTest extends PageTestCase
         $this->assertSame(0, $crawler->filter('[data-home-banner]')->count());
         $this->assertSame(1, $crawler->filter('.hero-banner__details')->count());
         $this->assertEquals(3, $crawler->filter('.highlight-item')->count());
+        $this->assertSame(0, $crawler->filter('.wrapper--subjects')->count());
     }
 
     /**
@@ -35,6 +36,8 @@ final class HomeControllerTest extends PageTestCase
         $this->assertSame(1, $crawler->filter('[data-home-banner]')->count());
         $this->assertSame(0, $crawler->filter('.hero-banner__details')->count());
         $this->assertEquals(6, $crawler->filter('.highlight-item')->count());
+        $this->markTestIncomplete('not implemented');
+        $this->assertSame(1, $crawler->filter('.wrapper--subjects')->count());
     }
 
     /**
