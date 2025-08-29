@@ -39,7 +39,7 @@
 
         {% if subjects %}
 
-            <div class="wrapper">
+            <div class="wrapper{% if showNewHomePage %} wrapper--subjects{% endif %}">
 
                 {{ render_pattern(subjectsLink) }}
 
