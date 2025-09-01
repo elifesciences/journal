@@ -16,6 +16,7 @@ final class HomeControllerTest extends PageTestCase
     {
         $crawler = $this->getUrlWithSubjectsAndCovers();
 
+        $this->assertSame(0, $crawler->filter('.site-header-home-wrapper')->count());
         $this->assertSame(0, $crawler->filter('.main--with-new-designs-borders')->count());
         $this->assertSame(0, $crawler->filter('.banner-and-subjects-wrapper')->count());
         $this->assertSame(0, $crawler->filter('[data-home-banner]')->count());
