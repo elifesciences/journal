@@ -14,6 +14,21 @@ final class ArticleControllerTest extends PageTestCase
     /**
      * @test
      */
+    public function it_displays_the_default_site_header()
+    {
+        $client = static::createClient();
+
+        $crawler = $client->request('GET', $this->getUrl());
+
+        $this->assertSame(0, $crawler->filter('.site-header-home-wrapper')->count());
+        $this->assertSame(0, $crawler->filter('.site-header--home-page')->count());
+        $this->assertSame(1, $crawler->filter('.site-header source[srcset*="/elife-logo-xs."]')->count());
+        $this->assertSame(0, $crawler->filter('.site-header source[srcset*="/elife-logo-home-page-xs."]')->count());
+    }
+
+    /**
+     * @test
+     */
     public function it_displays_an_article_page()
     {
         $client = static::createClient();
