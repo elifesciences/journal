@@ -285,7 +285,10 @@ abstract class Controller implements ContainerAwareInterface
         return [
             'header' => all(['item' => promise_for($item), 'profile' => promise_for($profile ?? null)])
                 ->then(function (array $parts) {
-                    return $this->get('elife.journal.view_model.factory.site_header')->createSiteHeader($parts['item']);
+                    $isOnTheHomePage = false;
+                    $isUnderFeatureFlag = false;
+                    $isHomePageUnderFeatureFlag = $isOnTheHomePage && $isUnderFeatureFlag;
+                    return $this->get('elife.journal.view_model.factory.site_header')->createSiteHeader($parts['item'], $isHomePageUnderFeatureFlag);
                 }),
             'infoBars' => [],
             'callsToAction' => $this->getCallsToAction($request),
