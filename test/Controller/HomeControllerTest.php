@@ -34,14 +34,13 @@ final class HomeControllerTest extends PageTestCase
         $crawler = $this->getUrlWithSubjectsAndCovers('?show-new-home-page');
 
         $this->assertSame(1, $crawler->filter('.site-header-home-wrapper')->count());
+        $this->assertSame(1, $crawler->filter('.site-header--home-page')->count());
         $this->assertSame(1, $crawler->filter('.main--with-new-designs-borders')->count());
         $this->assertSame(1, $crawler->filter('.banner-and-subjects-wrapper')->count());
         $this->assertSame(1, $crawler->filter('[data-home-banner]')->count());
         $this->assertSame(0, $crawler->filter('.hero-banner__details')->count());
         $this->assertSame(1, $crawler->filter('.wrapper--subjects')->count());
         $this->assertEquals(6, $crawler->filter('.highlight-item')->count());
-        $this->markTestIncomplete();
-        $this->assertSame(1, $crawler->filter('.site-header--home-page')->count());
     }
 
     /**
