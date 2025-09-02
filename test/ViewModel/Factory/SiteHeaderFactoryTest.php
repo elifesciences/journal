@@ -56,7 +56,6 @@ final class SiteHeaderFactoryTest extends KernelTestCase
         $this->assertArrayNotHasKey('isHomePage', $notHomePageSiteHeader['title']);
 
         $homePageSiteHeader = $this->siteHeaderFactory->createSiteHeader(null, true);
-        $this->markTestIncomplete();
         $this->assertTrue($homePageSiteHeader['title']['isHomePage']);
     }
 }

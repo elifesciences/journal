@@ -30,7 +30,7 @@ final class SiteHeaderFactory
         $this->requestStack = $requestStack;
     }
 
-    public function createSiteHeader(Model $item = null, bool $isHomePage = false) : SiteHeader
+    public function createSiteHeader(Model $item = null, bool $isHomePageUnderFeatureFlag = false) : SiteHeader
     {
         $primaryLinks = SiteHeaderNavBar::primary([
             NavLinkedItem::asLink(
@@ -76,7 +76,7 @@ final class SiteHeaderFactory
         }
 
         $siteHeaderTitle = new SiteHeaderTitle($this->urlGenerator->generate('home'));
-        if (false) {
+        if ($isHomePageUnderFeatureFlag) {
             $siteHeaderTitle->setForHomePage();
         }
         return new SiteHeader($siteHeaderTitle, $primaryLinks, $secondaryLinks, $searchBox);
