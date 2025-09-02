@@ -75,6 +75,10 @@ final class SiteHeaderFactory
             $searchBox = null;
         }
 
-        return new SiteHeader(new SiteHeaderTitle($this->urlGenerator->generate('home')), $primaryLinks, $secondaryLinks, $searchBox);
+        $siteHeaderTitle = new SiteHeaderTitle($this->urlGenerator->generate('home'));
+        if (false) {
+            $siteHeaderTitle->setForHomePage();
+        }
+        return new SiteHeader($siteHeaderTitle, $primaryLinks, $secondaryLinks, $searchBox);
     }
 }
