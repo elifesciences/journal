@@ -14,7 +14,6 @@ final class HomeControllerTest extends PageTestCase
      */
     public function it_does_not_display_new_homepage_by_default()
     {
-// .site-header a.site-header__logo_link source[srcset*="/elife-logo-xs."]
         $crawler = $this->getUrlWithSubjectsAndCovers();
 
         $this->assertSame(0, $crawler->filter('.site-header-home-wrapper')->count());
