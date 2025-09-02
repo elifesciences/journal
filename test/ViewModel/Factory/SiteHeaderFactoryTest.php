@@ -43,4 +43,20 @@ final class SiteHeaderFactoryTest extends KernelTestCase
             $siteHeader['secondaryLinks']['linkedItems'][2]['button']['path']
         );
     }
+
+    /**
+     * @test
+     */
+    public function it_may_be_set_to_home_page()
+    {
+        $defaultSiteHeader = $this->siteHeaderFactory->createSiteHeader(null);
+        $this->assertArrayNotHasKey('isHomePage', $defaultSiteHeader['title']);
+
+        $notHomePageSiteHeader = $this->siteHeaderFactory->createSiteHeader(null, false);
+        $this->assertArrayNotHasKey('isHomePage', $notHomePageSiteHeader['title']);
+
+        $homePageSiteHeader = $this->siteHeaderFactory->createSiteHeader(null, true);
+        $this->markTestIncomplete();
+        $this->assertTrue($homePageSiteHeader['title']['isHomePage']);
+    }
 }

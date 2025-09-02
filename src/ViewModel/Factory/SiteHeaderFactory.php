@@ -30,7 +30,7 @@ final class SiteHeaderFactory
         $this->requestStack = $requestStack;
     }
 
-    public function createSiteHeader(Model $item = null) : SiteHeader
+    public function createSiteHeader(Model $item = null, bool $isHomePage = false) : SiteHeader
     {
         $primaryLinks = SiteHeaderNavBar::primary([
             NavLinkedItem::asLink(
