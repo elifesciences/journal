@@ -12,20 +12,31 @@ final class HomeControllerTest extends PageTestCase
     /**
      * @test
      */
+    public function it_displays_the_appropriate_site_header_with_show_new_home_page_feature_flag()
+    {
+        $client = static::createClient();
+
+        $crawler = $client->request('GET', $this->getUrl().'?show-new-home-page');
+
+        $this->assertSame(1, $crawler->filter('.site-header-home-wrapper')->count());
+        $this->assertSame(1, $crawler->filter('.site-header--home-page')->count());
+        $this->assertSame(0, $crawler->filter('.site-header source[srcset*="/elife-logo-xs."]')->count());
+        $this->assertSame(1, $crawler->filter('.site-header source[srcset*="/elife-logo-home-page-xs."]')->count());
+    }
+
+    /**
+     * @test
+     */
     public function it_does_not_display_new_homepage_by_default()
     {
         $crawler = $this->getUrlWithSubjectsAndCovers();
 
-        $this->assertSame(0, $crawler->filter('.site-header-home-wrapper')->count());
-        $this->assertSame(0, $crawler->filter('.site-header--home-page')->count());
         $this->assertSame(0, $crawler->filter('.main--with-new-designs-borders')->count());
         $this->assertSame(0, $crawler->filter('.banner-and-subjects-wrapper')->count());
         $this->assertSame(0, $crawler->filter('[data-home-banner]')->count());
         $this->assertSame(1, $crawler->filter('.hero-banner__details')->count());
         $this->assertSame(0, $crawler->filter('.wrapper--subjects')->count());
         $this->assertSame(3, $crawler->filter('.highlight-item')->count());
-        $this->assertSame(1, $crawler->filter('.site-header source[srcset*="/elife-logo-xs."]')->count());
-        $this->assertSame(0, $crawler->filter('.site-header source[srcset*="/elife-logo-home-page-xs."]')->count());
     }
 
     /**
@@ -35,16 +46,12 @@ final class HomeControllerTest extends PageTestCase
     {
         $crawler = $this->getUrlWithSubjectsAndCovers('?show-new-home-page');
 
-        $this->assertSame(1, $crawler->filter('.site-header-home-wrapper')->count());
-        $this->assertSame(1, $crawler->filter('.site-header--home-page')->count());
         $this->assertSame(1, $crawler->filter('.main--with-new-designs-borders')->count());
         $this->assertSame(1, $crawler->filter('.banner-and-subjects-wrapper')->count());
         $this->assertSame(1, $crawler->filter('[data-home-banner]')->count());
         $this->assertSame(0, $crawler->filter('.hero-banner__details')->count());
         $this->assertSame(1, $crawler->filter('.wrapper--subjects')->count());
         $this->assertSame(6, $crawler->filter('.highlight-item')->count());
-        $this->assertSame(0, $crawler->filter('.site-header source[srcset*="/elife-logo-xs."]')->count());
-        $this->assertSame(1, $crawler->filter('.site-header source[srcset*="/elife-logo-home-page-xs."]')->count());
     }
 
     /**

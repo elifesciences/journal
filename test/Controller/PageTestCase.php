@@ -12,6 +12,29 @@ abstract class PageTestCase extends WebTestCase
     /**
      * @test
      */
+    public function it_displays_the_appropriate_site_header($query = '')
+    {
+        $client = static::createClient();
+
+        $crawler = $client->request('GET', $this->getUrl().($query ? '?'.$query : ''));
+
+        $this->assertSame(0, $crawler->filter('.site-header-home-wrapper')->count());
+        $this->assertSame(0, $crawler->filter('.site-header--home-page')->count());
+        $this->assertSame(1, $crawler->filter('.site-header source[srcset*="/elife-logo-xs."]')->count());
+        $this->assertSame(0, $crawler->filter('.site-header source[srcset*="/elife-logo-home-page-xs."]')->count());
+    }
+
+    /**
+     * @test
+     */
+    public function it_displays_the_appropriate_site_header_with_show_new_home_page_feature_flag()
+    {
+        $this->it_displays_the_appropriate_site_header('show-new-home-page');
+    }
+
+    /**
+     * @test
+     */
     final public function it_has_the_header()
     {
         $client = static::createClient();
