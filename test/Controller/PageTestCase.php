@@ -20,8 +20,8 @@ abstract class PageTestCase extends WebTestCase
 
         $this->assertSame(0, $crawler->filter('.site-header-home-wrapper')->count());
         $this->assertSame(0, $crawler->filter('.site-header--home-page')->count());
-        $this->assertSame(1, $crawler->filter('.site-header source[srcset*="/elife-logo-xs."]')->count());
-        $this->assertSame(0, $crawler->filter('.site-header source[srcset*="/elife-logo-home-page-xs."]')->count());
+        $this->assertSame(1, $crawler->filter('.site-header img[src*="/elife-logo-xs."]')->count());
+        $this->assertSame(0, $crawler->filter('.site-header img[src*="/elife-logo-home-page-xs."]')->count());
     }
 
     /**
