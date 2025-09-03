@@ -269,7 +269,7 @@ abstract class Controller implements ContainerAwareInterface
         ];
     }
 
-    final protected function defaultPageArguments(Request $request, PromiseInterface $item = null) : array
+    final protected function defaultPageArguments(Request $request, PromiseInterface $item = null, $isHomePageUnderFeatureFlag = false) : array
     {
         if ($this->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             $user = $this->get('security.token_storage')->getToken()->getUser();
@@ -284,10 +284,7 @@ abstract class Controller implements ContainerAwareInterface
 
         return [
             'header' => all(['item' => promise_for($item), 'profile' => promise_for($profile ?? null)])
-                ->then(function (array $parts) use ($request) {
-                    $isOnTheHomePage = '/' === $request->getPathInfo();
-                    $isUnderFeatureFlag = $request->query->has('show-new-home-page');
-                    $isHomePageUnderFeatureFlag = $isOnTheHomePage && $isUnderFeatureFlag;
+                ->then(function (array $parts) use ($isHomePageUnderFeatureFlag) {
                     return $this->get('elife.journal.view_model.factory.site_header')->createSiteHeader($parts['item'], $isHomePageUnderFeatureFlag);
                 }),
             'infoBars' => [],
@@ -301,6 +298,7 @@ abstract class Controller implements ContainerAwareInterface
             'footer' => $this->get('elife.journal.view_model.factory.footer')->createFooter(),
             'user' => $user ?? null,
             'item' => $item,
+            'showNewHomePage' => $isHomePageUnderFeatureFlag,
         ];
     }
 
