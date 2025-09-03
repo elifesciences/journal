@@ -4,10 +4,18 @@ namespace test\eLife\Journal\ViewModel\Factory;
 
 use eLife\Journal\ViewModel\Factory\SiteHeaderFactory;
 use eLife\Patterns\ViewModel\SiteHeader;
-use test\eLife\Journal\KernelTestCase;
+use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-final class SiteHeaderFactoryTest extends KernelTestCase
+final class SiteHeaderFactoryTest extends TestCase
 {
+    /**
+     * @var UrlGeneratorInterface
+     */
+    private $urlGenerator;
+
     /**
      * @var SiteHeaderFactory
      */
@@ -18,9 +26,19 @@ final class SiteHeaderFactoryTest extends KernelTestCase
      */
     public function createSiteHeaderFactory()
     {
-        static::bootKernel();
+        $request = $this->createMock(Request::class);
+        $request->method('get')->with('_route')->willReturn('/');
 
-        $this->siteHeaderFactory = static::$kernel->getContainer()->get('elife.journal.view_model.factory.site_header');
+        $requestStack = $this->createMock(RequestStack::class);
+        $requestStack->method('getCurrentRequest')->willReturn($request);
+
+        $this->urlGenerator = $this->createMock(UrlGeneratorInterface::class);
+        $this->urlGenerator->method('generate')
+            ->willReturnCallback(function ($route) {
+                return $route === 'submit-your-research' ? '/submit-your-research' : 'foo';
+            });
+
+        $this->siteHeaderFactory = new SiteHeaderFactory($this->urlGenerator, $requestStack);
     }
 
     /**
@@ -57,5 +75,23 @@ final class SiteHeaderFactoryTest extends KernelTestCase
 
         $homePageSiteHeader = $this->siteHeaderFactory->createSiteHeader(null, true);
         $this->assertTrue($homePageSiteHeader['title']['isHomePage']);
+    }
+
+    /**
+     * @test
+     */
+    public function it_will_not_show_the_search_box_on_the_search_page()
+    {
+        $notSearchPageSiteHeader = $this->siteHeaderFactory->createSiteHeader();
+        $this->assertNotNull($notSearchPageSiteHeader['searchBox']);
+
+        $request = $this->createMock(Request::class);
+        $request->method('get')->with('_route')->willReturn('search');
+
+        $requestStack = $this->createMock(RequestStack::class);
+        $requestStack->method('getCurrentRequest')->willReturn($request);
+
+        $searchPageSiteHeader = (new SiteHeaderFactory($this->urlGenerator, $requestStack))->createSiteHeader();
+        $this->assertNull($searchPageSiteHeader['searchBox']);
     }
 }
