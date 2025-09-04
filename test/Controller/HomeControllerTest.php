@@ -33,7 +33,7 @@ final class HomeControllerTest extends PageTestCase
 
         $this->assertSame(0, $crawler->filter('.main--with-new-designs-borders')->count());
         $this->assertSame(0, $crawler->filter('.banner-and-subjects-wrapper')->count());
-        $this->assertSame(0, $crawler->filter('[data-home-banner]')->count());
+        $this->assertSame(0, $crawler->filter('.home-banner')->count());
         $this->assertSame(1, $crawler->filter('.hero-banner__details')->count());
         $this->assertSame(0, $crawler->filter('.wrapper--subjects')->count());
         $this->assertSame(3, $crawler->filter('.highlight-item')->count());
@@ -48,7 +48,7 @@ final class HomeControllerTest extends PageTestCase
 
         $this->assertSame(1, $crawler->filter('.main--with-new-designs-borders')->count());
         $this->assertSame(1, $crawler->filter('.banner-and-subjects-wrapper')->count());
-        $this->assertSame(1, $crawler->filter('[data-home-banner]')->count());
+        $this->assertSame(1, $crawler->filter('.home-banner')->count());
         $this->assertSame(0, $crawler->filter('.hero-banner__details')->count());
         $this->assertSame(1, $crawler->filter('.wrapper--subjects')->count());
         $this->assertSame(6, $crawler->filter('.highlight-item')->count());
