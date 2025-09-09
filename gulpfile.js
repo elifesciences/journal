@@ -224,9 +224,9 @@ gulp.task('patterns:clean', () => {
 
 gulp.task('patterns', gulp.series('patterns:clean', () => {
     return gulp.src([
-        './src/elife/patterns/resources/assets/**/*',
-        '!./src/elife/patterns/resources/assets/js/elife-loader.js',
-        '!./src/elife/patterns/resources/assets/preload.json',
+        './src/patterns/resources/assets/**/*',
+        '!./src/patterns/resources/assets/js/elife-loader.js',
+        '!./src/patterns/resources/assets/preload.json',
     ])
         .pipe(gulp.dest('./build/assets/patterns'));
 }));
