@@ -11,6 +11,7 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
 COPY --from=npm /app/node_modules/ node_modules/
 
 COPY assets/images/ assets/images/
+COPY src/patterns/ assets/images/patterns/
 COPY gulpfile.js ./
 
 RUN node_modules/.bin/gulp assets

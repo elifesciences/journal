@@ -17,6 +17,7 @@ services:
     assets_builder:
         volumes:
             - ./assets/images:/assets/images
+            - ./src/patterns:/assets/patterns
             - assets:/web
             - build:/build
             - node_modules:/node_modules
