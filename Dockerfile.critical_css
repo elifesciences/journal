@@ -41,6 +41,7 @@ COPY --from=npm /app/node_modules/ node_modules/
 
 COPY check_critical_css.sh \
     critical-css.json \
+    critical-css-prod.json \
     gulpfile.js \
     wait_for_healthy_critical_css_server.sh \
     ./
