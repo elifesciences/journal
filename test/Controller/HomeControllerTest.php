@@ -43,6 +43,7 @@ final class HomeControllerTest extends PageTestCase
         $this->assertSame(0, $crawler->filter('.banner-and-subjects-wrapper')->count());
         $this->assertSame(0, $crawler->filter('.home-banner')->count());
         $this->assertSame(0, $crawler->filter('.wrapper--subjects')->count());
+        $this->assertSame(0, $crawler->filter('.section-listing-wrapper--show-heading')->count());
     }
 
     /**
@@ -57,6 +58,7 @@ final class HomeControllerTest extends PageTestCase
         $this->assertSame(1, $crawler->filter('.banner-and-subjects-wrapper')->count());
         $this->assertSame(1, $crawler->filter('.home-banner')->count());
         $this->assertSame(1, $crawler->filter('.wrapper--subjects')->count());
+        $this->assertSame(1, $crawler->filter('.section-listing-wrapper--show-heading')->count());
         $this->assertSame(6, $crawler->filter('.highlight-item')->count());
 
         // Expect not to show.

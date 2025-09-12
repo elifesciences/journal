@@ -127,8 +127,8 @@ final class HomeController extends Controller
             ->map(function (Subject $subject) {
                 return new Link($subject->getName(), $this->get('router')->generate('subject', [$subject]));
             })
-            ->then(function (Sequence $links) {
-                return new SectionListing('subjects', $links->toArray(), new ListHeading('Research categories'), false);
+            ->then(function (Sequence $links) use ($showNewHomePage) {
+                return new SectionListing('subjects', $links->toArray(), new ListHeading('Research categories'), false, $showNewHomePage);
             })
             ->otherwise($this->softFailure('Failed to load subjects list'));
 
