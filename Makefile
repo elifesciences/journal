@@ -17,11 +17,11 @@ vendor: composer.json composer.lock
 	composer install
 	@touch vendor
 
-dev: build vendor
-	$(DOCKER_COMPOSE) up
+dev: vendor
+	$(DOCKER_COMPOSE) up --build
 
-prod: build vendor
-	CRITICAL_CSS_JSON=critical-css-prod.json API_URL=https://api.prod.elifesciences.org $(DOCKER_COMPOSE) up
+prod: vendor
+	CRITICAL_CSS_JSON=critical-css-prod.json API_URL=https://api.prod.elifesciences.org $(DOCKER_COMPOSE) up --build
 
 stop:
 	$(DOCKER_COMPOSE) down
