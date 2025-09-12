@@ -14,7 +14,7 @@ const axios = require('axios');
 const rev = require('gulp-rev-all');
 let criticalCssPageTypes = {};
 try {
-    criticalCssPageTypes = require(`./${process.env.CRITICAL_CSS_JSON || 'critical-css.json'}`);
+    criticalCssPageTypes = require(`./critical-css${process.env.CRITICAL_CSS_JSON ? `-${process.env.CRITICAL_CSS_JSON}`: ''}.json`);
 } catch (exception) {
     // Do nothing.
 }

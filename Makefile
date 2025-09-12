@@ -21,7 +21,7 @@ dev: vendor
 	$(DOCKER_COMPOSE) up --build
 
 prod: vendor
-	CRITICAL_CSS_JSON=critical-css-prod.json API_URL=https://api.prod.elifesciences.org $(DOCKER_COMPOSE) up --build
+	CRITICAL_CSS_JSON=prod API_URL=https://api.prod.elifesciences.org $(DOCKER_COMPOSE) up --build
 
 stop:
 	$(DOCKER_COMPOSE) down
