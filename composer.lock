@@ -1378,12 +1378,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/patterns-php.git",
-                "reference": "a1e94ce4e94637dd23764ccfb4a18cd6088720dd"
+                "reference": "3b97d2da1ef83889eb4138dd29f8b84c8fd8692d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/a1e94ce4e94637dd23764ccfb4a18cd6088720dd",
-                "reference": "a1e94ce4e94637dd23764ccfb4a18cd6088720dd",
+                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/3b97d2da1ef83889eb4138dd29f8b84c8fd8692d",
+                "reference": "3b97d2da1ef83889eb4138dd29f8b84c8fd8692d",
                 "shasum": ""
             },
             "require": {
@@ -1424,7 +1424,7 @@
             "support": {
                 "source": "https://github.com/elifesciences/patterns-php/tree/master"
             },
-            "time": "2025-09-16T14:21:49+00:00"
+            "time": "2025-09-16T15:06:51+00:00"
         },
         {
             "name": "fabpot/goutte",
@@ -5844,5 +5844,5 @@
     "platform-overrides": {
         "php": "7.1.33"
     },
-    "plugin-api-version": "2.2.0"
+    "plugin-api-version": "2.6.0"
 }
