@@ -19,12 +19,12 @@ abstract class PageTestCase extends WebTestCase
         $crawler = $client->request('GET', $this->getUrl().($query ? '?'.$query : ''));
 
         // Expect to show.
-        $this->assertSame(1, $crawler->filter('.site-header img[src*="/elife-logo-xs."]')->count());
+        $this->assertCount(1, $crawler->filter('.site-header img[src*="/elife-logo-xs."]'));
 
         // Expect not to show.
-        $this->assertSame(0, $crawler->filter('.site-header-home-wrapper')->count());
-        $this->assertSame(0, $crawler->filter('.site-header--home-page')->count());
-        $this->assertSame(0, $crawler->filter('.site-header img[src*="/elife-logo-home-page-xs."]')->count());
+        $this->assertEmpty($crawler->filter('.site-header-home-wrapper'));
+        $this->assertEmpty($crawler->filter('.site-header--home-page'));
+        $this->assertEmpty($crawler->filter('.site-header img[src*="/elife-logo-home-page-xs."]'));
     }
 
     /**

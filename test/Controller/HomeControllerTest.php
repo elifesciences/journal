@@ -19,12 +19,12 @@ final class HomeControllerTest extends PageTestCase
         $crawler = $client->request('GET', $this->getUrl().'?show-new-home-page');
 
         // Expect to show.
-        $this->assertSame(1, $crawler->filter('.site-header-home-wrapper')->count());
-        $this->assertSame(1, $crawler->filter('.site-header--home-page')->count());
-        $this->assertSame(1, $crawler->filter('.site-header img[src*="/elife-logo-home-page-xs."]')->count());
+        $this->assertCount(1, $crawler->filter('.site-header-home-wrapper'));
+        $this->assertCount(1, $crawler->filter('.site-header--home-page'));
+        $this->assertCount(1, $crawler->filter('.site-header img[src*="/elife-logo-home-page-xs."]'));
 
         // Expect not to show.
-        $this->assertSame(0, $crawler->filter('.site-header img[src*="/elife-logo-xs."]')->count());
+        $this->assertEmpty($crawler->filter('.site-header img[src*="/elife-logo-xs."]'));
     }
 
     /**
@@ -35,15 +35,15 @@ final class HomeControllerTest extends PageTestCase
         $crawler = $this->getUrlWithSubjectsAndCovers();
 
         // Expect to show.
-        $this->assertSame(1, $crawler->filter('.hero-banner__details')->count());
-        $this->assertSame(3, $crawler->filter('.highlight-item')->count());
+        $this->assertCount(1, $crawler->filter('.hero-banner__details'));
+        $this->assertCount(3, $crawler->filter('.highlight-item'));
 
         // Expect not to show.
-        $this->assertSame(0, $crawler->filter('.main--with-new-designs-borders')->count());
-        $this->assertSame(0, $crawler->filter('.banner-and-subjects-wrapper')->count());
-        $this->assertSame(0, $crawler->filter('.home-banner')->count());
-        $this->assertSame(0, $crawler->filter('.wrapper--subjects')->count());
-        $this->assertSame(0, $crawler->filter('.section-listing-wrapper--home-page')->count());
+        $this->assertEmpty($crawler->filter('.main--with-new-designs-borders'));
+        $this->assertEmpty($crawler->filter('.banner-and-subjects-wrapper'));
+        $this->assertEmpty($crawler->filter('.home-banner'));
+        $this->assertEmpty($crawler->filter('.wrapper--subjects'));
+        $this->assertEmpty($crawler->filter('.section-listing-wrapper--home-page'));
     }
 
     /**
@@ -54,15 +54,15 @@ final class HomeControllerTest extends PageTestCase
         $crawler = $this->getUrlWithSubjectsAndCovers('?show-new-home-page');
 
         // Expect to show.
-        $this->assertSame(1, $crawler->filter('.main--with-new-designs-borders')->count());
-        $this->assertSame(1, $crawler->filter('.banner-and-subjects-wrapper')->count());
-        $this->assertSame(1, $crawler->filter('.home-banner')->count());
-        $this->assertSame(1, $crawler->filter('.wrapper--subjects')->count());
-        $this->assertSame(1, $crawler->filter('.section-listing-wrapper--home-page')->count());
-        $this->assertSame(6, $crawler->filter('.highlight-item')->count());
+        $this->assertCount(1, $crawler->filter('.main--with-new-designs-borders'));
+        $this->assertCount(1, $crawler->filter('.banner-and-subjects-wrapper'));
+        $this->assertCount(1, $crawler->filter('.home-banner'));
+        $this->assertCount(1, $crawler->filter('.wrapper--subjects'));
+        $this->assertCount(1, $crawler->filter('.section-listing-wrapper--home-page'));
+        $this->assertCount(6, $crawler->filter('.highlight-item'));
 
         // Expect not to show.
-        $this->assertSame(0, $crawler->filter('.hero-banner__details')->count());
+        $this->assertEmpty($crawler->filter('.hero-banner__details'));
     }
 
     /**
