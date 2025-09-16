@@ -34,7 +34,7 @@ final class HomeControllerTest extends PageTestCase
     {
         $crawler = $this->getUrlWithSubjectsAndCovers();
 
-        // Expect not to show.
+        // Expect to show.
         $this->assertSame(1, $crawler->filter('.hero-banner__details')->count());
         $this->assertSame(3, $crawler->filter('.highlight-item')->count());
 
@@ -53,7 +53,7 @@ final class HomeControllerTest extends PageTestCase
     {
         $crawler = $this->getUrlWithSubjectsAndCovers('?show-new-home-page');
 
-        // Expect not to show.
+        // Expect to show.
         $this->assertSame(1, $crawler->filter('.main--with-new-designs-borders')->count());
         $this->assertSame(1, $crawler->filter('.banner-and-subjects-wrapper')->count());
         $this->assertSame(1, $crawler->filter('.home-banner')->count());
