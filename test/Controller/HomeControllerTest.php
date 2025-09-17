@@ -37,6 +37,7 @@ final class HomeControllerTest extends PageTestCase
         // Expect to show.
         $this->assertCount(1, $crawler->filter('.hero-banner__details'));
         $this->assertCount(3, $crawler->filter('.highlight-item'));
+        $this->assertSame('Research categories', $crawler->filter('#subjects h3')->text());
 
         // Expect not to show.
         $this->assertEmpty($crawler->filter('.main--with-new-designs-borders'));
