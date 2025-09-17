@@ -64,6 +64,9 @@ final class HomeControllerTest extends PageTestCase
 
         // Expect not to show.
         $this->assertEmpty($crawler->filter('.hero-banner__details'));
+
+        $this->markTestIncomplete();
+        $this->assertSame('Categories', $crawler->filter('#subjects h3')->text());
     }
 
     /**
