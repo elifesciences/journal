@@ -60,6 +60,12 @@
         </div>
 
     {% endif %}
+    
+    {% if testimonialWithLink ?? false %}
+
+        {{ render_pattern(testimonialWithLink) }}
+
+    {% endif %}
 
     {% embed 'grid/listing-two-column.html.twig' %}
 

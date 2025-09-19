@@ -45,6 +45,7 @@ final class HomeControllerTest extends PageTestCase
         $this->assertEmpty($crawler->filter('.home-banner'));
         $this->assertEmpty($crawler->filter('.wrapper--subjects'));
         $this->assertEmpty($crawler->filter('.section-listing-wrapper--home-page'));
+        $this->assertEmpty($crawler->filter('[data-testimonial-with-link]'));
     }
 
     /**
@@ -62,6 +63,7 @@ final class HomeControllerTest extends PageTestCase
         $this->assertCount(1, $crawler->filter('.section-listing-wrapper--home-page'));
         $this->assertSame('Categories', $crawler->filter('#subjects h3')->text());
         $this->assertCount(6, $crawler->filter('.highlight-item'));
+        $this->assertCount(1, $crawler->filter('[data-testimonial-with-link]'));
 
         // Expect not to show.
         $this->assertEmpty($crawler->filter('.hero-banner__details'));

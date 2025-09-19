@@ -20,6 +20,7 @@ use eLife\Patterns\ViewModel\SectionListing;
 use eLife\Patterns\ViewModel\SectionListingLink;
 use eLife\Patterns\ViewModel\SeeMoreLink;
 use eLife\Patterns\ViewModel\Teaser;
+use eLife\Patterns\ViewModel\TestimonialWithLink;
 use eLife\Patterns\ViewModel\ViewSelector;
 use Pagerfanta\Pagerfanta;
 use Symfony\Component\HttpFoundation\Request;
@@ -120,6 +121,10 @@ final class HomeController extends Controller
         }))->otherwise($this->softFailure('Failed to load hero and highlights'));
 
         $arguments['subjectsLink'] = new SectionListingLink('All research categories', 'subjects');
+        
+        if ($showNewHomePage) {
+            $arguments['testimonialWithLink'] = new TestimonialWithLink();
+        }
 
         $arguments['subjects'] = $this->get('elife.api_sdk.subjects')
             ->reverse()
