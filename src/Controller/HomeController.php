@@ -123,7 +123,14 @@ final class HomeController extends Controller
         $arguments['subjectsLink'] = new SectionListingLink('All research categories', 'subjects');
         
         if ($showNewHomePage) {
-            $arguments['testimonialWithLink'] = new TestimonialWithLink();
+            $arguments['testimonialWithLink'] = new TestimonialWithLink(
+                "We liked the idea of having an open 'conversation' with the reviewers during the process, and having the chance to polish the manuscript by following the editors and reviewers’ recommendations without the threat of rejection.",
+                'Patrick Allard, Professor at University of California, Los Angeles',
+                new Link(
+                    'Why expert researchers support the eLife model',
+                    'https://elifesciences.org/about/why-publish-with-elife'
+                )
+            );
         }
 
         $arguments['subjects'] = $this->get('elife.api_sdk.subjects')
