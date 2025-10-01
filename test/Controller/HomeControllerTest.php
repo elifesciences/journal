@@ -12,11 +12,11 @@ final class HomeControllerTest extends PageTestCase
     /**
      * @test
      */
-    public function it_displays_the_appropriate_site_header_with_show_new_home_page_feature_flag()
+    public function it_displays_the_appropriate_site_header()
     {
         $client = static::createClient();
 
-        $crawler = $client->request('GET', $this->getUrl().'?show-new-home-page');
+        $crawler = $client->request('GET', $this->getUrl());
 
         // Expect to show.
         $this->assertCount(1, $crawler->filter('.site-header-home-wrapper'));
@@ -30,30 +30,9 @@ final class HomeControllerTest extends PageTestCase
     /**
      * @test
      */
-    public function it_does_not_display_new_homepage_by_default()
+    public function it_does_display_new_homepage()
     {
         $crawler = $this->getUrlWithSubjectsAndCovers();
-
-        // Expect to show.
-        $this->assertCount(1, $crawler->filter('.hero-banner__details'));
-        $this->assertCount(3, $crawler->filter('.highlight-item'));
-        $this->assertSame('Research categories', $crawler->filter('#subjects h3')->text());
-
-        // Expect not to show.
-        $this->assertEmpty($crawler->filter('.main--with-new-designs-borders'));
-        $this->assertEmpty($crawler->filter('.banner-and-subjects-wrapper'));
-        $this->assertEmpty($crawler->filter('.home-banner'));
-        $this->assertEmpty($crawler->filter('.wrapper--subjects'));
-        $this->assertEmpty($crawler->filter('.section-listing-wrapper--home-page'));
-        $this->assertEmpty($crawler->filter('[data-testimonial-with-link]'));
-    }
-
-    /**
-     * @test
-     */
-    public function it_does_display_new_homepage_with_feature_flag()
-    {
-        $crawler = $this->getUrlWithSubjectsAndCovers('?show-new-home-page');
 
         // Expect to show.
         $this->assertCount(1, $crawler->filter('.main--with-new-designs-borders'));
@@ -770,9 +749,8 @@ final class HomeControllerTest extends PageTestCase
                 200,
                 ['Content-Type' => 'application/vnd.elife.cover-list+json; version=1'],
                 json_encode([
-                        'total' => 4,
+                        'total' => 3,
                         'items' => [
-                            $this->prepareCover('research-article', 1),
                             $cover,
                             $this->prepareCover('podcast-episode', 2),
                             $this->prepareCover('interview', 3),
@@ -802,7 +780,7 @@ final class HomeControllerTest extends PageTestCase
     /**
      * @test
      */
-    public function it_displays_three_highlights_even_if_more_are_provided()
+    public function it_displays_six_highlights_even_if_more_are_provided()
     {
         $client = static::createClient();
 
@@ -832,72 +810,7 @@ final class HomeControllerTest extends PageTestCase
         );
 
         $crawler = $client->request('GET', $this->getUrl());
-        $this->assertEquals(3, $crawler->filter('.highlight-item')->count());
-    }
-
-    /**
-     * @test
-     * @dataProvider coversProvider
-     */
-    public function it_displays_different_types_in_hero_banner(
-        array $cover,
-        string $expectedTitle,
-        string $expectedImpactStatement,
-        string $expectedMetaType,
-        string $expectedDate,
-        string $expectedAuthorLine = null,
-        array $expectedSubjects = []
-    )
-    {
-        $client = static::createClient();
-
-        $this->mockApiResponse(
-            new Request(
-                'GET',
-                'http://api.elifesciences.org/covers/current',
-                ['Accept' => 'application/vnd.elife.cover-list+json; version=1']
-            ),
-            new Response(
-                200,
-                ['Content-Type' => 'application/vnd.elife.cover-list+json; version=1'],
-                json_encode([
-                        'total' => 4,
-                        'items' => [
-                            $cover,
-                            $this->prepareCover('research-article', 1),
-                            $this->prepareCover('podcast-episode', 2),
-                            $this->prepareCover('interview', 3),
-                        ]
-                    ]
-                )
-            )
-        );
-
-        $crawler = $client->request('GET', $this->getUrl());
-        $heroDetails = $crawler->filter('.hero-banner__details');
-        $this->assertSame($expectedTitle, trim($heroDetails->filter('.hero-banner__title_link')->text()));
-        $this->assertSame($expectedImpactStatement, trim($heroDetails->filter('.hero-banner__summary')->text()));
-        if ($expectedAuthorLine) {
-            $this->assertSame($expectedAuthorLine, trim($heroDetails->filter('.author-line')->text()));
-        } else {
-            $this->assertCount(0, $heroDetails->filter('.author-line'));
-        }
-        $this->assertSame($expectedMetaType, trim($heroDetails->filter('.meta__type')->text()));
-        $this->assertSame($expectedDate, trim($heroDetails->filter('.date')->text()));
-
-        if (!empty($expectedSubjects)) {
-            $subjectLinks = $heroDetails->filter('.hero-banner__subject_link');
-            $this->assertCount(count($expectedSubjects), $subjectLinks);
-
-            $co = 0;
-            foreach ($expectedSubjects as $url => $name) {
-                $link = $subjectLinks->eq($co++);
-                $this->assertSame($url, $link->attr('href'));
-                $this->assertSame($name, trim($link->text()));
-            }
-        } else {
-            $this->assertCount(0, $heroDetails->filter('.hero-banner__subject_link'));
-        }
+        $this->assertEquals(6, $crawler->filter('.highlight-item')->count());
     }
 
     public function coversProvider(): array
@@ -957,7 +870,7 @@ final class HomeControllerTest extends PageTestCase
     /**
      * @return Crawler|null
      */
-    private function getUrlWithSubjectsAndCovers(string $query = '')
+    private function getUrlWithSubjectsAndCovers()
     {
         $client = static::createClient();
         
@@ -1008,7 +921,7 @@ final class HomeControllerTest extends PageTestCase
             )
         );
 
-        return $client->request('GET', $this->getUrl().$query);
+        return $client->request('GET', $this->getUrl());
     }
 
     private function prepareSubject($titleSuffix = null) : array

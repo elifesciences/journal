@@ -12,11 +12,11 @@ abstract class PageTestCase extends WebTestCase
     /**
      * @test
      */
-    public function it_displays_the_appropriate_site_header($query = '')
+    public function it_displays_the_appropriate_site_header()
     {
         $client = static::createClient();
 
-        $crawler = $client->request('GET', $this->getUrl().($query ? '?'.$query : ''));
+        $crawler = $client->request('GET', $this->getUrl());
 
         // Expect to show.
         $this->assertCount(1, $crawler->filter('.site-header img[src*="/elife-logo-xs."]'));
@@ -25,14 +25,6 @@ abstract class PageTestCase extends WebTestCase
         $this->assertEmpty($crawler->filter('.site-header-home-wrapper'));
         $this->assertEmpty($crawler->filter('.site-header--home-page'));
         $this->assertEmpty($crawler->filter('.site-header img[src*="/elife-logo-home-page-xs."]'));
-    }
-
-    /**
-     * @test
-     */
-    public function it_displays_the_appropriate_site_header_with_show_new_home_page_feature_flag()
-    {
-        $this->it_displays_the_appropriate_site_header('show-new-home-page');
     }
 
     /**

@@ -34,7 +34,7 @@ final class HomeController extends Controller
         $page = (int) $request->query->get('page', 1);
         $perPage = 10;
 
-        $arguments = $this->defaultPageArguments($request, null, $request->query->has('show-new-home-page'));
+        $arguments = $this->defaultPageArguments($request, null, true);
 
         $searchTypes = [
             'reviewed-preprint',
