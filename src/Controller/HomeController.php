@@ -125,9 +125,9 @@ final class HomeController extends Controller
         if ($showNewHomePage) {
             $arguments['testimonialWithLink'] = new TestimonialWithLink(
                 "We liked the idea of having an open 'conversation' with the reviewers during the process, and having the chance to polish the manuscript by following the editors and reviewers’ recommendations without the threat of rejection.",
-                'Patrick Allard, Professor at University of California, Los Angeles',
+                'Patrick Allard, UCLA and eLife author',
                 new Link(
-                    'Why expert researchers support the eLife model',
+                    'Researchers explain why they published in eLife',
                     'https://elifesciences.org/about/why-publish-with-elife'
                 )
             );
