@@ -1,11 +1,6 @@
 {% set criticalCss = 'home' %}
 {% set isHomePage = true %}
-{% if showNewHomePage is not defined %}
-    {% set showNewHomePage = false %}
-{% endif %}
-{% if showNewHomePage %}
-    {% set mainClass = 'main--with-new-designs-borders' %}
-{% endif %}
+{% set mainClass = 'main--with-new-designs-borders' %}
 
 {% extends '::page.html.twig' %}
 
@@ -19,7 +14,7 @@
 
 {% block body %}
 
-    <div{% if showNewHomePage %} class="banner-and-subjects-wrapper"{% endif %}>
+    <div class="banner-and-subjects-wrapper">
 
         {% if homeBanner is defined and homeBanner %}
 
@@ -27,19 +22,9 @@
 
         {% endif %}
 
-        {% if heroBanner is defined and heroBanner %}
-
-            <div class="wrapper">
-
-                {{ render_pattern(heroBanner) }}
-
-            </div>
-
-        {% endif %}
-
         {% if subjects %}
 
-            <div class="wrapper{% if showNewHomePage %} wrapper--subjects{% endif %}">
+            <div class="wrapper wrapper--subjects">
 
                 {{ render_pattern(subjectsLink) }}
 
@@ -61,11 +46,7 @@
 
     {% endif %}
     
-    {% if testimonialWithLink ?? false %}
-
-        {{ render_pattern(testimonialWithLink) }}
-
-    {% endif %}
+    {{ render_pattern(testimonialWithLink) }}
 
     {% embed 'grid/listing-two-column.html.twig' %}
 

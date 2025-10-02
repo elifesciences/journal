@@ -89,31 +89,23 @@ final class HomeController extends Controller
 
     private function createFirstPage(array $arguments) : Response
     {
-        $showNewHomePage = $arguments['showNewHomePage'] ?? false;
-
-        if ($showNewHomePage) {
-            $arguments['homeBanner'] = new HomeBanner(
-                Button::homeBanner('Browse the latest research', '/browse'),
-                Button::homeBanner('Learn more about eLife', '/about', 'medium', 'secondary')
-            );
-        }
+        $arguments['homeBanner'] = new HomeBanner(
+            Button::homeBanner('Browse the latest research', '/browse'),
+            Button::homeBanner('Learn more about eLife', '/about', 'medium', 'secondary')
+        );
 
         $heroHighlights = $this->get('elife.api_sdk.covers')
             ->getCurrent()
-            ->then(function (Sequence $items) use ($showNewHomePage) {
+            ->then(function (Sequence $items) {
                 return $items
-                    ->slice(0, $showNewHomePage ? 6 : 4)
-                    ->map(function(Cover $cover, int $i) use ($showNewHomePage) {
+                    ->slice(0, 6)
+                    ->map(function(Cover $cover) {
                         return $this->convertTo(
                             $cover,
-                            !$showNewHomePage && 0 === $i ? HeroBanner::class : HighlightItem::class
+                            HighlightItem::class
                         );
                     });
             })->otherwise($this->softFailure('Failed to load hero and highlights'));
-
-        $arguments['heroBanner'] = $heroHighlights->then(Callback::emptyOr(function (Sequence $covers) {
-            return $covers->filter(Callback::isInstanceOf(HeroBanner::class))->offsetGet(0);
-        }))->otherwise($this->softFailure('Failed to load hero and highlights'));
 
         $arguments['highlights'] = $heroHighlights->then(function (Sequence $covers) {
             return $covers->filter(Callback::isInstanceOf(HighlightItem::class));
@@ -123,20 +115,18 @@ final class HomeController extends Controller
 
         $arguments['subjectsLink'] = new SectionListingLink('All research categories', 'subjects');
         
-        if ($showNewHomePage) {
-            $arguments['testimonialWithLink'] = new TestimonialWithLink(
-                new SimpleImage(
-                    'https://iiif.elifesciences.org/journal-cms/person%2F2025-09%2Fpatrick-allard-from-source.jpg/0,0,512,512/320,/0/default.webp',
-                    'Headshot of Patrick Allard'
-                ),
-                "We liked the idea of having an open 'conversation' with the reviewers during the process, and having the chance to polish the manuscript by following the editors and reviewers’ recommendations without the threat of rejection.",
-                'Patrick Allard, UCLA and eLife author',
-                new Link(
-                    'Researchers explain why they published in eLife',
-                    'https://elifesciences.org/about/why-publish-with-elife'
-                )
-            );
-        }
+        $arguments['testimonialWithLink'] = new TestimonialWithLink(
+            new SimpleImage(
+                'https://iiif.elifesciences.org/journal-cms/person%2F2025-09%2Fpatrick-allard-from-source.jpg/0,0,512,512/320,/0/default.webp',
+                'Headshot of Patrick Allard'
+            ),
+            "We liked the idea of having an open 'conversation' with the reviewers during the process, and having the chance to polish the manuscript by following the editors and reviewers’ recommendations without the threat of rejection.",
+            'Patrick Allard, UCLA and eLife author',
+            new Link(
+                'Researchers explain why they published in eLife',
+                'https://elifesciences.org/about/why-publish-with-elife'
+            )
+        );
 
         $arguments['subjects'] = $this->get('elife.api_sdk.subjects')
             ->reverse()
@@ -144,9 +134,8 @@ final class HomeController extends Controller
             ->map(function (Subject $subject) {
                 return new Link($subject->getName(), $this->get('router')->generate('subject', [$subject]));
             })
-            ->then(function (Sequence $links) use ($showNewHomePage) {
-                $heading = $showNewHomePage ? 'Categories' : 'Research categories';
-                return new SectionListing('subjects', $links->toArray(), new ListHeading($heading), false, $showNewHomePage);
+            ->then(function (Sequence $links) {
+                return new SectionListing('subjects', $links->toArray(), new ListHeading('Categories'), false, true);
             })
             ->otherwise($this->softFailure('Failed to load subjects list'));
 
