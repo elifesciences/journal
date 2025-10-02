@@ -9,7 +9,6 @@ use eLife\Journal\Helper\Callback;
 use eLife\Journal\Helper\Paginator;
 use eLife\Journal\Pagerfanta\SequenceAdapter;
 use eLife\Patterns\ViewModel\Button;
-use eLife\Patterns\ViewModel\HeroBanner;
 use eLife\Patterns\ViewModel\Highlight;
 use eLife\Patterns\ViewModel\HighlightItem;
 use eLife\Patterns\ViewModel\HomeBanner;

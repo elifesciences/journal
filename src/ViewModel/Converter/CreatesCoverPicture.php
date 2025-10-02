@@ -12,11 +12,6 @@ trait CreatesCoverPicture
     {
         return $this->coverPicture($object, 368, 207);
     }
-
-    final private function heroBannerCoverPicture(HasBanner $object): Picture
-    {
-        return $this->coverPicture($object, 633, 367);
-    }
     
     final private function coverPicture(HasBanner $object, int $defaultWidth, int $defaultHeight = null): Picture
     {
