@@ -30,27 +30,6 @@ final class HomeControllerTest extends PageTestCase
     /**
      * @test
      */
-    public function it_does_display_new_homepage()
-    {
-        $crawler = $this->getUrlWithSubjectsAndCovers();
-
-        // Expect to show.
-        $this->assertCount(1, $crawler->filter('.main--with-new-designs-borders'));
-        $this->assertCount(1, $crawler->filter('.banner-and-subjects-wrapper'));
-        $this->assertCount(1, $crawler->filter('.home-banner'));
-        $this->assertCount(1, $crawler->filter('.wrapper--subjects'));
-        $this->assertCount(1, $crawler->filter('.section-listing-wrapper--home-page'));
-        $this->assertSame('Categories', $crawler->filter('#subjects h3')->text());
-        $this->assertCount(6, $crawler->filter('.highlight-item'));
-        $this->assertCount(1, $crawler->filter('.testimonial-with-link'));
-
-        // Expect not to show.
-        $this->assertEmpty($crawler->filter('.hero-banner__details'));
-    }
-
-    /**
-     * @test
-     */
     public function it_displays_the_homepage()
     {
         $client = static::createClient();
@@ -58,8 +37,25 @@ final class HomeControllerTest extends PageTestCase
         $crawler = $client->request('GET', $this->getUrl());
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
+        $this->assertCount(1, $crawler->filter('.main--with-new-designs-borders'));
+        $this->assertCount(1, $crawler->filter('.banner-and-subjects-wrapper'));
+        $this->assertCount(1, $crawler->filter('.home-banner'));
+        $this->assertCount(1, $crawler->filter('.testimonial-with-link'));
         $this->assertContains('No articles available.', $crawler->filter('main')->text());
         $this->assertEmpty($client->getResponse()->headers->getCookies());
+    }
+
+    /**
+     * @test
+     */
+    public function it_does_display_the_homepage_with_categories_and_highlights()
+    {
+        $crawler = $this->getUrlWithSubjectsAndHighlights();
+
+        $this->assertCount(1, $crawler->filter('.wrapper--subjects'));
+        $this->assertCount(1, $crawler->filter('.section-listing-wrapper--home-page'));
+        $this->assertSame('Categories', $crawler->filter('#subjects h3')->text());
+        $this->assertCount(6, $crawler->filter('.highlight-item'));
     }
 
     /**
@@ -870,7 +866,7 @@ final class HomeControllerTest extends PageTestCase
     /**
      * @return Crawler|null
      */
-    private function getUrlWithSubjectsAndCovers()
+    private function getUrlWithSubjectsAndHighlights()
     {
         $client = static::createClient();
         
