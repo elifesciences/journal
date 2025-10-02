@@ -19,6 +19,7 @@ use eLife\Patterns\ViewModel\ListingTeasers;
 use eLife\Patterns\ViewModel\SectionListing;
 use eLife\Patterns\ViewModel\SectionListingLink;
 use eLife\Patterns\ViewModel\SeeMoreLink;
+use eLife\Patterns\ViewModel\SimpleImage;
 use eLife\Patterns\ViewModel\Teaser;
 use eLife\Patterns\ViewModel\TestimonialWithLink;
 use eLife\Patterns\ViewModel\ViewSelector;
@@ -124,6 +125,10 @@ final class HomeController extends Controller
         
         if ($showNewHomePage) {
             $arguments['testimonialWithLink'] = new TestimonialWithLink(
+                new SimpleImage(
+                    'https://iiif.elifesciences.org/journal-cms/person%2F2025-09%2Fpatrick-allard-from-source.jpg/0,0,512,512/320,/0/default.webp',
+                    'Headshot of Patrick Allard'
+                ),
                 "We liked the idea of having an open 'conversation' with the reviewers during the process, and having the chance to polish the manuscript by following the editors and reviewers’ recommendations without the threat of rejection.",
                 'Patrick Allard, UCLA and eLife author',
                 new Link(
