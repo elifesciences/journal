@@ -272,7 +272,7 @@ final class ArticlesController extends Controller
                 return $context;
             });
 
-        $arguments = $this->contentAsideArguments($arguments);
+        $arguments = $this->contentAsideArguments($arguments, true);
 
         $arguments['body'] = all(['item' => $arguments['item'], 'isMagazine' => $arguments['isMagazine'], 'history' => $arguments['history'], 'citations' => $arguments['citations'], 'allVersionCitations' => $arguments['citationsForAllVersions'], 'downloads' => $arguments['downloads'], 'pageViews' => $arguments['pageViews'], 'data' => $arguments['hasData'], 'context' => $context])
             ->then(function (array $parts) {
@@ -1576,7 +1576,7 @@ final class ArticlesController extends Controller
     }
 
 
-    private function contentAsideArguments(array $arguments) : array
+    private function contentAsideArguments(array $arguments, bool $includeAltMetricBadge = false) : array
     {
         $arguments['contentAside'] = all([
             'item' => $arguments['item'],
@@ -1585,7 +1585,7 @@ final class ArticlesController extends Controller
             'history' => $arguments['history'],
             'relatedItem' => $arguments['relatedItem'] ?? promise_for(null),
         ])
-            ->then(function (array $parts) {
+            ->then(function (array $parts) use ($includeAltMetricBadge) {
                 /** @var ArticleVersion $item */
                 $item = $parts['item'];
 
@@ -1716,9 +1716,11 @@ final class ArticlesController extends Controller
                     'relatedItem' => $parts['relatedItem']
                 ];
 
-                $altmetricBadge = new ViewModel\Altmetric($item->getDoi(), 'donut', false);
+                if ($includeAltMetricBadge) {
+                    $altmetricBadge = new ViewModel\Altmetric($item->getDoi(), 'donut', false);
 
-                $contentAsideItems = array_merge($contentAsideItems, ['altmetric' => $altmetricBadge]);
+                    $contentAsideItems = array_merge($contentAsideItems, ['altmetric' => $altmetricBadge]);
+                }
 
                 return $this->convertTo(
                     $parts['item'],
