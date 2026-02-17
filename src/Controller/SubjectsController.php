@@ -50,6 +50,12 @@ final class SubjectsController extends Controller
             ->reverse()
             ->slice(1, 100)
             ->map($this->willConvertTo(BlockLink::class))
+            ->filter(function (Subject $subject) {
+              if ($subject->getId() == "physiology") {
+                return false;
+              }
+              return true;
+            })
             ->then(function (Sequence $subjects) {
                 if ($subjects->isEmpty()) {
                     return new EmptyListing(null, 'No subjects available.');
