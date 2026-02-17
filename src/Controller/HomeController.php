@@ -79,6 +79,8 @@ final class HomeController extends Controller
         $arguments['listing'] = $arguments['paginator']
             ->then($this->willConvertTo(ListingTeasers::class, ['heading' => 'Latest research', 'type' => 'articles']));
 
+        $arguments['physiologyEnabled'] = $request->query->get("physiology-enabled") == "true";
+
         if (1 === $page) {
             return $this->createFirstPage($arguments);
         }
@@ -130,6 +132,15 @@ final class HomeController extends Controller
         $arguments['subjects'] = $this->get('elife.api_sdk.subjects')
             ->reverse()
             ->slice(1, 100)
+            ->filter(function (Subject $subject) use ($arguments) {
+                if ($arguments['physiologyEnabled']) {
+                    return true;
+                }
+                if ($subject->getId() == "physiology") {
+                    return false;
+                }
+                return true;
+            })
             ->map(function (Subject $subject) {
                 return new Link($subject->getName(), $this->get('router')->generate('subject', [$subject]));
             })
