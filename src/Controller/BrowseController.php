@@ -124,7 +124,16 @@ final class BrowseController extends Controller
                 if (count($search->subjects())) {
                     $subjectFilters = [];
                     foreach ($search->subjects() as $subject => $results) {
-                        $subjectFilters[] = new Filter(in_array($subject->getId(), $arguments['query']['subjects']), $subject->getName(), null, 'subjects[]', $subject->getId());
+                        if ($subject->getId() == "physiology") {
+                            continue;
+                        }
+                        $subjectFilters[] = new Filter(
+                        in_array($subject->getId(), $arguments['query']['subjects']),
+                        $subject->getName(),
+                        null,
+                        'subjects[]',
+                        $subject->getId()
+                        );
                     }
 
                     usort($subjectFilters, function (Filter $a, Filter $b) {
