@@ -46,16 +46,21 @@ final class SubjectsController extends Controller
             Browse our research categories or <a href="'.$this->get('router')->generate('content-alerts').'">subscribe to email alerts</a>.'
         );
 
+        $physiologyEnabled = $request->query->get("physiology-enabled") == "true";
+
         $arguments['subjects'] = $this->get('elife.api_sdk.subjects')
             ->reverse()
             ->slice(1, 100)
-            ->map($this->willConvertTo(BlockLink::class))
-            ->filter(function (Subject $subject) {
-              if ($subject->getId() == "physiology") {
-                return false;
-              }
-              return true;
+            ->filter(function (Subject $subject) use ($physiologyEnabled) {
+                if ($physiologyEnabled) {
+                    return true;
+                }
+                if ($subject->getId() == "physiology") {
+                    return false;
+                }
+                return true;
             })
+            ->map($this->willConvertTo(BlockLink::class))
             ->then(function (Sequence $subjects) {
                 if ($subjects->isEmpty()) {
                     return new EmptyListing(null, 'No subjects available.');
