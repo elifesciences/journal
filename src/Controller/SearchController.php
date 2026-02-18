@@ -166,7 +166,11 @@ final class SearchController extends Controller
 
                 if (count($search->subjects())) {
                     $subjectFilters = [];
+
                     foreach ($search->subjects() as $subject => $results) {
+                        if ($subject->getId() == "physiology") {
+                            continue;
+                        }
                         $subjectFilters[] = new Filter(in_array($subject->getId(), $arguments['query']['subjects']), $subject->getName(), $results, 'subjects[]', $subject->getId());
                     }
 
