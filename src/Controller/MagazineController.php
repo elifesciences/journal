@@ -68,7 +68,13 @@ final class MagazineController extends Controller
 
     private function createFirstPage(Request $request, array $arguments) : Response
     {
-        $arguments['contentHeader'] = $this->get('elife.api_sdk.podcast_episodes')
+        $arguments['contentHeader'] = $request->query->has('new') ?
+            new ContentHeader(
+                'Magazine',
+                null,
+                'Highlighting the latest research and giving a voice to scientists'
+            )
+            : $this->get('elife.api_sdk.podcast_episodes')
             ->slice(0, 1)
             ->then(Callback::method('offsetGet', 0))
             ->then(Callback::emptyOr($this->willConvertTo(AudioPlayer::class, ['link' => true])))
