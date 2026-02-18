@@ -28,6 +28,7 @@ use Pagerfanta\Pagerfanta;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use function GuzzleHttp\Promise\all;
 use function GuzzleHttp\Promise\promise_for;
 
@@ -74,6 +75,10 @@ final class SubjectsController extends Controller
 
     public function subjectAction(Request $request, string $id) : Response
     {
+        if ('physiology' === $id) {
+            throw new NotFoundHttpException();
+        }
+
         $page = (int) $request->query->get('page', 1);
         $perPage = 10;
 
