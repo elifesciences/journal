@@ -98,9 +98,10 @@ final class MagazineController extends Controller
                 );
             });
 
+        $maxHighlightCount = $request->query->has('new') ? 3 : 6;
         $arguments['highlights'] = $this->get('elife.api_sdk.highlights')
             ->get('magazine')
-            ->slice(0, 6)
+            ->slice(0, $maxHighlightCount)
             ->map($this->willConvertTo(Teaser::class, ['variant' => 'secondary']))
             ->then(Callback::emptyOr(function (Sequence $highlights) {
                 return ListingTeasers::forHighlights($highlights->toArray(), new ListHeading('Highlights'), 'highlights');
