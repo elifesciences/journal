@@ -98,15 +98,23 @@ final class MagazineController extends Controller
                 );
             });
 
-        $maxHighlightCount = $request->query->has('new') ? 3 : 6;
-        $arguments['highlights'] = $this->get('elife.api_sdk.highlights')
+        $arguments['highlights'] = $request->query->has('new')
+            ? $this->get('elife.api_sdk.highlights')
             ->get('magazine')
-            ->slice(0, $maxHighlightCount)
+            ->slice(0, 3)
             ->map($this->willConvertTo(Teaser::class, ['variant' => 'secondary']))
             ->then(Callback::emptyOr(function (Sequence $highlights) {
                 return ListingTeasers::forHighlights($highlights->toArray(), new ListHeading('Highlights'), 'highlights');
             }))
-            ->otherwise($this->softFailure('Failed to load highlights for magazine'));
+            ->otherwise($this->softFailure('Failed to load highlights for magazine'))
+            : $this->get('elife.api_sdk.highlights')
+                ->get('magazine')
+                ->slice(0, 6)
+                ->map($this->willConvertTo(Teaser::class, ['variant' => 'secondary']))
+                ->then(Callback::emptyOr(function (Sequence $highlights) {
+                    return ListingTeasers::forHighlights($highlights->toArray(), new ListHeading('Highlights'), 'highlights');
+                }))
+                ->otherwise($this->softFailure('Failed to load highlights for magazine'));
 
         $events = $this->get('elife.api_sdk.events')
             ->show('open')
