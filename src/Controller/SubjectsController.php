@@ -75,7 +75,7 @@ final class SubjectsController extends Controller
 
     public function subjectAction(Request $request, string $id) : Response
     {
-        if ('physiology' === $id) {
+        if ('physiology' === $id && ! $request->query->has("physiology-enabled")) {
             throw new NotFoundHttpException();
         }
 
