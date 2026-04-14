@@ -9,6 +9,8 @@ use eLife\Journal\Helper\Paginator;
 use eLife\Journal\Pagerfanta\SequenceAdapter;
 use eLife\Patterns\ViewModel\AudioPlayer;
 use eLife\Patterns\ViewModel\ContentHeader;
+use eLife\Patterns\ViewModel\Highlight;
+use eLife\Patterns\ViewModel\HighlightItem;
 use eLife\Patterns\ViewModel\Link;
 use eLife\Patterns\ViewModel\ListHeading;
 use eLife\Patterns\ViewModel\ListingTeasers;
@@ -69,42 +71,34 @@ final class MagazineController extends Controller
     private function createFirstPage(Request $request, array $arguments) : Response
     {
         $arguments['contentHeader'] = $request->query->has('new') ?
-            new ContentHeader(
-                'Magazine',
+            (new ContentHeader(
+                'eLife Magazine',
                 null,
                 'Highlighting the latest research and giving a voice to scientists'
-            )
+            ))->withSignupLink(new Link(
+                'Sign up to eLife Magazine Highlights Alerts',
+                'https://connect.elifesciences.org/magazine-highlights'
+            ))
             : $this->get('elife.api_sdk.podcast_episodes')
             ->slice(0, 1)
             ->then(Callback::method('offsetGet', 0))
             ->then(Callback::emptyOr($this->willConvertTo(AudioPlayer::class, ['link' => true])))
             ->otherwise($this->softFailure('Failed to load podcast episode audio player'))
             ->then(function (AudioPlayer $audioPlayer = null) {
-                return new ContentHeader(
+                return (new ContentHeader(
                     'Magazine',
                     $this->get('elife.journal.view_model.factory.content_header_image')->forLocalFile('magazine', true),
-                    'Highlighting the latest research and giving a voice to scientists',
-                    false,
-                    null,
-                    [],
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    $audioPlayer
-                );
+                    'Highlighting the latest research and giving a voice to scientists'
+                ))->withAudioPlayer($audioPlayer);
             });
 
         $arguments['highlights'] = $request->query->has('new')
             ? $this->get('elife.api_sdk.highlights')
             ->get('magazine')
             ->slice(0, 3)
-            ->map($this->willConvertTo(Teaser::class, ['variant' => 'secondary']))
+            ->map($this->willConvertTo(HighlightItem::class)) // calls HighlightHighlightItemConverter class
             ->then(Callback::emptyOr(function (Sequence $highlights) {
-                return ListingTeasers::forHighlights($highlights->toArray(), new ListHeading('Highlights'), 'highlights');
+                return new Highlight($highlights->toArray(), null, true);
             }))
             ->otherwise($this->softFailure('Failed to load highlights for magazine'))
             : $this->get('elife.api_sdk.highlights')

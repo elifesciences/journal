@@ -906,6 +906,14 @@ services:
         tags:
           - name: view_model.converter
 
+    elife.journal.view_model.converter.highlight.article.highlight_item:
+      class: eLife\Journal\ViewModel\Converter\HighlightHighlightItemConverter
+      public: false
+      arguments:
+        - '@router'
+      tags:
+        - name: view_model.converter
+
     elife.journal.view_model.converter.cover.article.teaser.secondary:
       class: eLife\Journal\ViewModel\Converter\CoverArticleSecondaryTeaserConverter
       public: false
