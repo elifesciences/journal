@@ -13,3 +13,5 @@
 /web/assets/
 /web/bundles/
 /web/favicon.ico
+docker-compose.override.yml
+.env

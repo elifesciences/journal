@@ -16,26 +16,48 @@ services:
             - node_modules:/node_modules
     assets_builder:
         volumes:
+            #
+            - ../patterns-php/resources/assets:/vendor/elife/patterns/resources/assets
+
             - ./assets/images:/assets/images
             - assets:/web
             - build:/build
             - node_modules:/node_modules
             - ./gulpfile.js:/gulpfile.js
     app:
+        # Comment out the build section if you don't want to run the xdebug Dockerfile
+        build:
+            context: .
+            dockerfile: Dockerfile.xdebug
+            args:
+                image_tag: ${IMAGE_TAG}
+                php_version: ${PHP_VERSION}
         environment:
             - APP_ENV=${APP_ENV}
+            - XDEBUG_MODE=debug
+            - XDEBUG_CONFIG=client_host=host.docker.internal
+            - PHP_IDE_CONFIG=serverName=DockerApp
         volumes:
             - ./:/srv/journal
             - ./.docker/php.ini:/usr/local/etc/php/conf.d/x-dev.ini
+            - /srv/journal/vendor
             - /srv/journal/var
             - build:/srv/journal/build
             - critical_css:/srv/journal/build/critical-css
-            - ./vendor:/srv/journal/vendor
+
+            - ../api-sdk-php:/srv/journal/vendor/elife/api-sdk
+            - ../patterns-php:/srv/journal/vendor/elife/patterns
     web:
         volumes:
             - assets:/srv/journal/web
     api_dummy:
-        platform: linux/amd64
+        #        image: ghcr.io/elifesciences/api-dummy:${DEPENDENCIES_API_DUMMY}
+        build:
+            context: ../api-dummy
+        ports:
+            - '${JOURNAL_API_DUMMY_PORT}:8080'
+        platform: linux/arm64
+        stop_grace_period: 1s
     critical_css:
         volumes:
             - critical_css:/build/critical-css
