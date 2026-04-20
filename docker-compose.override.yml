@@ -17,7 +17,7 @@ services:
     assets_builder:
         volumes:
             #
-            - ../patterns-php/resources/assets:/vendor/elife/patterns/resources/assets
+#            - ../patterns-php/resources/assets:/vendor/elife/patterns/resources/assets
 
             - ./assets/images:/assets/images
             - assets:/web
