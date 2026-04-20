@@ -30,7 +30,6 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  */
 class HighlightHighlightItemConverter implements ViewModelConverter
 {
-
     use CreatesCoverPicture;
     use CreatesDate;
 
@@ -160,7 +159,7 @@ class HighlightHighlightItemConverter implements ViewModelConverter
             return null;
         }
 
-        // TODO put these values somewhere else
+        // TODO put these numerical values somewhere else?
         return (new PictureBuilderFactory())->forImage($image, 368, 207)->build();
     }
 
