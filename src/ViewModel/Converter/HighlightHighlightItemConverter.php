@@ -81,8 +81,7 @@ class HighlightHighlightItemConverter implements ViewModelConverter
                 ModelName::singular('collection'),
                 $this->urlGenerator->generate('collections')
             );
-        }
-        else if ($item instanceof Event) {
+        } else if ($item instanceof Event) {
             $contentUrl = $this->urlGenerator->generate('event', [$item]);
             $metaLink = new ViewModel\Link(
                 ModelName::singular('event'),
@@ -101,7 +100,6 @@ class HighlightHighlightItemConverter implements ViewModelConverter
                 $this->urlGenerator->generate('podcast')
             );
         } else if ($item instanceof PodcastEpisodeChapter) {
-
         } else if ($item instanceof PressPackage) {
             $contentUrl = $this->urlGenerator->generate('press-pack', [$item]);
             $metaLink = new ViewModel\Link(
@@ -121,8 +119,7 @@ class HighlightHighlightItemConverter implements ViewModelConverter
                 ModelName::singular('digest'),
                 $this->urlGenerator->generate('digests')
             );
-        }
-        else {
+        } else {
             throw new InvalidArgumentException('Unknown cover item type: '.get_class($item));
         }
 
