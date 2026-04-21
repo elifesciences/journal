@@ -128,7 +128,7 @@ class HighlightHighlightItemConverter implements ViewModelConverter
             new ViewModel\Link($object->getTitle(), $contentUrl),
             ViewModel\Meta::withLink($metaLink, $this->simpleDate($item, $context)),
             $this->highlightPicture($object),
-            $object->getImpactStatement(),
+            $object->getImpactStatement() ?? "Placeholder",
             $authorLine
         );
     }
