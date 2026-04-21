@@ -112,7 +112,7 @@ final class MagazineController extends Controller
 
             $arguments['highlights'] = $highlights->then(
                 Callback::emptyOr(
-                    function (Sequence $highlights) use ($heroItem, $highlightItems) {
+                    function () use ($heroItem, $highlightItems) {
                         return new Highlight($highlightItems->toArray(), null, $heroItem);
                     }
                 )
