@@ -99,7 +99,6 @@ class HighlightHighlightItemConverter implements ViewModelConverter
                 ModelName::singular('podcast-episode'),
                 $this->urlGenerator->generate('podcast')
             );
-        } else if ($item instanceof PodcastEpisodeChapter) {
         } else if ($item instanceof PressPackage) {
             $contentUrl = $this->urlGenerator->generate('press-pack', [$item]);
             $metaLink = new ViewModel\Link(
