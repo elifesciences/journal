@@ -104,7 +104,7 @@ abstract class PageTestCase extends WebTestCase
     public function it_has_cache_headers()
     {
         // @todo - this can be switched on again after https://github.com/elifesciences/issues/issues/7764
-        $this->markTestSkipped('This test can be skipped as non-deterministic!');
+        // $this->markTestSkipped('This test can be skipped as non-deterministic!');
         $client = static::createClient();
 
         $client->request('GET', $this->getUrl());
