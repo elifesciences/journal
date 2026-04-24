@@ -115,7 +115,7 @@ final class MagazineController extends Controller
                         return new Highlight($highlightItems->toArray(), null, $heroHighlightItem);
                     }
                 )
-            )->otherwise($this->softFailure('Failed to load highlights for magazine'));;
+            )->otherwise($this->softFailure('Failed to load highlights for magazine'));
         } else {
             $arguments['highlights'] = $this->get('elife.api_sdk.highlights')
                 ->get('magazine')
