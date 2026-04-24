@@ -70,7 +70,7 @@ final class MagazineController extends Controller
 
     private function createFirstPage(Request $request, array $arguments) : Response
     {
-        $arguments['contentHeader'] = ($request->query->has('new') || $request->query->has('new-hero')) ?
+        $arguments['contentHeader'] = ($request->query->has('new')) ?
             (new ContentHeader(
                 'eLife Magazine',
                 null,
@@ -93,39 +93,29 @@ final class MagazineController extends Controller
             });
 
         // Feature flag for the hero highlight
-        if ($request->query->has('new-hero')) {
-            $highlights = $this->get('elife.api_sdk.highlights')
-                ->get('magazine')
-                ->slice(0, 4)
+        if ($request->query->has('new')) {
+            $currentHighlights = $this->get('elife.api_sdk.highlights')
+                ->getCurrent('magazine')
                 ->map($this->willConvertTo(HighlightItem::class)); // calls HighlightHighlightItemConverter class
 
-            $heroItem = null;
-            if ($highlights->count() === 4) {
-                // Setting the first highlight as the heroItem
-                $heroItem = $highlights[0];
+            $heroHighlightItem = null;
+            if ($currentHighlights->count() === 4) {
+                // Setting the first highlight as the heroHighlightItem
+                $heroHighlightItem = $currentHighlights[0];
                 // Setting the rest of the highlights
-                $highlightItems = $highlights->slice(1, 3);
+                $highlightItems = $currentHighlights->slice(1, 3);
             } else {
                 // Setting the highlights as usual
-                $highlightItems = $highlights;
+                $highlightItems = $currentHighlights;
             }
 
-            $arguments['highlights'] = $highlights->then(
+            $arguments['highlights'] = $currentHighlights->then(
                 Callback::emptyOr(
-                    function () use ($heroItem, $highlightItems) {
-                        return new Highlight($highlightItems->toArray(), null, $heroItem);
+                    function () use ($highlightItems, $heroHighlightItem) {
+                        return new Highlight($highlightItems->toArray(), null, $heroHighlightItem);
                     }
                 )
-            );
-        } else if ($request->query->has('new')) {
-            $arguments['highlights'] = $this->get('elife.api_sdk.highlights')
-                ->get('magazine')
-                ->slice(0, 3)
-                ->map($this->willConvertTo(HighlightItem::class)) // calls HighlightHighlightItemConverter class
-                ->then(Callback::emptyOr(function (Sequence $highlights) {
-                    return new Highlight($highlights->toArray(), null);
-                }))
-                ->otherwise($this->softFailure('Failed to load highlights for magazine'));
+            )->otherwise($this->softFailure('Failed to load highlights for magazine'));;
         } else {
             $arguments['highlights'] = $this->get('elife.api_sdk.highlights')
                 ->get('magazine')
