@@ -37,7 +37,7 @@ When using Windows to bypass the main errors we recommend to follow the next :
       How to install : [Step 1](https://getcomposer.org/download/)
 </details>
 
-Running the site locally
+Running the site locally:
 ----------------------------------------------
 
 1. Run either:
