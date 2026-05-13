@@ -30,7 +30,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Build container image
         run: |
-          docker compose -f 'docker-compose.yml' -f 'docker-compose.ci.yml' build composer npm
+          docker compose -f 'docker-compose.yml' -f 'docker-compose.ci.yml' build composer composer-dev npm
           docker compose -f 'docker-compose.yml' -f 'docker-compose.ci.yml' build assets_builder
           docker compose -f 'docker-compose.yml' -f 'docker-compose.ci.yml' build app
           docker compose -f 'docker-compose.yml' -f 'docker-compose.ci.yml' build
