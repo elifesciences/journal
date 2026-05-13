@@ -31,6 +31,7 @@ jobs:
       - name: Build container image
         run: |
           docker compose -f 'docker-compose.yml' -f 'docker-compose.ci.yml' build composer npm
+          docker compose -f 'docker-compose.yml' -f 'docker-compose.ci.yml' build assets_builder
           docker compose -f 'docker-compose.yml' -f 'docker-compose.ci.yml' build
           docker image tag elifesciences/journal:develop ${CONTAINER_REPO}:${CONTAINER_TAG}
       - name: Push container image
