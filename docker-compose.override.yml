@@ -17,7 +17,7 @@ services:
     assets_builder:
         volumes:
             #
-#            - ../patterns-php/resources/assets:/vendor/elife/patterns/resources/assets
+            - ../patterns-php/resources/assets:/vendor/elife/patterns/resources/assets
 
             - ./assets/images:/assets/images
             - assets:/web
@@ -45,7 +45,7 @@ services:
             - build:/srv/journal/build
             - critical_css:/srv/journal/build/critical-css
 
-            - ../api-sdk-php:/srv/journal/vendor/elife/api-sdk
+#            - ../api-sdk-php:/srv/journal/vendor/elife/api-sdk
             - ../patterns-php:/srv/journal/vendor/elife/patterns
     web:
         volumes:
