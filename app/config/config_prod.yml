@@ -58,6 +58,8 @@ nelmio_security:
               - 'wss://*.hotjar.com'
               - unsafe-eval
               - unsafe-inline
+            worker-src:
+              - 'blob:'
     forced_ssl:
         whitelist:
           - ^/ # Hack to disable redirect.
