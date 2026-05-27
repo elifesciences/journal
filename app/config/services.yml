@@ -16,20 +16,65 @@ services:
           - '%google_api_client.refresh_token%'
           - '@monolog.logger.api'
 
-    elife.api_client.client:
-        class: eLife\ApiClient\HttpClient\Guzzle6HttpClient
+    # Manually wired until Symfony is upgraded to 4.3+ and http_client.yml can be loaded via framework config
+    framework.http_client.clients.elife_api:
+        class: Symfony\Contracts\HttpClient\HttpClientInterface
+        factory: ['Symfony\Component\HttpClient\HttpClient', 'create']
         arguments:
-          - '@csa_guzzle.client.elife_api'
+            - base_uri: '%api_url%'
+              headers:
+                  Authorization: '%api_key%'
+              timeout: '%api_timeout%'
+
+    framework.http_client.clients.elife_api_search_page:
+        class: Symfony\Contracts\HttpClient\HttpClientInterface
+        factory: ['Symfony\Component\HttpClient\HttpClient', 'create']
+        arguments:
+            - base_uri: '%api_url_search_page%'
+              headers:
+                  Authorization: '%api_key%'
+              timeout: '%api_timeout_slow%'
+
+    framework.http_client.clients.elife_crm:
+        class: Symfony\Contracts\HttpClient\HttpClientInterface
+        factory: ['Symfony\Component\HttpClient\HttpClient', 'create']
+        arguments:
+            - base_uri: '%crm_url%'
+              timeout: '%api_timeout_slow%'
+
+    framework.http_client.clients.elife_crm_api:
+        class: Symfony\Contracts\HttpClient\HttpClientInterface
+        factory: ['Symfony\Component\HttpClient\HttpClient', 'create']
+        arguments:
+            - base_uri: '%crm_api_url%'
+              timeout: '%api_timeout_slow%'
+
+    framework.http_client.clients.oauth:
+        class: Symfony\Contracts\HttpClient\HttpClientInterface
+        factory: ['Symfony\Component\HttpClient\HttpClient', 'create']
+        arguments:
+            - timeout: '%api_timeout_slow%'
+
+    framework.http_client.clients.streamer:
+        class: Symfony\Contracts\HttpClient\HttpClientInterface
+        factory: ['Symfony\Component\HttpClient\HttpClient', 'create']
+        arguments:
+            - timeout: '%api_timeout%'
+
+    elife.api_client.client:
+        class: eLife\Journal\HttpClient\SymfonyHttpClient
+        arguments:
+          - '@framework.http_client.clients.elife_api'
 
     elife.api_client.client.search_page:
-        class: eLife\ApiClient\HttpClient\Guzzle6HttpClient
+        class: eLife\Journal\HttpClient\SymfonyHttpClient
         arguments:
-          - '@csa_guzzle.client.elife_api_search_page'
+          - '@framework.http_client.clients.elife_api_search_page'
 
     elife.api_client.client.crm_api:
         class: eLife\CiviContacts\Guzzle\CiviCrmClient
         arguments:
-          - '@csa_guzzle.client.elife_crm_api'
+          - '@framework.http_client.clients.elife_crm_api'
           - '%crm_api_key%'
           - '%crm_api_site_key%'
 
@@ -46,6 +91,14 @@ services:
         arguments:
           - '@elife.api_client.client.warning_checking.inner'
           - '@="eLifeJournal/"~service("kernel").getVersion()'
+
+    elife.api_client.client.subject_rewriting:
+        class: eLife\Journal\HttpClient\SubjectRewritingHttpClient
+        decorates: elife.api_client.client
+        decoration_priority: -1
+        arguments:
+          - '@elife.api_client.client.subject_rewriting.inner'
+          - '%subject_rewrites%'
 
     elife.api_sdk:
         class: eLife\ApiSdk\ApiSdk
@@ -183,7 +236,7 @@ services:
     elife.journal.goutte:
         class: Goutte\Client
         calls:
-          - ['setClient', ['@csa_guzzle.client.elife_crm']]
+          - ['setClient', ['@@framework.http_client.clients.elife_crm_']]
 
     elife.journal.guzzle.cache:
         class: Kevinrob\GuzzleCache\CacheMiddleware
@@ -262,7 +315,7 @@ services:
     elife.journal.helper.http_proxy:
         class: eLife\Journal\Helper\HttpProxy
         arguments:
-          - '@csa_guzzle.client.streamer'
+          - '@framework.http_client.clients.streamer'
 
     elife.journal.listener.authentication_error:
         class: eLife\Journal\EventListener\AuthenticationErrorSubscriber

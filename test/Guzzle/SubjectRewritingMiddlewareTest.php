@@ -12,6 +12,7 @@ use test\eLife\Journal\Providers;
 use Traversable;
 use function GuzzleHttp\Psr7\str;
 
+#TODO use the new SubjectRewriting Class under HttpClient
 final class SubjectRewritingMiddlewareTest extends KernelTestCase
 {
     use Assertions;

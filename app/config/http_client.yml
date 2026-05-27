@@ -1,0 +1,23 @@
+framework:
+    http_client:
+        scoped_clients:
+            elife_api:
+                base_uri: '%api_url%'
+                headers:
+                    Authorization: '%api_key%'
+                timeout: '%api_timeout%'
+            elife_api_search_page:
+                base_uri: '%api_url_search_page%'
+                headers:
+                    Authorization: '%api_key%'
+                timeout: '%api_timeout_slow%'
+            elife_crm:
+                base_uri: '%crm_url%'
+                timeout: '%api_timeout_slow%'
+            elife_crm_api:
+                base_uri: '%crm_api_url%'
+                timeout: '%api_timeout_slow%'
+            oauth:
+                timeout: '%api_timeout_slow%'
+            streamer:
+                stream: true
