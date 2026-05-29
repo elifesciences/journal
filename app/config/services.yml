@@ -55,16 +55,42 @@ services:
         arguments:
             - timeout: '%api_timeout_slow%'
 
+    elife.journal.security.oauth.guzzle_adapter:
+        class: eLife\Journal\HttpClient\GuzzleToSymfonyAdapter
+        arguments:
+          - '@framework.http_client.clients.oauth'
+
     framework.http_client.clients.streamer:
         class: Symfony\Contracts\HttpClient\HttpClientInterface
         factory: ['Symfony\Component\HttpClient\HttpClient', 'create']
         arguments:
-            - timeout: '%api_timeout%'
+            -
+                timeout: '%api_timeout%'
+                buffer: false
+
+# elife.api_client.client (SymfonyHttpClient)
+#    └── @elife.api_client.client.status_date_override
+#          └── @elife.api_client.stale_response_logging
+#                └── @framework.http_client.clients.elife_api
+# TODO: add CachingHttpClient between stale_response_logging and elife_api once upgraded to Symfony 4.3+
 
     elife.api_client.client:
         class: eLife\Journal\HttpClient\SymfonyHttpClient
         arguments:
+          - '@elife.api_client.client.status_date_override'
+
+    elife.api_client.client.status_date_override:
+        class: eLife\Journal\HttpClient\StatusDateOverrideHttpClient
+        arguments:
+          - '@elife.api_client.stale_response_logging'
+          - '%era_articles%'
+
+    elife.api_client.stale_response_logging:
+        class: eLife\Journal\HttpClient\StaleResponseLoggingHttpClient
+        public: false
+        arguments:
           - '@framework.http_client.clients.elife_api'
+          - '@monolog.logger.api'
 
     elife.api_client.client.search_page:
         class: eLife\Journal\HttpClient\SymfonyHttpClient
@@ -99,6 +125,7 @@ services:
         arguments:
           - '@elife.api_client.client.subject_rewriting.inner'
           - '%subject_rewrites%'
+
 
     elife.api_sdk:
         class: eLife\ApiSdk\ApiSdk
@@ -236,71 +263,13 @@ services:
     elife.journal.goutte:
         class: Goutte\Client
         calls:
-          - ['setClient', ['@@framework.http_client.clients.elife_crm_']]
+          - ['setClient', ['@framework.http_client.clients.elife_crm']]
 
-    elife.journal.guzzle.cache:
-        class: Kevinrob\GuzzleCache\CacheMiddleware
-        public: false
-        arguments:
-          - '@elife.journal.guzzle.cache.strategy'
-        calls:
-          - ['setClient', ['@elife.journal.guzzle.cache.client']]
-        tags:
-          - name: csa_guzzle.middleware
-            alias: cache
-            priority: -1500
 
-    elife.journal.guzzle.cache.client:
-        class: GuzzleHttp\Client
-        public: false
+    elife.journal.status_controller:
+        class: eLife\Journal\Controller\StatusController
         arguments:
-          - connect_timeout: 1
-            timeout: 2
-        tags:
-          - name: csa_guzzle.client
-
-    elife.journal.guzzle.cache.storage:
-        class: Kevinrob\GuzzleCache\Storage\Psr6CacheStorage
-        public: false
-        arguments:
-          - '@cache.guzzle'
-
-    elife.journal.guzzle.cache.strategy:
-        class: Kevinrob\GuzzleCache\Strategy\PrivateCacheStrategy
-        public: false
-        arguments:
-          - '@elife.journal.guzzle.cache.storage'
-
-    elife.journal.guzzle.stale_logging:
-        class: eLife\Journal\Guzzle\StaleLoggingMiddleware
-        public: false
-        arguments:
-          - '@monolog.logger.api'
-        tags:
-          - name: csa_guzzle.middleware
-            alias: state_logging
-            priority: -1499
-
-    elife.journal.guzzle.subject_rewriting:
-        class: eLife\Journal\Guzzle\SubjectRewritingMiddleware
-        public: false
-        arguments:
-          - '%subject_rewrites%'
-        tags:
-          - name: csa_guzzle.middleware
-            alias: subject_rewriting
-            priority: 1500
-
-    elife.journal.guzzle.status_date_override:
-        class: eLife\Journal\Guzzle\StatusDateOverrideMiddleware
-        public: false
-        arguments:
-          - '@security.authorization_checker'
-          - '%era_articles%'
-        tags:
-          - name: csa_guzzle.middleware
-            alias: status_date_override
-            priority: 1499
+          - '@framework.http_client.clients.elife_api'
 
     elife.journal.helper.fragment_link_rewriter:
         class: eLife\Journal\Helper\FragmentLinkRewriter
@@ -1683,8 +1652,8 @@ services:
     elife.assets.packages:
         alias: 'assets.packages'
 
-    elife.csa_guzzle.client.elife_api:
-        alias: 'csa_guzzle.client.elife_api'
+#    elife.csa_guzzle.client.elife_api:
+#        alias: 'csa_guzzle.client.elife_api'
 
     elife.logger:
         alias: 'logger'

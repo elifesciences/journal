@@ -2,20 +2,19 @@
 
 namespace eLife\Journal\Helper;
 
-use GuzzleHttp\ClientInterface;
-use GuzzleHttp\Exception\BadResponseException;
-use GuzzleHttp\Exception\TransferException;
-use Psr\Http\Message\ResponseInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
+use Symfony\Contracts\HttpClient\ResponseInterface;
 
 final class HttpProxy
 {
     private $client;
 
-    public function __construct(ClientInterface $client)
+    public function __construct(HttpClientInterface $client)
     {
         $this->client = $client;
     }
@@ -24,30 +23,25 @@ final class HttpProxy
     {
         try {
             $backendResponse = $this->sendRequest($request, $uri);
-        } catch (TransferException $e) {
-            if ($e instanceof BadResponseException) {
-                $backendResponse = $e->getResponse();
-
-                switch ($backendResponse->getStatusCode()) {
-                    case Response::HTTP_NOT_MODIFIED:
-                        $response = new Response('', $backendResponse->getStatusCode());
-                        break;
-                    case Response::HTTP_NOT_FOUND:
-                    case Response::HTTP_GONE:
-                        throw new HttpException($backendResponse->getStatusCode(), $e->getMessage(), $e);
-                }
-
-                if (isset($response)) {
-                    return $this->finishResponse($response, $backendResponse);
-                }
-            }
-
+            $statusCode = $backendResponse->getStatusCode();
+        } catch (TransportExceptionInterface $e) {
             throw new HttpException(Response::HTTP_BAD_GATEWAY, $e->getMessage(), $e);
         }
 
-        $response = $this->createResponse($backendResponse);
+        switch ($statusCode) {
+            case Response::HTTP_NOT_MODIFIED:
+                $response = new Response('', $statusCode);
+                return $this->finishResponse($response, $backendResponse);
+            case Response::HTTP_NOT_FOUND:
+            case Response::HTTP_GONE:
+                throw new HttpException($statusCode);
+        }
 
-        return $this->finishResponse($response, $backendResponse);
+        if ($statusCode >= 500) {
+            throw new HttpException(Response::HTTP_BAD_GATEWAY);
+        }
+
+        return $this->finishResponse($this->createResponse($backendResponse), $backendResponse);
     }
 
     private function sendRequest(Request $request, string $uri) : ResponseInterface
@@ -56,6 +50,7 @@ final class HttpProxy
         $xForwardedFor[] = $request->server->get('REMOTE_ADDR');
 
         return $this->client->request('GET', $uri, [
+            'buffer' => false,
             'headers' => array_filter([
                 'Accept' => $request->headers->get('Accept'),
                 'Cache-Control' => $request->headers->get('Cache-Control'),
@@ -67,24 +62,23 @@ final class HttpProxy
                 'X-Forwarded-Port' => $request->getPort(),
                 'X-Forwarded-Proto' => $request->getScheme(),
             ]),
-            'http_errors' => true,
         ]);
     }
 
     private function createResponse(ResponseInterface $backendResponse) : Response
     {
-        $stream = $backendResponse->getBody();
+        $client = $this->client;
 
         return new StreamedResponse(
-            function () use ($stream) {
+            function () use ($backendResponse, $client) {
                 if (ob_get_length()) {
                     ob_end_clean();
                 }
-                while (!$stream->eof()) {
-                    echo $stream->read(1024);
+
+                foreach ($client->stream($backendResponse) as $chunk) {
+                    echo $chunk->getContent();
                     flush();
                 }
-                $stream->close();
             },
             $backendResponse->getStatusCode()
         );
@@ -92,16 +86,20 @@ final class HttpProxy
 
     private function finishResponse(Response $response, ResponseInterface $backendResponse) : Response
     {
+        $headers = $backendResponse->getHeaders(false);
+
         $response->headers->remove('Cache-Control');
 
-        $response->headers->add(array_filter(['Cache-Control' => $backendResponse->getHeaderLine('Cache-Control'),
-            'Content-Length' => $backendResponse->getHeaderLine('Content-Length'),
-            'Content-Type' => $backendResponse->getHeaderLine('Content-Type'),
-            'Date' => $backendResponse->getHeaderLine('Date'),
-            'ETag' => $backendResponse->getHeaderLine('ETag'),
-            'Expires' => $backendResponse->getHeaderLine('Expires'),
-            'Last-Modified' => $backendResponse->getHeaderLine('Last-Modified'),
-            'Vary' => $backendResponse->getHeaderLine('Vary'), ]));
+        $response->headers->add(array_filter([
+            'Cache-Control' => $headers['cache-control'][0] ?? null,
+            'Content-Length' => $headers['content-length'][0] ?? null,
+            'Content-Type' => $headers['content-type'][0] ?? null,
+            'Date' => $headers['date'][0] ?? null,
+            'ETag' => $headers['etag'][0] ?? null,
+            'Expires' => $headers['expires'][0] ?? null,
+            'Last-Modified' => $headers['last-modified'][0] ?? null,
+            'Vary' => $headers['vary'][0] ?? null,
+        ]));
 
         return $response;
     }

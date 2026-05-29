@@ -53,7 +53,7 @@ class AppKernel extends Kernel
             new AppBundle(),
             new BobthecowMustacheBundle(),
             new CocurSlugifyBundle(),
-            new CsaGuzzleBundle(),
+//            new CsaGuzzleBundle(),
             new FrameworkBundle(),
             new IsometriksSpamBundle(),
             new KnpUOAuth2ClientBundle(),

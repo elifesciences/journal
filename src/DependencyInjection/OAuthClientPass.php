@@ -9,7 +9,7 @@ final class OAuthClientPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container)
     {
-        $container->findDefinition('knpu.oauth2.provider.elife')
-            ->addMethodCall('setHttpClient', [$container->findDefinition('csa_guzzle.client.oauth')]);
+//        $container->findDefinition('knpu.oauth2.provider.elife')
+//            ->addMethodCall('setHttpClient', [$container->findDefinition('csa_guzzle.client.oauth')]);
     }
 }

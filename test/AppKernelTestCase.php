@@ -19,7 +19,6 @@ trait AppKernelTestCase
         parent::bootKernel($options);
 
         (new Filesystem())->remove(static::$kernel->getContainer()->getParameter('api_mock'));
-        static::$kernel->getContainer()->get('cache.guzzle')->clear();
 
         return static::$kernel;
     }
@@ -37,9 +36,11 @@ trait AppKernelTestCase
 
     final protected static function mockApiResponse(RequestInterface $request, ResponseInterface $response)
     {
-        static::$kernel->getContainer()
-            ->get('elife.guzzle.middleware.mock.storage')
-            ->save($request, $response);
+        $container = static::$kernel->getContainer();
+        $container->get('framework.http_client.clients.elife_api')->save($request, $response);
+        $container->get('framework.http_client.clients.elife_api_search_page')->save($request, $response);
+        $container->get('framework.http_client.clients.streamer')->save($request, $response);
+        $container->get('framework.http_client.clients.oauth')->save($request, $response);
     }
 
     final protected function getParameter(string $parameter)

@@ -67,6 +67,10 @@ final class SubjectsController extends Controller
         $page = (int) $request->query->get('page', 1);
         $perPage = 10;
 
+        if ($page < 1) {
+            throw new NotFoundHttpException();
+        }
+
         $item = $this->get('elife.api_sdk.subjects')
             ->get($id)
             ->otherwise($this->mightNotExist())

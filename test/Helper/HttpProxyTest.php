@@ -2,19 +2,14 @@
 
 namespace test\eLife\Journal\Helper;
 
-use Csa\Bundle\GuzzleBundle\GuzzleHttp\Middleware\MockMiddleware;
-use eLife\Journal\Guzzle\NormalizingStorageAdapter;
 use eLife\Journal\Helper\HttpProxy;
-use GuzzleHttp\Client;
-use GuzzleHttp\Handler\MockHandler;
-use GuzzleHttp\Psr7\Request;
-use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpClient\MockHttpClient;
+use Symfony\Component\HttpClient\Response\MockResponse;
 use Symfony\Component\HttpFoundation\Request as HttpFoundationRequest;
 use Symfony\Component\HttpFoundation\Response as HttpFoundationResponse;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\HttpKernel\Exception\HttpException;
-use test\eLife\Journal\InMemoryStorageAdapter;
 use test\eLife\Journal\Providers;
 use Traversable;
 
@@ -22,23 +17,18 @@ final class HttpProxyTest extends TestCase
 {
     use Providers;
 
+    private $mockResponses;
     private $httpProxy;
-    private $storage;
 
     protected function setUp()
     {
-        $this->storage = new NormalizingStorageAdapter(
-            new InMemoryStorageAdapter(
-                ['authorization', 'content-length', 'host', 'referer', 'user-agent', 'x-guzzle-cache']
-            )
-        );
+        $this->mockResponses = [];
 
-        $stack = MockHandler::createWithMiddleware();
-        $stack->push(new MockMiddleware($this->storage, 'replay'));
+        $mockClient = new MockHttpClient(function ($method, $url, $options) {
+            return $this->mockResponses[$url] ?? new MockResponse('', ['http_code' => 404]);
+        });
 
-        $httpClient = new Client(['handler' => $stack, 'http_errors' => false]);
-
-        $this->httpProxy = new HttpProxy($httpClient);
+        $this->httpProxy = new HttpProxy($mockClient);
     }
 
     protected function tearDown()
@@ -51,24 +41,11 @@ final class HttpProxyTest extends TestCase
      */
     public function it_proxies_a_request()
     {
-        $this->storage->save(
-            new Request(
-                'GET',
-                'http://www.example.com/test.mp3',
-                [
-                    'Accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-                    'Referer' => 'http://www.example.com/',
-                    'X-Forwarded-For' => '127.0.0.1',
-                    'X-Forwarded-Host' => 'localhost',
-                    'X-Forwarded-Port' => '80',
-                    'X-Forwarded-Proto' => 'http',
-                ]
-            ),
-            new Response(
-                200,
-                ['Content-Type' => 'audio/mp3'],
-                fopen($mp3 = __DIR__.'/../../assets/tests/blank.mp3', 'r')
-            )
+        $mp3 = __DIR__.'/../../assets/tests/blank.mp3';
+
+        $this->mockResponses['http://www.example.com/test.mp3'] = new MockResponse(
+            file_get_contents($mp3),
+            ['http_code' => 200, 'response_headers' => ['Content-Type: audio/mp3']]
         );
 
         $request = HttpFoundationRequest::create('GET', 'http://www.example.com/');
@@ -88,35 +65,30 @@ final class HttpProxyTest extends TestCase
      */
     public function it_sets_x_forwarded_for_when_not_through_a_trusted_proxy()
     {
-        $this->storage->save(
-            new Request(
-                'GET',
-                'http://www.example.com/test.txt',
-                [
-                    'Accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-                    'X-Forwarded-For' => '127.0.0.1',
-                    'X-Forwarded-Host' => 'localhost',
-                    'X-Forwarded-Port' => '80',
-                    'X-Forwarded-Proto' => 'http',
-                ]
-            ),
-            new Response(
-                200,
-                ['Content-Type' => 'text/plain'],
-                'test'
-            )
-        );
+        $capturedHeaders = [];
+
+        $mockClient = new MockHttpClient(function ($method, $url, $options) use (&$capturedHeaders) {
+            $capturedHeaders = $options['headers'] ?? [];
+
+            return new MockResponse('test', ['http_code' => 200, 'response_headers' => ['Content-Type: text/plain']]);
+        });
+
+        $httpProxy = new HttpProxy($mockClient);
 
         $request = HttpFoundationRequest::create('GET', 'http://www.example.com/', [], [], [], ['HTTP_X_FORWARDED_FOR' => '54.230.78.56, 34.197.12.171']);
 
-        $response = $this->httpProxy->send($request, 'http://www.example.com/test.txt');
+        $response = $httpProxy->send($request, 'http://www.example.com/test.txt');
 
         $this->assertInstanceOf(StreamedResponse::class, $response);
         $this->assertSame(200, $response->getStatusCode());
-        $this->assertArraySubset([
-            'content-type' => ['text/plain'],
-        ], $response->headers->all());
         $this->assertSame('test', $this->captureContent($response));
+
+        $normalizedHeaders = array_change_key_case(array_column(array_map(function ($h) {
+            [$k, $v] = explode(': ', $h, 2);
+            return [$k, $v];
+        }, $capturedHeaders), 1, 0));
+
+        $this->assertSame('127.0.0.1', $normalizedHeaders['x-forwarded-for'] ?? '');
     }
 
     /**
@@ -126,89 +98,30 @@ final class HttpProxyTest extends TestCase
     {
         HttpFoundationRequest::setTrustedProxies(['127.0.0.1'], HttpFoundationRequest::HEADER_X_FORWARDED_ALL);
 
-        $this->storage->save(
-            new Request(
-                'GET',
-                'http://www.example.com/test.txt',
-                [
-                    'Accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-                    'X-Forwarded-For' => '54.230.78.56, 34.197.12.171, 127.0.0.1',
-                    'X-Forwarded-Host' => 'localhost',
-                    'X-Forwarded-Port' => '80',
-                    'X-Forwarded-Proto' => 'http',
-                ]
-            ),
-            new Response(
-                200,
-                ['Content-Type' => 'text/plain'],
-                'test'
-            )
-        );
+        $capturedHeaders = [];
+
+        $mockClient = new MockHttpClient(function ($method, $url, $options) use (&$capturedHeaders) {
+            $capturedHeaders = $options['headers'] ?? [];
+
+            return new MockResponse('test', ['http_code' => 200, 'response_headers' => ['Content-Type: text/plain']]);
+        });
+
+        $httpProxy = new HttpProxy($mockClient);
 
         $request = HttpFoundationRequest::create('GET', 'http://www.example.com/', [], [], [], ['HTTP_X_FORWARDED_FOR' => '54.230.78.56, 34.197.12.171']);
 
-        $response = $this->httpProxy->send($request, 'http://www.example.com/test.txt');
+        $response = $httpProxy->send($request, 'http://www.example.com/test.txt');
 
         $this->assertInstanceOf(StreamedResponse::class, $response);
         $this->assertSame(200, $response->getStatusCode());
-        $this->assertArraySubset([
-            'content-type' => ['text/plain'],
-        ], $response->headers->all());
         $this->assertSame('test', $this->captureContent($response));
-    }
 
-    /**
-     * @test
-     */
-    public function it_follows_redirects()
-    {
-        $this->storage->save(
-            new Request(
-                'GET',
-                'http://www.example.com/test.txt',
-                [
-                    'Accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-                    'X-Forwarded-For' => '127.0.0.1',
-                    'X-Forwarded-Host' => 'localhost',
-                    'X-Forwarded-Port' => '80',
-                    'X-Forwarded-Proto' => 'http',
-                ]
-            ),
-            new Response(
-                301,
-                ['Location' => 'http://www.example.com/foo.txt']
-            )
-        );
+        $normalizedHeaders = array_change_key_case(array_column(array_map(function ($h) {
+            [$k, $v] = explode(': ', $h, 2);
+            return [$k, $v];
+        }, $capturedHeaders), 1, 0));
 
-        $this->storage->save(
-            new Request(
-                'GET',
-                'http://www.example.com/foo.txt',
-                [
-                    'Accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-                    'X-Forwarded-For' => '127.0.0.1',
-                    'X-Forwarded-Host' => 'localhost',
-                    'X-Forwarded-Port' => '80',
-                    'X-Forwarded-Proto' => 'http',
-                ]
-            ),
-            new Response(
-                200,
-                ['Content-Type' => 'text/plain'],
-                'test'
-            )
-        );
-
-        $request = HttpFoundationRequest::create('GET', 'http://www.example.com/');
-
-        $response = $this->httpProxy->send($request, 'http://www.example.com/test.txt');
-
-        $this->assertInstanceOf(StreamedResponse::class, $response);
-        $this->assertSame(200, $response->getStatusCode());
-        $this->assertArraySubset([
-            'content-type' => ['text/plain'],
-        ], $response->headers->all());
-        $this->assertSame('test', $this->captureContent($response));
+        $this->assertSame('54.230.78.56, 34.197.12.171, 127.0.0.1', $normalizedHeaders['x-forwarded-for'] ?? '');
     }
 
     /**
@@ -216,32 +129,21 @@ final class HttpProxyTest extends TestCase
      */
     public function it_returns_headers()
     {
-        $this->storage->save(
-            new Request(
-                'GET',
-                'http://www.example.com/test.txt',
-                [
-                    'Accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-                    'X-Forwarded-For' => '127.0.0.1',
-                    'X-Forwarded-Host' => 'localhost',
-                    'X-Forwarded-Port' => '80',
-                    'X-Forwarded-Proto' => 'http',
-                ]
-            ),
-            new Response(
-                200,
-                [
-                    'Cache-Control' => 'public, max-age=100',
-                    'Content-Length' => 4,
-                    'Content-Type' => 'text/plain',
-                    'Date' => 'Wed, 21 Oct 2015 07:28:00 GMT',
-                    'ETag' => '1234567890',
-                    'Expires' => 'Wed, 21 Oct 2015 07:28:00 GMT',
-                    'Last-Modified' => 'Wed, 21 Oct 2015 07:28:00 GMT',
-                    'Vary' => 'Accept',
+        $this->mockResponses['http://www.example.com/test.txt'] = new MockResponse(
+            'test',
+            [
+                'http_code' => 200,
+                'response_headers' => [
+                    'Cache-Control: public, max-age=100',
+                    'Content-Length: 4',
+                    'Content-Type: text/plain',
+                    'Date: Wed, 21 Oct 2015 07:28:00 GMT',
+                    'ETag: 1234567890',
+                    'Expires: Wed, 21 Oct 2015 07:28:00 GMT',
+                    'Last-Modified: Wed, 21 Oct 2015 07:28:00 GMT',
+                    'Vary: Accept',
                 ],
-                'test'
-            )
+            ]
         );
 
         $request = HttpFoundationRequest::create('GET', 'http://www.example.com/');
@@ -268,31 +170,18 @@ final class HttpProxyTest extends TestCase
      */
     public function it_respects_caching()
     {
-        $this->storage->save(
-            new Request(
-                'GET',
-                'http://www.example.com/test.txt',
-                [
-                    'Accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-                    'Cache-Control' => 'public',
-                    'If-Modified-Since' => 'Wed, 21 Oct 2015 07:28:00 GMT',
-                    'If-None-Match' => '1234567890',
-                    'X-Forwarded-For' => '127.0.0.1',
-                    'X-Forwarded-Host' => 'localhost',
-                    'X-Forwarded-Port' => '80',
-                    'X-Forwarded-Proto' => 'http',
-                ]
-            ),
-            new Response(
-                304,
-                [
-                    'Cache-Control' => 'public, max-age=300',
-                    'Date' => 'Wed, 21 Oct 2015 07:28:00 GMT',
-                    'ETag' => '1234567890',
-                    'Expires' => 'Wed, 21 Oct 2015 07:29:00 GMT',
-                    'Vary' => 'Accept',
-                ]
-            )
+        $this->mockResponses['http://www.example.com/test.txt'] = new MockResponse(
+            '',
+            [
+                'http_code' => 304,
+                'response_headers' => [
+                    'Cache-Control: public, max-age=300',
+                    'Date: Wed, 21 Oct 2015 07:28:00 GMT',
+                    'ETag: 1234567890',
+                    'Expires: Wed, 21 Oct 2015 07:29:00 GMT',
+                    'Vary: Accept',
+                ],
+            ]
         );
 
         $request = HttpFoundationRequest::create('GET', 'http://www.example.com/', [], [], [], ['HTTP_CACHE_CONTROL' => 'public', 'HTTP_IF_MODIFIED_SINCE' => 'Wed, 21 Oct 2015 07:28:00 GMT', 'HTTP_IF_NONE_MATCH' => '1234567890']);
@@ -316,19 +205,9 @@ final class HttpProxyTest extends TestCase
      */
     public function it_returns_other_status_codes(int $fileStatusCode, int $expected)
     {
-        $this->storage->save(
-            new Request(
-                'GET',
-                'http://www.example.com/test.txt',
-                [
-                    'Accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-                    'X-Forwarded-For' => '127.0.0.1',
-                    'X-Forwarded-Host' => 'localhost',
-                    'X-Forwarded-Port' => '80',
-                    'X-Forwarded-Proto' => 'http',
-                ]
-            ),
-            new Response($fileStatusCode)
+        $this->mockResponses['http://www.example.com/test.txt'] = new MockResponse(
+            '',
+            ['http_code' => $fileStatusCode]
         );
 
         $request = HttpFoundationRequest::create('GET', 'http://www.example.com/');

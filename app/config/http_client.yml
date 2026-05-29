@@ -20,4 +20,6 @@ framework:
             oauth:
                 timeout: '%api_timeout_slow%'
             streamer:
+                # TODO I don't think stream option exists
                 stream: true
+                buffer: false

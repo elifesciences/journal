@@ -6,12 +6,10 @@ use eLife\ApiClient\HttpClient;
 use eLife\ApiClient\MediaType;
 use eLife\ApiClient\Result\HttpResult;
 use GuzzleHttp\Promise\PromiseInterface;
+use GuzzleHttp\Psr7\Query;
+use GuzzleHttp\Psr7\Utils;
 use InvalidArgumentException;
 use Psr\Http\Message\RequestInterface;
-use function GuzzleHttp\json_decode;
-use function GuzzleHttp\json_encode;
-use function GuzzleHttp\Psr7\parse_query;
-use function GuzzleHttp\Psr7\stream_for;
 
 final class SubjectRewritingHttpClient implements HttpClient
 {
@@ -43,9 +41,10 @@ final class SubjectRewritingHttpClient implements HttpClient
     private function rewriteRequest(RequestInterface $request) : RequestInterface
     {
         $uri = $request->getUri();
+        $path = '/'.ltrim($uri->getPath(), '/');
 
         foreach ($this->replacements as $replaced => $replacement) {
-            switch ($uri->getPath()) {
+            switch ($path) {
                 case "/highlights/{$replaced}":
                     $uri = $uri->withPath("/highlights/{$replacement['id']}");
                     break;
@@ -55,7 +54,7 @@ final class SubjectRewritingHttpClient implements HttpClient
             }
         }
 
-        $query = parse_query($request->getUri()->getQuery());
+        $query = Query::parse($request->getUri()->getQuery());
         if (!empty($query['subject[]'])) {
             $subjects = array_flip((array) $query['subject[]']);
 
@@ -77,8 +76,12 @@ final class SubjectRewritingHttpClient implements HttpClient
 
         try {
             $mediaType = MediaType::fromString($response->getHeaderLine('Content-Type'));
-            $data = json_decode((string) $response->getBody(), true);
         } catch (InvalidArgumentException $e) {
+            return $result;
+        }
+
+        $data = json_decode((string) $response->getBody(), true);
+        if (!is_array($data)) {
             return $result;
         }
 
@@ -164,7 +167,7 @@ final class SubjectRewritingHttpClient implements HttpClient
                 return $result;
         }
 
-        return HttpResult::fromResponse($response->withBody(stream_for(json_encode($data))));
+        return HttpResult::fromResponse($response->withBody(Utils::streamFor(json_encode($data))));
     }
 
     private function updateItems(array $items) : array

@@ -65,12 +65,11 @@ final class ElifeAuthenticator extends SocialAuthenticator
             $this->removeTargetPath($request->getSession(), $providerKey);
 
             try {
-                $targetPath = new Uri($targetPath);
+                $uri = new Uri($targetPath);
+                if (!Uri::isAbsolute($uri)) {
+                    $targetPath = null;
+                }
             } catch (InvalidArgumentException $e) {
-                $targetPath = null;
-            }
-
-            if ($targetPath && !Uri::isAbsolute($targetPath)) {
                 $targetPath = null;
             }
         }

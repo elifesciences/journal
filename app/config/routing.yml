@@ -484,9 +484,9 @@ who-we-work-with:
 ping:
     path: /ping
     defaults:
-         _controller: AppBundle:Status:ping
+         _controller: elife.journal.status_controller:pingAction
 
 status:
     path: /status
     defaults:
-         _controller: AppBundle:Status:status
+         _controller: elife.journal.status_controller:statusAction

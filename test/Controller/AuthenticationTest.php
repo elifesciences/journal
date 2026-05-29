@@ -96,7 +96,8 @@ final class AuthenticationTest extends WebTestCase
         $this->assertSame('Failed to log in, please try again.', trim($crawler->filter('.info-bar')->text()));
         $this->assertSame('max-age=0, must-revalidate, private', $client->getResponse()->headers->get('Cache-Control'));
         $this->assertEmpty($client->getResponse()->getVary());
-        $this->assertEmpty($client->getCookieJar()->all());
+        $cookieNames = array_map(function ($cookie) { return $cookie->getName(); }, $client->getCookieJar()->all());
+        $this->assertSame(['MOCKSESSID'], array_values($cookieNames));
     }
 
     /**

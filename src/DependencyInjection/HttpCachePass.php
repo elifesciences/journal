@@ -8,15 +8,21 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 final class HttpCachePass implements CompilerPassInterface
 {
-    private static $packages = ['guzzlehttp/psr7', 'kevinrob/guzzle-cache-middleware'];
+
+    #TODO rewrite
+    private static $packages = ['guzzlehttp/psr7'];
 
     public function process(ContainerBuilder $container)
     {
-        $definition = $container->findDefinition('cache.guzzle');
+        $definition = $container->findDefinition('cache.http');
 
         $tags = $definition->getTags();
 
-        $namespace = crc32(implode(',', [$container->getParameter('kernel.instance')] + array_map(Versions::class.'::getVersion', self::$packages)));
+        $namespace = crc32(
+            implode(',', [
+                    $container->getParameter('kernel.instance')] + array_map(Versions::class . '::getVersion', self::$packages)
+            )
+        );
 
         // Make updates to a library invalidate the cache.
         $tags['cache.pool'][0]['namespace'] = "http-$namespace";

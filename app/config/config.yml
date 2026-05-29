@@ -21,40 +21,40 @@ bobthecow_mustache:
 cocur_slugify:
     strip_tags: true
 
-csa_guzzle:
-    clients:
-        elife_api:
-            config:
-                base_uri: '%api_url%'
-                connect_timeout: '%api_connect_timeout%'
-                headers:
-                    Authorization: '%api_key%'
-                timeout: '%api_timeout%'
-        elife_api_search_page:
-            config:
-                base_uri: '%api_url_search_page%'
-                connect_timeout: '%api_connect_timeout_slow%'
-                headers:
-                    Authorization: '%api_key%'
-                timeout: '%api_timeout_slow%'
-        elife_crm:
-            config:
-                base_uri: '%crm_url%'
-                connect_timeout: '%api_connect_timeout_slow%'
-                timeout: '%api_timeout_slow%'
-        elife_crm_api:
-            config:
-                base_uri: '%crm_api_url%'
-                connect_timeout: '%api_connect_timeout_slow%'
-                timeout: '%api_timeout_slow%'
-        oauth:
-            config:
-                connect_timeout: '%api_connect_timeout_slow%'
-                timeout: '%api_timeout_slow%'
-        streamer:
-            config:
-                connect_timeout: '%api_connect_timeout%'
-                stream: true
+#csa_guzzle:
+#    clients:
+#        elife_api:
+#            config:
+#                base_uri: '%api_url%'
+#                connect_timeout: '%api_connect_timeout%'
+#                headers:
+#                    Authorization: '%api_key%'
+#                timeout: '%api_timeout%'
+#        elife_api_search_page:
+#            config:
+#                base_uri: '%api_url_search_page%'
+#                connect_timeout: '%api_connect_timeout_slow%'
+#                headers:
+#                    Authorization: '%api_key%'
+#                timeout: '%api_timeout_slow%'
+#        elife_crm:
+#            config:
+#                base_uri: '%crm_url%'
+#                connect_timeout: '%api_connect_timeout_slow%'
+#                timeout: '%api_timeout_slow%'
+#        elife_crm_api:
+#            config:
+#                base_uri: '%crm_api_url%'
+#                connect_timeout: '%api_connect_timeout_slow%'
+#                timeout: '%api_timeout_slow%'
+#        oauth:
+#            config:
+#                connect_timeout: '%api_connect_timeout_slow%'
+#                timeout: '%api_timeout_slow%'
+#        streamer:
+#            config:
+#                connect_timeout: '%api_connect_timeout%'
+#                stream: true
 
 framework:
     assets:
@@ -66,7 +66,7 @@ framework:
                 adapter: cache.app
                 default_lifetime: 31536000 # 1 year
                 public: true
-            cache.guzzle:
+            cache.http:
                 adapter: cache.app
                 clearer: ~
                 default_lifetime: 31536000 # 1 year
@@ -93,6 +93,7 @@ isometriks_spam:
         message: Please try submitting the form again.
 
 knpu_oauth2_client:
+    http_client: elife.journal.security.oauth.guzzle_adapter
     clients:
         elife:
             type: generic

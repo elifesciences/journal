@@ -2,10 +2,6 @@ imports:
   - resource: config.yml
   - resource: services_dev.yml
 
-csa_guzzle:
-    profiler:
-        enabled: true
-
 framework:
     profiler: ~
     router:
