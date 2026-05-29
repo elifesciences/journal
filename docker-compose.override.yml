@@ -44,9 +44,6 @@ services:
             - /srv/journal/var
             - build:/srv/journal/build
             - critical_css:/srv/journal/build/critical-css
-
-            - ../api-sdk-php:/srv/journal/vendor/elife/api-sdk
-            - ../patterns-php:/srv/journal/vendor/elife/patterns
     web:
         volumes:
             - assets:/srv/journal/web
