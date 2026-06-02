@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4e018f07a119b7e0d69b312bfcf22a99",
+    "content-hash": "06e91687c8c76edf21869b8fe71adfea",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -1374,16 +1374,16 @@
         },
         {
             "name": "elife/patterns",
-            "version": "dev-master",
+            "version": "dev-mathjax-fix-inline-division-bug",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/patterns-php.git",
-                "reference": "88cd867b64893a3df0d0f0bbd02306c7359aaf6d"
+                "reference": "da78ec8e98d92cbca546b3db6c4b4a7c75fe836a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/88cd867b64893a3df0d0f0bbd02306c7359aaf6d",
-                "reference": "88cd867b64893a3df0d0f0bbd02306c7359aaf6d",
+                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/da78ec8e98d92cbca546b3db6c4b4a7c75fe836a",
+                "reference": "da78ec8e98d92cbca546b3db6c4b4a7c75fe836a",
                 "shasum": ""
             },
             "require": {
@@ -1406,7 +1406,6 @@
             "suggest": {
                 "twig/twig": "^2.0, to use PatternExtension"
             },
-            "default-branch": true,
             "type": "library",
             "autoload": {
                 "files": [
@@ -1422,9 +1421,9 @@
             ],
             "description": "eLife patterns",
             "support": {
-                "source": "https://github.com/elifesciences/patterns-php/tree/master"
+                "source": "https://github.com/elifesciences/patterns-php/tree/mathjax-fix-inline-division-bug"
             },
-            "time": "2026-05-27T09:05:43+00:00"
+            "time": "2026-06-02T08:54:32+00:00"
         },
         {
             "name": "fabpot/goutte",
