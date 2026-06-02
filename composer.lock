@@ -1378,12 +1378,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/patterns-php.git",
-                "reference": "da78ec8e98d92cbca546b3db6c4b4a7c75fe836a"
+                "reference": "ef5e0d94f87a40f6cce422086cdea3b80ca847bf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/da78ec8e98d92cbca546b3db6c4b4a7c75fe836a",
-                "reference": "da78ec8e98d92cbca546b3db6c4b4a7c75fe836a",
+                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/ef5e0d94f87a40f6cce422086cdea3b80ca847bf",
+                "reference": "ef5e0d94f87a40f6cce422086cdea3b80ca847bf",
                 "shasum": ""
             },
             "require": {
@@ -1423,7 +1423,7 @@
             "support": {
                 "source": "https://github.com/elifesciences/patterns-php/tree/mathjax-fix-inline-division-bug"
             },
-            "time": "2026-06-02T08:54:32+00:00"
+            "time": "2026-06-02T11:00:38+00:00"
         },
         {
             "name": "fabpot/goutte",
