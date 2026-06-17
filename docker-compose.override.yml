@@ -31,7 +31,6 @@ services:
             dockerfile: Dockerfile.xdebug
             args:
                 image_tag: ${IMAGE_TAG}
-                php_version: ${PHP_VERSION}
         environment:
             - APP_ENV=${APP_ENV}
             - XDEBUG_MODE=debug

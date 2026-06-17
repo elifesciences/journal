@@ -34,7 +34,6 @@ services:
             context: .
             args:
                 image_tag: ${IMAGE_TAG}
-                php_version: ${PHP_VERSION}
         environment:
             - API_URL=${API_URL}
             - API_URL_SEARCH_PAGE=${API_URL_SEARCH_PAGE:-${API_URL}}
