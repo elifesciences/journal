@@ -76,7 +76,7 @@ final class MagazineController extends Controller
                 null,
                 'Highlighting the latest research and giving a voice to scientists'
             ))->withSignupLink(new Link(
-                'Sign up to eLife Magazine Highlights Alerts',
+                'Sign up to eLife Magazine Highlights',
                 'https://connect.elifesciences.org/magazine-highlights'
             ))
             : $this->get('elife.api_sdk.podcast_episodes')
@@ -139,8 +139,8 @@ final class MagazineController extends Controller
             new Link(ModelName::plural('feature'), $this->get('router')->generate('article-type', ['type' => 'feature'])),
             new Link(ModelName::plural('podcast-episode'), $this->get('router')->generate('podcast')),
             new Link(ModelName::plural('collection'), $this->get('router')->generate('collections')),
-            new Link('Community', $this->get('router')->generate('community')),
             new Link('Digests', $this->get('router')->generate('digests')),
+            new Link(ModelName::plural('interview'), $this->get('router')->generate('interviews')),
         ];
 
         $arguments['menu'] = new SectionListing('sections', $menu, new ListHeading('Magazine sections'), true);
