@@ -41,8 +41,8 @@ final class MagazineControllerTest extends PageTestCase
         $this->assertSame('Feature Articles', trim($sections->eq(2)->text()));
         $this->assertSame('Podcasts', trim($sections->eq(3)->text()));
         $this->assertSame('Collections', trim($sections->eq(4)->text()));
-        $this->assertSame('Community', trim($sections->eq(5)->text()));
-        $this->assertSame('Digests', trim($sections->eq(6)->text()));
+        $this->assertSame('Digests', trim($sections->eq(5)->text()));
+        $this->assertSame('Interviews', trim($sections->eq(6)->text()));
     }
 
     /**
