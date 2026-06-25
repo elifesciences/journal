@@ -92,40 +92,29 @@ final class MagazineController extends Controller
                 ))->withAudioPlayer($audioPlayer);
             });
 
-        // Feature flag for the hero highlight
-        if ($request->query->has('new')) {
-            $currentHighlights = $this->get('elife.api_sdk.highlights')
-                ->getCurrent('magazine')
-                ->map($this->willConvertTo(HighlightItem::class)); // calls HighlightHighlightItemConverter class
+        $currentHighlights = $this->get('elife.api_sdk.highlights')
+            ->getCurrent('magazine')
+            ->map($this->willConvertTo(HighlightItem::class)); // calls HighlightHighlightItemConverter class
 
-            $heroHighlightItem = null;
-            if ($currentHighlights->count() === 4) {
-                // Setting the first highlight as the heroHighlightItem
-                $heroHighlightItem = $currentHighlights[0];
-                // Setting the rest of the highlights
-                $highlightItems = $currentHighlights->slice(1, 3);
-            } else {
-                // Setting the highlights as usual
-                $highlightItems = $currentHighlights;
-            }
-
-            $arguments['highlights'] = $currentHighlights->then(
-                Callback::emptyOr(
-                    function () use ($highlightItems, $heroHighlightItem) {
-                        return new Highlight($highlightItems->toArray(), null, $heroHighlightItem);
-                    }
-                )
-            )->otherwise($this->softFailure('Failed to load highlights for magazine'));
+        $heroHighlightItem = null;
+        if ($currentHighlights->count() === 4) {
+            // Setting the first highlight as the heroHighlightItem
+            $heroHighlightItem = $currentHighlights[0];
+            // Setting the rest of the highlights
+            $highlightItems = $currentHighlights->slice(1, 3);
         } else {
-            $arguments['highlights'] = $this->get('elife.api_sdk.highlights')
-                ->get('magazine')
-                ->slice(0, 6)
-                ->map($this->willConvertTo(Teaser::class, ['variant' => 'secondary']))
-                ->then(Callback::emptyOr(function (Sequence $highlights) {
-                    return ListingTeasers::forHighlights($highlights->toArray(), new ListHeading('Highlights'), 'highlights');
-                }))
-                ->otherwise($this->softFailure('Failed to load highlights for magazine'));
+            // Setting the highlights as usual
+            $highlightItems = $currentHighlights;
         }
+
+        $arguments['highlights'] = $currentHighlights->then(
+            Callback::emptyOr(
+                function () use ($highlightItems, $heroHighlightItem) {
+                    return new Highlight($highlightItems->toArray(), null, $heroHighlightItem);
+                }
+            )
+        )->otherwise($this->softFailure('Failed to load highlights for magazine'));
+
 
         $events = $this->get('elife.api_sdk.events')
             ->show('open')
