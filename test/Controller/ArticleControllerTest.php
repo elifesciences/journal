@@ -5613,7 +5613,7 @@ final class ArticleControllerTest extends PageTestCase
             [],
             [
                 'Version of Record',
-                'May 3, 2023Read the peer reviews',
+                'May 3, 2023 Read the peer reviews',
             ],
         ];
         yield 'preprint only' => [
@@ -5627,7 +5627,7 @@ final class ArticleControllerTest extends PageTestCase
             ],
             [
                 'Version of Record',
-                'May 3, 2023Read the peer reviews',
+                'May 3, 2023 Read the peer reviews',
             ],
         ];
         yield 'reviewed preprint only' => [
@@ -5641,7 +5641,7 @@ final class ArticleControllerTest extends PageTestCase
             ],
             [
                 'Version of Record',
-                'May 3, 2023Read the peer reviews',
+                'May 3, 2023 Read the peer reviews',
                 'Reviewed Preprint',
                 'February 16, 2023',
             ],
@@ -5663,7 +5663,7 @@ final class ArticleControllerTest extends PageTestCase
             ],
             [
                 'Version of Record',
-                'May 3, 2023Read the peer reviews',
+                'May 3, 2023 Read the peer reviews',
                 'Reviewed Preprint',
                 'v2 February 17, 2023',
                 'Reviewed Preprint',
@@ -5699,7 +5699,7 @@ final class ArticleControllerTest extends PageTestCase
             ],
             [
                 'Version of Record',
-                'May 3, 2023Read the peer reviews',
+                'May 3, 2023 Read the peer reviews',
                 'Reviewed Preprint',
                 'v3 February 18, 2023',
                 'Reviewed Preprint',
@@ -5737,7 +5737,7 @@ final class ArticleControllerTest extends PageTestCase
             ],
             [
                 'Version of Record',
-                'May 3, 2023Read the peer reviews',
+                'May 3, 2023 Read the peer reviews',
                 'Reviewed Preprint',
                 'v3 February 18, 2023',
                 'Reviewed Preprint',

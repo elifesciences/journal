@@ -1628,8 +1628,7 @@ final class ArticlesController extends Controller
                                     $versionLabel
                                     : sprintf('<a href="%s">%s</a>', $this->generatePath($history, $articleVersion->getVersion()), $versionLabel)
                         ),
-                        sprintf(
-                            '%s %s',
+                        implode(' ', array_filter([
                             $articleVersion->getVersionDate() ?
                                 sprintf(
                                     '<time datetime="%s">%s</time>',
@@ -1640,8 +1639,8 @@ final class ArticlesController extends Controller
                                 sprintf(
                                     '<a href="%s">Read the peer reviews</a>',
                                     $this->generatePath($history, $item->getVersion(), 'peer-reviews', 'content')
-                                ) : ''
-                            ),
+                                ) : '',
+                        ])),
                         $isLastVor ? 'vor': '',
                         $articleVersion->getVersion() === $item->getVersion()
                     );
