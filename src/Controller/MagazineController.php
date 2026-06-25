@@ -83,20 +83,16 @@ final class MagazineController extends Controller
             ->getCurrent('magazine')
             ->map($this->willConvertTo(HighlightItem::class)); // calls HighlightHighlightItemConverter class
 
-        $heroHighlightItem = null;
-        if ($currentHighlights->count() === 4) {
-            // Setting the first highlight as the heroHighlightItem
-            $heroHighlightItem = $currentHighlights[0];
-            // Setting the rest of the highlights
-            $highlightItems = $currentHighlights->slice(1, 3);
-        } else {
-            // Setting the highlights as usual
-            $highlightItems = $currentHighlights;
-        }
-
         $arguments['highlights'] = $currentHighlights->then(
             Callback::emptyOr(
-                function () use ($highlightItems, $heroHighlightItem) {
+                function () use ($currentHighlights) {
+                    $heroHighlightItem = null;
+                    if ($currentHighlights->count() === 4) {
+                        $heroHighlightItem = $currentHighlights[0];
+                        $highlightItems = $currentHighlights->slice(1, 3);
+                    } else {
+                        $highlightItems = $currentHighlights;
+                    }
                     return new Highlight($highlightItems->toArray(), null, $heroHighlightItem);
                 }
             )
