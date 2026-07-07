@@ -267,14 +267,14 @@ final class ArticlesController extends Controller
             'bioprotocols' => $bioprotocols
         ])->then(function (array $parts) {
                 $context = [];
-                if ($parts['hasFigures']) {
-                    $context['figuresUri'] = $this->generatePath($parts['history'], $parts['item']->getVersion(), 'figures');
-                }
+            if ($parts['hasFigures']) {
+                $context['figuresUri'] = $this->generatePath($parts['history'], $parts['item']->getVersion(), 'figures');
+            }
 
                 $context['bioprotocols'] = $parts['bioprotocols'];
 
                 return $context;
-            });
+        });
 
         $arguments = $this->contentAsideArguments($arguments, true);
 
@@ -310,295 +310,295 @@ final class ArticlesController extends Controller
 
                 $parts = [];
 
-                if ($isMagazine && $item->getAuthors()->notEmpty()) {
-                    $parts[] = $this->convertTo($item, ViewModel\Authors::class);
-                }
+            if ($isMagazine && $item->getAuthors()->notEmpty()) {
+                $parts[] = $this->convertTo($item, ViewModel\Authors::class);
+            }
 
                 $first = true;
 
-                if (!$isMagazine && $item->getAbstract()) {
-                    $parts[] = ArticleSection::collapsible(
-                        'abstract',
-                        'Abstract',
-                        2,
-                        $this->render(...$this->convertContent($item->getAbstract(), 2, $context)),
-                        null,
-                        null,
-                        false,
-                        $first,
-                        $item->getAbstract()->getDoi() ? new Doi($item->getAbstract()->getDoi()) : null
-                    );
+            if (!$isMagazine && $item->getAbstract()) {
+                $parts[] = ArticleSection::collapsible(
+                    'abstract',
+                    'Abstract',
+                    2,
+                    $this->render(...$this->convertContent($item->getAbstract(), 2, $context)),
+                    null,
+                    null,
+                    false,
+                    $first,
+                    $item->getAbstract()->getDoi() ? new Doi($item->getAbstract()->getDoi()) : null
+                );
 
-                    $first = false;
+                $first = false;
+            }
+
+            if ($item instanceof ArticleVoR && $item->getEditorEvaluation()) {
+                // Editor's evaluation should feel connected to abstract and not be collapsible
+                $first = true;
+                $relatedLinks = [];
+
+                if ($item->getDecisionLetter()) {
+                    $relatedLinks[] = new Link('Decision letter', $this->get('router')->generate('article', ['id' => $item->getId(), '_fragment' => $item->getDecisionLetter()->getId() ?? 'decision-letter']));
                 }
 
-                if ($item instanceof ArticleVoR && $item->getEditorEvaluation()) {
-                    // Editor's evaluation should feel connected to abstract and not be collapsible
-                    $first = true;
-                    $relatedLinks = [];
-
-                    if ($item->getDecisionLetter()) {
-                        $relatedLinks[] = new Link('Decision letter', $this->get('router')->generate('article', ['id' => $item->getId(), '_fragment' => $item->getDecisionLetter()->getId() ?? 'decision-letter']));
-                    }
-
-                    if ($item->getEditorEvaluationScietyUri()) {
-                        $relatedLinks[] = new Link('Reviews on Sciety', $item->getEditorEvaluationScietyUri());
-                    }
-
-                    $relatedLinks[] = new Link('eLife\'s review process', $this->get('router')->generate('about-pubpub', ['type'=> 'peer-review']));
-
-                    $parts[] = ArticleSection::collapsible(
-                        $item->getEditorEvaluation()->getId() ?? 'editor-evaluation',
-                        'Editor\'s evaluation',
-                        2,
-                        $this->render(...$this->convertContent($item->getEditorEvaluation(), 2, $context)),
-                        $relatedLinks,
-                        ArticleSection::STYLE_HIGHLIGHTED,
-                        false,
-                        $first,
-                        $item->getEditorEvaluation()->getDoi() ? new Doi($item->getEditorEvaluation()->getDoi()) : null
-                    );
-
-                    $first = false;
+                if ($item->getEditorEvaluationScietyUri()) {
+                    $relatedLinks[] = new Link('Reviews on Sciety', $item->getEditorEvaluationScietyUri());
                 }
 
-                if ($item instanceof ArticleVoR && $item->getDigest()) {
-                    $parts[] = ArticleSection::collapsible(
-                        'digest',
-                        'eLife digest',
-                        2,
-                        $this->render(...$this->convertContent($item->getDigest(), 2, $context)),
-                        null,
-                        null,
-                        false,
-                        $first,
-                        $item->getDigest()->getDoi() ? new Doi($item->getDigest()->getDoi()) : null
-                    );
+                $relatedLinks[] = new Link('eLife\'s review process', $this->get('router')->generate('about-pubpub', ['type'=> 'peer-review']));
 
-                    $first = false;
-                }
+                $parts[] = ArticleSection::collapsible(
+                    $item->getEditorEvaluation()->getId() ?? 'editor-evaluation',
+                    'Editor\'s evaluation',
+                    2,
+                    $this->render(...$this->convertContent($item->getEditorEvaluation(), 2, $context)),
+                    $relatedLinks,
+                    ArticleSection::STYLE_HIGHLIGHTED,
+                    false,
+                    $first,
+                    $item->getEditorEvaluation()->getDoi() ? new Doi($item->getEditorEvaluation()->getDoi()) : null
+                );
+
+                $first = false;
+            }
+
+            if ($item instanceof ArticleVoR && $item->getDigest()) {
+                $parts[] = ArticleSection::collapsible(
+                    'digest',
+                    'eLife digest',
+                    2,
+                    $this->render(...$this->convertContent($item->getDigest(), 2, $context)),
+                    null,
+                    null,
+                    false,
+                    $first,
+                    $item->getDigest()->getDoi() ? new Doi($item->getDigest()->getDoi()) : null
+                );
+
+                $first = false;
+            }
 
                 $isInitiallyClosed = false;
 
-                if ($item instanceof ArticleVoR) {
-                    $parts = array_merge($parts, $item->getContent()->map(function (Block\Section $section) use (&$first, &$isInitiallyClosed, $isMagazine, $context) {
-                        $section = ($isMagazine && $first) ?
-                            ArticleSection::basic(
-                                $this->render(...$this->convertContent($section, 2, $context)),
-                                null,
-                                null,
-                                $section->getId(),
-                                null,
-                                null,
-                                null,
-                                $first
-                            ) :
-                            ArticleSection::collapsible(
-                                $section->getId(),
-                                $section->getTitle(),
-                                2,
-                                $this->render(...$this->convertContent($section, 2, $context)),
-                                null,
-                                null,
-                                $isInitiallyClosed,
-                                $first
-                            );
+            if ($item instanceof ArticleVoR) {
+                $parts = array_merge($parts, $item->getContent()->map(function (Block\Section $section) use (&$first, &$isInitiallyClosed, $isMagazine, $context) {
+                    $section = ($isMagazine && $first) ?
+                        ArticleSection::basic(
+                            $this->render(...$this->convertContent($section, 2, $context)),
+                            null,
+                            null,
+                            $section->getId(),
+                            null,
+                            null,
+                            null,
+                            $first
+                        ) :
+                        ArticleSection::collapsible(
+                            $section->getId(),
+                            $section->getTitle(),
+                            2,
+                            $this->render(...$this->convertContent($section, 2, $context)),
+                            null,
+                            null,
+                            $isInitiallyClosed,
+                            $first
+                        );
 
-                        $first = false;
-                        $isInitiallyClosed = true;
+                    $first = false;
+                    $isInitiallyClosed = true;
 
-                        return $section;
-                    })->toArray());
-                }
+                    return $section;
+                })->toArray());
+            }
 
                 $parts[] = SpeechBubble::forArticleBody();
 
-                if ($item instanceof ArticleVoR) {
-                    $parts = array_merge($parts, $item->getAppendices()->map(function (Appendix $appendix) use ($context) {
-                        return ArticleSection::collapsible($appendix->getId(), $appendix->getTitle(), 2,
-                            $this->render(...$this->convertContent($appendix, 2, $context)),
-                            null, null, true, false, $appendix->getDoi() ? new Doi($appendix->getDoi()) : null);
-                    })->toArray());
-                }
+            if ($item instanceof ArticleVoR) {
+                $parts = array_merge($parts, $item->getAppendices()->map(function (Appendix $appendix) use ($context) {
+                    return ArticleSection::collapsible($appendix->getId(), $appendix->getTitle(), 2,
+                        $this->render(...$this->convertContent($appendix, 2, $context)),
+                        null, null, true, false, $appendix->getDoi() ? new Doi($appendix->getDoi()) : null);
+                })->toArray());
+            }
 
-                if ($data->notEmpty()) {
-                    $parts[] = ArticleSection::collapsible('data', 'Data availability', 2, $this->render(...$data), null, null, false, $first);
-                }
+            if ($data->notEmpty()) {
+                $parts[] = ArticleSection::collapsible('data', 'Data availability', 2, $this->render(...$data), null, null, false, $first);
+            }
 
-                if ($item instanceof ArticleVoR && $item->getReferences()->notEmpty()) {
-                    $parts[] = ArticleSection::collapsible(
-                        'references',
-                        'References',
-                        2,
-                        $this->render($this->convertTo($item, ViewModel\ReferenceList::class)),
-                        null,
-                        null,
-                        true
-                    );
-                }
+            if ($item instanceof ArticleVoR && $item->getReferences()->notEmpty()) {
+                $parts[] = ArticleSection::collapsible(
+                    'references',
+                    'References',
+                    2,
+                    $this->render($this->convertTo($item, ViewModel\ReferenceList::class)),
+                    null,
+                    null,
+                    true
+                );
+            }
 
-                if ($item->getType() === 'feature' && $item instanceof ArticleVoR && $item->getDecisionLetter()) {
-                    $parts[] = ArticleSection::collapsible(
-                        $item->getDecisionLetter()->getId() ?? 'decision-letter',
-                        'Decision letter',
-                        2,
-                        $this->render($this->convertTo($item, ViewModel\DecisionLetterHeader::class)).
-                        $this->render(...$this->convertContent($item->getDecisionLetter(), 2, $context)),
-                        null,
-                        null,
-                        true,
-                        $first,
-                        $item->getDecisionLetter()->getDoi() ? new Doi($item->getDecisionLetter()->getDoi()) : null
-                    );
+            if ($item->getType() === 'feature' && $item instanceof ArticleVoR && $item->getDecisionLetter()) {
+                $parts[] = ArticleSection::collapsible(
+                    $item->getDecisionLetter()->getId() ?? 'decision-letter',
+                    'Decision letter',
+                    2,
+                    $this->render($this->convertTo($item, ViewModel\DecisionLetterHeader::class)).
+                    $this->render(...$this->convertContent($item->getDecisionLetter(), 2, $context)),
+                    null,
+                    null,
+                    true,
+                    $first,
+                    $item->getDecisionLetter()->getDoi() ? new Doi($item->getDecisionLetter()->getDoi()) : null
+                );
 
-                    $first = false;
-                }
+                $first = false;
+            }
 
-                if ($item->getType() === 'feature' && $item instanceof ArticleVoR && $item->getAuthorResponse()) {
-                    $parts[] = ArticleSection::collapsible(
-                        $item->getAuthorResponse()->getId() ?? 'author-response',
-                        'Author response',
-                        2,
-                        $this->render(...$this->convertContent($item->getAuthorResponse(), 2, $context)),
-                        null,
-                        null,
-                        true,
-                        $first,
-                        $item->getAuthorResponse()->getDoi() ? new Doi($item->getAuthorResponse()->getDoi()) : null
-                    );
-                }
+            if ($item->getType() === 'feature' && $item instanceof ArticleVoR && $item->getAuthorResponse()) {
+                $parts[] = ArticleSection::collapsible(
+                    $item->getAuthorResponse()->getId() ?? 'author-response',
+                    'Author response',
+                    2,
+                    $this->render(...$this->convertContent($item->getAuthorResponse(), 2, $context)),
+                    null,
+                    null,
+                    true,
+                    $first,
+                    $item->getAuthorResponse()->getDoi() ? new Doi($item->getAuthorResponse()->getDoi()) : null
+                );
+            }
 
                 $infoSections = [];
 
                 $realAuthors = $item->getAuthors()->filter(Callback::isInstanceOf(Author::class));
 
-                if ($realAuthors->notEmpty()) {
-                    $infoSections[] = new ViewModel\AuthorsDetails(
-                        ...$realAuthors->map($this->willConvertTo(null, ['authors' => $realAuthors]))
-                    );
-                }
+            if ($realAuthors->notEmpty()) {
+                $infoSections[] = new ViewModel\AuthorsDetails(
+                    ...$realAuthors->map($this->willConvertTo(null, ['authors' => $realAuthors]))
+                );
+            }
 
-                if ($item->getFunding()) {
-                    $funding = $item->getFunding()->getAwards()
-                        ->map(function (FundingAward $award) {
-                            $title = $award->getSource()->getPlace()->toString();
-                            $headerLink = null;
+            if ($item->getFunding()) {
+                $funding = $item->getFunding()->getAwards()
+                    ->map(function (FundingAward $award) {
+                        $title = $award->getSource()->getPlace()->toString();
+                        $headerLink = null;
 
-                            if ($award->getAwardDoi()) {
-                                $headerLinkDoi = "https://doi.org/{$award->getAwardDoi()}";
-                                $headerLink = new ViewModel\Link(
-                                    $headerLinkDoi,
-                                    $headerLinkDoi
-                                );
-                            } else if ($award->getAwardId()) {
-                                $title .= ' ('.$award->getAwardId().')';
-                            }
-
-                            $recipients = $award->getRecipients()->notEmpty() ? $award->getRecipients()
-                                ->map(Callback::method('toString'))
-                                ->toArray() : ['No recipients declared.'];
-
-                            $body = Listing::unordered(
-                                $recipients,
-                                'bullet'
+                        if ($award->getAwardDoi()) {
+                            $headerLinkDoi = "https://doi.org/{$award->getAwardDoi()}";
+                            $headerLink = new ViewModel\Link(
+                                $headerLinkDoi,
+                                $headerLinkDoi
                             );
-
-                            return ArticleSection::basic($this->render($body), $title, 4, null, null, null, null, false, $headerLink);
-                        })->toArray();
-
-                    $funding[] = new Paragraph($item->getFunding()->getStatement());
-
-                    $infoSections[] = ArticleSection::basic($this->render(...$funding), 'Funding', 3);
-                }
-
-                if ($item instanceof ArticleVoR && $item->getAcknowledgements()->notEmpty()) {
-                    $infoSections[] = ArticleSection::basic(
-                        $this->render(...$item->getAcknowledgements()->map($this->willConvertTo(null, ['level' => 3]))),
-                        'Acknowledgements',
-                        3
-                    );
-                }
-
-                if (!$item->getReviewers()->isEmpty() && !$this->hasPeerReview($item, $isMagazine, $history)->wait()) {
-                    $roles = $item->getReviewers()
-                        ->reduce(function (array $roles, Reviewer $reviewer) {
-                            $entry = $reviewer->getPreferredName();
-
-                            foreach ($reviewer->getAffiliations() as $affiliation) {
-                                $entry .= ", {$affiliation->toString()}";
-                            }
-
-                            $roles[$reviewer->getRole()][] = $entry;
-
-                            return $roles;
-                        }, []);
-
-                    uksort($roles, function (string $a, string $b) : int {
-                        if (false !== stripos($a, 'Senior')) {
-                            return -1;
-                        }
-                        if (false !== stripos($b, 'Senior')) {
-                            return 1;
-                        }
-                        if (false !== stripos($a, 'Editor')) {
-                            return -1;
-                        }
-                        if (false !== stripos($b, 'Editor')) {
-                            return 1;
+                        } else if ($award->getAwardId()) {
+                            $title .= ' ('.$award->getAwardId().')';
                         }
 
-                        return 0;
-                    });
+                        $recipients = $award->getRecipients()->notEmpty() ? $award->getRecipients()
+                            ->map(Callback::method('toString'))
+                            ->toArray() : ['No recipients declared.'];
 
-                    foreach ($roles as $role => $reviewers) {
-                        if (count($reviewers) > 2) {
-                            $role = "${role}s";
-                        }
-
-                        $infoSections[] = ArticleSection::basic(
-                            $this->render(Listing::ordered($reviewers)),
-                            $role,
-                            3
+                        $body = Listing::unordered(
+                            $recipients,
+                            'bullet'
                         );
-                    }
-                }
 
-                if ($item->getEthics()->notEmpty()) {
+                        return ArticleSection::basic($this->render($body), $title, 4, null, null, null, null, false, $headerLink);
+                    })->toArray();
+
+                $funding[] = new Paragraph($item->getFunding()->getStatement());
+
+                $infoSections[] = ArticleSection::basic($this->render(...$funding), 'Funding', 3);
+            }
+
+            if ($item instanceof ArticleVoR && $item->getAcknowledgements()->notEmpty()) {
+                $infoSections[] = ArticleSection::basic(
+                    $this->render(...$item->getAcknowledgements()->map($this->willConvertTo(null, ['level' => 3]))),
+                    'Acknowledgements',
+                    3
+                );
+            }
+
+            if (!$item->getReviewers()->isEmpty() && !$this->hasPeerReview($item, $isMagazine, $history)->wait()) {
+                $roles = $item->getReviewers()
+                    ->reduce(function (array $roles, Reviewer $reviewer) {
+                        $entry = $reviewer->getPreferredName();
+
+                        foreach ($reviewer->getAffiliations() as $affiliation) {
+                            $entry .= ", {$affiliation->toString()}";
+                        }
+
+                        $roles[$reviewer->getRole()][] = $entry;
+
+                        return $roles;
+                    }, []);
+
+                uksort($roles, function (string $a, string $b) : int {
+                    if (false !== stripos($a, 'Senior')) {
+                        return -1;
+                    }
+                    if (false !== stripos($b, 'Senior')) {
+                        return 1;
+                    }
+                    if (false !== stripos($a, 'Editor')) {
+                        return -1;
+                    }
+                    if (false !== stripos($b, 'Editor')) {
+                        return 1;
+                    }
+
+                    return 0;
+                });
+
+                foreach ($roles as $role => $reviewers) {
+                    if (count($reviewers) > 2) {
+                        $role = "${role}s";
+                    }
+
                     $infoSections[] = ArticleSection::basic(
-                        $this->render(...$item->getEthics()->map($this->willConvertTo(null, ['level' => 3]))),
-                        'Ethics',
+                        $this->render(Listing::ordered($reviewers)),
+                        $role,
                         3
                     );
                 }
+            }
 
-                if ($item instanceof ArticleVoR && (
+            if ($item->getEthics()->notEmpty()) {
+                $infoSections[] = ArticleSection::basic(
+                    $this->render(...$item->getEthics()->map($this->willConvertTo(null, ['level' => 3]))),
+                    'Ethics',
+                    3
+                );
+            }
+
+            if ($item instanceof ArticleVoR && (
                         $item->isReviewedPreprint() ||
                         in_array($item->getType(), ['feature', 'correction', 'expression-concern', 'retraction']) ||
                         $isMagazine)
                     ) {
-                    $publicationHistory = $this->generatePublicationHistoryForNewVor($history);
-                    $publicationHistoryTitle = ($isMagazine || 'feature' === $item->getType()) ? 'Publication history' : 'Version history';
-                    $infoSections[] = ArticleSection::basic(
-                        $this->render(
-                            Listing::ordered($publicationHistory, 'bullet')
-                        ),
-                        $publicationHistoryTitle,
-                        3
-                    );
-                }
+                $publicationHistory = $this->generatePublicationHistoryForNewVor($history);
+                $publicationHistoryTitle = ($isMagazine || 'feature' === $item->getType()) ? 'Publication history' : 'Version history';
+                $infoSections[] = ArticleSection::basic(
+                    $this->render(
+                        Listing::ordered($publicationHistory, 'bullet')
+                    ),
+                    $publicationHistoryTitle,
+                    3
+                );
+            }
 
-                if ($item instanceof ArticleVoR && $item->isReviewedPreprint()) {
-                    $infoSections[] = ArticleSection::basic(
-                        sprintf('<p>You can cite all versions using the DOI  <a href="https://doi.org/%s">https://doi.org/%s</a>. This DOI represents all versions, and will always resolve to the latest one.</p>', $item->getDoi(), $item->getDoi()),
-                        'Cite all versions', 3
-                    );
-                }
+            if ($item instanceof ArticleVoR && $item->isReviewedPreprint()) {
+                $infoSections[] = ArticleSection::basic(
+                    sprintf('<p>You can cite all versions using the DOI  <a href="https://doi.org/%s">https://doi.org/%s</a>. This DOI represents all versions, and will always resolve to the latest one.</p>', $item->getDoi(), $item->getDoi()),
+                    'Cite all versions', 3
+                );
+            }
 
                 $copyright = '<p>'.$item->getCopyright()->getStatement().'</p>';
 
-                if ($item->getCopyright()->getHolder()) {
-                    $copyright = sprintf('<p>© %s, %s</p>', 2011 + $item->getVolume(), $item->getCopyright()->getHolder()).$copyright;
-                }
+            if ($item->getCopyright()->getHolder()) {
+                $copyright = sprintf('<p>© %s, %s</p>', 2011 + $item->getVolume(), $item->getCopyright()->getHolder()).$copyright;
+            }
 
                 $infoSections[] = ArticleSection::basic($copyright, 'Copyright', 3, 'copyright');
 
@@ -612,21 +612,21 @@ final class ArticlesController extends Controller
                     true
                 );
 
-                if ($pageViews || $downloads || $citations) {
-                    $metrics = $this->buildMetrics($citationsForAllVersions, $item, $pageViews, $downloads, $citations)->wait();
-                    $parts[] = ArticleSection::collapsible(
-                        'metrics',
-                        'Metrics',
-                        2,
-                        $this->render(...$metrics),
-                        null,
-                        null,
-                        true
-                    );
-                }
+            if ($pageViews || $downloads || $citations) {
+                $metrics = $this->buildMetrics($citationsForAllVersions, $item, $pageViews, $downloads, $citations)->wait();
+                $parts[] = ArticleSection::collapsible(
+                    'metrics',
+                    'Metrics',
+                    2,
+                    $this->render(...$metrics),
+                    null,
+                    null,
+                    true
+                );
+            }
 
                 return $parts;
-            });
+        });
 
         $arguments['viewSelector'] = $this->createViewSelector(
             $arguments['item'],
@@ -1139,7 +1139,6 @@ final class ArticlesController extends Controller
                         $arguments['eraArticle'],
                         promise_for(true)
                     );
-
             });
 
         $arguments = $this->contentAsideArguments($arguments);
