@@ -260,8 +260,12 @@ final class ArticlesController extends Controller
             ->otherwise($this->mightNotExist())
             ->otherwise($this->softFailure('Failed to load bioprotocols', []));
 
-        $context = all(['item' => $arguments['item'], 'history' => $arguments['history'], 'hasFigures' => $arguments['hasFigures'], 'bioprotocols' => $bioprotocols])
-            ->then(function (array $parts) {
+        $context = all([
+            'item' => $arguments['item'],
+            'history' => $arguments['history'],
+            'hasFigures' => $arguments['hasFigures'],
+            'bioprotocols' => $bioprotocols
+        ])->then(function (array $parts) {
                 $context = [];
                 if ($parts['hasFigures']) {
                     $context['figuresUri'] = $this->generatePath($parts['history'], $parts['item']->getVersion(), 'figures');
@@ -274,8 +278,17 @@ final class ArticlesController extends Controller
 
         $arguments = $this->contentAsideArguments($arguments, true);
 
-        $arguments['body'] = all(['item' => $arguments['item'], 'isMagazine' => $arguments['isMagazine'], 'history' => $arguments['history'], 'citations' => $arguments['citations'], 'allVersionCitations' => $arguments['citationsForAllVersions'], 'downloads' => $arguments['downloads'], 'pageViews' => $arguments['pageViews'], 'data' => $arguments['hasData'], 'context' => $context])
-            ->then(function (array $parts) {
+        $arguments['body'] = all([
+            'item' => $arguments['item'],
+            'isMagazine' => $arguments['isMagazine'],
+            'history' => $arguments['history'],
+            'citations' => $arguments['citations'],
+            'allVersionCitations' => $arguments['citationsForAllVersions'],
+            'downloads' => $arguments['downloads'],
+            'pageViews' => $arguments['pageViews'],
+            'data' => $arguments['hasData'],
+            'context' => $context]
+        )->then(function (array $parts) {
                 /** @var ArticleVersion $item */
                 $item = $parts['item'];
                 /** @var bool $isMagazine */
@@ -615,9 +628,27 @@ final class ArticlesController extends Controller
                 return $parts;
             });
 
-        $arguments['viewSelector'] = $this->createViewSelector($arguments['item'], $arguments['isMagazine'], $arguments['hasFigures'], false, $arguments['history'], $arguments['body'], $arguments['eraArticle']);
+        $arguments['viewSelector'] = $this->createViewSelector(
+            $arguments['item'],
+            $arguments['isMagazine'],
+            $arguments['hasFigures'],
+            false,
+            $arguments['history'],
+            $arguments['body'],
+            $arguments['eraArticle'],
+            $arguments['hasPeerReview']
+        );
 
-        $arguments['tabbedNavigation'] = $this->createTabbedNavigation($arguments['item'], $arguments['isMagazine'], $arguments['hasFigures'], 'fullText', $arguments['history'], $arguments['body'], $arguments['eraArticle'], $arguments['hasPeerReview']);
+        $arguments['tabbedNavigation'] = $this->createTabbedNavigation(
+            $arguments['item'],
+            $arguments['isMagazine'],
+            $arguments['hasFigures'],
+            'fullText',
+            $arguments['history'],
+            $arguments['body'],
+            $arguments['eraArticle'],
+            $arguments['hasPeerReview']
+        );
 
         $arguments['assessmentBlock'] = all(['item' => $arguments['item'], 'context' => $context])
             ->then(function (array $parts) {
@@ -812,6 +843,17 @@ final class ArticlesController extends Controller
             ->then(Callback::mustNotBeEmpty(new NotFoundHttpException('Article version does not contain any figures or data')));
 
         $arguments['tabbedNavigation'] = $this->createTabbedNavigation($arguments['item'], $arguments['isMagazine'], promise_for(true), 'figures', $arguments['history'], $arguments['body'], $arguments['eraArticle'], $arguments['hasPeerReview']);
+
+        $arguments['viewSelector'] = $this->createViewSelector(
+            $arguments['item'],
+            $arguments['isMagazine'],
+            promise_for(false),
+            true,
+            $arguments['history'],
+            $arguments['body'],
+            $arguments['eraArticle'],
+            $arguments['hasPeerReview']
+        );
 
         $arguments['jumpMenu'] = $this->createJumpMenu($arguments['item'], $arguments['isMagazine'], promise_for(true), true, $arguments['history'], $arguments['body'], $arguments['eraArticle']);
 
@@ -1072,6 +1114,33 @@ final class ArticlesController extends Controller
         $arguments['tabbedNavigation'] = $this->createTabbedNavigation($arguments['item'], $arguments['isMagazine'], $arguments['hasFigures'], 'peerReviews', $arguments['history'], $arguments['body'], $arguments['eraArticle'], promise_for(true));
 
         $arguments['jumpMenu'] = $this->createJumpMenu($arguments['item'], $arguments['isMagazine'], promise_for(true), true, $arguments['history'], $arguments['body'], $arguments['eraArticle']);
+
+        // View Selector (left side menu in page) for peer reviews page on a feature article
+        $arguments['viewSelector'] =  all([
+            'item' => $arguments['item'],
+            'body' => $arguments['body'],
+            'downloadLinks' => $arguments['downloadLinks'],
+            'isMagazine' => $arguments['isMagazine'],
+            'history' => $arguments['history'],
+            'hasFigures' => $arguments['hasFigures'],
+            'eraArticle' => $arguments['eraArticle'],
+        ])
+            ->then(function (array $parts) use ($arguments) {
+                if ($parts['item']->getType() !== 'feature') {
+                    return null;
+                }
+                    return $this->createViewSelector(
+                        $arguments['item'],
+                        $arguments['isMagazine'],
+                        $arguments['hasFigures'],
+                        false,
+                        $arguments['history'],
+                        $arguments['body'],
+                        $arguments['eraArticle'],
+                        promise_for(true)
+                    );
+
+            });
 
         $arguments = $this->contentAsideArguments($arguments);
 
@@ -1516,10 +1585,26 @@ final class ArticlesController extends Controller
             });
     }
 
-    private function createViewSelector(PromiseInterface $item, PromiseInterface $isMagazine, PromiseInterface $hasFigures, bool $isFiguresPage, PromiseInterface $history, PromiseInterface $sections, array $eraArticle) : PromiseInterface
+    private function createViewSelector(
+        PromiseInterface $item,
+        PromiseInterface $isMagazine,
+        PromiseInterface $hasFigures,
+        bool $isFiguresPage,
+        PromiseInterface $history,
+        PromiseInterface $sections,
+        array $eraArticle,
+        PromiseInterface $hasPeerReview
+    ) : PromiseInterface
     {
-        return all(['item' => $item, 'isMagazine' => $isMagazine, 'hasFigures' => $hasFigures, 'history' => $history, 'sections' => $sections])
-            ->then(function (array $sections) use ($isFiguresPage, $eraArticle) {
+        return all([
+            'item' => $item,
+            'isMagazine' => $isMagazine,
+            'hasFigures' => $hasFigures,
+            'history' => $history,
+            'sections' => $sections,
+            'hasPeerReview' => $hasPeerReview,
+        ])
+            ->then(function (array $sections) use ($isFiguresPage, $eraArticle, $hasPeerReview) {
 
                 $item = $sections['item'];
                 $hasFigures = $sections['hasFigures'];
@@ -1552,6 +1637,13 @@ final class ArticlesController extends Controller
                     $otherLinks[] = new Link(
                         'Executable code',
                         $this->get('router')->generate('article-era', ['id' => $item->getId()])
+                    );
+                }
+
+                if ($hasPeerReview) {
+                    $otherLinks [] = new Link(
+                       'Peer review',
+                        $this->generatePath($history, $item->getVersion(), 'peer-reviews', 'content')
                     );
                 }
 
