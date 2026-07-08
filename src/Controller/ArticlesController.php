@@ -1639,13 +1639,6 @@ final class ArticlesController extends Controller
                     );
                 }
 
-                if ($hasPeerReview) {
-                    $otherLinks [] = new Link(
-                       'Peer review',
-                        $this->generatePath($history, $item->getVersion(), 'peer-reviews', 'content')
-                    );
-                }
-
                 return new ViewSelector(
                     new Link('Article', $this->generatePath($history, $item->getVersion(), null, 'content')),
                     array_values(array_filter(array_map(function (ViewModel $viewModel) {
