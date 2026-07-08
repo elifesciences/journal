@@ -34,8 +34,6 @@ services:
                 php_version: ${PHP_VERSION}
         environment:
             - APP_ENV=${APP_ENV}
-            - XDEBUG_MODE=debug
-            - XDEBUG_CONFIG=client_host=host.docker.internal
             - PHP_IDE_CONFIG=serverName=DockerApp
         volumes:
             - ./:/srv/journal
