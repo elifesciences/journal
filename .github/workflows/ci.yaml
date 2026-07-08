@@ -64,6 +64,9 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Build container image
         run: |
+          # Build base images first
+          docker compose -f docker-compose.yml -f docker-compose.ci.yml build composer npm composer-dev
+          
           # Build all images
           docker compose -f docker-compose.yml -f docker-compose.ci.yml build
 
