@@ -2911,6 +2911,10 @@ final class ArticleControllerTest extends PageTestCase
                         '/articles/79595/figures#content',
                     ],
                     [
+                        'Peer review',
+                        '/articles/79595/peer-reviews#content'
+                    ],
+                    [
                         'Abstract',
                         '#abstract',
                     ],
