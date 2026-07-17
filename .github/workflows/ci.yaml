@@ -48,7 +48,7 @@ jobs:
   build-and-push:
     runs-on: ubuntu-latest
     needs: [generate-date, tests]
-    if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop' || startsWith('refs/heads/feature-', github.ref)
+    if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop' || startsWith(github.ref, 'refs/heads/feature-')
     env:
       CONTAINER_REPO: ghcr.io/elifesciences/journal
       CONTAINER_TAG: ${{ github.head_ref || github.ref_name }}-${{ github.sha }}-${{ needs.generate-date.outputs.date }}
