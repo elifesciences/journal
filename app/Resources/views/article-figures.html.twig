@@ -9,6 +9,12 @@
     {% embed 'grid/content-new.html.twig' %}
 
         {% block navigation %}
+
+            {% if viewSelector is defined and viewSelector is not null %}
+
+                {{ render_pattern(viewSelector) }}
+
+            {% endif %}
         
             {% if tabbedNavigation %}
 

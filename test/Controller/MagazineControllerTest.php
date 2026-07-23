@@ -18,7 +18,7 @@ final class MagazineControllerTest extends PageTestCase
         $crawler = $client->request('GET', $this->getUrl());
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
-        $this->assertSame('Magazine', $crawler->filter('.content-header__title')->text());
+        $this->assertSame('eLife Magazine', $crawler->filter('.content-header__title')->text());
         $this->assertContains('No articles available.', $crawler->filter('main')->text());
     }
 
@@ -41,8 +41,8 @@ final class MagazineControllerTest extends PageTestCase
         $this->assertSame('Feature Articles', trim($sections->eq(2)->text()));
         $this->assertSame('Podcasts', trim($sections->eq(3)->text()));
         $this->assertSame('Collections', trim($sections->eq(4)->text()));
-        $this->assertSame('Community', trim($sections->eq(5)->text()));
-        $this->assertSame('Digests', trim($sections->eq(6)->text()));
+        $this->assertSame('Digests', trim($sections->eq(5)->text()));
+        $this->assertSame('Interviews', trim($sections->eq(6)->text()));
     }
 
     /**
@@ -62,10 +62,10 @@ final class MagazineControllerTest extends PageTestCase
         $this->assertSame('Magazine', $crawler->filter('meta[property="og:title"]')->attr('content'));
         $this->assertSame('Highlighting the latest research and giving a voice to scientists', $crawler->filter('meta[property="og:description"]')->attr('content'));
         $this->assertSame('Highlighting the latest research and giving a voice to scientists', $crawler->filter('meta[name="description"]')->attr('content'));
-        $this->assertSame('summary_large_image', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
-        $this->assertSame('http://localhost/'.ltrim(self::$kernel->getContainer()->get('elife.assets.packages')->getUrl('assets/images/banners/magazine-1114x336@1.jpg'), '/'), $crawler->filter('meta[property="og:image"]')->attr('content'));
-        $this->assertSame('1114', $crawler->filter('meta[property="og:image:width"]')->attr('content'));
-        $this->assertSame('336', $crawler->filter('meta[property="og:image:height"]')->attr('content'));
+        $this->assertSame('summary', $crawler->filter('meta[name="twitter:card"]')->attr('content'));
+        $this->assertSame('http://localhost/'.ltrim(self::$kernel->getContainer()->get('elife.assets.packages')->getUrl('assets/images/social/icon-600x600@1.png'), '/'), $crawler->filter('meta[property="og:image"]')->attr('content'));
+        $this->assertSame('600', $crawler->filter('meta[property="og:image:width"]')->attr('content'));
+        $this->assertSame('600', $crawler->filter('meta[property="og:image:height"]')->attr('content'));
         $this->assertSame('application/rss+xml', $crawler->filter('link[rel="alternate"]')->attr('type'));
         $this->assertSame('Insights into science from eLife', $crawler->filter('link[rel="alternate"]')->attr('title'));
         $this->assertSame('/rss/magazine.xml', $crawler->filter('link[rel="alternate"]')->attr('href'));
@@ -123,6 +123,19 @@ final class MagazineControllerTest extends PageTestCase
 
     protected function getUrl() : string
     {
+        $this->mockApiResponse(
+            new Request(
+                'GET',
+                'http://api.elifesciences.org/highlights/magazine/current',
+                ['Accept' => 'application/vnd.elife.highlight-list+json; version=3']
+            ),
+            new Response(
+                200,
+                ['Content-Type' => 'application/vnd.elife.highlight-list+json; version=3'],
+                json_encode(['total' => 0, 'items' => []])
+            )
+        );
+
         $this->mockApiResponse(
             new Request(
                 'GET',

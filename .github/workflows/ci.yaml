@@ -10,6 +10,8 @@ on:
   push:
     branches:
       - master
+      - develop
+      - feature-*
 
 jobs:
   generate-date:
@@ -46,7 +48,7 @@ jobs:
   build-and-push:
     runs-on: ubuntu-latest
     needs: [generate-date, tests]
-    if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop'
+    if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop' || startsWith(github.ref, 'refs/heads/feature-')
     env:
       CONTAINER_REPO: ghcr.io/elifesciences/journal
       CONTAINER_TAG: ${{ github.head_ref || github.ref_name }}-${{ github.sha }}-${{ needs.generate-date.outputs.date }}
@@ -64,6 +66,9 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Build container image
         run: |
+          # Build base images first 
+          docker compose -f docker-compose.yml -f docker-compose.ci.yml build composer npm composer-dev
+          
           # Build all images
           docker compose -f docker-compose.yml -f docker-compose.ci.yml build
 
