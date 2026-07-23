@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "554de7b2af730626ab0fbcd331eecaeb",
+    "content-hash": "f9b57da0394f930a807d97656c83eac9",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -187,16 +187,16 @@
         },
         {
             "name": "composer/ca-bundle",
-            "version": "1.5.12",
+            "version": "1.5.13",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/ca-bundle.git",
-                "reference": "00a2f4201641d5c53f7fc0195e6c8d9fcc321a78"
+                "reference": "c008272789979f709f7fcb32c2ecf1d2db5e84e5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/ca-bundle/zipball/00a2f4201641d5c53f7fc0195e6c8d9fcc321a78",
-                "reference": "00a2f4201641d5c53f7fc0195e6c8d9fcc321a78",
+                "url": "https://api.github.com/repos/composer/ca-bundle/zipball/c008272789979f709f7fcb32c2ecf1d2db5e84e5",
+                "reference": "c008272789979f709f7fcb32c2ecf1d2db5e84e5",
                 "shasum": ""
             },
             "require": {
@@ -243,7 +243,7 @@
             "support": {
                 "irc": "irc://irc.freenode.org/composer",
                 "issues": "https://github.com/composer/ca-bundle/issues",
-                "source": "https://github.com/composer/ca-bundle/tree/1.5.12"
+                "source": "https://github.com/composer/ca-bundle/tree/1.5.13"
             },
             "funding": [
                 {
@@ -255,7 +255,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-05-19T11:26:22+00:00"
+            "time": "2026-07-18T12:35:13+00:00"
         },
         {
             "name": "composer/package-versions-deprecated",
@@ -328,6 +328,7 @@
                     "type": "tidelift"
                 }
             ],
+            "abandoned": true,
             "time": "2021-05-24T07:46:03+00:00"
         },
         {
@@ -400,72 +401,6 @@
                 }
             ],
             "time": "2022-01-04T15:47:30+00:00"
-        },
-        {
-            "name": "csa/guzzle-bundle",
-            "version": "v2.2.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/csarrazi/CsaGuzzleBundle.git",
-                "reference": "bbe54641ad6171dc562034f2824f7c18cec80ca4"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/csarrazi/CsaGuzzleBundle/zipball/bbe54641ad6171dc562034f2824f7c18cec80ca4",
-                "reference": "bbe54641ad6171dc562034f2824f7c18cec80ca4",
-                "shasum": ""
-            },
-            "require": {
-                "guzzlehttp/guzzle": "^6.1",
-                "php": ">=5.5.0",
-                "symfony/dependency-injection": "^2.7|^3.0",
-                "symfony/filesystem": "^2.7|^3.0",
-                "symfony/framework-bundle": "^2.7|^3.0",
-                "twig/twig": "^1.12|^2.0"
-            },
-            "require-dev": {
-                "doctrine/cache": "^1.1",
-                "namshi/cuzzle": "^2.0",
-                "phpunit/phpunit": "^4.8",
-                "psr/cache": "^1.0",
-                "symfony/phpunit-bridge": "^2.7|^3.0",
-                "symfony/web-profiler-bundle": "^2.3|^3.0"
-            },
-            "suggest": {
-                "doctrine/cache": "Allows caching of responses",
-                "namshi/cuzzle": "Output command to repeat request in command line",
-                "psr/cache": "Allows caching of responses",
-                "tolerance/tolerance": "Allows retrying failed requests"
-            },
-            "type": "symfony-bundle",
-            "extra": {
-                "branch-alias": {
-                    "dev-2.x": "2.3-dev",
-                    "dev-master": "3.0-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Csa\\Bundle\\GuzzleBundle\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "Apache-2.0"
-            ],
-            "authors": [
-                {
-                    "name": "Charles Sarrazin",
-                    "email": "charles@sarraz.in"
-                }
-            ],
-            "description": "A bundle integrating GuzzleHttp >= 4.0",
-            "support": {
-                "issues": "https://github.com/csarrazi/CsaGuzzleBundle/issues",
-                "source": "https://github.com/csarrazi/CsaGuzzleBundle/tree/2.x"
-            },
-            "abandoned": "symfony/http-client",
-            "time": "2017-03-27T07:49:26+00:00"
         },
         {
             "name": "cweagans/composer-patches",
@@ -1540,62 +1475,17 @@
             "time": "2026-04-24T14:22:49+00:00"
         },
         {
-            "name": "elife/civi-contacts",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/elifesciences/civi-contacts.git",
-                "reference": "c20fa23d4c0cf7cdac67bc19ecae0c7c2d3e65f1"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/civi-contacts/zipball/c20fa23d4c0cf7cdac67bc19ecae0c7c2d3e65f1",
-                "reference": "c20fa23d4c0cf7cdac67bc19ecae0c7c2d3e65f1",
-                "shasum": ""
-            },
-            "require": {
-                "guzzlehttp/guzzle": "^6.5",
-                "guzzlehttp/promises": "^1.5",
-                "php": "^7.1"
-            },
-            "require-dev": {
-                "mockery/mockery": "^1.3",
-                "phpunit/phpunit": "^7.5",
-                "squizlabs/php_codesniffer": "^3.6"
-            },
-            "suggest": {
-                "laravel-zero/framework": "Required to use the console (^5.8)."
-            },
-            "default-branch": true,
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "eLife\\CiviContacts\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "support": {
-                "issues": "https://github.com/elifesciences/civi-contacts/issues",
-                "source": "https://github.com/elifesciences/civi-contacts/tree/master"
-            },
-            "abandoned": true,
-            "time": "2024-04-12T01:07:21+00:00"
-        },
-        {
             "name": "elife/patterns",
             "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/patterns-php.git",
-                "reference": "d2a5b4ba4b835eec8ffa9ac3fafb4086685ead19"
+                "reference": "68938eabece3dadbcb64d26180d79207852d6782"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/d2a5b4ba4b835eec8ffa9ac3fafb4086685ead19",
-                "reference": "d2a5b4ba4b835eec8ffa9ac3fafb4086685ead19",
+                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/68938eabece3dadbcb64d26180d79207852d6782",
+                "reference": "68938eabece3dadbcb64d26180d79207852d6782",
                 "shasum": ""
             },
             "require": {
@@ -1636,7 +1526,7 @@
             "support": {
                 "source": "https://github.com/elifesciences/patterns-php/tree/master"
             },
-            "time": "2026-05-05T14:31:27+00:00"
+            "time": "2026-06-27T13:59:44+00:00"
         },
         {
             "name": "fabpot/goutte",
@@ -2335,89 +2225,6 @@
             "time": "2020-09-14T15:31:16+00:00"
         },
         {
-            "name": "kevinrob/guzzle-cache-middleware",
-            "version": "v3.5.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/Kevinrob/guzzle-cache-middleware.git",
-                "reference": "c699f4623a7be6c92468876a1b2404d499a4f22f"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/Kevinrob/guzzle-cache-middleware/zipball/c699f4623a7be6c92468876a1b2404d499a4f22f",
-                "reference": "c699f4623a7be6c92468876a1b2404d499a4f22f",
-                "shasum": ""
-            },
-            "require": {
-                "guzzlehttp/guzzle": "^6.0 || ^7.0",
-                "guzzlehttp/psr7": "^1.7.0 || ^2.0.0",
-                "php": ">=5.5.0"
-            },
-            "require-dev": {
-                "cache/array-adapter": "^0.4 || ^0.5 || ^1.0",
-                "cache/simple-cache-bridge": "^0.1 || ^1.0",
-                "doctrine/cache": "^1.0",
-                "illuminate/cache": "^5.0",
-                "league/flysystem": "^1.0",
-                "phpunit/phpunit": "^4.8.36 || ^5.0",
-                "psr/cache": "^1.0",
-                "symfony/phpunit-bridge": "^4.4 || ^5.0"
-            },
-            "suggest": {
-                "doctrine/cache": "This library has a lot of ready-to-use cache storage (to be used with Kevinrob\\GuzzleCache\\Storage\\DoctrineCacheStorage).",
-                "guzzlehttp/guzzle": "For using this library. It was created for Guzzle6 (but you can use it with any PSR-7 HTTP client).",
-                "laravel/framework": "To be used with Kevinrob\\GuzzleCache\\Storage\\LaravelCacheStorage",
-                "league/flysystem": "To be used with Kevinrob\\GuzzleCache\\Storage\\FlysystemStorage",
-                "psr/cache": "To be used with Kevinrob\\GuzzleCache\\Storage\\Psr6CacheStorage",
-                "psr/simple-cache": "To be used with Kevinrob\\GuzzleCache\\Storage\\Psr16CacheStorage"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Kevinrob\\GuzzleCache\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Kevin Robatel",
-                    "email": "kevinrob2@gmail.com",
-                    "homepage": "https://github.com/Kevinrob"
-                }
-            ],
-            "description": "A HTTP/1.1 Cache for Guzzle 6. It's a simple Middleware to be added in the HandlerStack. (RFC 7234)",
-            "homepage": "https://github.com/Kevinrob/guzzle-cache-middleware",
-            "keywords": [
-                "Etag",
-                "Flysystem",
-                "Guzzle",
-                "cache",
-                "cache-control",
-                "doctrine",
-                "expiration",
-                "guzzle6",
-                "handler",
-                "http",
-                "http 1.1",
-                "middleware",
-                "performance",
-                "php",
-                "promise",
-                "psr6",
-                "psr7",
-                "rfc7234",
-                "validation"
-            ],
-            "support": {
-                "issues": "https://github.com/Kevinrob/guzzle-cache-middleware/issues",
-                "source": "https://github.com/Kevinrob/guzzle-cache-middleware/tree/v3.5.0"
-            },
-            "time": "2022-01-04T16:40:46+00:00"
-        },
-        {
             "name": "knpuniversity/oauth2-client-bundle",
             "version": "v1.34.0",
             "source": {
@@ -2941,16 +2748,16 @@
         },
         {
             "name": "phpseclib/phpseclib",
-            "version": "3.0.52",
+            "version": "3.0.55",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpseclib/phpseclib.git",
-                "reference": "2adaefc83df2ec548558307690f376dd7d4f4fce"
+                "reference": "db9744e6d47e742b1f974e965ad49bdd041105af"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/2adaefc83df2ec548558307690f376dd7d4f4fce",
-                "reference": "2adaefc83df2ec548558307690f376dd7d4f4fce",
+                "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/db9744e6d47e742b1f974e965ad49bdd041105af",
+                "reference": "db9744e6d47e742b1f974e965ad49bdd041105af",
                 "shasum": ""
             },
             "require": {
@@ -3031,7 +2838,7 @@
             ],
             "support": {
                 "issues": "https://github.com/phpseclib/phpseclib/issues",
-                "source": "https://github.com/phpseclib/phpseclib/tree/3.0.52"
+                "source": "https://github.com/phpseclib/phpseclib/tree/3.0.55"
             },
             "funding": [
                 {
@@ -3047,7 +2854,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-04-27T07:02:15+00:00"
+            "time": "2026-06-14T23:24:10+00:00"
         },
         {
             "name": "psr/cache",
@@ -3936,16 +3743,16 @@
         },
         {
             "name": "symfony/polyfill-intl-idn",
-            "version": "v1.37.0",
+            "version": "v1.38.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-intl-idn.git",
-                "reference": "9614ac4d8061dc257ecc64cba1b140873dce8ad3"
+                "reference": "dc21118016c039a66235cf93d96b435ffb282412"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-intl-idn/zipball/9614ac4d8061dc257ecc64cba1b140873dce8ad3",
-                "reference": "9614ac4d8061dc257ecc64cba1b140873dce8ad3",
+                "url": "https://api.github.com/repos/symfony/polyfill-intl-idn/zipball/dc21118016c039a66235cf93d96b435ffb282412",
+                "reference": "dc21118016c039a66235cf93d96b435ffb282412",
                 "shasum": ""
             },
             "require": {
@@ -3999,7 +3806,7 @@
                 "shim"
             ],
             "support": {
-                "source": "https://github.com/symfony/polyfill-intl-idn/tree/v1.37.0"
+                "source": "https://github.com/symfony/polyfill-intl-idn/tree/v1.38.1"
             },
             "funding": [
                 {
@@ -4019,7 +3826,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-09-10T14:38:51+00:00"
+            "time": "2026-05-25T15:22:23+00:00"
         },
         {
             "name": "symfony/polyfill-intl-normalizer",
@@ -6048,7 +5855,6 @@
                     "type": "github"
                 }
             ],
-            "abandoned": true,
             "time": "2021-07-26T12:15:06+00:00"
         },
         {
@@ -6236,7 +6042,6 @@
                     "type": "github"
                 }
             ],
-            "abandoned": true,
             "time": "2024-03-01T13:45:45+00:00"
         },
         {
@@ -7158,14 +6963,14 @@
     "stability-flags": {
         "elife/api-client": 20,
         "elife/api-sdk": 20,
-        "elife/civi-contacts": 20,
         "elife/patterns": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": "^7.1",
-        "ext-hash": "*"
+        "php": "^7.3",
+        "ext-hash": "*",
+        "ext-json": "*"
     },
     "platform-dev": {},
     "platform-overrides": {
