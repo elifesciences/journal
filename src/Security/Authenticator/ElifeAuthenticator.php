@@ -74,7 +74,7 @@ final class ElifeAuthenticator extends SocialAuthenticator
             }
         }
 
-        return $this->httpUtils->createRedirectResponse($request, $targetPath ?? 'home');
+        return $this->httpUtils->createRedirectResponse($request, $targetPath ?? '/');
     }
 
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception) : Response

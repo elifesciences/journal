@@ -126,7 +126,6 @@ services:
           - '@elife.api_client.client.subject_rewriting.inner'
           - '%subject_rewrites%'
 
-
     elife.api_sdk:
         class: eLife\ApiSdk\ApiSdk
         public: false
