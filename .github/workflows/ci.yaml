@@ -35,7 +35,7 @@ jobs:
         with:
           version: v2.29.7
       - name: Bring up test stack
-        run: docker compose -f docker-compose.yml -f docker-compose.ci.yml up -d
+        run: docker compose -f docker-compose.yml -f docker-compose.ci.yml up --build -d app web api_dummy redis selenium
       - name: Debug bring up test stack
         if: failure()
         run: docker compose logs
@@ -78,6 +78,10 @@ jobs:
 
           # Rebuild app now we have new CSS
           docker compose -f docker-compose.yml -f docker-compose.ci.yml build app
+
+          # Run smoke tests
+          docker compose -f docker-compose.yml -f docker-compose.ci.yml exec app ./smoke_tests.sh
+          ./smoke_tests.sh localhost 8080
 
           # Retag and push
           docker image tag elifesciences/journal:develop ${CONTAINER_REPO}:${CONTAINER_TAG}
