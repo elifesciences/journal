@@ -6,6 +6,7 @@ use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\Query;
 use GuzzleHttp\Psr7\Uri;
+use PHPUnit\Framework\Attributes\Test;
 use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Component\DomCrawler\Crawler;
 
@@ -15,9 +16,7 @@ final class BrowseControllerTest extends PageTestCase
 
     
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_displays_the_browse_page()
     {
         $client = static::createClient();
@@ -29,21 +28,17 @@ final class BrowseControllerTest extends PageTestCase
         $this->assertSame('Browse the latest research', $crawler->filter('main h1')->text());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_does_display_the_original_model_filter()
     {
         $client = static::createClient();
 
         $crawler = $client->request('GET', $this->getUrl());
 
-        $this->assertContains('original publishing model', $crawler->filter('html')->text());
+        $this->assertStringContainsString('original publishing model', $crawler->filter('html')->text());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_has_metadata()
     {
         $client = static::createClient();
@@ -71,9 +66,7 @@ final class BrowseControllerTest extends PageTestCase
         $this->assertEmpty($crawler->filter('meta[name="dc.rights"]'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_shows_reviewed_preprints_on_results()
     {
         $client = static::createClient();
@@ -127,7 +120,7 @@ final class BrowseControllerTest extends PageTestCase
             ],
         ];
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             $this->buildSearchApiRequestForOneItem(),
             new Response(
                 200,
@@ -168,7 +161,7 @@ final class BrowseControllerTest extends PageTestCase
                 ])
             )
         );
-        $this->mockApiResponse(
+        self::mockApiResponse(
             $this->buildSearchApiRequestForTenItems(),
             new Response(
                 200,
@@ -219,9 +212,7 @@ final class BrowseControllerTest extends PageTestCase
         $this->assertSame('Reviewed Preprint Aug 1, 2022', trim(preg_replace('/\s+/S', ' ', $listing->eq(0)->filter('.teaser__footer .meta')->text())));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_displays_the_requested_minimum_significance_in_the_filter_dropdown_when_minimum_elife_significance_is_selected() {
         $client = static::createClient();
         $this->setUpApiMocksForMinimumSignificanceQuery();
@@ -234,9 +225,7 @@ final class BrowseControllerTest extends PageTestCase
         $this->assertSame($selectedMinimumSignificanceDropdownValue, 'landmark');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_displays_the_requested_minimum_strength_in_the_filter_dropdown_when_minimum_elife_strength_is_selected() {
         $client = static::createClient();
         $this->setUpApiMocksForMinimumStrengthQuery();
@@ -249,9 +238,7 @@ final class BrowseControllerTest extends PageTestCase
         $this->assertSame($selectedMinimumStrengthDropdownValue, 'solid');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_includes_original_model_papers_when_the_previous_load_of_this_page_was_not_filtered()
     {
         $this->markTestIncomplete();
@@ -259,12 +246,12 @@ final class BrowseControllerTest extends PageTestCase
 
     protected function setUpApiMocksForMinimumStrengthQuery()
     {
-        $this->mockApiResponse(
+        self::mockApiResponse(
             $this->buildSearchApiRequestForOneItemWithSolidStrength(),
             $this->getEmptyResponse()
         );
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             $this->buildSearchApiRequestForTenItemsWithSolidStrength(),
             $this->getEmptyResponse()
         );
@@ -273,12 +260,12 @@ final class BrowseControllerTest extends PageTestCase
     protected function setUpApiMocksForMinimumSignificanceQuery()
     {
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             $this->buildSearchApiRequestForOneItemWithLandmarkSignificance(),
             $this->getEmptyResponse()
         );
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             $this->buildSearchApiRequestForTenItemsWithLandmarkSignificance(),
             $this->getEmptyResponse()
         );
@@ -286,7 +273,7 @@ final class BrowseControllerTest extends PageTestCase
 
     protected function getUrl() : string
     {
-        $this->mockApiResponse(
+        self::mockApiResponse(
             $this->buildSearchApiRequestForOneItem(),
             new Response(
                 200,
@@ -328,7 +315,7 @@ final class BrowseControllerTest extends PageTestCase
             )
         );
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             $this->buildSearchApiRequestForTenItems(),
             new Response(
                 200,

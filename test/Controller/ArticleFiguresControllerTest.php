@@ -4,12 +4,11 @@ namespace test\eLife\Journal\Controller;
 
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use PHPUnit\Framework\Attributes\Test;
 
 final class ArticleFiguresControllerTest extends PageTestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function it_displays_an_article_figures_page_for_a_vor()
     {
         $client = static::createClient();
@@ -63,9 +62,7 @@ final class ArticleFiguresControllerTest extends PageTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_has_metadata()
     {
         $client = static::createClient();
@@ -92,9 +89,7 @@ final class ArticleFiguresControllerTest extends PageTestCase
         $this->assertSame('© 2010 Bar. Copyright statement', $crawler->filter('meta[name="dc.rights"]')->attr('content'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_displays_an_article_figures_page_for_a_poa()
     {
         $client = static::createClient();
@@ -120,9 +115,7 @@ final class ArticleFiguresControllerTest extends PageTestCase
         $this->assertEmpty($crawler->filter('.view-selector__jump_link_item'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_has_metadata_for_previous_versions()
     {
         $client = static::createClient();
@@ -149,9 +142,7 @@ final class ArticleFiguresControllerTest extends PageTestCase
         $this->assertSame('© 2010 Foo Bar. Copyright statement.', $crawler->filter('meta[name="dc.rights"]')->attr('content'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_displays_a_404_if_the_article_is_not_found()
     {
         $client = static::createClient();
@@ -173,7 +164,7 @@ final class ArticleFiguresControllerTest extends PageTestCase
             )
         );
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001/versions',
@@ -199,14 +190,12 @@ final class ArticleFiguresControllerTest extends PageTestCase
         $this->assertSame(404, $client->getResponse()->getStatusCode());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_displays_a_404_if_the_article_has_no_figures()
     {
         $client = static::createClient();
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001',
@@ -260,7 +249,7 @@ final class ArticleFiguresControllerTest extends PageTestCase
             )
         );
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001/versions',
@@ -305,14 +294,12 @@ final class ArticleFiguresControllerTest extends PageTestCase
         $this->assertSame(404, $client->getResponse()->getStatusCode());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_does_not_display_an_article_figures_page_for_a_vor_with_only_a_data_availability_statement()
     {
         $client = static::createClient();
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001',
@@ -374,7 +361,7 @@ final class ArticleFiguresControllerTest extends PageTestCase
             )
         );
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001/versions',
@@ -419,14 +406,12 @@ final class ArticleFiguresControllerTest extends PageTestCase
         $this->assertSame(404, $client->getResponse()->getStatusCode());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_redirects_an_insight_or_editorial_article_with_figures_to_the_article_page()
     {
         $client = static::createClient();
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00002',
@@ -514,7 +499,7 @@ final class ArticleFiguresControllerTest extends PageTestCase
             )
         );
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00002/versions',
@@ -566,14 +551,12 @@ final class ArticleFiguresControllerTest extends PageTestCase
     }
 
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_displays_a_404_if_the_an_insight_or_editorial_content_has_no_figures()
     {
         $client = static::createClient();
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00002',
@@ -641,7 +624,7 @@ final class ArticleFiguresControllerTest extends PageTestCase
             )
         );
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00002/versions',
@@ -688,7 +671,7 @@ final class ArticleFiguresControllerTest extends PageTestCase
 
     protected function getUrl() : string
     {
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001',
@@ -1027,7 +1010,7 @@ final class ArticleFiguresControllerTest extends PageTestCase
             )
         );
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001/versions',
@@ -1072,7 +1055,7 @@ final class ArticleFiguresControllerTest extends PageTestCase
 
     private function getPreviousVersionUrl()
     {
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001/versions/1',
@@ -1123,7 +1106,7 @@ final class ArticleFiguresControllerTest extends PageTestCase
             )
         );
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001/versions',

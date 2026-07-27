@@ -9,15 +9,15 @@ use GuzzleHttp\Psr7\Response;
 use ML\JsonLD\JsonLD;
 use ML\JsonLD\RdfConstants;
 use ML\JsonLD\TypedValue;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use test\eLife\Journal\Providers;
 
 final class JobAdvertControllerTest extends PageTestCase
 {
     use Providers;
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_displays_the_job_advert_page()
     {
         $client = static::createClient();
@@ -27,13 +27,11 @@ final class JobAdvertControllerTest extends PageTestCase
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertSame('Job advert title', $crawler->filter('.content-header__title')->text());
         $this->assertSame('Jan 1, 2010', trim(preg_replace('!\s+!', ' ', $crawler->filter('.content-header .meta')->text())));
-        $this->assertContains('Closing date for applications is '.date('F j, Y', strtotime('+1 day')).'.', $crawler->filter('main')->text());
-        $this->assertContains('Job advert text.', $crawler->filter('main')->text());
+        $this->assertStringContainsString('Closing date for applications is '.date('F j, Y', strtotime('+1 day')).'.', $crawler->filter('main')->text());
+        $this->assertStringContainsString('Job advert text.', $crawler->filter('main')->text());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_has_metadata()
     {
         $client = static::createClient();
@@ -60,14 +58,12 @@ final class JobAdvertControllerTest extends PageTestCase
         $this->assertSame('© 2010 eLife Sciences Publications Limited. This article is distributed under the terms of the Creative Commons Attribution License, which permits unrestricted use and redistribution provided that the original author and source are credited.', $crawler->filter('meta[name="dc.rights"]')->attr('content'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_displays_a_message_if_the_job_advert_has_finished()
     {
         $client = static::createClient();
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/job-adverts/1',
@@ -94,14 +90,12 @@ final class JobAdvertControllerTest extends PageTestCase
         $crawler = $client->request('GET', '/jobs/1/job-advert-title');
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
-        $this->assertContains('This position is now closed to applications.', trim($crawler->filter('main')->text()));
+        $this->assertStringContainsString('This position is now closed to applications.', trim($crawler->filter('main')->text()));
         $this->assertSame('noindex', $crawler->filter('head > meta[name="robots"]')->attr('content'));
     }
 
-    /**
-     * @test
-     * @dataProvider incorrectSlugProvider
-     */
+    #[Test]
+    #[DataProvider('incorrectSlugProvider')]
     public function it_redirects_if_the_slug_is_not_correct(string $slug = null, string $queryString = null)
     {
         $client = static::createClient();
@@ -119,9 +113,7 @@ final class JobAdvertControllerTest extends PageTestCase
         $this->assertTrue($client->getResponse()->isRedirect($expectedUrl));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_has_schema_org_metadata()
     {
         $client = static::createClient();
@@ -145,14 +137,12 @@ final class JobAdvertControllerTest extends PageTestCase
         $this->assertEquals(new TypedValue('Job advert title', RdfConstants::XSD_STRING), $node->getProperty('http://schema.org/name'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_displays_a_404_if_the_job_advert_is_not_found()
     {
         $client = static::createClient();
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/job-adverts/1',
@@ -176,7 +166,7 @@ final class JobAdvertControllerTest extends PageTestCase
 
     protected function getUrl() : string
     {
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/job-adverts/1',

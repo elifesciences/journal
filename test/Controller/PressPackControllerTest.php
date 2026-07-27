@@ -25,8 +25,8 @@ final class PressPackControllerTest extends PageTestCase
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertSame('Press package title', $crawler->filter('.content-header__title')->text());
         $this->assertSame('Press Pack Jan 1, 2010', trim(preg_replace('!\s+!', ' ', $crawler->filter('.content-header .meta')->text())));
-        $this->assertContains('Annotations', $crawler->filter('.contextual-data__list')->text());
-        $this->assertContains('Press package text.', $crawler->filter('.wrapper--content')->text());
+        $this->assertStringContainsString('Annotations', $crawler->filter('.contextual-data__list')->text());
+        $this->assertStringContainsString('Press package text.', $crawler->filter('.wrapper--content')->text());
         $this->assertCount(0, $crawler->filter('.teaser--secondary'));
         $this->assertNotContains('Media contacts', $crawler->filter('.wrapper--content')->text());
         $this->assertNotContains('About', $crawler->filter('.wrapper--content')->text());
@@ -39,7 +39,7 @@ final class PressPackControllerTest extends PageTestCase
     {
         $client = static::createClient();
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/metrics/press-package/1/page-views?by=month&page=1&per-page=20&order=desc',
@@ -88,7 +88,7 @@ final class PressPackControllerTest extends PageTestCase
     {
         $client = static::createClient();
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/press-packages/1',
@@ -155,11 +155,11 @@ final class PressPackControllerTest extends PageTestCase
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertCount(2, $crawler->filter('.article-section:contains("Media contacts") .list > li'));
-        $this->assertContains('Media Contact 1', $crawler->filter('.article-section:contains("Media contacts") .list > li:nth-child(1)')->text());
-        $this->assertContains('Department of Molecular and Cell Biology, University of California, Berkeley', $crawler->filter('.article-section:contains("Media contacts") .list > li:nth-child(1)')->text());
-        $this->assertContains('media-contact-1@example.com', $crawler->filter('.article-section:contains("Media contacts") .list > li:nth-child(1)')->text());
-        $this->assertContains('+12025550182;ext=555', $crawler->filter('.article-section:contains("Media contacts") .list > li:nth-child(1)')->text());
-        $this->assertContains('Media Contact 2', $crawler->filter('.article-section:contains("Media contacts") .list > li:nth-child(2)')->text());
+        $this->assertStringContainsString('Media Contact 1', $crawler->filter('.article-section:contains("Media contacts") .list > li:nth-child(1)')->text());
+        $this->assertStringContainsString('Department of Molecular and Cell Biology, University of California, Berkeley', $crawler->filter('.article-section:contains("Media contacts") .list > li:nth-child(1)')->text());
+        $this->assertStringContainsString('media-contact-1@example.com', $crawler->filter('.article-section:contains("Media contacts") .list > li:nth-child(1)')->text());
+        $this->assertStringContainsString('+12025550182;ext=555', $crawler->filter('.article-section:contains("Media contacts") .list > li:nth-child(1)')->text());
+        $this->assertStringContainsString('Media Contact 2', $crawler->filter('.article-section:contains("Media contacts") .list > li:nth-child(2)')->text());
     }
 
     /**
@@ -169,7 +169,7 @@ final class PressPackControllerTest extends PageTestCase
     {
         $client = static::createClient();
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/press-packages/1',
@@ -225,8 +225,8 @@ final class PressPackControllerTest extends PageTestCase
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $secondaryText = $crawler->filter('.grid-secondary-column__item')->text();
-        $this->assertContains('Article title', $secondaryText);
-        $this->assertContains('Reviewed preprint title', $secondaryText);
+        $this->assertStringContainsString('Article title', $secondaryText);
+        $this->assertStringContainsString('Reviewed preprint title', $secondaryText);
     }
 
     /**
@@ -338,7 +338,7 @@ final class PressPackControllerTest extends PageTestCase
 
     protected function getUrl() : string
     {
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/press-packages/1',

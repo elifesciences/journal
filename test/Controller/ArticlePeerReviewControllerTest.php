@@ -4,12 +4,11 @@ namespace test\eLife\Journal\Controller;
 
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use PHPUnit\Framework\Attributes\Test;
 
 final class ArticlePeerReviewControllerTest extends PageTestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function it_displays_an_article_peer_review_page_for_a_new_model_vor()
     {
         $client = static::createClient();
@@ -62,9 +61,7 @@ final class ArticlePeerReviewControllerTest extends PageTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_displays_peer_review_process_and_decision_letter_in_peer_review_page_for_old_vor()
     {
         $client = static::createClient();
@@ -94,9 +91,7 @@ final class ArticlePeerReviewControllerTest extends PageTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_has_metadata()
     {
         $client = static::createClient();
@@ -125,7 +120,7 @@ final class ArticlePeerReviewControllerTest extends PageTestCase
 
     protected function getUrl() : string
     {
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001',
@@ -548,7 +543,7 @@ final class ArticlePeerReviewControllerTest extends PageTestCase
             )
         );
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001/versions',
@@ -593,7 +588,7 @@ final class ArticlePeerReviewControllerTest extends PageTestCase
 
     protected function getOldVorUrl() : string
     {
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001',
@@ -964,7 +959,7 @@ final class ArticlePeerReviewControllerTest extends PageTestCase
             )
         );
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001/versions',
@@ -1007,14 +1002,12 @@ final class ArticlePeerReviewControllerTest extends PageTestCase
         return '/articles/00001/peer-reviews';
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_displays_a_poa()
     {
         $client = static::createClient();
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001',
@@ -1075,7 +1068,7 @@ final class ArticlePeerReviewControllerTest extends PageTestCase
             )
         );
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001/versions',
@@ -1118,8 +1111,8 @@ final class ArticlePeerReviewControllerTest extends PageTestCase
         $crawler = $client->request('GET', '/articles/00001/peer-reviews');
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
-        $this->assertContains('Accepted manuscript, PDF only. Full online edition to follow.',
-            array_map('trim', $crawler->filter('.info-bar')->extract(['_text'])));
+        $this->assertStringContainsString('Accepted manuscript, PDF only. Full online edition to follow.',
+            implode("\n", array_map('trim', $crawler->filter('.info-bar')->extract(['_text']))));
         $this->assertEmpty($crawler->filter('.view-selector'));
         $articleInfo = $crawler->filter('.main-content-grid > section:nth-of-type(1)');
         $this->assertSame('Peer review process',

@@ -5,6 +5,8 @@ namespace test\eLife\Journal\Controller;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\Uri;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use Symfony\Component\BrowserKit\Cookie;
 use test\eLife\Journal\WebTestCase;
 use Traversable;
@@ -13,10 +15,9 @@ use function GuzzleHttp\Psr7\parse_query;
 
 final class AuthenticationTest extends WebTestCase
 {
-    /**
-     * @test
-     * @dataProvider refererProvider
-     */
+
+    #[Test]
+    #[DataProvider('refererProvider')]
     public function it_uses_the_referer_header_for_redirecting_after_logging_in(string $referer, string $expectedRedirect)
     {
         $client = static::createClient();
@@ -38,7 +39,7 @@ final class AuthenticationTest extends WebTestCase
         $this->assertSameUri($expectedRedirect, $response->headers->get('Location'));
     }
 
-    public function refererProvider() : Traversable
+    public static function refererProvider() : Traversable
     {
         yield 'no header' => ['', 'http://localhost/'];
         yield 'string header' => ['foo', 'http://localhost/'];
@@ -51,9 +52,7 @@ final class AuthenticationTest extends WebTestCase
         yield 'external site with path' => ['http://www.example.com/foo', 'http://localhost/'];
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_shows_error_messages()
     {
         $client = static::createClient();
@@ -74,7 +73,7 @@ final class AuthenticationTest extends WebTestCase
 
         $client->followRedirects();
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'POST',
                 'http://api.elifesciences.org/oauth2/token',
@@ -100,9 +99,7 @@ final class AuthenticationTest extends WebTestCase
         $this->assertSame(['MOCKSESSID'], array_values($cookieNames));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_redirects_to_help_page_when_no_name_is_available()
     {
         $client = static::createClient();
@@ -121,7 +118,7 @@ final class AuthenticationTest extends WebTestCase
 
         $state = parse_query((new Uri($response->headers->get('Location')))->getQuery())['state'];
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'POST',
                 'http://api.elifesciences.org/oauth2/token',
@@ -145,9 +142,7 @@ final class AuthenticationTest extends WebTestCase
         $this->assertTrue($client->getResponse()->isRedirect('http://localhost/log-in/orcid-visibility-setting'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_logs_you_out_if_your_profile_is_unavailable()
     {
         $client = static::createClient();
@@ -156,7 +151,7 @@ final class AuthenticationTest extends WebTestCase
 
         $this->logIn($client);
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/profiles/jcarberry',
@@ -191,9 +186,7 @@ final class AuthenticationTest extends WebTestCase
         $this->assertEmpty($client->getCookieJar()->all());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_removes_the_cookie_if_the_session_does_not_exist()
     {
         $client = static::createClient();
@@ -213,7 +206,7 @@ final class AuthenticationTest extends WebTestCase
 
     private function readyHomePage()
     {
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/search?for=&page=1&per-page=10&sort=date&order=desc&type[]=reviewed-preprint&type[]=research-advance&type[]=research-article&type[]=research-communication&type[]=review-article&type[]=scientific-correspondence&type[]=short-report&type[]=tools-resources&type[]=replication-study&use-date=default',

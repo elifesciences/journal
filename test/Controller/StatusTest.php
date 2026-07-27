@@ -31,7 +31,7 @@ final class StatusTest extends WebTestCase
     {
         $client = static::createClient();
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/foo',
@@ -40,7 +40,7 @@ final class StatusTest extends WebTestCase
             new Response()
         );
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/bar',

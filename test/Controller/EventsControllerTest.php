@@ -4,13 +4,13 @@ namespace test\eLife\Journal\Controller;
 
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use Traversable;
 
 final class EventsControllerTest extends PageTestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function it_displays_an_empty_events_page()
     {
         $client = static::createClient();
@@ -19,15 +19,13 @@ final class EventsControllerTest extends PageTestCase
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertSame('eLife events', $crawler->filter('.content-header__title')->text());
-        $this->assertContains(
+        $this->assertStringContainsString(
             'There are currently no pending events. In the meantime, you can find clips and recordings from past events covering a wide range of topics on our YouTube.',
             $crawler->filter('main')->text()
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_has_metadata()
     {
         $client = static::createClient();
@@ -55,10 +53,8 @@ final class EventsControllerTest extends PageTestCase
         $this->assertEmpty($crawler->filter('meta[name="dc.rights"]'));
     }
 
-    /**
-     * @test
-     * @dataProvider invalidPageProvider
-     */
+    #[Test]
+    #[DataProvider('invalidPageProvider')]
     public function it_displays_a_404_when_not_on_a_valid_page($page, callable $callable = null)
     {
         $client = static::createClient();
@@ -72,7 +68,7 @@ final class EventsControllerTest extends PageTestCase
         $this->assertSame(404, $client->getResponse()->getStatusCode());
     }
 
-    public function invalidPageProvider() : Traversable
+    public static function invalidPageProvider() : Traversable
     {
         foreach (['-1', '0', 'foo'] as $page) {
             yield 'page '.$page => [$page];
@@ -82,7 +78,7 @@ final class EventsControllerTest extends PageTestCase
             yield 'page '.$page => [
                 $page,
                 function () use ($page) {
-                    $this->mockApiResponse(
+                    self::mockApiResponse(
                         new Request(
                             'GET',
                             'http://api.elifesciences.org/events?page=1&per-page=1&show=open&order=asc',
@@ -101,7 +97,7 @@ final class EventsControllerTest extends PageTestCase
 
     protected function getUrl() : string
     {
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/events?page=1&per-page=10&show=open&order=asc',

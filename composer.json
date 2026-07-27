@@ -13,17 +13,16 @@
         }
     },
     "require": {
-        "php": "^7.3",
+        "php": "8.3",
         "ext-hash": "*",
-        "beberlei/assert": "^2.8",
+        "beberlei/assert": "^v3.3.4",
         "bobthecow/mustache-bundle": "^1.2",
         "cocur/slugify": "^3.0",
         "composer/package-versions-deprecated": "1.11.99.2",
         "cweagans/composer-patches": "^1.6",
         "elife/api-client": "^1.0@dev",
         "elife/api-sdk": "dev-master",
-        "elife/civi-contacts": "dev-master",
-        "elife/patterns": "dev-master",
+        "elife/patterns": "dev-upgrade-patterns-to-php-8.3",
         "fabpot/goutte": "^3.2",
         "fig/link-util": "^1.0",
         "firebase/php-jwt": "^5.0",
@@ -53,13 +52,13 @@
     },
     "require-dev": {
         "elife/api": "^2.31",
-        "elife/api-validator": "^1.0",
+        "elife/api-validator": "dev-support-php-8.x",
         "justinrainbow/json-schema": "^5.2",
         "liuggio/fastest": "^1.6",
         "ml/json-ld": "^1.1",
         "namshi/cuzzle": "^2.0",
         "phpspec/prophecy": "^1.7",
-        "phpunit/phpunit": "^7.1",
+        "phpunit/phpunit": "^12.5",
         "rawr/cross-data-providers": "^2.3",
         "squizlabs/php_codesniffer": "^3.5",
         "symfony/phpunit-bridge": "^4.0"
@@ -75,7 +74,7 @@
     },
     "config": {
         "platform": {
-            "php": "7.3"
+            "php": "8.3"
         },
         "sort-packages": true,
         "allow-plugins": {

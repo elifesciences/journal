@@ -4,6 +4,8 @@ namespace test\eLife\Journal\Controller;
 
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use test\eLife\Journal\Providers;
 use test\eLife\Journal\WebTestCase;
 use Traversable;
@@ -12,9 +14,7 @@ final class DoiControllerTest extends WebTestCase
 {
     use Providers;
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_redirects_article_dois()
     {
         $client = static::createClient();
@@ -29,14 +29,12 @@ final class DoiControllerTest extends WebTestCase
         $this->assertSame(['Cookie'], $client->getResponse()->getVary());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_displays_a_404_if_the_article_is_not_found()
     {
         $client = static::createClient();
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001',
@@ -58,10 +56,8 @@ final class DoiControllerTest extends WebTestCase
         $this->assertSame(404, $client->getResponse()->getStatusCode());
     }
 
-    /**
-     * @test
-     * @dataProvider subDoiProvider
-     */
+    #[Test]
+    #[DataProvider('subDoiProvider')]
     public function it_redirects_article_sub_dois(string $doi, string $expected)
     {
         $client = static::createClient();
@@ -76,9 +72,9 @@ final class DoiControllerTest extends WebTestCase
         $this->assertSame(['Cookie'], $client->getResponse()->getVary());
     }
 
-    public function subDoiProvider() : Traversable
+    public static function subDoiProvider() : Traversable
     {
-        return $this->arrayProvider([
+        return self::arrayProvider([
             '10.7554/eLife.00001.001' => '/articles/00001#abstract',
             '10.7554/eLife.00001.002' => '/articles/00001#image1',
             '10.7554/eLife.00001.003' => '/articles/00001#image1-sd1',
@@ -87,14 +83,12 @@ final class DoiControllerTest extends WebTestCase
         ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_displays_a_404_if_the_sub_doi_is_not_found()
     {
         $client = static::createClient();
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001',
@@ -118,7 +112,7 @@ final class DoiControllerTest extends WebTestCase
 
     private function mockArticleRequest()
     {
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001',
@@ -233,7 +227,7 @@ final class DoiControllerTest extends WebTestCase
             )
         );
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001/versions',

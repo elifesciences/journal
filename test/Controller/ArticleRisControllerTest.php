@@ -4,20 +4,21 @@ namespace test\eLife\Journal\Controller;
 
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use test\eLife\Journal\WebTestCase;
 use Traversable;
 
 final class ArticleRisControllerTest extends WebTestCase
 {
-    /**
-     * @test
-     * @dataProvider risProvider
-     */
+
+    #[Test]
+    #[DataProvider('risProvider')]
     public function it_displays_ris(string $status, array $json, string $expected)
     {
         $client = static::createClient();
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001',
@@ -37,7 +38,7 @@ final class ArticleRisControllerTest extends WebTestCase
         $this->assertSame(preg_replace('~\R~u', "\r\n", $expected), trim($client->getResponse()->getContent()));
     }
 
-    public function risProvider() : Traversable
+    public static function risProvider() : Traversable
     {
         yield 'minimum PoA' => [
             'poa',
@@ -86,118 +87,118 @@ PB  - eLife Sciences Publications, Ltd
 ER  -
 EOT
             ,
-        ];
+    ];
 
-        yield 'complete VoR' => [
-            'vor',
-            [
-                'status' => 'vor',
-                'id' => '00001',
-                'version' => 3,
-                'type' => 'research-article',
-                'doi' => '10.7554/eLife.00001',
-                'title' => '<i>Title</i>',
-                'titlePrefix' => 'Prefix',
-                'stage' => 'published',
-                'published' => '2016-01-02T00:00:00Z',
-                'statusDate' => '2016-02-01T00:00:00Z',
-                'versionDate' => '2016-03-01T00:00:00Z',
-                'volume' => 1,
-                'issue' => 2,
-                'elocationId' => 'e00001',
-                'copyright' => [
-                    'license' => 'CC-BY-4.0',
-                    'holder' => 'Author One et al.',
-                    'statement' => 'Statement.',
+    yield 'complete VoR' => [
+        'vor',
+        [
+            'status' => 'vor',
+            'id' => '00001',
+            'version' => 3,
+            'type' => 'research-article',
+            'doi' => '10.7554/eLife.00001',
+            'title' => '<i>Title</i>',
+            'titlePrefix' => 'Prefix',
+            'stage' => 'published',
+            'published' => '2016-01-02T00:00:00Z',
+            'statusDate' => '2016-02-01T00:00:00Z',
+            'versionDate' => '2016-03-01T00:00:00Z',
+            'volume' => 1,
+            'issue' => 2,
+            'elocationId' => 'e00001',
+            'copyright' => [
+                'license' => 'CC-BY-4.0',
+                'holder' => 'Author One et al.',
+                'statement' => 'Statement.',
+            ],
+            'authorLine' => 'Author One et al.',
+            'authors' => [
+                [
+                    'type' => 'person',
+                    'name' => [
+                        'preferred' => 'Author One',
+                        'index' => 'One, Author',
+                    ],
                 ],
-                'authorLine' => 'Author One et al.',
-                'authors' => [
-                    [
-                        'type' => 'person',
-                        'name' => [
-                            'preferred' => 'Author One',
-                            'index' => 'One, Author',
+                [
+                    'type' => 'group',
+                    'name' => 'Group One',
+                    'people' => [
+                        [
+                            'name' => [
+                                'preferred' => 'Author Two',
+                                'index' => 'Two, Author',
+                            ],
                         ],
                     ],
-                    [
-                        'type' => 'group',
-                        'name' => 'Group One',
-                        'people' => [
+                ],
+                [
+                    'type' => 'group',
+                    'name' => 'Group Two',
+                    'groups' => [
+                        'Sub-group 1' => [
                             [
                                 'name' => [
-                                    'preferred' => 'Author Two',
-                                    'index' => 'Two, Author',
+                                    'preferred' => 'Author Three',
+                                    'index' => 'Three, Author',
                                 ],
                             ],
                         ],
                     ],
+                ],
+                [
+                    'type' => 'on-behalf-of',
+                    'onBehalfOf' => 'on behalf of An Organisation',
+                ],
+            ],
+            'reviewers' => [
+                [
+                    'name' => [
+                        'preferred' => 'Reviewer One',
+                        'index' => 'One, Reviewer',
+                    ],
+                    'role' => 'Reviewing editor',
+                ],
+                [
+                    'name' => [
+                        'preferred' => 'Reviewer Two',
+                        'index' => 'Two, Reviewer',
+                    ],
+                    'role' => 'Reviewing editor',
+                ],
+            ],
+            'keywords' => [
+                '<i>Keyword one</i>',
+                'Keyword two',
+            ],
+            'abstract' => [
+                'doi' => '10.7554/eLife.00001.001',
+                'content' => [
                     [
-                        'type' => 'group',
-                        'name' => 'Group Two',
-                        'groups' => [
-                            'Sub-group 1' => [
-                                [
-                                    'name' => [
-                                        'preferred' => 'Author Three',
-                                        'index' => 'Three, Author',
-                                    ],
-                                ],
-                            ],
-                        ],
+                        'type' => 'paragraph',
+                        'text' => 'Lorem <b>ipsum</b> <i>dolor</i> <span class="underline">sit</span> <span class="monospace">amet</span>, <span class="small-caps">consectetur</span> <sub>adipiscing</sub> <sup>elit</sup>.',
                     ],
                     [
-                        'type' => 'on-behalf-of',
-                        'onBehalfOf' => 'on behalf of An Organisation',
+                        'type' => 'paragraph',
+                        'text' => '<b><i>D<sub>u</sub>i</i>s</b> ornare &amp;%$#_{}~^\&gt;&lt; nunc.',
                     ],
                 ],
-                'reviewers' => [
-                    [
-                        'name' => [
-                            'preferred' => 'Reviewer One',
-                            'index' => 'One, Reviewer',
-                        ],
-                        'role' => 'Reviewing editor',
-                    ],
-                    [
-                        'name' => [
-                            'preferred' => 'Reviewer Two',
-                            'index' => 'Two, Reviewer',
-                        ],
-                        'role' => 'Reviewing editor',
-                    ],
-                ],
-                'keywords' => [
-                    '<i>Keyword one</i>',
-                    'Keyword two',
-                ],
-                'abstract' => [
-                    'doi' => '10.7554/eLife.00001.001',
+            ],
+            'body' => [
+                [
+                    'type' => 'section',
+                    'id' => 's-1',
+                    'title' => 'Section',
                     'content' => [
                         [
                             'type' => 'paragraph',
-                            'text' => 'Lorem <b>ipsum</b> <i>dolor</i> <span class="underline">sit</span> <span class="monospace">amet</span>, <span class="small-caps">consectetur</span> <sub>adipiscing</sub> <sup>elit</sup>.',
-                        ],
-                        [
-                            'type' => 'paragraph',
-                            'text' => '<b><i>D<sub>u</sub>i</i>s</b> ornare &amp;%$#_{}~^\&gt;&lt; nunc.',
-                        ],
-                    ],
-                ],
-                'body' => [
-                    [
-                        'type' => 'section',
-                        'id' => 's-1',
-                        'title' => 'Section',
-                        'content' => [
-                            [
-                                'type' => 'paragraph',
-                                'text' => 'Text.',
-                            ],
+                            'text' => 'Text.',
                         ],
                     ],
                 ],
             ],
-            <<<EOT
+        ],
+        <<<EOT
 TY  - JOUR
 TI  - Title
 AU  - One, Author
@@ -222,53 +223,53 @@ PB  - eLife Sciences Publications, Ltd
 ER  -
 EOT
             ,
-        ];
+    ];
 
-        yield 'structured abstract' => [
-            'poa',
-            [
-                'status' => 'poa',
-                'id' => '00001',
-                'version' => 1,
-                'type' => 'research-article',
-                'doi' => '10.7554/eLife.00001',
-                'title' => 'Title',
-                'stage' => 'published',
-                'published' => '2016-01-02T00:00:00Z',
-                'statusDate' => '2016-01-02T00:00:00Z',
-                'versionDate' => '2016-01-02T00:00:00Z',
-                'volume' => 1,
-                'elocationId' => 'e00001',
-                'copyright' => [
-                    'license' => 'CC0-1.0',
-                    'statement' => 'Statement.',
-                ],
-                'authorLine' => 'Foo Bar et al.',
-                'authors' => [
-                    [
-                        'type' => 'person',
-                        'name' => [
-                            'preferred' => 'Foo Bar',
-                            'index' => 'Bar, Foo',
-                        ],
+    yield 'structured abstract' => [
+        'poa',
+        [
+            'status' => 'poa',
+            'id' => '00001',
+            'version' => 1,
+            'type' => 'research-article',
+            'doi' => '10.7554/eLife.00001',
+            'title' => 'Title',
+            'stage' => 'published',
+            'published' => '2016-01-02T00:00:00Z',
+            'statusDate' => '2016-01-02T00:00:00Z',
+            'versionDate' => '2016-01-02T00:00:00Z',
+            'volume' => 1,
+            'elocationId' => 'e00001',
+            'copyright' => [
+                'license' => 'CC0-1.0',
+                'statement' => 'Statement.',
+            ],
+            'authorLine' => 'Foo Bar et al.',
+            'authors' => [
+                [
+                    'type' => 'person',
+                    'name' => [
+                        'preferred' => 'Foo Bar',
+                        'index' => 'Bar, Foo',
                     ],
                 ],
-                'abstract' => [
-                    'content' => [
-                        [
-                            'type' => 'section',
-                            'title' => 'Introduction',
-                            'content' => [
-                                [
-                                    'type' => 'paragraph',
-                                    'text' => 'Abstract 00001.',
-                                ],
+            ],
+            'abstract' => [
+                'content' => [
+                    [
+                        'type' => 'section',
+                        'title' => 'Introduction',
+                        'content' => [
+                            [
+                                'type' => 'paragraph',
+                                'text' => 'Abstract 00001.',
                             ],
                         ],
                     ],
                 ],
             ],
-            <<<'EOT'
+        ],
+        <<<'EOT'
 TY  - JOUR
 TI  - Title
 AU  - Bar, Foo
@@ -286,12 +287,10 @@ PB  - eLife Sciences Publications, Ltd
 ER  -
 EOT
             ,
-        ];
-    }
+    ];
+}
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_displays_a_404_if_the_article_is_not_found()
     {
         $client = static::createClient();
@@ -313,7 +312,7 @@ EOT
             )
         );
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001/versions',
@@ -339,14 +338,12 @@ EOT
         $this->assertSame(404, $client->getResponse()->getStatusCode());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_displays_a_404_if_the_article_is_not_published()
     {
         $client = static::createClient();
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001',

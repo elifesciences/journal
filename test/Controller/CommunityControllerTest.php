@@ -4,13 +4,13 @@ namespace test\eLife\Journal\Controller;
 
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use Traversable;
 
 final class CommunityControllerTest extends PageTestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function it_displays_the_community_page()
     {
         $client = static::createClient();
@@ -19,17 +19,15 @@ final class CommunityControllerTest extends PageTestCase
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertSame('Community', $crawler->filter('.content-header__title')->text());
-        $this->assertContains('No community articles available.', $crawler->filter('main')->text());
+        $this->assertStringContainsString('No community articles available.', $crawler->filter('main')->text());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_has_highlights()
     {
         $client = static::createClient();
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/highlights/community?page=1&per-page=6&order=desc',
@@ -155,14 +153,12 @@ final class CommunityControllerTest extends PageTestCase
         $this->assertSame(200, $client->getResponse()->getStatusCode());
 
         $this->assertCount(3, $crawler->filter('.list-heading:contains("Highlights") + .listing-list > .listing-list__item'));
-        $this->assertContains('Article highlight', $crawler->filter('.list-heading:contains("Highlights") + .listing-list > .listing-list__item:nth-child(1)')->text());
-        $this->assertContains('Podcast episode highlight', $crawler->filter('.list-heading:contains("Highlights") + .listing-list > .listing-list__item:nth-child(2)')->text());
-        $this->assertContains('Podcast episode chapter highlight', $crawler->filter('.list-heading:contains("Highlights") + .listing-list > .listing-list__item:nth-child(3)')->text());
+        $this->assertStringContainsString('Article highlight', $crawler->filter('.list-heading:contains("Highlights") + .listing-list > .listing-list__item:nth-child(1)')->text());
+        $this->assertStringContainsString('Podcast episode highlight', $crawler->filter('.list-heading:contains("Highlights") + .listing-list > .listing-list__item:nth-child(2)')->text());
+        $this->assertStringContainsString('Podcast episode chapter highlight', $crawler->filter('.list-heading:contains("Highlights") + .listing-list > .listing-list__item:nth-child(3)')->text());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_has_metadata()
     {
         $client = static::createClient();
@@ -189,10 +185,8 @@ final class CommunityControllerTest extends PageTestCase
         $this->assertEmpty($crawler->filter('meta[name="dc.rights"]'));
     }
 
-    /**
-     * @test
-     * @dataProvider invalidPageProvider
-     */
+    #[Test]
+    #[DataProvider('invalidPageProvider')]
     public function it_displays_a_404_when_not_on_a_valid_page($page, callable $callable = null)
     {
         $client = static::createClient();
@@ -206,39 +200,38 @@ final class CommunityControllerTest extends PageTestCase
         $this->assertSame(404, $client->getResponse()->getStatusCode());
     }
 
-    public function invalidPageProvider() : Traversable
+    public static function invalidPageProvider() : Traversable
     {
         foreach (['-1', '0', 'foo'] as $page) {
             yield "page $page" => [$page];
         }
 
-        foreach (['2'] as $page) {
-            yield "page $page" => [
-                $page,
-                function () use ($page) {
-                    $this->mockApiResponse(
-                        new Request(
-                            'GET',
-                            'http://api.elifesciences.org/community?page=1&per-page=1&order=desc',
-                            ['Accept' => 'application/vnd.elife.community-list+json; version=1']
-                        ),
-                        new Response(
-                            200,
-                            ['Content-Type' => 'application/vnd.elife.community-list+json; version=1'],
-                            json_encode([
-                                'total' => 0,
-                                'items' => [],
-                            ])
-                        )
-                    );
-                },
-            ];
-        }
+        $page = '2';
+        yield "page $page" => [
+            $page,
+            function () use ($page) {
+                self::mockApiResponse(
+                    new Request(
+                        'GET',
+                        'http://api.elifesciences.org/community?page=1&per-page=1&order=desc',
+                        ['Accept' => 'application/vnd.elife.community-list+json; version=1']
+                    ),
+                    new Response(
+                        200,
+                        ['Content-Type' => 'application/vnd.elife.community-list+json; version=1'],
+                        json_encode([
+                            'total' => 0,
+                            'items' => [],
+                        ])
+                    )
+                );
+            },
+        ];
     }
 
     protected function getUrl() : string
     {
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/community?page=1&per-page=10&order=desc',

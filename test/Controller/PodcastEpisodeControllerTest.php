@@ -114,7 +114,7 @@ final class PodcastEpisodeControllerTest extends PageTestCase
 
     protected function getUrl() : string
     {
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/podcast-episodes/1',

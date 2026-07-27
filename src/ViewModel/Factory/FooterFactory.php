@@ -71,7 +71,7 @@ final class FooterFactory
                     new Link('Research categories', $this->urlGenerator->generate('subjects')),
                     (new Link('Inside eLife', $this->urlGenerator->generate('inside-elife')))->endOfGroup(),
                     (new Link('Search', $this->urlGenerator->generate('search')))->hiddenWide(),
-                    (new Link('Subscribe to alerts', $this->urlGenerator->generate('content-alerts')))->hiddenWide(
+                    (new Link('Subscribe to alerts', '/content-alerts'))->hiddenWide(
                     )->endOfGroup(),
                     (new Link(
                         'Submit your research', 'https://elifesciences.org/submit-your-research'

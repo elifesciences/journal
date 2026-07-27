@@ -4,19 +4,18 @@ namespace test\eLife\Journal\Controller;
 
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use PHPUnit\Framework\Attributes\Test;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use test\eLife\Journal\WebTestCase;
 
 final class ArticleXmlTest extends WebTestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function it_displays_xml()
     {
         $client = static::createClient();
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://www.example.com/xml',
@@ -43,20 +42,16 @@ final class ArticleXmlTest extends WebTestCase
 
         $this->assertInstanceOf(StreamedResponse::class, $response);
         $this->assertSame(200, $response->getStatusCode());
-        $this->assertArraySubset([
-            'content-type' => ['application/xml'],
-        ], $response->headers->all());
+        $this->assertSame(['application/xml'], $response->headers->all()['content-type']);
         $this->assertSame('<xml></xml>', $content);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_displays_previous_versions()
     {
         $client = static::createClient();
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://www.example.com/xml1',
@@ -83,15 +78,15 @@ final class ArticleXmlTest extends WebTestCase
 
         $this->assertInstanceOf(StreamedResponse::class, $response);
         $this->assertSame(200, $response->getStatusCode());
-        $this->assertArraySubset([
-            'content-type' => ['application/xml'],
-        ], $response->headers->all());
+
+        $this->assertSame(['application/xml'], $response->headers->all()['content-type']);
+
         $this->assertSame('<xml></xml>', $content);
     }
 
     protected function getUrl() : string
     {
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001',
@@ -136,7 +131,7 @@ final class ArticleXmlTest extends WebTestCase
             )
         );
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001/versions',
@@ -181,7 +176,7 @@ final class ArticleXmlTest extends WebTestCase
 
     private function getPreviousVersionUrl() : string
     {
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001/versions/1',
@@ -213,7 +208,7 @@ final class ArticleXmlTest extends WebTestCase
             )
         );
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001/versions',

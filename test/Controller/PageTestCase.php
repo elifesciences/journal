@@ -54,7 +54,7 @@ abstract class PageTestCase extends WebTestCase
 
         // Call to actions are limited to 1 until we resolve issues with display of multiple.
         $this->assertCount(1, $callsToAction);
-        $this->assertContains('Call to action 3', $callsToAction->eq(0)->text());
+        $this->assertStringContainsString('Call to action 3', $callsToAction->eq(0)->text());
     }
 
     /**
@@ -110,7 +110,7 @@ abstract class PageTestCase extends WebTestCase
         $client->request('GET', $this->getUrl());
 
         $this->assertSame('max-age=300, public, stale-if-error=86400, stale-while-revalidate=300', $client->getResponse()->headers->get('Cache-Control'));
-        $this->assertContains('Cookie', $client->getResponse()->getVary());
+        $this->assertStringContainsString('Cookie', $client->getResponse()->getVary());
 
         $client->request('GET', $this->getUrl(), [], [], ['HTTP_IF_NONE_MATCH' => $client->getResponse()->headers->get('Etag')]);
 

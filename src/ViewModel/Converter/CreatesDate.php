@@ -13,7 +13,7 @@ trait CreatesDate
     /**
      * @return ViewModel\Date|null
      */
-    final private function simpleDate(HasPublishedDate $model, array $context = [])
+    private function simpleDate(HasPublishedDate $model, array $context = [])
     {
         if ('published' !== ($context['date'] ?? 'default')) {
             if ($model instanceof ArticleVersion || $model instanceof ReviewedPreprint) {

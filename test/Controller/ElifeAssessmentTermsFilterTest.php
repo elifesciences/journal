@@ -3,12 +3,14 @@
 namespace test\eLife\Journal\Controller;
 
 use eLife\Journal\Controller\ElifeAssessmentTermsFilter;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Traversable;
 
 final class ElifeAssessmentTermsFilterTest extends TestCase
 {
-    public function significanceProvider() : Traversable
+    public static function significanceProvider() : Traversable
     {
         yield 'landmark' => [
             ['landmark'],
@@ -54,7 +56,7 @@ final class ElifeAssessmentTermsFilterTest extends TestCase
         ];
     }
 
-    public function strengthProvider() : Traversable
+    public static function strengthProvider() : Traversable
     {
         yield 'exceptional' => [
             ['exceptional'],
@@ -99,11 +101,9 @@ final class ElifeAssessmentTermsFilterTest extends TestCase
             'notAStrengthTerm',
         ];
     }
-
-    /**
-     * @test
-     * @dataProvider significanceProvider
-     */
+    
+    #[Test]
+    #[DataProvider('significanceProvider')]
     public function it_translates_a_minimum_significance_to_the_correct_set_of_filters(array $expected, string $input = null, string $includeOriginalModelPapers = '')
     {
         $query = $this->overrideDefaultQueryStringWith(['includeOriginalModelPapers' => $includeOriginalModelPapers]);
@@ -111,10 +111,8 @@ final class ElifeAssessmentTermsFilterTest extends TestCase
         $this->assertEqualsCanonicalizing($expected, $result);
     }
 
-    /**
-     * @test
-     * @dataProvider strengthProvider
-     */
+    #[Test]
+    #[DataProvider('strengthProvider')]
     public function it_translates_a_minimum_strength_to_the_correct_set_of_filters(array $expected, string $input = null, string $includeOriginalModelPapers = '')
     {
         $query = $this->overrideDefaultQueryStringWith(['includeOriginalModelPapers' => $includeOriginalModelPapers]);
@@ -122,45 +120,35 @@ final class ElifeAssessmentTermsFilterTest extends TestCase
         $this->assertEqualsCanonicalizing($expected, $result);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_includes_original_model_papers_when_the_query_string_contains_nothing()
     {
         $query = $this->overrideDefaultQueryStringWith([]);
         $this->assertTrue(ElifeAssessmentTermsFilter::decideWhetherToIncludeOriginalModelPapers($query));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_includes_original_model_papers_when_the_query_string_contains_include_original_papers_with_the_yes_value()
     {
         $query = $this->overrideDefaultQueryStringWith(['includeOriginalModelPapers' => 'yes']);
         $this->assertTrue(ElifeAssessmentTermsFilter::decideWhetherToIncludeOriginalModelPapers($query));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_does_not_include_original_model_papers_when_the_query_string_contains_include_original_papers_with_any_value_that_is_not_yes()
     {
         $query = $this->overrideDefaultQueryStringWith(['includeOriginalModelPapers' => 'not yes']);
         $this->assertFalse(ElifeAssessmentTermsFilter::decideWhetherToIncludeOriginalModelPapers($query));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_does_not_include_original_model_papers_when_the_query_string_contains_minimum_significance_and_include_original_papers_with_any_value_that_is_not_yes()
     {
         $query = $this->overrideDefaultQueryStringWith(['minimumSignificance' => 'valuable', 'includeOriginalModelPapers' => 'not yes']);
         $this->assertFalse(ElifeAssessmentTermsFilter::decideWhetherToIncludeOriginalModelPapers($query));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_includes_original_model_papers_when_the_query_string_contains_minimum_strength_and_include_original_papers_with_the_yes_value()
     {
         $query = $this->overrideDefaultQueryStringWith(['minimumStrength' => 'convincing', 'includeOriginalModelPapers' => 'yes']);

@@ -4,14 +4,14 @@ namespace test\eLife\Journal\Controller;
 
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use Symfony\Component\DomCrawler\Crawler;
 use Traversable;
 
 final class HomeControllerTest extends PageTestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function it_displays_the_appropriate_site_header()
     {
         $client = static::createClient();
@@ -27,9 +27,7 @@ final class HomeControllerTest extends PageTestCase
         $this->assertEmpty($crawler->filter('.site-header img[src*="/elife-logo-xs."]'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_displays_the_homepage()
     {
         $client = static::createClient();
@@ -41,13 +39,11 @@ final class HomeControllerTest extends PageTestCase
         $this->assertCount(1, $crawler->filter('.banner-and-subjects-wrapper'));
         $this->assertCount(1, $crawler->filter('.home-banner'));
         $this->assertCount(1, $crawler->filter('.testimonial-with-link'));
-        $this->assertContains('No articles available.', $crawler->filter('main')->text());
+        $this->assertStringContainsString('No articles available.', $crawler->filter('main')->text());
         $this->assertEmpty($client->getResponse()->headers->getCookies());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_does_display_the_homepage_with_categories_and_highlights()
     {
         $crawler = $this->getUrlWithSubjectsAndHighlights();
@@ -58,14 +54,12 @@ final class HomeControllerTest extends PageTestCase
         $this->assertCount(6, $crawler->filter('.highlight-item'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_has_announcements()
     {
         $client = static::createClient();
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/highlights/announcements?page=1&per-page=3&order=desc',
@@ -148,8 +142,8 @@ final class HomeControllerTest extends PageTestCase
         $this->assertSame(200, $client->getResponse()->getStatusCode());
 
         $this->assertCount(2, $crawler->filter('.list-heading:contains("New from eLife") + .listing-list > .listing-list__item'));
-        $this->assertContains('Article highlight', $crawler->filter('.list-heading:contains("New from eLife") + .listing-list > .listing-list__item:nth-child(1)')->text());
-        $this->assertContains('Podcast episode highlight', $crawler->filter('.list-heading:contains("New from eLife") + .listing-list > .listing-list__item:nth-child(2)')->text());
+        $this->assertStringContainsString('Article highlight', $crawler->filter('.list-heading:contains("New from eLife") + .listing-list > .listing-list__item:nth-child(1)')->text());
+        $this->assertStringContainsString('Podcast episode highlight', $crawler->filter('.list-heading:contains("New from eLife") + .listing-list > .listing-list__item:nth-child(2)')->text());
     }
 
     private function arbitraryReviewedPreprintSnippet($relevantProperties)
@@ -188,13 +182,11 @@ final class HomeControllerTest extends PageTestCase
         return array_merge($arbitraryArticleMetadata, $relevantProperties);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_displays_the_correct_article_status_and_article_type_and_article_date_in_the_latest_research_listing()
     {
         $client = static::createClient();
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/search?for=&page=1&per-page=10&sort=date&order=desc&type[]=reviewed-preprint&type[]=research-advance&type[]=research-article&type[]=research-communication&type[]=review-article&type[]=scientific-correspondence&type[]=short-report&type[]=tools-resources&type[]=replication-study&use-date=default',
@@ -320,9 +312,7 @@ final class HomeControllerTest extends PageTestCase
         $this->assertSame('Accepted Manuscript Research Article Jan 1, 2012', trim(preg_replace('/\s+/S', ' ', $teasers->eq(5)->filter('.teaser__footer .meta')->text())));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_has_metadata()
     {
         $client = static::createClient();
@@ -353,9 +343,7 @@ final class HomeControllerTest extends PageTestCase
         $this->assertEmpty($crawler->filter('meta[name="dc.rights"]'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_has_a_view_selector_when_secondary_column_introduced()
     {
         $client = static::createClient();
@@ -367,7 +355,7 @@ final class HomeControllerTest extends PageTestCase
         $tabSelector = $crawler->filter('.button--switch-selector .view-selector__link');
         $this->assertCount(0, $tabSelector);
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/search?for=&page=1&per-page=7&sort=date&order=desc&type[]=editorial&type[]=insight&type[]=feature&type[]=collection&type[]=interview&type[]=podcast-episode&use-date=default',
@@ -452,9 +440,7 @@ final class HomeControllerTest extends PageTestCase
         ], $tabSelector->extract(['_text', 'href']));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_configures_javascript_libraries_through_a_script_element()
     {
         $client = static::createClient();
@@ -464,17 +450,15 @@ final class HomeControllerTest extends PageTestCase
         $this->assertSame(200, $client->getResponse()->getStatusCode());
 
         $scriptTag = $crawler->filter('script')->last()->text();
-        $this->assertContains('window.elifeConfig.domain = \'localhost\';', $scriptTag);
+        $this->assertStringContainsString('window.elifeConfig.domain = \'localhost\';', $scriptTag);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_displays_the_homepage_even_if_the_api_is_unavailable()
     {
         $client = static::createClient();
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/search?for=&page=1&per-page=10&sort=date&order=desc&type[]=reviewed-preprint&type[]=research-advance&type[]=research-article&type[]=research-communication&type[]=review-article&type[]=scientific-correspondence&type[]=short-report&type[]=tools-resources&type[]=replication-study&use-date=default',
@@ -526,10 +510,10 @@ final class HomeControllerTest extends PageTestCase
         $crawler = $client->request('GET', '/');
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
-        $this->assertContains('No articles available.', $crawler->filter('main')->text());
+        $this->assertStringContainsString('No articles available.', $crawler->filter('main')->text());
         $this->assertEmpty($client->getResponse()->headers->getCookies());
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/search?for=&page=1&per-page=10&sort=date&order=desc&type[]=research-advance&type[]=research-article&type[]=research-communication&type[]=review-article&type[]=scientific-correspondence&type[]=short-report&type[]=tools-resources&type[]=replication-study&use-date=default',
@@ -547,14 +531,12 @@ final class HomeControllerTest extends PageTestCase
         $crawler = $client->request('GET', '/');
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
-        $this->assertContains('No articles available.', $crawler->filter('main')->text());
+        $this->assertStringContainsString('No articles available.', $crawler->filter('main')->text());
         $this->assertEmpty($client->getResponse()->headers->getCookies());
     }
 
-    /**
-     * @test
-     * @dataProvider invalidPageProvider
-     */
+    #[Test]
+    #[DataProvider('invalidPageProvider')]
     public function it_displays_a_404_when_not_on_a_valid_page($page, callable $callable = null)
     {
         $client = static::createClient();
@@ -568,7 +550,7 @@ final class HomeControllerTest extends PageTestCase
         $this->assertSame(404, $client->getResponse()->getStatusCode());
     }
 
-    public function invalidPageProvider(): Traversable
+    public static function invalidPageProvider(): Traversable
     {
         foreach (['-1', '0', 'foo'] as $page) {
             yield 'page '.$page => [$page];
@@ -578,7 +560,7 @@ final class HomeControllerTest extends PageTestCase
             yield 'page '.$page => [
                 $page,
                 function () use ($page) {
-                    $this->mockApiResponse(
+                    self::mockApiResponse(
                         new Request(
                             'GET',
                             'http://api.elifesciences.org/search?for=&page=1&per-page=1&sort=date&order=desc&type[]=reviewed-preprint&type[]=research-advance&type[]=research-article&type[]=research-communication&type[]=review-article&type[]=scientific-correspondence&type[]=short-report&type[]=tools-resources&type[]=replication-study&use-date=default',
@@ -595,14 +577,12 @@ final class HomeControllerTest extends PageTestCase
         }
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_displays_a_subjects_list()
     {
         $client = static::createClient();
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/subjects?page=1&per-page=100&order=asc',
@@ -625,14 +605,12 @@ final class HomeControllerTest extends PageTestCase
         $this->assertSame('Subject name', trim($crawler->filter('.section-listing__list_item')->text()));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function subjects_are_rewritten()
     {
         $client = static::createClient();
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/subjects?page=1&per-page=100&order=asc',
@@ -720,10 +698,8 @@ final class HomeControllerTest extends PageTestCase
         $this->assertSame(['New Subject'], array_map('trim', $crawler->filter('.section-listing__list_item')->extract('_text')));
     }
 
-    /**
-     * @test
-     * @dataProvider coversProvider
-     */
+    #[Test]
+    #[DataProvider('coversProvider')]
     public function it_displays_different_types_in_highlight_item(
         array $cover,
         string $expectedTitle,
@@ -735,7 +711,7 @@ final class HomeControllerTest extends PageTestCase
     {
         $client = static::createClient();
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/covers/current',
@@ -748,8 +724,8 @@ final class HomeControllerTest extends PageTestCase
                         'total' => 3,
                         'items' => [
                             $cover,
-                            $this->prepareCover('podcast-episode', 2),
-                            $this->prepareCover('interview', 3),
+                            self::prepareCover('podcast-episode', 2),
+                            self::prepareCover('interview', 3),
                         ]
                     ]
                 )
@@ -773,14 +749,12 @@ final class HomeControllerTest extends PageTestCase
         $this->assertSame($expectedDate, trim($highlightItem->filter('.date')->text()));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_displays_six_highlights_even_if_more_are_provided()
     {
         $client = static::createClient();
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/covers/current',
@@ -792,13 +766,13 @@ final class HomeControllerTest extends PageTestCase
                 json_encode([
                         'total' => 7,
                         'items' => [
-                            $this->prepareCover('research-article', 1),
-                            $this->prepareCover('research-article', 2),
-                            $this->prepareCover('podcast-episode', 3),
-                            $this->prepareCover('interview', 4),
-                            $this->prepareCover('interview', 5),
-                            $this->prepareCover('interview', 6),
-                            $this->prepareCover('interview', 7),
+                            self::prepareCover('research-article', 1),
+                            self::prepareCover('research-article', 2),
+                            self::prepareCover('podcast-episode', 3),
+                            self::prepareCover('interview', 4),
+                            self::prepareCover('interview', 5),
+                            self::prepareCover('interview', 6),
+                            self::prepareCover('interview', 7),
                         ]
                     ]
                 )
@@ -809,11 +783,11 @@ final class HomeControllerTest extends PageTestCase
         $this->assertEquals(6, $crawler->filter('.highlight-item')->count());
     }
 
-    public function coversProvider(): array
+    public static function coversProvider(): array
     {
         return [
             'research-article' => [
-                $this->prepareCover('research-article'),
+                self::prepareCover('research-article'),
                 'research-article title',
                 'research-article impact statement',
                 'Research Article',
@@ -825,7 +799,7 @@ final class HomeControllerTest extends PageTestCase
                 ],
             ],
             'research-article-poa' => [
-                $this->prepareCover('research-article-poa'),
+                self::prepareCover('research-article-poa'),
                 'research-article-poa title',
                 'research-article-poa impact statement',
                 'Research Article',
@@ -836,7 +810,7 @@ final class HomeControllerTest extends PageTestCase
                 ],
             ],
             'blog-article' => [
-                $this->prepareCover('blog-article'),
+                self::prepareCover('blog-article'),
                 'blog-article title',
                 'blog-article impact statement',
                 'Inside eLife',
@@ -847,14 +821,14 @@ final class HomeControllerTest extends PageTestCase
                 ],
             ],
             'interview' => [
-                $this->prepareCover('interview'),
+                self::prepareCover('interview'),
                 'interview title',
                 'interview impact statement',
                 'Interview',
                 'Sep 13, 2015',
             ],
             'podcast-episode' => [
-                $this->prepareCover('podcast-episode'),
+                self::prepareCover('podcast-episode'),
                 'podcast-episode title',
                 'podcast-episode impact statement',
                 'Podcast',
@@ -870,7 +844,7 @@ final class HomeControllerTest extends PageTestCase
     {
         $client = static::createClient();
         
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/subjects?page=1&per-page=100&order=asc',
@@ -893,7 +867,7 @@ final class HomeControllerTest extends PageTestCase
             )
         );
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/covers/current',
@@ -905,12 +879,12 @@ final class HomeControllerTest extends PageTestCase
                 json_encode([
                         'total' => 6,
                         'items' => [
-                            $this->prepareCover('research-article', 1),
-                            $this->prepareCover('research-article', 2),
-                            $this->prepareCover('research-article', 3),
-                            $this->prepareCover('research-article', 4),
-                            $this->prepareCover('research-article', 5),
-                            $this->prepareCover('research-article', 6),
+                            self::prepareCover('research-article', 1),
+                            self::prepareCover('research-article', 2),
+                            self::prepareCover('research-article', 3),
+                            self::prepareCover('research-article', 4),
+                            self::prepareCover('research-article', 5),
+                            self::prepareCover('research-article', 6),
                         ],
                     ]
                 )
@@ -957,7 +931,7 @@ final class HomeControllerTest extends PageTestCase
         ];
     }
 
-    private function prepareCover(string $type, $titleSuffix = null) : array
+    private static function prepareCover(string $type, $titleSuffix = null) : array
     {
         switch ($type) {
             case 'podcast-episode':
@@ -1092,7 +1066,7 @@ final class HomeControllerTest extends PageTestCase
 
     protected function getUrl() : string
     {
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/search?for=&page=1&per-page=10&sort=date&order=desc&type[]=reviewed-preprint&type[]=research-advance&type[]=research-article&type[]=research-communication&type[]=review-article&type[]=scientific-correspondence&type[]=short-report&type[]=tools-resources&type[]=replication-study&use-date=default',

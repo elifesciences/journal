@@ -19,7 +19,7 @@ final class PressPacksControllerTest extends PageTestCase
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertSame('For the press', $crawler->filter('.content-header__title')->text());
-        $this->assertContains('No press packs available.', $crawler->filter('main')->text());
+        $this->assertStringContainsString('No press packs available.', $crawler->filter('main')->text());
     }
 
     /**
@@ -69,7 +69,7 @@ final class PressPacksControllerTest extends PageTestCase
         $this->assertSame(404, $client->getResponse()->getStatusCode());
     }
 
-    public function invalidPageProvider() : Traversable
+    public static function invalidPageProvider() : Traversable
     {
         foreach (['-1', '0', 'foo'] as $page) {
             yield "page $page" => [$page];
@@ -79,7 +79,7 @@ final class PressPacksControllerTest extends PageTestCase
             yield "page $page" => [
                 $page,
                 function () use ($page) {
-                    $this->mockApiResponse(
+                    self::mockApiResponse(
                         new Request(
                             'GET',
                             'http://api.elifesciences.org/press-packages?page=1&per-page=1&order=desc',
@@ -101,7 +101,7 @@ final class PressPacksControllerTest extends PageTestCase
 
     protected function getUrl() : string
     {
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/press-packages?page=1&per-page=10&order=desc',

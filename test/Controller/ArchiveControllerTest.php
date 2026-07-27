@@ -2,24 +2,36 @@
 
 namespace test\eLife\Journal\Controller;
 
+use eLife\Journal\Controller\ArchiveController;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use Symfony\Bridge\PhpUnit\ClockMock;
 
-/**
- * @group time-sensitive
- */
 final class ArchiveControllerTest extends PageTestCase
 {
-    public function setUp()
+    public static function setUpBeforeClass(): void
     {
+        // Register eLife\Journal\Controller namespace for clock mocking so that
+        // ClockMock::withClockMock() intercepts time() calls inside controllers.
+        ClockMock::register(ArchiveController::class);
+    }
+
+    public function setUp(): void
+    {
+        parent::setUp();
         ClockMock::withClockMock(strtotime('2016-01-01T00:00:00Z'));
     }
 
-    /**
-     * @test
-     */
+    protected function tearDown(): void
+    {
+        ClockMock::withClockMock(false);
+        parent::tearDown();
+    }
+
+    #[Test]
     public function it_displays_the_archive_page_for_a_year()
     {
-        $client = static::createClient();
+        $client = ArchiveControllerTest::createClient();
 
         $crawler = $client->request('GET', '/archive/2015');
 
@@ -28,12 +40,10 @@ final class ArchiveControllerTest extends PageTestCase
         $this->assertEquals(2015, $crawler->filter('.content-header__cta option[selected]')->text());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function navigate_between_years()
     {
-        $client = static::createClient();
+        $client = ArchiveControllerTest::createClient();
 
         $crawler = $client->request('GET', '/archive/2015');
 
@@ -51,12 +61,10 @@ final class ArchiveControllerTest extends PageTestCase
         $this->assertEquals(2012, $crawler->filter('.content-header__cta option[selected]')->text());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_has_metadata()
     {
-        $client = static::createClient();
+        $client = ArchiveControllerTest::createClient();
 
         $crawler = $client->request('GET', $this->getUrl().'?foo');
 
@@ -81,20 +89,18 @@ final class ArchiveControllerTest extends PageTestCase
         $this->assertEmpty($crawler->filter('meta[name="dc.rights"]'));
     }
 
-    /**
-     * @test
-     * @dataProvider invalidYearProvider
-     */
+    #[Test]
+    #[DataProvider('invalidYearProvider')]
     public function it_returns_a_404_for_an_invalid_year($year)
     {
-        $client = static::createClient();
+        $client = ArchiveControllerTest::createClient();
 
         $client->request('GET', '/archive/'.$year);
 
         $this->assertSame(404, $client->getResponse()->getStatusCode());
     }
 
-    public function invalidYearProvider() : array
+    public static function invalidYearProvider() : array
     {
         return [
             'before eLife' => [2011],
@@ -104,25 +110,21 @@ final class ArchiveControllerTest extends PageTestCase
         ];
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_returns_a_404_for_the_index_page_without_a_year()
     {
-        $client = static::createClient();
+        $client = ArchiveControllerTest::createClient();
 
         $client->request('GET', '/archive');
 
         $this->assertSame(404, $client->getResponse()->getStatusCode());
     }
 
-    /**
-     * @test
-     * @dataProvider invalidYearProvider
-     */
+    #[Test]
+    #[DataProvider('invalidYearProvider')]
     public function it_returns_a_404_for_the_index_page_with_an_invalid_year($year)
     {
-        $client = static::createClient();
+        $client = ArchiveControllerTest::createClient();
 
         $client->request('GET', '/archive?year='.$year);
 

@@ -11,7 +11,7 @@ trait CreatesContextLabel
     /**
      * @return ContextLabel|null
      */
-    final private function createContextLabel($item)
+    private function createContextLabel($item)
     {
         if (!method_exists($item, 'getSubjects') || $item->getSubjects()->isEmpty()) {
             return null;

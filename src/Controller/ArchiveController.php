@@ -46,7 +46,7 @@ final class ArchiveController extends Controller
 
     public function indexAction(Request $request) : Response
     {
-        $year = $request->query->get('year');
+        $year = (int) $request->query->get('year');
 
         $this->validateArchiveYear($year);
 

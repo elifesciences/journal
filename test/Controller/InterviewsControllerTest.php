@@ -4,13 +4,13 @@ namespace test\eLife\Journal\Controller;
 
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use Traversable;
 
 final class InterviewsControllerTest extends PageTestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function it_displays_the_interviews_page()
     {
         $client = static::createClient();
@@ -19,12 +19,10 @@ final class InterviewsControllerTest extends PageTestCase
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertSame('Interviews', $crawler->filter('.content-header__title')->text());
-        $this->assertContains('No interviews available.', $crawler->filter('main')->text());
+        $this->assertStringContainsString('No interviews available.', $crawler->filter('main')->text());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_has_metadata()
     {
         $client = static::createClient();
@@ -52,10 +50,8 @@ final class InterviewsControllerTest extends PageTestCase
         $this->assertEmpty($crawler->filter('meta[name="dc.rights"]'));
     }
 
-    /**
-     * @test
-     * @dataProvider invalidPageProvider
-     */
+    #[Test]
+    #[DataProvider('invalidPageProvider')]
     public function it_displays_a_404_when_not_on_a_valid_page($page, callable $callable = null)
     {
         $client = static::createClient();
@@ -69,7 +65,7 @@ final class InterviewsControllerTest extends PageTestCase
         $this->assertSame(404, $client->getResponse()->getStatusCode());
     }
 
-    public function invalidPageProvider() : Traversable
+    public static function invalidPageProvider() : Traversable
     {
         foreach (['-1', '0', 'foo'] as $page) {
             yield 'page '.$page => [$page];
@@ -79,7 +75,7 @@ final class InterviewsControllerTest extends PageTestCase
             yield 'page '.$page => [
                 $page,
                 function () use ($page) {
-                    $this->mockApiResponse(
+                    self::mockApiResponse(
                         new Request(
                             'GET',
                             'http://api.elifesciences.org/interviews?page=1&per-page=1&order=desc',
@@ -98,7 +94,7 @@ final class InterviewsControllerTest extends PageTestCase
 
     protected function getUrl() : string
     {
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/interviews?page=1&per-page=10&order=desc',

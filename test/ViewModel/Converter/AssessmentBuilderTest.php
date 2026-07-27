@@ -180,16 +180,16 @@ class AssessmentBuilderTest extends TestCase
     private function assertHasSignificance(string $term, Assessment $result)
     {
         $this->assertInstanceOf('eLife\Patterns\ViewModel\ArticleAssessmentTerms', $result['significance']);
-        $this->assertContains("<b>{$term}</b>", $result['significance']['termDescription']);
+        $this->assertStringContainsString("<b>{$term}</b>", $result['significance']['termDescription']);
         $highlightedTerm = new Term($term, true);
-        $this->assertContains($highlightedTerm, $result['significance']['terms'], '', false, false);
+        $this->assertStringContainsString($highlightedTerm, $result['significance']['terms'], '', false, false);
     }
 
     private function assertHasStrength(string $term, Assessment $result)
     {
         $this->assertInstanceOf('eLife\Patterns\ViewModel\ArticleAssessmentTerms', $result['strength']);
-        $this->assertContains("<b>{$term}</b>", $result['strength']['termDescription']);
+        $this->assertStringContainsString("<b>{$term}</b>", $result['strength']['termDescription']);
         $highlightedTerm = new Term($term, true);
-        $this->assertContains($highlightedTerm, $result['strength']['terms'], '', false, false);
+        $this->assertStringContainsString($highlightedTerm, $result['strength']['terms'], '', false, false);
     }
 }

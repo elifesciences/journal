@@ -30,9 +30,9 @@ final class ModelNameTest extends TestCase
         $this->assertSame($plural, ModelName::plural($id));
     }
 
-    public function validModelProvider() : Traversable
+    public static function validModelProvider() : Traversable
     {
-        return $this->arrayProvider([
+        return self::arrayProvider([
             'correction' => ['Correction', 'Corrections'],
             'editorial' => ['Editorial', 'Editorials'],
             'expression-concern' => ['Expression of Concern', 'Expressions of Concern'],

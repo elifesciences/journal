@@ -17,7 +17,7 @@ final class ModelRelationshipTest extends TestCase
         $this->assertSame($expected, ModelRelationship::get($from, $to, $related));
     }
 
-    public function typesProvider() : Traversable
+    public static function typesProvider() : Traversable
     {
         yield ['foo', 'bar', false, 'Of interest'];
         yield ['foo', 'bar', true, 'Related to'];

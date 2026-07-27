@@ -35,7 +35,7 @@ final class IframeEmbedExtensionTest extends TestCase
         $this->assertSame($expected, $twig->render('foo', ['string' => $input]));
     }
 
-    public function htmlProvider() : Traversable
+    public static function htmlProvider() : Traversable
     {
         yield 'no embed' => [
             '<p>No embed</p>',

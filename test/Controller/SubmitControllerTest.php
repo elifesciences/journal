@@ -150,7 +150,7 @@ final class SubmitControllerTest extends WebTestCase
         $this->assertSame(400, $client->getResponse()->getStatusCode());
     }
 
-    public function invalidDomainProvider()
+    public static function invalidDomainProvider()
     {
         return [
             ['http://elifesciences.org.uk'],

@@ -29,7 +29,7 @@ final class PromotionalCollectionControllerTest extends PageTestCase
 
         $content = $crawler->filter('.list-heading:contains("Collection") + .listing-list > .listing-list__item');
         $this->assertCount(1, $content);
-        $this->assertContains('Blog article title', $content->eq(0)->text());
+        $this->assertStringContainsString('Blog article title', $content->eq(0)->text());
     }
 
     /**
@@ -39,7 +39,7 @@ final class PromotionalCollectionControllerTest extends PageTestCase
     {
         $client = static::createClient();
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/promotional-collections/1',
@@ -140,7 +140,7 @@ final class PromotionalCollectionControllerTest extends PageTestCase
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $multimedia = $crawler->filter('.list-heading:contains("Multimedia") + .listing-list > .listing-list__item');
         $this->assertCount(1, $multimedia);
-        $this->assertContains('Podcast episode title', $multimedia->eq(0)->text());
+        $this->assertStringContainsString('Podcast episode title', $multimedia->eq(0)->text());
     }
 
     /**
@@ -150,7 +150,7 @@ final class PromotionalCollectionControllerTest extends PageTestCase
     {
         $client = static::createClient();
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/promotional-collections/1',
@@ -231,7 +231,7 @@ final class PromotionalCollectionControllerTest extends PageTestCase
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $related = $crawler->filter('.list-heading:contains("Related") + .listing-list > .listing-list__item');
         $this->assertCount(1, $related);
-        $this->assertContains('Blog article 2 title', $related->eq(0)->text());
+        $this->assertStringContainsString('Blog article 2 title', $related->eq(0)->text());
     }
 
     /**
@@ -241,7 +241,7 @@ final class PromotionalCollectionControllerTest extends PageTestCase
     {
         $client = static::createClient();
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/promotional-collections/1',
@@ -436,7 +436,7 @@ final class PromotionalCollectionControllerTest extends PageTestCase
 
     protected function getUrl() : string
     {
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/promotional-collections/1',

@@ -4,15 +4,14 @@ namespace test\eLife\Journal\Controller;
 
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use PHPUnit\Framework\Attributes\Test;
 
 final class AboutPeopleControllerTest extends PageTestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function it_displays_the_people_page()
     {
-        $client = static::createClient();
+        $client = AboutPeopleControllerTest::createClient();
 
         $crawler = $client->request('GET', $this->getUrl());
 
@@ -38,14 +37,12 @@ final class AboutPeopleControllerTest extends PageTestCase
         $this->assertSame('Leadership team', $crawler->filter('.content-header__title')->text());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_shows_the_first_paragraph_of_aims_and_scope_for_a_subject()
     {
-        $client = static::createClient();
+        $client = AboutPeopleControllerTest::createClient();
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/subjects/subject',
@@ -111,14 +108,12 @@ final class AboutPeopleControllerTest extends PageTestCase
         $this->assertSame('Subject aims and scope.', $crawler->filter('meta[name="description"]')->attr('content'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_shows_default_impact_statement_if_subject_without_aims_and_scope()
     {
-        $client = static::createClient();
+        $client = AboutPeopleControllerTest::createClient();
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/subjects/subject',
@@ -172,12 +167,10 @@ final class AboutPeopleControllerTest extends PageTestCase
         $this->assertSame('eLife’s editors, early-career advisors, governing board, and executive staff work in concert to realise our mission.', $crawler->filter('.content-header__impact-statement')->text());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_has_metadata()
     {
-        $client = static::createClient();
+        $client = AboutPeopleControllerTest::createClient();
 
         $crawler = $client->request('GET', $this->getUrl().'?foo');
 
@@ -202,12 +195,10 @@ final class AboutPeopleControllerTest extends PageTestCase
         $this->assertEmpty($crawler->filter('meta[name="dc.rights"]'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_does_not_display_announcement_info_bar()
     {
-        $client = static::createClient();
+        $client = AboutPeopleControllerTest::createClient();
 
         $crawler = $client->request('GET', $this->getUrl());
 
@@ -222,14 +213,14 @@ final class AboutPeopleControllerTest extends PageTestCase
         return '/about/people';
     }
 
-    protected function mockPeopleApi(array $types, $subject = null)
+    protected function mockPeopleApi(array $types, $subject = null): void
     {
         $subject_filter = ($subject) ? '&subject[]='.$subject : '';
         foreach ($types as $type) {
             $type = implode('', array_map(function (string $type) {
                 return "&type[]={$type}";
             }, (array) $type));
-            $this->mockApiResponse(
+            self::mockApiResponse(
                 new Request(
                     'GET',
                     'http://api.elifesciences.org/people?page=1&per-page=1&order=asc'.$subject_filter.$type,

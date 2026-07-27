@@ -4,19 +4,18 @@ namespace test\eLife\Journal\Controller;
 
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use PHPUnit\Framework\Attributes\Test;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use test\eLife\Journal\WebTestCase;
 
 final class ArticlePdfTest extends WebTestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function it_displays_pdf()
     {
         $client = static::createClient();
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://www.example.com/pdf',
@@ -43,20 +42,16 @@ final class ArticlePdfTest extends WebTestCase
 
         $this->assertInstanceOf(StreamedResponse::class, $response);
         $this->assertSame(200, $response->getStatusCode());
-        $this->assertArraySubset([
-            'content-type' => ['application/pdf'],
-        ], $response->headers->all());
+        $this->assertSame(['application/pdf'], $response->headers->all()['content-type']);
         $this->assertSame('pdf content', $content);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_displays_previous_versions()
     {
         $client = static::createClient();
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://www.example.com/pdf1',
@@ -83,15 +78,13 @@ final class ArticlePdfTest extends WebTestCase
 
         $this->assertInstanceOf(StreamedResponse::class, $response);
         $this->assertSame(200, $response->getStatusCode());
-        $this->assertArraySubset([
-            'content-type' => ['application/pdf'],
-        ], $response->headers->all());
+        $this->assertSame(['application/pdf'], $response->headers->all()['content-type']);
         $this->assertSame('pdf content', $content);
     }
 
     protected function getUrl() : string
     {
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001',
@@ -136,7 +129,7 @@ final class ArticlePdfTest extends WebTestCase
             )
         );
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001/versions',
@@ -181,7 +174,7 @@ final class ArticlePdfTest extends WebTestCase
 
     private function getPreviousVersionUrl() : string
     {
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001/versions/1',
@@ -213,7 +206,7 @@ final class ArticlePdfTest extends WebTestCase
             )
         );
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001/versions',

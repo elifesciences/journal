@@ -18,7 +18,7 @@ final class SubjectsControllerTest extends PageTestCase
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertSame('Research Categories', $crawler->filter('.content-header-simple__title')->text());
-        $this->assertContains('No subjects available.', $crawler->filter('main')->text());
+        $this->assertStringContainsString('No subjects available.', $crawler->filter('main')->text());
     }
 
     /**
@@ -53,7 +53,7 @@ final class SubjectsControllerTest extends PageTestCase
 
     protected function getUrl() : string
     {
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/subjects?page=1&per-page=100&order=asc',

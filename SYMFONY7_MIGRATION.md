@@ -95,3 +95,21 @@ go through `CiviCrmClient` and can be removed once confirmed no longer needed.
 
 These should point to the HubSpot URL (via a config parameter) or be removed, depending on
 whether HubSpot provides equivalent subscribe/unsubscribe entry points.
+
+
+Hard blockers (things Symfony 7 physically removed):
+
+2. Guard authenticator — SocialAuthenticator / AbstractGuardAuthenticator are gone in Symfony 7. ElifeAuthenticator and the knpu bundle's base class both need rewriting to use
+   AbstractAuthenticator. PostAuthenticationGuardToken in WebTestCase::logIn() also goes away.
+3. SwiftMailer — swiftmailer/swiftmailer + symfony/swiftmailer-bundle are dead. Needs migrating to Symfony Mailer (symfony/mailer).
+4. Templating component — $this->get('templating') is used in every single controller (~35 files). The symfony/templating component is removed; everything needs to switch to Twig
+   directly via $this->render().
+5. symfony/symfony monolith — doesn't exist at v7; needs splitting into individual component packages.
+
+Significant work but not hard removed:
+
+6. Twig 2 → 3 — some deprecations become errors.
+7. Service locator pattern — $this->get('router'), $this->get('session') etc. throughout controllers; Symfony 7 enforces constructor injection.
+8. knpu bundle — needs upgrading to a version compatible with Symfony 7 and the new security system, which then also resolves the http_client option issue from Chapter 2.
+
+The PHP version bump is the logical first step since it'll surface a lot of the other issues naturally.

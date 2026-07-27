@@ -4,7 +4,6 @@ namespace eLife\Journal;
 
 use Bobthecow\Bundle\MustacheBundle\BobthecowMustacheBundle;
 use Cocur\Slugify\Bridge\Symfony\CocurSlugifyBundle;
-use Csa\Bundle\GuzzleBundle\CsaGuzzleBundle;
 use eLife\Journal\Expression\ComposerLocateFunctionProvider;
 use eLife\Journal\Expression\TimeFunctionProvider;
 use Isometriks\Bundle\SpamBundle\IsometriksSpamBundle;
@@ -47,13 +46,12 @@ class AppKernel extends Kernel
         $this->instance = getenv('JOURNAL_INSTANCE') ?: null;
     }
 
-    public function registerBundles()
+    public function registerBundles(): iterable
     {
         $bundles = [
             new AppBundle(),
             new BobthecowMustacheBundle(),
             new CocurSlugifyBundle(),
-//            new CsaGuzzleBundle(),
             new FrameworkBundle(),
             new IsometriksSpamBundle(),
             new KnpUOAuth2ClientBundle(),
@@ -74,49 +72,49 @@ class AppKernel extends Kernel
         return $bundles;
     }
 
-    public function getName()
+    public function getName(): string
     {
         return 'journal';
     }
 
-    public function getVersion()
+    public function getVersion(): string
     {
         return $this->version;
     }
 
-    public function getRootDir()
+    public function getRootDir(): string
     {
         return $this->getProjectDir().'/app';
     }
 
-    public function getProjectDir()
+    public function getProjectDir(): string
     {
         return __DIR__.'/..';
     }
 
-    public function getCacheDir()
+    public function getCacheDir(): string
     {
         return "{$this->getProjectDir()}/var/cache/{$this->getEnvironment()}{$this->instance}";
     }
 
-    public function getLogDir()
+    public function getLogDir(): string
     {
         return $this->getProjectDir().'/var/logs';
     }
 
-    public function registerContainerConfiguration(LoaderInterface $loader)
+    public function registerContainerConfiguration(LoaderInterface $loader): void
     {
         $loader->load($this->getProjectDir().'/app/config/config_'.$this->getEnvironment().'.yml');
     }
 
-    public function run(Request $request)
+    public function run(Request $request): void
     {
         $response = $this->handle($request);
         $response->send();
         $this->terminate($request, $response);
     }
 
-    protected function buildContainer()
+    protected function buildContainer(): \Symfony\Component\DependencyInjection\ContainerBuilder
     {
         $builder = parent::buildContainer();
 

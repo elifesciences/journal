@@ -15,7 +15,7 @@ final class ReviewedPreprintsControllerTest extends PageTestCase
     {
         $client = static::createClient();
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/reviewed-preprints?page=1&per-page=10&order=desc&use-date=default',
@@ -35,7 +35,7 @@ final class ReviewedPreprintsControllerTest extends PageTestCase
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertSame('Reviewed Preprints', $crawler->filter('.content-header__title')->text());
-        $this->assertContains('No items available.', $crawler->filter('main')->text());
+        $this->assertStringContainsString('No items available.', $crawler->filter('main')->text());
     }
 
     /**
@@ -45,7 +45,7 @@ final class ReviewedPreprintsControllerTest extends PageTestCase
     {
         $client = static::createClient();
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/reviewed-preprints?page=1&per-page=10&order=desc&use-date=default',
@@ -148,8 +148,8 @@ final class ReviewedPreprintsControllerTest extends PageTestCase
         $this->assertSame(200, $client->getResponse()->getStatusCode());
 
         $this->assertCount(2, $crawler->filter('.list-heading:contains("Latest") + .listing-list > .listing-list__item'));
-        $this->assertContains('Homo naledi, a new species of the genus Homo from the Dinaledi Chamber, South Africa', $crawler->filter('.list-heading:contains("Latest") + .listing-list > .listing-list__item:nth-child(1)')->text());
-        $this->assertContains('An example of a Reviewed preprint', $crawler->filter('.list-heading:contains("Latest") + .listing-list > .listing-list__item:nth-child(2)')->text());
+        $this->assertStringContainsString('Homo naledi, a new species of the genus Homo from the Dinaledi Chamber, South Africa', $crawler->filter('.list-heading:contains("Latest") + .listing-list > .listing-list__item:nth-child(1)')->text());
+        $this->assertStringContainsString('An example of a Reviewed preprint', $crawler->filter('.list-heading:contains("Latest") + .listing-list > .listing-list__item:nth-child(2)')->text());
     }
 
     /**
@@ -199,7 +199,7 @@ final class ReviewedPreprintsControllerTest extends PageTestCase
         $this->assertSame(404, $client->getResponse()->getStatusCode());
     }
 
-    public function invalidPageProvider() : Traversable
+    public static function invalidPageProvider() : Traversable
     {
         foreach (['-1', '0', 'foo'] as $page) {
             yield 'page '.$page => [$page];
@@ -209,7 +209,7 @@ final class ReviewedPreprintsControllerTest extends PageTestCase
             yield 'page '.$page => [
                 $page,
                 function () use ($page) {
-                    $this->mockApiResponse(
+                    self::mockApiResponse(
                         new Request(
                             'GET',
                             'http://api.elifesciences.org/reviewed-preprints?page=1&per-page=1&order=desc&use-date=default',
@@ -228,7 +228,7 @@ final class ReviewedPreprintsControllerTest extends PageTestCase
 
     protected function getUrl() : string
     {
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/reviewed-preprints?page=1&per-page=10&order=desc&use-date=default',

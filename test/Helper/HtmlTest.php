@@ -20,9 +20,9 @@ final class HtmlTest extends TestCase
         $this->assertSame($expected, Html::stripElement($input, 'a'));
     }
 
-    public function stripElementProvider() : Traversable
+    public static function stripElementProvider() : Traversable
     {
-        return $this->arrayProvider([
+        return self::arrayProvider([
             'foo' => 'foo',
             '<a>foo</a>' => 'foo',
             '<A>foo</A>' => 'foo',

@@ -19,7 +19,7 @@ final class ProfileControllerTest extends PageTestCase
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertSame('Preferred Name', $crawler->filter('.content-header-profile__display_name')->text());
         $this->assertEmpty($crawler->filter('.content-header-profile__details'));
-        $this->assertContains('No annotations available.', $crawler->text());
+        $this->assertStringContainsString('No annotations available.', $crawler->text());
     }
 
     /**
@@ -34,7 +34,7 @@ final class ProfileControllerTest extends PageTestCase
         $crawler = $client->request('GET', $this->getUrl());
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
-        $this->assertContains('No annotations available.', $crawler->text());
+        $this->assertStringContainsString('No annotations available.', $crawler->text());
     }
 
     /**
@@ -46,7 +46,7 @@ final class ProfileControllerTest extends PageTestCase
 
         $url = $this->getUrl();
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/profiles/1',
@@ -251,7 +251,7 @@ final class ProfileControllerTest extends PageTestCase
 
     protected function getUrl() : string
     {
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/profiles/1',
@@ -270,7 +270,7 @@ final class ProfileControllerTest extends PageTestCase
             )
         );
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/annotations?by=1&page=1&per-page=10&order=desc&use-date=updated&access=public',

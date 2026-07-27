@@ -291,7 +291,7 @@ final class CallbackTest extends TestCase
         $this->assertSame($expected, $callback($object));
     }
 
-    public function notEmptyProvider() : Traversable
+    public static function notEmptyProvider() : Traversable
     {
         yield 'sequence' => [new ArraySequence(['foo'])];
         yield 'array' => [['foo']];
@@ -299,7 +299,7 @@ final class CallbackTest extends TestCase
         yield 'int' => [1];
     }
 
-    public function emptyProvider() : Traversable
+    public static function emptyProvider() : Traversable
     {
         yield 'empty sequence' => [new EmptySequence()];
         yield 'empty array' => [[]];

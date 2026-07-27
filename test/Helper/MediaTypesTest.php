@@ -21,9 +21,9 @@ final class MediaTypesTest extends TestCase
         $this->assertSame($extension, MediaTypes::toExtension($mediaType));
     }
 
-    public function extensionProvider() : Traversable
+    public static function extensionProvider() : Traversable
     {
-        return $this->arrayProvider([
+        return self::arrayProvider([
             'image/jpeg' => 'jpg',
             'image/png' => 'png',
             'image/svg+xml' => 'svg',

@@ -4,14 +4,14 @@ namespace test\eLife\Journal\Controller;
 
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use test\eLife\Journal\WebTestCase;
 
 final class LocalPageStubControllerTest extends WebTestCase
 {
-    /**
-     * @test
-     * @dataProvider stubbedPathsProvider
-     */
+    #[Test]
+    #[DataProvider('stubbedPathsProvider')]
     public function it_displays_the_local_page_stub_instead_of_a_page_that_is_hosted_elsewhere($path)
     {
         $client = static::createClient();
@@ -22,7 +22,7 @@ final class LocalPageStubControllerTest extends WebTestCase
         $this->assertSame('Local Page Stub', $crawler->filter('.content-header__title')->text());
     }
 
-    public function stubbedPathsProvider() : array
+    public static function stubbedPathsProvider() : array
     {
         return [
             ['/about'],

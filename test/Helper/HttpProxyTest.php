@@ -20,7 +20,7 @@ final class HttpProxyTest extends TestCase
     private $mockResponses;
     private $httpProxy;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->mockResponses = [];
 
@@ -31,7 +31,7 @@ final class HttpProxyTest extends TestCase
         $this->httpProxy = new HttpProxy($mockClient);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         HttpFoundationRequest::setTrustedProxies([], -1);
     }
@@ -220,9 +220,9 @@ final class HttpProxyTest extends TestCase
         }
     }
 
-    public function statusCodeProvider() : Traversable
+    public static function statusCodeProvider() : Traversable
     {
-        return $this->arrayProvider([404 => 404, 410 => 410, 500 => 502, 503 => 502]);
+        return self::arrayProvider([404 => 404, 410 => 410, 500 => 502, 503 => 502]);
     }
 
     private function captureContent(HttpFoundationResponse $response) : string

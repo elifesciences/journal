@@ -17,6 +17,15 @@ abstract class WebTestCase extends BaseWebTestCase
     use AppKernelTestCase;
     use Assertions;
 
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+        if (static::$kernelBootedInCurrentTest) {
+            static::$kernelBootedInCurrentTest = false;
+            restore_exception_handler();
+        }
+    }
+
     final protected function logIn(Client $client)
     {
         $session = $client->getContainer()->get('session');
@@ -29,7 +38,7 @@ abstract class WebTestCase extends BaseWebTestCase
         $cookie = new Cookie($session->getName(), $session->getId(), null, null, 'localhost');
         $client->getCookieJar()->set($cookie);
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/profiles/jcarberry',
@@ -52,7 +61,7 @@ abstract class WebTestCase extends BaseWebTestCase
 
     final protected function readyToken()
     {
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'POST',
                 'http://api.elifesciences.org/oauth2/token',

@@ -2,23 +2,34 @@
 
 namespace test\eLife\Journal\Controller;
 
+use eLife\Journal\Controller\ArchiveController;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use Symfony\Bridge\PhpUnit\ClockMock;
 
-/**
- * @group time-sensitive
- */
 final class ArchiveMonthControllerTest extends PageTestCase
 {
-    public function setUp()
+    public static function setUpBeforeClass(): void
     {
+        // Register eLife\Journal\Controller namespace for clock mocking so that
+        // ClockMock::withClockMock() intercepts time() calls inside controllers.
+        ClockMock::register(ArchiveController::class);
+    }
+    public function setUp(): void
+    {
+        parent::setUp();
         ClockMock::withClockMock(strtotime('2016-01-01T00:00:00Z'));
     }
 
-    /**
-     * @test
-     */
+    protected function tearDown(): void
+    {
+        ClockMock::withClockMock(false);
+        parent::tearDown();
+    }
+
+    #[Test]
     public function it_displays_the_archive_page_for_a_month()
     {
         $client = static::createClient();
@@ -27,12 +38,10 @@ final class ArchiveMonthControllerTest extends PageTestCase
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertSame('December 2015', $crawler->filter('.content-header__title')->text());
-        $this->assertContains('No articles available.', $crawler->filter('main')->text());
+        $this->assertStringContainsString('No articles available.', $crawler->filter('main')->text());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_has_metadata()
     {
         $client = static::createClient();
@@ -60,10 +69,8 @@ final class ArchiveMonthControllerTest extends PageTestCase
         $this->assertEmpty($crawler->filter('meta[name="dc.rights"]'));
     }
 
-    /**
-     * @test
-     * @dataProvider invalidYearProvider
-     */
+    #[Test]
+    #[DataProvider('invalidYearProvider')]
     public function it_returns_a_404_for_an_invalid_year_and_month($year, string $month)
     {
         $client = static::createClient();
@@ -73,7 +80,7 @@ final class ArchiveMonthControllerTest extends PageTestCase
         $this->assertSame(404, $client->getResponse()->getStatusCode());
     }
 
-    public function invalidYearProvider() : array
+    public static function invalidYearProvider() : array
     {
         return [
             'before eLife' => [2012, 'september'],
@@ -86,7 +93,7 @@ final class ArchiveMonthControllerTest extends PageTestCase
 
     protected function getUrl() : string
     {
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/search?for=&page=1&per-page=1&sort=date&order=desc&type[]=research-advance&type[]=research-article&type[]=research-communication&type[]=review-article&type[]=scientific-correspondence&type[]=short-report&type[]=tools-resources&type[]=replication-study&type[]=reviewed-preprint&use-date=published&start-date=2015-12-01&end-date=2015-12-31',

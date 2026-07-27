@@ -32,7 +32,7 @@ final class SessionAttributeVoterTest extends TestCase
         $this->assertSame($expected, $voter->vote(new AnonymousToken('secret', 'anon.'), $subject, $roles));
     }
 
-    public function noSetValueProvider() : Traversable
+    public static function noSetValueProvider() : Traversable
     {
         yield 'no roles' => [null, [], [], VoterInterface::ACCESS_ABSTAIN];
         yield 'some other role' => [null, ['bar'], [], VoterInterface::ACCESS_ABSTAIN];
@@ -59,7 +59,7 @@ final class SessionAttributeVoterTest extends TestCase
         $this->assertSame($expected, $voter->vote(new AnonymousToken('secret', 'anon.'), $subject, $roles));
     }
 
-    public function setValueProvider() : Traversable
+    public static function setValueProvider() : Traversable
     {
         yield 'no roles' => ['value', null, [], [], VoterInterface::ACCESS_ABSTAIN];
         yield 'some other role' => ['value', null, ['bar'], [], VoterInterface::ACCESS_ABSTAIN];

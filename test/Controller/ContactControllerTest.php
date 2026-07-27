@@ -2,11 +2,11 @@
 
 namespace test\eLife\Journal\Controller;
 
+use PHPUnit\Framework\Attributes\Test;
+
 final class ContactControllerTest extends PageTestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function it_displays_the_contact_page()
     {
         $client = static::createClient();
@@ -17,9 +17,7 @@ final class ContactControllerTest extends PageTestCase
         $this->assertSame('Contact', $crawler->filter('main h1')->text());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_has_metadata()
     {
         $client = static::createClient();

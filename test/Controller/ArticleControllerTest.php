@@ -7,13 +7,13 @@ use GuzzleHttp\Psr7\Response;
 use ML\JsonLD\JsonLD;
 use ML\JsonLD\RdfConstants;
 use ML\JsonLD\TypedValue;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use Traversable;
 
 final class ArticleControllerTest extends PageTestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function it_displays_an_article_page()
     {
         $client = static::createClient();
@@ -36,14 +36,12 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertSame('Jan 1, 2010', trim(preg_replace('!\s+!', ' ', $crawler->filter('.content-header .meta')->text())));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_displays_an_preview_article_page()
     {
         $client = static::createClient();
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001',
@@ -84,7 +82,7 @@ final class ArticleControllerTest extends PageTestCase
             )
         );
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001/versions',
@@ -132,9 +130,7 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertSame('Article title eLife 1:e00001. https://doi.org/10.7554/eLife.00001', $this->crawlerText($crawler->filter('.article-download-links-list__group .reference')));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_has_metadata()
     {
         $client = static::createClient();
@@ -163,14 +159,12 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertEmpty($crawler->filter('meta[name^="citation_"]'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_may_have_a_social_image()
     {
         $client = static::createClient();
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001',
@@ -263,7 +257,7 @@ final class ArticleControllerTest extends PageTestCase
             )
         );
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001/versions',
@@ -314,14 +308,12 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertSame('600', $crawler->filter('meta[property="og:image:height"]')->attr('content'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_has_citation_metadata()
     {
         $client = static::createClient();
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001',
@@ -591,7 +583,7 @@ final class ArticleControllerTest extends PageTestCase
             )
         );
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001/versions',
@@ -713,9 +705,7 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertCount(1, $crawler->filter('meta[name="citation_reference"]'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_has_schema_org_metadata()
     {
         $client = static::createClient();
@@ -739,9 +729,7 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertEquals(new TypedValue('Article title', RdfConstants::XSD_STRING), $node->getProperty('http://schema.org/headline'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_displays_a_404_if_the_article_is_not_found()
     {
         $client = static::createClient();
@@ -763,7 +751,7 @@ final class ArticleControllerTest extends PageTestCase
             )
         );
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001/versions',
@@ -789,14 +777,12 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertSame(404, $client->getResponse()->getStatusCode());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_displays_the_author_and_institution_lists()
     {
         $client = static::createClient();
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001',
@@ -925,7 +911,7 @@ final class ArticleControllerTest extends PageTestCase
             )
         );
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001/versions',
@@ -987,14 +973,12 @@ final class ArticleControllerTest extends PageTestCase
             trim($institutions->eq(2)->text(), " \n;"));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_may_not_have_authors()
     {
         $client = static::createClient();
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001',
@@ -1038,7 +1022,7 @@ final class ArticleControllerTest extends PageTestCase
             )
         );
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001/versions',
@@ -1088,14 +1072,12 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertSame('Article information', $articleInfo->filter('header > h2')->text());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_displays_bioprotocols()
     {
         $client = static::createClient();
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/bioprotocol/article/00001',
@@ -1130,19 +1112,17 @@ final class ArticleControllerTest extends PageTestCase
 
         $sections = $crawler->filter('.main-content-grid > .article-section:first-child > .article-section__body > .article-section');
 
-        $this->assertContains('Request a detailed protocol', $sections->eq(0)->filter('.article-section__header_link')->text());
+        $this->assertStringContainsString('Request a detailed protocol', $sections->eq(0)->filter('.article-section__header_link')->text());
         $this->assertEmpty($sections->eq(1)->filter('.article-section__header_link'));
-        $this->assertContains('View detailed protocol', $sections->eq(2)->filter('.article-section__header_link')->text());
+        $this->assertStringContainsString('View detailed protocol', $sections->eq(2)->filter('.article-section__header_link')->text());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_displays_metrics()
     {
         $client = static::createClient();
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/metrics/article/00001/citations',
@@ -1166,7 +1146,7 @@ final class ArticleControllerTest extends PageTestCase
             )
         );
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/metrics/article/00001/page-views?by=month&page=1&per-page=20&order=desc',
@@ -1192,7 +1172,7 @@ final class ArticleControllerTest extends PageTestCase
             )
         );
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/metrics/article/00001/downloads?by=month&page=1&per-page=20&order=desc',
@@ -1239,15 +1219,15 @@ final class ArticleControllerTest extends PageTestCase
 
         $metrics = $crawler->filter('.main-content-grid > section:nth-of-type(3)');
         $this->assertSame('Metrics', $metrics->filter('header > h2')->text());
-        $this->assertContains('5,678', $metrics->filter('.statistic:contains("views") .statistic__value')->text());
+        $this->assertStringContainsString('5,678', $metrics->filter('.statistic:contains("views") .statistic__value')->text());
         $this->assertCount(1, $metrics->filter('[data-behaviour="Metrics"][data-type="article"][data-id="00001"][data-metric="page-views"]'));
-        $this->assertContains('9,012', $metrics->filter('.statistic:contains("downloads") .statistic__value')->text());
+        $this->assertStringContainsString('9,012', $metrics->filter('.statistic:contains("downloads") .statistic__value')->text());
         $this->assertCount(1, $metrics->filter('[data-behaviour="Metrics"][data-type="article"][data-id="00001"][data-metric="downloads"]'));
-        $this->assertContains('1,234', $metrics->filter('.statistic:contains("citations") .statistic__value')->text());
-        $this->assertContains('Views, downloads and citations are aggregated across all versions of this paper published by eLife.', $metrics->text());
+        $this->assertStringContainsString('1,234', $metrics->filter('.statistic:contains("citations") .statistic__value')->text());
+        $this->assertStringContainsString('Views, downloads and citations are aggregated across all versions of this paper published by eLife.', $metrics->text());
     }
 
-    public function contextualDataMetricsProvider() : array
+    public static function contextualDataMetricsProvider() : array
     {
         return [
             '0 citations and 0 page views' => [
@@ -1344,16 +1324,14 @@ final class ArticleControllerTest extends PageTestCase
         ];
     }
 
-    /**
-     * @test
-     * @dataProvider contextualDataMetricsProvider
-     */
+    #[Test]
+    #[DataProvider('contextualDataMetricsProvider')]
     public function it_may_display_contextual_data_metrics(array $citations, array $pageViews, array $expected)
     {
 
         $client = static::createClient();
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/metrics/article/00001/citations',
@@ -1366,7 +1344,7 @@ final class ArticleControllerTest extends PageTestCase
             )
         );
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/metrics/article/00001/page-views?by=month&page=1&per-page=20&order=desc',
@@ -1396,14 +1374,12 @@ final class ArticleControllerTest extends PageTestCase
         }
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_displays_a_poa()
     {
         $client = static::createClient();
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001',
@@ -1464,7 +1440,7 @@ final class ArticleControllerTest extends PageTestCase
             )
         );
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001/versions',
@@ -1507,8 +1483,8 @@ final class ArticleControllerTest extends PageTestCase
         $crawler = $client->request('GET', '/articles/00001');
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
-        $this->assertContains('Accepted manuscript, PDF only. Full online edition to follow.',
-            array_map('trim', $crawler->filter('.info-bar')->extract(['_text'])));
+        $this->assertStringContainsString('Accepted manuscript, PDF only. Full online edition to follow.',
+            implode("\n", array_map('trim', $crawler->filter('.info-bar')->extract(['_text']))));
         $this->assertEmpty($crawler->filter('.view-selector'));
         $articleInfo = $crawler->filter('.main-content-grid > section:nth-of-type(1)');
         $this->assertSame('Article and author information',
@@ -1521,22 +1497,20 @@ final class ArticleControllerTest extends PageTestCase
         $articleInfo = $crawler->filter('.main-content-grid > section:nth-of-type(1) > div > section');
         $copyright = $articleInfo->eq(0);
         $this->assertSame('Copyright', $copyright->filter('header > h3')->text());
-        $this->assertContains('© 2012, Author One', $copyright->filter('div')->text());
-        $this->assertContains('Copyright statement.', $copyright->filter('div')->text());
+        $this->assertStringContainsString('© 2012, Author One', $copyright->filter('div')->text());
+        $this->assertStringContainsString('Copyright statement.', $copyright->filter('div')->text());
 
         $this->assertSame('Download links', $crawler->filter('.main-content-grid > section:nth-of-type(2) .article-section__header_text')->text());
 
         $this->assertSame('Categories and tags', $crawler->filter('.main-content-grid > section:nth-of-type(4) .article-meta__group_title')->text());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_displays_pdf_only_info_bar_if_no_vor_available()
     {
         $client = static::createClient();
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001',
@@ -1597,7 +1571,7 @@ final class ArticleControllerTest extends PageTestCase
             )
         );
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001/versions/1',
@@ -1658,7 +1632,7 @@ final class ArticleControllerTest extends PageTestCase
             )
         );
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001/versions',
@@ -1722,23 +1696,21 @@ final class ArticleControllerTest extends PageTestCase
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertCount(1, $crawler->filter('.info-bar--info'));
-        $this->assertContains('Accepted manuscript, PDF only. Full online edition to follow.',
-            array_map('trim', $crawler->filter('.info-bar--info')->extract(['_text'])));
-
+        $this->assertStringContainsString('Accepted manuscript, PDF only. Full online edition to follow.',
+            implode("\n", array_map('trim', $crawler->filter('.info-bar--info')->extract(['_text']))));
         $crawler = $client->request('GET', '/articles/00001v1');
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertCount(1, $crawler->filter('.info-bar--info'));
         $this->assertCount(1, $crawler->filter('.info-bar--multiple-versions'));
-        $this->assertContains('Accepted manuscript, PDF only. Full online edition to follow.',
-            array_map('trim', $crawler->filter('.info-bar--info')->extract(['_text'])));
-        $this->assertContains('Read the most recent version of this article.',
-            array_map('trim', $crawler->filter('.info-bar--multiple-versions')->extract(['_text'])));
+        $this->assertStringContainsString('Accepted manuscript, PDF only. Full online edition to follow.',
+            implode("\n", array_map('trim', $crawler->filter('.info-bar--info')->extract(['_text']))));
+
+        $this->assertStringContainsString('Read the most recent version of this article.',
+            implode("\n", array_map('trim', $crawler->filter('.info-bar--multiple-versions')->extract(['_text']))));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_does_not_display_pdf_only_info_bar_if_vor_available()
     {
         $client = static::createClient();
@@ -1764,14 +1736,14 @@ final class ArticleControllerTest extends PageTestCase
         $crawler = $client->request('GET', $this->getUrl('id-of-article-with-era'));
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
-        $this->assertContains(
+        $this->assertStringContainsString(
             'See this research in an executable code view.',
             array_map('trim', $crawler->filter('.info-bar--warning')->extract(['_text']))
         );
         $this->assertNotEmpty($crawler->filter('.article-download-links-list__link')->selectLink('Executable version'));
         $this->assertNotEmpty($crawler->filter('.article-download-links-list__secondary_link')->selectLink('What are executable versions?'));
-        $this->assertContains('/id-of-article-with-era/executable/download', $crawler->filter('.article-download-links-list__link')->selectLink('Executable version')->attr('href'));
-        $this->assertContains('Executable code', $crawler->filter('.tabbed-navigation')->text());
+        $this->assertStringContainsString('/id-of-article-with-era/executable/download', $crawler->filter('.article-download-links-list__link')->selectLink('Executable version')->attr('href'));
+        $this->assertStringContainsString('Executable code', $crawler->filter('.tabbed-navigation')->text());
     }
 
     /**
@@ -1790,9 +1762,7 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertEmpty($crawler->filter('.view-selector'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_displays_dismissible_info_bars_when_it_has_been_selected()
     {
         $client = static::createClient();
@@ -1825,9 +1795,7 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertNotContains('Executable code', $crawler->filter('.tabbed-navigation')->text());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_does_not_display_dismissible_info_bars_when_it_is_a_poa_as_it_has_already_different_info_bars()
     {
         $client = static::createClient();
@@ -1843,9 +1811,7 @@ final class ArticleControllerTest extends PageTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_displays_previous_versions()
     {
         $client = static::createClient();
@@ -1853,12 +1819,12 @@ final class ArticleControllerTest extends PageTestCase
         $crawler = $client->request('GET', $this->getPreviousVersionUrl());
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
-        $this->assertContains('Read the most recent version of this article.', array_map('trim', $crawler->filter('.info-bar')->extract(['_text'])));
+        $this->assertStringContainsString('Read the most recent version of this article.',
+            implode("\n", array_map('trim', $crawler->filter('.info-bar')->extract(['_text']))));
+
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_has_metadata_on_previous_versions()
     {
         $client = static::createClient();
@@ -1887,9 +1853,7 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertEmpty($crawler->filter('meta[name^="citation_"]'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_has_citation_metadata_on_previous_versions()
     {
         $client = static::createClient();
@@ -1903,14 +1867,12 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertSame('http://localhost/articles/00001v1.xml', $crawler->filter('meta[name="citation_xml_url"]')->attr('content'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_displays_content()
     {
         $client = static::createClient();
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001',
@@ -2508,7 +2470,7 @@ final class ArticleControllerTest extends PageTestCase
             )
         );
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001/versions',
@@ -2784,8 +2746,8 @@ final class ArticleControllerTest extends PageTestCase
 
         $copyright = $articleInfo->eq(3);
         $this->assertSame('Copyright', $copyright->filter('header > h3')->text());
-        $this->assertContains('© 2012, Bar', $copyright->filter('div')->text());
-        $this->assertContains('Copyright statement.', $copyright->filter('div')->text());
+        $this->assertStringContainsString('© 2012, Bar', $copyright->filter('div')->text());
+        $this->assertStringContainsString('Copyright statement.', $copyright->filter('div')->text());
 
         $downloadLinks = $crawler->filter('.main-content-grid > section:nth-of-type(9)');
         $this->assertSame('Download links', $downloadLinks->filter('.article-section__header_text')->text());
@@ -2852,7 +2814,7 @@ final class ArticleControllerTest extends PageTestCase
         );
     }
 
-    public function magazineArticlesProvider() : array
+    public static function magazineArticlesProvider() : array
     {
         return [
             'insight' => [
@@ -2931,10 +2893,8 @@ final class ArticleControllerTest extends PageTestCase
         ];
     }
 
-    /**
-     * @test
-     * @dataProvider magazineArticlesProvider
-     */
+    #[Test]
+    #[DataProvider('magazineArticlesProvider')]
     public function it_displays_magazine_content(
         string $id,
         string $type,
@@ -2945,7 +2905,7 @@ final class ArticleControllerTest extends PageTestCase
     {
         $client = static::createClient();
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/'.$id,
@@ -3770,7 +3730,7 @@ final class ArticleControllerTest extends PageTestCase
             )
         );
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/'.$id.'/versions',
@@ -3875,9 +3835,9 @@ final class ArticleControllerTest extends PageTestCase
         $sections = $crawler->filter('.main-content-grid > .article-section');
         if (empty($expectedViewSelectorItems)) {
             // Abstract does not appear in main-content-grid but populates the impact statement property.
-            $this->assertNotContains('Abstract', $crawler->filter('.main-content-grid')->text());
+            $this->assertStringNotContainsString('Abstract', $crawler->filter('.main-content-grid')->text());
             // The Main text heading does not appear for insights and editorials.
-            $this->assertNotContains('Main text', $crawler->filter('.main-content-grid')->text());
+            $this->assertStringNotContainsString('Main text', $crawler->filter('.main-content-grid')->text());
             $this->assertCount(4, $sections);
             $this->assertEmpty($sections->eq(0)->filter('h2'));
             $references = $sections->eq(1);
@@ -3925,7 +3885,7 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertSame('Categories and tags', $categoriesAndTags->filter('h4')->text());
     }
 
-    public function contentAsideProvider() : Traversable
+    public static function contentAsideProvider() : Traversable
     {
         yield 'with content-aside' => [
             'research-article',
@@ -3944,10 +3904,8 @@ final class ArticleControllerTest extends PageTestCase
         }
     }
 
-    /**
-     * @test
-     * @dataProvider contentAsideProvider
-     */
+    #[Test]
+    #[DataProvider('contentAsideProvider')]
     public function it_may_have_content_aside(
         string $type,
         bool $hasContentAside
@@ -3955,7 +3913,7 @@ final class ArticleControllerTest extends PageTestCase
     {
         $client = static::createClient();
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001',
@@ -4009,7 +3967,7 @@ final class ArticleControllerTest extends PageTestCase
             )
         );
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001/versions',
@@ -4108,14 +4066,12 @@ final class ArticleControllerTest extends PageTestCase
         }
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_may_have_a_data_availability_statement()
     {
         $client = static::createClient();
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001',
@@ -4216,7 +4172,7 @@ final class ArticleControllerTest extends PageTestCase
             )
         );
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001/versions',
@@ -4290,14 +4246,12 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertSame(200, $client->getResponse()->getStatusCode());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_displays_recommendations_no_further_reading()
     {
         $client = static::createClient();
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001',
@@ -4338,7 +4292,7 @@ final class ArticleControllerTest extends PageTestCase
             )
         );
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001/versions',
@@ -4378,7 +4332,7 @@ final class ArticleControllerTest extends PageTestCase
             )
         );
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001/related',
@@ -4516,7 +4470,7 @@ final class ArticleControllerTest extends PageTestCase
             )
         );
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/recommendations/article/00001?page=1&per-page=100&order=desc',
@@ -4604,23 +4558,21 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertCount(2, $crawler->filter('.info-bar--attention'));
         $this->assertSame('This article has been retracted. Read the retraction notice.', trim($crawler->filter('.info-bar--attention')->eq(0)->text()));
         $this->assertSame('Concern(s) have been raised about this article. Read the expression of concern.', trim($crawler->filter('.info-bar--attention')->eq(1)->text()));
-        $this->assertContains('Insight 1 title', $crawler->filter('.teaser--related')->text());
+        $this->assertStringContainsString('Insight 1 title', $crawler->filter('.teaser--related')->text());
         $this->assertEmpty($crawler->filter('.article__related-item')->selectLink('Further reading'));
 
         $furtherReading = $crawler->filter('.listing-list-heading:contains("Further reading") + .listing-list > .listing-list__item');
         $this->assertCount(1, $furtherReading);
         $this->assertCount(1, $crawler->filter('.listing-list__item--related'));
-        $this->assertContains('Insight 1 title', $furtherReading->eq(0)->text());
+        $this->assertStringContainsString('Insight 1 title', $furtherReading->eq(0)->text());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_displays_recommendations()
     {
         $client = static::createClient();
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001',
@@ -4661,7 +4613,7 @@ final class ArticleControllerTest extends PageTestCase
             )
         );
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001/versions',
@@ -4701,7 +4653,7 @@ final class ArticleControllerTest extends PageTestCase
             )
         );
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001/related',
@@ -4839,7 +4791,7 @@ final class ArticleControllerTest extends PageTestCase
             )
         );
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/recommendations/article/00001?page=1&per-page=100&order=desc',
@@ -5027,33 +4979,31 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertCount(2, $crawler->filter('.info-bar--attention'));
         $this->assertSame('This article has been retracted. Read the retraction notice.', trim($crawler->filter('.info-bar--attention')->eq(0)->text()));
         $this->assertSame('Concern(s) have been raised about this article. Read the expression of concern.', trim($crawler->filter('.info-bar--attention')->eq(1)->text()));
-        $this->assertContains('Insight 1 title', $crawler->filter('.teaser--related')->text());
+        $this->assertStringContainsString('Insight 1 title', $crawler->filter('.teaser--related')->text());
         $this->assertNotEmpty($crawler->filter('.article__related-item')->selectLink('Further reading'));
 
         $furtherReading = $crawler->filter('.listing-list-heading:contains("Further reading") + .listing-list > .listing-list__item');
         $this->assertCount(3, $furtherReading);
         $this->assertCount(1, $crawler->filter('.listing-list__item--related'));
-        $this->assertContains('Insight 1 title', $furtherReading->eq(0)->text());
-        $this->assertContains('Insight 2 title', $furtherReading->eq(1)->text());
-        $this->assertContains('Insight 3 title', $furtherReading->eq(2)->text());
+        $this->assertStringContainsString('Insight 1 title', $furtherReading->eq(0)->text());
+        $this->assertStringContainsString('Insight 2 title', $furtherReading->eq(1)->text());
+        $this->assertStringContainsString('Insight 3 title', $furtherReading->eq(2)->text());
 
         $crawler = $client->click($crawler->selectLink('Load more')->link());
 
         $furtherReading = $crawler->filter('.listing-list__item');
         $this->assertCount(2, $furtherReading);
         $this->assertCount(0, $crawler->filter('.listing-list__item--related'));
-        $this->assertContains('Insight 4 title', $furtherReading->eq(0)->text());
-        $this->assertContains('Expression of concern title', $furtherReading->eq(1)->text());
+        $this->assertStringContainsString('Insight 4 title', $furtherReading->eq(0)->text());
+        $this->assertStringContainsString('Expression of concern title', $furtherReading->eq(1)->text());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_displays_reviewed_preprint_in_recommendations()
     {
         $client = static::createClient();
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001',
@@ -5108,7 +5058,7 @@ final class ArticleControllerTest extends PageTestCase
             )
         );
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001/versions',
@@ -5148,7 +5098,7 @@ final class ArticleControllerTest extends PageTestCase
             )
         );
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001/related',
@@ -5206,7 +5156,7 @@ final class ArticleControllerTest extends PageTestCase
             )
         );
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/recommendations/article/00001?page=1&per-page=100&order=desc',
@@ -5270,22 +5220,20 @@ final class ArticleControllerTest extends PageTestCase
         $crawler = $client->request('GET', '/articles/00001');
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
-        $this->assertContains('reviewed-preprint 1', $crawler->filter('.teaser--related .teaser__header_text')->text());
+        $this->assertStringContainsString('reviewed-preprint 1', $crawler->filter('.teaser--related .teaser__header_text')->text());
 
         $furtherReading = $crawler->filter('.listing-list-heading:contains("Further reading") + .listing-list > .listing-list__item');
         $this->assertCount(2, $furtherReading);
         $this->assertCount(1, $crawler->filter('.listing-list__item--related'));
-        $this->assertContains('reviewed preprint 2', $furtherReading->filter('.content-header__title_link')->eq(1)->text());
+        $this->assertStringContainsString('reviewed preprint 2', $furtherReading->filter('.content-header__title_link')->eq(1)->text());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_displays_vor_prc_article()
     {
         $client = static::createClient();
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001',
@@ -5438,7 +5386,7 @@ final class ArticleControllerTest extends PageTestCase
             )
         );
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001/versions',
@@ -5494,14 +5442,12 @@ final class ArticleControllerTest extends PageTestCase
             $this->crawlerText($citeAll->filter('.article-section__body')));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_displays_doi_version_for_vor_article()
     {
         $client = static::createClient();
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001',
@@ -5556,7 +5502,7 @@ final class ArticleControllerTest extends PageTestCase
             )
         );
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001/versions',
@@ -5607,7 +5553,7 @@ final class ArticleControllerTest extends PageTestCase
         $this->assertSame('https://doi.org/10.7554/eLife.00001.1', trim($crawler->filter('.content-header__footer .doi')->text()));
     }
 
-    public function prcVorHistoryProvider()
+    public static function prcVorHistoryProvider()
     {
         yield 'none' => [
             [],
@@ -5748,10 +5694,8 @@ final class ArticleControllerTest extends PageTestCase
         ];
     }
 
-    /**
-     * @test
-     * @dataProvider prcVorHistoryProvider
-     */
+    #[Test]
+    #[DataProvider('prcVorHistoryProvider')]
     public function it_displays_versions_in_timeline_for_prc_vor(
         array $preprints,
         array $expectedTimeline
@@ -5759,7 +5703,7 @@ final class ArticleControllerTest extends PageTestCase
     {
         $client = static::createClient();
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001',
@@ -5912,7 +5856,7 @@ final class ArticleControllerTest extends PageTestCase
             )
         );
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001/versions',
@@ -5967,7 +5911,7 @@ final class ArticleControllerTest extends PageTestCase
 
     protected function getUrl($articleId = '00001') : string
     {
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 "http://api.elifesciences.org/articles/{$articleId}",
@@ -6045,7 +5989,7 @@ final class ArticleControllerTest extends PageTestCase
             )
         );
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 "http://api.elifesciences.org/articles/{$articleId}/versions",
@@ -6090,7 +6034,7 @@ final class ArticleControllerTest extends PageTestCase
 
     private function getPreviousVersionUrl() : string
     {
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001/versions/1',
@@ -6133,7 +6077,7 @@ final class ArticleControllerTest extends PageTestCase
             )
         );
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/articles/00001/versions',
@@ -6198,7 +6142,7 @@ final class ArticleControllerTest extends PageTestCase
 
     public function getPoaUrl($articleId = '12345') : string
     {
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 "http://api.elifesciences.org/articles/${articleId}",
@@ -6259,7 +6203,7 @@ final class ArticleControllerTest extends PageTestCase
             )
         );
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 "http://api.elifesciences.org/articles/{$articleId}/versions",

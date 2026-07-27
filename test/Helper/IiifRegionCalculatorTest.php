@@ -49,7 +49,7 @@ final class IiifRegionCalculatorTest extends TestCase
         $this->assertSame($expected, IiifRegionCalculator::calculate($sourceW, $sourceH, $focalX, $focalY, $requestedW, $requestedH));
     }
 
-    public function regionProvider() : Traversable
+    public static function regionProvider() : Traversable
     {
         yield [1280, 720, 50, 50, 720, 720, '280,0,720,720'];
         yield [800, 600, 50, 50, 400, 150, '0,150,800,300'];

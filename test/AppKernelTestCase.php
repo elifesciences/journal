@@ -9,6 +9,8 @@ use Symfony\Component\Filesystem\Filesystem;
 
 trait AppKernelTestCase
 {
+    private static bool $kernelBootedInCurrentTest = false;
+
     final protected static function getKernelClass() : string
     {
         return AppKernel::class;
@@ -17,6 +19,12 @@ trait AppKernelTestCase
     final protected static function bootKernel(array $options = [])
     {
         parent::bootKernel($options);
+
+        // FrameworkBundle::boot() calls ErrorHandler::register() which installs a
+        // PHP exception handler via set_exception_handler() without restoring it.
+        // PHPUnit 10+ fails tests that increase the handler stack depth. We track
+        // the boot so tearDown() can restore the handler.
+        static::$kernelBootedInCurrentTest = true;
 
         (new Filesystem())->remove(static::$kernel->getContainer()->getParameter('api_mock'));
 

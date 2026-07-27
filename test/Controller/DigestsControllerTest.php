@@ -4,13 +4,13 @@ namespace test\eLife\Journal\Controller;
 
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use Traversable;
 
 final class DigestsControllerTest extends PageTestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function it_displays_the_digests_page()
     {
         $client = static::createClient();
@@ -19,12 +19,10 @@ final class DigestsControllerTest extends PageTestCase
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertSame('eLife Science Digests', $crawler->filter('.content-header__title')->text());
-        $this->assertContains('No digests available.', $crawler->filter('main')->text());
+        $this->assertStringContainsString('No digests available.', $crawler->filter('main')->text());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_has_metadata()
     {
         $client = static::createClient();
@@ -55,10 +53,8 @@ final class DigestsControllerTest extends PageTestCase
         $this->assertEmpty($crawler->filter('meta[name="dc.rights"]'));
     }
 
-    /**
-     * @test
-     * @dataProvider invalidPageProvider
-     */
+    #[Test]
+    #[DataProvider('invalidPageProvider')]
     public function it_displays_a_404_when_not_on_a_valid_page($page, callable $callable = null)
     {
         $client = static::createClient();
@@ -72,36 +68,35 @@ final class DigestsControllerTest extends PageTestCase
         $this->assertSame(404, $client->getResponse()->getStatusCode());
     }
 
-    public function invalidPageProvider() : Traversable
+    public static function invalidPageProvider() : Traversable
     {
         foreach (['-1', '0', 'foo'] as $page) {
             yield 'page '.$page => [$page];
         }
 
-        foreach (['2'] as $page) {
-            yield 'page '.$page => [
-                $page,
-                function () use ($page) {
-                    $this->mockApiResponse(
-                        new Request(
-                            'GET',
-                            'http://api.elifesciences.org/digests?page=1&per-page=1&order=desc',
-                            ['Accept' => 'application/vnd.elife.digest-list+json; version=1']
-                        ),
-                        new Response(
-                            404,
-                            ['Content-Type' => 'application/problem+json'],
-                            json_encode(['title' => 'Not found'])
-                        )
-                    );
-                },
-            ];
-        }
+        $page = '2';
+        yield 'page '.$page => [
+            $page,
+            function () use ($page) {
+                self::mockApiResponse(
+                    new Request(
+                        'GET',
+                        'http://api.elifesciences.org/digests?page=1&per-page=1&order=desc',
+                        ['Accept' => 'application/vnd.elife.digest-list+json; version=1']
+                    ),
+                    new Response(
+                        404,
+                        ['Content-Type' => 'application/problem+json'],
+                        json_encode(['title' => 'Not found'])
+                    )
+                );
+            },
+        ];
     }
 
     protected function getUrl() : string
     {
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/digests?page=1&per-page=8&order=desc',

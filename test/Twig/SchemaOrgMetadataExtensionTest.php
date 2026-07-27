@@ -51,7 +51,7 @@ final class SchemaOrgMetadataExtensionTest extends TestCase
     /** @var Environment */
     private $twig;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->urlGenerator = $this->createMock(UrlGeneratorInterface::class);
         $this->packages = $this->createMock(Packages::class);
@@ -232,7 +232,7 @@ final class SchemaOrgMetadataExtensionTest extends TestCase
         }
     }
 
-    public function validateJsonProvider() : Traversable
+    public static function validateJsonProvider() : Traversable
     {
         yield 'blog-article' => [
             new BlogArticle(
@@ -265,7 +265,7 @@ final class SchemaOrgMetadataExtensionTest extends TestCase
                 ])
             ),
             function ($json) {
-                $this->assertContains('"headline": "Headline does not support tags",', $json);
+                $this->assertStringContainsString('"headline": "Headline does not support tags",', $json);
             },
         ];
         yield 'quotes in title' => [
@@ -283,7 +283,7 @@ final class SchemaOrgMetadataExtensionTest extends TestCase
                 ])
             ),
             function ($json) {
-                $this->assertContains('"headline": "title might have \"quotes\"",', $json);
+                $this->assertStringContainsString('"headline": "title might have \"quotes\"",', $json);
             },
         ];
     }

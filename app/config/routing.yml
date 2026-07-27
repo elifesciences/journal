@@ -200,51 +200,6 @@ contact:
     defaults:
          _controller: AppBundle:Contact:contact
 
-content-alerts:
-    path: /content-alerts
-    defaults:
-         _controller: AppBundle:ContentAlerts:subscribe
-
-content-alerts-variant:
-    path: /content-alerts/{variant}
-    defaults:
-         _controller: AppBundle:ContentAlerts:subscribe
-    requirements:
-        variant: '(early\-career|elife\-newsletter)'
-
-content-alerts-link-expired:
-    path: /content-alerts/expired
-    defaults:
-         _controller: AppBundle:ContentAlerts:linkExpired
-
-content-alerts-update:
-    path: /content-alerts/{id}
-    defaults:
-         _controller: AppBundle:ContentAlerts:update
-    requirements:
-        id: '[a-z0-9]+'
-
-content-alerts-unsubscribe:
-    path: /content-alerts/unsubscribe/{id}
-    defaults:
-         _controller: AppBundle:ContentAlerts:unsubscribe
-    requirements:
-        id: '[a-z0-9]+'
-
-content-alerts-unsubscribe-variant:
-    path: /content-alerts/unsubscribe/{id}/{variant}
-    defaults:
-         _controller: AppBundle:ContentAlerts:unsubscribe
-    requirements:
-        id: '[a-z0-9]+'
-        variant: '(early\-career|elife\-newsletter)'
-
-content-alerts-optout:
-    path: /content-alerts/optout/{id}
-    defaults:
-         _controller: AppBundle:ContentAlerts:optout
-    requirements:
-        id: '[a-z0-9]+'
 
 digest:
     path: /digests/{id}/{slug}

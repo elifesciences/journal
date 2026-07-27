@@ -25,7 +25,7 @@ final class TimeVoterTest extends TestCase
         $this->assertSame($expected, $voter->vote(new AnonymousToken('secret', 'anon.'), $subject, $roles));
     }
 
-    public function voteProvider() : Traversable
+    public static function voteProvider() : Traversable
     {
         yield 'no roles' => [null, [], 1234, 1234, VoterInterface::ACCESS_ABSTAIN];
         yield 'some other role' => [null, ['other role'], 1234, 1234, VoterInterface::ACCESS_ABSTAIN];

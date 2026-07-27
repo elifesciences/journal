@@ -58,7 +58,7 @@ final class CacheControlSubscriberTest extends TestCase
         $this->assertSame('"'.md5($response->getContent()).'"', $response->getEtag());
     }
 
-    public function notFoundProvider() : Traversable
+    public static function notFoundProvider() : Traversable
     {
         yield 'cannot be cached' => ['private, no-cache, no-store, must-revalidate', 'must-revalidate, no-cache, no-store, private'];
         yield 'short max-age' => ['public, max-age=299', 'max-age=299, public', ['Cookie']];

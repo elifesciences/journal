@@ -10,7 +10,7 @@ trait CreatesDoi
     /**
      * @return ViewModel\Doi|null
      */
-    final private function createDoi(HasDoi $object)
+    private function createDoi(HasDoi $object)
     {
         return $object->getDoi() ? new ViewModel\Doi($object->getDoi()) : null;
     }

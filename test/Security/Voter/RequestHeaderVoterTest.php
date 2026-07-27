@@ -28,7 +28,7 @@ final class RequestHeaderVoterTest extends TestCase
         $this->assertSame($expected, $voter->vote(new AnonymousToken('secret', 'anon.'), $subject, $roles));
     }
 
-    public function voteProvider() : Traversable
+    public static function voteProvider() : Traversable
     {
         yield 'no roles' => [null, [], 'foo', 'foo', VoterInterface::ACCESS_ABSTAIN];
         yield 'some other role' => [null, ['other role'], 'foo', 'foo', VoterInterface::ACCESS_ABSTAIN];

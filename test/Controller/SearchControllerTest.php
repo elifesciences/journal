@@ -35,7 +35,7 @@ final class SearchControllerTest extends PageTestCase
 
         $form['for'] = 'keyword';
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/search?for=keyword&page=1&per-page=1&sort=relevance&order=desc&use-date=default',
@@ -81,7 +81,7 @@ final class SearchControllerTest extends PageTestCase
             )
         );
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/search?for=keyword&page=1&per-page=10&sort=relevance&order=desc&use-date=default',
@@ -160,7 +160,7 @@ final class SearchControllerTest extends PageTestCase
 
         $crawler = $client->request('GET', $this->getUrl());
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/search?for=&page=1&per-page=1&sort=date&order=desc&use-date=default',
@@ -206,7 +206,7 @@ final class SearchControllerTest extends PageTestCase
             )
         );
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/search?for=&page=1&per-page=10&sort=date&order=desc&use-date=default',
@@ -257,7 +257,7 @@ final class SearchControllerTest extends PageTestCase
         $this->assertSame('/search?for=&sort=date&order=descending', $client->getRequest()->getRequestUri());
         $this->assertSame(200, $client->getResponse()->getStatusCode());
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/search?for=&page=1&per-page=1&sort=date&order=asc&use-date=default',
@@ -303,7 +303,7 @@ final class SearchControllerTest extends PageTestCase
             )
         );
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/search?for=&page=1&per-page=10&sort=date&order=asc&type[]=blog-article&type[]=collection&type[]=editorial&type[]=feature&type[]=insight&type[]=interview&type[]=labs-post&type[]=podcast-episode&type[]=correction&type[]=expression-concern&type[]=registered-report&type[]=replication-study&type[]=research-advance&type[]=research-article&type[]=research-communication&type[]=retraction&type[]=review-article&type[]=scientific-correspondence&type[]=short-report&type[]=tools-resources&use-date=default',
@@ -442,7 +442,7 @@ final class SearchControllerTest extends PageTestCase
             ],
         ];
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/search?for=Reviewed preprint&page=1&per-page=1&sort=relevance&order=desc&use-date=default',
@@ -487,7 +487,7 @@ final class SearchControllerTest extends PageTestCase
                 ])
             )
         );
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/search?for=Reviewed preprint&page=1&per-page=10&sort=relevance&order=desc&use-date=default',
@@ -544,7 +544,7 @@ final class SearchControllerTest extends PageTestCase
 
     protected function getUrl($for = '', $expectedQuery = null) : string
     {
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/search?for='.($expectedQuery ?? $for).'&page=1&per-page=1&sort=relevance&order=desc&use-date=default',
@@ -590,7 +590,7 @@ final class SearchControllerTest extends PageTestCase
             )
         );
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/search?for='.($expectedQuery ?? $for).'&page=1&per-page=10&sort=relevance&order=desc&use-date=default',

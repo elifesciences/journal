@@ -12,7 +12,7 @@ trait CreatesAssetViewerInline
     use CreatesDoi;
     use CreatesCaptionedAsset;
 
-    final private function createAssetViewerInline(Block\FigureAsset $asset, ViewModel\IsCaptioned $assetViewModel, ViewModel\Link $download = null, ViewModel\OpenLink $open = null, array $context = []) : ViewModel\AssetViewerInline
+    private function createAssetViewerInline(Block\FigureAsset $asset, ViewModel\IsCaptioned $assetViewModel, ViewModel\Link $download = null, ViewModel\OpenLink $open = null, array $context = []) : ViewModel\AssetViewerInline
     {
         $assetViewModel = $this->createCaptionedAsset($assetViewModel, $asset->getAsset(), $this->createDoi($asset));
 

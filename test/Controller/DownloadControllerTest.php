@@ -4,19 +4,18 @@ namespace test\eLife\Journal\Controller;
 
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use PHPUnit\Framework\Attributes\Test;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use test\eLife\Journal\WebTestCase;
 
 final class DownloadControllerTest extends WebTestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function it_downloads_a_file()
     {
         $client = static::createClient();
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://www.example.com/test.mp3',
@@ -44,21 +43,23 @@ final class DownloadControllerTest extends WebTestCase
 
         $this->assertInstanceOf(StreamedResponse::class, $response);
         $this->assertSame(200, $response->getStatusCode());
-        $this->assertArraySubset([
-            'content-type' => ['audio/mp3'],
-            'content-disposition' => ['attachment; filename="test.mp3"'],
-        ], $response->headers->all());
+        foreach (
+            [
+                'content-type' => ['audio/mp3'],
+                'content-disposition' => ['attachment; filename="test.mp3"']
+            ] as $key => $value) {
+                $this->assertArrayHasKey($key, $response->headers->all());
+                $this->assertSame($value, $response->headers->all()[$key]);
+        }
         $this->assertSame(file_get_contents($mp3), $content);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_may_set_the_rel_canonical_link_header()
     {
         $client = static::createClient();
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://www.example.com/test.pdf?canonicalUri=http://www.example.com/canonical',
@@ -86,11 +87,15 @@ final class DownloadControllerTest extends WebTestCase
 
         $this->assertInstanceOf(StreamedResponse::class, $response);
         $this->assertSame(200, $response->getStatusCode());
-        $this->assertArraySubset([
-            'content-type' => ['application/pdf'],
-            'content-disposition' => ['attachment; filename="test.pdf"'],
-            'link' => ['<http://www.example.com/canonical>; rel="canonical"'],
-        ], $response->headers->all());
+        foreach (
+            [
+                'content-type' => ['application/pdf'],
+                'content-disposition' => ['attachment; filename="test.pdf"'],
+                'link' => ['<http://www.example.com/canonical>; rel="canonical"'],
+            ] as $key => $value) {
+            $this->assertArrayHasKey($key, $response->headers->all());
+            $this->assertSame($value, $response->headers->all()[$key]);
+        }
         $this->assertSame(file_get_contents($mp3), $content);
     }
 

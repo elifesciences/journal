@@ -19,7 +19,7 @@ final class PodcastControllerTest extends PageTestCase
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertSame('eLife podcast', $crawler->filter('.content-header__title')->text());
-        $this->assertContains('No episodes available.', $crawler->filter('main')->text());
+        $this->assertStringContainsString('No episodes available.', $crawler->filter('main')->text());
     }
 
     /**
@@ -69,7 +69,7 @@ final class PodcastControllerTest extends PageTestCase
         $this->assertSame(404, $client->getResponse()->getStatusCode());
     }
 
-    public function invalidPageProvider() : Traversable
+    public static function invalidPageProvider() : Traversable
     {
         foreach (['-1', '0', 'foo'] as $page) {
             yield 'page '.$page => [$page];
@@ -79,7 +79,7 @@ final class PodcastControllerTest extends PageTestCase
             yield 'page '.$page => [
                 $page,
                 function () use ($page) {
-                    $this->mockApiResponse(
+                    self::mockApiResponse(
                         new Request(
                             'GET',
                             'http://api.elifesciences.org/podcast-episodes?page=1&per-page=1&order=desc',
@@ -98,7 +98,7 @@ final class PodcastControllerTest extends PageTestCase
 
     protected function getUrl() : string
     {
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/podcast-episodes?page=1&per-page=8&order=desc',

@@ -3,18 +3,6 @@ services:
     _defaults:
         public: true
 
-    elife.google_api.sheets:
-        class: Google\Service\Sheets
-        arguments:
-          - '%google_api_client.config%'
-
-    elife.journal.google_client.opt_out_unsubscribe_reason:
-        class: eLife\Journal\GoogleClient\OptoutUnsubscribeReason
-        arguments:
-          - '@elife.google_api.sheets'
-          - '%google_api_client.optout_unsubscribe_spreadsheet_id%'
-          - '%google_api_client.refresh_token%'
-          - '@monolog.logger.api'
 
     # Manually wired until Symfony is upgraded to 4.3+ and http_client.yml can be loaded via framework config
     framework.http_client.clients.elife_api:
@@ -97,12 +85,6 @@ services:
         arguments:
           - '@framework.http_client.clients.elife_api_search_page'
 
-    elife.api_client.client.crm_api:
-        class: eLife\CiviContacts\Guzzle\CiviCrmClient
-        arguments:
-          - '@framework.http_client.clients.elife_crm_api'
-          - '%crm_api_key%'
-          - '%crm_api_site_key%'
 
     elife.api_client.client.warning_checking:
         class: eLife\ApiClient\HttpClient\WarningCheckingHttpClient

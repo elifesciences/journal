@@ -4,17 +4,16 @@ namespace test\eLife\Journal\Controller;
 
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use PHPUnit\Framework\Attributes\Test;
 
 final class AlertsControllerTest extends PageTestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function it_displays_the_alerts_page()
     {
-        $client = static::createClient();
+        $client = AlertsControllerTest::createClient();
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/subjects?page=1&per-page=100&order=asc',
@@ -80,12 +79,10 @@ final class AlertsControllerTest extends PageTestCase
         $this->assertSame('eLife\'s Subject specific RSS feeds', trim($majorSections->eq(4)->text()));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_has_metadata()
     {
-        $client = static::createClient();
+        $client = AlertsControllerTest::createClient();
 
         $crawler = $client->request('GET', $this->getUrl().'?foo');
 

@@ -7,15 +7,15 @@ use GuzzleHttp\Psr7\Response;
 use ML\JsonLD\JsonLD;
 use ML\JsonLD\RdfConstants;
 use ML\JsonLD\TypedValue;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use test\eLife\Journal\Providers;
 
 final class CollectionControllerTest extends PageTestCase
 {
     use Providers;
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_displays_a_collection_page()
     {
         $client = static::createClient();
@@ -28,17 +28,15 @@ final class CollectionControllerTest extends PageTestCase
 
         $content = $crawler->filter('.list-heading:contains("Collection") + .listing-list > .listing-list__item');
         $this->assertCount(1, $content);
-        $this->assertContains('Blog article title', $content->eq(0)->text());
+        $this->assertStringContainsString('Blog article title', $content->eq(0)->text());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_displays_metrics()
     {
         $client = static::createClient();
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/metrics/collection/1/page-views?by=month&page=1&per-page=20&order=desc',
@@ -79,14 +77,12 @@ final class CollectionControllerTest extends PageTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_displays_multimedia()
     {
         $client = static::createClient();
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/collections/1',
@@ -198,17 +194,15 @@ final class CollectionControllerTest extends PageTestCase
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $multimedia = $crawler->filter('.list-heading:contains("Multimedia") + .listing-list > .listing-list__item');
         $this->assertCount(1, $multimedia);
-        $this->assertContains('Podcast episode title', $multimedia->eq(0)->text());
+        $this->assertStringContainsString('Podcast episode title', $multimedia->eq(0)->text());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_displays_related_content()
     {
         $client = static::createClient();
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/collections/1',
@@ -300,17 +294,15 @@ final class CollectionControllerTest extends PageTestCase
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $related = $crawler->filter('.list-heading:contains("Related") + .listing-list > .listing-list__item');
         $this->assertCount(1, $related);
-        $this->assertContains('Blog article 2 title', $related->eq(0)->text());
+        $this->assertStringContainsString('Blog article 2 title', $related->eq(0)->text());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_displays_contributors()
     {
         $client = static::createClient();
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/collections/1',
@@ -406,15 +398,13 @@ final class CollectionControllerTest extends PageTestCase
         $this->assertCount(2, $crawler->filter('.list-heading:contains("Contributors") + .listing-list > .listing-list__item'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_displays_reviewed_preprints()
     {
         $client = static::createClient();
         $url = '/collections/1/collection-title';
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/collections/1',
@@ -513,9 +503,7 @@ final class CollectionControllerTest extends PageTestCase
         $this->assertSame('Collection with reviewed-preprint', trim($crawler->filter('#maincontent #primaryListing .teaser__header_text')->text()));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_has_metadata()
     {
         $client = static::createClient();
@@ -543,10 +531,8 @@ final class CollectionControllerTest extends PageTestCase
         $this->assertSame('© 2010 eLife Sciences Publications Limited. This article is distributed under the terms of the Creative Commons Attribution License, which permits unrestricted use and redistribution provided that the original author and source are credited.', $crawler->filter('meta[name="dc.rights"]')->attr('content'));
     }
 
-    /**
-     * @test
-     * @dataProvider incorrectSlugProvider
-     */
+    #[Test]
+    #[DataProvider('incorrectSlugProvider')]
     public function it_redirects_if_the_slug_is_not_correct(string $slug = null, string $queryString = null)
     {
         $client = static::createClient();
@@ -564,9 +550,7 @@ final class CollectionControllerTest extends PageTestCase
         $this->assertTrue($client->getResponse()->isRedirect($expectedUrl));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_has_schema_org_metadata()
     {
         $client = static::createClient();
@@ -590,9 +574,7 @@ final class CollectionControllerTest extends PageTestCase
         $this->assertEquals(new TypedValue('Collection title', RdfConstants::XSD_STRING), $node->getProperty('http://schema.org/headline'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_displays_a_404_if_the_collection_is_not_found()
     {
         $client = static::createClient();
@@ -623,7 +605,7 @@ final class CollectionControllerTest extends PageTestCase
 
     protected function getUrl() : string
     {
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/collections/1',

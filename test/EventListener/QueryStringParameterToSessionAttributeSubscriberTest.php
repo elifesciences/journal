@@ -30,7 +30,7 @@ final class QueryStringParameterToSessionAttributeSubscriberTest extends TestCas
         $this->assertSame($expected, $request->getSession()->all());
     }
 
-    public function sessionAttributeProvider() : Traversable
+    public static function sessionAttributeProvider() : Traversable
     {
         yield 'no value' => ['?parameter', ['attribute' => '']];
         yield 'value' => ['?parameter=foo', ['attribute' => 'foo']];

@@ -59,7 +59,7 @@ final class FooterFactoryTest extends KernelTestCase
         $this->assertSame($expected, $link);
     }
 
-    public function yearProvider() : Traversable
+    public static function yearProvider() : Traversable
     {
         yield 'in January 2017' => ['2017-01-01T00:00:00Z', '/archive/2016'];
         yield 'in February 2017' => ['2017-02-01T00:00:00Z', '/archive/2017'];

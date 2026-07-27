@@ -6,7 +6,7 @@ use Traversable;
 
 trait Providers
 {
-    final public function incorrectSlugProvider() : Traversable
+    final public static function incorrectSlugProvider() : Traversable
     {
         yield 'no slug' => [];
         yield 'no slug with query string' => [null, 'foo'];
@@ -21,7 +21,7 @@ trait Providers
         }
     }
 
-    final protected function arrayProvider(array $array) : Traversable
+    final protected static function arrayProvider(array $array) : Traversable
     {
         foreach ($array as $key => $value) {
             $values = (array) $value;

@@ -4,16 +4,14 @@ namespace test\eLife\Journal\Controller;
 
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use PHPUnit\Framework\Attributes\BackupGlobals;
+use PHPUnit\Framework\Attributes\Test;
 use test\eLife\Journal\WebTestCase;
 
-/**
- * @backupGlobals enabled
- */
+#[BackupGlobals(true)]
 final class ArticleEraDownloadControllerTest extends WebTestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function it_does_not_download_era_article_if_the_article_has_no_era()
     {
         $client = static::createClient();
@@ -24,9 +22,7 @@ final class ArticleEraDownloadControllerTest extends WebTestCase
         $this->assertSame(404, $client->getResponse()->getStatusCode());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_does_download_the_era_article_if_the_article_has_era()
     {
         $client = static::createClient();
@@ -40,7 +36,7 @@ final class ArticleEraDownloadControllerTest extends WebTestCase
 
     private function mockArticle($articleId = '00001') : void
     {
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 "http://api.elifesciences.org/articles/{$articleId}",

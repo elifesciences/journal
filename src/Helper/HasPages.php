@@ -11,7 +11,7 @@ use function GuzzleHttp\Promise\promise_for;
 
 trait HasPages
 {
-    final private function pagerfantaPromise(Sequence $sdkClient, int $page, int $perPage, callable $map = null) : PromiseInterface
+    private function pagerfantaPromise(Sequence $sdkClient, int $page, int $perPage, callable $map = null) : PromiseInterface
     {
         return promise_for($sdkClient)
             ->then(function (Sequence $sequence) use ($page, $perPage, $map) {
@@ -22,7 +22,7 @@ trait HasPages
             });
     }
 
-    final private function paginator(PromiseInterface $pagerfantaPromise, Request $request, string $title, string $route) : PromiseInterface
+    private function paginator(PromiseInterface $pagerfantaPromise, Request $request, string $title, string $route) : PromiseInterface
     {
         return $pagerfantaPromise
             ->then(function (Pagerfanta $pagerfanta) use ($request, $title, $route) {

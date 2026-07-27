@@ -7,15 +7,15 @@ use GuzzleHttp\Psr7\Response;
 use ML\JsonLD\JsonLD;
 use ML\JsonLD\RdfConstants;
 use ML\JsonLD\TypedValue;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use test\eLife\Journal\Providers;
 
 final class DigestControllerTest extends PageTestCase
 {
     use Providers;
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_displays_an_digest_page()
     {
         $client = static::createClient();
@@ -40,17 +40,15 @@ final class DigestControllerTest extends PageTestCase
         $this->assertSame('Digest title', $crawler->filter('.content-header__title')->text());
         $this->assertSame('Jan 1, 2010', trim(preg_replace('!\s+!', ' ', $crawler->filter('.content-header .meta')
             ->text())));
-        $this->assertContains('Digest text.', $crawler->filter('.wrapper--content')->text());
+        $this->assertStringContainsString('Digest text.', $crawler->filter('.wrapper--content')->text());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_displays_metrics()
     {
         $client = static::createClient();
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/metrics/digest/1/page-views?by=month&page=1&per-page=20&order=desc',
@@ -94,9 +92,7 @@ final class DigestControllerTest extends PageTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_displays_collections()
     {
         $client = static::createClient();
@@ -109,9 +105,7 @@ final class DigestControllerTest extends PageTestCase
             ->text())));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_has_metadata()
     {
         $client = static::createClient();
@@ -142,10 +136,8 @@ final class DigestControllerTest extends PageTestCase
             ->attr('content'));
     }
 
-    /**
-     * @test
-     * @dataProvider incorrectSlugProvider
-     */
+    #[Test]
+    #[DataProvider('incorrectSlugProvider')]
     public function it_redirects_if_the_slug_is_not_correct(string $slug = null, string $queryString = null)
     {
         $client = static::createClient();
@@ -163,9 +155,7 @@ final class DigestControllerTest extends PageTestCase
         $this->assertTrue($client->getResponse()->isRedirect($expectedUrl));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_has_schema_org_metadata()
     {
         $client = static::createClient();
@@ -189,9 +179,7 @@ final class DigestControllerTest extends PageTestCase
         $this->assertEquals(new TypedValue('Digest title', RdfConstants::XSD_STRING), $node->getProperty('http://schema.org/headline'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_displays_a_404_if_the_digest_is_not_found()
     {
         $client = static::createClient();
@@ -222,7 +210,7 @@ final class DigestControllerTest extends PageTestCase
 
     protected function getUrl() : string
     {
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/digests/1',

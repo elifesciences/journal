@@ -25,7 +25,7 @@ final class AlertsController extends Controller
         $arguments['body'] = [
             ArticleSection::basic($this->render(
                 Listing::unordered([
-                    'Receive <a href="'.$this->get('router')->generate('content-alerts').'">weekly updates of the latest published research</a>',
+                    'Receive <a href="/content-alerts">weekly updates of the latest published research</a>',
                     'To stay on top of new research available every day, subscribe to our RSS feeds for <a href="'.$this->get('router')->generate('rss-ahead').'">author PDFs</a> and <a href="'.$this->get('router')->generate('rss-recent').'">published articles</a>',
                     'See the highlights of recently published research and more on <a href="https://www.twitter.com/elife">X (formerly Twitter) </a>, <a href="https://bsky.app/profile/elife.bsky.social">Bluesky</a>, <a href="https://www.linkedin.com/company/2541446">LinkedIn</a>, <a href="https://www.facebook.com/elifesciences">Facebook</a>, <a href="https://fediscience.org/@eLife">Mastodon</a>, <a href="https://www.threads.net/@elifesciences">Threads</a> and <a href="https://www.instagram.com/elifesciences/">Instagram</a>',
                 ], 'bullet')
@@ -39,12 +39,12 @@ final class AlertsController extends Controller
             ), 'eLife Magazine', 2),
             ArticleSection::basic($this->render(
                 Listing::unordered([
-                    'Sign up to our monthly <a href="'.$this->get('router')->generate('content-alerts-variant', ['variant' => 'early-career']).'">eLife Community newsletter</a> for details on upcoming webinars, new programmes, interviews, and other efforts to support positive research culture in life sciences and biomedicine',
+                    'Sign up to our monthly <a href="/content-alerts/early-career">eLife Community newsletter</a> for details on upcoming webinars, new programmes, interviews, and other efforts to support positive research culture in life sciences and biomedicine',
                 ], 'bullet')
             ), 'Community-building', 2),
             ArticleSection::basic($this->render(
                 Listing::unordered([
-                    'Sign up to receive our <a href="'.$this->get('router')->generate('content-alerts-variant', ['variant' => 'elife-newsletter']).'">bi-monthly newsletter</a> for recent developments at eLife, new products and collaborations and changes to editorial policy</a>',
+                    'Sign up to receive our <a href="/content-alerts/elife-newsletter">bi-monthly newsletter</a> for recent developments at eLife, new products and collaborations and changes to editorial policy</a>',
                 ], 'bullet')
             ), 'The latest from eLife', 2),
         ];

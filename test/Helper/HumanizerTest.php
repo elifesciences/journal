@@ -20,9 +20,9 @@ final class HumanizerTest extends TestCase
         $this->assertSame($expected, Humanizer::humanize($input));
     }
 
-    public function stringProvider() : Traversable
+    public static function stringProvider() : Traversable
     {
-        return $this->arrayProvider([
+        return self::arrayProvider([
             'foo' => 'Foo',
             'foo_bar' => 'Foo bar',
             'foo-bar' => 'Foo bar',
@@ -38,9 +38,9 @@ final class HumanizerTest extends TestCase
         $this->assertSame($expected, Humanizer::prettyList(...$input));
     }
 
-    public function listProvider() : Traversable
+    public static function listProvider() : Traversable
     {
-        return $this->arrayProvider([
+        return self::arrayProvider([
             '' => [],
             'foo' => ['foo'],
             'foo and bar' => ['foo', 'bar'],

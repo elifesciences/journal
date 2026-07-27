@@ -291,7 +291,7 @@ abstract class Controller implements ContainerAwareInterface
             'callsToAction' => $this->getCallsToAction($request),
             'emailCta' => new ViewModel\EmailCta(
                 'Be the first to read new articles from eLife',
-                ViewModel\Button::link('Sign up for email alerts', $this->get('router')->generate('content-alerts')),
+                ViewModel\Button::link('Sign up for email alerts', '/content-alerts'),
                 $this->get('router')->generate('privacy'),
                 'Privacy notice'
             ),

@@ -29,9 +29,9 @@ final class LicenceUriTest extends TestCase
         $this->assertSame($uri, LicenceUri::forCode($code));
     }
 
-    public function validModelProvider() : Traversable
+    public static function validModelProvider() : Traversable
     {
-        return $this->arrayProvider([
+        return self::arrayProvider([
             'CC0-1.0' => 'https://creativecommons.org/publicdomain/zero/1.0/',
             'CC-BY-1.0' => 'https://creativecommons.org/licenses/by/1.0/',
             'CC-BY-2.0' => 'https://creativecommons.org/licenses/by/2.0/',

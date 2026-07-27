@@ -19,7 +19,7 @@ final class SubjectControllerTest extends PageTestCase
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertSame('Subject', $crawler->filter('.content-header__title')->text());
-        $this->assertContains('No articles available.', $crawler->filter('main')->text());
+        $this->assertStringContainsString('No articles available.', $crawler->filter('main')->text());
     }
 
     /**
@@ -68,7 +68,7 @@ final class SubjectControllerTest extends PageTestCase
         $tabSelector = $crawler->filter('.button--switch-selector .view-selector__link');
         $this->assertCount(0, $tabSelector);
 
-        $this->mockApiResponse(
+        self::mockApiResponse(
             new Request(
                 'GET',
                 'http://api.elifesciences.org/highlights/subject?page=1&per-page=3&order=desc',
@@ -145,7 +145,7 @@ final class SubjectControllerTest extends PageTestCase
         $this->assertSame(404, $client->getResponse()->getStatusCode());
     }
 
-    public function invalidPageProvider() : Traversable
+    public static function invalidPageProvider() : Traversable
     {
         foreach (['-1', '0', 'foo'] as $page) {
             yield 'page '.$page => [$page];
@@ -155,7 +155,7 @@ final class SubjectControllerTest extends PageTestCase
             yield 'page '.$page => [
                 $page,
                 function () use ($page) {
-                    $this->mockApiResponse(
+                    self::mockApiResponse(
                         new Request(
                             'GET',
                             'http://api.elifesciences.org/subjects/subject',
@@ -200,7 +200,7 @@ final class SubjectControllerTest extends PageTestCase
                         )
                     );
 
-                    $this->mockApiResponse(
+                    self::mockApiResponse(
                         new Request(
                             'GET',
                             'http://api.elifesciences.org/search?for=&page=1&per-page=1&sort=date&order=desc&subject[]=subject&type[]=reviewed-preprint&type[]=research-article&type[]=research-communication&type[]=research-advance&type[]=review-article&type[]=scientific-correspondence&type[]=short-report&type[]=tools-resources&type[]=replication-study&type[]=editorial&type[]=insight&type[]=feature&type[]=collection&use-date=default',

@@ -66,7 +66,7 @@ abstract class ModelConverterTestCase extends TestCase
             'Converter does not support turning '.get_class($model).' into '.$viewModelClass
         );
         $viewModel = $this->converter->convert($model, $viewModelClass, $this->context);
-        $this->assertContains(get_class($viewModel), $this->viewModelClasses);
+        $this->assertStringContainsString(get_class($viewModel), $this->viewModelClasses);
 
         $viewModel->toArray();
     }
