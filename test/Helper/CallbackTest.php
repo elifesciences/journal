@@ -11,14 +11,14 @@ use InvalidArgumentException;
 use LogicException;
 use Pagerfanta\Adapter\NullAdapter;
 use Pagerfanta\Pagerfanta;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Traversable;
 
 final class CallbackTest extends TestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function it_creates_is_instance_of()
     {
         $callback = Callback::isInstanceOf(TestCase::class);
@@ -27,9 +27,7 @@ final class CallbackTest extends TestCase
         $this->assertFalse($callback('foo'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_creates_must_be_an_instance_of()
     {
         $callback = Callback::mustBeInstanceOf(TestCase::class);
@@ -41,9 +39,7 @@ final class CallbackTest extends TestCase
         $callback('foo');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_creates_method_is_value()
     {
         $object1 = new class($this) {
@@ -79,10 +75,8 @@ final class CallbackTest extends TestCase
         $this->assertFalse($callback($object2));
     }
 
-    /**
-     * @test
-     * @dataProvider notEmptyProvider
-     */
+    #[Test]
+    #[DataProvider('notEmptyProvider')]
     public function it_creates_is_not_empty_with_not_empty($item)
     {
         $callback = Callback::isNotEmpty();
@@ -90,10 +84,8 @@ final class CallbackTest extends TestCase
         $this->assertTrue($callback($item));
     }
 
-    /**
-     * @test
-     * @dataProvider emptyProvider
-     */
+    #[Test]
+    #[DataProvider('emptyProvider')]
     public function it_creates_is_not_empty_with_empty($item)
     {
         $callback = Callback::isNotEmpty();
@@ -101,10 +93,8 @@ final class CallbackTest extends TestCase
         $this->assertFalse($callback($item));
     }
 
-    /**
-     * @test
-     * @dataProvider notEmptyProvider
-     */
+    #[Test]
+    #[DataProvider('notEmptyProvider')]
     public function it_creates_must_not_be_empty_with_not_empty($item)
     {
         $callback = Callback::mustNotBeEmpty();
@@ -112,10 +102,8 @@ final class CallbackTest extends TestCase
         $this->assertSame($item, $callback($item));
     }
 
-    /**
-     * @test
-     * @dataProvider emptyProvider
-     */
+    #[Test]
+    #[DataProvider('emptyProvider')]
     public function it_creates_must_not_be_empty_with_empty($item)
     {
         $callback = Callback::mustNotBeEmpty();
@@ -125,10 +113,8 @@ final class CallbackTest extends TestCase
         $callback($item);
     }
 
-    /**
-     * @test
-     * @dataProvider notEmptyProvider
-     */
+    #[Test]
+    #[DataProvider('notEmptyProvider')]
     public function it_creates_method_must_not_be_empty_with_not_empty($item)
     {
         $object = new class($item) {
@@ -150,10 +136,8 @@ final class CallbackTest extends TestCase
         $this->assertSame($object, $callback($object));
     }
 
-    /**
-     * @test
-     * @dataProvider emptyProvider
-     */
+    #[Test]
+    #[DataProvider('emptyProvider')]
     public function it_creates_method_must_not_be_empty_with_empty($item)
     {
         $object = new class($item) {
@@ -177,9 +161,7 @@ final class CallbackTest extends TestCase
         $callback($object);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_creates_apply()
     {
         $callback = Callback::apply('end');
@@ -187,9 +169,7 @@ final class CallbackTest extends TestCase
         $this->assertSame('bar', $callback(['foo', 'bar']));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_creates_method()
     {
         $date = new DateTimeImmutable();
@@ -201,9 +181,7 @@ final class CallbackTest extends TestCase
         $this->assertSame($date->format('c'), $callback2($date));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_creates_call()
     {
         $callback = Callback::call('range', 2, 5);
@@ -211,10 +189,8 @@ final class CallbackTest extends TestCase
         $this->assertSame(range(2, 5), $callback('foo'));
     }
 
-    /**
-     * @test
-     * @dataProvider notEmptyProvider
-     */
+    #[Test]
+    #[DataProvider('notEmptyProvider')]
     public function it_creates_empty_or_with_not_empty($item)
     {
         $callback = Callback::emptyOr(function ($item) {
@@ -224,10 +200,8 @@ final class CallbackTest extends TestCase
         $this->assertSame($item, $callback($item));
     }
 
-    /**
-     * @test
-     * @dataProvider emptyProvider
-     */
+    #[Test]
+    #[DataProvider('emptyProvider')]
     public function it_creates_empty_or_with_empty($item, $default = null, $expected = null)
     {
         $callback = Callback::emptyOr(function () {
@@ -237,10 +211,8 @@ final class CallbackTest extends TestCase
         $this->assertSame($expected, $callback($item));
     }
 
-    /**
-     * @test
-     * @dataProvider notEmptyProvider
-     */
+    #[Test]
+    #[DataProvider('notEmptyProvider')]
     public function it_creates_method_empty_or_with_not_empty($item)
     {
         $object = new class($item) {
@@ -264,10 +236,8 @@ final class CallbackTest extends TestCase
         $this->assertSame($object, $callback($object));
     }
 
-    /**
-     * @test
-     * @dataProvider emptyProvider
-     */
+    #[Test]
+    #[DataProvider('emptyProvider')]
     public function it_creates_method_empty_or_with_empty($item, $default = null, $expected = null)
     {
         $object = new class($item) {

@@ -7,6 +7,8 @@ use GuzzleHttp\Psr7\Response;
 use ML\JsonLD\JsonLD;
 use ML\JsonLD\RdfConstants;
 use ML\JsonLD\TypedValue;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Util\Type;
 use test\eLife\Journal\Providers;
 
@@ -14,9 +16,7 @@ final class PromotionalCollectionControllerTest extends PageTestCase
 {
     use Providers;
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_displays_a_promotional_collection_page()
     {
         $client = static::createClient();
@@ -32,9 +32,7 @@ final class PromotionalCollectionControllerTest extends PageTestCase
         $this->assertStringContainsString('Blog article title', $content->eq(0)->text());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_displays_multimedia()
     {
         $client = static::createClient();
@@ -143,9 +141,7 @@ final class PromotionalCollectionControllerTest extends PageTestCase
         $this->assertStringContainsString('Podcast episode title', $multimedia->eq(0)->text());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_displays_related_content()
     {
         $client = static::createClient();
@@ -234,9 +230,7 @@ final class PromotionalCollectionControllerTest extends PageTestCase
         $this->assertStringContainsString('Blog article 2 title', $related->eq(0)->text());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_displays_editors()
     {
         $client = static::createClient();
@@ -326,9 +320,7 @@ final class PromotionalCollectionControllerTest extends PageTestCase
         $this->assertCount(2, $crawler->filter('.list-heading:contains("Editors") + .listing-list > .listing-list__item'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_has_metadata()
     {
         $client = static::createClient();
@@ -356,10 +348,8 @@ final class PromotionalCollectionControllerTest extends PageTestCase
         $this->assertSame('© 2010 eLife Sciences Publications Limited. This article is distributed under the terms of the Creative Commons Attribution License, which permits unrestricted use and redistribution provided that the original author and source are credited.', $crawler->filter('meta[name="dc.rights"]')->attr('content'));
     }
 
-    /**
-     * @test
-     * @dataProvider incorrectSlugProvider
-     */
+    #[Test]
+    #[DataProvider('incorrectSlugProvider')]
     public function it_redirects_if_the_slug_is_not_correct(string $slug = null, string $queryString = null)
     {
         $client = static::createClient();
@@ -377,9 +367,7 @@ final class PromotionalCollectionControllerTest extends PageTestCase
         $this->assertTrue($client->getResponse()->isRedirect($expectedUrl));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_has_schema_org_metadata()
     {
         $client = static::createClient();
@@ -403,9 +391,7 @@ final class PromotionalCollectionControllerTest extends PageTestCase
         $this->assertEquals(new TypedValue('Promotional collection title', RdfConstants::XSD_STRING), $node->getProperty('http://schema.org/headline'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_displays_a_404_if_the_promotional_collection_is_not_found()
     {
         $client = static::createClient();

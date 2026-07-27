@@ -4,12 +4,11 @@ namespace test\eLife\Journal\Controller;
 
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use PHPUnit\Framework\Attributes\Test;
 
 final class SubjectsControllerTest extends PageTestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function it_displays_an_empty_subjects_page()
     {
         $client = static::createClient();
@@ -21,9 +20,7 @@ final class SubjectsControllerTest extends PageTestCase
         $this->assertStringContainsString('No subjects available.', $crawler->filter('main')->text());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_has_metadata()
     {
         $client = static::createClient();

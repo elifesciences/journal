@@ -7,12 +7,11 @@ use GuzzleHttp\Psr7\Response;
 use ML\JsonLD\JsonLD;
 use ML\JsonLD\RdfConstants;
 use ML\JsonLD\TypedValue;
+use PHPUnit\Framework\Attributes\Test;
 
 final class PodcastEpisodeControllerTest extends PageTestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function it_displays_a_podcast_episode_page()
     {
         $client = static::createClient();
@@ -24,9 +23,7 @@ final class PodcastEpisodeControllerTest extends PageTestCase
         $this->assertSame('Podcast', trim(preg_replace('!\s+!', ' ', $crawler->filter('.content-header .meta')->text())));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_has_metadata()
     {
         $client = static::createClient();
@@ -56,9 +53,7 @@ final class PodcastEpisodeControllerTest extends PageTestCase
         $this->assertSame('© 2010 eLife Sciences Publications Limited. This article is distributed under the terms of the Creative Commons Attribution License, which permits unrestricted use and redistribution provided that the original author and source are credited.', $crawler->filter('meta[name="dc.rights"]')->attr('content'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_has_schema_org_metadata()
     {
         $client = static::createClient();
@@ -82,10 +77,7 @@ final class PodcastEpisodeControllerTest extends PageTestCase
         $this->assertEquals(new TypedValue('Episode title', RdfConstants::XSD_STRING), $node->getProperty('http://schema.org/headline'));
     }
 
-    /**
-     * /**
-     * @test
-     */
+    #[Test]
     public function it_displays_a_404_if_the_episode_is_not_found()
     {
         $client = static::createClient();

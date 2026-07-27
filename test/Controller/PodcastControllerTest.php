@@ -4,13 +4,13 @@ namespace test\eLife\Journal\Controller;
 
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use Traversable;
 
 final class PodcastControllerTest extends PageTestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function it_displays_the_podcast_page()
     {
         $client = static::createClient();
@@ -22,9 +22,7 @@ final class PodcastControllerTest extends PageTestCase
         $this->assertStringContainsString('No episodes available.', $crawler->filter('main')->text());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_has_metadata()
     {
         $client = static::createClient();
@@ -52,10 +50,8 @@ final class PodcastControllerTest extends PageTestCase
         $this->assertEmpty($crawler->filter('meta[name="dc.rights"]'));
     }
 
-    /**
-     * @test
-     * @dataProvider invalidPageProvider
-     */
+    #[Test]
+    #[DataProvider('invalidPageProvider')]
     public function it_displays_a_404_when_not_on_a_valid_page($page, callable $callable = null)
     {
         $client = static::createClient();

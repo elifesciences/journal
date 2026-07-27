@@ -2,11 +2,11 @@
 
 namespace test\eLife\Journal\Controller;
 
+use PHPUnit\Framework\Attributes\Test;
+
 final class MediaPolicyControllerTest extends PageTestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function it_displays_the_media_policy_page()
     {
         $client = static::createClient();
@@ -28,9 +28,7 @@ final class MediaPolicyControllerTest extends PageTestCase
         ], $majorSections->extract('_text'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_has_metadata()
     {
         $client = static::createClient();

@@ -8,6 +8,7 @@ use eLife\ApiClient\Exception\NetworkProblem;
 use eLife\Journal\EventListener\ApiTimeoutSubscriber;
 use GuzzleHttp\Psr7\Request as GuzzleRequest;
 use GuzzleHttp\Psr7\Response as GuzzleResponse;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
@@ -16,9 +17,7 @@ use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 final class ApiTimeoutSubscriberTest extends TestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function it_turns_api_timeouts_into_a_504_exception()
     {
         $subscriber = new ApiTimeoutSubscriber();
@@ -31,9 +30,7 @@ final class ApiTimeoutSubscriberTest extends TestCase
         $this->assertEquals(new HttpException(504, 'Timeout', $exception), $event->getException());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_turns_gateway_timeout_responses_into_a_504_exception()
     {
         $subscriber = new ApiTimeoutSubscriber();
@@ -46,9 +43,7 @@ final class ApiTimeoutSubscriberTest extends TestCase
         $this->assertEquals(new HttpException(504, 'Timeout', $exception), $event->getException());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_ignores_other_exceptions()
     {
         $subscriber = new ApiTimeoutSubscriber();
@@ -61,9 +56,7 @@ final class ApiTimeoutSubscriberTest extends TestCase
         $this->assertSame($exception, $event->getException());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_ignores_other_responses()
     {
         $subscriber = new ApiTimeoutSubscriber();

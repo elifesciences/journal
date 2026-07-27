@@ -3,6 +3,8 @@
 namespace test\eLife\Journal\EventListener;
 
 use eLife\Journal\EventListener\QueryStringParameterToSessionAttributeSubscriber;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -13,10 +15,8 @@ use Traversable;
 
 final class QueryStringParameterToSessionAttributeSubscriberTest extends TestCase
 {
-    /**
-     * @test
-     * @dataProvider sessionAttributeProvider
-     */
+    #[Test]
+    #[DataProvider('sessionAttributeProvider')]
     public function it_sets_a_session_attribute(string $uri, array $expected)
     {
         $subscriber = new QueryStringParameterToSessionAttributeSubscriber('parameter', 'attribute');
@@ -37,9 +37,7 @@ final class QueryStringParameterToSessionAttributeSubscriberTest extends TestCas
         yield 'multiple parameters' => ['?foo=bar&parameter', ['attribute' => '']];
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_ignores_other_parameters()
     {
         $subscriber = new QueryStringParameterToSessionAttributeSubscriber('parameter', 'attribute');
@@ -53,9 +51,7 @@ final class QueryStringParameterToSessionAttributeSubscriberTest extends TestCas
         $this->assertEmpty($request->getSession()->all());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_ignores_sub_requests()
     {
         $subscriber = new QueryStringParameterToSessionAttributeSubscriber('parameter', 'attribute');

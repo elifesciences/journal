@@ -1488,12 +1488,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elifesciences/patterns-php.git",
-                "reference": "99a202edd360761e8e2ad497ef3ed76ddfb9d4f3"
+                "reference": "ea7295e20ccc5754e8ecaa05957f13093baf40fe"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/99a202edd360761e8e2ad497ef3ed76ddfb9d4f3",
-                "reference": "99a202edd360761e8e2ad497ef3ed76ddfb9d4f3",
+                "url": "https://api.github.com/repos/elifesciences/patterns-php/zipball/ea7295e20ccc5754e8ecaa05957f13093baf40fe",
+                "reference": "ea7295e20ccc5754e8ecaa05957f13093baf40fe",
                 "shasum": ""
             },
             "require": {
@@ -1534,7 +1534,7 @@
             "support": {
                 "source": "https://github.com/elifesciences/patterns-php/tree/upgrade-patterns-to-php-8.3"
             },
-            "time": "2026-07-23T16:22:53+00:00"
+            "time": "2026-07-27T10:31:19+00:00"
         },
         {
             "name": "fabpot/goutte",
@@ -1786,16 +1786,16 @@
         },
         {
             "name": "google/apiclient-services",
-            "version": "v0.451.0",
+            "version": "v0.452.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/googleapis/google-api-php-client-services.git",
-                "reference": "81162a54400a4bd7ec20f107a4798c49b1b37e02"
+                "reference": "2b86a7203ffd6520968ec568d58131ed380a59e1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/googleapis/google-api-php-client-services/zipball/81162a54400a4bd7ec20f107a4798c49b1b37e02",
-                "reference": "81162a54400a4bd7ec20f107a4798c49b1b37e02",
+                "url": "https://api.github.com/repos/googleapis/google-api-php-client-services/zipball/2b86a7203ffd6520968ec568d58131ed380a59e1",
+                "reference": "2b86a7203ffd6520968ec568d58131ed380a59e1",
                 "shasum": ""
             },
             "require": {
@@ -1824,9 +1824,9 @@
             ],
             "support": {
                 "issues": "https://github.com/googleapis/google-api-php-client-services/issues",
-                "source": "https://github.com/googleapis/google-api-php-client-services/tree/v0.451.0"
+                "source": "https://github.com/googleapis/google-api-php-client-services/tree/v0.452.0"
             },
-            "time": "2026-07-19T01:14:24+00:00"
+            "time": "2026-07-27T01:28:26+00:00"
         },
         {
             "name": "google/auth",
@@ -6000,16 +6000,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "12.5.31",
+            "version": "12.5.32",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "0608d157a284f15cc73b99a3327eff06b66a176d"
+                "reference": "c02591dd7840ed124a98d7770753329ad28e9f8f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/0608d157a284f15cc73b99a3327eff06b66a176d",
-                "reference": "0608d157a284f15cc73b99a3327eff06b66a176d",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/c02591dd7840ed124a98d7770753329ad28e9f8f",
+                "reference": "c02591dd7840ed124a98d7770753329ad28e9f8f",
                 "shasum": ""
             },
             "require": {
@@ -6078,7 +6078,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
                 "security": "https://github.com/sebastianbergmann/phpunit/security/policy",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/12.5.31"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/12.5.32"
             },
             "funding": [
                 {
@@ -6086,7 +6086,7 @@
                     "type": "other"
                 }
             ],
-            "time": "2026-07-06T14:54:16+00:00"
+            "time": "2026-07-25T06:54:13+00:00"
         },
         {
             "name": "rawr/cross-data-providers",

@@ -4,12 +4,11 @@ namespace test\eLife\Journal\Controller;
 
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use PHPUnit\Framework\Attributes\Test;
 
 final class SearchControllerTest extends PageTestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function it_displays_the_search_page()
     {
         $client = static::createClient();
@@ -20,9 +19,7 @@ final class SearchControllerTest extends PageTestCase
         $this->assertSame('0 results found', trim($crawler->filter('.message-bar')->text()));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_has_a_search_box_in_the_page()
     {
         $client = static::createClient();
@@ -133,9 +130,7 @@ final class SearchControllerTest extends PageTestCase
         $this->assertSame(200, $client->getResponse()->getStatusCode());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_sanitises_the_search_query()
     {
         $client = static::createClient();
@@ -151,9 +146,7 @@ final class SearchControllerTest extends PageTestCase
         $this->assertSame(200, $client->getResponse()->getStatusCode());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_can_be_ordered_by_date()
     {
         $client = static::createClient();
@@ -355,9 +348,7 @@ final class SearchControllerTest extends PageTestCase
         $this->assertSame(200, $client->getResponse()->getStatusCode());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_has_metadata()
     {
         $client = static::createClient();
@@ -385,9 +376,7 @@ final class SearchControllerTest extends PageTestCase
         $this->assertEmpty($crawler->filter('meta[name="dc.rights"]'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_shows_reviewed_preprints_on_results()
     {
 

@@ -2,11 +2,11 @@
 
 namespace test\eLife\Journal\Controller;
 
+use PHPUnit\Framework\Attributes\Test;
+
 final class TermsControllerTest extends PageTestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function it_displays_the_terms_and_conditions_page()
     {
         $client = static::createClient();
@@ -17,9 +17,7 @@ final class TermsControllerTest extends PageTestCase
         $this->assertSame('Terms and conditions', $crawler->filter('.content-header__title')->text());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_has_metadata()
     {
         $client = static::createClient();

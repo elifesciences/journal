@@ -3,6 +3,8 @@
 namespace test\eLife\Journal\EventListener;
 
 use eLife\Journal\EventListener\CacheControlSubscriber;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,9 +17,7 @@ use Traversable;
 
 final class CacheControlSubscriberTest extends TestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function it_adds_cache_headers_if_none_are_set()
     {
         $subscriber = new CacheControlSubscriber('public, max-age=1, stale-while-revalidate=2, stale-if-error=3');
@@ -29,9 +29,7 @@ final class CacheControlSubscriberTest extends TestCase
         $this->assertSame('"'.md5($response->getContent()).'"', $response->getEtag());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_adds_a_vary_header()
     {
         $subscriber = new CacheControlSubscriber('public, max-age=1');
@@ -43,10 +41,8 @@ final class CacheControlSubscriberTest extends TestCase
         $this->assertSame('"'.md5($response->getContent()).'"', $response->getEtag());
     }
 
-    /**
-     * @test
-     * @dataProvider notFoundProvider
-     */
+    #[Test]
+    #[DataProvider('notFoundProvider')]
     public function it_limits_404_cache_headers(string $cacheControl, string $expected, array $expectedVary = [])
     {
         $subscriber = new CacheControlSubscriber($cacheControl);
@@ -69,9 +65,7 @@ final class CacheControlSubscriberTest extends TestCase
         yield 'stale-if-error' => ['public, max-age=299, stale-if-error=1', 'max-age=299, public, stale-if-error=1', ['Cookie']];
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_does_not_change_for_post_requests()
     {
         $subscriber = new CacheControlSubscriber('public, max-age=1');
@@ -83,9 +77,7 @@ final class CacheControlSubscriberTest extends TestCase
         $this->assertFalse($response->headers->has('Etag'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_does_not_change_for_streamed_responses()
     {
         $subscriber = new CacheControlSubscriber('public, max-age=1');
@@ -97,9 +89,7 @@ final class CacheControlSubscriberTest extends TestCase
         $this->assertFalse($response->headers->has('Etag'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_does_not_change_for_already_not_modified_responses()
     {
         $subscriber = new CacheControlSubscriber('public, max-age=1');
@@ -111,9 +101,7 @@ final class CacheControlSubscriberTest extends TestCase
         $this->assertFalse($response->headers->has('Etag'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_does_not_change_when_there_is_a_new_session()
     {
         $subscriber = new CacheControlSubscriber('public, max-age=1');
@@ -129,9 +117,7 @@ final class CacheControlSubscriberTest extends TestCase
         $this->assertFalse($response->headers->has('Etag'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_does_not_change_when_there_is_a_previous_session()
     {
         $subscriber = new CacheControlSubscriber('public, max-age=1');

@@ -4,9 +4,7 @@ namespace test\eLife\Journal\Controller;
 
 final class PrivacyControllerTest extends PageTestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function it_displays_the_privacy_notice_page()
     {
         $client = static::createClient();
@@ -28,9 +26,7 @@ final class PrivacyControllerTest extends PageTestCase
         ], $majorSections->extract('_text'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_has_metadata()
     {
         $client = static::createClient();

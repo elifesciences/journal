@@ -4,13 +4,12 @@ namespace test\eLife\Journal\Controller;
 
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use PHPUnit\Framework\Attributes\Test;
 use test\eLife\Journal\WebTestCase;
 
 final class StatusTest extends WebTestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function it_returns_200_pong_when_the_application_is_correctly_setup()
     {
         $client = static::createClient();
@@ -24,9 +23,7 @@ final class StatusTest extends WebTestCase
         $this->assertSame('none', $client->getResponse()->headers->get('X-Robots-Tag'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_returns_200_status_when_the_status_checks_work()
     {
         $client = static::createClient();
@@ -60,9 +57,7 @@ final class StatusTest extends WebTestCase
         $this->assertSame('none', $client->getResponse()->headers->get('X-Robots-Tag'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_returns_500_status_when_a_status_check_does_not_work()
     {
         $client = static::createClient();

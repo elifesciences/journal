@@ -4,13 +4,13 @@ namespace test\eLife\Journal\Controller;
 
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use Traversable;
 
 final class ReviewedPreprintsControllerTest extends PageTestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function it_displays_an_empty_reviewed_preprints_page()
     {
         $client = static::createClient();
@@ -38,9 +38,7 @@ final class ReviewedPreprintsControllerTest extends PageTestCase
         $this->assertStringContainsString('No items available.', $crawler->filter('main')->text());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_displays_a_reviewed_preprints_listing_page()
     {
         $client = static::createClient();
@@ -152,9 +150,7 @@ final class ReviewedPreprintsControllerTest extends PageTestCase
         $this->assertStringContainsString('An example of a Reviewed preprint', $crawler->filter('.list-heading:contains("Latest") + .listing-list > .listing-list__item:nth-child(2)')->text());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_has_metadata()
     {
         $client = static::createClient();
@@ -182,10 +178,8 @@ final class ReviewedPreprintsControllerTest extends PageTestCase
         $this->assertEmpty($crawler->filter('meta[name="dc.rights"]'));
     }
 
-    /**
-     * @test
-     * @dataProvider invalidPageProvider
-     */
+    #[Test]
+    #[DataProvider('invalidPageProvider')]
     public function it_displays_a_404_when_not_on_a_valid_page($page, callable $callable = null)
     {
         $client = static::createClient();

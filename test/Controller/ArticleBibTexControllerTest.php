@@ -11,7 +11,6 @@ use Traversable;
 
 final class ArticleBibTexControllerTest extends WebTestCase
 {
-
     #[Test]
     #[DataProvider('bibTexProvider')]
     public function it_displays_bib_tex(string $status, array $json, string $expected)

@@ -3,14 +3,13 @@
 namespace test\eLife\Journal\Expression;
 
 use eLife\Journal\Expression\TimeFunctionProvider;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
 final class TimeFunctionProviderTest extends TestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function it_turns_strings_into_times()
     {
         $expressionLanguage = new ExpressionLanguage();

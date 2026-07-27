@@ -4,13 +4,13 @@ namespace test\eLife\Journal\Controller;
 
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use Traversable;
 
 final class SubjectControllerTest extends PageTestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function it_displays_a_subject_page()
     {
         $client = static::createClient();
@@ -22,9 +22,7 @@ final class SubjectControllerTest extends PageTestCase
         $this->assertStringContainsString('No articles available.', $crawler->filter('main')->text());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_has_metadata()
     {
         $client = static::createClient();
@@ -54,9 +52,7 @@ final class SubjectControllerTest extends PageTestCase
         $this->assertEmpty($crawler->filter('meta[name="dc.rights"]'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_has_a_view_selector_when_secondary_column_introduced()
     {
         $client = static::createClient();
@@ -128,10 +124,8 @@ final class SubjectControllerTest extends PageTestCase
         ], $tabSelector->extract(['_text', 'href']));
     }
 
-    /**
-     * @test
-     * @dataProvider invalidPageProvider
-     */
+    #[Test]
+    #[DataProvider('invalidPageProvider')]
     public function it_displays_a_404_when_not_on_a_valid_page($page, callable $callable = null)
     {
         $client = static::createClient();
@@ -217,9 +211,7 @@ final class SubjectControllerTest extends PageTestCase
         }
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_displays_a_404_if_the_subject_is_not_found()
     {
         $client = static::createClient();
@@ -248,9 +240,7 @@ final class SubjectControllerTest extends PageTestCase
         $this->assertSame(404, $client->getResponse()->getStatusCode());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_redirects_if_the_subject_is_rewritten()
     {
         $client = static::createClient();

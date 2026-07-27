@@ -2,11 +2,11 @@
 
 namespace test\eLife\Journal\Controller;
 
+use PHPUnit\Framework\Attributes\Test;
+
 final class WhoWeWorkWithControllerTest extends PageTestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function it_displays_the_who_we_work_with_page()
     {
         $client = static::createClient();
@@ -206,9 +206,7 @@ final class WhoWeWorkWithControllerTest extends PageTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_has_metadata()
     {
         $client = static::createClient();

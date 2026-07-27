@@ -4,25 +4,21 @@ namespace test\eLife\Journal\Controller;
 
 use Firebase\JWT\JWT;
 use GuzzleHttp\Psr7\Uri;
+use PHPUnit\Framework\Attributes\BackupGlobals;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use test\eLife\Journal\WebTestCase;
 use function GuzzleHttp\Psr7\parse_query;
 
-/**
- * @backupGlobals enabled
- */
+#[BackupGlobals(true)]
 final class SubmitControllerTest extends WebTestCase
 {
-    /**
-     * @before
-     */
-    public function enableFeatureFlag()
+    public static function setUpBeforeClass(): void
     {
         $_ENV['FEATURE_XPUB'] = true;
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_does_not_redirect_if_the_feature_flag_is_disabled()
     {
         $_ENV['FEATURE_XPUB'] = false;
@@ -34,9 +30,7 @@ final class SubmitControllerTest extends WebTestCase
         $this->assertSame(404, $client->getResponse()->getStatusCode());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_requires_you_to_be_logged_in()
     {
         $client = static::createClient();
@@ -71,9 +65,7 @@ final class SubmitControllerTest extends WebTestCase
         $this->assertTrue($jwt['new-session']);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_redirects_you_to_xpub_with_a_jwt()
     {
         $client = static::createClient();
@@ -92,9 +84,7 @@ final class SubmitControllerTest extends WebTestCase
         $this->assertFalse($jwt['new-session']);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_redirects_you_to_a_trusted_url_with_a_jwt()
     {
         $client = static::createClient();
@@ -113,9 +103,7 @@ final class SubmitControllerTest extends WebTestCase
         $this->assertFalse($jwt['new-session']);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_redirects_you_to_a_trusted_url_with_a_jwt_in_query_argument()
     {
         $client = static::createClient();
@@ -136,10 +124,8 @@ final class SubmitControllerTest extends WebTestCase
         $this->assertFalse($jwt['new-session']);
     }
 
-    /**
-     * @test
-     * @dataProvider invalidDomainProvider
-     */
+    #[Test]
+    #[DataProvider('invalidDomainProvider')]
     public function it_does_not_redirect_if_return_url_is_not_trusted_with_invalid_domain($domain)
     {
         $client = static::createClient();

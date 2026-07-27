@@ -2,11 +2,11 @@
 
 namespace test\eLife\Journal\Controller;
 
+use PHPUnit\Framework\Attributes\Test;
+
 final class ResourcesControllerTest extends PageTestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function it_displays_the_resources_page()
     {
         $client = static::createClient();
@@ -31,9 +31,7 @@ final class ResourcesControllerTest extends PageTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_has_metadata()
     {
         $client = static::createClient();

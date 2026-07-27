@@ -2,6 +2,7 @@
 
 namespace test\eLife\Journal\Controller;
 
+use PHPUnit\Framework\Attributes\Test;
 use Symfony\Component\BrowserKit\Client;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\HttpFoundation\Response;
@@ -9,9 +10,7 @@ use test\eLife\Journal\WebTestCase;
 
 abstract class PageTestCase extends WebTestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function it_displays_the_appropriate_site_header()
     {
         $client = static::createClient();
@@ -27,9 +26,7 @@ abstract class PageTestCase extends WebTestCase
         $this->assertEmpty($crawler->filter('.site-header img[src*="/elife-logo-home-page-xs."]'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     final public function it_has_the_header()
     {
         $client = static::createClient();
@@ -41,9 +38,7 @@ abstract class PageTestCase extends WebTestCase
         $this->assertCount(1, $header);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     final public function it_may_have_a_call_to_action()
     {
         $client = static::createClient();
@@ -57,9 +52,7 @@ abstract class PageTestCase extends WebTestCase
         $this->assertStringContainsString('Call to action 3', $callsToAction->eq(0)->text());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_has_the_sign_up_cta()
     {
         $client = static::createClient();
@@ -71,9 +64,7 @@ abstract class PageTestCase extends WebTestCase
         $this->assertCount(1, $emailCta);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_has_the_footer()
     {
         $client = static::createClient();
@@ -85,9 +76,7 @@ abstract class PageTestCase extends WebTestCase
         $this->assertCount(1, $footer);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     final public function it_has_global_metadata()
     {
         $client = static::createClient();
@@ -98,9 +87,7 @@ abstract class PageTestCase extends WebTestCase
         $this->assertSame('@eLife', $crawler->filter('meta[name="twitter:site"]')->attr('content'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_has_cache_headers()
     {
         // @todo - this can be switched on again after https://github.com/elifesciences/issues/issues/7764

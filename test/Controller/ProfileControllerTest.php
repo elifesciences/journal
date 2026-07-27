@@ -4,12 +4,11 @@ namespace test\eLife\Journal\Controller;
 
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use PHPUnit\Framework\Attributes\Test;
 
 final class ProfileControllerTest extends PageTestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function it_displays_a_profile_page()
     {
         $client = static::createClient();
@@ -22,9 +21,7 @@ final class ProfileControllerTest extends PageTestCase
         $this->assertStringContainsString('No annotations available.', $crawler->text());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_displays_public_annotations_when_it_is_not_your_profile_page()
     {
         $client = static::createClient();
@@ -37,9 +34,7 @@ final class ProfileControllerTest extends PageTestCase
         $this->assertStringContainsString('No annotations available.', $crawler->text());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_displays_a_profile_page_with_public_information()
     {
         $client = static::createClient();
@@ -190,9 +185,7 @@ final class ProfileControllerTest extends PageTestCase
         $this->assertSame('j.carberry@orcid.org', $crawler->filter('.content-header-profile__email')->text());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_has_metadata()
     {
         $client = static::createClient();
@@ -218,9 +211,7 @@ final class ProfileControllerTest extends PageTestCase
         $this->assertEmpty($crawler->filter('meta[name="dc.rights"]'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_displays_a_404_if_the_profile_is_not_found()
     {
         $client = static::createClient();

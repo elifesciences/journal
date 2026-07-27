@@ -4,14 +4,13 @@ namespace test\eLife\Journal\Expression;
 
 use ComposerLocator;
 use eLife\Journal\Expression\ComposerLocateFunctionProvider;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
 final class ComposerLocateFunctionProviderTest extends TestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function it_locates_composer_packages()
     {
         $expressionLanguage = new ExpressionLanguage();
