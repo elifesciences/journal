@@ -64,6 +64,12 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Install smoke.sh
+        run: |
+          sudo mkdir -p /opt/smoke.sh
+          sudo curl -fsSL -o /opt/smoke.sh/smoke.sh https://raw.githubusercontent.com/asm89/smoke.sh/34ba26aa28279dceaacd16e2b38f51cda6398853/smoke.sh
+          echo "39a6913a5a6808ad62a84c994b86ff07  /opt/smoke.sh/smoke.sh" | md5sum -c
+          sudo chmod 755 /opt/smoke.sh/smoke.sh
       - name: Build container image
         run: |
           # Build base images first 
