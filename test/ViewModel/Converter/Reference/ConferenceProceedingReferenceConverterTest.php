@@ -4,15 +4,14 @@ namespace test\eLife\Journal\ViewModel\Converter\Reference;
 
 use eLife\ApiSdk\Model\Reference\ConferenceProceedingReference;
 use eLife\Journal\ViewModel\Converter\Reference\ConferenceProceedingReferenceConverter;
+use PHPUnit\Framework\Attributes\Before;
 
 final class ConferenceProceedingReferenceConverterTest extends ReferenceConverterTestCase
 {
-    protected $referenceClass = ConferenceProceedingReference::class;
+    protected string $referenceClass = ConferenceProceedingReference::class;
 
-    /**
-     * @before
-     */
-    public function setUpConverter()
+    #[Before]
+    public function setUpConverter(): void
     {
         $this->converter = new ConferenceProceedingReferenceConverter();
     }

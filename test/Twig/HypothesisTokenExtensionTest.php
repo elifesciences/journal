@@ -4,7 +4,10 @@ namespace test\eLife\Journal\Twig;
 
 use eLife\Journal\Security\HypothesisTokenGenerator;
 use eLife\Journal\Twig\HypothesisTokenExtension;
+use PHPUnit\Framework\Attributes\Depends;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
+use Symfony\Bridge\PhpUnit\Attribute\TimeSensitive;
 use Symfony\Component\Security\Core\User\User;
 use Twig\Environment;
 use Twig\Extension\ExtensionInterface;
@@ -12,9 +15,7 @@ use Twig\Loader\ArrayLoader;
 
 final class HypothesisTokenExtensionTest extends TestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function it_is_a_twig_extension()
     {
         $extension = new HypothesisTokenExtension(new HypothesisTokenGenerator('authority', 'client_id', 'client_secret'));
@@ -22,11 +23,9 @@ final class HypothesisTokenExtensionTest extends TestCase
         $this->assertInstanceOf(ExtensionInterface::class, $extension);
     }
 
-    /**
-     * @test
-     * @depends it_is_a_twig_extension
-     * @group time-sensitive
-     */
+    #[Test]
+    #[Depends('it_is_a_twig_extension')]
+    #[TimeSensitive(HypothesisTokenGenerator::class)]
     public function it_generates_a_token()
     {
         $tokenGenerator = new HypothesisTokenGenerator('authority', 'client_id', 'client_secret');

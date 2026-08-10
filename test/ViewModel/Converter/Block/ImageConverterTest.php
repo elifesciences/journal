@@ -7,16 +7,15 @@ use eLife\Journal\ViewModel\Converter\Block\ImageConverter;
 use eLife\Journal\ViewModel\Converter\ViewModelConverter;
 use eLife\Patterns\PatternRenderer;
 use eLife\Patterns\ViewModel;
+use PHPUnit\Framework\Attributes\Before;
 
 final class ImageConverterTest extends BlockConverterTestCase
 {
-    protected $blockClass = Block\Image::class;
+    protected string $blockClass = Block\Image::class;
     protected $viewModelClasses = [ViewModel\CaptionedAsset::class];
 
-    /**
-     * @before
-     */
-    public function setUpConverter()
+    #[Before]
+    public function setUpConverter(): void
     {
         $this->converter = new ImageConverter(
             $viewModelConverter = $this->createMock(ViewModelConverter::class),
@@ -24,11 +23,10 @@ final class ImageConverterTest extends BlockConverterTestCase
         );
 
         $viewModelConverter
-            ->expects($this->any())
             ->method('convert')
-            ->will($this->returnValue(new ViewModel\Picture(
+            ->willReturn(new ViewModel\Picture(
                 [],
                 new ViewModel\Image('/image.jpg')
-            )));
+            ));
     }
 }

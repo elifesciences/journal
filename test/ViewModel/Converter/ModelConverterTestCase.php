@@ -6,7 +6,10 @@ use ComposerLocator;
 use eLife\ApiSdk\Collection;
 use eLife\ApiSdk\Model;
 use eLife\Journal\ViewModel\Converter\ViewModelConverter;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
@@ -47,18 +50,14 @@ abstract class ModelConverterTestCase extends TestCase
 
     use SerializerAwareTestCase;
 
-    /**
-     * @test
-     */
+    #[Test]
     final public function it_is_a_view_model_converter()
     {
         $this->assertInstanceOf(ViewModelConverter::class, $this->converter);
     }
 
-    /**
-     * @test
-     * @dataProvider samples
-     */
+    #[Test]
+    #[DataProvider('samples')]
     final public function it_converts_a_model($model, string $viewModelClass)
     {
         $this->assertTrue(
@@ -66,34 +65,53 @@ abstract class ModelConverterTestCase extends TestCase
             'Converter does not support turning '.get_class($model).' into '.$viewModelClass
         );
         $viewModel = $this->converter->convert($model, $viewModelClass, $this->context);
-        $this->assertStringContainsString(get_class($viewModel), $this->viewModelClasses);
+        $this->assertContains(get_class($viewModel), $this->viewModelClasses);
 
         $viewModel->toArray();
     }
 
-    final public function samples() : Traversable
+    public static function samples() : Traversable
     {
-        $this->setUpSerializer();
+        $instance = (new ReflectionClass(static::class))->newInstanceWithoutConstructor();
+        $instance->setUpSerializer();
 
-        foreach ($this->findSamples() as $sample) {
+        foreach ($instance->findSamples() as $sample) {
             $model = $sample[0];
             $class = $sample[1];
 
-            $model = $this->serializer->denormalize($model, $class);
+            $model = $instance->serializer->denormalize($model, $class);
 
-            foreach ($this->modelHook($model) as $model) {
-                foreach ($this->viewModelClasses as $viewModelClass) {
+            foreach ($instance->modelHook($model) as $model) {
+                foreach ($instance->viewModelClasses as $viewModelClass) {
                     yield [$model, $viewModelClass];
                 }
             }
         }
     }
 
+    /**
+     * Denormalizes a real sample fixture file directly into the given model class, for cases where
+     * no fixture combines the wrapper and item types needed (e.g. a highlight wrapping an item type
+     * that no highlight-list sample happens to contain).
+     */
+    protected static function denormalizeSample(string $path, string $class)
+    {
+        return self::denormalizeData(json_decode(file_get_contents($path), true), $class);
+    }
+
+    protected static function denormalizeData(array $data, string $class)
+    {
+        $instance = (new ReflectionClass(static::class))->newInstanceWithoutConstructor();
+        $instance->setUpSerializer();
+
+        return $instance->serializer->denormalize($data, $class);
+    }
+
     private function findSamples() : Traversable
     {
-        $this->assertInternalType('array', $this->models);
-        $this->assertInternalType('array', $this->viewModelClasses);
-        $this->assertInternalType('array', $this->context);
+        $this->assertIsArray($this->models);
+        $this->assertIsArray($this->viewModelClasses);
+        $this->assertIsArray($this->context);
 
         foreach ($this->models as $originalModel) {
             $model = $originalModel;
@@ -162,9 +180,7 @@ abstract class ModelConverterTestCase extends TestCase
         }
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     final public function it_does_not_convert_unsupported_models()
     {
         $block = $this->serializer->denormalize($this->unsupportedModelData(), Model\Block::class);

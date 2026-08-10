@@ -11,6 +11,7 @@ use eLife\Patterns\PatternRenderer;
 use eLife\Patterns\ViewModel\DecisionLetterHeader;
 use eLife\Patterns\ViewModel\Paragraph;
 use eLife\Patterns\ViewModel\ProfileSnippet;
+use PHPUnit\Framework\Attributes\Before;
 use Traversable;
 
 final class ArticleDecisionLetterHeaderConverterTest extends ModelConverterTestCase
@@ -18,10 +19,8 @@ final class ArticleDecisionLetterHeaderConverterTest extends ModelConverterTestC
     protected $models = ['article-vor'];
     protected $viewModelClasses = [DecisionLetterHeader::class];
 
-    /**
-     * @before
-     */
-    public function setUpConverter()
+    #[Before]
+    public function setUpConverter(): void
     {
         $this->converter = new ArticleDecisionLetterHeaderConverter(
             $viewModelConverter = $this->createMock(ViewModelConverter::class),
@@ -29,20 +28,18 @@ final class ArticleDecisionLetterHeaderConverterTest extends ModelConverterTestC
         );
 
         $viewModelConverter
-            ->expects($this->any())
             ->method('convert')
-            ->will($this->returnCallback(function ($input) {
+            ->willReturnCallback(function ($input) {
                 if ($input instanceof Block) {
                     return new Paragraph('...');
                 }
 
                 return new ProfileSnippet('name', 'title');
-            }));
+            });
 
         $patternRenderer
-            ->expects($this->any())
             ->method('render')
-            ->will($this->returnValue('...'));
+            ->willReturn('...');
     }
 
     /**

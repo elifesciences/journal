@@ -6,6 +6,8 @@ use eLife\Journal\Mustache\PackagesHelper;
 use Mustache_Context;
 use Mustache_Engine;
 use Mustache_LambdaHelper;
+use PHPUnit\Framework\Attributes\Before;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Asset\Packages;
 use Symfony\Component\Asset\PathPackage;
@@ -16,25 +18,19 @@ final class PackagesHelperTest extends TestCase
     private $packages;
     private $lambdaHelper;
 
-    /**
-     * @before
-     */
+    #[Before]
     public function setUpPackages()
     {
         $this->packages = new Packages(new PathPackage('/foo', new EmptyVersionStrategy()));
     }
 
-    /**
-     * @before
-     */
+    #[Before]
     public function setUpLambdaHelper()
     {
         $this->lambdaHelper = new Mustache_LambdaHelper(new Mustache_Engine(), new Mustache_Context(['bar' => 'baz']));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_rewrites_paths()
     {
         $helper = new PackagesHelper($this->packages);

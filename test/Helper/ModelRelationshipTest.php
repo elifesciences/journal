@@ -3,15 +3,15 @@
 namespace test\eLife\Journal\Helper;
 
 use eLife\Journal\Helper\ModelRelationship;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Traversable;
 
 final class ModelRelationshipTest extends TestCase
 {
-    /**
-     * @test
-     * @dataProvider typesProvider
-     */
+    #[Test]
+    #[DataProvider('typesProvider')]
     public function it_determines_relationship_text(string $from, string $to, bool $related, string $expected)
     {
         $this->assertSame($expected, ModelRelationship::get($from, $to, $related));

@@ -7,16 +7,15 @@ use eLife\Journal\ViewModel\Converter\Block\ListingConverter;
 use eLife\Journal\ViewModel\Converter\ViewModelConverter;
 use eLife\Patterns\PatternRenderer;
 use eLife\Patterns\ViewModel;
+use PHPUnit\Framework\Attributes\Before;
 
 final class ListingConverterTest extends BlockConverterTestCase
 {
-    protected $blockClass = Block\Listing::class;
+    protected string $blockClass = Block\Listing::class;
     protected $viewModelClasses = [ViewModel\Listing::class];
 
-    /**
-     * @before
-     */
-    public function setUpConverter()
+    #[Before]
+    public function setUpConverter(): void
     {
         $this->converter = new ListingConverter(
             $this->createMock(ViewModelConverter::class),

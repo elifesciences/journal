@@ -81,7 +81,6 @@
             "version": "0.16.13",
             "resolved": "https://registry.npmjs.org/@jimp/custom/-/custom-0.16.13.tgz",
             "integrity": "sha512-LTATglVUPGkPf15zX1wTMlZ0+AU7cGEGF6ekVF1crA8eHUWsGjrYTB+Ht4E3HTrCok8weQG+K01rJndCp/l4XA==",
-            "peer": true,
             "dependencies": {
                 "@babel/runtime": "^7.7.2",
                 "@jimp/core": "^0.16.13"
@@ -118,7 +117,6 @@
             "version": "0.16.13",
             "resolved": "https://registry.npmjs.org/@jimp/plugin-blit/-/plugin-blit-0.16.13.tgz",
             "integrity": "sha512-8Z1k96ZFxlhK2bgrY1JNWNwvaBeI/bciLM0yDOni2+aZwfIIiC7Y6PeWHTAvjHNjphz+XCt01WQmOYWCn0ML6g==",
-            "peer": true,
             "dependencies": {
                 "@babel/runtime": "^7.7.2",
                 "@jimp/utils": "^0.16.13"
@@ -131,7 +129,6 @@
             "version": "0.16.13",
             "resolved": "https://registry.npmjs.org/@jimp/plugin-blur/-/plugin-blur-0.16.13.tgz",
             "integrity": "sha512-PvLrfa8vkej3qinlebyhLpksJgCF5aiysDMSVhOZqwH5nQLLtDE9WYbnsofGw4r0VVpyw3H/ANCIzYTyCtP9Cg==",
-            "peer": true,
             "dependencies": {
                 "@babel/runtime": "^7.7.2",
                 "@jimp/utils": "^0.16.13"
@@ -156,7 +153,6 @@
             "version": "0.16.13",
             "resolved": "https://registry.npmjs.org/@jimp/plugin-color/-/plugin-color-0.16.13.tgz",
             "integrity": "sha512-xW+9BtEvoIkkH/Wde9ql4nAFbYLkVINhpgAE7VcBUsuuB34WUbcBl/taOuUYQrPEFQJ4jfXiAJZ2H/rvKjCVnQ==",
-            "peer": true,
             "dependencies": {
                 "@babel/runtime": "^7.7.2",
                 "@jimp/utils": "^0.16.13",
@@ -200,7 +196,6 @@
             "version": "0.16.13",
             "resolved": "https://registry.npmjs.org/@jimp/plugin-crop/-/plugin-crop-0.16.13.tgz",
             "integrity": "sha512-WEl2tPVYwzYL8OKme6Go2xqiWgKsgxlMwyHabdAU4tXaRwOCnOI7v4021gCcBb9zn/oWwguHuKHmK30Fw2Z/PA==",
-            "peer": true,
             "dependencies": {
                 "@babel/runtime": "^7.7.2",
                 "@jimp/utils": "^0.16.13"
@@ -324,7 +319,6 @@
             "version": "0.16.13",
             "resolved": "https://registry.npmjs.org/@jimp/plugin-resize/-/plugin-resize-0.16.13.tgz",
             "integrity": "sha512-qoqtN8LDknm3fJm9nuPygJv30O3vGhSBD2TxrsCnhtOsxKAqVPJtFVdGd/qVuZ8nqQANQmTlfqTiK9mVWQ7MiQ==",
-            "peer": true,
             "dependencies": {
                 "@babel/runtime": "^7.7.2",
                 "@jimp/utils": "^0.16.13"
@@ -337,7 +331,6 @@
             "version": "0.16.13",
             "resolved": "https://registry.npmjs.org/@jimp/plugin-rotate/-/plugin-rotate-0.16.13.tgz",
             "integrity": "sha512-Ev+Jjmj1nHYw897z9C3R9dYsPv7S2/nxdgfFb/h8hOwK0Ovd1k/+yYS46A0uj/JCKK0pQk8wOslYBkPwdnLorw==",
-            "peer": true,
             "dependencies": {
                 "@babel/runtime": "^7.7.2",
                 "@jimp/utils": "^0.16.13"
@@ -353,7 +346,6 @@
             "version": "0.16.13",
             "resolved": "https://registry.npmjs.org/@jimp/plugin-scale/-/plugin-scale-0.16.13.tgz",
             "integrity": "sha512-05POQaEJVucjTiSGMoH68ZiELc7QqpIpuQlZ2JBbhCV+WCbPFUBcGSmE7w4Jd0E2GvCho/NoMODLwgcVGQA97A==",
-            "peer": true,
             "dependencies": {
                 "@babel/runtime": "^7.7.2",
                 "@jimp/utils": "^0.16.13"
@@ -5275,7 +5267,6 @@
             "version": "4.0.2",
             "resolved": "https://registry.npmjs.org/gulp/-/gulp-4.0.2.tgz",
             "integrity": "sha512-dvEs27SCZt2ibF29xYgmnwwCYZxdxhQ/+LFWlbAW8y7jt68L/65402Lz3+CKy0Ov4rOs+NERmDq7YlZaDqUIfA==",
-            "peer": true,
             "dependencies": {
                 "glob-watcher": "^5.0.3",
                 "gulp-cli": "^2.2.0",
@@ -12164,7 +12155,6 @@
             "version": "0.16.13",
             "resolved": "https://registry.npmjs.org/@jimp/custom/-/custom-0.16.13.tgz",
             "integrity": "sha512-LTATglVUPGkPf15zX1wTMlZ0+AU7cGEGF6ekVF1crA8eHUWsGjrYTB+Ht4E3HTrCok8weQG+K01rJndCp/l4XA==",
-            "peer": true,
             "requires": {
                 "@babel/runtime": "^7.7.2",
                 "@jimp/core": "^0.16.13"
@@ -12195,7 +12185,6 @@
             "version": "0.16.13",
             "resolved": "https://registry.npmjs.org/@jimp/plugin-blit/-/plugin-blit-0.16.13.tgz",
             "integrity": "sha512-8Z1k96ZFxlhK2bgrY1JNWNwvaBeI/bciLM0yDOni2+aZwfIIiC7Y6PeWHTAvjHNjphz+XCt01WQmOYWCn0ML6g==",
-            "peer": true,
             "requires": {
                 "@babel/runtime": "^7.7.2",
                 "@jimp/utils": "^0.16.13"
@@ -12205,7 +12194,6 @@
             "version": "0.16.13",
             "resolved": "https://registry.npmjs.org/@jimp/plugin-blur/-/plugin-blur-0.16.13.tgz",
             "integrity": "sha512-PvLrfa8vkej3qinlebyhLpksJgCF5aiysDMSVhOZqwH5nQLLtDE9WYbnsofGw4r0VVpyw3H/ANCIzYTyCtP9Cg==",
-            "peer": true,
             "requires": {
                 "@babel/runtime": "^7.7.2",
                 "@jimp/utils": "^0.16.13"
@@ -12224,7 +12212,6 @@
             "version": "0.16.13",
             "resolved": "https://registry.npmjs.org/@jimp/plugin-color/-/plugin-color-0.16.13.tgz",
             "integrity": "sha512-xW+9BtEvoIkkH/Wde9ql4nAFbYLkVINhpgAE7VcBUsuuB34WUbcBl/taOuUYQrPEFQJ4jfXiAJZ2H/rvKjCVnQ==",
-            "peer": true,
             "requires": {
                 "@babel/runtime": "^7.7.2",
                 "@jimp/utils": "^0.16.13",
@@ -12253,7 +12240,6 @@
             "version": "0.16.13",
             "resolved": "https://registry.npmjs.org/@jimp/plugin-crop/-/plugin-crop-0.16.13.tgz",
             "integrity": "sha512-WEl2tPVYwzYL8OKme6Go2xqiWgKsgxlMwyHabdAU4tXaRwOCnOI7v4021gCcBb9zn/oWwguHuKHmK30Fw2Z/PA==",
-            "peer": true,
             "requires": {
                 "@babel/runtime": "^7.7.2",
                 "@jimp/utils": "^0.16.13"
@@ -12345,7 +12331,6 @@
             "version": "0.16.13",
             "resolved": "https://registry.npmjs.org/@jimp/plugin-resize/-/plugin-resize-0.16.13.tgz",
             "integrity": "sha512-qoqtN8LDknm3fJm9nuPygJv30O3vGhSBD2TxrsCnhtOsxKAqVPJtFVdGd/qVuZ8nqQANQmTlfqTiK9mVWQ7MiQ==",
-            "peer": true,
             "requires": {
                 "@babel/runtime": "^7.7.2",
                 "@jimp/utils": "^0.16.13"
@@ -12355,7 +12340,6 @@
             "version": "0.16.13",
             "resolved": "https://registry.npmjs.org/@jimp/plugin-rotate/-/plugin-rotate-0.16.13.tgz",
             "integrity": "sha512-Ev+Jjmj1nHYw897z9C3R9dYsPv7S2/nxdgfFb/h8hOwK0Ovd1k/+yYS46A0uj/JCKK0pQk8wOslYBkPwdnLorw==",
-            "peer": true,
             "requires": {
                 "@babel/runtime": "^7.7.2",
                 "@jimp/utils": "^0.16.13"
@@ -12365,7 +12349,6 @@
             "version": "0.16.13",
             "resolved": "https://registry.npmjs.org/@jimp/plugin-scale/-/plugin-scale-0.16.13.tgz",
             "integrity": "sha512-05POQaEJVucjTiSGMoH68ZiELc7QqpIpuQlZ2JBbhCV+WCbPFUBcGSmE7w4Jd0E2GvCho/NoMODLwgcVGQA97A==",
-            "peer": true,
             "requires": {
                 "@babel/runtime": "^7.7.2",
                 "@jimp/utils": "^0.16.13"
@@ -16248,7 +16231,6 @@
             "version": "4.0.2",
             "resolved": "https://registry.npmjs.org/gulp/-/gulp-4.0.2.tgz",
             "integrity": "sha512-dvEs27SCZt2ibF29xYgmnwwCYZxdxhQ/+LFWlbAW8y7jt68L/65402Lz3+CKy0Ov4rOs+NERmDq7YlZaDqUIfA==",
-            "peer": true,
             "requires": {
                 "glob-watcher": "^5.0.3",
                 "gulp-cli": "^2.2.0",

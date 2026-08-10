@@ -793,10 +793,6 @@ final class HomeControllerTest extends PageTestCase
                 'Research Article',
                 'Updated Sep 11, 2015',
                 'Nicholas P Lesner, Xun Wang ... Prashant Mishra',
-                [
-                    '/subjects/genomics-evolutionary-biology' => 'Genomics and Evolutionary Biology',
-                    '/subjects/genetics-genomics' => 'Genetics and Genomics',
-                ],
             ],
             'research-article-poa' => [
                 self::prepareCover('research-article-poa'),
@@ -804,10 +800,6 @@ final class HomeControllerTest extends PageTestCase
                 'research-article-poa impact statement',
                 'Research Article',
                 'Sep 10, 2015',
-                null,
-                [
-                    '/subjects/cancer-biology' => 'Cancer Biology',
-                ],
             ],
             'blog-article' => [
                 self::prepareCover('blog-article'),
@@ -815,10 +807,6 @@ final class HomeControllerTest extends PageTestCase
                 'blog-article impact statement',
                 'Inside eLife',
                 'Sep 12, 2015',
-                null,
-                [
-                    '/subjects/genomics-evolutionary-biology' => 'Genomics and Evolutionary Biology',
-                ],
             ],
             'interview' => [
                 self::prepareCover('interview'),

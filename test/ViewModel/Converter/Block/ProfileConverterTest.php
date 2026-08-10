@@ -7,16 +7,15 @@ use eLife\Journal\ViewModel\Converter\Block\ProfileConverter;
 use eLife\Journal\ViewModel\Converter\ViewModelConverter;
 use eLife\Patterns\PatternRenderer;
 use eLife\Patterns\ViewModel;
+use PHPUnit\Framework\Attributes\Before;
 
 final class ProfileConverterTest extends BlockConverterTestCase
 {
-    protected $blockClass = Block\Profile::class;
+    protected string $blockClass = Block\Profile::class;
     protected $viewModelClasses = [ViewModel\InlineProfile::class];
 
-    /**
-     * @before
-     */
-    public function setUpConverter()
+    #[Before]
+    public function setUpConverter(): void
     {
         $this->converter = new ProfileConverter(
             $viewModelConverter = $this->createMock(ViewModelConverter::class),
@@ -24,15 +23,13 @@ final class ProfileConverterTest extends BlockConverterTestCase
         );
 
         $viewModelConverter
-            ->expects($this->any())
             ->method('convert')
-            ->will($this->returnValue(new ViewModel\Picture(
+            ->willReturn(new ViewModel\Picture(
                 [],
                 new ViewModel\Image('/image.jpg')
-            )));
+            ));
         $patternRenderer
-            ->expects($this->any())
             ->method('render')
-            ->will($this->returnValue('...'));
+            ->willReturn('...');
     }
 }

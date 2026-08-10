@@ -5,8 +5,9 @@ namespace test\eLife\Journal\ViewModel\Converter\Block;
 use eLife\ApiSdk\Collection\Sequence;
 use eLife\ApiSdk\Model\ArticleVersion;
 use eLife\ApiSdk\Model\ArticleVoR;
-use eLife\ApiSdk\Model\Asset;
 use eLife\ApiSdk\Model\Block;
+use eLife\ApiSdk\Model\Block\Figure;
+use eLife\ApiSdk\Model\BlockWithCaption;
 use eLife\ApiSdk\Model\HasContent;
 use eLife\ApiSdk\Model\Model;
 use eLife\ApiSdk\Model\Person;
@@ -20,7 +21,7 @@ abstract class BlockConverterTestCase extends ModelConverterTestCase
 
     final protected function modelHook(Model $model) : Traversable
     {
-        foreach (array_filter(iterator_to_array($this->findBlocks($model)), [$this, 'includeBlock']) as $block) {
+        foreach (array_filter(iterator_to_array($this->findBlocks($model), false), [$this, 'includeBlock']) as $block) {
             yield from $this->explodeBlock($block);
         }
     }
@@ -81,17 +82,29 @@ abstract class BlockConverterTestCase extends ModelConverterTestCase
     private function sequenceHook(Sequence $blocks) : Traversable
     {
         foreach ($blocks as $block) {
-            if ($block instanceof $this->blockClass) {
-                yield $block;
-                continue;
-            }
+            yield from $this->blockHook($block);
+        }
+    }
 
-            if ($block instanceof HasContent) {
-                yield from $this->hasContentHook($block);
-            }
+    private function blockHook(Block $block) : Traversable
+    {
+        if ($block instanceof $this->blockClass) {
+            yield $block;
 
-            if ($block instanceof Asset) {
-                yield from $this->sequenceHook($block->getCaption());
+            return;
+        }
+
+        if ($block instanceof HasContent) {
+            yield from $this->hasContentHook($block);
+        }
+
+        if ($block instanceof BlockWithCaption) {
+            yield from $this->sequenceHook($block->getCaption());
+        }
+
+        if ($block instanceof Figure) {
+            foreach ($block->getAssets() as $figureAsset) {
+                yield from $this->blockHook($figureAsset->getAsset());
             }
         }
     }

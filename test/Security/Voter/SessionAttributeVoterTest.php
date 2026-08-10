@@ -3,6 +3,8 @@
 namespace test\eLife\Journal\Security\Voter;
 
 use eLife\Journal\Security\Voter\SessionAttributeVoter;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -14,10 +16,8 @@ use Traversable;
 
 final class SessionAttributeVoterTest extends TestCase
 {
-    /**
-     * @test
-     * @dataProvider noSetValueProvider
-     */
+    #[Test]
+    #[DataProvider('noSetValueProvider')]
     public function it_votes_without_a_set_value($subject, array $roles, array $attributes, int $expected)
     {
         $requestStack = new RequestStack();
@@ -41,10 +41,8 @@ final class SessionAttributeVoterTest extends TestCase
         yield 'without attribute' => [null, ['foo'], [], VoterInterface::ACCESS_DENIED];
     }
 
-    /**
-     * @test
-     * @dataProvider setValueProvider
-     */
+    #[Test]
+    #[DataProvider('setValueProvider')]
     public function it_votes_with_a_set_value($requiredValue, $subject, array $roles, array $attributes, int $expected)
     {
         $requestStack = new RequestStack();

@@ -17,15 +17,6 @@ abstract class WebTestCase extends BaseWebTestCase
     use AppKernelTestCase;
     use Assertions;
 
-    protected function tearDown(): void
-    {
-        parent::tearDown();
-        if (static::$kernelBootedInCurrentTest) {
-            static::$kernelBootedInCurrentTest = false;
-            restore_exception_handler();
-        }
-    }
-
     final protected function logIn(Client $client)
     {
         $session = $client->getContainer()->get('session');

@@ -9,6 +9,8 @@ use eLife\ApiSdk\Collection\ArraySequence;
 use eLife\Journal\ViewModel\Converter\TeaserTermsBuilder;
 use eLife\Patterns\ViewModel\TeaserTerms;
 use eLife\Patterns\ViewModel\Term;
+use PHPUnit\Framework\Attributes\Before;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 final class TeaserTermsBuilderTest extends TestCase
@@ -21,18 +23,14 @@ final class TeaserTermsBuilderTest extends TestCase
     private $elifeAssessmentTitle = 'Lorem ipsum';
     private $articleSection;
 
-     /**
-     * @before
-     */
-    public function setUpConverter()
+     #[Before]
+    public function setUpConverter(): void
     {
         $this->builder = new TeaserTermsBuilder();
         $this->articleSection = new ArticleSection(new ArraySequence([new Paragraph('eLife assessment')]));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     final public function it_builds_significance_terms_when_there_are_significance_terms_and_no_strength_terms_are_available()
     {
         $elifeAssessment = new ElifeAssessment($this->elifeAssessmentTitle, $this->articleSection, ['landmark'], null);
@@ -42,9 +40,7 @@ final class TeaserTermsBuilderTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     final public function it_does_not_build_significance_terms_when_there_are_none_in_the_assessment_and_no_strength_terms_are_available()
     {
         $elifeAssessment = new ElifeAssessment($this->elifeAssessmentTitle, $this->articleSection, [], null);
@@ -53,9 +49,7 @@ final class TeaserTermsBuilderTest extends TestCase
         $this->assertNull($result);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     final public function it_builds_strength_terms_when_there_are_strength_terms_and_no_significance_terms_are_available()
     {
         $elifeAssessment = new ElifeAssessment($this->elifeAssessmentTitle, $this->articleSection, null, ['convincing']);
@@ -65,9 +59,7 @@ final class TeaserTermsBuilderTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     final public function it_builds_terms_using_both_significance_and_strength_terms_in_that_order()
     {
         $elifeAssessment = new ElifeAssessment($this->elifeAssessmentTitle, $this->articleSection, ['landmark'], ['solid']);

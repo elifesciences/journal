@@ -5,16 +5,17 @@ namespace test\eLife\Journal\ViewModel\Converter;
 use eLife\Journal\ViewModel\Converter\ReviewedPreprintTeaserConverter;
 use eLife\Journal\ViewModel\Converter\ViewModelConverter;
 use eLife\Patterns\ViewModel;
+use PHPUnit\Framework\Attributes\Before;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 
 final class ReviewedPreprintTeaserConverterTest extends ModelConverterTestCase
 {
     protected $models = ['reviewed-preprint'];
     protected $viewModelClasses = [ViewModel\Teaser::class];
 
-    /**
-     * @before
-     */
-    public function setUpConverter()
+    #[Before]
+    public function setUpConverter(): void
     {
         $this->converter = new ReviewedPreprintTeaserConverter(
             $viewModelConverter = $this->createMock(ViewModelConverter::class),
@@ -22,33 +23,28 @@ final class ReviewedPreprintTeaserConverterTest extends ModelConverterTestCase
         );
 
         $viewModelConverter
-            ->expects($this->any())
             ->method('convert')
-            ->will($this->returnValue(new ViewModel\Picture(
+            ->willReturn(new ViewModel\Picture(
                 [],
                 new ViewModel\Image('/image.jpg')
-            )));
+            ));
     }
 
-    /**
-     * @test
-     * @dataProvider samples
-     */
+    #[Test]
+    #[DataProvider('samples')]
     final public function it_shows_the_reviewed_preprint_status($model, string $viewModelClass)
     {
         $viewModel = $this->converter->convert($model, $viewModelClass, $this->context);
 
         $array = $viewModel->toArray();
         $this->assertArrayHasKey('articleStatus', $array['footer']['meta']);
-        $this->assertStringContainsString($array['footer']['meta']['articleStatus'], [ViewModel\Meta::STATUS_NOT_REVISED, ViewModel\Meta::STATUS_REVISED]);
+        $this->assertContains($array['footer']['meta']['articleStatus'], [ViewModel\Meta::STATUS_NOT_REVISED, ViewModel\Meta::STATUS_REVISED]);
         $this->assertArrayHasKey('articleStatusColorClass', $array['footer']['meta']);
-        $this->assertStringContainsString($array['footer']['meta']['articleStatusColorClass'], [ViewModel\Meta::COLOR_NOT_REVISED, ViewModel\Meta::COLOR_REVISED]);
+        $this->assertContains($array['footer']['meta']['articleStatusColorClass'], [ViewModel\Meta::COLOR_NOT_REVISED, ViewModel\Meta::COLOR_REVISED]);
     }
 
-    /**
-     * @test
-     * @dataProvider samples
-     */
+    #[Test]
+    #[DataProvider('samples')]
     final public function it_shows_the_reviewed_preprint_date($model, string $viewModelClass)
     {
         $viewModel = $this->converter->convert($model, $viewModelClass, $this->context);
@@ -58,10 +54,8 @@ final class ReviewedPreprintTeaserConverterTest extends ModelConverterTestCase
         $this->assertArrayHasKey('date', $array['footer']['meta']);
     }
 
-    /**
-     * @test
-     * @dataProvider samples
-     */
+    #[Test]
+    #[DataProvider('samples')]
     final public function it_shows_the_reviewed_preprint_version_in_the_meta_version($model, string $viewModelClass)
     {
         $viewModel = $this->converter->convert($model, $viewModelClass, $this->context);
@@ -70,10 +64,8 @@ final class ReviewedPreprintTeaserConverterTest extends ModelConverterTestCase
         $this->assertArrayHasKey('version', $array['footer']['meta']);
     }
 
-    /**
-     * @test
-     * @dataProvider samples
-     */
+    #[Test]
+    #[DataProvider('samples')]
     final public function it_does_not_show_any_url_or_text($model, string $viewModelClass)
     {
         $viewModel = $this->converter->convert($model, $viewModelClass, $this->context);

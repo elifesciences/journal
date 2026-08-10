@@ -9,17 +9,16 @@ use eLife\Journal\ViewModel\Converter\ViewModelConverter;
 use eLife\Patterns\PatternRenderer;
 use eLife\Patterns\ViewModel;
 use eLife\Patterns\ViewModel\Link;
+use PHPUnit\Framework\Attributes\Before;
 use Traversable;
 
 final class FigureAssetTableConverterTest extends BlockConverterTestCase
 {
-    protected $blockClass = Block\Figure::class;
+    protected string $blockClass = Block\Figure::class;
     protected $viewModelClasses = [ViewModel\AssetViewerInline::class];
 
-    /**
-     * @before
-     */
-    public function setUpConverter()
+    #[Before]
+    public function setUpConverter(): void
     {
         $this->converter = new FigureAssetTableConverter(
             $viewModelConverter = $this->createMock(ViewModelConverter::class),
@@ -27,19 +26,17 @@ final class FigureAssetTableConverterTest extends BlockConverterTestCase
         );
 
         $viewModelConverter
-            ->expects($this->any())
             ->method('convert')
-            ->will($this->returnValue(ViewModel\AdditionalAsset::withoutDoi(
+            ->willReturn(ViewModel\AdditionalAsset::withoutDoi(
                 'id',
                 ViewModel\CaptionText::withHeading('Without doi'),
                 ViewModel\DownloadLink::fromLink(new Link('Download link', 'http://google.com/download'), 'File name'),
                 'http://google.com/'
-            )));
+            ));
 
         $patternRenderer
-            ->expects($this->any())
             ->method('render')
-            ->will($this->returnValue('...'));
+            ->willReturn('...');
     }
 
     protected function explodeBlock(Block $block) : Traversable

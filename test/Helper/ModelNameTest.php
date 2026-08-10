@@ -4,6 +4,8 @@ namespace test\eLife\Journal\Helper;
 
 use eLife\Journal\Helper\ModelName;
 use InvalidArgumentException;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use test\eLife\Journal\Providers;
 use Traversable;
@@ -11,20 +13,16 @@ use Traversable;
 final class ModelNameTest extends TestCase
 {
     use Providers;
-
-    /**
-     * @test
-     * @dataProvider validModelProvider
-     */
+    
+    #[Test]
+    #[DataProvider('singularProvider')]
     public function it_providers_a_singular(string $id, string $singular)
     {
         $this->assertSame($singular, ModelName::singular($id));
     }
 
-    /**
-     * @test
-     * @dataProvider validModelProvider
-     */
+    #[Test]
+    #[DataProvider('validModelProvider')]
     public function it_providers_a_plural(string $id, string $singular, string $plural)
     {
         $this->assertSame($plural, ModelName::plural($id));
@@ -62,9 +60,14 @@ final class ModelNameTest extends TestCase
         ]);
     }
 
-    /**
-     * @test
-     */
+    public static function singularProvider() : Traversable
+    {
+        foreach (self::validModelProvider() as $key => $data) {
+            yield $key => [$data[0], $data[1]];
+        }
+    }
+
+    #[Test]
     public function it_fails_on_an_invalid_type_for_singular()
     {
         $this->expectException(InvalidArgumentException::class);
@@ -72,9 +75,7 @@ final class ModelNameTest extends TestCase
         ModelName::singular('foo');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_fails_on_an_invalid_type_for_plural()
     {
         $this->expectException(InvalidArgumentException::class);

@@ -3,15 +3,17 @@
 namespace test\eLife\Journal\Security\Authorization;
 
 use eLife\Journal\Security\Authorization\MissingCredentialsAuthorizationChecker;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationCredentialsNotFoundException;
 
 final class MissingCredentialsAuthorizationCheckerTest extends TestCase
 {
-    /**
-     * @test
-     */
+    use ProphecyTrait;
+
+    #[Test]
     public function it_grants_if_the_parent_grants()
     {
         $parent = $this->prophesize(AuthorizationCheckerInterface::class);
@@ -22,9 +24,7 @@ final class MissingCredentialsAuthorizationCheckerTest extends TestCase
         $this->assertTrue($checker->isGranted('attribute', 'object'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_denies_if_the_parent_denies()
     {
         $parent = $this->prophesize(AuthorizationCheckerInterface::class);
@@ -35,9 +35,7 @@ final class MissingCredentialsAuthorizationCheckerTest extends TestCase
         $this->assertFalse($checker->isGranted('attribute', 'object'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_denies_if_the_parent_does_not_have_credentials()
     {
         $parent = $this->prophesize(AuthorizationCheckerInterface::class);

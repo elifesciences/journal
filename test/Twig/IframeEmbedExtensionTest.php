@@ -3,6 +3,9 @@
 namespace test\eLife\Journal\Twig;
 
 use eLife\Journal\Twig\IframeEmbedExtension;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Depends;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Traversable;
 use Twig\Environment;
@@ -11,9 +14,7 @@ use Twig\Loader\ArrayLoader;
 
 final class IframeEmbedExtensionTest extends TestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function it_is_a_twig_extension()
     {
         $extension = new IframeEmbedExtension();
@@ -21,11 +22,9 @@ final class IframeEmbedExtensionTest extends TestCase
         $this->assertInstanceOf(ExtensionInterface::class, $extension);
     }
 
-    /**
-     * @test
-     * @depends it_is_a_twig_extension
-     * @dataProvider htmlProvider
-     */
+    #[Test]
+    #[DataProvider('htmlProvider')]
+    #[Depends('it_is_a_twig_extension')]
     public function it_turns_embed_placeholders_into_embeds(string $input, string $expected)
     {
         $twigLoader = new ArrayLoader(['foo' => '{{ string|iframe_embed }}']);

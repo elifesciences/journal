@@ -4,6 +4,7 @@ namespace test\eLife\Journal\ViewModel\Converter;
 
 use eLife\Journal\ViewModel\Converter\SocialMediaSharersConverter;
 use eLife\Patterns\ViewModel\SocialMediaSharersNew;
+use PHPUnit\Framework\Attributes\Before;
 
 final class DigestSocialMediaSharersConverterTest extends ModelConverterTestCase
 {
@@ -11,10 +12,8 @@ final class DigestSocialMediaSharersConverterTest extends ModelConverterTestCase
     protected $viewModelClasses = [SocialMediaSharersNew::class];
     protected $context = ['variant' => 'digest'];
     
-    /**
-     * @before
-     */
-    public function setUpConverter()
+    #[Before]
+    public function setUpConverter(): void
     {
         $this->converter = new SocialMediaSharersConverter($this->stubUrlGenerator());
     }

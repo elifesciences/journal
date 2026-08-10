@@ -4,6 +4,8 @@ namespace test\eLife\Journal\Helper;
 
 use eLife\ApiSdk\Model\Image;
 use eLife\Journal\Helper\IiifRegionCalculator;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use test\eLife\Journal\ViewModel\Converter\SerializerAwareTestCase;
 use Traversable;
@@ -12,9 +14,7 @@ final class IiifRegionCalculatorTest extends TestCase
 {
     use SerializerAwareTestCase;
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_calculates_regions_for_an_image()
     {
         $json = [
@@ -40,10 +40,8 @@ final class IiifRegionCalculatorTest extends TestCase
         $this->assertSame('0,0,600,600', IiifRegionCalculator::calculateForImage($image, 200, 200));
     }
 
-    /**
-     * @test
-     * @dataProvider regionProvider
-     */
+    #[Test]
+    #[DataProvider('regionProvider')]
     public function it_calculates_regions(int $sourceW, int $sourceH, int $focalX, int $focalY, int $requestedW, int $requestedH, string $expected)
     {
         $this->assertSame($expected, IiifRegionCalculator::calculate($sourceW, $sourceH, $focalX, $focalY, $requestedW, $requestedH));

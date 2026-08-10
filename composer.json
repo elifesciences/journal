@@ -61,7 +61,8 @@
         "phpunit/phpunit": "^12.5",
         "rawr/cross-data-providers": "^2.3",
         "squizlabs/php_codesniffer": "^3.5",
-        "symfony/phpunit-bridge": "^4.0"
+        "symfony/phpunit-bridge": "^7.4",
+        "phpspec/prophecy-phpunit": "^v2.5.0"
     },
     "replace": {
         "paragonie/random_compat": "*",

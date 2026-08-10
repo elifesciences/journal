@@ -6,6 +6,7 @@ use eLife\ApiSdk\Model\Model;
 use eLife\ApiSdk\Model\PodcastEpisode;
 use eLife\Journal\ViewModel\Converter\PodcastEpisodeMediaChapterListingItemConverter;
 use eLife\Patterns\ViewModel\MediaChapterListingItem;
+use PHPUnit\Framework\Attributes\Before;
 use Traversable;
 
 final class PodcastEpisodeMediaChapterListingItemConverterTest extends ModelConverterTestCase
@@ -13,10 +14,8 @@ final class PodcastEpisodeMediaChapterListingItemConverterTest extends ModelConv
     protected $models = ['podcast-episode'];
     protected $viewModelClasses = [MediaChapterListingItem::class];
 
-    /**
-     * @before
-     */
-    public function setUpConverter()
+    #[Before]
+    public function setUpConverter(): void
     {
         $this->converter = new PodcastEpisodeMediaChapterListingItemConverter($this->stubUrlGenerator());
     }

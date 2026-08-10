@@ -10,6 +10,7 @@ use eLife\ApiSdk\Model\Model;
 use eLife\Journal\ViewModel\Converter\ImagePictureConverter;
 use eLife\Journal\ViewModel\Factory\PictureBuilderFactory;
 use eLife\Patterns\ViewModel;
+use PHPUnit\Framework\Attributes\Before;
 use Traversable;
 
 final class ImagePictureConverterTest extends ModelConverterTestCase
@@ -18,10 +19,8 @@ final class ImagePictureConverterTest extends ModelConverterTestCase
     protected $viewModelClasses = [ViewModel\Picture::class];
     protected $context = ['width' => 100];
 
-    /**
-     * @before
-     */
-    public function setUpConverter()
+    #[Before]
+    public function setUpConverter(): void
     {
         $this->converter = new ImagePictureConverter(new PictureBuilderFactory());
     }

@@ -4,6 +4,7 @@ namespace test\eLife\Journal\ViewModel\Converter;
 
 use eLife\Journal\ViewModel\Converter\ExternalArticleReadMoreItemConverter;
 use eLife\Patterns\ViewModel\ReadMoreItem;
+use PHPUnit\Framework\Attributes\Before;
 
 final class ExternalArticleReadMoreItemConverterTest extends ModelConverterTestCase
 {
@@ -11,10 +12,8 @@ final class ExternalArticleReadMoreItemConverterTest extends ModelConverterTestC
     protected $viewModelClasses = [ReadMoreItem::class];
     protected $context = ['from' => 'research-article', 'variant' => 'relatedItem'];
 
-    /**
-     * @before
-     */
-    public function setUpConverter()
+    #[Before]
+    public function setUpConverter(): void
     {
         $this->converter = new ExternalArticleReadMoreItemConverter();
     }

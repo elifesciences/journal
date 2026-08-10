@@ -4,15 +4,14 @@ namespace test\eLife\Journal\ViewModel\Converter\Reference;
 
 use eLife\ApiSdk\Model\Reference\WebReference;
 use eLife\Journal\ViewModel\Converter\Reference\WebReferenceConverter;
+use PHPUnit\Framework\Attributes\Before;
 
 final class WebReferenceConverterTest extends ReferenceConverterTestCase
 {
-    protected $referenceClass = WebReference::class;
+    protected string $referenceClass = WebReference::class;
 
-    /**
-     * @before
-     */
-    public function setUpConverter()
+    #[Before]
+    public function setUpConverter(): void
     {
         $this->converter = new WebReferenceConverter();
     }

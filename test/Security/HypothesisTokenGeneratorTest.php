@@ -4,16 +4,16 @@ namespace test\eLife\Journal\Security;
 
 use eLife\Journal\Security\HypothesisTokenGenerator;
 use Firebase\JWT\JWT;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
+use Symfony\Bridge\PhpUnit\Attribute\TimeSensitive;
 use Symfony\Bridge\PhpUnit\ClockMock;
 use Symfony\Component\Security\Core\User\User;
 
 final class HypothesisTokenGeneratorTest extends TestCase
 {
-    /**
-     * @test
-     * @group time-sensitive
-     */
+    #[Test]
+    #[TimeSensitive(HypothesisTokenGenerator::class)]
     public function it_generates_a_token()
     {
         $now = strtotime('-1 second');

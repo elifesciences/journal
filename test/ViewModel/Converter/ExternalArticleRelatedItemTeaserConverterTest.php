@@ -4,6 +4,7 @@ namespace test\eLife\Journal\ViewModel\Converter;
 
 use eLife\Journal\ViewModel\Converter\ExternalArticleRelatedItemTeaserConverter;
 use eLife\Patterns\ViewModel\Teaser;
+use PHPUnit\Framework\Attributes\Before;
 
 final class ExternalArticleRelatedItemTeaserConverterTest extends ModelConverterTestCase
 {
@@ -11,10 +12,8 @@ final class ExternalArticleRelatedItemTeaserConverterTest extends ModelConverter
     protected $viewModelClasses = [Teaser::class];
     protected $context = ['from' => 'research-article', 'variant' => 'relatedItem'];
 
-    /**
-     * @before
-     */
-    public function setUpConverter()
+    #[Before]
+    public function setUpConverter(): void
     {
         $this->converter = new ExternalArticleRelatedItemTeaserConverter();
     }

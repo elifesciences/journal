@@ -7,16 +7,15 @@ use eLife\Journal\ViewModel\Converter\Block\YouTubeConverter;
 use eLife\Journal\ViewModel\Converter\ViewModelConverter;
 use eLife\Patterns\PatternRenderer;
 use eLife\Patterns\ViewModel;
+use PHPUnit\Framework\Attributes\Before;
 
 final class YouTubeConverterTest extends BlockConverterTestCase
 {
-    protected $blockClass = Block\YouTube::class;
+    protected string $blockClass = Block\YouTube::class;
     protected $viewModelClasses = [ViewModel\IFrame::class, ViewModel\CaptionedAsset::class];
 
-    /**
-     * @before
-     */
-    public function setUpConverter()
+    #[Before]
+    public function setUpConverter(): void
     {
         $this->converter = new YouTubeConverter(
             $this->createMock(ViewModelConverter::class),

@@ -4,15 +4,14 @@ namespace test\eLife\Journal\ViewModel\Converter\Reference;
 
 use eLife\ApiSdk\Model\Reference\PreprintReference;
 use eLife\Journal\ViewModel\Converter\Reference\PreprintReferenceConverter;
+use PHPUnit\Framework\Attributes\Before;
 
 final class PreprintReferenceConverterTest extends ReferenceConverterTestCase
 {
-    protected $referenceClass = PreprintReference::class;
+    protected string $referenceClass = PreprintReference::class;
 
-    /**
-     * @before
-     */
-    public function setUpConverter()
+    #[Before]
+    public function setUpConverter(): void
     {
         $this->converter = new PreprintReferenceConverter();
     }

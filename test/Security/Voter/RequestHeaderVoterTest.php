@@ -3,6 +3,8 @@
 namespace test\eLife\Journal\Security\Voter;
 
 use eLife\Journal\Security\Voter\RequestHeaderVoter;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -12,10 +14,8 @@ use Traversable;
 
 final class RequestHeaderVoterTest extends TestCase
 {
-    /**
-     * @test
-     * @dataProvider voteProvider
-     */
+    #[Test]
+    #[DataProvider('voteProvider')]
     public function it_votes($subject, array $roles, $expectedValue, $actualValue, int $expected)
     {
         $requestStack = new RequestStack();
@@ -38,9 +38,7 @@ final class RequestHeaderVoterTest extends TestCase
         yield 'with incorrect value' => [null, ['role'], ['foo', 'bar'], 'baz', VoterInterface::ACCESS_DENIED];
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_can_require_a_trusted_proxy()
     {
         $requestStack = new RequestStack();

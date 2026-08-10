@@ -7,6 +7,8 @@ use eLife\ApiSdk\ApiSdk;
 use eLife\ApiSdk\Model\Image;
 use eLife\Journal\ViewModel\Factory\PictureBuilderFactory;
 use eLife\Patterns\ViewModel;
+use PHPUnit\Framework\Attributes\Before;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
@@ -15,19 +17,15 @@ final class PictureBuilderFactoryTest extends TestCase
     /** @var DenormalizerInterface */
     private $denormalizer;
 
-    /**
-     * @before
-     */
-    public function setUpSerializer()
+    #[Before]
+    public function setUpSerializer(): void
     {
         $apiSdk = new ApiSdk(new ForbiddingHttpClient());
 
         $this->denormalizer = $apiSdk->getSerializer();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_creates_a_builder()
     {
         $factory = new PictureBuilderFactory();
@@ -50,9 +48,7 @@ final class PictureBuilderFactoryTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_creates_a_builder_with_sizes()
     {
         $factory = new PictureBuilderFactory();
@@ -79,9 +75,7 @@ final class PictureBuilderFactoryTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_creates_a_builder_for_svgs()
     {
         $factory = new PictureBuilderFactory();
@@ -114,9 +108,7 @@ final class PictureBuilderFactoryTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_creates_a_builder_for_images()
     {
         $factory = new PictureBuilderFactory();
@@ -155,9 +147,7 @@ final class PictureBuilderFactoryTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_creates_a_builder_for_images_that_does_not_stretch_when_there_is_no_height()
     {
         $factory = new PictureBuilderFactory();
@@ -191,9 +181,7 @@ final class PictureBuilderFactoryTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_creates_a_builder_for_images_that_can_stretch_if_there_is_a_height()
     {
         $factory = new PictureBuilderFactory();
@@ -227,9 +215,7 @@ final class PictureBuilderFactoryTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_creates_a_builder_for_png_images()
     {
         $factory = new PictureBuilderFactory();
@@ -268,9 +254,7 @@ final class PictureBuilderFactoryTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_creates_a_builder_for_other_image_types()
     {
         $factory = new PictureBuilderFactory();

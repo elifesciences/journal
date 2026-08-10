@@ -9,6 +9,7 @@ use eLife\Journal\ViewModel\Converter\ViewModelConverter;
 use eLife\Patterns\ViewModel\Link;
 use eLife\Patterns\ViewModel\Reference;
 use eLife\Patterns\ViewModel\ReferenceList;
+use PHPUnit\Framework\Attributes\Before;
 use Traversable;
 
 final class ReferenceListConverterTest extends ModelConverterTestCase
@@ -16,17 +17,14 @@ final class ReferenceListConverterTest extends ModelConverterTestCase
     protected $models = ['article-vor'];
     protected $viewModelClasses = [ReferenceList::class];
 
-    /**
-     * @before
-     */
-    public function setUpConverter()
+    #[Before]
+    public function setUpConverter(): void
     {
         $this->converter = new ReferenceListConverter($viewModelConverter = $this->createMock(ViewModelConverter::class));
 
         $viewModelConverter
-            ->expects($this->any())
             ->method('convert')
-            ->will($this->returnValue(Reference::withOutDoi(new Link('title'))));
+            ->willReturn(Reference::withOutDoi(new Link('title')));
     }
 
     /**

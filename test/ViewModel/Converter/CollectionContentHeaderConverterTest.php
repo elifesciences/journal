@@ -8,6 +8,7 @@ use eLife\Journal\ViewModel\Converter\ViewModelConverter;
 use eLife\Journal\ViewModel\Factory\ContentHeaderImageFactory;
 use eLife\Journal\ViewModel\Factory\PictureBuilderFactory;
 use eLife\Patterns\ViewModel;
+use PHPUnit\Framework\Attributes\Before;
 use Symfony\Component\Asset\Packages;
 
 final class CollectionContentHeaderConverterTest extends ModelConverterTestCase
@@ -15,10 +16,8 @@ final class CollectionContentHeaderConverterTest extends ModelConverterTestCase
     protected $models = ['collection'];
     protected $viewModelClasses = [ViewModel\ContentHeader::class];
 
-    /**
-     * @before
-     */
-    public function setUpConverter()
+    #[Before]
+    public function setUpConverter(): void
     {
         $this->converter = new CollectionContentHeaderConverter(
             $viewModelConverter = $this->createMock(ViewModelConverter::class),
@@ -27,11 +26,10 @@ final class CollectionContentHeaderConverterTest extends ModelConverterTestCase
         );
 
         $viewModelConverter
-            ->expects($this->any())
             ->method('convert')
-            ->will($this->returnValue(new ViewModel\Picture(
+            ->willReturn(new ViewModel\Picture(
                 [],
                 new ViewModel\Image('/image.jpg')
-            )));
+            ));
     }
 }

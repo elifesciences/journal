@@ -7,27 +7,25 @@ use eLife\Journal\ViewModel\Converter\ViewModelConverter;
 use eLife\Patterns\PatternRenderer;
 use eLife\Patterns\ViewModel\AnnotationTeaser;
 use eLife\Patterns\ViewModel\Paragraph;
+use PHPUnit\Framework\Attributes\Before;
 
 final class AnnotationAnnotationTeaserConverterTest extends ModelConverterTestCase
 {
     protected $models = ['annotation'];
     protected $viewModelClasses = [AnnotationTeaser::class];
 
-    /**
-     * @before
-     */
-    public function setUpConverter()
+    #[Before]
+    public function setUpConverter(): void
     {
         $viewModelConverter = $this->createMock(ViewModelConverter::class);
-        $viewModelConverter->expects($this->any())
+        $viewModelConverter
             ->method('convert')
-            ->will($this->returnValue(new Paragraph('foo')));
+            ->willReturn(new Paragraph('foo'));
 
         $patternRenderer = $this->createMock(PatternRenderer::class);
         $patternRenderer
-            ->expects($this->any())
             ->method('render')
-            ->will($this->returnValue('...'));
+            ->willReturn('...');
 
         $this->converter = new AnnotationAnnotationTeaserConverter($viewModelConverter, $patternRenderer);
     }

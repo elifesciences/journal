@@ -3,6 +3,8 @@
 namespace test\eLife\Journal\Security\Voter;
 
 use eLife\Journal\Security\Voter\FixedVoter;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
 use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
@@ -10,10 +12,8 @@ use Traversable;
 
 final class FixedVoterTest extends TestCase
 {
-    /**
-     * @test
-     * @dataProvider voteProvider
-     */
+    #[Test]
+    #[DataProvider('voteProvider')]
     public function it_votes($subject, array $roles, bool $vote, int $expected)
     {
         $voter = new FixedVoter('role', $vote);

@@ -5,13 +5,12 @@ namespace test\eLife\Journal\ViewModel\Builder;
 use eLife\Journal\ViewModel\Builder\PictureBuilder;
 use eLife\Patterns\ViewModel;
 use InvalidArgumentException;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 final class PictureBuilderTest extends TestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function it_creates_a_basic_image()
     {
         $builder = new PictureBuilder(function () {
@@ -27,9 +26,7 @@ final class PictureBuilderTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_creates_an_image_with_types_and_sizes()
     {
         $builder = new PictureBuilder(function () {
@@ -80,9 +77,7 @@ final class PictureBuilderTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_creates_an_image_with_types_and_sizes_without_oversizing()
     {
         $builder = new PictureBuilder(function () {
@@ -119,9 +114,7 @@ final class PictureBuilderTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_handles_rounding_correctly()
     {
         $builder = new PictureBuilder(function () {
@@ -179,9 +172,7 @@ final class PictureBuilderTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_might_not_produce_any_size_based_sources_due_to_the_original_size()
     {
         $builder = new PictureBuilder(function () {
@@ -208,9 +199,7 @@ final class PictureBuilderTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_rejects_unknown_media_types()
     {
         $builder = new PictureBuilder(function () {
@@ -222,9 +211,7 @@ final class PictureBuilderTest extends TestCase
         $builder->addType('image/foo');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_rejects_impossible_widths()
     {
         $builder = new PictureBuilder(function () {
@@ -236,9 +223,7 @@ final class PictureBuilderTest extends TestCase
         $builder->addSize(0);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_rejects_impossible_heights()
     {
         $builder = new PictureBuilder(function () {
@@ -250,9 +235,7 @@ final class PictureBuilderTest extends TestCase
         $builder->addSize(100, 0);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_rejects_impossible_original_widths()
     {
         $builder = new PictureBuilder(function () {
@@ -264,9 +247,7 @@ final class PictureBuilderTest extends TestCase
         $builder->setOriginalSize(0, 1);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_rejects_impossible_original_heights()
     {
         $builder = new PictureBuilder(function () {

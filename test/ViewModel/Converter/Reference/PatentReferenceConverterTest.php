@@ -4,15 +4,14 @@ namespace test\eLife\Journal\ViewModel\Converter\Reference;
 
 use eLife\ApiSdk\Model\Reference\PatentReference;
 use eLife\Journal\ViewModel\Converter\Reference\PatentReferenceConverter;
+use PHPUnit\Framework\Attributes\Before;
 
 final class PatentReferenceConverterTest extends ReferenceConverterTestCase
 {
-    protected $referenceClass = PatentReference::class;
+    protected string $referenceClass = PatentReference::class;
 
-    /**
-     * @before
-     */
-    public function setUpConverter()
+    #[Before]
+    public function setUpConverter(): void
     {
         $this->converter = new PatentReferenceConverter();
     }

@@ -4,15 +4,14 @@ namespace test\eLife\Journal\ViewModel\Converter\Reference;
 
 use eLife\ApiSdk\Model\Reference\PeriodicalReference;
 use eLife\Journal\ViewModel\Converter\Reference\PeriodicalReferenceConverter;
+use PHPUnit\Framework\Attributes\Before;
 
 final class PeriodicalReferenceConverterTest extends ReferenceConverterTestCase
 {
-    protected $referenceClass = PeriodicalReference::class;
+    protected string $referenceClass = PeriodicalReference::class;
 
-    /**
-     * @before
-     */
-    public function setUpConverter()
+    #[Before]
+    public function setUpConverter(): void
     {
         $this->converter = new PeriodicalReferenceConverter();
     }

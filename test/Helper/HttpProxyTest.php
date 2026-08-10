@@ -3,6 +3,8 @@
 namespace test\eLife\Journal\Helper;
 
 use eLife\Journal\Helper\HttpProxy;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
@@ -36,9 +38,7 @@ final class HttpProxyTest extends TestCase
         HttpFoundationRequest::setTrustedProxies([], -1);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_proxies_a_request()
     {
         $mp3 = __DIR__.'/../../assets/tests/blank.mp3';
@@ -54,15 +54,16 @@ final class HttpProxyTest extends TestCase
 
         $this->assertInstanceOf(StreamedResponse::class, $response);
         $this->assertSame(200, $response->getStatusCode());
-        $this->assertArraySubset([
-            'content-type' => ['audio/mp3'],
-        ], $response->headers->all());
+
+        $key = 'content-type';
+        $value = ['audio/mp3'];
+        $this->assertArrayHasKey($key, $response->headers->all());
+        $this->assertSame($value, $response->headers->all()[$key]);
+
         $this->assertSame(file_get_contents($mp3), $this->captureContent($response));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_sets_x_forwarded_for_when_not_through_a_trusted_proxy()
     {
         $capturedHeaders = [];
@@ -91,9 +92,7 @@ final class HttpProxyTest extends TestCase
         $this->assertSame('127.0.0.1', $normalizedHeaders['x-forwarded-for'] ?? '');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_adds_x_forwarded_for_when_through_a_trusted_proxy()
     {
         HttpFoundationRequest::setTrustedProxies(['127.0.0.1'], HttpFoundationRequest::HEADER_X_FORWARDED_ALL);
@@ -124,9 +123,7 @@ final class HttpProxyTest extends TestCase
         $this->assertSame('54.230.78.56, 34.197.12.171, 127.0.0.1', $normalizedHeaders['x-forwarded-for'] ?? '');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_returns_headers()
     {
         $this->mockResponses['http://www.example.com/test.txt'] = new MockResponse(
@@ -152,22 +149,26 @@ final class HttpProxyTest extends TestCase
 
         $this->assertInstanceOf(StreamedResponse::class, $response);
         $this->assertSame(200, $response->getStatusCode());
-        $this->assertArraySubset([
-            'cache-control' => ['max-age=100, public'],
-            'content-length' => ['4'],
-            'content-type' => ['text/plain'],
-            'date' => ['Wed, 21 Oct 2015 07:28:00 GMT'],
-            'etag' => ['1234567890'],
-            'expires' => ['Wed, 21 Oct 2015 07:28:00 GMT'],
-            'last-modified' => ['Wed, 21 Oct 2015 07:28:00 GMT'],
-            'vary' => ['Accept'],
-        ], $response->headers->all());
+
+        foreach (
+            [
+                'cache-control' => ['max-age=100, public'],
+                'content-length' => ['4'],
+                'content-type' => ['text/plain'],
+                'date' => ['Wed, 21 Oct 2015 07:28:00 GMT'],
+                'etag' => ['1234567890'],
+                'expires' => ['Wed, 21 Oct 2015 07:28:00 GMT'],
+                'last-modified' => ['Wed, 21 Oct 2015 07:28:00 GMT'],
+                'vary' => ['Accept'],
+            ] as $key => $value) {
+            $this->assertArrayHasKey($key, $response->headers->all());
+            $this->assertSame($value, $response->headers->all()[$key]);
+        }
+
         $this->assertSame('test', $this->captureContent($response));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_respects_caching()
     {
         $this->mockResponses['http://www.example.com/test.txt'] = new MockResponse(
@@ -189,20 +190,24 @@ final class HttpProxyTest extends TestCase
         $response = $this->httpProxy->send($request, 'http://www.example.com/test.txt');
 
         $this->assertSame(304, $response->getStatusCode());
-        $this->assertArraySubset([
-            'cache-control' => ['max-age=300, public'],
-            'date' => ['Wed, 21 Oct 2015 07:28:00 GMT'],
-            'etag' => ['1234567890'],
-            'expires' => ['Wed, 21 Oct 2015 07:29:00 GMT'],
-            'vary' => ['Accept'],
-        ], $response->headers->all());
+
+        foreach (
+            [
+                'cache-control' => ['max-age=300, public'],
+                'date' => ['Wed, 21 Oct 2015 07:28:00 GMT'],
+                'etag' => ['1234567890'],
+                'expires' => ['Wed, 21 Oct 2015 07:29:00 GMT'],
+                'vary' => ['Accept'],
+            ] as $key => $value) {
+            $this->assertArrayHasKey($key, $response->headers->all());
+            $this->assertSame($value, $response->headers->all()[$key]);
+        }
+
         $this->assertEmpty($response->getContent());
     }
 
-    /**
-     * @test
-     * @dataProvider statusCodeProvider
-     */
+    #[Test]
+    #[DataProvider('statusCodeProvider')]
     public function it_returns_other_status_codes(int $fileStatusCode, int $expected)
     {
         $this->mockResponses['http://www.example.com/test.txt'] = new MockResponse(

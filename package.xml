@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<package packagerversion="1.10.13" version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0 http://pear.php.net/dtd/tasks-1.0.xsd http://pear.php.net/dtd/package-2.0 http://pear.php.net/dtd/package-2.0.xsd">
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<package packagerversion="1.10.15" version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0 http://pear.php.net/dtd/tasks-1.0.xsd http://pear.php.net/dtd/package-2.0 http://pear.php.net/dtd/package-2.0.xsd">
  <name>xdebug</name>
  <channel>pecl.php.net</channel>
  <summary>Xdebug is a debugging and productivity extension for PHP</summary>
@@ -32,25 +32,35 @@ Code Coverage Analysis
   <email>derick@xdebug.org</email>
   <active>yes</active>
  </lead>
- <date>2022-11-08</date>
- <time>13:48:05</time>
+ <date>2026-06-08</date>
+ <time>14:38:52</time>
  <version>
-  <release>3.1.6</release>
-  <api>3.1.6</api>
+  <release>3.5.3</release>
+  <api>3.5.3</api>
  </version>
  <stability>
   <release>stable</release>
   <api>stable</api>
  </stability>
- <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD style</license>
+ <license filesource="LICENSE" uri="https://xdebug.org/license/1.03">Xdebug-1.03</license>
  <notes>
-Tue, Nov 08, 2022 - Xdebug 3.1.6
+Mon, Jun 08, 2026 - Xdebug 3.5.3
 
 = Fixed bugs:
 
-  - Fixed issue #2100: &quot;Fatal error: debuginfo() must return an array&quot; when Exception is thrown from debugInfo in PHP 8.x
-  - Fixed issue #2101: When a temporary breakpoint is hit, breakpoint_list should show it as disabled
-  - Fixed issue #2129: Cannot read snapshot Gzip-compressed data is corrupt
+  - Fixed issue #2404: Xdebug outputs a message to stderr when path mapping is enabled, and a directory is present
+  - Fixed issue #2405: Handle minimum path in .xdebug directory discovery
+  - Fixed issue #2411: Native Path Mapping is not applied to the initial fileuri in the init packet
+  - Fixed issue #2421: Crash with wrong option letter in DBGP and socket commands
+  - Fixed issue #2422: No limit on DBGP read buffer
+  - Fixed issue #2423: Don&apos;t follow symlinks with file creation
+  - Fixed issue #2424: Control-socket buffer crashes
+  - Fixed issue #2426: xdebug_get_tracefile_name incorrectly throws notice
+  - Fixed issue #2427: Crash when file_link_format setting is wrong
+  - Fixed issue #2429: Crash when trace_output_name setting is wrong
+  - Fixed issue #2430: Variable fetching may crash with `::` if there is no active stack
+  - Fixed issue #2431: Crash when trying to retrieve Windows-style URL with not enough characters
+  - Fixed issue #2433: Refactor finding variable names in trace files with assignments
  </notes>
  <contents>
   <dir name="/">
@@ -58,109 +68,133 @@ Tue, Nov 08, 2022 - Xdebug 3.1.6
    <file md5sum="ed01d7b0936a39822cd5c9144852e1b9" name="contrib/xt.vim" role="doc" />
    <file md5sum="372197f5b791b837269177402b31688c" name="m4/clocks.m4" role="src" />
    <file md5sum="c55adfb3a3094c8029687ae1f7a46120" name="m4/pkg.m4" role="src" />
-   <file md5sum="1a8a24cdabd1ed24acc3d6fbe9fe6a6f" name="src/base/base.c" role="src" />
+   <file md5sum="ed79df8184d282f801e459018dc84de0" name="src/base/base.c" role="src" />
    <file md5sum="7db372db630677292df705a90c07e21c" name="src/base/base.h" role="src" />
-   <file md5sum="4bc56e4bf66e6105ba31458fa3219ae9" name="src/base/base_globals.h" role="src" />
+   <file md5sum="0afa846b6a31cba4fabe7af94932082e" name="src/base/base_globals.h" role="src" />
    <file md5sum="baf483b8b3f68c10d0c3f8863accf0c3" name="src/base/base_private.h" role="src" />
-   <file md5sum="d0e04b38a411646d145e3a62afccdd7d" name="src/base/filter.c" role="src" />
-   <file md5sum="cfcba73b7c5a588bcfd7d69d0a08e772" name="src/base/filter.h" role="src" />
-   <file md5sum="5bd6e0617b2e3e22a8e9b23ef3ad0fdf" name="src/lib/usefulstuff.c" role="src" />
-   <file md5sum="36f17d040407ee39a71c74b30e88f8b1" name="src/lib/usefulstuff.h" role="src" />
-   <file md5sum="a2685b4fd650d89696762f191f60da7a" name="src/lib/compat.c" role="src" />
-   <file md5sum="4655f7167b6a47eecdaf114df5f0746d" name="src/lib/compat.h" role="src" />
+   <file md5sum="ecced137dc9c6dc9cbe4c6c946d2cf9c" name="src/base/filter.c" role="src" />
+   <file md5sum="dc9f79b67b940c0ca6676008b94f0c91" name="src/base/filter.h" role="src" />
+   <file md5sum="e8159b8eed23cfc5f2fc2d97366250e9" name="src/base/ctrl_socket.c" role="src" />
+   <file md5sum="8663469dde1558dab7a03f0814501483" name="src/base/ctrl_socket.h" role="src" />
+   <file md5sum="e2997ef1849ad7d4aa5cb487c91a6198" name="src/lib/maps/maps.c" role="src" />
+   <file md5sum="55f2c367598b9540a91287c5facaa8e8" name="src/lib/maps/maps.h" role="src" />
+   <file md5sum="1a73038352560f6ab0c9d4a74eef832e" name="src/lib/maps/maps_private.c" role="src" />
+   <file md5sum="6b8d9e20f84614992a4a7240dfdcbd8d" name="src/lib/maps/maps_private.h" role="src" />
+   <file md5sum="c67c709b6e9b864a5c69e42bc164f457" name="src/lib/maps/parser.c" role="src" />
+   <file md5sum="2b029efa34495b7fa835a7b3592dc323" name="src/lib/maps/parser.h" role="src" />
+   <file md5sum="747e8c638cb317b736986449d204d315" name="src/lib/usefulstuff.c" role="src" />
+   <file md5sum="457dca4fdb27d7bfb63a12c49e2ff174" name="src/lib/usefulstuff.h" role="src" />
+   <file md5sum="9db5fb7eefa1f3f12b11c8cf2fb292eb" name="src/lib/cmd_parser.c" role="src" />
+   <file md5sum="5f81c7032747f5cf25cf89c3bc817f7a" name="src/lib/cmd_parser.h" role="src" />
+   <file md5sum="ead135f2ae254d0fd9478dc949cc9e3c" name="src/lib/compat.c" role="src" />
+   <file md5sum="ec6b26fbcd1232fd1e97e0c437901c71" name="src/lib/compat.h" role="src" />
    <file md5sum="5ded1e8050a567ddf31f15ccf8fc92d8" name="src/lib/crc32.c" role="src" />
    <file md5sum="8e3d5ef843f03afab4cb27c4944d204f" name="src/lib/crc32.h" role="src" />
    <file md5sum="825fb123306f9531faa11e83fbaa0a9e" name="src/lib/file.c" role="src" />
    <file md5sum="5c262995cdd25eb6b65a1fb76eedfd11" name="src/lib/file.h" role="src" />
    <file md5sum="53ae56622dd00dccdbffc92c938fe5a0" name="src/lib/hash.c" role="src" />
-   <file md5sum="77bef9854199eb280ecbd97a83737648" name="src/lib/hash.h" role="src" />
-   <file md5sum="b95fb17e72285dd3c99ddd49356cbf80" name="src/lib/headers.c" role="src" />
+   <file md5sum="0a10cabff3f3f8c21c1a41bd6f288918" name="src/lib/hash.h" role="src" />
+   <file md5sum="36e8a2546949f80339886c2bfe7e8584" name="src/lib/headers.c" role="src" />
    <file md5sum="b05e34ecc50ab77d02933c583d88551b" name="src/lib/headers.h" role="src" />
-   <file md5sum="bbcf90ab960a334d793fc16319895ba2" name="src/lib/lib.c" role="src" />
-   <file md5sum="d0a89ae948e09c49592e0ce4bcaa33ad" name="src/lib/lib.h" role="src" />
-   <file md5sum="a9d381a26a166fd8a7c6eb6aabb148f0" name="src/lib/log.c" role="src" />
-   <file md5sum="2ded0176decc29f511215987461419ff" name="src/lib/log.h" role="src" />
+   <file md5sum="8a51a1ba40840b211eb0a906d6f0b517" name="src/lib/lib.c" role="src" />
+   <file md5sum="07df08dbe8a67924ccfd2b38eea6fd3a" name="src/lib/lib.h" role="src" />
+   <file md5sum="1b3124565536a5acdb0dc6c807b697d0" name="src/lib/log.c" role="src" />
+   <file md5sum="db30484306f4465611253190e22336d0" name="src/lib/log.h" role="src" />
    <file md5sum="8026528d3daa7d18021442eddbf60176" name="src/lib/lib_private.h" role="src" />
    <file md5sum="88171fff82c5233a96d05341e0fcdcf9" name="src/lib/llist.c" role="src" />
    <file md5sum="833b8b23d247ee19d10a58a0e9159174" name="src/lib/llist.h" role="src" />
    <file md5sum="78eb2398cc1a535be67632e0de82b727" name="src/lib/mm.h" role="src" />
+   <file md5sum="755ab4cafa76bee1bf1620a9c2cbd469" name="src/lib/normalize_path.c" role="src" />
+   <file md5sum="86509a53f260e0d259f06ed49ccf1482" name="src/lib/normalize_path.h" role="src" />
+   <file md5sum="4ccd9c3332d36f3ddcb36af0dd3a7d23" name="src/lib/php-header.h" role="src" />
    <file md5sum="7ad345e09f5c1768900ce690e5efd770" name="src/lib/set.c" role="src" />
    <file md5sum="dc03fc37187e29189e906e577d5b9c4c" name="src/lib/set.h" role="src" />
-   <file md5sum="51ae57e6480f0c40aa90f387b5b1ec97" name="src/lib/str.c" role="src" />
-   <file md5sum="de7ed2c4e5f8f10fd684b607660a32e5" name="src/lib/str.h" role="src" />
-   <file md5sum="326ce360a40b63e768992aee68fe0c9d" name="src/lib/timing.c" role="src" />
+   <file md5sum="137548b665c4a6e1e90dd8fbe5984c66" name="src/lib/str.c" role="src" />
+   <file md5sum="f20ac43b5ee8e66dc4d993cb43be8832" name="src/lib/str.h" role="src" />
+   <file md5sum="98f10016851605885ca93564adb82183" name="src/lib/stripcslashes.c" role="src" />
+   <file md5sum="86c3fb0e4784feda72d3ba4eab7c5437" name="src/lib/stripcslashes.h" role="src" />
+   <file md5sum="a19cd6f76cc97f53dab1aca50e62b46e" name="src/lib/strrnchr.h" role="src" />
+   <file md5sum="5b9f132ac452b6a5077bd401a3af0099" name="src/lib/timing.c" role="src" />
    <file md5sum="637e3b5e753e6afc8b014b02cec7b0ec" name="src/lib/timing.h" role="src" />
-   <file md5sum="88a2b8e51aa6de5048482c7fda812fb5" name="src/lib/var.c" role="src" />
-   <file md5sum="6e7077d2c6982e333d258e9609788cf3" name="src/lib/var.h" role="src" />
-   <file md5sum="dd87a632c0d1c6fc0e7a34c6163fb60a" name="src/lib/var_export_html.c" role="src" />
+   <file md5sum="9cb8eab36edb38f875a80a3c9e91791d" name="src/lib/trim.c" role="src" />
+   <file md5sum="b9678be93ff64fc15403dfe270209085" name="src/lib/trim.h" role="src" />
+   <file md5sum="b61b7cd4add29333422466e4dbc56b91" name="src/lib/var.c" role="src" />
+   <file md5sum="3c779b9832916c8fc106df56da6f7304" name="src/lib/var.h" role="src" />
+   <file md5sum="2f6fadc3c352bdd9b76210aed95db5db" name="src/lib/var_export_html.c" role="src" />
    <file md5sum="ab2c1ac724a54c2b50946c7746ee135c" name="src/lib/var_export_html.h" role="src" />
-   <file md5sum="1d563e00283a2c504c5da7fc5fbc725e" name="src/lib/var_export_line.c" role="src" />
+   <file md5sum="15f4c1baf34e4aca2b4dddc24b4c4db5" name="src/lib/var_export_line.c" role="src" />
    <file md5sum="a865240b02e1f698ce57098f01693399" name="src/lib/var_export_line.h" role="src" />
-   <file md5sum="15cab0d1d149690bf2c6affb5a8075fc" name="src/lib/var_export_text.c" role="src" />
+   <file md5sum="05df82b845c25a343be4c3796d37074e" name="src/lib/var_export_text.c" role="src" />
    <file md5sum="ce4f91762755006f5df6353465e9927b" name="src/lib/var_export_text.h" role="src" />
-   <file md5sum="55bc76df1f68409819d74aacc955d774" name="src/lib/var_export_xml.c" role="src" />
+   <file md5sum="b2e0a7fb0e62518206fd12d882334dc0" name="src/lib/var_export_xml.c" role="src" />
    <file md5sum="dc4f5766d9ebe581d6de6319fcc966ab" name="src/lib/var_export_xml.h" role="src" />
-   <file md5sum="8d1a4cb863697a98bf063b6a4ab79050" name="src/lib/vector.h" role="src" />
+   <file md5sum="6cf7c152bfca6843c25ccc69d0ede155" name="src/lib/vector.h" role="src" />
+   <file md5sum="a4ecf2d4782e26dfda36c0e0a0d26168" name="src/lib/xdebug_strndup.c" role="src" />
+   <file md5sum="24a9368c6609848a98d0ef14b187ca5f" name="src/lib/xdebug_strndup.h" role="src" />
    <file md5sum="a637b4abdfcc5a1a74ea7fcb94ebf0db" name="src/lib/xml.c" role="src" />
    <file md5sum="bf00317cca78941bc659bf15b07fe385" name="src/lib/xml.h" role="src" />
-   <file md5sum="92d72ed5ef9a4dd4317f92bd04582572" name="src/coverage/branch_info.c" role="src" />
+   <file md5sum="3bf888cd6a2d69da7738f278cb108561" name="src/coverage/branch_info.c" role="src" />
    <file md5sum="963e2650561b374f99943254bda93688" name="src/coverage/branch_info.h" role="src" />
-   <file md5sum="9bab949f6e0f2dd55002414104af0ecd" name="src/coverage/code_coverage.c" role="src" />
-   <file md5sum="c7c6c4688b7654d2a481e64a519596a3" name="src/coverage/code_coverage.h" role="src" />
-   <file md5sum="8a73ee60f8eba6df2712da9085d419f9" name="src/coverage/code_coverage_private.h" role="src" />
-   <file md5sum="9c7381bbe83085c5e2e78ba5ea15136a" name="src/develop/develop.c" role="src" />
-   <file md5sum="6b059569e6b7c4ba3c46aea147ff9126" name="src/develop/develop.h" role="src" />
+   <file md5sum="5072a13aceb3d37bacd03d91efe3faca" name="src/coverage/code_coverage.c" role="src" />
+   <file md5sum="cdc4e93f940a5e524f1446c13d8514be" name="src/coverage/code_coverage.h" role="src" />
+   <file md5sum="b0a609f56e0d13cf7f6c915af1774512" name="src/coverage/code_coverage_private.h" role="src" />
+   <file md5sum="89a65d3495bdf205766dd72377f451ab" name="src/develop/develop.c" role="src" />
+   <file md5sum="f7cf8df6eb57d3a4fbd41ce614a6fc5b" name="src/develop/develop.h" role="src" />
    <file md5sum="8bc34c16b460129c99c0a43ef3db87e4" name="src/develop/develop_private.h" role="src" />
-   <file md5sum="75d302506fc6c1aabcbc501b7d6c0c2a" name="src/develop/monitor.c" role="src" />
+   <file md5sum="90b834c845688751dbb723fb6b9e855b" name="src/develop/monitor.c" role="src" />
    <file md5sum="e29f144cd504ee14ebddee4f8ab5b714" name="src/develop/monitor.h" role="src" />
-   <file md5sum="a6a76454d90efdb6106c8e76a035e9e0" name="src/develop/php_functions.c" role="src" />
-   <file md5sum="85803cddf8cc9ef72a733b723baf4451" name="src/develop/stack.c" role="src" />
-   <file md5sum="59ef2237151c3bf77c1493b65c7d1111" name="src/develop/stack.h" role="src" />
-   <file md5sum="e784721dd6938c070fe209f9032d2636" name="src/develop/superglobals.c" role="src" />
-   <file md5sum="de5e6312abee7eea0ac07bcb4920f704" name="src/develop/superglobals.h" role="src" />
-   <file md5sum="dcc45764527a9b4e1551ee8df613e267" name="src/debugger/com.c" role="src" />
-   <file md5sum="64d7afd2dfda444cb74382106f9edb3c" name="src/debugger/com.h" role="src" />
-   <file md5sum="9da9f6e6100e3847a64569895f452b27" name="src/debugger/debugger.c" role="src" />
-   <file md5sum="82013c30b962631a67d3c37f2b221e3e" name="src/debugger/debugger.h" role="src" />
-   <file md5sum="57dc7787f58e11c1b703b3c2e32808fe" name="src/debugger/debugger_private.h" role="src" />
-   <file md5sum="ebb7b99fc1253c60f3caf63bdba60e32" name="src/debugger/handlers.c" role="src" />
-   <file md5sum="46940b69874be77442128d0c13df742a" name="src/debugger/handlers.h" role="src" />
-   <file md5sum="7382a0eb71d907cc4f26a8ed11b4393a" name="src/debugger/handler_dbgp.c" role="src" />
-   <file md5sum="2512b85a30418041ec34f3717fc428a5" name="src/debugger/handler_dbgp.h" role="src" />
-   <file md5sum="96c018face07ce06623f16e4fefd6c4c" name="src/gcstats/gc_stats.c" role="src" />
+   <file md5sum="d9a771fa984ea3bf7697373847141abe" name="src/develop/php_functions.c" role="src" />
+   <file md5sum="bb338f6661656aae9c1fc578716ca146" name="src/develop/stack.c" role="src" />
+   <file md5sum="8befdeb139efc9a471dc9a3277ca771c" name="src/develop/stack.h" role="src" />
+   <file md5sum="f8075b29ea1cd537822b1640cc847888" name="src/develop/superglobals.c" role="src" />
+   <file md5sum="3a2f095163c396e8945274b6d4595eaf" name="src/develop/superglobals.h" role="src" />
+   <file md5sum="9abd92f7100c86fd92ef8dcdabd97014" name="src/debugger/com.c" role="src" />
+   <file md5sum="9a69d4bd80f97d8fc0694314bf146cbf" name="src/debugger/com.h" role="src" />
+   <file md5sum="2f295645e54d3a18b93139a0c12edbf4" name="src/debugger/debugger.c" role="src" />
+   <file md5sum="0a9f5a13aadab33a931014b74188ff0a" name="src/debugger/debugger.h" role="src" />
+   <file md5sum="9fcd238d717652b90ac59fd8a518a7a7" name="src/debugger/debugger_private.h" role="src" />
+   <file md5sum="18aae49457118ac68a386a532f5a478c" name="src/debugger/handlers.c" role="src" />
+   <file md5sum="9533c60538b0e1a434f741248642956a" name="src/debugger/handlers.h" role="src" />
+   <file md5sum="4ea821553b9b200f5626c6b6017005aa" name="src/debugger/handler_dbgp.c" role="src" />
+   <file md5sum="5d7dfdf54c9e5933bd3cf6a5fc70fd63" name="src/debugger/handler_dbgp.h" role="src" />
+   <file md5sum="a7dda9a3ce716c3359caa83adb344676" name="src/debugger/ip_info.c" role="src" />
+   <file md5sum="e9bb3affd46a34d2ef21a8a251a54599" name="src/debugger/ip_info.h" role="src" />
+   <file md5sum="c3b2730b6167353c0bdb14efc8c4a8f1" name="src/gcstats/gc_stats.c" role="src" />
    <file md5sum="3bf056d2ba948c4db6ec0375225ace32" name="src/gcstats/gc_stats.h" role="src" />
-   <file md5sum="574739da937d570df6371efbbe4369fb" name="src/gcstats/gc_stats_private.h" role="src" />
-   <file md5sum="0b0e416ba80885781d7ec64a1c799073" name="src/profiler/profiler.c" role="src" />
-   <file md5sum="9dad15fe395223bebdc646341803242a" name="src/profiler/profiler.h" role="src" />
-   <file md5sum="bed3b315bb5ac1e7ea43cc09897d3257" name="src/profiler/profiler_private.h" role="src" />
-   <file md5sum="0061a007ed1ea5fb42de228901b2d8a9" name="src/tracing/tracing.c" role="src" />
-   <file md5sum="e5b4b45b1dfe1ea3b486b1e822ffa6ab" name="src/tracing/tracing.h" role="src" />
-   <file md5sum="5d09da4c1a1b82e95553600a6348620e" name="src/tracing/tracing_private.h" role="src" />
-   <file md5sum="41133071f7de7f8cbd3046eb4a02d03c" name="src/tracing/trace_textual.c" role="src" />
-   <file md5sum="13b0dca161acbf3c2f80c0b110b134e8" name="src/tracing/trace_textual.h" role="src" />
-   <file md5sum="01b597a9e411bdf892f04d9e02cf7637" name="src/tracing/trace_computerized.c" role="src" />
+   <file md5sum="b413a2fc300ffd2f7e4a7f0da5c846a7" name="src/gcstats/gc_stats_private.h" role="src" />
+   <file md5sum="e370ae14cc9df44e38298b3b73fee23a" name="src/profiler/profiler.c" role="src" />
+   <file md5sum="cc5756875c989340b0985fd5688892cf" name="src/profiler/profiler.h" role="src" />
+   <file md5sum="898430e957132a43aeff96f40dddac18" name="src/profiler/profiler_private.h" role="src" />
+   <file md5sum="32f19119400848309560d45773188bf8" name="src/tracing/tracing.c" role="src" />
+   <file md5sum="a3d47ae66e1fdd13d505ccaf52b35870" name="src/tracing/tracing.h" role="src" />
+   <file md5sum="f1319418b7165faac0ff1f1ce23467db" name="src/tracing/tracing_private.h" role="src" />
+   <file md5sum="68281302e760e1f3b7a727b2d90ca6e1" name="src/tracing/trace_computerized.c" role="src" />
    <file md5sum="caf12732954476c16d0057cafee32451" name="src/tracing/trace_computerized.h" role="src" />
-   <file md5sum="fa3bb1b9024a231a99c0a55aecacf7ea" name="src/tracing/trace_html.c" role="src" />
+   <file md5sum="6f6d699277e249c9748754f5546435ac" name="src/tracing/trace_flamegraph.c" role="src" />
+   <file md5sum="6ec60e0621dcacfadf859a7003e25fe5" name="src/tracing/trace_flamegraph.h" role="src" />
+   <file md5sum="757acc4205a1431836e7879a878b54f2" name="src/tracing/trace_html.c" role="src" />
    <file md5sum="cb9721509e7356c52dd87d724c5b6ddc" name="src/tracing/trace_html.h" role="src" />
-   <file md5sum="cfe3eb16db5d2ff168aa678cfc9c940a" name="config.m4" role="src" />
-   <file md5sum="7bc1315e7ae78f0f512cdacfc4717112" name="config.w32" role="src" />
+   <file md5sum="5f03fdcb8f3ad236c4f8c51190bb9847" name="src/tracing/trace_textual.c" role="src" />
+   <file md5sum="13b0dca161acbf3c2f80c0b110b134e8" name="src/tracing/trace_textual.h" role="src" />
+   <file md5sum="007f796b35307c7fa38eaed517edcb63" name="config.m4" role="src" />
+   <file md5sum="39f0ffd2c0b06e5d40887ace4ea42d9d" name="config.w32" role="src" />
    <file md5sum="8f9a93feba6ff23c4bc1bc2929babcc4" name="CREDITS" role="doc" />
-   <file md5sum="92d94a330d34ee6edc2638450736f119" name="LICENSE" role="doc" />
-   <file md5sum="23dc8e1e1d5e501150964b1eaf8f6347" name="xdebug.ini" role="doc" />
+   <file md5sum="afd6ce4aa04fdc346e5b3c6e634bd75c" name="LICENSE" role="doc" />
+   <file md5sum="0b0b6fc9a48e3e8311c1418f102e9fbc" name="xdebug.ini" role="doc" />
    <file md5sum="82ad7174e13d1bb8c64835f8cefeb494" name="Makefile.frag" role="src" />
-   <file md5sum="935f1fad118f9542b9f968e29f504de7" name="CONTRIBUTING.rst" role="doc" />
-   <file md5sum="10e4e8f9ef7aa548bd000e265ebb0df0" name="README.rst" role="doc" />
-   <file md5sum="8a50eb9f2f429d6632addc0cb62f40d1" name="run-xdebug-tests.php" role="src" />
-   <file md5sum="53b9d4d3f7196d827cb63c704cbcc382" name="xdebug.c" role="src" />
-   <file md5sum="a9afd288e721a59400a8bc6519e41620" name="php_xdebug.h" role="src" />
-   <file md5sum="ada484ed09ba0ed095502d343714fce7" name="php_xdebug_arginfo.h" role="src" />
+   <file md5sum="2db1d3d6ed8a981191667f24fb8c946a" name="CONTRIBUTING.rst" role="doc" />
+   <file md5sum="dc0c645a3f84e2c535402cc2739ab339" name="README.rst" role="doc" />
+   <file md5sum="d430e9da79fc850c459b83cac380d53c" name="run-xdebug-tests.php" role="src" />
+   <file md5sum="d18f86801292f77dbb2bdab194aca0ce" name="xdebug.c" role="src" />
+   <file md5sum="12430f83d5b26c2baee452c8a5d722e4" name="php_xdebug.h" role="src" />
+   <file md5sum="73bd04f8dea1031f54b2ff3f5688ecab" name="php_xdebug_arginfo.h" role="src" />
   </dir>
  </contents>
  <dependencies>
   <required>
    <php>
-    <min>7.2.0</min>
-    <max>8.1.99</max>
+    <min>8.0.0</min>
+    <max>8.5.99</max>
    </php>
    <pearinstaller>
     <min>1.9.1</min>
@@ -170,6 +204,802 @@ Tue, Nov 08, 2022 - Xdebug 3.1.6
  <providesextension>xdebug</providesextension>
  <zendextsrcrelease />
  <changelog>
+  <release>
+   <date>2026-02-03</date>
+   <time>15:38:25</time>
+   <version>
+    <release>3.5.1</release>
+    <api>3.5.1</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <license filesource="LICENSE" uri="https://xdebug.org/license/1.03">Xdebug-1.03</license>
+   <notes>
+Tue, Feb 03, 2026 - Xdebug 3.5.1
+
+= Fixed bugs:
+
+  - Fixed issue #2391: Code Coverage times out on random tests
+  - Fixed issue #2395: Severe performance degredation on Windows
+  - Fixed issue #2397: Very slow with Xdebug 3.5.0
+   </notes>
+  </release>
+  <release>
+   <date>2025-12-04</date>
+   <time>14:55:24</time>
+   <version>
+    <release>3.5.0</release>
+    <api>3.5.0</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <license filesource="LICENSE" uri="https://xdebug.org/license/1.03">Xdebug-1.03</license>
+   <notes>
+Thu, Dec 04, 2025 - Xdebug 3.5.0
+
++ New features:
+
+  - Fixed issue #2338: Add experimental support for Windows Named Pipes control socket
+  - Fixed issue #2369: Implement &quot;Native Xdebug Path Mapping&quot; project
+  - Fixed issue #2370: PHP 8.5 support
+
++ Improvements:
+
+  - Fixed issue #2213: Expose __EXCEPTION virtual variable for current EG(exception)
+  - Fixed issue #2363: Add better debugging support for PHP 8.5&apos;s pipes
+  - Fixed issue #2345: DBGP&apos;s detach does not support base64 encoded strings
+
+= Fixed bugs:
+
+  - Fixed issue #2335: Failed dbgp connection is not marked as not active
+  - Fixed issue #2336: Optimise xdebug_init_oparray
+  - Fixed issue #2337: Modify xdebug_add_stack_frame to always work on the passed execute_data
+  - Fixed issue #2367: Debugger should not break on return out of include files when return value debugger is enabled
+  - Fixed issue #2372: Build failed on MSVC
+  - Fixed issue #2374: Breakpoints in mapped paths don&apos;t trigger as they&apos;re mapped back before matching
+  - Fixed issue #2386: Crashes when running context_get in an exception thrown from an internal function
+   </notes>
+  </release>
+  <release>
+   <date>2025-11-12</date>
+   <time>17:30:23</time>
+   <version>
+    <release>3.5.0alpha3</release>
+    <api>3.5.0alpha3</api>
+   </version>
+   <stability>
+    <release>beta</release>
+    <api>beta</api>
+   </stability>
+   <license filesource="LICENSE" uri="https://xdebug.org/license/1.03">Xdebug-1.03</license>
+   <notes>
+Wed, Nov 12, 2025 - Xdebug 3.5.0alpha3
+
+= Fixed bugs:
+
+  - Fixed issue #2372: Build failed on MSVC
+  - Fixed issue #2374: Breakpoints in mapped paths don&apos;t trigger as they&apos;re mapped back before matching
+   </notes>
+  </release>
+  <release>
+   <date>2025-10-07</date>
+   <time>11:57:01</time>
+   <version>
+    <release>3.5.0alpha2</release>
+    <api>3.5.0alpha2</api>
+   </version>
+   <stability>
+    <release>beta</release>
+    <api>beta</api>
+   </stability>
+   <license filesource="LICENSE" uri="https://xdebug.org/license/1.03">Xdebug-1.03</license>
+   <notes>
+Tue, Oct 07, 2025 - Xdebug 3.5.0alpha2
+
++ New features:
+
+  - Fixed issue #2213: Expose __EXCEPTION virtual variable for current EG(exception)
+  - Fixed issue #2369: Implement &quot;Native Xdebug Path Mapping&quot; project
+  - Fixed issue #2370: PHP 8.5 support
+
++ Improvements
+
+  - Fixed issue #2336: Optimise xdebug_init_oparray
+  - Fixed issue #2337: Modify xdebug_add_stack_frame to always work on the passed execute_data
+  - Fixed issue #2338: Add experimental support for Windows Named Pipes control socket
+  - Fixed issue #2363: Add better debugging support for PHP 8.5&apos;s pipes
+  - Fixed issue #2367: Debugger should not break on return out of include files when return value debugger is enabled
+
+= Fixed bugs:
+
+  - Fixed issue #2335: Failed dbgp connection is not marked as not active
+  - Fixed issue #2345: DBGP&apos;s detach does not support base64 encoded strings
+   </notes>
+  </release>
+  <release>
+   <date>2025-10-26</date>
+   <time>13:37:32</time>
+   <version>
+    <release>3.4.7</release>
+    <api>3.4.7</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <license filesource="LICENSE" uri="https://xdebug.org/license/1.03">Xdebug-1.03</license>
+   <notes>
+Sun, Oct 26, 2025 - Xdebug 3.4.7
+
+= Fixed bugs:
+
+  - Fixed issue #2359: PHP 8.4 Lazy Ghost Object inoperable/defunct when Xdebug is enabled
+  - Fixed issue #2371: Step debugging initialize lazy objects
+  - Fixed issue #2375: Xdebug&apos;s exception trace conversion initialises lazy objects
+   </notes>
+  </release>
+  <release>
+   <date>2025-10-06</date>
+   <time>09:45:27</time>
+   <version>
+    <release>3.4.6</release>
+    <api>3.4.6</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <license filesource="LICENSE" uri="https://xdebug.org/license/1.03">Xdebug-1.03</license>
+   <notes>
+Mon, Oct 06, 2025 - Xdebug 3.4.6
+
+= Fixed bugs:
+
+  - Fixed issue #2328: Stream resource references in stored stack traces don&apos;t hold, and can cause crashes
+  - Fixed issue #2360: Debugging DateInterval (and other internal objects) causes a crash
+   </notes>
+  </release>
+  <release>
+   <date>2025-07-14</date>
+   <time>14:58:54</time>
+   <version>
+    <release>3.4.5</release>
+    <api>3.4.5</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <license filesource="LICENSE" uri="https://xdebug.org/license/1.03">Xdebug-1.03</license>
+   <notes>
+Mon, Jul 14, 2025 - Xdebug 3.4.5
+
+= Fixed bugs:
+
+  - Fixed issue #2332: Segmentation fault for code coverage with nested fibers
+  - Fixed issue #2356: Reading properties with get hooks may modify property value
+   </notes>
+  </release>
+  <release>
+   <date>2025-06-12</date>
+   <time>11:51:46</time>
+   <version>
+    <release>3.4.4</release>
+    <api>3.4.4</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <license filesource="LICENSE" uri="https://xdebug.org/license/1.03">Xdebug-1.03</license>
+   <notes>
+Thu, Jun 12, 2025 - Xdebug 3.4.4
+
+= Fixed bugs:
+
+  - Fixed issue #2349: Regression in Xdebug 3.4.3 breaks throwing exceptions in nested generators
+  - Fixed issue #2350: Crash when a certain page generates an exception since Xdebug 3.4.3
+  - Fixed issue #2352: Crash when using latest Xdebug version when throwing exceptions
+  - Fixed issue #2354: The __invoke frame in call stacks don&apos;t have the argument name in the trace
+   </notes>
+  </release>
+  <release>
+   <date>2025-05-14</date>
+   <time>09:37:56</time>
+   <version>
+    <release>3.4.3</release>
+    <api>3.4.3</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <license filesource="LICENSE" uri="https://xdebug.org/license/1.03">Xdebug-1.03</license>
+   <notes>
+Wed, May 14, 2025 - Xdebug 3.4.3
+
+= Fixed bugs:
+
+  - Fixed issue #2322: Xdebug tries to open debugging connection in destructors during shutdown
+  - Fixed issue #2325: Referred chrome browser extension is no longer working
+  - Fixed issue #2326: Step debugger finishes if property debugging handler in PHP throws an exception
+  - Fixed issue #2331: Segmentation fault with &apos;invalid&apos; variable names
+  - Fixed issue #2339: Trying to throw an exception can cause a zend_mm_heap corrupted error under specific circumstances
+  - Fixed issue #2340: Xdebug case sensitivity issues on some files introduced since 3.3.0
+  - Fixed issue #2343: Fatal error on virtual property hook step debugging
+  - Fixed issue #2348: Xdebug does not resolve breakpoints in property hooks
+   </notes>
+  </release>
+  <release>
+   <date>2025-03-09</date>
+   <time>16:10:30</time>
+   <version>
+    <release>3.4.2</release>
+    <api>3.4.2</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <license filesource="LICENSE" uri="https://xdebug.org/license/1.03">Xdebug-1.03</license>
+   <notes>
+Sun, Mar 09, 2025 - Xdebug 3.4.2
+
+= Fixed bugs:
+
+  - Fixed issue #2313: var_dump does not output some Russian characters
+  - Fixed issue #2314: Class properties with hooks are always shown as null
+  - Fixed issue #2315: xdebug_dump_superglobals() leaks memory
+  - Fixed issue #2317: Code coverage leaks memory
+  - Fixed issue #2321: Segfault when null is assigned to a superglobal
+  - Fixed issue #2323: xdebug_notify() does not respect xdebug.var_display_max_* Settings
+  - Fixed issue #2327: Segmentation Fault 139 if exception thrown in callback since PHP 8.4
+   </notes>
+  </release>
+  <release>
+   <date>2025-01-06</date>
+   <time>15:43:11</time>
+   <version>
+    <release>3.4.1</release>
+    <api>3.4.1</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <license filesource="LICENSE" uri="https://xdebug.org/license/1.03">Xdebug-1.03</license>
+   <notes>
+Mon, Jan 06, 2025 - Xdebug 3.4.1
+
+= Fixed bugs:
+
+  - Fixed issue #2306: Segmentation fault on each HTTP request when not listening to debugging connections
+  - Fixed issue #2307: Segmentation fault due to a superglobal being a reference while checking for triggers
+  - Fixed issue #2309: Installation on Windows with PHP PIE failing
+  - Fixed issue #2310: xdebug 3.4.0 crashes php8.1-fpm after script execution
+   </notes>
+  </release>
+  <release>
+   <date>2024-11-28</date>
+   <time>13:45:52</time>
+   <version>
+    <release>3.4.0</release>
+    <api>3.4.0</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <license filesource="LICENSE" uri="https://xdebug.org/license/1.03">Xdebug-1.03</license>
+   <notes>
+Thu, Nov 28, 2024 - Xdebug 3.4.0
+
++ New features:
+
+  - Fixed issue #2239: Add &apos;XDEBUG_IGNORE&apos; GET/POST/COOKIE/ENV to make the step debugger ignore that specific request
+  - Fixed issue #2281: PHP 8.4 support
+
++ Improvements
+
+  - Fixed issue #2261: Send control socket location in init packet
+
+= Fixed bugs:
+
+  - Fixed issue #2262: PHP 8.4: Closure names need different wrapping algorithm
+  - Fixed issue #2283: SoapClient usage causes segfault with codecoverage
+  - Fixed issue #2294: Nette Tester always crashes in all test jobs when running with XDebug 3.4.0beta1 active
+  - Fixed issue #2304: Seg fault on throw exception
+  - Fixed issue #2305: Segfault when checking whether to ignore creating a debug connection during shutdown functions
+   </notes>
+  </release>
+  <release>
+   <date>2024-10-04</date>
+   <time>14:39:23</time>
+   <version>
+    <release>3.4.0beta1</release>
+    <api>3.4.0beta1</api>
+   </version>
+   <stability>
+    <release>beta</release>
+    <api>beta</api>
+   </stability>
+   <license filesource="LICENSE" uri="https://xdebug.org/license/1.03">Xdebug-1.03</license>
+   <notes>
+Fri, Oct 04, 2024 - Xdebug 3.4.0beta1
+
+= Fixed bugs:
+
+  - Fixed issue #2261: Send control socket location in init packet
+  - Fixed issue #2281: PHP 8.4 support
+   </notes>
+  </release>
+  <release>
+   <date>2024-05-31</date>
+   <time>09:21:23</time>
+   <version>
+    <release>3.4.0alpha1</release>
+    <api>3.4.0alpha1</api>
+   </version>
+   <stability>
+    <release>beta</release>
+    <api>beta</api>
+   </stability>
+   <license filesource="LICENSE" uri="https://xdebug.org/license/1.03">Xdebug-1.03</license>
+   <notes>
+Fri, May 31, 2024 - Xdebug 3.4.0alpha1
+
+= Fixed bugs:
+
+  - Fixed issue #2239: Add &apos;XDEBUG_IGNORE&apos; GET/POST/COOKIE/ENV to make the step debugger ignore that specific request
+  - Fixed issue #2262: PHP 8.4: Closure names need different wrapping algorithm
+   </notes>
+  </release>
+  <release>
+   <date>2024-04-15</date>
+   <time>12:51:20</time>
+   <version>
+    <release>3.3.2</release>
+    <api>3.3.2</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <license filesource="LICENSE" uri="https://xdebug.org/license/1.03">Xdebug-1.03</license>
+   <notes>
+Mon, Apr 15, 2024 - Xdebug 3.3.2
+
+= Fixed bugs:
+
+  - Fixed issue #2216: With PHP8.3 and Apache 2.4.58 error_reporting() causing Apache process to hang
+  - Fixed issue #2230: Crash when xdebug and blackfire extensions are active
+  - Fixed issue #2233: High and continuous Apache server CPU use
+   </notes>
+  </release>
+  <release>
+   <date>2023-12-14</date>
+   <time>17:36:35</time>
+   <version>
+    <release>3.3.1</release>
+    <api>3.3.1</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <license filesource="LICENSE" uri="https://xdebug.org/license/1.03">Xdebug-1.03</license>
+   <notes>
+Thu, Dec 14, 2023 - Xdebug 3.3.1
+
+= Fixed bugs:
+
+  - Fixed issue #2220: Test failure
+  - Fixed issue #2221: Crash when other extensions run PHP code without the stack being initialised yet
+  - Fixed issue #2223: Xdebug&apos;s constants are not available with `xdebug.mode=off`
+  - Fixed issue #2226: xdebug_get_function_stack([&apos;from_exception&apos;]) does not always find stored trace
+  - Fixed issue #2227: Crash with return value and observers
+  - Fixed issue #2228: Return value can not be fetched with property_get if top frame is an internal function
+   </notes>
+  </release>
+  <release>
+   <date>2023-11-30</date>
+   <time>16:27:19</time>
+   <version>
+    <release>3.3.0</release>
+    <api>3.3.0</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <license filesource="LICENSE" uri="https://xdebug.org/license/1.03">Xdebug-1.03</license>
+   <notes>
+Thu, Nov 30, 2023 - Xdebug 3.3.0
+
++ New features:
+
+  - Fixed issue #2171: Support for PHP 8.3
+  - Fixed issue #1732: Add support for flame graph outputs
+  - Fixed issue #2219: Add control socket on Linux to obtain information and initiate debugger or breakpoint
+  - Fixed issue #1562: Add &apos;local_vars&apos; option to &apos;xdebug_get_function_stack&apos; to include variables for each st
+  - Fixed issue #2194: Add &apos;params_as_values&apos; option to &apos;xdebug_get_function_stack&apos; to return data as values
+  - Fixed issue #2195: Add &apos;from_exception&apos; option to &apos;xdebug_get_function_stack&apos; to return the stack trace where an exception was thrown
+
++ Improvements:
+
+  - Fixed issue #2077: Bring back xdebug.collect_params
+  - Fixed issue #2170: Show contents of Spl&apos;s ArrayIterator
+  - Fixed issue #2172: Show contents of SplDoublyLinkedList and SplPriorityQueue
+  - Fixed issue #2183: Bubble up exception message when using code evalution through protocol
+  - Fixed issue #2188: Step over with fibers does still step into fiber routines
+  - Fixed issue #2197: Add time index and memory to output of xdebug_get_function_stack
+  - Fixed issue #2203: Increase default max nesting time out from 256 to 512
+  - Fixed issue #2206: Optimise debugger breakpoints checking
+  - Fixed issue #2207: Add filenames for include and friends to flamegraph output
+  - Fixed issue #2217: xdebug://gateway pseudo host does not support IPv6
+
+= Fixed bugs:
+
+  - Fixed issue #450: &quot;Incomplete&quot; backtraces when an exception gets rethrown
+  - Fixed issue #476: Exception chaining does not work properly
+  - Fixed issue #1155: Local variables are not shown when execution break in error_handler
+  - Fixed issue #2000: Debugger evaluate expression: &quot;can&apos;t evaluate expression&quot;
+  - Fixed issue #2027: Branch/path code coverage for traits drops trait name since 3.1.0
+  - Fixed issue #2132: Errors when mountinfo does not have enough information for finding systemd private tmp directory
+  - Fixed issue #2200: PECL package file has wrong max PHP version number, and peclweb refuses the package
+  - Fixed issue #2208: Superfluous `...` (three omission dots) in var_dump()
+  - Fixed issue #2210: Flamegraphs crash when using `start_with_request`
+  - Fixed issue #2211: File wrappers get wrong filename location in stack.
+  - Fixed issue #2214: Array keys aren&apos;t escaped in traces
+   </notes>
+  </release>
+  <release>
+   <date>2023-10-19</date>
+   <time>15:42:30</time>
+   <version>
+    <release>3.3.0alpha3</release>
+    <api>3.3.0alpha3</api>
+   </version>
+   <stability>
+    <release>beta</release>
+    <api>beta</api>
+   </stability>
+   <license filesource="LICENSE" uri="https://xdebug.org/license/1.03">Xdebug-1.03</license>
+   <notes>
+Thu, Oct 19, 2023 - Xdebug 3.3.0alpha3
+
+= Fixed bugs:
+
+  - Fixed issue #1732: Add support for flame graph outputs
+  - Fixed issue #2000: Debugger evaluate expression: &quot;can&apos;t evaluate expression&quot;
+  - Fixed issue #2077: Bring back xdebug.collect_params
+  - Fixed issue #2203: Increase default max nesting time out from 256 to 512
+  - Fixed issue #2206: Optimise debugger breakpoints checking
+   </notes>
+  </release>
+  <release>
+   <date>2023-09-06</date>
+   <time>12:53:26</time>
+   <version>
+    <release>3.3.0alpha2</release>
+    <api>3.3.0alpha2</api>
+   </version>
+   <stability>
+    <release>beta</release>
+    <api>beta</api>
+   </stability>
+   <license filesource="LICENSE" uri="https://xdebug.org/license/1.03">Xdebug-1.03</license>
+   <notes>
+Wed, Sep 06, 2023 - Xdebug 3.3.0alpha2
+
+= Fixed bugs:
+
+  - Fixed issue #2200: PECL package file has wrong max PHP version number, and peclweb refuses the package
+   </notes>
+  </release>
+  <release>
+   <date>2023-09-06</date>
+   <time>09:53:58</time>
+   <version>
+    <release>3.3.0alpha1</release>
+    <api>3.3.0alpha1</api>
+   </version>
+   <stability>
+    <release>beta</release>
+    <api>beta</api>
+   </stability>
+   <license filesource="LICENSE" uri="https://xdebug.org/license/1.03">Xdebug-1.03</license>
+   <notes>
+Wed, Sep 06, 2023 - Xdebug 3.3.0alpha1
+
++ New features:
+
+  - Fixed issue #2171: Support for PHP 8.3
+
++ Improvements:
+
+  - Fixed issue #1562: Add &apos;local_vars&apos; option to &apos;xdebug_get_function_stack&apos; to include variables for each st
+  - Fixed issue #2170: Show contents of Spl&apos;s ArrayIterator while debugging
+  - Fixed issue #2172: Show contents of SplDoublyLinkedList and SplPriorityQueue while debugging
+  - Fixed issue #2183: Bubble up exception message when using code evalution through protocol
+  - Fixed issue #2188: Step over with fibers does still step into fiber routines
+  - Fixed issue #2194: Add &apos;params_as_values&apos; option to &apos;xdebug_get_function_stack&apos; to return data as values
+  - Fixed issue #2195: Add &apos;from_exception&apos; option to &apos;xdebug_get_function_stack&apos; to return the stack trace where an exception was thrown
+  - Fixed issue #2197: Add time index and memory to output of xdebug_get_function_stack
+
+= Fixed bugs:
+
+  - Fixed issue #450: &quot;Incomplete&quot; backtraces when an exception gets rethrown
+  - Fixed issue #476: Exception chaining does not work properly
+  - Fixed issue #2132: Errors when mountinfo does not have enough information for finding systemd private tmp directory
+   </notes>
+  </release>
+  <release>
+   <date>2023-07-14</date>
+   <time>09:14:53</time>
+   <version>
+    <release>3.2.2</release>
+    <api>3.2.2</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <license filesource="LICENSE" uri="https://xdebug.org/license/1.03">Xdebug-1.03</license>
+   <notes>
+Fri, Jul 14, 2023 - Xdebug 3.2.2
+
+= Fixed bugs:
+
+  - Fixed issue #2175: Crash with EXC_BAD_ACCESS in xdebug_str_create
+  - Fixed issue #2180: Crash on extended SplFixedArray
+  - Fixed issue #2182: Segfault with ArrayObject on stack
+  - Fixed issue #2186: Segfault with trampoline functions and debugger activation
+   </notes>
+  </release>
+  <release>
+   <date>2023-03-21</date>
+   <time>16:35:27</time>
+   <version>
+    <release>3.2.1</release>
+    <api>3.2.1</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <license filesource="LICENSE" uri="https://xdebug.org/license/1.03">Xdebug-1.03</license>
+   <notes>
+Tue, Mar 21, 2023 - Xdebug 3.2.1
+
+= Fixed bugs:
+
+  - Fixed issue #2144: Xdebug 3.2.0 ignores xdebug.mode and enables all features
+  - Fixed issue #2145: Xdebug 3.2.0 crash PHP on Windows if xdebug.mode = off
+  - Fixed issue #2146: apache2 segfaulting with version 3.2.0 on PHP 8.0
+  - Fixed issue #2148: Icon for link to docs in xdebug_info() HTML output does not always render correctly
+   </notes>
+  </release>
+  <release>
+   <date>2022-12-08</date>
+   <time>18:53:55</time>
+   <version>
+    <release>3.2.0</release>
+    <api>3.2.0</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD style</license>
+   <notes>
+Thu, Dec 08, 2022 - Xdebug 3.2.0
+
++ New features:
+
+  - Fixed issue #1819: Allow a list of headers in &apos;xdebug.client_discovery_header&apos;
+  - Fixed issue #2079: Add pseudo hosts xdebug://gateway and xdebug://nameserver
+  - Fixed issue #2086: Include return value in return breakpoint interruption response
+  - Fixed issue #2087: Introduce step for the return state and virtual property for return value
+
++ Improvements:
+
+  - Fixed issue #2062: Xdebug now records whether systemd&apos;s PrivateTmp is used in its diagnostics information
+  - Fixed issue #2104: Add support for PHP 8.2 &quot;SensitiveParameter&quot; attribute
+  - Fixed issue #2117: Removed emulated properties for closures, as PHP 8.2 adds debug information for them
+  - Fixed issue #2122: Local variables are now available when using start_upon_error
+  - Fixed issue #2123: Add warning in log and diagnositics information when a breakpoint is set on a non-existing file
+  - Fixed issue #2138: Step debugger now disconnects and continues running the script, when the debugging client closes the connection
+  - Fixed issue #2136: Duplicate line/conditional breakpoints are now rejected
+
+- Deprecations:
+
+  - Fixed issue #2014: Drop support for PHP 7.2
+  - Fixed issue #2102: Drop support for PHP 7.3
+  - Fixed issue #2103: Drop support for PHP 7.4
+
+= Fixed bugs:
+
+  - Fixed issue #2002: xdebug_trace_handler_t handler members are not always checked for NULL when executing
+  - Fixed issue #2045: Inapproriate frowny face
+  - Fixed issue #2089: Alpine Linux does not support res_ninit
+  - Fixed issue #2093: Fatal error: linux/rtnetlink.h: No such file or directory linux/rtnetlink.h
+  - Fixed issue #2098: With breakpoint_include_return_value enabled step_out break at every function
+  - Fixed issue #2105: 3.2.0alpha1 package misses the php-header.h file
+  - Fixed issue #2108: Segfault on PHP8.1 with PHPUnit 10 when path coverage is enabled
+  - Fixed issue #2113: Crash at step_into after thrown exception with return value debugging en
+  - Fixed issue #2121: Xdebug does not use local independent float-to-string functions
+  - Fixed issue #2124: Xdebug incorrectly reports that there are no children for static closure properties, even though there are
+  - Fixed issue #2125: Crash with PHP 8.2 on 32-bit due to change in &quot;not set&quot; value with CATCH opcode
+  - Fixed issue #2126: Problems with retrieving global variables
+  - Fixed issue #2127: Tracing does not handle NUL char in anonymous closure scope
+  - Fixed issue #2133: Warning with regards to extra NUL character in xdebug_setcookie call
+  - Fixed issue #2134: Xdebug stops at the line where the exception is created, not where it is thrown
+  - Fixed issue #2135: Xdebug stops twice at the same line after a call breakpoint or xdebug_break()
+   </notes>
+  </release>
+  <release>
+   <date>2022-11-10</date>
+   <time>09:56:57</time>
+   <version>
+    <release>3.2.0RC2</release>
+    <api>3.2.0RC2</api>
+   </version>
+   <stability>
+    <release>beta</release>
+    <api>beta</api>
+   </stability>
+   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD style</license>
+   <notes>
+Thu, Nov 10, 2022 - Xdebug 3.2.0RC2
+
+= Fixed bugs:
+
+  - Fixed issue #2100: &quot;Fatal error: debuginfo() must return an array&quot; when Exception is thrown from debugInfo in PHP 8.x
+  - Fixed issue #2101: When a temporary breakpoint is hit, breakpoint_list should show it as disabled
+  - Fixed issue #2126: Problems with retrieving global variables
+  - Fixed issue #2127: Tracing does not handle NUL char in anonymous closure scope
+  - Fixed issue #2129: Cannot read snapshot Gzip-compressed data is corrupt
+  - Fixed issue #2133: Warning with regards to extra NUL character in xdebug_setcookie call
+  - Fixed issue #2134: Xdebug stops at the line where the exception is created, not where it is thrown
+  - Fixed issue #2135: Xdebug stops twice at the same line after a call breakpoint or xdebug_break()
+  - Fixed issue #2136: Duplicate line/conditional breakpoints are not rejected
+   </notes>
+  </release>
+  <release>
+   <date>2022-10-10</date>
+   <time>15:52:03</time>
+   <version>
+    <release>3.2.0RC1</release>
+    <api>3.2.0RC1</api>
+   </version>
+   <stability>
+    <release>beta</release>
+    <api>beta</api>
+   </stability>
+   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD style</license>
+   <notes>
+Mon, Oct 10, 2022 - Xdebug 3.2.0RC1
+
+= Fixed bugs:
+
+  - Fixed issue #2113: Crash at step_into after thrown exception with return value debugging en
+  - Fixed issue #2117: Removed emulated properties for closures, as PHP 8.2 adds debug information for them
+  - Fixed issue #2121: Xdebug does not use local independent float-to-string functions
+  - Fixed issue #2122: Local variables are not available when using start_upon_error
+  - Fixed issue #2123: Add warning in log and diagnositics information when a breakpoint is set on a non-existing file
+  - Fixed issue #2124: Xdebug incorrectly reports that there are no children for static closure properties, even thought there are
+  - Fixed issue #2125: Crash with PHP 8.2 on 32-bit due to change in &quot;not set&quot; value with CATCH opcode
+   </notes>
+  </release>
+  <release>
+   <date>2022-08-24</date>
+   <time>09:21:42</time>
+   <version>
+    <release>3.2.0alpha3</release>
+    <api>3.2.0alpha3</api>
+   </version>
+   <stability>
+    <release>beta</release>
+    <api>beta</api>
+   </stability>
+   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD style</license>
+   <notes>
+Wed, Aug 24, 2022 - Xdebug 3.2.0alpha3
+
++ Improvements:
+
+  - Fixed issue #2112: Force &apos;return_value&apos; breakpoint information and step to &apos;on&apos; temporarily
+   </notes>
+  </release>
+  <release>
+   <date>2022-07-25</date>
+   <time>10:07:50</time>
+   <version>
+    <release>3.2.0alpha2</release>
+    <api>3.2.0alpha2</api>
+   </version>
+   <stability>
+    <release>beta</release>
+    <api>beta</api>
+   </stability>
+   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD style</license>
+   <notes>
+Mon, Jul 25, 2022 - Xdebug 3.2.0alpha2
+
+= Fixed bugs:
+
+  - Fixed issue #2105: 3.2.0alpha1 package misses the php-header.h file
+   </notes>
+  </release>
+  <release>
+   <date>2022-07-20</date>
+   <time>15:57:59</time>
+   <version>
+    <release>3.2.0alpha1</release>
+    <api>3.2.0alpha1</api>
+   </version>
+   <stability>
+    <release>beta</release>
+    <api>beta</api>
+   </stability>
+   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD style</license>
+   <notes>
+Wed, Jul 20, 2022 - Xdebug 3.2.0alpha1
+
++ New features:
+
+  - Fixed issue #1819: Allow a list of headers in &apos;xdebug.client_discovery_header&apos;
+  - Fixed issue #2079: Add pseudo hosts xdebug://gateway and xdebug://nameserver
+  - Fixed issue #2087: Introduce step for the return state and virtual property for return value
+  - Fixed issue #2104: Add support for PHP 8.2 &quot;SensitiveParameter&quot; attribute
+
++ Improvements:
+
+  - Fixed issue #2086: Include return value in return breakpoint interruption response
+
+- Removed features:
+
+  - Fixed issue #2014: Drop support for PHP 7.2
+  - Fixed issue #2102: Drop support for PHP 7.3
+  - Fixed issue #2103: Drop support for PHP 7.4
+
+= Fixed bugs:
+
+  - Fixed issue #2002: xdebug_trace_handler_t handler members are not always checked for NULL when executing
+  - Fixed issue #2045: Inapproriate frowny face
+  - Fixed issue #2062: Profiler can&apos;t able to write cachegrind file at /tmp
+  - Fixed issue #2089: Alpine Linux does not support res_ninit
+  - Fixed issue #2093: Fatal error: linux/rtnetlink.h: No such file or directory  linux/rtnetlink.h
+  - Fixed issue #2098: With breakpoint_include_return_value enabled step_out break at every function
+   </notes>
+  </release>
+  <release>
+   <date>2022-11-08</date>
+   <time>13:08:25</time>
+   <version>
+    <release>3.1.6</release>
+    <api>3.1.6</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <license uri="http://www.opensource.org/licenses/bsd-license.php">BSD style</license>
+   <notes>
+Tue, Nov 08, 2022 - Xdebug 3.1.6
+
+= Fixed bugs:
+
+  - Fixed issue #2100: &quot;Fatal error: debuginfo() must return an array&quot; when Exception is thrown from debugInfo in PHP 8.x
+  - Fixed issue #2101: When a temporary breakpoint is hit, breakpoint_list should show it as disabled
+  - Fixed issue #2129: Cannot read snapshot Gzip-compressed data is corrupt
+   </notes>
+  </release>
   <release>
    <date>2022-06-06</date>
    <time>16:30:05</time>
@@ -317,7 +1147,7 @@ Mon, Oct 04, 2021 - Xdebug 3.1.0
   - Fixed issue #1890: Add connected client and protocol features to diagnostic page
   - Fixed issue #1898: API for querying the currently active mode(s)
   - Fixed issue #1933: Allow for cloud ID to be set through the trigger
-  - Fixed issue #1938: Branches in traits aren’t marked as executed
+  - Fixed issue #1938: Branches in traits aren&apos;t marked as executed
   - Fixed issue #1948: Do not redirect warning and error messages to PHP&apos;s error log if an Xdebug log is active
   - Fixed issue #1949: private properties for internal classes can&apos;t be fetched for debugging
   - Fixed issue #1963: php exit code = -1073741819 when xdebug.mode = off (Windows Thread Safe Only)
@@ -410,7 +1240,7 @@ Sun, Sep 05, 2021 - Xdebug 3.1.0beta1
 
 = Fixed bugs:
 
-  - Fixed issue #1938: Branches in traits aren’t marked as executed
+  - Fixed issue #1938: Branches in traits aren&apos;t marked as executed
   - Fixed issue #1948: Do not redirect warning and error messages to PHP&apos;s error log if an Xdebug log is active
   - Fixed issue #1949: private properties for internal classes can&apos;t be fetched for debugging
   - Fixed issue #1963: php exit code = -1073741819 when xdebug.mode = off (Windows Thread Safe Only)
@@ -591,11 +1421,11 @@ https://xdebug.org/docs/upgrade_guide
   - Implemented issue #1813: Make sure that the xdebug_init_*_globals don&apos;t do more than they need to, and that init is only done when xdebug.mode != off
   - Implemented issue #1817: Switch filename storage from char*/size_t to zend_string*
   - Implemented issue #1818: Switch variable storage from char*/size_t to zend_string*
-  - Implemented issue #1820: Increase time tracing precision (Michael Voříšek)
+  - Implemented issue #1820: Increase time tracing precision (Michael Vorisek)
   - Implemented issue #1824: Allow Xdebug&apos;s mode to be set through an environment variable
-  - Implemented issue #1825: Improve profiler performance by not calling fflush after every function (Michael Voříšek)
+  - Implemented issue #1825: Improve profiler performance by not calling fflush after every function (Michael Vorisek)
   - Implemented issue #1826: Reduce profiler memory allocation and call overhead
-  - Implemented issue #1829: Switch to 10ns profiler resolution (Michael Voříšek)
+  - Implemented issue #1829: Switch to 10ns profiler resolution (Michael Vorisek)
   - Implemented issue #1832: If connect back host can not be contacted, fallback to remote_host/port
   - Implemented issue #1858: Only open/close log if there is an actual message to log
   - Implemented issue #1860: Allow xdebug.cloud_id to be set through an environment variable
@@ -796,11 +1626,11 @@ Xdebug 3 documentation is available at https://3.xdebug.org/docs
   - Implemented issue #1813: Make sure that the xdebug_init_*_globals don&apos;t do more than they need to, and that init is only done when xdebug.mode != off
   - Implemented issue #1817: Switch filename storage from char*/size_t to zend_string*
   - Implemented issue #1818: Switch variable storage from char*/size_t to zend_string*
-  - Implemented issue #1820: Increase time tracing precision (Michael Voříšek)
+  - Implemented issue #1820: Increase time tracing precision (Michael Vorisek)
   - Implemented issue #1824: Allow Xdebug&apos;s mode to be set through an environment variable
-  - Implemented issue #1825: Improve profiler performance by not calling fflush after every function (Michael Voříšek)
+  - Implemented issue #1825: Improve profiler performance by not calling fflush after every function (Michael Vorisek)
   - Implemented issue #1826: Reduce profiler memory allocation and call overhead
-  - Implemented issue #1829: Switch to 10ns profiler resolution (Michael Voříšek)
+  - Implemented issue #1829: Switch to 10ns profiler resolution (Michael Vorisek)
   - Implemented issue #1832: If connect back host can not be contacted, fallback to remote_host/port
   - Implemented issue #1858: Only open/close log if there is an actual message to log
   - Implemented issue #1860: Allow xdebug.cloud_id to be set through an environment variable
@@ -870,7 +1700,7 @@ Fri, May 29, 2020 - xdebug 2.9.6
 
 = Fixed bugs:
 
-  - Fixed issue #1782: Cookie &quot;XDEBUG_SESSION&quot; will be soon rejected because it has the “sameSite” attribute set to none
+  - Fixed issue #1782: Cookie &quot;XDEBUG_SESSION&quot; will be soon rejected because it has the &quot;sameSite&quot; attribute set to none
   - Fixed issue #1787: Branch coverage data does not always follow the lines/functions format
   - Fixed issue #1790: Segfault in var_dump() or while debugging with protobuf extension
    </notes>
@@ -3078,7 +3908,7 @@ Wed, Jul 18, 2007 - xdebug 2.0.0
    <notes>
 Wed, May 17, 2007 - xdebug 2.0.0rc4
 + Changes:
-	- Use Âµ seconds instead of a tenths of Âµ seconds to avoid confusion in
+	- Use microseconds instead of a tenths of microseconds to avoid confusion in
 	  profile information.
 	- Changed xdebug.profiler_output_name and xdebug.trace_output_name to use
 	  modifier tags:

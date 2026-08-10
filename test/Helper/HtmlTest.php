@@ -3,6 +3,8 @@
 namespace test\eLife\Journal\Helper;
 
 use eLife\Journal\Helper\Html;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use test\eLife\Journal\Providers;
 use Traversable;
@@ -11,10 +13,8 @@ final class HtmlTest extends TestCase
 {
     use Providers;
 
-    /**
-     * @test
-     * @dataProvider stripElementProvider
-     */
+    #[Test]
+    #[DataProvider('stripElementProvider')]
     public function it_strips_an_element(string $input, string $expected)
     {
         $this->assertSame($expected, Html::stripElement($input, 'a'));

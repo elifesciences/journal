@@ -15,3 +15,4 @@
 /web/favicon.ico
 docker-compose.override.yml
 .env
+.idea/

@@ -4,6 +4,7 @@ namespace test\eLife\Journal\Templating;
 
 use eLife\Journal\Templating\PromiseAwareEngine;
 use GuzzleHttp\Promise\FulfilledPromise;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Symfony\Bridge\Twig\TwigEngine;
 use Symfony\Component\Templating\EngineInterface;
@@ -13,9 +14,7 @@ use Twig_Loader_Array;
 
 final class PromiseAwareEngineTest extends TestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function it_is_a_templating_engine()
     {
         $twigLoader = new Twig_Loader_Array([]);
@@ -26,9 +25,7 @@ final class PromiseAwareEngineTest extends TestCase
         $this->assertInstanceOf(EngineInterface::class, $engine);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_unwraps_promises_before_rendering()
     {
         $twigLoader = new Twig_Loader_Array(['foo' => '{{bar}} {{qux}}']);
@@ -39,9 +36,7 @@ final class PromiseAwareEngineTest extends TestCase
         $this->assertSame('baz quxx', $engine->render('foo', ['bar' => new FulfilledPromise('baz'), 'qux' => 'quxx']));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_delegates_to_another_engine()
     {
         $twigLoader = new Twig_Loader_Array(['foo' => '{{bar}}']);

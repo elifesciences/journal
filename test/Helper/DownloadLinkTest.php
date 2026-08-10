@@ -3,13 +3,12 @@
 namespace test\eLife\Journal\Helper;
 
 use eLife\Journal\Helper\DownloadLink;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 final class DownloadLinkTest extends TestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function it_has_a_uri()
     {
         $link = new DownloadLink('http://www.example.com/test.txt', 'test.txt');
@@ -17,9 +16,7 @@ final class DownloadLinkTest extends TestCase
         $this->assertSame('http://www.example.com/test.txt', $link->getUri());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_has_a_filename()
     {
         $link = new DownloadLink('http://www.example.com/test.txt', 'foo.bar');
@@ -27,9 +24,7 @@ final class DownloadLinkTest extends TestCase
         $this->assertSame('foo.bar', $link->getFilename());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_may_have_a_canonical_uri()
     {
         $with = new DownloadLink('http://www.example.com/test.txt?canonicalUri=http://www.example.com/canonical', 'foo.bar');
@@ -39,9 +34,7 @@ final class DownloadLinkTest extends TestCase
         $this->assertNull($withOut->getCanonicalUri());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_can_be_created_from_a_uri()
     {
         $link = DownloadLink::fromUri('http://www.example.com/test.txt');
@@ -50,9 +43,7 @@ final class DownloadLinkTest extends TestCase
         $this->assertSame('test.txt', $link->getFilename());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_can_be_created_from_a_uri_with_a_format_query_parameter()
     {
         $link = DownloadLink::fromUri('http://www.example.com/test?format=tar.gz');
@@ -61,9 +52,7 @@ final class DownloadLinkTest extends TestCase
         $this->assertSame('test.tar.gz', $link->getFilename());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_can_be_created_from_a_uri_and_canonical_uri()
     {
         $link = DownloadLink::fromUri('http://www.example.com/test.txt?canonicalUri=http://www.example.com/canonical');

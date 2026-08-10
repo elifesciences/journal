@@ -5,14 +5,13 @@ namespace test\eLife\Journal\ViewModel\Converter;
 use DateTimeImmutable;
 use eLife\Journal\ViewModel\Converter\ViewModelConverter;
 use eLife\Journal\ViewModel\Converter\ViewModelConverterRegistry;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 
 final class ViewModelConverterRegistryTest extends TestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function it_supports_the_union_of_its_converters_supports()
     {
         $registry = new ViewModelConverterRegistry();
@@ -29,11 +28,10 @@ final class ViewModelConverterRegistryTest extends TestCase
     {
         $stub = $this->createMock(ViewModelConverter::class);
         $stub
-            ->expects($this->any())
             ->method('supports')
-            ->will($this->returnCallback(function ($object, $specifiedViewModelClass) use ($objectClass, $viewModelClass) {
+            ->willReturnCallback(function ($object, $specifiedViewModelClass) use ($objectClass, $viewModelClass) {
                 return $object instanceof $objectClass && $viewModelClass == $specifiedViewModelClass;
-            }));
+            });
 
         return $stub;
     }

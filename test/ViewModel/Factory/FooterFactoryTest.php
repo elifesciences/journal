@@ -4,6 +4,10 @@ namespace test\eLife\Journal\ViewModel\Factory;
 
 use eLife\Journal\ViewModel\Factory\FooterFactory;
 use eLife\Patterns\ViewModel\Footer;
+use PHPUnit\Framework\Attributes\Before;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
+use Symfony\Bridge\PhpUnit\Attribute\TimeSensitive;
 use Symfony\Bridge\PhpUnit\ClockMock;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
@@ -17,9 +21,7 @@ final class FooterFactoryTest extends KernelTestCase
      */
     private $footerFactory;
 
-    /**
-     * @before
-     */
+    #[Before]
     public function createFooterFactory()
     {
         static::bootKernel();
@@ -28,19 +30,15 @@ final class FooterFactoryTest extends KernelTestCase
         static::$kernel->getContainer()->get('security.token_storage')->setToken(new AnonymousToken('secret', 'anon.'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_returns_a_footer()
     {
         $this->assertInstanceOf(Footer::class, $this->footerFactory->createFooter());
     }
 
-    /**
-     * @test
-     * @dataProvider yearProvider
-     * @group        time-sensitive
-     */
+    #[Test]
+    #[DataProvider('yearProvider')]
+    #[TimeSensitive(FooterFactory::class)]
     public function it_includes_a_link_to_the_latest_year_in_the_archive(string $today, string $expected)
     {
         ClockMock::withClockMock(strtotime($today));
@@ -65,9 +63,7 @@ final class FooterFactoryTest extends KernelTestCase
         yield 'in February 2017' => ['2017-02-01T00:00:00Z', '/archive/2017'];
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_displays_investor_logos()
     {
         $footer = $this->footerFactory->createFooter();

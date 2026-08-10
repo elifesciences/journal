@@ -5,6 +5,7 @@ namespace test\eLife\Journal\ViewModel\Converter;
 use eLife\Journal\ViewModel\Converter\PodcastEpisodeGridTeaserConverter;
 use eLife\Journal\ViewModel\Converter\ViewModelConverter;
 use eLife\Patterns\ViewModel;
+use PHPUnit\Framework\Attributes\Before;
 
 final class PodcastEpisodeGridTeaserConverterTest extends ModelConverterTestCase
 {
@@ -12,10 +13,8 @@ final class PodcastEpisodeGridTeaserConverterTest extends ModelConverterTestCase
     protected $viewModelClasses = [ViewModel\Teaser::class];
     protected $context = ['variant' => 'grid'];
 
-    /**
-     * @before
-     */
-    public function setUpConverter()
+    #[Before]
+    public function setUpConverter(): void
     {
         $this->converter = new PodcastEpisodeGridTeaserConverter(
             $viewModelConverter = $this->createMock(ViewModelConverter::class),
@@ -23,11 +22,10 @@ final class PodcastEpisodeGridTeaserConverterTest extends ModelConverterTestCase
         );
 
         $viewModelConverter
-            ->expects($this->any())
             ->method('convert')
-            ->will($this->returnValue(new ViewModel\Picture(
+            ->willReturn(new ViewModel\Picture(
                 [],
                 new ViewModel\Image('/image.jpg')
-            )));
+            ));
     }
 }

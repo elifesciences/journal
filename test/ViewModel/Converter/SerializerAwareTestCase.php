@@ -4,15 +4,14 @@ namespace test\eLife\Journal\ViewModel\Converter;
 
 use eLife\ApiClient\HttpClient;
 use eLife\ApiSdk\ApiSdk;
+use PHPUnit\Framework\Attributes\Before;
 
 trait SerializerAwareTestCase
 {
     private $serializer;
 
-    /**
-     * @before
-     */
-    public function setUpSerializer()
+    #[Before]
+    public function setUpSerializer(): void
     {
         // in the future: use ForbiddingHttpClient when available
         $httpClient = $this->createMock(HttpClient::class);

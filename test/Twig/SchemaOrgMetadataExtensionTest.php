@@ -31,6 +31,10 @@ use eLife\ApiSdk\Model\PressPackage;
 use eLife\ApiSdk\Model\PromotionalCollection;
 use eLife\ApiSdk\Model\Subject;
 use eLife\Journal\Twig\SchemaOrgMetadataExtension;
+use PHPUnit\Framework\Assert;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Depends;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Asset\Packages;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -64,22 +68,20 @@ final class SchemaOrgMetadataExtensionTest extends TestCase
 
     private function defaultExpectations(bool $many = false)
     {
-        $this->urlGenerator->expects($many ? $this->any() : $this->once())->method('getContext')->willReturn(new RequestContext(null, 'GET', 'journal', 'https'));
-        $this->packages->expects($many ? $this->any() : $this->once())->method('getUrl')->willReturn('/assets/patterns/img/patterns/organisms/elife-logo-symbol@2x.png');
+        ($many ? $this->urlGenerator : $this->urlGenerator->expects($this->once()))
+            ->method('getContext')->willReturn(new RequestContext(null, 'GET', 'journal', 'https'));
+        ($many ? $this->packages : $this->packages->expects($this->once()))
+            ->method('getUrl')->willReturn('/assets/patterns/img/patterns/organisms/elife-logo-symbol@2x.png');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_is_a_twig_extension()
     {
         $this->assertInstanceOf(ExtensionInterface::class, $this->extension);
     }
 
-    /**
-     * @test
-     * @depends it_is_a_twig_extension
-     */
+    #[Test]
+    #[Depends('it_is_a_twig_extension')]
     public function it_must_receive_a_content_model()
     {
         $this->urlGenerator->expects($this->once())->method('getContext')->willReturn(new RequestContext());
@@ -103,10 +105,8 @@ final class SchemaOrgMetadataExtensionTest extends TestCase
         $this->twig->render('foo', ['item' => 'not content model']);
     }
 
-    /**
-     * @test
-     * @depends it_is_a_twig_extension
-     */
+    #[Test]
+    #[Depends('it_is_a_twig_extension')]
     public function it_generates_schema_org_metadata()
     {
         $this->urlGenerator->expects($this->once())->method('generate')->willReturn('https://journal/articles/digest-id');
@@ -156,10 +156,8 @@ final class SchemaOrgMetadataExtensionTest extends TestCase
         )]));
     }
 
-    /**
-     * @test
-     * @depends it_is_a_twig_extension
-     */
+    #[Test]
+    #[Depends('it_is_a_twig_extension')]
     public function it_will_generate_metadata_from_digest()
     {
         $this->defaultExpectations();
@@ -215,10 +213,8 @@ final class SchemaOrgMetadataExtensionTest extends TestCase
         )]));
     }
 
-    /**
-     * @test
-     * @dataProvider validateJsonProvider
-     */
+    #[Test]
+    #[DataProvider('validateJsonProvider')]
     public function it_will_generate_valid_json(Model $item, callable $callable = null)
     {
         $this->defaultExpectations(true);
@@ -245,7 +241,7 @@ final class SchemaOrgMetadataExtensionTest extends TestCase
                 new EmptySequence(),
                 new ArraySequence([
                     new Subject('subject1', 'Subject 1 name', promise_for('Subject subject1 impact statement'),
-                        new EmptySequence(), promise_for($this->defaultImage()), promise_for($this->defaultImage())),
+                        new EmptySequence(), promise_for(self::defaultImage()), promise_for(self::defaultImage())),
                 ])
             ),
             null,
@@ -261,11 +257,11 @@ final class SchemaOrgMetadataExtensionTest extends TestCase
                 new EmptySequence(),
                 new ArraySequence([
                     new Subject('subject1', 'Subject 1 name', promise_for('Subject subject1 impact statement'),
-                        new EmptySequence(), promise_for($this->defaultImage()), promise_for($this->defaultImage())),
+                        new EmptySequence(), promise_for(self::defaultImage()), promise_for(self::defaultImage())),
                 ])
             ),
             function ($json) {
-                $this->assertStringContainsString('"headline": "Headline does not support tags",', $json);
+                Assert::assertStringContainsString('"headline": "Headline does not support tags",', $json);
             },
         ];
         yield 'quotes in title' => [
@@ -279,19 +275,17 @@ final class SchemaOrgMetadataExtensionTest extends TestCase
                 new EmptySequence(),
                 new ArraySequence([
                     new Subject('subject1', 'Subject 1 name', promise_for('Subject subject1 impact statement'),
-                        new EmptySequence(), promise_for($this->defaultImage()), promise_for($this->defaultImage())),
+                        new EmptySequence(), promise_for(self::defaultImage()), promise_for(self::defaultImage())),
                 ])
             ),
             function ($json) {
-                $this->assertStringContainsString('"headline": "title might have \"quotes\"",', $json);
+                Assert::assertStringContainsString('"headline": "title might have \"quotes\"",', $json);
             },
         ];
     }
 
-    /**
-     * @test
-     * @depends it_is_a_twig_extension
-     */
+    #[Test]
+    #[Depends('it_is_a_twig_extension')]
     public function it_will_generate_metadata_from_article()
     {
         $this->defaultExpectations();
@@ -409,9 +403,7 @@ final class SchemaOrgMetadataExtensionTest extends TestCase
         )]));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_will_generate_metadata_from_collection()
     {
         $this->defaultExpectations();
@@ -524,9 +516,7 @@ final class SchemaOrgMetadataExtensionTest extends TestCase
         )]));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_will_generate_metadata_from_promotional_collection()
     {
         $this->defaultExpectations();
@@ -606,16 +596,12 @@ final class SchemaOrgMetadataExtensionTest extends TestCase
         )]));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_will_generate_metadata_from_event()
     {
-        $this->urlGenerator->expects($this->exactly(2))->method('generate')->will(
-            $this->onConsecutiveCalls(
-                'https://journal/events/event-id',
-                'https://journal'
-            )
+        $this->urlGenerator->expects($this->exactly(2))->method('generate')->willReturnOnConsecutiveCalls(
+            'https://journal/events/event-id',
+            'https://journal'
         );
 
         $this->assertSame(implode(PHP_EOL, [
@@ -652,9 +638,7 @@ final class SchemaOrgMetadataExtensionTest extends TestCase
         )]));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_will_generate_metadata_from_blog_article()
     {
         $this->defaultExpectations();
@@ -706,9 +690,7 @@ final class SchemaOrgMetadataExtensionTest extends TestCase
         )]));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_will_generate_metadata_from_labs_post()
     {
         $this->defaultExpectations();
@@ -755,9 +737,7 @@ final class SchemaOrgMetadataExtensionTest extends TestCase
         )]));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_will_generate_metadata_from_press_packs()
     {
         $this->defaultExpectations();
@@ -806,18 +786,14 @@ final class SchemaOrgMetadataExtensionTest extends TestCase
         )]));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_will_generate_metadata_from_podcast_episode()
     {
         $this->defaultExpectations();
 
-        $this->urlGenerator->expects($this->exactly(2))->method('generate')->will(
-            $this->onConsecutiveCalls(
-                'https://journal/podcast-episode/1',
-                'https://journal/podcast'
-            )
+        $this->urlGenerator->expects($this->exactly(2))->method('generate')->willReturnOnConsecutiveCalls(
+            'https://journal/podcast-episode/1',
+            'https://journal/podcast'
         );
 
         $this->assertSame(implode(PHP_EOL, [
@@ -910,9 +886,7 @@ final class SchemaOrgMetadataExtensionTest extends TestCase
         )]));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_will_generate_metadata_from_job_advert()
     {
         $this->urlGenerator->expects($this->once())->method('generate')->willReturn('https://journal/jobs/job-advert-id');
@@ -956,9 +930,7 @@ final class SchemaOrgMetadataExtensionTest extends TestCase
         )]));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_will_generate_metadata_from_interview()
     {
         $this->defaultExpectations();
@@ -1015,7 +987,7 @@ final class SchemaOrgMetadataExtensionTest extends TestCase
         )]));
     }
 
-    private function defaultImage()
+    private static function defaultImage()
     {
         return new Image(
             '',

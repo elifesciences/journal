@@ -6,6 +6,7 @@ use eLife\ApiSdk\Model\Collection;
 use eLife\Journal\ViewModel\Converter\CollectionReadMoreItemConverter;
 use eLife\Patterns\PatternRenderer;
 use eLife\Patterns\ViewModel\ReadMoreItem;
+use PHPUnit\Framework\Attributes\Before;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 final class CollectionReadMoreItemConverterTest extends ModelConverterTestCase
@@ -13,22 +14,18 @@ final class CollectionReadMoreItemConverterTest extends ModelConverterTestCase
     protected $models = ['collection'];
     protected $viewModelClasses = [ReadMoreItem::class];
 
-    /**
-     * @before
-     */
-    public function setUpConverter()
+    #[Before]
+    public function setUpConverter(): void
     {
         $patternRenderer = $this->createMock(PatternRenderer::class);
         $patternRenderer
-            ->expects($this->any())
             ->method('render')
-            ->will($this->returnValue('...'));
+            ->willReturn('...');
 
         $urlGenerator = $this->createMock(UrlGeneratorInterface::class);
         $urlGenerator
-            ->expects($this->any())
             ->method('generate')
-            ->will($this->returnValue('/'));
+            ->willReturn('/');
 
         $this->converter = new CollectionReadMoreItemConverter($patternRenderer, $urlGenerator);
     }

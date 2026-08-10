@@ -8,6 +8,7 @@ use eLife\ApiSdk\Model\PressPackage;
 use eLife\Journal\ViewModel\Converter\HighlightPressPackageSecondaryTeaserConverter;
 use eLife\Journal\ViewModel\Converter\ViewModelConverter;
 use eLife\Patterns\ViewModel;
+use PHPUnit\Framework\Attributes\Before;
 use Traversable;
 
 final class HighlightPressPackageSecondaryTeaserConverterTest extends ModelConverterTestCase
@@ -16,10 +17,8 @@ final class HighlightPressPackageSecondaryTeaserConverterTest extends ModelConve
     protected $viewModelClasses = [ViewModel\Teaser::class];
     protected $context = ['variant' => 'secondary'];
 
-    /**
-     * @before
-     */
-    public function setUpConverter()
+    #[Before]
+    public function setUpConverter(): void
     {
         $this->converter = new HighlightPressPackageSecondaryTeaserConverter(
             $viewModelConverter = $this->createMock(ViewModelConverter::class),
@@ -27,12 +26,11 @@ final class HighlightPressPackageSecondaryTeaserConverterTest extends ModelConve
         );
 
         $viewModelConverter
-            ->expects($this->any())
             ->method('convert')
-            ->will($this->returnValue(new ViewModel\Picture(
+            ->willReturn(new ViewModel\Picture(
                 [],
                 new ViewModel\Image('/image.jpg')
-            )));
+            ));
     }
 
     /**

@@ -4,15 +4,14 @@ namespace test\eLife\Journal\ViewModel\Converter\Reference;
 
 use eLife\ApiSdk\Model\Reference\SoftwareReference;
 use eLife\Journal\ViewModel\Converter\Reference\SoftwareReferenceConverter;
+use PHPUnit\Framework\Attributes\Before;
 
 final class SoftwareReferenceConverterTest extends ReferenceConverterTestCase
 {
-    protected $referenceClass = SoftwareReference::class;
+    protected string $referenceClass = SoftwareReference::class;
 
-    /**
-     * @before
-     */
-    public function setUpConverter()
+    #[Before]
+    public function setUpConverter(): void
     {
         $this->converter = new SoftwareReferenceConverter();
     }

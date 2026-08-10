@@ -3,13 +3,12 @@
 namespace test\eLife\Journal\Helper;
 
 use eLife\Journal\Helper\FragmentLinkRewriter;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 final class FragmentLinkRewriterTest extends TestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function it_rewrites_fragment_links()
     {
         $rewriter = new FragmentLinkRewriter();

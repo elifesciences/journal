@@ -5,6 +5,7 @@ namespace test\eLife\Journal\ViewModel\Converter;
 use eLife\Journal\ViewModel\Converter\ReviewedPreprintSecondaryTeaserConverter;
 use eLife\Journal\ViewModel\Converter\ViewModelConverter;
 use eLife\Patterns\ViewModel;
+use PHPUnit\Framework\Attributes\Before;
 
 final class ReviewedPreprintSecondaryTeaserConverterTest extends ModelConverterTestCase
 {
@@ -12,10 +13,8 @@ final class ReviewedPreprintSecondaryTeaserConverterTest extends ModelConverterT
     protected $viewModelClasses = [ViewModel\Teaser::class];
     protected $context = ['variant' => 'secondary'];
 
-    /**
-     * @before
-     */
-    public function setUpConverter()
+    #[Before]
+    public function setUpConverter(): void
     {
         $this->converter = new ReviewedPreprintSecondaryTeaserConverter(
             $viewModelConverter = $this->createMock(ViewModelConverter::class),
@@ -23,11 +22,10 @@ final class ReviewedPreprintSecondaryTeaserConverterTest extends ModelConverterT
         );
 
         $viewModelConverter
-            ->expects($this->any())
             ->method('convert')
-            ->will($this->returnValue(new ViewModel\Picture(
+            ->willReturn(new ViewModel\Picture(
                 [],
                 new ViewModel\Image('/image.jpg')
-            )));
+            ));
     }
 }

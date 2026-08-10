@@ -7,16 +7,15 @@ use eLife\Journal\ViewModel\Converter\Block\BoxConverter;
 use eLife\Journal\ViewModel\Converter\ViewModelConverter;
 use eLife\Patterns\PatternRenderer;
 use eLife\Patterns\ViewModel;
+use PHPUnit\Framework\Attributes\Before;
 
 final class BoxConverterTest extends BlockConverterTestCase
 {
-    protected $blockClass = Block\Box::class;
+    protected string $blockClass = Block\Box::class;
     protected $viewModelClasses = [ViewModel\Box::class];
 
-    /**
-     * @before
-     */
-    public function setUpConverter()
+    #[Before]
+    public function setUpConverter(): void
     {
         $this->converter = new BoxConverter(
             $this->createMock(ViewModelConverter::class),
@@ -24,8 +23,7 @@ final class BoxConverterTest extends BlockConverterTestCase
         );
 
         $patternRenderer
-            ->expects($this->any())
             ->method('render')
-            ->will($this->returnValue('...'));
+            ->willReturn('...');
     }
 }

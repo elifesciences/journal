@@ -13,6 +13,7 @@ use eLife\Patterns\ViewModel\Link;
 use eLife\Patterns\ViewModel\MediaChapterListingItem;
 use eLife\Patterns\ViewModel\MediaSource;
 use eLife\Patterns\ViewModel\MediaType;
+use PHPUnit\Framework\Attributes\Before;
 use Symfony\Component\Asset\Packages;
 use Symfony\Component\HttpKernel\UriSigner;
 
@@ -21,15 +22,13 @@ final class PodcastEpisodeContentHeaderConverterTest extends ModelConverterTestC
     protected $models = ['podcast-episode'];
     protected $viewModelClasses = [ContentHeader::class];
 
-    /**
-     * @before
-     */
-    public function setUpConverter()
+    #[Before]
+    public function setUpConverter(): void
     {
         $viewModelConverter = $this->createMock(ViewModelConverter::class);
-        $viewModelConverter->expects($this->any())
+        $viewModelConverter
             ->method('convert')
-            ->will($this->returnValue($this->anAudioPlayer()));
+            ->willReturn($this->anAudioPlayer());
 
         $this->converter = new PodcastEpisodeContentHeaderConverter(
             $viewModelConverter,

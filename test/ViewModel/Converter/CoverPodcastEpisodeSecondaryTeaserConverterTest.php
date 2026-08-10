@@ -8,6 +8,7 @@ use eLife\ApiSdk\Model\PodcastEpisode;
 use eLife\Journal\ViewModel\Converter\CoverPodcastEpisodeSecondaryTeaserConverter;
 use eLife\Journal\ViewModel\Converter\ViewModelConverter;
 use eLife\Patterns\ViewModel;
+use PHPUnit\Framework\Attributes\Before;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Traversable;
 
@@ -17,16 +18,13 @@ final class CoverPodcastEpisodeSecondaryTeaserConverterTest extends ModelConvert
     protected $viewModelClasses = [ViewModel\Teaser::class];
     protected $context = ['variant' => 'secondary'];
 
-    /**
-     * @before
-     */
-    public function setUpConverter()
+    #[Before]
+    public function setUpConverter(): void
     {
         $urlGenerator = $this->createMock(UrlGeneratorInterface::class);
         $urlGenerator
-            ->expects($this->any())
             ->method('generate')
-            ->will($this->returnValue('/'));
+            ->willReturn('/');
 
         $this->converter = new CoverPodcastEpisodeSecondaryTeaserConverter(
             $viewModelConverter = $this->createMock(ViewModelConverter::class),
@@ -34,12 +32,11 @@ final class CoverPodcastEpisodeSecondaryTeaserConverterTest extends ModelConvert
         );
 
         $viewModelConverter
-            ->expects($this->any())
             ->method('convert')
-            ->will($this->returnValue(new ViewModel\Picture(
+            ->willReturn(new ViewModel\Picture(
                 [],
                 new ViewModel\Image('/image.jpg')
-            )));
+            ));
     }
 
     /**

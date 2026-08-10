@@ -7,6 +7,7 @@ use eLife\Journal\ViewModel\Converter\ViewModelConverter;
 use eLife\Patterns\PatternRenderer;
 use eLife\Patterns\ViewModel\Paragraph;
 use eLife\Patterns\ViewModel\ReadMoreItem;
+use PHPUnit\Framework\Attributes\Before;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 final class ArticleReadMoreItemConverterTest extends ModelConverterTestCase
@@ -14,27 +15,23 @@ final class ArticleReadMoreItemConverterTest extends ModelConverterTestCase
     protected $models = ['article-poa', 'article-vor'];
     protected $viewModelClasses = [ReadMoreItem::class];
 
-    /**
-     * @before
-     */
-    public function setUpConverter()
+    #[Before]
+    public function setUpConverter(): void
     {
         $viewModelConverter = $this->createMock(ViewModelConverter::class);
-        $viewModelConverter->expects($this->any())
+        $viewModelConverter
             ->method('convert')
-            ->will($this->returnValue(new Paragraph('foo')));
+            ->willReturn(new Paragraph('foo'));
 
         $patternRenderer = $this->createMock(PatternRenderer::class);
         $patternRenderer
-            ->expects($this->any())
             ->method('render')
-            ->will($this->returnValue('...'));
+            ->willReturn('...');
 
         $urlGenerator = $this->createMock(UrlGeneratorInterface::class);
         $urlGenerator
-            ->expects($this->any())
             ->method('generate')
-            ->will($this->returnValue('/'));
+            ->willReturn('/');
 
         $this->converter = new ArticleReadMoreItemConverter($viewModelConverter, $patternRenderer, $urlGenerator);
     }

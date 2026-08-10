@@ -16,6 +16,16 @@ trait AppKernelTestCase
         return AppKernel::class;
     }
 
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+
+        if (static::$kernelBootedInCurrentTest) {
+            static::$kernelBootedInCurrentTest = false;
+            restore_exception_handler();
+        }
+    }
+
     final protected static function bootKernel(array $options = [])
     {
         parent::bootKernel($options);

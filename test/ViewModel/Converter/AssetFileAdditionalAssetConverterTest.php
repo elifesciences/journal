@@ -9,6 +9,7 @@ use eLife\Journal\ViewModel\Converter\AssetFileAdditionalAssetConverter;
 use eLife\Journal\ViewModel\Converter\ViewModelConverter;
 use eLife\Patterns\PatternRenderer;
 use eLife\Patterns\ViewModel\AdditionalAsset;
+use PHPUnit\Framework\Attributes\Before;
 use Symfony\Component\HttpKernel\UriSigner;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Traversable;
@@ -18,10 +19,8 @@ final class AssetFileAdditionalAssetConverterTest extends ModelConverterTestCase
     protected $models = ['article-poa', 'article-vor'];
     protected $viewModelClasses = [AdditionalAsset::class];
 
-    /**
-     * @before
-     */
-    public function setUpConverter()
+    #[Before]
+    public function setUpConverter(): void
     {
         $this->converter = new AssetFileAdditionalAssetConverter(
             $this->createMock(ViewModelConverter::class),

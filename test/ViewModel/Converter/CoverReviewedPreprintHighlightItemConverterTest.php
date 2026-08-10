@@ -7,6 +7,7 @@ use eLife\ApiSdk\Model\Model;
 use eLife\ApiSdk\Model\ReviewedPreprint;
 use eLife\Journal\ViewModel\Converter\CoverReviewedPreprintHighlightItemConverter;
 use eLife\Patterns\ViewModel\HighlightItem;
+use PHPUnit\Framework\Attributes\Before;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Traversable;
 
@@ -15,16 +16,13 @@ final class CoverReviewedPreprintHighlightItemConverterTest extends ModelConvert
     protected $models = ['cover'];
     protected $viewModelClasses = [HighlightItem::class];
 
-    /**
-     * @before
-     */
-    public function setUpConverter()
+    #[Before]
+    public function setUpConverter(): void
     {
         $urlGenerator = $this->createMock(UrlGeneratorInterface::class);
         $urlGenerator
-            ->expects($this->any())
             ->method('generate')
-            ->will($this->returnValue('/'));
+            ->willReturn('/');
 
         $this->converter = new CoverReviewedPreprintHighlightItemConverter(
             $urlGenerator

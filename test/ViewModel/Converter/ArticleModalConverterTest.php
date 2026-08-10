@@ -8,6 +8,7 @@ use eLife\Journal\ViewModel\Converter\ArticleModalConverter;
 use eLife\Journal\ViewModel\Converter\ViewModelConverter;
 use eLife\Patterns\PatternRenderer;
 use eLife\Patterns\ViewModel;
+use PHPUnit\Framework\Attributes\Before;
 use Traversable;
 
 final class ArticleModalConverterTest extends ModelConverterTestCase
@@ -16,16 +17,13 @@ final class ArticleModalConverterTest extends ModelConverterTestCase
     protected $viewModelClasses = [ViewModel\ModalWindow::class];
     protected $context = ['type' => 'social'];
 
-    /**
-     * @before
-     */
-    public function setUpConverter()
+    #[Before]
+    public function setUpConverter(): void
     {
         $patternRenderer = $this->createMock(PatternRenderer::class);
         $patternRenderer
-            ->expects($this->any())
             ->method('render')
-            ->will($this->returnValue('foo'));
+            ->willReturn('foo');
 
         $this->converter = new ArticleModalConverter(
             $this->createMock(ViewModelConverter::class),

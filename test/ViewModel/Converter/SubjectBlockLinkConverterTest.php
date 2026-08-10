@@ -6,16 +6,15 @@ use eLife\ApiSdk\Model\Subject;
 use eLife\Journal\ViewModel\Converter\SubjectBlockLinkConverter;
 use eLife\Journal\ViewModel\Factory\PictureBuilderFactory;
 use eLife\Patterns\ViewModel;
+use PHPUnit\Framework\Attributes\Before;
 
 final class SubjectBlockLinkConverterTest extends ModelConverterTestCase
 {
     protected $models = ['subject'];
     protected $viewModelClasses = [ViewModel\BlockLink::class];
 
-    /**
-     * @before
-     */
-    public function setUpConverter()
+    #[Before]
+    public function setUpConverter(): void
     {
         $this->converter = new SubjectBlockLinkConverter(
             $this->stubUrlGenerator(),

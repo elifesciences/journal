@@ -4,6 +4,8 @@ namespace test\eLife\Journal\Helper;
 
 use eLife\Journal\Helper\LicenceUri;
 use InvalidArgumentException;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use test\eLife\Journal\Providers;
 use Traversable;
@@ -12,18 +14,14 @@ final class LicenceUriTest extends TestCase
 {
     use Providers;
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_provides_a_default_uri()
     {
         $this->assertSame('https://creativecommons.org/licenses/by/4.0/', LicenceUri::default());
     }
 
-    /**
-     * @test
-     * @dataProvider validModelProvider
-     */
+    #[Test]
+    #[DataProvider('validModelProvider')]
     public function it_providers_a_uri_for_a_code(string $code, string $uri)
     {
         $this->assertSame($uri, LicenceUri::forCode($code));
@@ -41,9 +39,7 @@ final class LicenceUriTest extends TestCase
         ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_fails_on_an_invalid_code()
     {
         $this->expectException(InvalidArgumentException::class);

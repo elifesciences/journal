@@ -6,6 +6,7 @@ use eLife\ApiSdk\Model\ArticleVersion;
 use eLife\ApiSdk\Model\Model;
 use eLife\Journal\ViewModel\Converter\DataSetConverter;
 use eLife\Patterns\ViewModel\Reference;
+use PHPUnit\Framework\Attributes\Before;
 use Traversable;
 
 final class DataSetConverterTest extends ModelConverterTestCase
@@ -13,10 +14,8 @@ final class DataSetConverterTest extends ModelConverterTestCase
     protected $models = ['article-poa', 'article-vor'];
     protected $viewModelClasses = [Reference::class];
 
-    /**
-     * @before
-     */
-    public function setUpConverter()
+    #[Before]
+    public function setUpConverter(): void
     {
         $this->converter = new DataSetConverter();
     }

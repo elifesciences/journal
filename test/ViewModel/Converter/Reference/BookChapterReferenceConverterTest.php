@@ -4,15 +4,14 @@ namespace test\eLife\Journal\ViewModel\Converter\Reference;
 
 use eLife\ApiSdk\Model\Reference\BookChapterReference;
 use eLife\Journal\ViewModel\Converter\Reference\BookChapterReferenceConverter;
+use PHPUnit\Framework\Attributes\Before;
 
 final class BookChapterReferenceConverterTest extends ReferenceConverterTestCase
 {
-    protected $referenceClass = BookChapterReference::class;
+    protected string $referenceClass = BookChapterReference::class;
 
-    /**
-     * @before
-     */
-    public function setUpConverter()
+    #[Before]
+    public function setUpConverter(): void
     {
         $this->converter = new BookChapterReferenceConverter();
     }

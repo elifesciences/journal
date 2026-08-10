@@ -7,16 +7,15 @@ use eLife\Journal\ViewModel\Converter\Block\VideoConverter;
 use eLife\Journal\ViewModel\Converter\ViewModelConverter;
 use eLife\Patterns\PatternRenderer;
 use eLife\Patterns\ViewModel;
+use PHPUnit\Framework\Attributes\Before;
 
 final class VideoConverterTest extends BlockConverterTestCase
 {
-    protected $blockClass = Block\Video::class;
+    protected string $blockClass = Block\Video::class;
     protected $viewModelClasses = [ViewModel\Video::class, ViewModel\CaptionedAsset::class];
 
-    /**
-     * @before
-     */
-    public function setUpConverter()
+    #[Before]
+    public function setUpConverter(): void
     {
         $this->converter = new VideoConverter(
             $this->createMock(ViewModelConverter::class),

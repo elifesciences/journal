@@ -10,19 +10,18 @@ use eLife\Journal\ViewModel\Converter\Block\FigureAssetImageConverter;
 use eLife\Journal\ViewModel\Converter\ViewModelConverter;
 use eLife\Patterns\PatternRenderer;
 use eLife\Patterns\ViewModel;
+use PHPUnit\Framework\Attributes\Before;
 use Symfony\Component\HttpKernel\UriSigner;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Traversable;
 
 final class FigureAssetImageConverterTest extends BlockConverterTestCase
 {
-    protected $blockClass = Block\Figure::class;
+    protected string $blockClass = Block\Figure::class;
     protected $viewModelClasses = [ViewModel\AssetViewerInline::class];
 
-    /**
-     * @before
-     */
-    public function setUpConverter()
+    #[Before]
+    public function setUpConverter(): void
     {
         $this->converter = new FigureAssetImageConverter(
             $viewModelConverter = $this->createMock(ViewModelConverter::class),
@@ -31,9 +30,8 @@ final class FigureAssetImageConverterTest extends BlockConverterTestCase
         );
 
         $viewModelConverter
-            ->expects($this->any())
             ->method('convert')
-            ->will($this->returnCallback(function ($input) {
+            ->willReturnCallback(function ($input) {
                 if ($input instanceof AssetFile) {
                     return ViewModel\AdditionalAsset::withoutDoi('id', ViewModel\CaptionText::withHeading('heading'), null, 'http://google.com/');
                 }
@@ -42,7 +40,7 @@ final class FigureAssetImageConverterTest extends BlockConverterTestCase
                     [],
                     new ViewModel\Image('/image.jpg')
                 );
-            }));
+            });
     }
 
     protected function explodeBlock(Block $block) : Traversable

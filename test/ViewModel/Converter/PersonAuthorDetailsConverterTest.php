@@ -10,6 +10,7 @@ use eLife\Journal\ViewModel\Converter\PersonAuthorDetailsConverter;
 use eLife\Journal\ViewModel\Converter\ViewModelConverter;
 use eLife\Patterns\PatternRenderer;
 use eLife\Patterns\ViewModel\AuthorDetails;
+use PHPUnit\Framework\Attributes\Before;
 use Traversable;
 
 final class PersonAuthorDetailsConverterTest extends ModelConverterTestCase
@@ -17,10 +18,8 @@ final class PersonAuthorDetailsConverterTest extends ModelConverterTestCase
     protected $models = ['article-poa', 'article-vor'];
     protected $viewModelClasses = [AuthorDetails::class];
 
-    /**
-     * @before
-     */
-    public function setUpConverter()
+    #[Before]
+    public function setUpConverter(): void
     {
         $this->converter = new PersonAuthorDetailsConverter($this->createMock(ViewModelConverter::class), $this->createMock(PatternRenderer::class));
     }

@@ -6,6 +6,7 @@ use eLife\ApiSdk\Model\Collection;
 use eLife\Journal\ViewModel\Converter\CollectionSecondaryTeaserConverter;
 use eLife\Journal\ViewModel\Converter\ViewModelConverter;
 use eLife\Patterns\ViewModel;
+use PHPUnit\Framework\Attributes\Before;
 
 final class CollectionSecondaryTeaserConverterTest extends ModelConverterTestCase
 {
@@ -13,10 +14,8 @@ final class CollectionSecondaryTeaserConverterTest extends ModelConverterTestCas
     protected $viewModelClasses = [ViewModel\Teaser::class];
     protected $context = ['variant' => 'secondary'];
 
-    /**
-     * @before
-     */
-    public function setUpConverter()
+    #[Before]
+    public function setUpConverter(): void
     {
         $this->converter = new CollectionSecondaryTeaserConverter(
             $viewModelConverter = $this->createMock(ViewModelConverter::class),
@@ -24,11 +23,10 @@ final class CollectionSecondaryTeaserConverterTest extends ModelConverterTestCas
         );
 
         $viewModelConverter
-            ->expects($this->any())
             ->method('convert')
-            ->will($this->returnValue(new ViewModel\Picture(
+            ->willReturn(new ViewModel\Picture(
                 [],
                 new ViewModel\Image('/image.jpg')
-            )));
+            ));
     }
 }

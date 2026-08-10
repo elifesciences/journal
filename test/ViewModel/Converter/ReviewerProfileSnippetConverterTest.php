@@ -7,6 +7,7 @@ use eLife\ApiSdk\Model\Model;
 use eLife\Journal\ViewModel\Converter\ReviewerProfileSnippetConverter;
 use eLife\Journal\ViewModel\Converter\ViewModelConverter;
 use eLife\Patterns\ViewModel\ProfileSnippet;
+use PHPUnit\Framework\Attributes\Before;
 use Traversable;
 
 final class ReviewerProfileSnippetConverterTest extends ModelConverterTestCase
@@ -14,10 +15,8 @@ final class ReviewerProfileSnippetConverterTest extends ModelConverterTestCase
     protected $models = ['article-poa', 'article-vor'];
     protected $viewModelClasses = [ProfileSnippet::class];
 
-    /**
-     * @before
-     */
-    public function setUpConverter()
+    #[Before]
+    public function setUpConverter(): void
     {
         $this->converter = new ReviewerProfileSnippetConverter($this->createMock(ViewModelConverter::class));
     }

@@ -3,7 +3,10 @@
 namespace test\eLife\Journal\Security\Voter;
 
 use eLife\Journal\Security\Voter\TimeVoter;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
+use Symfony\Bridge\PhpUnit\Attribute\TimeSensitive;
 use Symfony\Bridge\PhpUnit\ClockMock;
 use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
 use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
@@ -11,11 +14,9 @@ use Traversable;
 
 final class TimeVoterTest extends TestCase
 {
-    /**
-     * @test
-     * @dataProvider voteProvider
-     * @group time-sensitive
-     */
+    #[Test]
+    #[DataProvider('voteProvider')]
+    #[TimeSensitive(TimeVoter::class)]
     public function it_votes($subject, array $roles, int $timestamp, int $now, int $expected)
     {
         ClockMock::withClockMock($now);

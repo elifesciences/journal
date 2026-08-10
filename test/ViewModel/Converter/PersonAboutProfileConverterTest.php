@@ -6,16 +6,15 @@ use eLife\Journal\ViewModel\Converter\PersonAboutProfileConverter;
 use eLife\Journal\ViewModel\Converter\ViewModelConverter;
 use eLife\Patterns\PatternRenderer;
 use eLife\Patterns\ViewModel;
+use PHPUnit\Framework\Attributes\Before;
 
 final class PersonAboutProfileConverterTest extends ModelConverterTestCase
 {
     protected $models = ['person'];
     protected $viewModelClasses = [ViewModel\AboutProfile::class];
 
-    /**
-     * @before
-     */
-    public function setUpConverter()
+    #[Before]
+    public function setUpConverter(): void
     {
         $this->converter = new PersonAboutProfileConverter(
             $viewModelConverter = $this->createMock(ViewModelConverter::class),
@@ -23,11 +22,10 @@ final class PersonAboutProfileConverterTest extends ModelConverterTestCase
         );
 
         $viewModelConverter
-            ->expects($this->any())
             ->method('convert')
-            ->will($this->returnValue(new ViewModel\Picture(
+            ->willReturn(new ViewModel\Picture(
                 [],
                 new ViewModel\Image('/image.jpg')
-            )));
+            ));
     }
 }

@@ -6,16 +6,15 @@ use eLife\ApiSdk\Model\Cover;
 use eLife\Journal\ViewModel\Converter\CoverBlockLinkConverter;
 use eLife\Journal\ViewModel\Factory\PictureBuilderFactory;
 use eLife\Patterns\ViewModel;
+use PHPUnit\Framework\Attributes\Before;
 
 final class CoverBlockLinkConverterTest extends ModelConverterTestCase
 {
     protected $models = ['cover'];
     protected $viewModelClasses = [ViewModel\BlockLink::class];
 
-    /**
-     * @before
-     */
-    public function setUpConverter()
+    #[Before]
+    public function setUpConverter(): void
     {
         $this->context['link'] = new ViewModel\Link('link');
 

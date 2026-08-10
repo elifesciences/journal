@@ -201,7 +201,7 @@ final class CallbackTest extends TestCase
     }
 
     #[Test]
-    #[DataProvider('emptyProvider')]
+    #[DataProvider('emptyWithDefaultProvider')]
     public function it_creates_empty_or_with_empty($item, $default = null, $expected = null)
     {
         $callback = Callback::emptyOr(function () {
@@ -237,7 +237,7 @@ final class CallbackTest extends TestCase
     }
 
     #[Test]
-    #[DataProvider('emptyProvider')]
+    #[DataProvider('emptyWithDefaultProvider')]
     public function it_creates_method_empty_or_with_empty($item, $default = null, $expected = null)
     {
         $object = new class($item) {
@@ -279,6 +279,14 @@ final class CallbackTest extends TestCase
         })];
         yield '0' => [0];
         yield 'null' => [null];
+    }
+
+    public static function emptyWithDefaultProvider() : Traversable
+    {
+        foreach (self::emptyProvider() as $key => $arguments) {
+            yield $key => [$arguments[0], null, null];
+        }
+
         yield 'null with default' => [null, 'foo', 'foo'];
         yield 'null with callable default' => [null, function () {
             return 'foo';

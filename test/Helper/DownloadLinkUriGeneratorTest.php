@@ -4,6 +4,8 @@ namespace test\eLife\Journal\Helper;
 
 use eLife\Journal\Helper\DownloadLink;
 use eLife\Journal\Helper\DownloadLinkUriGenerator;
+use PHPUnit\Framework\Attributes\Before;
+use PHPUnit\Framework\Attributes\Test;
 use Symfony\Component\HttpKernel\UriSigner;
 use test\eLife\Journal\KernelTestCase;
 use UnexpectedValueException;
@@ -19,10 +21,8 @@ final class DownloadLinkUriGeneratorTest extends KernelTestCase
     /** @var string */
     private $defaultBaseUrl;
 
-    /**
-     * @before
-     */
-    public function setUpDownloadLinkUriGenerator()
+    #[Before]
+    public function setUpDownloadLinkUriGenerator(): void
     {
         static::bootKernel();
 
@@ -38,9 +38,7 @@ final class DownloadLinkUriGeneratorTest extends KernelTestCase
                 : '');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_generates_a_uri()
     {
         $this->assertSame(
@@ -54,9 +52,7 @@ final class DownloadLinkUriGeneratorTest extends KernelTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_generates_a_uri_avoiding_unsafe_characters()
     {
         // See: https://stackoverflow.com/questions/1374753/passing-base64-encoded-strings-in-url
@@ -66,17 +62,13 @@ final class DownloadLinkUriGeneratorTest extends KernelTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_checks_a_uri()
     {
         $this->assertEquals(new DownloadLink('http://www.example.com/test.txt', 'foo.bar'), $this->downloadLinkUriGenerator->check($this->uriSigner->sign('http://localhost/download/aHR0cDovL3d3dy5leGFtcGxlLmNvbS90ZXN0LnR4dA--/foo.bar')));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_rejects_invalid_uris()
     {
         $this->expectException(UnexpectedValueException::class);

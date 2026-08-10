@@ -7,6 +7,7 @@ use eLife\Journal\ViewModel\Converter\ArticleDownloadLinksListConverter;
 use eLife\Journal\ViewModel\Converter\ViewModelConverter;
 use eLife\Patterns\PatternRenderer;
 use eLife\Patterns\ViewModel;
+use PHPUnit\Framework\Attributes\Before;
 use Symfony\Component\HttpKernel\UriSigner;
 
 final class ArticleDownloadLinksListConverterTest extends ModelConverterTestCase
@@ -14,10 +15,8 @@ final class ArticleDownloadLinksListConverterTest extends ModelConverterTestCase
     protected $models = ['article-poa', 'article-vor'];
     protected $viewModelClasses = [ViewModel\ArticleDownloadLinksList::class];
 
-    /**
-     * @before
-     */
-    public function setUpConverter()
+    #[Before]
+    public function setUpConverter(): void
     {
         $this->converter = new ArticleDownloadLinksListConverter(
             $this->createMock(ViewModelConverter::class),
